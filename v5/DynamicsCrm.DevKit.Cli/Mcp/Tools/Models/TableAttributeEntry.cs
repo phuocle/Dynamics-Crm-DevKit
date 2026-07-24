@@ -15,6 +15,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("type")]
         public string Type { get; set; }
 
+        /// <summary>
+        /// Simple boolean: is the field required (system or application)?
+        /// Always emitted in compact/standard/full so AI can decide which fields to populate.
+        /// True when <c>RequiredLevel</c> is <c>SystemRequired</c> or <c>ApplicationRequired</c>.
+        /// </summary>
+        [JsonPropertyName("required")]
+        public bool Required { get; set; }
+
         [JsonPropertyName("requiredLevel")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string RequiredLevel { get; set; }

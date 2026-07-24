@@ -57,3 +57,6 @@ D:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAllInOne/.env
 
 # DynamicsCrm.DevKit local project environment
 D:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAddCrmPluginRegistration/2.after/.env
+
+# Local Claude Code MCP server config (may contain credentials)
+.mcp.json

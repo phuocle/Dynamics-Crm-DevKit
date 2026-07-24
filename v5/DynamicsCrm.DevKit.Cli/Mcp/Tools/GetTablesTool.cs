@@ -30,8 +30,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Dataverse entity metadata. entity_name empty = list. Set = detail (attributes, relationships, alternate keys). Returns structured JSON in structuredContent — AI parses and displays to user.\n\n" +
 
             "DETAIL LEVELS (detail_level, detail mode only):\n" +
-            "- compact: Display Name, Schema Name, Logical Name, Type only (~2KB for 50 attrs)\n" +
-            "- standard (default): + requiredLevel, isValidForCreate/Update, constraints, lookup targets, picklist options (no option colors, no audit/security/sortable flags, no formula/default details) (~8KB)\n" +
+            "- compact (default): Display Name, Schema Name, Logical Name, Type, required, isValidForCreate/Update only (~2KB for 50 attrs)\n" +
+            "- standard: + requiredLevel, constraints, lookup targets, picklist options (no option colors, no audit/security/sortable flags, no formula/default details) (~8KB)\n" +
             "- full: all metadata including audit, formula, security, default values, option colors, description, min/max/precision/behavior (~40KB)\n\n" +
 
             "FILTER (detail mode):\n" +
@@ -63,8 +63,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("LIST: include N:N intersect entities.")] bool include_intersect = false,
             [Description("LIST: comma-separated logical names. Overrides filter/custom_only."
             )] string names = "",
-            [Description("DETAIL: 'compact' (Display Name, Schema Name, Logical Name, Type only), 'standard' (default, + requiredLevel, isValidForCreate/Update, constraints, lookup targets, picklist options), 'full' (all metadata including audit, formula, security, default values, option colors, description, min/max/precision/behavior)."
-            )] string detail_level = "standard")
+            [Description("DETAIL: 'compact' (default, Display Name, Schema Name, Logical Name, Type, required, isValidForCreate/Update), 'standard' (+ requiredLevel, constraints, lookup targets, picklist options), 'full' (all metadata including audit, formula, security, default values, option colors, description, min/max/precision/behavior)."
+            )] string detail_level = "compact")
         {
             try
             {
@@ -453,7 +453,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static TableAttributeEntry BuildAttribute(string entityLogicalName, AttributeMetadata attribute, string detailLevel)
         {
-            // Compact: only identity + type
+            // Compact: identity + type + required/create/update flags (the bare minimum
+            // to know which fields a caller can/should set on a new record).
             if (detailLevel == "compact")
             {
                 return new TableAttributeEntry
@@ -461,6 +462,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     LogicalName = attribute.LogicalName,
                     SchemaName = attribute.SchemaName,
                     Type = FormatAttributeType(attribute),
+                    Required = IsAttributeRequired(attribute),
+                    IsValidForCreate = attribute.IsValidForCreate == true,
+                    IsValidForUpdate = attribute.IsValidForUpdate == true,
                     DisplayName = attribute.DisplayName?.UserLocalizedLabel?.Label ?? "",
                 };
             }
@@ -471,12 +475,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 LogicalName = attribute.LogicalName,
                 SchemaName = attribute.SchemaName,
                 Type = FormatAttributeType(attribute),
-                RequiredLevel = attribute.RequiredLevel?.Value switch
-                {
-                    AttributeRequiredLevel.ApplicationRequired => "Required",
-                    AttributeRequiredLevel.Recommended => "Recommended",
-                    _ => null
-                },
+                Required = IsAttributeRequired(attribute),
+                RequiredLevel = MapRequiredLevel(attribute.RequiredLevel?.Value),
                 IsValidForCreate = attribute.IsValidForCreate == true,
                 IsValidForUpdate = attribute.IsValidForUpdate == true,
                 DisplayName = attribute.DisplayName?.UserLocalizedLabel?.Label ?? "",
@@ -535,6 +535,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _ => $"SourceType{attribute.SourceType}"
             };
         }
+
+        /// <summary>
+        /// True when the attribute must be supplied to create a record.
+        /// Maps both <c>SystemRequired</c> (e.g. createdon, statecode) and
+        /// <c>ApplicationRequired</c> (business-required) to true. Recommended
+        /// fields stay false — they're a hint, not a constraint.
+        /// </summary>
+        private static bool IsAttributeRequired(AttributeMetadata attribute) =>
+            attribute.RequiredLevel?.Value is
+                AttributeRequiredLevel.ApplicationRequired or
+                AttributeRequiredLevel.SystemRequired;
+
+        /// <summary>
+        /// Maps Dataverse's <c>AttributeRequiredLevel</c> enum to a human label.
+        /// SystemRequired and ApplicationRequired both surface as "Required" because
+        /// AI callers only need the "is it required?" answer; callers that need
+        /// the nuance should rely on the <c>required</c> boolean + the original SDK.
+        /// </summary>
+        private static string MapRequiredLevel(AttributeRequiredLevel? level) => level switch
+        {
+            AttributeRequiredLevel.ApplicationRequired => "Required",
+            AttributeRequiredLevel.SystemRequired => "Required",
+            AttributeRequiredLevel.Recommended => "Recommended",
+            _ => null
+        };
 
         private static void PopulateFormulaInfo(TableAttributeEntry entry, string entityLogicalName, AttributeMetadata attribute)
         {
