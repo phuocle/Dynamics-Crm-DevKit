@@ -76,16 +76,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // Organization details
                 PopulateOrgDetails(structured);
 
-                // Access token
+                // Access token (optional). If the getter throws, leave AccessToken null;
+                // the caller can detect the missing token and request re-auth if needed.
                 if (include_token)
-                {
-                    try { structured.AccessToken = _serviceClient.CurrentAccessToken; }
-                    catch (Exception ex)
-                    {
-                        structured.Warnings ??= [];
-                        structured.Warnings.Add($"Failed to retrieve access token: {ex.Message}");
-                    }
-                }
+                    structured.AccessToken = _serviceClient.CurrentAccessToken;
 
                 // Security roles
                 PopulateRoles(structured, response.UserId);
@@ -97,10 +91,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return Error(
-                    $"Error: Failed to execute WhoAmI: {ex.Message}",
-                    "Verify the Dataverse connection and that the current user has organization read access. If the connection is valid, retry the request.",
-                    new { exceptionType = ex.GetType().Name });
+                return ThrowException(ex);
             }
         }
 

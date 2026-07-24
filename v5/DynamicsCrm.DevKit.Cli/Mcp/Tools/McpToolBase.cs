@@ -1,5 +1,6 @@
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using ModelContextProtocol.Protocol;
+using System;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -15,6 +16,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         /// <inheritdoc />
         public CallToolResult Error(string message, string hint = null, object details = null) => McpToolResults.Error(message, hint, details);
+
+        /// <inheritdoc />
+        public CallToolResult ThrowException(Exception ex) => McpToolResults.ThrowException(ex);
 
         /// <inheritdoc />
         public CallToolResult DryRun(string message) => McpToolResults.DryRun(message);

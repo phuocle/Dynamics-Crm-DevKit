@@ -1,4 +1,5 @@
 using ModelContextProtocol.Protocol;
+using System;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -29,6 +30,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         /// <param name="hint">Actionable hint for the AI/client.</param>
         /// <param name="details">Optional structured details (exception type, field, etc.).</param>
         CallToolResult Error(string message, string hint = null, object details = null);
+
+        /// <summary>
+        /// Return an error result for an unhandled exception. Use this in the top-level
+        /// <c>catch (Exception ex)</c> block of an MCP tool method, NOT for validation
+        /// errors or expected business-rule failures (use <see cref="Error"/> for those).
+        /// </summary>
+        /// <remarks>
+        /// The result distinguishes itself from <see cref="Error"/> with an
+        /// <c>[UncaughtException]</c> prefix and an exception-type tag in the
+        /// structured payload, so AI clients can recognize uncontrolled failures
+        /// and avoid retrying with the same inputs.
+        /// </remarks>
+        /// <param name="ex">The exception that escaped the tool's normal flow.</param>
+        CallToolResult ThrowException(Exception ex);
 
         /// <summary>
         /// Return a dry-run result describing what would happen without making changes.

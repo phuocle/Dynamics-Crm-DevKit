@@ -75,9 +75,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return Error($"Error: Failed to execute FetchXML: {ex.Message}\n" +
-                       "Hint: Use get_tables to verify logical names and available columns.\n" +
-                       "Read schema://fetchxml for valid FetchXML syntax.");
+                return ThrowException(ex);
             }
         }
 

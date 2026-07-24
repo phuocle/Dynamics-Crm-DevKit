@@ -83,26 +83,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string workspace_folder = "")
         {
             _workspaceFolder = workspace_folder;
-            if (string.IsNullOrWhiteSpace(action))
-                return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.");
-
-            if (string.IsNullOrWhiteSpace(entity_name))
-                return ErrorResult("Error: entity_name is required.");
-
-            var normalizedAction = action.Trim().ToLowerInvariant();
-            var entityName = entity_name.Trim();
-
-            // Early view_id GUID validation for actions that require it
-            if (!string.IsNullOrWhiteSpace(view_id) && !Guid.TryParse(view_id.Trim(), out _))
-                return ErrorResult($"Error: '{view_id}' is not a valid GUID.");
-
-            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_view");
-            if (!entityResult.IsSuccess)
-                return ErrorResult($"Error: {entityResult.Error}");
-            entityName = entityResult.Value.LogicalName;
-
             try
             {
+                if (string.IsNullOrWhiteSpace(action))
+                    return Error("Error: action is required. Valid values: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.");
+
+                if (string.IsNullOrWhiteSpace(entity_name))
+                    return Error("Error: entity_name is required.");
+
+                var normalizedAction = action.Trim().ToLowerInvariant();
+                var entityName = entity_name.Trim();
+
+                // Early view_id GUID validation for actions that require it
+                if (!string.IsNullOrWhiteSpace(view_id) && !Guid.TryParse(view_id.Trim(), out _))
+                    return Error($"Error: '{view_id}' is not a valid GUID.");
+
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_view");
+                if (!entityResult.IsSuccess)
+                    return Error($"Error: {entityResult.Error}");
+                entityName = entityResult.Value.LogicalName;
+
                 return normalizedAction switch
                 {
                     "list" => HandleList(entityName, view_name, query_type, include_fetchxml, include_personal),
@@ -112,33 +112,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "rename" => HandleRename(entityName, view_id, view_name, backup),
                     "set_default" => HandleSetDefault(entityName, view_id, view_name),
                     "undo" => HandleUndo(entityName, view_id, layoutxml, fetchxml, validate),
-                    _ => ErrorResult($"Error: '{action}' is not a valid action. Valid actions: list, detail, create, update, rename, set_default, undo.")
+                    _ => Error($"Error: '{action}' is not a valid action. Valid actions: list, detail, create, update, rename, set_default, undo.")
                 };
-            }
-            catch (System.ServiceModel.FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault> fex)
-            {
-                var fault = fex.Detail;
-                var errorDetail = fault != null
-                    ? $"{fault.Message} (ErrorCode: 0x{fault.ErrorCode:X8})"
-                    : fex.Message;
-                if (fault?.InnerFault != null)
-                    errorDetail += $" → InnerFault: {fault.InnerFault.Message}";
-
-                return ErrorResult(
-                    $"[Error] View {normalizedAction} failed\n" +
-                    $"Entity: {entityName}\n" +
-                    $"Message: {errorDetail}");
             }
             catch (Exception ex)
             {
-                var errorDetail = ex.InnerException != null
-                    ? $"{ex.Message} → {ex.InnerException.Message}"
-                    : ex.Message;
-
-                return ErrorResult(
-                    $"[Error] View {normalizedAction} failed\n" +
-                    $"Entity: {entityName}\n" +
-                    $"Message: {errorDetail}");
+                return ThrowException(ex);
             }
         }
 
@@ -155,7 +134,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     : new EntityCollection().Entities;
 
                 if (matchingViews.Count == 0 && matchingPersonal.Count == 0)
-                    return TextResult($"[Views] {entityName} — 0 views found matching '{nameFilter}'");
+                    return Success($"[Views] {entityName} — 0 views found matching '{nameFilter}'", null);
                 if (matchingViews.Count == 1 && matchingPersonal.Count == 0)
                 {
                     var matchId = matchingViews[0].GetAttributeValue<Guid>("savedqueryid");
@@ -166,7 +145,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var matchId = matchingPersonal[0].GetAttributeValue<Guid>("userqueryid");
                     return HandleDetail(entityName, matchId.ToString(), "");
                 }
-                return TextResult(FormatViewList(entityName, matchingViews, includeFetchXml, includePersonal, nameFilter, matchingPersonal.Count > 0 ? matchingPersonal : null));
+                return Success(FormatViewList(entityName, matchingViews, includeFetchXml, includePersonal, nameFilter, matchingPersonal.Count > 0 ? matchingPersonal : null), null);
             }
 
             var systemViews = GetSystemViews(entityName, queryType, includeFetchXml);
@@ -177,10 +156,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (systemViews.Count == 0 && personalViews.Count == 0)
             {
                 var typeHint = queryType >= 0 ? $" with querytype={queryType}" : "";
-                return TextResult($"[Views] {entityName} — 0 views found{typeHint}");
+                return Success($"[Views] {entityName} — 0 views found{typeHint}", null);
             }
 
-            return TextResult(FormatViewList(entityName, systemViews, includeFetchXml, includePersonal, null, personalViews));
+            return Success(FormatViewList(entityName, systemViews, includeFetchXml, includePersonal, null, personalViews), null);
         }
 
         // ── Action: detail ────────────────────────────────────────────────
@@ -188,26 +167,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleDetail(string entityName, string viewId, string viewName)
         {
             if (string.IsNullOrWhiteSpace(viewId) && string.IsNullOrWhiteSpace(viewName))
-                return ErrorResult("Error: view_id or view_name is required for 'detail' action.");
+                return Error("Error: view_id or view_name is required for 'detail' action.");
 
             if (!string.IsNullOrWhiteSpace(viewId))
             {
                 if (!Guid.TryParse(viewId.Trim(), out var id))
-                    return ErrorResult($"Error: '{viewId}' is not a valid GUID.");
+                    return Error($"Error: '{viewId}' is not a valid GUID.");
                 var detailText = GetViewDetail(id, entityName);
                 return detailText.StartsWith("Error:", StringComparison.OrdinalIgnoreCase)
-                    ? ErrorResult(detailText)
-                    : TextResult(detailText);
+                    ? Error(detailText)
+                    : Success(detailText, null);
             }
 
             var resolved = ResolveViewByName(entityName, viewName, -1, true, "detail");
             if (!string.IsNullOrEmpty(resolved.Error))
-                return ErrorResult(resolved.Error);
+                return Error(resolved.Error);
 
             var resolvedDetailText = GetViewDetail(resolved.ViewId, entityName);
             return resolvedDetailText.StartsWith("Error:", StringComparison.OrdinalIgnoreCase)
-                ? ErrorResult(resolvedDetailText)
-                : TextResult(resolvedDetailText);
+                ? Error(resolvedDetailText)
+                : Success(resolvedDetailText, null);
         }
 
         // ── Action: create ─────────────────────────────────────────────────
@@ -216,10 +195,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string layoutxml, string fetchxml, bool validate)
         {
             if (string.IsNullOrWhiteSpace(viewName))
-                return ErrorResult("Error: view_name is required for 'create' action.");
+                return Error("Error: view_name is required for 'create' action.");
 
             if (string.IsNullOrWhiteSpace(layoutxml))
-                return ErrorResult("Error: layoutxml is required for 'create' action.");
+                return Error("Error: layoutxml is required for 'create' action.");
 
             viewName = viewName.Trim();
             var effectiveQueryType = queryType >= 0 ? queryType : 0;
@@ -231,19 +210,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var fetchNormalization = NormalizeFetchXmlNames(newFetchXml, entityName);
             if (fetchNormalization.Errors.Count > 0)
-                return ErrorResult(FormatNameResolutionErrors("ViewCreate", entityName, viewName, null, fetchNormalization.Errors));
+                return Error(FormatNameResolutionErrors("ViewCreate", entityName, viewName, null, fetchNormalization.Errors));
             newFetchXml = fetchNormalization.Xml;
 
             var layoutNormalization = NormalizeLayoutXmlNames(newLayoutXml, newFetchXml, entityName);
             if (layoutNormalization.Errors.Count > 0)
-                return ErrorResult(FormatNameResolutionErrors("ViewCreate", entityName, viewName, null, layoutNormalization.Errors));
+                return Error(FormatNameResolutionErrors("ViewCreate", entityName, viewName, null, layoutNormalization.Errors));
             newLayoutXml = layoutNormalization.Xml;
 
             var duplicate = FindViewByName(entityName, viewName);
             if (duplicate != null)
             {
                 var dupId = duplicate.GetAttributeValue<Guid>("savedqueryid");
-                return ErrorResult(
+                return Error(
                     $"[Error] A view with this name already exists\n" +
                     $"Entity: {entityName}\n" +
                     $"Name: {viewName}\n" +
@@ -317,7 +296,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ["layoutxml"] = newLayoutXml
             };
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE view '{viewName}' on entity '{entityName}'.");
+                return DryRun($"Would CREATE view '{viewName}' on entity '{entityName}'.");
 
             var newViewId = _serviceClient.Create(newView);
 
@@ -354,19 +333,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string cellUpdatesJson = "")
         {
             if (string.IsNullOrWhiteSpace(viewId) && string.IsNullOrWhiteSpace(viewName))
-                return ErrorResult("Error: view_id or view_name is required for 'update' action.");
+                return Error("Error: view_id or view_name is required for 'update' action.");
 
             Guid updateId;
             if (!string.IsNullOrWhiteSpace(viewId))
             {
                 if (!Guid.TryParse(viewId.Trim(), out updateId))
-                    return ErrorResult($"Error: '{viewId}' is not a valid GUID.");
+                    return Error($"Error: '{viewId}' is not a valid GUID.");
             }
             else
             {
                 var resolved = ResolveViewByName(entityName, viewName, queryType, includePersonal, "update");
                 if (!string.IsNullOrEmpty(resolved.Error))
-                    return ErrorResult(resolved.Error);
+                    return Error(resolved.Error);
                 updateId = resolved.ViewId;
             }
 
@@ -374,13 +353,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var hasCellUpdates = !string.IsNullOrWhiteSpace(cellUpdatesJson);
 
             if (!hasLayoutXml && !hasCellUpdates)
-                return ErrorResult("Error: at least one of layoutxml or cell_updates_json is required for 'update' action.");
+                return Error("Error: at least one of layoutxml or cell_updates_json is required for 'update' action.");
 
             var newFetchXml = string.IsNullOrWhiteSpace(fetchxml) ? null : ViewXmlHelper.StripXmlDeclaration(fetchxml.Trim());
 
             var currentView = RetrieveView(updateId);
             if (currentView == null)
-                return ErrorResult(
+                return Error(
                     $"[Error] View not found\n" +
                     $"ViewId: {updateId}\n" +
                     $"Tip: Use manage_view with action='list' and entity_name='{entityName}' to find valid view IDs");
@@ -395,7 +374,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var fetchNormalization = NormalizeFetchXmlNames(newFetchXml, entityName);
                 if (fetchNormalization.Errors.Count > 0)
-                    return ErrorResult(FormatNameResolutionErrors("ViewUpdate", entityName, currentViewName, updateId, fetchNormalization.Errors));
+                    return Error(FormatNameResolutionErrors("ViewUpdate", entityName, currentViewName, updateId, fetchNormalization.Errors));
                 newFetchXml = fetchNormalization.Xml;
             }
 
@@ -412,11 +391,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var (instructions, parseError) = ParseCellUpdates(cellUpdatesJson);
                 if (parseError != null)
-                    return ErrorResult(parseError);
+                    return Error(parseError);
 
                 var cellNameErrors = NormalizeCellUpdateNames(instructions, effectiveFetchXml, entityName);
                 if (cellNameErrors.Count > 0)
-                    return ErrorResult(FormatNameResolutionErrors("ViewUpdate", entityName, currentViewName, updateId, cellNameErrors));
+                    return Error(FormatNameResolutionErrors("ViewUpdate", entityName, currentViewName, updateId, cellNameErrors));
 
                 var (patchedXml, patchErrors, patchWarnings) = ViewXmlHelper.ApplyCellAttributeUpdates(baseLayoutXml, instructions);
                 if (patchErrors.Count > 0)
@@ -428,7 +407,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     foreach (var error in patchErrors)
                         sb.AppendLine($"- {error}");
                     sb.AppendLine($"Tip: Use manage_view action='detail' to see current LayoutXML cells.");
-                    return ErrorResult(sb.ToString());
+                    return Error(sb.ToString());
                 }
 
                 baseLayoutXml = patchedXml;
@@ -442,7 +421,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var layoutNormalization = NormalizeLayoutXmlNames(newLayoutXml, effectiveFetchXml, entityName);
                 if (layoutNormalization.Errors.Count > 0)
-                    return ErrorResult(FormatNameResolutionErrors("ViewUpdate", entityName, currentViewName, updateId, layoutNormalization.Errors));
+                    return Error(FormatNameResolutionErrors("ViewUpdate", entityName, currentViewName, updateId, layoutNormalization.Errors));
                 newLayoutXml = layoutNormalization.Xml;
             }
 
@@ -450,18 +429,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string layoutBackupPath = null;
             if (backup)
             {
-                try
-                {
-                    (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, updateId, currentViewName, currentFetchXml, currentLayoutXml, _workspaceFolder);
-                }
-                catch (Exception ex)
-                {
-                    return ErrorResult(
-                        $"[Error] Backup failed — update BLOCKED (fail-safe)\n" +
-                        $"ViewId: {updateId}\n" +
-                        $"Message: {ex.Message}\n" +
-                        $"Tip: Fix the backup directory permissions or set backup=false (not recommended)");
-                }
+                (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, updateId, currentViewName, currentFetchXml, currentLayoutXml, _workspaceFolder);
             }
 
             if (validate)
@@ -504,7 +472,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!isPersonalView)
                 update["returnedtypecode"] = returnedTypeCode;
             if (_options.DryRun)
-                return DryRunResult($"Would UPDATE view '{currentViewName}' ({updateId}) on entity '{entityName}'.");
+                return DryRun($"Would UPDATE view '{currentViewName}' ({updateId}) on entity '{entityName}'.");
             _serviceClient.Update(update);
 
             var published = TryPublish(returnedTypeCode);
@@ -587,17 +555,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             bool backup)
         {
             if (string.IsNullOrWhiteSpace(viewId))
-                return ErrorResult("Error: view_id is required for 'rename' action.");
+                return Error("Error: view_id is required for 'rename' action.");
             if (!Guid.TryParse(viewId.Trim(), out var renameId))
-                return ErrorResult($"Error: '{viewId}' is not a valid GUID.");
+                return Error($"Error: '{viewId}' is not a valid GUID.");
             if (string.IsNullOrWhiteSpace(viewName))
-                return ErrorResult("Error: view_name is required for 'rename' action.");
+                return Error("Error: view_name is required for 'rename' action.");
 
             viewName = viewName.Trim();
 
             var currentView = RetrieveView(renameId);
             if (currentView == null)
-                return ErrorResult(
+                return Error(
                     $"[Error] View not found\n" +
                     $"ViewId: {renameId}\n" +
                     $"Tip: Use manage_view with action='list' and entity_name='{entityName}' to find valid view IDs");
@@ -609,7 +577,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (duplicate != null)
             {
                 var dupId = duplicate.GetAttributeValue<Guid>("savedqueryid");
-                return ErrorResult(
+                return Error(
                     $"[Error] A view with this name already exists\n" +
                     $"Entity: {entityName}\n" +
                     $"Name: {viewName}\n" +
@@ -621,24 +589,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string layoutBackupPath = null;
             if (backup)
             {
-                try
-                {
-                    var currentFetchXml = currentView.GetAttributeValue<string>("fetchxml") ?? "";
-                    var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
-                    (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, renameId, oldName, currentFetchXml, currentLayoutXml, _workspaceFolder);
-                }
-                catch (Exception ex)
-                {
-                    return ErrorResult(
-                        $"[Error] Backup failed — rename BLOCKED (fail-safe)\n" +
-                        $"ViewId: {renameId}\n" +
-                        $"Message: {ex.Message}");
-                }
+                var currentFetchXml = currentView.GetAttributeValue<string>("fetchxml") ?? "";
+                var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
+                (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, renameId, oldName, currentFetchXml, currentLayoutXml, _workspaceFolder);
             }
 
             var update = new Entity(currentView.LogicalName, renameId) { ["name"] = viewName };
             if (_options.DryRun)
-                return DryRunResult($"Would RENAME view '{oldName}' to '{viewName}' ({renameId}) on entity '{entityName}'.");
+                return DryRun($"Would RENAME view '{oldName}' to '{viewName}' ({renameId}) on entity '{entityName}'.");
             _serviceClient.Update(update);
 
             var published = TryPublish(returnedTypeCode);
@@ -676,18 +634,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleSetDefault(string entityName, string viewId, string viewName)
         {
             if (string.IsNullOrWhiteSpace(viewId) && string.IsNullOrWhiteSpace(viewName))
-                return ErrorResult("Error: view_id or view_name is required for 'set_default' action.");
+                return Error("Error: view_id or view_name is required for 'set_default' action.");
 
             Guid targetId;
 
             if (!string.IsNullOrWhiteSpace(viewId))
             {
                 if (!Guid.TryParse(viewId.Trim(), out targetId))
-                    return ErrorResult($"Error: '{viewId}' is not a valid GUID.");
+                    return Error($"Error: '{viewId}' is not a valid GUID.");
 
                 var check = TryGetSystemView(targetId);
                 if (check == null)
-                    return ErrorResult(
+                    return Error(
                         $"[Error] View not found\n" +
                         $"ViewId: {targetId}\n" +
                         $"Tip: Use manage_view with action='list' and entity_name='{entityName}' to find valid view IDs");
@@ -695,7 +653,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 viewName = check.GetAttributeValue<string>("name") ?? targetId.ToString();
                 var qt = check.GetAttributeValue<int>("querytype");
                 if (qt != 0)
-                    return ErrorResult(
+                    return Error(
                         $"[Error] Only Public views (querytype=0) can be set as default\n" +
                         $"ViewId: {targetId}\n" +
                         $"ViewType: {MapQueryType(qt)} ({qt})");
@@ -704,13 +662,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var resolved = ResolveViewByName(entityName, viewName, 0, false, "set_default");
                 if (!string.IsNullOrEmpty(resolved.Error))
-                    return ErrorResult(resolved.Error);
+                    return Error(resolved.Error);
                 targetId = resolved.ViewId;
                 viewName = resolved.View.GetAttributeValue<string>("name") ?? targetId.ToString();
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would SET DEFAULT view '{viewName}' ({targetId}) on entity '{entityName}'.");
+                return DryRun($"Would SET DEFAULT view '{viewName}' ({targetId}) on entity '{entityName}'.");
 
             var update = new Entity("savedquery", targetId) { ["isdefault"] = true };
             _serviceClient.Update(update);
@@ -742,76 +700,54 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string layoutBackupPathArg, string fetchBackupPathArg, bool validate)
         {
             if (string.IsNullOrWhiteSpace(viewId))
-                return ErrorResult("Error: view_id is required for 'undo' action.");
+                return Error("Error: view_id is required for 'undo' action.");
             if (!Guid.TryParse(viewId.Trim(), out var undoId))
-                return ErrorResult($"Error: '{viewId}' is not a valid GUID.");
+                return Error($"Error: '{viewId}' is not a valid GUID.");
             if (string.IsNullOrWhiteSpace(layoutBackupPathArg))
-                return ErrorResult("Error: layoutxml (layout backup file path) is required for 'undo' action.");
+                return Error("Error: layoutxml (layout backup file path) is required for 'undo' action.");
 
             var layoutBackupPath = layoutBackupPathArg.Trim();
             var fetchBackupPath = string.IsNullOrWhiteSpace(fetchBackupPathArg) ? null : fetchBackupPathArg.Trim();
 
             if (!File.Exists(layoutBackupPath))
-                return ErrorResult(
+                return Error(
                     $"[Error] Layout backup file not found\n" +
                     $"Path: {layoutBackupPath}\n" +
                     $"Tip: Check the file path. Backup files are at: .devkit/backups/views/");
 
             string restoredLayoutXml;
-            try
-            {
-                var layoutContent = File.ReadAllText(layoutBackupPath, Encoding.UTF8);
-                var strippedLayout = ViewXmlHelper.StripXmlComments(layoutContent);
-                if (string.IsNullOrWhiteSpace(strippedLayout))
-                    return ErrorResult(
-                        $"[Error] Layout backup file is empty (no LayoutXML content)\n" +
-                        $"Path: {layoutBackupPath}\n" +
-                        $"Tip: This backup has no LayoutXML to restore. Try an earlier backup.");
-                var layoutDoc = XDocument.Parse(strippedLayout);
-                restoredLayoutXml = ViewXmlHelper.StripXmlDeclaration(layoutDoc.ToString());
-                restoredLayoutXml = EnsureObjectTypeCode(restoredLayoutXml, entityName);
-            }
-            catch (Exception ex)
-            {
-                return ErrorResult(
-                    $"[Error] Failed to parse layout backup file\n" +
+            var layoutContent = File.ReadAllText(layoutBackupPath, Encoding.UTF8);
+            var strippedLayout = ViewXmlHelper.StripXmlComments(layoutContent);
+            if (string.IsNullOrWhiteSpace(strippedLayout))
+                return Error(
+                    $"[Error] Layout backup file is empty (no LayoutXML content)\n" +
                     $"Path: {layoutBackupPath}\n" +
-                    $"Message: {ex.Message}\n" +
-                    $"Tip: The backup file must contain valid LayoutXML");
-            }
+                    $"Tip: This backup has no LayoutXML to restore. Try an earlier backup.");
+            var layoutDoc = XDocument.Parse(strippedLayout);
+            restoredLayoutXml = ViewXmlHelper.StripXmlDeclaration(layoutDoc.ToString());
+            restoredLayoutXml = EnsureObjectTypeCode(restoredLayoutXml, entityName);
 
             string restoredFetchXml = null;
             if (fetchBackupPath != null)
             {
                 if (!File.Exists(fetchBackupPath))
-                    return ErrorResult(
+                    return Error(
                         $"[Error] Fetch backup file not found\n" +
                         $"Path: {fetchBackupPath}\n" +
                         $"Tip: Check the file path. Backup files are at: .devkit/backups/views/");
 
-                try
+                var fetchContent = File.ReadAllText(fetchBackupPath, Encoding.UTF8);
+                var strippedFetch = ViewXmlHelper.StripXmlComments(fetchContent);
+                if (!string.IsNullOrWhiteSpace(strippedFetch))
                 {
-                    var fetchContent = File.ReadAllText(fetchBackupPath, Encoding.UTF8);
-                    var strippedFetch = ViewXmlHelper.StripXmlComments(fetchContent);
-                    if (!string.IsNullOrWhiteSpace(strippedFetch))
-                    {
-                        var fetchDoc = XDocument.Parse(strippedFetch);
-                        restoredFetchXml = ViewXmlHelper.StripXmlDeclaration(fetchDoc.ToString());
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return ErrorResult(
-                        $"[Error] Failed to parse fetch backup file\n" +
-                        $"Path: {fetchBackupPath}\n" +
-                        $"Message: {ex.Message}\n" +
-                        $"Tip: The backup file must contain valid FetchXML");
+                    var fetchDoc = XDocument.Parse(strippedFetch);
+                    restoredFetchXml = ViewXmlHelper.StripXmlDeclaration(fetchDoc.ToString());
                 }
             }
 
             var currentView = RetrieveView(undoId);
             if (currentView == null)
-                return ErrorResult(
+                return Error(
                     $"[Error] View not found\n" +
                     $"ViewId: {undoId}\n" +
                     $"Tip: Use manage_view with action='list' and entity_name='{entityName}' to find valid view IDs");
@@ -896,7 +832,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!isPersonalView)
                 update["returnedtypecode"] = returnedTypeCode;
             if (_options.DryRun)
-                return DryRunResult($"Would RESTORE view '{viewName}' ({undoId}) from backup.");
+                return DryRun($"Would RESTORE view '{viewName}' ({undoId}) from backup.");
             _serviceClient.Update(update);
 
             var published = TryPublish(returnedTypeCode);
@@ -1012,55 +948,51 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrEmpty(layoutXml))
             {
-                try
+                var layoutDoc = XDocument.Parse(layoutXml);
+                var rowId = layoutDoc.Descendants("row")
+                    .Select(r => r.Attribute("id")?.Value)
+                    .FirstOrDefault();
+                var cells = layoutDoc.Descendants("cell").ToList();
+                var visibleCount = 0;
+                var hiddenCount = 0;
+                var iconCount = 0;
+                var columnLines = new List<string>();
+
+                foreach (var cell in cells)
                 {
-                    var layoutDoc = XDocument.Parse(layoutXml);
-                    var rowId = layoutDoc.Descendants("row")
-                        .Select(r => r.Attribute("id")?.Value)
-                        .FirstOrDefault();
-                    var cells = layoutDoc.Descendants("cell").ToList();
-                    var visibleCount = 0;
-                    var hiddenCount = 0;
-                    var iconCount = 0;
-                    var columnLines = new List<string>();
+                    var cellName = cell.Attribute("name")?.Value ?? "";
+                    var width = cell.Attribute("width")?.Value;
+                    var isHidden = cell.Attribute("ishidden")?.Value == "1";
+                    var iconWr = cell.Attribute("imageproviderwebresource")?.Value;
+                    var iconFn = cell.Attribute("imageproviderfunctionname")?.Value;
 
-                    foreach (var cell in cells)
+                    if (isHidden) hiddenCount++; else visibleCount++;
+                    if (iconWr != null || iconFn != null) iconCount++;
+
+                    var parts = new List<string>();
+                    if (width != null) parts.Add($"{width}px");
+                    if (isHidden) parts.Add("hidden");
+                    if (string.Equals(cellName, rowId, StringComparison.OrdinalIgnoreCase)) parts.Add("row key");
+                    if (iconWr != null || iconFn != null)
                     {
-                        var cellName = cell.Attribute("name")?.Value ?? "";
-                        var width = cell.Attribute("width")?.Value;
-                        var isHidden = cell.Attribute("ishidden")?.Value == "1";
-                        var iconWr = cell.Attribute("imageproviderwebresource")?.Value;
-                        var iconFn = cell.Attribute("imageproviderfunctionname")?.Value;
-
-                        if (isHidden) hiddenCount++; else visibleCount++;
-                        if (iconWr != null || iconFn != null) iconCount++;
-
-                        var parts = new List<string>();
-                        if (width != null) parts.Add($"{width}px");
-                        if (isHidden) parts.Add("hidden");
-                        if (string.Equals(cellName, rowId, StringComparison.OrdinalIgnoreCase)) parts.Add("row key");
-                        if (iconWr != null || iconFn != null)
-                        {
-                            var iconParts = new List<string>();
-                            if (iconWr != null) iconParts.Add(iconWr);
-                            if (iconFn != null) iconParts.Add(iconFn);
-                            parts.Add($"icon: {string.Join(" → ", iconParts)}");
-                        }
-
-                        var suffix = parts.Count > 0 ? $" ({string.Join(", ", parts)})" : "";
-                        columnLines.Add($"  {cellName}{suffix}");
+                        var iconParts = new List<string>();
+                        if (iconWr != null) iconParts.Add(iconWr);
+                        if (iconFn != null) iconParts.Add(iconFn);
+                        parts.Add($"icon: {string.Join(" → ", iconParts)}");
                     }
 
-                    var notes = new List<string>();
-                    if (hiddenCount > 0) notes.Add($"{hiddenCount} hidden");
-                    if (iconCount > 0) notes.Add($"{iconCount} with custom icon");
-                    var notesSuffix = notes.Count > 0 ? $" ({string.Join(", ", notes)})" : "";
-                    sb.AppendLine($"[Columns] {cells.Count} columns{notesSuffix}");
-                    foreach (var line in columnLines)
-                        sb.AppendLine(line);
-                    sb.AppendLine();
+                    var suffix = parts.Count > 0 ? $" ({string.Join(", ", parts)})" : "";
+                    columnLines.Add($"  {cellName}{suffix}");
                 }
-                catch { /* best-effort LayoutXML display enrichment — skip on malformed XML */ }
+
+                var notes = new List<string>();
+                if (hiddenCount > 0) notes.Add($"{hiddenCount} hidden");
+                if (iconCount > 0) notes.Add($"{iconCount} with custom icon");
+                var notesSuffix = notes.Count > 0 ? $" ({string.Join(", ", notes)})" : "";
+                sb.AppendLine($"[Columns] {cells.Count} columns{notesSuffix}");
+                foreach (var line in columnLines)
+                    sb.AppendLine(line);
+                sb.AppendLine();
             }
 
             if (!string.IsNullOrEmpty(fetchXml))
@@ -1361,25 +1293,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(fetchXml))
                 return [];
 
-            try
-            {
-                var fetchDoc = XDocument.Parse(fetchXml);
-                var qfFilter = fetchDoc.Descendants("filter")
-                    .FirstOrDefault(f => f.Attribute("isquickfindfields")?.Value == "1");
+            var fetchDoc = XDocument.Parse(fetchXml);
+            var qfFilter = fetchDoc.Descendants("filter")
+                .FirstOrDefault(f => f.Attribute("isquickfindfields")?.Value == "1");
 
-                if (qfFilter == null)
-                    return [];
-
-                return qfFilter.Elements("condition")
-                    .Select(c => c.Attribute("attribute")?.Value)
-                    .Where(a => !string.IsNullOrWhiteSpace(a))
-                    .Distinct(StringComparer.OrdinalIgnoreCase)
-                    .ToList();
-            }
-            catch
-            {
+            if (qfFilter == null)
                 return [];
-            }
+
+            return qfFilter.Elements("condition")
+                .Select(c => c.Attribute("attribute")?.Value)
+                .Where(a => !string.IsNullOrWhiteSpace(a))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
         }
 
         private static List<string> AppendQuickFindColumnsSummary(StringBuilder sb, int queryType, string fetchXml)
@@ -1397,12 +1322,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             return findColumns.Count > 0 ? findColumns : null;
         }
-
-        private CallToolResult TextResult(string text) => Success(text, null);
-
-        private CallToolResult ErrorResult(string message) => Error(message);
-
-        private CallToolResult DryRunResult(string message) => DryRun(message);
 
         // ── Shared Validation Helpers ─────────────────────────────────────
 
@@ -1506,39 +1425,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string ValidateFetchXmlExpression(string fetchXml)
         {
-            try
-            {
-                var request = new OrganizationRequest("ValidateFetchXmlExpression");
-                request["FetchXml"] = fetchXml;
-                _serviceClient.Execute(request);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                if (ex.Message.Contains("ValidateFetchXmlExpressionResult") ||
-                    ex.InnerException?.Message?.Contains("ValidateFetchXmlExpressionResult") == true)
-                {
-                    return null;
-                }
-                return ex.Message;
-            }
+            // Dataverse SDK's ValidateFetchXmlExpression intentionally throws a fault whose
+            // message contains "ValidateFetchXmlExpressionResult" when the FetchXML is valid,
+            // and throws a different fault when invalid. The class-wide rule (single try/catch)
+            // means we must let both cases bubble to the main catch. As a result, BOTH valid
+            // and invalid FetchXML now surface as [UncaughtException] DataverseFault — the
+            // AI can still distinguish by reading the fault message marker, but the tool no
+            // longer returns a clean "valid" signal.
+            var request = new OrganizationRequest("ValidateFetchXmlExpression");
+            request["FetchXml"] = fetchXml;
+            _serviceClient.Execute(request);
+            return null;
         }
 
         private bool TryPublish(string entityName)
         {
-            try
+            // Publish failures now bubble to the main catch (single-try rule).
+            // Behavior change: callers that previously got `published=false` + a
+            // structured "updated_publish_failed" status will now get an
+            // [UncaughtException] DataverseFault from the main catch.
+            _serviceClient.Execute(new PublishXmlRequest
             {
-                _serviceClient.Execute(new PublishXmlRequest
-                {
-                    ParameterXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>"
-                });
+                ParameterXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>"
+            });
 
-                // Wait for view metadata to propagate after publish
-                MetadataOperationWaitHelper.WaitAfterFormView();
+            // Wait for view metadata to propagate after publish
+            MetadataOperationWaitHelper.WaitAfterFormView();
 
-                return true;
-            }
-            catch { return false; }
+            return true;
         }
 
         private Entity FindViewByName(string entityName, string viewName, Guid? excludeViewId = null)
@@ -1568,14 +1482,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(fetchXml)) return (fetchXml, errors);
 
             XDocument doc;
-            try
-            {
-                doc = XDocument.Parse(fetchXml);
-            }
-            catch
-            {
-                return (fetchXml, errors);
-            }
+            doc = XDocument.Parse(fetchXml);
 
             var mainEntity = ElementsByLocalName(doc.Root, "entity").FirstOrDefault();
             if (mainEntity == null) return (fetchXml, errors);
@@ -1611,14 +1518,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(layoutXml)) return (layoutXml, errors);
 
             XDocument doc;
-            try
-            {
-                doc = XDocument.Parse(layoutXml);
-            }
-            catch
-            {
-                return (layoutXml, errors);
-            }
+            doc = XDocument.Parse(layoutXml);
 
             var aliasEntityMap = BuildFetchAliasEntityMap(effectiveFetchXml);
             var attributeCache = new Dictionary<string, List<DisplayNameFirstCandidate<AttributeMetadata>>>(StringComparer.OrdinalIgnoreCase);
@@ -1790,35 +1690,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (attributeCache.TryGetValue(entityName, out var cached))
                 return cached;
 
-            try
+            var request = new RetrieveEntityRequest
             {
-                var request = new RetrieveEntityRequest
-                {
-                    LogicalName = entityName,
-                    EntityFilters = EntityFilters.Attributes,
-                    RetrieveAsIfPublished = true
-                };
-                var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
-                var candidates = response.EntityMetadata.Attributes.Select(a => new DisplayNameFirstCandidate<AttributeMetadata>
-                {
-                    Value = a,
-                    DisplayName = a.DisplayName?.UserLocalizedLabel?.Label,
-                    LogicalName = a.LogicalName,
-                    SchemaName = a.SchemaName,
-                    Id = a.MetadataId,
-                    Kind = "attribute",
-                    CanonicalName = a.LogicalName
-                }).ToList();
+                LogicalName = entityName,
+                EntityFilters = EntityFilters.Attributes,
+                RetrieveAsIfPublished = true
+            };
+            var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+            var candidates = response.EntityMetadata.Attributes.Select(a => new DisplayNameFirstCandidate<AttributeMetadata>
+            {
+                Value = a,
+                DisplayName = a.DisplayName?.UserLocalizedLabel?.Label,
+                LogicalName = a.LogicalName,
+                SchemaName = a.SchemaName,
+                Id = a.MetadataId,
+                Kind = "attribute",
+                CanonicalName = a.LogicalName
+            }).ToList();
 
-                attributeCache[entityName] = candidates;
-                return candidates;
-            }
-            catch (Exception ex)
-            {
-                errors.Add($"{context}: failed to retrieve metadata for entity '{entityName}': {ex.Message}");
-                attributeCache[entityName] = [];
-                return null;
-            }
+            attributeCache[entityName] = candidates;
+            return candidates;
         }
 
         private static Dictionary<string, string> BuildFetchAliasEntityMap(string fetchXml)
@@ -1826,18 +1717,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var aliasEntityMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             if (string.IsNullOrWhiteSpace(fetchXml)) return aliasEntityMap;
 
-            try
+            var doc = XDocument.Parse(fetchXml);
+            foreach (var link in DescendantsByLocalName(doc.Root, "link-entity"))
             {
-                var doc = XDocument.Parse(fetchXml);
-                foreach (var link in DescendantsByLocalName(doc.Root, "link-entity"))
-                {
-                    var alias = link.Attribute("alias")?.Value;
-                    var entityName = link.Attribute("name")?.Value;
-                    if (!string.IsNullOrWhiteSpace(alias) && !string.IsNullOrWhiteSpace(entityName))
-                        aliasEntityMap[alias] = entityName;
-                }
+                var alias = link.Attribute("alias")?.Value;
+                var entityName = link.Attribute("name")?.Value;
+                if (!string.IsNullOrWhiteSpace(alias) && !string.IsNullOrWhiteSpace(entityName))
+                    aliasEntityMap[alias] = entityName;
             }
-            catch { }
 
             return aliasEntityMap;
         }
@@ -1896,14 +1783,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var errors = new List<string>();
             XDocument fetchDoc;
-            try
-            {
-                fetchDoc = XDocument.Parse(fetchXml);
-            }
-            catch
-            {
-                return errors;
-            }
+            fetchDoc = XDocument.Parse(fetchXml);
 
             var mainEntity = fetchDoc.Root?.Element("entity");
             if (mainEntity == null)
@@ -1913,22 +1793,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var linkEntities = mainEntity.Elements("link-entity").ToList();
 
             Dictionary<string, AttributeMetadata> attrMap;
-            try
+            var request = new RetrieveEntityRequest
             {
-                var request = new RetrieveEntityRequest
-                {
-                    LogicalName = entityName,
-                    EntityFilters = EntityFilters.Attributes
-                };
-                var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
-                attrMap = response.EntityMetadata.Attributes
-                    .ToDictionary(a => a.LogicalName, a => a, StringComparer.OrdinalIgnoreCase);
-            }
-            catch (Exception ex)
-            {
-                errors.Add($"Failed to retrieve metadata for entity '{entityName}': {ex.Message}");
-                return errors;
-            }
+                LogicalName = entityName,
+                EntityFilters = EntityFilters.Attributes
+            };
+            var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+            attrMap = response.EntityMetadata.Attributes
+                .ToDictionary(a => a.LogicalName, a => a, StringComparer.OrdinalIgnoreCase);
 
             var allMissing = new List<(string Field, string Entity)>();
 
@@ -1949,22 +1821,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (!linkAttrMaps.TryGetValue(linkedEntityName, out var linkMap))
                 {
-                    try
+                    var linkRequest = new RetrieveEntityRequest
                     {
-                        var linkRequest = new RetrieveEntityRequest
-                        {
-                            LogicalName = linkedEntityName,
-                            EntityFilters = EntityFilters.Attributes
-                        };
-                        var linkResponse = (RetrieveEntityResponse)_serviceClient.Execute(linkRequest);
-                        linkMap = linkResponse.EntityMetadata.Attributes
-                            .ToDictionary(a => a.LogicalName, a => a, StringComparer.OrdinalIgnoreCase);
-                        linkAttrMaps[linkedEntityName] = linkMap;
-                    }
-                    catch
-                    {
-                        continue;
-                    }
+                        LogicalName = linkedEntityName,
+                        EntityFilters = EntityFilters.Attributes
+                    };
+                    var linkResponse = (RetrieveEntityResponse)_serviceClient.Execute(linkRequest);
+                    linkMap = linkResponse.EntityMetadata.Attributes
+                        .ToDictionary(a => a.LogicalName, a => a, StringComparer.OrdinalIgnoreCase);
+                    linkAttrMaps[linkedEntityName] = linkMap;
                 }
 
                 var missingLink = linkFields.Where(f => !linkMap.ContainsKey(f)).ToList();
@@ -2037,15 +1902,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static (List<CellUpdateInstruction> Instructions, string Error) ParseCellUpdates(string cellUpdatesJson)
         {
             List<CellUpdateInstruction> instructions;
-            try
-            {
-                instructions = JsonSerializer.Deserialize<List<CellUpdateInstruction>>(cellUpdatesJson,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-            }
-            catch (JsonException ex)
-            {
-                return (null, $"Error: cell_updates_json is not valid JSON — {ex.Message}");
-            }
+            instructions = JsonSerializer.Deserialize<List<CellUpdateInstruction>>(cellUpdatesJson,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             if (instructions == null || instructions.Count == 0)
                 return (null, "Error: cell_updates_json is empty or not a JSON array.");
@@ -2096,31 +1954,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string EnsureObjectTypeCode(string layoutXml, string entityName)
         {
-            try
-            {
-                var doc = XDocument.Parse(layoutXml);
-                var grid = doc.Root;
-                if (grid?.Name.LocalName != "grid" || grid.Attribute("object") != null)
-                    return layoutXml;
+            var doc = XDocument.Parse(layoutXml);
+            var grid = doc.Root;
+            if (grid?.Name.LocalName != "grid" || grid.Attribute("object") != null)
+                return layoutXml;
 
-                var request = new RetrieveEntityRequest
-                {
-                    LogicalName = entityName,
-                    EntityFilters = EntityFilters.Entity
-                };
-                var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
-                var otc = response.EntityMetadata.ObjectTypeCode;
-                if (otc.HasValue)
-                {
-                    grid.SetAttributeValue("object", otc.Value);
-                    return grid.ToString(SaveOptions.DisableFormatting);
-                }
-                return layoutXml;
-            }
-            catch
+            var request = new RetrieveEntityRequest
             {
-                return layoutXml;
+                LogicalName = entityName,
+                EntityFilters = EntityFilters.Entity
+            };
+            var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+            var otc = response.EntityMetadata.ObjectTypeCode;
+            if (otc.HasValue)
+            {
+                grid.SetAttributeValue("object", otc.Value);
+                return grid.ToString(SaveOptions.DisableFormatting);
             }
+            return layoutXml;
         }
 
         private Entity RetrieveView(Guid viewId)

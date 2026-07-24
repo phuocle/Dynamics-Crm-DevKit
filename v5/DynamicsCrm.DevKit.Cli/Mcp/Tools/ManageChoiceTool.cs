@@ -136,7 +136,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return Error($"Error: Failed to manage global option set: {ex.Message}");
+                return ThrowException(ex);
             }
         }
 
@@ -417,24 +417,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var published = false;
             if (requiresPublish)
             {
-                try
-                {
-                    published = PublishOptionSet(name);
+                // Publish failures now bubble to the main catch (single-try rule).
+                // Behavior change: caller no longer gets "updated_publish_failed" status;
+                // an [UncaughtException] DataverseFault is returned instead.
+                published = PublishOptionSet(name);
 
-                    // Wait for choice metadata to propagate after publish
-                    if (published)
-                    {
-                        MetadataOperationWaitHelper.WaitAfterChoiceOperation();
-                    }
-                }
-                catch (Exception ex)
+                // Wait for choice metadata to propagate after publish
+                if (published)
                 {
-                    sb.AppendLine("Published: no");
-                    sb.AppendLine($"PublishError: {ex.Message}");
-                    sb.AppendLine($"NextStep: wait {MetadataOperationWaitHelper.DefaultWaitSeconds}s, then publish only or read back with manage_choice(action='detail').");
-                    return Success(sb.ToString(), BuildChoiceUpdateResult(name, displayName, hasDisplayName,
-                        optionsToInsert, optionsAlreadyExisted, parsedUpdateLabels, parsedRemoveLabels, coloredSummary,
-                        false, metadataVerified, "publish_failed", ex.Message, needsWait: true));
+                    MetadataOperationWaitHelper.WaitAfterChoiceOperation();
                 }
             }
 
@@ -558,10 +549,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 colorMap = resolved;
             }
 
-            // Check if already exists
-            if (OptionSetExists(name))
-                return Error($"Error: Global option set '{name}' already exists. " +
-                    "Use action='update' to modify it.");
+            // Existence check removed: with the single-try rule, an attempt to create an
+            // existing option set will surface as [UncaughtException] DataverseFault from
+            // the create call below. Caller (HandleCreate) used to short-circuit with a
+            // controlled "already exists" error; that controlled path is gone.
 
             if (_options.DryRun)
                 return DryRun($"Would CREATE global option set '{name}' with {parsedOptions.Count} option(s).");
@@ -692,20 +683,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!solResult2.IsSuccess)
                     return Error($"Error: {solResult2.Error}");
                 // Use max existing value + 1 as starting point so new options don't collide
-                try
-                {
-                    var existingResp = (RetrieveOptionSetResponse)_serviceClient.Execute(
-                        new RetrieveOptionSetRequest { Name = name });
-                    var existingOpts = (existingResp.OptionSetMetadata as OptionSetMetadata)?.Options;
-                    var maxExisting = existingOpts != null && existingOpts.Count > 0
-                        ? existingOpts.Max(o => o.Value ?? 0)
-                        : solResult2.OptionValuePrefix * 10000 - 1;
-                    addOptionValueBase = maxExisting + 1;
-                }
-                catch
-                {
-                    addOptionValueBase = solResult2.OptionValuePrefix * 10000;
-                }
+                var existingResp = (RetrieveOptionSetResponse)_serviceClient.Execute(
+                    new RetrieveOptionSetRequest { Name = name });
+                var existingOpts = (existingResp.OptionSetMetadata as OptionSetMetadata)?.Options;
+                var maxExisting = existingOpts != null && existingOpts.Count > 0
+                    ? existingOpts.Max(o => o.Value ?? 0)
+                    : solResult2.OptionValuePrefix * 10000 - 1;
+                addOptionValueBase = maxExisting + 1;
             }
 
             var parsedAdd = addOptionValueBase.HasValue
@@ -738,18 +722,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("Error: No changes specified. Provide at least one of: " +
                     "display_name, description, add_options, update_options, remove_options, option_colors.");
 
-            // Fetch current metadata for label→value resolution (name is already resolved above)
+            // Fetch current metadata for label→value resolution (name is already resolved above).
+            // "Not found" errors now bubble to the main catch (single-try rule); they surface
+            // as [UncaughtException] DataverseFault with the not-found error code.
             OptionSetMetadata existingMeta;
-            try
-            {
-                var resp = (RetrieveOptionSetResponse)_serviceClient.Execute(new RetrieveOptionSetRequest { Name = name });
-                existingMeta = resp.OptionSetMetadata as OptionSetMetadata;
-            }
-            catch (Exception)
-            {
-                return Error($"Error: Global option set '{name}' not found. " +
-                    "Use action='create' to create it, or action='list' to see all available option sets.");
-            }
+            var resp = (RetrieveOptionSetResponse)_serviceClient.Execute(new RetrieveOptionSetRequest { Name = name });
+            existingMeta = resp.OptionSetMetadata as OptionSetMetadata;
 
             // Resolve update labels → values
             List<(int value, string newLabel)> parsedUpdate = null;
@@ -1251,18 +1229,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return $"{publisherPrefix.Trim().ToLowerInvariant()}_{compactName}";
         }
 
-        private bool OptionSetExists(string name)
-        {
-            try
-            {
-                _serviceClient.Execute(new RetrieveOptionSetRequest { Name = name });
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
+        // OptionSetExists helper removed: with the single-try rule, existence checks
+        // bubble to the main catch. Create-flows that try to create an existing option
+        // set now surface as [UncaughtException] DataverseFault instead of a controlled
+        // "already exists" error.
 
         private bool PublishOptionSet(string optionSetName)
         {
