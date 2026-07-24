@@ -2,3 +2,4 @@ execute_fetchxml
 whoami
 manage_choice
 manage_view
+parse_record_url

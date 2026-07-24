@@ -27,35 +27,42 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(ParsedRecordUrlResult)),
         Description(
-            "Extract entity logical name + record ID from a D365/Power Platform URL/GUID. Supports main.aspx (etn/etc), Web API, maker portal, rundialog, workflow/report/solution editor URLs, raw GUIDs. Returns EntityName, RecordId, Source, EnvironmentId (maker only). Auto-resolves etc → entitySetName via Dataverse.\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- User pastes a record URL — extract entity + GUID before calling other tools\n" +
-            "- Convert raw GUID to typed reference when context is unknown\n" +
-            "- If EntityName='(unknown)', ask user for entity name or fuller URL")]
+            "Extract entity logical name and record GUID from a Dataverse/Power Platform URL or raw GUID. " +
+            "Parsers (first match wins): main.aspx, Web API, maker portal (flow/solution/environment), legacy URLs, raw GUID. " +
+            "Returns EntityName, RecordId, Source; maker URLs also include EnvironmentId and FlowId. " +
+            "EntityName='(unknown)' means only a GUID was found — ask the user for the entity name. " +
+            "Call this FIRST when the user pastes a URL, then chain to manage_record or execute_fetchxml. " +
+            "Do not use to read record fields or for non-Dataverse URLs.")]
         public CallToolResult parse_record_url(
             [Description(
-                "URL, GUID, or text (record URL, Web API URL, maker portal URL, raw GUID)."
+                "URL, GUID, or text. URL-decoded automatically; first matching parser wins."
             )] string input)
         {
-            if (string.IsNullOrWhiteSpace(input))
-                return Error("Error: input is required.\n" +
-                       "Valid input: Dynamics 365 record URL, Web API URL, maker portal URL, or raw GUID.");
+            try
+            {
+                if (string.IsNullOrWhiteSpace(input))
+                    return Error("Error: input is required.\n" +
+                           "Valid input: Dynamics 365 record URL, Web API URL, maker portal URL, or raw GUID.");
 
-            var decoded = Uri.UnescapeDataString(input.Trim());
+                var decoded = Uri.UnescapeDataString(input.Trim());
 
-            // Try each parser in priority order
-            var result = TryParseMainAspx(decoded)
-                      ?? TryParseWebApi(decoded)
-                      ?? TryParseMakerPortal(decoded)
-                      ?? TryParseLegacyUrls(decoded)
-                      ?? TryParseRawGuid(decoded);
+                // Try each parser in priority order
+                var result = TryParseMainAspx(decoded)
+                          ?? TryParseWebApi(decoded)
+                          ?? TryParseMakerPortal(decoded)
+                          ?? TryParseLegacyUrls(decoded)
+                          ?? TryParseRawGuid(decoded);
 
-            if (result == null)
-                return Error("[ParsedUrl] Error: No GUID found in input.\n" +
-                       "Valid input: Dynamics 365 record URL, Web API URL, maker portal URL, or raw GUID.");
+                if (result == null)
+                    return Error("[ParsedUrl] Error: No GUID found in input.\n" +
+                           "Valid input: Dynamics 365 record URL, Web API URL, maker portal URL, or raw GUID.");
 
-            return Success(FormatText(result), result);
+                return Success(BuildCompactText(result), result);
+            }
+            catch (Exception ex)
+            {
+                return ThrowException(ex);
+            }
         }
 
         // ── Priority 1: Model-Driven App URLs (main.aspx) ─────────────────────────
@@ -271,42 +278,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string ResolveEntityTypeCode(int objectTypeCode)
         {
-            try
+            var request = new RetrieveAllEntitiesRequest
             {
-                var request = new RetrieveAllEntitiesRequest
-                {
-                    EntityFilters = EntityFilters.Entity,
-                    RetrieveAsIfPublished = true
-                };
-                var response = (RetrieveAllEntitiesResponse)_serviceClient.Execute(request);
-                var entity = response.EntityMetadata
-                    .FirstOrDefault(e => e.ObjectTypeCode == objectTypeCode);
-                return entity?.LogicalName;
-            }
-            catch
-            {
-                return null;
-            }
+                EntityFilters = EntityFilters.Entity,
+                RetrieveAsIfPublished = true
+            };
+            var response = (RetrieveAllEntitiesResponse)_serviceClient.Execute(request);
+            var entity = response.EntityMetadata
+                .FirstOrDefault(e => e.ObjectTypeCode == objectTypeCode);
+            return entity?.LogicalName;
         }
 
         private string ResolveEntitySetName(string entitySetName)
         {
-            try
+            var request = new RetrieveAllEntitiesRequest
             {
-                var request = new RetrieveAllEntitiesRequest
-                {
-                    EntityFilters = EntityFilters.Entity,
-                    RetrieveAsIfPublished = true
-                };
-                var response = (RetrieveAllEntitiesResponse)_serviceClient.Execute(request);
-                var entity = response.EntityMetadata
-                    .FirstOrDefault(e => string.Equals(e.EntitySetName, entitySetName, StringComparison.OrdinalIgnoreCase));
-                return entity?.LogicalName;
-            }
-            catch
-            {
-                return null;
-            }
+                EntityFilters = EntityFilters.Entity,
+                RetrieveAsIfPublished = true
+            };
+            var response = (RetrieveAllEntitiesResponse)_serviceClient.Execute(request);
+            var entity = response.EntityMetadata
+                .FirstOrDefault(e => string.Equals(e.EntitySetName, entitySetName, StringComparison.OrdinalIgnoreCase));
+            return entity?.LogicalName;
         }
 
         // ── Formatting helpers ────────────────────────────────────────────────────
@@ -333,25 +326,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        private static string FormatText(ParsedRecordUrlResult result)
+        private static string BuildCompactText(ParsedRecordUrlResult result)
         {
-            var sb = new StringBuilder(256);
-            sb.AppendLine("[ParsedUrl]");
-            sb.AppendLine($"EntityName: {result.EntityName}");
-            sb.AppendLine($"RecordId: {result.RecordId}");
+            var sb = new StringBuilder(128);
+            sb.Append($"[ParsedUrl] {result.EntityName} {result.RecordId} ({result.Source})");
             if (!string.IsNullOrWhiteSpace(result.EnvironmentId))
-                sb.AppendLine($"EnvironmentId: {result.EnvironmentId}");
-            sb.Append($"Source: {result.Source}");
+                sb.Append($" env={result.EnvironmentId}");
             if (!string.IsNullOrWhiteSpace(result.FlowId))
-            {
-                sb.AppendLine();
-                sb.Append($"FlowId: {result.FlowId}");
-            }
+                sb.Append($" flow={result.FlowId}");
             if (!string.IsNullOrWhiteSpace(result.Tip))
-            {
-                sb.AppendLine();
-                sb.Append($"Tip: {result.Tip}");
-            }
+                sb.Append($". {result.Tip}");
+            sb.Append('.');
             return sb.ToString();
         }
 
