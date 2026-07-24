@@ -39,21 +39,38 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertViewResult)),
         Description(
-            "Dataverse views (savedquery/userquery) — list/detail/create/update/rename/set_default/undo. Required: list (none); detail (view_id OR view_name); create (view_name+layoutxml); update (view_id OR view_name + layoutxml and/or cell_updates_json); rename (view_id+view_name); set_default (view_id OR view_name); undo (view_id+backup path). Auto: backup→XSD+sync validate→update→publish. SYNC RULE: every FetchXML <attribute> MUST have a matching LayoutXML <cell>; mismatch blocks. querytype: 0=Public, 4=QuickFind, 64=SubGrid. See docs://instructions_for_views, schema://layoutxml, schema://fetchxml.\n\n" +
+            "Manage Dataverse views (savedquery/userquery) — list, detail, create, update, rename, set_default, undo.\n\n" +
 
-            "QUICK FIND NOTE: for query_type=4, searchable fields are FetchXML <condition> nodes inside <filter isquickfindfields=\"1\">. LayoutXML <cell> only controls displayed columns and does NOT make a field searchable.\n\n" +
+            "ACTIONS + REQUIRED PARAMS:\n" +
+            "- 'list' — entity_name only. Optional: view_name (contains filter), query_type, include_fetchxml, include_personal.\n" +
+            "- 'detail' — entity_name + (view_id OR view_name). Returns columns, FetchXML, LayoutXML, conditional formatting.\n" +
+            "- 'create' — entity_name + view_name + layoutxml. Optional: fetchxml (auto-generated if omitted).\n" +
+            "- 'update' — entity_name + (view_id OR view_name) + (layoutxml and/or cell_updates_json). Auto: backup→validate→update→publish.\n" +
+            "- 'rename' — entity_name + view_id + view_name (new name).\n" +
+            "- 'set_default' — entity_name + (view_id OR view_name). Public views (querytype=0) only.\n" +
+            "- 'undo' — entity_name + view_id + layoutxml (backup path). Optional: fetchxml (backup path).\n\n" +
+
+            "SYNC RULE: every FetchXML <attribute> MUST have a matching LayoutXML <cell>; mismatch blocks update. querytype: 0=Public, 4=QuickFind, 64=SubGrid. See docs://instructions_for_views, schema://layoutxml, schema://fetchxml.\n\n" +
+
+            "QUICK FIND NOTE: for query_type=4, searchable fields are <condition> nodes inside <filter isquickfindfields=\"1\">. LayoutXML <cell> only controls displayed columns.\n\n" +
+
+            "NAME RESOLUTION: entity_name, FetchXML fields, LayoutXML cells, and cell_updates_json accept Display Name or logical name. Display Name resolved first.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Inspect existing views (list, detail) before editing\n" +
-            "- Apply layout/fetch changes (action=update)\n" +
-            "- Patch cell attributes only via cell_updates_json (no full LayoutXML rebuild)\n\n" +
-            "NAME RESOLUTION: entity_name, FetchXML field/entity references, LayoutXML cell names, and cell_updates_json cell_name values accept Display Name or logical/schema name. Display Name contains is resolved first, then logical/schema contains.\n\n" +
-            "The AI should pass its current workspace directory to workspace_folder to ensure backups are saved to the user's project.\n\n" +
-            "FUZZY/AMBIGUITY:\n" +
-            "- view_name is contains match. Exactly 1 → auto-detail; multiple → tool returns candidates, use view_id to disambiguate.\n\n" +
+            "- Inspect existing views (list, detail) before editing.\n" +
+            "- Apply layout/fetch changes (action=update).\n" +
+            "- Patch cell attributes only via cell_updates_json (no full LayoutXML rebuild).\n\n" +
+
+            "COMMON MISTAKES:\n" +
+            "- Always inspect with action='list' or 'detail' BEFORE editing.\n" +
+            "- Pass workspace_folder so backups are saved to the user's project directory.\n" +
+            "- view_name is contains match: 1 match → auto-selects; multiple → returns candidates, use view_id.\n\n" +
 
             "SAFETY:\n" +
-            "- Validation blocks FetchXML/LayoutXML mismatch by default (validate=true).")]
+            "- Validation blocks FetchXML/LayoutXML mismatch by default (validate=true).\n" +
+            "- Automatic backups saved to .devkit/backups/views/ before update/rename.\n\n" +
+
+            "RELATED TOOLS: get_tables (entity/field metadata), execute_fetchxml (test the view's FetchXML).")]
         public CallToolResult manage_view(
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'."
             )] string action,

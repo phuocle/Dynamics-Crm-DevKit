@@ -30,23 +30,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(WhoAmIResult)),
         Description(
-            "Get current user and environment information. Returns structured JSON including user identity, organization details, security roles, and DevKit runtime version.\n\n" +
+            "Get current user and environment information. Returns structured JSON with identity, org, settings, roles, and DevKit runtime.\n\n" +
 
             "OUTPUT:\n" +
             "- User: ID, full name, domain name, email.\n" +
             "- Organization: URL, version, friendly name, unique name, tenant/env IDs.\n" +
             "- Settings: language, currency, fiscal start, audit enabled.\n" +
             "- Roles: list of security roles assigned to the current user.\n" +
-            "- DevKit runtime: version, build, assembly SHA, process info.\n\n" +
-
-            "PARAMETERS:\n" +
-            "- include_token: include OAuth access token in the response (default false).\n\n" +
+            "- DevKit runtime: version, build timestamp, assembly SHA, process info.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Confirm connected user/environment.\n" +
-            "- Verify the DevKit CLI build/runtime after installation or restart.\n" +
-            "- Troubleshoot security roles.\n" +
-            "- Get user ID for FetchXML owner filters.")]
+            "- First call after connection to confirm user/environment.\n" +
+            "- Verify DevKit CLI build/runtime after installation or restart.\n" +
+            "- Get userId for FetchXML owner filters (e.g. <condition attribute='ownerid' operator='eq' value='{userId}'/>).\n" +
+            "- Troubleshoot permissions by checking security roles.\n\n" +
+
+            "WHEN NOT TO USE:\n" +
+            "- Do not call repeatedly — result is stable within a session. Call once and cache the userId.\n\n" +
+
+            "RELATED TOOLS: execute_fetchxml (use userId in owner filters), get_tables (entity metadata).")]
         public CallToolResult whoami(
             [Description(
                 "Include OAuth access token (~400 tokens extra). For direct Web API calls only."

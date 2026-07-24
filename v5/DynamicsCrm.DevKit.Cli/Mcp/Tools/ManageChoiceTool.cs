@@ -37,52 +37,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Manage Dataverse GLOBAL option sets (choices/picklists). For local picklists (per-attribute), use get_tables instead. Note: list and detail are non-destructive; create and update are destructive — confirm with the user before invoking create/update.\n\n" +
 
             "ACTIONS (one per call):\n" +
-            "- 'list' — no required params. Optional filter= (contains match on logical name OR display name, case-insensitive). Returns totalCount + items[].\n" +
+            "- 'list' — optional filter= (contains match on logical name OR display name, case-insensitive). Returns totalCount + items[].\n" +
             "- 'detail' — optionset_name required. Returns optionCount + options[] (with value, label, color).\n" +
-            "- 'create' — display_name + options (label-only) + solution_name required. optionset_name is optional (auto-derived as '{publisher_prefix}_{compact_lowercase_display_name}' if omitted; if provided, it MUST start with the solution publisher prefix or an error is returned). description and option_colors are optional.\n" +
-            "- 'update' — optionset_name required. Provide at least one of: display_name, description, add_options, update_options, remove_options, option_colors. add_options with label-only entries requires solution_name to resolve the publisher prefix.\n\n" +
+            "- 'create' — display_name + options (label-only) + solution_name required. optionset_name auto-derived if omitted (must start with publisher prefix if provided).\n" +
+            "- 'update' — optionset_name required + at least one of: display_name, description, add_options, update_options, remove_options, option_colors.\n\n" +
 
             "OPTION VALUES:\n" +
-            "- solution_name is REQUIRED for 'create' and for label-only 'add_options'. If the user did not provide it, ASK — never search or guess.\n" +
-            "- options / add_options: label-only entries ('Draft;Confirmed') — values auto-assigned starting from the publisher's customizationoptionvalueprefix. 'value:label' pairs are also accepted for explicit values.\n" +
-            "- update_options: 'OldLabel:NewLabel;...' pairs. Labels are resolved to values via the current metadata. Warning: rename REPLACES the localized label — other-language labels are preserved (MergeLabels=true is NOT used for rename), so non-base-language labels are kept.\n" +
-            "- remove_options: comma-separated label names ('Draft,Cancelled'). Labels are resolved to values automatically. IRREVERSIBLE.\n\n" +
-
-            "OPTION COLORS:\n" +
-            "- format: option_colors='Label:#RRGGBB;...' or 'value:#RRGGBB;...' (semicolon-separated). Labels resolved case-insensitively. Example: 'Draft:#808080;Paid:#008000'.\n" +
-            "- applies to create and update. Color keys must resolve to existing options (after add/rename projection); duplicates are rejected.\n" +
-            "- on update, only options whose color actually changes are written (no-op for unchanged colors).\n\n" +
+            "- solution_name is REQUIRED for 'create' and label-only 'add_options'. If user did not provide it, ASK — never guess.\n" +
+            "- options / add_options: label-only 'Draft;Confirmed' (values auto-assigned) or 'value:label' explicit pairs.\n" +
+            "- update_options: 'OldLabel:NewLabel;...' pairs. Labels resolved to values via metadata.\n" +
+            "- remove_options: comma-separated labels 'Draft,Cancelled'. IRREVERSIBLE.\n" +
+            "- option_colors: 'Label:#RRGGBB;...' or 'value:#RRGGBB;...' (semicolon-separated). Labels resolved case-insensitively.\n\n" +
 
             "AMBIGUITY:\n" +
-            "- optionset_name accepts logical name OR display name. Display Name is matched first (contains), then logical name. If multiple optionsets match, the tool returns an error — call action='list' to disambiguate, then retry with the exact logical name.\n\n" +
-
-            "PUBLISHING:\n" +
-            "- list and detail never publish.\n" +
-            "- create and delete-only update do not publish (Dataverse auto-publishes new/removed customizations).\n" +
-            "- Other updates (display_name, description, add_options, update_options, option_colors) publish the affected option set via PublishXmlRequest.\n\n" +
-
-            "IDEMPOTENCY:\n" +
-            "- tool is marked Idempotent=false. Repeating the same update with identical values still issues Dataverse calls (no client-side diff). To safely retry, run once and read back via 'detail'.\n" +
-            "- add_options with a label that already exists returns 'OptionsAlreadyExisted' in the result and does NOT fail — it is silently skipped.\n\n" +
-
-            "READBACK WAIT:\n" +
-            "- After create/update that mutates metadata, the tool waits internally and verifies via re-read. The structured result includes 'metadataVerified', 'published', and (when applicable) 'needsWait=true' with 'pollAfterSeconds' and 'nextAllowedActions'. If needsWait is true, do NOT immediately call action='detail' — wait the suggested seconds first, or pass filter= instead to avoid triggering re-read.\n\n" +
-
-            "DRY RUN:\n" +
-            "- When McpDryRunOptions.DryRun is enabled, create/update return a 'Would CREATE/...' or 'Would UPDATE/...' summary instead of mutating. No publish, no verify, no wait.\n\n" +
+            "- optionset_name accepts logical name OR display name. Display Name matched first (contains). Multiple matches → error; use action='list' to disambiguate.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- List all global choices in the org (or filter by name fragment) before creating/modifying.\n" +
-            "- Resolve the integer value of a picklist label returned from FetchXML / query results (use action='detail').\n" +
-            "- Create a global choice that upsert_column will reference via global_optionset_name.\n" +
-            "- Add, rename, remove, or recolor option values on an existing global choice.\n" +
-            "- Bulk-rename or bulk-color a set of options in one call.\n\n" +
+            "- List/inspect global choices before creating or modifying.\n" +
+            "- Resolve integer value of a picklist label (use action='detail').\n" +
+            "- Create a global choice for upsert_column to reference via global_optionset_name.\n" +
+            "- Add, rename, remove, or recolor option values.\n\n" +
 
             "SAFETY:\n" +
-            "- remove_options is destructive and cannot be undone (the integer value may be reused by future options — historic data referencing it becomes orphaned).\n" +
-            "- add_options with an explicit value that collides with an existing value returns an error — omit the value to auto-assign.\n" +
-            "- update_options is destructive on the base-language label of the option (other-language labels are preserved).\n" +
-            "- All create/update operations require a confirmed optionset_name (logical name) or display_name (for create) — do not infer from context.")]
+            "- remove_options is irreversible — historic data referencing removed values becomes orphaned.\n" +
+            "- add_options with a label that already exists is silently skipped (no error).\n" +
+            "- add_options with an explicit value that collides returns an error — omit the value to auto-assign.\n" +
+            "- If structured result has needsWait=true, wait pollAfterSeconds before calling action='detail'.\n\n" +
+
+            "RELATED TOOLS: get_tables (local picklist metadata), upsert_column (reference global choice via global_optionset_name), execute_fetchxml (query records with choice values).")]
         public CallToolResult manage_choice(
             [Description(
                 "Action to perform. One of: 'list', 'detail', 'create', 'update'."
