@@ -29,7 +29,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "List/inspect Dataverse plugin trace logs (plugintracelog). Empty record_id = list (filtered). Set record_id = detail with full messageBlock + exceptionDetails in structured content. Requires Plugin Trace Log enabled (System Settings > Customization).\n\n" +
 
             "MODES:\n" +
-            "- list: newest first; default last 60 min, max 50 (cap 200 / 1440 min).\n" +
+            "- list: newest first; default last 60 min, max 50 (cap 200 / 43200 min = 30 days).\n" +
             "- detail: one log by plugintracelog GUID from list.\n\n" +
 
             "FILTERS (list only):\n" +
@@ -71,7 +71,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "GUID. Trace one request across logs."
             )] string correlation_id = "",
             [Description(
-                "0 = 60 min default. Max 1440."
+                "0 = 60 min default. Max 43200 (30 days)."
             )] int minutes_ago = 0,
             [Description(
                 "Default 50. Max 200."
@@ -103,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"Error: '{correlationId.Trim()}' is not a valid GUID for correlation_id.");
 
             if (minutesAgo <= 0) minutesAgo = 60;
-            if (minutesAgo > 1440) minutesAgo = 1440;
+            if (minutesAgo > 43200) minutesAgo = 43200;
             if (maxRecords <= 0) maxRecords = 50;
             if (maxRecords > 200) maxRecords = 200;
 
