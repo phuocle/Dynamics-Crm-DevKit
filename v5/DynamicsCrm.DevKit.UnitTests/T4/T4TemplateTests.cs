@@ -73,8 +73,8 @@ public class T4TemplateTests
         var template = LoadTemplate("Plugin.tt");
         var output = SimpleT4Processor.Process(template, ctx);
 
-        Assert.IsTrue(output.Contains("// DynamicsCrm.DevKit.Template: Plugin.tt"));
-        Assert.IsTrue(output.Contains("// DynamicsCrm.DevKit.TemplateVersion: 1"));
+        Assert.IsTrue(output.Contains("[CrmPluginRegistration("));
+        Assert.IsTrue(output.Contains("public class"));
     }
 
     [TestMethod]

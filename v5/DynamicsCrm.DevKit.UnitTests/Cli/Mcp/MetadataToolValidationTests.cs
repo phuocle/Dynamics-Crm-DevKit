@@ -29,7 +29,7 @@ public class MetadataToolValidationTests
     private static string InvokeGetTables(object tool, string entityName)
     {
         var method = GetTablesToolType.GetMethod("get_tables")!;
-        var task = (System.Threading.Tasks.Task<CallToolResult>)method.Invoke(tool, new object[] { entityName, "", false, false, "" })!;
+        var task = (System.Threading.Tasks.Task<CallToolResult>)method.Invoke(tool, new object[] { entityName, "", false, false, "", "compact" })!;
         var result = task.GetAwaiter().GetResult();
         var text = result.Content.Count > 0 && result.Content[0] is ModelContextProtocol.Protocol.TextContentBlock tb ? tb.Text : "";
         return text;

@@ -175,10 +175,7 @@ public class ConnectionBuilderCoverageTests
         var builder = new FromPacConnectionBuilder();
         Assert.AreEqual(ConnectionType.FromPac, builder.Type);
         Assert.AreEqual("AuthType=FromPac;Profile=Default;", builder.BuildConnectionString(new CrmConnection { PacProfile = "Default" }));
-
-        var missing = await builder.ValidateAsync(new CrmConnection());
-        Assert.IsFalse(missing.isValid);
-        Assert.IsTrue(missing.error.Contains("PAC CLI profile name is required"));
+        Assert.AreEqual("AuthType=FromPac;Profile=(active);", builder.BuildConnectionString(new CrmConnection()));
 
         var notFound = await builder.ValidateAsync(new CrmConnection { PacProfile = $"missing-{Guid.NewGuid():N}" });
         Assert.IsFalse(notFound.isValid);

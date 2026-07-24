@@ -61,7 +61,7 @@ public class PublishToolTests
         var result = BuildParameterXml(new List<string> { "account" }, false, true);
 
         Assert.IsTrue(result.Contains("<optionsets />"));
-        Assert.IsTrue(result.Contains("<sitemaps><sitemap></sitemap></sitemaps>"));
+        Assert.IsTrue(result.Contains("<sitemaps><sitemap /></sitemaps>"));
     }
 
     [TestMethod]
@@ -70,7 +70,7 @@ public class PublishToolTests
         var result = BuildParameterXml(new List<string> { "account" }, true, true);
 
         Assert.IsTrue(result.Contains("<optionsets><optionset>all</optionset></optionsets>"));
-        Assert.IsTrue(result.Contains("<sitemaps><sitemap></sitemap></sitemaps>"));
+        Assert.IsTrue(result.Contains("<sitemaps><sitemap /></sitemaps>"));
     }
 
     [TestMethod]

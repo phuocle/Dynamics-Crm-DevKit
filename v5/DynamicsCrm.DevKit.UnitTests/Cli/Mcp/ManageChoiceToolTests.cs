@@ -345,19 +345,13 @@ public class ManageChoiceToolTests
     }
 
     // ──────────────────────────────────────────────
-    // SuccessResult / ErrorResult (private static) via reflection
+    // SuccessResult / ErrorResult / DryRunResult
     // ──────────────────────────────────────────────
-
-    private static readonly MethodInfo SuccessResultMethod = ToolType
-        .GetMethod("SuccessResult", BindingFlags.NonPublic | BindingFlags.Static)!;
-
-    private static readonly MethodInfo ErrorResultMethod = ToolType
-        .GetMethod("ErrorResult", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     [TestMethod]
     public void SuccessResult_ReturnsCallToolResult_WithContent()
     {
-        var result = (CallToolResult)SuccessResultMethod.Invoke(null, new object[] { "test content" })!;
+        var result = DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.McpToolResults.Success("test content", null);
         Assert.AreEqual(1, result.Content.Count, "SuccessResult should have exactly 1 content block");
         var text = ((TextContentBlock)result.Content[0]).Text;
         Assert.AreEqual("test content", text);
@@ -366,7 +360,7 @@ public class ManageChoiceToolTests
     [TestMethod]
     public void SuccessResult_Content_ContainsText()
     {
-        var result = (CallToolResult)SuccessResultMethod.Invoke(null, new object[] { "hello world" })!;
+        var result = DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.McpToolResults.Success("hello world", null);
         Assert.AreEqual(1, result.Content.Count, "Should have exactly 1 content block");
         var text = ((TextContentBlock)result.Content[0]).Text;
         Assert.AreEqual("hello world", text);
@@ -375,7 +369,7 @@ public class ManageChoiceToolTests
     [TestMethod]
     public void SuccessResult_EmptyText_HasContent()
     {
-        var result = (CallToolResult)SuccessResultMethod.Invoke(null, new object[] { "" })!;
+        var result = DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.McpToolResults.Success("", null);
         Assert.AreEqual(1, result.Content.Count, "Should have 1 content block even for empty text");
         var text = ((TextContentBlock)result.Content[0]).Text;
         Assert.AreEqual("", text);
@@ -384,14 +378,14 @@ public class ManageChoiceToolTests
     [TestMethod]
     public void ErrorResult_ReturnsCallToolResult_WithIsErrorTrue()
     {
-        var result = (CallToolResult)ErrorResultMethod.Invoke(null, new object[] { "something failed" })!;
+        var result = DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.McpToolResults.Error("something failed");
         Assert.IsTrue(result.IsError, "ErrorResult should have IsError=true");
     }
 
     [TestMethod]
     public void ErrorResult_Content_ContainsErrorMessage()
     {
-        var result = (CallToolResult)ErrorResultMethod.Invoke(null, new object[] { "Error: test message" })!;
+        var result = DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.McpToolResults.Error("Error: test message");
         var text = ((TextContentBlock)result.Content[0]).Text;
         Assert.AreEqual("Error: test message", text);
     }
@@ -399,7 +393,7 @@ public class ManageChoiceToolTests
     [TestMethod]
     public void ErrorResult_EmptyText_StillSetsIsError()
     {
-        var result = (CallToolResult)ErrorResultMethod.Invoke(null, new object[] { "" })!;
+        var result = DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.McpToolResults.Error("");
         Assert.IsTrue(result.IsError, "ErrorResult should always set IsError=true");
         Assert.AreEqual(1, result.Content.Count);
     }
@@ -484,16 +478,13 @@ public class ManageChoiceToolTests
     }
 
     // ──────────────────────────────────────────────
-    // DryRunResult via reflection
+    // DryRunResult
     // ──────────────────────────────────────────────
-
-    private static readonly MethodInfo DryRunResultMethod = ToolType
-        .GetMethod("DryRunResult", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     [TestMethod]
     public void DryRunResult_ContainsDryRunPrefix()
     {
-        var result = (CallToolResult)DryRunResultMethod.Invoke(null, new object[] { "Would do something" })!;
+        var result = DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.McpToolResults.DryRun("Would do something");
         var text = ((TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("[DRY-RUN]"), "DryRunResult should contain [DRY-RUN] prefix");
         Assert.IsTrue(text.Contains("No changes were made"), "DryRunResult should contain 'No changes were made'");

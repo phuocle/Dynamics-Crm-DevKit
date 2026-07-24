@@ -1,3 +1,4 @@
+#nullable enable
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using Microsoft.Xrm.Sdk;
 using ModelContextProtocol.Protocol;
@@ -29,7 +30,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// The hint is included in both text and structured content so the AI/client
         /// knows how to proceed.
         /// </summary>
-        internal static CallToolResult Error(string message, string hint = null, object details = null)
+        internal static CallToolResult Error(string message, string? hint = null, object? details = null)
         {
             var text = message;
             if (!string.IsNullOrWhiteSpace(hint))
@@ -102,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             // Build structured details so AI clients don't have to parse text
             var details = new Dictionary<string, object>
             {
-                ["exceptionType"] = ex.GetType().FullName,
+                ["exceptionType"] = ex.GetType().FullName ?? ex.GetType().Name,
                 ["kind"] = kind,
                 ["message"] = message
             };
@@ -116,7 +117,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             {
                 details["innerException"] = new Dictionary<string, object>
                 {
-                    ["type"] = ex.InnerException.GetType().FullName,
+                    ["type"] = ex.InnerException.GetType().FullName ?? ex.InnerException.GetType().Name,
                     ["message"] = ex.InnerException.Message ?? "(no message)"
                 };
             }

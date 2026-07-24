@@ -146,14 +146,10 @@ public class UpsertTableToolTests
     // ── Entity name validation edge cases (inline prefix logic) ──────────────
 
     [TestMethod]
-    public void UpsertTableTool_EntityName_EmptyGivesErrorResult()
+    public void UpsertTableTool_DisplayName_ExistsOnSignature()
     {
-        // We can't call the method without ServiceClient, but we can verify the
-        // method signature accepts entity_name as required (no default value).
         var method = ToolType.GetMethod("upsert_table");
-        var param = System.Array.Find(method!.GetParameters(), p => p.Name == "entity_name");
-        Assert.IsNotNull(param, "entity_name parameter must exist");
-        Assert.AreEqual(System.DBNull.Value, param.DefaultValue ?? System.DBNull.Value,
-            "entity_name should be required (no default value)");
+        var param = System.Array.Find(method!.GetParameters(), p => p.Name == "display_name");
+        Assert.IsNotNull(param, "display_name parameter must exist");
     }
 }

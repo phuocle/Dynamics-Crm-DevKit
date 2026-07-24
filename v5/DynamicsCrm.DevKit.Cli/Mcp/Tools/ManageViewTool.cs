@@ -1,4 +1,3 @@
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
@@ -9,6 +8,7 @@ using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ServiceModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -300,17 +300,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var newViewId = _serviceClient.Create(newView);
 
-            var published = TryPublish(entityName);
+            PublishHelper.PublishEntity(_serviceClient, entityName);
+            MetadataOperationWaitHelper.WaitAfterFormView();
 
             var resultSb = new StringBuilder(256);
             resultSb.AppendLine($"[ViewCreate] {entityName} — {viewName}");
             resultSb.AppendLine($"ViewId: {newViewId}");
             resultSb.AppendLine($"Status: Created successfully");
             resultSb.AppendLine($"Validated: {(validate ? "yes (sync OK)" : "skipped")}");
-            resultSb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            resultSb.AppendLine("Published: yes");
             var quickFindColumns = AppendQuickFindColumnsSummary(resultSb, effectiveQueryType, newFetchXml);
-
-            var status = published ? "created" : "created_publish_failed";
 
             return new CallToolResult
             {
@@ -318,7 +317,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
                 {
                     Action = "created", Entity = entityName, ViewId = newViewId.ToString(), ViewName = viewName,
-                    Status = status, Validated = validate, Published = published,
+                    Status = "created", Validated = validate, Published = true,
                     CreateMode = SolutionComponentCreateMode.None.ToString(),
                     QuickFindColumns = quickFindColumns
                 })
@@ -475,40 +474,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return DryRun($"Would UPDATE view '{currentViewName}' ({updateId}) on entity '{entityName}'.");
             _serviceClient.Update(update);
 
-            var published = TryPublish(returnedTypeCode);
-
-            if (!published)
-            {
-                var sb = ViewBackupHelper.BuildSuccessText(entityName, updateId, currentViewName, fetchBackupPath, layoutBackupPath,
-                    validate, newFetchXml != null, false);
-                if (cellPatchWarnings?.Count > 0)
-                {
-                    sb.AppendLine($"CellPatchWarnings: {cellPatchWarnings.Count}");
-                    foreach (var w in cellPatchWarnings)
-                        sb.AppendLine($"  - {w}");
-                }
-                var quickFindColumns = AppendQuickFindColumnsSummary(sb, currentQueryType, effectiveFetchXml);
-                sb.AppendLine($"Tip: Call publish with entities='{returnedTypeCode}' to retry");
-                sb.AppendLine();
-                ViewBackupHelper.AppendRollbackInfo(sb, fetchBackupPath, layoutBackupPath, updateId);
-
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = sb.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
-                    {
-                        Action = "updated", Entity = entityName, ViewId = updateId.ToString(), ViewName = currentViewName,
-                        Status = "updated_publish_failed", Validated = validate,
-                        UpdatedParts = updatedParts, ValidationWarnings = cellPatchWarnings,
-                        FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = false,
-                        QuickFindColumns = quickFindColumns
-                    })
-                };
-            }
+            PublishHelper.PublishEntity(_serviceClient, returnedTypeCode);
+            MetadataOperationWaitHelper.WaitAfterFormView();
 
             {
                 var sb = ViewBackupHelper.BuildSuccessText(entityName, updateId, currentViewName, fetchBackupPath, layoutBackupPath,
-                    validate, newFetchXml != null, published);
+                    validate, newFetchXml != null, true);
                 if (cellPatchWarnings?.Count > 0)
                 {
                     sb.AppendLine($"CellPatchWarnings: {cellPatchWarnings.Count}");
@@ -527,7 +498,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Action = "updated", Entity = entityName, ViewId = updateId.ToString(), ViewName = currentViewName,
                         Status = "updated", Validated = validate,
                         UpdatedParts = updatedParts, ValidationWarnings = cellPatchWarnings,
-                        FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = published,
+                        FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = true,
                         QuickFindColumns = quickFindColumns
                     })
                 };
@@ -599,7 +570,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return DryRun($"Would RENAME view '{oldName}' to '{viewName}' ({renameId}) on entity '{entityName}'.");
             _serviceClient.Update(update);
 
-            var published = TryPublish(returnedTypeCode);
+            PublishHelper.PublishEntity(_serviceClient, returnedTypeCode);
+            MetadataOperationWaitHelper.WaitAfterFormView();
 
             var sb = new StringBuilder(256);
             sb.AppendLine($"[ViewRename] {entityName}");
@@ -607,7 +579,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"OldName: {oldName}");
             sb.AppendLine($"NewName: {viewName}");
             sb.AppendLine($"Status: Renamed successfully");
-            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            sb.AppendLine("Published: yes");
             if (fetchBackupPath != null)
             {
                 sb.AppendLine($"Backup:");
@@ -615,16 +587,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"  {layoutBackupPath}");
             }
 
-            var status = published ? "renamed" : "renamed_publish_failed";
-
             return new CallToolResult
             {
                 Content = [new TextContentBlock { Text = sb.ToString() }],
                 StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
                 {
                     Action = "renamed", Entity = entityName, ViewId = renameId.ToString(), ViewName = viewName,
-                    Status = status, Validated = false,
-                    FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = published
+                    Status = "renamed", Validated = false,
+                    FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = true
                 })
             };
         }
@@ -673,15 +643,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var update = new Entity("savedquery", targetId) { ["isdefault"] = true };
             _serviceClient.Update(update);
 
-            var published = TryPublish(entityName);
+            PublishHelper.PublishEntity(_serviceClient, entityName);
+            MetadataOperationWaitHelper.WaitAfterFormView();
 
             var sb = new StringBuilder(256);
             sb.AppendLine($"[ViewSetDefault] {entityName} — {viewName}");
             sb.AppendLine($"ViewId: {targetId}");
             sb.AppendLine($"Status: Set as default successfully");
-            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
-
-            var status = published ? "set_default" : "set_default_publish_failed";
+            sb.AppendLine("Published: yes");
 
             return new CallToolResult
             {
@@ -689,7 +658,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
                 {
                     Action = "set_default", Entity = entityName, ViewId = targetId.ToString(), ViewName = viewName,
-                    Status = status, Validated = false, Published = published
+                    Status = "set_default", Validated = false, Published = true
                 })
             };
         }
@@ -835,33 +804,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return DryRun($"Would RESTORE view '{viewName}' ({undoId}) from backup.");
             _serviceClient.Update(update);
 
-            var published = TryPublish(returnedTypeCode);
-
-            if (!published)
-            {
-                var sb = new StringBuilder(256);
-                sb.AppendLine($"[ViewUndo] Restored but publish failed");
-                sb.AppendLine($"ViewId: {undoId}");
-                sb.AppendLine($"RestoredFrom: {layoutBackupPath}");
-                if (fetchBackupPath != null)
-                    sb.AppendLine($"FetchRestoredFrom: {fetchBackupPath}");
-                sb.AppendLine($"PublishError: Publish failed after successful restore");
-                sb.AppendLine($"Tip: Call publish with entities='{entityName}' to retry");
-
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = sb.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
-                    {
-                        Action = "undo",
-                        Entity = entityName, ViewId = undoId.ToString(), ViewName = viewName,
-                        Status = "restored_publish_failed", Validated = validate,
-                        RestoredFromLayoutXmlBackup = layoutBackupPath,
-                        RestoredFromFetchXmlBackup = fetchBackupPath,
-                        Published = false
-                    })
-                };
-            }
+            PublishHelper.PublishEntity(_serviceClient, returnedTypeCode);
+            MetadataOperationWaitHelper.WaitAfterFormView();
 
             {
                 var sb = new StringBuilder(256);
@@ -872,7 +816,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (fetchBackupPath != null)
                     sb.AppendLine($"FetchRestoredFrom: {fetchBackupPath}");
                 sb.AppendLine($"Validated: {(validate ? "yes" : "skipped")}");
-                sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+                sb.AppendLine("Published: yes");
                 if (validationWarnings?.Count > 0)
                 {
                     sb.AppendLine($"ValidationWarnings: {validationWarnings.Count}");
@@ -891,7 +835,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         ValidationWarnings = validationWarnings,
                         RestoredFromLayoutXmlBackup = layoutBackupPath,
                         RestoredFromFetchXmlBackup = fetchBackupPath,
-                        Published = published
+                        Published = true
                     })
                 };
             }
@@ -1425,34 +1369,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string ValidateFetchXmlExpression(string fetchXml)
         {
-            // Dataverse SDK's ValidateFetchXmlExpression intentionally throws a fault whose
-            // message contains "ValidateFetchXmlExpressionResult" when the FetchXML is valid,
-            // and throws a different fault when invalid. The class-wide rule (single try/catch)
-            // means we must let both cases bubble to the main catch. As a result, BOTH valid
-            // and invalid FetchXML now surface as [UncaughtException] DataverseFault — the
-            // AI can still distinguish by reading the fault message marker, but the tool no
-            // longer returns a clean "valid" signal.
-            var request = new OrganizationRequest("ValidateFetchXmlExpression");
-            request["FetchXml"] = fetchXml;
-            _serviceClient.Execute(request);
-            return null;
-        }
-
-        private bool TryPublish(string entityName)
-        {
-            // Publish failures now bubble to the main catch (single-try rule).
-            // Behavior change: callers that previously got `published=false` + a
-            // structured "updated_publish_failed" status will now get an
-            // [UncaughtException] DataverseFault from the main catch.
-            _serviceClient.Execute(new PublishXmlRequest
+            try
             {
-                ParameterXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>"
-            });
-
-            // Wait for view metadata to propagate after publish
-            MetadataOperationWaitHelper.WaitAfterFormView();
-
-            return true;
+                var request = new OrganizationRequest("ValidateFetchXmlExpression");
+                request["FetchXml"] = fetchXml;
+                _serviceClient.Execute(request);
+                return null;
+            }
+            catch (FaultException<OrganizationServiceFault> ex)
+                when (ex.Detail?.Message?.Contains("ValidateFetchXmlExpressionResult") == true)
+            {
+                return null; // SDK throws even on valid FetchXML
+            }
+            catch (FaultException<OrganizationServiceFault> ex)
+            {
+                return ex.Detail?.Message ?? ex.Message;
+            }
         }
 
         private Entity FindViewByName(string entityName, string viewName, Guid? excludeViewId = null)

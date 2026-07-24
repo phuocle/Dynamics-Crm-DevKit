@@ -1,0 +1,88 @@
+using Microsoft.Crm.Sdk.Messages;
+using Microsoft.PowerPlatform.Dataverse.Client;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security;
+
+namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
+{
+    /// <summary>
+    /// Centralized helper for Dataverse publish operations.
+    /// </summary>
+    /// <remarks>
+    /// This helper intentionally does NOT wrap calls in try/catch.
+    /// Callers should invoke it from their top-level main try/catch so that
+    /// publish failures surface as [UncaughtException] DataverseFault instead
+    /// of being silently swallowed. This keeps the "single try/catch in main"
+    /// rule for MCP tools.
+    /// </remarks>
+    internal static class PublishHelper
+    {
+        /// <summary>
+        /// Publishes one or more entities using <see cref="PublishXmlRequest"/>.
+        /// </summary>
+        /// <param name="serviceClient">Connected Dataverse service client.</param>
+        /// <param name="entityNames">Entity logical names to publish.</param>
+        public static void PublishEntities(ServiceClient serviceClient, IEnumerable<string> entityNames)
+        {
+            if (serviceClient == null)
+                throw new ArgumentNullException(nameof(serviceClient));
+
+            var entities = entityNames?.Where(n => !string.IsNullOrWhiteSpace(n)).ToList();
+            if (entities == null || entities.Count == 0)
+                return;
+
+            var entityXml = string.Join(string.Empty, entities.Select(n => $"<entity>{SecurityElement.Escape(n)}</entity>"));
+            var parameterXml = $"<importexportxml><entities>{entityXml}</entities></importexportxml>";
+
+            serviceClient.Execute(new PublishXmlRequest { ParameterXml = parameterXml });
+        }
+
+        /// <summary>
+        /// Publishes a single entity using <see cref="PublishXmlRequest"/>.
+        /// </summary>
+        /// <param name="serviceClient">Connected Dataverse service client.</param>
+        /// <param name="entityName">Entity logical name to publish.</param>
+        public static void PublishEntity(ServiceClient serviceClient, string entityName)
+        {
+            if (string.IsNullOrWhiteSpace(entityName))
+                throw new ArgumentException("Entity name is required.", nameof(entityName));
+
+            PublishEntities(serviceClient, new[] { entityName });
+        }
+
+        /// <summary>
+        /// Publishes one or more global option sets using <see cref="PublishXmlRequest"/>.
+        /// </summary>
+        /// <param name="serviceClient">Connected Dataverse service client.</param>
+        /// <param name="optionSetNames">Global option set logical names to publish.</param>
+        public static void PublishOptionSets(ServiceClient serviceClient, IEnumerable<string> optionSetNames)
+        {
+            if (serviceClient == null)
+                throw new ArgumentNullException(nameof(serviceClient));
+
+            var optionSets = optionSetNames?.Where(n => !string.IsNullOrWhiteSpace(n)).ToList();
+            if (optionSets == null || optionSets.Count == 0)
+                return;
+
+            var optionSetXml = string.Join(string.Empty, optionSets.Select(n => $"<optionset>{SecurityElement.Escape(n)}</optionset>"));
+            var parameterXml = $"<importexportxml><optionsets>{optionSetXml}</optionsets></importexportxml>";
+
+            serviceClient.Execute(new PublishXmlRequest { ParameterXml = parameterXml });
+        }
+
+        /// <summary>
+        /// Publishes a single global option set using <see cref="PublishXmlRequest"/>.
+        /// </summary>
+        /// <param name="serviceClient">Connected Dataverse service client.</param>
+        /// <param name="optionSetName">Global option set logical name to publish.</param>
+        public static void PublishOptionSet(ServiceClient serviceClient, string optionSetName)
+        {
+            if (string.IsNullOrWhiteSpace(optionSetName))
+                throw new ArgumentException("Option set name is required.", nameof(optionSetName));
+
+            PublishOptionSets(serviceClient, new[] { optionSetName });
+        }
+    }
+}

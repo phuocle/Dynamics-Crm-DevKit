@@ -199,16 +199,16 @@ public class ManageAppInternalsCoverageTests
     [TestMethod]
     public void ErrorAndStructuredResults_ReturnCallToolResults()
     {
-        var error = (ModelContextProtocol.Protocol.CallToolResult)Invoke("ErrorResult", "bad")!;
+        var error = DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.McpToolResults.Error("bad");
         Assert.IsTrue(error.IsError);
         StringAssert.Contains(((ModelContextProtocol.Protocol.TextContentBlock)error.Content[0]).Text, "bad");
 
-        var result = (ModelContextProtocol.Protocol.CallToolResult)Invoke("StructuredResult", "ok", new ManageAppResult
+        var result = DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.McpToolResults.Success("ok", new ManageAppResult
         {
             Action = "detail",
             Status = "success",
             AppName = "Sales Hub"
-        })!;
+        });
         StringAssert.Contains(((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text, "ok");
         Assert.IsNotNull(result.StructuredContent);
     }

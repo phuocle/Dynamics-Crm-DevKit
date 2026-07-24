@@ -1,7 +1,6 @@
 using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xrm.Sdk.Metadata;
 using ModelContextProtocol.Protocol;
 using System;
 using System.Reflection;
@@ -20,7 +19,7 @@ public class UpsertColumnCreateDryRunTests
     {
         var result = InvokeCreate("CreateStringAttribute",
             "account", "devkit_text", "devkit_Text", "Text", "Description",
-            AttributeRequiredLevel.Recommended, 9000, "Email", "devkit");
+            9000, "Email", "devkit", null, null);
 
         AssertDryRun(result, "String", "devkit_text");
     }
@@ -30,7 +29,7 @@ public class UpsertColumnCreateDryRunTests
     {
         var result = InvokeCreate("CreateMemoAttribute",
             "account", "devkit_notes", "devkit_Notes", "Notes", "Description",
-            AttributeRequiredLevel.None, 2_000_000, "RichText", "devkit");
+            2_000_000, "RichText", "devkit", null, null);
 
         AssertDryRun(result, "Memo", "devkit_notes");
     }
@@ -40,7 +39,7 @@ public class UpsertColumnCreateDryRunTests
     {
         var result = InvokeCreate("CreateIntegerAttribute",
             "account", "devkit_duration", "devkit_Duration", "Duration", "",
-            AttributeRequiredLevel.ApplicationRequired, 1d, 90d, "Duration", "devkit");
+            1d, 90d, "Duration", "devkit", null, null);
 
         AssertDryRun(result, "Integer", "devkit_duration");
     }
@@ -50,7 +49,7 @@ public class UpsertColumnCreateDryRunTests
     {
         var result = InvokeCreate("CreateDecimalAttribute",
             "account", "devkit_ratio", "devkit_Ratio", "Ratio", "",
-            AttributeRequiredLevel.None, 0d, 100d, 99, "devkit");
+            0d, 100d, 99, "devkit", null, null);
 
         AssertDryRun(result, "Decimal", "devkit_ratio");
     }
@@ -60,7 +59,7 @@ public class UpsertColumnCreateDryRunTests
     {
         var result = InvokeCreate("CreateMoneyAttribute",
             "account", "devkit_budget", "devkit_Budget", "Budget", "",
-            AttributeRequiredLevel.None, 0d, 1_000d, 8, 2, "devkit");
+            0d, 1_000d, 8, 2, "devkit", null, null);
 
         AssertDryRun(result, "Money", "devkit_budget");
     }
@@ -70,7 +69,7 @@ public class UpsertColumnCreateDryRunTests
     {
         var result = InvokeCreate("CreateFloatAttribute",
             "account", "devkit_score", "devkit_Score", "Score", "",
-            AttributeRequiredLevel.None, -10d, 10d, 12, "devkit");
+            -10d, 10d, 12, "devkit", null, null);
 
         AssertDryRun(result, "Double", "devkit_score");
     }
@@ -80,7 +79,7 @@ public class UpsertColumnCreateDryRunTests
     {
         var result = InvokeCreate("CreateBooleanAttribute",
             "account", "devkit_enabled", "devkit_Enabled", "Enabled", "",
-            AttributeRequiredLevel.None, "Active", "Inactive", "devkit");
+            "Active", "Inactive", "devkit", null, null, null);
 
         AssertDryRun(result, "Boolean", "devkit_enabled");
     }
@@ -90,7 +89,7 @@ public class UpsertColumnCreateDryRunTests
     {
         var result = InvokeCreate("CreateDateTimeAttribute",
             "account", "devkit_effectiveon", "devkit_EffectiveOn", "Effective On", "",
-            AttributeRequiredLevel.None, "DateAndTime", "DateOnly", "devkit");
+            "DateAndTime", "DateOnly", "devkit", null, null);
 
         AssertDryRun(result, "DateTime", "devkit_effectiveon");
     }
@@ -100,9 +99,8 @@ public class UpsertColumnCreateDryRunTests
     {
         var result = InvokeCreate("CreatePicklistAttribute",
             "account", "devkit_priority", "devkit_Priority", "Priority", "",
-            AttributeRequiredLevel.None,
             """[{"label":"Low","value":100000000,"color":"#00AA00"},{"label":"High","value":100000001}]""",
-            "", false, "devkit");
+            "", false, "devkit", "", null);
 
         AssertDryRun(result, "Picklist", "devkit_priority");
     }
@@ -112,9 +110,8 @@ public class UpsertColumnCreateDryRunTests
     {
         var result = InvokeCreate("CreatePicklistAttribute",
             "account", "devkit_tags", "devkit_Tags", "Tags", "",
-            AttributeRequiredLevel.None,
             """[{"label":"Internal","value":100000000},{"label":"External","value":100000001}]""",
-            "", true, "devkit");
+            "", true, "devkit", "", null);
 
         AssertDryRun(result, "MultiSelectPicklist", "devkit_tags");
     }
@@ -124,7 +121,7 @@ public class UpsertColumnCreateDryRunTests
     {
         var result = InvokeCreate("CreateCustomerAttribute",
             "devkit_order", "devkit_customer", "devkit_Customer", "Customer", "",
-            AttributeRequiredLevel.None, "devkit", "devkit");
+            "devkit", "devkit", null);
 
         AssertDryRun(result, "customer", "devkit_customer");
     }
@@ -134,7 +131,7 @@ public class UpsertColumnCreateDryRunTests
     {
         var result = InvokeCreate("CreatePolymorphicLookupAttribute",
             "devkit_order", "devkit_regarding", "devkit_Regarding", "Regarding", "",
-            AttributeRequiredLevel.None, new[] { "account", "contact" }, "devkit", "devkit");
+            new[] { "account", "contact" }, "devkit", "devkit", null);
 
         AssertDryRun(result, "polymorphic lookup", "devkit_regarding");
     }
@@ -144,7 +141,7 @@ public class UpsertColumnCreateDryRunTests
     {
         var result = InvokeCreate("CreateBigIntAttribute",
             "account", "devkit_externalid", "devkit_ExternalId", "External Id", "",
-            AttributeRequiredLevel.None, "devkit");
+            "devkit", null);
 
         AssertDryRun(result, "BigInt", "devkit_externalid");
     }
@@ -154,7 +151,7 @@ public class UpsertColumnCreateDryRunTests
     {
         var result = InvokeCreate("CreateImageAttribute",
             "account", "devkit_photo", "devkit_Photo", "Photo", "",
-            AttributeRequiredLevel.None, "devkit");
+            "devkit", null);
 
         AssertDryRun(result, "Image", "devkit_photo");
     }
@@ -164,7 +161,7 @@ public class UpsertColumnCreateDryRunTests
     {
         var result = InvokeCreate("CreateFileAttribute",
             "account", "devkit_attachment", "devkit_Attachment", "Attachment", "",
-            AttributeRequiredLevel.None, 99_999_999, "devkit");
+            99_999_999, "devkit", null);
 
         AssertDryRun(result, "File", "devkit_attachment");
     }

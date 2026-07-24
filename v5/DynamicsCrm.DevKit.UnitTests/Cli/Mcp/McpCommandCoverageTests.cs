@@ -34,7 +34,7 @@ public class McpCommandCoverageTests
         Assert.AreEqual(0, exitCode);
         StringAssert.Contains(stdout, "DevKit MCP Setup Guide");
         StringAssert.Contains(stdout, "DEVKIT_AUTH_TYPE");
-        StringAssert.Contains(stdout, "ClientSecret Auth");
+        StringAssert.Contains(stdout, "devkit-claude");
         StringAssert.Contains(stdout, "AVAILABLE TOOLS");
         Assert.AreEqual("", stderr);
     }

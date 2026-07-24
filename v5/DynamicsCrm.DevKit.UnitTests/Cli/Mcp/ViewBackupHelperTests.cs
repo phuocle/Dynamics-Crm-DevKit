@@ -193,7 +193,7 @@ public class ViewBackupHelperTests
             var fetchXml = "<fetch><entity name='account'></entity></fetch>";
             var layoutXml = "<grid name='resultset'><row name='result'/></grid>";
 
-            var result = SaveBackupMethod.Invoke(null, ["account", viewId, "Test View", fetchXml, layoutXml]);
+            var result = SaveBackupMethod.Invoke(null, ["account", viewId, "Test View", fetchXml, layoutXml, ""]);
             dynamic tuple = result!;
             string? fetchPath = tuple.Item1;
             string? layoutPath = tuple.Item2;
@@ -228,7 +228,7 @@ public class ViewBackupHelperTests
         {
             var viewId = Guid.NewGuid();
             var result = SaveBackupMethod.Invoke(null, ["account", viewId, "Test View",
-                "<fetch><entity name='account'></entity></fetch>", "<grid/>"]);
+                "<fetch><entity name='account'></entity></fetch>", "<grid/>", ""]);
             dynamic tuple = result!;
             string? fetchPath = tuple.Item1;
 
@@ -254,7 +254,7 @@ public class ViewBackupHelperTests
         try
         {
             var viewId = Guid.NewGuid();
-            SaveBackupMethod.Invoke(null, ["account", viewId, "Test", "<fetch/>", "<grid/>"]);
+            SaveBackupMethod.Invoke(null, ["account", viewId, "Test", "<fetch/>", "<grid/>", ""]);
 
             var backupDir = Path.Combine(tempDir, ".devkit", "backups", "views");
             Assert.IsTrue(Directory.Exists(backupDir), "Backup directory .devkit/backups/views should be created");
@@ -278,7 +278,7 @@ public class ViewBackupHelperTests
         try
         {
             var viewId = Guid.NewGuid();
-            var result = SaveBackupMethod.Invoke(null, ["account", viewId, "Test View", "", "<grid/>"]);
+            var result = SaveBackupMethod.Invoke(null, ["account", viewId, "Test View", "", "<grid/>", ""]);
             dynamic tuple = result!;
             string? fetchPath = tuple.Item1;
 

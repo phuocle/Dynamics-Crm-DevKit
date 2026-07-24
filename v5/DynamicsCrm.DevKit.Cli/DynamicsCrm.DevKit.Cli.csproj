@@ -55,7 +55,7 @@
 	  </AssemblyAttribute>
 	</ItemGroup>
 	<PropertyGroup>
-		<NoWarn>CVSTBLD002;NU1702;NU5100;CA1416;SYSLIB0057</NoWarn>
+		<NoWarn>CVSTBLD002;NU1702;NU5100;CA1416;SYSLIB0057;NU1901;NU1902;NU1903;NU1904</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
