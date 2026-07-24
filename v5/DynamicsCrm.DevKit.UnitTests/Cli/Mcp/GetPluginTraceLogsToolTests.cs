@@ -7,8 +7,8 @@ using System.Text;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 /// <summary>
-/// Tests for GetPluginTraceLogsTool private static methods:
-/// BuildTraceListFetchXml, FormatTraceNoResults, FormatTraceDetailResult, EscapeTab, EscapeXml.
+/// Tests for GetPluginTraceLogsTool private methods:
+/// BuildListFetchXml, FormatNoResults, FormatDetailResult, EscapeXml.
 /// </summary>
 [TestClass]
 public class GetPluginTraceLogsToolTests
@@ -244,15 +244,15 @@ public class GetPluginTraceLogsToolTests
     }
 
     // ──────────────────────────────────────────────
-    // FormatTraceDetailResult (private static, returns CallToolResult)
+    // FormatDetailResult (private instance, returns CallToolResult)
     // ──────────────────────────────────────────────
 
     private static readonly MethodInfo FormatTraceDetailResultMethod = ToolType
-        .GetMethod("FormatDetailResult", BindingFlags.NonPublic | BindingFlags.Static)!;
+        .GetMethod("FormatDetailResult", BindingFlags.NonPublic | BindingFlags.Instance)!;
 
-    private static ModelContextProtocol.Protocol.CallToolResult FormatTraceDetailResult(Entity entity)
+    private ModelContextProtocol.Protocol.CallToolResult FormatTraceDetailResult(Entity entity)
     {
-        return (ModelContextProtocol.Protocol.CallToolResult)FormatTraceDetailResultMethod.Invoke(null, new object[] { entity })!;
+        return (ModelContextProtocol.Protocol.CallToolResult)FormatTraceDetailResultMethod.Invoke(_tool, new object[] { entity })!;
     }
 
     [TestMethod]
@@ -270,7 +270,8 @@ public class GetPluginTraceLogsToolTests
         entity["messageblock"] = "Trace line 1\nTrace line 2";
         entity["exceptiondetails"] = "System.NullReferenceException...";
 
-        var result = GetText(FormatTraceDetailResult(entity));
+        var callResult = FormatTraceDetailResult(entity);
+        var result = GetText(callResult);
 
         Assert.IsTrue(result.Contains("[PluginTraceLog] MyNamespace.MyPlugin"));
         Assert.IsTrue(result.Contains("Message: Create"));
@@ -279,10 +280,11 @@ public class GetPluginTraceLogsToolTests
         Assert.IsTrue(result.Contains("Depth: 1"));
         Assert.IsTrue(result.Contains("Duration: 150ms"));
         Assert.IsTrue(result.Contains("CorrelationId: 11111111-1111-1111-1111-111111111111"));
-        Assert.IsTrue(result.Contains("[Trace Output]"));
-        Assert.IsTrue(result.Contains("Trace line 1"));
-        Assert.IsTrue(result.Contains("[Exception]"));
-        Assert.IsTrue(result.Contains("NullReferenceException"));
+        Assert.IsTrue(result.Contains("Trace: available"));
+        Assert.IsTrue(result.Contains("Exception: available"));
+        Assert.IsFalse(result.Contains("Trace line 1"));
+        Assert.IsFalse(result.Contains("NullReferenceException"));
+        Assert.IsNotNull(callResult.StructuredContent);
     }
 
     [TestMethod]
@@ -305,39 +307,8 @@ public class GetPluginTraceLogsToolTests
 
         var result = GetText(FormatTraceDetailResult(entity));
 
-        Assert.IsTrue(result.Contains("[Trace Output]"));
-        Assert.IsTrue(result.Contains("(none)"));
-        Assert.IsTrue(result.Contains("[Exception]"));
-    }
-
-    // ──────────────────────────────────────────────
-    // EscapeTab (private static)
-    // ──────────────────────────────────────────────
-
-    private static readonly MethodInfo EscapeTabMethod = ToolType
-        .GetMethod("EscapeTab", BindingFlags.NonPublic | BindingFlags.Static)!;
-
-    private static string EscapeTab(string value)
-    {
-        return (string)EscapeTabMethod.Invoke(null, new object[] { value })!;
-    }
-
-    [TestMethod]
-    public void EscapeTab_TabReplaced()
-    {
-        Assert.AreEqual("a b", EscapeTab("a\tb"));
-    }
-
-    [TestMethod]
-    public void EscapeTab_NewlineReplaced()
-    {
-        Assert.AreEqual("a b", EscapeTab("a\nb"));
-    }
-
-    [TestMethod]
-    public void EscapeTab_CarriageReturnRemoved()
-    {
-        Assert.AreEqual("ab", EscapeTab("a\rb"));
+        Assert.IsTrue(result.Contains("Trace: none"));
+        Assert.IsTrue(result.Contains("Exception: none"));
     }
 
     // ──────────────────────────────────────────────

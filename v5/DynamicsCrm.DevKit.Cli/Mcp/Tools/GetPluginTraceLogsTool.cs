@@ -6,9 +6,7 @@ using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Text;
-using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
@@ -28,23 +26,40 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetPluginTraceLogsResult)),
         Description(
-            "Plugin trace logs for debugging plugin/custom action. record_id empty = list (filtered, default last 60 min). Set = detail (full messageblock + exceptiondetails). Requires Plugin Trace Log enabled (System Settings > Customization).\n\n" +
+            "List/inspect Dataverse plugin trace logs (plugintracelog). Empty record_id = list (filtered). Set record_id = detail with full messageBlock + exceptionDetails in structured content. Requires Plugin Trace Log enabled (System Settings > Customization).\n\n" +
 
-            "FILTER SEMANTICS: type_name filters plugintracelog.typename (plugin class/type name), NOT the Dataverse table. Use entity_name to filter logs by primary table/entity.\n\n" +
+            "MODES:\n" +
+            "- list: newest first; default last 60 min, max 50 (cap 200 / 1440 min).\n" +
+            "- detail: one log by plugintracelog GUID from list.\n\n" +
+
+            "FILTERS (list only):\n" +
+            "- type_name: contains on plugin class/type name (typename) — NOT the table.\n" +
+            "- entity_name: primary table/entity (Display Name or logical name → primaryentity).\n" +
+            "- message_name: SDK message (Create, Update, Delete, …).\n" +
+            "- mode: sync | async.\n" +
+            "- correlation_id: one request across logs.\n\n" +
+
+            "OUTPUT:\n" +
+            "- Compact text summary.\n" +
+            "- Structured traces[] (list metadata; detail also includes messageBlock + exceptionDetails).\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Debug failing plugin (list first → detail with record_id for full trace)\n" +
-            "- Trace one request across logs (correlation_id)\n" +
-            "- Async plugin failures: combine with get_system_jobs")]
+            "- Debug failing plugin/custom action: list → detail(record_id).\n" +
+            "- Follow one request via correlation_id.\n" +
+            "- Async failures: combine with get_system_jobs.\n\n" +
+
+            "COMMON MISTAKES:\n" +
+            "- Do not put table name in type_name; use entity_name for primaryentity.\n" +
+            "- record_id must be plugintracelog GUID from list, not a business record GUID.")]
         public CallToolResult get_plugin_trace_logs(
             [Description(
-                "GUID → detail mode. Empty = list. Use parse_record_url."
+                "plugintracelog GUID → detail. Empty = list. Take id from list mode."
             )] string record_id = "",
             [Description(
                 "Plugin type name (contains). E.g. 'AccountPlugin'."
             )] string type_name = "",
             [Description(
-                "Primary table/entity filter, Display Name or logical name. Filters plugintracelog.primaryentity."
+                "Primary entity Display/logical name (primaryentity)."
             )] string entity_name = "",
             [Description(
                 "SDK message: Create, Update, Delete, etc."
@@ -59,7 +74,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "0 = 60 min default. Max 1440."
             )] int minutes_ago = 0,
             [Description(
-                "Max 200."
+                "Default 50. Max 200."
             )] int max_records = 50)
         {
             try
@@ -69,13 +84,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 return HandleList(type_name, entity_name, minutes_ago, correlation_id, message_name, mode, max_records);
             }
-            catch (System.ServiceModel.FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault> fex)
-            {
-                return ErrorResult($"Error: Dataverse fault: {fex.Detail?.Message ?? fex.Message}");
-            }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: {ex.Message}");
+                return ThrowException(ex);
             }
         }
 
@@ -85,11 +96,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var modeLower = mode.Trim().ToLowerInvariant();
                 if (modeLower != "sync" && modeLower != "synchronous" && modeLower != "async" && modeLower != "asynchronous")
-                    return ErrorResult($"Error: Invalid mode '{mode.Trim()}'. Use 'sync' or 'async'.");
+                    return Error($"Error: Invalid mode '{mode.Trim()}'. Use 'sync' or 'async'.");
             }
 
             if (!string.IsNullOrWhiteSpace(correlationId) && !Guid.TryParse(correlationId.Trim(), out _))
-                return ErrorResult($"Error: '{correlationId.Trim()}' is not a valid GUID for correlation_id.");
+                return Error($"Error: '{correlationId.Trim()}' is not a valid GUID for correlation_id.");
 
             if (minutesAgo <= 0) minutesAgo = 60;
             if (minutesAgo > 1440) minutesAgo = 1440;
@@ -98,25 +109,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var primaryEntity = ResolvePrimaryEntity(entityName);
             if (!string.IsNullOrEmpty(primaryEntity.Error))
-                return ErrorResult(primaryEntity.Error);
+                return Error(primaryEntity.Error);
 
             var fetchXml = BuildListFetchXml(typeName, primaryEntity.LogicalName, minutesAgo, correlationId, messageName, mode, maxRecords);
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
 
             if (result.Entities.Count == 0)
             {
-                var text = FormatNoResults(typeName, primaryEntity.LogicalName, minutesAgo, correlationId, messageName, mode);
                 var emptyResult = new GetPluginTraceLogsResult
                 {
                     Mode = "list",
                     TotalCount = 0,
                     Traces = []
                 };
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = text }],
-                    StructuredContent = JsonSerializer.SerializeToElement(emptyResult)
-                };
+                var text = FormatNoResults(typeName, primaryEntity.LogicalName, minutesAgo, correlationId, messageName, mode);
+                return Success(text, emptyResult);
             }
 
             return FormatListResults(result.Entities, minutesAgo);
@@ -125,7 +132,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleDetail(string recordId)
         {
             if (!Guid.TryParse(recordId.Trim(), out var id))
-                return ErrorResult($"Error: '{recordId}' is not a valid GUID. Use a plugintracelog ID from list mode.");
+                return Error($"Error: '{recordId}' is not a valid GUID. Use a plugintracelog ID from list mode.");
 
             var entity = _serviceClient.Retrieve("plugintracelog", id, new ColumnSet(true));
             return FormatDetailResult(entity);
@@ -215,13 +222,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return sb.ToString();
         }
 
-        private static CallToolResult FormatListResults(DataCollection<Entity> entities, int minutesAgo)
+        private CallToolResult FormatListResults(DataCollection<Entity> entities, int minutesAgo)
         {
-            var traces = new List<PluginTraceLogEntry>();
-            var sb = new StringBuilder(entities.Count * 120 + 256);
-            sb.AppendLine($"[PluginTraceLogs] {entities.Count} logs (last {minutesAgo} min)");
-            sb.AppendLine();
-            sb.AppendLine("id\ttypename\tmessage\tentity\tmode\tdepth\tduration\tcreated");
+            var traces = new List<PluginTraceLogEntry>(entities.Count);
 
             foreach (var e in entities)
             {
@@ -237,8 +240,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var createdStr = created?.ToString("yyyy-MM-dd HH:mm:ss") ?? "";
                 var correlationId = e.GetAttributeValue<Guid?>("correlationid");
 
-                sb.AppendLine($"{e.Id}\t{EscapeTab(typeName)}\t{EscapeTab(msgName)}\t{EscapeTab(entity)}\t{modeStr}\t{depth}\t{durationStr}\t{createdStr}");
-
                 traces.Add(new PluginTraceLogEntry
                 {
                     Id = e.Id.ToString(),
@@ -249,7 +250,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Depth = depth,
                     Duration = NullIfEmpty(durationStr),
                     CorrelationId = correlationId?.ToString(),
-                    CreatedOn = createdStr
+                    CreatedOn = NullIfEmpty(createdStr)
                 });
             }
 
@@ -260,14 +261,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Traces = traces
             };
 
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            return Success(BuildCompactListText(structured, minutesAgo), structured);
         }
 
-        private static CallToolResult FormatDetailResult(Entity e)
+        private CallToolResult FormatDetailResult(Entity e)
         {
             var typeName = e.GetAttributeValue<string>("typename") ?? "";
             var msgName = e.GetAttributeValue<string>("messagename") ?? "";
@@ -281,27 +278,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var created = e.GetAttributeValue<DateTime?>("createdon");
             var messageBlock = e.GetAttributeValue<string>("messageblock") ?? "";
             var exceptionDetails = e.GetAttributeValue<string>("exceptiondetails") ?? "";
-
-            var sb = new StringBuilder(4096);
-            sb.AppendLine($"[PluginTraceLog] {typeName}");
-            sb.AppendLine($"Id: {e.Id}");
-            sb.AppendLine($"Message: {msgName}");
-            sb.AppendLine($"Entity: {entity}");
-            sb.AppendLine($"Mode: {modeStr}");
-            sb.AppendLine($"Depth: {depth}");
-            sb.AppendLine($"Duration: {durationStr}");
-            if (correlationId.HasValue)
-                sb.AppendLine($"CorrelationId: {correlationId}");
-            if (created.HasValue)
-                sb.AppendLine($"Created: {created.Value:yyyy-MM-dd HH:mm:ss}");
-
-            sb.AppendLine();
-            sb.AppendLine("[Trace Output]");
-            sb.AppendLine(string.IsNullOrWhiteSpace(messageBlock) ? "(none)" : messageBlock);
-
-            sb.AppendLine();
-            sb.AppendLine("[Exception]");
-            sb.AppendLine(string.IsNullOrWhiteSpace(exceptionDetails) ? "(none)" : exceptionDetails);
 
             var entry = new PluginTraceLogEntry
             {
@@ -325,11 +301,48 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Traces = [entry]
             };
 
-            return new CallToolResult
+            return Success(BuildCompactDetailText(entry), structured);
+        }
+
+        private static string BuildCompactListText(GetPluginTraceLogsResult result, int minutesAgo)
+        {
+            var sb = new StringBuilder(128);
+            sb.Append($"[PluginTraceLogs] {result.TotalCount} logs (last {minutesAgo} min)");
+            if (result.Traces is { Count: > 0 })
             {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+                var first = result.Traces[0];
+                if (!string.IsNullOrWhiteSpace(first.TypeName))
+                    sb.Append($". First: {first.TypeName}");
+                if (!string.IsNullOrWhiteSpace(first.MessageName))
+                    sb.Append($"/{first.MessageName}");
+                if (!string.IsNullOrWhiteSpace(first.PrimaryEntity))
+                    sb.Append($" on {first.PrimaryEntity}");
+            }
+            sb.Append('.');
+            return sb.ToString();
+        }
+
+        private static string BuildCompactDetailText(PluginTraceLogEntry entry)
+        {
+            var sb = new StringBuilder(256);
+            sb.Append($"[PluginTraceLog] {entry.TypeName}");
+            if (!string.IsNullOrWhiteSpace(entry.MessageName))
+                sb.Append($". Message: {entry.MessageName}");
+            if (!string.IsNullOrWhiteSpace(entry.PrimaryEntity))
+                sb.Append($". Entity: {entry.PrimaryEntity}");
+            if (!string.IsNullOrWhiteSpace(entry.Mode))
+                sb.Append($". Mode: {entry.Mode}");
+            sb.Append($". Depth: {entry.Depth}");
+            if (!string.IsNullOrWhiteSpace(entry.Duration))
+                sb.Append($". Duration: {entry.Duration}");
+            if (!string.IsNullOrWhiteSpace(entry.CorrelationId))
+                sb.Append($". CorrelationId: {entry.CorrelationId}");
+            if (!string.IsNullOrWhiteSpace(entry.CreatedOn))
+                sb.Append($". Created: {entry.CreatedOn}");
+            sb.Append(string.IsNullOrWhiteSpace(entry.MessageBlock) ? ". Trace: none" : ". Trace: available");
+            sb.Append(string.IsNullOrWhiteSpace(entry.ExceptionDetails) ? ". Exception: none" : ". Exception: available");
+            sb.Append('.');
+            return sb.ToString();
         }
 
         private static string NullIfEmpty(string value) =>
@@ -337,10 +350,5 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string EscapeXml(string value) =>
             value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("\"", "&quot;");
-
-        private static string EscapeTab(string value) =>
-            value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
-
-        private CallToolResult ErrorResult(string message) => Error(message);
     }
 }

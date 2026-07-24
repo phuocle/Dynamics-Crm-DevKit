@@ -3,3 +3,4 @@ whoami
 manage_choice
 manage_view
 parse_record_url
+get_plugin_trace_logs
