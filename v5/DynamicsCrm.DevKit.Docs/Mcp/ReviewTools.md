@@ -1,5 +1,6 @@
 execute_fetchxml
 get_messages
+get_custom_apis
 whoami
 manage_choice
 manage_view

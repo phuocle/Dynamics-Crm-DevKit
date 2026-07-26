@@ -61,36 +61,52 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetApisResult)),
         Description(
-            "Custom API definitions — modern replacement for Custom Actions (binding, visibility, plugin attachment, typed params). api_name empty = list (filter by entity_name, status, include_microsoft). Set = detail (request params, response properties, plugin binding). Managed APIs excluded by default. isFunction=true → GET (no side effects); false → POST Action.\n\n" +
+            "Custom API definitions — modern replacement for Custom Actions (typed params, plugin binding, explicit binding/visibility). api_name empty = list; set = detail (request params, response properties, plugin binding). Managed APIs excluded by default. isFunction=true → GET (no side effects); false → POST Action. For legacy workflow-based Custom Actions use get_messages.\n\n" +
+
+            "MODES:\n" +
+            "- list (default): returns Custom APIs filtered by entity_name/status/include_microsoft; capped at max_records (default 100, max 500)\n" +
+            "- detail: requires api_name (unique name or display name); returns all attributes + linked plugin type/assembly + request/response parameters\n\n" +
+
+            "OUTPUT:\n" +
+            "- list: text table (uniqueName/boundTo/isFunction/pluginType/processingType/isPrivate/status) + structured {totalCount, entityFilter, apis[]}\n" +
+            "- detail: text with full metadata + structured {totalCount, apis[0]} (includes description, owner, solution, plugin assembly, isolation mode, request parameters[], response properties[])\n\n" +
 
             "WHEN TO USE:\n" +
             "- Discover Custom APIs registered on an entity (or globally)\n" +
             "- Inspect input/output params + plugin binding before invoking\n" +
-            "- For legacy Custom Actions (workflow-based) use get_messages")]
+            "- Audit which plugin assembly handles a specific Custom API\n" +
+            "- Distinguish Functions (GET) from Actions (POST) and binding scope (Global/Entity/EntityCollection)\n\n" +
+
+            "FUZZY/AMBIGUITY:\n" +
+            "- api_name resolves Display Name contains first, then unique name contains\n" +
+            "- entity_name resolves Display Name contains first, then logical name contains\n" +
+            "- include_microsoft default false (managed APIs hidden); set true to include OOB/managed\n" +
+            "- status default 'active'; use 'inactive' or 'all' to broaden\n" +
+            "- 0 or 2+ matches on api_name/entity_name returns a disambiguation list — call again with exact GUID/name")]
         public CallToolResult get_custom_apis(
             [Description("Display Name or unique name → detail. Empty = list.")] string api_name = "",
             [Description("Bound entity Display Name or logical name. Empty = all.")] string entity_name = "",
-            [Description("Include managed APIs.")] bool include_microsoft = false,
+            [Description("Include managed APIs. Default false (unmanaged + custom only).")] bool include_microsoft = false,
             [Description("'active' / 'inactive' / 'all'.")] string status = "active",
             [Description("1–500.")] int max_records = 100)
         {
-            if (!string.IsNullOrWhiteSpace(status))
-            {
-                var s = status.Trim().ToLowerInvariant();
-                if (s != "active" && s != "inactive" && s != "all")
-                    return ErrorResult($"Error: Invalid status '{status.Trim()}'. Use 'active', 'inactive', or 'all'.");
-            }
-
-            if (max_records <= 0) max_records = 100;
-            if (max_records > 500) max_records = 500;
-
             try
             {
+                if (!string.IsNullOrWhiteSpace(status))
+                {
+                    var s = status.Trim().ToLowerInvariant();
+                    if (s != "active" && s != "inactive" && s != "all")
+                        return Error($"Error: Invalid status '{status.Trim()}'. Use 'active', 'inactive', or 'all'.");
+                }
+
+                if (max_records <= 0) max_records = 100;
+                if (max_records > 500) max_records = 500;
+
                 if (!string.IsNullOrWhiteSpace(api_name))
                 {
                     var apiResult = ResolveCustomApi(api_name.Trim());
                     if (!apiResult.IsSuccess)
-                        return ErrorResult($"Error: api_name '{api_name.Trim()}': {apiResult.Error}");
+                        return Error($"Error: api_name '{api_name.Trim()}': {apiResult.Error}");
                     return GetDetail(apiResult.CanonicalName);
                 }
 
@@ -98,7 +114,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_custom_apis");
                     if (!entityResult.IsSuccess)
-                        return ErrorResult($"Error: entity_name '{entity_name.Trim()}': {entityResult.Error}");
+                        return Error($"Error: entity_name '{entity_name.Trim()}': {entityResult.Error}");
                     entity_name = entityResult.Value.LogicalName;
                 }
 
@@ -106,7 +122,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Failed to retrieve Custom APIs: {ex.Message}");
+                return ThrowException(ex);
             }
         }
 
@@ -223,7 +239,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var apiResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchApi));
             if (apiResult.Entities.Count == 0)
-                return ErrorResult(
+                return Error(
                     $"Error: Custom API '{apiName}' not found.\n" +
                     "Verify the unique name using get_custom_apis (list mode, api_name empty).");
 
@@ -421,9 +437,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string ResolveSolutionName(string solutionId)
         {
-            try
-            {
-                var fetchXml = $@"<fetch top='1'>
+            var fetchXml = $@"<fetch top='1'>
   <entity name='solution'>
     <attribute name='friendlyname'/>
     <filter>
@@ -431,13 +445,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     </filter>
   </entity>
 </fetch>";
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                return result.Entities.Count > 0 ? result.Entities[0].GetAttributeValue<string>("friendlyname") : null;
-            }
-            catch
-            {
-                return null;
-            }
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            return result.Entities.Count > 0 ? result.Entities[0].GetAttributeValue<string>("friendlyname") : null;
         }
 
         private ResolveResult<Entity> ResolveCustomApi(string apiName)
@@ -491,8 +500,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("\"", "&quot;");
 
         private static string EscapeTab(string value) =>
-            value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
+            value?.Replace("\t", " ").Replace("\n", " ").Replace("\r", "") ?? "";
 
-        private CallToolResult ErrorResult(string message) => Error(message);
     }
 }
