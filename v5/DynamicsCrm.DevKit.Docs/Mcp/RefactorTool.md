@@ -18,7 +18,7 @@ skip — only re-review when behavior or description actually changes.
 
 ---
 
-## Workflow — 3 steps, in order
+## Workflow — 4 steps, in order
 
 ### Step 1: Consolidate try/catch
 
@@ -137,6 +137,48 @@ FUZZY/AMBIGUITY:
 
 ---
 
+### Step 4: Eliminate redundant private result-builder wrappers
+
+**Rule**: Call `Error(...)`, `Success(...)`, `ThrowException(...)` from
+[McpToolBase.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/McpToolBase.cs) **directly**. Do
+**not** define private helpers that wrap them.
+
+**Known offenders in the codebase** (rename-flexible, but all equivalent):
+
+| Local helper | Equivalent base call | Action |
+|---|---|---|
+| `private CallToolResult ErrorResult(string msg) => Error(msg);` | `Error(msg)` | Delete helper, switch callers |
+| `private CallToolResult SuccessResult(string text, T structured) => Success(text, structured);` | `Success(text, structured)` | Delete helper, switch callers |
+| `private CallToolResult StructuredResult(string text, T structured) => Success(text, structured);` | `Success(text, structured)` | Delete helper, switch callers |
+| `private CallToolResult ShowError(string msg) => Error(msg);` | `Error(msg)` | Delete helper, switch callers |
+| `private CallToolResult ErrorMessage(string msg) => Error(msg);` | `Error(msg)` | Delete helper, switch callers |
+
+**Why these wrappers are harmful**:
+- They hide the call from IDE jump-to-definition and refactoring tools — clicking
+  `ErrorResult` from a call site doesn't show you the McpToolBase contract.
+- They bloat the class file (every `Manage*Tool`/`Get*Tool` ships one or two of
+  these for no reason).
+- They drift over time — `SuccessResult(text, structured)` was added in a tool
+  that wanted to set a default structured payload, then the default was removed
+  but the helper stayed. Now it shadows the real `Success` from the base.
+
+**Refactor procedure**:
+1. Search for any private method whose body is just a one-liner forward to
+   `Error(...)`, `Success(...)`, or `ThrowException(...)`.
+2. Delete the helper.
+3. Replace every call site with the base helper directly.
+4. Re-run `grep` to confirm zero `ErrorResult`/`SuccessResult`/`ShowError`/
+   `ErrorMessage` references remain in the file.
+
+**Audit command**:
+```bash
+# Find redundant wrappers across all tools
+grep -nE "private\s+(static\s+)?CallToolResult\s+(ErrorResult|SuccessResult|StructuredResult|ShowError|ErrorMessage)" DynamicsCrm.DevKit.Cli/Mcp/Tools/*.cs
+```
+Expected output: empty.
+
+---
+
 ## Reference tools — current gold standard
 
 | Tool | What it exemplifies | Path |
@@ -192,7 +234,7 @@ use the base helpers directly.
 - [ ] `grep -nE "try\s*\{|catch\s*\("` shows exactly one `try` + one `catch` in the tool file.
 - [ ] That single catch returns `ThrowException(ex)`.
 - [ ] No silent `catch { ... }` swallowers in helper methods.
-- [ ] No redundant `ErrorResult`/`SuccessResult` local wrappers.
+- [ ] `grep -nE "private\s+(static\s+)?CallToolResult\s+(ErrorResult|SuccessResult|StructuredResult|ShowError|ErrorMessage)"` returns zero hits in the tool file.
 - [ ] Tool description has all 5 sections (intro + MODES + OUTPUT + WHEN TO USE + FUZZY/AMBIGUITY).
 - [ ] Per-parameter descriptions state defaults and valid value sets.
 - [ ] Tool added to [ReviewTools.md](ReviewTools.md).
