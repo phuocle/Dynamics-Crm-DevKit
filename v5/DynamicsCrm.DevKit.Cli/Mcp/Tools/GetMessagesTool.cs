@@ -64,12 +64,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetMessagesResult)),
         Description(
-            "SDK messages + Custom Actions for an entity (or global with entity_name='none'). message_name empty = list. Set = detail (params, supported entities, plugin steps). Covers legacy Custom Actions (workflow-based, category=3); for modern Custom APIs use get_custom_apis.\n\n" +
+            "SDK messages + legacy Custom Actions (workflow-based, category=3) for an entity or globally. message_name empty = list. Set = detail (params, supported entities, plugin steps). Custom APIs (modern) are excluded — use get_custom_apis.\n\n" +
+
+            "MODES:\n" +
+            "- list (default): returns SDK message names + custom action names for entity_name (or 'none' = global)\n" +
+            "- detail: requires message_name; entity_name is ignored\n\n" +
+
+            "OUTPUT:\n" +
+            "- list: text summary + structured {totalCount, scope, sdkMessageCount, customActionCount, sdkMessages[], customActions[]}\n" +
+            "- detail: text with metadata + structured {messageDetail} or {actionDetail} (with input/output parameters)\n\n" +
 
             "WHEN TO USE:\n" +
             "- Find SDK messages available for plugin registration\n" +
-            "- Discover Custom Actions on an entity\n" +
-            "- Inspect input/output parameters of a legacy Custom Action")]
+            "- Discover workflow-based Custom Actions on an entity (legacy, category=3)\n" +
+            "- Inspect input/output parameters of a Custom Action parsed from workflow XAML\n" +
+            "- Check plugin step registrations for a specific message\n\n" +
+
+            "FUZZY/AMBIGUITY:\n" +
+            "- entity_name resolves Display Name contains first, then logical name contains\n" +
+            "- message_name (detail mode) searches SDK message name first, then Custom Action name/uniquename\n" +
+            "- include_custom_actions default true; set false for SDK messages only")]
         public async Task<CallToolResult> get_messages(
             [Description(
                 "Entity Display Name or logical name. 'none'/empty = global messages (WhoAmI, etc.). Ignored in detail mode (when message_name is set)."
@@ -90,13 +104,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // List mode
                 var scopeResult = ResolveEntityScope(entity_name);
                 if (!string.IsNullOrEmpty(scopeResult.Error))
-                    return ErrorResult(scopeResult.Error);
+                    return Error(scopeResult.Error);
                 entity_name = scopeResult.Scope;
                 return await GetMessageListAsync(entity_name, include_custom_actions);
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Failed to load messages: {ex.Message}");
+                return ThrowException(ex);
             }
         }
 
@@ -170,7 +184,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return FormatCustomActionDetail(action, sdkMsgForAction);
             }
 
-            return ErrorResult(
+            return Error(
                 $"Error: Message or Custom Action '{messageName}' not found.\n" +
                 $"Call get_messages without message_name to list all available messages for the entity.");
         }
@@ -334,12 +348,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            try
-            {
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                return result.Entities.Count > 0 ? result.Entities[0] : null;
-            }
-            catch { return null; }
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
         private Entity FindCustomAction(string actionName)
@@ -368,12 +378,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            try
-            {
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                return result.Entities.Count > 0 ? result.Entities[0] : null;
-            }
-            catch { return null; }
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
         private List<string> GetSupportedEntities(Guid sdkMessageId)
@@ -389,17 +395,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            try
-            {
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                return result.Entities
-                    .Select(e => e.GetAttributeValue<string>("primaryobjecttypecode") ?? "")
-                    .Where(s => !string.IsNullOrWhiteSpace(s) && s != "none")
-                    .Distinct()
-                    .OrderBy(s => s)
-                    .ToList();
-            }
-            catch { return []; }
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            return result.Entities
+                .Select(e => e.GetAttributeValue<string>("primaryobjecttypecode") ?? "")
+                .Where(s => !string.IsNullOrWhiteSpace(s) && s != "none")
+                .Distinct()
+                .OrderBy(s => s)
+                .ToList();
         }
 
         private int CountPluginSteps(Guid sdkMessageId)
@@ -421,16 +423,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            try
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (result.Entities.Count > 0)
             {
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                if (result.Entities.Count > 0)
-                {
-                    var alias = result.Entities[0].GetAttributeValue<AliasedValue>("cnt");
-                    if (alias?.Value is int count) return count;
-                }
+                var alias = result.Entities[0].GetAttributeValue<AliasedValue>("cnt");
+                if (alias?.Value is int count) return count;
             }
-            catch { /* best-effort count query — returns 0 on failure */ }
             return 0;
         }
 
@@ -453,35 +451,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            try
-            {
-                var msgResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchMsg));
-                if (msgResult.Entities.Count == 0) return (inputs, outputs);
+            var msgResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchMsg));
+            if (msgResult.Entities.Count == 0) return (inputs, outputs);
 
-                var msgId = msgResult.Entities[0].Id;
-
-                // Query request fields
-                var fetchReq = $@"<fetch>
-  <entity name='sdkmessagerequest'>
-    <attribute name='sdkmessagerequestid'/>
-    <filter>
-      <condition attribute='sdkmessagepairid' operator='in'>
-        <value>{msgId}</value>
-      </condition>
-    </filter>
-    <link-entity name='sdkmessagepair' from='sdkmessagepairid' to='sdkmessagepairid'>
-      <filter>
-        <condition attribute='sdkmessageid' operator='eq' value='{msgId}'/>
-      </filter>
-    </link-entity>
-  </entity>
-</fetch>";
-
-                // Fallback: use workflow's input/output arguments from process entity
-                inputs = GetActionParametersFromProcess(workflowId, true);
-                outputs = GetActionParametersFromProcess(workflowId, false);
-            }
-            catch { /* best-effort parameter extraction — returns empty lists on failure */ }
+            // Fallback: use workflow's input/output arguments from process entity
+            inputs = GetActionParametersFromProcess(workflowId, true);
+            outputs = GetActionParametersFromProcess(workflowId, false);
 
             return (inputs, outputs);
         }
@@ -502,74 +477,66 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            try
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (result.Entities.Count == 0) return parameters;
+
+            var xaml = result.Entities[0].GetAttributeValue<string>("xaml") ?? "";
+            if (string.IsNullOrEmpty(xaml)) return parameters;
+
+            // Parse XAML arguments: <x:Property Name="ArgumentName" Type="InArgument(xxx)" />
+            // or <x:Property Name="ArgumentName" Type="OutArgument(xxx)" />
+            var directionPrefix = isInput ? "InArgument" : "OutArgument";
+            var inOutPrefix = isInput ? "InOutArgument" : null;
+
+            var lines = xaml.Split('\n');
+            foreach (var line in lines)
             {
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                if (result.Entities.Count == 0) return parameters;
+                var trimmed = line.Trim();
+                if (!trimmed.StartsWith("<x:Property ")) continue;
 
-                var xaml = result.Entities[0].GetAttributeValue<string>("xaml") ?? "";
-                if (string.IsNullOrEmpty(xaml)) return parameters;
+                // Extract Name and Type
+                var nameMatch = ExtractAttribute(trimmed, "Name");
+                var typeMatch = ExtractAttribute(trimmed, "Type");
+                if (nameMatch == null || typeMatch == null) continue;
 
-                // Parse XAML arguments: <x:Property Name="ArgumentName" Type="InArgument(xxx)" />
-                // or <x:Property Name="ArgumentName" Type="OutArgument(xxx)" />
-                var directionPrefix = isInput ? "InArgument" : "OutArgument";
-                var inOutPrefix = isInput ? "InOutArgument" : null;
+                var isMatch = typeMatch.StartsWith(directionPrefix + "(") ||
+                              (inOutPrefix != null && typeMatch.StartsWith(inOutPrefix + "("));
 
-                var lines = xaml.Split('\n');
-                foreach (var line in lines)
+                // InOutArgument counts as both input and output
+                if (!isMatch && typeMatch.StartsWith("InOutArgument("))
+                    isMatch = true;
+
+                if (!isMatch) continue;
+
+                // Extract the inner type: InArgument(String) -> String
+                var openParen = typeMatch.IndexOf('(');
+                var closeParen = typeMatch.LastIndexOf(')');
+                var innerType = openParen >= 0 && closeParen > openParen
+                    ? typeMatch.Substring(openParen + 1, closeParen - openParen - 1)
+                    : typeMatch;
+
+                // Check Required attribute
+                var requiredAttr = ExtractAttribute(trimmed, "IsRequired");
+                var isRequired = requiredAttr != null && requiredAttr.Equals("True", StringComparison.OrdinalIgnoreCase);
+
+                parameters.Add(new ActionParameterEntry
                 {
-                    var trimmed = line.Trim();
-                    if (!trimmed.StartsWith("<x:Property ")) continue;
-
-                    // Extract Name and Type
-                    var nameMatch = ExtractAttribute(trimmed, "Name");
-                    var typeMatch = ExtractAttribute(trimmed, "Type");
-                    if (nameMatch == null || typeMatch == null) continue;
-
-                    var isMatch = typeMatch.StartsWith(directionPrefix + "(") ||
-                                  (inOutPrefix != null && typeMatch.StartsWith(inOutPrefix + "("));
-
-                    // InOutArgument counts as both input and output
-                    if (!isMatch && typeMatch.StartsWith("InOutArgument("))
-                        isMatch = true;
-
-                    if (!isMatch) continue;
-
-                    // Extract the inner type: InArgument(String) -> String
-                    var openParen = typeMatch.IndexOf('(');
-                    var closeParen = typeMatch.LastIndexOf(')');
-                    var innerType = openParen >= 0 && closeParen > openParen
-                        ? typeMatch.Substring(openParen + 1, closeParen - openParen - 1)
-                        : typeMatch;
-
-                    // Check Required attribute
-                    var requiredAttr = ExtractAttribute(trimmed, "IsRequired");
-                    var isRequired = requiredAttr != null && requiredAttr.Equals("True", StringComparison.OrdinalIgnoreCase);
-
-                    parameters.Add(new ActionParameterEntry
-                    {
-                        Name = nameMatch,
-                        Type = SimplifyType(innerType),
-                        IsRequired = isRequired,
-                        EntityName = innerType.Contains("Entity") && !innerType.Equals("EntityReference") && !innerType.Equals("EntityCollection")
-                            ? ExtractEntityType(innerType)
-                            : null
-                    });
-                }
+                    Name = nameMatch,
+                    Type = SimplifyType(innerType),
+                    IsRequired = isRequired,
+                    EntityName = innerType.Contains("Entity") && !innerType.Equals("EntityReference") && !innerType.Equals("EntityCollection")
+                        ? ExtractEntityType(innerType)
+                        : null
+                });
             }
-            catch { /* skip malformed parameter XAML — returns partial list */ }
 
             return parameters;
         }
 
         private string GetWorkflowUniqueName(Guid workflowId)
         {
-            try
-            {
-                var entity = _serviceClient.Retrieve("workflow", workflowId, new ColumnSet("uniquename"));
-                return entity.GetAttributeValue<string>("uniquename") ?? "";
-            }
-            catch { return ""; }
+            var entity = _serviceClient.Retrieve("workflow", workflowId, new ColumnSet("uniquename"));
+            return entity.GetAttributeValue<string>("uniquename") ?? "";
         }
 
         private async Task<List<string>> GetSdkMessageNamesAsync(string scope)
@@ -646,6 +613,5 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string EscapeTab(string value) =>
             value?.Replace("\t", " ").Replace("\n", " ").Replace("\r", "") ?? "";
 
-        private CallToolResult ErrorResult(string message) => Error(message);
     }
 }
