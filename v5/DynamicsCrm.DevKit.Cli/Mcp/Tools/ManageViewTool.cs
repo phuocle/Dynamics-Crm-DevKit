@@ -8,9 +8,10 @@ using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ServiceModel;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.ServiceModel;
 using System.Text;
 using System.Text.Json;
 using System.Xml.Linq;
@@ -1386,21 +1387,69 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string ValidateFetchXmlExpression(string fetchXml)
         {
+            // Gọi qua Web API (ServiceClient.ExecuteWebRequest) — không cần try/catch đặc biệt:
+            //   - VALID   → HTTP 200, ValidationResults.Messages = []   → return null
+            //   - INVALID → HTTP 200, ValidationResults.Messages[].LocalizedMessageText → return error message
+            //   - HTTP 4xx/5xx (auth, network) → throw HttpOperationException (không phải FetchXML invalid)
+            var queryString = "ValidateFetchXmlExpression(FetchXml=@p1)?@p1="
+                              + System.Net.WebUtility.UrlEncode("'" + fetchXml + "'");
+            var headers = new Dictionary<string, List<string>>
+            {
+                { "Accept", new List<string> { "application/json" } },
+                { "OData-MaxVersion", new List<string> { "4.0" } },
+                { "OData-Version", new List<string> { "4.0" } }
+            };
+
+            HttpResponseMessage resp;
             try
             {
-                var request = new OrganizationRequest("ValidateFetchXmlExpression");
-                request["FetchXml"] = fetchXml;
-                _serviceClient.Execute(request);
-                return null;
+                resp = _serviceClient.ExecuteWebRequest(HttpMethod.Get, queryString, null, headers);
             }
-            catch (FaultException<OrganizationServiceFault> ex)
-                when (ex.Detail?.Message?.Contains("ValidateFetchXmlExpressionResult") == true)
+            catch (Exception ex)
             {
-                return null; // SDK throws even on valid FetchXML
+                // Transport / auth error — KHÔNG phải "FetchXML invalid" (vì invalid vẫn trả HTTP 200).
+                return $"Web API call failed: {ex.Message}";
             }
-            catch (FaultException<OrganizationServiceFault> ex)
+
+            using (resp)
             {
-                return ex.Detail?.Message ?? ex.Message;
+                if (!resp.IsSuccessStatusCode)
+                    return $"Web API returned HTTP {(int)resp.StatusCode} {resp.StatusCode}";
+
+                var body = resp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                if (string.IsNullOrWhiteSpace(body))
+                    return null;
+
+                try
+                {
+                    using (var doc = System.Text.Json.JsonDocument.Parse(body))
+                    {
+                        if (!doc.RootElement.TryGetProperty("ValidationResults", out var vr)
+                            || !vr.TryGetProperty("Messages", out var msgs))
+                        {
+                            // Không có Messages → coi như valid (an toàn).
+                            return null;
+                        }
+                        if (msgs.GetArrayLength() == 0)
+                            return null; // VALID
+
+                        // Gộp các issue messages lại thành 1 string cho caller cũ.
+                        var parts = new List<string>();
+                        foreach (var m in msgs.EnumerateArray())
+                        {
+                            var txt = m.TryGetProperty("LocalizedMessageText", out var t) ? t.GetString() : null;
+                            var sev = m.TryGetProperty("Severity", out var s) ? s.ToString() : "?";
+                            if (!string.IsNullOrWhiteSpace(txt))
+                                parts.Add($"[Severity={sev}] {txt}");
+                        }
+                        return parts.Count > 0 ? string.Join("; ", parts) : null;
+                    }
+                }
+                catch
+                {
+                    // JSON parse fail — để caller quyết định (an toàn nhất là trả null).
+                    return null;
+                }
             }
         }
 
