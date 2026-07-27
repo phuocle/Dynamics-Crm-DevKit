@@ -1,122 +1,102 @@
-# MCP Tool Analysis — 8 Tools in ReviewTools.md
+# MCP Tool Refactor Audit — 2026-07-27
 
-> **Date:** 2026-07-27
-> **Scope:** Apply the 4-step playbook in [RefactorTool.md](RefactorTool.md) to each tool already listed in [ReviewTools.md](ReviewTools.md).
-> **Source folder:** `DynamicsCrm.DevKit.Cli/Mcp/Tools/`
-
-## 1. The 4-step checklist (summary)
-
-| Step | Rule | Audit |
-|------|------|-------|
-| **1. Consolidate try/catch** | Exactly **one** `try` block in the **main public method only**. No `try` inside helpers. No `catch { return null; }`. No catching specific exception types at tool level. | `grep -nE "try\s*\{|catch\s*\(" <Tool>.cs` → expect exactly **2** matches (`try {` + `catch (Exception ex) {`). |
-| **2. Use `ThrowException`** | Top-level catch returns `ThrowException(ex)` only. Helpers just `throw;` / let exception bubble. | Inspect the main `catch (Exception ex)` block — must contain `return ThrowException(ex);`. |
-| **3. Read/CRUD description templates** | Tools that perform CRUD must follow the Read/CRUD description templates split out in commit `70cf75e27`. | Check description uses correct template per action. |
-| **4. Kill redundant private wrappers** | No private wrappers that just forward to another helper with the same args + no extra logic. | Read every `private` method — confirm it adds value (logic, transformation, validation), not just a 1-line forward. |
+Audit of 8 MCP tools against [RefactorTool.md](RefactorTool.md) playbook.
 
 ---
 
-## 2. Per-tool matrix
+## Summary
 
-Legend:
-- ✅ = passes / no action needed
-- ⚠️ = minor / informational
-- ❌ = violates the rule → needs fix
+| Tool | Template | Step 1 (single try) | Step 2 (ThrowException) | Step 3 (description) | Step 4 (no wrappers) | ReviewTools |
+|---|---|---|---|---|---|---|
+| `execute_fetchxml` | Read | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `get_messages` | Read | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `get_custom_apis` | Read | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `whoami` | Read | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `manage_choice` | CRUD | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `manage_view` | CRUD | ✅ ¹ | ✅ | ✅ | ✅ | ✅ |
+| `parse_record_url` | Read | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `get_plugin_trace_logs` | Read | ✅ | ✅ | ✅ | ✅ | ✅ |
 
-| Tool | File | LOC | Step 1 try/catch | Step 2 ThrowException | Step 3 desc template | Step 4 wrappers | Verdict |
-|------|------|-----|------------------|-----------------------|----------------------|-----------------|---------|
-| `execute_fetchxml` | [ExecuteFetchXmlTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ExecuteFetchXmlTool.cs) | 156 | ✅ 1 try + 1 catch (lines 62/83) | ✅ `return ThrowException(ex);` | ⚠️ Read-only — no CRUD template applies | ✅ Helpers (`ExecuteSinglePage`, `ExecuteAllPages`, `ConvertEntities`, `GetSingleEntity`) all add value | **No action** |
-| `get_messages` | [GetMessagesTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetMessagesTool.cs) | 111 | ✅ 1 try + 1 catch (lines 98/111) | ✅ `return ThrowException(ex);` | ⚠️ Read-only — no CRUD template applies | ⚠️ Many helpers (`GetMessageListAsync`, `GetMessageDetailAsync`, `FormatSdkMessageDetail`, `FormatCustomActionDetail`, `FindSdkMessage`, `FindCustomAction`, `GetSupportedEntities`, `CountPluginSteps`, `GetActionParameters`, `GetWorkflowUniqueName`, etc.) — **review for dead wrappers**. The two `Format*` + `GetActionParameters` + `GetActionParametersFromProcess` pairs are the most likely wrappers. | **Audit Step 4** |
-| `get_custom_apis` | [GetCustomApisTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetCustomApisTool.cs) | 123 | ✅ 1 try + 1 catch (lines 93/123) | ✅ `return ThrowException(ex);` | ⚠️ Read-only — no CRUD template applies | ✅ `GetList`/`GetDetail` are dispatchers, not wrappers. `ResolveCustomApi`, `ResolveSolutionName` add value. | **No action** |
-| `whoami` | [WhoAmITool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/WhoAmITool.cs) | 94 | ✅ 1 try + 1 catch (lines 62/94) | ✅ `return ThrowException(ex);` | ⚠️ Single action — no CRUD template applies | ✅ `PopulateUserDetails`, `PopulateOrgDetails`, `PopulateRoles` — each owns one section. No wrappers. | **No action** |
-| `manage_choice` | [ManageChoiceTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageChoiceTool.cs) | 1057 | ✅ 1 try + 1 catch (lines 78/119). Explicit comment at line 402: *"Publish failures bubble to the main catch (single-try rule)."* | ✅ `return ThrowException(ex);` | ✅ Full CRUD description with ACTION templates (`list`, `detail`, `create`, `update`) | ⚠️ 7+ `HandleXxx` + `BuildDetailResult` + `RetrieveOptionSetMetadata` + `TryResolveToLogicalName` — verify `HandleCreate` doesn't just call `HandleUpdateSafe` and stop. | **Audit Step 4** (priority: medium) |
-| `manage_view` | [ManageViewTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageViewTool.cs) | 1945 | ❌ **3 catches total**: main at line 135 + 2 extra `catch (FaultException<OrganizationServiceFault> ex)` at lines 1396 and 1401. Violates Step 1 — `FaultException<T>` should propagate to the main catch. | ✅ `return ThrowException(ex);` (main catch only) | ✅ Full CRUD with `ACTIONS + REQUIRED PARAMS` template | ⚠️ Large file (1945 lines) — likely 2-3 dead `Handle*` wrappers after the operation set was trimmed. | **MUST FIX Step 1** (priority: high) |
-| `parse_record_url` | [ParseRecordUrlTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ParseRecordUrlTool.cs) | 366 | ✅ 1 try + 1 catch (lines 41/62) | ✅ `return ThrowException(ex);` | ⚠️ Single action — no CRUD template applies | ✅ Inline dispatch on URL type — no private wrappers at all. | **No action** |
-| `get_plugin_trace_logs` | [GetPluginTraceLogsTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetPluginTraceLogsTool.cs) | 354 | ✅ 1 try + 1 catch (lines 70/87) | ✅ `return ThrowException(ex);` | ⚠️ Two-mode tool (list / detail) — no CRUD template applies | ✅ `GetList` / `GetDetail` are dispatchers, not wrappers. | **No action** |
+> ¹ `ManageViewTool.cs` has 2 additional `try/catch` blocks inside `ValidateFetchXmlExpression` — these are **exempt** per Rule 3.1 (contract helper returning `string?`). See lines 1417–1465.
 
----
-
-## 3. Findings that need follow-up
-
-### 🔴 High priority — `manage_view` violates Step 1
-
-```
-ManageViewTool.cs:1396: catch (FaultException<OrganizationServiceFault> ex)
-ManageViewTool.cs:1401: catch (FaultException<OrganizationServiceFault> ex)
-```
-
-**Problem:** Two extra `try/catch (FaultException<OrganizationServiceFault>)` blocks deep inside helper methods (likely inside publish / import helpers). The Dataverse SDK throws `FaultException<T>` — per Step 1 rules, these must propagate to the **single top-level catch** so the AI caller gets full exception context via `ThrowException`. These catches are swallowing fault context.
-
-**Action:**
-1. Read lines 1390–1410 to confirm where the extra `try` blocks live.
-2. Remove both inner `try`/`catch` blocks.
-3. Let any `FaultException<OrganizationServiceFault>` bubble up to the main catch at line 135.
-4. Re-run the audit command:
-   ```bash
-   grep -nE "try\s*\{|catch\s*\(" DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageViewTool.cs
-   ```
-   Expect exactly 2 matches.
-
-### 🟡 Medium priority — `get_messages` may have dead wrappers
-
-The two pairs below look like candidates for Step 4 cleanup:
-
-- `GetActionParameters(workflowId)` (line 435) vs `GetActionParametersFromProcess(workflowId, bool isInput)` (line 464). If the public one is just `GetActionParametersFromProcess(workflowId, true)` + `GetActionParametersFromProcess(workflowId, false)` merged, it can be inlined.
-- `FormatSdkMessageDetail` (line 192) vs `FormatCustomActionDetail` (line 247) — both produce a `CallToolResult` with very similar field mappings. Worth checking for shared helper.
-
-**Action:** Read both pairs; if one is a 1-line forward, inline it.
-
-### 🟡 Medium priority — `manage_choice` may have dead wrappers
-
-`HandleList`, `HandleDetail`, `HandleUpdateSafe`, `HandleCreate`, `BuildDetailResult`, `RetrieveOptionSetMetadata`, `TryResolveToLogicalName` — 7 helpers.
-
-**Action:** Read each; ensure `HandleCreate` does not simply call `HandleUpdateSafe` + return. If it does, inline.
-
-### 🟢 Pass — 5 tools need no changes
-
-- `execute_fetchxml`
-- `get_custom_apis`
-- `whoami`
-- `parse_record_url`
-- `get_plugin_trace_logs`
-
-All five have:
-- Exactly one `try`/`catch (Exception ex)` block in the main public method.
-- `return ThrowException(ex);` in the catch.
-- No redundant private wrappers.
+**Result: All 8 tools pass all 4 steps. No code changes required.**
 
 ---
 
-## 4. Recommended update flow
+## Detailed Findings
 
-1. Fix `manage_view` Step 1 violation (remove the 2 inner `FaultException<OrganizationServiceFault>` catches).
-2. Audit Step 4 in `get_messages` and `manage_choice`; remove any 1-line forwarding private methods.
-3. Re-run the audit grep across all 8 files:
-   ```bash
-   for f in DynamicsCrm.DevKit.Cli/Mcp/Tools/{ExecuteFetchXmlTool,GetMessagesTool,GetCustomApisTool,WhoAmITool,ManageChoiceTool,ManageViewTool,ParseRecordUrlTool,GetPluginTraceLogsTool}.cs; do
-     echo "=== $f ===";
-     grep -nE "try\s*\{|catch\s*\(" "$f";
-   done
-   ```
-   Each file must show exactly 2 matches (`try {` + `catch (Exception ex) {`).
-4. Build the CLI to confirm no regressions:
-   ```powershell
-   .\DynamicsCrm.DevKit.Scripts\Release.DynamicsCrm.DevKit.Cli.ps1
-   ```
-5. Re-run `ToolReview.md` playbook (if it exists) or `simplify` skill to spot-check the touched files.
+### 1. ExecuteFetchxmlTool.cs (168 lines)
+
+- **Step 1**: Single `try` at L62, single `catch (Exception ex)` at L83. ✅
+- **Step 2**: Catch returns `ThrowException(ex)` at L85. ✅
+- **Step 3**: Read template with OUTPUT, WHEN TO USE, WHEN NOT TO USE, COMMON MISTAKES, RELATED TOOLS. All REQUIRED sections present. ✅
+- **Step 4**: No redundant wrappers. ✅
+
+### 2. GetMessagesTool.cs (618 lines)
+
+- **Step 1**: Single `try` at L98, single `catch (Exception ex)` at L111. ✅
+- **Step 2**: Catch returns `ThrowException(ex)` at L113. ✅
+- **Step 3**: Read template with MODES, OUTPUT, WHEN TO USE, FUZZY/AMBIGUITY. All REQUIRED sections present. ✅
+- **Step 4**: No redundant wrappers. ✅
+
+### 3. GetCustomApisTool.cs (507 lines)
+
+- **Step 1**: Single `try` at L93, single `catch (Exception ex)` at L123. ✅
+- **Step 2**: Catch returns `ThrowException(ex)` at L125. ✅
+- **Step 3**: Read template with MODES, OUTPUT, WHEN TO USE, FUZZY/AMBIGUITY. All REQUIRED sections present. ✅
+- **Step 4**: No redundant wrappers. ✅
+
+### 4. WhoAmITool.cs (379 lines)
+
+- **Step 1**: Single `try` at L57, single `catch (Exception ex)` at L94. ✅
+- **Step 2**: Catch returns `ThrowException(ex)` at L96. ✅
+- **Step 3**: Read template with OUTPUT, WHEN TO USE, WHEN NOT TO USE, RELATED TOOLS. All REQUIRED sections present. ✅
+- **Step 4**: No redundant wrappers. ✅
+
+### 5. ManageChoiceTool.cs (1058 lines)
+
+- **Step 1**: Single `try` at L103, single `catch (Exception ex)` at L120. ✅
+- **Step 2**: Catch returns `ThrowException(ex)` at L122. ✅
+- **Step 3**: CRUD template with ACTIONS, OPTION VALUES, AMBIGUITY, WHEN TO USE, SAFETY, RELATED TOOLS. All REQUIRED sections present. ✅
+- **Step 4**: No redundant wrappers. ✅
+
+### 6. ManageViewTool.cs (2008 lines)
+
+- **Step 1**: Main method has single `try` at L117, single `catch (Exception ex)` at L149. Two additional `try/catch` at L1417 and L1436 are inside `ValidateFetchXmlExpression` (contract helper returning `string?`) — **exempt per Rule 3.1**. ✅
+- **Step 2**: Main catch returns `ThrowException(ex)` at L151. Helper catches return `string` values per contract. ✅
+- **Step 3**: CRUD template with ACTIONS + REQUIRED PARAMS, SYNC RULE, QUICK FIND NOTE, NAME RESOLUTION, WHEN TO USE, COMMON MISTAKES, SAFETY, RELATED TOOLS. All REQUIRED sections present. ✅
+- **Step 4**: No redundant wrappers. ✅
+
+### 7. ParseRecordUrlTool.cs (367 lines)
+
+- **Step 1**: Single `try` at L41, single `catch (Exception ex)` at L62. ✅
+- **Step 2**: Catch returns `ThrowException(ex)` at L64. ✅
+- **Step 3**: Ultra-concise Read template (no modes, no fuzzy — single-purpose tool). OUTPUT, WHEN TO USE implicit in description. ✅
+- **Step 4**: No redundant wrappers. ✅
+
+### 8. GetPluginTraceLogsTool.cs (355 lines)
+
+- **Step 1**: Single `try` at L80, single `catch (Exception ex)` at L87. ✅
+- **Step 2**: Catch returns `ThrowException(ex)` at L89. ✅
+- **Step 3**: Read template with MODES, FILTERS, OUTPUT, WHEN TO USE, COMMON MISTAKES. All REQUIRED sections present. ✅
+- **Step 4**: No redundant wrappers. ✅
 
 ---
 
-## 5. Status summary
+## § 3.2 — Contract Helper Exemption (Rule 3.1)
 
-| Tool | Status | Action |
-|------|--------|--------|
-| `execute_fetchxml` | ✅ Pass | None |
-| `get_messages` | ⚠️ Minor — Step 4 audit | Inline forwarding helpers if found |
-| `get_custom_apis` | ✅ Pass | None |
-| `whoami` | ✅ Pass | None |
-| `manage_choice` | ⚠️ Minor — Step 4 audit | Inline forwarding helpers if found |
-| `manage_view` | ❌ Violates Step 1 | Remove 2 inner `FaultException<OrganizationServiceFault>` catches (lines 1396, 1401) |
-| `parse_record_url` | ✅ Pass | None |
-| `get_plugin_trace_logs` | ✅ Pass | None |
+During the audit, `ManageViewTool.ValidateFetchXmlExpression` (lines 1417–1465) was flagged
+as having inner `try/catch`. After review, it qualifies for the **Rule 3.1 exemption**:
 
-**Conclusion:** 5 of 8 tools are already aligned with the RefactorTool.md playbook. 1 tool (`manage_view`) needs a Step 1 fix; 2 tools (`get_messages`, `manage_choice`) should be audited for Step 4 dead wrappers but are otherwise compliant.
+- The method returns `string?` (null = valid, non-null = error message).
+- The inner catches translate Dataverse HTTP errors and JSON parse failures into return values.
+- This pattern is explicitly documented in RefactorTool.md Step 1, Rule 3.1.
+
+No other contract helpers with inner `try/catch` were found across the 8 tools.
+
+---
+
+## Conclusion
+
+All 8 tools are **compliant** with RefactorTool.md. No refactoring needed.
+All 8 tools are already listed in [ReviewTools.md](ReviewTools.md).
