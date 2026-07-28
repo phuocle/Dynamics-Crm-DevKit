@@ -56,30 +56,10 @@ grep -nE "try\s*\{|catch\s*\(" DynamicsCrm.DevKit.Cli/Mcp/Tools/<Tool>.cs
 ```
 Expect exactly 2 matches: the `try {` and `catch (Exception ex) {` of the main method.
 
-**Rule 3.1 — Contract helpers are exempt from the single-try rule.** A helper method
-whose declared contract is a value type (e.g. `string?`, `bool`, `OptionSetMetadata?`)
-rather than "throw on failure" is allowed to contain its own `try/catch` blocks.
-The "single top-level catch" rule applies only to the **main public method**;
-contract helpers that translate exceptions into return values are exempt.
-
-Example (from `ManageViewTool.cs`):
-```csharp
-// ValidateFetchXmlExpression is a contract helper: returns string?.
-// null  -> FetchXML is valid.
-// non-null -> human-readable error message.
-// It is allowed to contain inner try/catch blocks for HttpOperationException
-// and JSON parse failure fallback.
-private string? ValidateFetchXmlExpression(string fetchXml)
-{
-    try { /* call Dataverse */ } catch (Exception ex) { return ex.Message; }
-    try { /* parse JSON */ } catch { return null; }   // safe fallback
-    return null;
-}
-```
-
-Without this exemption, every contract helper would be misclassified as a Step-1
-violation. See [ToolAnalysis2026-07-27.md § 3.2](ToolAnalysis2026-07-27.md) for the
-audit pass that surfaced this rule.
+**No exceptions.** Every other `try/catch` in the file is a Step-1 violation.
+Helpers must let exceptions propagate to the single top-level catch — swallowing
+them hides the real cause from the caller and silently returns wrong results
+downstream (e.g. zero matches, null values, misleading "not found" messages).
 
 ---
 

@@ -7,3 +7,4 @@ manage_environment_variable
 manage_view
 parse_record_url
 get_plugin_trace_logs
+get_audit_history

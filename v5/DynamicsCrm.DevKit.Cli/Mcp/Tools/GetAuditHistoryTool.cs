@@ -34,117 +34,142 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Audit history for Dataverse records (who/what/when/old/new). record_id set = detail (field-level, entity_name required). Empty = browse list (entity_name optional). Audit must be enabled at org AND entity. from_date/to_date overrides minutes_ago.\n\n" +
 
+            "MODES:\n" +
+            "- list (default): browse audit entries across entities (or one entity if entity_name set); newest first; default last 1440 min (24h), max 50 (cap 500 / 43200 min = 30 days).\n" +
+            "- detail: requires entity_name + record_id; returns field-level old/new values for that record.\n\n" +
+
+            "OUTPUT:\n" +
+            "- list: text summary + structured {mode, entityName, timeScope, totalCount, entries[]} (entries have timestamp, user, entity, recordName, recordId, action, operation).\n" +
+            "- detail: text summary + structured {mode, entityName, recordId, timeScope, totalCount, entries[]} (entries have timestamp, user, action, field, oldValue, newValue).\n\n" +
+
             "WHEN TO USE:\n" +
-            "- Debug unexpected field changes\n" +
-            "- Compliance / regulatory auditing\n" +
-            "- Track user or integration activity\n\n" +
+            "- Debug unexpected field changes on a specific record (detail mode).\n" +
+            "- Compliance / regulatory auditing across an entity or org (browse mode).\n" +
+            "- Track user or integration activity (browse mode with user_filter).\n\n" +
+
+            "WHEN NOT TO USE:\n" +
+            "- get_plugin_trace_logs — for plugin execution traces (different table, different purpose).\n" +
+            "- get_system_jobs — for async operation failures (workflows, bulk delete, imports).\n\n" +
+
+            "COMMON MISTAKES:\n" +
+            "- entity_name is REQUIRED in detail mode (with record_id); optional in browse mode.\n" +
+            "- attribute_name only works in detail mode (with record_id); ignored in browse mode.\n" +
+            "- from_date overrides minutes_ago; to_date defaults to now when omitted.\n" +
+            "- Empty result usually means auditing is not enabled at org or entity level.\n\n" +
+
+            "RELATED TOOLS:\n" +
+            "- get_plugin_trace_logs (plugin execution traces).\n" +
+            "- get_system_jobs (async operation failures).\n\n" +
 
             "FUZZY/AMBIGUITY:\n" +
-            "- user_filter by email/name may resolve multiple users; tool returns candidates and requires exact display name.")]
+            "- entity_name resolves Display Name contains first, then logical name contains.\n" +
+            "- attribute_name (detail mode) resolves Display Name contains first, then logical name contains.\n" +
+            "- user_filter by email/name may resolve multiple users; tool returns candidates and requires exact display name.\n" +
+            "- 0 or 2+ matches returns a disambiguation list — call again with exact GUID/name.")]
         public CallToolResult get_audit_history(
-            [Description("Entity Display Name or logical name. Required with record_id."
-            )] string entity_name = "",
-            [Description("GUID → detail. Empty = browse."
-            )] string record_id = "",
-            [Description("Last N min. Max 43200. Ignored if from_date set."
-            )] int minutes_ago = 1440,
-            [Description("User name (contains) or email (auto-resolved)."
-            )] string user_filter = "",
-            [Description("Create, Update, Delete, Activate, Deactivate, Assign, Merge, SetState."
-            )] string operation = "",
-            [Description("Detail only. Filter one field by Display Name or logical name."
-            )] string attribute_name = "",
-            [Description("Max 500."
-            )] int max_records = 50,
-            [Description("ISO 8601 (e.g. '2026-03-01'). Overrides minutes_ago."
-            )] string from_date = "",
-            [Description("ISO 8601. With from_date. Default = now."
-            )] string to_date = "")
+            [Description("Entity Display Name or logical name. Required with record_id (detail mode). Optional in browse mode (filters to one entity).")]
+            string entity_name = "",
+            [Description("GUID → detail mode. Empty = browse list. Must be a valid GUID when set.")]
+            string record_id = "",
+            [Description("Last N min. Default 1440 (24h). Max 43200 (30 days). Ignored if from_date set.")]
+            int minutes_ago = 1440,
+            [Description("User name (contains) or email (auto-resolved to fullname). Empty = all users.")]
+            string user_filter = "",
+            [Description("Filter by action. Valid: Create, Update, Delete, Activate, Deactivate, Assign, Merge, Cascade, SetState. Empty = all.")]
+            string operation = "",
+            [Description("Detail mode only. Filter one field by Display Name or logical name. Ignored in browse mode.")]
+            string attribute_name = "",
+            [Description("Max entries to return. Default 50. Max 500.")]
+            int max_records = 50,
+            [Description("ISO 8601 (e.g. '2026-03-01' or '2026-03-01T00:00:00Z'). Overrides minutes_ago. Empty = use minutes_ago.")]
+            string from_date = "",
+            [Description("ISO 8601. With from_date. Default = now.")]
+            string to_date = "")
         {
-            if (!string.IsNullOrWhiteSpace(record_id) && string.IsNullOrWhiteSpace(entity_name))
-                return ErrorResult(
-                    "Error: entity_name is required when record_id is provided.\n" +
-                    "Required: entity_name (logical name, e.g. 'account') + record_id.");
-
-            if (string.IsNullOrWhiteSpace(record_id) && !string.IsNullOrWhiteSpace(attribute_name))
-                return ErrorResult("Error: attribute_name requires record_id (detail mode). In browse mode, attribute-level filtering is not available.");
-
-            if (!string.IsNullOrWhiteSpace(record_id) && !Guid.TryParse(record_id.Trim(), out _))
-                return ErrorResult($"Error: '{record_id}' is not a valid GUID.");
-
-            if (minutes_ago < 1) minutes_ago = 1440;
-            if (minutes_ago > 43200) minutes_ago = 43200;
-            if (max_records < 1) max_records = 50;
-            if (max_records > 500) max_records = 500;
-
-            entity_name = entity_name?.Trim() ?? "";
-            if (!string.IsNullOrWhiteSpace(entity_name))
-            {
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name, "get_audit_history");
-                if (!entityResult.IsSuccess)
-                    return ErrorResult($"Error: entity_name '{entity_name}': {entityResult.Error}");
-                entity_name = entityResult.Value.LogicalName;
-            }
-
-            attribute_name = attribute_name?.Trim() ?? "";
-            if (!string.IsNullOrWhiteSpace(record_id) && !string.IsNullOrWhiteSpace(attribute_name))
-            {
-                var attributeResult = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, attribute_name, "get_audit_history");
-                if (!attributeResult.IsSuccess)
-                    return ErrorResult($"Error: attribute_name '{attribute_name}': {attributeResult.Error}");
-                attribute_name = attributeResult.Value.LogicalName;
-            }
-
-            operation = operation?.Trim() ?? "";
-            if (!string.IsNullOrWhiteSpace(operation) && !ParseActionName(operation).HasValue)
-                return ErrorResult($"Error: '{operation}' is not a valid operation. Valid values: Create, Update, Delete, Activate, Deactivate, Assign, Merge, Cascade, SetState.");
-
-            DateTime? fromUtc = null, toUtc = null;
-            if (!string.IsNullOrWhiteSpace(from_date))
-            {
-                if (!DateTime.TryParse(from_date.Trim(), CultureInfo.InvariantCulture,
-                        DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var fd))
-                    return ErrorResult(
-                        $"Error: '{from_date}' is not a valid ISO 8601 date.\n" +
-                        "Expected format: 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:mm:ssZ'.");
-                fromUtc = fd;
-            }
-            if (!string.IsNullOrWhiteSpace(to_date))
-            {
-                if (!DateTime.TryParse(to_date.Trim(), CultureInfo.InvariantCulture,
-                        DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var td))
-                    return ErrorResult(
-                        $"Error: '{to_date}' is not a valid ISO 8601 date.\n" +
-                        "Expected format: 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:mm:ssZ'.");
-                toUtc = td;
-            }
-
-            if (fromUtc.HasValue && toUtc.HasValue && fromUtc.Value > toUtc.Value)
-                return ErrorResult($"Error: from_date '{from_date}' is after to_date '{to_date}'. Swap the values or correct the range.");
-
-            var resolvedUserFilter = ResolveUserFilter(user_filter?.Trim() ?? "");
-            if (resolvedUserFilter.StartsWith("[AMBIGUOUS_USER]"))
-                return ErrorResult(resolvedUserFilter.Substring("[AMBIGUOUS_USER]".Length));
-
-            DateTime sinceUtc, untilUtc;
-            bool usedFromDate = fromUtc.HasValue;
-            if (fromUtc.HasValue)
-            {
-                sinceUtc = fromUtc.Value;
-                untilUtc = toUtc ?? DateTime.UtcNow;
-            }
-            else
-            {
-                sinceUtc = DateTime.UtcNow.AddMinutes(-minutes_ago);
-                untilUtc = toUtc ?? DateTime.UtcNow;
-            }
-
-            var timeScope = usedFromDate
-                ? $"{sinceUtc.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} to {untilUtc.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}"
-                : $"last {FormatTimeWindow(minutes_ago)}";
-
             try
             {
+                if (!string.IsNullOrWhiteSpace(record_id) && string.IsNullOrWhiteSpace(entity_name))
+                    return Error(
+                        "Error: entity_name is required when record_id is provided.\n" +
+                        "Required: entity_name (logical name, e.g. 'account') + record_id.");
+
+                if (string.IsNullOrWhiteSpace(record_id) && !string.IsNullOrWhiteSpace(attribute_name))
+                    return Error("Error: attribute_name requires record_id (detail mode). In browse mode, attribute-level filtering is not available.");
+
+                if (!string.IsNullOrWhiteSpace(record_id) && !Guid.TryParse(record_id.Trim(), out _))
+                    return Error($"Error: '{record_id}' is not a valid GUID.");
+
+                if (minutes_ago < 1) minutes_ago = 1440;
+                if (minutes_ago > 43200) minutes_ago = 43200;
+                if (max_records < 1) max_records = 50;
+                if (max_records > 500) max_records = 500;
+
+                entity_name = entity_name?.Trim() ?? "";
+                if (!string.IsNullOrWhiteSpace(entity_name))
+                {
+                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name, "get_audit_history");
+                    if (!entityResult.IsSuccess)
+                        return Error($"Error: entity_name '{entity_name}': {entityResult.Error}");
+                    entity_name = entityResult.Value.LogicalName;
+                }
+
+                attribute_name = attribute_name?.Trim() ?? "";
+                if (!string.IsNullOrWhiteSpace(record_id) && !string.IsNullOrWhiteSpace(attribute_name))
+                {
+                    var attributeResult = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, attribute_name, "get_audit_history");
+                    if (!attributeResult.IsSuccess)
+                        return Error($"Error: attribute_name '{attribute_name}': {attributeResult.Error}");
+                    attribute_name = attributeResult.Value.LogicalName;
+                }
+
+                operation = operation?.Trim() ?? "";
+                if (!string.IsNullOrWhiteSpace(operation) && !ParseActionName(operation).HasValue)
+                    return Error($"Error: '{operation}' is not a valid operation. Valid values: Create, Update, Delete, Activate, Deactivate, Assign, Merge, Cascade, SetState.");
+
+                DateTime? fromUtc = null, toUtc = null;
+                if (!string.IsNullOrWhiteSpace(from_date))
+                {
+                    if (!DateTime.TryParse(from_date.Trim(), CultureInfo.InvariantCulture,
+                            DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var fd))
+                        return Error(
+                            $"Error: '{from_date}' is not a valid ISO 8601 date.\n" +
+                            "Expected format: 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:mm:ssZ'.");
+                    fromUtc = fd;
+                }
+                if (!string.IsNullOrWhiteSpace(to_date))
+                {
+                    if (!DateTime.TryParse(to_date.Trim(), CultureInfo.InvariantCulture,
+                            DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var td))
+                        return Error(
+                            $"Error: '{to_date}' is not a valid ISO 8601 date.\n" +
+                            "Expected format: 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:mm:ssZ'.");
+                    toUtc = td;
+                }
+
+                if (fromUtc.HasValue && toUtc.HasValue && fromUtc.Value > toUtc.Value)
+                    return Error($"Error: from_date '{from_date}' is after to_date '{to_date}'. Swap the values or correct the range.");
+
+                var resolvedUserFilter = ResolveUserFilter(user_filter?.Trim() ?? "");
+                if (resolvedUserFilter.StartsWith("[AMBIGUOUS_USER]"))
+                    return Error(resolvedUserFilter.Substring("[AMBIGUOUS_USER]".Length));
+
+                DateTime sinceUtc, untilUtc;
+                bool usedFromDate = fromUtc.HasValue;
+                if (fromUtc.HasValue)
+                {
+                    sinceUtc = fromUtc.Value;
+                    untilUtc = toUtc ?? DateTime.UtcNow;
+                }
+                else
+                {
+                    sinceUtc = DateTime.UtcNow.AddMinutes(-minutes_ago);
+                    untilUtc = toUtc ?? DateTime.UtcNow;
+                }
+
+                var timeScope = usedFromDate
+                    ? $"{sinceUtc.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} to {untilUtc.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}"
+                    : $"last {FormatTimeWindow(minutes_ago)}";
+
                 if (!string.IsNullOrWhiteSpace(record_id))
                 {
                     var id = Guid.Parse(record_id.Trim());
@@ -157,16 +182,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                var msg = ex.Message;
-                if (msg.Contains("auditing is not enabled", StringComparison.OrdinalIgnoreCase) ||
-                    (msg.Contains("audit", StringComparison.OrdinalIgnoreCase) && msg.Contains("not enabled", StringComparison.OrdinalIgnoreCase)))
-                {
-                    return ErrorResult(
-                        $"Error: Auditing is not enabled for '{entity_name}'.\n" +
-                        $"Detail: {msg}\n" +
-                        "Enable auditing: Settings > Administration > System Settings > Auditing tab.");
-                }
-                return ErrorResult($"Error: Failed to retrieve audit history: {msg}");
+                return ThrowException(ex);
             }
         }
 
@@ -177,27 +193,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (userFilter.Contains('@'))
             {
-                try
+                var userQuery = new QueryExpression("systemuser")
                 {
-                    var userQuery = new QueryExpression("systemuser")
-                    {
-                        ColumnSet = new ColumnSet("fullname", "internalemailaddress", "isdisabled", "businessunitid")
-                    };
-                    userQuery.Criteria.AddCondition("internalemailaddress", ConditionOperator.Equal, userFilter);
+                    ColumnSet = new ColumnSet("fullname", "internalemailaddress", "isdisabled", "businessunitid")
+                };
+                userQuery.Criteria.AddCondition("internalemailaddress", ConditionOperator.Equal, userFilter);
 
-                    var result = _serviceClient.RetrieveMultiple(userQuery);
-                    if (result.Entities.Count > 1)
-                        return $"[AMBIGUOUS_USER]{FormatMultipleUsers(userFilter, result.Entities)}";
-                    if (result.Entities.Count == 1)
-                    {
-                        var fullName = result.Entities[0].GetAttributeValue<string>("fullname");
-                        if (!string.IsNullOrWhiteSpace(fullName))
-                            return fullName;
-                    }
-                }
-                catch
+                var result = _serviceClient.RetrieveMultiple(userQuery);
+                if (result.Entities.Count > 1)
+                    return $"[AMBIGUOUS_USER]{FormatMultipleUsers(userFilter, result.Entities)}";
+                if (result.Entities.Count == 1)
                 {
-                    // Fall through to use the original filter
+                    var fullName = result.Entities[0].GetAttributeValue<string>("fullname");
+                    if (!string.IsNullOrWhiteSpace(fullName))
+                        return fullName;
                 }
             }
 
@@ -271,13 +280,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             int? objectTypeCode = null;
             if (!string.IsNullOrWhiteSpace(entityName))
-            {
                 objectTypeCode = ResolveObjectTypeCode(entityName);
-                if (!objectTypeCode.HasValue)
-                    return ErrorResult(
-                        $"Error: Could not resolve entity '{entityName}' to an ObjectTypeCode.\n" +
-                        "Verify the logical name is correct. Use get_tables to list available entities.");
-            }
 
             var fetchXml = BuildBrowseFetchXml(objectTypeCode, sinceUtc, untilUtc, operation, maxRecords);
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
@@ -303,22 +306,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return FormatBrowseResults(result.Entities, entityName, timeScope, userFilter);
         }
 
-        private int? ResolveObjectTypeCode(string entityName)
+        private int ResolveObjectTypeCode(string entityName)
         {
-            try
+            var request = new RetrieveEntityRequest
             {
-                var request = new RetrieveEntityRequest
-                {
-                    LogicalName = entityName,
-                    EntityFilters = EntityFilters.Entity
-                };
-                var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
-                return response.EntityMetadata.ObjectTypeCode;
-            }
-            catch
-            {
-                return null;
-            }
+                LogicalName = entityName,
+                EntityFilters = EntityFilters.Entity
+            };
+            var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+            return response.EntityMetadata.ObjectTypeCode ?? throw new InvalidOperationException(
+                $"Entity '{entityName}' has no ObjectTypeCode.");
         }
 
         private static string BuildBrowseFetchXml(int? objectTypeCode,
@@ -722,7 +719,5 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string EscapeXml(string value) =>
             value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;")
                  .Replace("'", "&apos;").Replace("\"", "&quot;");
-
-        private CallToolResult ErrorResult(string message) => Error(message);
     }
 }

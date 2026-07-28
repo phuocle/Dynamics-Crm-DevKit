@@ -112,7 +112,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Failed to manage environment variable: {ex.Message}");
+                return ThrowException(ex);
             }
         }
 
@@ -145,7 +145,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Resolve solution → publisher prefix
             var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
             if (!solResult.IsSuccess)
-                return ErrorResult($"Error: {solResult.Error}");
+                return Error($"Error: {solResult.Error}");
 
             // Layer 2 (code gate): block 'new' prefix — it means the solution's publisher is misconfigured
             // or the AI bypassed the layer-1 gate by guessing a default prefix
@@ -187,7 +187,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var resolved = ResolveDefinitionInput(variableName);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return ErrorResult(resolved.Error);
+                return Error(resolved.Error);
 
             return HandleUpdate(resolved.Definition, resolved.SchemaName, displayName, defaultValue, currentValue, description);
         }
@@ -201,7 +201,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
                 if (!solResult.IsSuccess)
-                    return ErrorResult($"Error: {solResult.Error}");
+                    return Error($"Error: {solResult.Error}");
                 solutionName = solResult.UniqueName;
             }
 
@@ -271,7 +271,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var resolved = ResolveDefinitionInput(variableName);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return ErrorResult(resolved.Error);
+                return Error(resolved.Error);
             var def = resolved.Definition;
 
             var currentValues = GetCurrentValues([def.Id]);
@@ -465,7 +465,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var resolved = ResolveDefinitionInput(variableName);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return ErrorResult(resolved.Error);
+                return Error(resolved.Error);
             var def = resolved.Definition;
             variableName = resolved.SchemaName;
 
@@ -506,7 +506,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var resolved = ResolveDefinitionInput(variableName);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return ErrorResult(resolved.Error);
+                return Error(resolved.Error);
             var def = resolved.Definition;
             variableName = resolved.SchemaName;
 
