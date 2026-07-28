@@ -84,73 +84,99 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Plugin assemblies, types, processing steps. Modes: no filters = assembly list with type counts. assembly_name (1 match) = assembly detail (types+steps+images). entity_name = all steps on entity across assemblies. Stages: PreValidation/PreOperation/PostOperation/MainOperation (Custom API/DataProvider). Set include_config=true only for secure config inspection.\n\n" +
 
-            "WHEN TO USE:\n" +
-            "- Audit plugin registrations across assemblies\n" +
-            "- Find which plugin handles a message/entity (filter by entity_name + message_name)\n" +
-            "- Inspect step images / mode (sync/async) before changes\n\n" +
+                    "MODES:\n" +
+                    "- list (default): no filters → assembly list with type counts; assembly_name (1 match) → assembly detail (types+steps+images); assembly_name (0/2+ matches) → disambiguation list\n" +
+                    "- detail: entity_name → all steps on that entity across assemblies; assembly_name (1 match) → assembly detail\n" +
+                    "- assembly_name and entity_name are mutually exclusive — entity_name wins when both are set\n\n" +
 
-            "Fuzzy on assembly_name: 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto-detail.")]
-        public CallToolResult get_plugins(
-            [Description("Assembly name contains.")] string assembly_name = "",
-            [Description("Steps for entity Display Name or logical name (e.g. 'Account' or 'account').")] string entity_name = "",
-            [Description("SDK message (Create, Update, Delete, …).")] string message_name = "",
-            [Description("Plugin type name contains.")] string type_name = "",
-            [Description("Pre/post images.")] bool include_images = true,
-            [Description("Config values (security-sensitive).")] bool include_config = false,
-            [Description("prevalidation / preoperation / postoperation / mainoperation.")] string stage = "",
-            [Description("'sync' / 'async'.")] string mode = "",
-            [Description("Only activated steps.")] bool active_only = true,
-            [Description("Steps limit, 1–500.")] int max_records = 100)
-        {
-            if (!string.IsNullOrWhiteSpace(stage))
-            {
-                var s = stage.Trim().ToLowerInvariant();
-                if (s != "prevalidation" && s != "preoperation" && s != "postoperation" && s != "mainoperation")
-                    return ErrorResult($"Error: Invalid stage '{stage.Trim()}'. Use 'prevalidation', 'preoperation', 'postoperation', or 'mainoperation'.");
-            }
+                    "OUTPUT:\n" +
+                    "- list (assemblies): text table + structured {totalCount, mode='assemblies', assemblies[], packages?}\n" +
+                    "- list (assembly detail): text with types+steps+images + structured {totalCount, mode='detail', assemblies[], steps[]}\n" +
+                    "- list (entity steps): text with steps+summary + structured {totalCount, mode='steps', steps[], summary}\n" +
+                    "- disambiguation: text table of matching assemblies + structured {totalCount, mode='assemblies', assemblies[]}\n\n" +
 
-            if (!string.IsNullOrWhiteSpace(mode))
-            {
-                var m = mode.Trim().ToLowerInvariant();
-                if (m != "sync" && m != "async")
-                    return ErrorResult($"Error: Invalid mode '{mode.Trim()}'. Use 'sync' or 'async'.");
-            }
+                    "WHEN TO USE:\n" +
+                    "- Audit plugin registrations across assemblies\n" +
+                    "- Find which plugin handles a message/entity (filter by entity_name + message_name)\n" +
+                    "- Inspect step images / mode (sync/async) before changes\n" +
+                    "- Inspect plugin package + managed identity bindings\n\n" +
 
-            if (max_records <= 0) max_records = 100;
-            if (max_records > 500) max_records = 500;
+                    "WHEN NOT TO USE:\n" +
+                    "- get_plugin_trace_logs — for plugin execution traces (different table, different purpose)\n" +
+                    "- get_system_jobs — for async plugin failures (use operation_type='plugin')\n\n" +
 
-            try
-            {
-                // If entity_name is provided, show steps for that entity
-                if (!string.IsNullOrWhiteSpace(entity_name))
+                    "FUZZY/AMBIGUITY:\n" +
+                    "- assembly_name: contains match on assembly name; 0 or 2+ matches returns a disambiguation list and stops — AI must ask user\n" +
+                    "- entity_name: resolves Display Name contains first, then logical name contains; 0 or 2+ matches returns a disambiguation list — call again with exact GUID/name\n" +
+                    "- type_name: contains match on plugin type typename\n" +
+                    "- message_name: exact match on SDK message name (Create, Update, Delete, …)\n" +
+                    "- stage default empty (all); use 'prevalidation' / 'preoperation' / 'postoperation' / 'mainoperation' to filter\n" +
+                    "- mode default empty (all); use 'sync' / 'async' to filter\n" +
+                    "- active_only default true; set false to include disabled steps\n" +
+                    "- include_images default true; set false to skip pre/post image fetch\n" +
+                    "- include_config default false (security-sensitive); set true to include unsecure/secure config values\n" +
+                    "- max_records default 100, clamped to 1–500")]
+                public CallToolResult get_plugins(
+                    [Description("Assembly name contains. 1 match → detail; 0/2+ matches → disambiguation list. Empty = list all assemblies.")] string assembly_name = "",
+                    [Description("Steps for entity Display Name or logical name (e.g. 'Account' or 'account'). Empty = no entity filter. Wins over assembly_name when both set.")] string entity_name = "",
+                    [Description("SDK message name (Create, Update, Delete, …). Empty = all messages.")] string message_name = "",
+                    [Description("Plugin type typename contains. Empty = all types.")] string type_name = "",
+                    [Description("Include pre/post images for each step. Default true.")] bool include_images = true,
+                    [Description("Include unsecure/secure config values (security-sensitive). Default false.")] bool include_config = false,
+                    [Description("Stage filter: 'prevalidation' / 'preoperation' / 'postoperation' / 'mainoperation'. Empty = all stages.")] string stage = "",
+                    [Description("Mode filter: 'sync' / 'async'. Empty = both.")] string mode = "",
+                    [Description("Only activated steps (statecode=0). Default true; set false to include disabled steps.")] bool active_only = true,
+                    [Description("Steps limit, 1–500. Default 100.")] int max_records = 100)
                 {
-                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_plugins");
-                    if (!entityResult.IsSuccess)
-                        return ErrorResult($"Error: entity_name '{entity_name.Trim()}': {entityResult.Error}");
+                    try
+                    {
+                        if (!string.IsNullOrWhiteSpace(stage))
+                        {
+                            var s = stage.Trim().ToLowerInvariant();
+                            if (s != "prevalidation" && s != "preoperation" && s != "postoperation" && s != "mainoperation")
+                                return Error($"Error: Invalid stage '{stage.Trim()}'. Use 'prevalidation', 'preoperation', 'postoperation', or 'mainoperation'.");
+                        }
 
-                    var resolvedEntityName = entityResult.Value.LogicalName;
-                    var otc = GetObjectTypeCode(resolvedEntityName);
-                    if (otc == null)
-                        return ErrorResult($"Error: Entity '{resolvedEntityName}' not found. Use get_tables to discover valid entity names.");
+                        if (!string.IsNullOrWhiteSpace(mode))
+                        {
+                            var m = mode.Trim().ToLowerInvariant();
+                            if (m != "sync" && m != "async")
+                                return Error($"Error: Invalid mode '{mode.Trim()}'. Use 'sync' or 'async'.");
+                        }
 
-                    return GetStepsByEntity(resolvedEntityName, otc.Value, message_name, type_name, stage, mode, active_only, include_images, include_config, max_records);
+                        if (max_records <= 0) max_records = 100;
+                        if (max_records > 500) max_records = 500;
+
+                        // If entity_name is provided, show steps for that entity
+                        if (!string.IsNullOrWhiteSpace(entity_name))
+                        {
+                            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_plugins");
+                            if (!entityResult.IsSuccess)
+                                return Error($"Error: entity_name '{entity_name.Trim()}': {entityResult.Error}");
+
+                            var resolvedEntityName = entityResult.Value.LogicalName;
+                            var otc = GetObjectTypeCode(resolvedEntityName);
+                            if (otc == null)
+                                return Error($"Error: Entity '{resolvedEntityName}' not found. Use get_tables to discover valid entity names.");
+
+                            return GetStepsByEntity(resolvedEntityName, otc.Value, message_name, type_name, stage, mode, active_only, include_images, include_config, max_records);
+                        }
+
+                        // If assembly_name is provided, show detail for matching assemblies
+                        if (!string.IsNullOrWhiteSpace(assembly_name))
+                            return GetAssemblyDetail(assembly_name.Trim(), message_name, type_name, stage, mode, active_only, include_images, include_config, max_records);
+
+                        // Default: list all assemblies
+                        if (!string.IsNullOrWhiteSpace(stage) || !string.IsNullOrWhiteSpace(mode) || !string.IsNullOrWhiteSpace(message_name) || !string.IsNullOrWhiteSpace(type_name))
+                            return Error("Error: stage, mode, message_name, and type_name filters require entity_name or assembly_name. Provide one of these to enable filtering.");
+
+                        return GetAssemblyList();
+                    }
+                    catch (Exception ex)
+                    {
+                        return ThrowException(ex);
+                    }
                 }
-
-                // If assembly_name is provided, show detail for matching assemblies
-                if (!string.IsNullOrWhiteSpace(assembly_name))
-                    return GetAssemblyDetail(assembly_name.Trim(), message_name, type_name, stage, mode, active_only, include_images, include_config, max_records);
-
-                // Default: list all assemblies
-                if (!string.IsNullOrWhiteSpace(stage) || !string.IsNullOrWhiteSpace(mode) || !string.IsNullOrWhiteSpace(message_name) || !string.IsNullOrWhiteSpace(type_name))
-                    return ErrorResult("Error: stage, mode, message_name, and type_name filters require entity_name or assembly_name. Provide one of these to enable filtering.");
-
-                return GetAssemblyList();
-            }
-            catch (Exception ex)
-            {
-                return ErrorResult($"Error: Failed to retrieve plugins: {ex.Message}");
-            }
-        }
 
         private CallToolResult GetAssemblyList()
         {
@@ -272,8 +298,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var asmResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchAsm));
             if (asmResult.Entities.Count == 0)
-                return ErrorResult($"Error: No plugin assembly matching '{assemblyName}' found.\n" +
-                                   "Use get_plugins without assembly_name to list all available assemblies.");
+                            return Error($"Error: No plugin assembly matching '{assemblyName}' found.\n" +
+                                         "Use get_plugins without assembly_name to list all available assemblies.");
 
             // If multiple matches, list them
             if (asmResult.Entities.Count > 1)
@@ -618,32 +644,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-                try
-                {
-                    var imgResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchImages));
-                    foreach (var img in imgResult.Entities)
-                    {
-                        var stepRef = img.GetAttributeValue<EntityReference>("sdkmessageprocessingstepid");
-                        if (stepRef == null) continue;
+                var imgResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchImages));
+                                foreach (var img in imgResult.Entities)
+                                {
+                                    var stepRef = img.GetAttributeValue<EntityReference>("sdkmessageprocessingstepid");
+                                    if (stepRef == null) continue;
 
-                        var stepId = stepRef.Id.ToString();
-                        var imageEntry = new PluginImageEntry
-                        {
-                            Name = img.GetAttributeValue<string>("name") ?? "",
-                            EntityAlias = img.GetAttributeValue<string>("entityalias") ?? "",
-                            ImageType = ImageTypeMap.TryGetValue(img.GetAttributeValue<OptionSetValue>("imagetype")?.Value ?? -1, out var it) ? it : "Unknown",
-                            Attributes = NullIfEmpty(img.GetAttributeValue<string>("attributes"))
-                        };
+                                    var stepId = stepRef.Id.ToString();
+                                    var imageEntry = new PluginImageEntry
+                                    {
+                                        Name = img.GetAttributeValue<string>("name") ?? "",
+                                        EntityAlias = img.GetAttributeValue<string>("entityalias") ?? "",
+                                        ImageType = ImageTypeMap.TryGetValue(img.GetAttributeValue<OptionSetValue>("imagetype")?.Value ?? -1, out var it) ? it : "Unknown",
+                                        Attributes = NullIfEmpty(img.GetAttributeValue<string>("attributes"))
+                                    };
 
-                        if (!allImages.ContainsKey(stepId))
-                            allImages[stepId] = [];
-                        allImages[stepId].Add(imageEntry);
-                    }
-                }
-                catch
-                {
-                    // Continue without images on error
-                }
+                                    if (!allImages.ContainsKey(stepId))
+                                        allImages[stepId] = [];
+                                    allImages[stepId].Add(imageEntry);
+                                }
             }
 
             foreach (var step in steps)
@@ -712,15 +731,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            try
-            {
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                return result.Entities.Count > 0 ? result.Entities[0].Id.ToString() : null;
-            }
-            catch
-            {
-                return null;
-            }
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                        return result.Entities.Count > 0 ? result.Entities[0].Id.ToString() : null;
         }
 
         private static PluginAssemblyEntry MapAssemblyEntry(Entity e, Dictionary<Guid, int> typeCounts)
@@ -833,86 +845,72 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private List<PluginPackageEntry> GetPackages()
         {
-            try
-            {
-                var fetchXml = @"<fetch>
-  <entity name='pluginpackage'>
-    <attribute name='pluginpackageid'/>
-    <attribute name='name'/>
-    <attribute name='version'/>
-    <attribute name='ismanaged'/>
-    <attribute name='managedidentityid'/>
-    <attribute name='modifiedon'/>
-    <order attribute='name'/>
-  </entity>
-</fetch>";
+            var fetchXml = @"<fetch>
+              <entity name='pluginpackage'>
+                <attribute name='pluginpackageid'/>
+                <attribute name='name'/>
+                <attribute name='version'/>
+                <attribute name='ismanaged'/>
+                <attribute name='managedidentityid'/>
+                <attribute name='modifiedon'/>
+                <order attribute='name'/>
+              </entity>
+            </fetch>";
 
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                if (result.Entities.Count == 0) return [];
+                        var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                        if (result.Entities.Count == 0) return [];
 
-                // Get assembly names per package
-                var packageAssemblies = new Dictionary<string, List<string>>();
-                var fetchAsm = @"<fetch>
-  <entity name='pluginassembly'>
-    <attribute name='name'/>
-    <attribute name='packageid'/>
-    <filter>
-      <condition attribute='packageid' operator='not-null'/>
-      <condition attribute='ishidden' operator='eq' value='false'/>
-    </filter>
-  </entity>
-</fetch>";
+                        // Get assembly names per package
+                        var packageAssemblies = new Dictionary<string, List<string>>();
+                        var fetchAsm = @"<fetch>
+              <entity name='pluginassembly'>
+                <attribute name='name'/>
+                <attribute name='packageid'/>
+                <filter>
+                  <condition attribute='packageid' operator='not-null'/>
+                  <condition attribute='ishidden' operator='eq' value='false'/>
+                </filter>
+              </entity>
+            </fetch>";
 
-                var asmResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchAsm));
-                foreach (var asm in asmResult.Entities)
-                {
-                    var pkgRef = asm.GetAttributeValue<EntityReference>("packageid");
-                    if (pkgRef == null) continue;
-                    var pkgId = pkgRef.Id.ToString();
-                    if (!packageAssemblies.ContainsKey(pkgId))
-                        packageAssemblies[pkgId] = [];
-                    var asmName = asm.GetAttributeValue<string>("name");
-                    if (!string.IsNullOrEmpty(asmName))
-                        packageAssemblies[pkgId].Add(asmName);
-                }
+                        var asmResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchAsm));
+                        foreach (var asm in asmResult.Entities)
+                        {
+                            var pkgRef = asm.GetAttributeValue<EntityReference>("packageid");
+                            if (pkgRef == null) continue;
+                            var pkgId = pkgRef.Id.ToString();
+                            if (!packageAssemblies.ContainsKey(pkgId))
+                                packageAssemblies[pkgId] = [];
+                            var asmName = asm.GetAttributeValue<string>("name");
+                            if (!string.IsNullOrEmpty(asmName))
+                                packageAssemblies[pkgId].Add(asmName);
+                        }
 
-                return result.Entities.Select(e =>
-                {
-                    var pkgId = e.Id.ToString();
-                    return new PluginPackageEntry
-                    {
-                        PackageId = pkgId,
-                        Name = e.GetAttributeValue<string>("name") ?? "",
-                        Version = NullIfEmpty(e.GetAttributeValue<string>("version")),
-                        IsManaged = e.GetAttributeValue<bool>("ismanaged"),
-                        HasManagedIdentity = e.GetAttributeValue<EntityReference>("managedidentityid") != null,
-                        ModifiedOn = e.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd HH:mm"),
-                        Assemblies = packageAssemblies.TryGetValue(pkgId, out var asmNames) && asmNames.Count > 0 ? asmNames : null
-                    };
-                }).ToList();
-            }
-            catch
-            {
-                return [];
-            }
+                        return result.Entities.Select(e =>
+                        {
+                            var pkgId = e.Id.ToString();
+                            return new PluginPackageEntry
+                            {
+                                PackageId = pkgId,
+                                Name = e.GetAttributeValue<string>("name") ?? "",
+                                Version = NullIfEmpty(e.GetAttributeValue<string>("version")),
+                                IsManaged = e.GetAttributeValue<bool>("ismanaged"),
+                                HasManagedIdentity = e.GetAttributeValue<EntityReference>("managedidentityid") != null,
+                                ModifiedOn = e.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd HH:mm"),
+                                Assemblies = packageAssemblies.TryGetValue(pkgId, out var asmNames) && asmNames.Count > 0 ? asmNames : null
+                            };
+                        }).ToList();
         }
 
         private int? GetObjectTypeCode(string entityName)
         {
-            try
-            {
-                var request = new RetrieveEntityRequest
-                {
-                    LogicalName = entityName,
-                    EntityFilters = EntityFilters.Entity
-                };
-                var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
-                return response.EntityMetadata.ObjectTypeCode;
-            }
-            catch
-            {
-                return null;
-            }
+            var request = new RetrieveEntityRequest
+                        {
+                            LogicalName = entityName,
+                            EntityFilters = EntityFilters.Entity
+                        };
+                        var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+                        return response.EntityMetadata.ObjectTypeCode;
         }
 
         private static string NullIfEmpty(string value) =>
@@ -922,8 +920,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("\"", "&quot;");
 
         private static string EscapeTab(string value) =>
-            value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
-
-        private CallToolResult ErrorResult(string message) => Error(message);
-    }
-}
+                    value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
+            }
+        }
