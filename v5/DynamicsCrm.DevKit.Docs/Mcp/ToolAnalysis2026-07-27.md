@@ -13,11 +13,9 @@ Audit of 8 MCP tools against [RefactorTool.md](RefactorTool.md) playbook.
 | `get_custom_apis` | Read | ✅ | ✅ | ✅ | ✅ | ✅ |
 | `whoami` | Read | ✅ | ✅ | ✅ | ✅ | ✅ |
 | `manage_choice` | CRUD | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `manage_view` | CRUD | ✅ ¹ | ✅ | ✅ | ✅ | ✅ |
+| `manage_view` | CRUD | ✅ | ✅ | ✅ | ✅ | ✅ |
 | `parse_record_url` | Read | ✅ | ✅ | ✅ | ✅ | ✅ |
 | `get_plugin_trace_logs` | Read | ✅ | ✅ | ✅ | ✅ | ✅ |
-
-> ¹ `ManageViewTool.cs` has 2 additional `try/catch` blocks inside `ValidateFetchXmlExpression` — these are **exempt** per Rule 3.1 (contract helper returning `string?`). See lines 1417–1465.
 
 **Result: All 8 tools pass all 4 steps. No code changes required.**
 
@@ -62,8 +60,8 @@ Audit of 8 MCP tools against [RefactorTool.md](RefactorTool.md) playbook.
 
 ### 6. ManageViewTool.cs (2008 lines)
 
-- **Step 1**: Main method has single `try` at L117, single `catch (Exception ex)` at L149. Two additional `try/catch` at L1417 and L1436 are inside `ValidateFetchXmlExpression` (contract helper returning `string?`) — **exempt per Rule 3.1**. ✅
-- **Step 2**: Main catch returns `ThrowException(ex)` at L151. Helper catches return `string` values per contract. ✅
+- **Step 1**: Main method has single `try` at L117, single `catch (Exception ex)` at L149. No inner try/catch blocks. ✅
+- **Step 2**: Main catch returns `ThrowException(ex)` at L151. ✅
 - **Step 3**: CRUD template with ACTIONS + REQUIRED PARAMS, SYNC RULE, QUICK FIND NOTE, NAME RESOLUTION, WHEN TO USE, COMMON MISTAKES, SAFETY, RELATED TOOLS. All REQUIRED sections present. ✅
 - **Step 4**: No redundant wrappers. ✅
 
@@ -83,16 +81,14 @@ Audit of 8 MCP tools against [RefactorTool.md](RefactorTool.md) playbook.
 
 ---
 
-## § 3.2 — Contract Helper Exemption (Rule 3.1)
+## § 3.2 — Contract Helper Note
 
-During the audit, `ManageViewTool.ValidateFetchXmlExpression` (lines 1417–1465) was flagged
-as having inner `try/catch`. After review, it qualifies for the **Rule 3.1 exemption**:
+`ManageViewTool.ValidateFetchXmlExpression` returns `string?` (null = valid, non-null = error message).
+Previously had an inner `try/catch` for JSON parse failures (Rule 3.1 exemption).
+Removed on 2026-07-28 — JSON parse errors now propagate to the main `catch (Exception ex)`,
+giving the user a clear error instead of silently skipping validation.
 
-- The method returns `string?` (null = valid, non-null = error message).
-- The inner catches translate Dataverse HTTP errors and JSON parse failures into return values.
-- This pattern is explicitly documented in RefactorTool.md Step 1, Rule 3.1.
-
-No other contract helpers with inner `try/catch` were found across the 8 tools.
+No contract helpers with inner `try/catch` remain across the 8 tools.
 
 ---
 

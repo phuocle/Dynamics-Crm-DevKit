@@ -1405,28 +1405,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(body))
                 return null;
 
-            try
-            {
-                using var doc = JsonDocument.Parse(body);
-                if (!doc.RootElement.TryGetProperty("ValidationResults", out var vr)
-                    || !vr.TryGetProperty("Messages", out var msgs)
-                    || msgs.GetArrayLength() == 0)
-                    return null;
+            using var doc = JsonDocument.Parse(body);
+            if (!doc.RootElement.TryGetProperty("ValidationResults", out var vr)
+                || !vr.TryGetProperty("Messages", out var msgs)
+                || msgs.GetArrayLength() == 0)
+                return null;
 
-                var parts = new List<string>();
-                foreach (var m in msgs.EnumerateArray())
-                {
-                    var txt = m.TryGetProperty("LocalizedMessageText", out var t) ? t.GetString() : null;
-                    var sev = m.TryGetProperty("Severity", out var s) ? s.ToString() : "?";
-                    if (!string.IsNullOrWhiteSpace(txt))
-                        parts.Add($"[Severity={sev}] {txt}");
-                }
-                return parts.Count > 0 ? string.Join("; ", parts) : null;
-            }
-            catch
+            var parts = new List<string>();
+            foreach (var m in msgs.EnumerateArray())
             {
-                return null; // garbled response → safe fallback
+                var txt = m.TryGetProperty("LocalizedMessageText", out var t) ? t.GetString() : null;
+                var sev = m.TryGetProperty("Severity", out var s) ? s.ToString() : "?";
+                if (!string.IsNullOrWhiteSpace(txt))
+                    parts.Add($"[Severity={sev}] {txt}");
             }
+            return parts.Count > 0 ? string.Join("; ", parts) : null;
         }
 
         private Entity FindViewByName(string entityName, string viewName, Guid? excludeViewId = null)
