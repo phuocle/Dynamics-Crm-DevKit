@@ -1,4 +1,4 @@
-using Microsoft.PowerPlatform.Dataverse.Client;
+﻿using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -15,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
@@ -40,195 +41,177 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(BatchCreateResult)),
         Description(
-            "Bulk create Dataverse records in parallel (data migration). Partial failures reported per-item; successes still committed. Input: inline JSON array, .json (from generate_demo_data), or .csv with Display Name headers (lookups resolved by Name: 1 match=GUID, 0/2+=skipped). Polymorphic lookup: 'field@targetentity'. Max 5000 records/call.\n\n" +
+            "Bulk create Dataverse records in parallel (data migration). Partial failures reported per-item; successes still committed.\n\n" +
 
-            "ACTIVITY PARTY FIELDS (to, from, cc, bcc, requiredattendees, optionalattendees, organizer, customers, resources):\n" +
-            "These fields require a JSON array of party objects (or single object for one participant).\n" +
-            "Format: [{\"id\":\"<guid>\",\"type\":\"<entity_logical_name>\"}]\n" +
-            "Optional addressused: [{\"id\":\"<guid>\",\"type\":\"contact\",\"addressused\":\"alt@email.com\"}]\n" +
-            "Examples:\n" +
-            "  \"to\": [{\"id\":\"<guid>\",\"type\":\"contact\"},{\"id\":\"<guid>\",\"type\":\"account\"}]\n" +
-            "  \"from\": {\"id\":\"<guid>\",\"type\":\"systemuser\"} (single object auto-wrapped to array)\n" +
-            "Do NOT set participationtypemask — Dataverse sets it automatically from the field name.\n\n" +
+            "ACTIONS + REQUIRED PARAMS:\n" +
+            "- 'create' — entity_name + records_json. Optional: max_parallelism (default 0 = server hint).\n\n" +
+
+            "PARAM FORMATS:\n" +
+            "- records_json: inline JSON array, .json file path, or .csv file path with Display Name headers.\n" +
+            "- Polymorphic lookup: 'field@targetentity' (e.g. 'customerid@account').\n" +
+            "- Activity party fields (to, from, cc, bcc, requiredattendees, optionalattendees, organizer, customers, resources): JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"} objects. Single object auto-wrapped to array. Optional 'addressused' for email/phone override. Do NOT set participationtypemask — Dataverse sets it automatically.\n\n" +
+
+            "VALIDATION RULES:\n" +
+            "- Max 5000 records per call.\n" +
+            "- max_parallelism clamped to 1-52. Use 1-2 for on-prem or throttled environments.\n" +
+            "- CSV lookup-by-name: exactly 1 match becomes GUID; 0 or 2+ matches is skipped with warning.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Bulk insert > 1 records of the same entity (data migration, demo seeding)\n" +
-            "- Pipe demo data: generate_demo_data → create_records\n" +
-            "- For single-record CRUD use manage_record instead\n\n" +
+            "- Bulk insert > 1 records of the same entity (data migration, demo seeding).\n" +
+            "- Pipe demo data: generate_demo_data → create_records.\n" +
+            "- For single-record CRUD use manage_record instead.\n\n" +
 
-            "FUZZY/AMBIGUITY:\n" +
-            "- CSV lookup-by-name: exactly 1 match becomes GUID; 0 or 2+ is skipped with warning.")]
+            "SAFETY:\n" +
+            "- Creates are irreversible — records persist in Dataverse after this call returns.\n" +
+            "- Partial failures: successful records are committed even if others fail. Check the 'failed' count in the structured result.\n" +
+            "- Dry-run mode (--dry-run) previews the operation without creating records.\n\n" +
+
+            "RELATED TOOLS: manage_record (single-record CRUD), generate_demo_data (produces .json input for this tool).")]
         public async Task<CallToolResult> create_records(
             [Description(
-                "Entity logical name (e.g., 'account')."
+                "Entity Display Name or logical name (Display Name resolved first; e.g. 'Account' or 'account')."
             )] string entity_name,
             [Description(
-                "JSON array, .json path, or .csv path. Max 5000."
+                "Input data: inline JSON array, .json file path, or .csv file path with Display Name headers. Max 5000 records."
             )] string records_json,
             [Description(
-                "Concurrent requests. 0 = server hint (x-ms-dop-hint, typically 4–8). Clamp 1–52. Use 1–2 for on-prem/throttled."
+                "Concurrent requests. Default 0 = server hint (x-ms-dop-hint, typically 4â€“8). Clamped to 1â€“52. Use 1â€“2 for on-prem or throttled environments."
             )] int max_parallelism = 0)
         {
-            if (string.IsNullOrWhiteSpace(entity_name))
-                return Error("Error: entity_name is required.");
-
-            if (string.IsNullOrWhiteSpace(records_json))
-                return Error("Error: records_json is required. Provide a JSON array, .json file path, or .csv file path.");
-
-            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "create_records");
-            if (!entityResult.IsSuccess)
-                return Error($"Error: {entityResult.Error}");
-            var entityName = entityResult.Value.LogicalName;
-
-            var csvWarnings = new List<string>();
-            var resolved = ResolveRecordsInput(records_json, entityName, csvWarnings);
-            if (resolved == null)
-            {
-                var trimmed = records_json.Trim();
-                if (trimmed.EndsWith(".csv", StringComparison.OrdinalIgnoreCase) || trimmed.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
-                    return Error($"Error: File not found: {trimmed}");
-                return Error(
-                    "Error: Failed to resolve records_json input.\n" +
-                    "Valid formats: inline JSON array, .json file path, or .csv file path.");
-            }
-
-            JsonElement[] elements;
             try
             {
-                var doc = JsonDocument.Parse(resolved);
-                if (doc.RootElement.ValueKind != JsonValueKind.Array)
+                if (string.IsNullOrWhiteSpace(entity_name))
+                    return Error("Error: entity_name is required.");
+
+                if (string.IsNullOrWhiteSpace(records_json))
+                    return Error("Error: records_json is required. Provide a JSON array, .json file path, or .csv file path.");
+
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "create_records");
+                if (!entityResult.IsSuccess)
+                    return Error($"Error: {entityResult.Error}");
+                var entityName = entityResult.Value.LogicalName;
+
+                var csvWarnings = new List<string>();
+                var resolved = ResolveRecordsInput(records_json, entityName, csvWarnings);
+                if (resolved == null)
+                {
+                    var trimmed = records_json.Trim();
+                    if (trimmed.EndsWith(".csv", StringComparison.OrdinalIgnoreCase) || trimmed.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+                        return Error($"Error: File not found: {trimmed}");
+                    return Error(
+                        "Error: Failed to resolve records_json input.\n" +
+                        "Valid formats: inline JSON array, .json file path, or .csv file path.");
+                }
+
+                JsonElement[] elements;
+                var root = JsonSerializer.Deserialize<JsonElement>(resolved);
+
+                if (root.ValueKind != JsonValueKind.Array)
                     return Error("Error: records_json must be a JSON array.");
 
-                elements = doc.RootElement.EnumerateArray().ToArray();
-            }
-            catch (JsonException ex)
-            {
-                return Error(
-                    $"Error: Invalid JSON in records_json: {ex.Message}\n" +
-                    "Read docs://data_operations_guide for field type format examples.");
-            }
+                elements = root.EnumerateArray().ToArray();
 
-            if (elements.Length == 0)
-                return Error("Error: records_json array is empty.");
+                if (elements.Length == 0)
+                    return Error("Error: records_json array is empty.");
 
-            if (elements.Length > MaxRecords)
-                return Error($"Error: records_json has {elements.Length} elements. Max is {MaxRecords}.");
+                if (elements.Length > MaxRecords)
+                    return Error($"Error: records_json has {elements.Length} elements. Max is {MaxRecords}.");
 
-            var usedDefault = max_parallelism <= 0;
-            var parallelism = usedDefault
-                ? Math.Max(1, _serviceClient.RecommendedDegreesOfParallelism)
-                : max_parallelism;
-            parallelism = Math.Clamp(parallelism, 1, MaxParallelism);
+                var usedDefault = max_parallelism <= 0;
+                var parallelism = usedDefault
+                    ? Math.Max(1, _serviceClient.RecommendedDegreesOfParallelism)
+                    : max_parallelism;
+                parallelism = Math.Clamp(parallelism, 1, MaxParallelism);
 
-            if (_options.DryRun)
-                return DryRun($"Would CREATE {elements.Length} '{entityName}' records (parallelism={parallelism}).");
+                if (_options.DryRun)
+                    return DryRun($"Would CREATE {elements.Length} '{entityName}' records (parallelism={parallelism}).");
 
-            var parsedItems = new (int index, Entity entity, string error)[elements.Length];
+                var parsedEntities = new Entity[elements.Length];
+                for (var i = 0; i < elements.Length; i++)
+                    parsedEntities[i] = EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, elements[i].GetRawText());
 
-            try
-            {
-                parsedItems[0] = (0, EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, elements[0].GetRawText()), null);
+                var results = new ConcurrentBag<BatchCreateItem>();
+                var sw = Stopwatch.StartNew();
+                await Parallel.ForEachAsync(Enumerable.Range(0, parsedEntities.Length), new ParallelOptions
+                {
+                    MaxDegreeOfParallelism = parallelism
+                }, async (i, ct) =>
+                {
+                    var (id, error) = await TryCreateAsync(parsedEntities[i], ct);
+                    if (error == null)
+                        results.Add(new BatchCreateItem { Index = i, Id = id.ToString(), Status = "created" });
+                    else
+                        results.Add(new BatchCreateItem { Index = i, Status = "failed", Error = error });
+                });
+                sw.Stop();
+
+                var sortedItems = results.OrderBy(x => x.Index).ToList();
+                var succeeded = sortedItems.Count(x => x.Status == "created");
+                var failed = sortedItems.Count(x => x.Status == "failed");
+
+                var structured = new BatchCreateResult
+                {
+                    Entity = entityName,
+                    Total = elements.Length,
+                    Succeeded = succeeded,
+                    Failed = failed,
+                    DurationSeconds = Math.Round(sw.Elapsed.TotalSeconds, 1),
+                    Parallelism = parallelism,
+                    UsedDefaultParallelism = usedDefault,
+                    Items = sortedItems
+                };
+
+                var sb = new StringBuilder(256);
+
+                if (csvWarnings.Count > 0)
+                {
+                    sb.AppendLine("CSV warnings:");
+                    foreach (var w in csvWarnings)
+                        sb.AppendLine($"  {w}");
+                    sb.AppendLine();
+                }
+
+                if (usedDefault)
+                {
+                    sb.AppendLine($"Applied default parallelism = {parallelism} (from server hint x-ms-dop-hint; hard limit: {MaxParallelism})");
+                    sb.AppendLine("Tip: provide max_parallelism explicitly to suppress this notice.");
+                    sb.AppendLine();
+                }
+
+                sb.AppendLine($"Created {succeeded}/{elements.Length} '{entityName}' records in {structured.DurationSeconds}s ({parallelism} concurrent)");
+
+                if (failed > 0)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine("Failed records:");
+                    foreach (var item in sortedItems.Where(x => x.Status == "failed"))
+                        sb.AppendLine($"  [{item.Index}] {item.Error}");
+                }
+
+                return Success(sb.ToString(), structured);
             }
             catch (Exception ex)
             {
-                parsedItems[0] = (0, null, ex.Message);
+                return ThrowException(ex);
             }
-
-            for (var i = 1; i < elements.Length; i++)
-            {
-                try
-                {
-                    parsedItems[i] = (i, EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, elements[i].GetRawText()), null);
-                }
-                catch (Exception ex)
-                {
-                    parsedItems[i] = (i, null, ex.Message);
-                }
-            }
-
-            var parseFailures = parsedItems.Where(x => x.error != null).ToList();
-            var validItems = parsedItems.Where(x => x.error == null).ToList();
-
-            var results = new ConcurrentBag<BatchCreateItem>();
-
-            foreach (var pf in parseFailures)
-                results.Add(new BatchCreateItem { Index = pf.index, Status = "failed", Error = pf.error });
-
-            var oldAffinity = _serviceClient.EnableAffinityCookie;
-            var sw = Stopwatch.StartNew();
-            try
-            {
-                _serviceClient.EnableAffinityCookie = false;
-
-                await Parallel.ForEachAsync(validItems, new ParallelOptions
-                {
-                    MaxDegreeOfParallelism = parallelism
-                }, async (item, ct) =>
-                {
-                    try
-                    {
-                        var id = await _serviceClient.CreateAsync(item.entity, ct);
-                        results.Add(new BatchCreateItem { Index = item.index, Id = id.ToString(), Status = "created" });
-                    }
-                    catch (Exception ex)
-                    {
-                        results.Add(new BatchCreateItem { Index = item.index, Status = "failed", Error = ex.Message });
-                    }
-                });
-            }
-            finally
-            {
-                _serviceClient.EnableAffinityCookie = oldAffinity;
-            }
-            sw.Stop();
-
-            var sortedItems = results.OrderBy(x => x.Index).ToList();
-            var succeeded = sortedItems.Count(x => x.Status == "created");
-            var failed = sortedItems.Count(x => x.Status == "failed");
-
-            var structured = new BatchCreateResult
-            {
-                Entity = entityName,
-                Total = elements.Length,
-                Succeeded = succeeded,
-                Failed = failed,
-                DurationSeconds = Math.Round(sw.Elapsed.TotalSeconds, 1),
-                Parallelism = parallelism,
-                UsedDefaultParallelism = usedDefault,
-                Items = sortedItems
-            };
-
-            var sb = new StringBuilder(256);
-
-            if (csvWarnings.Count > 0)
-            {
-                sb.AppendLine("CSV warnings:");
-                foreach (var w in csvWarnings)
-                    sb.AppendLine($"  {w}");
-                sb.AppendLine();
-            }
-
-            if (usedDefault)
-            {
-                sb.AppendLine($"Applied default parallelism = {parallelism} (from server hint x-ms-dop-hint; hard limit: {MaxParallelism})");
-                sb.AppendLine("Tip: provide max_parallelism explicitly to suppress this notice.");
-                sb.AppendLine();
-            }
-
-            sb.AppendLine($"Created {succeeded}/{elements.Length} '{entityName}' records in {structured.DurationSeconds}s ({parallelism} concurrent)");
-
-            if (failed > 0)
-            {
-                sb.AppendLine();
-                sb.AppendLine("Failed records:");
-                foreach (var item in sortedItems.Where(x => x.Status == "failed"))
-                    sb.AppendLine($"  [{item.Index}] {item.Error}");
-            }
-
-            return Success(sb.ToString(), structured);
         }
 
-        // ── Input resolution ────────────────────────────────────────────
+        // Per-item helper for parallel create. Returns (id, null) on success,
+        // (Guid.Empty, errorMessage) on failure. Cannot let exceptions propagate
+        // because it runs inside Parallel.ForEachAsync — an unhandled throw
+        // would abort the entire batch and hide which records succeeded.
+        private async Task<(Guid id, string error)> TryCreateAsync(Entity entity, CancellationToken ct)
+        {
+            try
+            {
+                var id = await _serviceClient.CreateAsync(entity, ct);
+                return (id, null);
+            }
+            catch (Exception ex)
+            {
+                return (Guid.Empty, ex.Message);
+            }
+        }
 
         private string ResolveRecordsInput(string recordsJson, string entityName, List<string> csvWarnings)
         {
@@ -238,7 +221,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (!File.Exists(trimmed)) return null;
                 var json = ConvertCsvToJson(trimmed, entityName, csvWarnings);
-                try { File.Delete(trimmed); } catch { }
+                SafeDelete(trimmed);
                 return json;
             }
 
@@ -246,14 +229,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (!File.Exists(trimmed)) return null;
                 var content = File.ReadAllText(trimmed, Encoding.UTF8);
-                try { File.Delete(trimmed); } catch { }
+                SafeDelete(trimmed);
                 return content;
             }
 
             return recordsJson;
         }
-
-        // ── CSV to JSON conversion ──────────────────────────────────────
 
         private string ConvertCsvToJson(string csvPath, string entityName, List<string> warnings)
         {
@@ -345,7 +326,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (record.Count > 0)
                     records.Add(record);
                 else
-                    warnings.Add($"Row {rowNum}: all fields skipped — row excluded.");
+                    warnings.Add($"Row {rowNum}: all fields skipped â€” row excluded.");
             }
 
             return JsonSerializer.Serialize(records);
@@ -365,13 +346,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 case IntegerAttributeMetadata:
                     if (int.TryParse(cellValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var intVal))
                         return (logicalName, intVal);
-                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid integer — skipped.");
+                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid integer â€” skipped.");
                     return null;
 
                 case BigIntAttributeMetadata:
                     if (long.TryParse(cellValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var longVal))
                         return (logicalName, longVal);
-                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid integer — skipped.");
+                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid integer â€” skipped.");
                     return null;
 
                 case DecimalAttributeMetadata:
@@ -379,20 +360,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 case MoneyAttributeMetadata:
                     if (decimal.TryParse(cellValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var decVal))
                         return (logicalName, decVal);
-                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid number — skipped.");
+                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid number â€” skipped.");
                     return null;
 
                 case BooleanAttributeMetadata:
                     var lower = cellValue.ToLowerInvariant();
                     if (lower is "true" or "yes" or "1") return (logicalName, true);
                     if (lower is "false" or "no" or "0") return (logicalName, false);
-                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid boolean — skipped.");
+                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid boolean â€” skipped.");
                     return null;
 
                 case DateTimeAttributeMetadata:
                     if (DateTime.TryParse(cellValue, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dtVal))
                         return (logicalName, dtVal.ToString("yyyy-MM-ddTHH:mm:ssZ"));
-                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid date — skipped.");
+                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid date â€” skipped.");
                     return null;
 
                 case PicklistAttributeMetadata picklist:
@@ -405,7 +386,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return ResolveLookupByName(lookup, cellValue, logicalName, rowNum, lookupNameCache, warnings);
 
                 default:
-                    warnings.Add($"Row {rowNum}: '{logicalName}' type '{attr.GetType().Name}' not supported for CSV — skipped.");
+                    warnings.Add($"Row {rowNum}: '{logicalName}' type '{attr.GetType().Name}' not supported for CSV â€” skipped.");
                     return null;
             }
         }
@@ -420,7 +401,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (option != null)
                 return (logicalName, option.Value.Value);
 
-            warnings.Add($"Row {rowNum}: picklist '{logicalName}' label '{label}' not found in options — skipped.");
+            warnings.Add($"Row {rowNum}: picklist '{logicalName}' label '{label}' not found in options â€” skipped.");
             return null;
         }
 
@@ -439,7 +420,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (option != null)
                     values.Add(option.Value.Value);
                 else
-                    warnings.Add($"Row {rowNum}: multi-select '{logicalName}' label '{part}' not found — skipped.");
+                    warnings.Add($"Row {rowNum}: multi-select '{logicalName}' label '{part}' not found â€” skipped.");
             }
 
             return values.Count > 0 ? (logicalName, values) : null;
@@ -452,7 +433,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var targets = lookup.Targets;
             if (targets == null || targets.Length == 0)
             {
-                warnings.Add($"Row {rowNum}: lookup '{logicalName}' has no target entity — skipped.");
+                warnings.Add($"Row {rowNum}: lookup '{logicalName}' has no target entity â€” skipped.");
                 return null;
             }
 
@@ -472,21 +453,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
-            warnings.Add($"Row {rowNum}: lookup '{logicalName}' value '{nameValue}' not found or ambiguous — skipped.");
+            warnings.Add($"Row {rowNum}: lookup '{logicalName}' value '{nameValue}' not found or ambiguous â€” skipped.");
             return null;
         }
 
         private Guid? ResolveLookupGuid(string targetEntity, string nameValue)
         {
-            try
-            {
-                var targetMeta = LoadEntityMetadata(targetEntity);
-                if (targetMeta == null) return null;
+            var targetMeta = LoadEntityMetadata(targetEntity);
+            if (targetMeta == null) return null;
 
-                var primaryNameAttr = targetMeta.PrimaryNameAttribute;
-                if (string.IsNullOrEmpty(primaryNameAttr)) return null;
+            var primaryNameAttr = targetMeta.PrimaryNameAttribute;
+            if (string.IsNullOrEmpty(primaryNameAttr)) return null;
 
-                var fetchXml = $@"<fetch top='2'>
+            var fetchXml = $@"<fetch top='2'>
   <entity name='{targetEntity}'>
     <attribute name='{targetEntity}id'/>
     <filter>
@@ -496,38 +475,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-                var results = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var results = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
 
-                if (results.Entities.Count == 1)
-                    return results.Entities[0].Id;
+            if (results.Entities.Count == 1)
+                return results.Entities[0].Id;
 
-                return null;
-            }
-            catch
-            {
-                return null;
-            }
+            return null;
         }
 
         private EntityMetadata LoadEntityMetadata(string entityName)
         {
-            try
+            var request = new RetrieveEntityRequest
             {
-                var request = new RetrieveEntityRequest
-                {
-                    LogicalName = entityName,
-                    EntityFilters = EntityFilters.Attributes
-                };
-                var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
-                return response.EntityMetadata;
-            }
-            catch
-            {
-                return null;
-            }
+                LogicalName = entityName,
+                EntityFilters = EntityFilters.Attributes
+            };
+            var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+            return response.EntityMetadata;
         }
-
-        // ── CSV parsing ─────────────────────────────────────────────────
 
         private static string[] ParseCsvLine(string line)
         {
@@ -581,7 +546,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string EscapeXml(string value) =>
             value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("\"", "&quot;");
 
-        // ── Helpers ─────────────────────────────────────────────────────
+        private static void SafeDelete(string path)
+        {
+            if (!File.Exists(path)) return;
+            File.SetAttributes(path, FileAttributes.Normal);
+            File.Delete(path);
+        }
 
     }
 }
