@@ -2,13 +2,14 @@
 
 Reusable checklist for reviewing and refactoring any MCP tool under
 `DynamicsCrm.DevKit.Cli/Mcp/Tools/`. Invoke by mentioning this file
-plus the tool name, e.g. *"apply RefactorTool.md to GetBusinessProcessFlowsTool.cs"*.
+plus the tool name, e.g. _"apply RefactorTool.md to GetBusinessProcessFlowsTool.cs"_.
 
 ---
 
 ## When to use
 
 Run this playbook when:
+
 - Adding a new MCP tool (apply rules from the start).
 - Reviewing an existing tool for consistency with the rest of the suite.
 - Merging a tool from another branch that has drifted from current conventions.
@@ -42,6 +43,7 @@ public CallToolResult my_tool(/* params */)
 ```
 
 **Do NOT**:
+
 - Add `try` blocks inside helper methods (`GetList`, `GetDetail`, `FindXxx`, `ResolveXxx`).
   Let exceptions propagate to the single top-level catch.
 - Use `catch { return null; }` or `catch { /* swallow */ }` — these hide Dataverse
@@ -49,17 +51,33 @@ public CallToolResult my_tool(/* params */)
   on its own; `ThrowException` returns the full exception context.
 - Catch specific exception types (`catch (DataException)`, etc.) at the tool level.
   The Dataverse SDK throws `FaultException<T>` and similar — let them surface.
+- Add a "documented exception" carve-out for helpers that "return a value and use
+  exception type to discriminate". **There is no carve-out.** If a helper needs to
+  distinguish "entity not found" from other failures, do it without try/catch —
+  e.g. check the response, use a typed result, or let the exception propagate and
+  classify it in the main catch.
 
 **Audit command** (run after editing):
+
 ```bash
 grep -nE "try\s*\{|catch\s*\(" DynamicsCrm.DevKit.Cli/Mcp/Tools/<Tool>.cs
 ```
+
 Expect exactly 2 matches: the `try {` and `catch (Exception ex) {` of the main method.
 
-**No exceptions.** Every other `try/catch` in the file is a Step-1 violation.
-Helpers must let exceptions propagate to the single top-level catch — swallowing
-them hides the real cause from the caller and silently returns wrong results
-downstream (e.g. zero matches, null values, misleading "not found" messages).
+**ZERO TOLERANCE — ABSOLUTE RULE.** Every other `try/catch` in the file is a
+Step-1 violation, no matter how well-commented. The whole point of the rule is
+that exceptions must surface at the main catch so `ThrowException` can format
+them with full context (Dataverse error code, inner exception, stack frame,
+actionable hint). Swallowing them in helpers — even with a "best-effort"
+comment — hides the real cause from the caller and silently returns wrong
+results downstream (e.g. zero matches, null values, misleading "not found"
+messages, or a generic "unable to parse" string that masks a regex bug).
+
+If a helper genuinely cannot let an exception propagate (e.g. it parses
+untrusted input where a malformed shape is expected, not exceptional), the
+fix is to make the helper's logic defensive — guard the regex, validate the
+input shape, return a typed result — **not** to wrap it in try/catch.
 
 ---
 
@@ -100,11 +118,11 @@ pick the one that matches the tool's role.
 
 #### How to choose
 
-| Tool has... | Use template |
-|---|---|
-| `Destructive = false`, `Idempotent = true`, returns metadata only | **Read template** |
-| `Destructive = true`, multiple actions (`list`/`detail`/`create`/`update`/`delete`/`rename`/etc.), mutates server state | **CRUD template** |
-| Mixed (some modes destructive, some not — e.g. `manage_view` lists + creates) | **CRUD template** (CRUD template covers read-only modes via ACTIONS section) |
+| Tool has...                                                                                                             | Use template                                                                 |
+| ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `Destructive = false`, `Idempotent = true`, returns metadata only                                                       | **Read template**                                                            |
+| `Destructive = true`, multiple actions (`list`/`detail`/`create`/`update`/`delete`/`rename`/etc.), mutates server state | **CRUD template**                                                            |
+| Mixed (some modes destructive, some not — e.g. `manage_view` lists + creates)                                           | **CRUD template** (CRUD template covers read-only modes via ACTIONS section) |
 
 If unsure, default to **CRUD template** — it's a superset. The read template
 is just CRUD with the dangerous sections removed.
@@ -149,12 +167,13 @@ FUZZY/AMBIGUITY:                                    [REQUIRED if any param is fu
 ```
 
 **Section guidance**:
+
 - **`MODES`**: explicit about which params are ignored in which mode. Example:
   `entity_name is ignored in detail mode`.
 - **`OUTPUT`**: document both the human-readable text shape AND the structured
   field names. Clients index on the structured shape.
-- **`WHEN TO USE`**: concrete scenarios, not fluff. *"Find SDK messages for
-  plugin registration"* yes, *"useful for debugging"* no.
+- **`WHEN TO USE`**: concrete scenarios, not fluff. _"Find SDK messages for
+  plugin registration"_ yes, _"useful for debugging"_ no.
 - **`WHEN NOT TO USE`**: redirect to the right tool. Saves users from
   trial-and-error.
 - **`COMMON MISTAKES`**: only for tools with non-obvious parameter traps
@@ -211,6 +230,7 @@ RELATED TOOLS:                                       [optional]
 ```
 
 **Section guidance**:
+
 - **`ACTIONS + REQUIRED PARAMS`**: one line per action. State which params are
   required vs optional. Use `+` for required, `optional:` for optional. The
   reader should be able to construct a valid call from this section alone.
@@ -232,6 +252,7 @@ RELATED TOOLS:                                       [optional]
 
 **Per-parameter descriptions** (`[Description(...)]` on each parameter) apply to
 both templates and should:
+
 - State the default value explicitly (`Default false (managed APIs hidden)`).
 - State the valid set if it's an enum-like string (`'active' / 'inactive' / 'all'`).
 - Use null-safe phrasing for nullable inputs.
@@ -246,15 +267,16 @@ both templates and should:
 
 **Known offenders in the codebase** (rename-flexible, but all equivalent):
 
-| Local helper | Equivalent base call | Action |
-|---|---|---|
-| `private CallToolResult ErrorResult(string msg) => Error(msg);` | `Error(msg)` | Delete helper, switch callers |
-| `private CallToolResult SuccessResult(string text, T structured) => Success(text, structured);` | `Success(text, structured)` | Delete helper, switch callers |
+| Local helper                                                                                       | Equivalent base call        | Action                        |
+| -------------------------------------------------------------------------------------------------- | --------------------------- | ----------------------------- |
+| `private CallToolResult ErrorResult(string msg) => Error(msg);`                                    | `Error(msg)`                | Delete helper, switch callers |
+| `private CallToolResult SuccessResult(string text, T structured) => Success(text, structured);`    | `Success(text, structured)` | Delete helper, switch callers |
 | `private CallToolResult StructuredResult(string text, T structured) => Success(text, structured);` | `Success(text, structured)` | Delete helper, switch callers |
-| `private CallToolResult ShowError(string msg) => Error(msg);` | `Error(msg)` | Delete helper, switch callers |
-| `private CallToolResult ErrorMessage(string msg) => Error(msg);` | `Error(msg)` | Delete helper, switch callers |
+| `private CallToolResult ShowError(string msg) => Error(msg);`                                      | `Error(msg)`                | Delete helper, switch callers |
+| `private CallToolResult ErrorMessage(string msg) => Error(msg);`                                   | `Error(msg)`                | Delete helper, switch callers |
 
 **Why these wrappers are harmful**:
+
 - They hide the call from IDE jump-to-definition and refactoring tools — clicking
   `ErrorResult` from a call site doesn't show you the McpToolBase contract.
 - They bloat the class file (every `Manage*Tool`/`Get*Tool` ships one or two of
@@ -264,6 +286,7 @@ both templates and should:
   but the helper stayed. Now it shadows the real `Success` from the base.
 
 **Refactor procedure**:
+
 1. Search for any private method whose body is just a one-liner forward to
    `Error(...)`, `Success(...)`, or `ThrowException(...)`.
 2. Delete the helper.
@@ -272,10 +295,12 @@ both templates and should:
    `ErrorMessage` references remain in the file.
 
 **Audit command**:
+
 ```bash
 # Find redundant wrappers across all tools
 grep -nE "private\s+(static\s+)?CallToolResult\s+(ErrorResult|SuccessResult|StructuredResult|ShowError|ErrorMessage)" DynamicsCrm.DevKit.Cli/Mcp/Tools/*.cs
 ```
+
 Expected output: empty.
 
 ---
@@ -284,23 +309,23 @@ Expected output: empty.
 
 ### Read template examples
 
-| Tool | What it exemplifies | Path |
-|---|---|---|
-| `get_messages` | List vs detail modes, MODES/OUTPUT sections, FUZZY/AMBIGUITY pattern — closest to canonical Read template. | [GetMessagesTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetMessagesTool.cs) |
-| `get_custom_apis` | Same template with null-safe `EscapeTab`; full 5-section description. | [GetCustomApisTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetCustomApisTool.cs) |
-| `get_plugin_trace_logs` | Read template with FILTERS + MODES sub-sections (multi-axis filter list). | [GetPluginTraceLogsTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetPluginTraceLogsTool.cs) |
-| `whoami` | Single-mode tool — minimal Read template (OUTPUT + WHEN TO USE only). | [WhoAmITool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/WhoAmITool.cs) |
-| `execute_fetchxml` | Read template + WHEN NOT TO USE + COMMON MISTAKES + RELATED TOOLS (error-prone param shape). | [ExecuteFetchxmlTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ExecuteFetchxmlTool.cs) |
-| `parse_record_url` | Ultra-concise Read template (no modes, no fuzzy — single-purpose tool). | [ParseRecordUrlTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ParseRecordUrlTool.cs) |
+| Tool                    | What it exemplifies                                                                                        | Path                                                                                          |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `get_messages`          | List vs detail modes, MODES/OUTPUT sections, FUZZY/AMBIGUITY pattern — closest to canonical Read template. | [GetMessagesTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetMessagesTool.cs)               |
+| `get_custom_apis`       | Same template with null-safe `EscapeTab`; full 5-section description.                                      | [GetCustomApisTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetCustomApisTool.cs)           |
+| `get_plugin_trace_logs` | Read template with FILTERS + MODES sub-sections (multi-axis filter list).                                  | [GetPluginTraceLogsTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetPluginTraceLogsTool.cs) |
+| `whoami`                | Single-mode tool — minimal Read template (OUTPUT + WHEN TO USE only).                                      | [WhoAmITool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/WhoAmITool.cs)                         |
+| `execute_fetchxml`      | Read template + WHEN NOT TO USE + COMMON MISTAKES + RELATED TOOLS (error-prone param shape).               | [ExecuteFetchxmlTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ExecuteFetchxmlTool.cs)       |
+| `parse_record_url`      | Ultra-concise Read template (no modes, no fuzzy — single-purpose tool).                                    | [ParseRecordUrlTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ParseRecordUrlTool.cs)         |
 
 ### CRUD template examples
 
-| Tool | What it exemplifies | Path |
-|---|---|---|
-| `manage_view` | Canonical CRUD template — ACTIONS + REQUIRED PARAMS + SYNC RULE + SAFETY + AMBIGUITY. | [ManageViewTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageViewTool.cs) |
-| `manage_choice` | CRUD template with OPTION VALUES + AMBIGUITY + SAFETY (irreversible remove). | [ManageChoiceTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageChoiceTool.cs) |
-| `manage_app` | CRUD template with update_navigation + undo, multi-surface actions. | [ManageAppTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageAppTool.cs) |
-| `manage_form` | CRUD template with operation-based updates (manage_tab/manage_section/etc.). | [ManageFormTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageFormTool.cs) |
+| Tool            | What it exemplifies                                                                   | Path                                                                              |
+| --------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `manage_view`   | Canonical CRUD template — ACTIONS + REQUIRED PARAMS + SYNC RULE + SAFETY + AMBIGUITY. | [ManageViewTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageViewTool.cs)     |
+| `manage_choice` | CRUD template with OPTION VALUES + AMBIGUITY + SAFETY (irreversible remove).          | [ManageChoiceTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageChoiceTool.cs) |
+| `manage_app`    | CRUD template with update_navigation + undo, multi-surface actions.                   | [ManageAppTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageAppTool.cs)       |
+| `manage_form`   | CRUD template with operation-based updates (manage_tab/manage_section/etc.).          | [ManageFormTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageFormTool.cs)     |
 
 When in doubt, match the most recently reviewed tool — newer commits reflect the
 latest conventions.
@@ -309,14 +334,14 @@ latest conventions.
 
 ## Helpers — where to find them
 
-| Helper | Purpose | Defined in |
-|---|---|---|
-| `Success(summary, structured)` | Return compact text + structured JSON. | [McpToolBase.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/McpToolBase.cs) |
-| `Error(message, hint?, details?)` | Return structured error with optional hint + details object. | [McpToolBase.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/McpToolBase.cs) |
-| `ThrowException(ex)` | Convert an exception into a structured error result. | [McpToolBase.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/McpToolBase.cs) |
-| `DryRun(message)` | Return a dry-run notice (not commonly used). | [McpToolBase.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/McpToolBase.cs) |
-| `DisplayNameFirstResolver.ResolveEntity(...)` | Entity name → logical name with disambiguation. | `Mcp/Tools/Helper/` |
-| `MessageDiscoveryHelper` | Shared FetchXML builders for SDK message queries. | `Mcp/Tools/Helper/` |
+| Helper                                        | Purpose                                                      | Defined in                                                              |
+| --------------------------------------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| `Success(summary, structured)`                | Return compact text + structured JSON.                       | [McpToolBase.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/McpToolBase.cs) |
+| `Error(message, hint?, details?)`             | Return structured error with optional hint + details object. | [McpToolBase.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/McpToolBase.cs) |
+| `ThrowException(ex)`                          | Convert an exception into a structured error result.         | [McpToolBase.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/McpToolBase.cs) |
+| `DryRun(message)`                             | Return a dry-run notice (not commonly used).                 | [McpToolBase.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/McpToolBase.cs) |
+| `DisplayNameFirstResolver.ResolveEntity(...)` | Entity name → logical name with disambiguation.              | `Mcp/Tools/Helper/`                                                     |
+| `MessageDiscoveryHelper`                      | Shared FetchXML builders for SDK message queries.            | `Mcp/Tools/Helper/`                                                     |
 
 Do **not** create local helpers like `private CallToolResult ErrorResult(string msg) => Error(msg);`
 or `private CallToolResult SuccessResult(string text) => Success(text, null);` —
@@ -344,9 +369,9 @@ use the base helpers directly.
 
 ## Definition of done
 
-- [ ] `grep -nE "try\s*\{|catch\s*\("` shows exactly one `try` + one `catch` in the main method of the tool file.
+- [ ] `grep -nE "try\s*\{|catch\s*\("` shows exactly one `try` + one `catch` in the main method of the tool file. **No other try/catch anywhere in the file.**
 - [ ] That single catch returns `ThrowException(ex)`.
-- [ ] No silent `catch { ... }` swallowers in helper methods (exception: helpers that return `string` and use exception type to discriminate — must have a comment explaining why).
+- [ ] No silent `catch { ... }` swallowers in helper methods. **No carve-outs.**
 - [ ] `grep -nE "private\s+(static\s+)?CallToolResult\s+(ErrorResult|SuccessResult|StructuredResult|ShowError|ErrorMessage)"` returns zero hits in the tool file.
 - [ ] Tool description matches the chosen template (Read or CRUD) — all REQUIRED sections present, optional sections included where helpful.
 - [ ] Per-parameter descriptions state defaults and valid value sets.
