@@ -3,6 +3,7 @@ get_messages
 get_custom_apis
 whoami
 manage_choice
+manage_environment_variable
 manage_view
 parse_record_url
 get_plugin_trace_logs

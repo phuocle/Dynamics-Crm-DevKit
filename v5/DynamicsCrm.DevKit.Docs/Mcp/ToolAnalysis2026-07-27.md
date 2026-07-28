@@ -6,16 +6,16 @@ Audit of 8 MCP tools against [RefactorTool.md](RefactorTool.md) playbook.
 
 ## Summary
 
-| Tool | Template | Step 1 (single try) | Step 2 (ThrowException) | Step 3 (description) | Step 4 (no wrappers) | ReviewTools |
-|---|---|---|---|---|---|---|
-| `execute_fetchxml` | Read | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `get_messages` | Read | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `get_custom_apis` | Read | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `whoami` | Read | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `manage_choice` | CRUD | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `manage_view` | CRUD | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `parse_record_url` | Read | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `get_plugin_trace_logs` | Read | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Tool                    | Template | Step 1 (single try) | Step 2 (ThrowException) | Step 3 (description) | Step 4 (no wrappers) | ReviewTools |
+| ----------------------- | -------- | ------------------- | ----------------------- | -------------------- | -------------------- | ----------- |
+| `execute_fetchxml`      | Read     | ✅                  | ✅                      | ✅                   | ✅                   | ✅          |
+| `get_messages`          | Read     | ✅                  | ✅                      | ✅                   | ✅                   | ✅          |
+| `get_custom_apis`       | Read     | ✅                  | ✅                      | ✅                   | ✅                   | ✅          |
+| `whoami`                | Read     | ✅                  | ✅                      | ✅                   | ✅                   | ✅          |
+| `manage_choice`         | CRUD     | ✅                  | ✅                      | ✅                   | ✅                   | ✅          |
+| `manage_view`           | CRUD     | ✅                  | ✅                      | ✅                   | ✅                   | ✅          |
+| `parse_record_url`      | Read     | ✅                  | ✅                      | ✅                   | ✅                   | ✅          |
+| `get_plugin_trace_logs` | Read     | ✅                  | ✅                      | ✅                   | ✅                   | ✅          |
 
 **Result: All 8 tools pass all 4 steps. No code changes required.**
 
