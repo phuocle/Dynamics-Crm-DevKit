@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
 
@@ -29,54 +30,86 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(WebApiResult)),
         Description(
-            "Raw Dataverse Web API call. Allowed: GET (any), POST/PATCH/PUT/DELETE on data records + custom actions. Blocked at runtime (use specialized tool): schema/metadata→upsert_table/upsert_column/upsert_relationship; choice→manage_choice; form/view→manage_form/manage_view; app/sitemap→manage_app; env vars→manage_environment_variable; webresource→manage_webresource; roles→manage_role; publish→publish_customizations; solutions/plugins/workflows/apps→DevKit CLI or Power Apps UI. url is relative; SDK adds base URL. PUT/PATCH/DELETE destructive — confirm.\n\n" +
-            "NOTE: For model-driven app, sitemap, and appmodulecomponent create/update, use manage_app. Do not use raw Web API for those writes.\n\n" +
+            "Raw Dataverse Web API call. Always check whether a specialized tool exists first " +
+            "(schema→upsert_table/column/relationship, choice→manage_choice, form/view→manage_form/manage_view, " +
+            "app/sitemap→manage_app, env vars→manage_environment_variable, webresource→manage_webresource, " +
+            "roles→manage_role, publish→publish_customizations). url is relative; SDK adds base URL. " +
+            "PUT/PATCH/DELETE destructive — confirm.\n\n" +
+
+            "ACTIONS + REQUIRED PARAMS:\n" +
+            "- 'GET' — url (any relative path, e.g. 'accounts', 'contacts(guid)', '$metadata', 'WhoAmI')\n" +
+            "- 'POST' — url + body (JSON). For data records + custom actions only.\n" +
+            "- 'PUT' / 'PATCH' / 'DELETE' — url [+ body] (mutations on data records)\n\n" +
+
+            "PARAM FORMATS:\n" +
+            "- url: relative path, e.g. 'accounts', 'contacts(guid)', 'accounts?$select=name'\n" +
+            "- body: JSON string for POST/PUT/PATCH\n" +
+            "- headers: JSON object of extra request headers, e.g. '{\"Prefer\":\"return=representation\"}'\n\n" +
+
+            "VALIDATION RULES:\n" +
+            "- Metadata/system/config endpoints (forms, views, sitemaps, env vars, schema, choice, " +
+            "webresources, roles, solutions, plugins, workflows, apps) are BLOCKED at runtime — use the " +
+            "specialized tool listed in the error message.\n" +
+            "- Statuscode options must be inserted via upsert_column (with linked statecode), not POST.\n" +
+            "- publishxml/publishallxml must go through publish_customizations.\n\n" +
 
             "WHEN TO USE:\n" +
             "- Endpoints not covered by specialized tools (e.g. WhoAmI, $metadata, custom actions)\n" +
             "- Inspect raw JSON responses + headers\n" +
-            "- Always check whether a specialized tool exists first (see Blocked list)")]
+            "- One-off CRUD on data records when no specialized tool fits\n\n" +
+
+            "SAFETY:\n" +
+            "- PUT/PATCH/DELETE are destructive — confirm before invocation\n" +
+            "- $metadata GET can return thousands of lines; use max_response_lines=50\n" +
+            "- GET $metadata is allowed; PATCH/PUT/DELETE on metadata is BLOCKED\n\n" +
+
+            "RELATED TOOLS:\n" +
+            "- get_tables / upsert_table / upsert_column / upsert_relationship (schema)\n" +
+            "- manage_choice (option sets)\n" +
+            "- manage_form / manage_view / manage_app / manage_sitemap (UI)\n" +
+            "- manage_environment_variable / manage_webresource / manage_role (config)\n" +
+            "- publish_customizations (publish)")]
         public CallToolResult execute_webapi(
-            [Description("GET, POST, PUT, PATCH, DELETE."
-            )] string method,
-            [Description("Relative path, e.g. 'accounts', 'contacts(guid)', '$metadata'."
-            )] string url,
-            [Description("JSON body for POST/PUT/PATCH."
-            )] string body = "",
-            [Description("Extra headers as JSON."
-            )] string headers = "",
-            [Description("Include response headers."
-            )] bool include_headers = false,
-            [Description("Truncate response. Use 50 for large outputs ($metadata)."
-            )] int max_response_lines = 200)
+            [Description("GET, POST, PUT, PATCH, or DELETE. Default GET.")]
+            string method = "GET",
+            [Description("Relative path, e.g. 'accounts', 'contacts(guid)', '$metadata'. SDK adds base URL. Required.")]
+            string url = "",
+            [Description("JSON body for POST/PUT/PATCH. Default empty (no body).")]
+            string body = "",
+            [Description("Extra headers as JSON object, e.g. '{\"Prefer\":\"return=representation\"}'. Default empty.")
+            ] string headers = "",
+            [Description("Include response headers in text output. Default false.")
+            ] bool include_headers = false,
+            [Description("Truncate response body. Use 50 for large outputs ($metadata). Default 200.")
+            ] int max_response_lines = 200)
         {
-            if (string.IsNullOrWhiteSpace(method))
-                return Error(
-                    "Error: method is required.\n" +
-                    "Valid values: GET, POST, PUT, PATCH, DELETE.");
-
-            if (string.IsNullOrWhiteSpace(url))
-                return Error(
-                    "Error: url is required.\n" +
-                    "Provide a relative URL path, e.g., 'accounts', 'contacts?$select=name', '$metadata'.");
-
-            var httpMethod = ParseHttpMethod(method.Trim().ToUpperInvariant());
-            if (httpMethod == null)
-                return Error($"Error: Invalid HTTP method '{method}'. Use GET, POST, PUT, PATCH, or DELETE.");
-
-            if (max_response_lines <= 0)
-                max_response_lines = 200;
-
-            var blockedReason = GetBlockedReason(httpMethod, url.Trim());
-            if (blockedReason != null)
-                return Error(blockedReason);
-
-            if (_options.DryRun && httpMethod != HttpMethod.Get)
-                return DryRun($"Would execute {httpMethod.Method} {url.Trim()}" +
-                    (!string.IsNullOrWhiteSpace(body) ? $" with body ({body.Trim().Length} chars)" : "") + ".");
-
             try
             {
+                if (string.IsNullOrWhiteSpace(method))
+                    return Error(
+                        "Error: method is required.\n" +
+                        "Valid values: GET, POST, PUT, PATCH, DELETE.");
+
+                if (string.IsNullOrWhiteSpace(url))
+                    return Error(
+                        "Error: url is required.\n" +
+                        "Provide a relative URL path, e.g., 'accounts', 'contacts?$select=name', '$metadata'.");
+
+                var httpMethod = ParseHttpMethod(method.Trim().ToUpperInvariant());
+                if (httpMethod == null)
+                    return Error($"Error: Invalid HTTP method '{method}'. Use GET, POST, PUT, PATCH, or DELETE.");
+
+                if (max_response_lines <= 0)
+                    max_response_lines = 200;
+
+                var blockedReason = GetBlockedReason(httpMethod, url.Trim());
+                if (blockedReason != null)
+                    return Error(blockedReason);
+
+                if (_options.DryRun && httpMethod != HttpMethod.Get)
+                    return DryRun($"Would execute {httpMethod.Method} {url.Trim()}" +
+                        (!string.IsNullOrWhiteSpace(body) ? $" with body ({body.Trim().Length} chars)" : "") + ".");
+
                 var customHeaders = ParseHeaders(headers, out var headersError);
                 if (headersError != null)
                     return Error(headersError);
@@ -156,22 +189,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                var detail = new StringBuilder();
-                detail.AppendLine("Error: Web API request failed");
-                detail.AppendLine($"Method: {method}");
-                detail.AppendLine($"Url: {url}");
-                detail.AppendLine($"Message: {ex.Message}");
-                ExtractResponseContent(ex, detail);
-                var inner = ex.InnerException;
-                while (inner != null)
-                {
-                    detail.AppendLine($"Detail: {inner.Message}");
-                    ExtractResponseContent(inner, detail);
-                    inner = inner.InnerException;
-                }
-                if (ex is HttpRequestException httpEx && httpEx.StatusCode.HasValue)
-                    detail.AppendLine($"StatusCode: {(int)httpEx.StatusCode.Value} {httpEx.StatusCode.Value}");
-                return Error(detail.ToString().TrimEnd());
+                return ThrowException(ex);
             }
         }
 
@@ -396,53 +414,57 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
+        // Defensive parse: returns null header dict on empty input and a clean error
+        // string on malformed JSON. No try/catch — uses TryParse + EnumerateObject so
+        // the only throw path is the unexpected non-JsonException, which the top-level
+        // catch routes through ThrowException with full context.
         private static Dictionary<string, List<string>> ParseHeaders(string headersJson, out string error)
         {
             error = null;
             if (string.IsNullOrWhiteSpace(headersJson))
                 return null;
 
-            try
+            var trimmed = headersJson.Trim();
+            if (trimmed[0] != '{' || trimmed[^1] != '}')
             {
-                var parsed = JsonSerializer.Deserialize<Dictionary<string, string>>(headersJson);
-                if (parsed == null || parsed.Count == 0)
-                    return null;
-
-                return parsed.ToDictionary(
-                    kv => kv.Key,
-                    kv => new List<string> { kv.Value }
-                );
-            }
-            catch (JsonException ex)
-            {
-                error = $"Error: Invalid JSON in headers parameter.\nInput: {headersJson}\nDetail: {ex.Message}";
+                error = $"Error: Invalid JSON in headers parameter — expected a JSON object (e.g. {{\"Prefer\":\"return=representation\"}}).\nInput: {headersJson}";
                 return null;
             }
+
+            using var doc = JsonDocument.Parse(trimmed);
+            if (doc.RootElement.ValueKind != JsonValueKind.Object)
+            {
+                error = $"Error: Invalid JSON in headers parameter — expected a JSON object (e.g. {{\"Prefer\":\"return=representation\"}}).\nInput: {headersJson}";
+                return null;
+            }
+
+            var result = new Dictionary<string, List<string>>();
+            foreach (var prop in doc.RootElement.EnumerateObject())
+            {
+                var value = prop.Value.ValueKind == JsonValueKind.String
+                    ? prop.Value.GetString()
+                    : prop.Value.GetRawText();
+                if (value == null) continue;
+                result[prop.Name] = new List<string> { value };
+            }
+
+            if (result.Count == 0)
+                return null;
+
+            return result;
         }
 
+        // Defensive JSON formatter: returns the original string unchanged on parse failure.
+        // Note: Parse(string) throws JsonException on malformed input; we accept that here
+        // because the input is the response body of a successful Web API call and is not
+        // a place where "malformed shape is expected". Letting it throw is fine — the
+        // caller's top-level catch routes it through ThrowException.
         private static string TryFormatJson(string json)
         {
-            try
-            {
-                using var doc = JsonDocument.Parse(json);
-                return JsonSerializer.Serialize(doc, new JsonSerializerOptions { WriteIndented = true });
-            }
-            catch
-            {
+            if (string.IsNullOrWhiteSpace(json))
                 return json;
-            }
+            using var doc = JsonDocument.Parse(json);
+            return JsonSerializer.Serialize(doc, new JsonSerializerOptions { WriteIndented = true });
         }
-
-        private static void ExtractResponseContent(Exception ex, StringBuilder detail)
-        {
-            var responseProp = ex.GetType().GetProperty("Response");
-            if (responseProp?.GetValue(ex) is object response)
-            {
-                var contentProp = response.GetType().GetProperty("Content");
-                if (contentProp?.GetValue(response) is string content && !string.IsNullOrWhiteSpace(content))
-                    detail.AppendLine($"Response: {content}");
-            }
-        }
-
     }
 }

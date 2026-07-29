@@ -14,7 +14,7 @@ Run this playbook when:
 - Reviewing an existing tool for consistency with the rest of the suite.
 - Merging a tool from another branch that has drifted from current conventions.
 
-If the tool was already reviewed and is listed in [ReviewTools.md](ReviewTools.md),
+If the tool was already reviewed and is listed in [ReviewTools2.md](ReviewTools2.md),
 skip — only re-review when behavior or description actually changes.
 
 ---
@@ -381,7 +381,7 @@ use the base helpers directly.
 
 ## After the refactor
 
-1. **Update [ReviewTools.md](ReviewTools.md)** — add the tool name to the alphabetical
+1. **Update [ReviewTools2.md](ReviewTools2.md)** — add the tool name to the alphabetical
    list so future maintainers know it follows current conventions.
 2. **Run the build script** (not raw `dotnet build`):
    ```powershell
@@ -405,7 +405,7 @@ use the base helpers directly.
 - [ ] `grep -nE "private\s+(static\s+)?CallToolResult\s+(ErrorResult|SuccessResult|StructuredResult|ShowError|ErrorMessage)"` returns zero hits in the tool file.
 - [ ] Tool description matches the chosen template (Read or CRUD) — all REQUIRED sections present, optional sections included where helpful.
 - [ ] Per-parameter descriptions state defaults and valid value sets.
-- [ ] Tool added to [ReviewTools.md](ReviewTools.md).
+- [ ] Tool added to [ReviewTools2.md](ReviewTools2.md).
 - [ ] Build script ran clean, Const.cs restored to placeholders.
 - [ ] MCP `whoami` SHA matches manifest SHA.
 - [ ] Committed (not pushed).
