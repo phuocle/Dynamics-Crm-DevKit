@@ -30,25 +30,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(WhoAmIResult)),
         Description(
-            "Get current user and environment information. Returns structured JSON with identity, org, settings, roles, and DevKit runtime.\n\n" +
-
-            "OUTPUT:\n" +
-            "- User: ID, full name, domain name, email.\n" +
-            "- Organization: URL, version, friendly name, unique name, tenant/env IDs.\n" +
-            "- Settings: language, currency, fiscal start, audit enabled.\n" +
-            "- Roles: list of security roles assigned to the current user.\n" +
-            "- DevKit runtime: version, build timestamp, assembly SHA, process info.\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- First call after connection to confirm user/environment.\n" +
-            "- Verify DevKit CLI build/runtime after installation or restart.\n" +
-            "- Get userId for FetchXML owner filters (e.g. <condition attribute='ownerid' operator='eq' value='{userId}'/>).\n" +
-            "- Troubleshoot permissions by checking security roles.\n\n" +
-
-            "WHEN NOT TO USE:\n" +
-            "- Do not call repeatedly — result is stable within a session. Call once and cache the userId.\n\n" +
-
-            "RELATED TOOLS: execute_fetchxml (use userId in owner filters), get_tables (entity metadata).")]
+            "Current user + org + roles + DevKit runtime. Call once per session; cache userId for owner filters in execute_fetchxml.")]
         public CallToolResult whoami(
             [Description(
                 "Include OAuth access token (~400 tokens extra). For direct Web API calls only."

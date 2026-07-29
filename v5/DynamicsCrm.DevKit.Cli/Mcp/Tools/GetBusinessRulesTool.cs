@@ -31,33 +31,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetBusinessRulesResult)),
         Description(
-            "Business rules (client-side logic) for a Dataverse entity. rule_id empty = list (name, scope, status). Set = detail (conditions + actions parsed from XAML). Rules run BEFORE JavaScript form events. Scope 'Entity' = runs on ALL forms.\n\n" +
-
-            "MODES:\n" +
-            "- list (default): returns business rules for entity_name filtered by status; capped at max_records (default 50, max 200)\n" +
-            "- detail: requires rule_id (GUID); entity_name is ignored once the rule is resolved\n\n" +
-
-            "OUTPUT:\n" +
-            "- list: text table (ruleId/name/scope/status/modifiedOn) + structured {mode, entityName, count, rules[]}\n" +
-            "- detail: text with full metadata + parsed conditions/actions + structured {mode, entityName, count, rule{}}\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- Debug form behavior (fields hide/show unexpectedly)\n" +
-            "- Audit client-side logic before adding JavaScript\n" +
-            "- Inspect conditions + actions of a specific business rule without opening the form editor\n\n" +
-
-            "WHEN NOT TO USE:\n" +
-            "- get_messages — for workflow-based Custom Actions (category=3) or SDK messages\n" +
-            "- manage_record(action='read') with columns 'xaml' — for raw XAML when parsing fails\n\n" +
-
-            "FUZZY/AMBIGUITY:\n" +
-            "- entity_name resolves Display Name contains first, then logical name contains\n" +
-            "- rule_id must be a valid GUID; non-GUID input returns an error\n" +
-            "- status default empty (all); use 'active' or 'draft' to filter\n" +
-            "- 0 or 2+ matches on entity_name returns a disambiguation list — call again with exact GUID/name")]
+            "Business rules (client-side logic) for an entity. rule_id empty = list; set = detail (conditions+actions from XAML). " +
+            "Rules run BEFORE form JS. Scope 'Entity' = all forms. " +
+            "For workflow Custom Actions → get_messages. For raw XAML → manage_record(action='read', columns='xaml').")]
         public CallToolResult get_business_rules(
             [Description(
-                "Entity Display Name or logical name. Ignored in detail mode once rule_id resolves."
+                "Entity Display Name or logical name. Ignored in detail mode."
             )] string entity_name,
             [Description(
                 "GUID → detail mode. Empty = list mode."

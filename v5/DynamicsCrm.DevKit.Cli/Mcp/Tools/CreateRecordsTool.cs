@@ -41,41 +41,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(BatchCreateResult)),
         Description(
-            "Bulk create Dataverse records in parallel (data migration). Partial failures reported per-item; successes still committed.\n\n" +
-
-            "ACTIONS + REQUIRED PARAMS:\n" +
-            "- 'create' — entity_name + records_json. Optional: max_parallelism (default 0 = server hint).\n\n" +
-
-            "PARAM FORMATS:\n" +
-            "- records_json: inline JSON array, .json file path, or .csv file path with Display Name headers.\n" +
-            "- Polymorphic lookup: 'field@targetentity' (e.g. 'customerid@account').\n" +
-            "- Activity party fields (to, from, cc, bcc, requiredattendees, optionalattendees, organizer, customers, resources): JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"} objects. Single object auto-wrapped to array. Optional 'addressused' for email/phone override. Do NOT set participationtypemask — Dataverse sets it automatically.\n\n" +
-
-            "VALIDATION RULES:\n" +
-            "- Max 5000 records per call.\n" +
-            "- max_parallelism clamped to 1-52. Use 1-2 for on-prem or throttled environments.\n" +
-            "- CSV lookup-by-name: exactly 1 match becomes GUID; 0 or 2+ matches is skipped with warning.\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- Bulk insert > 1 records of the same entity (data migration, demo seeding).\n" +
-            "- Pipe demo data: generate_demo_data → create_records.\n" +
-            "- For single-record CRUD use manage_record instead.\n\n" +
-
-            "SAFETY:\n" +
-            "- Creates are irreversible — records persist in Dataverse after this call returns.\n" +
-            "- Partial failures: successful records are committed even if others fail. Check the 'failed' count in the structured result.\n" +
-            "- Dry-run mode (--dry-run) previews the operation without creating records.\n\n" +
-
-            "RELATED TOOLS: manage_record (single-record CRUD), generate_demo_data (produces .json input for this tool).")]
+            "Bulk create Dataverse records in parallel. Max 5000/call. Partial failures: successes committed, failures reported per-item.\n" +
+            "records_json: inline JSON array, .json path, or .csv path (Display Name headers).\n" +
+            "Polymorphic lookup: 'field@targetentity' (e.g. 'customerid@account'). Activity parties (to, from, cc, bcc, requiredattendees, optionalattendees, organizer, customers, resources): JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Single object auto-wrapped. Optional 'addressused' for email/phone override. Do NOT set participationtypemask — Dataverse sets it.\n" +
+            "CSV lookup-by-name: exactly 1 match → GUID; 0 or 2+ matches → skipped with warning.\n" +
+            "For single-record CRUD → manage_record. Dry-run via --dry-run flag.")]
         public async Task<CallToolResult> create_records(
             [Description(
-                "Entity Display Name or logical name (Display Name resolved first; e.g. 'Account' or 'account')."
+                "Entity Display Name or logical name (Display Name resolved first)."
             )] string entity_name,
             [Description(
-                "Input data: inline JSON array, .json file path, or .csv file path with Display Name headers. Max 5000 records."
+                "Inline JSON array, .json file path, or .csv file path. Max 5000 records."
             )] string records_json,
             [Description(
-                "Concurrent requests. Default 0 = server hint (x-ms-dop-hint, typically 4â€“8). Clamped to 1â€“52. Use 1â€“2 for on-prem or throttled environments."
+                "Concurrent requests. 0 = server hint. Clamped 1-52. Use 1-2 for on-prem."
             )] int max_parallelism = 0)
         {
             try

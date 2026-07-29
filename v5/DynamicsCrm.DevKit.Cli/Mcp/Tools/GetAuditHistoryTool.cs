@@ -32,56 +32,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetAuditHistoryResult)),
         Description(
-            "Audit history for Dataverse records (who/what/when/old/new). record_id set = detail (field-level, entity_name required). Empty = browse list (entity_name optional). Audit must be enabled at org AND entity. from_date/to_date overrides minutes_ago.\n\n" +
-
-            "MODES:\n" +
-            "- list (default): browse audit entries across entities (or one entity if entity_name set); newest first; default last 1440 min (24h), max 50 (cap 500 / 43200 min = 30 days).\n" +
-            "- detail: requires entity_name + record_id; returns field-level old/new values for that record.\n\n" +
-
-            "OUTPUT:\n" +
-            "- list: text summary + structured {mode, entityName, timeScope, totalCount, entries[]} (entries have timestamp, user, entity, recordName, recordId, action, operation).\n" +
-            "- detail: text summary + structured {mode, entityName, recordId, timeScope, totalCount, entries[]} (entries have timestamp, user, action, field, oldValue, newValue).\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- Debug unexpected field changes on a specific record (detail mode).\n" +
-            "- Compliance / regulatory auditing across an entity or org (browse mode).\n" +
-            "- Track user or integration activity (browse mode with user_filter).\n\n" +
-
-            "WHEN NOT TO USE:\n" +
-            "- get_plugin_trace_logs — for plugin execution traces (different table, different purpose).\n" +
-            "- get_system_jobs — for async operation failures (workflows, bulk delete, imports).\n\n" +
-
-            "COMMON MISTAKES:\n" +
-            "- entity_name is REQUIRED in detail mode (with record_id); optional in browse mode.\n" +
-            "- attribute_name only works in detail mode (with record_id); ignored in browse mode.\n" +
-            "- from_date overrides minutes_ago; to_date defaults to now when omitted.\n" +
-            "- Empty result usually means auditing is not enabled at org or entity level.\n\n" +
-
-            "RELATED TOOLS:\n" +
-            "- get_plugin_trace_logs (plugin execution traces).\n" +
-            "- get_system_jobs (async operation failures).\n\n" +
-
-            "FUZZY/AMBIGUITY:\n" +
-            "- entity_name resolves Display Name contains first, then logical name contains.\n" +
-            "- attribute_name (detail mode) resolves Display Name contains first, then logical name contains.\n" +
-            "- user_filter by email/name may resolve multiple users; tool returns candidates and requires exact display name.\n" +
-            "- 0 or 2+ matches returns a disambiguation list — call again with exact GUID/name.")]
+            "Audit history (who/what/when/old/new). record_id set = detail (field-level, entity_name REQUIRED). Empty = browse list. " +
+            "Audit must be enabled at org AND entity. from_date overrides minutes_ago. " +
+            "Empty result usually means auditing not enabled. " +
+            "For plugin traces → get_plugin_trace_logs. For async failures → get_system_jobs.")]
         public CallToolResult get_audit_history(
-            [Description("Entity Display Name or logical name. Required with record_id (detail mode). Optional in browse mode (filters to one entity).")]
+            [Description("Entity Display/logical name. Required with record_id. Optional in browse mode.")]
             string entity_name = "",
-            [Description("GUID → detail mode. Empty = browse list. Must be a valid GUID when set.")]
+            [Description("GUID → detail mode. Empty = browse list.")]
             string record_id = "",
-            [Description("Last N min. Default 1440 (24h). Max 43200 (30 days). Ignored if from_date set.")]
+            [Description("Last N min. Default 1440 (24h). Max 43200. Ignored if from_date set.")]
             int minutes_ago = 1440,
-            [Description("User name (contains) or email (auto-resolved to fullname). Empty = all users.")]
+            [Description("User name (contains) or email. Empty = all users.")]
             string user_filter = "",
-            [Description("Filter by action. Valid: Create, Update, Delete, Activate, Deactivate, Assign, Merge, Cascade, SetState. Empty = all.")]
+            [Description("Create, Update, Delete, Activate, Deactivate, Assign, Merge, Cascade, SetState. Empty = all.")]
             string operation = "",
-            [Description("Detail mode only. Filter one field by Display Name or logical name. Ignored in browse mode.")]
+            [Description("Detail mode only. Filter one field. Ignored in browse mode.")]
             string attribute_name = "",
-            [Description("Max entries to return. Default 50. Max 500.")]
+            [Description("Default 50. Max 500.")]
             int max_records = 50,
-            [Description("ISO 8601 (e.g. '2026-03-01' or '2026-03-01T00:00:00Z'). Overrides minutes_ago. Empty = use minutes_ago.")]
+            [Description("ISO 8601. Overrides minutes_ago.")]
             string from_date = "",
             [Description("ISO 8601. With from_date. Default = now.")]
             string to_date = "")

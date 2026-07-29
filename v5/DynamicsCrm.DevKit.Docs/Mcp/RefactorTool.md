@@ -116,6 +116,33 @@ The `[Description(...)]` attribute on the `[McpServerTool]` method is what MCP
 clients see when deciding whether to call the tool. Two template families —
 pick the one that matches the tool's role.
 
+#### Token Optimization Philosophy (2026-07-29)
+
+**Core principle**: _"Guide AI correctly the first time"_ — keep format examples,
+conventions, resource paths, and edge-case behaviors that AI cannot infer. Remove
+what AI already knows or can derive from `OutputSchemaType`.
+
+**What to KEEP** (AI cannot infer these):
+
+- Format examples: `'Draft;Confirmed'`, `'OldLabel:NewLabel;...'`, `'Label:#RRGGBB'`
+- Conventions: `customerid@account`, `v4_ApiEndpoint`, `.devkit/backups/views/`
+- Edge-case behaviors: `add_options` skip on existing label, value collision error
+- Resource references: `docs://instructions_for_views`, `schema://layoutxml`
+- Safety warnings: `IRREVERSIBLE`, `no backup`, `destructive — confirm first`
+
+**What to REMOVE** (AI already knows or can derive):
+
+- `OUTPUT` section — `OutputSchemaType` provides full JSON schema to MCP client
+- `RELATED TOOLS` long lists — keep only 1-line cross-references when critical
+- `FUZZY/AMBIGUITY` repeated patterns — `DisplayNameFirstResolver` behavior is
+  consistent across all tools; mention once in the tool if it has fuzzy params
+- `WHEN NOT TO USE` obvious redirects — only keep when the distinction is subtle
+- `COMMON MISTAKES` that are already in param descriptions
+
+**Result**: 60-75% token reduction while preserving correctness.
+
+---
+
 #### How to choose
 
 | Tool has...                                                                                                             | Use template                                                                 |
@@ -132,37 +159,26 @@ is just CRUD with the dangerous sections removed.
 #### Template A — Read template (use for `get_*` and inspection tools)
 
 Tools in this family: `get_messages`, `get_custom_apis`, `get_plugin_trace_logs`,
-`whoami`, `parse_record_url`, `execute_fetchxml`.
+`whoami`, `parse_record_url`, `execute_fetchxml`, `get_business_rules`, `get_plugins`,
+`get_audit_history`.
 
 ```
-<one-line "what it returns">
+<one-line "what it returns; mention key behavior">
 
 MODES:                                              [skip if single mode]
 - list (default): <what list returns + filters/caps>
 - detail: <what detail requires + returns; which params are ignored>
 
-OUTPUT:                                             [REQUIRED]
-- list: <text shape> + structured {<field list>}
-- detail: <text shape> + structured {<field list>}
-
-WHEN TO USE:                                        [REQUIRED]
+WHEN TO USE:                                        [REQUIRED — 1-3 concrete cases]
 - <concrete use case 1>
 - <concrete use case 2>
-- <concrete use case 3>
 - <redirect to related tool> (if applicable)
 
-WHEN NOT TO USE:                                     [optional but encouraged]
-- <alternative tool name> — <when to use that instead>
-
-COMMON MISTAKES:                                    [optional]
+COMMON MISTAKES:                                    [optional — only non-obvious traps]
 - <pitfall + correct call>
-
-RELATED TOOLS:                                      [optional]
-- <tool> (<when to chain to it>)
 
 FUZZY/AMBIGUITY:                                    [REQUIRED if any param is fuzzy]
 - <param>: resolves Display Name contains first, then <other> contains
-- <param> default <value>; set/omit to <effect>
 - 0 or 2+ matches returns a disambiguation list — call again with exact GUID/name
 ```
 
@@ -170,26 +186,29 @@ FUZZY/AMBIGUITY:                                    [REQUIRED if any param is fu
 
 - **`MODES`**: explicit about which params are ignored in which mode. Example:
   `entity_name is ignored in detail mode`.
-- **`OUTPUT`**: document both the human-readable text shape AND the structured
-  field names. Clients index on the structured shape.
 - **`WHEN TO USE`**: concrete scenarios, not fluff. _"Find SDK messages for
   plugin registration"_ yes, _"useful for debugging"_ no.
-- **`WHEN NOT TO USE`**: redirect to the right tool. Saves users from
-  trial-and-error.
 - **`COMMON MISTAKES`**: only for tools with non-obvious parameter traps
   (case sensitivity, attribute misuse). Skip if the params are straightforward.
 - **`FUZZY/AMBIGUITY`**: required if the tool resolves names. Always mention
   the disambiguation-list behavior on 0/2+ matches — `DisplayNameFirstResolver`
   returns candidates, not a silent error.
-- **`RELATED TOOLS`**: cross-link when the user might reasonably chain to
-  another tool.
+
+**REMOVED sections** (previously required, now optional or removed):
+
+- ~~`OUTPUT`~~ — `OutputSchemaType` provides structured schema to MCP client.
+  Only document if the text shape is non-obvious.
+- ~~`WHEN NOT TO USE`~~ — only keep when the alternative tool distinction is
+  subtle (e.g. `get_plugin_trace_logs` vs `get_system_jobs`).
+- ~~`RELATED TOOLS`~~ — only keep 1-line cross-references when chaining is
+  common (e.g. `parse_record_url` → `manage_record`).
 
 #### Template B — CRUD template (use for `manage_*` and multi-action tools)
 
 Tools in this family: `manage_choice`, `manage_view`, `manage_app`, `manage_form`,
 `manage_chart`, `manage_ribbon`, `manage_command`, `manage_environment_variable`,
 `manage_role`, `manage_webresource`, `upsert_table`, `upsert_column`,
-`upsert_relationship`.
+`upsert_relationship`, `create_records`.
 
 ```
 <one-line "what it manages; mention destructive create/update/delete">
@@ -246,9 +265,13 @@ RELATED TOOLS:                                       [optional]
   must understand `remove_options`, `delete`, `drop_column` cannot be undone
   without a backup. Reference the auto-backup behavior when present
   (`update`/`update_navigation`/`manage_view.update`).
-- **`RELATED TOOLS`**: cross-link when alternatives exist
-  (`manage_choice` ↔ `manage_environment_variable` for value scoping,
-  `manage_view` ↔ `manage_form` for layout changes).
+
+**REMOVED sections** (previously required, now optional or removed):
+
+- ~~`WHEN NOT TO USE`~~ — only keep when the alternative tool distinction is
+  subtle.
+- ~~`RELATED TOOLS`~~ — only keep 1-line cross-references when chaining is
+  common.
 
 **Per-parameter descriptions** (`[Description(...)]` on each parameter) apply to
 both templates and should:
@@ -256,6 +279,8 @@ both templates and should:
 - State the default value explicitly (`Default false (managed APIs hidden)`).
 - State the valid set if it's an enum-like string (`'active' / 'inactive' / 'all'`).
 - Use null-safe phrasing for nullable inputs.
+- Keep format examples in param descriptions when the format is non-obvious
+  (e.g. `'Draft;Confirmed'`, `'OldLabel:NewLabel;...'`).
 
 ---
 
@@ -309,23 +334,28 @@ Expected output: empty.
 
 ### Read template examples
 
-| Tool                    | What it exemplifies                                                                                        | Path                                                                                          |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `get_messages`          | List vs detail modes, MODES/OUTPUT sections, FUZZY/AMBIGUITY pattern — closest to canonical Read template. | [GetMessagesTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetMessagesTool.cs)               |
-| `get_custom_apis`       | Same template with null-safe `EscapeTab`; full 5-section description.                                      | [GetCustomApisTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetCustomApisTool.cs)           |
-| `get_plugin_trace_logs` | Read template with FILTERS + MODES sub-sections (multi-axis filter list).                                  | [GetPluginTraceLogsTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetPluginTraceLogsTool.cs) |
-| `whoami`                | Single-mode tool — minimal Read template (OUTPUT + WHEN TO USE only).                                      | [WhoAmITool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/WhoAmITool.cs)                         |
-| `execute_fetchxml`      | Read template + WHEN NOT TO USE + COMMON MISTAKES + RELATED TOOLS (error-prone param shape).               | [ExecuteFetchxmlTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ExecuteFetchxmlTool.cs)       |
-| `parse_record_url`      | Ultra-concise Read template (no modes, no fuzzy — single-purpose tool).                                    | [ParseRecordUrlTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ParseRecordUrlTool.cs)         |
+| Tool                    | What it exemplifies                                                                                | Path                                                                                          |
+| ----------------------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `get_messages`          | List vs detail modes, MODES section, FUZZY/AMBIGUITY pattern — closest to canonical Read template. | [GetMessagesTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetMessagesTool.cs)               |
+| `get_custom_apis`       | Same template with null-safe `EscapeTab`; concise description.                                     | [GetCustomApisTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetCustomApisTool.cs)           |
+| `get_plugin_trace_logs` | Read template with FILTERS + MODES sub-sections (multi-axis filter list).                          | [GetPluginTraceLogsTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetPluginTraceLogsTool.cs) |
+| `whoami`                | Single-mode tool — minimal Read template (1-line description).                                     | [WhoAmITool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/WhoAmITool.cs)                         |
+| `execute_fetchxml`      | Read template + COMMON MISTAKES (error-prone param shape).                                         | [ExecuteFetchxmlTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ExecuteFetchxmlTool.cs)       |
+| `parse_record_url`      | Ultra-concise Read template (no modes, no fuzzy — single-purpose tool).                            | [ParseRecordUrlTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ParseRecordUrlTool.cs)         |
+| `get_business_rules`    | Read template with MODES + WHEN TO USE (client-side logic inspection).                             | [GetBusinessRulesTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetBusinessRulesTool.cs)     |
+| `get_plugins`           | Read template with multi-mode behavior (assembly list vs detail vs entity steps).                  | [GetPluginsTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetPluginsTool.cs)                 |
+| `get_audit_history`     | Read template with browse vs detail modes + audit-enable prerequisite.                             | [GetAuditHistoryTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetAuditHistoryTool.cs)       |
 
 ### CRUD template examples
 
-| Tool            | What it exemplifies                                                                   | Path                                                                              |
-| --------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `manage_view`   | Canonical CRUD template — ACTIONS + REQUIRED PARAMS + SYNC RULE + SAFETY + AMBIGUITY. | [ManageViewTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageViewTool.cs)     |
-| `manage_choice` | CRUD template with OPTION VALUES + AMBIGUITY + SAFETY (irreversible remove).          | [ManageChoiceTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageChoiceTool.cs) |
-| `manage_app`    | CRUD template with update_navigation + undo, multi-surface actions.                   | [ManageAppTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageAppTool.cs)       |
-| `manage_form`   | CRUD template with operation-based updates (manage_tab/manage_section/etc.).          | [ManageFormTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageFormTool.cs)     |
+| Tool                          | What it exemplifies                                                                   | Path                                                                                                        |
+| ----------------------------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `manage_view`                 | Canonical CRUD template — ACTIONS + REQUIRED PARAMS + SYNC RULE + SAFETY + AMBIGUITY. | [ManageViewTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageViewTool.cs)                               |
+| `manage_choice`               | CRUD template with OPTION VALUES + AMBIGUITY + SAFETY (irreversible remove).          | [ManageChoiceTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageChoiceTool.cs)                           |
+| `manage_app`                  | CRUD template with update_navigation + undo, multi-surface actions.                   | [ManageAppTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageAppTool.cs)                                 |
+| `manage_form`                 | CRUD template with operation-based updates (manage_tab/manage_section/etc.).          | [ManageFormTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageFormTool.cs)                               |
+| `manage_environment_variable` | CRUD template with type immutability + prefix validation + delete/clear distinction.  | [ManageEnvironmentVariableTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageEnvironmentVariableTool.cs) |
+| `create_records`              | CRUD template with bulk create + polymorphic lookup + activity party formats.         | [CreateRecordsTool.cs](../../DynamicsCrm.DevKit.Cli/Mcp/Tools/CreateRecordsTool.cs)                         |
 
 When in doubt, match the most recently reviewed tool — newer commits reflect the
 latest conventions.

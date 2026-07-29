@@ -34,70 +34,45 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageChoiceResult)),
         Description(
-            "Manage Dataverse GLOBAL option sets (choices/picklists). For local picklists (per-attribute), use get_tables instead. Note: list and detail are non-destructive; create and update are destructive — confirm with the user before invoking create/update.\n\n" +
-
-            "ACTIONS (one per call):\n" +
-            "- 'list' — optional filter= (contains match on logical name OR display name, case-insensitive). Returns totalCount + items[].\n" +
-            "- 'detail' — optionset_name required. Returns optionCount + options[] (with value, label, color).\n" +
-            "- 'create' — display_name + options (label-only) + solution_name required. optionset_name auto-derived if omitted (must start with publisher prefix if provided).\n" +
-            "- 'update' — optionset_name required + at least one of: display_name, description, add_options, update_options, remove_options, option_colors.\n\n" +
-
-            "OPTION VALUES:\n" +
-            "- solution_name is REQUIRED for 'create' and label-only 'add_options'. If user did not provide it, ASK — never guess.\n" +
-            "- options / add_options: label-only 'Draft;Confirmed' (values auto-assigned) or 'value:label' explicit pairs.\n" +
-            "- update_options: 'OldLabel:NewLabel;...' pairs. Labels resolved to values via metadata.\n" +
-            "- remove_options: comma-separated labels 'Draft,Cancelled'. IRREVERSIBLE.\n" +
-            "- option_colors: 'Label:#RRGGBB;...' or 'value:#RRGGBB;...' (semicolon-separated). Labels resolved case-insensitively.\n\n" +
-
-            "AMBIGUITY:\n" +
-            "- optionset_name accepts logical name OR display name. Display Name matched first (contains). Multiple matches → error; use action='list' to disambiguate.\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- List/inspect global choices before creating or modifying.\n" +
-            "- Resolve integer value of a picklist label (use action='detail').\n" +
-            "- Create a global choice for upsert_column to reference via global_optionset_name.\n" +
-            "- Add, rename, remove, or recolor option values.\n\n" +
-
-            "SAFETY:\n" +
-            "- remove_options is irreversible — historic data referencing removed values becomes orphaned.\n" +
-            "- add_options with a label that already exists is silently skipped (no error).\n" +
-            "- add_options with an explicit value that collides returns an error — omit the value to auto-assign.\n" +
-            "- If structured result has needsWait=true, wait pollAfterSeconds before calling action='detail'.\n\n" +
-
-            "RELATED TOOLS: get_tables (local picklist metadata), upsert_column (reference global choice via global_optionset_name), execute_fetchxml (query records with choice values).")]
+            "Manage GLOBAL option sets. For local picklists → get_tables. list/detail non-destructive; create/update destructive — confirm first.\n" +
+            "Actions: 'list' (filter=), 'detail' (optionset_name), 'create' (display_name+options+solution_name), 'update' (optionset_name + add/update/remove_options or option_colors).\n" +
+            "Option formats: label-only 'Draft;Confirmed' (auto-value from publisher prefix) or 'value:label' explicit. update_options: 'OldLabel:NewLabel;...'. remove_options: 'Label1,Label2' (IRREVERSIBLE — orphaned data). option_colors: 'Label:#RRGGBB;...' or 'value:#RRGGBB;...'.\n" +
+            "solution_name REQUIRED for create + label-only add_options — ASK if missing, never guess.\n" +
+            "add_options with existing label = silently skipped. Explicit value collision = error — omit value to auto-assign.\n" +
+            "If needsWait=true, wait pollAfterSeconds before detail.")]
         public CallToolResult manage_choice(
             [Description(
-                "Action to perform. One of: 'list', 'detail', 'create', 'update'."
+                "'list', 'detail', 'create', 'update'."
             )] string action,
             [Description(
-                "Logical name OR display name of the global option set. Required for 'detail' and 'update'. Optional for 'create' (auto-derived from display_name if omitted). Ignored by 'list'. Display Name is matched first (contains, case-insensitive), then logical name — if ambiguous, the tool returns an error; re-call with the exact logical name or call action='list' first."
+                "Logical or display name. Required: detail/update. Optional: create (auto-derived). Display Name matched first."
             )] string optionset_name = "",
             [Description(
-                "Required for 'create'. Optional for 'update' (renames the option set). For 'list', used as a contains-filter (case-insensitive on both logical name and display name) — prefer filter= for list queries."
+                "Required: create. Optional: update (rename). For list, prefer filter=."
             )] string display_name = "",
             [Description(
-                "'list' only. Keyword filter applied to both logical name and display name (contains, case-insensitive). Shorthand alternative to display_name for list queries."
+                "'list' only. Contains filter on logical+display name."
             )] string filter = "",
             [Description(
-                "Optional for 'create' and 'update'. Localized description for the option set."
+                "Optional: create/update. Localized description."
             )] string description = "",
             [Description(
-                "'create' only. Label-only values separated by semicolons (e.g. 'Draft;Confirmed;Paid') or 'value:label' pairs. Integer values are auto-assigned from the solution publisher's customizationoptionvalueprefix. solution_name is required."
+                "'create' only. 'Draft;Confirmed' (auto-value) or 'value:label'. solution_name required."
             )] string options = "",
             [Description(
-                "'update' only. New options to insert: label-only 'NewLabel' (requires solution_name to resolve publisher prefix; values auto-assigned, next sequential) or 'value:label;...' explicit pairs. Labels that already exist are reported in 'OptionsAlreadyExisted' and skipped (no error)."
+                "'update' only. 'NewLabel' (needs solution_name) or 'value:label'. Existing labels skipped."
             )] string add_options = "",
             [Description(
-                "'update' only. Rename map: 'OldLabel:NewLabel;...' (semicolon-separated). Labels are resolved against the current metadata. Non-base-language labels are preserved."
+                "'update' only. 'OldLabel:NewLabel;...' pairs."
             )] string update_options = "",
             [Description(
-                "'update' only. Comma-separated label names to remove (e.g. 'Draft,Cancelled'). Labels are resolved to values via current metadata. IRREVERSIBLE — historic data referencing the removed value becomes orphaned."
+                "'update' only. 'Label1,Label2'. IRREVERSIBLE."
             )] string remove_options = "",
             [Description(
-                "Required for 'create'. Required for label-only 'add_options' (update). Used to resolve the publisher's customizationoptionvalueprefix for auto-assigned option values. Accepts solution unique name or display name."
+                "Required: create + label-only add_options. Solution unique/display name."
             )] string solution_name = "",
             [Description(
-                "Optional for 'create'/'update'. Semicolon-separated hex color mappings: 'Label:#RRGGBB;...' or 'value:#RRGGBB;...'. Labels resolved case-insensitively. Color keys must resolve to existing options (after add/rename projection); duplicates are rejected. On update, only changed colors are written."
+                "Optional: create/update. 'Label:#RRGGBB;...' or 'value:#RRGGBB;...'."
             )] string option_colors = "")
         {
             try

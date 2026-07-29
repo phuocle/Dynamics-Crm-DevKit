@@ -61,34 +61,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetApisResult)),
         Description(
-            "Custom API definitions — modern replacement for Custom Actions (typed params, plugin binding, explicit binding/visibility). api_name empty = list; set = detail (request params, response properties, plugin binding). Managed APIs excluded by default. isFunction=true → GET (no side effects); false → POST Action. For legacy workflow-based Custom Actions use get_messages.\n\n" +
-
-            "MODES:\n" +
-            "- list (default): returns Custom APIs filtered by entity_name/status/include_microsoft; capped at max_records (default 100, max 500)\n" +
-            "- detail: requires api_name (unique name or display name); returns all attributes + linked plugin type/assembly + request/response parameters\n\n" +
-
-            "OUTPUT:\n" +
-            "- list: text table (uniqueName/boundTo/isFunction/pluginType/processingType/isPrivate/status) + structured {totalCount, entityFilter, apis[]}\n" +
-            "- detail: text with full metadata + structured {totalCount, apis[0]} (includes description, owner, solution, plugin assembly, isolation mode, request parameters[], response properties[])\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- Discover Custom APIs registered on an entity (or globally)\n" +
-            "- Inspect input/output params + plugin binding before invoking\n" +
-            "- Audit which plugin assembly handles a specific Custom API\n" +
-            "- Distinguish Functions (GET) from Actions (POST) and binding scope (Global/Entity/EntityCollection)\n\n" +
-
-            "FUZZY/AMBIGUITY:\n" +
-            "- api_name resolves Display Name contains first, then unique name contains\n" +
-            "- entity_name resolves Display Name contains first, then logical name contains\n" +
-            "- include_microsoft default false (managed APIs hidden); set true to include OOB/managed\n" +
-            "- status default 'active'; use 'inactive' or 'all' to broaden\n" +
-            "- 0 or 2+ matches on api_name/entity_name returns a disambiguation list — call again with exact GUID/name")]
+            "Custom API definitions (modern replacement for Custom Actions). api_name empty = list; set = detail (params, plugin binding). " +
+            "Managed APIs excluded by default. isFunction=true → GET; false → POST. " +
+            "For legacy workflow Custom Actions → get_messages.")]
         public CallToolResult get_custom_apis(
             [Description("Display Name or unique name → detail. Empty = list.")] string api_name = "",
-            [Description("Bound entity Display Name or logical name. Empty = all.")] string entity_name = "",
-            [Description("Include managed APIs. Default false (unmanaged + custom only).")] bool include_microsoft = false,
+            [Description("Bound entity Display/logical name. Empty = all.")] string entity_name = "",
+            [Description("Include managed APIs. Default false.")] bool include_microsoft = false,
             [Description("'active' / 'inactive' / 'all'.")] string status = "active",
-            [Description("1–500.")] int max_records = 100)
+            [Description("1-500. Default 100.")] int max_records = 100)
         {
             try
             {

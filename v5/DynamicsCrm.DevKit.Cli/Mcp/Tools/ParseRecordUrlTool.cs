@@ -27,12 +27,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(ParsedRecordUrlResult)),
         Description(
-            "Extract entity logical name and record GUID from a Dataverse/Power Platform URL or raw GUID. " +
-            "Parsers (first match wins): main.aspx, Web API, maker portal (flow/solution/environment), legacy URLs, raw GUID. " +
-            "Returns EntityName, RecordId, Source; maker URLs also include EnvironmentId and FlowId. " +
-            "EntityName='(unknown)' means only a GUID was found — ask the user for the entity name. " +
-            "Call this FIRST when the user pastes a URL, then chain to manage_record or execute_fetchxml. " +
-            "Do not use to read record fields or for non-Dataverse URLs.")]
+            "Extract entity logical name + record GUID from a Dataverse/Power Platform URL or raw GUID. " +
+            "Supports main.aspx, Web API, maker portal, legacy URLs. " +
+            "EntityName='(unknown)' = GUID only — ask user for entity. " +
+            "Call FIRST when user pastes a URL, then chain to manage_record or execute_fetchxml.")]
         public CallToolResult parse_record_url(
             [Description(
                 "URL, GUID, or text. URL-decoded automatically; first matching parser wins."

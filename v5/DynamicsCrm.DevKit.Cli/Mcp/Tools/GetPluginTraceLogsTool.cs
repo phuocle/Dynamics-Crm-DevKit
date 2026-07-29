@@ -26,40 +26,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetPluginTraceLogsResult)),
         Description(
-            "List/inspect Dataverse plugin trace logs (plugintracelog). Empty record_id = list (filtered). Set record_id = detail with full messageBlock + exceptionDetails in structured content. Requires Plugin Trace Log enabled (System Settings > Customization).\n\n" +
-
-            "MODES:\n" +
-            "- list: newest first; default last 60 min, max 50 (cap 200 / 43200 min = 30 days).\n" +
-            "- detail: one log by plugintracelog GUID from list.\n\n" +
-
-            "FILTERS (list only):\n" +
-            "- type_name: contains on plugin class/type name (typename) — NOT the table.\n" +
-            "- entity_name: primary table/entity (Display Name or logical name → primaryentity).\n" +
-            "- message_name: SDK message (Create, Update, Delete, …).\n" +
-            "- mode: sync | async.\n" +
-            "- correlation_id: one request across logs.\n\n" +
-
-            "OUTPUT:\n" +
-            "- Compact text summary.\n" +
-            "- Structured traces[] (list metadata; detail also includes messageBlock + exceptionDetails).\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- Debug failing plugin/custom action: list → detail(record_id).\n" +
-            "- Follow one request via correlation_id.\n" +
-            "- Async failures: combine with get_system_jobs.\n\n" +
-
-            "COMMON MISTAKES:\n" +
-            "- Do not put table name in type_name; use entity_name for primaryentity.\n" +
-            "- record_id must be plugintracelog GUID from list, not a business record GUID.")]
+            "Plugin trace logs (plugintracelog). record_id empty = list (newest first, default 60min); set = detail (messageBlock+exceptionDetails). " +
+            "Requires Plugin Trace Log enabled. " +
+            "type_name = plugin class (NOT table); entity_name = primaryentity. " +
+            "For async failures → get_system_jobs.")]
         public CallToolResult get_plugin_trace_logs(
             [Description(
-                "plugintracelog GUID → detail. Empty = list. Take id from list mode."
+                "plugintracelog GUID → detail. Empty = list."
             )] string record_id = "",
             [Description(
-                "Plugin type name (contains). E.g. 'AccountPlugin'."
+                "Plugin type name (contains). NOT table name."
             )] string type_name = "",
             [Description(
-                "Primary entity Display/logical name (primaryentity)."
+                "Primary entity Display/logical name."
             )] string entity_name = "",
             [Description(
                 "SDK message: Create, Update, Delete, etc."

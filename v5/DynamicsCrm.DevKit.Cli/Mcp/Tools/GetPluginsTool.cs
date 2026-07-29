@@ -82,51 +82,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetPluginsResult)),
         Description(
-            "Plugin assemblies, types, processing steps. Modes: no filters = assembly list with type counts. assembly_name (1 match) = assembly detail (types+steps+images). entity_name = all steps on entity across assemblies. Stages: PreValidation/PreOperation/PostOperation/MainOperation (Custom API/DataProvider). Set include_config=true only for secure config inspection.\n\n" +
-
-                    "MODES:\n" +
-                    "- list (default): no filters → assembly list with type counts; assembly_name (1 match) → assembly detail (types+steps+images); assembly_name (0/2+ matches) → disambiguation list\n" +
-                    "- detail: entity_name → all steps on that entity across assemblies; assembly_name (1 match) → assembly detail\n" +
-                    "- assembly_name and entity_name are mutually exclusive — entity_name wins when both are set\n\n" +
-
-                    "OUTPUT:\n" +
-                    "- list (assemblies): text table + structured {totalCount, mode='assemblies', assemblies[], packages?}\n" +
-                    "- list (assembly detail): text with types+steps+images + structured {totalCount, mode='detail', assemblies[], steps[]}\n" +
-                    "- list (entity steps): text with steps+summary + structured {totalCount, mode='steps', steps[], summary}\n" +
-                    "- disambiguation: text table of matching assemblies + structured {totalCount, mode='assemblies', assemblies[]}\n\n" +
-
-                    "WHEN TO USE:\n" +
-                    "- Audit plugin registrations across assemblies\n" +
-                    "- Find which plugin handles a message/entity (filter by entity_name + message_name)\n" +
-                    "- Inspect step images / mode (sync/async) before changes\n" +
-                    "- Inspect plugin package + managed identity bindings\n\n" +
-
-                    "WHEN NOT TO USE:\n" +
-                    "- get_plugin_trace_logs — for plugin execution traces (different table, different purpose)\n" +
-                    "- get_system_jobs — for async plugin failures (use operation_type='plugin')\n\n" +
-
-                    "FUZZY/AMBIGUITY:\n" +
-                    "- assembly_name: contains match on assembly name; 0 or 2+ matches returns a disambiguation list and stops — AI must ask user\n" +
-                    "- entity_name: resolves Display Name contains first, then logical name contains; 0 or 2+ matches returns a disambiguation list — call again with exact GUID/name\n" +
-                    "- type_name: contains match on plugin type typename\n" +
-                    "- message_name: exact match on SDK message name (Create, Update, Delete, …)\n" +
-                    "- stage default empty (all); use 'prevalidation' / 'preoperation' / 'postoperation' / 'mainoperation' to filter\n" +
-                    "- mode default empty (all); use 'sync' / 'async' to filter\n" +
-                    "- active_only default true; set false to include disabled steps\n" +
-                    "- include_images default true; set false to skip pre/post image fetch\n" +
-                    "- include_config default false (security-sensitive); set true to include unsecure/secure config values\n" +
-                    "- max_records default 100, clamped to 1–500")]
+            "Plugin assemblies, types, steps. No filters = assembly list. assembly_name (1 match) = detail (types+steps+images). entity_name = steps on entity (wins over assembly_name). " +
+            "Stages: PreValidation/PreOperation/PostOperation/MainOperation (Custom API/DataProvider). " +
+            "include_config=true only for secure config inspection. " +
+            "For execution traces → get_plugin_trace_logs. For async failures → get_system_jobs.")]
                 public CallToolResult get_plugins(
-                    [Description("Assembly name contains. 1 match → detail; 0/2+ matches → disambiguation list. Empty = list all assemblies.")] string assembly_name = "",
-                    [Description("Steps for entity Display Name or logical name (e.g. 'Account' or 'account'). Empty = no entity filter. Wins over assembly_name when both set.")] string entity_name = "",
-                    [Description("SDK message name (Create, Update, Delete, …). Empty = all messages.")] string message_name = "",
-                    [Description("Plugin type typename contains. Empty = all types.")] string type_name = "",
-                    [Description("Include pre/post images for each step. Default true.")] bool include_images = true,
-                    [Description("Include unsecure/secure config values (security-sensitive). Default false.")] bool include_config = false,
-                    [Description("Stage filter: 'prevalidation' / 'preoperation' / 'postoperation' / 'mainoperation'. Empty = all stages.")] string stage = "",
-                    [Description("Mode filter: 'sync' / 'async'. Empty = both.")] string mode = "",
-                    [Description("Only activated steps (statecode=0). Default true; set false to include disabled steps.")] bool active_only = true,
-                    [Description("Steps limit, 1–500. Default 100.")] int max_records = 100)
+                    [Description("Assembly name contains. 1 match → detail; 0/2+ → disambiguation. Empty = list all.")] string assembly_name = "",
+                    [Description("Steps for entity Display/logical name. Wins over assembly_name.")] string entity_name = "",
+                    [Description("SDK message name (Create, Update, …). Empty = all.")] string message_name = "",
+                    [Description("Plugin type typename contains. Empty = all.")] string type_name = "",
+                    [Description("Include pre/post images. Default true.")] bool include_images = true,
+                    [Description("Include unsecure/secure config (security-sensitive). Default false.")] bool include_config = false,
+                    [Description("'prevalidation'/'preoperation'/'postoperation'/'mainoperation'. Empty = all.")] string stage = "",
+                    [Description("'sync' / 'async'. Empty = both.")] string mode = "",
+                    [Description("Only activated steps. Default true.")] bool active_only = true,
+                    [Description("1-500. Default 100.")] int max_records = 100)
                 {
                     try
                     {

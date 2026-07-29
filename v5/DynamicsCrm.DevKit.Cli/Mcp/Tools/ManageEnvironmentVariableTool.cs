@@ -34,62 +34,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageEnvironmentVariableResult)),
         Description(
-            "Manage Dataverse environment variables (list/detail/create/update/delete/clear). Note: list and detail are non-destructive; create/update/delete/clear mutate server state — confirm with the user before invoking destructive actions.\n\n" +
-
-            "ACTIONS (one per call):\n" +
-            "- 'list' — optional: solution_name (filter), max_records (default 50, max 5000)\n" +
-            "- 'detail' — variable_name required (Display Name or schema name)\n" +
-            "- 'create' — solution_name (REQUIRED) + display_name + type. Optional: default_value, value, description, confirmed_prefix\n" +
-            "- 'update' — variable_name required. Optional: display_name, default_value, value, description\n" +
-            "- 'delete' — variable_name required (irreversible: removes definition + current value)\n" +
-            "- 'clear' — variable_name required (removes current value only; reverts to default)\n\n" +
-
-            "VALIDATION:\n" +
-            "- 'create' blocks the reserved prefix 'new' — set a proper customization prefix on the publisher first.\n" +
-            "- 'create' rejects if Display Name or schema name already exists; use action='update' instead.\n" +
-            "- Type is immutable after creation. To change type, delete and recreate.\n" +
-            "- confirmed_prefix is optional safety check; if supplied, must match solution publisher prefix.\n\n" +
-
-            "AMBIGUITY:\n" +
-            "- variable_name / solution_name: Display Name matched first (contains), then schema name / unique name. Multiple matches → disambiguation list.\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- Inspect / list env vars in a solution (config secrets, feature flags, connection strings).\n" +
-            "- Create or update a definition + current value in one call.\n" +
-            "- Clear current value to fall back to default; delete the definition entirely when no longer needed.\n\n" +
-
-            "SAFETY:\n" +
-            "- 'delete' is irreversible — no auto-backup; export the solution first if you need to restore.\n" +
-            "- 'clear' removes the current value record only; the definition + default remain.\n\n" +
-
-            "RELATED TOOLS: manage_app (which apps reference this var), manage_choice (env vars of type 'datasource' often wrap a choice)."
-        )]
+            "Manage env vars. list/detail non-destructive; create/update/delete/clear destructive — confirm first.\n" +
+            "Actions: 'list' (solution_name filter), 'detail' (variable_name), 'create' (solution_name+display_name+type REQUIRED), 'update' (variable_name), 'delete' (variable_name, irreversible — no backup), 'clear' (variable_name, removes current value only; definition+default remain).\n" +
+            "Type immutable after create — delete+recreate to change. 'create' blocks reserved prefix 'new' — set proper customization prefix on publisher first. 'create' rejects if Display/schema name exists → use update.\n" +
+            "confirmed_prefix = optional safety check; must match solution publisher prefix.")]
         public CallToolResult manage_environment_variable(
-            [Description("Action to perform: 'list', 'detail', 'create', 'update', 'delete', or 'clear'. Required."
+            [Description("'list', 'detail', 'create', 'update', 'delete', 'clear'."
             )] string action,
-            [Description("Display Name or schema name with prefix (e.g. 'v4_ApiEndpoint'). " +
-                "Required: detail/update/delete/clear. " +
-                "For 'create': omit — derived from solution_name publisher prefix."
+            [Description("Display/schema name with prefix (e.g. 'v4_ApiEndpoint'). Required: detail/update/delete/clear. Omit for create (derived from solution)."
             )] string variable_name = "",
-            [Description("Display Name, unique name, or GUID. " +
-                "'list': optional filter. " +
-                "'create': REQUIRED — used to resolve publisher prefix."
+            [Description("Display/unique name or GUID. 'list': filter. 'create': REQUIRED (resolves publisher prefix)."
             )] string solution_name = "",
-            [Description("List only. Maximum records to return. Default 50, max 5000. Out-of-range values are silently clamped."
+            [Description("List only. Default 50, max 5000."
             )] int max_records = 50,
             [Description("Human-readable label. Required: create."
             )] string display_name = "",
-            [Description("Variable data type. 'string' / 'number' / 'boolean' / 'json' / 'datasource' / 'secret'. " +
-                "Required: create. Ignored: update (type is immutable after creation)."
+            [Description("'string'/'number'/'boolean'/'json'/'datasource'/'secret'. Required: create. Immutable after."
             )] string type = "",
-            [Description("Default value applied when no current value is set. Optional: create/update."
+            [Description("Default value. Optional: create/update."
             )] string default_value = "",
-            [Description("Current value (overrides default at runtime). Optional: create/update."
+            [Description("Current value (overrides default). Optional: create/update."
             )] string value = "",
-            [Description("Human-readable description of the environment variable. Optional: create/update."
+            [Description("Description. Optional: create/update."
             )] string description = "",
-            [Description("Optional prefix validation for 'create'. If supplied, must match the solution's publisher prefix. " +
-                "Use to confirm the AI resolved the right solution before mutating server state."
+            [Description("Optional prefix check for 'create'. Must match solution publisher prefix."
             )] string confirmed_prefix = "")
         {
             if (string.IsNullOrWhiteSpace(action))

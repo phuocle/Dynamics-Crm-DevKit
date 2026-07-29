@@ -40,46 +40,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertViewResult)),
         Description(
-            "Manage Dataverse views (savedquery/userquery) — list, detail, create, update, rename, set_default, undo.\n\n" +
-
-            "ACTIONS + REQUIRED PARAMS:\n" +
-            "- 'list' — entity_name only. Optional: view_name (contains filter), query_type, include_fetchxml, include_personal.\n" +
-            "- 'detail' — entity_name + (view_id OR view_name). Returns columns, FetchXML, LayoutXML, conditional formatting.\n" +
-            "- 'create' — entity_name + view_name + layoutxml. Optional: fetchxml (auto-generated if omitted).\n" +
-            "- 'update' — entity_name + (view_id OR view_name) + (layoutxml and/or cell_updates_json). Auto: backup→validate→update→publish.\n" +
-            "- 'rename' — entity_name + view_id + view_name (new name).\n" +
-            "- 'set_default' — entity_name + (view_id OR view_name). Public views (querytype=0) only.\n" +
-            "- 'undo' — entity_name + view_id + layoutxml (backup path). Optional: fetchxml (backup path).\n\n" +
-
-            "SYNC RULE: every FetchXML <attribute> MUST have a matching LayoutXML <cell>; mismatch blocks update. querytype: 0=Public, 4=QuickFind, 64=SubGrid. See docs://instructions_for_views, schema://layoutxml, schema://fetchxml.\n\n" +
-
-            "QUICK FIND NOTE: for query_type=4, searchable fields are <condition> nodes inside <filter isquickfindfields=\"1\">. LayoutXML <cell> only controls displayed columns.\n\n" +
-
-            "NAME RESOLUTION: entity_name, FetchXML fields, LayoutXML cells, and cell_updates_json accept Display Name or logical name. Display Name resolved first.\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- Inspect existing views (list, detail) before editing.\n" +
-            "- Apply layout/fetch changes (action=update).\n" +
-            "- Patch cell attributes only via cell_updates_json (no full LayoutXML rebuild).\n\n" +
-
-            "COMMON MISTAKES:\n" +
-            "- Always inspect with action='list' or 'detail' BEFORE editing.\n" +
-            "- Pass workspace_folder so backups are saved to the user's project directory.\n" +
-            "- view_name is contains match: 1 match → auto-selects; multiple → returns candidates, use view_id.\n\n" +
-
-            "SAFETY:\n" +
-            "- Validation blocks FetchXML/LayoutXML mismatch by default (validate=true).\n" +
-            "- Automatic backups saved to .devkit/backups/views/ before update/rename.\n\n" +
-
-            "RELATED TOOLS: get_tables (entity/field metadata), execute_fetchxml (test the view's FetchXML).")]
+            "Manage views (savedquery/userquery). Actions: list, detail, create, update, rename, set_default, undo.\n" +
+            "SYNC RULE: every FetchXML <attribute> MUST have matching LayoutXML <cell>; mismatch blocks update. querytype: 0=Public, 4=QuickFind, 64=SubGrid.\n" +
+            "QuickFind (querytype=4): searchable fields are <condition> in <filter isquickfindfields=\"1\">; <cell> = display only.\n" +
+            "Always list/detail BEFORE editing. Pass workspace_folder for backups (saved to .devkit/backups/views/). See docs://instructions_for_views, schema://layoutxml, schema://fetchxml.")]
         public CallToolResult manage_view(
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'."
             )] string action,
-            [Description("Entity Display Name or logical name (Display Name is resolved first; e.g. 'Account' or 'account')."
+            [Description("Entity Display/logical name (Display Name resolved first)."
             )] string entity_name,
             [Description("GUID. Required: detail/update/rename/undo."
             )] string view_id = "",
-            [Description("Name contains. 1 match → auto-detail."
+            [Description("Name contains. 1 match → auto-select; multiple → returns candidates, use view_id."
             )] string view_name = "",
             [Description("0=Public, 1=Lookup, 4=QuickFind, 64=SubGrid. -1=all."
             )] int query_type = -1,
@@ -95,9 +67,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] bool validate = true,
             [Description("Backup before overwrite."
             )] bool backup = true,
-            [Description("JSON array of {cell_name, set_attributes, remove_attributes}. Patch cell attrs (imageproviderwebresource, imageproviderfunctionname, ishidden, …) without rebuilding LayoutXML."
+            [Description("JSON array of {cell_name, set_attributes, remove_attributes}. Patch cell attrs (imageproviderwebresource, ishidden, …) without rebuilding LayoutXML."
             )] string cell_updates_json = "",
-            [Description("Optional project/workspace folder path to save backups in."
+            [Description("Optional workspace folder for backups."
             )] string workspace_folder = "")
         {
             _workspaceFolder = workspace_folder;

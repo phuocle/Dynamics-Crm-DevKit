@@ -27,36 +27,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(FetchXmlResult)),
         Description(
-            "Run FetchXML query against Dataverse and return structured JSON records. Auto-paging supported. See schema://fetchxml for syntax and docs://data_operations_guide for joins and field formats.\n\n" +
-
-            "OUTPUT:\n" +
-            "- Structured JSON: records[] with _entity (logical name) and _id (primary key) plus all requested attributes.\n" +
-            "- totalReturned, hasMore, singleEntity.\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- Precise filtering, joins, aggregation across entities.\n" +
-            "- Full dataset retrieval with get_all=true (up to max_records).\n" +
-            "- When search_records (Relevance Search) is unavailable or too coarse.\n\n" +
-
-            "WHEN NOT TO USE:\n" +
-            "- For simple keyword search across multiple entities → use search_records.\n" +
-            "- To explore entity structure/fields → use get_tables.\n\n" +
-
-            "COMMON MISTAKES:\n" +
-            "- Do NOT put top/count/page attributes in <fetch>; use max_records parameter instead.\n" +
-            "- Use lowercase logical names only (not Display Names). Use get_tables to verify.\n" +
-            "- For samples/exploration, use max_records=10-50, not the default 5000.\n" +
-            "- Aggregate queries (<fetch aggregate='true'>) return a different record shape — check output.\n\n" +
-
-            "RELATED TOOLS: search_records (keyword search), get_tables (entity metadata), whoami (get userId for owner filters).")]
+            "Run FetchXML against Dataverse. Auto-paging via get_all. See schema://fetchxml for syntax.\n" +
+            "Rules: lowercase logical names only; no top/count/page in <fetch> (use max_records); use max_records=10-50 for samples.\n" +
+            "For keyword search → search_records. For entity metadata → get_tables.")]
         public CallToolResult execute_fetchxml(
             [Description("FetchXML starting with <fetch>. Lowercase logical names."
             )] string fetchxml,
             [Description(
-                "1-5000. Defaults to 5000 if not provided. Use smaller values (10-100) for samples."
+                "1-5000. Default 5000. Use 10-100 for samples."
             )] int max_records = 5000,
             [Description(
-                "true = auto-page until max_records. false = first page only (default)."
+                "true = auto-page until max_records. false = first page only."
             )] bool get_all = false)
         {
             try
