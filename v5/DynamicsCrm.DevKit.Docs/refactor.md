@@ -11,4 +11,5 @@
 
 # Tools đã hoàn thành và aP đã review
 
+- 7. parse_record_url
 - 9. whoami
