@@ -1,3 +1,4 @@
 execute_webapi
 generate_demo_data
 get_business_process_flows
+get_flows

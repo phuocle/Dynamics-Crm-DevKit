@@ -1,4 +1,3 @@
-get_flows
 get_solution_components
 get_system_jobs
 get_tables

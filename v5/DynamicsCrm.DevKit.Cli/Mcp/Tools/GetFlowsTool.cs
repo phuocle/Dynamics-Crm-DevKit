@@ -60,10 +60,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var normalizedAction = (action ?? "list").Trim().ToLowerInvariant();
             if (normalizedAction != "list" && normalizedAction != "runs")
-                return ErrorResult($"Error: Invalid action '{action?.Trim()}'. Use 'list' or 'runs'.");
+                return Error($"Error: Invalid action '{action?.Trim()}'. Use 'list' or 'runs'.");
 
             if (normalizedAction == "runs" && string.IsNullOrWhiteSpace(flow_id))
-                return ErrorResult(
+                return Error(
                     "Error: action='runs' requires flow_id.\n" +
                     "Provide a valid flow GUID as flow_id.");
 
@@ -71,7 +71,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var s = status.Trim().ToLowerInvariant();
                 if (s != "active" && s != "draft" && s != "suspended" && s != "all")
-                    return ErrorResult($"Error: Invalid status '{status.Trim()}'. Use 'active', 'draft', 'suspended', or 'all'.");
+                    return Error($"Error: Invalid status '{status.Trim()}'. Use 'active', 'draft', 'suspended', or 'all'.");
             }
 
             if (max_records <= 0) max_records = 50;
@@ -85,12 +85,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrWhiteSpace(flow_id))
                 {
                     if (!Guid.TryParse(flow_id.Trim(), out _))
-                        return ErrorResult($"Error: '{flow_id.Trim()}' is not a valid GUID.");
+                        return Error($"Error: '{flow_id.Trim()}' is not a valid GUID.");
 
                     if (normalizedAction == "runs")
                     {
                         if (!string.IsNullOrWhiteSpace(status_filter) && !ValidStatusFilters.Contains(status_filter.Trim()))
-                            return ErrorResult($"Error: Invalid status_filter '{status_filter.Trim()}'. Use 'succeeded', 'failed', 'running', 'cancelled', 'waiting', 'paused', 'skipped', or 'suspended'.");
+                            return Error($"Error: Invalid status_filter '{status_filter.Trim()}'. Use 'succeeded', 'failed', 'running', 'cancelled', 'waiting', 'paused', 'skipped', or 'suspended'.");
                         return GetRuns(flow_id.Trim(), status_filter, minutes_ago, max_records);
                     }
                     else
@@ -103,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Failed to retrieve cloud flows: {ex.Message}");
+                return ThrowException(ex);
             }
         }
 
@@ -158,18 +158,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (entities.Count == 0)
             {
-                var text = "0 cloud flows found.";
-                var emptyResult = new GetFlowsResult
+                return Success("0 cloud flows found.", new GetFlowsResult
                 {
                     TotalCount = 0,
                     Action = "list",
                     Flows = []
-                };
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = text }],
-                    StructuredContent = JsonSerializer.SerializeToElement(emptyResult)
-                };
+                });
             }
 
             var flows = entities.Select(MapFlowEntry).ToList();
@@ -195,11 +189,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Flows = flows
             };
 
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            return Success(sb.ToString(), structured);
         }
 
         private CallToolResult GetDetail(string flowId)
@@ -216,7 +206,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
-                return ErrorResult(
+                return Error(
                     $"Error: Cloud flow '{flowId}' not found (or not a cloud flow).\n" +
                      "Use get_flows without flow_id to list available flows.");
             var entity = result.Entities[0];
@@ -273,19 +263,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Runs = runs.Count > 0 ? runs : null
             };
 
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            return Success(sb.ToString(), structured);
         }
 
         private CallToolResult GetRuns(string flowId, string statusFilter, int minutesAgo, int maxRecords)
         {
-            // First get the flow name
             var flowName = GetFlowName(flowId);
             if (flowName == null)
-                return ErrorResult(
+                return Error(
                     $"Error: Cloud flow '{flowId}' not found (or not a cloud flow).\n" +
                      "Use get_flows without flow_id to list available flows.");
 
@@ -374,18 +359,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 RunSummary = summary
             };
 
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            return Success(sb.ToString(), structured);
         }
 
         private List<FlowRunEntry> GetRecentRuns(string flowId, int count)
         {
-            try
-            {
-                var fetchXml = $@"<fetch top='{count}'>
+            var fetchXml = $@"<fetch top='{count}'>
   <entity name='flowsession'>
     <attribute name='flowsessionid'/>
     <attribute name='startedon'/>
@@ -401,20 +380,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                return result.Entities.Select(MapRunEntry).ToList();
-            }
-            catch
-            {
-                return [];
-            }
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            return result.Entities.Select(MapRunEntry).ToList();
         }
 
         private string GetFlowName(string flowId)
         {
-            try
-            {
-                var fetchXml = $@"<fetch>
+            var fetchXml = $@"<fetch>
   <entity name='workflow'>
     <attribute name='name'/>
     <filter>
@@ -424,15 +396,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                return result.Entities.Count > 0
-                    ? result.Entities[0].GetAttributeValue<string>("name")
-                    : null;
-            }
-            catch
-            {
-                return null;
-            }
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            return result.Entities.Count > 0
+                ? result.Entities[0].GetAttributeValue<string>("name")
+                : null;
         }
 
         private static CloudFlowEntry MapFlowEntry(Entity e)
@@ -515,7 +482,5 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string EscapeTab(string value) =>
             value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
-
-        private CallToolResult ErrorResult(string message) => Error(message);
     }
 }
