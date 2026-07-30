@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Current user + org + roles + DevKit runtime. Call once per session; cache userId for owner filters in execute_fetchxml.")]
         public CallToolResult whoami(
             [Description(
-                "Include OAuth access token (~400 tokens extra). For direct Web API calls only."
+                "Include OAuth access token (~400 tokens extra) for direct Web API calls."
             )] bool include_token = false)
         {
             try
@@ -135,45 +135,42 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 </fetch>";
 
             var qResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (qResult.Entities.Count == 0) return;
+
+            var roles = new List<Models.RoleInfo>(qResult.Entities.Count);
             foreach (var role in qResult.Entities)
             {
                 var name = role.GetAttributeValue<string>("name") ?? "";
                 var roleId = role.GetAttributeValue<Guid>("roleid");
                 if (!string.IsNullOrEmpty(name))
-                    result.Roles.Add(new Models.RoleInfo { Name = name, RoleId = roleId.ToString() });
+                    roles.Add(new Models.RoleInfo { Name = name, RoleId = roleId.ToString() });
             }
+            result.Roles = roles;
         }
 
         private static string BuildCompactText(WhoAmIResult r)
         {
-            var sb = new StringBuilder(256);
-
             var identity = !string.IsNullOrEmpty(r.FullName)
                 ? r.FullName
                 : (!string.IsNullOrEmpty(r.DomainName) ? r.DomainName : r.UserId);
 
             var org = !string.IsNullOrEmpty(r.OrgFriendlyName)
                 ? r.OrgFriendlyName
-                : r.OrgUniqueName;
+                : (!string.IsNullOrEmpty(r.OrgUniqueName) ? r.OrgUniqueName : "Dataverse");
 
-            sb.Append($"Connected to {org}");
+            var sb = new StringBuilder(256);
+            sb.Append("[Success] Connected to ");
+            sb.Append(org);
             if (!string.IsNullOrEmpty(r.EnvironmentUrl))
-                sb.Append($" at {r.EnvironmentUrl}");
-            sb.Append($" as {identity}");
+                sb.Append(" (").Append(r.EnvironmentUrl).Append(')');
+            sb.Append(" as ").Append(identity);
             if (!string.IsNullOrEmpty(r.Version))
-                sb.Append($". Dataverse {r.Version}");
-            if (r.DevKit != null && !string.IsNullOrEmpty(r.DevKit.Version))
-            {
-                sb.Append($". DevKit {r.DevKit.Version}");
-                if (!string.IsNullOrEmpty(r.DevKit.Build))
-                    sb.Append($" build {r.DevKit.Build}");
-            }
-            if (r.Roles.Count > 0)
-                sb.Append($". {r.Roles.Count} security role(s)");
+                sb.Append(". Dataverse ").Append(r.Version);
+            if (r.Roles is { Count: > 0 })
+                sb.Append(". ").Append(r.Roles.Count).Append(" role(s)");
             if (r.Warnings is { Count: > 0 })
-                sb.Append($". {r.Warnings.Count} warning(s)");
+                sb.Append(". ").Append(r.Warnings.Count).Append(" warning(s)");
             sb.Append('.');
-
             return sb.ToString();
         }
 
