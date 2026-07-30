@@ -12,7 +12,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
@@ -28,127 +27,44 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
+        // Action name → int for the audit 'action' field
+        private static readonly Dictionary<string, int> ActionNameMap = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ["create"] = 1,
+            ["update"] = 2,
+            ["delete"] = 3,
+            ["activate"] = 4,
+            ["deactivate"] = 5,
+            ["cascade"] = 11,
+            ["merge"] = 12,
+            ["assign"] = 13,
+            ["setstate"] = 41
+        };
+
         [McpServerTool(Name = "get_audit_history", Title = "Get record audit history",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetAuditHistoryResult)),
         Description(
-            "Audit history (who/what/when/old/new). record_id set = detail (field-level, entity_name REQUIRED). Empty = browse list. " +
-            "Audit must be enabled at org AND entity. from_date overrides minutes_ago. " +
+            "Audit history (who/what/when/old/new). record_id set = detail (field-level, entity_name REQUIRED). " +
+            "Empty = browse list. Audit must be enabled at org AND entity. " +
+            "from_date/to_date override minutes_ago. attribute_name requires record_id. " +
             "Empty result usually means auditing not enabled. " +
             "For plugin traces → get_plugin_trace_logs. For async failures → get_system_jobs.")]
         public CallToolResult get_audit_history(
-            [Description("Entity Display/logical name. Required with record_id. Optional in browse mode.")]
-            string entity_name = "",
-            [Description("GUID → detail mode. Empty = browse list.")]
-            string record_id = "",
-            [Description("Last N min. Default 1440 (24h). Max 43200. Ignored if from_date set.")]
-            int minutes_ago = 1440,
-            [Description("User name (contains) or email. Empty = all users.")]
-            string user_filter = "",
-            [Description("Create, Update, Delete, Activate, Deactivate, Assign, Merge, Cascade, SetState. Empty = all.")]
-            string operation = "",
-            [Description("Detail mode only. Filter one field. Ignored in browse mode.")]
-            string attribute_name = "",
-            [Description("Default 50. Max 500.")]
-            int max_records = 50,
-            [Description("ISO 8601. Overrides minutes_ago.")]
-            string from_date = "",
-            [Description("ISO 8601. With from_date. Default = now.")]
-            string to_date = "")
+            [Description("Entity Display/logical name. Required with record_id. Optional in browse mode.")] string entity_name = "",
+            [Description("GUID → detail mode. Empty = browse list.")] string record_id = "",
+            [Description("Last N min. Default 1440 (24h). Max 43200. Ignored if from_date set.")] int minutes_ago = 1440,
+            [Description("User name (contains) or email. Empty = all users.")] string user_filter = "",
+            [Description("Create, Update, Delete, Activate, Deactivate, Assign, Merge, Cascade, SetState. Empty = all.")] string operation = "",
+            [Description("Detail mode only. Filter one field. Ignored in browse mode.")] string attribute_name = "",
+            [Description("Default 50. Max 500.")] int max_records = 50,
+            [Description("ISO 8601. Overrides minutes_ago.")] string from_date = "",
+            [Description("ISO 8601. With from_date. Default = now.")] string to_date = "")
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(record_id) && string.IsNullOrWhiteSpace(entity_name))
-                    return Error(
-                        "Error: entity_name is required when record_id is provided.\n" +
-                        "Required: entity_name (logical name, e.g. 'account') + record_id.");
-
-                if (string.IsNullOrWhiteSpace(record_id) && !string.IsNullOrWhiteSpace(attribute_name))
-                    return Error("Error: attribute_name requires record_id (detail mode). In browse mode, attribute-level filtering is not available.");
-
-                if (!string.IsNullOrWhiteSpace(record_id) && !Guid.TryParse(record_id.Trim(), out _))
-                    return Error($"Error: '{record_id}' is not a valid GUID.");
-
-                if (minutes_ago < 1) minutes_ago = 1440;
-                if (minutes_ago > 43200) minutes_ago = 43200;
-                if (max_records < 1) max_records = 50;
-                if (max_records > 500) max_records = 500;
-
-                entity_name = entity_name?.Trim() ?? "";
-                if (!string.IsNullOrWhiteSpace(entity_name))
-                {
-                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name, "get_audit_history");
-                    if (!entityResult.IsSuccess)
-                        return Error($"Error: entity_name '{entity_name}': {entityResult.Error}");
-                    entity_name = entityResult.Value.LogicalName;
-                }
-
-                attribute_name = attribute_name?.Trim() ?? "";
-                if (!string.IsNullOrWhiteSpace(record_id) && !string.IsNullOrWhiteSpace(attribute_name))
-                {
-                    var attributeResult = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, attribute_name, "get_audit_history");
-                    if (!attributeResult.IsSuccess)
-                        return Error($"Error: attribute_name '{attribute_name}': {attributeResult.Error}");
-                    attribute_name = attributeResult.Value.LogicalName;
-                }
-
-                operation = operation?.Trim() ?? "";
-                if (!string.IsNullOrWhiteSpace(operation) && !ParseActionName(operation).HasValue)
-                    return Error($"Error: '{operation}' is not a valid operation. Valid values: Create, Update, Delete, Activate, Deactivate, Assign, Merge, Cascade, SetState.");
-
-                DateTime? fromUtc = null, toUtc = null;
-                if (!string.IsNullOrWhiteSpace(from_date))
-                {
-                    if (!DateTime.TryParse(from_date.Trim(), CultureInfo.InvariantCulture,
-                            DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var fd))
-                        return Error(
-                            $"Error: '{from_date}' is not a valid ISO 8601 date.\n" +
-                            "Expected format: 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:mm:ssZ'.");
-                    fromUtc = fd;
-                }
-                if (!string.IsNullOrWhiteSpace(to_date))
-                {
-                    if (!DateTime.TryParse(to_date.Trim(), CultureInfo.InvariantCulture,
-                            DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var td))
-                        return Error(
-                            $"Error: '{to_date}' is not a valid ISO 8601 date.\n" +
-                            "Expected format: 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:mm:ssZ'.");
-                    toUtc = td;
-                }
-
-                if (fromUtc.HasValue && toUtc.HasValue && fromUtc.Value > toUtc.Value)
-                    return Error($"Error: from_date '{from_date}' is after to_date '{to_date}'. Swap the values or correct the range.");
-
-                var resolvedUserFilter = ResolveUserFilter(user_filter?.Trim() ?? "");
-                if (resolvedUserFilter.StartsWith("[AMBIGUOUS_USER]"))
-                    return Error(resolvedUserFilter.Substring("[AMBIGUOUS_USER]".Length));
-
-                DateTime sinceUtc, untilUtc;
-                bool usedFromDate = fromUtc.HasValue;
-                if (fromUtc.HasValue)
-                {
-                    sinceUtc = fromUtc.Value;
-                    untilUtc = toUtc ?? DateTime.UtcNow;
-                }
-                else
-                {
-                    sinceUtc = DateTime.UtcNow.AddMinutes(-minutes_ago);
-                    untilUtc = toUtc ?? DateTime.UtcNow;
-                }
-
-                var timeScope = usedFromDate
-                    ? $"{sinceUtc.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} to {untilUtc.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}"
-                    : $"last {FormatTimeWindow(minutes_ago)}";
-
-                if (!string.IsNullOrWhiteSpace(record_id))
-                {
-                    var id = Guid.Parse(record_id.Trim());
-                    return ExecuteDetailMode(entity_name, id, sinceUtc, untilUtc,
-                        resolvedUserFilter, operation, attribute_name, max_records, timeScope);
-                }
-
-                return ExecuteBrowseMode(entity_name, sinceUtc, untilUtc,
-                    resolvedUserFilter, operation, max_records, timeScope);
+                return Execute(entity_name, record_id, minutes_ago, user_filter,
+                    operation, attribute_name, max_records, from_date, to_date);
             }
             catch (Exception ex)
             {
@@ -156,92 +72,348 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private string ResolveUserFilter(string userFilter)
+        // ── Main flow ────────────────────────────────────────────────────────────
+
+        private CallToolResult Execute(
+            string entityName, string recordId, int minutesAgo, string userFilter,
+            string operation, string attributeName, int maxRecords,
+            string fromDate, string toDate)
         {
-            if (string.IsNullOrWhiteSpace(userFilter))
-                return "";
+            // ── Validation ──────────────────────────────────────────────────────
+            if (!string.IsNullOrWhiteSpace(recordId) && string.IsNullOrWhiteSpace(entityName))
+                return Error("entity_name is required when record_id is provided.",
+                    "Pass entity_name (Display Name or logical name, e.g. 'Account' or 'account') + record_id GUID.");
 
-            if (userFilter.Contains('@'))
+            if (string.IsNullOrWhiteSpace(recordId) && !string.IsNullOrWhiteSpace(attributeName))
+                return Error("attribute_name requires record_id (detail mode).",
+                    "Browse mode does not support attribute-level filtering.");
+
+            if (!string.IsNullOrWhiteSpace(recordId) && !Guid.TryParse(recordId.Trim(), out _))
+                return Error($"'{recordId}' is not a valid GUID.");
+
+            if (minutesAgo < 1) minutesAgo = 1440;
+            if (minutesAgo > 43200) minutesAgo = 43200;
+            if (maxRecords < 1) maxRecords = 50;
+            if (maxRecords > 500) maxRecords = 500;
+
+            entityName = entityName?.Trim() ?? "";
+            attributeName = attributeName?.Trim() ?? "";
+            operation = operation?.Trim() ?? "";
+
+            // ── Resolve entity → logical name ───────────────────────────────────
+            if (!string.IsNullOrWhiteSpace(entityName))
             {
-                var userQuery = new QueryExpression("systemuser")
-                {
-                    ColumnSet = new ColumnSet("fullname", "internalemailaddress", "isdisabled", "businessunitid")
-                };
-                userQuery.Criteria.AddCondition("internalemailaddress", ConditionOperator.Equal, userFilter);
-
-                var result = _serviceClient.RetrieveMultiple(userQuery);
-                if (result.Entities.Count > 1)
-                    return $"[AMBIGUOUS_USER]{FormatMultipleUsers(userFilter, result.Entities)}";
-                if (result.Entities.Count == 1)
-                {
-                    var fullName = result.Entities[0].GetAttributeValue<string>("fullname");
-                    if (!string.IsNullOrWhiteSpace(fullName))
-                        return fullName;
-                }
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "get_audit_history");
+                if (!entityResult.IsSuccess)
+                    return Error($"entity_name '{entityName}': {entityResult.Error}");
+                entityName = entityResult.Value.LogicalName;
             }
 
-            return userFilter;
+            // ── Resolve attribute → logical name (detail mode only) ─────────────
+            if (!string.IsNullOrWhiteSpace(recordId) && !string.IsNullOrWhiteSpace(attributeName))
+            {
+                var attributeResult = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entityName, attributeName, "get_audit_history");
+                if (!attributeResult.IsSuccess)
+                    return Error($"attribute_name '{attributeName}': {attributeResult.Error}");
+                attributeName = attributeResult.Value.LogicalName;
+            }
+
+            // ── Validate operation ──────────────────────────────────────────────
+            if (!string.IsNullOrWhiteSpace(operation) && !ActionNameMap.ContainsKey(operation))
+                return Error($"'{operation}' is not a valid operation.",
+                    "Valid values: Create, Update, Delete, Activate, Deactivate, Assign, Merge, Cascade, SetState.");
+
+            // ── Parse dates ─────────────────────────────────────────────────────
+            if (!TryParseDate(fromDate, "from_date", out var fromUtc, out var fromError))
+                return Error(fromError);
+            if (!TryParseDate(toDate, "to_date", out var toUtc, out var toError))
+                return Error(toError);
+
+            if (fromUtc.HasValue && toUtc.HasValue && fromUtc.Value > toUtc.Value)
+                return Error($"from_date '{fromDate}' is after to_date '{toDate}'.",
+                    "Swap the values or correct the range.");
+
+            // ── Resolve user filter ─────────────────────────────────────────────
+            var resolvedUserFilter = ResolveUserFilter(userFilter);
+            if (resolvedUserFilter.StartsWith("[AMBIGUOUS_USER]"))
+                return Error(resolvedUserFilter.Substring("[AMBIGUOUS_USER]".Length));
+
+            // ── Compute time window ─────────────────────────────────────────────
+            bool usedFromDate = fromUtc.HasValue;
+            var sinceUtc = fromUtc ?? DateTime.UtcNow.AddMinutes(-minutesAgo);
+            var untilUtc = toUtc ?? DateTime.UtcNow;
+
+            var timeScope = usedFromDate
+                ? $"{sinceUtc:yyyy-MM-dd} to {untilUtc:yyyy-MM-dd}"
+                : $"last {FormatTimeWindow(minutesAgo)}";
+
+            // ── Dispatch ────────────────────────────────────────────────────────
+            if (!string.IsNullOrWhiteSpace(recordId))
+                return ExecuteDetailMode(entityName, Guid.Parse(recordId.Trim()), sinceUtc, untilUtc,
+                    resolvedUserFilter, operation, attributeName, maxRecords, timeScope);
+
+            return ExecuteBrowseMode(entityName, sinceUtc, untilUtc,
+                resolvedUserFilter, operation, maxRecords, timeScope);
         }
 
-        private static string FormatMultipleUsers(string input, DataCollection<Entity> users)
-        {
-            var sb = new StringBuilder(users.Count * 120 + 256);
-            sb.AppendLine($"[Multiple Users] {users.Count} users match '{input}'. Re-call with the exact display name:");
-            sb.AppendLine();
-            sb.AppendLine("systemuserid\tfullname\temail\tstatus\tbusinessunit");
-            foreach (var u in users)
-            {
-                var id = u.GetAttributeValue<Guid>("systemuserid");
-                var name = u.GetAttributeValue<string>("fullname") ?? "";
-                var email = u.GetAttributeValue<string>("internalemailaddress") ?? "";
-                var disabled = u.GetAttributeValue<bool>("isdisabled");
-                var buRef = u.GetAttributeValue<EntityReference>("businessunitid");
-                var buName = buRef?.Name ?? "";
-                sb.AppendLine($"{id}\t{EscapeTab(name)}\t{EscapeTab(email)}\t{(disabled ? "Disabled" : "Active")}\t{EscapeTab(buName)}");
-            }
-            return sb.ToString();
-        }
+        // ── Detail mode ─────────────────────────────────────────────────────────
 
         private CallToolResult ExecuteDetailMode(string entityName, Guid id,
             DateTime sinceUtc, DateTime untilUtc,
-            string userFilter, string operation, string attributeName,
+            string userFilter, string operationFilter, string attributeFilter,
             int maxRecords, string timeScope)
         {
+            // Audit response only gives logical names of touched fields (no display
+            // name, no option-set label). Fetch the entity's attribute metadata
+            // ONCE so we can attach a human-readable displayName to every change
+            // and resolve option-set values to their labels. Falls back to
+            // empty maps on failure -- in that case the JSON simply omits the
+            // fields (WhenWritingNull) so AI can still fall back to the
+            // logical name / raw value.
+            var metadata = GetEntityAttributeMetadata(entityName);
+
             var request = new RetrieveRecordChangeHistoryRequest
             {
                 Target = new EntityReference(entityName, id),
-                PagingInfo = new PagingInfo
-                {
-                    PageNumber = 1,
-                    Count = maxRecords
-                }
+                PagingInfo = new PagingInfo { PageNumber = 1, Count = maxRecords }
             };
-
             var response = (RetrieveRecordChangeHistoryResponse)_serviceClient.Execute(request);
             var auditDetails = response.AuditDetailCollection;
 
-            if (auditDetails == null || auditDetails.AuditDetails.Count == 0)
+            var entries = new List<AuditHistoryEntry>();
+            if (auditDetails?.AuditDetails != null && auditDetails.AuditDetails.Count > 0)
+                entries = FormatDetailEntries(auditDetails, sinceUtc, untilUtc,
+                    userFilter, operationFilter, attributeFilter, metadata);
+
+            var structured = new GetAuditHistoryResult
             {
-                var text = $"[AuditHistory] {entityName}: {id}\nEntries: 0 ({timeScope})\nTip: Audit may not be enabled for this entity. Check System Settings > Auditing.";
-                var emptyResult = new GetAuditHistoryResult
+                Mode = "detail",
+                EntityName = NullIfEmpty(entityName),
+                RecordId = id.ToString(),
+                TimeScope = timeScope,
+                TotalCount = entries.Count,
+                Entries = entries
+            };
+
+            return Success(BuildDetailText(entityName, id, entries, timeScope), structured);
+        }
+
+        /// <summary>
+        /// One-shot fetch of attribute metadata for the target entity:
+        ///   - Display Name per attribute (user-localized label, fallback to SchemaName)
+        ///   - OptionSet value -> label for every local picklist attribute
+        /// Both maps are keyed by attribute logical name. On failure returns
+        /// empty maps so the tool still works (displayName becomes null, and
+        /// option-set values fall back to their raw int).
+        /// </summary>
+        private AttributeMetadataCache GetEntityAttributeMetadata(string entityName)
+        {
+            var empty = new AttributeMetadataCache();
+            if (string.IsNullOrWhiteSpace(entityName)) return empty;
+
+            try
+            {
+                var response = (RetrieveEntityResponse)_serviceClient.Execute(new RetrieveEntityRequest
                 {
-                    Mode = "detail",
-                    EntityName = NullIfEmpty(entityName),
-                    RecordId = id.ToString(),
-                    TimeScope = timeScope,
-                    TotalCount = 0,
-                    Entries = []
-                };
-                return new CallToolResult
+                    LogicalName = entityName,
+                    EntityFilters = EntityFilters.Attributes
+                });
+
+                foreach (var a in response.EntityMetadata.Attributes ?? Array.Empty<AttributeMetadata>())
                 {
-                    Content = [new TextContentBlock { Text = text }],
-                    StructuredContent = JsonSerializer.SerializeToElement(emptyResult)
-                };
+                    if (string.IsNullOrWhiteSpace(a.LogicalName)) continue;
+
+                    var label = a.DisplayName?.UserLocalizedLabel?.Label;
+                    if (string.IsNullOrWhiteSpace(label)) label = a.SchemaName;
+                    if (!string.IsNullOrWhiteSpace(label))
+                        empty.DisplayNames[a.LogicalName] = label;
+
+                    // Local picklist: PicklistAttributeMetadata.OptionSet.Options
+                    // Global picklist: doesn't carry options here, but the audit
+                    // record's OldValue/NewValue .FormattedValues already maps
+                    // the int to the label, so FormatAttributeValue uses that
+                    // first and never reaches the int fallback for global sets.
+                    if (a is PicklistAttributeMetadata pick && pick.OptionSet?.Options != null)
+                    {
+                        var optionMap = new Dictionary<int, string>();
+                        foreach (var opt in pick.OptionSet.Options)
+                        {
+                            var optLabel = opt.Label?.UserLocalizedLabel?.Label;
+                            if (!string.IsNullOrWhiteSpace(optLabel) && opt.Value.HasValue)
+                                optionMap[opt.Value.Value] = optLabel;
+                        }
+                        if (optionMap.Count > 0)
+                            empty.OptionSetLabels[a.LogicalName] = optionMap;
+                    }
+                    else if (a is StateAttributeMetadata stateAttr && stateAttr.OptionSet?.Options != null)
+                    {
+                        var optionMap = new Dictionary<int, string>();
+                        foreach (var opt in stateAttr.OptionSet.Options)
+                        {
+                            var optLabel = opt.Label?.UserLocalizedLabel?.Label;
+                            if (!string.IsNullOrWhiteSpace(optLabel) && opt.Value.HasValue)
+                                optionMap[opt.Value.Value] = optLabel;
+                        }
+                        if (optionMap.Count > 0)
+                            empty.OptionSetLabels[a.LogicalName] = optionMap;
+                    }
+                    else if (a is StatusAttributeMetadata statusAttr && statusAttr.OptionSet?.Options != null)
+                    {
+                        var optionMap = new Dictionary<int, string>();
+                        foreach (var opt in statusAttr.OptionSet.Options)
+                        {
+                            var optLabel = opt.Label?.UserLocalizedLabel?.Label;
+                            if (!string.IsNullOrWhiteSpace(optLabel) && opt.Value.HasValue)
+                                optionMap[opt.Value.Value] = optLabel;
+                        }
+                        if (optionMap.Count > 0)
+                            empty.OptionSetLabels[a.LogicalName] = optionMap;
+                    }
+                    else if (a is BooleanAttributeMetadata)
+                    {
+                        // True/False labels for Two-Option fields
+                        var boolMap = new Dictionary<int, string>();
+                        if (!string.IsNullOrWhiteSpace(a.DisplayName?.UserLocalizedLabel?.Label))
+                        {
+                            // handled above; nothing extra to do here
+                        }
+                        var trueLabel = ((BooleanAttributeMetadata)a).OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label;
+                        var falseLabel = ((BooleanAttributeMetadata)a).OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label;
+                        if (!string.IsNullOrWhiteSpace(trueLabel)) boolMap[1] = trueLabel;
+                        if (!string.IsNullOrWhiteSpace(falseLabel)) boolMap[0] = falseLabel;
+                        if (boolMap.Count > 0)
+                            empty.OptionSetLabels[a.LogicalName] = boolMap;
+                    }
+                }
+            }
+            catch
+            {
+                // ignore -- empty cache
             }
 
-            return FormatAuditEntries(entityName, id, auditDetails,
-                sinceUtc, untilUtc, userFilter, operation, attributeName, timeScope);
+            return empty;
         }
+
+        private static List<AuditHistoryEntry> FormatDetailEntries(
+            AuditDetailCollection auditDetails,
+            DateTime sinceUtc, DateTime untilUtc,
+            string userFilter, string operationFilter, string attributeFilter,
+            AttributeMetadataCache metadata)
+        {
+            var entries = new List<AuditHistoryEntry>();
+
+            foreach (var auditDetail in auditDetails.AuditDetails)
+            {
+                var audit = auditDetail.AuditRecord;
+
+                var createdOn = audit.GetAttributeValue<DateTime?>("createdon");
+                if (createdOn.HasValue)
+                {
+                    var utc = createdOn.Value.ToUniversalTime();
+                    if (utc < sinceUtc || utc > untilUtc) continue;
+                }
+
+                var actionValue = audit.GetAttributeValue<OptionSetValue>("action")?.Value ?? 0;
+                var actionStr = FormatAction(actionValue);
+
+                if (!string.IsNullOrWhiteSpace(operationFilter) &&
+                    !actionStr.Equals(operationFilter, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                var userRef = audit.GetAttributeValue<EntityReference>("userid");
+                var userName = userRef?.Name ?? userRef?.Id.ToString() ?? "";
+
+                if (!string.IsNullOrWhiteSpace(userFilter) &&
+                    userName.IndexOf(userFilter, StringComparison.OrdinalIgnoreCase) < 0)
+                    continue;
+
+                var timestamp = createdOn?.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) ?? "";
+
+                // Build one entry per audit event; collect all field changes inside it.
+                var entry = new AuditHistoryEntry
+                {
+                    Timestamp = timestamp,
+                    User = userName,
+                    Action = actionStr
+                };
+
+                if (auditDetail is AttributeAuditDetail attrAudit)
+                    entry.Changes = ExtractAttributeChanges(attrAudit, attributeFilter, metadata);
+                else
+                    entry.Event = ExtractNonAttributeEventName(auditDetail);
+
+                // If user asked to filter on attribute_name and this event has no matching
+                // changes, drop the whole event from the result.
+                if (!string.IsNullOrWhiteSpace(attributeFilter))
+                {
+                    if (entry.Changes == null || entry.Changes.Count == 0) continue;
+                }
+
+                entries.Add(entry);
+            }
+
+            return entries;
+        }
+
+        /// <summary>
+        /// Build the <c>changes</c> array for one <see cref="AttributeAuditDetail"/> event.
+        /// One event can produce many changes (each touched field = 1 change).
+        /// OldValue and NewValue are paired by attribute logical name.
+        /// </summary>
+        private static List<AuditHistoryChange> ExtractAttributeChanges(
+            AttributeAuditDetail attrAudit, string attributeFilter,
+            AttributeMetadataCache metadata)
+        {
+            var oldValues = attrAudit.OldValue?.Attributes;
+            var newValues = attrAudit.NewValue?.Attributes;
+            var changes = new List<AuditHistoryChange>();
+
+            // Collect the union of attribute names touched by this event.
+            var touched = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            if (oldValues != null) foreach (var a in oldValues) touched.Add(a.Key);
+            if (newValues != null) foreach (var a in newValues) touched.Add(a.Key);
+
+            foreach (var field in touched)
+            {
+                if (!string.IsNullOrWhiteSpace(attributeFilter) &&
+                    !field.Equals(attributeFilter, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                object oldRaw = null, newRaw = null;
+                var hasOld = oldValues != null && oldValues.TryGetValue(field, out oldRaw);
+                var hasNew = newValues != null && newValues.TryGetValue(field, out newRaw);
+
+                string displayName = null;
+                metadata.DisplayNames.TryGetValue(field, out displayName);
+
+                var change = new AuditHistoryChange
+                {
+                    LogicalName = field,
+                    DisplayName = string.IsNullOrWhiteSpace(displayName) ? null : displayName,
+                    OldValue = hasOld ? FormatAttributeValue(oldRaw, attrAudit.OldValue, field, metadata) : null,
+                    NewValue = hasNew ? FormatAttributeValue(newRaw, attrAudit.NewValue, field, metadata) : null
+                };
+                changes.Add(change);
+            }
+
+            return changes;
+        }
+
+        /// <summary>
+        /// Human-readable label for non-attribute audit details (system/relationship/share events).
+        /// </summary>
+        private static string ExtractNonAttributeEventName(AuditDetail auditDetail)
+        {
+            return auditDetail.GetType().Name switch
+            {
+                "RelationshipAuditDetail" => "Relationship",
+                "ShareAuditDetail" => "Share",
+                "RolePrivilegeAuditDetail" => "RolePrivilege",
+                _ => "Activity"
+            };
+        }
+
+        // ── Browse mode ─────────────────────────────────────────────────────────
 
         private CallToolResult ExecuteBrowseMode(string entityName,
             DateTime sinceUtc, DateTime untilUtc,
@@ -250,43 +422,123 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             int? objectTypeCode = null;
             if (!string.IsNullOrWhiteSpace(entityName))
-                objectTypeCode = ResolveObjectTypeCode(entityName);
+            {
+                var otc = ResolveObjectTypeCode(entityName);
+                if (otc == null)
+                    return Error($"Entity '{entityName}' has no ObjectTypeCode.");
+                objectTypeCode = otc;
+            }
 
             var fetchXml = BuildBrowseFetchXml(objectTypeCode, sinceUtc, untilUtc, operation, maxRecords);
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
 
-            if (result.Entities.Count == 0)
+            // Apply user_filter in-memory (audit 'useridname' isn't FetchXML-queryable)
+            var filtered = new List<Entity>();
+            if (!string.IsNullOrWhiteSpace(userFilter))
             {
-                var text = FormatBrowseNoResults(entityName, timeScope, userFilter, operation);
-                var emptyResult = new GetAuditHistoryResult
+                foreach (var e in result.Entities)
                 {
-                    Mode = "browse",
-                    EntityName = NullIfEmpty(entityName),
-                    TimeScope = timeScope,
-                    TotalCount = 0,
-                    Entries = []
-                };
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = text }],
-                    StructuredContent = JsonSerializer.SerializeToElement(emptyResult)
-                };
+                    var userRef = e.GetAttributeValue<EntityReference>("userid");
+                    var userName = userRef?.Name ?? userRef?.Id.ToString() ?? "";
+                    if (userName.IndexOf(userFilter, StringComparison.OrdinalIgnoreCase) >= 0)
+                        filtered.Add(e);
+                }
+            }
+            else
+            {
+                filtered.AddRange(result.Entities);
             }
 
-            return FormatBrowseResults(result.Entities, entityName, timeScope, userFilter);
+            var entries = filtered.Select(BuildBrowseEntry).ToList();
+
+            var structured = new GetAuditHistoryResult
+            {
+                Mode = "browse",
+                EntityName = NullIfEmpty(entityName),
+                TimeScope = timeScope,
+                TotalCount = entries.Count,
+                Entries = entries
+            };
+
+            return Success(BuildBrowseText(entityName, timeScope, userFilter, operation, entries.Count), structured);
         }
 
-        private int ResolveObjectTypeCode(string entityName)
+        private static AuditHistoryEntry BuildBrowseEntry(Entity e)
         {
-            var request = new RetrieveEntityRequest
+            var created = e.GetAttributeValue<DateTime?>("createdon");
+            var userRef = e.GetAttributeValue<EntityReference>("userid");
+            var objectRef = e.GetAttributeValue<EntityReference>("objectid");
+            var objectTypeCode = e.GetAttributeValue<string>("objecttypecode") ?? "";
+            var actionValue = e.GetAttributeValue<OptionSetValue>("action")?.Value ?? 0;
+            var operationValue = e.GetAttributeValue<OptionSetValue>("operation")?.Value ?? 0;
+
+            return new AuditHistoryEntry
+            {
+                Timestamp = created?.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
+                User = NullIfEmpty(userRef?.Name ?? userRef?.Id.ToString()),
+                Entity = NullIfEmpty(objectTypeCode),
+                RecordName = NullIfEmpty(objectRef?.Name ?? objectRef?.Id.ToString()),
+                RecordId = objectRef?.Id.ToString(),
+                Action = FormatAction(actionValue),
+                Operation = FormatOperation(operationValue)
+            };
+        }
+
+        // ── User filter resolution ──────────────────────────────────────────────
+
+        private string ResolveUserFilter(string userFilter)
+        {
+            if (string.IsNullOrWhiteSpace(userFilter)) return "";
+            if (!userFilter.Contains('@')) return userFilter;
+
+            var query = new QueryExpression("systemuser")
+            {
+                ColumnSet = new ColumnSet("fullname", "internalemailaddress", "isdisabled", "businessunitid")
+            };
+            query.Criteria.AddCondition("internalemailaddress", ConditionOperator.Equal, userFilter);
+
+            var result = _serviceClient.RetrieveMultiple(query);
+            if (result.Entities.Count > 1)
+                return "[AMBIGUOUS_USER]" + FormatMultipleUsers(userFilter, result.Entities);
+            if (result.Entities.Count == 1)
+            {
+                var fullName = result.Entities[0].GetAttributeValue<string>("fullname");
+                if (!string.IsNullOrWhiteSpace(fullName)) return fullName;
+            }
+            return userFilter;
+        }
+
+        private static string FormatMultipleUsers(string input, DataCollection<Entity> users)
+        {
+            var sb = new StringBuilder(users.Count * 120 + 256);
+            sb.AppendLine($"{users.Count} users match '{input}'. Re-call with the exact display name:");
+            sb.AppendLine();
+            sb.AppendLine("systemuserid\tfullname\temail\tstatus\tbusinessunit");
+            foreach (var u in users)
+            {
+                var id = u.GetAttributeValue<Guid>("systemuserid");
+                var name = u.GetAttributeValue<string>("fullname") ?? "";
+                var email = u.GetAttributeValue<string>("internalemailaddress") ?? "";
+                var disabled = u.GetAttributeValue<bool>("isdisabled");
+                var buName = u.GetAttributeValue<EntityReference>("businessunitid")?.Name ?? "";
+                sb.AppendLine($"{id}\t{EscapeTab(name)}\t{EscapeTab(email)}\t{(disabled ? "Disabled" : "Active")}\t{EscapeTab(buName)}");
+            }
+            return sb.ToString();
+        }
+
+        // ── ObjectTypeCode resolution ───────────────────────────────────────────
+
+        private int? ResolveObjectTypeCode(string entityName)
+        {
+            var response = (RetrieveEntityResponse)_serviceClient.Execute(new RetrieveEntityRequest
             {
                 LogicalName = entityName,
                 EntityFilters = EntityFilters.Entity
-            };
-            var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
-            return response.EntityMetadata.ObjectTypeCode ?? throw new InvalidOperationException(
-                $"Entity '{entityName}' has no ObjectTypeCode.");
+            });
+            return response.EntityMetadata.ObjectTypeCode;
         }
+
+        // ── FetchXML builder ────────────────────────────────────────────────────
 
         private static string BuildBrowseFetchXml(int? objectTypeCode,
             DateTime sinceUtc, DateTime untilUtc,
@@ -303,19 +555,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.Append("<attribute name='operation'/>");
             sb.Append("<attribute name='objecttypecode'/>");
             sb.Append("<filter type='and'>");
-
-            sb.Append($"<condition attribute='createdon' operator='ge' value='{sinceUtc.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture)}'/>");
-            sb.Append($"<condition attribute='createdon' operator='le' value='{untilUtc.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture)}'/>");
+            sb.Append($"<condition attribute='createdon' operator='ge' value='{sinceUtc:yyyy-MM-ddTHH:mm:ssZ}'/>");
+            sb.Append($"<condition attribute='createdon' operator='le' value='{untilUtc:yyyy-MM-ddTHH:mm:ssZ}'/>");
 
             if (objectTypeCode.HasValue)
                 sb.Append($"<condition attribute='objecttypecode' operator='eq' value='{objectTypeCode.Value}'/>");
 
-            if (!string.IsNullOrWhiteSpace(operation))
-            {
-                var actionValue = ParseActionName(operation.Trim());
-                if (actionValue.HasValue)
-                    sb.Append($"<condition attribute='action' operator='eq' value='{actionValue.Value}'/>");
-            }
+            if (!string.IsNullOrWhiteSpace(operation) && ActionNameMap.TryGetValue(operation, out var actionValue))
+                sb.Append($"<condition attribute='action' operator='eq' value='{actionValue}'/>");
 
             sb.Append("</filter>");
             sb.Append("<order attribute='createdon' descending='true'/>");
@@ -324,317 +571,54 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return sb.ToString();
         }
 
-        private static int? ParseActionName(string operation) => operation.ToLowerInvariant() switch
-        {
-            "create" => 1,
-            "update" => 2,
-            "delete" => 3,
-            "activate" => 4,
-            "deactivate" => 5,
-            "cascade" => 11,
-            "merge" => 12,
-            "assign" => 13,
-            "setstate" => 41,
-            _ => null
-        };
+        // ── Text builders (1 line, concise) ─────────────────────────────────────
 
-        private static CallToolResult FormatBrowseResults(DataCollection<Entity> entities,
-            string entityName, string timeScope, string userFilter)
+        private static string BuildDetailText(string entityName, Guid recordId,
+            List<AuditHistoryEntry> entries, string timeScope)
+        {
+            var n = entries.Count;
+            if (n == 0)
+                return $"[Success] {entityName} {recordId}: 0 audit entries ({timeScope}).";
+            var word = n == 1 ? "entry" : "entries";
+            return $"[Success] {entityName} {recordId}: {n} {word} ({timeScope}).";
+        }
+
+        private static string BuildBrowseText(string entityName, string timeScope,
+            string userFilter, string operation, int count)
         {
             var scope = string.IsNullOrWhiteSpace(entityName) ? "all entities" : entityName;
-            var filtered = new List<Entity>();
-
-            foreach (var e in entities)
-            {
-                if (!string.IsNullOrWhiteSpace(userFilter))
-                {
-                    var userRef = e.GetAttributeValue<EntityReference>("userid");
-                    var userName = userRef?.Name ?? userRef?.Id.ToString() ?? "";
-                    if (userName.IndexOf(userFilter, StringComparison.OrdinalIgnoreCase) < 0)
-                        continue;
-                }
-                filtered.Add(e);
-            }
-
-            if (filtered.Count == 0)
-            {
-                var text = $"[AuditBrowse] 0 entries found after user filter\nScope: {scope}, {timeScope}\nuser_filter: \"{userFilter}\"\nTip: Check if auditing is enabled at System Settings > Auditing tab";
-                var emptyResult = new GetAuditHistoryResult
-                {
-                    Mode = "browse",
-                    EntityName = NullIfEmpty(entityName),
-                    TimeScope = timeScope,
-                    TotalCount = 0,
-                    Entries = []
-                };
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = text }],
-                    StructuredContent = JsonSerializer.SerializeToElement(emptyResult)
-                };
-            }
-
-            var entries = new List<AuditHistoryEntry>();
-            var sb = new StringBuilder(filtered.Count * 120 + 256);
-            sb.AppendLine($"[AuditBrowse] {filtered.Count} {(filtered.Count == 1 ? "entry" : "entries")} ({scope}, {timeScope})");
-            sb.AppendLine();
-            sb.AppendLine("timestamp\tuser\tentity\trecord\taction\toperation");
-
-            foreach (var e in filtered)
-            {
-                var created = e.GetAttributeValue<DateTime?>("createdon");
-                var createdStr = created?.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) ?? "";
-                var userRef = e.GetAttributeValue<EntityReference>("userid");
-                var userName = userRef?.Name ?? userRef?.Id.ToString() ?? "";
-                var objectRef = e.GetAttributeValue<EntityReference>("objectid");
-                var recordName = objectRef?.Name ?? objectRef?.Id.ToString() ?? "";
-                var recordId = objectRef?.Id.ToString();
-                var objectTypeCode = e.GetAttributeValue<string>("objecttypecode") ?? "";
-                var actionValue = e.GetAttributeValue<OptionSetValue>("action")?.Value ?? 0;
-                var actionStr = FormatAction(actionValue);
-                var operationValue = e.GetAttributeValue<OptionSetValue>("operation")?.Value ?? 0;
-                var operationStr = FormatOperation(operationValue);
-
-                sb.AppendLine($"{createdStr}\t{EscapeTab(userName)}\t{EscapeTab(objectTypeCode)}\t{EscapeTab(recordName)}\t{actionStr}\t{operationStr}");
-
-                entries.Add(new AuditHistoryEntry
-                {
-                    Timestamp = createdStr,
-                    User = NullIfEmpty(userName),
-                    Entity = NullIfEmpty(objectTypeCode),
-                    RecordName = NullIfEmpty(recordName),
-                    RecordId = recordId,
-                    Action = actionStr,
-                    Operation = operationStr
-                });
-            }
-
-            var structured = new GetAuditHistoryResult
-            {
-                Mode = "browse",
-                EntityName = NullIfEmpty(entityName),
-                TimeScope = timeScope,
-                TotalCount = filtered.Count,
-                Entries = entries
-            };
-
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            var word = count == 1 ? "entry" : "entries";
+            var suffix = (string.IsNullOrWhiteSpace(userFilter) ? "" : $", user contains \"{userFilter}\"") +
+                         (string.IsNullOrWhiteSpace(operation) ? "" : $", op={operation}");
+            return $"[Success] {scope} ({timeScope}{suffix}): {count} {word}.";
         }
 
-        private static string FormatBrowseNoResults(string entityName, string timeScope,
-            string userFilter, string operation)
-        {
-            var sb = new StringBuilder(256);
-            sb.AppendLine("[AuditBrowse] 0 entries found");
+        // ── Static formatting helpers ───────────────────────────────────────────
 
-            var filters = new List<string>();
-            if (!string.IsNullOrWhiteSpace(entityName))
-                filters.Add($"entity = \"{entityName}\"");
-            if (!string.IsNullOrWhiteSpace(userFilter))
-                filters.Add($"user contains \"{userFilter}\"");
-            if (!string.IsNullOrWhiteSpace(operation))
-                filters.Add($"operation = \"{operation}\"");
-            filters.Add(timeScope);
-
-            sb.AppendLine($"Filters: {string.Join(", ", filters)}");
-            sb.AppendLine("Tip: Check if auditing is enabled at System Settings > Auditing tab");
-            return sb.ToString();
-        }
-
-        private static CallToolResult FormatAuditEntries(
-            string entityName, Guid recordId,
-            AuditDetailCollection auditDetails,
-            DateTime sinceUtc, DateTime untilUtc,
-            string userFilter, string operationFilter, string attributeFilter,
-            string timeScope)
-        {
-            var entries = new List<AuditHistoryEntry>();
-
-            foreach (var auditDetail in auditDetails.AuditDetails)
-            {
-                Entity audit;
-                AttributeAuditDetail attrAudit = null;
-
-                if (auditDetail is AttributeAuditDetail aad)
-                {
-                    attrAudit = aad;
-                    audit = aad.AuditRecord;
-                }
-                else
-                {
-                    audit = auditDetail.AuditRecord;
-                }
-
-                var createdOn = audit.GetAttributeValue<DateTime?>("createdon");
-
-                if (createdOn.HasValue)
-                {
-                    var utc = createdOn.Value.ToUniversalTime();
-                    if (utc < sinceUtc || utc > untilUtc)
-                        continue;
-                }
-
-                var actionValue = audit.GetAttributeValue<OptionSetValue>("action")?.Value ?? 0;
-                var actionStr = FormatAction(actionValue);
-
-                if (!string.IsNullOrWhiteSpace(operationFilter) &&
-                    !actionStr.Equals(operationFilter.Trim(), StringComparison.OrdinalIgnoreCase))
-                    continue;
-
-                var userRef = audit.GetAttributeValue<EntityReference>("userid");
-                var userName = userRef?.Name ?? userRef?.Id.ToString() ?? "";
-
-                if (!string.IsNullOrWhiteSpace(userFilter) &&
-                    userName.IndexOf(userFilter, StringComparison.OrdinalIgnoreCase) < 0)
-                    continue;
-
-                var timestamp = createdOn?.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) ?? "";
-
-                if (attrAudit != null)
-                {
-                    var oldValues = attrAudit.OldValue?.Attributes;
-                    var newValues = attrAudit.NewValue?.Attributes;
-
-                    if (actionStr == "Create" && newValues != null && newValues.Count > 0)
-                    {
-                        foreach (var attr in newValues)
-                        {
-                            if (!string.IsNullOrWhiteSpace(attributeFilter) &&
-                                !attr.Key.Equals(attributeFilter.Trim(), StringComparison.OrdinalIgnoreCase))
-                                continue;
-
-                            entries.Add(new AuditHistoryEntry
-                            {
-                                Timestamp = timestamp,
-                                User = userName,
-                                Action = actionStr,
-                                Field = attr.Key,
-                                OldValue = "-",
-                                NewValue = FormatAttributeValue(attr.Value, attrAudit.NewValue, attr.Key)
-                            });
-                        }
-                    }
-                    else if (oldValues != null || newValues != null)
-                    {
-                        var changedFields = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                        if (oldValues != null) foreach (var a in oldValues) changedFields.Add(a.Key);
-                        if (newValues != null) foreach (var a in newValues) changedFields.Add(a.Key);
-
-                        foreach (var field in changedFields)
-                        {
-                            if (!string.IsNullOrWhiteSpace(attributeFilter) &&
-                                !field.Equals(attributeFilter.Trim(), StringComparison.OrdinalIgnoreCase))
-                                continue;
-
-                            var oldVal = oldValues != null && oldValues.TryGetValue(field, out var ov)
-                                ? FormatAttributeValue(ov, attrAudit.OldValue, field)
-                                : "-";
-                            var newVal = newValues != null && newValues.TryGetValue(field, out var nv)
-                                ? FormatAttributeValue(nv, attrAudit.NewValue, field)
-                                : "-";
-
-                            entries.Add(new AuditHistoryEntry
-                            {
-                                Timestamp = timestamp,
-                                User = userName,
-                                Action = actionStr,
-                                Field = field,
-                                OldValue = oldVal,
-                                NewValue = newVal
-                            });
-                        }
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrWhiteSpace(attributeFilter))
-                            continue;
-
-                        entries.Add(new AuditHistoryEntry
-                        {
-                            Timestamp = timestamp,
-                            User = userName,
-                            Action = actionStr,
-                            Field = "-",
-                            OldValue = "-",
-                            NewValue = actionStr == "Create" ? "(record created)" : "-"
-                        });
-                    }
-                }
-                else
-                {
-                    if (!string.IsNullOrWhiteSpace(attributeFilter))
-                        continue;
-
-                    var detailType = auditDetail.GetType().Name switch
-                    {
-                        "RelationshipAuditDetail" => "Relationship",
-                        "ShareAuditDetail" => "Share",
-                        "RolePrivilegeAuditDetail" => "RolePrivilege",
-                        _ => "Activity"
-                    };
-
-                    entries.Add(new AuditHistoryEntry
-                    {
-                        Timestamp = timestamp,
-                        User = userName,
-                        Action = actionStr,
-                        Field = $"({detailType})",
-                        OldValue = "-",
-                        NewValue = "-"
-                    });
-                }
-            }
-
-            var sb = new StringBuilder(entries.Count * 100 + 256);
-            sb.AppendLine($"[AuditHistory] {entityName}: {recordId}");
-            sb.AppendLine($"{(entries.Count == 1 ? "Entry" : "Entries")}: {entries.Count}");
-            sb.AppendLine();
-
-            if (entries.Count == 0)
-            {
-                sb.AppendLine("No matching audit entries found for the specified filters.");
-            }
-            else
-            {
-                sb.AppendLine("timestamp\tuser\taction\tfield\toldValue\tnewValue");
-                foreach (var e in entries)
-                {
-                    sb.AppendLine($"{e.Timestamp}\t{EscapeTab(e.User)}\t{e.Action}\t{e.Field}\t{EscapeTab(e.OldValue)}\t{EscapeTab(e.NewValue)}");
-                }
-            }
-
-            var structured = new GetAuditHistoryResult
-            {
-                Mode = "detail",
-                EntityName = NullIfEmpty(entityName),
-                RecordId = recordId.ToString(),
-                TimeScope = timeScope,
-                TotalCount = entries.Count,
-                Entries = entries
-            };
-
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
-        }
-
-        private static string FormatAttributeValue(object value, Entity entity, string attributeName)
+        private static string FormatAttributeValue(object value, Entity entity, string attributeName, AttributeMetadataCache metadata)
         {
             if (value == null) return "-";
 
+            // 1. Entity's own FormattedValues (Dataverse-provided label for picklist
+            //    / status / boolean / lookup display-name etc.) -- highest priority
+            //    because it reflects what the user actually saw at audit time
+            //    (covers global option sets, FormattedValues come for free).
             if (entity != null && entity.FormattedValues.TryGetValue(attributeName, out var formatted) && !string.IsNullOrEmpty(formatted))
                 return formatted;
+
+            // 2. Local picklist / state / status / boolean -- use cached value->label
+            //    map built from the attribute's own OptionSet.
+            if (value is OptionSetValue osv
+                && metadata.OptionSetLabels.TryGetValue(attributeName, out var labels)
+                && labels.TryGetValue(osv.Value, out var label))
+            {
+                return label;
+            }
 
             return value switch
             {
                 EntityReference er => string.IsNullOrWhiteSpace(er.Name) ? er.Id.ToString() : er.Name,
-                OptionSetValue osv => osv.Value.ToString(),
+                OptionSetValue osvFallback => osvFallback.Value.ToString(CultureInfo.InvariantCulture),
                 Money money => money.Value.ToString("N2", CultureInfo.InvariantCulture),
                 DateTime dt => dt.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
                 bool b => b ? "Yes" : "No",
@@ -680,14 +664,42 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return remainingHours == 0 ? $"{days}d" : $"{days}d {remainingHours}h";
         }
 
+        private static bool TryParseDate(string input, string fieldName, out DateTime? result, out string error)
+        {
+            result = null;
+            error = null;
+            if (string.IsNullOrWhiteSpace(input)) return true;
+
+            if (!DateTime.TryParse(input.Trim(), CultureInfo.InvariantCulture,
+                    DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var parsed))
+            {
+                error = $"'{input}' is not a valid ISO 8601 date for {fieldName}. " +
+                        "Expected format: 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:mm:ssZ'.";
+                return false;
+            }
+            result = parsed;
+            return true;
+        }
+
         private static string NullIfEmpty(string value) =>
             string.IsNullOrWhiteSpace(value) ? null : value.Trim();
 
         private static string EscapeTab(string value) =>
             value?.Replace("\t", " ").Replace("\n", " ").Replace("\r", "") ?? "";
+    }
 
-        private static string EscapeXml(string value) =>
-            value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;")
-                 .Replace("'", "&apos;").Replace("\"", "&quot;");
+    /// <summary>
+    /// Per-request cache of an entity's attribute metadata. Built once per
+    /// detail-mode call so every <c>change</c> in the response can carry
+    /// a human-readable display name and option-set label.
+    /// </summary>
+    internal sealed class AttributeMetadataCache
+    {
+        public Dictionary<string, string> DisplayNames { get; } =
+            new(StringComparer.OrdinalIgnoreCase);
+
+        // attribute logical name -> (option-set int value -> user-localized label)
+        public Dictionary<string, Dictionary<int, string>> OptionSetLabels { get; } =
+            new(StringComparer.OrdinalIgnoreCase);
     }
 }

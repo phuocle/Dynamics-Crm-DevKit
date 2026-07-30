@@ -14,3 +14,4 @@
 - 7. parse_record_url
 - 8. search_records
 - 9. whoami
+- 10. get_audit_history

@@ -3,6 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 {
+    /// <summary>
+    /// One audit event = one save/action in Dataverse.
+    /// May contain many field changes; each change is <see cref="AuditHistoryChange"/>.
+    /// </summary>
     internal sealed class AuditHistoryEntry
     {
         [JsonPropertyName("timestamp")]
@@ -17,6 +21,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Action { get; set; }
 
+        [JsonPropertyName("event")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Event { get; set; }
+
+        // Browse-mode fields (audit list view, one row per audit record)
         [JsonPropertyName("entity")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Entity { get; set; }
@@ -33,9 +42,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Operation { get; set; }
 
-        [JsonPropertyName("field")]
+        // Detail-mode: per-event list of field changes (may be empty for system events)
+        [JsonPropertyName("changes")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string Field { get; set; }
+        public List<AuditHistoryChange> Changes { get; set; }
+    }
+
+    /// <summary>
+    /// One field-level change within an audit event.
+    /// </summary>
+    internal sealed class AuditHistoryChange
+    {
+        [JsonPropertyName("logicalName")]
+        public string LogicalName { get; set; }
+
+        [JsonPropertyName("displayName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string DisplayName { get; set; }
 
         [JsonPropertyName("oldValue")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

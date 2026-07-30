@@ -1,19 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Text;
-using System.Text.Json;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Query;
 using SysConsole = System.Console;
 
 namespace Dev.AllInOne.Console
 {
-    // Probes Dataverse Relevance Search raw response shapes so we can update
-    // the MCP SearchRecordsTool models to match what the server actually sends.
-    //
-    // Uses App.Service (reads URL/ClientId/ClientSecret from App.config or .env,
-    // never hard-coded) -- same ServiceClient the MCP tool uses.
+    // Probes whether AttributeAuditDetail (or the underlying audit Entity) carries
+    // human-readable Display Names for the touched attributes, so we can decide
+    // whether the MCP tool needs to fetch entity metadata to translate
+    // logicalName -> displayName for the changes[] entries.
     public class Program
     {
         static void Main()
@@ -29,114 +30,84 @@ namespace Dev.AllInOne.Console
             }
             SysConsole.WriteLine("Connected OK to " + svc.ConnectedOrgUriActual + Environment.NewLine);
 
-            RunSearch(svc, "Boyle", top: 3);
-            RunSearch(svc, "Inc", top: 5);
-            RunSearch(svc, "Boyle", top: 3, entities: new List<string> { "account", "contact" });
-            RunStatus(svc);
+            var targetId = new Guid("71f939f8-4e40-f111-bec6-70a8a59a451e");
+            ProbeAuditDetail(svc, "account", targetId);
         }
 
-        // Raw POST to /api/search/v1.0/searchquery -- exact endpoint the MCP tool uses.
-        private static void RunSearch(ServiceClient svc, string term, int top, List<string> entities = null)
+        private static void ProbeAuditDetail(ServiceClient svc, string entityName, Guid targetId)
         {
             SysConsole.WriteLine("===============================================================");
-            SysConsole.WriteLine("SEARCH  term='" + term + "'  top=" + top +
-                                "  entities=" + (entities == null ? "(all)" : string.Join(",", entities)));
+            SysConsole.WriteLine("RetrieveRecordChangeHistoryRequest");
+            SysConsole.WriteLine("  entity  = " + entityName);
+            SysConsole.WriteLine("  target  = " + targetId);
             SysConsole.WriteLine("===============================================================");
 
-            var body = new Dictionary<string, object>
+            var request = new RetrieveRecordChangeHistoryRequest
             {
-                ["search"] = term,
-                ["count"] = true,
-                ["top"] = top
+                Target = new EntityReference(entityName, targetId),
+                PagingInfo = new PagingInfo { PageNumber = 1, Count = 5 }
             };
-            if (entities != null && entities.Count > 0)
-            {
-                // Match the MCP tool's exact body shape: "entities" is a JSON-encoded
-                // STRING (not an inline array) containing objects with a "name" field.
-                var entityList = entities.Select(e => new { name = e }).ToList();
-                body["entities"] = JsonSerializer.Serialize(entityList);
-            }
+            var response = (RetrieveRecordChangeHistoryResponse)svc.Execute(request);
+            var auditDetails = response.AuditDetailCollection;
+            if (auditDetails == null) { SysConsole.WriteLine("null"); return; }
 
-            var requestBody = JsonSerializer.Serialize(body);
-            SysConsole.WriteLine("--- REQUEST BODY ---" + Environment.NewLine + requestBody + Environment.NewLine);
-
-            var response = svc.ExecuteWebRequest(
-                HttpMethod.Post, "searchquery", requestBody, null, "application/json");
-
-            var json = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            SysConsole.WriteLine("--- HTTP " + (int)response.StatusCode + " " + response.ReasonPhrase + " ---");
-            Dump(json);
+            SysConsole.WriteLine("AuditDetails.Count = " + auditDetails.AuditDetails.Count);
             SysConsole.WriteLine();
+
+            int idx = 0;
+            foreach (var detail in auditDetails.AuditDetails)
+            {
+                SysConsole.WriteLine("--- detail #" + idx + " : " + detail.GetType().FullName + " ---");
+                var audit = detail.AuditRecord;
+
+                // 1. Does audit.AuditRecord itself carry a display-name per field?
+                SysConsole.WriteLine("  audit.LogicalName  = " + audit.LogicalName);
+                SysConsole.WriteLine("  audit.Attributes   =");
+                foreach (var kv in audit.Attributes)
+                {
+                    SysConsole.WriteLine("    KEY=" + kv.Key + "  TYPE=" + (kv.Value?.GetType().Name ?? "null") + "  VAL=" + ShortVal(kv.Value));
+                }
+                SysConsole.WriteLine("  audit.FormattedValues =");
+                foreach (var fv in audit.FormattedValues)
+                {
+                    SysConsole.WriteLine("    KEY=" + fv.Key + "  FMT=" + fv.Value);
+                }
+                SysConsole.WriteLine();
+
+                if (detail is AttributeAuditDetail aad)
+                {
+                    SysConsole.WriteLine("  -> OldValue keys/formatted:");
+                    DumpEntity(aad.OldValue, "    OLD.");
+                    SysConsole.WriteLine("  -> NewValue keys/formatted:");
+                    DumpEntity(aad.NewValue, "    NEW.");
+                }
+                SysConsole.WriteLine();
+                idx++;
+            }
         }
 
-        private static void RunStatus(ServiceClient svc)
+        private static void DumpEntity(Entity e, string indent)
         {
-            SysConsole.WriteLine("===============================================================");
-            SysConsole.WriteLine("STATUS  GET /api/search/v1.0/searchstatus");
-            SysConsole.WriteLine("===============================================================");
-            var resp = svc.ExecuteWebRequest(
-                HttpMethod.Get, "searchstatus", string.Empty, null, "application/json");
-            var json = resp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            SysConsole.WriteLine("--- HTTP " + (int)resp.StatusCode + " " + resp.ReasonPhrase + " ---");
-            Dump(json);
-            SysConsole.WriteLine();
-
-            SysConsole.WriteLine("===============================================================");
-            SysConsole.WriteLine("STATUS  GET /api/search/v1.0/searchstatistics");
-            SysConsole.WriteLine("===============================================================");
-            resp = svc.ExecuteWebRequest(
-                HttpMethod.Get, "searchstatistics", string.Empty, null, "application/json");
-            json = resp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            SysConsole.WriteLine("--- HTTP " + (int)resp.StatusCode + " " + resp.ReasonPhrase + " ---");
-            Dump(json);
-            SysConsole.WriteLine();
+            if (e == null) { SysConsole.WriteLine(indent + "(null)"); return; }
+            SysConsole.WriteLine(indent + "LogicalName = " + e.LogicalName);
+            SysConsole.WriteLine(indent + "Attributes count = " + e.Attributes.Count);
+            foreach (var kv in e.Attributes)
+                SysConsole.WriteLine(indent + "  " + kv.Key + " = " + ShortVal(kv.Value));
+            SysConsole.WriteLine(indent + "FormattedValues count = " + e.FormattedValues.Count);
+            foreach (var fv in e.FormattedValues)
+                SysConsole.WriteLine(indent + "  FMT " + fv.Key + " = " + fv.Value);
         }
 
-        // Dataverse wraps everything in { "response": "<JSON string>" }.
-        // Print the outer wrapper, then pretty-print the inner JSON if present.
-        private static void Dump(string json)
+        private static string ShortVal(object v)
         {
-            if (string.IsNullOrWhiteSpace(json))
+            if (v == null) return "null";
+            return v switch
             {
-                SysConsole.WriteLine("(empty)");
-                return;
-            }
-
-            using var doc = JsonDocument.Parse(json);
-            var root = doc.RootElement;
-
-            if (root.ValueKind == JsonValueKind.Object &&
-                root.TryGetProperty("response", out var respProp) &&
-                respProp.ValueKind == JsonValueKind.String)
-            {
-                var inner = respProp.GetString();
-                if (string.IsNullOrWhiteSpace(inner))
-                {
-                    SysConsole.WriteLine("(inner response is empty)");
-                    return;
-                }
-
-                try
-                {
-                    using var innerDoc = JsonDocument.Parse(inner);
-                    SysConsole.WriteLine("--- INNER (pretty) ---");
-                    SysConsole.WriteLine(JsonSerializer.Serialize(innerDoc.RootElement,
-                        new JsonSerializerOptions { WriteIndented = true }));
-                    SysConsole.WriteLine("--- INNER (compact) ---");
-                    SysConsole.WriteLine(JsonSerializer.Serialize(innerDoc.RootElement));
-                }
-                catch (JsonException)
-                {
-                    SysConsole.WriteLine("--- INNER (raw, not JSON) ---");
-                    SysConsole.WriteLine(inner);
-                }
-            }
-            else
-            {
-                SysConsole.WriteLine("--- BODY ---");
-                SysConsole.WriteLine(JsonSerializer.Serialize(root,
-                    new JsonSerializerOptions { WriteIndented = true }));
-            }
+                EntityReference er => "[ER " + er.LogicalName + "/" + er.Id + (string.IsNullOrEmpty(er.Name) ? "" : " name='" + er.Name + "'") + "]",
+                OptionSetValue osv => "[OSV " + osv.Value + "]",
+                Money m => "[$" + m.Value + "]",
+                _ => v.ToString()
+            };
         }
     }
 }
