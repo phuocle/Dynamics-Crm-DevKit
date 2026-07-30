@@ -345,7 +345,8 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 Console.WriteLine("  -------------------------------------------------------------------------");
                 foreach (var tool in categoryTools)
                 {
-                    Console.WriteLine($"  {index,3}. {tool.Name,-30} {tool.Title}");
+                    var suffix = tool.IsReadOnly ? " [readonly]" : string.Empty;
+                    Console.WriteLine($"  {index,3}. {tool.Name,-30} {tool.Title}{suffix}");
                     index++;
                 }
             }
@@ -375,7 +376,8 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     var title = toolAttr.Title ?? name;
 
                     var category = GetCategory(type.Name);
-                    results.Add(new McpToolInfo(name, title, category));
+                    var isReadOnly = toolAttr.ReadOnly;
+                    results.Add(new McpToolInfo(name, title, category, isReadOnly));
                 }
             }
 
@@ -407,6 +409,6 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             return "Advanced";
         }
 
-        private record McpToolInfo(string Name, string Title, string Category);
+        private record McpToolInfo(string Name, string Title, string Category, bool IsReadOnly);
     }
 }
