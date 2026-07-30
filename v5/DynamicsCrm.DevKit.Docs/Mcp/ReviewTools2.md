@@ -1,1 +1,2 @@
 execute_webapi
+generate_demo_data

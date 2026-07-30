@@ -72,11 +72,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Entity logical name (e.g., 'account').")] string entity_name,
             [Description("ISO 8601, e.g. '2026-01-01'. NEVER infer — ask user.")] string from_date,
             [Description("ISO 8601, e.g. '2026-04-30'. Must be >= from_date.")] string to_date,
-            [Description("1–500.")] int count = 10,
+            [Description("1-500.")] int count = 10,
             [Description("Comma-separated logical names. Empty = auto-select creatable.")] string fields = "",
             [Description("0 = random; non-zero = reproducible.")] int seed = 0,
             [Description("JSON array of {logicalname, operator, values[]}. Operators (see description). Example: [{\"logicalname\":\"jobtitle\",\"operator\":\"in\",\"values\":[\"CEO\",\"CFO\",\"CTO\"]}].")] string field_overrides = "")
         {
+            try
+            {
             if (string.IsNullOrWhiteSpace(entity_name))
                 return Error("Error: entity_name is required.");
 
@@ -102,12 +104,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"Error: {entityResult.Error}");
             var entityName = entityResult.Value.LogicalName;
 
-            // Load metadata
             var metadata = LoadEntityMetadata(entityName);
-            if (metadata == null)
-                return Error(
-                    $"Error: Entity '{entityName}' not found or metadata could not be loaded.\n" +
-                    "Use get_tables to verify the entity logical name.");
 
             var warnings = new List<string>();
 
@@ -148,15 +145,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var overrides = new List<FieldOverride>();
             if (!string.IsNullOrWhiteSpace(field_overrides))
             {
-                try
-                {
-                    overrides = JsonSerializer.Deserialize<List<FieldOverride>>(field_overrides,
-                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? [];
-                }
-                catch (Exception ex)
-                {
-                    return Error($"Error: field_overrides is not valid JSON. {ex.Message}");
-                }
+                overrides = JsonSerializer.Deserialize<List<FieldOverride>>(field_overrides,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? [];
 
                 foreach (var ov in overrides)
                 {
@@ -235,6 +225,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             return Success(sb.ToString(), structured);
+            }
+            catch (Exception ex)
+            {
+                return ThrowException(ex);
+            }
         }
 
         // ── Field selection ──────────────────────────────────────────────
@@ -559,23 +554,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     case "regex":
                     {
-                        // Map simple regex patterns to Bogus format strings
                         var pattern = OverrideValueAsString(values[0]);
                         var bogusFormat = Regex.Replace(pattern, @"\[0-9\]\{(\d+)\}", m =>
                         {
                             var len = int.Parse(m.Groups[1].Value);
                             return new string('#', len);
                         });
-                        // Strip leading/trailing anchors
                         bogusFormat = bogusFormat.TrimStart('^').TrimEnd('$');
-                        try
-                        {
-                            SetOverrideValue(record, field, faker.Phone.PhoneNumber(bogusFormat));
-                        }
-                        catch
-                        {
-                            warnings.Add($"field_override regex for '{field}': pattern '{pattern}' could not be applied — skipped.");
-                        }
+                        SetOverrideValue(record, field, faker.Phone.PhoneNumber(bogusFormat));
                         break;
                     }
                 }
@@ -812,20 +798,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             return MetadataCache.GetOrAdd(entityName, name =>
             {
-                try
+                var request = new RetrieveEntityRequest
                 {
-                    var request = new RetrieveEntityRequest
-                    {
-                        LogicalName = name,
-                        EntityFilters = EntityFilters.Attributes
-                    };
-                    var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
-                    return response.EntityMetadata;
-                }
-                catch
-                {
-                    return null;
-                }
+                    LogicalName = name,
+                    EntityFilters = EntityFilters.Attributes
+                };
+                var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+                return response.EntityMetadata;
             });
         }
 
@@ -833,22 +812,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             return LookupPoolCache.GetOrAdd(targetEntity, target =>
             {
-                try
-                {
-                    var fetchXml = $@"<fetch top='{LookupPoolSize}'>
+                var fetchXml = $@"<fetch top='{LookupPoolSize}'>
   <entity name='{target}'>
     <attribute name='{target}id'/>
     <filter><condition attribute='statecode' operator='eq' value='0'/></filter>
     <order attribute='modifiedon' descending='true'/>
   </entity>
 </fetch>";
-                    var results = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                    return results.Entities.Select(e => e.Id).ToList();
-                }
-                catch
-                {
-                    return [];
-                }
+                var results = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                return results.Entities.Select(e => e.Id).ToList();
             });
         }
 
