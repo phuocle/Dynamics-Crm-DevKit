@@ -62,7 +62,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 status = status.Trim().ToLowerInvariant();
 
             if (status != "active" && status != "draft" && status != "all")
-                return ErrorResult($"Error: Invalid status '{status}'. Use 'active', 'draft', or 'all'.");
+                return Error($"Error: Invalid status '{status}'. Use 'active', 'draft', or 'all'.");
 
             if (max_records <= 0) max_records = 50;
             if (max_records > 250) max_records = 250;
@@ -72,7 +72,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrWhiteSpace(bpf_id))
                 {
                     if (!Guid.TryParse(bpf_id.Trim(), out _))
-                        return ErrorResult($"Error: '{bpf_id.Trim()}' is not a valid GUID.");
+                        return Error($"Error: '{bpf_id.Trim()}' is not a valid GUID.");
 
                     return GetDetail(bpf_id.Trim());
                 }
@@ -81,7 +81,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_business_process_flows");
                     if (!entityResult.IsSuccess)
-                        return ErrorResult($"Error: entity_name '{entity_name.Trim()}': {entityResult.Error}");
+                        return Error($"Error: entity_name '{entity_name.Trim()}': {entityResult.Error}");
                     entity_name = entityResult.Value.LogicalName;
                 }
 
@@ -89,17 +89,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (bpfs.Count == 0)
                 {
-                    var text = "0 Business Process Flows found.";
-                    var emptyResult = new GetBpfsResult
+                    return Success("0 Business Process Flows found.", new GetBpfsResult
                     {
                         TotalCount = 0,
                         Bpfs = []
-                    };
-                    return new CallToolResult
-                    {
-                        Content = [new TextContentBlock { Text = text }],
-                        StructuredContent = JsonSerializer.SerializeToElement(emptyResult)
-                    };
+                    });
                 }
 
                 // Auto-detail if bpf_name matches exactly 1
@@ -110,7 +104,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Failed to retrieve Business Process Flows: {ex.Message}");
+                return ThrowException(ex);
             }
         }
 
@@ -193,7 +187,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
-                return ErrorResult($"Error: Business Process Flow '{bpfId}' not found (or not a BPF workflow).");
+                return Error($"Error: Business Process Flow '{bpfId}' not found (or not a BPF workflow).");
 
             var entity = result.Entities[0];
             var entry = MapBpfEntry(entity);
@@ -239,17 +233,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine("[Stages] 0");
             }
 
-            var structured = new GetBpfsResult
+            return Success(sb.ToString(), new GetBpfsResult
             {
                 TotalCount = 1,
                 Bpfs = [entry]
-            };
-
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            });
         }
 
         private CallToolResult FormatList(List<Entity> entities, string status, bool includeStages)
@@ -306,24 +294,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
-            var structured = new GetBpfsResult
+            return Success(sb.ToString(), new GetBpfsResult
             {
                 TotalCount = bpfs.Count,
                 Bpfs = bpfs
-            };
-
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            });
         }
 
         private List<BpfStageEntry> GetStages(string bpfWorkflowId)
         {
-            try
-            {
-                var fetchXml = $@"<fetch>
+            var fetchXml = $@"<fetch>
   <entity name='processstage'>
     <attribute name='processstageid'/>
     <attribute name='stagename'/>
@@ -335,28 +315,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                return result.Entities.Select(e =>
-                {
-                    var categoryValue = e.GetAttributeValue<OptionSetValue>("stagecategory")?.Value;
-                    return new BpfStageEntry
-                    {
-                        StageId = e.Id.ToString(),
-                        StageName = e.GetAttributeValue<string>("stagename") ?? "",
-                        StageCategory = categoryValue.HasValue && StageCategoryMap.TryGetValue(categoryValue.Value, out var label)
-                            ? label
-                            : categoryValue.HasValue ? $"Custom ({categoryValue.Value})" : "Unknown",
-                        StageCategoryValue = categoryValue ?? int.MaxValue,
-                        PrimaryEntity = e.GetAttributeValue<string>("primaryentitytypecode") ?? ""
-                    };
-                })
-                .OrderBy(s => s.StageCategoryValue)
-                .ToList();
-            }
-            catch
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            return result.Entities.Select(e =>
             {
-                return [];
-            }
+                var categoryValue = e.GetAttributeValue<OptionSetValue>("stagecategory")?.Value;
+                return new BpfStageEntry
+                {
+                    StageId = e.Id.ToString(),
+                    StageName = e.GetAttributeValue<string>("stagename") ?? "",
+                    StageCategory = categoryValue.HasValue && StageCategoryMap.TryGetValue(categoryValue.Value, out var label)
+                        ? label
+                        : categoryValue.HasValue ? $"Custom ({categoryValue.Value})" : "Unknown",
+                    StageCategoryValue = categoryValue ?? int.MaxValue,
+                    PrimaryEntity = e.GetAttributeValue<string>("primaryentitytypecode") ?? ""
+                };
+            })
+            .OrderBy(s => s.StageCategoryValue)
+            .ToList();
         }
 
         private Dictionary<string, int> GetStageCounts(List<string> bpfIds)
@@ -364,13 +339,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var counts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             if (bpfIds.Count == 0) return counts;
 
-            try
-            {
-                var conditions = new StringBuilder();
-                foreach (var id in bpfIds)
-                    conditions.AppendLine($"        <value>{EscapeXml(id)}</value>");
+            var conditions = new StringBuilder();
+            foreach (var id in bpfIds)
+                conditions.AppendLine($"        <value>{EscapeXml(id)}</value>");
 
-                var fetchXml = $@"<fetch aggregate='true'>
+            var fetchXml = $@"<fetch aggregate='true'>
   <entity name='processstage'>
     <attribute name='processid' alias='processId' groupby='true'/>
     <attribute name='processstageid' alias='stageCount' aggregate='count'/>
@@ -381,19 +354,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                foreach (var e in result.Entities)
-                {
-                    var processIdValue = e.GetAttributeValue<AliasedValue>("processId")?.Value;
-                    var processId = processIdValue is EntityReference er ? er.Id.ToString() : processIdValue?.ToString();
-                    var count = e.GetAttributeValue<AliasedValue>("stageCount")?.Value;
-                    if (processId != null && count is int c)
-                        counts[processId] = c;
-                }
-            }
-            catch
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            foreach (var e in result.Entities)
             {
-                // Fallback: return empty counts
+                var processIdValue = e.GetAttributeValue<AliasedValue>("processId")?.Value;
+                var processId = processIdValue is EntityReference er ? er.Id.ToString() : processIdValue?.ToString();
+                var count = e.GetAttributeValue<AliasedValue>("stageCount")?.Value;
+                if (processId != null && count is int c)
+                    counts[processId] = c;
             }
 
             return counts;
@@ -436,7 +404,5 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string EscapeTab(string value) =>
             value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
-
-        private CallToolResult ErrorResult(string message) => Error(message);
     }
 }
