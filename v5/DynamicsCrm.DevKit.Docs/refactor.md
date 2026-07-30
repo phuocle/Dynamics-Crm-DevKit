@@ -12,4 +12,5 @@
 # Tools đã hoàn thành và aP đã review
 
 - 7. parse_record_url
+- 8. search_records
 - 9. whoami

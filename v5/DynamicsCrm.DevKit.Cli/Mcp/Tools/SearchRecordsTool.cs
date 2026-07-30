@@ -4,9 +4,9 @@ using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
@@ -24,194 +24,127 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "search_records", Title = "Search records by keyword",
+        [McpServerTool(Name = "search_records", Title = "Search records by keyword or check Relevance Search status",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(SearchRecordsResult)),
         Description(
-            "Dataverse Relevance Search (full-text, ranked, with highlights) across entities. action='search' (needs search_term) or 'status' (config: enabled state, indexed entities/fields, sync status, storage). Requires Relevance Search enabled. Max 100 results — use execute_fetchxml for larger / precise filtering.\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- Find records by keyword across multiple entities\n" +
-            "- Quick text search when the exact field is unknown\n" +
-            "- Check Relevance Search config / indexed entities (action='status')")]
+            "Dataverse Relevance Search. Requires Relevance Search enabled.")]
         public CallToolResult search_records(
-            [Description(
-                "'search' or 'status'."
-            )] string action = "search",
-            [Description(
-                "Required for search. 1–100 chars. Syntax: + (AND), | (OR), - (NOT), * (wildcard), \"phrase\", () (group)."
-            )] string search_term = "",
-            [Description(
-                "Comma-separated entity Display Names or logical names (e.g. 'Account,contact'). Empty = all searchable."
-            )] string entities = "",
-            [Description(
-                "1–100."
-            )] int top = 50,
-            [Description(
-                "OData filter (eq, ne, gt, ge, lt, le, and, or, not). E.g. 'statecode eq 0'."
-            )] string filter = "")
+            [Description("'search' (default) or 'status'.")]
+            string action = "search",
+            [Description("Required for search. 1-100 chars. Operators: + (AND), | (OR), - (NOT), * (wildcard), \"phrase\", () (group).")]
+            string search_term = "",
+            [Description("Comma-separated Display Names or logical names (e.g. 'Account,contact'). Empty = all searchable.")]
+            string entities = "",
+            [Description("Max results to return. 1-100 (default 50).")]
+            int top = 50,
+            [Description("OData filter applied after search. e.g. 'statecode eq 0'.")]
+            string filter = "")
         {
-            if (string.IsNullOrWhiteSpace(action))
-                return Error("Error: action is required. Valid values: 'search', 'status'.");
-
-            var normalizedAction = action.Trim().ToLowerInvariant();
-
-            return normalizedAction switch
+            try
             {
-                "search" => HandleSearch(search_term, entities, top, filter),
-                "status" => HandleStatus(),
-                _ => Error($"Error: Invalid action '{action}'. Valid values: 'search', 'status'.")
-            };
+                if (string.IsNullOrWhiteSpace(action))
+                    return Error("action is required.", "Valid values: 'search', 'status'.");
+
+                var normalized = action.Trim().ToLowerInvariant();
+                if (normalized == "search")
+                    return ExecuteSearch(search_term, entities, top, filter);
+                if (normalized == "status")
+                    return ExecuteStatus();
+
+                return Error($"Invalid action '{action}'.", "Valid values: 'search', 'status'.");
+            }
+            catch (Exception ex)
+            {
+                return ThrowException(ex);
+            }
         }
 
-        private CallToolResult HandleSearch(string searchTerm, string entities, int top, string filter)
+        // ── Action: search ──────────────────────────────────────────────────────
+
+        private CallToolResult ExecuteSearch(string searchTerm, string entities, int top, string filter)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
-                return Error("Error: search_term is required when action='search'.");
+                return Error("search_term is required when action='search'.");
 
-            if (searchTerm.Trim().Length > 100)
-                return Error("Error: search_term must be 100 characters or less.");
+            var trimmedTerm = searchTerm.Trim();
+            if (trimmedTerm.Length > 100)
+                return Error("search_term must be 100 characters or less.");
 
-            if (top <= 0)
-                return Error("Error: top must be a positive number (1-100).");
+            if (top < 1) top = 1;
             if (top > 100) top = 100;
 
-            try
-            {
-                var entityList = ResolveEntityList(entities);
-                var requestBody = BuildSearchRequestBody(searchTerm.Trim(), entityList, top, filter);
-                var response = _serviceClient.ExecuteWebRequest(
-                    HttpMethod.Post, "searchquery", requestBody, null, "application/json");
+            var sw = Stopwatch.StartNew();
+            var resolvedEntities = ResolveEntityList(entities);
+            var requestBody = BuildSearchRequestBody(trimmedTerm, resolvedEntities, top, filter);
 
-                var jsonResponse = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var response = _serviceClient.ExecuteWebRequest(
+                HttpMethod.Post, "searchquery", requestBody, null, "application/json");
+            var json = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
-                if (!response.IsSuccessStatusCode)
-                    return Error($"Error: Search API returned {(int)response.StatusCode} {response.ReasonPhrase}.\n{jsonResponse}");
+            if (!response.IsSuccessStatusCode)
+                return Error($"Search API returned {(int)response.StatusCode} {response.ReasonPhrase}.", null, json);
 
-                // Web API wraps result in { "response": "..." }
-                var wrapper = JsonSerializer.Deserialize<SearchResponseWrapper>(jsonResponse, _jsonOptions);
-                if (wrapper?.Response == null)
-                    return Error("Error: Unexpected response format from search API.");
+            var wrapper = JsonSerializer.Deserialize<SearchResponseWrapper>(json, _jsonOptions);
+            if (wrapper?.Response == null)
+                return Error("Unexpected response format from search API.");
 
-                var structured = BuildSearchResult(wrapper.Response, searchTerm.Trim());
-                return Success(FormatSearchResults(structured), structured);
-            }
-            catch (Exception ex)
-            {
-                return Error(HandleSearchException(ex));
-            }
+            sw.Stop();
+            var structured = BuildSearchResult(wrapper.Response, trimmedTerm);
+            return Success(BuildSearchText(structured, sw.ElapsedMilliseconds), structured);
         }
 
-        private CallToolResult HandleStatus()
+        // ── Action: status ──────────────────────────────────────────────────────
+
+        private CallToolResult ExecuteStatus()
         {
-            try
-            {
-                // Call both searchstatus and searchstatistics endpoints
-                var statusResponse = _serviceClient.ExecuteWebRequest(
-                    HttpMethod.Get, "searchstatus", string.Empty, null, "application/json");
-                var statusJson = statusResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var statusJson = ExecuteStatusEndpoint("searchstatus");
 
-                if (!statusResponse.IsSuccessStatusCode)
-                    return Error($"Error: searchstatus API returned {(int)statusResponse.StatusCode} {statusResponse.ReasonPhrase}.\n{statusJson}");
+            var statusWrapper = JsonSerializer.Deserialize<SearchResponseWrapper>(statusJson, _jsonOptions);
+            if (statusWrapper?.Response == null)
+                return Error("Unexpected response format from searchstatus API.");
 
-                var statusWrapper = JsonSerializer.Deserialize<SearchResponseWrapper>(statusJson, _jsonOptions);
-                if (statusWrapper?.Response == null)
-                    return Error("Error: Unexpected response format from searchstatus API.");
+            // searchstatistics is optional — any failure (HTTP fault, network,
+            // malformed payload) bubbles up to the top-level catch so the AI can see it.
+            string statisticsJson = null;
+            var statsJson = ExecuteStatusEndpoint("searchstatistics");
+            var statsWrapperLocal = JsonSerializer.Deserialize<SearchResponseWrapper>(statsJson, _jsonOptions);
+            if (statsWrapperLocal?.Response != null)
+                statisticsJson = statsWrapperLocal.Response;
 
-                string statisticsInner = null;
-                try
-                {
-                    var statsResponse = _serviceClient.ExecuteWebRequest(
-                        HttpMethod.Get, "searchstatistics", string.Empty, null, "application/json");
-                    var statsJson = statsResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-
-                    if (statsResponse.IsSuccessStatusCode)
-                    {
-                        var statsWrapper = JsonSerializer.Deserialize<SearchResponseWrapper>(statsJson, _jsonOptions);
-                        statisticsInner = statsWrapper?.Response;
-                    }
-                }
-                catch
-                {
-                    // Statistics is optional — continue without it
-                }
-
-                var structured = BuildStatusResult(statusWrapper.Response, statisticsInner);
-                return Success(FormatStatusResults(structured), structured);
-            }
-            catch (Exception ex)
-            {
-                return Error(HandleSearchException(ex));
-            }
+            var structured = BuildStatusResult(statusWrapper.Response, statisticsJson);
+            return Success(BuildStatusText(structured), structured);
         }
 
-        private static string HandleSearchException(Exception ex)
+        private string ExecuteStatusEndpoint(string endpoint)
         {
-            var fullMessage = BuildFullExceptionMessage(ex);
+            var response = _serviceClient.ExecuteWebRequest(
+                HttpMethod.Get, endpoint, string.Empty, null, "application/json");
+            var json = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
-            if (fullMessage.Contains("0x80048d0b", StringComparison.OrdinalIgnoreCase) ||
-                fullMessage.Contains("0x80060203", StringComparison.OrdinalIgnoreCase) ||
-                fullMessage.Contains("SearchNotEnabled", StringComparison.OrdinalIgnoreCase) ||
-                fullMessage.Contains("not provisioned", StringComparison.OrdinalIgnoreCase) ||
-                fullMessage.Contains("Search feature is disabled", StringComparison.OrdinalIgnoreCase))
-            {
-                return "Error: Dataverse Search is not enabled in this environment.\n" +
-                       "HOW TO ENABLE: Power Platform admin center → select environment → Settings → Product → Features → Dataverse Search → On → Save.\n" +
-                       "Workaround: Use execute_fetchxml with a 'like' filter. Read docs://data_operations_guide for FetchXML search patterns.";
-            }
+            if (!response.IsSuccessStatusCode)
+                throw new InvalidOperationException($"{endpoint} returned {(int)response.StatusCode} {response.ReasonPhrase}: {json}");
 
-            var errorDetail = ex.InnerException != null
-                ? $"{ex.Message} → {ex.InnerException.Message}"
-                : ex.Message;
-            return $"Error: Search failed: {errorDetail}";
+            return json;
         }
 
-        private static string BuildFullExceptionMessage(Exception ex)
-        {
-            var messages = new StringBuilder();
-            var current = ex;
-            while (current != null)
-            {
-                messages.Append(current.Message);
-                messages.Append(' ');
-                current = current.InnerException;
-            }
-            return messages.ToString();
-        }
+        // ── Helpers ─────────────────────────────────────────────────────────────
 
         private List<string> ResolveEntityList(string entities)
         {
-            if (string.IsNullOrWhiteSpace(entities))
-                return [];
+            if (string.IsNullOrWhiteSpace(entities)) return [];
 
-            var inputs = entities
-                .Split(',')
-                .Select(e => e.Trim())
-                .Where(e => !string.IsNullOrEmpty(e))
-                .ToList();
-
-            var resolvedNames = new List<string>();
-            foreach (var input in inputs)
+            var resolved = new List<string>();
+            foreach (var input in entities.Split(',').Select(e => e.Trim()).Where(e => !string.IsNullOrEmpty(e)))
             {
-                var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, input, "search_records");
-                if (!resolved.IsSuccess)
-                    throw new InvalidOperationException($"entities '{input}': {resolved.Error}");
-
-                resolvedNames.Add(resolved.Value.LogicalName);
+                var r = DisplayNameFirstResolver.ResolveEntity(_serviceClient, input, "search_records");
+                if (!r.IsSuccess)
+                    throw new InvalidOperationException($"entities '{input}': {r.Error}");
+                if (!string.IsNullOrWhiteSpace(r.Value?.LogicalName))
+                    resolved.Add(r.Value.LogicalName);
             }
 
-            return resolvedNames
-                .Where(e => !string.IsNullOrWhiteSpace(e))
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .ToList();
-        }
-
-        private static string BuildSearchRequestBody(string searchTerm, string entities, int top, string filter)
-        {
-            var entityList = string.IsNullOrWhiteSpace(entities)
-                ? new List<string>()
-                : entities.Split(',').Select(e => e.Trim()).Where(e => !string.IsNullOrEmpty(e)).ToList();
-            return BuildSearchRequestBody(searchTerm, entityList, top, filter);
+            return resolved.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
         }
 
         private static string BuildSearchRequestBody(string searchTerm, List<string> entities, int top, string filter)
@@ -223,14 +156,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ["top"] = top
             };
 
-            if (entities != null && entities.Count > 0)
-            {
-                var entityList = entities
-                    .Select(e => new SearchEntity { Name = e })
-                    .ToList();
-
-                body["entities"] = JsonSerializer.Serialize(entityList, _jsonOptions);
-            }
+            if (entities.Count > 0)
+                body["entities"] = JsonSerializer.Serialize(
+                    entities.Select(e => new SearchEntity { Name = e }).ToList(),
+                    _jsonOptions);
 
             if (!string.IsNullOrWhiteSpace(filter))
                 body["filter"] = filter.Trim();
@@ -238,23 +167,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return JsonSerializer.Serialize(body, _jsonOptions);
         }
 
-        private static SearchRecordsResult BuildSearchResult(string jsonResponse, string searchTerm)
+        // ── Result builders ─────────────────────────────────────────────────────
+
+        private static SearchRecordsResult BuildSearchResult(string innerJson, string searchTerm)
         {
-            SearchQueryResults results;
-            try
-            {
-                results = JsonSerializer.Deserialize<SearchQueryResults>(jsonResponse, _jsonOptions);
-            }
-            catch
-            {
-                return new SearchRecordsResult
-                {
-                    Action = "search",
-                    SearchTerm = searchTerm,
-                    RawResponse = jsonResponse,
-                    Records = []
-                };
-            }
+            // Malformed JSON bubble ups to top-level catch — do NOT swallow.
+            var results = JsonSerializer.Deserialize<SearchQueryResults>(innerJson, _jsonOptions);
 
             if (results?.Error != null)
             {
@@ -269,14 +187,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var records = results?.Value ?? [];
-            var totalCount = results?.Count ?? records.Count;
-
             return new SearchRecordsResult
             {
                 Action = "search",
                 SearchTerm = searchTerm,
                 ReturnedCount = records.Count,
-                TotalCount = totalCount,
+                TotalCount = results?.Count ?? records.Count,
                 Records = records.Select(r => new SearchRecordEntry
                 {
                     Id = r.Id,
@@ -285,132 +201,38 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Score = r.Score,
                     Attributes = r.Attributes ?? [],
                     Highlights = r.Highlights ?? []
-                }).ToList()
+                }).ToList(),
+                QueryContext = results?.QueryContext == null ? null : new SearchQueryContextEntry
+                {
+                    OriginalQuery = results.QueryContext.OriginalQuery,
+                    AlteredQuery = results.QueryContext.AlteredQuery,
+                    Reason = results.QueryContext.Reason,
+                    SpellSuggestions = results.QueryContext.SpellSuggestions
+                },
+                WarningList = results?.WarningList?.Count > 0 ? results.WarningList : null,
+                ErrorList = results?.ErrorList?.Count > 0 ? results.ErrorList : null
             };
-        }
-
-        private static string FormatSearchResults(string jsonResponse, string searchTerm)
-            => FormatSearchResults(BuildSearchResult(jsonResponse, searchTerm));
-
-        private static string FormatSearchResults(SearchRecordsResult structured)
-        {
-            var sb = new StringBuilder(4096);
-
-            if (!string.IsNullOrEmpty(structured.RawResponse))
-            {
-                sb.AppendLine($"[Search: \"{structured.SearchTerm}\"]");
-                sb.AppendLine(structured.RawResponse);
-                return sb.ToString();
-            }
-
-            if (structured.ErrorCode != null)
-            {
-                sb.AppendLine($"Error: {structured.ErrorCode}");
-                sb.AppendLine($"Message: {structured.ErrorMessage}");
-                return sb.ToString();
-            }
-
-            var records = structured.Records ?? [];
-            var totalCount = structured.TotalCount ?? records.Count;
-
-            var resultWord = records.Count == 1 ? "result" : "results";
-            sb.AppendLine($"[Search: \"{structured.SearchTerm}\"] {records.Count} {resultWord} (total: {totalCount})");
-            sb.AppendLine();
-
-            if (records.Count == 0)
-            {
-                sb.AppendLine("No matching records found.");
-                return sb.ToString();
-            }
-
-            sb.AppendLine("| Entity | Id | Score | Attributes | Highlights |");
-            sb.AppendLine("|---|---|---|---|---|");
-
-            foreach (var record in records)
-            {
-                var attrs = FormatAttributes(record.Attributes);
-                var highlights = FormatHighlights(record.Highlights);
-                sb.AppendLine($"| {EscapePipe(record.EntityName)} | {EscapePipe(record.Id)} | {record.Score:F2} | {EscapePipe(attrs)} | {EscapePipe(highlights)} |");
-            }
-
-            return sb.ToString();
-        }
-
-        private static string FormatAttributes(Dictionary<string, object> attributes)
-        {
-            if (attributes == null || attributes.Count == 0)
-                return "";
-
-            var relevant = attributes
-                .Where(kv => !kv.Key.StartsWith("@search.", StringComparison.OrdinalIgnoreCase))
-                .Where(kv => !kv.Key.Contains("@OData", StringComparison.OrdinalIgnoreCase))
-                .Where(kv => kv.Value != null)
-                .OrderBy(kv => kv.Key);
-
-            return string.Join("; ", relevant.Select(kv =>
-            {
-                var value = kv.Value is JsonElement je ? je.ToString() : kv.Value?.ToString() ?? "";
-                return $"{kv.Key}={value}";
-            }));
-        }
-
-        private static string FormatHighlights(Dictionary<string, string[]> highlights)
-        {
-            if (highlights == null || highlights.Count == 0)
-                return "";
-
-            return string.Join("; ", highlights.Select(kv =>
-            {
-                var values = string.Join(", ", kv.Value.Select(v =>
-                    v.Replace("{crmhit}", "**").Replace("{/crmhit}", "**")));
-                return $"{kv.Key}: {values}";
-            }));
         }
 
         private static SearchRecordsResult BuildStatusResult(string statusJson, string statisticsJson)
         {
-            SearchStatusResult statusResult;
-            try
-            {
-                var statusOuter = JsonSerializer.Deserialize<SearchStatusValueWrapper>(statusJson, _jsonOptions);
-                statusResult = statusOuter?.Value;
-            }
-            catch
-            {
-                return new SearchRecordsResult
-                {
-                    Action = "status",
-                    RawResponse = statusJson
-                };
-            }
+            // Malformed JSON bubble ups to top-level catch — do NOT swallow.
+            var status = JsonSerializer.Deserialize<SearchStatusValueWrapper>(statusJson, _jsonOptions)?.Value;
 
-            if (statusResult == null)
-                return new SearchRecordsResult
-                {
-                    Action = "status",
-                    ErrorMessage = "Unable to parse status response."
-                };
+            if (status == null)
+                return new SearchRecordsResult { Action = "status", ErrorMessage = "Unable to parse status response." };
 
             SearchStatisticsEntry statistics = null;
             if (!string.IsNullOrEmpty(statisticsJson))
             {
-                try
-                {
-                    var statsOuter = JsonSerializer.Deserialize<SearchStatisticsValueWrapper>(statisticsJson, _jsonOptions);
-                    if (statsOuter?.Value != null)
+                var stats = JsonSerializer.Deserialize<SearchStatisticsValueWrapper>(statisticsJson, _jsonOptions)?.Value;
+                if (stats != null)
+                    statistics = new SearchStatisticsEntry
                     {
-                        statistics = new SearchStatisticsEntry
-                        {
-                            StorageSizeInBytes = statsOuter.Value.StorageSizeInBytes,
-                            StorageSizeInMb = statsOuter.Value.StorageSizeInMb,
-                            DocumentCount = statsOuter.Value.DocumentCount
-                        };
-                    }
-                }
-                catch
-                {
-                    // Skip statistics if parse fails
-                }
+                        StorageSizeInBytes = stats.StorageSizeInBytes,
+                        StorageSizeInMb = stats.StorageSizeInMb,
+                        DocumentCount = stats.DocumentCount
+                    };
             }
 
             return new SearchRecordsResult
@@ -418,10 +240,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Action = "status",
                 Status = new SearchStatusEntry
                 {
-                    Status = statusResult.Status,
-                    LockboxStatus = statusResult.LockboxStatus,
-                    CmkStatus = statusResult.CmkStatus,
-                    EntityStatusResults = statusResult.EntityStatusResults?.Select(e => new SearchEntityStatusEntry
+                    Status = status.Status,
+                    LockboxStatus = status.LockboxStatus,
+                    CmkStatus = status.CmkStatus,
+                    EntityStatusResults = status.EntityStatusResults?.Select(e => new SearchEntityStatusEntry
                     {
                         EntityLogicalName = e.EntityLogicalName,
                         ObjectTypeCode = e.ObjectTypeCode,
@@ -429,7 +251,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         EntityStatus = e.EntityStatus,
                         IndexedFields = e.SearchableIndexedFieldInfoMap?.Keys.OrderBy(k => k).ToList()
                     }).ToList(),
-                    ManyToManyRelationshipSyncStatus = statusResult.ManyToManyRelationshipSyncStatus?.Select(r => new SearchManyToManyRelationshipEntry
+                    ManyToManyRelationshipSyncStatus = status.ManyToManyRelationshipSyncStatus?.Select(r => new SearchManyToManyRelationshipEntry
                     {
                         RelationshipName = r.RelationshipName,
                         SearchEntity = r.SearchEntity,
@@ -441,94 +263,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        private static string FormatStatusResults(string statusJson, string statisticsJson) =>
-            FormatStatusResults(BuildStatusResult(statusJson, statisticsJson));
+        // ── One-line text builders ──────────────────────────────────────────────
 
-        private static string FormatStatusResults(SearchRecordsResult structured)
+        private static string BuildSearchText(SearchRecordsResult r, long elapsedMs)
         {
-            var sb = new StringBuilder(4096);
+            if (!string.IsNullOrEmpty(r.ErrorMessage))
+                return $"[Error] {r.ErrorCode}: {r.ErrorMessage}";
 
-            if (!string.IsNullOrEmpty(structured.RawResponse))
-            {
-                sb.AppendLine("[Search Status]");
-                sb.AppendLine(structured.RawResponse);
-                return sb.ToString();
-            }
+            var n = r.ReturnedCount ?? 0;
+            var total = r.TotalCount ?? n;
+            var word = n == 1 ? "result" : "results";
+            var trimmed = r.SearchTerm?.Trim('"') ?? "";
+            return $"[Success] Found {n} {word} ({total} total) for \"{trimmed}\" in {elapsedMs}ms.";
+        }
 
-            if (structured.Status == null)
-            {
-                sb.AppendLine("[Search Status]");
-                sb.AppendLine($"Error: {structured.ErrorMessage ?? "Unable to parse status response."}");
-                return sb.ToString();
-            }
+        private static string BuildStatusText(SearchRecordsResult r)
+        {
+            if (r.Status == null)
+                return $"[Error] {r.ErrorMessage ?? "Unable to parse status response."}";
 
-            var statusResult = structured.Status;
-
-            // Header
-            sb.AppendLine("[Dataverse Relevance Search Status]");
-            sb.AppendLine();
-
-            // Overall status
-            sb.AppendLine("## Configuration");
-            sb.AppendLine();
-            sb.AppendLine($"| Setting | Value |");
-            sb.AppendLine($"|---|---|");
-            sb.AppendLine($"| Search Status | {FormatProvisionStatus(statusResult.Status)} |");
-            sb.AppendLine($"| Lockbox Status | {statusResult.LockboxStatus ?? "N/A"} |");
-            if (!string.IsNullOrEmpty(statusResult.CmkStatus))
-                sb.AppendLine($"| CMK Status | {statusResult.CmkStatus} |");
-
-            // Statistics (if available)
-            if (structured.Statistics != null)
-            {
-                sb.AppendLine($"| Storage Size | {structured.Statistics.StorageSizeInMb} MB ({structured.Statistics.StorageSizeInBytes:N0} bytes) |");
-                sb.AppendLine($"| Document Count | {structured.Statistics.DocumentCount:N0} |");
-            }
-
-            sb.AppendLine();
-
-            // Entity status
-            var entities = statusResult.EntityStatusResults;
-            if (entities == null || entities.Count == 0)
-            {
-                if (string.Equals(statusResult.Status, "notprovisioned", StringComparison.OrdinalIgnoreCase))
-                    sb.AppendLine("Search is not provisioned. No entities are indexed.");
-                else
-                    sb.AppendLine("No entities are currently indexed.");
-                return sb.ToString();
-            }
-
-            sb.AppendLine($"## Indexed Entities ({entities.Count})");
-            sb.AppendLine();
-            sb.AppendLine("| Entity | OTC | Primary Field | Sync Status | Indexed Fields |");
-            sb.AppendLine("|---|---|---|---|---|");
-
-            foreach (var entity in entities.OrderBy(e => e.EntityLogicalName))
-            {
-                var fieldCount = entity.IndexedFields?.Count ?? 0;
-                var fieldNames = entity.IndexedFields != null
-                    ? string.Join(", ", entity.IndexedFields)
-                    : "";
-                var fieldsSummary = fieldCount > 0 ? $"{fieldCount} fields: {EscapePipe(fieldNames)}" : "0 fields";
-                sb.AppendLine($"| {EscapePipe(entity.EntityLogicalName)} | {entity.ObjectTypeCode} | {EscapePipe(entity.PrimaryNameField ?? "")} | {EscapePipe(entity.EntityStatus ?? "")} | {fieldsSummary} |");
-            }
-
-            // Many-to-many relationships
-            var m2mRelations = statusResult.ManyToManyRelationshipSyncStatus;
-            if (m2mRelations != null && m2mRelations.Count > 0)
-            {
-                sb.AppendLine();
-                sb.AppendLine($"## Many-to-Many Relationships ({m2mRelations.Count})");
-                sb.AppendLine();
-                sb.AppendLine("| Relationship | Search Entity | Related Entity | Intersect Entity |");
-                sb.AppendLine("|---|---|---|---|");
-
-                foreach (var rel in m2mRelations.OrderBy(r => r.RelationshipName))
-                {
-                    sb.AppendLine($"| {EscapePipe(rel.RelationshipName ?? "")} | {EscapePipe(rel.SearchEntity ?? "")} | {EscapePipe(rel.RelatedEntity ?? "")} | {EscapePipe(rel.IntersectEntity ?? "")} |");
-                }
-            }
-
+            var s = r.Status;
+            var indexedCount = s.EntityStatusResults?.Count ?? 0;
+            var sb = new System.Text.StringBuilder(128);
+            sb.Append("[Success] Search ").Append(FormatProvisionStatus(s.Status));
+            sb.Append(" | ").Append(indexedCount).Append(" indexed entities");
+            if (r.Statistics != null)
+                sb.Append(" | ").Append(r.Statistics.StorageSizeInMb).Append(" MB, ").Append(r.Statistics.DocumentCount).Append(" docs");
+            sb.Append('.');
             return sb.ToString();
         }
 
@@ -543,9 +304,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _ => status
             };
         }
-
-        private static string EscapePipe(string value) =>
-            value.Replace("|", "\\|").Replace("\n", " ").Replace("\r", "");
 
         private static readonly JsonSerializerOptions _jsonOptions = new()
         {
@@ -567,36 +325,114 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             public string Name { get; set; } = "";
 
             [JsonPropertyName("selectColumns")]
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public List<string> SelectColumns { get; set; }
 
             [JsonPropertyName("searchColumns")]
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public List<string> SearchColumns { get; set; }
 
             [JsonPropertyName("filter")]
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public string Filter { get; set; }
         }
 
         private sealed class SearchQueryResults
         {
+            // Verified PascalCase from Dev.AllInOne.Console probe (30.07.2026):
+            //   { "Error": null, "Value": [...], "Facets": {},
+            //     "QueryContext": {...}, "Count": 1, "WarningList": [],
+            //     "ErrorList": [], "FullSyncIsInProgress": null }
+            [JsonPropertyName("Error")]
             public SearchErrorDetail Error { get; set; }
+
+            [JsonPropertyName("Value")]
             public List<QueryResult> Value { get; set; }
+
+            [JsonPropertyName("Count")]
             public long Count { get; set; }
+
+            [JsonPropertyName("Facets")]
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+            public Dictionary<string, object> Facets { get; set; }
+
+            [JsonPropertyName("QueryContext")]
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+            public SearchQueryContext QueryContext { get; set; }
+
+            [JsonPropertyName("WarningList")]
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+            public List<string> WarningList { get; set; }
+
+            [JsonPropertyName("ErrorList")]
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+            public List<string> ErrorList { get; set; }
+
+            [JsonPropertyName("FullSyncIsInProgress")]
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+            public bool? FullSyncIsInProgress { get; set; }
+        }
+
+        private sealed class SearchQueryContext
+        {
+            [JsonPropertyName("OriginalQuery")]
+            public string OriginalQuery { get; set; }
+
+            [JsonPropertyName("AlteredQuery")]
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+            public string AlteredQuery { get; set; }
+
+            [JsonPropertyName("Reason")]
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+            public string Reason { get; set; }
+
+            [JsonPropertyName("SpellSuggestions")]
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+            public List<string> SpellSuggestions { get; set; }
         }
 
         private sealed class SearchErrorDetail
         {
+            [JsonPropertyName("Code")]
             public string Code { get; set; }
+
+            [JsonPropertyName("Message")]
             public string Message { get; set; }
         }
 
         private sealed class QueryResult
         {
+            // Exact PascalCase JSON keys returned by Dataverse /searchquery.
+            // Verified via Dev.AllInOne.Console probe on 30.07.2026:
+            //   "Id": "...",
+            //   "EntityName": "account",
+            //   "ObjectTypeCode": 0,         <-- server always returns 0 here;
+            //                                   real OTC is inside attributes["@search.objecttypecode"]
+            //   "Attributes": { ..., "@search.objecttypecode": 1, ... },
+            //   "Highlights": { "name": ["..."] },
+            //   "Score": 14.69,
+            //   "SemanticSearchResult": null
+            [JsonPropertyName("Id")]
             public string Id { get; set; } = "";
+
+            [JsonPropertyName("EntityName")]
             public string EntityName { get; set; } = "";
+
+            [JsonPropertyName("ObjectTypeCode")]
             public int ObjectTypeCode { get; set; }
+
+            [JsonPropertyName("Attributes")]
             public Dictionary<string, object> Attributes { get; set; } = [];
+
+            [JsonPropertyName("Highlights")]
             public Dictionary<string, string[]> Highlights { get; set; } = [];
+
+            [JsonPropertyName("Score")]
             public double Score { get; set; }
+
+            [JsonPropertyName("SemanticSearchResult")]
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+            public object SemanticSearchResult { get; set; }
         }
 
         #endregion
@@ -605,11 +441,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private sealed class SearchStatusValueWrapper
         {
+            [JsonPropertyName("value")]
             public SearchStatusResult Value { get; set; }
         }
 
         private sealed class SearchStatusResult
         {
+            [JsonPropertyName("status")]
             public string Status { get; set; }
 
             [JsonPropertyName("lockboxstatus")]
@@ -635,12 +473,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             [JsonPropertyName("primarynamefield")]
             public string PrimaryNameField { get; set; }
-
-            [JsonPropertyName("lastdatasynctimestamp")]
-            public string LastDataSyncTimestamp { get; set; }
-
-            [JsonPropertyName("lastprincipalobjectaccesssynctimestamp")]
-            public string LastPrincipalObjectAccessSyncTimestamp { get; set; }
 
             [JsonPropertyName("entitystatus")]
             public string EntityStatus { get; set; }
@@ -672,6 +504,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private sealed class SearchStatisticsValueWrapper
         {
+            [JsonPropertyName("value")]
             public SearchStatisticsResult Value { get; set; }
         }
 

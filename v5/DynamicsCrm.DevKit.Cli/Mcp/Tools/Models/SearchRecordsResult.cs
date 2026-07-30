@@ -24,6 +24,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<SearchRecordEntry> Records { get; set; }
 
+        [JsonPropertyName("queryContext")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public SearchQueryContextEntry QueryContext { get; set; }
+
+        [JsonPropertyName("warningList")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> WarningList { get; set; }
+
+        [JsonPropertyName("errorList")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> ErrorList { get; set; }
+
         [JsonPropertyName("status")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public SearchStatusEntry Status { get; set; }

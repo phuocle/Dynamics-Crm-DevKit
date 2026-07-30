@@ -11,6 +11,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("entityName")]
         public string EntityName { get; set; }
 
+        // Dataverse /searchquery response uses PascalCase for these top-level
+        // fields (verified via Dev.AllInOne.Console probe on 30.07.2026):
+        //   "ObjectTypeCode": 0,         <-- top-level, but server returns 0;
+        //                                    the REAL OTC lives inside attributes["@search.objecttypecode"]
+        //   "Score": 14.69               <-- top-level, real relevance score
+        // (Earlier versions used lowercase "objecttypecode" + "@search.score", which
+        // always produced 0.0 because those keys are NOT in the response.)
         [JsonPropertyName("objectTypeCode")]
         public int ObjectTypeCode { get; set; }
 

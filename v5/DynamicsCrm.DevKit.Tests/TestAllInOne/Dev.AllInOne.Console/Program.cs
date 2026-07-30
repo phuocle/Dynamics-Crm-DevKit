@@ -1,152 +1,141 @@
 using System;
-using System.ServiceModel;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using Microsoft.PowerPlatform.Dataverse.Client;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
+using SysConsole = System.Console;
 
 namespace Dev.AllInOne.Console
 {
+    // Probes Dataverse Relevance Search raw response shapes so we can update
+    // the MCP SearchRecordsTool models to match what the server actually sends.
+    //
+    // Uses App.Service (reads URL/ClientId/ClientSecret from App.config or .env,
+    // never hard-coded) -- same ServiceClient the MCP tool uses.
     public class Program
     {
         static void Main()
         {
-            System.Console.OutputEncoding = Encoding.UTF8;
+            SysConsole.OutputEncoding = Encoding.UTF8;
 
-            var url = "https://dynamics-crm-devkit-v4.crm.dynamics.com";
-            var clientId = "1a60a5c2-d04c-4b26-8f86-9d6ce0616799";
-            var clientSecret = "~je8Q~4DL221zUgKOaHq-EWMlowkpl3KEbZItccL";
-
-            System.Console.WriteLine($"Connecting to {url} ...");
-            var connectionString = $"AuthType=ClientSecret;Url={url};ClientId={clientId};ClientSecret={clientSecret};RequireNewInstance=true";
-            using (var serviceClient = new ServiceClient(connectionString))
+            SysConsole.WriteLine("Connecting via App.Service ...");
+            var svc = App.Service;
+            if (!svc.IsReady)
             {
-                if (!serviceClient.IsReady)
+                SysConsole.WriteLine("ERROR: " + svc.LastError);
+                return;
+            }
+            SysConsole.WriteLine("Connected OK to " + svc.ConnectedOrgUriActual + Environment.NewLine);
+
+            RunSearch(svc, "Boyle", top: 3);
+            RunSearch(svc, "Inc", top: 5);
+            RunSearch(svc, "Boyle", top: 3, entities: new List<string> { "account", "contact" });
+            RunStatus(svc);
+        }
+
+        // Raw POST to /api/search/v1.0/searchquery -- exact endpoint the MCP tool uses.
+        private static void RunSearch(ServiceClient svc, string term, int top, List<string> entities = null)
+        {
+            SysConsole.WriteLine("===============================================================");
+            SysConsole.WriteLine("SEARCH  term='" + term + "'  top=" + top +
+                                "  entities=" + (entities == null ? "(all)" : string.Join(",", entities)));
+            SysConsole.WriteLine("===============================================================");
+
+            var body = new Dictionary<string, object>
+            {
+                ["search"] = term,
+                ["count"] = true,
+                ["top"] = top
+            };
+            if (entities != null && entities.Count > 0)
+            {
+                // Match the MCP tool's exact body shape: "entities" is a JSON-encoded
+                // STRING (not an inline array) containing objects with a "name" field.
+                var entityList = entities.Select(e => new { name = e }).ToList();
+                body["entities"] = JsonSerializer.Serialize(entityList);
+            }
+
+            var requestBody = JsonSerializer.Serialize(body);
+            SysConsole.WriteLine("--- REQUEST BODY ---" + Environment.NewLine + requestBody + Environment.NewLine);
+
+            var response = svc.ExecuteWebRequest(
+                HttpMethod.Post, "searchquery", requestBody, null, "application/json");
+
+            var json = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            SysConsole.WriteLine("--- HTTP " + (int)response.StatusCode + " " + response.ReasonPhrase + " ---");
+            Dump(json);
+            SysConsole.WriteLine();
+        }
+
+        private static void RunStatus(ServiceClient svc)
+        {
+            SysConsole.WriteLine("===============================================================");
+            SysConsole.WriteLine("STATUS  GET /api/search/v1.0/searchstatus");
+            SysConsole.WriteLine("===============================================================");
+            var resp = svc.ExecuteWebRequest(
+                HttpMethod.Get, "searchstatus", string.Empty, null, "application/json");
+            var json = resp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            SysConsole.WriteLine("--- HTTP " + (int)resp.StatusCode + " " + resp.ReasonPhrase + " ---");
+            Dump(json);
+            SysConsole.WriteLine();
+
+            SysConsole.WriteLine("===============================================================");
+            SysConsole.WriteLine("STATUS  GET /api/search/v1.0/searchstatistics");
+            SysConsole.WriteLine("===============================================================");
+            resp = svc.ExecuteWebRequest(
+                HttpMethod.Get, "searchstatistics", string.Empty, null, "application/json");
+            json = resp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            SysConsole.WriteLine("--- HTTP " + (int)resp.StatusCode + " " + resp.ReasonPhrase + " ---");
+            Dump(json);
+            SysConsole.WriteLine();
+        }
+
+        // Dataverse wraps everything in { "response": "<JSON string>" }.
+        // Print the outer wrapper, then pretty-print the inner JSON if present.
+        private static void Dump(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                SysConsole.WriteLine("(empty)");
+                return;
+            }
+
+            using var doc = JsonDocument.Parse(json);
+            var root = doc.RootElement;
+
+            if (root.ValueKind == JsonValueKind.Object &&
+                root.TryGetProperty("response", out var respProp) &&
+                respProp.ValueKind == JsonValueKind.String)
+            {
+                var inner = respProp.GetString();
+                if (string.IsNullOrWhiteSpace(inner))
                 {
-                    System.Console.WriteLine($"ERROR: {serviceClient.LastError}");
+                    SysConsole.WriteLine("(inner response is empty)");
                     return;
                 }
-                System.Console.WriteLine("Connected OK.\n");
 
-                // ── Get "My Active Accounts" view FetchXML (known VALID) ──
-                var query = new QueryExpression("savedquery")
+                try
                 {
-                    ColumnSet = new ColumnSet("name", "fetchxml"),
-                    TopCount = 1
-                };
-                query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, "account");
-                query.Criteria.AddCondition("name", ConditionOperator.Like, "%Active Account%");
-                query.Criteria.AddCondition("querytype", ConditionOperator.Equal, 0);
-
-                var view = serviceClient.RetrieveMultiple(query).Entities[0];
-                var validFetch = view.GetAttributeValue<string>("fetchxml");
-                System.Console.WriteLine($"View: {view.GetAttributeValue<string>("name")}");
-                System.Console.WriteLine($"FetchXML (valid): {validFetch.Substring(0, 80)}...\n");
-
-                // ── Also test with INVALID FetchXML ──
-                var invalidFetch = "<fetch><entity name='account'><attribute name='DOES_NOT_EXIST_xyz' /></entity></fetch>";
-
-                // ═══════════════════════════════════════════════════
-                // APPROACH 1: catch (Exception) + check message
-                // ═══════════════════════════════════════════════════
-                System.Console.WriteLine("═══ APPROACH 1: catch (Exception) + Contains check ═══");
-                System.Console.WriteLine("[VALID  FetchXML] → " + Approach1(serviceClient, validFetch));
-                System.Console.WriteLine("[INVALID FetchXML] → " + Approach1(serviceClient, invalidFetch));
-                System.Console.WriteLine();
-
-                // ═══════════════════════════════════════════════════
-                // APPROACH 2: catch (FaultException) non-generic
-                // NetDispatcherFaultException : FaultException
-                // ═══════════════════════════════════════════════════
-                System.Console.WriteLine("═══ APPROACH 2: catch (FaultException) non-generic ═══");
-                System.Console.WriteLine("[VALID  FetchXML] → " + Approach2(serviceClient, validFetch));
-                System.Console.WriteLine("[INVALID FetchXML] → " + Approach2(serviceClient, invalidFetch));
-                System.Console.WriteLine();
-
-                // ═══════════════════════════════════════════════════
-                // APPROACH 3: catch (Exception) simple — return null
-                // for any "ValidateFetchXmlExpressionResult" mention
-                // ═══════════════════════════════════════════════════
-                System.Console.WriteLine("═══ APPROACH 3: catch (Exception) with when clause ═══");
-                System.Console.WriteLine("[VALID  FetchXML] → " + Approach3(serviceClient, validFetch));
-                System.Console.WriteLine("[INVALID FetchXML] → " + Approach3(serviceClient, invalidFetch));
-                System.Console.WriteLine();
-
-                System.Console.WriteLine("── Done ──");
+                    using var innerDoc = JsonDocument.Parse(inner);
+                    SysConsole.WriteLine("--- INNER (pretty) ---");
+                    SysConsole.WriteLine(JsonSerializer.Serialize(innerDoc.RootElement,
+                        new JsonSerializerOptions { WriteIndented = true }));
+                    SysConsole.WriteLine("--- INNER (compact) ---");
+                    SysConsole.WriteLine(JsonSerializer.Serialize(innerDoc.RootElement));
+                }
+                catch (JsonException)
+                {
+                    SysConsole.WriteLine("--- INNER (raw, not JSON) ---");
+                    SysConsole.WriteLine(inner);
+                }
             }
-        }
-
-        // Approach 1: catch all Exception, check message contains
-        static string Approach1(ServiceClient svc, string fetchXml)
-        {
-            try
+            else
             {
-                var req = new OrganizationRequest("ValidateFetchXmlExpression");
-                req["FetchXml"] = fetchXml;
-                svc.Execute(req);
-                return "null (SDK returned normally)";
-            }
-            catch (Exception ex) when (ex.Message?.Contains("ValidateFetchXmlExpressionResult") == true)
-            {
-                return $"null (SDK threw {ex.GetType().Name} but message contains Result → valid)";
-            }
-            catch (FaultException<OrganizationServiceFault> ex)
-            {
-                return $"ERROR: {ex.Detail?.Message ?? ex.Message}";
-            }
-            catch (Exception ex)
-            {
-                return $"UNEXPECTED: [{ex.GetType().Name}] {ex.Message?.Substring(0, Math.Min(120, ex.Message.Length))}";
-            }
-        }
-
-        // Approach 2: catch FaultException (non-generic base class)
-        static string Approach2(ServiceClient svc, string fetchXml)
-        {
-            try
-            {
-                var req = new OrganizationRequest("ValidateFetchXmlExpression");
-                req["FetchXml"] = fetchXml;
-                svc.Execute(req);
-                return "null (SDK returned normally)";
-            }
-            catch (FaultException ex) when (ex.Message?.Contains("ValidateFetchXmlExpressionResult") == true)
-            {
-                return $"null (FaultException with Result → valid, type={ex.GetType().Name})";
-            }
-            catch (FaultException<OrganizationServiceFault> ex)
-            {
-                return $"ERROR: {ex.Detail?.Message ?? ex.Message}";
-            }
-            catch (Exception ex)
-            {
-                return $"UNEXPECTED: [{ex.GetType().Name}] {ex.Message?.Substring(0, Math.Min(120, ex.Message.Length))}";
-            }
-        }
-
-        // Approach 3: catch Exception with when — cleanest
-        static string Approach3(ServiceClient svc, string fetchXml)
-        {
-            try
-            {
-                var req = new OrganizationRequest("ValidateFetchXmlExpression");
-                req["FetchXml"] = fetchXml;
-                svc.Execute(req);
-                return "null (SDK returned normally)";
-            }
-            catch (Exception ex) when (
-                ex.Message?.Contains("ValidateFetchXmlExpressionResult") == true
-                || ex.InnerException?.Message?.Contains("ValidateFetchXmlExpressionResult") == true)
-            {
-                return $"null (valid — caught {ex.GetType().Name}, 'Result' in message)";
-            }
-            catch (FaultException<OrganizationServiceFault> ex)
-            {
-                return $"ERROR (FaultException<OSF>): {ex.Detail?.Message ?? ex.Message}";
-            }
-            catch (Exception ex)
-            {
-                return $"ERROR (other): [{ex.GetType().Name}] {ex.Message?.Substring(0, Math.Min(200, ex.Message.Length))}";
+                SysConsole.WriteLine("--- BODY ---");
+                SysConsole.WriteLine(JsonSerializer.Serialize(root,
+                    new JsonSerializerOptions { WriteIndented = true }));
             }
         }
     }
