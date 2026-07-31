@@ -94,10 +94,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? EnabledTableCount { get; set; }
 
-        [JsonPropertyName("auditEnabled")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? AuditEnabled { get; set; }
-
         [JsonPropertyName("dataverseVersion")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string DataverseVersion { get; set; }

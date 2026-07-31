@@ -1,4 +1,4 @@
-using Microsoft.PowerPlatform.Dataverse.Client;
+﻿using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
@@ -27,15 +27,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         [McpServerTool(Name = "manage_deleted_records",
             Title = "List/detail/restore/check-status of soft-deleted Dataverse records",
-            Idempotent = false,                // restore mutates
-            Destructive = false,               // restore = inverse of delete
-            ReadOnly = false,                  // restore writes
+            Idempotent = false,
+            Destructive = false,
+            ReadOnly = false,
             UseStructuredContent = true,
             OutputSchemaType = typeof(ManageDeletedRecordsResult)),
         Description(
             "List / detail / restore / status for soft-deleted records. " +
             "Soft-delete = IOrganizationService.Delete (records recoverable for up to MaxRetentionDays, default 30). " +
-            "Uses FetchXml datasource='bin' for list/detail (bin exposes only entity attributes — no 'deletedon'/'deletedby', use 'modifiedOn' as proxy). " +
+            "Uses FetchXml datasource='bin' for list/detail (bin exposes only entity attributes â€” no 'deletedon'/'deletedby', use 'modifiedOn' as proxy). " +
             "Restore uses OrganizationRequest('Restore') late-bound. " +
             "RELATED: manage_record (live CRUD), execute_webapi (raw), get_audit_history (who deleted).")]
         public CallToolResult manage_deleted_records(
@@ -68,9 +68,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        // ====================================================================
-        //  action="list"
-        // ====================================================================
         private CallToolResult ExecuteList(string entityName, string nameFilter, int maxRecords)
         {
             if (string.IsNullOrWhiteSpace(entityName))
@@ -83,7 +80,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             entityName = entityName.Trim();
             nameFilter = nameFilter?.Trim() ?? "";
 
-            // Resolve Display Name → logical name
             var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_deleted_records");
             if (!entityResult.IsSuccess)
                 return Error($"entity_name '{entityName}': {entityResult.Error}");
@@ -92,11 +88,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var primaryKey = entityResult.Value.PrimaryIdAttribute ?? GetPrimaryKeyAttribute(logicalName);
             var primaryName = entityResult.Value.PrimaryNameAttribute ?? GetPrimaryNameAttribute(logicalName);
 
-            // Build FetchXml with datasource="bin"
             var fetchXml = BuildListFetchXml(logicalName, primaryKey, primaryName, nameFilter, maxRecords);
             var ec = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
 
-            // Try to get maxRetentionDays from recyclebinconfig for expiresOn computation
             var maxRetentionDays = GetMaxRetentionDays();
 
             var records = new List<DeletedRecordEntry>();
@@ -156,9 +150,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return sb.ToString();
         }
 
-        // ====================================================================
-        //  action="detail"
-        // ====================================================================
         private CallToolResult ExecuteDetail(string entityName, string recordId)
         {
             if (string.IsNullOrWhiteSpace(entityName))
@@ -190,21 +181,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                            $"  </entity>" +
                            $"</fetch>";
 
-            EntityCollection ec;
-            try
-            {
-                ec = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            }
-            catch (Exception ex) when (ex.Message?.IndexOf("attribute with Name", StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                // Some entities' primaryKey attribute may differ; fall back to attribute-name omitted
-                return Error($"Failed to query bin for entity '{logicalName}'. The primary key attribute '{primaryKey}' may not be valid.",
-                    "Try a different entity or use action='list' to see available records.");
-            }
+            EntityCollection ec = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
 
             if (ec.Entities.Count == 0)
             {
-                // Not in bin. Hint to try live table (manage_record).
                 var notFound = new ManageDeletedRecordsResult
                 {
                     Action = "detail",
@@ -220,7 +200,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var entity = ec.Entities[0];
             var maxRetentionDays = GetMaxRetentionDays();
 
-            // Build attributes dict (formatted values) — skip null/empty
             var attributes = new Dictionary<string, string>();
             foreach (var kv in entity.Attributes.OrderBy(k => k.Key))
             {
@@ -253,12 +232,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success($"[Success] {logicalName} {entity.Id}: {attributes.Count} attributes from bin.", structured);
         }
 
-        // ====================================================================
-        //  action="restore"
-        // ====================================================================
         private CallToolResult ExecuteRestore(string entityName, string recordId, string[] recordIds, bool dryRun)
         {
-            // Normalize input — prefer record_ids (array) over record_id (single)
             var guids = new List<string>();
             if (recordIds != null && recordIds.Length > 0)
                 guids.AddRange(recordIds.Where(g => !string.IsNullOrWhiteSpace(g)));
@@ -269,7 +244,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("record_id or record_ids is required when action='restore'.",
                     "Pass 1+ GUIDs of soft-deleted records (e.g. record_id='abc-...' or record_ids=['abc-...','def-...']).");
 
-            // Validate GUIDs
             for (int i = 0; i < guids.Count; i++)
             {
                 if (!Guid.TryParse(guids[i].Trim(), out _))
@@ -277,7 +251,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 guids[i] = guids[i].Trim();
             }
 
-            // Resolve entity_name (required for restore — we need to know the entity to build Target Entity)
             if (string.IsNullOrWhiteSpace(entityName))
                 return Error("entity_name is required when action='restore'.",
                     "Pass entity_name (e.g. 'Account' or 'account'). Even when restoring mixed entities, entity_name is required to build the Target Entity.");
@@ -289,14 +262,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var logicalName = entityResult.Value.LogicalName;
             var displayName = entityResult.Value.DisplayName?.UserLocalizedLabel?.Label ?? logicalName;
 
-            // Dry-run: just preview, don't actually call Restore
             if (dryRun)
             {
                 var previewResults = guids.Select(g => new RestoreResultEntry
                 {
                     RecordId = g,
                     Status = "would-restore",
-                    Message = "dry_run=true — no actual restore performed"
+                    Message = "dry_run=true â€” no actual restore performed"
                 }).ToList();
 
                 var previewStructured = new ManageDeletedRecordsResult
@@ -315,39 +287,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Success(previewText, previewStructured);
             }
 
-            // Actual restore: loop each GUID, call OrganizationRequest("Restore")
             var results = new List<RestoreResultEntry>();
-            int restored = 0, failed = 0;
+            int restored = 0;
             foreach (var g in guids)
             {
-                try
+                var request = new OrganizationRequest("Restore")
                 {
-                    var request = new OrganizationRequest("Restore")
-                    {
-                        Parameters = { { "Target", new Entity(logicalName, Guid.Parse(g)) } }
-                    };
-                    var response = _serviceClient.Execute(request);
-                    var restoredId = response.Results.ContainsKey("id") ? response.Results["id"]?.ToString() : g;
-                    results.Add(new RestoreResultEntry
-                    {
-                        RecordId = g,
-                        Status = "restored",
-                        Message = null,
-                        RestoredRecordId = restoredId
-                    });
-                    restored++;
-                }
-                catch (Exception ex)
+                    Parameters = { { "Target", new Entity(logicalName, Guid.Parse(g)) } }
+                };
+                var response = _serviceClient.Execute(request);
+                var restoredId = response.Results.ContainsKey("id") ? response.Results["id"]?.ToString() : g;
+                results.Add(new RestoreResultEntry
                 {
-                    var message = ExtractDataverseErrorMessage(ex);
-                    results.Add(new RestoreResultEntry
-                    {
-                        RecordId = g,
-                        Status = "failed",
-                        Message = message
-                    });
-                    failed++;
-                }
+                    RecordId = g,
+                    Status = "restored",
+                    RestoredRecordId = restoredId
+                });
+                restored++;
             }
 
             var structured = new ManageDeletedRecordsResult
@@ -358,20 +314,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 DryRun = false,
                 TotalRequested = guids.Count,
                 Restored = restored,
-                Failed = failed,
+                Failed = 0,
                 Results = results
             };
 
-            var text = failed == 0
-                ? $"[Success] {logicalName}: Restored {restored}/{guids.Count} record(s)."
-                : $"[Success] {logicalName}: Restored {restored}/{guids.Count} — {failed} failed.";
+            var text = $"[Success] {logicalName}: Restored {restored}/{guids.Count} record(s).";
 
             return Success(text, structured);
         }
 
-        // ====================================================================
-        //  action="status"
-        // ====================================================================
         private CallToolResult ExecuteStatus()
         {
             var orgConfig = GetOrgRecycleBinConfig();
@@ -380,23 +331,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var enabledTableCount = CountEnabledTables();
 
-            // auditEnabled: best-effort from whoami-style query (optional). If it fails, omit.
-            bool? auditEnabled = TryGetAuditEnabled();
-
             var structured = new ManageDeletedRecordsResult
             {
                 Action = "status",
                 SoftDeleteSupported = softDeleteSupported,
-                MaxRetentionDays = 30,         // hard cap from Microsoft docs
+                MaxRetentionDays = 30,
                 CurrentRetentionDays = maxRetentionDays,
                 EnabledTableCount = enabledTableCount,
-                AuditEnabled = auditEnabled,
                 DataverseVersion = _serviceClient.ConnectedOrgVersion?.ToString()
             };
 
             var warnings = new List<string>();
             if (orgConfig == null)
-                warnings.Add("Org-level RecycleBinConfig row not found — deleted record keeping may be disabled.");
+                warnings.Add("Org-level RecycleBinConfig row not found â€” deleted record keeping may be disabled.");
             if (maxRetentionDays >= 30)
                 warnings.Add("CleanupIntervalInDays at or near max (30). Records older than 30 days are auto-purged and cannot be restored.");
 
@@ -409,9 +356,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success(text, structured);
         }
 
-        // ====================================================================
-        //  Helpers
-        // ====================================================================
 
         private sealed class OrgRecycleBinConfig
         {
@@ -421,30 +365,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private OrgRecycleBinConfig GetOrgRecycleBinConfig()
         {
-            try
+            var qe = new QueryExpression("recyclebinconfig")
             {
-                var qe = new QueryExpression("recyclebinconfig")
+                ColumnSet = new ColumnSet("cleanupintervalindays", "isreadyforrecyclebin"),
+                Criteria = new FilterExpression(LogicalOperator.And)
                 {
-                    ColumnSet = new ColumnSet("cleanupintervalindays", "isreadyforrecyclebin"),
-                    Criteria = new FilterExpression(LogicalOperator.And)
-                    {
-                        Conditions = { new ConditionExpression("name", ConditionOperator.Equal, "organization") }
-                    },
-                    TopCount = 1
-                };
-                var ec = _serviceClient.RetrieveMultiple(qe);
-                var row = ec.Entities.FirstOrDefault();
-                if (row == null) return null;
-                return new OrgRecycleBinConfig
-                {
-                    CleanupIntervalInDays = row.GetAttributeValue<int?>("cleanupintervalindays"),
-                    IsReadyForRecycleBin = row.GetAttributeValue<bool?>("isreadyforrecyclebin")
-                };
-            }
-            catch
+                    Conditions = { new ConditionExpression("name", ConditionOperator.Equal, "organization") }
+                },
+                TopCount = 1
+            };
+            var ec = _serviceClient.RetrieveMultiple(qe);
+            var row = ec.Entities.FirstOrDefault();
+            if (row == null) return null;
+            return new OrgRecycleBinConfig
             {
-                return null;
-            }
+                CleanupIntervalInDays = row.GetAttributeValue<int?>("cleanupintervalindays"),
+                IsReadyForRecycleBin = row.GetAttributeValue<bool?>("isreadyforrecyclebin")
+            };
         }
 
         private int GetMaxRetentionDays()
@@ -455,9 +392,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private int CountEnabledTables()
         {
-            try
-            {
-                var fetch = @"<fetch aggregate='true'>
+            var fetch = @"<fetch aggregate='true'>
   <entity name='recyclebinconfig'>
     <attribute name='recyclebinconfigid' aggregate='count' alias='count_enabled'/>
     <filter type='and'>
@@ -466,44 +401,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     </filter>
   </entity>
 </fetch>";
-                var ec = _serviceClient.RetrieveMultiple(new FetchExpression(fetch));
-                // aggregate result returns aliased column
-                var row = ec.Entities.FirstOrDefault();
-                if (row != null && row.Attributes.ContainsKey("count_enabled"))
-                {
-                    var aliased = row["count_enabled"] as AliasedValue;
-                    if (aliased?.Value is int n) return n;
-                    if (aliased?.Value is long l) return (int)l;
-                }
-                return 0;
-            }
-            catch
+            var ec = _serviceClient.RetrieveMultiple(new FetchExpression(fetch));
+            var row = ec.Entities.FirstOrDefault();
+            if (row != null && row.Attributes.ContainsKey("count_enabled"))
             {
-                return 0;
+                var aliased = row["count_enabled"] as AliasedValue;
+                if (aliased?.Value is int n) return n;
+                if (aliased?.Value is long l) return (int)l;
             }
+            return 0;
         }
 
-        private bool? TryGetAuditEnabled()
-        {
-            try
-            {
-                var qe = new QueryExpression("organization")
-                {
-                    ColumnSet = new ColumnSet("isauditenabled"),
-                    TopCount = 1
-                };
-                var ec = _serviceClient.RetrieveMultiple(qe);
-                var org = ec.Entities.FirstOrDefault();
-                return org?.GetAttributeValue<bool?>("isauditenabled");
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        // Heuristic primary key/name — works for most OOB + custom tables.
-        // Special cases: activitypointer, etc. fall back to common patterns.
         private static string GetPrimaryKeyAttribute(string entityLogicalName)
         {
             if (entityLogicalName.EndsWith("ies", StringComparison.OrdinalIgnoreCase))
@@ -538,16 +446,5 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string EscapeXml(string s) =>
             string.IsNullOrEmpty(s) ? s : s.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;").Replace("'", "&apos;");
-
-        private static string ExtractDataverseErrorMessage(Exception ex)
-        {
-            if (ex is System.ServiceModel.FaultException<OrganizationServiceFault> fex && fex.Detail != null)
-            {
-                var code = $"0x{fex.Detail.ErrorCode:X8}";
-                var msg = fex.Detail.Message ?? ex.Message;
-                return $"{code}: {msg}";
-            }
-            return ex.Message ?? "Unknown error";
-        }
     }
 }
