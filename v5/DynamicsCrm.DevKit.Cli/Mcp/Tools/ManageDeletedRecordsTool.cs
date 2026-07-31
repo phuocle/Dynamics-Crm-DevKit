@@ -58,8 +58,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "list" => ExecuteList(entity_name, name_filter, max_records),
                     "detail" => ExecuteDetail(entity_name, record_id),
                     "restore" => ExecuteRestore(entity_name, record_id, record_ids, dry_run),
-                    "status" => ExecuteStatus(),
-                    _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'restore', 'status'.")
+                    _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'restore'. For org status, use manage_recycle_bin(action='status').")
                 };
             }
             catch (Exception ex)
@@ -323,93 +322,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success(text, structured);
         }
 
-        private CallToolResult ExecuteStatus()
-        {
-            var orgConfig = GetOrgRecycleBinConfig();
-            var maxRetentionDays = orgConfig?.CleanupIntervalInDays is int d && d > 0 ? d : 30;
-            var softDeleteSupported = orgConfig?.IsReadyForRecycleBin == true;
-
-            var enabledTableCount = CountEnabledTables();
-
-            var structured = new ManageDeletedRecordsResult
-            {
-                Action = "status",
-                SoftDeleteSupported = softDeleteSupported,
-                MaxRetentionDays = 30,
-                CurrentRetentionDays = maxRetentionDays,
-                EnabledTableCount = enabledTableCount,
-                DataverseVersion = _serviceClient.ConnectedOrgVersion?.ToString()
-            };
-
-            var warnings = new List<string>();
-            if (orgConfig == null)
-                warnings.Add("Org-level RecycleBinConfig row not found â€” deleted record keeping may be disabled.");
-            if (maxRetentionDays >= 30)
-                warnings.Add("CleanupIntervalInDays at or near max (30). Records older than 30 days are auto-purged and cannot be restored.");
-
-            if (warnings.Count > 0) structured.Warnings = warnings;
-
-            var text = softDeleteSupported
-                ? $"[Success] Soft-delete supported. Retention: {maxRetentionDays} day(s). Enabled tables: {enabledTableCount}."
-                : $"[Success] Soft-delete NOT supported on this org (isreadyforrecyclebin=false).";
-
-            return Success(text, structured);
-        }
-
-
-        private sealed class OrgRecycleBinConfig
-        {
-            public int? CleanupIntervalInDays { get; set; }
-            public bool? IsReadyForRecycleBin { get; set; }
-        }
-
-        private OrgRecycleBinConfig GetOrgRecycleBinConfig()
-        {
-            var qe = new QueryExpression("recyclebinconfig")
-            {
-                ColumnSet = new ColumnSet("cleanupintervalindays", "isreadyforrecyclebin"),
-                Criteria = new FilterExpression(LogicalOperator.And)
-                {
-                    Conditions = { new ConditionExpression("name", ConditionOperator.Equal, "organization") }
-                },
-                TopCount = 1
-            };
-            var ec = _serviceClient.RetrieveMultiple(qe);
-            var row = ec.Entities.FirstOrDefault();
-            if (row == null) return null;
-            return new OrgRecycleBinConfig
-            {
-                CleanupIntervalInDays = row.GetAttributeValue<int?>("cleanupintervalindays"),
-                IsReadyForRecycleBin = row.GetAttributeValue<bool?>("isreadyforrecyclebin")
-            };
-        }
-
         private int GetMaxRetentionDays()
         {
-            var c = GetOrgRecycleBinConfig();
-            return c?.CleanupIntervalInDays is int d && d > 0 ? d : 30;
-        }
-
-        private int CountEnabledTables()
-        {
-            var fetch = @"<fetch aggregate='true'>
-  <entity name='recyclebinconfig'>
-    <attribute name='recyclebinconfigid' aggregate='count' alias='count_enabled'/>
-    <filter type='and'>
-      <condition attribute='statecode' operator='eq' value='0'/>
-      <condition attribute='isreadyforrecyclebin' operator='eq' value='1'/>
-    </filter>
-  </entity>
-</fetch>";
-            var ec = _serviceClient.RetrieveMultiple(new FetchExpression(fetch));
-            var row = ec.Entities.FirstOrDefault();
-            if (row != null && row.Attributes.ContainsKey("count_enabled"))
-            {
-                var aliased = row["count_enabled"] as AliasedValue;
-                if (aliased?.Value is int n) return n;
-                if (aliased?.Value is long l) return (int)l;
-            }
-            return 0;
+            return RecycleBinConfigHelper.GetMaxRetentionDays(_serviceClient);
         }
 
         private static string GetPrimaryKeyAttribute(string entityLogicalName)
