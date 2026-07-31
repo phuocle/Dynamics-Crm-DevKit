@@ -33,8 +33,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Raw Dataverse Web API call. Always check whether a specialized tool exists first " +
             "(schema→upsert_table/column/relationship, choice→manage_choice, form/view→manage_form/manage_view, " +
             "app/sitemap→manage_app, env vars→manage_environment_variable, webresource→manage_webresource, " +
-            "roles→manage_role, publish→publish_customizations). url is relative; SDK adds base URL. " +
-            "PUT/PATCH/DELETE destructive — confirm.\n\n" +
+            "roles→manage_role, publish→publish_customizations, deleted records→manage_deleted_records). " +
+            "url is relative; SDK adds base URL. PUT/PATCH/DELETE destructive — confirm.\n\n" +
 
             "ACTIONS + REQUIRED PARAMS:\n" +
             "- 'GET' — url (any relative path, e.g. 'accounts', 'contacts(guid)', '$metadata', 'WhoAmI')\n" +
@@ -306,7 +306,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Examples:\n" +
                 "  manage_choice(action='list') → list global option sets\n" +
                 "  manage_choice(action='detail', optionset_name='...') → inspect options\n" +
-                "  upsert_column for local picklists on an entity")
+                "  upsert_column for local picklists on an entity"),
+
+            // ── Deleted Records (Recycle Bin) ──────────────────────────────────
+            // Block tất cả GET record-by-id — manage_deleted_records(action='detail') check cả live + bin.
+            // NOTE: this is just a hint entry; actual GUID URL check happens via regex below.
+            ("__guid_url__", "manage_deleted_records",
+                "REDIRECT: For a single record GUID, use manage_deleted_records(action='detail', entity_name='<entity>', record_id='<guid>') instead of execute_webapi GET. " +
+                "The tool checks both the live table and the recycle bin, returning full attributes if the record exists. " +
+                "If not found anywhere, returns a clear notFound=true with a hint. " +
+                "Use action='list' first if you don't have a specific GUID."),
+
+            // Filter ngụ ý "đã xóa" — Dataverse OData filter không trả soft-deleted records.
+            ("deletionstatecode", "manage_deleted_records",
+                "REDIRECT: Standard OData $filter on 'deletionstatecode' or 'statecode eq 1' is unreliable for non-activity entities " +
+                "(returns empty for account/contact default statecode=0 even after soft-delete). " +
+                "Use manage_deleted_records(action='list', entity_name='<entity>') which uses FetchXml datasource='bin' " +
+                "and returns records with modifiedOn ≈ delete time."),
+
+            // Web API Restore action work (verified 2026-07-31) nhưng body phức tạp → dùng tool mới.
+            ("restore", "manage_deleted_records",
+                "REDIRECT (not blocked): Web API 'Restore' action works (returns 200 with restored id), " +
+                "but requires complex body with @odata.id/@odata.type. " +
+                "Use manage_deleted_records(action='restore', entity_name='<entity>', record_id='<guid>') " +
+                "which uses the SDK OrganizationRequest('Restore') late-bound with a simple Entity param " +
+                "and returns full per-record status (success/failed with reason). " +
+                "Also supports batch via record_ids[] and dry_run preview.")
         ];
 
         private static readonly (string UrlPattern, string RedirectTool, string Reason)[] BlockedPostEndpoints =
@@ -348,12 +373,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ("sitemaps", "manage_app",
                 "Do not use execute_webapi for model-driven app or sitemap creation/update. Use manage_app."),
             ("appmodulecomponents", "manage_app",
-                "Do not use execute_webapi for appmodulecomponent creation/update. Use manage_app.")
+                "Do not use execute_webapi for appmodulecomponent creation/update. Use manage_app."),
+
+            // ── Deleted Records — restore via Web API POST /Restore ───────
+            // Web API Restore works (verified 2026-07-31) but body phức tạp → dùng tool mới.
+            ("restore", "manage_deleted_records",
+                "Web API 'Restore' action works (returns 200 with restored id) but requires complex body with @odata.id/@odata.type. " +
+                "Use manage_deleted_records(action='restore', entity_name='<entity>', record_id='<guid>') " +
+                "which uses the SDK OrganizationRequest('Restore') late-bound with a simple Entity param " +
+                "and returns full per-record status (success/failed with reason). " +
+                "Also supports batch via record_ids[] and dry_run preview.")
         ];
 
         private static string GetBlockedReason(HttpMethod method, string url)
         {
             var urlLower = url.ToLowerInvariant();
+
+            // Phase 0: Special: GUID URL pattern — any <entity-set>(<guid>) URL → redirect to manage_deleted_records
+            // (works for any HTTP method: GET, PATCH, PUT, DELETE).
+            // Match pattern like 'accounts(abc-123)' or 'accounts(abc-123)/contacts' but NOT 'accounts?$filter=...'
+            // Use regex: entityname(dash-separated-guid) optionally followed by /... — must be a balanced parens.
+            if (IsEntityByIdUrl(url))
+            {
+                return "REDIRECT: For a single record GUID, use manage_deleted_records(action='detail', entity_name='<entity>', record_id='<guid>') instead of execute_webapi. " +
+                       "The tool checks both the live table and the recycle bin, returning full attributes if the record exists. " +
+                       "If not found anywhere, returns a clear notFound=true with a hint. " +
+                       "Use action='list' first if you don't have a specific GUID.\n\nUSE INSTEAD: manage_deleted_records";
+            }
 
             // Phase 1: Block POST on specific patterns (publish, metadata actions, dedicated-tool endpoints)
             if (method == HttpMethod.Post)
@@ -376,6 +422,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 foreach (var (pattern, tool, message) in RedirectedGetEndpoints)
                 {
+                    // Skip the placeholder __guid_url__ entry — handled in Phase 0 above
+                    if (pattern == "__guid_url__") continue;
                     if (urlLower.Contains(pattern))
                         return $"{message}\n\nUSE INSTEAD: {tool}";
                 }
@@ -399,6 +447,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             return null;
+        }
+
+        // Match a URL that targets a specific record by GUID, e.g.:
+        //   accounts(abc-123-def-456)
+        //   accounts(abc-123)/contacts
+        //   contacts(abc-123)?$select=name
+        // Does NOT match $filter=... or $expand=... URLs.
+        private static readonly System.Text.RegularExpressions.Regex GuidUrlPattern =
+            new(@"^[A-Za-z_][A-Za-z0-9_]*\([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\)(\/|\?|$)", System.Text.RegularExpressions.RegexOptions.Compiled);
+
+        private static bool IsEntityByIdUrl(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url)) return false;
+            return GuidUrlPattern.IsMatch(url.Trim());
         }
 
         private static HttpMethod ParseHttpMethod(string method)

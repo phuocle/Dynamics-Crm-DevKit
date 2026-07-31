@@ -37,6 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(ParseRecordUrlTool)] = "basic",
 
             // standard (17 additional tools)
+            [nameof(ManageDeletedRecordsTool)] = "standard",
             [nameof(PublishCustomizationsTool)] = "standard",
             [nameof(ManageFormTool)] = "standard",
             [nameof(ManageViewTool)] = "standard",

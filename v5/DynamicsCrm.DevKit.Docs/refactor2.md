@@ -44,6 +44,11 @@
     - Nếu fetch fail → cache rỗng → `displayName` null (ẩn), picklist fallback int. Tool vẫn hoạt động bình thường.
 12. **Test thật trước khi viết test call.** Dùng [Program.cs](..\DynamicsCrm.DevKit.Tests\TestAllInOne\Dev.AllInOne.Console\Program.cs) probe Dataverse (qua `App.Service` — không hard-code credentials) để xác nhận cấu trúc response trước. Probe giúp tránh assumption sai về response shape (ví dụ audit response không có display name sẵn, search `objectTypeCode` luôn = 0, v.v.).
 13. **Đừng đoán metadata format.** Luôn probe trước, dump ra, đọc kỹ, rồi mới code. Áp dụng cho mọi tool cần dùng `RetrieveEntityRequest` / `RetrieveMultiple` / `ExecuteWebRequest` etc.
+14. **Tool mới handle data nhạy cảm → PHẢI redirect `execute_webapi`.** Khi thêm tool mới truy cập recycle bin / audit / security / user permissions / bulk operations, đồng thời cập nhật `ExecuteWebApiTool.cs` để:
+    - **Block/redirect** các URL/endpoint mà Web API có thể làm được nhưng tool SDK-side handle tốt hơn (vd `GET <entity>(<guid>)` → redirect về `manage_deleted_records` thay vì trả 404).
+    - **Add vào `RedirectedGetEndpoints` / `BlockedPostEndpoints` / `RedirectedPostEndpoints`** với message dẫn user sang tool mới.
+    - **KHÔNG ship tool mới mà chưa update `execute_webapi`** cùng build — AI sẽ quay lại dùng `execute_webapi` cũ → UX broken. Áp dụng lần đầu cho `manage_deleted_records` (3 redirect rules: `(<guid>)` GET, `deletionstatecode` GET, `restore` POST).
+    - Khi `execute_webapi` chưa có test call file, **KHÔNG tạo mới** chỉ để document redirect — chỉ note redirect rule trong plan/tool description; tạo test call file khi `execute_webapi` được refactor (tool #32).
 
 ## 3. Checklist approve trước khi mark "xong"
 
@@ -110,6 +115,7 @@ Số thứ tự theo `McpServerHost.ToolCategoryMap` (xem [McpServerHost.cs](..\
 - 8. search_records (phase 1)
 - 9. whoami (phase 1)
 - 10. get_audit_history (phase 1)
+- 22. manage_deleted_records (phase 2 — added 2026-07-31, redirect rules added to execute_webapi (tool #29) for `(<guid>)` / `deletionstatecode` / `restore`)
 
 ---
 
@@ -130,6 +136,8 @@ Số thứ tự theo `McpServerHost.ToolCategoryMap` (xem [McpServerHost.cs](..\
 ```
 
 Mỗi bước fail → quay lại bước trước. **Không skip probe** dù response shape có vẻ rõ — Dataverse hay surprise (audit không có display name, search `objectTypeCode` luôn = 0, ribbon không refresh với targeted publish, v.v.).
+
+**Lưu ý phase 2+ khi tool mới handle data nhạy cảm (recycle bin, audit, security, …):** bước 4 phải bao gồm cập nhật `ExecuteWebApiTool.cs` để redirect AI từ raw Web API sang tool mới. Áp dụng cụ thể cho `manage_deleted_records` (rule 14).
 
 ---
 
