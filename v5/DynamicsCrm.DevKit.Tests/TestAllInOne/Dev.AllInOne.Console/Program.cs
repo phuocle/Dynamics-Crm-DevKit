@@ -104,9 +104,8 @@ namespace Dev.AllInOne.Console
             if (retentionDays < MinRetentionDays) retentionDays = MinRetentionDays;
             if (retentionDays > MaxRetentionDays) retentionDays = MaxRetentionDays;
 
-            SysConsole.WriteLine("[TurnOn] retention_days = " + retentionDays);
+            SysConsole.WriteLine("[TurnOn] retention_days = " + retentionDays);           
 
-            // Step 1 — DELETE old row if present.
             var row = GetOrgRecycleBinConfigRow(svc);
             if (row != null)
             {

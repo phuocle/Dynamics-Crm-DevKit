@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
@@ -479,6 +480,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (retentionDays < MinRetentionDays) retentionDays = MinRetentionDays;
             if (retentionDays > MaxRetentionDays) retentionDays = MaxRetentionDays;
 
+            var row = GetOrgRecycleBinConfigRow();
+            if (row != null)
+            {
+                _serviceClient.Delete(RecycleBinConfigTable, row.Id);
+            }
+
             var entityId = GetOrganizationEntityId();
 
             var payload = "{" +
@@ -523,6 +530,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     int iEnd = body.IndexOf(')', iStart);
                     if (iEnd > iStart)
                         newId = body.Substring(iStart + "recyclebinconfigs(".Length, iEnd - iStart - "recyclebinconfigs(".Length);
+                }
+            }
+            if (newId == "(see response body)" && !string.IsNullOrWhiteSpace(body))
+            {
+                using var doc = JsonDocument.Parse(body);
+                if (doc.RootElement.TryGetProperty("recyclebinconfigid", out var idProperty))
+                {
+                    var idText = idProperty.GetString();
+                    if (!string.IsNullOrWhiteSpace(idText))
+                        newId = idText;
                 }
             }
 
