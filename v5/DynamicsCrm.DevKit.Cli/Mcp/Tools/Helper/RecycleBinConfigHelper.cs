@@ -214,20 +214,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             var entityId = GetOrganizationEntityId(svc);
 
             // 3. POST Web API (matches Power Platform admin center exactly).
+            //    IMPORTANT: must use Web API mode (useapi=true). Otherwise
+            //    ServiceClient routes through SOAP /2011/Organization.svc and
+            //    Dataverse returns 400 because the recyclebinconfig table is
+            //    Web API only.
             var payload = "{" +
-                "\"extensionofrecordid@odata.bind\":\"/entities(" + entityId.ToString() + "\")," +
+                "\"cleanupintervalindays\":" + retentionDays.ToString(CultureInfo.InvariantCulture) + "," +
                 "\"extensionofrecordid@OData.Community.Display.V1.FormattedValue\":\"OrganizationId\"," +
-                "\"cleanupintervalindays\":" + retentionDays.ToString(CultureInfo.InvariantCulture) +
+                "\"extensionofrecordid@odata.bind\":\"entities(" + entityId.ToString() + ")\"" +
                 "}";
             var headers = new Dictionary<string, List<string>>
             {
                 { "Accept", new List<string> { "application/json" } },
                 { "OData-MaxVersion", new List<string> { "4.0" } },
                 { "OData-Version", new List<string> { "4.0" } },
-                { "Prefer", new List<string> { "return=representation" } }
+                { "Prefer", new List<string> { "return=representation", "odata.include-annotations=\"*\"" } }
             };
 
-            using var resp = svc.ExecuteWebRequest(
+            bool prevUseWebApi = svc.UseWebApi;
+            svc.UseWebApi = true;
+            try
+            {
+                using var resp = svc.ExecuteWebRequest(
                 HttpMethod.Post,
                 "recyclebinconfigs",
                 payload,
@@ -235,31 +243,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 "application/json");
 
             var body = resp.Content != null ? resp.Content.ReadAsStringAsync().GetAwaiter().GetResult() : "";
-            int code = (int)resp.StatusCode;
-            if (code < 200 || code >= 300)
-                throw new InvalidOperationException("POST /recyclebinconfigs returned HTTP " + code + ": " + body);
+                int code = (int)resp.StatusCode;
+                if (code < 200 || code >= 300)
+                    throw new InvalidOperationException("POST /recyclebinconfigs returned HTTP " + code + ": " + body);
 
-            // Extract the new row id from OData-EntityId header (some envs).
-            string newId = "(see response body)";
-            if (resp.Headers != null && resp.Headers.TryGetValues("OData-EntityId", out var vals))
-            {
-                var entId = string.Join("", vals);
-                int idx = entId.LastIndexOf('(');
-                if (idx > 0 && entId.EndsWith(")"))
-                    newId = entId.Substring(idx + 1, entId.Length - idx - 2);
-            }
-            if (newId == "(see response body)")
-            {
-                int iStart = body.IndexOf("recyclebinconfigs(", StringComparison.OrdinalIgnoreCase);
-                if (iStart >= 0)
+                // Extract the new row id from OData-EntityId header (some envs).
+                string newId = "(see response body)";
+                if (resp.Headers != null && resp.Headers.TryGetValues("OData-EntityId", out var vals))
                 {
-                    int iEnd = body.IndexOf(')', iStart);
-                    if (iEnd > iStart)
-                        newId = body.Substring(iStart + "recyclebinconfigs(".Length, iEnd - iStart - "recyclebinconfigs(".Length);
+                    var entId = string.Join("", vals);
+                    int idx = entId.LastIndexOf('(');
+                    if (idx > 0 && entId.EndsWith(")"))
+                        newId = entId.Substring(idx + 1, entId.Length - idx - 2);
                 }
-            }
+                if (newId == "(see response body)")
+                {
+                    int iStart = body.IndexOf("recyclebinconfigs(", StringComparison.OrdinalIgnoreCase);
+                    if (iStart >= 0)
+                    {
+                        int iEnd = body.IndexOf(')', iStart);
+                        if (iEnd > iStart)
+                            newId = body.Substring(iStart + "recyclebinconfigs(".Length, iEnd - iStart - "recyclebinconfigs(".Length);
+                    }
+                }
 
-            return newId;
+                return newId;
+            }
+            finally
+            {
+                svc.UseWebApi = prevUseWebApi;
+            }
         }
 
         /// <summary>
