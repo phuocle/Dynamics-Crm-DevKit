@@ -76,7 +76,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string NotFoundHint { get; set; }
 
-        // ---- Restore only ----
+        // ---- Status only ----
+
+        [JsonPropertyName("softDeleteSupported")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? SoftDeleteSupported { get; set; }
+
+        [JsonPropertyName("maxRetentionDays")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? MaxRetentionDays { get; set; }
+
+        [JsonPropertyName("currentRetentionDays")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? CurrentRetentionDays { get; set; }
+
+        [JsonPropertyName("enabledTableCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? EnabledTableCount { get; set; }
+
+        [JsonPropertyName("dataverseVersion")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string DataverseVersion { get; set; }
+
+        // ---- Turn on / turn off only ----
+
+        [JsonPropertyName("previousValue")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? PreviousValue { get; set; }
+
+        [JsonPropertyName("newValue")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? NewValue { get; set; }
 
         // ---- Restore only ----
 

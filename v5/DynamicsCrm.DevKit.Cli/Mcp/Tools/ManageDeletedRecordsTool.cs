@@ -37,20 +37,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Soft-delete = IOrganizationService.Delete (records recoverable for up to MaxRetentionDays, default 30). " +
             "Uses FetchXml datasource='bin' for list/detail (bin exposes only entity attributes â€” no 'deletedon'/'deletedby', use 'modifiedOn' as proxy). " +
             "Restore uses OrganizationRequest('Restore') late-bound. " +
+            "Toggle the org-level 'Keep deleted Dataverse records' setting via action='turn' turn='on|off'. " +
             "RELATED: manage_record (live CRUD), execute_webapi (raw), get_audit_history (who deleted).")]
         public CallToolResult manage_deleted_records(
-            [Description("Action: 'list' (default) | 'detail' | 'restore' | 'status'.")] string action = "list",
-            [Description("Entity Display/logical name. list: required. detail: required. restore: required if record_ids span multiple entities. status: not used.")] string entity_name = "",
+            [Description("Action: 'list' (default) | 'detail' | 'restore' | 'status' | 'turn'.")] string action = "list",
+            [Description("Entity Display/logical name. list: required. detail: required. restore: required if record_ids span multiple entities. status: not used. turn: not used.")] string entity_name = "",
             [Description("Single GUID. detail: required. list: not used. restore: optional if record_ids set.")] string record_id = "",
             [Description("Array of GUIDs (preferred for restore). detail/list: not used. restore: alternative to record_id.")] string[] record_ids = null,
             [Description("Search by primary attribute value (contains, case-insensitive). list only. Empty = all deleted records of entity.")] string name_filter = "",
-            [Description("Max records. list: default 100, max 5000. detail/restore/status: not used.")] int max_records = 100,
-            [Description("Set false to actually restore. list/detail/status: not used. Default true (safe preview).")] bool dry_run = true)
+            [Description("Max records. list: default 100, max 5000. detail/restore/status/turn: not used.")] int max_records = 100,
+            [Description("Set false to actually restore. list/detail/status/turn: not used. Default true (safe preview).")] bool dry_run = true,
+            [Description("Toggle direction for action='turn': 'on' to enable soft-delete, 'off' to disable. Required when action='turn'.")] string turn = "",
+            [Description("Retention days for action='turn' turn='on'. Integer 1..30 inclusive. Default 30. Ignored for turn='off' or other actions.")] int retention_days = 30)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(action))
-                    return Error("action is required.", "Valid values: 'list', 'detail', 'restore', 'status'.");
+                    return Error("action is required.", "Valid values: 'list', 'detail', 'restore', 'status', 'turn'.");
 
                 var normalized = action.Trim().ToLowerInvariant();
                 return normalized switch
@@ -58,7 +61,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "list" => ExecuteList(entity_name, name_filter, max_records),
                     "detail" => ExecuteDetail(entity_name, record_id),
                     "restore" => ExecuteRestore(entity_name, record_id, record_ids, dry_run),
-                    _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'restore'. For org status, use manage_recycle_bin(action='status').")
+                    "status" => ExecuteStatus(),
+                    "turn" => ExecuteTurn(turn, retention_days),
+                    _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'restore', 'status', 'turn'.")
                 };
             }
             catch (Exception ex)
@@ -320,6 +325,140 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var text = $"[Success] {logicalName}: Restored {restored}/{guids.Count} record(s).";
 
             return Success(text, structured);
+        }
+
+        /// <summary>
+        /// action='status': reads org-level soft-delete state -- reads the
+        /// <c>recyclebinconfig</c> org row (isreadyforrecyclebin +
+        /// cleanupintervalindays) and counts how many per-table rows exist
+        /// (each table that has soft-delete enabled has its own row whose
+        /// name = table logical name).
+        /// </summary>
+        private CallToolResult ExecuteStatus()
+        {
+            var orgRow = RecycleBinConfigHelper.GetOrgRecycleBinConfigRow(_serviceClient);
+            bool? isOn = orgRow == null
+                ? (bool?)null
+                : orgRow.GetAttributeValue<bool?>("isreadyforrecyclebin");
+            int? currentDays = orgRow?.GetAttributeValue<int?>("cleanupintervalindays");
+            int maxDays = RecycleBinConfigHelper.GetMaxRetentionDays(_serviceClient);
+
+            // Count per-table rows (those with name != 'organization').
+            int enabledTableCount = 0;
+            var qe = new QueryExpression(RecycleBinConfigHelper.RecycleBinConfigTable)
+            {
+                ColumnSet = new ColumnSet("recyclebinconfigid"),
+                Criteria = new FilterExpression(LogicalOperator.And)
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("name", ConditionOperator.NotEqual, RecycleBinConfigHelper.OrgRowName)
+                    }
+                }
+            };
+            enabledTableCount = _serviceClient.RetrieveMultiple(qe).Entities.Count;
+
+            var warnings = new List<string>();
+            if (!isOn.HasValue)
+            {
+                warnings.Add("Org-level RecycleBinConfig row not found -- deleted record keeping may be disabled.");
+            }
+            if (currentDays.HasValue && currentDays.Value >= RecycleBinConfigHelper.MaxRetentionDays)
+            {
+                warnings.Add($"CleanupIntervalInDays at or near max ({RecycleBinConfigHelper.MaxRetentionDays}). Records older than {RecycleBinConfigHelper.MaxRetentionDays} days are auto-purged and cannot be restored.");
+            }
+
+            var structured = new ManageDeletedRecordsResult
+            {
+                Action = "status",
+                SoftDeleteSupported = isOn,
+                MaxRetentionDays = maxDays,
+                CurrentRetentionDays = currentDays,
+                EnabledTableCount = enabledTableCount,
+                Warnings = warnings.Count > 0 ? warnings : null
+            };
+
+            var text = isOn == true
+                ? $"[Success] Soft-delete is ON ({enabledTableCount} table(s), retention={currentDays ?? maxDays} days)."
+                : isOn == false
+                    ? $"[Success] Soft-delete is OFF (0 tables, retention would be {maxDays} days when enabled)."
+                    : "[Success] Soft-delete state UNKNOWN (org row missing).";
+
+            return Success(text, structured);
+        }
+
+        /// <summary>
+        /// action='turn': toggle the org-level soft-delete setting.
+        /// Requires the <c>turn</c> param ("on" or "off"). If a previous
+        /// RecycleBin operation is still running (operationtype=104 not yet
+        /// Completed), this throws -- call again after Solution History shows
+        /// the job as Succeeded/Failed/Canceled.
+        /// </summary>
+        private CallToolResult ExecuteTurn(string turn, int retentionDays)
+        {
+            // Validate 'turn' value.
+            var t = (turn ?? "").Trim().ToLowerInvariant();
+            if (t != "on" && t != "off")
+            {
+                return Error(
+                    $"turn='{turn}' is not valid.",
+                    "Valid values: turn='on' (enable soft-delete) | turn='off' (disable soft-delete). " +
+                    "Both empty and anything other than 'on'/'off' are rejected to avoid accidental toggles.");
+            }
+
+            // Validate retention_days range for turn='on'.
+            int actualRetention = retentionDays;
+            if (t == "on")
+            {
+                if (retentionDays < RecycleBinConfigHelper.MinRetentionDays ||
+                    retentionDays > RecycleBinConfigHelper.MaxRetentionDays)
+                {
+                    return Error(
+                        $"retention_days={retentionDays} out of range.",
+                        $"Valid range: {RecycleBinConfigHelper.MinRetentionDays}..{RecycleBinConfigHelper.MaxRetentionDays}. Default = {RecycleBinConfigHelper.DefaultRetentionDays}.");
+                }
+            }
+            else
+            {
+                // retention_days is meaningless for turn='off'; ignore user input.
+                actualRetention = RecycleBinConfigHelper.DefaultRetentionDays;
+            }
+
+            // Snapshot previous state for the response.
+            var prevRow = RecycleBinConfigHelper.GetOrgRecycleBinConfigRow(_serviceClient);
+            bool? previousOn = prevRow?.GetAttributeValue<bool?>("isreadyforrecyclebin");
+
+            // Do the toggle.
+            if (t == "on")
+            {
+                var newId = RecycleBinConfigHelper.TurnOn(_serviceClient, actualRetention);
+                var text = previousOn == true
+                    ? $"[Success] Soft-delete was already ON (id={newId}). No state change."
+                    : $"[Success] Soft-delete turned ON (new id={newId}, retention={actualRetention} days). Dataverse will provision per-table rows in the background (operationtype=104 'Process Table For RecycleBin').";
+                var structured = new ManageDeletedRecordsResult
+                {
+                    Action = "turn",
+                    PreviousValue = previousOn,
+                    NewValue = true,
+                    MaxRetentionDays = actualRetention,
+                    CurrentRetentionDays = actualRetention
+                };
+                return Success(text, structured);
+            }
+            else
+            {
+                var deletedId = RecycleBinConfigHelper.TurnOff(_serviceClient);
+                var text = deletedId.HasValue
+                    ? $"[Success] Soft-delete turned OFF (deleted recyclebinconfig id={deletedId}). Dataverse will cascade-delete per-table rows in the background."
+                    : "[Success] Soft-delete was already OFF (no row to delete). No state change.";
+                var structured = new ManageDeletedRecordsResult
+                {
+                    Action = "turn",
+                    PreviousValue = previousOn,
+                    NewValue = false
+                };
+                return Success(text, structured);
+            }
         }
 
         private int GetMaxRetentionDays()
