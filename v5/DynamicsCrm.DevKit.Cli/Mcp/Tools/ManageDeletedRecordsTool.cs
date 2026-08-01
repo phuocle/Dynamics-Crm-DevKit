@@ -19,10 +19,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class ManageDeletedRecordsTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
+        private readonly McpDryRunOptions _options;
 
-        public ManageDeletedRecordsTool(ServiceClient serviceClient)
+        public ManageDeletedRecordsTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
             _serviceClient = serviceClient;
+            _options = options;
         }
 
         [McpServerTool(Name = "manage_deleted_records",
@@ -46,7 +48,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Array of GUIDs (preferred for restore). detail/list: not used. restore: alternative to record_id.")] string[] record_ids = null,
             [Description("Search by primary attribute value (contains, case-insensitive). list only. Empty = all deleted records of entity.")] string name_filter = "",
             [Description("Max records. list: default 100, max 5000. detail/restore/status/turn: not used.")] int max_records = 100,
-            [Description("Set false to actually restore. list/detail/status/turn: not used. Default true (safe preview).")] bool dry_run = true,
             [Description("Toggle direction for action='turn': 'on' to enable soft-delete, 'off' to disable. Required when action='turn'.")] string turn = "",
             [Description("Retention days for action='turn' turn='on'. Integer 1..30 inclusive. Default 30. Ignored for turn='off' or other actions.")] int retention_days = 30)
         {
@@ -60,7 +61,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "list" => ExecuteList(entity_name, name_filter, max_records),
                     "detail" => ExecuteDetail(entity_name, record_id),
-                    "restore" => ExecuteRestore(entity_name, record_id, record_ids, dry_run),
+                    "restore" => ExecuteRestore(entity_name, record_id, record_ids),
                     "status" => ExecuteStatus(),
                     "turn" => ExecuteTurn(turn, retention_days),
                     _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'restore', 'status', 'turn'.")
@@ -236,7 +237,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success($"[Success] {logicalName} {entity.Id}: {attributes.Count} attributes from bin.", structured);
         }
 
-        private CallToolResult ExecuteRestore(string entityName, string recordId, string[] recordIds, bool dryRun)
+        private CallToolResult ExecuteRestore(string entityName, string recordId, string[] recordIds)
         {
             var guids = new List<string>();
             if (recordIds != null && recordIds.Length > 0)
@@ -266,13 +267,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var logicalName = entityResult.Value.LogicalName;
             var displayName = entityResult.Value.DisplayName?.UserLocalizedLabel?.Label ?? logicalName;
 
-            if (dryRun)
+            // Runtime dry-run guard: when MCP server was started with
+            // `devkit mcp --dry-run`, skip the actual Restore and return
+            // a preview. AI clients do not pass a dry_run parameter — this
+            // flag is set once at server startup and applies to all writes.
+            if (_options != null && _options.DryRun)
             {
                 var previewResults = guids.Select(g => new RestoreResultEntry
                 {
                     RecordId = g,
-                    Status = "would-restore",
-                    Message = "dry_run=true â€” no actual restore performed"
+                    Status = "dry_run",
+                    Message = "Would restore (MCP server started with --dry-run). No changes were made."
                 }).ToList();
 
                 var previewStructured = new ManageDeletedRecordsResult
@@ -287,7 +292,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Results = previewResults
                 };
 
-                var previewText = $"[DRY-RUN] Would restore {guids.Count} record(s) of {logicalName}.\nNo changes were made.";
+                var previewText = $"[DRY-RUN] Would restore {guids.Count} record(s) of {logicalName}.\nNo changes were made (MCP server is in dry-run mode).";
                 return Success(previewText, previewStructured);
             }
 
@@ -404,6 +409,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"turn='{turn}' is not valid.",
                     "Valid values: turn='on' (enable soft-delete) | turn='off' (disable soft-delete). " +
                     "Both empty and anything other than 'on'/'off' are rejected to avoid accidental toggles.");
+            }
+
+            // Runtime dry-run guard: when MCP server was started with
+            // `devkit mcp --dry-run`, skip the actual toggle and return a preview.
+            if (_options != null && _options.DryRun)
+            {
+                var retentionText = t == "on" ? $" with retention_days={retentionDays}" : "";
+                var previewText = $"[DRY-RUN] Would turn soft-delete {t.ToUpperInvariant()}{retentionText}.\nNo changes were made (MCP server is in dry-run mode).";
+                var previewStructured = new ManageDeletedRecordsResult
+                {
+                    Action = "turn",
+                    NewValue = t == "on",
+                    MaxRetentionDays = t == "on" ? retentionDays : (int?)null,
+                    CurrentRetentionDays = t == "on" ? retentionDays : (int?)null
+                };
+                return Success(previewText, previewStructured);
             }
 
             // Validate retention_days range for turn='on'.

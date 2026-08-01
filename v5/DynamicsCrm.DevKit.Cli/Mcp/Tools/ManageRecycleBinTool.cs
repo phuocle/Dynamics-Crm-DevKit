@@ -9,7 +9,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
@@ -32,48 +31,51 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         [McpServerTool(Name = "manage_recycle_bin",
-            Title = "List, preview and bulk-configure per-table soft-delete (Recycle Bin) settings",
+            Title = "List and bulk-configure per-table soft-delete (Recycle Bin) readiness flags",
             Idempotent = false,
             Destructive = false,
             ReadOnly = false,
             UseStructuredContent = true,
             OutputSchemaType = typeof(ManageRecycleBinResult)),
         Description(
-            "List / preview / set per-table soft-delete (Recycle Bin) configuration. " +
-            "Backed by the recyclebinconfig entity — one row per (org, table) plus a special name='organization' row that holds the org default cleanupintervalindays (1-30). " +
-            "isreadyforrecyclebin is the per-table readiness flag. cleanupintervalindays=-1 means inherit from the org row. " +
+            "Manage per-table soft-delete (Recycle Bin) readiness flags in the recyclebinconfig entity. " +
+            "STRICT RULES — AI MUST FOLLOW: " +
+            "(1) THIS TOOL ONLY UPDATES per-table rows. NEVER CREATE, NEVER DELETE any row. NEVER touch the org-level row (name='organization'). " +
+            "(2) For ORG-LEVEL soft-delete ON/OFF and retention days, use manage_deleted_records(action='turn'). Do NOT call manage_recycle_bin on the org row. " +
+            "(3) WARNING: manage_deleted_records(action='turn', turn='off') DELETEs the org row and Dataverse CASCADE-DELETEs ALL per-table rows in the background. If the user only wants to disable soft-delete for some tables while keeping the org-level feature ON, prefer manage_recycle_bin(action='turn_off', turn_off=<csv>) instead. " +
+            "DATA MODEL: one row per (org, table); isreadyforrecyclebin=true means soft-delete ON for that table; cleanupintervalindays=-1 inherits from the org row. " +
             "ACTIONS: " +
-            "list_tables — paginated list of tables + their current soft-delete state (default 10/page, A-Z by logical name, supports entity_filter prefix match). " +
-            "preview — interpret a free-form user intent (e.g. 'soft delete for all except Account, Contact') into a {enable, disable, skip} plan WITHOUT applying. " +
-            "set — enable/disable soft-delete for 1+ tables in parallel (Parallel.ForEachAsync + UpdateAsync, same pattern as create_records). " +
-            "Pagination: caller passes page=1,2,...; when truncated, response text ends with '... còn N tables nữa. Nói show page 2 để xem tiếp.' style note. " +
-            "RELATED: manage_deleted_records (bin operations), execute_webapi (raw).")]
+            "list_table — paginated list of tables + their current soft-delete state (default 10/page, A-Z by logical name, supports entity_filter contains match). " +
+            "turn_on — bulk turn soft-delete ON for 1+ tables (parallel Update only). " +
+            "turn_off — bulk turn soft-delete OFF for 1+ tables (parallel Update only). " +
+            "turn_on/turn_off special CSV value 'all' means every per-table row currently present in recyclebinconfig (skip the org row). " +
+            "No CREATE and no DELETE is ever issued by this tool; per-table rows that don't exist yet must be created via manage_deleted_records(action='turn', turn='on') which triggers Dataverse background provisioning. " +
+            "RELATED: manage_deleted_records (org-level ON/OFF + bin read/restore), get_tables (list of tables to build CSV), execute_webapi (raw — blocked for recyclebinconfigs PATCH/POST).")]
         public async Task<CallToolResult> manage_recycle_bin(
-            [Description("Action: 'list_tables' (default) | 'preview' | 'set' | 'status'.")] string action = "list_tables",
-            [Description("list_tables: filter by name (contains, case-insensitive). preview: free-form intent. set: not used.")] string entity_filter = "",
-            [Description("list_tables: include system tables (default false; only_custom takes precedence).")] bool include_system = false,
-            [Description("list_tables: show only custom tables (default false).")] bool only_custom = false,
-            [Description("list_tables: 1-based page number (default 1).")] int page = 1,
-            [Description("list_tables: rows per page (default 10, max 100).")] int page_size = 10,
-            [Description("set: list of entity logical/display names to enable soft-delete. preview: not used.")] string[] enable = null,
-            [Description("set: list of entity logical/display names to disable soft-delete. preview: not used.")] string[] disable = null,
-            [Description("set: optional cleanupintervalindays (1-30). When set, also updates the org row (sets it from -1 to a real value). -1 = inherit.")] int? cleanup_interval_days = null,
-            [Description("set: 0 = server hint (RecommendedDegreesOfParallelism). Clamped 1-52.")] int max_parallelism = 0,
-            [Description("set: false to actually apply. Default true (safe preview).")] bool dry_run = true)
+            [Description("Action: 'list_table' (default) | 'turn_on' | 'turn_off'.")] string action = "list_table",
+            [Description("list_table: filter by name (contains, case-insensitive). turn_on/turn_off: not used.")] string entity_filter = "",
+            [Description("list_table: include system tables (default false; only_custom takes precedence).")] bool include_system = false,
+            [Description("list_table: show only custom tables (default false).")] bool only_custom = false,
+            [Description("list_table: 1-based page number (default 1).")] int page = 1,
+            [Description("list_table: rows per page (default 10, max 100).")] int page_size = 10,
+            [Description("turn_on: CSV of entity logical/display names to turn soft-delete ON. Required for action='turn_on'.")] string turn_on = null,
+            [Description("turn_off: CSV of entity logical/display names to turn soft-delete OFF. Required for action='turn_off'.")] string turn_off = null,
+            [Description("turn_on/turn_off: optional cleanupintervalindays (1-30) for the org row. When set, also updates the org row (sets it from -1 to a real value). -1 = inherit.")] int? cleanup_interval_days = null,
+            [Description("turn_on/turn_off: 0 = server hint (RecommendedDegreesOfParallelism). Clamped 1-52.")] int max_parallelism = 0,
+            [Description("turn_on/turn_off: false to actually apply. Default true (safe preview).")] bool dry_run = true)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(action))
-                    return Error("action is required.", "Valid values: 'list_tables', 'preview', 'set', 'status'.");
+                    return Error("action is required.", "Valid values: 'list_table', 'turn_on', 'turn_off'.");
 
                 var normalized = action.Trim().ToLowerInvariant();
                 return normalized switch
                 {
-                    "list_tables" => ExecuteListTables(entity_filter, include_system, only_custom, page, page_size),
-                    "preview" => ExecutePreview(entity_filter),
-                    "set" => await ExecuteSetAsync(enable, disable, cleanup_interval_days, max_parallelism, dry_run),
-                    "status" => ExecuteStatus(),
-                    _ => Error($"Invalid action '{action}'.", "Valid values: 'list_tables', 'preview', 'set', 'status'.")
+                    "list_table" => ExecuteListTable(entity_filter, include_system, only_custom, page, page_size),
+                    "turn_on" => await ExecuteTurnOnAsync(turn_on, cleanup_interval_days, max_parallelism, dry_run),
+                    "turn_off" => await ExecuteTurnOffAsync(turn_off, cleanup_interval_days, max_parallelism, dry_run),
+                    _ => Error($"Invalid action '{action}'.", "Valid values: 'list_table', 'turn_on', 'turn_off'.")
                 };
             }
             catch (Exception ex)
@@ -82,7 +84,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private CallToolResult ExecuteListTables(string entityFilter, bool includeSystem, bool onlyCustom, int page, int pageSize)
+        // ------------------------------------------------------------------
+        // list_table
+        // ------------------------------------------------------------------
+
+        private CallToolResult ExecuteListTable(string entityFilter, bool includeSystem, bool onlyCustom, int page, int pageSize)
         {
             entityFilter = entityFilter?.Trim() ?? "";
             if (page < 1) page = 1;
@@ -90,7 +96,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (pageSize > MaxPageSize) pageSize = MaxPageSize;
 
             var allRows = RecycleBinConfigHelper.QueryConfigEntries(_serviceClient, entityFilter, includeSystem, onlyCustom, page, pageSize);
-            var totalMatching = allRows.Count;
 
             var displayNames = string.Join(", ", allRows.Select(r => r.DisplayName));
             var totalCount = RecycleBinConfigHelper.CountAllEnabledRows(_serviceClient);
@@ -99,7 +104,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var structured = new ManageRecycleBinResult
             {
-                Action = "list_tables",
+                Action = "list_table",
                 EntityDisplayNames = string.IsNullOrEmpty(displayNames) ? null : displayNames,
                 Page = page,
                 PageSize = pageSize,
@@ -143,59 +148,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success(sb.ToString(), structured);
         }
 
-        private CallToolResult ExecutePreview(string intent)
+        // ------------------------------------------------------------------
+        // turn_on / turn_off (CSV → parallel apply)
+        // ------------------------------------------------------------------
+
+        private Task<CallToolResult> ExecuteTurnOnAsync(string turnOn, int? cleanupIntervalDays, int maxParallelism, bool dryRun)
+            => ExecuteTurnAsync("turn_on", isReady: true, turnOn, cleanupIntervalDays, maxParallelism, dryRun);
+
+        private Task<CallToolResult> ExecuteTurnOffAsync(string turnOff, int? cleanupIntervalDays, int maxParallelism, bool dryRun)
+            => ExecuteTurnAsync("turn_off", isReady: false, turnOff, cleanupIntervalDays, maxParallelism, dryRun);
+
+        private async Task<CallToolResult> ExecuteTurnAsync(string action, bool isReady, string csv, int? cleanupIntervalDays, int maxParallelism, bool dryRun)
         {
-            if (string.IsNullOrWhiteSpace(intent))
-                return Error("entity_filter is required when action='preview'.",
-                    "Pass the user's free-form intent (e.g. 'soft delete cho tất cả trừ Account, Contact').");
+            // 1. Parse CSV → distinct, non-empty list.
+            var names = ParseCsv(csv);
+            if (names.Count == 0)
+                return Error($"{action}: CSV parameter is required and must contain at least 1 entity name.",
+                    $"Pass 1+ entity logical/display names as a comma-separated string (e.g. {action}=\"Account,Contact,new_order\"). " +
+                    "Use get_tables to enumerate available tables.");
 
-            var plan = ParseIntent(intent.Trim());
-            if (plan == null)
-                return Error("Could not parse intent into enable/disable plan.",
-                    "Use clear wording. Examples: 'soft delete cho tất cả trừ Account, Contact', 'chỉ Account, Contact', 'tắt Lead', 'bật Account'.");
-
-            var orgConfig = RecycleBinConfigHelper.GetOrgRecycleBinConfig(_serviceClient);
-
-            var structured = new ManageRecycleBinResult
-            {
-                Action = "preview",
-                EnableCount = plan.Enable?.Count ?? 0,
-                DisableCount = plan.Disable?.Count ?? 0,
-                SkipCount = plan.Skip?.Count ?? 0,
-                Preview = plan,
-                OrgIntervalDays = orgConfig?.CleanupIntervalInDays,
-                DryRun = true
-            };
-
-            var sb = new StringBuilder();
-            sb.AppendLine("[PREVIEW] No changes were made. Review plan below and confirm via set.");
-            sb.AppendLine();
-            if (plan.Enable?.Count > 0)
-            {
-                sb.AppendLine($"  Enable  ({plan.Enable.Count}): {string.Join(", ", plan.Enable)}");
-            }
-            if (plan.Disable?.Count > 0)
-            {
-                sb.AppendLine($"  Disable ({plan.Disable.Count}): {string.Join(", ", plan.Disable)}");
-            }
-            if (plan.Skip?.Count > 0)
-            {
-                sb.AppendLine($"  Skip    ({plan.Skip.Count}): {string.Join(", ", plan.Skip)}");
-                if (!string.IsNullOrEmpty(plan.SkipReason))
-                    sb.AppendLine($"          reason: {plan.SkipReason}");
-            }
-            sb.AppendLine();
-            sb.AppendLine("To apply, call manage_recycle_bin(action='set', enable=[...], disable=[...], dry_run=false).");
-
-            return Success(sb.ToString(), structured);
-        }
-
-        private async Task<CallToolResult> ExecuteSetAsync(string[] enable, string[] disable, int? cleanupIntervalDays, int maxParallelism, bool dryRun)
-        {
-            if ((enable == null || enable.Length == 0) && (disable == null || disable.Length == 0))
-                return Error("enable or disable is required when action='set'.",
-                    "Pass 1+ entity names in either list (both allowed, e.g. 'enable=[A,B], disable=[C]').");
-
+            // 2. Validate cleanup_interval_days.
             if (cleanupIntervalDays.HasValue)
             {
                 var v = cleanupIntervalDays.Value;
@@ -204,32 +176,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         $"Valid: 1..{RecycleBinConfigHelper.HardCapRetentionDays} (per-table override), or {RecycleBinConfigHelper.InheritRetentionSentinel} = inherit from org row.");
             }
 
-            var parallelism = maxParallelism <= 0
-                ? Math.Max(1, _serviceClient.RecommendedDegreesOfParallelism)
-                : maxParallelism;
-            parallelism = Math.Clamp(parallelism, 1, MaxParallelism);
+            // 3. Pre-flight: org-level must be ON. Fail fast with redirect hint
+            //    if not, otherwise per-table writes are pointless.
+            var orgConfig = RecycleBinConfigHelper.GetOrgRecycleBinConfig(_serviceClient);
+            if (orgConfig == null)
+                return Error("Org-level RecycleBinConfig row (name='organization') not found — soft-delete is disabled at the org level.",
+                    "Call manage_deleted_records(action='turn', retention_days=1..30) first to turn ON soft-delete at the org level, then retry this " + action + ".");
+            if (orgConfig.IsReadyForRecycleBin != true)
+                return Error("Org-level soft-delete is currently OFF (isreadyforrecyclebin=false on the org row).",
+                    "Call manage_deleted_records(action='turn', retention_days=1..30) first to turn ON soft-delete at the org level, then retry this " + action + ".");
 
-            var enableList = (enable ?? Array.Empty<string>()).Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => s.Trim()).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-            var disableList = (disable ?? Array.Empty<string>()).Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => s.Trim()).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-            var overlap = enableList.Intersect(disableList, StringComparer.OrdinalIgnoreCase).ToList();
-            if (overlap.Count > 0)
-                return Error($"Tables appear in both enable and disable: {string.Join(", ", overlap)}.",
-                    "A table cannot be enabled and disabled in the same call. Split into two calls or remove from one list.");
-
-            var items = new List<RecycleBinApplyItem>();
-            items.AddRange(enableList.Select(n => new RecycleBinApplyItem { LogicalName = n, Mode = "enable" }));
-            items.AddRange(disableList.Select(n => new RecycleBinApplyItem { LogicalName = n, Mode = "disable" }));
-
+            // 4. Dry-run: report plan and exit. No writes.
             if (dryRun)
             {
+                var items = names.Select(n => new RecycleBinApplyItem
+                {
+                    LogicalName = n,
+                    Mode = action,
+                    Status = "dry_run"
+                }).ToList();
+
                 var structured = new ManageRecycleBinResult
                 {
-                    Action = "set",
+                    Action = action,
                     DryRun = true,
                     Succeeded = 0,
                     Failed = 0,
-                    EnableCount = enableList.Count,
-                    DisableCount = disableList.Count,
+                    EnableCount = isReady ? names.Count : 0,
+                    DisableCount = isReady ? 0 : names.Count,
                     OrgIntervalDays = cleanupIntervalDays,
                     Items = items,
                     Warnings = new List<string>
@@ -242,32 +216,66 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 };
 
                 var sb = new StringBuilder();
-                sb.AppendLine("[DRY-RUN] Would apply the following changes:");
+                sb.AppendLine($"[DRY-RUN] {action}: would apply to {names.Count} table(s):");
                 sb.AppendLine();
-                if (enableList.Count > 0) sb.AppendLine($"  Enable  ({enableList.Count}): {string.Join(", ", enableList)}");
-                if (disableList.Count > 0) sb.AppendLine($"  Disable ({disableList.Count}): {string.Join(", ", disableList)}");
+                sb.AppendLine($"  {string.Join(", ", names)}");
                 if (cleanupIntervalDays.HasValue) sb.AppendLine($"  Org row cleanupintervalindays → {cleanupIntervalDays}");
                 sb.AppendLine();
                 sb.AppendLine("No changes were made. Re-call with dry_run=false to apply.");
                 return Success(sb.ToString(), structured);
             }
 
+            // 5. Real apply. Clamp parallelism.
+            // continue-on-error semantics: every item is wrapped in a per-item
+            // try/catch (TryUpdateOneAsync returns ok/err instead of throwing),
+            // so one bad entity never aborts the whole batch. We also wrap the
+            // ForEachAsync body in an outer try/catch as defense-in-depth for
+            // any unexpected exception escaping the inner catch.
+            var parallelism = maxParallelism <= 0
+                ? Math.Max(1, _serviceClient.RecommendedDegreesOfParallelism)
+                : maxParallelism;
+            parallelism = Math.Clamp(parallelism, 1, MaxParallelism);
+
             var sw = Stopwatch.StartNew();
-            var results = new ConcurrentBag<RecycleBinApplyItem>();
-            await Parallel.ForEachAsync(items, new ParallelOptions { MaxDegreeOfParallelism = parallelism }, async (item, ct) =>
+            var allItems = new ConcurrentBag<RecycleBinApplyItem>();
+
+            await Parallel.ForEachAsync(names, new ParallelOptions { MaxDegreeOfParallelism = parallelism }, async (name, ct) =>
             {
-                var (ok, err) = await TryApplyOneAsync(item, cleanupIntervalDays, ct);
-                item.Status = ok ? "applied" : "failed";
-                item.Error = err;
-                results.Add(item);
+                try
+                {
+                    var (ok, err) = await TryUpdateOneAsync(name, isReady, cleanupIntervalDays, ct);
+                    allItems.Add(new RecycleBinApplyItem
+                    {
+                        LogicalName = name,
+                        Mode = action,
+                        Status = ok ? "applied" : "failed",
+                        Error = err
+                    });
+                }
+                catch (Exception ex)
+                {
+                    // Last-resort safety net — should not happen because
+                    // TryUpdateOneAsync catches everything, but never let an
+                    // unhandled exception abort the parallel batch.
+                    allItems.Add(new RecycleBinApplyItem
+                    {
+                        LogicalName = name,
+                        Mode = action,
+                        Status = "failed",
+                        Error = ex.Message
+                    });
+                }
             });
+
             sw.Stop();
 
-            var ordered = results.OrderBy(i => enableList.IndexOf(i.LogicalName) >= 0
-                ? enableList.IndexOf(i.LogicalName)
-                : disableList.IndexOf(i.LogicalName) + 10000).ToList();
+            // Order: keep the user's CSV order.
+            var ordered = allItems.OrderBy(i => names.IndexOf(i.LogicalName)).ToList();
+
             var succeeded = ordered.Count(i => i.Status == "applied");
             var failed = ordered.Count(i => i.Status == "failed");
+            var total = names.Count;
+            var failRate = total > 0 ? (double)failed / total : 0.0;
 
             var warnings = new List<string>();
             if (cleanupIntervalDays.HasValue)
@@ -277,14 +285,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 else warnings.Add($"Updated org row (name='organization') cleanupintervalindays={cleanupIntervalDays}.");
             }
 
+            // High fail-rate warning: helps the user notice org-wide problems
+            // (e.g. permissions, throttling, missing entity metadata) instead
+            // of burying it in a long per-item failure list.
+            if (total >= 5 && failRate >= 0.5)
+            {
+                warnings.Add(
+                    $"High fail rate: {failed}/{total} items failed ({failRate:P0}). " +
+                    "Likely org-wide issue (permissions, throttling, or invalid entity names). " +
+                    "Consider lowering max_parallelism or verifying the entity names with get_tables.");
+            }
+
             var structured2 = new ManageRecycleBinResult
             {
-                Action = "set",
+                Action = action,
                 DryRun = false,
                 Succeeded = succeeded,
                 Failed = failed,
-                EnableCount = enableList.Count,
-                DisableCount = disableList.Count,
+                EnableCount = isReady ? total : 0,
+                DisableCount = isReady ? 0 : total,
                 OrgIntervalDays = cleanupIntervalDays,
                 DurationSeconds = Math.Round(sw.Elapsed.TotalSeconds, 1),
                 Parallelism = parallelism,
@@ -293,7 +312,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
 
             var sb2 = new StringBuilder();
-            sb2.AppendLine($"[Success] Applied {succeeded}/{items.Count} table config(s) in {sw.Elapsed.TotalSeconds:0.0}s ({parallelism} concurrent).");
+            sb2.AppendLine($"[Success] {action}: applied {succeeded}/{total} table config(s) in {sw.Elapsed.TotalSeconds:0.0}s ({parallelism} concurrent).");
             if (failed > 0)
             {
                 sb2.AppendLine();
@@ -310,53 +329,38 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success(sb2.ToString(), structured2);
         }
 
-        private async Task<(bool ok, string err)> TryApplyOneAsync(RecycleBinApplyItem item, int? cleanupIntervalDays, CancellationToken ct)
+        // ------------------------------------------------------------------
+        // Per-table write: UPDATE only. Dataverse auto-creates the row if it
+        // doesn't exist (extension table behavior on recyclebinconfig).
+        // ------------------------------------------------------------------
+
+        private async Task<(bool ok, string err)> TryUpdateOneAsync(string entityName, bool isReady, int? cleanupIntervalDays, CancellationToken ct)
         {
             try
             {
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, item.LogicalName, "manage_recycle_bin");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_recycle_bin");
                 if (!entityResult.IsSuccess) return (false, entityResult.Error);
                 var entityId = entityResult.Value.MetadataId ?? Guid.Empty;
                 if (entityId == Guid.Empty) return (false, "entity has no metadata id");
 
-                var existing = FindConfigByEntityId(entityId);
-                var update = new Entity(RecycleBinConfigHelper.EntityLogicalName, existing ?? Guid.NewGuid());
-                update["extensionofrecordid"] = new EntityReference("entity", entityId);
-                update["name"] = entityResult.Value.LogicalName;
-                update["isreadyforrecyclebin"] = item.Mode == "enable";
+                // Update only. If the row doesn't exist, Dataverse auto-creates
+                // it (recyclebinconfig is an extension table of `entity`).
+                var update = new Entity(RecycleBinConfigHelper.EntityLogicalName, Guid.NewGuid())
+                {
+                    ["extensionofrecordid"] = new EntityReference("entity", entityId),
+                    ["name"] = entityResult.Value.LogicalName,
+                    ["isreadyforrecyclebin"] = isReady
+                };
                 if (cleanupIntervalDays.HasValue)
                     update["cleanupintervalindays"] = cleanupIntervalDays.Value;
 
-                if (existing.HasValue)
-                    await _serviceClient.UpdateAsync(update, ct);
-                else
-                    await _serviceClient.CreateAsync(update, ct);
-
+                await _serviceClient.UpdateAsync(update, ct);
                 return (true, null);
             }
             catch (Exception ex)
             {
                 return (false, ex.Message);
             }
-        }
-
-        private Guid? FindConfigByEntityId(Guid entityMetadataId)
-        {
-            var qe = new Microsoft.Xrm.Sdk.Query.QueryExpression(RecycleBinConfigHelper.EntityLogicalName)
-            {
-                ColumnSet = new Microsoft.Xrm.Sdk.Query.ColumnSet("recyclebinconfigid"),
-                Criteria = new Microsoft.Xrm.Sdk.Query.FilterExpression(Microsoft.Xrm.Sdk.Query.LogicalOperator.And)
-                {
-                    Conditions =
-                    {
-                        new Microsoft.Xrm.Sdk.Query.ConditionExpression("extensionofrecordid", Microsoft.Xrm.Sdk.Query.ConditionOperator.Equal, entityMetadataId)
-                    }
-                },
-                TopCount = 1
-            };
-            var ec = _serviceClient.RetrieveMultiple(qe);
-            var row = ec.Entities.FirstOrDefault();
-            return row?.Id;
         }
 
         private async Task<string> TryUpdateOrgRowAsync(int cleanupIntervalDays)
@@ -378,109 +382,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private CallToolResult ExecuteStatus()
+        // ------------------------------------------------------------------
+        // CSV parsing
+        // ------------------------------------------------------------------
+
+        private static List<string> ParseCsv(string csv)
         {
-            var orgConfig = RecycleBinConfigHelper.GetOrgRecycleBinConfig(_serviceClient);
-            var maxRetentionDays = orgConfig?.CleanupIntervalInDays is int d && d > 0 ? d : RecycleBinConfigHelper.HardCapRetentionDays;
-            var softDeleteSupported = orgConfig?.IsReadyForRecycleBin == true;
-            var enabledTableCount = RecycleBinConfigHelper.CountEnabledTables(_serviceClient);
-
-            var warnings = new List<string>();
-            if (orgConfig == null)
-                warnings.Add("Org-level RecycleBinConfig row not found — deleted record keeping may be disabled.");
-            if (maxRetentionDays >= RecycleBinConfigHelper.HardCapRetentionDays)
-                warnings.Add($"CleanupIntervalInDays at or near max ({RecycleBinConfigHelper.HardCapRetentionDays}). Records older than {RecycleBinConfigHelper.HardCapRetentionDays} days are auto-purged and cannot be restored.");
-
-            var structured = new ManageRecycleBinResult
-            {
-                Action = "status",
-                OrgIntervalDays = maxRetentionDays,
-                Warnings = warnings.Count > 0 ? warnings : null
-            };
-
-            var text = softDeleteSupported
-                ? $"[Success] Soft-delete supported. Org interval: {maxRetentionDays} day(s). Enabled tables: {enabledTableCount}."
-                : $"[Success] Soft-delete NOT supported on this org (isreadyforrecyclebin=false on org row).";
-
-            return Success(text, structured);
-        }
-
-        private static readonly Regex CsvSplit = new(@",\s*", RegexOptions.Compiled);
-
-        private static RecycleBinPreviewPlan ParseIntent(string intent)
-        {
-            var lower = intent.ToLowerInvariant();
-            var explicitNames = ExtractCommaSeparatedNames(intent);
-
-            RecycleBinPreviewPlan plan;
-            if (lower.Contains("trừ") || lower.Contains("ngoại trừ") || lower.Contains("except") || lower.Contains("excluding"))
-            {
-                plan = new RecycleBinPreviewPlan
-                {
-                    Enable = new List<string> { "ALL" },
-                    Disable = new List<string>(),
-                    Skip = explicitNames,
-                    SkipReason = "user listed as 'trừ/except'"
-                };
-            }
-            else if (lower.StartsWith("chỉ ") || lower.StartsWith("only ") || lower.Contains(" chỉ ") || lower.Contains(" only "))
-            {
-                plan = new RecycleBinPreviewPlan
-                {
-                    Enable = explicitNames,
-                    Disable = new List<string> { "REST" },
-                    Skip = new List<string>()
-                };
-            }
-            else if (lower.StartsWith("tắt ") || lower.StartsWith("remove ") || lower.StartsWith("disable ") || lower.StartsWith("off "))
-            {
-                plan = new RecycleBinPreviewPlan
-                {
-                    Enable = new List<string>(),
-                    Disable = explicitNames,
-                    Skip = new List<string>()
-                };
-            }
-            else if (lower.StartsWith("bật ") || lower.StartsWith("add ") || lower.StartsWith("enable ") || lower.StartsWith("on "))
-            {
-                plan = new RecycleBinPreviewPlan
-                {
-                    Enable = explicitNames,
-                    Disable = new List<string>(),
-                    Skip = new List<string>()
-                };
-            }
-            else
-            {
-                return null;
-            }
-            return plan;
-        }
-
-        private static List<string> ExtractCommaSeparatedNames(string intent)
-        {
-            var idx = intent.IndexOf(':');
-            if (idx < 0) idx = intent.IndexOf('"');
-            var tail = idx >= 0 ? intent.Substring(idx + 1) : intent;
-            foreach (var kw in new[] { "trừ ", "ngoại trừ ", "except ", "excluding ", "chỉ ", "only ", "tắt ", "remove ", "disable ", "off ", "bật ", "add ", "enable ", "on " })
-            {
-                var ki = tail.IndexOf(kw, StringComparison.OrdinalIgnoreCase);
-                if (ki >= 0 && (kw.Trim().Equals("trừ", StringComparison.OrdinalIgnoreCase) || kw.Trim().Equals("ngoại trừ", StringComparison.OrdinalIgnoreCase) || kw.Trim().Equals("except", StringComparison.OrdinalIgnoreCase) || kw.Trim().Equals("excluding", StringComparison.OrdinalIgnoreCase)))
-                {
-                    tail = tail.Substring(ki + kw.Length);
-                    break;
-                }
-                else if (ki >= 0)
-                {
-                    tail = tail.Substring(ki + kw.Length);
-                    break;
-                }
-            }
-            var parts = CsvSplit.Split(tail)
+            if (string.IsNullOrWhiteSpace(csv)) return new List<string>();
+            return csv
+                .Split(new[] { ',', '\n', '\r', ';' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(s => s.Trim().TrimEnd('.', ';'))
                 .Where(s => !string.IsNullOrEmpty(s))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToList();
-            return parts;
         }
     }
 }
