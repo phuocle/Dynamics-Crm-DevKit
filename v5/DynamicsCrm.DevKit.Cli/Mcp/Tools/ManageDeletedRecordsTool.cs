@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
@@ -18,6 +19,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageDeletedRecordsTool : McpToolBase
     {
+        private const string RecycleBinConfigTable = "recyclebinconfig";
+        private const string OrgRowName = "organization";
+        private const int MinRetentionDays = 1;
+        private const int MaxRetentionDays = 30;
+        private const int DefaultRetentionDays = 30;
+
+        private static Guid? _cachedOrganizationEntityId;
+
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
 
@@ -267,10 +276,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var logicalName = entityResult.Value.LogicalName;
             var displayName = entityResult.Value.DisplayName?.UserLocalizedLabel?.Label ?? logicalName;
 
-            // Runtime dry-run guard: when MCP server was started with
-            // `devkit mcp --dry-run`, skip the actual Restore and return
-            // a preview. AI clients do not pass a dry_run parameter — this
-            // flag is set once at server startup and applies to all writes.
             if (_options != null && _options.DryRun)
             {
                 var previewResults = guids.Select(g => new RestoreResultEntry
@@ -332,32 +337,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success(text, structured);
         }
 
-        /// <summary>
-        /// action='status': reads org-level soft-delete state -- reads the
-        /// <c>recyclebinconfig</c> org row (isreadyforrecyclebin +
-        /// cleanupintervalindays) and counts how many per-table rows exist
-        /// (each table that has soft-delete enabled has its own row whose
-        /// name = table logical name).
-        /// </summary>
         private CallToolResult ExecuteStatus()
         {
-            var orgRow = RecycleBinConfigHelper.GetOrgRecycleBinConfigRow(_serviceClient);
+            var orgRow = GetOrgRecycleBinConfigRow();
             bool? isOn = orgRow == null
                 ? (bool?)null
                 : orgRow.GetAttributeValue<bool?>("isreadyforrecyclebin");
             int? currentDays = orgRow?.GetAttributeValue<int?>("cleanupintervalindays");
-            int maxDays = RecycleBinConfigHelper.GetMaxRetentionDays(_serviceClient);
+            int maxDays = GetMaxRetentionDays();
 
-            // Count per-table rows (those with name != 'organization').
             int enabledTableCount = 0;
-            var qe = new QueryExpression(RecycleBinConfigHelper.RecycleBinConfigTable)
+            var qe = new QueryExpression(RecycleBinConfigTable)
             {
                 ColumnSet = new ColumnSet("recyclebinconfigid"),
                 Criteria = new FilterExpression(LogicalOperator.And)
                 {
                     Conditions =
                     {
-                        new ConditionExpression("name", ConditionOperator.NotEqual, RecycleBinConfigHelper.OrgRowName)
+                        new ConditionExpression("name", ConditionOperator.NotEqual, OrgRowName)
                     }
                 }
             };
@@ -368,9 +365,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 warnings.Add("Org-level RecycleBinConfig row not found -- deleted record keeping may be disabled.");
             }
-            if (currentDays.HasValue && currentDays.Value >= RecycleBinConfigHelper.MaxRetentionDays)
+            if (currentDays.HasValue && currentDays.Value >= MaxRetentionDays)
             {
-                warnings.Add($"CleanupIntervalInDays at or near max ({RecycleBinConfigHelper.MaxRetentionDays}). Records older than {RecycleBinConfigHelper.MaxRetentionDays} days are auto-purged and cannot be restored.");
+                warnings.Add($"CleanupIntervalInDays at or near max ({MaxRetentionDays}). Records older than {MaxRetentionDays} days are auto-purged and cannot be restored.");
             }
 
             var structured = new ManageDeletedRecordsResult
@@ -392,16 +389,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success(text, structured);
         }
 
-        /// <summary>
-        /// action='turn': toggle the org-level soft-delete setting.
-        /// Requires the <c>turn</c> param ("on" or "off"). If a previous
-        /// RecycleBin operation is still running (operationtype=104 not yet
-        /// Completed), this throws -- call again after Solution History shows
-        /// the job as Succeeded/Failed/Canceled.
-        /// </summary>
         private CallToolResult ExecuteTurn(string turn, int retentionDays)
         {
-            // Validate 'turn' value.
             var t = (turn ?? "").Trim().ToLowerInvariant();
             if (t != "on" && t != "off")
             {
@@ -411,8 +400,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Both empty and anything other than 'on'/'off' are rejected to avoid accidental toggles.");
             }
 
-            // Runtime dry-run guard: when MCP server was started with
-            // `devkit mcp --dry-run`, skip the actual toggle and return a preview.
             if (_options != null && _options.DryRun)
             {
                 var retentionText = t == "on" ? $" with retention_days={retentionDays}" : "";
@@ -427,32 +414,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Success(previewText, previewStructured);
             }
 
-            // Validate retention_days range for turn='on'.
             int actualRetention = retentionDays;
             if (t == "on")
             {
-                if (retentionDays < RecycleBinConfigHelper.MinRetentionDays ||
-                    retentionDays > RecycleBinConfigHelper.MaxRetentionDays)
+                if (retentionDays < MinRetentionDays ||
+                    retentionDays > MaxRetentionDays)
                 {
                     return Error(
                         $"retention_days={retentionDays} out of range.",
-                        $"Valid range: {RecycleBinConfigHelper.MinRetentionDays}..{RecycleBinConfigHelper.MaxRetentionDays}. Default = {RecycleBinConfigHelper.DefaultRetentionDays}.");
+                        $"Valid range: {MinRetentionDays}..{MaxRetentionDays}. Default = {DefaultRetentionDays}.");
                 }
             }
             else
             {
-                // retention_days is meaningless for turn='off'; ignore user input.
-                actualRetention = RecycleBinConfigHelper.DefaultRetentionDays;
+                actualRetention = DefaultRetentionDays;
             }
 
-            // Snapshot previous state for the response.
-            var prevRow = RecycleBinConfigHelper.GetOrgRecycleBinConfigRow(_serviceClient);
+            var prevRow = GetOrgRecycleBinConfigRow();
             bool? previousOn = prevRow?.GetAttributeValue<bool?>("isreadyforrecyclebin");
 
-            // Do the toggle.
             if (t == "on")
             {
-                var newId = RecycleBinConfigHelper.TurnOn(_serviceClient, actualRetention);
+                var newId = TurnOn(actualRetention);
                 var text = previousOn == true
                     ? $"[Success] Soft-delete was already ON (id={newId}). No state change."
                     : $"[Success] Soft-delete turned ON (new id={newId}, retention={actualRetention} days). Dataverse will provision per-table rows in the background (operationtype=104 'Process Table For RecycleBin').";
@@ -468,7 +451,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             else
             {
-                var deletedId = RecycleBinConfigHelper.TurnOff(_serviceClient);
+                var deletedId = TurnOff();
                 var text = deletedId.HasValue
                     ? $"[Success] Soft-delete turned OFF (deleted recyclebinconfig id={deletedId}). Dataverse will cascade-delete per-table rows in the background."
                     : "[Success] Soft-delete was already OFF (no row to delete). No state change.";
@@ -482,9 +465,115 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
+        private Guid? TurnOff()
+        {
+            var row = GetOrgRecycleBinConfigRow();
+            if (row == null) return null;
+            var id = row.Id;
+            _serviceClient.Delete(RecycleBinConfigTable, id);
+            return id;
+        }
+
+        private string TurnOn(int retentionDays)
+        {
+            if (retentionDays < MinRetentionDays) retentionDays = MinRetentionDays;
+            if (retentionDays > MaxRetentionDays) retentionDays = MaxRetentionDays;
+
+            var entityId = GetOrganizationEntityId();
+
+            var payload = "{" +
+                "\"cleanupintervalindays\":" + retentionDays.ToString(CultureInfo.InvariantCulture) + "," +
+                "\"extensionofrecordid@OData.Community.Display.V1.FormattedValue\":\"OrganizationId\"," +
+                "\"extensionofrecordid@odata.bind\":\"entities(" + entityId.ToString() + ")\"" +
+                "}";
+            var headers = new Dictionary<string, List<string>>
+            {
+                { "Accept", new List<string> { "application/json" } },
+                { "OData-MaxVersion", new List<string> { "4.0" } },
+                { "OData-Version", new List<string> { "4.0" } },
+                { "Prefer", new List<string> { "return=representation", "odata.include-annotations=\"*\"" } }
+            };
+
+            using var webApiMode = new ServiceClientWebApiMode(_serviceClient);
+            using var resp = _serviceClient.ExecuteWebRequest(
+                HttpMethod.Post,
+                "recyclebinconfigs",
+                payload,
+                headers,
+                "application/json");
+
+            var body = resp.Content != null ? resp.Content.ReadAsStringAsync().GetAwaiter().GetResult() : "";
+            int code = (int)resp.StatusCode;
+            if (code < 200 || code >= 300)
+                throw new InvalidOperationException("POST /recyclebinconfigs returned HTTP " + code + ": " + body);
+
+            string newId = "(see response body)";
+            if (resp.Headers != null && resp.Headers.TryGetValues("OData-EntityId", out var vals))
+            {
+                var entId = string.Join("", vals);
+                int idx = entId.LastIndexOf('(');
+                if (idx > 0 && entId.EndsWith(")"))
+                    newId = entId.Substring(idx + 1, entId.Length - idx - 2);
+            }
+            if (newId == "(see response body)")
+            {
+                int iStart = body.IndexOf("recyclebinconfigs(", StringComparison.OrdinalIgnoreCase);
+                if (iStart >= 0)
+                {
+                    int iEnd = body.IndexOf(')', iStart);
+                    if (iEnd > iStart)
+                        newId = body.Substring(iStart + "recyclebinconfigs(".Length, iEnd - iStart - "recyclebinconfigs(".Length);
+                }
+            }
+
+            return newId;
+        }
+
         private int GetMaxRetentionDays()
         {
-            return RecycleBinConfigHelper.GetMaxRetentionDays(_serviceClient);
+            var row = GetOrgRecycleBinConfigRow();
+            if (row == null) return MaxRetentionDays;
+            int? days = row.GetAttributeValue<int?>("cleanupintervalindays");
+            if (!days.HasValue || days.Value < 1) return MaxRetentionDays;
+            return Math.Min(days.Value, MaxRetentionDays);
+        }
+
+        private Entity GetOrgRecycleBinConfigRow()
+        {
+            var qe = new QueryExpression(RecycleBinConfigTable)
+            {
+                ColumnSet = new ColumnSet("recyclebinconfigid", "name", "isreadyforrecyclebin", "cleanupintervalindays"),
+                Criteria = new FilterExpression(LogicalOperator.And)
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("name", ConditionOperator.Equal, OrgRowName)
+                    }
+                }
+            };
+            var result = _serviceClient.RetrieveMultiple(qe);
+            return result.Entities.Count == 1 ? result.Entities[0] : null;
+        }
+
+        private Guid GetOrganizationEntityId()
+        {
+            if (_cachedOrganizationEntityId.HasValue) return _cachedOrganizationEntityId.Value;
+            var qe = new QueryExpression("entity")
+            {
+                ColumnSet = new ColumnSet("entityid"),
+                Criteria = new FilterExpression(LogicalOperator.And)
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("logicalname", ConditionOperator.Equal, "organization")
+                    }
+                }
+            };
+            var result = _serviceClient.RetrieveMultiple(qe);
+            if (result.Entities.Count == 0)
+                throw new InvalidOperationException("entity row not found for logicalname='organization'");
+            _cachedOrganizationEntityId = result.Entities[0].Id;
+            return _cachedOrganizationEntityId.Value;
         }
 
         private static string GetPrimaryKeyAttribute(string entityLogicalName)
