@@ -9,6 +9,7 @@ namespace DynamicsCrm.DevKit.Shared
         public const string Build = "xxxx.yy.zz HH.mm.ss";
         public const string CrmString = "Dataverse/CDS";
         public const string DynamicsCrmDevKit = "DynamicsCrm.DevKit";
+        public const string SystemAdministratorRoleName = "System Administrator";
         public const string DynamicsCrmDevKitJson = $"{Const.DynamicsCrmDevKit}.json";
         public const string DynamicsCrmDevKitCliJson = $"{Const.DynamicsCrmDevKit}.Cli.json";
         public const string DynamicsCrmDevKitConfigJson = $"{Const.DynamicsCrmDevKit}.Config.json";

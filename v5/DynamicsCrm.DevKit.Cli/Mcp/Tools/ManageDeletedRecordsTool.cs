@@ -415,6 +415,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Success(previewText, previewStructured);
             }
 
+            // Security gate: action='turn' is high-impact (cascades per-table rows + changes
+            // future Deletes from soft→hard). Require the OOB "System Administrator" role
+            // to be directly assigned to the calling user. Re-queried on every call so a
+            // freshly-revoked admin role cannot slip through a stale cache.
+            const string requiredRoleName = DynamicsCrm.DevKit.Shared.Const.SystemAdministratorRoleName;
+            if (!RoleGateHelper.IsSystemAdministrator(_serviceClient))
+            {
+                var haveRoles = RoleGateHelper.GetCurrentRoleNames(_serviceClient);
+                var haveList = haveRoles.Count > 0
+                    ? string.Join(", ", haveRoles)
+                    : "(no roles assigned)";
+                return Error(
+                    $"Action 'turn' requires the '{requiredRoleName}' role. The calling user does not have it.",
+                    $"Toggling soft-delete on/off at the org level is destructive (cascades per-table recyclebinconfig rows; turns future Deletes into permanent hard-deletes). " +
+                    $"Ask a System Administrator to assign the '{requiredRoleName}' role to your user, then retry. " +
+                    $"Current roles on the calling user: {haveList}.");
+            }
+
             int actualRetention = retentionDays;
             if (t == "on")
             {
