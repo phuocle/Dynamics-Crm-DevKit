@@ -415,6 +415,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Success(previewText, previewStructured);
             }
 
+            // Idempotency / no-op gate: reject turn='on' when org is already ON, and
+            // turn='off' when org is already OFF. This runs BEFORE the role gate so
+            // non-admin users get the same clear error (caller can read it without
+            // needing System Administrator role) and we avoid touching Dataverse
+            // (DELETE + POST round-trip) for a request that would do nothing.
+            // Normalize: a NULL `isreadyforrecyclebin` (or missing org row) is treated as
+            // OFF. Without this normalization the `==` comparison would evaluate
+            // `null == false` to `false`, letting a redundant turn='off' slip past the
+            // gate and trigger a pointless DELETE on a non-existent row.
+            var currentOrgRow = GetOrgRecycleBinConfigRow();
+            bool currentlyOn = currentOrgRow?.GetAttributeValue<bool?>("isreadyforrecyclebin").GetValueOrDefault(false) ?? false;
+            bool requestedOn = t == "on";
+            if (currentlyOn == requestedOn)
+            {
+                var stateWord = requestedOn ? "ON" : "OFF";
+                var hint = requestedOn
+                    ? "Call action='turn' turn='off' first to disable, then re-run with turn='on'."
+                    : "Call action='turn' turn='on' first to enable, then re-run with turn='off'.";
+                return Error(
+                    $"Soft-delete is already {stateWord} at the org level. No state change was made.",
+                    $"The org-level 'Keep deleted Dataverse records' feature is currently {stateWord} " +
+                    $"(recyclebinconfig[organization].isreadyforrecyclebin = {(currentOrgRow == null ? "(row missing)" : currentlyOn.ToString())}). " +
+                    $"This turn='{t}' request would be a no-op, so it was rejected to avoid unnecessary " +
+                    $"DELETE + POST round-trips. {hint}");
+            }
+
             // Security gate: action='turn' is high-impact (cascades per-table rows + changes
             // future Deletes from soft→hard). Require the OOB "System Administrator" role
             // to be directly assigned to the calling user. Re-queried on every call so a
@@ -449,15 +475,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 actualRetention = DefaultRetentionDays;
             }
 
+            // Re-read after the no-op gate to capture the row we are about to mutate
+            // (avoids a second round-trip if the row was created/changed between the
+            // gate check and now; in practice it's the same row but we want the fresh
+            // `previousOn` value for the structured response).
             var prevRow = GetOrgRecycleBinConfigRow();
             bool? previousOn = prevRow?.GetAttributeValue<bool?>("isreadyforrecyclebin");
 
             if (t == "on")
             {
                 var newId = TurnOn(actualRetention);
-                var text = previousOn == true
-                    ? $"[Success] Soft-delete was already ON (id={newId}). No state change."
-                    : $"[Success] Soft-delete turned ON (new id={newId}, retention={actualRetention} days). Dataverse will provision per-table rows in the background (operationtype=104 'Process Table For RecycleBin').";
+                var text = $"[Success] Soft-delete turned ON (new id={newId}, retention={actualRetention} days). Dataverse will provision per-table rows in the background (operationtype=104 'Process Table For RecycleBin').";
                 var structured = new ManageDeletedRecordsResult
                 {
                     Action = "turn",
@@ -471,9 +499,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             else
             {
                 var deletedId = TurnOff();
-                var text = deletedId.HasValue
-                    ? $"[Success] Soft-delete turned OFF (deleted recyclebinconfig id={deletedId}). Dataverse will cascade-delete per-table rows in the background."
-                    : "[Success] Soft-delete was already OFF (no row to delete). No state change.";
+                var text = $"[Success] Soft-delete turned OFF (deleted recyclebinconfig id={deletedId}). Dataverse will cascade-delete per-table rows in the background.";
                 var structured = new ManageDeletedRecordsResult
                 {
                     Action = "turn",
