@@ -519,7 +519,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 { "Prefer", new List<string> { "return=representation", "odata.include-annotations=\"*\"" } }
             };
 
-            using var webApiMode = new ServiceClientWebApiMode(_serviceClient);
             using var resp = _serviceClient.ExecuteWebRequest(
                 HttpMethod.Post,
                 "recyclebinconfigs",
