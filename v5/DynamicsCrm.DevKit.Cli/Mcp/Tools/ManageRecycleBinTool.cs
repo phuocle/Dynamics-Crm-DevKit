@@ -50,6 +50,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             public Guid? Id { get; set; }
             public bool? IsReadyForRecycleBin { get; set; }
+            public int? StateCode { get; set; }
             public int? CleanupIntervalInDays { get; set; }
         }
 
@@ -211,8 +212,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (orgConfig == null)
                 return Error("Org-level RecycleBinConfig row (name='organization') not found — soft-delete is disabled at the org level.",
                     "Call manage_deleted_records(action='turn', retention_days=1..30) first to turn ON soft-delete at the org level, then retry this " + action + ".");
-            if (orgConfig.IsReadyForRecycleBin != true)
-                return Error("Org-level soft-delete is currently OFF (isreadyforrecyclebin=false on the org row).",
+            // Soft-delete is ON only when BOTH statecode=0 (Active) AND
+            // isreadyforrecyclebin=true. The platform keeps isreadyforrecyclebin=true
+            // even after the row is set to Inactive (statecode=1), so checking
+            // isreadyforrecyclebin alone is insufficient and causes false "ON".
+            bool orgIsOn = orgConfig.StateCode.GetValueOrDefault(1) == 0 && orgConfig.IsReadyForRecycleBin.GetValueOrDefault(false);
+            if (!orgIsOn)
+                return Error("Org-level soft-delete is currently OFF (statecode=" + orgConfig.StateCode + ", isreadyforrecyclebin=" + orgConfig.IsReadyForRecycleBin + " on the org row).",
                     "Call manage_deleted_records(action='turn', retention_days=1..30) first to turn ON soft-delete at the org level, then retry this " + action + ".");
 
             if (dryRun)
@@ -492,6 +498,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 Id = row.Id,
                 IsReadyForRecycleBin = row.GetAttributeValue<bool?>("isreadyforrecyclebin"),
+                StateCode = row.GetAttributeValue<OptionSetValue>("statecode")?.Value,
                 CleanupIntervalInDays = row.GetAttributeValue<int?>("cleanupintervalindays")
             };
         }
@@ -500,7 +507,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var qe = new QueryExpression(RecycleBinConfigTable)
             {
-                ColumnSet = new ColumnSet("recyclebinconfigid", "name", "isreadyforrecyclebin", "cleanupintervalindays"),
+                ColumnSet = new ColumnSet("recyclebinconfigid", "name", "isreadyforrecyclebin", "cleanupintervalindays", "statecode"),
                 Criteria = new FilterExpression(LogicalOperator.And)
                 {
                     Conditions =
