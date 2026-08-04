@@ -101,6 +101,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("isReady")]
         public bool IsReady { get; set; }
 
+        [JsonPropertyName("stateCode")]
+        public int StateCode { get; set; }
+
+        [JsonPropertyName("enabled")]
+        public bool Enabled { get; set; }
+
         [JsonPropertyName("intervalDays")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? IntervalDays { get; set; }

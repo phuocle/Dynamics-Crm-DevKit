@@ -42,7 +42,19 @@ namespace Dev.AllInOne.Console
 
             try
             {
-                await TurnOnAsync(svc, DefaultRetentionDays);
+                if (args.Length > 0 && args[0].Equals("turnon-org", StringComparison.OrdinalIgnoreCase))
+                {
+                    await TurnOnAsync(svc, DefaultRetentionDays);
+                    return 0;
+                }
+                if (args.Length > 0 && args[0].Equals("apply", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Timed bulk per-table turn-off (A/B test + full run).
+                    await BulkProbe.RunTurnOffAllAsync(svc);
+                    return 0;
+                }
+                // Default: diagnostics to find the real per-table disable mechanism.
+                await DiagProbe.RunAsync(svc);
                 return 0;
             }
             catch (Exception ex)

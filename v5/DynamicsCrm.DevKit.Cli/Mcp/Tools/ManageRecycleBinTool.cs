@@ -1,5 +1,8 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
@@ -21,6 +24,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class ManageRecycleBinTool : McpToolBase
     {
         private const int MaxParallelism = 52;
+        private const int RequestBatchSize = 100;
+        private const int RequestBatchParallelism = 4;
         private const int DefaultPageSize = 10;
         private const int MaxPageSize = 100;
         private const string RecycleBinConfigTable = "recyclebinconfig";
@@ -33,9 +38,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private sealed class RecycleBinConfigEntry
         {
+            public Guid Id { get; set; }
             public string LogicalName { get; set; }
             public string DisplayName { get; set; }
             public bool IsReadyForRecycleBin { get; set; }
+            public int StateCode { get; set; }
             public int? CleanupIntervalInDays { get; set; }
         }
 
@@ -61,15 +68,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Manage per-table soft-delete (Recycle Bin) readiness flags in the recyclebinconfig entity. " +
             "STRICT RULES — AI MUST FOLLOW: " +
-            "(1) THIS TOOL ONLY UPDATES per-table rows. NEVER CREATE, NEVER DELETE any row. NEVER touch the org-level row (name='organization'). " +
-            "(2) For ORG-LEVEL soft-delete ON/OFF and retention days, use manage_deleted_records(action='turn'). Do NOT call manage_recycle_bin on the org row. " +
+            "(1) THIS TOOL ONLY toggles per-table rows via SetState (+ optional per-table cleanup interval). NEVER CREATE, NEVER DELETE any row. " +
+            "(2) For ORG-LEVEL soft-delete ON/OFF and retention days, use manage_deleted_records(action='turn'). Do NOT call manage_recycle_bin on the org row (name='organization'). " +
             "(3) WARNING: manage_deleted_records(action='turn', turn='off') DELETEs the org row and Dataverse CASCADE-DELETEs ALL per-table rows in the background. If the user only wants to disable soft-delete for some tables while keeping the org-level feature ON, prefer manage_recycle_bin(action='turn_off', turn_off=<csv>) instead. " +
-            "DATA MODEL: one row per (org, table); isreadyforrecyclebin=true means soft-delete ON for that table; cleanupintervalindays=-1 inherits from the org row. " +
+            "DATA MODEL: one row per (org, table). Per-table soft-delete ON = row statecode=0 (Active); OFF = statecode=1 (Inactive). isreadyforrecyclebin is platform-managed (stays true) — direct Update of it FAULTS with 0x80097578, so this tool toggles via SetStateRequest (probe-verified). cleanupintervalindays=-1 inherits from the org row (updating it via normal Update is supported). " +
             "ACTIONS: " +
             "list_table — paginated list of tables + their current soft-delete state (default 10/page, A-Z by logical name, supports entity_filter contains match). " +
-            "turn_on — bulk turn soft-delete ON for 1+ tables (parallel Update only). " +
-            "turn_off — bulk turn soft-delete OFF for 1+ tables (parallel Update only). " +
-            "turn_on/turn_off special CSV value 'all' means every per-table row currently present in recyclebinconfig (skip the org row). " +
+            "turn_on — bulk turn soft-delete ON for 1+ tables (SetState Active via ExecuteMultiple batches). " +
+            "turn_off — bulk turn soft-delete OFF for 1+ tables (SetState Inactive via ExecuteMultiple batches). " +
+            "turn_on/turn_off special CSV value 'all' means every per-table row currently present in recyclebinconfig (skip the org row). Rows already in the desired state are reported as 'skipped'. " +
             "No CREATE and no DELETE is ever issued by this tool; per-table rows that don't exist yet must be created via manage_deleted_records(action='turn', turn='on') which triggers Dataverse background provisioning. " +
             "RELATED: manage_deleted_records (org-level ON/OFF + bin read/restore), get_tables (list of tables to build CSV), execute_webapi (raw — blocked for recyclebinconfigs PATCH/POST).")]
         public async Task<CallToolResult> manage_recycle_bin(
@@ -81,8 +88,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("list_table: rows per page (default 10, max 100).")] int page_size = 10,
             [Description("turn_on: CSV of entity logical/display names to turn soft-delete ON. Required for action='turn_on'.")] string turn_on = null,
             [Description("turn_off: CSV of entity logical/display names to turn soft-delete OFF. Required for action='turn_off'.")] string turn_off = null,
-            [Description("turn_on/turn_off: optional cleanupintervalindays (1-30) for the org row. When set, also updates the org row (sets it from -1 to a real value). -1 = inherit.")] int? cleanup_interval_days = null,
-            [Description("turn_on/turn_off: 0 = server hint (RecommendedDegreesOfParallelism). Clamped 1-52.")] int max_parallelism = 0,
+            [Description("turn_on/turn_off: optional cleanupintervalindays. 1-30: sets per-table rows AND the org row. -1: sets per-table rows only (inherit); org row untouched.")] int? cleanup_interval_days = null,
+            [Description("turn_on/turn_off: 0 = default 4 ExecuteMultiple batch workers (server-advertised optimum). Clamped 1-52.")] int max_parallelism = 0,
             [Description("turn_on/turn_off: false to actually apply. Default true (safe preview).")] bool dry_run = true)
         {
             try
@@ -115,7 +122,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var allRows = QueryConfigEntries(entityFilter, includeSystem, onlyCustom, page, pageSize);
 
             var displayNames = string.Join(", ", allRows.Select(r => r.DisplayName));
-            var totalCount = CountAllEnabledRows();
+            var totalCount = CountConfigRows(entityFilter, includeSystem, onlyCustom);
             var totalPages = Math.Max(1, (int)Math.Ceiling(totalCount / (double)pageSize));
             var truncated = allRows.Count >= pageSize && page < totalPages;
 
@@ -133,6 +140,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     LogicalName = r.LogicalName,
                     DisplayName = r.DisplayName,
                     IsReady = r.IsReadyForRecycleBin,
+                    StateCode = r.StateCode,
+                    Enabled = r.StateCode == 0 && r.IsReadyForRecycleBin,
                     IntervalDays = r.CleanupIntervalInDays
                 }).ToList() : null,
                 FilterNote = string.IsNullOrEmpty(entityFilter) ? null : $"entity_filter='{entityFilter}'"
@@ -176,8 +185,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var names = ParseCsv(csv);
             if (names.Count == 0)
                 return Error($"{action}: CSV parameter is required and must contain at least 1 entity name.",
-                    $"Pass 1+ entity logical/display names as a comma-separated string (e.g. {action}=\"Account,Contact,new_order\"). " +
+                    $"Pass 1+ entity logical/display names as a comma-separated string (e.g. {action}=\"Account,Contact,new_order\"), or the special value 'all' for every per-table row. " +
                     "Use get_tables to enumerate available tables.");
+
+            List<RecycleBinConfigEntry> configRows = null;
+            if (names.Any(n => string.Equals(n, "all", StringComparison.OrdinalIgnoreCase)))
+            {
+                configRows = GetAllPerTableRows();
+                names = configRows.Select(r => r.LogicalName).Where(n => !string.IsNullOrEmpty(n)).ToList();
+                if (names.Count == 0)
+                    return Error($"{action}: 'all' matched 0 per-table rows in recyclebinconfig.",
+                        "Per-table rows are provisioned by Dataverse in the background after org-level soft-delete is turned ON. " +
+                        "Call manage_deleted_records(action='turn', retention_days=1..30) first, wait for provisioning, then retry.");
+            }
 
             if (cleanupIntervalDays.HasValue)
             {
@@ -217,9 +237,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Warnings = new List<string>
                     {
                         "dry_run=true — no changes were made. Call again with dry_run=false to apply.",
-                        cleanupIntervalDays.HasValue
-                            ? $"cleanup_interval_days={cleanupIntervalDays} will also update the org row (name='organization')."
-                            : "cleanup_interval_days not provided — per-table rows keep their current value; org row untouched."
+                        BuildIntervalNote(cleanupIntervalDays)
                     }
                 };
 
@@ -227,47 +245,113 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"[DRY-RUN] {action}: would apply to {names.Count} table(s):");
                 sb.AppendLine();
                 sb.AppendLine($"  {string.Join(", ", names)}");
-                if (cleanupIntervalDays.HasValue) sb.AppendLine($"  Org row cleanupintervalindays → {cleanupIntervalDays}");
+                if (cleanupIntervalDays.HasValue && cleanupIntervalDays.Value != InheritRetentionSentinel)
+                    sb.AppendLine($"  Org row cleanupintervalindays → {cleanupIntervalDays}");
+                else if (cleanupIntervalDays.HasValue)
+                    sb.AppendLine($"  Per-table rows cleanupintervalindays → {InheritRetentionSentinel} (inherit); org row untouched");
                 sb.AppendLine();
                 sb.AppendLine("No changes were made. Re-call with dry_run=false to apply.");
                 return Success(sb.ToString(), structured);
             }
 
-            var parallelism = maxParallelism <= 0
-                ? Math.Max(1, _serviceClient.RecommendedDegreesOfParallelism)
-                : maxParallelism;
-            parallelism = Math.Clamp(parallelism, 1, MaxParallelism);
-
             var sw = Stopwatch.StartNew();
-            var allItems = new ConcurrentBag<RecycleBinApplyItem>();
 
-            await Parallel.ForEachAsync(names, new ParallelOptions { MaxDegreeOfParallelism = parallelism }, async (name, ct) =>
+            // max_parallelism controls ExecuteMultiple batch workers (default 4 = server-advertised optimum).
+            var batchDop = maxParallelism <= 0 ? RequestBatchParallelism : Math.Clamp(maxParallelism, 1, MaxParallelism);
+
+            // Load per-table rows (once) + entity metadata ONCE (no per-item RetrieveAllEntities).
+            configRows ??= GetAllPerTableRows();
+            var rowsByName = new Dictionary<string, RecycleBinConfigEntry>(StringComparer.OrdinalIgnoreCase);
+            foreach (var r in configRows)
+                if (!string.IsNullOrEmpty(r.LogicalName) && !rowsByName.ContainsKey(r.LogicalName))
+                    rowsByName[r.LogicalName] = r;
+
+            // statecode is the real per-table switch (probe-verified): 0=Active(ON), 1=Inactive(OFF).
+            var desiredState = isReady ? 0 : 1;
+            var desiredStatus = isReady ? 1 : 2;
+
+            var candidates = LoadEntityCandidatesOnce();
+            var allItems = new List<RecycleBinApplyItem>(names.Count);
+            var resolvedRows = new List<(RecycleBinApplyItem Item, RecycleBinConfigEntry Row)>();
+            var toChange = new List<(RecycleBinApplyItem Item, OrganizationRequest Request)>();
+            var queuedRowIds = new HashSet<Guid>();
+            foreach (var name in names)
             {
-                var (ok, err) = await TryUpdateOneAsync(name, isReady, cleanupIntervalDays, ct);
-                allItems.Add(new RecycleBinApplyItem
+                var resolved = DisplayNameFirstResolver.Resolve(
+                    name,
+                    candidates,
+                    "[AmbiguousEntity]",
+                    "[NotFoundEntity]",
+                    "Tip: Use get_tables to list entities before calling manage_recycle_bin.",
+                    "entity_name");
+                if (!resolved.IsSuccess)
                 {
-                    LogicalName = name,
-                    Mode = action,
-                    Status = ok ? "applied" : "failed",
-                    Error = err
-                });
-            });
+                    allItems.Add(new RecycleBinApplyItem { LogicalName = name, Mode = action, Status = "failed", Error = resolved.Error });
+                    continue;
+                }
+                var logicalName = resolved.Value.LogicalName;
+                if (!rowsByName.TryGetValue(logicalName, out var row))
+                {
+                    allItems.Add(new RecycleBinApplyItem
+                    {
+                        LogicalName = logicalName,
+                        Mode = action,
+                        Status = "failed",
+                        Error = $"recyclebinconfig row for '{logicalName}' not found — per-table rows are provisioned by Dataverse in the background. " +
+                                "Ensure org-level soft-delete is ON (manage_deleted_records action='turn') and wait for provisioning, then retry."
+                    });
+                    continue;
+                }
+                var pending = new RecycleBinApplyItem { LogicalName = logicalName, Mode = action, Status = "pending" };
+                allItems.Add(pending);
+                resolvedRows.Add((pending, row));
+                if (row.StateCode == desiredState || !queuedRowIds.Add(row.Id))
+                {
+                    pending.Status = "skipped";
+                    continue;
+                }
+                toChange.Add((pending, new SetStateRequest
+                {
+                    EntityMoniker = new EntityReference(EntityLogicalName, row.Id),
+                    State = new OptionSetValue(desiredState),
+                    Status = new OptionSetValue(desiredStatus)
+                }));
+            }
+
+            // SetState via ExecuteMultiple batches (probe-proven fastest vs parallel individual Execute).
+            ExecuteRequestBatches(toChange, batchDop);
+
+            // Optional per-table cleanup interval (documented Update path) on every resolved row.
+            if (cleanupIntervalDays.HasValue)
+            {
+                ExecuteRequestBatches(resolvedRows.Select(t =>
+                {
+                    var update = new Entity(EntityLogicalName, t.Row.Id);
+                    update["cleanupintervalindays"] = cleanupIntervalDays.Value;
+                    return (t.Item, (OrganizationRequest)new UpdateRequest { Target = update });
+                }).ToList(), batchDop);
+            }
 
             sw.Stop();
 
             var ordered = allItems.OrderBy(i => names.IndexOf(i.LogicalName)).ToList();
 
             var succeeded = ordered.Count(i => i.Status == "applied");
+            var skipped = ordered.Count(i => i.Status == "skipped");
             var failed = ordered.Count(i => i.Status == "failed");
             var total = names.Count;
             var failRate = total > 0 ? (double)failed / total : 0.0;
 
             var warnings = new List<string>();
-            if (cleanupIntervalDays.HasValue)
+            if (cleanupIntervalDays.HasValue && cleanupIntervalDays.Value != InheritRetentionSentinel)
             {
                 var orgErr = await TryUpdateOrgRowAsync(cleanupIntervalDays.Value);
                 if (orgErr != null) warnings.Add($"Failed to update org row (name='organization'): {orgErr}");
                 else warnings.Add($"Updated org row (name='organization') cleanupintervalindays={cleanupIntervalDays}.");
+            }
+            else if (cleanupIntervalDays.HasValue)
+            {
+                warnings.Add($"cleanup_interval_days={InheritRetentionSentinel} applied to per-table rows only (inherit); org row untouched.");
             }
 
             if (total >= 5 && failRate >= 0.5)
@@ -284,17 +368,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 DryRun = false,
                 Succeeded = succeeded,
                 Failed = failed,
+                SkipCount = skipped > 0 ? skipped : (int?)null,
                 EnableCount = isReady ? total : 0,
                 DisableCount = isReady ? 0 : total,
                 OrgIntervalDays = cleanupIntervalDays,
                 DurationSeconds = Math.Round(sw.Elapsed.TotalSeconds, 1),
-                Parallelism = parallelism,
+                Parallelism = batchDop,
                 Items = ordered,
                 Warnings = warnings.Count > 0 ? warnings : null
             };
 
             var sb2 = new StringBuilder();
-            sb2.AppendLine($"[Success] {action}: applied {succeeded}/{total} table config(s) in {sw.Elapsed.TotalSeconds:0.0}s ({parallelism} concurrent).");
+            sb2.AppendLine($"[Success] {action}: applied {succeeded}/{total} table config(s) in {sw.Elapsed.TotalSeconds:0.0}s ({batchDop} batch workers).");
+            if (skipped > 0) sb2.AppendLine($"  {skipped} table(s) skipped — already in the desired state.");
             if (failed > 0)
             {
                 sb2.AppendLine();
@@ -311,31 +397,72 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success(sb2.ToString(), structured2);
         }
 
-        private async Task<(bool ok, string err)> TryUpdateOneAsync(string entityName, bool isReady, int? cleanupIntervalDays, CancellationToken ct)
+        private void ExecuteRequestBatches(List<(RecycleBinApplyItem Item, OrganizationRequest Request)> work, int batchDop)
         {
-            return await Task.Run(async () =>
+            if (work.Count == 0) return;
+            var batches = work
+                .Select((w, i) => new { w, i })
+                .GroupBy(x => x.i / RequestBatchSize)
+                .Select(g => g.Select(x => x.w).ToList())
+                .ToList();
+            Parallel.ForEach(batches, new ParallelOptions { MaxDegreeOfParallelism = batchDop }, batch =>
             {
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_recycle_bin");
-                if (!entityResult.IsSuccess) return (false, entityResult.Error);
-                var entityId = entityResult.Value.MetadataId ?? Guid.Empty;
-                if (entityId == Guid.Empty) return (false, "entity has no metadata id");
-
-                var update = new Entity(EntityLogicalName, Guid.NewGuid())
+                var request = new ExecuteMultipleRequest
                 {
-                    ["extensionofrecordid"] = new EntityReference("entity", entityId),
-                    ["name"] = entityResult.Value.LogicalName,
-                    ["isreadyforrecyclebin"] = isReady
+                    Settings = new ExecuteMultipleSettings { ContinueOnError = true, ReturnResponses = true },
+                    Requests = new OrganizationRequestCollection()
                 };
-                if (cleanupIntervalDays.HasValue)
-                    update["cleanupintervalindays"] = cleanupIntervalDays.Value;
+                foreach (var w in batch) request.Requests.Add(w.Request);
+                try
+                {
+                    var response = (ExecuteMultipleResponse)_serviceClient.Execute(request);
+                    foreach (var responseItem in response.Responses)
+                    {
+                        if (responseItem.Fault == null) continue;
+                        var target = batch[responseItem.RequestIndex].Item;
+                        target.Status = "failed";
+                        target.Error = responseItem.Fault.Message;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    foreach (var w in batch)
+                    {
+                        w.Item.Status = "failed";
+                        w.Item.Error = ex.GetBaseException().Message;
+                    }
+                }
+            });
+            foreach (var w in work)
+                if (w.Item.Status == "pending") w.Item.Status = "applied";
+        }
 
-                await _serviceClient.UpdateAsync(update, ct);
-                return (true, null);
-            }, ct).ContinueWith(t => t.IsFaulted
-                ? (false, t.Exception.GetBaseException().Message)
-                : t.IsCanceled
-                    ? (false, "operation canceled")
-                    : t.Result, CancellationToken.None);
+        private List<DisplayNameFirstCandidate<EntityMetadata>> LoadEntityCandidatesOnce()
+        {
+            var response = (RetrieveAllEntitiesResponse)_serviceClient.Execute(new RetrieveAllEntitiesRequest
+            {
+                EntityFilters = EntityFilters.Entity,
+                RetrieveAsIfPublished = true
+            });
+            return response.EntityMetadata.Select(e => new DisplayNameFirstCandidate<EntityMetadata>
+            {
+                Value = e,
+                DisplayName = e.DisplayName?.UserLocalizedLabel?.Label,
+                LogicalName = e.LogicalName,
+                SchemaName = e.SchemaName,
+                Id = e.MetadataId,
+                Kind = "entity",
+                CanonicalName = e.LogicalName
+            }).ToList();
+        }
+
+        private static string BuildIntervalNote(int? cleanupIntervalDays)
+        {
+            if (!cleanupIntervalDays.HasValue)
+                return "cleanup_interval_days not provided — per-table rows keep their current value; org row untouched.";
+            if (cleanupIntervalDays.Value == InheritRetentionSentinel)
+                return $"cleanup_interval_days={InheritRetentionSentinel} — per-table rows will inherit from the org row; org row untouched.";
+            return $"cleanup_interval_days={cleanupIntervalDays.Value} will also update the org row (name='organization').";
         }
 
         private async Task<string> TryUpdateOrgRowAsync(int cleanupIntervalDays)
@@ -386,31 +513,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return result.Entities.Count == 1 ? result.Entities[0] : null;
         }
 
-        private List<RecycleBinConfigEntry> QueryConfigEntries(
-            string nameFilter,
-            bool includeSystem,
-            bool onlyCustom,
-            int page,
-            int pageSize)
+        private QueryExpression BuildConfigQuery(string nameFilter, bool includeSystem, bool onlyCustom, ColumnSet entityLinkColumns)
         {
-            if (page < 1) page = 1;
-            if (pageSize < 1) pageSize = 10;
-
             var qe = new QueryExpression(RecycleBinConfigTable)
             {
-                ColumnSet = new ColumnSet("recyclebinconfigid", "name", "isreadyforrecyclebin", "cleanupintervalindays"),
                 Criteria = new FilterExpression(LogicalOperator.And)
                 {
                     Conditions =
                     {
                         new ConditionExpression("name", ConditionOperator.NotEqual, OrgRowName)
                     }
-                },
-                Orders = { new OrderExpression("name", OrderType.Ascending) },
-                PageInfo = new PagingInfo
-                {
-                    PageNumber = page,
-                    Count = pageSize
                 }
             };
 
@@ -420,17 +532,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var entityLink = qe.AddLink("entity", "extensionofrecordid", "entityid", JoinOperator.Inner);
-            entityLink.Columns = new ColumnSet("logicalname", "name", "collectionname");
             entityLink.EntityAlias = "ent";
+            if (entityLinkColumns != null) entityLink.Columns = entityLinkColumns;
 
-            if (onlyCustom)
+            if (onlyCustom || !includeSystem)
             {
                 qe.Criteria.AddCondition("ismanaged", ConditionOperator.Equal, false);
             }
-            else if (!includeSystem)
+
+            return qe;
+        }
+
+        private List<RecycleBinConfigEntry> QueryConfigEntries(
+            string nameFilter,
+            bool includeSystem,
+            bool onlyCustom,
+            int page,
+            int pageSize)
+        {
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = DefaultPageSize;
+
+            var qe = BuildConfigQuery(nameFilter, includeSystem, onlyCustom,
+                new ColumnSet("logicalname", "name", "collectionname"));
+            qe.ColumnSet = new ColumnSet("recyclebinconfigid", "name", "isreadyforrecyclebin", "cleanupintervalindays", "statecode");
+            qe.Orders.Add(new OrderExpression("name", OrderType.Ascending));
+            qe.PageInfo = new PagingInfo
             {
-                qe.Criteria.AddCondition("ismanaged", ConditionOperator.Equal, false);
-            }
+                PageNumber = page,
+                Count = pageSize
+            };
 
             var result = _serviceClient.RetrieveMultiple(qe);
             var entries = new List<RecycleBinConfigEntry>(result.Entities.Count);
@@ -438,20 +569,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 entries.Add(new RecycleBinConfigEntry
                 {
+                    Id = row.Id,
                     LogicalName = row.GetAttributeValue<string>("name"),
                     DisplayName = ReadAliasedDisplayName(row, "ent"),
                     IsReadyForRecycleBin = row.GetAttributeValue<bool?>("isreadyforrecyclebin") ?? false,
+                    StateCode = row.GetAttributeValue<OptionSetValue>("statecode")?.Value ?? 0,
                     CleanupIntervalInDays = row.GetAttributeValue<int?>("cleanupintervalindays")
                 });
             }
             return entries;
         }
 
-        private int CountAllEnabledRows()
+        private List<RecycleBinConfigEntry> GetAllPerTableRows()
         {
+            var rows = new List<RecycleBinConfigEntry>();
             var qe = new QueryExpression(RecycleBinConfigTable)
             {
-                ColumnSet = new ColumnSet("recyclebinconfigid"),
+                ColumnSet = new ColumnSet("recyclebinconfigid", "name", "statecode"),
                 Criteria = new FilterExpression(LogicalOperator.And)
                 {
                     Conditions =
@@ -459,12 +593,39 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         new ConditionExpression("name", ConditionOperator.NotEqual, OrgRowName)
                     }
                 },
-                PageInfo = new PagingInfo
+                Orders = { new OrderExpression("name", OrderType.Ascending) },
+                PageInfo = new PagingInfo { PageNumber = 1, Count = 5000 }
+            };
+            while (true)
+            {
+                var result = _serviceClient.RetrieveMultiple(qe);
+                foreach (var row in result.Entities)
                 {
-                    PageNumber = 1,
-                    Count = 5000,
-                    ReturnTotalRecordCount = true
+                    var name = row.GetAttributeValue<string>("name");
+                    if (string.IsNullOrEmpty(name)) continue;
+                    rows.Add(new RecycleBinConfigEntry
+                    {
+                        Id = row.Id,
+                        LogicalName = name,
+                        StateCode = row.GetAttributeValue<OptionSetValue>("statecode")?.Value ?? 0
+                    });
                 }
+                if (!result.MoreRecords) break;
+                qe.PageInfo.PageNumber++;
+                qe.PageInfo.PagingCookie = result.PagingCookie;
+            }
+            return rows;
+        }
+
+        private int CountConfigRows(string nameFilter, bool includeSystem, bool onlyCustom)
+        {
+            var qe = BuildConfigQuery(nameFilter, includeSystem, onlyCustom, null);
+            qe.ColumnSet = new ColumnSet("recyclebinconfigid");
+            qe.PageInfo = new PagingInfo
+            {
+                PageNumber = 1,
+                Count = 5000,
+                ReturnTotalRecordCount = true
             };
             var result = _serviceClient.RetrieveMultiple(qe);
             return result.TotalRecordCount;
