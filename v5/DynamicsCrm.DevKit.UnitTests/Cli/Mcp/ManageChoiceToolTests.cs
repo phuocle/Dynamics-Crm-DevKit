@@ -484,10 +484,12 @@ public class ManageChoiceToolTests
     [TestMethod]
     public void DryRunResult_ContainsDryRunPrefix()
     {
-        var result = DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.McpToolResults.DryRun("Would do something");
+        var result = DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.McpToolResults.DryRun(
+            "Would do something", new { message = "Would do something" });
         var text = ((TextContentBlock)result.Content[0]).Text;
-        Assert.IsTrue(text.Contains("[DRY-RUN]"), "DryRunResult should contain [DRY-RUN] prefix");
-        Assert.IsTrue(text.Contains("No changes were made"), "DryRunResult should contain 'No changes were made'");
+        Assert.IsTrue(text.Contains("[DryRun]"), "DryRunResult should contain [DryRun] prefix");
+        Assert.IsFalse(result.StructuredContent!.Value.ToString().Contains("dryRun", StringComparison.OrdinalIgnoreCase));
+        Assert.IsTrue(result.StructuredContent.Value.ToString().Contains("message"));
     }
 
     // ──────────────────────────────────────────────

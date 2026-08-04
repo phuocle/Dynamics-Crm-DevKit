@@ -426,7 +426,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 webResource["description"] = description.Trim();
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE web resource '{name}' (type: {typeTrimmed}) in solution '{solResult.UniqueName}'.");
+                return DryRun($"Would CREATE web resource '{name}' (type: {typeTrimmed}) in solution '{solResult.UniqueName}'.", new ManageWebResourceResult
+                {
+                    Action = "create",
+                    Status = "not_executed",
+                    TotalCount = 1,
+                    WebResources =
+                    [
+                        new WebResourceEntry
+                        {
+                            Name = name,
+                            DisplayName = string.IsNullOrWhiteSpace(displayName) ? name : displayName.Trim(),
+                            Type = typeTrimmed,
+                            TypeCode = typeCode,
+                            Description = NullIfEmpty(description)
+                        }
+                    ],
+                    SolutionName = solResult.UniqueName,
+                    CreateMode = "record_create_then_add_solution_component",
+                    IsAddToSolution = true,
+                    AddToSolutionMethod = "SolutionUniqueName",
+                    Published = false
+                });
 
             var webResourceId = _serviceClient.Create(webResource);
 
@@ -549,7 +570,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (_options.DryRun)
             {
                 var existingNameDry = existing.GetAttributeValue<string>("name") ?? "";
-                return DryRunResult($"Would UPDATE web resource '{existingNameDry}' ({id}), {fieldsUpdated} field(s).");
+                return DryRun($"Would UPDATE web resource '{existingNameDry}' ({id}), {fieldsUpdated} field(s).", new ManageWebResourceResult
+                {
+                    Action = "update",
+                    Status = "not_executed",
+                    TotalCount = 1,
+                    WebResources =
+                    [
+                        new WebResourceEntry
+                        {
+                            WebResourceId = id.ToString(),
+                            Name = existingNameDry,
+                            DisplayName = !string.IsNullOrWhiteSpace(displayName) ? displayName.Trim() : NullIfEmpty(existing.GetAttributeValue<string>("displayname")),
+                            Type = TypeCodeMap.TryGetValue(existing.GetAttributeValue<OptionSetValue>("webresourcetype")?.Value ?? 0, out var previewType) ? previewType : "Unknown",
+                            TypeCode = existing.GetAttributeValue<OptionSetValue>("webresourcetype")?.Value ?? 0,
+                            IsManaged = isManaged ?? false
+                        }
+                    ],
+                    Published = false
+                });
             }
 
             _serviceClient.Update(update);
@@ -614,7 +653,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var typeValue = existing.GetAttributeValue<OptionSetValue>("webresourcetype")?.Value ?? 0;
 
             if (_options.DryRun)
-                return DryRunResult($"Would DELETE web resource '{existingName}' ({id}).");
+                return DryRun($"Would DELETE web resource '{existingName}' ({id}).", new ManageWebResourceResult
+                {
+                    Action = "delete",
+                    Status = "not_executed",
+                    TotalCount = 1,
+                    WebResources =
+                    [
+                        new WebResourceEntry
+                        {
+                            WebResourceId = id.ToString(),
+                            Name = existingName,
+                            Type = TypeCodeMap.TryGetValue(typeValue, out var previewType) ? previewType : "Unknown",
+                            TypeCode = typeValue,
+                            IsManaged = isManaged ?? false
+                        }
+                    ],
+                    Published = false
+                });
 
             _serviceClient.Delete("webresource", id);
 
@@ -741,8 +797,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult ErrorResult(string message) => Error(message);
-
-        private CallToolResult DryRunResult(string message) => DryRun(message);
 
         #endregion
     }

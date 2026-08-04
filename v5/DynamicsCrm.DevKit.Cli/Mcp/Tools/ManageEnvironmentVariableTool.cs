@@ -310,7 +310,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 newDef["description"] = description.Trim();
 
             if (_options.DryRun)
-                return DryRun($"Would CREATE environment variable '{variableName}' (type: {GetVariableTypeLabel(new OptionSetValue(typeValue))}).");
+                return DryRun($"Would CREATE environment variable '{variableName}' (type: {GetVariableTypeLabel(new OptionSetValue(typeValue))}).", new ManageEnvironmentVariableResult
+                {
+                    Action = "create",
+                    Status = "not_executed",
+                    VariableName = variableName,
+                    DisplayName = displayName,
+                    Type = GetVariableTypeLabel(new OptionSetValue(typeValue)),
+                    DefaultValue = defaultValue,
+                    CurrentValue = currentValue,
+                    Description = description,
+                    SolutionName = solutionName,
+                    CreateMode = "metadata",
+                    IsAddToSolution = true,
+                    AddToSolutionMethod = "SolutionUniqueName",
+                    Published = false
+                });
 
             var defId = _serviceClient.Create(newDef);
 
@@ -389,7 +404,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var parts = new List<string>();
                 if (hasDefChanges) parts.Add("definition");
                 if (hasValueChange) parts.Add("current value");
-                return DryRun($"Would UPDATE environment variable '{variableName}' ({string.Join(" + ", parts)}).");
+                return DryRun($"Would UPDATE environment variable '{variableName}' ({string.Join(" + ", parts)}).", new ManageEnvironmentVariableResult
+                {
+                    Action = "update",
+                    Status = "not_executed",
+                    VariableName = variableName,
+                    DisplayName = displayName,
+                    DefaultValue = defaultValue,
+                    CurrentValue = currentValue,
+                    Description = description,
+                    Published = false
+                });
             }
 
             if (hasDefChanges)
@@ -443,7 +468,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var existingDefault = def.GetAttributeValue<string>("defaultvalue") ?? "";
 
             if (_options.DryRun)
-                return DryRun($"Would CLEAR current value of environment variable '{variableName}' (reverts to default).");
+                return DryRun($"Would CLEAR current value of environment variable '{variableName}' (reverts to default).", new ManageEnvironmentVariableResult
+                {
+                    Action = "clear",
+                    Status = "not_executed",
+                    VariableName = variableName,
+                    DisplayName = existingDisplayName,
+                    Type = existingType,
+                    DefaultValue = existingDefault,
+                    ValueCleared = true,
+                    Published = false
+                });
 
             DeleteCurrentValue(defId);
 
@@ -484,7 +519,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Delete current value first (if exists), then delete definition
             if (_options.DryRun)
-                return DryRun($"Would DELETE environment variable '{variableName}'.");
+                return DryRun($"Would DELETE environment variable '{variableName}'.", new ManageEnvironmentVariableResult
+                {
+                    Action = "delete",
+                    Status = "not_executed",
+                    VariableName = variableName,
+                    DisplayName = existingDisplayName,
+                    Type = existingType,
+                    Published = false
+                });
             DeleteCurrentValue(defId);
             _serviceClient.Delete("environmentvariabledefinition", defId);
 

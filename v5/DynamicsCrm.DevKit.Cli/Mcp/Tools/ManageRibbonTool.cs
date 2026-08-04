@@ -859,7 +859,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Step 4: Build solution ZIP from template
             if (_options.DryRun)
-                return DryRunResult($"Would UPDATE ribbon for entity '{entityName}'.");
+                return DryRun($"Would UPDATE ribbon for entity '{entityName}'.", new ManageRibbonResult
+                {
+                    Action = "update",
+                    EntityName = entityName,
+                    Status = "not_executed",
+                    BackupPath = backupPath,
+                    Published = false
+                });
 
             // Step 5: Import solution. Execute returns only after Dataverse finishes the import request.
             var solutionZip = BuildSolutionZip(entityName, resolvedXml);
@@ -1031,7 +1038,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would UPDATE ribbon for entity '{entityName}' with {ops.Count} operations.");
+                return DryRun($"Would UPDATE ribbon for entity '{entityName}' with {ops.Count} operations.", new ManageRibbonResult
+                {
+                    Action = "update",
+                    EntityName = entityName,
+                    Status = "not_executed",
+                    BackupPath = backupPath,
+                    Published = false
+                });
 
             // Step 9: Build solution ZIP + import. Execute returns only after Dataverse finishes the import request.
             var solutionZip = BuildSolutionZip(entityName, xmlString);
@@ -1129,7 +1143,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would RESTORE ribbon for entity '{entityName}' from backup.");
+                return DryRun($"Would RESTORE ribbon for entity '{entityName}' from backup.", new ManageRibbonResult
+                {
+                    Action = "undo",
+                    EntityName = entityName,
+                    Status = "not_executed",
+                    RestoredFromBackup = backupFilePath,
+                    Published = false
+                });
 
             // Build and import. Execute returns only after Dataverse finishes the import request.
             var solutionZip = BuildSolutionZip(entityName, restoredXml);
@@ -1575,8 +1596,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult ErrorResult(string message) => Error(message);
-
-        private CallToolResult DryRunResult(string message) => DryRun(message);
 
         // ── Backup model ─────────────────────────────────────────────────
 

@@ -160,7 +160,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var fieldCount = CountFields(fieldsJson);
 
             if (_options.DryRun)
-                return DryRun($"Would CREATE a '{entityName}' record with {fieldCount} fields.");
+                return DryRun($"Would CREATE a '{entityName}' record with {fieldCount} fields.", new CrudResult
+                {
+                    Action = "create",
+                    Entity = entityName,
+                    Status = "not_executed",
+                    FieldsUpdated = fieldCount
+                });
 
             try
             {
@@ -231,7 +237,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var fieldCount = CountFields(fieldsJson);
 
             if (_options.DryRun)
-                return DryRun($"Would UPDATE '{entityName}' record {id} with {fieldCount} fields.");
+                return DryRun($"Would UPDATE '{entityName}' record {id} with {fieldCount} fields.", new CrudResult
+                {
+                    Action = "update",
+                    Entity = entityName,
+                    Id = id.ToString(),
+                    Status = "not_executed",
+                    FieldsUpdated = fieldCount
+                });
 
             try
             {
@@ -263,7 +276,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"Error: '{recordId}' is not a valid GUID.");
 
             if (_options.DryRun)
-                return DryRun($"Would DELETE '{entityName}' record {id}.");
+                return DryRun($"Would DELETE '{entityName}' record {id}.", new CrudResult
+                {
+                    Action = "delete",
+                    Entity = entityName,
+                    Id = id.ToString(),
+                    Status = "not_executed"
+                });
 
             try
             {
@@ -288,7 +307,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string resolvedRelatedEntity = relatedEntityResult.Value.LogicalName;
 
             if (_options.DryRun)
-                return DryRun($"Would ASSOCIATE {entityName}({id1}) with {resolvedRelatedEntity}({id2}) via {relationshipName}");
+                return DryRun($"Would ASSOCIATE {entityName}({id1}) with {resolvedRelatedEntity}({id2}) via {relationshipName}", new CrudResult
+                {
+                    Action = "associate",
+                    Entity = entityName,
+                    Id = id1.ToString(),
+                    Status = "not_executed"
+                });
 
             try
             {
@@ -315,7 +340,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string resolvedRelatedEntity = relatedEntityResult.Value.LogicalName;
 
             if (_options.DryRun)
-                return DryRun($"Would DISASSOCIATE {entityName}({id1}) from {resolvedRelatedEntity}({id2}) via {relationshipName}");
+                return DryRun($"Would DISASSOCIATE {entityName}({id1}) from {resolvedRelatedEntity}({id2}) via {relationshipName}", new CrudResult
+                {
+                    Action = "disassociate",
+                    Entity = entityName,
+                    Id = id1.ToString(),
+                    Status = "not_executed"
+                });
 
             try
             {

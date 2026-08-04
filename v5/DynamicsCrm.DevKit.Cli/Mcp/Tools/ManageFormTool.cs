@@ -485,7 +485,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var updateEntity = new Entity("systemform", id);
             updateEntity["formxml"] = modifiedFormXml;
             if (_options.DryRun)
-                return DryRunResult($"Would UPDATE FormXML (operations) for form '{formName}' ({id}) on entity '{entityName}'.");
+                return DryRun($"Would UPDATE FormXML (operations) for form '{formName}' ({id}) on entity '{entityName}'.", new UpsertFormResult
+                {
+                    Action = "update",
+                    Entity = entityName,
+                    FormId = id.ToString(),
+                    FormName = formName,
+                    Status = "not_executed",
+                    Validated = validate,
+                    ValidationWarnings = validationWarnings,
+                    BackupPath = backupPath,
+                    Published = false,
+                    OperationsCount = ops?.Count
+                });
             _serviceClient.Update(updateEntity);
 
             var published = false;
@@ -667,7 +679,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var update = new Entity("systemform", id);
             update["formxml"] = newFormXml;
             if (_options.DryRun)
-                return DryRunResult($"Would UPDATE FormXML for form '{formName}' ({id}) on entity '{entityName}'.");
+                return DryRun($"Would UPDATE FormXML for form '{formName}' ({id}) on entity '{entityName}'.", new UpsertFormResult
+                {
+                    Action = "update",
+                    Entity = entityName,
+                    FormId = id.ToString(),
+                    FormName = formName,
+                    Status = "not_executed",
+                    Validated = validate,
+                    BackupPath = backupPath,
+                    Published = false
+                });
             _serviceClient.Update(update);
 
             // Step 5: Publish entity
@@ -820,7 +842,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ["name"] = formName
             };
             if (_options.DryRun)
-                return DryRunResult($"Would RENAME form '{oldName}' to '{formName}' ({id}) on entity '{entityName}'.");
+                return DryRun($"Would RENAME form '{oldName}' to '{formName}' ({id}) on entity '{entityName}'.", new UpsertFormResult
+                {
+                    Action = "rename",
+                    Entity = entityName,
+                    FormId = id.ToString(),
+                    FormName = formName,
+                    Status = "not_executed",
+                    BackupPath = backupPath,
+                    Published = false
+                });
             _serviceClient.Update(update);
 
             // Step 5: Publish
@@ -997,7 +1028,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var update = new Entity("systemform", id);
             update["formxml"] = restoredFormXml;
             if (_options.DryRun)
-                return DryRunResult($"Would RESTORE form '{formName}' ({id}) from backup on entity '{entityName}'.");
+                return DryRun($"Would RESTORE form '{formName}' ({id}) from backup on entity '{entityName}'.", new UpsertFormResult
+                {
+                    Action = "undo",
+                    Entity = entityName,
+                    FormId = id.ToString(),
+                    FormName = formName,
+                    Status = "not_executed",
+                    Validated = validate,
+                    RestoredFromBackup = backupFilePath,
+                    Published = false
+                });
             _serviceClient.Update(update);
 
             // Step 5: Publish
@@ -1184,8 +1225,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult TextResult(string text) => Success(text, null);
 
         private CallToolResult ErrorResult(string message) => Error(message);
-
-        private CallToolResult DryRunResult(string message) => DryRun(message);
 
         // ── Shared Helpers (write actions) ────────────────────────────────
 

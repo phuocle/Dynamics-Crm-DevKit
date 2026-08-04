@@ -107,8 +107,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error(blockedReason);
 
                 if (_options.DryRun && httpMethod != HttpMethod.Get)
-                    return DryRun($"Would execute {httpMethod.Method} {url.Trim()}" +
-                        (!string.IsNullOrWhiteSpace(body) ? $" with body ({body.Trim().Length} chars)" : "") + ".");
+                {
+                    var preview = new WebApiResult
+                    {
+                        Method = httpMethod.Method,
+                        Url = url.Trim(),
+                        StatusCode = 0,
+                        StatusText = "Not executed",
+                        IsSuccess = false
+                    };
+                    return DryRun(
+                        $"Would execute {httpMethod.Method} {url.Trim()}" +
+                        (!string.IsNullOrWhiteSpace(body) ? $" with body ({body.Trim().Length} chars)" : "") + ".",
+                        preview);
+                }
 
                 var customHeaders = ParseHeaders(headers, out var headersError);
                 if (headersError != null)
@@ -331,7 +343,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Use manage_deleted_records(action='restore', entity_name='<entity>', record_id='<guid>') " +
                 "which uses the SDK OrganizationRequest('Restore') late-bound with a simple Entity param " +
                 "and returns full per-record status (success/failed with reason). " +
-                "Also supports batch via record_ids[] and dry_run preview.")
+                "Also supports batch via record_ids[].")
         ];
 
         private static readonly (string UrlPattern, string RedirectTool, string Reason)[] BlockedPostEndpoints =
@@ -382,7 +394,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Use manage_deleted_records(action='restore', entity_name='<entity>', record_id='<guid>') " +
                 "which uses the SDK OrganizationRequest('Restore') late-bound with a simple Entity param " +
                 "and returns full per-record status (success/failed with reason). " +
-                "Also supports batch via record_ids[] and dry_run preview.")
+                "Also supports batch via record_ids[].")
         ];
 
         private static string GetBlockedReason(HttpMethod method, string url)

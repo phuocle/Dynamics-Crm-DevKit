@@ -110,10 +110,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         // ---- Restore only ----
 
-        [JsonPropertyName("dryRun")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? DryRun { get; set; }
-
         [JsonPropertyName("totalRequested")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? TotalRequested { get; set; }
@@ -181,7 +177,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string RecordId { get; set; }
 
         /// <summary>
-        /// "would-restore" (dry-run), "restored" (success), or "failed" (per-record error).
+        /// "not_executed", "restored" (success), or "failed" (per-record error).
         /// </summary>
         [JsonPropertyName("status")]
         public string Status { get; set; }

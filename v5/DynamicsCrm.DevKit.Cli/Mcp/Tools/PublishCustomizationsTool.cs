@@ -119,7 +119,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         ? "ALL customizations"
                         : BuildTargetSummary(entityList, appModuleList, include_global_optionset, include_sitemap,
                             include_ribbons, optionSetNameList, dashboardList, webResourceList);
-                    return DryRunResult($"Would PUBLISH {target}.");
+                    return DryRun($"Would PUBLISH {target}.", new PublishResult
+                    {
+                        Mode = hasSpecificTargets ? "specific" : "all_async",
+                        Entities = entityList.Count > 0 ? entityList : null,
+                        EntityCount = hasSpecificTargets ? entityList.Count : null,
+                        AppModules = appModuleList.Count > 0 ? appModuleList : null,
+                        AppModuleCount = hasSpecificTargets ? appModuleList.Count : null,
+                        IncludeGlobalOptionSets = include_global_optionset,
+                        IncludeSiteMap = include_sitemap,
+                        Status = "not_executed",
+                        DurationSeconds = 0
+                    });
                 }
 
                 if (!hasSpecificTargets)
@@ -447,6 +458,5 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult ErrorResult(string message) => Error(message);
 
-        private CallToolResult DryRunResult(string message) => DryRun(message);
     }
 }

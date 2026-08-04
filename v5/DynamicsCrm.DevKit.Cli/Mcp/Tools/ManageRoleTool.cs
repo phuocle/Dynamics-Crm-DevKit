@@ -347,7 +347,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var roleName = role.GetAttributeValue<string>("name") ?? "";
 
             if (_options.DryRun)
-                return DryRunResult($"Would ASSIGN role '{roleName}' ({roleGuid}) to user '{userName}' ({userGuid}).");
+                return DryRun($"Would ASSIGN role '{roleName}' ({roleGuid}) to user '{userName}' ({userGuid}).", new ManageRoleResult
+                {
+                    Action = "assign",
+                    RoleId = roleGuid.ToString(),
+                    RoleName = roleName,
+                    UserId = userGuid.ToString(),
+                    UserName = userName,
+                    Status = "not_executed"
+                });
 
             _serviceClient.Associate(
                 "systemuser",
@@ -398,7 +406,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var roleName = role.GetAttributeValue<string>("name") ?? "";
 
             if (_options.DryRun)
-                return DryRunResult($"Would UNASSIGN role '{roleName}' ({roleGuid}) from user '{userName}' ({userGuid}).");
+                return DryRun($"Would UNASSIGN role '{roleName}' ({roleGuid}) from user '{userName}' ({userGuid}).", new ManageRoleResult
+                {
+                    Action = "unassign",
+                    RoleId = roleGuid.ToString(),
+                    RoleName = roleName,
+                    UserId = userGuid.ToString(),
+                    UserName = userName,
+                    Status = "not_executed"
+                });
 
             _serviceClient.Disassociate(
                 "systemuser",
@@ -462,7 +478,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE role '{roleName}' in business unit '{buName}' ({buId}).");
+                return DryRun($"Would CREATE role '{roleName}' in business unit '{buName}' ({buId}).", new ManageRoleResult
+                {
+                    Action = "create",
+                    RoleName = roleName,
+                    BusinessUnitId = buId.ToString(),
+                    Status = "not_executed",
+                    CreateMode = "metadata"
+                });
 
             var roleEntity = new Entity("role")
             {
@@ -510,7 +533,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var oldName = existingRole.GetAttributeValue<string>("name") ?? "";
 
             if (_options.DryRun)
-                return DryRunResult($"Would UPDATE role '{oldName}' ({id}) → rename to '{roleName}'.");
+                return DryRun($"Would UPDATE role '{oldName}' ({id}) → rename to '{roleName}'.", new ManageRoleResult
+                {
+                    Action = "update",
+                    RoleId = id.ToString(),
+                    RoleName = roleName,
+                    Status = "not_executed"
+                });
 
             var updateEntity = new Entity("role", id)
             {
@@ -551,7 +580,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var roleName = existingRole.GetAttributeValue<string>("name") ?? "";
 
             if (_options.DryRun)
-                return DryRunResult($"Would DELETE role '{roleName}' ({id}). WARNING: this cannot be undone.");
+                return DryRun($"Would DELETE role '{roleName}' ({id}). WARNING: this cannot be undone.", new ManageRoleResult
+                {
+                    Action = "delete",
+                    RoleId = id.ToString(),
+                    RoleName = roleName,
+                    Status = "not_executed"
+                });
 
             _serviceClient.Delete("role", id);
 
@@ -590,7 +625,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var privileges = GetRolePrivileges(sourceId);
 
             if (_options.DryRun)
-                return DryRunResult($"Would COPY role '{sourceRoleName}' ({sourceId}) → new role '{roleName}' with {privileges.Count} privileges.");
+                return DryRun($"Would COPY role '{sourceRoleName}' ({sourceId}) → new role '{roleName}' with {privileges.Count} privileges.", new ManageRoleResult
+                {
+                    Action = "copy",
+                    SourceRoleId = sourceId.ToString(),
+                    RoleName = roleName,
+                    BusinessUnitId = buId.ToString(),
+                    PrivilegesCopied = privileges.Count,
+                    Status = "not_executed",
+                    CreateMode = "metadata"
+                });
 
             var newRoleEntity = new Entity("role")
             {
@@ -944,8 +988,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult ErrorResult(string message) => Error(message);
 
         private CallToolResult TextResult(string message) => Success(message, null);
-
-        private CallToolResult DryRunResult(string message) => DryRun(message);
 
         private CallToolResult StructuredResult(string text, ManageRoleResult structured) => Success(text, structured);
 

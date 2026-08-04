@@ -8,6 +8,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("action")]
         public string Action { get; set; }
 
+        [JsonPropertyName("status")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Status { get; set; }
+
         [JsonPropertyName("count")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? Count { get; set; }

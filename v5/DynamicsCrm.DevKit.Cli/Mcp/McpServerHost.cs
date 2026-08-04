@@ -120,8 +120,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                         $"Connected to Dataverse environment: {_serviceClient.ConnectedOrgUriActual} | " +
                         $"Org: {_serviceClient.ConnectedOrgFriendlyName} ({_serviceClient.ConnectedOrgUniqueName}) | " +
                         $"Version: {_serviceClient.ConnectedOrgVersion} | " +
-                        $"Category: {displayCategory} ({toolCount} tools)" +
-                        (dryRun ? " | DRY-RUN MODE ACTIVE: All mutating operations are blocked. Read operations work normally." : "");
+                        $"Category: {displayCategory} ({toolCount} tools)";
                 })
                 .WithStdioServerTransport()
                 .WithToolsFromAssembly()

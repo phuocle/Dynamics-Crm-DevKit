@@ -48,7 +48,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         /// <summary>
         /// Return a dry-run result describing what would happen without making changes.
         /// </summary>
-        /// <param name="message">Description of the operation that would run.</param>
-        CallToolResult DryRun(string message);
+        /// <param name="summary">Description of the operation that would run.</param>
+        /// <param name="structured">Typed payload matching the tool's output schema.</param>
+        CallToolResult DryRun(string summary, object structured);
     }
 }

@@ -45,7 +45,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "records_json: inline JSON array, .json path, or .csv path (Display Name headers).\n" +
             "Polymorphic lookup: 'field@targetentity' (e.g. 'customerid@account'). Activity parties (to, from, cc, bcc, requiredattendees, optionalattendees, organizer, customers, resources): JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Single object auto-wrapped. Optional 'addressused' for email/phone override. Do NOT set participationtypemask — Dataverse sets it.\n" +
             "CSV lookup-by-name: exactly 1 match → GUID; 0 or 2+ matches → skipped with warning.\n" +
-            "For single-record CRUD → manage_record. Dry-run via --dry-run flag.")]
+            "For single-record CRUD → manage_record.")]
         public async Task<CallToolResult> create_records(
             [Description(
                 "Entity Display Name or logical name (Display Name resolved first)."
@@ -103,7 +103,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 parallelism = Math.Clamp(parallelism, 1, MaxParallelism);
 
                 if (_options.DryRun)
-                    return DryRun($"Would CREATE {elements.Length} '{entityName}' records (parallelism={parallelism}).");
+                {
+                    var preview = new BatchCreateResult
+                    {
+                        Entity = entityName,
+                        Total = elements.Length,
+                        Succeeded = 0,
+                        Failed = 0,
+                        DurationSeconds = 0,
+                        Parallelism = parallelism,
+                        UsedDefaultParallelism = usedDefault,
+                        Items = []
+                    };
+                    return DryRun(
+                        $"Would CREATE {elements.Length} '{entityName}' records (parallelism={parallelism}).",
+                        preview);
+                }
 
                 var parsedEntities = new Entity[elements.Length];
                 for (var i = 0; i < elements.Length; i++)

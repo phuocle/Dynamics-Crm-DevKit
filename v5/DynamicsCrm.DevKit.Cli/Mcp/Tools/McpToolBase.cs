@@ -21,6 +21,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult ThrowException(Exception ex) => McpToolResults.ThrowException(ex);
 
         /// <inheritdoc />
-        public CallToolResult DryRun(string message) => McpToolResults.DryRun(message);
+        public CallToolResult DryRun(string summary, object structured) => McpToolResults.DryRun(summary, structured);
+
     }
 }

@@ -52,12 +52,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         }
 
         /// <summary>
-        /// Dry-run result describing what would happen without making changes.
+        /// Dry-run result describing what would happen without making Dataverse changes.
         /// </summary>
-        internal static CallToolResult DryRun(string message) => new()
+        internal static CallToolResult DryRun(string summary, object structured) => new()
         {
-            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }],
-            StructuredContent = JsonSerializer.SerializeToElement(new { dryRun = true, message })
+            Content = [new TextContentBlock { Text = $"[DryRun] {summary}" }],
+            StructuredContent = JsonSerializer.SerializeToElement(structured)
         };
 
         /// <summary>

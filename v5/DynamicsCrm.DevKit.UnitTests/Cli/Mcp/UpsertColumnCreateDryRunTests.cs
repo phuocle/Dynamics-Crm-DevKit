@@ -71,7 +71,7 @@ public class UpsertColumnCreateDryRunTests
             "account", "devkit_score", "devkit_Score", "Score", "",
             -10d, 10d, 12, "devkit", null, null);
 
-        AssertDryRun(result, "Double", "devkit_score");
+        AssertDryRun(result, "Float", "devkit_score");
     }
 
     [TestMethod]
@@ -133,7 +133,7 @@ public class UpsertColumnCreateDryRunTests
             "devkit_order", "devkit_regarding", "devkit_Regarding", "Regarding", "",
             new[] { "account", "contact" }, "devkit", "devkit", null);
 
-        AssertDryRun(result, "polymorphic lookup", "devkit_regarding");
+        AssertDryRun(result, "PolymorphicLookup", "devkit_regarding");
     }
 
     [TestMethod]

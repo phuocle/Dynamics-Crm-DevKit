@@ -283,12 +283,12 @@ public class ManageCommandToolTests
     }
 
     [TestMethod]
-    public void Validation_CreateDryRun_ReturnsBlocked()
+    public void Validation_CreateDryRun_ReturnsPreview()
     {
         var tool = CreateDryRunTool();
         var result = tool.manage_command(action: "create", entity_name: "account", location: "form", label: "Test", app_id: "00000000-0000-0000-0000-000000000001");
-        Assert.IsTrue(result.IsError == true);
-        Assert.IsTrue(GetText(result).Contains("DRY-RUN"));
+        Assert.IsFalse(result.IsError == true);
+        Assert.IsTrue(GetText(result).Contains("[DryRun]"));
     }
 
     // ──────────────────────────────────────────────
@@ -314,12 +314,12 @@ public class ManageCommandToolTests
     }
 
     [TestMethod]
-    public void Validation_UpdateDryRun_ReturnsBlocked()
+    public void Validation_UpdateDryRun_ReturnsPreview()
     {
         var tool = CreateDryRunTool();
         var result = tool.manage_command(action: "update", command_id: "00000000-0000-0000-0000-000000000001", label: "New Label");
-        Assert.IsTrue(result.IsError == true);
-        Assert.IsTrue(GetText(result).Contains("DRY-RUN"));
+        Assert.IsFalse(result.IsError == true);
+        Assert.IsTrue(GetText(result).Contains("[DryRun]"));
     }
 
     // ──────────────────────────────────────────────
@@ -352,12 +352,12 @@ public class ManageCommandToolTests
     }
 
     [TestMethod]
-    public void Validation_HideShowDryRun_ReturnBlocked()
+    public void Validation_HideShowDryRun_ReturnsPreview()
     {
         var tool = CreateDryRunTool();
 
-        StringAssert.Contains(GetText(tool.manage_command(action: "hide", command_id: "00000000-0000-0000-0000-000000000001")), "DRY-RUN");
-        StringAssert.Contains(GetText(tool.manage_command(action: "show", command_id: "00000000-0000-0000-0000-000000000001")), "DRY-RUN");
+        StringAssert.Contains(GetText(tool.manage_command(action: "hide", command_id: "00000000-0000-0000-0000-000000000001")), "[DryRun]");
+        StringAssert.Contains(GetText(tool.manage_command(action: "show", command_id: "00000000-0000-0000-0000-000000000001")), "[DryRun]");
     }
 
     [TestMethod]
@@ -380,7 +380,7 @@ public class ManageCommandToolTests
     {
         var tool = CreateDryRunTool();
 
-        StringAssert.Contains(GetText(tool.manage_command(action: "add_flyout", entity_name: "account", location: "form", label: "More", items: "[{\"label\":\"One\"}]")), "DRY-RUN");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_flyout", entity_name: "account", location: "form", label: "More", items: "[{\"label\":\"One\"}]")), "[DryRun]");
     }
 
     [TestMethod]
@@ -390,7 +390,7 @@ public class ManageCommandToolTests
 
         StringAssert.Contains(GetText(tool.manage_command(action: "update_flyout")), "command_id is required");
         StringAssert.Contains(GetText(tool.manage_command(action: "update_flyout", command_id: "bad-guid")), "not a valid GUID");
-        StringAssert.Contains(GetText(CreateDryRunTool().manage_command(action: "update_flyout", command_id: "00000000-0000-0000-0000-000000000001")), "DRY-RUN");
+        StringAssert.Contains(GetText(CreateDryRunTool().manage_command(action: "update_flyout", command_id: "00000000-0000-0000-0000-000000000001")), "[DryRun]");
     }
 
     [TestMethod]
@@ -414,7 +414,7 @@ public class ManageCommandToolTests
     {
         var tool = CreateDryRunTool();
 
-        StringAssert.Contains(GetText(tool.manage_command(action: "add_split_button", entity_name: "account", location: "form", label: "More", items: "[{\"label\":\"One\"}]")), "DRY-RUN");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_split_button", entity_name: "account", location: "form", label: "More", items: "[{\"label\":\"One\"}]")), "[DryRun]");
     }
 
     [TestMethod]
@@ -424,7 +424,7 @@ public class ManageCommandToolTests
 
         StringAssert.Contains(GetText(tool.manage_command(action: "update_split_button")), "command_id is required");
         StringAssert.Contains(GetText(tool.manage_command(action: "update_split_button", command_id: "bad-guid")), "not a valid GUID");
-        StringAssert.Contains(GetText(CreateDryRunTool().manage_command(action: "update_split_button", command_id: "00000000-0000-0000-0000-000000000001")), "DRY-RUN");
+        StringAssert.Contains(GetText(CreateDryRunTool().manage_command(action: "update_split_button", command_id: "00000000-0000-0000-0000-000000000001")), "[DryRun]");
     }
 
     [TestMethod]
@@ -440,12 +440,12 @@ public class ManageCommandToolTests
     }
 
     [TestMethod]
-    public void Validation_FlyoutItemDryRun_ReturnsBlocked()
+    public void Validation_FlyoutItemDryRun_ReturnsPreview()
     {
         var tool = CreateDryRunTool();
 
-        StringAssert.Contains(GetText(tool.manage_command(action: "add_flyout_item", flyout_command_id: "00000000-0000-0000-0000-000000000001", label: "One")), "DRY-RUN");
-        StringAssert.Contains(GetText(tool.manage_command(action: "remove_flyout_item", command_id: "00000000-0000-0000-0000-000000000001")), "DRY-RUN");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_flyout_item", flyout_command_id: "00000000-0000-0000-0000-000000000001", label: "One")), "[DryRun]");
+        StringAssert.Contains(GetText(tool.manage_command(action: "remove_flyout_item", command_id: "00000000-0000-0000-0000-000000000001")), "[DryRun]");
     }
 
     [TestMethod]

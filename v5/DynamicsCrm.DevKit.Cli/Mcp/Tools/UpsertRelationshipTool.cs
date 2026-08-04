@@ -180,7 +180,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solResult.UniqueName);
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE 1:N relationship '{relationshipName}' ({referencedEntity} -> {referencingEntity}) with lookup '{lookupLogicalName}'{(isHierarchical ? " [IsHierarchical=true]" : "")}.");
+                return DryRun($"Would CREATE 1:N relationship '{relationshipName}' ({referencedEntity} -> {referencingEntity}) with lookup '{lookupLogicalName}'{(isHierarchical ? " [IsHierarchical=true]" : "") }.", new UpsertRelationshipResult
+                {
+                    Action = "create_1n",
+                    RelationshipName = relationshipName,
+                    RelationshipType = "1:N",
+                    ReferencedEntity = referencedEntity,
+                    ReferencingEntity = referencingEntity,
+                    LookupAttributeName = lookupLogicalName,
+                    IsHierarchical = isHierarchical,
+                    SolutionName = solResult.UniqueName,
+                    CreateMode = "metadata",
+                    IsAddToSolution = true,
+                    AddToSolutionMethod = "SolutionUniqueName",
+                    Status = "not_executed",
+                    Published = false
+                });
 
             // Wrap create in retry to handle lock contention
             Guid metadataId = Guid.Empty;
@@ -309,7 +324,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solResult.UniqueName);
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE N:N relationship '{relationshipName}' between '{entity1}' and '{entity2}' (intersect: '{intersectEntityName}').");
+                return DryRun($"Would CREATE N:N relationship '{relationshipName}' between '{entity1}' and '{entity2}' (intersect: '{intersectEntityName}').", new UpsertRelationshipResult
+                {
+                    Action = "create_nn",
+                    RelationshipName = relationshipName,
+                    RelationshipType = "N:N",
+                    Entity1 = entity1,
+                    Entity2 = entity2,
+                    IntersectEntityName = intersectEntityName,
+                    SolutionName = solResult.UniqueName,
+                    CreateMode = "metadata",
+                    IsAddToSolution = true,
+                    AddToSolutionMethod = "SolutionUniqueName",
+                    Status = "not_executed",
+                    Published = false
+                });
 
             var response = (CreateManyToManyResponse)_serviceClient.Execute(request);
             var metadataId = response.ManyToManyRelationshipId;
@@ -445,7 +474,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (changes.Count > 0)
             {
                 if (_options.DryRun)
-                    return DryRunResult($"Would UPDATE relationship '{relationshipName}' with {changes.Count} change(s).");
+                    return DryRun($"Would UPDATE relationship '{relationshipName}' with {changes.Count} change(s).", new UpsertRelationshipResult
+                    {
+                        Action = "update",
+                        RelationshipName = relationshipName,
+                        Changes = changes,
+                        Status = "not_executed",
+                        Published = false
+                    });
 
                 var updateRequest = new UpdateRelationshipRequest
                 {
@@ -504,7 +540,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would DELETE relationship '{relationshipName}'.");
+                return DryRun($"Would DELETE relationship '{relationshipName}'.", new UpsertRelationshipResult
+                {
+                    Action = "delete",
+                    RelationshipName = relationshipName,
+                    Status = "not_executed",
+                    Published = false
+                });
 
             _serviceClient.Execute(new DeleteRelationshipRequest { Name = relationshipName });
 
@@ -594,7 +636,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solResult.UniqueName);
 
             if (_options.DryRun)
-                return DryRunResult($"Would ADD target '{referencedEntity}' to polymorphic lookup '{entityName}.{attributeName}'.");
+                return DryRun($"Would ADD target '{referencedEntity}' to polymorphic lookup '{entityName}.{attributeName}'.", new UpsertRelationshipResult
+                {
+                    Action = "add_target",
+                    RelationshipName = relName,
+                    ReferencedEntity = referencedEntity,
+                    ReferencingEntity = entityName,
+                    LookupAttributeName = attributeName,
+                    Status = "not_executed",
+                    Published = false
+                });
 
             try
             {
@@ -674,7 +725,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var relName = rel.SchemaName;
 
             if (_options.DryRun)
-                return DryRunResult($"Would REMOVE target '{referencedEntity}' from polymorphic lookup '{entityName}.{attributeName}' (relationship: '{relName}').\nWARNING: Data in this lookup target will be lost.");
+                return DryRun($"Would REMOVE target '{referencedEntity}' from polymorphic lookup '{entityName}.{attributeName}' (relationship: '{relName}'). WARNING: Data in this lookup target will be lost.", new UpsertRelationshipResult
+                {
+                    Action = "remove_target",
+                    RelationshipName = relName,
+                    ReferencedEntity = referencedEntity,
+                    ReferencingEntity = entityName,
+                    LookupAttributeName = attributeName,
+                    Status = "not_executed",
+                    Published = false,
+                    Warnings = ["Data in this lookup target will be lost."]
+                });
 
             _serviceClient.Execute(new DeleteRelationshipRequest { Name = relName });
 
@@ -869,8 +930,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult ErrorResult(string message) => Error(message);
-
-        private CallToolResult DryRunResult(string message) => DryRun(message);
 
         private CallToolResult BuildResult(string text, UpsertRelationshipResult structured) => Success(text, structured);
     }

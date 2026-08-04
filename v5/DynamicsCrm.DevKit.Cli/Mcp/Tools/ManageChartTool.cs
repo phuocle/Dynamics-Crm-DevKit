@@ -346,7 +346,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                              $"(category={groupByCol}, legend={aggregateCol}/{aggregateType}" +
                              (resolvedSolutionUniqueName != null ? $", solution={resolvedSolutionUniqueName}" : "") +
                              ").";
-                return DryRunResult(dryMsg);
+                return DryRun(dryMsg, new UpsertChartResult
+                {
+                    Action = "create",
+                    Entity = entityName,
+                    ChartName = chartName,
+                    ChartType = chartType,
+                    Category = groupByCol,
+                    Legend = aggregateCol,
+                    AggregateType = aggregateType,
+                    SolutionName = resolvedSolutionUniqueName,
+                    Status = "not_executed",
+                    NeedsConfirmation = false,
+                    Validated = validate,
+                    Published = false
+                });
             }
 
             const string table = "savedqueryvisualization";
@@ -483,7 +497,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would UPDATE chart '{chartName}' ({chartId}). Backup: {backupPath ?? "none"}.");
+                return DryRun($"Would UPDATE chart '{chartName}' ({chartId}). Backup: {backupPath ?? "none"}.", new UpsertChartResult
+                {
+                    Action = "update",
+                    Entity = primaryEntity,
+                    ChartId = chartId.ToString(),
+                    ChartName = chartName,
+                    SolutionName = resolvedSolutionUniqueName,
+                    Status = "not_executed",
+                    BackupPath = backupPath,
+                    Validated = validate,
+                    Published = false
+                });
 
             var updateRecord = new Entity(table, chartId)
             {
@@ -540,7 +565,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var primaryEntity = chartRecord.GetAttributeValue<string>("primaryentitytypecode");
 
             if (_options.DryRun)
-                return DryRunResult($"Would RENAME chart {chartId} to '{chartNameInput}'.");
+                return DryRun($"Would RENAME chart {chartId} to '{chartNameInput}'.", new UpsertChartResult
+                {
+                    Action = "rename",
+                    Entity = primaryEntity,
+                    ChartId = chartId.ToString(),
+                    ChartName = chartNameInput.Trim(),
+                    Status = "not_executed",
+                    Published = false
+                });
 
             var updateRecord = new Entity(table, chartId)
             {
@@ -576,7 +609,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var primaryEntity = chartRecord.GetAttributeValue<string>("primaryentitytypecode");
 
             if (_options.DryRun)
-                return DryRunResult($"Would SET chart '{chartName}' ({chartId}) as DEFAULT for entity '{primaryEntity}'.");
+                return DryRun($"Would SET chart '{chartName}' ({chartId}) as DEFAULT for entity '{primaryEntity}'.", new UpsertChartResult
+                {
+                    Action = "set_default",
+                    Entity = primaryEntity,
+                    ChartId = chartId.ToString(),
+                    ChartName = chartName,
+                    Status = "not_executed",
+                    Published = false
+                });
 
             var query = new QueryExpression("savedqueryvisualization")
             {
@@ -636,7 +677,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var chartId = Guid.Parse(backupData.ChartId);
 
             if (_options.DryRun)
-                return DryRunResult($"Would UNDO chart {chartId} using backup from '{backupPathInput}'.");
+                return DryRun($"Would UNDO chart {chartId} using backup from '{backupPathInput}'.", new UpsertChartResult
+                {
+                    Action = "undo",
+                    Entity = backupData.Entity,
+                    ChartId = chartId.ToString(),
+                    ChartName = backupData.ChartName,
+                    Status = "not_executed",
+                    RestoredFromBackup = backupPathInput,
+                    Published = false
+                });
 
             const string table = "savedqueryvisualization";
             var updateRecord = new Entity(table, chartId);
@@ -976,8 +1026,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult ErrorResult(string message) => Error(message);
 
         private CallToolResult SuccessResult(string text, UpsertChartResult structured) => Success(text, structured);
-
-        private CallToolResult DryRunResult(string message) => DryRun(message);
 
         private sealed class ChartBackup
         {

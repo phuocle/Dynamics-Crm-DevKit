@@ -875,7 +875,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleCreate(string entityName, string location, string appId, string appName, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden)
         {
             if (_options.DryRun)
-                return ErrorResult("DRY-RUN: create blocked. Would create appaction command.");
+                return DryRun("Would create an appaction command.", new ManageCommandResult
+                {
+                    Action = "create",
+                    Status = "not_executed",
+                    Message = "The appaction command was not created.",
+                    CreateMode = "metadata"
+                });
 
             if (string.IsNullOrWhiteSpace(entityName))
                 return ErrorResult("Error: entity_name is required for action='create'.");
@@ -992,7 +998,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleUpdate(string commandId, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence)
         {
             if (_options.DryRun)
-                return ErrorResult("DRY-RUN: update blocked. Would update appaction command.");
+                return DryRun($"Would update appaction command '{commandId}'.", new ManageCommandResult
+                {
+                    Action = "update",
+                    Status = "not_executed",
+                    CommandId = commandId,
+                    Message = "The appaction command was not updated."
+                });
 
             if (string.IsNullOrWhiteSpace(commandId))
                 return ErrorResult("Error: command_id is required for action='update'.");
@@ -1114,7 +1126,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleHideShow(string commandId, string entityName, string location, string appId, string appName, string label, bool wantHidden)
         {
             if (_options.DryRun)
-                return ErrorResult($"DRY-RUN: {(wantHidden ? "hide" : "show")} blocked.");
+            {
+                var action = wantHidden ? "hide" : "show";
+                return DryRun($"Would {action} appaction command '{commandId}'.", new ManageCommandResult
+                {
+                    Action = action,
+                    Status = "not_executed",
+                    CommandId = commandId,
+                    Message = $"The appaction command was not {(wantHidden ? "hidden" : "shown")}."
+                });
+            }
 
             var verb = wantHidden ? "hide" : "show";
 
@@ -1512,7 +1533,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleAddFlyout(string entityName, string location, string appId, string appName, string label, string itemsJson, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden)
         {
             if (_options.DryRun)
-                return ErrorResult("DRY-RUN: add_flyout blocked. Would create Dropdown Button + Group + items.");
+                return DryRun("Would create a Dropdown Button, Group, and flyout items.", new ManageCommandResult
+                {
+                    Action = "add_flyout",
+                    Status = "not_executed",
+                    Message = "The flyout command was not created.",
+                    CreateMode = "metadata"
+                });
 
             if (string.IsNullOrWhiteSpace(entityName))
                 return ErrorResult("Error: entity_name is required for action='add_flyout'.");
@@ -1666,7 +1693,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleUpdateFlyout(string commandId, string label, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence)
         {
             if (_options.DryRun)
-                return ErrorResult("DRY-RUN: update_flyout blocked.");
+                return DryRun($"Would update flyout command '{commandId}'.", new ManageCommandResult
+                {
+                    Action = "update_flyout",
+                    Status = "not_executed",
+                    CommandId = commandId,
+                    Message = "The flyout command was not updated."
+                });
 
             if (string.IsNullOrWhiteSpace(commandId))
                 return ErrorResult("Error: command_id is required for action='update_flyout'.");
@@ -1767,7 +1800,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleAddSplitButton(string entityName, string location, string appId, string appName, string label, string onclickType, string jsWebResource, string jsFunction, string itemsJson, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden)
         {
             if (_options.DryRun)
-                return ErrorResult("DRY-RUN: add_split_button blocked. Would create Split Button + Group + items.");
+                return DryRun("Would create a Split Button, Group, and split-button items.", new ManageCommandResult
+                {
+                    Action = "add_split_button",
+                    Status = "not_executed",
+                    Message = "The split button was not created.",
+                    CreateMode = "metadata"
+                });
 
             if (string.IsNullOrWhiteSpace(entityName))
                 return ErrorResult("Error: entity_name is required for action='add_split_button'.");
@@ -1951,7 +1990,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleUpdateSplitButton(string commandId, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence)
         {
             if (_options.DryRun)
-                return ErrorResult("DRY-RUN: update_split_button blocked.");
+                return DryRun($"Would update split button command '{commandId}'.", new ManageCommandResult
+                {
+                    Action = "update_split_button",
+                    Status = "not_executed",
+                    CommandId = commandId,
+                    Message = "The split button was not updated."
+                });
 
             if (string.IsNullOrWhiteSpace(commandId))
                 return ErrorResult("Error: command_id is required for action='update_split_button'.");
@@ -2075,7 +2120,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleAddFlyoutItem(string flyoutCommandId, string label, string onclickType, string jsWebResource, string jsFunction, int sequence, bool hidden)
         {
             if (_options.DryRun)
-                return ErrorResult("DRY-RUN: add_flyout_item blocked.");
+                return DryRun($"Would add an item to flyout command '{flyoutCommandId}'.", new ManageCommandResult
+                {
+                    Action = "add_flyout_item",
+                    Status = "not_executed",
+                    CommandId = flyoutCommandId,
+                    Message = "The flyout item was not created."
+                });
 
             if (string.IsNullOrWhiteSpace(flyoutCommandId))
                 return ErrorResult("Error: flyout_command_id is required for action='add_flyout_item'.");
@@ -2185,7 +2236,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleRemoveFlyoutItem(string commandId)
         {
             if (_options.DryRun)
-                return ErrorResult("DRY-RUN: remove_flyout_item blocked. Would delete appaction record.");
+                return DryRun($"Would remove flyout item command '{commandId}'.", new ManageCommandResult
+                {
+                    Action = "remove_flyout_item",
+                    Status = "not_executed",
+                    CommandId = commandId,
+                    Message = "The flyout item was not removed."
+                });
 
             if (string.IsNullOrWhiteSpace(commandId))
                 return ErrorResult("Error: command_id is required for action='remove_flyout_item'.");

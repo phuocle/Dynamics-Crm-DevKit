@@ -286,7 +286,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ["layoutxml"] = newLayoutXml
             };
             if (_options.DryRun)
-                return DryRun($"Would CREATE view '{viewName}' on entity '{entityName}'.");
+                return DryRun($"Would CREATE view '{viewName}' on entity '{entityName}'.", new UpsertViewResult
+                {
+                    Action = "create",
+                    Entity = entityName,
+                    ViewName = viewName,
+                    Status = "not_executed",
+                    Validated = validate,
+                    Published = false,
+                    CreateMode = "metadata"
+                });
 
             var newViewId = _serviceClient.Create(newView);
 
@@ -461,7 +470,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!isPersonalView)
                 update["returnedtypecode"] = returnedTypeCode;
             if (_options.DryRun)
-                return DryRun($"Would UPDATE view '{currentViewName}' ({updateId}) on entity '{entityName}'.");
+                return DryRun($"Would UPDATE view '{currentViewName}' ({updateId}) on entity '{entityName}'.", new UpsertViewResult
+                {
+                    Action = "update",
+                    Entity = entityName,
+                    ViewId = updateId.ToString(),
+                    ViewName = currentViewName,
+                    Status = "not_executed",
+                    Validated = validate,
+                    UpdatedParts = updatedParts,
+                    FetchXmlBackupPath = fetchBackupPath,
+                    LayoutXmlBackupPath = layoutBackupPath,
+                    Published = false
+                });
             _serviceClient.Update(update);
 
             PublishHelper.PublishEntity(_serviceClient, returnedTypeCode);
@@ -557,7 +578,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var update = new Entity(currentView.LogicalName, renameId) { ["name"] = viewName };
             if (_options.DryRun)
-                return DryRun($"Would RENAME view '{oldName}' to '{viewName}' ({renameId}) on entity '{entityName}'.");
+                return DryRun($"Would RENAME view '{oldName}' to '{viewName}' ({renameId}) on entity '{entityName}'.", new UpsertViewResult
+                {
+                    Action = "rename",
+                    Entity = entityName,
+                    ViewId = renameId.ToString(),
+                    ViewName = viewName,
+                    Status = "not_executed",
+                    FetchXmlBackupPath = fetchBackupPath,
+                    LayoutXmlBackupPath = layoutBackupPath,
+                    Published = false
+                });
             _serviceClient.Update(update);
 
             PublishHelper.PublishEntity(_serviceClient, returnedTypeCode);
@@ -628,7 +659,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRun($"Would SET DEFAULT view '{viewName}' ({targetId}) on entity '{entityName}'.");
+                return DryRun($"Would SET DEFAULT view '{viewName}' ({targetId}) on entity '{entityName}'.", new UpsertViewResult
+                {
+                    Action = "set_default",
+                    Entity = entityName,
+                    ViewId = targetId.ToString(),
+                    ViewName = viewName,
+                    Status = "not_executed",
+                    Published = false
+                });
 
             var update = new Entity("savedquery", targetId) { ["isdefault"] = true };
             _serviceClient.Update(update);
@@ -791,7 +830,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!isPersonalView)
                 update["returnedtypecode"] = returnedTypeCode;
             if (_options.DryRun)
-                return DryRun($"Would RESTORE view '{viewName}' ({undoId}) from backup.");
+                return DryRun($"Would RESTORE view '{viewName}' ({undoId}) from backup.", new UpsertViewResult
+                {
+                    Action = "undo",
+                    Entity = entityName,
+                    ViewId = undoId.ToString(),
+                    ViewName = viewName,
+                    Status = "not_executed",
+                    RestoredFromFetchXmlBackup = fetchBackupPath,
+                    RestoredFromLayoutXmlBackup = layoutBackupPath,
+                    Published = false
+                });
             _serviceClient.Update(update);
 
             PublishHelper.PublishEntity(_serviceClient, returnedTypeCode);

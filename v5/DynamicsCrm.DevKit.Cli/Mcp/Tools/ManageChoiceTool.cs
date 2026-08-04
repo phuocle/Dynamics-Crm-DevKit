@@ -253,7 +253,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (hasUpdate) parts.Add($"update {parsedUpdate.Count} label(s)");
                 if (hasRemove) parts.Add($"remove {parsedRemove.Count} option(s)");
                 if (hasColors) parts.Add("colors");
-                return DryRun($"Would UPDATE global option set '{name}': {string.Join(", ", parts)}.");
+                return DryRun($"Would UPDATE global option set '{name}': {string.Join(", ", parts)}.", new ManageChoiceResult
+                {
+                    Action = "update",
+                    OptionSetName = name,
+                    DisplayName = hasDisplayName ? displayName.Trim() : null,
+                    Description = hasDescription ? description.Trim() : null,
+                    SolutionName = string.IsNullOrWhiteSpace(solutionName) ? null : solutionName.Trim(),
+                    Status = "not_executed",
+                    OptionsAdded = optionsToInsert.Count > 0 ? optionsToInsert.Select(x => x.label).ToList() : null,
+                    OptionsAlreadyExisted = optionsAlreadyExisted.Count > 0 ? optionsAlreadyExisted.Select(x => x.label).ToList() : null,
+                    OptionsRenamed = parsedUpdate.Count > 0 ? parsedUpdate.Select(x => x.newLabel).ToList() : null,
+                    OptionsRemoved = parsedRemoveLabels?.Count > 0 ? parsedRemoveLabels.ToList() : null,
+                    OptionsColored = colorMap.Count > 0 ? colorMap.Keys.ToList() : null,
+                    Published = false
+                });
             }
 
             var sb = new StringBuilder(512);
@@ -508,7 +522,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // controlled "already exists" error; that controlled path is gone.
 
             if (_options.DryRun)
-                return DryRun($"Would CREATE global option set '{name}' with {parsedOptions.Count} option(s).");
+                return DryRun($"Would CREATE global option set '{name}' with {parsedOptions.Count} option(s).", new ManageChoiceResult
+                {
+                    Action = "create",
+                    OptionSetName = name,
+                    DisplayName = displayName.Trim(),
+                    Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
+                    OptionCount = parsedOptions.Count,
+                    Options = parsedOptions.Select(x => new ChoiceOptionItem { Label = x.label, Value = x.value }).ToList(),
+                    SolutionName = solutionName.Trim(),
+                    CreateMode = "metadata",
+                    IsAddToSolution = true,
+                    AddToSolutionMethod = "SolutionUniqueName",
+                    Status = "not_executed",
+                    Published = false
+                });
 
             var langCode = McpHelper.GetBaseLanguageCode(_serviceClient);
             var optionSetMetadata = new OptionSetMetadata

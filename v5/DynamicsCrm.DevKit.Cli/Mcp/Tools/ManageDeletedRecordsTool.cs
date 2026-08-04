@@ -35,7 +35,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public ManageDeletedRecordsTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
         [McpServerTool(Name = "manage_deleted_records",
@@ -278,13 +278,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var logicalName = entityResult.Value.LogicalName;
             var displayName = entityResult.Value.DisplayName?.UserLocalizedLabel?.Label ?? logicalName;
 
-            if (_options != null && _options.DryRun)
+            if (_options.DryRun)
             {
                 var previewResults = guids.Select(g => new RestoreResultEntry
                 {
                     RecordId = g,
-                    Status = "dry_run",
-                    Message = "Would restore (MCP server started with --dry-run). No changes were made."
+                    Status = "not_executed",
+                    Message = "The record was not restored."
                 }).ToList();
 
                 var previewStructured = new ManageDeletedRecordsResult
@@ -292,17 +292,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Action = "restore",
                     EntityName = logicalName,
                     EntityDisplayName = displayName,
-                    DryRun = true,
                     TotalRequested = guids.Count,
                     Restored = 0,
                     Failed = 0,
                     Results = previewResults
                 };
 
-                var previewText = $"[DRY-RUN] Would restore {guids.Count} record(s) of {logicalName}.\nNo changes were made (MCP server is in dry-run mode).";
-                return Success(previewText, previewStructured);
+                var previewText = $"Would restore {guids.Count} record(s) of {logicalName}.";
+                return DryRun(previewText, previewStructured);
             }
 
+            EnsureMutationAllowed();
             var results = new List<RestoreResultEntry>();
             int restored = 0;
             foreach (var g in guids)
@@ -343,7 +343,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Action = "restore",
                 EntityName = logicalName,
                 EntityDisplayName = displayName,
-                DryRun = false,
                 TotalRequested = guids.Count,
                 Restored = restored,
                 Failed = failed,
@@ -428,10 +427,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Both empty and anything other than 'on'/'off' are rejected to avoid accidental toggles.");
             }
 
-            if (_options != null && _options.DryRun)
+            if (_options.DryRun)
             {
                 var retentionText = t == "on" ? $" with retention_days={retentionDays}" : "";
-                var previewText = $"[DRY-RUN] Would turn soft-delete {t.ToUpperInvariant()}{retentionText}.\nNo changes were made (MCP server is in dry-run mode).";
+                var previewText = $"Would turn soft-delete {t.ToUpperInvariant()}{retentionText}.";
                 var previewStructured = new ManageDeletedRecordsResult
                 {
                     Action = "turn",
@@ -439,7 +438,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     MaxRetentionDays = t == "on" ? retentionDays : (int?)null,
                     CurrentRetentionDays = t == "on" ? retentionDays : (int?)null
                 };
-                return Success(previewText, previewStructured);
+                return DryRun(previewText, previewStructured);
             }
 
             var currentOrgRow = GetOrgRecycleBinConfigRow();
@@ -535,6 +534,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private Guid? TurnOff()
         {
+            EnsureMutationAllowed();
             var row = GetOrgRecycleBinConfigRow();
             if (row == null) return null;
             var id = row.Id;
@@ -551,6 +551,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string TurnOn(int retentionDays)
         {
+            EnsureMutationAllowed();
             if (retentionDays < MinRetentionDays) retentionDays = MinRetentionDays;
             if (retentionDays > MaxRetentionDays) retentionDays = MaxRetentionDays;
 
@@ -635,6 +636,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             return newId;
+        }
+
+        private void EnsureMutationAllowed()
+        {
+            if (_options.DryRun)
+                throw new InvalidOperationException("Dataverse mutation is blocked by the execution policy.");
         }
 
         private int GetMaxRetentionDays()

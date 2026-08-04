@@ -545,7 +545,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
+                return DryRunCreatePreview(entityName, logicalName, schemaName, attr, displayName, reqLevel, solutionName);
 
             var sb = FormatHeader(entityName, logicalName, "String", displayName, reqLevel);
             sb.AppendLine($"MaxLength: {maxLength}");
@@ -610,7 +610,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
+                return DryRunCreatePreview(entityName, logicalName, schemaName, attr, displayName, reqLevel, solutionName);
 
             var sb = FormatHeader(entityName, logicalName, "Memo", displayName, reqLevel);
             sb.AppendLine($"MaxLength: {maxLength}");
@@ -673,7 +673,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
+                return DryRunCreatePreview(entityName, logicalName, schemaName, attr, displayName, reqLevel, solutionName);
 
             var sb = FormatHeader(entityName, logicalName, "Integer", displayName, reqLevel);
             if (minValue.HasValue) sb.AppendLine($"MinValue: {(int)minValue.Value}");
@@ -739,7 +739,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
+                return DryRunCreatePreview(entityName, logicalName, schemaName, attr, displayName, reqLevel, solutionName);
 
             var sb = FormatHeader(entityName, logicalName, "Decimal", displayName, reqLevel);
             sb.AppendLine($"Precision: {precision}");
@@ -808,7 +808,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
+                return DryRunCreatePreview(entityName, logicalName, schemaName, attr, displayName, reqLevel, solutionName);
 
             var precisionSourceLabel = precisionSource switch { 0 => "Attribute", 1 => "Organization", 2 => "Currency", _ => precisionSource.ToString() };
             var sb = FormatHeader(entityName, logicalName, "Money", displayName, reqLevel);
@@ -877,7 +877,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
+                return DryRunCreatePreview(entityName, logicalName, schemaName, attr, displayName, reqLevel, solutionName);
 
             var sb = FormatHeader(entityName, logicalName, "Float", displayName, reqLevel);
             sb.AppendLine($"Precision: {precision}");
@@ -958,7 +958,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
+                return DryRunCreatePreview(entityName, logicalName, schemaName, attr, displayName, reqLevel, solutionName);
 
             var sb = FormatHeader(entityName, logicalName, "Boolean", displayName, reqLevel);
             sb.AppendLine($"TrueLabel: {trueLabel.Trim()}");
@@ -1027,7 +1027,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
+                return DryRunCreatePreview(entityName, logicalName, schemaName, attr, displayName, reqLevel, solutionName);
 
             var behaviorName = dtBehavior.Value;
             var sb = FormatHeader(entityName, logicalName, "DateTime", displayName, reqLevel);
@@ -1143,7 +1143,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             createFlags?.Apply(request.Lookup);
             SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solutionName);
 
-            if (_options.DryRun) return DryRunResult($"Would CREATE lookup column '{logicalName}' on entity '{entityName}'.");
+            if (_options.DryRun) return DryRunCreatePreview(entityName, logicalName, schemaName, "Lookup", displayName, reqLevel, solutionName);
 
             // Wrap create in retry to handle lock contention
             Guid metadataId = Guid.Empty;
@@ -1239,7 +1239,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solutionName);
 
-            if (_options.DryRun) return DryRunResult($"Would CREATE polymorphic lookup column '{logicalName}' on entity '{entityName}'.");
+            if (_options.DryRun) return DryRunCreatePreview(entityName, logicalName, schemaName, "PolymorphicLookup", displayName, reqLevel, solutionName);
 
             // Wrap create in retry to handle lock contention
             Guid metadataId = Guid.Empty;
@@ -1355,7 +1355,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solutionName);
 
-            if (_options.DryRun) return DryRunResult($"Would CREATE customer column '{logicalName}' on entity '{entityName}'.");
+            if (_options.DryRun) return DryRunCreatePreview(entityName, logicalName, schemaName, "Customer", displayName, reqLevel, solutionName);
 
             // Wrap create in retry to handle lock contention
             Guid metadataId = Guid.Empty;
@@ -1520,7 +1520,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
+                return DryRunCreatePreview(entityName, logicalName, schemaName, attr, displayName, reqLevel, solutionName);
 
             var sb = FormatHeader(entityName, logicalName, typeName, displayName, reqLevel);
             sb.AppendLine($"Options: {string.Join(", ", optionLabels)}");
@@ -1575,7 +1575,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
+                return DryRunCreatePreview(entityName, logicalName, schemaName, attr, displayName, reqLevel, solutionName);
 
             var sb = FormatHeader(entityName, logicalName, "BigInt", displayName, reqLevel);
             var published = PublishIfNeeded(entityName);
@@ -1629,7 +1629,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
+                return DryRunCreatePreview(entityName, logicalName, schemaName, attr, displayName, reqLevel, solutionName);
 
             var sb = FormatHeader(entityName, logicalName, "Image", displayName, reqLevel);
             var published = PublishIfNeeded(entityName);
@@ -1686,7 +1686,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
+                return DryRunCreatePreview(entityName, logicalName, schemaName, attr, displayName, reqLevel, solutionName);
 
             var sb = FormatHeader(entityName, logicalName, "File", displayName, reqLevel);
             sb.AppendLine($"MaxSizeInKB: {maxSizeInKB}");
@@ -2272,15 +2272,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                 }
 
+                var hasOptionRequests = !string.IsNullOrWhiteSpace(addOptions) ||
+                    !string.IsNullOrWhiteSpace(updateOptions) ||
+                    !string.IsNullOrWhiteSpace(deleteOptions);
+
+                // Plan the complete mutation before any metadata, Web API, option,
+                // or publish request. This also covers option-only updates: they
+                // must not fall through to PublishIfNeeded below.
+                if (_options.DryRun && (changes.Count > 0 || hasOptionRequests))
+                {
+                    var plannedParts = new List<string>(changes);
+                    if (!string.IsNullOrWhiteSpace(addOptions)) plannedParts.Add("add options");
+                    if (!string.IsNullOrWhiteSpace(updateOptions)) plannedParts.Add("update options");
+                    if (!string.IsNullOrWhiteSpace(deleteOptions)) plannedParts.Add("delete options");
+
+                    return DryRun(
+                        $"Would UPDATE column '{entityName}.{attributeName}' with changes: {string.Join(", ", plannedParts)}",
+                        new UpsertColumnResult
+                        {
+                            EntityName = entityName,
+                            AttributeName = attributeName,
+                            LogicalName = attributeName,
+                            AttributeType = GetAttributeTypeName(metadata),
+                            Changes = structuredChanges.Count > 0 ? structuredChanges : null,
+                            Status = "not_executed",
+                            Published = false
+                        });
+                }
+
                 // --- Execute metadata update (if any generic/type-specific changes) ---
                 if (changes.Count > 0)
                 {
-                    if (_options.DryRun)
-                    {
-                        var changesSummary = string.Join(", ", changes);
-                        return DryRunResult($"Would UPDATE column '{entityName}.{attributeName}' with changes: {changesSummary}");
-                    }
-
                     var updateRequest = new UpdateAttributeRequest
                     {
                         EntityName = entityName,
@@ -2556,17 +2578,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return results;
             }
 
-            if (_options.DryRun)
-            {
-                var opsSummary = new List<string>();
-                if (!string.IsNullOrWhiteSpace(addOptionsJson)) opsSummary.Add("add options");
-                if (!string.IsNullOrWhiteSpace(updateOptionsJson)) opsSummary.Add("update options");
-                if (!string.IsNullOrWhiteSpace(deleteOptionsJson)) opsSummary.Add("delete options");
-                if (opsSummary.Count > 0)
-                    results.Add($"[DRY-RUN] Would manage picklist options on '{entityName}.{attributeName}': {string.Join(", ", opsSummary)}.");
-                return results;
-            }
-
             // Detect global vs local option set
             OptionSetMetadata optionSetMeta = null;
             if (metadata is PicklistAttributeMetadata plm)
@@ -2661,17 +2672,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var results = new List<string>();
             if (metadata is not StatusAttributeMetadata)
                 return results;
-
-            if (_options.DryRun)
-            {
-                var opsSummary = new List<string>();
-                if (!string.IsNullOrWhiteSpace(addOptionsJson)) opsSummary.Add("add status options");
-                if (!string.IsNullOrWhiteSpace(updateOptionsJson)) opsSummary.Add("update status options");
-                if (!string.IsNullOrWhiteSpace(deleteOptionsJson)) opsSummary.Add("delete status options");
-                if (opsSummary.Count > 0)
-                    results.Add($"[DRY-RUN] Would manage statuscode options on '{entityName}.{attributeName}': {string.Join(", ", opsSummary)}.");
-                return results;
-            }
 
             if (!string.IsNullOrWhiteSpace(addOptionsJson))
             {
@@ -2778,7 +2778,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult ErrorResult(string message) => Error(message);
 
-        private CallToolResult DryRunResult(string message) => DryRun(message);
+        private CallToolResult DryRunCreatePreview(string entityName, string logicalName, string schemaName,
+            AttributeMetadata attribute, string displayName, AttributeRequiredLevel reqLevel, string solutionName)
+            => DryRunCreatePreview(entityName, logicalName, schemaName, GetAttributeTypeName(attribute), displayName, reqLevel, solutionName);
+
+        private CallToolResult DryRunCreatePreview(string entityName, string logicalName, string schemaName,
+            string typeName, string displayName, AttributeRequiredLevel reqLevel, string solutionName)
+            => DryRun(
+                $"Would CREATE {typeName} column '{logicalName}' on entity '{entityName}'.",
+                new UpsertColumnResult
+                {
+                    EntityName = entityName,
+                    AttributeName = logicalName,
+                    LogicalName = logicalName,
+                    SchemaName = schemaName,
+                    AttributeType = typeName,
+                    DisplayName = displayName,
+                    RequiredLevel = reqLevel.ToString(),
+                    SolutionName = string.IsNullOrWhiteSpace(solutionName) ? null : solutionName,
+                    CreateMode = "MetadataCreateRequest",
+                    IsAddToSolution = !string.IsNullOrWhiteSpace(solutionName),
+                    AddToSolutionMethod = string.IsNullOrWhiteSpace(solutionName) ? "none" : "SolutionUniqueName",
+                    Status = "not_executed",
+                    Published = false
+                });
 
         private static CallToolResult AppendFormulaCloneWarning(CallToolResult result, string warning)
         {

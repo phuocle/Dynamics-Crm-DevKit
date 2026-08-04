@@ -352,7 +352,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SolutionComponentCreateHelper.ApplySolutionUniqueName(request, resolvedSolutionUniqueName ?? solution_name.Trim());
 
                 if (_options.DryRun)
-                    return DryRunResult($"Would CREATE entity '{entityName}' (display: '{display_name}').");
+                    return DryRun($"Would CREATE entity '{entityName}' (display: '{display_name}').", new UpsertTableResult
+                    {
+                        DisplayName = display_name.Trim(),
+                        DisplayCollectionName = display_collection_name.Trim(),
+                        SchemaName = schemaName,
+                        LogicalName = entityName,
+                        OwnershipType = ownership_type,
+                        TableType = table_type,
+                        PrimaryAttributeName = primary_attribute_name,
+                        PrimaryAttributeDisplayName = primary_attribute_display_name,
+                        PrimaryAttributeMaxLength = primary_attribute_max_length,
+                        SolutionName = resolvedSolutionUniqueName ?? solution_name.Trim(),
+                        CreateMode = "metadata",
+                        IsAddToSolution = true,
+                        AddToSolutionMethod = "SolutionUniqueName",
+                        Status = "not_executed",
+                        Published = false,
+                        IsAuditEnabled = is_audit_enabled,
+                        IsQuickCreateEnabled = effectiveIsQuickCreateEnabled,
+                        IsSearchEnabled = is_search_enabled
+                    });
 
                 var response = (CreateEntityResponse)_serviceClient.Execute(request);
                 var entityId = response.EntityId;
@@ -654,7 +674,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (_options.DryRun)
                 {
                     var changesSummary = string.Join("; ", changes);
-                    return DryRunResult($"Would UPDATE entity '{entityName}' with changes: {changesSummary}");
+                    return DryRun($"Would UPDATE entity '{entityName}' with changes: {changesSummary}", new UpsertTableResult
+                    {
+                        DisplayName = existingMetadata.DisplayName?.UserLocalizedLabel?.Label ?? "",
+                        DisplayCollectionName = existingMetadata.DisplayCollectionName?.UserLocalizedLabel?.Label ?? "",
+                        SchemaName = existingMetadata.SchemaName,
+                        LogicalName = existingMetadata.LogicalName,
+                        OwnershipType = existingMetadata.OwnershipType?.ToString() ?? "",
+                        MetadataId = existingMetadata.MetadataId?.ToString() ?? "",
+                        EntitySetName = existingMetadata.EntitySetName,
+                        Warnings = warnings.Count > 0 ? warnings : null,
+                        Status = "not_executed",
+                        Published = false
+                    });
                 }
 
                 _serviceClient.Execute(updateRequest);
@@ -744,8 +776,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult ErrorResult(string message) => Error(message);
-
-        private CallToolResult DryRunResult(string message) => DryRun(message);
 
     }
 }

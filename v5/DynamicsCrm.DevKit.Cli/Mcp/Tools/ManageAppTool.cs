@@ -259,12 +259,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return StructuredResult(
-                    $"[ManageAppCreate] DRY RUN\nWould create app '{displayName.Trim()}' ({appUniqueName}) in solution '{solResult.UniqueName}'.\nPublished: no\nNextStep: {NotPublishedNextStep}",
+                return DryRun(
+                    $"Would create app '{displayName.Trim()}' ({appUniqueName}) in solution '{solResult.UniqueName}'. Published: no. NextStep: {NotPublishedNextStep}",
                     new ManageAppResult
                     {
                         Action = "create",
-                        Status = "dry_run",
+                        Status = "not_executed",
                         AppName = displayName.Trim(),
                         UniqueName = appUniqueName,
                         SolutionUniqueName = solResult.UniqueName,
@@ -403,12 +403,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return StructuredResult(
-                    $"[ManageAppUpdate] DRY RUN\nWould update app '{appModule.GetAttributeValue<string>("name")}' with: {string.Join(", ", changes)}.\nPublished: no\nNextStep: {NotPublishedNextStep}",
+                return DryRun(
+                    $"Would update app '{appModule.GetAttributeValue<string>("name")}' with: {string.Join(", ", changes)}. Published: no. NextStep: {NotPublishedNextStep}",
                     new ManageAppResult
                     {
                         Action = "update",
-                        Status = "dry_run",
+                        Status = "not_executed",
                         AppModuleId = appModule.Id.ToString(),
                         AppName = appModule.GetAttributeValue<string>("name"),
                         UniqueName = appModule.GetAttributeValue<string>("uniquename"),
@@ -639,8 +639,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (_options.DryRun)
             {
-                var dryRunText = BuildNavigationText(
-                    "DRY RUN - would update",
+                var previewText = BuildNavigationText(
+                    "Would update",
                     appModule,
                     appModuleIdUnique.Value,
                     siteMapId.Value,
@@ -648,10 +648,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     AppValidationResult.Skipped(),
                     navResult,
                     xsdWarnings);
-                return StructuredResult(dryRunText, new ManageAppResult
+                return DryRun(previewText, new ManageAppResult
                 {
                     Action = "update_navigation",
-                    Status = "dry_run",
+                    Status = "not_executed",
                     AppModuleId = appModule.Id.ToString(),
                     AppModuleIdUnique = appModuleIdUnique.Value.ToString(),
                     AppName = appModule.GetAttributeValue<string>("name"),
@@ -853,8 +853,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (_options.DryRun)
             {
-                var dryRunText = BuildUndoText(
-                    "DRY RUN - would restore",
+                var previewText = BuildUndoText(
+                    "Would restore",
                     appModule,
                     appModuleIdUnique.Value,
                     siteMapId.Value,
@@ -863,10 +863,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     AppValidationResult.Skipped(),
                     xsdWarnings);
 
-                return StructuredResult(dryRunText, new ManageAppResult
+                return DryRun(previewText, new ManageAppResult
                 {
                     Action = "undo",
-                    Status = "dry_run",
+                    Status = "not_executed",
                     AppModuleId = appModule.Id.ToString(),
                     AppModuleIdUnique = appModuleIdUnique.Value.ToString(),
                     AppName = appModule.GetAttributeValue<string>("name"),
