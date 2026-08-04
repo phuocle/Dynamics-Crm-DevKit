@@ -309,13 +309,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 try
                 {
-                    // Soft-deleted records live in the recycle bin, not the live table.
-                    // SetStateRequest fails with "Does Not Exist" because it targets the
-                    // live table. The correct approach is the late-bound "Restore" SDK
-                    // message (OrganizationRequest("Restore") with Parameters["Target"]).
-                    // There is no early-bound RestoreRequest class in the SDK.
-                    // Target must be an Entity (not EntityReference) — the SDK expects
-                    // new Entity(logicalName, id) per probe findings.
                     var restore = new OrganizationRequest("Restore")
                     {
                         Parameters =
@@ -367,10 +360,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult ExecuteStatus()
         {
             var orgRow = GetOrgRecycleBinConfigRow();
-            // Soft-delete is ON only when BOTH statecode=0 (Active) AND
-            // isreadyforrecyclebin=true. The platform keeps isreadyforrecyclebin=true
-            // even after the row is set to Inactive (statecode=1), so checking
-            // isreadyforrecyclebin alone is insufficient.
             bool? isOn;
             if (orgRow == null)
             {
@@ -453,19 +442,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Success(previewText, previewStructured);
             }
 
-            // Idempotency / no-op gate: reject turn='on' when org is already ON, and
-            // turn='off' when org is already OFF. This runs BEFORE the role gate so
-            // non-admin users get the same clear error (caller can read it without
-            // needing System Administrator role) and we avoid touching Dataverse
-            // (DELETE + POST round-trip) for a request that would do nothing.
-            // Soft-delete is ON only when BOTH statecode=0 (Active) AND
-            // isreadyforrecyclebin=true. The platform keeps isreadyforrecyclebin=true
-            // even after the row is set to Inactive (statecode=1), so checking
-            // isreadyforrecyclebin alone is insufficient and causes false "already ON".
-            // Normalize: a NULL `isreadyforrecyclebin` (or missing org row) is treated as
-            // OFF. Without this normalization the `==` comparison would evaluate
-            // `null == false` to `false`, letting a redundant turn='off' slip past the
-            // gate and trigger a pointless DELETE on a non-existent row.
             var currentOrgRow = GetOrgRecycleBinConfigRow();
             bool currentIsReady = currentOrgRow?.GetAttributeValue<bool?>("isreadyforrecyclebin").GetValueOrDefault(false) ?? false;
             int currentState = currentOrgRow?.GetAttributeValue<OptionSetValue>("statecode")?.Value ?? 1;
@@ -486,10 +462,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"DELETE + POST round-trips. {hint}");
             }
 
-            // Security gate: action='turn' is high-impact (cascades per-table rows + changes
-            // future Deletes from soft→hard). Require the OOB "System Administrator" role
-            // to be directly assigned to the calling user. Re-queried on every call so a
-            // freshly-revoked admin role cannot slip through a stale cache.
             const string requiredRoleName = DynamicsCrm.DevKit.Shared.Const.SystemAdministratorRoleName;
             if (!RoleGateHelper.IsSystemAdministrator(_serviceClient))
             {
@@ -520,12 +492,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 actualRetention = DefaultRetentionDays;
             }
 
-            // Re-read after the no-op gate to capture the row we are about to mutate
-            // (avoids a second round-trip if the row was created/changed between the
-            // gate check and now; in practice it's the same row but we want the fresh
-            // `previousOn` value for the structured response).
-            // Use the same statecode+isreadyforrecyclebin logic as the gate so the
-            // reported PreviousValue matches the gate's determination.
             var prevRow = GetOrgRecycleBinConfigRow();
             bool? previousOn;
             if (prevRow == null)
@@ -573,15 +539,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (row == null) return null;
             var id = row.Id;
 
-            // Use SetState to deactivate, instead of DELETE.
-            // DELETE cascade-deletes all per-table config rows and can cause
-            // SQL error 4701 when re-creating the org row later (TurnOn).
-            // SetState Inactive preserves the row and per-table configs.
             var setState = new SetStateRequest
             {
                 EntityMoniker = new EntityReference(RecycleBinConfigTable, id),
-                State = new OptionSetValue(1),  // Inactive
-                Status = new OptionSetValue(2)  // Inactive
+                State = new OptionSetValue(1),
+                Status = new OptionSetValue(2)
             };
             _serviceClient.Execute(setState);
             return id;
@@ -595,19 +557,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var row = GetOrgRecycleBinConfigRow();
             if (row != null)
             {
-                // Row already exists (possibly Inactive after a previous turn=off).
-                // Use SetState to activate it + Update retention, instead of DELETE+POST.
-                // DELETE+POST fails with SQL error 4701 when the row still exists,
-                // and cascade-deletes all per-table config rows unnecessarily.
                 var setState = new SetStateRequest
                 {
                     EntityMoniker = new EntityReference(RecycleBinConfigTable, row.Id),
-                    State = new OptionSetValue(0),  // Active
-                    Status = new OptionSetValue(1)  // Active
+                    State = new OptionSetValue(0),
+                    Status = new OptionSetValue(1)
                 };
                 _serviceClient.Execute(setState);
 
-                // Update retention days if different
                 var currentDays = row.GetAttributeValue<int?>("cleanupintervalindays");
                 if (!currentDays.HasValue || currentDays.Value != retentionDays)
                 {
@@ -621,7 +578,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return row.Id.ToString();
             }
 
-            // Row doesn't exist — create via Web API POST
             var entityId = GetOrganizationEntityId();
 
             var payload = "{" +

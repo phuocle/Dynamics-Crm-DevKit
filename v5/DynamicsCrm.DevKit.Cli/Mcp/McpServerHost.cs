@@ -38,7 +38,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
 
             // standard (18 additional tools)
             [nameof(ManageDeletedRecordsTool)] = "standard",
-            [nameof(ManageRecycleBinTool)] = "standard",
             [nameof(PublishCustomizationsTool)] = "standard",
             [nameof(ManageFormTool)] = "standard",
             [nameof(ManageViewTool)] = "standard",
