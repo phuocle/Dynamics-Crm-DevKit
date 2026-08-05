@@ -17,7 +17,7 @@ public class ExecuteWebApiToolTests
 {
     private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.ExecuteWebApiTool);
 
-    private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.ExecuteWebApiTool _tool = new(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+    private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.ExecuteWebApiTool _tool = new(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
 
     // ──────────────────────────────────────────────
     // Input validation via public method

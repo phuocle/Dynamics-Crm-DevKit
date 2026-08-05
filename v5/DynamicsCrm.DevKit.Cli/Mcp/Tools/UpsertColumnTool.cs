@@ -24,11 +24,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
 
-        public UpsertColumnTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public UpsertColumnTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         [McpServerTool(Name = "upsert_column", Title = "Create or update a table column",
@@ -1149,7 +1151,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Guid metadataId = Guid.Empty;
             var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
             {
-                var response = (CreateOneToManyResponse)_serviceClient.Execute(request);
+                var response = (CreateOneToManyResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, request);
                 metadataId = response.AttributeId;
             }, $"create Lookup column '{logicalName}' on entity '{entityName}'");
 
@@ -1245,7 +1247,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Guid metadataId = Guid.Empty;
             var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
             {
-                var response = _serviceClient.Execute(request);
+                var response = DataverseMutationExecutor.Execute(_context, _serviceClient, request);
                 metadataId = (Guid)response.Results["AttributeId"];
             }, $"create PolymorphicLookup column '{logicalName}' on entity '{entityName}'");
 
@@ -1361,7 +1363,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Guid metadataId = Guid.Empty;
             var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
             {
-                var response = (CreateCustomerRelationshipsResponse)_serviceClient.Execute(request);
+                var response = (CreateCustomerRelationshipsResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, request);
                 metadataId = response.AttributeId;
             }, $"create Customer column '{logicalName}' on entity '{entityName}'");
 
@@ -1718,7 +1720,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (_options.DryRun) return Guid.Empty;
 
-            var response = (CreateAttributeResponse)_serviceClient.Execute(request);
+            var response = (CreateAttributeResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, request);
             return response.AttributeId;
         }
 
@@ -1773,7 +1775,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 var publishXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>";
-                _serviceClient.Execute(new Microsoft.Crm.Sdk.Messages.PublishXmlRequest { ParameterXml = publishXml });
+                PublishHelper.PublishEntity(_context, _serviceClient, entityName);
                 return true;
             }
             catch
@@ -2309,7 +2311,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Attribute = metadata,
                         MergeLabels = true
                     };
-                    _serviceClient.Execute(updateRequest);
+                    DataverseMutationExecutor.Execute(_context, _serviceClient, updateRequest);
 
                     // WORKAROUND: UpdateAttributeRequest silently fails to persist
                     // RequiredLevel on an existing attribute (the request succeeds
@@ -2329,6 +2331,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             var putBody = $"{{\"LogicalName\":\"{attributeName}\",\"RequiredLevel\":{{\"Value\":\"{levelName}\",\"CanBeChanged\":true}}}}";
                             try
                             {
+                                _context.AssertMutationAllowed($"Web API PUT {route}");
                                 _serviceClient.ExecuteWebRequest(
                                     HttpMethod.Put,
                                     route,
@@ -2607,7 +2610,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         if (opt.Value.HasValue) req.Value = opt.Value.Value;
                         if (!string.IsNullOrWhiteSpace(opt.Color) && ManageChoiceTool.TryNormalizeHexColor(opt.Color, out var hexAdd))
                             req.Parameters["Color"] = hexAdd;
-                        var resp = (InsertOptionValueResponse)_serviceClient.Execute(req);
+                        var resp = (InsertOptionValueResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, req);
                         results.Add(string.IsNullOrWhiteSpace(opt.Color)
                             ? $"OptionsAdded: {opt.Label} ({resp.NewOptionValue})"
                             : $"OptionsAdded: {opt.Label} ({resp.NewOptionValue}) [{opt.Color}]");
@@ -2633,7 +2636,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         }
                         if (!string.IsNullOrWhiteSpace(opt.Color) && ManageChoiceTool.TryNormalizeHexColor(opt.Color, out var hexUpd))
                             req.Parameters["Color"] = hexUpd;
-                        _serviceClient.Execute(req);
+                        DataverseMutationExecutor.Execute(_context, _serviceClient, req);
                         results.Add(string.IsNullOrWhiteSpace(opt.Color)
                             ? $"OptionsRenamed: {opt.Value.Value} -> \"{opt.Label}\""
                             : $"OptionsRenamed: {opt.Value.Value} -> \"{opt.Label}\" [{opt.Color}]");
@@ -2656,7 +2659,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             req.EntityLogicalName = entityName;
                             req.AttributeLogicalName = attributeName;
                         }
-                        _serviceClient.Execute(req);
+                        DataverseMutationExecutor.Execute(_context, _serviceClient, req);
                         results.Add($"OptionsDeleted: {val}");
                     }
             }
@@ -2690,7 +2693,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             StateCode = stateValue
                         };
                         if (opt.Value.HasValue) req.Value = opt.Value.Value;
-                        var resp = (InsertStatusValueResponse)_serviceClient.Execute(req);
+                        var resp = (InsertStatusValueResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, req);
                         results.Add($"OptionsAdded: {opt.Label} ({resp.NewOptionValue}) [state={stateValue}]");
                     }
             }
@@ -2712,7 +2715,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             Label = new Label(opt.Label, McpHelper.GetBaseLanguageCode(_serviceClient)),
                             MergeLabels = true
                         };
-                        _serviceClient.Execute(req);
+                        DataverseMutationExecutor.Execute(_context, _serviceClient, req);
                         results.Add($"OptionsRenamed: {opt.Value.Value} -> \"{opt.Label}\"");
                     }
             }
@@ -2731,7 +2734,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             AttributeLogicalName = attributeName,
                             Value = val
                         };
-                        _serviceClient.Execute(req);
+                        DataverseMutationExecutor.Execute(_context, _serviceClient, req);
                         results.Add($"OptionsDeleted: {val}");
                     }
             }

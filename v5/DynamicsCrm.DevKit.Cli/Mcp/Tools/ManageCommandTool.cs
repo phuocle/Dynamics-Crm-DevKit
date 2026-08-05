@@ -23,11 +23,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
 
-        public ManageCommandTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public ManageCommandTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         private static readonly Dictionary<int, string> LocationMap = new()
@@ -974,7 +976,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     entity["onclickeventjavascriptparameters"] = defaultParams;
             }
 
-            var newId = _serviceClient.Create(entity);
+            var newId = DataverseMutationExecutor.Create(_context, _serviceClient, entity);
             PublishEntity(createEntityLogical);
 
             var structured = new ManageCommandResult
@@ -1099,7 +1101,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (changes.Count == 0)
                 return ErrorResult("Error: No fields to update. Provide at least one field to change (label, sequence, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description). Use action='hide'/'show' to change visibility.");
 
-            _serviceClient.Update(entity);
+            DataverseMutationExecutor.Update(_context, _serviceClient, entity);
             var updateEntityLogical = existing.GetAttributeValue<string>("contextvalue");
             PublishEntity(updateEntityLogical);
 
@@ -1153,7 +1155,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var commandName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
                     var contextValue = existing.GetAttributeValue<string>("contextvalue");
-                    _serviceClient.Delete("appaction", cmdGuid);
+                    DataverseMutationExecutor.Delete(_context, _serviceClient, "appaction", cmdGuid);
                     PublishEntity(contextValue);
 
                     var deletedMsg = $"OOB command override '{commandName}' deleted. Entity published.";
@@ -1180,7 +1182,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var update = new Entity("appaction", cmdGuid);
                 update["hidden"] = wantHidden;
-                _serviceClient.Update(update);
+                DataverseMutationExecutor.Update(_context, _serviceClient, update);
                 PublishEntity(existing.GetAttributeValue<string>("contextvalue"));
 
                 var doneMsg = $"Command '{existing.GetAttributeValue<string>("name") ?? commandId.Trim()}' is now {(wantHidden ? "hidden" : "visible")}. Entity published.";
@@ -1219,7 +1221,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var commandName = found.GetAttributeValue<string>("name") ?? label.Trim();
                     var contextValue = found.GetAttributeValue<string>("contextvalue");
-                    _serviceClient.Delete("appaction", found.Id);
+                    DataverseMutationExecutor.Delete(_context, _serviceClient, "appaction", found.Id);
                     PublishEntity(contextValue);
 
                     var deletedMsg2 = $"OOB command override '{commandName}' deleted. Entity published.";
@@ -1246,7 +1248,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var update2 = new Entity("appaction", found.Id);
                 update2["hidden"] = wantHidden;
-                _serviceClient.Update(update2);
+                DataverseMutationExecutor.Update(_context, _serviceClient, update2);
                 PublishEntity(found.GetAttributeValue<string>("contextvalue"));
 
                 var doneMsg2 = $"Command '{label.Trim()}' is now {(wantHidden ? "hidden" : "visible")}. Entity published.";
@@ -1343,7 +1345,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 newEntity["sequence"] = (decimal)100;
             }
 
-            var newId = _serviceClient.Create(newEntity);
+            var newId = DataverseMutationExecutor.Create(_context, _serviceClient, newEntity);
             PublishEntity(entityLogical);
 
             var createdMsg = $"Created appaction override: command '{label.Trim()}' on {entityName} ({LocationMap[locationValue]}) is now hidden. Entity published.";
@@ -1619,7 +1621,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(tooltipDescription))
                 dropdown["buttontooltipdescription"] = tooltipDescription.Trim();
 
-            var dropdownId = _serviceClient.Create(dropdown);
+            var dropdownId = DataverseMutationExecutor.Create(_context, _serviceClient, dropdown);
 
             // Create Group (invisible container, no label)
             var groupName = $"{publisherPrefix}.{entityLogical}.{safeLabel}.{locPrefix}.Group";
@@ -1642,7 +1644,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             group["origin"] = new OptionSetValue(0);
             group["parentappactionid"] = new EntityReference("appaction", dropdownId);
 
-            var groupId = _serviceClient.Create(group);
+            var groupId = DataverseMutationExecutor.Create(_context, _serviceClient, group);
 
             // Create items as Standard Buttons under the Group
             var createdItems = new List<string>();
@@ -1775,7 +1777,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (changes.Count == 0)
                 return ErrorResult("Error: No fields to update. Provide at least one: label, sequence, font_icon, icon_webresource, tooltip_title, tooltip_description.");
 
-            _serviceClient.Update(entity);
+            DataverseMutationExecutor.Update(_context, _serviceClient, entity);
 
             var commandName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
             var message = $"Flyout '{commandName}' updated: {string.Join(", ", changes)}.";
@@ -1918,7 +1920,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(tooltipDescription))
                 split["buttontooltipdescription"] = tooltipDescription.Trim();
 
-            var splitId = _serviceClient.Create(split);
+            var splitId = DataverseMutationExecutor.Create(_context, _serviceClient, split);
 
             // Create Group (internal container under the Split Button)
             var groupName = $"{publisherPrefix}.{entityLogical}.{safeLabel}.{locPrefix}.Group";
@@ -1941,7 +1943,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             group["origin"] = new OptionSetValue(0);
             group["parentappactionid"] = new EntityReference("appaction", splitId);
 
-            var groupId = _serviceClient.Create(group);
+            var groupId = DataverseMutationExecutor.Create(_context, _serviceClient, group);
 
             // Create dropdown items as Standard Buttons under the Group
             var createdItems = new List<string>();
@@ -2095,7 +2097,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (changes.Count == 0)
                 return ErrorResult("Error: No fields to update. Provide at least one: label, sequence, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description.");
 
-            _serviceClient.Update(entity);
+            DataverseMutationExecutor.Update(_context, _serviceClient, entity);
 
             var commandName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
             var message = $"Split Button '{commandName}' updated: {string.Join(", ", changes)}.";
@@ -2183,7 +2185,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 groupEntity["origin"] = new OptionSetValue(0);
                 groupEntity["parentappactionid"] = new EntityReference("appaction", flyoutGuid);
 
-                groupId = _serviceClient.Create(groupEntity);
+                groupId = DataverseMutationExecutor.Create(_context, _serviceClient, groupEntity);
             }
 
             // Count existing items to auto-assign sequence
@@ -2269,7 +2271,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var itemName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
             var itemLabel = existing.GetAttributeValue<string>("buttonlabeltext") ?? itemName;
 
-            _serviceClient.Delete("appaction", cmdGuid);
+            DataverseMutationExecutor.Delete(_context, _serviceClient, "appaction", cmdGuid);
 
             var message = $"Flyout item '{itemLabel}' ({itemName}) deleted successfully.";
             var structured = new ManageCommandResult
@@ -2350,7 +2352,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             try
             {
-                var newId = _serviceClient.Create(itemEntity);
+                var newId = DataverseMutationExecutor.Create(_context, _serviceClient, itemEntity);
                 return (null, newId.ToString());
             }
             catch (Exception ex)
@@ -2667,8 +2669,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(entityLogicalName)) return;
 
-            var publishXml = $"<importexportxml><entities><entity>{EscapeXml(entityLogicalName.Trim().ToLowerInvariant())}</entity></entities></importexportxml>";
-            _serviceClient.Execute(new PublishXmlRequest { ParameterXml = publishXml });
+            PublishHelper.PublishEntity(_context, _serviceClient, entityLogicalName.Trim().ToLowerInvariant());
 
             // Wait for command metadata to propagate after publish
             MetadataOperationWaitHelper.WaitAfterFormView();

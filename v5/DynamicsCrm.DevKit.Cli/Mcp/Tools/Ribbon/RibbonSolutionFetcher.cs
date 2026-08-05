@@ -9,21 +9,25 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Xml.Linq;
+using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 {
     internal sealed class RibbonSolutionFetcher
     {
         private readonly ServiceClient _serviceClient;
+        private readonly McpExecutionContext _context;
         private const string SOLUTION_NAME = "devkit_ribbon";
 
-        public RibbonSolutionFetcher(ServiceClient serviceClient)
+        public RibbonSolutionFetcher(ServiceClient serviceClient, McpExecutionContext context)
         {
-            _serviceClient = serviceClient;
+            _serviceClient = serviceClient ?? throw new ArgumentNullException(nameof(serviceClient));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public string FetchExistingRibbonDiffXml(string entityName)
         {
+            _context.AssertMutationAllowed("prepare the ribbon solution for export");
             var solutionId = GetSolutionId();
             if (solutionId == null)
                 return RibbonXmlHelpers.GetEmptyRibbonDiffXml();
@@ -78,8 +82,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             return RibbonXmlHelpers.GetEmptyRibbonDiffXml();
         }
 
+        /// <summary>
+        /// Reads the published ribbon through RetrieveEntityRibbonRequest. This is
+        /// deliberately separate from FetchExistingRibbonDiffXml because exporting
+        /// the devkit solution requires destructive component reset operations.
+        /// </summary>
+        public string ReadRibbonWithoutMutation(string entityName, RibbonLocationFilters filter = RibbonLocationFilters.Form)
+        {
+            var response = (RetrieveEntityRibbonResponse)_serviceClient.Execute(new RetrieveEntityRibbonRequest
+            {
+                EntityName = entityName,
+                RibbonLocationFilter = filter
+            });
+            if (response?.CompressedEntityXml == null || response.CompressedEntityXml.Length == 0)
+                return RibbonXmlHelpers.GetEmptyRibbonDiffXml();
+
+            using var input = new MemoryStream(response.CompressedEntityXml);
+            using var zip = new ZipArchive(input, ZipArchiveMode.Read);
+            var entry = zip.GetEntry("RibbonXml.xml");
+            if (entry == null)
+                return RibbonXmlHelpers.GetEmptyRibbonDiffXml();
+            using var reader = new StreamReader(entry.Open());
+            return reader.ReadToEnd();
+        }
+
         private void ResetSolutionToEntity(Guid solutionId, string entityName)
         {
+            _context.AssertMutationAllowed("reset ribbon solution components");
             var metadataId = GetEntityMetadataId(entityName);
             if (metadataId == null)
                 return;

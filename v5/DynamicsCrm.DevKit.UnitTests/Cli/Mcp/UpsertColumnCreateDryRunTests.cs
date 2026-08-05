@@ -12,7 +12,7 @@ public class UpsertColumnCreateDryRunTests
 {
     private static readonly Type ToolType = typeof(UpsertColumnTool);
 
-    private readonly UpsertColumnTool _tool = new(null!, new McpDryRunOptions { DryRun = true });
+    private readonly UpsertColumnTool _tool = new(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true));
 
     [TestMethod]
     public void CreateStringAttribute_DryRun_BuildsMetadataWithoutServiceCall()

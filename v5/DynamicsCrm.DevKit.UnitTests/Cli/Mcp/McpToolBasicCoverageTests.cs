@@ -123,7 +123,7 @@ public class McpToolBasicCoverageTests
     [TestMethod]
     public void ManageRibbon_MissingAction_ReturnsError()
     {
-        var tool = new ManageRibbonTool(null!, DryRunOptions());
+        var tool = new ManageRibbonTool(null!, DryRunOptions(), DryRunTestHelpers.BlockedContext());
 
         var result = tool.manage_ribbon(action: "");
 
@@ -134,7 +134,7 @@ public class McpToolBasicCoverageTests
     [TestMethod]
     public void ManageRibbon_InvalidAction_ReturnsError()
     {
-        var tool = new ManageRibbonTool(null!, DryRunOptions());
+        var tool = new ManageRibbonTool(null!, DryRunOptions(), DryRunTestHelpers.BlockedContext());
 
         var result = tool.manage_ribbon(action: "not_an_action");
 
@@ -145,7 +145,7 @@ public class McpToolBasicCoverageTests
     [TestMethod]
     public void ManageRibbon_DetailWithoutEntity_ReturnsError()
     {
-        var tool = new ManageRibbonTool(null!, DryRunOptions());
+        var tool = new ManageRibbonTool(null!, DryRunOptions(), DryRunTestHelpers.BlockedContext());
 
         var result = tool.manage_ribbon(action: "detail", entity_name: "");
 
@@ -156,7 +156,7 @@ public class McpToolBasicCoverageTests
     [TestMethod]
     public void ManageRibbon_UpdateWithoutEntity_ReturnsError()
     {
-        var tool = new ManageRibbonTool(null!, DryRunOptions());
+        var tool = new ManageRibbonTool(null!, DryRunOptions(), DryRunTestHelpers.BlockedContext());
 
         var result = tool.manage_ribbon(action: "update", entity_name: "");
 

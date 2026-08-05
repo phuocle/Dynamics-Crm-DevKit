@@ -19,11 +19,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
 
-        public ExecuteWebApiTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public ExecuteWebApiTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         [McpServerTool(Name = "execute_webapi", Title = "Execute a raw Web API request",
@@ -106,27 +108,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (blockedReason != null)
                     return Error(blockedReason);
 
-                if (_options.DryRun && httpMethod != HttpMethod.Get)
-                {
-                    var preview = new WebApiResult
-                    {
-                        Method = httpMethod.Method,
-                        Url = url.Trim(),
-                        StatusCode = 0,
-                        StatusText = "Not executed",
-                        IsSuccess = false
-                    };
-                    return DryRun(
-                        $"Would execute {httpMethod.Method} {url.Trim()}" +
-                        (!string.IsNullOrWhiteSpace(body) ? $" with body ({body.Trim().Length} chars)" : "") + ".",
-                        preview);
-                }
-
                 var customHeaders = ParseHeaders(headers, out var headersError);
                 if (headersError != null)
                     return Error(headersError);
                 var requestBody = string.IsNullOrWhiteSpace(body) ? null : body.Trim();
                 var trimmedUrl = url.Trim();
+
+                if (_options.DryRun && httpMethod != HttpMethod.Get)
+                {
+                    var preview = new WebApiResult
+                    {
+                        Method = httpMethod.Method,
+                        Url = trimmedUrl,
+                        StatusCode = 0,
+                        StatusText = "Not executed",
+                        IsSuccess = false
+                    };
+                    return DryRun(
+                        $"Would execute {httpMethod.Method} {trimmedUrl}" +
+                        (!string.IsNullOrWhiteSpace(requestBody) ? $" with body ({requestBody.Length} chars)" : "") + ".",
+                        preview);
+                }
+
+                if (httpMethod != HttpMethod.Get)
+                    _context.AssertMutationAllowed($"Web API {httpMethod.Method} {trimmedUrl}");
                 HttpResponseMessage response;
                 if (trimmedUrl.StartsWith("$metadata", StringComparison.OrdinalIgnoreCase))
                 {

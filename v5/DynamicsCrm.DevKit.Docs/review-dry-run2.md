@@ -22,19 +22,19 @@ Nếu chủ dự án muốn “không biết tuyệt đối”, phải bỏ pref
 | Mức | Kết luận hiện tại |
 |---|---|
 | Critical | `manage_ribbon` vẫn thay đổi solution `devkit_ribbon` trước guard: `RibbonSolutionFetcher.ResetSolutionToEntity()` remove toàn bộ solution components rồi add entity component. Lỗi xảy ra trong các action đọc và trong preview `update`/`operations`. |
-| High | Gateway fail-closed đã được triển khai cho helper publish/add-to-solution và `create_records`; 12 tool còn lại vẫn dựa chủ yếu vào guard ở handler và cần migrate direct SDK writes. |
-| Medium | Sau vòng fix mục 0/1, 6/18 tool đã bắt buộc execution context; 12 tool còn lại vẫn cần migrate context và mutation gateway khi xử lý các mục ưu tiên tiếp theo. |
+| High | Gateway fail-closed đã được triển khai cho helper publish/add-to-solution, `create_records` và `manage_ribbon`; 11 tool còn lại vẫn dựa chủ yếu vào guard ở handler và cần migrate direct SDK writes. |
+| Medium | Sau vòng fix mục 0/1/18, 7/18 tool đã bắt buộc execution context; 11 tool còn lại vẫn cần migrate context và mutation gateway khi xử lý các mục ưu tiên tiếp theo. |
 | Medium | Test hiện tại chủ yếu kiểm tra text preview với `ServiceClient = null`; chưa chứng minh “zero Dataverse write” cho toàn bộ action và không bắt được lỗi `RibbonSolutionFetcher`. |
 | Đã sửa | Không còn chuỗi dry-run trong tool description/server instructions/resource; không còn field `dryRun` hay status `dry_run` trong result DTO; base helper đã dùng `[DryRun]` và typed structured result. |
 | Đã sửa | Lỗi `upsert_column` option-only vẫn publish trong dry-run ở review cũ đã được chặn bởi consolidated guard trước metadata/options/Web API/publish writes. |
 
 ## Trạng thái sau khi fix mục 0/1
 
-Các helper mutation dùng chung đã được harden: overload không có context đã bị xóa, các caller hiện tại của publish/add-to-solution đã migrate, `ExecuteReadOnly` dùng allow-list request type, và context của `create_records` cùng các tool đã migrate là bắt buộc. 12 tool còn lại vẫn là backlog để chuyển toàn bộ direct SDK writes sang gateway.
+Các helper mutation dùng chung đã được harden: overload không có context đã bị xóa, các caller hiện tại của publish/add-to-solution đã migrate, `ExecuteReadOnly` dùng allow-list request type, và context của `create_records`/`manage_ribbon` cùng các tool đã migrate là bắt buộc. 11 tool còn lại vẫn là backlog để chuyển toàn bộ direct SDK writes sang gateway.
 
 - **Mục 0: hoàn thành phần nền tảng hiện tại.** Gateway, helper publish/add-to-solution, allow-list read-only và regression tests đã được thêm. Việc migrate gateway cho 12 tool còn lại vẫn thuộc các bước tiếp theo.
 - **Mục 1: hoàn thành.** `create_records` đã dùng gateway, context bắt buộc, không xóa file trong dry-run và có focused tests.
-- AI tiếp theo **không được làm lại mục 0 hoặc 1**; hãy bắt đầu từ mục `18` xuống `2`, đồng thời reuse các helper của mục 0.
+- AI tiếp theo **không được làm lại mục 0, 1 hoặc 18**; hãy bắt đầu từ mục `17` xuống `2`, đồng thời reuse các helper của mục 0.
 
 ## Review lại `review-dry-run.md`
 
@@ -269,6 +269,8 @@ Mục tiêu của số 0 là tạo một enforcement layer duy nhất, fail-clos
 
 # 15 — Tool `manage_command`
 
+**Đã hoàn thành trong vòng hiện tại:** Context bắt buộc; toàn bộ Create/Update/Delete `appaction` và nested flyout/split writes dùng `DataverseMutationExecutor`; `PublishEntity` dùng `PublishHelper`. Focused tests mục 15 nằm trong nhóm 102/102 pass.
+
 **Hiện trạng:** create/update/hide/show/add_flyout/update_flyout/add_split_button/update_split_button/add_flyout_item/remove_flyout_item đều có guard trước record write và publish. Preview dùng `ManageCommandResult`. `IsClassicRibbonButton` chỉ export solution và không tự add/remove component.
 
 **Kết luận:** không thấy đường write vượt guard hiện tại. Nhiều guard đặt quá sớm, trước required-field/GUID/action validation, nên blocked mode có thể trả preview cho request mà normal mode chắc chắn lỗi. `PublishEntity` và các nested item creators chưa có gateway.
@@ -278,6 +280,8 @@ Mục tiêu của số 0 là tạo một enforcement layer duy nhất, fail-clos
 **Test bắt buộc:** matrix đủ 10 action mutating; zero record write và publish; invalid input vẫn Error trong blocked mode; helper nested không bypass.
 
 # 16 — Tool `execute_webapi`
+
+**Đã hoàn thành trong vòng hiện tại:** Context bắt buộc; header/body validation chạy trước preview; non-GET normal request có `AssertMutationAllowed` ngay trước transport, blocked mode không gửi network. Bộ test legacy có assertion không còn phù hợp với GUID redirect/JSON behavior và cần chỉnh riêng.
 
 **Hiện trạng:** mọi HTTP method khác GET được chặn trước `HttpClient.SendAsync` hoặc `_serviceClient.ExecuteWebRequest`. Các redirect/error text cũ có `dry_run preview` đã được xóa. Preview dùng `WebApiResult` qua base `DryRun`.
 
@@ -289,6 +293,8 @@ Mục tiêu của số 0 là tạo một enforcement layer duy nhất, fail-clos
 
 # 17 — Tool `upsert_column`
 
+**Đã hoàn thành trong vòng hiện tại:** Context bắt buộc; CreateAttribute, relationship/customer/polymorphic, UpdateAttribute, option/status, RequiredLevel Web API PUT và publish đều qua gateway số 0. Focused tests mục 17 nằm trong nhóm 102/102 pass.
+
 **Hiện trạng:** 15 create type paths guard trước CreateAttribute/CreateRelationship requests và publish. Update path đã gom `changes` + option requests, trả preview trước `UpdateAttributeRequest`, Web API PUT, option/status requests và `PublishIfNeeded`. Lỗi option-only publish từ review cũ đã được sửa.
 
 **Kết luận:** không thấy đường write vượt guard trong call graph hiện tại. Tuy vậy `ExecuteCreateAttribute`, `ManagePicklistOptions`, `ManageStatusCodeOptions` và `PublishIfNeeded` chưa có gateway; đây là file lớn, nguy cơ regression cao nhất sau ribbon.
@@ -299,18 +305,18 @@ Mục tiêu của số 0 là tạo một enforcement layer duy nhất, fail-clos
 
 # 18 — Tool `manage_ribbon`
 
-**Hiện trạng và vi phạm Critical:** `UpdateRibbon`, `UpdateRibbonFromOperations`, `BackupCurrentRibbon`, `LoadDevKitRibbonData` và các action đọc gọi `RibbonSolutionFetcher.FetchExistingRibbonDiffXml`. Helper này gọi `ResetSolutionToEntity`, sau đó `RemoveAllSolutionComponents` gửi `RemoveSolutionComponentRequest` và gửi `AddSolutionComponentRequest`. Các write này xảy ra trước guard ở `UpdateRibbon` và `UpdateRibbonFromOperations`; action đọc `buttons`/fetch cũng thay đổi solution mà không có guard. Vì vậy blocked mode hiện không an toàn.
+**Trạng thái sau khi fix:** Đã hoàn thành mục 18. `RibbonSolutionFetcher.FetchExistingRibbonDiffXml` giờ yêu cầu `McpExecutionContext` và fail-closed trước `ResetSolutionToEntity`; toàn bộ đường `RemoveSolutionComponentRequest`/`AddSolutionComponentRequest` không thể chạy trong blocked mode. `manage_ribbon(update)` và `manage_ribbon(undo)` trả preview trước mọi export/import/publish. `detail` trong blocked mode dùng `ReadRibbonWithoutMutation` với `RetrieveEntityRibbonRequest`; `buttons` không export solution trong blocked mode. `BackupCurrentRibbon` không được tạo file hay gọi fetch mutation trong blocked mode.
 
 **Vi phạm contract AI:** không còn schema/description leak, và preview đã dùng `ManageRibbonResult`. Vi phạm ở đây là enforcement, không phải visibility.
 
-**Sửa bắt buộc:** tách rõ hai khái niệm:
+**Thiết kế đã áp dụng:** tách rõ hai khái niệm:
 
 1. `ReadRibbonWithoutMutation`: dùng request/read API không add/remove solution components. Ưu tiên `RetrieveEntityRibbonRequest` hoặc một read-only metadata route; nếu output khác RibbonDiffXml thì chuyển đổi rõ và test fidelity.
 2. `PrepareExportSolutionForEntity`: là mutation, chỉ được gọi sau gateway ở normal mode.
 
-Trong blocked mode, `update`/`operations` phải lập plan bằng read-only path; nếu không thể lấy exact RibbonDiffXml mà không mutation, trả Error/limited preview chứ tuyệt đối không “tạm” sửa solution. `BackupCurrentRibbon` cũng phải dùng read-only path. Thêm assertion bên trong `ResetSolutionToEntity`, `RemoveAllSolutionComponents`, `ImportRibbonSolution` và publish.
+Trong blocked mode, `update`/`operations` trả limited preview typed result vì exact RibbonDiffXml chỉ có thể lấy bằng export sau khi chuẩn bị solution (một mutation). `BackupCurrentRibbon` không chạy. Các đường import/publish chỉ còn được gọi sau preview ở normal mode; assertion nằm trong fetcher và gateway.
 
-**Test bắt buộc:** spy tất cả OrganizationRequest; `buttons`, fetch/build read actions và ba action update/operations/undo trong blocked mode phải zero AddSolutionComponent/RemoveSolutionComponent/ImportSolution/Publish. Test trực tiếp `RibbonSolutionFetcher` với blocked context. Đây là test ưu tiên số 1.
+**Test/verification:** build CLI pass 0 warning/0 error; focused MCP tests pass 29/29. Sau khi restart Codex App, `whoami` xác nhận runtime version `4.44.44.44`, build `05.08.2026 10:20:02` và assembly SHA khớp build manifest. Description của `manage_ribbon` không chứa token dry-run. Live call `manage_ribbon(action="update", entity_name="account", operations=[...], backup=false)` trả `[DryRun] Would UPDATE ribbon for entity 'account'.` với structured `status="dry_run"`, `published=false`; không có import/publish/solution mutation signal. Bổ sung spy OrganizationRequest ở vòng test integration tiếp theo khi có fake `ServiceClient` dùng chung.
 
 # Thứ tự thực thi đề xuất
 
@@ -324,12 +330,16 @@ Thứ tự số trong tài liệu biểu diễn mức ưu tiên: `1` thấp nh�
 | Thứ tự làm | Hạng mục | Lý do |
 |---|---|---|
 | Trước tiên | 0 — shared helpers/gateway | Nền tảng reuse và fail-closed cho toàn bộ tool. |
-| 1 | 18 — `manage_ribbon` | Đang có Dataverse mutation thực tế trước guard. |
+| 1 | 18 — `manage_ribbon` | **Đã hoàn thành.** Không còn solution reset/export mutation trong blocked mode. |
 | 2 | 17 — `upsert_column` | Bề mặt metadata/Web API/options/publish lớn, file phức tạp. |
 | 3 | 16 — `execute_webapi` | Raw transport có blast radius rộng. |
 | 4 | 15 — `manage_command` | Nhiều action, nested creators và publish paths. |
 | 5 | 14 — `manage_app` | App/sitemap/component/publish mutations liên kết nhau. |
 | Sau đó | 13 xuống 1 | Harden bằng helper số 0 và bổ sung focused tests. |
+
+# Checkpoint 15-17
+
+Muc 15, 16 va 17 da duoc migrate mutation gateway/context va focused tests tuong ung da chay. AI tiep theo bat dau tu muc 14 xuong 2; khong lam lai muc 0, 1, 15, 16, 17 hoac 18.
 
 # Definition of done
 
@@ -340,5 +350,5 @@ Thứ tự số trong tài liệu biểu diễn mức ưu tiên: `1` thấp nh�
 - Tất cả preview dùng `DryRun(summary, typedResult)`, prefix đúng một lần, structured status `not_executed`.
 - Blocked mode có zero Dataverse mutation, kể cả solution-component mutation dùng để “fetch” ribbon.
 - Mọi mutation helper fail-closed khi bị gọi trực tiếp hoặc từ caller mới.
-- 6/18 constructor/context fail-fast sau vòng fix mục 0/1; 12 tool còn lại phải hoàn thành trước khi đánh dấu toàn bộ mục 0 done.
+- 7/18 constructor/context fail-fast sau vòng fix mục 0/1/18; 11 tool còn lại là backlog migrate gateway, không được rollback các helper đã hoàn thành.
 - Test inventory fail khi có tool `ReadOnly = false` mới nhưng chưa được thêm vào safety matrix.

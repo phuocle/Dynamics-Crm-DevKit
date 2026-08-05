@@ -32,6 +32,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
         private string _workspaceFolder;
         private const string SOLUTION_NAME = "devkit_ribbon";
         private const string SOLUTION_DISPLAY_NAME = "DEVKIT_RIBBON";
@@ -42,10 +43,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private const string PublishWaitTimeoutInstruction =
             "After the third get_system_jobs poll, if the PublishAll system job is not Succeeded or no result is returned, stop waiting, do not call manage_ribbon(buttons/detail), and report the ribbon result to the user with a note that Dataverse publish is still running or did not complete successfully and the user must wait/check the job.";
 
-        public ManageRibbonTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public ManageRibbonTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
+            // Keep null service construction usable for argument-validation tests;
+            // any Dataverse action still fails safely when it reaches the service.
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         [McpServerTool(Name = "manage_ribbon", Title = "Manage classic Dataverse ribbon buttons and customizations",
@@ -135,6 +139,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         var updateBusy = TryBlockRibbonActionWhenBusy("update", updateEntityName, isReadback: false);
                         if (updateBusy != null) return updateBusy;
 
+                        if (_options.DryRun)
+                            return DryRun($"Would UPDATE ribbon for entity '{updateEntityName}'.",
+                                new ManageRibbonResult { Action = "update", EntityName = updateEntityName, Status = "dry_run", Published = false });
+
                         if (!string.IsNullOrWhiteSpace(operations))
                             return UpdateRibbonFromOperations(
                                 updateEntityName,
@@ -160,6 +168,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             var (entityName, entityError) = ResolveEntityLogicalName(entity_name);
                             if (entityError != null) return ErrorResult(entityError);
                             var undoBusy = TryBlockRibbonActionWhenBusy("undo", entityName, isReadback: false);
+                            if (_options.DryRun)
+                                return DryRun($"Would RESTORE ribbon for entity '{entityName}' from backup.",
+                                    new ManageRibbonResult { Action = "undo", EntityName = entityName, Status = "dry_run", Published = false });
                             return undoBusy ?? UndoRibbon(entityName, ribbonxml.Trim());
                         }
 
@@ -575,7 +586,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             locLabels = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             try
             {
-                var fetcher = new RibbonSolutionFetcher(_serviceClient);
+                if (_options.DryRun)
+                    return;
+                var fetcher = new RibbonSolutionFetcher(_serviceClient, _context);
                 var ribbonDiffXml = fetcher.FetchExistingRibbonDiffXml(entityName);
                 if (string.IsNullOrWhiteSpace(ribbonDiffXml)) return;
 
@@ -743,8 +756,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string ribbonXml;
             try
             {
-                var fetcher = new RibbonSolutionFetcher(_serviceClient);
-                ribbonXml = fetcher.FetchExistingRibbonDiffXml(entityName);
+                var fetcher = new RibbonSolutionFetcher(_serviceClient, _context);
+                ribbonXml = _options.DryRun
+                    ? fetcher.ReadRibbonWithoutMutation(entityName)
+                    : fetcher.FetchExistingRibbonDiffXml(entityName);
             }
             catch (Exception ex)
             {
@@ -820,7 +835,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Raw ribbonxml updates are treated as patches so adding one button cannot delete siblings.
             try
             {
-                var fetcher = new RibbonSolutionFetcher(_serviceClient);
+                var fetcher = new RibbonSolutionFetcher(_serviceClient, _context);
                 var existingXml = fetcher.FetchExistingRibbonDiffXml(entityName);
                 var targetDoc = XDocument.Parse(resolvedXml);
                 var existingDoc = XDocument.Parse(existingXml);
@@ -955,7 +970,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ops = normalizedOps;
 
             // Step 3: Fetch existing RibbonDiffXml from devkit-ribbon solution
-            var fetcher = new RibbonSolutionFetcher(_serviceClient);
+            var fetcher = new RibbonSolutionFetcher(_serviceClient, _context);
             var existingXml = fetcher.FetchExistingRibbonDiffXml(entityName);
 
             // Step 4: Parse existing XML
@@ -1363,7 +1378,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             try
             {
-                var fetcher = new RibbonSolutionFetcher(_serviceClient);
+                var fetcher = new RibbonSolutionFetcher(_serviceClient, _context);
                 currentXml = fetcher.FetchExistingRibbonDiffXml(entityName);
             }
             catch

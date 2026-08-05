@@ -363,7 +363,7 @@ public class UpsertColumnToolTests
     [TestMethod]
     public void UpsertColumn_EmptyEntityName_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.upsert_column(entity_name: "", logical_name: "new_test", attribute_type: "string", display_name: "Test");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -373,7 +373,7 @@ public class UpsertColumnToolTests
     [TestMethod]
     public void UpsertColumn_InvalidAttributeType_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.upsert_column(entity_name: "account", logical_name: "new_test", attribute_type: "invalidtype", display_name: "Test");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -383,7 +383,7 @@ public class UpsertColumnToolTests
     [TestMethod]
     public void UpsertColumn_InvalidRequiredLevel_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.upsert_column(entity_name: "account", logical_name: "new_test", attribute_type: "string", display_name: "Test", required_level: "bogus");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -393,7 +393,7 @@ public class UpsertColumnToolTests
     [TestMethod]
     public void UpsertColumn_InvalidStringFormat_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.upsert_column(entity_name: "account", logical_name: "new_test", attribute_type: "string", display_name: "Test", format: "BadFormat");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -404,7 +404,7 @@ public class UpsertColumnToolTests
     [TestMethod]
     public void UpsertColumn_InvalidIntegerFormat_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.upsert_column(entity_name: "account", logical_name: "new_test", attribute_type: "integer", display_name: "Test", format: "BadFormat");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -415,7 +415,7 @@ public class UpsertColumnToolTests
     [TestMethod]
     public void UpsertColumn_InvalidMemoFormat_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.upsert_column(entity_name: "account", logical_name: "new_test", attribute_type: "memo", display_name: "Test", format: "BadFormat");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -426,7 +426,7 @@ public class UpsertColumnToolTests
     [TestMethod]
     public void UpsertColumn_InvalidDateTimeBehavior_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.upsert_column(entity_name: "account", logical_name: "new_test", attribute_type: "datetime", display_name: "Test", behavior: "BadBehavior");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -496,7 +496,7 @@ public class UpsertColumnToolTests
         // Pass logical_name="statuscode" with no option params and no other changes.
         // The tool resolves entity_name before reaching Dataverse (null serviceClient
         // causes the resolve to fail with entity_name error), so we verify early-exit.
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.upsert_column(entity_name: "", logical_name: "statuscode");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;

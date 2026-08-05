@@ -45,10 +45,10 @@ public class ManageCommandToolTests
         .GetMethod("NullIfEmpty", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     private static DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageCommandTool CreateTool() =>
-        new(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions { DryRun = false });
+        new(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions { DryRun = false }, new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(false));
 
     private static DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageCommandTool CreateDryRunTool() =>
-        new(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions { DryRun = true });
+        new(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions { DryRun = true }, new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true));
 
     // ──────────────────────────────────────────────
     // LocationFilterMap covers all LocationMap values
