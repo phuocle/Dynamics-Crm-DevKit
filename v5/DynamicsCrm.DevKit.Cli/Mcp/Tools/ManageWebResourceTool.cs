@@ -451,7 +451,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
 
-            var webResourceId = _serviceClient.Create(webResource);
+            var webResourceId = DataverseMutationExecutor.Create(_context, _serviceClient, webResource);
 
             var addResult = SolutionComponentCreateHelper.AddExistingComponent(
                 _context, _serviceClient,
@@ -593,7 +593,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
             }
 
-            _serviceClient.Update(update);
+            DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             var published = PublishWebResource(id);
             var existingName = existing.GetAttributeValue<string>("name") ?? "";
@@ -674,7 +674,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
 
-            _serviceClient.Delete("webresource", id);
+            DataverseMutationExecutor.Delete(_context, _serviceClient, "webresource", id);
 
             var published = PublishWebResource(id);
 
@@ -726,8 +726,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             try
             {
-                var publishXml = $"<importexportxml><webresources><webresource>{webResourceId:D}</webresource></webresources></importexportxml>";
-                _serviceClient.Execute(new PublishXmlRequest { ParameterXml = publishXml });
+                PublishHelper.PublishWebResource(_context, _serviceClient, webResourceId);
 
                 // Wait for web resource metadata to propagate after publish
                 MetadataOperationWaitHelper.WaitAfterWebResource();

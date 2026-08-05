@@ -22,11 +22,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
 
-        public UpsertTableTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public UpsertTableTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         [McpServerTool(Name = "upsert_table", Title = "Create or update a Dataverse table",
@@ -374,7 +376,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         IsSearchEnabled = is_search_enabled
                     });
 
-                var response = (CreateEntityResponse)_serviceClient.Execute(request);
+                var response = (CreateEntityResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, request);
                 var entityId = response.EntityId;
 
                 // Retrieve the created entity to get EntitySetName and managed properties.
@@ -401,7 +403,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 try
                 {
                     var publishXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>";
-                    _serviceClient.Execute(new Microsoft.Crm.Sdk.Messages.PublishXmlRequest { ParameterXml = publishXml });
+                    PublishHelper.PublishEntity(_context, _serviceClient, entityName);
                     published = true;
                 }
                 catch
@@ -689,14 +691,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     });
                 }
 
-                _serviceClient.Execute(updateRequest);
+                DataverseMutationExecutor.Execute(_context, _serviceClient, updateRequest);
 
                 // --- Publish ---
                 var published = false;
                 try
                 {
                     var publishXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>";
-                    _serviceClient.Execute(new Microsoft.Crm.Sdk.Messages.PublishXmlRequest { ParameterXml = publishXml });
+                    PublishHelper.PublishEntity(_context, _serviceClient, entityName);
                     published = true;
                 }
                 catch

@@ -219,6 +219,8 @@ Mục tiêu của số 0 là tạo một enforcement layer duy nhất, fail-clos
 
 # 10 — Tool `manage_webresource`
 
+**Đã hoàn thành trong vòng hiện tại:** Context/gateway bắt buộc cho Create/Update/Delete; publish webresource dùng helper publish riêng, giữ nguyên preview typed và không mutation trong blocked mode.
+
 **Hiện trạng:** create/update/delete có preview trước record Create/Update/Delete, solution-component handling và publish. Typed `ManageWebResourceResult`.
 
 **Kết luận:** không thấy write vượt guard. `PublishIfRequested` và `SolutionComponentCreateHelper` vẫn là mutation helpers không biết execution context.
@@ -228,6 +230,8 @@ Mục tiêu của số 0 là tạo một enforcement layer duy nhất, fail-clos
 **Test bắt buộc:** create/update/delete zero writes; create with solution zero AddSolutionComponent; publish=true zero PublishXml; invalid file/base64/type vẫn Error.
 
 # 11 — Tool `manage_choice`
+
+**Đã hoàn thành trong vòng hiện tại:** Mọi Update/Insert/Delete option và CreateOptionSet request dùng `DataverseMutationExecutor`; publish đã dùng `PublishHelper`; read option-set request vẫn read-only.
 
 **Hiện trạng:** create và update có consolidated preview trước `CreateOptionSetRequest`, `UpdateOptionSetRequest`, insert/update/delete/color option requests và add-to-solution. Output dùng `ManageChoiceResult`.
 
@@ -239,6 +243,8 @@ Mục tiêu của số 0 là tạo một enforcement layer duy nhất, fail-clos
 
 # 12 — Tool `upsert_table`
 
+**Đã hoàn thành trong vòng hiện tại:** Context bắt buộc; CreateEntity/UpdateEntity và publish đều qua gateway/helper; retrieve metadata không bị chặn.
+
 **Hiện trạng:** create/update có guard trước `CreateEntityRequest`, `UpdateEntityRequest` và publish. Preview dùng `UpsertTableResult`.
 
 **Kết luận:** không thấy write vượt guard. Request execution và publish chưa có boundary assertion; constructor chưa reject null.
@@ -249,6 +255,8 @@ Mục tiêu của số 0 là tạo một enforcement layer duy nhất, fail-clos
 
 # 13 — Tool `upsert_relationship`
 
+**Đã hoàn thành trong vòng hiện tại:** Context bắt buộc; CreateOneToMany/CreateManyToMany/Update/Delete và polymorphic relationship writes dùng executor; publish dùng helper.
+
 **Hiện trạng:** create 1:N, create N:N, update, delete, add/remove polymorphic target có preview trước corresponding metadata request và publish. Typed `UpsertRelationshipResult`.
 
 **Kết luận:** không thấy write vượt guard. Read requests `RetrieveRelationshipRequest`/`RetrieveEntityRequest` được phép; write request type cần gateway allow/deny rõ.
@@ -258,6 +266,8 @@ Mục tiêu của số 0 là tạo một enforcement layer duy nhất, fail-clos
 **Test bắt buộc:** sáu action zero writes/publish; invalid relationship/target/hierarchical constraints vẫn Error; read requests có thể chạy để tạo preview chính xác.
 
 # 14 — Tool `manage_app`
+
+**Đã hoàn thành trong vòng hiện tại:** App module/site-map Create/Update, AddAppComponents và app-module publish đều qua gateway/helper; read/unpublished inspection không mutation.
 
 **Hiện trạng:** các action mutation `create`, `update`, `update_navigation`, `undo` có typed preview trước Create/Update, `AddAppComponents` và publish. Các response tự tạo `DRY RUN`/`status=dry_run` ở review cũ đã được thay bằng `DryRun(...)` và `not_executed`.
 
@@ -340,6 +350,10 @@ Thứ tự số trong tài liệu biểu diễn mức ưu tiên: `1` thấp nh�
 # Checkpoint 15-17
 
 Muc 15, 16 va 17 da duoc migrate mutation gateway/context va focused tests tuong ung da chay. AI tiep theo bat dau tu muc 14 xuong 2; khong lam lai muc 0, 1, 15, 16, 17 hoac 18.
+
+# Checkpoint 10-14
+
+Muc 10, 11, 12, 13 va 14 da duoc migrate mutation gateway/context va focused tests tuong ung da chay. AI tiep theo bat dau tu muc 9 xuong 2; khong lam lai muc 0, 1, 10, 11, 12, 13, 14, 15, 16, 17 hoac 18.
 
 # Definition of done
 

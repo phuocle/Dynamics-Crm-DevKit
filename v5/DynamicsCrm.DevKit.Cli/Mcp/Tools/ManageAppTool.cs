@@ -291,7 +291,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(description))
                 appModule["description"] = description.Trim();
 
-            var appModuleId = _serviceClient.Create(appModule);
+            var appModuleId = DataverseMutationExecutor.Create(_context, _serviceClient, appModule);
             var createdApp = RetrieveCreatedApp(appModuleId, appUniqueName);
             appModuleIdUnique = createdApp.GetAttributeValue<Guid>("appmoduleidunique");
 
@@ -301,7 +301,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ["sitemapnameunique"] = $"{appUniqueName}SiteMap",
                 ["sitemapxml"] = starterSiteMapXml
             };
-            var siteMapId = _serviceClient.Create(siteMap);
+            var siteMapId = DataverseMutationExecutor.Create(_context, _serviceClient, siteMap);
 
             var starterComponents = BuildEntityAppComponents("account");
             starterComponents.Insert(0, new EntityReference("sitemap", siteMapId));
@@ -420,7 +420,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         NextStep = NotPublishedNextStep
                     });
 
-            _serviceClient.Update(update);
+            DataverseMutationExecutor.Update(_context, _serviceClient, update);
             var refreshed = _serviceClient.Retrieve("appmodule", appModule.Id,
                 new ColumnSet("appmoduleid", "appmoduleidunique", "name", "uniquename", "description", "webresourceid"));
             var validation = ValidateApp(refreshed.Id);
@@ -713,7 +713,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 ["sitemapxml"] = navResult.ModifiedSiteMapXml
             };
-            _serviceClient.Update(updateSiteMap);
+            DataverseMutationExecutor.Update(_context, _serviceClient, updateSiteMap);
 
             if (entityComponentRefs.Count > 0)
                 AddAppComponents(appModule.Id, entityComponentRefs);
@@ -882,7 +882,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
             }
 
-            _serviceClient.Update(new Entity("sitemap", siteMapId.Value)
+            DataverseMutationExecutor.Update(_context, _serviceClient, new Entity("sitemap", siteMapId.Value)
             {
                 ["sitemapxml"] = snapshot.SiteMapXml
             });
@@ -1206,7 +1206,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private void AddAppComponents(Guid appModuleId, EntityReferenceCollection components)
         {
-            _serviceClient.Execute(new AddAppComponentsRequest
+            DataverseMutationExecutor.Execute(_context, _serviceClient, new AddAppComponentsRequest
             {
                 AppId = appModuleId,
                 Components = components
@@ -1615,8 +1615,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private void PublishAppModule(Guid appModuleId)
         {
-            var parameterXml = $"<importexportxml><appmodules><appmodule>{appModuleId:D}</appmodule></appmodules></importexportxml>";
-            _serviceClient.Execute(new PublishXmlRequest { ParameterXml = parameterXml });
+            PublishHelper.PublishAppModule(_context, _serviceClient, appModuleId);
             MetadataOperationWaitHelper.WaitForPropagation();
         }
 

@@ -292,7 +292,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     updateMeta.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
                     sb.AppendLine($"Description: {description.Trim()}");
                 }
-                _serviceClient.Execute(new UpdateOptionSetRequest { OptionSet = updateMeta });
+                DataverseMutationExecutor.Execute(_context, _serviceClient, new UpdateOptionSetRequest { OptionSet = updateMeta });
                 metadataMutated = true;
             }
 
@@ -301,7 +301,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var deleteReq = InitializeRequest(new DeleteOptionValueRequest());
                 deleteReq.OptionSetName = name;
                 deleteReq.Value = parsedRemove[i];
-                _serviceClient.Execute(deleteReq);
+                DataverseMutationExecutor.Execute(_context, _serviceClient, deleteReq);
                 sb.AppendLine($"Removed: {parsedRemoveLabels[i]}");
                 metadataMutated = true;
             }
@@ -323,7 +323,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     sb.AppendLine($"Added: {label}");
                 }
-                _serviceClient.Execute(insertReq);
+                DataverseMutationExecutor.Execute(_context, _serviceClient, insertReq);
                 metadataMutated = true;
             }
 
@@ -349,7 +349,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     sb.AppendLine($"Updated: {oldLabel} -> {newLabel}");
                 }
-                _serviceClient.Execute(updateReq);
+                DataverseMutationExecutor.Execute(_context, _serviceClient, updateReq);
                 metadataMutated = true;
             }
 
@@ -365,7 +365,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 colorReq.Value = val;
                 colorReq.MergeLabels = true;
                 SetRequestParameter(colorReq, "Color", kv.Value);
-                _serviceClient.Execute(colorReq);
+                DataverseMutationExecutor.Execute(_context, _serviceClient, colorReq);
                 sb.AppendLine($"Colored: {lbl} -> {kv.Value}");
                 coloredSummary.Add($"{val}:{lbl}:{kv.Value}");
                 metadataMutated = true;
@@ -565,7 +565,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             CreateOptionSetResponse createResp = null;
             var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
             {
-                createResp = (CreateOptionSetResponse)_serviceClient.Execute(
+                createResp = (CreateOptionSetResponse)DataverseMutationExecutor.Execute(_context, _serviceClient,
                     new CreateOptionSetRequest { OptionSet = optionSetMetadata });
             }, $"create global option set '{name}'");
 

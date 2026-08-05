@@ -101,5 +101,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             PublishOptionSets(context, serviceClient, new[] { optionSetName });
         }
 
+        public static void PublishAppModule(McpExecutionContext context, ServiceClient serviceClient, Guid appModuleId)
+        {
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (serviceClient == null) throw new ArgumentNullException(nameof(serviceClient));
+            context.AssertMutationAllowed($"Publish appmodule {appModuleId}");
+            serviceClient.Execute(new PublishXmlRequest
+            {
+                ParameterXml = $"<importexportxml><appmodules><appmodule>{appModuleId:D}</appmodule></appmodules></importexportxml>"
+            });
+        }
+
+        public static void PublishWebResource(McpExecutionContext context, ServiceClient serviceClient, Guid webResourceId)
+        {
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (serviceClient == null) throw new ArgumentNullException(nameof(serviceClient));
+            context.AssertMutationAllowed($"Publish webresource {webResourceId}");
+            serviceClient.Execute(new PublishXmlRequest
+            {
+                ParameterXml = $"<importexportxml><webresources><webresource>{webResourceId:D}</webresource></webresources></importexportxml>"
+            });
+        }
+
     }
 }

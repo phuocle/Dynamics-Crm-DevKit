@@ -167,7 +167,7 @@ public class McpToolBasicCoverageTests
     [TestMethod]
     public void UpsertTable_NoLogicalNameNoCreateFields_ReturnsError()
     {
-        var tool = new UpsertTableTool(null!, DryRunOptions());
+        var tool = new UpsertTableTool(null!, DryRunOptions(), DryRunTestHelpers.BlockedContext());
 
         var result = tool.upsert_table();
 

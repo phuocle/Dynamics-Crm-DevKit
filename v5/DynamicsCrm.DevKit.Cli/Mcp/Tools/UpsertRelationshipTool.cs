@@ -22,11 +22,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
 
-        public UpsertRelationshipTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public UpsertRelationshipTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         [McpServerTool(Name = "upsert_relationship", Title = "Create, update, or delete Dataverse relationships",
@@ -201,7 +203,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Guid metadataId = Guid.Empty;
             var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
             {
-                var response = (CreateOneToManyResponse)_serviceClient.Execute(request);
+                var response = (CreateOneToManyResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, request);
                 metadataId = response.RelationshipId;
             }, $"create 1:N relationship '{relationshipName}' ({referencedEntity} -> {referencingEntity})");
 
@@ -340,7 +342,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
 
-            var response = (CreateManyToManyResponse)_serviceClient.Execute(request);
+            var response = (CreateManyToManyResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, request);
             var metadataId = response.ManyToManyRelationshipId;
             var published = PublishIfNeeded(entity1);
 
@@ -488,7 +490,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Relationship = metadata,
                     MergeLabels = true
                 };
-                _serviceClient.Execute(updateRequest);
+                DataverseMutationExecutor.Execute(_context, _serviceClient, updateRequest);
             }
 
             var published = (changes.Count > 0 && entityToPublish != null) ? PublishIfNeeded(entityToPublish) : false;
@@ -548,7 +550,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
 
-            _serviceClient.Execute(new DeleteRelationshipRequest { Name = relationshipName });
+            DataverseMutationExecutor.Execute(_context, _serviceClient, new DeleteRelationshipRequest { Name = relationshipName });
 
             var sb = new StringBuilder(256);
             sb.AppendLine($"[RelationshipDeleted] {relationshipName}");
@@ -649,7 +651,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             try
             {
-                var response = (CreateOneToManyResponse)_serviceClient.Execute(request);
+                    var response = (CreateOneToManyResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, request);
                 var metadataId = response.RelationshipId;
                 var published = PublishIfNeeded(entityName);
 
@@ -737,7 +739,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Warnings = ["Data in this lookup target will be lost."]
                 });
 
-            _serviceClient.Execute(new DeleteRelationshipRequest { Name = relName });
+            DataverseMutationExecutor.Execute(_context, _serviceClient, new DeleteRelationshipRequest { Name = relName });
 
             var sb = new StringBuilder(256);
             sb.AppendLine($"[TargetRemoved] {referencedEntity} from {entityName}.{attributeName}");
@@ -920,7 +922,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 var publishXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>";
-                _serviceClient.Execute(new Microsoft.Crm.Sdk.Messages.PublishXmlRequest { ParameterXml = publishXml });
+                PublishHelper.PublishEntity(_context, _serviceClient, entityName);
                 return true;
             }
             catch
