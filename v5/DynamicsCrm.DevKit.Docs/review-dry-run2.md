@@ -355,6 +355,10 @@ Muc 15, 16 va 17 da duoc migrate mutation gateway/context va focused tests tuong
 
 Muc 10, 11, 12, 13 va 14 da duoc migrate mutation gateway/context va focused tests tuong ung da chay. AI tiep theo bat dau tu muc 9 xuong 2; khong lam lai muc 0, 1, 10, 11, 12, 13, 14, 15, 16, 17 hoac 18.
 
+# Checkpoint 2-9
+
+Muc 2 den 9 da duoc migrate mutation gateway/context va focused tests nhom nay pass 74/74. AI tiep theo bat dau tu muc 1 (muc 0 va 1 da hoan thanh truoc do); khong lam lai cac muc 2 den 18 da co checkpoint.
+
 # Definition of done
 
 - Mục số 0 được reuse; không có 18 bản sao guard/gateway khác nhau.

@@ -20,11 +20,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
 
-        public ManageRoleTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public ManageRoleTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         [McpServerTool(Name = "manage_role",
@@ -357,7 +359,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = "not_executed"
                 });
 
-            _serviceClient.Associate(
+            DataverseMutationExecutor.Associate(_context, _serviceClient,
                 "systemuser",
                 userGuid,
                 new Relationship("systemuserroles_association"),
@@ -416,7 +418,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = "not_executed"
                 });
 
-            _serviceClient.Disassociate(
+            DataverseMutationExecutor.Disassociate(_context, _serviceClient,
                 "systemuser",
                 userGuid,
                 new Relationship("systemuserroles_association"),
@@ -493,7 +495,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ["businessunitid"] = new EntityReference("businessunit", buId)
             };
 
-            var newId = _serviceClient.Create(roleEntity);
+            var newId = DataverseMutationExecutor.Create(_context, _serviceClient, roleEntity);
 
             var sb = new StringBuilder(256);
             sb.AppendLine($"[Role Created] {roleName}");
@@ -545,7 +547,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 ["name"] = roleName
             };
-            _serviceClient.Update(updateEntity);
+            DataverseMutationExecutor.Update(_context, _serviceClient, updateEntity);
 
             var sb = new StringBuilder(256);
             sb.AppendLine($"[Role Updated] '{oldName}' → '{roleName}'");
@@ -588,7 +590,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = "not_executed"
                 });
 
-            _serviceClient.Delete("role", id);
+            DataverseMutationExecutor.Delete(_context, _serviceClient, "role", id);
 
             var sb = new StringBuilder(256);
             sb.AppendLine($"[Role Deleted] {roleName}");
@@ -641,7 +643,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ["name"] = roleName,
                 ["businessunitid"] = new EntityReference("businessunit", buId)
             };
-            var newRoleId = _serviceClient.Create(newRoleEntity);
+            var newRoleId = DataverseMutationExecutor.Create(_context, _serviceClient, newRoleEntity);
 
             if (privileges.Count > 0)
             {
@@ -661,7 +663,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     RoleId = newRoleId,
                     Privileges = privilegeInfos
                 };
-                _serviceClient.Execute(addPrivRequest);
+                DataverseMutationExecutor.Execute(_context, _serviceClient, addPrivRequest);
             }
 
             var sb = new StringBuilder(256);

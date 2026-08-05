@@ -32,12 +32,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static readonly object _schemaLock = new();
 
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
         private string _workspaceFolder;
 
-        public ManageFormTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public ManageFormTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         [McpServerTool(Name = "manage_form", Title = "Manage entity forms",
@@ -498,12 +500,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false,
                     OperationsCount = ops?.Count
                 });
-            _serviceClient.Update(updateEntity);
+            DataverseMutationExecutor.Update(_context, _serviceClient, updateEntity);
 
             var published = false;
             try
             {
-                _serviceClient.Execute(new PublishXmlRequest
+                DataverseMutationExecutor.Execute(_context, _serviceClient, new PublishXmlRequest
                 {
                     ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
                 });
@@ -690,7 +692,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     BackupPath = backupPath,
                     Published = false
                 });
-            _serviceClient.Update(update);
+            DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             // Step 5: Publish entity
             var published = false;
@@ -700,7 +702,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
                 };
-                _serviceClient.Execute(publishRequest);
+                DataverseMutationExecutor.Execute(_context, _serviceClient, publishRequest);
                 published = true;
 
                 // Wait for form metadata to propagate after publish
@@ -852,14 +854,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     BackupPath = backupPath,
                     Published = false
                 });
-            _serviceClient.Update(update);
+            DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             // Step 5: Publish
             var published = false;
             string publishError = null;
             try
             {
-                _serviceClient.Execute(new PublishXmlRequest
+                DataverseMutationExecutor.Execute(_context, _serviceClient, new PublishXmlRequest
                 {
                     ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
                 });
@@ -1039,13 +1041,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     RestoredFromBackup = backupFilePath,
                     Published = false
                 });
-            _serviceClient.Update(update);
+            DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             // Step 5: Publish
             var published = false;
             try
             {
-                _serviceClient.Execute(new PublishXmlRequest
+                DataverseMutationExecutor.Execute(_context, _serviceClient, new PublishXmlRequest
                 {
                     ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
                 });

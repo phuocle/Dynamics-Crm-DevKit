@@ -34,7 +34,7 @@ public class ManageChartToolTests
     [TestMethod]
     public void ManageChart_EmptyAction_ReturnsErrorResult()
     {
-        var tool = new ManageChartTool(null!, new McpDryRunOptions());
+        var tool = new ManageChartTool(null!, new McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_chart(action: "");
         Assert.IsTrue(result.IsError);
         var text = ((TextContentBlock)result.Content[0]).Text;
@@ -44,7 +44,7 @@ public class ManageChartToolTests
     [TestMethod]
     public void ManageChart_InvalidAction_ReturnsErrorResult()
     {
-        var tool = new ManageChartTool(null!, new McpDryRunOptions());
+        var tool = new ManageChartTool(null!, new McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_chart(action: "invalid_action");
         Assert.IsTrue(result.IsError);
         var text = ((TextContentBlock)result.Content[0]).Text;
@@ -54,7 +54,7 @@ public class ManageChartToolTests
     [TestMethod]
     public void ManageChart_InvalidChartIdGuid_ReturnsErrorResult()
     {
-        var tool = new ManageChartTool(null!, new McpDryRunOptions());
+        var tool = new ManageChartTool(null!, new McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_chart(action: "detail", chart_id: "not-a-guid");
         Assert.IsTrue(result.IsError);
         var text = ((TextContentBlock)result.Content[0]).Text;
@@ -64,7 +64,7 @@ public class ManageChartToolTests
     [TestMethod]
     public void ManageChart_CreateAction_EmptyEntityName_ReturnsErrorResult()
     {
-        var tool = new ManageChartTool(null!, new McpDryRunOptions());
+        var tool = new ManageChartTool(null!, new McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_chart(action: "create", entity_name: "", chart_name: "Test Chart");
         Assert.IsTrue(result.IsError);
         var text = ((TextContentBlock)result.Content[0]).Text;
@@ -74,7 +74,7 @@ public class ManageChartToolTests
     [TestMethod]
     public void ManageChart_CreateAction_EmptyChartName_ReturnsErrorResult()
     {
-        var tool = new ManageChartTool(null!, new McpDryRunOptions());
+        var tool = new ManageChartTool(null!, new McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_chart(action: "create", entity_name: "account", chart_name: "");
         Assert.IsTrue(result.IsError);
         var text = ((TextContentBlock)result.Content[0]).Text;
@@ -122,7 +122,7 @@ public class ManageChartToolTests
     [TestMethod]
     public void ManageChart_UndoAction_MissingBackupFile_ReturnsErrorResult()
     {
-        var tool = new ManageChartTool(null!, new McpDryRunOptions());
+        var tool = new ManageChartTool(null!, new McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_chart(action: "undo", chart_id: Guid.NewGuid().ToString(), presentationdescription: "non_existent_file.chart.json");
         Assert.IsTrue(result.IsError);
         var text = ((TextContentBlock)result.Content[0]).Text;

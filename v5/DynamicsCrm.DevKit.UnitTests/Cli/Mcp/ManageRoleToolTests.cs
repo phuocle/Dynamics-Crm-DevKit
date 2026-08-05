@@ -185,7 +185,7 @@ public class ManageRoleToolTests
     [TestMethod]
     public void ManageRole_EmptyAction_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_role(action: "");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -195,7 +195,7 @@ public class ManageRoleToolTests
     [TestMethod]
     public void ManageRole_InvalidAction_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_role(action: "invalid_action");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -205,7 +205,7 @@ public class ManageRoleToolTests
     [TestMethod]
     public void ManageRole_DetailWithoutRoleReference_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_role(action: "detail");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -215,7 +215,7 @@ public class ManageRoleToolTests
     [TestMethod]
     public void ManageRole_DetailWithInvalidGuid_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_role(action: "detail", role_id: "not-a-guid");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -225,7 +225,7 @@ public class ManageRoleToolTests
     [TestMethod]
     public void ManageRole_DetailWithRoleName_DoesNotRequireRoleId()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_role(action: "detail", role_name: "System Administrator");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -236,7 +236,7 @@ public class ManageRoleToolTests
     [TestMethod]
     public void ManageRole_DetailRoleIdMayCarryName_DoesNotRequireGuidBeforeResolution()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_role(action: "detail", role_id: "System Administrator");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -247,7 +247,7 @@ public class ManageRoleToolTests
     [TestMethod]
     public void ManageRole_UserWithoutUserId_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_role(action: "user");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -257,7 +257,7 @@ public class ManageRoleToolTests
     [TestMethod]
     public void ManageRole_AssignWithoutUserId_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_role(action: "assign", role_id: Guid.NewGuid().ToString());
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -267,7 +267,7 @@ public class ManageRoleToolTests
     [TestMethod]
     public void ManageRole_AssignWithoutRoleId_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_role(action: "assign", user_id: "user@test.com");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -277,7 +277,7 @@ public class ManageRoleToolTests
     [TestMethod]
     public void ManageRole_UnassignWithoutUserId_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_role(action: "unassign", role_id: Guid.NewGuid().ToString());
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -287,7 +287,7 @@ public class ManageRoleToolTests
     [TestMethod]
     public void ManageRole_CreateWithoutRoleName_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_role(action: "create");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -297,7 +297,7 @@ public class ManageRoleToolTests
     [TestMethod]
     public void ManageRole_UpdateWithoutRoleId_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_role(action: "update", role_name: "New Name");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -307,7 +307,7 @@ public class ManageRoleToolTests
     [TestMethod]
     public void ManageRole_UpdateWithoutRoleName_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_role(action: "update", role_id: Guid.NewGuid().ToString());
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -317,7 +317,7 @@ public class ManageRoleToolTests
     [TestMethod]
     public void ManageRole_DeleteWithoutRoleId_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_role(action: "delete");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -327,7 +327,7 @@ public class ManageRoleToolTests
     [TestMethod]
     public void ManageRole_DeleteWithInvalidGuid_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_role(action: "delete", role_id: "bad-guid");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -337,7 +337,7 @@ public class ManageRoleToolTests
     [TestMethod]
     public void ManageRole_CopyWithoutRoleId_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_role(action: "copy", role_name: "New Role");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -347,7 +347,7 @@ public class ManageRoleToolTests
     [TestMethod]
     public void ManageRole_CopyWithoutRoleName_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
         var result = tool.manage_role(action: "copy", role_id: Guid.NewGuid().ToString());
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;

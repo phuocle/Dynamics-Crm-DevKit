@@ -31,10 +31,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
 
-        public ManageDeletedRecordsTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public ManageDeletedRecordsTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
@@ -316,7 +318,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             ["Target"] = new Entity(logicalName, Guid.Parse(g))
                         }
                     };
-                    _serviceClient.Execute(restore);
+                    DataverseMutationExecutor.Execute(_context, _serviceClient, restore);
                     results.Add(new RestoreResultEntry
                     {
                         RecordId = g,
@@ -545,7 +547,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 State = new OptionSetValue(1),
                 Status = new OptionSetValue(2)
             };
-            _serviceClient.Execute(setState);
+                    DataverseMutationExecutor.Execute(_context, _serviceClient, setState);
             return id;
         }
 
@@ -564,7 +566,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     State = new OptionSetValue(0),
                     Status = new OptionSetValue(1)
                 };
-                _serviceClient.Execute(setState);
+                    DataverseMutationExecutor.Execute(_context, _serviceClient, setState);
 
                 var currentDays = row.GetAttributeValue<int?>("cleanupintervalindays");
                 if (!currentDays.HasValue || currentDays.Value != retentionDays)
@@ -573,7 +575,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         ["cleanupintervalindays"] = retentionDays
                     };
-                    _serviceClient.Update(update);
+                    DataverseMutationExecutor.Update(_context, _serviceClient, update);
                 }
 
                 return row.Id.ToString();
@@ -594,6 +596,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 { "Prefer", new List<string> { "return=representation", "odata.include-annotations=\"*\"" } }
             };
 
+            _context.AssertMutationAllowed("restore deleted record via Web API");
             using var resp = _serviceClient.ExecuteWebRequest(
                 HttpMethod.Post,
                 "recyclebinconfigs",

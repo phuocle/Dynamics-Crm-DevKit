@@ -14,7 +14,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 [TestClass]
 public class CrudToolValidationTests
 {
-    private readonly ManageRecordTool _tool = new(null!, new McpDryRunOptions());
+    private readonly ManageRecordTool _tool = new(null!, new McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
 
     // ──────────────────────────────────────────────
     // Delete action

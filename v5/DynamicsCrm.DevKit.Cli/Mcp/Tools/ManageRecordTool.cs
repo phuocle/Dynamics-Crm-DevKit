@@ -21,11 +21,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
 
-        public ManageRecordTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public ManageRecordTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         [McpServerTool(Name = "manage_record", Title = "Manage a single record (CRUD)",
@@ -171,7 +173,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 var entity = EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, fieldsJson);
-                var newId = _serviceClient.Create(entity);
+                var newId = DataverseMutationExecutor.Create(_context, _serviceClient, entity);
 
                 var structured = new CrudResult
                 {
@@ -249,7 +251,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 var entity = EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, fieldsJson, id);
-                _serviceClient.Update(entity);
+                DataverseMutationExecutor.Update(_context, _serviceClient, entity);
 
                 var structured = new CrudResult
                 {
@@ -286,7 +288,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             try
             {
-                _serviceClient.Delete(entityName, id);
+                DataverseMutationExecutor.Delete(_context, _serviceClient, entityName, id);
 
                 var structured = new CrudResult { Action = "delete", Entity = entityName, Id = id.ToString(), Status = "deleted" };
                 return Success($"Deleted {entityName} {id}", structured);
@@ -319,7 +321,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var relationship = new Relationship(relationshipName.Trim());
                 var relatedEntities = new EntityReferenceCollection { new EntityReference(resolvedRelatedEntity, id2) };
-                _serviceClient.Associate(entityName, id1, relationship, relatedEntities);
+                DataverseMutationExecutor.Associate(_context, _serviceClient, entityName, id1, relationship, relatedEntities);
 
                 var structured = new CrudResult { Action = "associate", Entity = entityName, Id = id1.ToString(), Status = "associated" };
                 return Success($"Associated {entityName} {id1} with {resolvedRelatedEntity} {id2}", structured);
@@ -352,7 +354,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var relationship = new Relationship(relationshipName.Trim());
                 var relatedEntities = new EntityReferenceCollection { new EntityReference(resolvedRelatedEntity, id2) };
-                _serviceClient.Disassociate(entityName, id1, relationship, relatedEntities);
+                DataverseMutationExecutor.Disassociate(_context, _serviceClient, entityName, id1, relationship, relatedEntities);
 
                 var structured = new CrudResult { Action = "disassociate", Entity = entityName, Id = id1.ToString(), Status = "disassociated" };
                 return Success($"Disassociated {entityName} {id1} from {resolvedRelatedEntity} {id2}", structured);

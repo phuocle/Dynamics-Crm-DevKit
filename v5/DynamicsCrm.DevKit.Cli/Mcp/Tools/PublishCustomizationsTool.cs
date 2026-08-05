@@ -21,11 +21,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
 
-        public PublishCustomizationsTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public PublishCustomizationsTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         [McpServerTool(Name = "publish_customizations", Title = "Publish customizations to make changes visible",
@@ -137,7 +139,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     // Use async version to avoid timeout
                     var asyncRequest = new PublishAllXmlAsyncRequest();
-                    var asyncResponse = (PublishAllXmlAsyncResponse)_serviceClient.Execute(asyncRequest);
+                    var asyncResponse = (PublishAllXmlAsyncResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, asyncRequest);
                     sw.Stop();
 
                     var jobId = asyncResponse.AsyncOperationId;
@@ -164,7 +166,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var parameterXml = BuildParameterXml(entityList, appModuleList, include_global_optionset, include_sitemap,
                     include_ribbons, optionSetNameList, dashboardList, webResourceList);
                 var request = new PublishXmlRequest { ParameterXml = parameterXml };
-                _serviceClient.Execute(request);
+                DataverseMutationExecutor.Execute(_context, _serviceClient, request);
 
                 // Wait for metadata to propagate after publish
                 MetadataOperationWaitHelper.WaitForPropagation();

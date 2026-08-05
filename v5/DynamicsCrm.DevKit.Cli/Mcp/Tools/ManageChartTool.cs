@@ -35,12 +35,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
         private string _workspaceFolder;
 
-        public ManageChartTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public ManageChartTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         [McpServerTool(Name = "manage_chart", Title = "Manage Dataverse system charts",
@@ -373,7 +375,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             if (!string.IsNullOrWhiteSpace(description)) chartRecord["description"] = description;
 
-            var newId = _serviceClient.Create(chartRecord);
+            var newId = DataverseMutationExecutor.Create(_context, _serviceClient, chartRecord);
 
             var addedToSolution = false;
             if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
@@ -517,7 +519,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             if (description != null && description != "") updateRecord["description"] = description;
 
-            _serviceClient.Update(updateRecord);
+            DataverseMutationExecutor.Update(_context, _serviceClient, updateRecord);
 
             var addedToSolution = false;
             if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
@@ -579,7 +581,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 ["name"] = chartNameInput.Trim()
             };
-            _serviceClient.Update(updateRecord);
+            DataverseMutationExecutor.Update(_context, _serviceClient, updateRecord);
 
             AddToSolutionIfRequested(chartId, solutionName);
             var published = PublishIfNeeded(primaryEntity);
@@ -630,10 +632,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             foreach (var existing in existingDefaults.Entities)
             {
                 if (existing.Id == chartId) continue;
-                _serviceClient.Update(new Entity("savedqueryvisualization", existing.Id) { ["isdefault"] = false });
+                DataverseMutationExecutor.Update(_context, _serviceClient, new Entity("savedqueryvisualization", existing.Id) { ["isdefault"] = false });
             }
 
-            _serviceClient.Update(new Entity("savedqueryvisualization", chartId) { ["isdefault"] = true });
+            DataverseMutationExecutor.Update(_context, _serviceClient, new Entity("savedqueryvisualization", chartId) { ["isdefault"] = true });
 
             var published = PublishIfNeeded(primaryEntity);
 
@@ -693,7 +695,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (backupData.DataDescription != null) updateRecord["datadescription"] = backupData.DataDescription;
             if (backupData.PresentationDescription != null) updateRecord["presentationdescription"] = backupData.PresentationDescription;
 
-            _serviceClient.Update(updateRecord);
+                DataverseMutationExecutor.Update(_context, _serviceClient, updateRecord);
 
             AddToSolutionIfRequested(chartId, solutionName);
 
@@ -959,7 +961,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(entityName)) return false;
             try
             {
-                var pubTool = new PublishCustomizationsTool(_serviceClient, _options);
+                var pubTool = new PublishCustomizationsTool(_serviceClient, _options, _context);
                 pubTool.publish_customizations(entities: entityName);
                 return true;
             }
