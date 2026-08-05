@@ -72,7 +72,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("roles")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<RoleInfo> Roles { get; set; }
+        public List<RoleInfo> Roles { get; set; } = new();
 
         [JsonPropertyName("accessToken")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -80,6 +80,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("warnings")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<string> Warnings { get; set; }
+        public List<string> Warnings { get; set; } = new();
     }
 }

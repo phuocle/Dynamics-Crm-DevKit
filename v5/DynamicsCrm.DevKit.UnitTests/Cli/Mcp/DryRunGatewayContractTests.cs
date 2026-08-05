@@ -172,6 +172,42 @@ public class DryRunGatewayContractTests
     }
 
     [TestMethod]
+    public void WebApiMutationExecutor_AbsoluteUrlIsRejectedBeforeServiceCall()
+    {
+        AssertException<ArgumentException>(() =>
+            DataverseWebApiMutationExecutor.Execute(
+                DryRunTestHelpers.NormalContext(), null!,
+                System.Net.Http.HttpMethod.Post,
+                "https://evil.example/api/data/v9.2/accounts",
+                "{}", null));
+    }
+
+    [TestMethod]
+    public void WebApiMutationExecutor_BlockedContextWinsBeforeAbsoluteUrlValidation()
+    {
+        AssertException<InvalidOperationException>(() =>
+            DataverseWebApiMutationExecutor.Execute(
+                DryRunTestHelpers.BlockedContext(), null!,
+                System.Net.Http.HttpMethod.Post,
+                "https://evil.example/api/data/v9.2/accounts",
+                "{}", null));
+    }
+
+    private static void AssertException<TException>(Action action)
+        where TException : Exception
+    {
+        try
+        {
+            action();
+            Assert.Fail($"Expected {typeof(TException).Name}.");
+        }
+        catch (TException)
+        {
+            // expected
+        }
+    }
+
+    [TestMethod]
     public void PublishAllAsync_BlockedContextThrowsBeforeServiceCall()
     {
         try
@@ -262,5 +298,19 @@ public class DryRunGatewayContractTests
             "McpDryRunOptions should have exactly one public property.");
         Assert.AreEqual(typeof(bool), publicProps[0].PropertyType,
             "McpDryRunOptions.DryRun should be bool.");
+    }
+
+    [TestMethod]
+    public void McpExecutionPolicy_ProjectsOneStartupValueToOptionsAndContext()
+    {
+        var blocked = new McpExecutionPolicy(mutationsBlocked: true);
+        Assert.IsTrue(blocked.MutationsBlocked);
+        Assert.IsTrue(blocked.Options.DryRun);
+        Assert.IsTrue(blocked.Context.MutationsBlocked);
+
+        var normal = new McpExecutionPolicy(mutationsBlocked: false);
+        Assert.IsFalse(normal.MutationsBlocked);
+        Assert.IsFalse(normal.Options.DryRun);
+        Assert.IsFalse(normal.Context.MutationsBlocked);
     }
 }

@@ -488,6 +488,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private EntityMetadata LoadEntityMetadata(string entityName)
         {
+            if (_serviceClient == null)
+                return null;
+
             var request = new RetrieveEntityRequest
             {
                 LogicalName = entityName,

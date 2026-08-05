@@ -644,8 +644,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private void EnsureMutationAllowed()
         {
-            if (_options.DryRun)
-                throw new InvalidOperationException("Dataverse mutation is blocked by the execution policy.");
+            // Keep one fail-closed mutation policy. Action-level _options.DryRun
+            // checks are only for producing the preview response; this assertion
+            // protects the boundary even if a caller reaches the helper directly.
+            _context.AssertMutationAllowed("Manage deleted records mutation");
         }
 
         private int GetMaxRetentionDays()

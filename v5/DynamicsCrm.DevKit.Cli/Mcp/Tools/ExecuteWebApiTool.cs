@@ -104,7 +104,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (max_response_lines <= 0)
                     max_response_lines = 200;
 
-                var blockedReason = GetBlockedReason(httpMethod, url.Trim());
+                var trimmedUrl = url.Trim();
+                if (IsAbsoluteUrl(trimmedUrl))
+                    return Error("Error: url must be a relative Dataverse Web API path; absolute URLs are not allowed.");
+
+                var blockedReason = GetBlockedReason(httpMethod, trimmedUrl);
                 if (blockedReason != null)
                     return Error(blockedReason);
 
@@ -112,8 +116,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (headersError != null)
                     return Error(headersError);
                 var requestBody = string.IsNullOrWhiteSpace(body) ? null : body.Trim();
-                var trimmedUrl = url.Trim();
-
                 if (_options.DryRun && httpMethod != HttpMethod.Get)
                 {
                     var preview = new WebApiResult
@@ -486,6 +488,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(url)) return false;
             return GuidUrlPattern.IsMatch(url.Trim());
+        }
+
+        private static bool IsAbsoluteUrl(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url)) return false;
+            return url.StartsWith("//", StringComparison.Ordinal) ||
+                   Uri.TryCreate(url, UriKind.Absolute, out _);
         }
 
         private static HttpMethod ParseHttpMethod(string method)

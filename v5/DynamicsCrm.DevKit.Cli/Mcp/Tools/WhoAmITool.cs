@@ -159,7 +159,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 : (!string.IsNullOrEmpty(r.OrgUniqueName) ? r.OrgUniqueName : "Dataverse");
 
             var sb = new StringBuilder(256);
-            sb.Append("[Success] Connected to ");
+            sb.Append("Connected to ");
             sb.Append(org);
             if (!string.IsNullOrEmpty(r.EnvironmentUrl))
                 sb.Append(" (").Append(r.EnvironmentUrl).Append(')');
@@ -167,7 +167,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrEmpty(r.Version))
                 sb.Append(". Dataverse ").Append(r.Version);
             if (r.Roles is { Count: > 0 })
-                sb.Append(". ").Append(r.Roles.Count).Append(" role(s)");
+                sb.Append(". ").Append(r.Roles.Count).Append(" security role(s)");
             if (r.Warnings is { Count: > 0 })
                 sb.Append(". ").Append(r.Warnings.Count).Append(" warning(s)");
             sb.Append('.');

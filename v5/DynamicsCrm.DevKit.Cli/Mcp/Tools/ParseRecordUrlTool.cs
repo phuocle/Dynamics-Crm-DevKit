@@ -39,7 +39,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 if (string.IsNullOrWhiteSpace(input))
-                    return Error("[Error] input is required.",
+                    return Error("Error: input is required.",
                         "Provide a Dynamics 365 URL, Web API URL, maker portal URL, or raw GUID.");
 
                 var decoded = Uri.UnescapeDataString(input.Trim());
@@ -52,7 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                           ?? TryParseRawGuid(decoded);
 
                 if (result == null)
-                    return Error("[Error] No GUID found in input.",
+                    return Error("Error: No GUID found in input.",
                         "Provide a Dynamics 365 URL, Web API URL, maker portal URL, or raw GUID.");
 
                 return Success(BuildCompactText(result), result);
@@ -289,6 +289,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string ResolveEntitySetName(string entitySetName)
         {
+            if (_serviceClient == null)
+                return null;
+
             var request = new RetrieveAllEntitiesRequest
             {
                 EntityFilters = EntityFilters.Entity,
@@ -326,16 +329,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string BuildCompactText(ParsedRecordUrlResult result)
         {
-            var sb = new StringBuilder(128);
-            sb.Append($"[Success] {result.EntityName} {result.RecordId} ({result.Source})");
+            var sb = new StringBuilder(256);
+            sb.AppendLine("[ParsedUrl]");
+            sb.AppendLine($"EntityName: {result.EntityName ?? "(unknown)"}");
+            sb.AppendLine($"RecordId: {result.RecordId ?? "(none)"}");
+            sb.AppendLine($"Source: {result.Source}");
             if (!string.IsNullOrWhiteSpace(result.EnvironmentId))
-                sb.Append($" env={result.EnvironmentId}");
+                sb.AppendLine($"EnvironmentId: {result.EnvironmentId}");
             if (!string.IsNullOrWhiteSpace(result.FlowId))
-                sb.Append($" flow={result.FlowId}");
+                sb.AppendLine($"FlowId: {result.FlowId}");
             if (!string.IsNullOrWhiteSpace(result.Tip))
-                sb.Append($". {result.Tip}");
-            sb.Append('.');
-            return sb.ToString();
+                sb.AppendLine($"Tip: {result.Tip}");
+            return sb.ToString().TrimEnd();
         }
 
         private static string CleanGuid(string value)

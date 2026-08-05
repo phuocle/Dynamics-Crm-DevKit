@@ -3,8 +3,6 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 {
@@ -13,8 +11,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
     /// </summary>
     internal static class DataverseWebApiMutationExecutor
     {
-        private static readonly HttpClient AbsoluteClient = new();
-
         internal static HttpResponseMessage Execute(
             McpExecutionContext context,
             ServiceClient serviceClient,
@@ -34,29 +30,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
             var trimmedUrl = url.Trim();
             context.AssertMutationAllowed($"Web API {method.Method} {trimmedUrl}");
+            // The public MCP contract accepts a relative Dataverse Web API path.
+            // Never turn an AI-controlled absolute URL into an HttpClient request:
+            // doing so would require attaching the Dataverse bearer token and could
+            // exfiltrate it to an arbitrary host. ServiceClient owns the trusted
+            // organization base URL and handles relative requests safely.
+            if (Uri.TryCreate(trimmedUrl, UriKind.Absolute, out _))
+                throw new ArgumentException("Web API URL must be a relative Dataverse path.", nameof(url));
+
             if (serviceClient == null) throw new ArgumentNullException(nameof(serviceClient));
 
-            if (!Uri.TryCreate(trimmedUrl, UriKind.Absolute, out var absoluteUri))
-                return serviceClient.ExecuteWebRequest(method, trimmedUrl, body, headers, contentType);
-
-            using var request = new HttpRequestMessage(method, absoluteUri);
-            if (body != null)
-                request.Content = new StringContent(body, Encoding.UTF8, contentType);
-
-            if (headers != null)
-            {
-                foreach (var header in headers)
-                {
-                    if (!request.Headers.TryAddWithoutValidation(header.Key, header.Value))
-                        request.Content?.Headers.TryAddWithoutValidation(header.Key, header.Value);
-                }
-            }
-
-            var accessToken = serviceClient.CurrentAccessToken;
-            if (!string.IsNullOrWhiteSpace(accessToken))
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
-            return AbsoluteClient.SendAsync(request).GetAwaiter().GetResult();
+            return serviceClient.ExecuteWebRequest(method, trimmedUrl, body, headers, contentType);
         }
     }
 }

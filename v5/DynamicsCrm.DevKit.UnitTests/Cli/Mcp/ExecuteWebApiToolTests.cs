@@ -47,6 +47,14 @@ public class ExecuteWebApiToolTests
         Assert.IsTrue(GetText(result).Contains("Invalid HTTP method"));
     }
 
+    [TestMethod]
+    public void ExecuteWebApi_AbsoluteUrl_ReturnsRelativeUrlError()
+    {
+        var result = _tool.execute_webapi("POST", "https://evil.example/api/data/v9.2/accounts", "{}");
+        Assert.IsTrue(result.IsError);
+        Assert.IsTrue(GetText(result).Contains("relative Dataverse Web API path"));
+    }
+
     // ──────────────────────────────────────────────
     // ParseHttpMethod (private static)
     // ──────────────────────────────────────────────

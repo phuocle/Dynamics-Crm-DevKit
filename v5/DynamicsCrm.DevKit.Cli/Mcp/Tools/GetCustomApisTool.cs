@@ -62,7 +62,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(GetApisResult)),
         Description(
             "Custom API definitions (modern replacement for Custom Actions). api_name empty = list; set = detail (params, plugin binding). " +
-            "Managed APIs excluded by default. isFunction=true → GET; false → POST. " +
+            "Managed APIs excluded by default (set include_microsoft=true to include them). isFunction=true → GET; false → POST. " +
             "For legacy workflow Custom Actions → get_messages.")]
         public CallToolResult get_custom_apis(
             [Description("Display Name or unique name → detail. Empty = list.")] string api_name = "",

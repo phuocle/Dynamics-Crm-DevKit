@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
@@ -156,7 +157,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ["top"] = top
             };
 
-            if (entities.Count > 0)
+            if (entities != null && entities.Count > 0)
                 body["entities"] = JsonSerializer.Serialize(
                     entities.Select(e => new SearchEntity { Name = e }).ToList(),
                     _jsonOptions);
@@ -165,6 +166,72 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 body["filter"] = filter.Trim();
 
             return JsonSerializer.Serialize(body, _jsonOptions);
+        }
+
+        private static string BuildSearchRequestBody(string searchTerm, string entities, int top, string filter)
+        {
+            var entityList = string.IsNullOrWhiteSpace(entities)
+                ? null
+                : entities.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
+            return BuildSearchRequestBody(searchTerm, entityList, top, filter);
+        }
+
+        private static string FormatAttributes(Dictionary<string, object> attributes)
+        {
+            if (attributes == null || attributes.Count == 0) return "";
+            return string.Join("; ", attributes
+                .Where(p => !p.Key.StartsWith("@", StringComparison.Ordinal) &&
+                            !p.Key.Contains("@OData", StringComparison.OrdinalIgnoreCase) && p.Value != null)
+                .OrderBy(p => p.Key, StringComparer.OrdinalIgnoreCase)
+                .Select(p => $"{p.Key}={p.Value}"));
+        }
+
+        private static string FormatHighlights(Dictionary<string, string[]> highlights)
+        {
+            if (highlights == null || highlights.Count == 0) return "";
+            return string.Join("; ", highlights.OrderBy(p => p.Key, StringComparer.OrdinalIgnoreCase)
+                .Select(p => $"{p.Key}: {string.Join(", ", p.Value ?? [])
+                    .Replace("{crmhit}", "**", StringComparison.OrdinalIgnoreCase)
+                    .Replace("{/crmhit}", "**", StringComparison.OrdinalIgnoreCase)}"));
+        }
+
+        private static string EscapePipe(string value) =>
+            (value ?? "").Replace("\r", "").Replace("\n", " ").Replace("|", "\\|");
+
+        private static string FormatSearchResults(string jsonResponse, string searchTerm)
+        {
+            try
+            {
+                using var document = JsonDocument.Parse(jsonResponse);
+                if (document.RootElement.TryGetProperty("error", out var error))
+                {
+                    var code = error.TryGetProperty("code", out var c) ? c.GetString() : "Unknown";
+                    var message = error.TryGetProperty("message", out var m) ? m.GetString() : "Search failed";
+                    return $"Error: {code} {message}";
+                }
+
+                var result = BuildSearchResult(jsonResponse, searchTerm);
+                var rows = result.Records ?? [];
+                var total = result.TotalCount ?? rows.Count;
+                var word = rows.Count == 1 ? "result" : "results";
+                var sb = new StringBuilder($"[Search: \"{searchTerm}\"]\n{rows.Count} {word}");
+                if (total != rows.Count) sb.Append($" (total: {total})");
+                sb.AppendLine();
+                if (rows.Count == 0)
+                {
+                    sb.Append("No matching records found.");
+                    return sb.ToString();
+                }
+
+                sb.AppendLine("| Entity | Id | Score | Attributes | Highlights |");
+                foreach (var row in rows)
+                    sb.AppendLine($"| {row.EntityName} | {row.Id} | {row.Score} | {EscapePipe(FormatAttributes(row.Attributes))} | {EscapePipe(FormatHighlights(row.Highlights))} |");
+                return sb.ToString().TrimEnd();
+            }
+            catch
+            {
+                return $"[Search: \"{searchTerm}\"]\n{jsonResponse}";
+            }
         }
 
         // ── Result builders ─────────────────────────────────────────────────────
@@ -291,6 +358,83 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.Append(" | ").Append(r.Statistics.StorageSizeInMb).Append(" MB, ").Append(r.Statistics.DocumentCount).Append(" docs");
             sb.Append('.');
             return sb.ToString();
+        }
+
+        // Compatibility formatter retained for callers that consume the original
+        // human-readable status contract. BuildStatusResult remains the canonical
+        // structured representation used by the MCP action.
+        private static string FormatStatusResults(string statusJson, string statisticsJson)
+        {
+            try
+            {
+                var result = BuildStatusResult(statusJson, statisticsJson);
+                if (result.Status == null)
+                    return $"[Search Status]\n{statusJson}";
+
+                var status = result.Status;
+                var sb = new StringBuilder();
+                sb.AppendLine("[Dataverse Relevance Search Status]");
+                sb.AppendLine($"Status: {FormatProvisionStatus(status.Status)}");
+                if (string.Equals(status.Status, "notprovisioned", StringComparison.OrdinalIgnoreCase))
+                    sb.AppendLine("Search is not provisioned.");
+
+                var entities = status.EntityStatusResults ?? [];
+                sb.AppendLine($"Indexed Entities ({entities.Count})");
+                foreach (var entity in entities)
+                {
+                    var fields = entity.IndexedFields ?? [];
+                    sb.AppendLine($"- {entity.EntityLogicalName}: {entity.EntityStatus} ({fields.Count} fields)");
+                    if (fields.Count > 0)
+                        sb.AppendLine($"  Fields: {string.Join(", ", fields.OrderBy(f => f, StringComparer.OrdinalIgnoreCase))}");
+                }
+
+                var relationships = status.ManyToManyRelationshipSyncStatus ?? [];
+                if (relationships.Count > 0)
+                {
+                    sb.AppendLine($"Many-to-Many Relationships ({relationships.Count})");
+                    foreach (var relationship in relationships)
+                        sb.AppendLine($"- {relationship.RelationshipName}: {relationship.SearchEntity} / {relationship.RelatedEntity} / {relationship.IntersectEntity}");
+                }
+
+                if (result.Statistics != null)
+                {
+                    sb.AppendLine($"Storage: {result.Statistics.StorageSizeInMb:N0} MB ({result.Statistics.StorageSizeInBytes:N0} bytes)");
+                    sb.AppendLine($"Documents: {result.Statistics.DocumentCount:N0}");
+                }
+
+                return sb.ToString().TrimEnd();
+            }
+            catch
+            {
+                return $"[Search Status]\n{statusJson}";
+            }
+        }
+
+        private static string HandleSearchException(Exception ex)
+        {
+            var fullMessage = BuildFullExceptionMessage(ex);
+            if (fullMessage.Contains("0x80048d0b", StringComparison.OrdinalIgnoreCase) ||
+                fullMessage.Contains("0x80060203", StringComparison.OrdinalIgnoreCase) ||
+                fullMessage.Contains("SearchNotEnabled", StringComparison.OrdinalIgnoreCase) ||
+                fullMessage.Contains("not provisioned", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Error: Dataverse Search is not enabled.\nHOW TO ENABLE: Enable Relevance Search in the Power Platform environment settings, then wait for provisioning to complete.";
+            }
+
+            return $"Error: Search failed: {fullMessage}";
+        }
+
+        private static string BuildFullExceptionMessage(Exception ex)
+        {
+            if (ex == null) return "Unknown error";
+            var messages = new List<string>();
+            for (var current = ex; current != null; current = current.InnerException)
+            {
+                if (!string.IsNullOrWhiteSpace(current.Message))
+                    messages.Add(current.Message);
+            }
+
+            return string.Join(" → ", messages);
         }
 
         private static string FormatProvisionStatus(string status)

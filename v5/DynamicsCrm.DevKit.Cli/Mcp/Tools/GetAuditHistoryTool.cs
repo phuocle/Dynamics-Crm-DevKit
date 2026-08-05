@@ -41,6 +41,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ["setstate"] = 41
         };
 
+        // Compatibility helper for the audit query/test contract. Keep the
+        // canonical action map in one place so validation and FetchXML filters
+        // cannot disagree.
+        private static int? ParseActionName(string operation)
+        {
+            if (string.IsNullOrWhiteSpace(operation)) return null;
+            return ActionNameMap.TryGetValue(operation.Trim(), out var value) ? value : null;
+        }
+
         [McpServerTool(Name = "get_audit_history", Title = "Get record audit history",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetAuditHistoryResult)),
@@ -593,6 +602,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return $"[Success] {scope} ({timeScope}{suffix}): {count} {word}.";
         }
 
+        private static string FormatBrowseNoResults(string entityName, string timeScope,
+            string userFilter, string operation)
+        {
+            var sb = new StringBuilder("[AuditBrowse] 0 entries found; auditing is enabled.");
+            if (!string.IsNullOrWhiteSpace(entityName)) sb.Append($" entity = \"{entityName}\";");
+            if (!string.IsNullOrWhiteSpace(userFilter)) sb.Append($" user contains \"{userFilter}\";");
+            if (!string.IsNullOrWhiteSpace(operation)) sb.Append($" operation = \"{operation}\";");
+            if (!string.IsNullOrWhiteSpace(timeScope)) sb.Append($" time scope = \"{timeScope}\".");
+            return sb.ToString();
+        }
+
         // ── Static formatting helpers ───────────────────────────────────────────
 
         private static string FormatAttributeValue(object value, Entity entity, string attributeName, AttributeMetadataCache metadata)
@@ -686,6 +706,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string EscapeTab(string value) =>
             value?.Replace("\t", " ").Replace("\n", " ").Replace("\r", "") ?? "";
+
+        private static string EscapeXml(string value) =>
+            System.Security.SecurityElement.Escape(value ?? "") ?? "";
     }
 
     /// <summary>
