@@ -38,7 +38,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Manage env vars. list/detail non-destructive; create/update/delete/clear destructive — confirm first.\n" +
             "Actions: 'list' (solution_name filter), 'detail' (variable_name), 'create' (solution_name+display_name+type REQUIRED), 'update' (variable_name), 'delete' (variable_name, irreversible — no backup), 'clear' (variable_name, removes current value only; definition+default remain).\n" +
-            "Type immutable after create — delete+recreate to change. 'create' blocks reserved prefix 'new' — set proper customization prefix on publisher first. 'create' rejects if Display/schema name exists → use update.\n" +
+            "Type immutable after create — delete+recreate to change. CREATE uses the publisher prefix from solution_name directly. 'create' blocks reserved prefix 'new' — set proper customization prefix on publisher first. 'create' rejects if Display/schema name exists → use update.\n" +
             "confirmed_prefix = optional safety check; must match solution publisher prefix.")]
         public CallToolResult manage_environment_variable(
             [Description("'list', 'detail', 'create', 'update', 'delete', 'clear'."
@@ -329,7 +329,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
 
-            var defId = _serviceClient.Create(newDef);
+            var defId = DataverseMutationExecutor.Create(_context, _serviceClient, newDef);
 
             var addResult = SolutionComponentCreateHelper.AddExistingComponent(
                 _context, _serviceClient,
@@ -420,7 +420,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (hasDefChanges)
-                _serviceClient.Update(update);
+                DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             var curVal = "";
             if (hasValueChange)
@@ -531,7 +531,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
             DeleteCurrentValue(defId);
-            _serviceClient.Delete("environmentvariabledefinition", defId);
+            DataverseMutationExecutor.Delete(_context, _serviceClient, "environmentvariabledefinition", defId);
 
             var structured = new ManageEnvironmentVariableResult
             {
@@ -640,7 +640,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var existing = result.Entities[0];
                 existing["value"] = value;
-                _serviceClient.Update(existing);
+                DataverseMutationExecutor.Update(_context, _serviceClient, existing);
             }
             else
             {
@@ -649,7 +649,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ["value"] = value,
                     ["environmentvariabledefinitionid"] = new EntityReference("environmentvariabledefinition", definitionId)
                 };
-                _serviceClient.Create(newValue);
+                DataverseMutationExecutor.Create(_context, _serviceClient, newValue);
             }
         }
 
@@ -671,7 +671,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var result = _serviceClient.RetrieveMultiple(query);
             if (result.Entities.Count > 0)
             {
-                _serviceClient.Delete("environmentvariablevalue", result.Entities[0].Id);
+                DataverseMutationExecutor.Delete(_context, _serviceClient, "environmentvariablevalue", result.Entities[0].Id);
             }
         }
 

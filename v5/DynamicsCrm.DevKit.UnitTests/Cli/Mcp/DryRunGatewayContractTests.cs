@@ -1,8 +1,11 @@
 using DynamicsCrm.DevKit.Cli.Mcp;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Crm.Sdk.Messages;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
+using ModelContextProtocol.Server;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -85,6 +88,30 @@ internal static class DryRunTestHelpers
 public class DryRunGatewayContractTests
 {
     [TestMethod]
+    public void MutatingToolInventory_IsExactlyTheReviewedEighteen()
+    {
+        var expected = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "create_records", "manage_record", "publish_customizations",
+            "manage_deleted_records", "manage_role", "manage_environment_variable",
+            "manage_chart", "manage_view", "manage_form", "manage_webresource",
+            "manage_choice", "upsert_table", "upsert_relationship", "manage_app",
+            "manage_command", "execute_webapi", "upsert_column", "manage_ribbon"
+        };
+
+        var actual = typeof(CreateRecordsTool).Assembly
+            .GetTypes()
+            .Where(t => t.GetCustomAttribute<McpServerToolTypeAttribute>() != null)
+            .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static))
+            .Select(m => m.GetCustomAttribute<McpServerToolAttribute>())
+            .Where(a => a != null && a.ReadOnly == false)
+            .Select(a => a!.Name)
+            .ToHashSet(StringComparer.Ordinal);
+
+        CollectionAssert.AreEquivalent(expected.ToArray(), actual.ToArray());
+    }
+
+    [TestMethod]
     public void ExecuteReadOnly_RejectsMutatingRequest()
     {
         try
@@ -106,6 +133,65 @@ public class DryRunGatewayContractTests
             SolutionComponentCreateHelper.AddExistingComponent(
                 DryRunTestHelpers.BlockedContext(), null!, Guid.NewGuid(), 61, "devkit_test");
             Assert.Fail("Blocked add-to-solution must throw before the service call.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            StringAssert.Contains(ex.Message, "Mutation blocked");
+        }
+    }
+
+    [TestMethod]
+    public void RemoveExistingComponent_BlockedContextThrowsBeforeServiceCall()
+    {
+        try
+        {
+            SolutionComponentCreateHelper.RemoveExistingComponent(
+                DryRunTestHelpers.BlockedContext(), null!, Guid.NewGuid(), 61, "devkit_test");
+            Assert.Fail("Blocked remove-from-solution must throw before the service call.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            StringAssert.Contains(ex.Message, "Mutation blocked");
+        }
+    }
+
+    [TestMethod]
+    public void WebApiMutationExecutor_BlockedContextThrowsBeforeTransport()
+    {
+        try
+        {
+            DataverseWebApiMutationExecutor.Execute(
+                DryRunTestHelpers.BlockedContext(), null!,
+                System.Net.Http.HttpMethod.Post, "accounts", "{}", null);
+            Assert.Fail("Blocked Web API mutation must throw before transport.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            StringAssert.Contains(ex.Message, "Mutation blocked");
+        }
+    }
+
+    [TestMethod]
+    public void PublishAllAsync_BlockedContextThrowsBeforeServiceCall()
+    {
+        try
+        {
+            PublishHelper.PublishAllAsync(DryRunTestHelpers.BlockedContext(), null!);
+            Assert.Fail("Blocked PublishAll must throw before the service call.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            StringAssert.Contains(ex.Message, "Mutation blocked");
+        }
+    }
+
+    [TestMethod]
+    public void SolutionImport_BlockedContextThrowsBeforeServiceCall()
+    {
+        try
+        {
+            SolutionImportHelper.Import(DryRunTestHelpers.BlockedContext(), null!, [1]);
+            Assert.Fail("Blocked solution import must throw before the service call.");
         }
         catch (InvalidOperationException ex)
         {

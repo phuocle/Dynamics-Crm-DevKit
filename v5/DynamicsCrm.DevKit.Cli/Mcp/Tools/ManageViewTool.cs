@@ -299,7 +299,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     CreateMode = "metadata"
                 });
 
-            var newViewId = _serviceClient.Create(newView);
+            var newViewId = DataverseMutationExecutor.Create(_context, _serviceClient, newView);
 
             PublishHelper.PublishEntity(_context, _serviceClient, entityName);
             MetadataOperationWaitHelper.WaitAfterFormView();
@@ -485,7 +485,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     LayoutXmlBackupPath = layoutBackupPath,
                     Published = false
                 });
-            _serviceClient.Update(update);
+            DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
             MetadataOperationWaitHelper.WaitAfterFormView();
@@ -591,7 +591,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     LayoutXmlBackupPath = layoutBackupPath,
                     Published = false
                 });
-            _serviceClient.Update(update);
+            DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
             MetadataOperationWaitHelper.WaitAfterFormView();
@@ -672,7 +672,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
 
             var update = new Entity("savedquery", targetId) { ["isdefault"] = true };
-            _serviceClient.Update(update);
+            DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             PublishHelper.PublishEntity(_context, _serviceClient, entityName);
             MetadataOperationWaitHelper.WaitAfterFormView();
@@ -843,7 +843,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     RestoredFromLayoutXmlBackup = layoutBackupPath,
                     Published = false
                 });
-            _serviceClient.Update(update);
+            DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
             MetadataOperationWaitHelper.WaitAfterFormView();

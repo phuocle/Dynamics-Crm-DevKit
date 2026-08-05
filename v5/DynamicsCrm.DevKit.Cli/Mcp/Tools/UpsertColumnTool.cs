@@ -2331,13 +2331,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             var putBody = $"{{\"LogicalName\":\"{attributeName}\",\"RequiredLevel\":{{\"Value\":\"{levelName}\",\"CanBeChanged\":true}}}}";
                             try
                             {
-                                _context.AssertMutationAllowed($"Web API PUT {route}");
-                                _serviceClient.ExecuteWebRequest(
+                                DataverseWebApiMutationExecutor.Execute(
+                                    _context,
+                                    _serviceClient,
                                     HttpMethod.Put,
                                     route,
                                     putBody,
                                     null,
                                     "application/json");
+                            }
+                            catch (InvalidOperationException) when (_context.MutationsBlocked)
+                            {
+                                throw;
                             }
                             catch
                             {

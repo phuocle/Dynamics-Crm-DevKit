@@ -123,5 +123,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             });
         }
 
+        /// <summary>
+        /// Starts the asynchronous PublishAll operation. The mutation assertion is
+        /// intentionally inside this helper so callers cannot bypass the gateway.
+        /// </summary>
+        public static Guid PublishAllAsync(McpExecutionContext context, ServiceClient serviceClient)
+        {
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            context.AssertMutationAllowed("PublishAllXmlAsyncRequest");
+            if (serviceClient == null) throw new ArgumentNullException(nameof(serviceClient));
+            var response = (PublishAllXmlAsyncResponse)serviceClient.Execute(new PublishAllXmlAsyncRequest());
+            return response.AsyncOperationId;
+        }
+
     }
 }

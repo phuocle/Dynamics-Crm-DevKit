@@ -39,7 +39,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             Guid componentId,
             int componentType,
             string solutionUniqueName,
-            bool addRequiredComponents = false)
+            bool addRequiredComponents = false,
+            bool doNotIncludeSubcomponents = false)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
 
@@ -63,6 +64,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 service.Execute(new AddSolutionComponentRequest
                 {
                     AddRequiredComponents = addRequiredComponents,
+                    DoNotIncludeSubcomponents = doNotIncludeSubcomponents,
                     ComponentType = componentType,
                     ComponentId = componentId,
                     SolutionUniqueName = trimmedSolutionName
@@ -87,6 +89,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     AddToSolutionWarning = ex.Message
                 };
             }
+        }
+
+        public static void RemoveExistingComponent(
+            McpExecutionContext context,
+            IOrganizationService service,
+            Guid componentId,
+            int componentType,
+            string solutionUniqueName)
+        {
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (string.IsNullOrWhiteSpace(solutionUniqueName))
+                throw new ArgumentException("Solution unique name is required.", nameof(solutionUniqueName));
+
+            var trimmedSolutionName = solutionUniqueName.Trim();
+            context.AssertMutationAllowed($"RemoveSolutionComponentRequest {trimmedSolutionName}");
+            if (service == null) throw new ArgumentNullException(nameof(service));
+            service.Execute(new RemoveSolutionComponentRequest
+            {
+                ComponentId = componentId,
+                ComponentType = componentType,
+                SolutionUniqueName = trimmedSolutionName
+            });
         }
 
     }

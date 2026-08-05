@@ -141,7 +141,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                         if (_options.DryRun)
                             return DryRun($"Would UPDATE ribbon for entity '{updateEntityName}'.",
-                                new ManageRibbonResult { Action = "update", EntityName = updateEntityName, Status = "dry_run", Published = false });
+                                new ManageRibbonResult { Action = "update", EntityName = updateEntityName, Status = "not_executed", Published = false });
 
                         if (!string.IsNullOrWhiteSpace(operations))
                             return UpdateRibbonFromOperations(
@@ -170,7 +170,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             var undoBusy = TryBlockRibbonActionWhenBusy("undo", entityName, isReadback: false);
                             if (_options.DryRun)
                                 return DryRun($"Would RESTORE ribbon for entity '{entityName}' from backup.",
-                                    new ManageRibbonResult { Action = "undo", EntityName = entityName, Status = "dry_run", Published = false });
+                                    new ManageRibbonResult { Action = "undo", EntityName = entityName, Status = "not_executed", Published = false });
                             return undoBusy ?? UndoRibbon(entityName, ribbonxml.Trim());
                         }
 
@@ -1589,9 +1589,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 // Use async version to avoid timeout
-                var asyncRequest = new PublishAllXmlAsyncRequest();
-                var asyncResponse = (PublishAllXmlAsyncResponse)_serviceClient.Execute(asyncRequest);
-                return (true, asyncResponse.AsyncOperationId);
+                return (true, PublishHelper.PublishAllAsync(_context, _serviceClient));
+            }
+            catch (InvalidOperationException) when (_context.MutationsBlocked)
+            {
+                throw;
             }
             catch
             {
@@ -1601,13 +1603,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private void ImportRibbonSolution(byte[] solutionZip)
         {
-            var importReq = new ImportSolutionRequest
-            {
-                CustomizationFile = solutionZip,
-                OverwriteUnmanagedCustomizations = true,
-                PublishWorkflows = true
-            };
-            _serviceClient.Execute(importReq);
+            SolutionImportHelper.Import(_context, _serviceClient, solutionZip);
         }
 
         private CallToolResult ErrorResult(string message) => Error(message);

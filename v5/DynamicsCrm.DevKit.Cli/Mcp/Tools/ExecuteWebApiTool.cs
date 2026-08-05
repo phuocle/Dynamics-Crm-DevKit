@@ -130,10 +130,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         preview);
                 }
 
-                if (httpMethod != HttpMethod.Get)
-                    _context.AssertMutationAllowed($"Web API {httpMethod.Method} {trimmedUrl}");
                 HttpResponseMessage response;
-                if (trimmedUrl.StartsWith("$metadata", StringComparison.OrdinalIgnoreCase))
+                if (trimmedUrl.StartsWith("$metadata", StringComparison.OrdinalIgnoreCase) && httpMethod == HttpMethod.Get)
                 {
                     using var httpClient = new HttpClient();
                     var orgUri = _serviceClient.ConnectedOrgUriActual;
@@ -142,6 +140,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     request.Headers.Add("Authorization", $"Bearer {_serviceClient.CurrentAccessToken}");
                     request.Headers.Add("Accept", "application/xml");
                     response = httpClient.SendAsync(request).GetAwaiter().GetResult();
+                }
+                else if (httpMethod != HttpMethod.Get)
+                {
+                    response = DataverseWebApiMutationExecutor.Execute(
+                        _context,
+                        _serviceClient,
+                        httpMethod,
+                        trimmedUrl,
+                        requestBody,
+                        customHeaders);
                 }
                 else
                 {
@@ -410,7 +418,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // (works for any HTTP method: GET, PATCH, PUT, DELETE).
             // Match pattern like 'accounts(abc-123)' or 'accounts(abc-123)/contacts' but NOT 'accounts?$filter=...'
             // Use regex: entityname(dash-separated-guid) optionally followed by /... — must be a balanced parens.
-            if (IsEntityByIdUrl(url))
+            if (method == HttpMethod.Get && IsEntityByIdUrl(url))
             {
                 return "REDIRECT: For a single record GUID, use manage_deleted_records(action='detail', entity_name='<entity>', record_id='<guid>') instead of execute_webapi. " +
                        "The tool checks both the live table and the recycle bin, returning full attributes if the record exists. " +
@@ -542,8 +550,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(json))
                 return json;
-            using var doc = JsonDocument.Parse(json);
-            return JsonSerializer.Serialize(doc, new JsonSerializerOptions { WriteIndented = true });
+            try
+            {
+                using var doc = JsonDocument.Parse(json);
+                return JsonSerializer.Serialize(doc, new JsonSerializerOptions { WriteIndented = true });
+            }
+            catch (JsonException)
+            {
+                return json;
+            }
         }
     }
 }

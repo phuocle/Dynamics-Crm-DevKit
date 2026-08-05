@@ -10,6 +10,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Xml.Linq;
 using DynamicsCrm.DevKit.Cli.Mcp;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 {
@@ -115,14 +116,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
             RemoveAllSolutionComponents(solutionId);
 
-            _serviceClient.Execute(new AddSolutionComponentRequest
-            {
-                ComponentId = metadataId.Value,
-                ComponentType = 1,
-                SolutionUniqueName = SOLUTION_NAME,
-                AddRequiredComponents = false,
-                DoNotIncludeSubcomponents = true
-            });
+            SolutionComponentCreateHelper.AddExistingComponent(
+                _context,
+                _serviceClient,
+                metadataId.Value,
+                1,
+                SOLUTION_NAME,
+                addRequiredComponents: false,
+                doNotIncludeSubcomponents: true);
         }
 
         private Guid? GetEntityMetadataId(string entityName)
@@ -159,12 +160,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 if (componentId == Guid.Empty || !componentType.HasValue)
                     continue;
 
-                _serviceClient.Execute(new RemoveSolutionComponentRequest
-                {
-                    ComponentId = componentId,
-                    ComponentType = componentType.Value,
-                    SolutionUniqueName = SOLUTION_NAME
-                });
+                SolutionComponentCreateHelper.RemoveExistingComponent(
+                    _context,
+                    _serviceClient,
+                    componentId,
+                    componentType.Value,
+                    SOLUTION_NAME);
             }
         }
 

@@ -596,8 +596,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 { "Prefer", new List<string> { "return=representation", "odata.include-annotations=\"*\"" } }
             };
 
-            _context.AssertMutationAllowed("restore deleted record via Web API");
-            using var resp = _serviceClient.ExecuteWebRequest(
+            using var resp = DataverseWebApiMutationExecutor.Execute(
+                _context,
+                _serviceClient,
                 HttpMethod.Post,
                 "recyclebinconfigs",
                 payload,

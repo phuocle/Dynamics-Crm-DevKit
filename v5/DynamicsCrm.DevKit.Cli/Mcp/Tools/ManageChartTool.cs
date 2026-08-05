@@ -854,15 +854,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(solutionName)) return false;
             try
             {
-                var request = new AddSolutionComponentRequest
-                {
-                    ComponentId = chartId,
-                    ComponentType = 59, // SavedQueryVisualization (System Chart)
-                    SolutionUniqueName = solutionName.Trim(),
-                    AddRequiredComponents = false
-                };
-                _serviceClient.Execute(request);
-                return true;
+                var result = SolutionComponentCreateHelper.AddExistingComponent(
+                    _context,
+                    _serviceClient,
+                    chartId,
+                    59, // SavedQueryVisualization (System Chart)
+                    solutionName,
+                    addRequiredComponents: false);
+                return result.IsAddToSolution;
+            }
+            catch (InvalidOperationException) when (_context.MutationsBlocked)
+            {
+                throw;
             }
             catch
             {
