@@ -13,7 +13,7 @@ public class McpToolBasicCoverageTests
     [TestMethod]
     public async Task CreateRecords_MissingEntityName_ReturnsError()
     {
-        var tool = new CreateRecordsTool(null!, DryRunOptions());
+        var tool = new CreateRecordsTool(null!, DryRunOptions(), DryRunTestHelpers.BlockedContext());
 
         var result = await tool.create_records("", "[]");
 
@@ -24,7 +24,7 @@ public class McpToolBasicCoverageTests
     [TestMethod]
     public async Task CreateRecords_MissingRecordsJson_ReturnsError()
     {
-        var tool = new CreateRecordsTool(null!, DryRunOptions());
+        var tool = new CreateRecordsTool(null!, DryRunOptions(), DryRunTestHelpers.BlockedContext());
 
         var result = await tool.create_records("account", "");
 
@@ -79,7 +79,7 @@ public class McpToolBasicCoverageTests
     [TestMethod]
     public void ManageApp_InvalidAction_ReturnsError()
     {
-        var tool = new ManageAppTool(null!, DryRunOptions());
+        var tool = new ManageAppTool(null!, DryRunOptions(), DryRunTestHelpers.BlockedContext());
 
         var result = tool.manage_app(action: "not_an_action");
 
@@ -90,7 +90,7 @@ public class McpToolBasicCoverageTests
     [TestMethod]
     public void ManageApp_DetailWithoutApp_ReturnsError()
     {
-        var tool = new ManageAppTool(null!, DryRunOptions());
+        var tool = new ManageAppTool(null!, DryRunOptions(), DryRunTestHelpers.BlockedContext());
 
         var result = tool.manage_app(action: "detail", app: "");
 
@@ -101,7 +101,7 @@ public class McpToolBasicCoverageTests
     [TestMethod]
     public void ManageApp_CreateWithoutSolution_ReturnsError()
     {
-        var tool = new ManageAppTool(null!, DryRunOptions());
+        var tool = new ManageAppTool(null!, DryRunOptions(), DryRunTestHelpers.BlockedContext());
 
         var result = tool.manage_app(action: "create", display_name: "Demo App");
 
@@ -112,7 +112,7 @@ public class McpToolBasicCoverageTests
     [TestMethod]
     public void ManageApp_CreateWithoutDisplayName_ReturnsError()
     {
-        var tool = new ManageAppTool(null!, DryRunOptions());
+        var tool = new ManageAppTool(null!, DryRunOptions(), DryRunTestHelpers.BlockedContext());
 
         var result = tool.manage_app(action: "create", solution_name: "DemoSolution");
 

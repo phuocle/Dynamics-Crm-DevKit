@@ -29,7 +29,7 @@ public class McpFormattingCoverageTests
     [TestMethod]
     public void ManageView_FormatViewList_RendersSystemPersonalAndXmlSections()
     {
-        var tool = new ManageViewTool(null!, new McpDryRunOptions());
+        var tool = new ManageViewTool(null!, new McpDryRunOptions(), new McpExecutionContext(true));
         var systemViews = new EntityCollection().Entities;
         systemViews.Add(new Entity("savedquery")
         {

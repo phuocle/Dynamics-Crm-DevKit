@@ -102,6 +102,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             builder.Services.AddSingleton(_serviceClient);
             builder.Services.AddSingleton(new MetadataService(_serviceClient));
             builder.Services.AddSingleton(new McpDryRunOptions { DryRun = dryRun });
+            builder.Services.AddSingleton(new McpExecutionContext(mutationsBlocked: dryRun));
 
             var displayCategory = normalizedCategory == "all" ? "all" : normalizedCategory;
             var serverName = string.IsNullOrWhiteSpace(instanceName)

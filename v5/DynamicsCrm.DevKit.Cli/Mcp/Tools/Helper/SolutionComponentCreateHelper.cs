@@ -4,6 +4,10 @@ using System;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 {
+    // NOTE: AddExistingComponent now requires a non-null McpExecutionContext and
+    // asserts mutation is allowed before AddSolutionComponentRequest. This makes
+    // the helper fail-closed when called directly or from a new caller.
+
     internal enum SolutionComponentCreateMode
     {
         None,
@@ -30,12 +34,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         }
 
         public static SolutionComponentCreateResult AddExistingComponent(
+            McpExecutionContext context,
             IOrganizationService service,
             Guid componentId,
             int componentType,
             string solutionUniqueName,
             bool addRequiredComponents = false)
         {
+            if (context == null) throw new ArgumentNullException(nameof(context));
+
             if (string.IsNullOrWhiteSpace(solutionUniqueName))
                 return new SolutionComponentCreateResult
                 {
@@ -45,6 +52,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 };
 
             var trimmedSolutionName = solutionUniqueName.Trim();
+
+            // Keep the policy assertion outside the warning-producing catch.
+            // A blocked mutation is a safety decision, not an optional
+            // Add-to-solution warning and must propagate to the caller.
+            context.AssertMutationAllowed($"AddSolutionComponentRequest {trimmedSolutionName}");
 
             try
             {
@@ -76,5 +88,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 };
             }
         }
+
     }
 }

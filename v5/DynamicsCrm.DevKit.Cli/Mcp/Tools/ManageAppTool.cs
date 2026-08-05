@@ -1,4 +1,5 @@
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.App;
 using Microsoft.Crm.Sdk.Messages;
@@ -37,12 +38,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
         private string _workspaceFolder;
 
-        public ManageAppTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public ManageAppTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         [McpServerTool(Name = "manage_app", Title = "Manage model-driven apps",
@@ -305,9 +308,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             AddAppComponents(appModuleId, starterComponents);
 
             var appSolutionResult = SolutionComponentCreateHelper.AddExistingComponent(
-                _serviceClient, appModuleId, 80, solResult.UniqueName, addRequiredComponents: true);
+                _context, _serviceClient, appModuleId, 80, solResult.UniqueName, addRequiredComponents: true);
             var siteMapSolutionResult = SolutionComponentCreateHelper.AddExistingComponent(
-                _serviceClient, siteMapId, 62, solResult.UniqueName, addRequiredComponents: true);
+                _context, _serviceClient, siteMapId, 62, solResult.UniqueName, addRequiredComponents: true);
 
             var validation = ValidateApp(appModuleId);
 

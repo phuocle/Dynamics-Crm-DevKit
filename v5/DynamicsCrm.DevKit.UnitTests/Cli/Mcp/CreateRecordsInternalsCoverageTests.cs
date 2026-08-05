@@ -34,7 +34,7 @@ public class CreateRecordsInternalsCoverageTests
     [TestMethod]
     public void ResolveRecordsInput_InlineJsonAndJsonFile_ReturnContent()
     {
-        var tool = new CreateRecordsTool(null!, new McpDryRunOptions());
+        var tool = new CreateRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
         var warnings = new List<string>();
         var inline = (string)InvokeInstance(tool, "ResolveRecordsInput", "[{\"name\":\"A\"}]", "account", warnings)!;
         Assert.AreEqual("[{\"name\":\"A\"}]", inline);
@@ -65,7 +65,7 @@ public class CreateRecordsInternalsCoverageTests
     [TestMethod]
     public void ConvertCsvValue_Primitives_ReturnConvertedValuesAndWarnings()
     {
-        var tool = new CreateRecordsTool(null!, new McpDryRunOptions());
+        var tool = new CreateRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
         var warnings = new List<string>();
         var cache = new Dictionary<string, Guid?>(StringComparer.OrdinalIgnoreCase);
 
@@ -86,7 +86,7 @@ public class CreateRecordsInternalsCoverageTests
     [TestMethod]
     public void ConvertCsvValue_InvalidPrimitiveValues_AddWarningsAndReturnNull()
     {
-        var tool = new CreateRecordsTool(null!, new McpDryRunOptions());
+        var tool = new CreateRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
         var warnings = new List<string>();
         var cache = new Dictionary<string, Guid?>(StringComparer.OrdinalIgnoreCase);
 
@@ -101,7 +101,7 @@ public class CreateRecordsInternalsCoverageTests
     [TestMethod]
     public void ConvertCsvValue_PicklistAndMultiSelect_ResolveLabels()
     {
-        var tool = new CreateRecordsTool(null!, new McpDryRunOptions());
+        var tool = new CreateRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
         var warnings = new List<string>();
         var cache = new Dictionary<string, Guid?>(StringComparer.OrdinalIgnoreCase);
         var options = new OptionMetadataCollection
@@ -124,7 +124,7 @@ public class CreateRecordsInternalsCoverageTests
     [TestMethod]
     public void ConvertCsvValue_LookupWithoutTargetsAndUnsupportedType_ReturnWarnings()
     {
-        var tool = new CreateRecordsTool(null!, new McpDryRunOptions());
+        var tool = new CreateRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
         var warnings = new List<string>();
         var cache = new Dictionary<string, Guid?>(StringComparer.OrdinalIgnoreCase);
 

@@ -19,6 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -27,11 +28,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
 
-        public CreateRecordsTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public CreateRecordsTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         private const int MaxRecords = 5000;
@@ -71,7 +74,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var entityName = entityResult.Value.LogicalName;
 
                 var csvWarnings = new List<string>();
-                var resolved = ResolveRecordsInput(records_json, entityName, csvWarnings);
+                var resolved = ResolveRecordsInput(records_json, entityName, csvWarnings, deleteInput: !_options.DryRun);
                 if (resolved == null)
                 {
                     var trimmed = records_json.Trim();
@@ -194,11 +197,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // (Guid.Empty, errorMessage) on failure. Cannot let exceptions propagate
         // because it runs inside Parallel.ForEachAsync — an unhandled throw
         // would abort the entire batch and hide which records succeeded.
+        //
+        // The mutation gateway (DataverseMutationExecutor.CreateAsync) asserts
+        // that mutations are allowed before the SDK call. In dry-run mode the
+        // action-level preview returns before this method is reached; the
+        // gateway is the fail-closed safety net for any future caller that
+        // forgets the preview.
         private async Task<(Guid id, string error)> TryCreateAsync(Entity entity, CancellationToken ct)
         {
             try
             {
-                var id = await _serviceClient.CreateAsync(entity, ct);
+                var id = await DataverseMutationExecutor.CreateAsync(_context, _serviceClient, entity, ct);
                 return (id, null);
             }
             catch (Exception ex)
@@ -207,7 +216,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private string ResolveRecordsInput(string recordsJson, string entityName, List<string> csvWarnings)
+        private string ResolveRecordsInput(string recordsJson, string entityName, List<string> csvWarnings, bool deleteInput)
         {
             var trimmed = recordsJson.Trim();
 
@@ -215,7 +224,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (!File.Exists(trimmed)) return null;
                 var json = ConvertCsvToJson(trimmed, entityName, csvWarnings);
-                SafeDelete(trimmed);
+                if (deleteInput) SafeDelete(trimmed);
                 return json;
             }
 
@@ -223,7 +232,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (!File.Exists(trimmed)) return null;
                 var content = File.ReadAllText(trimmed, Encoding.UTF8);
-                SafeDelete(trimmed);
+                if (deleteInput) SafeDelete(trimmed);
                 return content;
             }
 

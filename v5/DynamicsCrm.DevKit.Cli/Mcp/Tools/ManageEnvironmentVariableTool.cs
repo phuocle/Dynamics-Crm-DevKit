@@ -22,11 +22,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
 
-        public ManageEnvironmentVariableTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public ManageEnvironmentVariableTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         [McpServerTool(Name = "manage_environment_variable",
@@ -330,7 +332,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var defId = _serviceClient.Create(newDef);
 
             var addResult = SolutionComponentCreateHelper.AddExistingComponent(
-                _serviceClient,
+                _context, _serviceClient,
                 defId,
                 380,
                 solutionName);

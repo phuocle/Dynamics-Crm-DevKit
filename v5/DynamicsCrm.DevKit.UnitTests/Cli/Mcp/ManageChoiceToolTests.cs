@@ -498,7 +498,7 @@ public class ManageChoiceToolTests
 
     private static DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageChoiceTool CreateTool()
     {
-        return new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageChoiceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        return new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageChoiceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true));
     }
 
     private static string GetText(CallToolResult result)

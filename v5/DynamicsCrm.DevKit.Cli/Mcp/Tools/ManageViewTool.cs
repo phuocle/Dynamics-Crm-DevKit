@@ -28,12 +28,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
         private string _workspaceFolder;
 
-        public ManageViewTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public ManageViewTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         [McpServerTool(Name = "manage_view", Title = "Manage entity views",
@@ -299,7 +301,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var newViewId = _serviceClient.Create(newView);
 
-            PublishHelper.PublishEntity(_serviceClient, entityName);
+            PublishHelper.PublishEntity(_context, _serviceClient, entityName);
             MetadataOperationWaitHelper.WaitAfterFormView();
 
             var resultSb = new StringBuilder(256);
@@ -485,7 +487,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
             _serviceClient.Update(update);
 
-            PublishHelper.PublishEntity(_serviceClient, returnedTypeCode);
+            PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
             MetadataOperationWaitHelper.WaitAfterFormView();
 
             {
@@ -591,7 +593,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
             _serviceClient.Update(update);
 
-            PublishHelper.PublishEntity(_serviceClient, returnedTypeCode);
+            PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
             MetadataOperationWaitHelper.WaitAfterFormView();
 
             var sb = new StringBuilder(256);
@@ -672,7 +674,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var update = new Entity("savedquery", targetId) { ["isdefault"] = true };
             _serviceClient.Update(update);
 
-            PublishHelper.PublishEntity(_serviceClient, entityName);
+            PublishHelper.PublishEntity(_context, _serviceClient, entityName);
             MetadataOperationWaitHelper.WaitAfterFormView();
 
             var sb = new StringBuilder(256);
@@ -843,7 +845,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
             _serviceClient.Update(update);
 
-            PublishHelper.PublishEntity(_serviceClient, returnedTypeCode);
+            PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
             MetadataOperationWaitHelper.WaitAfterFormView();
 
             {

@@ -23,11 +23,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
 
-        public ManageWebResourceTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public ManageWebResourceTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         private static readonly Dictionary<int, string> TypeCodeMap = new()
@@ -452,7 +454,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var webResourceId = _serviceClient.Create(webResource);
 
             var addResult = SolutionComponentCreateHelper.AddExistingComponent(
-                _serviceClient,
+                _context, _serviceClient,
                 webResourceId,
                 61,
                 solResult.UniqueName,

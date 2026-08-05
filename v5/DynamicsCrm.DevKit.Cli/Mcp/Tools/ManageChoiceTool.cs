@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -22,11 +23,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private readonly McpExecutionContext _context;
 
-        public ManageChoiceTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public ManageChoiceTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         [McpServerTool(Name = "manage_choice",
@@ -389,7 +392,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (requiresPublish)
             {
                 // Publish failures bubble to the main catch (single-try rule).
-                PublishHelper.PublishOptionSet(_serviceClient, name);
+                PublishHelper.PublishOptionSet(_context, _serviceClient, name);
                 published = true;
 
                 // Wait for choice metadata to propagate after publish
@@ -575,7 +578,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var addResult = SolutionComponentCreateHelper.AddExistingComponent(
-                _serviceClient,
+                _context, _serviceClient,
                 createResp.OptionSetId,
                 9,
                 solResult.IsSuccess ? solResult.UniqueName : solutionName.Trim());

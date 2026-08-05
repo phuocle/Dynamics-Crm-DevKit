@@ -119,7 +119,7 @@ public class ManageWebResourceToolTests
     [TestMethod]
     public void ManageWebResource_EmptyAction_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true));
         var result = tool.manage_webresource(action: "");
 
         Assert.IsTrue(result.IsError);
@@ -130,7 +130,7 @@ public class ManageWebResourceToolTests
     [TestMethod]
     public void ManageWebResource_WhitespaceAction_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true));
         var result = tool.manage_webresource(action: "   ");
 
         Assert.IsTrue(result.IsError);
@@ -141,7 +141,7 @@ public class ManageWebResourceToolTests
     [TestMethod]
     public void ManageWebResource_InvalidAction_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true));
         var result = tool.manage_webresource(action: "invalid_xyz");
 
         Assert.IsTrue(result.IsError);
@@ -153,7 +153,7 @@ public class ManageWebResourceToolTests
     [TestMethod]
     public void ManageWebResource_DetailWithoutId_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true));
         var result = tool.manage_webresource(action: "detail");
 
         Assert.IsTrue(result.IsError);
@@ -164,7 +164,7 @@ public class ManageWebResourceToolTests
     [TestMethod]
     public void ManageWebResource_DetailWithInvalidGuid_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true));
         var result = tool.manage_webresource(action: "detail", web_resource_id: "not-a-guid");
 
         Assert.IsTrue(result.IsError);
@@ -175,7 +175,7 @@ public class ManageWebResourceToolTests
     [TestMethod]
     public void ManageWebResource_CreateMissingName_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true));
         var result = tool.manage_webresource(action: "create");
 
         Assert.IsTrue(result.IsError);
@@ -186,7 +186,7 @@ public class ManageWebResourceToolTests
     [TestMethod]
     public void ManageWebResource_CreateMissingFilePath_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true));
         var result = tool.manage_webresource(action: "create", name: "test_wr");
 
         Assert.IsTrue(result.IsError);
@@ -199,7 +199,7 @@ public class ManageWebResourceToolTests
     {
         var tempFile = System.IO.Path.GetTempFileName();
         System.IO.File.WriteAllText(tempFile, "test");
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true));
         var result = tool.manage_webresource(action: "create", name: "test_wr", file_path: tempFile);
 
         Assert.IsTrue(result.IsError);
@@ -214,7 +214,7 @@ public class ManageWebResourceToolTests
     {
         var tempFile = System.IO.Path.GetTempFileName();
         System.IO.File.WriteAllText(tempFile, "test");
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true));
         var result = tool.manage_webresource(action: "create", name: "test_wr", file_path: tempFile, type: "invalid");
 
         Assert.IsTrue(result.IsError);
@@ -227,7 +227,7 @@ public class ManageWebResourceToolTests
     [TestMethod]
     public void ManageWebResource_UpdateWithoutId_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true));
         var result = tool.manage_webresource(action: "update");
 
         Assert.IsTrue(result.IsError);
@@ -238,7 +238,7 @@ public class ManageWebResourceToolTests
     [TestMethod]
     public void ManageWebResource_DeleteWithoutId_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true));
         var result = tool.manage_webresource(action: "delete");
 
         Assert.IsTrue(result.IsError);
@@ -253,7 +253,7 @@ public class ManageWebResourceToolTests
     [TestMethod]
     public void ManageWebResource_ListWithMaxRecordsZero_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true));
         var result = tool.manage_webresource(action: "list", max_records: 0);
 
         Assert.IsTrue(result.IsError);
@@ -264,7 +264,7 @@ public class ManageWebResourceToolTests
     [TestMethod]
     public void ManageWebResource_ListWithNegativeMaxRecords_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true));
         var result = tool.manage_webresource(action: "list", max_records: -5);
 
         Assert.IsTrue(result.IsError);
