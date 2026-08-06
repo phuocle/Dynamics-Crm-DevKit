@@ -11,6 +11,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("mode")]
         public string Mode { get; set; }
 
+        [JsonPropertyName("entityName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string EntityName { get; set; }
+
         [JsonPropertyName("assemblies")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<PluginAssemblyEntry> Assemblies { get; set; }
