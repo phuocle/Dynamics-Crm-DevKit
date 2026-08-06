@@ -76,6 +76,7 @@ Mỗi tool phải pass hết 13 item dưới trước khi add vào list "đã ho
 - 11. get_message (phase 2)
 - 13. get_custom_apis (phase 2)
 - 14. get_flows (phase 2)
+- 16. get_plugin_trace_logs (phase 2)
 
 ---
 

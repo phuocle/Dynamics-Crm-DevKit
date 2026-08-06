@@ -11,6 +11,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("totalCount")]
         public int TotalCount { get; set; }
 
+        [JsonPropertyName("timeScope")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string TimeScope { get; set; }
+
+        [JsonPropertyName("entityName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string EntityName { get; set; }
+
         [JsonPropertyName("traces")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<PluginTraceLogEntry> Traces { get; set; }

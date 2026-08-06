@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using SysConsole = System.Console;
 
@@ -50,9 +51,13 @@ namespace Dev.AllInOne.Console
                 var scanTables = args.Any(a => a.Equals("--scan-tables", StringComparison.OrdinalIgnoreCase));
                 var forceDeleteAll = args.Any(a => a.Equals("--force-delete-all", StringComparison.OrdinalIgnoreCase));
                 var compareProblemRows = args.Any(a => a.Equals("--compare-problem-rows", StringComparison.OrdinalIgnoreCase));
+                var probeTrace = args.Any(a => a.Equals("--probe-trace", StringComparison.OrdinalIgnoreCase));
                 SysConsole.WriteLine("Connected: " + serviceClient.ConnectedOrgUriActual);
-                SysConsole.WriteLine("Mode: " + (forceDeleteAll ? "FORCE DELETE ALL (destructive)" : repair ? "REPAIR" : scanTables ? "TABLE SCAN (read-only)" : compareProblemRows ? "COMPARE PROBLEM ROWS (read-only)" : "AUDIT (read-only)"));
+                SysConsole.WriteLine("Mode: " + (forceDeleteAll ? "FORCE DELETE ALL (destructive)" : repair ? "REPAIR" : scanTables ? "TABLE SCAN (read-only)" : compareProblemRows ? "COMPARE PROBLEM ROWS (read-only)" : probeTrace ? "PROBE PLUGIN TRACE (read-only)" : "AUDIT (read-only)"));
                 SysConsole.WriteLine();
+
+                if (probeTrace)
+                    return ProbePluginTraceLogs(serviceClient);
 
                 PrintReportedJob(serviceClient);
                 PrintRecentProvisioningJobs(serviceClient);
@@ -86,6 +91,119 @@ namespace Dev.AllInOne.Console
                 SysConsole.WriteLine("[ERROR] " + ex.GetType().Name + ": " + ex.Message);
                 return 1;
             }
+        }
+
+        private static int ProbePluginTraceLogs(ServiceClient serviceClient)
+        {
+            // ── 1. Retrieve all attributes of plugintracelog (metadata) ────────
+            SysConsole.WriteLine("=== plugintracelog entity metadata ===");
+            var metaReq = new RetrieveEntityRequest
+            {
+                EntityFilters = Microsoft.Xrm.Sdk.Metadata.EntityFilters.Attributes,
+                LogicalName = "plugintracelog"
+            };
+            var metaResp = (RetrieveEntityResponse)serviceClient.Execute(metaReq);
+            var attrs = metaResp.EntityMetadata.Attributes
+                .OrderBy(a => a.LogicalName)
+                .ToList();
+            SysConsole.WriteLine("Attribute count: " + attrs.Count);
+            foreach (var a in attrs)
+            {
+                var typeName = a.AttributeType?.ToString() ?? "?";
+                if (a is Microsoft.Xrm.Sdk.Metadata.PicklistAttributeMetadata pick)
+                    typeName += " (OptionSet)";
+                if (a is Microsoft.Xrm.Sdk.Metadata.BooleanAttributeMetadata boolAttr)
+                    typeName += " (Boolean)";
+                SysConsole.WriteLine($"  {a.LogicalName,-35} {typeName,-20} IsValidForRead={a.IsValidForRead ?? false} IsLogical={a.IsLogical ?? false}");
+            }
+            SysConsole.WriteLine();
+
+            // ── 2. Retrieve top 3 rows with ALL columns ────────────────────────
+            SysConsole.WriteLine("=== plugintracelog top 3 rows (all columns) ===");
+            var query = new QueryExpression("plugintracelog")
+            {
+                ColumnSet = new ColumnSet(true),
+                PageInfo = new PagingInfo { Count = 3, PageNumber = 1 },
+                Orders = { new OrderExpression("createdon", OrderType.Descending) }
+            };
+            var result = serviceClient.RetrieveMultiple(query);
+            SysConsole.WriteLine("Rows returned: " + result.Entities.Count);
+            SysConsole.WriteLine();
+
+            foreach (var e in result.Entities)
+            {
+                SysConsole.WriteLine("--- Row " + e.Id + " ---");
+                foreach (var key in e.Attributes.Keys.OrderBy(k => k))
+                {
+                    var val = e.Attributes[key];
+                    string valStr;
+                    if (val is OptionSetValue osv)
+                        valStr = $"OptionSetValue({osv.Value})";
+                    else if (val is EntityReference er)
+                        valStr = $"EntityReference({er.LogicalName}:{er.Id})";
+                    else if (val is bool b)
+                        valStr = $"bool({b})";
+                    else if (val is Guid g)
+                        valStr = $"Guid({g})";
+                    else if (val is int i)
+                        valStr = $"int({i})";
+                    else if (val is DateTime dt)
+                        valStr = $"DateTime({dt:O})";
+                    else if (val == null)
+                        valStr = "null";
+                    else
+                        valStr = val.ToString();
+                    SysConsole.WriteLine($"  {key,-35} = {valStr}");
+                }
+                // FormattedValues
+                if (e.FormattedValues.Count > 0)
+                {
+                    SysConsole.WriteLine("  -- FormattedValues --");
+                    foreach (var fv in e.FormattedValues.OrderBy(f => f.Key))
+                        SysConsole.WriteLine($"  {fv.Key,-35} => \"{fv.Value}\"");
+                }
+                SysConsole.WriteLine();
+            }
+
+            // ── 3. Test each candidate field individually ──────────────────────
+            SysConsole.WriteLine("=== Field-by-field probe (candidate fields) ===");
+            var candidates = new[]
+            {
+                "plugintracelogid", "typename", "messagename", "primaryentity",
+                "mode", "operationtype", "depth", "performanceexecutionduration",
+                "correlationid", "pluginstepid", "requestid", "issystemcreated",
+                "createdon", "messageblock", "exceptiondetails"
+            };
+            foreach (var field in candidates)
+            {
+                try
+                {
+                    var q = new QueryExpression("plugintracelog")
+                    {
+                        ColumnSet = new ColumnSet(field),
+                        PageInfo = new PagingInfo { Count = 1, PageNumber = 1 },
+                        Orders = { new OrderExpression("createdon", OrderType.Descending) }
+                    };
+                    var r = serviceClient.RetrieveMultiple(q);
+                    var row = r.Entities.FirstOrDefault();
+                    if (row != null && row.Contains(field))
+                    {
+                        var v = row[field];
+                        var type = v?.GetType().Name ?? "null";
+                        SysConsole.WriteLine($"  {field,-35} OK  type={type}");
+                    }
+                    else
+                    {
+                        SysConsole.WriteLine($"  {field,-35} OK  (no value in row)");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SysConsole.WriteLine($"  {field,-35} FAIL {ex.GetType().Name}: {ex.Message}");
+                }
+            }
+
+            return 0;
         }
 
         private static int CompareProblemRows(ServiceClient serviceClient)

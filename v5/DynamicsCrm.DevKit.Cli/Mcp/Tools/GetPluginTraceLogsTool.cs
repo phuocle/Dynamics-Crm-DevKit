@@ -31,37 +31,95 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "type_name = plugin class (NOT table); entity_name = primaryentity. " +
             "For async failures → get_system_jobs.")]
         public CallToolResult get_plugin_trace_logs(
-            [Description(
-                "plugintracelog GUID → detail. Empty = list."
-            )] string record_id = "",
-            [Description(
-                "Plugin type name (contains). NOT table name."
-            )] string type_name = "",
-            [Description(
-                "Primary entity Display/logical name."
-            )] string entity_name = "",
-            [Description(
-                "SDK message: Create, Update, Delete, etc."
-            )] string message_name = "",
-            [Description(
-                "'sync' / 'async'. Empty = both."
-            )] string mode = "",
-            [Description(
-                "GUID. Trace one request across logs."
-            )] string correlation_id = "",
-            [Description(
-                "0 = 60 min default. Max 43200 (30 days)."
-            )] int minutes_ago = 0,
-            [Description(
-                "Default 50. Max 200."
-            )] int max_records = 50)
+            [Description("plugintracelog GUID → detail. Empty = list.")] string record_id = "",
+            [Description("Plugin type name (contains). NOT table name.")] string type_name = "",
+            [Description("Primary entity Display/logical name.")] string entity_name = "",
+            [Description("SDK message: Create, Update, Delete, etc.")] string message_name = "",
+            [Description("'sync' / 'async'. Empty = both.")] string mode = "",
+            [Description("GUID. Trace one request across logs.")] string correlation_id = "",
+            [Description("0 = 60 min default. Max 43200 (30d).")] int minutes_ago = 0,
+            [Description("Default 50. Max 200.")] int max_records = 50)
         {
             try
             {
+                // ── Validation ──────────────────────────────────────────────
                 if (!string.IsNullOrWhiteSpace(record_id))
-                    return HandleDetail(record_id);
+                {
+                    // Detail mode
+                    if (!Guid.TryParse(record_id.Trim(), out var detailId))
+                        return Error($"'{record_id}' is not a valid GUID. Use a plugintracelog ID from list mode.");
 
-                return HandleList(type_name, entity_name, minutes_ago, correlation_id, message_name, mode, max_records);
+                    var detailEntity = _serviceClient.Retrieve("plugintracelog", detailId, new ColumnSet(true));
+                    var detailEntry = BuildEntry(detailEntity, includeDetail: true);
+                    var detailStructured = new GetPluginTraceLogsResult
+                    {
+                        Mode = "detail",
+                        TotalCount = 1,
+                        Traces = [detailEntry]
+                    };
+                    return Success(BuildDetailText(detailEntry), detailStructured);
+                }
+
+                // List mode
+                if (!string.IsNullOrWhiteSpace(mode))
+                {
+                    var modeLower = mode.Trim().ToLowerInvariant();
+                    if (modeLower != "sync" && modeLower != "synchronous" && modeLower != "async" && modeLower != "asynchronous")
+                        return Error($"Invalid mode '{mode.Trim()}'. Use 'sync' or 'async'.");
+                }
+
+                if (!string.IsNullOrWhiteSpace(correlation_id) && !Guid.TryParse(correlation_id.Trim(), out _))
+                    return Error($"'{correlation_id.Trim()}' is not a valid GUID for correlation_id.");
+
+                if (minutes_ago < 0) minutes_ago = 60;
+                if (minutes_ago == 0) minutes_ago = 60;
+                if (minutes_ago > 43200) minutes_ago = 43200;
+                if (max_records <= 0) max_records = 50;
+                if (max_records > 200) max_records = 200;
+
+                string primaryEntityLogical = null;
+                if (!string.IsNullOrWhiteSpace(entity_name))
+                {
+                    var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_plugin_trace_logs");
+                    if (!resolved.IsSuccess)
+                        return Error($"entity_name '{entity_name.Trim()}': {resolved.Error}");
+                    primaryEntityLogical = resolved.Value.LogicalName;
+                }
+
+                // ── Fetch ───────────────────────────────────────────────────
+                var fetchXml = BuildListFetchXml(type_name, primaryEntityLogical, minutes_ago, correlation_id, message_name, mode, max_records);
+                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+
+                var timeScope = FormatTimeScope(minutes_ago);
+
+                if (result.Entities.Count == 0)
+                {
+                    var emptyStructured = new GetPluginTraceLogsResult
+                    {
+                        Mode = "list",
+                        TotalCount = 0,
+                        TimeScope = timeScope,
+                        EntityName = NullIfEmpty(primaryEntityLogical),
+                        Traces = null
+                    };
+                    return Success($"[Success] 0 plugin trace logs ({timeScope}).", emptyStructured);
+                }
+
+                // ── Build entries ───────────────────────────────────────────
+                var traces = new List<PluginTraceLogEntry>(result.Entities.Count);
+                foreach (var e in result.Entities)
+                    traces.Add(BuildEntry(e, includeDetail: false));
+
+                var structured = new GetPluginTraceLogsResult
+                {
+                    Mode = "list",
+                    TotalCount = result.Entities.Count,
+                    TimeScope = timeScope,
+                    EntityName = NullIfEmpty(primaryEntityLogical),
+                    Traces = traces
+                };
+
+                return Success(BuildListText(structured.TotalCount, timeScope, primaryEntityLogical), structured);
             }
             catch (Exception ex)
             {
@@ -69,65 +127,44 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private CallToolResult HandleList(string typeName, string entityName, int minutesAgo, string correlationId, string messageName, string mode, int maxRecords)
+        // ── Entry builder (shared by list + detail) ───────────────────────────
+        // Fields verified by Program.cs --probe-trace:
+        //   mode=OptionSetValue(0=Sync,1=Async) → FormattedValues["mode"]
+        //   operationtype=OptionSetValue(0=Unknown,1=Plug-in,2=Workflow Activity) → FormattedValues["operationtype"]
+        //   issystemcreated=Boolean → FormattedValues["issystemcreated"]
+        //   depth=int, performanceexecutionduration=int
+        //   correlationid/pluginstepid/requestid=Guid
+        //   messageblock/exceptiondetails=Memo (detail only)
+
+        private static PluginTraceLogEntry BuildEntry(Entity e, bool includeDetail)
         {
-            if (!string.IsNullOrWhiteSpace(mode))
+            var entry = new PluginTraceLogEntry
             {
-                var modeLower = mode.Trim().ToLowerInvariant();
-                if (modeLower != "sync" && modeLower != "synchronous" && modeLower != "async" && modeLower != "asynchronous")
-                    return Error($"Error: Invalid mode '{mode.Trim()}'. Use 'sync' or 'async'.");
+                Id = e.Id.ToString(),
+                TypeName = e.GetAttributeValue<string>("typename") ?? "",
+                MessageName = NullIfEmpty(e.GetAttributeValue<string>("messagename")),
+                PrimaryEntity = NullIfEmpty(e.GetAttributeValue<string>("primaryentity")),
+                Mode = NullIfEmpty(e.FormattedValues.Contains("mode") ? e.FormattedValues["mode"] : null),
+                OperationType = NullIfEmpty(e.FormattedValues.Contains("operationtype") ? e.FormattedValues["operationtype"] : null),
+                Depth = e.GetAttributeValue<int?>("depth"),
+                DurationMs = e.GetAttributeValue<int?>("performanceexecutionduration"),
+                CorrelationId = e.GetAttributeValue<Guid?>("correlationid")?.ToString(),
+                PluginStepId = e.GetAttributeValue<Guid?>("pluginstepid")?.ToString(),
+                RequestId = e.GetAttributeValue<Guid?>("requestid")?.ToString(),
+                IsSystemCreated = NullIfEmpty(e.FormattedValues.Contains("issystemcreated") ? e.FormattedValues["issystemcreated"] : null),
+                CreatedOn = e.GetAttributeValue<DateTime?>("createdon")?.ToString("yyyy-MM-dd HH:mm:ss")
+            };
+
+            if (includeDetail)
+            {
+                entry.MessageBlock = NullIfEmpty(e.GetAttributeValue<string>("messageblock"));
+                entry.ExceptionDetails = NullIfEmpty(e.GetAttributeValue<string>("exceptiondetails"));
             }
 
-            if (!string.IsNullOrWhiteSpace(correlationId) && !Guid.TryParse(correlationId.Trim(), out _))
-                return Error($"Error: '{correlationId.Trim()}' is not a valid GUID for correlation_id.");
-
-            if (minutesAgo <= 0) minutesAgo = 60;
-            if (minutesAgo > 43200) minutesAgo = 43200;
-            if (maxRecords <= 0) maxRecords = 50;
-            if (maxRecords > 200) maxRecords = 200;
-
-            var primaryEntity = ResolvePrimaryEntity(entityName);
-            if (!string.IsNullOrEmpty(primaryEntity.Error))
-                return Error(primaryEntity.Error);
-
-            var fetchXml = BuildListFetchXml(typeName, primaryEntity.LogicalName, minutesAgo, correlationId, messageName, mode, maxRecords);
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-
-            if (result.Entities.Count == 0)
-            {
-                var emptyResult = new GetPluginTraceLogsResult
-                {
-                    Mode = "list",
-                    TotalCount = 0,
-                    Traces = []
-                };
-                var text = FormatNoResults(typeName, primaryEntity.LogicalName, minutesAgo, correlationId, messageName, mode);
-                return Success(text, emptyResult);
-            }
-
-            return FormatListResults(result.Entities, minutesAgo);
+            return entry;
         }
 
-        private CallToolResult HandleDetail(string recordId)
-        {
-            if (!Guid.TryParse(recordId.Trim(), out var id))
-                return Error($"Error: '{recordId}' is not a valid GUID. Use a plugintracelog ID from list mode.");
-
-            var entity = _serviceClient.Retrieve("plugintracelog", id, new ColumnSet(true));
-            return FormatDetailResult(entity);
-        }
-
-        private (string LogicalName, string Error) ResolvePrimaryEntity(string entityName)
-        {
-            if (string.IsNullOrWhiteSpace(entityName))
-                return (null, null);
-
-            var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "get_plugin_trace_logs");
-            if (!resolved.IsSuccess)
-                return (null, $"Error: entity_name '{entityName.Trim()}': {resolved.Error}");
-
-            return (resolved.Value.LogicalName, null);
-        }
+        // ── FetchXML builder ──────────────────────────────────────────────────
 
         private static string BuildListFetchXml(string typeName, string primaryEntity, int minutesAgo, string correlationId, string messageName, string mode, int maxRecords)
         {
@@ -139,9 +176,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.Append("<attribute name='messagename'/>");
             sb.Append("<attribute name='primaryentity'/>");
             sb.Append("<attribute name='mode'/>");
+            sb.Append("<attribute name='operationtype'/>");
             sb.Append("<attribute name='depth'/>");
             sb.Append("<attribute name='performanceexecutionduration'/>");
             sb.Append("<attribute name='correlationid'/>");
+            sb.Append("<attribute name='pluginstepid'/>");
+            sb.Append("<attribute name='requestid'/>");
+            sb.Append("<attribute name='issystemcreated'/>");
             sb.Append("<attribute name='createdon'/>");
             sb.Append("<filter type='and'>");
             var sinceUtc = DateTime.UtcNow.AddMinutes(-minutesAgo).ToString("yyyy-MM-ddTHH:mm:ssZ");
@@ -161,14 +202,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(mode))
             {
-                var modeValue = mode.Trim().ToLowerInvariant() switch
-                {
-                    "sync" or "synchronous" => "0",
-                    "async" or "asynchronous" => "1",
-                    _ => null
-                };
-                if (modeValue != null)
-                    sb.Append($"<condition attribute='mode' operator='eq' value='{modeValue}'/>");
+                var modeLower = mode.Trim().ToLowerInvariant();
+                var modeValue = modeLower == "sync" || modeLower == "synchronous" ? 0 : 1;
+                sb.Append($"<condition attribute='mode' operator='eq' value='{modeValue}'/>");
             }
 
             sb.Append("</filter>");
@@ -178,151 +214,43 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return sb.ToString();
         }
 
-        private static string FormatNoResults(string typeName, string primaryEntity, int minutesAgo, string correlationId, string messageName, string mode)
+        // ── Text builders (1 line, concise) ───────────────────────────────────
+
+        private static string BuildListText(int count, string timeScope, string primaryEntity)
         {
-            var sb = new StringBuilder(256);
-            sb.AppendLine("[PluginTraceLogs] 0 logs found");
-
-            var filters = new List<string>();
-            if (!string.IsNullOrWhiteSpace(typeName))
-                filters.Add($"typename contains \"{typeName}\"");
-            if (!string.IsNullOrWhiteSpace(primaryEntity))
-                filters.Add($"primaryentity = \"{primaryEntity}\"");
-            if (!string.IsNullOrWhiteSpace(correlationId))
-                filters.Add($"correlationid = \"{correlationId}\"");
-            if (!string.IsNullOrWhiteSpace(messageName))
-                filters.Add($"message = \"{messageName}\"");
-            if (!string.IsNullOrWhiteSpace(mode))
-                filters.Add($"mode = \"{mode}\"");
-            filters.Add($"last {minutesAgo} minutes");
-
-            sb.AppendLine($"Filters: {string.Join(", ", filters)}");
-            sb.AppendLine("Tip: Check if Plugin Trace Log is enabled in System Settings > Customization");
-            return sb.ToString();
+            var word = count == 1 ? "log" : "logs";
+            var entityPart = string.IsNullOrWhiteSpace(primaryEntity) ? "" : $" on {primaryEntity}";
+            return $"[Success] {count} plugin trace {word}{entityPart} ({timeScope}).";
         }
 
-        private CallToolResult FormatListResults(DataCollection<Entity> entities, int minutesAgo)
-        {
-            var traces = new List<PluginTraceLogEntry>(entities.Count);
-
-            foreach (var e in entities)
-            {
-                var typeName = e.GetAttributeValue<string>("typename") ?? "";
-                var msgName = e.GetAttributeValue<string>("messagename") ?? "";
-                var entity = e.GetAttributeValue<string>("primaryentity") ?? "";
-                var modeValue = e.GetAttributeValue<OptionSetValue>("mode");
-                var modeStr = modeValue?.Value == 0 ? "Sync" : modeValue?.Value == 1 ? "Async" : "";
-                var depth = e.GetAttributeValue<int?>("depth") ?? 0;
-                var duration = e.GetAttributeValue<int?>("performanceexecutionduration");
-                var durationStr = duration.HasValue ? $"{duration}ms" : "";
-                var created = e.GetAttributeValue<DateTime?>("createdon");
-                var createdStr = created?.ToString("yyyy-MM-dd HH:mm:ss") ?? "";
-                var correlationId = e.GetAttributeValue<Guid?>("correlationid");
-
-                traces.Add(new PluginTraceLogEntry
-                {
-                    Id = e.Id.ToString(),
-                    TypeName = typeName,
-                    MessageName = NullIfEmpty(msgName),
-                    PrimaryEntity = NullIfEmpty(entity),
-                    Mode = NullIfEmpty(modeStr),
-                    Depth = depth,
-                    Duration = NullIfEmpty(durationStr),
-                    CorrelationId = correlationId?.ToString(),
-                    CreatedOn = NullIfEmpty(createdStr)
-                });
-            }
-
-            var structured = new GetPluginTraceLogsResult
-            {
-                Mode = "list",
-                TotalCount = entities.Count,
-                Traces = traces
-            };
-
-            return Success(BuildCompactListText(structured, minutesAgo), structured);
-        }
-
-        private CallToolResult FormatDetailResult(Entity e)
-        {
-            var typeName = e.GetAttributeValue<string>("typename") ?? "";
-            var msgName = e.GetAttributeValue<string>("messagename") ?? "";
-            var entity = e.GetAttributeValue<string>("primaryentity") ?? "";
-            var modeValue = e.GetAttributeValue<OptionSetValue>("mode");
-            var modeStr = modeValue?.Value == 0 ? "Synchronous" : modeValue?.Value == 1 ? "Asynchronous" : "";
-            var depth = e.GetAttributeValue<int?>("depth") ?? 0;
-            var duration = e.GetAttributeValue<int?>("performanceexecutionduration");
-            var durationStr = duration.HasValue ? $"{duration}ms" : "";
-            var correlationId = e.GetAttributeValue<Guid?>("correlationid");
-            var created = e.GetAttributeValue<DateTime?>("createdon");
-            var messageBlock = e.GetAttributeValue<string>("messageblock") ?? "";
-            var exceptionDetails = e.GetAttributeValue<string>("exceptiondetails") ?? "";
-
-            var entry = new PluginTraceLogEntry
-            {
-                Id = e.Id.ToString(),
-                TypeName = typeName,
-                MessageName = NullIfEmpty(msgName),
-                PrimaryEntity = NullIfEmpty(entity),
-                Mode = NullIfEmpty(modeStr),
-                Depth = depth,
-                Duration = NullIfEmpty(durationStr),
-                CorrelationId = correlationId?.ToString(),
-                CreatedOn = created?.ToString("yyyy-MM-dd HH:mm:ss"),
-                MessageBlock = NullIfEmpty(messageBlock),
-                ExceptionDetails = NullIfEmpty(exceptionDetails)
-            };
-
-            var structured = new GetPluginTraceLogsResult
-            {
-                Mode = "detail",
-                TotalCount = 1,
-                Traces = [entry]
-            };
-
-            return Success(BuildCompactDetailText(entry), structured);
-        }
-
-        private static string BuildCompactListText(GetPluginTraceLogsResult result, int minutesAgo)
+        private static string BuildDetailText(PluginTraceLogEntry entry)
         {
             var sb = new StringBuilder(128);
-            sb.Append($"[PluginTraceLogs] {result.TotalCount} logs (last {minutesAgo} min)");
-            if (result.Traces is { Count: > 0 })
-            {
-                var first = result.Traces[0];
-                if (!string.IsNullOrWhiteSpace(first.TypeName))
-                    sb.Append($". First: {first.TypeName}");
-                if (!string.IsNullOrWhiteSpace(first.MessageName))
-                    sb.Append($"/{first.MessageName}");
-                if (!string.IsNullOrWhiteSpace(first.PrimaryEntity))
-                    sb.Append($" on {first.PrimaryEntity}");
-            }
-            sb.Append('.');
-            return sb.ToString();
-        }
-
-        private static string BuildCompactDetailText(PluginTraceLogEntry entry)
-        {
-            var sb = new StringBuilder(256);
-            sb.Append($"[PluginTraceLog] {entry.TypeName}");
+            sb.Append($"[Success] {entry.Id}");
             if (!string.IsNullOrWhiteSpace(entry.MessageName))
-                sb.Append($". Message: {entry.MessageName}");
+                sb.Append($". {entry.MessageName}");
             if (!string.IsNullOrWhiteSpace(entry.PrimaryEntity))
-                sb.Append($". Entity: {entry.PrimaryEntity}");
+                sb.Append($" on {entry.PrimaryEntity}");
             if (!string.IsNullOrWhiteSpace(entry.Mode))
-                sb.Append($". Mode: {entry.Mode}");
-            sb.Append($". Depth: {entry.Depth}");
-            if (!string.IsNullOrWhiteSpace(entry.Duration))
-                sb.Append($". Duration: {entry.Duration}");
-            if (!string.IsNullOrWhiteSpace(entry.CorrelationId))
-                sb.Append($". CorrelationId: {entry.CorrelationId}");
-            if (!string.IsNullOrWhiteSpace(entry.CreatedOn))
-                sb.Append($". Created: {entry.CreatedOn}");
+                sb.Append($" ({entry.Mode})");
             sb.Append(string.IsNullOrWhiteSpace(entry.MessageBlock) ? ". Trace: none" : ". Trace: available");
             sb.Append(string.IsNullOrWhiteSpace(entry.ExceptionDetails) ? ". Exception: none" : ". Exception: available");
             sb.Append('.');
             return sb.ToString();
         }
+
+        // ── Time scope formatter ──────────────────────────────────────────────
+
+        private static string FormatTimeScope(int minutesAgo)
+        {
+            if (minutesAgo >= 1440 && minutesAgo % 1440 == 0)
+                return $"last {minutesAgo / 1440}d";
+            if (minutesAgo >= 60 && minutesAgo % 60 == 0)
+                return $"last {minutesAgo / 60}h";
+            return $"last {minutesAgo}min";
+        }
+
+        // ── Utils ─────────────────────────────────────────────────────────────
 
         private static string NullIfEmpty(string value) =>
             string.IsNullOrWhiteSpace(value) ? null : value.Trim();
