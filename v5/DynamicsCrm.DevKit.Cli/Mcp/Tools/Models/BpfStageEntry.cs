@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
@@ -9,15 +8,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string StageId { get; set; }
 
         [JsonPropertyName("stageName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string StageName { get; set; }
 
         [JsonPropertyName("stageCategory")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string StageCategory { get; set; }
 
         [JsonPropertyName("primaryEntity")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string PrimaryEntity { get; set; }
 
         [JsonIgnore]
-        public int StageCategoryValue { get; set; }
+        public int? StageCategoryValue { get; set; }
     }
 }

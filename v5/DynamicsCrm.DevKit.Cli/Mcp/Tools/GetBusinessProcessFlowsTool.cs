@@ -1,4 +1,4 @@
-using Microsoft.PowerPlatform.Dataverse.Client;
+﻿using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
@@ -40,73 +39,170 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetBpfsResult)),
         Description(
-            "Business Process Flows (BPFs) + stages. Each BPF auto-creates its own Dataverse entity (uniqueName = logical name). bpf_id empty = list. Set = detail with stages. BPFs can span multiple entities (Lead → Opportunity); each stage has its own primaryEntity.\n\n" +
-
+            "Business Process Flows (BPFs) + stages. Each BPF auto-creates its own Dataverse entity (uniqueName = logical name). bpf_id empty = list. Set = detail with stages. BPFs can span multiple entities (Lead -> Opportunity); each stage has its own primaryEntity.\n\n" +
             "WHEN TO USE:\n" +
             "- Inspect stage sequence + primary entities for a BPF\n" +
             "- Find BPFs bound to an entity (entity_name filter)\n" +
             "- Resolve BPF unique/logical name for the auto-created entity\n\n" +
-
-            "Fuzzy on bpf_name: 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto-detail.")]
+            "RELATED TOOLS:\n" +
+            "- get_workflows -> classic workflow definitions (background async + realtime sync)\n" +
+            "- get_business_rules -> client-side business rules\n" +
+            "- get_flows -> Power Automate cloud flows")]
         public CallToolResult get_business_process_flows(
-            [Description("GUID → detail. Empty = list.")] string bpf_id = "",
-            [Description("Name contains. 1 match → auto-detail.")] string bpf_name = "",
+            [Description("GUID -> detail. Empty = list.")] string bpf_id = "",
+            [Description("Name contains. 1 match -> auto-detail.")] string bpf_name = "",
             [Description("Primary entity filter, Display Name or logical name (e.g. 'Lead' or 'lead').")] string entity_name = "",
             [Description("'active' / 'draft' / 'all'.")] string status = "active",
             [Description("List only. Detail always includes.")] bool include_stages = false,
-            [Description("1–250.")] int max_records = 50)
+            [Description("1-250.")] int max_records = 50)
         {
-            if (string.IsNullOrWhiteSpace(status))
-                status = "active";
-            else
-                status = status.Trim().ToLowerInvariant();
-
-            if (status != "active" && status != "draft" && status != "all")
-                return Error($"Error: Invalid status '{status}'. Use 'active', 'draft', or 'all'.");
-
-            if (max_records <= 0) max_records = 50;
-            if (max_records > 250) max_records = 250;
-
             try
             {
-                if (!string.IsNullOrWhiteSpace(bpf_id))
-                {
-                    if (!Guid.TryParse(bpf_id.Trim(), out _))
-                        return Error($"Error: '{bpf_id.Trim()}' is not a valid GUID.");
+                // -- Validate --
+                var normalizedStatus = (status ?? "").Trim().ToLowerInvariant();
+                if (string.IsNullOrEmpty(normalizedStatus))
+                    normalizedStatus = "active";
 
-                    return GetDetail(bpf_id.Trim());
-                }
+                if (normalizedStatus != "active" && normalizedStatus != "draft" && normalizedStatus != "all")
+                    return Error($"Invalid status '{status}'. Use 'active', 'draft', or 'all'.");
 
+                if (max_records <= 0) max_records = 50;
+                if (max_records > 250) max_records = 250;
+
+                if (!string.IsNullOrWhiteSpace(bpf_id) && !Guid.TryParse(bpf_id.Trim(), out _))
+                    return Error($"'{bpf_id.Trim()}' is not a valid GUID.");
+
+                // -- Resolve entity_name -> logical name --
+                string resolvedEntityName = null;
                 if (!string.IsNullOrWhiteSpace(entity_name))
                 {
                     var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_business_process_flows");
                     if (!entityResult.IsSuccess)
-                        return Error($"Error: entity_name '{entity_name.Trim()}': {entityResult.Error}");
-                    entity_name = entityResult.Value.LogicalName;
+                        return Error($"entity_name '{entity_name.Trim()}': {entityResult.Error}");
+                    resolvedEntityName = entityResult.Value.LogicalName;
                 }
 
-                var bpfs = QueryBpfs(bpf_name, entity_name, status, max_records);
+                // -- Detail mode by ID --
+                if (!string.IsNullOrWhiteSpace(bpf_id))
+                    return BuildDetail(bpf_id.Trim());
+
+                // -- List mode --
+                var bpfs = QueryBpfs(bpf_name, resolvedEntityName, normalizedStatus, max_records);
 
                 if (bpfs.Count == 0)
                 {
-                    return Success("0 Business Process Flows found.", new GetBpfsResult
-                    {
-                        TotalCount = 0,
-                        Bpfs = []
-                    });
+                    var entityLabel = resolvedEntityName != null ? $" for '{resolvedEntityName}'" : "";
+                    var statusLabel = normalizedStatus == "all" ? "" : $" {normalizedStatus}";
+                    return Success(
+                        $"[Success]{statusLabel} BPFs{entityLabel}: 0 found.",
+                        new GetBpfsResult
+                        {
+                            Mode = "list",
+                            TotalCount = 0,
+                            EntityName = resolvedEntityName
+                        });
                 }
 
                 // Auto-detail if bpf_name matches exactly 1
                 if (!string.IsNullOrWhiteSpace(bpf_name) && bpfs.Count == 1)
-                    return GetDetail(bpfs[0].Id.ToString());
+                    return BuildDetail(bpfs[0].Id.ToString());
 
-                return FormatList(bpfs, status, include_stages);
+                return BuildList(bpfs, resolvedEntityName, normalizedStatus, include_stages);
             }
             catch (Exception ex)
             {
                 return ThrowException(ex);
             }
         }
+
+        // -- List mode --
+
+        private CallToolResult BuildList(List<Entity> entities, string entityName, string status, bool includeStages)
+        {
+            var bpfs = entities.Select(MapBpfEntry).ToList();
+
+            // Get stage counts
+            var bpfIds = entities.Select(e => e.Id.ToString()).ToList();
+            var stageCounts = GetStageCounts(bpfIds);
+            foreach (var bpf in bpfs)
+                bpf.StageCount = stageCounts.TryGetValue(bpf.WorkflowId, out var count) ? count : 0;
+
+            // Optionally include full stages
+            if (includeStages)
+            {
+                foreach (var bpf in bpfs)
+                {
+                    var stages = GetStages(bpf.WorkflowId);
+                    if (stages.Count > 0)
+                        bpf.Stages = stages;
+                }
+            }
+
+            var entityLabel = entityName != null ? $" for '{entityName}'" : "";
+            var statusLabel = status == "all" ? "" : $" {status}";
+            var word = bpfs.Count == 1 ? "BPF" : "BPFs";
+
+            return Success(
+                $"[Success]{statusLabel} {bpfs.Count} {word}{entityLabel}.",
+                new GetBpfsResult
+                {
+                    Mode = "list",
+                    TotalCount = bpfs.Count,
+                    EntityName = entityName,
+                    Bpfs = bpfs
+                });
+        }
+
+        // -- Detail mode --
+
+        private CallToolResult BuildDetail(string bpfId)
+        {
+            var fetchXml = $@"<fetch top='1'>
+  <entity name='workflow'>
+    <attribute name='workflowid'/>
+    <attribute name='name'/>
+    <attribute name='uniquename'/>
+    <attribute name='description'/>
+    <attribute name='primaryentity'/>
+    <attribute name='statecode'/>
+    <attribute name='statuscode'/>
+    <attribute name='ownerid'/>
+    <attribute name='ismanaged'/>
+    <attribute name='businessprocesstype'/>
+    <attribute name='createdon'/>
+    <attribute name='modifiedon'/>
+    <attribute name='modifiedby'/>
+    <filter>
+      <condition attribute='workflowid' operator='eq' value='{EscapeXml(bpfId)}'/>
+      <condition attribute='category' operator='eq' value='4'/>
+    </filter>
+  </entity>
+</fetch>";
+
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (result.Entities.Count == 0)
+                return Error($"Business Process Flow '{bpfId}' not found (or not a BPF workflow).",
+                    "Use get_business_process_flows without bpf_id to list available BPFs.");
+
+            var entity = result.Entities[0];
+            var entry = MapBpfEntry(entity);
+
+            var stages = GetStages(bpfId);
+            entry.StageCount = stages.Count;
+            if (stages.Count > 0)
+                entry.Stages = stages;
+
+            return Success(
+                $"[Success] BPF '{entry.Name}': {stages.Count} stages.",
+                new GetBpfsResult
+                {
+                    Mode = "detail",
+                    TotalCount = 1,
+                    Bpf = entry
+                });
+        }
+
+        // -- Data fetchers (return data, not CallToolResult) --
 
         private List<Entity> QueryBpfs(string bpfName, string entityName, string status, int maxRecords)
         {
@@ -161,146 +257,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return entities;
         }
 
-        private CallToolResult GetDetail(string bpfId)
-        {
-            var fetchXml = $@"<fetch>
-  <entity name='workflow'>
-    <attribute name='workflowid'/>
-    <attribute name='name'/>
-    <attribute name='uniquename'/>
-    <attribute name='description'/>
-    <attribute name='primaryentity'/>
-    <attribute name='statecode'/>
-    <attribute name='statuscode'/>
-    <attribute name='ownerid'/>
-    <attribute name='ismanaged'/>
-    <attribute name='businessprocesstype'/>
-    <attribute name='createdon'/>
-    <attribute name='modifiedon'/>
-    <attribute name='modifiedby'/>
-    <filter>
-      <condition attribute='workflowid' operator='eq' value='{EscapeXml(bpfId)}'/>
-      <condition attribute='category' operator='eq' value='4'/>
-    </filter>
-  </entity>
-</fetch>";
-
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            if (result.Entities.Count == 0)
-                return Error($"Error: Business Process Flow '{bpfId}' not found (or not a BPF workflow).");
-
-            var entity = result.Entities[0];
-            var entry = MapBpfEntry(entity);
-
-            var stages = GetStages(bpfId);
-            entry.StageCount = stages.Count;
-            entry.Stages = stages;
-
-            var sb = new StringBuilder(512);
-            sb.AppendLine($"[Business Process Flow] {entry.Name}");
-            sb.AppendLine();
-            sb.AppendLine($"workflowId: {entry.WorkflowId}");
-            sb.AppendLine($"name: {entry.Name}");
-            sb.AppendLine($"uniqueName: {entry.UniqueName}");
-            if (!string.IsNullOrEmpty(entry.Description))
-                sb.AppendLine($"description: {entry.Description}");
-            sb.AppendLine($"primaryEntity: {entry.PrimaryEntity}");
-            sb.AppendLine($"status: {entry.Status}");
-            sb.AppendLine($"businessProcessType: {entry.BusinessProcessType}");
-            sb.AppendLine($"isManaged: {(entry.IsManaged ? "Yes" : "No")}");
-            sb.AppendLine($"owner: {entry.Owner}");
-            sb.AppendLine($"createdOn: {entry.CreatedOn}");
-            sb.AppendLine($"modifiedOn: {entry.ModifiedOn}");
-            if (!string.IsNullOrEmpty(entry.ModifiedBy))
-                sb.AppendLine($"modifiedBy: {entry.ModifiedBy}");
-
-            sb.AppendLine();
-
-            if (stages.Count > 0)
-            {
-                var stageWord = stages.Count == 1 ? "stage" : "stages";
-                sb.AppendLine($"[Stages] {stages.Count} {stageWord} (ordered)");
-                sb.AppendLine();
-                sb.AppendLine("#\tstageName\tstageCategory\tprimaryEntity");
-                for (var i = 0; i < stages.Count; i++)
-                {
-                    var s = stages[i];
-                    sb.AppendLine($"{i + 1}\t{EscapeTab(s.StageName)}\t{s.StageCategory}\t{s.PrimaryEntity}");
-                }
-            }
-            else
-            {
-                sb.AppendLine("[Stages] 0");
-            }
-
-            return Success(sb.ToString(), new GetBpfsResult
-            {
-                TotalCount = 1,
-                Bpfs = [entry]
-            });
-        }
-
-        private CallToolResult FormatList(List<Entity> entities, string status, bool includeStages)
-        {
-            var bpfs = entities.Select(MapBpfEntry).ToList();
-
-            // Get stage counts
-            var bpfIds = entities.Select(e => e.Id.ToString()).ToList();
-            var stageCounts = GetStageCounts(bpfIds);
-            foreach (var bpf in bpfs)
-            {
-                bpf.StageCount = stageCounts.TryGetValue(bpf.WorkflowId, out var count) ? count : 0;
-            }
-
-            // Optionally include full stages
-            if (includeStages)
-            {
-                foreach (var bpf in bpfs)
-                {
-                    bpf.Stages = GetStages(bpf.WorkflowId);
-                }
-            }
-
-            var statusLabel = status == "all" ? "" : $" {status}";
-            var countWord = bpfs.Count == 1 ? "BPF" : "BPFs";
-
-            var sb = new StringBuilder(bpfs.Count * 150 + 256);
-            sb.AppendLine($"[Business Process Flows] {bpfs.Count}{statusLabel} {countWord}");
-            sb.AppendLine();
-            sb.AppendLine("#\tname\tprimaryEntity\tuniqueName\tstageCount\tstatus\tisManaged\tmodifiedOn");
-
-            for (var i = 0; i < bpfs.Count; i++)
-            {
-                var b = bpfs[i];
-                sb.AppendLine($"{i + 1}\t{EscapeTab(b.Name)}\t{b.PrimaryEntity}\t{b.UniqueName}\t{b.StageCount}\t{b.Status}\t{(b.IsManaged ? "Yes" : "No")}\t{b.ModifiedOn}");
-            }
-
-            if (includeStages)
-            {
-                sb.AppendLine();
-                foreach (var b in bpfs)
-                {
-                    if (b.Stages != null && b.Stages.Count > 0)
-                    {
-                        sb.AppendLine($"[{EscapeTab(b.Name)}] {b.Stages.Count} stages");
-                        sb.AppendLine("#\tstageName\tstageCategory\tprimaryEntity");
-                        for (var j = 0; j < b.Stages.Count; j++)
-                        {
-                            var s = b.Stages[j];
-                            sb.AppendLine($"{j + 1}\t{EscapeTab(s.StageName)}\t{s.StageCategory}\t{s.PrimaryEntity}");
-                        }
-                        sb.AppendLine();
-                    }
-                }
-            }
-
-            return Success(sb.ToString(), new GetBpfsResult
-            {
-                TotalCount = bpfs.Count,
-                Bpfs = bpfs
-            });
-        }
-
         private List<BpfStageEntry> GetStages(string bpfWorkflowId)
         {
             var fetchXml = $@"<fetch>
@@ -322,12 +278,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return new BpfStageEntry
                 {
                     StageId = e.Id.ToString(),
-                    StageName = e.GetAttributeValue<string>("stagename") ?? "",
+                    StageName = NullIfEmpty(e.GetAttributeValue<string>("stagename")),
                     StageCategory = categoryValue.HasValue && StageCategoryMap.TryGetValue(categoryValue.Value, out var label)
                         ? label
                         : categoryValue.HasValue ? $"Custom ({categoryValue.Value})" : "Unknown",
-                    StageCategoryValue = categoryValue ?? int.MaxValue,
-                    PrimaryEntity = e.GetAttributeValue<string>("primaryentitytypecode") ?? ""
+                    PrimaryEntity = NullIfEmpty(e.GetAttributeValue<string>("primaryentitytypecode")),
+                    StageCategoryValue = categoryValue
                 };
             })
             .OrderBy(s => s.StageCategoryValue)
@@ -367,6 +323,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return counts;
         }
 
+        // -- Mappers --
+
         private static BpfEntry MapBpfEntry(Entity e)
         {
             var stateValue = e.GetAttributeValue<OptionSetValue>("statecode")?.Value;
@@ -376,18 +334,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 WorkflowId = e.Id.ToString(),
                 Name = e.GetAttributeValue<string>("name") ?? "",
-                UniqueName = e.GetAttributeValue<string>("uniquename") ?? "",
+                UniqueName = NullIfEmpty(e.GetAttributeValue<string>("uniquename")),
                 Description = SanitizeDescription(e.GetAttributeValue<string>("description")),
                 PrimaryEntity = e.GetAttributeValue<string>("primaryentity") ?? "",
                 Status = stateValue == 1 ? "Active" : "Draft",
                 BusinessProcessType = bptValue == 1 ? "Task Flow" : "Business Flow",
                 IsManaged = e.GetAttributeValue<bool>("ismanaged"),
                 Owner = e.GetAttributeValue<EntityReference>("ownerid")?.Name ?? "",
-                CreatedOn = e.GetAttributeValue<DateTime?>("createdon")?.ToString("yyyy-MM-dd") ?? "",
-                ModifiedOn = e.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd") ?? "",
+                CreatedOn = e.GetAttributeValue<DateTime?>("createdon")?.ToString("yyyy-MM-dd"),
+                ModifiedOn = e.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd"),
                 ModifiedBy = e.GetAttributeValue<EntityReference>("modifiedby")?.Name
             };
         }
+
+        // -- Utils --
 
         private static string SanitizeDescription(string description)
         {
@@ -399,10 +359,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return trimmed;
         }
 
+        private static string NullIfEmpty(string value) =>
+            string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+
         private static string EscapeXml(string value) =>
             value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("\"", "&quot;");
-
-        private static string EscapeTab(string value) =>
-            value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
     }
 }

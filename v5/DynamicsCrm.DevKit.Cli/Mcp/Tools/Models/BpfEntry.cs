@@ -12,6 +12,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string Name { get; set; }
 
         [JsonPropertyName("uniqueName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string UniqueName { get; set; }
 
         [JsonPropertyName("description")]
@@ -34,9 +35,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string Owner { get; set; }
 
         [JsonPropertyName("createdOn")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string CreatedOn { get; set; }
 
         [JsonPropertyName("modifiedOn")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string ModifiedOn { get; set; }
 
         [JsonPropertyName("modifiedBy")]
