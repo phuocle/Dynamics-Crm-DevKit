@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+#nullable enable
 using System.Text.Json.Serialization;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
@@ -6,20 +6,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
     internal sealed class ActionParameterEntry
     {
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Name { get; set; }
 
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Type { get; set; }
 
         [JsonPropertyName("isRequired")]
         public bool IsRequired { get; set; }
 
         [JsonPropertyName("entityName")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string EntityName { get; set; }
+        public string? EntityName { get; set; }
 
         [JsonPropertyName("description")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
     }
 }

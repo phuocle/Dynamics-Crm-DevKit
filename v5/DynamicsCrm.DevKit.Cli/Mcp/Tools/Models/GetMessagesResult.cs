@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -9,11 +10,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public int TotalCount { get; set; }
 
         [JsonPropertyName("mode")]
-        public string Mode { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Mode { get; set; }
 
         [JsonPropertyName("scope")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string Scope { get; set; }
+        public string? Scope { get; set; }
 
         [JsonPropertyName("sdkMessageCount")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -25,18 +27,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("sdkMessages")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<string> SdkMessages { get; set; }
+        public List<string>? SdkMessages { get; set; }
 
         [JsonPropertyName("customActions")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<string> CustomActions { get; set; }
+        public List<string>? CustomActions { get; set; }
 
         [JsonPropertyName("messageDetail")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public SdkMessageDetail MessageDetail { get; set; }
+        public SdkMessageDetail? MessageDetail { get; set; }
 
         [JsonPropertyName("actionDetail")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public CustomActionDetail ActionDetail { get; set; }
+        public CustomActionDetail? ActionDetail { get; set; }
     }
 }

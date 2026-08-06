@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -6,10 +7,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
     internal sealed class SdkMessageDetail
     {
         [JsonPropertyName("messageId")]
-        public string MessageId { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? MessageId { get; set; }
 
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Name { get; set; }
 
         [JsonPropertyName("isActive")]
         public bool IsActive { get; set; }
@@ -19,11 +22,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("availability")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string Availability { get; set; }
+        public string? Availability { get; set; }
 
         [JsonPropertyName("supportedEntities")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<string> SupportedEntities { get; set; }
+        public List<string>? SupportedEntities { get; set; }
 
         [JsonPropertyName("pluginStepCount")]
         public int PluginStepCount { get; set; }

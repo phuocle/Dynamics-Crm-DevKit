@@ -9,8 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
@@ -43,46 +41,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [4] = "Org"
         };
 
-        private static readonly Dictionary<int, string> ArgumentTypeMap = new()
-        {
-            [0] = "Boolean",
-            [1] = "DateTime",
-            [2] = "Decimal",
-            [3] = "Entity",
-            [4] = "EntityCollection",
-            [5] = "EntityReference",
-            [6] = "Float",
-            [7] = "Integer",
-            [8] = "Money",
-            [9] = "Picklist",
-            [10] = "String",
-            [11] = "StringArray",
-            [12] = "Guid"
-        };
-
         [McpServerTool(Name = "get_messages", Title = "List SDK messages and custom actions",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetMessagesResult)),
         Description(
             "SDK messages + legacy Custom Actions (workflow-based, category=3). message_name empty = list; set = detail (params, plugin steps). " +
             "Modern Custom APIs excluded → get_custom_apis. " +
-            "entity_name='none' = global messages.")]
+            "entity_name='none' = global messages.\n\n" +
+            "WHEN TO USE:\n" +
+            "- Discover available SDK messages for an entity before writing plugin registration\n" +
+            "- Inspect a legacy Custom Action's input/output parameters from XAML\n" +
+            "- Check plugin step count registered on a specific message\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_custom_apis → modern Custom API definitions (replaces Custom Actions)\n" +
+            "- get_plugins → plugin assemblies/types/steps registered on these messages\n" +
+            "- get_workflows → classic workflow definitions (background + realtime)")]
         public async Task<CallToolResult> get_messages(
-            [Description(
-                "Entity Display/logical name. 'none'/empty = global. Ignored in detail mode."
-            )] string entity_name = "none",
-            [Description(
-                "Message/Action name → detail mode. Empty = list mode."
-            )] string message_name = "",
-            [Description(
-                "List: include Custom Actions. false = SDK only. Ignored in detail mode."
-            )] bool include_custom_actions = true)
+            [Description("Entity Display/logical name. 'none'/empty = global. Ignored in detail mode.")] string entity_name = "none",
+            [Description("Message/Action name → detail mode. Empty = list mode.")] string message_name = "",
+            [Description("List: include Custom Actions. false = SDK only. Ignored in detail mode.")] bool include_custom_actions = true)
         {
             try
             {
                 // Detail mode
                 if (!string.IsNullOrWhiteSpace(message_name))
-                    return await GetMessageDetailAsync(message_name.Trim(), entity_name);
+                    return GetMessageDetail(message_name.Trim(), entity_name);
 
                 // List mode
                 var scopeResult = ResolveEntityScope(entity_name);
@@ -99,11 +82,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private async Task<CallToolResult> GetMessageListAsync(string entityName, bool includeCustomActions)
         {
-            var normalizedScope = MessageDiscoveryHelper.NormalizeScope(entityName);
-            var text = await MessageDiscoveryHelper.GetMessageMarkdownAsync(
-                _metadataService, entityName, includeCustomActions);
+            var normalizedScope = NormalizeScope(entityName);
 
-            // Parse counts from the formatted text for structured output
             var sdkMessages = await GetSdkMessageNamesAsync(normalizedScope);
             var customActions = includeCustomActions
                 ? await GetCustomActionNamesAsync(normalizedScope)
@@ -120,11 +100,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 CustomActions = customActions.Count > 0 ? customActions : null
             };
 
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = text }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            var scopeLabel = normalizedScope == "none" ? "global" : normalizedScope;
+            return Success(
+                $"[Success] {scopeLabel}: {structured.TotalCount} messages ({sdkMessages.Count} SDK, {customActions.Count} custom actions).",
+                structured);
         }
 
         private (string Scope, string Error) ResolveEntityScope(string entityName)
@@ -135,12 +114,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "get_messages");
             if (!entityResult.IsSuccess)
-                return (null, $"Error: entity_name '{entityName.Trim()}': {entityResult.Error}");
+                return (null, $"entity_name '{entityName.Trim()}': {entityResult.Error}");
 
             return (entityResult.Value.LogicalName, null);
         }
 
-        private async Task<CallToolResult> GetMessageDetailAsync(string messageName, string entityName)
+        private CallToolResult GetMessageDetail(string messageName, string entityName)
         {
             // Step 1: Try to find as SDK message
             var sdkMsg = FindSdkMessage(messageName);
@@ -168,8 +147,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             return Error(
-                $"Error: Message or Custom Action '{messageName}' not found.\n" +
-                $"Call get_messages without message_name to list all available messages for the entity.");
+                $"Message or Custom Action '{messageName}' not found.",
+                "Call get_messages without message_name to list all available messages for the entity.");
         }
 
         private CallToolResult FormatSdkMessageDetail(Entity sdkMsg, bool isCustomOperation)
@@ -179,10 +158,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var isActive = sdkMsg.GetAttributeValue<bool?>("isactive") ?? true;
             var availability = sdkMsg.GetAttributeValue<int?>("availability") ?? 0;
 
-            // Get supported entities from sdkmessagefilter
             var supportedEntities = GetSupportedEntities(msgId);
-
-            // Count registered plugin steps
             var pluginStepCount = CountPluginSteps(msgId);
 
             var detail = new SdkMessageDetail
@@ -196,23 +172,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 PluginStepCount = pluginStepCount
             };
 
-            var label = isCustomOperation ? "Custom Action" : "SDK Message";
-            var sb = new StringBuilder(512);
-            sb.AppendLine($"[{label}] {name}");
-            sb.AppendLine();
-            sb.AppendLine($"messageId: {msgId}");
-            sb.AppendLine($"isActive: {(isActive ? "Yes" : "No")}");
-            sb.AppendLine($"availability: {detail.Availability}");
-            sb.AppendLine($"pluginSteps: {pluginStepCount}");
-
-            if (supportedEntities.Count > 0)
-            {
-                sb.AppendLine();
-                sb.AppendLine($"[Supported Entities] {supportedEntities.Count}");
-                foreach (var e in supportedEntities)
-                    sb.AppendLine($"- {e}");
-            }
-
             var structured = new GetMessagesResult
             {
                 TotalCount = 1,
@@ -220,11 +179,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 MessageDetail = detail
             };
 
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            var label = isCustomOperation ? "custom action" : "SDK message";
+            return Success(
+                $"[Success] {label} '{name}': {pluginStepCount} plugin steps, {supportedEntities.Count} supported entities.",
+                structured);
         }
 
         private CallToolResult FormatCustomActionDetail(Entity workflow, Entity sdkMsg)
@@ -240,10 +198,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var owner = workflow.GetAttributeValue<EntityReference>("ownerid")?.Name ?? "";
             var modifiedOn = workflow.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd") ?? "";
 
-            // Get input/output parameters from process entity (argumentdescription XML)
             var (inputParams, outputParams) = GetActionParameters(workflowId);
-
-            // Count plugin steps
             var pluginStepCount = sdkMsg != null ? CountPluginSteps(sdkMsg.Id) : 0;
 
             var detail = new CustomActionDetail
@@ -263,41 +218,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 PluginStepCount = pluginStepCount
             };
 
-            var sb = new StringBuilder(1024);
-            sb.AppendLine($"[Custom Action] {name}");
-            sb.AppendLine();
-            sb.AppendLine($"workflowId: {workflowId}");
-            sb.AppendLine($"uniqueName: {uniqueName}");
-            sb.AppendLine($"primaryEntity: {primaryEntity}");
-            sb.AppendLine($"scope: {detail.Scope}");
-            sb.AppendLine($"status: {detail.Status}");
-            sb.AppendLine($"isManaged: {(isManaged ? "Yes" : "No")}");
-            if (isCustomizable.HasValue)
-                sb.AppendLine($"isCustomizable: {(isCustomizable.Value ? "Yes" : "No")}");
-            sb.AppendLine($"owner: {owner}");
-            sb.AppendLine($"modifiedOn: {modifiedOn}");
-            sb.AppendLine($"pluginSteps: {pluginStepCount}");
-
-            if (inputParams.Count > 0)
-            {
-                sb.AppendLine();
-                sb.AppendLine($"[Input Parameters] {inputParams.Count}");
-                sb.AppendLine();
-                sb.AppendLine("Name\tType\tRequired\tEntityName\tDescription");
-                foreach (var p in inputParams)
-                    sb.AppendLine($"{EscapeTab(p.Name)}\t{p.Type}\t{(p.IsRequired ? "Yes" : "No")}\t{EscapeTab(p.EntityName ?? "-")}\t{EscapeTab(p.Description ?? "")}");
-            }
-
-            if (outputParams.Count > 0)
-            {
-                sb.AppendLine();
-                sb.AppendLine($"[Output Parameters] {outputParams.Count}");
-                sb.AppendLine();
-                sb.AppendLine("Name\tType\tEntityName\tDescription");
-                foreach (var p in outputParams)
-                    sb.AppendLine($"{EscapeTab(p.Name)}\t{p.Type}\t{EscapeTab(p.EntityName ?? "-")}\t{EscapeTab(p.Description ?? "")}");
-            }
-
             var structured = new GetMessagesResult
             {
                 TotalCount = 1,
@@ -305,11 +225,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ActionDetail = detail
             };
 
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            return Success(
+                $"[Success] custom action '{name}': {inputParams.Count} input params, {outputParams.Count} output params, {pluginStepCount} plugin steps.",
+                structured);
         }
 
         // ── Query helpers ────────────────────────────────────────────────────────
@@ -420,40 +338,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var inputs = new List<ActionParameterEntry>();
             var outputs = new List<ActionParameterEntry>();
 
-            // Custom Action parameters are stored in process XML (argumentdescription or clientdata)
-            // Query the workflow entity for XAML content and parse, OR query sdkmessagerequestfield/sdkmessageresponsefield
-            // More reliable: query via sdkmessage → sdkmessagepair → sdkmessagerequest/response fields
-
-            // First find the SDK message for this action
-            var fetchMsg = $@"<fetch top='1'>
-  <entity name='sdkmessage'>
-    <attribute name='sdkmessageid'/>
-    <filter>
-      <condition attribute='name' operator='eq' value='{EscapeXml(GetWorkflowUniqueName(workflowId))}'/>
-    </filter>
-  </entity>
-</fetch>";
-
-            var msgResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchMsg));
-            if (msgResult.Entities.Count == 0) return (inputs, outputs);
-
-            // Fallback: use workflow's input/output arguments from process entity
-            inputs = GetActionParametersFromProcess(workflowId, true);
-            outputs = GetActionParametersFromProcess(workflowId, false);
-
-            return (inputs, outputs);
-        }
-
-        private List<ActionParameterEntry> GetActionParametersFromProcess(Guid workflowId, bool isInput)
-        {
-            var parameters = new List<ActionParameterEntry>();
-
-            // Query workflow's XAML for argument definitions
-            // Custom Actions store their arguments in the workflow.xaml field as XAML Activity definitions
             var fetchXml = $@"<fetch top='1'>
   <entity name='workflow'>
     <attribute name='xaml'/>
-    <attribute name='clientdata'/>
     <filter>
       <condition attribute='workflowid' operator='eq' value='{workflowId}'/>
     </filter>
@@ -461,65 +348,96 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 </fetch>";
 
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            if (result.Entities.Count == 0) return parameters;
+            if (result.Entities.Count == 0) return (inputs, outputs);
 
             var xaml = result.Entities[0].GetAttributeValue<string>("xaml") ?? "";
-            if (string.IsNullOrEmpty(xaml)) return parameters;
+            if (string.IsNullOrEmpty(xaml)) return (inputs, outputs);
 
-            // Parse XAML arguments: <x:Property Name="ArgumentName" Type="InArgument(xxx)" />
-            // or <x:Property Name="ArgumentName" Type="OutArgument(xxx)" />
-            var directionPrefix = isInput ? "InArgument" : "OutArgument";
-            var inOutPrefix = isInput ? "InOutArgument" : null;
-
-            var lines = xaml.Split('\n');
-            foreach (var line in lines)
+            // XAML is typically a single line — split by <x:Property> tags instead of newlines.
+            // Each property has Name, Type (InArgument/OutArgument/InOutArgument),
+            // and optional ArgumentRequiredAttribute, ArgumentDescriptionAttribute,
+            // ArgumentEntityAttribute, ArgumentTargetAttribute inside <x:Property.Attributes>.
+            var segments = SplitXamlProperties(xaml);
+            foreach (var seg in segments)
             {
-                var trimmed = line.Trim();
-                if (!trimmed.StartsWith("<x:Property ")) continue;
-
-                // Extract Name and Type
-                var nameMatch = ExtractAttribute(trimmed, "Name");
-                var typeMatch = ExtractAttribute(trimmed, "Type");
+                var nameMatch = ExtractAttribute(seg, "Name");
+                var typeMatch = ExtractAttribute(seg, "Type");
                 if (nameMatch == null || typeMatch == null) continue;
 
-                var isMatch = typeMatch.StartsWith(directionPrefix + "(") ||
-                              (inOutPrefix != null && typeMatch.StartsWith(inOutPrefix + "("));
+                // Skip internal framework arguments
+                if (nameMatch == "InputEntities" || nameMatch == "CreatedEntities") continue;
 
-                // InOutArgument counts as both input and output
-                if (!isMatch && typeMatch.StartsWith("InOutArgument("))
-                    isMatch = true;
+                // Determine direction: InArgument, OutArgument, or InOutArgument
+                bool isInput = typeMatch.StartsWith("InArgument(") || typeMatch.StartsWith("InOutArgument(");
+                bool isOutput = typeMatch.StartsWith("OutArgument(") || typeMatch.StartsWith("InOutArgument(");
+                if (!isInput && !isOutput) continue;
 
-                if (!isMatch) continue;
-
-                // Extract the inner type: InArgument(String) -> String
+                // Extract the inner type: InArgument(x:String) -> x:String
                 var openParen = typeMatch.IndexOf('(');
                 var closeParen = typeMatch.LastIndexOf(')');
                 var innerType = openParen >= 0 && closeParen > openParen
                     ? typeMatch.Substring(openParen + 1, closeParen - openParen - 1)
                     : typeMatch;
 
-                // Check Required attribute
-                var requiredAttr = ExtractAttribute(trimmed, "IsRequired");
+                var requiredAttr = ExtractAttribute(seg, "ArgumentRequiredAttribute Value=");
                 var isRequired = requiredAttr != null && requiredAttr.Equals("True", StringComparison.OrdinalIgnoreCase);
 
-                parameters.Add(new ActionParameterEntry
+                var description = ExtractAttribute(seg, "ArgumentDescriptionAttribute Value=");
+                var entityAttr = ExtractAttribute(seg, "ArgumentEntityAttribute Value=");
+
+                var entry = new ActionParameterEntry
                 {
                     Name = nameMatch,
                     Type = SimplifyType(innerType),
                     IsRequired = isRequired,
-                    EntityName = innerType.Contains("Entity") && !innerType.Equals("EntityReference") && !innerType.Equals("EntityCollection")
-                        ? ExtractEntityType(innerType)
-                        : null
-                });
+                    Description = string.IsNullOrWhiteSpace(description) ? null : description,
+                    EntityName = string.IsNullOrWhiteSpace(entityAttr) ? null : entityAttr
+                };
+
+                if (isInput) inputs.Add(entry);
+                if (isOutput && !typeMatch.StartsWith("InOutArgument(")) outputs.Add(entry);
             }
 
-            return parameters;
+            return (inputs, outputs);
         }
 
-        private string GetWorkflowUniqueName(Guid workflowId)
+        /// <summary>
+        /// Splits XAML into segments starting at each &lt;x:Property&gt; tag,
+        /// including the nested &lt;x:Property.Attributes&gt; block so attribute
+        /// extraction can find ArgumentRequired/Description/Entity values.
+        /// </summary>
+        private static List<string> SplitXamlProperties(string xaml)
         {
-            var entity = _serviceClient.Retrieve("workflow", workflowId, new ColumnSet("uniquename"));
-            return entity.GetAttributeValue<string>("uniquename") ?? "";
+            var segments = new List<string>();
+            var marker = "<x:Property ";
+            var idx = 0;
+            while (true)
+            {
+                var start = xaml.IndexOf(marker, idx, StringComparison.Ordinal);
+                if (start < 0) break;
+                // A property with an <x:Property.Attributes> block ends with "</x:Property>".
+                // A self-closing property (no attributes block) ends with "/>".
+                // Distinguish by checking whether <x:Property.Attributes> appears before
+                // the first "/>" after the property start. If it does, the property has
+                // an attributes block and we must use "</x:Property>" as the end.
+                var attrsBlock = xaml.IndexOf("<x:Property.Attributes>", start, StringComparison.Ordinal);
+                var selfClose = xaml.IndexOf("/>", start, StringComparison.Ordinal);
+                int end;
+                if (attrsBlock >= 0 && attrsBlock < selfClose)
+                {
+                    var endTag = xaml.IndexOf("</x:Property>", attrsBlock, StringComparison.Ordinal);
+                    if (endTag < 0) break;
+                    end = endTag + "</x:Property>".Length;
+                }
+                else if (selfClose >= 0)
+                    end = selfClose + 2;
+                else
+                    break;
+
+                segments.Add(xaml.Substring(start, end - start));
+                idx = end;
+            }
+            return segments;
         }
 
         private async Task<List<string>> GetSdkMessageNamesAsync(string scope)
@@ -562,39 +480,92 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Helpers ──────────────────────────────────────────────────────────────
 
+        private static string NormalizeScope(string scope)
+        {
+            if (string.IsNullOrWhiteSpace(scope))
+                return "none";
+
+            var normalized = scope.Trim().ToLowerInvariant();
+            return normalized == "global" ? "none" : normalized;
+        }
+
         private static string ExtractAttribute(string xml, string attrName)
         {
-            var search = $"{attrName}=\"";
-            var idx = xml.IndexOf(search, StringComparison.OrdinalIgnoreCase);
+            // attrName is either a simple XAML attribute ("Name", "Type") or a compound
+            // pattern ("ArgumentRequiredAttribute Value=") where the first part is an
+            // element name (possibly XML-namespaced: mxsw:ArgumentRequiredAttribute)
+            // followed by a Value="..." attribute.
+            if (attrName.Contains(' '))
+            {
+                // Compound: "ElementName Value=" — find the element (ignoring ns prefix),
+                // then extract the Value attribute inside it.
+                var spaceIdx = attrName.IndexOf(' ');
+                var elementLocal = attrName.Substring(0, spaceIdx);   // e.g. "ArgumentRequiredAttribute"
+                var valueAttr = attrName.Substring(spaceIdx + 1);     // e.g. "Value="
+
+                // Find the element tag, ignoring any XML namespace prefix (mxsw:).
+                var elementIdx = FindElementStart(xml, elementLocal);
+                if (elementIdx < 0) return null;
+
+                // Find the Value="..." attribute after the element tag.
+                var search = $"{valueAttr}\"";
+                var valIdx = xml.IndexOf(search, elementIdx, StringComparison.OrdinalIgnoreCase);
+                if (valIdx < 0) return null;
+                valIdx += search.Length;
+                var end = xml.IndexOf('"', valIdx);
+                return end > valIdx ? xml.Substring(valIdx, end - valIdx) : null;
+            }
+
+            // Simple: "Name" → find Name="..."
+            var simple = $"{attrName}=\"";
+            var idx = xml.IndexOf(simple, StringComparison.OrdinalIgnoreCase);
             if (idx < 0) return null;
-            idx += search.Length;
-            var end = xml.IndexOf('"', idx);
-            return end > idx ? xml.Substring(idx, end - idx) : null;
+            idx += simple.Length;
+            var endSimple = xml.IndexOf('"', idx);
+            return endSimple > idx ? xml.Substring(idx, endSimple - idx) : null;
+        }
+
+        /// <summary>
+        /// Finds the start index of an element with the given local name,
+        /// ignoring XML namespace prefixes (e.g. mxsw:ArgumentRequiredAttribute).
+        /// </summary>
+        private static int FindElementStart(string xml, string localName)
+        {
+            // Search for "<prefix:localName" or "<localName"
+            var idx = 0;
+            while (true)
+            {
+                var lt = xml.IndexOf('<', idx);
+                if (lt < 0) return -1;
+                // Skip past any namespace prefix
+                var tagStart = lt + 1;
+                var colon = xml.IndexOf(':', tagStart);
+                int nameStart;
+                if (colon >= 0 && colon < xml.Length && colon - tagStart <= 60)
+                    nameStart = colon + 1;
+                else
+                    nameStart = tagStart;
+
+                if (xml.Length - nameStart >= localName.Length &&
+                    xml.Substring(nameStart, localName.Length).Equals(localName, StringComparison.OrdinalIgnoreCase))
+                    return lt;
+
+                idx = lt + 1;
+            }
         }
 
         private static string SimplifyType(string type)
         {
             if (type == null) return "Unknown";
-            // Remove namespace: System.String -> String
+            // Remove XML namespace prefixes: x:String -> String, mxs:EntityReference -> EntityReference
+            var colon = type.LastIndexOf(':');
+            if (colon >= 0) type = type.Substring(colon + 1);
+            // Remove .NET namespace: System.String -> String
             var lastDot = type.LastIndexOf('.');
             return lastDot >= 0 ? type.Substring(lastDot + 1) : type;
         }
 
-        private static string ExtractEntityType(string type)
-        {
-            // EntityReference(account) -> account
-            var open = type.IndexOf('(');
-            var close = type.LastIndexOf(')');
-            if (open >= 0 && close > open)
-                return type.Substring(open + 1, close - open - 1);
-            return null;
-        }
-
         private static string EscapeXml(string value) =>
-            value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("\"", "&quot;");
-
-        private static string EscapeTab(string value) =>
-            value?.Replace("\t", " ").Replace("\n", " ").Replace("\r", "") ?? "";
-
+            System.Security.SecurityElement.Escape(value ?? "") ?? "";
     }
 }
