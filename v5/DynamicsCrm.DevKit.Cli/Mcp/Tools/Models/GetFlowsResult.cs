@@ -9,6 +9,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public int TotalCount { get; set; }
 
         [JsonPropertyName("action")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Action { get; set; }
 
         [JsonPropertyName("flows")]

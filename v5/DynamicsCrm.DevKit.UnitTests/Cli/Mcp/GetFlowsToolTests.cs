@@ -21,9 +21,6 @@ public class GetFlowsToolTests
     private static readonly MethodInfo EscapeXmlMethod =
         ToolType.GetMethod("EscapeXml", BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    private static readonly MethodInfo EscapeTabMethod =
-        ToolType.GetMethod("EscapeTab", BindingFlags.NonPublic | BindingFlags.Static)!;
-
     // ── Helpers ───────────────────────────────────────────────────────────────
 
     private static string BuildStatusFilter(string? statusFilter) =>
@@ -37,9 +34,6 @@ public class GetFlowsToolTests
 
     private static string EscapeXml(string value) =>
         (string)EscapeXmlMethod.Invoke(null, [value])!;
-
-    private static string EscapeTab(string value) =>
-        (string)EscapeTabMethod.Invoke(null, [value])!;
 
     // ── BuildStatusFilter ─────────────────────────────────────────────────────
 
@@ -241,29 +235,4 @@ public class GetFlowsToolTests
         Assert.AreEqual("hello world", EscapeXml("hello world"));
     }
 
-    // ── EscapeTab ─────────────────────────────────────────────────────────────
-
-    [TestMethod]
-    public void EscapeTab_Tab_ReplacedWithSpace()
-    {
-        Assert.AreEqual("a b", EscapeTab("a\tb"));
-    }
-
-    [TestMethod]
-    public void EscapeTab_Newline_ReplacedWithSpace()
-    {
-        Assert.AreEqual("a b", EscapeTab("a\nb"));
-    }
-
-    [TestMethod]
-    public void EscapeTab_CarriageReturn_Removed()
-    {
-        Assert.AreEqual("ab", EscapeTab("a\rb"));
-    }
-
-    [TestMethod]
-    public void EscapeTab_PlainString_Unchanged()
-    {
-        Assert.AreEqual("hello", EscapeTab("hello"));
-    }
 }

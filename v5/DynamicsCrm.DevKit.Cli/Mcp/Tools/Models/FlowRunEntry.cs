@@ -9,6 +9,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string FlowSessionId { get; set; }
 
         [JsonPropertyName("startedOn")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string StartedOn { get; set; }
 
         [JsonPropertyName("completedOn")]
@@ -16,6 +17,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string CompletedOn { get; set; }
 
         [JsonPropertyName("status")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Status { get; set; }
 
         [JsonPropertyName("duration")]

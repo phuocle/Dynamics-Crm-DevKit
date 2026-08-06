@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -46,7 +45,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- List flows by name/owner/status\n" +
             "- Inspect a specific flow + recent runs\n" +
             "- Drill into run history with status_filter (debug failures)\n\n" +
-
+            "RELATED TOOLS:\n" +
+            "- get_workflows → classic workflows (category=0)\n" +
+            "- get_business_process_flows → BPF definitions + stages\n" +
+            "- get_business_rules → client-side business rules\n\n" +
             "Fuzzy on name_filter / owner_filter: 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto.")]
         public CallToolResult get_flows(
             [Description("GUID. Empty = list. Set: action determines detail vs runs.")] string flow_id = "",
@@ -60,18 +62,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var normalizedAction = (action ?? "list").Trim().ToLowerInvariant();
             if (normalizedAction != "list" && normalizedAction != "runs")
-                return Error($"Error: Invalid action '{action?.Trim()}'. Use 'list' or 'runs'.");
+                return Error($"Invalid action '{action?.Trim()}'. Use 'list' or 'runs'.");
 
             if (normalizedAction == "runs" && string.IsNullOrWhiteSpace(flow_id))
-                return Error(
-                    "Error: action='runs' requires flow_id.\n" +
+                return Error("action='runs' requires flow_id.",
                     "Provide a valid flow GUID as flow_id.");
 
             if (!string.IsNullOrWhiteSpace(status))
             {
                 var s = status.Trim().ToLowerInvariant();
                 if (s != "active" && s != "draft" && s != "suspended" && s != "all")
-                    return Error($"Error: Invalid status '{status.Trim()}'. Use 'active', 'draft', 'suspended', or 'all'.");
+                    return Error($"Invalid status '{status.Trim()}'. Use 'active', 'draft', 'suspended', or 'all'.");
             }
 
             if (max_records <= 0) max_records = 50;
@@ -85,12 +86,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrWhiteSpace(flow_id))
                 {
                     if (!Guid.TryParse(flow_id.Trim(), out _))
-                        return Error($"Error: '{flow_id.Trim()}' is not a valid GUID.");
+                        return Error($"'{flow_id.Trim()}' is not a valid GUID.");
 
                     if (normalizedAction == "runs")
                     {
                         if (!string.IsNullOrWhiteSpace(status_filter) && !ValidStatusFilters.Contains(status_filter.Trim()))
-                            return Error($"Error: Invalid status_filter '{status_filter.Trim()}'. Use 'succeeded', 'failed', 'running', 'cancelled', 'waiting', 'paused', 'skipped', or 'suspended'.");
+                            return Error($"Invalid status_filter '{status_filter.Trim()}'. Use 'succeeded', 'failed', 'running', 'cancelled', 'waiting', 'paused', 'skipped', or 'suspended'.");
                         return GetRuns(flow_id.Trim(), status_filter, minutes_ago, max_records);
                     }
                     else
@@ -158,11 +159,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (entities.Count == 0)
             {
-                return Success("0 cloud flows found.", new GetFlowsResult
+                return Success("[Success] 0 cloud flows found.", new GetFlowsResult
                 {
                     TotalCount = 0,
-                    Action = "list",
-                    Flows = []
+                    Action = "list"
                 });
             }
 
@@ -171,17 +171,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var statusLabel = normalizedStatus == "all" ? "" : $" {normalizedStatus}";
             var countWord = entities.Count == 1 ? "flow" : "flows";
 
-            var sb = new StringBuilder(entities.Count * 120 + 128);
-            sb.AppendLine($"[Cloud Flows] {entities.Count}{statusLabel} {countWord}");
-            sb.AppendLine();
-            sb.AppendLine("#\tname\tstatus\towner\tisManaged\tmodifiedOn");
-
-            for (var i = 0; i < flows.Count; i++)
-            {
-                var f = flows[i];
-                sb.AppendLine($"{i + 1}\t{EscapeTab(f.Name)}\t{f.Status}\t{EscapeTab(f.Owner)}\t{(f.IsManaged ? "Yes" : "No")}\t{f.ModifiedOn}");
-            }
-
             var structured = new GetFlowsResult
             {
                 TotalCount = flows.Count,
@@ -189,7 +178,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Flows = flows
             };
 
-            return Success(sb.ToString(), structured);
+            return Success($"[Success] {entities.Count}{statusLabel} {countWord} found.", structured);
         }
 
         private CallToolResult GetDetail(string flowId)
@@ -206,9 +195,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
-                return Error(
-                    $"Error: Cloud flow '{flowId}' not found (or not a cloud flow).\n" +
-                     "Use get_flows without flow_id to list available flows.");
+                return Error($"Cloud flow '{flowId}' not found (or not a cloud flow).",
+                    "Use get_flows without flow_id to list available flows.");
             var entity = result.Entities[0];
             var entry = MapFlowEntry(entity);
             entry.Description = NullIfEmpty(entity.GetAttributeValue<string>("description"));
@@ -219,42 +207,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Get last 5 runs
             var runs = GetRecentRuns(flowId, 5);
 
-            var sb = new StringBuilder(512);
-            sb.AppendLine($"[Cloud Flow] {entry.Name}");
-            sb.AppendLine();
-            sb.AppendLine($"workflowId: {entry.WorkflowId}");
-            sb.AppendLine($"name: {entry.Name}");
-            if (!string.IsNullOrEmpty(entry.Description))
-                sb.AppendLine($"description: {entry.Description}");
-            sb.AppendLine($"status: {entry.Status}");
-            sb.AppendLine($"owner: {entry.Owner}");
-            sb.AppendLine($"isManaged: {(entry.IsManaged ? "Yes" : "No")}");
-            if (!string.IsNullOrEmpty(entry.UniqueName))
-                sb.AppendLine($"uniqueName: {entry.UniqueName}");
-            if (!string.IsNullOrEmpty(entry.CreatedOn))
-                sb.AppendLine($"createdOn: {entry.CreatedOn}");
-            sb.AppendLine($"modifiedOn: {entry.ModifiedOn}");
-            if (!string.IsNullOrEmpty(entry.ModifiedBy))
-                sb.AppendLine($"modifiedBy: {entry.ModifiedBy}");
-
-            sb.AppendLine();
-
-            if (runs.Count > 0)
-            {
-                sb.AppendLine($"[Recent Runs] last {runs.Count} runs");
-                sb.AppendLine();
-                sb.AppendLine("#\tstartedOn\tcompletedOn\tstatus\tduration\terrorMessage");
-                for (var i = 0; i < runs.Count; i++)
-                {
-                    var r = runs[i];
-                    sb.AppendLine($"{i + 1}\t{r.StartedOn}\t{r.CompletedOn ?? "-"}\t{r.Status}\t{r.Duration ?? "-"}\t{EscapeTab(r.ErrorMessage ?? "-")}");
-                }
-            }
-            else
-            {
-                sb.AppendLine("[Recent Runs] 0");
-            }
-
             var structured = new GetFlowsResult
             {
                 TotalCount = 1,
@@ -263,16 +215,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Runs = runs.Count > 0 ? runs : null
             };
 
-            return Success(sb.ToString(), structured);
+            var runWord = runs.Count == 1 ? "run" : "runs";
+            return Success($"[Success] {entry.Name}: detail + {runs.Count} recent {runWord}.", structured);
         }
 
         private CallToolResult GetRuns(string flowId, string statusFilter, int minutesAgo, int maxRecords)
         {
             var flowName = GetFlowName(flowId);
             if (flowName == null)
-                return Error(
-                    $"Error: Cloud flow '{flowId}' not found (or not a cloud flow).\n" +
-                     "Use get_flows without flow_id to list available flows.");
+                return Error($"Cloud flow '{flowId}' not found (or not a cloud flow).",
+                    "Use get_flows without flow_id to list available flows.");
 
             var fromDate = DateTime.UtcNow.AddMinutes(-minutesAgo).ToString("o");
             var statusCondition = BuildStatusFilter(statusFilter);
@@ -320,46 +272,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _ => $"last {minutesAgo / 1440}d"
             };
 
-            var sb = new StringBuilder(runs.Count * 150 + 256);
-            sb.AppendLine($"[Flow Runs] {EscapeTab(flowName)} ({timeLabel})");
-            sb.AppendLine();
-
-            if (runs.Count > 0)
-            {
-                sb.AppendLine("#\tflowSessionId\tstartedOn\tcompletedOn\tstatus\tduration\terrorCode\terrorMessage");
-                for (var i = 0; i < runs.Count; i++)
-                {
-                    var r = runs[i];
-                    sb.AppendLine($"{i + 1}\t{r.FlowSessionId}\t{r.StartedOn}\t{r.CompletedOn ?? "-"}\t{r.Status}\t{r.Duration ?? "-"}\t{EscapeTab(r.ErrorCode ?? "-")}\t{EscapeTab(r.ErrorMessage ?? "-")}");
-                }
-            }
-            else
-            {
-                sb.AppendLine("0 runs found.");
-            }
-
-            sb.AppendLine();
-            sb.AppendLine("Summary:");
-            sb.AppendLine($"  Total: {runs.Count}");
-            sb.AppendLine($"  Succeeded: {summary.Succeeded}");
-            sb.AppendLine($"  Failed: {summary.Failed}");
-            sb.AppendLine($"  Running: {summary.Running}");
-            sb.AppendLine($"  Cancelled: {summary.Cancelled}");
-            sb.AppendLine($"  Waiting: {summary.Waiting}");
-            if (summary.Paused > 0) sb.AppendLine($"  Paused: {summary.Paused}");
-            if (summary.Skipped > 0) sb.AppendLine($"  Skipped: {summary.Skipped}");
-            if (summary.Suspended > 0) sb.AppendLine($"  Suspended: {summary.Suspended}");
-            if (summary.NotSpecified > 0) sb.AppendLine($"  NotSpecified: {summary.NotSpecified}");
-
             var structured = new GetFlowsResult
             {
                 TotalCount = runs.Count,
                 Action = "runs",
-                Runs = runs,
+                Runs = runs.Count > 0 ? runs : null,
                 RunSummary = summary
             };
 
-            return Success(sb.ToString(), structured);
+            var runWord = runs.Count == 1 ? "run" : "runs";
+            return Success($"[Success] {flowName} ({timeLabel}): {runs.Count} {runWord}.", structured);
         }
 
         private List<FlowRunEntry> GetRecentRuns(string flowId, int count)
@@ -417,9 +339,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     2 => "Suspended",
                     _ => "Unknown"
                 },
-                Owner = e.GetAttributeValue<EntityReference>("ownerid")?.Name ?? "",
+                Owner = e.GetAttributeValue<EntityReference>("ownerid")?.Name,
                 IsManaged = e.GetAttributeValue<bool>("ismanaged"),
-                ModifiedOn = e.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd") ?? ""
+                ModifiedOn = e.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd")
             };
         }
 
@@ -432,7 +354,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return new FlowRunEntry
             {
                 FlowSessionId = e.Id.ToString(),
-                StartedOn = startedOn?.ToString("yyyy-MM-dd HH:mm:ss") ?? "",
+                StartedOn = startedOn?.ToString("yyyy-MM-dd HH:mm:ss"),
                 CompletedOn = completedOn?.ToString("yyyy-MM-dd HH:mm:ss"),
                 Status = FlowSessionStatusMap.TryGetValue(statusValue, out var s) ? s : statusValue.ToString(),
                 Duration = FormatDuration(startedOn, completedOn),
@@ -479,8 +401,5 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string EscapeXml(string value) =>
             value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("\"", "&quot;");
-
-        private static string EscapeTab(string value) =>
-            value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
     }
 }
