@@ -344,6 +344,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "If not found anywhere, returns a clear notFound=true with a hint. " +
                 "Use action='list' first if you don't have a specific GUID."),
 
+            // System jobs (asyncoperation) — dedicated tool has status/operation_type filters + detail mode.
+            ("asyncoperations", "get_system_jobs",
+                "REDIRECT: Use get_system_jobs instead of GET asyncoperations.\n" +
+                "get_system_jobs provides status/operation_type filters, time scope, correlation_id tracing, and detail mode with error/stack trace.\n\n" +
+                "Examples:\n" +
+                "  get_system_jobs(status='failed', minutes_ago=1440) → failed jobs last 24h\n" +
+                "  get_system_jobs(record_id='<guid>') → detail with message + friendlyMessage\n" +
+                "  get_system_jobs(operation_type='solution', status='all') → solution import/export jobs\n" +
+                "  get_system_jobs(correlation_id='<guid>') → trace one request across jobs"),
+
             // Filter ngụ ý "đã xóa" — Dataverse OData filter không trả soft-deleted records.
             ("deletionstatecode", "manage_deleted_records",
                 "REDIRECT: Standard OData $filter on 'deletionstatecode' or 'statecode eq 1' is unreliable for non-activity entities " +

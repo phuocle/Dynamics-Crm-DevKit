@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
@@ -9,9 +8,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string JobId { get; set; }
 
         [JsonPropertyName("name")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Name { get; set; }
 
         [JsonPropertyName("operationType")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string OperationType { get; set; }
 
         [JsonPropertyName("primaryEntity")]
@@ -19,7 +20,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string PrimaryEntity { get; set; }
 
         [JsonPropertyName("status")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Status { get; set; }
+
+        [JsonPropertyName("state")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string State { get; set; }
 
         [JsonPropertyName("messageName")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -33,15 +39,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string CompletedOn { get; set; }
 
+        [JsonPropertyName("createdOn")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CreatedOn { get; set; }
+
         [JsonPropertyName("executionTime")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string ExecutionTime { get; set; }
 
         [JsonPropertyName("retryCount")]
-        public int RetryCount { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? RetryCount { get; set; }
 
         [JsonPropertyName("depth")]
-        public int Depth { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? Depth { get; set; }
 
         [JsonPropertyName("errorCode")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -66,6 +78,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("regardingRecord")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string RegardingRecord { get; set; }
+
+        [JsonPropertyName("postponeUntil")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string PostponeUntil { get; set; }
 
         [JsonPropertyName("friendlyMessage")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

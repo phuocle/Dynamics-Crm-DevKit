@@ -8,9 +8,7 @@ using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Text;
-using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
@@ -26,37 +24,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        private static readonly Dictionary<int, string> OperationTypeMap = new()
-        {
-            [1] = "Plugin",
-            [2] = "BulkEmail",
-            [5] = "Import",
-            [10] = "Workflow",
-            [13] = "BulkDelete",
-            [17] = "ImportSubprocess",
-            [23] = "BulkDeleteSubprocess",
-            [35] = "RecurringSeries",
-            [40] = "GoalRollUp",
-            [54] = "CustomAction",
-            [57] = "RollupField",
-            [58] = "MassRollupField",
-            [202] = "ExportSolution",
-            [203] = "ImportSolution",
-            [204] = "PublishAll"
-        };
-
-        private static readonly Dictionary<int, string> StatusCodeMap = new()
-        {
-            [0] = "WaitingForResources",
-            [10] = "Waiting",
-            [20] = "InProgress",
-            [21] = "Pausing",
-            [22] = "Canceling",
-            [30] = "Succeeded",
-            [31] = "Failed",
-            [32] = "Canceled"
-        };
-
         private static readonly HashSet<string> ValidStatuses = new(StringComparer.OrdinalIgnoreCase)
         {
             "failed", "succeeded", "waiting", "in_progress", "canceled", "all"
@@ -71,38 +38,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetSystemJobsResult)),
         Description(
-            "System jobs (asyncoperation) for async failures, workflow errors, bulk ops, imports, solutions. record_id empty = list (default: failed jobs last 24h). Set = detail (error + stack trace).\n\n" +
-
+            "System jobs (asyncoperation) for async failures, workflow errors, bulk ops, imports, solutions. record_id empty = list (default: failed jobs last 24h); set = detail (error + stack trace).\n\n" +
             "WHEN TO USE:\n" +
             "- Debug async failures (list failed → detail for stack trace)\n" +
             "- Monitor bulk ops (operation_type='bulk_delete'/'import'/'solution')\n" +
             "- Trace one request (correlation_id across jobs)\n" +
-            "- Async plugin failures: combine with get_plugin_trace_logs")]
+            "- Async plugin failures: combine with get_plugin_trace_logs\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_plugin_trace_logs → plugin execution traces (sync + async)\n" +
+            "- get_workflows → classic workflow definitions (background + realtime)\n" +
+            "- get_flows → Power Automate cloud flows + run history")]
         public CallToolResult get_system_jobs(
-            [Description(
-                "GUID → detail. Empty = list."
-            )] string record_id = "",
-            [Description(
-                "Filter by entity Display Name or logical name (e.g. 'Account' or 'account')."
-            )] string entity_name = "",
-            [Description(
-                "failed/succeeded/waiting/in_progress/canceled/all."
-            )] string status = "failed",
-            [Description(
-                "plugin/workflow/bulk_delete/import/goal_rollup/solution/all."
-            )] string operation_type = "",
-            [Description(
-                "Name contains."
-            )] string name_filter = "",
-            [Description(
-                "GUID. Trace one request across jobs."
-            )] string correlation_id = "",
-            [Description(
-                "0 = 1440 (24h) default. Max 43200."
-            )] int minutes_ago = 0,
-            [Description(
-                "Max 500."
-            )] int max_records = 50)
+            [Description("GUID → detail. Empty = list.")] string record_id = "",
+            [Description("Filter by entity Display Name or logical name (e.g. 'Account' or 'account').")] string entity_name = "",
+            [Description("failed/succeeded/waiting/in_progress/canceled/all.")] string status = "failed",
+            [Description("plugin/workflow/bulk_delete/import/goal_rollup/solution/all.")] string operation_type = "",
+            [Description("Name contains.")] string name_filter = "",
+            [Description("GUID. Trace one request across jobs.")] string correlation_id = "",
+            [Description("0 = 1440 (24h) default. Max 43200.")] int minutes_ago = 0,
+            [Description("Max 500.")] int max_records = 50)
         {
             try
             {
@@ -111,114 +65,109 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 return HandleList(entity_name, status, operation_type, name_filter, correlation_id, minutes_ago, max_records);
             }
-            catch (System.ServiceModel.FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault> fex)
-            {
-                return ErrorResult($"Error: Dataverse fault: {fex.Detail?.Message ?? fex.Message}");
-            }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: {ex.Message}");
+                return ThrowException(ex);
             }
         }
 
         private CallToolResult HandleList(string entityName, string status, string operationType, string nameFilter, string correlationId, int minutesAgo, int maxRecords)
         {
-            if (minutesAgo <= 0) minutesAgo = 1440;
+            // ── Validation ──────────────────────────────────────────────
+            if (minutesAgo < 0) minutesAgo = 1440;
+            if (minutesAgo == 0) minutesAgo = 1440;
             if (minutesAgo > 43200) minutesAgo = 43200;
             if (maxRecords <= 0) maxRecords = 50;
             if (maxRecords > 500) maxRecords = 500;
 
             var normalizedStatus = (status ?? "failed").Trim().ToLowerInvariant();
             if (!ValidStatuses.Contains(normalizedStatus))
-                return ErrorResult($"Error: '{status?.Trim()}' is not a valid status. Valid values: failed, succeeded, waiting, in_progress, canceled, all.");
+                return Error($"'{status?.Trim()}' is not a valid status. Valid values: failed, succeeded, waiting, in_progress, canceled, all.");
 
             var normalizedOpType = (operationType ?? "").Trim().ToLowerInvariant();
             if (!string.IsNullOrEmpty(normalizedOpType) && !ValidOperationTypes.Contains(normalizedOpType))
-                return ErrorResult($"Error: '{operationType?.Trim()}' is not a valid operation_type. Valid values: plugin, workflow, bulk_delete, import, goal_rollup, solution, all.");
+                return Error($"'{operationType?.Trim()}' is not a valid operation_type. Valid values: plugin, workflow, bulk_delete, import, goal_rollup, solution, all.");
 
             if (!string.IsNullOrWhiteSpace(correlationId) && !Guid.TryParse(correlationId.Trim(), out _))
-                return ErrorResult($"Error: '{correlationId.Trim()}' is not a valid GUID for correlation_id.");
+                return Error($"'{correlationId.Trim()}' is not a valid GUID for correlation_id.");
 
-            var fromDate = DateTime.UtcNow.AddMinutes(-minutesAgo).ToString("yyyy-MM-ddTHH:mm:ssZ");
-            var filters = new StringBuilder();
-
-            var statusFilter = BuildStatusFilter(status);
-            if (!string.IsNullOrEmpty(statusFilter))
-                filters.AppendLine($"      {statusFilter}");
-
-            var opFilter = BuildOperationTypeFilter(operationType);
-            if (!string.IsNullOrEmpty(opFilter))
-                filters.AppendLine($"      {opFilter}");
-
-            filters.AppendLine($"      <condition attribute='startedon' operator='ge' value='{fromDate}'/>");
-
+            string primaryEntityLogical = null;
+            int? primaryEntityTypeCode = null;
             if (!string.IsNullOrWhiteSpace(entityName))
             {
                 var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "get_system_jobs");
                 if (!entityResult.IsSuccess)
-                    return ErrorResult($"Error: entity_name '{entityName.Trim()}': {entityResult.Error}");
+                    return Error($"entity_name '{entityName.Trim()}': {entityResult.Error}");
 
-                entityName = entityResult.Value.LogicalName;
-                var entityTypeCode = ResolveEntityTypeCode(entityName);
-                if (entityTypeCode == null)
-                    return ErrorResult($"Error: Entity '{entityName.Trim()}' not found. Use get_tables to find valid entity names.");
-                filters.AppendLine($"      <condition attribute='primaryentitytype' operator='eq' value='{entityTypeCode}'/>");
+                primaryEntityLogical = entityResult.Value.LogicalName;
+                primaryEntityTypeCode = ResolveEntityTypeCode(primaryEntityLogical);
+                if (primaryEntityTypeCode == null)
+                    return Error($"Entity '{entityName.Trim()}' not found. Use get_tables to find valid entity names.");
+                entityName = primaryEntityLogical;
             }
 
-            if (!string.IsNullOrWhiteSpace(nameFilter))
-                filters.AppendLine($"      <condition attribute='name' operator='like' value='%{EscapeXml(nameFilter.Trim())}%'/>");
-
-            if (!string.IsNullOrWhiteSpace(correlationId) && Guid.TryParse(correlationId.Trim(), out _))
-                filters.AppendLine($"      <condition attribute='correlationid' operator='eq' value='{EscapeXml(correlationId.Trim())}'/>");
-
-            var fetchXml = $@"<fetch top='{maxRecords}'>
-  <entity name='asyncoperation'>
-    <attribute name='asyncoperationid'/>
-    <attribute name='name'/>
-    <attribute name='operationtype'/>
-    <attribute name='primaryentitytype'/>
-    <attribute name='statecode'/>
-    <attribute name='statuscode'/>
-    <attribute name='startedon'/>
-    <attribute name='completedon'/>
-    <attribute name='executiontimespan'/>
-    <attribute name='friendlymessage'/>
-    <attribute name='messagename'/>
-    <attribute name='errorcode'/>
-    <attribute name='ownerid'/>
-    <attribute name='correlationid'/>
-    <filter type='and'>
-{filters}    </filter>
-    <order attribute='startedon' descending='true'/>
-  </entity>
-</fetch>";
-
+            // ── Build FetchXML ──────────────────────────────────────────
+            var fetchXml = BuildListFetchXml(status, operationType, entityName, primaryEntityTypeCode, nameFilter, correlationId, minutesAgo, maxRecords);
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+
+            var timeScope = FormatTimeScope(minutesAgo);
 
             if (result.Entities.Count == 0)
             {
-                var text = $"0 system jobs found (status={normalizedStatus}, last {FormatTimeLabel(minutesAgo)}).";
-                var emptyResult = new GetSystemJobsResult
+                var emptyStructured = new GetSystemJobsResult
                 {
                     Mode = "list",
                     TotalCount = 0,
-                    Jobs = [],
-                    Summary = new JobSummary()
+                    TimeScope = timeScope,
+                    Status = normalizedStatus == "all" ? null : normalizedStatus,
+                    OperationType = NullIfEmpty(normalizedOpType == "all" ? null : normalizedOpType),
+                    EntityName = NullIfEmpty(primaryEntityLogical),
+                    CorrelationId = NullIfEmpty(correlationId?.Trim()),
+                    Jobs = null,
+                    Summary = null
                 };
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = text }],
-                    StructuredContent = JsonSerializer.SerializeToElement(emptyResult)
-                };
+                return Success($"[Success] 0 system jobs ({timeScope}).", emptyStructured);
             }
 
-            return FormatListResults(result.Entities, status, minutesAgo);
+            // ── Build entries + summary ─────────────────────────────────
+            var jobs = new List<SystemJobEntry>(result.Entities.Count);
+            var summary = new JobSummary();
+
+            foreach (var e in result.Entities)
+            {
+                jobs.Add(BuildEntry(e, includeDetail: false));
+                var opTypeValue = e.GetAttributeValue<OptionSetValue>("operationtype")?.Value ?? 0;
+                switch (opTypeValue)
+                {
+                    case 1 or 54: summary.Plugin = (summary.Plugin ?? 0) + 1; break;
+                    case 10: summary.Workflow = (summary.Workflow ?? 0) + 1; break;
+                    case 13 or 23: summary.BulkDelete = (summary.BulkDelete ?? 0) + 1; break;
+                    case 5 or 17: summary.Import = (summary.Import ?? 0) + 1; break;
+                    case 202 or 203 or 204: summary.Solution = (summary.Solution ?? 0) + 1; break;
+                    default: summary.Other = (summary.Other ?? 0) + 1; break;
+                }
+            }
+
+            var structured = new GetSystemJobsResult
+            {
+                Mode = "list",
+                TotalCount = result.Entities.Count,
+                TimeScope = timeScope,
+                Status = normalizedStatus == "all" ? null : normalizedStatus,
+                OperationType = NullIfEmpty(normalizedOpType == "all" ? null : normalizedOpType),
+                EntityName = NullIfEmpty(primaryEntityLogical),
+                CorrelationId = NullIfEmpty(correlationId?.Trim()),
+                Jobs = jobs,
+                Summary = summary
+            };
+
+            return Success(BuildListText(structured.TotalCount, timeScope, normalizedStatus, primaryEntityLogical), structured);
         }
 
         private CallToolResult HandleDetail(string recordId)
         {
             if (!Guid.TryParse(recordId.Trim(), out _))
-                return ErrorResult($"Error: '{recordId.Trim()}' is not a valid GUID.");
+                return Error($"'{recordId.Trim()}' is not a valid GUID. Use an asyncoperation ID from list mode.");
 
             var fetchXml = $@"<fetch>
   <entity name='asyncoperation'>
@@ -252,91 +201,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
-                return ErrorResult($"Error: System job '{recordId.Trim()}' not found.");
+                return Error($"System job '{recordId.Trim()}' not found.");
 
-            var e = result.Entities[0];
-            var name = e.GetAttributeValue<string>("name") ?? "";
-            var opTypeValue = e.GetAttributeValue<OptionSetValue>("operationtype")?.Value ?? 0;
-            var opTypeLabel = MapOperationType(opTypeValue);
-            var statusValue = e.GetAttributeValue<OptionSetValue>("statuscode")?.Value ?? 0;
-            var statusLabel = MapStatusCode(statusValue);
-            var startedOn = e.GetAttributeValue<DateTime?>("startedon");
-            var completedOn = e.GetAttributeValue<DateTime?>("completedon");
-            var executionTime = e.GetAttributeValue<double?>("executiontimespan");
-            var retryCount = e.GetAttributeValue<int?>("retrycount") ?? 0;
-            var depth = e.GetAttributeValue<int?>("depth") ?? 0;
-            var correlationId = e.GetAttributeValue<Guid?>("correlationid");
-            var owner = e.GetAttributeValue<EntityReference>("ownerid")?.Name ?? "";
-            var pluginStep = e.GetAttributeValue<EntityReference>("owningextensionid")?.Name;
-            var workflowName = e.GetAttributeValue<EntityReference>("workflowactivationid")?.Name;
-            var regarding = e.GetAttributeValue<EntityReference>("regardingobjectid");
-            var friendlyMessage = e.GetAttributeValue<string>("friendlymessage");
-            var message = e.GetAttributeValue<string>("message");
-            var primaryEntity = e.GetAttributeValue<string>("primaryentitytype") ?? "";
-            var errorCode = e.GetAttributeValue<int?>("errorcode");
-
-            var sb = new StringBuilder(2048);
-            sb.AppendLine($"[System Job] {EscapeTab(name)}");
-            sb.AppendLine();
-            sb.AppendLine($"jobId: {e.Id}");
-            sb.AppendLine($"name: {name}");
-            sb.AppendLine($"operationType: {opTypeLabel} ({opTypeValue})");
-            sb.AppendLine($"primaryEntity: {primaryEntity}");
-            sb.AppendLine($"status: {statusLabel} ({statusValue})");
-            sb.AppendLine($"startedOn: {startedOn?.ToString("yyyy-MM-dd HH:mm:ss") ?? "-"}");
-            sb.AppendLine($"completedOn: {completedOn?.ToString("yyyy-MM-dd HH:mm:ss") ?? "-"}");
-            sb.AppendLine($"executionTime: {FormatExecutionTime(executionTime)}");
-            sb.AppendLine($"retryCount: {retryCount}");
-            sb.AppendLine($"depth: {depth}");
-            sb.AppendLine($"owner: {owner}");
-            if (correlationId.HasValue)
-                sb.AppendLine($"correlationId: {correlationId}");
-            if (errorCode.HasValue)
-                sb.AppendLine($"errorCode: {errorCode}");
-            if (!string.IsNullOrEmpty(pluginStep))
-                sb.AppendLine($"pluginStep: {pluginStep}");
-            if (!string.IsNullOrEmpty(workflowName))
-                sb.AppendLine($"workflow: {workflowName}");
-            if (regarding != null)
-                sb.AppendLine($"regarding: {regarding.LogicalName}/{regarding.Id}{(!string.IsNullOrEmpty(regarding.Name) ? $" ({regarding.Name})" : "")}");
-
-            if (!string.IsNullOrWhiteSpace(friendlyMessage))
-            {
-                sb.AppendLine();
-                sb.AppendLine("[Friendly Message]");
-                sb.AppendLine(friendlyMessage.Trim());
-            }
-
-            if (!string.IsNullOrWhiteSpace(message))
-            {
-                sb.AppendLine();
-                sb.AppendLine("[Error Message]");
-                sb.AppendLine(message.Trim());
-            }
-
-            var entry = new SystemJobEntry
-            {
-                JobId = e.Id.ToString(),
-                Name = name,
-                OperationType = opTypeLabel,
-                PrimaryEntity = NullIfEmpty(primaryEntity),
-                Status = statusLabel,
-                MessageName = NullIfEmpty(e.GetAttributeValue<string>("messagename")),
-                StartedOn = startedOn?.ToString("yyyy-MM-dd HH:mm:ss"),
-                CompletedOn = completedOn?.ToString("yyyy-MM-dd HH:mm:ss"),
-                ExecutionTime = FormatExecutionTime(executionTime),
-                RetryCount = retryCount,
-                Depth = depth,
-                ErrorCode = errorCode,
-                CorrelationId = correlationId?.ToString(),
-                Owner = NullIfEmpty(owner),
-                PluginStep = pluginStep,
-                WorkflowName = workflowName,
-                RegardingRecord = regarding != null ? $"{regarding.LogicalName}/{regarding.Id}" : null,
-                FriendlyMessage = NullIfEmpty(friendlyMessage),
-                Message = NullIfEmpty(message)
-            };
-
+            var entry = BuildEntry(result.Entities[0], includeDetail: true);
             var structured = new GetSystemJobsResult
             {
                 Mode = "detail",
@@ -344,109 +211,119 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Jobs = [entry]
             };
 
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            return Success(BuildDetailText(entry), structured);
         }
 
-        private static CallToolResult FormatListResults(DataCollection<Entity> entities, string status, int minutesAgo)
+        // ── Entry builder (shared by list + detail) ───────────────────────────
+        // Fields verified by probe on org DEVKITV4 (2026-08-06):
+        //   operationtype=OptionSetValue → FormattedValues["operationtype"] (e.g. "Calculate Rollup Field", "System Event")
+        //   statecode=OptionSetValue → FormattedValues["statecode"] (e.g. "Completed", "Suspended")
+        //   statuscode=OptionSetValue → FormattedValues["statuscode"] (e.g. "Succeeded", "Waiting", "Failed")
+        //   primaryentitytype=string (logical name, can be empty)
+        //   executiontimespan=double (seconds)
+        //   friendlymessage/message=Memo (detail only for message)
+        //   errorcode=int? (only when failed)
+        //   owningextensionid/workflowactivationid/regardingobjectid=EntityReference
+
+        private static SystemJobEntry BuildEntry(Entity e, bool includeDetail)
         {
-            var jobs = new List<SystemJobEntry>();
-            var pluginCount = 0;
-            var workflowCount = 0;
-            var bulkDeleteCount = 0;
-            var importCount = 0;
-            var solutionCount = 0;
-            var otherCount = 0;
+            var startedOn = e.GetAttributeValue<DateTime?>("startedon");
+            var completedOn = e.GetAttributeValue<DateTime?>("completedon");
+            var createdOn = e.GetAttributeValue<DateTime?>("createdon");
+            var executionTime = e.GetAttributeValue<double?>("executiontimespan");
+            var retryCount = e.GetAttributeValue<int?>("retrycount");
+            var depth = e.GetAttributeValue<int?>("depth");
+            var correlationId = e.GetAttributeValue<Guid?>("correlationid");
+            var owner = e.GetAttributeValue<EntityReference>("ownerid");
+            var pluginStep = e.GetAttributeValue<EntityReference>("owningextensionid");
+            var workflow = e.GetAttributeValue<EntityReference>("workflowactivationid");
+            var regarding = e.GetAttributeValue<EntityReference>("regardingobjectid");
+            var postponeUntil = e.GetAttributeValue<DateTime?>("postponeuntil");
+            var friendlyMessage = e.GetAttributeValue<string>("friendlymessage");
+            var message = e.GetAttributeValue<string>("message");
+            var primaryEntity = e.GetAttributeValue<string>("primaryentitytype");
+            var errorCode = e.GetAttributeValue<int?>("errorcode");
 
-            foreach (var e in entities)
+            var entry = new SystemJobEntry
             {
-                var opTypeValue = e.GetAttributeValue<OptionSetValue>("operationtype")?.Value ?? 0;
-                var opTypeLabel = MapOperationType(opTypeValue);
-                var statusValue = e.GetAttributeValue<OptionSetValue>("statuscode")?.Value ?? 0;
-                var startedOn = e.GetAttributeValue<DateTime?>("startedon");
-                var completedOn = e.GetAttributeValue<DateTime?>("completedon");
-                var friendlyMessage = e.GetAttributeValue<string>("friendlymessage");
-
-                var entry = new SystemJobEntry
-                {
-                    JobId = e.Id.ToString(),
-                    Name = e.GetAttributeValue<string>("name") ?? "",
-                    OperationType = opTypeLabel,
-                    PrimaryEntity = NullIfEmpty(e.GetAttributeValue<string>("primaryentitytype")),
-                    Status = MapStatusCode(statusValue),
-                    MessageName = NullIfEmpty(e.GetAttributeValue<string>("messagename")),
-                    StartedOn = startedOn?.ToString("yyyy-MM-dd HH:mm") ?? "",
-                    CompletedOn = completedOn?.ToString("yyyy-MM-dd HH:mm"),
-                    ExecutionTime = FormatExecutionTime(e.GetAttributeValue<double?>("executiontimespan")),
-                    ErrorCode = e.GetAttributeValue<int?>("errorcode"),
-                    CorrelationId = e.GetAttributeValue<Guid?>("correlationid")?.ToString(),
-                    Owner = NullIfEmpty(e.GetAttributeValue<EntityReference>("ownerid")?.Name),
-                    FriendlyMessage = TruncateMessage(friendlyMessage, 100)
-                };
-                jobs.Add(entry);
-
-                switch (opTypeValue)
-                {
-                    case 1 or 54: pluginCount++; break;
-                    case 10: workflowCount++; break;
-                    case 13 or 23: bulkDeleteCount++; break;
-                    case 5 or 17: importCount++; break;
-                    case 202 or 203 or 204: solutionCount++; break;
-                    default: otherCount++; break;
-                }
-            }
-
-            var normalizedStatus = (status ?? "failed").Trim().ToLowerInvariant();
-            var countWord = entities.Count == 1 ? "job" : "jobs";
-            var statusLabel = normalizedStatus == "all" ? "" : $"{normalizedStatus} ";
-
-            var sb = new StringBuilder(entities.Count * 200 + 256);
-            sb.AppendLine($"[System Jobs] {entities.Count} {statusLabel}{countWord} (last {FormatTimeLabel(minutesAgo)})");
-            sb.AppendLine();
-            sb.AppendLine("#\tname\toperationType\tentity\tstatus\tstartedOn\tcompletedOn\tmessage");
-
-            for (var i = 0; i < jobs.Count; i++)
-            {
-                var j = jobs[i];
-                sb.AppendLine($"{i + 1}\t{EscapeTab(j.Name)}\t{j.OperationType}\t{j.PrimaryEntity ?? "-"}\t{j.Status}\t{j.StartedOn}\t{j.CompletedOn ?? "-"}\t{EscapeTab(j.FriendlyMessage ?? "-")}");
-            }
-
-            sb.AppendLine();
-            sb.AppendLine("Summary:");
-            if (pluginCount > 0) sb.AppendLine($"  Plugin: {pluginCount}");
-            if (workflowCount > 0) sb.AppendLine($"  Workflow: {workflowCount}");
-            if (bulkDeleteCount > 0) sb.AppendLine($"  BulkDelete: {bulkDeleteCount}");
-            if (importCount > 0) sb.AppendLine($"  Import: {importCount}");
-            if (solutionCount > 0) sb.AppendLine($"  Solution: {solutionCount}");
-            if (otherCount > 0) sb.AppendLine($"  Other: {otherCount}");
-
-            var structured = new GetSystemJobsResult
-            {
-                Mode = "list",
-                TotalCount = entities.Count,
-                Jobs = jobs,
-                Summary = new JobSummary
-                {
-                    Plugin = pluginCount,
-                    Workflow = workflowCount,
-                    BulkDelete = bulkDeleteCount,
-                    Import = importCount,
-                    Solution = solutionCount,
-                    Other = otherCount
-                }
+                JobId = e.Id.ToString(),
+                Name = NullIfEmpty(e.GetAttributeValue<string>("name")),
+                OperationType = NullIfEmpty(e.FormattedValues.Contains("operationtype") ? e.FormattedValues["operationtype"] : null),
+                PrimaryEntity = NullIfEmpty(primaryEntity),
+                State = NullIfEmpty(e.FormattedValues.Contains("statecode") ? e.FormattedValues["statecode"] : null),
+                Status = NullIfEmpty(e.FormattedValues.Contains("statuscode") ? e.FormattedValues["statuscode"] : null),
+                MessageName = NullIfEmpty(e.GetAttributeValue<string>("messagename")),
+                StartedOn = startedOn?.ToString("yyyy-MM-dd HH:mm:ss"),
+                CompletedOn = completedOn?.ToString("yyyy-MM-dd HH:mm:ss"),
+                CreatedOn = createdOn?.ToString("yyyy-MM-dd HH:mm:ss"),
+                ExecutionTime = FormatExecutionTime(executionTime),
+                RetryCount = retryCount,
+                Depth = depth,
+                ErrorCode = errorCode,
+                CorrelationId = correlationId?.ToString(),
+                Owner = NullIfEmpty(owner?.Name),
+                PluginStep = NullIfEmpty(pluginStep?.Name),
+                WorkflowName = NullIfEmpty(workflow?.Name),
+                RegardingRecord = regarding != null ? $"{regarding.LogicalName}/{regarding.Id}" : null,
+                PostponeUntil = postponeUntil?.ToString("yyyy-MM-dd HH:mm:ss"),
+                FriendlyMessage = NullIfEmpty(friendlyMessage)
             };
 
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            if (includeDetail)
+                entry.Message = NullIfEmpty(message);
+
+            return entry;
         }
 
-        // ========== HELPERS ==========
+        // ── FetchXML builder ──────────────────────────────────────────────────
+
+        private static string BuildListFetchXml(string status, string operationType, string entityLogicalName, int? entityTypeCode, string nameFilter, string correlationId, int minutesAgo, int maxRecords)
+        {
+            var sb = new StringBuilder(640);
+            sb.Append($"<fetch top='{maxRecords}'>");
+            sb.Append("<entity name='asyncoperation'>");
+            sb.Append("<attribute name='asyncoperationid'/>");
+            sb.Append("<attribute name='name'/>");
+            sb.Append("<attribute name='operationtype'/>");
+            sb.Append("<attribute name='primaryentitytype'/>");
+            sb.Append("<attribute name='statecode'/>");
+            sb.Append("<attribute name='statuscode'/>");
+            sb.Append("<attribute name='startedon'/>");
+            sb.Append("<attribute name='completedon'/>");
+            sb.Append("<attribute name='executiontimespan'/>");
+            sb.Append("<attribute name='friendlymessage'/>");
+            sb.Append("<attribute name='messagename'/>");
+            sb.Append("<attribute name='errorcode'/>");
+            sb.Append("<attribute name='ownerid'/>");
+            sb.Append("<attribute name='correlationid'/>");
+            sb.Append("<filter type='and'>");
+
+            var statusFilter = BuildStatusFilter(status);
+            if (!string.IsNullOrEmpty(statusFilter))
+                sb.Append(statusFilter);
+
+            var opFilter = BuildOperationTypeFilter(operationType);
+            if (!string.IsNullOrEmpty(opFilter))
+                sb.Append(opFilter);
+
+            var sinceUtc = DateTime.UtcNow.AddMinutes(-minutesAgo).ToString("yyyy-MM-ddTHH:mm:ssZ");
+            sb.Append($"<condition attribute='startedon' operator='ge' value='{sinceUtc}'/>");
+
+            if (!string.IsNullOrWhiteSpace(entityLogicalName) && entityTypeCode.HasValue)
+                sb.Append($"<condition attribute='primaryentitytype' operator='eq' value='{entityTypeCode.Value}'/>");
+
+            if (!string.IsNullOrWhiteSpace(nameFilter))
+                sb.Append($"<condition attribute='name' operator='like' value='%{EscapeXml(nameFilter.Trim())}%'/>");
+
+            if (!string.IsNullOrWhiteSpace(correlationId) && Guid.TryParse(correlationId.Trim(), out _))
+                sb.Append($"<condition attribute='correlationid' operator='eq' value='{EscapeXml(correlationId.Trim())}'/>");
+
+            sb.Append("</filter>");
+            sb.Append("<order attribute='startedon' descending='true'/>");
+            sb.Append("</entity>");
+            sb.Append("</fetch>");
+            return sb.ToString();
+        }
 
         private static string BuildStatusFilter(string status)
         {
@@ -494,14 +371,58 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        private static string MapOperationType(int value) =>
-            OperationTypeMap.TryGetValue(value, out var label) ? label : $"System({value})";
+        // ── Text builders (1 line, concise) ───────────────────────────────────
 
-        private static string MapStatusCode(int value) =>
-            StatusCodeMap.TryGetValue(value, out var label) ? label : value.ToString();
+        private static string BuildListText(int count, string timeScope, string normalizedStatus, string primaryEntity)
+        {
+            var word = count == 1 ? "job" : "jobs";
+            var statusPart = normalizedStatus == "all" ? "" : $"{normalizedStatus} ";
+            var entityPart = string.IsNullOrWhiteSpace(primaryEntity) ? "" : $" on {primaryEntity}";
+            return $"[Success] {count} {statusPart}system {word}{entityPart} ({timeScope}).";
+        }
+
+        private static string BuildDetailText(SystemJobEntry entry)
+        {
+            var sb = new StringBuilder(160);
+            sb.Append($"[Success] {entry.JobId}");
+            if (!string.IsNullOrWhiteSpace(entry.Name))
+                sb.Append($". {entry.Name}");
+            if (!string.IsNullOrWhiteSpace(entry.OperationType))
+                sb.Append($" [{entry.OperationType}]");
+            if (!string.IsNullOrWhiteSpace(entry.Status))
+                sb.Append($" — {entry.Status}");
+            sb.Append(string.IsNullOrWhiteSpace(entry.Message) ? ". Error: none" : ". Error: available");
+            sb.Append(string.IsNullOrWhiteSpace(entry.FriendlyMessage) ? ". Message: none" : ". Message: available");
+            sb.Append('.');
+            return sb.ToString();
+        }
+
+        // ── Time scope formatter ──────────────────────────────────────────────
+
+        private static string FormatTimeScope(int minutesAgo)
+        {
+            if (minutesAgo >= 1440 && minutesAgo % 1440 == 0)
+                return $"last {minutesAgo / 1440}d";
+            if (minutesAgo >= 60 && minutesAgo % 60 == 0)
+                return $"last {minutesAgo / 60}h";
+            return $"last {minutesAgo}min";
+        }
+
+        // ── Utils ─────────────────────────────────────────────────────────────
+
+        private static string FormatExecutionTime(double? seconds)
+        {
+            if (seconds == null || seconds <= 0) return null;
+            if (seconds < 1) return $"{seconds * 1000:F0}ms";
+            if (seconds < 60) return $"{seconds:F1}s";
+            if (seconds < 3600) return $"{(int)(seconds / 60)}m {(int)(seconds % 60)}s";
+            return $"{(int)(seconds / 3600)}h {(int)(seconds % 3600 / 60)}m";
+        }
 
         private int? ResolveEntityTypeCode(string entityLogicalName)
         {
+            // primaryentitytype on asyncoperation is an int ObjectTypeCode, not a string.
+            // Resolve the entity's ObjectTypeCode via RetrieveEntityRequest so we can filter.
             try
             {
                 var request = new RetrieveEntityRequest
@@ -518,38 +439,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private static string FormatExecutionTime(double? seconds)
-        {
-            if (seconds == null || seconds <= 0) return "-";
-            if (seconds < 1) return $"{seconds * 1000:F0}ms";
-            if (seconds < 60) return $"{seconds:F1}s";
-            if (seconds < 3600) return $"{(int)(seconds / 60)}m {(int)(seconds % 60)}s";
-            return $"{(int)(seconds / 3600)}h {(int)(seconds % 3600 / 60)}m";
-        }
-
-        private static string FormatTimeLabel(int minutesAgo) => minutesAgo switch
-        {
-            <= 60 => $"{minutesAgo}m",
-            <= 1440 => $"{minutesAgo / 60}h",
-            _ => $"{minutesAgo / 1440}d"
-        };
-
-        private static string TruncateMessage(string message, int maxLength)
-        {
-            if (string.IsNullOrWhiteSpace(message)) return null;
-            var trimmed = message.Trim().Replace("\r\n", " ").Replace("\n", " ");
-            return trimmed.Length <= maxLength ? trimmed : trimmed.Substring(0, maxLength) + "...";
-        }
-
         private static string NullIfEmpty(string value) =>
             string.IsNullOrWhiteSpace(value) ? null : value.Trim();
 
         private static string EscapeXml(string value) =>
             value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("\"", "&quot;");
-
-        private static string EscapeTab(string value) =>
-            value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
-
-        private CallToolResult ErrorResult(string message) => Error(message);
     }
 }
