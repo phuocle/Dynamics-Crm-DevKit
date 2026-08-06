@@ -40,13 +40,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string ModifiedBy { get; set; }
 
+        [JsonPropertyName("xamlParseStatus")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string XamlParseStatus { get; set; }
+
         [JsonPropertyName("conditions")]
-        public List<string> Conditions { get; set; } = [];
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> Conditions { get; set; }
 
         [JsonPropertyName("actions")]
-        public List<string> Actions { get; set; } = [];
-
-        [JsonPropertyName("xamlParseStatus")]
-        public string XamlParseStatus { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> Actions { get; set; }
     }
 }

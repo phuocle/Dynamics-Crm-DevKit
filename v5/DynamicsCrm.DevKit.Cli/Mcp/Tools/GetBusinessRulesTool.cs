@@ -9,8 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
@@ -32,58 +30,55 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(GetBusinessRulesResult)),
         Description(
             "Business rules (client-side logic) for an entity. rule_id empty = list; set = detail (conditions+actions from XAML). " +
-            "Rules run BEFORE form JS. Scope 'Entity' = all forms. " +
-            "For workflow Custom Actions → get_messages. For raw XAML → manage_record(action='read', columns='xaml').")]
+            "Rules run BEFORE form JS. Scope 'Entity' = all forms.\n\n" +
+            "WHEN TO USE:\n" +
+            "- Inspect a business rule's conditions and actions before refactoring or disabling it\n" +
+            "- Find business rules bound to an entity (entity_name filter)\n" +
+            "- Check if a field is referenced in any client-side rule logic\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_workflows → classic workflow definitions (background async + realtime sync)\n" +
+            "- get_messages → legacy workflow Custom Actions (category=3) + SDK messages\n" +
+            "- get_custom_apis → modern Custom API definitions\n" +
+            "- get_business_process_flows → BPF definitions + stages\n" +
+            "- manage_record(action='read', columns='xaml') → raw XAML when parse is incomplete")]
         public CallToolResult get_business_rules(
-            [Description(
-                "Entity Display Name or logical name. Ignored in detail mode."
-            )] string entity_name,
-            [Description(
-                "GUID → detail mode. Empty = list mode."
-            )] string rule_id = "",
-            [Description(
-                "'active' or 'draft'. Empty = all. Ignored in detail mode."
-            )] string status = "",
-            [Description(
-                "1-200. Default 50. Ignored in detail mode."
-            )] int max_records = 50)
+            [Description("Entity Display Name or logical name. Ignored in detail mode.")] string entity_name,
+            [Description("GUID → detail mode. Empty = list mode.")] string rule_id = "",
+            [Description("'active' or 'draft'. Empty = all. Ignored in detail mode.")] string status = "",
+            [Description("1-200. Default 50. Ignored in detail mode.")] int max_records = 50)
         {
             try
             {
+                // ── Validate ──────────────────────────────────────────────────────
                 if (string.IsNullOrWhiteSpace(entity_name))
-                    return Error("Error: entity_name is required.\n" +
-                           "Provide the entity logical name (e.g., 'account', 'contact'). Use get_tables to discover names.");
+                    return Error("entity_name is required.",
+                        "Provide the entity logical name (e.g. 'account', 'contact'). Use get_tables to discover names.");
 
-                if (!string.IsNullOrWhiteSpace(status))
-                {
-                    var s = status.Trim().ToLowerInvariant();
-                    if (s != "active" && s != "draft")
-                        return Error($"Error: Invalid status value '{status.Trim()}'. Use 'active' or 'draft'.");
-                }
+                var normalizedStatus = (status ?? "").Trim().ToLowerInvariant();
+                if (normalizedStatus != "" && normalizedStatus != "active" && normalizedStatus != "draft")
+                    return Error($"Invalid status '{status.Trim()}'. Use 'active' or 'draft'.");
 
-                if (!string.IsNullOrWhiteSpace(rule_id))
-                {
-                    if (!Guid.TryParse(rule_id.Trim(), out _))
-                        return Error($"Error: '{rule_id}' is not a valid GUID.");
-                }
-
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_business_rules");
-                if (!entityResult.IsSuccess)
-                    return Error($"Error: entity_name '{entity_name.Trim()}': {entityResult.Error}");
-                entity_name = entityResult.Value.LogicalName;
+                if (!string.IsNullOrWhiteSpace(rule_id) && !Guid.TryParse(rule_id.Trim(), out _))
+                    return Error($"'{rule_id}' is not a valid GUID.");
 
                 if (max_records <= 0) max_records = 50;
                 if (max_records > 200) max_records = 200;
 
-                // Detail mode
+                // ── Resolve entity → logical name ─────────────────────────────────
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_business_rules");
+                if (!entityResult.IsSuccess)
+                    return Error($"entity_name '{entity_name.Trim()}': {entityResult.Error}");
+                var logicalEntityName = entityResult.Value.LogicalName;
+
+                // ── Detail mode ───────────────────────────────────────────────────
                 if (!string.IsNullOrWhiteSpace(rule_id))
                 {
                     Guid.TryParse(rule_id.Trim(), out var id);
-                    return GetRuleDetail(entity_name, id);
+                    return BuildDetail(logicalEntityName, id);
                 }
 
-                // List mode
-                return GetRuleList(entity_name, status, max_records);
+                // ── List mode ─────────────────────────────────────────────────────
+                return BuildList(logicalEntityName, normalizedStatus, max_records);
             }
             catch (Exception ex)
             {
@@ -91,97 +86,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private CallToolResult GetRuleList(string entityName, string status, int maxRecords)
+        // ── List mode ─────────────────────────────────────────────────────────────
+
+        private CallToolResult BuildList(string entityName, string status, int maxRecords)
         {
             var objectTypeCode = GetObjectTypeCode(entityName);
-            var fetchXml = BuildListFetchXml(objectTypeCode, status, maxRecords);
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            var rules = result.Entities.Select(e => new BusinessRuleSummaryEntry
-            {
-                RuleId = e.Id.ToString(),
-                Name = e.GetAttributeValue<string>("name") ?? "",
-                Scope = e.FormattedValues.TryGetValue("scope", out var scopeText) ? scopeText : "",
-                Status = e.FormattedValues.TryGetValue("statuscode", out var statusText) ? statusText : "",
-                ModifiedOn = e.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd") ?? ""
-            }).ToList();
 
-            return Success(FormatRuleList(entityName, rules), new GetBusinessRulesResult
-            {
-                Mode = "list",
-                EntityName = entityName,
-                Count = rules.Count,
-                Rules = rules
-            });
-        }
-
-        private CallToolResult GetRuleDetail(string entityName, Guid ruleId)
-        {
-            var entity = _serviceClient.Retrieve("workflow", ruleId,
-                new ColumnSet("name", "primaryentity", "scope", "statecode", "statuscode",
-                    "xaml", "modifiedon", "modifiedby", "createdon", "createdby",
-                    "description", "category"));
-
-            var category = entity.GetAttributeValue<OptionSetValue>("category")?.Value;
-            if (category != 2)
-                return Error($"Error: Record {ruleId} is not a business rule (category={category}, expected 2).");
-
-            var primary = entity.GetAttributeValue<string>("primaryentity") ?? "";
-            if (!string.IsNullOrEmpty(entityName) && !primary.Equals(entityName, StringComparison.OrdinalIgnoreCase))
-                return Error($"Error: Business rule {ruleId} belongs to entity '{primary}', not '{entityName}'.");
-
-            var name = entity.GetAttributeValue<string>("name") ?? "";
-            var scope = entity.FormattedValues.TryGetValue("scope", out var scopeText) ? scopeText : "";
-            var status = entity.FormattedValues.TryGetValue("statuscode", out var statusText) ? statusText : "";
-            var description = SanitizeDescription(entity.GetAttributeValue<string>("description"));
-            var createdOn = entity.GetAttributeValue<DateTime?>("createdon");
-            var createdBy = entity.GetAttributeValue<EntityReference>("createdby");
-            var modifiedOn = entity.GetAttributeValue<DateTime?>("modifiedon");
-            var modifiedBy = entity.GetAttributeValue<EntityReference>("modifiedby");
-
-            var xaml = entity.GetAttributeValue<string>("xaml");
-            var parsedXaml = !string.IsNullOrEmpty(xaml)
-                ? ParseXaml(xaml)
-                : new XamlParseResult { ParseStatus = "no xaml" };
-
-            var detail = new BusinessRuleDetailEntry
-            {
-                RuleId = ruleId.ToString(),
-                Name = name,
-                EntityName = primary,
-                Scope = scope,
-                Status = status,
-                Description = string.IsNullOrEmpty(description) ? null : description,
-                CreatedOn = createdOn?.ToString("yyyy-MM-dd HH:mm:ss"),
-                CreatedBy = createdBy?.Name ?? createdBy?.Id.ToString(),
-                ModifiedOn = modifiedOn?.ToString("yyyy-MM-dd HH:mm:ss"),
-                ModifiedBy = modifiedBy?.Name ?? modifiedBy?.Id.ToString(),
-                Conditions = parsedXaml.Conditions,
-                Actions = parsedXaml.Actions,
-                XamlParseStatus = parsedXaml.ParseStatus
-            };
-
-            return Success(FormatRuleDetail(detail), new GetBusinessRulesResult
-            {
-                Mode = "detail",
-                EntityName = primary,
-                Count = 1,
-                Rule = detail
-            });
-        }
-
-        private static string BuildListFetchXml(int? objectTypeCode, string status, int maxRecords)
-        {
             var filterStatus = "";
-            if (!string.IsNullOrWhiteSpace(status))
-            {
-                var s = status.Trim().ToLowerInvariant();
-                if (s == "active")
-                    filterStatus = "<condition attribute='statecode' operator='eq' value='1' />";
-                else if (s == "draft")
-                    filterStatus = "<condition attribute='statecode' operator='eq' value='0' />";
-            }
+            if (status == "active")
+                filterStatus = "<condition attribute='statecode' operator='eq' value='1' />";
+            else if (status == "draft")
+                filterStatus = "<condition attribute='statecode' operator='eq' value='0' />";
 
-            return $@"<fetch top='{maxRecords}'>
+            var fetchXml = $@"<fetch top='{maxRecords}'>
   <entity name='workflow'>
     <attribute name='workflowid' />
     <attribute name='name' />
@@ -198,7 +115,84 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <order attribute='name' />
   </entity>
 </fetch>";
+
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rules = result.Entities.Select(e => new BusinessRuleSummaryEntry
+            {
+                RuleId = e.Id.ToString(),
+                Name = e.GetAttributeValue<string>("name") ?? "",
+                Scope = e.FormattedValues.TryGetValue("scope", out var scopeText) ? scopeText : null,
+                Status = e.FormattedValues.TryGetValue("statuscode", out var statusText) ? statusText : null,
+                ModifiedOn = e.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd")
+            }).ToList();
+
+            var statusLabel = status == "" ? "" : $" {status}";
+            return Success(
+                $"[Success]{statusLabel} business rules for '{entityName}': {rules.Count} found.",
+                new GetBusinessRulesResult
+                {
+                    Mode = "list",
+                    EntityName = entityName,
+                    Count = rules.Count,
+                    Rules = rules.Count > 0 ? rules : null
+                });
         }
+
+        // ── Detail mode ──────────────────────────────────────────────────────────
+
+        private CallToolResult BuildDetail(string entityName, Guid ruleId)
+        {
+            var entity = _serviceClient.Retrieve("workflow", ruleId,
+                new ColumnSet("name", "primaryentity", "scope", "statecode", "statuscode",
+                    "xaml", "modifiedon", "modifiedby", "createdon", "createdby",
+                    "description", "category"));
+
+            var category = entity.GetAttributeValue<OptionSetValue>("category")?.Value;
+            if (category != 2)
+                return Error($"Record {ruleId} is not a business rule (category={category}, expected 2).",
+                    "Use get_workflows to inspect classic workflows (category=0).");
+
+            var primary = entity.GetAttributeValue<string>("primaryentity") ?? "";
+            if (!string.IsNullOrEmpty(entityName) && !primary.Equals(entityName, StringComparison.OrdinalIgnoreCase))
+                return Error($"Business rule {ruleId} belongs to entity '{primary}', not '{entityName}'.");
+
+            var xaml = entity.GetAttributeValue<string>("xaml");
+            var parsedXaml = !string.IsNullOrEmpty(xaml)
+                ? ParseXaml(xaml)
+                : new XamlParseResult { ParseStatus = "no xaml" };
+
+            var detail = new BusinessRuleDetailEntry
+            {
+                RuleId = ruleId.ToString(),
+                Name = entity.GetAttributeValue<string>("name") ?? "",
+                EntityName = primary,
+                Scope = entity.FormattedValues.TryGetValue("scope", out var scopeText) ? scopeText : null,
+                Status = entity.FormattedValues.TryGetValue("statuscode", out var statusText) ? statusText : null,
+                Description = SanitizeDescription(entity.GetAttributeValue<string>("description")),
+                CreatedOn = entity.GetAttributeValue<DateTime?>("createdon")?.ToString("yyyy-MM-dd HH:mm:ss"),
+                CreatedBy = entity.GetAttributeValue<EntityReference>("createdby")?.Name,
+                ModifiedOn = entity.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd HH:mm:ss"),
+                ModifiedBy = entity.GetAttributeValue<EntityReference>("modifiedby")?.Name,
+                Conditions = parsedXaml.Conditions,
+                Actions = parsedXaml.Actions,
+                XamlParseStatus = parsedXaml.ParseStatus
+            };
+
+            var condCount = detail.Conditions?.Count ?? 0;
+            var actionCount = detail.Actions?.Count ?? 0;
+
+            return Success(
+                $"[Success] Business rule '{detail.Name}': {condCount} conditions, {actionCount} actions.",
+                new GetBusinessRulesResult
+                {
+                    Mode = "detail",
+                    EntityName = primary,
+                    Count = 1,
+                    Rule = detail
+                });
+        }
+
+        // ── Helpers ───────────────────────────────────────────────────────────────
 
         private int? GetObjectTypeCode(string entityName)
         {
@@ -239,11 +233,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var constants = new List<string>();
             foreach (Match m in constMatches)
                 constants.Add($"{m.Groups["val"].Value} ({m.Groups["typename"].Value})");
-
-            // Extract condition branch descriptions
-            var descMatches = Regex.Matches(xaml,
-                @"x:Key=""Description""\>(?<desc>[^<]+)\<",
-                RegexOptions.Singleline);
 
             // Build natural language conditions
             for (var i = 0; i < evaluatedFields.Count; i++)
@@ -308,8 +297,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             return new XamlParseResult
             {
-                Conditions = conditions,
-                Actions = actions,
+                Conditions = conditions.Count > 0 ? conditions : null,
+                Actions = actions.Count > 0 ? actions : null,
                 ParseStatus = conditions.Count == 0 && actions.Count == 0
                     ? "no conditions or actions extracted"
                     : "parsed"
@@ -318,86 +307,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string SanitizeDescription(string description)
         {
-            if (string.IsNullOrWhiteSpace(description)) return string.Empty;
+            if (string.IsNullOrWhiteSpace(description)) return null;
             var trimmed = description.Trim();
             if (trimmed.Equals("Click to add description", StringComparison.OrdinalIgnoreCase) ||
                 trimmed.Equals("Click to add description.", StringComparison.OrdinalIgnoreCase))
-                return string.Empty;
+                return null;
             return trimmed;
-        }
-
-        private static string EscapeTab(string value) =>
-            value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
-
-        private static string FormatRuleList(string entityName, List<BusinessRuleSummaryEntry> rules)
-        {
-            if (rules.Count == 0)
-                return $"0 business rules found for '{entityName}'.";
-
-            var sb = new StringBuilder(rules.Count * 120 + 128);
-            var countLabel = rules.Count == 1 ? "rule" : "rules";
-            sb.AppendLine($"[BusinessRules] {entityName} ({rules.Count} {countLabel})");
-            sb.AppendLine();
-            sb.AppendLine("ruleId\tname\tscope\tstatus\tmodifiedOn");
-
-            foreach (var rule in rules)
-                sb.AppendLine($"{rule.RuleId}\t{EscapeTab(rule.Name)}\t{rule.Scope}\t{rule.Status}\t{rule.ModifiedOn}");
-
-            return sb.ToString();
-        }
-
-        private static string FormatRuleDetail(BusinessRuleDetailEntry rule)
-        {
-            var sb = new StringBuilder(1024);
-            sb.AppendLine($"[BusinessRule] {rule.Name}");
-            sb.AppendLine($"RuleId: {rule.RuleId}");
-            sb.AppendLine($"Entity: {rule.EntityName}");
-            sb.AppendLine($"Scope: {rule.Scope}");
-            sb.AppendLine($"Status: {rule.Status}");
-
-            if (!string.IsNullOrEmpty(rule.Description))
-                sb.AppendLine($"Description: {rule.Description}");
-            if (!string.IsNullOrEmpty(rule.CreatedOn))
-                sb.AppendLine($"CreatedOn: {rule.CreatedOn}");
-            if (!string.IsNullOrEmpty(rule.CreatedBy))
-                sb.AppendLine($"CreatedBy: {rule.CreatedBy}");
-            if (!string.IsNullOrEmpty(rule.ModifiedOn))
-                sb.AppendLine($"ModifiedOn: {rule.ModifiedOn}");
-            if (!string.IsNullOrEmpty(rule.ModifiedBy))
-                sb.AppendLine($"ModifiedBy: {rule.ModifiedBy}");
-
-            sb.AppendLine();
-            if (rule.Conditions.Count > 0)
-            {
-                sb.AppendLine($"[Conditions] {rule.Conditions.Count} total");
-                foreach (var c in rule.Conditions)
-                    sb.AppendLine(c);
-                sb.AppendLine();
-            }
-
-            if (rule.Actions.Count > 0)
-            {
-                sb.AppendLine($"[Actions] {rule.Actions.Count} total");
-                foreach (var a in rule.Actions)
-                    sb.AppendLine(a);
-                sb.AppendLine();
-            }
-
-            if (rule.Conditions.Count == 0 && rule.Actions.Count == 0)
-            {
-                var message = rule.XamlParseStatus == "unable to parse"
-                    ? "unable to parse"
-                    : "no conditions or actions extracted";
-                sb.AppendLine($"[XAML] ({message} - use manage_record(action='read') with columns 'xaml' to inspect raw)");
-            }
-
-            return sb.ToString();
         }
 
         private sealed class XamlParseResult
         {
-            public List<string> Conditions { get; set; } = [];
-            public List<string> Actions { get; set; } = [];
+            public List<string> Conditions { get; set; }
+            public List<string> Actions { get; set; }
             public string ParseStatus { get; set; }
         }
     }

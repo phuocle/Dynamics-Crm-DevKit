@@ -73,6 +73,7 @@ Mỗi tool phải pass hết 13 item dưới trước khi add vào list "đã ho
 - 8. search_records (phase 1)
 - 9. whoami (phase 1)
 - 10. get_audit_history (phase 1)
+- 12. get_business_rules (phase 2)
 - 13. get_custom_apis (phase 2)
 - 14. get_flows (phase 2)
 - 15. get_message (phase 2)
