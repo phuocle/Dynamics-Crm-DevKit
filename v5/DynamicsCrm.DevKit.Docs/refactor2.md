@@ -67,57 +67,17 @@ Mỗi tool phải pass hết 13 item dưới trước khi add vào list "đã ho
 - [ ] **Không để lại `using` thừa** (ví dụ `System.Text.Json` nếu không dùng `JsonSerializer`).
 - [ ] **Naming:** `logicalName` (không `field`); `recordId` / `entityName` (camelCase JSON) phù hợp convention tool khác.
 
-## 4. tools cần refactor
-
-Số thứ tự theo `McpServerHost.ToolCategoryMap` (xem [McpServerHost.cs](..\DynamicsCrm.DevKit.Cli\Mcp\McpServerHost.cs)).
-
-### Tier `standard` (17 tools)
-
-| #   | Tool                          | Độ khó            | Note                                                         |
-| --- | ----------------------------- | ----------------- | ------------------------------------------------------------ |
-| 10  | `get_audit_history`           | ✅ done (phase 1) | Dùng làm chuẩn cho 11-33                                     |
-| 11  | `publish_customizations`      | medium            | Cần probe: targeted vs PublishAll; ribbon cache quirk        |
-| 12  | `manage_form`                 | high              | FormXML phức tạp; multi-operation; auto-backup               |
-| 13  | `manage_view`                 | high              | LayoutXML/FetchXML sync rule; QuickFind special              |
-| 14  | `manage_role`                 | medium            | `user` action trả privileges grouped by entity               |
-| 15  | `get_messages`                | ✅ done           | SDK messages + custom actions list; XAML param parsing fixed |
-| 16  | `manage_environment_variable` | medium            | create/update/delete/clear; type immutable                   |
-| 17  | `get_workflows`               | medium            | Classic workflow; realtime vs background                     |
-| 18  | `get_flows`                   | medium            | Power Automate cloud flows; run history                      |
-| 19  | `get_business_process_flows`  | medium            | BPF + stages; auto-created entity                            |
-| 20  | `get_business_rules`          | medium            | Client-side logic; XAML từ `manage_record`                   |
-| 21  | `get_custom_apis`             | medium            | Modern API; isFunction flag                                  |
-| 22  | `get_solution_components`     | low               | Solution audit; component type summary                       |
-| 23  | `get_plugin_trace_logs`       | medium            | Plugin traces; sync/async; correlation_id                    |
-| 24  | `get_system_jobs`             | medium            | Async failures; status/operation_type maps                   |
-| 25  | `get_plugins`                 | high              | Assembly/types/steps; include_images flag                    |
-| 26  | `manage_web_resource`         | medium            | prefix validation; create/update/delete                      |
-| 27  | `manage_chart`                | high              | Pie create needs user confirmation                           |
-
-### Tier `advanced` (7 tools)
-
-| #   | Tool                  | Độ khó    | Note                                             |
-| --- | --------------------- | --------- | ------------------------------------------------ |
-| 28  | `manage_app`          | high      | App + sitemap navigation; backup/undo            |
-| 29  | `upsert_table`        | high      | Auto-derive schemaName; mutation                 |
-| 30  | `upsert_column`       | high      | Formula clone; picklist options; create flags    |
-| 31  | `upsert_relationship` | high      | 1:N / N:N / polymorphic; cascade preset          |
-| 32  | `execute_web_api`     | high      | Raw Web API; URL validator chặn metadata/system  |
-| 33  | `manage_ribbon`       | very high | RibbonDiffXml; solution import; PublishAll async |
-| 34  | `manage_command`      | high      | Modern appaction; Power Fx; visibility rules     |
-
-> Tier advanced nên refactor sau cùng vì phức tạp, dễ phá vỡ behavior. Test kỹ trên dev org trước khi approve.
-
 ## 4. Tools đã hoàn thành và aP đã review
 
 - 7. parse_record_url (phase 1)
 - 8. search_records (phase 1)
 - 9. whoami (phase 1)
 - 10. get_audit_history (phase 1)
+- 11. get_message (phase 2)
 
 ---
 
-## 6. Quy trình làm việc chuẩn cho mỗi tool
+## 5. Quy trình làm việc chuẩn cho mỗi tool
 
 ```
 1. User yêu cầu refactor tool {N}.{name}
