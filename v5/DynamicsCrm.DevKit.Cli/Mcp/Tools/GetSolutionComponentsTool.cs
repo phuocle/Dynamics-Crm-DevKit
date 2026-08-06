@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
@@ -135,31 +134,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Identify unmanaged customizations before importing managed solutions\n\n" +
 
             "FUZZY/AMBIGUITY:\n" +
-            "- solution_name resolves Display Name contains first, then unique name contains. Ambiguity returns IsError=true with candidates.")]
+            "- solution_name resolves Display Name contains first, then unique name contains. Ambiguity returns IsError=true with candidates.\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_tables → entity/attribute metadata for sub-components\n" +
+            "- get_plugins → plugin assembly/type/step detail\n" +
+            "- manage_webresource → web resource detail")]
         public CallToolResult get_solution_components(
-            [Description(
-                "Solution unique/display name; multiple matches return choices."
-            )] string solution_name,
-            [Description(
-                "Add ActiveLayer (Yes/No) via msdyn_componentlayer. Active = unmanaged customization exists."
-            )] bool include_active_layers = false,
-            [Description(
-                "Show only active-layer components; implies include_active_layers."
-            )] bool active_layers_only = false)
+            [Description("Solution unique/display name; multiple matches return choices.")] string solution_name,
+            [Description("Add ActiveLayer (Yes/No) via msdyn_componentlayer. Active = unmanaged customization exists.")] bool include_active_layers = false,
+            [Description("Show only active-layer components; implies include_active_layers.")] bool active_layers_only = false)
         {
-            if (string.IsNullOrWhiteSpace(solution_name))
-                return ErrorResult("Error: solution_name is required.\n" +
-                       "Provide the solution uniqueName (e.g. 'DevKit_Core') or displayName (e.g. 'DevKit Core').");
-
-            // active_layers_only implies include_active_layers
-            if (active_layers_only)
-                include_active_layers = true;
-
             try
             {
+                if (string.IsNullOrWhiteSpace(solution_name))
+                    return Error("solution_name is required.",
+                        "Provide the solution uniqueName (e.g. 'DevKit_Core') or displayName (e.g. 'DevKit Core').");
+
+                // active_layers_only implies include_active_layers
+                if (active_layers_only)
+                    include_active_layers = true;
+
+            
                 var solutionResult = ResolveSolution(solution_name.Trim());
                 if (!solutionResult.IsSuccess)
-                    return ErrorResult($"Error: {solutionResult.Error}");
+                {
+                    // Ambiguous → return structured candidates so AI can re-call with exact name
+                    if (solutionResult.Status == ResolveStatus.Ambiguous && solutionResult.Candidates.Count > 0)
+                    {
+                        var matches = solutionResult.Candidates.Select(c => new SolutionMatchEntry
+                        {
+                            UniqueName = c.UniqueName ?? "",
+                            DisplayName = c.DisplayName ?? "",
+                            Version = "",
+                            IsManaged = false
+                        }).ToList();
+                        return Error(solutionResult.Error, null, new GetSolutionComponentsResult
+                        {
+                            TotalComponents = 0,
+                            SolutionMatches = matches
+                        });
+                    }
+
+                    return Error(solutionResult.Error);
+                }
 
                 var solution = solutionResult.Value;
                 var (components, fullEntityNames) = LoadComponents(solution.Id);
@@ -170,13 +187,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     activeLayers = CheckActiveLayers(components);
 
                 var structured = BuildStructuredResult(solution, components, fullEntityNames, activeLayers, active_layers_only);
-                return StructuredResult(
-                    FormatResult(solution, components, fullEntityNames, activeLayers, active_layers_only),
+                return Success(
+                    BuildSummaryText(solution, components, activeLayers, active_layers_only),
                     structured);
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Failed to get solution components: {ex.Message}");
+                return ThrowException(ex);
             }
         }
 
@@ -296,154 +313,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Output formatters ────────────────────────────────────────────────────
 
-        private static string FormatMultipleSolutions(string keyword, List<Entity> solutions)
-        {
-            var sb = new StringBuilder(512);
-            sb.AppendLine($"[Multiple Solutions] {solutions.Count} matches for \"{keyword}\"");
-            sb.AppendLine("Re-call with exact UniqueName:");
-            sb.AppendLine();
-            sb.AppendLine("UniqueName\tDisplayName\tVersion\tIsManaged");
-            foreach (var s in solutions.OrderBy(s => s.GetAttributeValue<string>("uniquename")))
-            {
-                var uniqueName  = s.GetAttributeValue<string>("uniquename")   ?? "";
-                var displayName = s.GetAttributeValue<string>("friendlyname") ?? "";
-                var version     = s.GetAttributeValue<string>("version")      ?? "";
-                var isManaged   = s.GetAttributeValue<bool>("ismanaged") ? "Yes" : "No";
-                sb.AppendLine($"{uniqueName}\t{displayName}\t{version}\t{isManaged}");
-            }
-            return sb.ToString();
-        }
-
-        private string FormatResult(Entity solution, List<Entity> components, Dictionary<Guid, string> fullEntityNames,
+        private static string BuildSummaryText(Entity solution, List<Entity> components,
             Dictionary<Guid, bool> activeLayers, bool activeLayersOnly)
         {
-            var uniqueName   = solution.GetAttributeValue<string>("uniquename")   ?? "";
-            var displayName  = solution.GetAttributeValue<string>("friendlyname") ?? "";
-            var version      = solution.GetAttributeValue<string>("version")      ?? "";
-            var isManaged    = solution.GetAttributeValue<bool>("ismanaged") ? "Yes" : "No";
-            var publisherName = solution.GetAttributeValue<AliasedValue>("pub.friendlyname")?.Value as string ?? "";
+            var displayName = solution.GetAttributeValue<string>("friendlyname") ?? "";
+            var uniqueName  = solution.GetAttributeValue<string>("uniquename")   ?? "";
+            var displayCount = activeLayersOnly
+                ? components.Count(c => activeLayers.TryGetValue(c.GetAttributeValue<Guid>("objectid"), out var a) && a)
+                : components.Count;
 
-            var sb = new StringBuilder(components.Count * 60 + 1024);
-            var showActiveLayers = activeLayers != null;
-
-            // ── Solution info ──
-            sb.AppendLine($"[Solution] {displayName} ({uniqueName})");
-            sb.AppendLine($"Version: {version}");
-            sb.AppendLine($"Publisher: {publisherName}");
-            sb.AppendLine($"IsManaged: {isManaged}");
-            sb.AppendLine($"Components: {components.Count}");
-            if (showActiveLayers)
+            if (activeLayers != null)
             {
                 var activeCount = activeLayers.Count(kv => kv.Value);
-                sb.AppendLine($"ActiveLayers: {activeCount} of {components.Count} components");
-            }
-            sb.AppendLine();
-
-            // ── Full Entities guidance (if any) ──
-            if (fullEntityNames.Count > 0)
-            {
-                sb.AppendLine($"[Full Entities] {fullEntityNames.Count} entities");
-                sb.AppendLine("Use get_tables for details:");
-                foreach (var kvp in fullEntityNames.OrderBy(k => k.Value))
-                    sb.AppendLine($"- {kvp.Value}");
-                sb.AppendLine();
+                return activeLayersOnly
+                    ? $"[Success] {displayName} ({uniqueName}): {displayCount} active-layer components of {components.Count} total."
+                    : $"[Success] {displayName} ({uniqueName}): {components.Count} components, {activeCount} with active layers.";
             }
 
-            var grouped = components
-                .GroupBy(c => c.GetAttributeValue<OptionSetValue>("componenttype")?.Value ?? 0)
-                .OrderBy(g => g.Key)
-                .ToList();
-
-            // ── Summary ──
-            sb.AppendLine("[Component Summary]");
-            if (showActiveLayers)
-                sb.AppendLine("Type\tTypeId\tCount\tActiveLayers");
-            else
-                sb.AppendLine("Type\tTypeId\tCount");
-            foreach (var grp in grouped)
-            {
-                var typeName = GetTypeName(grp.Key);
-                if (showActiveLayers)
-                {
-                    var activeInGroup = grp.Count(c => activeLayers.TryGetValue(c.GetAttributeValue<Guid>("objectid"), out var a) && a);
-                    sb.AppendLine($"{typeName}\t{grp.Key}\t{grp.Count()}\t{activeInGroup}");
-                }
-                else
-                {
-                    sb.AppendLine($"{typeName}\t{grp.Key}\t{grp.Count()}");
-                }
-            }
-            sb.AppendLine();
-
-            var nameMap = BuildNameMap(components, fullEntityNames);
-
-            // ── Full component list ──
-            // When activeLayersOnly, filter to only components with active layers
-            var displayComponents = activeLayersOnly
-                ? components.Where(c => activeLayers.TryGetValue(c.GetAttributeValue<Guid>("objectid"), out var a) && a).ToList()
-                : components;
-
-            var displayGrouped = displayComponents
-                .GroupBy(c => c.GetAttributeValue<OptionSetValue>("componenttype")?.Value ?? 0)
-                .OrderBy(g => g.Key)
-                .ToList();
-
-            if (activeLayersOnly)
-                sb.AppendLine($"[Components] {displayComponents.Count} with active layers (of {components.Count} total)");
-            else
-                sb.AppendLine($"[Components] {components.Count} total");
-            sb.AppendLine();
-
-            if (showActiveLayers)
-                sb.AppendLine("Type\tTypeId\tObjectId\tActiveLayer\tName");
-            else
-                sb.AppendLine("Type\tTypeId\tObjectId\tName");
-            foreach (var grp in displayGrouped)
-            {
-                var typeName = GetTypeName(grp.Key);
-                foreach (var c in grp)
-                {
-                    var objectId = c.GetAttributeValue<Guid>("objectid");
-                    nameMap.TryGetValue(objectId, out var name);
-
-                    // Mark full entities
-                    if (grp.Key == 1 && fullEntityNames.ContainsKey(objectId))
-                        name = $"{name} (full — use get_tables)";
-
-                    if (showActiveLayers)
-                    {
-                        var isActive = activeLayers.TryGetValue(objectId, out var a) && a ? "Yes" : "No";
-                        sb.AppendLine($"{typeName}\t{grp.Key}\t{objectId}\t{isActive}\t{name ?? "(unresolved)"}");
-                    }
-                    else
-                    {
-                        sb.AppendLine($"{typeName}\t{grp.Key}\t{objectId}\t{name ?? "(unresolved)"}");
-                    }
-                }
-            }
-
-            return sb.ToString();
+            return $"[Success] {displayName} ({uniqueName}): {components.Count} components.";
         }
 
         // ── Name resolution ──────────────────────────────────────────────────────
-
-        private static GetSolutionComponentsResult BuildMultipleSolutionsResult(List<Entity> solutions)
-        {
-            return new GetSolutionComponentsResult
-            {
-                TotalComponents = 0,
-                SolutionMatches = solutions
-                    .OrderBy(s => s.GetAttributeValue<string>("uniquename"))
-                    .Select(s => new SolutionMatchEntry
-                    {
-                        UniqueName = s.GetAttributeValue<string>("uniquename") ?? "",
-                        DisplayName = s.GetAttributeValue<string>("friendlyname") ?? "",
-                        Version = s.GetAttributeValue<string>("version") ?? "",
-                        IsManaged = s.GetAttributeValue<bool>("ismanaged")
-                    })
-                    .ToList()
-            };
-        }
 
         private GetSolutionComponentsResult BuildStructuredResult(Entity solution, List<Entity> components,
             Dictionary<Guid, string> fullEntityNames, Dictionary<Guid, bool> activeLayers, bool activeLayersOnly)
@@ -511,10 +401,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Components = componentEntries
             };
         }
-
-        private CallToolResult StructuredResult(string text, GetSolutionComponentsResult structured) => Success(text, structured);
-
-        private CallToolResult ErrorResult(string message) => Error(message);
 
         private Dictionary<Guid, string> BuildNameMap(List<Entity> components, Dictionary<Guid, string> fullEntityNames)
         {
