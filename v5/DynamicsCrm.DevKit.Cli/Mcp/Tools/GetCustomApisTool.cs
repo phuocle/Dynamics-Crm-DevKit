@@ -1,7 +1,5 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Messages;
-using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
@@ -10,7 +8,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
@@ -62,8 +59,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(GetApisResult)),
         Description(
             "Custom API definitions (modern replacement for Custom Actions). api_name empty = list; set = detail (params, plugin binding). " +
-            "Managed APIs excluded by default (set include_microsoft=true to include them). isFunction=true → GET; false → POST. " +
-            "For legacy workflow Custom Actions → get_messages.")]
+            "Managed APIs excluded by default (set include_microsoft=true to include them). isFunction=true → GET; false → POST.\n\n" +
+            "WHEN TO USE:\n" +
+            "- Inspect a Custom API's request/response parameters and plugin binding before registering or invoking it\n" +
+            "- Discover Custom APIs bound to a specific entity\n" +
+            "- Distinguish modern Custom APIs from legacy workflow Custom Actions\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_messages → legacy workflow Custom Actions (category=3) + SDK messages\n" +
+            "- get_plugins → plugin assemblies/types/steps registered on these APIs\n" +
+            "- get_workflows → classic workflow definitions")]
         public CallToolResult get_custom_apis(
             [Description("Display Name or unique name → detail. Empty = list.")] string api_name = "",
             [Description("Bound entity Display/logical name. Empty = all.")] string entity_name = "",
@@ -73,33 +77,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(status))
-                {
-                    var s = status.Trim().ToLowerInvariant();
-                    if (s != "active" && s != "inactive" && s != "all")
-                        return Error($"Error: Invalid status '{status.Trim()}'. Use 'active', 'inactive', or 'all'.");
-                }
+                // ── Validate status ──────────────────────────────────────────────
+                var normalizedStatus = (status ?? "active").Trim().ToLowerInvariant();
+                if (normalizedStatus != "active" && normalizedStatus != "inactive" && normalizedStatus != "all")
+                    return Error($"Invalid status '{status.Trim()}'. Use 'active', 'inactive', or 'all'.");
 
                 if (max_records <= 0) max_records = 100;
                 if (max_records > 500) max_records = 500;
 
+                // ── Detail mode ──────────────────────────────────────────────────
                 if (!string.IsNullOrWhiteSpace(api_name))
                 {
                     var apiResult = ResolveCustomApi(api_name.Trim());
                     if (!apiResult.IsSuccess)
-                        return Error($"Error: api_name '{api_name.Trim()}': {apiResult.Error}");
-                    return GetDetail(apiResult.CanonicalName);
+                        return Error($"api_name '{api_name.Trim()}': {apiResult.Error}");
+                    return BuildDetail(apiResult.CanonicalName);
                 }
 
+                // ── List mode ────────────────────────────────────────────────────
+                var resolvedEntity = string.IsNullOrWhiteSpace(entity_name)
+                    ? null
+                    : entity_name.Trim().ToLowerInvariant();
                 if (!string.IsNullOrWhiteSpace(entity_name))
                 {
                     var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_custom_apis");
                     if (!entityResult.IsSuccess)
-                        return Error($"Error: entity_name '{entity_name.Trim()}': {entityResult.Error}");
-                    entity_name = entityResult.Value.LogicalName;
+                        return Error($"entity_name '{entity_name.Trim()}': {entityResult.Error}");
+                    resolvedEntity = entityResult.Value.LogicalName;
                 }
 
-                return GetList(entity_name, include_microsoft, status, max_records);
+                return BuildList(resolvedEntity, include_microsoft, normalizedStatus, max_records);
             }
             catch (Exception ex)
             {
@@ -107,19 +114,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private CallToolResult GetList(string entityName, bool includeMicrosoft, string status, int maxRecords)
+        private CallToolResult BuildList(string entityName, bool includeMicrosoft, string normalizedStatus, int maxRecords)
         {
             var filters = new StringBuilder();
 
             if (!string.IsNullOrWhiteSpace(entityName))
-                filters.AppendLine($"      <condition attribute='boundentitylogicalname' operator='eq' value='{EscapeXml(entityName.Trim().ToLowerInvariant())}'/>");
+                filters.AppendLine($"      <condition attribute='boundentitylogicalname' operator='eq' value='{EscapeXml(entityName)}'/>");
 
             if (!includeMicrosoft)
-            {
                 filters.AppendLine("      <condition attribute='ismanaged' operator='eq' value='0'/>");
-            }
 
-            var normalizedStatus = (status ?? "active").Trim().ToLowerInvariant();
             if (normalizedStatus == "active")
                 filters.AppendLine("      <condition attribute='statuscode' operator='eq' value='1'/>");
             else if (normalizedStatus == "inactive")
@@ -148,55 +152,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             var entities = result.Entities.ToList();
 
-            if (entities.Count == 0)
-            {
-                var label = string.IsNullOrWhiteSpace(entityName) ? "" : $" for entity '{entityName.Trim().ToLowerInvariant()}'";
-                var text = $"0 Custom APIs found{label}.";
-                var emptyResult = new GetApisResult
-                {
-                    TotalCount = 0,
-                    EntityFilter = string.IsNullOrWhiteSpace(entityName) ? null : entityName.Trim().ToLowerInvariant(),
-                    Apis = []
-                };
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = text }],
-                    StructuredContent = JsonSerializer.SerializeToElement(emptyResult)
-                };
-            }
-
             var apis = entities.Select(MapListEntry).ToList();
-
-            var entityLabel = string.IsNullOrWhiteSpace(entityName) ? "" : $" (entity: {entityName.Trim().ToLowerInvariant()})";
             var statusLabel = normalizedStatus == "all" ? "" : $" {normalizedStatus}";
-            var countWord = entities.Count == 1 ? "API" : "APIs";
-
-            var sb = new StringBuilder(entities.Count * 120 + 128);
-            sb.AppendLine($"[Custom APIs] {entities.Count}{statusLabel} {countWord}{entityLabel}");
-            sb.AppendLine();
-            sb.AppendLine("uniqueName\tboundTo\tisFunction\tpluginType\tprocessingType\tisPrivate\tstatus");
-
-            foreach (var api in apis)
-            {
-                var boundTo = api.BoundEntity ?? (api.BindingType == "Global" ? "(global)" : api.BindingType);
-                sb.AppendLine($"{EscapeTab(api.UniqueName)}\t{boundTo}\t{(api.IsFunction ? "Yes" : "No")}\t{EscapeTab(api.PluginType ?? "(none)")}\t{api.ProcessingType}\t{(api.IsPrivate ? "Yes" : "No")}\t{api.Status}");
-            }
+            var entityLabel = string.IsNullOrWhiteSpace(entityName) ? "" : $" (entity: {entityName})";
 
             var structured = new GetApisResult
             {
                 TotalCount = apis.Count,
-                EntityFilter = string.IsNullOrWhiteSpace(entityName) ? null : entityName.Trim().ToLowerInvariant(),
-                Apis = apis
+                EntityFilter = string.IsNullOrWhiteSpace(entityName) ? null : entityName,
+                Apis = apis.Count > 0 ? apis : null
             };
 
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            return Success(
+                $"[Success]{statusLabel} custom APIs{entityLabel}: {apis.Count} found.",
+                structured);
         }
 
-        private CallToolResult GetDetail(string apiName)
+        private CallToolResult BuildDetail(string apiName)
         {
             var fetchApi = $@"<fetch>
   <entity name='customapi'>
@@ -221,8 +193,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var apiResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchApi));
             if (apiResult.Entities.Count == 0)
                 return Error(
-                    $"Error: Custom API '{apiName}' not found.\n" +
-                    "Verify the unique name using get_custom_apis (list mode, api_name empty).");
+                    $"Custom API '{apiName}' not found.",
+                    "Call get_custom_apis with api_name empty to list available Custom APIs.");
 
             var api = apiResult.Entities[0];
             var customApiId = api.Id;
@@ -263,75 +235,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrEmpty(entry.SolutionId))
                 entry.SolutionId = ResolveSolutionName(entry.SolutionId) ?? entry.SolutionId;
             entry.RequestParameters = paramsResult.Entities.Select(MapRequestParameter).ToList();
+            if (entry.RequestParameters.Count == 0) entry.RequestParameters = null;
             entry.ResponseProperties = responseResult.Entities.Select(MapResponseProperty).ToList();
-
-            var sb = new StringBuilder(512);
-            sb.AppendLine($"[Custom API] {entry.UniqueName}");
-            sb.AppendLine();
-            sb.AppendLine($"uniqueName: {entry.UniqueName}");
-            if (!string.IsNullOrEmpty(entry.DisplayName))
-                sb.AppendLine($"displayName: {entry.DisplayName}");
-            if (!string.IsNullOrEmpty(entry.Description))
-                sb.AppendLine($"description: {entry.Description}");
-
-            var bindingDisplay = entry.BindingType;
-            if (!string.IsNullOrEmpty(entry.BoundEntity))
-                bindingDisplay += $" ({entry.BoundEntity})";
-            sb.AppendLine($"bindingType: {bindingDisplay}");
-            sb.AppendLine($"isFunction: {(entry.IsFunction ? "Yes" : "No")}");
-            sb.AppendLine($"isPrivate: {(entry.IsPrivate ? "Yes" : "No")}");
-            sb.AppendLine($"processingType: {entry.ProcessingType}");
-            sb.AppendLine($"pluginType: {entry.PluginType ?? "(none)"}");
-            if (!string.IsNullOrEmpty(entry.PluginTypeFullName))
-                sb.AppendLine($"pluginTypeFullName: {entry.PluginTypeFullName}");
-            if (!string.IsNullOrEmpty(entry.PluginAssemblyName))
-                sb.AppendLine($"pluginAssembly: {entry.PluginAssemblyName} ({entry.PluginAssemblyVersion})");
-            if (!string.IsNullOrEmpty(entry.PluginIsolationMode))
-                sb.AppendLine($"isolationMode: {entry.PluginIsolationMode}");
-            sb.AppendLine($"status: {entry.Status}");
-
-            if (!string.IsNullOrEmpty(entry.Owner))
-                sb.AppendLine($"owner: {entry.Owner}");
-            if (!string.IsNullOrEmpty(entry.SolutionId))
-                sb.AppendLine($"solutionId: {entry.SolutionId}");
-            if (!string.IsNullOrEmpty(entry.CreatedOn))
-                sb.AppendLine($"createdOn: {entry.CreatedOn}");
-            if (!string.IsNullOrEmpty(entry.ModifiedOn))
-                sb.AppendLine($"modifiedOn: {entry.ModifiedOn}");
-
-            sb.AppendLine();
-
-            if (entry.RequestParameters.Count > 0)
-            {
-                sb.AppendLine($"[Request Parameters] {entry.RequestParameters.Count} total");
-                sb.AppendLine();
-                sb.AppendLine("name\ttype\trequired\tentity\tdescription");
-                foreach (var p in entry.RequestParameters)
-                {
-                    sb.AppendLine($"{p.Name}\t{p.Type}\t{(p.IsOptional == true ? "No" : "Yes")}\t{p.LogicalEntityName ?? "-"}\t{EscapeTab(p.Description ?? "")}");
-                }
-                sb.AppendLine();
-            }
-            else
-            {
-                sb.AppendLine("[Request Parameters] 0");
-                sb.AppendLine();
-            }
-
-            if (entry.ResponseProperties.Count > 0)
-            {
-                sb.AppendLine($"[Response Properties] {entry.ResponseProperties.Count} total");
-                sb.AppendLine();
-                sb.AppendLine("name\ttype\tentity\tdescription");
-                foreach (var p in entry.ResponseProperties)
-                {
-                    sb.AppendLine($"{p.Name}\t{p.Type}\t{p.LogicalEntityName ?? "-"}\t{EscapeTab(p.Description ?? "")}");
-                }
-            }
-            else
-            {
-                sb.AppendLine("[Response Properties] 0");
-            }
+            if (entry.ResponseProperties.Count == 0) entry.ResponseProperties = null;
 
             var structured = new GetApisResult
             {
@@ -339,11 +245,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Apis = [entry]
             };
 
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            var paramCount = entry.RequestParameters?.Count ?? 0;
+            var responseCount = entry.ResponseProperties?.Count ?? 0;
+
+            return Success(
+                $"[Success] Custom API '{entry.UniqueName}': {paramCount} request params, {responseCount} response properties.",
+                structured);
         }
 
         private static CustomApiEntry MapListEntry(Entity e)
@@ -367,7 +274,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        private static CustomApiEntry MapDetailEntry(Entity e)
+        private CustomApiEntry MapDetailEntry(Entity e)
         {
             var entry = MapListEntry(e);
             entry.Description = NullIfEmpty(e.GetAttributeValue<string>("description"));
@@ -479,9 +386,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string EscapeXml(string value) =>
             value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("\"", "&quot;");
-
-        private static string EscapeTab(string value) =>
-            value?.Replace("\t", " ").Replace("\n", " ").Replace("\r", "") ?? "";
 
     }
 }

@@ -13,6 +13,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string EntityFilter { get; set; }
 
         [JsonPropertyName("apis")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<CustomApiEntry> Apis { get; set; }
     }
 }
