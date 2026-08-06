@@ -1,10 +1,8 @@
-# Refactor MCP tools — phase 2 (33 tools còn lại)
-
-> Spec chuẩn cho mọi MCP tool trong `DynamicsCrm.DevKit.Cli/Mcp/Tools/`, dùng từ tool số **11** trở đi (đã làm 7-10 ở phase 1, xem [refactor.md](refactor.md)). Phase 2 refactor 33 tools còn lại trong `McpServerHost.ToolCategoryMap`, bám sát 8 rule dưới.
+# Refactor MCP tools — docs 2
 
 ## 1. Rules — không được quên
 
-> Giữ nguyên tinh thần [refactor.md](refactor.md), bổ sung rule mới phát sinh từ review phase 1.
+> Giữ nguyên tinh thần [refactor.md](refactor.md), bổ sung rule mới phát sinh từ docs 1.
 
 1. **Bỏ qua hết unit test**, làm sau. Khi build dùng `DynamicsCrm.DevKit.Scripts/Release.DynamicsCrm.DevKit.Cli.ps1` (xem [build-cli.md](../.codex/workflows/build-cli.md)) — script này kill MCP process hiện tại, MCP tự restart với build mới.
 2. **Toàn bộ class chỉ có 1 try-catch ở hàm main của tool.** Không try-catch trong helper (để exception bubble lên main → `ThrowException(ex)`).
@@ -28,8 +26,9 @@
    - **(3) Output tool call** — `Content` 1 dòng + `Structured content` JSON + `IsError`.
    - **(4) Kết quả AI tổng hợp lại** — bullet `Trạng thái` + giải thích từng trường + `Token tiết kiệm` + `Cách dùng tiếp theo`.
    - Thêm ≥ 3 ví dụ phụ: 1 happy-path khác (filter/mode khác) + 2-3 validation error paths.
+   - Có thể xem bất kỳ ví dụ nào ở folder Docs\testcall
 
-## 2. Rule bổ sung phase 2 (rút ra từ review `get_audit_history`)
+## 2. Rule bổ sung docs 2
 
 9. **Lookup audit (1 entry = 1 event, KHÔNG phải 1 field):** Khi tool trả về danh sách event, mỗi entry phải có cấu trúc:
    ```
@@ -68,7 +67,7 @@ Mỗi tool phải pass hết 13 item dưới trước khi add vào list "đã ho
 - [ ] **Không để lại `using` thừa** (ví dụ `System.Text.Json` nếu không dùng `JsonSerializer`).
 - [ ] **Naming:** `logicalName` (không `field`); `recordId` / `entityName` (camelCase JSON) phù hợp convention tool khác.
 
-## 4. 33 tools cần refactor (ưu tiên)
+## 4. tools cần refactor
 
 Số thứ tự theo `McpServerHost.ToolCategoryMap` (xem [McpServerHost.cs](..\DynamicsCrm.DevKit.Cli\Mcp\McpServerHost.cs)).
 
@@ -109,13 +108,12 @@ Số thứ tự theo `McpServerHost.ToolCategoryMap` (xem [McpServerHost.cs](..\
 
 > Tier advanced nên refactor sau cùng vì phức tạp, dễ phá vỡ behavior. Test kỹ trên dev org trước khi approve.
 
-## 5. Tools đã hoàn thành và aP đã review
+## 4. Tools đã hoàn thành và aP đã review
 
 - 7. parse_record_url (phase 1)
 - 8. search_records (phase 1)
 - 9. whoami (phase 1)
 - 10. get_audit_history (phase 1)
-- 22. manage_deleted_records (phase 2 — added 2026-07-31, redirect rules added to execute_webapi (tool #29) for `(<guid>)` / `deletionstatecode` / `restore`)
 
 ---
 
@@ -136,9 +134,5 @@ Số thứ tự theo `McpServerHost.ToolCategoryMap` (xem [McpServerHost.cs](..\
 ```
 
 Mỗi bước fail → quay lại bước trước. **Không skip probe** dù response shape có vẻ rõ — Dataverse hay surprise (audit không có display name, search `objectTypeCode` luôn = 0, ribbon không refresh với targeted publish, v.v.).
-
-**Lưu ý phase 2+ khi tool mới handle data nhạy cảm (recycle bin, audit, security, …):** bước 4 phải bao gồm cập nhật `ExecuteWebApiTool.cs` để redirect AI từ raw Web API sang tool mới. Áp dụng cụ thể cho `manage_deleted_records` (rule 14).
-
----
 
 > File này là living document. Khi phát hiện rule mới từ review phase 2, cập nhật section 2 và checklist ở section 3. Khi phase 2 hoàn tất, archive lại thành `refactor3.md` cho phase 3 (nếu có).
