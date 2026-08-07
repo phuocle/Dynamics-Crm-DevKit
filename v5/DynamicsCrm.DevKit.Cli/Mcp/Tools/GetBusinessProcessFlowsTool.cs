@@ -39,9 +39,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetBpfsResult)),
         Description(
-            "Business Process Flows (BPFs) + stages. Each BPF auto-creates its own Dataverse entity (uniqueName = logical name). bpf_id empty = list. Set = detail with stages. BPFs can span multiple entities (Lead -> Opportunity); each stage has its own primaryEntity.\n\n" +
+            "List Business Process Flow definitions or inspect one BPF and its stage definitions.\n\n" +
             "WHEN TO USE:\n" +
-            "- Inspect stage sequence + primary entities for a BPF\n" +
+            "- Inspect stage categories and primary entities for a BPF\n" +
             "- Find BPFs bound to an entity (entity_name filter)\n" +
             "- Resolve BPF unique/logical name for the auto-created entity\n\n" +
             "RELATED TOOLS:\n" +
@@ -282,12 +282,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     StageCategory = categoryValue.HasValue && StageCategoryMap.TryGetValue(categoryValue.Value, out var label)
                         ? label
                         : categoryValue.HasValue ? $"Custom ({categoryValue.Value})" : "Unknown",
-                    PrimaryEntity = NullIfEmpty(e.GetAttributeValue<string>("primaryentitytypecode")),
-                    StageCategoryValue = categoryValue
+                    PrimaryEntity = NullIfEmpty(e.GetAttributeValue<string>("primaryentitytypecode"))
                 };
-            })
-            .OrderBy(s => s.StageCategoryValue)
-            .ToList();
+            }).ToList();
         }
 
         private Dictionary<string, int> GetStageCounts(List<string> bpfIds)

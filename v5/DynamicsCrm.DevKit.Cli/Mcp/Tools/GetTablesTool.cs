@@ -43,7 +43,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("LIST: only custom entities.")] bool custom_only = false,
             [Description("LIST: include N:N intersect entities.")] bool include_intersect = false,
             [Description("LIST: comma-separated logical names. Overrides filter/custom_only.")] string names = "",
-            [Description("DETAIL: 'compact' (default, Display Name, Schema Name, Logical Name, Type, required, isValidForCreate/Update), 'standard' (+ requiredLevel, constraints, lookup targets, picklist options), 'full' (all metadata including audit, formula, security, default values, option colors, description, min/max/precision/behavior).")] string detail_level = "compact")
+            [Description("DETAIL: 'compact' (default), 'standard', or 'full'.")] string detail_level = "compact",
+            [Description("LIST: maximum 1-500 entities. Default 100.")] int max_records = 100)
         {
             try
             {
@@ -55,7 +56,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrWhiteSpace(entity_name))
                     return await GetEntityDetail(entity_name.Trim(), trimmedFilter, detailLevel);
 
-                return await ListAllEntities(trimmedFilter, custom_only, include_intersect, names);
+                if (max_records <= 0) max_records = 100;
+                if (max_records > 500) max_records = 500;
+                return await ListAllEntities(trimmedFilter, custom_only, include_intersect, names, max_records);
             }
             catch (Exception ex)
             {
@@ -115,7 +118,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success(summary, structured);
         }
 
-        private async Task<CallToolResult> ListAllEntities(string filter, bool customOnly, bool includeIntersect, string names)
+        private async Task<CallToolResult> ListAllEntities(string filter, bool customOnly, bool includeIntersect, string names, int maxRecords)
         {
             var entities = await _metadataService.GetEntitiesMetadataAsync(EntityFilters.Entity);
             var query = entities.AsEnumerable();
@@ -147,7 +150,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
-            var sorted = query.OrderBy(x => x.LogicalName).ToList();
+            var sorted = query.OrderBy(x => x.LogicalName).Take(maxRecords).ToList();
             var structured = new GetTablesResult
             {
                 Mode = "list",
@@ -162,8 +165,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             LogicalName = metadata.LogicalName,
             SchemaName = metadata.SchemaName,
-            DisplayName = metadata.DisplayName?.UserLocalizedLabel?.Label ?? "",
-            OwnershipType = metadata.OwnershipType?.ToString() ?? "",
+            DisplayName = Norm(metadata.DisplayName?.UserLocalizedLabel?.Label),
+            OwnershipType = Norm(metadata.OwnershipType?.ToString()),
             IsCustom = metadata.IsCustomEntity == true,
             IsActivity = metadata.IsActivity == true,
             IsAuditEnabled = metadata.IsAuditEnabled?.Value == true
@@ -204,7 +207,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 .Select(k => new TableKeyEntry
                 {
                     SchemaName = k.SchemaName,
-                    DisplayName = k.DisplayName?.UserLocalizedLabel?.Label ?? "",
+                    DisplayName = Norm(k.DisplayName?.UserLocalizedLabel?.Label),
                     KeyAttributes = (k.KeyAttributes ?? []).ToList()
                 })
                 .ToList();
@@ -441,7 +444,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Required = IsAttributeRequired(attribute),
                     IsValidForCreate = attribute.IsValidForCreate == true,
                     IsValidForUpdate = attribute.IsValidForUpdate == true,
-                    DisplayName = attribute.DisplayName?.UserLocalizedLabel?.Label ?? "",
+                    DisplayName = Norm(attribute.DisplayName?.UserLocalizedLabel?.Label),
                 };
             }
 
@@ -455,7 +458,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 RequiredLevel = MapRequiredLevel(attribute.RequiredLevel?.Value),
                 IsValidForCreate = attribute.IsValidForCreate == true,
                 IsValidForUpdate = attribute.IsValidForUpdate == true,
-                DisplayName = attribute.DisplayName?.UserLocalizedLabel?.Label ?? "",
+                DisplayName = Norm(attribute.DisplayName?.UserLocalizedLabel?.Label),
                 Description = Norm(attribute.Description?.UserLocalizedLabel?.Label),
                 IsAuditEnabled = attribute.IsAuditEnabled?.Value,
                 IsValidForAdvancedFind = attribute.IsValidForAdvancedFind?.Value,

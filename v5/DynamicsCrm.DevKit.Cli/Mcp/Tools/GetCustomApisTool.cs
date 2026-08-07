@@ -58,8 +58,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetApisResult)),
         Description(
-            "Custom API definitions (modern replacement for Custom Actions). api_name empty = list; set = detail (params, plugin binding). " +
-            "Managed APIs excluded by default (set include_microsoft=true to include them). isFunction=true → GET; false → POST.\n\n" +
+            "List modern Custom API definitions or inspect one API's parameters and plugin binding.\n\n" +
             "WHEN TO USE:\n" +
             "- Inspect a Custom API's request/response parameters and plugin binding before registering or invoking it\n" +
             "- Discover Custom APIs bound to a specific entity\n" +
@@ -232,8 +231,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var responseResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchResponse));
 
             var entry = MapDetailEntry(api);
-            if (!string.IsNullOrEmpty(entry.SolutionId))
-                entry.SolutionId = ResolveSolutionName(entry.SolutionId) ?? entry.SolutionId;
+            if (!string.IsNullOrEmpty(entry.SolutionId) && string.IsNullOrEmpty(entry.SolutionName))
+                entry.SolutionName = ResolveSolutionName(entry.SolutionId);
             entry.RequestParameters = paramsResult.Entities.Select(MapRequestParameter).ToList();
             if (entry.RequestParameters.Count == 0) entry.RequestParameters = null;
             entry.ResponseProperties = responseResult.Entities.Select(MapResponseProperty).ToList();
@@ -279,7 +278,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var entry = MapListEntry(e);
             entry.Description = NullIfEmpty(e.GetAttributeValue<string>("description"));
             entry.Owner = GetLookupName(e, "ownerid");
-            entry.SolutionId = GetLookupName(e, "solutionid");
+            entry.SolutionId = GetLookupId(e, "solutionid");
+            entry.SolutionName = GetLookupName(e, "solutionid");
+            if (string.Equals(entry.SolutionName, entry.SolutionId, StringComparison.OrdinalIgnoreCase))
+                entry.SolutionName = null;
             entry.CreatedOn = e.GetAttributeValue<DateTime?>("createdon")?.ToString("yyyy-MM-dd");
             entry.ModifiedOn = e.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd");
             // Plugin type detail
@@ -308,6 +310,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (raw is EntityReference er) return er.Name;
             if (raw is Guid g) return g.ToString();
             return raw?.ToString();
+        }
+
+        private static string GetLookupId(Entity e, string attributeName)
+        {
+            if (!e.Contains(attributeName)) return null;
+            return e[attributeName] switch
+            {
+                EntityReference er => er.Id.ToString(),
+                Guid guid => guid.ToString(),
+                _ => null
+            };
         }
 
         private static string GetAliasedString(Entity e, string alias)

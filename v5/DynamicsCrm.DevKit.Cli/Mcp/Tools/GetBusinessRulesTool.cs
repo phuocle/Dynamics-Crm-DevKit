@@ -42,7 +42,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_business_process_flows → BPF definitions + stages\n" +
             "- manage_record(action='read', columns='xaml') → raw XAML when parse is incomplete")]
         public CallToolResult get_business_rules(
-            [Description("Entity Display Name or logical name. Ignored in detail mode.")] string entity_name,
+            [Description("Entity Display Name or logical name. Required and ownership-validated in detail mode.")] string entity_name,
             [Description("GUID → detail mode. Empty = list mode.")] string rule_id = "",
             [Description("'active' or 'draft'. Empty = all. Ignored in detail mode.")] string status = "",
             [Description("1-200. Default 50. Ignored in detail mode.")] int max_records = 50)
@@ -142,10 +142,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult BuildDetail(string entityName, Guid ruleId)
         {
-            var entity = _serviceClient.Retrieve("workflow", ruleId,
-                new ColumnSet("name", "primaryentity", "scope", "statecode", "statuscode",
+            var query = new QueryExpression("workflow")
+            {
+                TopCount = 1,
+                ColumnSet = new ColumnSet("name", "primaryentity", "scope", "statecode", "statuscode",
                     "xaml", "modifiedon", "modifiedby", "createdon", "createdby",
-                    "description", "category"));
+                    "description", "category")
+            };
+            query.Criteria.AddCondition("workflowid", ConditionOperator.Equal, ruleId);
+            var result = _serviceClient.RetrieveMultiple(query);
+            if (result.Entities.Count == 0)
+                return Error($"Business rule '{ruleId}' not found.",
+                    "Use get_business_rules in list mode to find a valid ruleId.");
+            var entity = result.Entities[0];
 
             var category = entity.GetAttributeValue<OptionSetValue>("category")?.Value;
             if (category != 2)
@@ -301,7 +310,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Actions = actions.Count > 0 ? actions : null,
                 ParseStatus = conditions.Count == 0 && actions.Count == 0
                     ? "no conditions or actions extracted"
-                    : "parsed"
+                    : "best-effort parsed"
             };
         }
 

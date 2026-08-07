@@ -26,10 +26,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetPluginTraceLogsResult)),
         Description(
-            "Plugin trace logs (plugintracelog). record_id empty = list (newest first, default 60min); set = detail (messageBlock+exceptionDetails). " +
-            "Requires Plugin Trace Log enabled. " +
-            "type_name = plugin class (NOT table); entity_name = primaryentity. " +
-            "For async failures → get_system_jobs.")]
+            "List recent plugin trace logs or inspect one trace with diagnostic details.\n\n" +
+            "WHEN TO USE:\n" +
+            "- Diagnose synchronous or asynchronous plugin execution\n" +
+            "- Correlate traces by entity, message, plugin type, or request ID\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_plugins → plugin registrations and steps\n" +
+            "- get_system_jobs → asynchronous job failures")]
         public CallToolResult get_plugin_trace_logs(
             [Description("plugintracelog GUID → detail. Empty = list.")] string record_id = "",
             [Description("Plugin type name (contains). NOT table name.")] string type_name = "",
@@ -49,7 +52,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (!Guid.TryParse(record_id.Trim(), out var detailId))
                         return Error($"'{record_id}' is not a valid GUID. Use a plugintracelog ID from list mode.");
 
-                    var detailEntity = _serviceClient.Retrieve("plugintracelog", detailId, new ColumnSet(true));
+                    var detailQuery = new QueryExpression("plugintracelog")
+                    {
+                        TopCount = 1,
+                        ColumnSet = new ColumnSet(
+                            "typename", "messagename", "primaryentity", "mode", "operationtype",
+                            "depth", "performanceexecutionduration", "correlationid", "pluginstepid",
+                            "requestid", "issystemcreated", "createdon", "messageblock", "exceptiondetails")
+                    };
+                    detailQuery.Criteria.AddCondition("plugintracelogid", ConditionOperator.Equal, detailId);
+                    var detailResult = _serviceClient.RetrieveMultiple(detailQuery);
+                    if (detailResult.Entities.Count == 0)
+                        return Error($"Plugin trace log '{detailId}' not found.",
+                            "Use get_plugin_trace_logs in list mode to find a valid record_id.");
+                    var detailEntity = detailResult.Entities[0];
                     var detailEntry = BuildEntry(detailEntity, includeDetail: true);
                     var detailStructured = new GetPluginTraceLogsResult
                     {

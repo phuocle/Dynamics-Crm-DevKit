@@ -70,6 +70,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SolutionId { get; set; }
 
+        [JsonPropertyName("solutionName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SolutionName { get; set; }
+
         [JsonPropertyName("createdOn")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string CreatedOn { get; set; }

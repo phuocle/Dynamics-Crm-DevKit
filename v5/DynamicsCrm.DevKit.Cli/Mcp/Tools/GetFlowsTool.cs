@@ -48,8 +48,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- get_workflows → classic workflows (category=0)\n" +
             "- get_business_process_flows → BPF definitions + stages\n" +
-            "- get_business_rules → client-side business rules\n\n" +
-            "Fuzzy on name_filter / owner_filter: 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto.")]
+            "- get_business_rules → client-side business rules")]
         public CallToolResult get_flows(
             [Description("GUID. Empty = list. Set: action determines detail vs runs.")] string flow_id = "",
             [Description("'list' or 'runs'. 'runs' needs flow_id.")] string action = "list",
@@ -60,6 +59,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("runs only. Max 43200.")] int minutes_ago = 1440,
             [Description("1–250.")] int max_records = 50)
         {
+            try
+            {
             var normalizedAction = (action ?? "list").Trim().ToLowerInvariant();
             if (normalizedAction != "list" && normalizedAction != "runs")
                 return Error($"Invalid action '{action?.Trim()}'. Use 'list' or 'runs'.");
@@ -81,8 +82,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (minutes_ago <= 0) minutes_ago = 1440;
             if (minutes_ago > 43200) minutes_ago = 43200;
 
-            try
-            {
                 if (!string.IsNullOrWhiteSpace(flow_id))
                 {
                     if (!Guid.TryParse(flow_id.Trim(), out _))
@@ -125,7 +124,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(nameFilter))
                 filters.AppendLine($"      <condition attribute='name' operator='like' value='%{EscapeXml(nameFilter.Trim())}%'/>");
 
-            var fetchXml = $@"<fetch top='{maxRecords}'>
+            // Owner is polymorphic (user/team), so apply that filter client-side.
+            // Do not cap the server result before filtering or a valid owner match can be lost.
+            var topAttribute = string.IsNullOrWhiteSpace(ownerFilter) ? $" top='{maxRecords}'" : "";
+            var fetchXml = $@"<fetch{topAttribute}>
   <entity name='workflow'>
     <attribute name='workflowid'/>
     <attribute name='name'/>
@@ -154,7 +156,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var owner = e.GetAttributeValue<EntityReference>("ownerid")?.Name;
                     return owner != null && owner.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0;
-                }).ToList();
+                }).Take(maxRecords).ToList();
             }
 
             if (entities.Count == 0)

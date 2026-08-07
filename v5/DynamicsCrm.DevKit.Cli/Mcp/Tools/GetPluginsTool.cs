@@ -82,12 +82,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(GetPluginsResult)),
         Description(
             "Plugin assemblies, types, steps. No filters = assembly list. assembly_name (1 match) = detail (types+steps+images). entity_name = steps on entity (wins over assembly_name). " +
-            "Stages: PreValidation/PreOperation/PostOperation/MainOperation (Custom API/DataProvider). include_config=true only for secure config inspection. " +
+            "Stages: PreValidation/PreOperation/PostOperation/MainOperation (Custom API/DataProvider). include_config=true only for secure config inspection.\n\n" +
             "WHEN TO USE:\n" +
             "- Inspect a plugin assembly's types+steps before refactoring/disabling\n" +
             "- Find steps registered on an entity (entity_name wins over assembly_name)\n" +
             "- Check if a field triggers any plugin (trigger_field + entity_name)\n" +
-            "- Find synchronous plugins (mode='sync'; Pre-op can cancel/rollback)\n" +
+            "- Find synchronous plugins (mode='sync'; Pre-op can cancel/rollback)\n\n" +
             "RELATED TOOLS:\n" +
             "- get_plugin_trace_logs → execution traces\n" +
             "- get_system_jobs → async failures\n" +
@@ -125,6 +125,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (max_records <= 0) max_records = 100;
                 if (max_records > 500) max_records = 500;
 
+                if (!string.IsNullOrWhiteSpace(message_name) && ResolveSdkMessageId(message_name.Trim()) == null)
+                    return Error($"SDK message '{message_name.Trim()}' not found.",
+                        "Use get_messages to discover valid SDK message names.");
+
                 // ── Mode dispatch ───────────────────────────────────────────
                 // entity_name → steps on entity (wins over assembly_name)
                 if (!string.IsNullOrWhiteSpace(entity_name))
@@ -161,7 +165,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrWhiteSpace(assembly_name))
                 {
                     var asmName = assembly_name.Trim();
-                    var assemblies = FetchAssemblies(asmName);
+                    var assemblies = FetchAssemblies(asmName, max_records);
                     if (assemblies.Count == 0)
                         return Error($"No plugin assembly matching '{asmName}' found.",
                             "Use get_plugins without assembly_name to list all available assemblies.");
@@ -184,7 +188,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     // Single assembly → detail
                     var entry = assemblies[0];
-                    var types = FetchTypes(entry.AssemblyId);
+                    var types = FetchTypes(entry.AssemblyId, max_records);
                     var steps = GetSteps(entry.AssemblyId, null, message_name, type_name, stage, mode, active_only, include_config, max_records);
 
                     foreach (var t in types)
@@ -212,12 +216,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error("stage, mode, message_name, and type_name filters require entity_name or assembly_name.",
                         "Provide entity_name or assembly_name to enable filtering.");
 
-                var allAssemblies = FetchAssemblies(null);
+                var allAssemblies = FetchAssemblies(null, max_records);
                 var allTypeCounts = GetTypeCountsPerAssembly();
                 foreach (var a in allAssemblies)
                     a.TypeCount = allTypeCounts.TryGetValue(Guid.Parse(a.AssemblyId), out var tc) ? tc : 0;
 
-                var packages = GetPackages();
+                var packages = GetPackages(max_records);
                 var listStructured = new GetPluginsResult
                 {
                     TotalCount = allAssemblies.Count,
@@ -235,13 +239,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Data fetchers (return data, not CallToolResult) ────────────────
 
-        private List<PluginAssemblyEntry> FetchAssemblies(string nameFilter)
+        private List<PluginAssemblyEntry> FetchAssemblies(string nameFilter, int maxRecords)
         {
             var nameCondition = string.IsNullOrWhiteSpace(nameFilter)
                 ? ""
                 : $"\n      <condition attribute='name' operator='like' value='%{EscapeXml(nameFilter)}%'/>";
 
-            var fetchXml = $@"<fetch>
+            var fetchXml = $@"<fetch top='{maxRecords}'>
   <entity name='pluginassembly'>
     <attribute name='pluginassemblyid'/>
     <attribute name='name'/>
@@ -271,9 +275,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return result.Entities.Select(e => MapAssemblyEntry(e, null)).ToList();
         }
 
-        private List<PluginTypeEntry> FetchTypes(string assemblyId)
+        private List<PluginTypeEntry> FetchTypes(string assemblyId, int maxRecords)
         {
-            var fetchTypes = $@"<fetch>
+            var fetchTypes = $@"<fetch top='{maxRecords}'>
   <entity name='plugintype'>
     <attribute name='plugintypeid'/>
     <attribute name='typename'/>
@@ -491,9 +495,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return result.Entities.Count > 0 ? result.Entities[0].Id.ToString() : null;
         }
 
-        private List<PluginPackageEntry> GetPackages()
+        private List<PluginPackageEntry> GetPackages(int maxRecords)
         {
-            var fetchXml = @"<fetch>
+            var fetchXml = $@"<fetch top='{maxRecords}'>
               <entity name='pluginpackage'>
                 <attribute name='pluginpackageid'/>
                 <attribute name='name'/>

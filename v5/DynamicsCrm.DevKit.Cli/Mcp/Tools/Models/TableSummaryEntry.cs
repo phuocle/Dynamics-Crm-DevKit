@@ -13,9 +13,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string SchemaName { get; set; }
 
         [JsonPropertyName("displayName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string DisplayName { get; set; }
 
         [JsonPropertyName("ownershipType")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string OwnershipType { get; set; }
 
         [JsonPropertyName("isCustom")]

@@ -45,9 +45,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetMessagesResult)),
         Description(
-            "SDK messages + legacy Custom Actions (workflow-based, category=3). message_name empty = list; set = detail (params, plugin steps). " +
-            "Modern Custom APIs excluded → get_custom_apis. " +
-            "entity_name='none' = global messages.\n\n" +
+            "List SDK messages and legacy workflow Custom Actions, or inspect one message/action in detail.\n\n" +
             "WHEN TO USE:\n" +
             "- Discover available SDK messages for an entity before writing plugin registration\n" +
             "- Inspect a legacy Custom Action's input/output parameters from XAML\n" +
@@ -59,7 +57,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public async Task<CallToolResult> get_messages(
             [Description("Entity Display/logical name. 'none'/empty = global. Ignored in detail mode.")] string entity_name = "none",
             [Description("Message/Action name → detail mode. Empty = list mode.")] string message_name = "",
-            [Description("List: include Custom Actions. false = SDK only. Ignored in detail mode.")] bool include_custom_actions = true)
+            [Description("List: include Custom Actions. false = SDK only. Ignored in detail mode.")] bool include_custom_actions = true,
+            [Description("List: maximum 1-500 names per category. Default 100.")] int max_records = 100)
         {
             try
             {
@@ -72,7 +71,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrEmpty(scopeResult.Error))
                     return Error(scopeResult.Error);
                 entity_name = scopeResult.Scope;
-                return await GetMessageListAsync(entity_name, include_custom_actions);
+                if (max_records <= 0) max_records = 100;
+                if (max_records > 500) max_records = 500;
+                return await GetMessageListAsync(entity_name, include_custom_actions, max_records);
             }
             catch (Exception ex)
             {
@@ -80,13 +81,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private async Task<CallToolResult> GetMessageListAsync(string entityName, bool includeCustomActions)
+        private async Task<CallToolResult> GetMessageListAsync(string entityName, bool includeCustomActions, int maxRecords)
         {
             var normalizedScope = NormalizeScope(entityName);
 
-            var sdkMessages = await GetSdkMessageNamesAsync(normalizedScope);
+            var sdkMessages = (await GetSdkMessageNamesAsync(normalizedScope)).Take(maxRecords).ToList();
             var customActions = includeCustomActions
-                ? await GetCustomActionNamesAsync(normalizedScope)
+                ? (await GetCustomActionNamesAsync(normalizedScope)).Take(maxRecords).ToList()
                 : [];
 
             var structured = new GetMessagesResult
@@ -395,7 +396,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 };
 
                 if (isInput) inputs.Add(entry);
-                if (isOutput && !typeMatch.StartsWith("InOutArgument(")) outputs.Add(entry);
+                if (isOutput) outputs.Add(entry);
             }
 
             return (inputs, outputs);
@@ -467,7 +468,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var customApis = await _metadataService.GetCustomApisAsync(scope);
             if (customApis.Count > 0)
             {
-                var apiNames = new HashSet<string>(customApis.Select(x => x.Name));
+                var apiNames = new HashSet<string>(customApis.Select(x => x.Name), StringComparer.OrdinalIgnoreCase);
                 names = names.Where(x => !apiNames.Contains(x));
             }
 

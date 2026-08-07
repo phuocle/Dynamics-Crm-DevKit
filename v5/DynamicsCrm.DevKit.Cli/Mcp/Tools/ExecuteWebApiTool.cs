@@ -72,18 +72,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- manage_environment_variable / manage_webresource / manage_role (config)\n" +
             "- publish_customizations (publish)")]
         public CallToolResult execute_webapi(
-            [Description("GET, POST, PUT, PATCH, or DELETE. Default GET.")]
-            string method = "GET",
-            [Description("Relative path, e.g. 'accounts', 'contacts(guid)', '$metadata'. SDK adds base URL. Required.")]
-            string url = "",
-            [Description("JSON body for POST/PUT/PATCH. Default empty (no body).")]
-            string body = "",
-            [Description("Extra headers as JSON object, e.g. '{\"Prefer\":\"return=representation\"}'. Default empty.")
-            ] string headers = "",
-            [Description("Include response headers in text output. Default false.")
-            ] bool include_headers = false,
-            [Description("Truncate response body. Use 50 for large outputs ($metadata). Default 200.")
-            ] int max_response_lines = 200)
+            [Description("GET, POST, PUT, PATCH, or DELETE. Default GET.")] string method = "GET",
+            [Description("Relative path, e.g. 'accounts', 'contacts(guid)', '$metadata'. SDK adds base URL. Required.")] string url = "",
+            [Description("JSON body for POST/PUT/PATCH. Default empty (no body).")] string body = "",
+            [Description("Extra headers as JSON object, e.g. '{\"Prefer\":\"return=representation\"}'. Default empty.")] string headers = "",
+            [Description("Include response headers in text output. Default false.")] bool include_headers = false,
+            [Description("Truncate response body. Use 50 for large outputs ($metadata). Default 200.")] int max_response_lines = 200)
         {
             try
             {
@@ -348,11 +342,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Classic workflows (workflow entity) — dedicated tool has mode/scope/trigger filters + detail mode.
             ("workflows", "get_workflows",
                 "REDIRECT: Use get_workflows instead of GET workflows.\n" +
-                "get_workflows provides entity_name/mode/scope/status filters, trigger_field discovery, and detail mode with XAML.\n\n" +
+                "get_workflows provides entity_name/mode/status filters, trigger_field discovery, and workflow execution metadata.\n\n" +
                 "Examples:\n" +
                 "  get_workflows(entity_name='account') → workflows bound to account\n" +
                 "  get_workflows(mode='realtime', status='active') → active realtime workflows\n" +
-                "  get_workflows(workflow_id='<guid>') → detail with trigger fields + XAML\n" +
+                "  get_workflows(workflow_id='<guid>') → detail with trigger fields and execution metadata\n" +
                 "  get_workflows(entity_name='account', trigger_field='statecode') → workflows triggered by status change"),
 
             // Legacy 'processes' entity-set alias → same redirect as workflows.

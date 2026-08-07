@@ -8,6 +8,7 @@ using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
@@ -42,7 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- Check if a field triggers any workflow (trigger_field + entity_name)\n" +
             "- Find synchronous workflows (mode='realtime'; Pre-op can cancel/rollback)\n" +
-            "- Inspect workflow steps before refactoring/disabling\n\n" +
+            "- Inspect workflow triggers and execution metadata before refactoring/disabling\n\n" +
             "RELATED TOOLS:\n" +
             "- get_business_process_flows → BPF definitions + stages\n" +
             "- get_business_rules → client-side business rules\n" +
@@ -110,8 +111,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // ── Build FetchXML + retrieve ───────────────────────────────
             var fetchXml = BuildListFetchXml(objectTypeCode, normalizedMode, normalizedStatus, triggerField, nameFilter, maxRecords);
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var resultEntities = result.Entities.AsEnumerable();
+            if (!string.IsNullOrWhiteSpace(triggerField))
+            {
+                resultEntities = resultEntities.Where(e =>
+                    (e.GetAttributeValue<string>("triggeronupdateattributelist") ?? "")
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                    .Contains(triggerField, StringComparer.OrdinalIgnoreCase));
+            }
+            var matchedEntities = resultEntities.Take(maxRecords).ToList();
 
-            if (result.Entities.Count == 0)
+            if (matchedEntities.Count == 0)
             {
                 var emptyStructured = new GetWorkflowsResult
                 {
@@ -129,14 +139,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             // Auto-detail: if exactly 1 result with name_filter, switch to detail mode
-            if (result.Entities.Count == 1 && !string.IsNullOrWhiteSpace(nameFilter))
-                return HandleDetail(result.Entities[0].Id.ToString());
+            if (matchedEntities.Count == 1 && !string.IsNullOrWhiteSpace(nameFilter))
+                return HandleDetail(matchedEntities[0].Id.ToString());
 
             // ── Build entries + summary ─────────────────────────────────
-            var workflows = new List<WorkflowEntry>(result.Entities.Count);
+            var workflows = new List<WorkflowEntry>(matchedEntities.Count);
             var summary = new WorkflowSummary();
 
-            foreach (var e in result.Entities)
+            foreach (var e in matchedEntities)
             {
                 var entry = MapEntity(e, includeDetail: false);
                 workflows.Add(entry);
@@ -152,7 +162,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var structured = new GetWorkflowsResult
             {
                 Mode = "list",
-                TotalCount = result.Entities.Count,
+                TotalCount = matchedEntities.Count,
                 EntityName = NullIfEmpty(entityName),
                 ModeFilter = NullIfEmpty(normalizedMode),
                 StatusFilter = normalizedStatus == "active" ? null : normalizedStatus,
@@ -243,6 +253,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static WorkflowEntry MapEntity(Entity e, bool includeDetail)
         {
             var modeValue = e.GetAttributeValue<OptionSetValue>("mode")?.Value;
+            var scopeValue = e.GetAttributeValue<OptionSetValue>("scope")?.Value;
             var isRealtime = modeValue == 1;
 
             var entry = new WorkflowEntry
@@ -260,7 +271,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 UpdateStage = isRealtime ? MapStage(e, "updatestage") : null,
                 DeleteStage = isRealtime ? MapStage(e, "deletestage") : null,
                 Mode = NullIfEmpty(e.FormattedValues.Contains("mode") ? e.FormattedValues["mode"] : (modeValue == 1 ? "Realtime" : modeValue == 0 ? "Background" : null)),
-                Scope = NullIfEmpty(e.FormattedValues.Contains("scope") ? e.FormattedValues["scope"] : MapScope(modeValue)),
+                Scope = NullIfEmpty(e.FormattedValues.Contains("scope") ? e.FormattedValues["scope"] : MapScope(scopeValue)),
                 RunAs = NullIfEmpty(e.FormattedValues.Contains("runas") ? e.FormattedValues["runas"] : null),
                 Rank = e.GetAttributeValue<int?>("rank"),
                 OnDemand = e.GetAttributeValue<bool>("ondemand"),
@@ -291,7 +302,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string BuildListFetchXml(int? objectTypeCode, string mode, string status, string triggerField, string nameFilter, int maxRecords)
         {
             var sb = new StringBuilder(640);
-            sb.Append($"<fetch top='{maxRecords}'>");
+            var topAttribute = string.IsNullOrWhiteSpace(triggerField) ? $" top='{maxRecords}'" : "";
+            sb.Append($"<fetch{topAttribute}>");
             sb.Append("<entity name='workflow'>");
             sb.Append("<attribute name='workflowid'/>");
             sb.Append("<attribute name='name'/>");
@@ -336,9 +348,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.Append("<condition attribute='statecode' operator='eq' value='1'/>");
             else if (status == "draft")
                 sb.Append("<condition attribute='statecode' operator='eq' value='0'/>");
-
-            if (!string.IsNullOrWhiteSpace(triggerField))
-                sb.Append($"<condition attribute='triggeronupdateattributelist' operator='like' value='%{EscapeXml(triggerField.Trim().ToLowerInvariant())}%'/>");
 
             if (!string.IsNullOrWhiteSpace(nameFilter))
                 sb.Append($"<condition attribute='name' operator='like' value='%{EscapeXml(nameFilter.Trim())}%'/>");

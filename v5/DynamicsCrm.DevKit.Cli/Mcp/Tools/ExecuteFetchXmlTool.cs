@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
@@ -27,9 +28,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(FetchXmlResult)),
         Description(
-            "Run FetchXML against Dataverse. Auto-paging via get_all. See schema://fetchxml for syntax.\n" +
-            "Rules: lowercase logical names only; no top/count/page in <fetch> (use max_records); use max_records=10-50 for samples.\n" +
-            "For keyword search → search_records. For entity metadata → get_tables.")]
+            "Run a FetchXML query in single-page or bounded auto-paging mode.\n\n" +
+            "WHEN TO USE:\n" +
+            "- Query Dataverse records with deterministic columns, filters, joins, or aggregates\n" +
+            "- Page through a bounded result after validating logical names\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_tables → discover entity and attribute logical names\n" +
+            "- search_records → keyword relevance search\n" +
+            "- schema://fetchxml → FetchXML syntax and examples")]
         public CallToolResult execute_fetchxml(
             [Description("FetchXML starting with <fetch>. Lowercase logical names.")] string fetchxml,
             [Description("1-5000. Default 5000. Use 10-100 for samples.")] int max_records = 5000,
@@ -40,6 +46,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (string.IsNullOrWhiteSpace(fetchxml))
                     return Error("fetchxml is required.",
                         "Read schema://fetchxml for FetchXML query structure and examples.");
+
+                var trimmedFetchXml = fetchxml.Trim();
+                if (!trimmedFetchXml.StartsWith("<fetch", StringComparison.OrdinalIgnoreCase) ||
+                    !trimmedFetchXml.EndsWith("</fetch>", StringComparison.OrdinalIgnoreCase))
+                    return Error("fetchxml must contain one complete <fetch>...</fetch> document.",
+                        "Read schema://fetchxml for FetchXML query structure and examples.");
+
+                var fetchStartTag = Regex.Match(trimmedFetchXml, @"^<fetch\b[^>]*>", RegexOptions.IgnoreCase).Value;
+                if (Regex.IsMatch(fetchStartTag, @"\s(top|count|page|paging-cookie)\s*=", RegexOptions.IgnoreCase))
+                    return Error("Do not set top, count, page, or paging-cookie in <fetch>.",
+                        "Use max_records and get_all; the tool owns paging attributes.");
 
                 if (max_records <= 0)
                     return Error("max_records must be a positive integer (1-5000).");

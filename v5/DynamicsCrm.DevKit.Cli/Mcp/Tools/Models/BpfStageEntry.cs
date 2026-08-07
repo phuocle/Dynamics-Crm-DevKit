@@ -18,8 +18,5 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("primaryEntity")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string PrimaryEntity { get; set; }
-
-        [JsonIgnore]
-        public int? StageCategoryValue { get; set; }
     }
 }

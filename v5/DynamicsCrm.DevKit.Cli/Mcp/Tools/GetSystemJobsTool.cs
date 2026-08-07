@@ -38,7 +38,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetSystemJobsResult)),
         Description(
-            "System jobs (asyncoperation) for async failures, workflow errors, bulk ops, imports, solutions. record_id empty = list (default: failed jobs last 24h); set = detail (error + stack trace).\n\n" +
+            "List asynchronous system jobs or inspect one job with its diagnostic messages.\n\n" +
             "WHEN TO USE:\n" +
             "- Debug async failures (list failed → detail for stack trace)\n" +
             "- Monitor bulk ops (operation_type='bulk_delete'/'import'/'solution')\n" +
@@ -307,7 +307,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.Append(opFilter);
 
             var sinceUtc = DateTime.UtcNow.AddMinutes(-minutesAgo).ToString("yyyy-MM-ddTHH:mm:ssZ");
-            sb.Append($"<condition attribute='startedon' operator='ge' value='{sinceUtc}'/>");
+            var timeAttribute = string.Equals(status?.Trim(), "waiting", StringComparison.OrdinalIgnoreCase)
+                ? "createdon"
+                : "startedon";
+            sb.Append($"<condition attribute='{timeAttribute}' operator='ge' value='{sinceUtc}'/>");
 
             if (!string.IsNullOrWhiteSpace(entityLogicalName) && entityTypeCode.HasValue)
                 sb.Append($"<condition attribute='primaryentitytype' operator='eq' value='{entityTypeCode.Value}'/>");
@@ -423,20 +426,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             // primaryentitytype on asyncoperation is an int ObjectTypeCode, not a string.
             // Resolve the entity's ObjectTypeCode via RetrieveEntityRequest so we can filter.
-            try
+            var request = new RetrieveEntityRequest
             {
-                var request = new RetrieveEntityRequest
-                {
-                    LogicalName = entityLogicalName,
-                    EntityFilters = EntityFilters.Entity
-                };
-                var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
-                return response.EntityMetadata.ObjectTypeCode;
-            }
-            catch
-            {
-                return null;
-            }
+                LogicalName = entityLogicalName,
+                EntityFilters = EntityFilters.Entity
+            };
+            var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+            return response.EntityMetadata.ObjectTypeCode;
         }
 
         private static string NullIfEmpty(string value) =>

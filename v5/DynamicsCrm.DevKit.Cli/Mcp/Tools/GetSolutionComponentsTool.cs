@@ -283,9 +283,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return (components, fullEntityNames);
 
             // 3) Lightweight metadata query — only fetch MetadataId + LogicalName (no attributes, no relationships)
-            try
-            {
-                var entityQuery = new EntityQueryExpression
+            var entityQuery = new EntityQueryExpression
                 {
                     Criteria = new MetadataFilterExpression(LogicalOperator.And)
                     {
@@ -295,18 +293,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         }
                     },
                     Properties = new MetadataPropertiesExpression("MetadataId", "LogicalName")
-                };
+            };
 
-                var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
-                    new RetrieveMetadataChangesRequest { Query = entityQuery });
+            var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
+                new RetrieveMetadataChangesRequest { Query = entityQuery });
 
-                foreach (var em in response.EntityMetadata)
-                {
-                    if (em.MetadataId.HasValue && em.LogicalName != null)
-                        fullEntityNames[em.MetadataId.Value] = em.LogicalName;
-                }
+            foreach (var em in response.EntityMetadata)
+            {
+                if (em.MetadataId.HasValue && em.LogicalName != null)
+                    fullEntityNames[em.MetadataId.Value] = em.LogicalName;
             }
-            catch { /* skip on metadata query failure */ }
 
             return (components, fullEntityNames);
         }
@@ -349,7 +345,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 .OrderBy(g => g.Key)
                 .Select(g => new SolutionComponentSummaryEntry
                 {
-                    Type = GetTypeName(g.Key),
+                    Type = GetTypeName(g.First()),
                     TypeId = g.Key,
                     Count = g.Count(),
                     ActiveLayerCount = showActiveLayers
@@ -369,7 +365,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     return new SolutionComponentEntry
                     {
-                        Type = GetTypeName(g.Key),
+                        Type = GetTypeName(c),
                         TypeId = g.Key,
                         ObjectId = objectId.ToString(),
                         Name = name ?? "(unresolved)",
@@ -484,33 +480,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private void ResolveEntityMetadataNames(List<Guid> entityIds, Dictionary<Guid, string> nameMap)
         {
-            try
-            {
-                var query = new EntityQueryExpression
+            var query = new EntityQueryExpression
                 {
                     Criteria = new MetadataFilterExpression(LogicalOperator.Or),
                     Properties = new MetadataPropertiesExpression("MetadataId", "LogicalName")
-                };
-                foreach (var id in entityIds)
-                    query.Criteria.Conditions.Add(
-                        new MetadataConditionExpression("MetadataId", MetadataConditionOperator.Equals, id));
+            };
+            foreach (var id in entityIds)
+                query.Criteria.Conditions.Add(
+                    new MetadataConditionExpression("MetadataId", MetadataConditionOperator.Equals, id));
 
-                var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
-                    new RetrieveMetadataChangesRequest { Query = query });
+            var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
+                new RetrieveMetadataChangesRequest { Query = query });
 
-                foreach (var em in response.EntityMetadata)
-                    if (em.MetadataId.HasValue)
-                        nameMap.TryAdd(em.MetadataId.Value, em.LogicalName);
-            }
-            catch { /* skip on metadata query failure */ }
+            foreach (var em in response.EntityMetadata)
+                if (em.MetadataId.HasValue)
+                    nameMap.TryAdd(em.MetadataId.Value, em.LogicalName);
         }
 
         private void ResolveAttributeMetadataNames(List<Guid> attrIds, Dictionary<Guid, string> nameMap)
         {
-            try
-            {
-                var attrSet = new HashSet<Guid>(attrIds);
-                var query = new EntityQueryExpression
+            var attrSet = new HashSet<Guid>(attrIds);
+            var query = new EntityQueryExpression
                 {
                     Properties = new MetadataPropertiesExpression("MetadataId", "LogicalName"),
                     AttributeQuery = new AttributeQueryExpression
@@ -518,28 +508,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Criteria = new MetadataFilterExpression(LogicalOperator.Or),
                         Properties = new MetadataPropertiesExpression("MetadataId", "LogicalName")
                     }
-                };
-                foreach (var id in attrIds)
-                    query.AttributeQuery.Criteria.Conditions.Add(
-                        new MetadataConditionExpression("MetadataId", MetadataConditionOperator.Equals, id));
+            };
+            foreach (var id in attrIds)
+                query.AttributeQuery.Criteria.Conditions.Add(
+                    new MetadataConditionExpression("MetadataId", MetadataConditionOperator.Equals, id));
 
-                var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
-                    new RetrieveMetadataChangesRequest { Query = query });
+            var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
+                new RetrieveMetadataChangesRequest { Query = query });
 
-                foreach (var em in response.EntityMetadata)
-                    foreach (var attr in em.Attributes ?? Array.Empty<AttributeMetadata>())
-                        if (attr.MetadataId.HasValue && attr.LogicalName != null && attrSet.Contains(attr.MetadataId.Value))
-                            nameMap.TryAdd(attr.MetadataId.Value, $"{em.LogicalName}.{attr.LogicalName}");
-            }
-            catch { /* skip on metadata query failure */ }
+            foreach (var em in response.EntityMetadata)
+                foreach (var attr in em.Attributes ?? Array.Empty<AttributeMetadata>())
+                    if (attr.MetadataId.HasValue && attr.LogicalName != null && attrSet.Contains(attr.MetadataId.Value))
+                        nameMap.TryAdd(attr.MetadataId.Value, $"{em.LogicalName}.{attr.LogicalName}");
         }
 
         private void ResolveRelationshipMetadataNames(List<Guid> relIds, Dictionary<Guid, string> nameMap)
         {
-            try
-            {
-                var relSet = new HashSet<Guid>(relIds);
-                var query = new EntityQueryExpression
+            var relSet = new HashSet<Guid>(relIds);
+            var query = new EntityQueryExpression
                 {
                     Properties = new MetadataPropertiesExpression("MetadataId", "LogicalName",
                         "OneToManyRelationships", "ManyToManyRelationships"),
@@ -548,26 +534,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Criteria = new MetadataFilterExpression(LogicalOperator.Or),
                         Properties = new MetadataPropertiesExpression("MetadataId", "SchemaName")
                     }
-                };
-                foreach (var id in relIds)
-                    query.RelationshipQuery.Criteria.Conditions.Add(
-                        new MetadataConditionExpression("MetadataId", MetadataConditionOperator.Equals, id));
+            };
+            foreach (var id in relIds)
+                query.RelationshipQuery.Criteria.Conditions.Add(
+                    new MetadataConditionExpression("MetadataId", MetadataConditionOperator.Equals, id));
 
-                var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
-                    new RetrieveMetadataChangesRequest { Query = query });
+            var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
+                new RetrieveMetadataChangesRequest { Query = query });
 
-                foreach (var em in response.EntityMetadata)
-                {
-                    foreach (var rel in em.OneToManyRelationships ?? Array.Empty<OneToManyRelationshipMetadata>())
-                        if (rel.MetadataId.HasValue && rel.SchemaName != null && relSet.Contains(rel.MetadataId.Value))
-                            nameMap.TryAdd(rel.MetadataId.Value, rel.SchemaName);
+            foreach (var em in response.EntityMetadata)
+            {
+                foreach (var rel in em.OneToManyRelationships ?? Array.Empty<OneToManyRelationshipMetadata>())
+                    if (rel.MetadataId.HasValue && rel.SchemaName != null && relSet.Contains(rel.MetadataId.Value))
+                        nameMap.TryAdd(rel.MetadataId.Value, rel.SchemaName);
 
-                    foreach (var rel in em.ManyToManyRelationships ?? Array.Empty<ManyToManyRelationshipMetadata>())
-                        if (rel.MetadataId.HasValue && rel.SchemaName != null && relSet.Contains(rel.MetadataId.Value))
-                            nameMap.TryAdd(rel.MetadataId.Value, rel.SchemaName);
-                }
+                foreach (var rel in em.ManyToManyRelationships ?? Array.Empty<ManyToManyRelationshipMetadata>())
+                    if (rel.MetadataId.HasValue && rel.SchemaName != null && relSet.Contains(rel.MetadataId.Value))
+                        nameMap.TryAdd(rel.MetadataId.Value, rel.SchemaName);
             }
-            catch { /* skip on metadata query failure */ }
         }
 
         private void BatchResolve(
@@ -582,29 +566,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!byType.TryGetValue(typeId, out var ids) || ids.Count == 0)
                 return;
 
-            try
+            const int chunkSize = 500;
+            for (var i = 0; i < ids.Count; i += chunkSize)
             {
-                const int chunkSize = 500;
-                for (var i = 0; i < ids.Count; i += chunkSize)
+                var chunk = ids.Skip(i).Take(chunkSize).Cast<object>().ToArray();
+                var query = new QueryExpression(entityName)
                 {
-                    var chunk = ids.Skip(i).Take(chunkSize).Cast<object>().ToArray();
-                    var query = new QueryExpression(entityName)
+                    NoLock = true,
+                    ColumnSet = columnSet,
+                    Criteria = new FilterExpression
                     {
-                        NoLock = true,
-                        ColumnSet = columnSet,
-                        Criteria = new FilterExpression
-                        {
-                            Conditions = { new ConditionExpression(pkAttribute, ConditionOperator.In, chunk) }
-                        }
-                    };
-                    foreach (var e in _serviceClient.RetrieveMultiple(query).Entities)
-                    {
-                        try { nameMap.TryAdd(e.Id, nameSelector(e) ?? ""); }
-                        catch { /* ignore individual name resolution failures */ }
+                        Conditions = { new ConditionExpression(pkAttribute, ConditionOperator.In, chunk) }
                     }
-                }
+                };
+                foreach (var e in _serviceClient.RetrieveMultiple(query).Entities)
+                    nameMap.TryAdd(e.Id, nameSelector(e) ?? "");
             }
-            catch { /* skip unsupported or unavailable entity types */ }
         }
 
         // ── Active Layer checking ────────────────────────────────────────────
@@ -767,22 +744,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (bulk.Requests.Count == 200 || i == components.Count - 1)
                 {
-                    try
+                    var bulkResponse = (ExecuteMultipleResponse)_serviceClient.Execute(bulk);
+                    foreach (var response in bulkResponse.Responses)
                     {
-                        var bulkResponse = (ExecuteMultipleResponse)_serviceClient.Execute(bulk);
-                        foreach (var response in bulkResponse.Responses)
-                        {
-                            if (response.Fault != null)
-                                continue;
+                        if (response.Fault != null)
+                            throw new InvalidOperationException(response.Fault.Message);
 
-                            var layers = ((RetrieveMultipleResponse)response.Response).EntityCollection.Entities;
-                            var hasActive = layers.Any(x =>
-                                string.Equals(x.GetAttributeValue<string>("msdyn_solutionname"), "Active", StringComparison.OrdinalIgnoreCase));
-                            var objId = requestMap[response.RequestIndex];
-                            result[objId] = hasActive;
-                        }
+                        var layers = ((RetrieveMultipleResponse)response.Response).EntityCollection.Entities;
+                        var hasActive = layers.Any(x =>
+                            string.Equals(x.GetAttributeValue<string>("msdyn_solutionname"), "Active", StringComparison.OrdinalIgnoreCase));
+                        var objId = requestMap[response.RequestIndex];
+                        result[objId] = hasActive;
                     }
-                    catch { /* skip batch on failure */ }
 
                     bulk.Requests.Clear();
                     requestMap.Clear();
@@ -796,7 +769,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string S(Entity e, string attr) =>
             e.Contains(attr) ? e[attr]?.ToString() ?? "" : "";
 
-        private static string GetTypeName(int typeId) =>
-            ComponentTypeNames.TryGetValue(typeId, out var name) ? name : $"Type_{typeId}";
+        private static string GetTypeName(Entity component)
+        {
+            if (component.FormattedValues.TryGetValue("componenttype", out var label) &&
+                !string.IsNullOrWhiteSpace(label))
+                return label;
+            var typeId = component.GetAttributeValue<OptionSetValue>("componenttype")?.Value ?? 0;
+            return ComponentTypeNames.TryGetValue(typeId, out var name) ? name : $"Type_{typeId}";
+        }
     }
 }

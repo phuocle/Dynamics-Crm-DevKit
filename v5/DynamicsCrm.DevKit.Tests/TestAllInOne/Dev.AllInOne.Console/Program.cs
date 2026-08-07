@@ -52,12 +52,16 @@ namespace Dev.AllInOne.Console
                 var forceDeleteAll = args.Any(a => a.Equals("--force-delete-all", StringComparison.OrdinalIgnoreCase));
                 var compareProblemRows = args.Any(a => a.Equals("--compare-problem-rows", StringComparison.OrdinalIgnoreCase));
                 var probeTrace = args.Any(a => a.Equals("--probe-trace", StringComparison.OrdinalIgnoreCase));
+                var probeWorkflowXaml = args.Any(a => a.Equals("--probe-workflow-xaml", StringComparison.OrdinalIgnoreCase));
                 SysConsole.WriteLine("Connected: " + serviceClient.ConnectedOrgUriActual);
-                SysConsole.WriteLine("Mode: " + (forceDeleteAll ? "FORCE DELETE ALL (destructive)" : repair ? "REPAIR" : scanTables ? "TABLE SCAN (read-only)" : compareProblemRows ? "COMPARE PROBLEM ROWS (read-only)" : probeTrace ? "PROBE PLUGIN TRACE (read-only)" : "AUDIT (read-only)"));
+                SysConsole.WriteLine("Mode: " + (forceDeleteAll ? "FORCE DELETE ALL (destructive)" : repair ? "REPAIR" : scanTables ? "TABLE SCAN (read-only)" : compareProblemRows ? "COMPARE PROBLEM ROWS (read-only)" : probeTrace ? "PROBE PLUGIN TRACE (read-only)" : probeWorkflowXaml ? "PROBE WORKFLOW XAML (read-only)" : "AUDIT (read-only)"));
                 SysConsole.WriteLine();
 
                 if (probeTrace)
                     return ProbePluginTraceLogs(serviceClient);
+
+                if (probeWorkflowXaml)
+                    return ProbeWorkflowXaml(serviceClient);
 
                 PrintReportedJob(serviceClient);
                 PrintRecentProvisioningJobs(serviceClient);
@@ -91,6 +95,54 @@ namespace Dev.AllInOne.Console
                 SysConsole.WriteLine("[ERROR] " + ex.GetType().Name + ": " + ex.Message);
                 return 1;
             }
+        }
+
+        private static int ProbeWorkflowXaml(ServiceClient serviceClient)
+        {
+            SysConsole.WriteLine("=== workflow.xaml metadata proof ===");
+            var metadataResponse = (RetrieveEntityResponse)serviceClient.Execute(new RetrieveEntityRequest
+            {
+                LogicalName = "workflow",
+                EntityFilters = EntityFilters.Attributes,
+                RetrieveAsIfPublished = true
+            });
+
+            var attribute = metadataResponse.EntityMetadata.Attributes
+                .SingleOrDefault(a => string.Equals(a.LogicalName, "xaml", StringComparison.OrdinalIgnoreCase));
+            if (attribute == null)
+            {
+                SysConsole.WriteLine("[FAIL] workflow.xaml metadata attribute was not found.");
+                return 1;
+            }
+
+            SysConsole.WriteLine("[PASS] LogicalName=" + attribute.LogicalName);
+            SysConsole.WriteLine("SchemaName=" + attribute.SchemaName);
+            SysConsole.WriteLine("AttributeType=" + attribute.AttributeType);
+            SysConsole.WriteLine("IsValidForRead=" + (attribute.IsValidForRead ?? false));
+
+            var query = new QueryExpression("workflow")
+            {
+                ColumnSet = new ColumnSet("workflowid", "name", "category", "type", "xaml"),
+                TopCount = 1,
+                Criteria = new FilterExpression(LogicalOperator.And)
+            };
+            query.Criteria.AddCondition("category", ConditionOperator.Equal, 0);
+            query.Criteria.AddCondition("type", ConditionOperator.Equal, 1);
+            query.Criteria.AddCondition("xaml", ConditionOperator.NotNull);
+
+            var row = serviceClient.RetrieveMultiple(query).Entities.FirstOrDefault();
+            if (row == null)
+            {
+                SysConsole.WriteLine("[WARN] Metadata is valid, but no classic workflow with non-null xaml was found.");
+                return 0;
+            }
+
+            var xaml = row.GetAttributeValue<string>("xaml");
+            SysConsole.WriteLine("[PASS] Runtime query returned workflow " + row.Id);
+            SysConsole.WriteLine("Name=" + (row.GetAttributeValue<string>("name") ?? ""));
+            SysConsole.WriteLine("XamlClrType=" + (row.Attributes["xaml"]?.GetType().FullName ?? "null"));
+            SysConsole.WriteLine("XamlLength=" + (xaml?.Length ?? 0));
+            return 0;
         }
 
         private static int ProbePluginTraceLogs(ServiceClient serviceClient)

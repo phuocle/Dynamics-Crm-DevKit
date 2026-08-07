@@ -30,11 +30,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(WhoAmIResult)),
         Description(
-            "Current user + org + roles + DevKit runtime. Call once per session; cache userId for owner filters in execute_fetchxml.")]
+            "Return the connected Dataverse identity, organization, direct roles, and DevKit runtime evidence.\n\n" +
+            "WHEN TO USE:\n" +
+            "- Verify the active environment and user before reading or changing data\n" +
+            "- Verify MCP process version, build timestamp, assembly path, and SHA after reinstall\n\n" +
+            "RELATED TOOLS:\n" +
+            "- execute_fetchxml → query records with the returned userId\n" +
+            "- manage_role → inspect role definitions and assignments")]
         public CallToolResult whoami(
-            [Description(
-                "Include OAuth access token (~400 tokens extra) for direct Web API calls."
-            )] bool include_token = false)
+            [Description("Include OAuth access token (~400 tokens extra) for direct Web API calls.")] bool include_token = false)
         {
             try
             {
@@ -63,7 +67,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // Access token (optional). If the getter throws, leave AccessToken null;
                 // the caller can detect the missing token and request re-auth if needed.
                 if (include_token)
+                {
                     structured.AccessToken = _serviceClient.CurrentAccessToken;
+                    structured.Warnings.Add("Sensitive access token included by explicit request; do not log or persist it.");
+                }
 
                 // Security roles
                 PopulateRoles(structured, response.UserId);
@@ -83,9 +90,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var user = _serviceClient.Retrieve("systemuser", userId,
                 new ColumnSet("fullname", "domainname", "internalemailaddress"));
-            result.FullName = user.GetAttributeValue<string>("fullname") ?? "";
-            result.DomainName = user.GetAttributeValue<string>("domainname") ?? "";
-            result.Email = user.GetAttributeValue<string>("internalemailaddress") ?? "";
+            result.FullName = NullIfEmpty(user.GetAttributeValue<string>("fullname"));
+            result.DomainName = NullIfEmpty(user.GetAttributeValue<string>("domainname"));
+            result.Email = NullIfEmpty(user.GetAttributeValue<string>("internalemailaddress"));
         }
 
         private void PopulateOrgDetails(WhoAmIResult result)
@@ -159,7 +166,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 : (!string.IsNullOrEmpty(r.OrgUniqueName) ? r.OrgUniqueName : "Dataverse");
 
             var sb = new StringBuilder(256);
-            sb.Append("Connected to ");
+            sb.Append("[Success] Connected to ");
             sb.Append(org);
             if (!string.IsNullOrEmpty(r.EnvironmentUrl))
                 sb.Append(" (").Append(r.EnvironmentUrl).Append(')');
@@ -212,6 +219,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (uri == null) return null;
             return $"{uri.Scheme}://{uri.Host}";
         }
+
+        private static string NullIfEmpty(string value) =>
+            string.IsNullOrWhiteSpace(value) ? null : value.Trim();
 
         private static string GetLanguageName(int lcid) => lcid switch
         {

@@ -6,7 +6,6 @@ using ModelContextProtocol.Server;
 using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
@@ -27,19 +26,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(ParsedRecordUrlResult)),
         Description(
-            "Parse a Dataverse/Power Platform URL or raw GUID → entity logical name + record ID. " +
-            "Supports main.aspx, Web API, maker portal, legacy URLs. " +
-            "EntityName='(unknown)' = GUID only; ask user for entity. " +
-            "Call FIRST when user pastes a URL.")]
+            "Parse a Dataverse/Power Platform URL or raw GUID into record and environment identifiers.\n\n" +
+            "WHEN TO USE:\n" +
+            "- Call first when the user pastes a model-driven app, Web API, maker, admin, or legacy URL\n" +
+            "- Extract a GUID while preserving its URL context\n\n" +
+            "RELATED TOOLS:\n" +
+            "- manage_record → read or change a parsed record\n" +
+            "- get_tables → resolve or verify an unknown entity logical name")]
         public CallToolResult parse_record_url(
-            [Description(
-                "URL, GUID, or text. URL-decoded automatically; first matching parser wins."
-            )] string input)
+            [Description("URL, GUID, or text. URL-decoded automatically; first matching parser wins.")] string input)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(input))
-                    return Error("Error: input is required.",
+                    return Error("input is required.",
                         "Provide a Dynamics 365 URL, Web API URL, maker portal URL, or raw GUID.");
 
                 var decoded = Uri.UnescapeDataString(input.Trim());
@@ -52,7 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                           ?? TryParseRawGuid(decoded);
 
                 if (result == null)
-                    return Error("Error: No GUID found in input.",
+                    return Error("No GUID found in input.",
                         "Provide a Dynamics 365 URL, Web API URL, maker portal URL, or raw GUID.");
 
                 return Success(BuildCompactText(result), result);
@@ -329,18 +329,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string BuildCompactText(ParsedRecordUrlResult result)
         {
-            var sb = new StringBuilder(256);
-            sb.AppendLine("[ParsedUrl]");
-            sb.AppendLine($"EntityName: {result.EntityName ?? "(unknown)"}");
-            sb.AppendLine($"RecordId: {result.RecordId ?? "(none)"}");
-            sb.AppendLine($"Source: {result.Source}");
-            if (!string.IsNullOrWhiteSpace(result.EnvironmentId))
-                sb.AppendLine($"EnvironmentId: {result.EnvironmentId}");
-            if (!string.IsNullOrWhiteSpace(result.FlowId))
-                sb.AppendLine($"FlowId: {result.FlowId}");
-            if (!string.IsNullOrWhiteSpace(result.Tip))
-                sb.AppendLine($"Tip: {result.Tip}");
-            return sb.ToString().TrimEnd();
+            var entityName = string.IsNullOrWhiteSpace(result.EntityName) ? "(unknown)" : result.EntityName;
+            var recordId = string.IsNullOrWhiteSpace(result.RecordId) ? "(none)" : result.RecordId;
+            return $"[Success] {entityName} {recordId} ({result.Source}).";
         }
 
         private static string CleanGuid(string value)

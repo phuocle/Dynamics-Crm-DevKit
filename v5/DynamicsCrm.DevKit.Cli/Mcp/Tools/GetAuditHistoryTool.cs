@@ -54,11 +54,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetAuditHistoryResult)),
         Description(
-            "Audit history (who/what/when/old/new). record_id set = detail (field-level, entity_name REQUIRED). " +
-            "Empty = browse list. Audit must be enabled at org AND entity. " +
-            "from_date/to_date override minutes_ago. attribute_name requires record_id. " +
-            "Empty result usually means auditing not enabled. " +
-            "For plugin traces → get_plugin_trace_logs. For async failures → get_system_jobs.")]
+            "Browse audit events or inspect field-level changes for one Dataverse record.\n\n" +
+            "WHEN TO USE:\n" +
+            "- Identify who changed a record, when, and which logical fields changed\n" +
+            "- Browse recent audited create/update/delete/state events\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_plugin_trace_logs → plugin execution traces\n" +
+            "- get_system_jobs → asynchronous failures\n" +
+            "- get_tables → verify entity and attribute logical names")]
         public CallToolResult get_audit_history(
             [Description("Entity Display/logical name. Required with record_id. Optional in browse mode.")] string entity_name = "",
             [Description("GUID → detail mode. Empty = browse list.")] string record_id = "",
@@ -211,93 +214,71 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         /// One-shot fetch of attribute metadata for the target entity:
         ///   - Display Name per attribute (user-localized label, fallback to SchemaName)
         ///   - OptionSet value -> label for every local picklist attribute
-        /// Both maps are keyed by attribute logical name. On failure returns
-        /// empty maps so the tool still works (displayName becomes null, and
-        /// option-set values fall back to their raw int).
+        /// Both maps are keyed by attribute logical name. Metadata failures bubble
+        /// to the single tool catch so partial labels are never reported as complete.
         /// </summary>
         private AttributeMetadataCache GetEntityAttributeMetadata(string entityName)
         {
             var empty = new AttributeMetadataCache();
             if (string.IsNullOrWhiteSpace(entityName)) return empty;
 
-            try
-            {
-                var response = (RetrieveEntityResponse)_serviceClient.Execute(new RetrieveEntityRequest
+            var response = (RetrieveEntityResponse)_serviceClient.Execute(new RetrieveEntityRequest
                 {
                     LogicalName = entityName,
                     EntityFilters = EntityFilters.Attributes
-                });
+            });
 
-                foreach (var a in response.EntityMetadata.Attributes ?? Array.Empty<AttributeMetadata>())
-                {
-                    if (string.IsNullOrWhiteSpace(a.LogicalName)) continue;
-
-                    var label = a.DisplayName?.UserLocalizedLabel?.Label;
-                    if (string.IsNullOrWhiteSpace(label)) label = a.SchemaName;
-                    if (!string.IsNullOrWhiteSpace(label))
-                        empty.DisplayNames[a.LogicalName] = label;
-
-                    // Local picklist: PicklistAttributeMetadata.OptionSet.Options
-                    // Global picklist: doesn't carry options here, but the audit
-                    // record's OldValue/NewValue .FormattedValues already maps
-                    // the int to the label, so FormatAttributeValue uses that
-                    // first and never reaches the int fallback for global sets.
-                    if (a is PicklistAttributeMetadata pick && pick.OptionSet?.Options != null)
-                    {
-                        var optionMap = new Dictionary<int, string>();
-                        foreach (var opt in pick.OptionSet.Options)
-                        {
-                            var optLabel = opt.Label?.UserLocalizedLabel?.Label;
-                            if (!string.IsNullOrWhiteSpace(optLabel) && opt.Value.HasValue)
-                                optionMap[opt.Value.Value] = optLabel;
-                        }
-                        if (optionMap.Count > 0)
-                            empty.OptionSetLabels[a.LogicalName] = optionMap;
-                    }
-                    else if (a is StateAttributeMetadata stateAttr && stateAttr.OptionSet?.Options != null)
-                    {
-                        var optionMap = new Dictionary<int, string>();
-                        foreach (var opt in stateAttr.OptionSet.Options)
-                        {
-                            var optLabel = opt.Label?.UserLocalizedLabel?.Label;
-                            if (!string.IsNullOrWhiteSpace(optLabel) && opt.Value.HasValue)
-                                optionMap[opt.Value.Value] = optLabel;
-                        }
-                        if (optionMap.Count > 0)
-                            empty.OptionSetLabels[a.LogicalName] = optionMap;
-                    }
-                    else if (a is StatusAttributeMetadata statusAttr && statusAttr.OptionSet?.Options != null)
-                    {
-                        var optionMap = new Dictionary<int, string>();
-                        foreach (var opt in statusAttr.OptionSet.Options)
-                        {
-                            var optLabel = opt.Label?.UserLocalizedLabel?.Label;
-                            if (!string.IsNullOrWhiteSpace(optLabel) && opt.Value.HasValue)
-                                optionMap[opt.Value.Value] = optLabel;
-                        }
-                        if (optionMap.Count > 0)
-                            empty.OptionSetLabels[a.LogicalName] = optionMap;
-                    }
-                    else if (a is BooleanAttributeMetadata)
-                    {
-                        // True/False labels for Two-Option fields
-                        var boolMap = new Dictionary<int, string>();
-                        if (!string.IsNullOrWhiteSpace(a.DisplayName?.UserLocalizedLabel?.Label))
-                        {
-                            // handled above; nothing extra to do here
-                        }
-                        var trueLabel = ((BooleanAttributeMetadata)a).OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label;
-                        var falseLabel = ((BooleanAttributeMetadata)a).OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label;
-                        if (!string.IsNullOrWhiteSpace(trueLabel)) boolMap[1] = trueLabel;
-                        if (!string.IsNullOrWhiteSpace(falseLabel)) boolMap[0] = falseLabel;
-                        if (boolMap.Count > 0)
-                            empty.OptionSetLabels[a.LogicalName] = boolMap;
-                    }
-                }
-            }
-            catch
+            foreach (var a in response.EntityMetadata.Attributes ?? Array.Empty<AttributeMetadata>())
             {
-                // ignore -- empty cache
+                if (string.IsNullOrWhiteSpace(a.LogicalName)) continue;
+
+                var label = a.DisplayName?.UserLocalizedLabel?.Label;
+                if (string.IsNullOrWhiteSpace(label)) label = a.SchemaName;
+                if (!string.IsNullOrWhiteSpace(label))
+                    empty.DisplayNames[a.LogicalName] = label;
+
+                if (a is PicklistAttributeMetadata pick && pick.OptionSet?.Options != null)
+                {
+                    var optionMap = new Dictionary<int, string>();
+                    foreach (var opt in pick.OptionSet.Options)
+                    {
+                        var optLabel = opt.Label?.UserLocalizedLabel?.Label;
+                        if (!string.IsNullOrWhiteSpace(optLabel) && opt.Value.HasValue)
+                            optionMap[opt.Value.Value] = optLabel;
+                    }
+                    if (optionMap.Count > 0) empty.OptionSetLabels[a.LogicalName] = optionMap;
+                }
+                else if (a is StateAttributeMetadata stateAttr && stateAttr.OptionSet?.Options != null)
+                {
+                    var optionMap = new Dictionary<int, string>();
+                    foreach (var opt in stateAttr.OptionSet.Options)
+                    {
+                        var optLabel = opt.Label?.UserLocalizedLabel?.Label;
+                        if (!string.IsNullOrWhiteSpace(optLabel) && opt.Value.HasValue)
+                            optionMap[opt.Value.Value] = optLabel;
+                    }
+                    if (optionMap.Count > 0) empty.OptionSetLabels[a.LogicalName] = optionMap;
+                }
+                else if (a is StatusAttributeMetadata statusAttr && statusAttr.OptionSet?.Options != null)
+                {
+                    var optionMap = new Dictionary<int, string>();
+                    foreach (var opt in statusAttr.OptionSet.Options)
+                    {
+                        var optLabel = opt.Label?.UserLocalizedLabel?.Label;
+                        if (!string.IsNullOrWhiteSpace(optLabel) && opt.Value.HasValue)
+                            optionMap[opt.Value.Value] = optLabel;
+                    }
+                    if (optionMap.Count > 0) empty.OptionSetLabels[a.LogicalName] = optionMap;
+                }
+                else if (a is BooleanAttributeMetadata booleanAttribute)
+                {
+                    var boolMap = new Dictionary<int, string>();
+                    var trueLabel = booleanAttribute.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label;
+                    var falseLabel = booleanAttribute.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label;
+                    if (!string.IsNullOrWhiteSpace(trueLabel)) boolMap[1] = trueLabel;
+                    if (!string.IsNullOrWhiteSpace(falseLabel)) boolMap[0] = falseLabel;
+                    if (boolMap.Count > 0) empty.OptionSetLabels[a.LogicalName] = boolMap;
+                }
             }
 
             return empty;
@@ -438,7 +419,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 objectTypeCode = otc;
             }
 
-            var fetchXml = BuildBrowseFetchXml(objectTypeCode, sinceUtc, untilUtc, operation, maxRecords);
+            var serverLimit = string.IsNullOrWhiteSpace(userFilter) ? maxRecords : 0;
+            var fetchXml = BuildBrowseFetchXml(objectTypeCode, sinceUtc, untilUtc, operation, serverLimit);
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
 
             // Apply user_filter in-memory (audit 'useridname' isn't FetchXML-queryable)
@@ -458,7 +440,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 filtered.AddRange(result.Entities);
             }
 
-            var entries = filtered.Select(BuildBrowseEntry).ToList();
+            var entries = filtered.Take(maxRecords).Select(BuildBrowseEntry).ToList();
 
             var structured = new GetAuditHistoryResult
             {
@@ -554,7 +536,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string operation, int maxRecords)
         {
             var sb = new StringBuilder(512);
-            sb.Append($"<fetch top='{maxRecords}'>");
+            sb.Append(maxRecords > 0 ? $"<fetch top='{maxRecords}'>" : "<fetch>");
             sb.Append("<entity name='audit'>");
             sb.Append("<attribute name='auditid'/>");
             sb.Append("<attribute name='createdon'/>");
