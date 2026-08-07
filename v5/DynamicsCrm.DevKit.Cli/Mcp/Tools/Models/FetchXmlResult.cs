@@ -11,15 +11,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("hasMore")]
         public bool HasMore { get; set; }
 
-        [JsonPropertyName("getAll")]
-        public bool GetAll { get; set; }
-
-        [JsonPropertyName("maxRecords")]
-        public int MaxRecords { get; set; }
-
-        [JsonPropertyName("singleEntity")]
+        [JsonPropertyName("entity")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string SingleEntity { get; set; }
+        public string Entity { get; set; }
 
         [JsonPropertyName("records")]
         public List<Dictionary<string, string>> Records { get; set; } = [];

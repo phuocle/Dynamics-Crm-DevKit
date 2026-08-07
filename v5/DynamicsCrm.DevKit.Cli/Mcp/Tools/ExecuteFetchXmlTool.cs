@@ -31,34 +31,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Rules: lowercase logical names only; no top/count/page in <fetch> (use max_records); use max_records=10-50 for samples.\n" +
             "For keyword search → search_records. For entity metadata → get_tables.")]
         public CallToolResult execute_fetchxml(
-            [Description("FetchXML starting with <fetch>. Lowercase logical names."
-            )] string fetchxml,
-            [Description(
-                "1-5000. Default 5000. Use 10-100 for samples."
-            )] int max_records = 5000,
-            [Description(
-                "true = auto-page until max_records. false = first page only."
-            )] bool get_all = false)
+            [Description("FetchXML starting with <fetch>. Lowercase logical names.")] string fetchxml,
+            [Description("1-5000. Default 5000. Use 10-100 for samples.")] int max_records = 5000,
+            [Description("true = auto-page until max_records. false = first page only.")] bool get_all = false)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(fetchxml))
-                    return Error("Error: fetchxml is required.\n" +
-                           "Read schema://fetchxml for FetchXML query structure and examples.");
+                    return Error("fetchxml is required.",
+                        "Read schema://fetchxml for FetchXML query structure and examples.");
 
                 if (max_records <= 0)
-                    return Error("Error: max_records must be a positive integer (1-5000).");
+                    return Error("max_records must be a positive integer (1-5000).");
                 if (max_records > DataversePageLimit)
                     max_records = DataversePageLimit;
 
                 var structured = get_all
                     ? ExecuteAllPages(fetchxml, max_records)
                     : ExecuteSinglePage(fetchxml, max_records);
-                structured.GetAll = get_all;
-                structured.MaxRecords = max_records;
 
-                var summary = $"{structured.TotalReturned} record(s) returned" +
-                    (structured.HasMore ? " (more records available)" : "");
+                var summary = structured.HasMore
+                    ? $"[Success] {structured.TotalReturned} records returned (more available)."
+                    : $"[Success] {structured.TotalReturned} records returned.";
                 return Success(summary, structured);
             }
             catch (Exception ex)
@@ -78,7 +72,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Records = records,
                 TotalReturned = records.Count,
                 HasMore = result.MoreRecords,
-                SingleEntity = GetSingleEntity(records)
+                Entity = GetSingleEntity(records)
             };
         }
 
@@ -111,7 +105,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Records = allRecords,
                 TotalReturned = allRecords.Count,
                 HasMore = hasMore,
-                SingleEntity = GetSingleEntity(allRecords)
+                Entity = GetSingleEntity(allRecords)
             };
         }
 
