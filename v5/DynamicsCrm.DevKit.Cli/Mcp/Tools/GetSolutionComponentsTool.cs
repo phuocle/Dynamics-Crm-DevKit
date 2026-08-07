@@ -254,16 +254,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         /// </summary>
         private (List<Entity> Components, Dictionary<Guid, string> FullEntityNames) LoadComponents(Guid solutionId)
         {
-            // 1) Fetch all direct solutioncomponent rows for this solution
-            var allComponents = _serviceClient.RetrieveMultiple(new QueryExpression("solutioncomponent")
+            // 1) Fetch all direct solutioncomponent rows for this solution (paged — solutions can have >5000 components)
+            var allComponents = new List<Entity>();
+            var componentQuery = new QueryExpression("solutioncomponent")
             {
                 NoLock = true,
                 ColumnSet = new ColumnSet("objectid", "componenttype", "rootcomponentbehavior"),
                 Criteria = new FilterExpression
                 {
                     Conditions = { new ConditionExpression("solutionid", ConditionOperator.Equal, solutionId) }
-                }
-            }).Entities.ToList();
+                },
+                PageInfo = new PagingInfo { Count = 5000, PageNumber = 1, PagingCookie = null }
+            };
+
+            while (true)
+            {
+                var page = _serviceClient.RetrieveMultiple(componentQuery);
+                allComponents.AddRange(page.Entities);
+                if (!page.MoreRecords)
+                    break;
+                componentQuery.PageInfo.PageNumber++;
+                componentQuery.PageInfo.PagingCookie = page.PagingCookie;
+            }
 
             var components = new List<Entity>(allComponents);
 
@@ -466,7 +478,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             BatchResolve(byType, nameMap, 150, "routingrule",                   "routingruleid",                   new ColumnSet("name"),                                e => S(e, "name"));
             BatchResolve(byType, nameMap, 152, "sla",                           "slaid",                           new ColumnSet("name"),                                e => S(e, "name"));
             BatchResolve(byType, nameMap, 380, "environmentvariabledefinition", "environmentvariabledefinitionid", new ColumnSet("schemaname", "displayname"),          e => $"{S(e, "schemaname")} ({S(e, "displayname")})");
-            BatchResolve(byType, nameMap, 381, "environmentvariablevalue",      "environmentvariablevalueid",      new ColumnSet("schemaname", "value"),                e => S(e, "schemaname") is { Length: > 0 } n ? n : S(e, "value"));
+            // Type 381 (environmentvariablevalue): resolve name via linked definition's schemaname.
+            // Never query/return the 'value' field — it may contain secrets.
+            if (byType.TryGetValue(381, out var envVarValueIds) && envVarValueIds.Count > 0)
+                ResolveEnvironmentVariableValueNames(envVarValueIds, nameMap);
             BatchResolve(byType, nameMap, 300, "canvasapp",                     "canvasappid",                     new ColumnSet("name", "displayname"),                e => S(e, "displayname") is { Length: > 0 } n ? n : S(e, "name"));
             BatchResolve(byType, nameMap, 10032, "managedidentity",             "managedidentityid",               new ColumnSet("managedidentityid"),                  e => e.Id.ToString());
             BatchResolve(byType, nameMap, 10036, "customapi",                   "customapiid",                     new ColumnSet("name", "uniquename"),                 e => S(e, "uniquename") is { Length: > 0 } n ? n : S(e, "name"));
@@ -581,6 +596,40 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 };
                 foreach (var e in _serviceClient.RetrieveMultiple(query).Entities)
                     nameMap.TryAdd(e.Id, nameSelector(e) ?? "");
+            }
+        }
+
+        // ── Environment Variable Value name resolution ─────────────────────────
+        // Resolves the display name via the linked environmentvariabledefinition.schemaname.
+        // Never queries or returns the 'value' field — it may contain secrets.
+        private void ResolveEnvironmentVariableValueNames(List<Guid> ids, Dictionary<Guid, string> nameMap)
+        {
+            const int chunkSize = 500;
+            for (var i = 0; i < ids.Count; i += chunkSize)
+            {
+                var chunk = ids.Skip(i).Take(chunkSize).Cast<object>().ToArray();
+                var query = new QueryExpression("environmentvariablevalue")
+                {
+                    NoLock = true,
+                    ColumnSet = new ColumnSet("environmentvariablevalueid"),
+                    Criteria = new FilterExpression
+                    {
+                        Conditions = { new ConditionExpression("environmentvariablevalueid", ConditionOperator.In, chunk) }
+                    }
+                };
+                var link = query.AddLink("environmentvariabledefinition", "environmentvariabledefinitionid", "environmentvariabledefinitionid", JoinOperator.LeftOuter);
+                link.Columns = new ColumnSet("schemaname", "displayname");
+                link.EntityAlias = "def";
+
+                foreach (var e in _serviceClient.RetrieveMultiple(query).Entities)
+                {
+                    var schemaName = e.GetAttributeValue<AliasedValue>("def.schemaname")?.Value as string;
+                    var displayName = e.GetAttributeValue<AliasedValue>("def.displayname")?.Value as string;
+                    var name = !string.IsNullOrWhiteSpace(schemaName) ? schemaName
+                               : !string.IsNullOrWhiteSpace(displayName) ? displayName
+                               : e.Id.ToString();
+                    nameMap.TryAdd(e.Id, name);
+                }
             }
         }
 

@@ -332,7 +332,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // System jobs (asyncoperation) — dedicated tool has status/operation_type filters + detail mode.
             ("asyncoperations", "get_system_jobs",
                 "REDIRECT: Use get_system_jobs instead of GET asyncoperations.\n" +
-                "get_system_jobs provides status/operation_type filters, time scope, correlation_id tracing, and detail mode with error/stack trace.\n\n" +
+                "get_system_jobs provides status/operation_type filters, time scope, correlation_id tracing, and detail mode with message + friendlyMessage.\n\n" +
                 "Examples:\n" +
                 "  get_system_jobs(status='failed', minutes_ago=1440) → failed jobs last 24h\n" +
                 "  get_system_jobs(record_id='<guid>') → detail with message + friendlyMessage\n" +
@@ -356,7 +356,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Examples:\n" +
                 "  get_workflows(entity_name='account') → workflows bound to account\n" +
                 "  get_workflows(mode='realtime') → realtime (sync) workflows\n" +
-                "  get_workflows(workflow_id='<guid>') → detail with trigger fields + XAML"),
+                "  get_workflows(workflow_id='<guid>') → detail with trigger fields and execution metadata"),
 
             // Filter ngụ ý "đã xóa" — Dataverse OData filter không trả soft-deleted records.
             ("deletionstatecode", "manage_deleted_records",

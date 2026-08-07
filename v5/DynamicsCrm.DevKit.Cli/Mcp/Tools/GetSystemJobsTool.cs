@@ -40,7 +40,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "List asynchronous system jobs or inspect one job with its diagnostic messages.\n\n" +
             "WHEN TO USE:\n" +
-            "- Debug async failures (list failed → detail for stack trace)\n" +
+            "- Debug async failures (list failed → detail for message + friendlyMessage)\n" +
             "- Monitor bulk ops (operation_type='bulk_delete'/'import'/'solution')\n" +
             "- Trace one request (correlation_id across jobs)\n" +
             "- Async plugin failures: combine with get_plugin_trace_logs\n\n" +
@@ -307,7 +307,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.Append(opFilter);
 
             var sinceUtc = DateTime.UtcNow.AddMinutes(-minutesAgo).ToString("yyyy-MM-ddTHH:mm:ssZ");
-            var timeAttribute = string.Equals(status?.Trim(), "waiting", StringComparison.OrdinalIgnoreCase)
+            // Waiting jobs have startedon=null, so filter on createdon for both 'waiting' and 'all' statuses.
+            // 'all' includes waiting jobs, so it must also use createdon to avoid dropping them.
+            var normalizedStatusForTime = (status ?? "failed").Trim().ToLowerInvariant();
+            var timeAttribute = (normalizedStatusForTime == "waiting" || normalizedStatusForTime == "all")
                 ? "createdon"
                 : "startedon";
             sb.Append($"<condition attribute='{timeAttribute}' operator='ge' value='{sinceUtc}'/>");
@@ -322,7 +325,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.Append($"<condition attribute='correlationid' operator='eq' value='{EscapeXml(correlationId.Trim())}'/>");
 
             sb.Append("</filter>");
-            sb.Append("<order attribute='startedon' descending='true'/>");
+            // Order by the same attribute used for time filtering — waiting/all use createdon, others use startedon.
+            sb.Append($"<order attribute='{timeAttribute}' descending='true'/>");
             sb.Append("</entity>");
             sb.Append("</fetch>");
             return sb.ToString();

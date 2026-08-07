@@ -109,17 +109,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             // ── Build FetchXML + retrieve ───────────────────────────────
+            // When trigger_field is set, we use a server-side like-filter on triggeronupdateattributelist
+            // to avoid the fetch-before-filter false-zero bug (match on a later page would be missed).
             var fetchXml = BuildListFetchXml(objectTypeCode, normalizedMode, normalizedStatus, triggerField, nameFilter, maxRecords);
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            var resultEntities = result.Entities.AsEnumerable();
-            if (!string.IsNullOrWhiteSpace(triggerField))
-            {
-                resultEntities = resultEntities.Where(e =>
-                    (e.GetAttributeValue<string>("triggeronupdateattributelist") ?? "")
-                    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                    .Contains(triggerField, StringComparer.OrdinalIgnoreCase));
-            }
-            var matchedEntities = resultEntities.Take(maxRecords).ToList();
+            var matchedEntities = result.Entities.ToList();
 
             if (matchedEntities.Count == 0)
             {
@@ -302,8 +296,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string BuildListFetchXml(int? objectTypeCode, string mode, string status, string triggerField, string nameFilter, int maxRecords)
         {
             var sb = new StringBuilder(640);
-            var topAttribute = string.IsNullOrWhiteSpace(triggerField) ? $" top='{maxRecords}'" : "";
-            sb.Append($"<fetch{topAttribute}>");
+            sb.Append($"<fetch top='{maxRecords}'>");
             sb.Append("<entity name='workflow'>");
             sb.Append("<attribute name='workflowid'/>");
             sb.Append("<attribute name='name'/>");
@@ -348,6 +341,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.Append("<condition attribute='statecode' operator='eq' value='1'/>");
             else if (status == "draft")
                 sb.Append("<condition attribute='statecode' operator='eq' value='0'/>");
+
+            // Server-side trigger_field filter: use like on triggeronupdateattributelist.
+            // The field is a comma-separated list of logical names (e.g. "statecode,statuscode").
+            // A like-filter on ',fieldname,' after wrapping the field value in commas would be ideal,
+            // but FetchXML like on a substring is sufficient for server-side filtering and avoids
+            // the fetch-before-filter false-zero bug (match on a later page would be missed).
+            if (!string.IsNullOrWhiteSpace(triggerField))
+                sb.Append($"<condition attribute='triggeronupdateattributelist' operator='like' value='%{EscapeXml(triggerField.Trim())}%'/>");
 
             if (!string.IsNullOrWhiteSpace(nameFilter))
                 sb.Append($"<condition attribute='name' operator='like' value='%{EscapeXml(nameFilter.Trim())}%'/>");
