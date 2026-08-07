@@ -21,6 +21,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class GetAuditHistoryTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
+        private const int PagingPageSize = 5000;
 
         public GetAuditHistoryTool(ServiceClient serviceClient)
         {
@@ -146,7 +147,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Swap the values or correct the range.");
 
             // ── Resolve user filter ─────────────────────────────────────────────
-            var resolvedUserFilter = ResolveUserFilter(userFilter);
+            var resolvedUserFilter = ResolveUserFilter(userFilter, out var resolvedUserId);
             if (resolvedUserFilter.StartsWith("[AMBIGUOUS_USER]"))
                 return Error(resolvedUserFilter.Substring("[AMBIGUOUS_USER]".Length));
 
@@ -162,17 +163,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // ── Dispatch ────────────────────────────────────────────────────────
             if (!string.IsNullOrWhiteSpace(recordId))
                 return ExecuteDetailMode(entityName, Guid.Parse(recordId.Trim()), sinceUtc, untilUtc,
-                    resolvedUserFilter, operation, attributeName, maxRecords, timeScope);
+                    resolvedUserFilter, resolvedUserId, operation, attributeName, maxRecords, timeScope);
 
             return ExecuteBrowseMode(entityName, sinceUtc, untilUtc,
-                resolvedUserFilter, operation, maxRecords, timeScope);
+                resolvedUserFilter, resolvedUserId, operation, maxRecords, timeScope);
         }
 
         // ── Detail mode ─────────────────────────────────────────────────────────
 
         private CallToolResult ExecuteDetailMode(string entityName, Guid id,
             DateTime sinceUtc, DateTime untilUtc,
-            string userFilter, string operationFilter, string attributeFilter,
+            string userFilter, Guid? userId, string operationFilter, string attributeFilter,
             int maxRecords, string timeScope)
         {
             // Audit response only gives logical names of touched fields (no display
@@ -184,18 +185,44 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // logical name / raw value.
             var metadata = GetEntityAttributeMetadata(entityName);
 
-            var request = new RetrieveRecordChangeHistoryRequest
-            {
-                Target = new EntityReference(entityName, id),
-                PagingInfo = new PagingInfo { PageNumber = 1, Count = maxRecords }
-            };
-            var response = (RetrieveRecordChangeHistoryResponse)_serviceClient.Execute(request);
-            var auditDetails = response.AuditDetailCollection;
-
+            // RetrieveRecordChangeHistory has no server-side user filter, so a
+            // client-side user filter must page past page 1; otherwise matches on
+            // later pages would be dropped (false zero).
+            var needsPaging = !string.IsNullOrWhiteSpace(userFilter);
             var entries = new List<AuditHistoryEntry>();
-            if (auditDetails?.AuditDetails != null && auditDetails.AuditDetails.Count > 0)
-                entries = FormatDetailEntries(auditDetails, sinceUtc, untilUtc,
-                    userFilter, operationFilter, attributeFilter, metadata);
+
+            var page = 1;
+            string pagingCookie = null;
+            while (true)
+            {
+                var request = new RetrieveRecordChangeHistoryRequest
+                {
+                    Target = new EntityReference(entityName, id),
+                    PagingInfo = new PagingInfo
+                    {
+                        PageNumber = page,
+                        Count = needsPaging ? PagingPageSize : maxRecords,
+                        PagingCookie = pagingCookie
+                    }
+                };
+                var response = (RetrieveRecordChangeHistoryResponse)_serviceClient.Execute(request);
+                var auditDetails = response.AuditDetailCollection;
+
+                if (auditDetails?.AuditDetails != null && auditDetails.AuditDetails.Count > 0)
+                    entries.AddRange(FormatDetailEntries(auditDetails, sinceUtc, untilUtc,
+                        userFilter, userId, operationFilter, attributeFilter, metadata));
+
+                if (!needsPaging || entries.Count >= maxRecords ||
+                    auditDetails == null || !auditDetails.MoreRecords ||
+                    auditDetails.AuditDetails == null || auditDetails.AuditDetails.Count == 0)
+                    break;
+
+                pagingCookie = auditDetails.PagingCookie;
+                page++;
+            }
+
+            if (needsPaging && entries.Count > maxRecords)
+                entries = entries.Take(maxRecords).ToList();
 
             var structured = new GetAuditHistoryResult
             {
@@ -287,7 +314,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static List<AuditHistoryEntry> FormatDetailEntries(
             AuditDetailCollection auditDetails,
             DateTime sinceUtc, DateTime untilUtc,
-            string userFilter, string operationFilter, string attributeFilter,
+            string userFilter, Guid? userId, string operationFilter, string attributeFilter,
             AttributeMetadataCache metadata)
         {
             var entries = new List<AuditHistoryEntry>();
@@ -313,9 +340,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var userRef = audit.GetAttributeValue<EntityReference>("userid");
                 var userName = userRef?.Name ?? userRef?.Id.ToString() ?? "";
 
-                if (!string.IsNullOrWhiteSpace(userFilter) &&
-                    userName.IndexOf(userFilter, StringComparison.OrdinalIgnoreCase) < 0)
-                    continue;
+                // When the filter resolved to a unique user id, match by id to avoid
+                // duplicate-name false positives; otherwise fall back to name contains.
+                if (!string.IsNullOrWhiteSpace(userFilter))
+                {
+                    var userMatches = userId.HasValue
+                        ? userRef != null && userRef.Id == userId.Value
+                        : userName.IndexOf(userFilter, StringComparison.OrdinalIgnoreCase) >= 0;
+                    if (!userMatches) continue;
+                }
 
                 var timestamp = createdOn?.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) ?? "";
 
@@ -407,7 +440,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult ExecuteBrowseMode(string entityName,
             DateTime sinceUtc, DateTime untilUtc,
-            string userFilter, string operation,
+            string userFilter, Guid? userId, string operation,
             int maxRecords, string timeScope)
         {
             int? objectTypeCode = null;
@@ -419,24 +452,42 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 objectTypeCode = otc;
             }
 
-            var serverLimit = string.IsNullOrWhiteSpace(userFilter) ? maxRecords : 0;
-            var fetchXml = BuildBrowseFetchXml(objectTypeCode, sinceUtc, untilUtc, operation, serverLimit);
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            // A user filter that resolved to a unique user id can be pushed into
+            // FetchXML (server-side, exact); a name fragment still filters
+            // client-side because the audit 'userid' name is not queryable.
+            var serverLimit = string.IsNullOrWhiteSpace(userFilter) || userId.HasValue ? maxRecords : 0;
+            var fetchXml = BuildBrowseFetchXml(objectTypeCode, sinceUtc, untilUtc, operation, serverLimit, userId);
 
-            // Apply user_filter in-memory (audit 'useridname' isn't FetchXML-queryable)
             var filtered = new List<Entity>();
-            if (!string.IsNullOrWhiteSpace(userFilter))
+            if (!string.IsNullOrWhiteSpace(userFilter) && !userId.HasValue)
             {
-                foreach (var e in result.Entities)
+                // Page through ALL audit pages: a single RetrieveMultiple returns one
+                // page, so matches on later pages would be dropped (false zero).
+                var page = 1;
+                string pagingCookie = null;
+                while (filtered.Count < maxRecords)
                 {
-                    var userRef = e.GetAttributeValue<EntityReference>("userid");
-                    var userName = userRef?.Name ?? userRef?.Id.ToString() ?? "";
-                    if (userName.IndexOf(userFilter, StringComparison.OrdinalIgnoreCase) >= 0)
-                        filtered.Add(e);
+                    var pagedFetchXml = FetchXmlPagingHelper.ApplyPaging(fetchXml, page, PagingPageSize, pagingCookie);
+                    var pageResult = _serviceClient.RetrieveMultiple(new FetchExpression(pagedFetchXml));
+
+                    foreach (var e in pageResult.Entities)
+                    {
+                        var userRef = e.GetAttributeValue<EntityReference>("userid");
+                        var userName = userRef?.Name ?? userRef?.Id.ToString() ?? "";
+                        if (userName.IndexOf(userFilter, StringComparison.OrdinalIgnoreCase) >= 0)
+                            filtered.Add(e);
+                    }
+
+                    if (!pageResult.MoreRecords || pageResult.Entities.Count == 0)
+                        break;
+
+                    pagingCookie = pageResult.PagingCookie;
+                    page++;
                 }
             }
             else
             {
+                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
                 filtered.AddRange(result.Entities);
             }
 
@@ -477,8 +528,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── User filter resolution ──────────────────────────────────────────────
 
-        private string ResolveUserFilter(string userFilter)
+        private string ResolveUserFilter(string userFilter, out Guid? resolvedUserId)
         {
+            resolvedUserId = null;
             if (string.IsNullOrWhiteSpace(userFilter)) return "";
             if (!userFilter.Contains('@')) return userFilter;
 
@@ -493,6 +545,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return "[AMBIGUOUS_USER]" + FormatMultipleUsers(userFilter, result.Entities);
             if (result.Entities.Count == 1)
             {
+                // Keep the systemuserid so callers can filter server-side / match by
+                // id instead of by display name (duplicate full names are possible).
+                resolvedUserId = result.Entities[0].Id;
                 var fullName = result.Entities[0].GetAttributeValue<string>("fullname");
                 if (!string.IsNullOrWhiteSpace(fullName)) return fullName;
             }
@@ -533,7 +588,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string BuildBrowseFetchXml(int? objectTypeCode,
             DateTime sinceUtc, DateTime untilUtc,
-            string operation, int maxRecords)
+            string operation, int maxRecords, Guid? userId = null)
         {
             var sb = new StringBuilder(512);
             sb.Append(maxRecords > 0 ? $"<fetch top='{maxRecords}'>" : "<fetch>");
@@ -554,6 +609,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(operation) && ActionNameMap.TryGetValue(operation, out var actionValue))
                 sb.Append($"<condition attribute='action' operator='eq' value='{actionValue}'/>");
+
+            if (userId.HasValue)
+                sb.Append($"<condition attribute='userid' operator='eq' value='{userId.Value}'/>");
 
             sb.Append("</filter>");
             sb.Append("<order attribute='createdon' descending='true'/>");

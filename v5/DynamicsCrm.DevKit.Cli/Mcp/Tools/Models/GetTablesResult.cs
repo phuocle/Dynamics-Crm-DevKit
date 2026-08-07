@@ -11,6 +11,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("count")]
         public int Count { get; set; }
 
+        [JsonPropertyName("totalMatched")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? TotalMatched { get; set; }
+
         [JsonPropertyName("entityName")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string EntityName { get; set; }

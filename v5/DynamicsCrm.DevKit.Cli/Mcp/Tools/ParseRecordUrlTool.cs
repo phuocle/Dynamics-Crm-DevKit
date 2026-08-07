@@ -127,7 +127,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ? "Web API (resolved)"
                 : "Web API (unresolved)";
 
-            return FormatResult(logicalName ?? entitySetName, guid, source);
+            // Keep the entity-set name in its own field: when resolution fails,
+            // entityName stays null instead of borrowing the set name (different semantic).
+            return new ParsedRecordUrlResult
+            {
+                EntityName = logicalName,
+                EntitySetName = entitySetName,
+                RecordId = guid,
+                Source = source,
+                Tip = logicalName == null
+                    ? $"Resolve entity set name '{entitySetName}' with get_tables"
+                    : null
+            };
         }
 
         // ── Priority 3: Power Platform Maker Portal URLs ──────────────────────────
@@ -154,27 +165,35 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var match = MakerFlowRunRegex.Match(input);
             if (match.Success)
             {
-                var envId = match.Groups[1].Value.ToLowerInvariant();
-                var flowId = match.Groups[2].Value.ToLowerInvariant();
-                var runId = match.Groups[3].Value.ToLowerInvariant();
-                return FormatMakerResult("flowsession", runId, envId,
-                    "make.powerautomate.com (flow run)", flowId);
+                // The character-class regex cannot prove GUID shape; reject
+                // malformed ids instead of returning them as valid identifiers.
+                if (!Guid.TryParse(match.Groups[1].Value, out var envGuid) ||
+                    !Guid.TryParse(match.Groups[2].Value, out var flowGuid) ||
+                    !Guid.TryParse(match.Groups[3].Value, out var runGuid))
+                    return null;
+                return FormatMakerResult("flowsession", runGuid.ToString().ToLowerInvariant(),
+                    envGuid.ToString().ToLowerInvariant(),
+                    "make.powerautomate.com (flow run)", flowGuid.ToString().ToLowerInvariant());
             }
 
             // Flow
             match = MakerFlowRegex.Match(input);
             if (match.Success)
             {
-                var envId = match.Groups[1].Value.ToLowerInvariant();
-                var flowId = match.Groups[2].Value.ToLowerInvariant();
-                return FormatMakerResult("workflow", flowId, envId, "make.powerautomate.com (flow)");
+                if (!Guid.TryParse(match.Groups[1].Value, out var envGuid) ||
+                    !Guid.TryParse(match.Groups[2].Value, out var flowGuid))
+                    return null;
+                return FormatMakerResult("workflow", flowGuid.ToString().ToLowerInvariant(),
+                    envGuid.ToString().ToLowerInvariant(), "make.powerautomate.com (flow)");
             }
 
             // Solution
             match = MakerSolutionRegex.Match(input);
             if (match.Success)
             {
-                var envId = match.Groups[1].Value.ToLowerInvariant();
+                if (!Guid.TryParse(match.Groups[1].Value, out var envGuid))
+                    return null;
+                var envId = envGuid.ToString().ToLowerInvariant();
                 var solRaw = match.Groups[2].Value;
                 if (Guid.TryParse(solRaw, out var solGuid))
                     return FormatMakerResult("solution", solGuid.ToString().ToLowerInvariant(), envId, "make.powerapps.com (solution)");
@@ -186,7 +205,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             match = AdminPortalRegex.Match(input);
             if (match.Success)
             {
-                var envId = match.Groups[1].Value.ToLowerInvariant();
+                if (!Guid.TryParse(match.Groups[1].Value, out var envGuid))
+                    return null;
+                var envId = envGuid.ToString().ToLowerInvariant();
                 return FormatMakerResult("environment", envId, envId, "admin.powerplatform.microsoft.com");
             }
 

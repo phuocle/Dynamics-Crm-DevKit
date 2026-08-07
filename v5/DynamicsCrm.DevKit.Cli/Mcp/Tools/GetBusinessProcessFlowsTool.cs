@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
@@ -87,7 +88,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return BuildDetail(bpf_id.Trim());
 
                 // -- List mode --
-                var bpfs = QueryBpfs(bpf_name, resolvedEntityName, normalizedStatus, max_records);
+                var bpfs = QueryBpfs(bpf_name, resolvedEntityName, normalizedStatus, max_records, include_stages);
 
                 if (bpfs.Count == 0)
                 {
@@ -132,7 +133,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 foreach (var bpf in bpfs)
                 {
-                    var stages = GetStages(bpf.WorkflowId);
+                    var source = entities.FirstOrDefault(e =>
+                        string.Equals(e.Id.ToString(), bpf.WorkflowId, StringComparison.OrdinalIgnoreCase));
+                    var stages = GetStages(bpf.WorkflowId, source?.GetAttributeValue<string>("clientdata"));
                     if (stages.Count > 0)
                         bpf.Stages = stages;
                 }
@@ -172,6 +175,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <attribute name='createdon'/>
     <attribute name='modifiedon'/>
     <attribute name='modifiedby'/>
+    <attribute name='clientdata'/>
     <filter>
       <condition attribute='workflowid' operator='eq' value='{EscapeXml(bpfId)}'/>
       <condition attribute='category' operator='eq' value='4'/>
@@ -187,7 +191,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var entity = result.Entities[0];
             var entry = MapBpfEntry(entity);
 
-            var stages = GetStages(bpfId);
+            var stages = GetStages(bpfId, entity.GetAttributeValue<string>("clientdata"));
             entry.StageCount = stages.Count;
             if (stages.Count > 0)
                 entry.Stages = stages;
@@ -204,7 +208,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // -- Data fetchers (return data, not CallToolResult) --
 
-        private List<Entity> QueryBpfs(string bpfName, string entityName, string status, int maxRecords)
+        private List<Entity> QueryBpfs(string bpfName, string entityName, string status, int maxRecords, bool includeStages)
         {
             var filters = new StringBuilder();
             filters.AppendLine("      <condition attribute='category' operator='eq' value='4'/>");
@@ -218,11 +222,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(bpfName))
                 filters.AppendLine($"      <condition attribute='name' operator='like' value='%{EscapeXml(bpfName.Trim())}%'/>");
 
-            // Note: primaryentity is EntityName type (Int32 internally), cannot filter in FetchXML with string.
-            // Fetch more records and filter client-side.
-            var fetchLimit = !string.IsNullOrWhiteSpace(entityName) ? 250 : maxRecords;
+            // clientdata carries the visual stage order; only fetch it when stages are requested.
+            var clientDataAttribute = includeStages ? "    <attribute name='clientdata'/>\n" : "";
 
-            var fetchXml = $@"<fetch top='{fetchLimit}'>
+            // Note: primaryentity is EntityName type (Int32 internally), cannot filter in FetchXML with string.
+            // With an entity filter the tool must scan EVERY matching BPF page (no top cap);
+            // a capped fetch could drop matches that sort past the first page.
+            var fetchAll = !string.IsNullOrWhiteSpace(entityName);
+            var topAttribute = fetchAll ? "" : $" top='{maxRecords}'";
+
+            var fetchXml = $@"<fetch{topAttribute}>
   <entity name='workflow'>
     <attribute name='workflowid'/>
     <attribute name='name'/>
@@ -237,13 +246,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <attribute name='createdon'/>
     <attribute name='modifiedon'/>
     <attribute name='modifiedby'/>
-    <filter type='and'>
+{clientDataAttribute}    <filter type='and'>
 {filters}    </filter>
     <order attribute='name'/>
   </entity>
 </fetch>";
 
-            var entities = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml)).Entities.ToList();
+            List<Entity> entities;
+            if (fetchAll)
+            {
+                entities = new List<Entity>();
+                var page = 1;
+                string pagingCookie = null;
+                while (true)
+                {
+                    var pagedFetchXml = FetchXmlPagingHelper.ApplyPaging(fetchXml, page, 5000, pagingCookie);
+                    var pageResult = _serviceClient.RetrieveMultiple(new FetchExpression(pagedFetchXml));
+                    entities.AddRange(pageResult.Entities);
+                    if (!pageResult.MoreRecords || pageResult.Entities.Count == 0)
+                        break;
+                    pagingCookie = pageResult.PagingCookie;
+                    page++;
+                }
+            }
+            else
+            {
+                entities = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml)).Entities.ToList();
+            }
 
             if (!string.IsNullOrWhiteSpace(entityName))
             {
@@ -257,8 +286,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return entities;
         }
 
-        private List<BpfStageEntry> GetStages(string bpfWorkflowId)
+        private List<BpfStageEntry> GetStages(string bpfWorkflowId, string clientData = null)
         {
+            // processstage has no sequence column; the true visual stage order lives in
+            // the BPF workflow's clientdata (StageStep.stageId == processstageid).
+            var stageOrder = ParseStageOrder(clientData);
+
             var fetchXml = $@"<fetch>
   <entity name='processstage'>
     <attribute name='processstageid'/>
@@ -272,7 +305,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 </fetch>";
 
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            return result.Entities.Select(e =>
+            var stages = result.Entities.Select(e =>
             {
                 var categoryValue = e.GetAttributeValue<OptionSetValue>("stagecategory")?.Value;
                 return new BpfStageEntry
@@ -285,6 +318,72 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     PrimaryEntity = NullIfEmpty(e.GetAttributeValue<string>("primaryentitytypecode"))
                 };
             }).ToList();
+
+            return OrderStages(stages, stageOrder);
+        }
+
+        // Order stages by the clientdata visual sequence; unknown/missing clientdata
+        // falls back to stage name so the output is still deterministic.
+        private static List<BpfStageEntry> OrderStages(List<BpfStageEntry> stages, List<Guid> stageOrder)
+        {
+            if (stages.Count == 0 || stageOrder == null || stageOrder.Count == 0)
+                return stages.OrderBy(s => s.StageName, StringComparer.OrdinalIgnoreCase).ToList();
+
+            var orderIndex = new Dictionary<Guid, int>();
+            for (var i = 0; i < stageOrder.Count; i++)
+                orderIndex.TryAdd(stageOrder[i], i);
+
+            return stages
+                .OrderBy(s => Guid.TryParse(s.StageId, out var id) && orderIndex.TryGetValue(id, out var idx)
+                    ? idx
+                    : int.MaxValue)
+                .ThenBy(s => s.StageName, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+        }
+
+        // Walk the workflow clientdata JSON tree and collect StageStep ids in
+        // document order (= visual order in the BPF designer).
+        private static List<Guid> ParseStageOrder(string clientData)
+        {
+            var order = new List<Guid>();
+            if (string.IsNullOrWhiteSpace(clientData)) return order;
+
+            try
+            {
+                using var document = JsonDocument.Parse(clientData);
+                CollectStageIds(document.RootElement, order);
+            }
+            catch (JsonException)
+            {
+                order.Clear();
+            }
+            return order;
+        }
+
+        private static void CollectStageIds(JsonElement element, List<Guid> order)
+        {
+            if (element.ValueKind != JsonValueKind.Object) return;
+
+            var isStageStep = element.TryGetProperty("__class", out var className) &&
+                className.ValueKind == JsonValueKind.String &&
+                className.GetString() != null &&
+                className.GetString().StartsWith("StageStep:", StringComparison.Ordinal);
+
+            if (isStageStep &&
+                element.TryGetProperty("stageId", out var stageId) &&
+                Guid.TryParse(stageId.GetString(), out var id))
+            {
+                order.Add(id);
+            }
+
+            if (element.TryGetProperty("steps", out var steps) &&
+                steps.ValueKind == JsonValueKind.Object &&
+                steps.TryGetProperty("list", out var list) &&
+                list.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var child in list.EnumerateArray())
+                    CollectStageIds(child, order);
+            }
         }
 
         private Dictionary<string, int> GetStageCounts(List<string> bpfIds)

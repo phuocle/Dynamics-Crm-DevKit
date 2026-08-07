@@ -58,6 +58,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error("Do not set top, count, page, or paging-cookie in <fetch>.",
                         "Use max_records and get_all; the tool owns paging attributes.");
 
+                // Well-formedness gate: the start/end tag check above only inspects the
+                // outer shell. Parse once here so malformed inner XML becomes a
+                // validation Error instead of an unexpected XmlException downstream.
+                try
+                {
+                    System.Xml.Linq.XDocument.Parse(trimmedFetchXml);
+                }
+                catch (System.Xml.XmlException xmlEx)
+                {
+                    return Error($"fetchxml is not well-formed XML: {xmlEx.Message}",
+                        "Read schema://fetchxml for FetchXML query structure and examples.");
+                }
+
                 if (max_records <= 0)
                     return Error("max_records must be a positive integer (1-5000).");
                 if (max_records > DataversePageLimit)

@@ -150,15 +150,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
-            var sorted = query.OrderBy(x => x.LogicalName).Take(maxRecords).ToList();
+            // Materialize the full match count before Take so truncation is explicit:
+            // "N entities returned" alone could be misread as the complete list.
+            var allMatches = query.OrderBy(x => x.LogicalName).ToList();
+            var totalMatched = allMatches.Count;
+            var sorted = allMatches.Take(maxRecords).ToList();
+            var truncated = totalMatched > maxRecords;
             var structured = new GetTablesResult
             {
                 Mode = "list",
                 Filter = string.IsNullOrWhiteSpace(filter) ? null : filter,
                 Count = sorted.Count,
+                TotalMatched = truncated ? totalMatched : null,
                 Tables = sorted.Count > 0 ? sorted.Select(BuildTableSummary).ToList() : null
             };
-            return Success($"[Success] {sorted.Count} entities returned.", structured);
+            var summary = truncated
+                ? $"[Success] {sorted.Count} of {totalMatched} entities returned (truncated by max_records; raise max_records to see more)."
+                : $"[Success] {sorted.Count} entities returned.";
+            return Success(summary, structured);
         }
 
         private static TableSummaryEntry BuildTableSummary(EntityMetadata metadata) => new()

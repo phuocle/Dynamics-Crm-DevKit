@@ -8,6 +8,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("entityName")]
         public string EntityName { get; set; }
 
+        [JsonPropertyName("entitySetName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string EntitySetName { get; set; }
+
         [JsonPropertyName("recordId")]
         public string RecordId { get; set; }
 

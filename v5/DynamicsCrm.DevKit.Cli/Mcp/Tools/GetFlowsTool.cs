@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -21,6 +22,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             _serviceClient = serviceClient;
         }
+
+        private const int PagingPageSize = 5000;
 
         private static readonly Dictionary<int, string> FlowSessionStatusMap = new()
         {
@@ -146,17 +149,39 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            var entities = result.Entities.ToList();
-
+            List<Entity> entities;
             if (!string.IsNullOrWhiteSpace(ownerFilter))
             {
+                // A single RetrieveMultiple only returns one page; page through every
+                // page so owner matches on later pages are not dropped (false zero).
                 var filter = ownerFilter.Trim();
-                entities = entities.Where(e =>
+                var matched = new List<Entity>();
+                var page = 1;
+                string pagingCookie = null;
+                while (matched.Count < maxRecords)
                 {
-                    var owner = e.GetAttributeValue<EntityReference>("ownerid")?.Name;
-                    return owner != null && owner.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0;
-                }).Take(maxRecords).ToList();
+                    var pagedFetchXml = FetchXmlPagingHelper.ApplyPaging(fetchXml, page, PagingPageSize, pagingCookie);
+                    var pageResult = _serviceClient.RetrieveMultiple(new FetchExpression(pagedFetchXml));
+
+                    foreach (var e in pageResult.Entities)
+                    {
+                        var owner = e.GetAttributeValue<EntityReference>("ownerid")?.Name;
+                        if (owner != null && owner.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0)
+                            matched.Add(e);
+                    }
+
+                    if (!pageResult.MoreRecords || pageResult.Entities.Count == 0)
+                        break;
+
+                    pagingCookie = pageResult.PagingCookie;
+                    page++;
+                }
+                entities = matched;
+            }
+            else
+            {
+                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                entities = result.Entities.ToList();
             }
 
             if (entities.Count == 0)

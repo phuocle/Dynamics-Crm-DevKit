@@ -22,14 +22,17 @@ Trạng thái dùng trong tài liệu:
 - Đã reject `top`, `count`, `page`, `paging-cookie` ở opening `<fetch>` thay vì âm thầm ghi đè.
 - DTO đã null-aware hơn và không còn echo input FetchXML vào structured output.
 
+## Đã sửa (phase 4)
+
+- Thêm gate `XDocument.Parse` ngay sau check tag: XML sai cấu trúc ở giữa giờ trả validation `Error("fetchxml is not well-formed XML: ...")` thay vì bubble `XmlException` từ `FetchXmlPagingHelper`.
+
 ## Còn lại
 
-- Validation XML chỉ kiểm tra chuỗi bắt đầu `<fetch` và kết thúc `</fetch>`. XML sai cấu trúc ở giữa vẫn đi vào `XDocument.Parse` trong `FetchXmlPagingHelper` và trở thành unexpected exception thay vì validation `Error`.
-- Test-call vẫn chứa description cũ, chưa test các paging attributes mới bị cấm hoặc malformed XML, và có structured output ghi “rút gọn”.
+- Test-call vẫn chứa description cũ, chưa test các paging attributes mới bị cấm hoặc malformed XML (regression case của phase 4), và có structured output ghi “rút gọn”. Cũng chưa có case auto-paging `get_all=true` nhiều page.
 
-## Kết luận — NEED UPDATE
+## Kết luận — NEED TEST-CALL UPDATE
 
-Core paging đã tốt hơn, nhưng malformed FetchXML và evidence stale chưa đạt checklist.
+Malformed FetchXML đã đóng ở code; chỉ còn regenerate evidence.
 
 # 4. get_tables
 
@@ -39,14 +42,17 @@ Core paging đã tốt hơn, nhưng malformed FetchXML và evidence stale chưa 
 - Contract `formulaDefinition` đã được document rõ là source reference `entity:attribute` để `upsert_column` resolve server-side, không còn giả vờ đây là raw formula.
 - Description và DTO hiện tại nhất quán hơn với compact/standard/full.
 
+## Đã sửa (phase 4)
+
+- List mode giờ đếm full match trước khi `Take`; khi bị cắt trả thêm `totalMatched` trong structured output và summary đổi thành `[Success] N of M entities returned (truncated by max_records; ...)`. Không bị cắt thì output giữ nguyên như cũ.
+
 ## Còn lại
 
-- List mode `Take(maxRecords)` nhưng không trả `hasMore`, tổng số match hoặc warning khi bị cắt; câu `[Success] N entities returned` có thể bị hiểu là danh sách đầy đủ.
-- Test-call được tạo trước parameter `max_records` và trước khi rút gọn parameter description; artifact không khớp source hiện tại.
+- Test-call được tạo trước parameter `max_records` và trước khi rút gọn parameter description; artifact không khớp source hiện tại. Cần thêm case bị truncate (`max_records` nhỏ) để chứng minh `totalMatched`.
 
-## Kết luận — NEED UPDATE
+## Kết luận — NEED TEST-CALL UPDATE
 
-Cần làm truncation explicit và regenerate test-call từ source hiện tại.
+Truncation đã explicit; chỉ còn regenerate evidence.
 
 # 7. parse_record_url
 
@@ -55,15 +61,18 @@ Cần làm truncation explicit và regenerate test-call từ source hiện tại
 - Content đã thành một dòng `[Success]`; validation không còn tạo `Error: Error:`.
 - Description đã theo template; helper không catch lỗi metadata.
 
+## Đã sửa (phase 4)
+
+- Maker flow/flow-run/admin URL giờ `Guid.TryParse` từng captured ID; malformed ID không còn được trả như identifier hợp lệ (fall through về "No GUID found"). Solution URL giữ nhánh unique name cho solution id non-GUID (đúng semantic), chỉ env-id bắt buộc là GUID.
+- Web API unresolved: DTO có thêm `entitySetName`; `entityName` giờ để null khi không resolve được, kèm `tip` gợi ý dùng `get_tables`.
+
 ## Còn lại
 
-- Regex maker/admin dùng `[0-9a-fA-F-]+` và không `Guid.TryParse` environment/flow/run IDs, nên chuỗi malformed vẫn có thể được trả như identifier hợp lệ.
-- Web API unresolved vẫn đặt entity-set name vào `entityName`; DTO chưa có `entitySetName` để phân biệt semantic.
-- Test-call chỉ có một happy path và một error path, đồng thời description trong file vẫn là bản cũ. Chưa có Web API, maker/admin, raw GUID, no-GUID và malformed maker-ID cases.
+- Test-call chỉ có một happy path và một error path, đồng thời description trong file vẫn là bản cũ. Chưa có Web API, maker/admin, raw GUID, no-GUID, malformed maker-ID và Web-API-unresolved (`entitySetName`) cases.
 
-## Kết luận — NEED UPDATE
+## Kết luận — NEED TEST-CALL UPDATE
 
-Lỗi Content cũ đã đóng, nhưng parser contract và coverage chưa đủ.
+Parser contract đã đóng; chỉ còn coverage/evidence.
 
 # 8. search_records
 
@@ -108,15 +117,18 @@ Lỗi prefix/source mismatch cũ đã sửa, nhưng token contract chưa đủ �
 - Description đã theo template; formatted values/display labels và detail DTO vẫn giữ đúng event + `changes[]` shape.
 - Đã bỏ `top=max_records` trước client-side user filtering.
 
+## Đã sửa (phase 4)
+
+- `ResolveUserFilter` giờ trả thêm `systemuserid` khi email resolve đúng 1 user; browse mode đẩy `userid eq <guid>` xuống FetchXML server-side (không còn client-filter theo tên, tránh trùng tên). Detail mode match theo user ID khi đã resolve.
+- Name fragment (không resolve được ID): browse mode page qua mọi audit page (`FetchXmlPagingHelper`, page 5000) tới khi đủ `max_records` hoặc hết records; detail mode page `RetrieveRecordChangeHistoryRequest` tương tự. False-zero từ single-page đã đóng.
+
 ## Còn lại
 
-- Khi có `user_filter`, query không có `top` nhưng chỉ gọi một lần `RetrieveMultiple`; Dataverse vẫn chỉ trả một page. Match ở page sau vẫn có thể bị bỏ và trả false zero/count thấp.
-- Email được resolve về full name rồi client-filter theo tên; không tận dụng user ID để server-filter chính xác và tránh trùng tên.
-- Test-call còn structured output “rút gọn” và chưa chứng minh paging/filter regression.
+- Test-call còn structured output “rút gọn” và chưa chứng minh paging/filter regression (cần case user_filter bằng email → server-side, và name fragment → paging).
 
-## Kết luận — NEED UPDATE
+## Kết luận — NEED TEST-CALL UPDATE
 
-Đã đóng silent catch nhưng chưa đóng triệt để post-filter/paging bug.
+Post-filter/paging bug đã đóng triệt để; chỉ còn evidence.
 
 # 11. get_business_process_flows
 
@@ -125,15 +137,18 @@ Lỗi prefix/source mismatch cũ đã sửa, nhưng token contract chưa đủ �
 - Đã bỏ sort sai theo `stagecategory`; category giờ chỉ còn là label.
 - Description/Content/DTO được chuẩn hóa; valid GUID not-found dùng business `Error`.
 
+## Đã sửa (phase 4)
+
+- Stage order: đã verify trên org thật là `processstage` không có cột sequence; tool giờ parse `workflow.clientdata` (JSON `StageStep.stageId` == `processstageid`, đúng thứ tự visual trong designer) để order stages, fallback `stagename` khi clientdata thiếu/hỏng. `clientdata` chỉ fetch khi `include_stages=true` hoặc detail mode.
+- `entity_name` filter: bỏ cap `top=250` trước khi client-filter; page hết mọi BPF page rồi mới `Take(max_records)` — hết biến thể fetch-before-filter.
+
 ## Còn lại
 
-- `GetStages()` không có nguồn order thật và FetchXML cũng không có `<order>`; array stages hiện là unordered. Nếu consumer cần sequence, tool vẫn chưa cung cấp sequence đã prove.
-- `entity_name` filter lấy trước tối đa 250 BPF rồi mới client-filter; match ngoài 250 có thể bị bỏ. Đây vẫn là biến thể fetch-before-filter.
-- Test-call chỉ có `# Test calls`, thiếu bốn H1 chuẩn và thiếu 2-3 validation/error paths.
+- Test-call chỉ có `# Test calls`, thiếu bốn H1 chuẩn, thiếu 2-3 validation/error paths và chưa có case chứng minh stage sequence từ clientdata.
 
-## Kết luận — NEED UPDATE
+## Kết luận — NEED TEST-CALL UPDATE
 
-Sort sai đã bỏ nhưng stage order, filter completeness và evidence chưa đạt.
+Stage order và filter completeness đã đóng; chỉ còn evidence.
 
 # 12. get_business_rules
 
@@ -176,14 +191,17 @@ Static code review đạt, nhưng artifact contract đang stale.
 - Validation nằm trong main catch; owner filtering không còn bị `top=max_records` cắt trước.
 - Detail/runs valid GUID not-found dùng `Error`; Content và DTO đã chuẩn hóa.
 
+## Đã sửa (phase 4)
+
+- Owner-filter path giờ page qua mọi page workflow (`FetchXmlPagingHelper`, page 5000) tới khi đủ `max_records` hoặc hết records; không còn single-page false zero.
+
 ## Còn lại
 
-- Owner-filter path vẫn chỉ gọi một page `RetrieveMultiple` rồi client-filter; match ở page sau có thể bị bỏ.
 - Test-call không theo bốn H1 và không test `name_filter`/`owner_filter`, tức chưa có regression evidence cho lỗi chính trước đây.
 
-## Kết luận — NEED UPDATE
+## Kết luận — NEED TEST-CALL UPDATE
 
-Public description đã sửa, nhưng paging của owner filter chưa complete.
+Owner-filter paging đã complete; chỉ còn evidence.
 
 # 15. get_messages
 
@@ -304,22 +322,23 @@ Redirect XAML stale và paging false-zero đã đóng; cần regenerate evidence
 
 - `PASSED`: 0.
 - `FAILED`: 0.
-- `NEED UPDATE`: 6 — `execute_fetchxml`, `get_tables`, `parse_record_url`, `get_audit_history`, `get_business_process_flows`, `get_flows`.
-- `NEED TEST-CALL UPDATE`: 8 — `search_records`, `get_business_rules`, `get_custom_apis`, `get_messages`, `get_plugin_trace_logs`, `get_solution_components`, `get_system_jobs`, `get_workflows`.
+- `NEED UPDATE`: 0 — phase 4 đã đóng cả 6 tool từng `NEED UPDATE`.
+- `NEED TEST-CALL UPDATE`: 14 — `execute_fetchxml`, `get_tables`, `parse_record_url`, `search_records`, `get_audit_history`, `get_business_process_flows`, `get_business_rules`, `get_custom_apis`, `get_flows`, `get_messages`, `get_plugin_trace_logs`, `get_solution_components`, `get_system_jobs`, `get_workflows`.
 - `NEED SECURITY + TEST-CALL UPDATE`: 2 — `whoami`, `get_plugins`.
 
 ## So với review trước
 
 - Đã đóng đúng phần lớn lỗi exception/description/DTO: helper catches của audit/system jobs/solution components đã bỏ; payload error của search đã sửa; Custom API solution ID, Business Rule not-found, Plugin Trace not-found, Message InOut và plugin limits đã sửa.
 - Phase 3 đã đóng thêm 3 blocker `FAILED`: `get_solution_components` (paging + leak secret), `get_system_jobs` (stack-trace promise + `status=all` time semantics), `get_workflows` (redirect XAML stale + paging false-zero).
-- Trong mười tool từng `NEED UPDATE`, bốn tool hiện chỉ còn thiếu evidence chuẩn (`get_business_rules`, `get_custom_apis`, `get_messages`, `get_plugin_trace_logs`); các tool khác vẫn còn code/contract/security issue.
+- Phase 4 đã đóng 6 blocker `NEED UPDATE` còn lại: malformed FetchXML validation (`execute_fetchxml`), truncation explicit với `totalMatched` (`get_tables`), maker/admin GUID validation + `entitySetName` (`parse_record_url`), post-filter paging + server-side user filter theo `systemuserid` (`get_audit_history`), stage order từ `workflow.clientdata` + full paging cho `entity_name` filter (`get_business_process_flows`), owner-filter paging (`get_flows`).
 
 ## Ưu tiên tiếp theo
 
-1. Đóng các post-filter paging paths: audit user, flow owner, BPF entity/stages.
-2. Chốt policy cho bearer token và secure plugin config.
-3. Regenerate toàn bộ test-call từ đúng build: đúng description/parameters, năm H1 gồm title + bốn section chuẩn, raw output đầy đủ, không “rút gọn”, không token/secret.
+1. Chốt policy cho bearer token (`whoami` `include_token`) và secure plugin config (`get_plugins` `include_config`) — cần quyết định của owner, AI không tự ý sửa.
+2. Regenerate toàn bộ 16 test-call từ đúng build: đúng description/parameters, năm H1 gồm title + bốn section chuẩn, raw output đầy đủ, không “rút gọn”, không token/secret. Regression cases mới bắt buộc có: malformed XML (`execute_fetchxml`), truncate + `totalMatched` (`get_tables`), malformed maker-ID + Web-API-unresolved (`parse_record_url`), `user_filter` bằng email và name fragment (`get_audit_history`), stage sequence từ clientdata (`get_business_process_flows`), `name_filter`/`owner_filter` (`get_flows`).
 
-## Kết luận — PHASE 3 NEED TEST-CALL UPDATE
+## Kết luận — PHASE 4 NEED TEST-CALL UPDATE
+
+Toàn bộ lỗi code/contract của 16 READONLY tools đã đóng. Chỉ còn 2 quyết định security policy và đợt regenerate test-call evidence.
 
 Batch sửa phase 3 đã đóng toàn bộ 3 blocker `FAILED`. Source code của 16 read tools không còn blocker correctness/security đã biết, nhưng evidence chưa đủ để `PASSED`.
