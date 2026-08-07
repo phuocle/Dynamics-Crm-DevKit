@@ -48,22 +48,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("attributes")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<TableAttributeEntry> Attributes { get; set; } = [];
+        public List<TableAttributeEntry> Attributes { get; set; }
 
         [JsonPropertyName("oneToManyRelationships")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<TableRelationshipEntry> OneToManyRelationships { get; set; } = [];
+        public List<TableRelationshipEntry> OneToManyRelationships { get; set; }
 
         [JsonPropertyName("manyToOneRelationships")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<TableRelationshipEntry> ManyToOneRelationships { get; set; } = [];
+        public List<TableRelationshipEntry> ManyToOneRelationships { get; set; }
 
         [JsonPropertyName("manyToManyRelationships")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<TableManyToManyRelationshipEntry> ManyToManyRelationships { get; set; } = [];
+        public List<TableManyToManyRelationshipEntry> ManyToManyRelationships { get; set; }
 
         [JsonPropertyName("alternateKeys")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<TableKeyEntry> AlternateKeys { get; set; } = [];
+        public List<TableKeyEntry> AlternateKeys { get; set; }
     }
 }

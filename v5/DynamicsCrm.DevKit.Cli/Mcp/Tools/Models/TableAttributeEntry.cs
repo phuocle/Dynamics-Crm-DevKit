@@ -125,10 +125,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? IsSortable { get; set; }
 
-        [JsonPropertyName("imeMode")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string ImeMode { get; set; }
-
         // ── Formula-aware fields (Calculated / Rollup / Power Fx) ──
 
         [JsonPropertyName("sourceType")]

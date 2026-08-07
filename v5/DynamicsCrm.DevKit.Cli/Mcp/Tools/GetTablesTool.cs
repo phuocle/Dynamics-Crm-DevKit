@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -27,51 +26,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetTablesResult)),
         Description(
-            "Dataverse entity metadata. entity_name empty = list. Set = detail (attributes, relationships, alternate keys). Returns structured JSON in structuredContent — AI parses and displays to user.\n\n" +
-
-            "DETAIL LEVELS (detail_level, detail mode only):\n" +
-            "- compact (default): Display Name, Schema Name, Logical Name, Type, required, isValidForCreate/Update only (~2KB for 50 attrs)\n" +
-            "- standard: + requiredLevel, constraints, lookup targets, picklist options (no option colors, no audit/security/sortable flags, no formula/default details) (~8KB)\n" +
-            "- full: all metadata including audit, formula, security, default values, option colors, description, min/max/precision/behavior (~40KB)\n\n" +
-
-            "FILTER (detail mode):\n" +
-            "- Single value: prefix match on attribute logical names (e.g. 'v5_' matches v5_name, v5_code)\n" +
-            "- Multi-value (comma/pipe/semicolon separated): word-boundary match on logical name + exact match on display name (e.g. 'regarding,direction' matches regardingobjectid, directioncode; 'to' does NOT match attachmentopencount)\n\n" +
-
+            "Dataverse entity metadata. entity_name empty = list; set = detail (attributes, relationships, alternate keys).\n\n" +
             "WHEN TO USE:\n" +
-            "- Discover entity/attribute names before building FetchXML\n" +
-            "- Find join columns, picklist options, required fields, primary key\n" +
-            "- Audit settings on a set of entities (use names= with solution entity list, detail_level='full')\n" +
-            "- Clone or copy a column from one entity to another (detail_level='full' required)\n" +
+            "- Discover entity/attribute names before building FetchXML or calling other tools\n" +
+            "- Find join columns, picklist options, required fields, primary key, lookup targets\n" +
+            "- Clone or copy a column (detail_level='full' required — compact/standard lack clone metadata)\n" +
             "- AI MUST use get_tables for entity/attribute metadata — do NOT use execute_webapi with EntityDefinitions\n\n" +
-
-            "CLONE / COPY COLUMNS:\n" +
-            "- To clone or copy a column from entity B to entity C, AI MUST read the source column with detail_level='full' first.\n" +
-            "- Full mode returns all metadata required by upsert_column: type, length, precision, picklist options, lookup targets, formula definition, default value, audit/security/sortable flags, etc.\n" +
-            "- Compact and standard modes do NOT include enough metadata for safe cloning.\n\n" +
-
-            "FORMULA CLONE (Calculated/Rollup/PowerFx):\n" +
-            "- Formula columns expose `formulaDefinition` as `table_logical_name:column_logical_name`; raw formula XML/text is never returned.\n" +
-            "- Pass this reference unchanged to upsert_column's `formula_definition`. The server retrieves the source formula and kind directly from Dataverse and rewrites them for the target column. Do not parse or construct formula content.\n" +
-            "- `formula_source_type` is only needed when intentionally creating an empty formula column without `formula_definition`.\n")]
+            "RELATED TOOLS:\n" +
+            "- upsert_column → create/update columns (pass formula_definition unchanged from full mode)\n" +
+            "- upsert_table → create/update tables\n" +
+            "- upsert_relationship → create/update relationships\n" +
+            "- execute_fetchxml → query data once you know attribute names")]
         public async Task<CallToolResult> get_tables(
-            [Description("Logical name → detail mode. Empty = list mode."
-            )] string entity_name = "",
-            [Description("LIST: keyword filter on entity. DETAIL: single value = prefix match on logical names; comma/pipe/semicolon-separated = word-boundary match on logical name + exact match on display name."
-            )] string filter = "",
+            [Description("Logical name → detail mode. Empty = list mode.")] string entity_name = "",
+            [Description("LIST: keyword filter on entity. DETAIL: single value = prefix match on logical names; comma/pipe/semicolon-separated = word-boundary match on logical name + exact match on display name.")] string filter = "",
             [Description("LIST: only custom entities.")] bool custom_only = false,
             [Description("LIST: include N:N intersect entities.")] bool include_intersect = false,
-            [Description("LIST: comma-separated logical names. Overrides filter/custom_only."
-            )] string names = "",
-            [Description("DETAIL: 'compact' (default, Display Name, Schema Name, Logical Name, Type, required, isValidForCreate/Update), 'standard' (+ requiredLevel, constraints, lookup targets, picklist options), 'full' (all metadata including audit, formula, security, default values, option colors, description, min/max/precision/behavior)."
-            )] string detail_level = "compact")
+            [Description("LIST: comma-separated logical names. Overrides filter/custom_only.")] string names = "",
+            [Description("DETAIL: 'compact' (default, Display Name, Schema Name, Logical Name, Type, required, isValidForCreate/Update), 'standard' (+ requiredLevel, constraints, lookup targets, picklist options), 'full' (all metadata including audit, formula, security, default values, option colors, description, min/max/precision/behavior).")] string detail_level = "compact")
         {
             try
             {
                 var trimmedFilter = string.IsNullOrWhiteSpace(filter) ? "" : filter.Trim();
-                var detailLevel = (detail_level ?? "standard").Trim().ToLowerInvariant();
+                var detailLevel = (detail_level ?? "compact").Trim().ToLowerInvariant();
                 if (detailLevel is not ("compact" or "standard" or "full"))
-                    detailLevel = "standard";
+                    return Error($"'{detail_level}' is not a valid detail_level. Valid values: compact, standard, full.");
 
                 if (!string.IsNullOrWhiteSpace(entity_name))
                     return await GetEntityDetail(entity_name.Trim(), trimmedFilter, detailLevel);
@@ -80,10 +59,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                var target = string.IsNullOrWhiteSpace(entity_name) ? "entities metadata" : $"metadata for '{entity_name}'";
-                return Error(
-                    $"Error: Failed to load {target}: {ex.Message}",
-                    "Verify the entity name with get_tables (no entity_name) and check that the connection is active.");
+                return ThrowException(ex);
             }
         }
 
@@ -109,11 +85,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "entity_name");
 
             if (!resolved.IsSuccess)
-                return Error($"Error: {resolved.Error}");
+                return Error(resolved.Error);
 
             var logicalName = resolved.Value.LogicalName;
             var metadata = await _metadataService.FetchEntityMetadataAsync(logicalName);
             var filterInfo = ParseDetailFilter(attributeFilter);
+            var table = BuildTableDetail(metadata, filterInfo, detailLevel);
             var structured = new GetTablesResult
             {
                 Mode = "detail",
@@ -121,17 +98,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Filter = string.IsNullOrWhiteSpace(attributeFilter) ? null : attributeFilter,
                 DetailLevel = detailLevel,
                 Count = 1,
-                Table = BuildTableDetail(metadata, filterInfo, detailLevel)
+                Table = table
             };
-            var attrCount = structured.Table?.Attributes?.Count ?? 0;
-            var summary = $"{attrCount} attributes returned for '{logicalName}' (detail={detailLevel})";
+            var attrCount = table?.Attributes?.Count ?? 0;
+            var summary = attrCount > 0
+                ? $"[Success] {logicalName} (detail={detailLevel}): {attrCount} attributes."
+                : $"[Success] {logicalName} (detail={detailLevel}): 0 attributes matched filter '{attributeFilter}'.";
+
             if (attrCount == 0 && filterInfo.HasFilter)
             {
                 var suggestions = FindClosestAttributeMatches(metadata.Attributes, filterInfo, 5);
-                if (suggestions.Count > 0)
-                    summary += $"\nHint: filter '{attributeFilter}' matched no attributes. Did you mean: {string.Join(", ", suggestions)}?";
-                else
-                    summary += $"\nHint: filter '{attributeFilter}' matched no attributes. Try a broader filter or omit filter to list all attributes.";
+                structured.Hint = suggestions.Count > 0
+                    ? $"filter '{attributeFilter}' matched no attributes. Did you mean: {string.Join(", ", suggestions)}?"
+                    : $"filter '{attributeFilter}' matched no attributes. Try a broader filter or omit filter to list all attributes.";
             }
             return Success(summary, structured);
         }
@@ -174,9 +153,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Mode = "list",
                 Filter = string.IsNullOrWhiteSpace(filter) ? null : filter,
                 Count = sorted.Count,
-                Tables = sorted.Select(BuildTableSummary).ToList()
+                Tables = sorted.Count > 0 ? sorted.Select(BuildTableSummary).ToList() : null
             };
-            return Success($"{sorted.Count} entities returned", structured);
+            return Success($"[Success] {sorted.Count} entities returned.", structured);
         }
 
         private static TableSummaryEntry BuildTableSummary(EntityMetadata metadata) => new()
@@ -193,6 +172,43 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static TableDetailEntry BuildTableDetail(EntityMetadata metadata, DetailFilterInfo filterInfo, string detailLevel)
         {
             var summary = BuildTableSummary(metadata);
+            var attributes = FilterAttributesForOutput(metadata.Attributes, filterInfo)
+                .OrderBy(a => a.LogicalName)
+                .Select(attribute => BuildAttribute(metadata.LogicalName, attribute, detailLevel))
+                .ToList();
+            var oneToMany = (metadata.OneToManyRelationships ?? [])
+                .Where(r => !filterInfo.HasFilter || filterInfo.IsMultiValue || r.ReferencingEntity.StartsWith(filterInfo.PrefixFilter, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(r => r.ReferencingEntity)
+                .Select(BuildRelationship)
+                .ToList();
+            var manyToOne = (metadata.ManyToOneRelationships ?? [])
+                .Where(r => !filterInfo.HasFilter || filterInfo.IsMultiValue || r.ReferencedEntity.StartsWith(filterInfo.PrefixFilter, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(r => r.ReferencedEntity)
+                .Select(BuildRelationship)
+                .ToList();
+            var manyToMany = (metadata.ManyToManyRelationships ?? [])
+                .Where(r => !filterInfo.HasFilter || filterInfo.IsMultiValue ||
+                    r.Entity1LogicalName.StartsWith(filterInfo.PrefixFilter, StringComparison.OrdinalIgnoreCase) ||
+                    r.Entity2LogicalName.StartsWith(filterInfo.PrefixFilter, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(r => r.IntersectEntityName)
+                .Select(r => new TableManyToManyRelationshipEntry
+                {
+                    SchemaName = r.SchemaName,
+                    Entity1 = r.Entity1LogicalName,
+                    Entity2 = r.Entity2LogicalName,
+                    IntersectEntityName = r.IntersectEntityName
+                })
+                .ToList();
+            var alternateKeys = (metadata.Keys ?? [])
+                .OrderBy(k => k.SchemaName)
+                .Select(k => new TableKeyEntry
+                {
+                    SchemaName = k.SchemaName,
+                    DisplayName = k.DisplayName?.UserLocalizedLabel?.Label ?? "",
+                    KeyAttributes = (k.KeyAttributes ?? []).ToList()
+                })
+                .ToList();
+
             var detail = new TableDetailEntry
             {
                 LogicalName = summary.LogicalName,
@@ -204,53 +220,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 IsAuditEnabled = summary.IsAuditEnabled,
                 PrimaryIdAttribute = metadata.PrimaryIdAttribute,
                 PrimaryNameAttribute = metadata.PrimaryNameAttribute,
-                EntitySetName = metadata.EntitySetName,
-                LogicalCollectionName = metadata.LogicalCollectionName,
-                ObjectTypeCode = metadata.ObjectTypeCode,
-                Attributes = FilterAttributesForOutput(metadata.Attributes, filterInfo)
-                    .OrderBy(a => a.LogicalName)
-                    .Select(attribute => BuildAttribute(metadata.LogicalName, attribute, detailLevel))
-                    .ToList(),
-                OneToManyRelationships = (metadata.OneToManyRelationships ?? [])
-                    .Where(r => !filterInfo.HasFilter || filterInfo.IsMultiValue || r.ReferencingEntity.StartsWith(filterInfo.PrefixFilter, StringComparison.OrdinalIgnoreCase))
-                    .OrderBy(r => r.ReferencingEntity)
-                    .Select(BuildRelationship)
-                    .ToList(),
-                ManyToOneRelationships = (metadata.ManyToOneRelationships ?? [])
-                    .Where(r => !filterInfo.HasFilter || filterInfo.IsMultiValue || r.ReferencedEntity.StartsWith(filterInfo.PrefixFilter, StringComparison.OrdinalIgnoreCase))
-                    .OrderBy(r => r.ReferencedEntity)
-                    .Select(BuildRelationship)
-                    .ToList(),
-                ManyToManyRelationships = (metadata.ManyToManyRelationships ?? [])
-                    .Where(r => !filterInfo.HasFilter || filterInfo.IsMultiValue ||
-                        r.Entity1LogicalName.StartsWith(filterInfo.PrefixFilter, StringComparison.OrdinalIgnoreCase) ||
-                        r.Entity2LogicalName.StartsWith(filterInfo.PrefixFilter, StringComparison.OrdinalIgnoreCase))
-                    .OrderBy(r => r.IntersectEntityName)
-                    .Select(r => new TableManyToManyRelationshipEntry
-                    {
-                        SchemaName = r.SchemaName,
-                        Entity1 = r.Entity1LogicalName,
-                        Entity2 = r.Entity2LogicalName,
-                        IntersectEntityName = r.IntersectEntityName
-                    })
-                    .ToList(),
-                AlternateKeys = (metadata.Keys ?? [])
-                    .OrderBy(k => k.SchemaName)
-                    .Select(k => new TableKeyEntry
-                    {
-                        SchemaName = k.SchemaName,
-                        DisplayName = k.DisplayName?.UserLocalizedLabel?.Label ?? "",
-                        KeyAttributes = (k.KeyAttributes ?? []).ToList()
-                    })
-                    .ToList()
+                Attributes = attributes.Count > 0 ? attributes : null,
+                OneToManyRelationships = oneToMany.Count > 0 ? oneToMany : null,
+                ManyToOneRelationships = manyToOne.Count > 0 ? manyToOne : null,
+                ManyToManyRelationships = manyToMany.Count > 0 ? manyToMany : null,
+                AlternateKeys = alternateKeys.Count > 0 ? alternateKeys : null
             };
 
             // Apply tier-based stripping to reduce payload
             if (detailLevel == "compact")
             {
-                detail.EntitySetName = null;
-                detail.LogicalCollectionName = null;
-                detail.ObjectTypeCode = null;
                 detail.OneToManyRelationships = null;
                 detail.ManyToOneRelationships = null;
                 detail.ManyToManyRelationships = null;
@@ -258,9 +237,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             else if (detailLevel == "standard")
             {
-                detail.EntitySetName = null;
-                detail.LogicalCollectionName = null;
-                detail.ObjectTypeCode = null;
                 detail.AlternateKeys = null;
             }
 
@@ -513,6 +489,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 entry.GlobalOptionSetName = null;
                 if (entry.Options != null)
                     foreach (var o in entry.Options) o.Color = null;
+                if (entry.Options is { Count: 0 })
+                    entry.Options = null;
             }
 
             return entry;
@@ -679,7 +657,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (osm.IsGlobal == true && !string.IsNullOrEmpty(osm.Name))
                     entry.GlobalOptionSetName = osm.Name;
 
-                entry.Options = osm.Options
+                var options = osm.Options
                     .OrderBy(o => o.Value)
                     .Select(o => new ChoiceOptionItem
                     {
@@ -688,6 +666,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Color = o.Color
                     })
                     .ToList();
+                entry.Options = options.Count > 0 ? options : null;
             }
         }
 

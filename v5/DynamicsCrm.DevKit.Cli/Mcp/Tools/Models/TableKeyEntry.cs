@@ -9,9 +9,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string SchemaName { get; set; }
 
         [JsonPropertyName("displayName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string DisplayName { get; set; }
 
         [JsonPropertyName("keyAttributes")]
-        public List<string> KeyAttributes { get; set; } = [];
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> KeyAttributes { get; set; }
     }
 }

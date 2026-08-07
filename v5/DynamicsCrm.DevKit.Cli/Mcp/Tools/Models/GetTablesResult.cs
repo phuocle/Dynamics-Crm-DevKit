@@ -30,5 +30,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("table")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public TableDetailEntry Table { get; set; }
+
+        [JsonPropertyName("hint")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Hint { get; set; }
     }
 }

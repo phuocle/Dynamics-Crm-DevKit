@@ -69,7 +69,7 @@ Mỗi tool phải pass hết 13 item dưới trước khi add vào list "đã ho
 
 ## 4. Tools đã hoàn thành và aP đã review
 
-- 2. execute_fetchxml (phase 1)- 7. parse_record_url (phase 1)
+- 2. execute_fetchxml (phase 1)- 4. get_tables (phase 1)- 7. parse_record_url (phase 1)
 - 8. search_records (phase 1)
 - 9. whoami (phase 1)
 - 10. get_audit_history (phase 1)
