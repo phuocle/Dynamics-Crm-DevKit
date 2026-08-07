@@ -74,10 +74,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<RoleInfo> Roles { get; set; } = new();
 
-        [JsonPropertyName("accessToken")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string AccessToken { get; set; }
-
         [JsonPropertyName("warnings")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> Warnings { get; set; } = new();

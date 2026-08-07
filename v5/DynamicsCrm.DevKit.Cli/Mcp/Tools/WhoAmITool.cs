@@ -37,8 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- execute_fetchxml → query records with the returned userId\n" +
             "- manage_role → inspect role definitions and assignments")]
-        public CallToolResult whoami(
-            [Description("Include OAuth access token (~400 tokens extra) for direct Web API calls.")] bool include_token = false)
+        public CallToolResult whoami()
         {
             try
             {
@@ -64,16 +63,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // Organization details
                 PopulateOrgDetails(structured);
 
-                // Access token (optional). If the getter throws, leave AccessToken null;
-                // the caller can detect the missing token and request re-auth if needed.
-                if (include_token)
-                {
-                    structured.AccessToken = _serviceClient.CurrentAccessToken;
-                    structured.Warnings.Add("Sensitive access token included by explicit request; do not log or persist it.");
-                }
-
                 // Security roles
                 PopulateRoles(structured, response.UserId);
+
+                // Empty lists carry no meaning here; serialize as absent, not [].
+                if (structured.Roles?.Count == 0) structured.Roles = null;
+                if (structured.Warnings?.Count == 0) structured.Warnings = null;
 
                 // Build compact text
                 var text = BuildCompactText(structured);
