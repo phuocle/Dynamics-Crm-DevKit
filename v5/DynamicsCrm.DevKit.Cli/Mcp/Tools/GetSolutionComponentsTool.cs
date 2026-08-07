@@ -295,25 +295,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return (components, fullEntityNames);
 
             // 3) Lightweight metadata query — only fetch MetadataId + LogicalName (no attributes, no relationships)
-            var entityQuery = new EntityQueryExpression
-                {
-                    Criteria = new MetadataFilterExpression(LogicalOperator.And)
-                    {
-                        Conditions =
-                        {
-                            new MetadataConditionExpression("MetadataId", MetadataConditionOperator.In, fullEntityIds)
-                        }
-                    },
-                    Properties = new MetadataPropertiesExpression("MetadataId", "LogicalName")
-            };
-
-            var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
-                new RetrieveMetadataChangesRequest { Query = entityQuery });
-
-            foreach (var em in response.EntityMetadata)
+            //    Chunked: metadata 'In' queries hit the 300-condition hard limit with large solutions.
+            const int chunkSize = 250;
+            for (var i = 0; i < fullEntityIds.Length; i += chunkSize)
             {
-                if (em.MetadataId.HasValue && em.LogicalName != null)
-                    fullEntityNames[em.MetadataId.Value] = em.LogicalName;
+                var chunk = fullEntityIds.Skip(i).Take(chunkSize).ToArray();
+                var entityQuery = new EntityQueryExpression
+                    {
+                        Criteria = new MetadataFilterExpression(LogicalOperator.And)
+                        {
+                            Conditions =
+                            {
+                                new MetadataConditionExpression("MetadataId", MetadataConditionOperator.In, chunk)
+                            }
+                        },
+                        Properties = new MetadataPropertiesExpression("MetadataId", "LogicalName")
+                };
+
+                var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
+                    new RetrieveMetadataChangesRequest { Query = entityQuery });
+
+                foreach (var em in response.EntityMetadata)
+                {
+                    if (em.MetadataId.HasValue && em.LogicalName != null)
+                        fullEntityNames[em.MetadataId.Value] = em.LogicalName;
+                }
             }
 
             return (components, fullEntityNames);
@@ -426,7 +432,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var missing = entityIds.Where(id => !nameMap.ContainsKey(id)).ToList();
                 if (missing.Count > 0)
-                    ResolveEntityMetadataNames(missing, nameMap);
+                {
+                    const int entityChunkSize = 250;
+                    for (var i = 0; i < missing.Count; i += entityChunkSize)
+                        ResolveEntityMetadataNames(missing.Skip(i).Take(entityChunkSize).ToList(), nameMap);
+                }
             }
 
             // Step 3: Resolve attribute names (type 2) not already in cache
@@ -517,7 +527,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var attrSet = new HashSet<Guid>(attrIds);
             var query = new EntityQueryExpression
                 {
-                    Properties = new MetadataPropertiesExpression("MetadataId", "LogicalName"),
+                    // 'Attributes' is required in entity properties when an AttributeQuery is specified
+                    Properties = new MetadataPropertiesExpression("MetadataId", "LogicalName", "Attributes"),
                     AttributeQuery = new AttributeQueryExpression
                     {
                         Criteria = new MetadataFilterExpression(LogicalOperator.Or),

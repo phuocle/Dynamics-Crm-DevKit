@@ -2,7 +2,7 @@
 
 ## 1. Mục tiêu và phạm vi
 
-Tiếp tục toàn bộ tinh thần của [refactor2.md](refactor2.md), đồng thời áp dụng bài học từ [review phase 2](testcall/review-phase-2.md). “Review phase 2” ở đây bao gồm toàn bộ 16 READONLY tools đã làm qua cả phase 1 và phase 2 (`2, 4, 7-20`), không chỉ nhóm 11-20. Phase 3 phải đóng regression của nhóm này rồi mới xử lý các tool còn lại; không coi một tool là hoàn thành chỉ vì happy path chạy được.
+Tiếp tục toàn bộ tinh thần của [refactor2.md](refactor2.md), đồng thời áp dụng kết quả [full re-review phase 2](testcall/review-phase-2.md). Phạm vi review bao gồm toàn bộ 16 READONLY tools đã làm qua phase 1 và phase 2 (`2, 4, 7-20`), không chỉ nhóm 11-20. Batch sửa đã đóng phần lớn lỗi exception/description/DTO, nhưng chưa đủ để approve: còn 3 `FAILED`, 6 `NEED UPDATE`, 5 `NEED TEST-CALL UPDATE` và 2 `NEED SECURITY + TEST-CALL UPDATE`. Phase 3 phải đóng các blocker còn lại rồi mới dùng các read tools này làm dependency tin cậy.
 
 Không làm unit test trong phase này. Không stage, commit hoặc push. Chỉ sửa đúng CLI/MCP, model/helper liên quan, redirect bắt buộc và test-call của tool đang làm.
 
@@ -56,27 +56,48 @@ Nếu runtime trả numbering khác, runtime thắng và tên file test-call ph�
 
 Trong task review phase 2, Program.cs đã được bỏ qua hoàn toàn; không lấy comment “đã probe” trong source làm evidence mới nếu không có artifact output tương ứng.
 
-## 5. Thứ tự ưu tiên phase 3
+## 5. Trạng thái sau full re-review
 
-1. Sửa sáu FAILED trước khi dùng read tools làm dependency: `parse_record_url`, `search_records`, `whoami`, `get_flows`, `get_solution_components`, `get_workflows`.
-2. Xử lý mười NEED UPDATE: `execute_fetchxml`, `get_tables`, `get_audit_history`, `get_business_process_flows`, `get_business_rules`, `get_custom_apis`, `get_messages`, `get_plugin_trace_logs`, `get_plugins`, `get_system_jobs`.
-3. Refactor `execute_webapi` sớm để thiết lập redirect/block matrix đúng cho các dedicated tools còn lại.
-4. Làm mutation cơ bản: `create_records`, `generate_demo_data`, `manage_record`, `manage_choice`.
-5. Làm Standard tools, ưu tiên safety-sensitive: deleted records, environment variables, roles, publish; sau đó chart/form/view/webresource.
-6. Làm Advanced tools: app/command/ribbon và schema upsert tools.
+| Trạng thái | Tools | Blocker chính |
+|---|---|---|
+| `FAILED` | `get_solution_components`, `get_system_jobs`, `get_workflows` | Sensitive-value leak/partial paging; stack-trace contract + time filter; stale XAML redirect + post-filter paging |
+| `NEED UPDATE` | `execute_fetchxml`, `get_tables`, `parse_record_url`, `get_audit_history`, `get_business_process_flows`, `get_flows` | Validation, honest truncation, identifier semantics, hoặc paging trước client filter |
+| `NEED TEST-CALL UPDATE` | `search_records`, `get_business_rules`, `get_custom_apis`, `get_messages`, `get_plugin_trace_logs` | Static code review đã đóng blocker cũ nhưng artifacts không khớp source/rule 8 |
+| `NEED SECURITY + TEST-CALL UPDATE` | `whoami`, `get_plugins` | Bearer token và secure config cần policy/redaction contract rõ |
+
+Không có tool nào được đưa vào danh sách hoàn thành cho đến khi đạt `PASSED` cả code lẫn evidence.
+
+## 6. Thứ tự ưu tiên phase 3
+
+1. Sửa ba `FAILED` trước:
+   - `get_solution_components`: không query/return environment-variable `value`; resolve tên qua definition hoặc để unresolved; page toàn bộ `solutioncomponent` hoặc trả partial warning explicit.
+   - `get_system_jobs`: xóa lời hứa stack trace nếu không có field thật; sửa `status=all` để không mất waiting jobs và dùng order phù hợp.
+   - `get_workflows`: sửa redirect alias `processes`; page đến khi đủ exact trigger-field matches.
+2. Đóng các correctness gaps còn lại:
+   - Parse malformed FetchXML thành validation `Error`.
+   - Làm truncation của `get_tables` explicit (`hasMore`/matched count/warning).
+   - Validate GUID thật cho maker/admin URLs và tách `entitySetName` khỏi `entityName` khi Web API unresolved.
+   - Page trước client filter cho audit user, flow owner và BPF entity; chỉ trả BPF sequence khi có nguồn order thật đã prove.
+3. Chốt sensitive-output policy:
+   - `whoami.include_token`: ưu tiên bỏ token khỏi MCP output; nếu giữ compatibility thì cần opt-in policy, redaction/presence-only evidence và warning rõ.
+   - `get_plugins.include_config`: không ghi secure config vào docs/logs; cân nhắc chỉ trả presence/ID hoặc require explicit policy gate.
+4. Regenerate 16 test-call từ đúng source/build đang review. Mỗi file phải có title + bốn H1 chuẩn, raw output đầy đủ, không “rút gọn”, không token/secret, và regression cases đúng lỗi vừa sửa.
+5. Chỉ sau khi 16 read tools đạt `PASSED`, refactor `execute_webapi` và tiếp tục mutation/Standard/Advanced tools còn lại.
 
 Mỗi tool hoàn tất độc lập: code → build → release/restart → runtime/SHA verify → happy/error/dry-run calls → test-call → review checklist. Không gom nhiều tool rồi mới test.
 
-## 6. Checklist approve cho từng tool
+## 7. Checklist approve cho từng tool
 
 - [ ] Chỉ một main try-catch; không helper catch/silent catch; main catch dùng `ThrowException`.
 - [ ] Validation/not-found dùng `Error`; unexpected fault không bị giả thành business error.
 - [ ] Description khớp tuyệt đối code và không lặp parameter.
 - [ ] DTO null-aware, semantic keys đúng, Content một dòng.
 - [ ] Filter/limit/order/paging cho kết quả đúng, không false zero hoặc substring false positive.
+- [ ] Mọi client-side filter page đến khi đủ `max_records` matches hoặc hết dữ liệu; bỏ `top` không được coi là đã giải quyết paging.
 - [ ] Metadata/logical name/option/lookup/order đã prove; Program.cs chỉ optional fallback.
 - [ ] Dry-run không mutate; destructive target và role/safety gate được kiểm tra.
 - [ ] Sensitive values không leak; partial failures/warnings explicit.
+- [ ] Access token, secure plugin config và environment-variable value không xuất hiện trong test-call; production output phải có explicit safety policy nếu vẫn hỗ trợ opt-in.
 - [ ] `execute_webapi` redirect/block được cập nhật nếu endpoint overlap.
 - [ ] Smallest relevant CLI build: 0 errors, 0 warnings.
 - [ ] Release script hoàn tất và `Const.cs` trở về `xxxx.yy.zz HH.mm.ss`.
@@ -87,7 +108,7 @@ Mỗi tool hoàn tất độc lập: code → build → release/restart → runt
 - [ ] Payload-level error trả `IsError=true`; không có `Success("[Error] ...")`.
 - [ ] Git status chỉ có files thuộc tool đang làm và test-call; không stage/commit/push.
 
-## 7. Definition of done cho toàn phase
+## 8. Definition of done cho toàn phase
 
 Phase 3 chỉ hoàn tất khi:
 

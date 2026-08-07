@@ -96,18 +96,19 @@ Static code review không còn blocker cũ, nhưng chưa đủ evidence để PA
 ## Đã sửa đúng
 
 - Content có `[Success]`, DTO strings đã null-aware hơn, runtime version/build/process/SHA vẫn được trả đầy đủ.
-- Khi caller chủ động `include_token=true`, structured output có warning nhạy cảm.
+
+## Đã sửa (phase 5)
+
+- Policy owner chốt: bỏ hoàn toàn access token khỏi MCP output. Đã xóa parameter `include_token`, block gán `AccessToken` và property `accessToken` khỏi DTO; wiki `mcp_whoami.md` cũng đã cập nhật (tool không còn parameter). Cả comment-fallback-không-khớp-code lẫn leak token đều biến mất cùng feature.
+- `Roles`/`Warnings` rỗng giờ được null trước khi trả, không còn serialize `[]`.
 
 ## Còn lại
 
-- `Roles` và `Warnings` được khởi tạo bằng list rỗng nên vẫn serialize `[]`, trái rule list rỗng nên null khi không mang nghĩa riêng.
-- Comment nói token getter lỗi thì để null, nhưng không có code thực hiện fallback; exception hiện bubble qua main catch.
-- Bearer token vẫn được trả nguyên văn qua structured output. Theo rule 28, feature này cần safety decision riêng; test-call tuyệt đối không được ghi token.
-- Test-call description vẫn là bản cũ, chỉ có default happy path và còn hướng dẫn gọi `include_token=true` mà chưa ghi rõ cơ chế redaction/evidence an toàn.
+- Test-call description vẫn là bản cũ, chỉ có default happy path và còn hướng dẫn gọi `include_token=true` (parameter không còn tồn tại) — bắt buộc regenerate, cần case chứng minh output không có token và `roles`/`warnings` vắng mặt khi rỗng.
 
-## Kết luận — NEED SECURITY + TEST-CALL UPDATE
+## Kết luận — NEED TEST-CALL UPDATE
 
-Lỗi prefix/source mismatch cũ đã sửa, nhưng token contract chưa đủ để approve.
+Token feature đã gỡ theo quyết định owner; chỉ còn evidence.
 
 # 10. get_audit_history
 
@@ -243,14 +244,17 @@ Static code review đạt, evidence chưa đủ.
 - `message_name` không tồn tại trả validation `Error` thay vì success zero.
 - Description theo template; helper catch đã được loại bỏ.
 
+## Đã xác nhận (phase 5)
+
+- Policy owner chốt: giữ nguyên `include_config`, không redaction. Đã re-review code: default `false` thì FetchXML không hề chứa `configuration`/`secureconfig` (không attribute, không join — không có leak path); khi `true` outer join `sdkmessageprocessingstepsecureconfig` + aliased `sc.secureconfig` đọc đúng qua `AliasedValue`; 3 field config đều `WhenWritingNull`; description đã ghi "security-sensitive". Code đúng, không sửa.
+
 ## Còn lại
 
-- `include_config=true` trả cả unsecure và secure config nguyên văn. Parameter đã ghi security-sensitive và default false, nhưng output không có warning/redaction metadata; cần safety decision rõ trước khi approve.
-- Test-call không theo bốn H1, có nhiều structured output “rút gọn”, và không có safe evidence cho config behavior.
+- Test-call không theo bốn H1, có nhiều structured output “rút gọn”, và không có safe evidence cho config behavior (evidence vẫn không được ghi giá trị secure config thật — dùng step demo hoặc chỉ ghi nhận presence).
 
-## Kết luận — NEED SECURITY + TEST-CALL UPDATE
+## Kết luận — NEED TEST-CALL UPDATE
 
-Limit/error semantics đã sửa, nhưng sensitive-output contract và evidence chưa đóng.
+Sensitive-output contract đã chốt theo owner; chỉ còn evidence.
 
 # 18. get_solution_components
 
@@ -323,22 +327,22 @@ Redirect XAML stale và paging false-zero đã đóng; cần regenerate evidence
 - `PASSED`: 0.
 - `FAILED`: 0.
 - `NEED UPDATE`: 0 — phase 4 đã đóng cả 6 tool từng `NEED UPDATE`.
-- `NEED TEST-CALL UPDATE`: 14 — `execute_fetchxml`, `get_tables`, `parse_record_url`, `search_records`, `get_audit_history`, `get_business_process_flows`, `get_business_rules`, `get_custom_apis`, `get_flows`, `get_messages`, `get_plugin_trace_logs`, `get_solution_components`, `get_system_jobs`, `get_workflows`.
-- `NEED SECURITY + TEST-CALL UPDATE`: 2 — `whoami`, `get_plugins`.
+- `NEED SECURITY + TEST-CALL UPDATE`: 0 — phase 5 owner đã chốt policy cho cả 2 tool.
+- `NEED TEST-CALL UPDATE`: 16 — toàn bộ READONLY tools chỉ còn thiếu evidence chuẩn.
 
 ## So với review trước
 
 - Đã đóng đúng phần lớn lỗi exception/description/DTO: helper catches của audit/system jobs/solution components đã bỏ; payload error của search đã sửa; Custom API solution ID, Business Rule not-found, Plugin Trace not-found, Message InOut và plugin limits đã sửa.
 - Phase 3 đã đóng thêm 3 blocker `FAILED`: `get_solution_components` (paging + leak secret), `get_system_jobs` (stack-trace promise + `status=all` time semantics), `get_workflows` (redirect XAML stale + paging false-zero).
 - Phase 4 đã đóng 6 blocker `NEED UPDATE` còn lại: malformed FetchXML validation (`execute_fetchxml`), truncation explicit với `totalMatched` (`get_tables`), maker/admin GUID validation + `entitySetName` (`parse_record_url`), post-filter paging + server-side user filter theo `systemuserid` (`get_audit_history`), stage order từ `workflow.clientdata` + full paging cho `entity_name` filter (`get_business_process_flows`), owner-filter paging (`get_flows`).
+- Phase 5 (theo quyết định của owner): `whoami` gỡ hoàn toàn `include_token`/access token khỏi output và sửa list rỗng serialize `[]`; `get_plugins` giữ nguyên `include_config` (re-review code xác nhận đúng, không leak path khi `false`).
 
 ## Ưu tiên tiếp theo
 
-1. Chốt policy cho bearer token (`whoami` `include_token`) và secure plugin config (`get_plugins` `include_config`) — cần quyết định của owner, AI không tự ý sửa.
-2. Regenerate toàn bộ 16 test-call từ đúng build: đúng description/parameters, năm H1 gồm title + bốn section chuẩn, raw output đầy đủ, không “rút gọn”, không token/secret. Regression cases mới bắt buộc có: malformed XML (`execute_fetchxml`), truncate + `totalMatched` (`get_tables`), malformed maker-ID + Web-API-unresolved (`parse_record_url`), `user_filter` bằng email và name fragment (`get_audit_history`), stage sequence từ clientdata (`get_business_process_flows`), `name_filter`/`owner_filter` (`get_flows`).
+1. Regenerate toàn bộ 16 test-call từ đúng build: đúng description/parameters, năm H1 gồm title + bốn section chuẩn, raw output đầy đủ, không “rút gọn”, không token/secret. Regression cases mới bắt buộc có: malformed XML (`execute_fetchxml`), truncate + `totalMatched` (`get_tables`), malformed maker-ID + Web-API-unresolved (`parse_record_url`), `user_filter` bằng email và name fragment (`get_audit_history`), stage sequence từ clientdata (`get_business_process_flows`), `name_filter`/`owner_filter` (`get_flows`), output không token + `roles`/`warnings` absent khi rỗng (`whoami`), config behavior an toàn (`get_plugins`).
 
-## Kết luận — PHASE 4 NEED TEST-CALL UPDATE
+## Kết luận — PHASE 5 NEED TEST-CALL UPDATE
 
-Toàn bộ lỗi code/contract của 16 READONLY tools đã đóng. Chỉ còn 2 quyết định security policy và đợt regenerate test-call evidence.
+Toàn bộ lỗi code/contract và cả 2 quyết định security policy đã đóng. Việc duy nhất còn lại: regenerate test-call evidence cho 16 tools.
 
 Batch sửa phase 3 đã đóng toàn bộ 3 blocker `FAILED`. Source code của 16 read tools không còn blocker correctness/security đã biết, nhưng evidence chưa đủ để `PASSED`.
