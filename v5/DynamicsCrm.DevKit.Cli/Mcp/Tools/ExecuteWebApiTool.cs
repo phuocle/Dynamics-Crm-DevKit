@@ -335,15 +335,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "  manage_choice(action='detail', optionset_name='...') → inspect options\n" +
                 "  upsert_column for local picklists on an entity"),
 
-            // ── Deleted Records (Recycle Bin) ──────────────────────────────────
-            // Block tất cả GET record-by-id — manage_deleted_records(action='detail') check cả live + bin.
-            // NOTE: this is just a hint entry; actual GUID URL check happens via regex below.
-            ("__guid_url__", "manage_deleted_records",
-                "REDIRECT: For a single record GUID, use manage_deleted_records(action='detail', entity_name='<entity>', record_id='<guid>') instead of execute_webapi GET. " +
-                "The tool checks both the live table and the recycle bin, returning full attributes if the record exists. " +
-                "If not found anywhere, returns a clear notFound=true with a hint. " +
-                "Use action='list' first if you don't have a specific GUID."),
-
             // System jobs (asyncoperation) — dedicated tool has status/operation_type filters + detail mode.
             ("asyncoperations", "get_system_jobs",
                 "REDIRECT: Use get_system_jobs instead of GET asyncoperations.\n" +
@@ -445,18 +436,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var urlLower = url.ToLowerInvariant();
 
-            // Phase 0: Special: GUID URL pattern — any <entity-set>(<guid>) URL → redirect to manage_deleted_records
-            // (works for any HTTP method: GET, PATCH, PUT, DELETE).
-            // Match pattern like 'accounts(abc-123)' or 'accounts(abc-123)/contacts' but NOT 'accounts?$filter=...'
-            // Use regex: entityname(dash-separated-guid) optionally followed by /... — must be a balanced parens.
-            if (method == HttpMethod.Get && IsEntityByIdUrl(url))
-            {
-                return "REDIRECT: For a single record GUID, use manage_deleted_records(action='detail', entity_name='<entity>', record_id='<guid>') instead of execute_webapi. " +
-                       "The tool checks both the live table and the recycle bin, returning full attributes if the record exists. " +
-                       "If not found anywhere, returns a clear notFound=true with a hint. " +
-                       "Use action='list' first if you don't have a specific GUID.\n\nUSE INSTEAD: manage_deleted_records";
-            }
-
             // Phase 1: Block POST on specific patterns (publish, metadata actions, dedicated-tool endpoints)
             if (method == HttpMethod.Post)
             {
@@ -503,20 +482,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             return null;
-        }
-
-        // Match a URL that targets a specific record by GUID, e.g.:
-        //   accounts(abc-123-def-456)
-        //   accounts(abc-123)/contacts
-        //   contacts(abc-123)?$select=name
-        // Does NOT match $filter=... or $expand=... URLs.
-        private static readonly System.Text.RegularExpressions.Regex GuidUrlPattern =
-            new(@"^[A-Za-z_][A-Za-z0-9_]*\([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\)(\/|\?|$)", System.Text.RegularExpressions.RegexOptions.Compiled);
-
-        private static bool IsEntityByIdUrl(string url)
-        {
-            if (string.IsNullOrWhiteSpace(url)) return false;
-            return GuidUrlPattern.IsMatch(url.Trim());
         }
 
         private static bool IsAbsoluteUrl(string url)

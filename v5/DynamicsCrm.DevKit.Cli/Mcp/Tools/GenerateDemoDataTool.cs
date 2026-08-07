@@ -51,7 +51,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private const int LookupPoolSize = 100;
 
         [McpServerTool(Name = "generate_demo_data", Title = "Generate demo data for an entity",
-            Destructive = false, ReadOnly = true, Idempotent = true,
+            Destructive = false, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GenerateDemoDataResult)),
         Description(
             "Bogus-generated demo data for an entity → JSON file at .devkit/demo_data/ → pipe to create_records. from_date/to_date REQUIRED (ISO 8601, ask user, never infer). Auto-selects creatable fields with smart mapping (email→Email, telephone→Phone…) and overriddencreatedon. Lookups: real GUIDs auto-fetched; polymorphic uses 'field@entity'.\n\n" +
