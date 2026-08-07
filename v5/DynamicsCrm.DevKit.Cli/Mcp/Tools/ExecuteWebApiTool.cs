@@ -354,6 +354,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "  get_system_jobs(operation_type='solution', status='all') → solution import/export jobs\n" +
                 "  get_system_jobs(correlation_id='<guid>') → trace one request across jobs"),
 
+            // Classic workflows (workflow entity) — dedicated tool has mode/scope/trigger filters + detail mode.
+            ("workflows", "get_workflows",
+                "REDIRECT: Use get_workflows instead of GET workflows.\n" +
+                "get_workflows provides entity_name/mode/scope/status filters, trigger_field discovery, and detail mode with XAML.\n\n" +
+                "Examples:\n" +
+                "  get_workflows(entity_name='account') → workflows bound to account\n" +
+                "  get_workflows(mode='realtime', status='active') → active realtime workflows\n" +
+                "  get_workflows(workflow_id='<guid>') → detail with trigger fields + XAML\n" +
+                "  get_workflows(entity_name='account', trigger_field='statecode') → workflows triggered by status change"),
+
+            // Legacy 'processes' entity-set alias → same redirect as workflows.
+            ("processes", "get_workflows",
+                "REDIRECT: Use get_workflows instead of GET processes.\n" +
+                "get_workflows covers classic workflows (background + realtime) with filters and detail mode.\n\n" +
+                "Examples:\n" +
+                "  get_workflows(entity_name='account') → workflows bound to account\n" +
+                "  get_workflows(mode='realtime') → realtime (sync) workflows\n" +
+                "  get_workflows(workflow_id='<guid>') → detail with trigger fields + XAML"),
+
             // Filter ngụ ý "đã xóa" — Dataverse OData filter không trả soft-deleted records.
             ("deletionstatecode", "manage_deleted_records",
                 "REDIRECT: Standard OData $filter on 'deletionstatecode' or 'statecode eq 1' is unreliable for non-activity entities " +

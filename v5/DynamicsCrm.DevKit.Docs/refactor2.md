@@ -82,6 +82,7 @@ Mỗi tool phải pass hết 13 item dưới trước khi add vào list "đã ho
 - 17. get_plugins (phase 2)
 - 18. get_solution_components (phase 2)
 - 19. get_system_jobs (phase 2)
+- 20. get_workflows (phase 2)
 
 ---
 

@@ -8,9 +8,7 @@ using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Text;
-using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
@@ -26,125 +24,153 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
+        private static readonly HashSet<string> ValidModes = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "background", "realtime"
+        };
+
+        private static readonly HashSet<string> ValidStatuses = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "active", "draft", "all"
+        };
+
         [McpServerTool(Name = "get_workflows", Title = "List classic workflows",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetWorkflowsResult)),
         Description(
-            "Classic workflows (background async + realtime sync) for a Dataverse entity. workflow_id empty = list. Set = detail. Classic only — use get_business_rules / get_custom_apis / get_business_process_flows / get_flows for others.\n\n" +
-
-            "Key fields:\n" +
-            "- triggeronupdateattributelist: trigger fields ('statecode'=status, 'ownerid'=assignment)\n" +
-            "- mode: Background (async, Post) | Realtime (sync, Pre/Post; Pre can cancel/rollback)\n" +
-            "- scope: User/BU/Parent:ChildBU/Org. runas: Owner/Caller\n\n" +
-
-            "Fuzzy on name_filter: 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto-detail.\n\n" +
-
+            "Classic workflows (background async + realtime sync) for a Dataverse entity. workflow_id empty = list; set = detail. Classic only — see RELATED TOOLS for modern alternatives.\n\n" +
             "WHEN TO USE:\n" +
             "- Check if a field triggers any workflow (trigger_field + entity_name)\n" +
             "- Find synchronous workflows (mode='realtime'; Pre-op can cancel/rollback)\n" +
-            "- Inspect workflow steps before refactoring/disabling")]
+            "- Inspect workflow steps before refactoring/disabling\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_business_process_flows → BPF definitions + stages\n" +
+            "- get_business_rules → client-side business rules\n" +
+            "- get_flows → Power Automate cloud flows + run history\n" +
+            "- get_system_jobs → workflow execution results (asyncoperation)")]
         public CallToolResult get_workflows(
-            [Description("GUID → detail. Empty = list."
-            )] string workflow_id = "",
-            [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Empty = all."
-            )] string entity_name = "",
-            [Description("'background' / 'realtime'. Empty = both."
-            )] string mode = "",
-            [Description("Only activated workflows."
-            )] bool active_only = true,
-            [Description("Update trigger field Display Name or logical name when entity_name is set; otherwise contains filter."
-            )] string trigger_field = "",
-            [Description("Name contains. 1 match → auto-detail."
-            )] string name_filter = "",
-            [Description("Max 250."
-            )] int max_records = 50)
+            [Description("GUID → detail. Empty = list.")] string workflow_id = "",
+            [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Empty = all.")] string entity_name = "",
+            [Description("'background' / 'realtime'. Empty = both.")] string mode = "",
+            [Description("'active' / 'draft' / 'all'. Default: active.")] string status = "active",
+            [Description("Update trigger field Display Name or logical name when entity_name is set; otherwise contains filter.")] string trigger_field = "",
+            [Description("Name contains. 1 match → auto-detail.")] string name_filter = "",
+            [Description("Max 250.")] int max_records = 50)
         {
-            // Detail mode by ID
-            if (!string.IsNullOrWhiteSpace(workflow_id))
-            {
-                if (!Guid.TryParse(workflow_id.Trim(), out var wfId))
-                    return ErrorResult($"Error: Invalid workflow_id '{workflow_id.Trim()}'. Must be a GUID.");
-                try
-                {
-                    return GetWorkflowDetail(wfId);
-                }
-                catch (Exception ex)
-                {
-                    return ErrorResult($"Error: Failed to retrieve workflow: {ex.Message}");
-                }
-            }
-
-            if (!string.IsNullOrWhiteSpace(mode))
-            {
-                var m = mode.Trim().ToLowerInvariant();
-                if (m != "background" && m != "realtime")
-                    return ErrorResult($"Error: Invalid mode '{mode.Trim()}'. Use 'background' or 'realtime'.");
-            }
-
-            if (max_records <= 0) max_records = 50;
-            if (max_records > 250) max_records = 250;
-
-            int? objectTypeCode = null;
-            if (!string.IsNullOrWhiteSpace(entity_name))
-            {
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_workflows");
-                if (!entityResult.IsSuccess)
-                    return ErrorResult($"Error: entity_name '{entity_name.Trim()}': {entityResult.Error}");
-
-                entity_name = entityResult.Value.LogicalName;
-                objectTypeCode = GetObjectTypeCode(entity_name);
-                if (objectTypeCode == null)
-                    return ErrorResult(
-                        $"Error: Entity '{entity_name}' not found.\n" +
-                        $"Use get_tables to discover valid entity logical names.\n" +
-                        $"Read docs://server_logic_guide for entity scoping and filtering.");
-
-                if (!string.IsNullOrWhiteSpace(trigger_field))
-                {
-                    var fieldResult = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, trigger_field.Trim(), "get_workflows");
-                    if (!fieldResult.IsSuccess)
-                        return ErrorResult($"Error: trigger_field '{trigger_field.Trim()}': {fieldResult.Error}");
-                    trigger_field = fieldResult.Value.LogicalName;
-                }
-            }
-
             try
             {
-                var fetchXml = BuildFetchXml(objectTypeCode, mode, active_only, trigger_field, name_filter, max_records);
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                if (!string.IsNullOrWhiteSpace(workflow_id))
+                    return HandleDetail(workflow_id);
 
-                if (result.Entities.Count == 0)
-                {
-                    var label = string.IsNullOrWhiteSpace(entity_name) ? "any entity" : $"'{entity_name.Trim().ToLowerInvariant()}'";
-                    var text = $"0 classic workflows found for {label}.";
-                    var emptyResult = new GetWorkflowsResult
-                    {
-                        TotalCount = 0,
-                        EntityName = string.IsNullOrWhiteSpace(entity_name) ? null : entity_name.Trim().ToLowerInvariant(),
-                        Summary = new WorkflowSummary(),
-                        Workflows = []
-                    };
-                    return new CallToolResult
-                    {
-                        Content = [new TextContentBlock { Text = text }],
-                        StructuredContent = JsonSerializer.SerializeToElement(emptyResult)
-                    };
-                }
-
-                // Auto-detail: if exactly 1 result, switch to detail mode
-                if (result.Entities.Count == 1 && !string.IsNullOrWhiteSpace(name_filter))
-                    return GetWorkflowDetail(result.Entities[0].Id);
-
-                return FormatResults(result.Entities, entity_name, trigger_field);
+                return HandleList(entity_name, mode, status, trigger_field, name_filter, max_records);
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Failed to retrieve workflows: {ex.Message}");
+                return ThrowException(ex);
             }
         }
 
-        private CallToolResult GetWorkflowDetail(Guid workflowId)
+        // ── List mode ──────────────────────────────────────────────────────────
+
+        private CallToolResult HandleList(string entityName, string mode, string status, string triggerField, string nameFilter, int maxRecords)
         {
+            // ── Validation ──────────────────────────────────────────────
+            if (maxRecords <= 0) maxRecords = 50;
+            if (maxRecords > 250) maxRecords = 250;
+
+            var normalizedMode = (mode ?? "").Trim().ToLowerInvariant();
+            if (!string.IsNullOrEmpty(normalizedMode) && !ValidModes.Contains(normalizedMode))
+                return Error($"'{mode.Trim()}' is not a valid mode. Valid values: background, realtime.");
+
+            var normalizedStatus = (status ?? "active").Trim().ToLowerInvariant();
+            if (!ValidStatuses.Contains(normalizedStatus))
+                return Error($"'{status.Trim()}' is not a valid status. Valid values: active, draft, all.");
+
+            int? objectTypeCode = null;
+            if (!string.IsNullOrWhiteSpace(entityName))
+            {
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "get_workflows");
+                if (!entityResult.IsSuccess)
+                    return Error($"entity_name '{entityName.Trim()}': {entityResult.Error}");
+
+                entityName = entityResult.Value.LogicalName;
+                objectTypeCode = GetObjectTypeCode(entityName);
+                if (objectTypeCode == null)
+                    return Error($"Entity '{entityName}' not found. Use get_tables to discover valid entity names.");
+
+                if (!string.IsNullOrWhiteSpace(triggerField))
+                {
+                    var fieldResult = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entityName, triggerField.Trim(), "get_workflows");
+                    if (!fieldResult.IsSuccess)
+                        return Error($"trigger_field '{triggerField.Trim()}': {fieldResult.Error}");
+                    triggerField = fieldResult.Value.LogicalName;
+                }
+            }
+
+            // ── Build FetchXML + retrieve ───────────────────────────────
+            var fetchXml = BuildListFetchXml(objectTypeCode, normalizedMode, normalizedStatus, triggerField, nameFilter, maxRecords);
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+
+            if (result.Entities.Count == 0)
+            {
+                var emptyStructured = new GetWorkflowsResult
+                {
+                    Mode = "list",
+                    TotalCount = 0,
+                    EntityName = NullIfEmpty(entityName),
+                    ModeFilter = NullIfEmpty(normalizedMode),
+                    StatusFilter = normalizedStatus == "active" ? null : normalizedStatus,
+                    TriggerField = NullIfEmpty(triggerField),
+                    Summary = null,
+                    Workflows = null
+                };
+                var entityPart = string.IsNullOrWhiteSpace(entityName) ? "" : $" on {entityName}";
+                return Success($"[Success] 0 classic workflows{entityPart}.", emptyStructured);
+            }
+
+            // Auto-detail: if exactly 1 result with name_filter, switch to detail mode
+            if (result.Entities.Count == 1 && !string.IsNullOrWhiteSpace(nameFilter))
+                return HandleDetail(result.Entities[0].Id.ToString());
+
+            // ── Build entries + summary ─────────────────────────────────
+            var workflows = new List<WorkflowEntry>(result.Entities.Count);
+            var summary = new WorkflowSummary();
+
+            foreach (var e in result.Entities)
+            {
+                var entry = MapEntity(e, includeDetail: false);
+                workflows.Add(entry);
+
+                if (entry.Mode == "Background") summary.BackgroundCount = (summary.BackgroundCount ?? 0) + 1;
+                else summary.RealtimeCount = (summary.RealtimeCount ?? 0) + 1;
+                if (entry.OnDemand) summary.OnDemandCount = (summary.OnDemandCount ?? 0) + 1;
+                if (entry.Subprocess) summary.SubprocessCount = (summary.SubprocessCount ?? 0) + 1;
+                if (entry.State == "Activated") summary.ActiveCount = (summary.ActiveCount ?? 0) + 1;
+                else if (entry.State == "Draft") summary.DraftCount = (summary.DraftCount ?? 0) + 1;
+            }
+
+            var structured = new GetWorkflowsResult
+            {
+                Mode = "list",
+                TotalCount = result.Entities.Count,
+                EntityName = NullIfEmpty(entityName),
+                ModeFilter = NullIfEmpty(normalizedMode),
+                StatusFilter = normalizedStatus == "active" ? null : normalizedStatus,
+                TriggerField = NullIfEmpty(triggerField),
+                Summary = summary,
+                Workflows = workflows
+            };
+
+            return Success(BuildListText(structured), structured);
+        }
+
+        // ── Detail mode ────────────────────────────────────────────────────────
+
+        private CallToolResult HandleDetail(string workflowId)
+        {
+            if (!Guid.TryParse(workflowId.Trim(), out _))
+                return Error($"'{workflowId.Trim()}' is not a valid GUID. Use a workflow ID from list mode.");
+
             var fetchXml = $@"<fetch top='1'>
   <entity name='workflow'>
     <attribute name='workflowid'/>
@@ -168,6 +194,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <attribute name='istransacted'/>
     <attribute name='asyncautodelete'/>
     <attribute name='statecode'/>
+    <attribute name='statuscode'/>
     <attribute name='ismanaged'/>
     <attribute name='iscustomizable'/>
     <attribute name='businessprocesstype'/>
@@ -177,7 +204,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <attribute name='modifiedby'/>
     <attribute name='modifiedon'/>
     <filter>
-      <condition attribute='workflowid' operator='eq' value='{workflowId}'/>
+      <condition attribute='workflowid' operator='eq' value='{EscapeXml(workflowId.Trim())}'/>
       <condition attribute='category' operator='eq' value='0'/>
       <condition attribute='type' operator='eq' value='1'/>
     </filter>
@@ -186,273 +213,191 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
-                return ErrorResult($"Error: Classic workflow '{workflowId}' not found. Ensure it is category=0 (classic workflow).");
+                return Error($"Classic workflow '{workflowId.Trim()}' not found. Ensure it is category=0 (classic workflow), not a BPF or modern flow.");
 
-            var e = result.Entities[0];
-            var entry = MapEntity(e);
-            var uniqueName = e.GetAttributeValue<string>("uniquename") ?? "";
-            var workflowIdUnique = e.GetAttributeValue<Guid?>("workflowidunique")?.ToString() ?? "";
-            var isCustomizable = e.GetAttributeValue<BooleanManagedProperty>("iscustomizable")?.Value;
-            var businessProcessType = e.GetAttributeValue<OptionSetValue>("businessprocesstype")?.Value;
-            var createdBy = e.GetAttributeValue<EntityReference>("createdby")?.Name ?? "";
-            var createdOn = e.GetAttributeValue<DateTime?>("createdon")?.ToString("yyyy-MM-dd") ?? "";
-            var description = e.GetAttributeValue<string>("description");
-
-            var sb = new StringBuilder(1024);
-            sb.AppendLine($"[Classic Workflow] {entry.Name}");
-            sb.AppendLine();
-            sb.AppendLine($"workflowId: {workflowId}");
-            sb.AppendLine($"workflowIdUnique: {workflowIdUnique}");
-            if (!string.IsNullOrWhiteSpace(uniqueName))
-                sb.AppendLine($"uniqueName: {uniqueName}");
-            sb.AppendLine($"primaryEntity: {entry.PrimaryEntity}");
-            sb.AppendLine($"mode: {entry.Mode}");
-            sb.AppendLine($"scope: {entry.Scope}");
-            sb.AppendLine($"runAs: {entry.RunAs}");
-            sb.AppendLine($"rank: {entry.Rank}");
-            sb.AppendLine($"status: {entry.Status}");
-            sb.AppendLine($"isManaged: {(entry.IsManaged ? "Yes" : "No")}");
-            if (isCustomizable.HasValue)
-                sb.AppendLine($"isCustomizable: {(isCustomizable.Value ? "Yes" : "No")}");
-            sb.AppendLine($"onDemand: {(entry.OnDemand ? "Yes" : "No")}");
-            sb.AppendLine($"subprocess: {(entry.Subprocess ? "Yes" : "No")}");
-            sb.AppendLine($"isTransacted: {(entry.IsTransacted ? "Yes" : "No")}");
-            sb.AppendLine($"asyncAutoDelete: {(entry.AsyncAutoDelete ? "Yes" : "No")}");
-            if (businessProcessType.HasValue)
-                sb.AppendLine($"businessProcessType: {businessProcessType.Value}");
-
-            if (!string.IsNullOrWhiteSpace(description))
-            {
-                sb.AppendLine();
-                sb.AppendLine($"[Description]");
-                sb.AppendLine(description.Trim());
-            }
-
-            sb.AppendLine();
-            sb.AppendLine("[Triggers]");
-            var triggers = BuildTriggersDisplay(entry);
-            sb.AppendLine($"triggers: {triggers}");
-            if (!string.IsNullOrEmpty(entry.TriggerOnUpdateFields))
-                sb.AppendLine($"updateFields: {entry.TriggerOnUpdateFields}");
-            sb.AppendLine($"stage: {BuildStageDisplay(entry)}");
-
-            sb.AppendLine();
-            sb.AppendLine("[Audit]");
-            sb.AppendLine($"createdBy: {createdBy}");
-            sb.AppendLine($"createdOn: {createdOn}");
-            sb.AppendLine($"modifiedBy: {entry.ModifiedBy}");
-            sb.AppendLine($"modifiedOn: {entry.ModifiedOn}");
-            sb.AppendLine($"owner: {entry.Owner}");
-
+            var entry = MapEntity(result.Entities[0], includeDetail: true);
             var structured = new GetWorkflowsResult
             {
+                Mode = "detail",
                 TotalCount = 1,
-                EntityName = entry.PrimaryEntity,
                 Workflows = [entry]
             };
 
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            return Success(BuildDetailText(entry), structured);
         }
 
-        private static string BuildFetchXml(int? objectTypeCode, string mode, bool activeOnly, string triggerField, string nameFilter, int maxRecords)
-        {
-            var filters = new StringBuilder();
+        // ── Entry builder (shared by list + detail) ───────────────────────────
+        // Fields verified by probe on org DEVKITV4 (2026-08-07):
+        //   mode=OptionSetValue(0=Background,1=Realtime) → FormattedValues["mode"]
+        //   scope=OptionSetValue(1=User,2=BU,3=Parent:ChildBU,4=Org) → FormattedValues["scope"]
+        //   runas=OptionSetValue(0=Owner,1=Calling User) → FormattedValues["runas"]
+        //   statecode=OptionSetValue(0=Draft,1=Activated) → FormattedValues["statecode"]
+        //   statuscode=OptionSetValue(1=Draft,2=Activated) → FormattedValues["statuscode"]
+        //   createstage/updatestage/deletestage=OptionSetValue(20=Pre,40=Post) → FormattedValues
+        //   primaryentity=string (logical name, e.g. 'account')
+        //   triggeronupdateattributelist=string (comma-separated logical names)
+        //   iscustomizable=BooleanManagedProperty → .Value
+        //   businessprocesstype=OptionSetValue → FormattedValues (null when not BPF-related)
+        //   rank=int? (nullable)
 
-            // Always filter: classic workflow + definition only
-            filters.AppendLine("      <condition attribute='category' operator='eq' value='0' />");
-            filters.AppendLine("      <condition attribute='type' operator='eq' value='1' />");
-
-            if (objectTypeCode.HasValue)
-                filters.AppendLine($"      <condition attribute='primaryentity' operator='eq' value='{objectTypeCode.Value}' />");
-
-            if (!string.IsNullOrWhiteSpace(mode))
-            {
-                var modeValue = mode.Trim().ToLowerInvariant() == "background" ? "0" : "1";
-                filters.AppendLine($"      <condition attribute='mode' operator='eq' value='{modeValue}' />");
-            }
-
-            if (activeOnly)
-                filters.AppendLine("      <condition attribute='statecode' operator='eq' value='1' />");
-
-            if (!string.IsNullOrWhiteSpace(triggerField))
-                filters.AppendLine($"      <condition attribute='triggeronupdateattributelist' operator='like' value='%{EscapeXml(triggerField.Trim().ToLowerInvariant())}%' />");
-
-            if (!string.IsNullOrWhiteSpace(nameFilter))
-                filters.AppendLine($"      <condition attribute='name' operator='like' value='%{EscapeXml(nameFilter.Trim())}%' />");
-
-            return $@"<fetch top='{maxRecords}'>
-  <entity name='workflow'>
-    <attribute name='workflowid' />
-    <attribute name='name' />
-    <attribute name='primaryentity' />
-    <attribute name='description' />
-    <attribute name='triggeroncreate' />
-    <attribute name='triggerondelete' />
-    <attribute name='triggeronupdateattributelist' />
-    <attribute name='createstage' />
-    <attribute name='updatestage' />
-    <attribute name='deletestage' />
-    <attribute name='mode' />
-    <attribute name='scope' />
-    <attribute name='runas' />
-    <attribute name='rank' />
-    <attribute name='ondemand' />
-    <attribute name='subprocess' />
-    <attribute name='istransacted' />
-    <attribute name='asyncautodelete' />
-    <attribute name='statecode' />
-    <attribute name='ismanaged' />
-    <attribute name='ownerid' />
-    <attribute name='modifiedby' />
-    <attribute name='modifiedon' />
-    <filter type='and'>
-{filters}    </filter>
-    <order attribute='primaryentity' />
-    <order attribute='name' />
-  </entity>
-</fetch>";
-        }
-
-        private static CallToolResult FormatResults(DataCollection<Entity> entities, string entityName, string triggerField)
-        {
-            var workflows = new List<WorkflowEntry>();
-            var backgroundCount = 0;
-            var realtimeCount = 0;
-            var onDemandCount = 0;
-            var subprocessCount = 0;
-
-            foreach (var e in entities)
-            {
-                var entry = MapEntity(e);
-                workflows.Add(entry);
-
-                if (entry.Mode == "Background") backgroundCount++;
-                else realtimeCount++;
-                if (entry.OnDemand) onDemandCount++;
-                if (entry.Subprocess) subprocessCount++;
-            }
-
-            var entityLabel = string.IsNullOrWhiteSpace(entityName) ? "" : $" for {entityName.Trim().ToLowerInvariant()}";
-            var fieldLabel = string.IsNullOrWhiteSpace(triggerField) ? "" : $" (trigger_field='{triggerField.Trim().ToLowerInvariant()}')";
-            var countWord = entities.Count == 1 ? "workflow" : "workflows";
-
-            // Compact text
-            var sb = new StringBuilder(entities.Count * 200 + 256);
-            sb.AppendLine($"[Workflows] {entities.Count} classic {countWord}{entityLabel}{fieldLabel}");
-            sb.AppendLine();
-            sb.AppendLine("#\tName\tEntity\tMode\tTriggers\tUpdateFields\tStage\tScope\tRunAs\tRank\tOnDemand\tSubprocess\tOwner\tStatus\tModified");
-
-            for (var i = 0; i < workflows.Count; i++)
-            {
-                var w = workflows[i];
-                var triggers = BuildTriggersDisplay(w);
-                var updateFields = EscapeTab(w.TriggerOnUpdateFields ?? "-");
-                var stage = BuildStageDisplay(w);
-                sb.AppendLine($"{i + 1}\t{EscapeTab(w.Name)}\t{w.PrimaryEntity}\t{w.Mode}\t{triggers}\t{updateFields}\t{stage}\t{w.Scope}\t{w.RunAs}\t{w.Rank}\t{(w.OnDemand ? "Yes" : "No")}\t{(w.Subprocess ? "Yes" : "No")}\t{EscapeTab(w.Owner)}\t{w.Status}\t{w.ModifiedOn}");
-            }
-
-            sb.AppendLine();
-            sb.AppendLine("Summary:");
-            sb.AppendLine($"  Background: {backgroundCount}");
-            sb.AppendLine($"  Real-time: {realtimeCount}");
-            sb.AppendLine($"  On-demand: {onDemandCount}");
-            sb.AppendLine($"  Subprocess: {subprocessCount}");
-
-            var structured = new GetWorkflowsResult
-            {
-                TotalCount = entities.Count,
-                EntityName = string.IsNullOrWhiteSpace(entityName) ? null : entityName.Trim().ToLowerInvariant(),
-                Summary = new WorkflowSummary
-                {
-                    BackgroundCount = backgroundCount,
-                    RealtimeCount = realtimeCount,
-                    OnDemandCount = onDemandCount,
-                    SubprocessCount = subprocessCount
-                },
-                Workflows = workflows
-            };
-
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
-        }
-
-        private static WorkflowEntry MapEntity(Entity e)
+        private static WorkflowEntry MapEntity(Entity e, bool includeDetail)
         {
             var modeValue = e.GetAttributeValue<OptionSetValue>("mode")?.Value;
-            var scopeValue = e.GetAttributeValue<OptionSetValue>("scope")?.Value;
-            var runAsValue = e.GetAttributeValue<OptionSetValue>("runas")?.Value;
-            var stateValue = e.GetAttributeValue<OptionSetValue>("statecode")?.Value;
-
             var isRealtime = modeValue == 1;
 
-            return new WorkflowEntry
+            var entry = new WorkflowEntry
             {
                 WorkflowId = e.Id.ToString(),
-                Name = e.GetAttributeValue<string>("name") ?? "",
-                PrimaryEntity = e.GetAttributeValue<string>("primaryentity") ?? "",
+                WorkflowIdUnique = e.GetAttributeValue<Guid?>("workflowidunique")?.ToString(),
+                UniqueName = NullIfEmpty(e.GetAttributeValue<string>("uniquename")),
+                Name = NullIfEmpty(e.GetAttributeValue<string>("name")),
+                PrimaryEntity = NullIfEmpty(e.GetAttributeValue<string>("primaryentity")),
                 Description = SanitizeDescription(e.GetAttributeValue<string>("description")),
                 TriggerOnCreate = e.GetAttributeValue<bool>("triggeroncreate"),
                 TriggerOnDelete = e.GetAttributeValue<bool>("triggerondelete"),
                 TriggerOnUpdateFields = NullIfEmpty(e.GetAttributeValue<string>("triggeronupdateattributelist")),
-                CreateStage = isRealtime ? MapStage(e.GetAttributeValue<OptionSetValue>("createstage")?.Value) : null,
-                UpdateStage = isRealtime ? MapStage(e.GetAttributeValue<OptionSetValue>("updatestage")?.Value) : null,
-                DeleteStage = isRealtime ? MapStage(e.GetAttributeValue<OptionSetValue>("deletestage")?.Value) : null,
-                Mode = modeValue == 0 ? "Background" : "Realtime",
-                Scope = MapScope(scopeValue),
-                RunAs = runAsValue == 0 ? "Owner" : "Caller",
-                Rank = e.GetAttributeValue<int>("rank"),
+                CreateStage = isRealtime ? MapStage(e, "createstage") : null,
+                UpdateStage = isRealtime ? MapStage(e, "updatestage") : null,
+                DeleteStage = isRealtime ? MapStage(e, "deletestage") : null,
+                Mode = NullIfEmpty(e.FormattedValues.Contains("mode") ? e.FormattedValues["mode"] : (modeValue == 1 ? "Realtime" : modeValue == 0 ? "Background" : null)),
+                Scope = NullIfEmpty(e.FormattedValues.Contains("scope") ? e.FormattedValues["scope"] : MapScope(modeValue)),
+                RunAs = NullIfEmpty(e.FormattedValues.Contains("runas") ? e.FormattedValues["runas"] : null),
+                Rank = e.GetAttributeValue<int?>("rank"),
                 OnDemand = e.GetAttributeValue<bool>("ondemand"),
                 Subprocess = e.GetAttributeValue<bool>("subprocess"),
                 IsTransacted = e.GetAttributeValue<bool>("istransacted"),
                 AsyncAutoDelete = e.GetAttributeValue<bool>("asyncautodelete"),
-                Status = stateValue == 1 ? "Active" : "Draft",
+                State = NullIfEmpty(e.FormattedValues.Contains("statecode") ? e.FormattedValues["statecode"] : null),
+                Status = NullIfEmpty(e.FormattedValues.Contains("statuscode") ? e.FormattedValues["statuscode"] : null),
                 IsManaged = e.GetAttributeValue<bool>("ismanaged"),
-                Owner = e.GetAttributeValue<EntityReference>("ownerid")?.Name ?? "",
-                ModifiedOn = e.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd") ?? "",
-                ModifiedBy = e.GetAttributeValue<EntityReference>("modifiedby")?.Name ?? ""
+                IsCustomizable = e.GetAttributeValue<BooleanManagedProperty>("iscustomizable")?.Value,
+                BusinessProcessType = NullIfEmpty(e.FormattedValues.Contains("businessprocesstype") ? e.FormattedValues["businessprocesstype"] : null),
+                Owner = NullIfEmpty(e.GetAttributeValue<EntityReference>("ownerid")?.Name),
+                ModifiedOn = e.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd"),
+                ModifiedBy = NullIfEmpty(e.GetAttributeValue<EntityReference>("modifiedby")?.Name)
             };
+
+            if (includeDetail)
+            {
+                entry.CreatedBy = NullIfEmpty(e.GetAttributeValue<EntityReference>("createdby")?.Name);
+                entry.CreatedOn = e.GetAttributeValue<DateTime?>("createdon")?.ToString("yyyy-MM-dd");
+            }
+
+            return entry;
         }
 
-        private static string BuildTriggersDisplay(WorkflowEntry w)
+        // ── FetchXML builder ──────────────────────────────────────────────────
+
+        private static string BuildListFetchXml(int? objectTypeCode, string mode, string status, string triggerField, string nameFilter, int maxRecords)
         {
-            var parts = new List<string>();
-            if (w.TriggerOnCreate) parts.Add("Create");
-            if (!string.IsNullOrEmpty(w.TriggerOnUpdateFields)) parts.Add("Update");
-            if (w.TriggerOnDelete) parts.Add("Delete");
-            return parts.Count > 0 ? string.Join(", ", parts) : "-";
+            var sb = new StringBuilder(640);
+            sb.Append($"<fetch top='{maxRecords}'>");
+            sb.Append("<entity name='workflow'>");
+            sb.Append("<attribute name='workflowid'/>");
+            sb.Append("<attribute name='name'/>");
+            sb.Append("<attribute name='primaryentity'/>");
+            sb.Append("<attribute name='description'/>");
+            sb.Append("<attribute name='triggeroncreate'/>");
+            sb.Append("<attribute name='triggerondelete'/>");
+            sb.Append("<attribute name='triggeronupdateattributelist'/>");
+            sb.Append("<attribute name='createstage'/>");
+            sb.Append("<attribute name='updatestage'/>");
+            sb.Append("<attribute name='deletestage'/>");
+            sb.Append("<attribute name='mode'/>");
+            sb.Append("<attribute name='scope'/>");
+            sb.Append("<attribute name='runas'/>");
+            sb.Append("<attribute name='rank'/>");
+            sb.Append("<attribute name='ondemand'/>");
+            sb.Append("<attribute name='subprocess'/>");
+            sb.Append("<attribute name='istransacted'/>");
+            sb.Append("<attribute name='asyncautodelete'/>");
+            sb.Append("<attribute name='statecode'/>");
+            sb.Append("<attribute name='statuscode'/>");
+            sb.Append("<attribute name='ismanaged'/>");
+            sb.Append("<attribute name='ownerid'/>");
+            sb.Append("<attribute name='modifiedby'/>");
+            sb.Append("<attribute name='modifiedon'/>");
+            sb.Append("<filter type='and'>");
+
+            // Always filter: classic workflow + definition only
+            sb.Append("<condition attribute='category' operator='eq' value='0'/>");
+            sb.Append("<condition attribute='type' operator='eq' value='1'/>");
+
+            if (objectTypeCode.HasValue)
+                sb.Append($"<condition attribute='primaryentity' operator='eq' value='{objectTypeCode.Value}'/>");
+
+            if (!string.IsNullOrEmpty(mode))
+            {
+                var modeValue = mode == "background" ? "0" : "1";
+                sb.Append($"<condition attribute='mode' operator='eq' value='{modeValue}'/>");
+            }
+
+            if (status == "active")
+                sb.Append("<condition attribute='statecode' operator='eq' value='1'/>");
+            else if (status == "draft")
+                sb.Append("<condition attribute='statecode' operator='eq' value='0'/>");
+
+            if (!string.IsNullOrWhiteSpace(triggerField))
+                sb.Append($"<condition attribute='triggeronupdateattributelist' operator='like' value='%{EscapeXml(triggerField.Trim().ToLowerInvariant())}%'/>");
+
+            if (!string.IsNullOrWhiteSpace(nameFilter))
+                sb.Append($"<condition attribute='name' operator='like' value='%{EscapeXml(nameFilter.Trim())}%'/>");
+
+            sb.Append("</filter>");
+            sb.Append("<order attribute='primaryentity'/>");
+            sb.Append("<order attribute='name'/>");
+            sb.Append("</entity>");
+            sb.Append("</fetch>");
+            return sb.ToString();
         }
 
-        private static string BuildStageDisplay(WorkflowEntry w)
+        // ── Text builders (1 line, concise) ───────────────────────────────────
+
+        private static string BuildListText(GetWorkflowsResult structured)
         {
-            if (w.Mode == "Background") return "Post(async)";
-            var parts = new List<string>();
-            if (w.TriggerOnCreate && w.CreateStage != null) parts.Add($"Create:{w.CreateStage}");
-            if (!string.IsNullOrEmpty(w.TriggerOnUpdateFields) && w.UpdateStage != null) parts.Add($"Update:{w.UpdateStage}");
-            if (w.TriggerOnDelete && w.DeleteStage != null) parts.Add($"Delete:{w.DeleteStage}");
-            return parts.Count > 0 ? string.Join(", ", parts) : "-";
+            var word = structured.TotalCount == 1 ? "workflow" : "workflows";
+            var entityPart = string.IsNullOrWhiteSpace(structured.EntityName) ? "" : $" on {structured.EntityName}";
+            var modePart = string.IsNullOrWhiteSpace(structured.ModeFilter) ? "" : $" {structured.ModeFilter}";
+            var statusPart = string.IsNullOrWhiteSpace(structured.StatusFilter) ? "" : $" {structured.StatusFilter}";
+            var fieldPart = string.IsNullOrWhiteSpace(structured.TriggerField) ? "" : $" (trigger: {structured.TriggerField})";
+            return $"[Success] {structured.TotalCount}{modePart}{statusPart} classic {word}{entityPart}{fieldPart}.";
         }
 
-        private static string MapStage(int? value) => value switch
+        private static string BuildDetailText(WorkflowEntry entry)
         {
-            20 => "Pre",
-            40 => "Post",
-            _ => null
-        };
+            var sb = new StringBuilder(160);
+            sb.Append($"[Success] {entry.WorkflowId}");
+            if (!string.IsNullOrWhiteSpace(entry.Name))
+                sb.Append($". {entry.Name}");
+            if (!string.IsNullOrWhiteSpace(entry.Mode))
+                sb.Append($" [{entry.Mode}]");
+            if (!string.IsNullOrWhiteSpace(entry.State))
+                sb.Append($" — {entry.State}");
+            if (!string.IsNullOrWhiteSpace(entry.PrimaryEntity))
+                sb.Append($" on {entry.PrimaryEntity}");
+            sb.Append('.');
+            return sb.ToString();
+        }
+
+        // ── Helpers ───────────────────────────────────────────────────────────
+
+        private static string MapStage(Entity e, string attributeName)
+        {
+            if (!e.FormattedValues.Contains(attributeName))
+            {
+                var value = e.GetAttributeValue<OptionSetValue>(attributeName)?.Value;
+                return value switch { 20 => "Pre", 40 => "Post", _ => null };
+            }
+            return e.FormattedValues[attributeName];
+        }
 
         private static string MapScope(int? value) => value switch
         {
             1 => "User",
-            2 => "BU",
-            3 => "Parent:ChildBU",
-            4 => "Org",
-            _ => "Unknown"
+            2 => "Business Unit",
+            3 => "Parent:Child Business Units",
+            4 => "Organization",
+            _ => null
         };
 
         private static string SanitizeDescription(string description)
@@ -471,27 +416,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string EscapeXml(string value) =>
             value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("\"", "&quot;");
 
-        private static string EscapeTab(string value) =>
-            value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
-
         private int? GetObjectTypeCode(string entityName)
         {
-            try
+            var request = new RetrieveEntityRequest
             {
-                var request = new RetrieveEntityRequest
-                {
-                    LogicalName = entityName,
-                    EntityFilters = EntityFilters.Entity
-                };
-                var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
-                return response.EntityMetadata.ObjectTypeCode;
-            }
-            catch
-            {
-                return null;
-            }
+                LogicalName = entityName,
+                EntityFilters = EntityFilters.Entity
+            };
+            var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+            return response.EntityMetadata.ObjectTypeCode;
         }
-
-        private CallToolResult ErrorResult(string message) => Error(message);
     }
 }
