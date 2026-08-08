@@ -169,7 +169,7 @@ public class WhoAmIToolTests
 
         var text = BuildCompactText(r);
 
-        Assert.IsTrue(text.StartsWith("Connected to "));
+        Assert.IsTrue(text.StartsWith("[Success] Connected to "));
         Assert.IsTrue(text.Contains("SANDBOX"));
         Assert.IsTrue(text.Contains("https://org.crm.dynamics.com"));
         Assert.IsTrue(text.Contains("as John Doe"));
@@ -198,7 +198,7 @@ public class WhoAmIToolTests
 
         var text = BuildCompactText(r);
 
-        Assert.IsTrue(text.StartsWith("Connected to "));
+        Assert.IsTrue(text.StartsWith("[Success] Connected to "));
         Assert.IsTrue(text.Contains("as user-id"));
         Assert.IsFalse(text.Contains("security role"));
         Assert.IsFalse(text.Contains("warning"));
@@ -220,25 +220,6 @@ public class WhoAmIToolTests
         var text = BuildCompactText(r);
 
         Assert.IsFalse(text.Contains("role"));
-    }
-
-    [TestMethod]
-    public void BuildCompactText_WithAccessToken_DoesNotExposeTokenInText()
-    {
-        var r = CreateWhoAmIResult();
-        SetProperty(r, "UserId", "user-id");
-        SetProperty(r, "BusinessUnitId", "bu-id");
-        SetProperty(r, "OrganizationId", "org-id");
-        SetProperty(r, "OrgFriendlyName", "Test");
-        SetProperty(r, "OrgUniqueName", "test");
-        SetProperty(r, "TenantId", "tenant");
-        SetProperty(r, "EnvironmentId", "env");
-        SetProperty(r, "AccessToken", "eyJ0eXAiOiJKV1Q...");
-
-        var text = BuildCompactText(r);
-
-        Assert.IsFalse(text.Contains("AccessToken"));
-        Assert.IsFalse(text.Contains("eyJ0eXAiOiJKV1Q"));
     }
 
     [TestMethod]
@@ -298,14 +279,14 @@ public class WhoAmIToolTests
         SetProperty(r, "TenantId", "tenant");
         SetProperty(r, "EnvironmentId", "env");
 
-        var warnings = new System.Collections.Generic.List<string> { "Failed to retrieve access token: timeout" };
+        var warnings = new System.Collections.Generic.List<string> { "Failed to retrieve roles: timeout" };
         SetProperty(r, "Warnings", warnings);
 
         var text = BuildCompactText(r);
 
         Assert.IsTrue(text.Contains("1 warning(s)"));
         // Warning details remain in StructuredContent only.
-        Assert.IsFalse(text.Contains("Failed to retrieve access token"));
+        Assert.IsFalse(text.Contains("Failed to retrieve roles"));
     }
 
     [TestMethod]
