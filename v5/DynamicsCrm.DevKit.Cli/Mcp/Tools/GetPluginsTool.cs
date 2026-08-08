@@ -183,7 +183,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             Mode = "assemblies",
                             Assemblies = assemblies
                         };
-                        return Success($"[Success] {assemblies.Count} plugin assemblies matching '{asmName}'.", structured);
+                        return Success($"{assemblies.Count} plugin assemblies matching '{asmName}'.", structured);
                     }
 
                     // Single assembly → detail
@@ -229,7 +229,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Assemblies = allAssemblies,
                     Packages = packages.Count > 0 ? packages : null
                 };
-                return Success($"[Success] {allAssemblies.Count} plugin assemblies registered.", listStructured);
+                return Success($"{allAssemblies.Count} plugin assemblies registered.", listStructured);
             }
             catch (Exception ex)
             {
@@ -660,12 +660,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string BuildStepsText(int count, string entityName)
         {
             var word = count == 1 ? "step" : "steps";
-            return $"[Success] {count} plugin {word} on {entityName}.";
+            return $"{count} plugin {word} on {entityName}.";
         }
 
         private static string BuildDetailText(PluginAssemblyEntry entry, int typeCount, int stepCount)
         {
-            return $"[Success] {entry.Name} ({entry.Version}): {typeCount} types, {stepCount} steps.";
+            return $"{entry.Name} ({entry.Version}): {typeCount} types, {stepCount} steps.";
         }
 
         // ── Summary builder ────────────────────────────────────────────────

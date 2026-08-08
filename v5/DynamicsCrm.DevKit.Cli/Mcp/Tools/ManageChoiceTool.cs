@@ -520,7 +520,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             // Existence check removed: with the single-try rule, an attempt to create an
-            // existing option set will surface as [UncaughtException] DataverseFault from
+            // existing option set will surface as [Error] DataverseFault from
             // the create call below. Caller (HandleCreate) used to short-circuit with a
             // controlled "already exists" error; that controlled path is gone.
 
@@ -956,7 +956,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // OptionSetExists helper removed: with the single-try rule, existence checks
         // bubble to the main catch. Create-flows that try to create an existing option
-        // set now surface as [UncaughtException] DataverseFault instead of a controlled
+        // set now surface as [Error] DataverseFault instead of a controlled
         // "already exists" error.
 
         /// <summary>

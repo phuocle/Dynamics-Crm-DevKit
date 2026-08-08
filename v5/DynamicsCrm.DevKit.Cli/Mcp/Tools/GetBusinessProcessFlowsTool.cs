@@ -95,7 +95,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var entityLabel = resolvedEntityName != null ? $" for '{resolvedEntityName}'" : "";
                     var statusLabel = normalizedStatus == "all" ? "" : $" {normalizedStatus}";
                     return Success(
-                        $"[Success]{statusLabel} BPFs{entityLabel}: 0 found.",
+                        $"{statusLabel} BPFs{entityLabel}: 0 found.",
                         new GetBpfsResult
                         {
                             Mode = "list",
@@ -146,7 +146,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var word = bpfs.Count == 1 ? "BPF" : "BPFs";
 
             return Success(
-                $"[Success]{statusLabel} {bpfs.Count} {word}{entityLabel}.",
+                $"{statusLabel} {bpfs.Count} {word}{entityLabel}.",
                 new GetBpfsResult
                 {
                     Mode = "list",
@@ -197,7 +197,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 entry.Stages = stages;
 
             return Success(
-                $"[Success] BPF '{entry.Name}': {stages.Count} stages.",
+                $"BPF '{entry.Name}': {stages.Count} stages.",
                 new GetBpfsResult
                 {
                     Mode = "detail",

@@ -163,7 +163,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
 
             return Success(
-                $"[Success]{statusLabel} custom APIs{entityLabel}: {apis.Count} found.",
+                $"{statusLabel} custom APIs{entityLabel}: {apis.Count} found.",
                 structured);
         }
 
@@ -248,7 +248,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var responseCount = entry.ResponseProperties?.Count ?? 0;
 
             return Success(
-                $"[Success] Custom API '{entry.UniqueName}': {paramCount} request params, {responseCount} response properties.",
+                $"Custom API '{entry.UniqueName}': {paramCount} request params, {responseCount} response properties.",
                 structured);
         }
 
@@ -365,7 +365,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 kind: "customapi",
                 ambiguousTag: "[AmbiguousCustomApi]",
                 notFoundTag: "[NotFoundCustomApi]",
-                notFoundTip: "Tip: Use get_custom_apis with api_name empty to list available Custom APIs.",
+                notFoundTip: "Use get_custom_apis with api_name empty to list available Custom APIs.",
                 retryParameterName: "api_name");
         }
 

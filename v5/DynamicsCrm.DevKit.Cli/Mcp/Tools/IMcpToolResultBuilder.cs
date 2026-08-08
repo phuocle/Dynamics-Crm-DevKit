@@ -38,7 +38,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         /// </summary>
         /// <remarks>
         /// The result distinguishes itself from <see cref="Error"/> with an
-        /// <c>[UncaughtException]</c> prefix and an exception-type tag in the
+        /// <c>[Error]</c> prefix and an exception-type tag in the
         /// structured payload, so AI clients can recognize uncontrolled failures
         /// and avoid retrying with the same inputs.
         /// </remarks>

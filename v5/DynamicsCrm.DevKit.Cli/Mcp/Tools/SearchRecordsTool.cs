@@ -274,25 +274,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string BuildSearchText(SearchRecordsResult r, long elapsedMs)
         {
-            if (!string.IsNullOrEmpty(r.ErrorMessage))
-                return $"[Error] {r.ErrorCode}: {r.ErrorMessage}";
-
             var n = r.ReturnedCount ?? 0;
             var total = r.TotalCount ?? n;
             var word = n == 1 ? "result" : "results";
             var trimmed = r.SearchTerm?.Trim('"') ?? "";
-            return $"[Success] Found {n} {word} ({total} total) for \"{trimmed}\" in {elapsedMs}ms.";
+            return $"Found {n} {word} ({total} total) for \"{trimmed}\" in {elapsedMs}ms.";
         }
 
         private static string BuildStatusText(SearchRecordsResult r)
         {
-            if (r.Status == null)
-                return $"[Error] {r.ErrorMessage ?? "Unable to parse status response."}";
-
             var s = r.Status;
             var indexedCount = s.EntityStatusResults?.Count ?? 0;
             var sb = new System.Text.StringBuilder(128);
-            sb.Append("[Success] Search ").Append(FormatProvisionStatus(s.Status));
+            sb.Append("Search ").Append(FormatProvisionStatus(s.Status));
             sb.Append(" | ").Append(indexedCount).Append(" indexed entities");
             if (r.Statistics != null)
                 sb.Append(" | ").Append(r.Statistics.StorageSizeInMb).Append(" MB, ").Append(r.Statistics.DocumentCount).Append(" docs");

@@ -161,7 +161,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 : (!string.IsNullOrEmpty(r.OrgUniqueName) ? r.OrgUniqueName : "Dataverse");
 
             var sb = new StringBuilder(256);
-            sb.Append("[Success] Connected to ");
+            sb.Append("Connected to ");
             sb.Append(org);
             if (!string.IsNullOrEmpty(r.EnvironmentUrl))
                 sb.Append(" (").Append(r.EnvironmentUrl).Append(')');

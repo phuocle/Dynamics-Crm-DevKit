@@ -103,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var scopeLabel = normalizedScope == "none" ? "global" : normalizedScope;
             return Success(
-                $"[Success] {scopeLabel}: {structured.TotalCount} messages ({sdkMessages.Count} SDK, {customActions.Count} custom actions).",
+                $"{scopeLabel}: {structured.TotalCount} messages ({sdkMessages.Count} SDK, {customActions.Count} custom actions).",
                 structured);
         }
 
@@ -182,7 +182,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var label = isCustomOperation ? "custom action" : "SDK message";
             return Success(
-                $"[Success] {label} '{name}': {pluginStepCount} plugin steps, {supportedEntities.Count} supported entities.",
+                $"{label} '{name}': {pluginStepCount} plugin steps, {supportedEntities.Count} supported entities.",
                 structured);
         }
 
@@ -227,7 +227,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
 
             return Success(
-                $"[Success] custom action '{name}': {inputParams.Count} input params, {outputParams.Count} output params, {pluginStepCount} plugin steps.",
+                $"custom action '{name}': {inputParams.Count} input params, {outputParams.Count} output params, {pluginStepCount} plugin steps.",
                 structured);
         }
 

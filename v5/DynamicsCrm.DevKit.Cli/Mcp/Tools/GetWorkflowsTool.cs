@@ -129,7 +129,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Workflows = null
                 };
                 var entityPart = string.IsNullOrWhiteSpace(entityName) ? "" : $" on {entityName}";
-                return Success($"[Success] 0 classic workflows{entityPart}.", emptyStructured);
+                return Success($"0 classic workflows{entityPart}.", emptyStructured);
             }
 
             // Auto-detail: if exactly 1 result with name_filter, switch to detail mode
@@ -370,13 +370,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var modePart = string.IsNullOrWhiteSpace(structured.ModeFilter) ? "" : $" {structured.ModeFilter}";
             var statusPart = string.IsNullOrWhiteSpace(structured.StatusFilter) ? "" : $" {structured.StatusFilter}";
             var fieldPart = string.IsNullOrWhiteSpace(structured.TriggerField) ? "" : $" (trigger: {structured.TriggerField})";
-            return $"[Success] {structured.TotalCount}{modePart}{statusPart} classic {word}{entityPart}{fieldPart}.";
+            return $"{structured.TotalCount}{modePart}{statusPart} classic {word}{entityPart}{fieldPart}.";
         }
 
         private static string BuildDetailText(WorkflowEntry entry)
         {
             var sb = new StringBuilder(160);
-            sb.Append($"[Success] {entry.WorkflowId}");
+            sb.Append($"{entry.WorkflowId}");
             if (!string.IsNullOrWhiteSpace(entry.Name))
                 sb.Append($". {entry.Name}");
             if (!string.IsNullOrWhiteSpace(entry.Mode))

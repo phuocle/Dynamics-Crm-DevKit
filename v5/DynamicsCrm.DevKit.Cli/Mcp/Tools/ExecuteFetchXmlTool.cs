@@ -81,8 +81,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     : ExecuteSinglePage(fetchxml, max_records);
 
                 var summary = structured.HasMore
-                    ? $"[Success] {structured.TotalReturned} records returned (more available)."
-                    : $"[Success] {structured.TotalReturned} records returned.";
+                    ? $"{structured.TotalReturned} records returned (more available)."
+                    : $"{structured.TotalReturned} records returned.";
                 return Success(summary, structured);
             }
             catch (Exception ex)

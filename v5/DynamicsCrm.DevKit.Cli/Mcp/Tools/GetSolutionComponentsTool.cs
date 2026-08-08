@@ -243,7 +243,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 candidates,
                 "[AmbiguousSolution]",
                 "[NotFoundSolution]",
-                "Tip: Use get_solution_components with a more specific solution_name.",
+                "Use get_solution_components with a more specific solution_name.",
                 "solution_name");
         }
 
@@ -340,11 +340,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var activeCount = activeLayers.Count(kv => kv.Value);
                 return activeLayersOnly
-                    ? $"[Success] {displayName} ({uniqueName}): {displayCount} active-layer components of {components.Count} total."
-                    : $"[Success] {displayName} ({uniqueName}): {components.Count} components, {activeCount} with active layers.";
+                    ? $"{displayName} ({uniqueName}): {displayCount} active-layer components of {components.Count} total."
+                    : $"{displayName} ({uniqueName}): {components.Count} components, {activeCount} with active layers.";
             }
 
-            return $"[Success] {displayName} ({uniqueName}): {components.Count} components.";
+            return $"{displayName} ({uniqueName}): {components.Count} components.";
         }
 
         // ── Name resolution ──────────────────────────────────────────────────────

@@ -186,7 +186,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (entities.Count == 0)
             {
-                return Success("[Success] 0 cloud flows found.", new GetFlowsResult
+                return Success("0 cloud flows found.", new GetFlowsResult
                 {
                     TotalCount = 0,
                     Action = "list"
@@ -205,7 +205,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Flows = flows
             };
 
-            return Success($"[Success] {entities.Count}{statusLabel} {countWord} found.", structured);
+            return Success($"{entities.Count}{statusLabel} {countWord} found.", structured);
         }
 
         private CallToolResult GetDetail(string flowId)
@@ -243,7 +243,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
 
             var runWord = runs.Count == 1 ? "run" : "runs";
-            return Success($"[Success] {entry.Name}: detail + {runs.Count} recent {runWord}.", structured);
+            return Success($"{entry.Name}: detail + {runs.Count} recent {runWord}.", structured);
         }
 
         private CallToolResult GetRuns(string flowId, string statusFilter, int minutesAgo, int maxRecords)
@@ -308,7 +308,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
 
             var runWord = runs.Count == 1 ? "run" : "runs";
-            return Success($"[Success] {flowName} ({timeLabel}): {runs.Count} {runWord}.", structured);
+            return Success($"{flowName} ({timeLabel}): {runs.Count} {runWord}.", structured);
         }
 
         private List<FlowRunEntry> GetRecentRuns(string flowId, int count)

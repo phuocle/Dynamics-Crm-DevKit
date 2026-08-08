@@ -16,12 +16,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
     /// </summary>
     internal static class McpToolResults
     {
+        // ── Output prefix/label constants — single source of truth ─────────────
+        // The factory owns all prefixes/labels; call sites must NOT embed them.
+        // Change here to rebrand every tool at once (e.g. ErrorPrefix = "LOI").
+        internal const string SuccessPrefix = "[Success]";
+        internal const string ErrorPrefix = "[Error]";
+        internal const string DryRunPrefix = "[DryRun]";
+        internal const string HintLabel = "Hint";
+
         /// <summary>
         /// Successful result with a concise text summary and the full structured payload.
         /// </summary>
         internal static CallToolResult Success(string summary, object structured) => new()
         {
-            Content = [new TextContentBlock { Text = summary }],
+            Content = [new TextContentBlock { Text = $"{SuccessPrefix} {StripPrefix(summary, SuccessPrefix)}" }],
             StructuredContent = JsonSerializer.SerializeToElement(structured)
         };
 
@@ -32,14 +40,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// </summary>
         internal static CallToolResult Error(string message, string? hint = null, object? details = null)
         {
-            var text = message;
-            if (!string.IsNullOrWhiteSpace(hint))
-                text += $"\nHint: {hint}";
+            var clean = StripPrefix(message, ErrorPrefix);
+            var normalizedHint = NormalizeHint(hint);
+            var text = $"{ErrorPrefix} {clean}";
+            if (normalizedHint != null)
+                text += $"\n{HintLabel}: {normalizedHint}";
 
             var structured = new McpErrorResult
             {
-                Error = message,
-                Hint = string.IsNullOrWhiteSpace(hint) ? null : hint,
+                Error = clean,
+                Hint = normalizedHint,
                 Details = details
             };
 
@@ -56,20 +66,51 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// </summary>
         internal static CallToolResult DryRun(string summary, object structured) => new()
         {
-            Content = [new TextContentBlock { Text = $"[DryRun] {summary}" }],
+            Content = [new TextContentBlock { Text = $"{DryRunPrefix} {StripPrefix(summary, DryRunPrefix)}" }],
             StructuredContent = JsonSerializer.SerializeToElement(structured)
         };
 
         /// <summary>
-        /// Format an unhandled exception into an error result that AI clients can
-        /// distinguish from <see cref="Error"/>. Use this only in top-level
-        /// <c>catch (Exception ex)</c> blocks — for expected/validation errors,
-        /// use <see cref="Error"/> instead.
+        /// Strip a legacy literal prefix that older call sites embedded themselves,
+        /// so migration can happen tool-by-tool without double prefixes at runtime.
+        /// For errors, also strips the legacy "Error:" label.
+        /// </summary>
+        private static string StripPrefix(string? text, string prefix)
+        {
+            var t = (text ?? "").TrimStart();
+            if (t.StartsWith(prefix, StringComparison.Ordinal))
+                t = t.Substring(prefix.Length).TrimStart();
+            else if (prefix == ErrorPrefix && t.StartsWith("Error:", StringComparison.Ordinal))
+                t = t.Substring("Error:".Length).TrimStart();
+            return t;
+        }
+
+        /// <summary>
+        /// Normalize a hint value: the factory owns the "Hint:" label, so strip any
+        /// legacy "Hint:"/"Tip:" prefix the call site embedded.
+        /// </summary>
+        private static string? NormalizeHint(string? hint)
+        {
+            if (string.IsNullOrWhiteSpace(hint)) return null;
+            var h = hint.TrimStart();
+            if (h.StartsWith(HintLabel + ":", StringComparison.Ordinal))
+                h = h.Substring(HintLabel.Length + 1).TrimStart();
+            else if (h.StartsWith("Tip:", StringComparison.Ordinal))
+                h = h.Substring(4).TrimStart();
+            return h;
+        }
+
+        /// <summary>
+        /// Format an unhandled exception into an error result. Same <c>[Error]</c>
+        /// prefix as <see cref="Error"/> — the structured payload (exceptionType,
+        /// errorCode, stackTrace) is what lets AI clients distinguish it. Use this
+        /// only in top-level <c>catch (Exception ex)</c> blocks — for
+        /// expected/validation errors, use <see cref="Error"/> instead.
         /// </summary>
         /// <remarks>
         /// Output shape (text):
         /// <code>
-        /// [UncaughtException] {ExceptionType}: {TopMessage}
+        /// [Error] {ExceptionType}: {TopMessage}
         /// InnerException: {InnerType}: {InnerMessage}  (if any)
         /// StackTrace: {FirstFrame}                       (file:line)
         /// Hint: ...
@@ -80,7 +121,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         internal static CallToolResult ThrowException(Exception ex)
         {
             if (ex == null)
-                return Error("[UncaughtException] (null exception)", "An unknown error was raised. Check server logs.");
+                return Error("(null exception)", "An unknown error was raised. Check server logs.");
 
             var (kind, hint) = ClassifyException(ex);
 
@@ -91,13 +132,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
             var textLines = new List<string>
             {
-                $"[UncaughtException] {kind}: {message}"
+                $"{ErrorPrefix} {kind}: {message}"
             };
             if (!string.IsNullOrWhiteSpace(innerText))
                 textLines.Add($"InnerException: {innerText}");
             if (!string.IsNullOrWhiteSpace(topFrame))
                 textLines.Add($"StackTrace: {topFrame}");
-            textLines.Add($"Hint: {hint}");
+            textLines.Add($"{HintLabel}: {hint}");
             var text = string.Join("\n", textLines);
 
             // Build structured details so AI clients don't have to parse text

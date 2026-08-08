@@ -14,7 +14,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
     /// <para>
     /// This helper intentionally does NOT wrap calls in try/catch.
     /// Callers should invoke it from their top-level main try/catch so that
-    /// publish failures surface as [UncaughtException] DataverseFault instead
+    /// publish failures surface as [Error] DataverseFault instead
     /// of being silently swallowed. This keeps the "single try/catch in main"
     /// rule for MCP tools.
     /// </para>

@@ -126,7 +126,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Jobs = null,
                     Summary = null
                 };
-                return Success($"[Success] 0 system jobs ({timeScope}).", emptyStructured);
+                return Success($"0 system jobs ({timeScope}).", emptyStructured);
             }
 
             // ── Build entries + summary ─────────────────────────────────
@@ -385,13 +385,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var word = count == 1 ? "job" : "jobs";
             var statusPart = normalizedStatus == "all" ? "" : $"{normalizedStatus} ";
             var entityPart = string.IsNullOrWhiteSpace(primaryEntity) ? "" : $" on {primaryEntity}";
-            return $"[Success] {count} {statusPart}system {word}{entityPart} ({timeScope}).";
+            return $"{count} {statusPart}system {word}{entityPart} ({timeScope}).";
         }
 
         private static string BuildDetailText(SystemJobEntry entry)
         {
             var sb = new StringBuilder(160);
-            sb.Append($"[Success] {entry.JobId}");
+            sb.Append($"{entry.JobId}");
             if (!string.IsNullOrWhiteSpace(entry.Name))
                 sb.Append($". {entry.Name}");
             if (!string.IsNullOrWhiteSpace(entry.OperationType))

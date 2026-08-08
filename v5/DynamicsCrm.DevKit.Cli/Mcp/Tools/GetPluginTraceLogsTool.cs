@@ -118,7 +118,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         EntityName = NullIfEmpty(primaryEntityLogical),
                         Traces = null
                     };
-                    return Success($"[Success] 0 plugin trace logs ({timeScope}).", emptyStructured);
+                    return Success($"0 plugin trace logs ({timeScope}).", emptyStructured);
                 }
 
                 // ── Build entries ───────────────────────────────────────────
@@ -236,13 +236,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var word = count == 1 ? "log" : "logs";
             var entityPart = string.IsNullOrWhiteSpace(primaryEntity) ? "" : $" on {primaryEntity}";
-            return $"[Success] {count} plugin trace {word}{entityPart} ({timeScope}).";
+            return $"{count} plugin trace {word}{entityPart} ({timeScope}).";
         }
 
         private static string BuildDetailText(PluginTraceLogEntry entry)
         {
             var sb = new StringBuilder(128);
-            sb.Append($"[Success] {entry.Id}");
+            sb.Append($"{entry.Id}");
             if (!string.IsNullOrWhiteSpace(entry.MessageName))
                 sb.Append($". {entry.MessageName}");
             if (!string.IsNullOrWhiteSpace(entry.PrimaryEntity))

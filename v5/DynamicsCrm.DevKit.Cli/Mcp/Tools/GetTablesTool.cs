@@ -84,7 +84,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 candidates,
                 "[AmbiguousEntity]",
                 "[NotFoundEntity]",
-                "Tip: Use get_tables with no entity_name to list available tables.",
+                "Use get_tables with no entity_name to list available tables.",
                 "entity_name");
 
             if (!resolved.IsSuccess)
@@ -105,8 +105,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             var attrCount = table?.Attributes?.Count ?? 0;
             var summary = attrCount > 0
-                ? $"[Success] {logicalName} (detail={detailLevel}): {attrCount} attributes."
-                : $"[Success] {logicalName} (detail={detailLevel}): 0 attributes matched filter '{attributeFilter}'.";
+                ? $"{logicalName} (detail={detailLevel}): {attrCount} attributes."
+                : $"{logicalName} (detail={detailLevel}): 0 attributes matched filter '{attributeFilter}'.";
 
             if (attrCount == 0 && filterInfo.HasFilter)
             {
@@ -165,8 +165,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Tables = sorted.Count > 0 ? sorted.Select(BuildTableSummary).ToList() : null
             };
             var summary = truncated
-                ? $"[Success] {sorted.Count} of {totalMatched} entities returned (truncated by max_records; raise max_records to see more)."
-                : $"[Success] {sorted.Count} entities returned.";
+                ? $"{sorted.Count} of {totalMatched} entities returned (truncated by max_records; raise max_records to see more)."
+                : $"{sorted.Count} entities returned.";
             return Success(summary, structured);
         }
 

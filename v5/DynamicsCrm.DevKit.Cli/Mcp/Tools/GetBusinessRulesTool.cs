@@ -128,7 +128,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var statusLabel = status == "" ? "" : $" {status}";
             return Success(
-                $"[Success]{statusLabel} business rules for '{entityName}': {rules.Count} found.",
+                $"{statusLabel} business rules for '{entityName}': {rules.Count} found.",
                 new GetBusinessRulesResult
                 {
                     Mode = "list",
@@ -191,7 +191,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var actionCount = detail.Actions?.Count ?? 0;
 
             return Success(
-                $"[Success] Business rule '{detail.Name}': {condCount} conditions, {actionCount} actions.",
+                $"Business rule '{detail.Name}': {condCount} conditions, {actionCount} actions.",
                 new GetBusinessRulesResult
                 {
                     Mode = "detail",

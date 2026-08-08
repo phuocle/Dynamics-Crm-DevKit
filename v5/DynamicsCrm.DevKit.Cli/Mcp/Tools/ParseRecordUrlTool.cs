@@ -352,7 +352,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var entityName = string.IsNullOrWhiteSpace(result.EntityName) ? "(unknown)" : result.EntityName;
             var recordId = string.IsNullOrWhiteSpace(result.RecordId) ? "(none)" : result.RecordId;
-            return $"[Success] {entityName} {recordId} ({result.Source}).";
+            return $"{entityName} {recordId} ({result.Source}).";
         }
 
         private static string CleanGuid(string value)

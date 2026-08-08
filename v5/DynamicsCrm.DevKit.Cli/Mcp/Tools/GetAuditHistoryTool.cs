@@ -627,9 +627,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var n = entries.Count;
             if (n == 0)
-                return $"[Success] {entityName} {recordId}: 0 audit entries ({timeScope}).";
+                return $"{entityName} {recordId}: 0 audit entries ({timeScope}).";
             var word = n == 1 ? "entry" : "entries";
-            return $"[Success] {entityName} {recordId}: {n} {word} ({timeScope}).";
+            return $"{entityName} {recordId}: {n} {word} ({timeScope}).";
         }
 
         private static string BuildBrowseText(string entityName, string timeScope,
@@ -639,7 +639,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var word = count == 1 ? "entry" : "entries";
             var suffix = (string.IsNullOrWhiteSpace(userFilter) ? "" : $", user contains \"{userFilter}\"") +
                          (string.IsNullOrWhiteSpace(operation) ? "" : $", op={operation}");
-            return $"[Success] {scope} ({timeScope}{suffix}): {count} {word}.";
+            return $"{scope} ({timeScope}{suffix}): {count} {word}.";
         }
 
         private static string FormatBrowseNoResults(string entityName, string timeScope,
