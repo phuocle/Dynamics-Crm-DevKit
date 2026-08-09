@@ -2,6 +2,11 @@
 
 > Phase 1–2 đã xong **16 readonly tools** — tinh thần gốc ở [refactor.md](refactor.md) / [refactor2.md](refactor2.md), ví dụ test-call chuẩn ở `testcall/` (xem `9.whoami.md`, `4.get_tables.md`). File này chỉ lo **19 tool còn lại (mutation/metadata/Web API)**. Rules bên dưới chính là checklist approve — không có checklist riêng.
 
+## 0. Khi test REAL mcp (connected mcp với môi trường)
+
+- Dùng solution ALl-IN-ONE (all_in_one)
+- Không được action, touch, update, create với table: "All in One" (all_in_one), đây là rule, là luật, table này chứa nhiều thông tin để dùng cho các test case khác.
+
 ## 1. Tools còn lại
 
 **N là dữ liệu động** — lấy từ `devkit mcp --tools` sau mỗi build, runtime thắng mọi số ghi ở đây.
@@ -35,15 +40,15 @@
 
 ## 4. Helpers có sẵn — tái dụng, không viết lại
 
-| Helper | Dùng khi |
-|---|---|
-| `McpToolBase` (`Tools/McpToolBase.cs`) | `Success` / `Error` / `ThrowException` / `DryRun` |
-| `Helper/DataverseMutationExecutor.cs` | Create/Update/Delete/Associate/Disassociate/Execute qua SDK |
-| `Helper/DataverseWebApiMutationExecutor.cs` | Mutation qua raw Web API |
-| `Helper/RoleGateHelper.cs` | Gate destructive/security action theo role |
-| `Helper/MetadataOperationWaitHelper.cs` | Wait propagation sau metadata mutation |
-| `Helper/SolutionComponentCreateHelper.cs` | Add component vào solution |
-| `Helper/PublishHelper.cs`, `ViewXmlHelper.cs`, `ViewBackupHelper.cs` | publish / view / form XML |
+| Helper                                                               | Dùng khi                                                    |
+| -------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `McpToolBase` (`Tools/McpToolBase.cs`)                               | `Success` / `Error` / `ThrowException` / `DryRun`           |
+| `Helper/DataverseMutationExecutor.cs`                                | Create/Update/Delete/Associate/Disassociate/Execute qua SDK |
+| `Helper/DataverseWebApiMutationExecutor.cs`                          | Mutation qua raw Web API                                    |
+| `Helper/RoleGateHelper.cs`                                           | Gate destructive/security action theo role                  |
+| `Helper/MetadataOperationWaitHelper.cs`                              | Wait propagation sau metadata mutation                      |
+| `Helper/SolutionComponentCreateHelper.cs`                            | Add component vào solution                                  |
+| `Helper/PublishHelper.cs`, `ViewXmlHelper.cs`, `ViewBackupHelper.cs` | publish / view / form XML                                   |
 
 ## 5. Quy trình mỗi tool (1 tool xong mới sang tool kế)
 
@@ -66,4 +71,4 @@ Mọi tool PASSED rules §2+§3; numbering/`ToolCategoryMap`/test-call đồng b
 
 ## 7. Tools đã hoàn thành phase 3
 
-- _(chưa có — thêm `{N}. {tool_name}` khi PASSED)_
+- `5. manage_choice` — PASSED 16 test cases (list/detail/create/update/add/rename/remove/recolor/display_name/description + 5 error paths). Test-call: `testcall/5.manage_choice.md`
