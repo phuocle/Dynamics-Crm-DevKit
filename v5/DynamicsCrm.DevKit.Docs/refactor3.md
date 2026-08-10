@@ -9,6 +9,7 @@
 - Bạn hãy quên (forget) dry-run nhé, các task bạn làm và test KHÔNG bao giờ test được dry-run vì nó là setting khi mcp run mà, ko có cách nào truyền thông số cả.
 - Mỗi lần bạn làm xong 1 TODO task do bạn tạo ra, bạn có sure là bạn có nhớ lại RULES của file này không ? nếu không hãy đọc lại.
 - DOCS này yêu cầu bạn FULL TEST => ĐÚNG. Tuy nhiên khi bạn làm xong task, đến khi run @build-cli.md OK, bạn phải dừng lại (STOP) hỏi aP review trước khi real TEST.
+- NHẮC LẠI 1 LẦN NỮA, LÀM TASK XONG THÌ KHÔNG REAL TEST MCP, DỪNG LẠI HỎI A PHƯỚC REVIEW TRƯỚC KHI REAL TEST MCP
 
 ## 1. Tools còn lại
 
@@ -22,7 +23,7 @@
 
 1. **Bỏ qua unit test.** Build/reinstall bằng `DynamicsCrm.DevKit.Scripts/Release.DynamicsCrm.DevKit.Cli.ps1` (kill MCP, MCP tự restart). Không stage/commit/push.
 2. **1 try-catch duy nhất ở entry point của tool.** Catch chỉ `return ThrowException(ex)`. Validation/business fail → `Error(msg, hint?)`; unhandled fault → `ThrowException(ex)`. Không catch trong helper, không catch rỗng, không tự build error text.
-3. **Không wrapper method** — gọi thẳng `Success`/`Error`/`ThrowException`/`DryRun` từ `McpToolBase`. Helper parse/format/build DTO/execute vẫn OK.
+3. **Không wrapper method** — gọi thẳng `Success`/`Error`/`ThrowException`/`DryRun`/`Partial`/`Failed` từ `McpToolBase`. Helper parse/format/build DTO/execute vẫn OK.
 4. **DTO null-aware:** mọi property nullable có `[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]`; list rỗng → `null`. Không đổi null thành `""`.
 5. **`Content` đúng 1 dòng** `[Success]` / `[Error]` / `[DRY-RUN]`, ngắn. Chi tiết đẩy vào `structuredContent`.
 6. **Description ngắn:** 1 câu tóm tắt + modes + `WHEN TO USE` / `RELATED TOOLS`. Không lặp param schema, không hứa capability thiếu code.
@@ -33,7 +34,7 @@
 ## 3. Rules mới cho mutation tool
 
 10. **Prefix/label do factory sở hữu (đã chuẩn hóa).** `McpToolResults` có constants `SuccessPrefix`/`ErrorPrefix`/`DryRunPrefix`/`UncaughtExceptionPrefix`/`HintLabel` — đổi 1 chỗ rebrand toàn bộ (vd `"LOI"`). Call site **KHÔNG tự viết** `[Success]`/`[Error]`/`Error: ` trong summary/message, KHÔNG viết `Hint:`/`Tip:` trong hint value. Factory tự strip legacy prefix nên tool chưa migrate vẫn ra output đúng — nhưng khi refactor từng mutation tool phải **xóa literal prefix khỏi source** và route mọi error result thủ công (vd `ManageWebResourceTool` PrefixMismatch ~L408, các `ErrorResult` local wrappers) qua base `Error()`.
-11. **`dry_run` bắt buộc** cho mọi mutation: không ghi Dataverse, trả `DryRun(summary, structured)` mô tả exact action + target (entity, id, fields, count). Destructive action (delete/restore/publish) phải validate exact target trước khi preview.
+11. **`dry_run` bắt buộc** KHÔNG LÀM TASK, ĐÃ LÀM XONG, ĐÂY CHỈ LÀ NOTED ĐỂ AI BIẾT cho mọi mutation: không ghi Dataverse, trả `DryRun(summary, structured)` mô tả exact action + target (entity, id, fields, count). Destructive action (delete/restore/publish) phải validate exact target trước khi preview.
 12. **Role/security/publish/import → gate qua `Helper/RoleGateHelper.cs`** (`IsSystemAdministrator`, `GetCurrentRoleNames`); thiếu quyền → `Error` rõ lý do.
 13. **Bulk mutation** (`create_records`, `generate_demo_data`): per-item status (id, status, error), giới hạn output, **không che partial failure** — `[Success] 18/20 created`, không phải `[Success] 20 created`.
 14. **Metadata mutation** (`upsert_*`, `manage_form/view/chart/choice`): sau mutation gọi `Helper/MetadataOperationWaitHelper.cs` (`WaitAfterTableCreation`, …) để metadata propagate; add-to-solution qua `Helper/SolutionComponentCreateHelper.cs` (`AddExistingComponent`, `ApplySolutionUniqueName`), không tự build `AddSolutionComponent` request.

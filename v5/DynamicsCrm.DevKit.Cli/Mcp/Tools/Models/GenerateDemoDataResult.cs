@@ -11,14 +11,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("count")]
         public int Count { get; set; }
 
+        [JsonPropertyName("recordsGenerated")]
+        public int RecordsGenerated { get; set; }
+
         [JsonPropertyName("fieldsGenerated")]
         public int FieldsGenerated { get; set; }
 
         [JsonPropertyName("fieldList")]
-        public List<string> FieldList { get; set; } = [];
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> FieldList { get; set; }
 
         [JsonPropertyName("filePath")]
         public string FilePath { get; set; }
+
+        [JsonPropertyName("seed")]
+        public int Seed { get; set; }
+
+        [JsonPropertyName("overridesApplied")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> OverridesApplied { get; set; }
 
         [JsonPropertyName("lookupsSampled")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

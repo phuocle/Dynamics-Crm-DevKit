@@ -55,19 +55,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(GenerateDemoDataResult)),
         Description(
             "Bogus-generated demo data for an entity → JSON file at .devkit/demo_data/ → pipe to create_records. from_date/to_date REQUIRED (ISO 8601, ask user, never infer). Auto-selects creatable fields with smart mapping (email→Email, telephone→Phone…) and overriddencreatedon. Lookups: real GUIDs auto-fetched; polymorphic uses 'field@entity'.\n\n" +
-
-            "field_overrides (JSON array of {logicalname, operator, values[]}):\n" +
-            "- eq: all records = values[0] (fixed GUID/string)\n" +
-            "- in: random pick from values[] (rotating lookups/enums)\n" +
-            "- startswith: 'ABC' → 'ABC_x7k2' (Bogus suffix)\n" +
-            "- endswith: '@acme.com' → 'john.doe@acme.com' (Bogus prefix)\n" +
-            "- contains: 'Manager' → 'Senior Manager II' (injected middle)\n" +
-            "- regex: '\\+84[0-9]{9}' → '+84912345678'\n\n" +
-
             "WHEN TO USE:\n" +
             "- Generate demo/test data for an entity → pipe to create_records\n" +
             "- Reproducible runs (fix seed); rotate lookups/enums via field_overrides 'in'\n" +
-            "- Pin specific FK values across all rows via field_overrides 'eq'")]
+            "- Pin specific FK values across all rows via field_overrides 'eq'\n\n" +
+            "RELATED TOOLS:\n" +
+            "- create_records → import generated JSON into Dataverse\n" +
+            "- get_tables → discover entity fields before generating")]
         public CallToolResult generate_demo_data(
             [Description("Entity logical name (e.g., 'account').")] string entity_name,
             [Description("ISO 8601, e.g. '2026-01-01'. NEVER infer — ask user.")] string from_date,
@@ -79,152 +73,141 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             try
             {
-            if (string.IsNullOrWhiteSpace(entity_name))
-                return Error("Error: entity_name is required.");
+                if (string.IsNullOrWhiteSpace(entity_name))
+                    return Error("entity_name is required.");
 
-            if (string.IsNullOrWhiteSpace(from_date) || string.IsNullOrWhiteSpace(to_date))
-                return Error("Error: from_date and to_date are required. DO NOT infer or assume these values — ask the user explicitly before calling this tool.");
+                if (string.IsNullOrWhiteSpace(from_date) || string.IsNullOrWhiteSpace(to_date))
+                    return Error("from_date and to_date are required. DO NOT infer or assume these values — ask the user explicitly before calling this tool.");
 
-            if (!DateTime.TryParse(from_date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var fromDt))
-                return Error($"Error: from_date '{from_date}' is not a valid date. Use ISO 8601 format, e.g. '2026-01-01'.");
+                if (!DateTime.TryParse(from_date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var fromDt))
+                    return Error($"from_date '{from_date}' is not a valid date. Use ISO 8601 format, e.g. '2026-01-01'.");
 
-            if (!DateTime.TryParse(to_date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var toDt))
-                return Error($"Error: to_date '{to_date}' is not a valid date. Use ISO 8601 format, e.g. '2026-04-30'.");
+                if (!DateTime.TryParse(to_date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var toDt))
+                    return Error($"to_date '{to_date}' is not a valid date. Use ISO 8601 format, e.g. '2026-04-30'.");
 
-            if (toDt < fromDt)
-                return Error($"Error: to_date '{to_date}' must be >= from_date '{from_date}'.");
+                if (toDt < fromDt)
+                    return Error($"to_date '{to_date}' must be >= from_date '{from_date}'.");
 
-            if (count > MaxCount)
-                return Error($"Error: count {count} exceeds maximum {MaxCount}.");
+                if (count > MaxCount)
+                    return Error($"count {count} exceeds maximum {MaxCount}.");
 
-            count = Math.Max(1, count);
+                count = Math.Max(1, count);
 
-            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "generate_demo_data");
-            if (!entityResult.IsSuccess)
-                return Error($"Error: {entityResult.Error}");
-            var entityName = entityResult.Value.LogicalName;
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "generate_demo_data");
+                if (!entityResult.IsSuccess)
+                    return Error(entityResult.Error);
+                var entityName = entityResult.Value.LogicalName;
 
-            var metadata = LoadEntityMetadata(entityName);
+                var metadata = LoadEntityMetadata(entityName);
 
-            var warnings = new List<string>();
+                var warnings = new List<string>();
 
-            // Select fields
-            var selectedAttrs = SelectFields(metadata, fields, entityName, warnings);
-            if (selectedAttrs.Count == 0)
-                return Error($"Error: No valid fields found for entity '{entityName}'. Check entity name or specify fields explicitly.");
+                // Select fields
+                var selectedAttrs = SelectFields(metadata, fields, entityName, warnings);
+                if (selectedAttrs.Count == 0)
+                    return Error($"No valid fields found for entity '{entityName}'. Check entity name or specify fields explicitly.");
 
-            // Pre-fetch lookup pools
-            var lookupPools = new Dictionary<string, List<Guid>>(StringComparer.OrdinalIgnoreCase);
-            var lookupsSampled = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                // Pre-fetch lookup pools
+                var lookupPools = new Dictionary<string, List<Guid>>(StringComparer.OrdinalIgnoreCase);
+                var lookupsSampled = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
-            foreach (var attr in selectedAttrs.OfType<LookupAttributeMetadata>())
-            {
-                var targets = attr.Targets ?? Array.Empty<string>();
-                foreach (var target in targets)
+                foreach (var attr in selectedAttrs.OfType<LookupAttributeMetadata>())
                 {
-                    if (lookupPools.ContainsKey(target)) continue;
-                    var guids = FetchLookupPool(target);
-                    if (guids.Count == 0)
+                    var targets = attr.Targets ?? Array.Empty<string>();
+                    foreach (var target in targets)
                     {
-                        warnings.Add($"Lookup target '{target}' has no active records — fields targeting it will be skipped.");
-                        lookupPools[target] = [];
-                    }
-                    else
-                    {
-                        lookupPools[target] = guids;
-                        lookupsSampled[target] = guids.Count;
+                        if (lookupPools.ContainsKey(target)) continue;
+                        var guids = FetchLookupPool(target);
+                        if (guids.Count == 0)
+                        {
+                            warnings.Add($"Lookup target '{target}' has no active records — fields targeting it will be skipped.");
+                            lookupPools[target] = [];
+                        }
+                        else
+                        {
+                            lookupPools[target] = guids;
+                            lookupsSampled[target] = guids.Count;
+                        }
                     }
                 }
-            }
 
-            // Build faker
-            var actualSeed = seed == 0 ? Environment.TickCount : seed;
-            var faker = new Faker { Random = new Randomizer(actualSeed) };
+                // Build faker
+                var actualSeed = seed == 0 ? Environment.TickCount : seed;
+                var faker = new Faker { Random = new Randomizer(actualSeed) };
 
-            // Parse field_overrides
-            var overrides = new List<FieldOverride>();
-            if (!string.IsNullOrWhiteSpace(field_overrides))
-            {
-                overrides = JsonSerializer.Deserialize<List<FieldOverride>>(field_overrides,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? [];
-
-                foreach (var ov in overrides)
+                // Parse field_overrides
+                var overrides = new List<FieldOverride>();
+                if (!string.IsNullOrWhiteSpace(field_overrides))
                 {
-                    if (string.IsNullOrWhiteSpace(ov.LogicalName))
-                        return Error("Error: each field_override must have a non-empty 'logicalname'.");
-                    var op = ov.Operator?.ToLowerInvariant();
-                    if (op is not ("eq" or "in" or "startswith" or "endswith" or "contains" or "regex"))
-                        return Error($"Error: unsupported operator '{ov.Operator}' for field '{ov.LogicalName}'. Supported: eq, in, startswith, endswith, contains, regex.");
-                    if (ov.Values == null || ov.Values.Count == 0)
-                        return Error($"Error: field_override for '{ov.LogicalName}' must have at least one value.");
+                    overrides = JsonSerializer.Deserialize<List<FieldOverride>>(field_overrides,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? [];
+
+                    foreach (var ov in overrides)
+                    {
+                        if (string.IsNullOrWhiteSpace(ov.LogicalName))
+                            return Error("each field_override must have a non-empty 'logicalname'.");
+                        var op = ov.Operator?.ToLowerInvariant();
+                        if (op is not ("eq" or "in" or "startswith" or "endswith" or "contains" or "regex"))
+                            return Error($"unsupported operator '{ov.Operator}' for field '{ov.LogicalName}'. Supported: eq, in, startswith, endswith, contains, regex.");
+                        if (ov.Values == null || ov.Values.Count == 0)
+                            return Error($"field_override for '{ov.LogicalName}' must have at least one value.");
+                    }
+
+                    var overrideError = NormalizeOverrides(metadata, overrides, entityName);
+                    if (overrideError != null)
+                        return Error(overrideError);
                 }
 
-                var overrideError = NormalizeOverrides(metadata, overrides, entityName);
-                if (overrideError != null)
-                    return Error(overrideError);
-            }
+                // Generate records
+                var records = new List<Dictionary<string, object>>(count);
+                var preGenWarningCount = warnings.Count;
+                for (var i = 0; i < count; i++)
+                {
+                    var record = GenerateRecord(faker, entityName, selectedAttrs, lookupPools, fromDt, toDt, warnings);
+                    if (overrides.Count > 0)
+                        ApplyOverrides(faker, record, overrides, warnings);
+                    records.Add(record);
+                }
 
-            // Generate records
-            var records = new List<Dictionary<string, object>>(count);
-            for (var i = 0; i < count; i++)
-            {
-                var record = GenerateRecord(faker, entityName, selectedAttrs, lookupPools, fromDt, toDt, warnings);
-                if (overrides.Count > 0)
-                    ApplyOverrides(faker, record, overrides, warnings);
-                records.Add(record);
-            }
+                // Save to .devkit/demo_data/
+                var outputDir = Path.Combine(".devkit", "demo_data");
+                Directory.CreateDirectory(outputDir);
+                var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+                var filePath = Path.Combine(outputDir, $"{entityName}_{timestamp}.json");
 
-            // Save to .devkit/demo_data/
-            var outputDir = Path.Combine(".devkit", "demo_data");
-            Directory.CreateDirectory(outputDir);
-            var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-            var filePath = Path.Combine(outputDir, $"{entityName}_{timestamp}.json");
+                var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
+                var json = JsonSerializer.Serialize(records, jsonOptions);
+                File.WriteAllText(filePath, json, Encoding.UTF8);
 
-            var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
-            var json = JsonSerializer.Serialize(records, jsonOptions);
-            File.WriteAllText(filePath, json, Encoding.UTF8);
+                var fieldNames = selectedAttrs.Select(a => a.LogicalName).ToList();
+                if (!fieldNames.Contains("overriddencreatedon"))
+                    fieldNames.Insert(0, "overriddencreatedon");
 
-            var fieldNames = selectedAttrs.Select(a => a.LogicalName).ToList();
-            // Always include overriddencreatedon in field list display
-            if (!fieldNames.Contains("overriddencreatedon"))
-                fieldNames.Insert(0, "overriddencreatedon");
+                var generationWarnings = warnings.Count - preGenWarningCount;
+                var structured = new GenerateDemoDataResult
+                {
+                    Entity = entityName,
+                    Count = count,
+                    RecordsGenerated = records.Count,
+                    FieldsGenerated = fieldNames.Count,
+                    FieldList = fieldNames.Count > 0 ? fieldNames : null,
+                    FilePath = filePath,
+                    Seed = actualSeed,
+                    OverridesApplied = overrides.Count > 0
+                        ? overrides.Select(o => $"{o.LogicalName} ({o.Operator})").ToList()
+                        : null,
+                    LookupsSampled = lookupsSampled.Count > 0 ? lookupsSampled : null,
+                    Warnings = warnings.Count > 0 ? warnings : null
+                };
 
-            var structured = new GenerateDemoDataResult
-            {
-                Entity = entityName,
-                Count = count,
-                FieldsGenerated = fieldNames.Count,
-                FieldList = fieldNames,
-                FilePath = filePath,
-                LookupsSampled = lookupsSampled.Count > 0 ? lookupsSampled : null,
-                Warnings = warnings.Count > 0 ? warnings : null
-            };
+                var summary = warnings.Count > 0
+                    ? $"Generated {records.Count}/{count} '{entityName}' records with {warnings.Count} warning(s) → {filePath}"
+                    : $"Generated {records.Count} '{entityName}' records → {filePath}";
 
-            var sb = new StringBuilder();
-            sb.AppendLine($"Generated {count} '{entityName}' records (seed: {actualSeed})");
-            if (overrides.Count > 0)
-                sb.AppendLine($"Field overrides applied: {string.Join(", ", overrides.Select(o => $"{o.LogicalName} ({o.Operator})"))}");
-            sb.AppendLine($"Fields: {string.Join(", ", fieldNames)}");
+                if (warnings.Count > 0 && generationWarnings > 0)
+                    return Partial(summary, structured);
 
-            if (lookupsSampled.Count > 0)
-            {
-                var lookupSummary = string.Join(", ", lookupsSampled.Select(kv => $"{kv.Key} ({kv.Value} records)"));
-                sb.AppendLine($"Lookups sampled: {lookupSummary}");
-            }
-
-            sb.AppendLine($"File: {filePath}");
-            sb.AppendLine();
-            sb.AppendLine($"Next: create_records(entity_name=\"{entityName}\", records_json=\"{filePath}\")");
-
-            if (warnings.Count > 0)
-            {
-                sb.AppendLine();
-                sb.AppendLine("Warnings:");
-                foreach (var w in warnings)
-                    sb.AppendLine($"  {w}");
-            }
-
-            return Success(sb.ToString(), structured);
+                return Success(summary, structured);
             }
             catch (Exception ex)
             {
@@ -320,7 +303,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (atIndex >= 0)
                 {
                     if (atIndex == 0 || atIndex == fieldInput.Length - 1)
-                        return $"Error: field_override '{fieldInput}' has invalid polymorphic lookup syntax. Use 'field@targetentity'.";
+                        return $"field_override '{fieldInput}' has invalid polymorphic lookup syntax. Use 'field@targetentity'.";
 
                     fieldToResolve = fieldInput[..atIndex];
                     targetSuffix = fieldInput[(atIndex + 1)..].Trim();
@@ -335,18 +318,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "field_overrides[].logicalname");
 
                 if (!resolved.IsSuccess)
-                    return $"Error: field_override '{fieldInput}' could not be resolved: {resolved.Error}";
+                    return $"field_override '{fieldInput}' could not be resolved: {resolved.Error}";
 
                 if (targetSuffix.Length > 0)
                 {
                     if (resolved.Value is not LookupAttributeMetadata lookup)
-                        return $"Error: field_override '{fieldInput}' uses polymorphic syntax, but '{resolved.Value.LogicalName}' is not a lookup field.";
+                        return $"field_override '{fieldInput}' uses polymorphic syntax, but '{resolved.Value.LogicalName}' is not a lookup field.";
 
                     var targets = lookup.Targets ?? Array.Empty<string>();
                     if (!targets.Contains(targetSuffix, StringComparer.OrdinalIgnoreCase))
                     {
                         var validTargets = targets.Length == 0 ? "(none)" : string.Join(", ", targets);
-                        return $"Error: field_override '{fieldInput}' target '{targetSuffix}' is not valid for lookup '{resolved.Value.LogicalName}'. Valid targets: {validTargets}.";
+                        return $"field_override '{fieldInput}' target '{targetSuffix}' is not valid for lookup '{resolved.Value.LogicalName}'. Valid targets: {validTargets}.";
                     }
 
                     ov.LogicalName = $"{resolved.Value.LogicalName}@{targetSuffix.ToLowerInvariant()}";
@@ -812,10 +795,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             return LookupPoolCache.GetOrAdd(targetEntity, target =>
             {
+                // Check if entity has statecode attribute before adding filter
+                var hasStateCode = false;
+                try
+                {
+                    var meta = LoadEntityMetadata(target);
+                    hasStateCode = meta.Attributes.Any(a => a.LogicalName == "statecode");
+                }
+                catch
+                {
+                    // If metadata load fails, skip statecode filter
+                }
+
+                var filterClause = hasStateCode
+                    ? "<filter><condition attribute='statecode' operator='eq' value='0'/></filter>"
+                    : "";
+
                 var fetchXml = $@"<fetch top='{LookupPoolSize}'>
   <entity name='{target}'>
     <attribute name='{target}id'/>
-    <filter><condition attribute='statecode' operator='eq' value='0'/></filter>
+    {filterClause}
     <order attribute='modifiedon' descending='true'/>
   </entity>
 </fetch>";
