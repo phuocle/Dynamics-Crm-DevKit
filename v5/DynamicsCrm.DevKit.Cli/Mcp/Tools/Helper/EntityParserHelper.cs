@@ -30,12 +30,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 throw new ArgumentException("fields_json must be a non-empty JSON object.");
 
             var attrIndex = GetAttributeIndex(serviceClient, entityLogicalName);
+            var seenLogicalNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             foreach (var (key, jsonVal) in fields)
             {
                 var (fieldInput, targetEntityInput) = ParseFieldKey(key);
                 var attrMeta = ResolveAttribute(attrIndex, entityLogicalName, fieldInput);
                 var resolvedField = attrMeta.LogicalName;
+
+                // Fast-fail: two JSON keys that resolve to the same logical name
+                // would silently overwrite each other. Reject early.
+                if (!seenLogicalNames.Add(resolvedField))
+                    throw new ArgumentException(
+                        $"fields_json key '{key}' resolves to field '{resolvedField}', but a previous key already resolved to the same field. Duplicate field mapping is not allowed. Tip: Use get_tables(entity_name='{entityLogicalName}') to find unique field names.");
+
                 var targetEntity = ResolveTargetEntity(serviceClient, targetEntityInput);
 
                 if (jsonVal.ValueKind == JsonValueKind.Null || jsonVal.ValueKind == JsonValueKind.Undefined)

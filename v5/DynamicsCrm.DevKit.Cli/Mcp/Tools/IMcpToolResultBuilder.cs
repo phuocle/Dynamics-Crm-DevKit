@@ -23,6 +23,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         CallToolResult Success(string summary, object structured);
 
         /// <summary>
+        /// Return a partial-failure result: some records succeeded, some failed.
+        /// Text prefix is <c>[Partial]</c>; <c>IsError=true</c> so AI clients
+        /// can detect that not everything went well.
+        /// </summary>
+        /// <param name="summary">One-line human-readable summary.</param>
+        /// <param name="structured">Machine-readable result object (tool DTO, not error DTO).</param>
+        CallToolResult Partial(string summary, object structured);
+
+        /// <summary>
+        /// Return an all-failed result: every record in the batch failed.
+        /// Text prefix is <c>[Failed]</c>; <c>IsError=true</c>.
+        /// </summary>
+        /// <param name="summary">One-line human-readable summary.</param>
+        /// <param name="structured">Machine-readable result object (tool DTO, not error DTO).</param>
+        CallToolResult Failed(string summary, object structured);
+
+        /// <summary>
         /// Return an error result: a message, an optional hint for the AI/client,
         /// and optional structured details. The hint tells the caller what to do next.
         /// </summary>

@@ -177,7 +177,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (_options.DryRun)
                 {
                     var previewItems = elements.Length <= 5
-                        ? elements.Select((_, i) => new BatchCreateItem { Index = i, Status = "pending" }).ToList()
+                        ? elements.Select((_, i) => new BatchCreateItem { Index = i, Id = "", Status = "pending" }).ToList()
                         : null;
                     var preview = new BatchCreateResult
                     {
@@ -228,7 +228,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     if (parsedEntities[i].entity == null)
                     {
-                        preParseFailed.Add(new BatchCreateItem { Index = i, Status = "failed", Error = parsedEntities[i].error });
+                        preParseFailed.Add(new BatchCreateItem { Index = i, Id = "", Status = "failed", Error = parsedEntities[i].error });
                         continue;
                     }
                     currentChunk.Add((i, parsedEntities[i].entity));
@@ -264,7 +264,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var sortedItems = chunkResults.Concat(preParseFailed).OrderBy(x => x.Index).ToList();
                 var succeeded = sortedItems.Count(x => x.Status == "created");
                 var failed = sortedItems.Count(x => x.Status == "failed");
-                var failedItems = sortedItems.Where(x => x.Status == "failed").ToList();
 
                 // Build the warnings list shown in structured content: CSV header
                 // warnings + the default-parallelism notice + the bypass note.
@@ -298,7 +297,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ImportSequenceNumber = batchIsn,
                     Warnings = structuredWarnings.Count > 0 ? structuredWarnings : null,
                     Items = sortedItems.Count > 0 ? sortedItems : null,
-                    FailedItems = failedItems.Count > 0 ? failedItems : null,
                     Status = failed == 0 ? "created" : (succeeded == 0 ? "failed" : "partial")
                 };
 
@@ -309,7 +307,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (succeeded == 0)
                     summary = $"Failed to create any of {elements.Length} '{entityName}' record(s) ({failed} failed{chunkTag}{bypassTag}{isnTag}).";
 
-                return Success(summary, structured);
+                if (failed == 0)
+                    return Success(summary, structured);
+                if (succeeded == 0)
+                    return Failed(summary, structured);
+                return Partial(summary, structured);
             }
             catch (Exception ex)
             {
@@ -435,7 +437,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (!byIndex.TryGetValue(i, out var item) || item.Fault != null)
                     {
                         var err = item?.Fault?.Message ?? "No response returned for this item.";
-                        items.Add(new BatchCreateItem { Index = chunk[i].index, Status = "failed", Error = err });
+                        items.Add(new BatchCreateItem { Index = chunk[i].index, Id = "", Status = "failed", Error = err });
                     }
                     else
                     {
@@ -452,7 +454,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // in this chunk failed with the shared error. The caller still
                 // processes other chunks; only this chunk is lost.
                 foreach (var (index, _) in chunk)
-                    items.Add(new BatchCreateItem { Index = index, Status = "failed", Error = ex.Message });
+                    items.Add(new BatchCreateItem { Index = index, Id = "", Status = "failed", Error = ex.Message });
             }
             return items;
         }
@@ -529,8 +531,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (resolved.IsSuccess)
                 {
                     var attr = resolved.Value;
+                    // Fast-fail: if the same logical name was already mapped by a
+                    // previous column, two columns are writing to the same field —
+                    // ambiguous and data-corrupting. Reject the entire CSV.
+                    if (columnMap.Any(c => c.logicalName == attr.LogicalName))
+                        throw new InvalidOperationException(
+                            $"CSV header '{header}' (column {i + 1}) maps to field '{attr.LogicalName}', but a previous column already maps to the same field. Duplicate field mapping is not allowed. Tip: Use get_tables(entity_name='{entityName}') to find unique Display Names or logical names for each column.");
                     columnMap[i] = (i, attr.LogicalName, attr);
                     validColumns++;
+                }
+                else if (resolved.Status == ResolveStatus.Ambiguous)
+                {
+                    // Fast-fail on ambiguous header — do NOT skip and continue.
+                    throw new InvalidOperationException(resolved.Error);
                 }
                 else
                 {

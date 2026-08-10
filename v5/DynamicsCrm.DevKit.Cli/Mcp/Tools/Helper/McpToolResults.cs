@@ -22,6 +22,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         internal const string SuccessPrefix = "[Success]";
         internal const string ErrorPrefix = "[Error]";
         internal const string DryRunPrefix = "[DryRun]";
+        internal const string PartialPrefix = "[Partial]";
+        internal const string FailedPrefix = "[Failed]";
         internal const string HintLabel = "Hint";
 
         /// <summary>
@@ -31,6 +33,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         {
             Content = [new TextContentBlock { Text = $"{SuccessPrefix} {StripPrefix(summary, SuccessPrefix)}" }],
             StructuredContent = JsonSerializer.SerializeToElement(structured)
+        };
+
+        /// <summary>
+        /// Partial-failure result: some records succeeded, some failed.
+        /// Text prefix is <c>[Partial]</c>; <c>IsError=true</c> so AI clients
+        /// can detect that not everything went well. The structured payload
+        /// is the tool's own result DTO (not <see cref="McpErrorResult"/>),
+        /// preserving per-item details for programmatic inspection.
+        /// </summary>
+        internal static CallToolResult Partial(string summary, object structured) => new()
+        {
+            Content = [new TextContentBlock { Text = $"{PartialPrefix} {StripPrefix(summary, PartialPrefix)}" }],
+            StructuredContent = JsonSerializer.SerializeToElement(structured),
+            IsError = true
+        };
+
+        /// <summary>
+        /// All-failed result: every record in the batch failed.
+        /// Text prefix is <c>[Failed]</c>; <c>IsError=true</c>. The structured
+        /// payload is the tool's own result DTO so the caller can inspect
+        /// per-item errors.
+        /// </summary>
+        internal static CallToolResult Failed(string summary, object structured) => new()
+        {
+            Content = [new TextContentBlock { Text = $"{FailedPrefix} {StripPrefix(summary, FailedPrefix)}" }],
+            StructuredContent = JsonSerializer.SerializeToElement(structured),
+            IsError = true
         };
 
         /// <summary>

@@ -15,6 +15,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult Success(string summary, object structured) => McpToolResults.Success(summary, structured);
 
         /// <inheritdoc />
+        public CallToolResult Partial(string summary, object structured) => McpToolResults.Partial(summary, structured);
+
+        /// <inheritdoc />
+        public CallToolResult Failed(string summary, object structured) => McpToolResults.Failed(summary, structured);
+
+        /// <inheritdoc />
         public CallToolResult Error(string message, string hint = null, object details = null) => McpToolResults.Error(message, hint, details);
 
         /// <inheritdoc />

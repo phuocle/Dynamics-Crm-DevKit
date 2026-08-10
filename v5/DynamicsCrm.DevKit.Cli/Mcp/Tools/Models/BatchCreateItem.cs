@@ -9,7 +9,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public int Index { get; set; }
 
         [JsonPropertyName("id")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Id { get; set; }
 
         [JsonPropertyName("status")]

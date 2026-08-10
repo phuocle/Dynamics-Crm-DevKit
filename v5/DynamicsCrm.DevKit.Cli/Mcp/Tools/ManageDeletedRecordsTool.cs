@@ -353,9 +353,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var text = failed == 0
                 ? $"[Success] {logicalName}: Restored {restored}/{guids.Count} record(s)."
-                : $"[Partial] {logicalName}: Restored {restored}/{guids.Count} record(s), {failed} failed.";
+                : (restored == 0
+                    ? $"[Failed] {logicalName}: Restored 0/{guids.Count} record(s), {failed} failed."
+                    : $"[Partial] {logicalName}: Restored {restored}/{guids.Count} record(s), {failed} failed.");
 
-            return Success(text, structured);
+            if (failed == 0)
+                return Success(text, structured);
+            if (restored == 0)
+                return Failed(text, structured);
+            return Partial(text, structured);
         }
 
         private CallToolResult ExecuteStatus()
