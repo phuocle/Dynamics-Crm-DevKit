@@ -127,17 +127,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
 
                 HttpResponseMessage response;
-                if (trimmedUrl.StartsWith("$metadata", StringComparison.OrdinalIgnoreCase) && httpMethod == HttpMethod.Get)
-                {
-                    using var httpClient = new HttpClient();
-                    var orgUri = _serviceClient.ConnectedOrgUriActual;
-                    var apiUrl = $"{orgUri.Scheme}://{orgUri.Host}/api/data/v{_serviceClient.ConnectedOrgVersion.ToString(2)}/{trimmedUrl}";
-                    var request = new HttpRequestMessage(httpMethod, apiUrl);
-                    request.Headers.Add("Authorization", $"Bearer {_serviceClient.CurrentAccessToken}");
-                    request.Headers.Add("Accept", "application/xml");
-                    response = httpClient.SendAsync(request).GetAwaiter().GetResult();
-                }
-                else if (httpMethod != HttpMethod.Get)
+                if (httpMethod != HttpMethod.Get)
                 {
                     response = DataverseWebApiMutationExecutor.Execute(
                         _context,
@@ -149,7 +139,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 else
                 {
-                    response = _serviceClient.ExecuteWebRequest(httpMethod, trimmedUrl, requestBody, customHeaders, "application/json");
+                    // $metadata is XML; all other GETs default to JSON.
+                    // Route every request through ServiceClient.ExecuteWebRequest so that
+                    // CallerId (impersonation), auth headers, and the trusted org base URL
+                    // are applied consistently — never use a raw HttpClient.
+                    var accept = trimmedUrl.StartsWith("$metadata", StringComparison.OrdinalIgnoreCase)
+                        ? "application/xml"
+                        : "application/json";
+                    response = _serviceClient.ExecuteWebRequest(httpMethod, trimmedUrl, requestBody, customHeaders, accept);
                 }
                 var statusCode = (int)response.StatusCode;
                 var reasonPhrase = response.ReasonPhrase ?? response.StatusCode.ToString();

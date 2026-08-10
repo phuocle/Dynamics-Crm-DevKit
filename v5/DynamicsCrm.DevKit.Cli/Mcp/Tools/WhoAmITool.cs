@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -20,10 +21,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class WhoAmITool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
+        private readonly McpExecutionContext _context;
 
-        public WhoAmITool(ServiceClient serviceClient)
+        public WhoAmITool(ServiceClient serviceClient, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
+            _context = context;
         }
 
         [McpServerTool(Name = "whoami", Title = "Get current user and environment info",
@@ -65,6 +68,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 // Security roles
                 PopulateRoles(structured, response.UserId);
+
+                // Impersonation info (from session policy, not from AI)
+                if (_context?.ImpersonatedUser != null)
+                    structured.ImpersonatedUser = _context.ImpersonatedUser;
 
                 // Empty lists carry no meaning here; serialize as absent, not [].
                 if (structured.Roles?.Count == 0) structured.Roles = null;
@@ -172,6 +179,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.Append(". ").Append(r.Roles.Count).Append(" security role(s)");
             if (r.Warnings is { Count: > 0 })
                 sb.Append(". ").Append(r.Warnings.Count).Append(" warning(s)");
+            if (!string.IsNullOrEmpty(r.ImpersonatedUser))
+                sb.Append(". Impersonating: ").Append(r.ImpersonatedUser);
             sb.Append('.');
             return sb.ToString();
         }

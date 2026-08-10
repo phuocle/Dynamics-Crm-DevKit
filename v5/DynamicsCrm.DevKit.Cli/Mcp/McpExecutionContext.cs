@@ -30,14 +30,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
         public bool MutationsBlocked { get; }
 
         /// <summary>
+        /// Display name of the impersonated user (e.g. "John Doe (john@contoso.com)")
+        /// when the server was started with <c>--as-user</c>, or <c>null</c> when
+        /// impersonation is not active. Used for audit/log output only — the actual
+        /// <c>CallerId</c> is set on the <c>ServiceClient</c> at host startup.
+        /// </summary>
+        public string? ImpersonatedUser { get; }
+
+        /// <summary>
         /// Create the execution context from the startup policy.
         /// </summary>
         /// <param name="mutationsBlocked">
         /// Pass <c>true</c> when the server was started with <c>--dry-run</c>.
         /// </param>
-        public McpExecutionContext(bool mutationsBlocked)
+        /// <param name="impersonatedUser">
+        /// Display name of the impersonated user when <c>--as-user</c> is active, or <c>null</c>.
+        /// </param>
+        public McpExecutionContext(bool mutationsBlocked, string? impersonatedUser = null)
         {
             MutationsBlocked = mutationsBlocked;
+            ImpersonatedUser = impersonatedUser;
         }
 
         /// <summary>

@@ -12,11 +12,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
     /// </summary>
     internal sealed class McpExecutionPolicy
     {
-        internal McpExecutionPolicy(bool mutationsBlocked)
+        internal McpExecutionPolicy(bool mutationsBlocked, string impersonatedUserDisplay = null)
         {
             MutationsBlocked = mutationsBlocked;
             Options = new McpDryRunOptions { DryRun = mutationsBlocked };
-            Context = new McpExecutionContext(mutationsBlocked);
+            Context = new McpExecutionContext(mutationsBlocked, impersonatedUserDisplay);
         }
 
         internal bool MutationsBlocked { get; }

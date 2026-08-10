@@ -223,6 +223,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }, async (chunk, ct) =>
                     {
                         using var worker = _serviceClient.Clone() ?? _serviceClient;
+                        // Propagate CallerId (impersonation) to cloned connections.
+                        // ServiceClient.Clone() may not copy CallerId, so set it explicitly.
+                        worker.CallerId = _serviceClient.CallerId;
                         foreach (var item in await ExecuteChunkAsync(worker, chunk, bypass_custom_logic, ct))
                             chunkResults.Add(item);
                     });

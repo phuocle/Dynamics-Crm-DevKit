@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using ModelContextProtocol.Server;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -85,7 +86,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             ["all"] = 3,
         };
 
-        public async Task RunAsync(string category = "all", bool dryRun = false, string instanceName = null)
+        public async Task RunAsync(string category = "all", bool dryRun = false, string instanceName = null,
+            Guid? impersonatedUserId = null, string impersonatedUserDisplay = null)
         {
             var normalizedCategory = category.Trim().ToLowerInvariant();
             var requestedLevel = CategoryLevel.TryGetValue(normalizedCategory, out var lvl) ? lvl : 3;
@@ -101,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
 
             builder.Services.AddSingleton(_serviceClient);
             builder.Services.AddSingleton(new MetadataService(_serviceClient));
-            var executionPolicy = new McpExecutionPolicy(mutationsBlocked: dryRun);
+            var executionPolicy = new McpExecutionPolicy(mutationsBlocked: dryRun, impersonatedUserDisplay: impersonatedUserDisplay);
             builder.Services.AddSingleton(executionPolicy);
             builder.Services.AddSingleton(executionPolicy.Options);
             builder.Services.AddSingleton(executionPolicy.Context);
@@ -123,7 +125,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                         $"Connected to Dataverse environment: {_serviceClient.ConnectedOrgUriActual} | " +
                         $"Org: {_serviceClient.ConnectedOrgFriendlyName} ({_serviceClient.ConnectedOrgUniqueName}) | " +
                         $"Version: {_serviceClient.ConnectedOrgVersion} | " +
-                        $"Category: {displayCategory} ({toolCount} tools)";
+                        $"Category: {displayCategory} ({toolCount} tools)" +
+                        (string.IsNullOrEmpty(impersonatedUserDisplay)
+                            ? ""
+                            : $" | Impersonating: {impersonatedUserDisplay} (CallerId set server-side)");
                 })
                 .WithStdioServerTransport()
                 .WithToolsFromAssembly()

@@ -77,5 +77,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("warnings")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> Warnings { get; set; } = new();
+
+        [JsonPropertyName("impersonatedUser")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ImpersonatedUser { get; set; }
     }
 }

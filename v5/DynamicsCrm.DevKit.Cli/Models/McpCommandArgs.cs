@@ -32,5 +32,9 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("Prevent mutating operations from executing. Read operations still work normally.")]
         [DefaultValue(false)]
         public bool DryRun { get; set; }
+
+        [CommandOption("--as-user")]
+        [Description("Impersonate this user for the entire MCP session. Accepts a systemuserid GUID or email. The connecting user must be a System Administrator (or have prvActOnBehalfOfAnotherUser assigned directly).")]
+        public string AsUser { get; set; }
     }
 }

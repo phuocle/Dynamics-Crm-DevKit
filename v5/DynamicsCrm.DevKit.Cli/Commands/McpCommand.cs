@@ -1,7 +1,10 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.ConnectionBuilder;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Server;
 using Spectre.Console.Cli;
 using System;
@@ -45,10 +48,40 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     LogInfo("DRY-RUN MODE: Mutating operations will NOT execute.");
                 if (!string.IsNullOrEmpty(settings.Name))
                     LogInfo($"Instance: {settings.Name}");
+
+                // ── Impersonation (--as-user) ────────────────────────────────────
+                // Resolve and validate before starting the server. If the connecting
+                // user is not a System Administrator (or lacks prvActOnBehalfOfAnotherUser),
+                // the setting is IGNORED with a warning rather than failing the server.
+                Guid? impersonatedUserId = null;
+                string impersonatedUserDisplay = null;
+                if (!string.IsNullOrWhiteSpace(settings.AsUser))
+                {
+                    if (RoleGateHelper.IsSystemAdministrator(serviceClient))
+                    {
+                        impersonatedUserId = ResolveAsUser(serviceClient, settings.AsUser, out impersonatedUserDisplay);
+                        if (impersonatedUserId.HasValue)
+                        {
+                            serviceClient.CallerId = impersonatedUserId.Value;
+                            LogInfo($"Impersonating: {impersonatedUserDisplay}");
+                        }
+                        else
+                        {
+                            LogInfo($"WARNING: --as-user '{settings.AsUser}' was ignored. Target user could not be resolved or is disabled. MCP server will run as the connecting user.");
+                        }
+                    }
+                    else
+                    {
+                        var roles = RoleGateHelper.GetCurrentRoleNames(serviceClient);
+                        var rolesList = roles.Count > 0 ? string.Join(", ", roles) : "(none)";
+                        LogInfo($"WARNING: --as-user '{settings.AsUser}' was ignored. The connecting user is not a System Administrator (roles: {rolesList}). MCP server will run as the connecting user.");
+                    }
+                }
+
                 LogInfo($"Starting MCP server v{Shared.Const.Version}...");
 
                 var host = new Mcp.McpServerHost(serviceClient);
-                await host.RunAsync(settings.Category, settings.DryRun, settings.Name);
+                await host.RunAsync(settings.Category, settings.DryRun, settings.Name, impersonatedUserId, impersonatedUserDisplay);
 
                 return 0;
             }
@@ -196,6 +229,120 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         {
             Stderr.WriteLine($"[DevKit MCP ERROR] {message}");
             Stderr.Flush();
+        }
+
+        // ── Impersonation helpers ──────────────────────────────────────────────
+
+        /// <summary>
+        /// Resolve <c>--as-user</c> to a <c>systemuserid</c> GUID and validate the
+        /// target user. Returns <c>null</c> if the user cannot be resolved, does not
+        /// exist, or is disabled. Never throws — the caller checks for <c>null</c>.
+        /// Privilege check is done separately via <see cref="RoleGateHelper.IsSystemAdministrator"/>
+        /// before calling this method.
+        /// </summary>
+        private static Guid? ResolveAsUser(ServiceClient serviceClient, string asUser, out string display)
+        {
+            display = null;
+
+            // Step 1: Resolve the target user (GUID or email).
+            Guid? targetUserId;
+            if (Guid.TryParse(asUser.Trim(), out var parsedGuid))
+            {
+                targetUserId = parsedGuid;
+            }
+            else
+            {
+                // Treat as email — resolve to systemuserid.
+                targetUserId = ResolveUserByEmail(serviceClient, asUser.Trim(), out var emailFullName);
+                if (!targetUserId.HasValue)
+                {
+                    LogInfo($"No systemuser found with email '{asUser}'. Check the email address or use a systemuserid GUID.");
+                    return null;
+                }
+            }
+
+            // Step 2: Validate the target user exists and is active.
+            if (!ValidateTargetUser(serviceClient, targetUserId.Value, out var fullName, out var email, out var isDisabled))
+            {
+                LogInfo($"Impersonation target user '{targetUserId.Value}' not found or not accessible.");
+                return null;
+            }
+
+            display = !string.IsNullOrEmpty(fullName)
+                ? $"{fullName} ({email ?? asUser})"
+                : (email ?? asUser);
+
+            if (isDisabled)
+            {
+                LogInfo($"Impersonation target user '{display}' is disabled. Cannot impersonate a disabled user.");
+                return null;
+            }
+
+            return targetUserId;
+        }
+
+        /// <summary>
+        /// Resolve an email address to a <c>systemuserid</c> GUID.
+        /// Returns <c>null</c> if no user or multiple users found. Never throws.
+        /// </summary>
+        private static Guid? ResolveUserByEmail(ServiceClient serviceClient, string email, out string fullName)
+        {
+            fullName = null;
+            try
+            {
+                var query = new QueryExpression("systemuser")
+                {
+                    ColumnSet = new ColumnSet("systemuserid", "fullname"),
+                    TopCount = 2
+                };
+                query.Criteria.AddCondition("internalemailaddress", ConditionOperator.Equal, email);
+
+                var result = serviceClient.RetrieveMultiple(query);
+                if (result.Entities.Count == 0)
+                    return null;
+
+                if (result.Entities.Count > 1)
+                {
+                    LogInfo($"Multiple systemusers found with email '{email}'. Use a systemuserid GUID instead to disambiguate.");
+                    return null;
+                }
+
+                fullName = result.Entities[0].GetAttributeValue<string>("fullname");
+                return result.Entities[0].Id;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Validate that the target user exists and is active.
+        /// Uses <c>RetrieveMultiple</c> (not <c>Retrieve</c>) so a missing user
+        /// returns an empty collection instead of throwing. Never throws.
+        /// </summary>
+        private static bool ValidateTargetUser(ServiceClient serviceClient, Guid userId, out string fullName, out string email, out bool isDisabled)
+        {
+            fullName = null;
+            email = null;
+            isDisabled = false;
+
+            var query = new QueryExpression("systemuser")
+            {
+                ColumnSet = new ColumnSet("fullname", "internalemailaddress", "isdisabled"),
+                TopCount = 1
+            };
+            query.Criteria.AddCondition("systemuserid", ConditionOperator.Equal, userId);
+
+            var result = serviceClient.RetrieveMultiple(query);
+            if (result?.Entities == null || result.Entities.Count == 0)
+                return false;
+
+            var user = result.Entities[0];
+            fullName = user.GetAttributeValue<string>("fullname");
+            email = user.GetAttributeValue<string>("internalemailaddress");
+            isDisabled = user.GetAttributeValue<bool?>("isdisabled") ?? false;
+            return true;
         }
 
         private void PrintSetupGuide()
