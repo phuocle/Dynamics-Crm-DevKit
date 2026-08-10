@@ -47,6 +47,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<BatchCreateItem> FailedItems { get; set; }
 
+        [JsonPropertyName("importSequenceNumber")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? ImportSequenceNumber { get; set; }
+
         [JsonPropertyName("status")]
         public string Status { get; set; }
     }

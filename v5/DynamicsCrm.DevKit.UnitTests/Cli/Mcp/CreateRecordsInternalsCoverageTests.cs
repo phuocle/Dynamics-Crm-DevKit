@@ -1,6 +1,7 @@
 using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
@@ -132,6 +133,67 @@ public class CreateRecordsInternalsCoverageTests
         Assert.IsNull(InvokeConvert(tool, new ImageAttributeMetadata(), "image", "entityimage", warnings, cache));
         Assert.IsTrue(warnings.Exists(w => w.Contains("no target entity")));
         Assert.IsTrue(warnings.Exists(w => w.Contains("not supported")));
+    }
+
+    // ── ImportSequenceNumber auto-fill tests ──────────────────────────────
+
+    /// <summary>
+    /// ApplyBatchImportSequenceNumber fills the ISN field on entities that do
+    /// not already have it set. Entities with a user-provided ISN keep their value.
+    /// </summary>
+    [TestMethod]
+    public void ApplyBatchImportSequenceNumber_FillsMissingPreservesUserValue()
+    {
+        var parsed = new (Entity entity, string error)[]
+        {
+            (new Entity("account"), (string)null!),
+            (new Entity("account") { ["importsequencenumber"] = 4567 }, (string)null!),
+            (null!, "parse error"),
+            (new Entity("account"), (string)null!),
+        };
+
+        InvokeStatic("ApplyBatchImportSequenceNumber", parsed, 999990);
+
+        Assert.AreEqual(999990, parsed[0].entity!["importsequencenumber"]);
+        Assert.AreEqual(4567, parsed[1].entity!["importsequencenumber"]);
+        Assert.IsNull(parsed[2].entity);
+        Assert.AreEqual(999990, parsed[3].entity!["importsequencenumber"]);
+    }
+
+    /// <summary>
+    /// ApplyBatchImportSequenceNumber does not overwrite an explicitly-set
+    /// ISN of 0 (edge case: user sets it to 0, which is a valid value).
+    /// Entity.Contains returns true for explicitly set values including 0.
+    /// </summary>
+    [TestMethod]
+    public void ApplyBatchImportSequenceNumber_PreservesExplicitZero()
+    {
+        var parsed = new (Entity entity, string error)[]
+        {
+            (new Entity("account") { ["importsequencenumber"] = 0 }, (string)null!),
+        };
+
+        InvokeStatic("ApplyBatchImportSequenceNumber", parsed, 999990);
+
+        Assert.AreEqual(0, parsed[0].entity!["importsequencenumber"]);
+    }
+
+    /// <summary>
+    /// ApplyBatchImportSequenceNumber handles an all-null array (all parse
+    /// failures) without throwing.
+    /// </summary>
+    [TestMethod]
+    public void ApplyBatchImportSequenceNumber_AllNulls_DoesNotThrow()
+    {
+        var parsed = new (Entity entity, string error)[]
+        {
+            (null!, "error 1"),
+            (null!, "error 2"),
+        };
+
+        InvokeStatic("ApplyBatchImportSequenceNumber", parsed, 999990);
+        Assert.IsNull(parsed[0].entity);
+        Assert.IsNull(parsed[1].entity);
     }
 
     private static void AssertValue(CreateRecordsTool tool, AttributeMetadata attr, string cellValue, string logicalName,

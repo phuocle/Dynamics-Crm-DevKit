@@ -40,6 +40,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private const int MaxRecords = 5000;
         private const int MaxParallelism = 52;
 
+        // ── ImportSequenceNumber auto-fill ──────────────────────────────────
+        // OOB Dataverse stamps importsequencenumber on every record during data
+        // import/migration so the batch can be queried and rolled back as a unit.
+        // The field is Integer (Int32, max 2,147,483,647), create-only, present on
+        // virtually all entities. We auto-fill it for every create_records batch:
+        //
+        //   batchValue = max(IsnBaseline, maxInTable + 1)
+        //
+        // All records in one tool call share the same batchValue (so they form a
+        // queryable group). If the user explicitly provides importsequencenumber
+        // on a record, that value wins for that record — no duplicate checking.
+        // The batchValue is returned in the result so the user can query back:
+        //   <condition attribute='importsequencenumber' operator='eq' value='999990'/>
+        private const string IsnLogicalName = "importsequencenumber";
+        private const int IsnBaseline = 999990;
+
         [McpServerTool(Name = "create_records", Title = "Create multiple records in parallel",
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(BatchCreateResult)),
@@ -54,7 +70,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- manage_record → single-record create/update/delete/associate/disassociate\n" +
             "- search_records / execute_fetchxml → verify created records\n\n" +
             "Field syntax: polymorphic lookup 'field@targetentity' (e.g. 'customerid@account'); activity parties (to/from/cc/bcc/requiredattendees/organizer/customers/resources) are a JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"} (single object auto-wrapped; do NOT set participationtypemask). For single-record CRUD → manage_record.\n\n" +
-            "BYPASS: bypass_custom_logic=true sets BypassBusinessLogicExecution=CustomSync,CustomAsync so sync+async plugins/workflows do NOT run for this create. Default false. Requires the System Administrator role (prvBypassCustomBusinessLogic privilege); rejected early if the calling user lacks it. Use for bulk seed/data-load where custom logic would slow or block creates.")]
+            "BYPASS: bypass_custom_logic=true sets BypassBusinessLogicExecution=CustomSync,CustomAsync so sync+async plugins/workflows do NOT run for this create. Default false. Requires the System Administrator role (prvBypassCustomBusinessLogic privilege); rejected early if the calling user lacks it. Use for bulk seed/data-load where custom logic would slow or block creates.\n\n" +
+            "IMPORT_SEQUENCE_NUMBER: Every record in the batch is auto-stamped with the same importsequencenumber value so the entire batch can be queried and bulk-deleted as a unit (e.g. <condition attribute='importsequencenumber' operator='eq' value='999990'/>). The value is computed as max(999990, maxInTable+1) and returned in the result as importSequenceNumber. If a record explicitly provides importsequencenumber, that value wins for that record (no duplicate checking). Set importsequencenumber on every record to override the auto-fill entirely.")]
         public async Task<CallToolResult> create_records(
             [Description(
                 "Entity Display Name or logical name (Display Name resolved first)."
@@ -130,6 +147,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     : max_parallelism;
                 parallelism = Math.Clamp(parallelism, 1, MaxParallelism);
 
+                // Parse all entities up front. A field/type error in one record
+                // must not abort the batch — collect per-record parse failures so
+                // they surface as failed items alongside successful creates.
+                // Parsing happens before the dry-run check so the ISN auto-fill
+                // can report the same batch value in both dry-run and live mode.
+                var parsedEntities = new (Entity entity, string error)[elements.Length];
+                for (var i = 0; i < elements.Length; i++)
+                {
+                    try
+                    {
+                        parsedEntities[i] = (EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, elements[i].GetRawText()), null);
+                    }
+                    catch (Exception ex)
+                    {
+                        parsedEntities[i] = (null, ex.Message);
+                    }
+                }
+
+                // Compute the batch importsequencenumber and auto-fill it on
+                // every successfully-parsed entity that does not already have one.
+                // User-provided values always win (no duplicate checking).
+                var (batchIsn, isnWarning) = ComputeBatchImportSequenceNumber(entityName);
+                if (batchIsn.HasValue)
+                    ApplyBatchImportSequenceNumber(parsedEntities, batchIsn.Value);
+                if (isnWarning != null)
+                    csvWarnings.Add(isnWarning);
+
                 if (_options.DryRun)
                 {
                     var previewItems = elements.Length <= 5
@@ -146,28 +190,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         UsedDefaultParallelism = usedDefault,
                         InputFormat = inputFormat,
                         BypassCustomLogic = bypass_custom_logic ? true : null,
+                        ImportSequenceNumber = batchIsn,
                         Items = previewItems,
                         Status = "not_executed"
                     };
                     return DryRun(
-                        $"Would CREATE {elements.Length} '{entityName}' record(s) (parallelism={parallelism}, input={inputFormat}, bypassCustomLogic={bypass_custom_logic.ToString().ToLowerInvariant()}).",
+                        $"Would CREATE {elements.Length} '{entityName}' record(s) (parallelism={parallelism}, input={inputFormat}, bypassCustomLogic={bypass_custom_logic.ToString().ToLowerInvariant()}{(batchIsn.HasValue ? $", importSequenceNumber={batchIsn}" : "")}).",
                         preview);
-                }
-
-                // Parse all entities up front. A field/type error in one record
-                // must not abort the batch — collect per-record parse failures so
-                // they surface as failed items alongside successful creates.
-                var parsedEntities = new (Entity entity, string error)[elements.Length];
-                for (var i = 0; i < elements.Length; i++)
-                {
-                    try
-                    {
-                        parsedEntities[i] = (EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, elements[i].GetRawText()), null);
-                    }
-                    catch (Exception ex)
-                    {
-                        parsedEntities[i] = (null, ex.Message);
-                    }
                 }
 
                 // Group parsed entities into chunks of ~100 records and send each
@@ -266,6 +295,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     UsedDefaultParallelism = usedDefault,
                     InputFormat = inputFormat,
                     BypassCustomLogic = bypass_custom_logic ? true : null,
+                    ImportSequenceNumber = batchIsn,
                     Warnings = structuredWarnings.Count > 0 ? structuredWarnings : null,
                     Items = sortedItems.Count > 0 ? sortedItems : null,
                     FailedItems = failedItems.Count > 0 ? failedItems : null,
@@ -274,15 +304,82 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var bypassTag = bypass_custom_logic ? ", bypass=on" : "";
                 var chunkTag = chunkCount > 0 ? $", {chunkCount} chunk(s)" : "";
-                var summary = $"Created {succeeded}/{elements.Length} '{entityName}' record(s) in {durationSeconds}s ({batchedParallelism} concurrent{chunkTag}{bypassTag}).";
+                var isnTag = batchIsn.HasValue ? $", importSequenceNumber={batchIsn}" : "";
+                var summary = $"Created {succeeded}/{elements.Length} '{entityName}' record(s) in {durationSeconds}s ({batchedParallelism} concurrent{chunkTag}{bypassTag}{isnTag}).";
                 if (succeeded == 0)
-                    summary = $"Failed to create any of {elements.Length} '{entityName}' record(s) ({failed} failed{chunkTag}{bypassTag}).";
+                    summary = $"Failed to create any of {elements.Length} '{entityName}' record(s) ({failed} failed{chunkTag}{bypassTag}{isnTag}).";
 
                 return Success(summary, structured);
             }
             catch (Exception ex)
             {
                 return ThrowException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Computes the batch importsequencenumber: max(IsnBaseline, maxInTable + 1).
+        /// Queries the entity for the highest existing importsequencenumber via
+        /// FetchXML aggregate. Returns null (with a warning) if the entity does not
+        /// have the field or the query fails — the batch proceeds without auto-fill.
+        /// </summary>
+        private (int? value, string warning) ComputeBatchImportSequenceNumber(string entityName)
+        {
+            try
+            {
+                var metadata = LoadEntityMetadata(entityName);
+                if (metadata == null)
+                    return (null, $"Could not load metadata for '{entityName}'; importsequencenumber auto-fill skipped.");
+
+                var hasIsn = metadata.Attributes.Any(a =>
+                    a.LogicalName.Equals(IsnLogicalName, StringComparison.OrdinalIgnoreCase));
+                if (!hasIsn)
+                    return (null, null); // entity has no ISN field — silently skip, not an error
+
+                var fetchXml = $@"<fetch aggregate='true'>
+  <entity name='{entityName}'>
+    <attribute name='{IsnLogicalName}' aggregate='max' alias='max_isn' />
+  </entity>
+</fetch>";
+
+                var results = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                if (results?.Entities == null || results.Entities.Count == 0)
+                    return (IsnBaseline, null);
+
+                var alias = results.Entities[0].Contains("max_isn")
+                    ? results.Entities[0]["max_isn"]
+                    : null;
+
+                // AliasedValue wraps the aggregate result
+                if (alias is AliasedValue av)
+                    alias = av.Value;
+
+                if (alias == null || alias is int maxInTable && maxInTable == 0)
+                    return (IsnBaseline, null);
+
+                var maxVal = Convert.ToInt32(alias, CultureInfo.InvariantCulture);
+                var computed = Math.Max(IsnBaseline, maxVal + 1);
+                return (computed, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, $"Failed to query max importsequencenumber for '{entityName}': {ex.Message}. Auto-fill skipped.");
+            }
+        }
+
+        /// <summary>
+        /// Applies the batch importsequencenumber to every successfully-parsed entity
+        /// that does not already have the field set. User-provided values are
+        /// preserved — this method only fills in entities where the key is absent.
+        /// </summary>
+        private static void ApplyBatchImportSequenceNumber(
+            (Entity entity, string error)[] parsedEntities, int batchIsn)
+        {
+            foreach (var (entity, _) in parsedEntities)
+            {
+                if (entity == null) continue;
+                if (!entity.Contains(IsnLogicalName))
+                    entity[IsnLogicalName] = batchIsn;
             }
         }
 
