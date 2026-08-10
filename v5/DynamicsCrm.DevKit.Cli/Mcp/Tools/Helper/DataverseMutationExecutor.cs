@@ -118,6 +118,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         }
 
         /// <summary>
+        /// Execute a mutating <see cref="OrganizationRequest"/> asynchronously,
+        /// asserting mutation is allowed first. Use for requests that carry
+        /// optional parameters (e.g. <c>BypassBusinessLogicExecution</c>) which
+        /// only work via <c>Execute(CreateRequest/UpdateRequest)</c>, not the
+        /// convenience <c>Create</c>/<c>Update</c> overloads.
+        /// </summary>
+        internal static async Task<OrganizationResponse> ExecuteAsync(
+            McpExecutionContext context,
+            Microsoft.PowerPlatform.Dataverse.Client.ServiceClient serviceClient,
+            OrganizationRequest request,
+            CancellationToken cancellationToken)
+        {
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            context.AssertMutationAllowed($"ExecuteAsync {request?.RequestName ?? "(unknown)"}");
+            return await serviceClient.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Execute a read-only <see cref="OrganizationRequest"/>. This is allowed in
         /// dry-run mode because it does not change Dataverse state. Only use this for
         /// requests that are genuinely read-only (Retrieve, RetrieveMultiple,

@@ -6,6 +6,9 @@
 
 - Dùng solution ALl-IN-ONE (all_in_one)
 - Không được action, touch, update, create với table: "All in One" (all_in_one), đây là rule, là luật, table này chứa nhiều thông tin để dùng cho các test case khác.
+- Bạn hãy quên (forget) dry-run nhé, các task bạn làm và test KHÔNG bao giờ test được dry-run vì nó là setting khi mcp run mà, ko có cách nào truyền thông số cả.
+- Mỗi lần bạn làm xong 1 TODO task do bạn tạo ra, bạn có sure là bạn có nhớ lại RULES của file này không ? nếu không hãy đọc lại.
+- DOCS này yêu cầu bạn FULL TEST => ĐÚNG. Tuy nhiên khi bạn làm xong task, đến khi run @build-cli.md OK, bạn phải dừng lại (STOP) hỏi aP review trước khi real TEST.
 
 ## 1. Tools còn lại
 
@@ -58,6 +61,7 @@
 3. Apply rules §2 + §3
 4. dotnet build DynamicsCrm.DevKit.Cli → 0 errors, 0 warnings
 5. Release script → MCP mới; lấy N từ devkit mcp --tools
+5a. Dừng lại, hỏi anh Phước verify mọi thứ bạn đã thay đổi, anh P đồng ý làm làm bước 6, aP có yêu cầu gì thêm thì làm theo yêu cầu. Làm xong yêu cầu thì đọc lại file này.
 6. Test thật org 🟢DEVKITV4: happy + alternate mode + 2–3 error paths + dry-run
 7. Test-call testcall/{N}.{tool_name}.md — 4 H1: Tool description / Input tool call /
    Output tool call / Kết quả AI tổng hợp; raw output đầy đủ, không "rút gọn", không secret

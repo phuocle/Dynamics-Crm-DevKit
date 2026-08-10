@@ -24,9 +24,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public int Parallelism { get; set; }
 
         [JsonPropertyName("usedDefaultParallelism")]
-        public bool UsedDefaultParallelism { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? UsedDefaultParallelism { get; set; }
+
+        [JsonPropertyName("inputFormat")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string InputFormat { get; set; }
+
+        [JsonPropertyName("bypassCustomLogic")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? BypassCustomLogic { get; set; }
+
+        [JsonPropertyName("warnings")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> Warnings { get; set; }
 
         [JsonPropertyName("items")]
-        public List<BatchCreateItem> Items { get; set; } = [];
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<BatchCreateItem> Items { get; set; }
+
+        [JsonPropertyName("failedItems")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<BatchCreateItem> FailedItems { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
     }
 }

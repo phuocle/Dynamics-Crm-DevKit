@@ -1,4 +1,4 @@
-﻿using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -44,11 +44,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(BatchCreateResult)),
         Description(
-            "Bulk create Dataverse records in parallel. Max 5000/call. Partial failures: successes committed, failures reported per-item.\n" +
-            "records_json: inline JSON array, .json path, or .csv path (Display Name headers).\n" +
-            "Polymorphic lookup: 'field@targetentity' (e.g. 'customerid@account'). Activity parties (to, from, cc, bcc, requiredattendees, optionalattendees, organizer, customers, resources): JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Single object auto-wrapped. Optional 'addressused' for email/phone override. Do NOT set participationtypemask — Dataverse sets it.\n" +
-            "CSV lookup-by-name: exactly 1 match → GUID; 0 or 2+ matches → skipped with warning.\n" +
-            "For single-record CRUD → manage_record.")]
+            "Bulk create Dataverse records in parallel (max 5000/call). Partial failures: successes committed, failures reported per-item. Input: inline JSON array, .json path, or .csv path (Display Name headers).\n\n" +
+            "WHEN TO USE:\n" +
+            "- Seed many records at once (accounts, contacts, tasks) or import from CSV\n" +
+            "- Pipe generate_demo_data output file (.json) into records_json\n" +
+            "- High-throughput parallel creates (server hints concurrency when max_parallelism=0)\n\n" +
+            "RELATED TOOLS:\n" +
+            "- generate_demo_data → produce JSON to pipe into records_json\n" +
+            "- manage_record → single-record create/update/delete/associate/disassociate\n" +
+            "- search_records / execute_fetchxml → verify created records\n\n" +
+            "Field syntax: polymorphic lookup 'field@targetentity' (e.g. 'customerid@account'); activity parties (to/from/cc/bcc/requiredattendees/organizer/customers/resources) are a JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"} (single object auto-wrapped; do NOT set participationtypemask). For single-record CRUD → manage_record.\n\n" +
+            "BYPASS: bypass_custom_logic=true sets BypassBusinessLogicExecution=CustomSync,CustomAsync so sync+async plugins/workflows do NOT run for this create. Default false. Requires the System Administrator role (prvBypassCustomBusinessLogic privilege); rejected early if the calling user lacks it. Use for bulk seed/data-load where custom logic would slow or block creates.")]
         public async Task<CallToolResult> create_records(
             [Description(
                 "Entity Display Name or logical name (Display Name resolved first)."
@@ -58,46 +64,65 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string records_json,
             [Description(
                 "Concurrent requests. 0 = server hint. Clamped 1-52. Use 1-2 for on-prem."
-            )] int max_parallelism = 0)
+            )] int max_parallelism = 0,
+            [Description(
+                "Bypass custom sync+async plugins/workflows (BypassBusinessLogicExecution=CustomSync,CustomAsync). Default false. Requires System Administrator role; rejected early otherwise. Use for bulk data load where plugins would slow/block creates."
+            )] bool bypass_custom_logic = false)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(entity_name))
-                    return Error("Error: entity_name is required.");
+                    return Error("entity_name is required.");
 
                 if (string.IsNullOrWhiteSpace(records_json))
-                    return Error("Error: records_json is required. Provide a JSON array, .json file path, or .csv file path.");
+                    return Error("records_json is required. Provide a JSON array, .json file path, or .csv file path.");
+
+                // Bypass privilege gate: BypassBusinessLogicExecution requires the
+                // prvBypassCustomBusinessLogic privilege, granted to the System
+                // Administrator role by default. Re-query role membership (no cache)
+                // and reject early so we never build the request only to have the
+                // server reject it. bypass=false needs no check.
+                if (bypass_custom_logic && !RoleGateHelper.IsSystemAdministrator(_serviceClient))
+                {
+                    var haveRoles = RoleGateHelper.GetCurrentRoleNames(_serviceClient);
+                    var haveList = haveRoles.Count > 0
+                        ? string.Join(", ", haveRoles)
+                        : "(no roles assigned)";
+                    var requiredRoleName = DynamicsCrm.DevKit.Shared.Const.SystemAdministratorRoleName;
+                    return Error(
+                        $"bypass_custom_logic=true requires the '{requiredRoleName}' role (prvBypassCustomBusinessLogic privilege). The calling user does not have it.",
+                        $"Ask a System Administrator to assign the '{requiredRoleName}' role to your user, then retry with bypass_custom_logic=true. Current roles on the calling user: {haveList}.");
+                }
 
                 var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "create_records");
                 if (!entityResult.IsSuccess)
-                    return Error($"Error: {entityResult.Error}");
+                    return Error(entityResult.Error);
                 var entityName = entityResult.Value.LogicalName;
 
                 var csvWarnings = new List<string>();
-                var resolved = ResolveRecordsInput(records_json, entityName, csvWarnings, deleteInput: !_options.DryRun);
+                var (resolved, inputFormat) = ResolveRecordsInput(records_json, entityName, csvWarnings, deleteInput: !_options.DryRun);
                 if (resolved == null)
                 {
                     var trimmed = records_json.Trim();
                     if (trimmed.EndsWith(".csv", StringComparison.OrdinalIgnoreCase) || trimmed.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
-                        return Error($"Error: File not found: {trimmed}");
+                        return Error($"File not found: {trimmed}");
                     return Error(
-                        "Error: Failed to resolve records_json input.\n" +
-                        "Valid formats: inline JSON array, .json file path, or .csv file path.");
+                        "Failed to resolve records_json input. Valid formats: inline JSON array, .json file path, or .csv file path.");
                 }
 
                 JsonElement[] elements;
                 var root = JsonSerializer.Deserialize<JsonElement>(resolved);
 
                 if (root.ValueKind != JsonValueKind.Array)
-                    return Error("Error: records_json must be a JSON array.");
+                    return Error("records_json must be a JSON array.");
 
                 elements = root.EnumerateArray().ToArray();
 
                 if (elements.Length == 0)
-                    return Error("Error: records_json array is empty.");
+                    return Error("records_json array is empty.");
 
                 if (elements.Length > MaxRecords)
-                    return Error($"Error: records_json has {elements.Length} elements. Max is {MaxRecords}.");
+                    return Error($"records_json has {elements.Length} elements. Max is {MaxRecords}.");
 
                 var usedDefault = max_parallelism <= 0;
                 var parallelism = usedDefault
@@ -107,6 +132,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (_options.DryRun)
                 {
+                    var previewItems = elements.Length <= 5
+                        ? elements.Select((_, i) => new BatchCreateItem { Index = i, Status = "pending" }).ToList()
+                        : null;
                     var preview = new BatchCreateResult
                     {
                         Entity = entityName,
@@ -116,76 +144,138 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         DurationSeconds = 0,
                         Parallelism = parallelism,
                         UsedDefaultParallelism = usedDefault,
-                        Items = []
+                        InputFormat = inputFormat,
+                        BypassCustomLogic = bypass_custom_logic ? true : null,
+                        Items = previewItems,
+                        Status = "not_executed"
                     };
                     return DryRun(
-                        $"Would CREATE {elements.Length} '{entityName}' records (parallelism={parallelism}).",
+                        $"Would CREATE {elements.Length} '{entityName}' record(s) (parallelism={parallelism}, input={inputFormat}, bypassCustomLogic={bypass_custom_logic.ToString().ToLowerInvariant()}).",
                         preview);
                 }
 
-                var parsedEntities = new Entity[elements.Length];
+                // Parse all entities up front. A field/type error in one record
+                // must not abort the batch — collect per-record parse failures so
+                // they surface as failed items alongside successful creates.
+                var parsedEntities = new (Entity entity, string error)[elements.Length];
                 for (var i = 0; i < elements.Length; i++)
-                    parsedEntities[i] = EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, elements[i].GetRawText());
+                {
+                    try
+                    {
+                        parsedEntities[i] = (EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, elements[i].GetRawText()), null);
+                    }
+                    catch (Exception ex)
+                    {
+                        parsedEntities[i] = (null, ex.Message);
+                    }
+                }
 
-                var results = new ConcurrentBag<BatchCreateItem>();
+                // Group parsed entities into chunks of ~100 records and send each
+                // chunk as a single ExecuteMultipleRequest (ContinueOnError=true).
+                // This is the OOB Dataverse bulk path: N records → 1 request, so
+                // 1000 records cost ~10 requests instead of 1000, drastically
+                // reducing round-trips and service-protection request-count. Each
+                // item in a chunk keeps its own fault when ContinueOnError is set,
+                // so a single bad record never rolls back its chunk — successes
+                // are committed, failures are reported per-item (Index preserved).
+                //
+                // Parse-failed records are pre-collected: they never enter a chunk's
+                // request, they surface directly as failed items carrying their
+                // parse error. Only successfully parsed entities become CreateRequest
+                // items inside the ExecuteMultiple payload.
+                //
+                // Concurrency: chunks run in Parallel.ForEachAsync. Each parallel
+                // worker uses its own cloned ServiceClient (Clone() opens a fresh
+                // connection bound to the same OAuth auth) so workers don't funnel
+                // through the shared DI singleton's cross-thread lock. Clone is
+                // OAuth-only; if Clone returns null (non-OAuth connection) the
+                // worker falls back to the shared _serviceClient. Workers are
+                // disposed per-chunk (using) to release their connections.
+                var chunkSize = 100;
+                var parsedChunks = new List<List<(int index, Entity entity)>>();
+                var preParseFailed = new List<BatchCreateItem>();
+                var currentChunk = new List<(int index, Entity entity)>();
+                for (var i = 0; i < parsedEntities.Length; i++)
+                {
+                    if (parsedEntities[i].entity == null)
+                    {
+                        preParseFailed.Add(new BatchCreateItem { Index = i, Status = "failed", Error = parsedEntities[i].error });
+                        continue;
+                    }
+                    currentChunk.Add((i, parsedEntities[i].entity));
+                    if (currentChunk.Count >= chunkSize)
+                    {
+                        parsedChunks.Add(currentChunk);
+                        currentChunk = new List<(int index, Entity entity)>();
+                    }
+                }
+                if (currentChunk.Count > 0) parsedChunks.Add(currentChunk);
+
+                var chunkCount = parsedChunks.Count;
+                var batchedParallelism = Math.Min(parallelism, Math.Max(1, chunkCount));
+                var chunkResults = new ConcurrentBag<BatchCreateItem>();
                 var sw = Stopwatch.StartNew();
-                await Parallel.ForEachAsync(Enumerable.Range(0, parsedEntities.Length), new ParallelOptions
+                if (chunkCount > 0)
                 {
-                    MaxDegreeOfParallelism = parallelism
-                }, async (i, ct) =>
-                {
-                    var (id, error) = await TryCreateAsync(parsedEntities[i], ct);
-                    if (error == null)
-                        results.Add(new BatchCreateItem { Index = i, Id = id.ToString(), Status = "created" });
-                    else
-                        results.Add(new BatchCreateItem { Index = i, Status = "failed", Error = error });
-                });
+                    await Parallel.ForEachAsync(parsedChunks, new ParallelOptions
+                    {
+                        MaxDegreeOfParallelism = batchedParallelism
+                    }, async (chunk, ct) =>
+                    {
+                        using var worker = _serviceClient.Clone() ?? _serviceClient;
+                        foreach (var item in await ExecuteChunkAsync(worker, chunk, bypass_custom_logic, ct))
+                            chunkResults.Add(item);
+                    });
+                }
                 sw.Stop();
 
-                var sortedItems = results.OrderBy(x => x.Index).ToList();
+                var sortedItems = chunkResults.Concat(preParseFailed).OrderBy(x => x.Index).ToList();
                 var succeeded = sortedItems.Count(x => x.Status == "created");
                 var failed = sortedItems.Count(x => x.Status == "failed");
+                var failedItems = sortedItems.Where(x => x.Status == "failed").ToList();
 
+                // Build the warnings list shown in structured content: CSV header
+                // warnings + the default-parallelism notice + the bypass note.
+                var structuredWarnings = new List<string>(csvWarnings);
+                if (usedDefault)
+                    structuredWarnings.Add($"Default parallelism = {parallelism} (from server hint x-ms-dop-hint; hard limit {MaxParallelism}). Provide max_parallelism explicitly to suppress this notice.");
+                if (chunkCount > 0)
+                    structuredWarnings.Add($"Batched into {chunkCount} chunk(s) of up to {chunkSize} record(s) via ExecuteMultiple (ContinueOnError=true); chunks ran on cloned connections ({batchedParallelism} concurrent). Parse failures excluded from chunks and reported per-item.");
+
+                // bypass note: when bypass is OFF (the default), inform the user —
+                // especially on a first run — that the parameter exists so they can
+                // prompt to enable it next time. When bypass is ON, confirm it
+                // bypassed (no educational hint, just a fact).
+                if (!bypass_custom_logic)
+                    structuredWarnings.Add("bypass_custom_logic is false: custom sync+async plugins/workflows ran for these creates. For bulk data loads where custom logic would slow or block creates, retry with bypass_custom_logic=true (requires the System Administrator role).");
+                else
+                    structuredWarnings.Add("bypass_custom_logic=true: custom sync+async plugins/workflows were bypassed (BypassBusinessLogicExecution=CustomSync,CustomAsync) for these creates.");
+
+                var durationSeconds = Math.Round(sw.Elapsed.TotalSeconds, 1);
                 var structured = new BatchCreateResult
                 {
                     Entity = entityName,
                     Total = elements.Length,
                     Succeeded = succeeded,
                     Failed = failed,
-                    DurationSeconds = Math.Round(sw.Elapsed.TotalSeconds, 1),
+                    DurationSeconds = durationSeconds,
                     Parallelism = parallelism,
                     UsedDefaultParallelism = usedDefault,
-                    Items = sortedItems
+                    InputFormat = inputFormat,
+                    BypassCustomLogic = bypass_custom_logic ? true : null,
+                    Warnings = structuredWarnings.Count > 0 ? structuredWarnings : null,
+                    Items = sortedItems.Count > 0 ? sortedItems : null,
+                    FailedItems = failedItems.Count > 0 ? failedItems : null,
+                    Status = failed == 0 ? "created" : (succeeded == 0 ? "failed" : "partial")
                 };
 
-                var sb = new StringBuilder(256);
+                var bypassTag = bypass_custom_logic ? ", bypass=on" : "";
+                var chunkTag = chunkCount > 0 ? $", {chunkCount} chunk(s)" : "";
+                var summary = $"Created {succeeded}/{elements.Length} '{entityName}' record(s) in {durationSeconds}s ({batchedParallelism} concurrent{chunkTag}{bypassTag}).";
+                if (succeeded == 0)
+                    summary = $"Failed to create any of {elements.Length} '{entityName}' record(s) ({failed} failed{chunkTag}{bypassTag}).";
 
-                if (csvWarnings.Count > 0)
-                {
-                    sb.AppendLine("CSV warnings:");
-                    foreach (var w in csvWarnings)
-                        sb.AppendLine($"  {w}");
-                    sb.AppendLine();
-                }
-
-                if (usedDefault)
-                {
-                    sb.AppendLine($"Applied default parallelism = {parallelism} (from server hint x-ms-dop-hint; hard limit: {MaxParallelism})");
-                    sb.AppendLine("Tip: provide max_parallelism explicitly to suppress this notice.");
-                    sb.AppendLine();
-                }
-
-                sb.AppendLine($"Created {succeeded}/{elements.Length} '{entityName}' records in {structured.DurationSeconds}s ({parallelism} concurrent)");
-
-                if (failed > 0)
-                {
-                    sb.AppendLine();
-                    sb.AppendLine("Failed records:");
-                    foreach (var item in sortedItems.Where(x => x.Status == "failed"))
-                        sb.AppendLine($"  [{item.Index}] {item.Error}");
-                }
-
-                return Success(sb.ToString(), structured);
+                return Success(summary, structured);
             }
             catch (Exception ex)
             {
@@ -193,50 +283,101 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        // Per-item helper for parallel create. Returns (id, null) on success,
-        // (Guid.Empty, errorMessage) on failure. Cannot let exceptions propagate
-        // because it runs inside Parallel.ForEachAsync — an unhandled throw
-        // would abort the entire batch and hide which records succeeded.
+        // Send one chunk (~100 records) as a single ExecuteMultipleRequest with
+        // ContinueOnError=true. Each record becomes a CreateRequest item inside
+        // the batch; ContinueOnError means a fault on one item does NOT abort
+        // the chunk — the rest are still committed and the fault is returned
+        // per-item via ExecuteMultipleResponseItem.Fault. This preserves the
+        // partial-failure behavior of the old per-record parallel loop while
+        // collapsing N round-trips into 1.
         //
-        // The mutation gateway (DataverseMutationExecutor.CreateAsync) asserts
-        // that mutations are allowed before the SDK call. In dry-run mode the
-        // action-level preview returns before this method is reached; the
-        // gateway is the fail-closed safety net for any future caller that
-        // forgets the preview.
-        private async Task<(Guid id, string error)> TryCreateAsync(Entity entity, CancellationToken ct)
+        // bypass=true sets BypassBusinessLogicExecution on EVERY CreateRequest
+        // item in the batch (the parameter is per-request, not per-batch). The
+        // role gate above already ensured the caller is a System Administrator.
+        //
+        // The mutation gateway (DataverseMutationExecutor.ExecuteAsync) asserts
+        // mutations are allowed before the SDK call. In dry-run mode the
+        // action-level preview returns before this method is reached. An
+        // unhandled throw here is caught by the caller's try/catch and the
+        // whole chunk is marked failed (all items) — matching the old loop's
+        // behavior of one bad connection attempt failing its record.
+        private async Task<List<BatchCreateItem>> ExecuteChunkAsync(
+            ServiceClient worker, List<(int index, Entity entity)> chunk, bool bypass, CancellationToken ct)
         {
+            var items = new List<BatchCreateItem>(chunk.Count);
+            var request = new ExecuteMultipleRequest
+            {
+                Settings = new ExecuteMultipleSettings
+                {
+                    ContinueOnError = true,
+                    ReturnResponses = true
+                },
+                Requests = new OrganizationRequestCollection()
+            };
+            foreach (var (index, entity) in chunk)
+            {
+                var create = new CreateRequest { Target = entity };
+                if (bypass)
+                    create.Parameters["BypassBusinessLogicExecution"] = "CustomSync,CustomAsync";
+                request.Requests.Add(create);
+            }
+
             try
             {
-                var id = await DataverseMutationExecutor.CreateAsync(_context, _serviceClient, entity, ct);
-                return (id, null);
+                var response = (ExecuteMultipleResponse)await DataverseMutationExecutor.ExecuteAsync(_context, worker, request, ct);
+                // ExecuteMultipleResponse.Responses only contains items that
+                // succeeded OR faulted-with-ReturnResponses; items may be absent
+                // if the server skipped them. Index by RequestIndex to align
+                // responses with the original chunk order safely.
+                var byIndex = response.Responses.ToDictionary(r => r.RequestIndex);
+                for (var i = 0; i < chunk.Count; i++)
+                {
+                    if (!byIndex.TryGetValue(i, out var item) || item.Fault != null)
+                    {
+                        var err = item?.Fault?.Message ?? "No response returned for this item.";
+                        items.Add(new BatchCreateItem { Index = chunk[i].index, Status = "failed", Error = err });
+                    }
+                    else
+                    {
+                        var id = item.Response != null && item.Response.Results.Contains("id")
+                            ? (Guid)item.Response.Results["id"]
+                            : Guid.Empty;
+                        items.Add(new BatchCreateItem { Index = chunk[i].index, Id = id.ToString(), Status = "created" });
+                    }
+                }
             }
             catch (Exception ex)
             {
-                return (Guid.Empty, ex.Message);
+                // Chunk-level failure (timeout, auth, network) — mark all items
+                // in this chunk failed with the shared error. The caller still
+                // processes other chunks; only this chunk is lost.
+                foreach (var (index, _) in chunk)
+                    items.Add(new BatchCreateItem { Index = index, Status = "failed", Error = ex.Message });
             }
+            return items;
         }
 
-        private string ResolveRecordsInput(string recordsJson, string entityName, List<string> csvWarnings, bool deleteInput)
+        private (string json, string format) ResolveRecordsInput(string recordsJson, string entityName, List<string> csvWarnings, bool deleteInput)
         {
             var trimmed = recordsJson.Trim();
 
             if (trimmed.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
             {
-                if (!File.Exists(trimmed)) return null;
+                if (!File.Exists(trimmed)) return (null, "csv");
                 var json = ConvertCsvToJson(trimmed, entityName, csvWarnings);
                 if (deleteInput) SafeDelete(trimmed);
-                return json;
+                return (json, "csv");
             }
 
             if (!trimmed.StartsWith("[") && trimmed.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
             {
-                if (!File.Exists(trimmed)) return null;
+                if (!File.Exists(trimmed)) return (null, "json-file");
                 var content = File.ReadAllText(trimmed, Encoding.UTF8);
                 if (deleteInput) SafeDelete(trimmed);
-                return content;
+                return (content, "json-file");
             }
 
-            return recordsJson;
+            return (recordsJson, "inline-json");
         }
 
         private string ConvertCsvToJson(string csvPath, string entityName, List<string> warnings)
@@ -329,7 +470,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (record.Count > 0)
                     records.Add(record);
                 else
-                    warnings.Add($"Row {rowNum}: all fields skipped â€” row excluded.");
+                    warnings.Add($"Row {rowNum}: all fields skipped — row excluded.");
             }
 
             return JsonSerializer.Serialize(records);
@@ -349,13 +490,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 case IntegerAttributeMetadata:
                     if (int.TryParse(cellValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var intVal))
                         return (logicalName, intVal);
-                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid integer â€” skipped.");
+                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid integer — skipped.");
                     return null;
 
                 case BigIntAttributeMetadata:
                     if (long.TryParse(cellValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var longVal))
                         return (logicalName, longVal);
-                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid integer â€” skipped.");
+                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid integer — skipped.");
                     return null;
 
                 case DecimalAttributeMetadata:
@@ -363,20 +504,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 case MoneyAttributeMetadata:
                     if (decimal.TryParse(cellValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var decVal))
                         return (logicalName, decVal);
-                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid number â€” skipped.");
+                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid number — skipped.");
                     return null;
 
                 case BooleanAttributeMetadata:
                     var lower = cellValue.ToLowerInvariant();
                     if (lower is "true" or "yes" or "1") return (logicalName, true);
                     if (lower is "false" or "no" or "0") return (logicalName, false);
-                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid boolean â€” skipped.");
+                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid boolean — skipped.");
                     return null;
 
                 case DateTimeAttributeMetadata:
                     if (DateTime.TryParse(cellValue, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dtVal))
                         return (logicalName, dtVal.ToString("yyyy-MM-ddTHH:mm:ssZ"));
-                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid date â€” skipped.");
+                    warnings.Add($"Row {rowNum}: '{logicalName}' value '{cellValue}' is not a valid date — skipped.");
                     return null;
 
                 case PicklistAttributeMetadata picklist:
@@ -389,7 +530,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return ResolveLookupByName(lookup, cellValue, logicalName, rowNum, lookupNameCache, warnings);
 
                 default:
-                    warnings.Add($"Row {rowNum}: '{logicalName}' type '{attr.GetType().Name}' not supported for CSV â€” skipped.");
+                    warnings.Add($"Row {rowNum}: '{logicalName}' type '{attr.GetType().Name}' not supported for CSV — skipped.");
                     return null;
             }
         }
@@ -404,7 +545,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (option != null)
                 return (logicalName, option.Value.Value);
 
-            warnings.Add($"Row {rowNum}: picklist '{logicalName}' label '{label}' not found in options â€” skipped.");
+            warnings.Add($"Row {rowNum}: picklist '{logicalName}' label '{label}' not found in options — skipped.");
             return null;
         }
 
@@ -423,7 +564,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (option != null)
                     values.Add(option.Value.Value);
                 else
-                    warnings.Add($"Row {rowNum}: multi-select '{logicalName}' label '{part}' not found â€” skipped.");
+                    warnings.Add($"Row {rowNum}: multi-select '{logicalName}' label '{part}' not found — skipped.");
             }
 
             return values.Count > 0 ? (logicalName, values) : null;
@@ -436,7 +577,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var targets = lookup.Targets;
             if (targets == null || targets.Length == 0)
             {
-                warnings.Add($"Row {rowNum}: lookup '{logicalName}' has no target entity â€” skipped.");
+                warnings.Add($"Row {rowNum}: lookup '{logicalName}' has no target entity — skipped.");
                 return null;
             }
 
@@ -456,7 +597,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
-            warnings.Add($"Row {rowNum}: lookup '{logicalName}' value '{nameValue}' not found or ambiguous â€” skipped.");
+            warnings.Add($"Row {rowNum}: lookup '{logicalName}' value '{nameValue}' not found or ambiguous — skipped.");
             return null;
         }
 
