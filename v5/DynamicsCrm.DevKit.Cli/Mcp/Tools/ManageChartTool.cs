@@ -1,4 +1,3 @@
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
@@ -49,65 +48,64 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertChartResult)),
         Description(
-            "Dataverse system charts (savedqueryvisualization) — list/detail/create/update/rename/set_default/undo. " +
-            "Creates or updates system charts from entity metadata. FetchXML (datadescription) is built from the resolved entity logical name — no view binding. " +
-            "Core params for create: entity_name, chart_name. chart_type defaults to Pie when omitted. " +
-            "Pie create defaults: category/group_by_column=statecode, legend/aggregate_column=importsequencenumber + count. " +
-            "Pie create requires user confirmation: first call returns needs_confirmation summary; re-call with confirmed=true after user approves. " +
-            "Optional: group_by_column (category), aggregate_column (legend/measure), aggregate_type (count/sum/avg/min/max), solution_name.")]
+            "Manage Dataverse system charts (savedqueryvisualization). Actions: 'list', 'detail' (read-only) | 'create', 'update', 'rename', 'set_default', 'undo' (mutations). " +
+            "datadescription FetchXML is built from entity metadata — no view binding.\n\n" +
+            "WHEN TO USE:\n" +
+            "- List or inspect system charts of an entity\n" +
+            "- Create a chart from group-by/aggregate columns, update chart type or columns, rename, set the entity default chart\n" +
+            "- Restore a chart from a .chart.json backup written by update (undo)\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_tables → column logical names for group_by_column/aggregate_column\n" +
+            "- publish_customizations → batch publish after multiple metadata changes\n" +
+            "- manage_view → views; execute_webapi → raw savedqueryvisualization access\n\n" +
+            "Omitted chart_type on create defaults to Pie (category=statecode, legend=importsequencenumber/count). " +
+            "Pie create first returns needs_confirmation without creating; re-call with confirmed=true after user approval.")]
         public CallToolResult manage_chart(
-            [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'."
-            )] string action,
-            [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Required for list/create."
-            )] string entity_name = "",
-            [Description("Chart GUID. Required for detail/update/rename/set_default/undo (unless chart_name uniquely identifies chart)."
-            )] string chart_id = "",
-            [Description("Chart name. Used for detail/update/rename lookup or create. Required for create."
-            )] string chart_name = "",
-            [Description("OOB Chart Type: Column, Bar, Line, Pie, Doughnut, Funnel, Area, Bubble, Radar. Default: Pie when omitted on create."
-            )] string chart_type = "",
-            [Description("Category / group-by attribute logical name or display name. Pie default: statecode."
-            )] string group_by_column = "",
-            [Description("Legend / measure attribute logical name or display name. Pie default: importsequencenumber."
-            )] string aggregate_column = "",
-            [Description("Aggregation type: 'count' (default), 'sum', 'avg', 'min', 'max'."
-            )] string aggregate_type = "count",
-            [Description("Optional custom Chart XML presentation description override."
-            )] string presentationdescription = "",
-            [Description("Chart description text."
-            )] string description = "",
-            [Description("Optional solution unique/display name. When provided and non-empty, chart is added to the solution after create/update."
-            )] string solution_name = "",
-            [Description("Validate XML syntax and chart types before saving."
-            )] bool validate = true,
-            [Description("Backup before overwrite."
-            )] bool backup = true,
-            [Description("Pie create only: set true only after user approved the confirmation summary. Default false returns needs_confirmation without creating."
-            )] bool confirmed = false,
-            [Description("Optional project/workspace folder path to save backups in."
-            )] string workspace_folder = "")
+            [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action,
+            [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Required for list/create.")] string entity_name = "",
+            [Description("Chart GUID. Required for detail/update/rename/set_default/undo (unless chart_name uniquely identifies chart).")] string chart_id = "",
+            [Description("Chart name. Used for detail/update/rename lookup or create. Required for create.")] string chart_name = "",
+            [Description("OOB Chart Type: Column, Bar, Line, Pie, Doughnut, Funnel, Area, Bubble, Radar. Default: Pie when omitted on create.")] string chart_type = "",
+            [Description("Category / group-by attribute logical name or display name. Pie default: statecode.")] string group_by_column = "",
+            [Description("Legend / measure attribute logical name or display name. Pie default: importsequencenumber.")] string aggregate_column = "",
+            [Description("Aggregation type: 'count' (default), 'sum', 'avg', 'min', 'max'.")] string aggregate_type = "count",
+            [Description("Custom presentation Chart XML override (create/update). For undo: path to the .chart.json backup file.")] string presentationdescription = "",
+            [Description("Chart description text.")] string description = "",
+            [Description("Optional solution unique/display name. When provided and non-empty, chart is added to the solution after create/update.")] string solution_name = "",
+            [Description("Validate XML syntax and chart types before saving.")] bool validate = true,
+            [Description("Backup before overwrite.")] bool backup = true,
+            [Description("Publish entity after create/update/rename/set_default/undo so changes become visible. Default: true. Set false to batch-publish later via publish_customizations.")] bool publish = true,
+            [Description("Pie create only: set true only after user approved the confirmation summary. Default false returns needs_confirmation without creating.")] bool confirmed = false,
+            [Description("Optional project/workspace folder path to save backups in.")] string workspace_folder = "")
         {
-            _workspaceFolder = workspace_folder;
-
-            if (string.IsNullOrWhiteSpace(action))
-                return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.");
-
-            var normalizedAction = action.Trim().ToLowerInvariant();
-
-            if (!string.IsNullOrWhiteSpace(chart_id) && !Guid.TryParse(chart_id.Trim(), out _))
-                return ErrorResult($"Error: '{chart_id}' is not a valid GUID.");
-
-            return normalizedAction switch
+            try
             {
-                "list" => HandleList(entity_name),
-                "detail" => HandleDetail(entity_name, chart_id, chart_name),
-                "create" => HandleCreate(entity_name, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, presentationdescription, description, solution_name, validate, confirmed),
-                "update" => HandleUpdate(entity_name, chart_id, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, presentationdescription, description, solution_name, validate, backup),
-                "rename" => HandleRename(entity_name, chart_id, chart_name, solution_name),
-                "set_default" => HandleSetDefault(entity_name, chart_id, chart_name),
-                "undo" => HandleUndo(chart_id, presentationdescription, solution_name),
-                _ => ErrorResult($"Error: Unknown action '{action}'. Valid actions: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")
-            };
+                _workspaceFolder = workspace_folder;
+
+                if (string.IsNullOrWhiteSpace(action))
+                    return Error("action is required.", "Valid values: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.");
+
+                var normalizedAction = action.Trim().ToLowerInvariant();
+
+                if (!string.IsNullOrWhiteSpace(chart_id) && !Guid.TryParse(chart_id.Trim(), out _))
+                    return Error($"'{chart_id}' is not a valid GUID.");
+
+                return normalizedAction switch
+                {
+                    "list" => HandleList(entity_name),
+                    "detail" => HandleDetail(entity_name, chart_id, chart_name),
+                    "create" => HandleCreate(entity_name, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, presentationdescription, description, solution_name, validate, publish, confirmed),
+                    "update" => HandleUpdate(entity_name, chart_id, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, presentationdescription, description, solution_name, validate, backup, publish),
+                    "rename" => HandleRename(entity_name, chart_id, chart_name, solution_name, publish),
+                    "set_default" => HandleSetDefault(entity_name, chart_id, chart_name, publish),
+                    "undo" => HandleUndo(chart_id, presentationdescription, solution_name, publish),
+                    _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")
+                };
+            }
+            catch (Exception ex)
+            {
+                return ThrowException(ex);
+            }
         }
 
         private CallToolResult HandleList(string entityNameInput)
@@ -126,28 +124,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var result = _serviceClient.RetrieveMultiple(query);
 
-            var sb = new StringBuilder();
-            sb.AppendLine($"[ChartList] {(string.IsNullOrEmpty(entityName) ? "All Entities" : entityName)} (System Charts)");
-            sb.AppendLine($"Found: {result.Entities.Count} chart(s)\n");
-
-            foreach (var entity in result.Entities)
+            var charts = result.Entities.Select(entity => new ChartListEntry
             {
-                var id = entity.GetAttributeValue<Guid>(idCol);
-                var name = entity.GetAttributeValue<string>("name");
-                var desc = entity.GetAttributeValue<string>("description");
-                var isDefault = entity.GetAttributeValue<bool?>("isdefault") ?? false;
-                var targetEntity = entity.GetAttributeValue<string>("primaryentitytypecode");
+                ChartId = entity.GetAttributeValue<Guid>(idCol).ToString(),
+                ChartName = entity.GetAttributeValue<string>("name"),
+                Entity = entity.GetAttributeValue<string>("primaryentitytypecode"),
+                IsDefault = entity.GetAttributeValue<bool?>("isdefault") ?? false,
+                Description = entity.GetAttributeValue<string>("description")
+            }).ToList();
 
-                sb.AppendLine($"- {name} (ID: {id})");
-                sb.AppendLine($"  Entity: {targetEntity} | Default: {(isDefault ? "Yes" : "No")}");
-                if (!string.IsNullOrWhiteSpace(desc))
-                    sb.AppendLine($"  Description: {desc}");
-            }
+            var text = string.IsNullOrEmpty(entityName)
+                ? $"Found {charts.Count} system chart(s) across all entities."
+                : $"Found {charts.Count} system chart(s) for '{entityName}'.";
 
-            return SuccessResult(sb.ToString(), new UpsertChartResult
+            return Success(text, new UpsertChartResult
             {
                 Action = "list",
-                Entity = entityName,
+                Entity = string.IsNullOrEmpty(entityName) ? null : entityName,
+                TotalCount = charts.Count,
+                Charts = charts.Count > 0 ? charts : null,
                 Status = "success"
             });
         }
@@ -155,7 +150,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleDetail(string entityNameInput, string chartIdInput, string chartNameInput)
         {
             var entity = FindChart(entityNameInput, chartIdInput, chartNameInput, out var error);
-            if (error != null) return ErrorResult(error);
+            if (error != null) return Error(error);
 
             const string idCol = "savedqueryvisualizationid";
             var id = entity.GetAttributeValue<Guid>(idCol);
@@ -166,27 +161,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var presXml = entity.GetAttributeValue<string>("presentationdescription");
             var isDefault = entity.GetAttributeValue<bool?>("isdefault") ?? false;
 
-            var sb = new StringBuilder();
-            sb.AppendLine($"[ChartDetail] {name}");
-            sb.AppendLine($"ID: {id}");
-            sb.AppendLine($"Entity: {primaryEntity}");
-            sb.AppendLine($"Type: System Chart (savedqueryvisualization)");
-            sb.AppendLine($"Default: {(isDefault ? "Yes" : "No")}");
-            if (!string.IsNullOrWhiteSpace(desc))
-                sb.AppendLine($"Description: {desc}");
+            var text = $"'{name}' ({id}) on '{primaryEntity}'{(isDefault ? " — default" : "")}. datadescription/presentationdescription in structuredContent.";
 
-            sb.AppendLine("\n--- Data Description (FetchXML) ---");
-            sb.AppendLine(PrettyPrintXml(dataXml));
-
-            sb.AppendLine("\n--- Presentation Description (Chart XML) ---");
-            sb.AppendLine(PrettyPrintXml(presXml));
-
-            return SuccessResult(sb.ToString(), new UpsertChartResult
+            return Success(text, new UpsertChartResult
             {
                 Action = "detail",
                 Entity = primaryEntity,
                 ChartId = id.ToString(),
                 ChartName = name,
+                Description = string.IsNullOrWhiteSpace(desc) ? null : desc,
+                IsDefault = isDefault,
+                DataDescription = dataXml,
+                PresentationDescription = presXml,
                 Status = "success"
             });
         }
@@ -194,17 +180,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleCreate(
             string entityNameInput, string chartName, string chartTypeInput,
             string groupByColInput, string aggregateColInput, string aggregateTypeInput,
-            string presXmlInput, string description, string solutionName, bool validate, bool confirmed)
+            string presXmlInput, string description, string solutionName, bool validate, bool publish, bool confirmed)
         {
             if (string.IsNullOrWhiteSpace(entityNameInput))
-                return ErrorResult("Error: entity_name is required for action='create'.");
+                return Error("entity_name is required when action='create'.");
 
             if (string.IsNullOrWhiteSpace(chartName))
-                return ErrorResult("Error: chart_name is required for action='create'.");
+                return Error("chart_name is required when action='create'.");
 
             var entityResolve = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityNameInput.Trim(), "manage_chart");
             if (!entityResolve.IsSuccess)
-                return ErrorResult($"Error: {entityResolve.Error}");
+                return Error($"entity_name '{entityNameInput.Trim()}': {entityResolve.Error}");
 
             var entityName = entityResolve.Value.LogicalName;
             var chartType = ResolveChartType(chartTypeInput, out var chartTypeDefaulted);
@@ -244,44 +230,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (!confirmed)
                 {
-                    var confirmSb = new StringBuilder();
-                    confirmSb.AppendLine("[ChartCreate] Confirmation required before creating pie chart.");
-                    confirmSb.AppendLine("No chart was created. Ask the user to approve the plan below, then re-call manage_chart(action='create', confirmed=true, ...) with the same values.");
-                    confirmSb.AppendLine();
-                    confirmSb.AppendLine("Proposed chart:");
-                    confirmSb.AppendLine($"  Chart Type : {chartType}{(chartTypeDefaulted ? " (default)" : "")}");
-                    confirmSb.AppendLine($"  Entity     : {entityName}");
-                    confirmSb.AppendLine($"  Chart Name : {chartName.Trim()}");
-                    confirmSb.AppendLine($"  Category   : {groupByCol}{(string.IsNullOrWhiteSpace(groupByColInput) ? " (default)" : "")}");
-                    confirmSb.AppendLine($"  Legend     : {aggregateCol} / {aggregateType}{(string.IsNullOrWhiteSpace(aggregateColInput) ? " (default)" : "")}");
-                    if (!string.IsNullOrWhiteSpace(solutionName))
-                        confirmSb.AppendLine($"  Solution   : {solutionName.Trim()}");
-                    else
-                        confirmSb.AppendLine("  Solution   : (none)");
-                    confirmSb.AppendLine();
-                    if (defaultsApplied.Count > 0)
-                    {
-                        confirmSb.AppendLine("Defaults applied:");
-                        foreach (var item in defaultsApplied)
-                            confirmSb.AppendLine($"  - {item}");
-                        confirmSb.AppendLine();
-                    }
-                    if (string.IsNullOrWhiteSpace(aggregateColInput))
-                    {
-                        confirmSb.AppendLine(
-                            $"Legend default is '{DefaultPieLegendColumn}' with aggregate '{DefaultPieAggregateType}' (field exists on every entity). " +
-                            "If the user wants a different measure, change aggregate_column/aggregate_type and confirm again.");
-                        confirmSb.AppendLine();
-                    }
-                    if (string.IsNullOrWhiteSpace(groupByColInput))
-                    {
-                        confirmSb.AppendLine(
-                            $"Category default is '{DefaultPieCategoryColumn}'. If the user wants a different slice field, change group_by_column and confirm again.");
-                        confirmSb.AppendLine();
-                    }
-                    confirmSb.AppendLine("After user approval, re-call with confirmed=true.");
+                    var confirmText = $"Pie chart '{chartName.Trim()}' not created — confirmation required. " +
+                        $"Plan: type={chartType}{(chartTypeDefaulted ? " (default)" : "")}, entity={entityName}, " +
+                        $"category={groupByCol}{(string.IsNullOrWhiteSpace(groupByColInput) ? " (default)" : "")}, " +
+                        $"legend={aggregateCol}/{aggregateType}{(string.IsNullOrWhiteSpace(aggregateColInput) ? " (default)" : "")}" +
+                        (string.IsNullOrWhiteSpace(solutionName) ? "" : $", solution={solutionName.Trim()}") +
+                        ". Show the plan to the user; after approval re-call with confirmed=true and the same values.";
 
-                    return SuccessResult(confirmSb.ToString(), new UpsertChartResult
+                    return Success(confirmText, new UpsertChartResult
                     {
                         Action = "create",
                         Entity = entityName,
@@ -313,7 +269,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var (dataXml, aggregateAlias, dataError) = BuildDataDescriptionFromEntity(
                 entityName, groupByCol, aggregateCol, aggregateType);
-            if (dataError != null) return ErrorResult(dataError);
+            if (dataError != null) return Error(dataError);
 
             var presXml = string.IsNullOrWhiteSpace(presXmlInput)
                 ? BuildPresentationDescription(chartType, chartName, aggregateAlias)
@@ -324,21 +280,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 : (new List<string>(), new List<string>());
 
             if (valErrors.Count > 0)
-            {
-                var errSb = new StringBuilder();
-                errSb.AppendLine($"[ChartCreate] Validation failed for new chart '{chartName}':");
-                foreach (var err in valErrors) errSb.AppendLine($"  - {err}");
-                return ErrorResult(errSb.ToString());
-            }
+                return Error(
+                    $"Validation failed for new chart '{chartName}' ({valErrors.Count} error(s)). First: {valErrors[0]}",
+                    details: new { validationErrors = valErrors });
 
             string resolvedSolutionUniqueName = null;
             if (!string.IsNullOrWhiteSpace(solutionName))
             {
                 var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
                 if (!solResult.IsSuccess)
-                    return ErrorResult($"Error: {solResult.Error}");
+                    return Error(solResult.Error);
                 if (string.IsNullOrWhiteSpace(solResult.UniqueName))
-                    return ErrorResult($"Error: Solution '{solutionName}' resolved but unique name is null/empty. Chart was not created.");
+                    return Error($"Solution '{solutionName}' resolved but unique name is null/empty. Chart was not created.");
                 resolvedSolutionUniqueName = solResult.UniqueName;
             }
 
@@ -377,25 +330,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var newId = DataverseMutationExecutor.Create(_context, _serviceClient, chartRecord);
 
-            var addedToSolution = false;
+            string solutionWarning = null;
             if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
-                addedToSolution = AddToSolutionIfRequested(newId, resolvedSolutionUniqueName);
+                solutionWarning = AddToSolution(newId, resolvedSolutionUniqueName);
 
-            var published = PublishIfNeeded(entityName);
+            var published = false;
+            if (publish)
+            {
+                PublishHelper.PublishEntity(_context, _serviceClient, entityName);
+                published = true;
+            }
 
-            var sb = new StringBuilder();
-            sb.AppendLine($"[ChartCreate] Chart '{chartName}' created successfully");
-            sb.AppendLine($"ID: {newId}");
-            sb.AppendLine($"Entity: {entityName}");
-            sb.AppendLine($"ChartType: {chartType}");
-            sb.AppendLine($"Category: {groupByCol}");
-            sb.AppendLine($"Legend: {aggregateCol} / {aggregateType}");
-            if (addedToSolution) sb.AppendLine($"Solution: Added to '{resolvedSolutionUniqueName}'");
-            else if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
-                sb.AppendLine($"Solution: Failed to add to '{resolvedSolutionUniqueName}'");
-            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            var text = $"Created chart '{chartName.Trim()}' ({newId}) on '{entityName}': type={chartType}, category={groupByCol}, legend={aggregateCol}/{aggregateType}.";
+            if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
+                text += solutionWarning == null
+                    ? $" Added to solution '{resolvedSolutionUniqueName}'."
+                    : $" Not added to solution '{resolvedSolutionUniqueName}' (see solutionWarning).";
+            if (!published) text += " Not published (publish=false).";
 
-            return SuccessResult(sb.ToString(), new UpsertChartResult
+            return Success(text, new UpsertChartResult
             {
                 Action = "create",
                 Entity = entityName,
@@ -406,6 +359,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Legend = aggregateCol,
                 AggregateType = aggregateType,
                 SolutionName = resolvedSolutionUniqueName,
+                SolutionWarning = solutionWarning,
                 Status = "created",
                 NeedsConfirmation = false,
                 DefaultsApplied = defaultsApplied.Count > 0 ? defaultsApplied : null,
@@ -419,10 +373,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string entityNameInput, string chartIdInput, string chartNameInput,
             string chartTypeInput, string groupByColInput, string aggregateColInput, string aggregateTypeInput,
             string presXmlInput, string description, string solutionName,
-            bool validate, bool backup)
+            bool validate, bool backup, bool publish)
         {
             var chartRecord = FindChart(entityNameInput, chartIdInput, chartNameInput, out var error);
-            if (error != null) return ErrorResult(error);
+            if (error != null) return Error(error);
 
             const string table = "savedqueryvisualization";
             const string idCol = "savedqueryvisualizationid";
@@ -454,7 +408,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var (derivedDataXml, alias, dataErr) = BuildDataDescriptionFromEntity(
                     primaryEntity, groupByCol, aggregateCol, aggregateType);
-                if (dataErr != null) return ErrorResult(dataErr);
+                if (dataErr != null) return Error(dataErr);
                 newDataXml = derivedDataXml;
                 aggregateAlias = alias;
             }
@@ -474,21 +428,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 : (new List<string>(), new List<string>());
 
             if (valErrors.Count > 0)
-            {
-                var errSb = new StringBuilder();
-                errSb.AppendLine($"[ChartUpdate] Validation failed for chart '{chartName}' ({chartId}):");
-                foreach (var err in valErrors) errSb.AppendLine($"  - {err}");
-                return ErrorResult(errSb.ToString());
-            }
+                return Error(
+                    $"Validation failed for chart '{chartName}' ({chartId}) ({valErrors.Count} error(s)). First: {valErrors[0]}",
+                    details: new { validationErrors = valErrors });
 
             string resolvedSolutionUniqueName = null;
             if (!string.IsNullOrWhiteSpace(solutionName))
             {
                 var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
                 if (!solResult.IsSuccess)
-                    return ErrorResult($"Error: {solResult.Error}");
+                    return Error(solResult.Error);
                 if (string.IsNullOrWhiteSpace(solResult.UniqueName))
-                    return ErrorResult($"Error: Solution '{solutionName}' resolved but unique name is null/empty.");
+                    return Error($"Solution '{solutionName}' resolved but unique name is null/empty.");
                 resolvedSolutionUniqueName = solResult.UniqueName;
             }
 
@@ -521,30 +472,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             DataverseMutationExecutor.Update(_context, _serviceClient, updateRecord);
 
-            var addedToSolution = false;
+            string solutionWarning = null;
             if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
-                addedToSolution = AddToSolutionIfRequested(chartId, resolvedSolutionUniqueName);
+                solutionWarning = AddToSolution(chartId, resolvedSolutionUniqueName);
 
-            var published = PublishIfNeeded(primaryEntity);
+            var published = false;
+            if (publish)
+            {
+                PublishHelper.PublishEntity(_context, _serviceClient, primaryEntity);
+                published = true;
+            }
 
-            var sb = new StringBuilder();
-            sb.AppendLine($"[ChartUpdate] {primaryEntity} — {chartName}");
-            sb.AppendLine($"ChartId: {chartId}");
-            sb.AppendLine($"Status: Updated successfully");
-            if (addedToSolution) sb.AppendLine($"Solution: Added to '{resolvedSolutionUniqueName}'");
-            else if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
-                sb.AppendLine($"Solution: Failed to add to '{resolvedSolutionUniqueName}'");
-            sb.AppendLine($"Validated: {(validate ? "yes" : "skipped")}");
-            sb.AppendLine($"Backup: {backupPath ?? "skipped"}");
-            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            var text = $"Updated chart '{chartName}' ({chartId}) on '{primaryEntity}'.";
+            if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
+                text += solutionWarning == null
+                    ? $" Added to solution '{resolvedSolutionUniqueName}'."
+                    : $" Not added to solution '{resolvedSolutionUniqueName}' (see solutionWarning).";
+            if (!published) text += " Not published (publish=false).";
 
-            return SuccessResult(sb.ToString(), new UpsertChartResult
+            return Success(text, new UpsertChartResult
             {
                 Action = "update",
                 Entity = primaryEntity,
                 ChartId = chartId.ToString(),
                 ChartName = chartName,
                 SolutionName = resolvedSolutionUniqueName,
+                SolutionWarning = solutionWarning,
                 Status = "updated",
                 Validated = validate,
                 ValidationWarnings = valWarnings.Count > 0 ? valWarnings : null,
@@ -553,13 +506,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             });
         }
 
-        private CallToolResult HandleRename(string entityNameInput, string chartIdInput, string chartNameInput, string solutionName)
+        private CallToolResult HandleRename(string entityNameInput, string chartIdInput, string chartNameInput, string solutionName, bool publish)
         {
             if (string.IsNullOrWhiteSpace(chartNameInput))
-                return ErrorResult("Error: chart_name is required for action='rename'.");
+                return Error("chart_name is required when action='rename'.");
 
             var chartRecord = FindChart(entityNameInput, chartIdInput, null, out var error);
-            if (error != null) return ErrorResult(error);
+            if (error != null) return Error(error);
 
             const string table = "savedqueryvisualization";
             const string idCol = "savedqueryvisualizationid";
@@ -583,28 +536,39 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             DataverseMutationExecutor.Update(_context, _serviceClient, updateRecord);
 
-            AddToSolutionIfRequested(chartId, solutionName);
-            var published = PublishIfNeeded(primaryEntity);
+            string solutionWarning = null;
+            if (!string.IsNullOrWhiteSpace(solutionName))
+                solutionWarning = AddToSolution(chartId, solutionName.Trim());
 
-            var sb = new StringBuilder();
-            sb.AppendLine($"[ChartRename] Chart {chartId} renamed to '{chartNameInput}'");
-            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            var published = false;
+            if (publish)
+            {
+                PublishHelper.PublishEntity(_context, _serviceClient, primaryEntity);
+                published = true;
+            }
 
-            return SuccessResult(sb.ToString(), new UpsertChartResult
+            var text = $"Renamed chart {chartId} to '{chartNameInput.Trim()}'.";
+            if (solutionWarning != null)
+                text += $" Not added to solution '{solutionName.Trim()}' (see solutionWarning).";
+            if (!published) text += " Not published (publish=false).";
+
+            return Success(text, new UpsertChartResult
             {
                 Action = "rename",
                 Entity = primaryEntity,
                 ChartId = chartId.ToString(),
                 ChartName = chartNameInput.Trim(),
+                SolutionName = string.IsNullOrWhiteSpace(solutionName) ? null : solutionName.Trim(),
+                SolutionWarning = solutionWarning,
                 Status = "renamed",
                 Published = published
             });
         }
 
-        private CallToolResult HandleSetDefault(string entityNameInput, string chartIdInput, string chartNameInput)
+        private CallToolResult HandleSetDefault(string entityNameInput, string chartIdInput, string chartNameInput, bool publish)
         {
             var chartRecord = FindChart(entityNameInput, chartIdInput, chartNameInput, out var error);
-            if (error != null) return ErrorResult(error);
+            if (error != null) return Error(error);
 
             var chartId = chartRecord.GetAttributeValue<Guid>("savedqueryvisualizationid");
             var chartName = chartRecord.GetAttributeValue<string>("name");
@@ -637,13 +601,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             DataverseMutationExecutor.Update(_context, _serviceClient, new Entity("savedqueryvisualization", chartId) { ["isdefault"] = true });
 
-            var published = PublishIfNeeded(primaryEntity);
+            var published = false;
+            if (publish)
+            {
+                PublishHelper.PublishEntity(_context, _serviceClient, primaryEntity);
+                published = true;
+            }
 
-            var sb = new StringBuilder();
-            sb.AppendLine($"[ChartSetDefault] Chart '{chartName}' ({chartId}) set as DEFAULT for '{primaryEntity}'");
-            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            var text = $"Set chart '{chartName}' ({chartId}) as default for '{primaryEntity}'.";
+            if (!published) text += " Not published (publish=false).";
 
-            return SuccessResult(sb.ToString(), new UpsertChartResult
+            return Success(text, new UpsertChartResult
             {
                 Action = "set_default",
                 Entity = primaryEntity,
@@ -654,27 +622,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             });
         }
 
-        private CallToolResult HandleUndo(string chartIdInput, string backupPathInput, string solutionName)
+        private CallToolResult HandleUndo(string chartIdInput, string backupPathInput, string solutionName, bool publish)
         {
             if (string.IsNullOrWhiteSpace(backupPathInput))
-                return ErrorResult("Error: backup path is required for action='undo'.");
+                return Error("backup path is required when action='undo'.", "Pass the .chart.json backup path via presentationdescription.");
 
             if (!File.Exists(backupPathInput))
-                return ErrorResult($"Error: Backup file not found at '{backupPathInput}'.");
+                return Error($"Backup file not found at '{backupPathInput}'.");
 
-            ChartBackup backupData;
-            try
-            {
-                var json = File.ReadAllText(backupPathInput, Encoding.UTF8);
-                backupData = JsonSerializer.Deserialize<ChartBackup>(json);
-            }
-            catch (Exception ex)
-            {
-                return ErrorResult($"Error: Failed to parse backup file: {ex.Message}");
-            }
+            // Malformed backup JSON bubbles to the entry-point catch (single-try rule).
+            var json = File.ReadAllText(backupPathInput, Encoding.UTF8);
+            var backupData = JsonSerializer.Deserialize<ChartBackup>(json);
 
             if (backupData == null || string.IsNullOrWhiteSpace(backupData.ChartId))
-                return ErrorResult("Error: Backup file does not contain valid chart data.");
+                return Error("Backup file does not contain valid chart data.");
 
             var chartId = Guid.Parse(backupData.ChartId);
 
@@ -695,25 +656,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (backupData.DataDescription != null) updateRecord["datadescription"] = backupData.DataDescription;
             if (backupData.PresentationDescription != null) updateRecord["presentationdescription"] = backupData.PresentationDescription;
 
-                DataverseMutationExecutor.Update(_context, _serviceClient, updateRecord);
+            DataverseMutationExecutor.Update(_context, _serviceClient, updateRecord);
 
-            AddToSolutionIfRequested(chartId, solutionName);
+            string solutionWarning = null;
+            if (!string.IsNullOrWhiteSpace(solutionName))
+                solutionWarning = AddToSolution(chartId, solutionName.Trim());
 
             var published = false;
-            if (!string.IsNullOrEmpty(backupData.Entity))
-                published = PublishIfNeeded(backupData.Entity);
+            if (publish && !string.IsNullOrEmpty(backupData.Entity))
+            {
+                PublishHelper.PublishEntity(_context, _serviceClient, backupData.Entity);
+                published = true;
+            }
 
-            var sb = new StringBuilder();
-            sb.AppendLine($"[ChartUndo] Chart {chartId} restored from backup");
-            sb.AppendLine($"Restored File: {backupPathInput}");
-            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            var text = $"Restored chart {chartId} from backup '{backupPathInput}'.";
+            if (solutionWarning != null)
+                text += $" Not added to solution '{solutionName.Trim()}' (see solutionWarning).";
+            if (!published) text += " Not published.";
 
-            return SuccessResult(sb.ToString(), new UpsertChartResult
+            return Success(text, new UpsertChartResult
             {
                 Action = "undo",
-                Entity = backupData.Entity,
+                Entity = string.IsNullOrWhiteSpace(backupData.Entity) ? null : backupData.Entity,
                 ChartId = chartId.ToString(),
                 ChartName = backupData.ChartName,
+                SolutionName = string.IsNullOrWhiteSpace(solutionName) ? null : solutionName.Trim(),
+                SolutionWarning = solutionWarning,
                 Status = "restored",
                 RestoredFromBackup = backupPathInput,
                 Published = published
@@ -726,11 +694,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string entityName, string groupByCol, string aggregateCol, string aggregateType)
         {
             if (string.IsNullOrWhiteSpace(entityName))
-                return (null, null, "Error: entity logical name is required to build chart data specification.");
+                return (null, null, "entity logical name is required to build chart data specification.");
             if (string.IsNullOrWhiteSpace(groupByCol))
-                return (null, null, "Error: category/group_by_column is required to build chart data specification.");
+                return (null, null, "category/group_by_column is required to build chart data specification.");
             if (string.IsNullOrWhiteSpace(aggregateCol))
-                return (null, null, "Error: legend/aggregate_column is required to build chart data specification.");
+                return (null, null, "legend/aggregate_column is required to build chart data specification.");
 
             var targetEntity = entityName.Trim().ToLowerInvariant();
             var resolvedGroupBy = groupByCol.Trim().ToLowerInvariant();
@@ -848,29 +816,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Solution Component Helper (SDK Request) ─────────────────────────
 
-        private bool AddToSolutionIfRequested(Guid chartId, string solutionName)
+        /// <summary>
+        /// Adds the chart to a solution. Returns the failure reason when the add
+        /// fails (reported via solutionWarning), or null on success. Callers must
+        /// null-check the solution name before calling.
+        /// </summary>
+        private string AddToSolution(Guid chartId, string solutionUniqueName)
         {
-            // Caller must null-check solutionName before calling when solution is optional.
-            if (string.IsNullOrWhiteSpace(solutionName)) return false;
-            try
-            {
-                var result = SolutionComponentCreateHelper.AddExistingComponent(
-                    _context,
-                    _serviceClient,
-                    chartId,
-                    59, // SavedQueryVisualization (System Chart)
-                    solutionName,
-                    addRequiredComponents: false);
-                return result.IsAddToSolution;
-            }
-            catch (InvalidOperationException) when (_context.MutationsBlocked)
-            {
-                throw;
-            }
-            catch
-            {
-                return false;
-            }
+            var result = SolutionComponentCreateHelper.AddExistingComponent(
+                _context,
+                _serviceClient,
+                chartId,
+                59, // SavedQueryVisualization (System Chart)
+                solutionUniqueName,
+                addRequiredComponents: false);
+            return string.IsNullOrWhiteSpace(result.AddToSolutionWarning) ? null : result.AddToSolutionWarning;
         }
 
         // ── Shared Helpers ──────────────────────────────────────────────────
@@ -885,12 +845,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (!Guid.TryParse(chartIdInput.Trim(), out var guid))
                 {
-                    error = $"Error: '{chartIdInput}' is not a valid GUID.";
+                    error = $"'{chartIdInput}' is not a valid GUID.";
                     return null;
                 }
                 var entity = _serviceClient.Retrieve(table, guid, new ColumnSet(idCol, "name", "description", "datadescription", "presentationdescription", "isdefault", "primaryentitytypecode"));
                 if (entity == null)
-                    error = $"Error: Chart with ID '{chartIdInput}' not found.";
+                    error = $"Chart with ID '{chartIdInput}' not found.";
                 return entity;
             }
 
@@ -912,13 +872,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var res = _serviceClient.RetrieveMultiple(query);
                 if (res.Entities.Count == 0)
                 {
-                    error = $"Error: No chart found matching name '{chartNameInput}'.";
+                    error = $"No chart found matching name '{chartNameInput}'.";
                     return null;
                 }
                 return res.Entities[0];
             }
 
-            error = "Error: Either chart_id or chart_name must be provided.";
+            error = "Either chart_id or chart_name must be provided.";
             return null;
         }
 
@@ -957,21 +917,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             File.WriteAllText(backupPath, json, Encoding.UTF8);
             return backupPath;
-        }
-
-        private bool PublishIfNeeded(string entityName)
-        {
-            if (string.IsNullOrWhiteSpace(entityName)) return false;
-            try
-            {
-                var pubTool = new PublishCustomizationsTool(_serviceClient, _options, _context);
-                pubTool.publish_customizations(entities: entityName);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
         }
 
         private static (List<string> Errors, List<string> Warnings) ValidateChartXmls(string dataXml, string presXml)
@@ -1013,24 +958,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return File.ReadAllText(xmlOrPath, Encoding.UTF8).Trim();
             return xmlOrPath;
         }
-
-        private static string PrettyPrintXml(string xml)
-        {
-            if (string.IsNullOrWhiteSpace(xml)) return "(empty)";
-            try
-            {
-                var doc = XDocument.Parse(xml);
-                return doc.ToString();
-            }
-            catch
-            {
-                return xml;
-            }
-        }
-
-        private CallToolResult ErrorResult(string message) => Error(message);
-
-        private CallToolResult SuccessResult(string text, UpsertChartResult structured) => Success(text, structured);
 
         private sealed class ChartBackup
         {

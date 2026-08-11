@@ -48,12 +48,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true,
             OutputSchemaType = typeof(ManageDeletedRecordsResult)),
         Description(
-            "List / detail / restore / status for soft-deleted records. " +
-            "Soft-delete = IOrganizationService.Delete (records recoverable for up to MaxRetentionDays, default 30). " +
-            "Uses FetchXml datasource='bin' for list/detail (bin exposes only entity attributes â€” no 'deletedon'/'deletedby', use 'modifiedOn' as proxy). " +
-            "Restore uses the SDK Restore message to move the record from the recycle bin back to the live table. " +
-            "Toggle the org-level 'Keep deleted Dataverse records' setting via action='turn' turn='on|off'. " +
-            "RELATED: manage_record (live CRUD), execute_webapi (raw), get_audit_history (who deleted).")]
+            "Manage soft-deleted (recycle bin) records. Actions: 'list', 'detail', 'status' (read-only) | 'restore', 'turn' (mutations). " +
+            "Soft-deleted records stay recoverable up to the retention period (1-30 days, default 30), then are auto-purged. " +
+            "Bin exposes record attributes only (no deletedon/deletedby; use modifiedOn as delete-time proxy).\n\n" +
+            "WHEN TO USE:\n" +
+            "- List or inspect records in the recycle bin before restoring\n" +
+            "- Restore one or many deleted records back to the live table\n" +
+            "- Check (status) or toggle (turn on/off) the org-level 'Keep deleted Dataverse records' setting\n\n" +
+            "RELATED TOOLS:\n" +
+            "- manage_record → live CRUD; delete becomes soft-delete when the bin is ON\n" +
+            "- get_audit_history → who deleted a record and when\n" +
+            "- execute_webapi → raw access (Restore action is redirected here)")]
         public CallToolResult manage_deleted_records(
             [Description("Action: 'list' (default) | 'detail' | 'restore' | 'status' | 'turn'.")] string action = "list",
             [Description("Entity Display/logical name. list: required. detail: required. restore: required if record_ids span multiple entities. status: not used. turn: not used.")] string entity_name = "",
@@ -141,8 +146,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
 
             var text = records.Count == 0
-                ? $"[Success] {logicalName}: 0 deleted records."
-                : $"[Success] {logicalName}: {records.Count} deleted record(s).";
+                ? $"{logicalName}: 0 deleted records."
+                : $"{logicalName}: {records.Count} deleted record(s).";
 
             return Success(text, structured);
         }
@@ -212,7 +217,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     NotFound = true,
                     NotFoundHint = $"Record not found in the bin. It may be live (not deleted), or it never existed, or the retention window has passed. Try manage_record(action='read', entity_name='{displayName}', record_id='{recordId.Trim()}') to check if it's live."
                 };
-                return Success($"[Success] {logicalName} {recordId.Trim()}: not found in bin.", notFound);
+                return Success($"{logicalName} {recordId.Trim()}: not found in bin.", notFound);
             }
 
             var entity = ec.Entities[0];
@@ -247,7 +252,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Attributes = attributes.Count > 0 ? attributes : null
             };
 
-            return Success($"[Success] {logicalName} {entity.Id}: {attributes.Count} attributes from bin.", structured);
+            return Success($"{logicalName} {entity.Id}: {attributes.Count} attributes from bin.", structured);
         }
 
         private CallToolResult ExecuteRestore(string entityName, string recordId, string[] recordIds)
@@ -352,10 +357,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
 
             var text = failed == 0
-                ? $"[Success] {logicalName}: Restored {restored}/{guids.Count} record(s)."
+                ? $"{logicalName}: Restored {restored}/{guids.Count} record(s)."
                 : (restored == 0
-                    ? $"[Failed] {logicalName}: Restored 0/{guids.Count} record(s), {failed} failed."
-                    : $"[Partial] {logicalName}: Restored {restored}/{guids.Count} record(s), {failed} failed.");
+                    ? $"{logicalName}: Restored 0/{guids.Count} record(s), {failed} failed."
+                    : $"{logicalName}: Restored {restored}/{guids.Count} record(s), {failed} failed.");
 
             if (failed == 0)
                 return Success(text, structured);
@@ -416,10 +421,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
 
             var text = isOn == true
-                ? $"[Success] Soft-delete is ON ({enabledTableCount} table(s), retention={currentDays ?? maxDays} days)."
+                ? $"Soft-delete is ON ({enabledTableCount} table(s), retention={currentDays ?? maxDays} days)."
                 : isOn == false
-                    ? $"[Success] Soft-delete is OFF (0 tables, retention would be {maxDays} days when enabled)."
-                    : "[Success] Soft-delete state UNKNOWN (org row missing).";
+                    ? $"Soft-delete is OFF (0 tables, retention would be {maxDays} days when enabled)."
+                    : "Soft-delete state UNKNOWN (org row missing).";
 
             return Success(text, structured);
         }
@@ -515,7 +520,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (t == "on")
             {
                 var newId = TurnOn(actualRetention);
-                var text = $"[Success] Soft-delete turned ON (new id={newId}, retention={actualRetention} days). Dataverse will provision per-table rows in the background (operationtype=104 'Process Table For RecycleBin').";
+                var text = $"Soft-delete turned ON (new id={newId}, retention={actualRetention} days). Dataverse will provision per-table rows in the background (operationtype=104 'Process Table For RecycleBin').";
                 var structured = new ManageDeletedRecordsResult
                 {
                     Action = "turn",
@@ -529,7 +534,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             else
             {
                 var deletedId = TurnOff();
-                var text = $"[Success] Soft-delete turned OFF (deleted recyclebinconfig id={deletedId}). Dataverse will cascade-delete per-table rows in the background.";
+                var text = $"Soft-delete turned OFF (deleted recyclebinconfig id={deletedId}). Dataverse will cascade-delete per-table rows in the background.";
                 var structured = new ManageDeletedRecordsResult
                 {
                     Action = "turn",
@@ -553,7 +558,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 State = new OptionSetValue(1),
                 Status = new OptionSetValue(2)
             };
-                    DataverseMutationExecutor.Execute(_context, _serviceClient, setState);
+            DataverseMutationExecutor.Execute(_context, _serviceClient, setState);
             return id;
         }
 

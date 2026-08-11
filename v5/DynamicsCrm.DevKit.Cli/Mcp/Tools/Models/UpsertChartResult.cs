@@ -10,9 +10,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string Action { get; set; }
 
         [JsonPropertyName("entity")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Entity { get; set; }
 
         [JsonPropertyName("chartId")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string ChartId { get; set; }
 
         [JsonPropertyName("chartName")]
@@ -70,5 +72,62 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("published")]
         public bool Published { get; set; }
+
+        // ---- list only ----
+
+        [JsonPropertyName("totalCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? TotalCount { get; set; }
+
+        [JsonPropertyName("charts")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<ChartListEntry> Charts { get; set; }
+
+        // ---- detail only ----
+
+        [JsonPropertyName("description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Description { get; set; }
+
+        [JsonPropertyName("isDefault")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsDefault { get; set; }
+
+        [JsonPropertyName("dataDescription")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string DataDescription { get; set; }
+
+        [JsonPropertyName("presentationDescription")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string PresentationDescription { get; set; }
+
+        // ---- create/update/rename/undo: add-to-solution warning channel ----
+
+        [JsonPropertyName("solutionWarning")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SolutionWarning { get; set; }
+    }
+
+    /// <summary>
+    /// One chart row in the <c>list</c> action result.
+    /// </summary>
+    internal sealed class ChartListEntry
+    {
+        [JsonPropertyName("chartId")]
+        public string ChartId { get; set; }
+
+        [JsonPropertyName("chartName")]
+        public string ChartName { get; set; }
+
+        [JsonPropertyName("entity")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Entity { get; set; }
+
+        [JsonPropertyName("isDefault")]
+        public bool IsDefault { get; set; }
+
+        [JsonPropertyName("description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Description { get; set; }
     }
 }
