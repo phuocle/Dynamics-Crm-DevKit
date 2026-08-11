@@ -354,7 +354,7 @@ public class ManageChoiceToolTests
         var result = DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.McpToolResults.Success("test content", null);
         Assert.AreEqual(1, result.Content.Count, "SuccessResult should have exactly 1 content block");
         var text = ((TextContentBlock)result.Content[0]).Text;
-        Assert.AreEqual("test content", text);
+        Assert.AreEqual("[Success] test content", text);
     }
 
     [TestMethod]
@@ -363,7 +363,7 @@ public class ManageChoiceToolTests
         var result = DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.McpToolResults.Success("hello world", null);
         Assert.AreEqual(1, result.Content.Count, "Should have exactly 1 content block");
         var text = ((TextContentBlock)result.Content[0]).Text;
-        Assert.AreEqual("hello world", text);
+        Assert.AreEqual("[Success] hello world", text);
     }
 
     [TestMethod]
@@ -372,7 +372,7 @@ public class ManageChoiceToolTests
         var result = DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.McpToolResults.Success("", null);
         Assert.AreEqual(1, result.Content.Count, "Should have 1 content block even for empty text");
         var text = ((TextContentBlock)result.Content[0]).Text;
-        Assert.AreEqual("", text);
+        Assert.AreEqual("[Success] ", text);
     }
 
     [TestMethod]
@@ -387,7 +387,7 @@ public class ManageChoiceToolTests
     {
         var result = DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.McpToolResults.Error("Error: test message");
         var text = ((TextContentBlock)result.Content[0]).Text;
-        Assert.AreEqual("Error: test message", text);
+        Assert.AreEqual("[Error] test message", text);
     }
 
     [TestMethod]
@@ -402,10 +402,10 @@ public class ManageChoiceToolTests
     // FormatOptionSetDetail — additional coverage
     // ──────────────────────────────────────────────
 
-    private static readonly Type CompactFormatterType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageChoiceTool).Assembly
-        .GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.CompactFormatter")!;
+    private static readonly Type MarkdownFormatterType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageChoiceTool).Assembly
+        .GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.MarkdownFormatter")!;
 
-    private static readonly MethodInfo FormatOptionSetDetailMethod = CompactFormatterType
+    private static readonly MethodInfo FormatOptionSetDetailMethod = MarkdownFormatterType
         .GetMethod("FormatOptionSetDetail", BindingFlags.Public | BindingFlags.Static)!;
 
     [TestMethod]
@@ -419,8 +419,9 @@ public class ManageChoiceToolTests
         osm.GetType().GetProperty("OptionSetType")!.SetValue(osm, (OptionSetType?)OptionSetType.Picklist);
 
         var result = (string)FormatOptionSetDetailMethod.Invoke(null, [osm])!;
-        Assert.IsTrue(result.Contains("[Options] 0 total"),
-            "Empty OptionSetMetadata should show '[Options] 0 total'");
+        Assert.IsTrue(result.Contains("test_empty"), "Should show the optionset name");
+        Assert.IsFalse(result.Contains("## Options"),
+            "Empty OptionSetMetadata should not render an Options section");
     }
 
     [TestMethod]
@@ -442,7 +443,7 @@ public class ManageChoiceToolTests
         osm.GetType().GetProperty("OptionSetType")!.SetValue(osm, (OptionSetType?)OptionSetType.Picklist);
 
         var result = (string)FormatOptionSetDetailMethod.Invoke(null, [osm])!;
-        Assert.IsTrue(result.Contains("[Options] 2 total"), "Should show 2 total options");
+        Assert.IsTrue(result.Contains("## Options — 2"), "Should show 2 total options");
         Assert.IsTrue(result.Contains("Active"), "Should contain the 'Active' label");
         Assert.IsTrue(result.Contains("Inactive"), "Should contain the 'Inactive' label");
     }
@@ -457,7 +458,7 @@ public class ManageChoiceToolTests
         osm.GetType().GetProperty("Description")!.SetValue(osm, descLabel);
 
         var result = (string)FormatOptionSetDetailMethod.Invoke(null, [osm])!;
-        Assert.IsTrue(result.Contains("Description: My description"), "Should show description");
+        Assert.IsTrue(result.Contains("> My description"), "Should show description as markdown blockquote");
     }
 
     [TestMethod]
@@ -472,9 +473,9 @@ public class ManageChoiceToolTests
 
         var result = (string)FormatOptionSetDetailMethod.Invoke(null, [boolOs])!;
 
-        Assert.IsTrue(result.Contains("[test_boolean]"));
-        Assert.IsTrue(result.Contains("[Options] 2 total"));
-        Assert.IsTrue(result.Contains("Value\tLabel"));
+        Assert.IsTrue(result.Contains("test_boolean"));
+        Assert.IsTrue(result.Contains("## Options"));
+        Assert.IsTrue(result.Contains("| Value | Label |"));
     }
 
     // ──────────────────────────────────────────────

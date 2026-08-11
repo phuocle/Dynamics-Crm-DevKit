@@ -37,29 +37,29 @@ public class CreateRecordsInternalsCoverageTests
     {
         var tool = new CreateRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
         var warnings = new List<string>();
-        var inline = (string)InvokeInstance(tool, "ResolveRecordsInput", "[{\"name\":\"A\"}]", "account", warnings, true)!;
-        Assert.AreEqual("[{\"name\":\"A\"}]", inline);
+        var inline = ((string json, string format))InvokeInstance(tool, "ResolveRecordsInput", "[{\"name\":\"A\"}]", "account", warnings, true)!;
+        Assert.AreEqual("[{\"name\":\"A\"}]", inline.json);
 
         var path = Path.Combine(Path.GetTempPath(), $"records-{Guid.NewGuid():N}.json");
         File.WriteAllText(path, "[{\"name\":\"B\"}]");
-        var fileContent = (string)InvokeInstance(tool, "ResolveRecordsInput", path, "account", warnings, true)!;
-        Assert.AreEqual("[{\"name\":\"B\"}]", fileContent);
+        var fileContent = ((string json, string format))InvokeInstance(tool, "ResolveRecordsInput", path, "account", warnings, true)!;
+        Assert.AreEqual("[{\"name\":\"B\"}]", fileContent.json);
         Assert.IsFalse(File.Exists(path), "Resolved temp json files are deleted after read.");
 
-        var missing = InvokeInstance(tool, "ResolveRecordsInput", path, "account", warnings, true);
-        Assert.IsNull(missing);
+        var missing = ((string json, string format))InvokeInstance(tool, "ResolveRecordsInput", path, "account", warnings, true)!;
+        Assert.IsNull(missing.json);
 
         var emptyCsv = Path.Combine(Path.GetTempPath(), $"records-{Guid.NewGuid():N}.csv");
         File.WriteAllText(emptyCsv, "Name");
-        var emptyCsvJson = (string)InvokeInstance(tool, "ResolveRecordsInput", emptyCsv, "account", warnings, true)!;
-        Assert.AreEqual("[]", emptyCsvJson);
+        var emptyCsvJson = ((string json, string format))InvokeInstance(tool, "ResolveRecordsInput", emptyCsv, "account", warnings, true)!;
+        Assert.AreEqual("[]", emptyCsvJson.json);
         Assert.IsTrue(warnings.Exists(w => w.Contains("no data rows")));
         Assert.IsFalse(File.Exists(emptyCsv), "Resolved temp csv files are deleted after read.");
 
         var csvWithoutMetadata = Path.Combine(Path.GetTempPath(), $"records-{Guid.NewGuid():N}.csv");
         File.WriteAllText(csvWithoutMetadata, "Name\r\nContoso");
-        var noMetadataJson = (string)InvokeInstance(tool, "ResolveRecordsInput", csvWithoutMetadata, "account", warnings, true)!;
-        Assert.AreEqual("[]", noMetadataJson);
+        var noMetadataJson = ((string json, string format))InvokeInstance(tool, "ResolveRecordsInput", csvWithoutMetadata, "account", warnings, true)!;
+        Assert.AreEqual("[]", noMetadataJson.json);
         Assert.IsTrue(warnings.Exists(w => w.Contains("Failed to load metadata")));
     }
 

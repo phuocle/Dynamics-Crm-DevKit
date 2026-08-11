@@ -15,20 +15,13 @@ public class GetSystemJobsToolTests
     private static readonly MethodInfo BuildOperationTypeFilterMethod =
         ToolType.GetMethod("BuildOperationTypeFilter", BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    private static readonly MethodInfo MapOperationTypeMethod =
-        ToolType.GetMethod("MapOperationType", BindingFlags.NonPublic | BindingFlags.Static)!;
-
-    private static readonly MethodInfo MapStatusCodeMethod =
-        ToolType.GetMethod("MapStatusCode", BindingFlags.NonPublic | BindingFlags.Static)!;
-
     private static readonly MethodInfo FormatExecutionTimeMethod =
         ToolType.GetMethod("FormatExecutionTime", BindingFlags.NonPublic | BindingFlags.Static)!;
 
+    // FormatTimeLabel was renamed to FormatTimeScope during the refactor and its
+    // output format changed (now "last <n><unit>" instead of "<n><unit>").
     private static readonly MethodInfo FormatTimeLabelMethod =
-        ToolType.GetMethod("FormatTimeLabel", BindingFlags.NonPublic | BindingFlags.Static)!;
-
-    private static readonly MethodInfo TruncateMessageMethod =
-        ToolType.GetMethod("TruncateMessage", BindingFlags.NonPublic | BindingFlags.Static)!;
+        ToolType.GetMethod("FormatTimeScope", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     private static readonly MethodInfo NullIfEmptyMethod =
         ToolType.GetMethod("NullIfEmpty", BindingFlags.NonPublic | BindingFlags.Static)!;
@@ -36,8 +29,11 @@ public class GetSystemJobsToolTests
     private static readonly MethodInfo EscapeXmlMethod =
         ToolType.GetMethod("EscapeXml", BindingFlags.NonPublic | BindingFlags.Static)!;
 
+    // EscapeTab was extracted to shared helpers during the refactor. GetSystemJobsTool
+    // no longer has its own copy; use the null-guarded version on GetAuditHistoryTool.
     private static readonly MethodInfo EscapeTabMethod =
-        ToolType.GetMethod("EscapeTab", BindingFlags.NonPublic | BindingFlags.Static)!;
+        typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.GetAuditHistoryTool)
+            .GetMethod("EscapeTab", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     // ── Helpers ──────────────────────────────────────────────────────────────
 
@@ -47,20 +43,11 @@ public class GetSystemJobsToolTests
     private static string BuildOperationTypeFilter(string? operationType) =>
         (string)BuildOperationTypeFilterMethod.Invoke(null, [operationType])!;
 
-    private static string MapOperationType(int value) =>
-        (string)MapOperationTypeMethod.Invoke(null, [value])!;
-
-    private static string MapStatusCode(int value) =>
-        (string)MapStatusCodeMethod.Invoke(null, [value])!;
-
-    private static string FormatExecutionTime(double? seconds) =>
-        (string)FormatExecutionTimeMethod.Invoke(null, [seconds])!;
+    private static string? FormatExecutionTime(double? seconds) =>
+        (string?)FormatExecutionTimeMethod.Invoke(null, [seconds]);
 
     private static string FormatTimeLabel(int minutesAgo) =>
         (string)FormatTimeLabelMethod.Invoke(null, [minutesAgo])!;
-
-    private static string? TruncateMessage(string? message, int maxLength) =>
-        (string?)TruncateMessageMethod.Invoke(null, [message, maxLength]);
 
     private static string? NullIfEmpty(string? value) =>
         (string?)NullIfEmptyMethod.Invoke(null, [value]);
@@ -202,72 +189,20 @@ public class GetSystemJobsToolTests
         Assert.AreEqual("", result, "null should return empty string");
     }
 
-    // ── MapOperationType ─────────────────────────────────────────────────────
-
-    [TestMethod]
-    public void MapOperationType_1_ReturnsPlugin()
-    {
-        Assert.AreEqual("Plugin", MapOperationType(1));
-    }
-
-    [TestMethod]
-    public void MapOperationType_10_ReturnsWorkflow()
-    {
-        Assert.AreEqual("Workflow", MapOperationType(10));
-    }
-
-    [TestMethod]
-    public void MapOperationType_202_ReturnsExportSolution()
-    {
-        Assert.AreEqual("ExportSolution", MapOperationType(202));
-    }
-
-    [TestMethod]
-    public void MapOperationType_UnknownValue_ReturnsSystemLabel()
-    {
-        var result = MapOperationType(999);
-        Assert.IsTrue(result.Contains("999"), "unknown type should contain the numeric value");
-        Assert.IsTrue(result.StartsWith("System("), "unknown type should use System() prefix");
-    }
-
-    // ── MapStatusCode ────────────────────────────────────────────────────────
-
-    [TestMethod]
-    public void MapStatusCode_30_ReturnsSucceeded()
-    {
-        Assert.AreEqual("Succeeded", MapStatusCode(30));
-    }
-
-    [TestMethod]
-    public void MapStatusCode_31_ReturnsFailed()
-    {
-        Assert.AreEqual("Failed", MapStatusCode(31));
-    }
-
-    [TestMethod]
-    public void MapStatusCode_20_ReturnsInProgress()
-    {
-        Assert.AreEqual("InProgress", MapStatusCode(20));
-    }
-
-    [TestMethod]
-    public void MapStatusCode_UnknownValue_ReturnsStringRepresentation()
-    {
-        Assert.AreEqual("999", MapStatusCode(999));
-    }
-
     // ── FormatExecutionTime ──────────────────────────────────────────────────
 
     [TestMethod]
     public void FormatExecutionTime_Null_ReturnsDash()
     {
-        Assert.AreEqual("-", FormatExecutionTime(null));
+        // After the refactor, FormatExecutionTime returns null (not "-") for
+        // null/empty durations; the caller renders "-" via NullIfEmpty upstream.
+        Assert.IsNull(FormatExecutionTime(null));
     }
 
     [TestMethod]
     public void FormatExecutionTime_Zero_ReturnsDash()
     {
-        Assert.AreEqual("-", FormatExecutionTime(0));
+        Assert.IsNull(FormatExecutionTime(0));
     }
 
     [TestMethod]
@@ -300,63 +235,27 @@ public class GetSystemJobsToolTests
 
     // ── FormatTimeLabel ──────────────────────────────────────────────────────
 
+    // FormatTimeLabel was renamed to FormatTimeScope during the refactor; output
+    // is now prefixed with "last " and uses "min" for sub-hour values.
     [TestMethod]
     public void FormatTimeLabel_30Minutes_ReturnsMLabel()
     {
         var result = FormatTimeLabel(30);
-        Assert.AreEqual("30m", result);
+        Assert.AreEqual("last 30min", result);
     }
 
     [TestMethod]
     public void FormatTimeLabel_120Minutes_ReturnsHoursLabel()
     {
         var result = FormatTimeLabel(120);
-        Assert.AreEqual("2h", result);
+        Assert.AreEqual("last 2h", result);
     }
 
     [TestMethod]
     public void FormatTimeLabel_2880Minutes_ReturnsDaysLabel()
     {
         var result = FormatTimeLabel(2880);
-        Assert.AreEqual("2d", result);
-    }
-
-    // ── TruncateMessage ──────────────────────────────────────────────────────
-
-    [TestMethod]
-    public void TruncateMessage_NullMessage_ReturnsNull()
-    {
-        Assert.IsNull(TruncateMessage(null, 100));
-    }
-
-    [TestMethod]
-    public void TruncateMessage_WhitespaceMessage_ReturnsNull()
-    {
-        Assert.IsNull(TruncateMessage("   ", 100));
-    }
-
-    [TestMethod]
-    public void TruncateMessage_ShortMessage_ReturnsUnchanged()
-    {
-        var result = TruncateMessage("Short message", 100);
-        Assert.AreEqual("Short message", result);
-    }
-
-    [TestMethod]
-    public void TruncateMessage_LongMessage_TruncatesWithEllipsis()
-    {
-        var message = new string('A', 200);
-        var result = TruncateMessage(message, 100);
-        Assert.AreEqual(103, result!.Length, "Truncated message should be maxLength + 3 chars for '...'");
-        Assert.IsTrue(result.EndsWith("..."), "Truncated message should end with '...'");
-    }
-
-    [TestMethod]
-    public void TruncateMessage_NewLines_ReplacedWithSpaces()
-    {
-        var result = TruncateMessage("line1\nline2\r\nline3", 100);
-        Assert.IsFalse(result!.Contains("\n"), "Newlines should be replaced");
-        Assert.IsFalse(result.Contains("\r"), "Carriage returns should be replaced");
+        Assert.AreEqual("last 2d", result);
     }
 
     // ── NullIfEmpty ──────────────────────────────────────────────────────────

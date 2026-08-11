@@ -17,14 +17,15 @@ public class GetMessagesToolTests
     private static readonly MethodInfo SimplifyTypeMethod = ToolType
         .GetMethod("SimplifyType", BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    private static readonly MethodInfo ExtractEntityTypeMethod = ToolType
-        .GetMethod("ExtractEntityType", BindingFlags.NonPublic | BindingFlags.Static)!;
-
     private static readonly MethodInfo EscapeXmlMethod = ToolType
         .GetMethod("EscapeXml", BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    private static readonly MethodInfo EscapeTabMethod = ToolType
-        .GetMethod("EscapeTab", BindingFlags.NonPublic | BindingFlags.Static)!;
+    // EscapeTab was extracted to shared helpers during the refactor. GetMessagesTool
+    // no longer has its own copy; use the null-guarded version on GetAuditHistoryTool
+    // so the EscapeTab_Null_ReturnsEmptyString expectation (null => "") stays valid.
+    private static readonly MethodInfo EscapeTabMethod =
+        typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.GetAuditHistoryTool)
+            .GetMethod("EscapeTab", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     private static readonly FieldInfo AvailabilityMapField = ToolType
         .GetField("AvailabilityMap", BindingFlags.NonPublic | BindingFlags.Static)!;
@@ -39,9 +40,6 @@ public class GetMessagesToolTests
 
     private static string SimplifyType(string? type) =>
         (string)SimplifyTypeMethod.Invoke(null, [type])!;
-
-    private static string? ExtractEntityType(string type) =>
-        (string?)ExtractEntityTypeMethod.Invoke(null, [type]);
 
     private static string EscapeXml(string value) =>
         (string)EscapeXmlMethod.Invoke(null, [value])!;
@@ -141,20 +139,6 @@ public class GetMessagesToolTests
     public void SimplifyType_Null_ReturnsUnknown()
     {
         Assert.AreEqual("Unknown", SimplifyType(null));
-    }
-
-    // ── ExtractEntityType tests ─────────────────────────────────────────────
-
-    [TestMethod]
-    public void ExtractEntityType_WithParens_ReturnsInnerValue()
-    {
-        Assert.AreEqual("account", ExtractEntityType("EntityReference(account)"));
-    }
-
-    [TestMethod]
-    public void ExtractEntityType_WithoutParens_ReturnsNull()
-    {
-        Assert.IsNull(ExtractEntityType("String"));
     }
 
     // ── EscapeXml tests ─────────────────────────────────────────────────────

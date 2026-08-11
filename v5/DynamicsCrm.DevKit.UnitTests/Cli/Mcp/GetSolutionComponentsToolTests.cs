@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,8 +23,12 @@ public class GetSolutionComponentsToolTests
     private static readonly MethodInfo GetComponentApiNameMethod = ToolType
         .GetMethod("GetComponentApiName", BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    private static string GetTypeName(int typeId) =>
-        (string)GetTypeNameMethod.Invoke(null, new object[] { typeId })!;
+    private static string GetTypeName(int typeId)
+    {
+        var entity = new Entity("solutioncomponent");
+        entity["componenttype"] = new OptionSetValue(typeId);
+        return (string)GetTypeNameMethod.Invoke(null, new object[] { entity })!;
+    }
 
     private static string GetComponentApiName(int typeId) =>
         (string)GetComponentApiNameMethod.Invoke(null, new object[] { typeId })!;

@@ -12,14 +12,11 @@ public class GetPluginsToolTests
     private static readonly MethodInfo EscapeXmlMethod = ToolType
         .GetMethod("EscapeXml", BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    private static readonly MethodInfo EscapeTabMethod = ToolType
+    private static readonly MethodInfo EscapeTabMethod = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.CompactFormatter)
         .GetMethod("EscapeTab", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     private static readonly MethodInfo NullIfEmptyMethod = ToolType
         .GetMethod("NullIfEmpty", BindingFlags.NonPublic | BindingFlags.Static)!;
-
-    private static readonly MethodInfo ShortTypeNameMethod = ToolType
-        .GetMethod("ShortTypeName", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     // ──────────────────────────────────────────────
     // EscapeXml
@@ -98,38 +95,6 @@ public class GetPluginsToolTests
     }
 
     // ──────────────────────────────────────────────
-    // ShortTypeName
-    // ──────────────────────────────────────────────
-
-    private static string ShortTypeName(string fullTypeName) =>
-        (string)ShortTypeNameMethod.Invoke(null, [fullTypeName])!;
-
-    [TestMethod]
-    public void ShortTypeName_WithNamespace_ReturnsLastPart()
-    {
-        Assert.AreEqual("PostDeleteAccount", ShortTypeName("AccountPlugin.PostDeleteAccount"));
-    }
-
-    [TestMethod]
-    public void ShortTypeName_NoNamespace_ReturnsAsIs()
-    {
-        Assert.AreEqual("SimplePlugin", ShortTypeName("SimplePlugin"));
-    }
-
-    [TestMethod]
-    public void ShortTypeName_DeepNamespace_ReturnsLastPart()
-    {
-        Assert.AreEqual("MyPlugin", ShortTypeName("A.B.C.D.MyPlugin"));
-    }
-
-    [TestMethod]
-    public void ShortTypeName_Empty_ReturnsEmpty()
-    {
-        var result = ShortTypeNameMethod.Invoke(null, [string.Empty]);
-        Assert.AreEqual(string.Empty, result);
-    }
-
-    // ──────────────────────────────────────────────
     // Validation: type_name filter uses <filter> wrapper (Finding 1 fix)
     // ──────────────────────────────────────────────
 
@@ -160,7 +125,7 @@ public class GetPluginsToolTests
     public void GetPlugins_FiltersWithoutEntityOrAssembly_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.GetPluginsTool(null!);
-        var result = tool.get_plugins(message_name: "Create");
+        var result = tool.get_plugins(stage: "prevalidation");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("require entity_name or assembly_name"));

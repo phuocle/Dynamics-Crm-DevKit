@@ -1,9 +1,11 @@
 using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using ModelContextProtocol.Protocol;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -52,46 +54,46 @@ public class CreateRecordsDryRunTests
     }
 
     /// <summary>
-    /// TryCreateAsync must call DataverseMutationExecutor.CreateAsync which
-    /// asserts mutation is allowed. In blocked mode, the gateway must throw
-    /// before any SDK call — even if the action-level preview was bypassed.
+    /// ExecuteChunkAsync (the per-record TryCreateAsync replacement after the
+    /// ExecuteMultiple refactor) routes the batch through
+    /// DataverseMutationExecutor.ExecuteAsync, which asserts mutation is
+    /// allowed. In blocked mode the gateway must throw before any SDK call —
+    /// even if the action-level preview was bypassed.
     /// </summary>
     [TestMethod]
     public async Task TryCreateAsync_BlockedContext_ThrowsBeforeSdkCall()
     {
         // Arrange: tool with blocked context and null ServiceClient.
-        // If the gateway works, it throws InvalidOperationException before
-        // _serviceClient.CreateAsync is reached (which would NullRef).
+        // If the gateway works, it throws before serviceClient.ExecuteAsync
+        // is reached (which would NullRef).
         var tool = new CreateRecordsTool(null!, new McpDryRunOptions { DryRun = true },
             DryRunTestHelpers.BlockedContext());
 
-        var entity = new Entity("account");
         var method = typeof(CreateRecordsTool)
-            .GetMethod("TryCreateAsync",
-                BindingFlags.NonPublic | BindingFlags.Instance,
-                null,
-                [typeof(Entity), typeof(CancellationToken)],
-                null);
+            .GetMethod("ExecuteChunkAsync", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        Assert.IsNotNull(method, "TryCreateAsync method not found via reflection.");
+        Assert.IsNotNull(method, "ExecuteChunkAsync method not found via reflection.");
 
-        var task = (Task<(Guid id, string error)>)method.Invoke(tool, [entity, CancellationToken.None])!;
+        var chunk = new List<(int index, Entity entity)> { (0, new Entity("account")) };
+        var task = (Task<List<BatchCreateItem>>)method.Invoke(tool,
+            new object[] { null, chunk, false, CancellationToken.None })!;
 
-        // The gateway should throw InvalidOperationException, which TryCreateAsync
-        // catches and returns as (Guid.Empty, errorMessage).
-        var result = await task;
+        // The gateway throws, the chunk-level catch marks every item failed
+        // with the gateway message.
+        var items = await task;
 
-        Assert.AreEqual(Guid.Empty, result.id);
-        Assert.IsFalse(string.IsNullOrEmpty(result.error),
-            "TryCreateAsync should return an error message when the gateway blocks the mutation.");
-        Assert.IsTrue(result.error.Contains("Mutation blocked", StringComparison.OrdinalIgnoreCase),
-            $"Error message should mention 'Mutation blocked'. Got: {result.error}");
+        Assert.AreEqual(1, items.Count);
+        Assert.AreEqual("failed", items[0].Status);
+        Assert.IsFalse(string.IsNullOrEmpty(items[0].Error),
+            "ExecuteChunkAsync should return an error message when the gateway blocks the mutation.");
+        Assert.IsTrue(items[0].Error.Contains("Mutation blocked", StringComparison.OrdinalIgnoreCase),
+            $"Error message should mention 'Mutation blocked'. Got: {items[0].Error}");
     }
 
     /// <summary>
-    /// TryCreateAsync with a non-blocking context and null ServiceClient should
-    /// reach the SDK call and return a NullReferenceException-derived error
-    /// (proving the gateway allowed the call through).
+    /// ExecuteChunkAsync with a non-blocking context and null ServiceClient
+    /// should reach the SDK call and return a NullReferenceException-derived
+    /// error (proving the gateway allowed the call through).
     /// </summary>
     [TestMethod]
     public async Task TryCreateAsync_NormalContext_AllowsSdkCall()
@@ -99,23 +101,21 @@ public class CreateRecordsDryRunTests
         var tool = new CreateRecordsTool(null!, new McpDryRunOptions { DryRun = false },
             DryRunTestHelpers.NormalContext());
 
-        var entity = new Entity("account");
         var method = typeof(CreateRecordsTool)
-            .GetMethod("TryCreateAsync",
-                BindingFlags.NonPublic | BindingFlags.Instance,
-                null,
-                [typeof(Entity), typeof(CancellationToken)],
-                null);
+            .GetMethod("ExecuteChunkAsync", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        Assert.IsNotNull(method, "TryCreateAsync method not found via reflection.");
+        Assert.IsNotNull(method, "ExecuteChunkAsync method not found via reflection.");
 
-        var task = (Task<(Guid id, string error)>)method.Invoke(tool, [entity, CancellationToken.None])!;
-        var result = await task;
+        var chunk = new List<(int index, Entity entity)> { (0, new Entity("account")) };
+        var task = (Task<List<BatchCreateItem>>)method.Invoke(tool,
+            new object[] { null, chunk, false, CancellationToken.None })!;
+        var items = await task;
 
-        Assert.AreEqual(Guid.Empty, result.id);
+        Assert.AreEqual(1, items.Count);
+        Assert.AreEqual("failed", items[0].Status);
         // With null ServiceClient, the SDK call throws — but NOT "Mutation blocked".
-        Assert.IsFalse(result.error.Contains("Mutation blocked", StringComparison.OrdinalIgnoreCase),
-            $"Normal context should not block. Got: {result.error}");
+        Assert.IsFalse(items[0].Error.Contains("Mutation blocked", StringComparison.OrdinalIgnoreCase),
+            $"Normal context should not block. Got: {items[0].Error}");
     }
 
     /// <summary>

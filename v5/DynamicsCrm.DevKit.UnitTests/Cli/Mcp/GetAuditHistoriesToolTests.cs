@@ -76,7 +76,7 @@ public class GetAuditHistoriesToolTests
         string operation, int maxRecords)
     {
         return (string)BuildBrowseFetchXmlMethod.Invoke(null,
-            new object?[] { objectTypeCode, sinceUtc, untilUtc, operation, maxRecords })!;
+            new object?[] { objectTypeCode, sinceUtc, untilUtc, operation, maxRecords, null })!;
     }
 
     [TestMethod]

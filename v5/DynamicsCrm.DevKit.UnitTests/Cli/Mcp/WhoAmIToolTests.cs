@@ -169,7 +169,7 @@ public class WhoAmIToolTests
 
         var text = BuildCompactText(r);
 
-        Assert.IsTrue(text.StartsWith("[Success] Connected to "));
+        Assert.IsTrue(text.StartsWith("Connected to "));
         Assert.IsTrue(text.Contains("SANDBOX"));
         Assert.IsTrue(text.Contains("https://org.crm.dynamics.com"));
         Assert.IsTrue(text.Contains("as John Doe"));
@@ -198,7 +198,7 @@ public class WhoAmIToolTests
 
         var text = BuildCompactText(r);
 
-        Assert.IsTrue(text.StartsWith("[Success] Connected to "));
+        Assert.IsTrue(text.StartsWith("Connected to "));
         Assert.IsTrue(text.Contains("as user-id"));
         Assert.IsFalse(text.Contains("security role"));
         Assert.IsFalse(text.Contains("warning"));

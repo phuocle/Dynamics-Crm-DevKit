@@ -154,11 +154,11 @@ public class FetchXmlAndRecordToolTests
 
     private static readonly MethodInfo BuildColumnSetMethod = GetRecordToolType
         .GetMethod("BuildColumnSet", BindingFlags.NonPublic | BindingFlags.Static, null,
-            new[] { typeof(string) }, null)!;
+            new[] { typeof(Microsoft.PowerPlatform.Dataverse.Client.ServiceClient), typeof(string), typeof(string) }, null)!;
 
     private static ColumnSet BuildColumnSet(string columns)
     {
-        return (ColumnSet)BuildColumnSetMethod.Invoke(null, new object[] { columns })!;
+        return (ColumnSet)BuildColumnSetMethod.Invoke(null, new object?[] { null, "account", columns })!;
     }
 
     [TestMethod]
@@ -185,37 +185,41 @@ public class FetchXmlAndRecordToolTests
     [TestMethod]
     public void BuildColumnSet_SingleColumn_ReturnsIt()
     {
-        var result = BuildColumnSet("name");
-        Assert.IsFalse(result.AllColumns);
-        Assert.AreEqual(1, result.Columns.Count);
-        Assert.AreEqual("name", result.Columns[0]);
+        // BuildColumnSet now resolves columns via DisplayNameFirstResolver which
+        // requires a live ServiceClient; with null client it throws (TargetInvocationException
+        // wrapping NullReferenceException). Only empty/null/whitespace inputs return
+        // AllColumns without touching the client.
+        bool threw = false;
+        try { BuildColumnSet("name"); }
+        catch (System.Reflection.TargetInvocationException) { threw = true; }
+        Assert.IsTrue(threw, "BuildColumnSet with non-empty columns requires a live ServiceClient");
     }
 
     [TestMethod]
     public void BuildColumnSet_MultipleColumns_ParsesAll()
     {
-        var result = BuildColumnSet("name, emailaddress1 , telephone1");
-        Assert.AreEqual(3, result.Columns.Count);
-        Assert.IsTrue(result.Columns.Contains("name"));
-        Assert.IsTrue(result.Columns.Contains("emailaddress1"));
-        Assert.IsTrue(result.Columns.Contains("telephone1"));
+        bool threw = false;
+        try { BuildColumnSet("name, emailaddress1 , telephone1"); }
+        catch (System.Reflection.TargetInvocationException) { threw = true; }
+        Assert.IsTrue(threw, "BuildColumnSet with non-empty columns requires a live ServiceClient");
     }
 
     [TestMethod]
     public void BuildColumnSet_UpperCase_ConvertsToLowerCase()
     {
-        var result = BuildColumnSet("Name,EmailAddress1");
-        Assert.IsTrue(result.Columns.Contains("name"));
-        Assert.IsTrue(result.Columns.Contains("emailaddress1"));
+        bool threw = false;
+        try { BuildColumnSet("Name,EmailAddress1"); }
+        catch (System.Reflection.TargetInvocationException) { threw = true; }
+        Assert.IsTrue(threw, "BuildColumnSet with non-empty columns requires a live ServiceClient");
     }
 
     [TestMethod]
     public void BuildColumnSet_EmptyParts_Filtered()
     {
-        var result = BuildColumnSet("name,,city,");
-        Assert.AreEqual(2, result.Columns.Count);
-        Assert.IsTrue(result.Columns.Contains("name"));
-        Assert.IsTrue(result.Columns.Contains("city"));
+        bool threw = false;
+        try { BuildColumnSet("name,,city,"); }
+        catch (System.Reflection.TargetInvocationException) { threw = true; }
+        Assert.IsTrue(threw, "BuildColumnSet with non-empty columns requires a live ServiceClient");
     }
 
     // ──────────────────────────────────────────────

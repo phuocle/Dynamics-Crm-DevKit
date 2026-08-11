@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ModelContextProtocol.Protocol;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -21,13 +22,30 @@ public class SearchToolTests
     // FormatSearchResults (private static)
     // ──────────────────────────────────────────────
 
-    private static readonly MethodInfo FormatSearchResultsMethod = ToolType
-        .GetMethod("FormatSearchResults", BindingFlags.NonPublic | BindingFlags.Static, null,
+    private static readonly Type SearchRecordsResultType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.SearchRecordsTool)
+        .Assembly.GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Models.SearchRecordsResult")!;
+
+    private static readonly MethodInfo BuildSearchResultMethod = ToolType
+        .GetMethod("BuildSearchResult", BindingFlags.NonPublic | BindingFlags.Static, null,
             new[] { typeof(string), typeof(string) }, null)!;
+
+    private static readonly MethodInfo BuildSearchTextMethod = ToolType
+        .GetMethod("BuildSearchText", BindingFlags.NonPublic | BindingFlags.Static, null,
+            new[] { SearchRecordsResultType, typeof(long) }, null)!;
+
+    private static object BuildSearchResult(string jsonResponse, string searchTerm)
+    {
+        return BuildSearchResultMethod.Invoke(null, new object[] { jsonResponse, searchTerm })!;
+    }
+
+    private static string BuildSearchText(object result, long elapsedMs)
+    {
+        return (string)BuildSearchTextMethod.Invoke(null, new object[] { result, elapsedMs })!;
+    }
 
     private static string FormatSearchResults(string jsonResponse, string searchTerm)
     {
-        return (string)FormatSearchResultsMethod.Invoke(null, new object[] { jsonResponse, searchTerm })!;
+        return BuildSearchText(BuildSearchResult(jsonResponse, searchTerm), 0);
     }
 
     [TestMethod]
@@ -36,9 +54,7 @@ public class SearchToolTests
         var json = JsonSerializer.Serialize(new { value = Array.Empty<object>(), count = 0 });
         var result = FormatSearchResults(json, "test");
 
-        Assert.IsTrue(result.Contains("[Search: \"test\"]"));
-        Assert.IsTrue(result.Contains("0 results"));
-        Assert.IsTrue(result.Contains("No matching records found"));
+        Assert.IsTrue(result.Contains("Found 0 results (0 total) for \"test\" in 0ms."));
     }
 
     [TestMethod]
@@ -63,11 +79,7 @@ public class SearchToolTests
 
         var result = FormatSearchResults(json, "Contoso");
 
-        Assert.IsTrue(result.Contains("[Search: \"Contoso\"]"));
-        Assert.IsTrue(result.Contains("1 result"));
-        Assert.IsTrue(result.Contains("| Entity | Id | Score | Attributes | Highlights |"));
-        Assert.IsTrue(result.Contains("account"));
-        Assert.IsTrue(result.Contains("11111111-1111-1111-1111-111111111111"));
+        Assert.IsTrue(result.Contains("Found 1 result (1 total) for \"Contoso\" in 0ms."));
     }
 
     [TestMethod]
@@ -75,22 +87,32 @@ public class SearchToolTests
     {
         var json = JsonSerializer.Serialize(new
         {
-            error = new { code = "SearchFailed", message = "Something went wrong" }
+            Error = new { Code = "SearchFailed", Message = "Something went wrong" }
         });
 
-        var result = FormatSearchResults(json, "test");
+        var result = BuildSearchResult(json, "test");
 
-        Assert.IsTrue(result.Contains("Error: SearchFailed"));
-        Assert.IsTrue(result.Contains("Something went wrong"));
+        var errorCode = (string)SearchRecordsResultType.GetProperty("ErrorCode")!.GetValue(result)!;
+        var errorMessage = (string)SearchRecordsResultType.GetProperty("ErrorMessage")!.GetValue(result)!;
+
+        Assert.AreEqual("SearchFailed", errorCode);
+        Assert.IsTrue(errorMessage.Contains("Something went wrong"));
     }
 
     [TestMethod]
     public void FormatSearchResults_InvalidJson_FallsBackToRawOutput()
     {
-        var result = FormatSearchResults("not valid json", "test");
-
-        Assert.IsTrue(result.Contains("[Search: \"test\"]"));
-        Assert.IsTrue(result.Contains("not valid json"));
+        // BuildSearchResult does not swallow malformed JSON — it bubbles up to
+        // the top-level catch in search_records, which routes to ThrowException.
+        try
+        {
+            BuildSearchResult("not valid json", "test");
+            Assert.Fail("Expected JsonException was not thrown.");
+        }
+        catch (TargetInvocationException ex) when (ex.InnerException is System.Text.Json.JsonException)
+        {
+            // expected — malformed JSON propagates (wrapped by reflection invoke)
+        }
     }
 
     [TestMethod]
@@ -109,31 +131,60 @@ public class SearchToolTests
 
         var result = FormatSearchResults(json, "xyz");
 
-        Assert.IsTrue(result.Contains("3 results (total: 42)"));
+        Assert.IsTrue(result.Contains("Found 3 results (42 total) for \"xyz\" in 0ms."));
     }
 
     // ──────────────────────────────────────────────
     // FormatAttributes (private static)
     // ──────────────────────────────────────────────
 
-    private static readonly MethodInfo FormatAttributesMethod = ToolType
-        .GetMethod("FormatAttributes", BindingFlags.NonPublic | BindingFlags.Static)!;
+    // FormatAttributes was removed in the MCP refactor. Attributes are now
+    // preserved as a raw Dictionary<string,object> on SearchRecordEntry. These
+    // tests verify BuildSearchResult carries the attributes through unchanged.
+    private static readonly Type SearchRecordEntryType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.SearchRecordsTool)
+        .Assembly.GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Models.SearchRecordEntry")!;
 
-    private static string FormatAttributes(Dictionary<string, object> attributes)
+    private static Dictionary<string, object> GetFirstRecordAttributes(object searchResult)
     {
-        return (string)FormatAttributesMethod.Invoke(null, new object[] { attributes })!;
+        var records = (System.Collections.IList)SearchRecordsResultType.GetProperty("Records")!.GetValue(searchResult)!;
+        return (Dictionary<string, object>)SearchRecordEntryType.GetProperty("Attributes")!.GetValue(records[0])!;
+    }
+
+    private static object BuildSearchResultWithAttributes(Dictionary<string, object> attributes)
+    {
+        var json = JsonSerializer.Serialize(new
+        {
+            value = new[]
+            {
+                new
+                {
+                    id = "00000000-0000-0000-0000-000000000000",
+                    entityName = "account",
+                    objectTypeCode = 1,
+                    score = 1.0,
+                    attributes = attributes ?? new Dictionary<string, object>(),
+                    highlights = new Dictionary<string, string[]>()
+                }
+            },
+            count = 1
+        });
+        return BuildSearchResult(json, "test");
     }
 
     [TestMethod]
     public void FormatAttributes_NullAttributes_ReturnsEmpty()
     {
-        Assert.AreEqual("", FormatAttributes(null!));
+        var result = BuildSearchResultWithAttributes(null!);
+        var attrs = GetFirstRecordAttributes(result);
+        Assert.AreEqual(0, attrs.Count);
     }
 
     [TestMethod]
     public void FormatAttributes_EmptyAttributes_ReturnsEmpty()
     {
-        Assert.AreEqual("", FormatAttributes(new Dictionary<string, object>()));
+        var result = BuildSearchResultWithAttributes(new Dictionary<string, object>());
+        var attrs = GetFirstRecordAttributes(result);
+        Assert.AreEqual(0, attrs.Count);
     }
 
     [TestMethod]
@@ -145,16 +196,19 @@ public class SearchToolTests
             ["city"] = "Seattle"
         };
 
-        var result = FormatAttributes(attrs);
+        var result = BuildSearchResultWithAttributes(attrs);
+        var preserved = GetFirstRecordAttributes(result);
 
-        Assert.IsTrue(result.Contains("city=Seattle"));
-        Assert.IsTrue(result.Contains("name=Contoso"));
-        Assert.IsTrue(result.Contains("; "));
+        Assert.AreEqual("Contoso", preserved["name"].ToString());
+        Assert.AreEqual("Seattle", preserved["city"].ToString());
     }
 
     [TestMethod]
     public void FormatAttributes_FiltersSearchAnnotations()
     {
+        // Annotation filtering was removed in the refactor — BuildSearchResult
+        // now preserves ALL attributes (including @search.* and @OData.* keys)
+        // so the structured payload is a faithful copy of the API response.
         var attrs = new Dictionary<string, object>
         {
             ["name"] = "Contoso",
@@ -162,65 +216,95 @@ public class SearchToolTests
             ["accountid@OData.Community.Display.V1.FormattedValue"] = "formatted"
         };
 
-        var result = FormatAttributes(attrs);
+        var result = BuildSearchResultWithAttributes(attrs);
+        var preserved = GetFirstRecordAttributes(result);
 
-        Assert.IsTrue(result.Contains("name=Contoso"));
-        Assert.IsFalse(result.Contains("@search."));
-        Assert.IsFalse(result.Contains("@OData"));
+        Assert.AreEqual("Contoso", preserved["name"].ToString());
+        Assert.IsTrue(preserved.ContainsKey("@search.score"));
+        Assert.IsTrue(preserved.ContainsKey("accountid@OData.Community.Display.V1.FormattedValue"));
     }
 
     [TestMethod]
     public void FormatAttributes_NullValue_Excluded()
     {
+        // Null values are no longer excluded — BuildSearchResult copies the
+        // Attributes dictionary verbatim from the deserialized API response.
         var attrs = new Dictionary<string, object>
         {
             ["name"] = "Contoso",
             ["nullfield"] = null!
         };
 
-        var result = FormatAttributes(attrs);
+        var result = BuildSearchResultWithAttributes(attrs);
+        var preserved = GetFirstRecordAttributes(result);
 
-        Assert.IsTrue(result.Contains("name=Contoso"));
-        Assert.IsFalse(result.Contains("nullfield"));
+        Assert.AreEqual("Contoso", preserved["name"].ToString());
+        Assert.IsTrue(preserved.ContainsKey("nullfield"));
     }
 
     // ──────────────────────────────────────────────
     // FormatHighlights (private static)
     // ──────────────────────────────────────────────
 
-    private static readonly MethodInfo FormatHighlightsMethod = ToolType
-        .GetMethod("FormatHighlights", BindingFlags.NonPublic | BindingFlags.Static)!;
-
-    private static string FormatHighlights(Dictionary<string, string[]> highlights)
+    // FormatHighlights was removed in the MCP refactor. Highlights are now
+    // preserved as a raw Dictionary<string,string[]> on SearchRecordEntry.
+    private static Dictionary<string, string[]> GetFirstRecordHighlights(object searchResult)
     {
-        return (string)FormatHighlightsMethod.Invoke(null, new object[] { highlights })!;
+        var records = (System.Collections.IList)SearchRecordsResultType.GetProperty("Records")!.GetValue(searchResult)!;
+        return (Dictionary<string, string[]>)SearchRecordEntryType.GetProperty("Highlights")!.GetValue(records[0])!;
+    }
+
+    private static object BuildSearchResultWithHighlights(Dictionary<string, string[]> highlights)
+    {
+        var json = JsonSerializer.Serialize(new
+        {
+            value = new[]
+            {
+                new
+                {
+                    id = "00000000-0000-0000-0000-000000000000",
+                    entityName = "account",
+                    objectTypeCode = 1,
+                    score = 1.0,
+                    attributes = new Dictionary<string, object>(),
+                    highlights = highlights ?? new Dictionary<string, string[]>()
+                }
+            },
+            count = 1
+        });
+        return BuildSearchResult(json, "test");
     }
 
     [TestMethod]
     public void FormatHighlights_NullHighlights_ReturnsEmpty()
     {
-        Assert.AreEqual("", FormatHighlights(null!));
+        var result = BuildSearchResultWithHighlights(null!);
+        var hl = GetFirstRecordHighlights(result);
+        Assert.AreEqual(0, hl.Count);
     }
 
     [TestMethod]
     public void FormatHighlights_EmptyHighlights_ReturnsEmpty()
     {
-        Assert.AreEqual("", FormatHighlights(new Dictionary<string, string[]>()));
+        var result = BuildSearchResultWithHighlights(new Dictionary<string, string[]>());
+        var hl = GetFirstRecordHighlights(result);
+        Assert.AreEqual(0, hl.Count);
     }
 
     [TestMethod]
     public void FormatHighlights_ReplacesCrmHitTags_WithBold()
     {
+        // crmhit tag replacement was removed in the refactor — highlights are
+        // preserved verbatim from the API response in the structured payload.
         var highlights = new Dictionary<string, string[]>
         {
             ["name"] = new[] { "{crmhit}Contoso{/crmhit} Ltd" }
         };
 
-        var result = FormatHighlights(highlights);
+        var result = BuildSearchResultWithHighlights(highlights);
+        var hl = GetFirstRecordHighlights(result);
 
-        Assert.IsTrue(result.Contains("**Contoso**"));
-        Assert.IsFalse(result.Contains("{crmhit}"));
-        Assert.IsFalse(result.Contains("{/crmhit}"));
+        Assert.IsTrue(hl["name"][0].Contains("{crmhit}Contoso{/crmhit} Ltd"));
     }
 
     [TestMethod]
@@ -232,11 +316,11 @@ public class SearchToolTests
             ["email"] = new[] { "test@test.com" }
         };
 
-        var result = FormatHighlights(highlights);
+        var result = BuildSearchResultWithHighlights(highlights);
+        var hl = GetFirstRecordHighlights(result);
 
-        Assert.IsTrue(result.Contains("name:"));
-        Assert.IsTrue(result.Contains("email:"));
-        Assert.IsTrue(result.Contains("; "));
+        Assert.IsTrue(hl.ContainsKey("name"));
+        Assert.IsTrue(hl.ContainsKey("email"));
     }
 
     [TestMethod]
@@ -247,9 +331,12 @@ public class SearchToolTests
             ["name"] = new[] { "hit1", "hit2" }
         };
 
-        var result = FormatHighlights(highlights);
+        var result = BuildSearchResultWithHighlights(highlights);
+        var hl = GetFirstRecordHighlights(result);
 
-        Assert.IsTrue(result.Contains("name: hit1, hit2"));
+        Assert.AreEqual(2, hl["name"].Length);
+        Assert.AreEqual("hit1", hl["name"][0]);
+        Assert.AreEqual("hit2", hl["name"][1]);
     }
 
     // ──────────────────────────────────────────────
@@ -258,9 +345,9 @@ public class SearchToolTests
 
     private static readonly MethodInfo BuildSearchRequestBodyMethod = ToolType
         .GetMethod("BuildSearchRequestBody", BindingFlags.NonPublic | BindingFlags.Static, null,
-            new[] { typeof(string), typeof(string), typeof(int), typeof(string) }, null)!;
+            new[] { typeof(string), typeof(List<string>), typeof(int), typeof(string) }, null)!;
 
-    private static string BuildSearchRequestBody(string searchTerm, string entities, int top, string filter)
+    private static string BuildSearchRequestBody(string searchTerm, List<string> entities, int top, string filter)
     {
         return (string)BuildSearchRequestBodyMethod.Invoke(null, new object[] { searchTerm, entities, top, filter })!;
     }
@@ -268,7 +355,7 @@ public class SearchToolTests
     [TestMethod]
     public void BuildSearchRequestBody_BasicQuery_SetsSearchAndTop()
     {
-        var json = BuildSearchRequestBody("Contoso", "", 50, "");
+        var json = BuildSearchRequestBody("Contoso", null, 50, "");
         var doc = JsonDocument.Parse(json);
         var root = doc.RootElement;
 
@@ -280,7 +367,7 @@ public class SearchToolTests
     [TestMethod]
     public void BuildSearchRequestBody_WithEntities_SetsEntitiesJson()
     {
-        var json = BuildSearchRequestBody("test", "account,contact", 10, "");
+        var json = BuildSearchRequestBody("test", new List<string> { "account", "contact" }, 10, "");
         var doc = JsonDocument.Parse(json);
         var root = doc.RootElement;
 
@@ -293,7 +380,7 @@ public class SearchToolTests
     [TestMethod]
     public void BuildSearchRequestBody_WithFilter_SetsFilter()
     {
-        var json = BuildSearchRequestBody("test", "", 50, "statecode eq 0");
+        var json = BuildSearchRequestBody("test", null, 50, "statecode eq 0");
         var doc = JsonDocument.Parse(json);
         var root = doc.RootElement;
 
@@ -303,7 +390,7 @@ public class SearchToolTests
     [TestMethod]
     public void BuildSearchRequestBody_EmptyEntities_NoEntitiesParameter()
     {
-        var json = BuildSearchRequestBody("test", "", 50, "");
+        var json = BuildSearchRequestBody("test", null, 50, "");
         var doc = JsonDocument.Parse(json);
         var root = doc.RootElement;
 
@@ -313,7 +400,7 @@ public class SearchToolTests
     [TestMethod]
     public void BuildSearchRequestBody_EmptyFilter_NoFilterParameter()
     {
-        var json = BuildSearchRequestBody("test", "", 50, "");
+        var json = BuildSearchRequestBody("test", null, 50, "");
         var doc = JsonDocument.Parse(json);
         var root = doc.RootElement;
 
@@ -324,7 +411,11 @@ public class SearchToolTests
     // EscapePipe (private static)
     // ──────────────────────────────────────────────
 
-    private static readonly MethodInfo EscapePipeMethod = ToolType
+    // EscapePipe moved from SearchRecordsTool to MarkdownFormatter (private static).
+    private static readonly Type MarkdownFormatterType = typeof(DynamicsCrm.DevKit.Cli.Mcp.McpServerHost).Assembly
+        .GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.MarkdownFormatter")!;
+
+    private static readonly MethodInfo EscapePipeMethod = MarkdownFormatterType
         .GetMethod("EscapePipe", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     private static string EscapePipe(string value)
@@ -360,14 +451,33 @@ public class SearchToolTests
     // FormatStatusResults (private static)
     // ──────────────────────────────────────────────
 
-    private static readonly MethodInfo FormatStatusResultsMethod = ToolType
-        .GetMethod("FormatStatusResults", BindingFlags.NonPublic | BindingFlags.Static, null,
+    private static readonly MethodInfo BuildStatusResultMethod = ToolType
+        .GetMethod("BuildStatusResult", BindingFlags.NonPublic | BindingFlags.Static, null,
             new[] { typeof(string), typeof(string) }, null)!;
+
+    private static readonly MethodInfo BuildStatusTextMethod = ToolType
+        .GetMethod("BuildStatusText", BindingFlags.NonPublic | BindingFlags.Static, null,
+            new[] { SearchRecordsResultType }, null)!;
+
+    private static readonly Type SearchStatusEntryType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.SearchRecordsTool)
+        .Assembly.GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Models.SearchStatusEntry")!;
+    private static readonly Type SearchEntityStatusEntryType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.SearchRecordsTool)
+        .Assembly.GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Models.SearchEntityStatusEntry")!;
+    private static readonly Type SearchManyToManyRelationshipEntryType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.SearchRecordsTool)
+        .Assembly.GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Models.SearchManyToManyRelationshipEntry")!;
+
+    private static object BuildStatusResult(string statusJson, string? statisticsJson)
+    {
+        return BuildStatusResultMethod.Invoke(null, new object?[] { statusJson, statisticsJson })!;
+    }
 
     private static string FormatStatusResults(string statusJson, string? statisticsJson)
     {
-        return (string)FormatStatusResultsMethod.Invoke(null, new object?[] { statusJson, statisticsJson })!;
+        return (string)BuildStatusTextMethod.Invoke(null, new object[] { BuildStatusResult(statusJson, statisticsJson) })!;
     }
+
+    private static object GetStatus(object searchResult)
+        => SearchRecordsResultType.GetProperty("Status")!.GetValue(searchResult)!;
 
     [TestMethod]
     public void FormatStatusResults_NotProvisioned_ShowsStatus()
@@ -379,9 +489,7 @@ public class SearchToolTests
 
         var result = FormatStatusResults(statusJson, null);
 
-        Assert.IsTrue(result.Contains("[Dataverse Relevance Search Status]"));
-        Assert.IsTrue(result.Contains("Not Provisioned"));
-        Assert.IsTrue(result.Contains("Search is not provisioned"));
+        Assert.IsTrue(result.Contains("Search Not Provisioned | 0 indexed entities."));
     }
 
     [TestMethod]
@@ -413,15 +521,19 @@ public class SearchToolTests
             }
         });
 
-        var result = FormatStatusResults(statusJson, null);
+        var statusObj = BuildStatusResult(statusJson, null);
+        var text = (string)BuildStatusTextMethod.Invoke(null, new object[] { statusObj })!;
+        var status = GetStatus(statusObj);
+        var entities = (System.Collections.IList)SearchStatusEntryType.GetProperty("EntityStatusResults")!.GetValue(status)!;
+        var entity0 = entities[0];
+        var indexedFields = (List<string>)SearchEntityStatusEntryType.GetProperty("IndexedFields")!.GetValue(entity0)!;
 
-        Assert.IsTrue(result.Contains("Provisioned"));
-        Assert.IsTrue(result.Contains("Indexed Entities (1)"));
-        Assert.IsTrue(result.Contains("account"));
-        Assert.IsTrue(result.Contains("EntitySyncComplete"));
-        Assert.IsTrue(result.Contains("2 fields"));
-        Assert.IsTrue(result.Contains("accountnumber"));
-        Assert.IsTrue(result.Contains("name"));
+        Assert.IsTrue(text.Contains("Search Provisioned | 1 indexed entities."));
+        Assert.AreEqual("account", SearchEntityStatusEntryType.GetProperty("EntityLogicalName")!.GetValue(entity0));
+        Assert.AreEqual("EntitySyncComplete", SearchEntityStatusEntryType.GetProperty("EntityStatus")!.GetValue(entity0));
+        Assert.AreEqual(2, indexedFields.Count);
+        CollectionAssert.Contains(indexedFields, "accountnumber");
+        CollectionAssert.Contains(indexedFields, "name");
     }
 
     [TestMethod]
@@ -446,20 +558,33 @@ public class SearchToolTests
             }
         });
 
-        var result = FormatStatusResults(statusJson, statsJson);
+        var statusObj = BuildStatusResult(statusJson, statsJson);
+        var text = (string)BuildStatusTextMethod.Invoke(null, new object[] { statusObj })!;
 
-        Assert.IsTrue(result.Contains("1 MB"));
-        Assert.IsTrue(result.Contains("1,341,090 bytes"));
-        Assert.IsTrue(result.Contains("1,309"));
+        Assert.IsTrue(text.Contains("1 MB"));
+        Assert.IsTrue(text.Contains("1309 docs"));
+
+        var stats = SearchRecordsResultType.GetProperty("Statistics")!.GetValue(statusObj);
+        Assert.IsNotNull(stats);
+        var statsType = stats!.GetType();
+        Assert.AreEqual(1341090L, statsType.GetProperty("StorageSizeInBytes")!.GetValue(stats));
+        Assert.AreEqual(1309L, statsType.GetProperty("DocumentCount")!.GetValue(stats));
     }
 
     [TestMethod]
     public void FormatStatusResults_InvalidJson_FallsBackToRaw()
     {
-        var result = FormatStatusResults("not valid json", null);
-
-        Assert.IsTrue(result.Contains("[Search Status]"));
-        Assert.IsTrue(result.Contains("not valid json"));
+        // BuildStatusResult does not swallow malformed JSON — it bubbles up to
+        // the top-level catch in search_records, which routes to ThrowException.
+        try
+        {
+            BuildStatusResult("not valid json", null);
+            Assert.Fail("Expected JsonException was not thrown.");
+        }
+        catch (TargetInvocationException ex) when (ex.InnerException is System.Text.Json.JsonException)
+        {
+            // expected — malformed JSON propagates (wrapped by reflection invoke)
+        }
     }
 
     [TestMethod]
@@ -498,13 +623,15 @@ public class SearchToolTests
             }
         });
 
-        var result = FormatStatusResults(statusJson, null);
-
-        Assert.IsTrue(result.Contains("Many-to-Many Relationships (1)"));
-        Assert.IsTrue(result.Contains("accountleads_association"));
-        Assert.IsTrue(result.Contains("account"));
-        Assert.IsTrue(result.Contains("lead"));
-        Assert.IsTrue(result.Contains("accountleads"));
+        var statusObj = BuildStatusResult(statusJson, null);
+        var status = GetStatus(statusObj);
+        var m2m = (System.Collections.IList)SearchStatusEntryType.GetProperty("ManyToManyRelationshipSyncStatus")!.GetValue(status)!;
+        Assert.AreEqual(1, m2m.Count);
+        var rel0 = m2m[0];
+        Assert.AreEqual("accountleads_association", SearchManyToManyRelationshipEntryType.GetProperty("RelationshipName")!.GetValue(rel0));
+        Assert.AreEqual("account", SearchManyToManyRelationshipEntryType.GetProperty("SearchEntity")!.GetValue(rel0));
+        Assert.AreEqual("lead", SearchManyToManyRelationshipEntryType.GetProperty("RelatedEntity")!.GetValue(rel0));
+        Assert.AreEqual("accountleads", SearchManyToManyRelationshipEntryType.GetProperty("IntersectEntity")!.GetValue(rel0));
     }
 
     // ──────────────────────────────────────────────
@@ -555,26 +682,32 @@ public class SearchToolTests
         Assert.AreEqual("Unknown", FormatProvisionStatus(null!));
     }
 
-    // ──────────────────────────────────────────────
-    // HandleSearchException (private static)
-    // ──────────────────────────────────────────────
+    // HandleSearchException / BuildFullExceptionMessage were removed in the MCP
+    // refactor. Exception handling now routes through McpToolResults.ThrowException,
+    // which classifies the exception, embeds the message chain (using "→" for
+    // inner exceptions), and returns a [Error]-prefixed CallToolResult.
+    private static readonly Type McpToolResultsType = typeof(DynamicsCrm.DevKit.Cli.Mcp.McpServerHost).Assembly
+        .GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.McpToolResults")!;
 
-    private static readonly MethodInfo HandleSearchExceptionMethod = ToolType
-        .GetMethod("HandleSearchException", BindingFlags.NonPublic | BindingFlags.Static)!;
+    private static readonly MethodInfo ThrowExceptionMethod = McpToolResultsType
+        .GetMethod("ThrowException", BindingFlags.Static | BindingFlags.NonPublic, null,
+            new[] { typeof(Exception) }, null)!;
 
-    private static string HandleSearchException(Exception ex)
+    private static CallToolResult InvokeThrowException(Exception ex)
     {
-        return (string)HandleSearchExceptionMethod.Invoke(null, new object[] { ex })!;
+        return (CallToolResult)ThrowExceptionMethod.Invoke(null, new object[] { ex })!;
     }
 
     [TestMethod]
     public void HandleSearchException_ErrorCodeInMessage_ReturnsEnableGuide()
     {
+        // Search-specific enable-guide detection was removed; ThrowException now
+        // classifies a plain Exception as "Exception" and surfaces the message.
         var ex = new Exception("Request failed with error 0x80048d0b");
-        var result = HandleSearchException(ex);
+        var result = InvokeThrowException(ex);
 
-        Assert.IsTrue(result.Contains("Dataverse Search is not enabled"));
-        Assert.IsTrue(result.Contains("HOW TO ENABLE"));
+        Assert.IsTrue(result.GetText().Contains("0x80048d0b"));
+        Assert.IsTrue(result.GetText().StartsWith("[Error]"));
     }
 
     [TestMethod]
@@ -582,10 +715,10 @@ public class SearchToolTests
     {
         var inner = new Exception("SearchNotEnabled: feature is not provisioned");
         var outer = new Exception("Request failed", inner);
-        var result = HandleSearchException(outer);
+        var result = InvokeThrowException(outer);
 
-        Assert.IsTrue(result.Contains("Dataverse Search is not enabled"));
-        Assert.IsTrue(result.Contains("HOW TO ENABLE"));
+        Assert.IsTrue(result.GetText().Contains("Request failed"));
+        Assert.IsTrue(result.GetText().Contains("SearchNotEnabled: feature is not provisioned"));
     }
 
     [TestMethod]
@@ -594,10 +727,12 @@ public class SearchToolTests
         var deepInner = new Exception("Error code 0x80060203");
         var inner = new Exception("Wrapper", deepInner);
         var outer = new Exception("Request failed", inner);
-        var result = HandleSearchException(outer);
+        var result = InvokeThrowException(outer);
 
-        Assert.IsTrue(result.Contains("Dataverse Search is not enabled"));
-        Assert.IsTrue(result.Contains("HOW TO ENABLE"));
+        // ThrowException walks one extra inner level via "→".
+        Assert.IsTrue(result.GetText().Contains("Request failed"));
+        Assert.IsTrue(result.GetText().Contains("Wrapper"));
+        Assert.IsTrue(result.GetText().Contains("0x80060203"));
     }
 
     [TestMethod]
@@ -605,41 +740,39 @@ public class SearchToolTests
     {
         var inner = new Exception("Detailed API error info");
         var outer = new Exception("Operation failed", inner);
-        var result = HandleSearchException(outer);
+        var result = InvokeThrowException(outer);
 
-        Assert.IsTrue(result.Contains("Operation failed"));
-        Assert.IsTrue(result.Contains("Detailed API error info"));
-        Assert.IsTrue(result.Contains("→"));
+        // ThrowException includes the outer message and the inner exception's
+        // type+message in an "InnerException:" line. The "→" separator only
+        // appears when there is a deeper nested inner exception.
+        Assert.IsTrue(result.GetText().Contains("Operation failed"));
+        Assert.IsTrue(result.GetText().Contains("Detailed API error info"));
+        Assert.IsTrue(result.GetText().Contains("InnerException"));
     }
 
     [TestMethod]
     public void HandleSearchException_NoInnerException_ShowsMessageOnly()
     {
         var ex = new Exception("Simple error");
-        var result = HandleSearchException(ex);
+        var result = InvokeThrowException(ex);
 
-        Assert.AreEqual("Error: Search failed: Simple error", result);
+        Assert.IsTrue(result.GetText().Contains("Simple error"));
+        Assert.IsFalse(result.GetText().Contains("InnerException"));
     }
 
     // ──────────────────────────────────────────────
     // BuildFullExceptionMessage (private static)
     // ──────────────────────────────────────────────
-
-    private static readonly MethodInfo BuildFullExceptionMessageMethod = ToolType
-        .GetMethod("BuildFullExceptionMessage", BindingFlags.NonPublic | BindingFlags.Static)!;
-
-    private static string BuildFullExceptionMessage(Exception ex)
-    {
-        return (string)BuildFullExceptionMessageMethod.Invoke(null, new object[] { ex })!;
-    }
+    // BuildFullExceptionMessage was removed; ThrowException now builds the
+    // exception message chain (including inner exceptions via "→").
 
     [TestMethod]
     public void BuildFullExceptionMessage_SingleException_ReturnsMessage()
     {
         var ex = new Exception("test error");
-        var result = BuildFullExceptionMessage(ex);
+        var result = InvokeThrowException(ex);
 
-        Assert.IsTrue(result.Contains("test error"));
+        Assert.IsTrue(result.GetText().Contains("test error"));
     }
 
     [TestMethod]
@@ -647,10 +780,10 @@ public class SearchToolTests
     {
         var inner = new Exception("inner detail");
         var outer = new Exception("outer wrapper", inner);
-        var result = BuildFullExceptionMessage(outer);
+        var result = InvokeThrowException(outer);
 
-        Assert.IsTrue(result.Contains("outer wrapper"));
-        Assert.IsTrue(result.Contains("inner detail"));
+        Assert.IsTrue(result.GetText().Contains("outer wrapper"));
+        Assert.IsTrue(result.GetText().Contains("inner detail"));
     }
 
     // ──────────────────────────────────────────────
@@ -680,9 +813,16 @@ public class SearchToolTests
             }
         });
 
-        var result = FormatStatusResults(statusJson, null);
+        var statusObj = BuildStatusResult(statusJson, null);
+        var status = GetStatus(statusObj);
+        var entities = (System.Collections.IList)SearchStatusEntryType.GetProperty("EntityStatusResults")!.GetValue(status)!;
+        var entity0 = entities[0];
+        var indexedFields = (List<string>?)SearchEntityStatusEntryType.GetProperty("IndexedFields")!.GetValue(entity0);
 
-        Assert.IsTrue(result.Contains("0 fields"));
-        Assert.IsFalse(result.Contains("0 fields:"));
+        // Entity with null searchableindexedfieldinfomap yields null IndexedFields
+        // (the ?. chain short-circuits), with no trailing colon in the one-line text.
+        Assert.IsNull(indexedFields);
+        var text = (string)BuildStatusTextMethod.Invoke(null, new object[] { statusObj })!;
+        Assert.IsFalse(text.Contains("0 fields:"));
     }
 }

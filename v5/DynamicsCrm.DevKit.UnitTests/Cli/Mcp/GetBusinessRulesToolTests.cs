@@ -16,11 +16,11 @@ public class GetBusinessRulesToolTests
     private static readonly MethodInfo SanitizeDescriptionMethod = ToolType
         .GetMethod("SanitizeDescription", BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    private static readonly MethodInfo EscapeTabMethod = ToolType
-        .GetMethod("EscapeTab", BindingFlags.NonPublic | BindingFlags.Static)!;
-
-    private static readonly MethodInfo BuildListFetchXmlMethod = ToolType
-        .GetMethod("BuildListFetchXml", BindingFlags.NonPublic | BindingFlags.Static)!;
+    // EscapeTab was extracted to the shared CompactFormatter helper during the
+    // phase 1-3 refactor; look it up there so the behaviour stays covered.
+    private static readonly MethodInfo EscapeTabMethod =
+        typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.CompactFormatter)
+            .GetMethod("EscapeTab", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     // ──────────────────────────────────────────────
     // ParseXaml — fallback messages reference correct tool
@@ -58,25 +58,25 @@ public class GetBusinessRulesToolTests
     // SanitizeDescription
     // ──────────────────────────────────────────────
 
-    private static string SanitizeDescription(string description) =>
-        (string)SanitizeDescriptionMethod.Invoke(null, [description])!;
+    private static string? SanitizeDescription(string description) =>
+        (string?)SanitizeDescriptionMethod.Invoke(null, [description]);
 
     [TestMethod]
     public void SanitizeDescription_Null_ReturnsEmpty()
     {
-        Assert.AreEqual(string.Empty, SanitizeDescription(null!));
+        Assert.IsNull(SanitizeDescription(null!));
     }
 
     [TestMethod]
     public void SanitizeDescription_Placeholder_ReturnsEmpty()
     {
-        Assert.AreEqual(string.Empty, SanitizeDescription("Click to add description"));
+        Assert.IsNull(SanitizeDescription("Click to add description"));
     }
 
     [TestMethod]
     public void SanitizeDescription_PlaceholderWithDot_ReturnsEmpty()
     {
-        Assert.AreEqual(string.Empty, SanitizeDescription("Click to add description."));
+        Assert.IsNull(SanitizeDescription("Click to add description."));
     }
 
     [TestMethod]
@@ -105,36 +105,6 @@ public class GetBusinessRulesToolTests
     }
 
     // ──────────────────────────────────────────────
-    // BuildListFetchXml
-    // ──────────────────────────────────────────────
-
-    private static string BuildListFetchXml(int objectTypeCode, string status, int maxRecords) =>
-        (string)BuildListFetchXmlMethod.Invoke(null, [objectTypeCode, status, maxRecords])!;
-
-    [TestMethod]
-    public void BuildListFetchXml_ActiveStatus_IncludesStatecodeFilter()
-    {
-        var xml = BuildListFetchXml(1, "active", 50);
-        Assert.IsTrue(xml.Contains("statecode"), "Active filter should include statecode condition");
-        Assert.IsTrue(xml.Contains("value='1'"), "Active maps to statecode=1");
-    }
-
-    [TestMethod]
-    public void BuildListFetchXml_DraftStatus_IncludesStatecodeFilter()
-    {
-        var xml = BuildListFetchXml(1, "draft", 50);
-        Assert.IsTrue(xml.Contains("statecode"), "Draft filter should include statecode condition");
-        Assert.IsTrue(xml.Contains("value='0'"), "Draft maps to statecode=0");
-    }
-
-    [TestMethod]
-    public void BuildListFetchXml_EmptyStatus_NoStatecodeFilter()
-    {
-        var xml = BuildListFetchXml(1, "", 50);
-        Assert.IsFalse(xml.Contains("attribute='statecode' operator="), "Empty status should not include statecode filter condition");
-    }
-
-    // ──────────────────────────────────────────────
     // Input validation (via public method)
     // ──────────────────────────────────────────────
 
@@ -143,7 +113,8 @@ public class GetBusinessRulesToolTests
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.GetBusinessRulesTool(null!);
         var result = tool.get_business_rules("");
-        Assert.IsTrue(result.StartsWith("Error:"), $"Expected error for empty entity_name, got: {result}");
+        Assert.IsTrue(result.IsError, $"Expected error for empty entity_name, got: {result.GetText()}");
+        Assert.IsTrue(result.Contains("entity_name is required"), $"Expected 'entity_name is required' error, got: {result.GetText()}");
     }
 
     [TestMethod]

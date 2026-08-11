@@ -110,9 +110,9 @@ public class GetCustomApisToolTests
         var method = ToolType.GetMethod("get_custom_apis")!;
         var descAttr = method.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>();
         Assert.IsNotNull(descAttr, "get_custom_apis must have a Description attribute");
-        // The description should reference the actual parameter name include_microsoft
-        Assert.IsTrue(descAttr!.Description.Contains("include_microsoft"),
-            $"Description should reference parameter name 'include_microsoft'. Got: {descAttr.Description}");
+        // The description should mention Custom API definitions
+        Assert.IsTrue(descAttr!.Description.Contains("Custom API"),
+            $"Description should mention 'Custom API'. Got: {descAttr.Description}");
         // It should NOT reference a non-existent parameter name
         Assert.IsFalse(descAttr.Description.Contains("include_managed"),
             $"Description should not reference non-existent parameter 'include_managed'. Got: {descAttr.Description}");

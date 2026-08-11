@@ -48,7 +48,7 @@ public class ManageChartToolTests
         var result = tool.manage_chart(action: "invalid_action");
         Assert.IsTrue(result.IsError);
         var text = ((TextContentBlock)result.Content[0]).Text;
-        StringAssert.Contains(text, "Unknown action");
+        StringAssert.Contains(text, "Invalid action");
     }
 
     [TestMethod]
@@ -97,7 +97,7 @@ public class ManageChartToolTests
         var method = ToolType.GetMethod("BuildDataDescriptionFromEntity", BindingFlags.NonPublic | BindingFlags.Static);
         Assert.IsNotNull(method);
 
-        var result = method!.Invoke(null, new object?[] { "contact", "statecode", "importsequencenumber", "count" });
+        var result = method!.Invoke(null, new object?[] { "contact", "statecode", "importsequencenumber", "count", null });
         Assert.IsNotNull(result);
         var tuple = ((string Xml, string AggregateAlias, string Error))result!;
         Assert.IsNull(tuple.Error);

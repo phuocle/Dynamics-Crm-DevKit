@@ -29,7 +29,7 @@ public class MetadataToolValidationTests
     private static string InvokeGetTables(object tool, string entityName)
     {
         var method = GetTablesToolType.GetMethod("get_tables")!;
-        var task = (System.Threading.Tasks.Task<CallToolResult>)method.Invoke(tool, new object[] { entityName, "", false, false, "", "compact" })!;
+        var task = (System.Threading.Tasks.Task<CallToolResult>)method.Invoke(tool, new object[] { entityName, "", false, false, "", "compact", 100 })!;
         var result = task.GetAwaiter().GetResult();
         var text = result.Content.Count > 0 && result.Content[0] is ModelContextProtocol.Protocol.TextContentBlock tb ? tb.Text : "";
         return text;
@@ -40,7 +40,7 @@ public class MetadataToolValidationTests
     {
         var tool = CreateGetTablesTool();
         var result = InvokeGetTables(tool, "");
-        Assert.IsTrue(result.StartsWith("Error:"));
+        Assert.IsTrue(result.StartsWith("[Error]"));
     }
 
     [TestMethod]
@@ -48,7 +48,7 @@ public class MetadataToolValidationTests
     {
         var tool = CreateGetTablesTool();
         var result = InvokeGetTables(tool, "   ");
-        Assert.IsTrue(result.StartsWith("Error:"));
+        Assert.IsTrue(result.StartsWith("[Error]"));
     }
 
     [TestMethod]
@@ -56,6 +56,6 @@ public class MetadataToolValidationTests
     {
         var tool = CreateGetTablesTool();
         var result = InvokeGetTables(tool, null!);
-        Assert.IsTrue(result.StartsWith("Error:"));
+        Assert.IsTrue(result.StartsWith("[Error]"));
     }
 }

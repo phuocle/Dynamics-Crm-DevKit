@@ -16,8 +16,11 @@ public class GetBusinessProcessFlowsToolTests
     private static readonly MethodInfo EscapeXmlMethod = ToolType
         .GetMethod("EscapeXml", BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    private static readonly MethodInfo EscapeTabMethod = ToolType
-        .GetMethod("EscapeTab", BindingFlags.NonPublic | BindingFlags.Static)!;
+    // EscapeTab was extracted to the shared CompactFormatter helper during the
+    // phase 1-3 refactor; look it up there so the behaviour stays covered.
+    private static readonly MethodInfo EscapeTabMethod =
+        typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.CompactFormatter)
+            .GetMethod("EscapeTab", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     private static readonly FieldInfo StageCategoryMapField = ToolType
         .GetField("StageCategoryMap", BindingFlags.NonPublic | BindingFlags.Static)!;

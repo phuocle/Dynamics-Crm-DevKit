@@ -18,6 +18,11 @@ public class CompactFormatterMetadataTests
     private static readonly Type FormatterType = typeof(DynamicsCrm.DevKit.Cli.Mcp.McpServerHost).Assembly
         .GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.CompactFormatter")!;
 
+    // FormatOptionSetList / FormatOptionSetDetail were moved to MarkdownFormatter and now emit
+    // markdown table output (not the old tab-delimited CompactFormatter contract).
+    private static readonly Type MarkdownFormatterType = typeof(DynamicsCrm.DevKit.Cli.Mcp.McpServerHost).Assembly
+        .GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.MarkdownFormatter")!;
+
     // ──────────────────────────────────────────────
     // FormatEntitySummaryTable
     // ──────────────────────────────────────────────
@@ -102,7 +107,7 @@ public class CompactFormatterMetadataTests
     // FormatOptionSetList
     // ──────────────────────────────────────────────
 
-    private static readonly MethodInfo FormatOptionSetListMethod = FormatterType
+    private static readonly MethodInfo FormatOptionSetListMethod = MarkdownFormatterType
         .GetMethod("FormatOptionSetList", BindingFlags.Public | BindingFlags.Static)!;
 
     private static string FormatOptionSetList(IEnumerable<OptionSetMetadataBase> optionSets)
@@ -115,8 +120,8 @@ public class CompactFormatterMetadataTests
     {
         var result = FormatOptionSetList(Enumerable.Empty<OptionSetMetadataBase>());
 
-        Assert.IsTrue(result.Contains("[Global Option Sets] 0 total"));
-        Assert.IsTrue(result.Contains("Name\tDisplayName\tType\tIsGlobal"));
+        Assert.IsTrue(result.Contains("# Global Option Sets — 0"));
+        Assert.IsTrue(result.Contains("| Name | DisplayName | Type | IsGlobal |"));
     }
 
     [TestMethod]
@@ -127,16 +132,16 @@ public class CompactFormatterMetadataTests
 
         var result = FormatOptionSetList(new[] { os });
 
-        Assert.IsTrue(result.Contains("[Global Option Sets] 1 total"));
+        Assert.IsTrue(result.Contains("# Global Option Sets — 1"));
         Assert.IsTrue(result.Contains("my_status"));
-        Assert.IsTrue(result.Contains("Yes")); // IsGlobal
+        Assert.IsTrue(result.Contains("| Yes |")); // IsGlobal = Yes in markdown table cell
     }
 
     // ──────────────────────────────────────────────
     // FormatOptionSetDetail
     // ──────────────────────────────────────────────
 
-    private static readonly MethodInfo FormatOptionSetDetailMethod = FormatterType
+    private static readonly MethodInfo FormatOptionSetDetailMethod = MarkdownFormatterType
         .GetMethod("FormatOptionSetDetail", BindingFlags.Public | BindingFlags.Static)!;
 
     private static string FormatOptionSetDetail(OptionSetMetadataBase optionSet)
@@ -158,12 +163,12 @@ public class CompactFormatterMetadataTests
 
         var result = FormatOptionSetDetail(os);
 
-        Assert.IsTrue(result.Contains("[test_status]"));
-        Assert.IsTrue(result.Contains("[Options] 2 total"));
-        Assert.IsTrue(result.Contains("Value\tLabel\tDescription"));
-        // Verify option values are present (0 and 1)
-        Assert.IsTrue(result.Contains("0\t"));
-        Assert.IsTrue(result.Contains("1\t"));
+        Assert.IsTrue(result.Contains("# test_status (`test_status`)"));
+        Assert.IsTrue(result.Contains("## Options — 2"));
+        Assert.IsTrue(result.Contains("| Value | Label | Description |"));
+        // Verify option values are present (0 and 1) in markdown table rows
+        Assert.IsTrue(result.Contains("| 0 |"));
+        Assert.IsTrue(result.Contains("| 1 |"));
     }
 
     [TestMethod]
@@ -178,12 +183,12 @@ public class CompactFormatterMetadataTests
 
         var result = FormatOptionSetDetail(boolOs);
 
-        Assert.IsTrue(result.Contains("[test_boolean]"));
-        Assert.IsTrue(result.Contains("[Options] 2 total"));
-        Assert.IsTrue(result.Contains("Value\tLabel"));
-        // Verify both option values (1 for true, 0 for false)
-        Assert.IsTrue(result.Contains("1\t"));
-        Assert.IsTrue(result.Contains("0\t"));
+        Assert.IsTrue(result.Contains("# test_boolean (`test_boolean`)"));
+        Assert.IsTrue(result.Contains("## Options"));
+        Assert.IsTrue(result.Contains("| Value | Label |"));
+        // Verify both option values (1 for true, 0 for false) in markdown rows
+        Assert.IsTrue(result.Contains("| 1 |"));
+        Assert.IsTrue(result.Contains("| 0 |"));
     }
 
     [TestMethod]
@@ -193,8 +198,10 @@ public class CompactFormatterMetadataTests
 
         var result = FormatOptionSetDetail(os);
 
-        Assert.IsTrue(result.Contains("[empty_optionset]"));
-        Assert.IsTrue(result.Contains("[Options] 0 total"));
+        Assert.IsTrue(result.Contains("# empty_optionset (`empty_optionset`)"));
+        Assert.IsTrue(result.Contains("| Property | Value |"));
+        // No Options section when options are empty
+        Assert.IsFalse(result.Contains("## Options"));
     }
 
     [TestMethod]
@@ -210,10 +217,10 @@ public class CompactFormatterMetadataTests
         var os = new OptionSetMetadata(options) { Name = "ordered_test" };
         var result = FormatOptionSetDetail(os);
 
-        // Options should be sorted by Value (100, 200, 300)
-        var idx100 = result.IndexOf("100\t");
-        var idx200 = result.IndexOf("200\t");
-        var idx300 = result.IndexOf("300\t");
+        // Options should be sorted by Value (100, 200, 300) in markdown table rows
+        var idx100 = result.IndexOf("| 100 |");
+        var idx200 = result.IndexOf("| 200 |");
+        var idx300 = result.IndexOf("| 300 |");
         Assert.IsTrue(idx100 >= 0, "100 should be present");
         Assert.IsTrue(idx200 >= 0, "200 should be present");
         Assert.IsTrue(idx300 >= 0, "300 should be present");
