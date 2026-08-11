@@ -53,7 +53,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Bin exposes record attributes only (no deletedon/deletedby; use modifiedOn as delete-time proxy).\n\n" +
             "WHEN TO USE:\n" +
             "- List or inspect records in the recycle bin before restoring\n" +
-            "- Restore one or many deleted records back to the live table\n" +
+            "- Restore one or many deleted records back to the live table (restore prepends name_prefix, default '[RESTORE] ', to the primary name)\n" +
             "- Check (status) or toggle (turn on/off) the org-level 'Keep deleted Dataverse records' setting\n\n" +
             "RELATED TOOLS:\n" +
             "- manage_record → live CRUD; delete becomes soft-delete when the bin is ON\n" +
@@ -67,7 +67,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Search by primary attribute value (contains, case-insensitive). list only. Empty = all deleted records of entity.")] string name_filter = "",
             [Description("Max records. list: default 100, max 5000. detail/restore/status/turn: not used.")] int max_records = 100,
             [Description("Toggle direction for action='turn': 'on' to enable soft-delete, 'off' to disable. Required when action='turn'.")] string turn = "",
-            [Description("Retention days for action='turn' turn='on'. Integer 1..30 inclusive. Default 30. Ignored for turn='off' or other actions.")] int retention_days = 30)
+            [Description("Retention days for action='turn' turn='on'. Integer 1..30 inclusive. Default 30. Ignored for turn='off' or other actions.")] int retention_days = 30,
+            [Description("restore only. Prefix prepended to the primary name of each restored record. Default '[RESTORE] '. Pass '' (empty string) to restore names unchanged.")] string name_prefix = "[RESTORE] ")
         {
             try
             {
@@ -79,7 +80,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "list" => ExecuteList(entity_name, name_filter, max_records),
                     "detail" => ExecuteDetail(entity_name, record_id),
-                    "restore" => ExecuteRestore(entity_name, record_id, record_ids),
+                    "restore" => ExecuteRestore(entity_name, record_id, record_ids, name_prefix),
                     "status" => ExecuteStatus(),
                     "turn" => ExecuteTurn(turn, retention_days),
                     _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'restore', 'status', 'turn'.")
@@ -255,8 +256,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success($"{logicalName} {entity.Id}: {attributes.Count} attributes from bin.", structured);
         }
 
-        private CallToolResult ExecuteRestore(string entityName, string recordId, string[] recordIds)
+        private CallToolResult ExecuteRestore(string entityName, string recordId, string[] recordIds, string namePrefix)
         {
+            namePrefix = namePrefix ?? "";
             var guids = new List<string>();
             if (recordIds != null && recordIds.Length > 0)
                 guids.AddRange(recordIds.Where(g => !string.IsNullOrWhiteSpace(g)));
@@ -284,6 +286,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"entity_name '{entityName}': {entityResult.Error}");
             var logicalName = entityResult.Value.LogicalName;
             var displayName = entityResult.Value.DisplayName?.UserLocalizedLabel?.Label ?? logicalName;
+            var primaryKey = entityResult.Value.PrimaryIdAttribute ?? GetPrimaryKeyAttribute(logicalName);
+            var primaryName = entityResult.Value.PrimaryNameAttribute ?? GetPrimaryNameAttribute(logicalName);
+            var applyPrefix = namePrefix.Length > 0;
 
             if (_options.DryRun)
             {
@@ -310,17 +315,41 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             EnsureMutationAllowed();
+
+            var originalNames = new Dictionary<Guid, string>();
+            if (applyPrefix)
+            {
+                var values = string.Join("", guids.Select(g => $"<value>{EscapeXml(g.Trim())}</value>"));
+                var nameFetch = $"<fetch datasource='bin'>" +
+                                $"  <entity name='{logicalName}'>" +
+                                $"    <attribute name='{primaryName}' />" +
+                                $"    <filter type='and'>" +
+                                $"      <condition attribute='{primaryKey}' operator='in'>{values}</condition>" +
+                                $"    </filter>" +
+                                $"  </entity>" +
+                                $"</fetch>";
+                var binNames = _serviceClient.RetrieveMultiple(new FetchExpression(nameFetch));
+                foreach (var e in binNames.Entities)
+                {
+                    var n = e.GetAttributeValue<string>(primaryName);
+                    if (!string.IsNullOrEmpty(n)) originalNames[e.Id] = n;
+                }
+            }
+
             var results = new List<RestoreResultEntry>();
             int restored = 0;
             foreach (var g in guids)
             {
                 try
                 {
+                    var target = new Entity(logicalName, Guid.Parse(g));
+                    if (applyPrefix && originalNames.TryGetValue(target.Id, out var originalName))
+                        target[primaryName] = namePrefix + originalName;
                     var restore = new OrganizationRequest("Restore")
                     {
                         Parameters =
                         {
-                            ["Target"] = new Entity(logicalName, Guid.Parse(g))
+                            ["Target"] = target
                         }
                     };
                     DataverseMutationExecutor.Execute(_context, _serviceClient, restore);
@@ -361,6 +390,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 : (restored == 0
                     ? $"{logicalName}: Restored 0/{guids.Count} record(s), {failed} failed."
                     : $"{logicalName}: Restored {restored}/{guids.Count} record(s), {failed} failed.");
+            if (applyPrefix && restored > 0)
+                text += $" Primary names prefixed with '{namePrefix}'. To restore without this prefix next time, pass name_prefix='' (empty).";
 
             if (failed == 0)
                 return Success(text, structured);
