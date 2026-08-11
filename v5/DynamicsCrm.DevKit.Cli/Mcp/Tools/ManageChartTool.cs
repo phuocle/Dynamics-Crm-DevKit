@@ -8,9 +8,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
@@ -28,9 +30,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         };
 
         private const string DefaultChartType = "Pie";
+        private const string MultiMeasureDefaultChartType = "Column";
         private const string DefaultPieCategoryColumn = "statecode";
         private const string DefaultPieLegendColumn = "importsequencenumber";
         private const string DefaultPieAggregateType = "count";
+
+        private static readonly HashSet<string> ValidAggregateTypes = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "count", "countcolumn", "sum", "avg", "min", "max"
+        };
+
+        private static readonly HashSet<string> SingleMeasureChartTypes = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "Pie", "Doughnut", "Donut", "Funnel"
+        };
 
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
@@ -59,7 +72,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- publish_customizations → batch publish after multiple metadata changes\n" +
             "- manage_view → views; execute_webapi → raw savedqueryvisualization access\n\n" +
             "Omitted chart_type on create defaults to Pie (category=statecode, legend=importsequencenumber/count). " +
-            "Pie create first returns needs_confirmation without creating; re-call with confirmed=true after user approval.")]
+            "Pie create first returns needs_confirmation without creating; re-call with confirmed=true after user approval. " +
+            "Multi-series: measures='col:agg[:label]; ...' (agg: count/countcolumn/sum/avg/min/max) defaults chart_type to Column and is mutually exclusive with aggregate_column. " +
+            "filter='field op value; ...' (ops: =, !=, >, >=, <, <=, like, in, null, not-null) filters chart data. Create with measures or filter also requires confirmed=true.")]
         public CallToolResult manage_chart(
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action,
             [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Required for list/create.")] string entity_name = "",
@@ -69,6 +84,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Category / group-by attribute logical name or display name. Pie default: statecode.")] string group_by_column = "",
             [Description("Legend / measure attribute logical name or display name. Pie default: importsequencenumber.")] string aggregate_column = "",
             [Description("Aggregation type: 'count' (default), 'sum', 'avg', 'min', 'max'.")] string aggregate_type = "count",
+            [Description("Multi-measure series: 'column:aggregate_type[:label]; ...' (e.g. 'estimatedvalue:sum:Revenue; importsequencenumber:count'). Mutually exclusive with aggregate_column/aggregate_type. Optional label becomes the series legend name.")] string measures = "",
+            [Description("Structured datadescription filter: 'field op value; ...'. Operators: =, !=, >, >=, <, <=, like, in (comma-separated list), null, not-null. Example: 'statecode=0; estimatedvalue>1000000'.")] string filter = "",
             [Description("Custom presentation Chart XML override (create/update). For undo: path to the .chart.json backup file.")] string presentationdescription = "",
             [Description("Chart description text.")] string description = "",
             [Description("Optional solution unique/display name. When provided and non-empty, chart is added to the solution after create/update.")] string solution_name = "",
@@ -94,8 +111,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "list" => HandleList(entity_name),
                     "detail" => HandleDetail(entity_name, chart_id, chart_name),
-                    "create" => HandleCreate(entity_name, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, presentationdescription, description, solution_name, validate, publish, confirmed),
-                    "update" => HandleUpdate(entity_name, chart_id, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, presentationdescription, description, solution_name, validate, backup, publish),
+                    "create" => HandleCreate(entity_name, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, measures, filter, presentationdescription, description, solution_name, validate, publish, confirmed),
+                    "update" => HandleUpdate(entity_name, chart_id, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, measures, filter, presentationdescription, description, solution_name, validate, backup, publish),
                     "rename" => HandleRename(entity_name, chart_id, chart_name, solution_name, publish),
                     "set_default" => HandleSetDefault(entity_name, chart_id, chart_name, publish),
                     "undo" => HandleUndo(chart_id, presentationdescription, solution_name, publish),
@@ -180,6 +197,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleCreate(
             string entityNameInput, string chartName, string chartTypeInput,
             string groupByColInput, string aggregateColInput, string aggregateTypeInput,
+            string measuresInput, string filterInput,
             string presXmlInput, string description, string solutionName, bool validate, bool publish, bool confirmed)
         {
             if (string.IsNullOrWhiteSpace(entityNameInput))
@@ -193,15 +211,52 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"entity_name '{entityNameInput.Trim()}': {entityResolve.Error}");
 
             var entityName = entityResolve.Value.LogicalName;
-            var chartType = ResolveChartType(chartTypeInput, out var chartTypeDefaulted);
+
+            var measuresResult = ParseMeasuresInput(measuresInput, aggregateColInput, aggregateTypeInput);
+            if (measuresResult.Error != null) return Error(measuresResult.Error);
+            var measures = measuresResult.Measures;
+
+            var filterResult = ParseFilter(filterInput);
+            if (filterResult.Error != null) return Error(filterResult.Error);
+            var conditions = filterResult.Conditions;
+
+            // Multi-measure charts default to Column — Pie/Doughnut/Funnel are single-measure.
+            string chartType;
+            bool chartTypeDefaulted;
+            if (measures != null && measures.Count > 1 && string.IsNullOrWhiteSpace(chartTypeInput))
+            {
+                chartType = MultiMeasureDefaultChartType;
+                chartTypeDefaulted = true;
+            }
+            else
+            {
+                chartType = ResolveChartType(chartTypeInput, out chartTypeDefaulted);
+            }
+
+            if (measures != null && measures.Count > 1 && SingleMeasureChartTypes.Contains(chartType))
+                return Error(
+                    $"Chart type '{chartType}' supports a single measure; measures has {measures.Count} entries.",
+                    "Use Column, Bar, Line, Area, Bubble or Radar for multi-series charts.");
+
             var isPie = chartType.Equals("Pie", StringComparison.OrdinalIgnoreCase);
 
             string groupByCol;
-            string aggregateCol;
-            string aggregateType;
+            string aggregateCol = null;
+            string aggregateType = null;
             var defaultsApplied = new List<string>();
 
-            if (isPie)
+            if (measures != null)
+            {
+                if (chartTypeDefaulted)
+                    defaultsApplied.Add($"chart_type={chartType}");
+
+                groupByCol = string.IsNullOrWhiteSpace(groupByColInput)
+                    ? DefaultPieCategoryColumn
+                    : groupByColInput.Trim().ToLowerInvariant();
+                if (string.IsNullOrWhiteSpace(groupByColInput))
+                    defaultsApplied.Add($"category/group_by_column={DefaultPieCategoryColumn}");
+            }
+            else if (isPie)
             {
                 if (chartTypeDefaulted)
                     defaultsApplied.Add("chart_type=Pie");
@@ -228,30 +283,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         defaultsApplied.Add($"aggregate_type={DefaultPieAggregateType}");
                 }
 
-                if (!confirmed)
-                {
-                    var confirmText = $"Pie chart '{chartName.Trim()}' not created — confirmation required. " +
-                        $"Plan: type={chartType}{(chartTypeDefaulted ? " (default)" : "")}, entity={entityName}, " +
-                        $"category={groupByCol}{(string.IsNullOrWhiteSpace(groupByColInput) ? " (default)" : "")}, " +
-                        $"legend={aggregateCol}/{aggregateType}{(string.IsNullOrWhiteSpace(aggregateColInput) ? " (default)" : "")}" +
-                        (string.IsNullOrWhiteSpace(solutionName) ? "" : $", solution={solutionName.Trim()}") +
-                        ". Show the plan to the user; after approval re-call with confirmed=true and the same values.";
-
-                    return Success(confirmText, new UpsertChartResult
-                    {
-                        Action = "create",
-                        Entity = entityName,
-                        ChartName = chartName.Trim(),
-                        ChartType = chartType,
-                        Category = groupByCol,
-                        Legend = aggregateCol,
-                        AggregateType = aggregateType,
-                        SolutionName = string.IsNullOrWhiteSpace(solutionName) ? null : solutionName.Trim(),
-                        Status = "needs_confirmation",
-                        NeedsConfirmation = true,
-                        DefaultsApplied = defaultsApplied.Count > 0 ? defaultsApplied : null
-                    });
-                }
             }
             else
             {
@@ -267,13 +298,81 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     : aggregateTypeInput.Trim().ToLowerInvariant();
             }
 
-            var (dataXml, aggregateAlias, dataError) = BuildDataDescriptionFromEntity(
-                entityName, groupByCol, aggregateCol, aggregateType);
-            if (dataError != null) return Error(dataError);
+            // Confirmation gate: Pie always; any create with measures or filter also requires approval.
+            var requiresConfirmation = isPie || measures != null || conditions != null;
+            if (requiresConfirmation && !confirmed)
+            {
+                string confirmText;
+                if (isPie && measures == null && conditions == null)
+                {
+                    confirmText = $"Pie chart '{chartName.Trim()}' not created — confirmation required. " +
+                        $"Plan: type={chartType}{(chartTypeDefaulted ? " (default)" : "")}, entity={entityName}, " +
+                        $"category={groupByCol}{(string.IsNullOrWhiteSpace(groupByColInput) ? " (default)" : "")}, " +
+                        $"legend={aggregateCol}/{aggregateType}{(string.IsNullOrWhiteSpace(aggregateColInput) ? " (default)" : "")}" +
+                        (string.IsNullOrWhiteSpace(solutionName) ? "" : $", solution={solutionName.Trim()}") +
+                        ". Show the plan to the user; after approval re-call with confirmed=true and the same values.";
+                }
+                else
+                {
+                    confirmText = $"Chart '{chartName.Trim()}' not created — confirmation required. " +
+                        $"Plan: type={chartType}{(chartTypeDefaulted ? " (default)" : "")}, entity={entityName}, category={groupByCol}" +
+                        (measures != null
+                            ? $", measures=[{FormatMeasures(measures)}]"
+                            : $", legend={aggregateCol}/{aggregateType}{(string.IsNullOrWhiteSpace(aggregateColInput) ? " (default)" : "")}") +
+                        (conditions != null ? $", filter=[{FormatConditions(conditions)}]" : "") +
+                        (string.IsNullOrWhiteSpace(solutionName) ? "" : $", solution={solutionName.Trim()}") +
+                        ". Show the plan to the user; after approval re-call with confirmed=true and the same values.";
+                }
 
-            var presXml = string.IsNullOrWhiteSpace(presXmlInput)
-                ? BuildPresentationDescription(chartType, chartName, aggregateAlias)
-                : ResolveXmlInput(presXmlInput);
+                return Success(confirmText, new UpsertChartResult
+                {
+                    Action = "create",
+                    Entity = entityName,
+                    ChartName = chartName.Trim(),
+                    ChartType = chartType,
+                    Category = groupByCol,
+                    Legend = measures == null ? aggregateCol : null,
+                    AggregateType = measures == null ? aggregateType : null,
+                    Measures = measures?.Select(m => m.ToResult()).ToList(),
+                    Filter = conditions != null ? filterInput.Trim() : null,
+                    SolutionName = string.IsNullOrWhiteSpace(solutionName) ? null : solutionName.Trim(),
+                    Status = "needs_confirmation",
+                    NeedsConfirmation = true,
+                    DefaultsApplied = defaultsApplied.Count > 0 ? defaultsApplied : null
+                });
+            }
+
+            string dataXml;
+            List<string> measureAliases;
+            if (measures != null)
+            {
+                var (multiXml, aliases, multiError) = BuildDataDescriptionMulti(entityName, groupByCol, measures, conditions);
+                if (multiError != null) return Error(multiError);
+                dataXml = multiXml;
+                measureAliases = aliases;
+            }
+            else
+            {
+                var (singleXml, singleAlias, dataError) = BuildDataDescriptionFromEntity(
+                    entityName, groupByCol, aggregateCol, aggregateType, conditions);
+                if (dataError != null) return Error(dataError);
+                dataXml = singleXml;
+                measureAliases = new List<string> { singleAlias };
+            }
+
+            string presXml;
+            if (!string.IsNullOrWhiteSpace(presXmlInput))
+            {
+                presXml = ResolveXmlInput(presXmlInput);
+            }
+            else if (measures != null)
+            {
+                presXml = BuildPresentationDescriptionMulti(chartType, measures);
+            }
+            else
+            {
+                presXml = BuildPresentationDescription(chartType, chartName, measureAliases[0]);
+            }
 
             var (valErrors, valWarnings) = validate
                 ? ValidateChartXmls(dataXml, presXml)
@@ -298,7 +397,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (_options.DryRun)
             {
                 var dryMsg = $"Would CREATE system chart '{chartName}' ({chartType}) for entity '{entityName}' " +
-                             $"(category={groupByCol}, legend={aggregateCol}/{aggregateType}" +
+                             $"(category={groupByCol}" +
+                             (measures != null
+                                 ? $", measures=[{FormatMeasures(measures)}]"
+                                 : $", legend={aggregateCol}/{aggregateType}") +
+                             (conditions != null ? $", filter=[{FormatConditions(conditions)}]" : "") +
                              (resolvedSolutionUniqueName != null ? $", solution={resolvedSolutionUniqueName}" : "") +
                              ").";
                 return DryRun(dryMsg, new UpsertChartResult
@@ -308,8 +411,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ChartName = chartName,
                     ChartType = chartType,
                     Category = groupByCol,
-                    Legend = aggregateCol,
-                    AggregateType = aggregateType,
+                    Legend = measures == null ? aggregateCol : null,
+                    AggregateType = measures == null ? aggregateType : null,
+                    Measures = measures?.Select(m => m.ToResult()).ToList(),
+                    Filter = conditions != null ? filterInput.Trim() : null,
                     SolutionName = resolvedSolutionUniqueName,
                     Status = "not_executed",
                     NeedsConfirmation = false,
@@ -341,7 +446,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 published = true;
             }
 
-            var text = $"Created chart '{chartName.Trim()}' ({newId}) on '{entityName}': type={chartType}, category={groupByCol}, legend={aggregateCol}/{aggregateType}.";
+            var text = $"Created chart '{chartName.Trim()}' ({newId}) on '{entityName}': type={chartType}, category={groupByCol}" +
+                (measures != null
+                    ? $", measures=[{FormatMeasures(measures)}]"
+                    : $", legend={aggregateCol}/{aggregateType}") +
+                (conditions != null ? $", filter=[{FormatConditions(conditions)}]" : "") +
+                ".";
             if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
                 text += solutionWarning == null
                     ? $" Added to solution '{resolvedSolutionUniqueName}'."
@@ -356,8 +466,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ChartName = chartName.Trim(),
                 ChartType = chartType,
                 Category = groupByCol,
-                Legend = aggregateCol,
-                AggregateType = aggregateType,
+                Legend = measures == null ? aggregateCol : null,
+                AggregateType = measures == null ? aggregateType : null,
+                Measures = measures?.Select(m => m.ToResult()).ToList(),
+                Filter = conditions != null ? filterInput.Trim() : null,
                 SolutionName = resolvedSolutionUniqueName,
                 SolutionWarning = solutionWarning,
                 Status = "created",
@@ -372,6 +484,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleUpdate(
             string entityNameInput, string chartIdInput, string chartNameInput,
             string chartTypeInput, string groupByColInput, string aggregateColInput, string aggregateTypeInput,
+            string measuresInput, string filterInput,
             string presXmlInput, string description, string solutionName,
             bool validate, bool backup, bool publish)
         {
@@ -384,6 +497,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var chartName = chartRecord.GetAttributeValue<string>("name");
             var primaryEntity = chartRecord.GetAttributeValue<string>("primaryentitytypecode");
 
+            var measuresResult = ParseMeasuresInput(measuresInput, aggregateColInput, aggregateTypeInput);
+            if (measuresResult.Error != null) return Error(measuresResult.Error);
+            var measures = measuresResult.Measures;
+
+            var filterResult = ParseFilter(filterInput);
+            if (filterResult.Error != null) return Error(filterResult.Error);
+            var conditions = filterResult.Conditions;
+
+            if (measures != null && measures.Count > 1 &&
+                !string.IsNullOrWhiteSpace(chartTypeInput) && SingleMeasureChartTypes.Contains(chartTypeInput.Trim()))
+                return Error(
+                    $"Chart type '{chartTypeInput.Trim()}' supports a single measure; measures has {measures.Count} entries.",
+                    "Use Column, Bar, Line, Area, Bubble or Radar for multi-series charts.");
+
             var currentDataXml = chartRecord.GetAttributeValue<string>("datadescription");
             var currentPresXml = chartRecord.GetAttributeValue<string>("presentationdescription");
 
@@ -392,31 +519,51 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var shouldRebuildData =
                 !string.IsNullOrWhiteSpace(groupByColInput) ||
                 !string.IsNullOrWhiteSpace(aggregateColInput) ||
-                !string.IsNullOrWhiteSpace(aggregateTypeInput);
+                !string.IsNullOrWhiteSpace(aggregateTypeInput) ||
+                measures != null ||
+                conditions != null;
 
             if (shouldRebuildData)
             {
                 var groupByCol = string.IsNullOrWhiteSpace(groupByColInput)
                     ? DefaultPieCategoryColumn
                     : groupByColInput.Trim().ToLowerInvariant();
-                var aggregateCol = string.IsNullOrWhiteSpace(aggregateColInput)
-                    ? DefaultPieLegendColumn
-                    : aggregateColInput.Trim().ToLowerInvariant();
-                var aggregateType = string.IsNullOrWhiteSpace(aggregateTypeInput)
-                    ? DefaultPieAggregateType
-                    : aggregateTypeInput.Trim().ToLowerInvariant();
 
-                var (derivedDataXml, alias, dataErr) = BuildDataDescriptionFromEntity(
-                    primaryEntity, groupByCol, aggregateCol, aggregateType);
-                if (dataErr != null) return Error(dataErr);
-                newDataXml = derivedDataXml;
-                aggregateAlias = alias;
+                if (measures != null)
+                {
+                    var (multiXml, aliases, multiErr) = BuildDataDescriptionMulti(primaryEntity, groupByCol, measures, conditions);
+                    if (multiErr != null) return Error(multiErr);
+                    newDataXml = multiXml;
+                    aggregateAlias = aliases[0];
+                }
+                else
+                {
+                    var aggregateCol = string.IsNullOrWhiteSpace(aggregateColInput)
+                        ? DefaultPieLegendColumn
+                        : aggregateColInput.Trim().ToLowerInvariant();
+                    var aggregateType = string.IsNullOrWhiteSpace(aggregateTypeInput)
+                        ? DefaultPieAggregateType
+                        : aggregateTypeInput.Trim().ToLowerInvariant();
+
+                    var (derivedDataXml, alias, dataErr) = BuildDataDescriptionFromEntity(
+                        primaryEntity, groupByCol, aggregateCol, aggregateType, conditions);
+                    if (dataErr != null) return Error(dataErr);
+                    newDataXml = derivedDataXml;
+                    aggregateAlias = alias;
+                }
             }
 
             var newPresXml = currentPresXml;
             if (!string.IsNullOrWhiteSpace(chartTypeInput))
             {
-                newPresXml = BuildPresentationDescription(chartTypeInput.Trim(), chartName, aggregateAlias);
+                newPresXml = measures != null
+                    ? BuildPresentationDescriptionMulti(chartTypeInput.Trim(), measures)
+                    : BuildPresentationDescription(chartTypeInput.Trim(), chartName, aggregateAlias);
+            }
+            else if (measures != null)
+            {
+                // measures rebuilds datadescription with N series; rebuild presentation to match (default Column).
+                newPresXml = BuildPresentationDescriptionMulti(MultiMeasureDefaultChartType, measures);
             }
             else if (!string.IsNullOrWhiteSpace(presXmlInput))
             {
@@ -456,6 +603,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Entity = primaryEntity,
                     ChartId = chartId.ToString(),
                     ChartName = chartName,
+                    Measures = measures?.Select(m => m.ToResult()).ToList(),
+                    Filter = conditions != null ? filterInput.Trim() : null,
                     SolutionName = resolvedSolutionUniqueName,
                     Status = "not_executed",
                     BackupPath = backupPath,
@@ -496,6 +645,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Entity = primaryEntity,
                 ChartId = chartId.ToString(),
                 ChartName = chartName,
+                Measures = measures?.Select(m => m.ToResult()).ToList(),
+                Filter = conditions != null ? filterInput.Trim() : null,
                 SolutionName = resolvedSolutionUniqueName,
                 SolutionWarning = solutionWarning,
                 Status = "updated",
@@ -691,7 +842,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Entity-Based DataDescription Builder ───────────────────────────
 
         private static (string Xml, string AggregateAlias, string Error) BuildDataDescriptionFromEntity(
-            string entityName, string groupByCol, string aggregateCol, string aggregateType)
+            string entityName, string groupByCol, string aggregateCol, string aggregateType,
+            List<ChartFilterCondition> conditions = null)
         {
             if (string.IsNullOrWhiteSpace(entityName))
                 return (null, null, "entity logical name is required to build chart data specification.");
@@ -726,6 +878,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Match OOB pie attribute order: aggregate then groupby. Harmless for other chart types.
             sb.Append($"<attribute alias=\"{aggregateAlias}\" name=\"{resolvedAggregate}\" aggregate=\"{aggType}\" />");
             sb.Append($"<attribute groupby=\"true\" alias=\"{groupByAlias}\" name=\"{resolvedGroupBy}\" />");
+            var filterFragment = BuildFilterFragment(conditions);
+            if (filterFragment != null) sb.Append(filterFragment);
             sb.Append("</entity>");
             sb.Append("</fetch>");
             sb.Append("</fetchcollection>");
@@ -740,6 +894,253 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             return (sb.ToString(), aggregateAlias, null);
         }
+
+        /// <summary>
+        /// Multi-measure variant: N aggregate attributes (aliases aggregate_column_1..N) +
+        /// one groupby, and N &lt;measurecollection&gt; siblings like OOB multi-measure charts
+        /// (series binding is positional).
+        /// </summary>
+        private static (string Xml, List<string> Aliases, string Error) BuildDataDescriptionMulti(
+            string entityName, string groupByCol, List<ChartMeasure> measures, List<ChartFilterCondition> conditions)
+        {
+            if (string.IsNullOrWhiteSpace(entityName))
+                return (null, null, "entity logical name is required to build chart data specification.");
+            if (string.IsNullOrWhiteSpace(groupByCol))
+                return (null, null, "category/group_by_column is required to build chart data specification.");
+
+            var targetEntity = entityName.Trim().ToLowerInvariant();
+            var resolvedGroupBy = groupByCol.Trim().ToLowerInvariant();
+            var aliases = measures.Select(m => m.Alias).ToList();
+
+            var sb = new StringBuilder();
+            sb.Append("<datadefinition>");
+            sb.Append("<fetchcollection>");
+            sb.Append("<fetch mapping=\"logical\" aggregate=\"true\">");
+            sb.Append($"<entity name=\"{targetEntity}\">");
+            foreach (var m in measures)
+                sb.Append($"<attribute alias=\"{m.Alias}\" name=\"{m.Column}\" aggregate=\"{m.AggregateType}\" />");
+            sb.Append($"<attribute groupby=\"true\" alias=\"groupby_column\" name=\"{resolvedGroupBy}\" />");
+            var filterFragment = BuildFilterFragment(conditions);
+            if (filterFragment != null) sb.Append(filterFragment);
+            sb.Append("</entity>");
+            sb.Append("</fetch>");
+            sb.Append("</fetchcollection>");
+            sb.Append("<categorycollection>");
+            sb.Append("<category>");
+            foreach (var alias in aliases)
+            {
+                sb.Append("<measurecollection>");
+                sb.Append($"<measure alias=\"{alias}\" />");
+                sb.Append("</measurecollection>");
+            }
+            sb.Append("</category>");
+            sb.Append("</categorycollection>");
+            sb.Append("</datadefinition>");
+
+            return (sb.ToString(), aliases, null);
+        }
+
+        // ── measures / filter parsing ──────────────────────────────────────
+
+        private sealed class ChartMeasure
+        {
+            public string Column;
+            public string AggregateType;
+            public string Label;
+            public string Alias;
+
+            public ChartMeasureResult ToResult() => new ChartMeasureResult
+            {
+                Column = Column,
+                AggregateType = AggregateType,
+                Label = Label
+            };
+        }
+
+        private sealed class ChartFilterCondition
+        {
+            public string Field;
+            public string Operator;
+            public string Value;
+            public List<string> Values;
+
+            public string ToDisplay()
+            {
+                if (Operator == "null" || Operator == "not-null") return $"{Field} {Operator}";
+                if (Operator == "in") return $"{Field} in ({string.Join(",", Values)})";
+                var symbol = Operator switch
+                {
+                    "eq" => "=",
+                    "ne" => "!=",
+                    "gt" => ">",
+                    "ge" => ">=",
+                    "lt" => "<",
+                    "le" => "<=",
+                    _ => Operator
+                };
+                return $"{Field}{symbol}{Value}";
+            }
+        }
+
+        private static (List<ChartMeasure> Measures, string Error) ParseMeasuresInput(
+            string measuresInput, string aggregateColInput, string aggregateTypeInput)
+        {
+            if (string.IsNullOrWhiteSpace(measuresInput)) return (null, null);
+
+            if (!string.IsNullOrWhiteSpace(aggregateColInput))
+                return (null, "measures cannot be combined with aggregate_column — ambiguous. Use either measures (multi-series) or aggregate_column/aggregate_type (single-series).");
+            if (!string.IsNullOrWhiteSpace(aggregateTypeInput) &&
+                !aggregateTypeInput.Trim().Equals(DefaultPieAggregateType, StringComparison.OrdinalIgnoreCase))
+                return (null, "measures cannot be combined with aggregate_type — ambiguous. Put the aggregate type inside each measures segment instead.");
+
+            return ParseMeasures(measuresInput);
+        }
+
+        private static (List<ChartMeasure> Measures, string Error) ParseMeasures(string input)
+        {
+            var measures = new List<ChartMeasure>();
+            foreach (var rawSeg in input.Split(';'))
+            {
+                var seg = rawSeg.Trim();
+                if (seg.Length == 0) continue;
+
+                var parts = seg.Split(':');
+                if (parts.Length < 2)
+                    return (null, $"measures segment '{seg}' is invalid. Expected format: column:aggregate_type[:label].");
+
+                var column = parts[0].Trim().ToLowerInvariant();
+                var aggType = parts[1].Trim().ToLowerInvariant();
+                var label = parts.Length > 2 ? string.Join(":", parts.Skip(2)).Trim() : null;
+                if (string.IsNullOrEmpty(label)) label = null;
+
+                if (!Regex.IsMatch(column, @"^[a-z_][a-z0-9_]*$"))
+                    return (null, $"measures column '{column}' is not a valid column logical name.");
+                if (!ValidAggregateTypes.Contains(aggType))
+                    return (null, $"measures aggregate type '{aggType}' is invalid. Valid values: count, countcolumn, sum, avg, min, max.");
+
+                measures.Add(new ChartMeasure
+                {
+                    Column = column,
+                    AggregateType = aggType,
+                    Label = label,
+                    Alias = $"aggregate_column_{measures.Count + 1}"
+                });
+            }
+
+            if (measures.Count == 0)
+                return (null, "measures did not contain any valid segment. Expected format: column:aggregate_type[:label]; ...");
+            return (measures, null);
+        }
+
+        private static readonly (string Symbol, string Op)[] SymbolOperators =
+        {
+            (">=", "ge"), ("<=", "le"), ("!=", "ne"), ("=", "eq"), (">", "gt"), ("<", "lt")
+        };
+
+        private static (List<ChartFilterCondition> Conditions, string Error) ParseFilter(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input)) return (null, null);
+
+            var conditions = new List<ChartFilterCondition>();
+            foreach (var rawSeg in input.Split(';'))
+            {
+                var seg = rawSeg.Trim();
+                if (seg.Length == 0) continue;
+
+                var wordMatch = Regex.Match(seg, @"^([A-Za-z_][A-Za-z0-9_]*)\s+(not-null|null)\s*$", RegexOptions.IgnoreCase);
+                if (wordMatch.Success)
+                {
+                    conditions.Add(new ChartFilterCondition
+                    {
+                        Field = wordMatch.Groups[1].Value.ToLowerInvariant(),
+                        Operator = wordMatch.Groups[2].Value.ToLowerInvariant()
+                    });
+                    continue;
+                }
+
+                wordMatch = Regex.Match(seg, @"^([A-Za-z_][A-Za-z0-9_]*)\s+(like|in)\s+(.+?)\s*$", RegexOptions.IgnoreCase);
+                if (wordMatch.Success)
+                {
+                    var field = wordMatch.Groups[1].Value.ToLowerInvariant();
+                    var op = wordMatch.Groups[2].Value.ToLowerInvariant();
+                    var value = wordMatch.Groups[3].Value.Trim();
+                    if (op == "in")
+                    {
+                        if (value.StartsWith("(") && value.EndsWith(")"))
+                            value = value.Substring(1, value.Length - 2);
+                        var values = value.Split(',').Select(v => v.Trim()).Where(v => v.Length > 0).ToList();
+                        if (values.Count == 0)
+                            return (null, $"filter segment '{seg}' has an empty value list for 'in'.");
+                        conditions.Add(new ChartFilterCondition { Field = field, Operator = "in", Values = values });
+                    }
+                    else
+                    {
+                        conditions.Add(new ChartFilterCondition { Field = field, Operator = "like", Value = value });
+                    }
+                    continue;
+                }
+
+                var matched = false;
+                foreach (var (symbol, op) in SymbolOperators)
+                {
+                    var idx = seg.IndexOf(symbol, StringComparison.Ordinal);
+                    if (idx <= 0) continue;
+                    var field = seg.Substring(0, idx).Trim().ToLowerInvariant();
+                    var value = seg.Substring(idx + symbol.Length).Trim();
+                    if (!Regex.IsMatch(field, @"^[a-z_][a-z0-9_]*$"))
+                        return (null, $"filter field '{field}' is not a valid column logical name.");
+                    if (value.Length == 0)
+                        return (null, $"filter segment '{seg}' has an empty value.");
+                    conditions.Add(new ChartFilterCondition { Field = field, Operator = op, Value = value });
+                    matched = true;
+                    break;
+                }
+
+                if (!matched)
+                    return (null, $"filter segment '{seg}' is invalid. Expected format: field<op>value. Operators: =, !=, >, >=, <, <=, like, in, null, not-null.");
+            }
+
+            if (conditions.Count == 0)
+                return (null, "filter did not contain any valid condition. Expected format: field<op>value; ...");
+            return (conditions, null);
+        }
+
+        private static string BuildFilterFragment(List<ChartFilterCondition> conditions)
+        {
+            if (conditions == null || conditions.Count == 0) return null;
+
+            var sb = new StringBuilder();
+            sb.Append("<filter type=\"and\">");
+            foreach (var c in conditions)
+            {
+                var attr = SecurityElement.Escape(c.Field);
+                if (c.Operator == "null" || c.Operator == "not-null")
+                {
+                    sb.Append($"<condition attribute=\"{attr}\" operator=\"{c.Operator}\" />");
+                }
+                else if (c.Operator == "in")
+                {
+                    sb.Append($"<condition attribute=\"{attr}\" operator=\"in\">");
+                    foreach (var v in c.Values)
+                        sb.Append($"<value>{SecurityElement.Escape(v)}</value>");
+                    sb.Append("</condition>");
+                }
+                else
+                {
+                    sb.Append($"<condition attribute=\"{attr}\" operator=\"{c.Operator}\" value=\"{SecurityElement.Escape(c.Value)}\" />");
+                }
+            }
+            sb.Append("</filter>");
+            return sb.ToString();
+        }
+
+        private static string FormatMeasures(List<ChartMeasure> measures) =>
+            string.Join("; ", measures.Select(m => m.Label != null
+                ? $"{m.Column}:{m.AggregateType}:{m.Label}"
+                : $"{m.Column}:{m.AggregateType}"));
+
+        private static string FormatConditions(List<ChartFilterCondition> conditions) =>
+            string.Join("; ", conditions.Select(c => c.ToDisplay()));
 
         private static string ResolveChartType(string chartTypeInput, out bool defaulted)
         {
@@ -762,18 +1163,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string BuildPresentationDescription(string chartType, string chartName, string aggregateAlias = null)
         {
-            var validChartType = SupportedChartTypes.FirstOrDefault(t => t.Equals(chartType, StringComparison.OrdinalIgnoreCase)) ?? "Column";
-            var resourceName = validChartType.Equals("Donut", StringComparison.OrdinalIgnoreCase) ? "Doughnut" : validChartType;
-
-            // Shared project embeds as DynamicsCrm.DevKit.Cli.Resources.charts.<Type>.xml
-            // because CLI imports Shared.projitems and uses CLI root namespace.
-            var chartXml = ReadChartTemplateXml(resourceName);
-
-            if (string.IsNullOrWhiteSpace(chartXml))
-            {
-                throw new InvalidOperationException(
-                    $"Chart XML resource template for '{validChartType}' could not be found in embedded resources. Expected resource ending with 'Resources.charts.{resourceName}.xml'.");
-            }
+            var chartXml = LoadChartTemplateXml(chartType);
 
             // Dynamic Binding: set Series Name to measure alias when template has a Series element.
             // For Pie, portal XML does not require Series Name; keep template as-is if no Series found.
@@ -798,6 +1188,73 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Dataverse stores presentationdescription as raw <Chart>...</Chart> (no wrapper).
             return chartXml.Trim();
+        }
+
+        /// <summary>
+        /// Builds a multi-series presentationdescription: clones the template Series node
+        /// per measure (positional binding, like OOB multi-measure charts) and sets each
+        /// Series Name to the measure label (or alias when no label). Injects a bottom
+        /// legend when the template has none and there is more than one series.
+        /// </summary>
+        private static string BuildPresentationDescriptionMulti(string chartType, List<ChartMeasure> measures)
+        {
+            var chartXml = LoadChartTemplateXml(chartType);
+            try
+            {
+                var doc = XDocument.Parse(chartXml);
+                var seriesContainer = doc.Descendants("Series")
+                    .FirstOrDefault(e => e.Parent != null && e.Parent.Name.LocalName == "Chart");
+                var firstSeries = seriesContainer?.Elements("Series").FirstOrDefault();
+                if (firstSeries != null)
+                {
+                    firstSeries.SetAttributeValue("Name", measures[0].Label ?? measures[0].Alias);
+                    var anchor = firstSeries;
+                    for (var i = 1; i < measures.Count; i++)
+                    {
+                        var clone = new XElement(firstSeries);
+                        clone.SetAttributeValue("Name", measures[i].Label ?? measures[i].Alias);
+                        anchor.AddAfterSelf(clone);
+                        anchor = clone;
+                    }
+
+                    if (measures.Count > 1 && doc.Descendants("Legend").FirstOrDefault() == null && doc.Root != null)
+                    {
+                        doc.Root.Add(new XElement("Legends",
+                            new XElement("Legend",
+                                new XAttribute("Alignment", "Center"),
+                                new XAttribute("LegendStyle", "Table"),
+                                new XAttribute("Docking", "Bottom"),
+                                new XAttribute("Font", "{0}, 11px"),
+                                new XAttribute("ForeColor", "59, 59, 59"))));
+                    }
+
+                    chartXml = doc.ToString(SaveOptions.DisableFormatting);
+                }
+            }
+            catch
+            {
+                // Fallback to raw XML if parsing fails
+            }
+
+            return chartXml.Trim();
+        }
+
+        private static string LoadChartTemplateXml(string chartType)
+        {
+            var validChartType = SupportedChartTypes.FirstOrDefault(t => t.Equals(chartType, StringComparison.OrdinalIgnoreCase)) ?? "Column";
+            var resourceName = validChartType.Equals("Donut", StringComparison.OrdinalIgnoreCase) ? "Doughnut" : validChartType;
+
+            // Shared project embeds as DynamicsCrm.DevKit.Cli.Resources.charts.<Type>.xml
+            // because CLI imports Shared.projitems and uses CLI root namespace.
+            var chartXml = ReadChartTemplateXml(resourceName);
+
+            if (string.IsNullOrWhiteSpace(chartXml))
+            {
+                throw new InvalidOperationException(
+                    $"Chart XML resource template for '{validChartType}' could not be found in embedded resources. Expected resource ending with 'Resources.charts.{resourceName}.xml'.");
+            }
+
+            return chartXml;
         }
 
         private static string ReadChartTemplateXml(string resourceName)

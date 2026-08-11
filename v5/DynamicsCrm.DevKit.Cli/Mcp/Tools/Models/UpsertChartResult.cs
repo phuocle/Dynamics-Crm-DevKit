@@ -37,6 +37,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string AggregateType { get; set; }
 
+        [JsonPropertyName("measures")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<ChartMeasureResult> Measures { get; set; }
+
+        [JsonPropertyName("filter")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Filter { get; set; }
+
         [JsonPropertyName("solutionName")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SolutionName { get; set; }
@@ -106,6 +114,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("solutionWarning")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SolutionWarning { get; set; }
+    }
+
+    /// <summary>
+    /// One measure entry for multi-series charts (from the <c>measures</c> param).
+    /// </summary>
+    internal sealed class ChartMeasureResult
+    {
+        [JsonPropertyName("column")]
+        public string Column { get; set; }
+
+        [JsonPropertyName("aggregateType")]
+        public string AggregateType { get; set; }
+
+        [JsonPropertyName("label")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Label { get; set; }
     }
 
     /// <summary>

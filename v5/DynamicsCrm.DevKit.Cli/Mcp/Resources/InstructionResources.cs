@@ -809,15 +809,17 @@ Required from user (error if missing):
 2. `chart_name`
 
 Optional:
-- `chart_type` (default Pie)
+- `chart_type` (default Pie; defaults to **Column** when `measures` has 2+ entries and `chart_type` is omitted)
 - `group_by_column` / category (default statecode)
 - `aggregate_column` / legend (default importsequencenumber)
 - `aggregate_type` (default count)
+- `measures` (multi-series: `column:aggregate_type[:label]; ...`, e.g. `estimatedvalue:sum:Revenue; importsequencenumber:count`. Mutually exclusive with `aggregate_column`/`aggregate_type`. Optional label becomes the series legend name. Pie/Doughnut/Funnel reject 2+ measures.)
+- `filter` (structured datadescription filter: `field op value; ...`; ops `=`, `!=`, `>`, `>=`, `<`, `<=`, `like`, `in` (comma list), `null`, `not-null`; e.g. `statecode=0; estimatedvalue>1000000`)
 - `solution_name` (optional; null-check before add)
 
 Workflow:
 1. Call `manage_chart(action='create', entity_name=..., chart_name=..., ...)` with `confirmed=false` (default).
-2. Tool returns `status=needs_confirmation` + full proposed plan (including defaults). **Do not create yet.**
+2. Tool returns `status=needs_confirmation` + full proposed plan (including defaults) — for Pie, and for **any** create with `measures` or `filter`. **Do not create yet.**
 3. Show the plan to the user. If they want different category/legend, re-call with updated fields and `confirmed=false` again.
 4. After user approves, re-call the same create with `confirmed=true`.
 5. Tool builds entity-based aggregate FetchXML, presentation XML, creates chart, adds to solution when `solution_name` is non-empty, and publishes.
@@ -825,8 +827,8 @@ Workflow:
 ### Actions
 - `list`: List system charts for an entity (`entity_name`).
 - `detail`: Get full chart definition by `chart_id` or `chart_name`.
-- `create`: Create a system chart (`entity_name`, `chart_name`, optional `chart_type`/`group_by_column`/`aggregate_column`/`aggregate_type`/`solution_name`, `confirmed` for pie).
-- `update`: Update chart type/data fields/description by `chart_id` or `chart_name`.
+- `create`: Create a system chart (`entity_name`, `chart_name`, optional `chart_type`/`group_by_column`/`aggregate_column`/`aggregate_type`/`measures`/`filter`/`solution_name`, `confirmed` for pie or any create with `measures`/`filter`).
+- `update`: Update chart type/data fields/description by `chart_id` or `chart_name` (also accepts `measures`/`filter` to rebuild the datadescription).
 - `rename`: Change chart display name.
 - `set_default`: Set a system chart as the default chart for an entity.
 - `undo`: Rollback chart state from a `.chart.json` backup file path.
