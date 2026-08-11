@@ -10,12 +10,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string Action { get; set; }
 
         [JsonPropertyName("entity")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Entity { get; set; }
 
         [JsonPropertyName("id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Id { get; set; }
 
         [JsonPropertyName("status")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Status { get; set; }
 
         [JsonPropertyName("fieldsUpdated")]

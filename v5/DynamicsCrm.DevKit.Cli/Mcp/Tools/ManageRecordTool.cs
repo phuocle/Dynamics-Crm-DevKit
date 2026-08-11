@@ -1,6 +1,5 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
@@ -34,135 +33,94 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(CrudResult)),
         Description(
-            "CRUD single Dataverse record. Required: entity_name. create: +fields_json (returns GUID). read: +record_id, optional columns. update: +record_id+fields_json (partial supported). delete: +record_id (irreversible, may fail on FK or cascade-delete children). Use get_tables for field names; execute_fetchxml to find lookup GUIDs.\n\n" +
-
-            "READ OUTPUT: action='read' returns selected field values in structuredContent.fields and also in text content. Use execute_webapi only when raw OData JSON, annotations, headers, or entity-set URL behavior is specifically needed.\n\n" +
-
-            "LOOKUP / POLYMORPHIC LOOKUP SYNTAX in fields_json:\n" +
-            "- Regular lookup (single target): {\"fieldname\": \"guid\"} — target entity resolved from metadata automatically\n" +
-            "- Polymorphic lookup (multiple targets, e.g. Customer, Owner, or any custom poly lookup): use 'fieldname@targetentity' key to specify which target entity the GUID belongs to\n" +
-            "  Syntax: {\"fieldname@targetentity\": \"guid\"}\n" +
-            "  Examples: {\"v5_billto@account\": \"<guid>\"}, {\"v5_billto@contact\": \"<guid>\"}, {\"ownerid@systemuser\": \"<guid>\"}, {\"v5_ref@devkit_custom1\": \"<guid>\"}\n" +
-            "- Never use @odata.bind format — use the fieldname@targetentity syntax above\n\n" +
-
-            "ACTIVITY PARTY FIELDS (to, from, cc, bcc, requiredattendees, optionalattendees, organizer, customers, resources):\n" +
-            "These fields require a JSON array of party objects (or single object for one participant).\n" +
-            "Format: [{\"id\":\"<guid>\",\"type\":\"<entity_logical_name>\"}]\n" +
-            "Optional addressused: [{\"id\":\"<guid>\",\"type\":\"contact\",\"addressused\":\"alt@email.com\"}]\n" +
-            "Examples:\n" +
-            "  \"to\": [{\"id\":\"<guid>\",\"type\":\"contact\"},{\"id\":\"<guid>\",\"type\":\"account\"}]\n" +
-            "  \"from\": {\"id\":\"<guid>\",\"type\":\"systemuser\"} (single object auto-wrapped to array)\n" +
-            "Do NOT set participationtypemask — Dataverse sets it automatically from the field name.\n\n" +
-
+            "CRUD a single Dataverse record. Actions: 'read' (read-only) | 'create', 'update', 'delete' (IRREVERSIBLE), 'associate', 'disassociate' (mutations). Record changes are live immediately — no publish needed.\n\n" +
             "WHEN TO USE:\n" +
             "- Create / read / update / delete a single record by GUID\n" +
             "- Partial-update specific fields without rewriting whole record\n" +
-            "- Verify a record before destructive changes\n" +
-            "- Use create_records instead for bulk (multiple records)")]
+            "- Associate/disassociate two records via an N:N relationship\n" +
+            "- Verify a record before destructive changes\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_tables → entity/attribute names before building fields_json\n" +
+            "- execute_fetchxml → find lookup GUIDs and record_id\n" +
+            "- create_records → bulk create multiple records\n" +
+            "- execute_webapi → raw OData JSON/annotations")]
         public CallToolResult manage_record(
-            [Description(
-                "'create', 'read', 'update', 'delete'."
-            )] string action,
-            [Description(
-                "Entity logical name (e.g., 'account')."
-            )] string entity_name,
-            [Description(
-                "GUID. Required: read/update/delete. Empty: create."
-            )] string record_id = "",
-            [Description(
-                "JSON object of field values. Required: create/update. Polymorphic lookup: 'fieldname@targetentity' key. Activity party fields (to/from/cc/bcc/requiredattendees/optionalattendees): JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Single party auto-wrapped: {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Optional: \"addressused\":\"email\". Regular lookup: {\"fieldname\": \"guid\"}."
-            )] string fields_json = "",
-            [Description(
-                "Read only. Comma-separated columns. Empty = all."
-            )] string columns = "",
-            [Description(
-                "Related Entity Name for associate/disassociate."
-            )] string related_entity_name = "",
-            [Description(
-                "Related Record GUID for associate/disassociate."
-            )] string related_record_id = "",
-            [Description(
-                "N:N Relationship Name for associate/disassociate."
-            )] string relationship_name = "")
+            [Description("'create', 'read', 'update', 'delete', 'associate', 'disassociate'.")] string action,
+            [Description("Entity logical name (e.g., 'account').")] string entity_name,
+            [Description("GUID. Required: read/update/delete. Empty: create.")] string record_id = "",
+            [Description("JSON object of field values. Required: create/update. Polymorphic lookup: 'fieldname@targetentity' key. Activity party fields (to/from/cc/bcc/requiredattendees/optionalattendees): JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Single party auto-wrapped: {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Optional: \"addressused\":\"email\". Regular lookup: {\"fieldname\": \"guid\"}.")] string fields_json = "",
+            [Description("Read only. Comma-separated columns. Empty = all.")] string columns = "",
+            [Description("Related Entity Name for associate/disassociate.")] string related_entity_name = "",
+            [Description("Related Record GUID for associate/disassociate.")] string related_record_id = "",
+            [Description("N:N Relationship Name for associate/disassociate.")] string relationship_name = "")
         {
-            if (string.IsNullOrWhiteSpace(action))
-                return Error("Error: action is required. Valid values: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.");
-
-            if (string.IsNullOrWhiteSpace(entity_name))
-                return Error("Error: entity_name is required.");
-
-            var normalizedAction = action.Trim().ToLowerInvariant();
-            if (normalizedAction is not ("create" or "read" or "update" or "delete" or "associate" or "disassociate"))
-                return Error($"Error: Invalid action '{action}'. Valid values: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.");
-
-            // Validate record_id early before entity resolution (which requires network)
-            if (normalizedAction is "read" or "update" or "delete" or "associate" or "disassociate")
-            {
-                if (string.IsNullOrWhiteSpace(record_id))
-                    return Error($"Error: record_id is required for '{normalizedAction}'.");
-                if (!Guid.TryParse(record_id.Trim(), out _))
-                    return Error($"Error: '{record_id}' is not a valid GUID.");
-            }
-            if (normalizedAction is "create" or "update")
-            {
-                if (string.IsNullOrWhiteSpace(fields_json))
-                    return Error(
-                        $"Error: fields_json is required for '{normalizedAction}'.\n" +
-                        "Required: JSON object with field logical names as keys.\n" +
-                        "Read docs://data_operations_guide for field type formats and polymorphic lookup syntax.");
-            }
-            if (normalizedAction is "associate" or "disassociate")
-            {
-                if (string.IsNullOrWhiteSpace(related_entity_name))
-                    return Error($"Error: related_entity_name is required for '{normalizedAction}'.");
-                if (string.IsNullOrWhiteSpace(related_record_id))
-                    return Error($"Error: related_record_id is required for '{normalizedAction}'.");
-                if (string.IsNullOrWhiteSpace(relationship_name))
-                    return Error($"Error: relationship_name is required for '{normalizedAction}'.");
-            }
-            if (normalizedAction == "create" && !string.IsNullOrWhiteSpace(record_id))
-                return Error("Error: record_id must be empty for 'create'. Use 'update' to modify an existing record.");
-
-            string entityName;
             try
             {
+                if (string.IsNullOrWhiteSpace(action))
+                    return Error("action is required. Valid values: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.", "Provide one of: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.");
+
+                if (string.IsNullOrWhiteSpace(entity_name))
+                    return Error("entity_name is required.", "Use get_tables to discover entity logical names.");
+
+                var normalizedAction = action.Trim().ToLowerInvariant();
+                if (normalizedAction is not ("create" or "read" or "update" or "delete" or "associate" or "disassociate"))
+                    return Error($"Invalid action '{action}'. Valid values: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.", "Provide one of: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.");
+
+                if (normalizedAction is "read" or "update" or "delete" or "associate" or "disassociate")
+                {
+                    if (string.IsNullOrWhiteSpace(record_id))
+                        return Error($"record_id is required for '{normalizedAction}'.", $"Provide a GUID for the {normalizedAction} action.");
+                    if (!Guid.TryParse(record_id.Trim(), out _))
+                        return Error($"'{record_id}' is not a valid GUID.", "Provide a GUID in the format '00000000-0000-0000-0000-000000000000'.");
+                }
+                if (normalizedAction is "create" or "update")
+                {
+                    if (string.IsNullOrWhiteSpace(fields_json))
+                        return Error(
+                            $"fields_json is required for '{normalizedAction}'.",
+                            "Provide a JSON object with field logical names as keys. Use get_tables for field names and types.");
+                }
+                if (normalizedAction is "associate" or "disassociate")
+                {
+                    if (string.IsNullOrWhiteSpace(related_entity_name))
+                        return Error($"related_entity_name is required for '{normalizedAction}'.", "Provide the related entity logical name.");
+                    if (string.IsNullOrWhiteSpace(related_record_id))
+                        return Error($"related_record_id is required for '{normalizedAction}'.", "Provide a GUID for the related record.");
+                    if (string.IsNullOrWhiteSpace(relationship_name))
+                        return Error($"relationship_name is required for '{normalizedAction}'.", "Provide the N:N relationship schema name. Use get_tables(entity_name=..., detail_level='full') to list relationships.");
+                }
+                if (normalizedAction == "create" && !string.IsNullOrWhiteSpace(record_id))
+                    return Error("record_id must be empty for 'create'. Use 'update' to modify an existing record.", "Omit record_id when creating a new record.");
+
                 var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "manage_record");
                 if (!entityResult.IsSuccess)
-                    return Error($"Error: {entityResult.Error}");
-                entityName = entityResult.Value.LogicalName;
+                    return Error(entityResult.Error, "Use get_tables to discover valid entity logical/display names.");
+
+                var entityName = entityResult.Value.LogicalName;
+
+                return normalizedAction switch
+                {
+                    "create" => HandleCreate(entityName, fields_json),
+                    "read" => HandleRead(entityName, record_id, columns),
+                    "update" => HandleUpdate(entityName, record_id, fields_json),
+                    "delete" => HandleDelete(entityName, record_id),
+                    "associate" => HandleAssociate(entityName, record_id, related_entity_name, related_record_id, relationship_name),
+                    "disassociate" => HandleDisassociate(entityName, record_id, related_entity_name, related_record_id, relationship_name),
+                    _ => Error($"Invalid action '{action}'. Valid values: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.", "Provide one of: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.")
+                };
             }
             catch (Exception ex)
             {
-                return Error($"Error: Failed to resolve entity '{entity_name}': {ex.Message}");
+                return ThrowException(ex);
             }
-
-            return normalizedAction switch
-            {
-                "create" => HandleCreate(entityName, fields_json, record_id),
-                "read" => HandleRead(entityName, record_id, columns),
-                "update" => HandleUpdate(entityName, record_id, fields_json),
-                "delete" => HandleDelete(entityName, record_id),
-                "associate" => HandleAssociate(entityName, record_id, related_entity_name, related_record_id, relationship_name),
-                "disassociate" => HandleDisassociate(entityName, record_id, related_entity_name, related_record_id, relationship_name),
-                _ => Error($"Error: Invalid action '{action}'. Valid values: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.")
-            };
         }
 
-        private CallToolResult HandleCreate(string entityName, string fieldsJson, string recordId)
+        private CallToolResult HandleCreate(string entityName, string fieldsJson)
         {
-            if (!string.IsNullOrWhiteSpace(recordId))
-                return Error("Error: record_id must be empty for 'create'. Use 'update' to modify an existing record.");
-
-            if (string.IsNullOrWhiteSpace(fieldsJson))
-                return Error(
-                    "Error: fields_json is required for 'create'.\n" +
-                    "Required: JSON object with field logical names as keys.\n" +
-                    "Read docs://data_operations_guide for field type formats and polymorphic lookup syntax.");
-
             var fieldCount = CountFields(fieldsJson);
 
             if (_options.DryRun)
-                return DryRun($"Would CREATE a '{entityName}' record with {fieldCount} fields.", new CrudResult
+                return DryRun($"Would CREATE a '{entityName}' record with {fieldCount} field(s).", new CrudResult
                 {
                     Action = "create",
                     Entity = entityName,
@@ -170,76 +128,46 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     FieldsUpdated = fieldCount
                 });
 
-            try
-            {
-                var entity = EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, fieldsJson);
-                var newId = DataverseMutationExecutor.Create(_context, _serviceClient, entity);
+            var entity = EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, fieldsJson);
+            var newId = DataverseMutationExecutor.Create(_context, _serviceClient, entity);
 
-                var structured = new CrudResult
-                {
-                    Action = "create",
-                    Entity = entityName,
-                    Id = newId.ToString(),
-                    Status = "created",
-                    FieldsUpdated = fieldCount
-                };
-                return Success($"Created {entityName} {newId} ({fieldCount} fields)", structured);
-            }
-            catch (Exception ex)
+            var structured = new CrudResult
             {
-                return Error($"Error: Create failed for {entityName}\nMessage: {ex.Message}\nHint: Use get_tables to verify field names and types.");
-            }
+                Action = "create",
+                Entity = entityName,
+                Id = newId.ToString(),
+                Status = "created",
+                FieldsUpdated = fieldCount
+            };
+            return Success($"Created {entityName} {newId} ({fieldCount} field(s))", structured);
         }
 
         private CallToolResult HandleRead(string entityName, string recordId, string columns)
         {
-            if (string.IsNullOrWhiteSpace(recordId))
-                return Error("Error: record_id is required for 'read'.");
+            var id = Guid.Parse(recordId.Trim());
 
-            if (!Guid.TryParse(recordId.Trim(), out var id))
-                return Error($"Error: '{recordId}' is not a valid GUID.");
+            var columnSet = BuildColumnSet(_serviceClient, entityName, columns);
+            var entity = _serviceClient.Retrieve(entityName, id, columnSet);
+            var text = FormatRecord(entity);
 
-            try
+            var structured = new CrudResult
             {
-                var columnSet = BuildColumnSet(_serviceClient, entityName, columns);
-                var entity = _serviceClient.Retrieve(entityName, id, columnSet);
-                var text = FormatRecord(entity);
-
-                var structured = new CrudResult
-                {
-                    Action = "read",
-                    Entity = entityName,
-                    Id = id.ToString(),
-                    Status = "read",
-                    Fields = FormatRecordFields(entity)
-                };
-                return Success(text, structured);
-            }
-            catch (Exception ex)
-            {
-                return Error($"Error: Failed to retrieve record: {ex.Message}\n" +
-                    "Hint: Verify the record_id using execute_fetchxml or manage_record with action='read'.");
-            }
+                Action = "read",
+                Entity = entityName,
+                Id = id.ToString(),
+                Status = "read",
+                Fields = FormatRecordFields(entity)
+            };
+            return Success(text, structured);
         }
 
         private CallToolResult HandleUpdate(string entityName, string recordId, string fieldsJson)
         {
-            if (string.IsNullOrWhiteSpace(recordId))
-                return Error("Error: record_id is required for 'update'.");
-
-            if (string.IsNullOrWhiteSpace(fieldsJson))
-                return Error(
-                    "Error: fields_json is required for 'update'.\n" +
-                    "Required: JSON object with field logical names as keys.\n" +
-                    "Read docs://data_operations_guide for field type formats and polymorphic lookup syntax.");
-
-            if (!Guid.TryParse(recordId.Trim(), out var id))
-                return Error($"Error: '{recordId}' is not a valid GUID.");
-
+            var id = Guid.Parse(recordId.Trim());
             var fieldCount = CountFields(fieldsJson);
 
             if (_options.DryRun)
-                return DryRun($"Would UPDATE '{entityName}' record {id} with {fieldCount} fields.", new CrudResult
+                return DryRun($"Would UPDATE '{entityName}' record {id} with {fieldCount} field(s).", new CrudResult
                 {
                     Action = "update",
                     Entity = entityName,
@@ -248,34 +176,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     FieldsUpdated = fieldCount
                 });
 
-            try
-            {
-                var entity = EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, fieldsJson, id);
-                DataverseMutationExecutor.Update(_context, _serviceClient, entity);
+            var entity = EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, fieldsJson, id);
+            DataverseMutationExecutor.Update(_context, _serviceClient, entity);
 
-                var structured = new CrudResult
-                {
-                    Action = "update",
-                    Entity = entityName,
-                    Id = id.ToString(),
-                    Status = "updated",
-                    FieldsUpdated = fieldCount
-                };
-                return Success($"Updated {entityName} {id} ({fieldCount} fields)", structured);
-            }
-            catch (Exception ex)
+            var structured = new CrudResult
             {
-                return Error($"Error: Update failed for {entityName} {recordId}\nMessage: {ex.Message}\nHint: Use get_tables to verify field names and types.");
-            }
+                Action = "update",
+                Entity = entityName,
+                Id = id.ToString(),
+                Status = "updated",
+                FieldsUpdated = fieldCount
+            };
+            return Success($"Updated {entityName} {id} ({fieldCount} field(s))", structured);
         }
 
         private CallToolResult HandleDelete(string entityName, string recordId)
         {
-            if (string.IsNullOrWhiteSpace(recordId))
-                return Error("Error: record_id is required for 'delete'.");
-
-            if (!Guid.TryParse(recordId.Trim(), out var id))
-                return Error($"Error: '{recordId}' is not a valid GUID.");
+            var id = Guid.Parse(recordId.Trim());
 
             if (_options.DryRun)
                 return DryRun($"Would DELETE '{entityName}' record {id}.", new CrudResult
@@ -286,30 +203,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = "not_executed"
                 });
 
-            try
-            {
-                DataverseMutationExecutor.Delete(_context, _serviceClient, entityName, id);
+            DataverseMutationExecutor.Delete(_context, _serviceClient, entityName, id);
 
-                var structured = new CrudResult { Action = "delete", Entity = entityName, Id = id.ToString(), Status = "deleted" };
-                return Success($"Deleted {entityName} {id}", structured);
-            }
-            catch (Exception ex)
-            {
-                return Error($"Error: Delete failed for {entityName} {recordId}\nMessage: {ex.Message}\nHint: Verify the record_id using execute_fetchxml or manage_record with action='read'.");
-            }
+            var structured = new CrudResult { Action = "delete", Entity = entityName, Id = id.ToString(), Status = "deleted" };
+            return Success($"Deleted {entityName} {id}", structured);
         }
 
         private CallToolResult HandleAssociate(string entityName, string recordId, string relatedEntityName, string relatedRecordId, string relationshipName)
         {
-            if (!Guid.TryParse(recordId.Trim(), out var id1)) return Error($"Error: '{recordId}' is not a valid GUID.");
-            if (!Guid.TryParse(relatedRecordId.Trim(), out var id2)) return Error($"Error: '{relatedRecordId}' is not a valid GUID.");
+            var id1 = Guid.Parse(recordId.Trim());
+            var id2 = Guid.Parse(relatedRecordId.Trim());
 
             var relatedEntityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, relatedEntityName.Trim(), "manage_record");
-            if (!relatedEntityResult.IsSuccess) return Error($"Error: {relatedEntityResult.Error}");
-            string resolvedRelatedEntity = relatedEntityResult.Value.LogicalName;
+            if (!relatedEntityResult.IsSuccess)
+                return Error(relatedEntityResult.Error, "Use get_tables to discover valid related entity names.");
+            var resolvedRelatedEntity = relatedEntityResult.Value.LogicalName;
 
             if (_options.DryRun)
-                return DryRun($"Would ASSOCIATE {entityName}({id1}) with {resolvedRelatedEntity}({id2}) via {relationshipName}", new CrudResult
+                return DryRun($"Would ASSOCIATE {entityName}({id1}) with {resolvedRelatedEntity}({id2}) via {relationshipName}.", new CrudResult
                 {
                     Action = "associate",
                     Entity = entityName,
@@ -317,32 +228,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = "not_executed"
                 });
 
-            try
-            {
-                var relationship = new Relationship(relationshipName.Trim());
-                var relatedEntities = new EntityReferenceCollection { new EntityReference(resolvedRelatedEntity, id2) };
-                DataverseMutationExecutor.Associate(_context, _serviceClient, entityName, id1, relationship, relatedEntities);
+            var relationship = new Relationship(relationshipName.Trim());
+            var relatedEntities = new EntityReferenceCollection { new EntityReference(resolvedRelatedEntity, id2) };
+            DataverseMutationExecutor.Associate(_context, _serviceClient, entityName, id1, relationship, relatedEntities);
 
-                var structured = new CrudResult { Action = "associate", Entity = entityName, Id = id1.ToString(), Status = "associated" };
-                return Success($"Associated {entityName} {id1} with {resolvedRelatedEntity} {id2}", structured);
-            }
-            catch (Exception ex)
-            {
-                return Error($"Error: Associate failed: {ex.Message}");
-            }
+            var structured = new CrudResult { Action = "associate", Entity = entityName, Id = id1.ToString(), Status = "associated" };
+            return Success($"Associated {entityName} {id1} with {resolvedRelatedEntity} {id2}", structured);
         }
 
         private CallToolResult HandleDisassociate(string entityName, string recordId, string relatedEntityName, string relatedRecordId, string relationshipName)
         {
-            if (!Guid.TryParse(recordId.Trim(), out var id1)) return Error($"Error: '{recordId}' is not a valid GUID.");
-            if (!Guid.TryParse(relatedRecordId.Trim(), out var id2)) return Error($"Error: '{relatedRecordId}' is not a valid GUID.");
+            var id1 = Guid.Parse(recordId.Trim());
+            var id2 = Guid.Parse(relatedRecordId.Trim());
 
             var relatedEntityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, relatedEntityName.Trim(), "manage_record");
-            if (!relatedEntityResult.IsSuccess) return Error($"Error: {relatedEntityResult.Error}");
-            string resolvedRelatedEntity = relatedEntityResult.Value.LogicalName;
+            if (!relatedEntityResult.IsSuccess)
+                return Error(relatedEntityResult.Error, "Use get_tables to discover valid related entity names.");
+            var resolvedRelatedEntity = relatedEntityResult.Value.LogicalName;
 
             if (_options.DryRun)
-                return DryRun($"Would DISASSOCIATE {entityName}({id1}) from {resolvedRelatedEntity}({id2}) via {relationshipName}", new CrudResult
+                return DryRun($"Would DISASSOCIATE {entityName}({id1}) from {resolvedRelatedEntity}({id2}) via {relationshipName}.", new CrudResult
                 {
                     Action = "disassociate",
                     Entity = entityName,
@@ -350,31 +255,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = "not_executed"
                 });
 
-            try
-            {
-                var relationship = new Relationship(relationshipName.Trim());
-                var relatedEntities = new EntityReferenceCollection { new EntityReference(resolvedRelatedEntity, id2) };
-                DataverseMutationExecutor.Disassociate(_context, _serviceClient, entityName, id1, relationship, relatedEntities);
+            var relationship = new Relationship(relationshipName.Trim());
+            var relatedEntities = new EntityReferenceCollection { new EntityReference(resolvedRelatedEntity, id2) };
+            DataverseMutationExecutor.Disassociate(_context, _serviceClient, entityName, id1, relationship, relatedEntities);
 
-                var structured = new CrudResult { Action = "disassociate", Entity = entityName, Id = id1.ToString(), Status = "disassociated" };
-                return Success($"Disassociated {entityName} {id1} from {resolvedRelatedEntity} {id2}", structured);
-            }
-            catch (Exception ex)
-            {
-                return Error($"Error: Disassociate failed: {ex.Message}");
-            }
-        }
-
-        private static ColumnSet BuildColumnSet(string columns)
-        {
-            if (string.IsNullOrWhiteSpace(columns))
-                return new ColumnSet(true);
-
-            var cols = columns.Split(',')
-                .Select(c => c.Trim().ToLowerInvariant())
-                .Where(c => !string.IsNullOrEmpty(c))
-                .ToArray();
-            return cols.Length > 0 ? new ColumnSet(cols) : new ColumnSet(true);
+            var structured = new CrudResult { Action = "disassociate", Entity = entityName, Id = id1.ToString(), Status = "disassociated" };
+            return Success($"Disassociated {entityName} {id1} from {resolvedRelatedEntity} {id2}", structured);
         }
 
         private static ColumnSet BuildColumnSet(ServiceClient serviceClient, string entityName, string columns)
@@ -387,7 +273,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var resolved = DisplayNameFirstResolver.ResolveAttribute(serviceClient, entityName, column, "manage_record");
                 if (!resolved.IsSuccess)
-                    throw new ArgumentException($"Column '{column}': {resolved.Error}");
+                    throw new ArgumentException($"Column '{column}': {resolved.Error}", "columns");
                 cols.Add(resolved.Value.LogicalName);
             }
 
@@ -418,19 +304,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static int CountFields(string fieldsJson)
         {
-            try
-            {
-                var doc = JsonDocument.Parse(fieldsJson);
-                var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                foreach (var prop in doc.RootElement.EnumerateObject())
-                    seen.Add(prop.Name);
-                return seen.Count;
-            }
-            catch
-            {
-                return 0;
-            }
+            var doc = JsonDocument.Parse(fieldsJson);
+            var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var prop in doc.RootElement.EnumerateObject())
+                seen.Add(prop.Name);
+            return seen.Count;
         }
-
     }
 }
