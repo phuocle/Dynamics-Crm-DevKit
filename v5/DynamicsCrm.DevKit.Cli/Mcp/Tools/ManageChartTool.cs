@@ -443,6 +443,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (publish)
             {
                 PublishHelper.PublishEntity(_context, _serviceClient, entityName);
+                MetadataOperationWaitHelper.WaitAfterFormView();
                 published = true;
             }
 
@@ -629,6 +630,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (publish)
             {
                 PublishHelper.PublishEntity(_context, _serviceClient, primaryEntity);
+                MetadataOperationWaitHelper.WaitAfterFormView();
                 published = true;
             }
 
@@ -695,6 +697,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (publish)
             {
                 PublishHelper.PublishEntity(_context, _serviceClient, primaryEntity);
+                MetadataOperationWaitHelper.WaitAfterFormView();
                 published = true;
             }
 
@@ -756,6 +759,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (publish)
             {
                 PublishHelper.PublishEntity(_context, _serviceClient, primaryEntity);
+                MetadataOperationWaitHelper.WaitAfterFormView();
                 published = true;
             }
 
@@ -817,6 +821,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (publish && !string.IsNullOrEmpty(backupData.Entity))
             {
                 PublishHelper.PublishEntity(_context, _serviceClient, backupData.Entity);
+                MetadataOperationWaitHelper.WaitAfterFormView();
                 published = true;
             }
 
