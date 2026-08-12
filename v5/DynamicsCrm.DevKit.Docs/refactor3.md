@@ -77,3 +77,4 @@ Mọi tool PASSED rules §2+§3; numbering/`ToolCategoryMap`/test-call đồng b
 ## 7. Tools đã hoàn thành phase 3
 
 - `5. manage_choice` — PASSED 16 test cases (list/detail/create/update/add/rename/remove/recolor/display_name/description + 5 error paths). Test-call: `testcall/5.manage_choice.md`
+- `23. manage_environment_variable` — PASSED 14 test cases (list no-filter/solution-filter, create/detail/update/clear/delete lifecycle, add-to-solution verify + 5 error paths). Test-call: `testcall/23.manage_environment_variable.md`
