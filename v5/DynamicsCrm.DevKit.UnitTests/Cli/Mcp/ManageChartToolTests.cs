@@ -120,6 +120,46 @@ public class ManageChartToolTests
     }
 
     [TestMethod]
+    public void ManageChart_GetCurrentChartType_ReadsSeriesChartType()
+    {
+        var method = ToolType.GetMethod("GetCurrentChartType", BindingFlags.NonPublic | BindingFlags.Static);
+        Assert.IsNotNull(method);
+
+        var pieXml = "<presentationdescription><Chart><Series ChartType=\"Pie\" /></Chart></presentationdescription>";
+        Assert.AreEqual("Pie", method!.Invoke(null, new object?[] { pieXml }) as string);
+
+        // Series without ChartType attribute defaults to Column (OOB behavior).
+        var noAttrXml = "<presentationdescription><Chart><Series Name=\"x\" /></Chart></presentationdescription>";
+        Assert.AreEqual("Column", method.Invoke(null, new object?[] { noAttrXml }) as string);
+
+        Assert.IsNull(method.Invoke(null, new object?[] { "not xml" }));
+        Assert.IsNull(method.Invoke(null, new object?[] { "" }));
+    }
+
+    [TestMethod]
+    public void ManageChart_GetCurrentChartType_ReadsInnerSeriesFromOobWrapper()
+    {
+        // Dataverse OOB template wraps the actual series in an outer
+        // <Series> container without a ChartType attr; the inner
+        // <Series ChartType="pie"> holds the real type. Descendants("Series")
+        // returns BOTH; the first match is the outer wrapper, which would
+        // silently report "Column" and let multi-measure updates corrupt
+        // Pie/Doughnut/Funnel charts. The helper must look for the FIRST
+        // Series that actually carries a ChartType attribute.
+        var method = ToolType.GetMethod("GetCurrentChartType", BindingFlags.NonPublic | BindingFlags.Static);
+        Assert.IsNotNull(method);
+
+        var oobPieXml = "<presentationdescription><Chart><Series><Series ShadowOffset=\"0\" ChartType=\"Pie\" /></Series></Chart></presentationdescription>";
+        Assert.AreEqual("Pie", method!.Invoke(null, new object?[] { oobPieXml }) as string);
+
+        var oobDoughnutXml = "<presentationdescription><Chart><Series><Series ChartType=\"Doughnut\" /></Series></Chart></presentationdescription>";
+        Assert.AreEqual("Doughnut", method.Invoke(null, new object?[] { oobDoughnutXml }) as string);
+
+        var oobFunnelXml = "<presentationdescription><Chart><Series><Series ChartType=\"Funnel\" /></Series></Chart></presentationdescription>";
+        Assert.AreEqual("Funnel", method.Invoke(null, new object?[] { oobFunnelXml }) as string);
+    }
+
+    [TestMethod]
     public void ManageChart_UndoAction_MissingBackupFile_ReturnsErrorResult()
     {
         var tool = new ManageChartTool(null!, new McpDryRunOptions(), DryRunTestHelpers.BlockedContext());

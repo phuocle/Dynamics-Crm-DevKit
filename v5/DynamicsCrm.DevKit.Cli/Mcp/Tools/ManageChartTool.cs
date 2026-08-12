@@ -506,14 +506,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (filterResult.Error != null) return Error(filterResult.Error);
             var conditions = filterResult.Conditions;
 
-            if (measures != null && measures.Count > 1 &&
-                !string.IsNullOrWhiteSpace(chartTypeInput) && SingleMeasureChartTypes.Contains(chartTypeInput.Trim()))
-                return Error(
-                    $"Chart type '{chartTypeInput.Trim()}' supports a single measure; measures has {measures.Count} entries.",
-                    "Use Column, Bar, Line, Area, Bubble or Radar for multi-series charts.");
-
             var currentDataXml = chartRecord.GetAttributeValue<string>("datadescription");
             var currentPresXml = chartRecord.GetAttributeValue<string>("presentationdescription");
+
+            // Guard single-measure chart types: explicit chart_type wins; otherwise use the chart's current type.
+            if (measures != null && measures.Count > 1)
+            {
+                var effectiveChartType = !string.IsNullOrWhiteSpace(chartTypeInput)
+                    ? chartTypeInput.Trim()
+                    : GetCurrentChartType(currentPresXml);
+                if (effectiveChartType != null && SingleMeasureChartTypes.Contains(effectiveChartType))
+                    return Error(
+                        $"Chart type '{effectiveChartType}' supports a single measure; measures has {measures.Count} entries.",
+                        "Use Column, Bar, Line, Area, Bubble or Radar for multi-series charts.");
+            }
 
             var newDataXml = currentDataXml;
             string aggregateAlias = null;
@@ -563,8 +569,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             else if (measures != null)
             {
-                // measures rebuilds datadescription with N series; rebuild presentation to match (default Column).
-                newPresXml = BuildPresentationDescriptionMulti(MultiMeasureDefaultChartType, measures);
+                // measures rebuilds datadescription with N series; rebuild presentation to match.
+                // Keep the chart's current type when chart_type is omitted; fall back to Column.
+                newPresXml = BuildPresentationDescriptionMulti(
+                    GetCurrentChartType(currentPresXml) ?? MultiMeasureDefaultChartType, measures);
             }
             else if (!string.IsNullOrWhiteSpace(presXmlInput))
             {
@@ -1162,6 +1170,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Normalize Donut -> Doughnut for template lookup, keep Pie casing from supported set.
             return match.Equals("Donut", StringComparison.OrdinalIgnoreCase) ? "Doughnut" : match;
+        }
+
+        /// <summary>
+        /// Reads the chart type from an existing presentationdescription XML.
+        /// The Dataverse OOB template wraps the actual series in an outer
+        /// <c>&lt;Series&gt;</c> container, so <c>Descendants("Series").First()</c>
+        /// always returns the wrapper and its missing <c>ChartType</c> would
+        /// incorrectly report "Column". Search every <c>&lt;Series&gt;</c> for the
+        /// first one that carries a <c>ChartType</c> attribute. When no Series
+        /// declares a type, fall back to "Column" (OOB behavior: charts with no
+        /// explicit ChartType are treated as Column). Returns null when the XML
+        /// cannot be parsed (validation reports it later).
+        /// </summary>
+        private static string GetCurrentChartType(string presXml)
+        {
+            if (string.IsNullOrWhiteSpace(presXml)) return null;
+            try
+            {
+                var doc = XDocument.Parse(presXml);
+                var seriesWithType = doc.Descendants("Series")
+                    .FirstOrDefault(s => s.Attribute("ChartType") != null);
+                return seriesWithType?.Attribute("ChartType")?.Value ?? "Column";
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         // ── Automatic PresentationDescription Builder ──────────────────────
