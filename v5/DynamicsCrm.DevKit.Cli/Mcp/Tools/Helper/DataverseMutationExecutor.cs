@@ -158,7 +158,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 request is not RetrieveAllEntitiesRequest &&
                 request is not RetrieveAllOptionSetsRequest &&
                 request is not RetrieveOptionSetRequest &&
-                request is not Microsoft.Crm.Sdk.Messages.WhoAmIRequest)
+                request is not Microsoft.Crm.Sdk.Messages.WhoAmIRequest &&
+                request is not Microsoft.Crm.Sdk.Messages.InitializeFileBlocksDownloadRequest &&
+                request is not Microsoft.Crm.Sdk.Messages.DownloadBlockRequest)
             {
                 throw new InvalidOperationException(
                     $"Request type '{request.GetType().Name}' is not allow-listed as read-only.");

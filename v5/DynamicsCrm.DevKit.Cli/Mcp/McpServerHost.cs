@@ -58,7 +58,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(ManageWebResourceTool)] = "standard",
             [nameof(ManageChartTool)] = "standard",
 
-            // advanced (7 additional tools)
+            // advanced (8 additional tools)
             [nameof(ManageAppTool)] = "advanced",
             [nameof(UpsertTableTool)] = "advanced",
             [nameof(UpsertColumnTool)] = "advanced",
@@ -66,6 +66,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(ExecuteWebApiTool)] = "advanced",
             [nameof(ManageRibbonTool)] = "advanced",
             [nameof(ManageCommandTool)] = "advanced",
+            [nameof(ManageFileTool)] = "advanced",
         };
 
         // Tools permanently disabled (set = type names using nameof() for compile-time safety)

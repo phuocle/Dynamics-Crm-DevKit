@@ -63,13 +63,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "SAFETY:\n" +
             "- PUT/PATCH/DELETE are destructive — confirm before invocation\n" +
             "- $metadata GET can return thousands of lines; use max_response_lines=50\n" +
-            "- GET $metadata is allowed; PATCH/PUT/DELETE on metadata is BLOCKED\n\n" +
+            "- GET $metadata is allowed; PATCH/PUT/DELETE on metadata is BLOCKED\n" +
+            "- File/image column endpoints are BLOCKED (/$value, block-protocol actions, chunked/binary PATCH, single-column DELETE) — use manage_file\n\n" +
 
             "RELATED TOOLS:\n" +
             "- get_tables / upsert_table / upsert_column / upsert_relationship (schema)\n" +
             "- manage_choice (option sets)\n" +
             "- manage_form / manage_view / manage_app / manage_sitemap (UI)\n" +
             "- manage_environment_variable / manage_webresource / manage_role (config)\n" +
+            "- manage_file (file/image column data)\n" +
             "- publish_customizations (publish)")]
         public CallToolResult execute_webapi(
             [Description("GET, POST, PUT, PATCH, or DELETE. Default GET.")] string method = "GET",
@@ -109,6 +111,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var customHeaders = ParseHeaders(headers, out var headersError);
                 if (headersError != null)
                     return Error(headersError);
+
+                var fileBlockedReason = GetFileColumnBlockedReason(httpMethod, trimmedUrl, customHeaders);
+                if (fileBlockedReason != null)
+                    return Error(fileBlockedReason);
+
                 var requestBody = string.IsNullOrWhiteSpace(body) ? null : body.Trim();
                 if (_options.DryRun && httpMethod != HttpMethod.Get)
                 {
@@ -422,6 +429,86 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "and returns full per-record status (success/failed with reason). " +
                 "Also supports batch via record_ids[].")
         ];
+
+        // File/image column endpoints are blocked for ALL methods: binary transfer for
+        // these columns requires the SDK block protocol (Initialize/Upload/Commit or
+        // Initialize/Download), which raw Web API calls cannot perform reliably.
+        private static readonly string[] FileColumnSdkActions =
+        [
+            "Microsoft.Dynamics.CRM.InitializeFileBlocksUpload",
+            "Microsoft.Dynamics.CRM.UploadBlock",
+            "Microsoft.Dynamics.CRM.CommitFileBlocksUpload",
+            "Microsoft.Dynamics.CRM.InitializeFileBlocksDownload",
+            "Microsoft.Dynamics.CRM.DownloadBlock",
+            "Microsoft.Dynamics.CRM.DeleteFile"
+        ];
+
+        private const string FileColumnBlockReason =
+            "File/image column binary endpoints are not allowed via execute_webapi.\n\n" +
+            "REASON: File/image column data requires the SDK block protocol " +
+            "(InitializeFileBlocksUpload → UploadBlock 4MB → CommitFileBlocksUpload, or the download equivalent). " +
+            "Raw PATCH/GET on these endpoints corrupts data or fails on chunk continuation.\n\n" +
+            "USE: manage_file — actions: 'info', 'upload', 'download', 'delete' (auto-detects File vs Image columns, supports local path, http(s) URL and base64 sources).";
+
+        private static string GetFileColumnBlockedReason(HttpMethod method, string url, Dictionary<string, List<string>> headers)
+        {
+            var path = url.Split('?')[0];
+
+            // 1. Binary value endpoint: {entity}({id})/{column}/$value — any method.
+            if (path.EndsWith("/$value", StringComparison.OrdinalIgnoreCase))
+                return $"BLOCKED: {method.Method} on a /$value binary endpoint is not allowed via execute_webapi.\n\n{FileColumnBlockReason}";
+
+            // 2. SDK block-protocol actions exposed over Web API (POST .../Microsoft.Dynamics.CRM.<Action>).
+            foreach (var action in FileColumnSdkActions)
+            {
+                if (path.IndexOf(action, StringComparison.OrdinalIgnoreCase) >= 0)
+                    return $"BLOCKED: {method.Method} on the file/image block-protocol action '{action}' is not allowed via execute_webapi.\n\n{FileColumnBlockReason}";
+            }
+
+            // 3. Single-column value URL: {entity}({id})/{column}
+            //    - PATCH/PUT with chunking header or binary content-type → chunked/raw binary upload.
+            //    - DELETE → file/image value delete. Clearing scalar properties stays available
+            //      via PATCH on the record or manage_record update.
+            if (IsSingleColumnValueUrl(path))
+            {
+                if (method == HttpMethod.Patch || method == HttpMethod.Put)
+                {
+                    var isChunked = HasHeader(headers, "x-ms-chunk-size");
+                    var isBinary = HeaderContains(headers, "Content-Type", "octet-stream");
+                    if (isChunked || isBinary)
+                        return $"BLOCKED: {method.Method} binary upload to a single-column endpoint is not allowed via execute_webapi.\n\n{FileColumnBlockReason}";
+                }
+                else if (method == HttpMethod.Delete)
+                {
+                    return $"BLOCKED: DELETE on a single-column endpoint is not allowed via execute_webapi.\n\n{FileColumnBlockReason}";
+                }
+            }
+
+            return null;
+        }
+
+        private static bool IsSingleColumnValueUrl(string path)
+        {
+            // Pattern: {entitySet}({guid})/{column} — no further segments, no $-suffix.
+            var firstSlash = path.IndexOf('/');
+            if (firstSlash <= 0 || firstSlash != path.LastIndexOf('/')) return false;
+            var key = path.Substring(0, firstSlash);
+            var column = path.Substring(firstSlash + 1);
+            var open = key.IndexOf('(');
+            if (open <= 0 || !key.EndsWith(")", StringComparison.Ordinal)) return false;
+            if (column.Length == 0 || column.StartsWith("$", StringComparison.Ordinal) || column.Contains('(')) return false;
+            foreach (var c in column)
+                if (!char.IsLetterOrDigit(c) && c != '_') return false;
+            return true;
+        }
+
+        private static bool HasHeader(Dictionary<string, List<string>> headers, string name) =>
+            headers != null && headers.Keys.Any(k => string.Equals(k, name, StringComparison.OrdinalIgnoreCase));
+
+        private static bool HeaderContains(Dictionary<string, List<string>> headers, string name, string valuePart) =>
+            headers != null && headers.Any(kv =>
+                string.Equals(kv.Key, name, StringComparison.OrdinalIgnoreCase) &&
+                kv.Value != null && kv.Value.Any(v => v != null && v.IndexOf(valuePart, StringComparison.OrdinalIgnoreCase) >= 0));
 
         private static string GetBlockedReason(HttpMethod method, string url)
         {

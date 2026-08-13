@@ -99,7 +99,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("picklist/boolean create: default option value. Picklist: single integer value (e.g. 100000002) — must match one of the options. Boolean: 'true'/'false' or '1'/'0'. Not supported on multipicklist.")] string default_value = "",
             [Description("SchemaName for the new column (e.g. 'devkit_InvoiceLineId'). If provided, used AS-IS as SchemaName (skip auto-derive from display_name). Caller responsible for casing. Create only — ignored on update. Must start with the publisher prefix.")] string schema_name = "",
             [Description("Create-only formula clone reference returned by get_tables, exactly `source_table_logical_name:source_column_logical_name` (for example `account:new_total`). Pass it unchanged; the server retrieves and rewrites the source formula directly. Omit it and pass formula_source_type only to create an empty formula column.")] string formula_definition = "",
-            [Description("Create only. Use powerfx, calculated, or rollup only when creating an empty formula column without formula_definition. Clone mode derives the kind from the referenced source column.")] string formula_source_type = "")
+            [Description("Create only. Use powerfx, calculated, or rollup only when creating an empty formula column without formula_definition. Clone mode derives the kind from the referenced source column.")] string formula_source_type = "",
+            [Description("image only. CREATE: true = store the full-sized image (default false). UPDATE: omit = keep current.")] bool? can_store_full_image = null)
         {
             // --- Validate required parameters ---
             if (string.IsNullOrWhiteSpace(entity_name))
@@ -252,7 +253,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     precision, format, true_label, false_label,
                     add_options, update_options, delete_options,
                     is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, behavior, precision_source,
-                    default_value);
+                    default_value, can_store_full_image);
             }
 
             // --- CREATE MODE ---
@@ -459,7 +460,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     case "multipicklist":
                         return CreatePicklistAttribute(entity_name, logical_name, schemaName, display_name, description, options, global_optionset_name, true, effectiveSolutionName, default_value, createFlags);
                     case "image":
-                        return CreateImageAttribute(entity_name, logical_name, schemaName, display_name, description, effectiveSolutionName, createFlags);
+                        return CreateImageAttribute(entity_name, logical_name, schemaName, display_name, description, effectiveSolutionName, createFlags, can_store_full_image);
                     case "file":
                         return CreateFileAttribute(entity_name, logical_name, schemaName, display_name, description, max_length == 0 ? 32768 : max_length, effectiveSolutionName, createFlags);
                     default:
@@ -1597,7 +1598,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // --- Image ---
         private CallToolResult CreateImageAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description,
-            string solutionName, ColumnFlags createFlags = null)
+            string solutionName, ColumnFlags createFlags = null, bool? canStoreFullImage = null)
         {
             var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             var attr = new ImageAttributeMetadata
@@ -1605,7 +1606,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SchemaName = schemaName,
                 LogicalName = logicalName,
                 DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                IsPrimaryImage = false
+                IsPrimaryImage = false,
+                CanStoreFullImage = canStoreFullImage == true
             };
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
@@ -1634,6 +1636,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return DryRunCreatePreview(entityName, logicalName, schemaName, attr, displayName, reqLevel, solutionName);
 
             var sb = FormatHeader(entityName, logicalName, "Image", displayName, reqLevel);
+            sb.AppendLine($"CanStoreFullImage: {(attr.CanStoreFullImage == true ? "True" : "False")}");
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -1645,6 +1648,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             AppendFooter(sb, solutionName, published, metadataId);
 
             return BuildResult(sb, entityName, logicalName, schemaName, "Image", displayName, reqLevel, metadataId, solutionName, published,
+                extra: new Dictionary<string, string> { { "canStoreFullImage", (attr.CanStoreFullImage == true ? "true" : "false") } },
                 description: description);
         }
 
@@ -2162,7 +2166,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string trueLabel, string falseLabel,
             string addOptions, string updateOptions, string deleteOptions,
             bool? isAuditEnabled, bool? isValidForAdvancedFind, bool? isSecured, bool? isSortable, string behavior, int precisionSource,
-            string defaultValue = "")
+            string defaultValue = "", bool? canStoreFullImage = null)
         {
             try
             {
@@ -2223,7 +2227,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 // --- Type-specific property updates ---
                 var typeError = ApplyTypeSpecificUpdates(metadata, maxLength, minValue, maxValue, precision, format,
-                    trueLabel, falseLabel, behavior, precisionSource, changes, structuredChanges);
+                    trueLabel, falseLabel, behavior, precisionSource, changes, structuredChanges, canStoreFullImage);
                 if (typeError != null)
                     return ErrorResult(typeError);
 
@@ -2369,7 +2373,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (changes.Count == 0 && optionResults.Count == 0)
                     return ErrorResult(
                         $"Error: No changes specified for '{entityName}.{attributeName}'.\n" +
-                        $"Provide at least one updatable parameter: display_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, true_label, false_label, add_options, update_options, delete_options, default_value (picklist/boolean), is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, or statuscode add/update/delete_options (for statuscode attribute).");
+                        $"Provide at least one updatable parameter: display_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, true_label, false_label, add_options, update_options, delete_options, default_value (picklist/boolean), is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, can_store_full_image (image), or statuscode add/update/delete_options (for statuscode attribute).");
 
                 // --- Publish ---
                 var published = PublishIfNeeded(entityName);
@@ -2434,7 +2438,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private string ApplyTypeSpecificUpdates(AttributeMetadata metadata,
             int maxLength, double? minValue, double? maxValue, int precision, string format,
             string trueLabel, string falseLabel, string behavior, int precisionSource,
-            List<string> changes, Dictionary<string, UpdateAttributeChange> structuredChanges)
+            List<string> changes, Dictionary<string, UpdateAttributeChange> structuredChanges,
+            bool? canStoreFullImage = null)
         {
             if (metadata is StringAttributeMetadata stringMeta)
             {
@@ -2565,6 +2570,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         changes.Add($"Format: {oldVal} -> {newFormat}");
                         structuredChanges["format"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = newFormat.ToString() };
                     }
+                }
+            }
+            if (metadata is ImageAttributeMetadata imageMeta)
+            {
+                if (canStoreFullImage.HasValue && (imageMeta.CanStoreFullImage ?? false) != canStoreFullImage.Value)
+                {
+                    var oldVal = (imageMeta.CanStoreFullImage ?? false).ToString();
+                    imageMeta.CanStoreFullImage = canStoreFullImage.Value;
+                    changes.Add($"CanStoreFullImage: {oldVal} -> {canStoreFullImage.Value}");
+                    structuredChanges["canStoreFullImage"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = canStoreFullImage.Value.ToString() };
                 }
             }
             return null;
