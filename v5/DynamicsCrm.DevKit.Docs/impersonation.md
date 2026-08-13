@@ -251,7 +251,7 @@ worker.CallerId = _context.ImpersonatedUserId ?? Guid.Empty;
 
 ## 6. Verify checklist (sau khi implement)
 
-- [ ] `whoami` trả về `ImpersonatedUser` field khi `--as-user` được set
+- [x] `whoami` trả về `ImpersonatedUser` field khi `--as-user` được set (implemented: `WhoAmITool.cs` — chưa real test)
 - [ ] `manage_record(action='create')` — audit history hiển thị impersonated user
 - [ ] `create_records` (batch) — audit history hiển thị impersonated user (verify `Clone()` fix)
 - [ ] `execute_webapi(method='GET', url='$metadata')` — trả về XML, không lỗi

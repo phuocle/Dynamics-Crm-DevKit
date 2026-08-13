@@ -244,6 +244,7 @@ MCP resources are bundled with the server so AI agents can read the exact schema
 | `[name]` | Optional display name reported to MCP clients, for example `DynamicsCrm.DevKit`. |
 | `--category`| readonly/all, limits the toolset loaded into the MCP server. Default is `all`. |
 | `--dry-run` | Blocks mutating MCP operations while keeping read operations available. Recommended for initial AI access. |
+| `--as-user` | Impersonate a user (systemuserid GUID or email) for the whole session. The connecting user must be System Administrator. |
 | `--tools` | Lists available MCP tools without connecting to Dataverse. |
 | `--setup-guide` | Prints the runtime setup guide without connecting to Dataverse. |
 

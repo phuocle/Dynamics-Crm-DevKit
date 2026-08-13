@@ -376,6 +376,10 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             var allCount = Mcp.McpServerHost.GetToolCount(Mcp.McpServerHost.CategoryLevel["all"]);
             Console.WriteLine($"   Filter tools with --category: readonly ({readonlyCount}), all ({allCount})");
             Console.WriteLine("   Default: all (loads everything)");
+            Console.WriteLine("   Session options:");
+            Console.WriteLine("   --dry-run              : Block mutations at execution time");
+            Console.WriteLine("   --as-user <guid|email> : Impersonate a user for the whole session");
+            Console.WriteLine("                            (requires System Administrator)");
             Console.WriteLine();
             foreach (var tool in tools)
             {
