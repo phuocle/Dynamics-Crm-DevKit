@@ -4,11 +4,11 @@ using System.Text.Json.Serialization;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 {
     /// <summary>
-    /// Structured output for manage_file (info / upload / download / delete on
+    /// Structured output for manage_record_file (info / upload / download / delete on
     /// File and Image columns). Never carries binary data — only metadata and
     /// local file paths.
     /// </summary>
-    internal sealed class ManageFileResult
+    internal sealed class ManageRecordFileResult
     {
         [JsonPropertyName("action")]
         public string Action { get; set; }

@@ -66,7 +66,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(ExecuteWebApiTool)] = "advanced",
             [nameof(ManageRibbonTool)] = "advanced",
             [nameof(ManageCommandTool)] = "advanced",
-            [nameof(ManageFileTool)] = "advanced",
+            [nameof(ManageRecordFileTool)] = "advanced",
         };
 
         // Tools permanently disabled (set = type names using nameof() for compile-time safety)

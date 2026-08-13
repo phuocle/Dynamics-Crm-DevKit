@@ -21,7 +21,7 @@ using DynamicsCrm.DevKit.Cli.Mcp;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class ManageFileTool : McpToolBase
+    public class ManageRecordFileTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
@@ -31,22 +31,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private const long MaxBase64UploadBytes = 1L * 1024 * 1024; // 1 MB
         private static readonly string[] ImageExtensions = [".gif", ".jpeg", ".jpg", ".tiff", ".tif", ".bmp", ".png"];
 
-        public ManageFileTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageRecordFileTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient ?? throw new ArgumentNullException(nameof(serviceClient));
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        [McpServerTool(Name = "manage_file", Title = "Manage file and image columns",
+        [McpServerTool(Name = "manage_record_file", Title = "Manage file and image columns",
             Destructive = true, ReadOnly = false, Idempotent = false,
-            UseStructuredContent = true, OutputSchemaType = typeof(ManageFileResult)),
+            UseStructuredContent = true, OutputSchemaType = typeof(ManageRecordFileResult)),
         Description(
             "Manage Dataverse File and Image column data. Actions: 'info' (read-only) | 'upload', 'download', 'delete' (upload/delete are mutations).\n\n" +
             "WHEN TO USE:\n" +
             "- Inspect a file/image column value (file id, name, size, column limits)\n" +
             "- Upload a file from a local path, an http(s) URL (auto-downloaded), or base64 (< 1 MB)\n" +
-            "- Download a file or image to local disk (.devkit/manage_file/{entity}/{record}/)\n" +
+            "- Download a file or image to local disk (.devkit/manage_record_file/{entity}/{record}/)\n" +
             "- Clear a file/image column value without deleting the record\n\n" +
             "NOTES:\n" +
             "- Upload always uses the SDK block protocol (4 MB blocks) — works for any size up to the column limit\n" +
@@ -56,7 +56,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_tables → find File/Image columns of a table\n" +
             "- manage_record / search_records → find record_id\n" +
             "- upsert_column → create file/image columns or raise MaxSizeInKB")]
-        public CallToolResult manage_file(
+        public CallToolResult manage_record_file(
             [Description("'info', 'upload', 'download', 'delete'.")] string action,
             [Description("Table Display or logical name (Display Name resolved first). Required.")] string entity_name,
             [Description("File/Image column Display or logical name (Display Name resolved first). Required.")] string column_name,
@@ -65,7 +65,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("upload alternative: base64 content, files < 1 MB only. Requires file_name.")] string content_base64 = "",
             [Description("upload: override file name. Required with content_base64; default = name from path/URL.")] string file_name = "",
             [Description("download: image columns only. true = full-sized image (requires CanStoreFullImage); false = thumbnail. Default false.")] bool full_size = false,
-            [Description("Optional workspace folder. download saves to {workspace_folder}/.devkit/manage_file/{entity}/{record}/.")] string workspace_folder = "")
+            [Description("Optional workspace folder. download saves to {workspace_folder}/.devkit/manage_record_file/{entity}/{record}/.")] string workspace_folder = "")
         {
             try
             {
@@ -78,12 +78,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!Guid.TryParse(record_id?.Trim(), out var recordId))
                     return Error("record_id must be a valid GUID.", "Use search_records or parse_record_url to find the record id.");
 
-                var entityResolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "manage_file");
+                var entityResolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "manage_record_file");
                 if (!entityResolved.IsSuccess)
                     return Error(entityResolved.Error);
                 var entityLogical = entityResolved.Value.LogicalName;
 
-                var attrResolved = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entityLogical, column_name.Trim(), "manage_file");
+                var attrResolved = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entityLogical, column_name.Trim(), "manage_record_file");
                 if (!attrResolved.IsSuccess)
                     return Error(attrResolved.Error);
                 var attribute = attrResolved.Value;
@@ -313,7 +313,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var workingDir = string.IsNullOrWhiteSpace(workspaceFolder) ? Directory.GetCurrentDirectory() : workspaceFolder;
-            var folder = Path.Combine(workingDir, ".devkit", "manage_file", entityLogical,
+            var folder = Path.Combine(workingDir, ".devkit", "manage_record_file", entityLogical,
                 FileColumnTransferHelper.SanitizeFolderName(primaryName ?? recordId.ToString()));
             Directory.CreateDirectory(folder);
             var savedPath = FileColumnTransferHelper.GetUniqueFilePath(folder, downloadFileName);
@@ -427,10 +427,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private static ManageFileResult BaseResult(string action, string entityLogical, Guid recordId, string primaryName,
+        private static ManageRecordFileResult BaseResult(string action, string entityLogical, Guid recordId, string primaryName,
             string columnLogical, FileAttributeMetadata fileAttr, ImageAttributeMetadata imageAttr)
         {
-            return new ManageFileResult
+            return new ManageRecordFileResult
             {
                 Action = action,
                 EntityName = entityLogical,

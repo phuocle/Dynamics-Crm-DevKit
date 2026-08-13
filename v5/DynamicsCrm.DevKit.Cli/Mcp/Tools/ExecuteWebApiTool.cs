@@ -64,14 +64,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- PUT/PATCH/DELETE are destructive — confirm before invocation\n" +
             "- $metadata GET can return thousands of lines; use max_response_lines=50\n" +
             "- GET $metadata is allowed; PATCH/PUT/DELETE on metadata is BLOCKED\n" +
-            "- File/image column endpoints are BLOCKED (/$value, block-protocol actions, chunked/binary PATCH, single-column DELETE) — use manage_file\n\n" +
+            "- File/image column endpoints are BLOCKED (/$value, block-protocol actions, chunked/binary PATCH, single-column DELETE) — use manage_record_file\n\n" +
 
             "RELATED TOOLS:\n" +
             "- get_tables / upsert_table / upsert_column / upsert_relationship (schema)\n" +
             "- manage_choice (option sets)\n" +
             "- manage_form / manage_view / manage_app / manage_sitemap (UI)\n" +
             "- manage_environment_variable / manage_webresource / manage_role (config)\n" +
-            "- manage_file (file/image column data)\n" +
+            "- manage_record_file (file/image column data)\n" +
             "- publish_customizations (publish)")]
         public CallToolResult execute_webapi(
             [Description("GET, POST, PUT, PATCH, or DELETE. Default GET.")] string method = "GET",
@@ -448,7 +448,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "REASON: File/image column data requires the SDK block protocol " +
             "(InitializeFileBlocksUpload → UploadBlock 4MB → CommitFileBlocksUpload, or the download equivalent). " +
             "Raw PATCH/GET on these endpoints corrupts data or fails on chunk continuation.\n\n" +
-            "USE: manage_file — actions: 'info', 'upload', 'download', 'delete' (auto-detects File vs Image columns, supports local path, http(s) URL and base64 sources).";
+            "USE: manage_record_file — actions: 'info', 'upload', 'download', 'delete' (auto-detects File vs Image columns, supports local path, http(s) URL and base64 sources).";
 
         private static string GetFileColumnBlockedReason(HttpMethod method, string url, Dictionary<string, List<string>> headers)
         {
