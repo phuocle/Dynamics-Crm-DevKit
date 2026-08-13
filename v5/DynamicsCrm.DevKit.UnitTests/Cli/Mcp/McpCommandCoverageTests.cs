@@ -19,9 +19,8 @@ public class McpCommandCoverageTests
 
         Assert.AreEqual(0, exitCode);
         StringAssert.Contains(stdout, "DevKit MCP Tools");
-        StringAssert.Contains(stdout, "Basic");
-        StringAssert.Contains(stdout, "Standard");
-        StringAssert.Contains(stdout, "Advanced");
+        StringAssert.Contains(stdout, "ReadOnly");
+        StringAssert.Contains(stdout, "Mutation");
         StringAssert.Contains(stdout, "manage_record");
         Assert.AreEqual("", stderr);
     }

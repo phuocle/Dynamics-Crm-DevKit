@@ -35,7 +35,7 @@
 
 ## 3. Đề xuất tool `manage_record_file`
 
-Category: **standard** (mutation). Tên cố ý bao cả image — tool auto-detect column type từ metadata.
+Category: **mutation** (category giờ derive từ `ReadOnly` attribute — chỉ còn `readonly`/`all`). Tên cố ý bao cả image — tool auto-detect column type từ metadata.
 
 ### Actions
 

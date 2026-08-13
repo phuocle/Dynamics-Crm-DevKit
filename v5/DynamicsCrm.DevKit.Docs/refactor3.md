@@ -1,6 +1,6 @@
 # Refactor MCP tools — phase 3 (mutation tools)
 
-> Phase 1–2 đã xong **16 readonly tools** — tinh thần gốc ở [refactor.md](refactor.md) / [refactor2.md](refactor2.md), ví dụ test-call chuẩn ở `testcall/` (xem `9.whoami.md`, `4.get_tables.md`). File này chỉ lo **19 tool còn lại (mutation/metadata/Web API)**. Rules bên dưới chính là checklist approve — không có checklist riêng.
+> Phase 1–2 đã xong **16 readonly tools** — tinh thần gốc ở [refactor.md](refactor.md) / [refactor2.md](refactor2.md), ví dụ test-call chuẩn ở `testcall/` (xem `16.whoami.md`, `12.get_tables.md`). File này chỉ lo **19 tool còn lại (mutation/metadata/Web API)**. Rules bên dưới chính là checklist approve — không có checklist riêng.
 
 ## 0. Khi test REAL mcp (connected mcp với môi trường)
 
@@ -15,9 +15,7 @@
 
 **N là dữ liệu động** — lấy từ `devkit mcp --tools` sau mỗi build, runtime thắng mọi số ghi ở đây.
 
-- **Basic:** `create_records`, `generate_demo_data`, `manage_choice`, `manage_record`
-- **Standard:** `manage_chart`, `manage_deleted_records`, `manage_environment_variable`, `manage_form`, `manage_role`, `manage_view`, `manage_webresource`, `publish_customizations`
-- **Advanced:** `manage_app`, `manage_command`, `manage_ribbon`, `manage_column`, `manage_relationship`, `manage_table`, **`execute_webapi` (làm cuối cùng)**
+- **Mutation (category cũ basic/standard/advanced đã bỏ — giờ chỉ còn `readonly`/`all`):** `create_records`, `generate_demo_data`, `manage_choice`, `manage_record`, `manage_chart`, `manage_deleted_records`, `manage_environment_variable`, `manage_form`, `manage_role`, `manage_view`, `manage_webresource`, `publish_customizations`, `manage_app`, `manage_command`, `manage_ribbon`, `manage_column`, `manage_relationship`, `manage_table`, `manage_record_file`, **`execute_webapi` (làm cuối cùng)**
 
 ## 2. Rules kế thừa từ phase 1–2 (bắt buộc)
 
@@ -29,7 +27,7 @@
 6. **Description ngắn:** 1 câu tóm tắt + modes + `WHEN TO USE` / `RELATED TOOLS`. Không lặp param schema, không hứa capability thiếu code.
 7. **Không đoán Dataverse.** Probe trước bằng MCP query / read tools đã có (logical name, option value, lookup type, order, paging) rồi mới code. Không lấy comment "đã probe" trong source làm evidence.
 8. **Tool overlap endpoint Web API → cập nhật redirect/block trong `ExecuteWebApiTool` cùng build** (`RedirectedGetEndpoints`/`BlockedPostEndpoints`/`RedirectedPostEndpoints`, message dẫn sang tool dedicated).
-9. **Preserve** tool name, JSON keys, error text, output shape — trừ khi bug contract bắt buộc đổi (đổi thì document migration). `ToolCategoryMap` (`Mcp/McpServerHost.cs`) dùng `nameof()`, count khớp source.
+9. **Preserve** tool name, JSON keys, error text, output shape — trừ khi bug contract bắt buộc đổi (đổi thì document migration). Category (`readonly`/`all`) derive từ `[McpServerTool(ReadOnly = ...)]` — tool mới phải set đúng flag, không còn map thủ công.
 
 ## 3. Rules mới cho mutation tool
 
@@ -72,9 +70,9 @@
 
 ## 6. Done khi
 
-Mọi tool PASSED rules §2+§3; numbering/`ToolCategoryMap`/test-call đồng bộ; không còn helper catch trong tool class; working tree sạch (không date replacement, credential, token).
+Mọi tool PASSED rules §2+§3; numbering/`ReadOnly` flag/test-call đồng bộ; không còn helper catch trong tool class; working tree sạch (không date replacement, credential, token).
 
 ## 7. Tools đã hoàn thành phase 3
 
-- `5. manage_choice` — PASSED 16 test cases (list/detail/create/update/add/rename/remove/recolor/display_name/description + 5 error paths). Test-call: `testcall/5.manage_choice.md`
-- `23. manage_environment_variable` — PASSED 14 test cases (list no-filter/solution-filter, create/detail/update/clear/delete lifecycle, add-to-solution verify + 5 error paths). Test-call: `testcall/23.manage_environment_variable.md`
+- `22. manage_choice` — PASSED 16 test cases (list/detail/create/update/add/rename/remove/recolor/display_name/description + 5 error paths). Test-call: `testcall/22.manage_choice.md`
+- `26. manage_environment_variable` — PASSED 14 test cases (list no-filter/solution-filter, create/detail/update/clear/delete lifecycle, add-to-solution verify + 5 error paths). Test-call: `testcall/26.manage_environment_variable.md`

@@ -372,10 +372,9 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine();
             Console.WriteLine($"3. AVAILABLE TOOLS ({tools.Count} Tools)");
             Console.WriteLine("-------------------------------------------------------------------------");
-            var basicCount = Mcp.McpServerHost.GetToolCount(Mcp.McpServerHost.CategoryLevel["basic"]);
-            var standardCount = Mcp.McpServerHost.GetToolCount(Mcp.McpServerHost.CategoryLevel["standard"]);
-            var advancedCount = Mcp.McpServerHost.GetToolCount(Mcp.McpServerHost.CategoryLevel["advanced"]);
-            Console.WriteLine($"   Filter tools with --category: basic ({basicCount}), standard ({standardCount}), advanced ({advancedCount})");
+            var readonlyCount = Mcp.McpServerHost.GetToolCount(Mcp.McpServerHost.CategoryLevel["readonly"]);
+            var allCount = Mcp.McpServerHost.GetToolCount(Mcp.McpServerHost.CategoryLevel["all"]);
+            Console.WriteLine($"   Filter tools with --category: readonly ({readonlyCount}), all ({allCount})");
             Console.WriteLine("   Default: all (loads everything)");
             Console.WriteLine();
             foreach (var tool in tools)
@@ -472,9 +471,8 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             var tools = GetMcpToolInfos();
             var categories = new (string Name, string Description)[]
             {
-                ("Basic", "Query data, manage records, and explore metadata"),
-                ("Standard", "Forms, views, security, automation, and debugging"),
-                ("Advanced", "Schema changes and low-level Web API access")
+                ("ReadOnly", "Query data and inspect metadata — never changes anything"),
+                ("Mutation", "Create, update, delete, publish — changes data or metadata")
             };
 
             Console.WriteLine();
@@ -492,15 +490,14 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 Console.WriteLine("  -------------------------------------------------------------------------");
                 foreach (var tool in categoryTools)
                 {
-                    var suffix = tool.IsReadOnly ? " [readonly]" : string.Empty;
-                    Console.WriteLine($"  {index,3}. {tool.Name,-30} {tool.Title}{suffix}");
+                    Console.WriteLine($"  {index,3}. {tool.Name,-30} {tool.Title}");
                     index++;
                 }
             }
 
             Console.WriteLine();
             Console.WriteLine("=========================================================================");
-            Console.WriteLine("Filter with: devkit mcp --category basic|standard|advanced");
+            Console.WriteLine("Filter with: devkit mcp --category readonly|all");
             Console.WriteLine("Run 'devkit mcp --setup-guide' for full configuration guide.");
         }
 
@@ -522,17 +519,15 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     var name = toolAttr.Name ?? method.Name;
                     var title = toolAttr.Title ?? name;
 
-                    var category = GetCategory(type.Name);
-                    var isReadOnly = toolAttr.ReadOnly;
-                    results.Add(new McpToolInfo(name, title, category, isReadOnly));
+                    var category = toolAttr.ReadOnly ? "ReadOnly" : "Mutation";
+                    results.Add(new McpToolInfo(name, title, category));
                 }
             }
 
             var categoryOrder = new Dictionary<string, int>
             {
-                ["Basic"] = 0,
-                ["Standard"] = 1,
-                ["Advanced"] = 2
+                ["ReadOnly"] = 0,
+                ["Mutation"] = 1
             };
 
             return results
@@ -541,21 +536,6 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 .ToList();
         }
 
-        private static string GetCategory(string typeName)
-        {
-            if (Mcp.McpServerHost.ToolCategoryMap.TryGetValue(typeName, out var category))
-            {
-                return category switch
-                {
-                    "basic" => "Basic",
-                    "standard" => "Standard",
-                    "advanced" => "Advanced",
-                    _ => "Advanced"
-                };
-            }
-            return "Advanced";
-        }
-
-        private record McpToolInfo(string Name, string Title, string Category, bool IsReadOnly);
+        private record McpToolInfo(string Name, string Title, string Category);
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModelContextProtocol.Protocol;
+using ModelContextProtocol.Server;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -25,10 +26,13 @@ public class ManageChartToolTests
     }
 
     [TestMethod]
-    public void ManageChart_RegisteredInToolCategoryMapAsStandard()
+    public void ManageChart_IsMutatingTool_NotInReadonlyCategory()
     {
-        Assert.IsTrue(McpServerHost.ToolCategoryMap.ContainsKey(nameof(ManageChartTool)), "ToolCategoryMap must contain ManageChartTool.");
-        Assert.AreEqual("standard", McpServerHost.ToolCategoryMap[nameof(ManageChartTool)]);
+        var attr = ToolType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+            .Select(m => m.GetCustomAttribute<McpServerToolAttribute>())
+            .FirstOrDefault(a => a != null && (a.Name ?? "") == "manage_chart");
+        Assert.IsNotNull(attr, "manage_chart must have [McpServerTool] attribute.");
+        Assert.IsFalse(attr.ReadOnly, "manage_chart mutates — ReadOnly must be false so it stays out of the 'readonly' category.");
     }
 
     [TestMethod]
