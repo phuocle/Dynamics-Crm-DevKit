@@ -29,6 +29,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string UniqueName { get; set; }
 
+        [JsonPropertyName("description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Description { get; set; }
+
+        [JsonPropertyName("totalCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? TotalCount { get; set; }
+
+        [JsonPropertyName("apps")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<ManageAppListEntryResult> Apps { get; set; }
+
+        [JsonPropertyName("appComponents")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> AppComponents { get; set; }
+
         [JsonPropertyName("siteMapId")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SiteMapId { get; set; }
