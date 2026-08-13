@@ -20,22 +20,22 @@ using DynamicsCrm.DevKit.Shared;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class UpsertColumnTool : McpToolBase
+    public class ManageColumnTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public UpsertColumnTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageColumnTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        [McpServerTool(Name = "upsert_column", Title = "Create or update a table column",
+        [McpServerTool(Name = "manage_column", Title = "Create or update a table column",
             Destructive = true, ReadOnly = false, Idempotent = false,
-            UseStructuredContent = true, OutputSchemaType = typeof(UpsertColumnResult)),
+            UseStructuredContent = true, OutputSchemaType = typeof(ManageColumnResult)),
         Description(
             "Dataverse column (attribute) — auto-detect create vs update. Types: string, memo, integer, bigint, decimal, money, float, boolean, datetime, lookup, customer, picklist, multipicklist, image, file.\n\n" +
 
@@ -67,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "STATUSCODE (statuscode / StatusType): pass logical_name='statuscode' and use add_options/update_options/delete_options.\n" +
             "add_options: JSON array with optional 'state' field (linked statecode value, default 0): [{\"label\":\"Under Review\",\"value\":100000001,\"state\":0}].\n" +
             "update_options: rename by value (no 'state' needed). delete_options: JSON array of integer values. statecode column is read-only.")]
-        public CallToolResult upsert_column(
+        public CallToolResult manage_column(
             [Description("Logical name (e.g. 'account').")] string entity_name,
             [Description("Logical name of the existing attribute to update (e.g. 'new_priority'). For CREATE: optional lowercase override of logical name; if omitted derives from schema_name/display_name. Must start with publisher prefix.")] string logical_name,
             [Description("string/memo/integer/bigint/decimal/money/float/boolean/datetime/lookup/customer/picklist/multipicklist/image/file. Required for CREATE. Ignored on UPDATE (immutable).")] string attribute_type = "",
@@ -204,7 +204,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(logical_name))
             {
                 var requestedLogicalName = logical_name;
-                var attributeResolve = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, logical_name, "upsert_column");
+                var attributeResolve = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, logical_name, "manage_column");
                 if (attributeResolve.IsSuccess)
                 {
                     var hasFormulaCreateIntent = !string.IsNullOrWhiteSpace(formula_definition) &&
@@ -226,7 +226,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             else if (!string.IsNullOrWhiteSpace(display_name))
             {
                 // No explicit logical_name but display_name given → try resolving by display_name (convenience).
-                var displayNameResolve = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, display_name, "upsert_column");
+                var displayNameResolve = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, display_name, "manage_column");
                 if (displayNameResolve.IsSuccess)
                 {
                     existingMetadata = displayNameResolve.Value;
@@ -339,11 +339,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // or pick a different display_name.
             if (string.IsNullOrWhiteSpace(logical_name))
             {
-                var collisionResolve = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, attributeName, "upsert_column");
+                var collisionResolve = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, attributeName, "manage_column");
                 if (collisionResolve.IsSuccess)
                     return ErrorResult(
                         $"[Error] Cannot create column '{display_name}' because derived logical name '{attributeName}' already exists on entity '{entity_name}'.\n" +
-                        "Re-call upsert_column with an explicit logical_name to update the existing column, or choose a different display_name.");
+                        "Re-call manage_column with an explicit logical_name to update the existing column, or choose a different display_name.");
                 if (collisionResolve.Status == ResolveStatus.Ambiguous || collisionResolve.Status == ResolveStatus.Error)
                     return ErrorResult($"Error: {collisionResolve.Error}");
             }
@@ -1088,7 +1088,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var targets = new List<string>();
             foreach (var targetInput in targetInputs)
             {
-                var targetResolve = DisplayNameFirstResolver.ResolveEntity(_serviceClient, targetInput, "upsert_column");
+                var targetResolve = DisplayNameFirstResolver.ResolveEntity(_serviceClient, targetInput, "manage_column");
                 if (!targetResolve.IsSuccess)
                     return ErrorResult($"Error: lookup_target '{targetInput}': {targetResolve.Error}");
                 targets.Add(targetResolve.Value.LogicalName);
@@ -1418,7 +1418,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(globalOptionSetName))
             {
-                var choiceResolve = DisplayNameFirstResolver.ResolveGlobalOptionSet(_serviceClient, globalOptionSetName, "upsert_column");
+                var choiceResolve = DisplayNameFirstResolver.ResolveGlobalOptionSet(_serviceClient, globalOptionSetName, "manage_column");
                 if (!choiceResolve.IsSuccess)
                     return ErrorResult($"Error: global_optionset_name '{globalOptionSetName.Trim()}': {choiceResolve.Error}");
                 globalOptionSetName = choiceResolve.Value.Name;
@@ -1820,7 +1820,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.Equals(actualLogicalName, logicalName, StringComparison.OrdinalIgnoreCase))
                 sb.Replace($"{entityName}.{logicalName}", $"{entityName}.{actualLogicalName}");
 
-            var structured = new UpsertColumnResult
+            var structured = new ManageColumnResult
             {
                 EntityName = entityName,
                 AttributeName = actualLogicalName,
@@ -2294,7 +2294,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     return DryRun(
                         $"Would UPDATE column '{entityName}.{attributeName}' with changes: {string.Join(", ", plannedParts)}",
-                        new UpsertColumnResult
+                        new ManageColumnResult
                         {
                             EntityName = entityName,
                             AttributeName = attributeName,
@@ -2396,7 +2396,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 sb.AppendLine($"Published: {(published ? "yes" : "no")}");
 
-                var structured = new UpsertColumnResult
+                var structured = new ManageColumnResult
                 {
                     EntityName = entityName,
                     AttributeName = attributeName,
@@ -2791,7 +2791,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static (string ResolvedName, string Error) ResolveEntityName(ServiceClient serviceClient, string entityName)
         {
-            var resolved = DisplayNameFirstResolver.ResolveEntity(serviceClient, entityName, "upsert_column");
+            var resolved = DisplayNameFirstResolver.ResolveEntity(serviceClient, entityName, "manage_column");
             if (resolved.IsSuccess)
                 return (resolved.Value.LogicalName, null);
 
@@ -2809,7 +2809,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string typeName, string displayName, AttributeRequiredLevel reqLevel, string solutionName)
             => DryRun(
                 $"Would CREATE {typeName} column '{logicalName}' on entity '{entityName}'.",
-                new UpsertColumnResult
+                new ManageColumnResult
                 {
                     EntityName = entityName,
                     AttributeName = logicalName,

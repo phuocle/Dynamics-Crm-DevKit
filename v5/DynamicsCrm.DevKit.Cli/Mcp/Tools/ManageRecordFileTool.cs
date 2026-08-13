@@ -55,7 +55,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- get_tables → find File/Image columns of a table\n" +
             "- manage_record / search_records → find record_id\n" +
-            "- upsert_column → create file/image columns or raise MaxSizeInKB")]
+            "- manage_column → create file/image columns or raise MaxSizeInKB")]
         public CallToolResult manage_record_file(
             [Description("'info', 'upload', 'download', 'delete'.")] string action,
             [Description("Table Display or logical name (Display Name resolved first). Required.")] string entity_name,
@@ -240,7 +240,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     return Error(
                         $"File size {data.LongLength:N0} bytes exceeds the column limit MaxSizeInKB={maxSizeKb.Value} ({(long)maxSizeKb.Value * 1024:N0} bytes) on '{columnLogical}'.",
-                        "Raise MaxSizeInKB via upsert_column (file columns max 131072 KB) or upload a smaller file. For image columns without CanStoreFullImage the platform rejects oversized uploads with ProcessImageFailure 0x80072553.");
+                        "Raise MaxSizeInKB via manage_column (file columns max 131072 KB) or upload a smaller file. For image columns without CanStoreFullImage the platform rejects oversized uploads with ProcessImageFailure 0x80072553.");
                 }
             }
 
@@ -296,7 +296,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (imageAttr.CanStoreFullImage != true)
                     return Error(
                         $"Image column '{columnLogical}' does not store the full-sized image (CanStoreFullImage=false).",
-                        "Call again with full_size=false to download the thumbnail, or enable full-size storage on the column via upsert_column.");
+                        "Call again with full_size=false to download the thumbnail, or enable full-size storage on the column via manage_column.");
                 if (record.GetAttributeValue<byte[]>(columnLogical) == null &&
                     record.GetAttributeValue<long?>(columnLogical + "_timestamp") == null)
                     return Error($"Image column '{columnLogical}' on {entityLogical}({recordId}) is empty — nothing to download.");

@@ -236,7 +236,7 @@ public class ExecuteWebApiToolTests
         var result = GetBlockedReason(HttpMethod.Patch, "EntityDefinitions(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("BLOCKED"));
-        Assert.IsTrue(result.Contains("upsert_table"));
+        Assert.IsTrue(result.Contains("manage_table"));
         Assert.IsTrue(result.Contains("IRREVERSIBLE"), "Should warn about irreversible flags");
     }
 
@@ -262,7 +262,7 @@ public class ExecuteWebApiToolTests
         var result = GetBlockedReason(HttpMethod.Patch, "EntityDefinitions(guid)/Attributes(guid)");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("BLOCKED"));
-        Assert.IsTrue(result.Contains("upsert_column"), $"Expected 'upsert_column' but got: {result}");
+        Assert.IsTrue(result.Contains("manage_column"), $"Expected 'manage_column' but got: {result}");
     }
 
     [TestMethod]
@@ -271,7 +271,7 @@ public class ExecuteWebApiToolTests
         var result = GetBlockedReason(HttpMethod.Delete, "RelationshipDefinitions(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("BLOCKED"));
-        Assert.IsTrue(result.Contains("upsert_relationship"), $"Expected 'upsert_relationship' but got: {result}");
+        Assert.IsTrue(result.Contains("manage_relationship"), $"Expected 'manage_relationship' but got: {result}");
     }
 
     [TestMethod]
@@ -584,7 +584,7 @@ public class ExecuteWebApiToolTests
         var result = GetBlockedReason(HttpMethod.Get, "RelationshipDefinitions");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("REDIRECT"));
-        Assert.IsTrue(result.Contains("get_tables") || result.Contains("upsert_relationship"));
+        Assert.IsTrue(result.Contains("get_tables") || result.Contains("manage_relationship"));
     }
 
     [TestMethod]

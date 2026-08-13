@@ -79,9 +79,9 @@ Mcp/Tools/WhoAmITool.cs                     ← _serviceClient.Execute
 Mcp/Tools/GetAuditHistoryTool.cs            ← _serviceClient.RetrieveMultiple + Execute
 Mcp/Tools/GetPluginsTool.cs                 ← _serviceClient.Execute + RetrieveMultiple
 Mcp/Tools/GetTablesTool.cs                  ← _serviceClient.Execute
-Mcp/Tools/UpsertColumnTool.cs               ← DataverseMutationExecutor + _serviceClient.Execute
-Mcp/Tools/UpsertRelationshipTool.cs         ← DataverseMutationExecutor + _serviceClient.Execute
-Mcp/Tools/UpsertTableTool.cs                ← _serviceClient.Execute
+Mcp/Tools/ManageColumnTool.cs               ← DataverseMutationExecutor + _serviceClient.Execute
+Mcp/Tools/ManageRelationshipTool.cs         ← DataverseMutationExecutor + _serviceClient.Execute
+Mcp/Tools/ManageTableTool.cs                ← _serviceClient.Execute
 Mcp/Tools/ManageFormTool.cs                 ← _serviceClient.Retrieve + Execute
 Mcp/Tools/ManageAppTool.cs                  ← _serviceClient.Execute + RetrieveMultiple
 Mcp/Tools/ManageRibbonTool.cs               ← _serviceClient.RetrieveMultiple + Execute

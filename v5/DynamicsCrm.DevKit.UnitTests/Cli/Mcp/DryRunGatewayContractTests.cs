@@ -88,16 +88,16 @@ internal static class DryRunTestHelpers
 public class DryRunGatewayContractTests
 {
     [TestMethod]
-    public void MutatingToolInventory_IsExactlyTheReviewedNineteen()
+    public void MutatingToolInventory_IsExactlyTheReviewedTwenty()
     {
         var expected = new HashSet<string>(StringComparer.Ordinal)
         {
             "create_records", "manage_record", "publish_customizations",
             "manage_deleted_records", "manage_role", "manage_environment_variable",
             "manage_chart", "manage_view", "manage_form", "manage_webresource",
-            "manage_choice", "upsert_table", "upsert_relationship", "manage_app",
-            "manage_command", "execute_webapi", "upsert_column", "manage_ribbon",
-            "generate_demo_data"
+            "manage_choice", "manage_table", "manage_relationship", "manage_app",
+            "manage_command", "execute_webapi", "manage_column", "manage_ribbon",
+            "generate_demo_data", "manage_record_file"
         };
 
         var actual = typeof(CreateRecordsTool).Assembly

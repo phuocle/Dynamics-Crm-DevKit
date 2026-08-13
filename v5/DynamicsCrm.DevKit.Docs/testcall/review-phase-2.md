@@ -39,7 +39,7 @@ Malformed FetchXML đã đóng ở code; chỉ còn regenerate evidence.
 ## Đã sửa đúng
 
 - List mode đã có `max_records`; label rỗng được normalize về null.
-- Contract `formulaDefinition` đã được document rõ là source reference `entity:attribute` để `upsert_column` resolve server-side, không còn giả vờ đây là raw formula.
+- Contract `formulaDefinition` đã được document rõ là source reference `entity:attribute` để `manage_column` resolve server-side, không còn giả vờ đây là raw formula.
 - Description và DTO hiện tại nhất quán hơn với compact/standard/full.
 
 ## Đã sửa (phase 4)

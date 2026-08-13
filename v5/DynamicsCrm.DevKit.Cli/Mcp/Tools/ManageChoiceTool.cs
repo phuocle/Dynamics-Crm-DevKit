@@ -35,12 +35,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageChoiceResult)),
         Description(
-            "Manage GLOBAL option sets (choices). Actions: 'list', 'detail' (read-only) | 'create', 'update' (mutations). For local picklists → upsert_column.\n\n" +
+            "Manage GLOBAL option sets (choices). Actions: 'list', 'detail' (read-only) | 'create', 'update' (mutations). For local picklists → manage_column.\n\n" +
             "WHEN TO USE:\n" +
             "- Create a global choice with options, or update options (add/rename/remove/recolor), display name, description\n" +
             "- Inspect a global choice before binding it to a column\n\n" +
             "RELATED TOOLS:\n" +
-            "- upsert_column → local picklists; bind a global choice to a column\n" +
+            "- manage_column → local picklists; bind a global choice to a column\n" +
             "- get_tables → see which columns use a choice\n" +
             "- publish_customizations → batch publish after multiple metadata changes\n\n" +
             "solution_name is REQUIRED for create and label-only add_options — ask the user if missing, never guess. If needsWait=true, wait pollAfterSeconds before detail.")]

@@ -278,7 +278,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         };
 
         // Distinguish single Lookup vs Customer vs Polymorphic so the type string
-        // matches upsert_column's `attribute_type` enum and AI can clone the column
+        // matches manage_column's `attribute_type` enum and AI can clone the column
         // back without guessing. Targets detail is exposed via TableAttributeEntry.LookupTargets.
         private static string FormatLookupType(LookupAttributeMetadata lk)
         {

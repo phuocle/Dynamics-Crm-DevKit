@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(WebApiResult)),
         Description(
             "Raw Dataverse Web API call. Always check whether a specialized tool exists first " +
-            "(schema→upsert_table/column/relationship, choice→manage_choice, form/view→manage_form/manage_view, " +
+            "(schema→manage_table/column/relationship, choice→manage_choice, form/view→manage_form/manage_view, " +
             "app/sitemap→manage_app, env vars→manage_environment_variable, webresource→manage_webresource, " +
             "roles→manage_role, publish→publish_customizations, deleted records→manage_deleted_records). " +
             "url is relative; SDK adds base URL. PUT/PATCH/DELETE destructive — confirm.\n\n" +
@@ -52,7 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Metadata/system/config endpoints (forms, views, sitemaps, env vars, schema, choice, " +
             "webresources, roles, solutions, plugins, workflows, apps) are BLOCKED at runtime — use the " +
             "specialized tool listed in the error message.\n" +
-            "- Statuscode options must be inserted via upsert_column (with linked statecode), not POST.\n" +
+            "- Statuscode options must be inserted via manage_column (with linked statecode), not POST.\n" +
             "- publishxml/publishallxml must go through publish_customizations.\n\n" +
 
             "WHEN TO USE:\n" +
@@ -67,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- File/image column endpoints are BLOCKED (/$value, block-protocol actions, chunked/binary PATCH, single-column DELETE) — use manage_record_file\n\n" +
 
             "RELATED TOOLS:\n" +
-            "- get_tables / upsert_table / upsert_column / upsert_relationship (schema)\n" +
+            "- get_tables / manage_table / manage_column / manage_relationship (schema)\n" +
             "- manage_choice (option sets)\n" +
             "- manage_form / manage_view / manage_app / manage_sitemap (UI)\n" +
             "- manage_environment_variable / manage_webresource / manage_role (config)\n" +
@@ -237,18 +237,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Environment variable values are linked to definitions. The manage_environment_variable tool handles create/update/clear correctly with definition lookup."),
 
             // ── Schema / Metadata ──
-            ("entitydefinitions", "upsert_table or upsert_column",
-                "Entity metadata contains IRREVERSIBLE flags (ChangeTracking, Activities, BPF, Feedback, Connections, Queues). These cannot be turned off once enabled. Use upsert_table for entity-level changes, upsert_column for attribute-level changes."),
-            ("relationshipdefinitions", "upsert_relationship",
-                "Relationship metadata controls cascading behavior and referential integrity. Incorrect changes can cause data loss. Use upsert_relationship for safe relationship management."),
-            ("managedpropertydefinitions", "upsert_table",
+            ("entitydefinitions", "manage_table or manage_column",
+                "Entity metadata contains IRREVERSIBLE flags (ChangeTracking, Activities, BPF, Feedback, Connections, Queues). These cannot be turned off once enabled. Use manage_table for entity-level changes, manage_column for attribute-level changes."),
+            ("relationshipdefinitions", "manage_relationship",
+                "Relationship metadata controls cascading behavior and referential integrity. Incorrect changes can cause data loss. Use manage_relationship for safe relationship management."),
+            ("managedpropertydefinitions", "manage_table",
                 "Managed properties control solution layering behavior. Incorrect changes affect solution export/import."),
 
             // ── Choice / OptionSet ──
             ("globaloptionsetdefinitions", "manage_choice",
                 "Global option sets are shared across multiple entities. Use manage_choice to list, create, update, add/remove options safely."),
-            ("optionsetdefinitions", "manage_choice or upsert_column",
-                "Option set definitions should be managed via manage_choice (global) or upsert_column (local picklist)."),
+            ("optionsetdefinitions", "manage_choice or manage_column",
+                "Option set definitions should be managed via manage_choice (global) or manage_column (local picklist)."),
 
             // ── Web Resources ──
             ("webresources(", "manage_webresource",
@@ -313,25 +313,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "REDIRECT: Use get_tables instead of GET AttributeDefinitions.\n" +
                 "get_tables(entity_name='...') returns attributes with filtering, detail levels, and relationships."),
 
-            ("relationshipdefinitions", "get_tables or upsert_relationship",
-                "REDIRECT: Use get_tables for relationship discovery or upsert_relationship for changes.\n\n" +
+            ("relationshipdefinitions", "get_tables or manage_relationship",
+                "REDIRECT: Use get_tables for relationship discovery or manage_relationship for changes.\n\n" +
                 "Examples:\n" +
                 "  get_tables(entity_name='account') → includes 1:N, N:1, N:N relationships\n" +
-                "  upsert_relationship(action='create_1n', referenced_entity='account', referencing_entity='contact', ...) → create relationship"),
+                "  manage_relationship(action='create_1n', referenced_entity='account', referencing_entity='contact', ...) → create relationship"),
 
             ("globaloptionsetdefinitions", "manage_choice",
                 "REDIRECT: Use manage_choice for option sets instead of GET GlobalOptionSetDefinitions.\n\n" +
                 "Examples:\n" +
                 "  manage_choice(action='list') → list global option sets\n" +
                 "  manage_choice(action='detail', optionset_name='...') → inspect options\n" +
-                "  upsert_column for local picklists on an entity"),
+                "  manage_column for local picklists on an entity"),
 
             ("optionsetdefinitions", "manage_choice",
                 "REDIRECT: Use manage_choice for option sets instead of GET OptionSetDefinitions.\n\n" +
                 "Examples:\n" +
                 "  manage_choice(action='list') → list global option sets\n" +
                 "  manage_choice(action='detail', optionset_name='...') → inspect options\n" +
-                "  upsert_column for local picklists on an entity"),
+                "  manage_column for local picklists on an entity"),
 
             // System jobs (asyncoperation) — dedicated tool has status/operation_type filters + detail mode.
             ("asyncoperations", "get_system_jobs",
@@ -389,21 +389,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // ── Metadata Actions ──
             ("createoptionset", "manage_choice",
-                "Creating option sets requires proper metadata structure. Use manage_choice for global option sets or upsert_column for local picklists."),
+                "Creating option sets requires proper metadata structure. Use manage_choice for global option sets or manage_column for local picklists."),
             ("updateoptionset", "manage_choice",
                 "Updating option set metadata requires proper label handling. Use manage_choice for safe updates."),
-            ("insertoptionvalue", "manage_choice or upsert_column",
-                "Inserting option values requires correct value/label pairs. Use manage_choice (global) or upsert_column (local) for safe option management."),
-            ("updateoptionvalue", "manage_choice or upsert_column",
-                "Updating option value labels requires merge label handling. Use manage_choice (global) or upsert_column (local)."),
-            ("deleteoptionvalue", "manage_choice or upsert_column",
-                "Deleting option values is irreversible. Use manage_choice (global) or upsert_column (local) for safe deletion."),
-            ("insertstatusvalue", "upsert_column",
-                "Inserting statuscode values requires linking to a statecode. Use upsert_column with logical_name='statuscode' and add_options JSON including a 'state' field for the linked statecode value."),
-            ("updatestatusvalue", "upsert_column",
-                "Updating statuscode value labels requires merge label handling. Use upsert_column with logical_name='statuscode' and update_options."),
-            ("deletestatusvalue", "upsert_column",
-                "Deleting statuscode values is irreversible. Use upsert_column with logical_name='statuscode' and delete_options."),
+            ("insertoptionvalue", "manage_choice or manage_column",
+                "Inserting option values requires correct value/label pairs. Use manage_choice (global) or manage_column (local) for safe option management."),
+            ("updateoptionvalue", "manage_choice or manage_column",
+                "Updating option value labels requires merge label handling. Use manage_choice (global) or manage_column (local)."),
+            ("deleteoptionvalue", "manage_choice or manage_column",
+                "Deleting option values is irreversible. Use manage_choice (global) or manage_column (local) for safe deletion."),
+            ("insertstatusvalue", "manage_column",
+                "Inserting statuscode values requires linking to a statecode. Use manage_column with logical_name='statuscode' and add_options JSON including a 'state' field for the linked statecode value."),
+            ("updatestatusvalue", "manage_column",
+                "Updating statuscode value labels requires merge label handling. Use manage_column with logical_name='statuscode' and update_options."),
+            ("deletestatusvalue", "manage_column",
+                "Deleting statuscode values is irreversible. Use manage_column with logical_name='statuscode' and delete_options."),
 
             // ── Data endpoints with dedicated tools ──
             ("webresources", "manage_webresource",

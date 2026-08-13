@@ -5,7 +5,7 @@ namespace DynamicsCrm.DevKit.Shared
 {
     /// <summary>
     /// Utility for deriving Dataverse SchemaName and LogicalName from a human-readable input and publisher prefix.
-    /// Used by MCP tools (upsert_table, upsert_column), VSIX Wizards, CLI TaskGenerator, and any component
+    /// Used by MCP tools (manage_table, manage_column), VSIX Wizards, CLI TaskGenerator, and any component
     /// that needs to normalize Dataverse names consistently.
     /// </summary>
     public static class DataverseNamer

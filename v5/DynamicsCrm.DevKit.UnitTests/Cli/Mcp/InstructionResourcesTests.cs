@@ -147,9 +147,9 @@ public class InstructionResourcesTests
         var result = InstructionResources.SchemaToolsGuide();
 
         Assert.IsTrue(result.Length > 0);
-        StringAssert.Contains(result, "upsert_table");
-        StringAssert.Contains(result, "upsert_column");
-        StringAssert.Contains(result, "upsert_relationship");
+        StringAssert.Contains(result, "manage_table");
+        StringAssert.Contains(result, "manage_column");
+        StringAssert.Contains(result, "manage_relationship");
     }
 
     [TestMethod]

@@ -18,22 +18,22 @@ using DynamicsCrm.DevKit.Shared;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class UpsertRelationshipTool : McpToolBase
+    public class ManageRelationshipTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public UpsertRelationshipTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageRelationshipTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        [McpServerTool(Name = "upsert_relationship", Title = "Create, update, or delete Dataverse relationships",
+        [McpServerTool(Name = "manage_relationship", Title = "Create, update, or delete Dataverse relationships",
             Destructive = true, ReadOnly = false, Idempotent = false,
-            UseStructuredContent = true, OutputSchemaType = typeof(UpsertRelationshipResult)),
+            UseStructuredContent = true, OutputSchemaType = typeof(ManageRelationshipResult)),
         Description(
             "Dataverse relationships (1:N, N:N) + polymorphic lookup targets. Required:\n" +
             "- create_1n: referenced_entity + referencing_entity + solution_name (auto-creates lookup column)\n" +
@@ -56,7 +56,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "FUZZY/AMBIGUITY:\n" +
             "- entity and field inputs resolve Display Name contains first, then logical/schema name contains. solution_name uses the shared Display Name first solution resolver. Ambiguity returns IsError=true.")]
-        public CallToolResult upsert_relationship(
+        public CallToolResult manage_relationship(
             [Description("create_1n / create_nn / update / delete / add_target / remove_target.")] string action = "",
             [Description("Schema name. Required: update/delete. Auto-generated on create.")] string relationship_name = "",
             [Description("Parent (1:N create, add/remove target).")] string referenced_entity = "",
@@ -182,7 +182,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solResult.UniqueName);
 
             if (_options.DryRun)
-                return DryRun($"Would CREATE 1:N relationship '{relationshipName}' ({referencedEntity} -> {referencingEntity}) with lookup '{lookupLogicalName}'{(isHierarchical ? " [IsHierarchical=true]" : "") }.", new UpsertRelationshipResult
+                return DryRun($"Would CREATE 1:N relationship '{relationshipName}' ({referencedEntity} -> {referencingEntity}) with lookup '{lookupLogicalName}'{(isHierarchical ? " [IsHierarchical=true]" : "") }.", new ManageRelationshipResult
                 {
                     Action = "create_1n",
                     RelationshipName = relationshipName,
@@ -238,7 +238,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Published: {(published ? "yes" : "no")}");
             sb.AppendLine($"MetadataId: {metadataId}");
 
-            return BuildResult(sb.ToString(), new UpsertRelationshipResult
+            return BuildResult(sb.ToString(), new ManageRelationshipResult
             {
                 Action = "create_1n",
                 RelationshipName = relationshipName,
@@ -326,7 +326,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solResult.UniqueName);
 
             if (_options.DryRun)
-                return DryRun($"Would CREATE N:N relationship '{relationshipName}' between '{entity1}' and '{entity2}' (intersect: '{intersectEntityName}').", new UpsertRelationshipResult
+                return DryRun($"Would CREATE N:N relationship '{relationshipName}' between '{entity1}' and '{entity2}' (intersect: '{intersectEntityName}').", new ManageRelationshipResult
                 {
                     Action = "create_nn",
                     RelationshipName = relationshipName,
@@ -354,7 +354,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Published: {(published ? "yes" : "no")}");
             sb.AppendLine($"MetadataId: {metadataId}");
 
-            return BuildResult(sb.ToString(), new UpsertRelationshipResult
+            return BuildResult(sb.ToString(), new ManageRelationshipResult
             {
                 Action = "create_nn",
                 RelationshipName = relationshipName,
@@ -476,7 +476,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (changes.Count > 0)
             {
                 if (_options.DryRun)
-                    return DryRun($"Would UPDATE relationship '{relationshipName}' with {changes.Count} change(s).", new UpsertRelationshipResult
+                    return DryRun($"Would UPDATE relationship '{relationshipName}' with {changes.Count} change(s).", new ManageRelationshipResult
                     {
                         Action = "update",
                         RelationshipName = relationshipName,
@@ -504,7 +504,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     sb.AppendLine($"  Warning: {w}");
             sb.AppendLine($"Published: {(published ? "yes" : "no")}");
 
-            return BuildResult(sb.ToString(), new UpsertRelationshipResult
+            return BuildResult(sb.ToString(), new ManageRelationshipResult
             {
                 Action = "update",
                 RelationshipName = relationshipName,
@@ -542,7 +542,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRun($"Would DELETE relationship '{relationshipName}'.", new UpsertRelationshipResult
+                return DryRun($"Would DELETE relationship '{relationshipName}'.", new ManageRelationshipResult
                 {
                     Action = "delete",
                     RelationshipName = relationshipName,
@@ -564,7 +564,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"IntersectEntity: {mtm.IntersectEntityName}");
             }
 
-            return BuildResult(sb.ToString(), new UpsertRelationshipResult
+            return BuildResult(sb.ToString(), new ManageRelationshipResult
             {
                 Action = "delete",
                 RelationshipName = relationshipName,
@@ -638,7 +638,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solResult.UniqueName);
 
             if (_options.DryRun)
-                return DryRun($"Would ADD target '{referencedEntity}' to polymorphic lookup '{entityName}.{attributeName}'.", new UpsertRelationshipResult
+                return DryRun($"Would ADD target '{referencedEntity}' to polymorphic lookup '{entityName}.{attributeName}'.", new ManageRelationshipResult
                 {
                     Action = "add_target",
                     RelationshipName = relName,
@@ -663,7 +663,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine();
                 sb.AppendLine("[IMPORTANT] The new target entity was added to the polymorphic lookup metadata, but any existing form controls for this field still display the OLD list of entity types. To make the new target appear in the lookup dialog on the form, you MUST remove the field from the form and re-add it. Use manage_form(action='update', operations=[{\"action\":\"manage_fields\",\"manage_action\":\"remove\",...}, {\"action\":\"manage_fields\",\"manage_action\":\"add\",...}]) to refresh the form control.");
 
-                return BuildResult(sb.ToString(), new UpsertRelationshipResult
+                return BuildResult(sb.ToString(), new ManageRelationshipResult
                 {
                     Action = "add_target",
                     RelationshipName = relName,
@@ -727,7 +727,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var relName = rel.SchemaName;
 
             if (_options.DryRun)
-                return DryRun($"Would REMOVE target '{referencedEntity}' from polymorphic lookup '{entityName}.{attributeName}' (relationship: '{relName}'). WARNING: Data in this lookup target will be lost.", new UpsertRelationshipResult
+                return DryRun($"Would REMOVE target '{referencedEntity}' from polymorphic lookup '{entityName}.{attributeName}' (relationship: '{relName}'). WARNING: Data in this lookup target will be lost.", new ManageRelationshipResult
                 {
                     Action = "remove_target",
                     RelationshipName = relName,
@@ -746,7 +746,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"DeletedRelationship: {relName}");
             sb.AppendLine($"WARNING: Data stored in this lookup target has been lost.");
 
-            return BuildResult(sb.ToString(), new UpsertRelationshipResult
+            return BuildResult(sb.ToString(), new ManageRelationshipResult
             {
                 Action = "remove_target",
                 RelationshipName = relName,
@@ -768,7 +768,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             logicalName = null;
             errorResult = null;
 
-            var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, input, "upsert_relationship");
+            var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, input, "manage_relationship");
             if (resolved.IsSuccess)
             {
                 logicalName = resolved.Value.LogicalName;
@@ -784,7 +784,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             attribute = null;
             errorResult = null;
 
-            var resolved = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entityLogicalName, input, "upsert_relationship");
+            var resolved = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entityLogicalName, input, "manage_relationship");
             if (resolved.IsSuccess)
             {
                 attribute = resolved.Value;
@@ -933,6 +933,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult ErrorResult(string message) => Error(message);
 
-        private CallToolResult BuildResult(string text, UpsertRelationshipResult structured) => Success(text, structured);
+        private CallToolResult BuildResult(string text, ManageRelationshipResult structured) => Success(text, structured);
     }
 }

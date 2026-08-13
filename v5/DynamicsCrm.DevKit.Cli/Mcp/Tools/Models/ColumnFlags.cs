@@ -7,7 +7,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 {
     /// <summary>
     /// Resolved flag overrides for a column being created or updated by
-    /// <c>upsert_column</c>. The SAME class is used for both CREATE and UPDATE
+    /// <c>manage_column</c>. The SAME class is used for both CREATE and UPDATE
     /// flows (there is no separate ColumnUpdateFlags twin) — each nullable
     /// boolean corresponds to a managed property on <see cref="AttributeMetadata"/>:
     /// <list type="bullet">
@@ -119,7 +119,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         /// <item>Any of the 4 boolean flags when null (caller omitted) OR when
         /// the new value equals the current value.</item>
         /// </list>
-        /// Use this from <see cref="T:DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool"/>.<c>UpdateExistingAttribute</c>
+        /// Use this from <see cref="T:DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool"/>.<c>UpdateExistingAttribute</c>
         /// for the five flag updates, instead of writing each property inline.
         /// </summary>
         public int TryApplyForUpdate(

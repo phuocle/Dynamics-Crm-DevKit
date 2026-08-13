@@ -17,7 +17,7 @@
 
 - **Basic:** `create_records`, `generate_demo_data`, `manage_choice`, `manage_record`
 - **Standard:** `manage_chart`, `manage_deleted_records`, `manage_environment_variable`, `manage_form`, `manage_role`, `manage_view`, `manage_webresource`, `publish_customizations`
-- **Advanced:** `manage_app`, `manage_command`, `manage_ribbon`, `upsert_column`, `upsert_relationship`, `upsert_table`, **`execute_webapi` (làm cuối cùng)**
+- **Advanced:** `manage_app`, `manage_command`, `manage_ribbon`, `manage_column`, `manage_relationship`, `manage_table`, **`execute_webapi` (làm cuối cùng)**
 
 ## 2. Rules kế thừa từ phase 1–2 (bắt buộc)
 

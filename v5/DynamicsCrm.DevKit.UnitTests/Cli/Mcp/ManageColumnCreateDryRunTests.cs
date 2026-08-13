@@ -8,11 +8,11 @@ using System.Reflection;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 [TestClass]
-public class UpsertColumnCreateDryRunTests
+public class ManageColumnCreateDryRunTests
 {
-    private static readonly Type ToolType = typeof(UpsertColumnTool);
+    private static readonly Type ToolType = typeof(ManageColumnTool);
 
-    private readonly UpsertColumnTool _tool = new(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true));
+    private readonly ManageColumnTool _tool = new(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true));
 
     [TestMethod]
     public void CreateStringAttribute_DryRun_BuildsMetadataWithoutServiceCall()
@@ -151,7 +151,7 @@ public class UpsertColumnCreateDryRunTests
     {
         var result = InvokeCreate("CreateImageAttribute",
             "account", "devkit_photo", "devkit_Photo", "Photo", "",
-            "devkit", null);
+            "devkit", null, null);
 
         AssertDryRun(result, "Image", "devkit_photo");
     }

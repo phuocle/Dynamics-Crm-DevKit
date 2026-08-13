@@ -147,7 +147,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         /// <summary>
         /// Source reference for cloning a formula column, formatted as
         /// <c>entityLogicalName:attributeLogicalName</c>. Raw formula XML/text is not
-        /// transported. Pass this reference unchanged to upsert_column's
+        /// transported. Pass this reference unchanged to manage_column's
         /// <c>formula_definition</c>; the server retrieves and rewrites it directly.
         /// </summary>
         [JsonPropertyName("formulaDefinition")]

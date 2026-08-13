@@ -7,9 +7,9 @@ using System.Reflection;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 [TestClass]
-public class UpsertRelationshipToolTests
+public class ManageRelationshipToolTests
 {
-    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRelationshipTool);
+    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRelationshipTool);
 
     // ──────────────────────────────────────────────
     // ParseCascadeType
@@ -241,140 +241,140 @@ public class UpsertRelationshipToolTests
     }
 
     [TestMethod]
-    public void UpsertRelationship_EmptyAction_ReturnsError()
+    public void ManageRelationship_EmptyAction_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.upsert_relationship(action: "");
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var result = tool.manage_relationship(action: "");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("action is required"));
     }
 
     [TestMethod]
-    public void UpsertRelationship_InvalidAction_ReturnsError()
+    public void ManageRelationship_InvalidAction_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.upsert_relationship(action: "invalid_action");
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var result = tool.manage_relationship(action: "invalid_action");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("Invalid action"));
     }
 
     [TestMethod]
-    public void UpsertRelationship_Create1N_MissingReferencedEntity_ReturnsError()
+    public void ManageRelationship_Create1N_MissingReferencedEntity_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.upsert_relationship(action: "create_1n", referencing_entity: "contact");
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var result = tool.manage_relationship(action: "create_1n", referencing_entity: "contact");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("referenced_entity is required"));
     }
 
     [TestMethod]
-    public void UpsertRelationship_Create1N_MissingReferencingEntity_ReturnsError()
+    public void ManageRelationship_Create1N_MissingReferencingEntity_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.upsert_relationship(action: "create_1n", referenced_entity: "account");
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var result = tool.manage_relationship(action: "create_1n", referenced_entity: "account");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("referencing_entity is required"));
     }
 
     [TestMethod]
-    public void UpsertRelationship_CreateNN_MissingEntity1_ReturnsError()
+    public void ManageRelationship_CreateNN_MissingEntity1_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.upsert_relationship(action: "create_nn", entity2: "contact");
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var result = tool.manage_relationship(action: "create_nn", entity2: "contact");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("entity1 is required"));
     }
 
     [TestMethod]
-    public void UpsertRelationship_CreateNN_MissingEntity2_ReturnsError()
+    public void ManageRelationship_CreateNN_MissingEntity2_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.upsert_relationship(action: "create_nn", entity1: "account");
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var result = tool.manage_relationship(action: "create_nn", entity1: "account");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("entity2 is required"));
     }
 
     [TestMethod]
-    public void UpsertRelationship_Update_MissingRelationshipName_ReturnsError()
+    public void ManageRelationship_Update_MissingRelationshipName_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.upsert_relationship(action: "update");
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var result = tool.manage_relationship(action: "update");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("relationship_name is required"));
     }
 
     [TestMethod]
-    public void UpsertRelationship_Delete_MissingRelationshipName_ReturnsError()
+    public void ManageRelationship_Delete_MissingRelationshipName_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.upsert_relationship(action: "delete");
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var result = tool.manage_relationship(action: "delete");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("relationship_name is required"));
     }
 
     [TestMethod]
-    public void UpsertRelationship_AddTarget_MissingEntityName_ReturnsError()
+    public void ManageRelationship_AddTarget_MissingEntityName_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.upsert_relationship(action: "add_target", attribute_name: "customerid", referenced_entity: "account");
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var result = tool.manage_relationship(action: "add_target", attribute_name: "customerid", referenced_entity: "account");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("entity_name is required"));
     }
 
     [TestMethod]
-    public void UpsertRelationship_AddTarget_MissingAttributeName_ReturnsError()
+    public void ManageRelationship_AddTarget_MissingAttributeName_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.upsert_relationship(action: "add_target", entity_name: "contact", referenced_entity: "account");
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var result = tool.manage_relationship(action: "add_target", entity_name: "contact", referenced_entity: "account");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("attribute_name is required"));
     }
 
     [TestMethod]
-    public void UpsertRelationship_AddTarget_MissingReferencedEntity_ReturnsError()
+    public void ManageRelationship_AddTarget_MissingReferencedEntity_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.upsert_relationship(action: "add_target", entity_name: "contact", attribute_name: "customerid");
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var result = tool.manage_relationship(action: "add_target", entity_name: "contact", attribute_name: "customerid");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("referenced_entity is required"));
     }
 
     [TestMethod]
-    public void UpsertRelationship_RemoveTarget_MissingEntityName_ReturnsError()
+    public void ManageRelationship_RemoveTarget_MissingEntityName_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.upsert_relationship(action: "remove_target", attribute_name: "customerid", referenced_entity: "account");
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var result = tool.manage_relationship(action: "remove_target", attribute_name: "customerid", referenced_entity: "account");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("entity_name is required"));
     }
 
     [TestMethod]
-    public void UpsertRelationship_RemoveTarget_MissingAttributeName_ReturnsError()
+    public void ManageRelationship_RemoveTarget_MissingAttributeName_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.upsert_relationship(action: "remove_target", entity_name: "contact", referenced_entity: "account");
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var result = tool.manage_relationship(action: "remove_target", entity_name: "contact", referenced_entity: "account");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("attribute_name is required"));
     }
 
     [TestMethod]
-    public void UpsertRelationship_RemoveTarget_MissingReferencedEntity_ReturnsError()
+    public void ManageRelationship_RemoveTarget_MissingReferencedEntity_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.upsert_relationship(action: "remove_target", entity_name: "contact", attribute_name: "customerid");
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var result = tool.manage_relationship(action: "remove_target", entity_name: "contact", attribute_name: "customerid");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("referenced_entity is required"));
@@ -385,9 +385,9 @@ public class UpsertRelationshipToolTests
     // ──────────────────────────────────────────────
 
     [TestMethod]
-    public void UpsertRelationship_HasAllExpectedParameters()
+    public void ManageRelationship_HasAllExpectedParameters()
     {
-        var method = ToolType.GetMethod("upsert_relationship")!;
+        var method = ToolType.GetMethod("manage_relationship")!;
         var parameters = method.GetParameters();
         var paramNames = parameters.Select(p => p.Name).ToArray();
         CollectionAssert.Contains(paramNames, "action");
@@ -415,9 +415,9 @@ public class UpsertRelationshipToolTests
     }
 
     [TestMethod]
-    public void UpsertRelationship_DescriptionMentionsAllActions()
+    public void ManageRelationship_DescriptionMentionsAllActions()
     {
-        var method = ToolType.GetMethod("upsert_relationship")!;
+        var method = ToolType.GetMethod("manage_relationship")!;
         var desc = method.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>()?.Description ?? "";
         Assert.IsTrue(desc.Contains("create_1n"), "Description should mention create_1n");
         Assert.IsTrue(desc.Contains("create_nn"), "Description should mention create_nn");
@@ -428,9 +428,9 @@ public class UpsertRelationshipToolTests
     }
 
     [TestMethod]
-    public void UpsertRelationship_DescriptionMentionsCascadeTypes()
+    public void ManageRelationship_DescriptionMentionsCascadeTypes()
     {
-        var method = ToolType.GetMethod("upsert_relationship")!;
+        var method = ToolType.GetMethod("manage_relationship")!;
         var desc = method.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>()?.Description ?? "";
         Assert.IsTrue(desc.Contains("Cascade"), "Description should mention Cascade type");
         Assert.IsTrue(desc.Contains("NoCascade"), "Description should mention NoCascade type");
@@ -439,9 +439,9 @@ public class UpsertRelationshipToolTests
     }
 
     [TestMethod]
-    public void UpsertRelationship_DescriptionMentionsPresets()
+    public void ManageRelationship_DescriptionMentionsPresets()
     {
-        var method = ToolType.GetMethod("upsert_relationship")!;
+        var method = ToolType.GetMethod("manage_relationship")!;
         var desc = method.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>()?.Description ?? "";
         Assert.IsTrue(desc.Contains("Parental"), "Description should mention Parental preset");
         Assert.IsTrue(desc.Contains("Referential"), "Description should mention Referential preset");

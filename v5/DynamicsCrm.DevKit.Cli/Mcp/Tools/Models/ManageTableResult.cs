@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 {
-    internal sealed class UpsertTableResult
+    internal sealed class ManageTableResult
     {
         [JsonPropertyName("displayName")]
         public string DisplayName { get; set; }

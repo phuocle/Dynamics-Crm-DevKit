@@ -221,7 +221,7 @@ get_plugin_trace_logs, get_system_jobs, get_plugins, manage_webresource
 Advanced tools:
 
 ```text
-manage_app, upsert_table, upsert_column, upsert_relationship, execute_webapi,
+manage_app, manage_table, manage_column, manage_relationship, execute_webapi,
 manage_ribbon, manage_command
 ```
 

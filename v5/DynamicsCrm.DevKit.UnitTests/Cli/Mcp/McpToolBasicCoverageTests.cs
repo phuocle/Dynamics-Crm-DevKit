@@ -165,11 +165,11 @@ public class McpToolBasicCoverageTests
     }
 
     [TestMethod]
-    public void UpsertTable_NoLogicalNameNoCreateFields_ReturnsError()
+    public void ManageTable_NoLogicalNameNoCreateFields_ReturnsError()
     {
-        var tool = new UpsertTableTool(null!, DryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var tool = new ManageTableTool(null!, DryRunOptions(), DryRunTestHelpers.BlockedContext());
 
-        var result = tool.upsert_table();
+        var result = tool.manage_table();
 
         Assert.IsTrue(result.IsError);
         StringAssert.Contains(result.GetText(), "logical_name is required");

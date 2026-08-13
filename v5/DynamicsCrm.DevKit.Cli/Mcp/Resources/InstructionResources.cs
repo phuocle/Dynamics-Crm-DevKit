@@ -661,17 +661,17 @@ Source: https://learn.microsoft.com/en-us/power-apps/maker/data-platform/display
         [McpServerResource(
             MimeType = "text/markdown",
             Name = "schema_tools_guide",
-            Title = "Guide for Dataverse schema tools (upsert_table, upsert_column, upsert_relationship)",
+            Title = "Guide for Dataverse schema tools (manage_table, manage_column, manage_relationship)",
             UriTemplate = "docs://schema_tools_guide"),
         Description(
             "Rules, type matrices, and immutable property lists for schema tools. " +
-            "Read this when upsert_table, upsert_column, or upsert_relationship returns an error.")]
+            "Read this when manage_table, manage_column, or manage_relationship returns an error.")]
         public static string SchemaToolsGuide() => @"
 # Schema Tools Guide
 
-Reference for `upsert_table`, `upsert_column`, and `upsert_relationship`.
+Reference for `manage_table`, `manage_column`, and `manage_relationship`.
 
-## upsert_table
+## manage_table
 
 ### Three-Field Name Model
 - **display_name** / **display_collection_name** -- human labels (required for CREATE; mutable on UPDATE)
@@ -705,16 +705,16 @@ Activities, Feedback, Change Tracking, Business Process Flows, Connections, Queu
 These CANNOT be turned off once enabled.
 
 ### Post-Create Workflow
-1. `upsert_table` -- create entity
-2. `upsert_column` -- add columns
+1. `manage_table` -- create entity
+2. `manage_column` -- add columns
 3. `manage_form(action='update', operations=[...])` -- customize the form
 4. `publish_customizations` -- publish (if auto_publish=false)
 
 ---
 
-## upsert_column
+## manage_column
 
-### Three-Field Name Model (same convention as upsert_table)
+### Three-Field Name Model (same convention as manage_table)
 - **display_name** -- human label (required for CREATE; mutable on UPDATE)
 - **logical_name** -- lowercase logical name with publisher prefix; identifies an existing attribute for UPDATE; optional CREATE override (must be the lowercase form of schema_name)
 - **schema_name** -- PascalCase schema name with publisher prefix; optional CREATE-only override of SchemaName (ignored on UPDATE)
@@ -773,7 +773,7 @@ JSON array: [{""label"": ""Low"", ""value"": 100000000}, {""label"": ""Medium"",
 - global_optionset_name -- option set binding fixed
 
 ### StatusType (statuscode) Options
-`statuscode` is a system attribute of type StatusType. Use `upsert_column` with
+`statuscode` is a system attribute of type StatusType. Use `manage_column` with
 `logical_name='statuscode'` and `add_options`/`update_options`/`delete_options`.
 
 Each option in `add_options` can include a `""state""` field (integer) that links the
@@ -784,7 +784,7 @@ update_options: [{""label"":""Renamed Status"",""value"":100000001}]
 delete_options: [100000001]
 
 `state` is required to control which statecode the new status appears under.
-`statecode` column itself is read-only and cannot be managed via `upsert_column`.
+`statecode` column itself is read-only and cannot be managed via `manage_column`.
 
 ---
 
@@ -835,7 +835,7 @@ Workflow:
 
 ---
 
-## upsert_relationship
+## manage_relationship
 
 ### Actions
 

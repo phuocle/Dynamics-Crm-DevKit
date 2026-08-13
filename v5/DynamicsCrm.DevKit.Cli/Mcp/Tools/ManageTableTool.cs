@@ -18,26 +18,26 @@ using DynamicsCrm.DevKit.Shared;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class UpsertTableTool : McpToolBase
+    public class ManageTableTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public UpsertTableTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageTableTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        [McpServerTool(Name = "upsert_table", Title = "Create or update a Dataverse table",
+        [McpServerTool(Name = "manage_table", Title = "Create or update a Dataverse table",
             Destructive = true, ReadOnly = false, Idempotent = false,
-            UseStructuredContent = true, OutputSchemaType = typeof(UpsertTableResult)),
+            UseStructuredContent = true, OutputSchemaType = typeof(ManageTableResult)),
         Description(
             "Create or update a Dataverse table. The tool auto-detects create vs update from the inputs:\n" +
             "- UPDATE (entity exists): pass logical_name that matches an existing table. Mutable: display_name, display_collection_name, description, is_audit_enabled, is_quick_create_enabled, is_search_enabled. Others immutable.\n" +
-            "- CREATE (new table): need display_name + display_collection_name + solution_name. Auto-creates primary name attribute. Next: upsert_column → manage_form(action='update', operations=[...]).\n\n" +
+            "- CREATE (new table): need display_name + display_collection_name + solution_name. Auto-creates primary name attribute. Next: manage_column → manage_form(action='update', operations=[...]).\n\n" +
 
             "IMPORTANT: there is NO entity_name parameter. The table's technical names come ONLY from logical_name / schema_name (see below) or are auto-derived from display_name. Do NOT invent or pass an entity_name.\n\n" +
 
@@ -58,7 +58,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "FUZZY/AMBIGUITY:\n" +
             "- logical_name (UPDATE) resolves Display Name contains first, then logical/schema name contains. solution_name uses the shared Display Name first solution resolver. Ambiguity returns IsError=true.")]
-        public CallToolResult upsert_table(
+        public CallToolResult manage_table(
             [Description("Singular display name (e.g. 'Project'). Required for CREATE.")] string display_name = "",
             [Description("Plural (e.g. 'Projects'). Required: create.")] string display_collection_name = "",
             [Description("Required: create.")] string solution_name = "",
@@ -104,7 +104,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 EntityMetadata existingEntity = null;
                 // Try resolving by Display Name first (legacy convenience), then by exact logical name.
-                var entityResolve = DisplayNameFirstResolver.ResolveEntity(_serviceClient, logical_name, "upsert_table");
+                var entityResolve = DisplayNameFirstResolver.ResolveEntity(_serviceClient, logical_name, "manage_table");
                 if (entityResolve.IsSuccess)
                 {
                     existingEntity = entityResolve.Value;
@@ -231,7 +231,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // Entity exists → cannot create with a derived (non-explicit) name.
                 return ErrorResult(
                     $"[Error] Cannot create table '{display_name}' because derived logical name '{entityName}' already exists.\n" +
-                    "Re-call upsert_table with an explicit logical_name to update the existing entity, or choose a different display_name.");
+                    "Re-call manage_table with an explicit logical_name to update the existing entity, or choose a different display_name.");
             }
             catch
             {
@@ -354,7 +354,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SolutionComponentCreateHelper.ApplySolutionUniqueName(request, resolvedSolutionUniqueName ?? solution_name.Trim());
 
                 if (_options.DryRun)
-                    return DryRun($"Would CREATE entity '{entityName}' (display: '{display_name}').", new UpsertTableResult
+                    return DryRun($"Would CREATE entity '{entityName}' (display: '{display_name}').", new ManageTableResult
                     {
                         DisplayName = display_name.Trim(),
                         DisplayCollectionName = display_collection_name.Trim(),
@@ -437,7 +437,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrEmpty(entitySetName))
                     sb.AppendLine($"EntitySetName: {entitySetName}");
 
-                var structured = new UpsertTableResult
+                var structured = new ManageTableResult
                 {
                     DisplayName = display_name.Trim(),
                     DisplayCollectionName = display_collection_name.Trim(),
@@ -626,7 +626,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         unchangedText.AppendLine($"MetadataId: {existingMetadata.MetadataId}");
                         AppendSearchMetadata(unchangedText, existingMetadata);
 
-                        var unchanged = new UpsertTableResult
+                        var unchanged = new ManageTableResult
                         {
                             DisplayName = existingMetadata.DisplayName?.UserLocalizedLabel?.Label ?? "",
                             DisplayCollectionName = existingMetadata.DisplayCollectionName?.UserLocalizedLabel?.Label ?? "",
@@ -676,7 +676,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (_options.DryRun)
                 {
                     var changesSummary = string.Join("; ", changes);
-                    return DryRun($"Would UPDATE entity '{entityName}' with changes: {changesSummary}", new UpsertTableResult
+                    return DryRun($"Would UPDATE entity '{entityName}' with changes: {changesSummary}", new ManageTableResult
                     {
                         DisplayName = existingMetadata.DisplayName?.UserLocalizedLabel?.Label ?? "",
                         DisplayCollectionName = existingMetadata.DisplayCollectionName?.UserLocalizedLabel?.Label ?? "",
@@ -722,7 +722,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"MetadataId: {existingMetadata.MetadataId}");
                 AppendSearchMetadata(sb, existingMetadata);
 
-                var structured = new UpsertTableResult
+                var structured = new ManageTableResult
                 {
                     DisplayName = existingMetadata.DisplayName?.UserLocalizedLabel?.Label ?? "",
                     DisplayCollectionName = existingMetadata.DisplayCollectionName?.UserLocalizedLabel?.Label ?? "",

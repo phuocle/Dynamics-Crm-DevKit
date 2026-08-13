@@ -6,15 +6,15 @@ using System.Reflection;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 [TestClass]
-public class UpsertTableToolTests
+public class ManageTableToolTests
 {
-    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertTableTool);
+    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageTableTool);
 
     // ── Validation rules tested via the public method signature ──────────────
     // Since most logic is in private/instance methods we test via reflection
     // on any static helpers that exist.
 
-    // UpsertTableTool doesn't have many static pure helpers — but we can test
+    // ManageTableTool doesn't have many static pure helpers — but we can test
     // the ownership type parsing logic that maps strings → OwnershipTypes enum.
     // We'll test this by inspecting what the tool does with known inputs via
     // constructed instances using a null ServiceClient + DryRun mode,
@@ -28,23 +28,23 @@ public class UpsertTableToolTests
     // ── EntityName prefix extraction (via public surface via reflection) ──────
 
     [TestMethod]
-    public void UpsertTableTool_ClassExists()
+    public void ManageTableTool_ClassExists()
     {
-        Assert.IsNotNull(ToolType, "UpsertTableTool class must exist");
+        Assert.IsNotNull(ToolType, "ManageTableTool class must exist");
     }
 
     [TestMethod]
-    public void UpsertTableTool_HasUpsertTableMethod()
+    public void ManageTableTool_HasManageTableMethod()
     {
-        var method = ToolType.GetMethod("upsert_table");
-        Assert.IsNotNull(method, "upsert_table public method must exist");
+        var method = ToolType.GetMethod("manage_table");
+        Assert.IsNotNull(method, "manage_table public method must exist");
     }
 
     [TestMethod]
-    public void UpsertTableTool_HasRequiredConstructorParameters()
+    public void ManageTableTool_HasRequiredConstructorParameters()
     {
         var constructors = ToolType.GetConstructors();
-        Assert.IsTrue(constructors.Length > 0, "UpsertTableTool must have at least one constructor");
+        Assert.IsTrue(constructors.Length > 0, "ManageTableTool must have at least one constructor");
 
         var ctor = constructors[0];
         var parameters = ctor.GetParameters();
@@ -57,63 +57,63 @@ public class UpsertTableToolTests
     // These test the known string → enum mapping documented in the tool.
 
     [TestMethod]
-    public void UpsertTableTool_OwnershipType_User_IsDefaultInSignature()
+    public void ManageTableTool_OwnershipType_User_IsDefaultInSignature()
     {
-        var method = ToolType.GetMethod("upsert_table");
+        var method = ToolType.GetMethod("manage_table");
         var param = System.Array.Find(method!.GetParameters(), p => p.Name == "ownership_type");
         Assert.IsNotNull(param, "ownership_type parameter must exist");
         Assert.AreEqual("User", param.DefaultValue?.ToString(), "Default ownership_type should be 'User'");
     }
 
     [TestMethod]
-    public void UpsertTableTool_TableType_Standard_IsDefaultInSignature()
+    public void ManageTableTool_TableType_Standard_IsDefaultInSignature()
     {
-        var method = ToolType.GetMethod("upsert_table");
+        var method = ToolType.GetMethod("manage_table");
         var param = System.Array.Find(method!.GetParameters(), p => p.Name == "table_type");
         Assert.IsNotNull(param, "table_type parameter must exist");
         Assert.AreEqual("Standard", param.DefaultValue?.ToString(), "Default table_type should be 'Standard'");
     }
 
     [TestMethod]
-    public void UpsertTableTool_PrimaryAttributeMaxLength_DefaultIs100()
+    public void ManageTableTool_PrimaryAttributeMaxLength_DefaultIs100()
     {
-        var method = ToolType.GetMethod("upsert_table");
+        var method = ToolType.GetMethod("manage_table");
         var param = System.Array.Find(method!.GetParameters(), p => p.Name == "primary_attribute_max_length");
         Assert.IsNotNull(param, "primary_attribute_max_length parameter must exist");
         Assert.AreEqual(100, param.DefaultValue, "Default primary_attribute_max_length should be 100");
     }
 
     [TestMethod]
-    public void UpsertTableTool_IsSearchEnabled_DefaultIsNull()
+    public void ManageTableTool_IsSearchEnabled_DefaultIsNull()
     {
-        var method = ToolType.GetMethod("upsert_table");
+        var method = ToolType.GetMethod("manage_table");
         var param = System.Array.Find(method!.GetParameters(), p => p.Name == "is_search_enabled");
         Assert.IsNotNull(param, "is_search_enabled parameter must exist");
         Assert.IsNull(param.DefaultValue, "Default is_search_enabled should be null");
     }
 
     [TestMethod]
-    public void UpsertTableTool_IsActivity_DefaultIsFalse()
+    public void ManageTableTool_IsActivity_DefaultIsFalse()
     {
-        var method = ToolType.GetMethod("upsert_table");
+        var method = ToolType.GetMethod("manage_table");
         var param = System.Array.Find(method!.GetParameters(), p => p.Name == "is_activity");
         Assert.IsNotNull(param, "is_activity parameter must exist");
         Assert.AreEqual(false, param.DefaultValue, "Default is_activity should be false");
     }
 
     [TestMethod]
-    public void UpsertTableTool_HasNotes_DefaultIsFalse()
+    public void ManageTableTool_HasNotes_DefaultIsFalse()
     {
-        var method = ToolType.GetMethod("upsert_table");
+        var method = ToolType.GetMethod("manage_table");
         var param = System.Array.Find(method!.GetParameters(), p => p.Name == "has_notes");
         Assert.IsNotNull(param, "has_notes parameter must exist");
         Assert.AreEqual(false, param.DefaultValue, "Default has_notes should be false");
     }
 
     [TestMethod]
-    public void UpsertTableTool_PrimaryAttributeDisplayName_DefaultIsName()
+    public void ManageTableTool_PrimaryAttributeDisplayName_DefaultIsName()
     {
-        var method = ToolType.GetMethod("upsert_table");
+        var method = ToolType.GetMethod("manage_table");
         var param = System.Array.Find(method!.GetParameters(), p => p.Name == "primary_attribute_display_name");
         Assert.IsNotNull(param, "primary_attribute_display_name parameter must exist");
         Assert.AreEqual("Name", param.DefaultValue?.ToString(), "Default primary_attribute_display_name should be 'Name'");
@@ -146,9 +146,9 @@ public class UpsertTableToolTests
     // ── Entity name validation edge cases (inline prefix logic) ──────────────
 
     [TestMethod]
-    public void UpsertTableTool_DisplayName_ExistsOnSignature()
+    public void ManageTableTool_DisplayName_ExistsOnSignature()
     {
-        var method = ToolType.GetMethod("upsert_table");
+        var method = ToolType.GetMethod("manage_table");
         var param = System.Array.Find(method!.GetParameters(), p => p.Name == "display_name");
         Assert.IsNotNull(param, "display_name parameter must exist");
     }

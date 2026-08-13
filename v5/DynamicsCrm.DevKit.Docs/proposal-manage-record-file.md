@@ -1,6 +1,6 @@
 # Proposal: `manage_record_file` — file & image column tool (MCP)
 
-> Rename note (13.08.2026): tool ban đầu tên `manage_file`, đổi thành `manage_record_file` sau khi implement xong — sibling thật của nó là `manage_record` (data record), không phải `upsert_column` (metadata). Doc này đã cập nhật tên mới; câu trả lời Q&A ở §7 ghi theo tên mới.
+> Rename note (13.08.2026): tool ban đầu tên `manage_file`, đổi thành `manage_record_file` sau khi implement xong — sibling thật của nó là `manage_record` (data record), không phải `manage_column` (metadata). Doc này đã cập nhật tên mới; câu trả lời Q&A ở §7 ghi theo tên mới.
 
 > Nguồn nghiên cứu: [Files and images overview](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/files-images-overview?tabs=sdk), [Use file column data](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/file-column-data?tabs=sdk), [Use image column data](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/image-column-data?tabs=sdk) (MS Learn, SDK tab).
 
@@ -78,7 +78,7 @@ full_size     download image: true = full image ($value?size=full), false/mặc 
 
 ## 5. Test plan (org 🟢DEVKITV4, khi được duyệt)
 
-Probe trước: table `all_in_one` **KHÔNG được touch** (rule refactor3 §0) — cần chọn table test khác có file/image column, hoặc tạo column mới qua `upsert_column` rồi xóa sau.
+Probe trước: table `all_in_one` **KHÔNG được touch** (rule refactor3 §0) — cần chọn table test khác có file/image column, hoặc tạo column mới qua `manage_column` rồi xóa sau.
 
 1. `info` trên column có data + column rỗng.
 2. `upload` file nhỏ (1 block) + file > 4 MB (multi-block) → verify bằng `info` (filename/size khớp) và download lại so hash.

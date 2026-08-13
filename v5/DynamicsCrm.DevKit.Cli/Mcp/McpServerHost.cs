@@ -60,9 +60,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
 
             // advanced (8 additional tools)
             [nameof(ManageAppTool)] = "advanced",
-            [nameof(UpsertTableTool)] = "advanced",
-            [nameof(UpsertColumnTool)] = "advanced",
-            [nameof(UpsertRelationshipTool)] = "advanced",
+            [nameof(ManageTableTool)] = "advanced",
+            [nameof(ManageColumnTool)] = "advanced",
+            [nameof(ManageRelationshipTool)] = "advanced",
             [nameof(ExecuteWebApiTool)] = "advanced",
             [nameof(ManageRibbonTool)] = "advanced",
             [nameof(ManageCommandTool)] = "advanced",

@@ -33,9 +33,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Clone or copy a column (detail_level='full' required — compact/standard lack clone metadata)\n" +
             "- AI MUST use get_tables for entity/attribute metadata — do NOT use execute_webapi with EntityDefinitions\n\n" +
             "RELATED TOOLS:\n" +
-            "- upsert_column → create/update columns (pass formula_definition unchanged from full mode)\n" +
-            "- upsert_table → create/update tables\n" +
-            "- upsert_relationship → create/update relationships\n" +
+            "- manage_column → create/update columns (pass formula_definition unchanged from full mode)\n" +
+            "- manage_table → create/update tables\n" +
+            "- manage_relationship → create/update relationships\n" +
             "- execute_fetchxml → query data once you know attribute names")]
         public async Task<CallToolResult> get_tables(
             [Description("Logical name → detail mode. Empty = list mode.")] string entity_name = "",
@@ -560,7 +560,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(entityLogicalName) || string.IsNullOrWhiteSpace(attribute.LogicalName))
                 return;
 
-            // Keep raw SDK FormulaDefinition server-side. upsert_column resolves this
+            // Keep raw SDK FormulaDefinition server-side. manage_column resolves this
             // compact source reference when the caller requests a clone.
             entry.FormulaDefinition = $"{entityLogicalName}:{attribute.LogicalName}";
         }
@@ -652,7 +652,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     break;
 
                 case ImageAttributeMetadata img:
-                    // No additional clone-friendly scalars for image in current upsert_column signature
+                    // No additional clone-friendly scalars for image in current manage_column signature
                     break;
 
                 case FileAttributeMetadata file:
@@ -703,7 +703,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         };
 
         // Distinguish single Lookup vs Customer vs Polymorphic so the type string
-        // matches upsert_column's `attribute_type` enum and AI can clone the column
+        // matches manage_column's `attribute_type` enum and AI can clone the column
         // back without guessing. Targets detail is exposed via TableAttributeEntry.LookupTargets.
         private static string FormatLookupType(LookupAttributeMetadata lookup)
         {
