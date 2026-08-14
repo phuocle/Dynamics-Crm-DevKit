@@ -1,0 +1,16 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{png,jpg,jpeg,gif,ico,bmp,webp,pdf,dll,exe,pdb,zip,7z,nupkg,vsix,woff,woff2,ttf,snk}]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+
+[*.md]
+trim_trailing_whitespace = false

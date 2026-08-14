@@ -1,5 +1,10 @@
 root = true
 
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+
 [*.cs]
 # TestAnalyzers is a visual diagnostics sandbox. Promote product-default info
 # diagnostics to warning so Visual Studio shows editor squiggles while sample

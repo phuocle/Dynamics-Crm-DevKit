@@ -1,0 +1,24 @@
+# Store text canonically as LF in Git; Windows checkouts use CRLF.
+* text=auto eol=crlf
+
+# Never perform text conversion on binary or packaged files.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.bmp binary
+*.webp binary
+*.pdf binary
+*.dll binary
+*.exe binary
+*.pdb binary
+*.zip binary
+*.7z binary
+*.nupkg binary
+*.vsix binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.snk binary
+
