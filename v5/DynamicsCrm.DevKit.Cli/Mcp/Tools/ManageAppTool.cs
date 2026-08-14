@@ -850,6 +850,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return sb.ToString();
         }
 
+        private static string FormatNavigationNameResolutionErrors(List<string> errors)
+        {
+            errors ??= [];
+            return $"BLOCKED\nErrors: {errors.Count}\n{FormatNavigationNameResolutionHint(errors)}";
+        }
+
         private static string GetJsonString(JsonObject obj, string propertyName)
         {
             if (obj.TryGetPropertyValue(propertyName, out var node) &&
@@ -1148,8 +1154,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(siteMapXml))
                 return [];
 
-            var doc = XDocument.Parse(siteMapXml);
-            return (doc.Root?.Elements("Area") ?? [])
+            try
+            {
+                var doc = XDocument.Parse(siteMapXml);
+                return (doc.Root?.Elements("Area") ?? [])
                     .Select(area => new ManageAppNavigationAreaResult
                     {
                         Id = area.Attribute("Id")?.Value,
@@ -1172,6 +1180,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             .ToList()
                     })
                     .ToList();
+            }
+            catch (XmlException)
+            {
+                return [];
+            }
         }
 
         private static string GetTitle(XElement element) =>
@@ -1380,6 +1393,73 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 .Select(ch => invalid.Contains(ch) ? '_' : ch)
                 .ToArray();
             return new string(chars).Replace(' ', '_').ToLowerInvariant();
+        }
+
+        private static string EscapeTable(string value) =>
+            (value ?? "").Replace("|", "\\|").Replace("\r", " ").Replace("\n", " ");
+
+        private static string FormatException(Exception exception)
+        {
+            if (exception?.InnerException == null)
+                return exception?.Message ?? "Unknown error";
+            return $"{exception.Message}\nInnerException: {exception.InnerException.Message}";
+        }
+
+        private static string BuildCreateUpdateText(
+            string status,
+            string appName,
+            string uniqueName,
+            Guid appId,
+            Guid appUniqueId,
+            Guid siteMapId,
+            string publisherPrefix,
+            string backupPath,
+            AppValidationResult validation,
+            List<string> xsdWarnings)
+        {
+            var sb = new StringBuilder($"[ManageApp] {status}\nApp: {appName}\nUniqueName: {uniqueName}\nAppId: {appId}\nAppModuleIdUnique: {appUniqueId}\nSiteMapId: {siteMapId}\nPublisherPrefix: {publisherPrefix}\nBackupPath: {backupPath}");
+            sb.Append("\nNextStep: publish_customizations");
+            foreach (var error in validation?.Errors ?? []) sb.Append($"\nValidationError: {error}");
+            foreach (var warning in validation?.Warnings ?? []) sb.Append($"\nValidationWarning: {warning}");
+            foreach (var warning in xsdWarnings ?? []) sb.Append($"\nSiteMap XSD: {warning}");
+            return sb.ToString();
+        }
+
+        private static string BuildNavigationText(
+            string status,
+            Entity app,
+            Guid appUniqueId,
+            Guid siteMapId,
+            string backupPath,
+            AppValidationResult validation,
+            AppNavigationOperationsResult navigation,
+            List<string> xsdWarnings,
+            bool published,
+            bool backupCreated)
+        {
+            var sb = new StringBuilder($"[ManageAppNavigation] {status}\nApp: {app?.GetAttributeValue<string>("name")}\nAppModuleIdUnique: {appUniqueId}\nSiteMapId: {siteMapId}\nBackupPath: {backupPath}\nPublished: {(published ? "yes" : "no")}");
+            if (navigation?.AddedEntities?.Count > 0)
+                sb.Append($"\nAddedAppComponents: {string.Join(", ", navigation.AddedEntities)}");
+            if (backupCreated) sb.Append("\nBackupCreated: yes");
+            foreach (var error in validation?.Errors ?? []) sb.Append($"\nValidationError: {error}");
+            foreach (var warning in xsdWarnings ?? []) sb.Append($"\nSiteMap XSD: {warning}");
+            return sb.ToString();
+        }
+
+        private static string BuildUndoText(
+            string status,
+            Entity app,
+            Guid appUniqueId,
+            Guid siteMapId,
+            string currentBackupPath,
+            string restoredFromBackup,
+            AppValidationResult validation,
+            List<string> xsdWarnings)
+        {
+            var sb = new StringBuilder($"[ManageAppUndo] {status}\nApp: {app?.GetAttributeValue<string>("name")}\nAppModuleIdUnique: {appUniqueId}\nSiteMapId: {siteMapId}\nBackupPath: {currentBackupPath}\nRestoredFromBackup: {restoredFromBackup}");
+            foreach (var error in validation?.Errors ?? []) sb.Append($"\nValidationError: {error}");
+            foreach (var warning in xsdWarnings ?? []) sb.Append($"\nSiteMap XSD: {warning}");
+            return sb.ToString();
         }
 
         private sealed class AppValidationResult

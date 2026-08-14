@@ -28,7 +28,7 @@ namespace DynamicsCrm.DevKit.Tool.Commands
 
     internal sealed class NUglifyCommand : Command<NUglifySettings>
     {
-        public override int Execute(CommandContext context, NUglifySettings settings, CancellationToken cancellation)
+        protected override int Execute(CommandContext context, NUglifySettings settings, CancellationToken cancellation)
         {
             try
             {

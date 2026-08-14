@@ -98,7 +98,7 @@ public class McpCommandCoverageTests
         {
             foreach (var name in envNames)
                 Environment.SetEnvironmentVariable(name, null);
-            var exitCode = await new McpCommand().ExecuteAsync(null!, args, CancellationToken.None);
+            var exitCode = await new McpCommand().ExecuteAsyncForTesting(null!, args, CancellationToken.None);
             return (exitCode, stdout.ToString(), stderr.ToString());
         }
         finally

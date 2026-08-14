@@ -23,7 +23,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         protected virtual bool IsProfileRequired(T settings) => true;
         protected virtual bool IsJsonRequired(T settings) => true;
 
-        public override async Task<int> ExecuteAsync(CommandContext context, T settings, CancellationToken cancellationToken)
+        protected override async Task<int> ExecuteAsync(CommandContext context, T settings, CancellationToken cancellationToken)
         {
             var stopwatch = Stopwatch.StartNew();
 

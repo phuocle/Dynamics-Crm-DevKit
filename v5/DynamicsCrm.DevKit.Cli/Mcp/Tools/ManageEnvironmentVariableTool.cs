@@ -40,7 +40,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- execute_webapi → environmentvariable* endpoints are blocked; use this tool\n" +
             "- get_solution_components → verify a variable's solution membership\n\n" +
-            "'create' REQUIRES solution_name+display_name+type; schema name = publisher prefix of solution_name + display name (blocks reserved prefix 'new'; rejects if display/schema name exists → use update). confirmed_prefix = optional safety check. Type immutable after create — delete+recreate to change.\n" +
+            "CREATE uses the publisher prefix from solution_name directly. 'create' REQUIRES solution_name+display_name+type; schema name = publisher prefix of solution_name + display name (blocks reserved prefix 'new'; rejects if display/schema name exists → use update). confirmed_prefix = optional safety check. Type immutable after create — delete+recreate to change.\n" +
             "'update' with empty value leaves the current value untouched — use 'clear' to remove it. 'clear' removes current value only (definition+default remain). 'delete' is irreversible (no backup).\n" +
             "Secret-type values are masked as '(secret)' in all outputs.")]
         public CallToolResult manage_environment_variable(

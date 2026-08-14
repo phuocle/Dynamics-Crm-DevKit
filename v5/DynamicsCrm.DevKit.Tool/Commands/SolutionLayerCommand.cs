@@ -32,7 +32,7 @@ namespace DynamicsCrm.DevKit.Tool.Commands
 
     internal sealed class SolutionLayerCommand : Command<SolutionLayerSettings>
     {
-        public override int Execute(CommandContext context, SolutionLayerSettings settings, CancellationToken cancellation)
+        protected override int Execute(CommandContext context, SolutionLayerSettings settings, CancellationToken cancellation)
         {
             try
             {

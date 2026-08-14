@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Tool.Commands
 
     internal sealed class CoverageToXmlCommand : Command<CoverageToXmlSettings>
     {
-        public override int Execute(CommandContext context, CoverageToXmlSettings settings, CancellationToken cancellation)
+        protected override int Execute(CommandContext context, CoverageToXmlSettings settings, CancellationToken cancellation)
         {
             try
             {

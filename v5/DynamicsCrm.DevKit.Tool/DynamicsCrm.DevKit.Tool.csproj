@@ -61,12 +61,12 @@
 		<NoWarn>SYSLIB0041;NU5100</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-	  <PackageReference Include="Spectre.Console" Version="0.54.0" />
-	  <PackageReference Include="Spectre.Console.Cli" Version="0.53.1" />
-	  <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.10" />
+	  <PackageReference Include="Spectre.Console" Version="0.57.2" />
+	  <PackageReference Include="Spectre.Console.Cli" Version="0.55.0" />
+	  <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.26" />
 	  <PackageReference Include="Mono.Cecil" Version="0.11.6" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-	  <PackageReference Include="NUglify" Version="1.21.17" />
-	  <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.6" />
+	  <PackageReference Include="NUglify" Version="1.22.3" />
+	  <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.11" />
 	</ItemGroup>
 </Project>
