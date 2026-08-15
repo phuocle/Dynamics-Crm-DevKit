@@ -191,7 +191,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     candidates,
                     "[AmbiguousEntity]",
                     "[NotFoundEntity]",
-                    $"Tip: Use get_tables to list entities before calling {callerToolName}.",
+                    $"Hint: Use get_tables to list entities before calling {callerToolName}.",
                     "entity_name");
             }
             catch (Exception ex)
@@ -231,7 +231,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     candidates,
                     "[AmbiguousField]",
                     "[NotFoundField]",
-                    $"Tip: Use get_tables(entity_name='{entityLogicalName}') to list fields before calling {callerToolName}.",
+                    $"Hint: Use get_tables(entity_name='{entityLogicalName}') to list fields before calling {callerToolName}.",
                     "attribute_name");
             }
             catch (Exception ex)
@@ -263,7 +263,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     candidates,
                     "[AmbiguousChoice]",
                     "[NotFoundChoice]",
-                    $"Tip: Use manage_choice(action='list') before calling {callerToolName}.",
+                    $"Hint: Use manage_choice(action='list') before calling {callerToolName}.",
                     "optionset_name");
             }
             catch (Exception ex)
@@ -290,7 +290,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 kind: "app",
                 ambiguousTag: "[AmbiguousApp]",
                 notFoundTag: "[NotFoundApp]",
-                notFoundTip: $"Tip: Use manage_app(action='list') before calling {callerToolName}.",
+                notFoundTip: $"Hint: Use manage_app(action='list') before calling {callerToolName}.",
                 retryParameterName: "app");
         }
 
@@ -312,7 +312,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 kind: "webresource",
                 ambiguousTag: "[AmbiguousWebResource]",
                 notFoundTag: "[NotFoundWebResource]",
-                notFoundTip: $"Tip: Use manage_webresource(action='list') before calling {callerToolName}.",
+                notFoundTip: $"Hint: Use manage_webresource(action='list') before calling {callerToolName}.",
                 retryParameterName: "web_resource_id");
         }
 
@@ -334,7 +334,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 kind: "environmentvariable",
                 ambiguousTag: "[AmbiguousEnvironmentVariable]",
                 notFoundTag: "[NotFoundEnvironmentVariable]",
-                notFoundTip: $"Tip: Use manage_environment_variable(action='list') before calling {callerToolName}.",
+                notFoundTip: $"Hint: Use manage_environment_variable(action='list') before calling {callerToolName}.",
                 retryParameterName: "variable_name");
         }
 

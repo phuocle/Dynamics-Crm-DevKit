@@ -50,18 +50,6 @@ public class ManageWebResourceToolTests
     }
 
     // ──────────────────────────────────────────────
-    // EscapeTab (private static)
-    // ──────────────────────────────────────────────
-
-    private static readonly MethodInfo EscapeTabMethod = ToolType
-        .GetMethod("EscapeTab", BindingFlags.NonPublic | BindingFlags.Static)!;
-
-    private static string EscapeTab(string value)
-    {
-        return (string)EscapeTabMethod.Invoke(null, new object[] { value })!;
-    }
-
-    // ──────────────────────────────────────────────
     // NullIfEmpty (private static)
     // ──────────────────────────────────────────────
 
@@ -281,13 +269,6 @@ public class ManageWebResourceToolTests
     {
         var result = EscapeXml("A&B<C>D'E\"F");
         Assert.AreEqual("A&amp;B&lt;C&gt;D&apos;E&quot;F", result);
-    }
-
-    [TestMethod]
-    public void EscapeTab_RemovesTabsAndNewlines()
-    {
-        var result = EscapeTab("A\tB\nC\rD");
-        Assert.AreEqual("A B CD", result);
     }
 
     [TestMethod]

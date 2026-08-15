@@ -10,11 +10,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
-
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -24,14 +22,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
-
         public ManageWebResourceTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
             _serviceClient = serviceClient;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-
         private static readonly Dictionary<int, string> TypeCodeMap = new()
         {
             [1] = "HTML",
@@ -69,55 +65,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageWebResourceResult)),
         Description(
-            "Web resources Dataverse — list/detail/create/update/delete. Required:\n" +
-            "- list: optional name, type_filter, solution_name, max_records\n" +
-            "- detail: web_resource_id (GUID, Display Name, or unique name)\n" +
-            "- create: name + file_path + type + solution_name (REQUIRED). Optional: display_name, description\n" +
-            "- update: web_resource_id (GUID, Display Name, or unique name). Optional: file_path, display_name, description\n" +
-            "- delete: web_resource_id (GUID, Display Name, or unique name; irreversible)\n\n" +
-
-            "Types: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.\n" +
-            "Naming convention: {prefix}_/path/filename.ext (e.g. 'v4_/entities/Account.form.js').\n\n" +
-
-            "PREFIX VALIDATION on CREATE: solution_name is required and used to resolve the publisher prefix. " +
-            "The prefix in name must match the solution's publisher prefix (case-insensitive). " +
-            "If they differ, the tool returns [PrefixMismatch] and stops — re-call with the correct prefix.\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- Find library_name for build_form_xml add_event/add_library (run list first)\n" +
-            "- Inspect, upload, update, or delete a single web resource\n" +
-            "- Combine with build_form_xml + manage_form to wire JS into a form\n\n" +
-
-            "SAFETY: delete is irreversible; file_path is converted to base64 internally for create/update.")]
+            "Manage Dataverse web resources — list / detail / create / update / delete.\n" +
+            "Required: detail/update/delete need web_resource_id (GUID, Display Name, or unique name); " +
+            "create needs name + file_path + type + solution_name.\n" +
+            "On create the prefix in name must match the solution's publisher prefix; on mismatch the tool errors " +
+            "with the suggested name — re-call with it. Create adds the web resource to the solution and publishes; " +
+            "update also publishes; delete is irreversible.\n" +
+            "Types: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap. " +
+            "Naming: {prefix}_/path/filename.ext (e.g. 'v4_/entities/Account.form.js').\n" +
+            "WHEN TO USE: upload/update/inspect a web resource; find library_name for build_form_xml " +
+            "add_event/add_library (run list first); combine with build_form_xml + manage_form to wire JS into a form.\n" +
+            "RELATED TOOLS: get_solution_components, manage_form, publish_customizations.")]
         public CallToolResult manage_webresource(
-            [Description("list / detail / create / update / delete."
-            )] string action,
-            [Description("GUID, Display Name, or unique name. Required: detail/update/delete."
-            )] string web_resource_id = "",
-            [Description("Unique name (e.g. 'v4_/entities/Account.form.js'). Required: create. list: contains filter across Display Name and unique name."
-            )] string name = "",
-            [Description("")
-            ] string display_name = "",
-            [Description("")
-            ] string description = "",
-            [Description("Absolute or relative file path. Required: create. Tool reads file and converts to base64 internally."
-            )] string file_path = "",
-            [Description("Required: create. See description for values. Ignored on other actions."
-            )] string type = "",
-            [Description("list: filter. create: REQUIRED — used to resolve publisher prefix and add WR to solution."
-            )] string solution_name = "",
-            [Description("list only. See type values."
-            )] string type_filter = "",
-            [Description("1–500."
-            )] int max_records = 50)
+            [Description("list / detail / create / update / delete.")] string action,
+            [Description("GUID, Display Name, or unique name. Required: detail/update/delete.")] string web_resource_id = "",
+            [Description("Unique name (e.g. 'v4_/entities/Account.form.js'). Required: create. list: contains filter across Display Name and unique name.")] string name = "",
+            [Description("Display Name. Optional: create/update.")] string display_name = "",
+            [Description("Description. Optional: create/update.")] string description = "",
+            [Description("Absolute or relative file path. Required: create. Tool reads file and converts to base64 internally.")] string file_path = "",
+            [Description("Required: create. See description for values. Ignored on other actions.")] string type = "",
+            [Description("list: filter. create: REQUIRED — used to resolve publisher prefix and add WR to solution.")] string solution_name = "",
+            [Description("list only. See type values.")] string type_filter = "",
+            [Description("1-500.")] int max_records = 50)
         {
-            if (string.IsNullOrWhiteSpace(action))
-                return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'create', 'update', 'delete'.");
-
-            var normalizedAction = action.Trim().ToLowerInvariant();
-
             try
             {
+                if (string.IsNullOrWhiteSpace(action))
+                    return Error("action is required. Valid values: 'list', 'detail', 'create', 'update', 'delete'.");
+                var normalizedAction = action.Trim().ToLowerInvariant();            
                 return normalizedAction switch
                 {
                     "list" => HandleList(name, type_filter, solution_name, max_records),
@@ -125,24 +100,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "create" => HandleCreate(name, display_name, description, file_path, type, solution_name),
                     "update" => HandleUpdate(web_resource_id, display_name, description, file_path),
                     "delete" => HandleDelete(web_resource_id),
-                    _ => ErrorResult($"Error: Invalid action '{action}'. Valid values: 'list', 'detail', 'create', 'update', 'delete'.")
+                    _ => Error($"Invalid action '{action}'. Valid values: 'list', 'detail', 'create', 'update', 'delete'.")
                 };
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Failed to manage web resource: {ex.Message}");
+                return ThrowException(ex);
             }
         }
-
-        #region Action Handlers
 
         private CallToolResult HandleList(string nameFilter, string typeFilter, string solutionName, int maxRecords)
         {
             if (!string.IsNullOrWhiteSpace(typeFilter) && !TypeFilterMap.ContainsKey(typeFilter.Trim()))
-                return ErrorResult($"Error: Invalid type_filter '{typeFilter.Trim()}'. Use: {string.Join(", ", TypeFilterMap.Keys)}.");
+                return Error($"Invalid type_filter '{typeFilter.Trim()}'.", $"Use: {string.Join(", ", TypeFilterMap.Keys)}.");
 
             if (maxRecords <= 0)
-                return ErrorResult("Error: max_records must be between 1 and 500.");
+                return Error("max_records must be between 1 and 500.");
             if (maxRecords > 500) maxRecords = 500;
 
             var filters = new StringBuilder();
@@ -165,7 +138,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
                 if (!solResult.IsSuccess)
-                    return ErrorResult($"[Error] {solResult.Error}\nTip: Use get_solution_components to find valid solution names.");
+                    return Error(solResult.Error);
 
                 solutionName = solResult.UniqueName;
                 solutionJoin = $@"
@@ -196,26 +169,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
             {
-                var emptyResult = new ManageWebResourceResult { Action = "list", TotalCount = 0, WebResources = [] };
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = "0 web resources found." }],
-                    StructuredContent = JsonSerializer.SerializeToElement(emptyResult)
-                };
+                var emptyResult = new ManageWebResourceResult { Action = "list", TotalCount = 0 };
+                return Success("0 web resources found.", emptyResult);
             }
 
             var entries = result.Entities.Select(MapEntry).ToList();
-
-            var sb = new StringBuilder(entries.Count * 120 + 256);
-            var countWord = entries.Count == 1 ? "web resource" : "web resources";
-            sb.AppendLine($"[WebResources] {entries.Count} {countWord}");
-            sb.AppendLine();
-            sb.AppendLine("webResourceId\tname\ttype\tdisplayName\tmodifiedOn");
-
-            foreach (var e in entries)
-            {
-                sb.AppendLine($"{e.WebResourceId}\t{EscapeTab(e.Name)}\t{e.Type}\t{EscapeTab(e.DisplayName ?? "")}\t{e.ModifiedOn ?? ""}");
-            }
 
             var structured = new ManageWebResourceResult
             {
@@ -224,23 +182,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 WebResources = entries
             };
 
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            var countWord = entries.Count == 1 ? "web resource" : "web resources";
+            return Success($"{entries.Count} {countWord} found.", structured);
         }
 
         private CallToolResult HandleDetail(string webResourceId)
         {
             if (string.IsNullOrWhiteSpace(webResourceId))
-                return ErrorResult("Error: web_resource_id is required for 'detail'.\n" +
-                                   "Use action='list' to find web resource IDs.");
+                return Error("web_resource_id is required for 'detail'.",
+                             "Use action='list' to find web resource IDs.");
 
             var resolved = ResolveWebResourceIdInput(webResourceId);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return ErrorResult(resolved.Error);
-
+                return Error(resolved.Error);
             var query = new QueryExpression("webresource")
             {
                 ColumnSet = new ColumnSet(
@@ -251,117 +205,62 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "solutionid", "introducedversion", "dependencyxml")
             };
             query.Criteria.AddCondition("webresourceid", ConditionOperator.Equal, resolved.Id.Value);
-
             var result = _serviceClient.RetrieveMultiple(query);
             if (result.Entities.Count == 0)
-                return ErrorResult($"Error: Web resource '{webResourceId}' not found.\n" +
-                                   $"Use action='list' to find valid web resource IDs.");
-
+                return Error($"Web resource '{webResourceId}' not found.",
+                             "Use action='list' to find valid web resource IDs.");
             var entity = result.Entities[0];
             var entry = MapEntry(entity);
-
             entry.Description = NullIfEmpty(entity.GetAttributeValue<string>("description"));
             entry.LanguageCode = entity.GetAttributeValue<int?>("languagecode");
             entry.IsCustomizable = entity.GetAttributeValue<BooleanManagedProperty>("iscustomizable")?.Value;
             entry.IsHidden = entity.GetAttributeValue<BooleanManagedProperty>("ishidden")?.Value;
             entry.IsEnabledForMobile = entity.GetAttributeValue<bool?>("isenabledformobileclient");
             entry.IntroducedVersion = NullIfEmpty(entity.GetAttributeValue<string>("introducedversion"));
-
             var createdBy = entity.GetAttributeValue<EntityReference>("createdby");
             entry.CreatedBy = createdBy != null ? (createdBy.Name ?? createdBy.Id.ToString()) : null;
-
             var createdOn = entity.GetAttributeValue<DateTime?>("createdon");
             entry.CreatedOn = createdOn?.ToString("yyyy-MM-dd HH:mm:ss");
-
             var modifiedBy = entity.GetAttributeValue<EntityReference>("modifiedby");
             entry.ModifiedBy = modifiedBy != null ? (modifiedBy.Name ?? modifiedBy.Id.ToString()) : null;
-
-            var sb = new StringBuilder(512);
-            sb.AppendLine($"[WebResource] {entry.Name}");
-            sb.AppendLine();
-            sb.AppendLine($"webResourceId: {entry.WebResourceId}");
-            sb.AppendLine($"name: {entry.Name}");
-            if (!string.IsNullOrEmpty(entry.DisplayName))
-                sb.AppendLine($"displayName: {entry.DisplayName}");
-            sb.AppendLine($"type: {entry.Type}");
-            sb.AppendLine($"isManaged: {(entry.IsManaged ? "Yes" : "No")}");
-            if (!string.IsNullOrEmpty(entry.Description))
-                sb.AppendLine($"description: {entry.Description}");
-            if (entry.LanguageCode.HasValue && entry.LanguageCode.Value > 0)
-                sb.AppendLine($"languageCode: {entry.LanguageCode}");
-            if (entry.IsCustomizable.HasValue)
-                sb.AppendLine($"isCustomizable: {(entry.IsCustomizable.Value ? "Yes" : "No")}");
-            if (entry.IsHidden.HasValue)
-                sb.AppendLine($"isHidden: {(entry.IsHidden.Value ? "Yes" : "No")}");
-            if (entry.IsEnabledForMobile.HasValue)
-                sb.AppendLine($"isEnabledForMobile: {(entry.IsEnabledForMobile.Value ? "Yes" : "No")}");
-            if (!string.IsNullOrEmpty(entry.IntroducedVersion))
-                sb.AppendLine($"introducedVersion: {entry.IntroducedVersion}");
-            if (!string.IsNullOrEmpty(entry.CreatedBy))
-                sb.AppendLine($"createdBy: {entry.CreatedBy}");
-            if (!string.IsNullOrEmpty(entry.CreatedOn))
-                sb.AppendLine($"createdOn: {entry.CreatedOn}");
-            if (!string.IsNullOrEmpty(entry.ModifiedBy))
-                sb.AppendLine($"modifiedBy: {entry.ModifiedBy}");
-            if (!string.IsNullOrEmpty(entry.ModifiedOn))
-                sb.AppendLine($"modifiedOn: {entry.ModifiedOn}");
-
             var structured = new ManageWebResourceResult
             {
                 Action = "detail",
                 TotalCount = 1,
                 WebResources = [entry]
             };
-
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            return Success($"Web resource '{entry.Name}' ({entry.WebResourceId}), type {entry.Type}.", structured);
         }
 
         private CallToolResult HandleCreate(string name, string displayName, string description,
             string filePath, string type, string solutionName)
         {
             if (string.IsNullOrWhiteSpace(name))
-                return ErrorResult("Error: name is required for 'create'.\n" +
-                                   "Provide a unique name, e.g. 'prefix_/entities/Account.form.js'.");
-
+                return Error("name is required for 'create'.",
+                             "Provide a unique name, e.g. 'prefix_/entities/Account.form.js'.");
             if (string.IsNullOrWhiteSpace(filePath))
-                return ErrorResult("Error: file_path is required for 'create'.\n" +
-                                   "Provide an absolute or relative path to the file.");
+                return Error("file_path is required for 'create'.",
+                             "Provide an absolute or relative path to the file.");
 
             if (string.IsNullOrWhiteSpace(type))
-                return ErrorResult("Error: type is required for 'create'. Valid values: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.");
+                return Error("type is required for 'create'. Valid values: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.");
 
-            // Read file and convert to base64
-            string content;
-            try
-            {
-                if (!File.Exists(filePath))
-                    return ErrorResult($"Error: File not found at path '{filePath}'.\n" +
-                                       "Provide a valid absolute or relative file path.");
-
-                var fileBytes = File.ReadAllBytes(filePath);
-                content = Convert.ToBase64String(fileBytes);
-            }
-            catch (Exception ex)
-            {
-                return ErrorResult($"Error: Failed to read file '{filePath}': {ex.Message}");
-            }
+            if (!File.Exists(filePath))
+                return Error($"File not found at path '{filePath}'.",
+                             "Provide a valid absolute or relative file path.");
+            var content = Convert.ToBase64String(File.ReadAllBytes(filePath));
 
             var typeTrimmed = type.Trim().ToLowerInvariant();
             if (!TypeFilterMap.TryGetValue(typeTrimmed, out var typeCode))
-                return ErrorResult($"Error: Invalid type '{type}'. Valid values: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.");
+                return Error($"Invalid type '{type}'. Valid values: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.");
 
             if (string.IsNullOrWhiteSpace(solutionName))
-                return ErrorResult("Error: solution_name is required for 'create'.\n" +
-                                   "Provide the solution unique name or display name. Use get_solution_components to find available solutions.");
+                return Error("solution_name is required for 'create'.",
+                             "Provide the solution unique name or display name. Use get_solution_components to find available solutions.");
 
-            // Resolve publisher prefix from solution
             var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
             if (!solResult.IsSuccess)
-                return ErrorResult($"[Error] {solResult.Error}\nTip: Use get_solution_components to find valid solution names.");
+                return Error(solResult.Error);
 
             name = name.Trim();
 
@@ -369,10 +268,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (existingByInput.IsSuccess)
             {
                 var existingName = existingByInput.Value.GetAttributeValue<string>("name") ?? existingByInput.CanonicalName ?? existingByInput.Value.Id.ToString();
-                return ErrorResult($"Error: Web resource input '{name}' resolves to existing web resource '{existingName}' (ID: {existingByInput.Value.Id}). Use action='update' to modify it.");
+                return Error($"Web resource input '{name}' resolves to existing web resource '{existingName}' (ID: {existingByInput.Value.Id}). Use action='update' to modify it.");
             }
             if (existingByInput.Status == ResolveStatus.Ambiguous || existingByInput.Status == ResolveStatus.Error)
-                return ErrorResult(existingByInput.Error);
+                return Error(existingByInput.Error);
 
             if (!string.IsNullOrWhiteSpace(displayName))
             {
@@ -380,36 +279,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (existingByDisplayName.IsSuccess)
                 {
                     var existingName = existingByDisplayName.Value.GetAttributeValue<string>("name") ?? existingByDisplayName.CanonicalName ?? existingByDisplayName.Value.Id.ToString();
-                    return ErrorResult($"Error: Display Name '{displayName.Trim()}' resolves to existing web resource '{existingName}' (ID: {existingByDisplayName.Value.Id}). Use action='update' to modify it.");
+                    return Error($"Display Name '{displayName.Trim()}' resolves to existing web resource '{existingName}' (ID: {existingByDisplayName.Value.Id}). Use action='update' to modify it.");
                 }
                 if (existingByDisplayName.Status == ResolveStatus.Ambiguous || existingByDisplayName.Status == ResolveStatus.Error)
-                    return ErrorResult(existingByDisplayName.Error);
+                    return Error(existingByDisplayName.Error);
             }
 
-            // Validate prefix in name matches the solution's publisher prefix
             var underscoreIndex = name.IndexOf('_');
             if (underscoreIndex < 1)
-                return ErrorResult(
-                    $"Error: name '{name}' has no prefix.\n" +
+                return Error(
+                    $"name '{name}' has no prefix.",
                     $"Rename it to '{solResult.Prefix}_{name}' to match solution '{solResult.UniqueName}' (publisher prefix: {solResult.Prefix}).");
 
             var prefixInName = name.Substring(0, underscoreIndex).ToLowerInvariant();
             if (!string.Equals(prefixInName, solResult.Prefix, StringComparison.OrdinalIgnoreCase))
             {
                 var suggestedName = $"{solResult.Prefix}_{name.Substring(underscoreIndex + 1)}";
-                var mismatchSb = new StringBuilder(256);
-                mismatchSb.AppendLine("[PrefixMismatch]");
-                mismatchSb.AppendLine($"NameProvided: {name}");
-                mismatchSb.AppendLine($"PrefixInName: {prefixInName}");
-                mismatchSb.AppendLine($"PrefixFromSolution: {solResult.Prefix} (solution: {solResult.UniqueName})");
-                mismatchSb.AppendLine();
-                mismatchSb.AppendLine($"→ Re-call with name=\"{suggestedName}\" to use the correct solution prefix.");
-                mismatchSb.AppendLine($"→ Or confirm your intended prefix is correct and check the solution_name.");
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = mismatchSb.ToString() }],
-                    IsError = true
-                };
+                return Error(
+                    $"PrefixMismatch: name '{name}' has prefix '{prefixInName}' but solution '{solResult.UniqueName}' publisher prefix is '{solResult.Prefix}'.",
+                    $"Re-call with name='{suggestedName}' to use the correct solution prefix, or confirm your intended prefix is correct and check solution_name.");
             }
 
             var webResource = new Entity("webresource")
@@ -463,22 +351,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ? null
                 : $"Failed to add to solution '{solResult.UniqueName}': {addResult.AddToSolutionWarning}";
 
-            var published = PublishWebResource(webResourceId);
+            PublishHelper.PublishWebResource(_context, _serviceClient, webResourceId);
+            MetadataOperationWaitHelper.WaitAfterWebResource();
 
             var typeLabel = TypeCodeMap.TryGetValue(typeCode, out var t) ? t : typeCode.ToString();
 
-            var sb = new StringBuilder(256);
-            sb.AppendLine($"[WebResource] Created: {name}");
-            sb.AppendLine($"webResourceId: {webResourceId}");
-            sb.AppendLine($"type: {typeLabel}");
-            sb.AppendLine($"solution: {solResult.UniqueName}");
-            if (!string.IsNullOrWhiteSpace(displayName))
-                sb.AppendLine($"displayName: {displayName.Trim()}");
-            if (!string.IsNullOrEmpty(solWarning))
-                sb.AppendLine($"solutionWarning: {solWarning}");
-            sb.AppendLine($"published: {(published ? "yes" : "no")}");
+            var summary = $"Created web resource '{name}' ({webResourceId}): type={typeLabel}" +
+                (solWarning == null
+                    ? $", added to solution '{solResult.UniqueName}', published."
+                    : $". Not added to solution '{solResult.UniqueName}' (see addToSolutionWarning). Published.");
 
-            var structured = new ManageWebResourceResult
+            return Success(summary, new ManageWebResourceResult
             {
                 Action = "created",
                 TotalCount = 1,
@@ -500,60 +383,42 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 IsAddToSolution = addResult.IsAddToSolution,
                 AddToSolutionMethod = addResult.AddToSolutionMethod,
                 AddToSolutionWarning = addResult.AddToSolutionWarning,
-                Published = published
-            };
-
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+                Published = true
+            });
         }
 
         private CallToolResult HandleUpdate(string webResourceId, string displayName,
             string description, string filePath)
         {
             if (string.IsNullOrWhiteSpace(webResourceId))
-                return ErrorResult("Error: web_resource_id is required for 'update'.\n" +
-                                   "Use action='list' to find web resource IDs.");
+                return Error("web_resource_id is required for 'update'.",
+                             "Use action='list' to find web resource IDs.");
 
             var resolved = ResolveWebResourceIdInput(webResourceId);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return ErrorResult(resolved.Error);
+                return Error(resolved.Error);
             var id = resolved.Id.Value;
 
             var existing = RetrieveById(id);
             if (existing == null)
-                return ErrorResult($"Error: Web resource '{webResourceId}' not found.\n" +
-                                   $"Use action='list' to find valid web resource IDs.");
+                return Error($"Web resource '{webResourceId}' not found.",
+                             "Use action='list' to find valid web resource IDs.");
 
-            // Check managed/customizable
             var isManaged = existing.GetAttributeValue<bool?>("ismanaged");
             var isCustomizable = existing.GetAttributeValue<BooleanManagedProperty>("iscustomizable");
             if (isManaged == true && isCustomizable?.Value == false)
-                return ErrorResult($"Error: Cannot update web resource '{webResourceId}' — it is managed and not customizable.");
+                return Error($"Cannot update web resource '{webResourceId}' — it is managed and not customizable.");
 
             var update = new Entity("webresource", id);
             var fieldsUpdated = 0;
 
             if (!string.IsNullOrWhiteSpace(filePath))
             {
-                // Read file and convert to base64
-                try
-                {
-                    if (!File.Exists(filePath))
-                        return ErrorResult($"Error: File not found at path '{filePath}'.\n" +
-                                           "Provide a valid absolute or relative file path.");
-
-                    var fileBytes = File.ReadAllBytes(filePath);
-                    var content = Convert.ToBase64String(fileBytes);
-                    update["content"] = content;
-                    fieldsUpdated++;
-                }
-                catch (Exception ex)
-                {
-                    return ErrorResult($"Error: Failed to read file '{filePath}': {ex.Message}");
-                }
+                if (!File.Exists(filePath))
+                    return Error($"File not found at path '{filePath}'.",
+                                 "Provide a valid absolute or relative file path.");
+                update["content"] = Convert.ToBase64String(File.ReadAllBytes(filePath));
+                fieldsUpdated++;
             }
             if (!string.IsNullOrWhiteSpace(displayName))
             {
@@ -567,7 +432,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (fieldsUpdated == 0)
-                return ErrorResult("Error: No fields to update. Provide at least one of: file_path, display_name, description.");
+                return Error("No fields to update. Provide at least one of: file_path, display_name, description.");
 
             if (_options.DryRun)
             {
@@ -595,16 +460,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
-            var published = PublishWebResource(id);
+            PublishHelper.PublishWebResource(_context, _serviceClient, id);
+            MetadataOperationWaitHelper.WaitAfterWebResource();
             var existingName = existing.GetAttributeValue<string>("name") ?? "";
 
-            var sb = new StringBuilder(256);
-            sb.AppendLine($"[WebResource] Updated: {existingName}");
-            sb.AppendLine($"webResourceId: {id}");
-            sb.AppendLine($"fieldsUpdated: {fieldsUpdated}");
-            sb.AppendLine($"published: {(published ? "yes" : "no")}");
-
-            var structured = new ManageWebResourceResult
+            return Success($"Updated web resource '{existingName}' ({id}): fieldsUpdated={fieldsUpdated}, published.", new ManageWebResourceResult
             {
                 Action = "updated",
                 TotalCount = 1,
@@ -620,36 +480,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         IsManaged = isManaged ?? false
                     }
                 ],
-                Published = published
-            };
-
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+                Published = true
+            });
         }
 
         private CallToolResult HandleDelete(string webResourceId)
         {
             if (string.IsNullOrWhiteSpace(webResourceId))
-                return ErrorResult("Error: web_resource_id is required for 'delete'.\n" +
-                                   "Use action='list' to find web resource IDs.");
+                return Error("web_resource_id is required for 'delete'.",
+                             "Use action='list' to find web resource IDs.");
 
             var resolved = ResolveWebResourceIdInput(webResourceId);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return ErrorResult(resolved.Error);
+                return Error(resolved.Error);
             var id = resolved.Id.Value;
 
             var existing = RetrieveById(id);
             if (existing == null)
-                return ErrorResult($"Error: Web resource '{webResourceId}' not found.\n" +
-                                   $"Use action='list' to find valid web resource IDs.");
+                return Error($"Web resource '{webResourceId}' not found.",
+                             "Use action='list' to find valid web resource IDs.");
 
             var isManaged = existing.GetAttributeValue<bool?>("ismanaged");
             var isCustomizable = existing.GetAttributeValue<BooleanManagedProperty>("iscustomizable");
             if (isManaged == true && isCustomizable?.Value == false)
-                return ErrorResult($"Error: Cannot delete web resource '{webResourceId}' — it is managed and not customizable.");
+                return Error($"Cannot delete web resource '{webResourceId}' — it is managed and not customizable.");
 
             var existingName = existing.GetAttributeValue<string>("name") ?? "";
             var typeValue = existing.GetAttributeValue<OptionSetValue>("webresourcetype")?.Value ?? 0;
@@ -676,9 +530,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             DataverseMutationExecutor.Delete(_context, _serviceClient, "webresource", id);
 
-            var published = PublishWebResource(id);
-
-            var structured = new ManageWebResourceResult
+            return Success($"Deleted web resource '{existingName}' ({id}).", new ManageWebResourceResult
             {
                 Action = "deleted",
                 TotalCount = 1,
@@ -691,20 +543,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Type = TypeCodeMap.TryGetValue(typeValue, out var t3) ? t3 : "Unknown",
                         TypeCode = typeValue
                     }
-                ],
-                Published = published
-            };
-
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = $"Deleted web resource '{existingName}' ({id})" }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+                ]
+            });
         }
-
-        #endregion
-
-        #region Dataverse Operations
 
         private Entity RetrieveById(Guid id)
         {
@@ -721,27 +562,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var result = _serviceClient.RetrieveMultiple(query);
             return result.Entities.FirstOrDefault();
         }
-
-        private bool PublishWebResource(Guid webResourceId)
-        {
-            try
-            {
-                PublishHelper.PublishWebResource(_context, _serviceClient, webResourceId);
-
-                // Wait for web resource metadata to propagate after publish
-                MetadataOperationWaitHelper.WaitAfterWebResource();
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        #endregion
-
-        #region Helpers
 
         private static WebResourceEntry MapEntry(Entity e)
         {
@@ -768,20 +588,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string EscapeXml(string value) =>
             value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("\"", "&quot;");
 
-        private static string EscapeTab(string value) =>
-            value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
-
         private (Guid? Id, string Error) ResolveWebResourceIdInput(string webResourceInput)
         {
             var trimmed = webResourceInput?.Trim();
             if (string.IsNullOrWhiteSpace(trimmed))
-                return (null, "Error: web_resource_id is required.");
+                return (null, "web_resource_id is required.");
 
             if (Guid.TryParse(trimmed, out var guid))
                 return (guid, null);
 
             if (_serviceClient == null)
-                return (null, $"Error: '{trimmed}' is not a valid GUID. Use action='list' to find valid web resource IDs.");
+                return (null, $"'{trimmed}' is not a valid GUID. Use action='list' to find valid web resource IDs.");
 
             var resolved = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, trimmed, "manage_webresource");
             if (!resolved.IsSuccess)
@@ -792,13 +609,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 resolvedId = resolved.Value.GetAttributeValue<Guid>("webresourceid");
 
             if (resolvedId == Guid.Empty)
-                return (null, $"Error: Web resource '{trimmed}' resolved without a valid ID. Use action='list' to find valid web resource IDs.");
+                return (null, $"Web resource '{trimmed}' resolved without a valid ID. Use action='list' to find valid web resource IDs.");
 
             return (resolvedId, null);
         }
-
-        private CallToolResult ErrorResult(string message) => Error(message);
-
-        #endregion
     }
 }

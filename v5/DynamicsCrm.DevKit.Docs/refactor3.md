@@ -29,6 +29,7 @@
 15. **Sensitive value không leak:** env var value, secure config, secret — không vào Content/structured/test-call trừ khi param explicit + policy cho phép.
 16. **HTTP success ≠ tool success.** Payload có `error` / parse fail / structured mang error → `Error(...)` (`IsError=true`). Cấm `Success()` với Content bắt đầu `[Error]`.
 17. **`execute_webapi` refactor cuối:** audit lại redirect/block cho toàn bộ mutation endpoint mà dedicated tool đã cover, đảm bảo AI không bypass safety của tool dedicated.
+18. **Label gợi ý sau error: CHỈ `Hint:`, cấm `Tip:`.** `Hint:` là convention chuẩn của error message (git/gh/.NET compiler đều dùng `hint:`) và factory đã sở hữu `HintLabel`. Helper (`DisplayNameFirstResolver`, `SolutionResolverHelper`, …) khi nhúng guidance vào error string cũng phải dùng `Hint:`, tuyệt đối không `Tip:`. Khi refactor tool mà thấy output có `Tip:` → đổi source sinh ra nó về `Hint:` trong cùng build. Guidance của helper đã nằm sẵn trong error string thì tool gọi `Error(helperError)` — **KHÔNG truyền thêm hint** kẻo render trùng 2 dòng `Hint:`/`Tip:` cùng nội dung (bug từng gặp ở manage_webresource + SolutionResolverHelper). Legacy `Tip:` còn sót trong tool chưa refactor (`CreateRecordsTool`, `GenerateDemoDataTool`, `EntityParserHelper`, `FormFieldMetadata`) sẽ quét chuẩn hóa khi refactor tool đó.
 
 ## 2. Helpers có sẵn — tái dụng, không viết lại
 
