@@ -29,7 +29,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// <summary>
         /// Successful result with a concise text summary and the full structured payload.
         /// </summary>
-        internal static CallToolResult Success(string summary, object structured) => new()
+        internal static CallToolResult Success(string summary, object? structured) => new()
         {
             Content = [new TextContentBlock { Text = $"{SuccessPrefix} {StripPrefix(summary, SuccessPrefix)}" }],
             StructuredContent = JsonSerializer.SerializeToElement(structured)

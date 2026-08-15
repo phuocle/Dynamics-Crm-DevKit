@@ -347,9 +347,9 @@ public class SearchToolTests
         .GetMethod("BuildSearchRequestBody", BindingFlags.NonPublic | BindingFlags.Static, null,
             new[] { typeof(string), typeof(List<string>), typeof(int), typeof(string) }, null)!;
 
-    private static string BuildSearchRequestBody(string searchTerm, List<string> entities, int top, string filter)
+    private static string BuildSearchRequestBody(string searchTerm, List<string>? entities, int top, string? filter)
     {
-        return (string)BuildSearchRequestBodyMethod.Invoke(null, new object[] { searchTerm, entities, top, filter })!;
+        return (string)BuildSearchRequestBodyMethod.Invoke(null, new object?[] { searchTerm, entities, top, filter })!;
     }
 
     [TestMethod]

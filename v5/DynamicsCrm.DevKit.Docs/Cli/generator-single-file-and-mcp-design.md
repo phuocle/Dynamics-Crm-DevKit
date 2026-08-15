@@ -1,94 +1,53 @@
-# Generator — Single-File CLI Mode & MCP Integration Analysis
+# Generator single-file CLI mode and MCP integration design
 
-> Status: **Design draft / pre-implementation review**
-> Scope: `DynamicsCrm.DevKit.Cli/Tasks/TaskGenerator.cs` and its callers
-> Date: 2026-08-14
-> Constraint (binding): `TaskGenerator.cs` is treated as **stable and proven** — do NOT clone, do NOT rewrite, only add minimal guard clauses if strictly necessary.
-
----
-
-## 1. Context recap
-
-### 1.1 What `TaskGenerator` does today
-
-`TaskGenerator` is the orchestrator for **five code generators**, dispatched by `Json.type`:
-
-| `type`     | output extension | generator entry                             |
-| ---------- | ---------------- | ------------------------------------------- |
-| `csharp`   | `.generated.cs`  | `CSharpLateBound.GetCsCode`                 |
-| `jsform`   | `.form.js`       | `JsForm.GetJsFormCodeAsync`                 |
-| `tsform`   | `.form.ts`       | `TsForm.GetTsFormCodeAsync` + `TsOptionSet` |
-| `jswebapi` | `.webapi.js`     | `JsWebApi.GetJsWebApiCodeAsync`             |
-| `tswebapi` | `.webapi.ts`     | `TsWebApi.GetTsWebApiCodeAsync`             |
-
-All heavy code-gen logic lives in `DynamicsCrm.DevKit.Shared/*`. `TaskGenerator` itself only:
-
-- Validates JSON profile (`IsValidAsync`).
-- Resolves which schema names to process (`GetSchemaNamesAsync`).
-- Loads entity metadata (either targeted via `Metadata.GetEntitiesMetadataAsync(schemaNames)` when ≤500, or full `MetadataService.ReadEntitiesMetadataAsync` for `*`).
-- Loops entities, computes new code, compares against existing file, writes via `FileHelper.ForceWriteAllTextAsync`.
-- Emits Spectre.Console progress / status lines.
-
-The 1:1 map between `type` and output extension is hard-coded in `GetSchemaNamesAsync`:
-
-```csharp
-if (Json.type.ToLower() == nameof(GeneratorType.csharp))      endsWith = ".generated.cs";
-else if (Json.type.ToLower() == nameof(GeneratorType.jsform))  endsWith = ".form.js";
-else if (Json.type.ToLower() == nameof(GeneratorType.tsform))  endsWith = ".form.ts";
-else if (Json.type.ToLower() == nameof(GeneratorType.jswebapi))endsWith = ".webapi.js";
-else if (Json.type.ToLower() == nameof(GeneratorType.tswebapi))endsWith = ".webapi.ts";
-```
-
-This map is **bidirectional and unambiguous** — given a file extension we can derive `type` with no collision.
-
-### 1.2 Existing single-file precedent — `devkit webresource`
-
-`WebResourceCommand` already implements **exactly the pattern we want to replicate**:
-
-```csharp
-// Commands/WebResourceCommand.cs
-[CommandOption("--file|-f")]      public string File;
-[CommandOption("--webresource|-w")] public string WebResource;
-
-// Bypass profile validation
-protected override bool IsProfileRequired(WebResourceCommandArgs s) => string.IsNullOrEmpty(s.File);
-protected override bool IsJsonRequired(WebResourceCommandArgs s)   => string.IsNullOrEmpty(s.File);
-```
-
-Inside `TaskWebResource`:
-
-```csharp
-// TaskWebResource.cs:37
-if (!string.IsNullOrEmpty(Arg.File) && !string.IsNullOrEmpty(Arg.WebResource))
-    return true; // Bypass profile validation for explicit single file update
-
-// TaskWebResource.cs:663-665 — WebResourceFiles getter
-if (!string.IsNullOrEmpty(Arg.File))
-{
-    var file = Path.GetFullPath(Arg.File);
-    ...
-    _webResourceFiles.Add(webResourceFile);
-    return _webResourceFiles;
-}
-```
-
-Side effects of single-file mode in webresource:
-
-- No JSON file required.
-- No profile required.
-- No "add to solution" step (only update of an existing web resource).
-- Special-case for `.ts` → auto `npm run debug` then deploy the compiled `.js`.
-- `Arg.WebResource` is the unique name; if missing → derived from `Json.rootfolder + SolutionPrefix + relative path`.
-
-This is the **template** we mirror for `generator`.
+> Status: **Reviewed design — CLI implementation ready; MCP implementation deferred**
+> Scope: `DynamicsCrm.DevKit.Cli` only
+> Reviewed against repository code: 2026-08-14
+> Binding constraint: `TaskGenerator.cs` is stable and proven. Do not clone, rewrite, or modify it for the CLI feature described here.
 
 ---
 
-## 2. Proposed feature — `devkit generator --file`
+## 1. Executive decision
 
-### 2.1 Goal
+Implement `devkit generator --file <existing-generated-file>` as a thin adapter in `GeneratorCommand`.
 
-Allow the user to regenerate code for **exactly one entity** without authoring a `DynamicsCrm.DevKit.Cli.json` profile, e.g.:
+The adapter must:
+
+1. validate and canonicalize the supplied path;
+2. derive the generator type and entity schema name from the complete file suffix;
+3. recover only the generator settings that are actually represented in the existing file;
+4. create an in-memory `JsonGenerator` whose `rootfolder` and `entities` make the existing `TaskGenerator` select exactly one entity; and
+5. call the unchanged `TaskGenerator`.
+
+Do not add `Arg.File` branches to `TaskGenerator`. Its existing `entities` branch already supports a one-entity run and uses the targeted metadata path.
+
+MCP exposure is a separate phase. `TaskGenerator` writes directly to disk and does not return a change plan, so it cannot currently provide a safe native MCP preview/result contract without a new execution seam. Do not include an MCP tool in the CLI `--file` change.
+
+---
+
+## 2. Verified current behavior
+
+`TaskGenerator` dispatches five generators by `Json.type`:
+
+| `Json.type` | Generated suffix | Generator entry point |
+| --- | --- | --- |
+| `csharp` | `.generated.cs` | `CSharpLateBound.GetCsCode` |
+| `jsform` | `.form.js` | `JsForm.GetJsFormCodeAsync` |
+| `tsform` | `.form.ts` | `TsForm.GetTsFormCodeAsync` and `TsOptionSet` |
+| `jswebapi` | `.webapi.js` | `JsWebApi.GetJsWebApiCodeAsync` |
+| `tswebapi` | `.webapi.ts` | `TsWebApi.GetTsWebApiCodeAsync` |
+
+When `Json.entities` contains a non-empty, non-`folder`, non-`all` value, `GetSchemaNamesAsync` returns that value directly. A single value therefore causes `RunAsync` to use the targeted metadata path rather than the all-entity path.
+
+`TaskGenerator.CurrentFolder` is currently constructed as `CurrentDirectory + "\\" + Json.rootfolder`. Consequently, `Json.rootfolder` must be relative to the process current directory. Supplying an absolute directory as `rootfolder` is invalid for this implementation.
+
+The existing `webresource --file` command is useful only as precedent for making `--json` and `--profile` optional. Generator mode has different derivation and companion-file behavior and must not copy `TaskWebResource` logic literally.
+
+---
+
+## 3. User-facing CLI contract
+
+### 3.1 Supported commands
 
 ```bash
 devkit generator --file Account.form.js
@@ -96,366 +55,383 @@ devkit generator --file Account.webapi.js
 devkit generator --file Account.form.ts
 devkit generator --file Account.webapi.ts
 devkit generator --file Account.generated.cs
-devkit generator --file Account.generated.cs --namespace Xrm.Entities
 ```
 
-`--rootnamespace` is **NOT required** — it is reverse-parsed from the target file (see §2.3 bis).
-`--namespace` is only needed for `csharp` when the user wants a custom `shareProject` value; otherwise it is derived from the file.
+Normal authentication options remain unchanged (`--conn`, or `--auth` plus its required options).
 
-### 2.2 CLI options (added to `GeneratorCommandArgs`)
+### 3.2 New option
 
-| Option         | Required?                                            | Notes                                                                                  |
-| -------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `--file  / -f` | yes (this mode)                                      | Absolute or CWD-relative path to a single existing generated file. Update-only.        |
-| `--namespace`  | optional, csharp only (`shareProject`)               | Same semantics as `Json.@namespace`. Omit it → derive from file (see §2.3 bis).         |
+Add only this option to `GeneratorCommandArgs`:
 
-`--type` is **NOT** required — derived from the file extension (1:1 map, see §2.3).
-`--rootnamespace` is **NOT** required — reverse-parsed from the target file (see §2.3 bis).
-`--json` and `--profile` become optional in this mode (mirror `webresource`).
+| Option | Meaning |
+| --- | --- |
+| `--file`, `-f` | Absolute or current-directory-relative path to one existing generated file. |
 
-### 2.3 Type derivation table
+Do not add `--type`, `--rootnamespace`, or `--namespace` in this change. All values needed to reproduce an existing supported output can be derived as described below. Explicit overrides can be designed later if a real non-round-trippable case is found.
 
-| File extension  | Derived `type` |
-| --------------- | -------------- |
-| `.form.js`      | `jsform`       |
-| `.webapi.js`    | `jswebapi`     |
-| `.form.ts`      | `tsform`       |
-| `.webapi.ts`    | `tswebapi`     |
-| `.generated.cs` | `csharp`       |
+### 3.3 Mode selection and precedence
 
-Edge: if both `Account.form.js` and `Account.form.ts` exist, user picks the one they want to regenerate. We do **not** support bare schema name (e.g. `--file Account`) because `jsform` vs `tsform` would be ambiguous.
+- When `--file` is empty, preserve profile mode exactly: `--json` and `--profile` are required and the selected generator profile is used unchanged.
+- When `--file` is present, single-file mode is authoritative for generation. A supplied `--json` or `--profile` must not override `type`, `rootfolder`, `rootnamespace`, `entities`, or C# `namespace` derived from the file.
+- A supplied JSON path may still participate in the existing project `.env` discovery performed by `DevKitCommandArgs`; this is authentication setup, not generator-profile merging.
 
-### 2.3 bis Reverse-parsing `rootnamespace` from the target file
+This rule avoids a dangerous state where the user names one file but a profile redirects generation to another folder or entity set.
 
-Verified against real output files in the repo:
+### 3.4 Update-only meaning
 
-| Output extension  | File path used as evidence                                                | Anchor / regex                                                                       | Result                                  |
-| ----------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------- |
-| `.generated.cs`   | `DynamicsCrm.DevKit.Tests/TestAllInOne/Dev.AllInOne.Shared/Entities/Account.generated.cs` | Line 13: `namespace Dev.AllInOne.Shared.Entities.AccountOptionSets` → strip `.{Class}OptionSets` | `Dev.AllInOne.Shared.Entities`           |
-| `.generated.cs`   | Same file, line 633                                                      | `namespace Dev.AllInOne.Shared.Entities` (second declaration)                        | `Dev.AllInOne.Shared.Entities` (sanity) |
-| `Account.cs` (custom user file) | `DynamicsCrm.DevKit.Tests/TestAllInOne/Dev.AllInOne.Shared/Entities/Account.cs` | Line 4: `namespace Dev.AllInOne.Shared.Entities`                                       | `Dev.AllInOne.Shared.Entities`           |
-| `.form.js`        | `DynamicsCrm.DevKit.Tests/TestAllInOne/Dev.AllInOne.WebResource/entities/Account.form.js` | Line 2: `/** @namespace AllInOne */`                                                  | `AllInOne`                              |
-| `.webapi.js`      | `DynamicsCrm.DevKit.Tests/TestAllInOne/Dev.AllInOne.WebResource/entities/Account.webapi.js` | Line 2: `/** @namespace AllInOne */`                                                  | `AllInOne`                              |
-| `.form.ts`        | `DynamicsCrm.DevKit.Tests/TestAllInOne/Dev.AllInOne.WebResourceTs/entities/Account.form.ts` | **Last** `export namespace` block (line ~1046, aggregate) → `export namespace AllInOne {` | `AllInOne`                              |
-| `.webapi.ts`      | `DynamicsCrm.DevKit.Tests/TestAllInOne/Dev.AllInOne.WebResourceTs/entities/Account.webapi.ts` | No namespace declaration; only `interface IAccountApi extends DevKit.IWebApiEntity`     | **N/A — already not required** for `tswebapi` |
+The path supplied to `--file` must already exist and must be a regular file. Single-file mode does not accept a desired new path.
 
-> **Why this works:** the real-world convention used in `.Tests/` is one-segment `rootnamespace` (e.g. `AllInOne`, `DevKit`, `Dev.DevKit`). `Helper.GetNameSpace("AllInOne")` returns `AllInOne` unchanged. There is **no information loss** when round-tripping through the file output. Multi-segment namespaces (`X.Y.Z`) would only collide if a user actively chose a custom JS namespace alias, which is uncommon.
+“Single-file” means **one entity and one selected generator type**, not “exactly one filesystem write.” Existing `TaskGenerator` behavior may also update or create companion files in the same directory:
 
-> **Caveat for `.form.ts`:** the file contains multiple `export namespace` blocks — the schema namespace (`Account`) for each form, plus the aggregate (`AllInOne`) at the bottom. **Always take the last one** — that is `rootnamespace`.
+| Selected target | Possible companion effects from current code |
+| --- | --- |
+| `.form.js` | `<Schema>.js` and `<Schema>.d.ts` |
+| `.webapi.js` | `<Schema>.js` and `<Schema>.d.ts` |
+| `.form.ts` | `<Schema>.ts` and `OptionSet.ts` |
+| `.webapi.ts` | no current companion output |
+| `.generated.cs` | `<Schema>.cs`; the existing custom file may also be migrated from `public partial` to `internal partial` |
 
-> **`@namespace` for `csharp`:** the `shareProject` argument is **not** stored in the file, only the final `RootNamespace` is. If the user wants a custom shareProject value, they must pass `--namespace` explicitly. Otherwise we can leave `Json.@namespace = null` (current behaviour) and accept the default.
-
-Implementation sketch (placed in `Commands/GeneratorCommand.cs`, **not** in `Shared/Helper.cs` to keep `Shared` untouched):
-
-```csharp
-private static string ReverseParseRootNamespace(string filePath)
-{
-    var ext = Path.GetExtension(filePath).ToLowerInvariant();
-    var firstLines = string.Join("\n",
-        File.ReadAllLines(filePath).Take(20));   // cheap, bounded read
-
-    if (ext == ".generated.cs")
-    {
-        // Line ~13: "namespace X.Y.Z.AccountOptionSets"
-        var m = System.Text.RegularExpressions.Regex.Match(
-            firstLines, @"namespace\s+([\w\.]+)\.\w+OptionSets");
-        return m.Success ? m.Groups[1].Value : null;
-    }
-    if (ext == ".form.js" || ext == ".webapi.js")
-    {
-        // Line 2: "/** @namespace X */"
-        var m = System.Text.RegularExpressions.Regex.Match(
-            firstLines, @"/\*\*\s*@namespace\s+([\w\.]+)\s*\*/");
-        return m.Success ? m.Groups[1].Value : null;
-    }
-    if (ext == ".form.ts")
-    {
-        // Last "export namespace X {" in the whole file
-        var all = File.ReadAllText(filePath);
-        var matches = System.Text.RegularExpressions.Regex.Matches(
-            all, @"export\s+namespace\s+([\w]+)");
-        return matches.Count > 0 ? matches[matches.Count - 1].Groups[1].Value : null;
-    }
-    // .ts (.webapi.ts): no namespace; .cs (.cs custom file): handled separately if user pointed at it
-    return null;
-}
-```
-
-If reverse-parse fails, fall back to existing error in `IsValidAsync` and exit cleanly.
-
-### 2.4 Touch points (minimal)
-
-#### a) `Models/GeneratorCommandArgs.cs` — add two props
-
-```csharp
-[CommandOption("--file|-f")]
-[Description("Single existing generated file to regenerate (e.g. Account.form.js). Update-only.")]
-public string File { get; set; }
-
-[CommandOption("--namespace")]
-[Description("C# shareProject namespace (csharp only; optional).")]
-public string Namespace { get; set; }
-```
-
-`--rootnamespace` is no longer a CLI option — it is reverse-parsed from `--file` (see §2.3 bis).
-
-#### b) `Commands/GeneratorCommand.cs` — bypass branch
-
-Mirror `WebResourceCommand`:
-
-```csharp
-protected override bool IsProfileRequired(GeneratorCommandArgs s) => string.IsNullOrEmpty(s.File);
-protected override bool IsJsonRequired(GeneratorCommandArgs s)   => string.IsNullOrEmpty(s.File);
-
-// In RunTaskAsync, before reading json:
-var hasOverride = !string.IsNullOrEmpty(settings.File);
-JsonGenerator profile = null;
-
-if (System.IO.File.Exists(settings.JsonFile))
-{
-    var json = JsonHelper.Deserialize<Json>(await FileHelper.ReadAllTextAsync(settings.JsonFile));
-    profile = json?.generators?.FirstOrDefault(x => x.profile == settings.Profile);
-}
-
-if (hasOverride)
-{
-    profile ??= new JsonGenerator();
-
-    // 1. Fast-fail: file must exist (update-only mode)
-    var absoluteFile = Path.GetFullPath(settings.File);
-    if (!File.Exists(absoluteFile))
-    {
-        SpectreLog.ActionError($"--file is update-only: '{absoluteFile}' does not exist.");
-        return;
-    }
-
-    // 2. Derive type from extension
-    profile.type        = DeriveTypeFromFile(absoluteFile);
-
-    // 3. Derive rootnamespace from the file's own header
-    profile.rootfolder  = Path.GetDirectoryName(absoluteFile) ?? ".";
-    profile.rootnamespace = ReverseParseRootNamespace(absoluteFile)
-                        ?? throw new DevKitValidationException(
-                              $"Cannot reverse-parse rootnamespace from '{absoluteFile}'. " +
-                              "Please open a DynamicsCrm.DevKit.Cli.json profile for this entity, " +
-                              "or pass --rootnamespace explicitly via the json profile.");
-
-    // 4. shareProject is optional
-    if (settings.Namespace != null) profile.@namespace = settings.Namespace;
-
-    // 5. Single entity only
-    profile.entities = Path.GetFileNameWithoutExtension(absoluteFile);
-}
-else if (profile == null)
-{
-    SpectreLog.ActionError($"Profile '{settings.Profile}' not found in 'generators' section");
-    return;
-}
-
-var args = new CommandLineArgs { /* … */, File = settings.File };
-var generator = new TaskGenerator(args, profile);
-await generator.RunAsync();
-```
-
-`DeriveTypeFromFile`:
-
-```csharp
-private static string DeriveTypeFromFile(string file)
-{
-    var name = Path.GetFileName(file).ToLowerInvariant();
-    if (name.EndsWith(".form.js"))      return "jsform";
-    if (name.EndsWith(".webapi.js"))    return "jswebapi";
-    if (name.EndsWith(".form.ts"))      return "tsform";
-    if (name.EndsWith(".webapi.ts"))    return "tswebapi";
-    if (name.EndsWith(".generated.cs")) return "csharp";
-    throw new ArgumentException(
-        $"Cannot derive generator type from '{file}'. " +
-        "Expected one of: .form.js, .webapi.js, .form.ts, .webapi.ts, .generated.cs");
-}
-```
-
-`ReverseParseRootNamespace` — see §2.3 bis for the full regex set.
-
-#### c) `Tasks/TaskGenerator.cs` — two guard clauses only
-
-Add at the top of `IsValidAsync`:
-
-```csharp
-if (!string.IsNullOrEmpty(Arg.File)) return true;
-```
-
-Add at the top of `GetSchemaNamesAsync`:
-
-```csharp
-if (!string.IsNullOrEmpty(Arg.File))
-{
-    var file = Path.GetFullPath(Arg.File);
-    var schema = Helper.GetSchemaNameFromFile(file, DeriveEndsWith(Json.type));
-    return new List<string> { schema };
-}
-```
-
-Existing routing (`schemaNames.Count > 500` vs targeted load) handles single-entity case optimally — no extra optimization needed.
-
-#### c) `Tasks/TaskGenerator.cs` — **two guard clauses only** (still respecting "no touch" constraint as much as possible)
-
-Add at the top of `IsValidAsync`:
-
-```csharp
-if (!string.IsNullOrEmpty(Arg.File)) return true;
-```
-
-Add at the top of `GetSchemaNamesAsync`:
-
-```csharp
-if (!string.IsNullOrEmpty(Arg.File))
-{
-    var file = Path.GetFullPath(Arg.File);
-    var endsWith = Path.GetExtension(file);                       // e.g. ".js"
-    if (endsWith == ".js" && !file.EndsWith(".form.js", …)) endsWith = ".webapi.js";
-    // … or use the existing GetSchemaNameFromFile helper
-    var schema = Helper.GetSchemaNameFromFile(file, Json.type.ToLower() switch { … });
-    return new List<string> { schema };
-}
-```
-
-The single-entity `entities` override already routes through the cheap path in `RunAsync`:
-
-```csharp
-if (schemaNames.Count > 500)
-    await ReadEntitiesMetadataAsync(ServiceClient, EntityFilters.Attributes);
-else
-    XrmHelper.EntitiesMetadata = await Metadata.GetEntitiesMetadataAsync(schemaNames);
-```
-
-So with one schema, **`ReadEntitiesMetadataAsync` (the expensive FormXml fetch) is skipped automatically**. No additional optimization required.
-
-### 2.5 Edge cases & how they are handled
-
-| Case                                                                        | Handling                                                                                                                             |
-| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| **File does not exist (update-only mode)**                                  | Fast-fail at command level (`Commands/GeneratorCommand.cs`) with `ActionError("--file is update-only: '<path>' does not exist.")` and return. **No file is created.** Profile mode still works for create-new. |
-| File outside `CurrentDirectory`                                             | `Path.GetFullPath` normalises; user can pass absolute path.                                                                          |
-| Schema in file name not in Dataverse                                        | Existing branch logs `ActionError("not found in the current instance !!!")`. User learns immediately.                                |
-| `ReverseParseRootNamespace` returns null                                    | Throw `DevKitValidationException` with a clear hint pointing at the JSON profile as the long-term fallback.                          |
-| `tsform/tswebapi` and `--rootnamespace` is reverse-parsed as null           | Already not required (current code skips `rootnamespace` validation for these two types).                                            |
-| Multi-segment rootnamespace (`X.Y.Z`) in source                            | `Helper.GetNameSpace` would reduce it to `Y` (or `Z`) before writing to JS file. Reverse-parse therefore recovers the **short** form. To regenerate correctly, user must keep the same convention (1 segment) OR provide a profile with the multi-segment rootnamespace. |
-| `--namespace` (csharp shareProject) omitted                                 | `Json.@namespace = null` — current default behaviour; `internal partial class Xxx : EntityBase` (no prefix).                          |
-| `CurrentFolder = "{CurrentDirectory}\{rootfolder}"` with derived rootfolder | `rootfolder = Path.GetDirectoryName(absoluteFile)` so `CurrentFolder` resolves to the file's folder. Helper diff (`Helper.IsTheSame`) still works on the same file. |
-| Old code present, only metadata changed                                     | `oldCode.Length > 0 && newCode.Length > 0 && !IsTheSame(oldDTS, newDTS)` branch updates the `.d.ts` companion.                       |
-| `OptionSet.ts` (tsform only)                                                | Regenerated after the entity loop — unchanged behaviour.                                                                             |
-| Connection setup                                                            | `--conn / --auth / --url` flow unchanged. `--file` does not affect auth.                                                             |
-| Combine `--file` with `--json`/`--profile`                                  | Profile settings win where set; `--file` only fills in the missing values (entity list, type, rootnamespace).                       |
-
-### 2.6 Net impact estimate
-
-| File                             | Lines added (≈) | Lines removed |
-| -------------------------------- | --------------- | ------------- |
-| `Models/GeneratorCommandArgs.cs` | 8               | 0             |
-| `Commands/GeneratorCommand.cs`   | 55              | 0             |
-| `Tasks/TaskGenerator.cs`         | 10 (guards)     | 0             |
-| **Total**                        | **~73**         | **0**         |
-
-No test fixture churn: existing `Json` + `generators[]` flows stay bit-exact.
+The CLI help text and documentation must not claim that no other file can be created.
 
 ---
 
-## 3. MCP integration analysis (separate concern)
+## 4. Deterministic derivation rules
 
-> Note: this section is **independent** of section 2. Per user instruction it was analysed earlier but kept here as a reference for later, isolated work.
+Create small, testable helpers in the CLI component, preferably next to `GeneratorCommand`. Do not place them in `DynamicsCrm.DevKit.Shared` for this change.
 
-### 3.1 Difficulties exposing `TaskGenerator` as an MCP tool
+### 4.1 Canonical target path
 
-| #   | Problem                                                                                                                                                                                                     |
-| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | **Filesystem side effects** — MCP server runs as its own process; `CWD` is not the user's workspace. Path must be injected by tool arg.                                                                     |
-| 2   | **Multiple companion files** — `jsform` writes both `.form.js` and `.d.ts`; `tsform` also writes `OptionSet.ts`. Result must enumerate them.                                                                |
-| 3   | **Diff vs old file** — Spectre progress / diff logs do not map to MCP structured result; need `{action, path, oldLength, newLength, changed}`.                                                              |
-| 4   | **Solution metadata unused** — `ITask.SolutionId/SolutionPrefix` are set but never read inside `TaskGenerator`.                                                                                             |
-| 5   | **"Read all metadata" cost** — when `Json.entities == "*"` or `>500`, `ReadEntitiesMetadataAsync` fetches FormXml for every entity in the instance. AI clients usually want 1–N entities, so this is heavy. |
-| 6   | **JSON profile required today** — AI client has no project file readily. Either inject a generated `JsonGenerator` or wrap and bypass.                                                                      |
-| 7   | **`McpExecutionContext.MutationsBlocked` only blocks Dataverse mutations** (see `ManageColumnTool.cs:2347`, `ManageRibbonTool.cs:1594`). It does NOT cover file IO — needs separate `previewOnly` flag.     |
+1. Reject null, empty, or whitespace input.
+2. Resolve it against `settings.CurrentDirectory` and call `Path.GetFullPath`.
+3. Require `File.Exists(absoluteFile)`.
+4. Use the canonical absolute path for validation and logging.
 
-### 3.2 Recommendation — wrap, do NOT clone
+Validation failures must throw `DevKitValidationException`, so `DevKitCommand` returns `ExitCodes.ValidationError`. Do not merely log and return from `RunTaskAsync`, because that path returns a success exit code.
 
-Create **`GenerateEntityCodeTool.cs`** (or 5 narrow tools) under `Mcp/Tools/`. Inside the tool:
+### 4.2 Type and schema name
 
-```csharp
-var args = new CommandLineArgs { CurrentDirectory = request.ProjectRoot, ServiceClient = _serviceClient };
-var profile = BuildProfileFromRequest(request);     // builds JsonGenerator in-memory, no file IO
-var task = new TaskGenerator(args, profile);
-await task.RunAsync();
-return BuildStructuredResult(...);                  // McpToolBase.Success(...)
+Match the full filename suffix, case-insensitively, using this table:
+
+| Full suffix | `JsonGenerator.type` |
+| --- | --- |
+| `.generated.cs` | `csharp` |
+| `.webapi.js` | `jswebapi` |
+| `.form.js` | `jsform` |
+| `.webapi.ts` | `tswebapi` |
+| `.form.ts` | `tsform` |
+
+The schema name is the filename with the **complete matched suffix** removed.
+
+| File | Schema name |
+| --- | --- |
+| `Account.form.js` | `Account` |
+| `new_Project.webapi.ts` | `new_Project` |
+| `Account.generated.cs` | `Account` |
+
+Do not use `Path.GetFileNameWithoutExtension`: for `Account.form.js` it returns `Account.form`, which is wrong. Reject an empty schema name and every suffix outside the table. Bare schema names and custom `.cs`, `.js`, or `.ts` files are not supported.
+
+### 4.3 Output directory and `rootfolder`
+
+Let `targetDirectory = Path.GetDirectoryName(absoluteFile)` and set:
+
+```text
+profile.rootfolder = Path.GetRelativePath(settings.CurrentDirectory, targetDirectory)
 ```
 
-The real work stays in `TaskGenerator`. The tool is a thin adapter that:
+Use `.` when the result is empty. Relative paths containing `..` are valid and are required to support a target outside the current directory.
 
-- Maps MCP request fields → `JsonGenerator` (so AI client never authors a JSON profile).
-- Decides `previewOnly` from `_context.MutationsBlocked` or an explicit arg.
-- Translates the per-entity `CliAction` log stream into a structured `files[]` array.
-- Forbids `--rootfolder`/filesystem side effects when `previewOnly=true`.
+Before invoking the task, combine `settings.CurrentDirectory` and `profile.rootfolder`, canonicalize the result, and assert that it equals `targetDirectory` using the platform-appropriate path comparison. This is a defensive invariant against writing to the wrong directory.
 
-To avoid touching `SpectreLog` (which writes to stderr and may pollute MCP stdio transport), wrap the call in `AnsiConsole.Console.Profile.Capabilities.Interactive = false;` or temporarily redirect `SpectreLog` to a sink. Decide during implementation.
+Do not assign `targetDirectory` directly to `rootfolder`; the current string-based `TaskGenerator.CurrentFolder` would produce an invalid path such as `D:\work\D:\other`.
 
-### 3.3 Risks specific to MCP (independent of section 2)
+### 4.4 `entities`
 
-- `XrmHelper.EntitiesMetadata` is a **static cache** in `Shared`. Two consecutive MCP calls with different filter sets may observe stale state. Wrapper must either reset or document.
-- `FileHelper.ForceWriteAllTextAsync` clobbers without confirmation. **`previewOnly=true` must be the default** for any new MCP tool that writes files.
-- Tool-result size: a generated `Account.form.js` can be tens of KB. Return only summary + `oldLength/newLength/changed`; do not echo full file content in the tool result.
+Set `profile.entities` to the schema name derived in section 4.2. Do not set it to `folder`, `*`, or the filename.
 
-### 3.4 Decision matrix — section 2 vs section 3
+This is the only selection mechanism needed by `TaskGenerator`; `CommandLineArgs.File` is not required.
 
-| Criterion                    | Section 2 (CLI `--file`) | Section 3 (MCP tool)            |
-| ---------------------------- | ------------------------ | ------------------------------- |
-| Effort                       | Low (~45 lines)          | High (tool class, schema, host) |
-| Touch `TaskGenerator.cs`     | 2 guards (~8 lines)      | 0                               |
-| Touch `TaskWebResource.cs`   | 0                        | 0                               |
-| Useful from AI client        | Yes (shell)              | Yes (native MCP)                |
-| Risk of clobbering user code | Low (visible log)        | High → requires `previewOnly`   |
-| Reuses `Json.profile`        | Optional fallback        | Bypassed                        |
+### 4.5 Namespace recovery
+
+Namespace parsing is type-specific. Read the existing file before connecting to Dataverse so malformed input fails quickly.
+
+#### JavaScript form and Web API
+
+For `.form.js` and `.webapi.js`, capture the identifier from the generated header marker `/** @namespace <value> */` and set `profile.rootnamespace` to that value.
+
+This is sufficient even when an original profile used a multi-part value: the JS generators call `Helper.GetNameSpace`, and the generated file stores the resulting runtime namespace. Feeding that emitted namespace back through the same transformation reproduces the runtime output.
+
+Reject the file if the marker is absent, duplicated with conflicting values, or contains a value outside the identifier shape emitted by the generator.
+
+#### C# late-bound
+
+For `.generated.cs`, recover both values from generated declarations:
+
+- `profile.rootnamespace`: the namespace containing the generated `internal partial class` whose base type ends in `EntityBase`;
+- `profile.@namespace`: the optional qualifier before `EntityBase` in the base type.
+
+`internal partial class Account : EntityBase` means `profile.@namespace = null`, while `internal partial class Account : Shared.Model.EntityBase` means `profile.@namespace = "Shared.Model"`.
+
+The earlier draft stated that the C# `shareProject` value was not stored in generated output. That was incorrect: `CSharpLateBound.GetCsCode` emits it directly in the base type.
+
+Do not derive the root namespace only by stripping `.<Schema>OptionSets` from the first namespace. The class declaration is the authoritative anchor and avoids assumptions about sanitized class names. Do not require the emitted class identifier to equal the filename schema text because the generator may sanitize identifiers. Reject a C# file unless exactly one qualifying generated class and its containing namespace can be identified.
+
+#### TypeScript form and Web API
+
+For `.form.ts` and `.webapi.ts`, set `profile.rootnamespace = null`. Current `TaskGenerator.IsValidAsync` explicitly skips root-namespace validation for `tsform` and `tswebapi`, and the current TypeScript generator entry points do not accept a root namespace.
+
+Do not parse the “last `export namespace`” from `.form.ts`. The generated file contains entity/form namespaces, not the profile `rootnamespace`, and `TsForm.GetTsFormCodeAsync` does not consume that setting.
+
+### 4.6 In-memory profile
+
+Single-file mode must construct a new `JsonGenerator`; it must not mutate or merge a profile loaded from JSON.
+
+```text
+type          = derived type
+rootfolder    = relative target directory
+entities      = derived schema name
+rootnamespace = parsed value for JS/C#, otherwise null
+namespace     = parsed C# EntityBase qualifier, otherwise null
+```
+
+Other fields remain at their defaults.
 
 ---
 
-## 4. Proposed order of work
+## 5. Implementation touch points
 
-1. **Ship section 2 first** — small, low-risk, unblocks the most common user complaint ("I just want to update one file").
-2. **Validate with a smoke script** that compiles and runs `devkit generator --file Account.form.js …` against a sandbox env.
-3. **Then revisit section 3** once a wrapper-friendly seam (preview/dry-run, structured result shape) is defined.
+### 5.1 `Models/GeneratorCommandArgs.cs`
+
+- Add `File` with `[CommandOption("--file|-f")]`.
+- Describe it as an existing generated file and mention one-entity regeneration.
+- Remove unused imports already present in this empty model only if touched by normal compiler cleanup; do not make unrelated changes.
+
+### 5.2 `Commands/GeneratorCommand.cs`
+
+- Override `IsProfileRequired` and `IsJsonRequired`; both return `false` only when `File` is non-empty.
+- Override or extend validation so file existence, supported suffix, path invariant, and namespace parsing fail with `DevKitValidationException` before connection.
+- Add `--file` to `BuildArgRows` so the invocation is visible in CLI diagnostics.
+- Keep the current profile-mode behavior unchanged.
+- Add a separate single-file branch that constructs the in-memory profile described above.
+- Create the existing `CommandLineArgs` compatibility object and invoke the unchanged `TaskGenerator`.
+- Do not pass `File` into `CommandLineArgs`; routing is entirely expressed by the in-memory profile.
+
+Avoid reading `settings.JsonFile` unless it is non-null and exists. `File.Exists(null)` is safe, but an unconditional `ReadAllTextAsync(settings.JsonFile)` is not.
+
+### 5.3 `Tasks/TaskGenerator.cs`
+
+No change. Do not add early returns to `IsValidAsync` or `GetSchemaNamesAsync`. The adapter provides a valid profile and the existing `entities` branch already selects one schema.
+
+### 5.4 Expected scope
+
+The implementation should be localized to the command and argument model. If it requires changes to Shared generator logic or substantial changes to `TaskGenerator`, stop and re-evaluate the design.
 
 ---
 
-## 5. Open questions for review
+## 6. Error contract
 
-### Resolved in this revision
+Use concise validation messages with the offending canonical path when available.
 
-| # | Question                                                              | Decision                                                                                              |
-| - | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| 1 | Accept absolute paths for `--file`?                                   | **Yes** — `Path.GetFullPath` normalises either form.                                                  |
-| 2 | Merge profile + `--file` or override?                                 | **Merge** — profile wins where set; `--file` only fills in missing values.                            |
-| 3 | Read `rootnamespace` from the file vs require an explicit CLI option?  | **Read from file** — see §2.3 bis. No CLI option for `rootnamespace`.                                |
-| 4 | Support `--namespace` (csharp shareProject)?                          | **Yes, optional** — only meaningful for `csharp`.                                                     |
-| 5 | Update-only vs create-new in single-file mode?                         | **Update-only** — fast-fail if file missing. Create-new stays in profile mode.                        |
+| Condition | Required outcome |
+| --- | --- |
+| `--file` does not exist | Validation error; do not connect or generate. |
+| Unsupported suffix | Validation error listing all five supported suffixes. |
+| Empty schema after suffix removal | Validation error. |
+| JS namespace marker missing or ambiguous | Validation error explaining that the file is not recognized as DevKit-generated JS. |
+| C# generated class/namespace/base type missing or ambiguous | Validation error explaining that the file is not recognized as DevKit-generated C#. |
+| Derived output directory differs from target directory | Validation error; do not generate. |
+| Entity not found in Dataverse | Preserve the current `TaskGenerator` error text and behavior. |
 
-### Still open (for the next iteration)
-
-1. Do we want a CLI-level `--dry-run` flag in this PR (compute + diff but don't write), or defer to MCP wrapper?
-2. For the future MCP wrapper (§3): single generic tool with `type` enum, or 5 narrow tools? (Generic = less surface, but less discoverable for AI client.)
-3. Should we also expose `devkit generator --files "Account.form.js,Contact.form.js"` (plural) in the same PR, or keep PR 1 strictly single-file?
-4. When `ReverseParseRootNamespace` fails (rare — file edited by hand, regex mismatch), do we (a) throw a hard error asking for a profile, or (b) prompt user to pass `--rootnamespace` via a new flag? — see §2.5 row "ReverseParseRootNamespace returns null".
+Do not change existing public error text in `TaskGenerator`.
 
 ---
 
-## 6. References (file paths)
+## 7. Tests and acceptance criteria
 
-- `DynamicsCrm.DevKit.Cli/Tasks/TaskGenerator.cs` — orchestrator (do not touch core logic).
-- `DynamicsCrm.DevKit.Cli/Tasks/ITask.cs` — task contract.
-- `DynamicsCrm.DevKit.Cli/Commands/GeneratorCommand.cs` — CLI binding.
-- `DynamicsCrm.DevKit.Cli/Models/GeneratorCommandArgs.cs` — CLI args (to extend).
-- `DynamicsCrm.DevKit.Cli/Commands/WebResourceCommand.cs` — template for single-file bypass.
-- `DynamicsCrm.DevKit.Cli/Tasks/TaskWebResource.cs` — reference for `--file --webresource` implementation.
-- `DynamicsCrm.DevKit.Cli/Models/WebResourceCommandArgs.cs` — reference for `--file/-f --webresource/-w` options.
-- `DynamicsCrm.DevKit.Shared/Models/JsonGenerator.cs` — profile DTO.
-- `DynamicsCrm.DevKit.Cli/Mcp/McpServerHost.cs` — MCP server bootstrap.
-- `DynamicsCrm.DevKit.Cli/Mcp/Tools/McpToolBase.cs` — tool result helper.
-- `DynamicsCrm.DevKit.Cli/Mcp/McpExecutionContext.cs` — mutation policy.
-- `DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageColumnTool.cs:2347`, `ManageRibbonTool.cs:1594` — existing `MutationsBlocked` usage.
+Add focused `net10.0` tests under `DynamicsCrm.DevKit.UnitTests/Cli/` for the new parsing and profile-building helpers. Keep tests independent of a live Dataverse connection where possible.
+
+### 7.1 Required unit cases
+
+1. Each of the five suffixes maps to the expected type and schema.
+2. Suffix matching is case-insensitive.
+3. `Account.form.js` produces `Account`, not `Account.form`.
+4. Unsupported and empty-schema filenames fail validation.
+5. A CWD-relative path and an absolute path resolve to the same canonical target.
+6. A target outside CWD produces a relative `rootfolder` containing `..`, and recombines to the original directory.
+7. JS namespace parsing succeeds for current `.form.js` and `.webapi.js` fixture shapes.
+8. JS namespace parsing rejects a missing or conflicting marker.
+9. C# parsing recovers the class namespace.
+10. C# parsing recovers both an unqualified `EntityBase` and a qualified `<shareProject>.EntityBase`.
+11. TypeScript profiles leave `rootnamespace` null.
+12. `--file` makes JSON/profile optional; profile mode still requires both.
+13. If `--file`, `--json`, and `--profile` are all supplied, derived single-file routing values win.
+
+Use small inline fixture strings for parser tests. A regression test may additionally read the checked-in `TestAllInOne` outputs, but tests should not depend only on large generated fixtures.
+
+### 7.2 Smoke cases requiring Dataverse
+
+Run only when valid test credentials/environment are available:
+
+- regenerate one file of each supported type;
+- confirm no second entity is generated;
+- confirm the named target directory is used when the target is outside CWD;
+- confirm JS `.d.ts`, TS `OptionSet.ts`, and C# custom-file side effects match profile-mode behavior;
+- confirm a nonexistent entity uses the current error output.
+
+### 7.3 Verification commands
+
+```powershell
+dotnet build DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj
+dotnet test DynamicsCrm.DevKit.UnitTests/DynamicsCrm.DevKit.UnitTests.csproj --framework net10.0 --filter <focused-filter>
+```
+
+Do not run a full solution or packaging build for this change.
+
+### 7.4 Definition of done for the CLI phase
+
+- Profile mode behavior is unchanged.
+- All five generated suffixes work in update-only single-entity mode.
+- The selected target directory is deterministic for relative, absolute, and outside-CWD paths.
+- No `TaskGenerator.cs` or Shared file is changed.
+- Validation failures return the validation exit code.
+- Companion-file behavior is documented and tested.
+- Focused build and tests pass.
+
+---
+
+## 8. MCP integration: deferred phase design
+
+### 8.1 Why the CLI adapter must not be exposed directly as an MCP tool
+
+Calling `TaskGenerator.RunAsync` from an MCP tool currently has four unresolved contract problems:
+
+1. It writes files directly and cannot preview a complete change set.
+2. It reports through `SpectreLog` rather than returning structured per-file results.
+3. One entity operation can affect companion files, so a result cannot honestly describe only the requested path.
+4. `XrmHelper.EntitiesMetadata` and other generator state are static; repeated or concurrent long-lived MCP calls require an explicit cache-isolation policy.
+
+The MCP host currently derives tool availability from `[McpServerTool(ReadOnly = ...)]` and supports `readonly`/`all` categories. The previous draft's reference to a three-tier `ToolCategoryMap` is not accurate for the current `McpServerHost` implementation.
+
+`McpExecutionContext.MutationsBlocked` is documented as a Dataverse mutation boundary. It is not, by itself, a filesystem transaction or rollback mechanism.
+
+### 8.2 Required prerequisite seam
+
+Before adding a native tool, approve and design a generator execution seam that can produce a `GeneratorChangePlan` without modifying destination files. The plan must include every primary and companion file:
+
+```text
+GeneratorChangePlan
+  generatorType
+  schemaName
+  targetDirectory
+  files[]
+    path
+    action: create | update | unchanged
+    oldLength
+    newLength
+    contentHash
+    content (internal only; omitted from normal MCP result)
+  warnings[]
+```
+
+Applying a plan must be separate from computing it and occur only after all paths are canonicalized and validated. This likely requires a deliberate refactor around generator output/write boundaries; it is not part of the single-file CLI implementation and must not be simulated by redirecting global console output.
+
+Do not use a temporary-directory wrapper around `TaskGenerator` as the production design. Companion-file existence affects generation, copying an arbitrary target directory is expensive and risky, and global/static state would remain unresolved.
+
+### 8.3 Proposed future tool contract
+
+After the prerequisite seam exists, add one generic tool rather than five duplicate tools:
+
+```text
+tool name: generate_entity_code
+classification: mutating (`ReadOnly = false`)
+
+inputs:
+  targetFile       required; existing supported generated file
+  applyChanges     optional; default false
+
+structured result:
+  applied          boolean
+  generatorType
+  schemaName
+  targetDirectory
+  files[]          path, action, oldLength, newLength, contentHash
+  warnings[]
+```
+
+Rules:
+
+- `applyChanges=false` returns a preview and performs no filesystem writes.
+- `applyChanges=true` applies exactly the computed plan after rechecking path invariants.
+- Server dry-run policy must force preview behavior even if `applyChanges=true`; the result must clearly state that changes were not applied.
+- Require a configured workspace root and reject every canonical destination outside it.
+- Do not return generated source content by default; large entities can exceed practical MCP result sizes.
+- Return all companion files in `files[]`.
+- Preserve existing MCP structured-result conventions through `McpToolBase`.
+- Only the tool class receives `[McpServerToolType]`; helpers belong in an appropriate subnamespace.
+- Add focused MCP tests for preview, apply, workspace escape, companion enumeration, dry-run behavior, and repeated calls with different entities.
+
+### 8.4 MCP go/no-go criteria
+
+Do not implement the MCP tool until all of these are true:
+
+- a side-effect-free change plan can be computed;
+- plan application is explicit and path-bounded;
+- static metadata/cache behavior is safe for sequential and concurrent server calls;
+- Spectre output cannot corrupt stdio transport;
+- structured results enumerate every affected file; and
+- dry-run semantics for filesystem writes are approved and tested.
+
+---
+
+## 9. Implementation order
+
+1. Implement and test the CLI derivation/profile builder.
+2. Add the command option, validation overrides, diagnostics row, and single-file branch.
+3. Run the focused CLI build and unit tests.
+4. Smoke-test against Dataverse when credentials are available.
+5. Stop. Do not add MCP code in the same change.
+6. In a later design/PR, introduce the side-effect-free change-plan seam.
+7. Only then implement `generate_entity_code` and perform the repository-required MCP rebuild/reinstall/runtime verification.
+
+---
+
+## 10. Files for the implementing AI to inspect
+
+- `DynamicsCrm.DevKit.Cli/Commands/GeneratorCommand.cs`
+- `DynamicsCrm.DevKit.Cli/Models/GeneratorCommandArgs.cs`
+- `DynamicsCrm.DevKit.Cli/Commands/DevKitCommand.cs`
+- `DynamicsCrm.DevKit.Cli/Commands/WebResourceCommand.cs`
+- `DynamicsCrm.DevKit.Cli/Models/DevKitCommandArgs.cs`
+- `DynamicsCrm.DevKit.Cli/Models/CommandLineArgs.cs`
+- `DynamicsCrm.DevKit.Cli/Tasks/TaskGenerator.cs` (read-only for the CLI phase)
+- `DynamicsCrm.DevKit.Shared/Models/JsonGenerator.cs` (read-only)
+- `DynamicsCrm.DevKit.Shared/Helper.cs` (`GetNameSpace`, read-only)
+- `DynamicsCrm.DevKit.Shared/Logic/CSharpLateBound.cs` (read-only)
+- `DynamicsCrm.DevKit.Shared/Logic/JsForm.cs` (read-only)
+- `DynamicsCrm.DevKit.Shared/Logic/JsWebApi.cs` (read-only)
+- `DynamicsCrm.DevKit.Shared/Logic/TsForm.cs` (read-only)
+- `DynamicsCrm.DevKit.Shared/Logic/TsWebApi.cs` (read-only)
+- `DynamicsCrm.DevKit.Cli/Mcp/McpServerHost.cs` (future MCP phase)
+- `DynamicsCrm.DevKit.Cli/Mcp/McpExecutionContext.cs` (future MCP phase)
+- `DynamicsCrm.DevKit.Cli/Mcp/Tools/McpToolBase.cs` (future MCP phase)
+- `DynamicsCrm.DevKit.UnitTests/Cli/` (focused tests)
+
+Checked-in output examples for parser validation:
+
+- `DynamicsCrm.DevKit.Tests/TestAllInOne/Dev.AllInOne.Shared/Entities/Account.generated.cs`
+- `DynamicsCrm.DevKit.Tests/TestAllInOne/Dev.AllInOne.WebResource/entities/Account.form.js`
+- `DynamicsCrm.DevKit.Tests/TestAllInOne/Dev.AllInOne.WebResource/entities/Account.webapi.js`
+- `DynamicsCrm.DevKit.Tests/TestAllInOne/Dev.AllInOne.WebResourceTs/entities/Account.form.ts`
+- `DynamicsCrm.DevKit.Tests/TestAllInOne/Dev.AllInOne.WebResourceTs/entities/Account.webapi.ts`
+
+---
+
+## 11. Explicit non-goals
+
+- No multiple-file `--files` option.
+- No create-new behavior in single-file mode.
+- No new generator type.
+- No changes to Shared code generation.
+- No changes to `TaskGenerator` for the CLI phase.
+- No CLI dry-run flag in this phase.
+- No native MCP tool in the same implementation change.
+- No generated configuration or adapter for unsupported AI clients.

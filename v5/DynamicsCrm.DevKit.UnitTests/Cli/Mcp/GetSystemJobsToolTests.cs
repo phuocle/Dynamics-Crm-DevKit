@@ -209,28 +209,32 @@ public class GetSystemJobsToolTests
     public void FormatExecutionTime_UnderOneSecond_ReturnsMilliseconds()
     {
         var result = FormatExecutionTime(0.5);
-        Assert.IsTrue(result.EndsWith("ms"), "sub-second should display in ms");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result!.EndsWith("ms"), "sub-second should display in ms");
     }
 
     [TestMethod]
     public void FormatExecutionTime_Under60Seconds_ReturnsSeconds()
     {
         var result = FormatExecutionTime(30.5);
-        Assert.IsTrue(result.EndsWith("s") && !result.Contains("m"), "under 60s should display in seconds");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result!.EndsWith("s") && !result.Contains("m"), "under 60s should display in seconds");
     }
 
     [TestMethod]
     public void FormatExecutionTime_Under3600Seconds_ReturnsMinutesAndSeconds()
     {
         var result = FormatExecutionTime(125);
-        Assert.IsTrue(result.Contains("m") && result.Contains("s"), "125s should display as Xm Ys");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result!.Contains("m") && result.Contains("s"), "125s should display as Xm Ys");
     }
 
     [TestMethod]
     public void FormatExecutionTime_Over3600Seconds_ReturnsHoursAndMinutes()
     {
         var result = FormatExecutionTime(3661);
-        Assert.IsTrue(result.Contains("h") && result.Contains("m"), "3661s should display as Xh Ym");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result!.Contains("h") && result.Contains("m"), "3661s should display as Xh Ym");
     }
 
     // ── FormatTimeLabel ──────────────────────────────────────────────────────
