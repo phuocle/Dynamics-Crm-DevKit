@@ -253,6 +253,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // ── Web Resources ──
             ("webresources(", "manage_webresource",
                 "Web resources require base64 content encoding and proper type codes. manage_webresource handles encoding, validation, publish, and solution assignment."),
+            // Real entity set name is 'webresourceset' — 'webresources(' above only catches
+            // the wrong-name guess. Without this entry PATCH/DELETE webresourceset(guid)
+            // bypassed manage_webresource (no prefix check / publish / customizable gate).
+            // GET stays allowed so content download still works (manage_webresource has no download action).
+            ("webresourceset(", "manage_webresource",
+                "Web resource updates/deletes must go through manage_webresource for prefix check, publish, and customizable gate. manage_webresource handles encoding, validation, publish, and solution assignment."),
 
             // ── Security ──
             ("roles(", "manage_role",
