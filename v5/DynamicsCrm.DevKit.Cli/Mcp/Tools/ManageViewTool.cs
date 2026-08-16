@@ -11,7 +11,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.ServiceModel;
 using System.Text;
 using System.Text.Json;
 using System.Xml.Linq;
@@ -42,69 +41,60 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertViewResult)),
         Description(
-            "Manage views (savedquery/userquery). Actions: list, detail, create, update, rename, set_default, undo.\n" +
-            "SYNC RULE: every FetchXML <attribute> MUST have matching LayoutXML <cell>; mismatch blocks update. querytype: 0=Public, 4=QuickFind, 64=SubGrid.\n" +
-            "QuickFind (querytype=4): searchable fields are <condition> in <filter isquickfindfields=\"1\">; <cell> = display only.\n" +
-            "Always list/detail BEFORE editing. Pass workspace_folder for backups (saved to .devkit/backups/views/). See docs://instructions_for_views, schema://layoutxml, schema://fetchxml.")]
+            "Manage views (savedquery/userquery). Actions: 'list', 'detail' (read-only) | 'create', 'update', 'rename', 'set_default', 'undo' (mutations).\n\n" +
+            "WHEN TO USE:\n" +
+            "- List or inspect views of an entity (system savedquery or personal userquery, scoped by is_personal_view; use detail for XML)\n" +
+            "- Create/update a view from FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type); patch cell attributes, rename, set the default public view\n" +
+            "- Restore a view from a .fetchxml.bak backup file written by update/rename/undo (undo)\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_tables → column logical names for FetchXML attributes/conditions\n" +
+            "- execute_fetchxml → test a FetchXML before putting it into a view\n" +
+            "- manage_form → entity forms; publish_customizations → batch publish; execute_webapi → raw savedquery access\n\n" +
+            "Created views are always Public (querytype=0). QuickFind views: searchable fields are <condition> in <filter isquickfindfields=\"1\">; grid columns are display only. " +
+            "Always list/detail BEFORE editing. workspace_folder is REQUIRED for update/rename/undo — current view XML is backed up to {workspace_folder}/.devkit/backups/views/ before overwrite. See docs://instructions_for_views, schema://fetchxml.")]
         public CallToolResult manage_view(
-            [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'."
-            )] string action,
-            [Description("Entity Display/logical name (Display Name resolved first)."
-            )] string entity_name,
-            [Description("GUID. Required: detail/update/rename/undo."
-            )] string view_id = "",
-            [Description("Name contains. 1 match → auto-select; multiple → returns candidates, use view_id."
-            )] string view_name = "",
-            [Description("0=Public, 1=Lookup, 4=QuickFind, 64=SubGrid. -1=all."
-            )] int query_type = -1,
-            [Description("List only. Detail always includes XMLs."
-            )] bool include_fetchxml = false,
-            [Description("Include userquery (personal views)."
-            )] bool include_personal = false,
-            [Description("update/create: LayoutXML. undo: backup path."
-            )] string layoutxml = "",
-            [Description("Empty = keep (update) / auto-generate (create). undo: backup path."
-            )] string fetchxml = "",
-            [Description("XSD + sync check before write."
-            )] bool validate = true,
-            [Description("Backup before overwrite."
-            )] bool backup = true,
-            [Description("JSON array of {cell_name, set_attributes, remove_attributes}. Patch cell attrs (imageproviderwebresource, ishidden, …) without rebuilding LayoutXML."
-            )] string cell_updates_json = "",
-            [Description("Optional workspace folder for backups."
-            )] string workspace_folder = "")
-        {
-            _workspaceFolder = workspace_folder;
+            [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action,
+            [Description("Entity Display/logical name (Display Name resolved first).")] string entity_name,
+            [Description("GUID. Required: detail/update/rename/undo.")] string view_id = "",
+            [Description("Name contains. 1 match → auto-select; multiple → returns candidates, use view_id.")] string view_name = "",
+            [Description("false = system views (savedquery), true = personal views (userquery) — scopes list and view_name resolution.")] bool is_personal_view = false,
+            [Description("create/update: FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type). undo: .fetchxml.bak backup file path from .devkit/backups/views/.")] string fetchxml = "",
+            [Description("JSON array of {cell_name, set_attributes, remove_attributes}. Patch cell attrs (imageproviderwebresource, ishidden, …) without changing the FetchXML.")] string cell_updates_json = "",
+            [Description("Required for update/rename/undo — current view XML is backed up to {workspace_folder}/.devkit/backups/views/ before overwrite.")] string workspace_folder = "")
+        {            
             try
             {
+                _workspaceFolder = workspace_folder;
                 if (string.IsNullOrWhiteSpace(action))
-                    return Error("Error: action is required. Valid values: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.");
+                    return Error("action is required.", "Valid values: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.");
 
                 if (string.IsNullOrWhiteSpace(entity_name))
-                    return Error("Error: entity_name is required.");
+                    return Error("entity_name is required.");
 
                 var normalizedAction = action.Trim().ToLowerInvariant();
                 var entityName = entity_name.Trim();
 
-                // Early view_id GUID validation for actions that require it
                 if (!string.IsNullOrWhiteSpace(view_id) && !Guid.TryParse(view_id.Trim(), out _))
-                    return Error($"Error: '{view_id}' is not a valid GUID.");
+                    return Error($"'{view_id}' is not a valid GUID.");
 
                 var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_view");
                 if (!entityResult.IsSuccess)
-                    return Error($"Error: {entityResult.Error}");
+                    return Error(entityResult.Error);
                 entityName = entityResult.Value.LogicalName;
+
+                if ((normalizedAction is "update" or "rename" or "undo") && string.IsNullOrWhiteSpace(workspace_folder))
+                    return Error($"workspace_folder is required when action='{normalizedAction}' — current view XML is backed up to {{workspace_folder}}/.devkit/backups/views/ before overwrite.");
 
                 return normalizedAction switch
                 {
-                    "list" => HandleList(entityName, view_name, query_type, include_fetchxml, include_personal),
-                    "detail" => HandleDetail(entityName, view_id, view_name),
-                    "create" => HandleCreate(entityName, view_name, query_type, layoutxml, fetchxml, validate),
-                    "update" => HandleUpdate(entityName, view_id, view_name, query_type, include_personal, layoutxml, fetchxml, validate, backup, cell_updates_json),
-                    "rename" => HandleRename(entityName, view_id, view_name, backup),
+                    "list" => HandleList(entityName, view_name, is_personal_view),
+                    "detail" => HandleDetail(entityName, view_id, view_name, is_personal_view),
+                    "create" => HandleCreate(entityName, view_name, fetchxml),
+                    "update" => HandleUpdate(entityName, view_id, view_name, is_personal_view, fetchxml, cell_updates_json),
+                    "rename" => HandleRename(entityName, view_id, view_name),
                     "set_default" => HandleSetDefault(entityName, view_id, view_name),
-                    "undo" => HandleUndo(entityName, view_id, layoutxml, fetchxml, validate),
-                    _ => Error($"Error: '{action}' is not a valid action. Valid actions: list, detail, create, update, rename, set_default, undo.")
+                    "undo" => HandleUndo(entityName, view_id, fetchxml),
+                    _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")
                 };
             }
             catch (Exception ex)
@@ -113,190 +103,213 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        // ── Action: list ──────────────────────────────────────────────────
 
-        private CallToolResult HandleList(string entityName, string viewName, int queryType, bool includeFetchXml, bool includePersonal)
+        private CallToolResult HandleList(string entityName, string viewName, bool isPersonalView)
         {
+            var empty = new EntityCollection().Entities;
             if (!string.IsNullOrWhiteSpace(viewName))
             {
                 var nameFilter = viewName.Trim();
-                var matchingViews = FindViewsByNameContains(entityName, nameFilter, queryType, includeFetchXml);
-                var matchingPersonal = includePersonal
-                    ? FindPersonalViewsByNameContains(entityName, nameFilter, queryType, includeFetchXml)
-                    : new EntityCollection().Entities;
+                var matchingViews = isPersonalView ? empty : FindViewsByNameContains(entityName, nameFilter);
+                var matchingPersonal = isPersonalView ? FindPersonalViewsByNameContains(entityName, nameFilter) : empty;
 
                 if (matchingViews.Count == 0 && matchingPersonal.Count == 0)
-                    return Success($"[Views] {entityName} — 0 views found matching '{nameFilter}'", null);
+                    return Success($"No views found for '{entityName}' matching '{nameFilter}'.", new UpsertViewResult
+                    {
+                        Action = "list", Entity = entityName, TotalCount = 0, Status = "success"
+                    });
                 if (matchingViews.Count == 1 && matchingPersonal.Count == 0)
                 {
                     var matchId = matchingViews[0].GetAttributeValue<Guid>("savedqueryid");
-                    return HandleDetail(entityName, matchId.ToString(), "");
+                    return HandleDetail(entityName, matchId.ToString(), "", false);
                 }
                 if (matchingViews.Count == 0 && matchingPersonal.Count == 1)
                 {
                     var matchId = matchingPersonal[0].GetAttributeValue<Guid>("userqueryid");
-                    return HandleDetail(entityName, matchId.ToString(), "");
+                    return HandleDetail(entityName, matchId.ToString(), "", true);
                 }
-                return Success(FormatViewList(entityName, matchingViews, includeFetchXml, includePersonal, nameFilter, matchingPersonal.Count > 0 ? matchingPersonal : null), null);
+
+                var matchingEntries = BuildViewListEntries(matchingViews, matchingPersonal);
+                return Success($"Found {matchingEntries.Count} views for '{entityName}' matching '{nameFilter}'.", new UpsertViewResult
+                {
+                    Action = "list", Entity = entityName, TotalCount = matchingEntries.Count,
+                    Views = matchingEntries.Count > 0 ? matchingEntries : null, Status = "success"
+                });
             }
 
-            var systemViews = GetSystemViews(entityName, queryType, includeFetchXml);
-            var personalViews = includePersonal
-                ? GetPersonalViews(entityName, queryType, includeFetchXml)
-                : new EntityCollection().Entities;
+            var systemViews = isPersonalView ? empty : GetSystemViews(entityName);
+            var personalViews = isPersonalView ? GetPersonalViews(entityName) : empty;
 
             if (systemViews.Count == 0 && personalViews.Count == 0)
             {
-                var typeHint = queryType >= 0 ? $" with querytype={queryType}" : "";
-                return Success($"[Views] {entityName} — 0 views found{typeHint}", null);
+                return Success($"No {(isPersonalView ? "personal" : "system")} views found for '{entityName}'.", new UpsertViewResult
+                {
+                    Action = "list", Entity = entityName, TotalCount = 0, Status = "success"
+                });
             }
 
-            return Success(FormatViewList(entityName, systemViews, includeFetchXml, includePersonal, null, personalViews), null);
+            var entries = BuildViewListEntries(systemViews, personalViews);
+            var summary = isPersonalView
+                ? $"Found {personalViews.Count} personal views for '{entityName}'."
+                : $"Found {systemViews.Count} system views for '{entityName}'.";
+            return Success(summary, new UpsertViewResult
+            {
+                Action = "list", Entity = entityName, TotalCount = entries.Count,
+                Views = entries.Count > 0 ? entries : null, Status = "success"
+            });
         }
 
-        // ── Action: detail ────────────────────────────────────────────────
+        private static List<ViewListEntry> BuildViewListEntries(DataCollection<Entity> systemViews, DataCollection<Entity> personalViews)
+        {
+            var entries = new List<ViewListEntry>(systemViews.Count + personalViews.Count);
+            foreach (var view in systemViews)
+                entries.Add(ToViewListEntry(view));
+            foreach (var view in personalViews)
+                entries.Add(ToViewListEntry(view));
+            return entries;
+        }
 
-        private CallToolResult HandleDetail(string entityName, string viewId, string viewName)
+        private static ViewListEntry ToViewListEntry(Entity view)
+        {
+            var isSystem = string.Equals(view.LogicalName, "savedquery", StringComparison.OrdinalIgnoreCase);
+            var qt = view.GetAttributeValue<int?>("querytype");
+            var description = view.GetAttributeValue<string>("description");
+            return new ViewListEntry
+            {
+                ViewId = GetViewId(view).ToString(),
+                ViewName = view.GetAttributeValue<string>("name") ?? "",
+                QueryType = qt,
+                QueryTypeName = qt.HasValue ? MapQueryType(qt.Value) : null,
+                IsDefault = isSystem ? view.GetAttributeValue<bool?>("isdefault") : null,
+                IsActive = (view.GetAttributeValue<OptionSetValue>("statecode")?.Value ?? 0) == 0,
+                IsManaged = isSystem ? view.GetAttributeValue<bool?>("ismanaged") : null,
+                Source = isSystem ? "system" : "personal",
+                Description = string.IsNullOrWhiteSpace(description) ? null : description
+            };
+        }
+
+
+        private CallToolResult HandleDetail(string entityName, string viewId, string viewName, bool isPersonalView)
         {
             if (string.IsNullOrWhiteSpace(viewId) && string.IsNullOrWhiteSpace(viewName))
-                return Error("Error: view_id or view_name is required for 'detail' action.");
+                return Error("view_id or view_name is required when action='detail'.");
 
+            Guid id;
             if (!string.IsNullOrWhiteSpace(viewId))
             {
-                if (!Guid.TryParse(viewId.Trim(), out var id))
-                    return Error($"Error: '{viewId}' is not a valid GUID.");
-                var detailText = GetViewDetail(id, entityName);
-                return detailText.StartsWith("Error:", StringComparison.OrdinalIgnoreCase)
-                    ? Error(detailText)
-                    : Success(detailText, null);
+                if (!Guid.TryParse(viewId.Trim(), out id))
+                    return Error($"'{viewId}' is not a valid GUID.");
+            }
+            else
+            {
+                var resolved = ResolveViewByName(entityName, viewName, isPersonalView, "detail");
+                if (!string.IsNullOrEmpty(resolved.Error))
+                    return Error(resolved.Error, details: resolved.Candidates);
+                id = resolved.ViewId;
             }
 
-            var resolved = ResolveViewByName(entityName, viewName, -1, true, "detail");
-            if (!string.IsNullOrEmpty(resolved.Error))
-                return Error(resolved.Error);
+            var view = isPersonalView ? TryGetPersonalView(id) : TryGetSystemView(id);
+            if (view == null)
+                return Error($"No {(isPersonalView ? "personal" : "system")} view found with ID '{id}'.",
+                    $"Use manage_view action='list' entity_name='{entityName}' to find valid view IDs.");
 
-            var resolvedDetailText = GetViewDetail(resolved.ViewId, entityName);
-            return resolvedDetailText.StartsWith("Error:", StringComparison.OrdinalIgnoreCase)
-                ? Error(resolvedDetailText)
-                : Success(resolvedDetailText, null);
+            return BuildViewDetailResult(view);
         }
 
-        // ── Action: create ─────────────────────────────────────────────────
 
-        private CallToolResult HandleCreate(string entityName, string viewName, int queryType,
-            string layoutxml, string fetchxml, bool validate)
+        private CallToolResult HandleCreate(string entityName, string viewName, string fetchxml)
         {
             if (string.IsNullOrWhiteSpace(viewName))
-                return Error("Error: view_name is required for 'create' action.");
-
-            if (string.IsNullOrWhiteSpace(layoutxml))
-                return Error("Error: layoutxml is required for 'create' action.");
+                return Error("view_name is required when action='create'.");
 
             viewName = viewName.Trim();
-            var effectiveQueryType = queryType >= 0 ? queryType : 0;
-            var newLayoutXml = ViewXmlHelper.StripXmlDeclaration(layoutxml.Trim());
-            newLayoutXml = EnsureObjectTypeCode(newLayoutXml, entityName);
+
+            var meta = RetrieveEntityMetadata(entityName);
             var newFetchXml = string.IsNullOrWhiteSpace(fetchxml)
-                ? $"<fetch><entity name='{entityName}'><attribute name='{entityName}id'/></entity></fetch>"
+                ? $"<fetch><entity name='{entityName}'><attribute name='{meta.PrimaryIdAttribute}'/><attribute name='{meta.PrimaryNameAttribute}'/></entity></fetch>"
                 : ViewXmlHelper.StripXmlDeclaration(fetchxml.Trim());
 
             var fetchNormalization = NormalizeFetchXmlNames(newFetchXml, entityName);
             if (fetchNormalization.Errors.Count > 0)
-                return Error(FormatNameResolutionErrors("ViewCreate", entityName, viewName, null, fetchNormalization.Errors));
+                return Error(NameResolutionMessage("create", entityName, fetchNormalization.Errors),
+                    NameResolutionHint, new { errors = fetchNormalization.Errors });
             newFetchXml = fetchNormalization.Xml;
-
-            var layoutNormalization = NormalizeLayoutXmlNames(newLayoutXml, newFetchXml, entityName);
-            if (layoutNormalization.Errors.Count > 0)
-                return Error(FormatNameResolutionErrors("ViewCreate", entityName, viewName, null, layoutNormalization.Errors));
-            newLayoutXml = layoutNormalization.Xml;
+            newFetchXml = EnsureLayoutBuildableFetchXml(newFetchXml, meta);
 
             var duplicate = FindViewByName(entityName, viewName);
             if (duplicate != null)
             {
                 var dupId = duplicate.GetAttributeValue<Guid>("savedqueryid");
                 return Error(
-                    $"[Error] A view with this name already exists\n" +
-                    $"Entity: {entityName}\n" +
-                    $"Name: {viewName}\n" +
-                    $"ExistingViewId: {dupId}\n" +
-                    $"Tip: Choose a different name or use action='update' with the existing view_id");
+                    $"A view named '{viewName}' already exists on '{entityName}' (view_id={dupId}).",
+                    "Choose a different name or use action='update' with the existing view_id.");
             }
 
-            if (validate)
-            {
-                var validationResult = RunValidation(newLayoutXml, newFetchXml, newFetchXml, effectiveQueryType, null);
-                if (validationResult != null)
-                {
-                    var sb = new StringBuilder(512);
-                    sb.AppendLine($"[ViewCreate] BLOCKED — Validation failed");
-                    sb.AppendLine($"Entity: {entityName}");
-                    sb.AppendLine($"ViewName: {viewName}");
-                    sb.AppendLine($"Errors: {validationResult.Value.Errors.Count}");
-                    foreach (var error in validationResult.Value.Errors)
-                        sb.AppendLine($"- {error}");
-                    sb.AppendLine($"Tip: Fix the errors above and retry. Refer to docs://instructions_for_views for rules.");
-
-                    var allIssues = new List<string>(validationResult.Value.Errors);
-                    if (validationResult.Value.Warnings.Count > 0) allIssues.AddRange(validationResult.Value.Warnings);
-
-                    return new CallToolResult
+            var (fetchErrors, fetchWarnings) = ViewXmlHelper.ValidateFetchXml(newFetchXml);
+            if (fetchErrors.Count > 0)
+                return Error(
+                    $"CREATE view '{viewName}' on '{entityName}' blocked — {fetchErrors.Count} validation error(s). First: {fetchErrors[0]}",
+                    ValidationFailedHint,
+                    new UpsertViewResult
                     {
-                        Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
-                        {
-                            Action = "created", Entity = entityName, ViewName = viewName,
-                            Status = "blocked_validation", Validated = true, ValidationErrors = allIssues, Published = false
-                        })
-                    };
-                }
-            }
+                        Action = "create", Entity = entityName, ViewName = viewName,
+                        Status = "blocked_validation", Validated = true,
+                        ValidationErrors = fetchErrors,
+                        ValidationWarnings = fetchWarnings.Count > 0 ? fetchWarnings : null, Published = false
+                    });
 
-            if (validate)
-            {
-                var fieldErrors = ValidateFieldNames(entityName, newFetchXml);
-                if (fieldErrors.Count > 0)
-                {
-                    var sb = new StringBuilder(512);
-                    sb.AppendLine($"[ViewCreate] BLOCKED — Field(s) not found in entity metadata");
-                    sb.AppendLine($"Entity: {entityName}");
-                    sb.AppendLine($"ViewName: {viewName}");
-                    sb.AppendLine($"Errors: {fieldErrors.Count}");
-                    foreach (var error in fieldErrors)
-                        sb.AppendLine($"- {error}");
-                    sb.AppendLine($"Tip: Use get_tables('{entityName}') to list all available fields.");
-
-                    var allIssues = new List<string>(fieldErrors);
-
-                    return new CallToolResult
+            var fieldErrors = ValidateFieldNames(entityName, newFetchXml);
+            if (fieldErrors.Count > 0)
+                return Error(
+                    $"CREATE view '{viewName}' on '{entityName}' blocked — {fieldErrors.Count} field(s) not found in entity metadata. First: {fieldErrors[0]}",
+                    $"Use get_tables('{entityName}') to list all available fields.",
+                    new UpsertViewResult
                     {
-                        Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
-                        {
-                            Action = "created", Entity = entityName, ViewName = viewName,
-                            Status = "blocked_validation", Validated = true, ValidationErrors = allIssues, Published = false
-                        })
-                    };
-                }
-            }
+                        Action = "create", Entity = entityName, ViewName = viewName,
+                        Status = "blocked_validation", Validated = true, ValidationErrors = fieldErrors, Published = false
+                    });
+
+            var serverError = ValidateFetchXmlExpression(newFetchXml);
+            if (serverError != null)
+                return Error(
+                    $"CREATE view '{viewName}' on '{entityName}' blocked — FetchXML failed server-side validation. {serverError}",
+                    ServerValidationHint,
+                    BuildBlockedValidationDto("create", entityName, Guid.Empty, viewName,
+                        [serverError], null, null, null));
+
+            var layout = BuildLayoutXmlFromFetch(entityName, newFetchXml, meta);
+            if (layout.Error != null)
+                return Error($"CREATE view '{viewName}' on '{entityName}' blocked — {layout.Error}");
+            var newLayoutXml = layout.Xml;
+
+            var syncErrors = ViewXmlHelper.ValidateSync(newFetchXml, newLayoutXml);
+            if (syncErrors.Count > 0)
+                return Error(
+                    $"CREATE view '{viewName}' on '{entityName}' blocked — generated layout failed sync check ({syncErrors.Count} error(s)). First: {syncErrors[0]}",
+                    ValidationFailedHint,
+                    BuildBlockedValidationDto("create", entityName, Guid.Empty, viewName,
+                        syncErrors, null, null, null));
 
             var newView = new Entity("savedquery")
             {
                 ["name"] = viewName,
                 ["returnedtypecode"] = entityName,
-                ["querytype"] = effectiveQueryType,
+                ["querytype"] = 0,
                 ["fetchxml"] = newFetchXml,
                 ["layoutxml"] = newLayoutXml
             };
             if (_options.DryRun)
-                return DryRun($"Would CREATE view '{viewName}' on entity '{entityName}'.", new UpsertViewResult
+                return DryRun($"Would CREATE view '{viewName}' on entity '{entityName}' — {layout.ColumnCount} columns auto-generated from FetchXML.", new UpsertViewResult
                 {
                     Action = "create",
                     Entity = entityName,
                     ViewName = viewName,
                     Status = "not_executed",
-                    Validated = validate,
+                    Validated = true,
                     Published = false,
-                    CreateMode = "metadata"
+                    CreateMode = "metadata",
+                    FetchXml = newFetchXml,
+                    LayoutXml = newLayoutXml
                 });
 
             var newViewId = DataverseMutationExecutor.Create(_context, _serviceClient, newView);
@@ -304,65 +317,54 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             PublishHelper.PublishEntity(_context, _serviceClient, entityName);
             MetadataOperationWaitHelper.WaitAfterFormView();
 
-            var resultSb = new StringBuilder(256);
-            resultSb.AppendLine($"[ViewCreate] {entityName} — {viewName}");
-            resultSb.AppendLine($"ViewId: {newViewId}");
-            resultSb.AppendLine($"Status: Created successfully");
-            resultSb.AppendLine($"Validated: {(validate ? "yes (sync OK)" : "skipped")}");
-            resultSb.AppendLine("Published: yes");
-            var quickFindColumns = AppendQuickFindColumnsSummary(resultSb, effectiveQueryType, newFetchXml);
+            var text = $"Created view '{viewName}' ({newViewId}) on '{entityName}' — Public view, {layout.ColumnCount} columns auto-generated from FetchXML" +
+                ", validated (client + server), published.";
 
-            return new CallToolResult
+            return Success(text, new UpsertViewResult
             {
-                Content = [new TextContentBlock { Text = resultSb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
-                {
-                    Action = "created", Entity = entityName, ViewId = newViewId.ToString(), ViewName = viewName,
-                    Status = "created", Validated = validate, Published = true,
-                    CreateMode = SolutionComponentCreateMode.None.ToString(),
-                    QuickFindColumns = quickFindColumns
-                })
-            };
+                Action = "created", Entity = entityName, ViewId = newViewId.ToString(), ViewName = viewName,
+                Status = "created", Validated = true, Published = true,
+                CreateMode = SolutionComponentCreateMode.None.ToString(),
+                FetchXml = newFetchXml,
+                LayoutXml = newLayoutXml
+            });
         }
 
-        // ── Action: update ─────────────────────────────────────────────────
 
         private CallToolResult HandleUpdate(string entityName, string viewId,
-            string viewName, int queryType, bool includePersonal,
-            string layoutxml, string fetchxml, bool validate, bool backup,
+            string viewName, bool isPersonalView,
+            string fetchxml,
             string cellUpdatesJson = "")
         {
             if (string.IsNullOrWhiteSpace(viewId) && string.IsNullOrWhiteSpace(viewName))
-                return Error("Error: view_id or view_name is required for 'update' action.");
+                return Error("view_id or view_name is required when action='update'.");
 
             Guid updateId;
             if (!string.IsNullOrWhiteSpace(viewId))
             {
                 if (!Guid.TryParse(viewId.Trim(), out updateId))
-                    return Error($"Error: '{viewId}' is not a valid GUID.");
+                    return Error($"'{viewId}' is not a valid GUID.");
             }
             else
             {
-                var resolved = ResolveViewByName(entityName, viewName, queryType, includePersonal, "update");
+                var resolved = ResolveViewByName(entityName, viewName, isPersonalView, "update");
                 if (!string.IsNullOrEmpty(resolved.Error))
-                    return Error(resolved.Error);
+                    return Error(resolved.Error, details: resolved.Candidates);
                 updateId = resolved.ViewId;
             }
 
-            var hasLayoutXml = !string.IsNullOrWhiteSpace(layoutxml);
             var hasCellUpdates = !string.IsNullOrWhiteSpace(cellUpdatesJson);
 
-            if (!hasLayoutXml && !hasCellUpdates)
-                return Error("Error: at least one of layoutxml or cell_updates_json is required for 'update' action.");
+            if (!hasCellUpdates && string.IsNullOrWhiteSpace(fetchxml))
+                return Error("at least one of fetchxml or cell_updates_json is required when action='update' — LayoutXML is always auto-generated from fetchxml.");
 
             var newFetchXml = string.IsNullOrWhiteSpace(fetchxml) ? null : ViewXmlHelper.StripXmlDeclaration(fetchxml.Trim());
 
             var currentView = RetrieveView(updateId);
             if (currentView == null)
                 return Error(
-                    $"[Error] View not found\n" +
-                    $"ViewId: {updateId}\n" +
-                    $"Tip: Use manage_view with action='list' and entity_name='{entityName}' to find valid view IDs");
+                    $"View not found (view_id={updateId}).",
+                    $"Use manage_view action='list' entity_name='{entityName}' to find valid view IDs.");
 
             var currentFetchXml = currentView.GetAttributeValue<string>("fetchxml") ?? "";
             var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
@@ -374,102 +376,116 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var fetchNormalization = NormalizeFetchXmlNames(newFetchXml, entityName);
                 if (fetchNormalization.Errors.Count > 0)
-                    return Error(FormatNameResolutionErrors("ViewUpdate", entityName, currentViewName, updateId, fetchNormalization.Errors));
+                    return Error(NameResolutionMessage("update", entityName, fetchNormalization.Errors),
+                        NameResolutionHint, new { errors = fetchNormalization.Errors });
                 newFetchXml = fetchNormalization.Xml;
             }
 
             var effectiveFetchXml = newFetchXml ?? currentFetchXml;
 
-            var baseLayoutXml = hasLayoutXml
-                ? ViewXmlHelper.StripXmlDeclaration(layoutxml.Trim())
-                : currentLayoutXml;
+            var regenerateLayout = newFetchXml != null && !hasCellUpdates;
 
+            string newLayoutXml;
             List<string> cellPatchWarnings = null;
             var usedCellPatch = false;
 
-            if (hasCellUpdates)
+            if (regenerateLayout)
             {
-                var (instructions, parseError) = ParseCellUpdates(cellUpdatesJson);
-                if (parseError != null)
-                    return Error(parseError);
+                var meta = RetrieveEntityMetadata(returnedTypeCode);
+                newFetchXml = EnsureLayoutBuildableFetchXml(newFetchXml, meta);
+                effectiveFetchXml = newFetchXml;
 
-                var cellNameErrors = NormalizeCellUpdateNames(instructions, effectiveFetchXml, entityName);
-                if (cellNameErrors.Count > 0)
-                    return Error(FormatNameResolutionErrors("ViewUpdate", entityName, currentViewName, updateId, cellNameErrors));
-
-                var (patchedXml, patchErrors, patchWarnings) = ViewXmlHelper.ApplyCellAttributeUpdates(baseLayoutXml, instructions);
-                if (patchErrors.Count > 0)
                 {
-                    var sb = new StringBuilder(256);
-                    sb.AppendLine($"[ViewUpdate] BLOCKED — Cell patch failed");
-                    sb.AppendLine($"ViewId: {updateId}");
-                    sb.AppendLine($"Errors: {patchErrors.Count}");
-                    foreach (var error in patchErrors)
-                        sb.AppendLine($"- {error}");
-                    sb.AppendLine($"Tip: Use manage_view action='detail' to see current LayoutXML cells.");
-                    return Error(sb.ToString());
+                    var serverError = ValidateFetchXmlExpression(newFetchXml);
+                    if (serverError != null)
+                        return Error(
+                            $"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — FetchXML failed server-side validation. {serverError}",
+                            ServerValidationHint,
+                            BuildBlockedValidationDto("update", entityName, updateId, currentViewName,
+                                [serverError], null, null, null));
                 }
 
-                baseLayoutXml = patchedXml;
-                usedCellPatch = true;
-                if (patchWarnings.Count > 0)
-                    cellPatchWarnings = patchWarnings;
+                var built = BuildLayoutXmlFromFetch(returnedTypeCode, newFetchXml, meta);
+                if (built.Error != null)
+                    return Error($"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — {built.Error}");
+                newLayoutXml = built.Xml;
             }
-
-            var newLayoutXml = EnsureObjectTypeCode(baseLayoutXml, entityName);
-            if (hasLayoutXml)
+            else
             {
-                var layoutNormalization = NormalizeLayoutXmlNames(newLayoutXml, effectiveFetchXml, entityName);
-                if (layoutNormalization.Errors.Count > 0)
-                    return Error(FormatNameResolutionErrors("ViewUpdate", entityName, currentViewName, updateId, layoutNormalization.Errors));
-                newLayoutXml = layoutNormalization.Xml;
+                var baseLayoutXml = currentLayoutXml;
+
+                if (hasCellUpdates)
+                {
+                    var (instructions, parseError) = ParseCellUpdates(cellUpdatesJson);
+                    if (parseError != null)
+                        return Error(parseError);
+
+                    var cellNameErrors = NormalizeCellUpdateNames(instructions, effectiveFetchXml, entityName);
+                    if (cellNameErrors.Count > 0)
+                        return Error(NameResolutionMessage("update", entityName, cellNameErrors),
+                            NameResolutionHint, new { errors = cellNameErrors });
+
+                    var (patchedXml, patchErrors, patchWarnings) = ViewXmlHelper.ApplyCellAttributeUpdates(baseLayoutXml, instructions);
+                    if (patchErrors.Count > 0)
+                        return Error(
+                            $"UPDATE view '{currentViewName}' ({updateId}) blocked — cell patch failed ({patchErrors.Count} error(s)). First: {patchErrors[0]}",
+                            "Use manage_view action='detail' to see current LayoutXML cells.",
+                            new { errors = patchErrors });
+
+                    baseLayoutXml = patchedXml;
+                    usedCellPatch = true;
+                    if (patchWarnings.Count > 0)
+                        cellPatchWarnings = patchWarnings;
+                }
+
+                newLayoutXml = EnsureObjectTypeCode(baseLayoutXml, entityName);
             }
 
-            string fetchBackupPath = null;
-            string layoutBackupPath = null;
-            if (backup)
-            {
-                (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, updateId, currentViewName, currentFetchXml, currentLayoutXml, _workspaceFolder);
-            }
+            string fetchBackupPath;
+            string layoutBackupPath;
+            (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, updateId, currentViewName, currentFetchXml, currentLayoutXml, _workspaceFolder);
 
-            if (validate)
             {
                 var validationResult = RunValidation(newLayoutXml, newFetchXml, effectiveFetchXml,
                     currentQueryType, currentFetchXml);
                 if (validationResult != null)
-                {
-                    return BuildValidationBlockedResult("ViewUpdate", entityName, updateId, currentViewName,
-                        validationResult.Value.Errors, validationResult.Value.Warnings,
-                        fetchBackupPath, layoutBackupPath, "updated");
-                }
+                    return Error(
+                        $"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — {validationResult.Value.Errors.Count} validation error(s). First: {validationResult.Value.Errors[0]}",
+                        ValidationFailedHint,
+                        BuildBlockedValidationDto("update", entityName, updateId, currentViewName,
+                            validationResult.Value.Errors, validationResult.Value.Warnings,
+                            fetchBackupPath, layoutBackupPath));
             }
 
-            if (validate)
             {
                 var fieldErrors = ValidateFieldNames(entityName, effectiveFetchXml);
                 if (fieldErrors.Count > 0)
-                {
-                    return BuildValidationBlockedResult("ViewUpdate", entityName, updateId, currentViewName,
-                        fieldErrors, new List<string>(), fetchBackupPath, layoutBackupPath, "updated");
-                }
+                    return Error(
+                        $"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — {fieldErrors.Count} field(s) not found in entity metadata. First: {fieldErrors[0]}",
+                        $"Use get_tables('{entityName}') to list all available fields.",
+                        BuildBlockedValidationDto("update", entityName, updateId, currentViewName,
+                            fieldErrors, null, fetchBackupPath, layoutBackupPath));
             }
 
-            if (validate && newFetchXml != null)
+            if (newFetchXml != null && !regenerateLayout)
             {
                 var serverError = ValidateFetchXmlExpression(newFetchXml);
                 if (serverError != null)
-                    return BuildServerValidationBlockedResult("ViewUpdate", entityName, updateId, currentViewName,
-                        serverError, fetchBackupPath, layoutBackupPath, "updated");
+                    return Error(
+                        $"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — FetchXML failed server-side validation. {serverError}",
+                        ServerValidationHint,
+                        BuildBlockedValidationDto("update", entityName, updateId, currentViewName,
+                            [serverError], null, fetchBackupPath, layoutBackupPath));
             }
 
-            var updatedParts = DetermineUpdatedParts(hasLayoutXml, usedCellPatch, newFetchXml != null);
+            var updatedParts = DetermineUpdatedParts(usedCellPatch, newFetchXml != null, regenerateLayout);
 
-            var isPersonalView = currentView.LogicalName == "userquery";
+            var isPersonal = currentView.LogicalName == "userquery";
             var update = new Entity(currentView.LogicalName, updateId);
             update["layoutxml"] = newLayoutXml;
             if (newFetchXml != null)
                 update["fetchxml"] = newFetchXml;
-            if (!isPersonalView)
+            if (!isPersonal)
                 update["returnedtypecode"] = returnedTypeCode;
             if (_options.DryRun)
                 return DryRun($"Would UPDATE view '{currentViewName}' ({updateId}) on entity '{entityName}'.", new UpsertViewResult
@@ -479,7 +495,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ViewId = updateId.ToString(),
                     ViewName = currentViewName,
                     Status = "not_executed",
-                    Validated = validate,
+                    Validated = true,
                     UpdatedParts = updatedParts,
                     FetchXmlBackupPath = fetchBackupPath,
                     LayoutXmlBackupPath = layoutBackupPath,
@@ -490,39 +506,29 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
             MetadataOperationWaitHelper.WaitAfterFormView();
 
-            {
-                var sb = ViewBackupHelper.BuildSuccessText(entityName, updateId, currentViewName, fetchBackupPath, layoutBackupPath,
-                    validate, newFetchXml != null, true);
-                if (cellPatchWarnings?.Count > 0)
-                {
-                    sb.AppendLine($"CellPatchWarnings: {cellPatchWarnings.Count}");
-                    foreach (var w in cellPatchWarnings)
-                        sb.AppendLine($"  - {w}");
-                }
-                var quickFindColumns = AppendQuickFindColumnsSummary(sb, currentQueryType, effectiveFetchXml);
-                sb.AppendLine();
-                ViewBackupHelper.AppendRollbackInfo(sb, fetchBackupPath, layoutBackupPath, updateId);
+            var quickFindColumns = currentQueryType == 4 ? ExtractQuickFindColumns(effectiveFetchXml) : null;
 
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = sb.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
-                    {
-                        Action = "updated", Entity = entityName, ViewId = updateId.ToString(), ViewName = currentViewName,
-                        Status = "updated", Validated = validate,
-                        UpdatedParts = updatedParts, ValidationWarnings = cellPatchWarnings,
-                        FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = true,
-                        QuickFindColumns = quickFindColumns
-                    })
-                };
-            }
+            var text = $"Updated view '{currentViewName}' ({updateId}) on '{entityName}' — {updatedParts}" +
+                ", validated, published." +
+                " Backup saved (see fetchXmlBackupPath/layoutXmlBackupPath)." +
+                (quickFindColumns?.Count > 0 ? $" {quickFindColumns.Count} find columns (see quickFindColumns)." : "") +
+                (cellPatchWarnings?.Count > 0 ? $" {cellPatchWarnings.Count} cell patch warning(s) (see validationWarnings)." : "");
+
+            return Success(text, new UpsertViewResult
+            {
+                Action = "updated", Entity = entityName, ViewId = updateId.ToString(), ViewName = currentViewName,
+                Status = "updated", Validated = true,
+                UpdatedParts = updatedParts, ValidationWarnings = cellPatchWarnings,
+                FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = true,
+                QuickFindColumns = quickFindColumns?.Count > 0 ? quickFindColumns : null
+            });
         }
 
-        private static string DetermineUpdatedParts(bool hasExplicitLayout, bool usedCellPatch, bool hasFetchXml)
+        private static string DetermineUpdatedParts(bool usedCellPatch, bool hasFetchXml, bool regeneratedLayout)
         {
             string layoutPart;
-            if (usedCellPatch && hasExplicitLayout)
-                layoutPart = "LayoutXML (cell patch applied)";
+            if (regeneratedLayout)
+                layoutPart = "LayoutXML (regenerated from FetchXML)";
             else if (usedCellPatch)
                 layoutPart = "LayoutXML (cell patch)";
             else
@@ -533,26 +539,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 : layoutPart;
         }
 
-        // ── Action: rename ─────────────────────────────────────────────────
 
-        private CallToolResult HandleRename(string entityName, string viewId, string viewName,
-            bool backup)
+        private CallToolResult HandleRename(string entityName, string viewId, string viewName)
         {
             if (string.IsNullOrWhiteSpace(viewId))
-                return Error("Error: view_id is required for 'rename' action.");
+                return Error("view_id is required when action='rename'.");
             if (!Guid.TryParse(viewId.Trim(), out var renameId))
-                return Error($"Error: '{viewId}' is not a valid GUID.");
+                return Error($"'{viewId}' is not a valid GUID.");
             if (string.IsNullOrWhiteSpace(viewName))
-                return Error("Error: view_name is required for 'rename' action.");
+                return Error("view_name is required when action='rename'.");
 
             viewName = viewName.Trim();
 
             var currentView = RetrieveView(renameId);
             if (currentView == null)
                 return Error(
-                    $"[Error] View not found\n" +
-                    $"ViewId: {renameId}\n" +
-                    $"Tip: Use manage_view with action='list' and entity_name='{entityName}' to find valid view IDs");
+                    $"View not found (view_id={renameId}).",
+                    $"Use manage_view action='list' entity_name='{entityName}' to find valid view IDs.");
 
             var oldName = currentView.GetAttributeValue<string>("name") ?? "";
             var returnedTypeCode = currentView.GetAttributeValue<string>("returnedtypecode") ?? entityName;
@@ -562,21 +565,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var dupId = duplicate.GetAttributeValue<Guid>("savedqueryid");
                 return Error(
-                    $"[Error] A view with this name already exists\n" +
-                    $"Entity: {entityName}\n" +
-                    $"Name: {viewName}\n" +
-                    $"ExistingViewId: {dupId}\n" +
-                    $"Tip: Choose a different name");
+                    $"A view named '{viewName}' already exists on '{entityName}' (view_id={dupId}).",
+                    "Choose a different name.");
             }
 
-            string fetchBackupPath = null;
-            string layoutBackupPath = null;
-            if (backup)
-            {
-                var currentFetchXml = currentView.GetAttributeValue<string>("fetchxml") ?? "";
-                var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
-                (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, renameId, oldName, currentFetchXml, currentLayoutXml, _workspaceFolder);
-            }
+            var currentFetchXml = currentView.GetAttributeValue<string>("fetchxml") ?? "";
+            var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
+            var (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, renameId, oldName, currentFetchXml, currentLayoutXml, _workspaceFolder);
 
             var update = new Entity(currentView.LogicalName, renameId) { ["name"] = viewName };
             if (_options.DryRun)
@@ -596,80 +591,74 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
             MetadataOperationWaitHelper.WaitAfterFormView();
 
-            var sb = new StringBuilder(256);
-            sb.AppendLine($"[ViewRename] {entityName}");
-            sb.AppendLine($"ViewId: {renameId}");
-            sb.AppendLine($"OldName: {oldName}");
-            sb.AppendLine($"NewName: {viewName}");
-            sb.AppendLine($"Status: Renamed successfully");
-            sb.AppendLine("Published: yes");
-            if (fetchBackupPath != null)
-            {
-                sb.AppendLine($"Backup:");
-                sb.AppendLine($"  {fetchBackupPath}");
-                sb.AppendLine($"  {layoutBackupPath}");
-            }
+            var text = $"Renamed view '{oldName}' to '{viewName}' ({renameId}) on '{entityName}', published." +
+                " Backup saved (see fetchXmlBackupPath/layoutXmlBackupPath).";
 
-            return new CallToolResult
+            return Success(text, new UpsertViewResult
             {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
-                {
-                    Action = "renamed", Entity = entityName, ViewId = renameId.ToString(), ViewName = viewName,
-                    Status = "renamed", Validated = false,
-                    FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = true
-                })
-            };
+                Action = "renamed", Entity = entityName, ViewId = renameId.ToString(), ViewName = viewName,
+                Status = "renamed", Validated = false,
+                FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = true
+            });
         }
 
-        // ── Action: set_default ───────────────────────────────────────────
 
         private CallToolResult HandleSetDefault(string entityName, string viewId, string viewName)
         {
             if (string.IsNullOrWhiteSpace(viewId) && string.IsNullOrWhiteSpace(viewName))
-                return Error("Error: view_id or view_name is required for 'set_default' action.");
+                return Error("view_id or view_name is required when action='set_default'.");
 
             Guid targetId;
 
             if (!string.IsNullOrWhiteSpace(viewId))
             {
                 if (!Guid.TryParse(viewId.Trim(), out targetId))
-                    return Error($"Error: '{viewId}' is not a valid GUID.");
+                    return Error($"'{viewId}' is not a valid GUID.");
 
                 var check = TryGetSystemView(targetId);
                 if (check == null)
                     return Error(
-                        $"[Error] View not found\n" +
-                        $"ViewId: {targetId}\n" +
-                        $"Tip: Use manage_view with action='list' and entity_name='{entityName}' to find valid view IDs");
+                        $"View not found (view_id={targetId}).",
+                        $"Use manage_view action='list' entity_name='{entityName}' to find valid view IDs.");
 
                 viewName = check.GetAttributeValue<string>("name") ?? targetId.ToString();
                 var qt = check.GetAttributeValue<int>("querytype");
                 if (qt != 0)
-                    return Error(
-                        $"[Error] Only Public views (querytype=0) can be set as default\n" +
-                        $"ViewId: {targetId}\n" +
-                        $"ViewType: {MapQueryType(qt)} ({qt})");
+                    return Error($"Only Public views (querytype=0) can be set as default — view {targetId} is {MapQueryType(qt)} (querytype={qt}).");
             }
             else
             {
-                var resolved = ResolveViewByName(entityName, viewName, 0, false, "set_default");
+                var resolved = ResolveViewByName(entityName, viewName, false, "set_default");
                 if (!string.IsNullOrEmpty(resolved.Error))
-                    return Error(resolved.Error);
+                    return Error(resolved.Error, details: resolved.Candidates);
                 targetId = resolved.ViewId;
                 viewName = resolved.View.GetAttributeValue<string>("name") ?? targetId.ToString();
             }
 
+            // Dataverse allows multiple isdefault=true at data level (UI enforces one) —
+            // clear previous Public defaults of this entity so exactly one remains.
+            var prevQuery = new QueryExpression("savedquery") { ColumnSet = new ColumnSet("savedqueryid") };
+            prevQuery.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
+            prevQuery.Criteria.AddCondition("querytype", ConditionOperator.Equal, 0);
+            prevQuery.Criteria.AddCondition("isdefault", ConditionOperator.Equal, true);
+            prevQuery.Criteria.AddCondition("savedqueryid", ConditionOperator.NotEqual, targetId);
+            var previousDefaults = _serviceClient.RetrieveMultiple(prevQuery).Entities;
+
             if (_options.DryRun)
-                return DryRun($"Would SET DEFAULT view '{viewName}' ({targetId}) on entity '{entityName}'.", new UpsertViewResult
+                return DryRun($"Would SET DEFAULT view '{viewName}' ({targetId}) on entity '{entityName}'" +
+                    (previousDefaults.Count > 0 ? $", clearing {previousDefaults.Count} previous default(s)." : "."), new UpsertViewResult
                 {
                     Action = "set_default",
                     Entity = entityName,
                     ViewId = targetId.ToString(),
                     ViewName = viewName,
                     Status = "not_executed",
+                    ClearedPreviousDefaults = previousDefaults.Count > 0 ? previousDefaults.Count : null,
                     Published = false
                 });
+
+            foreach (var prev in previousDefaults)
+                DataverseMutationExecutor.Update(_context, _serviceClient, new Entity("savedquery", prev.Id) { ["isdefault"] = false });
 
             var update = new Entity("savedquery", targetId) { ["isdefault"] = true };
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
@@ -677,86 +666,65 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             PublishHelper.PublishEntity(_context, _serviceClient, entityName);
             MetadataOperationWaitHelper.WaitAfterFormView();
 
-            var sb = new StringBuilder(256);
-            sb.AppendLine($"[ViewSetDefault] {entityName} — {viewName}");
-            sb.AppendLine($"ViewId: {targetId}");
-            sb.AppendLine($"Status: Set as default successfully");
-            sb.AppendLine("Published: yes");
-
-            return new CallToolResult
+            var clearedText = previousDefaults.Count > 0 ? $", cleared {previousDefaults.Count} previous default(s)" : "";
+            return Success($"Set default view for '{entityName}' to '{viewName}' ({targetId}){clearedText}, published.", new UpsertViewResult
             {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
-                {
-                    Action = "set_default", Entity = entityName, ViewId = targetId.ToString(), ViewName = viewName,
-                    Status = "set_default", Validated = false, Published = true
-                })
-            };
+                Action = "set_default", Entity = entityName, ViewId = targetId.ToString(), ViewName = viewName,
+                Status = "set_default", Validated = false,
+                ClearedPreviousDefaults = previousDefaults.Count > 0 ? previousDefaults.Count : null,
+                Published = true
+            });
         }
 
-        // ── Action: undo ───────────────────────────────────────────────────
 
         private CallToolResult HandleUndo(string entityName, string viewId,
-            string layoutBackupPathArg, string fetchBackupPathArg, bool validate)
+            string backupPathArg)
         {
             if (string.IsNullOrWhiteSpace(viewId))
-                return Error("Error: view_id is required for 'undo' action.");
+                return Error("view_id is required when action='undo'.");
             if (!Guid.TryParse(viewId.Trim(), out var undoId))
-                return Error($"Error: '{viewId}' is not a valid GUID.");
-            if (string.IsNullOrWhiteSpace(layoutBackupPathArg))
-                return Error("Error: layoutxml (layout backup file path) is required for 'undo' action.");
+                return Error($"'{viewId}' is not a valid GUID.");
+            if (string.IsNullOrWhiteSpace(backupPathArg))
+                return Error("fetchxml (.fetchxml.bak backup file path) is required when action='undo'.",
+                    "Backup files are at: .devkit/backups/views/ — LayoutXML is regenerated from the FetchXML backup.");
 
-            var layoutBackupPath = layoutBackupPathArg.Trim();
-            var fetchBackupPath = string.IsNullOrWhiteSpace(fetchBackupPathArg) ? null : fetchBackupPathArg.Trim();
-
-            if (!File.Exists(layoutBackupPath))
+            var fetchBackupPath = backupPathArg.Trim();
+            if (!fetchBackupPath.EndsWith(".fetchxml.bak", StringComparison.OrdinalIgnoreCase))
                 return Error(
-                    $"[Error] Layout backup file not found\n" +
-                    $"Path: {layoutBackupPath}\n" +
-                    $"Tip: Check the file path. Backup files are at: .devkit/backups/views/");
+                    $"Backup file must end with .fetchxml.bak: '{fetchBackupPath}'.",
+                    "Backup files are at: .devkit/backups/views/ — LayoutXML is regenerated from the FetchXML backup.");
 
-            string restoredLayoutXml;
-            var layoutContent = File.ReadAllText(layoutBackupPath, Encoding.UTF8);
-            var strippedLayout = ViewXmlHelper.StripXmlComments(layoutContent);
-            if (string.IsNullOrWhiteSpace(strippedLayout))
+            if (!File.Exists(fetchBackupPath))
                 return Error(
-                    $"[Error] Layout backup file is empty (no LayoutXML content)\n" +
-                    $"Path: {layoutBackupPath}\n" +
-                    $"Tip: This backup has no LayoutXML to restore. Try an earlier backup.");
-            var layoutDoc = XDocument.Parse(strippedLayout);
-            restoredLayoutXml = ViewXmlHelper.StripXmlDeclaration(layoutDoc.ToString());
-            restoredLayoutXml = EnsureObjectTypeCode(restoredLayoutXml, entityName);
+                    $"Fetch backup file not found: '{fetchBackupPath}'.",
+                    "Check the file path. Backup files are at: .devkit/backups/views/");
 
-            string restoredFetchXml = null;
-            if (fetchBackupPath != null)
-            {
-                if (!File.Exists(fetchBackupPath))
-                    return Error(
-                        $"[Error] Fetch backup file not found\n" +
-                        $"Path: {fetchBackupPath}\n" +
-                        $"Tip: Check the file path. Backup files are at: .devkit/backups/views/");
-
-                var fetchContent = File.ReadAllText(fetchBackupPath, Encoding.UTF8);
-                var strippedFetch = ViewXmlHelper.StripXmlComments(fetchContent);
-                if (!string.IsNullOrWhiteSpace(strippedFetch))
-                {
-                    var fetchDoc = XDocument.Parse(strippedFetch);
-                    restoredFetchXml = ViewXmlHelper.StripXmlDeclaration(fetchDoc.ToString());
-                }
-            }
+            var fetchContent = File.ReadAllText(fetchBackupPath, Encoding.UTF8);
+            var strippedFetch = ViewXmlHelper.StripXmlComments(fetchContent);
+            if (string.IsNullOrWhiteSpace(strippedFetch))
+                return Error(
+                    $"Fetch backup file is empty (no FetchXML content): '{fetchBackupPath}'.",
+                    "This backup has no FetchXML to restore. Try an earlier backup.");
+            var fetchDoc = XDocument.Parse(strippedFetch);
+            var restoredFetchXml = ViewXmlHelper.StripXmlDeclaration(fetchDoc.ToString());
 
             var currentView = RetrieveView(undoId);
             if (currentView == null)
                 return Error(
-                    $"[Error] View not found\n" +
-                    $"ViewId: {undoId}\n" +
-                    $"Tip: Use manage_view with action='list' and entity_name='{entityName}' to find valid view IDs");
+                    $"View not found (view_id={undoId}).",
+                    $"Use manage_view action='list' entity_name='{entityName}' to find valid view IDs.");
 
             var viewName = currentView.GetAttributeValue<string>("name") ?? "";
             var returnedTypeCode = currentView.GetAttributeValue<string>("returnedtypecode") ?? entityName;
 
+            var undoMeta = RetrieveEntityMetadata(returnedTypeCode);
+            restoredFetchXml = EnsureLayoutBuildableFetchXml(restoredFetchXml, undoMeta);
+            var undoLayout = BuildLayoutXmlFromFetch(returnedTypeCode, restoredFetchXml, undoMeta);
+            if (undoLayout.Error != null)
+                return Error($"UNDO view '{viewName}' ({undoId}) on '{entityName}' blocked — {undoLayout.Error}");
+            var restoredLayoutXml = undoLayout.Xml;
+
             List<string> validationWarnings = null;
-            if (validate)
             {
                 var allErrors = new List<string>();
                 var allWarnings = new List<string>();
@@ -778,57 +746,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 validationWarnings = allWarnings.Count > 0 ? allWarnings : null;
 
                 if (allErrors.Count > 0)
-                {
-                    var sb = new StringBuilder(512);
-                    sb.AppendLine($"[ViewUndo] BLOCKED — Backup file(s) failed validation");
-                    sb.AppendLine($"ViewId: {undoId}");
-                    sb.AppendLine($"LayoutBackup: {layoutBackupPath}");
-                    if (fetchBackupPath != null)
-                        sb.AppendLine($"FetchBackup: {fetchBackupPath}");
-                    sb.AppendLine($"Errors: {allErrors.Count}");
-                    foreach (var error in allErrors)
-                        sb.AppendLine($"- {error}");
-                    if (allWarnings.Count > 0)
-                    {
-                        sb.AppendLine($"Warnings: {allWarnings.Count}");
-                        foreach (var warning in allWarnings)
-                            sb.AppendLine($"- {warning}");
-                    }
-                    sb.AppendLine($"Tip: The backup file(s) may be corrupted. Set validate=false to force restore (not recommended).");
-
-                    var allIssues = new List<string>(allErrors);
-                    if (allWarnings.Count > 0) allIssues.AddRange(allWarnings);
-
-                    return new CallToolResult
-                    {
-                        Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
-                        {
-                            Action = "undo",
-                            Entity = entityName, ViewId = undoId.ToString(), ViewName = viewName,
-                            Status = "blocked_validation", Validated = true, ValidationErrors = allIssues,
-                            RestoredFromLayoutXmlBackup = layoutBackupPath,
-                            RestoredFromFetchXmlBackup = fetchBackupPath,
-                            Published = false
-                        })
-                    };
-                }
+                    return Error(
+                        $"UNDO view '{viewName}' ({undoId}) on '{entityName}' blocked — backup file(s) failed validation ({allErrors.Count} error(s)). First: {allErrors[0]}",
+                        "The backup file(s) may be corrupted — fix the XML in the backup file or use an earlier backup.",
+                        BuildBlockedValidationDto("undo", entityName, undoId, viewName,
+                            allErrors, allWarnings, null, null,
+                            restoredFetchBackup: fetchBackupPath));
             }
 
-            if (validate && restoredFetchXml != null)
             {
                 var serverError = ValidateFetchXmlExpression(restoredFetchXml);
                 if (serverError != null)
-                    return BuildServerValidationBlockedResult("ViewUndo", entityName, undoId, viewName,
-                        serverError, null, null, "undo",
-                        layoutBackupPath, fetchBackupPath);
+                    return Error(
+                        $"UNDO view '{viewName}' ({undoId}) on '{entityName}' blocked — FetchXML failed server-side validation. {serverError}",
+                        ServerValidationHint,
+                        BuildBlockedValidationDto("undo", entityName, undoId, viewName,
+                            [serverError], null, null, null,
+                            restoredFetchBackup: fetchBackupPath));
             }
+
+            var currentFetchXml = currentView.GetAttributeValue<string>("fetchxml") ?? "";
+            var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
+            var (preFetchBackupPath, preLayoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, undoId, viewName, currentFetchXml, currentLayoutXml, _workspaceFolder);
 
             var isPersonalView = currentView.LogicalName == "userquery";
             var update = new Entity(currentView.LogicalName, undoId);
             update["layoutxml"] = restoredLayoutXml;
-            if (restoredFetchXml != null)
-                update["fetchxml"] = restoredFetchXml;
+            update["fetchxml"] = restoredFetchXml;
             if (!isPersonalView)
                 update["returnedtypecode"] = returnedTypeCode;
             if (_options.DryRun)
@@ -840,7 +784,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ViewName = viewName,
                     Status = "not_executed",
                     RestoredFromFetchXmlBackup = fetchBackupPath,
-                    RestoredFromLayoutXmlBackup = layoutBackupPath,
+                    FetchXmlBackupPath = preFetchBackupPath,
+                    LayoutXmlBackupPath = preLayoutBackupPath,
                     Published = false
                 });
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
@@ -848,271 +793,126 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
             MetadataOperationWaitHelper.WaitAfterFormView();
 
-            {
-                var sb = new StringBuilder(256);
-                sb.AppendLine($"[ViewUndo] {entityName} — {viewName}");
-                sb.AppendLine($"ViewId: {undoId}");
-                sb.AppendLine($"Status: Restored successfully");
-                sb.AppendLine($"RestoredFrom: {layoutBackupPath}");
-                if (fetchBackupPath != null)
-                    sb.AppendLine($"FetchRestoredFrom: {fetchBackupPath}");
-                sb.AppendLine($"Validated: {(validate ? "yes" : "skipped")}");
-                sb.AppendLine("Published: yes");
-                if (validationWarnings?.Count > 0)
-                {
-                    sb.AppendLine($"ValidationWarnings: {validationWarnings.Count}");
-                    foreach (var w in validationWarnings)
-                        sb.AppendLine($"  - {w}");
-                }
+            var text = $"Restored view '{viewName}' ({undoId}) on '{entityName}' from FetchXML backup — LayoutXML regenerated" +
+                ", validated, published." +
+                " Pre-restore state backed up (see fetchXmlBackupPath/layoutXmlBackupPath)." +
+                (validationWarnings?.Count > 0 ? $" {validationWarnings.Count} validation warning(s) (see validationWarnings)." : "");
 
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = sb.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
-                    {
-                        Action = "undo",
-                        Entity = entityName, ViewId = undoId.ToString(), ViewName = viewName,
-                        Status = "restored", Validated = validate,
-                        ValidationWarnings = validationWarnings,
-                        RestoredFromLayoutXmlBackup = layoutBackupPath,
-                        RestoredFromFetchXmlBackup = fetchBackupPath,
-                        Published = true
-                    })
-                };
-            }
+            return Success(text, new UpsertViewResult
+            {
+                Action = "undo",
+                Entity = entityName, ViewId = undoId.ToString(), ViewName = viewName,
+                Status = "restored", Validated = true,
+                ValidationWarnings = validationWarnings,
+                RestoredFromFetchXmlBackup = fetchBackupPath,
+                FetchXmlBackupPath = preFetchBackupPath,
+                LayoutXmlBackupPath = preLayoutBackupPath,
+                Published = true
+            });
         }
 
-        // ── View Detail Formatter ─────────────────────────────────────────
 
-        private string GetViewDetail(Guid viewId, string entityName)
+        private CallToolResult BuildViewDetailResult(Entity view)
         {
-            var view = TryGetSystemView(viewId) ?? TryGetPersonalView(viewId);
-
-            if (view == null)
-                return $"Error: No view found with ID '{viewId}'.";
-
             var isSystem = view.LogicalName == "savedquery";
+            var viewId = GetViewId(view);
             var name = view.GetAttributeValue<string>("name") ?? "";
             var qt = view.GetAttributeValue<int>("querytype");
-            var stateCode = view.GetAttributeValue<OptionSetValue>("statecode")?.Value ?? 0;
-            var description = view.GetAttributeValue<string>("description") ?? "";
+            var isActive = (view.GetAttributeValue<OptionSetValue>("statecode")?.Value ?? 0) == 0;
+            var description = view.GetAttributeValue<string>("description");
             var fetchXml = view.GetAttributeValue<string>("fetchxml") ?? "";
             var layoutXml = view.GetAttributeValue<string>("layoutxml") ?? "";
-            var layoutJson = view.GetAttributeValue<string>("layoutjson") ?? "";
-            var conditionalFormatting = view.GetAttributeValue<string>("conditionalformatting") ?? "";
+            var layoutJson = view.GetAttributeValue<string>("layoutjson");
+            var conditionalFormatting = view.GetAttributeValue<string>("conditionalformatting");
 
-            var sb = new StringBuilder(fetchXml.Length + layoutXml.Length + 1024);
+            var columns = ParseViewColumns(layoutXml);
+            var hiddenCount = columns?.Count(c => c.IsHidden) ?? 0;
 
-            sb.AppendLine($"[View] {name} ({MapQueryType(qt)})");
-            sb.AppendLine($"ViewId: {viewId}");
-            sb.AppendLine($"Source: {(isSystem ? "System (savedquery)" : "Personal (userquery)")}");
-            sb.AppendLine($"Type: {MapQueryType(qt)} ({qt})");
-            sb.AppendLine($"Active: {(stateCode == 0 ? "yes" : "no")}");
+            var entityLogical = view.GetAttributeValue<string>("returnedtypecode") ?? "";
+            var text = $"'{name}' ({viewId}) on '{entityLogical}' — {MapQueryType(qt)} view, " +
+                $"{(isSystem ? "system" : "personal")}" +
+                (isSystem && view.GetAttributeValue<bool>("isdefault") ? ", default" : "") +
+                $", {(isActive ? "active" : "inactive")}" +
+                (columns != null ? $", {columns.Count} columns" + (hiddenCount > 0 ? $" ({hiddenCount} hidden)" : "") : "") +
+                ". fetchxml/layoutxml in structuredContent.";
 
-            if (isSystem)
+            return Success(text, new UpsertViewResult
             {
-                var isDefault = view.GetAttributeValue<bool>("isdefault");
-                var isManaged = view.GetAttributeValue<bool>("ismanaged");
-                var returnedTypeCode = view.GetAttributeValue<string>("returnedtypecode") ?? "";
-                sb.AppendLine($"Entity: {returnedTypeCode}");
-                sb.AppendLine($"Default: {(isDefault ? "yes" : "no")}");
-                sb.AppendLine($"Managed: {(isManaged ? "yes" : "no")}");
-            }
-            else
-            {
-                var returnedTypeCode = view.GetAttributeValue<string>("returnedtypecode") ?? "";
-                sb.AppendLine($"Entity: {returnedTypeCode}");
-            }
-
-            if (!string.IsNullOrEmpty(description))
-                sb.AppendLine($"Description: {description}");
-
-            sb.AppendLine();
-
-            AppendQuickFindColumnsSummary(sb, qt, fetchXml);
-
-            if (!string.IsNullOrEmpty(layoutXml))
-            {
-                var layoutDoc = XDocument.Parse(layoutXml);
-                var rowId = layoutDoc.Descendants("row")
-                    .Select(r => r.Attribute("id")?.Value)
-                    .FirstOrDefault();
-                var cells = layoutDoc.Descendants("cell").ToList();
-                var visibleCount = 0;
-                var hiddenCount = 0;
-                var iconCount = 0;
-                var columnLines = new List<string>();
-
-                foreach (var cell in cells)
-                {
-                    var cellName = cell.Attribute("name")?.Value ?? "";
-                    var width = cell.Attribute("width")?.Value;
-                    var isHidden = cell.Attribute("ishidden")?.Value == "1";
-                    var iconWr = cell.Attribute("imageproviderwebresource")?.Value;
-                    var iconFn = cell.Attribute("imageproviderfunctionname")?.Value;
-
-                    if (isHidden) hiddenCount++; else visibleCount++;
-                    if (iconWr != null || iconFn != null) iconCount++;
-
-                    var parts = new List<string>();
-                    if (width != null) parts.Add($"{width}px");
-                    if (isHidden) parts.Add("hidden");
-                    if (string.Equals(cellName, rowId, StringComparison.OrdinalIgnoreCase)) parts.Add("row key");
-                    if (iconWr != null || iconFn != null)
-                    {
-                        var iconParts = new List<string>();
-                        if (iconWr != null) iconParts.Add(iconWr);
-                        if (iconFn != null) iconParts.Add(iconFn);
-                        parts.Add($"icon: {string.Join(" → ", iconParts)}");
-                    }
-
-                    var suffix = parts.Count > 0 ? $" ({string.Join(", ", parts)})" : "";
-                    columnLines.Add($"  {cellName}{suffix}");
-                }
-
-                var notes = new List<string>();
-                if (hiddenCount > 0) notes.Add($"{hiddenCount} hidden");
-                if (iconCount > 0) notes.Add($"{iconCount} with custom icon");
-                var notesSuffix = notes.Count > 0 ? $" ({string.Join(", ", notes)})" : "";
-                sb.AppendLine($"[Columns] {cells.Count} columns{notesSuffix}");
-                foreach (var line in columnLines)
-                    sb.AppendLine(line);
-                sb.AppendLine();
-            }
-
-            if (!string.IsNullOrEmpty(fetchXml))
-            {
-                sb.AppendLine("[FetchXML]");
-                sb.AppendLine(ViewXmlHelper.PrettyPrintXml(fetchXml));
-                sb.AppendLine();
-            }
-
-            if (!string.IsNullOrEmpty(layoutXml))
-            {
-                sb.AppendLine("[LayoutXML]");
-                sb.AppendLine(ViewXmlHelper.PrettyPrintXml(layoutXml));
-            }
-
-            if (!string.IsNullOrEmpty(layoutJson))
-            {
-                sb.AppendLine();
-                sb.AppendLine("[LayoutJSON]");
-                sb.AppendLine(layoutJson);
-            }
-
-            if (!string.IsNullOrEmpty(conditionalFormatting))
-            {
-                sb.AppendLine();
-                sb.AppendLine("[ConditionalFormatting]");
-                sb.AppendLine(ViewXmlHelper.PrettyPrintXml(conditionalFormatting));
-            }
-
-            return sb.ToString();
+                Action = "detail",
+                Entity = entityLogical,
+                ViewId = viewId.ToString(),
+                ViewName = name,
+                Status = "success",
+                QueryType = qt,
+                QueryTypeName = MapQueryType(qt),
+                IsActive = isActive,
+                IsDefault = isSystem ? view.GetAttributeValue<bool>("isdefault") : null,
+                IsManaged = isSystem ? view.GetAttributeValue<bool>("ismanaged") : null,
+                Source = isSystem ? "system" : "personal",
+                Description = string.IsNullOrWhiteSpace(description) ? null : description,
+                Columns = columns,
+                FetchXml = string.IsNullOrEmpty(fetchXml) ? null : fetchXml,
+                LayoutXml = string.IsNullOrEmpty(layoutXml) ? null : layoutXml,
+                LayoutJson = string.IsNullOrWhiteSpace(layoutJson) ? null : layoutJson,
+                ConditionalFormatting = string.IsNullOrWhiteSpace(conditionalFormatting) ? null : conditionalFormatting,
+                QuickFindColumns = qt == 4 ? ExtractQuickFindColumns(fetchXml) : null
+            });
         }
 
-        // ── List Formatter ────────────────────────────────────────────────
-
-        private string FormatViewList(string entityName, DataCollection<Entity> systemViews, bool includeFetchXml, bool includePersonal, string nameFilter, DataCollection<Entity> personalViews = null)
+        private static List<ViewColumnEntry> ParseViewColumns(string layoutXml)
         {
-            var totalSystem = systemViews.Count;
-            var totalPersonal = personalViews?.Count ?? 0;
+            if (string.IsNullOrEmpty(layoutXml))
+                return null;
 
-            var sb = new StringBuilder((totalSystem + totalPersonal) * 120 + 256);
-
-            if (totalSystem > 0)
-            {
-                var filterNote = nameFilter != null ? $" matching '{nameFilter}'" : "";
-                var personalNote = includePersonal ? " system" : "";
-                var viewLabel = totalSystem == 1 ? "view" : "views";
-                sb.AppendLine($"[Views] {entityName} ({totalSystem}{personalNote} {viewLabel}{filterNote})");
-                sb.AppendLine();
-                sb.AppendLine("viewid\tname\ttype\tdefault\tactive\tmanaged");
-
-                foreach (var view in systemViews)
+            var cells = XDocument.Parse(layoutXml).Descendants("cell")
+                .Select(cell => new ViewColumnEntry
                 {
-                    var viewId = view.GetAttributeValue<Guid>("savedqueryid");
-                    var name = view.GetAttributeValue<string>("name") ?? "";
-                    var qt = view.GetAttributeValue<int>("querytype");
-                    var isDefault = view.GetAttributeValue<bool>("isdefault");
-                    var stateCode = view.GetAttributeValue<OptionSetValue>("statecode")?.Value ?? 0;
-                    var isManaged = view.GetAttributeValue<bool>("ismanaged");
+                    Name = cell.Attribute("name")?.Value ?? "",
+                    Width = cell.Attribute("width")?.Value,
+                    IsHidden = cell.Attribute("ishidden")?.Value == "1",
+                    ImageProviderWebResource = cell.Attribute("imageproviderwebresource")?.Value,
+                    ImageProviderFunctionName = cell.Attribute("imageproviderfunctionname")?.Value
+                })
+                .ToList();
 
-                    sb.AppendLine($"{viewId}\t{EscapeTab(name)}\t{MapQueryType(qt)}\t{(isDefault ? "yes" : "no")}\t{(stateCode == 0 ? "Active" : "Inactive")}\t{(isManaged ? "yes" : "no")}");
-
-                    if (includeFetchXml)
-                        AppendViewXml(sb, name, view.GetAttributeValue<string>("fetchxml"), view.GetAttributeValue<string>("layoutxml"));
-                }
-            }
-
-            if (totalPersonal > 0)
-            {
-                if (totalSystem > 0) sb.AppendLine();
-
-                var personalLabel = totalPersonal == 1 ? "view" : "views";
-                sb.AppendLine($"[Personal Views] {entityName} ({totalPersonal} {personalLabel})");
-                sb.AppendLine();
-                sb.AppendLine("viewid\tname\ttype\tactive");
-
-                foreach (var view in personalViews)
-                {
-                    var viewId = view.GetAttributeValue<Guid>("userqueryid");
-                    var name = view.GetAttributeValue<string>("name") ?? "";
-                    var qt = view.GetAttributeValue<int>("querytype");
-                    var stateCode = view.GetAttributeValue<OptionSetValue>("statecode")?.Value ?? 0;
-
-                    sb.AppendLine($"{viewId}\t{EscapeTab(name)}\t{MapQueryType(qt)}\t{(stateCode == 0 ? "Active" : "Inactive")}");
-
-                    if (includeFetchXml)
-                        AppendViewXml(sb, name, view.GetAttributeValue<string>("fetchxml"), view.GetAttributeValue<string>("layoutxml"));
-                }
-            }
-
-            return sb.ToString();
+            return cells.Count > 0 ? cells : null;
         }
 
-        private (Guid ViewId, Entity View, string Error) ResolveViewByName(
+        private (Guid ViewId, Entity View, string Error, List<ViewListEntry> Candidates) ResolveViewByName(
             string entityName,
             string viewName,
-            int queryType,
-            bool includePersonal,
+            bool isPersonalView,
             string actionName)
         {
             if (string.IsNullOrWhiteSpace(viewName))
-                return (Guid.Empty, null, $"Error: view_name is required for '{actionName}' action.");
+                return (Guid.Empty, null, $"view_name is required for '{actionName}' action.", null);
 
             var nameFilter = viewName.Trim();
-            var systemMatches = FindViewsByNameContains(entityName, nameFilter, queryType).ToList();
-            var personalMatches = includePersonal
-                ? FindPersonalViewsByNameContains(entityName, nameFilter, queryType).ToList()
+            var systemMatches = isPersonalView
+                ? new List<Entity>()
+                : FindViewsByNameContains(entityName, nameFilter).ToList();
+            var personalMatches = isPersonalView
+                ? FindPersonalViewsByNameContains(entityName, nameFilter).ToList()
                 : new List<Entity>();
 
             var matches = PreferExactViewNameMatches(systemMatches.Concat(personalMatches), nameFilter);
 
             if (matches.Count == 0)
             {
-                var typeHint = queryType >= 0 ? $"{MapQueryType(queryType)} " : "";
-                var scope = includePersonal ? "view" : "system view";
-                return (Guid.Empty, null, $"Error: No {typeHint}{scope} found matching name '{nameFilter}' for entity '{entityName}'.");
+                var scope = isPersonalView ? "personal view" : "system view";
+                return (Guid.Empty, null,
+                    $"No {scope} found matching name '{nameFilter}' for entity '{entityName}'.", null);
             }
 
             if (matches.Count == 1)
             {
                 var match = matches[0];
-                return (GetViewId(match), match, null);
+                return (GetViewId(match), match, null, null);
             }
 
-            var sb = new StringBuilder(256);
-            sb.AppendLine($"[Views] Multiple views match '{nameFilter}' — provide view_id to disambiguate");
-            sb.AppendLine();
-            sb.AppendLine("viewid\tname\ttype\tsource");
-            foreach (var v in matches)
-            {
-                var name = v.GetAttributeValue<string>("name") ?? "";
-                var qt = v.GetAttributeValue<int>("querytype");
-                sb.AppendLine($"{GetViewId(v)}\t{EscapeTab(name)}\t{MapQueryType(qt)}\t{GetViewSource(v)}");
-            }
-
-            return (Guid.Empty, null, sb.ToString());
+            var candidates = matches.Select(v => ToViewListEntry(v)).ToList();
+            return (Guid.Empty, null,
+                $"Multiple views match '{nameFilter}' on '{entityName}' — provide view_id to disambiguate.", candidates);
         }
 
         private static List<Entity> PreferExactViewNameMatches(IEnumerable<Entity> views, string nameFilter)
@@ -1139,84 +939,53 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string GetViewSource(Entity view) =>
             string.Equals(view.LogicalName, "userquery", StringComparison.OrdinalIgnoreCase) ? "personal" : "system";
 
-        // ── Data Helpers ──────────────────────────────────────────────────
 
-        private DataCollection<Entity> FindViewsByNameContains(string entityName, string nameFilter, int queryType, bool includeFetchXml = false)
+        private DataCollection<Entity> FindViewsByNameContains(string entityName, string nameFilter)
         {
             var columns = new ColumnSet("savedqueryid", "name", "querytype", "isdefault", "statecode", "ismanaged");
-            if (includeFetchXml)
-            {
-                columns.AddColumn("fetchxml");
-                columns.AddColumn("layoutxml");
-            }
             var query = new QueryExpression("savedquery")
             {
                 ColumnSet = columns
             };
             query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
             query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{nameFilter}%");
-            if (queryType >= 0)
-                query.Criteria.AddCondition("querytype", ConditionOperator.Equal, queryType);
             query.AddOrder("name", OrderType.Ascending);
             return _serviceClient.RetrieveMultiple(query).Entities;
         }
 
-        private DataCollection<Entity> FindPersonalViewsByNameContains(string entityName, string nameFilter, int queryType, bool includeFetchXml = false)
+        private DataCollection<Entity> FindPersonalViewsByNameContains(string entityName, string nameFilter)
         {
             var columns = new ColumnSet("userqueryid", "name", "querytype", "statecode");
-            if (includeFetchXml)
-            {
-                columns.AddColumn("fetchxml");
-                columns.AddColumn("layoutxml");
-            }
             var query = new QueryExpression("userquery")
             {
                 ColumnSet = columns
             };
             query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
             query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{nameFilter}%");
-            if (queryType >= 0)
-                query.Criteria.AddCondition("querytype", ConditionOperator.Equal, queryType);
             query.AddOrder("name", OrderType.Ascending);
             return _serviceClient.RetrieveMultiple(query).Entities;
         }
 
-        private DataCollection<Entity> GetSystemViews(string entityName, int queryType, bool includeFetchXml)
+        private DataCollection<Entity> GetSystemViews(string entityName)
         {
             var columns = new ColumnSet(
                 "savedqueryid", "name", "querytype", "isdefault",
                 "statecode", "ismanaged", "description");
 
-            if (includeFetchXml)
-            {
-                columns.AddColumn("fetchxml");
-                columns.AddColumn("layoutxml");
-            }
-
             var query = new QueryExpression("savedquery") { ColumnSet = columns };
             query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
-            if (queryType >= 0)
-                query.Criteria.AddCondition("querytype", ConditionOperator.Equal, queryType);
             query.AddOrder("querytype", OrderType.Ascending);
             query.AddOrder("name", OrderType.Ascending);
             return _serviceClient.RetrieveMultiple(query).Entities;
         }
 
-        private DataCollection<Entity> GetPersonalViews(string entityName, int queryType, bool includeFetchXml)
+        private DataCollection<Entity> GetPersonalViews(string entityName)
         {
             var columns = new ColumnSet(
                 "userqueryid", "name", "querytype", "statecode", "description");
 
-            if (includeFetchXml)
-            {
-                columns.AddColumn("fetchxml");
-                columns.AddColumn("layoutxml");
-            }
-
             var query = new QueryExpression("userquery") { ColumnSet = columns };
             query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
-            if (queryType >= 0)
-                query.Criteria.AddCondition("querytype", ConditionOperator.Equal, queryType);
             query.AddOrder("querytype", OrderType.Ascending);
             query.AddOrder("name", OrderType.Ascending);
             return _serviceClient.RetrieveMultiple(query).Entities;
@@ -1238,26 +1007,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
-        // ── Static Helpers ────────────────────────────────────────────────
-
-        private static void AppendViewXml(StringBuilder sb, string viewName, string fetchXml, string layoutXml)
-        {
-            if (string.IsNullOrEmpty(fetchXml) && string.IsNullOrEmpty(layoutXml))
-                return;
-
-            sb.AppendLine();
-            if (!string.IsNullOrEmpty(fetchXml))
-            {
-                sb.AppendLine($"[FetchXML: {viewName}]");
-                sb.AppendLine(ViewXmlHelper.PrettyPrintXml(fetchXml));
-            }
-            if (!string.IsNullOrEmpty(layoutXml))
-            {
-                sb.AppendLine($"[LayoutXML: {viewName}]");
-                sb.AppendLine(ViewXmlHelper.PrettyPrintXml(layoutXml));
-            }
-            sb.AppendLine();
-        }
 
         private static string MapQueryType(int queryType) => queryType switch
         {
@@ -1269,9 +1018,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             131072 => "Custom",
             _ => $"Other({queryType})"
         };
-
-        private static string EscapeTab(string value) =>
-            value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
 
         private static List<string> ExtractQuickFindColumns(string fetchXml)
         {
@@ -1292,23 +1038,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 .ToList();
         }
 
-        private static List<string> AppendQuickFindColumnsSummary(StringBuilder sb, int queryType, string fetchXml)
-        {
-            if (queryType != 4)
-                return null;
-
-            var findColumns = ExtractQuickFindColumns(fetchXml);
-            sb.AppendLine($"[FindColumns] {findColumns.Count} fields (searched when user types in search bar)");
-            foreach (var col in findColumns)
-                sb.AppendLine($"  {col}");
-            if (findColumns.Count == 0)
-                sb.AppendLine("  (none — LayoutXML cells are displayed columns only and are not searchable)");
-            sb.AppendLine();
-
-            return findColumns.Count > 0 ? findColumns : null;
-        }
-
-        // ── Shared Validation Helpers ─────────────────────────────────────
 
         private struct ValidationResult
         {
@@ -1348,69 +1077,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return null;
         }
 
-        private static CallToolResult BuildValidationBlockedResult(string prefix, string entityName, Guid viewId, string viewName,
-            List<string> errors, List<string> warnings, string fetchBackupPath, string layoutBackupPath, string action)
-        {
-            var sb = new StringBuilder(512);
-            sb.AppendLine($"[{prefix}] BLOCKED — Validation failed");
-            sb.AppendLine($"ViewId: {viewId}");
-            sb.AppendLine($"Errors: {errors.Count}");
-            foreach (var error in errors)
-                sb.AppendLine($"- {error}");
-            if (warnings.Count > 0)
-            {
-                sb.AppendLine($"Warnings: {warnings.Count}");
-                foreach (var warning in warnings)
-                    sb.AppendLine($"- {warning}");
-            }
-            sb.AppendLine(fetchBackupPath != null ? $"Backup: saved (no changes made)" : $"Backup: not needed (no changes made)");
-            sb.AppendLine($"Tip: Fix the errors above and retry. Refer to docs://instructions_for_views for rules.");
+        private const string ValidationFailedHint = "Fix the validation errors and retry. Rules: docs://instructions_for_views.";
+        private const string ServerValidationHint = "Fix the FetchXML and retry. Read schema://fetchxml for valid FetchXML structure.";
+        private const string NameResolutionHint = "Display Name contains is resolved first, then logical/schema contains. Use a more specific name when matches are ambiguous.";
 
+        private static string NameResolutionMessage(string actionName, string entityName, List<string> errors) =>
+            $"manage_view action='{actionName}' blocked on '{entityName}' — name resolution failed ({errors.Count} error(s)). First: {errors[0]}";
+
+        private static UpsertViewResult BuildBlockedValidationDto(string action, string entityName, Guid viewId, string viewName,
+            List<string> errors, List<string> warnings, string fetchBackupPath, string layoutBackupPath,
+            string restoredFetchBackup = null)
+        {
             var allIssues = new List<string>(errors);
-            if (warnings.Count > 0) allIssues.AddRange(warnings);
-
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
-                {
-                    Action = action, Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
-                    Status = "blocked_validation", Validated = true, ValidationErrors = allIssues,
-                    FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = false
-                })
-            };
-        }
-
-        private static CallToolResult BuildServerValidationBlockedResult(string prefix, string entityName, Guid viewId, string viewName,
-            string error, string fetchBackupPath, string layoutBackupPath, string action,
-            string restoredLayoutBackup = null, string restoredFetchBackup = null)
-        {
-            var sb = new StringBuilder(512);
-            sb.AppendLine($"[{prefix}] BLOCKED — FetchXML validation failed (server-side)");
-            sb.AppendLine($"ViewId: {viewId}");
-            sb.AppendLine($"Error: {error}");
-            sb.AppendLine($"Tip: Fix the FetchXML and retry. Read schema://fetchxml for valid FetchXML structure.");
+            if (warnings != null && warnings.Count > 0) allIssues.AddRange(warnings);
 
             var result = new UpsertViewResult
             {
-                Action = action, Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
+                Action = action, Entity = entityName,
+                ViewId = viewId != Guid.Empty ? viewId.ToString() : null, ViewName = viewName,
                 Status = "blocked_validation", Validated = true,
-                ValidationErrors = [error],
+                ValidationErrors = allIssues.Count > 0 ? allIssues : null,
                 FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = false
             };
-            if (restoredLayoutBackup != null) result.RestoredFromLayoutXmlBackup = restoredLayoutBackup;
             if (restoredFetchBackup != null) result.RestoredFromFetchXmlBackup = restoredFetchBackup;
-
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(result)
-            };
+            return result;
         }
 
         private string ValidateFetchXmlExpression(string fetchXml)
         {
-            // Web API — transport/auth errors propagate to the main catch (not FetchXML issues).
             var param = System.Net.WebUtility.UrlEncode("'" + fetchXml + "'");
             using var resp = _serviceClient.ExecuteWebRequest(
                 HttpMethod.Get, $"ValidateFetchXmlExpression(FetchXml=@p1)?@p1={param}",
@@ -1462,9 +1156,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
-        // ── Field Name Validation ─────────────────────────────────────
 
-        // Display/logical name normalization for view XML and cell patches.
 
         private (string Xml, List<string> Errors) NormalizeFetchXmlNames(string fetchXml, string entityName)
         {
@@ -1499,36 +1191,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             return errors.Count > 0
                 ? (fetchXml, errors)
-                : (doc.Root.ToString(SaveOptions.DisableFormatting), errors);
-        }
-
-        private (string Xml, List<string> Errors) NormalizeLayoutXmlNames(string layoutXml, string effectiveFetchXml, string entityName)
-        {
-            var errors = new List<string>();
-            if (string.IsNullOrWhiteSpace(layoutXml)) return (layoutXml, errors);
-
-            XDocument doc;
-            doc = XDocument.Parse(layoutXml);
-
-            var aliasEntityMap = BuildFetchAliasEntityMap(effectiveFetchXml);
-            var attributeCache = new Dictionary<string, List<DisplayNameFirstCandidate<AttributeMetadata>>>(StringComparer.OrdinalIgnoreCase);
-
-            foreach (var row in DescendantsByLocalName(doc.Root, "row"))
-            {
-                var id = row.Attribute("id")?.Value;
-                if (!string.IsNullOrWhiteSpace(id))
-                    row.SetAttributeValue("id", ResolveLayoutFieldReference(id, entityName, aliasEntityMap, attributeCache, errors, "LayoutXML row id"));
-            }
-
-            foreach (var cell in DescendantsByLocalName(doc.Root, "cell"))
-            {
-                var name = cell.Attribute("name")?.Value;
-                if (!string.IsNullOrWhiteSpace(name))
-                    cell.SetAttributeValue("name", ResolveLayoutFieldReference(name, entityName, aliasEntityMap, attributeCache, errors, "LayoutXML cell"));
-            }
-
-            return errors.Count > 0
-                ? (layoutXml, errors)
                 : (doc.Root.ToString(SaveOptions.DisableFormatting), errors);
         }
 
@@ -1663,7 +1325,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 candidates,
                 "[AmbiguousField]",
                 "[NotFoundField]",
-                $"Tip: Use get_tables(entity_name='{entityName}') to list fields before calling manage_view.",
+                $"Hint: Use get_tables(entity_name='{entityName}') to list fields before calling manage_view.",
                 "field name");
 
             if (result.IsSuccess) return result.Value.LogicalName;
@@ -1752,22 +1414,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static bool IsLocalName(XElement element, string localName) =>
             string.Equals(element?.Name.LocalName, localName, StringComparison.OrdinalIgnoreCase);
-
-        private static string FormatNameResolutionErrors(string prefix, string entityName, string viewName, Guid? viewId, List<string> errors)
-        {
-            var sb = new StringBuilder(512);
-            sb.AppendLine($"[{prefix}] BLOCKED -- Name resolution failed");
-            sb.AppendLine($"Entity: {entityName}");
-            if (!string.IsNullOrWhiteSpace(viewName))
-                sb.AppendLine($"ViewName: {viewName}");
-            if (viewId.HasValue)
-                sb.AppendLine($"ViewId: {viewId.Value}");
-            sb.AppendLine($"Errors: {errors.Count}");
-            foreach (var error in errors)
-                sb.AppendLine($"- {error}");
-            sb.AppendLine("Tip: Display Name contains is resolved first, then logical/schema contains. Use a more specific name when matches are ambiguous.");
-            return sb.ToString();
-        }
 
         private List<string> ValidateFieldNames(string entityName, string fetchXml)
         {
@@ -1884,7 +1530,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return dist <= 2;
         }
 
-        // ── Cell Updates Parsing ──────────────────────────────────────────
 
         private static readonly HashSet<string> ProtectedCellAttributes = new(StringComparer.OrdinalIgnoreCase) { "name" };
         private static readonly HashSet<string> NoRemoveCellAttributes = new(StringComparer.OrdinalIgnoreCase) { "name", "width" };
@@ -1896,7 +1541,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             if (instructions == null || instructions.Count == 0)
-                return (null, "Error: cell_updates_json is empty or not a JSON array.");
+                return (null, "cell_updates_json is empty or not a JSON array.");
 
             var seenNames = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
@@ -1905,26 +1550,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var item = instructions[i];
 
                 if (string.IsNullOrWhiteSpace(item.CellName))
-                    return (null, $"Error: cell_updates_json item at index {i} is missing required 'cell_name'.");
+                    return (null, $"cell_updates_json item at index {i} is missing required 'cell_name'.");
 
                 var cellName = item.CellName.Trim();
                 item.CellName = cellName;
 
                 if (seenNames.TryGetValue(cellName, out var prevIndex))
-                    return (null, $"Error: cell_updates_json has duplicate cell_name '{cellName}' at indices {prevIndex} and {i}.");
+                    return (null, $"cell_updates_json has duplicate cell_name '{cellName}' at indices {prevIndex} and {i}.");
                 seenNames[cellName] = i;
 
                 var hasSet = item.SetAttributes != null && item.SetAttributes.Count > 0;
                 var hasRemove = item.RemoveAttributes != null && item.RemoveAttributes.Count > 0;
                 if (!hasSet && !hasRemove)
-                    return (null, $"Error: cell_updates_json item '{cellName}' must have at least one of 'set_attributes' or 'remove_attributes'.");
+                    return (null, $"cell_updates_json item '{cellName}' must have at least one of 'set_attributes' or 'remove_attributes'.");
 
                 if (hasSet)
                 {
                     foreach (var key in item.SetAttributes.Keys)
                     {
                         if (ProtectedCellAttributes.Contains(key))
-                            return (null, $"Error: cell_updates_json cannot set protected attribute '{key}' on cell '{cellName}'.");
+                            return (null, $"cell_updates_json cannot set protected attribute '{key}' on cell '{cellName}'.");
                     }
                 }
 
@@ -1933,7 +1578,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     foreach (var key in item.RemoveAttributes)
                     {
                         if (NoRemoveCellAttributes.Contains(key))
-                            return (null, $"Error: cell_updates_json cannot remove protected attribute '{key}' from cell '{cellName}'" +
+                            return (null, $"cell_updates_json cannot remove protected attribute '{key}' from cell '{cellName}'" +
                                 (string.Equals(key, "width", StringComparison.OrdinalIgnoreCase) ? " (use set_attributes to resize)." : "."));
                     }
                 }
@@ -1962,6 +1607,160 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return grid.ToString(SaveOptions.DisableFormatting);
             }
             return layoutXml;
+        }
+
+        private EntityMetadata RetrieveEntityMetadata(string entityName)
+        {
+            var request = new RetrieveEntityRequest
+            {
+                LogicalName = entityName,
+                EntityFilters = EntityFilters.Entity | EntityFilters.Attributes
+            };
+            return ((RetrieveEntityResponse)_serviceClient.Execute(request)).EntityMetadata;
+        }
+
+        private static string EnsureLayoutBuildableFetchXml(string fetchXml, EntityMetadata meta)
+        {
+            var doc = XDocument.Parse(fetchXml);
+            var mainEntity = doc.Root?.Element("entity");
+            if (mainEntity == null)
+                return fetchXml;
+
+            var usedAliases = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var link in mainEntity.Elements("link-entity"))
+            {
+                var alias = link.Attribute("alias")?.Value;
+                if (!string.IsNullOrWhiteSpace(alias))
+                {
+                    usedAliases.Add(alias);
+                    continue;
+                }
+                if (!link.Elements("attribute").Any())
+                    continue;
+
+                var linkName = link.Attribute("name")?.Value ?? "link";
+                var candidate = linkName;
+                var i = 1;
+                while (!usedAliases.Add(candidate))
+                    candidate = linkName + ++i;
+                link.SetAttributeValue("alias", candidate);
+            }
+
+            var primaryId = meta?.PrimaryIdAttribute;
+            var hasDisplayColumn =
+                mainEntity.Elements("attribute").Any(a =>
+                {
+                    var n = a.Attribute("name")?.Value;
+                    return !string.IsNullOrWhiteSpace(n) && !string.Equals(n, primaryId, StringComparison.OrdinalIgnoreCase);
+                })
+                || mainEntity.Elements("link-entity").Any(l => l.Elements("attribute").Any());
+
+            if (!hasDisplayColumn && !string.IsNullOrWhiteSpace(meta?.PrimaryNameAttribute))
+                mainEntity.AddFirst(new XElement("attribute", new XAttribute("name", meta.PrimaryNameAttribute)));
+
+            return doc.Root.ToString(SaveOptions.DisableFormatting);
+        }
+
+        private (string Xml, int ColumnCount, string Error) BuildLayoutXmlFromFetch(string entityName, string fetchXml, EntityMetadata mainMeta)
+        {
+            var doc = XDocument.Parse(fetchXml);
+            var mainEntity = doc.Root?.Element("entity");
+            if (mainEntity == null)
+                return (null, 0, "FetchXML has no <entity> element.");
+
+            mainMeta ??= RetrieveEntityMetadata(entityName);
+            var primaryId = mainMeta.PrimaryIdAttribute ?? entityName + "id";
+            var primaryName = mainMeta.PrimaryNameAttribute ?? primaryId;
+            var attrMap = mainMeta.Attributes?.ToDictionary(a => a.LogicalName, a => a, StringComparer.OrdinalIgnoreCase)
+                ?? new Dictionary<string, AttributeMetadata>(StringComparer.OrdinalIgnoreCase);
+
+            var cells = new List<XElement>();
+
+            foreach (var attr in mainEntity.Elements("attribute"))
+            {
+                var name = attr.Attribute("name")?.Value;
+                if (string.IsNullOrWhiteSpace(name) || string.Equals(name, primaryId, StringComparison.OrdinalIgnoreCase))
+                    continue;
+                attrMap.TryGetValue(name, out var am);
+                cells.Add(BuildCell(name, GetColumnWidth(am, name, primaryName), disableSorting: false));
+            }
+
+            foreach (var link in mainEntity.Elements("link-entity"))
+            {
+                var linkAttrs = link.Elements("attribute").ToList();
+                if (linkAttrs.Count == 0)
+                    continue;
+
+                var alias = link.Attribute("alias")?.Value;
+                var linkName = link.Attribute("name")?.Value;
+                if (string.IsNullOrWhiteSpace(alias) || string.IsNullOrWhiteSpace(linkName))
+                    return (null, 0, $"link-entity '{linkName}' has attributes but no alias — cannot build LayoutXML cells.");
+
+                var linkMeta = RetrieveEntityMetadata(linkName);
+                var linkMap = linkMeta.Attributes?.ToDictionary(a => a.LogicalName, a => a, StringComparer.OrdinalIgnoreCase)
+                    ?? new Dictionary<string, AttributeMetadata>(StringComparer.OrdinalIgnoreCase);
+                foreach (var attr in linkAttrs)
+                {
+                    var name = attr.Attribute("name")?.Value;
+                    if (string.IsNullOrWhiteSpace(name))
+                        continue;
+                    linkMap.TryGetValue(name, out var am);
+                    cells.Add(BuildCell($"{alias}.{name}", GetColumnWidth(am, name, null), disableSorting: true));
+                }
+            }
+
+            if (cells.Count == 0)
+                return (null, 0, "FetchXML has no displayable columns — cannot build LayoutXML.");
+
+            var grid = new XElement("grid",
+                new XAttribute("name", "resultset"),
+                mainMeta.ObjectTypeCode.HasValue ? new XAttribute("object", mainMeta.ObjectTypeCode.Value) : null,
+                new XAttribute("jump", primaryName),
+                new XAttribute("select", "1"),
+                new XAttribute("icon", "1"),
+                new XAttribute("preview", "1"),
+                new XElement("row",
+                    new XAttribute("name", "result"),
+                    new XAttribute("id", primaryId),
+                    cells));
+
+            return (grid.ToString(SaveOptions.DisableFormatting), cells.Count, null);
+        }
+
+        private static XElement BuildCell(string name, int width, bool disableSorting)
+        {
+            var cell = new XElement("cell",
+                new XAttribute("name", name),
+                new XAttribute("width", width));
+            if (disableSorting)
+                cell.SetAttributeValue("disableSorting", "1");
+            return cell;
+        }
+
+        private static int GetColumnWidth(AttributeMetadata attr, string logicalName, string primaryName)
+        {
+            if (primaryName != null && string.Equals(logicalName, primaryName, StringComparison.OrdinalIgnoreCase))
+                return 300;
+            if (attr is StringAttributeMetadata sm)
+            {
+                if (sm.Format == StringFormat.Phone)
+                    return 100;
+                if (sm.Format == StringFormat.Email || sm.Format == StringFormat.Url)
+                    return 200;
+                return 150;
+            }
+            return attr?.AttributeType switch
+            {
+                AttributeTypeCode.Boolean => 75,
+                AttributeTypeCode.Integer or AttributeTypeCode.BigInt => 125,
+                AttributeTypeCode.Decimal or AttributeTypeCode.Double or AttributeTypeCode.Money => 125,
+                AttributeTypeCode.DateTime => 150,
+                AttributeTypeCode.Lookup or AttributeTypeCode.Customer or AttributeTypeCode.Owner => 150,
+                AttributeTypeCode.Picklist or AttributeTypeCode.State or AttributeTypeCode.Status => 125,
+                AttributeTypeCode.Memo => 250,
+                AttributeTypeCode.Uniqueidentifier => 250,
+                _ => 150
+            };
         }
 
         private Entity RetrieveView(Guid viewId)

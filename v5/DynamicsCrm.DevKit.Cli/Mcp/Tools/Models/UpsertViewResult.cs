@@ -13,6 +13,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string Entity { get; set; }
 
         [JsonPropertyName("viewId")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string ViewId { get; set; }
 
         [JsonPropertyName("viewName")]
@@ -45,10 +46,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string RestoredFromFetchXmlBackup { get; set; }
 
-        [JsonPropertyName("restoredFromLayoutXmlBackup")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string RestoredFromLayoutXmlBackup { get; set; }
-
         [JsonPropertyName("validationWarnings")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> ValidationWarnings { get; set; }
@@ -69,5 +66,123 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("addToSolutionMethod")]
         public string AddToSolutionMethod { get; set; } = "none";
+
+
+        [JsonPropertyName("queryType")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? QueryType { get; set; }
+
+        [JsonPropertyName("queryTypeName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string QueryTypeName { get; set; }
+
+        [JsonPropertyName("isActive")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsActive { get; set; }
+
+        [JsonPropertyName("isDefault")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsDefault { get; set; }
+
+        [JsonPropertyName("clearedPreviousDefaults")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? ClearedPreviousDefaults { get; set; }
+
+        [JsonPropertyName("isManaged")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsManaged { get; set; }
+
+        [JsonPropertyName("source")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Source { get; set; }
+
+        [JsonPropertyName("description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Description { get; set; }
+
+        [JsonPropertyName("columns")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<ViewColumnEntry> Columns { get; set; }
+
+        [JsonPropertyName("fetchXml")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string FetchXml { get; set; }
+
+        [JsonPropertyName("layoutXml")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string LayoutXml { get; set; }
+
+        [JsonPropertyName("layoutJson")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string LayoutJson { get; set; }
+
+        [JsonPropertyName("conditionalFormatting")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ConditionalFormatting { get; set; }
+
+
+        [JsonPropertyName("totalCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? TotalCount { get; set; }
+
+        [JsonPropertyName("views")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<ViewListEntry> Views { get; set; }
+    }
+
+    internal sealed class ViewListEntry
+    {
+        [JsonPropertyName("viewId")]
+        public string ViewId { get; set; }
+
+        [JsonPropertyName("viewName")]
+        public string ViewName { get; set; }
+
+        [JsonPropertyName("queryType")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? QueryType { get; set; }
+
+        [JsonPropertyName("queryTypeName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string QueryTypeName { get; set; }
+
+        [JsonPropertyName("isDefault")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsDefault { get; set; }
+
+        [JsonPropertyName("isActive")]
+        public bool IsActive { get; set; }
+
+        [JsonPropertyName("isManaged")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsManaged { get; set; }
+
+        [JsonPropertyName("source")]
+        public string Source { get; set; }
+
+        [JsonPropertyName("description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Description { get; set; }
+    }
+
+    internal sealed class ViewColumnEntry
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("width")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Width { get; set; }
+
+        [JsonPropertyName("isHidden")]
+        public bool IsHidden { get; set; }
+
+        [JsonPropertyName("imageProviderWebResource")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ImageProviderWebResource { get; set; }
+
+        [JsonPropertyName("imageProviderFunctionName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ImageProviderFunctionName { get; set; }
     }
 }

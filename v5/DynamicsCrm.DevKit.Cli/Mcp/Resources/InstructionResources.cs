@@ -435,34 +435,25 @@ Omit `function_name` to remove the entire event entry.
         public static string ViewInstructions() => @"
 # View (SavedQuery) Manipulation Rules
 
-## CRITICAL: Backup Before ANY Modification
-- ALWAYS retrieve the current FetchXML + LayoutXML using manage_view with action='detail' and the specific view_id FIRST
-- Save BOTH XMLs to local backup files BEFORE making any changes
-- Backup file naming:
-  - {entity_name}_{view_id}_{yyyyMMddHHmmss}.fetchxml.bak
-  - {entity_name}_{view_id}_{yyyyMMddHHmmss}.layoutxml.bak
-- Backup location: {working_directory}/.devkit/backups/views/
-- A broken FetchXML hides ALL data from users. A broken LayoutXML crashes the grid.
-  Without backup, you may need to restore the entire environment.
+## CRITICAL: workspace_folder + Auto Backup
+- update/rename/undo REQUIRE workspace_folder — the tool auto-backs-up the current FetchXML + LayoutXML to {workspace_folder}/.devkit/backups/views/ BEFORE overwrite
+- A broken FetchXML hides ALL data from users. A broken LayoutXML crashes the grid — without backup you may need to restore the entire environment.
 
-## Rollback Procedure (If View Breaks)
-1. Call manage_view with action='undo', view_id, layoutxml=<layout backup file path>, fetchxml=<fetch backup file path>
-2. Tool auto-handles: read backups > validate > restore > publish (no new backup created)
-3. The backup file paths are returned in every update/rename response
-4. Backup files are at: {working_directory}/.devkit/backups/views/
+## Rollback (If View Breaks)
+1. Call manage_view action='undo' with view_id + fetchxml=<.fetchxml.bak path from the update/rename response>
+2. Tool auto-handles: read FetchXML backup > regenerate LayoutXML > validate > restore > publish; pre-restore state is backed up again
 
 ## CRITICAL: Verify Field Names Before Modifying Views
-- Before adding ANY field to a view (FetchXML, LayoutXML, or Quick Find columns), you MUST call `get_tables` first to verify the field's logical name exists on the entity.
+- Before adding ANY field to a view (FetchXML attributes/conditions, Quick Find columns), you MUST call `get_tables` first to verify the field's logical name exists on the entity.
 - Do NOT guess or assume field names. User-provided names like ""fpt site"" may not match the actual logical name (e.g., it could be ""ftpsiteurl"", ""websiteurl"", or a custom field with a publisher prefix).
 - After calling `get_tables`, search the attributes list for the field by display name or logical name to find the exact match.
 - If the field does not exist, inform the user and list similar fields as suggestions.
-- This prevents failed updates due to invalid field names and avoids wasting backup/restore cycles.
 
 ## Structure
-A view has TWO XML parts that must be kept in sync:
+A view has TWO XML parts:
 
-1. **FetchXML** -- defines WHICH records and columns to retrieve
-2. **LayoutXML** -- defines HOW columns appear in the grid
+1. **FetchXML** -- WHICH records/columns to retrieve (you supply this)
+2. **LayoutXML** -- HOW columns appear in the grid (AUTO-GENERATED from FetchXML: columns follow attribute order, width by data type)
 
 ## FetchXML (Query)
 ```xml
@@ -480,24 +471,8 @@ A view has TWO XML parts that must be kept in sync:
 </fetch>
 ```
 
-## LayoutXML (Columns)
-```xml
-<grid name=""resultset"" object=""1"" jump=""name"" select=""1"" icon=""1"" preview=""1"">
-  <row name=""result"" id=""accountid"">
-    <cell name=""name"" width=""300"" />
-    <cell name=""primarycontactid"" width=""150"" />
-    <cell name=""telephone1"" width=""100"" />
-  </row>
-</grid>
-```
-
-## Rules
-- Every `<attribute>` in FetchXML MUST have a corresponding `<cell>` in LayoutXML
-- The `id` attribute in `<row>` must be the primary key field (e.g., accountid)
-- The `jump` attribute in `<grid>` is the column that becomes a clickable link
-- The `object` attribute in `<grid>` is the entity's Object Type Code (integer, e.g., 1=account, 2=contact). The tool auto-populates it if omitted
-- Column widths are in pixels
-- Standard column widths: 100 (narrow), 150 (medium), 200 (wide), 300 (extra wide)
+## LayoutXML (auto-generated — do NOT author it)
+The tool builds LayoutXML from FetchXML: one `<cell>` per `<attribute>` (same order), `row id` = primary key, `jump` = primary name column, `object` = entity type code (auto-populated). Widths in pixels by data type (100 narrow .. 300 extra wide). You only touch individual cell attributes via `cell_updates_json` (see below).
 
 ## Quick Find Views (querytype=4) -- Find Columns
 
@@ -517,40 +492,12 @@ Find columns and View columns are INDEPENDENT. A field can be a Find column with
 </filter>
 ```
 
-### Supported Find Column Types
-Any field type can be added as a Quick Find Find Column. Dataverse does NOT restrict column types
-for the isquickfindfields filter. All column types (String, Memo, Lookup, Picklist, Integer, Money,
-DateTime, Boolean, etc.) can be used as Find Columns.
-
 ### Quick Find Rules
 - Find columns use `operator=""like""` with `value=""{0}""` (placeholder for user input)
-- The filter MUST have `type=""or""` and `isquickfindfields=""1""`
+- The filter MUST have `type=""or""` and `isquickfindfields=""1""` — sits alongside the normal `<filter type=""and"">` in the same `<entity>`
 - NEVER remove the `isquickfindfields` filter -- it disables search entirely
-- To add a Find column: add a `<condition>` inside the `isquickfindfields` filter
-- To remove a Find column: remove the `<condition>` (keep at least one)
-- Keep only essential fields as Find columns for better search performance
-
-### Quick Find FetchXML Example
-```xml
-<fetch version=""1.0"" output-format=""xml-platform"" mapping=""logical"">
-  <entity name=""account"">
-    <attribute name=""name"" />
-    <attribute name=""accountnumber"" />
-    <attribute name=""telephone1"" />
-    <attribute name=""accountid"" />
-    <order attribute=""name"" descending=""false"" />
-    <filter type=""and"">
-      <condition attribute=""statecode"" operator=""eq"" value=""0"" />
-    </filter>
-    <filter type=""or"" isquickfindfields=""1"">
-      <condition attribute=""name"" operator=""like"" value=""{0}"" />
-      <condition attribute=""accountnumber"" operator=""like"" value=""{0}"" />
-      <condition attribute=""emailaddress1"" operator=""like"" value=""{0}"" />
-      <condition attribute=""telephone1"" operator=""like"" value=""{0}"" />
-    </filter>
-  </entity>
-</fetch>
-```
+- Add/remove Find columns by adding/removing `<condition>` inside that filter (keep at least one)
+- Any field type is allowed as a Find column; keep only essential fields for search performance
 
 Source: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/quick-find
 
@@ -563,38 +510,15 @@ Source: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/qui
   - JavaScript web resource data — column fetched for client-side logic but not displayed
   - Sort/filter support — column used in `<order>` or `<filter>` but not shown to users
 
-### Hidden Column Example
-```xml
-<grid name=""resultset"" object=""1"" jump=""name"" select=""1"" icon=""1"" preview=""1"">
-  <row name=""result"" id=""accountid"">
-    <cell name=""name"" width=""300"" />
-    <cell name=""primarycontactid"" width=""150"" />
-    <cell name=""statuscode"" width=""100"" ishidden=""1"" />
-  </row>
-</grid>
-```
-In this example, `statuscode` is fetched but not displayed in the grid.
-
 ## Custom Icons in Views (imageproviderwebresource / imageproviderfunctionname)
 
 Dataverse supports custom icon graphics alongside cell values in list views.
 
-### LayoutXML Attributes
+### Cell Attributes
 - `imageproviderwebresource` — JS web resource name (e.g., `new_/js/ratingicons.js`)
-- `imageproviderfunctionname` — JS function name (e.g., `MyNamespace.displayIconTooltip`)
-
-### LayoutXML Example
-```xml
-<grid name=""resultset"" object=""3"" jump=""name"" select=""1"" icon=""1"" preview=""1"">
-  <row name=""result"" id=""opportunityid"">
-    <cell name=""name"" width=""300"" />
-    <cell name=""opportunityratingcode"" width=""100""
-          imageproviderwebresource=""new_/js/ratingicons.js""
-          imageproviderfunctionname=""displayIconTooltip"" />
-    <cell name=""estimatedvalue"" width=""150"" />
-  </row>
-</grid>
-```
+- `imageproviderfunctionname` — JS function name (e.g., `displayIconTooltip`)
+- Both are set via `cell_updates_json`; the resulting cell looks like:
+  `<cell name=""opportunityratingcode"" width=""100"" imageproviderwebresource=""new_/js/ratingicons.js"" imageproviderfunctionname=""displayIconTooltip"" />`
 
 ### JavaScript Function Signature
 ```javascript
@@ -607,28 +531,15 @@ function displayIconTooltip(rowData, userLCID) {
 ```
 
 ### Rules
-- The JS function receives the entire row as JSON + user locale (LCID)
-- Access column values via `{columnname}_Value` (integer for option sets)
-- Return an array: `[imageWebResourceName, tooltipText]`
-- Image web resources should be 16x16 PNG/JPG/GIF
-- `imageproviderwebresource` is the JS logic file, NOT the icon image file
-- Icon images are separate web resources referenced by name in the JS return value
-- Both attributes must be set on the same `<cell>` element
-- Works on primary column (replaces default icon) and non-primary columns (adds secondary icon)
-- To use data from another column for icon logic, add that column as hidden: `<cell name=""statuscode"" ishidden=""1"" />`
-- Returning a JS Promise is supported in Unified Interface (for async data retrieval)
-- Do NOT use synchronous XMLHttpRequest in the icon function
+- The JS function receives the row as JSON + user locale (LCID); values via `{columnname}_Value` (integer for option sets); return `[imageWebResourceName, tooltipText]`
+- Both attributes must be set on the same `<cell>`; `imageproviderwebresource` is the JS logic file, NOT the icon image (icons are separate 16x16 web resources named in the JS return value)
+- Works on primary (replaces default icon) and non-primary columns; use a hidden cell for extra data; Promise return supported; never use synchronous XMLHttpRequest
 
 ### Cell Attribute Patching (cell_updates_json)
-Use `cell_updates_json` parameter with `action='update'` to patch cell attributes without rebuilding full LayoutXML:
+Use `cell_updates_json` parameter with `action='update'` to patch cell attributes on the current layout without changing the FetchXML:
 ```json
 [{""cell_name"":""statuscode"",""set_attributes"":{""imageproviderwebresource"":""new_/js/viewIcons.js"",""imageproviderfunctionname"":""displayIconTooltip""}}]
 ```
-
-Usage modes:
-1. **Patch only**: pass `cell_updates_json` without `layoutxml` — patches current view in Dataverse
-2. **Combined**: pass both `layoutxml` + `cell_updates_json` — patch applied on supplied layout
-3. **Full replace**: pass only `layoutxml` (existing behavior, unchanged)
 
 Rules:
 - `cell_name` must match an existing `<cell name=""..."">` in the LayoutXML (case-insensitive)
@@ -640,15 +551,14 @@ Rules:
 ### Workflow
 1. Create icon image web resources (16x16 PNG) — use `manage_webresource` action='create'
 2. Create JS web resource with the icon logic function — use `manage_webresource` action='create'
-3. Use `cell_updates_json` to add icon attributes to target cell, or include them in full LayoutXML
+3. Use `cell_updates_json` to add icon attributes to the target cell
 4. Update the view via `manage_view` action='update'
 
 Source: https://learn.microsoft.com/en-us/power-apps/maker/data-platform/display-custom-icons-instead
 
 ## After Making Changes
-- Use the dedicated manage_view tool to apply changes
 - manage_view auto-handles: backup > validate > sync-check > update > publish
-- If something breaks: use action='undo' with the backup file paths from the response
+- If something breaks: action='undo' with the .fetchxml.bak path from the response
 - Verify the view loads correctly in the browser
 ";
 
