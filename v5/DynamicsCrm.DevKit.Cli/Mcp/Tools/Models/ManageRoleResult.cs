@@ -28,6 +28,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string BusinessUnitId { get; set; }
 
+        [JsonPropertyName("teamId")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string TeamId { get; set; }
+
+        [JsonPropertyName("teamName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string TeamName { get; set; }
+
         [JsonPropertyName("sourceRoleId")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SourceRoleId { get; set; }
@@ -61,6 +69,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<RoleEntry> Roles { get; set; }
 
+        [JsonPropertyName("rolesViaTeams")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<TeamRoleEntry> RolesViaTeams { get; set; }
+
         [JsonPropertyName("user")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public RoleUserEntry User { get; set; }
@@ -76,5 +88,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("missingRights")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> MissingRights { get; set; }
+
+        [JsonPropertyName("privilegesAdded")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> PrivilegesAdded { get; set; }
+
+        [JsonPropertyName("privilegesUpdated")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> PrivilegesUpdated { get; set; }
+
+        [JsonPropertyName("privilegesRemoved")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> PrivilegesRemoved { get; set; }
     }
 }

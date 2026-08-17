@@ -36,9 +36,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- list: optional role_name, business_unit_id, max_records\n" +
             "- detail: role_id OR role_name (+optional entity_name) → privileges grouped by entity. Resolves role name first (fuzzy), then GUID fallback.\n" +
             "- user: user_id (+optional entity_name) → user's roles + effective privileges\n" +
-            "- assign / unassign: role_id + user_id\n" +
+            "- assign / unassign: role_id + user_id (direct) or team_id (role for a team; members inherit it). user action also reports roles inherited via team membership.\n" +
             "- create: role_name (+optional business_unit_id)\n" +
-            "- update: role_id + role_name (rename)\n" +
+            "- update: role_id + optional role_name (rename) and/or privileges (JSON array of {entity, right, depth}) to add/change/remove privileges and depth on an existing role. Depth: User | BusinessUnit | Parent:ChildBU | Organization; 'None' removes. Rights: Create | Read | Write | Delete | Append | AppendTo | Assign | Share, or '*' to apply to all rights of the entity.\n" +
             "- delete: role_id (irreversible; managed roles can't delete — use copy)\n" +
             "- copy: role_id + role_name (clone with all privileges)\n" +
             "Mutating actions require the System Administrator role on the calling user.\n\n" +
@@ -50,11 +50,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS: whoami, manage_record, execute_fetchxml.")]
         public CallToolResult manage_role(
             [Description("list, detail, user, assign, unassign, create, update, delete, copy.")] string action,
-            [Description("Email or GUID. Required: user/assign/unassign.")] string user_id = "",
+            [Description("Email or GUID. Required: user/assign/unassign (unless team_id is used).")] string user_id = "",
+            [Description("Team GUID or exact name. assign/unassign: assign the role to this team instead of a user (members inherit it).")] string team_id = "",
             [Description("Role GUID. For detail only, this may also be a role name; if empty, role_name is used. Required: detail/assign/unassign/update/delete/copy.")] string role_id = "",
             [Description("list: filter (contains). detail: role display name when role_id is empty. create/update/copy: new name.")] string role_name = "",
             [Description("BU GUID. list: filter. create: target BU (empty = root).")] string business_unit_id = "",
             [Description("detail/user: filter privileges by entity Display Name or logical name.")] string entity_name = "",
+            [Description("update only. JSON array: [{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Organization\"},...]. entity = Display Name or logical name; right = Create|Read|Write|Delete|Append|AppendTo|Assign|Share, or '*' for all rights on the entity; depth = User|BusinessUnit|Parent:ChildBU|Organization, or None to remove.")] string privileges = "",
             [Description("list only. Max 250.")] int max_records = 50)
         {
             try
@@ -77,10 +79,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "list" => HandleList(role_name?.Trim(), business_unit_id?.Trim(), max_records),
                     "detail" => HandleDetail(role_id?.Trim(), role_name?.Trim(), entity_name?.Trim()),
                     "user" => HandleUser(user_id?.Trim(), entity_name?.Trim()),
-                    "assign" => HandleAssign(user_id?.Trim(), role_id?.Trim()),
-                    "unassign" => HandleUnassign(user_id?.Trim(), role_id?.Trim()),
+                    "assign" => HandleAssign(user_id?.Trim(), team_id?.Trim(), role_id?.Trim()),
+                    "unassign" => HandleUnassign(user_id?.Trim(), team_id?.Trim(), role_id?.Trim()),
                     "create" => HandleCreate(role_name?.Trim(), business_unit_id?.Trim()),
-                    "update" => HandleUpdate(role_id?.Trim(), role_name?.Trim()),
+                    "update" => HandleUpdate(role_id?.Trim(), role_name?.Trim(), privileges),
                     "delete" => HandleDelete(role_id?.Trim()),
                     "copy" => HandleCopy(role_id?.Trim(), role_name?.Trim()),
                     _ => Error($"Invalid action '{action}'. Valid values: 'list', 'detail', 'user', 'assign', 'unassign', 'create', 'update', 'delete', 'copy'.")
@@ -289,6 +291,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
             }
 
+            var teamRoleEntries = GetTeamRolesForUser(userIdGuid);
             var structured = new ManageRoleResult
             {
                 Action = "user",
@@ -296,8 +299,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 UserId = userIdGuid.ToString(),
                 UserName = fullName,
                 User = userEntry,
-                Roles = roleEntries.Count > 0 ? roleEntries : null
+                Roles = roleEntries.Count > 0 ? roleEntries : null,
+                RolesViaTeams = teamRoleEntries.Count > 0 ? teamRoleEntries : null
             };
+            var allRoleIds = roleIds.Concat(teamRoleEntries.Select(t => Guid.Parse(t.RoleId))).ToList();
+
+            var teamSuffix = teamRoleEntries.Count > 0
+                ? $", {teamRoleEntries.Count} role(s) via team(s)"
+                : "";
 
             if (!string.IsNullOrWhiteSpace(entityFilter))
             {
@@ -309,7 +318,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 structured.EntityName = entityFilter;
 
                 var allPrivileges = new List<PrivilegeInfo>();
-                foreach (var roleId in roleIds)
+                foreach (var roleId in allRoleIds)
                 {
                     var privs = GetRolePrivileges(roleId);
                     allPrivileges.AddRange(privs);
@@ -324,7 +333,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     structured.EffectivePrivileges = null;
                     structured.MissingRights = null;
-                    return Success($"User '{fullName}' ({userIdGuid}): {roleEntries.Count} role(s) assigned, NO privileges on entity '{entityFilter}'.", structured);
+                    return Success($"User '{fullName}' ({userIdGuid}): {roleEntries.Count} role(s) assigned{teamSuffix}, NO privileges on entity '{entityFilter}'.", structured);
                 }
 
                 structured.EffectivePrivileges = entityPrivs
@@ -332,36 +341,40 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     .Select(p => new RolePrivilegeEntry { Right = p.Key, Depth = p.Value.Depth })
                     .ToList();
 
-                var missingRights = new[] { "Create", "Read", "Write", "Delete", "Append", "AppendTo", "Assign", "Share" }
+                var missingRights = StandardRights
                     .Where(r => !entityPrivs.ContainsKey(r))
                     .ToList();
                 structured.MissingRights = missingRights.Count > 0 ? missingRights : null;
 
                 var missingSuffix = missingRights.Count > 0 ? $", missing: {string.Join(", ", missingRights)}" : "";
-                return Success($"User '{fullName}' ({userIdGuid}): {roleEntries.Count} role(s) assigned, {entityPrivs.Count} rights on entity '{entityFilter}'{missingSuffix}.", structured);
+                return Success($"User '{fullName}' ({userIdGuid}): {roleEntries.Count} role(s) assigned{teamSuffix}, {entityPrivs.Count} rights on entity '{entityFilter}'{missingSuffix}.", structured);
             }
 
             var countWord = roleEntries.Count == 1 ? "role" : "roles";
-            return Success($"User '{fullName}' ({userIdGuid}): {roleEntries.Count} {countWord} assigned.", structured);
+            return Success($"User '{fullName}' ({userIdGuid}): {roleEntries.Count} {countWord} assigned{teamSuffix}.", structured);
         }
 
-        private CallToolResult HandleAssign(string userId, string roleId)
+        private CallToolResult HandleAssign(string userId, string teamId, string roleId)
         {
-            if (string.IsNullOrWhiteSpace(userId))
-                return Error("user_id is required for 'assign' action.");
+            return ApplyAssignment(userId, teamId, roleId, isAssign: true);
+        }
+
+        private CallToolResult HandleUnassign(string userId, string teamId, string roleId)
+        {
+            return ApplyAssignment(userId, teamId, roleId, isAssign: false);
+        }
+
+        private CallToolResult ApplyAssignment(string userId, string teamId, string roleId, bool isAssign)
+        {
+            var actionWord = isAssign ? "assign" : "unassign";
+            var resultWord = isAssign ? "assigned" : "unassigned";
+
+            if (string.IsNullOrWhiteSpace(userId) && string.IsNullOrWhiteSpace(teamId))
+                return Error($"user_id (or team_id) is required for '{actionWord}' action.");
             if (string.IsNullOrWhiteSpace(roleId))
-                return Error("role_id is required for 'assign' action.");
+                return Error($"role_id is required for '{actionWord}' action.");
             if (!Guid.TryParse(roleId, out var roleGuid))
                 return Error($"'{roleId}' is not a valid GUID for role_id.");
-
-            var userResult = GetUser(userId);
-            if (userResult.Error != null)
-                return Error(userResult.Error);
-            if (userResult.MultipleUsers != null)
-                return Error(userResult.Error, null, BuildMultipleUsersDetails("assign", userResult.MultipleUsers));
-
-            var userGuid = userResult.User.GetAttributeValue<Guid>("systemuserid");
-            var userName = userResult.User.GetAttributeValue<string>("fullname") ?? "";
 
             var role = RetrieveRole(roleGuid);
             if (role == null)
@@ -369,84 +382,82 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Use action='list' to find valid role IDs.");
             var roleName = role.GetAttributeValue<string>("name") ?? "";
 
-            if (_options.DryRun)
-                return DryRun($"Would ASSIGN role '{roleName}' ({roleGuid}) to user '{userName}' ({userGuid}).", new ManageRoleResult
-                {
-                    Action = "assign",
-                    RoleId = roleGuid.ToString(),
-                    RoleName = roleName,
-                    UserId = userGuid.ToString(),
-                    UserName = userName,
-                    Status = "not_executed"
-                });
+            string targetLogical;
+            Guid targetId;
+            string targetName;
 
-            DataverseMutationExecutor.Associate(_context, _serviceClient,
-                "systemuser",
-                userGuid,
-                new Relationship("systemuserroles_association"),
-                new EntityReferenceCollection { new EntityReference("role", roleGuid) });
-
-            return Success($"Assigned role '{roleName}' to user '{userName}'.", new ManageRoleResult
+            if (!string.IsNullOrWhiteSpace(teamId))
             {
-                Action = "assigned",
+                var teamResult = ResolveTeam(teamId);
+                if (teamResult.Error != null)
+                    return Error(teamResult.Error);
+                if (teamResult.MultipleTeams != null)
+                    return Error(teamResult.Error, null, BuildMultipleTeamsDetails(actionWord, teamResult.MultipleTeams));
+
+                targetLogical = "team";
+                targetId = teamResult.Team.GetAttributeValue<Guid>("teamid");
+                targetName = teamResult.Team.GetAttributeValue<string>("name") ?? "";
+            }
+            else
+            {
+                var userResult = GetUser(userId);
+                if (userResult.Error != null)
+                    return Error(userResult.Error);
+                if (userResult.MultipleUsers != null)
+                    return Error(userResult.Error, null, BuildMultipleUsersDetails(actionWord, userResult.MultipleUsers));
+
+                targetLogical = "systemuser";
+                targetId = userResult.User.GetAttributeValue<Guid>("systemuserid");
+                targetName = userResult.User.GetAttributeValue<string>("fullname") ?? "";
+            }
+
+            var relationship = targetLogical == "team"
+                ? "teamroles_association"
+                : "systemuserroles_association";
+            var targetLabel = targetLogical == "team" ? "team" : "user";
+
+            var structured = new ManageRoleResult
+            {
+                Action = resultWord,
                 RoleId = roleGuid.ToString(),
                 RoleName = roleName,
-                UserId = userGuid.ToString(),
-                UserName = userName,
-                Status = "assigned"
-            });
-        }
-
-        private CallToolResult HandleUnassign(string userId, string roleId)
-        {
-            if (string.IsNullOrWhiteSpace(userId))
-                return Error("user_id is required for 'unassign' action.");
-            if (string.IsNullOrWhiteSpace(roleId))
-                return Error("role_id is required for 'unassign' action.");
-            if (!Guid.TryParse(roleId, out var roleGuid))
-                return Error($"'{roleId}' is not a valid GUID for role_id.");
-
-            var userResult = GetUser(userId);
-            if (userResult.Error != null)
-                return Error(userResult.Error);
-            if (userResult.MultipleUsers != null)
-                return Error(userResult.Error, null, BuildMultipleUsersDetails("unassign", userResult.MultipleUsers));
-
-            var userGuid = userResult.User.GetAttributeValue<Guid>("systemuserid");
-            var userName = userResult.User.GetAttributeValue<string>("fullname") ?? "";
-
-            var role = RetrieveRole(roleGuid);
-            if (role == null)
-                return Error($"No security role found with ID '{roleId}'.",
-                    "Use action='list' to find valid role IDs.");
-            var roleName = role.GetAttributeValue<string>("name") ?? "";
+                Status = resultWord
+            };
+            if (targetLogical == "team")
+            {
+                structured.TeamId = targetId.ToString();
+                structured.TeamName = targetName;
+            }
+            else
+            {
+                structured.UserId = targetId.ToString();
+                structured.UserName = targetName;
+            }
 
             if (_options.DryRun)
-                return DryRun($"Would UNASSIGN role '{roleName}' ({roleGuid}) from user '{userName}' ({userGuid}).", new ManageRoleResult
-                {
-                    Action = "unassign",
-                    RoleId = roleGuid.ToString(),
-                    RoleName = roleName,
-                    UserId = userGuid.ToString(),
-                    UserName = userName,
-                    Status = "not_executed"
-                });
-
-            DataverseMutationExecutor.Disassociate(_context, _serviceClient,
-                "systemuser",
-                userGuid,
-                new Relationship("systemuserroles_association"),
-                new EntityReferenceCollection { new EntityReference("role", roleGuid) });
-
-            return Success($"Unassigned role '{roleName}' from user '{userName}'.", new ManageRoleResult
             {
-                Action = "unassigned",
-                RoleId = roleGuid.ToString(),
-                RoleName = roleName,
-                UserId = userGuid.ToString(),
-                UserName = userName,
-                Status = "unassigned"
-            });
+                structured.Action = actionWord;
+                structured.Status = "not_executed";
+                var direction = isAssign ? "to" : "from";
+                return DryRun($"Would {actionWord.ToUpperInvariant()} role '{roleName}' ({roleGuid}) {direction} {targetLabel} '{targetName}' ({targetId}).", structured);
+            }
+
+            if (isAssign)
+                DataverseMutationExecutor.Associate(_context, _serviceClient,
+                    targetLogical,
+                    targetId,
+                    new Relationship(relationship),
+                    new EntityReferenceCollection { new EntityReference("role", roleGuid) });
+            else
+                DataverseMutationExecutor.Disassociate(_context, _serviceClient,
+                    targetLogical,
+                    targetId,
+                    new Relationship(relationship),
+                    new EntityReferenceCollection { new EntityReference("role", roleGuid) });
+
+            var verb = isAssign ? "Assigned" : "Unassigned";
+            var preposition = isAssign ? "to" : "from";
+            return Success($"{verb} role '{roleName}' {preposition} {targetLabel} '{targetName}'.", structured);
         }
 
         private CallToolResult HandleCreate(string roleName, string businessUnitId)
@@ -515,12 +526,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             });
         }
 
-        private CallToolResult HandleUpdate(string roleId, string roleName)
+        private CallToolResult HandleUpdate(string roleId, string roleName, string privilegesJson)
         {
             if (string.IsNullOrWhiteSpace(roleId))
                 return Error("role_id is required for 'update' action.");
-            if (string.IsNullOrWhiteSpace(roleName))
-                return Error("role_name is required for 'update' action (new name for the role).");
+            if (string.IsNullOrWhiteSpace(roleName) && string.IsNullOrWhiteSpace(privilegesJson))
+                return Error("Nothing to update. Provide role_name (rename) and/or privileges (JSON array).",
+                    "Example privileges: [{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Organization\"}]. Use depth 'None' to remove a privilege.");
             if (!Guid.TryParse(roleId, out var id))
                 return Error($"'{roleId}' is not a valid GUID.");
 
@@ -534,29 +546,238 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"Role '{existingRole.GetAttributeValue<string>("name")}' is not customizable and cannot be updated.");
 
             var oldName = existingRole.GetAttributeValue<string>("name") ?? "";
+            var hasRename = !string.IsNullOrWhiteSpace(roleName) && !string.Equals(roleName, oldName, StringComparison.Ordinal);
+
+            List<PrivilegeChangeInput> changes = null;
+            if (!string.IsNullOrWhiteSpace(privilegesJson))
+            {
+                try
+                {
+                    changes = System.Text.Json.JsonSerializer.Deserialize<List<PrivilegeChangeInput>>(privilegesJson,
+                        new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                }
+                catch (System.Text.Json.JsonException ex)
+                {
+                    return Error($"privileges JSON is invalid: {ex.Message}",
+                        "Format: [{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Organization\"}].");
+                }
+                if (changes == null || changes.Count == 0)
+                    return Error("privileges JSON must be a non-empty array.",
+                        "Format: [{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Organization\"}].");
+            }
+
+            var added = new List<string>();
+            var updatedList = new List<string>();
+            var removed = new List<string>();
+            Dictionary<string, PrivilegeInfo> current = null;
+
+            if (changes != null)
+            {
+                current = new Dictionary<string, PrivilegeInfo>(StringComparer.OrdinalIgnoreCase);
+                foreach (var p in GetRolePrivileges(id))
+                    current[$"{p.EntityName}|{p.Right}"] = p;
+
+                foreach (var change in changes)
+                {
+                    var rightRaw = change.Right?.Trim();
+                    var isWildcard = rightRaw == "*" || string.Equals(rightRaw, "all", StringComparison.OrdinalIgnoreCase);
+                    if (!isWildcard)
+                    {
+                        var rightError = ValidateRight(rightRaw);
+                        if (rightError != null) return Error(rightError);
+                    }
+                    var depthError = ValidateDepth(change.Depth);
+                    if (depthError != null) return Error(depthError);
+
+                    var resolvedEntity = DisplayNameFirstResolver.ResolveEntity(_serviceClient, change.Entity?.Trim(), "manage_role");
+                    if (!resolvedEntity.IsSuccess)
+                        return Error($"privileges entity '{change.Entity}': {resolvedEntity.Error}");
+                    var entityLogical = resolvedEntity.Value.LogicalName;
+
+                    var isRemove = string.Equals(change.Depth?.Trim(), "None", StringComparison.OrdinalIgnoreCase);
+
+                    if (isWildcard)
+                    {
+                        var rights = isRemove
+                            ? current.Keys
+                                .Where(k => k.StartsWith(entityLogical + "|", StringComparison.OrdinalIgnoreCase))
+                                .Select(k => k.Substring(entityLogical.Length + 1))
+                                .ToList()
+                            : StandardRights.ToList();
+
+                        foreach (var right in rights)
+                        {
+                            var applyError = ApplyPrivilegeChange(current, entityLogical, right, change.Depth, isRemove, added, updatedList, removed);
+                            if (applyError != null) return Error(applyError);
+                        }
+                        continue;
+                    }
+
+                    var applyErrorSingle = ApplyPrivilegeChange(current, entityLogical, rightRaw, change.Depth, isRemove, added, updatedList, removed);
+                    if (applyErrorSingle != null) return Error(applyErrorSingle);
+                }
+
+                if (added.Count == 0 && updatedList.Count == 0 && removed.Count == 0 && !hasRename)
+                    return Error("No effective privilege changes. All requested privileges already match the current role.");
+            }
+
+            var renamePart = hasRename ? $" → rename to '{roleName.Trim()}'" : "";
+            var privPart = changes == null ? "" : $", privileges: {added.Count} added, {updatedList.Count} depth-changed, {removed.Count} removed";
 
             if (_options.DryRun)
-                return DryRun($"Would UPDATE role '{oldName}' ({id}) → rename to '{roleName}'.", new ManageRoleResult
+                return DryRun($"Would UPDATE role '{oldName}' ({id}){renamePart}{privPart}.", new ManageRoleResult
                 {
                     Action = "update",
                     RoleId = id.ToString(),
-                    RoleName = roleName,
-                    Status = "not_executed"
+                    RoleName = hasRename ? roleName.Trim() : null,
+                    Status = "not_executed",
+                    PrivilegesAdded = added.Count > 0 ? added : null,
+                    PrivilegesUpdated = updatedList.Count > 0 ? updatedList : null,
+                    PrivilegesRemoved = removed.Count > 0 ? removed : null
                 });
 
-            var updateEntity = new Entity("role", id)
+            if (hasRename)
             {
-                ["name"] = roleName
-            };
-            DataverseMutationExecutor.Update(_context, _serviceClient, updateEntity);
+                var updateEntity = new Entity("role", id)
+                {
+                    ["name"] = roleName.Trim()
+                };
+                DataverseMutationExecutor.Update(_context, _serviceClient, updateEntity);
+            }
 
-            return Success($"Renamed role '{oldName}' → '{roleName}' ({id}).", new ManageRoleResult
+            if (changes != null)
+            {
+                var finalPrivileges = new RolePrivilege[current.Count];
+                var i = 0;
+                foreach (var p in current.Values)
+                {
+                    finalPrivileges[i] = new RolePrivilege
+                    {
+                        PrivilegeId = p.PrivilegeId,
+                        Depth = p.DepthMask >= 0 ? (PrivilegeDepth)MaskToDepthValue(p.DepthMask) : (PrivilegeDepth)ReverseDepthMask(p.Depth)
+                    };
+                    i++;
+                }
+
+                DataverseMutationExecutor.Execute(_context, _serviceClient, new ReplacePrivilegesRoleRequest
+                {
+                    RoleId = id,
+                    Privileges = finalPrivileges
+                });
+            }
+
+            var displayName = hasRename ? $"{oldName}' → '{roleName.Trim()}" : oldName;
+            return Success($"Updated role '{displayName}' ({id}){privPart}.", new ManageRoleResult
             {
                 Action = "updated",
                 RoleId = id.ToString(),
-                RoleName = roleName,
-                Status = "updated"
+                RoleName = hasRename ? roleName.Trim() : oldName,
+                Status = "updated",
+                PrivilegesAdded = added.Count > 0 ? added : null,
+                PrivilegesUpdated = updatedList.Count > 0 ? updatedList : null,
+                PrivilegesRemoved = removed.Count > 0 ? removed : null
             });
+        }
+
+        private static readonly string[] StandardRights =
+            { "Create", "Read", "Write", "Delete", "Append", "AppendTo", "Assign", "Share" };
+
+        private string ApplyPrivilegeChange(
+            Dictionary<string, PrivilegeInfo> current,
+            string entityLogical,
+            string right,
+            string depthInput,
+            bool isRemove,
+            List<string> added,
+            List<string> updatedList,
+            List<string> removed)
+        {
+            var key = $"{entityLogical}|{right}";
+
+            if (isRemove)
+            {
+                if (current.TryGetValue(key, out var existing) && current.Remove(key))
+                    removed.Add($"{entityLogical}:{right}");
+                return null;
+            }
+
+            var depth = NormalizeDepth(depthInput);
+            if (current.TryGetValue(key, out var existingPriv))
+            {
+                if (!string.Equals(existingPriv.Depth, depth, StringComparison.Ordinal))
+                {
+                    existingPriv.Depth = depth;
+                    existingPriv.DepthMask = -1;
+                    updatedList.Add($"{entityLogical}:{right}={depth}");
+                }
+                return null;
+            }
+
+            var privId = FindPrivilegeId(right, entityLogical);
+            if (privId == null)
+                return $"No privilege found for right '{right}' on entity '{entityLogical}'. Check the right value and entity name. Use action='detail' with entity_name to see privileges the role already has.";
+            current[key] = new PrivilegeInfo
+            {
+                FullName = $"prv{right}{entityLogical}",
+                Right = right,
+                EntityName = entityLogical,
+                Depth = depth,
+                DepthMask = -1,
+                PrivilegeId = privId.Value
+            };
+            added.Add($"{entityLogical}:{right}={depth}");
+            return null;
+        }
+
+        private static string ValidateRight(string right)
+        {
+            if (string.IsNullOrWhiteSpace(right) || !StandardRights.Contains(right.Trim(), StringComparer.OrdinalIgnoreCase))
+                return $"Invalid privilege right '{right}'. Valid values: {string.Join(", ", StandardRights)}, or '*' for all rights on the entity.";
+            return null;
+        }
+
+        private static string ValidateDepth(string depth)
+        {
+            var valid = new[] { "User", "BusinessUnit", "BU", "Parent:ChildBU", "Organization", "Org", "None" };
+            if (string.IsNullOrWhiteSpace(depth) || !valid.Contains(depth.Trim(), StringComparer.OrdinalIgnoreCase))
+                return $"Invalid privilege depth '{depth}'. Valid values: User, BusinessUnit, Parent:ChildBU, Organization, None (remove).";
+            return null;
+        }
+
+        private static string NormalizeDepth(string depth) => depth.Trim().ToLowerInvariant() switch
+        {
+            "bu" => "BusinessUnit",
+            "org" => "Organization",
+            var d => char.ToUpperInvariant(d[0]) + d.Substring(1)
+        };
+
+        private static int MaskToDepthValue(int depthMask) => depthMask switch
+        {
+            1 => 0,
+            2 => 1,
+            4 => 2,
+            8 => 3,
+            _ => 0
+        };
+
+        private Guid? FindPrivilegeId(string right, string entityLogical)
+        {
+            var name = $"prv{right}{entityLogical}".Replace("[", "[[]").Replace("%", "[%]");
+            var query = new QueryExpression("privilege")
+            {
+                ColumnSet = new ColumnSet("privilegeid"),
+                TopCount = 2
+            };
+            query.Criteria.AddCondition("name", ConditionOperator.Like, name);
+            var result = _serviceClient.RetrieveMultiple(query);
+            return result.Entities.Count == 1 ? result.Entities[0].GetAttributeValue<Guid>("privilegeid") : null;
+        }
+
+        private sealed class PrivilegeChangeInput
+        {
+            public string Entity { get; set; }
+            public string Right { get; set; }
+            public string Depth { get; set; }
         }
 
         private CallToolResult HandleDelete(string roleId)
@@ -782,6 +1003,105 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }).ToList()
         };
 
+        private (Entity Team, string Error, List<Entity> MultipleTeams) ResolveTeam(string teamId)
+        {
+            var query = new QueryExpression("team")
+            {
+                ColumnSet = new ColumnSet("teamid", "name", "teamtype", "businessunitid")
+            };
+
+            if (Guid.TryParse(teamId, out var teamGuid))
+                query.Criteria.AddCondition("teamid", ConditionOperator.Equal, teamGuid);
+            else
+                query.Criteria.AddCondition("name", ConditionOperator.Equal, teamId);
+
+            var result = _serviceClient.RetrieveMultiple(query);
+            if (result.Entities.Count == 0)
+                return (null, $"No team found with '{teamId}'.", null);
+
+            if (result.Entities.Count > 1)
+                return (null, $"{result.Entities.Count} teams match '{teamId}'. Re-call with the exact teamid GUID.", result.Entities.ToList());
+
+            return (result.Entities[0], null, null);
+        }
+
+        private static object BuildMultipleTeamsDetails(string action, List<Entity> teams) => new
+        {
+            action,
+            totalCount = teams.Count,
+            teams = teams.Select(t => new
+            {
+                teamId = t.GetAttributeValue<Guid>("teamid"),
+                name = t.GetAttributeValue<string>("name") ?? "",
+                teamType = MapTeamType(t.GetAttributeValue<OptionSetValue>("teamtype")?.Value),
+                businessUnit = t.GetAttributeValue<EntityReference>("businessunitid")?.Name ?? ""
+            }).ToList()
+        };
+
+        private static string MapTeamType(int? teamType) => teamType switch
+        {
+            0 => "Owner",
+            1 => "Access",
+            2 => "Group",
+            _ => null
+        };
+
+        private List<TeamRoleEntry> GetTeamRolesForUser(Guid userId)
+        {
+            var teamsFetchXml = $@"
+<fetch>
+  <entity name='team'>
+    <attribute name='teamid' />
+    <attribute name='name' />
+    <attribute name='teamtype' />
+    <link-entity name='teammembership' from='teamid' to='teamid' alias='m'>
+      <filter>
+        <condition attribute='systemuserid' operator='eq' value='{userId}' />
+      </filter>
+    </link-entity>
+    <order attribute='name' />
+  </entity>
+</fetch>";
+
+            var teams = _serviceClient.RetrieveMultiple(new FetchExpression(teamsFetchXml)).Entities;
+            if (teams.Count == 0)
+                return [];
+
+            var entries = new List<TeamRoleEntry>();
+
+            foreach (var team in teams)
+            {
+                var teamId = team.GetAttributeValue<Guid>("teamid");
+                var teamRolesFetchXml = $@"
+<fetch>
+  <entity name='teamroles'>
+    <attribute name='roleid' />
+    <link-entity name='role' from='roleid' to='roleid' alias='r'>
+      <attribute name='name' />
+    </link-entity>
+    <filter>
+      <condition attribute='teamid' operator='eq' value='{teamId}' />
+    </filter>
+  </entity>
+</fetch>";
+
+                var teamRoles = _serviceClient.RetrieveMultiple(new FetchExpression(teamRolesFetchXml)).Entities;
+                foreach (var teamRole in teamRoles)
+                {
+                    entries.Add(new TeamRoleEntry
+                    {
+                        TeamId = teamId.ToString(),
+                        TeamName = team.GetAttributeValue<string>("name") ?? "",
+                        TeamType = MapTeamType(team.GetAttributeValue<OptionSetValue>("teamtype")?.Value),
+                        RoleId = teamRole.GetAttributeValue<Guid>("roleid").ToString(),
+                        RoleName = GetAliasedValue<string>(teamRole, "r.name") ?? ""
+                    });
+                }
+            }
+
+            return entries;
+        }
+
         private List<PrivilegeInfo> GetRolePrivileges(Guid roleId)
         {
             var privileges = new List<PrivilegeInfo>();
@@ -837,6 +1157,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Right = parsed.right,
                         EntityName = parsed.entity,
                         Depth = MapDepthMask(depthMask),
+                        DepthMask = depthMask,
                         PrivilegeId = privId
                     });
                 }
@@ -964,6 +1285,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             public string Right { get; set; }
             public string EntityName { get; set; }
             public string Depth { get; set; }
+            public int DepthMask { get; set; }
             public Guid PrivilegeId { get; set; }
         }
 
