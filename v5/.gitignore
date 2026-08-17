@@ -60,3 +60,6 @@ D:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAddCrmPluginRegist
 
 # Local Claude Code MCP server config (may contain credentials)
 .mcp.json
+
+# ZCode local session data
+.zcode/

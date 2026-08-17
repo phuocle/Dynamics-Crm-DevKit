@@ -8,8 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
@@ -42,37 +40,38 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- create: role_name (+optional business_unit_id)\n" +
             "- update: role_id + role_name (rename)\n" +
             "- delete: role_id (irreversible; managed roles can't delete — use copy)\n" +
-            "- copy: role_id + role_name (clone with all privileges)\n\n" +
-
+            "- copy: role_id + role_name (clone with all privileges)\n" +
+            "Mutating actions require the System Administrator role on the calling user.\n\n" +
             "Depth: User < BU < Parent:ChildBU < Org. Only root roles listed (not BU-inherited copies). Fuzzy on role_name: 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto.\n\n" +
-
             "WHEN TO USE:\n" +
             "- Debug 'access denied' (action='user' + entity_name)\n" +
             "- Audit role privileges (action='detail')\n" +
-            "- Provision access (assign/unassign or create/copy)")]
+            "- Provision access (assign/unassign or create/copy)\n" +
+            "RELATED TOOLS: whoami, manage_record, execute_fetchxml.")]
         public CallToolResult manage_role(
-            [Description("list, detail, user, assign, unassign, create, update, delete, copy."
-            )] string action,
-            [Description("Email or GUID. Required: user/assign/unassign."
-            )] string user_id = "",
-            [Description("Role GUID. For detail only, this may also be a role name; if empty, role_name is used. Required: detail/assign/unassign/update/delete/copy."
-            )] string role_id = "",
-            [Description("list: filter (contains). detail: role display name when role_id is empty. create/update/copy: new name."
-            )] string role_name = "",
-            [Description("BU GUID. list: filter. create: target BU (empty = root)."
-            )] string business_unit_id = "",
-            [Description("detail/user: filter privileges by entity Display Name or logical name."
-            )] string entity_name = "",
-            [Description("list only. Max 250."
-            )] int max_records = 50)
+            [Description("list, detail, user, assign, unassign, create, update, delete, copy.")] string action,
+            [Description("Email or GUID. Required: user/assign/unassign.")] string user_id = "",
+            [Description("Role GUID. For detail only, this may also be a role name; if empty, role_name is used. Required: detail/assign/unassign/update/delete/copy.")] string role_id = "",
+            [Description("list: filter (contains). detail: role display name when role_id is empty. create/update/copy: new name.")] string role_name = "",
+            [Description("BU GUID. list: filter. create: target BU (empty = root).")] string business_unit_id = "",
+            [Description("detail/user: filter privileges by entity Display Name or logical name.")] string entity_name = "",
+            [Description("list only. Max 250.")] int max_records = 50)
         {
-            if (string.IsNullOrWhiteSpace(action))
-                return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'user', 'assign', 'unassign', 'create', 'update', 'delete', 'copy'.");
-
-            var normalizedAction = action.Trim().ToLowerInvariant();
-
             try
             {
+                if (string.IsNullOrWhiteSpace(action))
+                    return Error("action is required. Valid values: 'list', 'detail', 'user', 'assign', 'unassign', 'create', 'update', 'delete', 'copy'.");
+
+                var normalizedAction = action.Trim().ToLowerInvariant();
+
+                var isMutation = normalizedAction is "assign" or "unassign" or "create" or "update" or "delete" or "copy";
+                if (isMutation)
+                {
+                    var gateError = RequireSystemAdministrator(normalizedAction);
+                    if (gateError != null)
+                        return gateError;
+                }
+
                 return normalizedAction switch
                 {
                     "list" => HandleList(role_name?.Trim(), business_unit_id?.Trim(), max_records),
@@ -84,16 +83,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "update" => HandleUpdate(role_id?.Trim(), role_name?.Trim()),
                     "delete" => HandleDelete(role_id?.Trim()),
                     "copy" => HandleCopy(role_id?.Trim(), role_name?.Trim()),
-                    _ => ErrorResult($"Error: Invalid action '{action}'. Valid values: 'list', 'detail', 'user', 'assign', 'unassign', 'create', 'update', 'delete', 'copy'.")
+                    _ => Error($"Invalid action '{action}'. Valid values: 'list', 'detail', 'user', 'assign', 'unassign', 'create', 'update', 'delete', 'copy'.")
                 };
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: {ex.Message}");
+                return ThrowException(ex);
             }
         }
-
-        #region Action Handlers
 
         private CallToolResult HandleList(string roleName, string businessUnitId, int maxRecords)
         {
@@ -119,7 +116,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(businessUnitId))
             {
                 if (!Guid.TryParse(businessUnitId, out var buId))
-                    return ErrorResult($"Error: '{businessUnitId}' is not a valid GUID for business_unit_id.");
+                    return Error($"'{businessUnitId}' is not a valid GUID for business_unit_id.");
                 query.Criteria.AddCondition("businessunitid", ConditionOperator.Equal, buId);
             }
 
@@ -131,27 +128,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (roles.Count == 0)
             {
                 var hint = !string.IsNullOrWhiteSpace(roleName) ? $" matching '{roleName}'" : "";
-                return TextResult($"[SecurityRoles] 0 roles found{hint}");
+                return Success($"0 roles found{hint}.", new ManageRoleResult
+                {
+                    Action = "list",
+                    TotalCount = 0
+                });
             }
 
-            var sb = new StringBuilder(roles.Count * 100 + 128);
-            sb.AppendLine($"[SecurityRoles] {roles.Count} {(roles.Count == 1 ? "role" : "roles")}");
-            sb.AppendLine();
-            sb.AppendLine("roleid\tname\tbusinessunit\tmanaged\tcustomizable");
+            var entries = roles.Select(MapRoleEntry).ToList();
 
-            foreach (var role in roles)
+            var countWord = entries.Count == 1 ? "role" : "roles";
+            return Success($"{entries.Count} {countWord} found.", new ManageRoleResult
             {
-                var roleId = role.GetAttributeValue<Guid>("roleid");
-                var name = role.GetAttributeValue<string>("name") ?? "";
-                var buRef = role.GetAttributeValue<EntityReference>("businessunitid");
-                var buName = buRef?.Name ?? "";
-                var isManaged = role.GetAttributeValue<bool>("ismanaged");
-                var isCustomizable = role.GetAttributeValue<BooleanManagedProperty>("iscustomizable")?.Value ?? true;
-
-                sb.AppendLine($"{roleId}\t{EscapeTab(name)}\t{EscapeTab(buName)}\t{(isManaged ? "yes" : "no")}\t{(isCustomizable ? "yes" : "no")}");
-            }
-
-            return TextResult(sb.ToString());
+                Action = "list",
+                TotalCount = entries.Count,
+                Roles = entries
+            });
         }
 
         private CallToolResult HandleDetail(string roleId, string roleNameInput, string entityFilter)
@@ -159,74 +151,104 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var roleReference = !string.IsNullOrWhiteSpace(roleId) ? roleId : roleNameInput;
             var resolvedRole = ResolveRoleForDetail(roleReference);
             if (!string.IsNullOrEmpty(resolvedRole.Error))
-                return ErrorResult(resolvedRole.Error);
+                return Error(resolvedRole.Error);
+            if (resolvedRole.AmbiguousRoles != null)
+                return Error(resolvedRole.Error, null, new ManageRoleResult
+                {
+                    Action = "detail",
+                    TotalCount = resolvedRole.AmbiguousRoles.Count,
+                    Roles = resolvedRole.AmbiguousRoles
+                });
 
             var role = resolvedRole.Role;
             var id = role.GetAttributeValue<Guid>("roleid");
             var roleName = role.GetAttributeValue<string>("name") ?? "";
-            var buRef = role.GetAttributeValue<EntityReference>("businessunitid");
-            var isManaged = role.GetAttributeValue<bool>("ismanaged");
-            var isCustomizable = role.GetAttributeValue<BooleanManagedProperty>("iscustomizable")?.Value ?? true;
-
-            var sb = new StringBuilder(4096);
-            sb.AppendLine($"[SecurityRole] {roleName}");
-            sb.AppendLine($"RoleId: {id}");
-            sb.AppendLine($"BusinessUnit: {buRef?.Name ?? buRef?.Id.ToString() ?? ""}");
-            sb.AppendLine($"Managed: {(isManaged ? "yes" : "no")}");
-            sb.AppendLine($"Customizable: {(isCustomizable ? "yes" : "no")}");
+            var entry = MapRoleEntry(role);
 
             var privileges = GetRolePrivileges(id);
+            var totalPrivileges = privileges.Count;
 
-            if (privileges.Count == 0)
-            {
-                sb.AppendLine();
-                sb.AppendLine("[Privileges] 0 total");
-                return TextResult(sb.ToString());
-            }
+            if (totalPrivileges == 0 && string.IsNullOrWhiteSpace(entityFilter))
+                return Success($"Security role '{roleName}' ({id}): 0 privileges.", new ManageRoleResult
+                {
+                    Action = "detail",
+                    TotalCount = 0,
+                    RoleId = id.ToString(),
+                    RoleName = roleName,
+                    Roles = [entry]
+                });
 
             var resolvedEntityFilter = ResolveEntityFilter(entityFilter, "detail");
             if (!string.IsNullOrEmpty(resolvedEntityFilter.Error))
-                return ErrorResult(resolvedEntityFilter.Error);
+                return Error(resolvedEntityFilter.Error);
             entityFilter = resolvedEntityFilter.EntityName;
 
-            var grouped = GroupPrivilegesByEntity(privileges, entityFilter);
-
-            sb.AppendLine();
-            var totalCount = grouped.Sum(g => g.Value.Count);
-            sb.AppendLine($"[Privileges] {totalCount} total across {grouped.Count} entities");
-
-            foreach (var group in grouped.OrderBy(g => g.Key))
-            {
-                sb.AppendLine();
-                sb.AppendLine($"[{group.Key}] {group.Value.Count} privileges");
-                sb.AppendLine("privilege\tdepth");
-
-                foreach (var priv in group.Value.OrderBy(p => p.Right))
+            var groups = GroupPrivilegesByEntity(privileges, entityFilter)
+                .Select(g => new RolePrivilegeGroup
                 {
-                    sb.AppendLine($"{priv.Right}\t{priv.Depth}");
-                }
-            }
+                    Entity = g.Key,
+                    Count = g.Value.Count,
+                    Privileges = g.Value
+                        .OrderBy(p => p.Right)
+                        .Select(p => new RolePrivilegeEntry { Right = p.Right, Depth = p.Depth })
+                        .ToList()
+                })
+                .OrderBy(g => g.Entity)
+                .ToList();
+            var shownCount = groups.Sum(g => g.Count ?? 0);
 
-            return TextResult(sb.ToString());
+            var filterSuffix = string.IsNullOrWhiteSpace(entityFilter) ? "" : $" on entity '{entityFilter}'";
+
+            if (groups.Count == 0)
+                return Success($"Security role '{roleName}' ({id}): 0 privileges{filterSuffix} (role has {totalPrivileges} total).", new ManageRoleResult
+                {
+                    Action = "detail",
+                    TotalCount = 0,
+                    RoleId = id.ToString(),
+                    RoleName = roleName,
+                    EntityName = entityFilter,
+                    Roles = [entry]
+                });
+
+            return Success($"Security role '{roleName}' ({id}): {shownCount} privileges across {groups.Count} entities{filterSuffix} (role has {totalPrivileges} total).", new ManageRoleResult
+            {
+                Action = "detail",
+                TotalCount = shownCount,
+                RoleId = id.ToString(),
+                RoleName = roleName,
+                EntityName = entityFilter,
+                Roles = [entry],
+                PrivilegeGroups = groups
+            });
         }
 
         private CallToolResult HandleUser(string userId, string entityFilter)
         {
             if (string.IsNullOrWhiteSpace(userId))
-                return ErrorResult("Error: user_id is required for 'user' action.");
+                return Error("user_id is required for 'user' action.",
+                    "Provide the user's email or systemuserid GUID.");
 
-            var user = GetUserEntity(userId);
-            if (user == null)
-                return ErrorResult($"Error: No user found with '{userId}'.");
-            if (user is string errorMsg)
-                return TextResult(errorMsg);
+            var userResult = GetUser(userId);
+            if (userResult.Error != null)
+                return Error(userResult.Error);
+            if (userResult.MultipleUsers != null)
+                return Error(userResult.Error, null, BuildMultipleUsersDetails("user", userResult.MultipleUsers));
 
-            var userEntity = (Entity)user;
+            var userEntity = userResult.User;
             var userIdGuid = userEntity.GetAttributeValue<Guid>("systemuserid");
             var fullName = userEntity.GetAttributeValue<string>("fullname") ?? "";
             var email = userEntity.GetAttributeValue<string>("internalemailaddress") ?? "";
             var isDisabled = userEntity.GetAttributeValue<bool>("isdisabled");
             var buRef = userEntity.GetAttributeValue<EntityReference>("businessunitid");
+
+            var userEntry = new RoleUserEntry
+            {
+                UserId = userIdGuid.ToString(),
+                FullName = fullName,
+                Email = email,
+                Status = isDisabled ? "Disabled" : "Active",
+                BusinessUnit = buRef?.Name ?? buRef?.Id.ToString()
+            };
 
             var rolesFetchXml = $@"
 <fetch>
@@ -236,6 +258,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
       <attribute name='name' />
       <attribute name='ismanaged' />
       <attribute name='iscustomizable' />
+      <attribute name='businessunitid' />
     </link-entity>
     <filter>
       <condition attribute='systemuserid' operator='eq' value='{userIdGuid}' />
@@ -245,43 +268,46 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var rolesResult = _serviceClient.RetrieveMultiple(new FetchExpression(rolesFetchXml));
 
-            var sb = new StringBuilder(2048);
-            sb.AppendLine($"[User] {fullName}");
-            sb.AppendLine($"UserId: {userIdGuid}");
-            sb.AppendLine($"Email: {email}");
-            sb.AppendLine($"Status: {(isDisabled ? "Disabled" : "Active")}");
-            sb.AppendLine($"BusinessUnit: {buRef?.Name ?? buRef?.Id.ToString() ?? ""}");
-            sb.AppendLine();
-
-            if (rolesResult.Entities.Count == 0)
-            {
-                sb.AppendLine("[Roles] 0 assigned");
-                return TextResult(sb.ToString());
-            }
-
-            sb.AppendLine($"[Roles] {rolesResult.Entities.Count} {(rolesResult.Entities.Count == 1 ? "role" : "roles")} assigned");
-            sb.AppendLine();
-            sb.AppendLine("roleid\tname\tmanaged");
-
+            var roleEntries = new List<RoleEntry>();
             var roleIds = new List<Guid>();
             foreach (var roleEntity in rolesResult.Entities)
             {
                 var roleId = roleEntity.GetAttributeValue<Guid>("roleid");
                 var roleName = GetAliasedValue<string>(roleEntity, "r.name") ?? "";
                 var isManaged = GetAliasedValue<bool>(roleEntity, "r.ismanaged");
+                var isCustomizable = GetAliasedValue<bool>(roleEntity, "r.iscustomizable");
+                var roleBuRef = GetAliasedValue<EntityReference>(roleEntity, "r.businessunitid");
 
                 roleIds.Add(roleId);
-                sb.AppendLine($"{roleId}\t{EscapeTab(roleName)}\t{(isManaged ? "yes" : "no")}");
+                roleEntries.Add(new RoleEntry
+                {
+                    RoleId = roleId.ToString(),
+                    Name = roleName,
+                    BusinessUnit = roleBuRef?.Name ?? roleBuRef?.Id.ToString(),
+                    IsManaged = isManaged,
+                    IsCustomizable = isCustomizable
+                });
             }
+
+            var structured = new ManageRoleResult
+            {
+                Action = "user",
+                TotalCount = roleEntries.Count,
+                UserId = userIdGuid.ToString(),
+                UserName = fullName,
+                User = userEntry,
+                Roles = roleEntries.Count > 0 ? roleEntries : null
+            };
 
             if (!string.IsNullOrWhiteSpace(entityFilter))
             {
                 var resolvedEntityFilter = ResolveEntityFilter(entityFilter, "user");
                 if (!string.IsNullOrEmpty(resolvedEntityFilter.Error))
-                    return ErrorResult(resolvedEntityFilter.Error);
+                    return Error(resolvedEntityFilter.Error);
                 entityFilter = resolvedEntityFilter.EntityName;
 
-                sb.AppendLine();
+                structured.EntityName = entityFilter;
+
                 var allPrivileges = new List<PrivilegeInfo>();
                 foreach (var roleId in roleIds)
                 {
@@ -296,56 +322,51 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (entityPrivs.Count == 0)
                 {
-                    sb.AppendLine($"[Effective Privileges] {entityFilter} -- NO privileges found");
-                    sb.AppendLine("This user has NO access to this entity.");
+                    structured.EffectivePrivileges = null;
+                    structured.MissingRights = null;
+                    return Success($"User '{fullName}' ({userIdGuid}): {roleEntries.Count} role(s) assigned, NO privileges on entity '{entityFilter}'.", structured);
                 }
-                else
-                {
-                    sb.AppendLine($"[Effective Privileges] {entityFilter} ({entityPrivs.Count} rights)");
-                    sb.AppendLine("right\tdepth");
 
-                    foreach (var priv in entityPrivs.OrderBy(p => p.Key))
-                    {
-                        sb.AppendLine($"{priv.Key}\t{priv.Value.Depth}");
-                    }
+                structured.EffectivePrivileges = entityPrivs
+                    .OrderBy(p => p.Key)
+                    .Select(p => new RolePrivilegeEntry { Right = p.Key, Depth = p.Value.Depth })
+                    .ToList();
 
-                    var missingRights = new[] { "Create", "Read", "Write", "Delete", "Append", "AppendTo", "Assign", "Share" }
-                        .Where(r => !entityPrivs.ContainsKey(r))
-                        .ToList();
+                var missingRights = new[] { "Create", "Read", "Write", "Delete", "Append", "AppendTo", "Assign", "Share" }
+                    .Where(r => !entityPrivs.ContainsKey(r))
+                    .ToList();
+                structured.MissingRights = missingRights.Count > 0 ? missingRights : null;
 
-                    if (missingRights.Count > 0)
-                    {
-                        sb.AppendLine();
-                        sb.AppendLine($"[Missing Rights] {string.Join(", ", missingRights)}");
-                    }
-                }
+                var missingSuffix = missingRights.Count > 0 ? $", missing: {string.Join(", ", missingRights)}" : "";
+                return Success($"User '{fullName}' ({userIdGuid}): {roleEntries.Count} role(s) assigned, {entityPrivs.Count} rights on entity '{entityFilter}'{missingSuffix}.", structured);
             }
 
-            return TextResult(sb.ToString());
+            var countWord = roleEntries.Count == 1 ? "role" : "roles";
+            return Success($"User '{fullName}' ({userIdGuid}): {roleEntries.Count} {countWord} assigned.", structured);
         }
 
         private CallToolResult HandleAssign(string userId, string roleId)
         {
             if (string.IsNullOrWhiteSpace(userId))
-                return ErrorResult("Error: user_id is required for 'assign' action.");
+                return Error("user_id is required for 'assign' action.");
             if (string.IsNullOrWhiteSpace(roleId))
-                return ErrorResult("Error: role_id is required for 'assign' action.");
+                return Error("role_id is required for 'assign' action.");
             if (!Guid.TryParse(roleId, out var roleGuid))
-                return ErrorResult($"Error: '{roleId}' is not a valid GUID for role_id.");
+                return Error($"'{roleId}' is not a valid GUID for role_id.");
 
-            var user = GetUserEntity(userId);
-            if (user == null)
-                return ErrorResult($"Error: No user found with '{userId}'.");
-            if (user is string errorMsg)
-                return TextResult(errorMsg);
+            var userResult = GetUser(userId);
+            if (userResult.Error != null)
+                return Error(userResult.Error);
+            if (userResult.MultipleUsers != null)
+                return Error(userResult.Error, null, BuildMultipleUsersDetails("assign", userResult.MultipleUsers));
 
-            var userEntity = (Entity)user;
-            var userGuid = userEntity.GetAttributeValue<Guid>("systemuserid");
-            var userName = userEntity.GetAttributeValue<string>("fullname") ?? "";
+            var userGuid = userResult.User.GetAttributeValue<Guid>("systemuserid");
+            var userName = userResult.User.GetAttributeValue<string>("fullname") ?? "";
 
             var role = RetrieveRole(roleGuid);
             if (role == null)
-                return ErrorResult($"Error: No security role found with ID '{roleId}'.");
+                return Error($"No security role found with ID '{roleId}'.",
+                    "Use action='list' to find valid role IDs.");
             var roleName = role.GetAttributeValue<string>("name") ?? "";
 
             if (_options.DryRun)
@@ -365,12 +386,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 new Relationship("systemuserroles_association"),
                 new EntityReferenceCollection { new EntityReference("role", roleGuid) });
 
-            var sb = new StringBuilder(256);
-            sb.AppendLine($"[Role Assigned] '{roleName}' → '{userName}'");
-            sb.AppendLine($"RoleId: {roleGuid}");
-            sb.AppendLine($"UserId: {userGuid}");
-
-            var structured = new ManageRoleResult
+            return Success($"Assigned role '{roleName}' to user '{userName}'.", new ManageRoleResult
             {
                 Action = "assigned",
                 RoleId = roleGuid.ToString(),
@@ -378,33 +394,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 UserId = userGuid.ToString(),
                 UserName = userName,
                 Status = "assigned"
-            };
-
-            return StructuredResult(sb.ToString(), structured);
+            });
         }
 
         private CallToolResult HandleUnassign(string userId, string roleId)
         {
             if (string.IsNullOrWhiteSpace(userId))
-                return ErrorResult("Error: user_id is required for 'unassign' action.");
+                return Error("user_id is required for 'unassign' action.");
             if (string.IsNullOrWhiteSpace(roleId))
-                return ErrorResult("Error: role_id is required for 'unassign' action.");
+                return Error("role_id is required for 'unassign' action.");
             if (!Guid.TryParse(roleId, out var roleGuid))
-                return ErrorResult($"Error: '{roleId}' is not a valid GUID for role_id.");
+                return Error($"'{roleId}' is not a valid GUID for role_id.");
 
-            var user = GetUserEntity(userId);
-            if (user == null)
-                return ErrorResult($"Error: No user found with '{userId}'.");
-            if (user is string errorMsg)
-                return TextResult(errorMsg);
+            var userResult = GetUser(userId);
+            if (userResult.Error != null)
+                return Error(userResult.Error);
+            if (userResult.MultipleUsers != null)
+                return Error(userResult.Error, null, BuildMultipleUsersDetails("unassign", userResult.MultipleUsers));
 
-            var userEntity = (Entity)user;
-            var userGuid = userEntity.GetAttributeValue<Guid>("systemuserid");
-            var userName = userEntity.GetAttributeValue<string>("fullname") ?? "";
+            var userGuid = userResult.User.GetAttributeValue<Guid>("systemuserid");
+            var userName = userResult.User.GetAttributeValue<string>("fullname") ?? "";
 
             var role = RetrieveRole(roleGuid);
             if (role == null)
-                return ErrorResult($"Error: No security role found with ID '{roleId}'.");
+                return Error($"No security role found with ID '{roleId}'.",
+                    "Use action='list' to find valid role IDs.");
             var roleName = role.GetAttributeValue<string>("name") ?? "";
 
             if (_options.DryRun)
@@ -424,12 +438,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 new Relationship("systemuserroles_association"),
                 new EntityReferenceCollection { new EntityReference("role", roleGuid) });
 
-            var sb = new StringBuilder(256);
-            sb.AppendLine($"[Role Unassigned] '{roleName}' ✕ '{userName}'");
-            sb.AppendLine($"RoleId: {roleGuid}");
-            sb.AppendLine($"UserId: {userGuid}");
-
-            var structured = new ManageRoleResult
+            return Success($"Unassigned role '{roleName}' from user '{userName}'.", new ManageRoleResult
             {
                 Action = "unassigned",
                 RoleId = roleGuid.ToString(),
@@ -437,15 +446,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 UserId = userGuid.ToString(),
                 UserName = userName,
                 Status = "unassigned"
-            };
-
-            return StructuredResult(sb.ToString(), structured);
+            });
         }
 
         private CallToolResult HandleCreate(string roleName, string businessUnitId)
         {
             if (string.IsNullOrWhiteSpace(roleName))
-                return ErrorResult("Error: role_name is required for 'create' action.");
+                return Error("role_name is required for 'create' action.");
 
             Guid buId;
             string buName;
@@ -453,7 +460,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(businessUnitId))
             {
                 if (!Guid.TryParse(businessUnitId, out buId))
-                    return ErrorResult($"Error: '{businessUnitId}' is not a valid GUID for business_unit_id.");
+                    return Error($"'{businessUnitId}' is not a valid GUID for business_unit_id.");
 
                 var buQuery = new QueryExpression("businessunit")
                 {
@@ -462,7 +469,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 buQuery.Criteria.AddCondition("businessunitid", ConditionOperator.Equal, buId);
                 var buResult = _serviceClient.RetrieveMultiple(buQuery);
                 if (buResult.Entities.Count == 0)
-                    return ErrorResult($"Error: No business unit found with ID '{businessUnitId}'.");
+                    return Error($"No business unit found with ID '{businessUnitId}'.");
                 buName = buResult.Entities[0].GetAttributeValue<string>("name") ?? "";
             }
             else
@@ -474,7 +481,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 rootBuQuery.Criteria.AddCondition("parentbusinessunitid", ConditionOperator.Null);
                 var rootResult = _serviceClient.RetrieveMultiple(rootBuQuery);
                 if (rootResult.Entities.Count == 0)
-                    return ErrorResult("Error: Could not find the root business unit.");
+                    return Error("Could not find the root business unit.");
                 buId = rootResult.Entities[0].GetAttributeValue<Guid>("businessunitid");
                 buName = rootResult.Entities[0].GetAttributeValue<string>("name") ?? "";
             }
@@ -497,12 +504,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var newId = DataverseMutationExecutor.Create(_context, _serviceClient, roleEntity);
 
-            var sb = new StringBuilder(256);
-            sb.AppendLine($"[Role Created] {roleName}");
-            sb.AppendLine($"RoleId: {newId}");
-            sb.AppendLine($"BusinessUnit: {buName}");
-
-            var structured = new ManageRoleResult
+            return Success($"Created role '{roleName}' ({newId}) in business unit '{buName}'.", new ManageRoleResult
             {
                 Action = "created",
                 RoleId = newId.ToString(),
@@ -510,27 +512,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 BusinessUnitId = buId.ToString(),
                 Status = "created",
                 CreateMode = SolutionComponentCreateMode.None.ToString()
-            };
-
-            return StructuredResult(sb.ToString(), structured);
+            });
         }
 
         private CallToolResult HandleUpdate(string roleId, string roleName)
         {
             if (string.IsNullOrWhiteSpace(roleId))
-                return ErrorResult("Error: role_id is required for 'update' action.");
+                return Error("role_id is required for 'update' action.");
             if (string.IsNullOrWhiteSpace(roleName))
-                return ErrorResult("Error: role_name is required for 'update' action (new name for the role).");
+                return Error("role_name is required for 'update' action (new name for the role).");
             if (!Guid.TryParse(roleId, out var id))
-                return ErrorResult($"Error: '{roleId}' is not a valid GUID.");
+                return Error($"'{roleId}' is not a valid GUID.");
 
             var existingRole = RetrieveRole(id);
             if (existingRole == null)
-                return ErrorResult($"Error: No security role found with ID '{roleId}'.");
+                return Error($"No security role found with ID '{roleId}'.",
+                    "Use action='list' to find valid role IDs.");
 
             var isCustomizable = existingRole.GetAttributeValue<BooleanManagedProperty>("iscustomizable")?.Value ?? true;
             if (!isCustomizable)
-                return ErrorResult($"Error: Role '{existingRole.GetAttributeValue<string>("name")}' is not customizable and cannot be updated.");
+                return Error($"Role '{existingRole.GetAttributeValue<string>("name")}' is not customizable and cannot be updated.");
 
             var oldName = existingRole.GetAttributeValue<string>("name") ?? "";
 
@@ -549,40 +550,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             DataverseMutationExecutor.Update(_context, _serviceClient, updateEntity);
 
-            var sb = new StringBuilder(256);
-            sb.AppendLine($"[Role Updated] '{oldName}' → '{roleName}'");
-            sb.AppendLine($"RoleId: {id}");
-
-            var structured = new ManageRoleResult
+            return Success($"Renamed role '{oldName}' → '{roleName}' ({id}).", new ManageRoleResult
             {
                 Action = "updated",
                 RoleId = id.ToString(),
                 RoleName = roleName,
                 Status = "updated"
-            };
-
-            return StructuredResult(sb.ToString(), structured);
+            });
         }
 
         private CallToolResult HandleDelete(string roleId)
         {
             if (string.IsNullOrWhiteSpace(roleId))
-                return ErrorResult("Error: role_id is required for 'delete' action.");
+                return Error("role_id is required for 'delete' action.");
             if (!Guid.TryParse(roleId, out var id))
-                return ErrorResult($"Error: '{roleId}' is not a valid GUID.");
+                return Error($"'{roleId}' is not a valid GUID.");
 
             var existingRole = RetrieveRole(id);
             if (existingRole == null)
-                return ErrorResult($"Error: No security role found with ID '{roleId}'.");
+                return Error($"No security role found with ID '{roleId}'.",
+                    "Use action='list' to find valid role IDs.");
 
             var isManaged = existingRole.GetAttributeValue<bool>("ismanaged");
             if (isManaged)
-                return ErrorResult($"Error: Role '{existingRole.GetAttributeValue<string>("name")}' is managed and cannot be deleted.");
+                return Error($"Role '{existingRole.GetAttributeValue<string>("name")}' is managed and cannot be deleted.",
+                    "Use action='copy' to clone its privileges into a new custom role, then adjust user assignments.");
 
             var roleName = existingRole.GetAttributeValue<string>("name") ?? "";
 
             if (_options.DryRun)
-                return DryRun($"Would DELETE role '{roleName}' ({id}). WARNING: this cannot be undone.", new ManageRoleResult
+                return DryRun($"Would DELETE role '{roleName}' ({id}). This cannot be undone.", new ManageRoleResult
                 {
                     Action = "delete",
                     RoleId = id.ToString(),
@@ -592,33 +589,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             DataverseMutationExecutor.Delete(_context, _serviceClient, "role", id);
 
-            var sb = new StringBuilder(256);
-            sb.AppendLine($"[Role Deleted] {roleName}");
-            sb.AppendLine($"RoleId: {id}");
-
-            var structured = new ManageRoleResult
+            return Success($"Deleted role '{roleName}' ({id}).", new ManageRoleResult
             {
                 Action = "deleted",
                 RoleId = id.ToString(),
                 RoleName = roleName,
                 Status = "deleted"
-            };
-
-            return StructuredResult(sb.ToString(), structured);
+            });
         }
 
         private CallToolResult HandleCopy(string roleId, string roleName)
         {
             if (string.IsNullOrWhiteSpace(roleId))
-                return ErrorResult("Error: role_id is required for 'copy' action.");
+                return Error("role_id is required for 'copy' action.");
             if (string.IsNullOrWhiteSpace(roleName))
-                return ErrorResult("Error: role_name is required for 'copy' action (name for the new role).");
+                return Error("role_name is required for 'copy' action (name for the new role).");
             if (!Guid.TryParse(roleId, out var sourceId))
-                return ErrorResult($"Error: '{roleId}' is not a valid GUID.");
+                return Error($"'{roleId}' is not a valid GUID.");
 
             var sourceRole = RetrieveRole(sourceId);
             if (sourceRole == null)
-                return ErrorResult($"Error: No security role found with ID '{roleId}'.");
+                return Error($"No security role found with ID '{roleId}'.",
+                    "Use action='list' to find valid role IDs.");
 
             var sourceRoleName = sourceRole.GetAttributeValue<string>("name") ?? "";
             var buRef = sourceRole.GetAttributeValue<EntityReference>("businessunitid");
@@ -666,13 +658,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 DataverseMutationExecutor.Execute(_context, _serviceClient, addPrivRequest);
             }
 
-            var sb = new StringBuilder(256);
-            sb.AppendLine($"[Role Copied] '{sourceRoleName}' → '{roleName}'");
-            sb.AppendLine($"SourceRoleId: {sourceId}");
-            sb.AppendLine($"NewRoleId: {newRoleId}");
-            sb.AppendLine($"PrivilegesCopied: {privileges.Count}");
-
-            var structured = new ManageRoleResult
+            return Success($"Copied role '{sourceRoleName}' ({sourceId}) → '{roleName}' ({newRoleId}) with {privileges.Count} privileges.", new ManageRoleResult
             {
                 Action = "copied",
                 RoleId = newRoleId.ToString(),
@@ -680,48 +666,54 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SourceRoleId = sourceId.ToString(),
                 PrivilegesCopied = privileges.Count,
                 Status = "copied"
-            };
-
-            return StructuredResult(sb.ToString(), structured);
+            });
         }
 
-        #endregion
+        private CallToolResult RequireSystemAdministrator(string action)
+        {
+            if (RoleGateHelper.IsSystemAdministrator(_serviceClient))
+                return null;
 
-        #region Dataverse Operations
+            var haveRoles = RoleGateHelper.GetCurrentRoleNames(_serviceClient);
+            var haveList = haveRoles.Count > 0
+                ? string.Join(", ", haveRoles)
+                : "(no roles assigned)";
+            const string requiredRoleName = DynamicsCrm.DevKit.Shared.Const.SystemAdministratorRoleName;
+            return Error(
+                $"Action '{action}' requires the '{requiredRoleName}' role. The calling user does not have it.",
+                $"Security role mutations change org-wide access. Ask a System Administrator to assign the '{requiredRoleName}' role to your user, then retry. Current roles on the calling user: {haveList}.");
+        }
 
-        private (Entity Role, string Error) ResolveRoleForDetail(string roleReference)
+        private (Entity Role, string Error, List<RoleEntry> AmbiguousRoles) ResolveRoleForDetail(string roleReference)
         {
             if (string.IsNullOrWhiteSpace(roleReference))
-                return (null, "Error: role_id or role_name is required for 'detail' action.");
+                return (null, "role_id or role_name is required for 'detail' action.", null);
 
             roleReference = roleReference.Trim();
 
-            if (_serviceClient != null)
+            var nameMatches = FindRootRolesByNameContains(roleReference);
+            if (nameMatches.Count == 1)
+                return (nameMatches[0], null, null);
+
+            if (nameMatches.Count > 1)
             {
-                var nameMatches = FindRootRolesByNameContains(roleReference);
-                if (nameMatches.Count == 1)
-                    return (nameMatches[0], null);
+                var exactMatches = nameMatches
+                    .Where(r => string.Equals(r.GetAttributeValue<string>("name"), roleReference, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+                if (exactMatches.Count == 1)
+                    return (exactMatches[0], null, null);
 
-                if (nameMatches.Count > 1)
-                {
-                    var exactMatches = nameMatches
-                        .Where(r => string.Equals(r.GetAttributeValue<string>("name"), roleReference, StringComparison.OrdinalIgnoreCase))
-                        .ToList();
-                    if (exactMatches.Count == 1)
-                        return (exactMatches[0], null);
-
-                    return (null, FormatMultipleRoles(roleReference, nameMatches));
-                }
+                return (null, $"{nameMatches.Count} roles match '{roleReference}'. Re-call with the exact roleid GUID or a more specific role_name.", nameMatches.Select(MapRoleEntry).ToList());
             }
 
             if (!Guid.TryParse(roleReference, out var id))
-                return (null, $"Error: '{roleReference}' is not a valid GUID.");
+                return (null, $"'{roleReference}' is not a valid GUID.", null);
 
             var role = RetrieveRole(id);
             if (role == null)
-                return (null, $"Error: No security role found with ID '{roleReference}'.");
+                return (null, $"No security role found with ID '{roleReference}'.", null);
 
-            return (role, null);
+            return (role, null, null);
         }
 
         private DataCollection<Entity> FindRootRolesByNameContains(string roleName)
@@ -754,7 +746,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
-        private object GetUserEntity(string userId)
+        private (Entity User, string Error, List<Entity> MultipleUsers) GetUser(string userId)
         {
             var userQuery = new QueryExpression("systemuser")
             {
@@ -768,13 +760,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var userResult = _serviceClient.RetrieveMultiple(userQuery);
             if (userResult.Entities.Count == 0)
-                return null;
+                return (null, $"No user found with '{userId}'.", null);
 
             if (userResult.Entities.Count > 1)
-                return FormatMultipleUsers(userId, userResult.Entities);
+                return (null, $"{userResult.Entities.Count} users match '{userId}'. Re-call with the exact systemuserid GUID.", userResult.Entities.ToList());
 
-            return userResult.Entities[0];
+            return (userResult.Entities[0], null, null);
         }
+
+        private static object BuildMultipleUsersDetails(string action, List<Entity> users) => new
+        {
+            action,
+            totalCount = users.Count,
+            users = users.Select(u => new
+            {
+                systemUserId = u.GetAttributeValue<Guid>("systemuserid"),
+                fullName = u.GetAttributeValue<string>("fullname") ?? "",
+                email = u.GetAttributeValue<string>("internalemailaddress") ?? "",
+                status = u.GetAttributeValue<bool>("isdisabled") ? "Disabled" : "Active",
+                businessUnit = u.GetAttributeValue<EntityReference>("businessunitid")?.Name ?? ""
+            }).ToList()
+        };
 
         private List<PrivilegeInfo> GetRolePrivileges(Guid roleId)
         {
@@ -845,9 +851,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return privileges;
         }
 
-        #endregion
 
-        #region Helpers
+
+        private static RoleEntry MapRoleEntry(Entity role) => new()
+        {
+            RoleId = role.GetAttributeValue<Guid>("roleid").ToString(),
+            Name = role.GetAttributeValue<string>("name") ?? "",
+            BusinessUnit = role.GetAttributeValue<EntityReference>("businessunitid")?.Name,
+            IsManaged = role.GetAttributeValue<bool>("ismanaged"),
+            IsCustomizable = role.GetAttributeValue<BooleanManagedProperty>("iscustomizable")?.Value ?? true
+        };
 
         private static Dictionary<string, List<PrivilegeInfo>> GroupPrivilegesByEntity(
             List<PrivilegeInfo> privileges, string entityFilter)
@@ -869,7 +882,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityFilter.Trim(), "manage_role");
             if (!resolved.IsSuccess)
-                return (null, $"Error: entity_name '{entityFilter.Trim()}' for action='{action}': {resolved.Error}");
+                return (null, $"entity_name '{entityFilter.Trim()}' for action='{action}': {resolved.Error}");
 
             return (resolved.Value.LogicalName, null);
         }
@@ -931,10 +944,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static int ReverseDepthMask(string depth) => depth switch
         {
-            "User" => 0,             // PrivilegeDepth.Basic
-            "BusinessUnit" => 1,     // PrivilegeDepth.Local
-            "Parent:ChildBU" => 2,   // PrivilegeDepth.Deep
-            "Organization" => 3,     // PrivilegeDepth.Global
+            "User" => 0,
+            "BusinessUnit" => 1,
+            "Parent:ChildBU" => 2,
+            "Organization" => 3,
             _ => 0
         };
 
@@ -945,56 +958,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return default;
         }
 
-        private static string EscapeTab(string value) =>
-            value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
-
-        private static string FormatMultipleUsers(string input, DataCollection<Entity> users)
-        {
-            var sb = new StringBuilder(users.Count * 120 + 256);
-            sb.AppendLine($"[Multiple Users] {users.Count} users match '{input}'. Re-call with the exact systemuserid GUID:");
-            sb.AppendLine();
-            sb.AppendLine("systemuserid\tfullname\temail\tstatus\tbusinessunit");
-            foreach (var u in users)
-            {
-                var id = u.GetAttributeValue<Guid>("systemuserid");
-                var name = u.GetAttributeValue<string>("fullname") ?? "";
-                var email = u.GetAttributeValue<string>("internalemailaddress") ?? "";
-                var disabled = u.GetAttributeValue<bool>("isdisabled");
-                var buRef = u.GetAttributeValue<EntityReference>("businessunitid");
-                var buName = buRef?.Name ?? "";
-                sb.AppendLine($"{id}\t{EscapeTab(name)}\t{EscapeTab(email)}\t{(disabled ? "Disabled" : "Active")}\t{EscapeTab(buName)}");
-            }
-            return sb.ToString();
-        }
-
-        private static string FormatMultipleRoles(string input, IEnumerable<Entity> roles)
-        {
-            var roleList = roles.ToList();
-            var sb = new StringBuilder(roleList.Count * 120 + 256);
-            sb.AppendLine($"[Multiple Security Roles] {roleList.Count} roles match '{input}'. Re-call with the exact roleid GUID or a more specific role_name:");
-            sb.AppendLine();
-            sb.AppendLine("roleid\tname\tbusinessunit\tmanaged\tcustomizable");
-            foreach (var role in roleList)
-            {
-                var id = role.GetAttributeValue<Guid>("roleid");
-                var name = role.GetAttributeValue<string>("name") ?? "";
-                var buRef = role.GetAttributeValue<EntityReference>("businessunitid");
-                var buName = buRef?.Name ?? "";
-                var isManaged = role.GetAttributeValue<bool>("ismanaged");
-                var isCustomizable = role.GetAttributeValue<BooleanManagedProperty>("iscustomizable")?.Value ?? true;
-                sb.AppendLine($"{id}\t{EscapeTab(name)}\t{EscapeTab(buName)}\t{(isManaged ? "yes" : "no")}\t{(isCustomizable ? "yes" : "no")}");
-            }
-            return sb.ToString();
-        }
-
-        private CallToolResult ErrorResult(string message) => Error(message);
-
-        private CallToolResult TextResult(string message) => Success(message, null);
-
-        private CallToolResult StructuredResult(string text, ManageRoleResult structured) => Success(text, structured);
-
-        #endregion
-
         private sealed class PrivilegeInfo
         {
             public string FullName { get; set; }
@@ -1003,5 +966,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             public string Depth { get; set; }
             public Guid PrivilegeId { get; set; }
         }
+
     }
 }

@@ -48,5 +48,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("addToSolutionMethod")]
         public string AddToSolutionMethod { get; set; } = "none";
+
+        [JsonPropertyName("totalCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? TotalCount { get; set; }
+
+        [JsonPropertyName("entityName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string EntityName { get; set; }
+
+        [JsonPropertyName("roles")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<RoleEntry> Roles { get; set; }
+
+        [JsonPropertyName("user")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public RoleUserEntry User { get; set; }
+
+        [JsonPropertyName("privilegeGroups")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<RolePrivilegeGroup> PrivilegeGroups { get; set; }
+
+        [JsonPropertyName("effectivePrivileges")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<RolePrivilegeEntry> EffectivePrivileges { get; set; }
+
+        [JsonPropertyName("missingRights")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> MissingRights { get; set; }
     }
 }
