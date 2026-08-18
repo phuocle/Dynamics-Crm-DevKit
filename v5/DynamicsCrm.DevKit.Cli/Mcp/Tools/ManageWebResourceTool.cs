@@ -77,7 +77,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "add_event/add_library (run list first); combine with build_form_xml + manage_form to wire JS into a form.\n" +
             "RELATED TOOLS: get_solution_components, manage_form, publish_customizations.")]
         public CallToolResult manage_webresource(
-            [Description("list / detail / create / update / delete.")] string action,
+            [Description("list / detail / create / update / delete.")] string action = "",
             [Description("GUID, Display Name, or unique name. Required: detail/update/delete.")] string web_resource_id = "",
             [Description("Unique name (e.g. 'v4_/entities/Account.form.js'). Required: create. list: contains filter across Display Name and unique name.")] string name = "",
             [Description("Display Name. Optional: create/update.")] string display_name = "",

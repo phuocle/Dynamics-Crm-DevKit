@@ -57,10 +57,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- manage_record / search_records → find record_id\n" +
             "- manage_column → create file/image columns or raise MaxSizeInKB")]
         public CallToolResult manage_record_file(
-            [Description("'info', 'upload', 'download', 'delete'.")] string action,
-            [Description("Table Display or logical name (Display Name resolved first). Required.")] string entity_name,
-            [Description("File/Image column Display or logical name (Display Name resolved first). Required.")] string column_name,
-            [Description("GUID of the record. Required.")] string record_id,
+            [Description("'info', 'upload', 'download', 'delete'.")] string action = "",
+            [Description("Table Display or logical name (Display Name resolved first). Required.")] string entity_name = "",
+            [Description("File/Image column Display or logical name (Display Name resolved first). Required.")] string column_name = "",
+            [Description("GUID of the record. Required.")] string record_id = "",
             [Description("upload: local file path or http(s) URL (auto-downloaded). Relative paths resolve against workspace_folder.")] string file_path = "",
             [Description("upload alternative: base64 content, files < 1 MB only. Requires file_name.")] string content_base64 = "",
             [Description("upload: override file name. Required with content_base64; default = name from path/URL.")] string file_name = "",

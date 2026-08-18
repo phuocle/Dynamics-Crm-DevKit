@@ -140,7 +140,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_plugins → plugin assembly/type/step detail\n" +
             "- manage_webresource → web resource detail")]
         public CallToolResult get_solution_components(
-            [Description("Solution unique/display name; multiple matches return choices.")] string solution_name,
+            [Description("Solution unique/display name; multiple matches return choices.")] string solution_name = "",
             [Description("Add ActiveLayer (Yes/No) via msdyn_componentlayer. Active = unmanaged customization exists.")] bool include_active_layers = false,
             [Description("Show only active-layer components; implies include_active_layers.")] bool active_layers_only = false)
         {

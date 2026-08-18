@@ -56,26 +56,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "The AI should pass its current workspace directory to workspace_folder to ensure backups are saved to the user's project.\n\n" +
             "Fuzzy on form_name (contains): 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto-detail.")]
         public CallToolResult manage_form(
-            [Description("'list', 'detail', 'update', 'rename', 'undo'."
-            )] string action,
-            [Description("Entity Display Name or logical name (Display Name is resolved first; e.g. 'Account' or 'account')."
-            )] string entity_name,
-            [Description("GUID. Required: detail/update/rename/undo."
-            )] string form_id = "",
-            [Description("Name contains. 1 match → auto-detail. Ignored if form_id set."
-            )] string form_name = "",
-            [Description("2=Main, 5=Mobile, 6=QuickView, 7=QuickCreate. 0 = all."
-            )] int form_type = 0,
-            [Description("List mode only. Detail always includes."
-            )] bool include_formxml = false,
-            [Description("update (advanced/undo): raw FormXML or backup file path (.formxml). Auto-detects. Use 'operations' for recommended flow."
-            )] string formxml = "",
-            [Description("update (recommended): JSON array. Example: [{\"action\":\"manage_event\",\"manage_action\":\"add\",\"event_name\":\"onload\",\"function_name\":\"Namespace.onLoad\",\"library_name\":\"new_/js/account.js\",\"pass_execution_context\":true}]. Read docs://instructions_for_formxml."
-            )] string operations = "",
-            [Description("XSD validate before write."
-            )] bool validate = true,
-            [Description("Backup before overwrite. Failure blocks update."
-            )] bool backup = true,
+            [Description("'list', 'detail', 'update', 'rename', 'undo'.")] string action = "",
+            [Description("Entity Display Name or logical name (Display Name is resolved first; e.g. 'Account' or 'account').")] string entity_name = "",
+            [Description("GUID. Required: detail/update/rename/undo.")] string form_id = "",
+            [Description("Name contains. 1 match → auto-detail. Ignored if form_id set.")] string form_name = "",
+            [Description("2=Main, 5=Mobile, 6=QuickView, 7=QuickCreate. 0 = all.")] int form_type = 0,
+            [Description("List mode only. Detail always includes.")] bool include_formxml = false,
+            [Description("update (advanced/undo): raw FormXML or backup file path (.formxml). Auto-detects. Use 'operations' for recommended flow.")] string formxml = "",
+            [Description("update (recommended): JSON array. Example: [{\"action\":\"manage_event\",\"manage_action\":\"add\",\"event_name\":\"onload\",\"function_name\":\"Namespace.onLoad\",\"library_name\":\"new_/js/account.js\",\"pass_execution_context\":true}]. Read docs://instructions_for_formxml.")] string operations = "",
+            [Description("XSD validate before write.")] bool validate = true,
+            [Description("Backup before overwrite. Failure blocks update.")] bool backup = true,
             [Description("Optional project/workspace folder path to save backups in.")] string workspace_folder = "")
         {
             _workspaceFolder = workspace_folder;

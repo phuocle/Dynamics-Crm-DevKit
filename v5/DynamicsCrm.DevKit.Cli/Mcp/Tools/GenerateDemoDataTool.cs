@@ -63,9 +63,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- create_records → import generated JSON into Dataverse\n" +
             "- get_tables → discover entity fields before generating")]
         public CallToolResult generate_demo_data(
-            [Description("Entity logical name (e.g., 'account').")] string entity_name,
-            [Description("ISO 8601, e.g. '2026-01-01'. NEVER infer — ask user.")] string from_date,
-            [Description("ISO 8601, e.g. '2026-04-30'. Must be >= from_date.")] string to_date,
+            [Description("Entity logical name (e.g., 'account').")] string entity_name = "",
+            [Description("ISO 8601, e.g. '2026-01-01'. NEVER infer — ask user.")] string from_date = "",
+            [Description("ISO 8601, e.g. '2026-04-30'. Must be >= from_date.")] string to_date = "",
             [Description("1-500.")] int count = 10,
             [Description("Comma-separated logical names. Empty = auto-select creatable.")] string fields = "",
             [Description("0 = random; non-zero = reproducible.")] int seed = 0,

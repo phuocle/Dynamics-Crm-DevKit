@@ -138,7 +138,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Fuzzy on label (within entity_name + location + app): 0/multi → tool returns disambiguation list and stops; AI must ask user (re-call with command_id). 1 → auto-resolve.\n" +
             "Fuzzy on app_name (contains): 0/multi → ask user. 1 → auto.")]
         public CallToolResult manage_command(
-            [Description("list/detail/create/update/hide/show/add_flyout/update_flyout/add_flyout_item/remove_flyout_item/add_split_button/update_split_button.")] string action,
+            [Description("list/detail/create/update/hide/show/add_flyout/update_flyout/add_flyout_item/remove_flyout_item/add_split_button/update_split_button.")] string action = "",
             [Description("appaction GUID. Required: detail/update.")] string command_id = "",
             [Description("Entity Display Name or logical name. Required: create.")] string entity_name = "",
             [Description("form/main_grid/sub_grid/associated_grid/quick_form/global_header/dashboard. Required: create.")] string location = "",

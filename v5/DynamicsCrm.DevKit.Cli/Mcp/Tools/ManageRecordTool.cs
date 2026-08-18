@@ -45,8 +45,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- create_records → bulk create multiple records\n" +
             "- execute_webapi → raw OData JSON/annotations")]
         public CallToolResult manage_record(
-            [Description("'create', 'read', 'update', 'delete', 'associate', 'disassociate'.")] string action,
-            [Description("Entity logical name (e.g., 'account').")] string entity_name,
+            [Description("'create', 'read', 'update', 'delete', 'associate', 'disassociate'.")] string action = "",
+            [Description("Entity logical name (e.g., 'account').")] string entity_name = "",
             [Description("GUID. Required: read/update/delete. Empty: create.")] string record_id = "",
             [Description("JSON object of field values. Required: create/update. Polymorphic lookup: 'fieldname@targetentity' key. Activity party fields (to/from/cc/bcc/requiredattendees/optionalattendees): JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Single party auto-wrapped: {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Optional: \"addressused\":\"email\". Regular lookup: {\"fieldname\": \"guid\"}.")] string fields_json = "",
             [Description("Read only. Comma-separated columns. Empty = all.")] string columns = "",

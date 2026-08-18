@@ -76,7 +76,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Multi-series: measures='col:agg[:label]; ...' (agg: count/countcolumn/sum/avg/min/max) defaults chart_type to Column and is mutually exclusive with aggregate_column. " +
             "filter='field op value; ...' (ops: =, !=, >, >=, <, <=, like, in, null, not-null) filters chart data. Create with measures or filter also requires confirmed=true.")]
         public CallToolResult manage_chart(
-            [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action,
+            [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",
             [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Required for list/create.")] string entity_name = "",
             [Description("Chart GUID. Required for detail/update/rename/set_default/undo (unless chart_name uniquely identifies chart).")] string chart_id = "",
             [Description("Chart name. Used for detail/update/rename lookup or create. Required for create.")] string chart_name = "",

@@ -49,7 +49,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Provision access (assign/unassign or create/copy)\n" +
             "RELATED TOOLS: whoami, manage_record, execute_fetchxml.")]
         public CallToolResult manage_role(
-            [Description("list, detail, user, assign, unassign, create, update, delete, copy.")] string action,
+            [Description("list, detail, user, assign, unassign, create, update, delete, copy.")] string action = "",
             [Description("Email or GUID. Required: user/assign/unassign (unless team_id is used).")] string user_id = "",
             [Description("Team GUID or exact name. assign/unassign: assign the role to this team instead of a user (members inherit it).")] string team_id = "",
             [Description("Role GUID. For detail only, this may also be a role name; if empty, role_name is used. Required: detail/assign/unassign/update/delete/copy.")] string role_id = "",

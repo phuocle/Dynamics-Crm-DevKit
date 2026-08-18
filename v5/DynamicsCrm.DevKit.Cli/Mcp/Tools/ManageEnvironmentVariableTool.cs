@@ -44,7 +44,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "'update' with empty value leaves the current value untouched — use 'clear' to remove it. 'clear' removes current value only (definition+default remain). 'delete' is irreversible (no backup).\n" +
             "Secret-type values are masked as '(secret)' in all outputs.")]
         public CallToolResult manage_environment_variable(
-            [Description("'list', 'detail', 'create', 'update', 'delete', 'clear'.")] string action,
+            [Description("'list', 'detail', 'create', 'update', 'delete', 'clear'.")] string action = "",
             [Description("Display/schema name with prefix (e.g. 'v4_ApiEndpoint'). Required: detail/update/delete/clear. Omit for create (derived from solution).")] string variable_name = "",
             [Description("Display/unique name or GUID. 'list': filter. 'create': REQUIRED (resolves publisher prefix).")] string solution_name = "",
             [Description("List only. Default 50, max 5000.")] int max_records = 50,

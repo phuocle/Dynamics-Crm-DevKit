@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- manage_record → read or change a parsed record\n" +
             "- get_tables → resolve or verify an unknown entity logical name")]
         public CallToolResult parse_record_url(
-            [Description("URL, GUID, or text. URL-decoded automatically; first matching parser wins.")] string input)
+            [Description("URL, GUID, or text. URL-decoded automatically; first matching parser wins.")] string input = "")
         {
             try
             {

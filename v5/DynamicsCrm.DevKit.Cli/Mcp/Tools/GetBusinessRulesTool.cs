@@ -42,7 +42,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_business_process_flows → BPF definitions + stages\n" +
             "- manage_record(action='read', columns='xaml') → raw XAML when parse is incomplete")]
         public CallToolResult get_business_rules(
-            [Description("Entity Display Name or logical name. Required and ownership-validated in detail mode.")] string entity_name,
+            [Description("Entity Display Name or logical name. Required and ownership-validated in detail mode.")] string entity_name = "",
             [Description("GUID → detail mode. Empty = list mode.")] string rule_id = "",
             [Description("'active' or 'draft'. Empty = all. Ignored in detail mode.")] string status = "",
             [Description("1-200. Default 50. Ignored in detail mode.")] int max_records = 50)

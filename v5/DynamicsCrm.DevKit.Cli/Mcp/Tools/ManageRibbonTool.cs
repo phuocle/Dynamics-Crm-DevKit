@@ -90,7 +90,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "The AI should pass its current workspace directory to workspace_folder to ensure backups are saved to the user's project.\n" +
             "- Modern Power Fx command bar customization is not exposed by this MCP server")]
         public CallToolResult manage_ribbon(
-            [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action,
+            [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action = "",
             [Description("Entity Display Name or logical name. Required: detail/update/undo/buttons.")] string entity_name = "",
             [Description("JSON array of ribbon operations for action='update'. Operations: add_button, update_button, hide_button, show_button, add_split_button, update_split_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item. add_button optional fields include selection_min and selection_max for main_grid/sub_grid SelectionCountRule; omit both to disable selection count, selection_min=1 means one or more rows, selection_min=1 + selection_max=1 means exactly one row.")] string operations = "",
             [Description("For 'undo': backup file path.")] string ribbonxml = "",

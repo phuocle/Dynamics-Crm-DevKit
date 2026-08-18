@@ -53,8 +53,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Created views are always Public (querytype=0). QuickFind views: searchable fields are <condition> in <filter isquickfindfields=\"1\">; grid columns are display only. " +
             "Always list/detail BEFORE editing. workspace_folder is REQUIRED for update/rename/undo — current view XML is backed up to {workspace_folder}/.devkit/backups/views/ before overwrite. See docs://instructions_for_views, schema://fetchxml.")]
         public CallToolResult manage_view(
-            [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action,
-            [Description("Entity Display/logical name (Display Name resolved first).")] string entity_name,
+            [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",
+            [Description("Entity Display/logical name (Display Name resolved first).")] string entity_name = "",
             [Description("GUID. Required: detail/update/rename/undo.")] string view_id = "",
             [Description("Name contains. 1 match → auto-select; multiple → returns candidates, use view_id.")] string view_name = "",
             [Description("false = system views (savedquery), true = personal views (userquery) — scopes list and view_name resolution.")] bool is_personal_view = false,

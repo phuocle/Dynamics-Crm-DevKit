@@ -37,7 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- search_records → keyword relevance search\n" +
             "- schema://fetchxml → FetchXML syntax and examples")]
         public CallToolResult execute_fetchxml(
-            [Description("FetchXML starting with <fetch>. Lowercase logical names.")] string fetchxml,
+            [Description("FetchXML starting with <fetch>. Lowercase logical names.")] string fetchxml = "",
             [Description("1-5000. Default 5000. Use 10-100 for samples.")] int max_records = 5000,
             [Description("true = auto-page until max_records. false = first page only.")] bool get_all = false)
         {

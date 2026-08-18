@@ -45,7 +45,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- publish_customizations → batch publish after multiple metadata changes\n\n" +
             "solution_name is REQUIRED for create and label-only add_options — ask the user if missing, never guess. If needsWait=true, wait pollAfterSeconds before detail.")]
         public CallToolResult manage_choice(
-            [Description("'list', 'detail', 'create', 'update'.")] string action,
+            [Description("'list', 'detail', 'create', 'update'.")] string action = "",
             [Description("Logical or display name. Required: detail/update. Optional: create (auto-derived). Display Name matched first.")] string optionset_name = "",
             [Description("Required: create. Optional: update (rename). For list, prefer filter=.")] string display_name = "",
             [Description("'list' only. Contains filter on logical+display name.")] string filter = "",
