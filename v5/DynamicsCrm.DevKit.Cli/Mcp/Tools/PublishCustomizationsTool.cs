@@ -163,13 +163,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     };
                 }
 
-                var parameterXml = BuildParameterXml(entityList, appModuleList, include_global_optionset, include_sitemap,
-                    include_ribbons, optionSetNameList, dashboardList, webResourceList);
-                var request = new PublishXmlRequest { ParameterXml = parameterXml };
-                DataverseMutationExecutor.Execute(_context, _serviceClient, request);
-
-                // Wait for metadata to propagate after publish
-                MetadataOperationWaitHelper.WaitForPropagation();
+                var payload = new PublishTargetedPayload
+                {
+                    EntityNames = entityList,
+                    AppModuleIds = appModuleList.Select(Guid.Parse).ToList(),
+                    OptionSetNames = optionSetNameList,
+                    DashboardIds = dashboardList.Select(Guid.Parse).ToList(),
+                    WebResourceIds = webResourceList.Select(Guid.Parse).ToList(),
+                    IncludeGlobalOptionSets = include_global_optionset,
+                    IncludeRibbons = include_ribbons,
+                    IncludeSiteMap = include_sitemap
+                };
+                var published = PublishHelper.PublishTargeted(_context, _serviceClient, payload, waitSeconds: 20);
 
                 sw.Stop();
 
@@ -182,7 +187,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"Dashboards: {(dashboardList.Count == 0 ? "(none)" : string.Join(", ", dashboardList))}");
                 sb.AppendLine($"WebResources: {(webResourceList.Count == 0 ? "(none)" : string.Join(", ", webResourceList))}");
                 sb.AppendLine($"SiteMap: {(include_sitemap ? "yes" : "no")}");
-                sb.AppendLine("Status: Published successfully");
+                sb.AppendLine($"Status: {(published ? "Published successfully" : "Publish failed")}");
                 sb.Append($"Duration: {sw.Elapsed.TotalSeconds:F1}s");
 
                 var specificStructured = new PublishResult
@@ -194,7 +199,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     AppModuleCount = appModuleList.Count,
                     IncludeGlobalOptionSets = include_global_optionset || optionSetNameList.Count > 0,
                     IncludeSiteMap = include_sitemap,
-                    Status = "published",
+                    Status = published ? "published" : "failed",
                     DurationSeconds = Math.Round(sw.Elapsed.TotalSeconds, 1)
                 };
                 return new CallToolResult
@@ -275,85 +280,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return resolvedIds
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToList();
-        }
-
-        private static string BuildParameterXml(
-            List<string> entityList,
-            bool includeGlobalOptionSets,
-            bool includeSiteMap)
-            => BuildParameterXml(entityList, new List<string>(), includeGlobalOptionSets, includeSiteMap,
-                false, new List<string>(), new List<string>(), new List<string>());
-
-        private static string BuildParameterXml(
-            List<string> entityList,
-            List<string> appModuleList,
-            bool includeGlobalOptionSets,
-            bool includeSiteMap,
-            bool includeRibbons = false,
-            List<string> optionSetNameList = null,
-            List<string> dashboardList = null,
-            List<string> webResourceList = null)
-        {
-            var sb = new StringBuilder();
-            sb.Append("<importexportxml>");
-
-            // Entities
-            sb.Append("<entities>");
-            foreach (var entity in entityList)
-                sb.Append($"<entity>{entity}</entity>");
-            sb.Append("</entities>");
-
-            // App modules
-            if (appModuleList?.Count > 0)
-            {
-                sb.Append("<appmodules>");
-                foreach (var appModuleId in appModuleList)
-                    sb.Append($"<appmodule>{appModuleId}</appmodule>");
-                sb.Append("</appmodules>");
-            }
-
-            // Option sets: specific names take precedence; fall back to "all"
-            if (optionSetNameList?.Count > 0)
-            {
-                sb.Append("<optionsets>");
-                foreach (var name in optionSetNameList)
-                    sb.Append($"<optionset>{name}</optionset>");
-                sb.Append("</optionsets>");
-            }
-            else
-            {
-                sb.Append(includeGlobalOptionSets
-                    ? "<optionsets><optionset>all</optionset></optionsets>"
-                    : "<optionsets />");
-            }
-
-            // Ribbons (application ribbon)
-            if (includeRibbons)
-                sb.Append("<ribbons><ribbon /></ribbons>");
-
-            // Dashboards
-            if (dashboardList?.Count > 0)
-            {
-                sb.Append("<dashboards>");
-                foreach (var id in dashboardList)
-                    sb.Append($"<dashboard>{id}</dashboard>");
-                sb.Append("</dashboards>");
-            }
-
-            // Web resources
-            if (webResourceList?.Count > 0)
-            {
-                sb.Append("<webresources>");
-                foreach (var id in webResourceList)
-                    sb.Append($"<webresource>{id}</webresource>");
-                sb.Append("</webresources>");
-            }
-
-            // Site map
-            sb.Append(includeSiteMap ? "<sitemaps><sitemap /></sitemaps>" : "<sitemaps />");
-
-            sb.Append("</importexportxml>");
-            return sb.ToString();
         }
 
         private static string BuildTargetSummary(

@@ -342,16 +342,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var requiresPublish = metadataMutated && (hasDisplayName || hasDescription || optionsToInsert.Count > 0 || hasUpdate || hasColors);
-            var published = false;
-            if (requiresPublish)
-            {
-                // Publish failures bubble to the main catch (single-try rule).
-                PublishHelper.PublishOptionSet(_context, _serviceClient, name);
-                published = true;
-
-                // Wait for choice metadata to propagate after publish
-                MetadataOperationWaitHelper.WaitAfterChoiceOperation();
-            }
+            var published = requiresPublish && PublishHelper.PublishOptionSet(_context, _serviceClient, name);
 
             // Removed choices are automatically published by Dataverse — no PublishXml needed for remove-only updates.
             var changeParts = new List<string>();

@@ -352,7 +352,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 : $"Failed to add to solution '{solResult.UniqueName}': {addResult.AddToSolutionWarning}";
 
             PublishHelper.PublishWebResource(_context, _serviceClient, webResourceId);
-            MetadataOperationWaitHelper.WaitAfterWebResource();
 
             var typeLabel = TypeCodeMap.TryGetValue(typeCode, out var t) ? t : typeCode.ToString();
 
@@ -461,7 +460,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             PublishHelper.PublishWebResource(_context, _serviceClient, id);
-            MetadataOperationWaitHelper.WaitAfterWebResource();
             var existingName = existing.GetAttributeValue<string>("name") ?? "";
 
             return Success($"Updated web resource '{existingName}' ({id}): fieldsUpdated={fieldsUpdated}, published.", new ManageWebResourceResult

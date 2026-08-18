@@ -2,14 +2,12 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
-
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
@@ -26,36 +24,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         public ManageRelationshipTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
-            _serviceClient = serviceClient;
+            _serviceClient = serviceClient ?? throw new ArgumentNullException(nameof(serviceClient));
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        [McpServerTool(Name = "manage_relationship", Title = "Create, update, or delete Dataverse relationships",
+        [McpServerTool(Name = "manage_relationship", Title = "Manage Dataverse relationships",
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageRelationshipResult)),
         Description(
-            "Dataverse relationships (1:N, N:N) + polymorphic lookup targets. Required:\n" +
-            "- create_1n: referenced_entity + referencing_entity + solution_name (auto-creates lookup column)\n" +
-            "- create_nn: entity1 + entity2 + solution_name (auto-creates intersect entity)\n" +
-            "- update: relationship_name (cascade/menu/hierarchy)\n" +
-            "- delete: relationship_name\n" +
-            "- add_target: entity_name + attribute_name + referenced_entity + solution_name\n" +
-            "- remove_target: entity_name + attribute_name + referenced_entity (deletes data permanently)\n\n" +
-
-            "is_hierarchical: only for self-referential 1:N (referenced=referencing), max 1/entity.\n" +
-            "Cascade presets: Parental (all Cascade) | Referential (NoCascade + RemoveLink on delete) | ReferentialRestrictDelete (NoCascade + Restrict on delete).\n" +
-            "Cascade types: Cascade | NoCascade | RemoveLink | Restrict | Active | UserOwned.\n" +
-            "See docs://schema_tools_guide.\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- Create 1:N (with auto lookup column) or N:N (with intersect entity)\n" +
-            "- Update cascade behavior, associated menu, or hierarchy flag\n" +
-            "- Add / remove a target on a polymorphic lookup (e.g. customer → account, contact, custom)\n" +
-            "- Inspect relationship_name first via get_tables before update/delete\n\n" +
-
-            "FUZZY/AMBIGUITY:\n" +
-            "- entity and field inputs resolve Display Name contains first, then logical/schema name contains. solution_name uses the shared Display Name first solution resolver. Ambiguity returns IsError=true.")]
+            "Manage Dataverse 1:N, N:N relationships and polymorphic lookup targets.\n" +
+            "Actions: create_1n (referenced_entity + referencing_entity + solution_name, auto-creates lookup), " +
+            "create_nn (entity1 + entity2 + solution_name, auto-creates intersect), " +
+            "update (relationship_name — cascade / menu / hierarchy), " +
+            "delete (relationship_name), " +
+            "add_target (entity_name + attribute_name + referenced_entity + solution_name — polymorphic lookup), " +
+            "remove_target (entity_name + attribute_name + referenced_entity — deletes data).\n\n" +
+            "is_hierarchical: self-referential 1:N only (referenced=referencing), max 1/entity. " +
+            "Cascade presets: Parental (all Cascade) | Referential (NoCascade + RemoveLink) | ReferentialRestrictDelete (NoCascade + Restrict). " +
+            "Cascade types: Cascade | NoCascade | RemoveLink | Restrict | Active | UserOwned.\n\n" +
+            "WHEN TO USE: create 1:N (with auto lookup) / N:N (with intersect), adjust cascade/menu/hierarchy, add/remove polymorphic lookup target. " +
+            "RELATED TOOLS: get_tables (discover relationships), manage_column (lookup columns), publish_customizations (batch publish).")]
         public CallToolResult manage_relationship(
             [Description("create_1n / create_nn / update / delete / add_target / remove_target.")] string action = "",
             [Description("Schema name. Required: update/delete. Auto-generated on create.")] string relationship_name = "",
@@ -80,13 +69,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Required: create_1n, create_nn, add_target.")] string solution_name = "",
             [Description("Self-referential 1:N (create_1n/update). 1 per entity, referenced=referencing.")] bool is_hierarchical = false)
         {
-            if (string.IsNullOrWhiteSpace(action))
-                return ErrorResult("Error: action is required. Valid actions: create_1n, create_nn, update, delete, add_target, remove_target");
-
-            action = action.Trim().ToLowerInvariant();
-
             try
             {
+                if (string.IsNullOrWhiteSpace(action))
+                    return Error("action is required. Valid actions: create_1n, create_nn, update, delete, add_target, remove_target");
+
+                action = action.Trim().ToLowerInvariant();
+
                 return action switch
                 {
                     "create_1n" => HandleCreate1N(referenced_entity, referencing_entity, relationship_name,
@@ -101,27 +90,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         cascade_preset, cascade_assign, cascade_delete, cascade_merge, cascade_reparent, cascade_share, cascade_unshare,
                         menu_behavior, menu_group, menu_order, solution_name),
                     "remove_target" => HandleRemoveTarget(entity_name, attribute_name, referenced_entity),
-                    _ => ErrorResult($"Error: Invalid action '{action}'. Valid actions: create_1n, create_nn, update, delete, add_target, remove_target")
+                    _ => Error($"Invalid action '{action}'. Valid actions: create_1n, create_nn, update, delete, add_target, remove_target")
                 };
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: {ex.Message}");
+                return ThrowException(ex);
             }
         }
-
-        // ══════════════════════════════════════════════
-        // HandleCreate1N
-        // ══════════════════════════════════════════════
 
         private CallToolResult HandleCreate1N(string referencedEntity, string referencingEntity, string relationshipName,
             string cascadePreset, string cascadeAssign, string cascadeDelete, string cascadeMerge, string cascadeReparent, string cascadeShare, string cascadeUnshare,
             string menuBehavior, string menuGroup, int menuOrder, string lookupDisplayName, string solutionName, bool isHierarchical)
         {
             if (string.IsNullOrWhiteSpace(referencedEntity))
-                return ErrorResult("Error: referenced_entity is required for create_1n (the parent/referenced entity).\nRead docs://schema_tools_guide for relationship creation examples.");
+                return Error("referenced_entity is required for create_1n (the parent/referenced entity).",
+                    "Read docs://schema_tools_guide for relationship creation examples.");
             if (string.IsNullOrWhiteSpace(referencingEntity))
-                return ErrorResult("Error: referencing_entity is required for create_1n (the child/referencing entity).\nRead docs://schema_tools_guide for relationship creation examples.");
+                return Error("referencing_entity is required for create_1n (the child/referencing entity).",
+                    "Read docs://schema_tools_guide for relationship creation examples.");
 
             if (!TryResolveEntityInput(referencedEntity, "referenced_entity", out referencedEntity, out var resolveError))
                 return resolveError;
@@ -129,19 +116,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return resolveError;
 
             if (isHierarchical && referencedEntity != referencingEntity)
-                return ErrorResult($"Error: is_hierarchical=true is only valid for self-referential relationships (referenced_entity must equal referencing_entity). Got: referenced='{referencedEntity}', referencing='{referencingEntity}'.");
+                return Error($"is_hierarchical=true is only valid for self-referential relationships (referenced_entity must equal referencing_entity). Got: referenced='{referencedEntity}', referencing='{referencingEntity}'.");
 
-            // Resolve prefix from solution — solution_name is required to get the correct publisher prefix
             if (string.IsNullOrWhiteSpace(solutionName))
-                return ErrorResult(
-                    "Error: solution_name is required for create_1n so the publisher prefix can be resolved.\n" +
-                    "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix.\n" +
-                    "Tip: Use get_solution_components to find valid solution names.");
+                return Error("solution_name is required for create_1n so the publisher prefix can be resolved.",
+                    "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix. Use get_solution_components to find valid solution names.");
 
             var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName);
-            if (!solResult.IsSuccess) return ErrorResult($"Error: {solResult.Error}");
+            if (!solResult.IsSuccess) return Error(solResult.Error);
 
-            // Auto-generate relationship name if not provided
             if (string.IsNullOrWhiteSpace(relationshipName))
                 relationshipName = BuildRelationshipName(solResult.Prefix, referencedEntity, referencingEntity);
             if (relationshipName.Length > 100)
@@ -182,24 +165,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solResult.UniqueName);
 
             if (_options.DryRun)
-                return DryRun($"Would CREATE 1:N relationship '{relationshipName}' ({referencedEntity} -> {referencingEntity}) with lookup '{lookupLogicalName}'{(isHierarchical ? " [IsHierarchical=true]" : "") }.", new ManageRelationshipResult
-                {
-                    Action = "create_1n",
-                    RelationshipName = relationshipName,
-                    RelationshipType = "1:N",
-                    ReferencedEntity = referencedEntity,
-                    ReferencingEntity = referencingEntity,
-                    LookupAttributeName = lookupLogicalName,
-                    IsHierarchical = isHierarchical,
-                    SolutionName = solResult.UniqueName,
-                    CreateMode = "metadata",
-                    IsAddToSolution = true,
-                    AddToSolutionMethod = "SolutionUniqueName",
-                    Status = "not_executed",
-                    Published = false
-                });
+                return DryRun($"Would CREATE 1:N relationship '{relationshipName}' ({referencedEntity} -> {referencingEntity}) with lookup '{lookupLogicalName}'{(isHierarchical ? " [IsHierarchical=true]" : "") }.",
+                    new ManageRelationshipResult
+                    {
+                        Action = "create_1n",
+                        RelationshipName = relationshipName,
+                        RelationshipType = "1:N",
+                        ReferencedEntity = referencedEntity,
+                        ReferencingEntity = referencingEntity,
+                        LookupAttributeName = lookupLogicalName,
+                        IsHierarchical = isHierarchical,
+                        SolutionName = solResult.UniqueName,
+                        CreateMode = "metadata",
+                        IsAddToSolution = true,
+                        AddToSolutionMethod = "SolutionUniqueName",
+                        Status = "not_executed",
+                        Published = false
+                    });
 
-            // Wrap create in retry to handle lock contention
             Guid metadataId = Guid.Empty;
             var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
             {
@@ -209,10 +192,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!createSuccess)
             {
-                return ErrorResult(
-                    $"Error: Failed to create relationship '{relationshipName}' after multiple retry attempts.\n" +
+                return Error(
+                    $"Failed to create relationship '{relationshipName}' after multiple retry attempts.\n" +
                     $"Reason: Lock contention or table metadata has not propagated.\n" +
-                    $"Action: Wait 30 seconds and retry manually. If creating multiple relationships, use phased approach:\n" +
+                    $"Hint: Wait 30 seconds and retry manually. If creating multiple relationships, use a phased approach:\n" +
                     $"  1. Create all tables first\n" +
                     $"  2. Wait 15-20 seconds\n" +
                     $"  3. Create all columns\n" +
@@ -220,25 +203,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"  5. Create all relationships");
             }
 
-            var published = PublishIfNeeded(referencingEntity);
+            var published = PublishHelper.PublishEntity(_context, _serviceClient, referencingEntity, waitSeconds: 20);
 
-            // Wait for relationship metadata to propagate (extended wait)
-            if (published)
-            {
-                MetadataOperationWaitHelper.WaitForPropagation();
-            }
-
-            var sb = new StringBuilder(512);
-            sb.AppendLine($"[RelationshipCreated] 1:N {relationshipName}");
-            sb.AppendLine($"ReferencedEntity: {referencedEntity}");
-            sb.AppendLine($"ReferencingEntity: {referencingEntity}");
-            sb.AppendLine($"LookupAttribute: {lookupLogicalName}");
-            sb.AppendLine($"IsHierarchical: {isHierarchical}");
-            sb.AppendLine($"CascadeDelete: {cascade.Delete}");
-            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
-            sb.AppendLine($"MetadataId: {metadataId}");
-
-            return BuildResult(sb.ToString(), new ManageRelationshipResult
+            return Success($"Created 1:N relationship '{relationshipName}' ({referencedEntity} -> {referencingEntity}) with lookup '{lookupLogicalName}', published={(published ? "yes" : "no")}.", new ManageRelationshipResult
             {
                 Action = "create_1n",
                 RelationshipName = relationshipName,
@@ -263,32 +230,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             });
         }
 
-        // ══════════════════════════════════════════════
-        // HandleCreateNN
-        // ══════════════════════════════════════════════
-
         private CallToolResult HandleCreateNN(string entity1, string entity2, string relationshipName, string intersectEntityName,
             string solutionName)
         {
             if (string.IsNullOrWhiteSpace(entity1))
-                return ErrorResult("Error: entity1 is required for create_nn.\nRead docs://schema_tools_guide for relationship creation examples.");
+                return Error("entity1 is required for create_nn.",
+                    "Read docs://schema_tools_guide for relationship creation examples.");
             if (string.IsNullOrWhiteSpace(entity2))
-                return ErrorResult("Error: entity2 is required for create_nn.\nRead docs://schema_tools_guide for relationship creation examples.");
+                return Error("entity2 is required for create_nn.",
+                    "Read docs://schema_tools_guide for relationship creation examples.");
 
             if (!TryResolveEntityInput(entity1, "entity1", out entity1, out var resolveError))
                 return resolveError;
             if (!TryResolveEntityInput(entity2, "entity2", out entity2, out resolveError))
                 return resolveError;
 
-            // Resolve prefix from solution — solution_name is required for N:N to get the correct publisher prefix
             if (string.IsNullOrWhiteSpace(solutionName))
-                return ErrorResult(
-                    "Error: solution_name is required for create_nn so the publisher prefix can be resolved.\n" +
-                    "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix.\n" +
-                    "Tip: Use get_solution_components to find valid solution names.");
+                return Error("solution_name is required for create_nn so the publisher prefix can be resolved.",
+                    "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix. Use get_solution_components to find valid solution names.");
 
             var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName);
-            if (!solResult.IsSuccess) return ErrorResult($"Error: {solResult.Error}");
+            if (!solResult.IsSuccess) return Error(solResult.Error);
 
             if (string.IsNullOrWhiteSpace(relationshipName))
                 relationshipName = $"{solResult.Prefix}_{entity1}_{entity2}";
@@ -344,17 +306,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var response = (CreateManyToManyResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, request);
             var metadataId = response.ManyToManyRelationshipId;
-            var published = PublishIfNeeded(entity1);
+            var published = PublishHelper.PublishEntity(_context, _serviceClient, entity1);
 
-            var sb = new StringBuilder(512);
-            sb.AppendLine($"[RelationshipCreated] N:N {relationshipName}");
-            sb.AppendLine($"Entity1: {entity1}");
-            sb.AppendLine($"Entity2: {entity2}");
-            sb.AppendLine($"IntersectEntity: {intersectEntityName}");
-            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
-            sb.AppendLine($"MetadataId: {metadataId}");
-
-            return BuildResult(sb.ToString(), new ManageRelationshipResult
+            return Success($"Created N:N relationship '{relationshipName}' between '{entity1}' and '{entity2}' (intersect: '{intersectEntityName}'), published={(published ? "yes" : "no")}.", new ManageRelationshipResult
             {
                 Action = "create_nn",
                 RelationshipName = relationshipName,
@@ -372,31 +326,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             });
         }
 
-        // ══════════════════════════════════════════════
-        // HandleUpdate
-        // ══════════════════════════════════════════════
-
         private CallToolResult HandleUpdate(string relationshipName,
             string cascadePreset, string cascadeAssign, string cascadeDelete, string cascadeMerge, string cascadeReparent, string cascadeShare, string cascadeUnshare,
             string menuBehavior, string menuGroup, int menuOrder, bool isHierarchical)
         {
             if (string.IsNullOrWhiteSpace(relationshipName))
-                return ErrorResult("Error: relationship_name is required for update.\nTip: Use get_tables with entity_name to find relationship_name.\nRead docs://schema_tools_guide for cascade preset and type values.");
+                return Error("relationship_name is required for update.",
+                    "Use get_tables with entity_name to find relationship_name. Read docs://schema_tools_guide for cascade preset and type values.");
 
             relationshipName = relationshipName.Trim();
 
-            // Retrieve existing relationship
-            var retrieveRequest = new RetrieveRelationshipRequest { Name = relationshipName };
-            RelationshipMetadataBase metadata;
-            try
-            {
-                var retrieveResponse = (RetrieveRelationshipResponse)_serviceClient.Execute(retrieveRequest);
-                metadata = retrieveResponse.RelationshipMetadata;
-            }
-            catch (Exception ex)
-            {
-                return ErrorResult($"Error: Relationship '{relationshipName}' not found.\nMessage: {ex.Message}");
-            }
+            var retrieveResponse = (RetrieveRelationshipResponse)_serviceClient.Execute(new RetrieveRelationshipRequest { Name = relationshipName });
+            var metadata = retrieveResponse.RelationshipMetadata;
 
             var changes = new Dictionary<string, UpdateAttributeChange>();
             var warnings = new List<string>();
@@ -408,7 +349,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var cascade = oneToMany.CascadeConfiguration;
                 var newCascade = BuildCascadeConfiguration(cascadePreset, cascadeAssign, cascadeDelete, cascadeMerge, cascadeReparent, cascadeShare, cascadeUnshare);
 
-                // Only update if changes requested
                 bool hasCascadeInput = !string.IsNullOrWhiteSpace(cascadePreset) || !string.IsNullOrWhiteSpace(cascadeAssign) ||
                     !string.IsNullOrWhiteSpace(cascadeDelete) || !string.IsNullOrWhiteSpace(cascadeMerge) ||
                     !string.IsNullOrWhiteSpace(cascadeReparent) || !string.IsNullOrWhiteSpace(cascadeShare) || !string.IsNullOrWhiteSpace(cascadeUnshare);
@@ -423,7 +363,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (cascade.Unshare != newCascade.Unshare) { changes["cascadeUnshare"] = new UpdateAttributeChange { OldValue = cascade.Unshare?.ToString(), NewValue = newCascade.Unshare?.ToString() }; cascade.Unshare = newCascade.Unshare; }
                 }
 
-                // Update menu config
                 if (!string.IsNullOrWhiteSpace(menuBehavior))
                 {
                     var newBehavior = ParseMenuBehavior(menuBehavior);
@@ -448,11 +387,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     oneToMany.AssociatedMenuConfiguration.Order = menuOrder;
                 }
 
-                // Update hierarchy
                 if (isHierarchical)
                 {
                     if (oneToMany.ReferencedEntity != oneToMany.ReferencingEntity)
-                        return ErrorResult($"Error: is_hierarchical=true is only valid for self-referential relationships. '{relationshipName}' links '{oneToMany.ReferencedEntity}' -> '{oneToMany.ReferencingEntity}' which are different entities.");
+                        return Error($"is_hierarchical=true is only valid for self-referential relationships. '{relationshipName}' links '{oneToMany.ReferencedEntity}' -> '{oneToMany.ReferencingEntity}' which are different entities.");
                     if (oneToMany.IsHierarchical != true)
                     {
                         changes["isHierarchical"] = new UpdateAttributeChange { OldValue = oneToMany.IsHierarchical?.ToString() ?? "false", NewValue = "true" };
@@ -467,11 +405,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             else
             {
-                return ErrorResult($"Error: Unknown relationship type for '{relationshipName}'.");
+                return Error($"Unknown relationship type for '{relationshipName}'.");
             }
 
             if (changes.Count == 0 && warnings.Count == 0)
-                return ErrorResult($"Error: No changes detected for relationship '{relationshipName}'. Provide cascade_preset, cascade_* overrides, or menu_* values to update.");
+                return Error($"No changes detected for relationship '{relationshipName}'. Provide cascade_preset, cascade_* overrides, or menu_* values to update.");
 
             if (changes.Count > 0)
             {
@@ -493,18 +431,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 DataverseMutationExecutor.Execute(_context, _serviceClient, updateRequest);
             }
 
-            var published = (changes.Count > 0 && entityToPublish != null) ? PublishIfNeeded(entityToPublish) : false;
+            var published = changes.Count > 0 && entityToPublish != null
+                && PublishHelper.PublishEntity(_context, _serviceClient, entityToPublish);
 
-            var sb = new StringBuilder(512);
-            sb.AppendLine($"[RelationshipUpdated] {relationshipName}");
-            foreach (var c in changes)
-                sb.AppendLine($"  {c.Key}: {c.Value.OldValue} -> {c.Value.NewValue}");
-            if (warnings.Count > 0)
-                foreach (var w in warnings)
-                    sb.AppendLine($"  Warning: {w}");
-            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            var summary = $"Updated relationship '{relationshipName}' with {changes.Count} change(s), published={(published ? "yes" : "no")}.";
 
-            return BuildResult(sb.ToString(), new ManageRelationshipResult
+            return Success(summary, new ManageRelationshipResult
             {
                 Action = "update",
                 RelationshipName = relationshipName,
@@ -518,28 +450,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             });
         }
 
-        // ══════════════════════════════════════════════
-        // HandleDelete
-        // ══════════════════════════════════════════════
-
         private CallToolResult HandleDelete(string relationshipName)
         {
             if (string.IsNullOrWhiteSpace(relationshipName))
-                return ErrorResult("Error: relationship_name is required for delete.\nTip: Use get_tables with entity_name to find relationship_name.");
+                return Error("relationship_name is required for delete.",
+                    "Use get_tables with entity_name to find relationship_name.");
 
             relationshipName = relationshipName.Trim();
 
-            // Retrieve first to get details for the response
-            RelationshipMetadataBase metadata;
-            try
-            {
-                var retrieveResponse = (RetrieveRelationshipResponse)_serviceClient.Execute(new RetrieveRelationshipRequest { Name = relationshipName });
-                metadata = retrieveResponse.RelationshipMetadata;
-            }
-            catch (Exception ex)
-            {
-                return ErrorResult($"Error: Relationship '{relationshipName}' not found.\nMessage: {ex.Message}");
-            }
+            var retrieveResponse = (RetrieveRelationshipResponse)_serviceClient.Execute(new RetrieveRelationshipRequest { Name = relationshipName });
+            var metadata = retrieveResponse.RelationshipMetadata;
 
             if (_options.DryRun)
                 return DryRun($"Would DELETE relationship '{relationshipName}'.", new ManageRelationshipResult
@@ -552,19 +472,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             DataverseMutationExecutor.Execute(_context, _serviceClient, new DeleteRelationshipRequest { Name = relationshipName });
 
-            var sb = new StringBuilder(256);
-            sb.AppendLine($"[RelationshipDeleted] {relationshipName}");
-            if (metadata is OneToManyRelationshipMetadata otm)
-            {
-                sb.AppendLine($"Type: 1:N ({otm.ReferencedEntity} -> {otm.ReferencingEntity})");
-            }
-            else if (metadata is ManyToManyRelationshipMetadata mtm)
-            {
-                sb.AppendLine($"Type: N:N ({mtm.Entity1LogicalName} <-> {mtm.Entity2LogicalName})");
-                sb.AppendLine($"IntersectEntity: {mtm.IntersectEntityName}");
-            }
+            var typeLabel = metadata is OneToManyRelationshipMetadata otm
+                ? $"1:N ({otm.ReferencedEntity} -> {otm.ReferencingEntity})"
+                : metadata is ManyToManyRelationshipMetadata mtm
+                    ? $"N:N ({mtm.Entity1LogicalName} <-> {mtm.Entity2LogicalName})"
+                    : "unknown";
 
-            return BuildResult(sb.ToString(), new ManageRelationshipResult
+            return Success($"Deleted relationship '{relationshipName}' ({typeLabel}).", new ManageRelationshipResult
             {
                 Action = "delete",
                 RelationshipName = relationshipName,
@@ -574,20 +488,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             });
         }
 
-        // ══════════════════════════════════════════════
-        // HandleAddTarget (polymorphic lookup)
-        // ══════════════════════════════════════════════
-
         private CallToolResult HandleAddTarget(string entityName, string attributeName, string referencedEntity,
             string cascadePreset, string cascadeAssign, string cascadeDelete, string cascadeMerge, string cascadeReparent, string cascadeShare, string cascadeUnshare,
             string menuBehavior, string menuGroup, int menuOrder, string solutionName)
         {
             if (string.IsNullOrWhiteSpace(entityName))
-                return ErrorResult("Error: entity_name is required for add_target (entity with the polymorphic lookup).");
+                return Error("entity_name is required for add_target (entity with the polymorphic lookup).");
             if (string.IsNullOrWhiteSpace(attributeName))
-                return ErrorResult("Error: attribute_name is required for add_target (the polymorphic lookup logical name).");
+                return Error("attribute_name is required for add_target (the polymorphic lookup logical name).");
             if (string.IsNullOrWhiteSpace(referencedEntity))
-                return ErrorResult("Error: referenced_entity is required for add_target (the new target entity to add).");
+                return Error("referenced_entity is required for add_target (the new target entity to add).");
 
             if (!TryResolveEntityInput(entityName, "entity_name", out entityName, out var resolveError))
                 return resolveError;
@@ -599,18 +509,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var lookupAttr = attributeMetadata as LookupAttributeMetadata;
 
             if (lookupAttr == null)
-                return ErrorResult($"Error: Lookup attribute '{attributeName}' not found on entity '{entityName}'.\nTip: Use get_tables with entity_name='{entityName}' to inspect lookup columns.");
+                return Error($"Lookup attribute '{attributeName}' not found on entity '{entityName}'.",
+                    $"Use get_tables with entity_name='{entityName}' to inspect lookup columns.");
+
             attributeName = lookupAttr.LogicalName;
 
-            // Resolve prefix for relationship name — solution_name is required
             if (string.IsNullOrWhiteSpace(solutionName))
-                return ErrorResult(
-                    "Error: solution_name is required for add_target so the publisher prefix can be resolved.\n" +
-                    "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix.\n" +
-                    "Tip: Use get_solution_components to find valid solution names.");
+                return Error("solution_name is required for add_target so the publisher prefix can be resolved.",
+                    "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix. Use get_solution_components to find valid solution names.");
 
             var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName);
-            if (!solResult.IsSuccess) return ErrorResult($"Error: {solResult.Error}");
+            if (!solResult.IsSuccess) return Error(solResult.Error);
 
             var relName = $"{solResult.Prefix}_{referencedEntity}_{entityName}_{attributeName}";
             if (relName.Length > 100) relName = relName[..100];
@@ -632,7 +541,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     },
                     CascadeConfiguration = cascade
                 },
-                Lookup = lookupAttr  // Pass existing lookup — SDK adds new target
+                Lookup = lookupAttr
             };
 
             SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solResult.UniqueName);
@@ -649,57 +558,38 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
 
-            try
-            {
-                    var response = (CreateOneToManyResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, request);
-                var metadataId = response.RelationshipId;
-                var published = PublishIfNeeded(entityName);
+            var response = (CreateOneToManyResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, request);
+            var metadataId = response.RelationshipId;
+            var published = PublishHelper.PublishEntity(_context, _serviceClient, entityName);
 
-                var sb = new StringBuilder(512);
-                sb.AppendLine($"[TargetAdded] {referencedEntity} -> {entityName}.{attributeName}");
-                sb.AppendLine($"RelationshipName: {relName}");
-                sb.AppendLine($"Published: {(published ? "yes" : "no")}");
-                sb.AppendLine($"MetadataId: {metadataId}");
-                sb.AppendLine();
-                sb.AppendLine("[IMPORTANT] The new target entity was added to the polymorphic lookup metadata, but any existing form controls for this field still display the OLD list of entity types. To make the new target appear in the lookup dialog on the form, you MUST remove the field from the form and re-add it. Use manage_form(action='update', operations=[{\"action\":\"manage_fields\",\"manage_action\":\"remove\",...}, {\"action\":\"manage_fields\",\"manage_action\":\"add\",...}]) to refresh the form control.");
+            var summary = $"Added target '{referencedEntity}' to polymorphic lookup '{entityName}.{attributeName}' (relationship: '{relName}'), published={(published ? "yes" : "no")}. IMPORTANT: existing form controls still display the OLD entity list — remove and re-add the field via manage_form to refresh.";
 
-                return BuildResult(sb.ToString(), new ManageRelationshipResult
-                {
-                    Action = "add_target",
-                    RelationshipName = relName,
-                    RelationshipType = "OneToMany",
-                    ReferencedEntity = referencedEntity,
-                    ReferencingEntity = entityName,
-                    LookupAttributeName = attributeName,
-                    MetadataId = metadataId.ToString(),
-                    SolutionName = string.IsNullOrWhiteSpace(solResult.UniqueName) ? null : solResult.UniqueName,
-                    CreateMode = SolutionComponentCreateMode.MetadataCreateRequest.ToString(),
-                    IsAddToSolution = !string.IsNullOrWhiteSpace(solResult.UniqueName),
-                    AddToSolutionMethod = string.IsNullOrWhiteSpace(solResult.UniqueName) ? "none" : "SolutionUniqueName",
-                    Published = published,
-                    Status = "TargetAdded"
-                });
-            }
-            catch (Exception ex)
+            return Success(summary, new ManageRelationshipResult
             {
-                if (ex.Message.Contains("-2147192813") || ex.Message.Contains("polymorphic", StringComparison.OrdinalIgnoreCase))
-                    return ErrorResult($"Error: '{entityName}.{attributeName}' is not a polymorphic lookup. Only polymorphic lookups support multiple targets.\nMessage: {ex.Message}");
-                throw;
-            }
+                Action = "add_target",
+                RelationshipName = relName,
+                RelationshipType = "OneToMany",
+                ReferencedEntity = referencedEntity,
+                ReferencingEntity = entityName,
+                LookupAttributeName = attributeName,
+                MetadataId = metadataId.ToString(),
+                SolutionName = string.IsNullOrWhiteSpace(solResult.UniqueName) ? null : solResult.UniqueName,
+                CreateMode = SolutionComponentCreateMode.MetadataCreateRequest.ToString(),
+                IsAddToSolution = !string.IsNullOrWhiteSpace(solResult.UniqueName),
+                AddToSolutionMethod = string.IsNullOrWhiteSpace(solResult.UniqueName) ? "none" : "SolutionUniqueName",
+                Published = published,
+                Status = "TargetAdded"
+            });
         }
-
-        // ══════════════════════════════════════════════
-        // HandleRemoveTarget (polymorphic lookup)
-        // ══════════════════════════════════════════════
 
         private CallToolResult HandleRemoveTarget(string entityName, string attributeName, string referencedEntity)
         {
             if (string.IsNullOrWhiteSpace(entityName))
-                return ErrorResult("Error: entity_name is required for remove_target.");
+                return Error("entity_name is required for remove_target.");
             if (string.IsNullOrWhiteSpace(attributeName))
-                return ErrorResult("Error: attribute_name is required for remove_target.");
+                return Error("attribute_name is required for remove_target.");
             if (string.IsNullOrWhiteSpace(referencedEntity))
-                return ErrorResult("Error: referenced_entity is required for remove_target (the target entity to remove).");
+                return Error("referenced_entity is required for remove_target (the target entity to remove).");
 
             if (!TryResolveEntityInput(entityName, "entity_name", out entityName, out var resolveError))
                 return resolveError;
@@ -709,20 +599,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return resolveError;
             attributeName = attributeMetadata.LogicalName;
 
-            // Retrieve entity metadata with relationships to find the specific relationship
             var entityMetadataRequest = new RetrieveEntityRequest
             {
                 LogicalName = entityName,
                 EntityFilters = EntityFilters.Relationships
             };
-            var entityMetadata = ((RetrieveEntityResponse)_serviceClient.Execute(entityMetadataRequest)).EntityMetadata;
+            var entityMetadataResponse = (RetrieveEntityResponse)_serviceClient.Execute(entityMetadataRequest);
+            var oneToManyRels = entityMetadataResponse.EntityMetadata.OneToManyRelationships ?? new OneToManyRelationshipMetadata[0];
 
-            // Find the N:1 relationship where ReferencedEntity == target and ReferencingAttribute == attributeName
-            var rel = entityMetadata.ManyToOneRelationships
+            var rel = oneToManyRels
                 .FirstOrDefault(r => r.ReferencedEntity == referencedEntity && r.ReferencingAttribute == attributeName);
 
             if (rel == null)
-                return ErrorResult($"Error: No relationship found for target '{referencedEntity}' on lookup '{entityName}.{attributeName}'.\nTip: Use get_tables with entity_name='{entityName}' to inspect relationships.");
+                return Error($"No relationship found for target '{referencedEntity}' on lookup '{entityName}.{attributeName}'.",
+                    $"Use get_tables with entity_name='{entityName}' to inspect relationships.");
 
             var relName = rel.SchemaName;
 
@@ -736,17 +626,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     LookupAttributeName = attributeName,
                     Status = "not_executed",
                     Published = false,
-                    Warnings = ["Data in this lookup target will be lost."]
+                    Warnings = new List<string> { "Data in this lookup target will be lost." }
                 });
 
             DataverseMutationExecutor.Execute(_context, _serviceClient, new DeleteRelationshipRequest { Name = relName });
 
-            var sb = new StringBuilder(256);
-            sb.AppendLine($"[TargetRemoved] {referencedEntity} from {entityName}.{attributeName}");
-            sb.AppendLine($"DeletedRelationship: {relName}");
-            sb.AppendLine($"WARNING: Data stored in this lookup target has been lost.");
-
-            return BuildResult(sb.ToString(), new ManageRelationshipResult
+            return Success($"Removed target '{referencedEntity}' from polymorphic lookup '{entityName}.{attributeName}' (deleted relationship '{relName}'). WARNING: data stored in this lookup target has been lost.", new ManageRelationshipResult
             {
                 Action = "remove_target",
                 RelationshipName = relName,
@@ -758,10 +643,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Status = "TargetRemoved"
             });
         }
-
-        // ══════════════════════════════════════════════
-        // Helper methods
-        // ══════════════════════════════════════════════
 
         private bool TryResolveEntityInput(string input, string parameterName, out string logicalName, out CallToolResult errorResult)
         {
@@ -775,7 +656,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return true;
             }
 
-            errorResult = ErrorResult($"Error: {parameterName} '{input?.Trim()}': {resolved.Error}");
+            errorResult = Error($"{parameterName} '{input?.Trim()}': {resolved.Error}");
             return false;
         }
 
@@ -791,7 +672,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return true;
             }
 
-            errorResult = ErrorResult($"Error: {parameterName} '{input?.Trim()}' on entity '{entityLogicalName}': {resolved.Error}");
+            errorResult = Error($"{parameterName} '{input?.Trim()}' on entity '{entityLogicalName}': {resolved.Error}");
             return false;
         }
 
@@ -806,7 +687,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "nocascade" => CascadeType.NoCascade,
                 "removelink" => CascadeType.RemoveLink,
                 "restrict" => CascadeType.Restrict,
-                _ => throw new ArgumentException($"Error: Invalid cascade type '{value}'.\nValid values: Cascade, Active, UserOwned, NoCascade, RemoveLink, Restrict.\nRead docs://schema_tools_guide for cascade behavior details.")
+                _ => throw new ArgumentException($"Invalid cascade type '{value}'.\nValid values: Cascade, Active, UserOwned, NoCascade, RemoveLink, Restrict.\nRead docs://schema_tools_guide for cascade behavior details.")
             };
         }
 
@@ -852,11 +733,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     };
                     break;
                 default:
-                    throw new ArgumentException($"Error: Invalid cascade_preset '{preset}'.\nValid values: Parental, Referential, ReferentialRestrictDelete.\nRead docs://schema_tools_guide for cascade preset behavior details.");
+                    throw new ArgumentException($"Invalid cascade_preset '{preset}'.\nValid values: Parental, Referential, ReferentialRestrictDelete.\nRead docs://schema_tools_guide for cascade preset behavior details.");
             }
 
-            // Apply individual overrides
-            var v = ParseCascadeType(assign); if (v.HasValue) config.Assign = v.Value;
+            CascadeType? v;
+            v = ParseCascadeType(assign); if (v.HasValue) config.Assign = v.Value;
             v = ParseCascadeType(delete); if (v.HasValue) config.Delete = v.Value;
             v = ParseCascadeType(merge); if (v.HasValue) config.Merge = v.Value;
             v = ParseCascadeType(reparent); if (v.HasValue) config.Reparent = v.Value;
@@ -874,7 +755,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "usecollectionname" => AssociatedMenuBehavior.UseCollectionName,
                 "uselabel" => AssociatedMenuBehavior.UseLabel,
                 "donotdisplay" => AssociatedMenuBehavior.DoNotDisplay,
-                _ => throw new ArgumentException($"Error: Invalid menu_behavior '{value}'.\nValid values: UseCollectionName, UseLabel, DoNotDisplay.")
+                _ => throw new ArgumentException($"Invalid menu_behavior '{value}'.\nValid values: UseCollectionName, UseLabel, DoNotDisplay.")
             };
         }
 
@@ -887,7 +768,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "sales" => AssociatedMenuGroup.Sales,
                 "service" => AssociatedMenuGroup.Service,
                 "marketing" => AssociatedMenuGroup.Marketing,
-                _ => throw new ArgumentException($"Error: Invalid menu_group '{value}'.\nValid values: Details, Sales, Service, Marketing.")
+                _ => throw new ArgumentException($"Invalid menu_group '{value}'.\nValid values: Details, Sales, Service, Marketing.")
             };
         }
 
@@ -914,25 +795,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ? trimmed[prefixWithSeparator.Length..]
                 : trimmed;
         }
-
-
-
-        private bool PublishIfNeeded(string entityName)
-        {
-            try
-            {
-                var publishXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>";
-                PublishHelper.PublishEntity(_context, _serviceClient, entityName);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private CallToolResult ErrorResult(string message) => Error(message);
-
-        private CallToolResult BuildResult(string text, ManageRelationshipResult structured) => Success(text, structured);
     }
 }
+

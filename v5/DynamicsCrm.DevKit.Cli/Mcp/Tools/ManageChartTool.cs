@@ -439,13 +439,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
                 solutionWarning = AddToSolution(newId, resolvedSolutionUniqueName);
 
-            var published = false;
-            if (publish)
-            {
-                PublishHelper.PublishEntity(_context, _serviceClient, entityName);
-                MetadataOperationWaitHelper.WaitAfterFormView();
-                published = true;
-            }
+            var published = publish && PublishHelper.PublishEntity(_context, _serviceClient, entityName);
 
             var text = $"Created chart '{chartName.Trim()}' ({newId}) on '{entityName}': type={chartType}, category={groupByCol}" +
                 (measures != null
@@ -634,13 +628,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
                 solutionWarning = AddToSolution(chartId, resolvedSolutionUniqueName);
 
-            var published = false;
-            if (publish)
-            {
-                PublishHelper.PublishEntity(_context, _serviceClient, primaryEntity);
-                MetadataOperationWaitHelper.WaitAfterFormView();
-                published = true;
-            }
+            bool published = publish && PublishHelper.PublishEntity(_context, _serviceClient, primaryEntity);
 
             var text = $"Updated chart '{chartName}' ({chartId}) on '{primaryEntity}'.";
             if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
@@ -701,13 +689,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(solutionName))
                 solutionWarning = AddToSolution(chartId, solutionName.Trim());
 
-            var published = false;
-            if (publish)
-            {
-                PublishHelper.PublishEntity(_context, _serviceClient, primaryEntity);
-                MetadataOperationWaitHelper.WaitAfterFormView();
-                published = true;
-            }
+            bool published = publish && PublishHelper.PublishEntity(_context, _serviceClient, primaryEntity);
 
             var text = $"Renamed chart {chartId} to '{chartNameInput.Trim()}'.";
             if (solutionWarning != null)
@@ -763,13 +745,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             DataverseMutationExecutor.Update(_context, _serviceClient, new Entity("savedqueryvisualization", chartId) { ["isdefault"] = true });
 
-            var published = false;
-            if (publish)
-            {
-                PublishHelper.PublishEntity(_context, _serviceClient, primaryEntity);
-                MetadataOperationWaitHelper.WaitAfterFormView();
-                published = true;
-            }
+            bool published = publish && PublishHelper.PublishEntity(_context, _serviceClient, primaryEntity);
 
             var text = $"Set chart '{chartName}' ({chartId}) as default for '{primaryEntity}'.";
             if (!published) text += " Not published (publish=false).";
@@ -825,13 +801,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(solutionName))
                 solutionWarning = AddToSolution(chartId, solutionName.Trim());
 
-            var published = false;
-            if (publish && !string.IsNullOrEmpty(backupData.Entity))
-            {
-                PublishHelper.PublishEntity(_context, _serviceClient, backupData.Entity);
-                MetadataOperationWaitHelper.WaitAfterFormView();
-                published = true;
-            }
+            bool published = publish && !string.IsNullOrEmpty(backupData.Entity)
+                && PublishHelper.PublishEntity(_context, _serviceClient, backupData.Entity);
 
             var text = $"Restored chart {chartId} from backup '{backupPathInput}'.";
             if (solutionWarning != null)

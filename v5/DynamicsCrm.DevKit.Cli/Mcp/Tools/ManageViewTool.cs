@@ -314,8 +314,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var newViewId = DataverseMutationExecutor.Create(_context, _serviceClient, newView);
 
-            PublishHelper.PublishEntity(_context, _serviceClient, entityName);
-            MetadataOperationWaitHelper.WaitAfterFormView();
+            var published = PublishHelper.PublishEntity(_context, _serviceClient, entityName);
 
             var text = $"Created view '{viewName}' ({newViewId}) on '{entityName}' — Public view, {layout.ColumnCount} columns auto-generated from FetchXML" +
                 ", validated (client + server), published.";
@@ -323,7 +322,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success(text, new UpsertViewResult
             {
                 Action = "created", Entity = entityName, ViewId = newViewId.ToString(), ViewName = viewName,
-                Status = "created", Validated = true, Published = true,
+                Status = "created", Validated = true, Published = published,
                 CreateMode = SolutionComponentCreateMode.None.ToString(),
                 FetchXml = newFetchXml,
                 LayoutXml = newLayoutXml
@@ -503,8 +502,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
-            PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
-            MetadataOperationWaitHelper.WaitAfterFormView();
+            var published = PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
 
             var quickFindColumns = currentQueryType == 4 ? ExtractQuickFindColumns(effectiveFetchXml) : null;
 
@@ -519,7 +517,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Action = "updated", Entity = entityName, ViewId = updateId.ToString(), ViewName = currentViewName,
                 Status = "updated", Validated = true,
                 UpdatedParts = updatedParts, ValidationWarnings = cellPatchWarnings,
-                FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = true,
+                FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = published,
                 QuickFindColumns = quickFindColumns?.Count > 0 ? quickFindColumns : null
             });
         }
@@ -588,8 +586,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
-            PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
-            MetadataOperationWaitHelper.WaitAfterFormView();
+            var published = PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
 
             var text = $"Renamed view '{oldName}' to '{viewName}' ({renameId}) on '{entityName}', published." +
                 " Backup saved (see fetchXmlBackupPath/layoutXmlBackupPath).";
@@ -663,8 +660,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var update = new Entity("savedquery", targetId) { ["isdefault"] = true };
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
-            PublishHelper.PublishEntity(_context, _serviceClient, entityName);
-            MetadataOperationWaitHelper.WaitAfterFormView();
+            var published = PublishHelper.PublishEntity(_context, _serviceClient, entityName);
 
             var clearedText = previousDefaults.Count > 0 ? $", cleared {previousDefaults.Count} previous default(s)" : "";
             return Success($"Set default view for '{entityName}' to '{viewName}' ({targetId}){clearedText}, published.", new UpsertViewResult
@@ -672,7 +668,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Action = "set_default", Entity = entityName, ViewId = targetId.ToString(), ViewName = viewName,
                 Status = "set_default", Validated = false,
                 ClearedPreviousDefaults = previousDefaults.Count > 0 ? previousDefaults.Count : null,
-                Published = true
+                Published = published
             });
         }
 
@@ -790,8 +786,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
-            PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
-            MetadataOperationWaitHelper.WaitAfterFormView();
+            var published = PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
 
             var text = $"Restored view '{viewName}' ({undoId}) on '{entityName}' from FetchXML backup — LayoutXML regenerated" +
                 ", validated, published." +
@@ -807,7 +802,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 RestoredFromFetchXmlBackup = fetchBackupPath,
                 FetchXmlBackupPath = preFetchBackupPath,
                 LayoutXmlBackupPath = preLayoutBackupPath,
-                Published = true
+                Published = published
             });
         }
 

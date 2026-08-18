@@ -1776,16 +1776,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private bool PublishIfNeeded(string entityName)
         {
-            try
-            {
-                var publishXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>";
-                PublishHelper.PublishEntity(_context, _serviceClient, entityName);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return PublishHelper.PublishEntity(_context, _serviceClient, entityName);
         }
 
         private static StringBuilder FormatHeader(string entityName, string logicalName, string typeName, string displayName, AttributeRequiredLevel reqLevel)

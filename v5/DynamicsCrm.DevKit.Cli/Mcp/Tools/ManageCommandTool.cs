@@ -2670,9 +2670,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(entityLogicalName)) return;
 
             PublishHelper.PublishEntity(_context, _serviceClient, entityLogicalName.Trim().ToLowerInvariant());
-
-            // Wait for command metadata to propagate after publish
-            MetadataOperationWaitHelper.WaitAfterFormView();
         }
 
         private CallToolResult ErrorResult(string message) => Error(message);

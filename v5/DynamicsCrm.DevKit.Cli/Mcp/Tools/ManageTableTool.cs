@@ -328,7 +328,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             MetadataOperationWaitHelper.WaitAfterTableCreation();
 
-            PublishHelper.PublishEntity(_context, _serviceClient, entityName);
+            var published = PublishHelper.PublishEntity(_context, _serviceClient, entityName);
 
             var structured = new ManageTableResult
             {
@@ -347,7 +347,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 CreateMode = SolutionComponentCreateMode.MetadataCreateRequest.ToString(),
                 IsAddToSolution = true,
                 AddToSolutionMethod = "SolutionUniqueName",
-                Published = true,
+                Published = published,
                 IsAuditEnabled = is_audit_enabled,
                 IsQuickCreateEnabled = effectiveIsQuickCreateEnabled,
                 IsSearchEnabled = is_search_enabled ?? false,
@@ -523,9 +523,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             DataverseMutationExecutor.Execute(_context, _serviceClient, updateRequest);
 
-            PublishHelper.PublishEntity(_context, _serviceClient, entityName);
+            var published = PublishHelper.PublishEntity(_context, _serviceClient, entityName);
 
-            var summary = $"Updated table '{entityName}' ({existingMetadata.MetadataId}) — {changes.Count} change(s), published.";
+            var summary = $"Updated table '{entityName}' ({existingMetadata.MetadataId}) — {changes.Count} change(s), published={(published ? "yes" : "no")}.";
             if (warnings.Count > 0)
                 summary += $" {warnings.Count} warning(s).";
 
@@ -538,7 +538,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 OwnershipType = existingMetadata.OwnershipType?.ToString() ?? "",
                 MetadataId = existingMetadata.MetadataId?.ToString() ?? "",
                 EntitySetName = existingMetadata.EntitySetName,
-                Published = true,
+                Published = published,
                 IsAuditEnabled = existingMetadata.IsAuditEnabled?.Value,
                 IsQuickCreateEnabled = existingMetadata.IsQuickCreateEnabled == true,
                 IsSearchEnabled = existingMetadata.SyncToExternalSearchIndex == true,
