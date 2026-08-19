@@ -87,7 +87,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return McpToolResults.ThrowExceptionFriendly(ex);
             }
         }
 

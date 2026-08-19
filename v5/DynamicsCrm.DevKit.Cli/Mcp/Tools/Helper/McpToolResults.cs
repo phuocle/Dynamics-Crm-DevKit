@@ -210,6 +210,68 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         }
 
         /// <summary>
+        /// Same as <see cref="ThrowException"/> but rewrites the text output to be
+        /// shorter and AI-friendly. Hides StackTrace from text (still available in
+        /// structured.details.stackTrace), and applies substring-based rewrites for
+        /// the most common Dataverse fault messages so AI callers see a clean,
+        /// categorized line. Falls back to the original message (with StackTrace
+        /// stripped) when no pattern matches.
+        /// </summary>
+        /// <remarks>
+        /// Hardcoded lowercase substrings — case-insensitive via ToLowerInvariant
+        /// before matching. Original Dataverse messages are never modified; only
+        /// the text output is rewritten.
+        /// </remarks>
+        internal static CallToolResult ThrowExceptionFriendly(Exception ex)
+        {
+            var raw = ThrowException(ex);
+            var originalText = (raw.Content[0] as TextContentBlock)?.Text ?? "";
+
+            // 1. Strip "StackTrace: ..." line from text (always)
+            var cleaned = originalText;
+            var stIdx = cleaned.IndexOf("\nStackTrace:", StringComparison.Ordinal);
+            if (stIdx > 0) cleaned = cleaned.Substring(0, stIdx);
+
+            // 2. Lowercase copy for case-insensitive contains checks only
+            string lower = cleaned.ToLowerInvariant();
+
+            // 3. Apply substring-based rewrites for known Dataverse patterns
+            string rewritten;
+            if (lower.Contains("entity doesn't contain attribute with name"))
+            {
+                // Example original:
+                //   "'Account' entity doesn't contain attribute with Name = 'nonexistent_field' and NameMapping = 'Logical'..."
+                rewritten = $"{ErrorPrefix} [AttributeNotFound] Attribute not found on entity. "
+                         + "Check attribute logical name (case-sensitive). "
+                         + "Use get_tables(entity_name=...) to list valid fields.";
+            }
+            else if (lower.Contains("with a name =") && lower.Contains("with namemapping = 'logical' was not found"))
+            {
+                rewritten = $"{ErrorPrefix} [EntityNotFound] Entity not found in Dataverse metadata. "
+                         + "Use get_tables to discover the correct logical name.";
+            }
+            else if (lower.Contains("unknown condition operator:"))
+            {
+                rewritten = $"{ErrorPrefix} [InvalidOperator] Unknown FetchXML condition operator. "
+                         + "See https://learn.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml/condition-operators";
+            }
+            else if (lower.Contains("entityname") && !lower.Contains("doesn't contain attribute"))
+            {
+                // Catches the bare "entityName" fault from empty <fetch></fetch>
+                rewritten = $"{ErrorPrefix} [MissingEntity] FetchXML is missing the required <entity name=\"...\"> element. "
+                         + "Read schema://fetchxml for FetchXML query structure.";
+            }
+            else
+            {
+                // Default: keep original message text, just without StackTrace
+                rewritten = cleaned;
+            }
+
+            raw.Content = [new TextContentBlock { Text = rewritten }];
+            return raw;
+        }
+
+        /// <summary>
         /// Classify an exception into a short kind label + a hint. The kind label
         /// is shown in the message; the hint is what the AI/client should do next.
         /// </summary>
