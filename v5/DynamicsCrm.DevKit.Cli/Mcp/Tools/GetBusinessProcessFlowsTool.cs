@@ -1,4 +1,5 @@
-﻿using Microsoft.PowerPlatform.Dataverse.Client;
+﻿#nullable enable
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
@@ -50,9 +51,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_business_rules -> client-side business rules\n" +
             "- get_flows -> Power Automate cloud flows")]
         public CallToolResult get_business_process_flows(
-            [Description("GUID -> detail. Empty = list.")] string bpf_id = "",
-            [Description("Name contains. 1 match -> auto-detail. Omit or pass null to list all. Empty/whitespace string will trigger MCP 2.x framework error before method runs.")] string bpf_name = "",
-            [Description("Primary entity filter, Display Name or logical name (e.g. 'Lead' or 'lead').")] string entity_name = "",
+            [Description("GUID -> detail. Empty = list.")] string? bpf_id = null,
+            [Description("Name contains. 1 match -> auto-detail. Omit or pass null to list all.")] string? bpf_name = null,
+            [Description("Primary entity filter, Display Name or logical name (e.g. 'Lead' or 'lead').")] string? entity_name = null,
             [Description("Filter by state: 'active' (Draft hidden), 'draft' (only Draft), or 'all' (no filter). Default 'all' returns every BPF regardless of state.")] string status = "all",
             [Description("List only. Detail always includes.")] bool include_stages = false,
             [Description("1-250.")] int max_records = 50)
@@ -60,10 +61,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 // -- Validate --
-                // Note: empty string bpf_name="" cannot be caught here — MCP SDK 2.x
-                // rejects it at the framework binding layer (before method body runs)
-                // with a generic "An error occurred invoking..." message. Callers must
-                // either omit the parameter entirely or pass a non-empty string.
+                // Optional string params are declared `string? ... = null` instead of `string ... = ""`.
+                // Rationale: MCP SDK 2.x JSON schema marks non-nullable string params with empty-string
+                // defaults as `required`, so MEAI's AIFunctionFactory rejects caller payloads containing
+                // an explicit "" before the method body runs (issue modelcontextprotocol/csharp-sdk#830,
+                // surfaced to callers as a generic "An error occurred invoking..."). Nullable string
+                // params are excluded from the schema `required` array and accept null/omitted values,
+                // matching the documented workaround. All downstream code already uses IsNullOrWhiteSpace
+                // which treats null and "" identically, so semantics are unchanged.
 
                 var normalizedStatus = (status ?? "").Trim().ToLowerInvariant();
                 if (string.IsNullOrEmpty(normalizedStatus))
@@ -79,7 +84,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error($"'{bpf_id.Trim()}' is not a valid GUID.");
 
                 // -- Resolve entity_name -> logical name --
-                string resolvedEntityName = null;
+                string? resolvedEntityName = null;
                 if (!string.IsNullOrWhiteSpace(entity_name))
                 {
                     var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_business_process_flows");
@@ -134,7 +139,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // -- List mode --
 
-        private CallToolResult BuildList(List<Entity> entities, string entityName, string status, bool includeStages)
+        private CallToolResult BuildList(List<Entity> entities, string? entityName, string status, bool includeStages)
         {
             var bpfs = entities.Select(MapBpfEntry).ToList();
 
@@ -226,7 +231,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // -- Data fetchers (return data, not CallToolResult) --
 
-        private List<Entity> QueryBpfs(string bpfName, string entityName, string status, int maxRecords, bool includeStages)
+        private List<Entity> QueryBpfs(string? bpfName, string? entityName, string status, int maxRecords, bool includeStages)
         {
             var filters = new StringBuilder();
             filters.AppendLine("      <condition attribute='category' operator='eq' value='4'/>");
@@ -275,7 +280,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 entities = new List<Entity>();
                 var page = 1;
-                string pagingCookie = null;
+                string? pagingCookie = null;
                 while (true)
                 {
                     var pagedFetchXml = FetchXmlPagingHelper.ApplyPaging(fetchXml, page, 5000, pagingCookie);
@@ -304,7 +309,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return entities;
         }
 
-        private List<BpfStageEntry> GetStages(string bpfWorkflowId, string clientData = null)
+        private List<BpfStageEntry> GetStages(string bpfWorkflowId, string? clientData = null)
         {
             // processstage has no sequence column; the true visual stage order lives in
             // the BPF workflow's clientdata (StageStep.stageId == processstageid).
@@ -361,7 +366,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // Walk the workflow clientdata JSON tree and collect StageStep ids in
         // document order (= visual order in the BPF designer).
-        private static List<Guid> ParseStageOrder(string clientData)
+        private static List<Guid> ParseStageOrder(string? clientData)
         {
             var order = new List<Guid>();
             if (string.IsNullOrWhiteSpace(clientData)) return order;
@@ -384,8 +389,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var isStageStep = element.TryGetProperty("__class", out var className) &&
                 className.ValueKind == JsonValueKind.String &&
-                className.GetString() != null &&
-                className.GetString().StartsWith("StageStep:", StringComparison.Ordinal);
+                className.GetString() is { } classStr &&
+                classStr.StartsWith("StageStep:", StringComparison.Ordinal);
 
             if (isStageStep &&
                 element.TryGetProperty("stageId", out var stageId) &&
@@ -463,18 +468,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // -- Utils --
 
-        private static string SanitizeDescription(string description)
+        private static string? SanitizeDescription(string? description)
         {
             if (string.IsNullOrWhiteSpace(description)) return null;
-            var trimmed = description.Trim();
+            var trimmed = description!.Trim();
             if (trimmed.Equals("Click to add description", StringComparison.OrdinalIgnoreCase) ||
                 trimmed.Equals("Click to add description.", StringComparison.OrdinalIgnoreCase))
                 return null;
             return trimmed;
         }
 
-        private static string NullIfEmpty(string value) =>
-            string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+        private static string? NullIfEmpty(string? value) =>
+            string.IsNullOrWhiteSpace(value) ? null : value!.Trim();
 
         private static string EscapeXml(string value) =>
             value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("\"", "&quot;");
