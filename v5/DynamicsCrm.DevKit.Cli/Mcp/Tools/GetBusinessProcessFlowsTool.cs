@@ -51,15 +51,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_flows -> Power Automate cloud flows")]
         public CallToolResult get_business_process_flows(
             [Description("GUID -> detail. Empty = list.")] string bpf_id = "",
-            [Description("Name contains. 1 match -> auto-detail.")] string bpf_name = "",
+            [Description("Name contains. 1 match -> auto-detail. Omit or pass null to list all. Empty/whitespace string will trigger MCP 2.x framework error before method runs.")] string bpf_name = "",
             [Description("Primary entity filter, Display Name or logical name (e.g. 'Lead' or 'lead').")] string entity_name = "",
-            [Description("'active' / 'draft' / 'all'.")] string status = "active",
+            [Description("Filter by state: 'active' (Draft hidden), 'draft' (only Draft), or 'all' (no filter). Default 'all' returns every BPF regardless of state.")] string status = "all",
             [Description("List only. Detail always includes.")] bool include_stages = false,
             [Description("1-250.")] int max_records = 50)
         {
             try
             {
                 // -- Validate --
+                // Note: empty string bpf_name="" cannot be caught here — MCP SDK 2.x
+                // rejects it at the framework binding layer (before method body runs)
+                // with a generic "An error occurred invoking..." message. Callers must
+                // either omit the parameter entirely or pass a non-empty string.
+
                 var normalizedStatus = (status ?? "").Trim().ToLowerInvariant();
                 if (string.IsNullOrEmpty(normalizedStatus))
                     normalizedStatus = "active";
@@ -89,6 +94,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 // -- List mode --
                 var bpfs = QueryBpfs(bpf_name, resolvedEntityName, normalizedStatus, max_records, include_stages);
+
+                // If the caller explicitly searched by bpf_name, an empty result means
+                // the BPF does not exist (typo, deleted, or unmanaged-vs-managed mismatch).
+                // Surface this as an error so callers can distinguish "no match" from
+                // "valid filter that legitimately returned nothing".
+                if (bpfs.Count == 0 && !string.IsNullOrWhiteSpace(bpf_name))
+                {
+                    return Error(
+                        $"No Business Process Flow matched bpf_name '{bpf_name.Trim()}'. " +
+                        "Hint: Use get_business_process_flows without bpf_name to list available BPFs.");
+                }
 
                 if (bpfs.Count == 0)
                 {
@@ -136,8 +152,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var source = entities.FirstOrDefault(e =>
                         string.Equals(e.Id.ToString(), bpf.WorkflowId, StringComparison.OrdinalIgnoreCase));
                     var stages = GetStages(bpf.WorkflowId, source?.GetAttributeValue<string>("clientdata"));
-                    if (stages.Count > 0)
-                        bpf.Stages = stages;
+                    // Always assign (including empty list) so callers can rely on
+                    // a stable JSON shape: when include_stages=true, every BPF
+                    // exposes a "stages" field — never omitted.
+                    bpf.Stages = stages ?? new List<BpfStageEntry>();
                 }
             }
 
