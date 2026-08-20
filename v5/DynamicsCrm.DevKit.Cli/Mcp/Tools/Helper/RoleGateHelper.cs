@@ -1,6 +1,7 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
+using ModelContextProtocol.Protocol;
 using System.Collections.Generic;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
@@ -90,6 +91,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 names.Add(name.Trim());
             }
             return names;
+        }
+
+        /// <summary>
+        /// One-call guard for mutation tools. Returns null when the calling user
+        /// IS a System Administrator (caller proceeds); returns a pre-built
+        /// <see cref="CallToolResult"/> error when not (caller returns it).
+        /// Usage: <code>if (RoleGateHelper.EnsureSystemAdministrator(_serviceClient) is { } gate) return gate;</code>
+        /// </summary>
+        internal static CallToolResult EnsureSystemAdministrator(ServiceClient serviceClient)
+        {
+            if (IsSystemAdministrator(serviceClient))
+                return null;
+
+            const string requiredRoleName = DynamicsCrm.DevKit.Shared.Const.SystemAdministratorRoleName;
+            var haveRoles = GetCurrentRoleNames(serviceClient);
+            var haveList = haveRoles.Count > 0
+                ? string.Join(", ", haveRoles)
+                : "(no roles assigned)";
+
+            return McpToolResults.Error(
+                $"This action requires the '{requiredRoleName}' role. The calling user does not have it.",
+                $"Ask a System Administrator to assign the '{requiredRoleName}' role to your user, then retry. Current roles on the calling user: {haveList}.");
         }
     }
 }

@@ -9,6 +9,8 @@
 - Mỗi lần bạn làm xong 1 TODO task do bạn tạo ra, bạn có sure là bạn có nhớ lại RULES của file này không ? nếu không hãy đọc lại.
 - Build bằng dotnet tool cho project cli trước, nếu mọi thứ ok khi đã code xong thì dùng @build-cli.md để full build, sau đó bạn phải dừng lại (STOP) hỏi aP review trước khi real TEST.
 - NHẮC LẠI 1 LẦN NỮA, LÀM TASK XONG THÌ KHÔNG REAL TEST MCP, DỪNG LẠI HỎI A PHƯỚC REVIEW TRƯỚC KHI REAL TEST MCP
+- **FORCE — sau khi real test xong MỘT tool, BẮT BUỘC ghi kết quả vào file `testcall/{N}.{tool_name}.md`** (folder `DynamicsCrm.DevKit.Docs/testcall`). Không ghi = task CHƯA xong. Đây là luật, không phải gợi ý. File theo 4 H1: `# Tool description AI đọc được` / `# Input tool call` / `# Output tool call` / `# Kết quả AI tổng hợp`; raw output đầy đủ, không "rút gọn", không secret.
+- **Số thứ tự `{N}` lấy từ `devkit mcp --tools`** — chạy lệnh, grep tên tool, lấy số ở cột đầu. KHÔNG dùng max existing file +1 (tool có thể thêm/xóa/reorder trong CLI → max+1 sai). Header `# N. tool_name` phải khớp số đó.
 
 ## 1. Rules
 

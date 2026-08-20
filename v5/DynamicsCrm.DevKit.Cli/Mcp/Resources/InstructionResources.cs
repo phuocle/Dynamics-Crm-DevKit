@@ -182,6 +182,26 @@ Do not put verbs like `""add""` or `""remove""` in operation `action`.
 ]
 ```
 
+## CRITICAL: `operations` is a JSON string — escape inner quotes
+The `operations` parameter is typed as a **string** (MCP has no JSON-array parameter type), so the entire JSON array must be passed as a single string value. Inside that string, every double-quote character of the JSON must be escaped as backslash-quote. If you pass raw (unescaped) JSON, the MCP call will FAIL with a JSON parse error.
+
+How to build it:
+1. Write the operations as a normal JSON array first.
+2. Serialize it to a string (`JSON.stringify` in JavaScript, `JsonSerializer.Serialize` in C#, `json.dumps` in Python).
+3. Pass that string to the `operations` parameter.
+
+Example — the array you want:
+```json
+[
+  { ""action"": ""manage_tab"", ""manage_action"": ""add"", ""label"": ""Main"" }
+]
+```
+After serializing, the `operations` string value contains escaped quotes:
+```
+[{\""action\"":\""manage_tab\"",\""manage_action\"":\""add\"",\""label\"":\""Main\""}]
+```
+Pass that serialized string to `operations`. Do NOT hand-type the escaped form — always serialize.
+
 ## Naming Conventions
 - Tab names: `tab_$label` (lowercase, no spaces/special chars)
   Example: tab_general, tab_details, tab_address

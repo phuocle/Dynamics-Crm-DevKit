@@ -386,5 +386,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             dist += Math.Abs(a.Length - b.Length);
             return dist <= 2;
         }
+
+        /// <summary>
+        /// Builds a hint string for "missing required key" errors: lists the keys the user
+        /// actually provided vs the valid keys, and flags near-matches (e.g. 'tab_name' for 'tab').
+        /// Returns empty string if the op has no properties.
+        /// </summary>
+        internal static string BuildProvidedKeysHint(JsonElement op, params string[] validKeys)
+        {
+            if (op.ValueKind != JsonValueKind.Object)
+                return string.Empty;
+
+            var provided = new List<string>();
+            foreach (var prop in op.EnumerateObject())
+                provided.Add(prop.Name);
+
+            if (provided.Count == 0)
+                return string.Empty;
+
+            var near = provided
+                .Where(p => validKeys.Any(v => LevenshteinClose(p, v) && !string.Equals(p, v, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+
+            var hint = $"Provided key(s): {string.Join(", ", provided)}. Valid: {string.Join(", ", validKeys)}.";
+            if (near.Count > 0)
+                hint += $" Did you mean: {string.Join(", ", near.Select(n => $"'{n}'"))}?";
+            return hint;
+        }
     }
 }

@@ -1,4 +1,3 @@
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
@@ -46,46 +45,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertFormResult)),
         Description(
-            "Form definitions for a Dataverse entity. Actions: list (optional form_type/include_formxml); detail (form_id or form_name); update (form_id+operations or form_id+formxml); rename (form_id+form_name); undo (form_id+backup path). Update flow: manage_form(update, operations=[...]) → auto-builds FormXML+backup+validate+import+publish. Operations support manage_tab, manage_section, manage_fields, manage_subgrid, manage_library, manage_event. Safety: auto-backup, XSD validate, backup failure blocks update. See schema://formxml + docs://instructions_for_formxml.\n\n" +
-            "OPERATION JSON: when tool action='update', each item in operations needs action='manage_tab|manage_section|manage_fields|manage_subgrid|manage_library|manage_event' plus manage_action='add|update|rename|move|remove|delete' (availability depends on family). For JavaScript events use library_name, event_name, function_name, pass_execution_context. Example: [{\"action\":\"manage_event\",\"manage_action\":\"add\",\"event_name\":\"onload\",\"function_name\":\"Namespace.onLoad\",\"library_name\":\"new_/js/account.js\",\"pass_execution_context\":true}].\n\n" +
+            "Manage form definitions (systemform) for a Dataverse entity. Actions: 'list', 'detail' (read-only) | 'update', 'rename', 'undo' (mutations — require System Administrator).\n\n" +
             "WHEN TO USE:\n" +
-            "- Inspect existing forms (list, detail) before editing\n" +
-            "- Apply operations via action=update (recommended) or provide raw formxml (advanced)\n" +
-            "- Rename a form, restore from backup (undo)\n\n" +
-            "NAME RESOLUTION: entity_name and operation field references accept Display Name or logical/schema name. Display Name contains is resolved first, then logical/schema contains.\n\n" +
-            "The AI should pass its current workspace directory to workspace_folder to ensure backups are saved to the user's project.\n\n" +
-            "Fuzzy on form_name (contains): 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto-detail.")]
+            "- List or inspect forms of an entity (list, detail) before editing\n" +
+            "- Apply form operations via action=update (recommended: operations JSON) or raw formxml (advanced/undo)\n" +
+            "- Rename a form, or restore a form from a .formxml backup (undo)\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_tables -> entity logical names; manage_view -> entity views; publish_customizations -> batch publish\n" +
+            "- See schema://formxml + docs://instructions_for_formxml for FormXML structure and operation examples\n\n" +
+            "Update flow: manage_form(update, operations=[...]) -> auto-builds FormXML + backup + XSD validate + import + publish. Operations support manage_tab, manage_section, manage_fields, manage_subgrid, manage_library, manage_event. workspace_folder is REQUIRED for update/rename/undo — backups are saved there before overwrite. Fuzzy on form_name (contains): 0/multi -> disambiguation list and stop; 1 -> auto-detail.")]
         public CallToolResult manage_form(
             [Description("'list', 'detail', 'update', 'rename', 'undo'.")] string action = "",
             [Description("Entity Display Name or logical name (Display Name is resolved first; e.g. 'Account' or 'account').")] string entity_name = "",
-            [Description("GUID. Required: detail/update/rename/undo.")] string form_id = "",
-            [Description("Name contains. 1 match → auto-detail. Ignored if form_id set.")] string form_name = "",
-            [Description("2=Main, 5=Mobile, 6=QuickView, 7=QuickCreate. 0 = all.")] int form_type = 0,
-            [Description("List mode only. Detail always includes.")] bool include_formxml = false,
-            [Description("update (advanced/undo): raw FormXML or backup file path (.formxml). Auto-detects. Use 'operations' for recommended flow.")] string formxml = "",
-            [Description("update (recommended): JSON array. Example: [{\"action\":\"manage_event\",\"manage_action\":\"add\",\"event_name\":\"onload\",\"function_name\":\"Namespace.onLoad\",\"library_name\":\"new_/js/account.js\",\"pass_execution_context\":true}]. Read docs://instructions_for_formxml.")] string operations = "",
-            [Description("XSD validate before write.")] bool validate = true,
-            [Description("Backup before overwrite. Failure blocks update.")] bool backup = true,
-            [Description("Optional project/workspace folder path to save backups in.")] string workspace_folder = "")
+            [Description("GUID. Required for detail/update/rename/undo.")] string form_id = "",
+            [Description("Name contains filter. 1 match → auto-detail. Ignored if form_id is set.")] string form_name = "",
+            [Description("2=Main, 5=Mobile, 6=QuickView, 7=QuickCreate. 0 or omit = all types.")] int form_type = 0,
+            [Description("List mode only — include formxml in each entry. Detail always includes formxml.")] bool include_formxml = false,
+            [Description("update (advanced) / undo: raw FormXML string or backup file path (.formxml). Auto-detects. Use 'operations' for the recommended flow.")] string formxml = "",
+            [Description("update (recommended): JSON array of form operations. Read docs://instructions_for_formxml for format and examples.")] string operations = "",
+            [Description("XSD validate FormXML before write.")] bool validate = true,
+            [Description("Backup before overwrite. Failure blocks the update.")] bool backup = true,
+            [Description("Project/workspace folder path to save backups in. Required for update/rename/undo.")] string workspace_folder = "")
         {
             _workspaceFolder = workspace_folder;
-            if (string.IsNullOrWhiteSpace(action))
-                return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'update', 'rename', 'undo'.");
-
-            if (string.IsNullOrWhiteSpace(entity_name))
-                return ErrorResult(
-                    "Error: entity_name is required.\n" +
-                    "Use get_tables to find the entity logical name.");
-
-            var normalizedAction = action.Trim().ToLowerInvariant();
-            var entityName = entity_name.Trim();
-            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_form");
-            if (!entityResult.IsSuccess)
-                return ErrorResult($"Error: {entityResult.Error}");
-            entityName = entityResult.Value.LogicalName;
-
             try
             {
+                if (string.IsNullOrWhiteSpace(action))
+                    return Error("action is required.", "Valid values: 'list', 'detail', 'update', 'rename', 'undo'.");
+
+                if (string.IsNullOrWhiteSpace(entity_name))
+                    return Error("entity_name is required.", "Use get_tables to find the entity logical name.");
+
+                var normalizedAction = action.Trim().ToLowerInvariant();
+                var entityName = entity_name.Trim();
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_form");
+                if (!entityResult.IsSuccess)
+                    return Error(entityResult.Error);
+                entityName = entityResult.Value.LogicalName;
+
+                // Rule12: gate mutation actions (update/rename/undo) behind System Administrator.
+                if (normalizedAction is "update" or "rename" or "undo"
+                    && RoleGateHelper.EnsureSystemAdministrator(_serviceClient) is { } gate)
+                    return gate;
+
                 return normalizedAction switch
                 {
                     "list" => HandleList(entityName, form_name, form_type, include_formxml),
@@ -93,33 +95,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "update" => HandleUpdate(entityName, form_id, formxml, operations, validate, backup),
                     "rename" => HandleRename(entityName, form_id, form_name, backup),
                     "undo" => HandleUndo(entityName, form_id, formxml, validate),
-                    _ => ErrorResult($"Error: '{action}' is not a valid action. Valid actions: list, detail, update, rename, undo.")
+                    _ => Error($"'{action}' is not a valid action.", "Valid actions: list, detail, update, rename, undo.")
                 };
-            }
-            catch (System.ServiceModel.FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault> fex)
-            {
-                var fault = fex.Detail;
-                var errorDetail = fault != null
-                    ? $"{fault.Message} (ErrorCode: 0x{fault.ErrorCode:X8})"
-                    : fex.Message;
-                if (fault?.InnerFault != null)
-                    errorDetail += $" → InnerFault: {fault.InnerFault.Message}";
-
-                return ErrorResult(
-                    $"[Error] Form {normalizedAction} failed\n" +
-                    $"Entity: {entityName}\n" +
-                    $"Message: {errorDetail}");
             }
             catch (Exception ex)
             {
-                var errorDetail = ex.InnerException != null
-                    ? $"{ex.Message} → {ex.InnerException.Message}"
-                    : ex.Message;
-
-                return ErrorResult(
-                    $"[Error] Form {normalizedAction} failed\n" +
-                    $"Entity: {entityName}\n" +
-                    $"Message: {errorDetail}");
+                return ThrowExceptionFriendly(ex);
             }
         }
 
@@ -134,7 +115,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (formType != 0 && !ValidFormTypes.Contains(formType))
-                return ErrorResult($"Error: form_type={formType} is not valid. Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. Use 0 or omit for all types.");
+                return Error($"form_type={formType} is not valid.", "Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. Use 0 or omit for all types.");
 
             var query = BuildListQuery(entityName, formType, includeFormXml);
             var result = _serviceClient.RetrieveMultiple(query);
@@ -143,16 +124,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (forms.Count == 0)
             {
                 var typeHint = formType > 0 ? $" with type={formType}" : "";
-                return TextResult($"[Forms] {entityName} — 0 forms found{typeHint}");
+                return Success($"No forms found for '{entityName}'{typeHint}.", new UpsertFormResult
+                {
+                    Action = "list", Entity = entityName, TotalCount = 0, Status = "success"
+                });
             }
 
-            return TextResult(FormatFormList(entityName, forms, includeFormXml));
+            var entries = BuildFormListEntries(forms, includeFormXml);
+            return Success($"Found {entries.Count} form(s) for '{entityName}'.", new UpsertFormResult
+            {
+                Action = "list", Entity = entityName, TotalCount = entries.Count,
+                Forms = entries, Status = "success"
+            });
         }
 
         private CallToolResult FindFormsByName(string entityName, string formName, int formType)
         {
             if (formType != 0 && !ValidFormTypes.Contains(formType))
-                return ErrorResult($"Error: form_type={formType} is not valid. Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. Use 0 or omit for all types.");
+                return Error($"form_type={formType} is not valid.", "Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. Use 0 or omit for all types.");
 
             var query = BuildListQuery(entityName, formType, includeFormXml: false);
             var escapedName = formName.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
@@ -164,34 +153,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (forms.Count == 0)
             {
                 var typeHint = formType > 0 ? $" (type={MapFormType(formType)})" : "";
-                return ErrorResult(
-                    $"Error: No form found matching '{formName}' for entity '{entityName}'{typeHint}. " +
+                return Error(
+                    $"No form found matching '{formName}' for entity '{entityName}'{typeHint}.",
                     $"Use manage_form with action='list' and entity_name='{entityName}' to list all available forms.");
             }
 
             if (forms.Count == 1)
-                return HandleDetail(entityName, forms[0].GetAttributeValue<Guid>("formid").ToString(), "");
+                return HandleDetail(entityName, forms[0].GetAttributeValue<Guid>("formid").ToString(), "", formType);
 
             // Multiple matches — return list for disambiguation
-            var sb = new StringBuilder(forms.Count * 120 + 256);
-            sb.AppendLine($"[Forms] {entityName} — {forms.Count} forms match '{formName}'. Specify the exact form_id to proceed.");
-            sb.AppendLine();
-            sb.AppendLine("formid\tname\ttype\tdefault\tactive\tmanaged\tversion");
+            var entries = BuildFormListEntries(forms, includeFormXml: false);
+            return Error(
+                $"Multiple forms match '{formName}' for '{entityName}' — provide form_id to proceed.",
+                "See the 'forms' array in structuredContent for candidate form IDs.",
+                new UpsertFormResult
+                {
+                    Action = "list", Entity = entityName, TotalCount = entries.Count,
+                    Forms = entries, Status = "ambiguous"
+                });
+        }
 
+        private static List<FormListEntry> BuildFormListEntries(DataCollection<Entity> forms, bool includeFormXml)
+        {
+            var entries = new List<FormListEntry>(forms.Count);
             foreach (var form in forms)
             {
-                var formId = form.GetAttributeValue<Guid>("formid");
-                var name = form.GetAttributeValue<string>("name") ?? "";
                 var type = form.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
-                var isDefault = form.GetAttributeValue<bool>("isdefault");
                 var activationState = form.GetAttributeValue<OptionSetValue>("formactivationstate")?.Value ?? 0;
-                var isManaged = form.GetAttributeValue<bool>("ismanaged");
-                var version = form.GetAttributeValue<int>("version");
-
-                sb.AppendLine($"{formId}\t{EscapeTab(name)}\t{MapFormType(type)}\t{(isDefault ? "yes" : "no")}\t{(activationState == 1 ? "Active" : "Inactive")}\t{(isManaged ? "yes" : "no")}\t{version}");
+                var entry = new FormListEntry
+                {
+                    FormId = form.GetAttributeValue<Guid>("formid").ToString(),
+                    FormName = form.GetAttributeValue<string>("name") ?? "",
+                    FormType = type,
+                    FormTypeName = MapFormType(type),
+                    IsDefault = form.GetAttributeValue<bool>("isdefault"),
+                    IsActive = activationState == 1,
+                    IsManaged = form.GetAttributeValue<bool>("ismanaged"),
+                    Version = form.GetAttributeValue<int>("version")
+                };
+                if (includeFormXml)
+                    entry.FormXml = form.GetAttributeValue<string>("formxml");
+                entries.Add(entry);
             }
-
-            return TextResult(sb.ToString());
+            return entries;
         }
 
         // ── Action: detail ────────────────────────────────────────────────
@@ -199,15 +203,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleDetail(string entityName, string formId, string formName, int formType = 0)
         {
             if (string.IsNullOrWhiteSpace(formId) && string.IsNullOrWhiteSpace(formName))
-                return ErrorResult("Error: form_id or form_name is required for 'detail' action.");
+                return Error("form_id or form_name is required when action='detail'.");
 
             if (formType != 0 && !ValidFormTypes.Contains(formType))
-                return ErrorResult($"Error: form_type={formType} is not valid. Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. Use 0 or omit for all types.");
+                return Error($"form_type={formType} is not valid.", "Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. Use 0 or omit for all types.");
 
             if (!string.IsNullOrWhiteSpace(formId))
             {
                 if (!Guid.TryParse(formId.Trim(), out var id))
-                    return ErrorResult($"Error: '{formId}' is not a valid GUID.");
+                    return Error($"'{formId}' is not a valid GUID.");
                 return GetFormDetailResult(entityName, id);
             }
 
@@ -223,27 +227,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (forms.Count == 0)
             {
                 var typeHint = formType > 0 ? $" with type '{MapFormType(formType)}'" : "";
-                return ErrorResult(
-                    $"Error: No form found matching name '{nameFilter}'{typeHint} for entity '{entityName}'.\n" +
+                return Error(
+                    $"No form found matching name '{nameFilter}'{typeHint} for entity '{entityName}'.",
                     $"Use manage_form with action='list' and entity_name='{entityName}' to list all available forms.");
             }
 
             if (forms.Count == 1)
                 return GetFormDetailResult(entityName, forms[0].GetAttributeValue<Guid>("formid"));
 
-            // Multiple matches
-            var sb = new StringBuilder(256);
-            sb.AppendLine($"[Forms] Multiple forms match '{nameFilter}' — provide form_id for detail");
-            sb.AppendLine();
-            sb.AppendLine("formid\tname\ttype");
-            foreach (var form in forms)
-            {
-                var fid = form.GetAttributeValue<Guid>("formid");
-                var name = form.GetAttributeValue<string>("name") ?? "";
-                var type = form.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
-                sb.AppendLine($"{fid}\t{EscapeTab(name)}\t{MapFormType(type)}");
-            }
-            return ErrorResult(sb.ToString());
+            // Multiple matches — return candidates for disambiguation
+            var entries = BuildFormListEntries(forms, includeFormXml: false);
+            return Error(
+                $"Multiple forms match '{nameFilter}' for '{entityName}' — provide form_id for detail.",
+                "See the 'forms' array in structuredContent for candidate form IDs.",
+                new UpsertFormResult
+                {
+                    Action = "detail", Entity = entityName, TotalCount = entries.Count,
+                    Forms = entries, Status = "ambiguous"
+                });
         }
 
         private CallToolResult GetFormDetailResult(string entityName, Guid formId)
@@ -257,61 +258,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var result = _serviceClient.RetrieveMultiple(query);
 
             if (result.Entities.Count == 0)
-                return ErrorResult(
-                    $"Error: No form found with ID '{formId}'.\n" +
+                return Error(
+                    $"No form found with ID '{formId}'.",
                     $"Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             var form = result.Entities[0];
             var objectTypeCode = form.GetAttributeValue<string>("objecttypecode") ?? "";
 
             if (!string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
-                return ErrorResult(
-                    $"[Error] Entity mismatch\n" +
-                    $"FormId: {formId}\n" +
-                    $"FormEntity: {objectTypeCode}\n" +
-                    $"ProvidedEntity: {entityName}\n" +
-                    $"Tip: This form belongs to '{objectTypeCode}', not '{entityName}'");
+                return Error(
+                    $"Form '{formId}' belongs to '{objectTypeCode}', not '{entityName}'.",
+                    $"Use action='list' entity_name='{entityName}' to find forms for that entity.");
 
-            return TextResult(FormatFormDetail(form, formId));
-        }
-
-        private static string FormatFormDetail(Entity form, Guid formId)
-        {
             var name = form.GetAttributeValue<string>("name") ?? "";
             var type = form.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
             var isDefault = form.GetAttributeValue<bool>("isdefault");
             var activationState = form.GetAttributeValue<OptionSetValue>("formactivationstate")?.Value ?? 0;
             var isManaged = form.GetAttributeValue<bool>("ismanaged");
             var version = form.GetAttributeValue<int>("version");
-            var description = form.GetAttributeValue<string>("description") ?? "";
-            var objectTypeCode = form.GetAttributeValue<string>("objecttypecode") ?? "";
-            var publishedOn = form.GetAttributeValue<DateTime?>("publishedon");
+            var description = form.GetAttributeValue<string>("description");
             var formXml = form.GetAttributeValue<string>("formxml") ?? "";
 
-            var sb = new StringBuilder(formXml.Length + 512);
+            var text = $"'{name}' ({formId}) on '{objectTypeCode}' — {MapFormType(type)} form, " +
+                $"{(activationState == 1 ? "active" : "inactive")}" +
+                (isDefault ? ", default" : "") +
+                (isManaged ? ", managed" : "") +
+                $", version {version}. formxml in structuredContent.";
 
-            sb.AppendLine($"[Form] {name} ({MapFormType(type)})");
-            sb.AppendLine($"FormId: {formId}");
-            sb.AppendLine($"Entity: {objectTypeCode}");
-            sb.AppendLine($"Type: {MapFormType(type)} ({type})");
-            sb.AppendLine($"Default: {(isDefault ? "yes" : "no")}");
-            sb.AppendLine($"Active: {(activationState == 1 ? "Active" : "Inactive")}");
-            sb.AppendLine($"Managed: {(isManaged ? "yes" : "no")}");
-            sb.AppendLine($"Version: {version}");
-            if (publishedOn.HasValue)
-                sb.AppendLine($"Published: {publishedOn.Value:yyyy-MM-dd HH:mm:ss}");
-            if (!string.IsNullOrEmpty(description))
-                sb.AppendLine($"Description: {description}");
-
-            sb.AppendLine();
-
-            if (!string.IsNullOrEmpty(formXml))
+            return Success(text, new UpsertFormResult
             {
-                sb.AppendLine("[FormXML]");
-                sb.AppendLine(PrettyPrintXml(formXml));
-            }
-
-            return sb.ToString();
+                Action = "detail",
+                Entity = objectTypeCode,
+                FormId = formId.ToString(),
+                FormName = name,
+                Status = "success",
+                FormType = type,
+                FormTypeName = MapFormType(type),
+                IsDefault = isDefault,
+                IsActive = activationState == 1,
+                IsManaged = isManaged,
+                Version = version,
+                Description = description,
+                FormXml = !string.IsNullOrEmpty(formXml) ? PrettyPrintXml(formXml) : null
+            });
         }
 
         // ── Action: update ────────────────────────────────────────────────
@@ -320,26 +309,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string formxml, string operations, bool validate, bool backup)
         {
             if (string.IsNullOrWhiteSpace(formId))
-                return ErrorResult("Error: form_id is required for 'update' action.");
+                return Error("form_id is required when action='update'.");
 
             if (!Guid.TryParse(formId.Trim(), out var id))
-                return ErrorResult($"Error: '{formId}' is not a valid GUID.");
+                return Error($"'{formId}' is not a valid GUID.");
 
             var hasOperations = !string.IsNullOrWhiteSpace(operations);
             var hasFormxml    = !string.IsNullOrWhiteSpace(formxml);
 
             if (!hasOperations && !hasFormxml)
-                return ErrorResult(
-                    "Error: Provide 'operations' (recommended) or 'formxml' for 'update' action.\n" +
-                    "- operations: JSON array of form operations (auto-builds + imports)\n" +
-                    "- formxml: raw FormXML string or file path from a previous export\n" +
-                    "Read docs://instructions_for_formxml for format and examples.");
+                return Error(
+                    "Provide 'operations' (recommended) or 'formxml' for action='update'.",
+                    "- operations: JSON array of form operations (auto-builds + imports)\n- formxml: raw FormXML string or file path from a previous export. Read docs://instructions_for_formxml.");
 
             if (hasOperations && hasFormxml)
-                return ErrorResult(
-                    "Error: Provide either 'operations' or 'formxml', not both.\n" +
-                    "- Use 'operations' for recommended inline build+import flow.\n" +
-                    "- Use 'formxml' for advanced/undo scenarios only.");
+                return Error(
+                    "Provide either 'operations' or 'formxml', not both.",
+                    "Use 'operations' for the recommended inline build+import flow; 'formxml' for advanced/undo scenarios only.");
 
             if (hasOperations)
                 return HandleUpdateWithOperations(entityName, id, operations, validate, backup);
@@ -350,79 +336,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleUpdateWithOperations(string entityName, Guid id,
             string operations, bool validate, bool backup)
         {
-            // 1. Parse operations JSON
-            List<JsonElement> ops;
-            try
-            {
-                ops = JsonSerializer.Deserialize<List<JsonElement>>(operations);
-                if (ops == null || ops.Count == 0)
-                    return ErrorResult(
-                        "Error: operations must be a non-empty JSON array.\n" +
-                        "Read docs://instructions_for_formxml for format and examples.");
-            }
-            catch (JsonException ex)
-            {
-                return ErrorResult(
-                    $"Error: Invalid operations JSON: {ex.Message}\n" +
-                    $"Read docs://instructions_for_formxml for format and examples.");
-            }
+            // 1. Parse operations JSON (JsonException bubbles to entry catch)
+            var ops = JsonSerializer.Deserialize<List<JsonElement>>(operations);
+            if (ops == null || ops.Count == 0)
+                return Error("operations must be a non-empty JSON array.", "Read docs://instructions_for_formxml for format and examples.");
 
             // 2. Retrieve current form
             var currentForm = RetrieveForm(id);
             if (currentForm == null)
-                return ErrorResult(
-                    $"[Error] Form not found\n" +
-                    $"FormId: {id}\n" +
-                    $"Tip: Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs");
+                return Error(
+                    $"Form '{id}' not found.",
+                    $"Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             var currentFormXml = currentForm.GetAttributeValue<string>("formxml") ?? "";
             var formName       = currentForm.GetAttributeValue<string>("name") ?? "";
             var objectTypeCode = currentForm.GetAttributeValue<string>("objecttypecode") ?? entityName;
 
             if (!string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
-                return ErrorResult(
-                    $"[Error] Entity mismatch\n" +
-                    $"FormId: {id}\nFormEntity: {objectTypeCode}\nProvidedEntity: {entityName}\n" +
-                    $"Tip: This form belongs to '{objectTypeCode}', not '{entityName}'");
+                return Error(
+                    $"Form '{id}' belongs to '{objectTypeCode}', not '{entityName}'.",
+                    $"Use action='list' entity_name='{entityName}' to find forms for that entity.");
 
             if (string.IsNullOrWhiteSpace(currentFormXml))
-                return ErrorResult($"Error: Form '{id}' has empty FormXML.");
+                return Error($"Form '{id}' has empty FormXML.");
 
-            // 3. Apply operations via runner
-            string modifiedFormXml;
-            List<string> opSummaries;
-            Dictionary<string, string> classIdMap;
-            try
-            {
-                var runner = new FormXmlOperationsRunner(_serviceClient);
-                (modifiedFormXml, opSummaries, classIdMap) = runner.Run(currentFormXml, entityName, ops);
-            }
-            catch (FormXmlOperationsException fex)
-            {
-                return ErrorResult(fex.Message);
-            }
-            catch (InvalidOperationException iex)
-            {
-                return ErrorResult($"Error: {iex.Message}");
-            }
-            catch (Exception ex)
-            {
-                return ErrorResult($"Error: Failed to apply operations: {ex.Message}");
-            }
+            // 3. Apply operations via runner (exceptions bubble to entry catch)
+            var runner = new FormXmlOperationsRunner(_serviceClient);
+            var (modifiedFormXml, opSummaries, classIdMap) = runner.Run(currentFormXml, entityName, ops);
 
-            // 4. Backup
-            string backupPath = null;
-            if (backup)
-            {
-                try { backupPath = SaveBackup(entityName, id, formName, currentFormXml); }
-                catch (Exception ex)
-                {
-                    return ErrorResult(
-                        $"[Error] Backup failed — update BLOCKED (fail-safe)\n" +
-                        $"FormId: {id}\nMessage: {ex.Message}\n" +
-                        $"Tip: Fix backup directory permissions or set backup=false (not recommended)");
-                }
-            }
+            // 4. Backup (fail-safe: exception bubbles to entry catch)
+            string backupPath = backup ? SaveBackup(entityName, id, formName, currentFormXml) : null;
 
             // 5. Validate XSD
             List<string> validationWarnings = null;
@@ -432,44 +375,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 validationWarnings = warnings.Count > 0 ? warnings : null;
                 if (errors.Count > 0)
                 {
-                    var sbError = new StringBuilder(512);
-                    sbError.AppendLine($"[FormUpdate] BLOCKED — Validation failed");
-                    sbError.AppendLine($"FormId: {id}");
-                    sbError.AppendLine($"Errors: {errors.Count}");
-                    foreach (var error in errors)
-                        sbError.AppendLine($"- {error}");
-                    if (warnings.Count > 0)
-                    {
-                        sbError.AppendLine($"Warnings: {warnings.Count}");
-                        foreach (var warning in warnings)
-                            sbError.AppendLine($"- {warning}");
-                    }
-                    if (backupPath != null)
-                        sbError.AppendLine($"Backup: saved (no changes made) — {backupPath}");
-                    else
-                        sbError.AppendLine($"Backup: not needed (no changes made)");
-                    sbError.AppendLine($"Tip: Fix the FormXML errors above and retry. Read schema://formxml for valid structure. Read docs://instructions_for_formxml for FormXML operation format examples.");
-
                     var allIssues = new List<string>(errors);
                     if (warnings.Count > 0) allIssues.AddRange(warnings);
-
-                    var blockedResult = new UpsertFormResult
-                    {
-                        Action = "updated",
-                        Entity = entityName,
-                        FormId = id.ToString(),
-                        FormName = formName,
-                        Status = "blocked_validation",
-                        Validated = true,
-                        ValidationErrors = allIssues,
-                        BackupPath = backupPath,
-                        Published = false
-                    };
-                    return new CallToolResult
-                    {
-                        Content = [new TextContentBlock { Text = sbError.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(blockedResult)
-                    };
+                    return Error(
+                        $"FormXML validation failed for form '{formName}' ({id}) — {errors.Count} error(s). First: {errors[0]}",
+                        "Fix the FormXML errors and retry. Read schema://formxml and docs://instructions_for_formxml.",
+                        new UpsertFormResult
+                        {
+                            Action = "update",
+                            Entity = entityName,
+                            FormId = id.ToString(),
+                            FormName = formName,
+                            Status = "blocked_validation",
+                            Validated = true,
+                            ValidationErrors = allIssues,
+                            ValidationWarnings = validationWarnings,
+                            BackupPath = backupPath,
+                            Published = false,
+                            OperationsCount = ops?.Count
+                        });
                 }
             }
 
@@ -492,76 +416,46 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
             DataverseMutationExecutor.Update(_context, _serviceClient, updateEntity);
 
-            var published = false;
-            try
-            {
-                DataverseMutationExecutor.Execute(_context, _serviceClient, new PublishXmlRequest
-                {
-                    ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
-                });
-                published = true;
+            // Publish via helper (swallows faults, returns false on failure)
+            var published = PublishHelper.PublishEntity(_context, _serviceClient, objectTypeCode);
 
-                // Wait for form metadata to propagate after publish
-                if (published)
-                {
-                    MetadataOperationWaitHelper.WaitAfterFormView();
-                }
-            }
-            catch (Exception ex)
-            {
-                var sb2 = BuildSuccessText(entityName, id, formName, backupPath, validate, false);
-                sb2.AppendLine($"PublishError: {ex.Message}");
-                sb2.AppendLine($"Tip: Call publish with entities='{objectTypeCode}' to retry");
-                sb2.AppendLine();
-                AppendRollbackInfo(sb2, backupPath, id);
-
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = sb2.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(new UpsertFormResult
+            if (!published)
+                return Partial(
+                    $"Updated form '{formName}' ({id}) on '{entityName}' but publish failed — Dataverse rejected the publish.",
+                    new UpsertFormResult
                     {
                         Action = "updated", Entity = entityName, FormId = id.ToString(),
                         FormName = formName, Status = "updated_publish_failed",
                         Validated = validate, BackupPath = backupPath, Published = false,
-                        OperationsCount = ops.Count, FieldsResolved = classIdMap.Count
-                        })
-                    };
-            }
+                        OperationsCount = ops.Count, FieldsResolved = classIdMap.Count,
+                        ValidationWarnings = validationWarnings,
+                        RollbackCommand = BuildRollbackCommand(id, backupPath)
+                    });
 
             // 7. Build success response
-            var sb = BuildSuccessText(entityName, id, formName, backupPath, validate, published);
-            sb.AppendLine($"OperationsCount: {ops.Count}");
-            sb.AppendLine("Operations performed:");
-            for (var i = 0; i < opSummaries.Count; i++)
-                sb.AppendLine($"  {i + 1}. {opSummaries[i]}");
-            if (classIdMap.Count > 0)
-            {
-                sb.AppendLine("ClassIds resolved:");
-                var maxNameLen = classIdMap.Keys.Max(k => k.Length);
-                foreach (var kv in classIdMap.OrderBy(k => k.Key))
-                    sb.AppendLine($"  {kv.Key.PadRight(maxNameLen)} -> {{{kv.Value}}}");
-            }
-            if (validationWarnings?.Count > 0)
-            {
-                sb.AppendLine($"ValidationWarnings: {validationWarnings.Count}");
-                foreach (var w in validationWarnings)
-                    sb.AppendLine($"  - {w}");
-            }
-            sb.AppendLine();
-            AppendRollbackInfo(sb, backupPath, id);
+            var summary = $"Updated form '{formName}' ({id}) on '{entityName}' — {ops.Count} operation(s)" +
+                $", {(validate ? "validated" : "validation skipped")}" +
+                $", {(published ? "published" : "publish pending")}" +
+                $". Backup: {backupPath ?? "skipped"}." +
+                (classIdMap.Count > 0 ? $" {classIdMap.Count} field(s) resolved." : "") +
+                (validationWarnings?.Count > 0 ? $" {validationWarnings.Count} validation warning(s) (see validationWarnings)." : "");
 
-            return new CallToolResult
+            return Success(summary, new UpsertFormResult
             {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(new UpsertFormResult
-                {
-                    Action = "updated", Entity = entityName, FormId = id.ToString(),
-                    FormName = formName, Status = "updated",
-                    Validated = validate, ValidationWarnings = validationWarnings,
-                    BackupPath = backupPath, Published = published,
-                    OperationsCount = ops.Count, FieldsResolved = classIdMap.Count
-                })
-            };
+                Action = "updated", Entity = entityName, FormId = id.ToString(),
+                FormName = formName, Status = "updated",
+                Validated = validate, ValidationWarnings = validationWarnings,
+                BackupPath = backupPath, Published = published,
+                OperationsCount = ops.Count, FieldsResolved = classIdMap.Count,
+                RollbackCommand = BuildRollbackCommand(id, backupPath)
+            });
+        }
+
+        private static string BuildRollbackCommand(Guid formId, string backupPath)
+        {
+            return backupPath != null
+                ? $"manage_form(action='undo', form_id='{formId}', formxml='{backupPath}')"
+                : $"manage_form(action='undo', form_id='{formId}') with the original FormXML";
         }
 
         private CallToolResult HandleUpdateWithFormXml(string entityName, Guid id,
@@ -570,18 +464,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Resolve formxml: if it's a file path, read content from file
             var resolvedFormXml = ResolveFormXmlInput(formxml.Trim());
             if (resolvedFormXml == null)
-                return ErrorResult(
-                    $"[Error] FormXML file not found\n" +
-                    $"Path: {formxml.Trim()}\n" +
-                    $"Tip: The file path may have been deleted. Re-run the export or use 'operations' for inline build+import.");
+                return Error(
+                    $"FormXML file not found at '{formxml.Trim()}'.",
+                    "The file path may have been deleted. Re-run the export or use 'operations' for inline build+import.");
 
             // Step 1: Retrieve current form
             var currentForm = RetrieveForm(id);
             if (currentForm == null)
-                return ErrorResult(
-                    $"[Error] Form not found\n" +
-                    $"FormId: {id}\n" +
-                    $"Tip: Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs");
+                return Error(
+                    $"Form '{id}' not found.",
+                    $"Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             var currentFormXml = currentForm.GetAttributeValue<string>("formxml") ?? "";
             var formName = currentForm.GetAttributeValue<string>("name") ?? "";
@@ -589,33 +481,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Validate entity name matches the form's actual entity
             if (!string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
-                return ErrorResult(
-                    $"[Error] Entity mismatch\n" +
-                    $"FormId: {id}\n" +
-                    $"FormEntity: {objectTypeCode}\n" +
-                    $"ProvidedEntity: {entityName}\n" +
-                    $"Tip: This form belongs to '{objectTypeCode}', not '{entityName}'");
+                return Error(
+                    $"Form '{id}' belongs to '{objectTypeCode}', not '{entityName}'.",
+                    $"Use action='list' entity_name='{entityName}' to find forms for that entity.");
 
             // Strip XML declaration from input
             var newFormXml = StripXmlDeclaration(resolvedFormXml);
 
-            // Step 2: Backup current FormXML
-            string backupPath = null;
-            if (backup)
-            {
-                try
-                {
-                    backupPath = SaveBackup(entityName, id, formName, currentFormXml);
-                }
-                catch (Exception ex)
-                {
-                    return ErrorResult(
-                        $"[Error] Backup failed — update BLOCKED (fail-safe)\n" +
-                        $"FormId: {id}\n" +
-                        $"Message: {ex.Message}\n" +
-                        $"Tip: Fix the backup directory permissions or set backup=false (not recommended)");
-                }
-            }
+            // Step 2: Backup current FormXML (fail-safe: exception bubbles to entry catch)
+            string backupPath = backup ? SaveBackup(entityName, id, formName, currentFormXml) : null;
 
             // Step 3: Validate new FormXML against XSD
             List<string> validationWarnings = null;
@@ -626,44 +500,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (errors.Count > 0)
                 {
-                    var sbError = new StringBuilder(512);
-                    sbError.AppendLine($"[FormUpdate] BLOCKED — Validation failed");
-                    sbError.AppendLine($"FormId: {id}");
-                    sbError.AppendLine($"Errors: {errors.Count}");
-                    foreach (var error in errors)
-                        sbError.AppendLine($"- {error}");
-                    if (warnings.Count > 0)
-                    {
-                        sbError.AppendLine($"Warnings: {warnings.Count}");
-                        foreach (var warning in warnings)
-                            sbError.AppendLine($"- {warning}");
-                    }
-                    if (backupPath != null)
-                        sbError.AppendLine($"Backup: saved (no changes made) — {backupPath}");
-                    else
-                        sbError.AppendLine($"Backup: not needed (no changes made)");
-                    sbError.AppendLine($"Tip: Fix the FormXML errors above and retry. Read schema://formxml for valid structure. Read docs://instructions_for_formxml for FormXML operation format examples.");
-
                     var allIssues = new List<string>(errors);
                     if (warnings.Count > 0) allIssues.AddRange(warnings);
-
-                    var blockedResult = new UpsertFormResult
-                    {
-                        Action = "updated",
-                        Entity = entityName,
-                        FormId = id.ToString(),
-                        FormName = formName,
-                        Status = "blocked_validation",
-                        Validated = true,
-                        ValidationErrors = allIssues,
-                        BackupPath = backupPath,
-                        Published = false
-                    };
-                    return new CallToolResult
-                    {
-                        Content = [new TextContentBlock { Text = sbError.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(blockedResult)
-                    };
+                    return Error(
+                        $"FormXML validation failed for form '{formName}' ({id}) — {errors.Count} error(s). First: {errors[0]}",
+                        "Fix the FormXML errors and retry. Read schema://formxml and docs://instructions_for_formxml.",
+                        new UpsertFormResult
+                        {
+                            Action = "update",
+                            Entity = entityName,
+                            FormId = id.ToString(),
+                            FormName = formName,
+                            Status = "blocked_validation",
+                            Validated = true,
+                            ValidationErrors = allIssues,
+                            ValidationWarnings = validationWarnings,
+                            BackupPath = backupPath,
+                            Published = false
+                        });
                 }
             }
 
@@ -684,80 +538,46 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
-            // Step 5: Publish entity
-            var published = false;
-            try
-            {
-                var publishRequest = new PublishXmlRequest
-                {
-                    ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
-                };
-                DataverseMutationExecutor.Execute(_context, _serviceClient, publishRequest);
-                published = true;
+            // Step 5: Publish via helper (swallows faults, returns false on failure)
+            var published = PublishHelper.PublishEntity(_context, _serviceClient, objectTypeCode);
 
-                // Wait for form metadata to propagate after publish
-                if (published)
-                {
-                    MetadataOperationWaitHelper.WaitAfterFormView();
-                }
-            }
-            catch (Exception ex)
-            {
-                // Update succeeded but publish failed — don't error, report it
-                var sb = BuildSuccessText(entityName, id, formName, backupPath, validate, false);
-                sb.AppendLine($"PublishError: {ex.Message}");
-                sb.AppendLine($"Tip: Call publish with entities='{objectTypeCode}' to retry");
-                sb.AppendLine();
-                AppendRollbackInfo(sb, backupPath, id);
-
-                var partialResult = new UpsertFormResult
-                {
-                    Action = "updated",
-                    Entity = entityName,
-                    FormId = id.ToString(),
-                    FormName = formName,
-                    Status = "updated_publish_failed",
-                    Validated = validate,
-                    BackupPath = backupPath,
-                    Published = false
-                };
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = sb.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(partialResult)
-                };
-            }
+            if (!published)
+                return Partial(
+                    $"Updated form '{formName}' ({id}) on '{entityName}' but publish failed — Dataverse rejected the publish.",
+                    new UpsertFormResult
+                    {
+                        Action = "updated",
+                        Entity = entityName,
+                        FormId = id.ToString(),
+                        FormName = formName,
+                        Status = "updated_publish_failed",
+                        Validated = validate,
+                        ValidationWarnings = validationWarnings,
+                        BackupPath = backupPath,
+                        Published = false,
+                        RollbackCommand = BuildRollbackCommand(id, backupPath)
+                    });
 
             // Step 6: Return success
-            {
-                var sb = BuildSuccessText(entityName, id, formName, backupPath, validate, published);
-                if (validationWarnings?.Count > 0)
-                {
-                    sb.AppendLine($"ValidationWarnings: {validationWarnings.Count}");
-                    foreach (var w in validationWarnings)
-                        sb.AppendLine($"  - {w}");
-                }
-                sb.AppendLine();
-                AppendRollbackInfo(sb, backupPath, id);
+            var summary = $"Updated form '{formName}' ({id}) on '{entityName}' — raw FormXML import" +
+                $", {(validate ? "validated" : "validation skipped")}" +
+                $", {(published ? "published" : "publish pending")}" +
+                $". Backup: {backupPath ?? "skipped"}." +
+                (validationWarnings?.Count > 0 ? $" {validationWarnings.Count} validation warning(s) (see validationWarnings)." : "");
 
-                var structured = new UpsertFormResult
-                {
-                    Action = "updated",
-                    Entity = entityName,
-                    FormId = id.ToString(),
-                    FormName = formName,
-                    Status = "updated",
-                    Validated = validate,
-                    ValidationWarnings = validationWarnings,
-                    BackupPath = backupPath,
-                    Published = published
-                };
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = sb.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(structured)
-                };
-            }
+            return Success(summary, new UpsertFormResult
+            {
+                Action = "updated",
+                Entity = entityName,
+                FormId = id.ToString(),
+                FormName = formName,
+                Status = "updated",
+                Validated = validate,
+                ValidationWarnings = validationWarnings,
+                BackupPath = backupPath,
+                Published = published,
+                RollbackCommand = BuildRollbackCommand(id, backupPath)
+            });
         }
 
         // ── Action: rename ────────────────────────────────────────────────
@@ -766,23 +586,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             bool backup)
         {
             if (string.IsNullOrWhiteSpace(formId))
-                return ErrorResult("Error: form_id is required for 'rename' action.");
+                return Error("form_id is required when action='rename'.");
 
             if (!Guid.TryParse(formId.Trim(), out var id))
-                return ErrorResult($"Error: '{formId}' is not a valid GUID.");
+                return Error($"'{formId}' is not a valid GUID.");
 
             if (string.IsNullOrWhiteSpace(formName))
-                return ErrorResult("Error: form_name is required for 'rename' action.");
+                return Error("form_name is required when action='rename'.");
 
             formName = formName.Trim();
 
             // Step 1: Retrieve current form
             var currentForm = RetrieveForm(id);
             if (currentForm == null)
-                return ErrorResult(
-                    $"[Error] Form not found\n" +
-                    $"FormId: {id}\n" +
-                    $"Tip: Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs");
+                return Error(
+                    $"Form '{id}' not found.",
+                    $"Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             var oldName = currentForm.GetAttributeValue<string>("name") ?? "";
             var objectTypeCode = currentForm.GetAttributeValue<string>("objecttypecode") ?? entityName;
@@ -790,42 +609,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Validate entity name matches the form's actual entity
             if (!string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
-                return ErrorResult(
-                    $"[Error] Entity mismatch\n" +
-                    $"FormId: {id}\n" +
-                    $"FormEntity: {objectTypeCode}\n" +
-                    $"ProvidedEntity: {entityName}\n" +
-                    $"Tip: This form belongs to '{objectTypeCode}', not '{entityName}'");
+                return Error(
+                    $"Form '{id}' belongs to '{objectTypeCode}', not '{entityName}'.",
+                    $"Use action='list' entity_name='{entityName}' to find forms for that entity.");
 
             // Step 2: Check for duplicate name (same entity + same form type, excluding current form)
             var duplicate = FindFormByName(objectTypeCode, formName, formType, excludeFormId: id);
             if (duplicate != null)
             {
                 var dupId = duplicate.GetAttributeValue<Guid>("formid");
-                return ErrorResult(
-                    $"[Error] A form with this name already exists\n" +
-                    $"Entity: {entityName}\n" +
-                    $"Name: {formName}\n" +
-                    $"ExistingFormId: {dupId}\n" +
-                    $"Tip: Choose a different name");
+                return Error(
+                    $"A form named '{formName}' already exists on '{entityName}' (FormId {dupId}).",
+                    "Choose a different name.");
             }
 
-            // Step 3: Backup
+            // Step 3: Backup (fail-safe: exception bubbles to entry catch)
             string backupPath = null;
             if (backup)
             {
-                try
-                {
-                    var currentFormXml = currentForm.GetAttributeValue<string>("formxml") ?? "";
-                    backupPath = SaveBackup(entityName, id, oldName, currentFormXml);
-                }
-                catch (Exception ex)
-                {
-                    return ErrorResult(
-                        $"[Error] Backup failed — rename BLOCKED (fail-safe)\n" +
-                        $"FormId: {id}\n" +
-                        $"Message: {ex.Message}");
-                }
+                var currentFormXml = currentForm.GetAttributeValue<string>("formxml") ?? "";
+                backupPath = SaveBackup(entityName, id, oldName, currentFormXml);
             }
 
             // Step 4: Rename
@@ -846,63 +649,41 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
-            // Step 5: Publish
-            var published = false;
-            string publishError = null;
-            try
-            {
-                DataverseMutationExecutor.Execute(_context, _serviceClient, new PublishXmlRequest
-                {
-                    ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
-                });
-                published = true;
+            // Step 5: Publish via helper (swallows faults, returns false on failure)
+            var published = PublishHelper.PublishEntity(_context, _serviceClient, objectTypeCode);
 
-                // Wait for form metadata to propagate after publish
-                if (published)
-                {
-                    MetadataOperationWaitHelper.WaitAfterFormView();
-                }
-            }
-            catch (Exception ex)
-            {
-                publishError = ex.Message;
-            }
+            if (!published)
+                return Partial(
+                    $"Renamed form '{oldName}' → '{formName}' ({id}) on '{entityName}' but publish failed — Dataverse rejected the publish.",
+                    new UpsertFormResult
+                    {
+                        Action = "renamed",
+                        Entity = entityName,
+                        FormId = id.ToString(),
+                        FormName = formName,
+                        Status = "renamed_publish_failed",
+                        Validated = false,
+                        BackupPath = backupPath,
+                        Published = false,
+                        RollbackCommand = BuildRollbackCommand(id, backupPath)
+                    });
 
             // Step 6: Return success
-            var sb = new StringBuilder(256);
-            sb.AppendLine($"[FormRename] {entityName}");
-            sb.AppendLine($"FormId: {id}");
-            sb.AppendLine($"OldName: {oldName}");
-            sb.AppendLine($"NewName: {formName}");
-            sb.AppendLine($"Status: Renamed{(publishError != null ? " (publish failed)" : "")} successfully");
-            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
-            if (publishError != null)
-            {
-                sb.AppendLine($"PublishError: {publishError}");
-                sb.AppendLine($"Tip: Call publish with entities='{objectTypeCode}' to retry");
-            }
-            if (backupPath != null)
-                sb.AppendLine($"Backup: {backupPath}");
-            sb.AppendLine();
-            AppendRollbackInfo(sb, backupPath, id);
+            var summary = $"Renamed form '{oldName}' → '{formName}' ({id}) on '{entityName}', published" +
+                (backupPath != null ? $". Backup: {backupPath}." : ".");
 
-            var status = published ? "renamed" : "renamed_publish_failed";
-
-            return new CallToolResult
+            return Success(summary, new UpsertFormResult
             {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(new UpsertFormResult
-                {
-                    Action = "renamed",
-                    Entity = entityName,
-                    FormId = id.ToString(),
-                    FormName = formName,
-                    Status = status,
-                    Validated = false,
-                    BackupPath = backupPath,
-                    Published = published
-                })
-            };
+                Action = "renamed",
+                Entity = entityName,
+                FormId = id.ToString(),
+                FormName = formName,
+                Status = "renamed",
+                Validated = false,
+                BackupPath = backupPath,
+                Published = published,
+                RollbackCommand = BuildRollbackCommand(id, backupPath)
+            });
         }
 
         // ── Action: undo ──────────────────────────────────────────────────
@@ -911,64 +692,46 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string backupFilePath, bool validate)
         {
             if (string.IsNullOrWhiteSpace(formId))
-                return ErrorResult("Error: form_id is required for 'undo' action.");
+                return Error("form_id is required when action='undo'.");
 
             if (!Guid.TryParse(formId.Trim(), out var id))
-                return ErrorResult($"Error: '{formId}' is not a valid GUID.");
+                return Error($"'{formId}' is not a valid GUID.");
 
             if (string.IsNullOrWhiteSpace(backupFilePath))
-                return ErrorResult("Error: formxml (backup file path) is required for 'undo' action.");
+                return Error("formxml (backup file path) is required when action='undo'.");
 
             backupFilePath = backupFilePath.Trim();
 
-            // Step 1: Read backup file
+            // Step 1: Read backup file (JSON parse errors bubble to entry catch)
             if (!File.Exists(backupFilePath))
-                return ErrorResult(
-                    $"[Error] Backup file not found\n" +
-                    $"Path: {backupFilePath}\n" +
-                    $"Tip: Check the file path. Backup files are at: .devkit/backups/forms/");
+                return Error(
+                    $"Backup file not found at '{backupFilePath}'.",
+                    "Backup files are saved at .devkit/backups/forms/.");
 
-            string restoredFormXml;
-            try
-            {
-                var json = File.ReadAllText(backupFilePath, Encoding.UTF8);
-                var backupData = JsonSerializer.Deserialize<FormBackup>(json);
-                if (backupData == null || string.IsNullOrWhiteSpace(backupData.FormXml))
-                    return ErrorResult(
-                        $"[Error] Backup file is empty or invalid\n" +
-                        $"Path: {backupFilePath}\n" +
-                        $"Tip: The backup file must be a JSON file with a 'formxml' field");
+            var json = File.ReadAllText(backupFilePath, Encoding.UTF8);
+            var backupData = JsonSerializer.Deserialize<FormBackup>(json);
+            if (backupData == null || string.IsNullOrWhiteSpace(backupData.FormXml))
+                return Error(
+                    $"Backup file '{backupFilePath}' is empty or invalid.",
+                    "The backup file must be a JSON file with a 'formxml' field.");
 
-                restoredFormXml = StripXmlDeclaration(backupData.FormXml.Trim());
-            }
-            catch (JsonException ex)
-            {
-                return ErrorResult(
-                    $"[Error] Failed to parse backup file as JSON\n" +
-                    $"Path: {backupFilePath}\n" +
-                    $"Message: {ex.Message}\n" +
-                    $"Tip: The backup file must be a valid .formxml.json file");
-            }
+            var restoredFormXml = StripXmlDeclaration(backupData.FormXml.Trim());
 
             // Step 2: Verify the form exists
             var currentForm = RetrieveForm(id);
             if (currentForm == null)
-                return ErrorResult(
-                    $"[Error] Form not found\n" +
-                    $"FormId: {id}\n" +
-                    $"Tip: Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs");
+                return Error(
+                    $"Form '{id}' not found.",
+                    $"Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             var formName = currentForm.GetAttributeValue<string>("name") ?? "";
             var objectTypeCode = currentForm.GetAttributeValue<string>("objecttypecode") ?? entityName;
 
             // Validate entity name matches the form's actual entity
             if (!string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
-                return ErrorResult(
-                    $"[Error] Entity mismatch\n" +
-                    $"FormId: {id}\n" +
-                    $"FormEntity: {objectTypeCode}\n" +
-                    $"ProvidedEntity: {entityName}\n" +
-                    $"Tip: This form belongs to '{objectTypeCode}', not '{entityName}'");
+                return Error(
+                    $"Form '{id}' belongs to '{objectTypeCode}', not '{entityName}'.",
+                    $"Use action='list' entity_name='{entityName}' to find forms for that entity.");
 
             // Step 3: Validate restored FormXML against XSD (no backup, but still validate!)
             List<string> validationWarnings = null;
@@ -979,28 +742,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (errors.Count > 0)
                 {
-                    var sb = new StringBuilder(512);
-                    sb.AppendLine($"[FormUndo] BLOCKED — Backup file failed validation");
-                    sb.AppendLine($"FormId: {id}");
-                    sb.AppendLine($"BackupFile: {backupFilePath}");
-                    sb.AppendLine($"Errors: {errors.Count}");
-                    foreach (var error in errors)
-                        sb.AppendLine($"- {error}");
-                    if (warnings.Count > 0)
-                    {
-                        sb.AppendLine($"Warnings: {warnings.Count}");
-                        foreach (var warning in warnings)
-                            sb.AppendLine($"- {warning}");
-                    }
-                    sb.AppendLine($"Tip: The backup file may be corrupted. Set validate=false to force restore (not recommended). Read schema://formxml for valid FormXML structure.");
-
                     var allIssues = new List<string>(errors);
                     if (warnings.Count > 0) allIssues.AddRange(warnings);
-
-                    return new CallToolResult
-                    {
-                        Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertFormResult
+                    return Error(
+                        $"Backup file failed FormXML validation for form '{formName}' ({id}) — {errors.Count} error(s). First: {errors[0]}",
+                        "The backup file may be corrupted. Set validate=false to force restore (not recommended). Read schema://formxml for valid structure.",
+                        new UpsertFormResult
                         {
                             Action = "undo",
                             Entity = entityName,
@@ -1009,10 +756,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             Status = "blocked_validation",
                             Validated = true,
                             ValidationErrors = allIssues,
+                            ValidationWarnings = validationWarnings,
                             RestoredFromBackup = backupFilePath,
                             Published = false
-                        })
-                    };
+                        });
                 }
             }
 
@@ -1033,35 +780,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
-            // Step 5: Publish
-            var published = false;
-            try
-            {
-                DataverseMutationExecutor.Execute(_context, _serviceClient, new PublishXmlRequest
-                {
-                    ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
-                });
-                published = true;
+            // Step 5: Publish via helper (swallows faults, returns false on failure)
+            var published = PublishHelper.PublishEntity(_context, _serviceClient, objectTypeCode);
 
-                // Wait for form metadata to propagate after publish
-                if (published)
-                {
-                    MetadataOperationWaitHelper.WaitAfterFormView();
-                }
-            }
-            catch (Exception ex)
-            {
-                var sb = new StringBuilder(256);
-                sb.AppendLine($"[FormUndo] Restored but publish failed");
-                sb.AppendLine($"FormId: {id}");
-                sb.AppendLine($"RestoredFrom: {backupFilePath}");
-                sb.AppendLine($"PublishError: {ex.Message}");
-                sb.AppendLine($"Tip: Call publish with entities='{entityName}' to retry");
-
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = sb.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(new UpsertFormResult
+            if (!published)
+                return Partial(
+                    $"Restored form '{formName}' ({id}) on '{entityName}' from '{backupFilePath}' but publish failed — Dataverse rejected the publish.",
+                    new UpsertFormResult
                     {
                         Action = "undo",
                         Entity = entityName,
@@ -1069,43 +794,29 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         FormName = formName,
                         Status = "restored_publish_failed",
                         Validated = validate,
+                        ValidationWarnings = validationWarnings,
                         RestoredFromBackup = backupFilePath,
                         Published = false
-                    })
-                };
-            }
+                    });
 
             // Step 6: Return success
-            var sb2 = new StringBuilder(256);
-            sb2.AppendLine($"[FormUndo] {entityName} — {formName}");
-            sb2.AppendLine($"FormId: {id}");
-            sb2.AppendLine($"Status: Restored successfully");
-            sb2.AppendLine($"RestoredFrom: {backupFilePath}");
-            sb2.AppendLine($"Validated: {(validate ? "yes" : "skipped")}");
-            sb2.AppendLine($"Published: {(published ? "yes" : "no")}");
-            if (validationWarnings?.Count > 0)
-            {
-                sb2.AppendLine($"ValidationWarnings: {validationWarnings.Count}");
-                foreach (var w in validationWarnings)
-                    sb2.AppendLine($"  - {w}");
-            }
+            var summary = $"Restored form '{formName}' ({id}) on '{entityName}' from '{backupFilePath}'" +
+                $", {(validate ? "validated" : "validation skipped")}" +
+                $", {(published ? "published" : "publish pending")}" +
+                (validationWarnings?.Count > 0 ? $" {validationWarnings.Count} validation warning(s) (see validationWarnings)." : "");
 
-            return new CallToolResult
+            return Success(summary, new UpsertFormResult
             {
-                Content = [new TextContentBlock { Text = sb2.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(new UpsertFormResult
-                {
-                    Action = "undo",
-                    Entity = entityName,
-                    FormId = id.ToString(),
-                    FormName = formName,
-                    Status = "restored",
-                    Validated = validate,
-                    ValidationWarnings = validationWarnings,
-                    RestoredFromBackup = backupFilePath,
-                    Published = published
-                })
-            };
+                Action = "undo",
+                Entity = entityName,
+                FormId = id.ToString(),
+                FormName = formName,
+                Status = "restored",
+                Validated = validate,
+                ValidationWarnings = validationWarnings,
+                RestoredFromBackup = backupFilePath,
+                Published = published
+            });
         }
 
         // ── List/Detail Helpers ───────────────────────────────────────────
@@ -1138,41 +849,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return query;
         }
 
-        private static string FormatFormList(string entityName, DataCollection<Entity> forms, bool includeFormXml, string header = null)
-        {
-            var sb = new StringBuilder(forms.Count * 120 + 256);
-            sb.AppendLine(header ?? $"[Forms] {entityName} ({forms.Count} forms)");
-            sb.AppendLine();
-            sb.AppendLine("formid\tname\ttype\tdefault\tactive\tmanaged\tversion");
-
-            foreach (var form in forms)
-            {
-                var formId = form.GetAttributeValue<Guid>("formid");
-                var name = form.GetAttributeValue<string>("name") ?? "";
-                var type = form.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
-                var isDefault = form.GetAttributeValue<bool>("isdefault");
-                var activationState = form.GetAttributeValue<OptionSetValue>("formactivationstate")?.Value ?? 0;
-                var isManaged = form.GetAttributeValue<bool>("ismanaged");
-                var version = form.GetAttributeValue<int>("version");
-
-                sb.AppendLine($"{formId}\t{EscapeTab(name)}\t{MapFormType(type)}\t{(isDefault ? "yes" : "no")}\t{(activationState == 1 ? "Active" : "Inactive")}\t{(isManaged ? "yes" : "no")}\t{version}");
-
-                if (includeFormXml)
-                {
-                    var formXml = form.GetAttributeValue<string>("formxml");
-                    if (!string.IsNullOrEmpty(formXml))
-                    {
-                        sb.AppendLine();
-                        sb.AppendLine($"[FormXML: {name}]");
-                        sb.AppendLine(PrettyPrintXml(formXml));
-                        sb.AppendLine();
-                    }
-                }
-            }
-
-            return sb.ToString();
-        }
-
         private static string MapFormType(int type) => type switch
         {
             0 => "Dashboard",
@@ -1189,48 +865,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string PrettyPrintXml(string xml)
         {
-            try
+            var doc = XDocument.Parse(xml);
+            var settings = new XmlWriterSettings
             {
-                var doc = XDocument.Parse(xml);
-                var settings = new XmlWriterSettings
-                {
-                    Indent = true,
-                    IndentChars = "  ",
-                    OmitXmlDeclaration = true
-                };
-                var sb = new StringBuilder(xml.Length + 256);
-                using (var writer = XmlWriter.Create(sb, settings))
-                {
-                    doc.WriteTo(writer);
-                }
-                return sb.ToString();
-            }
-            catch
+                Indent = true,
+                IndentChars = "  ",
+                OmitXmlDeclaration = true
+            };
+            var sb = new StringBuilder(xml.Length + 256);
+            using (var writer = XmlWriter.Create(sb, settings))
             {
-                return xml;
+                doc.WriteTo(writer);
             }
+            return sb.ToString();
         }
-
-        private static string EscapeTab(string value) =>
-            value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
-
-        private CallToolResult TextResult(string text) => Success(text, null);
-
-        private CallToolResult ErrorResult(string message) => Error(message);
 
         // ── Shared Helpers (write actions) ────────────────────────────────
 
         private Entity RetrieveForm(Guid formId)
         {
-            try
+            // RetrieveMultiple never throws on a missing row (Retrieve does) — returns empty set.
+            var query = new QueryExpression("systemform")
             {
-                return _serviceClient.Retrieve("systemform", formId,
-                    new ColumnSet("formxml", "name", "objecttypecode", "type"));
-            }
-            catch
-            {
-                return null;
-            }
+                ColumnSet = new ColumnSet("formxml", "name", "objecttypecode", "type"),
+                TopCount = 1
+            };
+            query.Criteria.AddCondition("formid", ConditionOperator.Equal, formId);
+            var result = _serviceClient.RetrieveMultiple(query);
+            return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
         /// <summary>
@@ -1450,33 +1112,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
 
                 return _cachedSchemaSet;
-            }
-        }
-
-        private static StringBuilder BuildSuccessText(
-            string entityName, Guid formId, string formName, string backupPath, bool validated, bool published)
-        {
-            var sb = new StringBuilder(512);
-            sb.AppendLine($"[FormUpdate] {entityName} — {formName}");
-            sb.AppendLine($"FormId: {formId}");
-            sb.AppendLine($"Status: Updated successfully");
-            sb.AppendLine($"Validated: {(validated ? "yes" : "skipped")}");
-            sb.AppendLine($"Backup: {backupPath ?? "skipped"}");
-            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
-            return sb;
-        }
-
-        private static void AppendRollbackInfo(StringBuilder sb, string backupPath, Guid formId)
-        {
-            sb.AppendLine("To rollback this change:");
-            if (backupPath != null)
-            {
-                sb.AppendLine($"  Call manage_form with action='undo', form_id='{formId}', formxml='{backupPath}'");
-            }
-            else
-            {
-                sb.AppendLine($"  1. Retrieve the previous FormXML (no backup was created)");
-                sb.AppendLine($"  2. Call manage_form with action='undo', form_id='{formId}' and the original formxml");
             }
         }
 

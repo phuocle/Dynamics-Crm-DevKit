@@ -51,5 +51,86 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("fieldsResolved")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? FieldsResolved { get; set; }
+
+        // ── list/detail fields ────────────────────────────────────────────
+
+        [JsonPropertyName("formType")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? FormType { get; set; }
+
+        [JsonPropertyName("formTypeName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string FormTypeName { get; set; }
+
+        [JsonPropertyName("formXml")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string FormXml { get; set; }
+
+        [JsonPropertyName("isDefault")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsDefault { get; set; }
+
+        [JsonPropertyName("isActive")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsActive { get; set; }
+
+        [JsonPropertyName("isManaged")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsManaged { get; set; }
+
+        [JsonPropertyName("version")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? Version { get; set; }
+
+        [JsonPropertyName("description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Description { get; set; }
+
+        [JsonPropertyName("forms")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<FormListEntry> Forms { get; set; }
+
+        [JsonPropertyName("totalCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? TotalCount { get; set; }
+
+        [JsonPropertyName("rollbackCommand")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string RollbackCommand { get; set; }
+    }
+
+    internal sealed class FormListEntry
+    {
+        [JsonPropertyName("formId")]
+        public string FormId { get; set; }
+
+        [JsonPropertyName("formName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string FormName { get; set; }
+
+        [JsonPropertyName("formType")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? FormType { get; set; }
+
+        [JsonPropertyName("formTypeName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string FormTypeName { get; set; }
+
+        [JsonPropertyName("isDefault")]
+        public bool IsDefault { get; set; }
+
+        [JsonPropertyName("isActive")]
+        public bool IsActive { get; set; }
+
+        [JsonPropertyName("isManaged")]
+        public bool IsManaged { get; set; }
+
+        [JsonPropertyName("version")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? Version { get; set; }
+
+        [JsonPropertyName("formXml")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string FormXml { get; set; }
     }
 }

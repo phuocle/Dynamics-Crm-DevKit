@@ -118,7 +118,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
         {
             var tabName = FormXmlHelpers.GetStringProp(op, "tab")
                 ?? FormXmlHelpers.GetStringProp(op, "name")
-                ?? throw new InvalidOperationException("update_tab requires 'tab' or 'name'.");
+                ?? throw new InvalidOperationException(
+                    $"update_tab requires 'tab' or 'name'. {FormXmlHelpers.BuildProvidedKeysHint(op, "tab", "name")}");
 
             var tabElement = FormXmlHelpers.FindTab(formDoc, tabName);
             if (tabElement == null)
