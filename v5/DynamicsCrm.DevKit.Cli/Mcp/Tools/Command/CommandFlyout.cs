@@ -184,7 +184,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!Guid.TryParse(commandId.Trim(), out var cmdGuid))
                 return Error($"'{commandId.Trim()}' is not a valid GUID.");
 
-            var existing = _serviceClient.Retrieve("appaction", cmdGuid, new ColumnSet("name", "type"));
+            var existing = RetrieveAppActionOrNull(cmdGuid, "name", "type");
             if (existing == null)
                 return Error($"Command '{commandId.Trim()}' not found.");
 
@@ -465,7 +465,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!Guid.TryParse(commandId.Trim(), out var cmdGuid))
                 return Error($"'{commandId.Trim()}' is not a valid GUID.");
 
-            var existing = _serviceClient.Retrieve("appaction", cmdGuid, new ColumnSet("name", "type"));
+            var existing = RetrieveAppActionOrNull(cmdGuid, "name", "type");
             if (existing == null)
                 return Error($"Command '{commandId.Trim()}' not found.");
 
@@ -594,8 +594,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("label is required for action='add_flyout_item'.");
 
             // Load flyout dropdown record
-            var flyout = _serviceClient.Retrieve("appaction", flyoutGuid,
-                new ColumnSet("name", "type", "contextvalue", "location", "appmoduleid"));
+            var flyout = RetrieveAppActionOrNull(flyoutGuid, "name", "type", "contextvalue", "location", "appmoduleid");
             if (flyout == null)
                 return Error($"Flyout command '{flyoutCommandId.Trim()}' not found.");
 
@@ -703,8 +702,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!Guid.TryParse(commandId.Trim(), out var cmdGuid))
                 return Error($"'{commandId.Trim()}' is not a valid GUID.");
 
-            var existing = _serviceClient.Retrieve("appaction", cmdGuid,
-                new ColumnSet("name", "type", "parentappactionid", "buttonlabeltext"));
+            var existing = RetrieveAppActionOrNull(cmdGuid, "name", "type", "parentappactionid", "buttonlabeltext");
             if (existing == null)
                 return Error($"Command '{commandId.Trim()}' not found.");
 

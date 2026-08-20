@@ -42,7 +42,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!Guid.TryParse(commandId.Trim(), out var cmdGuid))
                     return Error($"'{commandId.Trim()}' is not a valid GUID.");
 
-                var existing = _serviceClient.Retrieve("appaction", cmdGuid, new ColumnSet("name", "hidden", "contextvalue", "origin"));
+                var existing = RetrieveAppActionOrNull(cmdGuid, "name", "hidden", "contextvalue", "origin");
                 if (existing == null)
                     return Error($"Command '{commandId.Trim()}' not found.");
 

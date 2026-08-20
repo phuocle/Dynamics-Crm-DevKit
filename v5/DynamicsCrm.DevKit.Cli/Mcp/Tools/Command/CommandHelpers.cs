@@ -366,6 +366,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string EscapeXml(string value) =>
             value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("\"", "&quot;");
 
+        private Entity RetrieveAppActionOrNull(Guid id, params string[] columns)
+        {
+            var colSet = columns != null && columns.Length > 0
+                ? string.Join("", columns.Select(c => $"<attribute name='{c}'/>"))
+                : "<all-attributes/>";
+            var fetchXml = $@"<fetch>
+  <entity name='appaction'>
+    {colSet}
+    <filter>
+      <condition attribute='appactionid' operator='eq' value='{EscapeXml(id.ToString())}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            return result.Entities.Count == 0 ? null : result.Entities[0];
+        }
+
         private static string EscapeTab(string value) =>
             value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
     }
