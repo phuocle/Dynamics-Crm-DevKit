@@ -375,6 +375,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Use manage_deleted_records(action='list', entity_name='<entity>') which uses FetchXml datasource='bin' " +
                 "and returns records with modifiedOn ≈ delete time."),
 
+            // Modern command bar (appaction) — dedicated tool has list/detail with rules+children.
+            ("appactions", "manage_command",
+                "REDIRECT: Use manage_command instead of GET appactions.\n" +
+                "manage_command provides app-scoped list/detail with ribbon-style OOB+custom detection, visibility/enable rules, and flyout/split-button children.\n\n" +
+                "Examples:\n" +
+                "  manage_command(action='list', entity_name='account') → commands for account\n" +
+                "  manage_command(action='detail', command_id='<guid>', include_rules=true) → full detail with rules\n" +
+                "  manage_command(action='list', entity_name='account', include_children=true) → flyout/split items"),
+
             // Web API Restore action work (verified 2026-07-31) nhưng body phức tạp → dùng tool mới.
             ("restore", "manage_deleted_records",
                 "REDIRECT (not blocked): Web API 'Restore' action works (returns 200 with restored id), " +
@@ -425,6 +434,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Do not use execute_webapi for model-driven app or sitemap creation/update. Use manage_app."),
             ("appmodulecomponents", "manage_app",
                 "Do not use execute_webapi for appmodulecomponent creation/update. Use manage_app."),
+
+            // ── Modern command bar (appaction) — dedicated tool ──
+            ("appactions", "manage_command",
+                "Modern command bar buttons (appaction) require app-scoped context, OOB override logic, and entity publish. Use manage_command for create/update/hide/show/flyout/split-button operations."),
+            ("appactionrules", "manage_command",
+                "appactionrule (visibility/enable rules) are managed with their parent appaction via manage_command (include_rules=true to inspect)."),
 
             // ── Deleted Records — restore via Web API POST /Restore ───────
             // Web API Restore works (verified 2026-07-31) but body phức tạp → dùng tool mới.
