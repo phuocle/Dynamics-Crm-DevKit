@@ -105,7 +105,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return MapKnownFault(ex) ?? ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
 
@@ -114,9 +114,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleInfo(string entityLogical, Guid recordId, FileAttributeMetadata fileAttr, ImageAttributeMetadata imageAttr)
         {
             var record = RetrieveRecord(entityLogical, recordId, out var columnLogical, out var primaryName, fileAttr, imageAttr);
-            if (record == null)
-                return Error($"Record '{recordId}' does not exist in table '{entityLogical}'.",
-                    "Verify record_id via search_records or parse_record_url.");
 
             var result = BaseResult("info", entityLogical, recordId, primaryName, columnLogical, fileAttr, imageAttr);
             if (fileAttr != null)
@@ -127,7 +124,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 result.FileName = record.GetAttributeValue<string>(columnLogical + "_name");
                 if (fileId.HasValue)
                 {
-                    // One lightweight read-only call to report exact size/name; no data is transferred.
                     var init = (InitializeFileBlocksDownloadResponse)DataverseMutationExecutor.ExecuteReadOnly(
                         _serviceClient,
                         new InitializeFileBlocksDownloadRequest
@@ -165,7 +161,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var columnLogical = (fileAttr ?? (AttributeMetadata)imageAttr).LogicalName;
 
-            // ── Source resolution ────────────────────────────────────────────
             var hasPath = !string.IsNullOrWhiteSpace(filePath);
             var hasBase64 = !string.IsNullOrWhiteSpace(contentBase64);
             if (hasPath && hasBase64)
@@ -180,14 +175,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (string.IsNullOrWhiteSpace(fileName))
                     return Error("file_name is required when uploading via content_base64.");
-                try
-                {
-                    data = Convert.FromBase64String(contentBase64.Trim());
-                }
-                catch (FormatException)
-                {
+                data = new byte[contentBase64.Trim().Length * 3 / 4];
+                if (!Convert.TryFromBase64String(contentBase64.Trim(), data, out var bytesWritten))
                     return Error("content_base64 is not valid base64.");
-                }
+                Array.Resize(ref data, bytesWritten);
                 if (data.LongLength >= MaxBase64UploadBytes)
                     return Error($"content_base64 supports files < 1 MB only ({data.LongLength:N0} bytes given). Use file_path for larger files.");
                 resolvedFileName = fileName.Trim();
@@ -199,9 +190,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (trimmedPath.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
                     trimmedPath.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
                 {
-                    var downloadOk = TryDownloadFromUrl(trimmedPath, out data, out var urlFileName, out var httpError);
-                    if (!downloadOk)
-                        return Error(httpError);
+                    var (urlData, urlFileName) = DownloadFromUrl(trimmedPath);
+                    data = urlData;
                     resolvedFileName = !string.IsNullOrWhiteSpace(fileName) ? fileName.Trim() : urlFileName;
                     if (string.IsNullOrWhiteSpace(resolvedFileName))
                         return Error("Could not determine a file name from the URL. Provide file_name.");
@@ -220,7 +210,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
-            // ── Validation against column metadata ───────────────────────────
             if (imageAttr != null)
             {
                 var ext = Path.GetExtension(resolvedFileName)?.ToLowerInvariant() ?? "";
@@ -234,7 +223,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (imageAttr != null && imageAttr.CanStoreFullImage == true)
                 {
-                    // Allowed: full-sized image goes to file storage; thumbnail is generated from it.
                 }
                 else
                 {
@@ -245,9 +233,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var record = RetrieveRecord(entityLogical, recordId, out _, out var primaryName, fileAttr, imageAttr, idOnly: true);
-            if (record == null)
-                return Error($"Record '{recordId}' does not exist in table '{entityLogical}'.",
-                    "Verify record_id via search_records or parse_record_url.");
 
             var blockCount = (int)((data.LongLength + FileColumnTransferHelper.BlockSize - 1) / FileColumnTransferHelper.BlockSize);
             var result = BaseResult("upload", entityLogical, recordId, primaryName, columnLogical, fileAttr, imageAttr);
@@ -276,9 +261,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             bool fullSize, string workspaceFolder)
         {
             var record = RetrieveRecord(entityLogical, recordId, out var columnLogical, out var primaryName, fileAttr, imageAttr);
-            if (record == null)
-                return Error($"Record '{recordId}' does not exist in table '{entityLogical}'.",
-                    "Verify record_id via search_records or parse_record_url.");
 
             byte[] data;
             string downloadFileName;
@@ -336,9 +318,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleDelete(string entityLogical, Guid recordId, FileAttributeMetadata fileAttr, ImageAttributeMetadata imageAttr)
         {
             var record = RetrieveRecord(entityLogical, recordId, out var columnLogical, out var primaryName, fileAttr, imageAttr);
-            if (record == null)
-                return Error($"Record '{recordId}' does not exist in table '{entityLogical}'.",
-                    "Verify record_id via search_records or parse_record_url.");
 
             var result = BaseResult("delete", entityLogical, recordId, primaryName, columnLogical, fileAttr, imageAttr);
             if (fileAttr != null)
@@ -383,48 +362,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             columnLogical = (fileAttr ?? (AttributeMetadata)imageAttr).LogicalName;
             primaryName = null;
-            try
-            {
-                var metadata = (RetrieveEntityResponse)DataverseMutationExecutor.ExecuteReadOnly(
-                    _serviceClient,
-                    new RetrieveEntityRequest
-                    {
-                        LogicalName = entityLogical,
-                        EntityFilters = EntityFilters.Entity | EntityFilters.Attributes
-                    });
-                var primaryNameAttr = metadata.EntityMetadata.PrimaryNameAttribute;
-
-                ColumnSet columns;
-                if (idOnly)
+            var metadata = (RetrieveEntityResponse)DataverseMutationExecutor.ExecuteReadOnly(
+                _serviceClient,
+                new RetrieveEntityRequest
                 {
-                    columns = new ColumnSet(false);
-                }
-                else
-                {
-                    var colName = columnLogical; // local copy: out params cannot be captured in lambdas
-                    var columnPrefix = colName + "_";
-                    var names = metadata.EntityMetadata.Attributes
-                        .Where(a => a.LogicalName == colName || a.LogicalName.StartsWith(columnPrefix, StringComparison.Ordinal))
-                        .Select(a => a.LogicalName)
-                        .ToList();
-                    if (!string.IsNullOrEmpty(primaryNameAttr) && !names.Contains(primaryNameAttr))
-                        names.Add(primaryNameAttr);
-                    columns = new ColumnSet(names.ToArray());
-                }
+                    LogicalName = entityLogical,
+                    EntityFilters = EntityFilters.Entity | EntityFilters.Attributes
+                });
+            var primaryNameAttr = metadata.EntityMetadata.PrimaryNameAttribute;
 
-                var record = _serviceClient.Retrieve(entityLogical, recordId, columns);
-                if (!idOnly && !string.IsNullOrEmpty(primaryNameAttr))
-                    primaryName = record.GetAttributeValue<string>(primaryNameAttr);
-                return record;
-            }
-            catch (FaultException<OrganizationServiceFault> ex) when (
-                ex.Detail != null &&
-                (ex.Detail.ErrorCode == unchecked((int)0x80040217) || // ObjectDoesNotExist
-                 ex.Message.IndexOf("does not exist", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                 ex.Detail.Message.IndexOf("does not exist", StringComparison.OrdinalIgnoreCase) >= 0))
+            ColumnSet columns;
+            if (idOnly)
             {
-                return null;
+                columns = new ColumnSet(false);
             }
+            else
+            {
+                var colName = columnLogical;
+                var columnPrefix = colName + "_";
+                var names = metadata.EntityMetadata.Attributes
+                    .Where(a => a.LogicalName == colName || a.LogicalName.StartsWith(columnPrefix, StringComparison.Ordinal))
+                    .Select(a => a.LogicalName)
+                    .ToList();
+                if (!string.IsNullOrEmpty(primaryNameAttr) && !names.Contains(primaryNameAttr))
+                    names.Add(primaryNameAttr);
+                columns = new ColumnSet(names.ToArray());
+            }
+
+            var record = _serviceClient.Retrieve(entityLogical, recordId, columns);
+            if (!idOnly && !string.IsNullOrEmpty(primaryNameAttr))
+                primaryName = record.GetAttributeValue<string>(primaryNameAttr);
+            return record;
         }
 
         private static ManageRecordFileResult BaseResult(string action, string entityLogical, Guid recordId, string primaryName,
@@ -444,29 +412,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        private bool TryDownloadFromUrl(string url, out byte[] data, out string urlFileName, out string error)
+        private (byte[] data, string fileName) DownloadFromUrl(string url)
         {
-            data = null;
-            urlFileName = null;
-            error = null;
-            try
-            {
-                var response = _httpClient.GetAsync(url).GetAwaiter().GetResult();
-                if (!response.IsSuccessStatusCode)
-                {
-                    error = $"Failed to download '{url}': HTTP {(int)response.StatusCode} {response.ReasonPhrase}.";
-                    return false;
-                }
-                data = response.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult();
-                var segment = new Uri(url).AbsolutePath.Split('/').LastOrDefault(s => !string.IsNullOrEmpty(s));
-                urlFileName = segment == null ? null : Uri.UnescapeDataString(segment);
-                return true;
-            }
-            catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException || ex is UriFormatException)
-            {
-                error = $"Failed to download '{url}': {ex.Message}";
-                return false;
-            }
+            var response = _httpClient.GetAsync(url).GetAwaiter().GetResult();
+            if (!response.IsSuccessStatusCode)
+                throw new HttpRequestException($"HTTP {(int)response.StatusCode} {response.ReasonPhrase}");
+            var data = response.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult();
+            var segment = new Uri(url).AbsolutePath.Split('/').LastOrDefault(s => !string.IsNullOrEmpty(s));
+            var fileName = segment == null ? null : Uri.UnescapeDataString(segment);
+            return (data, fileName);
         }
 
         private static string DetectImageExtension(byte[] data)
@@ -484,29 +438,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string FirstNonEmpty(params string[] values) =>
             values.FirstOrDefault(v => !string.IsNullOrWhiteSpace(v));
-
-        /// <summary>
-        /// Surface well-known file/image upload faults with actionable hints
-        /// instead of a generic exception dump.
-        /// </summary>
-        private CallToolResult MapKnownFault(Exception ex)
-        {
-            if (ex is not FaultException<OrganizationServiceFault> fault || fault.Detail == null)
-                return null;
-            return fault.Detail.ErrorCode switch
-            {
-                unchecked((int)0x80072522) => Error(
-                    "Upload blocked: the file's MIME type is in the organization's blocked MIME type list (MimeTypeBlocked 0x80072522).",
-                    "Check System Settings → blocked MIME types (organization.blockedmimetypes) and remove the entry, or upload a different file type."),
-                unchecked((int)0x80072521) => Error(
-                    "Upload blocked: the file's MIME type is not in the organization's allowed MIME type list (MimeTypeNotInAllowedList 0x80072521).",
-                    "Check organization.allowedmimetypes and add the type, or upload a different file type."),
-                unchecked((int)0x80072553) => Error(
-                    $"Update image properties failed (ProcessImageFailure 0x80072553): {fault.Detail.Message}",
-                    "Image columns accept only gif/jpeg/tiff/bmp/png. Also verify the file size against the column MaxSizeInKB and CanStoreFullImage settings."),
-                _ => null
-            };
-        }
 
         #endregion
     }

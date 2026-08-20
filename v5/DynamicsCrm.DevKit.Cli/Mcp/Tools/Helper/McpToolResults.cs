@@ -5,8 +5,10 @@ using ModelContextProtocol.Protocol;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using System.ServiceModel;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 {
@@ -286,6 +288,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             {
                 rewritten = $"{ErrorPrefix} [InvalidPrefix] Schema name is missing or does not start with a valid publisher customization prefix. "
                          + "Ensure the component name starts with the solution publisher prefix.";
+            }
+            else if (lower.Contains("does not exist") && lower.Contains("dataversefault:"))
+            {
+                rewritten = $"{ErrorPrefix} [RecordNotFound] The specified record was not found in Dataverse. "
+                         + "Verify the record_id via search_records or parse_record_url.";
+            }
+            else if (lower.Contains("0x80072522"))
+            {
+                rewritten = $"{ErrorPrefix} [MimeTypeBlocked] Upload blocked: the file's MIME type is in the organization's blocked MIME type list. "
+                         + "Check System Settings → blocked MIME types (organization.blockedmimetypes) and remove the entry, or upload a different file type.";
+            }
+            else if (lower.Contains("0x80072521"))
+            {
+                rewritten = $"{ErrorPrefix} [MimeTypeNotAllowed] Upload blocked: the file's MIME type is not in the organization's allowed MIME type list. "
+                         + "Check organization.allowedmimetypes and add the type, or upload a different file type.";
+            }
+            else if (lower.Contains("0x80072553"))
+            {
+                rewritten = $"{ErrorPrefix} [ImageProcessFailure] Update image properties failed. "
+                         + "Image columns accept only gif/jpeg/tiff/bmp/png. Verify the file size against the column MaxSizeInKB and CanStoreFullImage settings.";
+            }
+            else if (ex is HttpRequestException || ex is TaskCanceledException || ex is UriFormatException)
+            {
+                rewritten = $"{ErrorPrefix} [UrlDownloadFailed] Failed to download the file from the URL. "
+                         + "Check the URL is reachable and returns a valid file; verify network/DNS and that the host is not timing out.";
             }
             else
             {
