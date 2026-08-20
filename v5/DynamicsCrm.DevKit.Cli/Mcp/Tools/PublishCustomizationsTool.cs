@@ -1,6 +1,4 @@
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
-using Microsoft.Xrm.Sdk;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
@@ -8,8 +6,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
@@ -34,61 +30,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(PublishResult)),
         Description(
-            "Publish Dataverse solution components using PublishXmlRequest (targeted, fast) or PublishAllXmlRequest (async, org-wide). Idempotent.\n\n" +
-
-            "TARGETED PUBLISH (recommended): supply at least one of entities/optionset_names/ribbons/dashboards/webresources/include_sitemap/appmodules. Runs PublishXmlRequest — only the listed components are published, no org-wide lock.\n\n" +
-
-            "PUBLISH ALL (fallback): pass no parameters at all. Runs PublishAllXmlAsyncRequest, which is heavy and acquires an org-wide exclusive lock; schedule during off-peak hours.\n\n" +
-
-            "Supported targets for targeted publish:\n" +
-            "- entities: comma-separated Display Names or logical names. Publishes entity metadata + forms + views + ribbons for each entity.\n" +
-            "- optionset_names: comma-separated global option set unique names (e.g. 'new_priority'). Publishes specific global option sets. Use include_global_optionset=true to publish ALL global option sets instead.\n" +
-            "- include_ribbons: true to publish the application ribbon (not entity-level ribbons — those are covered by entities).\n" +
-            "- dashboards: comma-separated system-form GUIDs for dashboards to publish.\n" +
-            "- webresources: comma-separated web resource GUIDs (or logical names) to publish.\n" +
-            "- include_sitemap: true to publish the site map.\n" +
-            "- appmodules: comma-separated appmodule GUIDs, Display Names, or unique names for model-driven apps.\n\n" +
-
-            "RIBBON CACHING QUIRK:\n" +
-            "While targeted publish (entities=... or include_ribbons=true) is supposed to publish ribbons, Dataverse's internal Ribbon Command cache is notorious for not updating in the UI. If you use targeted publish for ribbons and the changes do not appear, you MUST fall back to PublishAll (pass no parameters) to forcefully rebuild the ribbon cache.\n\n" +
-
+            "Publish Dataverse customizations. Pass at least one target (entities/optionset_names/dashboards/webresources/appmodules/include_ribbons/include_sitemap/include_global_optionset) for targeted PublishXml; pass nothing for PublishAll (async, org-wide lock).\n\n" +
             "WHEN TO USE:\n" +
-            "- After upsert_* / execute_webapi metadata changes when auto_publish=false\n" +
-            "- After manage_app changes when the user is ready to publish the appmodule\n" +
-            "- After manage_web_resource changes\n" +
-            "- After manage_ribbons changes (Note: you may need PublishAll for these to 'stick')\n" +
-            "- When user reports changes not showing up\n" +
-            "- Batch many changes then publish once at the end")]
+            "- After metadata mutations with auto_publish=false, or when changes are not showing up\n" +
+            "- Batch many changes then publish once at the end\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_system_jobs → track PublishAll async operation status\n" +
+            "- get_tables / manage_app / manage_webresource → discover valid target identifiers")]
         public CallToolResult publish_customizations(
-            [Description("Comma-separated entity Display Names or logical names (e.g. 'Account,contact'). Empty with no other targets = PublishAll."
-            )] string entities = "",
-            [Description("Comma-separated global option set unique names to publish specifically (e.g. 'new_priority,new_status'). Use instead of include_global_optionset when you want targeted publish."
-            )] string optionset_names = "",
-            [Description("Publish the application (global) ribbon. Entity-level ribbons are covered by 'entities'."
-            )] bool include_ribbons = false,
-            [Description("Comma-separated system-form (dashboard) GUIDs to publish (e.g. 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx')."
-            )] string dashboards = "",
-            [Description("Comma-separated web resource GUIDs or logical names to publish (e.g. 'new_/js/account.js')."
-            )] string webresources = "",
-            [Description("Publish ALL global option sets at once. Prefer optionset_names for targeted publish."
-            )] bool include_global_optionset = false,
-            [Description("Also publish sitemap."
-            )] bool include_sitemap = false,
-            [Description("Comma-separated appmodule GUIDs, Display Names, or unique names for model-driven apps."
-            )] string appmodules = "")
+            [Description("Comma-separated entity Display Names or logical names (e.g. 'Account,contact'). Empty with no other targets = PublishAll.")] string entities = "",
+            [Description("Comma-separated global option set unique names (e.g. 'new_priority,new_status'). Use instead of include_global_optionset for targeted publish.")] string optionset_names = "",
+            [Description("Publish the application (global) ribbon. Entity-level ribbons are covered by 'entities'.")] bool include_ribbons = false,
+            [Description("Comma-separated system-form (dashboard) GUIDs to publish.")] string dashboards = "",
+            [Description("Comma-separated web resource GUIDs or logical names to publish.")] string webresources = "",
+            [Description("Publish ALL global option sets at once. Prefer optionset_names for targeted publish.")] bool include_global_optionset = false,
+            [Description("Also publish sitemap.")] bool include_sitemap = false,
+            [Description("Comma-separated appmodule GUIDs, Display Names, or unique names for model-driven apps.")] string appmodules = "")
         {
             var sw = Stopwatch.StartNew();
 
             try
             {
+                const string requiredRoleName = DynamicsCrm.DevKit.Shared.Const.SystemAdministratorRoleName;
+                if (!RoleGateHelper.IsSystemAdministrator(_serviceClient))
+                {
+                    var haveRoles = RoleGateHelper.GetCurrentRoleNames(_serviceClient);
+                    var haveList = haveRoles.Count > 0
+                        ? string.Join(", ", haveRoles)
+                        : "(no roles assigned)";
+                    return Error(
+                        $"publish_customizations requires the '{requiredRoleName}' role. The calling user does not have it.",
+                        $"Publishing customizations is a destructive org-wide operation (PublishXml/PublishAll acquire locks and make pending metadata changes visible to all users). " +
+                        $"Ask a System Administrator to assign the '{requiredRoleName}' role to your user, then retry. " +
+                        $"Current roles on the calling user: {haveList}.");
+                }
+
                 var entitiesProvided = !string.IsNullOrWhiteSpace(entities);
                 var entityList = entitiesProvided ? ResolveEntityList(entities) : [];
 
                 if (entitiesProvided && entityList.Count == 0)
                 {
-                    return ErrorResult(
-                        "Error: No valid entity names found after parsing the 'entities' parameter.\n" +
-                        "Valid format: comma-separated logical names (e.g., 'account,contact,lead') or leave empty to publish all customizations.");
+                    return Error(
+                        "No valid entity names found after parsing the 'entities' parameter.",
+                        "Valid format: comma-separated logical names (e.g., 'account,contact,lead') or leave empty to publish all customizations. Use get_tables to verify logical names.");
                 }
 
                 var appModulesProvided = !string.IsNullOrWhiteSpace(appmodules);
@@ -96,9 +80,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (appModulesProvided && appModuleList.Count == 0)
                 {
-                    return ErrorResult(
-                        "Error: No valid appmodule values found after parsing the 'appmodules' parameter.\n" +
-                        "Valid format: comma-separated appmodule GUIDs, Display Names, or unique names.");
+                    return Error(
+                        "No valid appmodule values found after parsing the 'appmodules' parameter.",
+                        "Valid format: comma-separated appmodule GUIDs, Display Names, or unique names. Use manage_app to discover valid appmodule identifiers.");
                 }
 
                 // Named optionsets (targeted, by unique name)
@@ -137,17 +121,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (!hasSpecificTargets)
                 {
-                    // Use async version to avoid timeout
-                    var asyncRequest = new PublishAllXmlAsyncRequest();
-                    var asyncResponse = (PublishAllXmlAsyncResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, asyncRequest);
+                    var jobId = PublishHelper.PublishAllAsync(_context, _serviceClient);
                     sw.Stop();
-
-                    var jobId = asyncResponse.AsyncOperationId;
-                    var text = $"[Publish] All customizations (async)\n" +
-                               $"Status: Started asynchronously\n" +
-                               $"AsyncOperationId: {jobId}\n" +
-                               $"Duration: {sw.Elapsed.TotalSeconds:F1}s\n" +
-                               $"Note: Use get_system_jobs(record_id=\"{jobId}\") to check publish status.";
 
                     var structured = new PublishResult
                     {
@@ -156,11 +131,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         AsyncOperationId = jobId.ToString(),
                         DurationSeconds = Math.Round(sw.Elapsed.TotalSeconds, 1)
                     };
-                    return new CallToolResult
-                    {
-                        Content = [new TextContentBlock { Text = text }],
-                        StructuredContent = JsonSerializer.SerializeToElement(structured)
-                    };
+                    return Success(
+                        $"Published ALL customizations asynchronously (AsyncOperationId {jobId}, {sw.Elapsed.TotalSeconds:F1}s). Use get_system_jobs(record_id=\"{jobId}\") to check status.",
+                        structured);
                 }
 
                 var payload = new PublishTargetedPayload
@@ -178,17 +151,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 sw.Stop();
 
-                var sb = new StringBuilder();
-                sb.AppendLine("[Publish] Specific customizations");
-                sb.AppendLine($"Entities: {(entityList.Count == 0 ? "(none)" : string.Join(", ", entityList))}");
-                sb.AppendLine($"AppModules: {(appModuleList.Count == 0 ? "(none)" : string.Join(", ", appModuleList))}");
-                sb.AppendLine($"GlobalOptionSets: {(include_global_optionset ? "all" : optionSetNameList.Count > 0 ? string.Join(", ", optionSetNameList) : "no")}");
-                sb.AppendLine($"Ribbons: {(include_ribbons ? "yes" : "no")}");
-                sb.AppendLine($"Dashboards: {(dashboardList.Count == 0 ? "(none)" : string.Join(", ", dashboardList))}");
-                sb.AppendLine($"WebResources: {(webResourceList.Count == 0 ? "(none)" : string.Join(", ", webResourceList))}");
-                sb.AppendLine($"SiteMap: {(include_sitemap ? "yes" : "no")}");
-                sb.AppendLine($"Status: {(published ? "Published successfully" : "Publish failed")}");
-                sb.Append($"Duration: {sw.Elapsed.TotalSeconds:F1}s");
+                var summary = published
+                    ? $"Published {BuildTargetSummary(entityList, appModuleList, include_global_optionset, include_sitemap, include_ribbons, optionSetNameList, dashboardList, webResourceList)} ({sw.Elapsed.TotalSeconds:F1}s)."
+                    : $"Publish failed for {BuildTargetSummary(entityList, appModuleList, include_global_optionset, include_sitemap, include_ribbons, optionSetNameList, dashboardList, webResourceList)} after {sw.Elapsed.TotalSeconds:F1}s.";
 
                 var specificStructured = new PublishResult
                 {
@@ -202,26 +167,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = published ? "published" : "failed",
                     DurationSeconds = Math.Round(sw.Elapsed.TotalSeconds, 1)
                 };
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = sb.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(specificStructured)
-                };
+                return published
+                    ? Success(summary, specificStructured)
+                    : Error(summary,
+                        "Dataverse rejected the publish batch — verify the target names via get_tables / manage_app / manage_webresource and retry. If any entity name is invalid the entire batch is rejected.",
+                        specificStructured);
             }
             catch (Exception ex)
             {
-                sw.Stop();
-                var hasSpecificTargets = !string.IsNullOrWhiteSpace(entities) ||
-                    !string.IsNullOrWhiteSpace(appmodules) ||
-                    include_global_optionset ||
-                    include_sitemap;
-                var errorMsg = hasSpecificTargets
-                    ? $"Error: Publish failed for {BuildErrorTarget(entities, appmodules, include_global_optionset, include_sitemap)}.\n" +
-                      $"Note: Dataverse rejects the entire batch if any entity name is invalid - verify logical names via get_tables.\n" +
-                      $"Details: {ex.Message}"
-                    : $"Error: PublishAll failed.\n" +
-                      $"Details: {ex.Message}";
-                return ErrorResult(errorMsg);
+                return ThrowExceptionFriendly(ex);
             }
         }
 
@@ -309,21 +263,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 parts.Add($"{webResourceList.Count} web resource(s)");
             if (includeSiteMap)
                 parts.Add("sitemap");
-            return string.Join("; ", parts);
-        }
-
-        private static string BuildErrorTarget(string entities, string appModules, bool includeGlobalOptionSets, bool includeSiteMap)
-        {
-            var parts = new List<string>();
-            if (!string.IsNullOrWhiteSpace(entities))
-                parts.Add($"entities '{entities.Trim()}'");
-            if (!string.IsNullOrWhiteSpace(appModules))
-                parts.Add($"appmodules '{appModules.Trim()}'");
-            if (includeGlobalOptionSets)
-                parts.Add("global option sets");
-            if (includeSiteMap)
-                parts.Add("sitemap");
-            return parts.Count == 0 ? "specific customizations" : string.Join(", ", parts);
+            return parts.Count == 0 ? "specific customizations" : string.Join("; ", parts);
         }
 
         /// <summary>Parse a comma-separated list of simple names/values.</summary>
@@ -383,8 +323,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             return result.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
         }
-
-        private CallToolResult ErrorResult(string message) => Error(message);
 
     }
 }
