@@ -26,6 +26,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         /// <inheritdoc />
         public CallToolResult ThrowException(Exception ex) => McpToolResults.ThrowException(ex);
 
+        /// <summary>
+        /// Friendly exception handler: strips StackTrace and rewrites known Dataverse
+        /// fault messages into concise, actionable error text. Use at tool entry catch
+        /// when the tool surfaces Dataverse metadata/relationship faults.
+        /// </summary>
+        public CallToolResult ThrowExceptionFriendly(Exception ex) => McpToolResults.ThrowExceptionFriendly(ex);
+
         /// <inheritdoc />
         public CallToolResult DryRun(string summary, object structured) => McpToolResults.DryRun(summary, structured);
 

@@ -261,6 +261,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 rewritten = $"{ErrorPrefix} [MissingEntity] FetchXML is missing the required <entity name=\"...\"> element. "
                          + "Read schema://fetchxml for FetchXML query structure.";
             }
+            else if (lower.Contains("could not find a relationship with name"))
+            {
+                rewritten = $"{ErrorPrefix} [RelationshipNotFound] Relationship not found in Dataverse. "
+                         + "Check the relationship SchemaName. "
+                         + "Use get_tables(entity_name=..., detail_level='full') to inspect relationships.";
+            }
+            else if (lower.Contains("cannot create another parental relation"))
+            {
+                rewritten = $"{ErrorPrefix} [ParentalConflict] The referencing entity already has a parental relationship. "
+                         + "Use cascade_preset='Referential' or 'ReferentialRestrictDelete' instead of 'Parental'.";
+            }
+            else if (lower.Contains("custom label") && (lower.Contains("must have") || lower.Contains("should use")))
+            {
+                rewritten = $"{ErrorPrefix} [MissingCustomLabel] menu_behavior='UseLabel' requires custom display labels. "
+                         + "Provide custom labels for the relationship menu or use a different menu_behavior.";
+            }
+            else if (lower.Contains("canchangehierarchicalrelationship"))
+            {
+                rewritten = $"{ErrorPrefix} [ManagedProperty] Hierarchical relationship managed property is locked. "
+                         + "The entity already has a hierarchical relationship or the managed property prevents the change.";
+            }
+            else if (lower.Contains("is invalid or missing") && lower.Contains("must start with a valid customization prefix"))
+            {
+                rewritten = $"{ErrorPrefix} [InvalidPrefix] Schema name is missing or does not start with a valid publisher customization prefix. "
+                         + "Ensure the component name starts with the solution publisher prefix.";
+            }
             else
             {
                 // Default: keep original message text, just without StackTrace

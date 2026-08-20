@@ -95,7 +95,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
 
@@ -599,22 +599,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return resolveError;
             attributeName = attributeMetadata.LogicalName;
 
-            var entityMetadataRequest = new RetrieveEntityRequest
-            {
-                LogicalName = entityName,
-                EntityFilters = EntityFilters.Relationships
-            };
-            var entityMetadataResponse = (RetrieveEntityResponse)_serviceClient.Execute(entityMetadataRequest);
-            var oneToManyRels = entityMetadataResponse.EntityMetadata.OneToManyRelationships ?? new OneToManyRelationshipMetadata[0];
+            var prefix = attributeName.Split('_')[0];
+            var relName = $"{prefix}_{referencedEntity}_{entityName}_{attributeName}";
 
-            var rel = oneToManyRels
-                .FirstOrDefault(r => r.ReferencedEntity == referencedEntity && r.ReferencingAttribute == attributeName);
-
-            if (rel == null)
-                return Error($"No relationship found for target '{referencedEntity}' on lookup '{entityName}.{attributeName}'.",
-                    $"Use get_tables with entity_name='{entityName}' to inspect relationships.");
-
-            var relName = rel.SchemaName;
+            var retrieveResponse = (RetrieveRelationshipResponse)_serviceClient.Execute(
+                new RetrieveRelationshipRequest { Name = relName });
+            var rel = retrieveResponse.RelationshipMetadata as OneToManyRelationshipMetadata;
 
             if (_options.DryRun)
                 return DryRun($"Would REMOVE target '{referencedEntity}' from polymorphic lookup '{entityName}.{attributeName}' (relationship: '{relName}'). WARNING: Data in this lookup target will be lost.", new ManageRelationshipResult
