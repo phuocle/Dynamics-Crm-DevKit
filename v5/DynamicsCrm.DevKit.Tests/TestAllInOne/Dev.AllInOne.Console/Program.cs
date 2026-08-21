@@ -53,8 +53,9 @@ namespace Dev.AllInOne.Console
                 var compareProblemRows = args.Any(a => a.Equals("--compare-problem-rows", StringComparison.OrdinalIgnoreCase));
                 var probeTrace = args.Any(a => a.Equals("--probe-trace", StringComparison.OrdinalIgnoreCase));
                 var probeWorkflowXaml = args.Any(a => a.Equals("--probe-workflow-xaml", StringComparison.OrdinalIgnoreCase));
+                var probeMetadata = args.Any(a => a.Equals("--probe-metadata", StringComparison.OrdinalIgnoreCase));
                 SysConsole.WriteLine("Connected: " + serviceClient.ConnectedOrgUriActual);
-                SysConsole.WriteLine("Mode: " + (forceDeleteAll ? "FORCE DELETE ALL (destructive)" : repair ? "REPAIR" : scanTables ? "TABLE SCAN (read-only)" : compareProblemRows ? "COMPARE PROBLEM ROWS (read-only)" : probeTrace ? "PROBE PLUGIN TRACE (read-only)" : probeWorkflowXaml ? "PROBE WORKFLOW XAML (read-only)" : "AUDIT (read-only)"));
+                SysConsole.WriteLine("Mode: " + (forceDeleteAll ? "FORCE DELETE ALL (destructive)" : repair ? "REPAIR" : scanTables ? "TABLE SCAN (read-only)" : compareProblemRows ? "COMPARE PROBLEM ROWS (read-only)" : probeTrace ? "PROBE PLUGIN TRACE (read-only)" : probeWorkflowXaml ? "PROBE WORKFLOW XAML (read-only)" : probeMetadata ? "PROBE $metadata (read-only)" : "AUDIT (read-only)"));
                 SysConsole.WriteLine();
 
                 if (probeTrace)
@@ -62,6 +63,9 @@ namespace Dev.AllInOne.Console
 
                 if (probeWorkflowXaml)
                     return ProbeWorkflowXaml(serviceClient);
+
+                if (probeMetadata)
+                    return ProbeMetadata(serviceClient);
 
                 PrintReportedJob(serviceClient);
                 PrintRecentProvisioningJobs(serviceClient);
@@ -95,6 +99,92 @@ namespace Dev.AllInOne.Console
                 SysConsole.WriteLine("[ERROR] " + ex.GetType().Name + ": " + ex.Message);
                 return 1;
             }
+        }
+
+        private static int ProbeMetadata(ServiceClient serviceClient)
+        {
+            SysConsole.WriteLine("=== PROBE $metadata ===");
+            SysConsole.WriteLine();
+
+            SysConsole.WriteLine("[A] ExecuteWebRequest GET $metadata, contentType=application/json");
+            try
+            {
+                var resp = serviceClient.ExecuteWebRequest(
+                    System.Net.Http.HttpMethod.Get, "$metadata", null, null, "application/json");
+                var body = resp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                SysConsole.WriteLine("  Status: " + (int)resp.StatusCode + " " + resp.ReasonPhrase);
+                SysConsole.WriteLine("  Body length: " + body.Length);
+                SysConsole.WriteLine("  First 120: " + (body.Length > 120 ? body.Substring(0, 120) : body));
+            }
+            catch (Exception ex)
+            {
+                SysConsole.WriteLine("  FAIL " + ex.GetType().Name + ": " + ex.Message);
+            }
+            SysConsole.WriteLine();
+
+            SysConsole.WriteLine("[B] ExecuteWebRequest GET $metadata, contentType=\"\" (empty)");
+            try
+            {
+                var resp = serviceClient.ExecuteWebRequest(
+                    System.Net.Http.HttpMethod.Get, "$metadata", null, null, "");
+                var body = resp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                SysConsole.WriteLine("  Status: " + (int)resp.StatusCode + " " + resp.ReasonPhrase);
+                SysConsole.WriteLine("  Body length: " + body.Length);
+                SysConsole.WriteLine("  First 120: " + (body.Length > 120 ? body.Substring(0, 120) : body));
+            }
+            catch (Exception ex)
+            {
+                SysConsole.WriteLine("  FAIL " + ex.GetType().Name + ": " + ex.Message);
+            }
+            SysConsole.WriteLine();
+
+            SysConsole.WriteLine("[C] ExecuteWebRequest GET $metadata, customHeaders Accept=application/xml, contentType=application/json");
+            try
+            {
+                var headers = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["Accept"] = new List<string> { "application/xml" }
+                };
+                var resp = serviceClient.ExecuteWebRequest(
+                    System.Net.Http.HttpMethod.Get, "$metadata", null, headers, "application/json");
+                var body = resp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                SysConsole.WriteLine("  Status: " + (int)resp.StatusCode + " " + resp.ReasonPhrase);
+                SysConsole.WriteLine("  Body length: " + body.Length);
+                SysConsole.WriteLine("  First 120: " + (body.Length > 120 ? body.Substring(0, 120) : body));
+            }
+            catch (Exception ex)
+            {
+                SysConsole.WriteLine("  FAIL " + ex.GetType().Name + ": " + ex.Message);
+            }
+            SysConsole.WriteLine();
+
+            SysConsole.WriteLine("[D] Raw HttpClient GET $metadata, Bearer token, Accept=application/xml");
+            try
+            {
+                var orgUri = serviceClient.ConnectedOrgUriActual;
+                var baseHost = orgUri.GetLeftPart(System.UriPartial.Authority);
+                var token = serviceClient.CurrentAccessToken;
+                var fullUrl = baseHost + "/api/data/v9.2/$metadata";
+                SysConsole.WriteLine("  URL: " + fullUrl);
+                SysConsole.WriteLine("  Token: " + (string.IsNullOrWhiteSpace(token) ? "(null)" : token.Substring(0, 20) + "..."));
+                using var http = new System.Net.Http.HttpClient();
+                using var req = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, fullUrl);
+                req.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                req.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/xml"));
+                req.Headers.Add("OData-MaxVersion", "4.0");
+                req.Headers.Add("OData-Version", "4.0");
+                var resp = http.SendAsync(req).GetAwaiter().GetResult();
+                var body = resp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                SysConsole.WriteLine("  Status: " + (int)resp.StatusCode + " " + resp.ReasonPhrase);
+                SysConsole.WriteLine("  Body length: " + body.Length);
+                SysConsole.WriteLine("  First 120: " + (body.Length > 120 ? body.Substring(0, 120) : body));
+            }
+            catch (Exception ex)
+            {
+                SysConsole.WriteLine("  FAIL " + ex.GetType().Name + ": " + ex.Message);
+            }
+
+            return 0;
         }
 
         private static int ProbeWorkflowXaml(ServiceClient serviceClient)

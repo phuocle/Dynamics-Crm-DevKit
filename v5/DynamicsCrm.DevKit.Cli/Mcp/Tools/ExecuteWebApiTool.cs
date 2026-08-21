@@ -32,47 +32,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(WebApiResult)),
         Description(
-            "Raw Dataverse Web API call. Always check whether a specialized tool exists first " +
-            "(schema→manage_table/column/relationship, choice→manage_choice, form/view→manage_form/manage_view, " +
-            "app/sitemap→manage_app, env vars→manage_environment_variable, webresource→manage_webresource, " +
-            "roles→manage_role, publish→publish_customizations, deleted records→manage_deleted_records). " +
-            "url is relative; SDK adds base URL. PUT/PATCH/DELETE destructive — confirm.\n\n" +
+            "Raw Dataverse Web API call. url is relative; SDK adds base URL. PUT/PATCH/DELETE destructive — confirm.\n\n" +
 
-            "ACTIONS + REQUIRED PARAMS:\n" +
-            "- 'GET' — url (any relative path, e.g. 'accounts', 'contacts(guid)', '$metadata', 'WhoAmI')\n" +
-            "- 'POST' — url + body (JSON). For data records + custom actions only.\n" +
-            "- 'PUT' / 'PATCH' / 'DELETE' — url [+ body] (mutations on data records)\n\n" +
+            "WHEN TO USE: endpoints not covered by a specialized tool (WhoAmI, $metadata, custom actions, one-off data CRUD). " +
+            "Metadata/system endpoints (forms, views, sitemap, schema, choice, webresource, roles, publish, env vars, deleted records, command bar) are BLOCKED/REDIRECTED at runtime to the dedicated tool named in the error.\n\n" +
 
-            "PARAM FORMATS:\n" +
-            "- url: relative path, e.g. 'accounts', 'contacts(guid)', 'accounts?$select=name'\n" +
-            "- body: JSON string for POST/PUT/PATCH\n" +
-            "- headers: JSON object of extra request headers, e.g. '{\"Prefer\":\"return=representation\"}'\n\n" +
-
-            "VALIDATION RULES:\n" +
-            "- Metadata/system/config endpoints (forms, views, sitemaps, env vars, schema, choice, " +
-            "webresources, roles, solutions, plugins, workflows, apps) are BLOCKED at runtime — use the " +
-            "specialized tool listed in the error message.\n" +
-            "- Statuscode options must be inserted via manage_column (with linked statecode), not POST.\n" +
-            "- publishxml/publishallxml must go through publish_customizations.\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- Endpoints not covered by specialized tools (e.g. WhoAmI, $metadata, custom actions)\n" +
-            "- Inspect raw JSON responses + headers\n" +
-            "- One-off CRUD on data records when no specialized tool fits\n\n" +
-
-            "SAFETY:\n" +
-            "- PUT/PATCH/DELETE are destructive — confirm before invocation\n" +
-            "- $metadata GET can return thousands of lines; use max_response_lines=50\n" +
-            "- GET $metadata is allowed; PATCH/PUT/DELETE on metadata is BLOCKED\n" +
-            "- File/image column endpoints are BLOCKED (/$value, block-protocol actions, chunked/binary PATCH, single-column DELETE) — use manage_record_file\n\n" +
-
-            "RELATED TOOLS:\n" +
-            "- get_tables / manage_table / manage_column / manage_relationship (schema)\n" +
-            "- manage_choice (option sets)\n" +
-            "- manage_form / manage_view / manage_app / manage_sitemap (UI)\n" +
-            "- manage_environment_variable / manage_webresource / manage_role (config)\n" +
-            "- manage_record_file (file/image column data)\n" +
-            "- publish_customizations (publish)")]
+            "RELATED TOOLS: get_tables / manage_table / manage_column / manage_relationship (schema), manage_choice (option sets), " +
+            "manage_form / manage_view / manage_app (UI; sitemap via manage_app), manage_environment_variable / manage_webresource / manage_role (config), " +
+            "manage_command (command bar), manage_record_file (file/image column data), manage_deleted_records (restore), publish_customizations.")]
         public CallToolResult execute_webapi(
             [Description("GET, POST, PUT, PATCH, or DELETE. Default GET.")] string method = "GET",
             [Description("Relative path, e.g. 'accounts', 'contacts(guid)', '$metadata'. SDK adds base URL. Required.")] string url = "",
@@ -85,24 +52,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (string.IsNullOrWhiteSpace(method))
                     return Error(
-                        "Error: method is required.\n" +
+                        "method is required.\n" +
                         "Valid values: GET, POST, PUT, PATCH, DELETE.");
 
                 if (string.IsNullOrWhiteSpace(url))
                     return Error(
-                        "Error: url is required.\n" +
+                        "url is required.\n" +
                         "Provide a relative URL path, e.g., 'accounts', 'contacts?$select=name', '$metadata'.");
 
                 var httpMethod = ParseHttpMethod(method.Trim().ToUpperInvariant());
                 if (httpMethod == null)
-                    return Error($"Error: Invalid HTTP method '{method}'. Use GET, POST, PUT, PATCH, or DELETE.");
+                    return Error($"Invalid HTTP method '{method}'. Use GET, POST, PUT, PATCH, or DELETE.");
 
                 if (max_response_lines <= 0)
                     max_response_lines = 200;
 
                 var trimmedUrl = url.Trim();
                 if (IsAbsoluteUrl(trimmedUrl))
-                    return Error("Error: url must be a relative Dataverse Web API path; absolute URLs are not allowed.");
+                    return Error("url must be a relative Dataverse Web API path; absolute URLs are not allowed.");
 
                 var blockedReason = GetBlockedReason(httpMethod, trimmedUrl);
                 if (blockedReason != null)
@@ -146,14 +113,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 else
                 {
-                    // $metadata is XML; all other GETs default to JSON.
-                    // Route every request through ServiceClient.ExecuteWebRequest so that
-                    // CallerId (impersonation), auth headers, and the trusted org base URL
-                    // are applied consistently — never use a raw HttpClient.
-                    var accept = trimmedUrl.StartsWith("$metadata", StringComparison.OrdinalIgnoreCase)
-                        ? "application/xml"
-                        : "application/json";
-                    response = _serviceClient.ExecuteWebRequest(httpMethod, trimmedUrl, requestBody, customHeaders, accept);
+                    var isMetadata = trimmedUrl.StartsWith("$metadata", StringComparison.OrdinalIgnoreCase);
+                    var getHeaders = customHeaders ?? new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+                    if (isMetadata)
+                    {
+                        if (_serviceClient.ConnectedOrgUriActual == null)
+                            return Error("ServiceClient is not connected to a Dataverse organization. Call whoami first to verify the connection.");
+                        if (!getHeaders.Keys.Any(k => string.Equals(k, "Accept", StringComparison.OrdinalIgnoreCase)))
+                            getHeaders["Accept"] = new List<string> { "application/xml" };
+                        response = GetMetadataRaw(trimmedUrl, getHeaders);
+                    }
+                    else
+                    {
+                        response = _serviceClient.ExecuteWebRequest(httpMethod, trimmedUrl, requestBody, getHeaders, "application/json");
+                    }
                 }
                 var statusCode = (int)response.StatusCode;
                 var reasonPhrase = response.ReasonPhrase ?? response.StatusCode.ToString();
@@ -183,21 +156,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 string structuredBody = null;
                 if (!string.IsNullOrWhiteSpace(responseBody))
                 {
-                    sb.AppendLine();
-                    sb.AppendLine("[Response Body]");
-                    var formattedBody = TryFormatJson(responseBody);
-                    var lines = formattedBody.Split('\n');
+                    const int MaxResponseChars = 20000;
+                    var lines = responseBody.Split('\n');
+                    string note = null;
                     if (lines.Length > max_response_lines)
                     {
                         structuredBody = string.Join("\n", lines.Take(max_response_lines));
-                        sb.AppendLine(structuredBody);
-                        sb.AppendLine($"(truncated, showing first {max_response_lines} lines of {lines.Length} total)");
+                        note = $"(truncated, showing first {max_response_lines} lines of {lines.Length} total)";
                     }
-                    else
+                    if (structuredBody == null)
+                        structuredBody = responseBody;
+                    if (structuredBody.Length > MaxResponseChars)
                     {
-                        structuredBody = formattedBody;
-                        sb.Append(formattedBody);
+                        structuredBody = structuredBody.Substring(0, MaxResponseChars);
+                        note = $"(truncated, showing first {MaxResponseChars} chars of {responseBody.Length} total)";
                     }
+                    sb.AppendLine();
+                    sb.AppendLine("[Response Body]");
+                    sb.AppendLine(structuredBody);
+                    if (note != null) sb.AppendLine(note);
                 }
 
                 var structured = new WebApiResult
@@ -214,29 +191,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
 
         private static readonly (string UrlPattern, string RedirectTool, string Reason)[] BlockedEndpoints =
         [
-            // ── UI / Forms / Views / SiteMaps ──
             ("systemforms(", "manage_form or manage_form(operations)",
                 "FormXML defines the UI layout for ALL users. A malformed FormXML breaks the entire entity form with no undo."),
             ("savedqueries(", "manage_view",
                 "SavedQuery defines view columns and query for ALL users. A FetchXML/LayoutXML mismatch hides all data or crashes the grid."),
             ("userqueries(", "manage_view",
                 "UserQuery defines personal views. A malformed FetchXML/LayoutXML breaks the view with no undo."),
-            ("sitemaps(", "manage_sitemap",
-                "SiteMap defines app navigation for ALL users. A malformed SiteMap breaks navigation for the entire app. Do not use execute_webapi for model-driven app or sitemap creation/update. Use manage_sitemap."),
+            ("sitemaps(", "manage_app",
+                "SiteMap defines app navigation for ALL users. A malformed SiteMap breaks navigation for the entire app. SiteMap is managed together with its model-driven app. Do not use execute_webapi for app or sitemap creation/update. Use manage_app."),
 
-            // ── Environment Variables ──
             ("environmentvariabledefinitions(", "manage_environment_variable",
                 "Environment variable definitions have linked value records. The manage_environment_variable tool handles definition+value atomically with solution awareness."),
             ("environmentvariablevalues(", "manage_environment_variable",
                 "Environment variable values are linked to definitions. The manage_environment_variable tool handles create/update/clear correctly with definition lookup."),
 
-            // ── Schema / Metadata ──
             ("entitydefinitions", "manage_table or manage_column",
                 "Entity metadata contains IRREVERSIBLE flags (ChangeTracking, Activities, BPF, Feedback, Connections, Queues). These cannot be turned off once enabled. Use manage_table for entity-level changes, manage_column for attribute-level changes."),
             ("relationshipdefinitions", "manage_relationship",
@@ -244,33 +218,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ("managedpropertydefinitions", "manage_table",
                 "Managed properties control solution layering behavior. Incorrect changes affect solution export/import."),
 
-            // ── Choice / OptionSet ──
             ("globaloptionsetdefinitions", "manage_choice",
                 "Global option sets are shared across multiple entities. Use manage_choice to list, create, update, add/remove options safely."),
             ("optionsetdefinitions", "manage_choice or manage_column",
                 "Option set definitions should be managed via manage_choice (global) or manage_column (local picklist)."),
 
-            // ── Web Resources ──
             ("webresources(", "manage_webresource",
                 "Web resources require base64 content encoding and proper type codes. manage_webresource handles encoding, validation, publish, and solution assignment."),
-            // Real entity set name is 'webresourceset' — 'webresources(' above only catches
-            // the wrong-name guess. Without this entry PATCH/DELETE webresourceset(guid)
-            // bypassed manage_webresource (no prefix check / publish / customizable gate).
-            // GET stays allowed so content download still works (manage_webresource has no download action).
             ("webresourceset(", "manage_webresource",
                 "Web resource updates/deletes must go through manage_webresource for prefix check, publish, and customizable gate. manage_webresource handles encoding, validation, publish, and solution assignment."),
 
-            // ── Security ──
             ("roles(", "manage_role",
                 "Security roles control access for ALL users in a business unit. manage_role provides safe CRUD, privilege copying, and user assignment."),
 
-            // ── Solution Management ──
             ("solutions(", null,
                 "Solution manipulation can corrupt customizations and break deployments. Manage solutions via Power Apps UI, PAC CLI, or the DevKit solution command."),
             ("solutioncomponents(", null,
                 "Adding/removing solution components incorrectly can break solution exports. Manage via Power Apps UI or PAC CLI."),
 
-            // ── Plugin / Server-side ──
             ("pluginassemblies(", null,
                 "Plugin assemblies contain server-side business logic. Register/update plugins via the DevKit server command or Plugin Registration Tool."),
             ("plugintypes(", null,
@@ -282,13 +247,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ("pluginpackages(", null,
                 "Plugin packages (dependent assemblies) must be managed together with their plugin assemblies. Use DevKit server command."),
 
-            // ── Workflows / Processes ──
             ("workflows(", null,
                 "Workflows contain business process definitions. Modifying workflow XAML incorrectly breaks automation. Manage via Power Apps UI or Power Automate."),
             ("processes(", null,
                 "Process definitions control business logic flows. Manage via Power Apps UI."),
 
-            // ── Apps ──
             ("canvasapps(", null,
                 "Canvas apps have complex internal structure. Manage via Power Apps Studio."),
             ("appmodules(", "manage_app",
@@ -296,13 +259,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ("appmodulecomponents(", "manage_app",
                 "App module components link model-driven apps to sitemaps, entities, forms, views, and commands. Do not use execute_webapi for app component creation/update. Use manage_app."),
 
-            // ── Connections ──
             ("connectionreferences(", null,
                 "Connection references link flows/apps to external services. Manage via Power Apps UI or solution import.")
         ];
 
-        // GET endpoints that are redirected to dedicated MCP tools rather than raw Web API.
-        // Keep this array data-driven so future metadata endpoints only need one entry here.
         private static readonly (string UrlPattern, string RedirectTool, string Message)[] RedirectedGetEndpoints =
         [
             ("entitydefinitions", "get_tables",
@@ -339,7 +299,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "  manage_choice(action='detail', optionset_name='...') → inspect options\n" +
                 "  manage_column for local picklists on an entity"),
 
-            // System jobs (asyncoperation) — dedicated tool has status/operation_type filters + detail mode.
             ("asyncoperations", "get_system_jobs",
                 "REDIRECT: Use get_system_jobs instead of GET asyncoperations.\n" +
                 "get_system_jobs provides status/operation_type filters, time scope, correlation_id tracing, and detail mode with message + friendlyMessage.\n\n" +
@@ -349,7 +308,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "  get_system_jobs(operation_type='solution', status='all') → solution import/export jobs\n" +
                 "  get_system_jobs(correlation_id='<guid>') → trace one request across jobs"),
 
-            // Classic workflows (workflow entity) — dedicated tool has mode/scope/trigger filters + detail mode.
             ("workflows", "get_workflows",
                 "REDIRECT: Use get_workflows instead of GET workflows.\n" +
                 "get_workflows provides entity_name/mode/status filters, trigger_field discovery, and workflow execution metadata.\n\n" +
@@ -359,7 +317,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "  get_workflows(workflow_id='<guid>') → detail with trigger fields and execution metadata\n" +
                 "  get_workflows(entity_name='account', trigger_field='statecode') → workflows triggered by status change"),
 
-            // Legacy 'processes' entity-set alias → same redirect as workflows.
             ("processes", "get_workflows",
                 "REDIRECT: Use get_workflows instead of GET processes.\n" +
                 "get_workflows covers classic workflows (background + realtime) with filters and detail mode.\n\n" +
@@ -368,14 +325,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "  get_workflows(mode='realtime') → realtime (sync) workflows\n" +
                 "  get_workflows(workflow_id='<guid>') → detail with trigger fields and execution metadata"),
 
-            // Filter ngụ ý "đã xóa" — Dataverse OData filter không trả soft-deleted records.
             ("deletionstatecode", "manage_deleted_records",
                 "REDIRECT: Standard OData $filter on 'deletionstatecode' or 'statecode eq 1' is unreliable for non-activity entities " +
                 "(returns empty for account/contact default statecode=0 even after soft-delete). " +
                 "Use manage_deleted_records(action='list', entity_name='<entity>') which uses FetchXml datasource='bin' " +
                 "and returns records with modifiedOn ≈ delete time."),
 
-            // Modern command bar (appaction) — dedicated tool has list/detail with rules+children.
             ("appactions", "manage_command",
                 "REDIRECT: Use manage_command instead of GET appactions.\n" +
                 "manage_command provides app-scoped list/detail with ribbon-style OOB+custom detection, visibility/enable rules, and flyout/split-button children.\n\n" +
@@ -384,7 +339,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "  manage_command(action='detail', command_id='<guid>', include_rules=true) → full detail with rules\n" +
                 "  manage_command(action='list', entity_name='account', include_children=true) → flyout/split items"),
 
-            // Web API Restore action work (verified 2026-07-31) nhưng body phức tạp → dùng tool mới.
             ("restore", "manage_deleted_records",
                 "REDIRECT (not blocked): Web API 'Restore' action works (returns 200 with restored id), " +
                 "but requires complex body with @odata.id/@odata.type. " +
@@ -396,13 +350,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static readonly (string UrlPattern, string RedirectTool, string Reason)[] BlockedPostEndpoints =
         [
-            // ── Publish ──
             ("publishxml", "publish_customizations",
                 "PublishXml requires correctly formatted ParameterXml. The publish_customizations tool handles entity-specific vs all publishing with proper XML generation."),
             ("publishallxml", "publish_customizations",
                 "PublishAllXml publishes ALL customizations. The publish_customizations tool provides a simpler interface with proper status reporting."),
 
-            // ── Metadata Actions ──
             ("createoptionset", "manage_choice",
                 "Creating option sets requires proper metadata structure. Use manage_choice for global option sets or manage_column for local picklists."),
             ("updateoptionset", "manage_choice",
@@ -420,7 +372,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ("deletestatusvalue", "manage_column",
                 "Deleting statuscode values is irreversible. Use manage_column with logical_name='statuscode' and delete_options."),
 
-            // ── Data endpoints with dedicated tools ──
             ("webresources", "manage_webresource",
                 "Creating web resources requires base64 encoding and type codes. Use manage_webresource for safe creation with solution assignment."),
             ("savedqueryvisualizations", "manage_chart",
@@ -435,14 +386,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ("appmodulecomponents", "manage_app",
                 "Do not use execute_webapi for appmodulecomponent creation/update. Use manage_app."),
 
-            // ── Modern command bar (appaction) — dedicated tool ──
             ("appactions", "manage_command",
                 "Modern command bar buttons (appaction) require app-scoped context, OOB override logic, and entity publish. Use manage_command for create/update/hide/show/flyout/split-button operations."),
             ("appactionrules", "manage_command",
                 "appactionrule (visibility/enable rules) are managed with their parent appaction via manage_command (include_rules=true to inspect)."),
 
-            // ── Deleted Records — restore via Web API POST /Restore ───────
-            // Web API Restore works (verified 2026-07-31) but body phức tạp → dùng tool mới.
             ("restore", "manage_deleted_records",
                 "Web API 'Restore' action works (returns 200 with restored id) but requires complex body with @odata.id/@odata.type. " +
                 "Use manage_deleted_records(action='restore', entity_name='<entity>', record_id='<guid>') " +
@@ -451,9 +399,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Also supports batch via record_ids[].")
         ];
 
-        // File/image column endpoints are blocked for ALL methods: binary transfer for
-        // these columns requires the SDK block protocol (Initialize/Upload/Commit or
-        // Initialize/Download), which raw Web API calls cannot perform reliably.
         private static readonly string[] FileColumnSdkActions =
         [
             "Microsoft.Dynamics.CRM.InitializeFileBlocksUpload",
@@ -475,21 +420,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var path = url.Split('?')[0];
 
-            // 1. Binary value endpoint: {entity}({id})/{column}/$value — any method.
             if (path.EndsWith("/$value", StringComparison.OrdinalIgnoreCase))
                 return $"BLOCKED: {method.Method} on a /$value binary endpoint is not allowed via execute_webapi.\n\n{FileColumnBlockReason}";
 
-            // 2. SDK block-protocol actions exposed over Web API (POST .../Microsoft.Dynamics.CRM.<Action>).
             foreach (var action in FileColumnSdkActions)
             {
                 if (path.IndexOf(action, StringComparison.OrdinalIgnoreCase) >= 0)
                     return $"BLOCKED: {method.Method} on the file/image block-protocol action '{action}' is not allowed via execute_webapi.\n\n{FileColumnBlockReason}";
             }
 
-            // 3. Single-column value URL: {entity}({id})/{column}
-            //    - PATCH/PUT with chunking header or binary content-type → chunked/raw binary upload.
-            //    - DELETE → file/image value delete. Clearing scalar properties stays available
-            //      via PATCH on the record or manage_record update.
             if (IsSingleColumnValueUrl(path))
             {
                 if (method == HttpMethod.Patch || method == HttpMethod.Put)
@@ -510,7 +449,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static bool IsSingleColumnValueUrl(string path)
         {
-            // Pattern: {entitySet}({guid})/{column} — no further segments, no $-suffix.
             var firstSlash = path.IndexOf('/');
             if (firstSlash <= 0 || firstSlash != path.LastIndexOf('/')) return false;
             var key = path.Substring(0, firstSlash);
@@ -535,7 +473,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var urlLower = url.ToLowerInvariant();
 
-            // Phase 1: Block POST on specific patterns (publish, metadata actions, dedicated-tool endpoints)
             if (method == HttpMethod.Post)
             {
                 foreach (var (pattern, tool, reason) in BlockedPostEndpoints)
@@ -551,23 +488,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
-            // Phase 2: Redirect GET metadata endpoints to dedicated tools
             if (method == HttpMethod.Get)
             {
                 foreach (var (pattern, tool, message) in RedirectedGetEndpoints)
                 {
-                    // Skip the placeholder __guid_url__ entry — handled in Phase 0 above
                     if (pattern == "__guid_url__") continue;
                     if (urlLower.Contains(pattern))
                         return $"{message}\n\nUSE INSTEAD: {tool}";
                 }
             }
 
-            // Phase 3: GET is always safe for non-metadata reads
             if (method == HttpMethod.Get || method == HttpMethod.Post)
                 return null;
 
-            // Phase 4: Block PATCH/PUT/DELETE on metadata/system/config endpoints
             foreach (var (pattern, tool, reason) in BlockedEndpoints)
             {
                 if (urlLower.Contains(pattern.ToLowerInvariant()))
@@ -603,10 +536,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        // Defensive parse: returns null header dict on empty input and a clean error
-        // string on malformed JSON. No try/catch — uses TryParse + EnumerateObject so
-        // the only throw path is the unexpected non-JsonException, which the top-level
-        // catch routes through ThrowException with full context.
+        private HttpResponseMessage GetMetadataRaw(string relativeUrl, Dictionary<string, List<string>> headers)
+        {
+            var baseHost = _serviceClient.ConnectedOrgUriActual.GetLeftPart(UriPartial.Authority);
+            var token = _serviceClient.CurrentAccessToken;
+            var fullUrl = $"{baseHost}/api/data/v9.2/{relativeUrl.TrimStart('/')}";
+            using var http = new HttpClient();
+            using var req = new HttpRequestMessage(HttpMethod.Get, fullUrl);
+            if (!string.IsNullOrWhiteSpace(token))
+                req.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            req.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/xml"));
+            req.Headers.Add("OData-MaxVersion", "4.0");
+            req.Headers.Add("OData-Version", "4.0");
+            if (headers != null)
+            {
+                foreach (var kv in headers)
+                {
+                    if (string.Equals(kv.Key, "Accept", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(kv.Key, "Authorization", StringComparison.OrdinalIgnoreCase))
+                        continue;
+                    foreach (var v in kv.Value)
+                        req.Headers.TryAddWithoutValidation(kv.Key, v);
+                }
+            }
+            return http.SendAsync(req).GetAwaiter().GetResult();
+        }
+
         private static Dictionary<string, List<string>> ParseHeaders(string headersJson, out string error)
         {
             error = null;
@@ -616,14 +571,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var trimmed = headersJson.Trim();
             if (trimmed[0] != '{' || trimmed[^1] != '}')
             {
-                error = $"Error: Invalid JSON in headers parameter — expected a JSON object (e.g. {{\"Prefer\":\"return=representation\"}}).\nInput: {headersJson}";
+                error = $"Invalid JSON in headers parameter — expected a JSON object (e.g. {{\"Prefer\":\"return=representation\"}}).\nInput: {headersJson}";
                 return null;
             }
 
             using var doc = JsonDocument.Parse(trimmed);
             if (doc.RootElement.ValueKind != JsonValueKind.Object)
             {
-                error = $"Error: Invalid JSON in headers parameter — expected a JSON object (e.g. {{\"Prefer\":\"return=representation\"}}).\nInput: {headersJson}";
+                error = $"Invalid JSON in headers parameter — expected a JSON object (e.g. {{\"Prefer\":\"return=representation\"}}).\nInput: {headersJson}";
                 return null;
             }
 
@@ -641,26 +596,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return null;
 
             return result;
-        }
-
-        // Defensive JSON formatter: returns the original string unchanged on parse failure.
-        // Note: Parse(string) throws JsonException on malformed input; we accept that here
-        // because the input is the response body of a successful Web API call and is not
-        // a place where "malformed shape is expected". Letting it throw is fine — the
-        // caller's top-level catch routes it through ThrowException.
-        private static string TryFormatJson(string json)
-        {
-            if (string.IsNullOrWhiteSpace(json))
-                return json;
-            try
-            {
-                using var doc = JsonDocument.Parse(json);
-                return JsonSerializer.Serialize(doc, new JsonSerializerOptions { WriteIndented = true });
-            }
-            catch (JsonException)
-            {
-                return json;
-            }
         }
     }
 }
