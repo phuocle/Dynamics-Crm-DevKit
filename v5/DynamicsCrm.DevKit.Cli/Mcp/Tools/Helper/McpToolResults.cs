@@ -66,16 +66,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
         /// <summary>
         /// Error result with a message, optional hint, and optional structured details.
-        /// The hint is included in both text and structured content so the AI/client
-        /// knows how to proceed.
+        /// The text content is a 3-part bracketed block ([Error]/[Hint]/[Detail]) so
+        /// AI clients that only surface text (e.g. Claude Code CLI) still see all three
+        /// fields; the structured payload carries the same data as a JSON object for
+        /// clients that read structuredContent (e.g. GitHub Copilot). Duplication is
+        /// intentional for cross-client compatibility.
         /// </summary>
         internal static CallToolResult Error(string message, string? hint = null, object? details = null)
         {
             var clean = StripPrefix(message, ErrorPrefix);
             var normalizedHint = NormalizeHint(hint);
-            var text = $"{ErrorPrefix} {clean}";
+
+            var textLines = new List<string> { $"{ErrorPrefix} {clean}" };
             if (normalizedHint != null)
-                text += $"\n{HintLabel}: {normalizedHint}";
+                textLines.Add($"[Hint] {normalizedHint}");
+            if (details != null)
+                textLines.Add($"[Detail] {JsonSerializer.Serialize(details)}");
+            var text = string.Join("\n", textLines);
 
             var structured = new McpErrorResult
             {
@@ -132,22 +139,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         }
 
         /// <summary>
-        /// Format an unhandled exception into an error result. Same <c>[Error]</c>
-        /// prefix as <see cref="Error"/> — the structured payload (exceptionType,
-        /// errorCode, stackTrace) is what lets AI clients distinguish it. Use this
-        /// only in top-level <c>catch (Exception ex)</c> blocks — for
-        /// expected/validation errors, use <see cref="Error"/> instead.
+        /// Format an unhandled exception into an error result. Same 3-part text shape
+        /// as <see cref="Error"/> (<c>[Error]</c>/<c>[Hint]</c>/<c>[Detail]</c>) — the
+        /// structured payload (<c>exceptionType</c>, <c>errorCode</c>, <c>stackTrace</c>)
+        /// is what lets AI clients distinguish it. Use this only in top-level
+        /// <c>catch (Exception ex)</c> blocks — for expected/validation errors, use
+        /// <see cref="Error"/> instead.
         /// </summary>
         /// <remarks>
         /// Output shape (text):
         /// <code>
         /// [Error] {ExceptionType}: {TopMessage}
-        /// InnerException: {InnerType}: {InnerMessage}  (if any)
-        /// StackTrace: {FirstFrame}                       (file:line)
-        /// Hint: ...
+        /// [Hint] {recovery hint}
+        /// [Detail] {{"exceptionType":"...","kind":"...","message":"...","errorCode":"0x...","innerException":{...},"stackTrace":"file:line"}}
         /// </code>
-        /// Structured payload includes <c>exceptionType</c>, <c>errorCode</c> (Dataverse faults),
-        /// <c>message</c>, <c>innerException</c>, <c>stackTrace</c>.
+        /// Structured payload includes <c>error</c>, <c>hint</c>, <c>details</c>
+        /// (<c>exceptionType</c>, <c>errorCode</c> for Dataverse faults, <c>message</c>,
+        /// <c>innerException</c>, <c>stackTrace</c>).
         /// </remarks>
         internal static CallToolResult ThrowException(Exception ex)
         {
@@ -156,21 +164,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
             var (kind, hint) = ClassifyException(ex);
 
-            // Build the message chain: top-level + inner (one level deep, plus summary)
+            // Build the message chain: top-level message (inner/stack go into [Detail])
             var message = ex.Message ?? "(no message)";
-            var innerText = BuildInnerExceptionText(ex.InnerException);
             var topFrame = ExtractFirstFrame(ex);
-
-            var textLines = new List<string>
-            {
-                $"{ErrorPrefix} {kind}: {message}"
-            };
-            if (!string.IsNullOrWhiteSpace(innerText))
-                textLines.Add($"InnerException: {innerText}");
-            if (!string.IsNullOrWhiteSpace(topFrame))
-                textLines.Add($"StackTrace: {topFrame}");
-            textLines.Add($"{HintLabel}: {hint}");
-            var text = string.Join("\n", textLines);
 
             // Build structured details so AI clients don't have to parse text
             var details = new Dictionary<string, object>
@@ -195,6 +191,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             }
             if (!string.IsNullOrWhiteSpace(topFrame))
                 details["stackTrace"] = topFrame;
+
+            var textLines = new List<string>
+            {
+                $"{ErrorPrefix} {kind}: {message}"
+            };
+            if (hint != null)
+                textLines.Add($"[Hint] {hint}");
+            textLines.Add($"[Detail] {JsonSerializer.Serialize(details)}");
+            var text = string.Join("\n", textLines);
 
             var structured = new McpErrorResult
             {
@@ -373,16 +378,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     return (ex.GetType().Name,
                         "An unexpected error occurred. Check the server logs and retry; if it persists, report it as a tool bug with the inputs you used.");
             }
-        }
-
-        private static string BuildInnerExceptionText(Exception? inner)
-        {
-            if (inner == null) return "";
-            var s = $"{inner.GetType().Name}: {inner.Message ?? "(no message)"}";
-            // Recurse one extra level if there is a deeper inner exception
-            if (inner.InnerException != null)
-                s += $" → {inner.InnerException.GetType().Name}: {inner.InnerException.Message ?? "(no message)"}";
-            return s;
         }
 
         private static string ExtractFirstFrame(Exception ex)

@@ -53,6 +53,31 @@ When anh Phước asks you to fix / fill in / resolve a `[miss]` marker in a fil
 6. **Do not touch any other test** — only the test(s) anh Phước named. Do not fabricate output for tests that still lack data; leave their `[miss]` markers intact.
 7. After filling, the test must look identical in shape to a happy-case test (e.g. Test 2 in `2.get_audit_history.md`): ` ```text ` plain output, ` ```json ` structured output, ` ```json ` `{ "IsError": ... }`.
 
+## ERROR test output — text block only
+
+For a test whose result is an **error** (`IsError: true`), the MCP `CallToolResult` carries the same data in two places at once: the `content` text block (a 3-part `[Error]/[Hint]/[Detail]` text) and the `structuredContent` JSON object (`{ "error", "hint", "details" }`). MCP clients surface only one side on errors — never both — and we standardise on the **text** side. So for an error test, record **only** the ` ```text ` block (the `[Error]/[Hint]/[Detail]` output, verbatim) and the `## RESULT` `{ "IsError": true }` block. **Do not include a ` ```json ` structured block at all** — not even a `[miss]` marker. The structure for an error test is:
+
+```
+## OUTPUT
+
+```text
+[Error] {message}
+[Hint] {hint}            ← only if a hint exists
+[Detail] {json-string}   ← only if details exist
+```
+
+## RESULT
+
+```json
+{ "IsError": true }
+```
+```
+
+- If your client surfaces the **structured JSON** instead of text, record the ` ```json ` object verbatim and omit the ` ```text ` block (still include `## RESULT`). Never include both blocks for an error test.
+- Never reconstruct the side you cannot see from the side you can, from the tool description, or from the code.
+
+This rule overrides the general "OUTPUT has both a text block and a JSON block" structure **only for error tests**. Happy-case (success) tests still record both blocks as usual, because success output is surfaced by every client.
+
 ## Cleanup rules
 
 - Kill bug/fix-bug narrative. Rewrite any "regression", "phase 4", "fix bug" story as a normal `TEST N` with a clean description.
