@@ -22,13 +22,36 @@ Rules for every `testcall/{N}.{tool}.md` file. Goal: 36 files share one format s
    - `# TEST N` (H1, uppercase TEST)
    - `## INPUT` (H2) → one description line, then a ` ```json ` block with the tool-call input.
    - `## OUTPUT` (H2) → a ` ```text ` block with the plain-text output, then a ` ```json ` block with the structured object.
-     - **If the test has NOT been run yet** (no real output captured), do NOT fabricate output. Put a miss marker in the block instead so anh Phước can re-run and fill it:
-       - Plain text block: `[miss] Plain text output not captured. Re-run test and fill in.`
-       - JSON block: `[miss] Structured output not captured. Re-run test and fill in.`
-     - The reference file `2.get_audit_history.md` is a happy case with full output. Most other files will have `[miss]` markers until re-tested.
    - `## RESULT` (H2) → a ` ```json ` block: `{ "IsError": true }` or `{ "IsError": false }`.
-     - If the test has not been run, use `[miss] IsError not captured. Re-run test and fill in.`
 5. `# RESULTS` (exact, plural, uppercase) → bullet list of outcomes, one per test.
+
+## 🚫 HARD RULE: NEVER FABRICATE OUTPUT (read this twice)
+
+**This is the most important rule. Violating it breaks the whole purpose of these files.**
+
+- Every byte of OUTPUT plain text and OUTPUT JSON must come from a real tool run captured in the source file. You are formatting, not generating.
+- **NEVER invent, guess, reconstruct, or "fill in" output** — not counts, not GUIDs, not field values, not record names, not the number of entries, not the `IsError` value. Even an "obvious" reconstruction (e.g. copying entries from another test, inferring a count) is a violation.
+- **If any part of a test's output is missing, truncated, illegible, or you cannot see it verbatim in the source file → mark it `[miss]`.** Do not piece it together from other tests, from the tool description, or from your knowledge of the code.
+- A `[miss]` is the CORRECT outcome when you lack data. It is not a failure — it is a signal to anh Phước to re-run that test and fill it in. **Fabricating output is far worse than leaving a `[miss]`, because a fabricated value looks real and anh Phước has no way to know it is fake when reviewing.**
+- Miss markers (use exactly these strings):
+  - Plain text block: `[miss] Plain text output not captured. Re-run test and fill in.`
+  - JSON block: `[miss] Structured output not captured. Re-run test and fill in.`
+  - RESULT block: `[miss] IsError not captured. Re-run test and fill in.`
+- If you can see part of the output but not all, keep the part you can see verbatim and mark only the missing part `[miss]`. Never silently drop or "complete" partial output.
+- The reference file `2.get_audit_history.md` is a happy case with full captured output. Most other files will contain `[miss]` markers — that is expected and correct.
+- Miss marker fence rules: the plain-text miss uses a ` ```text ` fence; the JSON miss and the RESULT miss use a ` ```json ` fence (the marker text itself is still plain, but the fence matches the block it stands in for).
+
+## 🔧 WHEN aP REQUESTS "FIX THE MISS"
+
+When anh Phước asks you to fix / fill in / resolve a `[miss]` marker in a file:
+
+1. **Find the test** that has the `[miss]` (by `# TEST N` heading above it).
+2. **Read its `## INPUT` block** — that is the exact tool-call to re-run. Copy the arguments verbatim.
+3. **Run the tool** with that input (use the matching `mcp__devkit-claude__<tool>` tool) and capture the real output — the plain-text content and the structured JSON object, plus the `IsError` value.
+4. **Replace the `[miss]` markers** in that test's `## OUTPUT` and `## RESULT` with the captured output, verbatim. Do not edit, summarise, or "clean up" the real output — paste it as-returned.
+5. **Update the matching bullet** in `# RESULTS` so it describes the now-captured outcome (no more `[miss]` mention).
+6. **Do not touch any other test** — only the test(s) anh Phước named. Do not fabricate output for tests that still lack data; leave their `[miss]` markers intact.
+7. After filling, the test must look identical in shape to a happy-case test (e.g. Test 2 in `2.get_audit_history.md`): ` ```text ` plain output, ` ```json ` structured output, ` ```json ` `{ "IsError": ... }`.
 
 ## Cleanup rules
 
