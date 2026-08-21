@@ -18,7 +18,7 @@
 2. **1 try-catch duy nhất ở entry point của tool.** Catch chỉ `return ThrowException(ex)`. Validation/business fail → `Error(msg, hint?)`; unhandled fault → `ThrowException(ex)`. Không catch trong helper, không catch rỗng, không tự build error text.
 3. **Không wrapper method** — gọi thẳng `Success`/`Error`/`ThrowException`/`DryRun`/`Partial`/`Failed` từ `McpToolBase`. Helper parse/format/build DTO/execute vẫn OK.
 4. **DTO null-aware:** mọi property nullable có `[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]`; list rỗng → `null`. Không đổi null thành `""`.
-5. **`Content` đúng 1 dòng** `[Success]` / `[Error]` / `[DRY-RUN]`, ngắn. Chi tiết đẩy vào `structuredContent`.
+5. **`Content` đúng 1 dòng** `[Success]` / `[Error]` / `[DRY-RUN]`, ngắn. Chi tiết đẩy vào `structuredContent`. **Test-call phải tách rõ 2 khối: `Content (1 line, plain text):` trong ```text``` và `Structured content (JSON):` trong ```json```**, kèm `IsError: false/true`. KHÔNG paste toàn bộ JSON raw vào Content, KHÔNG gộp Content+Structured thành 1 block.
 6. **Description ngắn:** 1 câu tóm tắt + modes + `WHEN TO USE` / `RELATED TOOLS`. Không lặp param schema, không hứa capability thiếu code.
 7. **Không đoán Dataverse.** Probe trước bằng MCP query / read tools đã có (logical name, option value, lookup type, order, paging) rồi mới code. Không lấy comment "đã probe" trong source làm evidence.
 8. **Tool overlap endpoint Web API → cập nhật redirect/block trong `ExecuteWebApiTool` cùng build** (`RedirectedGetEndpoints`/`BlockedPostEndpoints`/`RedirectedPostEndpoints`, message dẫn sang tool dedicated).

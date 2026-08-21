@@ -169,6 +169,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
         {
             var buttonId = RibbonXmlHelpers.GetJsonString(op, "button_id");
             var labelHint = RibbonXmlHelpers.GetJsonString(op, "label");
+            // Option A: 'label' can be either an identifier (when no button_id) or the new value.
+            // When identifying by 'label', the new label comes from the separate 'new_label' field.
+            var identifiedByLabel = string.IsNullOrWhiteSpace(buttonId);
 
             if (string.IsNullOrWhiteSpace(buttonId))
             {
@@ -214,7 +217,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
             var updatedFields = new List<string>();
 
-            var newLabel = RibbonXmlHelpers.GetJsonString(op, "label");
+            // Label update: 'label' is the new value when identifying by button_id;
+            // 'new_label' is the new value when identifying by label (lookup).
+            var newLabel = identifiedByLabel
+                ? RibbonXmlHelpers.GetJsonString(op, "new_label")
+                : RibbonXmlHelpers.GetJsonString(op, "label");
             if (!string.IsNullOrWhiteSpace(newLabel))
             {
                 RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{buttonId}.LabelText", newLabel);
