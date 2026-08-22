@@ -53,7 +53,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- To intentionally create an empty formula column, omit formula_definition and pass formula_source_type as powerfx, calculated, or rollup.\n" +
             "- 5 create flags (so a column can be cloned in a SINGLE create call, no follow-up update): required_level (None/Recommended/Required — default None), is_audit_enabled (default true), is_valid_for_advanced_find (default true), is_secured (default false), is_sortable (default true when supported). On UPDATE, omit=null to keep current.\n\n" +
 
-            "CREATE uses the publisher prefix from solution_name directly. confirmed_prefix is optional and only validates the resolved prefix. Either solution_name or an explicit prefixed schema_name/logical_name must be supplied so the publisher prefix is known.\n\n" +
+            "CREATE uses the publisher prefix from solution_name directly. confirmed_prefix is optional and only validates the resolved prefix. Either solution_name or an explicit prefixed schema_name/logical_name must be supplied so the publisher prefix is known.\n" +
+            "STATUSCODE (statuscode / StatusType): pass logical_name='statuscode' and use add_options/update_options/delete_options.\n" +
+            "add_options: JSON array with optional 'state' field (linked statecode value, default 0): [{\"label\":\"Under Review\",\"value\":100000001,\"state\":0}].\n" +
+            "update_options: rename by value (no 'state' needed). delete_options: JSON array of integer values. statecode column is read-only.\n" +
+            "Name resolution: entity_name resolves Display Name contains first, then logical/schema name contains — ambiguity returns candidates. logical_name (UPDATE) follows the same Display Name first rule. lookup_target, global_optionset_name, and solution_name use their shared resolvers.\n\n" +
 
             "WHEN TO USE:\n" +
             "- Create a new attribute on an existing table (need attribute_type + display_name)\n" +
@@ -61,12 +65,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Update mutable metadata, format, required_level, and picklist options\n" +
             "- Add/rename/remove options on an existing picklist via add_options/update_options/delete_options\n\n" +
 
-            "FUZZY/AMBIGUITY:\n" +
-            "- entity_name resolves Display Name contains first, then logical/schema name contains. Ambiguity returns IsError=true with candidates.\n" +
-            "- logical_name (UPDATE) follows the same Display Name first rule. lookup_target, global_optionset_name, and solution_name use their shared resolvers.\n\n" +
-            "STATUSCODE (statuscode / StatusType): pass logical_name='statuscode' and use add_options/update_options/delete_options.\n" +
-            "add_options: JSON array with optional 'state' field (linked statecode value, default 0): [{\"label\":\"Under Review\",\"value\":100000001,\"state\":0}].\n" +
-            "update_options: rename by value (no 'state' needed). delete_options: JSON array of integer values. statecode column is read-only.")]
+            "RELATED TOOLS:\n" +
+            "- get_tables → discover entities and attribute logical names\n" +
+            "- manage_table → create the table before its columns\n" +
+            "- manage_relationship → 1:N / N:N\n" +
+            "- manage_choice → global option sets\n" +
+            "- manage_record_file → file/image column data\n" +
+            "- execute_webapi → raw Web API for endpoints not covered here")]
         public CallToolResult manage_column(
             [Description("Logical name (e.g. 'account').")] string entity_name = "",
             [Description("Logical name of the existing attribute to update (e.g. 'new_priority'). For CREATE: optional lowercase override of logical name; if omitted derives from schema_name/display_name. Must start with publisher prefix.")] string logical_name = "",
@@ -104,7 +109,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             // --- Validate required parameters ---
             if (string.IsNullOrWhiteSpace(entity_name))
-                return ErrorResult("Error: entity_name is required.");
+                return Error("entity_name is required.", "Use get_tables to list entities.");
 
             entity_name = entity_name.Trim();
             logical_name = logical_name?.Trim() ?? "";
@@ -122,18 +127,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var validTypes = new[] { "string", "memo", "integer", "bigint", "decimal", "money", "float", "double",
                     "boolean", "datetime", "lookup", "customer", "picklist", "multipicklist", "image", "file" };
                 if (!Array.Exists(validTypes, t => t == normalizedType))
-                    return ErrorResult(
-                        $"Error: Unknown attribute_type '{attribute_type}'.\n" +
-                        $"Valid types: string, memo, integer, bigint, decimal, money, float, boolean, datetime, lookup, customer, picklist, multipicklist, image, file.\n" +
-                        $"Read docs://schema_tools_guide for column type matrix and usage per type.");
+                    return Error(
+                        $"Unknown attribute_type '{attribute_type}'.",
+                        "Valid types: string, memo, integer, bigint, decimal, money, float, boolean, datetime, lookup, customer, picklist, multipicklist, image, file. Read docs://schema_tools_guide for the column type matrix.");
             }
 
             if (!string.IsNullOrWhiteSpace(required_level))
             {
                 if (!ParseRequiredLevel(required_level).HasValue)
-                    return ErrorResult(
-                        $"Error: Invalid required_level '{required_level}'.\n" +
-                        $"Valid values: 'None' (default), 'Recommended', 'Required'.");
+                    return Error(
+                        $"Invalid required_level '{required_level}'.",
+                        "Valid values: 'None' (default), 'Recommended', 'Required'.");
             }
 
             if (!string.IsNullOrWhiteSpace(format) && !string.IsNullOrWhiteSpace(attribute_type))
@@ -142,17 +146,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (normalizedType == "string")
                 {
                     ResolveStringFormat(format, out var fmtErr);
-                    if (fmtErr != null) return ErrorResult($"[Error] Invalid format for string: {fmtErr}");
+                    if (fmtErr != null) return Error(fmtErr, "Valid values: 'Text' (default), 'Email', 'Url', 'Phone', 'TextArea', 'TickerSymbol', 'RichText'.");
                 }
                 else if (normalizedType == "integer")
                 {
                     ResolveIntegerFormat(format, out var fmtErr);
-                    if (fmtErr != null) return ErrorResult($"[Error] Invalid format for integer: {fmtErr}");
+                    if (fmtErr != null) return Error(fmtErr, "Valid values: 'None' (default), 'Duration', 'TimeZone', 'Language', 'Locale'.");
                 }
                 else if (normalizedType == "memo")
                 {
                     ResolveMemoFormat(format, out var fmtErr);
-                    if (fmtErr != null) return ErrorResult($"[Error] Invalid format for memo: {fmtErr}");
+                    if (fmtErr != null) return Error(fmtErr, "Valid values: 'Text' (default), 'RichText'.");
                 }
             }
 
@@ -162,14 +166,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (normalizedType == "datetime")
                 {
                     ResolveDateTimeBehavior(behavior, out var behaviorErr);
-                    if (behaviorErr != null) return ErrorResult($"[Error] Invalid behavior for datetime: {behaviorErr}");
+                    if (behaviorErr != null) return Error(behaviorErr, "Valid values: 'UserLocal' (default), 'DateOnly', 'TimeZoneIndependent'.");
                 }
             }
 
             // --- Resolve entity_name: Display Name first, then logical/schema contains ---
             var (resolvedEntity, entityError) = ResolveEntityName(_serviceClient, entity_name);
             if (entityError != null)
-                return ErrorResult(entityError);
+                return Error(entityError.Split("\r\n")[0], "Use get_tables to list entities.");
             entity_name = resolvedEntity;
 
             // ===== Resolve publisher prefix from solution (needed when schema_name/logical_name lack one) =====
@@ -179,9 +183,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solResult = SolutionResolverHelper.Resolve(_serviceClient, solution_name);
                 if (!solResult.IsSuccess)
-                    return ErrorResult(
-                        $"[Error] {solResult.Error}\n" +
-                        $"Tip: Use get_solution_components to find valid solution names.");
+                    return Error(
+                        solResult.Error.Split("\r\n")[0],
+                        "Use get_solution_components to find valid solution names.");
                 resolvedPrefix = solResult.Prefix;
                 resolvedSolutionUniqueName = solResult.UniqueName;
             }
@@ -219,7 +223,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 else if (attributeResolve.Status == ResolveStatus.Ambiguous || attributeResolve.Status == ResolveStatus.Error)
                 {
-                    return ErrorResult($"Error: {attributeResolve.Error}");
+                    return Error(attributeResolve.Error.Split("\r\n")[0], "Use get_tables to list entities and attributes.");
                 }
                 // NotFound → fall through to CREATE if create fields are present, else error below.
             }
@@ -234,7 +238,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 else if (displayNameResolve.Status == ResolveStatus.Ambiguous || displayNameResolve.Status == ResolveStatus.Error)
                 {
-                    return ErrorResult($"Error: {displayNameResolve.Error}");
+                    return Error(displayNameResolve.Error.Split("\r\n")[0], "Use get_tables to list entities and attributes.");
                 }
             }
 
@@ -244,8 +248,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrWhiteSpace(formula_definition) ||
                     !string.IsNullOrWhiteSpace(formula_source_type))
                 {
-                    return ErrorResult(
-                        "Error: Formula clone parameters are create-only and cannot update an existing column.\n" +
+                    return Error(
+                        "Formula clone parameters are create-only and cannot update an existing column.",
                         "Read the source column with get_tables, then create a new column with its formulaDefinition reference.");
                 }
                 return UpdateExistingAttribute(entity_name, logical_name, existingMetadata,
@@ -260,30 +264,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(attribute_type))
             {
                 if (string.IsNullOrWhiteSpace(logical_name))
-                    return ErrorResult(
-                        "Error: logical_name is required to update an existing column, or attribute_type + display_name to create a new one.\n" +
+                    return Error(
+                        "logical_name is required to update an existing column, or attribute_type + display_name to create a new one.",
                         "To UPDATE: pass logical_name (e.g. 'new_priority'). To CREATE: pass attribute_type + display_name (+ solution_name or a prefixed schema_name/logical_name).");
-                return ErrorResult(
-                    $"[Error] No existing column found for logical_name '{logical_name}' on entity '{entity_name}'.\n" +
+                return Error(
+                    $"No existing column found for logical_name '{logical_name}' on entity '{entity_name}'.",
                     "To CREATE a new column, also provide attribute_type + display_name (+ solution_name or a prefixed schema_name/logical_name). To UPDATE, double-check the logical name (use get_tables to list attributes).");
             }
             if (string.IsNullOrWhiteSpace(display_name))
-                return ErrorResult("Error: display_name is required when creating a new attribute.");
+                return Error(
+                    "display_name is required when creating a new attribute.",
+                    "Required for create: attribute_type + display_name (+ solution_name or a prefixed schema_name/logical_name).");
 
             attribute_type = attribute_type.Trim().ToLowerInvariant();
 
             // A publisher prefix must be known by now (from solution_name or inherited from a prefixed schema_name/logical_name).
             if (string.IsNullOrWhiteSpace(resolvedPrefix))
-                return ErrorResult(
-                    "Error: A publisher prefix is required to create a column. Either:\n" +
-                    "- provide solution_name (resolves the publisher prefix and adds the column to the solution), or\n" +
-                    "- provide schema_name or logical_name with a publisher prefix (e.g. 'devkit_InvoiceLineId' / 'devkit_invoicelineid').");
+                return Error(
+                    "A publisher prefix is required to create a column.",
+                    "Provide solution_name (resolves the publisher prefix and adds the column to the solution), or schema_name/logical_name with a publisher prefix (e.g. 'devkit_InvoiceLineId' / 'devkit_invoicelineid').");
 
             var prefix = resolvedPrefix;
             if (!string.IsNullOrWhiteSpace(confirmed_prefix) &&
                 !confirmed_prefix.Equals(prefix, StringComparison.OrdinalIgnoreCase))
-                return ErrorResult(
-                    $"[Error] confirmed_prefix '{confirmed_prefix}' does not match solution '{resolvedSolutionUniqueName ?? solution_name}' publisher prefix '{prefix}'.\n" +
+                return Error(
+                    $"confirmed_prefix '{confirmed_prefix}' does not match solution '{resolvedSolutionUniqueName ?? solution_name}' publisher prefix '{prefix}'.",
                     "Use the solution publisher prefix or omit confirmed_prefix.");
 
             var prefixWithUnderscore = prefix + "_";
@@ -296,9 +301,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 schemaName = schema_name;
                 if (!schemaName.StartsWith(prefixWithUnderscore, StringComparison.OrdinalIgnoreCase))
-                    return ErrorResult(
-                        $"[Error] schema_name '{schemaName}' must start with the publisher prefix '{prefixWithUnderscore}' (resolved from solution '{resolvedSolutionUniqueName ?? solution_name}').\n" +
-                        "Tip: Prepend the publisher prefix, e.g. 'devkit_InvoiceLineId' instead of 'InvoiceLineId'.");
+                    return Error(
+                        $"schema_name '{schemaName}' must start with the publisher prefix '{prefixWithUnderscore}' (resolved from solution '{resolvedSolutionUniqueName ?? solution_name}').",
+                        "Prepend the publisher prefix, e.g. 'devkit_InvoiceLineId' instead of 'InvoiceLineId'.");
             }
             else
             {
@@ -320,12 +325,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 attributeName = logical_name.ToLowerInvariant();
                 if (!attributeName.StartsWith(prefixWithUnderscore, StringComparison.OrdinalIgnoreCase))
-                    return ErrorResult(
-                        $"[Error] logical_name '{logical_name}' must start with the publisher prefix '{prefixWithUnderscore}' (resolved from solution '{resolvedSolutionUniqueName ?? solution_name}').\n" +
-                        "Tip: Prepend the publisher prefix, e.g. 'devkit_invoicelineid' instead of 'invoicelineid'.");
+                    return Error(
+                        $"logical_name '{logical_name}' must start with the publisher prefix '{prefixWithUnderscore}' (resolved from solution '{resolvedSolutionUniqueName ?? solution_name}').",
+                        "Prepend the publisher prefix, e.g. 'devkit_invoicelineid' instead of 'invoicelineid'.");
                 if (!attributeName.Equals(schemaName.ToLowerInvariant(), StringComparison.OrdinalIgnoreCase))
-                    return ErrorResult(
-                        $"[Error] logical_name '{logical_name}' must be the lowercase form of schema_name '{schemaName}'.\n" +
+                    return Error(
+                        $"logical_name '{logical_name}' must be the lowercase form of schema_name '{schemaName}'.",
                         $"Expected '{schemaName.ToLowerInvariant()}'.");
             }
             else
@@ -341,19 +346,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var collisionResolve = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, attributeName, "manage_column");
                 if (collisionResolve.IsSuccess)
-                    return ErrorResult(
-                        $"[Error] Cannot create column '{display_name}' because derived logical name '{attributeName}' already exists on entity '{entity_name}'.\n" +
+                    return Error(
+                        $"Cannot create column '{display_name}' because derived logical name '{attributeName}' already exists on entity '{entity_name}'.",
                         "Re-call manage_column with an explicit logical_name to update the existing column, or choose a different display_name.");
                 if (collisionResolve.Status == ResolveStatus.Ambiguous || collisionResolve.Status == ResolveStatus.Error)
-                    return ErrorResult($"Error: {collisionResolve.Error}");
+                    return Error(collisionResolve.Error.Split("\r\n")[0], "Use get_tables to list entities and attributes.");
             }
 
             // Parse required level
             var reqLevel = ParseRequiredLevel(required_level);
             if (!reqLevel.HasValue)
-                return ErrorResult(
-                    $"Error: Invalid required_level '{required_level}'.\n" +
-                    $"Valid values: 'None' (default), 'Recommended', 'Required'.");
+                return Error(
+                    $"Invalid required_level '{required_level}'.",
+                    "Valid values: 'None' (default), 'Recommended', 'Required'.");
 
             var effectiveSolutionName = resolvedSolutionUniqueName ?? solution_name;
 
@@ -365,25 +370,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (!TryResolveFormulaCloneSource(formula_definition, out var resolvedFormula, out var sourceTypeVal,
                     out var kind, out var sourceEntity, out var sourceAttribute, out var sourceError))
-                    return ErrorResult(sourceError);
+                    return Error(sourceError, "Use get_tables to read the source column and pass its formulaDefinition reference unchanged.");
 
                 if (!string.IsNullOrWhiteSpace(formula_source_type))
                 {
                     var (requestedSourceType, requestedKindError) = ParseFormulaSourceType(formula_source_type.Trim().ToLowerInvariant());
-                    if (requestedKindError != null) return ErrorResult(requestedKindError);
+                    if (requestedKindError != null) return Error(requestedKindError, "Valid values: 'powerfx' (default), 'calculated', 'rollup'.");
                     if (requestedSourceType != sourceTypeVal)
-                        return ErrorResult($"Error: formula_source_type does not match source column '{sourceEntity}:{sourceAttribute}'. Omit it in clone mode; the server derives '{kind}' from Dataverse.");
+                        return Error($"formula_source_type does not match source column '{sourceEntity}:{sourceAttribute}'.", $"Omit it in clone mode; the server derives '{kind}' from Dataverse.");
                 }
 
                 var formulaCompatErr = ValidateFormulaAttributeType(attribute_type, kind);
-                if (formulaCompatErr != null) return ErrorResult(formulaCompatErr);
+                if (formulaCompatErr != null) return Error(formulaCompatErr, "Formula columns (Power Fx/Calculated/Rollup) only work on: string, memo, integer, decimal, money, float, double, boolean, datetime. Remove formula_definition/formula_source_type for this attribute_type.");
 
                 FormulaRelationshipMapping relationshipMapping = null;
                 if (kind == "rollup")
                 {
                     var mappingError = TryResolveRollupRelationshipMapping(
                         resolvedFormula, sourceEntity, entity_name, out relationshipMapping);
-                    if (mappingError != null) return ErrorResult(mappingError);
+                    if (mappingError != null) return Error(mappingError, "Use manage_relationship to check the 1:N relationships between the source and target tables.");
                 }
 
                 resolvedFormula = FormulaReferenceHelper.RewriteFormulaReferences(
@@ -395,10 +400,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var kind = formula_source_type.Trim().ToLowerInvariant();
                 var (sourceTypeVal, kindErr) = ParseFormulaSourceType(kind);
-                if (kindErr != null) return ErrorResult(kindErr);
+                if (kindErr != null) return Error(kindErr, "Valid values: 'powerfx' (default), 'calculated', 'rollup'.");
 
                 var formulaCompatErr = ValidateFormulaAttributeType(attribute_type, kind);
-                if (formulaCompatErr != null) return ErrorResult(formulaCompatErr);
+                if (formulaCompatErr != null) return Error(formulaCompatErr, "Formula columns (Power Fx/Calculated/Rollup) only work on: string, memo, integer, decimal, money, float, double, boolean, datetime. Remove formula_definition/formula_source_type for this attribute_type.");
 
                 formulaSpec = new FormulaColumnSpec(sourceTypeVal, null, kind);
             }
@@ -464,10 +469,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     case "file":
                         return CreateFileAttribute(entity_name, logical_name, schemaName, display_name, description, max_length == 0 ? 32768 : max_length, effectiveSolutionName, createFlags);
                     default:
-                        return ErrorResult(
-                            $"Error: Unknown attribute_type '{attribute_type}'.\n" +
-                            $"Valid types: string, memo, integer, bigint, decimal, money, float, boolean, datetime, lookup, customer, picklist, multipicklist, image, file.\n" +
-                            $"Read docs://schema_tools_guide for column type matrix and usage per type.");
+                        return Error(
+                            $"Unknown attribute_type '{attribute_type}'.",
+                            "Valid types: string, memo, integer, bigint, decimal, money, float, boolean, datetime, lookup, customer, picklist, multipicklist, image, file. Read docs://schema_tools_guide for the column type matrix.");
                 }
             }
 
@@ -510,7 +514,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (maxLength > 4000) maxLength = 4000;
 
             var resolvedFormat = ResolveStringFormat(format, out var formatError);
-            if (formatError != null) return ErrorResult(formatError);
+            if (formatError != null) return Error(formatError, "Valid values: 'Text' (default), 'Email', 'Url', 'Phone', 'TextArea', 'TickerSymbol', 'RichText'.");
 
             var attr = new StringAttributeMetadata
             {
@@ -538,13 +542,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!createSuccess)
             {
-                return ErrorResult(
-                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
-                    $"Reason: Lock contention or table metadata has not propagated.\n" +
-                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
-                    $"  1. Create all tables first\n" +
-                    $"  2. Wait 15-20 seconds\n" +
-                    $"  3. Create all columns");
+                return Error(
+                    $"Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.",
+                    "Lock contention or unpropagated table metadata. Wait 30 seconds and retry. When creating many columns: create all tables first, wait 15-20 seconds, then create the columns.");
             }
 
             if (_options.DryRun)
@@ -579,7 +579,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (maxLength > 1048576) maxLength = 1048576;
 
             var memoFormat = ResolveMemoFormat(format, out var formatError);
-            if (formatError != null) return ErrorResult(formatError);
+            if (formatError != null) return Error(formatError, "Valid values: 'Text' (default), 'RichText'.");
             var attr = new MemoAttributeMetadata
             {
                 SchemaName = schemaName,
@@ -603,13 +603,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!createSuccess)
             {
-                return ErrorResult(
-                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
-                    $"Reason: Lock contention or table metadata has not propagated.\n" +
-                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
-                    $"  1. Create all tables first\n" +
-                    $"  2. Wait 15-20 seconds\n" +
-                    $"  3. Create all columns");
+                return Error(
+                    $"Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.",
+                    "Lock contention or unpropagated table metadata. Wait 30 seconds and retry. When creating many columns: create all tables first, wait 15-20 seconds, then create the columns.");
             }
 
             if (_options.DryRun)
@@ -640,7 +636,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             var resolvedFormat = ResolveIntegerFormat(format, out var formatError);
-            if (formatError != null) return ErrorResult(formatError);
+            if (formatError != null) return Error(formatError, "Valid values: 'None' (default), 'Duration', 'TimeZone', 'Language', 'Locale'.");
 
             var attr = new IntegerAttributeMetadata
             {
@@ -666,13 +662,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!createSuccess)
             {
-                return ErrorResult(
-                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
-                    $"Reason: Lock contention or table metadata has not propagated.\n" +
-                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
-                    $"  1. Create all tables first\n" +
-                    $"  2. Wait 15-20 seconds\n" +
-                    $"  3. Create all columns");
+                return Error(
+                    $"Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.",
+                    "Lock contention or unpropagated table metadata. Wait 30 seconds and retry. When creating many columns: create all tables first, wait 15-20 seconds, then create the columns.");
             }
 
             if (_options.DryRun)
@@ -732,13 +724,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!createSuccess)
             {
-                return ErrorResult(
-                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
-                    $"Reason: Lock contention or table metadata has not propagated.\n" +
-                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
-                    $"  1. Create all tables first\n" +
-                    $"  2. Wait 15-20 seconds\n" +
-                    $"  3. Create all columns");
+                return Error(
+                    $"Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.",
+                    "Lock contention or unpropagated table metadata. Wait 30 seconds and retry. When creating many columns: create all tables first, wait 15-20 seconds, then create the columns.");
             }
 
             if (_options.DryRun)
@@ -801,13 +789,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!createSuccess)
             {
-                return ErrorResult(
-                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
-                    $"Reason: Lock contention or table metadata has not propagated.\n" +
-                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
-                    $"  1. Create all tables first\n" +
-                    $"  2. Wait 15-20 seconds\n" +
-                    $"  3. Create all columns");
+                return Error(
+                    $"Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.",
+                    "Lock contention or unpropagated table metadata. Wait 30 seconds and retry. When creating many columns: create all tables first, wait 15-20 seconds, then create the columns.");
             }
 
             if (_options.DryRun)
@@ -870,13 +854,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!createSuccess)
             {
-                return ErrorResult(
-                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
-                    $"Reason: Lock contention or table metadata has not propagated.\n" +
-                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
-                    $"  1. Create all tables first\n" +
-                    $"  2. Wait 15-20 seconds\n" +
-                    $"  3. Create all columns");
+                return Error(
+                    $"Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.",
+                    "Lock contention or unpropagated table metadata. Wait 30 seconds and retry. When creating many columns: create all tables first, wait 15-20 seconds, then create the columns.");
             }
 
             if (_options.DryRun)
@@ -934,8 +914,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 else if (dv == "false" || dv == "0")
                     attr.DefaultValue = false;
                 else
-                    return ErrorResult(
-                        $"Error: Invalid default_value '{defaultValue.Trim()}' for boolean. " +
+                    return Error(
+                        $"Invalid default_value '{defaultValue.Trim()}' for boolean.",
                         "Expected 'true', 'false', '1', or '0'.");
             }
             // Apply flag overrides (audit / advanced find / field security / sort).
@@ -951,13 +931,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!createSuccess)
             {
-                return ErrorResult(
-                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
-                    $"Reason: Lock contention or table metadata has not propagated.\n" +
-                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
-                    $"  1. Create all tables first\n" +
-                    $"  2. Wait 15-20 seconds\n" +
-                    $"  3. Create all columns");
+                return Error(
+                    $"Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.",
+                    "Lock contention or unpropagated table metadata. Wait 30 seconds and retry. When creating many columns: create all tables first, wait 15-20 seconds, then create the columns.");
             }
 
             if (_options.DryRun)
@@ -989,7 +965,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             var dtBehavior = ResolveDateTimeBehavior(behavior, out var behaviorError);
-            if (behaviorError != null) return ErrorResult(behaviorError);
+            if (behaviorError != null) return Error(behaviorError, "Valid values: 'UserLocal' (default), 'DateOnly', 'TimeZoneIndependent'.");
             var dateFormat = DateTimeFormat.DateAndTime;
             if (!string.IsNullOrWhiteSpace(format) && format.Trim().Equals("DateOnly", StringComparison.OrdinalIgnoreCase))
                 dateFormat = DateTimeFormat.DateOnly;
@@ -1020,13 +996,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!createSuccess)
             {
-                return ErrorResult(
-                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
-                    $"Reason: Lock contention or table metadata has not propagated.\n" +
-                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
-                    $"  1. Create all tables first\n" +
-                    $"  2. Wait 15-20 seconds\n" +
-                    $"  3. Create all columns");
+                return Error(
+                    $"Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.",
+                    "Lock contention or unpropagated table metadata. Wait 30 seconds and retry. When creating many columns: create all tables first, wait 15-20 seconds, then create the columns.");
             }
 
             if (_options.DryRun)
@@ -1064,7 +1036,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _ => (DateTimeBehavior)null
             };
             if (result == null)
-                error = $"[Error] Invalid behavior '{behavior}'.\nValid values: 'UserLocal' (default), 'DateOnly', 'TimeZoneIndependent'.";
+                error = $"Invalid behavior '{behavior}'.";
             return result ?? DateTimeBehavior.UserLocal;
         }
 
@@ -1076,10 +1048,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             if (string.IsNullOrWhiteSpace(lookupTarget))
-                return ErrorResult(
-                    $"Error: lookup_target is required for lookup type.\n" +
-                    $"Provide a target entity logical name (e.g., 'contact'). For polymorphic, comma-separate: 'account,contact,lead'.\n" +
-                    $"Use get_tables to find valid entity logical names.");
+                return Error(
+                    "lookup_target is required for lookup type.",
+                    "Provide a target entity logical name (e.g. 'contact'). For polymorphic, comma-separate: 'account,contact,lead'. Use get_tables to find valid entity logical names.");
 
             var targetInputs = lookupTarget.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(t => t.Trim())
@@ -1090,13 +1061,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var targetResolve = DisplayNameFirstResolver.ResolveEntity(_serviceClient, targetInput, "manage_column");
                 if (!targetResolve.IsSuccess)
-                    return ErrorResult($"Error: lookup_target '{targetInput}': {targetResolve.Error}");
+                    return Error($"lookup_target '{targetInput}': {targetResolve.Error.Split("\r\n")[0]}", "Use get_tables to find valid entity logical names.");
                 targets.Add(targetResolve.Value.LogicalName);
             }
             targets = targets.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
 
             if (targets.Count == 0)
-                return ErrorResult($"[Error] No valid target entities found in lookup_target: '{lookupTarget}'");
+                return Error($"No valid target entities found in lookup_target: '{lookupTarget}'.", "Use get_tables to find valid entity logical names.");
 
             // Multiple targets → Polymorphic Lookup
             if (targets.Count > 1)
@@ -1158,13 +1129,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!createSuccess)
             {
-                return ErrorResult(
-                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
-                    $"Reason: Lock contention or table metadata has not propagated.\n" +
-                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
-                    $"  1. Create all tables first\n" +
-                    $"  2. Wait 15-20 seconds\n" +
-                    $"  3. Create all columns");
+                return Error(
+                    $"Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.",
+                    "Lock contention or unpropagated table metadata. Wait 30 seconds and retry. When creating many columns: create all tables first, wait 15-20 seconds, then create the columns.");
             }
 
             var published = PublishIfNeeded(entityName);
@@ -1254,13 +1221,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!createSuccess)
             {
-                return ErrorResult(
-                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
-                    $"Reason: Lock contention or table metadata has not propagated.\n" +
-                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
-                    $"  1. Create all tables first\n" +
-                    $"  2. Wait 15-20 seconds\n" +
-                    $"  3. Create all columns");
+                return Error(
+                    $"Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.",
+                    "Lock contention or unpropagated table metadata. Wait 30 seconds and retry. When creating many columns: create all tables first, wait 15-20 seconds, then create the columns.");
             }
 
             var published = PublishIfNeeded(entityName);
@@ -1370,13 +1333,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!createSuccess)
             {
-                return ErrorResult(
-                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
-                    $"Reason: Lock contention or table metadata has not propagated.\n" +
-                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
-                    $"  1. Create all tables first\n" +
-                    $"  2. Wait 15-20 seconds\n" +
-                    $"  3. Create all columns");
+                return Error(
+                    $"Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.",
+                    "Lock contention or unpropagated table metadata. Wait 30 seconds and retry. When creating many columns: create all tables first, wait 15-20 seconds, then create the columns.");
             }
 
             var published = PublishIfNeeded(entityName);
@@ -1420,7 +1379,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var choiceResolve = DisplayNameFirstResolver.ResolveGlobalOptionSet(_serviceClient, globalOptionSetName, "manage_column");
                 if (!choiceResolve.IsSuccess)
-                    return ErrorResult($"Error: global_optionset_name '{globalOptionSetName.Trim()}': {choiceResolve.Error}");
+                    return Error($"global_optionset_name '{globalOptionSetName.Trim()}': {choiceResolve.Error.Split("\r\n")[0]}", "Use manage_choice(action='list') to find valid option set names.");
                 globalOptionSetName = choiceResolve.Value.Name;
 
                 // Use existing global option set
@@ -1446,22 +1405,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 optionLabels.Add($"GlobalOptionSet: {globalOptionSetName.Trim()}");
                 var defaultErr = ApplyPicklistDefaultValue(attr, defaultValue, isMultiSelect, knownOptionValues: null);
-                if (defaultErr != null) return ErrorResult(defaultErr);
+                if (defaultErr != null) return Error(defaultErr, "Picklist: an integer option value matching one of 'options'. Boolean: 'true'/'false'. Multipicklist: not supported.");
             }
             else
             {
                 // Parse local options
                 var (parsedOptions, parseError) = ParseOptions(optionsJson);
                 if (parseError != null)
-                    return ErrorResult(
-                        $"Error: Invalid options JSON for {typeName} — {parseError}.\n" +
-                        $"Expected format: [{{\"label\":\"Low\",\"value\":100000000}},{{\"label\":\"High\",\"value\":100000001}}].\n" +
-                        $"Read docs://schema_tools_guide for picklist option formats and global option set usage.");
+                    return Error(
+                        $"Invalid options JSON for {typeName} — {parseError}.",
+                        "Expected format: [{\"label\":\"Low\",\"value\":100000000},{\"label\":\"High\",\"value\":100000001}]. Optional 'color' field per option.");
                 if (parsedOptions == null || parsedOptions.Count == 0)
-                    return ErrorResult(
-                        $"Error: options or global_optionset_name is required for {typeName}.\n" +
-                        $"Provide options as JSON array or set global_optionset_name to an existing option set name.\n" +
-                        $"Read docs://schema_tools_guide for picklist option formats and global option set usage.");
+                    return Error(
+                        $"options or global_optionset_name is required for {typeName}.",
+                        "Provide options as a JSON array or set global_optionset_name to an existing option set name.");
 
                 var optionSet = new OptionSetMetadata { IsGlobal = false, OptionSetType = OptionSetType.Picklist };
                 foreach (var opt in parsedOptions)
@@ -1496,7 +1453,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 // Validate + apply default value (local option set — options known here).
                 var defaultErr = ApplyPicklistDefaultValue(attr, defaultValue, isMultiSelect, knownOptionValues: parsedOptions.Select(o => o.Value).ToList());
-                if (defaultErr != null) return ErrorResult(defaultErr);
+                if (defaultErr != null) return Error(defaultErr, "Picklist: an integer option value matching one of 'options'. Boolean: 'true'/'false'. Multipicklist: not supported.");
             }
 
             if (!string.IsNullOrWhiteSpace(description))
@@ -1513,13 +1470,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!createSuccess)
             {
-                return ErrorResult(
-                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
-                    $"Reason: Lock contention or table metadata has not propagated.\n" +
-                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
-                    $"  1. Create all tables first\n" +
-                    $"  2. Wait 15-20 seconds\n" +
-                    $"  3. Create all columns");
+                return Error(
+                    $"Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.",
+                    "Lock contention or unpropagated table metadata. Wait 30 seconds and retry. When creating many columns: create all tables first, wait 15-20 seconds, then create the columns.");
             }
 
             if (_options.DryRun)
@@ -1568,13 +1521,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!createSuccess)
             {
-                return ErrorResult(
-                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
-                    $"Reason: Lock contention or table metadata has not propagated.\n" +
-                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
-                    $"  1. Create all tables first\n" +
-                    $"  2. Wait 15-20 seconds\n" +
-                    $"  3. Create all columns");
+                return Error(
+                    $"Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.",
+                    "Lock contention or unpropagated table metadata. Wait 30 seconds and retry. When creating many columns: create all tables first, wait 15-20 seconds, then create the columns.");
             }
 
             if (_options.DryRun)
@@ -1623,13 +1572,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!createSuccess)
             {
-                return ErrorResult(
-                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
-                    $"Reason: Lock contention or table metadata has not propagated.\n" +
-                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
-                    $"  1. Create all tables first\n" +
-                    $"  2. Wait 15-20 seconds\n" +
-                    $"  3. Create all columns");
+                return Error(
+                    $"Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.",
+                    "Lock contention or unpropagated table metadata. Wait 30 seconds and retry. When creating many columns: create all tables first, wait 15-20 seconds, then create the columns.");
             }
 
             if (_options.DryRun)
@@ -1682,13 +1627,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!createSuccess)
             {
-                return ErrorResult(
-                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
-                    $"Reason: Lock contention or table metadata has not propagated.\n" +
-                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
-                    $"  1. Create all tables first\n" +
-                    $"  2. Wait 15-20 seconds\n" +
-                    $"  3. Create all columns");
+                return Error(
+                    $"Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.",
+                    "Lock contention or unpropagated table metadata. Wait 30 seconds and retry. When creating many columns: create all tables first, wait 15-20 seconds, then create the columns.");
             }
 
             if (_options.DryRun)
@@ -1736,7 +1677,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 formulaDefinition ?? "",
                 @"relatedlinked_(?<relationship>[^#]+)#(?<lookup>[^#]+)#(?<relatedEntity>[^#]+)#");
             if (!match.Success)
-                return "Error: Could not find the Rollup relationship reference in formula_definition.";
+                return "Could not find the Rollup relationship reference in formula_definition.";
 
             var sourceRelationshipName = match.Groups["relationship"].Value;
             var sourceLookupAttribute = match.Groups["lookup"].Value;
@@ -1757,14 +1698,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sourceRelationship = sourceMetadata.OneToManyRelationships?.FirstOrDefault(
                 relationship => string.Equals(relationship.SchemaName, sourceRelationshipName, StringComparison.Ordinal));
             if (sourceRelationship == null)
-                return $"Error: Rollup source relationship '{sourceRelationshipName}' was not found on table '{sourceEntityName}'.";
+                return $"Rollup source relationship '{sourceRelationshipName}' was not found on table '{sourceEntityName}'.";
 
             var targetRelationship = targetMetadata.OneToManyRelationships?.FirstOrDefault(
                 relationship =>
                     string.Equals(relationship.ReferencingEntity, sourceRelationship.ReferencingEntity, StringComparison.OrdinalIgnoreCase) &&
                     string.Equals(relationship.ReferencedEntity, targetEntityName, StringComparison.OrdinalIgnoreCase));
             if (targetRelationship == null)
-                return $"Error: No matching Rollup relationship from '{sourceRelationship.ReferencingEntity}' to target table '{targetEntityName}' was found.";
+                return $"No matching Rollup relationship from '{sourceRelationship.ReferencingEntity}' to target table '{targetEntityName}' was found.";
 
             mapping = new FormulaRelationshipMapping(
                 sourceRelationshipName,
@@ -1782,7 +1723,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static StringBuilder FormatHeader(string entityName, string logicalName, string typeName, string displayName, AttributeRequiredLevel reqLevel)
         {
             var sb = new StringBuilder(512);
-            sb.AppendLine($"[AttributeCreated] {entityName}.{logicalName}");
+            sb.AppendLine($"[Success] Created {typeName} column '{logicalName}' on entity '{entityName}'.");
             sb.AppendLine($"Type: {typeName}");
             sb.AppendLine($"DisplayName: {displayName.Trim()}");
             sb.AppendLine($"RequiredLevel: {reqLevel}");
@@ -1809,7 +1750,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var actualLogicalName = ResolveCreatedAttributeLogicalName(entityName, metadataId, logicalName);
             if (!string.Equals(actualLogicalName, logicalName, StringComparison.OrdinalIgnoreCase))
-                sb.Replace($"{entityName}.{logicalName}", $"{entityName}.{actualLogicalName}");
+                sb.Replace($"'{logicalName}'", $"'{actualLogicalName}'");
 
             var structured = new ManageColumnResult
             {
@@ -1893,7 +1834,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var parts = (reference ?? "").Trim().Split(':');
             if (parts.Length != 2 || string.IsNullOrWhiteSpace(parts[0]) || string.IsNullOrWhiteSpace(parts[1]))
             {
-                error = "Error: Invalid formula_definition. Pass the exact `table_logical_name:column_logical_name` reference returned by get_tables.";
+                error = "Invalid formula_definition. Pass the exact `table_logical_name:column_logical_name` reference returned by get_tables.";
                 return false;
             }
 
@@ -1901,7 +1842,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sourceAttribute = parts[1].Trim();
             if (!IsLogicalName(sourceEntity) || !IsLogicalName(sourceAttribute))
             {
-                error = "Error: Invalid formula_definition. Table and column must be lowercase Dataverse logical names separated by one colon.";
+                error = "Invalid formula_definition. Table and column must be lowercase Dataverse logical names separated by one colon.";
                 return false;
             }
 
@@ -1918,7 +1859,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                error = $"Error: Cannot resolve formula source '{sourceEntity}:{sourceAttribute}'. {ex.Message}";
+                error = $"Cannot resolve formula source '{sourceEntity}:{sourceAttribute}'. {ex.Message}";
                 return false;
             }
 
@@ -1932,7 +1873,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             if (kind == null)
             {
-                error = $"Error: Source column '{sourceEntity}:{sourceAttribute}' is not a Calculated, Rollup, or PowerFx column.";
+                error = $"Source column '{sourceEntity}:{sourceAttribute}' is not a Calculated, Rollup, or PowerFx column.";
                 return false;
             }
 
@@ -1940,7 +1881,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             formulaDefinition = formulaProperty?.GetValue(metadata, null)?.ToString();
             if (string.IsNullOrWhiteSpace(formulaDefinition))
             {
-                error = $"Error: Source column '{sourceEntity}:{sourceAttribute}' has an empty FormulaDefinition and cannot be cloned.";
+                error = $"Source column '{sourceEntity}:{sourceAttribute}' has an empty FormulaDefinition and cannot be cloned.";
                 return false;
             }
 
@@ -1961,7 +1902,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "" or "powerfx" or "power fx" => (3, null),
                 "calculated" or "calc" => (1, null),
                 "rollup" => (2, null),
-                _ => (0, $"Error: Invalid formula_source_type '{kind}'.\nValid values: 'powerfx' (default), 'calculated', 'rollup'.")
+                _ => (0, $"Invalid formula_source_type '{kind}'.")
             };
         }
 
@@ -1981,8 +1922,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!formulaSupported.Contains(attributeType))
             {
                 return
-                    $"Error: formula_definition ({kind}) is not supported on attribute_type '{attributeType}'.\n" +
-                    $"Formula columns (Power Fx/Calculated/Rollup) only work on: string, memo, integer, decimal, money, float, double, boolean, datetime.\n" +
+                    $"formula_definition ({kind}) is not supported on attribute_type '{attributeType}'. " +
                     $"Remove formula_definition/formula_source_type for '{attributeType}' columns.";
             }
             return null;
@@ -2005,7 +1945,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _ => (StringFormatName)null
             };
             if (result == null)
-                error = $"[Error] Invalid format '{format}'.\nValid values: 'Text' (default), 'Email', 'Url', 'Phone', 'TextArea', 'TickerSymbol', 'RichText'.";
+                error = $"Invalid format '{format}'.";
             return result ?? StringFormatName.Text;
         }
 
@@ -2024,7 +1964,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _ => null
             };
             if (result == null)
-                error = $"[Error] Invalid format for integer '{format}'.\nValid values: 'None' (default), 'Duration', 'TimeZone', 'Language', 'Locale'.";
+                error = $"Invalid format for integer '{format}'.";
             return result ?? IntegerFormat.None;
         }
 
@@ -2040,7 +1980,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _ => (MemoFormatName)null
             };
             if (result == null)
-                error = $"[Error] Invalid format for memo '{format}'.\nValid values: 'Text' (default), 'RichText'.";
+                error = $"Invalid format for memo '{format}'.";
             return result ?? MemoFormatName.Text;
         }
 
@@ -2086,14 +2026,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (isMultiSelect)
             {
                 return
-                    "Error: default_value is not supported for multipicklist columns. " +
+                    "default_value is not supported for multipicklist columns. " +
                     "Multi-select option sets do not support a default value in the Power Apps UI. " +
                     "Omit default_value for multipicklist.";
             }
 
             // Parse the requested default value (single integer for single-select Picklist).
             if (!int.TryParse(defaultValue.Trim(), out var dv))
-                return $"Error: Invalid default_value '{defaultValue.Trim()}'. Expected an integer option value (e.g. 100000002).";
+                return $"Invalid default_value '{defaultValue.Trim()}'. Expected an integer option value (e.g. 100000002).";
 
             // Validate membership when the caller supplied the local option values.
             if (knownOptionValues != null && knownOptionValues.Count > 0)
@@ -2101,14 +2041,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var match = knownOptionValues.Any(v => v.HasValue && v.Value == dv);
                 if (!match)
                     return
-                        $"Error: default_value '{dv}' does not match any option in the local option set. " +
+                        $"default_value '{dv}' does not match any option in the local option set. " +
                         "default_value must equal one of the option values provided in 'options'.";
             }
 
             if (attr is PicklistAttributeMetadata plm)
                 plm.DefaultFormValue = dv;
             else
-                return "Error: default_value can only be applied to a Picklist (single-select) attribute.";
+                return "default_value can only be applied to a Picklist (single-select) attribute.";
 
             return null;
         }
@@ -2120,33 +2060,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (msg.Contains("already exists", StringComparison.OrdinalIgnoreCase) ||
                 msg.Contains("duplicate", StringComparison.OrdinalIgnoreCase))
             {
-                return ErrorResult(
-                    $"Error: Attribute '{attributeName}' already exists on entity '{entityName}'.\n" +
-                    $"Message: {msg}\n" +
-                    $"Tip: Use get_tables to inspect existing attributes, or choose a different name");
+                return Error(
+                    $"Attribute '{attributeName}' already exists on entity '{entityName}'.",
+                    "Use get_tables to inspect existing attributes, or choose a different name.",
+                    details: new { serverMessage = msg });
             }
 
             if (msg.Contains("entity", StringComparison.OrdinalIgnoreCase) &&
                 (msg.Contains("not found", StringComparison.OrdinalIgnoreCase) ||
                  msg.Contains("does not exist", StringComparison.OrdinalIgnoreCase)))
             {
-                return ErrorResult(
-                    $"Error: Entity '{entityName}' not found.\n" +
-                    $"Message: {msg}\n" +
-                    $"Tip: Use get_tables to find the correct entity logical name");
+                return Error(
+                    $"Entity '{entityName}' not found.",
+                    "Use get_tables to find the correct entity logical name.",
+                    details: new { serverMessage = msg });
             }
 
             if (msg.Contains("solution", StringComparison.OrdinalIgnoreCase) &&
                 (msg.Contains("not found", StringComparison.OrdinalIgnoreCase) ||
                  msg.Contains("does not exist", StringComparison.OrdinalIgnoreCase)))
             {
-                return ErrorResult(
-                    $"Error: Solution '{solutionName}' not found.\n" +
-                    $"Message: {msg}\n" +
-                    $"Tip: Use get_solution_components to find valid solution names");
+                return Error(
+                    $"Solution '{solutionName}' not found.",
+                    "Use get_solution_components to find valid solution names.",
+                    details: new { serverMessage = msg });
             }
 
-            return ErrorResult($"Error: Failed to create attribute '{entityName}.{attributeName}'\nMessage: {msg}");
+            return Error(
+                $"Failed to create attribute '{entityName}.{attributeName}'.",
+                "Check the parameters and the server message in [Detail]; use get_tables to verify entity/attribute names.",
+                details: new { serverMessage = msg });
         }
 
         // ========== UPDATE MODE ==========
@@ -2200,9 +2143,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     parsedRequiredLevel = ParseRequiredLevel(requiredLevel);
                     if (!parsedRequiredLevel.HasValue)
-                        return ErrorResult(
-                            $"Error: Invalid required_level '{requiredLevel}'.\n" +
-                            $"Valid values: 'None' (default), 'Recommended', 'Required'.");
+                        return Error(
+                            $"Invalid required_level '{requiredLevel}'.",
+                            "Valid values: 'None' (default), 'Recommended', 'Required'.");
                 }
 
                 // Use None as the placeholder when the caller omitted required_level;
@@ -2220,7 +2163,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var typeError = ApplyTypeSpecificUpdates(metadata, maxLength, minValue, maxValue, precision, format,
                     trueLabel, falseLabel, behavior, precisionSource, changes, structuredChanges, canStoreFullImage);
                 if (typeError != null)
-                    return ErrorResult(typeError);
+                    return Error(typeError, "Check format/behavior values against the attribute type; see docs://schema_tools_guide.");
 
                 // --- Picklist / Boolean default value update ---
                 if (!string.IsNullOrWhiteSpace(defaultValue))
@@ -2228,7 +2171,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (metadata is PicklistAttributeMetadata plmUpdate)
                     {
                         if (!int.TryParse(defaultValue.Trim(), out var dvInt))
-                            return ErrorResult($"Error: Invalid default_value '{defaultValue.Trim()}'. Expected an integer option value (e.g. 100000001).");
+                            return Error($"Invalid default_value '{defaultValue.Trim()}'.", "Expected an integer option value (e.g. 100000001).");
                         var oldDv = plmUpdate.DefaultFormValue?.ToString() ?? "(none)";
                         if (plmUpdate.DefaultFormValue != dvInt)
                         {
@@ -2244,9 +2187,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         if (dv == "true" || dv == "1")       newBoolDefault = true;
                         else if (dv == "false" || dv == "0") newBoolDefault = false;
                         else
-                            return ErrorResult(
-                                $"Error: Invalid default_value '{defaultValue.Trim()}' for boolean. " +
-                                "Expected 'true', 'false', '1', or '0'.");
+                        return Error(
+                            $"Invalid default_value '{defaultValue.Trim()}' for boolean.",
+                            "Expected 'true', 'false', '1', or '0'.");
                         var oldBoolDv = boolDefaultMeta.DefaultValue?.ToString()?.ToLowerInvariant() ?? "(none)";
                         if (boolDefaultMeta.DefaultValue != newBoolDefault)
                         {
@@ -2257,15 +2200,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                     else if (metadata is MultiSelectPicklistAttributeMetadata)
                     {
-                        return ErrorResult(
-                            "Error: default_value is not supported for multipicklist columns. " +
-                            "Multi-select option sets do not support a default value in the Power Apps UI. " +
-                            "Omit default_value for multipicklist.");
+                        return Error(
+                            "default_value is not supported for multipicklist columns.",
+                            "Multi-select option sets do not support a default value. Omit default_value for multipicklist.");
                     }
                     else
                     {
-                        return ErrorResult(
-                            $"Error: default_value is only supported for Picklist (integer) and Boolean ('true'/'false') columns, but '{attributeName}' is {GetAttributeTypeName(metadata)}.");
+                        return Error(
+                            $"default_value is only supported for Picklist (integer) and Boolean ('true'/'false') columns, but '{attributeName}' is {GetAttributeTypeName(metadata)}.",
+                            "Remove default_value or target a Picklist/Boolean column.");
                     }
                 }
 
@@ -2362,9 +2305,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
 
                 if (changes.Count == 0 && optionResults.Count == 0)
-                    return ErrorResult(
-                        $"Error: No changes specified for '{entityName}.{attributeName}'.\n" +
-                        $"Provide at least one updatable parameter: display_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, true_label, false_label, add_options, update_options, delete_options, default_value (picklist/boolean), is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, can_store_full_image (image), or statuscode add/update/delete_options (for statuscode attribute).");
+                    return Error(
+                        $"No changes specified for '{entityName}.{attributeName}'.",
+                        "Provide at least one updatable parameter: display_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, true_label, false_label, add_options, update_options, delete_options, default_value (picklist/boolean), is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, can_store_full_image (image), or statuscode add/update/delete_options (for statuscode attribute).");
 
                 // --- Publish ---
                 var published = PublishIfNeeded(entityName);
@@ -2372,7 +2315,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // --- Format output ---
                 var typeName = GetAttributeTypeName(metadata);
                 var sb = new StringBuilder(512);
-                sb.AppendLine($"[AttributeUpdated] {entityName}.{attributeName}");
+                sb.AppendLine($"[Success] Updated column '{attributeName}' on entity '{entityName}'.");
                 sb.AppendLine($"Type: {typeName}");
 
                 if (changes.Count > 0)
@@ -2415,12 +2358,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (msg.Contains("could not be found", StringComparison.OrdinalIgnoreCase) ||
                     msg.Contains("does not exist", StringComparison.OrdinalIgnoreCase))
                 {
-                    return ErrorResult(
-                        $"Error: Entity or attribute not found: '{entityName}.{attributeName}'.\n" +
-                        $"Message: {msg}\n" +
-                        "Tip: Use get_tables to find the correct names");
+                    return Error(
+                        $"Entity or attribute not found: '{entityName}.{attributeName}'.",
+                        "Use get_tables to find the correct names.",
+                        details: new { serverMessage = msg });
                 }
-                return ErrorResult($"Error: Failed to update attribute '{entityName}.{attributeName}'\nMessage: {msg}");
+                return Error(
+                    $"Failed to update attribute '{entityName}.{attributeName}'.",
+                    "Check the parameters and the server message in [Detail]; use get_tables to verify entity/attribute names.",
+                    details: new { serverMessage = msg });
             }
         }
 
@@ -2786,11 +2732,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (resolved.IsSuccess)
                 return (resolved.Value.LogicalName, null);
 
-            return (null, $"Error: {resolved.Error}");
+            return (null, resolved.Error);
 
         }
-
-        private CallToolResult ErrorResult(string message) => Error(message);
 
         private CallToolResult DryRunCreatePreview(string entityName, string logicalName, string schemaName,
             AttributeMetadata attribute, string displayName, AttributeRequiredLevel reqLevel, string solutionName)
