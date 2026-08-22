@@ -46,7 +46,7 @@ Status: files `1`–`4` already follow this template. Files `5`–`36` still use
 - Every test is a real tool call against the tool this file documents. Helper/verification calls (`whoami`, `get_tables`, `devkit mcp --tools`, `git status`, `manage_record` delete for cleanup) are **not tests** — drop them. If a cleanup or verification step is genuinely worth keeping, mention it inside the test's description line or the matching RESULTS bullet, in one short sentence.
 - A zero-result success (`List 0 found`) is a SUCCESS test: both OUTPUT blocks + `{ "IsError": false }`.
 - `[Failed]`-prefixed content with `IsError: false` (e.g. `manage_deleted_records` no-op cases) stays a success test; keep the prefix verbatim in the text block.
-- Long outputs: never truncate with `,...` and never replace a block with a prose summary (`Structured content (JSON): giống hệt Test 1 ...` is the old format). Either paste the full verbatim output, or — if genuinely enormous — keep the verbatim first lines and mark the rest `[miss] Output too large to embed. Re-run and capture.` Never invent the omitted part.
+- Long outputs: never truncate with `,...` and never replace a block with a prose summary (`Structured content (JSON): giống hệt Test 1 ...` is the old format). **Always paste the full verbatim output, no matter how large** — these files are Wiki documentation, so an enormous block (e.g. a 20000-char `$metadata` responseBody) is embedded in full rather than trimmed. The `[miss] Output too large to embed. Re-run and capture.` marker is only for output you genuinely could not capture — size alone is never a reason to truncate or mark `[miss]`. Never invent the omitted part.
 
 ## Mutation-test data rules (files 17 onward)
 

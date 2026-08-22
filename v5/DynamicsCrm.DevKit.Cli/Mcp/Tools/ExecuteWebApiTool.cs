@@ -34,12 +34,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Raw Dataverse Web API call. url is relative; SDK adds base URL. PUT/PATCH/DELETE destructive — confirm.\n\n" +
 
-            "WHEN TO USE: endpoints not covered by a specialized tool (WhoAmI, $metadata, custom actions, one-off data CRUD). " +
-            "Metadata/system endpoints (forms, views, sitemap, schema, choice, webresource, roles, publish, env vars, deleted records, command bar) are BLOCKED/REDIRECTED at runtime to the dedicated tool named in the error.\n\n" +
+            "WHEN TO USE:\n" +
+            "- Endpoints not covered by a specialized tool (WhoAmI, $metadata, custom actions, one-off data CRUD)\n" +
+            "- Metadata/system endpoints (forms, views, sitemap, schema, choice, webresource, roles, publish, env vars, deleted records, command bar) are BLOCKED/REDIRECTED at runtime to the dedicated tool named in the error\n\n" +
 
-            "RELATED TOOLS: get_tables / manage_table / manage_column / manage_relationship (schema), manage_choice (option sets), " +
-            "manage_form / manage_view / manage_app (UI; sitemap via manage_app), manage_environment_variable / manage_webresource / manage_role (config), " +
-            "manage_command (command bar), manage_record_file (file/image column data), manage_deleted_records (restore), publish_customizations.")]
+            "RELATED TOOLS:\n" +
+            "- get_tables / manage_table / manage_column / manage_relationship → schema\n" +
+            "- manage_choice → option sets\n" +
+            "- manage_form / manage_view / manage_app → UI; sitemap via manage_app\n" +
+            "- manage_environment_variable / manage_webresource / manage_role → config\n" +
+            "- manage_command → command bar\n" +
+            "- manage_record_file → file/image column data\n" +
+            "- manage_deleted_records → restore\n" +
+            "- publish_customizations → publish after metadata changes")]
         public CallToolResult execute_webapi(
             [Description("GET, POST, PUT, PATCH, or DELETE. Default GET.")] string method = "GET",
             [Description("Relative path, e.g. 'accounts', 'contacts(guid)', '$metadata'. SDK adds base URL. Required.")] string url = "",
@@ -52,36 +59,38 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (string.IsNullOrWhiteSpace(method))
                     return Error(
-                        "method is required.\n" +
+                        "method is required.",
                         "Valid values: GET, POST, PUT, PATCH, DELETE.");
 
                 if (string.IsNullOrWhiteSpace(url))
                     return Error(
-                        "url is required.\n" +
-                        "Provide a relative URL path, e.g., 'accounts', 'contacts?$select=name', '$metadata'.");
+                        "url is required.",
+                        "Provide a relative URL path, e.g. 'accounts', 'contacts?$select=name', '$metadata'.");
 
                 var httpMethod = ParseHttpMethod(method.Trim().ToUpperInvariant());
                 if (httpMethod == null)
-                    return Error($"Invalid HTTP method '{method}'. Use GET, POST, PUT, PATCH, or DELETE.");
+                    return Error($"Invalid HTTP method '{method}'.", "Use GET, POST, PUT, PATCH, or DELETE.");
 
                 if (max_response_lines <= 0)
                     max_response_lines = 200;
 
                 var trimmedUrl = url.Trim();
                 if (IsAbsoluteUrl(trimmedUrl))
-                    return Error("url must be a relative Dataverse Web API path; absolute URLs are not allowed.");
+                    return Error(
+                        "url must be a relative Dataverse Web API path; absolute URLs are not allowed.",
+                        "Provide a relative path, e.g. 'accounts?$top=1' or '$metadata' — the SDK adds the organization base URL.");
 
-                var blockedReason = GetBlockedReason(httpMethod, trimmedUrl);
-                if (blockedReason != null)
-                    return Error(blockedReason);
+                var blocked = GetBlocked(httpMethod, trimmedUrl);
+                if (blocked != null)
+                    return Error(blocked.Value.Message, blocked.Value.Hint);
 
                 var customHeaders = ParseHeaders(headers, out var headersError);
                 if (headersError != null)
-                    return Error(headersError);
+                    return Error(headersError, "Pass a JSON object, e.g. {\"Prefer\":\"return=representation\"}.");
 
-                var fileBlockedReason = GetFileColumnBlockedReason(httpMethod, trimmedUrl, customHeaders);
-                if (fileBlockedReason != null)
-                    return Error(fileBlockedReason);
+                var fileBlocked = GetFileColumnBlocked(httpMethod, trimmedUrl, customHeaders);
+                if (fileBlocked != null)
+                    return Error(fileBlocked.Value.Message, fileBlocked.Value.Hint);
 
                 var requestBody = string.IsNullOrWhiteSpace(body) ? null : body.Trim();
                 if (_options.DryRun && httpMethod != HttpMethod.Get)
@@ -266,7 +275,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static readonly (string UrlPattern, string RedirectTool, string Message)[] RedirectedGetEndpoints =
         [
             ("entitydefinitions", "get_tables",
-                "REDIRECT: Use get_tables instead of GET EntityDefinitions/AttributeDefinitions.\n" +
                 "get_tables provides filtered, tiered metadata (compact/standard/full) optimized for AI consumption.\n\n" +
                 "Examples:\n" +
                 "  get_tables(entity_name='account') → standard detail with attributes & relationships\n" +
@@ -276,31 +284,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "  get_tables(filter='account') → list entities matching keyword"),
 
             ("attributedefinitions", "get_tables",
-                "REDIRECT: Use get_tables instead of GET AttributeDefinitions.\n" +
                 "get_tables(entity_name='...') returns attributes with filtering, detail levels, and relationships."),
 
             ("relationshipdefinitions", "get_tables or manage_relationship",
-                "REDIRECT: Use get_tables for relationship discovery or manage_relationship for changes.\n\n" +
                 "Examples:\n" +
                 "  get_tables(entity_name='account') → includes 1:N, N:1, N:N relationships\n" +
                 "  manage_relationship(action='create_1n', referenced_entity='account', referencing_entity='contact', ...) → create relationship"),
 
             ("globaloptionsetdefinitions", "manage_choice",
-                "REDIRECT: Use manage_choice for option sets instead of GET GlobalOptionSetDefinitions.\n\n" +
                 "Examples:\n" +
                 "  manage_choice(action='list') → list global option sets\n" +
                 "  manage_choice(action='detail', optionset_name='...') → inspect options\n" +
                 "  manage_column for local picklists on an entity"),
 
             ("optionsetdefinitions", "manage_choice",
-                "REDIRECT: Use manage_choice for option sets instead of GET OptionSetDefinitions.\n\n" +
                 "Examples:\n" +
                 "  manage_choice(action='list') → list global option sets\n" +
                 "  manage_choice(action='detail', optionset_name='...') → inspect options\n" +
                 "  manage_column for local picklists on an entity"),
 
             ("asyncoperations", "get_system_jobs",
-                "REDIRECT: Use get_system_jobs instead of GET asyncoperations.\n" +
                 "get_system_jobs provides status/operation_type filters, time scope, correlation_id tracing, and detail mode with message + friendlyMessage.\n\n" +
                 "Examples:\n" +
                 "  get_system_jobs(status='failed', minutes_ago=1440) → failed jobs last 24h\n" +
@@ -309,7 +312,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "  get_system_jobs(correlation_id='<guid>') → trace one request across jobs"),
 
             ("workflows", "get_workflows",
-                "REDIRECT: Use get_workflows instead of GET workflows.\n" +
                 "get_workflows provides entity_name/mode/status filters, trigger_field discovery, and workflow execution metadata.\n\n" +
                 "Examples:\n" +
                 "  get_workflows(entity_name='account') → workflows bound to account\n" +
@@ -318,7 +320,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "  get_workflows(entity_name='account', trigger_field='statecode') → workflows triggered by status change"),
 
             ("processes", "get_workflows",
-                "REDIRECT: Use get_workflows instead of GET processes.\n" +
                 "get_workflows covers classic workflows (background + realtime) with filters and detail mode.\n\n" +
                 "Examples:\n" +
                 "  get_workflows(entity_name='account') → workflows bound to account\n" +
@@ -326,13 +327,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "  get_workflows(workflow_id='<guid>') → detail with trigger fields and execution metadata"),
 
             ("deletionstatecode", "manage_deleted_records",
-                "REDIRECT: Standard OData $filter on 'deletionstatecode' or 'statecode eq 1' is unreliable for non-activity entities " +
+                "Standard OData $filter on 'deletionstatecode' or 'statecode eq 1' is unreliable for non-activity entities " +
                 "(returns empty for account/contact default statecode=0 even after soft-delete). " +
                 "Use manage_deleted_records(action='list', entity_name='<entity>') which uses FetchXml datasource='bin' " +
                 "and returns records with modifiedOn ≈ delete time."),
 
             ("appactions", "manage_command",
-                "REDIRECT: Use manage_command instead of GET appactions.\n" +
                 "manage_command provides app-scoped list/detail with ribbon-style OOB+custom detection, visibility/enable rules, and flyout/split-button children.\n\n" +
                 "Examples:\n" +
                 "  manage_command(action='list', entity_name='account') → commands for account\n" +
@@ -340,7 +340,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "  manage_command(action='list', entity_name='account', include_children=true) → flyout/split items"),
 
             ("restore", "manage_deleted_records",
-                "REDIRECT (not blocked): Web API 'Restore' action works (returns 200 with restored id), " +
+                "Web API 'Restore' action works (returns 200 with restored id), " +
                 "but requires complex body with @odata.id/@odata.type. " +
                 "Use manage_deleted_records(action='restore', entity_name='<entity>', record_id='<guid>') " +
                 "which uses the SDK OrganizationRequest('Restore') late-bound with a simple Entity param " +
@@ -410,23 +410,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         ];
 
         private const string FileColumnBlockReason =
-            "File/image column binary endpoints are not allowed via execute_webapi.\n\n" +
-            "REASON: File/image column data requires the SDK block protocol " +
+            "File/image column data requires the SDK block protocol " +
             "(InitializeFileBlocksUpload → UploadBlock 4MB → CommitFileBlocksUpload, or the download equivalent). " +
-            "Raw PATCH/GET on these endpoints corrupts data or fails on chunk continuation.\n\n" +
-            "USE: manage_record_file — actions: 'info', 'upload', 'download', 'delete' (auto-detects File vs Image columns, supports local path, http(s) URL and base64 sources).";
+            "Raw PATCH/GET on these endpoints corrupts data or fails on chunk continuation.";
 
-        private static string GetFileColumnBlockedReason(HttpMethod method, string url, Dictionary<string, List<string>> headers)
+        private const string FileColumnBlockHint =
+            "Use manage_record_file instead. Actions: 'info', 'upload', 'download', 'delete' " +
+            "(auto-detects File vs Image columns, supports local path, http(s) URL and base64 sources).";
+
+        private static (string Message, string Hint)? GetFileColumnBlocked(HttpMethod method, string url, Dictionary<string, List<string>> headers)
         {
             var path = url.Split('?')[0];
 
             if (path.EndsWith("/$value", StringComparison.OrdinalIgnoreCase))
-                return $"BLOCKED: {method.Method} on a /$value binary endpoint is not allowed via execute_webapi.\n\n{FileColumnBlockReason}";
+                return ($"{method.Method} on a /$value binary endpoint is not allowed via execute_webapi.\nREASON: {FileColumnBlockReason}", FileColumnBlockHint);
 
             foreach (var action in FileColumnSdkActions)
             {
                 if (path.IndexOf(action, StringComparison.OrdinalIgnoreCase) >= 0)
-                    return $"BLOCKED: {method.Method} on the file/image block-protocol action '{action}' is not allowed via execute_webapi.\n\n{FileColumnBlockReason}";
+                    return ($"{method.Method} on the file/image block-protocol action '{action}' is not allowed via execute_webapi.\nREASON: {FileColumnBlockReason}", FileColumnBlockHint);
             }
 
             if (IsSingleColumnValueUrl(path))
@@ -436,11 +438,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var isChunked = HasHeader(headers, "x-ms-chunk-size");
                     var isBinary = HeaderContains(headers, "Content-Type", "octet-stream");
                     if (isChunked || isBinary)
-                        return $"BLOCKED: {method.Method} binary upload to a single-column endpoint is not allowed via execute_webapi.\n\n{FileColumnBlockReason}";
+                        return ($"{method.Method} binary upload to a single-column endpoint is not allowed via execute_webapi.\nREASON: {FileColumnBlockReason}", FileColumnBlockHint);
                 }
                 else if (method == HttpMethod.Delete)
                 {
-                    return $"BLOCKED: DELETE on a single-column endpoint is not allowed via execute_webapi.\n\n{FileColumnBlockReason}";
+                    return ($"DELETE on a single-column endpoint is not allowed via execute_webapi.\nREASON: {FileColumnBlockReason}", FileColumnBlockHint);
                 }
             }
 
@@ -469,7 +471,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 string.Equals(kv.Key, name, StringComparison.OrdinalIgnoreCase) &&
                 kv.Value != null && kv.Value.Any(v => v != null && v.IndexOf(valuePart, StringComparison.OrdinalIgnoreCase) >= 0));
 
-        private static string GetBlockedReason(HttpMethod method, string url)
+        private static (string Message, string Hint)? GetBlocked(HttpMethod method, string url)
         {
             var urlLower = url.ToLowerInvariant();
 
@@ -478,13 +480,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 foreach (var (pattern, tool, reason) in BlockedPostEndpoints)
                 {
                     if (urlLower.Contains(pattern))
-                    {
-                        var toolHint = tool != null
-                            ? $"USE INSTEAD: {tool}"
-                            : "Manage via Power Apps UI, PAC CLI, or DevKit CLI commands.";
-                        return $"BLOCKED: Direct POST to {pattern} is not allowed via execute_webapi.\n\n" +
-                               $"REASON: {reason}\n\n{toolHint}";
-                    }
+                        return ($"Direct POST to {pattern} is not allowed via execute_webapi.\nREASON: {reason}", BlockedHint(tool));
                 }
             }
 
@@ -494,7 +490,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     if (pattern == "__guid_url__") continue;
                     if (urlLower.Contains(pattern))
-                        return $"{message}\n\nUSE INSTEAD: {tool}";
+                        return (message, $"Use {tool} instead.");
                 }
             }
 
@@ -504,17 +500,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             foreach (var (pattern, tool, reason) in BlockedEndpoints)
             {
                 if (urlLower.Contains(pattern.ToLowerInvariant()))
-                {
-                    var toolHint = tool != null
-                        ? $"USE INSTEAD: {tool}"
-                        : "Manage via Power Apps UI, PAC CLI, or DevKit CLI commands.";
-                    return $"BLOCKED: Direct {method.Method} on {pattern.TrimEnd('(')} is not allowed via execute_webapi.\n\n" +
-                           $"REASON: {reason}\n\n{toolHint}";
-                }
+                    return ($"Direct {method.Method} on {pattern.TrimEnd('(')} is not allowed via execute_webapi.\nREASON: {reason}", BlockedHint(tool));
             }
 
             return null;
         }
+
+        private static string BlockedHint(string tool) =>
+            tool != null
+                ? $"Use {tool} instead."
+                : "Manage this via Power Apps UI, PAC CLI, or the DevKit CLI.";
 
         private static bool IsAbsoluteUrl(string url)
         {
@@ -571,14 +566,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var trimmed = headersJson.Trim();
             if (trimmed[0] != '{' || trimmed[^1] != '}')
             {
-                error = $"Invalid JSON in headers parameter — expected a JSON object (e.g. {{\"Prefer\":\"return=representation\"}}).\nInput: {headersJson}";
+                error = $"Invalid JSON in headers parameter.\nInput: {headersJson}";
                 return null;
             }
 
             using var doc = JsonDocument.Parse(trimmed);
             if (doc.RootElement.ValueKind != JsonValueKind.Object)
             {
-                error = $"Invalid JSON in headers parameter — expected a JSON object (e.g. {{\"Prefer\":\"return=representation\"}}).\nInput: {headersJson}";
+                error = $"Invalid JSON in headers parameter.\nInput: {headersJson}";
                 return null;
             }
 

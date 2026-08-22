@@ -7,8 +7,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.ServiceModel;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using WebApiHttpException = Microsoft.PowerPlatform.Dataverse.Client.Exceptions.HttpOperationException;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 {
@@ -193,6 +195,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 if (faultEx.Detail.InnerFault != null)
                     details["innerFault"] = $"{faultEx.Detail.InnerFault.Message} (0x{faultEx.Detail.InnerFault.ErrorCode:X8})";
             }
+            if (ex is WebApiHttpException webApiEx && webApiEx.Response != null)
+            {
+                details["statusCode"] = (int)webApiEx.Response.StatusCode;
+                details["reasonPhrase"] = webApiEx.Response.ReasonPhrase ?? "";
+                var responseContent = webApiEx.Response.Content;
+                if (!string.IsNullOrWhiteSpace(responseContent))
+                    details["responseContent"] = responseContent.Length > 1000
+                        ? responseContent.Substring(0, 1000) + "..."
+                        : responseContent;
+            }
             if (ex.InnerException != null)
             {
                 details["innerException"] = new Dictionary<string, object>
@@ -326,6 +338,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 rewritten = $"{ErrorPrefix} [ImageProcessFailure] Update image properties failed. "
                          + "Image columns accept only gif/jpeg/tiff/bmp/png. Verify the file size against the column MaxSizeInKB and CanStoreFullImage settings.";
             }
+            else if (ex is WebApiHttpException hex && hex.Response != null)
+            {
+                var status = (int)hex.Response.StatusCode;
+                var reason = hex.Response.ReasonPhrase ?? hex.Response.StatusCode.ToString();
+                var content = (hex.Response.Content ?? "").Trim();
+                var cappedContent = content.Length > 1000 ? content.Substring(0, 1000) + "..." : content;
+                var odataMessage = ExtractODataErrorMessage(content);
+
+                var sb = new StringBuilder();
+                sb.Append($"{ErrorPrefix} [WebApiError] Dataverse Web API returned {status} {reason}");
+                if (odataMessage != null)
+                    sb.Append($": {odataMessage}");
+                sb.AppendLine();
+                sb.Append("[Hint] The request reached Dataverse but was rejected. Check the url path, HTTP method, and request body against the Web API endpoint.");
+                sb.AppendLine();
+                sb.Append($"[Detail] {{\"statusCode\":{status},\"reasonPhrase\":{JsonSerializer.Serialize(reason)}");
+                if (!string.IsNullOrEmpty(cappedContent))
+                    sb.Append($",\"responseContent\":{JsonSerializer.Serialize(cappedContent)}");
+                sb.Append('}');
+                rewritten = sb.ToString();
+            }
             else if (ex is HttpRequestException || ex is TaskCanceledException || ex is UriFormatException)
             {
                 rewritten = $"{ErrorPrefix} [UrlDownloadFailed] Failed to download the file from the URL. "
@@ -353,6 +386,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     var code = fex.Detail != null ? $"0x{fex.Detail.ErrorCode:X8}" : "unknown";
                     return ("DataverseFault",
                         $"Dataverse returned error code {code}. This is an organization-side error (validation, business rule, security, etc.). Inspect the error code and message; do not retry with the same inputs unless the message suggests a transient issue.");
+
+                case WebApiHttpException:
+                    return ("WebApiError",
+                        "The request reached Dataverse but was rejected. Check the url path, HTTP method, and request body against the Web API endpoint; the OData error details are in [Detail].");
 
                 case JsonException:
                     return ("JsonParseError",
@@ -390,6 +427,35 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     return (ex.GetType().Name,
                         "An unexpected error occurred. Check the server logs and retry; if it persists, report it as a tool bug with the inputs you used.");
             }
+        }
+
+        /// <summary>
+        /// Extract <c>error.message</c> from a Dataverse OData error JSON body,
+        /// e.g. {"error":{"code":"0x...","message":"..."}}. Returns null when the
+        /// body is missing or not an OData error object.
+        /// </summary>
+        private static string? ExtractODataErrorMessage(string content)
+        {
+            if (string.IsNullOrWhiteSpace(content)) return null;
+            try
+            {
+                using var doc = JsonDocument.Parse(content);
+                if (doc.RootElement.ValueKind == JsonValueKind.Object &&
+                    doc.RootElement.TryGetProperty("error", out var err) &&
+                    err.ValueKind == JsonValueKind.Object &&
+                    err.TryGetProperty("message", out var msg) &&
+                    msg.ValueKind == JsonValueKind.String)
+                {
+                    var m = msg.GetString();
+                    if (!string.IsNullOrWhiteSpace(m))
+                        return m.Length > 300 ? m.Substring(0, 300) + "..." : m;
+                }
+            }
+            catch (JsonException)
+            {
+                // Body is not JSON — fall back to the raw content in [Detail]
+            }
+            return null;
         }
 
         private static string ExtractFirstFrame(Exception ex)
