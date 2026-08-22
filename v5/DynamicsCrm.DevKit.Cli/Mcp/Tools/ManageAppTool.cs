@@ -51,10 +51,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageAppResult)),
         Description(
-            "Model-driven app management. Actions: list, detail, create, update, update_navigation, validate, undo.\n\n" +
+            "List, inspect, create, update, and validate model-driven apps, edit app sitemap navigation, or restore an app from a .app.json backup.\n\n" +
             "WHEN TO USE:\n" +
-            "- List/inspect model-driven apps, create or update app metadata (name, description, icon)\n" +
-            "- Apply app-scoped sitemap navigation operations (add_area/add_group/add_item), validate an app, or restore from a .app.json backup (undo)\n\n" +
+            "- List/inspect model-driven apps, or create/update app metadata (name, description, icon)\n" +
+            "- Apply app-scoped sitemap navigation operations (add_area/add_group/add_item), validate an app, or restore from a .app.json backup (undo)\n" +
+            "- App is resolved by Display Name first, then unique name/GUID; ambiguous Display Names return the candidates\n\n" +
             "RELATED TOOLS:\n" +
             "- get_solution_components → solution names for create\n" +
             "- publish_customizations → publish other components (manage_app mutations auto-publish the app)\n" +
