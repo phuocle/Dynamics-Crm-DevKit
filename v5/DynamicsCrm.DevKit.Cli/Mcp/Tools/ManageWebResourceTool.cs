@@ -66,16 +66,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(ManageWebResourceResult)),
         Description(
             "Manage Dataverse web resources — list / detail / create / update / delete.\n" +
-            "Required: detail/update/delete need web_resource_id (GUID, Display Name, or unique name); " +
+            "detail/update/delete need web_resource_id (GUID, Display Name, or unique name); " +
             "create needs name + file_path + type + solution_name.\n" +
             "On create the prefix in name must match the solution's publisher prefix; on mismatch the tool errors " +
             "with the suggested name — re-call with it. Create adds the web resource to the solution and publishes; " +
             "update also publishes; delete is irreversible.\n" +
             "Types: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap. " +
-            "Naming: {prefix}_/path/filename.ext (e.g. 'v4_/entities/Account.form.js').\n" +
-            "WHEN TO USE: upload/update/inspect a web resource; find library_name for build_form_xml " +
-            "add_event/add_library (run list first); combine with build_form_xml + manage_form to wire JS into a form.\n" +
-            "RELATED TOOLS: get_solution_components, manage_form, publish_customizations.")]
+            "Naming: {prefix}_/path/filename.ext (e.g. 'v4_/entities/Account.form.js').\n\n" +
+            "WHEN TO USE:\n" +
+            "- Upload/update/inspect a web resource\n" +
+            "- Find library_name for build_form_xml add_event/add_library (run list first)\n" +
+            "- Combine with build_form_xml + manage_form to wire JS into a form\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_solution_components → find solution names for create\n" +
+            "- manage_form → wire the JS library into a form\n" +
+            "- publish_customizations → publish other components (create/update auto-publish)")]
         public CallToolResult manage_webresource(
             [Description("list / detail / create / update / delete.")] string action = "",
             [Description("GUID, Display Name, or unique name. Required: detail/update/delete.")] string web_resource_id = "",
@@ -91,8 +96,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 if (string.IsNullOrWhiteSpace(action))
-                    return Error("action is required. Valid values: 'list', 'detail', 'create', 'update', 'delete'.");
-                var normalizedAction = action.Trim().ToLowerInvariant();            
+                    return Error("action is required.", "Valid values: 'list', 'detail', 'create', 'update', 'delete'.");
+                var normalizedAction = action.Trim().ToLowerInvariant();
                 return normalizedAction switch
                 {
                     "list" => HandleList(name, type_filter, solution_name, max_records),
@@ -100,7 +105,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "create" => HandleCreate(name, display_name, description, file_path, type, solution_name),
                     "update" => HandleUpdate(web_resource_id, display_name, description, file_path),
                     "delete" => HandleDelete(web_resource_id),
-                    _ => Error($"Invalid action '{action}'. Valid values: 'list', 'detail', 'create', 'update', 'delete'.")
+                    _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'create', 'update', 'delete'.")
                 };
             }
             catch (Exception ex)
@@ -138,7 +143,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
                 if (!solResult.IsSuccess)
-                    return Error(solResult.Error);
+                    return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
 
                 solutionName = solResult.UniqueName;
                 solutionJoin = $@"
@@ -194,7 +199,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var resolved = ResolveWebResourceIdInput(webResourceId);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return Error(resolved.Error);
+                return Error(resolved.Error.Split("\r\n")[0], DiscoverWebResourcesHint);
             var query = new QueryExpression("webresource")
             {
                 ColumnSet = new ColumnSet(
@@ -243,7 +248,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                              "Provide an absolute or relative path to the file.");
 
             if (string.IsNullOrWhiteSpace(type))
-                return Error("type is required for 'create'. Valid values: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.");
+                return Error("type is required for 'create'.", "Valid values: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.");
 
             if (!File.Exists(filePath))
                 return Error($"File not found at path '{filePath}'.",
@@ -252,7 +257,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var typeTrimmed = type.Trim().ToLowerInvariant();
             if (!TypeFilterMap.TryGetValue(typeTrimmed, out var typeCode))
-                return Error($"Invalid type '{type}'. Valid values: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.");
+                return Error($"Invalid type '{type}'.", "Valid values: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.");
 
             if (string.IsNullOrWhiteSpace(solutionName))
                 return Error("solution_name is required for 'create'.",
@@ -260,7 +265,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
             if (!solResult.IsSuccess)
-                return Error(solResult.Error);
+                return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
 
             name = name.Trim();
 
@@ -268,10 +273,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (existingByInput.IsSuccess)
             {
                 var existingName = existingByInput.Value.GetAttributeValue<string>("name") ?? existingByInput.CanonicalName ?? existingByInput.Value.Id.ToString();
-                return Error($"Web resource input '{name}' resolves to existing web resource '{existingName}' (ID: {existingByInput.Value.Id}). Use action='update' to modify it.");
+                return Error($"Web resource input '{name}' resolves to existing web resource '{existingName}' (ID: {existingByInput.Value.Id}).", "Use action='update' to modify it.");
             }
             if (existingByInput.Status == ResolveStatus.Ambiguous || existingByInput.Status == ResolveStatus.Error)
-                return Error(existingByInput.Error);
+                return Error(existingByInput.Error.Split("\r\n")[0], DiscoverWebResourcesHint);
 
             if (!string.IsNullOrWhiteSpace(displayName))
             {
@@ -279,10 +284,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (existingByDisplayName.IsSuccess)
                 {
                     var existingName = existingByDisplayName.Value.GetAttributeValue<string>("name") ?? existingByDisplayName.CanonicalName ?? existingByDisplayName.Value.Id.ToString();
-                    return Error($"Display Name '{displayName.Trim()}' resolves to existing web resource '{existingName}' (ID: {existingByDisplayName.Value.Id}). Use action='update' to modify it.");
+                    return Error($"Display Name '{displayName.Trim()}' resolves to existing web resource '{existingName}' (ID: {existingByDisplayName.Value.Id}).", "Use action='update' to modify it.");
                 }
                 if (existingByDisplayName.Status == ResolveStatus.Ambiguous || existingByDisplayName.Status == ResolveStatus.Error)
-                    return Error(existingByDisplayName.Error);
+                    return Error(existingByDisplayName.Error.Split("\r\n")[0], DiscoverWebResourcesHint);
             }
 
             var underscoreIndex = name.IndexOf('_');
@@ -395,7 +400,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var resolved = ResolveWebResourceIdInput(webResourceId);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return Error(resolved.Error);
+                return Error(resolved.Error.Split("\r\n")[0], DiscoverWebResourcesHint);
             var id = resolved.Id.Value;
 
             var existing = RetrieveById(id);
@@ -490,7 +495,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var resolved = ResolveWebResourceIdInput(webResourceId);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return Error(resolved.Error);
+                return Error(resolved.Error.Split("\r\n")[0], DiscoverWebResourcesHint);
             var id = resolved.Id.Value;
 
             var existing = RetrieveById(id);
@@ -560,6 +565,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var result = _serviceClient.RetrieveMultiple(query);
             return result.Entities.FirstOrDefault();
         }
+
+        private const string DiscoverWebResourcesHint = "Use manage_webresource(action='list') to discover web resources.";
 
         private static WebResourceEntry MapEntry(Entity e)
         {
