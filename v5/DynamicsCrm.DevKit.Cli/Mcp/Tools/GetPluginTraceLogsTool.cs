@@ -81,7 +81,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var modeLower = mode.Trim().ToLowerInvariant();
                     if (modeLower != "sync" && modeLower != "synchronous" && modeLower != "async" && modeLower != "asynchronous")
-                        return Error($"Invalid mode '{mode.Trim()}'. Use 'sync' or 'async'.");
+                        return Error($"Invalid mode '{mode.Trim()}'.", "Use 'sync' or 'async'.");
                 }
 
                 if (!string.IsNullOrWhiteSpace(correlation_id) && !Guid.TryParse(correlation_id.Trim(), out _))
