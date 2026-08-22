@@ -82,7 +82,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var normalizedStatus = (status ?? "failed").Trim().ToLowerInvariant();
             if (!ValidStatuses.Contains(normalizedStatus))
-                return Error($"'{status?.Trim()}' is not a valid status. Valid values: failed, succeeded, waiting, in_progress, canceled, all.");
+                return Error($"'{status?.Trim()}' is not a valid status.", "Valid values: failed, succeeded, waiting, in_progress, canceled, all.");
 
             var normalizedOpType = (operationType ?? "").Trim().ToLowerInvariant();
             if (!string.IsNullOrEmpty(normalizedOpType) && !ValidOperationTypes.Contains(normalizedOpType))
@@ -102,7 +102,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 primaryEntityLogical = entityResult.Value.LogicalName;
                 primaryEntityTypeCode = ResolveEntityTypeCode(primaryEntityLogical);
                 if (primaryEntityTypeCode == null)
-                    return Error($"Entity '{entityName.Trim()}' not found. Use get_tables to find valid entity names.");
+                    return Error($"Entity '{entityName.Trim()}' not found.", "Use get_tables to find valid entity names.");
                 entityName = primaryEntityLogical;
             }
 
@@ -201,7 +201,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
-                return Error($"System job '{recordId.Trim()}' not found.");
+                return Error($"System job '{recordId.Trim()}' not found.", "Use get_system_jobs in list mode (record_id empty) to find a valid jobId.");
 
             var entry = BuildEntry(result.Entities[0], includeDetail: true);
             var structured = new GetSystemJobsResult
