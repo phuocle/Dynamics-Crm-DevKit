@@ -40,29 +40,41 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// <summary>
         /// Partial-failure result: some records succeeded, some failed.
         /// Text prefix is <c>[Partial]</c>; <c>IsError=true</c> so AI clients
-        /// can detect that not everything went well. The structured payload
-        /// is the tool's own result DTO (not <see cref="McpErrorResult"/>),
-        /// preserving per-item details for programmatic inspection.
+        /// can detect that not everything went well. The text follows the same
+        /// convention as <see cref="Error"/>: summary line + <c>[Detail]</c> line
+        /// carrying the full structured payload (per-item statuses, errors), so
+        /// text-only clients lose no information. The structured payload is the
+        /// tool's own result DTO (not <see cref="McpErrorResult"/>).
         /// </summary>
-        internal static CallToolResult Partial(string summary, object structured) => new()
+        internal static CallToolResult Partial(string summary, object structured)
         {
-            Content = [new TextContentBlock { Text = $"{PartialPrefix} {StripPrefix(summary, PartialPrefix)}" }],
-            StructuredContent = JsonSerializer.SerializeToElement(structured),
-            IsError = true
-        };
+            var text = $"{PartialPrefix} {StripPrefix(summary, PartialPrefix)}\n[Detail] {JsonSerializer.Serialize(structured)}";
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = text }],
+                StructuredContent = JsonSerializer.SerializeToElement(structured),
+                IsError = true
+            };
+        }
 
         /// <summary>
         /// All-failed result: every record in the batch failed.
-        /// Text prefix is <c>[Failed]</c>; <c>IsError=true</c>. The structured
-        /// payload is the tool's own result DTO so the caller can inspect
-        /// per-item errors.
+        /// Text prefix is <c>[Failed]</c>; <c>IsError=true</c>. Text follows the
+        /// same convention as <see cref="Error"/>: summary line + <c>[Detail]</c>
+        /// line carrying the full structured payload (per-item errors). The
+        /// structured payload is the tool's own result DTO so the caller can
+        /// inspect per-item errors.
         /// </summary>
-        internal static CallToolResult Failed(string summary, object structured) => new()
+        internal static CallToolResult Failed(string summary, object structured)
         {
-            Content = [new TextContentBlock { Text = $"{FailedPrefix} {StripPrefix(summary, FailedPrefix)}" }],
-            StructuredContent = JsonSerializer.SerializeToElement(structured),
-            IsError = true
-        };
+            var text = $"{FailedPrefix} {StripPrefix(summary, FailedPrefix)}\n[Detail] {JsonSerializer.Serialize(structured)}";
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = text }],
+                StructuredContent = JsonSerializer.SerializeToElement(structured),
+                IsError = true
+            };
+        }
 
         /// <summary>
         /// Error result with a message, optional hint, and optional structured details.

@@ -64,6 +64,8 @@ From file 17 onward the tools **mutate Dataverse data** (create/update/delete of
 
 - Every byte of OUTPUT plain text and OUTPUT JSON must come from a real tool run captured in the source file. You are formatting, not generating.
 - **NEVER invent, guess, reconstruct, or "fill in" output** — not counts, not GUIDs, not field values, not record names, not the number of entries, not the `IsError` value. Even an "obvious" reconstruction (e.g. copying entries from another test, inferring a count) is a violation.
+- **NEVER "cook" output either.** Cooking = taking output that DOES exist (from an earlier run, another test, or the structured side) and assembling, merging, trimming, or reformatting it into the block you wish existed. Examples of cooking, all forbidden: splicing an old text line together with a JSON block from a different run; editing a captured line to add/remove a prefix or `[Detail]` part because the template "expects" it; deriving the text side from the structured side (or vice versa); pasting a capture from a DIFFERENT build than the one the test claims to run on. **The only valid way to produce an OUTPUT block is: run the real tool with the test's INPUT, then paste what actually came back, byte for byte.**
+- **If the real output does not match what the template or the doc expects (wrong prefix, missing `[Detail]`, wrong shape) → the CODE is wrong, not the capture.** Stop, fix the tool code, rebuild/release, re-run the test live, and capture the new real output. NEVER edit the captured output to make it look correct — that is the worst form of cooking because the doctored capture then hides a real bug.
 - **If any part of a test's output is missing, truncated, illegible, or you cannot see it verbatim in the source file → mark it `[miss]`.** Do not piece it together from other tests, from the tool description, or from your knowledge of the code.
 - A `[miss]` is the CORRECT outcome when you lack data. It is not a failure — it is a signal to anh Phước to re-run that test and fill it in. **Fabricating output is far worse than leaving a `[miss]`, because a fabricated value looks real and anh Phước has no way to know it is fake when reviewing.**
 - Miss markers (use exactly these strings):
@@ -89,7 +91,7 @@ When anh Phước asks you to fix / fill in / resolve a `[miss]` marker in a fil
 
 ## ERROR test output — text block only
 
-For a test whose result is an **error** (`IsError: true`), the MCP `CallToolResult` carries the same data in two places at once: the `content` text block (a 3-part `[Error]/[Hint]/[Detail]` text) and the `structuredContent` JSON object (`{ "error", "hint", "details" }`). MCP clients surface only one side on errors — never both — and we standardise on the **text** side. So for an error test, record **only** the ` ```text ` block (the `[Error]/[Hint]/[Detail]` output, verbatim) and the `## RESULT` `{ "IsError": true }` block. **Do not include a ` ```json ` structured block at all** — not even a `[miss]` marker. The structure for an error test is:
+For a test whose result is an **error** (`IsError: true`), the MCP `CallToolResult` carries the same data in two places at once: the `content` text block (a 3-part `[Error]/[Hint]/[Detail]` text) and the `structuredContent` JSON object (`{ "error", "hint", "details" }`). MCP clients surface only one side on errors — never both — and we standardise on the **text** side. So for an error test, record **only the ` ```text ` block (the `[Error]/[Hint]/[Detail]` output, verbatim) and the `## RESULT` `{ "IsError": true }` block. **Do not include a ` ```json ` structured block at all** — not even a `[miss]` marker. The structure for an error test is:
 
 ````
 ## OUTPUT
@@ -99,6 +101,18 @@ For a test whose result is an **error** (`IsError: true`), the MCP `CallToolResu
 [Hint] {hint}            ← only if a hint exists
 [Detail] {json-string}   ← only if details exist
 ````
+
+**Bulk `[Partial]` / `[Failed]` results behave exactly like `[Error]`.** They also return `IsError: true`, and their text output follows the same convention: a one-line `[Partial]`/`[Failed]` summary followed by a `[Detail]` line carrying the full result DTO (per-item statuses, per-item errors, warnings) as JSON. Record them the same way — text block only, no separate JSON block:
+
+````
+## OUTPUT
+
+```text
+[Partial] Created 2/3 'account' record(s) in 1.7s (...).
+[Detail] {"entity":"account","total":3,...,"items":[...],"status":"partial"}
+````
+
+Note: the `[Detail]` JSON is produced by the .NET JSON serializer, which escapes `+` as `\u002B` and `'` as `\u0027` — keep these escapes verbatim in captures; do not "fix" them into `+`/`'`.
 
 ## RESULT
 

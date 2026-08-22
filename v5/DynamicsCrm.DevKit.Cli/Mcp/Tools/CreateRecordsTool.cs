@@ -81,10 +81,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 if (string.IsNullOrWhiteSpace(entity_name))
-                    return Error("entity_name is required.");
+                    return Error("entity_name is required.",
+                        "Provide the entity Display Name or logical name, e.g. 'Account' or 'account'.");
 
                 if (string.IsNullOrWhiteSpace(records_json))
-                    return Error("records_json is required. Provide a JSON array, .json file path, or .csv file path.");
+                    return Error("records_json is required.",
+                        "Provide a JSON array, .json file path, or .csv file path.");
 
                 // Bypass privilege gate: BypassBusinessLogicExecution requires the
                 // prvBypassCustomBusinessLogic privilege, granted to the System
@@ -105,18 +107,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "create_records");
                 if (!entityResult.IsSuccess)
-                    return Error(entityResult.Error);
+                {
+                    if (entityResult.Status == ResolveStatus.Ambiguous)
+                    {
+                        var entityMatches = entityResult.Candidates.Select(c => new TableMatchEntry
+                        {
+                            DisplayName = c.DisplayName ?? "",
+                            LogicalName = c.LogicalName ?? "",
+                            SchemaName = c.SchemaName ?? ""
+                        }).ToList();
+                        return Error(
+                            entityResult.Error.Split("\r\n")[0],
+                            "Re-call with a more specific entity_name value.",
+                            new BatchCreateResult { EntityMatches = entityMatches });
+                    }
+                    return Error(
+                        entityResult.Error.Split("\r\n")[0],
+                        "Use get_tables to list entities before calling create_records.");
+                }
                 var entityName = entityResult.Value.LogicalName;
 
                 var csvWarnings = new List<string>();
-                var (resolved, inputFormat) = ResolveRecordsInput(records_json, entityName, csvWarnings, deleteInput: !_options.DryRun);
+                var (resolved, inputFormat) = ResolveRecordsInput(records_json, entityName, csvWarnings);
                 if (resolved == null)
                 {
                     var trimmed = records_json.Trim();
                     if (trimmed.EndsWith(".csv", StringComparison.OrdinalIgnoreCase) || trimmed.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
                         return Error($"File not found: {trimmed}");
                     return Error(
-                        "Failed to resolve records_json input. Valid formats: inline JSON array, .json file path, or .csv file path.");
+                        "Failed to resolve records_json input.",
+                        "Valid formats: inline JSON array, .json file path, or .csv file path.");
                 }
 
                 JsonElement[] elements;
@@ -451,7 +471,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return items;
         }
 
-        private (string json, string format) ResolveRecordsInput(string recordsJson, string entityName, List<string> csvWarnings, bool deleteInput)
+        // Input files are read, never deleted — the generated file stays on disk
+        // so it can be re-run, inspected, or piped again.
+        private (string json, string format) ResolveRecordsInput(string recordsJson, string entityName, List<string> csvWarnings)
         {
             var trimmed = recordsJson.Trim();
 
@@ -459,7 +481,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (!File.Exists(trimmed)) return (null, "csv");
                 var json = ConvertCsvToJson(trimmed, entityName, csvWarnings);
-                if (deleteInput) SafeDelete(trimmed);
                 return (json, "csv");
             }
 
@@ -467,7 +488,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (!File.Exists(trimmed)) return (null, "json-file");
                 var content = File.ReadAllText(trimmed, Encoding.UTF8);
-                if (deleteInput) SafeDelete(trimmed);
                 return (content, "json-file");
             }
 
@@ -797,13 +817,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string EscapeXml(string value) =>
             value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("\"", "&quot;");
-
-        private static void SafeDelete(string path)
-        {
-            if (!File.Exists(path)) return;
-            File.SetAttributes(path, FileAttributes.Normal);
-            File.Delete(path);
-        }
 
     }
 }

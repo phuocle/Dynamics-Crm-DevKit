@@ -74,16 +74,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 if (string.IsNullOrWhiteSpace(entity_name))
-                    return Error("entity_name is required.");
+                    return Error("entity_name is required.",
+                        "Provide the entity logical name, e.g. 'account'.");
 
                 if (string.IsNullOrWhiteSpace(from_date) || string.IsNullOrWhiteSpace(to_date))
-                    return Error("from_date and to_date are required. DO NOT infer or assume these values — ask the user explicitly before calling this tool.");
+                    return Error("from_date and to_date are required.",
+                        "DO NOT infer or assume these values — ask the user explicitly before calling this tool.");
 
                 if (!DateTime.TryParse(from_date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var fromDt))
-                    return Error($"from_date '{from_date}' is not a valid date. Use ISO 8601 format, e.g. '2026-01-01'.");
+                    return Error($"from_date '{from_date}' is not a valid date.",
+                        "Use ISO 8601 format, e.g. '2026-01-01'.");
 
                 if (!DateTime.TryParse(to_date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var toDt))
-                    return Error($"to_date '{to_date}' is not a valid date. Use ISO 8601 format, e.g. '2026-04-30'.");
+                    return Error($"to_date '{to_date}' is not a valid date.",
+                        "Use ISO 8601 format, e.g. '2026-04-30'.");
 
                 if (toDt < fromDt)
                     return Error($"to_date '{to_date}' must be >= from_date '{from_date}'.");
@@ -95,7 +99,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "generate_demo_data");
                 if (!entityResult.IsSuccess)
-                    return Error(entityResult.Error);
+                {
+                    if (entityResult.Status == ResolveStatus.Ambiguous)
+                    {
+                        var entityMatches = entityResult.Candidates.Select(c => new TableMatchEntry
+                        {
+                            DisplayName = c.DisplayName ?? "",
+                            LogicalName = c.LogicalName ?? "",
+                            SchemaName = c.SchemaName ?? ""
+                        }).ToList();
+                        return Error(
+                            entityResult.Error.Split("\r\n")[0],
+                            "Re-call with a more specific entity_name value.",
+                            new GenerateDemoDataResult { EntityMatches = entityMatches });
+                    }
+                    return Error(
+                        entityResult.Error.Split("\r\n")[0],
+                        "Use get_tables to discover valid entity names.");
+                }
                 var entityName = entityResult.Value.LogicalName;
 
                 var metadata = LoadEntityMetadata(entityName);
@@ -105,7 +126,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // Select fields
                 var selectedAttrs = SelectFields(metadata, fields, entityName, warnings);
                 if (selectedAttrs.Count == 0)
-                    return Error($"No valid fields found for entity '{entityName}'. Check entity name or specify fields explicitly.");
+                    return Error($"No valid fields found for entity '{entityName}'.",
+                        "Check the entity name or specify fields explicitly.");
 
                 // Pre-fetch lookup pools
                 var lookupPools = new Dictionary<string, List<Guid>>(StringComparer.OrdinalIgnoreCase);
@@ -148,7 +170,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             return Error("each field_override must have a non-empty 'logicalname'.");
                         var op = ov.Operator?.ToLowerInvariant();
                         if (op is not ("eq" or "in" or "startswith" or "endswith" or "contains" or "regex"))
-                            return Error($"unsupported operator '{ov.Operator}' for field '{ov.LogicalName}'. Supported: eq, in, startswith, endswith, contains, regex.");
+                            return Error($"unsupported operator '{ov.Operator}' for field '{ov.LogicalName}'.",
+                                "Valid values: eq, in, startswith, endswith, contains, regex.");
                         if (ov.Values == null || ov.Values.Count == 0)
                             return Error($"field_override for '{ov.LogicalName}' must have at least one value.");
                     }
