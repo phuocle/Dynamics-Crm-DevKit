@@ -2,6 +2,7 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
+using System.Collections.Generic;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 {
@@ -40,7 +41,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     retryParameterName: "solution_name");
 
                 if (!resolved.IsSuccess)
-                    return SolutionResolveResult.Fail(resolved.Error);
+                    return SolutionResolveResult.Fail(resolved.Error, resolved.Status, resolved.Candidates);
 
                 return BuildResult(serviceClient, resolved.Value, solutionInput);
             }
@@ -102,6 +103,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// <summary>True if resolution succeeded.</summary>
         public bool IsSuccess => Error == null;
 
+        /// <summary>Resolver status when resolution failed (Ambiguous/NotFound/Error); null on success.</summary>
+        public ResolveStatus? Status { get; private set; }
+
+        /// <summary>Resolver candidates when the failure was ambiguous; null otherwise.</summary>
+        public List<ResolveCandidate> Candidates { get; private set; }
+
         internal static SolutionResolveResult Ok(string prefix, int optionValuePrefix, Guid publisherId, string uniqueName, string friendlyName) =>
             new()
             {
@@ -112,7 +119,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 FriendlyName = friendlyName
             };
 
-        internal static SolutionResolveResult Fail(string error) =>
-            new() { Error = error };
+        internal static SolutionResolveResult Fail(string error, ResolveStatus? status = null, List<ResolveCandidate> candidates = null) =>
+            new() { Error = error, Status = status, Candidates = candidates };
     }
 }

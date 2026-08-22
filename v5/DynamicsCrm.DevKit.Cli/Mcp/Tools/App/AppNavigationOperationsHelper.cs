@@ -20,10 +20,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
     internal sealed class AppNavigationOperationException : Exception
     {
         public string Action { get; }
+        public string Hint { get; }
 
-        public AppNavigationOperationException(string action, string message) : base(message)
+        public AppNavigationOperationException(string action, string message, string hint = null) : base(message)
         {
             Action = action;
+            Hint = hint;
         }
     }
 
@@ -50,6 +52,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
                         result.NoOpOperations++;
                     else
                         result.ChangedOperations++;
+                }
+                catch (AppNavigationOperationException)
+                {
+                    throw;
                 }
                 catch (InvalidOperationException ex)
                 {
@@ -183,7 +189,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
 
             var id = GetStringProp(op, "id") ?? $"sa_{Sanitize(entity)}";
             if (FindSubArea(doc, id, null, null).Count > 0)
-                throw new InvalidOperationException($"SubArea id/item '{id}' already exists elsewhere. Provide a unique id.");
+                throw new AppNavigationOperationException("add_item", $"SubArea id/item '{id}' already exists elsewhere.", "Provide a unique id or set the 'id' field on the add_item operation.");
 
             var subArea = new XElement("SubArea",
                 new XAttribute("Id", id),

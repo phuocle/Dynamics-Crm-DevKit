@@ -58,8 +58,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- get_solution_components → solution names for create\n" +
             "- publish_customizations → publish other components (manage_app mutations auto-publish the app)\n" +
-            "- execute_webapi → blocked for appmodule/sitemap/appmodulecomponent; use this tool instead\n\n" +
-            "Pass the current workspace directory to workspace_folder so backups land in the user's project. See docs://instructions_for_manage_app for the operation workflow and examples.")]
+            "- execute_webapi → blocked for appmodule/sitemap/appmodulecomponent; use this tool instead")]
         public CallToolResult manage_app(
             [Description("'list', 'detail', 'create', 'update', 'update_navigation', 'validate', or 'undo'.")] string action = "detail",
             [Description("App display name, unique name, or GUID. Required for detail/update/update_navigation/validate/undo.")] string app = "",
@@ -146,11 +145,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(app))
                 return Error("app is required for action='detail'. Provide an app display name, unique name, or GUID.",
-                    "Use manage_app(action='list') to discover apps.");
+                    DiscoverAppsHint);
 
             var (appModule, resolveError) = ResolveApp(app.Trim());
             if (resolveError != null)
-                return Error(resolveError);
+                return resolveError;
 
             var appModuleIdUnique = appModule.GetAttributeValue<Guid?>("appmoduleidunique");
             var siteMapId = appModuleIdUnique.HasValue
@@ -189,13 +188,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string description, string iconWebResource)
         {
             if (string.IsNullOrWhiteSpace(solutionName))
-                return Error("solution_name is required for action='create'.");
+                return Error("solution_name is required for action='create'.",
+                    "Provide the unique or display name of the solution that will contain the app.");
             if (string.IsNullOrWhiteSpace(displayName))
-                return Error("display_name is required for action='create'.");
+                return Error("display_name is required for action='create'.",
+                    "Provide the app display name shown to users.");
 
             var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
             if (!solResult.IsSuccess)
-                return Error(solResult.Error, "Use get_solution_components to find valid solution names.");
+            {
+                if (solResult.Status == ResolveStatus.Ambiguous)
+                    return Error(solResult.Error.Split("\r\n")[0], "Re-call with a more specific solution_name value.", new ManageAppResult
+                    {
+                        Action = "create",
+                        Status = "blocked_solution_resolution",
+                        SolutionMatches = solResult.Candidates?.Select(c => new AppMatchEntry
+                        {
+                            DisplayName = c.DisplayName ?? "",
+                            UniqueName = c.UniqueName ?? "",
+                            Id = c.Id?.ToString()
+                        }).ToList(),
+                        Published = false
+                    });
+                return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
+            }
 
             var appUniqueName = string.IsNullOrWhiteSpace(uniqueName)
                 ? $"{solResult.Prefix}_{SanitizeUniqueName(displayName)}"
@@ -206,7 +222,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 appUniqueName = appUniqueName.Substring(0, 40);
 
             if (AppUniqueNameExists(appUniqueName))
-                return Error($"Model-driven app unique_name '{appUniqueName}' already exists. Use action='update' to modify it.");
+                return Error($"Model-driven app unique_name '{appUniqueName}' already exists.",
+                    "Use action='update' to modify the existing app.");
 
             var iconId = ResolveIconWebResourceId(iconWebResource, out var iconError);
             if (iconError != null)
@@ -317,21 +334,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string iconWebResource, bool backup)
         {
             if (string.IsNullOrWhiteSpace(app))
-                return Error("app is required for action='update'. Provide an app display name, unique name, or GUID.");
+                return Error("app is required for action='update'. Provide an app display name, unique name, or GUID.",
+                    DiscoverAppsHint);
 
             var (appModule, resolveError) = ResolveApp(app.Trim());
             if (resolveError != null)
-                return Error(resolveError);
+                return resolveError;
 
             var hasName = !string.IsNullOrWhiteSpace(displayName);
             var hasDescription = !string.IsNullOrWhiteSpace(description);
             var hasIcon = !string.IsNullOrWhiteSpace(iconWebResource);
             if (!hasName && !hasDescription && !hasIcon)
-                return Error("action='update' requires at least one of display_name, description, or icon_webresource.");
-
-            string backupPath = null;
-            if (backup)
-                backupPath = SaveAppSnapshot(appModule);
+                return Error("action='update' requires at least one of display_name, description, or icon_webresource.",
+                    "Provide the value(s) to change; omitting all three is a no-op.");
 
             var update = new Entity("appmodule", appModule.Id);
             var changes = new List<string>();
@@ -353,6 +368,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 update["webresourceid"] = iconId;
                 changes.Add($"icon_webresource='{iconWebResource.Trim()}'");
             }
+
+            string backupPath = null;
+            if (backup)
+                backupPath = SaveAppSnapshot(appModule);
 
             if (_options.DryRun)
                 return DryRun(
@@ -404,11 +423,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleValidate(string app)
         {
             if (string.IsNullOrWhiteSpace(app))
-                return Error("app is required for action='validate'. Provide an app display name, unique name, or GUID.");
+                return Error("app is required for action='validate'. Provide an app display name, unique name, or GUID.",
+                    DiscoverAppsHint);
 
             var (appModule, resolveError) = ResolveApp(app.Trim());
             if (resolveError != null)
-                return Error(resolveError);
+                return resolveError;
 
             var validation = ValidateApp(appModule.Id);
             var text = $"Validated app '{appModule.GetAttributeValue<string>("name")}' ({appModule.Id}): {validation.Status}." +
@@ -433,15 +453,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleUpdateNavigation(string app, string operations, bool backup)
         {
             if (string.IsNullOrWhiteSpace(app))
-                return Error("app is required for action='update_navigation'. Provide an app display name, unique name, or GUID.");
+                return Error("app is required for action='update_navigation'. Provide an app display name, unique name, or GUID.",
+                    DiscoverAppsHint);
             if (string.IsNullOrWhiteSpace(operations))
-                return Error("operations is required for action='update_navigation'. Provide a JSON array of navigation operations.");
+                return Error("operations is required for action='update_navigation'.",
+                    "Provide a JSON array of navigation operations, e.g. [{\"action\":\"add_group\",\"area\":\"area_default\",\"id\":\"group_x\",\"title\":\"X\"}].");
             if (!operations.TrimStart().StartsWith("["))
                 return Error("update_navigation only accepts operation JSON arrays. Raw sitemap XML and backup paths are not supported by this action.");
 
             var (appModule, resolveError) = ResolveApp(app.Trim());
             if (resolveError != null)
-                return Error(resolveError);
+                return resolveError;
 
             var appModuleIdUnique = appModule.GetAttributeValue<Guid?>("appmoduleidunique");
             if (!appModuleIdUnique.HasValue)
@@ -462,12 +484,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var (normalizedOps, operationNameErrors) = NormalizeNavigationEntityReferences(ops);
             if (operationNameErrors.Count > 0)
-                return Error("Navigation name resolution failed.", FormatNavigationNameResolutionHint(operationNameErrors));
+                return Error("Navigation name resolution failed.",
+                    "Display Name contains is resolved first, then logical/schema contains. Use a more specific entity value when matches are ambiguous.",
+                    new ManageAppResult
+                    {
+                        Action = "update_navigation",
+                        Status = "blocked_entity_resolution",
+                        AppModuleId = appModule.Id.ToString(),
+                        AppName = appModule.GetAttributeValue<string>("name"),
+                        UniqueName = appModule.GetAttributeValue<string>("uniquename"),
+                        ValidationErrors = operationNameErrors,
+                        Published = false
+                    });
             ops = normalizedOps;
-
-            string backupPath = null;
-            if (backup)
-                backupPath = SaveAppSnapshot(appModule);
 
             AppNavigationOperationsResult navResult;
             try
@@ -479,8 +508,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             catch (AppNavigationOperationException ex)
             {
                 return string.IsNullOrWhiteSpace(ex.Action)
-                    ? Error($"Navigation operation failed: {ex.Message}")
-                    : Error($"Navigation operation '{ex.Action}' failed: {ex.Message}");
+                    ? Error($"Navigation operation failed: {ex.Message}", ex.Hint)
+                    : Error($"Navigation operation '{ex.Action}' failed: {ex.Message}", ex.Hint);
             }
 
             var entityComponentErrors = new List<string>();
@@ -507,7 +536,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     AppName = appModule.GetAttributeValue<string>("name"),
                     UniqueName = appModule.GetAttributeValue<string>("uniquename"),
                     SiteMapId = siteMapId.Value.ToString(),
-                    BackupPath = backupPath,
                     ValidationErrors = entityComponentErrors,
                     Published = false,
                     NextStep = NotPublishedNextStep
@@ -524,7 +552,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     AppName = appModule.GetAttributeValue<string>("name"),
                     UniqueName = appModule.GetAttributeValue<string>("uniquename"),
                     SiteMapId = siteMapId.Value.ToString(),
-                    BackupPath = backupPath,
                     Validated = true,
                     ValidationErrors = xsdErrors,
                     ValidationWarnings = xsdWarnings.Count > 0 ? xsdWarnings : null,
@@ -536,6 +563,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     OperationSummaries = navResult.OperationSummaries,
                     NextStep = NotPublishedNextStep
                 });
+
+            string backupPath = null;
+            if (backup)
+                backupPath = SaveAppSnapshot(appModule);
 
             if (_options.DryRun)
             {
@@ -628,9 +659,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleUndo(string app, string operations, bool backup)
         {
             if (string.IsNullOrWhiteSpace(app))
-                return Error("app is required for action='undo'. Provide an app display name, unique name, or GUID.");
+                return Error("app is required for action='undo'. Provide an app display name, unique name, or GUID.",
+                    DiscoverAppsHint);
             if (string.IsNullOrWhiteSpace(operations))
-                return Error("operations is required for action='undo'. Provide a .app.json backup file path.");
+                return Error("operations is required for action='undo'.",
+                    "Provide the .app.json backup file path from the backupPath of a previous manage_app mutation.");
 
             var backupFile = operations.Trim();
             if (backupFile.StartsWith("<", StringComparison.Ordinal))
@@ -640,7 +673,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var (appModule, resolveError) = ResolveApp(app.Trim());
             if (resolveError != null)
-                return Error(resolveError);
+                return resolveError;
 
             var appModuleIdUnique = appModule.GetAttributeValue<Guid?>("appmoduleidunique");
             if (!appModuleIdUnique.HasValue)
@@ -653,7 +686,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var backupFullPath = Path.GetFullPath(backupFile);
             if (!File.Exists(backupFullPath))
-                return Error($"backup file '{backupFile}' was not found.");
+                return Error($"backup file '{backupFile}' was not found.",
+                    "Check the backupPath value returned by the manage_app call that created the backup.");
 
             var snapshot = JsonSerializer.Deserialize<ManageAppSnapshot>(
                 File.ReadAllText(backupFullPath, Encoding.UTF8),
@@ -667,10 +701,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(snapshot.SiteMapXml))
                 return Error("backup does not contain sitemapxml.");
 
-            string currentBackupPath = null;
-            if (backup)
-                currentBackupPath = SaveAppSnapshot(appModule);
-
             var (xsdErrors, xsdWarnings) = ValidateSiteMapXml(snapshot.SiteMapXml);
             if (xsdErrors.Count > 0)
                 return Error($"Backup sitemap XML failed XSD validation — undo not applied. {string.Join("; ", xsdErrors)}", details: new ManageAppResult
@@ -682,7 +712,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     AppName = appModule.GetAttributeValue<string>("name"),
                     UniqueName = appModule.GetAttributeValue<string>("uniquename"),
                     SiteMapId = siteMapId.Value.ToString(),
-                    BackupPath = currentBackupPath,
                     RestoredFromBackup = backupFullPath,
                     Validated = true,
                     ValidationErrors = xsdErrors,
@@ -690,6 +719,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false,
                     NextStep = NotPublishedNextStep
                 });
+
+            string currentBackupPath = null;
+            if (backup)
+                currentBackupPath = SaveAppSnapshot(appModule);
 
             if (_options.DryRun)
             {
@@ -740,7 +773,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             });
         }
 
-        private (Entity AppModule, string Error) ResolveApp(string app)
+        private const string DiscoverAppsHint = "Use manage_app(action='list') to discover apps.";
+
+        private (Entity AppModule, CallToolResult Error) ResolveApp(string app)
         {
             if (Guid.TryParse(app, out var appModuleId))
             {
@@ -753,7 +788,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var match = RetrieveAppModules(queryById).FirstOrDefault();
                 return match != null
                     ? (match, null)
-                    : (null, $"No model-driven app found for GUID '{app}'.");
+                    : (null, Error($"No model-driven app found for GUID '{app}'.", DiscoverAppsHint));
             }
 
             var query = new QueryExpression("appmodule")
@@ -768,7 +803,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var matches = RetrieveAppModules(query);
             if (matches.Count == 0)
-                return (null, $"No model-driven app found matching '{app}'. Use manage_app(action='list') to discover apps.");
+                return (null, Error($"No model-driven app found matching '{app}'.", DiscoverAppsHint));
 
             var result = DisplayNameFirstResolver.Resolve(
                 app,
@@ -783,12 +818,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }),
                 "[AmbiguousApp]",
                 "[NotFoundApp]",
-                "Use manage_app(action='list') to discover apps.",
+                null,
                 "app");
 
-            return result.IsSuccess
-                ? (result.Value, null)
-                : (null, result.Error);
+            if (result.IsSuccess)
+                return (result.Value, null);
+            if (result.Status == ResolveStatus.Ambiguous)
+                return (null, Error(result.Error.Split("\r\n")[0], "Re-call with a more specific app value.", new ManageAppResult
+                {
+                    AppMatches = result.Candidates.Select(c => new AppMatchEntry
+                    {
+                        DisplayName = c.DisplayName ?? "",
+                        UniqueName = c.UniqueName ?? "",
+                        Id = c.Id?.ToString()
+                    }).ToList()
+                }));
+            return (null, Error(result.Error.Split("\r\n")[0], DiscoverAppsHint));
         }
 
         private (List<JsonElement> Operations, List<string> Errors) NormalizeNavigationEntityReferences(List<JsonElement> ops)
@@ -840,21 +885,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             => !string.IsNullOrWhiteSpace(GetJsonString(obj, "label"))
                 || !string.IsNullOrWhiteSpace(GetJsonString(obj, "title"))
                 || !string.IsNullOrWhiteSpace(GetJsonString(obj, "name"));
-
-        private static string FormatNavigationNameResolutionHint(List<string> errors)
-        {
-            var sb = new StringBuilder();
-            foreach (var error in errors)
-                sb.AppendLine($"- {error}");
-            sb.Append("Display Name contains is resolved first, then logical/schema contains. Use a more specific entity value when matches are ambiguous.");
-            return sb.ToString();
-        }
-
-        private static string FormatNavigationNameResolutionErrors(List<string> errors)
-        {
-            errors ??= [];
-            return $"BLOCKED\nErrors: {errors.Count}\n{FormatNavigationNameResolutionHint(errors)}";
-        }
 
         private static string GetJsonString(JsonObject obj, string propertyName)
         {
@@ -1051,8 +1081,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     error = $"icon_webresource GUID '{trimmed}' was not found.";
                     return Guid.Empty;
-                }
-            }
+                }            }
             else
             {
                 var result = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, trimmed, "manage_app");
@@ -1351,7 +1380,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private void PublishAppModule(Guid appModuleId)
         {
             PublishHelper.PublishAppModule(_context, _serviceClient, appModuleId);
-            MetadataOperationWaitHelper.WaitForPropagation();
         }
 
         private static List<string> MergeWarnings(List<string> validationWarnings, List<string> xsdWarnings)

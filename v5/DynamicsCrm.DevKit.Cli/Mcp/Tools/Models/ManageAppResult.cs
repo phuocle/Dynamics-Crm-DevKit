@@ -41,6 +41,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<ManageAppListEntryResult> Apps { get; set; }
 
+        [JsonPropertyName("appMatches")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<AppMatchEntry> AppMatches { get; set; }
+
+        [JsonPropertyName("solutionMatches")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<AppMatchEntry> SolutionMatches { get; set; }
+
         [JsonPropertyName("appComponents")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> AppComponents { get; set; }
