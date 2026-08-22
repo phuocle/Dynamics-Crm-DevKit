@@ -18,7 +18,12 @@ Status: files `1`–`4` already follow this template. Files `5`–`36` still use
 ## Structure
 
 1. **No H1 with the tool name/number** — `# 5. get_custom_apis`, `# Tool description`, `# Tool description AI đọc được` are all wrong. The number + tool name are already in the filename.
-2. `# TOOL DESCRIPTION` (exact, uppercase) → a ` ```text ` block with the tool description copied from the tool's `Description(...)` attribute. Keep the internal `WHEN TO USE:` and `RELATED TOOLS:` headers when present; in `RELATED TOOLS:` bullets use the `→` arrow (not `->`).
+2. `# TOOL DESCRIPTION` (exact, uppercase) → a ` ```text ` block with the tool description copied from the tool's `Description(...)` attribute. The description must contain exactly 3 internal sections, in this order:
+   1. Plain description text (written so an AI can understand what the tool does)
+   2. `WHEN TO USE:` header + `- ` bullets
+   3. `RELATED TOOLS:` header + `- tool → purpose` bullets (use the `→` arrow, not `->`)
+   - If the source `Description(...)` attribute contains any other section (e.g. `FUZZY/AMBIGUITY:`, `NOTES:`) or is missing one of the 3, **do NOT edit the description yourself — copy it verbatim into the doc and REPORT the deviation to anh Phước**, who decides whether to fix the tool code. Never rewrite, reorganize, or summarize the tool description.
+   - When anh Phước fixes the tool description in code, re-capture the description and update the doc's TOOL DESCRIPTION block to match.
 3. `# PARAMETERS` (exact, uppercase) → a ` ```text ` block listing every parameter, one per line, column-aligned:
    `key : type : description`
    - Align the key column to the longest key (pad with spaces), then `:`, then type padded to the longest type, then `:`, then description.

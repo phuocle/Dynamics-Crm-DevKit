@@ -112,7 +112,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var s = stage.Trim().ToLowerInvariant();
                     if (s != "prevalidation" && s != "preoperation" && s != "postoperation" && s != "mainoperation")
-                        return Error($"Invalid stage '{stage.Trim()}'. Use 'prevalidation', 'preoperation', 'postoperation', or 'mainoperation'.");
+                        return Error($"Invalid stage '{stage.Trim()}'.", "Use 'prevalidation', 'preoperation', 'postoperation', or 'mainoperation'.");
                 }
 
                 if (!string.IsNullOrWhiteSpace(mode))
@@ -229,7 +229,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Assemblies = allAssemblies,
                     Packages = packages.Count > 0 ? packages : null
                 };
-                return Success($"{allAssemblies.Count} plugin assemblies registered.", listStructured);
+                var packageLabel = packages.Count > 0 ? $" ({packages.Count} plugin packages)" : "";
+                return Success($"{allAssemblies.Count} plugin assemblies{packageLabel} registered.", listStructured);
             }
             catch (Exception ex)
             {

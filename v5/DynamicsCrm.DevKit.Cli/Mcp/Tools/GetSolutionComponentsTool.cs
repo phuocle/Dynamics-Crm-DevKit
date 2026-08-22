@@ -126,15 +126,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetSolutionComponentsResult)),
         Description(
-            "List components in a Dataverse solution. Returns: solution info + count-per-type summary + detail (componentType, objectId, name). Full Entity components (rootComponentBehavior=0) listed as-is — use get_tables for sub-components.\n\n" +
+            "List components in a Dataverse solution. Returns: solution info + count-per-type summary + detail (componentType, objectId, name). Full Entity components (rootComponentBehavior=0) listed as-is — use get_tables for sub-components. solution_name resolves Display Name contains first, then unique name contains; ambiguity returns IsError=true with candidates.\n\n" +
 
             "WHEN TO USE:\n" +
             "- Audit solution contents before packaging/deploying\n" +
             "- Find objectIds for plugins, web resources, workflows\n" +
             "- Identify unmanaged customizations before importing managed solutions\n\n" +
-
-            "FUZZY/AMBIGUITY:\n" +
-            "- solution_name resolves Display Name contains first, then unique name contains. Ambiguity returns IsError=true with candidates.\n\n" +
             "RELATED TOOLS:\n" +
             "- get_tables → entity/attribute metadata for sub-components\n" +
             "- get_plugins → plugin assembly/type/step detail\n" +
@@ -168,12 +165,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             Version = "",
                             IsManaged = false
                         }).ToList();
-                        return Error(solutionResult.Error, null, new GetSolutionComponentsResult
+                        // Single-line message only — the candidate table travels in [Detail]/structured output
+                        var retryHint = "Re-call with a more specific solution_name value.";
+                        var message = solutionResult.Error.Split("\r\n")[0].Replace("[AmbiguousSolution] ", "");
+                        return Error(message, retryHint, new GetSolutionComponentsResult
                         {
                             TotalComponents = 0,
                             SolutionMatches = matches
                         });
                     }
+
+                    if (solutionResult.Status == ResolveStatus.NotFound)
+                        return Error(
+                            $"'{solution_name.Trim()}' was not found by Display Name or Logical/Unique/Schema Name.",
+                            "Use get_solution_components with a more specific solution_name.");
 
                     return Error(solutionResult.Error);
                 }
