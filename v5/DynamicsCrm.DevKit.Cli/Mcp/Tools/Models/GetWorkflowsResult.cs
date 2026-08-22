@@ -34,5 +34,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("workflows")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<WorkflowEntry> Workflows { get; set; }
+
+        [JsonPropertyName("entityMatches")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<TableMatchEntry> EntityMatches { get; set; }
     }
 }

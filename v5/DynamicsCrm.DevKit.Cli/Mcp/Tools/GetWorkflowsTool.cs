@@ -39,7 +39,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetWorkflowsResult)),
         Description(
-            "Classic workflows (background async + realtime sync) for a Dataverse entity. workflow_id empty = list; set = detail. Classic only — see RELATED TOOLS for modern alternatives.\n\n" +
+            "Classic workflows (background async + realtime sync) for a Dataverse entity. workflow_id empty = list; set = detail. Classic only.\n\n" +
             "WHEN TO USE:\n" +
             "- Check if a field triggers any workflow (trigger_field + entity_name)\n" +
             "- Find synchronous workflows (mode='realtime'; Pre-op can cancel/rollback)\n" +
@@ -81,29 +81,50 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var normalizedMode = (mode ?? "").Trim().ToLowerInvariant();
             if (!string.IsNullOrEmpty(normalizedMode) && !ValidModes.Contains(normalizedMode))
-                return Error($"'{mode.Trim()}' is not a valid mode. Valid values: background, realtime.");
+                return Error($"'{mode.Trim()}' is not a valid mode.", "Valid values: background, realtime.");
 
             var normalizedStatus = (status ?? "active").Trim().ToLowerInvariant();
             if (!ValidStatuses.Contains(normalizedStatus))
-                return Error($"'{status.Trim()}' is not a valid status. Valid values: active, draft, all.");
+                return Error($"'{status.Trim()}' is not a valid status.", "Valid values: active, draft, all.");
 
             int? objectTypeCode = null;
             if (!string.IsNullOrWhiteSpace(entityName))
             {
                 var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "get_workflows");
                 if (!entityResult.IsSuccess)
-                    return Error($"entity_name '{entityName.Trim()}': {entityResult.Error}");
+                {
+                    if (entityResult.Status == ResolveStatus.Ambiguous)
+                    {
+                        var entityMatches = entityResult.Candidates.Select(c => new TableMatchEntry
+                        {
+                            DisplayName = c.DisplayName ?? "",
+                            LogicalName = c.LogicalName ?? "",
+                            SchemaName = c.SchemaName ?? ""
+                        }).ToList();
+                        return Error(
+                            $"entity_name '{entityName.Trim()}': {entityResult.Error.Split("\r\n")[0]}",
+                            "Re-call with a more specific entity_name value.",
+                            new GetWorkflowsResult { EntityMatches = entityMatches });
+                    }
+                    return Error(
+                        $"entity_name '{entityName.Trim()}': {entityResult.Error.Split("\r\n")[0]}",
+                        "Use get_tables to discover valid entity names.");
+                }
 
                 entityName = entityResult.Value.LogicalName;
                 objectTypeCode = GetObjectTypeCode(entityName);
                 if (objectTypeCode == null)
-                    return Error($"Entity '{entityName}' not found. Use get_tables to discover valid entity names.");
+                    return Error($"Entity '{entityName}' not found.", "Use get_tables to discover valid entity names.");
 
                 if (!string.IsNullOrWhiteSpace(triggerField))
                 {
                     var fieldResult = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entityName, triggerField.Trim(), "get_workflows");
                     if (!fieldResult.IsSuccess)
-                        return Error($"trigger_field '{triggerField.Trim()}': {fieldResult.Error}");
+                        return Error(
+                            $"trigger_field '{triggerField.Trim()}': {fieldResult.Error.Split("\r\n")[0]}",
+                            fieldResult.Status == ResolveStatus.NotFound
+                                ? "Use get_tables with entity_name set to list valid attribute names."
+                                : "Re-call with a more specific trigger_field value.");
                     triggerField = fieldResult.Value.LogicalName;
                 }
             }
@@ -173,7 +194,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleDetail(string workflowId)
         {
             if (!Guid.TryParse(workflowId.Trim(), out _))
-                return Error($"'{workflowId.Trim()}' is not a valid GUID. Use a workflow ID from list mode.");
+                return Error($"'{workflowId.Trim()}' is not a valid GUID.", "Use a workflow ID from list mode.");
 
             var fetchXml = $@"<fetch top='1'>
   <entity name='workflow'>
@@ -217,7 +238,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
-                return Error($"Classic workflow '{workflowId.Trim()}' not found. Ensure it is category=0 (classic workflow), not a BPF or modern flow.");
+                return Error($"Classic workflow '{workflowId.Trim()}' not found.", "Ensure it is category=0 (classic workflow), not a BPF or modern flow.");
 
             var entry = MapEntity(result.Entities[0], includeDetail: true);
             var structured = new GetWorkflowsResult
