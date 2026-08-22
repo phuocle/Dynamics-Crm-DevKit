@@ -416,7 +416,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         {
             var candidateList = candidates?.ToList() ?? [];
             var sb = new StringBuilder();
-            sb.AppendLine($"{tag} Multiple candidates match '{input}' during {phase} name search.");
+            sb.AppendLine($"Multiple candidates match '{input}' during {phase} name search.");
             sb.AppendLine($"Re-call with a more specific {retryParameterName} value.");
             sb.AppendLine();
             sb.AppendLine("DisplayName\tLogicalName\tUniqueName\tSchemaName\tId");
@@ -472,7 +472,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         private static string FormatNotFound(string tag, string input, string notFoundTip)
         {
             var sb = new StringBuilder();
-            sb.Append($"{tag} '{input}' was not found by Display Name or Logical/Unique/Schema Name.");
+            sb.Append($"'{input}' was not found by Display Name or Logical/Unique/Schema Name.");
             if (!string.IsNullOrWhiteSpace(notFoundTip))
                 sb.AppendLine().Append(notFoundTip);
             return sb.ToString();

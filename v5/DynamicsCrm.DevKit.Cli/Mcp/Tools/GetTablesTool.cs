@@ -51,7 +51,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var trimmedFilter = string.IsNullOrWhiteSpace(filter) ? "" : filter.Trim();
                 var detailLevel = (detail_level ?? "compact").Trim().ToLowerInvariant();
                 if (detailLevel is not ("compact" or "standard" or "full"))
-                    return Error($"'{detail_level}' is not a valid detail_level. Valid values: compact, standard, full.");
+                    return Error($"'{detail_level}' is not a valid detail_level.", "Valid values: compact, standard, full.");
 
                 if (!string.IsNullOrWhiteSpace(entity_name))
                     return await GetEntityDetail(entity_name.Trim(), trimmedFilter, detailLevel);
@@ -84,11 +84,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 candidates,
                 "[AmbiguousEntity]",
                 "[NotFoundEntity]",
-                "Use get_tables with no entity_name to list available tables.",
+                null,
                 "entity_name");
 
             if (!resolved.IsSuccess)
+            {
+                if (resolved.Status == ResolveStatus.NotFound)
+                    return Error(
+                        $"'{entityName}' was not found by Display Name or Logical/Unique/Schema Name.",
+                        "Use get_tables with no entity_name to list available tables.");
+                if (resolved.Status == ResolveStatus.Ambiguous)
+                {
+                    var message = resolved.Error.Split("\r\n")[0];
+                    var matches = resolved.Candidates.Select(c => new TableMatchEntry
+                    {
+                        DisplayName = c.DisplayName ?? "",
+                        LogicalName = c.LogicalName ?? "",
+                        SchemaName = c.SchemaName ?? ""
+                    }).ToList();
+                    return Error(message, "Re-call with a more specific entity_name value.", new GetTablesResult
+                    {
+                        Mode = "detail",
+                        Count = 0,
+                        EntityName = entityName,
+                        TableMatches = matches
+                    });
+                }
                 return Error(resolved.Error);
+            }
 
             var logicalName = resolved.Value.LogicalName;
             var metadata = await _metadataService.FetchEntityMetadataAsync(logicalName);

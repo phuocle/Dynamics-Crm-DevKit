@@ -31,6 +31,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<TableSummaryEntry> Tables { get; set; }
 
+        [JsonPropertyName("tableMatches")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<TableMatchEntry> TableMatches { get; set; }
+
         [JsonPropertyName("table")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public TableDetailEntry Table { get; set; }
