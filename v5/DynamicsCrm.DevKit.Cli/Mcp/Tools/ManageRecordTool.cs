@@ -109,9 +109,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     _ => Error($"Invalid action '{action}'. Valid values: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.", "Provide one of: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.")
                 };
             }
+            catch (AmbiguousFieldException ex)
+            {
+                return Error(ex.Message,
+                    "Re-call with a more specific fields_json key value.",
+                    new
+                    {
+                        attributeMatches = ex.Candidates.Select(c => new
+                        {
+                            displayName = c.DisplayName,
+                            logicalName = c.LogicalName,
+                            schemaName = c.SchemaName
+                        }).ToList()
+                    });
+            }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
 
@@ -284,11 +298,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var sb = new StringBuilder(entity.Attributes.Count * 60 + 128);
 
-            sb.AppendLine($"[{entity.LogicalName}] {entity.Id}");
+            sb.AppendLine(entity.Id.ToString());
             sb.AppendLine();
 
             foreach (var field in FormatRecordFields(entity))
+            {
+                if (entity.Attributes.TryGetValue(field.Key, out var raw) && raw is Guid rawGuid && rawGuid == entity.Id)
+                    continue;
                 sb.AppendLine($"{field.Key}: {field.Value}");
+            }
 
             return sb.ToString();
         }

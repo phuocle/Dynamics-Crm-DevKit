@@ -33,16 +33,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageEnvironmentVariableResult)),
         Description(
-            "Manage Dataverse environment variables (definition + current value). Actions: 'list', 'detail' (read-only) | 'create', 'update', 'delete', 'clear' (mutations — confirm first).\n" +
+            "Manage Dataverse environment variables (definition + current value). Actions: 'list', 'detail' (read-only) | 'create', 'update', 'delete', 'clear' (mutations — confirm first). CREATE uses the publisher prefix from solution_name directly. 'create' REQUIRES solution_name+display_name+type; schema name = publisher prefix of solution_name + display name (blocks reserved prefix 'new'; rejects if display/schema name exists → use update). confirmed_prefix = optional safety check. Type immutable after create — delete+recreate to change. 'update' with empty value leaves the current value untouched — use 'clear' to remove it. 'clear' removes current value only (definition+default remain). 'delete' is irreversible (no backup). Secret-type values are masked as '(secret)' in all outputs.\n\n" +
             "WHEN TO USE:\n" +
             "- Create or update env vars used by apps, flows, or integrations\n" +
-            "- Inspect default/current values; move config between environments via solutions\n" +
+            "- Inspect default/current values; move config between environments via solutions\n\n" +
             "RELATED TOOLS:\n" +
             "- execute_webapi → environmentvariable* endpoints are blocked; use this tool\n" +
-            "- get_solution_components → verify a variable's solution membership\n\n" +
-            "CREATE uses the publisher prefix from solution_name directly. 'create' REQUIRES solution_name+display_name+type; schema name = publisher prefix of solution_name + display name (blocks reserved prefix 'new'; rejects if display/schema name exists → use update). confirmed_prefix = optional safety check. Type immutable after create — delete+recreate to change.\n" +
-            "'update' with empty value leaves the current value untouched — use 'clear' to remove it. 'clear' removes current value only (definition+default remain). 'delete' is irreversible (no backup).\n" +
-            "Secret-type values are masked as '(secret)' in all outputs.")]
+            "- get_solution_components → verify a variable's solution membership")]
         public CallToolResult manage_environment_variable(
             [Description("'list', 'detail', 'create', 'update', 'delete', 'clear'.")] string action = "",
             [Description("Display/schema name with prefix (e.g. 'v4_ApiEndpoint'). Required: detail/update/delete/clear. Omit for create (derived from solution).")] string variable_name = "",
@@ -58,7 +55,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 if (string.IsNullOrWhiteSpace(action))
-                    return Error("action is required. Valid values: 'list', 'detail', 'create', 'update', 'delete', 'clear'.");
+                    return Error("action is required.", "Valid values: 'list', 'detail', 'create', 'update', 'delete', 'clear'.");
 
                 var normalizedAction = action.Trim().ToLowerInvariant();
             
@@ -70,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "update" => HandleUpdateAction(variable_name, display_name, default_value, value, description),
                     "delete" => HandleDelete(variable_name),
                     "clear" => HandleClear(variable_name),
-                    _ => Error($"Invalid action '{action}'. Valid values: 'list', 'detail', 'create', 'update', 'delete', 'clear'.")
+                    _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'create', 'update', 'delete', 'clear'.")
                 };
             }
             catch (Exception ex)
@@ -93,10 +90,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (existingByDisplayName.IsSuccess)
             {
                 var existingSchemaName = existingByDisplayName.Value.GetAttributeValue<string>("schemaname") ?? existingByDisplayName.CanonicalName ?? existingByDisplayName.Value.Id.ToString();
-                return Error($"Display Name '{displayName.Trim()}' resolves to existing environment variable '{existingSchemaName}'. Use action='update' to modify it.");
+                return Error($"Display Name '{displayName.Trim()}' resolves to existing environment variable '{existingSchemaName}'.",
+                    "Use action='update' to modify it.");
             }
             if (existingByDisplayName.Status == ResolveStatus.Ambiguous || existingByDisplayName.Status == ResolveStatus.Error)
-                return Error(existingByDisplayName.Error);
+                return Error(existingByDisplayName.Error.Split("\r\n")[0], "Use manage_environment_variable(action='list') to see all environment variables.");
 
             // Layer 1 (AI gate): solution_name is mandatory — prefix can only come from the solution's publisher
             if (string.IsNullOrWhiteSpace(solutionName))
@@ -107,7 +105,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Resolve solution → publisher prefix
             var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
             if (!solResult.IsSuccess)
-                return Error(solResult.Error);
+                return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
 
             // Layer 2 (code gate): block 'new' prefix — it means the solution's publisher is misconfigured
             // or the AI bypassed the layer-1 gate by guessing a default prefix
@@ -132,10 +130,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (existingByVariableName.IsSuccess)
             {
                 var existingSchemaName = existingByVariableName.Value.GetAttributeValue<string>("schemaname") ?? existingByVariableName.CanonicalName ?? existingByVariableName.Value.Id.ToString();
-                return Error($"Environment variable '{variableName}' resolves to existing environment variable '{existingSchemaName}'. Use action='update' to modify it.");
+                return Error($"Environment variable '{variableName}' resolves to existing environment variable '{existingSchemaName}'.",
+                    "Use action='update' to modify it.");
             }
             if (existingByVariableName.Status == ResolveStatus.Ambiguous || existingByVariableName.Status == ResolveStatus.Error)
-                return Error(existingByVariableName.Error);
+                return Error(existingByVariableName.Error.Split("\r\n")[0], "Use manage_environment_variable(action='list') to see all environment variables.");
 
             return HandleCreate(variableName, displayName, type, defaultValue, currentValue, description, solResult.UniqueName);
         }
@@ -148,7 +147,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var resolved = ResolveDefinitionInput(variableName);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return Error(resolved.Error);
+                return Error(resolved.Error.Split("\r\n")[0], "Use manage_environment_variable(action='list') to see all environment variables.");
 
             return HandleUpdate(resolved.Definition, resolved.SchemaName, displayName, defaultValue, currentValue, description);
         }
@@ -162,7 +161,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
                 if (!solResult.IsSuccess)
-                    return Error(solResult.Error);
+                    return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
                 solutionName = solResult.UniqueName;
             }
 
@@ -226,7 +225,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var resolved = ResolveDefinitionInput(variableName);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return Error(resolved.Error);
+                return Error(resolved.Error.Split("\r\n")[0], "Use manage_environment_variable(action='list') to see all environment variables.");
             var def = resolved.Definition;
 
             var currentValues = GetCurrentValues([def.Id]);
@@ -426,7 +425,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var resolved = ResolveDefinitionInput(variableName);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return Error(resolved.Error);
+                return Error(resolved.Error.Split("\r\n")[0], "Use manage_environment_variable(action='list') to see all environment variables.");
             var def = resolved.Definition;
             variableName = resolved.SchemaName;
 
@@ -470,7 +469,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var resolved = ResolveDefinitionInput(variableName);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return Error(resolved.Error);
+                return Error(resolved.Error.Split("\r\n")[0], "Use manage_environment_variable(action='list') to see all environment variables.");
             var def = resolved.Definition;
             variableName = resolved.SchemaName;
 

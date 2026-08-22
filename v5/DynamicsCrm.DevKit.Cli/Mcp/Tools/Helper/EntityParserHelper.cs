@@ -91,6 +91,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             if (resolved.IsSuccess)
                 return resolved.Value;
 
+            if (resolved.Status == ResolveStatus.Ambiguous)
+                throw new AmbiguousFieldException(resolved.Error.Split("\r\n")[0], fieldInput, resolved.Candidates);
+
             throw new ArgumentException(resolved.Error);
         }
 
@@ -281,6 +284,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                         .ToList()
                 };
             }
+        }
+    }
+
+    /// <summary>
+    /// Thrown when a fields_json key ambiguously matches multiple attributes.
+    /// Carries the resolver candidates so tools can emit them in [Detail] instead of a text table.
+    /// </summary>
+    internal sealed class AmbiguousFieldException : ArgumentException
+    {
+        public string FieldInput { get; }
+        public List<ResolveCandidate> Candidates { get; }
+
+        public AmbiguousFieldException(string message, string fieldInput, List<ResolveCandidate> candidates)
+            : base(message)
+        {
+            FieldInput = fieldInput;
+            Candidates = candidates ?? new List<ResolveCandidate>();
         }
     }
 }

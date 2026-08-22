@@ -35,15 +35,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageChoiceResult)),
         Description(
-            "Manage GLOBAL option sets (choices). Actions: 'list', 'detail' (read-only) | 'create', 'update' (mutations). For local picklists → manage_column.\n\n" +
+            "Manage GLOBAL option sets (choices). Actions: 'list', 'detail' (read-only) | 'create', 'update' (mutations). For local picklists → manage_column. solution_name is REQUIRED for create and label-only add_options — ask the user if missing, never guess. If needsWait=true, wait pollAfterSeconds before detail.\n\n" +
             "WHEN TO USE:\n" +
             "- Create a global choice with options, or update options (add/rename/remove/recolor), display name, description\n" +
             "- Inspect a global choice before binding it to a column\n\n" +
             "RELATED TOOLS:\n" +
             "- manage_column → local picklists; bind a global choice to a column\n" +
             "- get_tables → see which columns use a choice\n" +
-            "- publish_customizations → batch publish after multiple metadata changes\n\n" +
-            "solution_name is REQUIRED for create and label-only add_options — ask the user if missing, never guess. If needsWait=true, wait pollAfterSeconds before detail.")]
+            "- publish_customizations → batch publish after multiple metadata changes")]
         public CallToolResult manage_choice(
             [Description("'list', 'detail', 'create', 'update'.")] string action = "",
             [Description("Logical or display name. Required: detail/update. Optional: create (auto-derived). Display Name matched first.")] string optionset_name = "",
@@ -60,7 +59,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 if (string.IsNullOrWhiteSpace(action))
-                    return Error("action is required. Valid values: 'list', 'detail', 'create', 'update'.");
+                    return Error("action is required.", "Valid values: 'list', 'detail', 'create', 'update'.");
 
                 var normalizedAction = action.Trim().ToLowerInvariant();
 
@@ -70,7 +69,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "detail" => HandleDetail(optionset_name),
                     "create" => HandleCreate(optionset_name, display_name, description, options, solution_name, option_colors),
                     "update" => HandleUpdateSafe(optionset_name, display_name, description, add_options, update_options, remove_options, solution_name, option_colors),
-                    _ => Error($"Invalid action '{action}'. Valid values: 'list', 'detail', 'create', 'update'.")
+                    _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'create', 'update'.")
                 };
             }
             catch (Exception ex)
@@ -128,7 +127,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("No changes specified. Provide at least one of: display_name, description, add_options, update_options, remove_options, option_colors.");
 
             if (!TryResolveToLogicalName(optionsetName, out var name, out var resolveErr))
-                return Error(resolveErr);
+                return Error(resolveErr.Split("\r\n")[0], "Use manage_choice(action='list') to see all available global option sets.");
 
             var existingMeta = RetrieveOptionSetMetadata(name);
             if (existingMeta == null)
@@ -143,7 +142,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName);
                 if (!solResult.IsSuccess)
-                    return Error(solResult.Error);
+                    return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
                 var maxExisting = existingMeta.Options != null && existingMeta.Options.Count > 0
                     ? existingMeta.Options.Max(o => o.Value ?? 0)
                     : solResult.OptionValuePrefix * 10000 - 1;
@@ -368,14 +367,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleDetail(string optionsetName)
         {
             if (string.IsNullOrWhiteSpace(optionsetName))
-                return Error("optionset_name is required for 'detail'. " +
-                    "Use action='list' to see all available global option sets.");
+                return Error("optionset_name is required for 'detail'.",
+                    "Use manage_choice(action='list') to see all available global option sets.");
 
             optionsetName = optionsetName.Trim().ToLowerInvariant();
 
             var resolved = DisplayNameFirstResolver.ResolveGlobalOptionSet(_serviceClient, optionsetName, "manage_choice");
             if (!resolved.IsSuccess)
-                return Error($"{resolved.Error}\nUse manage_choice(action='list') to see all available global option sets.");
+                return Error(resolved.Error.Split("\r\n")[0], "Use manage_choice(action='list') to see all available global option sets.");
 
             return BuildDetailResult(resolved.Value);
         }
@@ -431,19 +430,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"Global option set '{identityInput.Trim()}' already exists as '{existingChoice.Value.Name}' ({existingChoice.Value.DisplayName?.UserLocalizedLabel?.Label ?? ""}). " +
                     "Use action='update' to modify it.");
             if (existingChoice.Status == ResolveStatus.Ambiguous || existingChoice.Status == ResolveStatus.Error)
-                return Error(existingChoice.Error);
+                return Error(existingChoice.Error.Split("\r\n")[0], "Use manage_choice(action='list') to see all available global option sets.");
 
             var name = optionsetName.Trim().ToLowerInvariant();
 
             // solution_name is required for create — code-level enforcement, not just AI description
             if (string.IsNullOrWhiteSpace(solutionName))
                 return Error(
-                    "solution_name is required for 'create'. " +
+                    "solution_name is required for 'create'.",
                     "Provide the solution unique name or display name so the publisher's customizationoptionvalueprefix can be resolved and option integer values can be assigned correctly.");
 
             var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName);
             if (!solResult.IsSuccess)
-                return Error(solResult.Error);
+                return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
 
             var publisherPrefix = solResult.Prefix.ToLowerInvariant();
 
@@ -455,7 +454,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var suggested = DerivePortalOptionSetName(displayName, publisherPrefix);
                 return Error(
-                    $"optionset_name '{name}' does not start with the solution publisher prefix '{publisherPrefix}_'. " +
+                    $"optionset_name '{name}' does not start with the solution publisher prefix '{publisherPrefix}_'.",
                     $"Use '{suggested}' or omit optionset_name to auto-derive it.");
             }
 

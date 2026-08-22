@@ -318,10 +318,46 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 rewritten = $"{ErrorPrefix} [InvalidPrefix] Schema name is missing or does not start with a valid publisher customization prefix. "
                          + "Ensure the component name starts with the solution publisher prefix.";
             }
+            else if (lower.Contains("fields_json must be a non-empty json object"))
+            {
+                // User-input validation surfacing as ArgumentException from EntityParserHelper —
+                // rewrite so it reads as a normal validation error, not a tool bug.
+                rewritten = $"{ErrorPrefix} fields_json must be a non-empty JSON object.\n"
+                         + "[Hint] Provide at least one field, e.g. {\"name\": \"value\"}. Use get_tables(entity_name=...) to list valid field names.";
+            }
             else if (lower.Contains("does not exist") && lower.Contains("dataversefault:"))
             {
-                rewritten = $"{ErrorPrefix} [RecordNotFound] The specified record was not found in Dataverse. "
-                         + "Verify the record_id via search_records or parse_record_url.";
+                // Rewrite to the 3-part convention with a friendly message; the raw server
+                // fault (errorCode, innerFault, stackTrace) stays in structured.details.
+                var faultMessage = cleaned;
+                var nlIdx = faultMessage.IndexOf('\n');
+                if (nlIdx > 0) faultMessage = faultMessage.Substring(0, nlIdx);
+                var kindIdx = faultMessage.ToLowerInvariant().IndexOf("dataversefault:", StringComparison.Ordinal);
+                if (kindIdx >= 0) faultMessage = faultMessage.Substring(kindIdx + "DataverseFault:".Length).Trim();
+                var detailIdx = cleaned.IndexOf("\n[Detail] ", StringComparison.Ordinal);
+                var detail = detailIdx >= 0 ? cleaned.Substring(detailIdx + 1) : "";
+
+                var recordSb = new StringBuilder();
+                var recordMatch = System.Text.RegularExpressions.Regex.Match(
+                    faultMessage,
+                    @"Entity '(?<entity>[^']+)' With Id = (?<id>[0-9a-fA-F-]{36}) Does Not Exist",
+                    System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                if (recordMatch.Success)
+                {
+                    var entityName2 = recordMatch.Groups["entity"].Value;
+                    var recordId2 = recordMatch.Groups["id"].Value;
+                    recordSb.Append($"{ErrorPrefix} {entityName2} record with id {recordId2} does not exist. It may have been deleted.");
+                    recordSb.Append("\n[Hint] Verify with manage_record(action='read'), or find the correct id via search_records / parse_record_url.");
+                    recordSb.Append($"\n[Detail] {{\"entity\":{JsonSerializer.Serialize(entityName2)},\"id\":\"{recordId2}\",\"errorCode\":\"0x80040217\",\"message\":{JsonSerializer.Serialize(faultMessage)}}}");
+                }
+                else
+                {
+                    recordSb.Append($"{ErrorPrefix} [RecordNotFound] {faultMessage}");
+                    recordSb.Append("\n[Hint] The record may have been deleted, or the record_id/entity_name pair is wrong. Verify with manage_record(action='read'), or find the correct id via search_records / parse_record_url.");
+                    if (detail.Length > 0)
+                        recordSb.Append('\n').Append(detail);
+                }
+                rewritten = recordSb.ToString();
             }
             else if (lower.Contains("0x80072522"))
             {
