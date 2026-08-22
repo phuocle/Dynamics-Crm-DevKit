@@ -2,28 +2,46 @@
 
 Rules for every `testcall/{N}.{tool}.md` file. Goal: 36 files share one format so they become Wiki docs.
 
+Status: files `1`–`4` already follow this template. Files `5`–`36` still use the old format (`# Tool description AI đọc được` / `# Input tool call` / `# Output tool call` / `# Kết quả AI tổng hợp`) with per-file variations — when you touch one of those files, convert it fully to this template using the migration rules in the last section.
+
 ## ⭐ REFERENCE FILE (APPROVED)
 
 **`2.get_audit_history.md` is the golden reference.** It has been written, reviewed, and fully approved by anh Phước — every detail is correct as expected. Before you start, **read `2.get_audit_history.md` in full** and match its format exactly. After you finish your file, **compare it side-by-side against `2.get_audit_history.md`** and self-check that the format matches: same H1/H2 headings, same parameter column alignment, same TEST/INPUT/OUTPUT/RESULT/RESULTS structure, same English-only rule, same cleanup of bug/fix narrative. If it does not match, fix it before reporting done.
 
+`1.execute_fetchxml.md`, `3.get_business_process_flows.md`, and `4.get_business_rules.md` are additional approved examples (3 has no error tests; 4 shows several error tests).
+
 ## Language
 
-- English only. If a file has Vietnamese, translate it to English.
+- English only in all prose: headings, test descriptions, RESULTS bullets, notes. If a file has Vietnamese, translate it to English.
+- **Exception — captured output data stays verbatim.** Vietnamese or special characters inside a captured OUTPUT block (e.g. an owner name `"Phước Lê Văn"` in JSON, or `🟢DEVKITV4` in text output) is real org data and must NOT be translated or stripped.
 
 ## Structure
 
-1. **No H1 with tool name** — the number + tool name are already in the filename.
-2. `# TOOL DESCRIPTION` (exact, uppercase) → a ` ```text ` block with the tool description copied from the tool's `Description(...)` attribute.
+1. **No H1 with the tool name/number** — `# 5. get_custom_apis`, `# Tool description`, `# Tool description AI đọc được` are all wrong. The number + tool name are already in the filename.
+2. `# TOOL DESCRIPTION` (exact, uppercase) → a ` ```text ` block with the tool description copied from the tool's `Description(...)` attribute. Keep the internal `WHEN TO USE:` and `RELATED TOOLS:` headers when present; in `RELATED TOOLS:` bullets use the `→` arrow (not `->`).
 3. `# PARAMETERS` (exact, uppercase) → a ` ```text ` block listing every parameter, one per line, column-aligned:
    `key : type : description`
-   - Align the key column to the longest key (pad with spaces), then ` : `, then type padded to the longest type, then ` : `, then description.
+   - Align the key column to the longest key (pad with spaces), then `:`, then type padded to the longest type, then `:`, then description.
+   - Types: `string`, `int`, `bool` (match the C# signature).
+   - Defaults and ranges go inline in the description (`Default 5000.`, `Max 43200.`).
    - Get key/type/description from the tool's `[Description(...)] string/int param` signatures in `Mcp/Tools/{Tool}.cs`.
+   - If the tool has no parameters at all (e.g. `whoami`), keep the `# PARAMETERS` section with a single line `This tool takes no parameters.`
+   - Do NOT merge parameters into the TOOL DESCRIPTION block (`Parameters:` sub-lists inside the description fence are the old format — split them out).
 4. Repeat for every test:
-   - `# TEST N` (H1, uppercase TEST)
-   - `## INPUT` (H2) → one description line, then a ` ```json ` block with the tool-call input.
-   - `## OUTPUT` (H2) → a ` ```text ` block with the plain-text output, then a ` ```json ` block with the structured object.
-   - `## RESULT` (H2) → a ` ```json ` block: `{ "IsError": true }` or `{ "IsError": false }`.
-5. `# RESULTS` (exact, plural, uppercase) → bullet list of outcomes, one per test.
+   - `# TEST N` (H1, uppercase TEST). N is sequential from 1 with no gaps and no letter suffixes — old `Test 8b`, `Test 4b`, `Test 34a`… must be renumbered into the sequence.
+   - `## INPUT` (H2) → one description line, then a ` ```json ` block with the tool-call input as **bare arguments only** (`{ "action": "list", ... }`), pretty-printed with 2-space indent. Do NOT use the `{"name": "...", "arguments": {...}}` envelope, arrow pseudo-calls (`→ tool(...)`), or expectation lines (`→ expect: ...`) — fold the expectation into the description line instead.
+   - `## OUTPUT` (H2) → a ` ```text ` block with the plain-text output, then a ` ```json ` block with the structured object (success tests only — see the error-test rule below).
+   - `## RESULT` (H2) → a ` ```json ` block: `{ "IsError": true }` or `{ "IsError": false }`, one line, always present — never `IsError: `true``inline code, never a`**IsError:**` bold line, never omitted.
+5. `# RESULTS` (exact, plural, uppercase) → bullet list of outcomes, one per test: `- Test N: <English summary sentence>.` Bullets are ordered by test number (1, 2, 3, …), never grouped by outcome. Consecutive tests with the same outcome may be ranged: `- Test 4-6: three validation errors ...`.
+   - No extra non-test bullets (no `Output convention:` bullet, no `**Bold label:**` thematic bullets, no bug-history bullets).
+   - No markdown tables, no ✅ emoji, no numbered lists, no bold lead-ins.
+
+## Test content rules
+
+- Every test is a real tool call against the tool this file documents. Helper/verification calls (`whoami`, `get_tables`, `devkit mcp --tools`, `git status`, `manage_record` delete for cleanup) are **not tests** — drop them. If a cleanup or verification step is genuinely worth keeping, mention it inside the test's description line or the matching RESULTS bullet, in one short sentence.
+- A zero-result success (`List 0 found`) is a SUCCESS test: both OUTPUT blocks + `{ "IsError": false }`.
+- `[Failed]`-prefixed content with `IsError: false` (e.g. `manage_deleted_records` no-op cases) stays a success test; keep the prefix verbatim in the text block.
+- Long outputs: never truncate with `,...` and never replace a block with a prose summary (`Structured content (JSON): giống hệt Test 1 ...` is the old format). Either paste the full verbatim output, or — if genuinely enormous — keep the verbatim first lines and mark the rest `[miss] Output too large to embed. Re-run and capture.` Never invent the omitted part.
 
 ## 🚫 HARD RULE: NEVER FABRICATE OUTPUT (read this twice)
 
@@ -40,6 +58,7 @@ Rules for every `testcall/{N}.{tool}.md` file. Goal: 36 files share one format s
 - If you can see part of the output but not all, keep the part you can see verbatim and mark only the missing part `[miss]`. Never silently drop or "complete" partial output.
 - The reference file `2.get_audit_history.md` is a happy case with full captured output. Most other files will contain `[miss]` markers — that is expected and correct.
 - Miss marker fence rules: the plain-text miss uses a ` ```text ` fence; the JSON miss and the RESULT miss use a ` ```json ` fence (the marker text itself is still plain, but the fence matches the block it stands in for).
+- This rule also applies during migration from the old format: prose substitutes (`giống hệt Test 1`), paraphrased `structured:` digests, and "reconstructed from verification" outputs in the old files are NOT captured output — convert them to `[miss]` markers rather than copying them as if they were real.
 
 ## 🔧 WHEN aP REQUESTS "FIX THE MISS"
 
@@ -57,32 +76,47 @@ When anh Phước asks you to fix / fill in / resolve a `[miss]` marker in a fil
 
 For a test whose result is an **error** (`IsError: true`), the MCP `CallToolResult` carries the same data in two places at once: the `content` text block (a 3-part `[Error]/[Hint]/[Detail]` text) and the `structuredContent` JSON object (`{ "error", "hint", "details" }`). MCP clients surface only one side on errors — never both — and we standardise on the **text** side. So for an error test, record **only** the ` ```text ` block (the `[Error]/[Hint]/[Detail]` output, verbatim) and the `## RESULT` `{ "IsError": true }` block. **Do not include a ` ```json ` structured block at all** — not even a `[miss]` marker. The structure for an error test is:
 
-```
+````
 ## OUTPUT
 
 ```text
 [Error] {message}
 [Hint] {hint}            ← only if a hint exists
 [Detail] {json-string}   ← only if details exist
-```
+````
 
 ## RESULT
 
 ```json
 { "IsError": true }
 ```
-```
 
 - If your client surfaces the **structured JSON** instead of text, record the ` ```json ` object verbatim and omit the ` ```text ` block (still include `## RESULT`). Never include both blocks for an error test.
 - Never reconstruct the side you cannot see from the side you can, from the tool description, or from the code.
+- The error tag is always `Hint:`. Old captures that show `Tip:` are from pre-standardization builds — keep them verbatim when copying a real capture, but never write `Tip:` yourself.
+- Never wrap error output in a combined JSON object (`{"content": ..., "structuredContent": ...}` raw JSON-RPC dumps) — that is the old format.
 
 This rule overrides the general "OUTPUT has both a text block and a JSON block" structure **only for error tests**. Happy-case (success) tests still record both blocks as usual, because success output is surfaced by every client.
 
 ## Cleanup rules
 
-- Kill bug/fix-bug narrative. Rewrite any "regression", "phase 4", "fix bug" story as a normal `TEST N` with a clean description.
+- Kill bug/fix-bug narrative. Rewrite any "regression", "phase 4", "fix bug", "Round 2", "Đợt 2", "STRICT BUG POLICY", "BUG #2 FOUND + FIXED" story as a normal `TEST N` with a clean description. Multi-round retest tests (e.g. `34a`–`34d` after a bug fix) collapse into the renumbered sequence covering the final behavior only.
+- Kill build/runtime evidence: `Runtime proof:`, `assemblySha256 = ...`, `[Round 2]` build stamps, `whoami` SHA verification, MCP evidence sections, cleanup-evidence sections — all dropped. They belong to the review conversation, not the Wiki doc.
 - Keep real output data (timestamps, GUIDs, values) verbatim from the source file.
 - Short is better — long files make AI lose context. Do not duplicate identical structured JSON across tests unless it is the actual output; if two tests share identical output, show it once and reference it.
+- Only two fence languages exist in these files: ` ```text ` and ` ```json `. No bare ` ``` ` fences, no ` ```js `/` ```xml ` fences (XML content like FormXML or FetchXML lives inside a ` ```text ` or ` ```json ` block as data).
+- No blockquotes, no `Note:`/`Lưu ý:`/`Quan sát:` prose paragraphs between tests, no `Setup:`/`Fixture:` preamble blocks inside a test. If the setup matters, one sentence in the INPUT description line.
+
+## Migration checklist (old format → this template)
+
+When converting a file that still uses `# Tool description [AI đọc được]` / `# Input tool call` / `# Output tool call` / `# Kết quả [AI tổng hợp]`:
+
+1. Drop the `# N. tool_name` H1; rename description H1 to `# TOOL DESCRIPTION`.
+2. Extract parameters into a new `# PARAMETERS` section (from the embedded `Parameters:` list, `Input schema params:` line, or the C# signatures) in aligned `key : type : description` form.
+3. Merge the split Input/Output halves into per-test `# TEST N` / `## INPUT` / `## OUTPUT` / `## RESULT` blocks; renumber all tests sequentially (including letter-suffixed ones); convert envelopes/arrow-calls to bare-argument ` ```json ` inputs.
+4. Apply the error-test text-only rule; replace prose substitutes and paraphrases with `[miss]` markers per the hard rule.
+5. Translate all Vietnamese prose to English (leave captured output data verbatim); replace `# Kết quả …` with `# RESULTS` bullets in `- Test N: ...` form; drop tables, ✅, bold lead-ins, bug narrative, build proofs, blockquotes.
+6. Compare the result side-by-side with `2.get_audit_history.md` before reporting done.
 
 ## Minimal skeleton
 
@@ -130,3 +164,4 @@ plain text output
 
 - Test 1: ...
 ```
+

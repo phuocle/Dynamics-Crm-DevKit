@@ -89,7 +89,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var apiResult = ResolveCustomApi(api_name.Trim());
                     if (!apiResult.IsSuccess)
-                        return Error($"api_name '{api_name.Trim()}': {apiResult.Error}");
+                        return Error(
+                            $"api_name '{api_name.Trim()}': {apiResult.Error}",
+                            apiResult.Status == ResolveStatus.NotFound
+                                ? "Use get_custom_apis with api_name empty to list available Custom APIs."
+                                : null);
                     return BuildDetail(apiResult.CanonicalName);
                 }
 
@@ -365,7 +369,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 kind: "customapi",
                 ambiguousTag: "[AmbiguousCustomApi]",
                 notFoundTag: "[NotFoundCustomApi]",
-                notFoundTip: "Use get_custom_apis with api_name empty to list available Custom APIs.",
+                notFoundTip: null,
                 retryParameterName: "api_name");
         }
 
