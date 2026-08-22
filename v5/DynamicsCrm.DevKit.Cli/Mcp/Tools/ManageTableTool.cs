@@ -37,7 +37,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- UPDATE (entity exists): logical_name + optional display_name, display_collection_name, description, is_audit_enabled, is_quick_create_enabled, is_search_enabled.\n" +
             "- CREATE (new table): display_name + display_collection_name + solution_name (resolves publisher prefix). Auto-creates primary name attribute.\n" +
             "Technical names come from logical_name / schema_name or are auto-derived from display_name.\n\n" +
-            "WHEN TO USE: create a new custom table, or update mutable metadata of an existing one. RELATED TOOLS: get_tables (discover entities), manage_column (add columns), manage_relationship (1:N / N:N), manage_form (forms), publish_customizations (batch publish).")]
+            "WHEN TO USE:\n" +
+            "- Create a new custom table, or update mutable metadata of an existing one\n" +
+            "\n" +
+            "RELATED TOOLS:\n" +
+            "- get_tables → discover entities\n" +
+            "- manage_column → add columns\n" +
+            "- manage_relationship → 1:N / N:N\n" +
+            "- manage_form → forms\n" +
+            "- publish_customizations → batch publish after multiple metadata changes")]
         public CallToolResult manage_table(
             [Description("Singular display name (e.g. 'Project'). Required for CREATE.")] string display_name = "",
             [Description("Plural (e.g. 'Projects'). Required: create.")] string display_collection_name = "",
@@ -77,7 +85,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var solResult = SolutionResolverHelper.Resolve(_serviceClient, solution_name);
                     if (!solResult.IsSuccess)
-                        return Error(solResult.Error, "Use get_solution_components to find valid solution names.");
+                        return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
                     resolvedPrefix = solResult.Prefix;
                     resolvedSolutionUniqueName = solResult.UniqueName;
                 }
@@ -92,7 +100,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                     else if (entityResolve.Status != ResolveStatus.NotFound)
                     {
-                        return Error(entityResolve.Error);
+                        return Error(entityResolve.Error.Split("\r\n")[0], "Use get_tables to list entities.");
                     }
 
                     if (existingEntity != null)
@@ -202,7 +210,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         $"Cannot create table '{display_name}' because derived logical name '{entityName}' already exists.",
                         "Re-call manage_table with an explicit logical_name to update the existing entity, or choose a different display_name.");
                 if (collisionResolve.Status == ResolveStatus.Ambiguous || collisionResolve.Status == ResolveStatus.Error)
-                    return Error(collisionResolve.Error);
+                    return Error(collisionResolve.Error.Split("\r\n")[0], "Use get_tables to list entities.");
             }
 
             if (primary_attribute_max_length < 1) primary_attribute_max_length = 100;
