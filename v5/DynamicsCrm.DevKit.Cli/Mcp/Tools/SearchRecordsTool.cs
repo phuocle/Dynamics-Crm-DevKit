@@ -1,4 +1,5 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk.Metadata;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
@@ -66,7 +67,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult ExecuteSearch(string searchTerm, string entities, int top, string filter)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
-                return Error("search_term is required when action='search'.");
+                return Error("search_term is required when action='search'.",
+                    "Provide 1-100 chars. Operators: + (AND), | (OR), - (NOT), * (wildcard), \"phrase\", () (group).");
 
             var trimmedTerm = searchTerm.Trim();
             if (trimmedTerm.Length > 100)
@@ -77,8 +79,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var sw = Stopwatch.StartNew();
             var resolvedEntities = ResolveEntityList(entities);
-            if (resolvedEntities.Error != null)
-                return Error(resolvedEntities.Error);
+            if (resolvedEntities.Failed != null)
+            {
+                var failed = resolvedEntities.Failed.Value;
+                if (failed.Result.Status == ResolveStatus.Ambiguous)
+                {
+                    var entityMatches = failed.Result.Candidates.Select(c => new TableMatchEntry
+                    {
+                        DisplayName = c.DisplayName ?? "",
+                        LogicalName = c.LogicalName ?? "",
+                        SchemaName = c.SchemaName ?? ""
+                    }).ToList();
+                    return Error(
+                        $"entities '{failed.Input}': {failed.Result.Error.Split("\r\n")[0]}",
+                        "Re-call with a more specific entities value.",
+                        new SearchRecordsResult { EntityMatches = entityMatches });
+                }
+                return Error(
+                    $"entities '{failed.Input}': {failed.Result.Error.Split("\r\n")[0]}",
+                    "Use get_tables to discover valid entity names.");
+            }
             var requestBody = BuildSearchRequestBody(trimmedTerm, resolvedEntities.Values, top, filter);
 
             var response = _serviceClient.ExecuteWebRequest(
@@ -137,7 +157,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Helpers ─────────────────────────────────────────────────────────────
 
-        private (List<string> Values, string Error) ResolveEntityList(string entities)
+        private (List<string> Values, (string Input, ResolveResult<EntityMetadata> Result)? Failed) ResolveEntityList(string entities)
         {
             if (string.IsNullOrWhiteSpace(entities)) return ([], null);
 
@@ -146,7 +166,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var r = DisplayNameFirstResolver.ResolveEntity(_serviceClient, input, "search_records");
                 if (!r.IsSuccess)
-                    return (null, $"entities '{input}': {r.Error}");
+                    return (null, (input, r));
                 if (!string.IsNullOrWhiteSpace(r.Value?.LogicalName))
                     resolved.Add(r.Value.LogicalName);
             }

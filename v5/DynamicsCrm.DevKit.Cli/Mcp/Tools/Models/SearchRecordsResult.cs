@@ -48,6 +48,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string RawResponse { get; set; }
 
+        [JsonPropertyName("entityMatches")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<TableMatchEntry> EntityMatches { get; set; }
+
         [JsonPropertyName("errorCode")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string ErrorCode { get; set; }
