@@ -48,6 +48,16 @@ Status: files `1`–`4` already follow this template. Files `5`–`36` still use
 - `[Failed]`-prefixed content with `IsError: false` (e.g. `manage_deleted_records` no-op cases) stays a success test; keep the prefix verbatim in the text block.
 - Long outputs: never truncate with `,...` and never replace a block with a prose summary (`Structured content (JSON): giống hệt Test 1 ...` is the old format). Either paste the full verbatim output, or — if genuinely enormous — keep the verbatim first lines and mark the rest `[miss] Output too large to embed. Re-run and capture.` Never invent the omitted part.
 
+## Mutation-test data rules (files 17 onward)
+
+From file 17 onward the tools **mutate Dataverse data** (create/update/delete of records and metadata). These rules govern the test data — they are aP's decisions, not suggestions:
+
+1. **Never delete created data.** No cleanup calls at the end of a migration session. aP controls the org and deletes test artifacts manually when he chooses.
+2. **Test solution is always `all_in_one`.** All solution-scoped creates go there.
+3. **Test table:** if the org does not already have it, create a new table in `all_in_one` with Display Name `Test Mcp Final` and use it for all table/column/form/view/relationship tests.
+4. **Name collisions get a numeric suffix, starting from 2.** This applies to every component type (column, choice, chart, view, form, environment variable, …), not just columns: if `Column A` already exists, create `Column A2`; if that exists too, `Column A3`, and so on. Check before each create.
+5. **The doc records only the final name.** If repeated runs meant the session actually created `Column A`, `Column A2`, `Column A3`, and finally tested against `Column A4`, the doc's tests reference `Column A4` as if the earlier names never existed — the file must read as one clean pass against the final values. Earlier intermediate names never appear in the doc.
+
 ## 🚫 HARD RULE: NEVER FABRICATE OUTPUT (read this twice)
 
 **This is the most important rule. Violating it breaks the whole purpose of these files.**
