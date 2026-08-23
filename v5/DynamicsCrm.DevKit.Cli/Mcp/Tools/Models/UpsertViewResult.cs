@@ -128,6 +128,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("views")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<ViewListEntry> Views { get; set; }
+
+        [JsonPropertyName("entityMatches")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<TableMatchEntry> EntityMatches { get; set; }
     }
 
     internal sealed class ViewListEntry

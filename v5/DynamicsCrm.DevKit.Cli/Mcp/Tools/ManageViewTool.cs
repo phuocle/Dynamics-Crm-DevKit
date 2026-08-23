@@ -43,15 +43,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Manage views (savedquery/userquery). Actions: 'list', 'detail' (read-only) | 'create', 'update', 'rename', 'set_default', 'undo' (mutations).\n\n" +
             "WHEN TO USE:\n" +
-            "- List or inspect views of an entity (system savedquery or personal userquery, scoped by is_personal_view; use detail for XML)\n" +
-            "- Create/update a view from FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type); patch cell attributes, rename, set the default public view\n" +
+            "- List or inspect views of an entity (system savedquery or personal userquery, scoped by is_personal_view; use detail for XML) — always list/detail BEFORE editing\n" +
+            "- Create/update a view from FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type); patch cell attributes, rename, set the default public view. Created views are always Public (querytype=0)\n" +
+            "- QuickFind views: searchable fields are <condition> in <filter isquickfindfields=\"1\">; grid columns are display only\n" +
             "- Restore a view from a .fetchxml.bak backup file written by update/rename/undo (undo)\n\n" +
             "RELATED TOOLS:\n" +
             "- get_tables → column logical names for FetchXML attributes/conditions\n" +
             "- execute_fetchxml → test a FetchXML before putting it into a view\n" +
-            "- manage_form → entity forms; publish_customizations → batch publish; execute_webapi → raw savedquery access\n\n" +
-            "Created views are always Public (querytype=0). QuickFind views: searchable fields are <condition> in <filter isquickfindfields=\"1\">; grid columns are display only. " +
-            "Always list/detail BEFORE editing. workspace_folder is REQUIRED for update/rename/undo — current view XML is backed up to {workspace_folder}/.devkit/backups/views/ before overwrite. See docs://instructions_for_views, schema://fetchxml.")]
+            "- manage_form → entity forms; publish_customizations → batch publish; execute_webapi → raw savedquery access")]
         public CallToolResult manage_view(
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",
             [Description("Entity Display/logical name (Display Name resolved first).")] string entity_name = "",
@@ -69,7 +68,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error("action is required.", "Valid values: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.");
 
                 if (string.IsNullOrWhiteSpace(entity_name))
-                    return Error("entity_name is required.");
+                    return Error("entity_name is required.", "Use get_tables to list valid entity names.");
 
                 var normalizedAction = action.Trim().ToLowerInvariant();
                 var entityName = entity_name.Trim();
@@ -79,7 +78,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_view");
                 if (!entityResult.IsSuccess)
-                    return Error(entityResult.Error);
+                {
+                    if (entityResult.Status == ResolveStatus.Ambiguous)
+                    {
+                        var entityMatches = entityResult.Candidates.Select(c => new TableMatchEntry
+                        {
+                            DisplayName = c.DisplayName ?? "",
+                            LogicalName = c.LogicalName ?? "",
+                            SchemaName = c.SchemaName ?? ""
+                        }).ToList();
+                        return Error(
+                            $"entity_name '{entityName}': {entityResult.Error.Split("\r\n")[0]}",
+                            "Re-call with a more specific entity_name value.",
+                            new UpsertViewResult { EntityMatches = entityMatches });
+                    }
+                    return Error(
+                        $"entity_name '{entityName}': {entityResult.Error.Split("\r\n")[0]}",
+                        "Use get_tables to discover valid entity names.");
+                }
                 entityName = entityResult.Value.LogicalName;
 
                 if ((normalizedAction is "update" or "rename" or "undo") && string.IsNullOrWhiteSpace(workspace_folder))
@@ -192,7 +208,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleDetail(string entityName, string viewId, string viewName, bool isPersonalView)
         {
             if (string.IsNullOrWhiteSpace(viewId) && string.IsNullOrWhiteSpace(viewName))
-                return Error("view_id or view_name is required when action='detail'.");
+                return Error("view_id or view_name is required when action='detail'.",
+                    "Use manage_view action='list' to find views, then pass view_id or a unique view_name.");
 
             Guid id;
             if (!string.IsNullOrWhiteSpace(viewId))
@@ -204,7 +221,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var resolved = ResolveViewByName(entityName, viewName, isPersonalView, "detail");
                 if (!string.IsNullOrEmpty(resolved.Error))
-                    return Error(resolved.Error, details: resolved.Candidates);
+                    return Error(resolved.Error, resolved.Hint, details: resolved.Candidates);
                 id = resolved.ViewId;
             }
 
@@ -232,7 +249,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var fetchNormalization = NormalizeFetchXmlNames(newFetchXml, entityName);
             if (fetchNormalization.Errors.Count > 0)
                 return Error(NameResolutionMessage("create", entityName, fetchNormalization.Errors),
-                    NameResolutionHint, new { errors = fetchNormalization.Errors });
+                    $"Use get_tables(entity_name='{entityName}') to list valid fields. Use a more specific name when matches are ambiguous.", new { errors = fetchNormalization.Errors });
             newFetchXml = fetchNormalization.Xml;
             newFetchXml = EnsureLayoutBuildableFetchXml(newFetchXml, meta);
 
@@ -336,7 +353,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string cellUpdatesJson = "")
         {
             if (string.IsNullOrWhiteSpace(viewId) && string.IsNullOrWhiteSpace(viewName))
-                return Error("view_id or view_name is required when action='update'.");
+                return Error("view_id or view_name is required when action='update'.",
+                    "Use manage_view action='list' to find views, then pass view_id or a unique view_name.");
 
             Guid updateId;
             if (!string.IsNullOrWhiteSpace(viewId))
@@ -348,14 +366,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var resolved = ResolveViewByName(entityName, viewName, isPersonalView, "update");
                 if (!string.IsNullOrEmpty(resolved.Error))
-                    return Error(resolved.Error, details: resolved.Candidates);
+                    return Error(resolved.Error, resolved.Hint, details: resolved.Candidates);
                 updateId = resolved.ViewId;
             }
 
             var hasCellUpdates = !string.IsNullOrWhiteSpace(cellUpdatesJson);
 
             if (!hasCellUpdates && string.IsNullOrWhiteSpace(fetchxml))
-                return Error("at least one of fetchxml or cell_updates_json is required when action='update' — LayoutXML is always auto-generated from fetchxml.");
+                return Error("at least one of fetchxml or cell_updates_json is required when action='update'.",
+                    "LayoutXML is always auto-generated from fetchxml — pass fetchxml to rebuild the grid or cell_updates_json to patch cells.");
 
             var newFetchXml = string.IsNullOrWhiteSpace(fetchxml) ? null : ViewXmlHelper.StripXmlDeclaration(fetchxml.Trim());
 
@@ -376,7 +395,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var fetchNormalization = NormalizeFetchXmlNames(newFetchXml, entityName);
                 if (fetchNormalization.Errors.Count > 0)
                     return Error(NameResolutionMessage("update", entityName, fetchNormalization.Errors),
-                        NameResolutionHint, new { errors = fetchNormalization.Errors });
+                        $"Use get_tables(entity_name='{entityName}') to list valid fields. Use a more specific name when matches are ambiguous.", new { errors = fetchNormalization.Errors });
                 newFetchXml = fetchNormalization.Xml;
             }
 
@@ -417,12 +436,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var (instructions, parseError) = ParseCellUpdates(cellUpdatesJson);
                     if (parseError != null)
-                        return Error(parseError);
+                        return Error(parseError,
+                            "Expected format: [{\"cell_name\":\"...\",\"set_attributes\":{\"ishidden\":\"1\"}}]. See docs://instructions_for_views.");
 
                     var cellNameErrors = NormalizeCellUpdateNames(instructions, effectiveFetchXml, entityName);
                     if (cellNameErrors.Count > 0)
                         return Error(NameResolutionMessage("update", entityName, cellNameErrors),
-                            NameResolutionHint, new { errors = cellNameErrors });
+                            $"Use get_tables(entity_name='{entityName}') to list valid fields. Use a more specific name when matches are ambiguous.", new { errors = cellNameErrors });
 
                     var (patchedXml, patchErrors, patchWarnings) = ViewXmlHelper.ApplyCellAttributeUpdates(baseLayoutXml, instructions);
                     if (patchErrors.Count > 0)
@@ -541,11 +561,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleRename(string entityName, string viewId, string viewName)
         {
             if (string.IsNullOrWhiteSpace(viewId))
-                return Error("view_id is required when action='rename'.");
+                return Error("view_id is required when action='rename'.",
+                    "Use manage_view action='list' to find views, then pass view_id.");
             if (!Guid.TryParse(viewId.Trim(), out var renameId))
                 return Error($"'{viewId}' is not a valid GUID.");
             if (string.IsNullOrWhiteSpace(viewName))
-                return Error("view_name is required when action='rename'.");
+                return Error("view_name is required when action='rename'.",
+                    "Pass the new name in view_name.");
 
             viewName = viewName.Trim();
 
@@ -603,7 +625,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleSetDefault(string entityName, string viewId, string viewName)
         {
             if (string.IsNullOrWhiteSpace(viewId) && string.IsNullOrWhiteSpace(viewName))
-                return Error("view_id or view_name is required when action='set_default'.");
+                return Error("view_id or view_name is required when action='set_default'.",
+                    "Use manage_view action='list' to find views, then pass view_id or a unique view_name.");
 
             Guid targetId;
 
@@ -627,7 +650,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var resolved = ResolveViewByName(entityName, viewName, false, "set_default");
                 if (!string.IsNullOrEmpty(resolved.Error))
-                    return Error(resolved.Error, details: resolved.Candidates);
+                    return Error(resolved.Error, resolved.Hint, details: resolved.Candidates);
                 targetId = resolved.ViewId;
                 viewName = resolved.View.GetAttributeValue<string>("name") ?? targetId.ToString();
             }
@@ -677,7 +700,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string backupPathArg)
         {
             if (string.IsNullOrWhiteSpace(viewId))
-                return Error("view_id is required when action='undo'.");
+                return Error("view_id is required when action='undo'.",
+                    "Use manage_view action='list' to find views, then pass view_id.");
             if (!Guid.TryParse(viewId.Trim(), out var undoId))
                 return Error($"'{viewId}' is not a valid GUID.");
             if (string.IsNullOrWhiteSpace(backupPathArg))
@@ -873,14 +897,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return cells.Count > 0 ? cells : null;
         }
 
-        private (Guid ViewId, Entity View, string Error, List<ViewListEntry> Candidates) ResolveViewByName(
+        private (Guid ViewId, Entity View, string Error, string Hint, List<ViewListEntry> Candidates) ResolveViewByName(
             string entityName,
             string viewName,
             bool isPersonalView,
             string actionName)
         {
             if (string.IsNullOrWhiteSpace(viewName))
-                return (Guid.Empty, null, $"view_name is required for '{actionName}' action.", null);
+                return (Guid.Empty, null, $"view_name is required for '{actionName}' action.",
+                    "Use manage_view action='list' to find views, then pass view_name or view_id.", null);
 
             var nameFilter = viewName.Trim();
             var systemMatches = isPersonalView
@@ -896,18 +921,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var scope = isPersonalView ? "personal view" : "system view";
                 return (Guid.Empty, null,
-                    $"No {scope} found matching name '{nameFilter}' for entity '{entityName}'.", null);
+                    $"No {scope} found matching name '{nameFilter}' for entity '{entityName}'.",
+                    $"Use manage_view action='list' entity_name='{entityName}' to find valid view names.", null);
             }
 
             if (matches.Count == 1)
             {
                 var match = matches[0];
-                return (GetViewId(match), match, null, null);
+                return (GetViewId(match), match, null, null, null);
             }
 
             var candidates = matches.Select(v => ToViewListEntry(v)).ToList();
             return (Guid.Empty, null,
-                $"Multiple views match '{nameFilter}' on '{entityName}' — provide view_id to disambiguate.", candidates);
+                $"Multiple views match '{nameFilter}' on '{entityName}'.",
+                "Provide view_id to disambiguate.", candidates);
         }
 
         private static List<Entity> PreferExactViewNameMatches(IEnumerable<Entity> views, string nameFilter)
@@ -1074,7 +1101,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private const string ValidationFailedHint = "Fix the validation errors and retry. Rules: docs://instructions_for_views.";
         private const string ServerValidationHint = "Fix the FetchXML and retry. Read schema://fetchxml for valid FetchXML structure.";
-        private const string NameResolutionHint = "Display Name contains is resolved first, then logical/schema contains. Use a more specific name when matches are ambiguous.";
 
         private static string NameResolutionMessage(string actionName, string entityName, List<string> errors) =>
             $"manage_view action='{actionName}' blocked on '{entityName}' — name resolution failed ({errors.Count} error(s)). First: {errors[0]}";
@@ -1320,12 +1346,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 candidates,
                 "[AmbiguousField]",
                 "[NotFoundField]",
-                $"Hint: Use get_tables(entity_name='{entityName}') to list fields before calling manage_view.",
+                null,
                 "field name");
 
             if (result.IsSuccess) return result.Value.LogicalName;
 
-            errors.Add($"{context} '{input}' on entity '{entityName}': {result.Error}");
+            errors.Add($"{context} '{input}' on entity '{entityName}': {result.Error.Split("\r\n")[0]}");
             return input.Trim();
         }
 

@@ -203,7 +203,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         /// Resolve entity names. Returns null when any name cannot be resolved —
         /// the caller returns a friendly Error with hint in that case.
         /// </summary>
-        private List<string>? ResolveEntityList(string entities)
+        private List<string> ResolveEntityList(string entities)
         {
             var inputs = entities.Split(',')
                 .Select(e => e.Trim())
@@ -230,7 +230,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         /// Resolve appmodules (GUID / Display Name / unique name). Returns null when
         /// any value cannot be resolved — the caller returns a friendly Error with hint.
         /// </summary>
-        private List<string>? ResolveAppModuleList(string appModules)
+        private List<string> ResolveAppModuleList(string appModules)
         {
             var inputs = appModules.Split(',')
                 .Select(a => a.Trim())
@@ -310,7 +310,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         /// Returns null when any value is not a valid GUID — the caller returns a
         /// friendly Error with hint in that case.
         /// </summary>
-        private static List<string>? ParseGuidList(string input)
+        private static List<string> ParseGuidList(string input)
         {
             if (string.IsNullOrWhiteSpace(input)) return [];
             var result = new List<string>();
@@ -331,7 +331,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         /// Returns null when a logical name is not found — the caller returns a
         /// friendly Error with hint in that case.
         /// </summary>
-        private List<string>? ResolveWebResourceList(string input)
+        private List<string> ResolveWebResourceList(string input)
         {
             if (string.IsNullOrWhiteSpace(input)) return [];
             var result = new List<string>();
