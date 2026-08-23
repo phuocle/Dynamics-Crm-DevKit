@@ -106,7 +106,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_deleted_records");
             if (!entityResult.IsSuccess)
-                return Error($"entity_name '{entityName}': {entityResult.Error}");
+                return Error(entityResult.Error.Split("\r\n")[0], "Use get_tables to list entities.");
             var logicalName = entityResult.Value.LogicalName;
             var displayName = entityResult.Value.DisplayName?.UserLocalizedLabel?.Label ?? logicalName;
             var primaryKey = entityResult.Value.PrimaryIdAttribute ?? GetPrimaryKeyAttribute(logicalName);
@@ -189,7 +189,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_deleted_records");
             if (!entityResult.IsSuccess)
-                return Error($"entity_name '{entityName}': {entityResult.Error}");
+                return Error(entityResult.Error.Split("\r\n")[0], "Use get_tables to list entities.");
             var logicalName = entityResult.Value.LogicalName;
             var displayName = entityResult.Value.DisplayName?.UserLocalizedLabel?.Label ?? logicalName;
 
@@ -283,7 +283,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             entityName = entityName.Trim();
             var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_deleted_records");
             if (!entityResult.IsSuccess)
-                return Error($"entity_name '{entityName}': {entityResult.Error}");
+                return Error(entityResult.Error.Split("\r\n")[0], "Use get_tables to list entities.");
             var logicalName = entityResult.Value.LogicalName;
             var displayName = entityResult.Value.DisplayName?.UserLocalizedLabel?.Label ?? logicalName;
             var primaryKey = entityResult.Value.PrimaryIdAttribute ?? GetPrimaryKeyAttribute(logicalName);
