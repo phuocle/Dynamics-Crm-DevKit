@@ -44,12 +44,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 </fetch>";
                 var results = _serviceClient.RetrieveMultiple(new FetchExpression(fetch));
                 if (results.Entities.Count == 0)
-                    return $"Error: Entity '{entityName}' not found in Dataverse.\nTip: Use get_tables to find valid entity names.";
+                    return $"Entity '{entityName}' not found in Dataverse.";
                 return null;
             }
             catch (Exception ex)
             {
-                return $"Error: Failed to validate entity '{entityName}': {ex.Message}";
+                return $"Failed to validate entity '{entityName}': {ex.Message}";
             }
         }
 
@@ -73,12 +73,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 </fetch>";
                 var results = _serviceClient.RetrieveMultiple(new FetchExpression(fetch));
                 if (results.Entities.Count == 0)
-                    return $"Error: Web resource '{name}' not found in Dataverse.\nTip: Use manage_webresource(action='list') to find valid web resources.";
+                    return $"Web resource '{name}' not found in Dataverse.";
                 return null;
             }
             catch (Exception ex)
             {
-                return $"Error: Failed to validate web resource '{name}': {ex.Message}";
+                return $"Failed to validate web resource '{name}': {ex.Message}";
             }
         }
 
@@ -107,9 +107,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     var msg = $"{location}{e.Message}";
 
                     if (e.Message.Contains("not declared") || e.Severity == XmlSeverityType.Warning)
-                        warnings.Add($"Warning: {msg}");
+                        warnings.Add(msg);
                     else
-                        errors.Add($"Error: {msg}");
+                        errors.Add(msg);
                 };
 
                 using var stringReader = new StringReader(ribbonXml);
@@ -118,11 +118,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             }
             catch (XmlException xmlEx)
             {
-                errors.Add($"Error: XML parse error at Line {xmlEx.LineNumber}, Col {xmlEx.LinePosition}: {xmlEx.Message}");
+                errors.Add($"XML parse error at Line {xmlEx.LineNumber}, Col {xmlEx.LinePosition}: {xmlEx.Message}");
             }
             catch (Exception ex)
             {
-                errors.Add($"Error: Validation failed: {ex.Message}");
+                errors.Add($"Validation failed: {ex.Message}");
             }
 
             return (errors, warnings);

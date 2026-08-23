@@ -48,29 +48,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var entities = ExtractEntitiesFromSolution(zipBytes);
 
-            var sb = new StringBuilder();
-            sb.AppendLine($"manage_ribbon list — Solution: {SOLUTION_NAME}");
-            sb.AppendLine($"Entities with ribbon customizations: {entities.Count}");
-            sb.AppendLine();
-
             if (entities.Count == 0)
             {
-                sb.AppendLine("No entities with ribbon customizations found.");
-            }
-            else
-            {
-                sb.AppendLine("| Entity | Buttons |");
-                sb.AppendLine("|--------|---------|");
-                foreach (var e in entities)
-                    sb.AppendLine($"| {e.Name} | {e.ButtonCount} |");
+                return Success(
+                    $"manage_ribbon list — 0 entities with ribbon customizations in '{SOLUTION_NAME}'.",
+                    new ManageRibbonResult
+                    {
+                        Action = "list",
+                        Status = "ok",
+                        Entities = entities.Select(e => e.Name).ToList()
+                    });
             }
 
-            return Success(sb.ToString(), new ManageRibbonResult
-            {
-                Action = "list",
-                Status = "ok",
-                Entities = entities.Select(e => e.Name).ToList()
-            });
+            var entitySummary = string.Join(", ", entities.Select(e => $"{e.Name} ({e.ButtonCount} buttons)"));
+            return Success(
+                $"manage_ribbon list — {entities.Count} {(entities.Count == 1 ? "entity" : "entities")} with ribbon customizations: {entitySummary}.",
+                new ManageRibbonResult
+                {
+                    Action = "list",
+                    Status = "ok",
+                    Entities = entities.Select(e => e.Name).ToList()
+                });
         }
 
         // ── Action: buttons ──────────────────────────────────────────────
@@ -89,65 +87,60 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult ListRibbonButtons(string entityName)
         {
             var allSurfaces = new List<RibbonSurfaceButtons>();
-            var sb = new StringBuilder();
-            sb.AppendLine($"manage_ribbon buttons — {entityName}");
-            sb.AppendLine($"Showing buttons in devkit-managed locations (form, main_grid, sub_grid)");
-            sb.AppendLine();
 
             // Load hidden buttons and LocLabels from devkit solution RibbonDiffXml (single export)
             LoadDevKitRibbonData(entityName, out var hiddenBySurface, out var locLabels);
 
             foreach (var (surface, (filter, groupSuffix)) in SurfaceRibbonMap)
             {
-                var surfaceResult = new RibbonSurfaceButtons { Surface = surface };
-                hiddenBySurface.TryGetValue(surface, out var hiddenForSurface);
-                hiddenForSurface ??= [];
-
-                var request = new RetrieveEntityRibbonRequest
+                try
                 {
-                    EntityName = entityName,
-                    RibbonLocationFilter = filter
-                };
-                var response = (RetrieveEntityRibbonResponse)_serviceClient.Execute(request);
-                var xml = UnzipRibbonXml(response.CompressedEntityXml);
+                    var surfaceResult = new RibbonSurfaceButtons { Surface = surface };
+                    hiddenBySurface.TryGetValue(surface, out var hiddenForSurface);
+                    hiddenForSurface ??= [];
 
-                surfaceResult.Items = ParseButtonsFromRibbon(xml, entityName, groupSuffix, locLabels);
+                    var request = new RetrieveEntityRibbonRequest
+                    {
+                        EntityName = entityName,
+                        RibbonLocationFilter = filter
+                    };
+                    var response = _serviceClient.Execute(request) as RetrieveEntityRibbonResponse;
+                    var compressed = response?.CompressedEntityXml;
+                    var xml = compressed is { Length: > 0 } ? UnzipRibbonXml(compressed) : null;
 
-                // Append hidden buttons that no longer appear in the merged ribbon XML
-                foreach (var hiddenBtn in hiddenForSurface)
-                {
-                    if (!surfaceResult.Items.Any(b => string.Equals(b.Id, hiddenBtn.Id, StringComparison.OrdinalIgnoreCase)))
-                        surfaceResult.Items.Add(hiddenBtn);
+                    surfaceResult.Items = xml == null
+                        ? []
+                        : ParseButtonsFromRibbon(xml, entityName, groupSuffix, locLabels);
+
+                    // Append hidden buttons that no longer appear in the merged ribbon XML
+                    foreach (var hiddenBtn in hiddenForSurface)
+                    {
+                        if (!surfaceResult.Items.Any(b => string.Equals(b.Id, hiddenBtn.Id, StringComparison.OrdinalIgnoreCase)))
+                            surfaceResult.Items.Add(hiddenBtn);
+                    }
+
+                    // Re-sort after appending hidden buttons
+                    surfaceResult.Items = surfaceResult.Items.OrderBy(b => b.Sequence).ThenBy(b => b.IsHide ? 1 : 0).ToList();
+
+                    allSurfaces.Add(surfaceResult);
                 }
-
-                // Re-sort after appending hidden buttons
-                surfaceResult.Items = surfaceResult.Items.OrderBy(b => b.Sequence).ThenBy(b => b.IsHide ? 1 : 0).ToList();
-
-                sb.AppendLine($"### {surface.ToUpperInvariant()} (Mscrm.{{entity}}.{groupSuffix}.Controls)");
-                sb.AppendLine($"| # | Sequence | Button Label | Button Id | OOB | Custom | Hide |");
-                sb.AppendLine($"|---|----------|-------------|-----------|-----|--------|------|");
-                var idx = 1;
-                foreach (var btn in surfaceResult.Items)
+                catch (Exception ex)
                 {
-                    var oob = btn.IsOob ? "✓" : "";
-                    var custom = btn.IsCustom ? "✓" : "";
-                    var hide = btn.IsHide ? "✓" : "";
-                    var label = string.IsNullOrWhiteSpace(btn.Label) ? $"[{btn.Id}]" : btn.Label;
-                    var seqDisplay = btn.Sequence == 0 && btn.IsHide ? "(hidden)" : btn.Sequence.ToString();
-                    sb.AppendLine($"| {idx++} | {seqDisplay} | {label} | {btn.Id} | {oob} | {custom} | {hide} |");
+                    throw new InvalidOperationException(
+                        $"ListRibbonButtons stage=surface({surface}, filter={filter}, groupSuffix={groupSuffix}): {ex.GetType().Name} {ex.Message}", ex);
                 }
-
-                sb.AppendLine();
-                allSurfaces.Add(surfaceResult);
             }
 
-            return Success(sb.ToString(), new ManageRibbonResult
-            {
-                Action = "buttons",
-                EntityName = entityName,
-                Status = "ok",
-                Buttons = allSurfaces
-            });
+            var countSummary = string.Join(", ", allSurfaces.Select(s => $"{s.Surface}={s.Items.Count}"));
+            return Success(
+                $"manage_ribbon buttons — {entityName}: {countSummary}.",
+                new ManageRibbonResult
+                {
+                    Action = "buttons",
+                    EntityName = entityName,
+                    Status = "ok",
+                    Buttons = allSurfaces
+                });
         }
 
         private void LoadDevKitRibbonData(string entityName,
@@ -295,23 +288,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             // Pretty-print the XML
-            var prettyXml = XDocument.Parse(ribbonXml).ToString(SaveOptions.None);
+            var doc = XDocument.Parse(ribbonXml);
+            var prettyXml = doc.ToString(SaveOptions.None);
 
-            var sb = new StringBuilder();
-            sb.AppendLine($"manage_ribbon detail — {entityName}");
-            sb.AppendLine($"Solution: {SOLUTION_NAME}");
-            sb.AppendLine();
-            sb.AppendLine("```xml");
-            sb.AppendLine(prettyXml);
-            sb.AppendLine("```");
+            var customActionCount = doc.Descendants("CustomAction").Count();
+            var commandCount = doc.Descendants("CommandDefinition").Count();
+            var enableRuleCount = doc.Descendants("EnableRule").Count();
+            var locLabelCount = doc.Descendants("LocLabel").Count();
 
-            return Success(sb.ToString(), new ManageRibbonResult
-            {
-                Action = "detail",
-                EntityName = entityName,
-                Status = "ok",
-                RibbonDiffXml = prettyXml
-            });
+            return Success(
+                $"manage_ribbon detail — {entityName}: {customActionCount} CustomAction, {commandCount} CommandDefinition, {enableRuleCount} EnableRule, {locLabelCount} LocLabel.",
+                new ManageRibbonResult
+                {
+                    Action = "detail",
+                    EntityName = entityName,
+                    Status = "ok",
+                    RibbonDiffXml = prettyXml
+                });
         }
 
         // ── Zip helpers ──────────────────────────────────────────────────
@@ -321,6 +314,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             using var memStream = new MemoryStream(data);
             using var zip = new ZipArchive(memStream, ZipArchiveMode.Read);
             var entry = zip.GetEntry("RibbonXml.xml");
+            // A filter can legitimately return a zip without RibbonXml.xml (no ribbon data for that surface).
+            if (entry == null)
+                return null;
             using var strm = entry.Open();
             using var reader = new StreamReader(strm, Encoding.UTF8);
             return reader.ReadToEnd();

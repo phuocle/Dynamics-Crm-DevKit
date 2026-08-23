@@ -78,16 +78,29 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var validation = new RibbonValidation(_serviceClient);
             var entityError = validation.ValidateEntityExists(entityName);
             if (entityError != null)
-                return Error(entityError);
+                return Error(entityError, "Use get_tables to find valid entity names.");
 
-            // Step 2: Parse operations JSON (JsonException bubbles to the entry-point catch)
-            var ops = JsonSerializer.Deserialize<List<JsonElement>>(operationsJson);
+            // Step 2: Parse operations JSON (invalid JSON returns a friendly error instead of an exception)
+            List<JsonElement> ops;
+            try
+            {
+                ops = JsonSerializer.Deserialize<List<JsonElement>>(operationsJson);
+            }
+            catch (JsonException)
+            {
+                return Error(
+                    "Invalid 'operations' JSON: expected a JSON array of ribbon operations.",
+                    "Provide a JSON array of ribbon operations, e.g. " +
+                    "[{\"action\":\"add_button\",\"surface\":\"form\",\"label\":\"My Button\",...}]");
+            }
             if (ops == null || ops.Count == 0)
                 return Error("operations must be a non-empty JSON array.");
 
             var (normalizedOps, nameResolutionErrors) = NormalizeOperationWebResources(ops);
             if (nameResolutionErrors.Count > 0)
-                return Error(FormatOperationNameResolutionErrors(nameResolutionErrors));
+                return Error(
+                    FormatOperationNameResolutionErrors(nameResolutionErrors),
+                    "Display Name contains is resolved first, then logical/unique/schema contains. Use a more specific web resource name when matches are ambiguous.");
             ops = normalizedOps;
 
             // Step 3: Fetch existing RibbonDiffXml from devkit-ribbon solution
@@ -111,7 +124,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error("Each operation must have an 'action' field.");
 
                 var opAction = actionProp.GetString()?.Trim().ToLowerInvariant();
-                (string error, string summary) result = opAction switch
+                (string error, string hint, string summary) result = opAction switch
                 {
                     "add_button"           => btnOps.ExecuteAddButton(ribbonDoc, entityName, op),
                     "update_button"        => btnOps.ExecuteUpdateButton(ribbonDoc, entityName, op),
@@ -123,13 +136,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "update_flyout_static" => flyoutOps.ExecuteUpdateFlyoutStatic(ribbonDoc, entityName, op),
                     "hide_flyout_item"     => flyoutOps.ExecuteHideFlyoutItem(ribbonDoc, entityName, op),
                     "show_flyout_item"     => flyoutOps.ExecuteShowFlyoutItem(ribbonDoc, entityName, op),
-                    _ => ($"Unknown action '{opAction}'. " +
+                    _ => ($"Unknown action '{opAction}'.",
                           "Valid: add_button, update_button, hide_button, show_button, " +
                           "add_split_button, update_split_button, add_flyout_static, " +
                           "update_flyout_static, hide_flyout_item, show_flyout_item", null)
                 };
 
-                if (result.error != null) return Error(result.error);
+                if (result.error != null) return Error(result.error, result.hint);
                 summaries.Add(result.summary);
             }
 
@@ -176,38 +189,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult BuildUpdateResult(string entityName, string backupPath, Guid asyncJobId,
             List<RibbonFunctionSignature> functionSignatures, int? opsCount, List<string> summaries, List<string> xsdWarnings)
         {
-            var sb = new StringBuilder();
-            sb.AppendLine($"manage_ribbon update — {entityName}");
-            sb.AppendLine($"Solution: {SOLUTION_NAME}");
-            if (opsCount.HasValue)
-            {
-                sb.AppendLine($"Operations: {opsCount.Value}");
-                foreach (var s in summaries)
-                    sb.AppendLine($"  ✓ {s}");
-            }
-            else
-            {
-                sb.AppendLine("Status: Updated successfully");
-            }
-            sb.AppendLine($"Backup: {backupPath ?? "skipped"}");
-            AppendFunctionSignatures(sb, functionSignatures);
-            if (xsdWarnings != null && xsdWarnings.Count > 0)
-            {
-                sb.AppendLine($"XSD Warnings ({xsdWarnings.Count}):");
-                foreach (var w in xsdWarnings)
-                    sb.AppendLine($"  - {w}");
-            }
-            sb.AppendLine($"Published: started asynchronously");
-            sb.AppendLine($"AsyncOperationId: {asyncJobId}");
-            sb.AppendLine($"Note: Use get_system_jobs(record_id=\"{asyncJobId}\") to check publish status.");
-            sb.AppendLine("Wait: Do not call manage_ribbon(buttons/detail) or run the next prompt until this system job reaches a terminal status.");
-            AppendPublishWaitGuidance(sb);
-            sb.AppendLine();
-            if (backupPath != null)
-                sb.AppendLine($"To rollback: manage_ribbon(action='undo', entity_name='{entityName}', ribbonxml='{backupPath}')");
-
-            return Success(sb.ToString(), new ManageRibbonResult
-            {
+            var opsText = opsCount.HasValue
+                ? $"{opsCount.Value} operation{(opsCount.Value == 1 ? "" : "s")} ({string.Join("; ", summaries)})"
+                : "ribbonxml patch applied";
+            return Success(
+                $"manage_ribbon update — {entityName}: {opsText}, PublishAll started asynchronously ({asyncJobId}).",
+                new ManageRibbonResult
+                {
                 Action = "update",
                 EntityName = entityName,
                 Status = "publish_in_progress",
@@ -263,18 +251,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Publish immediately after import completes (PublishAll async).
             var asyncJobId = PublishHelper.PublishAllAsync(_context, _serviceClient);
 
-            var sb = new StringBuilder();
-            sb.AppendLine($"manage_ribbon undo — {entityName}");
-            sb.AppendLine($"Restored from: {backupFilePath}");
-            sb.AppendLine($"Status: Restored successfully");
-            sb.AppendLine($"Published: started asynchronously");
-            sb.AppendLine($"AsyncOperationId: {asyncJobId}");
-            sb.AppendLine($"Note: Use get_system_jobs(record_id=\"{asyncJobId}\") to check publish status.");
-            sb.AppendLine("Wait: Do not call manage_ribbon(buttons/detail) or run the next prompt until this system job reaches a terminal status.");
-            AppendPublishWaitGuidance(sb);
-
-            return Success(sb.ToString(), new ManageRibbonResult
-            {
+            return Success(
+                $"manage_ribbon undo — {entityName}: restored from {backupFilePath}, PublishAll started asynchronously ({asyncJobId}).",
+                new ManageRibbonResult
+                {
                 Action = "undo",
                 EntityName = entityName,
                 Status = "publish_in_progress",

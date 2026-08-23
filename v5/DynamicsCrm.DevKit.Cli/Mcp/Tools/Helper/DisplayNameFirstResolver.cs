@@ -165,7 +165,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         internal static ResolveResult<EntityMetadata> ResolveEntity(
             ServiceClient serviceClient,
             string input,
-            string callerToolName)
+            string callerToolName,
+            bool withNotFoundTip = true)
         {
             try
             {
@@ -191,7 +192,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     candidates,
                     "[AmbiguousEntity]",
                     "[NotFoundEntity]",
-                    $"Hint: Use get_tables to list entities before calling {callerToolName}.",
+                    withNotFoundTip ? $"Hint: Use get_tables to list entities before calling {callerToolName}." : null,
                     "entity_name");
             }
             catch (Exception ex)
@@ -297,7 +298,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         internal static ResolveResult<Entity> ResolveWebResource(
             ServiceClient serviceClient,
             string input,
-            string callerToolName)
+            string callerToolName,
+            bool withNotFoundTip = true)
         {
             return ResolveDataverseRecord(
                 serviceClient,
@@ -312,7 +314,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 kind: "webresource",
                 ambiguousTag: "[AmbiguousWebResource]",
                 notFoundTag: "[NotFoundWebResource]",
-                notFoundTip: $"Hint: Use manage_webresource(action='list') before calling {callerToolName}.",
+                notFoundTip: withNotFoundTip ? $"Hint: Use manage_webresource(action='list') before calling {callerToolName}." : null,
                 retryParameterName: "web_resource_id");
         }
 

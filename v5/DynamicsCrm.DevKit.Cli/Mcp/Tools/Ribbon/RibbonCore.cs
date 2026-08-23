@@ -21,14 +21,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         // ── Entity name resolution ───────────────────────────────────────
 
-        private (string LogicalName, string Error) ResolveEntityLogicalName(string entityName)
+        private (string LogicalName, CallToolResult Error) ResolveEntityLogicalName(string entityName)
         {
             if (string.IsNullOrWhiteSpace(entityName))
-                return (null, "entity_name is required.");
-            var result = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "manage_ribbon");
-            return result.IsSuccess
-                ? (result.Value.LogicalName, null)
-                : (null, $"entity_name '{entityName.Trim()}': {result.Error}");
+                return (null, Error("entity_name is required."));
+            var trimmed = entityName.Trim();
+            var result = DisplayNameFirstResolver.ResolveEntity(_serviceClient, trimmed, "manage_ribbon", withNotFoundTip: false);
+            if (result.IsSuccess)
+                return (result.Value.LogicalName, null);
+            if (result.Status == ResolveStatus.NotFound)
+                return (null, Error(
+                    $"entity_name '{trimmed}': {result.Error}",
+                    "Use get_tables to list entities before calling manage_ribbon."));
+            if (result.Status == ResolveStatus.Ambiguous)
+                return (null, Error(
+                    $"entity_name '{trimmed}': {result.Error.Split("\r\n")[0]}",
+                    "Re-call with a more specific entity_name value.",
+                    new
+                    {
+                        entityMatches = result.Candidates.Select(c => new
+                        {
+                            displayName = c.DisplayName,
+                            logicalName = c.LogicalName,
+                            schemaName = c.SchemaName
+                        }).ToList()
+                    }));
+            return (null, Error($"entity_name '{trimmed}': {result.Error}"));
         }
 
         // ── Busy-environment gate (blocks ribbon action while a solution job runs) ──
@@ -46,24 +64,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var operationType = GetRibbonJobOperationType(activeJob);
             var status = MapAsyncStatus(activeJob.GetAttributeValue<OptionSetValue>("statuscode")?.Value ?? 0);
             var name = activeJob.GetAttributeValue<string>("name") ?? operationType;
-            var startedOn = activeJob.GetAttributeValue<DateTime?>("startedon")?.ToString("yyyy-MM-dd HH:mm:ss") ?? "";
 
-            var sb = new StringBuilder();
-            sb.AppendLine($"manage_ribbon {action} — {entityName}");
-            sb.AppendLine("Status: environment_busy");
-            sb.AppendLine($"ActiveJob: {name}");
-            sb.AppendLine($"OperationType: {operationType}");
-            sb.AppendLine($"JobStatus: {status}");
-            if (!string.IsNullOrWhiteSpace(startedOn))
-                sb.AppendLine($"StartedOn: {startedOn}");
-            sb.AppendLine($"AsyncOperationId: {jobId}");
-            sb.AppendLine(isReadback
-                ? "Ribbon readback is blocked because a solution import/export or PublishAll job is still active."
-                : "Ribbon update/undo is blocked because a solution import/export or PublishAll job is still active.");
-            sb.AppendLine($"Wait first: get_system_jobs(record_id=\"{jobId}\")");
-            AppendPublishWaitGuidance(sb);
-
-            return Success(sb.ToString(), new ManageRibbonResult
+            return Success(
+                $"manage_ribbon {action} — {entityName}: environment_busy, {operationType} {status} ({jobId}). " +
+                $"Use get_system_jobs(record_id=\"{jobId}\") to wait.", new ManageRibbonResult
             {
                 Action = action,
                 EntityName = entityName,
@@ -204,11 +208,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (name.StartsWith("$webresource:", StringComparison.OrdinalIgnoreCase))
                 name = name.Substring("$webresource:".Length);
 
-            var result = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, name, "manage_ribbon");
+            var result = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, name, "manage_ribbon", withNotFoundTip: false);
             if (result.IsSuccess)
                 return result.Value.GetAttributeValue<string>("name") ?? result.CanonicalName;
 
-            errors.Add($"{path} '{input}': {result.Error}");
+            errors.Add(result.Status == ResolveStatus.Ambiguous
+                ? $"{path} '{input}': {result.Error.Split("\r\n")[0]}"
+                : $"{path} '{input}': {result.Error}");
             return input;
         }
 
@@ -219,13 +225,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string FormatOperationNameResolutionErrors(List<string> errors)
         {
-            var sb = new StringBuilder();
-            sb.AppendLine("Operation name resolution failed (BLOCKED).");
-            sb.AppendLine($"Errors: {errors.Count}");
-            foreach (var error in errors)
-                sb.AppendLine($"- {error}");
-            sb.AppendLine("Hint: Display Name contains is resolved first, then logical/unique/schema contains. Use a more specific web resource name when matches are ambiguous.");
-            return sb.ToString();
+            return $"Operation name resolution failed: {string.Join("; ", errors)}";
         }
 
         private static JsonElement ToJsonElement(JsonNode node)

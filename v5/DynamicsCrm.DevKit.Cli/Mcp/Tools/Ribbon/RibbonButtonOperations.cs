@@ -17,7 +17,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             _lcid = lcid;
         }
 
-        public (string error, string summary) ExecuteAddButton(XDocument ribbonDoc, string entityName, JsonElement op)
+        public (string error, string hint, string summary) ExecuteAddButton(XDocument ribbonDoc, string entityName, JsonElement op)
         {
             var surface = RibbonXmlHelpers.GetJsonString(op, "surface");
             var label = RibbonXmlHelpers.GetJsonString(op, "label");
@@ -27,26 +27,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             var enableFunction = RibbonXmlHelpers.GetJsonString(op, "enable_function");
 
             if (string.IsNullOrWhiteSpace(surface))
-                return ("Error: add_button requires 'surface' (form, main_grid, or sub_grid).", null);
+                return ("add_button requires 'surface' (form, main_grid, or sub_grid).", null, null);
             if (string.IsNullOrWhiteSpace(label))
-                return ("Error: add_button requires 'label' (button display text).", null);
+                return ("add_button requires 'label' (button display text).", null, null);
             if (string.IsNullOrWhiteSpace(library))
-                return ("Error: add_button requires 'library' (web resource JS file for button click).", null);
+                return ("add_button requires 'library' (web resource JS file for button click).", null, null);
             if (string.IsNullOrWhiteSpace(function))
-                return ("Error: add_button requires 'function' (JavaScript function name for button click).", null);
+                return ("add_button requires 'function' (JavaScript function name for button click).", null, null);
             if (string.IsNullOrWhiteSpace(enableLibrary))
-                return ("Error: add_button requires 'enable_library' (web resource JS file for enable rule).", null);
+                return ("add_button requires 'enable_library' (web resource JS file for enable rule).", null, null);
             if (string.IsNullOrWhiteSpace(enableFunction))
-                return ("Error: add_button requires 'enable_function' (JavaScript function name for enable rule).", null);
+                return ("add_button requires 'enable_function' (JavaScript function name for enable rule).", null, null);
 
             surface = surface.Trim().ToLowerInvariant();
             if (!RibbonXmlHelpers.SurfaceLocationMap.ContainsKey(surface))
-                return ($"Error: Invalid surface '{surface}'. Valid: form, main_grid, sub_grid.", null);
+                return ($"Invalid surface '{surface}'.", "Valid: form, main_grid, sub_grid.", null);
 
             var libError = _validation.ValidateWebResourceExists(library);
-            if (libError != null) return (libError, null);
+            if (libError != null) return (libError, null, null);
             var enableLibError = _validation.ValidateWebResourceExists(enableLibrary);
-            if (enableLibError != null) return (enableLibError, null);
+            if (enableLibError != null) return (enableLibError, null, null);
 
             var modernImage = RibbonXmlHelpers.GetJsonString(op, "modern_image");
             var tooltipTitle = RibbonXmlHelpers.GetJsonString(op, "tooltip_title");
@@ -54,14 +54,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             var sequence = RibbonXmlHelpers.GetJsonInt(op, "sequence", 85);
             var selectionOptions = ReadSelectionCountOptions(op);
             if (selectionOptions.error != null)
-                return (selectionOptions.error, null);
+                return (selectionOptions.error, null, null);
             if (selectionOptions.hasRule && surface == "form")
-                return ("Error: add_button selection_min/selection_max are only supported for main_grid or sub_grid.", null);
+                return ("add_button selection_min/selection_max are only supported for main_grid or sub_grid.", null, null);
 
             if (!string.IsNullOrWhiteSpace(modernImage))
             {
                 var imgError = _validation.ValidateWebResourceExists(modernImage);
-                if (imgError != null) return (imgError, null);
+                if (imgError != null) return (imgError, null, null);
             }
 
             var slug = RibbonXmlHelpers.GenerateSlug(label);
@@ -162,10 +162,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (!string.IsNullOrWhiteSpace(tooltipDesc))
                 RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{buttonId}.ToolTipDescription", tooltipDesc);
 
-            return (null, $"add_button: '{label}' [{surface}] click={function} enable={enableFunction}");
+            return (null, null, $"add_button: '{label}' [{surface}] click={function} enable={enableFunction}");
         }
 
-        public (string error, string summary) ExecuteUpdateButton(XDocument ribbonDoc, string entityName, JsonElement op)
+        public (string error, string hint, string summary) ExecuteUpdateButton(XDocument ribbonDoc, string entityName, JsonElement op)
         {
             var buttonId = RibbonXmlHelpers.GetJsonString(op, "button_id");
             var labelHint = RibbonXmlHelpers.GetJsonString(op, "label");
@@ -176,11 +176,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (string.IsNullOrWhiteSpace(buttonId))
             {
                 if (string.IsNullOrWhiteSpace(labelHint))
-                    return ("Error: update_button requires 'button_id' or 'label' to identify the button.", null);
+                    return ("update_button requires 'button_id' or 'label' to identify the button.", null, null);
 
                 var labelResolution = ResolveCustomButtonIdByLabel(ribbonDoc, labelHint);
                 if (labelResolution.error != null)
-                    return (labelResolution.error, null);
+                    return (labelResolution.error, labelResolution.hint, null);
 
                 buttonId = labelResolution.buttonId;
                 if (string.IsNullOrWhiteSpace(buttonId))
@@ -196,10 +196,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, buttonId, StringComparison.OrdinalIgnoreCase));
 
             if (buttonEl == null)
-                return ($"Error: Button '{buttonId}' not found in existing RibbonDiffXml. " +
+                return ($"Button '{buttonId}' not found in existing RibbonDiffXml. " +
                         "This is likely an OOB (out-of-the-box) button. " +
                         "update_button only supports custom buttons defined in RibbonDiffXml. " +
-                        "For OOB buttons, only hide_button and show_button are supported.", null);
+                        "For OOB buttons, only hide_button and show_button are supported.", null, null);
 
             var commandId = buttonId.Replace(".Button", ".Command");
             var enableRuleId = buttonId.Replace(".Button", ".EnableRule");
@@ -256,7 +256,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (!string.IsNullOrWhiteSpace(newModernImage))
             {
                 var imgError = _validation.ValidateWebResourceExists(newModernImage);
-                if (imgError != null) return (imgError, null);
+                if (imgError != null) return (imgError, null, null);
                 buttonEl.SetAttributeValue("Image16by16", $"$webresource:{newModernImage}");
                 buttonEl.SetAttributeValue("Image32by32", $"$webresource:{newModernImage}");
                 buttonEl.SetAttributeValue("ModernImage", $"$webresource:{newModernImage}");
@@ -267,7 +267,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (!string.IsNullOrWhiteSpace(newLibrary))
             {
                 var libError = _validation.ValidateWebResourceExists(newLibrary);
-                if (libError != null) return (libError, null);
+                if (libError != null) return (libError, null, null);
                 if (commandDefEl != null)
                     commandDefEl.Element("Actions")?.Element("JavaScriptFunction")?.SetAttributeValue("Library", $"$webresource:{newLibrary}");
                 updatedFields.Add("library");
@@ -285,7 +285,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (!string.IsNullOrWhiteSpace(newEnableLibrary))
             {
                 var libError = _validation.ValidateWebResourceExists(newEnableLibrary);
-                if (libError != null) return (libError, null);
+                if (libError != null) return (libError, null, null);
                 enableRuleEl?.Element("CustomRule")?.SetAttributeValue("Library", $"$webresource:{newEnableLibrary}");
                 updatedFields.Add("enable_library");
             }
@@ -298,13 +298,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             }
 
             if (updatedFields.Count == 0)
-                return ("Error: update_button requires at least one updatable field: " +
-                        "label, library, function, enable_library, enable_function, modern_image, tooltip_title, tooltip_description, sequence.", null);
+                return ("update_button requires at least one updatable field.",
+                        "Updatable fields: label, library, function, enable_library, enable_function, modern_image, tooltip_title, tooltip_description, sequence.",
+                        null);
 
-            return (null, $"update_button: '{buttonId}' updated [{string.Join(", ", updatedFields)}]");
+            return (null, null, $"update_button: '{buttonId}' updated [{string.Join(", ", updatedFields)}]");
         }
 
-        private static (string buttonId, string error) ResolveCustomButtonIdByLabel(XDocument ribbonDoc, string label)
+        private static (string buttonId, string error, string hint) ResolveCustomButtonIdByLabel(XDocument ribbonDoc, string label)
         {
             var buttons = ribbonDoc.Root
                 ?.Element("CustomActions")
@@ -316,12 +317,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 .ToList() ?? [];
 
             if (buttons.Count == 1)
-                return (buttons[0], null);
+                return (buttons[0], null, null);
 
             if (buttons.Count > 1)
-                return (null, $"Error: Multiple custom buttons with label '{label}' found in existing RibbonDiffXml. Use 'button_id' to identify the button. Matches: {string.Join(", ", buttons)}");
+                return (null,
+                        $"Multiple custom buttons with label '{label}' found in existing RibbonDiffXml. Matches: {string.Join(", ", buttons)}",
+                        "Use 'button_id' to identify the button.");
 
-            return (null, null);
+            return (null, null, null);
         }
 
         private static (bool hasRule, int? min, int? max, string error) ReadSelectionCountOptions(JsonElement op)
@@ -336,13 +339,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 return (false, null, null, null);
 
             if (min.HasValue && min.Value < 0)
-                return (false, null, null, "Error: add_button 'selection_min' must be greater than or equal to 0.");
+                return (false, null, null, "add_button 'selection_min' must be greater than or equal to 0.");
 
             if (max.HasValue && max.Value < 0)
-                return (false, null, null, "Error: add_button 'selection_max' must be greater than or equal to 0.");
+                return (false, null, null, "add_button 'selection_max' must be greater than or equal to 0.");
 
             if (min.HasValue && max.HasValue && min.Value > max.Value)
-                return (false, null, null, "Error: add_button 'selection_min' cannot be greater than 'selection_max'.");
+                return (false, null, null, "add_button 'selection_min' cannot be greater than 'selection_max'.");
 
             return (true, min, max, null);
         }
@@ -355,7 +358,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
             if (property.ValueKind != JsonValueKind.Number || !property.TryGetInt32(out var value))
             {
-                error = $"Error: add_button '{propertyName}' must be an integer.";
+                error = $"add_button '{propertyName}' must be an integer.";
                 return null;
             }
 
@@ -383,12 +386,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 .Any(e => string.Equals(e.Attribute("description")?.Value, label, StringComparison.OrdinalIgnoreCase)) == true;
         }
 
-        public (string error, string summary) ExecuteHideButton(XDocument ribbonDoc, string entityName, JsonElement op)
+        public (string error, string hint, string summary) ExecuteHideButton(XDocument ribbonDoc, string entityName, JsonElement op)
         {
             var buttonId = RibbonXmlHelpers.GetJsonString(op, "button_id");
             if (string.IsNullOrWhiteSpace(buttonId))
-                return ("Error: hide_button requires 'button_id' (e.g. 'Mscrm.Form.v4_mcp.Deactivate').\n" +
-                        "Tip: Use manage_ribbon(action='buttons') to see Button Id column.", null);
+                return ("hide_button requires 'button_id' (e.g. 'Mscrm.Form.v4_mcp.Deactivate').",
+                        "Use manage_ribbon(action='buttons') to see the Button Id column.",
+                        null);
 
             buttonId = buttonId.Trim();
             var isOob = _validation.IsOobButton(entityName, buttonId);
@@ -409,7 +413,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     new XAttribute("HideActionId", hideActionId),
                     new XAttribute("Location", buttonId)));
 
-                return (null, $"hide_button (OOB): '{buttonId}' → HideCustomAction added");
+                return (null, null, $"hide_button (OOB): '{buttonId}' → HideCustomAction added");
             }
             else
             {
@@ -418,12 +422,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, buttonId, StringComparison.OrdinalIgnoreCase));
 
                 if (buttonEl == null)
-                    return ($"Error: Button '{buttonId}' not found in RibbonDiffXml.\n" +
-                            "Tip: Use manage_ribbon(action='buttons') to verify the Button Id.", null);
+                    return ($"Button '{buttonId}' not found in RibbonDiffXml.",
+                            "Use manage_ribbon(action='buttons') to verify the Button Id.",
+                            null);
 
                 var commandId = buttonEl.Attribute("Command")?.Value;
                 if (string.IsNullOrWhiteSpace(commandId))
-                    return ($"Error: Button '{buttonId}' has no Command attribute.", null);
+                    return ($"Button '{buttonId}' has no Command attribute.", null, null);
 
                 var commandDefEl = ribbonDoc.Root
                     ?.Element("CommandDefinitions")
@@ -431,7 +436,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, commandId, StringComparison.OrdinalIgnoreCase));
 
                 if (commandDefEl == null)
-                    return ($"Error: CommandDefinition '{commandId}' not found for button '{buttonId}'.", null);
+                    return ($"CommandDefinition '{commandId}' not found for button '{buttonId}'.", null, null);
 
                 var alwaysDisabledRuleId = $"devkit.{entityName}.AlwaysDisabled.EnableRule";
 
@@ -454,16 +459,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                             new XAttribute("Maximum", "9999"))));
                 }
 
-                return (null, $"hide_button (custom): '{buttonId}' → AlwaysDisabled EnableRule injected into '{commandId}'");
+                return (null, null, $"hide_button (custom): '{buttonId}' → AlwaysDisabled EnableRule injected into '{commandId}'");
             }
         }
 
-        public (string error, string summary) ExecuteShowButton(XDocument ribbonDoc, string entityName, JsonElement op)
+        public (string error, string hint, string summary) ExecuteShowButton(XDocument ribbonDoc, string entityName, JsonElement op)
         {
             var buttonId = RibbonXmlHelpers.GetJsonString(op, "button_id");
             if (string.IsNullOrWhiteSpace(buttonId))
-                return ("Error: show_button requires 'button_id' (e.g. 'Mscrm.Form.v4_mcp.Deactivate').\n" +
-                        "Tip: Use manage_ribbon(action='buttons') to see Button Id column.", null);
+                return ("show_button requires 'button_id' (e.g. 'Mscrm.Form.v4_mcp.Deactivate').",
+                        "Use manage_ribbon(action='buttons') to see the Button Id column.",
+                        null);
 
             buttonId = buttonId.Trim();
             var isOob = _validation.IsOobButton(entityName, buttonId);
@@ -476,10 +482,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     .ToList();
 
                 if (removed == null || removed.Count == 0)
-                    return (null, $"show_button (OOB): '{buttonId}' — no HideCustomAction found (button already visible)");
+                    return (null, null, $"show_button (OOB): '{buttonId}' — no HideCustomAction found (button already visible)");
 
                 removed.ForEach(e => e.Remove());
-                return (null, $"show_button (OOB): '{buttonId}' → HideCustomAction removed");
+                return (null, null, $"show_button (OOB): '{buttonId}' → HideCustomAction removed");
             }
             else
             {
@@ -488,7 +494,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, buttonId, StringComparison.OrdinalIgnoreCase));
 
                 if (buttonEl == null)
-                    return ($"Error: Button '{buttonId}' not found in RibbonDiffXml.", null);
+                    return ($"Button '{buttonId}' not found in RibbonDiffXml.", null, null);
 
                 var commandId = buttonEl.Attribute("Command")?.Value;
                 var commandDefEl = ribbonDoc.Root
@@ -521,7 +527,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                         .ForEach(e => e.Remove());
                 }
 
-                return (null, $"show_button (custom): '{buttonId}' → AlwaysDisabled EnableRule removed from '{commandId}'");
+                return (null, null, $"show_button (custom): '{buttonId}' → AlwaysDisabled EnableRule removed from '{commandId}'");
             }
         }
     }
