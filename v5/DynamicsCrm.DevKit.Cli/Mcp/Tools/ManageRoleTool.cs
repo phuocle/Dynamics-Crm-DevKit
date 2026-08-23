@@ -46,8 +46,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- Debug 'access denied' (action='user' + entity_name)\n" +
             "- Audit role privileges (action='detail')\n" +
-            "- Provision access (assign/unassign or create/copy)\n" +
-            "RELATED TOOLS: whoami, manage_record, execute_fetchxml.")]
+            "- Provision access (assign/unassign or create/copy)\n\n" +
+            "RELATED TOOLS:\n" +
+            "- whoami → verify the connected user and their direct roles\n" +
+            "- manage_record → read/create/update role and team records directly\n" +
+            "- execute_fetchxml → query roles and privileges with deterministic filters")]
         public CallToolResult manage_role(
             [Description("list, detail, user, assign, unassign, create, update, delete, copy.")] string action = "",
             [Description("Email or GUID. Required: user/assign/unassign (unless team_id is used).")] string user_id = "",
@@ -62,7 +65,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 if (string.IsNullOrWhiteSpace(action))
-                    return Error("action is required. Valid values: 'list', 'detail', 'user', 'assign', 'unassign', 'create', 'update', 'delete', 'copy'.");
+                    return Error("action is required.",
+                        "Valid values: 'list', 'detail', 'user', 'assign', 'unassign', 'create', 'update', 'delete', 'copy'.");
 
                 var normalizedAction = action.Trim().ToLowerInvariant();
 
@@ -85,7 +89,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "update" => HandleUpdate(role_id?.Trim(), role_name?.Trim(), privileges),
                     "delete" => HandleDelete(role_id?.Trim()),
                     "copy" => HandleCopy(role_id?.Trim(), role_name?.Trim()),
-                    _ => Error($"Invalid action '{action}'. Valid values: 'list', 'detail', 'user', 'assign', 'unassign', 'create', 'update', 'delete', 'copy'.")
+                    _ => Error($"Invalid action '{action}'.",
+                        "Valid values: 'list', 'detail', 'user', 'assign', 'unassign', 'create', 'update', 'delete', 'copy'.")
                 };
             }
             catch (Exception ex)
@@ -152,15 +157,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var roleReference = !string.IsNullOrWhiteSpace(roleId) ? roleId : roleNameInput;
             var resolvedRole = ResolveRoleForDetail(roleReference);
-            if (!string.IsNullOrEmpty(resolvedRole.Error))
-                return Error(resolvedRole.Error);
             if (resolvedRole.AmbiguousRoles != null)
-                return Error(resolvedRole.Error, null, new ManageRoleResult
-                {
-                    Action = "detail",
-                    TotalCount = resolvedRole.AmbiguousRoles.Count,
-                    Roles = resolvedRole.AmbiguousRoles
-                });
+                return Error(resolvedRole.Error,
+                    "Re-call with the exact roleid GUID or a more specific role_name.",
+                    new ManageRoleResult
+                    {
+                        Action = "detail",
+                        TotalCount = resolvedRole.AmbiguousRoles.Count,
+                        Roles = resolvedRole.AmbiguousRoles
+                    });
+            if (!string.IsNullOrEmpty(resolvedRole.Error))
+            {
+                if (resolvedRole.Error.StartsWith("role_id or role_name is required", StringComparison.Ordinal))
+                    return Error(resolvedRole.Error,
+                        "Pass role_id (GUID) or role_name (Display Name). Use action='list' to discover roles.");
+                if (resolvedRole.Error.EndsWith("is not a valid GUID.", StringComparison.Ordinal) ||
+                    resolvedRole.Error.StartsWith("No security role found with ID", StringComparison.Ordinal))
+                    return Error(resolvedRole.Error,
+                        "Use action='list' to find valid role IDs.");
+                return Error(resolvedRole.Error);
+            }
 
             var role = resolvedRole.Role;
             var id = role.GetAttributeValue<Guid>("roleid");
@@ -584,10 +600,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (!isWildcard)
                     {
                         var rightError = ValidateRight(rightRaw);
-                        if (rightError != null) return Error(rightError);
+                        if (rightError != null) return Error(rightError.Value.Message, rightError.Value.Hint);
                     }
                     var depthError = ValidateDepth(change.Depth);
-                    if (depthError != null) return Error(depthError);
+                    if (depthError != null) return Error(depthError.Value.Message, depthError.Value.Hint);
 
                     var resolvedEntity = DisplayNameFirstResolver.ResolveEntity(_serviceClient, change.Entity?.Trim(), "manage_role");
                     if (!resolvedEntity.IsSuccess)
@@ -729,18 +745,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return null;
         }
 
-        private static string ValidateRight(string right)
+        private static (string Message, string Hint)? ValidateRight(string right)
         {
             if (string.IsNullOrWhiteSpace(right) || !StandardRights.Contains(right.Trim(), StringComparer.OrdinalIgnoreCase))
-                return $"Invalid privilege right '{right}'. Valid values: {string.Join(", ", StandardRights)}, or '*' for all rights on the entity.";
+                return ($"Invalid privilege right '{right}'.",
+                    $"Valid values: {string.Join(", ", StandardRights)}, or '*' for all rights on the entity.");
             return null;
         }
 
-        private static string ValidateDepth(string depth)
+        private static (string Message, string Hint)? ValidateDepth(string depth)
         {
             var valid = new[] { "User", "BusinessUnit", "BU", "Parent:ChildBU", "Organization", "Org", "None" };
             if (string.IsNullOrWhiteSpace(depth) || !valid.Contains(depth.Trim(), StringComparer.OrdinalIgnoreCase))
-                return $"Invalid privilege depth '{depth}'. Valid values: User, BusinessUnit, Parent:ChildBU, Organization, None (remove).";
+                return ($"Invalid privilege depth '{depth}'.",
+                    "Valid values: User, BusinessUnit, Parent:ChildBU, Organization, None (remove).");
             return null;
         }
 
@@ -924,7 +942,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (exactMatches.Count == 1)
                     return (exactMatches[0], null, null);
 
-                return (null, $"{nameMatches.Count} roles match '{roleReference}'. Re-call with the exact roleid GUID or a more specific role_name.", nameMatches.Select(MapRoleEntry).ToList());
+                return (null, $"{nameMatches.Count} roles match '{roleReference}'.", nameMatches.Select(MapRoleEntry).ToList());
             }
 
             if (!Guid.TryParse(roleReference, out var id))
