@@ -66,7 +66,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
 
                 var entitiesProvided = !string.IsNullOrWhiteSpace(entities);
-                var entityList = entitiesProvided ? ResolveEntityList(entities) : [];
+                var entityList = entitiesProvided ? ResolveEntityList(entities) : null;
+                if (entitiesProvided && entityList is null)
+                    return Error(
+                        $"entities '{entities}': could not be resolved. One or more names were not found by Display Name or Logical/Unique/Schema Name.",
+                        "Use get_tables to list entities before calling publish_customizations.");
+                entityList ??= [];
 
                 if (entitiesProvided && entityList.Count == 0)
                 {
@@ -76,7 +81,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
 
                 var appModulesProvided = !string.IsNullOrWhiteSpace(appmodules);
-                var appModuleList = appModulesProvided ? ResolveAppModuleList(appmodules) : [];
+                var appModuleList = appModulesProvided ? ResolveAppModuleList(appmodules) : null;
+                if (appModulesProvided && appModuleList is null)
+                    return Error(
+                        $"appmodules '{appmodules}': could not be resolved. One or more values were not found as appmodule GUID, Display Name, or unique name.",
+                        "Use manage_app(action='list') to discover valid appmodule identifiers.");
+                appModuleList ??= [];
 
                 if (appModulesProvided && appModuleList.Count == 0)
                 {
@@ -89,10 +99,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var optionSetNameList = ParseSimpleList(optionset_names);
 
                 // Dashboard GUIDs
-                var dashboardList = ParseGuidList(dashboards, "dashboards");
+                var dashboardList = ParseGuidList(dashboards);
+                if (dashboardList is null)
+                    return Error(
+                        $"dashboards '{dashboards}': contains a value that is not a valid GUID.",
+                        "Provide comma-separated system-form (dashboard) GUIDs, e.g. 'b52daa0a-996f-f111-ab0e-0022480a530f'. Use manage_form or get_solution_components to find valid dashboard IDs.");
+                dashboardList ??= [];
 
                 // Web resource GUIDs or logical names
                 var webResourceList = ResolveWebResourceList(webresources);
+                if (webResourceList is null)
+                    return Error(
+                        $"webresources '{webresources}': no web resource found with that name.",
+                        "Use manage_webresource(action='list') to find valid names.");
+                webResourceList ??= [];
 
                 var hasSpecificTargets = entityList.Count > 0 || appModuleList.Count > 0
                     || include_global_optionset || include_sitemap
@@ -179,7 +199,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private List<string> ResolveEntityList(string entities)
+        /// <summary>
+        /// Resolve entity names. Returns null when any name cannot be resolved —
+        /// the caller returns a friendly Error with hint in that case.
+        /// </summary>
+        private List<string>? ResolveEntityList(string entities)
         {
             var inputs = entities.Split(',')
                 .Select(e => e.Trim())
@@ -191,7 +215,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, input, "publish_customizations");
                 if (!resolved.IsSuccess)
-                    throw new InvalidOperationException($"entities '{input}': {resolved.Error}");
+                    return null;
 
                 resolvedNames.Add(resolved.Value.LogicalName);
             }
@@ -202,7 +226,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 .ToList();
         }
 
-        private List<string> ResolveAppModuleList(string appModules)
+        /// <summary>
+        /// Resolve appmodules (GUID / Display Name / unique name). Returns null when
+        /// any value cannot be resolved — the caller returns a friendly Error with hint.
+        /// </summary>
+        private List<string>? ResolveAppModuleList(string appModules)
         {
             var inputs = appModules.Split(',')
                 .Select(a => a.Trim())
@@ -220,13 +248,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var resolved = DisplayNameFirstResolver.ResolveApp(_serviceClient, input, "publish_customizations");
                 if (!resolved.IsSuccess)
-                    throw new InvalidOperationException($"appmodules '{input}': {resolved.Error}");
+                    return null;
 
                 var appId = resolved.Value.GetAttributeValue<Guid>("appmoduleid");
                 if (appId == Guid.Empty)
                     appId = resolved.Value.Id;
                 if (appId == Guid.Empty)
-                    throw new InvalidOperationException($"appmodules '{input}' resolved without an appmoduleid.");
+                    return null;
 
                 resolvedIds.Add(appId.ToString("D"));
             }
@@ -277,8 +305,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 .ToList();
         }
 
-        /// <summary>Parse a comma-separated list of GUIDs, returning formatted GUID strings.</summary>
-        private static List<string> ParseGuidList(string input, string paramName)
+        /// <summary>
+        /// Parse a comma-separated list of GUIDs, returning formatted GUID strings.
+        /// Returns null when any value is not a valid GUID — the caller returns a
+        /// friendly Error with hint in that case.
+        /// </summary>
+        private static List<string>? ParseGuidList(string input)
         {
             if (string.IsNullOrWhiteSpace(input)) return [];
             var result = new List<string>();
@@ -288,7 +320,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (Guid.TryParse(cleaned, out var guid))
                     result.Add(guid.ToString("D"));
                 else
-                    throw new InvalidOperationException($"{paramName} '{raw}' is not a valid GUID.");
+                    return null;
             }
             return result.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
         }
@@ -296,8 +328,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         /// <summary>
         /// Resolve web resources: accept GUIDs or logical names.
         /// For logical names, look up the webresource record to get its ID.
+        /// Returns null when a logical name is not found — the caller returns a
+        /// friendly Error with hint in that case.
         /// </summary>
-        private List<string> ResolveWebResourceList(string input)
+        private List<string>? ResolveWebResourceList(string input)
         {
             if (string.IsNullOrWhiteSpace(input)) return [];
             var result = new List<string>();
@@ -318,7 +352,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 query.Criteria.AddCondition("name", Microsoft.Xrm.Sdk.Query.ConditionOperator.Equal, raw);
                 var res = _serviceClient.RetrieveMultiple(query);
                 if (res.Entities.Count == 0)
-                    throw new InvalidOperationException($"webresources '{raw}': no web resource found with that name. Use manage_web_resource(action='list') to find valid names.");
+                    return null;
                 result.Add(res.Entities[0].GetAttributeValue<Guid>("webresourceid").ToString("D"));
             }
             return result.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
