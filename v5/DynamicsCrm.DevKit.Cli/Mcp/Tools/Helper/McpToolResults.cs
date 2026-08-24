@@ -266,6 +266,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             // 2. Lowercase copy for case-insensitive contains checks only
             string lower = cleaned.ToLowerInvariant();
 
+            // Fold the raw Dataverse fault (errorCode + message) into a hint suffix so
+            // friendly rewrites need no [Detail] line — [Error] + [Hint] is enough.
+            var detailSuffix = "";
+            if (raw.StructuredContent is { ValueKind: JsonValueKind.Object } structuredContent &&
+                structuredContent.TryGetProperty("details", out var detailsElement) &&
+                detailsElement.ValueKind == JsonValueKind.Object)
+            {
+                var rawMessage = detailsElement.TryGetProperty("message", out var m) ? m.GetString() : null;
+                var rawErrorCode = detailsElement.TryGetProperty("errorCode", out var c) ? c.GetString() : null;
+                if (!string.IsNullOrWhiteSpace(rawMessage))
+                    detailSuffix = $" Dataverse {rawErrorCode}: {rawMessage}";
+            }
+
             // 3. Apply substring-based rewrites for known Dataverse patterns
             string rewritten;
             if (lower.Contains("entity doesn't contain attribute with name"))
@@ -294,29 +307,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             }
             else if (lower.Contains("could not find a relationship with name"))
             {
-                rewritten = $"{ErrorPrefix} [RelationshipNotFound] Relationship not found in Dataverse. "
-                         + "Check the relationship SchemaName. "
-                         + "Use get_tables(entity_name=..., detail_level='full') to inspect relationships.";
+                return Error("Relationship not found in Dataverse. Check the relationship SchemaName.",
+                    "Use get_tables(entity_name=..., detail_level='full') to inspect relationships." + detailSuffix);
             }
             else if (lower.Contains("cannot create another parental relation"))
             {
-                rewritten = $"{ErrorPrefix} [ParentalConflict] The referencing entity already has a parental relationship. "
-                         + "Use cascade_preset='Referential' or 'ReferentialRestrictDelete' instead of 'Parental'.";
+                return Error("The referencing entity already has a parental relationship.",
+                    "Use cascade_preset='Referential' or 'ReferentialRestrictDelete' instead of 'Parental'." + detailSuffix);
             }
             else if (lower.Contains("custom label") && (lower.Contains("must have") || lower.Contains("should use")))
             {
-                rewritten = $"{ErrorPrefix} [MissingCustomLabel] menu_behavior='UseLabel' requires custom display labels. "
-                         + "Provide custom labels for the relationship menu or use a different menu_behavior.";
+                return Error("menu_behavior='UseLabel' requires custom display labels.",
+                    "Provide custom labels for the relationship menu or use a different menu_behavior." + detailSuffix);
             }
             else if (lower.Contains("canchangehierarchicalrelationship"))
             {
-                rewritten = $"{ErrorPrefix} [ManagedProperty] Hierarchical relationship managed property is locked. "
-                         + "The entity already has a hierarchical relationship or the managed property prevents the change.";
+                return Error("Hierarchical relationship managed property is locked.",
+                    "The entity may already have a hierarchical relationship; use get_tables(entity_name=..., detail_level='full') to check, or create a non-hierarchical relationship." + detailSuffix);
+            }
+            else if (lower.Contains("navigation property name cannot be the same on both sides"))
+            {
+                return Error("A self-referential relationship cannot use the same navigation property name on both sides.",
+                    "Dataverse requires distinct navigation property names per side for self-referential relationships; the tool does not expose them — create this relationship in the maker portal instead." + detailSuffix);
             }
             else if (lower.Contains("is invalid or missing") && lower.Contains("must start with a valid customization prefix"))
             {
-                rewritten = $"{ErrorPrefix} [InvalidPrefix] Schema name is missing or does not start with a valid publisher customization prefix. "
-                         + "Ensure the component name starts with the solution publisher prefix.";
+                return Error("Schema name is missing or does not start with a valid publisher customization prefix.",
+                    "Ensure the component name starts with the solution publisher prefix." + detailSuffix);
             }
             else if (lower.Contains("fields_json must be a non-empty json object"))
             {

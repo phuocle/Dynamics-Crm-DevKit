@@ -34,17 +34,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(ManageRelationshipResult)),
         Description(
             "Manage Dataverse 1:N, N:N relationships and polymorphic lookup targets.\n" +
-            "Actions: create_1n (referenced_entity + referencing_entity + solution_name, auto-creates lookup), " +
-            "create_nn (entity1 + entity2 + solution_name, auto-creates intersect), " +
-            "update (relationship_name — cascade / menu / hierarchy), " +
-            "delete (relationship_name), " +
-            "add_target (entity_name + attribute_name + referenced_entity + solution_name — polymorphic lookup), " +
-            "remove_target (entity_name + attribute_name + referenced_entity — deletes data).\n\n" +
+            "create_1n auto-creates the lookup column; create_nn auto-creates the intersect entity; " +
+            "update adjusts cascade/menu/hierarchy; add_target/remove_target manage polymorphic lookup targets (remove_target deletes the target's data).\n" +
             "is_hierarchical: self-referential 1:N only (referenced=referencing), max 1/entity. " +
             "Cascade presets: Parental (all Cascade) | Referential (NoCascade + RemoveLink) | ReferentialRestrictDelete (NoCascade + Restrict). " +
             "Cascade types: Cascade | NoCascade | RemoveLink | Restrict | Active | UserOwned.\n\n" +
-            "WHEN TO USE: create 1:N (with auto lookup) / N:N (with intersect), adjust cascade/menu/hierarchy, add/remove polymorphic lookup target. " +
-            "RELATED TOOLS: get_tables (discover relationships), manage_column (lookup columns), publish_customizations (batch publish).")]
+            "WHEN TO USE:\n" +
+            "- Create a 1:N relationship (with auto lookup) or an N:N relationship (with auto intersect).\n" +
+            "- Adjust cascade behaviors, relationship menu display, or hierarchy.\n" +
+            "- Add or remove a polymorphic lookup target.\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_tables → discover relationships\n" +
+            "- manage_column → lookup columns\n" +
+            "- publish_customizations → batch publish after multiple relationship changes")]
         public CallToolResult manage_relationship(
             [Description("create_1n / create_nn / update / delete / add_target / remove_target.")] string action = "",
             [Description("Schema name. Required: update/delete. Auto-generated on create.")] string relationship_name = "",
@@ -90,7 +92,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         cascade_preset, cascade_assign, cascade_delete, cascade_merge, cascade_reparent, cascade_share, cascade_unshare,
                         menu_behavior, menu_group, menu_order, solution_name),
                     "remove_target" => HandleRemoveTarget(entity_name, attribute_name, referenced_entity),
-                    _ => Error($"Invalid action '{action}'. Valid actions: create_1n, create_nn, update, delete, add_target, remove_target")
+                    _ => Error($"Invalid action '{action}'.",
+                        "Provide one of: 'create_1n', 'create_nn', 'update', 'delete', 'add_target', 'remove_target'.")
                 };
             }
             catch (Exception ex)
@@ -116,7 +119,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return resolveError;
 
             if (isHierarchical && referencedEntity != referencingEntity)
-                return Error($"is_hierarchical=true is only valid for self-referential relationships (referenced_entity must equal referencing_entity). Got: referenced='{referencedEntity}', referencing='{referencingEntity}'.");
+                return Error($"is_hierarchical=true is only valid for self-referential relationships (referenced_entity must equal referencing_entity). Got: referenced='{referencedEntity}', referencing='{referencingEntity}'.",
+                    "Set referenced_entity = referencing_entity for a hierarchical relationship, or omit is_hierarchical.");
 
             if (string.IsNullOrWhiteSpace(solutionName))
                 return Error("solution_name is required for create_1n so the publisher prefix can be resolved.",
@@ -390,7 +394,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (isHierarchical)
                 {
                     if (oneToMany.ReferencedEntity != oneToMany.ReferencingEntity)
-                        return Error($"is_hierarchical=true is only valid for self-referential relationships. '{relationshipName}' links '{oneToMany.ReferencedEntity}' -> '{oneToMany.ReferencingEntity}' which are different entities.");
+                        return Error($"is_hierarchical=true is only valid for self-referential relationships. '{relationshipName}' links '{oneToMany.ReferencedEntity}' -> '{oneToMany.ReferencingEntity}' which are different entities.",
+                            "Update a self-referential relationship (referenced entity = referencing entity), or omit is_hierarchical.");
                     if (oneToMany.IsHierarchical != true)
                     {
                         changes["isHierarchical"] = new UpdateAttributeChange { OldValue = oneToMany.IsHierarchical?.ToString() ?? "false", NewValue = "true" };
@@ -409,7 +414,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (changes.Count == 0 && warnings.Count == 0)
-                return Error($"No changes detected for relationship '{relationshipName}'. Provide cascade_preset, cascade_* overrides, or menu_* values to update.");
+                return Error($"No changes detected for relationship '{relationshipName}'.",
+                    "Provide cascade_preset, cascade_* overrides, or menu_* values to update.");
 
             if (changes.Count > 0)
             {
