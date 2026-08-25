@@ -113,21 +113,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "TOOL SELECTION: ONLY for 'modern', 'Power Fx', 'formula', 'appaction', 'new command bar', 'command designer'. NOT for 'button'/'ribbon'/'custom button'/'nút'/generic button → use manage_ribbon. When in doubt → manage_ribbon.\n\n" +
 
-            "Actions:\n" +
-            "- list: filter by entity/location/app/origin/action_type\n" +
-            "- detail: command_id OR label → full + rules + children\n" +
-            "- create: entity_name + location + label + (app_id OR app_name)\n" +
-            "- update: command_id + ≥1 field\n" +
-            "- hide: command_id OR (label+entity_name+location+app_name) — auto-overrides OOB\n" +
-            "- show: command_id OR (label+entity_name+location) — deletes OOB hide override, or unhides custom command\n" +
-            "- add_flyout (Dropdown Button): entity_name+location+label+(app_id|app_name)+items\n" +
-            "- update_flyout: command_id\n" +
-            "- add_flyout_item: flyout_command_id+label (works on Dropdown + Split)\n" +
-            "- remove_flyout_item: command_id\n" +
-            "- add_split_button (left=direct, arrow=dropdown): entity_name+location+label+(app_id|app_name)+items\n" +
-            "- update_split_button: command_id\n\n" +
+            "Actions: list, detail (rules+children), create, update, hide/show (OOB override per app), add_flyout/update_flyout (Dropdown), add_split_button/update_split_button (Split), add_flyout_item/remove_flyout_item (Dropdown + Split).\n\n" +
 
-            "origin='default' excludes auto-migrated. Commands are app-scoped (same entity differs per app). CRITICAL: if error mentions 'classic ribbon button', STOP and report — don't call other tools.\n\n" +
+            "Commands are app-scoped (same entity differs per app); origin='default' excludes auto-migrated. CRITICAL: if error mentions 'classic ribbon button', STOP and report — don't call other tools.\n\n" +
+
+            "NAME RESOLUTION: entity_name, app_name, javascript_webresource, icon_webresource resolve Display Name contains first, then logical/unique/schema contains. Fuzzy label (within entity+location+app) or app_name: 0/multi matches → ask user; 1 → auto-resolve.\n\n" +
 
             "WHEN TO USE:\n" +
             "- Add/update modern command bar buttons in MDA (Power Fx / appaction only)\n" +
@@ -137,11 +127,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- manage_ribbon → classic/legacy RibbonDiffXml buttons (NOT modern appaction)\n" +
             "- manage_app → app module metadata (commands are app-scoped)\n" +
             "- get_tables → entity logical/display names for entity_name\n" +
-            "- publish_customizations → batch publish after multiple command changes\n\n" +
-            "NAME RESOLUTION: entity_name, app_name, javascript_webresource, and icon_webresource resolve Display Name contains first, then logical/unique/schema contains.\n\n" +
-
-            "Fuzzy on label (within entity_name + location + app): 0/multi → tool returns disambiguation list and stops; AI must ask user (re-call with command_id). 1 → auto-resolve.\n" +
-            "Fuzzy on app_name (contains): 0/multi → ask user. 1 → auto.")]
+            "- publish_customizations → batch publish after multiple command changes")]
         public CallToolResult manage_command(
             [Description("list/detail/create/update/hide/show/add_flyout/update_flyout/add_flyout_item/remove_flyout_item/add_split_button/update_split_button.")] string action = "",
             [Description("appaction GUID. Required: detail/update.")] string command_id = "",

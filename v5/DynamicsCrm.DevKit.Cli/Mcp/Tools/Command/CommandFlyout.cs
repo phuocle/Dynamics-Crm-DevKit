@@ -190,7 +190,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var typeValue = existing.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
             if (typeValue != 1) // must be Dropdown Button
-                return Error($"Command '{commandId.Trim()}' is not a Dropdown Button (type={TypeMap.GetValueOrDefault(typeValue, typeValue.ToString())}). Use action='update' for Standard Buttons.");
+                return Error(
+                    $"Command '{commandId.Trim()}' is not a Dropdown Button (type={TypeMap.GetValueOrDefault(typeValue, typeValue.ToString())}).",
+                    "Use action='update_split_button' for Split Buttons or action='update' for Standard Buttons.");
 
             var entity = new Entity("appaction", cmdGuid);
             var changes = new List<string>();
@@ -471,7 +473,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var typeValue = existing.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
             if (typeValue != 2) // must be Split Button
-                return Error($"Command '{commandId.Trim()}' is not a Split Button (type={TypeMap.GetValueOrDefault(typeValue, typeValue.ToString())}). Use action='update' for Standard Buttons or action='update_flyout' for Dropdown Buttons.");
+                return Error(
+                    $"Command '{commandId.Trim()}' is not a Split Button (type={TypeMap.GetValueOrDefault(typeValue, typeValue.ToString())}).",
+                    "Use action='update_flyout' for Dropdown Buttons or action='update' for Standard Buttons.");
 
             var entity = new Entity("appaction", cmdGuid);
             var changes = new List<string>();
