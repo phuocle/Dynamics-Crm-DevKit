@@ -80,12 +80,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var entityResolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "manage_record_file");
                 if (!entityResolved.IsSuccess)
-                    return Error(entityResolved.Error);
+                    return entityResolved.Status == ResolveStatus.NotFound
+                        ? Error(entityResolved.Error.Split("\r\n")[0],
+                            "Use get_tables to list entities before calling manage_record_file.")
+                        : Error(entityResolved.Error);
                 var entityLogical = entityResolved.Value.LogicalName;
 
                 var attrResolved = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entityLogical, column_name.Trim(), "manage_record_file");
                 if (!attrResolved.IsSuccess)
-                    return Error(attrResolved.Error);
+                    return attrResolved.Status == ResolveStatus.NotFound
+                        ? Error(attrResolved.Error.Split("\r\n")[0],
+                            $"Use get_tables(entity_name='{entityLogical}') to list fields before calling manage_record_file.")
+                        : Error(attrResolved.Error);
                 var attribute = attrResolved.Value;
                 var fileAttr = attribute as FileAttributeMetadata;
                 var imageAttr = attribute as ImageAttributeMetadata;
