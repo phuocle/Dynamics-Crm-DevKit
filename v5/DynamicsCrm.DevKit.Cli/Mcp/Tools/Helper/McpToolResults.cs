@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.ServiceModel;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using WebApiHttpException = Microsoft.PowerPlatform.Dataverse.Client.Exceptions.HttpOperationException;
 
@@ -32,12 +33,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
         /// <summary>
         /// Successful result with a concise text summary and the full structured payload.
+        /// The summary is duplicated into the structured payload as a <c>summary</c>
+        /// property — byte-identical to the Content text line (prefix included) —
+        /// because some clients (Claude Code CLI) surface only the structured side
+        /// on success. Same duplication philosophy as <see cref="Error"/>.
         /// </summary>
-        internal static CallToolResult Success(string summary, object? structured) => new()
+        internal static CallToolResult Success(string summary, object? structured)
         {
-            Content = [new TextContentBlock { Text = $"{SuccessPrefix} {StripPrefix(summary, SuccessPrefix)}" }],
-            StructuredContent = JsonSerializer.SerializeToElement(structured)
-        };
+            var text = $"{SuccessPrefix} {StripPrefix(summary, SuccessPrefix)}";
+            var payload = JsonSerializer.SerializeToNode(structured) as JsonObject ?? new JsonObject();
+            payload["summary"] = text;
+            return new()
+            {
+                Content = [new TextContentBlock { Text = text }],
+                StructuredContent = JsonSerializer.SerializeToElement(payload)
+            };
+        }
 
         /// <summary>
         /// Partial-failure result: some records succeeded, some failed.

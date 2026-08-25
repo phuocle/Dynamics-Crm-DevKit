@@ -35,7 +35,7 @@ Status: files `1`–`4` already follow this template. Files `5`–`36` still use
 4. Repeat for every test:
    - `# TEST N` (H1, uppercase TEST). N is sequential from 1 with no gaps and no letter suffixes — old `Test 8b`, `Test 4b`, `Test 34a`… must be renumbered into the sequence.
    - `## INPUT` (H2) → one description line, then a ` ```json ` block with the tool-call input as **bare arguments only** (`{ "action": "list", ... }`), pretty-printed with 2-space indent. Do NOT use the `{"name": "...", "arguments": {...}}` envelope, arrow pseudo-calls (`→ tool(...)`), or expectation lines (`→ expect: ...`) — fold the expectation into the description line instead.
-   - `## OUTPUT` (H2) → a ` ```text ` block with the plain-text output, then a ` ```json ` block with the structured object (success tests only — see the error-test rule below).
+   - `## OUTPUT` (H2) → success tests: a single ` ```json ` block with the structured object, which always carries a trailing `"summary"` property. The summary is **byte-identical to the plain-text line, prefix included** — `"summary": "[Success] ..."` — so the JSON alone preserves everything the old ` ```text ` block showed; that is also what Claude Code CLI surfaces, so no separate text block is recorded for success. Error tests: text block only — see the error-test rule below.
    - `## RESULT` (H2) → a ` ```json ` block: `{ "IsError": true }` or `{ "IsError": false }`, one line, always present — never `IsError: `true``inline code, never a`**IsError:**` bold line, never omitted.
 5. `# RESULTS` (exact, plural, uppercase) → bullet list of outcomes, one per test: `- Test N: <English summary sentence>.` Bullets are ordered by test number (1, 2, 3, …), never grouped by outcome. Consecutive tests with the same outcome may be ranged: `- Test 4-6: three validation errors ...`.
    - No extra non-test bullets (no `Output convention:` bullet, no `**Bold label:**` thematic bullets, no bug-history bullets).
@@ -44,8 +44,9 @@ Status: files `1`–`4` already follow this template. Files `5`–`36` still use
 ## Test content rules
 
 - Every test is a real tool call against the tool this file documents. Helper/verification calls (`whoami`, `get_tables`, `devkit mcp --tools`, `git status`, `manage_record` delete for cleanup) are **not tests** — drop them. If a cleanup or verification step is genuinely worth keeping, mention it inside the test's description line or the matching RESULTS bullet, in one short sentence.
-- A zero-result success (`List 0 found`) is a SUCCESS test: both OUTPUT blocks + `{ "IsError": false }`.
+- A zero-result success (`List 0 found`) is a SUCCESS test: JSON OUTPUT block + `{ "IsError": false }`.
 - `[Failed]`-prefixed content with `IsError: false` (e.g. `manage_deleted_records` no-op cases) stays a success test; keep the prefix verbatim in the text block.
+- **Client-visibility note (verified by probe, 2026-08-24):** Claude Code CLI surfaces ONLY the structured JSON on success and ONLY the Content text on error; an error with structuredContent only collapses to `Unknown error`. That is why the `summary` property lives inside every success JSON (AI can read it) and why error tests record the text block.
 - Long outputs: never truncate with `,...` and never replace a block with a prose summary (`Structured content (JSON): giống hệt Test 1 ...` is the old format). **Always paste the full verbatim output, no matter how large** — these files are Wiki documentation, so an enormous block (e.g. a 20000-char `$metadata` responseBody) is embedded in full rather than trimmed. The `[miss] Output too large to embed. Re-run and capture.` marker is only for output you genuinely could not capture — size alone is never a reason to truncate or mark `[miss]`. Never invent the omitted part.
 
 ## Mutation-test data rules (files 17 onward)
@@ -83,11 +84,11 @@ When anh Phước asks you to fix / fill in / resolve a `[miss]` marker in a fil
 
 1. **Find the test** that has the `[miss]` (by `# TEST N` heading above it).
 2. **Read its `## INPUT` block** — that is the exact tool-call to re-run. Copy the arguments verbatim.
-3. **Run the tool** with that input (use the matching `mcp__devkit-claude__<tool>` tool) and capture the real output — the plain-text content and the structured JSON object, plus the `IsError` value.
+3. **Run the tool** with that input (use the matching `mcp__devkit-claude__<tool>` tool) and capture the real output — the structured JSON object (including its trailing `summary`) plus the `IsError` value. Error tests surface the `[Error]/[Hint]/[Detail]` text instead.
 4. **Replace the `[miss]` markers** in that test's `## OUTPUT` and `## RESULT` with the captured output, verbatim. Do not edit, summarise, or "clean up" the real output — paste it as-returned.
 5. **Update the matching bullet** in `# RESULTS` so it describes the now-captured outcome (no more `[miss]` mention).
 6. **Do not touch any other test** — only the test(s) anh Phước named. Do not fabricate output for tests that still lack data; leave their `[miss]` markers intact.
-7. After filling, the test must look identical in shape to a happy-case test (e.g. Test 2 in `2.get_audit_history.md`): ` ```text ` plain output, ` ```json ` structured output, ` ```json ` `{ "IsError": ... }`.
+7. After filling, the test must look identical in shape to a happy-case test: success = ` ```json ` structured output (with `summary`) + ` ```json ` `{ "IsError": false }`; error = ` ```text ` error output + ` ```json ` `{ "IsError": true }`.
 
 ## ERROR test output — text block only
 
@@ -175,12 +176,8 @@ One-line description of this test.
 
 ## OUTPUT
 
-\`\`\`text
-plain text output
-\`\`\`
-
 \`\`\`json
-{ "structured": "..." }
+{ "structured": "...", "summary": "[Success] One-line summary — byte-identical to the plain-text line." }
 \`\`\`
 
 ## RESULT
