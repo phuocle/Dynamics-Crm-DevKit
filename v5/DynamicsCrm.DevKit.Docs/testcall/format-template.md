@@ -2,7 +2,7 @@
 
 Rules for every `testcall/{N}.{tool}.md` file. Goal: 36 files share one format so they become Wiki docs.
 
-Status: files `1`–`4` already follow this template. Files `5`–`36` still use the old format (`# Tool description AI đọc được` / `# Input tool call` / `# Output tool call` / `# Kết quả AI tổng hợp`) with per-file variations — when you touch one of those files, convert it fully to this template using the migration rules in the last section.
+Status: files `1`–`26` and `28`–`36` already follow this template. File `27.manage_form.md` is the only one still in the old format (`# Tool description AI đọc được` / `# Input tool call` / `# Output tool call` / `# Kết quả AI tổng hợp`) — convert it fully to this template using the migration rules in the last section.
 
 ## ⭐ REFERENCE FILE (APPROVED)
 
@@ -45,7 +45,7 @@ Status: files `1`–`4` already follow this template. Files `5`–`36` still use
 
 - Every test is a real tool call against the tool this file documents. Helper/verification calls (`whoami`, `get_tables`, `devkit mcp --tools`, `git status`, `manage_record` delete for cleanup) are **not tests** — drop them. If a cleanup or verification step is genuinely worth keeping, mention it inside the test's description line or the matching RESULTS bullet, in one short sentence.
 - A zero-result success (`List 0 found`) is a SUCCESS test: JSON OUTPUT block + `{ "IsError": false }`.
-- `[Failed]`-prefixed content with `IsError: false` (e.g. `manage_deleted_records` no-op cases) stays a success test; keep the prefix verbatim in the text block.
+- `[Failed]`-prefixed content with `IsError: false` (e.g. `manage_deleted_records` no-op cases) stays a success test; keep the prefix verbatim inside the `summary` value.
 - **Client-visibility note (verified by probe, 2026-08-24):** Claude Code CLI surfaces ONLY the structured JSON on success and ONLY the Content text on error; an error with structuredContent only collapses to `Unknown error`. That is why the `summary` property lives inside every success JSON (AI can read it) and why error tests record the text block.
 - Long outputs: never truncate with `,...` and never replace a block with a prose summary (`Structured content (JSON): giống hệt Test 1 ...` is the old format). **Always paste the full verbatim output, no matter how large** — these files are Wiki documentation, so an enormous block (e.g. a 20000-char `$metadata` responseBody) is embedded in full rather than trimmed. The `[miss] Output too large to embed. Re-run and capture.` marker is only for output you genuinely could not capture — size alone is never a reason to truncate or mark `[miss]`. Never invent the omitted part.
 
@@ -126,7 +126,7 @@ Note: the `[Detail]` JSON is produced by the .NET JSON serializer, which escapes
 - The error tag is always `Hint:`. Old captures that show `Tip:` are from pre-standardization builds — keep them verbatim when copying a real capture, but never write `Tip:` yourself.
 - Never wrap error output in a combined JSON object (`{"content": ..., "structuredContent": ...}` raw JSON-RPC dumps) — that is the old format.
 
-This rule overrides the general "OUTPUT has both a text block and a JSON block" structure **only for error tests**. Happy-case (success) tests still record both blocks as usual, because success output is surfaced by every client.
+The OUTPUT shape is symmetrical and simple: **success = one ` ```json ` block (structured object with trailing `summary`); error = one ` ```text ` block (`[Error]`/`[Hint]`/`[Detail]`). No test ever has both blocks.** There is no "general both-blocks structure" — that was the old format.
 
 ## Cleanup rules
 
@@ -145,6 +145,7 @@ When converting a file that still uses `# Tool description [AI đọc được]`
 2. Extract parameters into a new `# PARAMETERS` section (from the embedded `Parameters:` list, `Input schema params:` line, or the C# signatures) in aligned `key : type : description` form.
 3. Merge the split Input/Output halves into per-test `# TEST N` / `## INPUT` / `## OUTPUT` / `## RESULT` blocks; renumber all tests sequentially (including letter-suffixed ones); convert envelopes/arrow-calls to bare-argument ` ```json ` inputs.
 4. Apply the error-test text-only rule; replace prose substitutes and paraphrases with `[miss]` markers per the hard rule.
+   - **Success OUTPUT migration:** old captures pair a ` ```text ` `[Success] ...` line with a ` ```json ` object. Embed the text line byte-identical as the trailing `"summary"` property of the JSON object and drop the text block. If the `[Success]` text line exists but the JSON does not (or vice versa), do NOT reconstruct the missing side — keep what exists, mark the missing side per the hard rule, and report.
 5. Translate all Vietnamese prose to English (leave captured output data verbatim); replace `# Kết quả …` with `# RESULTS` bullets in `- Test N: ...` form; drop tables, ✅, bold lead-ins, bug narrative, build proofs, blockquotes.
 6. Compare the result side-by-side with `2.get_audit_history.md` before reporting done.
 
