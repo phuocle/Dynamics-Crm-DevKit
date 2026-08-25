@@ -102,7 +102,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Browse mode does not support attribute-level filtering.");
 
             if (!string.IsNullOrWhiteSpace(recordId) && !Guid.TryParse(recordId.Trim(), out _))
-                return Error($"'{recordId}' is not a valid GUID.");
+                return Error($"'{recordId}' is not a valid GUID.",
+                    "record_id must be a GUID in the format '00000000-0000-0000-0000-000000000000'.");
 
             if (minutesAgo < 1) minutesAgo = 1440;
             if (minutesAgo > 43200) minutesAgo = 43200;
@@ -640,17 +641,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var suffix = (string.IsNullOrWhiteSpace(userFilter) ? "" : $", user contains \"{userFilter}\"") +
                          (string.IsNullOrWhiteSpace(operation) ? "" : $", op={operation}");
             return $"{scope} ({timeScope}{suffix}): {count} {word}.";
-        }
-
-        private static string FormatBrowseNoResults(string entityName, string timeScope,
-            string userFilter, string operation)
-        {
-            var sb = new StringBuilder("[AuditBrowse] 0 entries found; auditing is enabled.");
-            if (!string.IsNullOrWhiteSpace(entityName)) sb.Append($" entity = \"{entityName}\";");
-            if (!string.IsNullOrWhiteSpace(userFilter)) sb.Append($" user contains \"{userFilter}\";");
-            if (!string.IsNullOrWhiteSpace(operation)) sb.Append($" operation = \"{operation}\";");
-            if (!string.IsNullOrWhiteSpace(timeScope)) sb.Append($" time scope = \"{timeScope}\".");
-            return sb.ToString();
         }
 
         // ── Static formatting helpers ───────────────────────────────────────────
