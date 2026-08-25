@@ -111,13 +111,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Modern command bar buttons (appaction) for MDA + visibility/enable rules (appactionrule).\n\n" +
 
-            "TOOL SELECTION: ONLY for 'modern', 'Power Fx', 'formula', 'appaction', 'new command bar', 'command designer'. NOT for 'button'/'ribbon'/'custom button'/'nút'/generic button → use manage_ribbon. When in doubt → manage_ribbon.\n\n" +
+            "ONLY for 'modern', 'Power Fx', 'formula', 'appaction', 'new command bar', 'command designer'. NOT for 'button'/'ribbon'/'custom button'/generic button → use manage_ribbon. When in doubt → manage_ribbon.\n\n" +
 
             "Actions: list, detail (rules+children), create, update, hide/show (OOB override per app), add_flyout/update_flyout (Dropdown), add_split_button/update_split_button (Split), add_flyout_item/remove_flyout_item (Dropdown + Split).\n\n" +
 
             "Commands are app-scoped (same entity differs per app); origin='default' excludes auto-migrated. CRITICAL: if error mentions 'classic ribbon button', STOP and report — don't call other tools.\n\n" +
 
-            "NAME RESOLUTION: entity_name, app_name, javascript_webresource, icon_webresource resolve Display Name contains first, then logical/unique/schema contains. Fuzzy label (within entity+location+app) or app_name: 0/multi matches → ask user; 1 → auto-resolve.\n\n" +
+            "Name resolution: entity_name, app_name, javascript_webresource, icon_webresource resolve Display Name contains first, then logical/unique/schema contains. Fuzzy label (within entity+location+app) or app_name: 0/multi matches → ask user; 1 → auto-resolve.\n\n" +
 
             "WHEN TO USE:\n" +
             "- Add/update modern command bar buttons in MDA (Power Fx / appaction only)\n" +

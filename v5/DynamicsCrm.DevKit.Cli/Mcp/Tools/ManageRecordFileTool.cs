@@ -42,16 +42,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageRecordFileResult)),
         Description(
-            "Manage Dataverse File and Image column data. Actions: 'info' (read-only) | 'upload', 'download', 'delete' (upload/delete are mutations).\n\n" +
+            "Manage Dataverse File and Image column data. Actions: 'info' (read-only) | 'upload', 'download', 'delete' (upload/delete are mutations).\n" +
+            "- Upload always uses the SDK block protocol (4 MB blocks) — works for any size up to the column limit\n" +
+            "- Image columns: only gif/jpeg/tiff/bmp/png; download returns the thumbnail by default, use full_size=true for the full-sized image (requires CanStoreFullImage)\n" +
+            "- execute_webapi BLOCKS file/image endpoints (/$value, block-protocol actions, chunked PATCH) — always use this tool instead\n\n" +
             "WHEN TO USE:\n" +
             "- Inspect a file/image column value (file id, name, size, column limits)\n" +
             "- Upload a file from a local path, an http(s) URL (auto-downloaded), or base64 (< 1 MB)\n" +
             "- Download a file or image to local disk (.devkit/manage_record_file/{entity}/{record}/)\n" +
             "- Clear a file/image column value without deleting the record\n\n" +
-            "NOTES:\n" +
-            "- Upload always uses the SDK block protocol (4 MB blocks) — works for any size up to the column limit\n" +
-            "- Image columns: only gif/jpeg/tiff/bmp/png; download returns the thumbnail by default, use full_size=true for the full-sized image (requires CanStoreFullImage)\n" +
-            "- execute_webapi BLOCKS file/image endpoints (/$value, block-protocol actions, chunked PATCH) — always use this tool instead\n\n" +
             "RELATED TOOLS:\n" +
             "- get_tables → find File/Image columns of a table\n" +
             "- manage_record / search_records → find record_id\n" +

@@ -47,9 +47,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Find BPFs bound to an entity (entity_name filter)\n" +
             "- Resolve BPF unique/logical name for the auto-created entity\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_workflows -> classic workflow definitions (background async + realtime sync)\n" +
-            "- get_business_rules -> client-side business rules\n" +
-            "- get_flows -> Power Automate cloud flows")]
+            "- get_workflows → classic workflow definitions (background async + realtime sync)\n" +
+            "- get_business_rules → client-side business rules\n" +
+            "- get_flows → Power Automate cloud flows")]
         public CallToolResult get_business_process_flows(
             [Description("GUID -> detail. Empty = list.")] string? bpf_id = null,
             [Description("Name contains. 1 match -> auto-detail. Omit or pass null to list all.")] string? bpf_name = null,

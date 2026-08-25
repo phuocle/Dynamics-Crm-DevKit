@@ -44,7 +44,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Actions: list | buttons | detail | update | undo. update runs validate → backup → import → PublishAll async; undo restores from a backup file.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- classic/legacy ribbon & button customization — 'ribbon', 'classic', 'legacy', 'button', 'nút', 'custom button', 'action button', 'JavaScript button', 'sub_grid/homepage grid button', or generic button\n" +
+            "- classic/legacy ribbon & button customization — 'ribbon', 'classic', 'legacy', 'button', 'custom button', 'action button', 'JavaScript button', 'sub_grid/homepage grid button', or generic button\n" +
             "- the 10 operations: add_button, update_button, hide_button, show_button, add_split_button, update_split_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item\n" +
             "- update_button identifies by 'button_id' (then 'label' = new value) or by 'label' (then 'new_label' = new value)\n" +
             "- entity_name and web-resource fields resolve Display Name contains first, then logical/unique/schema\n" +

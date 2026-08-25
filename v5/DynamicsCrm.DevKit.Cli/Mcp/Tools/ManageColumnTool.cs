@@ -39,9 +39,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Dataverse column (attribute) — auto-detect create vs update. Types: string, memo, integer, bigint, decimal, money, float, boolean, datetime, lookup, customer, picklist, multipicklist, image, file.\n\n" +
 
-            "UPDATE (column exists): pass logical_name that matches an existing attribute. attribute_type ignored (immutable). picklist: use add/update/delete_options; use default_value to change the DefaultFormValue (single integer, e.g. 100000001) — omit to keep current; not supported on multipicklist. boolean: use default_value ('true'/'false' or '1'/'0') to flip the DefaultValue — omit to keep current. Omit params to keep current. Formula clone parameters are CREATE-only; if any are passed for an existing column, the tool returns an error and does not update the formula.\n\n" +
+            "Update (column exists): pass logical_name that matches an existing attribute. attribute_type ignored (immutable). picklist: use add/update/delete_options; use default_value to change the DefaultFormValue (single integer, e.g. 100000001) — omit to keep current; not supported on multipicklist. boolean: use default_value ('true'/'false' or '1'/'0') to flip the DefaultValue — omit to keep current. Omit params to keep current. Formula clone parameters are CREATE-only; if any are passed for an existing column, the tool returns an error and does not update the formula.\n\n" +
 
-            "CREATE (no attribute): need attribute_type + display_name.\n" +
+            "Create (no attribute): need attribute_type + display_name.\n" +
             "- schema_name: if provided, used AS-IS as SchemaName (skip auto-derive from display_name). Caller responsible for casing. Must start with the publisher prefix (e.g. 'devkit_InvoiceLineId'). Create only — ignored on update.\n" +
             "- logical_name: if provided, used AS-IS as the lowercase logical name. Must start with the publisher prefix and be the lowercase form of schema_name (e.g. 'devkit_invoicelineid'). Create only — ignored on update.\n" +
             "- If both omitted: SchemaName is auto-derived from display_name via DataverseNamer, logical name derives from schemaName.ToLowerInvariant().\n" +
@@ -54,7 +54,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- 5 create flags (so a column can be cloned in a SINGLE create call, no follow-up update): required_level (None/Recommended/Required — default None), is_audit_enabled (default true), is_valid_for_advanced_find (default true), is_secured (default false), is_sortable (default true when supported). On UPDATE, omit=null to keep current.\n\n" +
 
             "CREATE uses the publisher prefix from solution_name directly. confirmed_prefix is optional and only validates the resolved prefix. Either solution_name or an explicit prefixed schema_name/logical_name must be supplied so the publisher prefix is known.\n" +
-            "STATUSCODE (statuscode / StatusType): pass logical_name='statuscode' and use add_options/update_options/delete_options.\n" +
+            "Statuscode (statuscode / StatusType): pass logical_name='statuscode' and use add_options/update_options/delete_options.\n" +
             "add_options: JSON array with optional 'state' field (linked statecode value, default 0): [{\"label\":\"Under Review\",\"value\":100000001,\"state\":0}].\n" +
             "update_options: rename by value (no 'state' needed). delete_options: JSON array of integer values. statecode column is read-only.\n" +
             "Name resolution: entity_name resolves Display Name contains first, then logical/schema name contains — ambiguity returns candidates. logical_name (UPDATE) follows the same Display Name first rule. lookup_target, global_optionset_name, and solution_name use their shared resolvers.\n\n" +
