@@ -296,25 +296,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             {
                 // Example original:
                 //   "'Account' entity doesn't contain attribute with Name = 'nonexistent_field' and NameMapping = 'Logical'..."
-                rewritten = $"{ErrorPrefix} [AttributeNotFound] Attribute not found on entity. "
-                         + "Check attribute logical name (case-sensitive). "
-                         + "Use get_tables(entity_name=...) to list valid fields.";
+                return Error("Attribute not found on entity.",
+                    "Check attribute logical name (case-sensitive). Use get_tables(entity_name=...) to list valid fields." + detailSuffix);
             }
             else if (lower.Contains("with a name =") && lower.Contains("with namemapping = 'logical' was not found"))
             {
-                rewritten = $"{ErrorPrefix} [EntityNotFound] Entity not found in Dataverse metadata. "
-                         + "Use get_tables to discover the correct logical name.";
+                return Error("Entity not found in Dataverse metadata.",
+                    "Use get_tables to discover the correct logical name." + detailSuffix);
             }
             else if (lower.Contains("unknown condition operator:"))
             {
-                rewritten = $"{ErrorPrefix} [InvalidOperator] Unknown FetchXML condition operator. "
-                         + "See https://learn.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml/condition-operators";
+                return Error("Unknown FetchXML condition operator.",
+                    "See https://learn.microsoft.com/en-us/power-apps/developer/data-platform/fetchxml/reference/operators." + detailSuffix);
             }
             else if (lower.Contains("entityname") && !lower.Contains("doesn't contain attribute"))
             {
                 // Catches the bare "entityName" fault from empty <fetch></fetch>
-                rewritten = $"{ErrorPrefix} [MissingEntity] FetchXML is missing the required <entity name=\"...\"> element. "
-                         + "Read schema://fetchxml for FetchXML query structure.";
+                return Error("FetchXML is missing the required <entity name=\"...\"> element.",
+                    "Read schema://fetchxml for FetchXML query structure." + detailSuffix);
             }
             else if (lower.Contains("could not find a relationship with name"))
             {

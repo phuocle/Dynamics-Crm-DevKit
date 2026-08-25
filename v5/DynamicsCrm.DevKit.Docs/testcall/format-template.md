@@ -8,7 +8,7 @@ Rules for every `testcall/{N}.{tool}.md` file (36 files, one shared Wiki format)
 
 1. **ORDERING: success tests first, error tests last.** Tests `1..N` = success (`IsError: false`); tests `N+1..M` = error (`IsError: true`). A success test after any error test is a hard violation → reorder + renumber the whole file immediately (no gaps, no letter suffixes). Zero-result successes and `[Failed]`-with-`IsError: false` count as SUCCESS — they belong in the `1..N` block.
 2. **EVERY error MUST carry a `[Hint]` line.** `[Hint]` teaches the AI caller how to fix its mistake; an `[Error]` without `[Hint]` is a **code bug, never a doc choice**. Captured a hintless error → fix the tool code (hint must say exactly what to pass), rebuild, re-run, capture fresh. Never record a hintless error; never invent a hint.
-3. **NO OTHER TAGS MAY EXIST.** Complete allowed set (defined in `McpToolResults.cs`): first-line prefixes `[Success]` `[Error]` `[DryRun]` `[Partial]` `[Failed]`; continuation lines `[Hint]` `[Detail]`; per-item `[Warning]` inside `[Detail]` payloads. Nothing else — `[AuditBrowse]`, `[Info]`, any custom tag = **code bug**: fix the tool (route through the `McpToolResults` factory), rebuild, re-capture. Never copy a non-standard tag into a doc; never strip it from a capture to hide the bug.
+3. **NO OTHER TAGS MAY EXIST.** Complete allowed set (defined in `McpToolResults.cs`): first-line prefixes `[Success]` `[Error]` `[DryRun]` `[Partial]` `[Failed]`; continuation lines `[Hint]` `[Detail]`; per-item `[Warning]` inside `[Detail]` payloads. Nothing else — `[AuditBrowse]`, `[Info]`, any custom tag = **code bug**: fix the tool (route through the `McpToolResults` factory), rebuild, re-capture. **Inline category markers inside a message line (`[EntityNotFound]`, `[WebApiError]`, …) are redundant tags (aP's call, 2026-08-25) — strip them from the code branch you are fixing;** new captures must not contain them, but never silently edit an old verbatim capture to hide what the build actually emitted. Never copy a non-standard tag into a doc.
 4. **NEVER FABRICATE OUTPUT.** Every byte of OUTPUT comes from a real run of that test's INPUT — no inventing, no reconstructing, no splicing runs, no deriving one side from the other, no "fixing" prefixes. If the real output has the wrong shape → the CODE is wrong: fix code, rebuild, re-capture. Missing/unreadable output → mark `[miss]` (a `[miss]` is correct; fabrication is far worse):
    - `[miss] Structured output not captured. Re-run test and fill in.`
    - `[miss] Plain text output not captured. Re-run test and fill in.`
@@ -16,15 +16,17 @@ Rules for every `testcall/{N}.{tool}.md` file (36 files, one shared Wiki format)
    aP asks to fix a `[miss]` → re-run that INPUT verbatim, paste real output, update its RESULTS bullet, touch only the named test(s).
 5. **NEVER DELETE DATA. NEVER INVENT TEST CASES.** Test only the cases whose INPUT is already in the doc. No cleanup calls — aP deletes artifacts manually. Test solution is always `all_in_one`. CREATE mutations: check existence first — `Customer ABC` exists → create `Customer ABC 2`, then `3`… (every component type); the doc records only the final name. UPDATE mutations: just run them.
 
-## 🔨 Build workflow (aP's rule)
+## 🔨 Build workflow (aP's rule) — HARD RULES, no exceptions
 
-- aP requests an **edit** → plain `dotnet build` on `DynamicsCrm.DevKit.Cli` to verify compile. No release script, no MCP restart.
-- aP requests **"full test"** → `.\DynamicsCrm.DevKit.Scripts\Release.DynamicsCrm.DevKit.Cli.ps1` → ask aP to `/mcp` reconnect `devkit-claude` → proof SHA via `whoami` → re-run tests live.
+1. **NEVER run `Release.DynamicsCrm.DevKit.Cli.ps1` on your own initiative.** The release script reinstalls the global tool and kills the live MCP connection. Running it without aP explicitly saying **"full test"** (exact words, in the current message) is a hard violation — "a capture needs the new build" is NOT permission. When in doubt: don't run it.
+2. **Code fix during a testcall task** (rule 2/3 fix) → plain `dotnet build` on `DynamicsCrm.DevKit.Cli` to verify compile, then **STOP and report to aP**: what changed, and that a release build + `/mcp` reconnect is required before re-capture. Do not continue capturing on your own — the connected MCP server still runs the OLD build, so any post-fix capture before release+reconnect is **stale** and must never be pasted as if it were the fixed behavior.
+3. **aP says "full test"** → run `.\DynamicsCrm.DevKit.Scripts\Release.DynamicsCrm.DevKit.Cli.ps1` → ask aP to `/mcp` reconnect `devkit-claude` → proof SHA via `whoami` → re-run tests live.
 
 ## Structure
 
 - **English only** in prose (headings, descriptions, RESULTS). Captured output data stays verbatim (Vietnamese/special chars in org data are never translated or stripped).
 - **No H1 with the tool name/number** — it is in the filename.
+- `# ✅ TOOL DESCRIPTION` — the `✅` prefix marks the tool as **fully tested and confirmed by anh Phước**. Convention: exactly one `✅`, one space, then `TOOL DESCRIPTION` (uppercase). **ONLY add it when aP explicitly asks** — that request means aP has reviewed the file and confirmed every test passed. Never add it on your own; a plain `# TOOL DESCRIPTION` means unreviewed/in-progress. This ✅ is the ONLY emoji allowed anywhere in a testcall file.
 - `# TOOL DESCRIPTION` → ` ```text ` block, copied **verbatim** from the tool's `Description(...)` attribute. Exactly 3 sections in order: plain text → `WHEN TO USE:` bullets → `RELATED TOOLS:` `- tool → purpose` bullets (`→`, not `->`). Deviation (extra/missing section) → copy verbatim + **REPORT to aP** — never rewrite the description yourself.
 - `# PARAMETERS` → ` ```text ` block, one aligned line per param: `key : type : description`. Types `string`/`int`/`bool` from the C# `[Description(...)]` signatures; defaults/ranges inline (`Default 5000.`). No params → `This tool takes no parameters.`
 - Per test:

@@ -72,7 +72,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
 
                 if (max_records <= 0)
-                    return Error("max_records must be a positive integer (1-5000).");
+                    return Error("max_records must be a positive integer (1-5000).",
+                        "Pass max_records in the range 1-5000 (default 5000).");
                 if (max_records > DataversePageLimit)
                     max_records = DataversePageLimit;
 
