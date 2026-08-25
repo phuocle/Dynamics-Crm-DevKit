@@ -62,7 +62,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertChartResult)),
         Description(
             "Manage Dataverse system charts (savedqueryvisualization). Actions: 'list', 'detail' (read-only) | 'create', 'update', 'rename', 'set_default', 'undo' (mutations). " +
-            "datadescription FetchXML is built from entity metadata — no view binding.\n\n" +
+            "datadescription FetchXML is built from entity metadata — no view binding. " +
+            "Omitted chart_type on create defaults to Pie (category=statecode, legend=importsequencenumber/count). " +
+            "Pie create first returns needs_confirmation without creating; re-call with confirmed=true after user approval. " +
+            "Multi-series: measures='col:agg[:label]; ...' (agg: count/countcolumn/sum/avg/min/max) defaults chart_type to Column and is mutually exclusive with aggregate_column. " +
+            "filter='field op value; ...' (ops: =, !=, >, >=, <, <=, like, in, null, not-null) filters chart data. Create with measures or filter also requires confirmed=true.\n\n" +
             "WHEN TO USE:\n" +
             "- List or inspect system charts of an entity\n" +
             "- Create a chart from group-by/aggregate columns, update chart type or columns, rename, set the entity default chart\n" +
@@ -70,11 +74,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- get_tables → column logical names for group_by_column/aggregate_column\n" +
             "- publish_customizations → batch publish after multiple metadata changes\n" +
-            "- manage_view → views; execute_webapi → raw savedqueryvisualization access\n\n" +
-            "Omitted chart_type on create defaults to Pie (category=statecode, legend=importsequencenumber/count). " +
-            "Pie create first returns needs_confirmation without creating; re-call with confirmed=true after user approval. " +
-            "Multi-series: measures='col:agg[:label]; ...' (agg: count/countcolumn/sum/avg/min/max) defaults chart_type to Column and is mutually exclusive with aggregate_column. " +
-            "filter='field op value; ...' (ops: =, !=, >, >=, <, <=, like, in, null, not-null) filters chart data. Create with measures or filter also requires confirmed=true.")]
+            "- manage_view → views; execute_webapi → raw savedqueryvisualization access")]
         public CallToolResult manage_chart(
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",
             [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Required for list/create.")] string entity_name = "",
@@ -121,7 +121,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
 
