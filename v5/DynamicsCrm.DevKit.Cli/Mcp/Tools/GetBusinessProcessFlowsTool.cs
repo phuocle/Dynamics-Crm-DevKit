@@ -75,13 +75,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     normalizedStatus = "active";
 
                 if (normalizedStatus != "active" && normalizedStatus != "draft" && normalizedStatus != "all")
-                    return Error($"Invalid status '{status}'. Use 'active', 'draft', or 'all'.");
+                    return Error($"Invalid status '{status}'.",
+                        "Pass status='active', 'draft', or 'all' (or omit for the default 'all').");
 
                 if (max_records <= 0) max_records = 50;
                 if (max_records > 250) max_records = 250;
 
                 if (!string.IsNullOrWhiteSpace(bpf_id) && !Guid.TryParse(bpf_id.Trim(), out _))
-                    return Error($"'{bpf_id.Trim()}' is not a valid GUID.");
+                    return Error($"'{bpf_id.Trim()}' is not a valid GUID.",
+                        "bpf_id must be a GUID in the format '00000000-0000-0000-0000-000000000000'.");
 
                 // -- Resolve entity_name -> logical name --
                 string? resolvedEntityName = null;
@@ -89,7 +91,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_business_process_flows");
                     if (!entityResult.IsSuccess)
-                        return Error($"entity_name '{entity_name.Trim()}': {entityResult.Error}");
+                        return Error(
+                            entityResult.Error.Split("\r\n")[0],
+                            "Use get_tables to list entities before calling get_business_process_flows.");
                     resolvedEntityName = entityResult.Value.LogicalName;
                 }
 
@@ -107,8 +111,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (bpfs.Count == 0 && !string.IsNullOrWhiteSpace(bpf_name))
                 {
                     return Error(
-                        $"No Business Process Flow matched bpf_name '{bpf_name.Trim()}'. " +
-                        "Hint: Use get_business_process_flows without bpf_name to list available BPFs.");
+                        $"No Business Process Flow matched bpf_name '{bpf_name.Trim()}'.",
+                        "Use get_business_process_flows without bpf_name to list available BPFs.");
                 }
 
                 if (bpfs.Count == 0)
