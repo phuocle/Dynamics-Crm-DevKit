@@ -51,9 +51,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Apply form operations via action=update (recommended: operations JSON) or raw formxml (advanced/undo)\n" +
             "- Rename a form, or restore a form from a .formxml backup (undo)\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_tables -> entity logical names; manage_view -> entity views; publish_customizations -> batch publish\n" +
-            "- See schema://formxml + docs://instructions_for_formxml for FormXML structure and operation examples\n\n" +
-            "Update flow: manage_form(update, operations=[...]) -> auto-builds FormXML + backup + XSD validate + import + publish. Operations support manage_tab, manage_section, manage_fields, manage_subgrid, manage_library, manage_event. workspace_folder is REQUIRED for update/rename/undo — backups are saved there before overwrite. Fuzzy on form_name (contains): 0/multi -> disambiguation list and stop; 1 -> auto-detail.")]
+            "- get_tables → entity logical names; manage_view → entity views; publish_customizations → batch publish\n" +
+            "- See schema://formxml + docs://instructions_for_formxml for FormXML structure and operation examples")]
         public CallToolResult manage_form(
             [Description("'list', 'detail', 'update', 'rename', 'undo'.")] string action = "",
             [Description("Entity Display Name or logical name (Display Name is resolved first; e.g. 'Account' or 'account').")] string entity_name = "",
