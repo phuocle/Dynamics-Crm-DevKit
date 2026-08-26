@@ -69,7 +69,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // List mode
                 var scopeResult = ResolveEntityScope(entity_name);
                 if (!string.IsNullOrEmpty(scopeResult.Error))
-                    return Error(scopeResult.Error);
+                    return Error(
+                        scopeResult.Error.Split("\r\n")[0],
+                        "Use get_tables to list entities before calling get_messages.");
                 entity_name = scopeResult.Scope;
                 if (max_records <= 0) max_records = 100;
                 if (max_records > 500) max_records = 500;
