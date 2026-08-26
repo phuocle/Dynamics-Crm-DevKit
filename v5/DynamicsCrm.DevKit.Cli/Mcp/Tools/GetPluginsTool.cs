@@ -119,7 +119,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var m = mode.Trim().ToLowerInvariant();
                     if (m != "sync" && m != "async")
-                        return Error($"Invalid mode '{mode.Trim()}'. Use 'sync' or 'async'.");
+                        return Error($"Invalid mode '{mode.Trim()}'.",
+                            "Use 'sync' or 'async'.");
                 }
 
                 if (max_records <= 0) max_records = 100;
@@ -135,12 +136,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_plugins");
                     if (!entityResult.IsSuccess)
-                        return Error($"entity_name '{entity_name.Trim()}': {entityResult.Error}");
+                        return Error(
+                            $"entity_name '{entity_name.Trim()}': {entityResult.Error.Split("\r\n")[0]}",
+                            "Use get_tables to list entities before calling get_plugins.");
 
                     var resolvedEntityName = entityResult.Value.LogicalName;
                     var otc = GetObjectTypeCode(resolvedEntityName);
                     if (otc == null)
-                        return Error($"Entity '{resolvedEntityName}' not found. Use get_tables to discover valid entity names.");
+                        return Error($"Entity '{resolvedEntityName}' not found.",
+                            "Use get_tables to discover valid entity names.");
 
                     var steps = GetSteps(null, otc.Value, message_name, type_name, stage, mode, active_only, include_config, max_records);
                     // Post-filter: outer join can leak steps from other entities or unbound steps
