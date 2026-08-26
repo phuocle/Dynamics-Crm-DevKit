@@ -26,7 +26,13 @@ public static class DevKitJson
             "OrganizationId", "OrganizationName", "OutputParameters", "OwningExtension",
             "PostEntityImages", "PreEntityImages", "PrimaryEntityId", "PrimaryEntityName",
             "RequestId", "SecondaryEntityName", "SharedVariables", "Stage", "UserId",
-            "ParentContext"
+            "ParentContext",
+            // IPluginExecutionContext2–7 properties
+            "UserAzureActiveDirectoryObjectId", "InitiatingUserAzureActiveDirectoryObjectId",
+            "InitiatingUserApplicationId", "PortalsContactId", "IsPortalsClientCall",
+            "AuthenticatedUserId", "InitiatingUserAgent",
+            "EnvironmentId", "TenantId", "IsApplicationUser",
+            "PreEntityImagesCollection", "PostEntityImagesCollection"
         };
 
         #region Public API
@@ -509,7 +515,14 @@ public static class DevKitJson
             {"PrimaryEntityId", "pi"}, {"PrimaryEntityName", "pn"},
             {"RequestId", "ri"}, {"SecondaryEntityName", "sn"},
             {"SharedVariables", "sv"}, {"Stage", "st"}, {"UserId", "ui"},
-            {"ParentContext", "pc"}
+            {"ParentContext", "pc"},
+            // IPluginExecutionContext2–7 properties
+            {"UserAzureActiveDirectoryObjectId", "ua"}, {"InitiatingUserAzureActiveDirectoryObjectId", "ia"},
+            {"InitiatingUserApplicationId", "iap"}, {"PortalsContactId", "pci"},
+            {"IsPortalsClientCall", "xpc"}, {"AuthenticatedUserId", "au"},
+            {"InitiatingUserAgent", "iag"},
+            {"EnvironmentId", "ei"}, {"TenantId", "ti"}, {"IsApplicationUser", "xau"},
+            {"PreEntityImagesCollection", "prc"}, {"PostEntityImagesCollection", "poc"}
         };
 
         private static string GetCompactContextKey(string propertyName)
@@ -756,7 +769,7 @@ public static class DevKitJson
                 LogicalName = GetString(dict, "LogicalName", ""),
                 Id = dict.TryGetValue("Id", out var id) ? Guid.Parse((string)id) : Guid.Empty
             };
-            if (dict.TryGetValue("Name", out var name) && name is string n)
+            if (dict.TryGetValue("Name", out var name) && name is string n) 
                 er.Name = n;
             return er;
         }
@@ -866,6 +879,20 @@ public static class DevKitJson
             if (dict.TryGetValue("ParentContext", out var pc) && pc is RemoteExecutionContext parentCtx)
                 SetField(fields, ctx, "_parentContext", parentCtx);
 
+            // IPluginExecutionContext2–7 properties (set via fuzzy match against runtime backing fields)
+            if (dict.TryGetValue("UserAzureActiveDirectoryObjectId", out var uaVal)) SetFieldFuzzy(fields, ctx, "UserAzureActiveDirectoryObjectId", uaVal);
+            if (dict.TryGetValue("InitiatingUserAzureActiveDirectoryObjectId", out var iaVal)) SetFieldFuzzy(fields, ctx, "InitiatingUserAzureActiveDirectoryObjectId", iaVal);
+            if (dict.TryGetValue("InitiatingUserApplicationId", out var iapVal)) SetFieldFuzzy(fields, ctx, "InitiatingUserApplicationId", iapVal);
+            if (dict.TryGetValue("PortalsContactId", out var pciVal)) SetFieldFuzzy(fields, ctx, "PortalsContactId", pciVal);
+            if (dict.TryGetValue("IsPortalsClientCall", out var xpcVal)) SetFieldFuzzy(fields, ctx, "IsPortalsClientCall", xpcVal);
+            if (dict.TryGetValue("AuthenticatedUserId", out var auVal)) SetFieldFuzzy(fields, ctx, "AuthenticatedUserId", auVal);
+            if (dict.TryGetValue("InitiatingUserAgent", out var iagVal)) SetFieldFuzzy(fields, ctx, "InitiatingUserAgent", iagVal);
+            if (dict.TryGetValue("EnvironmentId", out var eiVal)) SetFieldFuzzy(fields, ctx, "EnvironmentId", eiVal);
+            if (dict.TryGetValue("TenantId", out var tiVal)) SetFieldFuzzy(fields, ctx, "TenantId", tiVal);
+            if (dict.TryGetValue("IsApplicationUser", out var xauVal)) SetFieldFuzzy(fields, ctx, "IsApplicationUser", xauVal);
+            if (dict.TryGetValue("PreEntityImagesCollection", out var prcVal)) SetFieldFuzzy(fields, ctx, "PreEntityImagesCollection", prcVal);
+            if (dict.TryGetValue("PostEntityImagesCollection", out var pocVal)) SetFieldFuzzy(fields, ctx, "PostEntityImagesCollection", pocVal);
+
             var knownDictKeys = new HashSet<string>(KnownContextProperties, StringComparer.Ordinal) { "__type" };
             foreach (var kvp in dict)
             {
@@ -899,7 +926,14 @@ public static class DevKitJson
             {"pi", "PrimaryEntityId"}, {"pn", "PrimaryEntityName"},
             {"ri", "RequestId"}, {"sn", "SecondaryEntityName"},
             {"sv", "SharedVariables"}, {"st", "Stage"}, {"ui", "UserId"},
-            {"pc", "ParentContext"}
+            {"pc", "ParentContext"},
+            // IPluginExecutionContext2–7 properties
+            {"ua", "UserAzureActiveDirectoryObjectId"}, {"ia", "InitiatingUserAzureActiveDirectoryObjectId"},
+            {"iap", "InitiatingUserApplicationId"}, {"pci", "PortalsContactId"},
+            {"xpc", "IsPortalsClientCall"}, {"au", "AuthenticatedUserId"},
+            {"iag", "InitiatingUserAgent"},
+            {"ei", "EnvironmentId"}, {"ti", "TenantId"}, {"xau", "IsApplicationUser"},
+            {"prc", "PreEntityImagesCollection"}, {"poc", "PostEntityImagesCollection"}
         };
 
         private static readonly Dictionary<string, string> CompactToFullType = new Dictionary<string, string>(StringComparer.Ordinal)
