@@ -15,6 +15,7 @@ Rules for every `testcall/{N}.{tool}.md` file (36 files, one shared Wiki format)
    - `[miss] IsError not captured. Re-run test and fill in.`
    aP asks to fix a `[miss]` → re-run that INPUT verbatim, paste real output, update its RESULTS bullet, touch only the named test(s).
 5. **NEVER DELETE DATA. NEVER INVENT TEST CASES.** Test only the cases whose INPUT is already in the doc. No cleanup calls — aP deletes artifacts manually. Test solution is always `all_in_one`. CREATE mutations: check existence first — `Customer ABC` exists → create `Customer ABC 2`, then `3`… (every component type); the doc records only the final name. UPDATE mutations: just run them.
+6. **Tool-level `catch (Exception ex)` MUST return `ThrowExceptionFriendly(ex)`, never bare `ThrowException(ex)`.** `ThrowExceptionFriendly` strips the stack trace and rewrites known Dataverse fault messages into concise, actionable error text — bare `ThrowException` leaks raw stack dumps to the caller. When auditing/refactoring a tool, check every catch block at the tool entry point and fix violations before building.
 
 ## 🔨 Build workflow (aP's rule) — HARD RULES, no exceptions
 
