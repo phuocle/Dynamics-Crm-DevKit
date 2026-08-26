@@ -79,7 +79,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // ── Validate status ──────────────────────────────────────────────
                 var normalizedStatus = (status ?? "active").Trim().ToLowerInvariant();
                 if (normalizedStatus != "active" && normalizedStatus != "inactive" && normalizedStatus != "all")
-                    return Error($"Invalid status '{status.Trim()}'. Use 'active', 'inactive', or 'all'.");
+                    return Error($"Invalid status '{status.Trim()}'.",
+                        "Use 'active', 'inactive', or 'all'. Default 'active'.");
 
                 if (max_records <= 0) max_records = 100;
                 if (max_records > 500) max_records = 500;
@@ -90,10 +91,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var apiResult = ResolveCustomApi(api_name.Trim());
                     if (!apiResult.IsSuccess)
                         return Error(
-                            $"api_name '{api_name.Trim()}': {apiResult.Error}",
+                            apiResult.Error.Split("\r\n")[0],
                             apiResult.Status == ResolveStatus.NotFound
                                 ? "Use get_custom_apis with api_name empty to list available Custom APIs."
-                                : null);
+                                : "Re-call with a more specific api_name value.");
                     return BuildDetail(apiResult.CanonicalName);
                 }
 
@@ -105,7 +106,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_custom_apis");
                     if (!entityResult.IsSuccess)
-                        return Error($"entity_name '{entity_name.Trim()}': {entityResult.Error}");
+                        return Error(
+                            entityResult.Error.Split("\r\n")[0],
+                            "Use get_tables to list entities before calling get_custom_apis.");
                     resolvedEntity = entityResult.Value.LogicalName;
                 }
 
@@ -367,8 +370,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 uniqueColumn: "uniquename",
                 schemaColumn: null,
                 kind: "customapi",
-                ambiguousTag: "[AmbiguousCustomApi]",
-                notFoundTag: "[NotFoundCustomApi]",
+                ambiguousTag: null,
+                notFoundTag: null,
                 notFoundTip: null,
                 retryParameterName: "api_name");
         }
