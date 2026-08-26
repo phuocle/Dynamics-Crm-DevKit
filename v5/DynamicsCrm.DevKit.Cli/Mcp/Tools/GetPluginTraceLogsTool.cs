@@ -50,7 +50,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     // Detail mode
                     if (!Guid.TryParse(record_id.Trim(), out var detailId))
-                        return Error($"'{record_id}' is not a valid GUID. Use a plugintracelog ID from list mode.");
+                        return Error($"'{record_id}' is not a valid GUID.",
+                            "Use a plugintracelog ID from list mode.");
 
                     var detailQuery = new QueryExpression("plugintracelog")
                     {
@@ -85,7 +86,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
 
                 if (!string.IsNullOrWhiteSpace(correlation_id) && !Guid.TryParse(correlation_id.Trim(), out _))
-                    return Error($"'{correlation_id.Trim()}' is not a valid GUID for correlation_id.");
+                    return Error($"'{correlation_id.Trim()}' is not a valid GUID for correlation_id.",
+                        "GUID format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.");
 
                 if (minutes_ago < 0) minutes_ago = 60;
                 if (minutes_ago == 0) minutes_ago = 60;
@@ -98,7 +100,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_plugin_trace_logs");
                     if (!resolved.IsSuccess)
-                        return Error($"entity_name '{entity_name.Trim()}': {resolved.Error}");
+                        return Error(
+                            $"entity_name '{entity_name.Trim()}': {resolved.Error.Split("\r\n")[0]}",
+                            "Use get_tables to list entities before calling get_plugin_trace_logs.");
                     primaryEntityLogical = resolved.Value.LogicalName;
                 }
 
