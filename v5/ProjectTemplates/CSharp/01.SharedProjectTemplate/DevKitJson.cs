@@ -70,28 +70,65 @@ public static class DevKitJson
             if (json == null) return null;
             var chars = json.ToCharArray();
             var index = 0;
-            return ParseValue(chars, ref index);
+            var result = ParseValue(chars, ref index);
+            EatWhitespace(chars, ref index);
+            if (index != chars.Length)
+                throw new FormatException("Unexpected content at JSON index " + index.ToString(CultureInfo.InvariantCulture) + ".");
+            return result;
         }
 
         public static T Deserialize<T>(string json)
         {
-            var result = Deserialize(json);
+            if (string.IsNullOrWhiteSpace(json))
+                throw CreateDeserializationException(typeof(T), json, null, new FormatException("JSON cannot be null or whitespace."));
+
+            object result;
+            try
+            {
+                result = Deserialize(json);
+            }
+            catch (Exception ex)
+            {
+                throw CreateDeserializationException(typeof(T), json, null, ex);
+            }
             if (result == null) return default(T);
             if (result is T typed) return typed;
             var t = typeof(T);
-            if (t == typeof(int)) return (T)(object)Convert.ToInt32(result, CultureInfo.InvariantCulture);
-            if (t == typeof(long)) return (T)(object)Convert.ToInt64(result, CultureInfo.InvariantCulture);
-            if (t == typeof(double)) return (T)(object)Convert.ToDouble(result, CultureInfo.InvariantCulture);
-            if (t == typeof(decimal)) return (T)(object)Convert.ToDecimal(result, CultureInfo.InvariantCulture);
-            if (t == typeof(float)) return (T)(object)Convert.ToSingle(result, CultureInfo.InvariantCulture);
-            if (t == typeof(bool)) return (T)(object)Convert.ToBoolean(result, CultureInfo.InvariantCulture);
-            if (t == typeof(string)) return (T)(object)result.ToString();
-            if (result is Dictionary<string, object> dict && t.IsClass && !typeof(IEnumerable).IsAssignableFrom(t))
+            try
             {
-                try { return (T)MapDictionaryToObject(dict, t); }
-                catch { }
+                if (t == typeof(int)) return (T)(object)Convert.ToInt32(result, CultureInfo.InvariantCulture);
+                if (t == typeof(long)) return (T)(object)Convert.ToInt64(result, CultureInfo.InvariantCulture);
+                if (t == typeof(double)) return (T)(object)Convert.ToDouble(result, CultureInfo.InvariantCulture);
+                if (t == typeof(decimal)) return (T)(object)Convert.ToDecimal(result, CultureInfo.InvariantCulture);
+                if (t == typeof(float)) return (T)(object)Convert.ToSingle(result, CultureInfo.InvariantCulture);
+                if (t == typeof(bool)) return (T)(object)Convert.ToBoolean(result, CultureInfo.InvariantCulture);
+                if (t == typeof(string)) return (T)(object)result.ToString();
+                if (result is Dictionary<string, object> dict && t.IsClass && !typeof(IEnumerable).IsAssignableFrom(t))
+                    return (T)MapDictionaryToObject(dict, t);
+                if (t.IsAssignableFrom(result.GetType())) return (T)result;
             }
-            return (T)result;
+            catch (Exception ex)
+            {
+                throw CreateDeserializationException(t, json, result, ex);
+            }
+            throw CreateDeserializationException(t, json, result, null);
+        }
+
+        /// <summary>
+        /// Attempts to deserialize JSON without throwing. Use Deserialize&lt;T&gt; when failure details are required.
+        /// </summary>
+        public static bool TryDeserialize<T>(string json, out T value)
+        {
+            try
+            {
+                value = Deserialize<T>(json);
+                return true;
+            }
+            catch
+            {
+                value = default(T);
+                return false;
+            }
         }
 
         /// <summary>
@@ -602,11 +639,29 @@ public static class DevKitJson
                 case '"': return ParseString(json, ref index);
                 case '{': return ParseObjectAndReconstruct(json, ref index);
                 case '[': return ParseArray(json, ref index);
-                case 't': index += 4; return true;
-                case 'f': index += 5; return false;
-                case 'n': index += 4; return null;
-                default: return ParseNumber(json, ref index);
+                case 't':
+                    if (MatchLiteral(json, index, "true")) { index += 4; return true; }
+                    break;
+                case 'f':
+                    if (MatchLiteral(json, index, "false")) { index += 5; return false; }
+                    break;
+                case 'n':
+                    if (MatchLiteral(json, index, "null")) { index += 4; return null; }
+                    break;
+                case '-':
+                case '0': case '1': case '2': case '3': case '4':
+                case '5': case '6': case '7': case '8': case '9':
+                    return ParseNumber(json, ref index);
             }
+            throw new FormatException("Unexpected token at JSON index " + index.ToString(CultureInfo.InvariantCulture) + ".");
+        }
+
+        private static bool MatchLiteral(char[] json, int index, string literal)
+        {
+            if (index + literal.Length > json.Length) return false;
+            for (var i = 0; i < literal.Length; i++)
+                if (json[index + i] != literal[i]) return false;
+            return true;
         }
 
         private static string ParseString(char[] json, ref int index)
@@ -709,8 +764,10 @@ public static class DevKitJson
             {
                 if (long.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out var l))
                     return (l >= int.MinValue && l <= int.MaxValue) ? (object)(int)l : l;
+                if (decimal.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out var m))
+                    return m;
             }
-            return 0;
+            throw new FormatException("Invalid number at JSON index " + start.ToString(CultureInfo.InvariantCulture) + ".");
         }
 
         private static void EatWhitespace(char[] json, ref int index)
@@ -1029,8 +1086,7 @@ public static class DevKitJson
                         prop.SetValue(instance, null);
                     continue;
                 }
-                try { prop.SetValue(instance, CoerceValue(value, prop.PropertyType)); }
-                catch { }
+                prop.SetValue(instance, CoerceValue(value, prop.PropertyType));
             }
             return instance;
         }
@@ -1110,6 +1166,26 @@ public static class DevKitJson
                 return array;
             }
             return Convert.ChangeType(value, targetType, CultureInfo.InvariantCulture);
+        }
+
+        private static InvalidOperationException CreateDeserializationException(Type targetType, string json, object result, Exception innerException)
+        {
+            const int maxPreviewLength = 500;
+            var preview = json == null ? "<null>" : json
+                .Replace("\r", "\\r")
+                .Replace("\n", "\\n")
+                .Replace("\t", "\\t");
+            if (preview.Length > maxPreviewLength)
+                preview = preview.Substring(0, maxPreviewLength) + "...";
+
+            var parsedType = result == null ? "<null>" : result.GetType().FullName;
+            var message = string.Format(
+                CultureInfo.InvariantCulture,
+                "Unable to deserialize JSON to '{0}'. Parsed root type: '{1}'. JSON: {2}",
+                targetType.FullName,
+                parsedType,
+                preview);
+            return new InvalidOperationException(message, innerException);
         }
 
         #endregion

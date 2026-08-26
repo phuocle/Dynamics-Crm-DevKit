@@ -152,6 +152,78 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             Assert.True(DevKitJson.Deserialize<bool>("true"));
         }
 
+        [Fact]
+        public void Deserialize_GenericRootTypeMismatch_ThrowsWithJsonContext()
+        {
+            var exception = Assert.Throws<InvalidOperationException>(
+                () => DevKitJson.Deserialize<SamplePoco>("42"));
+
+            Assert.Contains(typeof(SamplePoco).FullName, exception.Message);
+            Assert.Contains(typeof(int).FullName, exception.Message);
+            Assert.Contains("42", exception.Message);
+        }
+
+        [Fact]
+        public void Deserialize_PocoPropertyTypeMismatch_ThrowsWithJsonContext()
+        {
+            const string json = "{\"Count\":{\"unexpected\":1}}";
+
+            var exception = Assert.Throws<InvalidOperationException>(
+                () => DevKitJson.Deserialize<SamplePoco>(json));
+
+            Assert.Contains(typeof(SamplePoco).FullName, exception.Message);
+            Assert.Contains(json, exception.Message);
+            Assert.NotNull(exception.InnerException);
+        }
+
+        [Fact]
+        public void TryDeserialize_ValidPoco_ReturnsTrueAndValue()
+        {
+            var success = DevKitJson.TryDeserialize(
+                "{\"Name\":\"Test\",\"Count\":42,\"IsActive\":true,\"Amount\":9.5}",
+                out SamplePoco result);
+
+            Assert.True(success);
+            Assert.NotNull(result);
+            Assert.Equal("Test", result.Name);
+            Assert.Equal(42, result.Count);
+        }
+
+        [Fact]
+        public void TryDeserialize_InvalidRootType_ReturnsFalseAndDefault()
+        {
+            var success = DevKitJson.TryDeserialize("UpdateDataflow", out SamplePoco result);
+
+            Assert.False(success);
+            Assert.Null(result);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        [InlineData("trux")]
+        [InlineData("1e")]
+        [InlineData("42 trailing")]
+        public void TryDeserialize_InvalidJson_ReturnsFalse(string json)
+        {
+            var success = DevKitJson.TryDeserialize(json, out int result);
+
+            Assert.False(success);
+            Assert.Equal(0, result);
+        }
+
+        [Fact]
+        public void Deserialize_InvalidPrimitiveJson_ThrowsWithJsonContext()
+        {
+            var exception = Assert.Throws<InvalidOperationException>(
+                () => DevKitJson.Deserialize<int>("UpdateDataflow"));
+
+            Assert.Contains(typeof(int).FullName, exception.Message);
+            Assert.Contains("UpdateDataflow", exception.Message);
+            Assert.IsType<FormatException>(exception.InnerException);
+        }
+
         #endregion
 
         #region DateTime and Guid
