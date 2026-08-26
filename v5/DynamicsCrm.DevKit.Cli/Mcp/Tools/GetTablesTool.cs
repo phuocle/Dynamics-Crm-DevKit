@@ -62,7 +62,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
 
@@ -82,8 +82,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var resolved = DisplayNameFirstResolver.Resolve(
                 entityName,
                 candidates,
-                "[AmbiguousEntity]",
-                "[NotFoundEntity]",
+                null,
+                null,
                 null,
                 "entity_name");
 
