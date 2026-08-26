@@ -46,6 +46,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- manage_command → command bar\n" +
             "- manage_record_file → file/image column data\n" +
             "- manage_deleted_records → restore\n" +
+            "- execute_sql → SQL SELECT queries; the ?sql= query option is BLOCKED/REDIRECTED to execute_sql\n" +
             "- publish_customizations → publish after metadata changes")]
         public CallToolResult execute_webapi(
             [Description("GET, POST, PUT, PATCH, or DELETE. Default GET.")] string method = "GET",
@@ -449,6 +450,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return null;
         }
 
+        private static bool HasSqlQueryOption(string urlLower) =>
+            urlLower.Contains("?sql=") || urlLower.Contains("&sql=");
+
         private static bool IsSingleColumnValueUrl(string path)
         {
             var firstSlash = path.IndexOf('/');
@@ -486,6 +490,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (method == HttpMethod.Get)
             {
+                if (HasSqlQueryOption(urlLower))
+                    return ("The ?sql= query option is not supported in execute_webapi.",
+                        "Use execute_sql instead — pass the SQL via its sql parameter (without URL-encoding). " +
+                        "execute_sql validates syntax, handles paging, and returns tabular results. " +
+                        "Read docs://instructions_for_sql for Dataverse SQL rules.");
                 foreach (var (pattern, tool, message) in RedirectedGetEndpoints)
                 {
                     if (pattern == "__guid_url__") continue;

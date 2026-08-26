@@ -1,6 +1,6 @@
 # TESTCALL FORMAT TEMPLATE
 
-Rules for every `testcall/{N}.{tool}.md` file (36 files, one shared Wiki format). Keep this file short on purpose — every rule below matters.
+Rules for every `testcall/{N}.{tool}.md` file (37 files, one shared Wiki format). Keep this file short on purpose — every rule below matters.
 
 **Golden reference: `2.get_audit_history.md`** — reviewed and approved by anh Phước. Read it first; compare your file side-by-side with it before reporting done. More approved examples: `1`, `3`, `4`.
 

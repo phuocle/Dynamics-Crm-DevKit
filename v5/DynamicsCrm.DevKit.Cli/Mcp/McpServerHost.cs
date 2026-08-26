@@ -34,6 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
         // Maps disabled tool type name → associated resource names (Name from [McpServerResource(Name=...)])
         internal static readonly Dictionary<string, string[]> ToolResourceMap = new()
         {
+            [nameof(Tools.ExecuteSqlTool)] = new[] { "instructions_for_sql" },
         };
 
         internal static readonly Dictionary<string, int> CategoryLevel = new()

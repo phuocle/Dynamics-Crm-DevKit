@@ -1094,5 +1094,49 @@ NotSpecified(0), Paused(1), Running(2), Waiting(3), Succeeded(4), Skipped(5), Su
 - Detail mode returns the full XAML definition which can be complex
 - Business rules execute client-side (form) or server-side depending on scope
 ";
+
+        [McpServerResource(
+            MimeType = "text/markdown",
+            Name = "instructions_for_sql",
+            Title = "Instructions for Dataverse SQL queries",
+            UriTemplate = "docs://instructions_for_sql"),
+        Description(
+            "Rules, supported operators, and T-SQL conversion cheat sheet for execute_sql. " +
+            "Read this before writing complex SQL SELECT queries against Dataverse.")]
+        public static string SqlInstructions() => @"
+# Dataverse SQL Query Rules
+
+## CRITICAL: Inspect Table Schema Before Composing SQL
+- Never guess column names or publisher prefixes on custom tables (e.g. `new_`, `hs_`, `crm_`).
+- ALWAYS call `get_tables(name='...', include_columns=true)` FIRST if you do not know the exact column logical names.
+- `SELECT *` is STRICTLY UNSUPPORTED. You must explicitly specify every column you need.
+- Primary Key is ALWAYS `{entity_logical_name}id` (e.g. `accountid`, `contactid`).
+
+## Column Type Specifics
+1. **Choice / OptionSet / StateCode / StatusCode**:
+   - Compare with integer values, NOT strings (e.g. `WHERE a.statecode = 0`, NOT `WHERE a.statecode = 'Active'`).
+   - Results provide integer values and formatted display labels via `@OData.Community.Display.V1.FormattedValue` annotations.
+2. **Lookup Columns & JOINs**:
+   - N (child) table uses lookup attribute (`parentcustomerid`).
+   - 1 (parent) table uses primary key (`accountid`).
+   - Example: `INNER JOIN account AS a ON c.parentcustomerid = a.accountid`
+3. **Dates**:
+   - Stored in UTC. Use ISO date literals `'2026-01-15'`.
+   - Only `DATEADD(day/month/year, -N, GETUTCDATE())` or `DATEADD(..., 'literal')` are allowed in WHERE/ON.
+
+## Conversion Cheat Sheet (Standard SQL -> Dataverse SQL)
+
+| What you want to do (Standard SQL) | Dataverse SQL Equivalent | Why / Rule |
+|-----------------------------------|--------------------------|------------|
+| `SELECT * FROM account` | `SELECT a.name, a.telephone1 FROM account AS a` | `SELECT *` not supported. Name all columns explicitly. |
+| `SELECT TOP 10 name FROM account` | Pass `max_records: 10` parameter (or write TOP — it is converted automatically) | Paging is controlled by the tool, not the SQL. |
+| `SELECT name FROM account WHERE id IN (SELECT accountid FROM contact)` | `SELECT DISTINCT a.name FROM account AS a INNER JOIN contact AS c ON a.accountid = c.parentcustomerid` | Subqueries in `WHERE` are unsupported. Use `JOIN`. |
+| `WHERE a.modifiedon > a.createdon` | Filter client-side or use `execute_fetchxml` | Column-to-column comparison unsupported. |
+| `SELECT COUNT(*) ... HAVING COUNT(*) > 5` | Filter with `WHERE` prior to aggregation, or aggregate in client | `HAVING` clause is unsupported. |
+| `SELECT YEAR(createdon), COUNT(*)` | Group by entity attribute only; process date parts in client | Functions in `SELECT` / `GROUP BY` are unsupported. |
+| `WHERE createdon >= GETDATE() - 7` | `WHERE createdon >= DATEADD(day, -7, GETUTCDATE())` | Only `DATEADD` and `GETUTCDATE()` supported in WHERE. |
+| `SELECT 'Total', COUNT(*)` | `SELECT COUNT(*) AS total_count` | Literal values in `SELECT` list unsupported. |
+| `WHERE 1=1` | Omit dummy condition | Literal-to-literal comparisons unsupported. |
+";
     }
 }
