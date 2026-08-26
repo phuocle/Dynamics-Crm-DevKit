@@ -67,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
 
@@ -86,10 +86,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var normalizedOpType = (operationType ?? "").Trim().ToLowerInvariant();
             if (!string.IsNullOrEmpty(normalizedOpType) && !ValidOperationTypes.Contains(normalizedOpType))
-                return Error($"'{operationType?.Trim()}' is not a valid operation_type. Valid values: plugin, workflow, bulk_delete, import, goal_rollup, solution, all.");
+                return Error($"'{operationType?.Trim()}' is not a valid operation_type.", "Valid values: plugin, workflow, bulk_delete, import, goal_rollup, solution, all.");
 
             if (!string.IsNullOrWhiteSpace(correlationId) && !Guid.TryParse(correlationId.Trim(), out _))
-                return Error($"'{correlationId.Trim()}' is not a valid GUID for correlation_id.");
+                return Error($"'{correlationId.Trim()}' is not a valid GUID for correlation_id.", "Pass the correlationId GUID copied from a system job entry in list mode.");
 
             string primaryEntityLogical = null;
             int? primaryEntityTypeCode = null;
@@ -97,7 +97,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "get_system_jobs");
                 if (!entityResult.IsSuccess)
-                    return Error($"entity_name '{entityName.Trim()}': {entityResult.Error}");
+                    return Error(
+                        $"entity_name {entityResult.Error.Split("\r\n")[0]}",
+                        "Use get_tables to list entities before calling get_system_jobs.");
 
                 primaryEntityLogical = entityResult.Value.LogicalName;
                 primaryEntityTypeCode = ResolveEntityTypeCode(primaryEntityLogical);
@@ -167,7 +169,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleDetail(string recordId)
         {
             if (!Guid.TryParse(recordId.Trim(), out _))
-                return Error($"'{recordId.Trim()}' is not a valid GUID. Use an asyncoperation ID from list mode.");
+                return Error($"'{recordId.Trim()}' is not a valid GUID.", "Use an asyncoperation ID from list mode.");
 
             var fetchXml = $@"<fetch>
   <entity name='asyncoperation'>
@@ -395,11 +397,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(entry.Name))
                 sb.Append($". {entry.Name}");
             if (!string.IsNullOrWhiteSpace(entry.OperationType))
-                sb.Append($" [{entry.OperationType}]");
-            if (!string.IsNullOrWhiteSpace(entry.Status))
+                sb.Append($" ({entry.OperationType})");
+            if (!string.IsNullOrWhiteSpace(entry.Status) && entry.Status != "Succeeded")
                 sb.Append($" — {entry.Status}");
-            sb.Append(string.IsNullOrWhiteSpace(entry.Message) ? ". Error: none" : ". Error: available");
-            sb.Append(string.IsNullOrWhiteSpace(entry.FriendlyMessage) ? ". Message: none" : ". Message: available");
+            if (entry.ErrorCode != null)
+                sb.Append($". ErrorCode: {entry.ErrorCode}");
+            if (!string.IsNullOrWhiteSpace(entry.Message))
+                sb.Append(". Error message: available");
+            if (!string.IsNullOrWhiteSpace(entry.FriendlyMessage))
+                sb.Append(". Friendly message: available");
             sb.Append('.');
             return sb.ToString();
         }
