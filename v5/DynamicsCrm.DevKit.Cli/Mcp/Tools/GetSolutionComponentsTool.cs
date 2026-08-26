@@ -180,7 +180,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             $"'{solution_name.Trim()}' was not found by Display Name or Logical/Unique/Schema Name.",
                             "Use get_solution_components with a more specific solution_name.");
 
-                    return Error(solutionResult.Error);
+                    return Error(solutionResult.Error.Split("\r\n")[0],
+                        "Use get_solution_components with a more specific solution_name.");
                 }
 
                 var solution = solutionResult.Value;
