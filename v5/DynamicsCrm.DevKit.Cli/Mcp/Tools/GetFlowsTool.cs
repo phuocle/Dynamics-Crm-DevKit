@@ -66,7 +66,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
             var normalizedAction = (action ?? "list").Trim().ToLowerInvariant();
             if (normalizedAction != "list" && normalizedAction != "runs")
-                return Error($"Invalid action '{action?.Trim()}'. Use 'list' or 'runs'.");
+                return Error($"Invalid action '{action?.Trim()}'.",
+                    "Use 'list' or 'runs'.");
 
             if (normalizedAction == "runs" && string.IsNullOrWhiteSpace(flow_id))
                 return Error("action='runs' requires flow_id.",
@@ -76,7 +77,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var s = status.Trim().ToLowerInvariant();
                 if (s != "active" && s != "draft" && s != "suspended" && s != "all")
-                    return Error($"Invalid status '{status.Trim()}'. Use 'active', 'draft', 'suspended', or 'all'.");
+                    return Error($"Invalid status '{status.Trim()}'.",
+                        "Use 'active', 'draft', 'suspended', or 'all'.");
             }
 
             if (max_records <= 0) max_records = 50;
@@ -88,12 +90,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrWhiteSpace(flow_id))
                 {
                     if (!Guid.TryParse(flow_id.Trim(), out _))
-                        return Error($"'{flow_id.Trim()}' is not a valid GUID.");
+                        return Error($"'{flow_id.Trim()}' is not a valid GUID.",
+                            "GUID format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.");
 
                     if (normalizedAction == "runs")
                     {
                         if (!string.IsNullOrWhiteSpace(status_filter) && !ValidStatusFilters.Contains(status_filter.Trim()))
-                            return Error($"Invalid status_filter '{status_filter.Trim()}'. Use 'succeeded', 'failed', 'running', 'cancelled', 'waiting', 'paused', 'skipped', or 'suspended'.");
+                            return Error($"Invalid status_filter '{status_filter.Trim()}'.",
+                                "Use 'succeeded', 'failed', 'running', 'cancelled', 'waiting', 'paused', 'skipped', or 'suspended'.");
                         return GetRuns(flow_id.Trim(), status_filter, minutes_ago, max_records);
                     }
                     else
