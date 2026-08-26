@@ -52,10 +52,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var normalizedStatus = (status ?? "").Trim().ToLowerInvariant();
                 if (normalizedStatus != "" && normalizedStatus != "active" && normalizedStatus != "draft"
                     && normalizedStatus != "inactivedraft" && normalizedStatus != "canceled")
-                    return Error($"Invalid status '{status.Trim()}'. Use 'active', 'draft', 'inactivedraft', or 'canceled'.");
+                    return Error($"Invalid status '{status.Trim()}'.",
+                        "Use 'active', 'draft', 'inactivedraft', or 'canceled'. Omit status to return all.");
 
                 if (!string.IsNullOrWhiteSpace(rule_id) && !Guid.TryParse(rule_id.Trim(), out _))
-                    return Error($"'{rule_id}' is not a valid GUID.");
+                    return Error($"'{rule_id.Trim()}' is not a valid GUID.",
+                        "GUID format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.");
 
                 if (max_records <= 0) max_records = 50;
 
@@ -65,7 +67,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_business_rules");
                 if (!entityResult.IsSuccess)
-                    return Error($"entity_name '{entity_name.Trim()}': {entityResult.Error}");
+                    return Error(
+                        entityResult.Error.Split("\r\n")[0],
+                        "Use get_tables to list entities before calling get_business_rules.");
                 var logicalEntityName = entityResult.Value.LogicalName;
 
                 if (!string.IsNullOrWhiteSpace(rule_id))
@@ -168,7 +172,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var primary = entity.GetAttributeValue<string>("primaryentity") ?? "";
             if (!string.IsNullOrEmpty(entityName) && !primary.Equals(entityName, StringComparison.OrdinalIgnoreCase))
-                return Error($"Business rule {ruleId} belongs to entity '{primary}', not '{entityName}'.");
+                return Error($"Business rule {ruleId} belongs to entity '{primary}', not '{entityName}'.",
+                    $"Pass entity_name '{primary}' - this rule's primary entity.");
 
             var xaml = entity.GetAttributeValue<string>("xaml");
             var parsedXaml = !string.IsNullOrEmpty(xaml)
