@@ -9,7 +9,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 /// <summary>
 /// Tests for ExecuteWebApiTool private static methods:
-/// ParseHttpMethod, ParseHeaders, GetBlockedReason, TryFormatJson.
+/// ParseHttpMethod, ParseHeaders, GetBlocked.
 /// Input validation is tested via the public execute_webapi method.
 /// </summary>
 [TestClass]
@@ -164,12 +164,15 @@ public class ExecuteWebApiToolTests
     // GetBlockedReason (private static)
     // ──────────────────────────────────────────────
 
-    private static readonly MethodInfo GetBlockedReasonMethod = ToolType
-        .GetMethod("GetBlockedReason", BindingFlags.NonPublic | BindingFlags.Static)!;
+    private static readonly MethodInfo GetBlockedMethod = ToolType
+        .GetMethod("GetBlocked", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     private static string? GetBlockedReason(HttpMethod method, string url)
     {
-        return (string?)GetBlockedReasonMethod.Invoke(null, new object[] { method, url });
+        var result = GetBlockedMethod.Invoke(null, new object[] { method, url });
+        if (result is ValueTuple<string, string> tuple)
+            return $"{tuple.Item1}\n{tuple.Item2}";
+        return null;
     }
 
     // ── Existing: UI / Forms / Views / SiteMaps ──
@@ -179,7 +182,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "systemforms(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("manage_form"));
     }
 
@@ -188,7 +191,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Put, "savedqueries(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("manage_view"));
     }
 
@@ -197,7 +200,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Delete, "userqueries(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("manage_view"));
     }
 
@@ -206,8 +209,8 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "sitemaps(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
-        Assert.IsTrue(result.Contains("manage_sitemap"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
+        Assert.IsTrue(result.Contains("manage_app"));
     }
 
     [TestMethod]
@@ -215,7 +218,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "environmentvariabledefinitions(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("manage_environment_variable"));
     }
 
@@ -224,7 +227,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Delete, "environmentvariablevalues(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("manage_environment_variable"));
     }
 
@@ -235,7 +238,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "EntityDefinitions(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("manage_table"));
         Assert.IsTrue(result.Contains("IRREVERSIBLE"), "Should warn about irreversible flags");
     }
@@ -245,7 +248,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Put, "EntityDefinitions(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     [TestMethod]
@@ -253,7 +256,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Delete, "EntityDefinitions(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     [TestMethod]
@@ -261,7 +264,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "EntityDefinitions(guid)/Attributes(guid)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("manage_column"), $"Expected 'manage_column' but got: {result}");
     }
 
@@ -270,7 +273,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Delete, "RelationshipDefinitions(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("manage_relationship"), $"Expected 'manage_relationship' but got: {result}");
     }
 
@@ -279,7 +282,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "ManagedPropertyDefinitions(guid)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     // ── NEW: Choice / OptionSet ──
@@ -289,7 +292,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "GlobalOptionSetDefinitions(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("manage_choice"), $"Expected 'manage_choice' but got: {result}");
     }
 
@@ -298,7 +301,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Delete, "GlobalOptionSetDefinitions(guid)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("manage_choice"));
     }
 
@@ -307,7 +310,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "OptionSetDefinitions(guid)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     // ── NEW: Web Resources ──
@@ -317,7 +320,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "webresources(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("manage_webresource"), $"Expected 'manage_webresource' but got: {result}");
     }
 
@@ -326,7 +329,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Delete, "webresources(guid)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("manage_webresource"));
     }
 
@@ -337,7 +340,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "roles(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("manage_role"), $"Expected 'manage_role' but got: {result}");
     }
 
@@ -346,7 +349,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Delete, "roles(guid)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("manage_role"));
     }
 
@@ -357,7 +360,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Delete, "solutions(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("Power Apps UI"), $"Expected UI redirect but got: {result}");
     }
 
@@ -366,7 +369,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "solutioncomponents(guid)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     // ── NEW: Plugin / Server-side ──
@@ -376,7 +379,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "pluginassemblies(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     [TestMethod]
@@ -384,7 +387,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Delete, "sdkmessageprocessingsteps(guid)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     [TestMethod]
@@ -392,7 +395,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "plugintypes(guid)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     // ── NEW: Workflows / Processes ──
@@ -402,7 +405,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "workflows(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     [TestMethod]
@@ -410,7 +413,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Delete, "processes(guid)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     // ── NEW: Apps ──
@@ -420,7 +423,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Delete, "canvasapps(guid)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     [TestMethod]
@@ -428,7 +431,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "appmodules(guid)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     // ── NEW: Connections ──
@@ -438,7 +441,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "connectionreferences(guid)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     // ── NEW: POST metadata actions blocked ──
@@ -448,7 +451,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Post, "PublishXml");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("publish"));
     }
 
@@ -457,7 +460,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Post, "PublishAllXml");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("publish"));
     }
 
@@ -466,7 +469,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Post, "publishxml");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     [TestMethod]
@@ -474,7 +477,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Post, "CreateOptionSet");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("manage_choice"));
     }
 
@@ -483,7 +486,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Post, "InsertOptionValue");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     [TestMethod]
@@ -491,7 +494,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Post, "UpdateOptionValue");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     [TestMethod]
@@ -499,7 +502,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Post, "DeleteOptionValue");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     [TestMethod]
@@ -507,7 +510,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Post, "webresources");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("manage_webresource"));
     }
 
@@ -516,7 +519,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Post, "roles");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
         Assert.IsTrue(result.Contains("manage_role"));
     }
 
@@ -565,7 +568,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Get, "EntityDefinitions");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("REDIRECT"));
+        Assert.IsTrue(result.Contains("instead"));
         Assert.IsTrue(result.Contains("get_tables"));
     }
 
@@ -574,7 +577,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Get, "AttributeDefinitions");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("REDIRECT"));
+        Assert.IsTrue(result.Contains("instead"));
         Assert.IsTrue(result.Contains("get_tables"));
     }
 
@@ -583,7 +586,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Get, "RelationshipDefinitions");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("REDIRECT"));
+        Assert.IsTrue(result.Contains("instead"));
         Assert.IsTrue(result.Contains("get_tables") || result.Contains("manage_relationship"));
     }
 
@@ -592,7 +595,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Get, "GlobalOptionSetDefinitions");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("REDIRECT"));
+        Assert.IsTrue(result.Contains("instead"));
         Assert.IsTrue(result.Contains("manage_choice"));
     }
 
@@ -601,8 +604,17 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Get, "OptionSetDefinitions");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("REDIRECT"));
+        Assert.IsTrue(result.Contains("instead"));
         Assert.IsTrue(result.Contains("manage_choice"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_GET_WhoAmI_Redirected()
+    {
+        var result = GetBlockedReason(HttpMethod.Get, "WhoAmI");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("instead"));
+        Assert.IsTrue(result.Contains("whoami"));
     }
 
     // ── GET data endpoints remain allowed ──
@@ -670,7 +682,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "ENTITYDEFINITIONS(guid)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     [TestMethod]
@@ -678,7 +690,7 @@ public class ExecuteWebApiToolTests
     {
         var result = GetBlockedReason(HttpMethod.Patch, "SystemForms(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
     }
 
     // ── Redirect tool correctness (adversarial) ──
@@ -725,39 +737,6 @@ public class ExecuteWebApiToolTests
         var result = GetBlockedReason(HttpMethod.Patch, "systemforms(guid)");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("manage_form"), $"Expected 'manage_form' but got: {result}");
-    }
-
-    // ──────────────────────────────────────────────
-    // TryFormatJson (private static)
-    // ──────────────────────────────────────────────
-
-    private static readonly MethodInfo TryFormatJsonMethod = ToolType
-        .GetMethod("TryFormatJson", BindingFlags.NonPublic | BindingFlags.Static)!;
-
-    private static string TryFormatJson(string json)
-    {
-        return (string)TryFormatJsonMethod.Invoke(null, new object[] { json })!;
-    }
-
-    [TestMethod]
-    public void TryFormatJson_ValidJson_ReturnsIndented()
-    {
-        var result = TryFormatJson("{\"name\":\"test\"}");
-        Assert.IsTrue(result.Contains("  \"name\": \"test\""));
-    }
-
-    [TestMethod]
-    public void TryFormatJson_InvalidJson_ReturnsOriginal()
-    {
-        var result = TryFormatJson("not json at all");
-        Assert.AreEqual("not json at all", result);
-    }
-
-    [TestMethod]
-    public void TryFormatJson_EmptyObject_ReturnsFormatted()
-    {
-        var result = TryFormatJson("{}");
-        Assert.AreEqual("{}", result);
     }
 
     // ──────────────────────────────────────────────

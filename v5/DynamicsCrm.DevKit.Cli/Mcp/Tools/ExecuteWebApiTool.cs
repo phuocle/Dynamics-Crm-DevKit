@@ -35,10 +35,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Raw Dataverse Web API call. url is relative; SDK adds base URL. PUT/PATCH/DELETE destructive — confirm.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Endpoints not covered by a specialized tool (WhoAmI, $metadata, custom actions, one-off data CRUD)\n" +
+            "- Endpoints not covered by a specialized tool ($metadata, custom actions, one-off data CRUD)\n" +
             "- Metadata/system endpoints (forms, views, sitemap, schema, choice, webresource, roles, publish, env vars, deleted records, command bar) are BLOCKED/REDIRECTED at runtime to the dedicated tool named in the error\n\n" +
 
             "RELATED TOOLS:\n" +
+            "- whoami → current connection identity (GET WhoAmI is redirected here)\n" +
             "- get_tables / manage_table / manage_column / manage_relationship → schema\n" +
             "- manage_choice → option sets\n" +
             "- manage_form / manage_view / manage_app → UI; sitemap via manage_app\n" +
@@ -143,7 +144,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var responseBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
                 var sb = new StringBuilder(1024);
-                sb.AppendLine($"[WebAPI] {httpMethod.Method} {url.Trim()}");
+                sb.AppendLine($"{httpMethod.Method} {url.Trim()}");
                 sb.AppendLine($"Status: {statusCode} {reasonPhrase}");
 
                 if (include_headers)
@@ -275,70 +276,41 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static readonly (string UrlPattern, string RedirectTool, string Message)[] RedirectedGetEndpoints =
         [
+            ("whoami", "whoami",
+                "whoami returns the current connection identity in one call: user, organization, environment URL, Dataverse version, security roles, and DevKit build info."),
+
             ("entitydefinitions", "get_tables",
-                "get_tables provides filtered, tiered metadata (compact/standard/full) optimized for AI consumption.\n\n" +
-                "Examples:\n" +
-                "  get_tables(entity_name='account') → standard detail with attributes & relationships\n" +
-                "  get_tables(entity_name='account', detail_level='compact') → names & types only\n" +
-                "  get_tables(entity_name='account', detail_level='full') → all metadata including audit, formula, security\n" +
-                "  get_tables(entity_name='email', filter='to,from,cc,bcc,subject,description') → filtered attributes\n" +
-                "  get_tables(filter='account') → list entities matching keyword"),
+                "get_tables provides filtered, tiered metadata (compact/standard/full) optimized for AI consumption."),
 
             ("attributedefinitions", "get_tables",
                 "get_tables(entity_name='...') returns attributes with filtering, detail levels, and relationships."),
 
             ("relationshipdefinitions", "get_tables or manage_relationship",
-                "Examples:\n" +
-                "  get_tables(entity_name='account') → includes 1:N, N:1, N:N relationships\n" +
-                "  manage_relationship(action='create_1n', referenced_entity='account', referencing_entity='contact', ...) → create relationship"),
+                "get_tables(entity_name='...') includes 1:N, N:1, N:N relationships; manage_relationship creates/updates/deletes them safely."),
 
             ("globaloptionsetdefinitions", "manage_choice",
-                "Examples:\n" +
-                "  manage_choice(action='list') → list global option sets\n" +
-                "  manage_choice(action='detail', optionset_name='...') → inspect options\n" +
-                "  manage_column for local picklists on an entity"),
+                "manage_choice lists and manages global option sets; manage_column handles local picklists on an entity."),
 
             ("optionsetdefinitions", "manage_choice",
-                "Examples:\n" +
-                "  manage_choice(action='list') → list global option sets\n" +
-                "  manage_choice(action='detail', optionset_name='...') → inspect options\n" +
-                "  manage_column for local picklists on an entity"),
+                "manage_choice lists and manages global option sets; manage_column handles local picklists on an entity."),
 
             ("asyncoperations", "get_system_jobs",
-                "get_system_jobs provides status/operation_type filters, time scope, correlation_id tracing, and detail mode with message + friendlyMessage.\n\n" +
-                "Examples:\n" +
-                "  get_system_jobs(status='failed', minutes_ago=1440) → failed jobs last 24h\n" +
-                "  get_system_jobs(record_id='<guid>') → detail with message + friendlyMessage\n" +
-                "  get_system_jobs(operation_type='solution', status='all') → solution import/export jobs\n" +
-                "  get_system_jobs(correlation_id='<guid>') → trace one request across jobs"),
+                "get_system_jobs provides status/operation_type filters, time scope, correlation_id tracing, and detail mode with message + friendlyMessage."),
 
             ("workflows", "get_workflows",
-                "get_workflows provides entity_name/mode/status filters, trigger_field discovery, and workflow execution metadata.\n\n" +
-                "Examples:\n" +
-                "  get_workflows(entity_name='account') → workflows bound to account\n" +
-                "  get_workflows(mode='realtime', status='active') → active realtime workflows\n" +
-                "  get_workflows(workflow_id='<guid>') → detail with trigger fields and execution metadata\n" +
-                "  get_workflows(entity_name='account', trigger_field='statecode') → workflows triggered by status change"),
+                "get_workflows provides entity_name/mode/status filters, trigger_field discovery, and workflow execution metadata."),
 
             ("processes", "get_workflows",
-                "get_workflows covers classic workflows (background + realtime) with filters and detail mode.\n\n" +
-                "Examples:\n" +
-                "  get_workflows(entity_name='account') → workflows bound to account\n" +
-                "  get_workflows(mode='realtime') → realtime (sync) workflows\n" +
-                "  get_workflows(workflow_id='<guid>') → detail with trigger fields and execution metadata"),
+                "get_workflows covers classic workflows (background + realtime) with filters and detail mode."),
 
             ("deletionstatecode", "manage_deleted_records",
                 "Standard OData $filter on 'deletionstatecode' or 'statecode eq 1' is unreliable for non-activity entities " +
                 "(returns empty for account/contact default statecode=0 even after soft-delete). " +
-                "Use manage_deleted_records(action='list', entity_name='<entity>') which uses FetchXml datasource='bin' " +
+                "manage_deleted_records(action='list') uses FetchXml datasource='bin' " +
                 "and returns records with modifiedOn ≈ delete time."),
 
             ("appactions", "manage_command",
-                "manage_command provides app-scoped list/detail with ribbon-style OOB+custom detection, visibility/enable rules, and flyout/split-button children.\n\n" +
-                "Examples:\n" +
-                "  manage_command(action='list', entity_name='account') → commands for account\n" +
-                "  manage_command(action='detail', command_id='<guid>', include_rules=true) → full detail with rules\n" +
-                "  manage_command(action='list', entity_name='account', include_children=true) → flyout/split items"),
+                "manage_command provides app-scoped list/detail with ribbon-style OOB+custom detection, visibility/enable rules, and flyout/split-button children."),
 
             ("restore", "manage_deleted_records",
                 "Web API 'Restore' action works (returns 200 with restored id), " +
@@ -424,12 +396,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var path = url.Split('?')[0];
 
             if (path.EndsWith("/$value", StringComparison.OrdinalIgnoreCase))
-                return ($"{method.Method} on a /$value binary endpoint is not allowed via execute_webapi.\nREASON: {FileColumnBlockReason}", FileColumnBlockHint);
+                return ($"{method.Method} on a /$value binary endpoint is not allowed via execute_webapi. {FileColumnBlockReason}", FileColumnBlockHint);
 
             foreach (var action in FileColumnSdkActions)
             {
                 if (path.IndexOf(action, StringComparison.OrdinalIgnoreCase) >= 0)
-                    return ($"{method.Method} on the file/image block-protocol action '{action}' is not allowed via execute_webapi.\nREASON: {FileColumnBlockReason}", FileColumnBlockHint);
+                    return ($"{method.Method} on the file/image block-protocol action '{action}' is not allowed via execute_webapi. {FileColumnBlockReason}", FileColumnBlockHint);
             }
 
             if (IsSingleColumnValueUrl(path))
@@ -439,11 +411,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var isChunked = HasHeader(headers, "x-ms-chunk-size");
                     var isBinary = HeaderContains(headers, "Content-Type", "octet-stream");
                     if (isChunked || isBinary)
-                        return ($"{method.Method} binary upload to a single-column endpoint is not allowed via execute_webapi.\nREASON: {FileColumnBlockReason}", FileColumnBlockHint);
+                        return ($"{method.Method} binary upload to a single-column endpoint is not allowed via execute_webapi. {FileColumnBlockReason}", FileColumnBlockHint);
                 }
                 else if (method == HttpMethod.Delete)
                 {
-                    return ($"DELETE on a single-column endpoint is not allowed via execute_webapi.\nREASON: {FileColumnBlockReason}", FileColumnBlockHint);
+                    return ($"DELETE on a single-column endpoint is not allowed via execute_webapi. {FileColumnBlockReason}", FileColumnBlockHint);
                 }
             }
 
@@ -484,7 +456,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 foreach (var (pattern, tool, reason) in BlockedPostEndpoints)
                 {
                     if (urlLower.Contains(pattern))
-                        return ($"Direct POST to {pattern} is not allowed via execute_webapi.\nREASON: {reason}", BlockedHint(tool));
+                        return ($"Direct POST to {pattern} is not allowed via execute_webapi. {reason}", BlockedHint(tool));
                 }
             }
 
@@ -509,7 +481,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             foreach (var (pattern, tool, reason) in BlockedEndpoints)
             {
                 if (urlLower.Contains(pattern.ToLowerInvariant()))
-                    return ($"Direct {method.Method} on {pattern.TrimEnd('(')} is not allowed via execute_webapi.\nREASON: {reason}", BlockedHint(tool));
+                    return ($"Direct {method.Method} on {pattern.TrimEnd('(')} is not allowed via execute_webapi. {reason}", BlockedHint(tool));
             }
 
             return null;
@@ -575,14 +547,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var trimmed = headersJson.Trim();
             if (trimmed[0] != '{' || trimmed[^1] != '}')
             {
-                error = $"Invalid JSON in headers parameter.\nInput: {headersJson}";
+                error = "Invalid JSON in headers parameter.";
                 return null;
             }
 
             using var doc = JsonDocument.Parse(trimmed);
             if (doc.RootElement.ValueKind != JsonValueKind.Object)
             {
-                error = $"Invalid JSON in headers parameter.\nInput: {headersJson}";
+                error = "Invalid JSON in headers parameter.";
                 return null;
             }
 

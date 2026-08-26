@@ -141,7 +141,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         default);
 
                     // ExecuteWebRequestAsync throws on non-success status — server faults (400 etc.)
-                    // surface via catch → ThrowExceptionFriendly with [WebApiError] detail and [Hint].
+                    // surface via catch → ThrowExceptionFriendly with Web API status detail and [Hint].
                     var body = await response.Content.ReadAsStringAsync();
 
                     using var doc = JsonDocument.Parse(body);

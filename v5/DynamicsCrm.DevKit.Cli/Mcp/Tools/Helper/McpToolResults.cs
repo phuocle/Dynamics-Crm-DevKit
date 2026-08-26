@@ -410,7 +410,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 var odataMessage = ExtractODataErrorMessage(content);
 
                 var sb = new StringBuilder();
-                sb.Append($"{ErrorPrefix} [WebApiError] Dataverse Web API returned {status} {reason}");
+                sb.Append($"{ErrorPrefix} Dataverse Web API returned {status} {reason}");
                 if (odataMessage != null)
                     sb.Append($": {odataMessage}");
                 sb.AppendLine();

@@ -18,7 +18,7 @@ public class RibbonOperationsTests
         var doc = EmptyRibbon();
         var ops = new RibbonButtonOperations(_validation, 1033);
 
-        var (error, summary) = ops.ExecuteAddButton(doc, "account", Json("""
+        var (error, _, summary) = ops.ExecuteAddButton(doc, "account", Json("""
 {
   "surface": "form",
   "label": "Open Dialog",
@@ -49,7 +49,7 @@ public class RibbonOperationsTests
         var doc = EmptyRibbon();
         var ops = new RibbonButtonOperations(_validation, 1033);
 
-        var (error, _) = ops.ExecuteAddButton(doc, "account", Json("""
+        var (error, _, _) = ops.ExecuteAddButton(doc, "account", Json("""
 {
   "surface": "sub_grid",
   "label": "Bulk Approve",
@@ -77,7 +77,7 @@ public class RibbonOperationsTests
         var doc = EmptyRibbon();
         var ops = new RibbonButtonOperations(_validation, 1033);
 
-        var (error, _) = ops.ExecuteAddButton(doc, "ab_shipment", Json("""
+        var (error, _, _) = ops.ExecuteAddButton(doc, "ab_shipment", Json("""
 {
   "surface": "main_grid",
   "label": "Check Invent Sum",
@@ -105,7 +105,7 @@ public class RibbonOperationsTests
         var doc = EmptyRibbon();
         var ops = new RibbonButtonOperations(_validation, 1033);
 
-        var (setupError, _) = ops.ExecuteAddButton(doc, "account", Json("""
+        var (setupError, _, _) = ops.ExecuteAddButton(doc, "account", Json("""
 {
   "surface": "main_grid",
   "label": "Open Dialog",
@@ -119,7 +119,7 @@ public class RibbonOperationsTests
         Assert.IsNull(setupError);
         AssertSelectionCountRule(doc, "devkit.account.OpenDialog.HomepageGrid.EnableRuleSelectCount", "1", null);
 
-        var (error, _) = ops.ExecuteAddButton(doc, "account", AddButtonJson("main_grid", "Open Dialog"));
+        var (error, _, _) = ops.ExecuteAddButton(doc, "account", AddButtonJson("main_grid", "Open Dialog"));
 
         Assert.IsNull(error);
         AssertNoRuleDefinition(doc, "devkit.account.OpenDialog.HomepageGrid.EnableRuleSelectCount");
@@ -139,7 +139,7 @@ public class RibbonOperationsTests
         ops.ExecuteAddButton(doc, "account", AddButtonJson("form", "Open Dialog"));
 
         var buttonId = "devkit.account.OpenDialog.Form.Button";
-        var (error, summary) = ops.ExecuteUpdateButton(doc, "account", Json($$"""
+        var (error, _, summary) = ops.ExecuteUpdateButton(doc, "account", Json($$"""
 {
   "button_id": "{{buttonId}}",
   "label": "Open Now",
@@ -171,12 +171,12 @@ public class RibbonOperationsTests
         ops.ExecuteAddButton(doc, "account", AddButtonJson("form", "Open Dialog"));
 
         var buttonId = "devkit.account.OpenDialog.Form.Button";
-        var (hideError, _) = ops.ExecuteHideButton(doc, "account", Json($$"""{ "button_id": "{{buttonId}}" }"""));
+        var (hideError, _, _) = ops.ExecuteHideButton(doc, "account", Json($$"""{ "button_id": "{{buttonId}}" }"""));
 
         Assert.IsNull(hideError);
         AssertElement(doc, "EnableRule", "devkit.account.AlwaysDisabled.EnableRule");
 
-        var (showError, _) = ops.ExecuteShowButton(doc, "account", Json($$"""{ "button_id": "{{buttonId}}" }"""));
+        var (showError, _, _) = ops.ExecuteShowButton(doc, "account", Json($$"""{ "button_id": "{{buttonId}}" }"""));
 
         Assert.IsNull(showError);
         Assert.IsFalse(doc.Descendants("EnableRule").Any(e => e.Attribute("Id")?.Value == "devkit.account.AlwaysDisabled.EnableRule"));
@@ -189,12 +189,12 @@ public class RibbonOperationsTests
         var validation = new FakeRibbonValidation { TreatAsOob = true };
         var ops = new RibbonButtonOperations(validation, 1033);
 
-        var (hideError, _) = ops.ExecuteHideButton(doc, "account", Json("""{ "button_id": "Mscrm.Form.account.Activate" }"""));
+        var (hideError, _, _) = ops.ExecuteHideButton(doc, "account", Json("""{ "button_id": "Mscrm.Form.account.Activate" }"""));
 
         Assert.IsNull(hideError);
         Assert.AreEqual("Mscrm.Form.account.Activate", doc.Descendants("HideCustomAction").Single().Attribute("Location")?.Value);
 
-        var (showError, _) = ops.ExecuteShowButton(doc, "account", Json("""{ "button_id": "Mscrm.Form.account.Activate" }"""));
+        var (showError, _, _) = ops.ExecuteShowButton(doc, "account", Json("""{ "button_id": "Mscrm.Form.account.Activate" }"""));
 
         Assert.IsNull(showError);
         Assert.AreEqual(0, doc.Descendants("HideCustomAction").Count());
@@ -206,7 +206,7 @@ public class RibbonOperationsTests
         var doc = EmptyRibbon();
         var ops = new RibbonFlyoutOperations(_validation, 1033);
 
-        var (error, summary) = ops.ExecuteAddSplitButton(doc, "account", Json("""
+        var (error, _, summary) = ops.ExecuteAddSplitButton(doc, "account", Json("""
 {
   "surface": "main_grid",
   "label": "Actions",
@@ -239,7 +239,7 @@ public class RibbonOperationsTests
         ops.ExecuteAddSplitButton(doc, "account", AddSplitJson("form", "Actions"));
 
         var splitId = "devkit.account.Actions.Form.SplitButton";
-        var (error, summary) = ops.ExecuteUpdateSplitButton(doc, "account", Json($$"""
+        var (error, _, summary) = ops.ExecuteUpdateSplitButton(doc, "account", Json($$"""
 {
   "split_button_id": "{{splitId}}",
   "label": "Actions Updated",
@@ -269,7 +269,7 @@ public class RibbonOperationsTests
         var doc = EmptyRibbon();
         var ops = new RibbonFlyoutOperations(_validation, 1033);
 
-        var (error, summary) = ops.ExecuteAddFlyoutStatic(doc, "account", AddFlyoutJson("sub_grid", "More Actions"));
+        var (error, _, summary) = ops.ExecuteAddFlyoutStatic(doc, "account", AddFlyoutJson("sub_grid", "More Actions"));
 
         Assert.IsNull(error);
         StringAssert.Contains(summary!, "add_flyout_static");
@@ -287,7 +287,7 @@ public class RibbonOperationsTests
         ops.ExecuteAddFlyoutStatic(doc, "account", AddFlyoutJson("form", "More Actions"));
 
         var flyoutId = "devkit.account.MoreActions.Form.FlyoutAnchor";
-        var (error, summary) = ops.ExecuteUpdateFlyoutStatic(doc, "account", Json($$"""
+        var (error, _, summary) = ops.ExecuteUpdateFlyoutStatic(doc, "account", Json($$"""
 {
   "flyout_id": "{{flyoutId}}",
   "label": "More Updated",
@@ -316,12 +316,12 @@ public class RibbonOperationsTests
         ops.ExecuteAddFlyoutStatic(doc, "account", AddFlyoutJson("form", "More Actions"));
 
         var identifyPrint = Json("""{ "flyout_label": "More Actions", "item_label": "Print" }""");
-        var (hideError, _) = ops.ExecuteHideFlyoutItem(doc, "account", identifyPrint);
+        var (hideError, _, _) = ops.ExecuteHideFlyoutItem(doc, "account", identifyPrint);
 
         Assert.IsNull(hideError);
         AssertElement(doc, "EnableRule", "devkit.account.AlwaysDisabled.EnableRule");
 
-        var (showError, _) = ops.ExecuteShowFlyoutItem(doc, "account", identifyPrint);
+        var (showError, _, _) = ops.ExecuteShowFlyoutItem(doc, "account", identifyPrint);
 
         Assert.IsNull(showError);
         Assert.IsFalse(doc.Descendants("EnableRule").Any(e => e.Attribute("Id")?.Value == "devkit.account.AlwaysDisabled.EnableRule"));
@@ -333,7 +333,7 @@ public class RibbonOperationsTests
         var doc = EmptyRibbon();
         var ops = new RibbonFlyoutOperations(_validation, 1033);
 
-        var (error, summary) = ops.ExecuteAddSplitButton(doc, "account", Json("""
+        var (error, _, summary) = ops.ExecuteAddSplitButton(doc, "account", Json("""
 {
   "surface": "form",
   "label": "Actions",
