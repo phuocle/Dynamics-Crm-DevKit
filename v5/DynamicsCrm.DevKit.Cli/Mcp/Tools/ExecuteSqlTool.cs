@@ -59,6 +59,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (sql.EndsWith(";", StringComparison.Ordinal))
                     sql = sql.Substring(0, sql.Length - 1).Trim();
 
+                // Reject stacked statements: ';' is only legal as the final terminator (stripped above).
+                // Quote-aware so a semicolon inside a string literal (e.g. WHERE name = 'a;b') does not false-positive.
+                if (ContainsSemicolonOutsideLiteral(sql))
+                    return Error("Multiple statements are not supported.",
+                        "execute_sql accepts a single SELECT statement only — remove the extra statements separated by ';'. " +
+                        "Dataverse SQL is read-only; use manage_record for create, update, or delete operations.");
+
                 // Unwrap TOP n — the ?sql= endpoint rejects TOP; convert it to max_records instead.
                 var topMatch = SqlQueryResult.TopRegex.Match(sql);
                 if (topMatch.Success)
@@ -190,6 +197,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 return ThrowExceptionFriendly(ex);
             }
+        }
+
+        private static bool ContainsSemicolonOutsideLiteral(string sql)
+        {
+            var inLiteral = false;
+            for (var i = 0; i < sql.Length; i++)
+            {
+                var c = sql[i];
+                if (inLiteral)
+                {
+                    if (c == '\'')
+                    {
+                        if (i + 1 < sql.Length && sql[i + 1] == '\'') { i++; continue; } // T-SQL '' escape
+                        inLiteral = false;
+                    }
+                    continue;
+                }
+                if (c == '\'') inLiteral = true;
+                else if (c == ';') return true;
+            }
+            return false;
         }
     }
 }
