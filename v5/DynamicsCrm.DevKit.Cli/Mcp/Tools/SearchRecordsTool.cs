@@ -1,4 +1,5 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
@@ -6,8 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
@@ -32,7 +35,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Search Dataverse records or inspect Dataverse Search provisioning status.\n\n" +
             "WHEN TO USE:\n" +
             "- Find records by keywords across one or more searchable tables\n" +
-            "- Diagnose whether Dataverse Search and entity indexes are ready\n\n" +
+            "- Diagnose whether Dataverse Search and entity indexes are ready\n" +
+            "- detail_level='full' → raw API payload saved to {workspace_folder}/.devkit/search/, read it with file tools\n\n" +
             "RELATED TOOLS:\n" +
             "- execute_fetchxml → deterministic field filters and joins\n" +
             "- get_tables → discover searchable entity logical names")]
@@ -41,30 +45,39 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Required for search. 1-100 chars. Operators: + (AND), | (OR), - (NOT), * (wildcard), \"phrase\", () (group).")] string search_term = "",
             [Description("Comma-separated Display Names or logical names (e.g. 'Account,contact'). Empty = all searchable.")] string entities = "",
             [Description("Max results to return. 1-100 (default 50).")] int top = 50,
-            [Description("OData filter applied after search. e.g. 'statecode eq 0'.")] string filter = "")
+            [Description("OData filter applied after search. e.g. 'statecode eq 0'.")] string filter = "",
+            [Description("DETAIL: 'compact' (default) or 'full' — full writes the raw API payload to {workspace_folder}/.devkit/search/.")] string detail_level = "compact",
+            [Description("Required when detail_level='full'. Full payload saves to {workspace_folder}/.devkit/search/.")] string workspace_folder = "")
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(action))
                     return Error("action is required.", "Valid values: 'search', 'status'.");
 
+                var detailLevel = (detail_level ?? "compact").Trim().ToLowerInvariant();
+                if (detailLevel is not ("compact" or "full"))
+                    return Error($"'{detail_level}' is not a valid detail_level.", "Valid values: compact, full.");
+                if (detailLevel == "full" && string.IsNullOrWhiteSpace(workspace_folder))
+                    return Error("workspace_folder is required when detail_level='full'.",
+                        "Provide the workspace folder — full payload saves to {workspace_folder}/.devkit/search/.");
+
                 var normalized = action.Trim().ToLowerInvariant();
                 if (normalized == "search")
-                    return ExecuteSearch(search_term, entities, top, filter);
+                    return ExecuteSearch(search_term, entities, top, filter, detailLevel, workspace_folder);
                 if (normalized == "status")
-                    return ExecuteStatus();
+                    return ExecuteStatus(detailLevel, workspace_folder);
 
                 return Error($"Invalid action '{action}'.", "Valid values: 'search', 'status'.");
             }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
 
         // ── Action: search ──────────────────────────────────────────────────────
 
-        private CallToolResult ExecuteSearch(string searchTerm, string entities, int top, string filter)
+        private CallToolResult ExecuteSearch(string searchTerm, string entities, int top, string filter, string detailLevel, string workspaceFolder)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
                 return Error("search_term is required when action='search'.",
@@ -72,7 +85,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var trimmedTerm = searchTerm.Trim();
             if (trimmedTerm.Length > 100)
-                return Error("search_term must be 100 characters or less.");
+                return Error("search_term must be 100 characters or less.",
+                    "Provide 1-100 chars. Operators: + (AND), | (OR), - (NOT), * (wildcard), \"phrase\", () (group).");
 
             if (top < 1) top = 1;
             if (top > 100) top = 100;
@@ -116,12 +130,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var structured = BuildSearchResult(wrapper.Response, trimmedTerm);
             if (!string.IsNullOrEmpty(structured.ErrorMessage))
                 return Error(structured.ErrorMessage, null, structured);
+
+            structured.DetailLevel = detailLevel;
+            if (detailLevel == "full")
+                structured.FilePath = WriteFullPayload(workspaceFolder, "search", structured);
+
+            // Inline payload is always compact: primary name only, raw attributes
+            // live in the full-payload file (or are dropped in compact mode).
+            SetRecordNames(structured);
+            foreach (var record in structured.Records ?? [])
+                record.Attributes = null;
+
             return Success(BuildSearchText(structured, sw.ElapsedMilliseconds), structured);
         }
 
         // ── Action: status ──────────────────────────────────────────────────────
 
-        private CallToolResult ExecuteStatus()
+        private CallToolResult ExecuteStatus(string detailLevel, string workspaceFolder)
         {
             var statusJson = ExecuteStatusEndpoint("searchstatus");
 
@@ -140,6 +165,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var structured = BuildStatusResult(statusWrapper.Response, statisticsJson);
             if (structured.Status == null)
                 return Error(structured.ErrorMessage ?? "Unable to parse status response.", null, structured);
+
+            structured.DetailLevel = detailLevel;
+            if (detailLevel == "full")
+                structured.FilePath = WriteFullPayload(workspaceFolder, "status", structured);
+
+            // Inline payload is always compact: indexedFields live in the
+            // full-payload file (or are dropped in compact mode).
+            foreach (var entity in structured.Status.EntityStatusResults ?? [])
+                entity.IndexedFields = null;
+
             return Success(BuildStatusText(structured), structured);
         }
 
@@ -290,6 +325,54 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
+        // ── Compact/full helpers ────────────────────────────────────────────────
+
+        private Dictionary<string, string> _primaryNameMap;
+
+        // Primary name attribute per entity, resolved once per process via
+        // RetrieveAllEntities (EntityFilters.Entity) and cached.
+        private string GetPrimaryNameAttribute(string entityLogicalName)
+        {
+            if (string.IsNullOrEmpty(entityLogicalName)) return null;
+            if (_primaryNameMap == null)
+            {
+                var response = (RetrieveAllEntitiesResponse)_serviceClient.Execute(new RetrieveAllEntitiesRequest
+                {
+                    EntityFilters = EntityFilters.Entity,
+                    RetrieveAsIfPublished = true
+                });
+                var map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                foreach (var meta in response.EntityMetadata)
+                    if (!string.IsNullOrEmpty(meta.PrimaryNameAttribute))
+                        map[meta.LogicalName] = meta.PrimaryNameAttribute;
+                _primaryNameMap = map;
+            }
+            return _primaryNameMap.TryGetValue(entityLogicalName, out var attr) ? attr : null;
+        }
+
+        private void SetRecordNames(SearchRecordsResult result)
+        {
+            if (result.Records == null || result.Records.Count == 0) return;
+            foreach (var record in result.Records)
+            {
+                var primaryAttr = GetPrimaryNameAttribute(record.EntityName);
+                if (primaryAttr == null || record.Attributes == null) continue;
+                if (record.Attributes.TryGetValue(primaryAttr, out var value))
+                    record.Name = value is JsonElement element
+                        ? (element.ValueKind == JsonValueKind.String ? element.GetString() : element.ToString())
+                        : value?.ToString();
+            }
+        }
+
+        private static string WriteFullPayload(string workspaceFolder, string prefix, SearchRecordsResult payload)
+        {
+            var dir = Path.Combine(workspaceFolder, ".devkit", "search");
+            Directory.CreateDirectory(dir);
+            var filePath = Path.Combine(dir, $"{prefix}_{DateTime.Now:yyyyMMdd_HHmmss_fff}.json");
+            File.WriteAllText(filePath, JsonSerializer.Serialize(payload, _jsonWriteOptions), Encoding.UTF8);
+            return Path.GetFullPath(filePath);
+        }
+
         // ── One-line text builders ──────────────────────────────────────────────
 
         private static string BuildSearchText(SearchRecordsResult r, long elapsedMs)
@@ -298,7 +381,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var total = r.TotalCount ?? n;
             var word = n == 1 ? "result" : "results";
             var trimmed = r.SearchTerm?.Trim('"') ?? "";
-            return $"Found {n} {word} ({total} total) for \"{trimmed}\" in {elapsedMs}ms.";
+            var text = $"Found {n} {word} ({total} total) for \"{trimmed}\" in {elapsedMs}ms.";
+            return r.FilePath == null ? text : text + $" Full output: {r.FilePath}";
         }
 
         private static string BuildStatusText(SearchRecordsResult r)
@@ -311,6 +395,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (r.Statistics != null)
                 sb.Append(" | ").Append(r.Statistics.StorageSizeInMb).Append(" MB, ").Append(r.Statistics.DocumentCount).Append(" docs");
             sb.Append('.');
+            if (r.FilePath != null)
+                sb.Append(" Full output: ").Append(r.FilePath);
             return sb.ToString();
         }
 
@@ -348,6 +434,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             PropertyNameCaseInsensitive = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+
+        private static readonly JsonSerializerOptions _jsonWriteOptions = new()
+        {
+            WriteIndented = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 
         #region Search API Models (per Microsoft docs)

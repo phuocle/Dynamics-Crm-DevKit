@@ -8,6 +8,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("action")]
         public string Action { get; set; }
 
+        [JsonPropertyName("detailLevel")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string DetailLevel { get; set; }
+
+        [JsonPropertyName("filePath")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string FilePath { get; set; }
+
         [JsonPropertyName("searchTerm")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SearchTerm { get; set; }
