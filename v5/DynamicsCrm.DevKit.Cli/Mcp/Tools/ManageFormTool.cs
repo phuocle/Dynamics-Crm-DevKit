@@ -63,7 +63,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("update (advanced) / undo: raw FormXML string or backup file path (.formxml). Auto-detects. Use 'operations' for the recommended flow.")] string formxml = "",
             [Description("update (recommended): JSON array of form operations. Read docs://instructions_for_formxml for format and examples.")] string operations = "",
             [Description("XSD validate FormXML before write.")] bool validate = true,
-            [Description("Required for update/rename — current FormXML always backs up to {workspace_folder}/.devkit/manage_form/{entity}/backups/ before overwrite. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "")
+            [Description("Required for update/rename — current FormXML always backs up to {workspace_folder}/.devkit/manage_form/{entity}/ before overwrite. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "")
         {
             _workspaceFolder = workspace_folder;
             try
@@ -88,7 +88,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (normalizedAction is "update" or "rename" && string.IsNullOrWhiteSpace(workspace_folder))
                     return Error($"workspace_folder is required when action='{normalizedAction}' (backup before overwrite).",
-                        "Provide the workspace folder — current FormXML backs up to {workspace_folder}/.devkit/manage_form/{entity}/backups/ before overwrite.");
+                        "Provide the workspace folder — current FormXML backs up to {workspace_folder}/.devkit/manage_form/{entity}/ before overwrite.");
 
                 return normalizedAction switch
                 {
@@ -366,9 +366,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var runner = new FormXmlOperationsRunner(_serviceClient);
             var (modifiedFormXml, opSummaries, classIdMap) = runner.Run(currentFormXml, entityName, ops);
 
-            // 4. Backup (fail-safe: exception bubbles to entry catch)
-            var backupPath = SaveBackup(entityName, id, formName, currentFormXml);
-
             // 5. Validate XSD
             List<string> validationWarnings = null;
             if (validate)
@@ -392,7 +389,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             Validated = true,
                             ValidationErrors = allIssues,
                             ValidationWarnings = validationWarnings,
-                            BackupPath = backupPath,
                             Published = false,
                             OperationsCount = ops?.Count
                         });
@@ -412,10 +408,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = "not_executed",
                     Validated = validate,
                     ValidationWarnings = validationWarnings,
-                    BackupPath = backupPath,
                     Published = false,
                     OperationsCount = ops?.Count
                 });
+
+            // Backup (fail-safe: exception bubbles to entry catch) — only when actually mutating
+            var backupPath = SaveBackup(entityName, id, formName, currentFormXml);
             DataverseMutationExecutor.Update(_context, _serviceClient, updateEntity);
 
             // Publish via helper (swallows faults, returns false on failure)
@@ -481,9 +479,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Strip XML declaration from input
             var newFormXml = StripXmlDeclaration(resolvedFormXml);
 
-            // Step 2: Backup current FormXML (fail-safe: exception bubbles to entry catch)
-            var backupPath = SaveBackup(entityName, id, formName, currentFormXml);
-
             // Step 3: Validate new FormXML against XSD
             List<string> validationWarnings = null;
             if (validate)
@@ -508,7 +503,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             Validated = true,
                             ValidationErrors = allIssues,
                             ValidationWarnings = validationWarnings,
-                            BackupPath = backupPath,
                             Published = false
                         });
                 }
@@ -526,9 +520,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     FormName = formName,
                     Status = "not_executed",
                     Validated = validate,
-                    BackupPath = backupPath,
                     Published = false
                 });
+
+            // Backup (fail-safe: exception bubbles to entry catch) — only when actually mutating
+            var backupPath = SaveBackup(entityName, id, formName, currentFormXml);
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             // Step 5: Publish via helper (swallows faults, returns false on failure)
@@ -613,11 +609,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Choose a different name.");
             }
 
-            // Step 3: Backup (fail-safe: exception bubbles to entry catch)
-            var currentFormXml = currentForm.GetAttributeValue<string>("formxml") ?? "";
-            var backupPath = SaveBackup(entityName, id, oldName, currentFormXml);
-
-            // Step 4: Rename
+            // Step 3: Rename
             var update = new Entity("systemform", id)
             {
                 ["name"] = formName
@@ -630,9 +622,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     FormId = id.ToString(),
                     FormName = formName,
                     Status = "not_executed",
-                    BackupPath = backupPath,
                     Published = false
                 });
+
+            // Backup (fail-safe: exception bubbles to entry catch) — only when actually mutating
+            var currentFormXml = currentForm.GetAttributeValue<string>("formxml") ?? "";
+            var backupPath = SaveBackup(entityName, id, oldName, currentFormXml);
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             // Step 5: Publish via helper (swallows faults, returns false on failure)
@@ -690,7 +685,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!File.Exists(backupFilePath))
                 return Error(
                     $"Backup file not found at '{backupFilePath}'.",
-                    "Backup files are saved at .devkit/manage_form/{entity}/backups/.");
+                    "Backup files are saved at .devkit/manage_form/{entity}/.");
 
             var json = File.ReadAllText(backupFilePath, Encoding.UTF8);
             var backupData = JsonSerializer.Deserialize<FormBackup>(json);
@@ -967,7 +962,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string SaveBackup(string entityName, Guid formId, string formName, string currentFormXml)
         {
-            var backupDir = Path.Combine(_workspaceFolder, ".devkit", "manage_form", entityName, "backups");
+            var backupDir = Path.Combine(_workspaceFolder, ".devkit", "manage_form", entityName);
             Directory.CreateDirectory(backupDir);
 
             var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");

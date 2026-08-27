@@ -368,7 +368,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var dir = Path.Combine(workspaceFolder, ".devkit", "search_records");
             Directory.CreateDirectory(dir);
-            var filePath = Path.Combine(dir, $"{prefix}_{DateTime.Now:yyyyMMdd_HHmmss_fff}.json");
+            var filePath = Path.Combine(dir, $"{prefix}_{DateTime.Now:yyyyMMddHHmmss}.json");
             File.WriteAllText(filePath, JsonSerializer.Serialize(payload, _jsonWriteOptions), Encoding.UTF8);
             return Path.GetFullPath(filePath);
         }

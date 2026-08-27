@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>DevKit MCP — .devkit Saved Files Convention</title>
+<style>
+  body { font-family: Segoe UI, Arial, sans-serif; margin: 2em auto; max-width: 1100px; color: #222; line-height: 1.5; }
+  h1 { background: #1b4f8a; color: #fff; padding: .35em .6em; border-radius: 6px; margin-top: 1.6em; font-size: 1.25em; }
+  h1 small { font-weight: normal; opacity: .8; }
+  h2 { color: #1b4f8a; border-bottom: 2px solid #1b4f8a; padding-bottom: .2em; }
+  code, pre { background: #f4f4f4; border-radius: 4px; }
+  code { padding: .1em .35em; color: #b3003b; }
+  pre { padding: .8em 1em; overflow-x: auto; border-left: 4px solid #1b4f8a; }
+  table { border-collapse: collapse; width: 100%; margin: .6em 0; }
+  th, td { border: 1px solid #ccc; padding: .45em .7em; text-align: left; vertical-align: top; }
+  th { background: #e8f0fa; }
+  .write { color: #0a7d2c; font-weight: bold; }
+  .read { color: #b35900; font-weight: bold; }
+  .rule { background: #e8f5e9; border-left: 4px solid #0a7d2c; padding: .6em 1em; margin: .8em 0; }
+</style>
+</head>
+<body>
+
+<h2>DevKit MCP — Quy ước ghi/đọc file trong <code>.devkit/</code></h2>
+<p>Trang này mô tả toàn bộ cách các MCP tool của DynamicsCrm.DevKit ghi file xuống đĩa và đọc lại file đó.
+Ví dụ dùng <code>workspace_folder = D:\github\Dynamics-Crm-DevKit\v5</code> (folder A — workspace đang mở trong editor, KHÔNG phải folder cài devkit CLI).</p>
+
+<div class="rule">
+<b>Quy ước chung (v5.5):</b>
+<ul>
+  <li>Backup tools: <code>{workspace_folder}\.devkit\{tool_name}\{entity}\</code> — file backup nằm trực tiếp trong folder entity, KHÔNG có level <code>backups\</code>. manage_app dùng <code>{appName}</code> thay <code>{entity}</code>.</li>
+  <li>Output tools (flat): <code>.devkit\search_records\</code>, <code>.devkit\generate_demo_data\{entity}\</code>.</li>
+  <li>manage_record_file: <code>.devkit\manage_record_file\{entity}\{record}\</code> (output chính của download, không phải backup).</li>
+  <li>Backup LUÔN chạy trước mutate (không còn param <code>backup</code>); <b>dry-run KHÔNG ghi backup</b> (không đổi gì thì không cần backup).</li>
+  <li><code>workspace_folder</code> bắt buộc cho mọi action ghi file; không có CWD fallback.</li>
+  <li>Đường dẫn file chỉ nằm trong DTO (structured content) — text summary chỉ nói <i>"Backup saved."</i> / <i>"(see filePath)"</i>.</li>
+  <li>Extension theo nội dung: XML thuần → <code>.xml</code>; envelope có metadata → <code>.json</code>.</li>
+  <li>Timestamp chuẩn mọi tool: <code>yyyyMMddHHmmss</code>.</li>
+</ul>
+</div>
+
+<h2>Cây thư mục tổng quan (ví dụ thực tế)</h2>
+<pre>D:\github\Dynamics-Crm-DevKit\v5\.devkit\
+├── manage_form\
+│   └── account\            account_&lt;formId&gt;_20260827143022.formxml.json
+├── manage_view\
+│   └── account\            account_&lt;viewId&gt;_20260827143022.fetchxml.xml
+│                           account_&lt;viewId&gt;_20260827143022.layoutxml.xml
+├── manage_chart\
+│   └── account\            account_&lt;chartId&gt;_20260827143022.chart.json
+├── manage_app\
+│   └── MyApp\              MyApp_&lt;appModuleId&gt;_20260827143022.app.json
+├── manage_ribbon\
+│   └── account\            account_20260827143022.ribbon.json
+├── manage_record_file\
+│   └── account\My Record Name\  document.pdf        ← output chính của download
+├── search_records\
+│   └── search_20260827143022.json                   ← detail_level=full payload
+└── generate_demo_data\
+    └── contact\            contact_20260827143022.json</pre>
+
+<!-- ══════════════════════════ manage_form ══════════════════════════ -->
+<h1>manage_form <small>— systemform</small></h1>
+<table>
+  <tr><th></th><th>Chi tiết</th></tr>
+  <tr><td class="write">GHI</td><td>Backup FormXML hiện tại <b>trước khi</b> update/rename (sau DryRun check). File JSON envelope:
+    <code>{entity, formId, formName, timestamp, formxml}</code></td></tr>
+  <tr><td>Folder</td><td><code>D:\github\Dynamics-Crm-DevKit\v5\.devkit\manage_form\{entity}\</code></td></tr>
+  <tr><td>Tên file</td><td><code>{entity}_{formId:N}_{yyyyMMddHHmmss}.formxml.json</code></td></tr>
+  <tr><td class="read">ĐỌC</td><td><code>action='undo'</code> — truyền path backup vào param <code>formxml</code> (auto-detect file .formxml.json, lấy field <code>formxml</code>). Undo KHÔNG backup (restore thuần).</td></tr>
+  <tr><td>DTO</td><td><code>backupPath</code> (text chỉ nói "Backup saved.")</td></tr>
+</table>
+<p><b>Ví dụ:</b> update form "Information" của account →</p>
+<pre>GHI : D:\github\Dynamics-Crm-DevKit\v5\.devkit\manage_form\account\account_8448b78f8f42e61180ff001dd8a1c3f9_20260827143022.formxml.json
+ĐỌC : manage_form(action='undo', entity_name='account', form_id='8448b78f-...', formxml='D:\...\account_8448b78f..._20260827143022.formxml.json')</pre>
+
+<!-- ══════════════════════════ manage_view ══════════════════════════ -->
+<h1>manage_view <small>— savedquery / userquery</small></h1>
+<table>
+  <tr><td class="write">GHI</td><td><b>2 file</b> mỗi lần backup (update/rename, và cả undo — backup pre-restore state):
+    <code>.fetchxml.xml</code> + <code>.layoutxml.xml</code>. Nội dung là XML thuần (pretty-print) kèm comment header (ViewName, ViewId, Timestamp, hướng dẫn restore) — mở editor highlight ngay.</td></tr>
+  <tr><td>Folder</td><td><code>D:\github\Dynamics-Crm-DevKit\v5\.devkit\manage_view\{entity}\</code></td></tr>
+  <tr><td>Tên file</td><td><code>{entity}_{viewId:N}_{yyyyMMddHHmmss}.fetchxml.xml</code> / <code>....layoutxml.xml</code></td></tr>
+  <tr><td class="read">ĐỌC</td><td><code>action='undo'</code> — truyền path file <code>.fetchxml.xml</code> vào param <code>fetchxml</code>. LayoutXML được regenerate từ FetchXML (không đọc .layoutxml.xml).</td></tr>
+  <tr><td>DTO</td><td><code>fetchXmlBackupPath</code>, <code>layoutXmlBackupPath</code></td></tr>
+</table>
+<pre>GHI : D:\github\Dynamics-Crm-DevKit\v5\.devkit\manage_view\account\account_00000000..._20260827143022.fetchxml.xml
+      D:\github\Dynamics-Crm-DevKit\v5\.devkit\manage_view\account\account_00000000..._20260827143022.layoutxml.xml
+ĐỌC : manage_view(action='undo', entity_name='account', view_id='...', fetchxml='D:\...\account_..._20260827143022.fetchxml.xml')</pre>
+
+<!-- ══════════════════════════ manage_chart ══════════════════════════ -->
+<h1>manage_chart <small>— savedqueryvisualization</small></h1>
+<table>
+  <tr><td class="write">GHI</td><td>Backup chart trước khi update. File JSON envelope:
+    <code>{chartId, entity, chartName, dataDescription, presentationDescription}</code></td></tr>
+  <tr><td>Folder</td><td><code>D:\github\Dynamics-Crm-DevKit\v5\.devkit\manage_chart\{entity}\</code></td></tr>
+  <tr><td>Tên file</td><td><code>{entity}_{chartId:N}_{yyyyMMddHHmmss}.chart.json</code></td></tr>
+  <tr><td class="read">ĐỌC</td><td><code>action='undo'</code> — truyền path backup vào param <code>presentationdescription</code>.</td></tr>
+  <tr><td>DTO</td><td><code>backupPath</code></td></tr>
+</table>
+<pre>GHI : D:\github\Dynamics-Crm-DevKit\v5\.devkit\manage_chart\account\account_9f3c..._20260827143022.chart.json
+ĐỌC : manage_chart(action='undo', presentationdescription='D:\...\account_9f3c..._20260827143022.chart.json')</pre>
+
+<!-- ══════════════════════════ manage_app ══════════════════════════ -->
+<h1>manage_app <small>— appmodule / sitemap</small></h1>
+<table>
+  <tr><td class="write">GHI</td><td>Snapshot app <b>trước khi</b> update / update_navigation / undo (pre-restore). File JSON:
+    <code>{kind:"manage_app.snapshot", timestampUtc, appModuleId, appModuleIdUnique, appName, uniqueName, description, iconWebResourceId, siteMapId, appComponents[], sitemapxml}</code></td></tr>
+  <tr><td>Folder</td><td><code>D:\github\Dynamics-Crm-DevKit\v5\.devkit\manage_app\{appName}\</code> (appName đã sanitize, không phải entity)</td></tr>
+  <tr><td>Tên file</td><td><code>{appName}_{appModuleId:N}_{yyyyMMddHHmmss}.app.json</code></td></tr>
+  <tr><td class="read">ĐỌC</td><td><code>action='undo'</code> — truyền path snapshot vào param <code>operations</code>.</td></tr>
+  <tr><td>DTO</td><td><code>backupPath</code></td></tr>
+</table>
+<pre>GHI : D:\github\Dynamics-Crm-DevKit\v5\.devkit\manage_app\MyApp\MyApp_80e6..._20260827143022.app.json
+ĐỌC : manage_app(action='undo', app='MyApp', operations='D:\...\MyApp_80e6..._20260827143022.app.json')</pre>
+
+<!-- ══════════════════════════ manage_ribbon ══════════════════════════ -->
+<h1>manage_ribbon <small>— RibbonDiffXml (classic)</small></h1>
+<table>
+  <tr><td class="write">GHI</td><td>Backup RibbonDiffXml hiện tại trước khi import (action='update'). File JSON envelope:
+    <code>{entity, timestamp, ribbonDiffXml}</code>. Nếu entity chưa có ribbon → không ghi (backupPath=null).</td></tr>
+  <tr><td>Folder</td><td><code>D:\github\Dynamics-Crm-DevKit\v5\.devkit\manage_ribbon\{entity}\</code></td></tr>
+  <tr><td>Tên file</td><td><code>{entity}_{yyyyMMddHHmmss}.ribbon.json</code></td></tr>
+  <tr><td class="read">ĐỌC</td><td><code>action='undo'</code> — truyền path backup vào param <code>ribbonxml</code>. Undo KHÔNG backup (restore thuần).</td></tr>
+  <tr><td>DTO</td><td><code>backupPath</code></td></tr>
+</table>
+<pre>GHI : D:\github\Dynamics-Crm-DevKit\v5\.devkit\manage_ribbon\account\account_20260827143022.ribbon.json
+ĐỌC : manage_ribbon(action='undo', entity_name='account', ribbonxml='D:\...\account_20260827143022.ribbon.json')</pre>
+
+<!-- ══════════════════════════ manage_record_file ══════════════════════════ -->
+<h1>manage_record_file <small>— file/image column</small></h1>
+<table>
+  <tr><td class="write">GHI</td><td><code>action='download'</code> — ghi file binary (file/image column của record) xuống đĩa. Đây là <b>output chính</b>, không phải backup. Tên file trùng sẽ tự thêm hậu tố (unique).</td></tr>
+  <tr><td>Folder</td><td><code>D:\github\Dynamics-Crm-DevKit\v5\.devkit\manage_record_file\{entity}\{recordName}\</code> — <code>{recordName}</code> = primary name của record (sanitize), fallback recordId</td></tr>
+  <tr><td class="read">ĐỌC</td><td><code>action='upload'</code> — đọc file từ param <code>file_path</code>; path tương đối được resolve dưới <code>workspace_folder</code>.</td></tr>
+  <tr><td>DTO</td><td><code>savedPath</code> (download), kèm <code>sha256</code>, <code>fileSizeInBytes</code></td></tr>
+</table>
+<pre>GHI : D:\github\Dynamics-Crm-DevKit\v5\.devkit\manage_record_file\account\Fourth Coffee\contract.pdf
+ĐỌC : manage_record_file(action='upload', ..., file_path='.devkit/manage_record_file/account/Fourth Coffee/contract.pdf')</pre>
+
+<!-- ══════════════════════════ search_records ══════════════════════════ -->
+<h1>search_records <small>— Relevance Search</small></h1>
+<table>
+  <tr><td class="write">GHI</td><td>Chỉ khi <code>detail_level='full'</code> — ghi raw API payload (JSON) để AI đọc bằng file tools. Flat, không chia entity (relevance search là multi-entity).</td></tr>
+  <tr><td>Folder</td><td><code>D:\github\Dynamics-Crm-DevKit\v5\.devkit\search_records\</code></td></tr>
+  <tr><td>Tên file</td><td><code>search_{yyyyMMddHHmmss}.json</code> (action search) / <code>status_{yyyyMMddHHmmss}.json</code> (action status)</td></tr>
+  <tr><td class="read">ĐỌC</td><td>Không đọc lại — AI tự dùng file tools (Read/Grep) trên file payload.</td></tr>
+  <tr><td>DTO</td><td><code>filePath</code> (text chỉ nói "Full payload written (see filePath).")</td></tr>
+</table>
+<pre>GHI : D:\github\Dynamics-Crm-DevKit\v5\.devkit\search_records\search_20260827143022.json</pre>
+
+<!-- ══════════════════════════ generate_demo_data ══════════════════════════ -->
+<h1>generate_demo_data <small>— demo records JSON</small></h1>
+<table>
+  <tr><td class="write">GHI</td><td>Luôn ghi file JSON chứa mảng records đã generate (kể cả khi create_into_crm=false). workspace_folder bắt buộc.</td></tr>
+  <tr><td>Folder</td><td><code>D:\github\Dynamics-Crm-DevKit\v5\.devkit\generate_demo_data\{entity}\</code></td></tr>
+  <tr><td>Tên file</td><td><code>{entity}_{yyyyMMddHHmmss}.json</code></td></tr>
+  <tr><td class="read">ĐỌC</td><td>Không đọc lại bởi tool — file dùng làm input cho create_records hoặc AI review.</td></tr>
+  <tr><td>DTO</td><td><code>filePath</code></td></tr>
+</table>
+<pre>GHI : D:\github\Dynamics-Crm-DevKit\v5\.devkit\generate_demo_data\contact\contact_20260827143022.json</pre>
+
+<!-- ══════════════════════════ Bổ sung ══════════════════════════ -->
+<h2>Bảng tra cứu nhanh: undo dùng param nào?</h2>
+<table>
+  <tr><th>Tool</th><th>DTO field chứa path</th><th>Undo: truyền path vào param</th><th>Undo có backup pre-restore?</th></tr>
+  <tr><td>manage_form</td><td><code>backupPath</code></td><td><code>formxml</code></td><td>Không (restore thuần)</td></tr>
+  <tr><td>manage_view</td><td><code>fetchXmlBackupPath</code> (+<code>layoutXmlBackupPath</code>)</td><td><code>fetchxml</code> (chỉ file .fetchxml.xml)</td><td>Có</td></tr>
+  <tr><td>manage_chart</td><td><code>backupPath</code></td><td><code>presentationdescription</code></td><td>Không</td></tr>
+  <tr><td>manage_app</td><td><code>backupPath</code></td><td><code>operations</code></td><td>Có</td></tr>
+  <tr><td>manage_ribbon</td><td><code>backupPath</code></td><td><code>ribbonxml</code></td><td>Không (restore thuần)</td></tr>
+</table>
+
+<h2>Ghi chú bổ sung</h2>
+<ul>
+  <li><b>Dry-run KHÔNG ghi backup:</b> dry-run không thay đổi gì nên không cần backup — backup chỉ chạy ngay trước bước mutate thật (DTO dry-run trả <code>status='not_executed'</code>, không có path).</li>
+  <li><b>Timestamp chuẩn:</b> mọi tool dùng <code>yyyyMMddHHmmss</code> (không milliseconds).</li>
+  <li><b>Extension = loại nội dung:</b> file chứa XML thuần → <code>.xml</code> (view: <code>.fetchxml.xml</code>/<code>.layoutxml.xml</code> — editor highlight ngay); file envelope có metadata → <code>.json</code> (form/chart/app/ribbon, payload XML nằm trong field bên trong).</li>
+  <li><b>workspace_folder = folder A</b> (folder đang mở trong VS Code), KHÔNG phải folder cài devkit CLI (folder B). Truyền sai → backup rơi vào folder B.</li>
+  <li><b>Không còn CWD fallback:</b> thiếu workspace_folder → tool trả Error + Hint, không silently ghi vào current directory.</li>
+  <li><b>Không tool nào tự dọn backup cũ</b> — folder entity lớn dần theo thời gian, dọn tay khi cần.</li>
+</ul>
+
+</body>
+</html>

@@ -41,19 +41,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             RibbonXmlHelpers.PreserveMissingRibbonDiffElements(targetDoc, existingDoc);
             resolvedXml = targetDoc.ToString(SaveOptions.None);
 
-            // Step 3: Backup current ribbon (a genuine fetch failure bubbles to the entry-point catch)
-            var backupPath = BackupCurrentRibbon(entityName);
-
-            // Step 4: Build solution ZIP from template
+            // Step 3: Build solution ZIP from template
             if (_options.DryRun)
                 return DryRun($"Would UPDATE ribbon for entity '{entityName}'.", new ManageRibbonResult
                 {
                     Action = "update",
                     EntityName = entityName,
                     Status = "not_executed",
-                    BackupPath = backupPath,
                     Published = false
                 });
+
+            // Backup current ribbon only when actually mutating (a genuine fetch failure bubbles to the entry-point catch)
+            var backupPath = BackupCurrentRibbon(entityName);
 
             // Step 5: Import solution. Execute returns only after Dataverse finishes the import request.
             var solutionZip = BuildSolutionZip(entityName, resolvedXml);
@@ -157,18 +156,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"Generated XML failed Ribbon XSD validation:\n{string.Join("\n", xsdErrors)}");
             var functionSignatures = BuildFunctionSignatures(ribbonDoc);
 
-            // Step 8: Backup current ribbon (a genuine fetch failure bubbles to the entry-point catch)
-            var backupPath = BackupCurrentRibbon(entityName);
-
             if (_options.DryRun)
                 return DryRun($"Would UPDATE ribbon for entity '{entityName}' with {ops.Count} operations.", new ManageRibbonResult
                 {
                     Action = "update",
                     EntityName = entityName,
                     Status = "not_executed",
-                    BackupPath = backupPath,
                     Published = false
                 });
+
+            // Step 8: Backup current ribbon only when actually mutating (a genuine fetch failure bubbles to the entry-point catch)
+            var backupPath = BackupCurrentRibbon(entityName);
 
             // Step 9: Build solution ZIP + import. Execute returns only after Dataverse finishes the import request.
             var solutionZip = BuildSolutionZip(entityName, xmlString);
@@ -220,7 +218,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!File.Exists(backupFilePath))
                 return Error(
                     "Backup file not found.",
-                    $"Path: {backupFilePath}. Backups are at: .devkit/manage_ribbon/{{entity}}/backups/");
+                    $"Path: {backupFilePath}. Backups are at: .devkit/manage_ribbon/{{entity}}/");
 
             var json = File.ReadAllText(backupFilePath, Encoding.UTF8);
             var backupData = JsonSerializer.Deserialize<RibbonBackup>(json);
@@ -409,7 +407,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(currentXml))
                 return null; // Nothing to backup
 
-            var backupDir = Path.Combine(_workspaceFolder, ".devkit", "manage_ribbon", entityName, "backups");
+            var backupDir = Path.Combine(_workspaceFolder, ".devkit", "manage_ribbon", entityName);
             Directory.CreateDirectory(backupDir);
 
             var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");

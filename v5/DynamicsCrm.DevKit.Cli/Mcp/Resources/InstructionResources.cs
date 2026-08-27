@@ -125,7 +125,7 @@ Undo:
 {
   ""action"": ""undo"",
   ""app"": ""TEST MCP App"",
-  ""operations"": "".devkit/manage_app/test_mcp_app/backups/...app.json""
+  ""operations"": "".devkit/manage_app/test_mcp_app/...app.json""
 }
 ```
 ";
@@ -144,9 +144,9 @@ Undo:
 ## CRITICAL: Backup Before ANY Modification
 - ALWAYS retrieve the current FormXML using manage_form with action='detail' and the specific form_id FIRST
 - Save the current FormXML to a local backup file BEFORE making any changes
-- Backup file naming: {entity_name}_{form_id}_{yyyyMMddHHmmss}.formxml.bak
-  Example: account_abc123_20260329180000.formxml.bak
-- Backup location: {working_directory}/.devkit/manage_form/{entity}/backups/
+- Backup file naming (manage_form update/rename auto-backup): {entity_name}_{form_id}_{yyyyMMddHHmmss}.formxml.json
+  Example: account_8448b78f8f42e61180ff001dd8a1c3f9_20260329180000.formxml.json
+- Backup location: {working_directory}/.devkit/manage_form/{entity}/
 - A corrupted FormXML can break the entire entity form -- without backup, you must restore the environment
 
 ## Rollback Procedure (If Form Breaks)
@@ -456,11 +456,11 @@ Omit `function_name` to remove the entire event entry.
 # View (SavedQuery) Manipulation Rules
 
 ## CRITICAL: workspace_folder + Auto Backup
-- update/rename/undo REQUIRE workspace_folder — the tool auto-backs-up the current FetchXML + LayoutXML to {workspace_folder}/.devkit/manage_view/{entity}/backups/ BEFORE overwrite
+- update/rename/undo REQUIRE workspace_folder — the tool auto-backs-up the current FetchXML + LayoutXML to {workspace_folder}/.devkit/manage_view/{entity}/ BEFORE overwrite
 - A broken FetchXML hides ALL data from users. A broken LayoutXML crashes the grid — without backup you may need to restore the entire environment.
 
 ## Rollback (If View Breaks)
-1. Call manage_view action='undo' with view_id + fetchxml=<.fetchxml.bak path from the update/rename response>
+1. Call manage_view action='undo' with view_id + fetchxml=<.fetchxml.xml path from the update/rename response>
 2. Tool auto-handles: read FetchXML backup > regenerate LayoutXML > validate > restore > publish; pre-restore state is backed up again
 
 ## CRITICAL: Verify Field Names Before Modifying Views
@@ -578,7 +578,7 @@ Source: https://learn.microsoft.com/en-us/power-apps/maker/data-platform/display
 
 ## After Making Changes
 - manage_view auto-handles: backup > validate > sync-check > update > publish
-- If something breaks: action='undo' with the .fetchxml.bak path from the response
+- If something breaks: action='undo' with the .fetchxml.xml path from the response
 - Verify the view loads correctly in the browser
 ";
 

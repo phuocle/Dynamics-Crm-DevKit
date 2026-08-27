@@ -9,12 +9,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         public static (string FetchBackupPath, string LayoutBackupPath) SaveBackup(
             string entityName, Guid viewId, string viewName, string currentFetchXml, string currentLayoutXml, string workspaceFolder = "")
         {
-            var backupDir = Path.Combine(workspaceFolder, ".devkit", "manage_view", entityName, "backups");
+            var backupDir = Path.Combine(workspaceFolder, ".devkit", "manage_view", entityName);
             Directory.CreateDirectory(backupDir);
 
             var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-            var fetchFile = $"{entityName}_{viewId:N}_{timestamp}.fetchxml.bak";
-            var layoutFile = $"{entityName}_{viewId:N}_{timestamp}.layoutxml.bak";
+            var fetchFile = $"{entityName}_{viewId:N}_{timestamp}.fetchxml.xml";
+            var layoutFile = $"{entityName}_{viewId:N}_{timestamp}.layoutxml.xml";
             var fetchBackupPath = Path.Combine(backupDir, fetchFile);
             var layoutBackupPath = Path.Combine(backupDir, layoutFile);
 
@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             sbLayout.AppendLine($"<!-- Backup: {viewName} ({entityName}) -->");
             sbLayout.AppendLine($"<!-- ViewId: {viewId} -->");
             sbLayout.AppendLine($"<!-- Timestamp: {DateTime.Now:yyyy-MM-dd HH:mm:ss} -->");
-            sbLayout.AppendLine($"<!-- To restore: call manage_view with action='undo' and the matching .fetchxml.bak file path (LayoutXML is regenerated from FetchXML) -->");
+            sbLayout.AppendLine($"<!-- To restore: call manage_view with action='undo' and the matching .fetchxml.xml file path (LayoutXML is regenerated from FetchXML) -->");
             sbLayout.AppendLine();
             if (!string.IsNullOrWhiteSpace(currentLayoutXml))
                 sbLayout.Append(ViewXmlHelper.PrettyPrintXml(currentLayoutXml));

@@ -200,7 +200,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // Save to {workspace_folder}/.devkit/generate_demo_data/{entity}/{entity}/
                 var outputDir = Path.Combine(workspace_folder, ".devkit", "generate_demo_data", entityName);
                 Directory.CreateDirectory(outputDir);
-                var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+                var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
                 var filePath = Path.Combine(outputDir, $"{entityName}_{timestamp}.json");
 
                 var jsonOptions = new JsonSerializerOptions { WriteIndented = true };

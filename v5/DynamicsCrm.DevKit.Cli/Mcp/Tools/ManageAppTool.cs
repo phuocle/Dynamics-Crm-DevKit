@@ -70,7 +70,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Optional for create/update.")] string description = "",
             [Description("Optional app icon web resource name or GUID.")] string icon_webresource = "",
             [Description("JSON array for update_navigation, or backup file path for undo.")] string operations = "",
-            [Description("Required for update/update_navigation/undo — app snapshot always backs up to {workspace_folder}/.devkit/manage_app/{app}/backups/ before overwrite. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "",
+            [Description("Required for update/update_navigation/undo — app snapshot always backs up to {workspace_folder}/.devkit/manage_app/{app}/ before overwrite. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "",
             [Description("list only. 1-500.")] int max_records = 100)
         {            
             try
@@ -80,7 +80,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if ((normalizedAction is "update" or "update_navigation" or "undo") && string.IsNullOrWhiteSpace(workspace_folder))
                     return Error($"workspace_folder is required when action='{normalizedAction}' (backup before overwrite).",
-                        "Provide the workspace folder — current app snapshot backs up to {workspace_folder}/.devkit/manage_app/{app}/backups/ before overwrite.");
+                        "Provide the workspace folder — current app snapshot backs up to {workspace_folder}/.devkit/manage_app/{app}/ before overwrite.");
 
                 return normalizedAction switch
                 {
@@ -373,11 +373,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 changes.Add($"icon_webresource='{iconWebResource.Trim()}'");
             }
 
-            var backupPath = SaveAppSnapshot(appModule);
-
             if (_options.DryRun)
                 return DryRun(
-                    $"Would update app '{appModule.GetAttributeValue<string>("name")}' with: {string.Join(", ", changes)}. Backup saved. Published: yes.",
+                    $"Would update app '{appModule.GetAttributeValue<string>("name")}' with: {string.Join(", ", changes)}. Published: yes.",
                     new ManageAppResult
                     {
                         Action = "update",
@@ -385,9 +383,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         AppModuleId = appModule.Id.ToString(),
                         AppName = appModule.GetAttributeValue<string>("name"),
                         UniqueName = appModule.GetAttributeValue<string>("uniquename"),
-                        BackupPath = backupPath,
                         Published = false
                     });
+
+            // Snapshot only when actually mutating
+            var backupPath = SaveAppSnapshot(appModule);
 
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
             PublishAppModule(appModule.Id);
@@ -566,12 +566,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     NextStep = NotPublishedNextStep
                 });
 
-            var backupPath = SaveAppSnapshot(appModule);
-
             if (_options.DryRun)
             {
-                var previewText = $"Would update navigation of app '{appModule.GetAttributeValue<string>("name")}' with {ops.Count} operation(s): {navResult.ChangedOperations} changed, {navResult.NoOpOperations} no-op." +
-                    " Backup saved.";
+                var previewText = $"Would update navigation of app '{appModule.GetAttributeValue<string>("name")}' with {ops.Count} operation(s): {navResult.ChangedOperations} changed, {navResult.NoOpOperations} no-op.";
                 return DryRun(previewText, new ManageAppResult
                 {
                     Action = "update_navigation",
@@ -581,7 +578,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     AppName = appModule.GetAttributeValue<string>("name"),
                     UniqueName = appModule.GetAttributeValue<string>("uniquename"),
                     SiteMapId = siteMapId.Value.ToString(),
-                    BackupPath = backupPath,
                     Published = false,
                     OperationsCount = ops.Count,
                     NavigationChanged = navResult.HasChanges,
@@ -591,6 +587,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     AddedAppComponents = navResult.AddedEntities.Count > 0 ? navResult.AddedEntities : null
                 });
             }
+
+            // Snapshot only when actually mutating
+            var backupPath = SaveAppSnapshot(appModule);
 
             if (!navResult.HasChanges)
             {
@@ -720,12 +719,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     NextStep = NotPublishedNextStep
                 });
 
-            var currentBackupPath = SaveAppSnapshot(appModule);
-
             if (_options.DryRun)
             {
-                var previewText = $"Would restore app '{appModule.GetAttributeValue<string>("name")}' navigation from backup '{backupFullPath}'." +
-                    " Current state backed up.";
+                var previewText = $"Would restore app '{appModule.GetAttributeValue<string>("name")}' navigation from backup '{backupFullPath}'.";
                 return DryRun(previewText, new ManageAppResult
                 {
                     Action = "undo",
@@ -735,11 +731,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     AppName = appModule.GetAttributeValue<string>("name"),
                     UniqueName = appModule.GetAttributeValue<string>("uniquename"),
                     SiteMapId = siteMapId.Value.ToString(),
-                    BackupPath = currentBackupPath,
                     RestoredFromBackup = backupFullPath,
                     Published = false
                 });
             }
+
+            // Snapshot current state only when actually restoring
+            var currentBackupPath = SaveAppSnapshot(appModule);
 
             DataverseMutationExecutor.Update(_context, _serviceClient, new Entity("sitemap", siteMapId.Value)
             {
@@ -1329,7 +1327,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var components = appModuleIdUnique.HasValue ? GetAppComponents(appModuleIdUnique.Value) : [];
 
             var safeName = SanitizeFileName(appModule.GetAttributeValue<string>("name") ?? appModule.GetAttributeValue<string>("uniquename") ?? "app");
-            var backupDir = Path.Combine(_workspaceFolder, ".devkit", "manage_app", safeName, "backups");
+            var backupDir = Path.Combine(_workspaceFolder, ".devkit", "manage_app", safeName);
             Directory.CreateDirectory(backupDir);
 
             var backupPath = Path.Combine(backupDir, $"{safeName}_{appModule.Id:N}_{DateTime.Now:yyyyMMddHHmmss}.app.json");
