@@ -455,8 +455,8 @@ Omit `function_name` to remove the entire event entry.
         public static string ViewInstructions() => @"
 # View (SavedQuery) Manipulation Rules
 
-## CRITICAL: workspace_folder + Auto Backup
-- update/rename/undo REQUIRE workspace_folder — the tool auto-backs-up the current FetchXML + LayoutXML to {workspace_folder}/.devkit/manage_view/{entity}/ BEFORE overwrite
+## CRITICAL: Auto Backup
+- update/rename/undo auto-back-up the current FetchXML + LayoutXML to {workspace}/.devkit/manage_view/{entity}/ BEFORE overwrite (workspace auto-resolved from MCP roots or server cwd — no parameter needed)
 - A broken FetchXML hides ALL data from users. A broken LayoutXML crashes the grid — without backup you may need to restore the entire environment.
 
 ## Rollback (If View Breaks)

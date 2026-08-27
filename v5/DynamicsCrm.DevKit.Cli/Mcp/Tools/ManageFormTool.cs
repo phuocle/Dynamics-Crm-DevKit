@@ -13,6 +13,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -53,7 +54,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- get_tables → entity logical names; manage_view → entity views; publish_customizations → batch publish\n" +
             "- See schema://formxml + docs://instructions_for_formxml for FormXML structure and operation examples")]
-        public CallToolResult manage_form(
+        public async Task<CallToolResult> manage_form(
+            McpServer server,
             [Description("'list', 'detail', 'update', 'rename', 'undo'.")] string action = "",
             [Description("Entity Display Name or logical name (Display Name is resolved first; e.g. 'Account' or 'account').")] string entity_name = "",
             [Description("GUID. Required for detail/update/rename/undo.")] string form_id = "",
@@ -62,10 +64,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("List mode only — include formxml in each entry. Detail always includes formxml.")] bool include_formxml = false,
             [Description("update (advanced) / undo: raw FormXML string or backup file path (.formxml). Auto-detects. Use 'operations' for the recommended flow.")] string formxml = "",
             [Description("update (recommended): JSON array of form operations. Read docs://instructions_for_formxml for format and examples.")] string operations = "",
-            [Description("XSD validate FormXML before write.")] bool validate = true,
-            [Description("Required for update/rename — current FormXML always backs up to {workspace_folder}/.devkit/manage_form/{entity}/ before overwrite. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "")
+            [Description("XSD validate FormXML before write.")] bool validate = true)
         {
-            _workspaceFolder = workspace_folder;
             try
             {
                 if (string.IsNullOrWhiteSpace(action))
@@ -86,9 +86,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     && RoleGateHelper.EnsureSystemAdministrator(_serviceClient) is { } gate)
                     return gate;
 
-                if (normalizedAction is "update" or "rename" && string.IsNullOrWhiteSpace(workspace_folder))
-                    return Error($"workspace_folder is required when action='{normalizedAction}' (backup before overwrite).",
-                        "Provide the workspace folder — current FormXML backs up to {workspace_folder}/.devkit/manage_form/{entity}/ before overwrite.");
+                if (normalizedAction is "update" or "rename")
+                    _workspaceFolder = await WorkspaceFolderHelper.GetAsync(server);
 
                 return normalizedAction switch
                 {

@@ -20,6 +20,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -60,7 +61,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_solution_components → solution names for create\n" +
             "- publish_customizations → publish other components (manage_app mutations auto-publish the app)\n" +
             "- execute_webapi → blocked for appmodule/sitemap/appmodulecomponent; use this tool instead")]
-        public CallToolResult manage_app(
+        public async Task<CallToolResult> manage_app(
+            McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'update_navigation', 'validate', or 'undo'.")] string action = "detail",
             [Description("App display name, unique name, or GUID. Required for detail/update/update_navigation/validate/undo.")] string app = "",
             [Description("list only. App display/unique name contains filter.")] string app_name = "",
@@ -70,17 +72,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Optional for create/update.")] string description = "",
             [Description("Optional app icon web resource name or GUID.")] string icon_webresource = "",
             [Description("JSON array for update_navigation, or backup file path for undo.")] string operations = "",
-            [Description("Required for update/update_navigation/undo — app snapshot always backs up to {workspace_folder}/.devkit/manage_app/{app}/ before overwrite. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "",
             [Description("list only. 1-500.")] int max_records = 100)
-        {            
+        {
             try
             {
-                _workspaceFolder = workspace_folder;
                 var normalizedAction = (action ?? "detail").Trim().ToLowerInvariant();
 
-                if ((normalizedAction is "update" or "update_navigation" or "undo") && string.IsNullOrWhiteSpace(workspace_folder))
-                    return Error($"workspace_folder is required when action='{normalizedAction}' (backup before overwrite).",
-                        "Provide the workspace folder — current app snapshot backs up to {workspace_folder}/.devkit/manage_app/{app}/ before overwrite.");
+                if (normalizedAction is "update" or "update_navigation" or "undo")
+                    _workspaceFolder = await WorkspaceFolderHelper.GetAsync(server);
 
                 return normalizedAction switch
                 {

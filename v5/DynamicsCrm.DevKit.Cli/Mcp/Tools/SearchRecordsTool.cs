@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
@@ -36,18 +37,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- Find records by keywords across one or more searchable tables\n" +
             "- Diagnose whether Dataverse Search and entity indexes are ready\n" +
-            "- detail_level='full' → raw API payload saved to {workspace_folder}/.devkit/search_records/ (path returned in the result's filePath); read it with file tools\n\n" +
+            "- detail_level='full' → raw API payload saved to {workspace}/.devkit/search_records/ (workspace auto-resolved from MCP roots or server cwd; path returned in the result's filePath); read it with file tools\n\n" +
             "RELATED TOOLS:\n" +
             "- execute_fetchxml → deterministic field filters and joins\n" +
             "- get_tables → discover searchable entity logical names")]
-        public CallToolResult search_records(
+        public async Task<CallToolResult> search_records(
+            McpServer server,
             [Description("'search' (default) or 'status'.")] string action = "search",
             [Description("Required for search. 1-100 chars. Operators: + (AND), | (OR), - (NOT), * (wildcard), \"phrase\", () (group).")] string search_term = "",
             [Description("Comma-separated Display Names or logical names (e.g. 'Account,contact'). Empty = all searchable.")] string entities = "",
             [Description("Max results to return. 1-100 (default 50).")] int top = 50,
             [Description("OData filter applied after search. e.g. 'statecode eq 0'.")] string filter = "",
-            [Description("DETAIL: 'compact' (default) or 'full' — full writes the raw API payload to {workspace_folder}/.devkit/search_records/.")] string detail_level = "compact",
-            [Description("Required when detail_level='full'. Full payload saves to {workspace_folder}/.devkit/search_records/. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "")
+            [Description("DETAIL: 'compact' (default) or 'full' — full writes the raw API payload to {workspace}/.devkit/search_records/ (workspace auto-resolved).")] string detail_level = "compact")
         {
             try
             {
@@ -57,15 +58,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var detailLevel = (detail_level ?? "compact").Trim().ToLowerInvariant();
                 if (detailLevel is not ("compact" or "full"))
                     return Error($"'{detail_level}' is not a valid detail_level.", "Valid values: compact, full.");
-                if (detailLevel == "full" && string.IsNullOrWhiteSpace(workspace_folder))
-                    return Error("workspace_folder is required when detail_level='full'.",
-                        "Provide the workspace folder — full payload saves to {workspace_folder}/.devkit/search_records/.");
+
+                var workspaceFolder = detailLevel == "full" ? await WorkspaceFolderHelper.GetAsync(server) : "";
 
                 var normalized = action.Trim().ToLowerInvariant();
                 if (normalized == "search")
-                    return ExecuteSearch(search_term, entities, top, filter, detailLevel, workspace_folder);
+                    return ExecuteSearch(search_term, entities, top, filter, detailLevel, workspaceFolder);
                 if (normalized == "status")
-                    return ExecuteStatus(detailLevel, workspace_folder);
+                    return ExecuteStatus(detailLevel, workspaceFolder);
 
                 return Error($"Invalid action '{action}'.", "Valid values: 'search', 'status'.");
             }

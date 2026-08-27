@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
@@ -55,14 +56,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_system_jobs → poll the PublishAll async job\n" +
             "- publish_customizations → manual publish if the async publish did not finish\n" +
             "- manage_webresource → list/verify web resources used as button libraries and icons")]
-        public CallToolResult manage_ribbon(
+        public async Task<CallToolResult> manage_ribbon(
+            McpServer server,
             [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action = "",
             [Description("Entity Display Name or logical name. Required: detail/update/undo/buttons.")] string entity_name = "",
             [Description("JSON array of ribbon operations for action='update'. See tool description for the 10 supported actions and their fields.")] string operations = "",
-            [Description("For 'undo': backup file path.")] string ribbonxml = "",
-            [Description("Required for update — current RibbonDiffXml always backs up to {workspace_folder}/.devkit/manage_ribbon/{entity}/ before import. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "")
+            [Description("For 'undo': backup file path.")] string ribbonxml = "")
         {
-            _workspaceFolder = workspace_folder;
             var actionName = (action ?? "").Trim().ToLowerInvariant();
 
             if (string.IsNullOrWhiteSpace(actionName))
@@ -99,9 +99,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     case "update":
                         if (string.IsNullOrWhiteSpace(entity_name))
                             return Error("entity_name is required for action='update'.");
-                        if (string.IsNullOrWhiteSpace(workspace_folder))
-                            return Error("workspace_folder is required when action='update' (backup before import).",
-                                "Provide the workspace folder — current RibbonDiffXml backs up to {workspace_folder}/.devkit/manage_ribbon/{entity}/ before import.");
+                        _workspaceFolder = await WorkspaceFolderHelper.GetAsync(server);
                         {
                             var (updateEntityName, updateEntityError) = ResolveEntityLogicalName(entity_name);
                             if (updateEntityError != null)

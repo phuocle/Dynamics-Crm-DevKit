@@ -13,6 +13,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
@@ -75,7 +76,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_tables → column logical names for group_by_column/aggregate_column\n" +
             "- publish_customizations → batch publish after multiple metadata changes\n" +
             "- manage_view → views; execute_webapi → raw savedqueryvisualization access")]
-        public CallToolResult manage_chart(
+        public async Task<CallToolResult> manage_chart(
+            McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",
             [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Required for list/create.")] string entity_name = "",
             [Description("Chart GUID. Required for detail/update/rename/set_default/undo (unless chart_name uniquely identifies chart).")] string chart_id = "",
@@ -86,18 +88,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Aggregation type: 'count' (default), 'sum', 'avg', 'min', 'max'.")] string aggregate_type = "count",
             [Description("Multi-measure series: 'column:aggregate_type[:label]; ...' (e.g. 'estimatedvalue:sum:Revenue; importsequencenumber:count'). Mutually exclusive with aggregate_column/aggregate_type. Optional label becomes the series legend name.")] string measures = "",
             [Description("Structured datadescription filter: 'field op value; ...'. Operators: =, !=, >, >=, <, <=, like, in (comma-separated list), null, not-null. Example: 'statecode=0; estimatedvalue>1000000'.")] string filter = "",
-            [Description("Custom presentation Chart XML override (create/update). For undo: path to the .chart.json backup file from {workspace_folder}/.devkit/manage_chart/{entity}/.")] string presentationdescription = "",
+            [Description("Custom presentation Chart XML override (create/update). For undo: path to the .chart.json backup file from {workspace}/.devkit/manage_chart/{entity}/.")] string presentationdescription = "",
             [Description("Chart description text.")] string description = "",
             [Description("Optional solution unique/display name. When provided and non-empty, chart is added to the solution after create/update.")] string solution_name = "",
             [Description("Validate XML syntax and chart types before saving.")] bool validate = true,
             [Description("Publish entity after create/update/rename/set_default/undo so changes become visible. Default: true. Set false to batch-publish later via publish_customizations.")] bool publish = true,
-            [Description("Pie create only: set true only after user approved the confirmation summary. Default false returns needs_confirmation without creating.")] bool confirmed = false,
-            [Description("Required for update — current chart XML always backs up to {workspace_folder}/.devkit/manage_chart/{entity}/ before overwrite. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "")
+            [Description("Pie create only: set true only after user approved the confirmation summary. Default false returns needs_confirmation without creating.")] bool confirmed = false)
         {
             try
             {
-                _workspaceFolder = workspace_folder;
-
                 if (string.IsNullOrWhiteSpace(action))
                     return Error("action is required.", "Valid values: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.");
 
@@ -106,9 +105,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrWhiteSpace(chart_id) && !Guid.TryParse(chart_id.Trim(), out _))
                     return Error($"'{chart_id}' is not a valid GUID.");
 
-                if (normalizedAction == "update" && string.IsNullOrWhiteSpace(workspace_folder))
-                    return Error("workspace_folder is required when action='update' (backup before overwrite).",
-                        "Provide the workspace folder — current chart XML backs up to {workspace_folder}/.devkit/manage_chart/{entity}/ before overwrite.");
+                if (normalizedAction == "update")
+                    _workspaceFolder = await WorkspaceFolderHelper.GetAsync(server);
 
                 return normalizedAction switch
                 {

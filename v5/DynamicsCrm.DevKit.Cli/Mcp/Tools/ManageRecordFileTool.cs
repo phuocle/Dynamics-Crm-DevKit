@@ -55,16 +55,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_tables → find File/Image columns of a table\n" +
             "- manage_record / search_records → find record_id\n" +
             "- manage_column → create file/image columns or raise MaxSizeInKB")]
-        public CallToolResult manage_record_file(
+        public async Task<CallToolResult> manage_record_file(
+            McpServer server,
             [Description("'info', 'upload', 'download', 'delete'.")] string action = "",
             [Description("Table Display or logical name (Display Name resolved first). Required.")] string entity_name = "",
             [Description("File/Image column Display or logical name (Display Name resolved first). Required.")] string column_name = "",
             [Description("GUID of the record. Required.")] string record_id = "",
-            [Description("upload: local file path or http(s) URL (auto-downloaded). Relative paths resolve against workspace_folder.")] string file_path = "",
+            [Description("upload: local file path or http(s) URL (auto-downloaded). Relative paths resolve against the workspace folder (auto-resolved from MCP roots or server cwd).")] string file_path = "",
             [Description("upload alternative: base64 content, files < 1 MB only. Requires file_name.")] string content_base64 = "",
             [Description("upload: override file name. Required with content_base64; default = name from path/URL.")] string file_name = "",
-            [Description("download: image columns only. true = full-sized image (requires CanStoreFullImage); false = thumbnail. Default false.")] bool full_size = false,
-            [Description("Required for download; required for upload when file_path is relative. download saves to {workspace_folder}/.devkit/manage_record_file/{entity}/{record}/. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "")
+            [Description("download: image columns only. true = full-sized image (requires CanStoreFullImage); false = thumbnail. Default false.")] bool full_size = false)
         {
             try
             {
@@ -99,15 +99,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         $"Column '{attribute.LogicalName}' on table '{entityLogical}' is of type '{attribute.AttributeType}' — not a file/image column.",
                         "Use get_tables to list columns; file columns have type 'File', image columns have type 'Image'.");
 
-                if (action.Trim().Equals("download", StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(workspace_folder))
-                    return Error("workspace_folder is required when action='download'.",
-                        "Provide the workspace folder — file saves to {workspace_folder}/.devkit/manage_record_file/{entity}/{record}/.");
+                var workspaceFolder = action.Trim() is "upload" or "download"
+                    ? await WorkspaceFolderHelper.GetAsync(server)
+                    : "";
 
                 return action.Trim().ToLowerInvariant() switch
                 {
                     "info" => HandleInfo(entityLogical, recordId, fileAttr, imageAttr),
-                    "upload" => HandleUpload(entityLogical, recordId, fileAttr, imageAttr, file_path, content_base64, file_name, workspace_folder),
-                    "download" => HandleDownload(entityLogical, recordId, fileAttr, imageAttr, full_size, workspace_folder),
+                    "upload" => HandleUpload(entityLogical, recordId, fileAttr, imageAttr, file_path, content_base64, file_name, workspaceFolder),
+                    "download" => HandleDownload(entityLogical, recordId, fileAttr, imageAttr, full_size, workspaceFolder),
                     "delete" => HandleDelete(entityLogical, recordId, fileAttr, imageAttr),
                     _ => Error($"Invalid action '{action}'. Valid values: 'info', 'upload', 'download', 'delete'.")
                 };
@@ -208,14 +208,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 else
                 {
-                    if (!Path.IsPathRooted(trimmedPath) && string.IsNullOrWhiteSpace(workspaceFolder))
-                        return Error("workspace_folder is required when file_path is a relative path.",
-                            "Provide the workspace folder the relative path resolves against, or use an absolute file_path.");
                     var fullPath = Path.IsPathRooted(trimmedPath)
                         ? trimmedPath
                         : Path.Combine(workspaceFolder, trimmedPath);
                     if (!File.Exists(fullPath))
-                        return Error($"File not found: '{fullPath}'.", "Check the path; relative paths resolve against workspace_folder.");
+                        return Error($"File not found: '{fullPath}'.", "Check the path; relative paths resolve against the workspace folder (auto-resolved).");
                     data = File.ReadAllBytes(fullPath);
                     resolvedFileName = !string.IsNullOrWhiteSpace(fileName) ? fileName.Trim() : Path.GetFileName(fullPath);
                     sourceDescription = fullPath;

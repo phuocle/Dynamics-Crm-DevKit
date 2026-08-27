@@ -16,6 +16,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
@@ -54,7 +55,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = false, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GenerateDemoDataResult)),
         Description(
-            "Bogus-generated demo data for an entity → JSON file at {workspace_folder}/.devkit/generate_demo_data/{entity}/ → pipe to create_records. from_date/to_date REQUIRED (ISO 8601, ask user, never infer). Auto-selects creatable fields with smart mapping (email→Email, telephone→Phone…) and overriddencreatedon. Lookups: real GUIDs auto-fetched; polymorphic uses 'field@entity'.\n\n" +
+            "Bogus-generated demo data for an entity → JSON file at {workspace}/.devkit/generate_demo_data/{entity}/ (workspace auto-resolved from MCP roots or server cwd) → pipe to create_records. from_date/to_date REQUIRED (ISO 8601, ask user, never infer). Auto-selects creatable fields with smart mapping (email→Email, telephone→Phone…) and overriddencreatedon. Lookups: real GUIDs auto-fetched; polymorphic uses 'field@entity'.\n\n" +
             "WHEN TO USE:\n" +
             "- Generate demo/test data for an entity → pipe to create_records\n" +
             "- Reproducible runs (fix seed); rotate lookups/enums via field_overrides 'in'\n" +
@@ -62,15 +63,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- create_records → import generated JSON into Dataverse\n" +
             "- get_tables → discover entity fields before generating")]
-        public CallToolResult generate_demo_data(
+        public async Task<CallToolResult> generate_demo_data(
+            McpServer server,
             [Description("Entity logical name (e.g., 'account').")] string entity_name = "",
             [Description("ISO 8601, e.g. '2026-01-01'. NEVER infer — ask user.")] string from_date = "",
             [Description("ISO 8601, e.g. '2026-04-30'. Must be >= from_date.")] string to_date = "",
             [Description("1-500.")] int count = 10,
             [Description("Comma-separated logical names. Empty = auto-select creatable.")] string fields = "",
             [Description("0 = random; non-zero = reproducible.")] int seed = 0,
-            [Description("JSON array of {logicalname, operator, values[]}. Operators (see description). Example: [{\"logicalname\":\"jobtitle\",\"operator\":\"in\",\"values\":[\"CEO\",\"CFO\",\"CTO\"]}].")] string field_overrides = "",
-            [Description("Required. Project/workspace folder path — JSON file saves to {workspace_folder}/.devkit/generate_demo_data/{entity}/. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "")
+            [Description("JSON array of {logicalname, operator, values[]}. Operators (see description). Example: [{\"logicalname\":\"jobtitle\",\"operator\":\"in\",\"values\":[\"CEO\",\"CFO\",\"CTO\"]}].")] string field_overrides = "")
         {
             try
             {
@@ -82,9 +83,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error("from_date and to_date are required.",
                         "DO NOT infer or assume these values — ask the user explicitly before calling this tool.");
 
-                if (string.IsNullOrWhiteSpace(workspace_folder))
-                    return Error("workspace_folder is required.",
-                        "Provide the workspace folder — JSON file saves to {workspace_folder}/.devkit/generate_demo_data/{entity}/.");
+                var workspace_folder = await WorkspaceFolderHelper.GetAsync(server);
 
                 if (!DateTime.TryParse(from_date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var fromDt))
                     return Error($"from_date '{from_date}' is not a valid date.",

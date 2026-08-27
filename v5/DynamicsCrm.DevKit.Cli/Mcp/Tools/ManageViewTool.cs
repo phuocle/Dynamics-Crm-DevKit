@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
@@ -51,19 +52,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_tables → column logical names for FetchXML attributes/conditions\n" +
             "- execute_fetchxml → test a FetchXML before putting it into a view\n" +
             "- manage_form → entity forms; publish_customizations → batch publish; execute_webapi → raw savedquery access")]
-        public CallToolResult manage_view(
+        public async Task<CallToolResult> manage_view(
+            McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",
             [Description("Entity Display/logical name (Display Name resolved first).")] string entity_name = "",
             [Description("GUID. Required: detail/update/rename/undo.")] string view_id = "",
             [Description("Name contains. 1 match → auto-select; multiple → returns candidates, use view_id.")] string view_name = "",
             [Description("false = system views (savedquery), true = personal views (userquery) — scopes list and view_name resolution.")] bool is_personal_view = false,
             [Description("create/update: FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type). undo: .fetchxml.xml backup file path from .devkit/manage_view/{entity}/.")] string fetchxml = "",
-            [Description("JSON array of {cell_name, set_attributes, remove_attributes}. Patch cell attrs (imageproviderwebresource, ishidden, …) without changing the FetchXML.")] string cell_updates_json = "",
-            [Description("Required for update/rename/undo — current view XML is backed up to {workspace_folder}/.devkit/manage_view/{entity}/ before overwrite.")] string workspace_folder = "")
-        {            
+            [Description("JSON array of {cell_name, set_attributes, remove_attributes}. Patch cell attrs (imageproviderwebresource, ishidden, …) without changing the FetchXML.")] string cell_updates_json = "")
+        {
             try
             {
-                _workspaceFolder = workspace_folder;
                 if (string.IsNullOrWhiteSpace(action))
                     return Error("action is required.", "Valid values: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.");
 
@@ -98,8 +98,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 entityName = entityResult.Value.LogicalName;
 
-                if ((normalizedAction is "update" or "rename" or "undo") && string.IsNullOrWhiteSpace(workspace_folder))
-                    return Error($"workspace_folder is required when action='{normalizedAction}' — current view XML is backed up to {{workspace_folder}}/.devkit/manage_view/{{entity}}/ before overwrite.");
+                if (normalizedAction is "update" or "rename" or "undo")
+                    _workspaceFolder = await WorkspaceFolderHelper.GetAsync(server);
 
                 return normalizedAction switch
                 {
