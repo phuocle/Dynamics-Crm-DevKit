@@ -14,7 +14,7 @@ Rules for every `testcall/{N}.{tool}.md` file (37 files, one shared Wiki format)
    - `[miss] Plain text output not captured. Re-run test and fill in.`
    - `[miss] IsError not captured. Re-run test and fill in.`
    aP asks to fix a `[miss]` → re-run that INPUT verbatim, paste real output, update its RESULTS bullet, touch only the named test(s).
-5. **NEVER DELETE DATA. NEVER INVENT TEST CASES.** Test only the cases whose INPUT is already in the doc. No cleanup calls — aP deletes artifacts manually. Test solution is always `all_in_one`. CREATE mutations: check existence first — `Customer ABC` exists → create `Customer ABC 2`, then `3`… (every component type); the doc records only the final name. UPDATE mutations: just run them.
+5. **NEVER DELETE DATA. NEVER INVENT TEST CASES.** Test only the cases whose INPUT is already in the doc. No cleanup calls — aP deletes artifacts manually. Test solution is always `all_in_one`. CREATE mutations: check existence first — `Customer ABC` exists → create `Customer ABC 2`, then `3`… (every component type); the doc records only the final name. UPDATE mutations: just run them. **Never test `dry_run` via MCP — it can never be exercised there (aP's call); skip dry_run tests entirely, do not pass the param.**
 6. **Tool-level `catch (Exception ex)` MUST return `ThrowExceptionFriendly(ex)`, never bare `ThrowException(ex)`.** `ThrowExceptionFriendly` strips the stack trace and rewrites known Dataverse fault messages into concise, actionable error text — bare `ThrowException` leaks raw stack dumps to the caller. When auditing/refactoring a tool, check every catch block at the tool entry point and fix violations before building.
 7. **TRUNCATED OUTPUT → STOP AND ASK aP. NEVER WORK AROUND.** If any tool output arrives cut off (rtk truncation, MCP/harness truncation, `... [truncated]`, clearly missing tail/JSON closing brace), STOP that test immediately: report to aP what got cut, at which test, and investigate the root cause WITH aP before re-running. NEVER route around it — no Read offset re-reads, no `tail`/Node/PowerShell side-scripts, no splicing raw API payloads into structured output, no reconstructing the tail from assumptions (all of these were tried before and are banned). **Why:** the AI does not test for itself — after go-live, when a REAL caller's output gets truncated, that AI has no source code and no aP to consult; if the tool's real output is too big or badly shaped for the harness, THAT is a tool-design bug (payload too large, wrong channel) that must be fixed in the tool, not papered over during capture.
 
@@ -23,6 +23,13 @@ Rules for every `testcall/{N}.{tool}.md` file (37 files, one shared Wiki format)
 1. **NEVER run `Release.DynamicsCrm.DevKit.Cli.ps1` on your own initiative.** The release script reinstalls the global tool and kills the live MCP connection. Running it without aP explicitly saying **"full test"** (exact words, in the current message) is a hard violation — "a capture needs the new build" is NOT permission. When in doubt: don't run it.
 2. **Code fix during a testcall task** (rule 2/3 fix) → plain `dotnet build` on `DynamicsCrm.DevKit.Cli` to verify compile, then **STOP and report to aP**: what changed, and that a release build + `/mcp` reconnect is required before re-capture. Do not continue capturing on your own — the connected MCP server still runs the OLD build, so any post-fix capture before release+reconnect is **stale** and must never be pasted as if it were the fixed behavior.
 3. **aP says "full test"** → run `.\DynamicsCrm.DevKit.Scripts\Release.DynamicsCrm.DevKit.Cli.ps1` → ask aP to `/mcp` reconnect `devkit-claude` → proof SHA via `whoami` → re-run tests live.
+
+## Pre-report verification (aP cannot re-check params by hand — the AI MUST)
+
+Before reporting done, on the FINAL build (after any release + `/mcp` reconnect):
+1. Re-load the tool schema fresh (ToolSearch after the reconnect — never trust a schema cached before a release) and diff it against `# PARAMETERS`: exact same param set, same order, same defaults. A param in the doc that is absent from the live schema (or vice versa) = stop and fix.
+2. Diff `# TOOL DESCRIPTION` byte-for-byte against the `Description(...)` attribute in the current source (it is also what the live schema advertises).
+3. Report the result of both checks to aP explicitly ("description + params verified against build HH:mm:ss").
 
 ## Structure
 

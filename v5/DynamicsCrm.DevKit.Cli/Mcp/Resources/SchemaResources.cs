@@ -70,7 +70,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
             sb.AppendLine();
             sb.AppendLine("## CRITICAL: Backup Before ANY Modification");
             sb.AppendLine("- ALWAYS retrieve the current SiteMap XML BEFORE making changes");
-            sb.AppendLine("- manage_app auto-saves a snapshot: {appName}_{appModuleId}_{yyyyMMddHHmmss}.app.json");
+            sb.AppendLine("- manage_app auto-saves a snapshot: {appModuleId}_{yyyyMMddHHmmss}.app.json");
             sb.AppendLine("- Backup location: {working_directory}/.devkit/manage_app/{app}/");
             sb.AppendLine("- A broken SiteMap makes the entire app UNNAVIGABLE");
             sb.AppendLine();

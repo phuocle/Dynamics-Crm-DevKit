@@ -47,7 +47,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- List or inspect views of an entity (system savedquery or personal userquery, scoped by is_personal_view; use detail for XML) — always list/detail BEFORE editing\n" +
             "- Create/update a view from FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type); patch cell attributes, rename, set the default public view. Created views are always Public (querytype=0)\n" +
             "- QuickFind views: searchable fields are <condition> in <filter isquickfindfields=\"1\">; grid columns are display only\n" +
-            "- Restore a view from a .fetchxml.xml backup file written by update/rename/undo (undo) — the result's fetchXmlBackupPath and layoutXmlBackupPath point to the pre-change backups; pass fetchXmlBackupPath as fetchxml to action='undo' to restore\n\n" +
+            "- Restore a view from a .fetchxml.xml backup file written by update/rename/undo (undo) — the result's backupPath points to the pre-change backup; pass it as fetchxml to action='undo' to restore\n\n" +
             "RELATED TOOLS:\n" +
             "- get_tables → column logical names for FetchXML attributes/conditions\n" +
             "- execute_fetchxml → test a FetchXML before putting it into a view\n" +
@@ -74,7 +74,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var entityName = entity_name.Trim();
 
                 if (!string.IsNullOrWhiteSpace(view_id) && !Guid.TryParse(view_id.Trim(), out _))
-                    return Error($"'{view_id}' is not a valid GUID.");
+                    return Error($"'{view_id}' is not a valid GUID.",
+                        "Use manage_view action='list' to find views, then pass a valid view_id GUID.");
 
                 var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_view");
                 if (!entityResult.IsSuccess)
@@ -115,7 +116,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
 
@@ -215,7 +216,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(viewId))
             {
                 if (!Guid.TryParse(viewId.Trim(), out id))
-                    return Error($"'{viewId}' is not a valid GUID.");
+                    return Error($"'{viewId}' is not a valid GUID.",
+                        "Use manage_view action='list' to find views, then pass a valid view_id GUID.");
             }
             else
             {
@@ -237,7 +239,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleCreate(string entityName, string viewName, string fetchxml)
         {
             if (string.IsNullOrWhiteSpace(viewName))
-                return Error("view_name is required when action='create'.");
+                return Error("view_name is required when action='create'.",
+                    "Pass the new view name in view_name.");
 
             viewName = viewName.Trim();
 
@@ -292,11 +295,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"CREATE view '{viewName}' on '{entityName}' blocked — FetchXML failed server-side validation. {serverError}",
                     ServerValidationHint,
                     BuildBlockedValidationDto("create", entityName, Guid.Empty, viewName,
-                        [serverError], null, null, null));
+                        [serverError], null));
 
             var layout = BuildLayoutXmlFromFetch(entityName, newFetchXml, meta);
             if (layout.Error != null)
-                return Error($"CREATE view '{viewName}' on '{entityName}' blocked — {layout.Error}");
+                return Error($"CREATE view '{viewName}' on '{entityName}' blocked — {layout.Error}",
+                    $"Fix the FetchXML — grid columns are auto-generated from its attributes. Use get_tables(entity_name='{entityName}') to list valid fields.");
             var newLayoutXml = layout.Xml;
 
             var syncErrors = ViewXmlHelper.ValidateSync(newFetchXml, newLayoutXml);
@@ -305,7 +309,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"CREATE view '{viewName}' on '{entityName}' blocked — generated layout failed sync check ({syncErrors.Count} error(s)). First: {syncErrors[0]}",
                     ValidationFailedHint,
                     BuildBlockedValidationDto("create", entityName, Guid.Empty, viewName,
-                        syncErrors, null, null, null));
+                        syncErrors, null));
 
             var newView = new Entity("savedquery")
             {
@@ -360,7 +364,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(viewId))
             {
                 if (!Guid.TryParse(viewId.Trim(), out updateId))
-                    return Error($"'{viewId}' is not a valid GUID.");
+                    return Error($"'{viewId}' is not a valid GUID.",
+                        "Use manage_view action='list' to find views, then pass a valid view_id GUID.");
             }
             else
             {
@@ -420,12 +425,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             $"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — FetchXML failed server-side validation. {serverError}",
                             ServerValidationHint,
                             BuildBlockedValidationDto("update", entityName, updateId, currentViewName,
-                                [serverError], null, null, null));
+                                [serverError], null));
                 }
 
                 var built = BuildLayoutXmlFromFetch(returnedTypeCode, newFetchXml, meta);
                 if (built.Error != null)
-                    return Error($"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — {built.Error}");
+                    return Error($"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — {built.Error}",
+                        $"Fix the FetchXML — grid columns are auto-generated from its attributes. Use get_tables(entity_name='{entityName}') to list valid fields.");
                 newLayoutXml = built.Xml;
             }
             else
@@ -461,9 +467,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             // Backup runs only when actually mutating (after DryRun check below)
-            string fetchBackupPath = null;
-            string layoutBackupPath = null;
-
             {
                 var validationResult = RunValidation(newLayoutXml, newFetchXml, effectiveFetchXml,
                     currentQueryType, currentFetchXml);
@@ -472,8 +475,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         $"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — {validationResult.Value.Errors.Count} validation error(s). First: {validationResult.Value.Errors[0]}",
                         ValidationFailedHint,
                         BuildBlockedValidationDto("update", entityName, updateId, currentViewName,
-                            validationResult.Value.Errors, validationResult.Value.Warnings,
-                            fetchBackupPath, layoutBackupPath));
+                            validationResult.Value.Errors, validationResult.Value.Warnings));
             }
 
             {
@@ -483,7 +485,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         $"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — {fieldErrors.Count} field(s) not found in entity metadata. First: {fieldErrors[0]}",
                         $"Use get_tables('{entityName}') to list all available fields.",
                         BuildBlockedValidationDto("update", entityName, updateId, currentViewName,
-                            fieldErrors, null, fetchBackupPath, layoutBackupPath));
+                            fieldErrors, null));
             }
 
             if (newFetchXml != null && !regenerateLayout)
@@ -494,7 +496,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         $"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — FetchXML failed server-side validation. {serverError}",
                         ServerValidationHint,
                         BuildBlockedValidationDto("update", entityName, updateId, currentViewName,
-                            [serverError], null, fetchBackupPath, layoutBackupPath));
+                            [serverError], null));
             }
 
             var updatedParts = DetermineUpdatedParts(usedCellPatch, newFetchXml != null, regenerateLayout);
@@ -519,7 +521,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
 
-            (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, updateId, currentViewName, currentFetchXml, currentLayoutXml, _workspaceFolder);
+            var backupPath = ViewBackupHelper.SaveBackup(entityName, updateId, currentViewName, currentFetchXml, _workspaceFolder);
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             var published = PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
@@ -536,7 +538,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Action = "updated", Entity = entityName, ViewId = updateId.ToString(), ViewName = currentViewName,
                 Status = "updated", Validated = true,
                 UpdatedParts = updatedParts, ValidationWarnings = cellPatchWarnings,
-                FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = published,
+                BackupPath = backupPath, Published = published,
                 QuickFindColumns = quickFindColumns?.Count > 0 ? quickFindColumns : null
             });
         }
@@ -563,7 +565,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("view_id is required when action='rename'.",
                     "Use manage_view action='list' to find views, then pass view_id.");
             if (!Guid.TryParse(viewId.Trim(), out var renameId))
-                return Error($"'{viewId}' is not a valid GUID.");
+                return Error($"'{viewId}' is not a valid GUID.",
+                    "Use manage_view action='list' to find views, then pass a valid view_id GUID.");
             if (string.IsNullOrWhiteSpace(viewName))
                 return Error("view_name is required when action='rename'.",
                     "Pass the new name in view_name.");
@@ -589,7 +592,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var currentFetchXml = currentView.GetAttributeValue<string>("fetchxml") ?? "";
-            var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
             var update = new Entity(currentView.LogicalName, renameId) { ["name"] = viewName };
             if (_options.DryRun)
                 return DryRun($"Would RENAME view '{oldName}' to '{viewName}' ({renameId}) on entity '{entityName}'.", new UpsertViewResult
@@ -603,7 +605,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
 
             // Backup only when actually mutating
-            var (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, renameId, oldName, currentFetchXml, currentLayoutXml, _workspaceFolder);
+            var backupPath = ViewBackupHelper.SaveBackup(entityName, renameId, oldName, currentFetchXml, _workspaceFolder);
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             var published = PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
@@ -614,7 +616,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 Action = "renamed", Entity = entityName, ViewId = renameId.ToString(), ViewName = viewName,
                 Status = "renamed", Validated = false,
-                FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = true
+                BackupPath = backupPath, Published = true
             });
         }
 
@@ -630,7 +632,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(viewId))
             {
                 if (!Guid.TryParse(viewId.Trim(), out targetId))
-                    return Error($"'{viewId}' is not a valid GUID.");
+                    return Error($"'{viewId}' is not a valid GUID.",
+                        "Use manage_view action='list' to find views, then pass a valid view_id GUID.");
 
                 var check = TryGetSystemView(targetId);
                 if (check == null)
@@ -641,7 +644,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 viewName = check.GetAttributeValue<string>("name") ?? targetId.ToString();
                 var qt = check.GetAttributeValue<int>("querytype");
                 if (qt != 0)
-                    return Error($"Only Public views (querytype=0) can be set as default — view {targetId} is {MapQueryType(qt)} (querytype={qt}).");
+                    return Error($"Only Public views (querytype=0) can be set as default — view {targetId} is {MapQueryType(qt)} (querytype={qt}).",
+                        $"Pick a Public view (querytype=0) — use manage_view action='list' entity_name='{entityName}' to find one.");
             }
             else
             {
@@ -700,7 +704,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("view_id is required when action='undo'.",
                     "Use manage_view action='list' to find views, then pass view_id.");
             if (!Guid.TryParse(viewId.Trim(), out var undoId))
-                return Error($"'{viewId}' is not a valid GUID.");
+                return Error($"'{viewId}' is not a valid GUID.",
+                    "Use manage_view action='list' to find views, then pass a valid view_id GUID.");
             if (string.IsNullOrWhiteSpace(backupPathArg))
                 return Error("fetchxml (.fetchxml.xml backup file path) is required when action='undo'.",
                     "Backup files are at: .devkit/manage_view/{entity}/ — LayoutXML is regenerated from the FetchXML backup.");
@@ -738,7 +743,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             restoredFetchXml = EnsureLayoutBuildableFetchXml(restoredFetchXml, undoMeta);
             var undoLayout = BuildLayoutXmlFromFetch(returnedTypeCode, restoredFetchXml, undoMeta);
             if (undoLayout.Error != null)
-                return Error($"UNDO view '{viewName}' ({undoId}) on '{entityName}' blocked — {undoLayout.Error}");
+                return Error($"UNDO view '{viewName}' ({undoId}) on '{entityName}' blocked — {undoLayout.Error}",
+                    "The backup FetchXML could not be converted to a grid — try an earlier .fetchxml.xml backup.");
             var restoredLayoutXml = undoLayout.Xml;
 
             List<string> validationWarnings = null;
@@ -767,8 +773,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         $"UNDO view '{viewName}' ({undoId}) on '{entityName}' blocked — backup file(s) failed validation ({allErrors.Count} error(s)). First: {allErrors[0]}",
                         "The backup file(s) may be corrupted — fix the XML in the backup file or use an earlier backup.",
                         BuildBlockedValidationDto("undo", entityName, undoId, viewName,
-                            allErrors, allWarnings, null, null,
-                            restoredFetchBackup: fetchBackupPath));
+                            allErrors, allWarnings));
             }
 
             {
@@ -778,12 +783,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         $"UNDO view '{viewName}' ({undoId}) on '{entityName}' blocked — FetchXML failed server-side validation. {serverError}",
                         ServerValidationHint,
                         BuildBlockedValidationDto("undo", entityName, undoId, viewName,
-                            [serverError], null, null, null,
-                            restoredFetchBackup: fetchBackupPath));
+                            [serverError], null));
             }
 
             var currentFetchXml = currentView.GetAttributeValue<string>("fetchxml") ?? "";
-            var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
 
             var isPersonalView = currentView.LogicalName == "userquery";
             var update = new Entity(currentView.LogicalName, undoId);
@@ -799,12 +802,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ViewId = undoId.ToString(),
                     ViewName = viewName,
                     Status = "not_executed",
-                    RestoredFromFetchXmlBackup = fetchBackupPath,
                     Published = false
                 });
 
             // Backup pre-restore state only when actually mutating
-            var (preFetchBackupPath, preLayoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, undoId, viewName, currentFetchXml, currentLayoutXml, _workspaceFolder);
+            var preFetchBackupPath = ViewBackupHelper.SaveBackup(entityName, undoId, viewName, currentFetchXml, _workspaceFolder);
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             var published = PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
@@ -820,9 +822,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Entity = entityName, ViewId = undoId.ToString(), ViewName = viewName,
                 Status = "restored", Validated = true,
                 ValidationWarnings = validationWarnings,
-                RestoredFromFetchXmlBackup = fetchBackupPath,
-                FetchXmlBackupPath = preFetchBackupPath,
-                LayoutXmlBackupPath = preLayoutBackupPath,
+                BackupPath = preFetchBackupPath,
                 Published = published
             });
         }
@@ -1103,22 +1103,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             $"manage_view action='{actionName}' blocked on '{entityName}' — name resolution failed ({errors.Count} error(s)). First: {errors[0]}";
 
         private static UpsertViewResult BuildBlockedValidationDto(string action, string entityName, Guid viewId, string viewName,
-            List<string> errors, List<string> warnings, string fetchBackupPath, string layoutBackupPath,
-            string restoredFetchBackup = null)
+            List<string> errors, List<string> warnings)
         {
             var allIssues = new List<string>(errors);
             if (warnings != null && warnings.Count > 0) allIssues.AddRange(warnings);
 
-            var result = new UpsertViewResult
+            return new UpsertViewResult
             {
                 Action = action, Entity = entityName,
                 ViewId = viewId != Guid.Empty ? viewId.ToString() : null, ViewName = viewName,
                 Status = "blocked_validation", Validated = true,
                 ValidationErrors = allIssues.Count > 0 ? allIssues : null,
-                FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = false
+                Published = false
             };
-            if (restoredFetchBackup != null) result.RestoredFromFetchXmlBackup = restoredFetchBackup;
-            return result;
         }
 
         private string ValidateFetchXmlExpression(string fetchXml)

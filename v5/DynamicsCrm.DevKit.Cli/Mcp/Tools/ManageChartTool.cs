@@ -1360,7 +1360,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Directory.CreateDirectory(backupDir);
 
             var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-            var backupFile = $"{entityName}_{chartId:N}_{timestamp}.chart.json";
+            var backupFile = $"{chartId:N}_{timestamp}.chart.json";
             var backupPath = Path.Combine(backupDir, backupFile);
 
             var backupData = new ChartBackup

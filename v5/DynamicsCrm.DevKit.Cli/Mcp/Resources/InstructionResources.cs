@@ -144,8 +144,8 @@ Undo:
 ## CRITICAL: Backup Before ANY Modification
 - ALWAYS retrieve the current FormXML using manage_form with action='detail' and the specific form_id FIRST
 - Save the current FormXML to a local backup file BEFORE making any changes
-- Backup file naming (manage_form update/rename auto-backup): {entity_name}_{form_id}_{yyyyMMddHHmmss}.formxml.json
-  Example: account_8448b78f8f42e61180ff001dd8a1c3f9_20260329180000.formxml.json
+- Backup file naming (manage_form update/rename auto-backup): {form_id}_{yyyyMMddHHmmss}.formxml.json
+  Example: 8448b78f8f42e61180ff001dd8a1c3f9_20260329180000.formxml.json
 - Backup location: {working_directory}/.devkit/manage_form/{entity}/
 - A corrupted FormXML can break the entire entity form -- without backup, you must restore the environment
 
@@ -456,7 +456,7 @@ Omit `function_name` to remove the entire event entry.
 # View (SavedQuery) Manipulation Rules
 
 ## CRITICAL: Auto Backup
-- update/rename/undo auto-back-up the current FetchXML + LayoutXML to {workspace}/.devkit/manage_view/{entity}/ BEFORE overwrite (workspace auto-resolved from MCP roots or server cwd — no parameter needed)
+- update/rename/undo auto-back-up the current FetchXML to {workspace}/.devkit/manage_view/{entity}/ BEFORE overwrite (LayoutXML is regenerated from FetchXML on restore, so only the FetchXML is saved; workspace auto-resolved from MCP roots or server cwd — no parameter needed)
 - A broken FetchXML hides ALL data from users. A broken LayoutXML crashes the grid — without backup you may need to restore the entire environment.
 
 ## Rollback (If View Breaks)

@@ -1329,7 +1329,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var backupDir = Path.Combine(_workspaceFolder, ".devkit", "manage_app", safeName);
             Directory.CreateDirectory(backupDir);
 
-            var backupPath = Path.Combine(backupDir, $"{safeName}_{appModule.Id:N}_{DateTime.Now:yyyyMMddHHmmss}.app.json");
+            var backupPath = Path.Combine(backupDir, $"{appModule.Id:N}_{DateTime.Now:yyyyMMddHHmmss}.app.json");
 
             var snapshot = new
             {

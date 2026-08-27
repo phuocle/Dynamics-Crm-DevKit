@@ -135,7 +135,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         if (string.IsNullOrWhiteSpace(ribbonxml))
                             return Error(
                                 "ribbonxml is required for action='undo'.",
-                                "Provide backup file path from {workspace_folder}/.devkit/manage_ribbon/{entity}/.");
+                                "Provide backup file path from {workspace}/.devkit/manage_ribbon/{entity}/.");
                         {
                             var (entityName, entityError) = ResolveEntityLogicalName(entity_name);
                             if (entityError != null) return entityError;

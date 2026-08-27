@@ -6,17 +6,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 {
     internal static class ViewBackupHelper
     {
-        public static (string FetchBackupPath, string LayoutBackupPath) SaveBackup(
-            string entityName, Guid viewId, string viewName, string currentFetchXml, string currentLayoutXml, string workspaceFolder = "")
+        public static string SaveBackup(
+            string entityName, Guid viewId, string viewName, string currentFetchXml, string workspaceFolder = "")
         {
             var backupDir = Path.Combine(workspaceFolder, ".devkit", "manage_view", entityName);
             Directory.CreateDirectory(backupDir);
 
             var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-            var fetchFile = $"{entityName}_{viewId:N}_{timestamp}.fetchxml.xml";
-            var layoutFile = $"{entityName}_{viewId:N}_{timestamp}.layoutxml.xml";
+            var fetchFile = $"{viewId:N}_{timestamp}.fetchxml.xml";
             var fetchBackupPath = Path.Combine(backupDir, fetchFile);
-            var layoutBackupPath = Path.Combine(backupDir, layoutFile);
 
             var sbFetch = new StringBuilder(currentFetchXml.Length + 256);
             sbFetch.AppendLine($"<!-- Backup: {viewName} ({entityName}) -->");
@@ -30,19 +28,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 sbFetch.Append("<!-- (empty — no FetchXML on this view) -->");
             File.WriteAllText(fetchBackupPath, sbFetch.ToString(), Encoding.UTF8);
 
-            var sbLayout = new StringBuilder(currentLayoutXml.Length + 256);
-            sbLayout.AppendLine($"<!-- Backup: {viewName} ({entityName}) -->");
-            sbLayout.AppendLine($"<!-- ViewId: {viewId} -->");
-            sbLayout.AppendLine($"<!-- Timestamp: {DateTime.Now:yyyy-MM-dd HH:mm:ss} -->");
-            sbLayout.AppendLine($"<!-- To restore: call manage_view with action='undo' and the matching .fetchxml.xml file path (LayoutXML is regenerated from FetchXML) -->");
-            sbLayout.AppendLine();
-            if (!string.IsNullOrWhiteSpace(currentLayoutXml))
-                sbLayout.Append(ViewXmlHelper.PrettyPrintXml(currentLayoutXml));
-            else
-                sbLayout.Append("<!-- (empty — no LayoutXML on this view) -->");
-            File.WriteAllText(layoutBackupPath, sbLayout.ToString(), Encoding.UTF8);
-
-            return (fetchBackupPath, layoutBackupPath);
+            return fetchBackupPath;
         }
     }
 }

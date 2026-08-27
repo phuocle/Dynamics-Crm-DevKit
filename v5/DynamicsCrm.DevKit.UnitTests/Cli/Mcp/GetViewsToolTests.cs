@@ -3,6 +3,7 @@ using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
@@ -23,23 +24,23 @@ public class GetViewsToolTests
     private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageViewTool _tool = new(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true));
 
     [TestMethod]
-    public void GetViews_EmptyEntityName_ReturnsError()
+    public async Task GetViews_EmptyEntityName_ReturnsError()
     {
-        var result = _tool.manage_view("list", "");
+        var result = await _tool.manage_view(null!, "list", "");
         Assert.IsTrue(GetText(result).Contains("entity_name is required"));
     }
 
     [TestMethod]
-    public void GetViews_WhitespaceEntityName_ReturnsError()
+    public async Task GetViews_WhitespaceEntityName_ReturnsError()
     {
-        var result = _tool.manage_view("list", "   ");
+        var result = await _tool.manage_view(null!, "list", "   ");
         Assert.IsTrue(GetText(result).Contains("entity_name is required"));
     }
 
     [TestMethod]
-    public void GetViews_InvalidViewId_ReturnsError()
+    public async Task GetViews_InvalidViewId_ReturnsError()
     {
-        var result = _tool.manage_view("detail", "account", view_id: "not-a-guid");
+        var result = await _tool.manage_view(null!, "detail", "account", view_id: "not-a-guid");
         Assert.IsTrue(GetText(result).Contains("not a valid GUID"));
     }
 
@@ -48,19 +49,19 @@ public class GetViewsToolTests
     // ──────────────────────────────────────────────
 
     [TestMethod]
-    public void Detail_NonExistentViewId_ReturnsIsErrorTrue()
+    public async Task Detail_NonExistentViewId_ReturnsIsErrorTrue()
     {
         // GetViewDetail returns "Error: No view found..." as text.
         // HandleDetail must detect this and set IsError=true.
         // Without the fix, IsError was false (silent failure).
         // Note: With null serviceClient, the exception handler fires,
         // but IsError must still be true.
-        var result = _tool.manage_view("detail", "account", view_id: "11111111-1111-1111-1111-111111111111");
+        var result = await _tool.manage_view(null!, "detail", "account", view_id: "11111111-1111-1111-1111-111111111111");
         Assert.IsTrue(result.IsError == true, "detail with non-existent GUID should set IsError=true");
     }
 
     [TestMethod]
-    public void HandleDetail_ChecksGetViewDetailForErrorPrefix()
+    public async Task HandleDetail_ChecksGetViewDetailForErrorPrefix()
     {
         // Verify HandleDetail uses the "Error:" prefix check pattern
         // to convert GetViewDetail's string error into an ErrorResult.
@@ -69,7 +70,7 @@ public class GetViewsToolTests
         Assert.IsNotNull(method, "HandleDetail method should exist");
         // Verify the method body contains the pattern: StartsWith("Error:"
         // by checking IL or simply verifying the method returns correct IsError for invalid input
-        var result = _tool.manage_view("detail", "account", view_id: "not-a-guid");
+        var result = await _tool.manage_view(null!, "detail", "account", view_id: "not-a-guid");
         Assert.IsTrue(result.IsError == true, "Invalid GUID should return IsError=true");
     }
 

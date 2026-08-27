@@ -331,42 +331,42 @@ public class CrudToolValidationTests
     private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.SearchRecordsTool _searchTool = new(null!);
 
     [TestMethod]
-    public void Search_EmptySearchTerm_ReturnsError()
+    public async Task Search_EmptySearchTerm_ReturnsError()
     {
-        var result = _searchTool.search_records(action: "search", search_term: "");
+        var result = await _searchTool.search_records(null!, action: "search", search_term: "");
 
         Assert.IsTrue(result.Contains("search_term is required"));
     }
 
     [TestMethod]
-    public void Search_NullSearchTerm_ReturnsError()
+    public async Task Search_NullSearchTerm_ReturnsError()
     {
-        var result = _searchTool.search_records(action: "search", search_term: null!);
+        var result = await _searchTool.search_records(null!, action: "search", search_term: null!);
 
         Assert.IsTrue(result.Contains("search_term is required"));
     }
 
     [TestMethod]
-    public void Search_SearchTermTooLong_ReturnsError()
+    public async Task Search_SearchTermTooLong_ReturnsError()
     {
         var longTerm = new string('a', 101);
-        var result = _searchTool.search_records(action: "search", search_term: longTerm);
+        var result = await _searchTool.search_records(null!, action: "search", search_term: longTerm);
 
         Assert.IsTrue(result.Contains("100 characters or less"));
     }
 
     [TestMethod]
-    public void Search_InvalidAction_ReturnsError()
+    public async Task Search_InvalidAction_ReturnsError()
     {
-        var result = _searchTool.search_records(action: "invalid");
+        var result = await _searchTool.search_records(null!, action: "invalid");
 
         Assert.IsTrue(result.Contains("Invalid action"));
     }
 
     [TestMethod]
-    public void Search_EmptyAction_ReturnsError()
+    public async Task Search_EmptyAction_ReturnsError()
     {
-        var result = _searchTool.search_records(action: "");
+        var result = await _searchTool.search_records(null!, action: "");
 
         Assert.IsTrue(result.Contains("action is required"));
     }

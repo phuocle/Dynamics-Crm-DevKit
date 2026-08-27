@@ -965,7 +965,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Directory.CreateDirectory(backupDir);
 
             var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-            var backupFile = $"{entityName}_{formId:N}_{timestamp}.formxml.json";
+            var backupFile = $"{formId:N}_{timestamp}.formxml.json";
             var backupPath = Path.Combine(backupDir, backupFile);
 
             var prettyXml = PrettyPrintXml(currentFormXml);

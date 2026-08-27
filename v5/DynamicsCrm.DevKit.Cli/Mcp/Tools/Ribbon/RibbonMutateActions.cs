@@ -411,7 +411,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Directory.CreateDirectory(backupDir);
 
             var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-            var backupFile = $"{entityName}_{timestamp}.ribbon.json";
+            var backupFile = $"{timestamp}.ribbon.json";
             var backupPath = Path.Combine(backupDir, backupFile);
 
             var backupData = new RibbonBackup

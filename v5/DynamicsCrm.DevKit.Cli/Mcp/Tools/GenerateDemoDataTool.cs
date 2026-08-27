@@ -83,7 +83,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error("from_date and to_date are required.",
                         "DO NOT infer or assume these values — ask the user explicitly before calling this tool.");
 
-                var workspace_folder = await WorkspaceFolderHelper.GetAsync(server);
+                var workspaceFolder = await WorkspaceFolderHelper.GetAsync(server);
 
                 if (!DateTime.TryParse(from_date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var fromDt))
                     return Error($"from_date '{from_date}' is not a valid date.",
@@ -196,11 +196,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     records.Add(record);
                 }
 
-                // Save to {workspace_folder}/.devkit/generate_demo_data/{entity}/{entity}/
-                var outputDir = Path.Combine(workspace_folder, ".devkit", "generate_demo_data", entityName);
+                // Save to {workspace}/.devkit/generate_demo_data/{entity}/
+                var outputDir = Path.Combine(workspaceFolder, ".devkit", "generate_demo_data", entityName);
                 Directory.CreateDirectory(outputDir);
                 var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-                var filePath = Path.Combine(outputDir, $"{entityName}_{timestamp}.json");
+                var filePath = Path.Combine(outputDir, $"{timestamp}.demo.json");
 
                 var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
                 var json = JsonSerializer.Serialize(records, jsonOptions);
