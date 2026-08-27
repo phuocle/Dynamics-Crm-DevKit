@@ -93,10 +93,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("totalCount")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? TotalCount { get; set; }
-
-        [JsonPropertyName("rollbackCommand")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string RollbackCommand { get; set; }
     }
 
     internal sealed class FormListEntry

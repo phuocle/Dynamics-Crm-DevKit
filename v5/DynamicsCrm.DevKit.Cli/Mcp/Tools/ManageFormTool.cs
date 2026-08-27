@@ -49,7 +49,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- List or inspect forms of an entity (list, detail) before editing\n" +
             "- Apply form operations via action=update (recommended: operations JSON) or raw formxml (advanced/undo)\n" +
-            "- Rename a form, or restore a form from a .formxml backup (undo)\n\n" +
+            "- Rename a form, or restore a form from a .formxml backup (undo) — the result's backupPath points to the pre-change backup; pass it as formxml to action='undo' to restore\n\n" +
             "RELATED TOOLS:\n" +
             "- get_tables → entity logical names; manage_view → entity views; publish_customizations → batch publish\n" +
             "- See schema://formxml + docs://instructions_for_formxml for FormXML structure and operation examples")]
@@ -63,8 +63,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("update (advanced) / undo: raw FormXML string or backup file path (.formxml). Auto-detects. Use 'operations' for the recommended flow.")] string formxml = "",
             [Description("update (recommended): JSON array of form operations. Read docs://instructions_for_formxml for format and examples.")] string operations = "",
             [Description("XSD validate FormXML before write.")] bool validate = true,
-            [Description("Backup before overwrite. Failure blocks the update.")] bool backup = true,
-            [Description("Project/workspace folder path to save backups in. Required for update/rename/undo.")] string workspace_folder = "")
+            [Description("Required for update/rename — current FormXML always backs up to {workspace_folder}/.devkit/manage_form/{entity}/backups/ before overwrite. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "")
         {
             _workspaceFolder = workspace_folder;
             try
@@ -87,12 +86,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     && RoleGateHelper.EnsureSystemAdministrator(_serviceClient) is { } gate)
                     return gate;
 
+                if (normalizedAction is "update" or "rename" && string.IsNullOrWhiteSpace(workspace_folder))
+                    return Error($"workspace_folder is required when action='{normalizedAction}' (backup before overwrite).",
+                        "Provide the workspace folder — current FormXML backs up to {workspace_folder}/.devkit/manage_form/{entity}/backups/ before overwrite.");
+
                 return normalizedAction switch
                 {
                     "list" => HandleList(entityName, form_name, form_type, include_formxml),
                     "detail" => HandleDetail(entityName, form_id, form_name, form_type),
-                    "update" => HandleUpdate(entityName, form_id, formxml, operations, validate, backup),
-                    "rename" => HandleRename(entityName, form_id, form_name, backup),
+                    "update" => HandleUpdate(entityName, form_id, formxml, operations, validate),
+                    "rename" => HandleRename(entityName, form_id, form_name),
                     "undo" => HandleUndo(entityName, form_id, formxml, validate),
                     _ => Error($"'{action}' is not a valid action.", "Valid actions: list, detail, update, rename, undo.")
                 };
@@ -305,7 +308,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Action: update ────────────────────────────────────────────────
 
         private CallToolResult HandleUpdate(string entityName, string formId,
-            string formxml, string operations, bool validate, bool backup)
+            string formxml, string operations, bool validate)
         {
             if (string.IsNullOrWhiteSpace(formId))
                 return Error("form_id is required when action='update'.");
@@ -327,13 +330,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Use 'operations' for the recommended inline build+import flow; 'formxml' for advanced/undo scenarios only.");
 
             if (hasOperations)
-                return HandleUpdateWithOperations(entityName, id, operations, validate, backup);
+                return HandleUpdateWithOperations(entityName, id, operations, validate);
 
-            return HandleUpdateWithFormXml(entityName, id, formxml, validate, backup);
+            return HandleUpdateWithFormXml(entityName, id, formxml, validate);
         }
 
         private CallToolResult HandleUpdateWithOperations(string entityName, Guid id,
-            string operations, bool validate, bool backup)
+            string operations, bool validate)
         {
             // 1. Parse operations JSON (JsonException bubbles to entry catch)
             var ops = JsonSerializer.Deserialize<List<JsonElement>>(operations);
@@ -364,7 +367,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var (modifiedFormXml, opSummaries, classIdMap) = runner.Run(currentFormXml, entityName, ops);
 
             // 4. Backup (fail-safe: exception bubbles to entry catch)
-            string backupPath = backup ? SaveBackup(entityName, id, formName, currentFormXml) : null;
+            var backupPath = SaveBackup(entityName, id, formName, currentFormXml);
 
             // 5. Validate XSD
             List<string> validationWarnings = null;
@@ -427,15 +430,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         FormName = formName, Status = "updated_publish_failed",
                         Validated = validate, BackupPath = backupPath, Published = false,
                         OperationsCount = ops.Count, FieldsResolved = classIdMap.Count,
-                        ValidationWarnings = validationWarnings,
-                        RollbackCommand = BuildRollbackCommand(id, backupPath)
+                        ValidationWarnings = validationWarnings
                     });
 
             // 7. Build success response
             var summary = $"Updated form '{formName}' ({id}) on '{entityName}' — {ops.Count} operation(s)" +
                 $", {(validate ? "validated" : "validation skipped")}" +
                 $", {(published ? "published" : "publish pending")}" +
-                $". Backup: {backupPath ?? "skipped"}." +
+                ". Backup saved." +
                 (classIdMap.Count > 0 ? $" {classIdMap.Count} field(s) resolved." : "") +
                 (validationWarnings?.Count > 0 ? $" {validationWarnings.Count} validation warning(s) (see validationWarnings)." : "");
 
@@ -445,20 +447,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 FormName = formName, Status = "updated",
                 Validated = validate, ValidationWarnings = validationWarnings,
                 BackupPath = backupPath, Published = published,
-                OperationsCount = ops.Count, FieldsResolved = classIdMap.Count,
-                RollbackCommand = BuildRollbackCommand(id, backupPath)
+                OperationsCount = ops.Count, FieldsResolved = classIdMap.Count
             });
         }
 
-        private static string BuildRollbackCommand(Guid formId, string backupPath)
-        {
-            return backupPath != null
-                ? $"manage_form(action='undo', form_id='{formId}', formxml='{backupPath}')"
-                : $"manage_form(action='undo', form_id='{formId}') with the original FormXML";
-        }
-
         private CallToolResult HandleUpdateWithFormXml(string entityName, Guid id,
-            string formxml, bool validate, bool backup)
+            string formxml, bool validate)
         {
             // Resolve formxml: if it's a file path, read content from file
             var resolvedFormXml = ResolveFormXmlInput(formxml.Trim());
@@ -488,7 +482,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var newFormXml = StripXmlDeclaration(resolvedFormXml);
 
             // Step 2: Backup current FormXML (fail-safe: exception bubbles to entry catch)
-            string backupPath = backup ? SaveBackup(entityName, id, formName, currentFormXml) : null;
+            var backupPath = SaveBackup(entityName, id, formName, currentFormXml);
 
             // Step 3: Validate new FormXML against XSD
             List<string> validationWarnings = null;
@@ -553,15 +547,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Validated = validate,
                         ValidationWarnings = validationWarnings,
                         BackupPath = backupPath,
-                        Published = false,
-                        RollbackCommand = BuildRollbackCommand(id, backupPath)
+                        Published = false
                     });
 
             // Step 6: Return success
             var summary = $"Updated form '{formName}' ({id}) on '{entityName}' — raw FormXML import" +
                 $", {(validate ? "validated" : "validation skipped")}" +
                 $", {(published ? "published" : "publish pending")}" +
-                $". Backup: {backupPath ?? "skipped"}." +
+                ". Backup saved." +
                 (validationWarnings?.Count > 0 ? $" {validationWarnings.Count} validation warning(s) (see validationWarnings)." : "");
 
             return Success(summary, new UpsertFormResult
@@ -574,15 +567,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Validated = validate,
                 ValidationWarnings = validationWarnings,
                 BackupPath = backupPath,
-                Published = published,
-                RollbackCommand = BuildRollbackCommand(id, backupPath)
+                Published = published
             });
         }
 
         // ── Action: rename ────────────────────────────────────────────────
 
-        private CallToolResult HandleRename(string entityName, string formId, string formName,
-            bool backup)
+        private CallToolResult HandleRename(string entityName, string formId, string formName)
         {
             if (string.IsNullOrWhiteSpace(formId))
                 return Error("form_id is required when action='rename'.");
@@ -623,12 +614,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             // Step 3: Backup (fail-safe: exception bubbles to entry catch)
-            string backupPath = null;
-            if (backup)
-            {
-                var currentFormXml = currentForm.GetAttributeValue<string>("formxml") ?? "";
-                backupPath = SaveBackup(entityName, id, oldName, currentFormXml);
-            }
+            var currentFormXml = currentForm.GetAttributeValue<string>("formxml") ?? "";
+            var backupPath = SaveBackup(entityName, id, oldName, currentFormXml);
 
             // Step 4: Rename
             var update = new Entity("systemform", id)
@@ -663,13 +650,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Status = "renamed_publish_failed",
                         Validated = false,
                         BackupPath = backupPath,
-                        Published = false,
-                        RollbackCommand = BuildRollbackCommand(id, backupPath)
+                        Published = false
                     });
 
             // Step 6: Return success
             var summary = $"Renamed form '{oldName}' → '{formName}' ({id}) on '{entityName}', published" +
-                (backupPath != null ? $". Backup: {backupPath}." : ".");
+                ". Backup saved.";
 
             return Success(summary, new UpsertFormResult
             {
@@ -680,8 +666,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Status = "renamed",
                 Validated = false,
                 BackupPath = backupPath,
-                Published = published,
-                RollbackCommand = BuildRollbackCommand(id, backupPath)
+                Published = published
             });
         }
 
@@ -705,7 +690,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!File.Exists(backupFilePath))
                 return Error(
                     $"Backup file not found at '{backupFilePath}'.",
-                    "Backup files are saved at .devkit/backups/forms/.");
+                    "Backup files are saved at .devkit/manage_form/{entity}/backups/.");
 
             var json = File.ReadAllText(backupFilePath, Encoding.UTF8);
             var backupData = JsonSerializer.Deserialize<FormBackup>(json);
@@ -982,8 +967,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string SaveBackup(string entityName, Guid formId, string formName, string currentFormXml)
         {
-            var workingDir = string.IsNullOrWhiteSpace(_workspaceFolder) ? Directory.GetCurrentDirectory() : _workspaceFolder;
-            var backupDir = Path.Combine(workingDir, ".devkit", "backups", "forms");
+            var backupDir = Path.Combine(_workspaceFolder, ".devkit", "manage_form", entityName, "backups");
             Directory.CreateDirectory(backupDir);
 
             var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");

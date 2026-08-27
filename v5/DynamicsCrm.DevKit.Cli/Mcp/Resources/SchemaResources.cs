@@ -71,7 +71,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
             sb.AppendLine("## CRITICAL: Backup Before ANY Modification");
             sb.AppendLine("- ALWAYS retrieve the current SiteMap XML BEFORE making changes");
             sb.AppendLine("- Save to: {appmodule}_{yyyyMMddHHmmss}.sitemap.bak");
-            sb.AppendLine("- Backup location: {working_directory}/.devkit/backups/sitemaps/");
+            sb.AppendLine("- Backup location: {working_directory}/.devkit/manage_app/{app}/backups/");
             sb.AppendLine("- A broken SiteMap makes the entire app UNNAVIGABLE");
             sb.AppendLine();
             sb.AppendLine("## Rules");

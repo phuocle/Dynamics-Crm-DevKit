@@ -41,7 +41,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(ManageRibbonResult)),
         Description(
             "Classic RibbonDiffXml customization for Dataverse entities via 'devkit-ribbon' solution import. " +
-            "Actions: list | buttons | detail | update | undo. update runs validate → backup → import → PublishAll async; undo restores from a backup file.\n\n" +
+            "Actions: list | buttons | detail | update | undo. update runs validate → backup → import → PublishAll async; undo restores from a backup file. The update result's backupPath points to the pre-import backup — pass it as ribbonxml to action='undo' to restore.\n\n" +
 
             "WHEN TO USE:\n" +
             "- classic/legacy ribbon & button customization — 'ribbon', 'classic', 'legacy', 'button', 'custom button', 'action button', 'JavaScript button', 'sub_grid/homepage grid button', or generic button\n" +
@@ -60,8 +60,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Entity Display Name or logical name. Required: detail/update/undo/buttons.")] string entity_name = "",
             [Description("JSON array of ribbon operations for action='update'. See tool description for the 10 supported actions and their fields.")] string operations = "",
             [Description("For 'undo': backup file path.")] string ribbonxml = "",
-            [Description("Backup before overwrite.")] bool backup = true,
-            [Description("Optional project/workspace folder path to save backups in.")] string workspace_folder = "")
+            [Description("Required for update — current RibbonDiffXml always backs up to {workspace_folder}/.devkit/manage_ribbon/{entity}/backups/ before import. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "")
         {
             _workspaceFolder = workspace_folder;
             var actionName = (action ?? "").Trim().ToLowerInvariant();
@@ -100,6 +99,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     case "update":
                         if (string.IsNullOrWhiteSpace(entity_name))
                             return Error("entity_name is required for action='update'.");
+                        if (string.IsNullOrWhiteSpace(workspace_folder))
+                            return Error("workspace_folder is required when action='update' (backup before import).",
+                                "Provide the workspace folder — current RibbonDiffXml backs up to {workspace_folder}/.devkit/manage_ribbon/{entity}/backups/ before import.");
                         {
                             var (updateEntityName, updateEntityError) = ResolveEntityLogicalName(entity_name);
                             if (updateEntityError != null)
@@ -118,11 +120,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             if (!string.IsNullOrWhiteSpace(operations))
                                 return UpdateRibbonFromOperations(
                                     updateEntityName,
-                                    operations.Trim(),
-                                    backup);
+                                    operations.Trim());
 
                             if (!string.IsNullOrWhiteSpace(ribbonxml))
-                                return UpdateRibbon(updateEntityName, ribbonxml.Trim(), backup);
+                                return UpdateRibbon(updateEntityName, ribbonxml.Trim());
 
                             return Error(
                                 "'operations' is required for action='update'.",
@@ -136,7 +137,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         if (string.IsNullOrWhiteSpace(ribbonxml))
                             return Error(
                                 "ribbonxml is required for action='undo'.",
-                                "Provide backup file path from .devkit/backups/ribbons/.");
+                                "Provide backup file path from {workspace_folder}/.devkit/manage_ribbon/{entity}/backups/.");
                         {
                             var (entityName, entityError) = ResolveEntityLogicalName(entity_name);
                             if (entityError != null) return entityError;

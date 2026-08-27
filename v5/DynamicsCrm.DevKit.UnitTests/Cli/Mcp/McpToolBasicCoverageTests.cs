@@ -59,10 +59,21 @@ public class McpToolBasicCoverageTests
     {
         var tool = new GenerateDemoDataTool(null!);
 
-        var result = tool.generate_demo_data("account", "2026-02-01", "2026-01-01");
+        var result = tool.generate_demo_data("account", "2026-02-01", "2026-01-01", workspace_folder: ".");
 
         Assert.IsTrue(result.IsError);
         StringAssert.Contains(result.GetText(), "must be >= from_date");
+    }
+
+    [TestMethod]
+    public void GenerateDemoData_MissingWorkspaceFolder_ReturnsError()
+    {
+        var tool = new GenerateDemoDataTool(null!);
+
+        var result = tool.generate_demo_data("account", "2026-01-01", "2026-01-31");
+
+        Assert.IsTrue(result.IsError);
+        StringAssert.Contains(result.GetText(), "workspace_folder is required");
     }
 
     [TestMethod]
@@ -70,7 +81,7 @@ public class McpToolBasicCoverageTests
     {
         var tool = new GenerateDemoDataTool(null!);
 
-        var result = tool.generate_demo_data("account", "2026-01-01", "2026-01-31", count: 501);
+        var result = tool.generate_demo_data("account", "2026-01-01", "2026-01-31", count: 501, workspace_folder: ".");
 
         Assert.IsTrue(result.IsError);
         StringAssert.Contains(result.GetText(), "exceeds maximum 500");

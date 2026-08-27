@@ -70,7 +70,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- List or inspect system charts of an entity\n" +
             "- Create a chart from group-by/aggregate columns, update chart type or columns, rename, set the entity default chart\n" +
-            "- Restore a chart from a .chart.json backup written by update (undo)\n\n" +
+            "- Restore a chart from a .chart.json backup written by update (undo) — the update result's backupPath points to the pre-change backup; pass it as presentationdescription to action='undo' to restore\n\n" +
             "RELATED TOOLS:\n" +
             "- get_tables → column logical names for group_by_column/aggregate_column\n" +
             "- publish_customizations → batch publish after multiple metadata changes\n" +
@@ -86,14 +86,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Aggregation type: 'count' (default), 'sum', 'avg', 'min', 'max'.")] string aggregate_type = "count",
             [Description("Multi-measure series: 'column:aggregate_type[:label]; ...' (e.g. 'estimatedvalue:sum:Revenue; importsequencenumber:count'). Mutually exclusive with aggregate_column/aggregate_type. Optional label becomes the series legend name.")] string measures = "",
             [Description("Structured datadescription filter: 'field op value; ...'. Operators: =, !=, >, >=, <, <=, like, in (comma-separated list), null, not-null. Example: 'statecode=0; estimatedvalue>1000000'.")] string filter = "",
-            [Description("Custom presentation Chart XML override (create/update). For undo: path to the .chart.json backup file.")] string presentationdescription = "",
+            [Description("Custom presentation Chart XML override (create/update). For undo: path to the .chart.json backup file from {workspace_folder}/.devkit/manage_chart/{entity}/backups/.")] string presentationdescription = "",
             [Description("Chart description text.")] string description = "",
             [Description("Optional solution unique/display name. When provided and non-empty, chart is added to the solution after create/update.")] string solution_name = "",
             [Description("Validate XML syntax and chart types before saving.")] bool validate = true,
-            [Description("Backup before overwrite.")] bool backup = true,
             [Description("Publish entity after create/update/rename/set_default/undo so changes become visible. Default: true. Set false to batch-publish later via publish_customizations.")] bool publish = true,
             [Description("Pie create only: set true only after user approved the confirmation summary. Default false returns needs_confirmation without creating.")] bool confirmed = false,
-            [Description("Optional project/workspace folder path to save backups in.")] string workspace_folder = "")
+            [Description("Required for update — current chart XML always backs up to {workspace_folder}/.devkit/manage_chart/{entity}/backups/ before overwrite. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "")
         {
             try
             {
@@ -107,12 +106,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrWhiteSpace(chart_id) && !Guid.TryParse(chart_id.Trim(), out _))
                     return Error($"'{chart_id}' is not a valid GUID.");
 
+                if (normalizedAction == "update" && string.IsNullOrWhiteSpace(workspace_folder))
+                    return Error("workspace_folder is required when action='update' (backup before overwrite).",
+                        "Provide the workspace folder — current chart XML backs up to {workspace_folder}/.devkit/manage_chart/{entity}/backups/ before overwrite.");
+
                 return normalizedAction switch
                 {
                     "list" => HandleList(entity_name),
                     "detail" => HandleDetail(entity_name, chart_id, chart_name),
                     "create" => HandleCreate(entity_name, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, measures, filter, presentationdescription, description, solution_name, validate, publish, confirmed),
-                    "update" => HandleUpdate(entity_name, chart_id, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, measures, filter, presentationdescription, description, solution_name, validate, backup, publish),
+                    "update" => HandleUpdate(entity_name, chart_id, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, measures, filter, presentationdescription, description, solution_name, validate, publish),
                     "rename" => HandleRename(entity_name, chart_id, chart_name, solution_name, publish),
                     "set_default" => HandleSetDefault(entity_name, chart_id, chart_name, publish),
                     "undo" => HandleUndo(chart_id, presentationdescription, solution_name, publish),
@@ -481,7 +484,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string chartTypeInput, string groupByColInput, string aggregateColInput, string aggregateTypeInput,
             string measuresInput, string filterInput,
             string presXmlInput, string description, string solutionName,
-            bool validate, bool backup, bool publish)
+            bool validate, bool publish)
         {
             var chartRecord = FindChart(entityNameInput, chartIdInput, chartNameInput, out var error);
             if (error != null) return Error(error);
@@ -593,14 +596,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 resolvedSolutionUniqueName = solResult.UniqueName;
             }
 
-            string backupPath = null;
-            if (backup)
-            {
-                backupPath = SaveBackup(primaryEntity, chartId, chartName, currentDataXml, currentPresXml);
-            }
+            var backupPath = SaveBackup(primaryEntity, chartId, chartName, currentDataXml, currentPresXml);
 
             if (_options.DryRun)
-                return DryRun($"Would UPDATE chart '{chartName}' ({chartId}). Backup: {backupPath ?? "none"}.", new UpsertChartResult
+                return DryRun($"Would UPDATE chart '{chartName}' ({chartId}). Backup saved.", new UpsertChartResult
                 {
                     Action = "update",
                     Entity = primaryEntity,
@@ -630,7 +629,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             bool published = publish && PublishHelper.PublishEntity(_context, _serviceClient, primaryEntity);
 
-            var text = $"Updated chart '{chartName}' ({chartId}) on '{primaryEntity}'.";
+            var text = $"Updated chart '{chartName}' ({chartId}) on '{primaryEntity}'. Backup saved.";
             if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
                 text += solutionWarning == null
                     ? $" Added to solution '{resolvedSolutionUniqueName}'."
@@ -1359,8 +1358,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string SaveBackup(string entityName, Guid chartId, string chartName, string dataXml, string presXml)
         {
-            var workingDir = string.IsNullOrWhiteSpace(_workspaceFolder) ? Directory.GetCurrentDirectory() : _workspaceFolder;
-            var backupDir = Path.Combine(workingDir, ".devkit", "backups", "charts");
+            var backupDir = Path.Combine(_workspaceFolder, ".devkit", "manage_chart", entityName, "backups");
             Directory.CreateDirectory(backupDir);
 
             var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");

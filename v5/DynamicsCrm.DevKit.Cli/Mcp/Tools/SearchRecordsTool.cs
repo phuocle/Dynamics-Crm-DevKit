@@ -36,7 +36,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- Find records by keywords across one or more searchable tables\n" +
             "- Diagnose whether Dataverse Search and entity indexes are ready\n" +
-            "- detail_level='full' → raw API payload saved to {workspace_folder}/.devkit/search/, read it with file tools\n\n" +
+            "- detail_level='full' → raw API payload saved to {workspace_folder}/.devkit/search_records/ (path returned in the result's filePath); read it with file tools\n\n" +
             "RELATED TOOLS:\n" +
             "- execute_fetchxml → deterministic field filters and joins\n" +
             "- get_tables → discover searchable entity logical names")]
@@ -46,8 +46,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Comma-separated Display Names or logical names (e.g. 'Account,contact'). Empty = all searchable.")] string entities = "",
             [Description("Max results to return. 1-100 (default 50).")] int top = 50,
             [Description("OData filter applied after search. e.g. 'statecode eq 0'.")] string filter = "",
-            [Description("DETAIL: 'compact' (default) or 'full' — full writes the raw API payload to {workspace_folder}/.devkit/search/.")] string detail_level = "compact",
-            [Description("Required when detail_level='full'. Full payload saves to {workspace_folder}/.devkit/search/.")] string workspace_folder = "")
+            [Description("DETAIL: 'compact' (default) or 'full' — full writes the raw API payload to {workspace_folder}/.devkit/search_records/.")] string detail_level = "compact",
+            [Description("Required when detail_level='full'. Full payload saves to {workspace_folder}/.devkit/search_records/. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "")
         {
             try
             {
@@ -59,7 +59,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error($"'{detail_level}' is not a valid detail_level.", "Valid values: compact, full.");
                 if (detailLevel == "full" && string.IsNullOrWhiteSpace(workspace_folder))
                     return Error("workspace_folder is required when detail_level='full'.",
-                        "Provide the workspace folder — full payload saves to {workspace_folder}/.devkit/search/.");
+                        "Provide the workspace folder — full payload saves to {workspace_folder}/.devkit/search_records/.");
 
                 var normalized = action.Trim().ToLowerInvariant();
                 if (normalized == "search")
@@ -366,7 +366,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string WriteFullPayload(string workspaceFolder, string prefix, SearchRecordsResult payload)
         {
-            var dir = Path.Combine(workspaceFolder, ".devkit", "search");
+            var dir = Path.Combine(workspaceFolder, ".devkit", "search_records");
             Directory.CreateDirectory(dir);
             var filePath = Path.Combine(dir, $"{prefix}_{DateTime.Now:yyyyMMdd_HHmmss_fff}.json");
             File.WriteAllText(filePath, JsonSerializer.Serialize(payload, _jsonWriteOptions), Encoding.UTF8);
@@ -382,7 +382,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var word = n == 1 ? "result" : "results";
             var trimmed = r.SearchTerm?.Trim('"') ?? "";
             var text = $"Found {n} {word} ({total} total) for \"{trimmed}\" in {elapsedMs}ms.";
-            return r.FilePath == null ? text : text + $" Full output: {r.FilePath}";
+            return r.FilePath == null ? text : text + " Full payload written (see filePath).";
         }
 
         private static string BuildStatusText(SearchRecordsResult r)
@@ -396,7 +396,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.Append(" | ").Append(r.Statistics.StorageSizeInMb).Append(" MB, ").Append(r.Statistics.DocumentCount).Append(" docs");
             sb.Append('.');
             if (r.FilePath != null)
-                sb.Append(" Full output: ").Append(r.FilePath);
+                sb.Append(" Full payload written (see filePath).");
             return sb.ToString();
         }
 

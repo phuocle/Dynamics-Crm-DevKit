@@ -54,7 +54,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "List, inspect, create, update, and validate model-driven apps, edit app sitemap navigation, or restore an app from a .app.json backup.\n\n" +
             "WHEN TO USE:\n" +
             "- List/inspect model-driven apps, or create/update app metadata (name, description, icon)\n" +
-            "- Apply app-scoped sitemap navigation operations (add_area/add_group/add_item), validate an app, or restore from a .app.json backup (undo)\n" +
+            "- Apply app-scoped sitemap navigation operations (add_area/add_group/add_item), validate an app, or restore from a .app.json backup (undo) — the result's backupPath points to the pre-change snapshot; pass it as operations to action='undo' to restore\n" +
             "- App is resolved by Display Name first, then unique name/GUID; ambiguous Display Names return the candidates\n\n" +
             "RELATED TOOLS:\n" +
             "- get_solution_components → solution names for create\n" +
@@ -70,8 +70,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Optional for create/update.")] string description = "",
             [Description("Optional app icon web resource name or GUID.")] string icon_webresource = "",
             [Description("JSON array for update_navigation, or backup file path for undo.")] string operations = "",
-            [Description("Backup current app snapshot before update/update_navigation/undo when implemented.")] bool backup = true,
-            [Description("Optional project/workspace folder path to save backups in.")] string workspace_folder = "",
+            [Description("Required for update/update_navigation/undo — app snapshot always backs up to {workspace_folder}/.devkit/manage_app/{app}/backups/ before overwrite. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "",
             [Description("list only. 1-500.")] int max_records = 100)
         {            
             try
@@ -79,15 +78,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _workspaceFolder = workspace_folder;
                 var normalizedAction = (action ?? "detail").Trim().ToLowerInvariant();
 
+                if ((normalizedAction is "update" or "update_navigation" or "undo") && string.IsNullOrWhiteSpace(workspace_folder))
+                    return Error($"workspace_folder is required when action='{normalizedAction}' (backup before overwrite).",
+                        "Provide the workspace folder — current app snapshot backs up to {workspace_folder}/.devkit/manage_app/{app}/backups/ before overwrite.");
+
                 return normalizedAction switch
                 {
                     "list" => HandleList(app_name, max_records),
                     "detail" => HandleDetail(app),
                     "create" => HandleCreate(solution_name, display_name, unique_name, description, icon_webresource),
-                    "update" => HandleUpdate(app, display_name, description, icon_webresource, backup),
-                    "update_navigation" => HandleUpdateNavigation(app, operations, backup),
+                    "update" => HandleUpdate(app, display_name, description, icon_webresource),
+                    "update_navigation" => HandleUpdateNavigation(app, operations),
                     "validate" => HandleValidate(app),
-                    "undo" => HandleUndo(app, operations, backup),
+                    "undo" => HandleUndo(app, operations),
                     _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'create', 'update', 'update_navigation', 'validate', 'undo'.")
                 };
             }
@@ -332,7 +335,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult HandleUpdate(string app, string displayName, string description,
-            string iconWebResource, bool backup)
+            string iconWebResource)
         {
             if (string.IsNullOrWhiteSpace(app))
                 return Error("app is required for action='update'. Provide an app display name, unique name, or GUID.",
@@ -370,13 +373,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 changes.Add($"icon_webresource='{iconWebResource.Trim()}'");
             }
 
-            string backupPath = null;
-            if (backup)
-                backupPath = SaveAppSnapshot(appModule);
+            var backupPath = SaveAppSnapshot(appModule);
 
             if (_options.DryRun)
                 return DryRun(
-                    $"Would update app '{appModule.GetAttributeValue<string>("name")}' with: {string.Join(", ", changes)}. Published: yes.",
+                    $"Would update app '{appModule.GetAttributeValue<string>("name")}' with: {string.Join(", ", changes)}. Backup saved. Published: yes.",
                     new ManageAppResult
                     {
                         Action = "update",
@@ -451,7 +452,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             });
         }
 
-        private CallToolResult HandleUpdateNavigation(string app, string operations, bool backup)
+        private CallToolResult HandleUpdateNavigation(string app, string operations)
         {
             if (string.IsNullOrWhiteSpace(app))
                 return Error("app is required for action='update_navigation'. Provide an app display name, unique name, or GUID.",
@@ -565,14 +566,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     NextStep = NotPublishedNextStep
                 });
 
-            string backupPath = null;
-            if (backup)
-                backupPath = SaveAppSnapshot(appModule);
+            var backupPath = SaveAppSnapshot(appModule);
 
             if (_options.DryRun)
             {
                 var previewText = $"Would update navigation of app '{appModule.GetAttributeValue<string>("name")}' with {ops.Count} operation(s): {navResult.ChangedOperations} changed, {navResult.NoOpOperations} no-op." +
-                    (backupPath != null ? $" Backup: {backupPath}." : "");
+                    " Backup saved.";
                 return DryRun(previewText, new ManageAppResult
                 {
                     Action = "update_navigation",
@@ -657,7 +656,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             });
         }
 
-        private CallToolResult HandleUndo(string app, string operations, bool backup)
+        private CallToolResult HandleUndo(string app, string operations)
         {
             if (string.IsNullOrWhiteSpace(app))
                 return Error("app is required for action='undo'. Provide an app display name, unique name, or GUID.",
@@ -721,14 +720,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     NextStep = NotPublishedNextStep
                 });
 
-            string currentBackupPath = null;
-            if (backup)
-                currentBackupPath = SaveAppSnapshot(appModule);
+            var currentBackupPath = SaveAppSnapshot(appModule);
 
             if (_options.DryRun)
             {
                 var previewText = $"Would restore app '{appModule.GetAttributeValue<string>("name")}' navigation from backup '{backupFullPath}'." +
-                    (currentBackupPath != null ? $" Current state backed up to: {currentBackupPath}." : "");
+                    " Current state backed up.";
                 return DryRun(previewText, new ManageAppResult
                 {
                     Action = "undo",
@@ -1331,11 +1328,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var siteMapXml = siteMapId.HasValue ? RetrieveSiteMapXml(siteMapId.Value) : null;
             var components = appModuleIdUnique.HasValue ? GetAppComponents(appModuleIdUnique.Value) : [];
 
-            var workingDir = string.IsNullOrWhiteSpace(_workspaceFolder) ? Directory.GetCurrentDirectory() : _workspaceFolder;
-            var backupDir = Path.Combine(workingDir, ".devkit", "backups", "apps");
+            var safeName = SanitizeFileName(appModule.GetAttributeValue<string>("name") ?? appModule.GetAttributeValue<string>("uniquename") ?? "app");
+            var backupDir = Path.Combine(_workspaceFolder, ".devkit", "manage_app", safeName, "backups");
             Directory.CreateDirectory(backupDir);
 
-            var safeName = SanitizeFileName(appModule.GetAttributeValue<string>("name") ?? appModule.GetAttributeValue<string>("uniquename") ?? "app");
             var backupPath = Path.Combine(backupDir, $"{safeName}_{appModule.Id:N}_{DateTime.Now:yyyyMMddHHmmss}.app.json");
 
             var snapshot = new
@@ -1446,7 +1442,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             AppValidationResult validation,
             List<string> xsdWarnings)
         {
-            var sb = new StringBuilder($"[ManageApp] {status}\nApp: {appName}\nUniqueName: {uniqueName}\nAppId: {appId}\nAppModuleIdUnique: {appUniqueId}\nSiteMapId: {siteMapId}\nPublisherPrefix: {publisherPrefix}\nBackupPath: {backupPath}");
+            var sb = new StringBuilder($"[ManageApp] {status}\nApp: {appName}\nUniqueName: {uniqueName}\nAppId: {appId}\nAppModuleIdUnique: {appUniqueId}\nSiteMapId: {siteMapId}\nPublisherPrefix: {publisherPrefix}\nBackupSaved: yes");
             sb.Append("\nNextStep: publish_customizations");
             foreach (var error in validation?.Errors ?? []) sb.Append($"\nValidationError: {error}");
             foreach (var warning in validation?.Warnings ?? []) sb.Append($"\nValidationWarning: {warning}");
@@ -1466,7 +1462,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             bool published,
             bool backupCreated)
         {
-            var sb = new StringBuilder($"[ManageAppNavigation] {status}\nApp: {app?.GetAttributeValue<string>("name")}\nAppModuleIdUnique: {appUniqueId}\nSiteMapId: {siteMapId}\nBackupPath: {backupPath}\nPublished: {(published ? "yes" : "no")}");
+            var sb = new StringBuilder($"[ManageAppNavigation] {status}\nApp: {app?.GetAttributeValue<string>("name")}\nAppModuleIdUnique: {appUniqueId}\nSiteMapId: {siteMapId}\nBackupSaved: yes\nPublished: {(published ? "yes" : "no")}");
             if (navigation?.AddedEntities?.Count > 0)
                 sb.Append($"\nAddedAppComponents: {string.Join(", ", navigation.AddedEntities)}");
             if (backupCreated) sb.Append("\nBackupCreated: yes");
@@ -1485,7 +1481,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             AppValidationResult validation,
             List<string> xsdWarnings)
         {
-            var sb = new StringBuilder($"[ManageAppUndo] {status}\nApp: {app?.GetAttributeValue<string>("name")}\nAppModuleIdUnique: {appUniqueId}\nSiteMapId: {siteMapId}\nBackupPath: {currentBackupPath}\nRestoredFromBackup: {restoredFromBackup}");
+            var sb = new StringBuilder($"[ManageAppUndo] {status}\nApp: {app?.GetAttributeValue<string>("name")}\nAppModuleIdUnique: {appUniqueId}\nSiteMapId: {siteMapId}\nBackupSaved: yes\nRestoredFromBackup: {restoredFromBackup}");
             foreach (var error in validation?.Errors ?? []) sb.Append($"\nValidationError: {error}");
             foreach (var warning in xsdWarnings ?? []) sb.Append($"\nSiteMap XSD: {warning}");
             return sb.ToString();

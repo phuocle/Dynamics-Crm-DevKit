@@ -9,8 +9,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         public static (string FetchBackupPath, string LayoutBackupPath) SaveBackup(
             string entityName, Guid viewId, string viewName, string currentFetchXml, string currentLayoutXml, string workspaceFolder = "")
         {
-            var workingDir = string.IsNullOrWhiteSpace(workspaceFolder) ? Directory.GetCurrentDirectory() : workspaceFolder;
-            var backupDir = Path.Combine(workingDir, ".devkit", "backups", "views");
+            var backupDir = Path.Combine(workspaceFolder, ".devkit", "manage_view", entityName, "backups");
             Directory.CreateDirectory(backupDir);
 
             var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");

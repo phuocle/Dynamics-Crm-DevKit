@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         // ── Action: update (from raw ribbonxml patch) ────────────────────
 
-        private CallToolResult UpdateRibbon(string entityName, string ribbonxml, bool doBackup)
+        private CallToolResult UpdateRibbon(string entityName, string ribbonxml)
         {
             // Step 1: Resolve ribbonxml input (file path or inline)
             var resolvedXml = ResolveRibbonXmlInput(ribbonxml);
@@ -42,9 +42,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             resolvedXml = targetDoc.ToString(SaveOptions.None);
 
             // Step 3: Backup current ribbon (a genuine fetch failure bubbles to the entry-point catch)
-            string backupPath = null;
-            if (doBackup)
-                backupPath = BackupCurrentRibbon(entityName);
+            var backupPath = BackupCurrentRibbon(entityName);
 
             // Step 4: Build solution ZIP from template
             if (_options.DryRun)
@@ -72,7 +70,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Action: update (from operations) ────────────────────────────
 
-        private CallToolResult UpdateRibbonFromOperations(string entityName, string operationsJson, bool doBackup)
+        private CallToolResult UpdateRibbonFromOperations(string entityName, string operationsJson)
         {
             // Step 1: Validate entity
             var validation = new RibbonValidation(_serviceClient);
@@ -160,9 +158,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var functionSignatures = BuildFunctionSignatures(ribbonDoc);
 
             // Step 8: Backup current ribbon (a genuine fetch failure bubbles to the entry-point catch)
-            string backupPath = null;
-            if (doBackup)
-                backupPath = BackupCurrentRibbon(entityName);
+            var backupPath = BackupCurrentRibbon(entityName);
 
             if (_options.DryRun)
                 return DryRun($"Would UPDATE ribbon for entity '{entityName}' with {ops.Count} operations.", new ManageRibbonResult
@@ -224,7 +220,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!File.Exists(backupFilePath))
                 return Error(
                     "Backup file not found.",
-                    $"Path: {backupFilePath}. Backups are at: .devkit/backups/ribbons/");
+                    $"Path: {backupFilePath}. Backups are at: .devkit/manage_ribbon/{{entity}}/backups/");
 
             var json = File.ReadAllText(backupFilePath, Encoding.UTF8);
             var backupData = JsonSerializer.Deserialize<RibbonBackup>(json);
@@ -413,8 +409,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(currentXml))
                 return null; // Nothing to backup
 
-            var workingDir = string.IsNullOrWhiteSpace(_workspaceFolder) ? Directory.GetCurrentDirectory() : _workspaceFolder;
-            var backupDir = Path.Combine(workingDir, ".devkit", "backups", "ribbons");
+            var backupDir = Path.Combine(_workspaceFolder, ".devkit", "manage_ribbon", entityName, "backups");
             Directory.CreateDirectory(backupDir);
 
             var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");

@@ -147,7 +147,7 @@ public class ViewBackupHelperTests
         var viewId = Guid.NewGuid();
         var result = AppendRollbackInfo("/backup/fetch.bak", "/backup/layout.bak", viewId);
 
-        Assert.IsTrue(result.Contains(".devkit/backups/views"), "Rollback info should reference .devkit/backups/views folder");
+        Assert.IsTrue(result.Contains(".devkit/manage_view/"), "Rollback info should reference .devkit/manage_view/backups folder");
     }
 
     [TestMethod]
@@ -254,10 +254,10 @@ public class ViewBackupHelperTests
         try
         {
             var viewId = Guid.NewGuid();
-            SaveBackupMethod.Invoke(null, ["account", viewId, "Test", "<fetch/>", "<grid/>", ""]);
+            SaveBackupMethod.Invoke(null, ["account", viewId, "Test", "<fetch/>", "<grid/>", tempDir]);
 
-            var backupDir = Path.Combine(tempDir, ".devkit", "backups", "views");
-            Assert.IsTrue(Directory.Exists(backupDir), "Backup directory .devkit/backups/views should be created");
+            var backupDir = Path.Combine(tempDir, ".devkit", "manage_view", "account", "backups");
+            Assert.IsTrue(Directory.Exists(backupDir), "Backup directory .devkit/manage_view/account/backups should be created");
         }
         finally
         {

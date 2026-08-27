@@ -125,7 +125,7 @@ Undo:
 {
   ""action"": ""undo"",
   ""app"": ""TEST MCP App"",
-  ""operations"": "".devkit/backups/apps/test_mcp_app_...app.json""
+  ""operations"": "".devkit/manage_app/test_mcp_app/backups/...app.json""
 }
 ```
 ";
@@ -146,7 +146,7 @@ Undo:
 - Save the current FormXML to a local backup file BEFORE making any changes
 - Backup file naming: {entity_name}_{form_id}_{yyyyMMddHHmmss}.formxml.bak
   Example: account_abc123_20260329180000.formxml.bak
-- Backup location: {working_directory}/.devkit/backups/forms/
+- Backup location: {working_directory}/.devkit/manage_form/{entity}/backups/
 - A corrupted FormXML can break the entire entity form -- without backup, you must restore the environment
 
 ## Rollback Procedure (If Form Breaks)
@@ -456,7 +456,7 @@ Omit `function_name` to remove the entire event entry.
 # View (SavedQuery) Manipulation Rules
 
 ## CRITICAL: workspace_folder + Auto Backup
-- update/rename/undo REQUIRE workspace_folder — the tool auto-backs-up the current FetchXML + LayoutXML to {workspace_folder}/.devkit/backups/views/ BEFORE overwrite
+- update/rename/undo REQUIRE workspace_folder — the tool auto-backs-up the current FetchXML + LayoutXML to {workspace_folder}/.devkit/manage_view/{entity}/backups/ BEFORE overwrite
 - A broken FetchXML hides ALL data from users. A broken LayoutXML crashes the grid — without backup you may need to restore the entire environment.
 
 ## Rollback (If View Breaks)

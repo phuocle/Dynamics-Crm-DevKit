@@ -46,7 +46,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- List or inspect views of an entity (system savedquery or personal userquery, scoped by is_personal_view; use detail for XML) — always list/detail BEFORE editing\n" +
             "- Create/update a view from FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type); patch cell attributes, rename, set the default public view. Created views are always Public (querytype=0)\n" +
             "- QuickFind views: searchable fields are <condition> in <filter isquickfindfields=\"1\">; grid columns are display only\n" +
-            "- Restore a view from a .fetchxml.bak backup file written by update/rename/undo (undo)\n\n" +
+            "- Restore a view from a .fetchxml.bak backup file written by update/rename/undo (undo) — the result's fetchXmlBackupPath and layoutXmlBackupPath point to the pre-change backups; pass fetchXmlBackupPath as fetchxml to action='undo' to restore\n\n" +
             "RELATED TOOLS:\n" +
             "- get_tables → column logical names for FetchXML attributes/conditions\n" +
             "- execute_fetchxml → test a FetchXML before putting it into a view\n" +
@@ -57,9 +57,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("GUID. Required: detail/update/rename/undo.")] string view_id = "",
             [Description("Name contains. 1 match → auto-select; multiple → returns candidates, use view_id.")] string view_name = "",
             [Description("false = system views (savedquery), true = personal views (userquery) — scopes list and view_name resolution.")] bool is_personal_view = false,
-            [Description("create/update: FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type). undo: .fetchxml.bak backup file path from .devkit/backups/views/.")] string fetchxml = "",
+            [Description("create/update: FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type). undo: .fetchxml.bak backup file path from .devkit/manage_view/{entity}/backups/.")] string fetchxml = "",
             [Description("JSON array of {cell_name, set_attributes, remove_attributes}. Patch cell attrs (imageproviderwebresource, ishidden, …) without changing the FetchXML.")] string cell_updates_json = "",
-            [Description("Required for update/rename/undo — current view XML is backed up to {workspace_folder}/.devkit/backups/views/ before overwrite.")] string workspace_folder = "")
+            [Description("Required for update/rename/undo — current view XML is backed up to {workspace_folder}/.devkit/manage_view/{entity}/backups/ before overwrite.")] string workspace_folder = "")
         {            
             try
             {
@@ -99,7 +99,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 entityName = entityResult.Value.LogicalName;
 
                 if ((normalizedAction is "update" or "rename" or "undo") && string.IsNullOrWhiteSpace(workspace_folder))
-                    return Error($"workspace_folder is required when action='{normalizedAction}' — current view XML is backed up to {{workspace_folder}}/.devkit/backups/views/ before overwrite.");
+                    return Error($"workspace_folder is required when action='{normalizedAction}' — current view XML is backed up to {{workspace_folder}}/.devkit/manage_view/{{entity}}/backups/ before overwrite.");
 
                 return normalizedAction switch
                 {
@@ -527,8 +527,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var quickFindColumns = currentQueryType == 4 ? ExtractQuickFindColumns(effectiveFetchXml) : null;
 
             var text = $"Updated view '{currentViewName}' ({updateId}) on '{entityName}' — {updatedParts}" +
-                ", validated, published." +
-                " Backup saved (see fetchXmlBackupPath/layoutXmlBackupPath)." +
+                ", validated, published. Backup saved." +
                 (quickFindColumns?.Count > 0 ? $" {quickFindColumns.Count} find columns (see quickFindColumns)." : "") +
                 (cellPatchWarnings?.Count > 0 ? $" {cellPatchWarnings.Count} cell patch warning(s) (see validationWarnings)." : "");
 
@@ -610,8 +609,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var published = PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
 
-            var text = $"Renamed view '{oldName}' to '{viewName}' ({renameId}) on '{entityName}', published." +
-                " Backup saved (see fetchXmlBackupPath/layoutXmlBackupPath).";
+            var text = $"Renamed view '{oldName}' to '{viewName}' ({renameId}) on '{entityName}', published. Backup saved.";
 
             return Success(text, new UpsertViewResult
             {
@@ -706,18 +704,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"'{viewId}' is not a valid GUID.");
             if (string.IsNullOrWhiteSpace(backupPathArg))
                 return Error("fetchxml (.fetchxml.bak backup file path) is required when action='undo'.",
-                    "Backup files are at: .devkit/backups/views/ — LayoutXML is regenerated from the FetchXML backup.");
+                    "Backup files are at: .devkit/manage_view/{entity}/backups/ — LayoutXML is regenerated from the FetchXML backup.");
 
             var fetchBackupPath = backupPathArg.Trim();
             if (!fetchBackupPath.EndsWith(".fetchxml.bak", StringComparison.OrdinalIgnoreCase))
                 return Error(
                     $"Backup file must end with .fetchxml.bak: '{fetchBackupPath}'.",
-                    "Backup files are at: .devkit/backups/views/ — LayoutXML is regenerated from the FetchXML backup.");
+                    "Backup files are at: .devkit/manage_view/{entity}/backups/ — LayoutXML is regenerated from the FetchXML backup.");
 
             if (!File.Exists(fetchBackupPath))
                 return Error(
                     $"Fetch backup file not found: '{fetchBackupPath}'.",
-                    "Check the file path. Backup files are at: .devkit/backups/views/");
+                    "Check the file path. Backup files are at: .devkit/manage_view/{entity}/backups/");
 
             var fetchContent = File.ReadAllText(fetchBackupPath, Encoding.UTF8);
             var strippedFetch = ViewXmlHelper.StripXmlComments(fetchContent);
@@ -814,7 +812,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var text = $"Restored view '{viewName}' ({undoId}) on '{entityName}' from FetchXML backup — LayoutXML regenerated" +
                 ", validated, published." +
-                " Pre-restore state backed up (see fetchXmlBackupPath/layoutXmlBackupPath)." +
+                " Pre-restore state backed up." +
                 (validationWarnings?.Count > 0 ? $" {validationWarnings.Count} validation warning(s) (see validationWarnings)." : "");
 
             return Success(text, new UpsertViewResult

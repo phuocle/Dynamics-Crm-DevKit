@@ -54,7 +54,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = false, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GenerateDemoDataResult)),
         Description(
-            "Bogus-generated demo data for an entity → JSON file at .devkit/demo_data/ → pipe to create_records. from_date/to_date REQUIRED (ISO 8601, ask user, never infer). Auto-selects creatable fields with smart mapping (email→Email, telephone→Phone…) and overriddencreatedon. Lookups: real GUIDs auto-fetched; polymorphic uses 'field@entity'.\n\n" +
+            "Bogus-generated demo data for an entity → JSON file at {workspace_folder}/.devkit/generate_demo_data/{entity}/ → pipe to create_records. from_date/to_date REQUIRED (ISO 8601, ask user, never infer). Auto-selects creatable fields with smart mapping (email→Email, telephone→Phone…) and overriddencreatedon. Lookups: real GUIDs auto-fetched; polymorphic uses 'field@entity'.\n\n" +
             "WHEN TO USE:\n" +
             "- Generate demo/test data for an entity → pipe to create_records\n" +
             "- Reproducible runs (fix seed); rotate lookups/enums via field_overrides 'in'\n" +
@@ -69,7 +69,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("1-500.")] int count = 10,
             [Description("Comma-separated logical names. Empty = auto-select creatable.")] string fields = "",
             [Description("0 = random; non-zero = reproducible.")] int seed = 0,
-            [Description("JSON array of {logicalname, operator, values[]}. Operators (see description). Example: [{\"logicalname\":\"jobtitle\",\"operator\":\"in\",\"values\":[\"CEO\",\"CFO\",\"CTO\"]}].")] string field_overrides = "")
+            [Description("JSON array of {logicalname, operator, values[]}. Operators (see description). Example: [{\"logicalname\":\"jobtitle\",\"operator\":\"in\",\"values\":[\"CEO\",\"CFO\",\"CTO\"]}].")] string field_overrides = "",
+            [Description("Required. Project/workspace folder path — JSON file saves to {workspace_folder}/.devkit/generate_demo_data/{entity}/. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "")
         {
             try
             {
@@ -80,6 +81,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (string.IsNullOrWhiteSpace(from_date) || string.IsNullOrWhiteSpace(to_date))
                     return Error("from_date and to_date are required.",
                         "DO NOT infer or assume these values — ask the user explicitly before calling this tool.");
+
+                if (string.IsNullOrWhiteSpace(workspace_folder))
+                    return Error("workspace_folder is required.",
+                        "Provide the workspace folder — JSON file saves to {workspace_folder}/.devkit/generate_demo_data/{entity}/.");
 
                 if (!DateTime.TryParse(from_date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var fromDt))
                     return Error($"from_date '{from_date}' is not a valid date.",
@@ -192,8 +197,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     records.Add(record);
                 }
 
-                // Save to .devkit/demo_data/
-                var outputDir = Path.Combine(".devkit", "demo_data");
+                // Save to {workspace_folder}/.devkit/generate_demo_data/{entity}/{entity}/
+                var outputDir = Path.Combine(workspace_folder, ".devkit", "generate_demo_data", entityName);
                 Directory.CreateDirectory(outputDir);
                 var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                 var filePath = Path.Combine(outputDir, $"{entityName}_{timestamp}.json");
@@ -224,8 +229,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 };
 
                 var summary = warnings.Count > 0
-                    ? $"Generated {records.Count}/{count} '{entityName}' records with {warnings.Count} warning(s) → {filePath}"
-                    : $"Generated {records.Count} '{entityName}' records → {filePath}";
+                    ? $"Generated {records.Count}/{count} '{entityName}' records with {warnings.Count} warning(s) — payload written (see filePath)."
+                    : $"Generated {records.Count} '{entityName}' records — payload written (see filePath).";
 
                 if (warnings.Count > 0 && generationWarnings > 0)
                     return Partial(summary, structured);

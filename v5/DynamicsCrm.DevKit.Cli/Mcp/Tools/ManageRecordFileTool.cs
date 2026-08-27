@@ -64,7 +64,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("upload alternative: base64 content, files < 1 MB only. Requires file_name.")] string content_base64 = "",
             [Description("upload: override file name. Required with content_base64; default = name from path/URL.")] string file_name = "",
             [Description("download: image columns only. true = full-sized image (requires CanStoreFullImage); false = thumbnail. Default false.")] bool full_size = false,
-            [Description("Optional workspace folder. download saves to {workspace_folder}/.devkit/manage_record_file/{entity}/{record}/.")] string workspace_folder = "")
+            [Description("Required for download; required for upload when file_path is relative. download saves to {workspace_folder}/.devkit/manage_record_file/{entity}/{record}/. Pass the workspace folder currently open in the editor, NOT the devkit install folder.")] string workspace_folder = "")
         {
             try
             {
@@ -98,6 +98,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error(
                         $"Column '{attribute.LogicalName}' on table '{entityLogical}' is of type '{attribute.AttributeType}' — not a file/image column.",
                         "Use get_tables to list columns; file columns have type 'File', image columns have type 'Image'.");
+
+                if (action.Trim().Equals("download", StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(workspace_folder))
+                    return Error("workspace_folder is required when action='download'.",
+                        "Provide the workspace folder — file saves to {workspace_folder}/.devkit/manage_record_file/{entity}/{record}/.");
 
                 return action.Trim().ToLowerInvariant() switch
                 {
@@ -204,11 +208,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 else
                 {
+                    if (!Path.IsPathRooted(trimmedPath) && string.IsNullOrWhiteSpace(workspaceFolder))
+                        return Error("workspace_folder is required when file_path is a relative path.",
+                            "Provide the workspace folder the relative path resolves against, or use an absolute file_path.");
                     var fullPath = Path.IsPathRooted(trimmedPath)
                         ? trimmedPath
-                        : Path.Combine(string.IsNullOrWhiteSpace(workspaceFolder) ? Directory.GetCurrentDirectory() : workspaceFolder, trimmedPath);
+                        : Path.Combine(workspaceFolder, trimmedPath);
                     if (!File.Exists(fullPath))
-                        return Error($"File not found: '{fullPath}'.", "Check the path; relative paths resolve against workspace_folder or the current directory.");
+                        return Error($"File not found: '{fullPath}'.", "Check the path; relative paths resolve against workspace_folder.");
                     data = File.ReadAllBytes(fullPath);
                     resolvedFileName = !string.IsNullOrWhiteSpace(fileName) ? fileName.Trim() : Path.GetFileName(fullPath);
                     sourceDescription = fullPath;
@@ -299,8 +306,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 downloadFileName = columnLogical + DetectImageExtension(data);
             }
 
-            var workingDir = string.IsNullOrWhiteSpace(workspaceFolder) ? Directory.GetCurrentDirectory() : workspaceFolder;
-            var folder = Path.Combine(workingDir, ".devkit", "manage_record_file", entityLogical,
+            var folder = Path.Combine(workspaceFolder, ".devkit", "manage_record_file", entityLogical,
                 FileColumnTransferHelper.SanitizeFolderName(primaryName ?? recordId.ToString()));
             Directory.CreateDirectory(folder);
             var savedPath = FileColumnTransferHelper.GetUniqueFilePath(folder, downloadFileName);
@@ -316,7 +322,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             result.Sha256 = sha256;
             result.Status = "downloaded";
             return Success(
-                $"Downloaded {entityLogical}.{columnLogical} of record {recordId} ({data.LongLength:N0} bytes{(imageAttr != null ? (fullSize ? ", full-sized image" : ", thumbnail") : "")}) → {savedPath}",
+                $"Downloaded {entityLogical}.{columnLogical} of record {recordId} ({data.LongLength:N0} bytes{(imageAttr != null ? (fullSize ? ", full-sized image" : ", thumbnail") : "")}) — saved to file (see savedPath).",
                 result);
         }
 
