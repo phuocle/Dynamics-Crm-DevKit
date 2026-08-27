@@ -3,6 +3,7 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -122,6 +123,57 @@ public class ViewAndRibbonHelperCoverageTests
         var invalid = ViewXmlHelper.ApplyCellAttributeUpdates("<grid>", updates);
         Assert.IsNull(invalid.PatchedXml);
         Assert.IsTrue(invalid.Errors.Single().Contains("Failed to parse"));
+    }
+
+    [TestMethod]
+    public void ViewXmlHelper_MergeCellAttributes_CarriesAllAttrsExceptName()
+    {
+        var regen = """
+<grid name="resultset" object="1" jump="name" select="1" icon="1" preview="1">
+  <row name="result" id="accountid">
+    <cell name="name" width="300" />
+    <cell name="revenue" width="125" />
+    <cell name="createdon" width="150" />
+  </row>
+</grid>
+""";
+        var current = """
+<grid name="resultset" object="1" jump="name" select="1" icon="1" preview="1">
+  <row name="result" id="accountid">
+    <cell name="NAME" width="180" ishidden="1" label="Custom" desc="d" />
+    <cell name="revenue" width="100" imageproviderwebresource="$webresource:devkit_/icons.js" imageproviderfunctionname="Icons.revenue" cellType="Crm.X" disableMetaDataBinding="1" />
+    <cell name="droppedcol" width="90" imageproviderwebresource="$webresource:devkit_/icons.js" />
+  </row>
+</grid>
+""";
+
+        var merged = ViewXmlHelper.MergeCellAttributes(regen, current);
+
+        // case-insensitive match: NAME → name; all attrs carried except name
+        StringAssert.Contains(merged, "cell name=\"name\" width=\"180\"");
+        StringAssert.Contains(merged, "ishidden=\"1\"");
+        StringAssert.Contains(merged, "label=\"Custom\"");
+        // icon pair + cellType + disableMetaDataBinding carried
+        StringAssert.Contains(merged, "imageproviderwebresource=\"$webresource:devkit_/icons.js\"");
+        StringAssert.Contains(merged, "imageproviderfunctionname=\"Icons.revenue\"");
+        StringAssert.Contains(merged, "cellType=\"Crm.X\"");
+        StringAssert.Contains(merged, "disableMetaDataBinding=\"1\"");
+        // regen-only cell keeps defaults
+        StringAssert.Contains(merged, "cell name=\"createdon\" width=\"150\"");
+        // dropped cell's attrs do not leak
+        Assert.AreEqual(1, CountOccurrences(merged, "imageproviderwebresource="));
+
+        // empty/unparseable current → regen passthrough
+        Assert.AreEqual(regen, ViewXmlHelper.MergeCellAttributes(regen, ""));
+        Assert.AreEqual(regen, ViewXmlHelper.MergeCellAttributes(regen, "<grid>"));
+    }
+
+    private static int CountOccurrences(string haystack, string needle)
+    {
+        var count = 0;
+        var idx = 0;
+        while ((idx = haystack.IndexOf(needle, idx, StringComparison.Ordinal)) >= 0) { count++; idx += needle.Length; }
+        return count;
     }
 
     [TestMethod]

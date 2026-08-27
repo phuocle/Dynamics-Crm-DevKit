@@ -456,12 +456,12 @@ Omit `function_name` to remove the entire event entry.
 # View (SavedQuery) Manipulation Rules
 
 ## CRITICAL: Auto Backup
-- update/rename/undo auto-back-up the current FetchXML to {workspace}/.devkit/manage_view/{entity}/ BEFORE overwrite (LayoutXML is regenerated from FetchXML on restore, so only the FetchXML is saved; workspace auto-resolved from MCP roots or server cwd — no parameter needed)
+- update/rename/undo auto-back-up the current FetchXML AND LayoutXML (one pair, same timestamp) to {workspace}/.devkit/manage_view/{entity}/ BEFORE overwrite (workspace auto-resolved from MCP roots or server cwd — no parameter needed)
 - A broken FetchXML hides ALL data from users. A broken LayoutXML crashes the grid — without backup you may need to restore the entire environment.
 
 ## Rollback (If View Breaks)
-1. Call manage_view action='undo' with view_id + fetchxml=<.fetchxml.xml path from the update/rename response>
-2. Tool auto-handles: read FetchXML backup > regenerate LayoutXML > validate > restore > publish; pre-restore state is backed up again
+1. Call manage_view action='undo' with view_id + fetchxml=<.fetchxml.xml path> AND layoutxml=<.layoutxml.xml path> — BOTH files of one backup pair from the update/rename response (fetchXmlBackupPath + layoutXmlBackupPath)
+2. Tool auto-handles: read both backups > validate > restore both fields verbatim > publish; pre-restore state is backed up again as a new pair
 
 ## CRITICAL: Verify Field Names Before Modifying Views
 - Before adding ANY field to a view (FetchXML attributes/conditions, Quick Find columns), you MUST call `get_tables` first to verify the field's logical name exists on the entity.
@@ -551,9 +551,12 @@ function displayIconTooltip(rowData, userLCID) {
 ```
 
 ### Rules
-- The JS function receives the row as JSON + user locale (LCID); values via `{columnname}_Value` (integer for option sets); return `[imageWebResourceName, tooltipText]`
+- The JS function receives the row as JSON + user locale (LCID); values via `{columnname}_Value` (integer for option sets); return `[imageWebResourceName, tooltipText]` — imageWebResourceName is the image **web resource name** (not a URL); async OK (may return a Promise), never sync XHR
+- The view references only the **JS web resource + function name** (the function returns image names at runtime) — create the JS web resource FIRST (`manage_webresource`), then attach it to the cell (`manage_view`)
+- Pass the plain web resource name for `imageproviderwebresource` — the tool stores it with the required `$webresource:` prefix automatically (a value already prefixed is kept as-is)
 - Both attributes must be set on the same `<cell>`; `imageproviderwebresource` is the JS logic file, NOT the icon image (icons are separate 16x16 web resources named in the JS return value)
-- Works on primary (replaces default icon) and non-primary columns; use a hidden cell for extra data; Promise return supported; never use synchronous XMLHttpRequest
+- Works on primary (replaces default icon) and non-primary columns; use a hidden cell for extra data
+- update with a new fetchxml keeps cell attributes (icon, width, ishidden, ...) on surviving columns; columns dropped from the fetchxml lose their cell config
 
 ### Cell Attribute Patching (cell_updates_json)
 Use `cell_updates_json` parameter with `action='update'` to patch cell attributes on the current layout without changing the FetchXML:
@@ -571,14 +574,13 @@ Rules:
 ### Workflow
 1. Create icon image web resources (16x16 PNG) — use `manage_webresource` action='create'
 2. Create JS web resource with the icon logic function — use `manage_webresource` action='create'
-3. Use `cell_updates_json` to add icon attributes to the target cell
-4. Update the view via `manage_view` action='update'
+3. Attach to the target cell via `manage_view` action='update' with `cell_updates_json` (do NOT pass fetchxml in the same call)
 
 Source: https://learn.microsoft.com/en-us/power-apps/maker/data-platform/display-custom-icons-instead
 
 ## After Making Changes
 - manage_view auto-handles: backup > validate > sync-check > update > publish
-- If something breaks: action='undo' with the .fetchxml.xml path from the response
+- If something breaks: action='undo' with BOTH paths (fetchXmlBackupPath + layoutXmlBackupPath) from the response
 - Verify the view loads correctly in the browser
 ";
 

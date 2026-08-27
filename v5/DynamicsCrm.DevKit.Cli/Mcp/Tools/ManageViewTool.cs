@@ -47,7 +47,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- List or inspect views of an entity (system savedquery or personal userquery, scoped by is_personal_view; use detail for XML) — always list/detail BEFORE editing\n" +
             "- Create/update a view from FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type); patch cell attributes, rename, set the default public view. Created views are always Public (querytype=0)\n" +
             "- QuickFind views: searchable fields are <condition> in <filter isquickfindfields=\"1\">; grid columns are display only\n" +
-            "- Restore a view from a .fetchxml.xml backup file written by update/rename/undo (undo) — the result's backupPath points to the pre-change backup; pass it as fetchxml to action='undo' to restore\n\n" +
+            "- Restore a view from a backup pair written by update/rename/undo (undo) — the result's fetchXmlBackupPath + layoutXmlBackupPath point to the pre-change backup; pass both to action='undo' to restore\n\n" +
             "RELATED TOOLS:\n" +
             "- get_tables → column logical names for FetchXML attributes/conditions\n" +
             "- execute_fetchxml → test a FetchXML before putting it into a view\n" +
@@ -59,8 +59,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("GUID. Required: detail/update/rename/undo.")] string view_id = "",
             [Description("Name contains. 1 match → auto-select; multiple → returns candidates, use view_id.")] string view_name = "",
             [Description("false = system views (savedquery), true = personal views (userquery) — scopes list and view_name resolution.")] bool is_personal_view = false,
-            [Description("create/update: FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type). undo: .fetchxml.xml backup file path from .devkit/manage_view/{entity}/.")] string fetchxml = "",
-            [Description("JSON array of {cell_name, set_attributes, remove_attributes}. Patch cell attrs (imageproviderwebresource, ishidden, …) without changing the FetchXML.")] string cell_updates_json = "")
+            [Description("create/update: FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type). undo: .fetchxml.xml backup file path (pass layoutxml too).")] string fetchxml = "",
+            [Description("undo only: .layoutxml.xml backup file path — required together with fetchxml to restore the pair verbatim.")] string layoutxml = "",
+            [Description("JSON array of {cell_name, set_attributes, remove_attributes}. Patch cell attrs (imageproviderwebresource, ishidden, …) without changing the FetchXML. Do not combine with fetchxml.")] string cell_updates_json = "")
         {
             try
             {
@@ -110,7 +111,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "update" => HandleUpdate(entityName, view_id, view_name, is_personal_view, fetchxml, cell_updates_json),
                     "rename" => HandleRename(entityName, view_id, view_name),
                     "set_default" => HandleSetDefault(entityName, view_id, view_name),
-                    "undo" => HandleUndo(entityName, view_id, fetchxml),
+                    "undo" => HandleUndo(entityName, view_id, fetchxml, layoutxml),
                     _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")
                 };
             }
@@ -381,6 +382,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("at least one of fetchxml or cell_updates_json is required when action='update'.",
                     "LayoutXML is always auto-generated from fetchxml — pass fetchxml to rebuild the grid or cell_updates_json to patch cells.");
 
+            if (hasCellUpdates && !string.IsNullOrWhiteSpace(fetchxml))
+                return Error("pass either fetchxml (rebuild grid) or cell_updates_json (patch cells) — not both.",
+                    "One call = one action. To patch icon/cell attributes, call update with cell_updates_json only; to rebuild the grid, call update with fetchxml only (surviving cells keep their attributes).");
+
             var newFetchXml = string.IsNullOrWhiteSpace(fetchxml) ? null : ViewXmlHelper.StripXmlDeclaration(fetchxml.Trim());
 
             var currentView = RetrieveView(updateId);
@@ -432,7 +437,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (built.Error != null)
                     return Error($"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — {built.Error}",
                         $"Fix the FetchXML — grid columns are auto-generated from its attributes. Use get_tables(entity_name='{entityName}') to list valid fields.");
-                newLayoutXml = built.Xml;
+                newLayoutXml = ViewXmlHelper.MergeCellAttributes(built.Xml, currentLayoutXml);
             }
             else
             {
@@ -449,6 +454,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (cellNameErrors.Count > 0)
                         return Error(NameResolutionMessage("update", entityName, cellNameErrors),
                             $"Use get_tables(entity_name='{entityName}') to list valid fields. Use a more specific name when matches are ambiguous.", new { errors = cellNameErrors });
+
+                    var iconError = NormalizeAndValidateIconUpdates(instructions);
+                    if (iconError != null)
+                        return Error($"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — {iconError}",
+                            "See docs://instructions_for_views — Custom Icons section for the cell attribute contract.");
 
                     var (patchedXml, patchErrors, patchWarnings) = ViewXmlHelper.ApplyCellAttributeUpdates(baseLayoutXml, instructions);
                     if (patchErrors.Count > 0)
@@ -521,7 +531,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
 
-            var backupPath = ViewBackupHelper.SaveBackup(entityName, updateId, currentViewName, currentFetchXml, _workspaceFolder);
+            var (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, updateId, currentViewName, currentFetchXml, currentLayoutXml, _workspaceFolder);
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             var published = PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
@@ -538,7 +548,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Action = "updated", Entity = entityName, ViewId = updateId.ToString(), ViewName = currentViewName,
                 Status = "updated", Validated = true,
                 UpdatedParts = updatedParts, ValidationWarnings = cellPatchWarnings,
-                BackupPath = backupPath, Published = published,
+                FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = published,
                 QuickFindColumns = quickFindColumns?.Count > 0 ? quickFindColumns : null
             });
         }
@@ -592,6 +602,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var currentFetchXml = currentView.GetAttributeValue<string>("fetchxml") ?? "";
+            var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
             var update = new Entity(currentView.LogicalName, renameId) { ["name"] = viewName };
             if (_options.DryRun)
                 return DryRun($"Would RENAME view '{oldName}' to '{viewName}' ({renameId}) on entity '{entityName}'.", new UpsertViewResult
@@ -605,7 +616,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
 
             // Backup only when actually mutating
-            var backupPath = ViewBackupHelper.SaveBackup(entityName, renameId, oldName, currentFetchXml, _workspaceFolder);
+            var (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, renameId, oldName, currentFetchXml, currentLayoutXml, _workspaceFolder);
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             var published = PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
@@ -616,7 +627,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 Action = "renamed", Entity = entityName, ViewId = renameId.ToString(), ViewName = viewName,
                 Status = "renamed", Validated = false,
-                BackupPath = backupPath, Published = true
+                FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = true
             });
         }
 
@@ -698,7 +709,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
 
         private CallToolResult HandleUndo(string entityName, string viewId,
-            string backupPathArg)
+            string backupPathArg, string layoutBackupPathArg)
         {
             if (string.IsNullOrWhiteSpace(viewId))
                 return Error("view_id is required when action='undo'.",
@@ -708,18 +719,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Use manage_view action='list' to find views, then pass a valid view_id GUID.");
             if (string.IsNullOrWhiteSpace(backupPathArg))
                 return Error("fetchxml (.fetchxml.xml backup file path) is required when action='undo'.",
-                    "Backup files are at: .devkit/manage_view/{entity}/ — LayoutXML is regenerated from the FetchXML backup.");
+                    "Pass BOTH backup files of one pair: fetchxml=<.fetchxml.xml path> and layoutxml=<.layoutxml.xml path>. Backup pairs are at: .devkit/manage_view/{entity}/");
+            if (string.IsNullOrWhiteSpace(layoutBackupPathArg))
+                return Error("layoutxml (.layoutxml.xml backup file path) is required when action='undo'.",
+                    "Pass BOTH backup files of one pair: fetchxml=<.fetchxml.xml path> and layoutxml=<.layoutxml.xml path>. Backup pairs are at: .devkit/manage_view/{entity}/");
 
             var fetchBackupPath = backupPathArg.Trim();
             if (!fetchBackupPath.EndsWith(".fetchxml.xml", StringComparison.OrdinalIgnoreCase))
                 return Error(
-                    $"Backup file must end with .fetchxml.xml: '{fetchBackupPath}'.",
-                    "Backup files are at: .devkit/manage_view/{entity}/ — LayoutXML is regenerated from the FetchXML backup.");
+                    $"fetchxml must be a .fetchxml.xml backup file: '{fetchBackupPath}'.",
+                    "A backup pair is {viewId}_{timestamp}.fetchxml.xml + {viewId}_{timestamp}.layoutxml.xml at: .devkit/manage_view/{entity}/ — pass the .fetchxml.xml file as fetchxml and the .layoutxml.xml file as layoutxml.");
+            var layoutBackupPath = layoutBackupPathArg.Trim();
+            if (!layoutBackupPath.EndsWith(".layoutxml.xml", StringComparison.OrdinalIgnoreCase))
+                return Error(
+                    $"layoutxml must be a .layoutxml.xml backup file: '{layoutBackupPath}'.",
+                    "A backup pair is {viewId}_{timestamp}.fetchxml.xml + {viewId}_{timestamp}.layoutxml.xml at: .devkit/manage_view/{entity}/ — pass the .fetchxml.xml file as fetchxml and the .layoutxml.xml file as layoutxml.");
 
             if (!File.Exists(fetchBackupPath))
                 return Error(
                     $"Fetch backup file not found: '{fetchBackupPath}'.",
-                    "Check the file path. Backup files are at: .devkit/manage_view/{entity}/");
+                    "Check the file path. Backup pairs are at: .devkit/manage_view/{entity}/");
+            if (!File.Exists(layoutBackupPath))
+                return Error(
+                    $"Layout backup file not found: '{layoutBackupPath}'.",
+                    "Check the file path. Backup pairs are at: .devkit/manage_view/{entity}/ — single-file .fetchxml.xml backups written before the pair convention cannot restore LayoutXML; pick a pair with the same timestamp.");
 
             var fetchContent = File.ReadAllText(fetchBackupPath, Encoding.UTF8);
             var strippedFetch = ViewXmlHelper.StripXmlComments(fetchContent);
@@ -730,6 +753,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var fetchDoc = XDocument.Parse(strippedFetch);
             var restoredFetchXml = ViewXmlHelper.StripXmlDeclaration(fetchDoc.ToString());
 
+            var layoutContent = File.ReadAllText(layoutBackupPath, Encoding.UTF8);
+            var strippedLayout = ViewXmlHelper.StripXmlComments(layoutContent);
+            if (string.IsNullOrWhiteSpace(strippedLayout))
+                return Error(
+                    $"Layout backup file is empty (no LayoutXML content): '{layoutBackupPath}'.",
+                    "This backup has no LayoutXML to restore. Try an earlier backup pair.");
+            var layoutDoc = XDocument.Parse(strippedLayout);
+            var restoredLayoutXml = ViewXmlHelper.StripXmlDeclaration(layoutDoc.ToString());
+
             var currentView = RetrieveView(undoId);
             if (currentView == null)
                 return Error(
@@ -738,14 +770,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var viewName = currentView.GetAttributeValue<string>("name") ?? "";
             var returnedTypeCode = currentView.GetAttributeValue<string>("returnedtypecode") ?? entityName;
-
-            var undoMeta = RetrieveEntityMetadata(returnedTypeCode);
-            restoredFetchXml = EnsureLayoutBuildableFetchXml(restoredFetchXml, undoMeta);
-            var undoLayout = BuildLayoutXmlFromFetch(returnedTypeCode, restoredFetchXml, undoMeta);
-            if (undoLayout.Error != null)
-                return Error($"UNDO view '{viewName}' ({undoId}) on '{entityName}' blocked — {undoLayout.Error}",
-                    "The backup FetchXML could not be converted to a grid — try an earlier .fetchxml.xml backup.");
-            var restoredLayoutXml = undoLayout.Xml;
 
             List<string> validationWarnings = null;
             {
@@ -787,6 +811,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var currentFetchXml = currentView.GetAttributeValue<string>("fetchxml") ?? "";
+            var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
 
             var isPersonalView = currentView.LogicalName == "userquery";
             var update = new Entity(currentView.LogicalName, undoId);
@@ -806,12 +831,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
 
             // Backup pre-restore state only when actually mutating
-            var preFetchBackupPath = ViewBackupHelper.SaveBackup(entityName, undoId, viewName, currentFetchXml, _workspaceFolder);
+            var (preFetchBackupPath, preLayoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, undoId, viewName, currentFetchXml, currentLayoutXml, _workspaceFolder);
             DataverseMutationExecutor.Update(_context, _serviceClient, update);
 
             var published = PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
 
-            var text = $"Restored view '{viewName}' ({undoId}) on '{entityName}' from FetchXML backup — LayoutXML regenerated" +
+            var text = $"Restored view '{viewName}' ({undoId}) on '{entityName}' from backup pair" +
                 ", validated, published." +
                 " Pre-restore state backed up." +
                 (validationWarnings?.Count > 0 ? $" {validationWarnings.Count} validation warning(s) (see validationWarnings)." : "");
@@ -822,7 +847,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Entity = entityName, ViewId = undoId.ToString(), ViewName = viewName,
                 Status = "restored", Validated = true,
                 ValidationWarnings = validationWarnings,
-                BackupPath = preFetchBackupPath,
+                FetchXmlBackupPath = preFetchBackupPath, LayoutXmlBackupPath = preLayoutBackupPath,
                 Published = published
             });
         }
@@ -1548,6 +1573,56 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static readonly HashSet<string> ProtectedCellAttributes = new(StringComparer.OrdinalIgnoreCase) { "name" };
         private static readonly HashSet<string> NoRemoveCellAttributes = new(StringComparer.OrdinalIgnoreCase) { "name", "width" };
+
+        private const string WebResourcePrefix = "$webresource:";
+
+        private string NormalizeAndValidateIconUpdates(List<CellUpdateInstruction> instructions)
+        {
+            foreach (var item in instructions)
+            {
+                if (item.SetAttributes == null) continue;
+
+                string fnKey = null;
+                foreach (var key in item.SetAttributes.Keys)
+                    if (string.Equals(key, "imageproviderfunctionname", StringComparison.OrdinalIgnoreCase)) { fnKey = key; break; }
+                if (fnKey != null)
+                {
+                    var fn = item.SetAttributes[fnKey];
+                    if (string.IsNullOrWhiteSpace(fn) || fn.Any(char.IsWhiteSpace))
+                        return $"imageproviderfunctionname '{fn}' on cell '{item.CellName}' is invalid — must be a non-empty JS function name without whitespace.";
+                }
+
+                string wrKey = null;
+                foreach (var key in item.SetAttributes.Keys)
+                    if (string.Equals(key, "imageproviderwebresource", StringComparison.OrdinalIgnoreCase)) { wrKey = key; break; }
+                if (wrKey == null) continue;
+
+                var wr = (item.SetAttributes[wrKey] ?? "").Trim();
+                if (wr.Length == 0)
+                    return $"imageproviderwebresource on cell '{item.CellName}' is empty — pass the JS web resource name, or use remove_attributes to detach the icon.";
+                if (wr.StartsWith(WebResourcePrefix, StringComparison.OrdinalIgnoreCase))
+                    wr = wr.Substring(WebResourcePrefix.Length).Trim();
+                if (wr.Length == 0)
+                    return $"imageproviderwebresource on cell '{item.CellName}' has the '{WebResourcePrefix}' prefix but no web resource name.";
+
+                item.SetAttributes[wrKey] = WebResourcePrefix + wr;
+
+                if (!WebResourceExists(wr))
+                    return $"Web resource '{wr}' not found — create it first with manage_webresource action='create'.";
+            }
+            return null;
+        }
+
+        private bool WebResourceExists(string name)
+        {
+            var query = new QueryExpression("webresource")
+            {
+                ColumnSet = new ColumnSet("webresourceid"),
+                TopCount = 1
+            };
+            query.Criteria.AddCondition("name", ConditionOperator.Equal, name);
+            return _serviceClient.RetrieveMultiple(query).Entities.Count > 0;
+        }
 
         private static (List<CellUpdateInstruction> Instructions, string Error) ParseCellUpdates(string cellUpdatesJson)
         {

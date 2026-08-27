@@ -17,6 +17,17 @@ public class ViewBackupHelperTests
     private static readonly MethodInfo SaveBackupMethod =
         HelperType.GetMethod("SaveBackup", BindingFlags.Public | BindingFlags.Static)!;
 
+    private const string SampleFetch = "<fetch><entity name='account'></entity></fetch>";
+    private const string SampleLayout = "<grid name='resultset'><row name='result' id='accountid'><cell name='name' width='300' /></row></grid>";
+
+    private static (string FetchPath, string LayoutPath) InvokeSaveBackup(
+        string entity, Guid viewId, string viewName, string fetchXml, string layoutXml, string workspaceFolder)
+    {
+        var result = SaveBackupMethod.Invoke(null, [entity, viewId, viewName, fetchXml, layoutXml, workspaceFolder]);
+        var tuple = ((string FetchBackupPath, string LayoutBackupPath))result!;
+        return (tuple.FetchBackupPath, tuple.LayoutBackupPath);
+    }
+
     // ── SaveBackup ────────────────────────────────────────────────────────────
 
     [TestMethod]
@@ -30,16 +41,22 @@ public class ViewBackupHelperTests
         try
         {
             var viewId = Guid.NewGuid();
-            var fetchXml = "<fetch><entity name='account'></entity></fetch>";
 
-            var result = SaveBackupMethod.Invoke(null, ["account", viewId, "Test View", fetchXml, ""]);
-            string? fetchPath = result as string;
+            var (fetchPath, layoutPath) = InvokeSaveBackup("account", viewId, "Test View", SampleFetch, SampleLayout, "");
 
             Assert.IsTrue(File.Exists(fetchPath), "FetchXML backup file should be created");
+            Assert.IsTrue(File.Exists(layoutPath), "LayoutXML backup file should be created");
 
             var fetchFileName = Path.GetFileName(fetchPath);
             Assert.IsTrue(fetchFileName.StartsWith(viewId.ToString("N") + "_"), "Backup file should start with the view id (folder already carries the entity name)");
             Assert.IsTrue(fetchFileName.EndsWith(".fetchxml.xml"), "FetchXML backup should have .fetchxml.xml extension");
+
+            var layoutFileName = Path.GetFileName(layoutPath);
+            Assert.IsTrue(layoutFileName.EndsWith(".layoutxml.xml"), "LayoutXML backup should have .layoutxml.xml extension");
+            Assert.AreEqual(
+                fetchFileName.Replace(".fetchxml.xml", ""),
+                layoutFileName.Replace(".layoutxml.xml", ""),
+                "Pair files must share the same {viewId}_{timestamp} stem");
         }
         finally
         {
@@ -50,7 +67,7 @@ public class ViewBackupHelperTests
     }
 
     [TestMethod]
-    public void SaveBackup_FetchBackupContainsViewIdComment()
+    public void SaveBackup_BackupContainsViewIdComment()
     {
         var originalDir = Directory.GetCurrentDirectory();
         var tempDir = Path.Combine(Path.GetTempPath(), $"devkit_test_{Guid.NewGuid():N}");
@@ -60,12 +77,11 @@ public class ViewBackupHelperTests
         try
         {
             var viewId = Guid.NewGuid();
-            var result = SaveBackupMethod.Invoke(null, ["account", viewId, "Test View",
-                "<fetch><entity name='account'></entity></fetch>", ""]);
-            string? fetchPath = result as string;
+            var (fetchPath, layoutPath) = InvokeSaveBackup("account", viewId, "Test View", SampleFetch, SampleLayout, "");
 
-            var content = File.ReadAllText(fetchPath!);
-            Assert.IsTrue(content.Contains(viewId.ToString()), "FetchXML backup should contain ViewId comment");
+            Assert.IsTrue(File.ReadAllText(fetchPath).Contains(viewId.ToString()), "FetchXML backup should contain ViewId comment");
+            Assert.IsTrue(File.ReadAllText(layoutPath).Contains(viewId.ToString()), "LayoutXML backup should contain ViewId comment");
+            Assert.IsTrue(File.ReadAllText(layoutPath).Contains("cell name="), "LayoutXML backup should keep the layout content");
         }
         finally
         {
@@ -86,7 +102,7 @@ public class ViewBackupHelperTests
         try
         {
             var viewId = Guid.NewGuid();
-            SaveBackupMethod.Invoke(null, ["account", viewId, "Test", "<fetch/>", tempDir]);
+            InvokeSaveBackup("account", viewId, "Test", "<fetch/>", "<grid/>", tempDir);
 
             var backupDir = Path.Combine(tempDir, ".devkit", "manage_view", "account");
             Assert.IsTrue(Directory.Exists(backupDir), "Backup directory .devkit/manage_view/account should be created");
@@ -100,7 +116,7 @@ public class ViewBackupHelperTests
     }
 
     [TestMethod]
-    public void SaveBackup_EmptyFetchXml_WritesPlaceholderComment()
+    public void SaveBackup_EmptyXml_WritesPlaceholderComment()
     {
         var originalDir = Directory.GetCurrentDirectory();
         var tempDir = Path.Combine(Path.GetTempPath(), $"devkit_test_{Guid.NewGuid():N}");
@@ -110,11 +126,10 @@ public class ViewBackupHelperTests
         try
         {
             var viewId = Guid.NewGuid();
-            var result = SaveBackupMethod.Invoke(null, ["account", viewId, "Test View", "", ""]);
-            string? fetchPath = result as string;
+            var (fetchPath, layoutPath) = InvokeSaveBackup("account", viewId, "Test View", "", "", "");
 
-            var content = File.ReadAllText(fetchPath!);
-            Assert.IsTrue(content.Contains("empty"), "Empty FetchXML should write placeholder comment mentioning 'empty'");
+            Assert.IsTrue(File.ReadAllText(fetchPath).Contains("empty"), "Empty FetchXML should write placeholder comment mentioning 'empty'");
+            Assert.IsTrue(File.ReadAllText(layoutPath).Contains("empty"), "Empty LayoutXML should write placeholder comment mentioning 'empty'");
         }
         finally
         {

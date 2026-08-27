@@ -324,6 +324,47 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
         // ── Schema Loading ────────────────────────────────────────────────
 
+        /// <summary>
+        /// Carry over all cell attributes (except name — the match key) from the current LayoutXML
+        /// onto a regenerated LayoutXML, matching cells by name (case-insensitive, incl. alias.field).
+        /// Preserves user-set attrs (width, ishidden, label, desc, cellType, imageproviderwebresource, ...)
+        /// that regen would otherwise drop. Cells absent from the current layout keep regen defaults.
+        /// </summary>
+        public static string MergeCellAttributes(string regeneratedLayoutXml, string currentLayoutXml)
+        {
+            if (string.IsNullOrWhiteSpace(regeneratedLayoutXml) || string.IsNullOrWhiteSpace(currentLayoutXml))
+                return regeneratedLayoutXml;
+            try
+            {
+                var regenDoc = XDocument.Parse(regeneratedLayoutXml);
+                var currentDoc = XDocument.Parse(currentLayoutXml);
+                var oldCells = currentDoc.Descendants("cell")
+                    .Where(c => !string.IsNullOrWhiteSpace(c.Attribute("name")?.Value))
+                    .GroupBy(c => c.Attribute("name").Value, StringComparer.OrdinalIgnoreCase)
+                    .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+                if (oldCells.Count == 0)
+                    return regeneratedLayoutXml;
+
+                foreach (var cell in regenDoc.Descendants("cell"))
+                {
+                    var name = cell.Attribute("name")?.Value;
+                    if (string.IsNullOrWhiteSpace(name) || !oldCells.TryGetValue(name, out var oldCell))
+                        continue;
+                    foreach (var attr in oldCell.Attributes())
+                    {
+                        if (string.Equals(attr.Name.LocalName, "name", StringComparison.OrdinalIgnoreCase))
+                            continue;
+                        cell.SetAttributeValue(attr.Name.LocalName, attr.Value);
+                    }
+                }
+                return regenDoc.ToString(SaveOptions.DisableFormatting);
+            }
+            catch
+            {
+                return regeneratedLayoutXml;
+            }
+        }
+
         private static XmlSchemaSet GetLayoutSchemaSet()
         {
             if (_cachedLayoutSchemaSet != null) return _cachedLayoutSchemaSet;

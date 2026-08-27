@@ -34,9 +34,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string UpdatedParts { get; set; }
 
-        [JsonPropertyName("backupPath")]
+        [JsonPropertyName("fetchXmlBackupPath")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string BackupPath { get; set; }
+        public string FetchXmlBackupPath { get; set; }
+
+        [JsonPropertyName("layoutXmlBackupPath")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string LayoutXmlBackupPath { get; set; }
 
         [JsonPropertyName("validationWarnings")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

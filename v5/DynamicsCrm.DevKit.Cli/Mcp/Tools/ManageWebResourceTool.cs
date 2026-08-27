@@ -76,7 +76,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- Upload/update/inspect a web resource\n" +
             "- Find library_name for build_form_xml add_event/add_library (run list first)\n" +
-            "- Combine with build_form_xml + manage_form to wire JS into a form\n\n" +
+            "- Combine with build_form_xml + manage_form to wire JS into a form\n" +
+            "- Creating a JS web resource for view icons/tooltips → the function contract (rowData/{col}_Value, [imgName, tooltip] return) is in docs://instructions_for_views — read it first\n\n" +
             "RELATED TOOLS:\n" +
             "- get_solution_components → find solution names for create\n" +
             "- manage_form → wire the JS library into a form\n" +
