@@ -111,7 +111,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
 
@@ -121,7 +121,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"Invalid type_filter '{typeFilter.Trim()}'.", $"Use: {string.Join(", ", TypeFilterMap.Keys)}.");
 
             if (maxRecords <= 0)
-                return Error("max_records must be between 1 and 500.");
+                return Error("max_records must be between 1 and 500.", "Use a value from 1 to 500. Default is 50.");
             if (maxRecords > 500) maxRecords = 500;
 
             var filters = new StringBuilder();
@@ -412,7 +412,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var isManaged = existing.GetAttributeValue<bool?>("ismanaged");
             var isCustomizable = existing.GetAttributeValue<BooleanManagedProperty>("iscustomizable");
             if (isManaged == true && isCustomizable?.Value == false)
-                return Error($"Cannot update web resource '{webResourceId}' — it is managed and not customizable.");
+                return Error($"Cannot update web resource '{webResourceId}' — it is managed and not customizable.",
+                             "Only unmanaged web resources can be updated — use action='list' to find one (isManaged=false), or action='create' your own.");
 
             var update = new Entity("webresource", id);
             var fieldsUpdated = 0;
@@ -437,7 +438,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (fieldsUpdated == 0)
-                return Error("No fields to update. Provide at least one of: file_path, display_name, description.");
+                return Error("No fields to update.", "Provide at least one of: file_path, display_name, description.");
 
             if (_options.DryRun)
             {
@@ -507,7 +508,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var isManaged = existing.GetAttributeValue<bool?>("ismanaged");
             var isCustomizable = existing.GetAttributeValue<BooleanManagedProperty>("iscustomizable");
             if (isManaged == true && isCustomizable?.Value == false)
-                return Error($"Cannot delete web resource '{webResourceId}' — it is managed and not customizable.");
+                return Error($"Cannot delete web resource '{webResourceId}' — it is managed and not customizable.",
+                             "Only unmanaged web resources can be deleted — use action='list' to find one (isManaged=false).");
 
             var existingName = existing.GetAttributeValue<string>("name") ?? "";
             var typeValue = existing.GetAttributeValue<OptionSetValue>("webresourcetype")?.Value ?? 0;
