@@ -103,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var normalizedAction = action.Trim().ToLowerInvariant();
 
                 if (!string.IsNullOrWhiteSpace(chart_id) && !Guid.TryParse(chart_id.Trim(), out _))
-                    return Error($"'{chart_id}' is not a valid GUID.");
+                    return Error($"'{chart_id}' is not a valid GUID.", "Pass a chart GUID (e.g. from manage_chart(action='list')), or use chart_name instead.");
 
                 if (normalizedAction == "update")
                     _workspaceFolder = await WorkspaceFolderHelper.GetAsync(server);
@@ -167,8 +167,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult HandleDetail(string entityNameInput, string chartIdInput, string chartNameInput)
         {
-            var entity = FindChart(entityNameInput, chartIdInput, chartNameInput, out var error);
-            if (error != null) return Error(error);
+            var entity = FindChart(entityNameInput, chartIdInput, chartNameInput, out var error, out var errorHint);
+            if (error != null) return Error(error, errorHint);
 
             const string idCol = "savedqueryvisualizationid";
             var id = entity.GetAttributeValue<Guid>(idCol);
@@ -202,23 +202,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string presXmlInput, string description, string solutionName, bool validate, bool publish, bool confirmed)
         {
             if (string.IsNullOrWhiteSpace(entityNameInput))
-                return Error("entity_name is required when action='create'.");
+                return Error("entity_name is required when action='create'.", "Pass entity_name (Display Name or logical name, e.g. 'Account' or 'account').");
 
             if (string.IsNullOrWhiteSpace(chartName))
-                return Error("chart_name is required when action='create'.");
+                return Error("chart_name is required when action='create'.", "Pass chart_name for the new chart.");
 
             var entityResolve = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityNameInput.Trim(), "manage_chart");
             if (!entityResolve.IsSuccess)
-                return Error($"entity_name '{entityNameInput.Trim()}': {entityResolve.Error}");
+                return Error(entityResolve.Error.Split("\r\n")[0], "Use get_tables to list entities before calling manage_chart.");
 
             var entityName = entityResolve.Value.LogicalName;
 
             var measuresResult = ParseMeasuresInput(measuresInput, aggregateColInput, aggregateTypeInput);
-            if (measuresResult.Error != null) return Error(measuresResult.Error);
+            if (measuresResult.Error != null) return Error(measuresResult.Error, measuresResult.Hint);
             var measures = measuresResult.Measures;
 
             var filterResult = ParseFilter(filterInput);
-            if (filterResult.Error != null) return Error(filterResult.Error);
+            if (filterResult.Error != null) return Error(filterResult.Error, filterResult.Hint);
             var conditions = filterResult.Conditions;
 
             // Multi-measure charts default to Column — Pie/Doughnut/Funnel are single-measure.
@@ -347,16 +347,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             List<string> measureAliases;
             if (measures != null)
             {
-                var (multiXml, aliases, multiError) = BuildDataDescriptionMulti(entityName, groupByCol, measures, conditions);
-                if (multiError != null) return Error(multiError);
+                var (multiXml, aliases, multiError, multiHint) = BuildDataDescriptionMulti(entityName, groupByCol, measures, conditions);
+                if (multiError != null) return Error(multiError, multiHint);
                 dataXml = multiXml;
                 measureAliases = aliases;
             }
             else
             {
-                var (singleXml, singleAlias, dataError) = BuildDataDescriptionFromEntity(
+                var (singleXml, singleAlias, dataError, dataHint) = BuildDataDescriptionFromEntity(
                     entityName, groupByCol, aggregateCol, aggregateType, conditions);
-                if (dataError != null) return Error(dataError);
+                if (dataError != null) return Error(dataError, dataHint);
                 dataXml = singleXml;
                 measureAliases = new List<string> { singleAlias };
             }
@@ -382,6 +382,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (valErrors.Count > 0)
                 return Error(
                     $"Validation failed for new chart '{chartName}' ({valErrors.Count} error(s)). First: {valErrors[0]}",
+                    "Fix the chart_type/presentationdescription input — supported OOB chart types: Column, Bar, Line, Pie, Doughnut (Donut), Funnel, Area, Bubble, Radar. Set validate=false to skip checks.",
                     details: new { validationErrors = valErrors });
 
             string resolvedSolutionUniqueName = null;
@@ -389,9 +390,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
                 if (!solResult.IsSuccess)
-                    return Error(solResult.Error);
+                    return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
                 if (string.IsNullOrWhiteSpace(solResult.UniqueName))
-                    return Error($"Solution '{solutionName}' resolved but unique name is null/empty. Chart was not created.");
+                    return Error($"Solution '{solutionName}' resolved but unique name is null/empty. Chart was not created.", "Pick another solution via get_solution_components, or omit solution_name.");
                 resolvedSolutionUniqueName = solResult.UniqueName;
             }
 
@@ -484,8 +485,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string presXmlInput, string description, string solutionName,
             bool validate, bool publish)
         {
-            var chartRecord = FindChart(entityNameInput, chartIdInput, chartNameInput, out var error);
-            if (error != null) return Error(error);
+            var chartRecord = FindChart(entityNameInput, chartIdInput, chartNameInput, out var error, out var errorHint);
+            if (error != null) return Error(error, errorHint);
 
             const string table = "savedqueryvisualization";
             const string idCol = "savedqueryvisualizationid";
@@ -494,11 +495,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var primaryEntity = chartRecord.GetAttributeValue<string>("primaryentitytypecode");
 
             var measuresResult = ParseMeasuresInput(measuresInput, aggregateColInput, aggregateTypeInput);
-            if (measuresResult.Error != null) return Error(measuresResult.Error);
+            if (measuresResult.Error != null) return Error(measuresResult.Error, measuresResult.Hint);
             var measures = measuresResult.Measures;
 
             var filterResult = ParseFilter(filterInput);
-            if (filterResult.Error != null) return Error(filterResult.Error);
+            if (filterResult.Error != null) return Error(filterResult.Error, filterResult.Hint);
             var conditions = filterResult.Conditions;
 
             var currentDataXml = chartRecord.GetAttributeValue<string>("datadescription");
@@ -533,8 +534,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (measures != null)
                 {
-                    var (multiXml, aliases, multiErr) = BuildDataDescriptionMulti(primaryEntity, groupByCol, measures, conditions);
-                    if (multiErr != null) return Error(multiErr);
+                    var (multiXml, aliases, multiErr, multiErrHint) = BuildDataDescriptionMulti(primaryEntity, groupByCol, measures, conditions);
+                    if (multiErr != null) return Error(multiErr, multiErrHint);
                     newDataXml = multiXml;
                     aggregateAlias = aliases[0];
                 }
@@ -547,9 +548,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         ? DefaultPieAggregateType
                         : aggregateTypeInput.Trim().ToLowerInvariant();
 
-                    var (derivedDataXml, alias, dataErr) = BuildDataDescriptionFromEntity(
+                    var (derivedDataXml, alias, dataErr, dataErrHint) = BuildDataDescriptionFromEntity(
                         primaryEntity, groupByCol, aggregateCol, aggregateType, conditions);
-                    if (dataErr != null) return Error(dataErr);
+                    if (dataErr != null) return Error(dataErr, dataErrHint);
                     newDataXml = derivedDataXml;
                     aggregateAlias = alias;
                 }
@@ -581,6 +582,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (valErrors.Count > 0)
                 return Error(
                     $"Validation failed for chart '{chartName}' ({chartId}) ({valErrors.Count} error(s)). First: {valErrors[0]}",
+                    "Fix the chart_type/presentationdescription input — supported OOB chart types: Column, Bar, Line, Pie, Doughnut (Donut), Funnel, Area, Bubble, Radar. Set validate=false to skip checks.",
                     details: new { validationErrors = valErrors });
 
             string resolvedSolutionUniqueName = null;
@@ -588,9 +590,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
                 if (!solResult.IsSuccess)
-                    return Error(solResult.Error);
+                    return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
                 if (string.IsNullOrWhiteSpace(solResult.UniqueName))
-                    return Error($"Solution '{solutionName}' resolved but unique name is null/empty.");
+                    return Error($"Solution '{solutionName}' resolved but unique name is null/empty.", "Pick another solution via get_solution_components, or omit solution_name.");
                 resolvedSolutionUniqueName = solResult.UniqueName;
             }
 
@@ -655,10 +657,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleRename(string entityNameInput, string chartIdInput, string chartNameInput, string solutionName, bool publish)
         {
             if (string.IsNullOrWhiteSpace(chartNameInput))
-                return Error("chart_name is required when action='rename'.");
+                return Error("chart_name is required when action='rename'.", "Pass chart_name with the new name to set.");
 
-            var chartRecord = FindChart(entityNameInput, chartIdInput, null, out var error);
-            if (error != null) return Error(error);
+            var chartRecord = FindChart(entityNameInput, chartIdInput, null, out var error, out var errorHint);
+            if (error != null) return Error(error, errorHint);
 
             const string table = "savedqueryvisualization";
             const string idCol = "savedqueryvisualizationid";
@@ -708,8 +710,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult HandleSetDefault(string entityNameInput, string chartIdInput, string chartNameInput, bool publish)
         {
-            var chartRecord = FindChart(entityNameInput, chartIdInput, chartNameInput, out var error);
-            if (error != null) return Error(error);
+            var chartRecord = FindChart(entityNameInput, chartIdInput, chartNameInput, out var error, out var errorHint);
+            if (error != null) return Error(error, errorHint);
 
             var chartId = chartRecord.GetAttributeValue<Guid>("savedqueryvisualizationid");
             var chartName = chartRecord.GetAttributeValue<string>("name");
@@ -764,14 +766,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("backup path is required when action='undo'.", "Pass the .chart.json backup path via presentationdescription.");
 
             if (!File.Exists(backupPathInput))
-                return Error($"Backup file not found at '{backupPathInput}'.");
+                return Error($"Backup file not found at '{backupPathInput}'.", "Pass the backupPath returned by a previous manage_chart(action='update') call.");
 
             // Malformed backup JSON bubbles to the entry-point catch (single-try rule).
             var json = File.ReadAllText(backupPathInput, Encoding.UTF8);
             var backupData = JsonSerializer.Deserialize<ChartBackup>(json);
 
             if (backupData == null || string.IsNullOrWhiteSpace(backupData.ChartId))
-                return Error("Backup file does not contain valid chart data.");
+                return Error("Backup file does not contain valid chart data.", "Use a .chart.json backup file written by manage_chart(action='update').");
 
             var chartId = Guid.Parse(backupData.ChartId);
 
@@ -822,16 +824,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Entity-Based DataDescription Builder ───────────────────────────
 
-        private static (string Xml, string AggregateAlias, string Error) BuildDataDescriptionFromEntity(
+        private static (string Xml, string AggregateAlias, string Error, string Hint) BuildDataDescriptionFromEntity(
             string entityName, string groupByCol, string aggregateCol, string aggregateType,
             List<ChartFilterCondition> conditions = null)
         {
             if (string.IsNullOrWhiteSpace(entityName))
-                return (null, null, "entity logical name is required to build chart data specification.");
+                return (null, null, "entity logical name is required to build chart data specification.", "Pass entity_name (Display Name or logical name, e.g. 'Account' or 'account').");
             if (string.IsNullOrWhiteSpace(groupByCol))
-                return (null, null, "category/group_by_column is required to build chart data specification.");
+                return (null, null, "category/group_by_column is required to build chart data specification.", "Pass group_by_column (see get_tables for column logical names).");
             if (string.IsNullOrWhiteSpace(aggregateCol))
-                return (null, null, "legend/aggregate_column is required to build chart data specification.");
+                return (null, null, "legend/aggregate_column is required to build chart data specification.", "Pass aggregate_column (see get_tables for column logical names).");
 
             var targetEntity = entityName.Trim().ToLowerInvariant();
             var resolvedGroupBy = groupByCol.Trim().ToLowerInvariant();
@@ -873,7 +875,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.Append("</categorycollection>");
             sb.Append("</datadefinition>");
 
-            return (sb.ToString(), aggregateAlias, null);
+            return (sb.ToString(), aggregateAlias, null, null);
         }
 
         /// <summary>
@@ -881,13 +883,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         /// one groupby, and N &lt;measurecollection&gt; siblings like OOB multi-measure charts
         /// (series binding is positional).
         /// </summary>
-        private static (string Xml, List<string> Aliases, string Error) BuildDataDescriptionMulti(
+        private static (string Xml, List<string> Aliases, string Error, string Hint) BuildDataDescriptionMulti(
             string entityName, string groupByCol, List<ChartMeasure> measures, List<ChartFilterCondition> conditions)
         {
             if (string.IsNullOrWhiteSpace(entityName))
-                return (null, null, "entity logical name is required to build chart data specification.");
+                return (null, null, "entity logical name is required to build chart data specification.", "Pass entity_name (Display Name or logical name, e.g. 'Account' or 'account').");
             if (string.IsNullOrWhiteSpace(groupByCol))
-                return (null, null, "category/group_by_column is required to build chart data specification.");
+                return (null, null, "category/group_by_column is required to build chart data specification.", "Pass group_by_column (see get_tables for column logical names).");
 
             var targetEntity = entityName.Trim().ToLowerInvariant();
             var resolvedGroupBy = groupByCol.Trim().ToLowerInvariant();
@@ -918,7 +920,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.Append("</categorycollection>");
             sb.Append("</datadefinition>");
 
-            return (sb.ToString(), aliases, null);
+            return (sb.ToString(), aliases, null, null);
         }
 
         // ── measures / filter parsing ──────────────────────────────────────
@@ -963,21 +965,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private static (List<ChartMeasure> Measures, string Error) ParseMeasuresInput(
+        private static (List<ChartMeasure> Measures, string Error, string Hint) ParseMeasuresInput(
             string measuresInput, string aggregateColInput, string aggregateTypeInput)
         {
-            if (string.IsNullOrWhiteSpace(measuresInput)) return (null, null);
+            if (string.IsNullOrWhiteSpace(measuresInput)) return (null, null, null);
 
             if (!string.IsNullOrWhiteSpace(aggregateColInput))
-                return (null, "measures cannot be combined with aggregate_column — ambiguous. Use either measures (multi-series) or aggregate_column/aggregate_type (single-series).");
+                return (null, "measures cannot be combined with aggregate_column — ambiguous.", "Use either measures (multi-series) or aggregate_column/aggregate_type (single-series).");
             if (!string.IsNullOrWhiteSpace(aggregateTypeInput) &&
                 !aggregateTypeInput.Trim().Equals(DefaultPieAggregateType, StringComparison.OrdinalIgnoreCase))
-                return (null, "measures cannot be combined with aggregate_type — ambiguous. Put the aggregate type inside each measures segment instead.");
+                return (null, "measures cannot be combined with aggregate_type — ambiguous.", "Put the aggregate type inside each measures segment instead.");
 
             return ParseMeasures(measuresInput);
         }
 
-        private static (List<ChartMeasure> Measures, string Error) ParseMeasures(string input)
+        private static (List<ChartMeasure> Measures, string Error, string Hint) ParseMeasures(string input)
         {
             var measures = new List<ChartMeasure>();
             foreach (var rawSeg in input.Split(';'))
@@ -987,7 +989,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var parts = seg.Split(':');
                 if (parts.Length < 2)
-                    return (null, $"measures segment '{seg}' is invalid. Expected format: column:aggregate_type[:label].");
+                    return (null, $"measures segment '{seg}' is invalid.", "Expected format: column:aggregate_type[:label]; e.g. 'estimatedvalue:sum:Revenue; importsequencenumber:count'.");
 
                 var column = parts[0].Trim().ToLowerInvariant();
                 var aggType = parts[1].Trim().ToLowerInvariant();
@@ -995,9 +997,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (string.IsNullOrEmpty(label)) label = null;
 
                 if (!Regex.IsMatch(column, @"^[a-z_][a-z0-9_]*$"))
-                    return (null, $"measures column '{column}' is not a valid column logical name.");
+                    return (null, $"measures column '{column}' is not a valid column logical name.", "Use a lowercase logical name (letters, digits, underscore). Use get_tables to list column names.");
                 if (!ValidAggregateTypes.Contains(aggType))
-                    return (null, $"measures aggregate type '{aggType}' is invalid. Valid values: count, countcolumn, sum, avg, min, max.");
+                    return (null, $"measures aggregate type '{aggType}' is invalid.", "Valid values: count, countcolumn, sum, avg, min, max.");
 
                 measures.Add(new ChartMeasure
                 {
@@ -1009,8 +1011,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (measures.Count == 0)
-                return (null, "measures did not contain any valid segment. Expected format: column:aggregate_type[:label]; ...");
-            return (measures, null);
+                return (null, "measures did not contain any valid segment.", "Expected format: column:aggregate_type[:label]; e.g. 'estimatedvalue:sum:Revenue; importsequencenumber:count'.");
+            return (measures, null, null);
         }
 
         private static readonly (string Symbol, string Op)[] SymbolOperators =
@@ -1018,9 +1020,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             (">=", "ge"), ("<=", "le"), ("!=", "ne"), ("=", "eq"), (">", "gt"), ("<", "lt")
         };
 
-        private static (List<ChartFilterCondition> Conditions, string Error) ParseFilter(string input)
+        private static (List<ChartFilterCondition> Conditions, string Error, string Hint) ParseFilter(string input)
         {
-            if (string.IsNullOrWhiteSpace(input)) return (null, null);
+            if (string.IsNullOrWhiteSpace(input)) return (null, null, null);
 
             var conditions = new List<ChartFilterCondition>();
             foreach (var rawSeg in input.Split(';'))
@@ -1051,7 +1053,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             value = value.Substring(1, value.Length - 2);
                         var values = value.Split(',').Select(v => v.Trim()).Where(v => v.Length > 0).ToList();
                         if (values.Count == 0)
-                            return (null, $"filter segment '{seg}' has an empty value list for 'in'.");
+                            return (null, $"filter segment '{seg}' has an empty value list for 'in'.", "Provide comma-separated values, e.g. 'industrycode in (1,2,3)'.");
                         conditions.Add(new ChartFilterCondition { Field = field, Operator = "in", Values = values });
                     }
                     else
@@ -1069,21 +1071,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var field = seg.Substring(0, idx).Trim().ToLowerInvariant();
                     var value = seg.Substring(idx + symbol.Length).Trim();
                     if (!Regex.IsMatch(field, @"^[a-z_][a-z0-9_]*$"))
-                        return (null, $"filter field '{field}' is not a valid column logical name.");
+                        return (null, $"filter field '{field}' is not a valid column logical name.", "Use a lowercase logical name (letters, digits, underscore). Use get_tables to list column names.");
                     if (value.Length == 0)
-                        return (null, $"filter segment '{seg}' has an empty value.");
+                        return (null, $"filter segment '{seg}' has an empty value.", "Expected format: field<op>value. Operators: =, !=, >, >=, <, <=, like, in, null, not-null.");
                     conditions.Add(new ChartFilterCondition { Field = field, Operator = op, Value = value });
                     matched = true;
                     break;
                 }
 
                 if (!matched)
-                    return (null, $"filter segment '{seg}' is invalid. Expected format: field<op>value. Operators: =, !=, >, >=, <, <=, like, in, null, not-null.");
+                    return (null, $"filter segment '{seg}' is invalid.", "Expected format: field<op>value. Operators: =, !=, >, >=, <, <=, like, in, null, not-null. Example: 'statecode=0; estimatedvalue>1000000'.");
             }
 
             if (conditions.Count == 0)
-                return (null, "filter did not contain any valid condition. Expected format: field<op>value; ...");
-            return (conditions, null);
+                return (null, "filter did not contain any valid condition.", "Expected format: field<op>value; ... Operators: =, !=, >, >=, <, <=, like, in, null, not-null.");
+            return (conditions, null, null);
         }
 
         private static string BuildFilterFragment(List<ChartFilterCondition> conditions)
@@ -1300,9 +1302,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Shared Helpers ──────────────────────────────────────────────────
 
-        private Entity FindChart(string entityNameInput, string chartIdInput, string chartNameInput, out string error)
+        private Entity FindChart(string entityNameInput, string chartIdInput, string chartNameInput, out string error, out string hint)
         {
             error = null;
+            hint = null;
             const string table = "savedqueryvisualization";
             const string idCol = "savedqueryvisualizationid";
 
@@ -1311,11 +1314,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!Guid.TryParse(chartIdInput.Trim(), out var guid))
                 {
                     error = $"'{chartIdInput}' is not a valid GUID.";
+                    hint = "Pass a chart GUID (e.g. from manage_chart(action='list')), or use chart_name instead.";
                     return null;
                 }
                 var entity = _serviceClient.Retrieve(table, guid, new ColumnSet(idCol, "name", "description", "datadescription", "presentationdescription", "isdefault", "primaryentitytypecode"));
                 if (entity == null)
+                {
                     error = $"Chart with ID '{chartIdInput}' not found.";
+                    hint = "Use manage_chart(action='list') to find existing chart ids.";
+                }
                 return entity;
             }
 
@@ -1338,12 +1345,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (res.Entities.Count == 0)
                 {
                     error = $"No chart found matching name '{chartNameInput}'.";
+                    hint = "Use manage_chart(action='list', entity_name=...) to find existing chart names.";
                     return null;
                 }
                 return res.Entities[0];
             }
 
             error = "Either chart_id or chart_name must be provided.";
+            hint = "Pass chart_id (GUID) or chart_name to identify the chart.";
             return null;
         }
 
