@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
@@ -183,50 +184,50 @@ public class ManageRoleToolTests
     // ──────────────────────────────────────────────
 
     [TestMethod]
-    public void ManageRole_EmptyAction_ReturnsError()
+    public async Task ManageRole_EmptyAction_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.manage_role(action: "");
+        var result = await tool.manage_role(null!,action: "");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("action is required"));
     }
 
     [TestMethod]
-    public void ManageRole_InvalidAction_ReturnsError()
+    public async Task ManageRole_InvalidAction_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.manage_role(action: "invalid_action");
+        var result = await tool.manage_role(null!,action: "invalid_action");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("Invalid action"));
     }
 
     [TestMethod]
-    public void ManageRole_DetailWithoutRoleReference_ReturnsError()
+    public async Task ManageRole_DetailWithoutRoleReference_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.manage_role(action: "detail");
+        var result = await tool.manage_role(null!,action: "detail");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("role_id or role_name is required"));
     }
 
     [TestMethod]
-    public void ManageRole_DetailWithInvalidGuid_ReturnsError()
+    public async Task ManageRole_DetailWithInvalidGuid_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.manage_role(action: "detail", role_id: "not-a-guid");
+        var result = await tool.manage_role(null!,action: "detail", role_id: "not-a-guid");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("not a valid GUID"));
     }
 
     [TestMethod]
-    public void ManageRole_DetailWithRoleName_DoesNotRequireRoleId()
+    public async Task ManageRole_DetailWithRoleName_DoesNotRequireRoleId()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.manage_role(action: "detail", role_name: "System Administrator");
+        var result = await tool.manage_role(null!,action: "detail", role_name: "System Administrator");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsFalse(text.Contains("role_id or role_name is required"));
@@ -234,10 +235,10 @@ public class ManageRoleToolTests
     }
 
     [TestMethod]
-    public void ManageRole_DetailRoleIdMayCarryName_DoesNotRequireGuidBeforeResolution()
+    public async Task ManageRole_DetailRoleIdMayCarryName_DoesNotRequireGuidBeforeResolution()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.manage_role(action: "detail", role_id: "System Administrator");
+        var result = await tool.manage_role(null!,action: "detail", role_id: "System Administrator");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsFalse(text.Contains("role_id or role_name is required"));
@@ -245,110 +246,110 @@ public class ManageRoleToolTests
     }
 
     [TestMethod]
-    public void ManageRole_UserWithoutUserId_ReturnsError()
+    public async Task ManageRole_UserWithoutUserId_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.manage_role(action: "user");
+        var result = await tool.manage_role(null!,action: "user");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("user_id is required"));
     }
 
     [TestMethod]
-    public void ManageRole_AssignWithoutUserId_ReturnsError()
+    public async Task ManageRole_AssignWithoutUserId_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.manage_role(action: "assign", role_id: Guid.NewGuid().ToString());
+        var result = await tool.manage_role(null!,action: "assign", role_id: Guid.NewGuid().ToString());
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("user_id is required"));
     }
 
     [TestMethod]
-    public void ManageRole_AssignWithoutRoleId_ReturnsError()
+    public async Task ManageRole_AssignWithoutRoleId_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.manage_role(action: "assign", user_id: "user@test.com");
+        var result = await tool.manage_role(null!,action: "assign", user_id: "user@test.com");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("role_id is required"));
     }
 
     [TestMethod]
-    public void ManageRole_UnassignWithoutUserId_ReturnsError()
+    public async Task ManageRole_UnassignWithoutUserId_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.manage_role(action: "unassign", role_id: Guid.NewGuid().ToString());
+        var result = await tool.manage_role(null!,action: "unassign", role_id: Guid.NewGuid().ToString());
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("user_id is required"));
     }
 
     [TestMethod]
-    public void ManageRole_CreateWithoutRoleName_ReturnsError()
+    public async Task ManageRole_CreateWithoutRoleName_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.manage_role(action: "create");
+        var result = await tool.manage_role(null!,action: "create");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("role_name is required"));
     }
 
     [TestMethod]
-    public void ManageRole_UpdateWithoutRoleId_ReturnsError()
+    public async Task ManageRole_UpdateWithoutRoleId_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.manage_role(action: "update", role_name: "New Name");
+        var result = await tool.manage_role(null!,action: "update", role_name: "New Name");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("role_id is required"));
     }
 
     [TestMethod]
-    public void ManageRole_UpdateWithoutRoleName_ReturnsError()
+    public async Task ManageRole_UpdateWithoutRoleName_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.manage_role(action: "update", role_id: Guid.NewGuid().ToString());
+        var result = await tool.manage_role(null!,action: "update", role_id: Guid.NewGuid().ToString());
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("role_name is required"));
     }
 
     [TestMethod]
-    public void ManageRole_DeleteWithoutRoleId_ReturnsError()
+    public async Task ManageRole_DeleteWithoutRoleId_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.manage_role(action: "delete");
+        var result = await tool.manage_role(null!,action: "delete");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("role_id is required"));
     }
 
     [TestMethod]
-    public void ManageRole_DeleteWithInvalidGuid_ReturnsError()
+    public async Task ManageRole_DeleteWithInvalidGuid_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.manage_role(action: "delete", role_id: "bad-guid");
+        var result = await tool.manage_role(null!,action: "delete", role_id: "bad-guid");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("not a valid GUID"));
     }
 
     [TestMethod]
-    public void ManageRole_CopyWithoutRoleId_ReturnsError()
+    public async Task ManageRole_CopyWithoutRoleId_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.manage_role(action: "copy", role_name: "New Role");
+        var result = await tool.manage_role(null!,action: "copy", role_name: "New Role");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("role_id is required"));
     }
 
     [TestMethod]
-    public void ManageRole_CopyWithoutRoleName_ReturnsError()
+    public async Task ManageRole_CopyWithoutRoleName_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
-        var result = tool.manage_role(action: "copy", role_id: Guid.NewGuid().ToString());
+        var result = await tool.manage_role(null!,action: "copy", role_id: Guid.NewGuid().ToString());
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("role_name is required"));
@@ -359,7 +360,7 @@ public class ManageRoleToolTests
     // ──────────────────────────────────────────────
 
     [TestMethod]
-    public void ManageRole_HasAllExpectedParameters()
+    public async Task ManageRole_HasAllExpectedParameters()
     {
         var method = ToolType.GetMethod("manage_role")!;
         var parameters = method.GetParameters();

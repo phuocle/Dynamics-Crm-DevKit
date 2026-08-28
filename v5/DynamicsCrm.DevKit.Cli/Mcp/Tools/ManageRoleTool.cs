@@ -1,13 +1,16 @@
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
@@ -19,6 +22,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
+        private string _workspaceFolder;
 
         public ManageRoleTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
         {
@@ -32,27 +36,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageRoleResult)),
         Description(
-            "Security roles — list/detail/user/assign/unassign/create/update/delete/copy.\n" +
+            "Security roles — list/detail/user/assign/unassign/create/update/delete/copy/restore.\n" +
             "- list: optional role_name, business_unit_id, max_records\n" +
             "- detail: role_id OR role_name (+optional entity_name) → privileges grouped by entity. Resolves role name first (fuzzy), then GUID fallback.\n" +
             "- user: user_id (+optional entity_name) → user's roles + effective privileges\n" +
             "- assign / unassign: role_id + user_id (direct) or team_id (role for a team; members inherit it). user action also reports roles inherited via team membership.\n" +
             "- create: role_name (+optional business_unit_id)\n" +
             "- update: role_id + optional role_name (rename) and/or privileges (JSON array of {entity, right, depth}) to add/change/remove privileges and depth on an existing role. Depth: User | BusinessUnit | Parent:ChildBU | Organization; 'None' removes. Rights: Create | Read | Write | Delete | Append | AppendTo | Assign | Share, or '*' to apply to all rights of the entity.\n" +
-            "- delete: role_id (irreversible; managed roles can't delete — use copy)\n" +
+            "- delete: role_id (managed roles can't delete — use copy)\n" +
             "- copy: role_id + role_name (clone with all privileges)\n" +
+            "- restore: backup_path → restore a role from a .role.json backup written by update/delete (result's backupPath; backups at .devkit/manage_role/). If the role was deleted it is re-created with a NEW role ID — re-assign users/teams yourself (assignments are not backed up).\n" +
             "Mutating actions require the System Administrator role on the calling user.\n\n" +
-            "Depth: User < BU < Parent:ChildBU < Org. Only root roles listed (not BU-inherited copies). Fuzzy on role_name: 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto.\n\n" +
+            "Depth: User < BU < Parent:ChildBU < Org. Only root roles listed (not BU-inherited copies). Fuzzy on role_name: 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto. update/delete save a pre-change privilege backup (backupPath) before mutating.\n\n" +
             "WHEN TO USE:\n" +
             "- Debug 'access denied' (action='user' + entity_name)\n" +
             "- Audit role privileges (action='detail')\n" +
-            "- Provision access (assign/unassign or create/copy)\n\n" +
+            "- Provision access (assign/unassign or create/copy)\n" +
+            "- Roll back a bad privilege update or a mistaken delete (action='restore')\n\n" +
             "RELATED TOOLS:\n" +
             "- whoami → verify the connected user and their direct roles\n" +
             "- manage_record → read/create/update role and team records directly\n" +
             "- execute_fetchxml → query roles and privileges with deterministic filters")]
-        public CallToolResult manage_role(
-            [Description("list, detail, user, assign, unassign, create, update, delete, copy.")] string action = "",
+        public async Task<CallToolResult> manage_role(
+            McpServer server,
+            [Description("list, detail, user, assign, unassign, create, update, delete, copy, restore.")] string action = "",
             [Description("Email or GUID. Required: user/assign/unassign (unless team_id is used).")] string user_id = "",
             [Description("Team GUID or exact name. assign/unassign: assign the role to this team instead of a user (members inherit it).")] string team_id = "",
             [Description("Role GUID. For detail only, this may also be a role name; if empty, role_name is used. Required: detail/assign/unassign/update/delete/copy.")] string role_id = "",
@@ -60,23 +67,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("BU GUID. list: filter. create: target BU (empty = root).")] string business_unit_id = "",
             [Description("detail/user: filter privileges by entity Display Name or logical name.")] string entity_name = "",
             [Description("update only. JSON array: [{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Organization\"},...]. entity = Display Name or logical name; right = Create|Read|Write|Delete|Append|AppendTo|Assign|Share, or '*' for all rights on the entity; depth = User|BusinessUnit|Parent:ChildBU|Organization, or None to remove.")] string privileges = "",
+            [Description("restore only: .role.json backup file path written by update/delete (result's backupPath). Backups are at .devkit/manage_role/.")] string backup_path = "",
             [Description("list only. Max 250.")] int max_records = 50)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(action))
                     return Error("action is required.",
-                        "Valid values: 'list', 'detail', 'user', 'assign', 'unassign', 'create', 'update', 'delete', 'copy'.");
+                        "Valid values: 'list', 'detail', 'user', 'assign', 'unassign', 'create', 'update', 'delete', 'copy', 'restore'.");
 
                 var normalizedAction = action.Trim().ToLowerInvariant();
 
-                var isMutation = normalizedAction is "assign" or "unassign" or "create" or "update" or "delete" or "copy";
+                var isMutation = normalizedAction is "assign" or "unassign" or "create" or "update" or "delete" or "copy" or "restore";
                 if (isMutation)
                 {
                     var gateError = RequireSystemAdministrator(normalizedAction);
                     if (gateError != null)
                         return gateError;
                 }
+
+                if (normalizedAction is "update" or "delete" or "restore")
+                    _workspaceFolder = await WorkspaceFolderHelper.GetAsync(server);
 
                 return normalizedAction switch
                 {
@@ -89,13 +100,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "update" => HandleUpdate(role_id?.Trim(), role_name?.Trim(), privileges),
                     "delete" => HandleDelete(role_id?.Trim()),
                     "copy" => HandleCopy(role_id?.Trim(), role_name?.Trim()),
+                    "restore" => HandleRestore(backup_path?.Trim()),
                     _ => Error($"Invalid action '{action}'.",
-                        "Valid values: 'list', 'detail', 'user', 'assign', 'unassign', 'create', 'update', 'delete', 'copy'.")
+                        "Valid values: 'list', 'detail', 'user', 'assign', 'unassign', 'create', 'update', 'delete', 'copy', 'restore'.")
                 };
             }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
 
@@ -123,7 +135,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(businessUnitId))
             {
                 if (!Guid.TryParse(businessUnitId, out var buId))
-                    return Error($"'{businessUnitId}' is not a valid GUID for business_unit_id.");
+                    return Error($"'{businessUnitId}' is not a valid GUID for business_unit_id.",
+                        "Pass the businessunitid GUID of an existing business unit, or omit business_unit_id.");
                 query.Criteria.AddCondition("businessunitid", ConditionOperator.Equal, buId);
             }
 
@@ -175,7 +188,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     resolvedRole.Error.StartsWith("No security role found with ID", StringComparison.Ordinal))
                     return Error(resolvedRole.Error,
                         "Use action='list' to find valid role IDs.");
-                return Error(resolvedRole.Error);
+                return Error(resolvedRole.Error,
+                    "Use action='list' to find valid roles.");
             }
 
             var role = resolvedRole.Role;
@@ -196,10 +210,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Roles = [entry]
                 });
 
-            var resolvedEntityFilter = ResolveEntityFilter(entityFilter, "detail");
-            if (!string.IsNullOrEmpty(resolvedEntityFilter.Error))
-                return Error(resolvedEntityFilter.Error);
-            entityFilter = resolvedEntityFilter.EntityName;
+            var resolvedEntityFilter = ResolveEntityFilter(entityFilter);
+            if (resolvedEntityFilter != null && !resolvedEntityFilter.IsSuccess)
+                return EntityFilterError(entityFilter, "detail", resolvedEntityFilter);
+            entityFilter = resolvedEntityFilter?.Value.LogicalName;
 
             var groups = GroupPrivilegesByEntity(privileges, entityFilter)
                 .Select(g => new RolePrivilegeGroup
@@ -247,10 +261,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Provide the user's email or systemuserid GUID.");
 
             var userResult = GetUser(userId);
-            if (userResult.Error != null)
-                return Error(userResult.Error);
             if (userResult.MultipleUsers != null)
-                return Error(userResult.Error, null, BuildMultipleUsersDetails("user", userResult.MultipleUsers));
+                return Error(userResult.Error,
+                    "Re-call with the exact systemuserid GUID from the Detail list.",
+                    BuildMultipleUsersDetails("user", userResult.MultipleUsers));
+            if (userResult.Error != null)
+                return Error(userResult.Error,
+                    "Pass the user's email (internalemailaddress) or systemuserid GUID.");
 
             var userEntity = userResult.User;
             var userIdGuid = userEntity.GetAttributeValue<Guid>("systemuserid");
@@ -326,10 +343,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(entityFilter))
             {
-                var resolvedEntityFilter = ResolveEntityFilter(entityFilter, "user");
-                if (!string.IsNullOrEmpty(resolvedEntityFilter.Error))
-                    return Error(resolvedEntityFilter.Error);
-                entityFilter = resolvedEntityFilter.EntityName;
+                var resolvedEntityFilter = ResolveEntityFilter(entityFilter);
+                if (resolvedEntityFilter != null && !resolvedEntityFilter.IsSuccess)
+                    return EntityFilterError(entityFilter, "user", resolvedEntityFilter);
+                entityFilter = resolvedEntityFilter?.Value.LogicalName;
 
                 structured.EntityName = entityFilter;
 
@@ -386,11 +403,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var resultWord = isAssign ? "assigned" : "unassigned";
 
             if (string.IsNullOrWhiteSpace(userId) && string.IsNullOrWhiteSpace(teamId))
-                return Error($"user_id (or team_id) is required for '{actionWord}' action.");
+                return Error($"user_id (or team_id) is required for '{actionWord}' action.",
+                    $"Pass user_id (email or systemuserid GUID) to {actionWord} the role for a user, or team_id (team GUID or exact name) for a team.");
             if (string.IsNullOrWhiteSpace(roleId))
-                return Error($"role_id is required for '{actionWord}' action.");
+                return Error($"role_id is required for '{actionWord}' action.",
+                    "Pass the roleid GUID. Use action='list' to find valid role IDs.");
             if (!Guid.TryParse(roleId, out var roleGuid))
-                return Error($"'{roleId}' is not a valid GUID for role_id.");
+                return Error($"'{roleId}' is not a valid GUID for role_id.",
+                    "Use action='list' to find valid role IDs.");
 
             var role = RetrieveRole(roleGuid);
             if (role == null)
@@ -405,10 +425,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(teamId))
             {
                 var teamResult = ResolveTeam(teamId);
-                if (teamResult.Error != null)
-                    return Error(teamResult.Error);
                 if (teamResult.MultipleTeams != null)
-                    return Error(teamResult.Error, null, BuildMultipleTeamsDetails(actionWord, teamResult.MultipleTeams));
+                    return Error(teamResult.Error,
+                        "Re-call with the exact teamid GUID from the Detail list.",
+                        BuildMultipleTeamsDetails(actionWord, teamResult.MultipleTeams));
+                if (teamResult.Error != null)
+                    return Error(teamResult.Error,
+                        "Pass the teamid GUID or the exact team name.");
 
                 targetLogical = "team";
                 targetId = teamResult.Team.GetAttributeValue<Guid>("teamid");
@@ -417,10 +440,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             else
             {
                 var userResult = GetUser(userId);
-                if (userResult.Error != null)
-                    return Error(userResult.Error);
                 if (userResult.MultipleUsers != null)
-                    return Error(userResult.Error, null, BuildMultipleUsersDetails(actionWord, userResult.MultipleUsers));
+                    return Error(userResult.Error,
+                        "Re-call with the exact systemuserid GUID from the Detail list.",
+                        BuildMultipleUsersDetails(actionWord, userResult.MultipleUsers));
+                if (userResult.Error != null)
+                    return Error(userResult.Error,
+                        "Pass the user's email (internalemailaddress) or systemuserid GUID.");
 
                 targetLogical = "systemuser";
                 targetId = userResult.User.GetAttributeValue<Guid>("systemuserid");
@@ -479,7 +505,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleCreate(string roleName, string businessUnitId)
         {
             if (string.IsNullOrWhiteSpace(roleName))
-                return Error("role_name is required for 'create' action.");
+                return Error("role_name is required for 'create' action.",
+                    "Pass role_name — the display name for the new role.");
 
             Guid buId;
             string buName;
@@ -487,7 +514,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(businessUnitId))
             {
                 if (!Guid.TryParse(businessUnitId, out buId))
-                    return Error($"'{businessUnitId}' is not a valid GUID for business_unit_id.");
+                    return Error($"'{businessUnitId}' is not a valid GUID for business_unit_id.",
+                        "Pass the businessunitid GUID of an existing business unit, or omit business_unit_id to use the root business unit.");
 
                 var buQuery = new QueryExpression("businessunit")
                 {
@@ -496,7 +524,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 buQuery.Criteria.AddCondition("businessunitid", ConditionOperator.Equal, buId);
                 var buResult = _serviceClient.RetrieveMultiple(buQuery);
                 if (buResult.Entities.Count == 0)
-                    return Error($"No business unit found with ID '{businessUnitId}'.");
+                    return Error($"No business unit found with ID '{businessUnitId}'.",
+                        "Pass the businessunitid GUID of an existing business unit, or omit business_unit_id to use the root business unit.");
                 buName = buResult.Entities[0].GetAttributeValue<string>("name") ?? "";
             }
             else
@@ -508,7 +537,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 rootBuQuery.Criteria.AddCondition("parentbusinessunitid", ConditionOperator.Null);
                 var rootResult = _serviceClient.RetrieveMultiple(rootBuQuery);
                 if (rootResult.Entities.Count == 0)
-                    return Error("Could not find the root business unit.");
+                    return Error("Could not find the root business unit.",
+                        "Pass business_unit_id of an existing business unit explicitly.");
                 buId = rootResult.Entities[0].GetAttributeValue<Guid>("businessunitid");
                 buName = rootResult.Entities[0].GetAttributeValue<string>("name") ?? "";
             }
@@ -545,12 +575,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleUpdate(string roleId, string roleName, string privilegesJson)
         {
             if (string.IsNullOrWhiteSpace(roleId))
-                return Error("role_id is required for 'update' action.");
+                return Error("role_id is required for 'update' action.",
+                    "Pass the roleid GUID of the role to update. Use action='list' to find valid role IDs.");
             if (string.IsNullOrWhiteSpace(roleName) && string.IsNullOrWhiteSpace(privilegesJson))
                 return Error("Nothing to update. Provide role_name (rename) and/or privileges (JSON array).",
                     "Example privileges: [{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Organization\"}]. Use depth 'None' to remove a privilege.");
             if (!Guid.TryParse(roleId, out var id))
-                return Error($"'{roleId}' is not a valid GUID.");
+                return Error($"'{roleId}' is not a valid GUID.",
+                    "Use action='list' to find valid role IDs.");
 
             var existingRole = RetrieveRole(id);
             if (existingRole == null)
@@ -559,7 +591,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var isCustomizable = existingRole.GetAttributeValue<BooleanManagedProperty>("iscustomizable")?.Value ?? true;
             if (!isCustomizable)
-                return Error($"Role '{existingRole.GetAttributeValue<string>("name")}' is not customizable and cannot be updated.");
+                return Error($"Role '{existingRole.GetAttributeValue<string>("name")}' is not customizable and cannot be updated.",
+                    "Use action='copy' to clone its privileges into a new custom role, then update the copy.");
 
             var oldName = existingRole.GetAttributeValue<string>("name") ?? "";
             var hasRename = !string.IsNullOrWhiteSpace(roleName) && !string.Equals(roleName, oldName, StringComparison.Ordinal);
@@ -607,7 +640,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     var resolvedEntity = DisplayNameFirstResolver.ResolveEntity(_serviceClient, change.Entity?.Trim(), "manage_role");
                     if (!resolvedEntity.IsSuccess)
-                        return Error($"privileges entity '{change.Entity}': {resolvedEntity.Error}");
+                    {
+                        if (resolvedEntity.Status == ResolveStatus.Ambiguous)
+                        {
+                            var entityMatches = resolvedEntity.Candidates.Select(c => new TableMatchEntry
+                            {
+                                DisplayName = c.DisplayName ?? "",
+                                LogicalName = c.LogicalName ?? "",
+                                SchemaName = c.SchemaName ?? ""
+                            }).ToList();
+                            return Error(
+                                $"privileges entity '{change.Entity}': {resolvedEntity.Error.Split("\r\n")[0]}",
+                                "Re-call with a more specific entity value in privileges[].entity.",
+                                new ManageRoleResult { Action = "update", EntityMatches = entityMatches });
+                        }
+                        return Error(
+                            $"privileges entity '{change.Entity}': {resolvedEntity.Error.Split("\r\n")[0]}",
+                            "Fix privileges[].entity: pass a valid entity Display Name or logical name (use get_tables to discover).");
+                    }
                     var entityLogical = resolvedEntity.Value.LogicalName;
 
                     var isRemove = string.Equals(change.Depth?.Trim(), "None", StringComparison.OrdinalIgnoreCase);
@@ -624,17 +674,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         foreach (var right in rights)
                         {
                             var applyError = ApplyPrivilegeChange(current, entityLogical, right, change.Depth, isRemove, added, updatedList, removed);
-                            if (applyError != null) return Error(applyError);
+                            if (applyError != null) return Error(applyError.Value.Message, applyError.Value.Hint);
                         }
                         continue;
                     }
 
                     var applyErrorSingle = ApplyPrivilegeChange(current, entityLogical, rightRaw, change.Depth, isRemove, added, updatedList, removed);
-                    if (applyErrorSingle != null) return Error(applyErrorSingle);
+                    if (applyErrorSingle != null) return Error(applyErrorSingle.Value.Message, applyErrorSingle.Value.Hint);
                 }
 
                 if (added.Count == 0 && updatedList.Count == 0 && removed.Count == 0 && !hasRename)
-                    return Error("No effective privilege changes. All requested privileges already match the current role.");
+                    return Error("No effective privilege changes. All requested privileges already match the current role.",
+                        "Use action='detail' to see current privileges, then change a depth, add a new right, or set depth 'None' to remove.");
             }
 
             var renamePart = hasRename ? $" → rename to '{roleName.Trim()}'" : "";
@@ -651,6 +702,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     PrivilegesUpdated = updatedList.Count > 0 ? updatedList : null,
                     PrivilegesRemoved = removed.Count > 0 ? removed : null
                 });
+
+            // Backup runs only when actually mutating (after DryRun check above)
+            var backupBuRef = existingRole.GetAttributeValue<EntityReference>("businessunitid");
+            var backupPath = RoleBackupHelper.SaveBackup(id, oldName, backupBuRef?.Id ?? Guid.Empty,
+                GetRolePrivileges(id).Select(ToBackupPrivilege).ToList(), _workspaceFolder);
 
             if (hasRename)
             {
@@ -683,7 +739,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var displayName = hasRename ? $"{oldName}' → '{roleName.Trim()}" : oldName;
-            return Success($"Updated role '{displayName}' ({id}){privPart}.", new ManageRoleResult
+            return Success($"Updated role '{displayName}' ({id}){privPart}. Backup saved.", new ManageRoleResult
             {
                 Action = "updated",
                 RoleId = id.ToString(),
@@ -691,14 +747,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Status = "updated",
                 PrivilegesAdded = added.Count > 0 ? added : null,
                 PrivilegesUpdated = updatedList.Count > 0 ? updatedList : null,
-                PrivilegesRemoved = removed.Count > 0 ? removed : null
+                PrivilegesRemoved = removed.Count > 0 ? removed : null,
+                BackupPath = backupPath
             });
         }
 
         private static readonly string[] StandardRights =
             { "Create", "Read", "Write", "Delete", "Append", "AppendTo", "Assign", "Share" };
 
-        private string ApplyPrivilegeChange(
+        private (string Message, string Hint)? ApplyPrivilegeChange(
             Dictionary<string, PrivilegeInfo> current,
             string entityLogical,
             string right,
@@ -731,7 +788,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var privId = FindPrivilegeId(right, entityLogical);
             if (privId == null)
-                return $"No privilege found for right '{right}' on entity '{entityLogical}'. Check the right value and entity name. Use action='detail' with entity_name to see privileges the role already has.";
+                return ($"No privilege found for right '{right}' on entity '{entityLogical}'.",
+                    "Check the right value and entity name. Use action='detail' with entity_name to see privileges the role already has.");
             current[key] = new PrivilegeInfo
             {
                 FullName = $"prv{right}{entityLogical}",
@@ -801,9 +859,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleDelete(string roleId)
         {
             if (string.IsNullOrWhiteSpace(roleId))
-                return Error("role_id is required for 'delete' action.");
+                return Error("role_id is required for 'delete' action.",
+                    "Pass the roleid GUID of the role to delete. Use action='list' to find valid role IDs.");
             if (!Guid.TryParse(roleId, out var id))
-                return Error($"'{roleId}' is not a valid GUID.");
+                return Error($"'{roleId}' is not a valid GUID.",
+                    "Use action='list' to find valid role IDs.");
 
             var existingRole = RetrieveRole(id);
             if (existingRole == null)
@@ -818,7 +878,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var roleName = existingRole.GetAttributeValue<string>("name") ?? "";
 
             if (_options.DryRun)
-                return DryRun($"Would DELETE role '{roleName}' ({id}). This cannot be undone.", new ManageRoleResult
+                return DryRun($"Would DELETE role '{roleName}' ({id}). A backup would be saved first; restore re-creates the role with a new ID.", new ManageRoleResult
                 {
                     Action = "delete",
                     RoleId = id.ToString(),
@@ -826,25 +886,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = "not_executed"
                 });
 
+            // Backup runs only when actually mutating (after DryRun check above)
+            var deleteBuRef = existingRole.GetAttributeValue<EntityReference>("businessunitid");
+            var backupPath = RoleBackupHelper.SaveBackup(id, roleName, deleteBuRef?.Id ?? Guid.Empty,
+                GetRolePrivileges(id).Select(ToBackupPrivilege).ToList(), _workspaceFolder);
+
             DataverseMutationExecutor.Delete(_context, _serviceClient, "role", id);
 
-            return Success($"Deleted role '{roleName}' ({id}).", new ManageRoleResult
+            return Success($"Deleted role '{roleName}' ({id}). Backup saved.", new ManageRoleResult
             {
                 Action = "deleted",
                 RoleId = id.ToString(),
                 RoleName = roleName,
-                Status = "deleted"
+                Status = "deleted",
+                BackupPath = backupPath
             });
         }
 
         private CallToolResult HandleCopy(string roleId, string roleName)
         {
             if (string.IsNullOrWhiteSpace(roleId))
-                return Error("role_id is required for 'copy' action.");
+                return Error("role_id is required for 'copy' action.",
+                    "Pass the roleid GUID of the role to copy. Use action='list' to find valid role IDs.");
             if (string.IsNullOrWhiteSpace(roleName))
-                return Error("role_name is required for 'copy' action (name for the new role).");
+                return Error("role_name is required for 'copy' action (name for the new role).",
+                    "Pass role_name — the display name for the cloned role.");
             if (!Guid.TryParse(roleId, out var sourceId))
-                return Error($"'{roleId}' is not a valid GUID.");
+                return Error($"'{roleId}' is not a valid GUID.",
+                    "Use action='list' to find valid role IDs.");
 
             var sourceRole = RetrieveRole(sourceId);
             if (sourceRole == null)
@@ -907,6 +976,149 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Status = "copied"
             });
         }
+
+        private CallToolResult HandleRestore(string backupPath)
+        {
+            if (string.IsNullOrWhiteSpace(backupPath))
+                return Error("backup_path is required for 'restore' action.",
+                    "Pass the backupPath from a previous update/delete result. Backup files are at: .devkit/manage_role/");
+            var path = backupPath.Trim();
+            if (!path.EndsWith(".role.json", StringComparison.OrdinalIgnoreCase))
+                return Error($"backup_path must be a .role.json backup file: '{path}'.",
+                    "A backup file is {roleId}_{timestamp}.role.json at: .devkit/manage_role/ — written by update/delete (result's backupPath).");
+            if (!File.Exists(path))
+                return Error($"Backup file not found: '{path}'.",
+                    "Check the file path. Backup files are at: .devkit/manage_role/");
+
+            RoleBackupSnapshot snapshot;
+            try
+            {
+                snapshot = RoleBackupHelper.LoadBackup(path);
+            }
+            catch (System.Text.Json.JsonException ex)
+            {
+                return Error($"Backup file is not valid JSON: '{path}'. {ex.Message}",
+                    "The backup file may be corrupted — fix the JSON or use an earlier backup.");
+            }
+            if (snapshot == null || !Guid.TryParse(snapshot.RoleId, out var backupRoleId))
+                return Error($"Backup file has no valid roleId: '{path}'.",
+                    "The backup file may be corrupted — fix the JSON or use an earlier backup.");
+
+            var snapshotPrivileges = snapshot.Privileges ?? new List<RoleBackupPrivilege>();
+            var existingRole = RetrieveRole(backupRoleId);
+
+            if (existingRole != null)
+            {
+                var isCustomizable = existingRole.GetAttributeValue<BooleanManagedProperty>("iscustomizable")?.Value ?? true;
+                if (!isCustomizable)
+                    return Error($"Role '{existingRole.GetAttributeValue<string>("name")}' is not customizable and cannot be restored.",
+                        "Use action='copy' to clone its privileges into a new custom role, then update the copy.");
+
+                var currentName = existingRole.GetAttributeValue<string>("name") ?? "";
+                var restoreName = string.IsNullOrWhiteSpace(snapshot.RoleName) ? currentName : snapshot.RoleName;
+                var renamePart = string.Equals(currentName, restoreName, StringComparison.Ordinal) ? "" : $", rename '{currentName}' → '{restoreName}'";
+
+                if (_options.DryRun)
+                    return DryRun($"Would RESTORE role '{restoreName}' ({backupRoleId}) from backup — {snapshotPrivileges.Count} privileges{renamePart}.", new ManageRoleResult
+                    {
+                        Action = "restore",
+                        RoleId = backupRoleId.ToString(),
+                        RoleName = restoreName,
+                        Status = "not_executed"
+                    });
+
+                // Backup pre-restore state only when actually mutating
+                var currentBuRef = existingRole.GetAttributeValue<EntityReference>("businessunitid");
+                var preRestoreBackupPath = RoleBackupHelper.SaveBackup(backupRoleId, currentName, currentBuRef?.Id ?? Guid.Empty,
+                    GetRolePrivileges(backupRoleId).Select(ToBackupPrivilege).ToList(), _workspaceFolder);
+
+                if (!string.Equals(currentName, restoreName, StringComparison.Ordinal))
+                {
+                    var renameEntity = new Entity("role", backupRoleId)
+                    {
+                        ["name"] = restoreName
+                    };
+                    DataverseMutationExecutor.Update(_context, _serviceClient, renameEntity);
+                }
+
+                var finalPrivileges = new RolePrivilege[snapshotPrivileges.Count];
+                for (var i = 0; i < snapshotPrivileges.Count; i++)
+                {
+                    finalPrivileges[i] = new RolePrivilege
+                    {
+                        PrivilegeId = Guid.Parse(snapshotPrivileges[i].PrivilegeId),
+                        Depth = (PrivilegeDepth)ReverseDepthMask(snapshotPrivileges[i].Depth)
+                    };
+                }
+                DataverseMutationExecutor.Execute(_context, _serviceClient, new ReplacePrivilegesRoleRequest
+                {
+                    RoleId = backupRoleId,
+                    Privileges = finalPrivileges
+                });
+
+                return Success($"Restored role '{restoreName}' ({backupRoleId}) from backup — {snapshotPrivileges.Count} privileges{renamePart}. Backup saved.", new ManageRoleResult
+                {
+                    Action = "restored",
+                    RoleId = backupRoleId.ToString(),
+                    RoleName = restoreName,
+                    Status = "restored",
+                    PrivilegesCopied = snapshotPrivileges.Count,
+                    BackupPath = preRestoreBackupPath
+                });
+            }
+
+            if (_options.DryRun)
+                return DryRun($"Would RESTORE (re-create) role '{snapshot.RoleName}' from backup — original role ({backupRoleId}) no longer exists; a new role ID will be assigned. {snapshotPrivileges.Count} privileges.", new ManageRoleResult
+                {
+                    Action = "restore",
+                    RoleName = snapshot.RoleName,
+                    Status = "not_executed"
+                });
+
+            var buId = Guid.TryParse(snapshot.BusinessUnitId, out var parsedBuId) ? parsedBuId : Guid.Empty;
+            var newRoleEntity = new Entity("role")
+            {
+                ["name"] = snapshot.RoleName
+            };
+            if (buId != Guid.Empty)
+                newRoleEntity["businessunitid"] = new EntityReference("businessunit", buId);
+            var newRoleId = DataverseMutationExecutor.Create(_context, _serviceClient, newRoleEntity);
+
+            if (snapshotPrivileges.Count > 0)
+            {
+                var addPrivileges = new RolePrivilege[snapshotPrivileges.Count];
+                for (var i = 0; i < snapshotPrivileges.Count; i++)
+                {
+                    addPrivileges[i] = new RolePrivilege
+                    {
+                        PrivilegeId = Guid.Parse(snapshotPrivileges[i].PrivilegeId),
+                        Depth = (PrivilegeDepth)ReverseDepthMask(snapshotPrivileges[i].Depth)
+                    };
+                }
+                DataverseMutationExecutor.Execute(_context, _serviceClient, new AddPrivilegesRoleRequest
+                {
+                    RoleId = newRoleId,
+                    Privileges = addPrivileges
+                });
+            }
+
+            return Success($"Restored role '{snapshot.RoleName}' as NEW role ({newRoleId}) from backup — original ({backupRoleId}) was deleted. {snapshotPrivileges.Count} privileges restored. Re-assign users/teams yourself — assignments are not backed up.", new ManageRoleResult
+            {
+                Action = "restored",
+                RoleId = newRoleId.ToString(),
+                RoleName = snapshot.RoleName,
+                SourceRoleId = backupRoleId.ToString(),
+                Status = "restored",
+                PrivilegesCopied = snapshotPrivileges.Count
+            });
+        }
+
+        private static RoleBackupPrivilege ToBackupPrivilege(PrivilegeInfo p) => new RoleBackupPrivilege
+        {
+            PrivilegeId = p.PrivilegeId.ToString(),
+            Name = p.FullName,
+            Depth = p.Depth
+        };
 
         private CallToolResult RequireSystemAdministrator(string action)
         {
@@ -1002,7 +1214,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return (null, $"No user found with '{userId}'.", null);
 
             if (userResult.Entities.Count > 1)
-                return (null, $"{userResult.Entities.Count} users match '{userId}'. Re-call with the exact systemuserid GUID.", userResult.Entities.ToList());
+                return (null, $"{userResult.Entities.Count} users match '{userId}'.", userResult.Entities.ToList());
 
             return (userResult.Entities[0], null, null);
         }
@@ -1038,7 +1250,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return (null, $"No team found with '{teamId}'.", null);
 
             if (result.Entities.Count > 1)
-                return (null, $"{result.Entities.Count} teams match '{teamId}'. Re-call with the exact teamid GUID.", result.Entities.ToList());
+                return (null, $"{result.Entities.Count} teams match '{teamId}'.", result.Entities.ToList());
 
             return (result.Entities[0], null, null);
         }
@@ -1214,16 +1426,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 .ToDictionary(g => g.Key, g => g.ToList());
         }
 
-        private (string EntityName, string Error) ResolveEntityFilter(string entityFilter, string action)
+        private ResolveResult<EntityMetadata> ResolveEntityFilter(string entityFilter)
         {
             if (string.IsNullOrWhiteSpace(entityFilter))
-                return (null, null);
+                return null;
 
-            var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityFilter.Trim(), "manage_role");
-            if (!resolved.IsSuccess)
-                return (null, $"entity_name '{entityFilter.Trim()}' for action='{action}': {resolved.Error}");
+            return DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityFilter.Trim(), "manage_role");
+        }
 
-            return (resolved.Value.LogicalName, null);
+        private CallToolResult EntityFilterError(string entityFilter, string action, ResolveResult<EntityMetadata> resolved)
+        {
+            if (resolved.Status == ResolveStatus.Ambiguous)
+            {
+                var entityMatches = resolved.Candidates.Select(c => new TableMatchEntry
+                {
+                    DisplayName = c.DisplayName ?? "",
+                    LogicalName = c.LogicalName ?? "",
+                    SchemaName = c.SchemaName ?? ""
+                }).ToList();
+                return Error(
+                    $"entity_name '{entityFilter.Trim()}': {resolved.Error.Split("\r\n")[0]}",
+                    "Re-call with a more specific entity_name value.",
+                    new ManageRoleResult { Action = action, EntityMatches = entityMatches });
+            }
+            return Error(
+                $"entity_name '{entityFilter.Trim()}': {resolved.Error.Split("\r\n")[0]}",
+                "Use get_tables to discover valid entity names.");
         }
 
         private static (string right, string entity) ParsePrivilegeName(string privilegeName)

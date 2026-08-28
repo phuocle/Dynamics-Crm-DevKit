@@ -89,6 +89,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> MissingRights { get; set; }
 
+        [JsonPropertyName("entityMatches")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<TableMatchEntry> EntityMatches { get; set; }
+
+        [JsonPropertyName("backupPath")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string BackupPath { get; set; }
+
         [JsonPropertyName("privilegesAdded")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> PrivilegesAdded { get; set; }
