@@ -74,7 +74,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
 
@@ -113,25 +113,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string addOptions, string updateOptions, string removeOptionValues, string solutionName, string optionColors)
         {
             if (string.IsNullOrWhiteSpace(optionsetName))
-                return Error("optionset_name is required for 'update'.");
+                return Error("optionset_name is required for 'update'.",
+                    "Use manage_choice(action='list') to see all available global option sets.");
 
             if (!string.IsNullOrWhiteSpace(removeOptionValues) && ParseLabelList(removeOptionValues) == null)
-                return Error("Invalid remove_options format. Expected comma-separated label names (e.g., 'Draft,Cancelled').");
+                return Error("Invalid remove_options format.",
+                    "Expected comma-separated label names (e.g., 'Draft,Cancelled').");
 
             if (!string.IsNullOrWhiteSpace(addOptions) && string.IsNullOrWhiteSpace(solutionName) && ParseOptions(addOptions) == null)
-                return Error("Invalid add_options format. Use label-only 'NewLabel' (requires solution_name) e.g. 'Pending;Archived'.");
+                return Error("Invalid add_options format.",
+                    "Use label-only 'NewLabel' (requires solution_name) e.g. 'Pending;Archived', or explicit 'value:label' pairs.");
 
             if (string.IsNullOrWhiteSpace(displayName) && string.IsNullOrWhiteSpace(description) &&
                 string.IsNullOrWhiteSpace(addOptions) && string.IsNullOrWhiteSpace(updateOptions) &&
                 string.IsNullOrWhiteSpace(removeOptionValues) && string.IsNullOrWhiteSpace(optionColors))
-                return Error("No changes specified. Provide at least one of: display_name, description, add_options, update_options, remove_options, option_colors.");
+                return Error("No changes specified.",
+                    "Provide at least one of: display_name, description, add_options, update_options, remove_options, option_colors.");
 
             if (!TryResolveToLogicalName(optionsetName, out var name, out var resolveErr))
                 return Error(resolveErr.Split("\r\n")[0], "Use manage_choice(action='list') to see all available global option sets.");
 
             var existingMeta = RetrieveOptionSetMetadata(name);
             if (existingMeta == null)
-                return Error($"Global option set '{name}' not found. Use action='create' to create it, or action='list' to see all available option sets.");
+                return Error($"Global option set '{name}' not found.",
+                    "Use action='create' to create it, or action='list' to see all available option sets.");
 
             var hasDisplayName = !string.IsNullOrWhiteSpace(displayName);
             var hasDescription = !string.IsNullOrWhiteSpace(description);
@@ -156,17 +161,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var parsedRemoveLabels = ParseLabelList(removeOptionValues);
 
             if (!string.IsNullOrWhiteSpace(addOptions) && parsedAddRequest == null)
-                return Error("Invalid add_options format. Use label-only 'NewLabel' (requires solution_name) e.g. 'Pending;Archived'.");
+                return Error("Invalid add_options format.",
+                    "Use label-only 'NewLabel' (requires solution_name) e.g. 'Pending;Archived', or explicit 'value:label' pairs.");
             if (!string.IsNullOrWhiteSpace(updateOptions) && parsedUpdateLabels == null)
-                return Error("Invalid update_options format. Expected 'OldLabel:NewLabel;...' (e.g., 'Draft:Open;Paid:Completed').");
+                return Error("Invalid update_options format.",
+                    "Expected 'OldLabel:NewLabel;...' (e.g., 'Draft:Open;Paid:Completed').");
             if (!string.IsNullOrWhiteSpace(removeOptionValues) && parsedRemoveLabels == null)
-                return Error("Invalid remove_options format. Expected comma-separated label names (e.g., 'Draft,Cancelled').");
+                return Error("Invalid remove_options format.",
+                    "Expected comma-separated label names (e.g., 'Draft,Cancelled').");
 
             var hasAddRequest = parsedAddRequest != null && parsedAddRequest.Count > 0;
             var hasUpdate = parsedUpdateLabels != null && parsedUpdateLabels.Count > 0;
             var hasRemove = parsedRemoveLabels != null && parsedRemoveLabels.Count > 0;
             if (!hasDisplayName && !hasDescription && !hasAddRequest && !hasUpdate && !hasRemove && !hasColors)
-                return Error("No changes specified. Provide at least one of: display_name, description, add_options, update_options, remove_options, option_colors.");
+                return Error("No changes specified.",
+                    "Provide at least one of: display_name, description, add_options, update_options, remove_options, option_colors.");
 
             var optionsToInsert = new List<(int value, string label)>();
             var optionsAlreadyExisted = new List<(int value, string label)>();
@@ -181,7 +190,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         continue;
                     }
                     if (existingMeta.Options.Any(o => o.Value == opt.value))
-                        return Error($"Option value '{opt.value}' already exists in '{name}'. Use a different explicit value or omit the value so it can be auto-assigned.");
+                        return Error($"Option value '{opt.value}' already exists in '{name}'.",
+                            "Use a different explicit value or omit the value so it can be auto-assigned.");
                     optionsToInsert.Add(opt);
                 }
             }
@@ -193,7 +203,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var match = FindOptionByLabel(existingMeta, oldLabel);
                     if (match?.Value == null)
-                        return Error($"Option label '{oldLabel}' not found in '{name}'. Use action='detail' to see existing option labels.");
+                        return Error($"Option label '{oldLabel}' not found in '{name}'.",
+                            "Use action='detail' to see existing option labels.");
                     parsedUpdate.Add((match.Value.Value, newLabel));
                 }
             }
@@ -205,7 +216,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var match = FindOptionByLabel(existingMeta, label);
                     if (match?.Value == null)
-                        return Error($"Option label '{label}' not found in '{name}'. Use action='detail' to see existing option labels.");
+                        return Error($"Option label '{label}' not found in '{name}'.",
+                            "Use action='detail' to see existing option labels.");
                     parsedRemove.Add(match.Value.Value);
                 }
             }
@@ -214,12 +226,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Dictionary<string, string> colorMap;
             if (hasColors)
             {
-                var (colorRaw, colorParseError) = ParseOptionColors(optionColors);
+                var (colorRaw, colorParseError, colorParseHint) = ParseOptionColors(optionColors);
                 if (colorParseError != null)
-                    return Error(colorParseError);
-                var (resolvedColors, resolveError) = ResolveOptionColors(projected, colorRaw, name);
+                    return Error(colorParseError, colorParseHint);
+                var (resolvedColors, resolveError, resolveHint) = ResolveOptionColors(projected, colorRaw, name);
                 if (resolveError != null)
-                    return Error(resolveError);
+                    return Error(resolveError, resolveHint);
                 colorMap = resolvedColors;
             }
             else
@@ -337,7 +349,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var verifyErrors = VerifyChoiceUpdate(verifiedMeta, displayName, description, parsedAddRequest,
                     parsedUpdateLabels, parsedRemoveLabels, colorMap);
                 if (verifyErrors.Count > 0)
-                    return Error("Choice metadata update could not be verified after waiting. " + string.Join(" ", verifyErrors));
+                    return Error("Choice metadata update could not be verified after waiting. " + string.Join(" ", verifyErrors),
+                        "Wait a few seconds, run action='detail' to inspect the current state, then retry the update.");
             }
 
             var requiresPublish = metadataMutated && (hasDisplayName || hasDescription || optionsToInsert.Count > 0 || hasUpdate || hasColors);
@@ -412,22 +425,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string options, string solutionName, string optionColors)
         {
             if (string.IsNullOrWhiteSpace(displayName))
-                return Error("display_name is required for 'create'.");
+                return Error("display_name is required for 'create'.",
+                    "Provide a human-readable label — optionset_name is auto-derived from it when omitted.");
 
             if (string.IsNullOrWhiteSpace(options))
-                return Error("options is required for 'create'. " +
+                return Error("options is required for 'create'.",
                     "Provide label-only values separated by semicolons (e.g. 'Draft;Confirmed;Paid'). solution_name is also required.");
 
             // Early format validation (no Dataverse needed)
             if (ParseOptionsWithAutoValue(options, 0) == null)
-                return Error("Invalid options format. " +
-                    "Provide label-only values separated by semicolons (e.g. 'Draft;Confirmed;Paid').");
+                return Error("Invalid options format.",
+                    "Provide label-only values separated by semicolons (e.g. 'Draft;Confirmed;Paid'), or explicit 'value:label' pairs.");
 
             var identityInput = string.IsNullOrWhiteSpace(optionsetName) ? displayName : optionsetName;
             var existingChoice = DisplayNameFirstResolver.ResolveGlobalOptionSet(_serviceClient, identityInput, "manage_choice");
             if (existingChoice.IsSuccess)
                 return Error(
-                    $"Global option set '{identityInput.Trim()}' already exists as '{existingChoice.Value.Name}' ({existingChoice.Value.DisplayName?.UserLocalizedLabel?.Label ?? ""}). " +
+                    $"Global option set '{identityInput.Trim()}' already exists as '{existingChoice.Value.Name}' ({existingChoice.Value.DisplayName?.UserLocalizedLabel?.Label ?? ""}).",
                     "Use action='update' to modify it.");
             if (existingChoice.Status == ResolveStatus.Ambiguous || existingChoice.Status == ResolveStatus.Error)
                 return Error(existingChoice.Error.Split("\r\n")[0], "Use manage_choice(action='list') to see all available global option sets.");
@@ -461,22 +475,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var parsedOptions = ParseOptionsWithAutoValue(options, solResult.OptionValuePrefix * 10000);
 
             if (parsedOptions == null)
-                return Error("Invalid options format. " +
-                    "Provide label-only values separated by semicolons (e.g. 'Draft;Confirmed;Paid').");
+                return Error("Invalid options format.",
+                    "Provide label-only values separated by semicolons (e.g. 'Draft;Confirmed;Paid'), or explicit 'value:label' pairs.");
 
             if (parsedOptions.Count == 0)
-                return Error("At least one option is required for 'create'.");
+                return Error("At least one option is required for 'create'.",
+                    "Provide at least one option label in options, e.g. 'Draft;Confirmed;Paid'.");
 
             // Parse and validate option_colors
             Dictionary<string, string> colorMap = null;
             if (!string.IsNullOrWhiteSpace(optionColors))
             {
-                var (parsed, colorError) = ParseOptionColors(optionColors);
+                var (parsed, colorError, colorHint) = ParseOptionColors(optionColors);
                 if (colorError != null)
-                    return Error(colorError);
-                var (resolved, resolveError) = ResolveOptionColors(parsedOptions, parsed, name);
+                    return Error(colorError, colorHint);
+                var (resolved, resolveError, resolveHint) = ResolveOptionColors(parsedOptions, parsed, name);
                 if (resolveError != null)
-                    return Error(resolveError);
+                    return Error(resolveError, resolveHint);
                 colorMap = resolved;
             }
 
@@ -528,9 +543,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!createSuccess)
             {
                 return Error(
-                    $"Failed to create global option set '{name}' after multiple retry attempts.\n" +
-                    $"Reason: Lock contention or metadata cache not ready.\n" +
-                    $"Action: Wait 30 seconds and retry manually.");
+                    $"Failed to create global option set '{name}' after multiple retry attempts. Reason: Lock contention or metadata cache not ready.",
+                    "Wait 30 seconds and retry manually.");
             }
 
             var addResult = SolutionComponentCreateHelper.AddExistingComponent(
@@ -774,10 +788,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return true;
         }
 
-        private static (Dictionary<string, string> Result, string Error) ParseOptionColors(string input)
+        private static (Dictionary<string, string> Result, string Error, string Hint) ParseOptionColors(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
-                return (new Dictionary<string, string>(), null);
+                return (new Dictionary<string, string>(), null, null);
 
             var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (var part in input.Split(';'))
@@ -786,28 +800,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (string.IsNullOrEmpty(trimmed)) continue;
                 var colonIndex = trimmed.LastIndexOf(':');
                 if (colonIndex <= 0 || colonIndex >= trimmed.Length - 1)
-                    return (null, $"Invalid option_colors format. Expected 'Label:#RRGGBB;...' or 'value:#RRGGBB;...'.");
+                    return (null, "Invalid option_colors format.", "Expected 'Label:#RRGGBB;...' or 'value:#RRGGBB;...'.");
                 var key = trimmed[..colonIndex].Trim();
                 var colorPart = trimmed[(colonIndex + 1)..].Trim();
                 if (string.IsNullOrEmpty(key))
-                    return (null, $"Invalid option_colors format. Expected 'Label:#RRGGBB;...' or 'value:#RRGGBB;...'.");
+                    return (null, "Invalid option_colors format.", "Expected 'Label:#RRGGBB;...' or 'value:#RRGGBB;...'.");
                 if (!TryNormalizeHexColor(colorPart, out var hex))
-                    return (null, $"Invalid color '{colorPart}'. Expected hex color '#RRGGBB'.");
+                    return (null, $"Invalid color '{colorPart}'.", "Expected hex color '#RRGGBB'.");
                 if (result.ContainsKey(key))
-                    return (null, $"Duplicate option color key '{key}'.");
+                    return (null, $"Duplicate option color key '{key}'.", "Each label or value may appear only once in option_colors.");
                 result[key] = hex;
             }
-            return (result, null);
+            return (result, null, null);
         }
 
         // Returns a value-keyed dictionary (value.ToString() -> hex) or error.
-        private static (Dictionary<string, string> Result, string Error) ResolveOptionColors(
+        private static (Dictionary<string, string> Result, string Error, string Hint) ResolveOptionColors(
             IEnumerable<(int value, string label)> options,
             Dictionary<string, string> colorsByKey,
             string optionSetName)
         {
             if (colorsByKey == null || colorsByKey.Count == 0)
-                return (new Dictionary<string, string>(), null);
+                return (new Dictionary<string, string>(), null, null);
 
             var optList = options.ToList();
             var result = new Dictionary<string, string>();
@@ -818,7 +832,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     // resolve by integer value
                     var match = optList.FirstOrDefault(o => o.value == intKey);
                     if (match.label == null && !optList.Any(o => o.value == intKey))
-                        return (null, $"Option color key '{key}' not found in '{optionSetName}'. Use action='detail' to see existing option labels and values.");
+                        return (null, $"Option color key '{key}' not found in '{optionSetName}'.", "Use action='detail' to see existing option labels and values.");
                     result[intKey.ToString()] = hex;
                 }
                 else
@@ -828,11 +842,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         !string.IsNullOrWhiteSpace(o.label) &&
                         o.label.Equals(key, StringComparison.OrdinalIgnoreCase));
                     if (string.IsNullOrWhiteSpace(match.label))
-                        return (null, $"Option color key '{key}' not found in '{optionSetName}'. Use action='detail' to see existing option labels and values.");
+                        return (null, $"Option color key '{key}' not found in '{optionSetName}'.", "Use action='detail' to see existing option labels and values.");
                     result[match.value.ToString()] = hex;
                 }
             }
-            return (result, null);
+            return (result, null, null);
         }
 
         /// <summary>
