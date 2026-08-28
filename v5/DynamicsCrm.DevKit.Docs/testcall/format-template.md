@@ -2,7 +2,7 @@
 
 Rules for every `testcall/{N}.{tool}.md` file (37 files, one shared Wiki format). Keep this file short on purpose — every rule below matters.
 
-**Golden reference: `2.get_audit_history.md`** — reviewed and approved by anh Phước. Read it first; compare your file side-by-side with it before reporting done. More approved examples: `1`, `3`, `4`.
+**Golden reference: `3.get_audit_history.md`** — reviewed and approved by anh Phước. Read it first; compare your file side-by-side with it before reporting done. More approved examples: `1`, `4`, `5`.
 
 ## ⛔ MANDATORY RULES — violations AI made before; check EVERY file, BEFORE and AFTER editing
 

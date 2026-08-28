@@ -94,10 +94,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         "Use ISO 8601 format, e.g. '2026-04-30'.");
 
                 if (toDt < fromDt)
-                    return Error($"to_date '{to_date}' must be >= from_date '{from_date}'.");
+                    return Error($"to_date '{to_date}' must be >= from_date '{from_date}'.",
+                        "Pass a to_date on or after from_date (ISO 8601, e.g. '2026-04-30').");
 
                 if (count > MaxCount)
-                    return Error($"count {count} exceeds maximum {MaxCount}.");
+                    return Error($"count {count} exceeds maximum {MaxCount}.",
+                        $"Pass count between 1 and {MaxCount}. For larger batches, call multiple times and pipe each output file into create_records.");
 
                 count = Math.Max(1, count);
 
@@ -171,13 +173,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     foreach (var ov in overrides)
                     {
                         if (string.IsNullOrWhiteSpace(ov.LogicalName))
-                            return Error("each field_override must have a non-empty 'logicalname'.");
+                            return Error("each field_override must have a non-empty 'logicalname'.",
+                                "Pass the target field logical name, e.g. {\"logicalname\":\"jobtitle\",\"operator\":\"in\",\"values\":[\"CEO\"]}.");
                         var op = ov.Operator?.ToLowerInvariant();
                         if (op is not ("eq" or "in" or "startswith" or "endswith" or "contains" or "regex"))
                             return Error($"unsupported operator '{ov.Operator}' for field '{ov.LogicalName}'.",
                                 "Valid values: eq, in, startswith, endswith, contains, regex.");
                         if (ov.Values == null || ov.Values.Count == 0)
-                            return Error($"field_override for '{ov.LogicalName}' must have at least one value.");
+                            return Error($"field_override for '{ov.LogicalName}' must have at least one value.",
+                                "Provide a non-empty values array, e.g. \"values\":[\"CEO\",\"CFO\"].");
                     }
 
                     var overrideError = NormalizeOverrides(metadata, overrides, entityName);
@@ -199,12 +203,29 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // Save to {workspace}/.devkit/generate_demo_data/{entity}/
                 var outputDir = Path.Combine(workspaceFolder, ".devkit", "generate_demo_data", entityName);
                 Directory.CreateDirectory(outputDir);
-                var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-                var filePath = Path.Combine(outputDir, $"{timestamp}.demo.json");
+                var timestamp = DateTime.Now.ToString("yyyyMMddHHmm");
 
                 var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
                 var json = JsonSerializer.Serialize(records, jsonOptions);
-                File.WriteAllText(filePath, json, Encoding.UTF8);
+                string filePath;
+                var suffix = 1;
+                while (true)
+                {
+                    filePath = Path.Combine(outputDir, suffix == 1 ? $"{timestamp}.demo.json" : $"{timestamp}-{suffix}.demo.json");
+                    try
+                    {
+                        using (var stream = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+                        using (var writer = new StreamWriter(stream, Encoding.UTF8))
+                        {
+                            writer.Write(json);
+                        }
+                        break;
+                    }
+                    catch (IOException) when (File.Exists(filePath))
+                    {
+                        suffix++;
+                    }
+                }
 
                 var fieldNames = selectedAttrs.Select(a => a.LogicalName).ToList();
                 if (!fieldNames.Contains("overriddencreatedon"))
@@ -238,7 +259,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
 

@@ -61,6 +61,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(BatchCreateResult)),
         Description(
             "Bulk create Dataverse records in parallel (max 5000/call). Partial failures: successes committed, failures reported per-item. Input: inline JSON array, .json path, or .csv path (Display Name headers).\n\n" +
+            "Field syntax: polymorphic lookup 'field@targetentity' (e.g. 'customerid@account'); activity parties (to/from/cc/bcc/requiredattendees/organizer/customers/resources) are a JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"} (single object auto-wrapped; do NOT set participationtypemask). For single-record CRUD → manage_record.\n\n" +
+            "BYPASS: bypass_custom_logic=true sets BypassBusinessLogicExecution=CustomSync,CustomAsync so sync+async plugins/workflows do NOT run for this create. Default false. Requires the System Administrator role (prvBypassCustomBusinessLogic privilege); rejected early if the calling user lacks it. Use for bulk seed/data-load where custom logic would slow or block creates.\n\n" +
+            "IMPORT_SEQUENCE_NUMBER: Every record in the batch is auto-stamped with the same importsequencenumber value so the entire batch can be queried and bulk-deleted as a unit (e.g. <condition attribute='importsequencenumber' operator='eq' value='999990'/>). The value is computed as max(999990, maxInTable+1) and returned in the result as importSequenceNumber. If a record explicitly provides importsequencenumber, that value wins for that record (no duplicate checking). Set importsequencenumber on every record to override the auto-fill entirely.\n\n" +
             "WHEN TO USE:\n" +
             "- Seed many records at once (accounts, contacts, tasks) or import from CSV\n" +
             "- Pipe generate_demo_data output file (.json) into records_json\n" +
@@ -68,10 +71,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- generate_demo_data → produce JSON to pipe into records_json\n" +
             "- manage_record → single-record create/update/delete/associate/disassociate\n" +
-            "- search_records / execute_fetchxml → verify created records\n\n" +
-            "Field syntax: polymorphic lookup 'field@targetentity' (e.g. 'customerid@account'); activity parties (to/from/cc/bcc/requiredattendees/organizer/customers/resources) are a JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"} (single object auto-wrapped; do NOT set participationtypemask). For single-record CRUD → manage_record.\n\n" +
-            "BYPASS: bypass_custom_logic=true sets BypassBusinessLogicExecution=CustomSync,CustomAsync so sync+async plugins/workflows do NOT run for this create. Default false. Requires the System Administrator role (prvBypassCustomBusinessLogic privilege); rejected early if the calling user lacks it. Use for bulk seed/data-load where custom logic would slow or block creates.\n\n" +
-            "IMPORT_SEQUENCE_NUMBER: Every record in the batch is auto-stamped with the same importsequencenumber value so the entire batch can be queried and bulk-deleted as a unit (e.g. <condition attribute='importsequencenumber' operator='eq' value='999990'/>). The value is computed as max(999990, maxInTable+1) and returned in the result as importSequenceNumber. If a record explicitly provides importsequencenumber, that value wins for that record (no duplicate checking). Set importsequencenumber on every record to override the auto-fill entirely.")]
+            "- search_records / execute_fetchxml → verify created records")]
         public async Task<CallToolResult> create_records(
             [Description("Entity Display Name or logical name (Display Name resolved first).")] string entity_name = "",
             [Description("Inline JSON array, .json file path, or .csv file path. Max 5000 records.")] string records_json = "",
@@ -133,7 +133,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var trimmed = records_json.Trim();
                     if (trimmed.EndsWith(".csv", StringComparison.OrdinalIgnoreCase) || trimmed.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
-                        return Error($"File not found: {trimmed}");
+                        return Error($"File not found: {trimmed}",
+                            "Provide an existing .json/.csv file path (relative paths resolve against the workspace folder) or an inline JSON array.");
                     return Error(
                         "Failed to resolve records_json input.",
                         "Valid formats: inline JSON array, .json file path, or .csv file path.");
@@ -143,15 +144,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var root = JsonSerializer.Deserialize<JsonElement>(resolved);
 
                 if (root.ValueKind != JsonValueKind.Array)
-                    return Error("records_json must be a JSON array.");
+                    return Error("records_json must be a JSON array.",
+                        "Pass a JSON array of record objects, e.g. [{\"name\":\"Contoso\"}].");
 
                 elements = root.EnumerateArray().ToArray();
 
                 if (elements.Length == 0)
-                    return Error("records_json array is empty.");
+                    return Error("records_json array is empty.",
+                        "Provide at least one record object in the array.");
 
                 if (elements.Length > MaxRecords)
-                    return Error($"records_json has {elements.Length} elements. Max is {MaxRecords}.");
+                    return Error($"records_json has {elements.Length} elements. Max is {MaxRecords}.",
+                        $"Split the input into batches of at most {MaxRecords} records and call create_records once per batch.");
 
                 var usedDefault = max_parallelism <= 0;
                 var parallelism = usedDefault
@@ -327,7 +331,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
 
