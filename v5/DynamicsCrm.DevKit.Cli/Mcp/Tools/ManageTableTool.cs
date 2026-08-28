@@ -50,7 +50,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Singular display name (e.g. 'Project'). Required for CREATE.")] string display_name = "",
             [Description("Plural (e.g. 'Projects'). Required: create.")] string display_collection_name = "",
             [Description("Required: create.")] string solution_name = "",
-            [Description("Optional prefix validation for create. If supplied, it must match the solution publisher prefix.")] string confirmed_prefix = "",
             [Description("Optional table description.")] string description = "",
             [Description("Auto-derived if omitted. [create-only]")] string primary_attribute_name = "",
             [Description("[create-only]")] string primary_attribute_display_name = "Name",
@@ -72,7 +71,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 display_name = display_name?.Trim() ?? "";
                 display_collection_name = display_collection_name?.Trim() ?? "";
                 solution_name = solution_name?.Trim() ?? "";
-                confirmed_prefix = confirmed_prefix?.Trim() ?? "";
                 description = description?.Trim() ?? "";
                 primary_attribute_name = primary_attribute_name?.Trim() ?? "";
                 primary_attribute_display_name = primary_attribute_display_name?.Trim() ?? "";
@@ -134,12 +132,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     primary_attribute_name, primary_attribute_display_name,
                     primary_attribute_max_length,
                     schema_name, logical_name,
-                    confirmed_prefix,
                     resolvedPrefix, resolvedSolutionUniqueName, solution_name);
             }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
 
@@ -150,7 +147,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string primary_attribute_name, string primary_attribute_display_name,
             int primary_attribute_max_length,
             string schema_name, string logical_name,
-            string confirmed_prefix,
             string resolvedPrefix, string resolvedSolutionUniqueName, string solution_name)
         {
             if (string.IsNullOrWhiteSpace(display_name))
@@ -164,13 +160,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Required for create: display_name, display_collection_name, solution_name. Read docs://schema_tools_guide for prefix resolution and solution requirements.");
 
             var prefix = resolvedPrefix;
-            if (!string.IsNullOrWhiteSpace(confirmed_prefix) &&
-                !confirmed_prefix.Equals(prefix, StringComparison.OrdinalIgnoreCase))
-            {
-                return Error(
-                    $"confirmed_prefix '{confirmed_prefix}' does not match solution '{resolvedSolutionUniqueName ?? solution_name}' publisher prefix '{prefix}'.",
-                    "Use the solution publisher prefix or omit confirmed_prefix.");
-            }
 
             var prefixWithUnderscore = prefix + "_";
 
