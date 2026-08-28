@@ -88,7 +88,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
 
@@ -183,7 +183,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("record_id is required when action='detail'.",
                     "Pass a GUID of a soft-deleted record.");
             if (!Guid.TryParse(recordId.Trim(), out _))
-                return Error($"'{recordId}' is not a valid GUID.");
+                return Error($"'{recordId}' is not a valid GUID.",
+                    "record_id must be a GUID in the format '00000000-0000-0000-0000-000000000000'.");
 
             entityName = entityName.Trim();
 
@@ -272,7 +273,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             for (int i = 0; i < guids.Count; i++)
             {
                 if (!Guid.TryParse(guids[i].Trim(), out _))
-                    return Error($"record_ids[{i}] '{guids[i]}' is not a valid GUID.");
+                    return Error($"record_ids[{i}] '{guids[i]}' is not a valid GUID.",
+                        "Each record_ids value must be a GUID in the format '00000000-0000-0000-0000-000000000000'.");
                 guids[i] = guids[i].Trim();
             }
 
