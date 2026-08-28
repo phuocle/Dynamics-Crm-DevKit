@@ -735,6 +735,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"layoutxml must be a .layoutxml.xml backup file: '{layoutBackupPath}'.",
                     "A backup pair is {viewId}_{timestamp}.fetchxml.xml + {viewId}_{timestamp}.layoutxml.xml at: .devkit/manage_view/{entity}/ — pass the .fetchxml.xml file as fetchxml and the .layoutxml.xml file as layoutxml.");
 
+            var fetchStem = Path.GetFileName(fetchBackupPath);
+            fetchStem = fetchStem.Substring(0, fetchStem.Length - ".fetchxml.xml".Length);
+            var layoutStem = Path.GetFileName(layoutBackupPath);
+            layoutStem = layoutStem.Substring(0, layoutStem.Length - ".layoutxml.xml".Length);
+            if (!string.Equals(fetchStem, layoutStem, StringComparison.OrdinalIgnoreCase))
+                return Error(
+                    $"fetchxml and layoutxml are not one backup pair — stems differ: '{fetchStem}' vs '{layoutStem}'.",
+                    "Pass BOTH files of ONE pair (same {viewId}_{timestamp} stem) from a single update/rename/undo result — mixing files from different backups restores a hybrid state.");
+
             if (!File.Exists(fetchBackupPath))
                 return Error(
                     $"Fetch backup file not found: '{fetchBackupPath}'.",
@@ -1608,7 +1617,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 item.SetAttributes[wrKey] = WebResourcePrefix + wr;
 
                 if (!WebResourceExists(wr))
-                    return $"Web resource '{wr}' not found — create it first with manage_webresource action='create'.";
+                    return $"JS web resource '{wr}' not found — create it first with manage_webresource action='create' (imageproviderwebresource must be a script file, not an image).";
             }
             return null;
         }
@@ -1621,14 +1630,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 TopCount = 1
             };
             query.Criteria.AddCondition("name", ConditionOperator.Equal, name);
+            query.Criteria.AddCondition("webresourcetype", ConditionOperator.Equal, 3); // JS only — icon provider must be a script
             return _serviceClient.RetrieveMultiple(query).Entities.Count > 0;
         }
 
         private static (List<CellUpdateInstruction> Instructions, string Error) ParseCellUpdates(string cellUpdatesJson)
         {
             List<CellUpdateInstruction> instructions;
-            instructions = JsonSerializer.Deserialize<List<CellUpdateInstruction>>(cellUpdatesJson,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            try
+            {
+                instructions = JsonSerializer.Deserialize<List<CellUpdateInstruction>>(cellUpdatesJson,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            }
+            catch (JsonException ex)
+            {
+                return (null, $"cell_updates_json is not valid JSON: {ex.Message}");
+            }
 
             if (instructions == null || instructions.Count == 0)
                 return (null, "cell_updates_json is empty or not a JSON array.");
