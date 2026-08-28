@@ -42,7 +42,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
             {
                 var action = GetStringProp(op, "action");
                 if (string.IsNullOrWhiteSpace(action))
-                    throw new AppNavigationOperationException("", "Each operation must have an 'action' field.");
+                    throw new AppNavigationOperationException("", "Each operation must have an 'action' field.",
+                        "Add an \"action\" field to every operation, e.g. \"action\":\"add_group\".");
 
                 try
                 {
@@ -59,7 +60,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
                 }
                 catch (InvalidOperationException ex)
                 {
-                    throw new AppNavigationOperationException(action, ex.Message);
+                    throw new AppNavigationOperationException(action, ex.Message,
+                        "Fix the operation fields per the message and re-call; use manage_app(action='detail') to inspect current area/group/item ids.");
                 }
             }
 

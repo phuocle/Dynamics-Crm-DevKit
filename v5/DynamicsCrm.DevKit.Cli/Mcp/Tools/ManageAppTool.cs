@@ -95,7 +95,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
 
@@ -230,13 +230,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var iconId = ResolveIconWebResourceId(iconWebResource, out var iconError);
             if (iconError != null)
-                return Error(iconError);
+                return Error(iconError, "Provide an existing image web resource name/GUID (allowed types: png, jpg, gif, svg, ico), or omit icon_webresource to use the default icon.");
 
             var baseLanguage = McpHelper.GetBaseLanguageCode(_serviceClient);
             var starterSiteMapXml = BuildStarterSiteMapXml(baseLanguage);
             var (xsdErrors, xsdWarnings) = ValidateSiteMapXml(starterSiteMapXml);
             if (xsdErrors.Count > 0)
-                return Error("Starter sitemap XML failed XSD validation — app was not created.", details: new ManageAppResult
+                return Error("Starter sitemap XML failed XSD validation — app was not created.", "The tool-generated starter sitemap is invalid; report this as a tool bug.", details: new ManageAppResult
                 {
                     Action = "create",
                     Status = "blocked_validation",
@@ -367,7 +367,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var iconId = ResolveIconWebResourceId(iconWebResource, out var iconError);
                 if (iconError != null)
-                    return Error(iconError);
+                    return Error(iconError, "Provide an existing image web resource name/GUID (allowed types: png, jpg, gif, svg, ico), or omit icon_webresource to use the default icon.");
                 update["webresourceid"] = iconId;
                 changes.Add($"icon_webresource='{iconWebResource.Trim()}'");
             }
@@ -460,7 +460,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("operations is required for action='update_navigation'.",
                     "Provide a JSON array of navigation operations, e.g. [{\"action\":\"add_group\",\"area\":\"area_default\",\"id\":\"group_x\",\"title\":\"X\"}].");
             if (!operations.TrimStart().StartsWith("["))
-                return Error("update_navigation only accepts operation JSON arrays. Raw sitemap XML and backup paths are not supported by this action.");
+                return Error("update_navigation only accepts operation JSON arrays. Raw sitemap XML and backup paths are not supported by this action.",
+                    "Pass a JSON array of navigation operations, e.g. [{\"action\":\"add_group\",\"area\":\"area_default\",\"id\":\"group_x\",\"title\":\"X\"}]. To restore from a backup, use action='undo'.");
 
             var (appModule, resolveError) = ResolveApp(app.Trim());
             if (resolveError != null)
@@ -468,7 +469,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var appModuleIdUnique = appModule.GetAttributeValue<Guid?>("appmoduleidunique");
             if (!appModuleIdUnique.HasValue)
-                return Error($"App '{appModule.GetAttributeValue<string>("name")}' has no appmoduleidunique.");
+                return Error($"App '{appModule.GetAttributeValue<string>("name")}' has no appmoduleidunique.",
+                    "The app record is incomplete; re-create it with manage_app(action='create') or fix it in the app designer.");
 
             var siteMapId = ResolveSiteMapId(appModuleIdUnique.Value, appModule.GetAttributeValue<string>("uniquename"));
             if (!siteMapId.HasValue)
@@ -477,11 +479,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var currentSiteMapXml = RetrieveSiteMapXml(siteMapId.Value);
             if (string.IsNullOrWhiteSpace(currentSiteMapXml))
-                return Error($"Sitemap '{siteMapId}' has no sitemapxml content.");
+                return Error($"Sitemap '{siteMapId}' has no sitemapxml content.",
+                    "The sitemap record is empty; edit it in the app designer or re-create the app with manage_app(action='create').");
 
             var ops = JsonSerializer.Deserialize<List<JsonElement>>(operations);
             if (ops == null || ops.Count == 0)
-                return Error("operations must be a non-empty JSON array.");
+                return Error("operations must be a non-empty JSON array.",
+                    "Provide at least one navigation operation, e.g. [{\"action\":\"add_group\",\"area\":\"area_default\",\"id\":\"group_x\",\"title\":\"X\"}].");
 
             var (normalizedOps, operationNameErrors) = NormalizeNavigationEntityReferences(ops);
             if (operationNameErrors.Count > 0)
@@ -528,7 +532,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
             if (entityComponentErrors.Count > 0)
-                return Error($"Entity validation failed — navigation not updated. {string.Join("; ", entityComponentErrors)}", details: new ManageAppResult
+                return Error($"Entity validation failed — navigation not updated. {string.Join("; ", entityComponentErrors)}", "Fix the listed entity references and re-call with the same operations.", details: new ManageAppResult
                 {
                     Action = "update_navigation",
                     Status = "blocked_entity_validation",
@@ -544,7 +548,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var (xsdErrors, xsdWarnings) = ValidateSiteMapXml(navResult.ModifiedSiteMapXml);
             if (xsdErrors.Count > 0)
-                return Error($"Updated sitemap XML failed XSD validation — navigation not updated. {string.Join("; ", xsdErrors)}", details: new ManageAppResult
+                return Error($"Updated sitemap XML failed XSD validation — navigation not updated. {string.Join("; ", xsdErrors)}", "Fix the listed sitemap schema errors in the operations and re-call.", details: new ManageAppResult
                 {
                     Action = "update_navigation",
                     Status = "blocked_validation",
@@ -665,9 +669,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var backupFile = operations.Trim();
             if (backupFile.StartsWith("<", StringComparison.Ordinal))
-                return Error("Raw sitemap XML is not supported by manage_app v1. Use operations or read schema://sitemapxml for reference.");
+                return Error("Raw sitemap XML is not supported by manage_app v1. Use operations or read schema://sitemapxml for reference.",
+                    "Pass the .app.json backup file path from the backupPath of a previous manage_app mutation.");
             if (backupFile.StartsWith("[", StringComparison.Ordinal))
-                return Error("undo expects a .app.json backup file path, not a navigation operations JSON array.");
+                return Error("undo expects a .app.json backup file path, not a navigation operations JSON array.",
+                    "Pass the .app.json backup file path from the backupPath of a previous manage_app mutation.");
 
             var (appModule, resolveError) = ResolveApp(app.Trim());
             if (resolveError != null)
@@ -675,7 +681,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var appModuleIdUnique = appModule.GetAttributeValue<Guid?>("appmoduleidunique");
             if (!appModuleIdUnique.HasValue)
-                return Error($"App '{appModule.GetAttributeValue<string>("name")}' has no appmoduleidunique.");
+                return Error($"App '{appModule.GetAttributeValue<string>("name")}' has no appmoduleidunique.",
+                    "The app record is incomplete; re-create it with manage_app(action='create') or fix it in the app designer.");
 
             var siteMapId = ResolveSiteMapId(appModuleIdUnique.Value, appModule.GetAttributeValue<string>("uniquename"));
             if (!siteMapId.HasValue)
@@ -692,16 +699,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             if (snapshot == null || !string.Equals(snapshot.Kind, "manage_app.snapshot", StringComparison.Ordinal))
-                return Error("backup file is not a manage_app snapshot.");
+                return Error("backup file is not a manage_app snapshot.",
+                    "Use a .app.json file written by manage_app (Kind='manage_app.snapshot').");
             if (!Guid.TryParse(snapshot.AppModuleId, out var backupAppModuleId) || backupAppModuleId != appModule.Id)
                 return Error(
-                    $"backup app ID does not match current app. BackupAppModuleId: {snapshot.AppModuleId}. CurrentAppModuleId: {appModule.Id}.");
+                    $"backup app ID does not match current app. BackupAppModuleId: {snapshot.AppModuleId}. CurrentAppModuleId: {appModule.Id}.",
+                    "Re-call with the app the backup was taken from, or pick a backup whose appModuleId matches this app.");
             if (string.IsNullOrWhiteSpace(snapshot.SiteMapXml))
-                return Error("backup does not contain sitemapxml.");
+                return Error("backup does not contain sitemapxml.",
+                    "The backup file is incomplete; use a different .app.json backup from backupPath of a previous manage_app mutation.");
 
             var (xsdErrors, xsdWarnings) = ValidateSiteMapXml(snapshot.SiteMapXml);
             if (xsdErrors.Count > 0)
-                return Error($"Backup sitemap XML failed XSD validation — undo not applied. {string.Join("; ", xsdErrors)}", details: new ManageAppResult
+                return Error($"Backup sitemap XML failed XSD validation — undo not applied. {string.Join("; ", xsdErrors)}", "The backup's sitemap no longer passes schema validation; use a newer backup or fix the sitemap via update_navigation.", details: new ManageAppResult
                 {
                     Action = "undo",
                     Status = "blocked_validation",
