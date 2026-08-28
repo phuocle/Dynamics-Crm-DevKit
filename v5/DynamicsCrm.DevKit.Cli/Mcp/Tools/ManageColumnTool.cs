@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
@@ -53,7 +54,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- To intentionally create an empty formula column, omit formula_definition and pass formula_source_type as powerfx, calculated, or rollup.\n" +
             "- 5 create flags (so a column can be cloned in a SINGLE create call, no follow-up update): required_level (None/Recommended/Required — default None), is_audit_enabled (default true), is_valid_for_advanced_find (default true), is_secured (default false), is_sortable (default true when supported). On UPDATE, omit=null to keep current.\n\n" +
 
-            "CREATE uses the publisher prefix from solution_name directly. confirmed_prefix is optional and only validates the resolved prefix. Either solution_name or an explicit prefixed schema_name/logical_name must be supplied so the publisher prefix is known.\n" +
+            "CREATE resolves the publisher prefix from solution_name (required for CREATE) and adds the column to that solution.\n" +
             "Statuscode (statuscode / StatusType): pass logical_name='statuscode' and use add_options/update_options/delete_options.\n" +
             "add_options: JSON array with optional 'state' field (linked statecode value, default 0): [{\"label\":\"Under Review\",\"value\":100000001,\"state\":0}].\n" +
             "update_options: rename by value (no 'state' needed). delete_options: JSON array of integer values. statecode column is read-only.\n" +
@@ -77,8 +78,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Logical name of the existing attribute to update (e.g. 'new_priority'). For CREATE: optional lowercase override of logical name; if omitted derives from schema_name/display_name. Must start with publisher prefix.")] string logical_name = "",
             [Description("string/memo/integer/bigint/decimal/money/float/boolean/datetime/lookup/customer/picklist/multipicklist/image/file. Required for CREATE. Ignored on UPDATE (immutable).")] string attribute_type = "",
             [Description("Required for CREATE. Optional on UPDATE — pass only to rename the display label.")] string display_name = "",
-            [Description("Required for CREATE when schema_name/logical_name have no prefix. Resolves publisher prefix and adds the attribute to the solution.")] string solution_name = "",
-            [Description("Optional prefix validation. If supplied, it must match the solution publisher prefix.")] string confirmed_prefix = "",
+            [Description("Required for CREATE. Resolves the publisher prefix and adds the attribute to the solution.")] string solution_name = "",
             [Description("Optional column description.")] string description = "",
             [Description("Required level for the column. CREATE: always applied (None when omitted — NOT a Dataverse default). UPDATE: omit=keep current.")] string required_level = "",
             [Description("string 1-4000 (def 100); memo 1-1048576 (def 2000); file KB (def 32768).")] int max_length = 0,
@@ -116,7 +116,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             schema_name = schema_name?.Trim() ?? "";
             display_name = display_name?.Trim() ?? "";
             solution_name = solution_name?.Trim() ?? "";
-            confirmed_prefix = confirmed_prefix?.Trim() ?? "";
             default_value = default_value?.Trim() ?? "";
 
             // --- Early validation: attribute_type, required_level, format, behavior ---
@@ -190,16 +189,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 resolvedSolutionUniqueName = solResult.UniqueName;
             }
 
-            // Inherit prefix from an explicitly-provided schema_name/logical_name when solution_name is absent.
-            // This lets CREATE work with schema_name='devkit_InvoiceLineId' even without solution_name.
-            if (string.IsNullOrWhiteSpace(resolvedPrefix) &&
-                (!string.IsNullOrWhiteSpace(schema_name) || !string.IsNullOrWhiteSpace(logical_name)))
-            {
-                var source = !string.IsNullOrWhiteSpace(schema_name) ? schema_name : logical_name;
-                var idx = source.IndexOf('_');
-                if (idx >= 1 && idx < source.Length - 1)
-                    resolvedPrefix = source.Substring(0, idx);
-            }
 
             // ===== UPDATE MODE: logical_name identifies an existing attribute =====
             // - logical_name provided → resolve existing attribute → UPDATE.
@@ -266,30 +255,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (string.IsNullOrWhiteSpace(logical_name))
                     return Error(
                         "logical_name is required to update an existing column, or attribute_type + display_name to create a new one.",
-                        "To UPDATE: pass logical_name (e.g. 'new_priority'). To CREATE: pass attribute_type + display_name (+ solution_name or a prefixed schema_name/logical_name).");
+                        "To UPDATE: pass logical_name (e.g. 'new_priority'). To CREATE: pass attribute_type + display_name + solution_name.");
                 return Error(
                     $"No existing column found for logical_name '{logical_name}' on entity '{entity_name}'.",
-                    "To CREATE a new column, also provide attribute_type + display_name (+ solution_name or a prefixed schema_name/logical_name). To UPDATE, double-check the logical name (use get_tables to list attributes).");
+                    "To CREATE a new column, also provide attribute_type + display_name + solution_name. To UPDATE, double-check the logical name (use get_tables to list attributes).");
             }
             if (string.IsNullOrWhiteSpace(display_name))
                 return Error(
                     "display_name is required when creating a new attribute.",
-                    "Required for create: attribute_type + display_name (+ solution_name or a prefixed schema_name/logical_name).");
+                    "Required for create: attribute_type + display_name + solution_name.");
 
             attribute_type = attribute_type.Trim().ToLowerInvariant();
 
-            // A publisher prefix must be known by now (from solution_name or inherited from a prefixed schema_name/logical_name).
-            if (string.IsNullOrWhiteSpace(resolvedPrefix))
+            // The publisher prefix comes only from solution_name — required for CREATE.
+            if (string.IsNullOrWhiteSpace(solution_name) && string.IsNullOrWhiteSpace(resolvedPrefix))
                 return Error(
-                    "A publisher prefix is required to create a column.",
-                    "Provide solution_name (resolves the publisher prefix and adds the column to the solution), or schema_name/logical_name with a publisher prefix (e.g. 'devkit_InvoiceLineId' / 'devkit_invoicelineid').");
+                    "solution_name is required when creating a new column (needed to resolve the publisher prefix).",
+                    "Required for create: attribute_type, display_name, solution_name. Read docs://schema_tools_guide for prefix resolution and solution requirements.");
 
             var prefix = resolvedPrefix;
-            if (!string.IsNullOrWhiteSpace(confirmed_prefix) &&
-                !confirmed_prefix.Equals(prefix, StringComparison.OrdinalIgnoreCase))
-                return Error(
-                    $"confirmed_prefix '{confirmed_prefix}' does not match solution '{resolvedSolutionUniqueName ?? solution_name}' publisher prefix '{prefix}'.",
-                    "Use the solution publisher prefix or omit confirmed_prefix.");
 
             var prefixWithUnderscore = prefix + "_";
 
@@ -1772,11 +1756,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Extra = extra?.Count > 0 ? extra : null
             };
 
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            // Text = one-line summary (factory duplicates it into the payload as "summary");
+            // the former multi-line detail lines all live in the structured payload.
+            var firstLine = sb.ToString().Split('\n')[0].TrimEnd('\r');
+            return Success(firstLine, structured);
         }
 
         private string ResolveCreatedAttributeLogicalName(string entityName, Guid metadataId, string fallbackLogicalName)
@@ -2314,21 +2297,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 // --- Format output ---
                 var typeName = GetAttributeTypeName(metadata);
-                var sb = new StringBuilder(512);
-                sb.AppendLine($"[Success] Updated column '{attributeName}' on entity '{entityName}'.");
-                sb.AppendLine($"Type: {typeName}");
-
-                if (changes.Count > 0)
-                {
-                    sb.AppendLine("Changes:");
-                    foreach (var c in changes)
-                        sb.AppendLine($"  {c}");
-                }
-
-                foreach (var or in optionResults)
-                    sb.AppendLine(or);
-
-                sb.AppendLine($"Published: {(published ? "yes" : "no")}");
 
                 var structured = new ManageColumnResult
                 {
@@ -2346,11 +2314,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (structured.OptionsRenamed?.Count == 0) structured.OptionsRenamed = null;
                 if (structured.OptionsDeleted?.Count == 0) structured.OptionsDeleted = null;
 
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = sb.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(structured)
-                };
+                return Success($"Updated column '{attributeName}' on entity '{entityName}'.", structured);
             }
             catch (Exception ex)
             {
@@ -2761,16 +2725,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
 
+        // Warnings ride in the structured payload (manage_table convention); the custom
+        // [FormulaCloneWarning] tag is gone — the summary line just gains "1 warning(s).".
         private static CallToolResult AppendFormulaCloneWarning(CallToolResult result, string warning)
         {
-            if (result?.Content != null && result.Content.Count > 0 && result.Content[0] is TextContentBlock text)
+            var payload = JsonNode.Parse(result.StructuredContent?.GetRawText() ?? "{}") as JsonObject ?? new JsonObject();
+            payload["warnings"] = new JsonArray(warning);
+            var summary = payload["summary"]?.GetValue<string>() ?? "";
+            if (!string.IsNullOrEmpty(summary))
             {
-                result.Content[0] = new TextContentBlock
-                {
-                    Text = $"[FormulaCloneWarning] {warning}\n\n{text.Text}"
-                };
+                summary += " 1 warning(s).";
+                payload["summary"] = summary;
             }
-            return result;
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = summary }],
+                StructuredContent = JsonSerializer.SerializeToElement(payload)
+            };
         }
 
     }

@@ -604,7 +604,7 @@ Reference for `manage_table`, `manage_column`, and `manage_relationship`.
 - **logical_name** -- lowercase logical name with publisher prefix; identifies an existing table for UPDATE; optional CREATE override (must be the lowercase form of schema_name)
 - **schema_name** -- PascalCase schema name with publisher prefix; optional CREATE-only override of SchemaName (ignored on UPDATE)
 - If schema_name/logical_name are omitted on CREATE, SchemaName is auto-derived from display_name via DataverseNamer and the logical name derives from it.
-- Publisher prefix comes from solution_name (validated by confirmed_prefix). There is NO entity_name parameter.
+- Publisher prefix comes from solution_name (required for CREATE). There is NO entity_name parameter.
 
 ### Create Mode
 - display_name, display_collection_name, solution_name are REQUIRED
@@ -645,7 +645,7 @@ These CANNOT be turned off once enabled.
 - **logical_name** -- lowercase logical name with publisher prefix; identifies an existing attribute for UPDATE; optional CREATE override (must be the lowercase form of schema_name)
 - **schema_name** -- PascalCase schema name with publisher prefix; optional CREATE-only override of SchemaName (ignored on UPDATE)
 - If schema_name/logical_name are omitted on CREATE, SchemaName is auto-derived from display_name via DataverseNamer and the logical name derives from it.
-- Publisher prefix comes from solution_name (validated by confirmed_prefix). When solution_name is omitted, the prefix may be inherited from a prefixed schema_name/logical_name.
+- Publisher prefix comes from solution_name (required for CREATE); the column is added to that solution.
 - There is NO attribute_name parameter. The column's technical names come ONLY from logical_name / schema_name (or are auto-derived from display_name).
 
 ### Attribute Type Matrix
