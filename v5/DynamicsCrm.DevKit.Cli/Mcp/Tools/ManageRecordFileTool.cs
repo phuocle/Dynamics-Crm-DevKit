@@ -69,11 +69,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 if (string.IsNullOrWhiteSpace(action))
-                    return Error("action is required. Valid values: 'info', 'upload', 'download', 'delete'.");
+                    return Error("action is required. Valid values: 'info', 'upload', 'download', 'delete'.",
+                        "Provide one of: 'info', 'upload', 'download', 'delete'.");
                 if (string.IsNullOrWhiteSpace(entity_name))
-                    return Error("entity_name is required.");
+                    return Error("entity_name is required.",
+                        "Use get_tables to discover table names.");
                 if (string.IsNullOrWhiteSpace(column_name))
-                    return Error("column_name is required.");
+                    return Error("column_name is required.",
+                        "Use get_tables(entity_name=..., detail_level='full') to list File/Image columns.");
                 if (!Guid.TryParse(record_id?.Trim(), out var recordId))
                     return Error("record_id must be a valid GUID.", "Use search_records or parse_record_url to find the record id.");
 
@@ -109,7 +112,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "upload" => HandleUpload(entityLogical, recordId, fileAttr, imageAttr, file_path, content_base64, file_name, workspaceFolder),
                     "download" => HandleDownload(entityLogical, recordId, fileAttr, imageAttr, full_size, workspaceFolder),
                     "delete" => HandleDelete(entityLogical, recordId, fileAttr, imageAttr),
-                    _ => Error($"Invalid action '{action}'. Valid values: 'info', 'upload', 'download', 'delete'.")
+                    _ => Error($"Invalid action '{action}'. Valid values: 'info', 'upload', 'download', 'delete'.",
+                        "Provide one of: 'info', 'upload', 'download', 'delete'.")
                 };
             }
             catch (Exception ex)
@@ -173,9 +177,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var hasPath = !string.IsNullOrWhiteSpace(filePath);
             var hasBase64 = !string.IsNullOrWhiteSpace(contentBase64);
             if (hasPath && hasBase64)
-                return Error("Provide either file_path or content_base64, not both.");
+                return Error("Provide either file_path or content_base64, not both.",
+                    "Pass exactly one: file_path or content_base64.");
             if (!hasPath && !hasBase64)
-                return Error("upload requires file_path (local path or http(s) URL) or content_base64 (< 1 MB, with file_name).");
+                return Error("upload requires file_path (local path or http(s) URL) or content_base64 (< 1 MB, with file_name).",
+                    "Pass file_path (local path or http(s) URL), or content_base64 with file_name.");
 
             byte[] data;
             string resolvedFileName;
@@ -183,13 +189,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (hasBase64)
             {
                 if (string.IsNullOrWhiteSpace(fileName))
-                    return Error("file_name is required when uploading via content_base64.");
+                    return Error("file_name is required when uploading via content_base64.",
+                        "Provide file_name, e.g. file_name='photo.png'.");
                 data = new byte[contentBase64.Trim().Length * 3 / 4];
                 if (!Convert.TryFromBase64String(contentBase64.Trim(), data, out var bytesWritten))
-                    return Error("content_base64 is not valid base64.");
+                    return Error("content_base64 is not valid base64.",
+                        "Pass a valid base64 string (no data: URI prefix).");
                 Array.Resize(ref data, bytesWritten);
                 if (data.LongLength >= MaxBase64UploadBytes)
-                    return Error($"content_base64 supports files < 1 MB only ({data.LongLength:N0} bytes given). Use file_path for larger files.");
+                    return Error($"content_base64 supports files < 1 MB only ({data.LongLength:N0} bytes given). Use file_path for larger files.",
+                        "Use file_path instead — uploads stream via the block protocol and are only capped by the column limit.");
                 resolvedFileName = fileName.Trim();
                 sourceDescription = "content_base64";
             }
@@ -203,7 +212,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     data = urlData;
                     resolvedFileName = !string.IsNullOrWhiteSpace(fileName) ? fileName.Trim() : urlFileName;
                     if (string.IsNullOrWhiteSpace(resolvedFileName))
-                        return Error("Could not determine a file name from the URL. Provide file_name.");
+                        return Error("Could not determine a file name from the URL. Provide file_name.",
+                            "Provide file_name, e.g. file_name='logo.png'.");
                     sourceDescription = trimmedPath;
                 }
                 else
@@ -277,7 +287,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var fileId = record.GetAttributeValue<Guid?>(columnLogical);
                 if (!fileId.HasValue)
-                    return Error($"File column '{columnLogical}' on {entityLogical}({recordId}) is empty — nothing to download.");
+                    return Error($"File column '{columnLogical}' on {entityLogical}({recordId}) is empty — nothing to download.",
+                        "Upload a value first with action='upload'.");
                 var (bytes, serverName) = FileColumnTransferHelper.Download(_serviceClient, new EntityReference(entityLogical, recordId), columnLogical);
                 data = bytes;
                 downloadFileName = FirstNonEmpty(serverName, record.GetAttributeValue<string>(columnLogical + "_name"), "file.bin");
@@ -290,7 +301,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         "Call again with full_size=false to download the thumbnail, or enable full-size storage on the column via manage_column.");
                 if (record.GetAttributeValue<byte[]>(columnLogical) == null &&
                     record.GetAttributeValue<long?>(columnLogical + "_timestamp") == null)
-                    return Error($"Image column '{columnLogical}' on {entityLogical}({recordId}) is empty — nothing to download.");
+                    return Error($"Image column '{columnLogical}' on {entityLogical}({recordId}) is empty — nothing to download.",
+                        "Upload a value first with action='upload'.");
                 var (bytes, serverName) = FileColumnTransferHelper.Download(_serviceClient, new EntityReference(entityLogical, recordId), columnLogical);
                 data = bytes;
                 downloadFileName = FirstNonEmpty(serverName, columnLogical + DetectImageExtension(data));
@@ -299,7 +311,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 data = record.GetAttributeValue<byte[]>(columnLogical);
                 if (data == null)
-                    return Error($"Image column '{columnLogical}' on {entityLogical}({recordId}) is empty — nothing to download.");
+                    return Error($"Image column '{columnLogical}' on {entityLogical}({recordId}) is empty — nothing to download.",
+                        "Upload a value first with action='upload'.");
                 downloadFileName = columnLogical + DetectImageExtension(data);
             }
 
@@ -332,7 +345,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var fileId = record.GetAttributeValue<Guid?>(columnLogical);
                 if (!fileId.HasValue)
-                    return Error($"File column '{columnLogical}' on {entityLogical}({recordId}) is empty — nothing to delete.");
+                    return Error($"File column '{columnLogical}' on {entityLogical}({recordId}) is empty — nothing to delete.",
+                        "The column is already empty — check the current value with action='info'.");
                 result.FileId = fileId.Value.ToString();
                 result.FileName = record.GetAttributeValue<string>(columnLogical + "_name");
                 if (_options.DryRun)
@@ -347,7 +361,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var hasImage = record.GetAttributeValue<byte[]>(columnLogical) != null ||
                                record.GetAttributeValue<long?>(columnLogical + "_timestamp") != null;
                 if (!hasImage)
-                    return Error($"Image column '{columnLogical}' on {entityLogical}({recordId}) is empty — nothing to delete.");
+                    return Error($"Image column '{columnLogical}' on {entityLogical}({recordId}) is empty — nothing to delete.",
+                        "The column is already empty — check the current value with action='info'.");
                 if (_options.DryRun)
                 {
                     result.Status = "dry_run";
