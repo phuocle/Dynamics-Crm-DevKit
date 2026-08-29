@@ -123,7 +123,7 @@ Tài liệu nghiên cứu: [`manage-report-research.md`](file:///d:/github/Dynam
 
 ---
 
-#### [NEW] [`38.manage_report.md`](file:///d:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Docs/testcall/38.manage_report.md)
+#### [NEW] [`32.manage_report.md`](file:///d:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Docs/testcall/32.manage_report.md)
 - Test call documentation (~250 LOC) bao gồm cả MCP test cases và CLI Fast Deploy test cases:
   1. MCP: `list` filter by solution
   2. MCP: `detail` view metadata & dataset summary
@@ -151,7 +151,7 @@ Tài liệu nghiên cứu: [`manage-report-research.md`](file:///d:/github/Dynam
 | NEW | `Cli/Mcp/Tools/Models/ManageReportResult.cs` | ~45 |
 | NEW | `Cli/Mcp/Tools/Models/ReportEntry.cs` | ~45 |
 | MODIFY | `Cli/Mcp/Tools/Helper/DisplayNameFirstResolver.cs` | +~60 |
-| NEW | `Docs/testcall/38.manage_report.md` | ~250 |
+| NEW | `Docs/testcall/32.manage_report.md` | ~250 |
 | **Total** | **5 new + 6 modify** | **~1000–1200 LOC code/docs** |
 
 ---

@@ -318,6 +318,29 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 retryParameterName: "web_resource_id");
         }
 
+        internal static ResolveResult<Entity> ResolveReport(
+            ServiceClient serviceClient,
+            string input,
+            string callerToolName,
+            bool withNotFoundTip = true)
+        {
+            return ResolveDataverseRecord(
+                serviceClient,
+                input,
+                entityName: "report",
+                idColumn: "reportid",
+                columns: new ColumnSet("reportid", "name", "filename", "languagecode", "ismanaged", "modifiedon", "modifiedby"),
+                displayColumn: "name",
+                logicalColumn: null,
+                uniqueColumn: "filename",
+                schemaColumn: null,
+                kind: "report",
+                ambiguousTag: "[AmbiguousReport]",
+                notFoundTag: "[NotFoundReport]",
+                notFoundTip: withNotFoundTip ? $"Hint: Use manage_report(action='list') before calling {callerToolName}." : null,
+                retryParameterName: "report_id");
+        }
+
         internal static ResolveResult<Entity> ResolveEnvironmentVariableDefinition(
             ServiceClient serviceClient,
             string input,
