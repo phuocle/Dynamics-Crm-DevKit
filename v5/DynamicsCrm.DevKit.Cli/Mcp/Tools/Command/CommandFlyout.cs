@@ -32,32 +32,41 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
 
             if (string.IsNullOrWhiteSpace(entityName))
-                return Error("entity_name is required for action='add_flyout'.");
+                return Error("entity_name is required for action='add_flyout'.",
+                    "Pass the entity Display Name or logical name. Use get_tables to list available tables.");
             if (string.IsNullOrWhiteSpace(location))
-                return Error("location is required for action='add_flyout'.");
+                return Error("location is required for action='add_flyout'.",
+                    "Pass one of: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'.");
             if (string.IsNullOrWhiteSpace(label))
-                return Error("label is required for action='add_flyout'.");
+                return Error("label is required for action='add_flyout'.",
+                    "Pass the flyout button label text in label.");
             if (string.IsNullOrWhiteSpace(itemsJson))
-                return Error("items is required for action='add_flyout'. Provide a JSON array of item objects.");
+                return Error("items is required for action='add_flyout'.",
+                    "Pass a JSON array of item objects in items, e.g. [{\"label\":\"Item 1\"}].");
 
             if (!LocationFilterMap.TryGetValue(location.Trim(), out var locationValue))
-                return Error($"Invalid location '{location.Trim()}'. Use 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', or 'dashboard'.");
+                return Error($"Invalid location '{location.Trim()}'.",
+                    "Valid values: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'.");
 
             using var itemsDoc = JsonDocument.Parse(itemsJson);
             if (itemsDoc.RootElement.ValueKind != JsonValueKind.Array)
-                return Error("items must be a JSON array of item objects.");
+                return Error("items must be a JSON array of item objects.",
+                    "Pass items as a JSON array, e.g. [{\"label\":\"Item 1\"}].");
             var itemList = itemsDoc.RootElement.EnumerateArray().ToList();
 
             if (itemList.Count == 0)
-                return Error("items array must have at least 1 item.");
+                return Error("items array must have at least 1 item.",
+                    "Add at least one item object with a 'label' field.");
 
             var resolvedAppId = ResolveAppId(appId, appName, out var appResolveError);
             if (resolvedAppId == null)
-                return Error(appResolveError ?? "Could not resolve app.");
+                return Error((appResolveError ?? "Could not resolve app.").Split("\r\n")[0],
+                    "Pass app_id (app module GUID) or app_name. Use manage_app(action='list') to discover apps.");
 
             var (entityLogical, entityError) = ResolveEntityLogicalName(entityName);
             if (entityError != null)
-                return Error(entityError);
+                return Error(entityError.Split("\r\n")[0],
+                    "Use get_tables to list available tables.");
             var publisherPrefix = ResolvePublisherPrefix(entityLogical);
             var appUniqueName = ResolveAppUniqueName(resolvedAppId.Value);
             var entityId = ResolveEntityId(entityLogical);
@@ -92,7 +101,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var iconWrId = ResolveWebResourceId(iconWebResource.Trim());
                 if (iconWrId == null)
-                    return Error($"Icon web resource '{iconWebResource.Trim()}' not found.");
+                    return Error($"Icon web resource '{iconWebResource.Trim()}' not found.",
+                        "Use manage_webresource(action='list') to find valid web resource names.");
                 dropdown["iconwebresourceid"] = new EntityReference("webresource", iconWrId.Value);
             }
 
@@ -133,7 +143,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var item = itemList[i];
                 var itemLabel = GetJsonString(item, "label");
                 if (string.IsNullOrWhiteSpace(itemLabel))
-                    return Error($"Item [{i}] is missing 'label'.");
+                    return Error($"Item [{i}] is missing 'label'.",
+                        "Each item object must include a 'label' field.");
 
                 var itemOnclickType = GetJsonString(item, "onclick_type");
                 var itemJsWebResource = GetJsonString(item, "javascript_webresource");
@@ -148,7 +159,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (createResult.error != null)
                 {
                     // Rollback not trivial — report error with partial success note
-                    return Error($"Error creating item '{itemLabel}': {createResult.error}. Flyout '{label}' was partially created (dropdown + group already exist with id {dropdownId}).");
+                    return Error($"Error creating item '{itemLabel}': {createResult.error}.",
+                        $"Flyout '{label.Trim()}' was partially created (dropdown + group already exist with id {dropdownId}). Clean it up via the Dataverse UI or manage_record(action='delete') before retrying.");
                 }
                 createdItems.Add(itemLabel);
             }
@@ -180,13 +192,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
 
             if (string.IsNullOrWhiteSpace(commandId))
-                return Error("command_id is required for action='update_flyout'.");
+                return Error("command_id is required for action='update_flyout'.",
+                    "Pass the Dropdown Button appaction GUID. Use manage_command(action='list') to find command IDs.");
             if (!Guid.TryParse(commandId.Trim(), out var cmdGuid))
-                return Error($"'{commandId.Trim()}' is not a valid GUID.");
+                return Error($"'{commandId.Trim()}' is not a valid GUID.",
+                    "Pass an appaction GUID. Use manage_command(action='list') to find command IDs.");
 
             var existing = RetrieveAppActionOrNull(cmdGuid, "name", "type");
             if (existing == null)
-                return Error($"Command '{commandId.Trim()}' not found.");
+                return Error($"Command '{commandId.Trim()}' not found.",
+                    "Use manage_command(action='list') to find valid command IDs.");
 
             var typeValue = existing.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
             if (typeValue != 1) // must be Dropdown Button
@@ -234,7 +249,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var iconWrId = ResolveWebResourceId(iconWebResource.Trim());
                     if (iconWrId == null)
-                        return Error($"Icon web resource '{iconWebResource.Trim()}' not found.");
+                        return Error($"Icon web resource '{iconWebResource.Trim()}' not found.",
+                            "Use manage_webresource(action='list') to find valid web resource names.");
                     entity["iconwebresourceid"] = new EntityReference("webresource", iconWrId.Value);
                     changes.Add($"iconWebResource='{iconWebResource.Trim()}'");
                 }
@@ -253,7 +269,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (changes.Count == 0)
-                return Error("No fields to update. Provide at least one: label, sequence, font_icon, icon_webresource, tooltip_title, tooltip_description.");
+                return Error("No fields to update.",
+                    "Provide at least one: label, sequence, font_icon, icon_webresource, tooltip_title, tooltip_description.");
 
             DataverseMutationExecutor.Update(_context, _serviceClient, entity);
 
@@ -285,40 +302,50 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
 
             if (string.IsNullOrWhiteSpace(entityName))
-                return Error("entity_name is required for action='add_split_button'.");
+                return Error("entity_name is required for action='add_split_button'.",
+                    "Pass the entity Display Name or logical name. Use get_tables to list available tables.");
             if (string.IsNullOrWhiteSpace(location))
-                return Error("location is required for action='add_split_button'.");
+                return Error("location is required for action='add_split_button'.",
+                    "Pass one of: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'.");
             if (string.IsNullOrWhiteSpace(label))
-                return Error("label is required for action='add_split_button'.");
+                return Error("label is required for action='add_split_button'.",
+                    "Pass the split button label text in label.");
             if (string.IsNullOrWhiteSpace(itemsJson))
-                return Error("items is required for action='add_split_button'. Provide a JSON array of item objects.");
+                return Error("items is required for action='add_split_button'.",
+                    "Pass a JSON array of item objects in items, e.g. [{\"label\":\"Item 1\"}].");
 
             if (!LocationFilterMap.TryGetValue(location.Trim(), out var locationValue))
-                return Error($"Invalid location '{location.Trim()}'. Use 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', or 'dashboard'.");
+                return Error($"Invalid location '{location.Trim()}'.",
+                    "Valid values: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'.");
 
             // Main button onclick type
             var onclickTypeValue = 0;
             if (!string.IsNullOrWhiteSpace(onclickType))
             {
                 if (!ActionTypeFilterMap.TryGetValue(onclickType.Trim(), out onclickTypeValue))
-                    return Error($"Invalid onclick_type '{onclickType.Trim()}'. Use 'none', 'javascript', or 'formula'.");
+                    return Error($"Invalid onclick_type '{onclickType.Trim()}'.",
+                        "Valid values: 'none', 'javascript', 'formula'.");
             }
 
             using var itemsDoc = JsonDocument.Parse(itemsJson);
             if (itemsDoc.RootElement.ValueKind != JsonValueKind.Array)
-                return Error("items must be a JSON array of item objects.");
+                return Error("items must be a JSON array of item objects.",
+                    "Pass items as a JSON array, e.g. [{\"label\":\"Item 1\"}].");
             var itemList = itemsDoc.RootElement.EnumerateArray().ToList();
 
             if (itemList.Count == 0)
-                return Error("items array must have at least 1 item.");
+                return Error("items array must have at least 1 item.",
+                    "Add at least one item object with a 'label' field.");
 
             var resolvedAppId = ResolveAppId(appId, appName, out var appResolveError);
             if (resolvedAppId == null)
-                return Error(appResolveError ?? "Could not resolve app.");
+                return Error((appResolveError ?? "Could not resolve app.").Split("\r\n")[0],
+                    "Pass app_id (app module GUID) or app_name. Use manage_app(action='list') to discover apps.");
 
             var (entityLogical, entityError) = ResolveEntityLogicalName(entityName);
             if (entityError != null)
-                return Error(entityError);
+                return Error(entityError.Split("\r\n")[0],
+                    "Use get_tables to list available tables.");
             var publisherPrefix = ResolvePublisherPrefix(entityLogical);
             var appUniqueName = ResolveAppUniqueName(resolvedAppId.Value);
             var entityId = ResolveEntityId(entityLogical);
@@ -352,7 +379,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var wrId = ResolveWebResourceId(jsWebResource.Trim());
                     if (wrId == null)
-                        return Error($"Web resource '{jsWebResource.Trim()}' not found.");
+                        return Error($"Web resource '{jsWebResource.Trim()}' not found.",
+                            "Use manage_webresource(action='list') to find valid web resource names.");
                     split["onclickeventjavascriptwebresourceid"] = new EntityReference("webresource", wrId.Value);
                 }
                 if (!string.IsNullOrWhiteSpace(jsFunction))
@@ -377,7 +405,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var iconWrId = ResolveWebResourceId(iconWebResource.Trim());
                 if (iconWrId == null)
-                    return Error($"Icon web resource '{iconWebResource.Trim()}' not found.");
+                    return Error($"Icon web resource '{iconWebResource.Trim()}' not found.",
+                        "Use manage_webresource(action='list') to find valid web resource names.");
                 split["iconwebresourceid"] = new EntityReference("webresource", iconWrId.Value);
             }
 
@@ -418,7 +447,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var item = itemList[i];
                 var itemLabel = GetJsonString(item, "label");
                 if (string.IsNullOrWhiteSpace(itemLabel))
-                    return Error($"Item [{i}] is missing 'label'.");
+                    return Error($"Item [{i}] is missing 'label'.",
+                        "Each item object must include a 'label' field.");
 
                 var itemOnclickType = GetJsonString(item, "onclick_type");
                 var itemJsWebResource = GetJsonString(item, "javascript_webresource");
@@ -431,7 +461,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     itemLabel, itemOnclickType, itemJsWebResource, itemJsFunction, itemSeq);
 
                 if (createResult.error != null)
-                    return Error($"Error creating item '{itemLabel}': {createResult.error}. Split button '{label}' was partially created (split + group already exist with id {splitId}).");
+                    return Error($"Error creating item '{itemLabel}': {createResult.error}.",
+                        $"Split button '{label.Trim()}' was partially created (split + group already exist with id {splitId}). Clean it up via the Dataverse UI or manage_record(action='delete') before retrying.");
 
                 createdItems.Add(itemLabel);
             }
@@ -463,13 +494,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
 
             if (string.IsNullOrWhiteSpace(commandId))
-                return Error("command_id is required for action='update_split_button'.");
+                return Error("command_id is required for action='update_split_button'.",
+                    "Pass the Split Button appaction GUID. Use manage_command(action='list') to find command IDs.");
             if (!Guid.TryParse(commandId.Trim(), out var cmdGuid))
-                return Error($"'{commandId.Trim()}' is not a valid GUID.");
+                return Error($"'{commandId.Trim()}' is not a valid GUID.",
+                    "Pass an appaction GUID. Use manage_command(action='list') to find command IDs.");
 
             var existing = RetrieveAppActionOrNull(cmdGuid, "name", "type");
             if (existing == null)
-                return Error($"Command '{commandId.Trim()}' not found.");
+                return Error($"Command '{commandId.Trim()}' not found.",
+                    "Use manage_command(action='list') to find valid command IDs.");
 
             var typeValue = existing.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
             if (typeValue != 2) // must be Split Button
@@ -495,7 +529,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(onclickType))
             {
                 if (!ActionTypeFilterMap.TryGetValue(onclickType.Trim(), out var onclickValue))
-                    return Error($"Invalid onclick_type '{onclickType.Trim()}'. Use 'none', 'javascript', or 'formula'.");
+                    return Error($"Invalid onclick_type '{onclickType.Trim()}'.",
+                        "Valid values: 'none', 'javascript', 'formula'.");
                 entity["onclickeventtype"] = new OptionSetValue(onclickValue);
                 changes.Add($"onclickType='{onclickType.Trim()}'");
             }
@@ -504,7 +539,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var wrId = ResolveWebResourceId(jsWebResource.Trim());
                 if (wrId == null)
-                    return Error($"Web resource '{jsWebResource.Trim()}' not found.");
+                    return Error($"Web resource '{jsWebResource.Trim()}' not found.",
+                        "Use manage_webresource(action='list') to find valid web resource names.");
                 entity["onclickeventjavascriptwebresourceid"] = new EntityReference("webresource", wrId.Value);
                 changes.Add($"jsWebResource='{jsWebResource.Trim()}'");
             }
@@ -540,7 +576,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var iconWrId = ResolveWebResourceId(iconWebResource.Trim());
                     if (iconWrId == null)
-                        return Error($"Icon web resource '{iconWebResource.Trim()}' not found.");
+                        return Error($"Icon web resource '{iconWebResource.Trim()}' not found.",
+                            "Use manage_webresource(action='list') to find valid web resource names.");
                     entity["iconwebresourceid"] = new EntityReference("webresource", iconWrId.Value);
                     changes.Add($"iconWebResource='{iconWebResource.Trim()}'");
                 }
@@ -559,7 +596,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (changes.Count == 0)
-                return Error("No fields to update. Provide at least one: label, sequence, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description.");
+                return Error("No fields to update.",
+                    "Provide at least one: label, sequence, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description.");
 
             DataverseMutationExecutor.Update(_context, _serviceClient, entity);
 
@@ -591,27 +629,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
 
             if (string.IsNullOrWhiteSpace(flyoutCommandId))
-                return Error("flyout_command_id is required for action='add_flyout_item'.");
+                return Error("flyout_command_id is required for action='add_flyout_item'.",
+                    "Pass the flyout container (Dropdown or Split Button) appaction GUID. Use manage_command(action='list', include_children=true) to find command IDs.");
             if (!Guid.TryParse(flyoutCommandId.Trim(), out var flyoutGuid))
-                return Error($"'{flyoutCommandId.Trim()}' is not a valid GUID.");
+                return Error($"'{flyoutCommandId.Trim()}' is not a valid GUID.",
+                    "Pass the flyout container appaction GUID. Use manage_command(action='list', include_children=true) to find command IDs.");
             if (string.IsNullOrWhiteSpace(label))
-                return Error("label is required for action='add_flyout_item'.");
+                return Error("label is required for action='add_flyout_item'.",
+                    "Pass the display label for the new flyout item.");
 
             // Load flyout dropdown record
             var flyout = RetrieveAppActionOrNull(flyoutGuid, "name", "type", "contextvalue", "location", "appmoduleid");
             if (flyout == null)
-                return Error($"Flyout command '{flyoutCommandId.Trim()}' not found.");
+                return Error($"Flyout command '{flyoutCommandId.Trim()}' not found.",
+                    "Check the flyout_command_id. Use manage_command(action='list', include_children=true) to find command IDs.");
 
             var flyoutType = flyout.GetAttributeValue<OptionSetValue>("type")?.Value ?? -1;
             if (flyoutType != 1 && flyoutType != 2)
-                return Error($"'{flyoutCommandId.Trim()}' is not a Dropdown or Split Button (type={TypeMap.GetValueOrDefault(flyoutType, flyoutType.ToString())}). Provide the flyout container's id.");
+                return Error($"'{flyoutCommandId.Trim()}' is not a Dropdown or Split Button (type={TypeMap.GetValueOrDefault(flyoutType, flyoutType.ToString())}).",
+                    "Pass the flyout container's id, not an item's id. Use manage_command(action='list', include_children=true) to see the flyout hierarchy.");
 
             var entityLogical = flyout.GetAttributeValue<string>("contextvalue") ?? "";
             var locationValue = flyout.GetAttributeValue<OptionSetValue>("location")?.Value ?? 0;
             var appModuleRef = flyout.GetAttributeValue<EntityReference>("appmoduleid");
 
             if (appModuleRef == null)
-                return Error("Flyout has no associated app module.");
+                return Error("Flyout has no associated app module.",
+                    "The flyout command is not linked to an app. Recreate it with manage_command(action='add_flyout') passing app_id or app_name.");
 
             // Find the Group child of the flyout
             var groupId = FindFlyoutGroup(flyoutGuid);
@@ -655,7 +699,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(onclickType))
             {
                 if (!ActionTypeFilterMap.TryGetValue(onclickType.Trim(), out onclickValue))
-                    return Error($"Invalid onclick_type '{onclickType.Trim()}'. Use 'none', 'javascript', or 'formula'.");
+                    return Error($"Invalid onclick_type '{onclickType.Trim()}'.",
+                        "Valid values: 'none', 'javascript', 'formula'.");
             }
 
             var publisherPrefix = ResolvePublisherPrefix(entityLogical);
@@ -673,7 +718,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 label, onclickType, jsWebResource, jsFunction, itemSeq);
 
             if (result.error != null)
-                return Error(result.error);
+                return Error(result.error,
+                    "Check the item's onclick_type ('none', 'javascript', 'formula') and javascript_webresource — use manage_webresource(action='list') to find valid web resource names.");
 
             var message = $"Item '{label.Trim()}' added to flyout '{flyoutNameStr}'. ItemCommandId: {result.itemId}.";
             var structured = new ManageCommandResult
@@ -702,25 +748,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
 
             if (string.IsNullOrWhiteSpace(commandId))
-                return Error("command_id is required for action='remove_flyout_item'.");
+                return Error("command_id is required for action='remove_flyout_item'.",
+                    "Pass the flyout item appaction GUID. Use manage_command(action='list', include_children=true) to find item IDs.");
             if (!Guid.TryParse(commandId.Trim(), out var cmdGuid))
-                return Error($"'{commandId.Trim()}' is not a valid GUID.");
+                return Error($"'{commandId.Trim()}' is not a valid GUID.",
+                    "Pass an appaction GUID. Use manage_command(action='list', include_children=true) to find item IDs.");
 
             var existing = RetrieveAppActionOrNull(cmdGuid, "name", "type", "parentappactionid", "buttonlabeltext");
             if (existing == null)
-                return Error($"Command '{commandId.Trim()}' not found.");
+                return Error($"Command '{commandId.Trim()}' not found.",
+                    "Use manage_command(action='list', include_children=true) to find valid command IDs.");
 
             var typeValue = existing.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
             if (typeValue == 1)
-                return Error("Cannot remove a Dropdown Button using remove_flyout_item. To delete the entire flyout, use the Dataverse UI or manage_record(action='delete').");
+                return Error("Cannot remove a Dropdown Button using remove_flyout_item.",
+                    "To delete the entire flyout, use the Dataverse UI or manage_record(action='delete').");
             if (typeValue == 2)
-                return Error("Cannot remove a Split Button using remove_flyout_item. To delete the entire split button, use the Dataverse UI or manage_record(action='delete').");
+                return Error("Cannot remove a Split Button using remove_flyout_item.",
+                    "To delete the entire split button, use the Dataverse UI or manage_record(action='delete').");
             if (typeValue == 3)
-                return Error("Cannot directly remove a Group. Remove individual items or delete the entire flyout.");
+                return Error("Cannot directly remove a Group.",
+                    "Remove individual items or delete the entire flyout via the Dataverse UI or manage_record(action='delete').");
 
             var parentRef = existing.GetAttributeValue<EntityReference>("parentappactionid");
             if (parentRef == null)
-                return Error("This command has no parent — it is not a flyout item. Use action='hide' to hide a top-level button.");
+                return Error("This command has no parent — it is not a flyout item.",
+                    "Use action='hide' to hide a top-level button.");
 
             var itemName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
             var itemLabel = existing.GetAttributeValue<string>("buttonlabeltext") ?? itemName;

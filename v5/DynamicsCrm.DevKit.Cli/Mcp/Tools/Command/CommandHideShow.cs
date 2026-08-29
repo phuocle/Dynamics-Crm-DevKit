@@ -40,11 +40,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(commandId))
             {
                 if (!Guid.TryParse(commandId.Trim(), out var cmdGuid))
-                    return Error($"'{commandId.Trim()}' is not a valid GUID.");
+                    return Error($"'{commandId.Trim()}' is not a valid GUID.",
+                        "Pass an appaction GUID. Use manage_command(action='list') to find command IDs.");
 
                 var existing = RetrieveAppActionOrNull(cmdGuid, "name", "hidden", "contextvalue", "origin");
                 if (existing == null)
-                    return Error($"Command '{commandId.Trim()}' not found.");
+                    return Error($"Command '{commandId.Trim()}' not found.",
+                        "Use manage_command(action='list') to find valid command IDs.");
 
                 if (!wantHidden && IsOobOverrideCommand(existing))
                 {
@@ -79,21 +81,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Path 2: lookup by label + entity + location
             if (string.IsNullOrWhiteSpace(label))
-                return Error($"Provide command_id OR (label + entity_name + location) for action='{verb}'.");
+                return Error($"Provide command_id OR (label + entity_name + location) for action='{verb}'.",
+                    "Pass command_id (appaction GUID), or label together with entity_name and location for fuzzy lookup.");
             if (string.IsNullOrWhiteSpace(entityName))
-                return Error($"entity_name is required when using label lookup for action='{verb}'.");
+                return Error($"entity_name is required when using label lookup for action='{verb}'.",
+                    "Pass the entity Display Name or logical name. Use get_tables to list available tables.");
             if (string.IsNullOrWhiteSpace(location))
-                return Error($"location is required when using label lookup for action='{verb}'.");
+                return Error($"location is required when using label lookup for action='{verb}'.",
+                    "Pass one of: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'.");
             if (wantHidden && string.IsNullOrWhiteSpace(appId) && string.IsNullOrWhiteSpace(appName))
-                return Error($"app_id or app_name is required for action='hide'. " +
-                    "Multiple apps may exist — specify which app to apply the hide override to.");
+                return Error("app_id or app_name is required for action='hide'.",
+                    "Multiple apps may exist — specify which app to apply the hide override to. Use manage_app(action='list') to discover apps.");
 
             if (!LocationFilterMap.TryGetValue(location.Trim(), out var locationValue))
-                return Error($"Invalid location '{location.Trim()}'. Use 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', or 'dashboard'.");
+                return Error($"Invalid location '{location.Trim()}'.",
+                    "Valid values: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'.");
 
             var (resolvedEntityName, entityError) = ResolveEntityLogicalName(entityName);
             if (entityError != null)
-                return Error(entityError);
+                return Error(entityError.Split("\r\n")[0],
+                    "Use get_tables to list available tables.");
             entityName = resolvedEntityName;
 
             var found = FindCommandByLabel(label.Trim(), entityName, locationValue);
@@ -142,12 +149,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Block if this label belongs to a custom classic ribbon button
             if (IsClassicRibbonButton(label.Trim(), entityName))
-                return Error($"'{label.Trim()}' is a classic ribbon button defined via manage_ribbon and cannot be hidden using manage_command. Use manage_ribbon to hide it instead.");
+                return Error($"'{label.Trim()}' is a classic ribbon button defined via manage_ribbon and cannot be hidden using manage_command.",
+                    "Use manage_ribbon to hide it instead.");
 
             // hide: must create an appaction override record
             var resolvedAppId = ResolveAppId(appId, appName, out var appResolveError2);
             if (resolvedAppId == null)
-                return Error(appResolveError2 ?? "Could not resolve app. Provide a valid app_id or app_name.");
+                return Error((appResolveError2 ?? "Could not resolve app.").Split("\r\n")[0],
+                    "Pass app_id (app module GUID) or app_name. Use manage_app(action='list') to discover apps.");
 
             var entityLogical = entityName;
             var oobNamePrefix = LocationOobNamePrefix(locationValue);

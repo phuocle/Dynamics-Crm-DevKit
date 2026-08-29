@@ -171,11 +171,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     case "detail":
                         if (string.IsNullOrWhiteSpace(command_id) && string.IsNullOrWhiteSpace(label))
-                            return Error("command_id or label is required for action='detail'.");
+                            return Error("command_id or label is required for action='detail'.",
+                                "Pass command_id (appaction GUID), or label together with entity_name and location for fuzzy lookup. Use manage_command(action='list') to find command IDs.");
                         if (!string.IsNullOrWhiteSpace(command_id))
                         {
                             if (!Guid.TryParse(command_id.Trim(), out _))
-                                return Error($"'{command_id.Trim()}' is not a valid GUID.");
+                                return Error($"'{command_id.Trim()}' is not a valid GUID.",
+                                    "Pass an appaction GUID. Use manage_command(action='list') to find command IDs.");
                             return GetDetail(command_id.Trim(), include_rules, include_children);
                         }
                         return GetDetailByLabel(label.Trim(), entity_name.Trim(), location.Trim(), include_rules, include_children);
@@ -220,7 +222,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ThrowException(ex);
+                return ThrowExceptionFriendly(ex);
             }
         }
     }

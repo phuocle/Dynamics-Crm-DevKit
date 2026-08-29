@@ -32,29 +32,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
 
             if (string.IsNullOrWhiteSpace(entityName))
-                return Error("entity_name is required for action='create'.");
+                return Error("entity_name is required for action='create'.",
+                    "Pass the entity Display Name or logical name. Use get_tables to list available tables.");
             if (string.IsNullOrWhiteSpace(location))
-                return Error("location is required for action='create'.");
+                return Error("location is required for action='create'.",
+                    "Pass one of: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'.");
             if (string.IsNullOrWhiteSpace(label))
-                return Error("label is required for action='create'.");
+                return Error("label is required for action='create'.",
+                    "Pass the button label text in label.");
 
             if (!LocationFilterMap.TryGetValue(location.Trim(), out var locationValue))
-                return Error($"Invalid location '{location.Trim()}'. Use 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', or 'dashboard'.");
+                return Error($"Invalid location '{location.Trim()}'.",
+                    "Valid values: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'.");
 
             var resolvedAppId = ResolveAppId(appId, appName, out var appResolveError);
             if (resolvedAppId == null)
-                return Error(appResolveError ?? "Could not resolve app. Provide a valid app_id or app_name.");
+                return Error((appResolveError ?? "Could not resolve app.").Split("\r\n")[0],
+                    "Pass app_id (app module GUID) or app_name. Use manage_app(action='list') to discover apps.");
 
             var onclickTypeValue = 0;
             if (!string.IsNullOrWhiteSpace(onclickType))
             {
                 if (!ActionTypeFilterMap.TryGetValue(onclickType.Trim(), out onclickTypeValue))
-                    return Error($"Invalid onclick_type '{onclickType.Trim()}'. Use 'none', 'javascript', or 'formula'.");
+                    return Error($"Invalid onclick_type '{onclickType.Trim()}'.",
+                        "Valid values: 'none', 'javascript', 'formula'.");
             }
 
             var (createEntityLogical, createEntityError) = ResolveEntityLogicalName(entityName);
             if (createEntityError != null)
-                return Error(createEntityError);
+                return Error(createEntityError.Split("\r\n")[0],
+                    "Use get_tables to list available tables.");
             var createEntityId = ResolveEntityId(createEntityLogical);
             var createAppUniqueName = ResolveAppUniqueName(resolvedAppId.Value);
             var createPublisherPrefix = ResolvePublisherPrefix(createEntityLogical);
@@ -87,7 +94,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var iconWrId = ResolveWebResourceId(iconWebResource.Trim());
                 if (iconWrId == null)
-                    return Error($"Icon web resource '{iconWebResource.Trim()}' not found.");
+                    return Error($"Icon web resource '{iconWebResource.Trim()}' not found.",
+                        "Use manage_webresource(action='list') to find valid web resource names.");
                 entity["iconwebresourceid"] = new EntityReference("webresource", iconWrId.Value);
             }
 
@@ -103,7 +111,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var wrId = ResolveWebResourceId(jsWebResource.Trim());
                     if (wrId == null)
-                        return Error($"Web resource '{jsWebResource.Trim()}' not found.");
+                        return Error($"Web resource '{jsWebResource.Trim()}' not found.",
+                            "Use manage_webresource(action='list') to find valid web resource names.");
                     entity["onclickeventjavascriptwebresourceid"] = new EntityReference("webresource", wrId.Value);
                 }
                 if (!string.IsNullOrWhiteSpace(jsFunction))
@@ -151,13 +160,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
 
             if (string.IsNullOrWhiteSpace(commandId))
-                return Error("command_id is required for action='update'.");
+                return Error("command_id is required for action='update'.",
+                    "Pass the target appaction GUID. Use manage_command(action='list') to find command IDs.");
             if (!Guid.TryParse(commandId.Trim(), out var cmdGuid))
-                return Error($"'{commandId.Trim()}' is not a valid GUID.");
+                return Error($"'{commandId.Trim()}' is not a valid GUID.",
+                    "Pass an appaction GUID. Use manage_command(action='list') to find command IDs.");
 
             var existing = RetrieveAppActionOrNull(cmdGuid, "name", "buttonlabeltext", "contextvalue");
             if (existing == null)
-                return Error($"Command '{commandId.Trim()}' not found.");
+                return Error($"Command '{commandId.Trim()}' not found.",
+                    "Use manage_command(action='list') to find valid command IDs.");
 
             var entity = new Entity("appaction", cmdGuid);
             var changes = new List<string>();
@@ -177,7 +189,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(onclickType))
             {
                 if (!ActionTypeFilterMap.TryGetValue(onclickType.Trim(), out var onclickValue))
-                    return Error($"Invalid onclick_type '{onclickType.Trim()}'. Use 'none', 'javascript', or 'formula'.");
+                    return Error($"Invalid onclick_type '{onclickType.Trim()}'.",
+                        "Valid values: 'none', 'javascript', 'formula'.");
                 entity["onclickeventtype"] = new OptionSetValue(onclickValue);
                 changes.Add($"onclickType='{onclickType.Trim()}'");
             }
@@ -186,7 +199,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var wrId = ResolveWebResourceId(jsWebResource.Trim());
                 if (wrId == null)
-                    return Error($"Web resource '{jsWebResource.Trim()}' not found.");
+                    return Error($"Web resource '{jsWebResource.Trim()}' not found.",
+                        "Use manage_webresource(action='list') to find valid web resource names.");
                 entity["onclickeventjavascriptwebresourceid"] = new EntityReference("webresource", wrId.Value);
                 changes.Add($"jsWebResource='{jsWebResource.Trim()}'");
             }
@@ -222,7 +236,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var iconWrId = ResolveWebResourceId(iconWebResource.Trim());
                     if (iconWrId == null)
-                        return Error($"Icon web resource '{iconWebResource.Trim()}' not found.");
+                        return Error($"Icon web resource '{iconWebResource.Trim()}' not found.",
+                            "Use manage_webresource(action='list') to find valid web resource names.");
                     entity["iconwebresourceid"] = new EntityReference("webresource", iconWrId.Value);
                     changes.Add($"iconWebResource='{iconWebResource.Trim()}'");
                 }
@@ -241,7 +256,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (changes.Count == 0)
-                return Error("No fields to update. Provide at least one field to change (label, sequence, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description). Use action='hide'/'show' to change visibility.");
+                return Error("No fields to update.",
+                    "Provide at least one field to change (label, sequence, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description). Use action='hide'/'show' to change visibility.");
 
             DataverseMutationExecutor.Update(_context, _serviceClient, entity);
             var updateEntityLogical = existing.GetAttributeValue<string>("contextvalue");

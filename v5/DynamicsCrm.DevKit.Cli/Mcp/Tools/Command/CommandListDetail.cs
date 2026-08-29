@@ -25,30 +25,35 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(location))
             {
                 if (!LocationFilterMap.ContainsKey(location.Trim()))
-                    return Error($"Invalid location '{location.Trim()}'. Use 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', or 'dashboard'.");
+                    return Error($"Invalid location '{location.Trim()}'.",
+                        "Valid values: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'.");
             }
 
             if (!string.IsNullOrWhiteSpace(origin) && !origin.Trim().Equals("all", StringComparison.OrdinalIgnoreCase))
             {
                 if (!OriginFilterMap.ContainsKey(origin.Trim()))
-                    return Error($"Invalid origin '{origin.Trim()}'. Use 'default', 'migrated', 'enhanced_migrated', or 'all'.");
+                    return Error($"Invalid origin '{origin.Trim()}'.",
+                        "Valid values: 'default', 'migrated', 'enhanced_migrated', 'all'.");
             }
 
             if (!string.IsNullOrWhiteSpace(actionType))
             {
                 if (!ActionTypeFilterMap.ContainsKey(actionType.Trim()))
-                    return Error($"Invalid action_type '{actionType.Trim()}'. Use 'javascript', 'formula', or 'none'.");
+                    return Error($"Invalid action_type '{actionType.Trim()}'.",
+                        "Valid values: 'javascript', 'formula', 'none'.");
             }
 
             if (maxRecords <= 0)
-                return Error("max_records must be between 1 and 500.");
+                return Error("max_records must be between 1 and 500.",
+                    "Pass a value between 1 and 500.");
             if (maxRecords > 500) maxRecords = 500;
 
             if (!string.IsNullOrWhiteSpace(entityName))
             {
                 var (resolvedEntityName, entityError) = ResolveEntityLogicalName(entityName);
                 if (entityError != null)
-                    return Error(entityError);
+                    return Error(entityError.Split("\r\n")[0],
+                        "Use get_tables to list available tables.");
                 entityName = resolvedEntityName;
             }
 
@@ -327,7 +332,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var resolvedAppId = ResolveAppId("", appName, out var appResolveError);
                 if (resolvedAppId == null)
-                    return Error(appResolveError ?? "Could not resolve app_name.");
+                    return Error((appResolveError ?? "Could not resolve app_name.").Split("\r\n")[0],
+                        "Use manage_app(action='list') to discover apps.");
                 filters.AppendLine($"      <condition attribute='appmoduleid' operator='eq' value='{resolvedAppId.Value}'/>");
             }
 
@@ -418,7 +424,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
-                return Error($"Command '{commandId}' not found.");
+                return Error($"Command '{commandId}' not found.",
+                    "Use manage_command(action='list') to find valid command IDs.");
 
             var entity = result.Entities[0];
             var entry = MapCommandEntry(entity);
@@ -458,7 +465,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var (resolvedEntityName, entityError) = ResolveEntityLogicalName(entityName);
                 if (entityError != null)
-                    return Error(entityError);
+                    return Error(entityError.Split("\r\n")[0],
+                        "Use get_tables to list available tables.");
                 entityName = resolvedEntityName;
                 filters.AppendLine($"      <condition attribute='contextvalue' operator='eq' value='{EscapeXml(entityName)}'/>");
             }
@@ -485,7 +493,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (result.Entities.Count == 0)
                 return Error($"No command found with label containing '{label}'" +
-                    (string.IsNullOrWhiteSpace(entityName) ? "" : $" on entity '{entityName}'") + ".");
+                    (string.IsNullOrWhiteSpace(entityName) ? "" : $" on entity '{entityName}'") + ".",
+                    "Check the label spelling, or use manage_command(action='list') to browse commands.");
 
             if (result.Entities.Count > 1)
             {
