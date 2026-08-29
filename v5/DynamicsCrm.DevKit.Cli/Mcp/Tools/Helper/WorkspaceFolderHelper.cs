@@ -18,14 +18,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         {
             try
             {
+                // MCP9005: Roots deprecated by SEP-2577 (spec 2026-07-28). Advisory only —
+                // guaranteed functional in spec versions until ~2027-07-28. When the SDK removes
+                // this API, delete this branch; the cwd fallback below keeps the chain working.
+#pragma warning disable MCP9005
                 if (server?.ClientCapabilities?.Roots != null)
                 {
-                    // MCP9005: Roots deprecated by SEP-2577 (spec 2026-07-28). Advisory only —
-                    // guaranteed functional in spec versions until ~2027-07-28. When the SDK removes
-                    // this API, delete this branch; the cwd fallback below keeps the chain working.
-#pragma warning disable MCP9005
                     var result = await server.RequestRootsAsync(new ListRootsRequestParams(), cancellationToken);
-#pragma warning restore MCP9005
                     var first = result.Roots?.FirstOrDefault();
                     if (first != null)
                     {
@@ -34,6 +33,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                             return path;
                     }
                 }
+#pragma warning restore MCP9005
             }
             catch
             {

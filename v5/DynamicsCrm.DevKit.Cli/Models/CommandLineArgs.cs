@@ -37,5 +37,9 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [CommandOption("--webresource|-w")]
         [Description("Unique name of the web resource in Dataverse")]
         public string WebResource { get; set; }
+
+        public string Report { get; set; }
+
+        public string Language { get; set; }
     }
 }

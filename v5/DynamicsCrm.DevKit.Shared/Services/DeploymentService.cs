@@ -147,6 +147,83 @@ namespace DynamicsCrm.DevKit.Shared.Services
             await _serviceClient.UpdateAsync(update);
         }
 
+        public async Task<int?> GetLanguageCodeAsync(string language)
+        {
+            if (string.IsNullOrWhiteSpace(language)) return 1033;
+            if (int.TryParse(language, out var lcid)) return lcid;
+            var fetchData = new
+            {
+                language = System.Security.SecurityElement.Escape(language)
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='languagelocale'>
+    <attribute name='localeid' />
+    <filter type='and'>
+      <condition attribute='language' operator='eq' value='{fetchData.language}'/>
+    </filter>
+  </entity>
+</fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
+            var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            if (rows.Entities.Count == 0) return null;
+            return rows.Entities[0].GetAttributeValue<int>("localeid");
+        }
+
+        public async Task<List<DeployReport>> GetReportsAsync(string identifier, int? languageCode)
+        {
+            string condition;
+            if (Guid.TryParse(identifier, out var reportId))
+            {
+                condition = $"<condition attribute='reportid' operator='eq' value='{reportId}'/>";
+            }
+            else
+            {
+                var escaped = System.Security.SecurityElement.Escape(identifier);
+                var fileName = escaped.EndsWith(".rdl", StringComparison.OrdinalIgnoreCase) ? escaped : escaped + ".rdl";
+                condition = "<filter type='or'>" +
+                    $"<condition attribute='name' operator='eq' value='{escaped}'/>" +
+                    $"<condition attribute='filename' operator='eq' value='{escaped}'/>" +
+                    $"<condition attribute='filename' operator='eq' value='{fileName}'/>" +
+                    "</filter>";
+            }
+            var languageCondition = languageCode.HasValue
+                ? $"<condition attribute='languagecode' operator='eq' value='{languageCode.Value}'/>"
+                : string.Empty;
+            var fetchXml = $@"
+<fetch>
+  <entity name='report'>
+    <attribute name='name' />
+    <attribute name='filename' />
+    <attribute name='languagecode' />
+    <attribute name='ismanaged' />
+    <filter type='and'>
+      {condition}
+      {languageCondition}
+    </filter>
+    <link-entity name='languagelocale' from='localeid' to='languagecode' link-type='inner' alias='l'>
+      <attribute name='language' />
+    </link-entity>
+  </entity>
+</fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
+            var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var list = new List<DeployReport>();
+            foreach (var entity in rows.Entities)
+            {
+                list.Add(new DeployReport
+                {
+                    ReportId = entity.Id,
+                    ReportName = entity.GetAttributeValue<string>("name"),
+                    ReportFileName = entity.GetAttributeValue<string>("filename"),
+                    LanguageCode = entity.GetAttributeValue<int>("languagecode"),
+                    Language = entity.GetAttributeValue<AliasedValue>("l.language")?.Value?.ToString() ?? "English",
+                    IsManaged = entity.GetAttributeValue<bool>("ismanaged")
+                });
+            }
+            return list;
+        }
+
         public async Task<List<DeployWebResource>> GetWebResourcesAsync(string fullFileName)
         {
             var parts = fullFileName.Split(['\\', '/'], StringSplitOptions.RemoveEmptyEntries);
