@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
@@ -23,10 +24,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class SearchRecordsTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
+        private readonly McpDryRunOptions _options;
 
-        public SearchRecordsTool(ServiceClient serviceClient)
+        public SearchRecordsTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
             _serviceClient = serviceClient;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
         [McpServerTool(Name = "search_records", Title = "Search records by keyword or check Relevance Search status",
@@ -132,14 +135,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error(structured.ErrorMessage, null, structured);
 
             structured.DetailLevel = detailLevel;
-            if (detailLevel == "full")
+            // Dry-run: never write the full-payload file — zero disk side effects.
+            // Raw attributes stay inline because there is no file to hold them.
+            var suppressFile = detailLevel == "full" && _options.DryRun;
+            if (detailLevel == "full" && !suppressFile)
                 structured.FilePath = WriteFullPayload(workspaceFolder, "search", structured);
 
             // Inline payload is always compact: primary name only, raw attributes
             // live in the full-payload file (or are dropped in compact mode).
             SetRecordNames(structured);
-            foreach (var record in structured.Records ?? [])
-                record.Attributes = null;
+            if (!suppressFile)
+                foreach (var record in structured.Records ?? [])
+                    record.Attributes = null;
 
             return Success(BuildSearchText(structured, sw.ElapsedMilliseconds), structured);
         }
@@ -167,13 +174,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error(structured.ErrorMessage ?? "Unable to parse status response.", null, structured);
 
             structured.DetailLevel = detailLevel;
-            if (detailLevel == "full")
+            // Dry-run: never write the full-payload file — zero disk side effects.
+            // indexedFields stay inline because there is no file to hold them.
+            var suppressFile = detailLevel == "full" && _options.DryRun;
+            if (detailLevel == "full" && !suppressFile)
                 structured.FilePath = WriteFullPayload(workspaceFolder, "status", structured);
 
             // Inline payload is always compact: indexedFields live in the
             // full-payload file (or are dropped in compact mode).
-            foreach (var entity in structured.Status.EntityStatusResults ?? [])
-                entity.IndexedFields = null;
+            if (!suppressFile)
+                foreach (var entity in structured.Status.EntityStatusResults ?? [])
+                    entity.IndexedFields = null;
 
             return Success(BuildStatusText(structured), structured);
         }

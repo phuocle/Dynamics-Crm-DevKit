@@ -318,6 +318,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var folder = Path.Combine(workspaceFolder, ".devkit", "manage_record_file", entityLogical,
                 FileColumnTransferHelper.SanitizeFolderName(primaryName ?? recordId.ToString()));
+
+            if (_options.DryRun)
+            {
+                var dryRunResult = BaseResult("download", entityLogical, recordId, primaryName, columnLogical, fileAttr, imageAttr);
+                dryRunResult.HasValue = true;
+                dryRunResult.FileName = downloadFileName;
+                dryRunResult.FileSizeInBytes = data.LongLength;
+                dryRunResult.FullSize = imageAttr != null ? (bool?)fullSize : null;
+                dryRunResult.Sha256 = Convert.ToHexString(SHA256.HashData(data)).ToLowerInvariant();
+                dryRunResult.Status = "not_executed";
+                return DryRun(
+                    $"Would download {entityLogical}.{columnLogical} of record {recordId} ({data.LongLength:N0} bytes) to '{folder}'. No file written.",
+                    dryRunResult);
+            }
+
             Directory.CreateDirectory(folder);
             var savedPath = FileColumnTransferHelper.GetUniqueFilePath(folder, downloadFileName);
             File.WriteAllBytes(savedPath, data);
