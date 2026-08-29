@@ -91,7 +91,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "[{\"action\":\"add_button\",\"surface\":\"form\",\"label\":\"My Button\",...}]");
             }
             if (ops == null || ops.Count == 0)
-                return Error("operations must be a non-empty JSON array.");
+                return Error("operations must be a non-empty JSON array.",
+                    "Provide a JSON array with at least one ribbon operation, e.g. " +
+                    "[{\"action\":\"add_button\",\"surface\":\"form\",\"label\":\"My Button\",...}]");
 
             var (normalizedOps, nameResolutionErrors) = NormalizeOperationWebResources(ops);
             if (nameResolutionErrors.Count > 0)
@@ -118,7 +120,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             foreach (var op in ops)
             {
                 if (!op.TryGetProperty("action", out var actionProp))
-                    return Error("Each operation must have an 'action' field.");
+                    return Error("Each operation must have an 'action' field.",
+                        "Add \"action\":\"<operation>\". Valid: add_button, update_button, hide_button, show_button, " +
+                        "add_split_button, update_split_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item.");
 
                 var opAction = actionProp.GetString()?.Trim().ToLowerInvariant();
                 (string error, string hint, string summary) result = opAction switch
@@ -153,7 +157,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var xmlString = ribbonDoc.ToString(SaveOptions.None);
             var (xsdErrors, xsdWarnings) = RibbonValidation.ValidateRibbonXml(xmlString);
             if (xsdErrors.Count > 0)
-                return Error($"Generated XML failed Ribbon XSD validation:\n{string.Join("\n", xsdErrors)}");
+                return Error($"Generated XML failed Ribbon XSD validation:\n{string.Join("\n", xsdErrors)}",
+                    "Fix the operation fields reported above and retry; if a message does not map to an input field, report it to the tool maintainer.");
             var functionSignatures = BuildFunctionSignatures(ribbonDoc);
 
             if (_options.DryRun)

@@ -24,7 +24,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private (string LogicalName, CallToolResult Error) ResolveEntityLogicalName(string entityName)
         {
             if (string.IsNullOrWhiteSpace(entityName))
-                return (null, Error("entity_name is required."));
+                return (null, Error("entity_name is required.",
+                    "Provide entity_name, e.g. entity_name='account'. Use get_tables to find valid entity names."));
             var trimmed = entityName.Trim();
             var result = DisplayNameFirstResolver.ResolveEntity(_serviceClient, trimmed, "manage_ribbon", withNotFoundTip: false);
             if (result.IsSuccess)
@@ -46,7 +47,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             schemaName = c.SchemaName
                         }).ToList()
                     }));
-            return (null, Error($"entity_name '{trimmed}': {result.Error}"));
+            return (null, Error($"entity_name '{trimmed}': {result.Error}",
+                "Use get_tables to find valid entity names."));
         }
 
         // ── Busy-environment gate (blocks ribbon action while a solution job runs) ──

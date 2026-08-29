@@ -27,33 +27,41 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             var enableFunction = RibbonXmlHelpers.GetJsonString(op, "enable_function");
 
             if (string.IsNullOrWhiteSpace(surface))
-                return ("add_split_button requires 'surface' (form, main_grid, or sub_grid).", null, null);
+                return ("add_split_button requires 'surface' (form, main_grid, or sub_grid).",
+                        "Add \"surface\":\"form\" (valid: form, main_grid, sub_grid).", null);
             if (string.IsNullOrWhiteSpace(label))
-                return ("add_split_button requires 'label' (button display text).", null, null);
+                return ("add_split_button requires 'label' (button display text).",
+                        "Add \"label\":\"<split button display text>\".", null);
             if (string.IsNullOrWhiteSpace(library))
-                return ("add_split_button requires 'library' (main button JS web resource).", null, null);
+                return ("add_split_button requires 'library' (main button JS web resource).",
+                        "Add \"library\":\"<web resource JS file>\". Use manage_webresource(action='list') to find valid names.", null);
             if (string.IsNullOrWhiteSpace(function))
-                return ("add_split_button requires 'function' (main button JS function name).", null, null);
+                return ("add_split_button requires 'function' (main button JS function name).",
+                        "Add \"function\":\"<JavaScript function name>\" defined in the library.", null);
             if (string.IsNullOrWhiteSpace(enableLibrary))
-                return ("add_split_button requires 'enable_library' (main button enable JS web resource).", null, null);
+                return ("add_split_button requires 'enable_library' (main button enable JS web resource).",
+                        "Add \"enable_library\":\"<web resource JS file>\" for the enable rule. Use manage_webresource(action='list') to find valid names.", null);
             if (string.IsNullOrWhiteSpace(enableFunction))
-                return ("add_split_button requires 'enable_function' (main button enable JS function name).", null, null);
+                return ("add_split_button requires 'enable_function' (main button enable JS function name).",
+                        "Add \"enable_function\":\"<JavaScript function name>\" for the enable rule.", null);
 
             surface = surface.Trim().ToLowerInvariant();
             if (!RibbonXmlHelpers.SurfaceLocationMap.ContainsKey(surface))
                 return ($"Invalid surface '{surface}'.", "Valid: form, main_grid, sub_grid.", null);
 
             if (!op.TryGetProperty("items", out var itemsProp) || itemsProp.ValueKind != JsonValueKind.Array)
-                return ("add_split_button requires 'items' array with at least 1 item.", null, null);
+                return ("add_split_button requires 'items' array with at least 1 item.",
+                        "Add \"items\":[{\"label\":...,\"library\":...,\"function\":...,\"enable_library\":...,\"enable_function\":...}] with at least 1 item.", null);
 
             var items = itemsProp.EnumerateArray().ToList();
             if (items.Count == 0)
-                return ("add_split_button requires 'items' array with at least 1 item.", null, null);
+                return ("add_split_button requires 'items' array with at least 1 item.",
+                        "Add \"items\":[{\"label\":...,\"library\":...,\"function\":...,\"enable_library\":...,\"enable_function\":...}] with at least 1 item.", null);
 
             var libErr = _validation.ValidateWebResourceExists(library);
-            if (libErr != null) return (libErr, null, null);
+            if (libErr != null) return (libErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
             var enLibErr = _validation.ValidateWebResourceExists(enableLibrary);
-            if (enLibErr != null) return (enLibErr, null, null);
+            if (enLibErr != null) return (enLibErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
 
             var slugSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach (var item in items)
@@ -65,26 +73,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 var itemEnFunc = RibbonXmlHelpers.GetJsonString(item, "enable_function");
 
                 if (string.IsNullOrWhiteSpace(itemLabel))
-                    return ("Each item requires 'label'.", null, null);
+                    return ("Each item requires 'label'.",
+                            "Add \"label\":\"<item display text>\" to every item.", null);
                 if (string.IsNullOrWhiteSpace(itemLib))
-                    return ($"Item '{itemLabel}' requires 'library'.", null, null);
+                    return ($"Item '{itemLabel}' requires 'library'.",
+                            "Add \"library\":\"<web resource JS file>\" to the item. Use manage_webresource(action='list') to find valid names.", null);
                 if (string.IsNullOrWhiteSpace(itemFunc))
-                    return ($"Item '{itemLabel}' requires 'function'.", null, null);
+                    return ($"Item '{itemLabel}' requires 'function'.",
+                            "Add \"function\":\"<JavaScript function name>\" to the item.", null);
                 if (string.IsNullOrWhiteSpace(itemEnLib))
-                    return ($"Item '{itemLabel}' requires 'enable_library'.", null, null);
+                    return ($"Item '{itemLabel}' requires 'enable_library'.",
+                            "Add \"enable_library\":\"<web resource JS file>\" to the item. Use manage_webresource(action='list') to find valid names.", null);
                 if (string.IsNullOrWhiteSpace(itemEnFunc))
-                    return ($"Item '{itemLabel}' requires 'enable_function'.", null, null);
+                    return ($"Item '{itemLabel}' requires 'enable_function'.",
+                            "Add \"enable_function\":\"<JavaScript function name>\" to the item.", null);
 
                 var itemLibErr2 = _validation.ValidateWebResourceExists(itemLib);
-                if (itemLibErr2 != null) return (itemLibErr2, null, null);
+                if (itemLibErr2 != null) return (itemLibErr2, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
                 var itemEnLibErr2 = _validation.ValidateWebResourceExists(itemEnLib);
-                if (itemEnLibErr2 != null) return (itemEnLibErr2, null, null);
+                if (itemEnLibErr2 != null) return (itemEnLibErr2, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
 
                 var itemImage = RibbonXmlHelpers.GetJsonString(item, "modern_image");
                 if (!string.IsNullOrWhiteSpace(itemImage))
                 {
                     var imgErr = _validation.ValidateWebResourceExists(itemImage);
-                    if (imgErr != null) return (imgErr, null, null);
+                    if (imgErr != null) return (imgErr, "Use manage_webresource(action='list') to find valid image web resources (e.g. svg).", null);
                 }
 
                 var itemSlug = RibbonXmlHelpers.GenerateSlug(itemLabel);
@@ -100,7 +113,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (!string.IsNullOrWhiteSpace(modernImage))
             {
                 var imgErr = _validation.ValidateWebResourceExists(modernImage);
-                if (imgErr != null) return (imgErr, null, null);
+                if (imgErr != null) return (imgErr, "Use manage_webresource(action='list') to find valid image web resources (e.g. svg).", null);
             }
 
             var slug = RibbonXmlHelpers.GenerateSlug(label);
@@ -347,7 +360,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             else
             {
                 if (string.IsNullOrWhiteSpace(labelHint))
-                    return ("update_split_button requires 'split_button_id' or 'label' to identify the split button.", null, null);
+                    return ("update_split_button requires 'split_button_id' or 'label' to identify the split button.",
+                            "Provide 'split_button_id' or 'label' of an existing split button; use manage_ribbon(action='buttons') to list Ids.", null);
                 var slug = RibbonXmlHelpers.GenerateSlug(labelHint);
                 splitButtonEl = ribbonDoc.Root
                     ?.Element("CustomActions")
@@ -410,7 +424,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (!string.IsNullOrWhiteSpace(newImage))
             {
                 var imgErr = _validation.ValidateWebResourceExists(newImage);
-                if (imgErr != null) return (imgErr, null, null);
+                if (imgErr != null) return (imgErr, "Use manage_webresource(action='list') to find valid image web resources (e.g. svg).", null);
                 splitButtonEl.SetAttributeValue("Image16by16", $"$webresource:{newImage}");
                 splitButtonEl.SetAttributeValue("Image32by32", $"$webresource:{newImage}");
                 splitButtonEl.SetAttributeValue("ModernImage", $"$webresource:{newImage}");
@@ -429,7 +443,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (!string.IsNullOrWhiteSpace(newLibrary))
             {
                 var libErr = _validation.ValidateWebResourceExists(newLibrary);
-                if (libErr != null) return (libErr, null, null);
+                if (libErr != null) return (libErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
                 var cmdDefEl = ribbonDoc.Root?.Element("CommandDefinitions")
                     ?.Elements("CommandDefinition")
                     .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, mainCommandId, StringComparison.OrdinalIgnoreCase));
@@ -453,7 +467,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (!string.IsNullOrWhiteSpace(newEnLib))
             {
                 var libErr = _validation.ValidateWebResourceExists(newEnLib);
-                if (libErr != null) return (libErr, null, null);
+                if (libErr != null) return (libErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
                 var enRuleEl = ribbonDoc.Root?.Element("RuleDefinitions")?.Element("EnableRules")
                     ?.Elements("EnableRule")
                     .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, mainEnRuleId, StringComparison.OrdinalIgnoreCase));
@@ -477,7 +491,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 {
                     var itemLabel = RibbonXmlHelpers.GetJsonString(item, "item_label");
                     if (string.IsNullOrWhiteSpace(itemLabel))
-                        return ("Each item in update_split_button requires 'item_label' to identify which button to update.", null, null);
+                        return ("Each item in update_split_button requires 'item_label' to identify which button to update.",
+                                "Add \"item_label\":\"<existing item label>\" to each item to update.", null);
 
                     var itemSlug = RibbonXmlHelpers.GenerateSlug(itemLabel);
                     var itemBtnId = $"devkit.{entityName}.{splitPrefix}.{itemSlug}.Button";
@@ -489,7 +504,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     if (btnEl == null)
                     {
                         var existing = string.Join(", ", splitButtonEl.Descendants("Button").Select(b => b.Attribute("Id")?.Value ?? "?"));
-                        return ($"Item button '{itemBtnId}' not found in split button.\nExisting items: {existing}", null, null);
+                        return ($"Item button '{itemBtnId}' not found in split button.\nExisting items: {existing}",
+                                "Check item_label against the existing items listed above.", null);
                     }
 
                     var itemUpdated = new List<string>();
@@ -513,7 +529,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     if (!string.IsNullOrWhiteSpace(newItemImage))
                     {
                         var imgErr = _validation.ValidateWebResourceExists(newItemImage);
-                        if (imgErr != null) return (imgErr, null, null);
+                        if (imgErr != null) return (imgErr, "Use manage_webresource(action='list') to find valid image web resources (e.g. svg).", null);
                         btnEl.SetAttributeValue("Image16by16", $"$webresource:{newItemImage}");
                         btnEl.SetAttributeValue("Image32by32", $"$webresource:{newItemImage}");
                         btnEl.SetAttributeValue("ModernImage", $"$webresource:{newItemImage}");
@@ -530,7 +546,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     if (!string.IsNullOrWhiteSpace(newItemLib))
                     {
                         var libErr = _validation.ValidateWebResourceExists(newItemLib);
-                        if (libErr != null) return (libErr, null, null);
+                        if (libErr != null) return (libErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
                         var cmdDefEl = ribbonDoc.Root?.Element("CommandDefinitions")
                             ?.Elements("CommandDefinition")
                             .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemCmdId, StringComparison.OrdinalIgnoreCase));
@@ -554,7 +570,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     if (!string.IsNullOrWhiteSpace(newItemEnLib))
                     {
                         var libErr = _validation.ValidateWebResourceExists(newItemEnLib);
-                        if (libErr != null) return (libErr, null, null);
+                        if (libErr != null) return (libErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
                         var enRuleEl = ribbonDoc.Root?.Element("RuleDefinitions")?.Element("EnableRules")
                             ?.Elements("EnableRule")
                             .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemEnRuleId, StringComparison.OrdinalIgnoreCase));
@@ -589,20 +605,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             var label = RibbonXmlHelpers.GetJsonString(op, "label");
 
             if (string.IsNullOrWhiteSpace(surface))
-                return ("add_flyout_static requires 'surface' (form, main_grid, or sub_grid).", null, null);
+                return ("add_flyout_static requires 'surface' (form, main_grid, or sub_grid).",
+                        "Add \"surface\":\"form\" (valid: form, main_grid, sub_grid).", null);
             if (string.IsNullOrWhiteSpace(label))
-                return ("add_flyout_static requires 'label' (flyout display text).", null, null);
+                return ("add_flyout_static requires 'label' (flyout display text).",
+                        "Add \"label\":\"<flyout display text>\".", null);
 
             surface = surface.Trim().ToLowerInvariant();
             if (!RibbonXmlHelpers.SurfaceLocationMap.ContainsKey(surface))
                 return ($"Invalid surface '{surface}'.", "Valid: form, main_grid, sub_grid.", null);
 
             if (!op.TryGetProperty("items", out var itemsProp) || itemsProp.ValueKind != JsonValueKind.Array)
-                return ("add_flyout_static requires 'items' array with at least 1 item.", null, null);
+                return ("add_flyout_static requires 'items' array with at least 1 item.",
+                        "Add \"items\":[{\"label\":...,\"library\":...,\"function\":...,\"enable_library\":...,\"enable_function\":...}] with at least 1 item.", null);
 
             var items = itemsProp.EnumerateArray().ToList();
             if (items.Count == 0)
-                return ("add_flyout_static requires 'items' array with at least 1 item.", null, null);
+                return ("add_flyout_static requires 'items' array with at least 1 item.",
+                        "Add \"items\":[{\"label\":...,\"library\":...,\"function\":...,\"enable_library\":...,\"enable_function\":...}] with at least 1 item.", null);
 
             var slugSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach (var item in items)
@@ -614,26 +634,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 var itemEnFunc = RibbonXmlHelpers.GetJsonString(item, "enable_function");
 
                 if (string.IsNullOrWhiteSpace(itemLabel))
-                    return ("Each item requires 'label'.", null, null);
+                    return ("Each item requires 'label'.",
+                            "Add \"label\":\"<item display text>\" to every item.", null);
                 if (string.IsNullOrWhiteSpace(itemLib))
-                    return ($"Item '{itemLabel}' requires 'library'.", null, null);
+                    return ($"Item '{itemLabel}' requires 'library'.",
+                            "Add \"library\":\"<web resource JS file>\" to the item. Use manage_webresource(action='list') to find valid names.", null);
                 if (string.IsNullOrWhiteSpace(itemFunc))
-                    return ($"Item '{itemLabel}' requires 'function'.", null, null);
+                    return ($"Item '{itemLabel}' requires 'function'.",
+                            "Add \"function\":\"<JavaScript function name>\" to the item.", null);
                 if (string.IsNullOrWhiteSpace(itemEnLib))
-                    return ($"Item '{itemLabel}' requires 'enable_library'.", null, null);
+                    return ($"Item '{itemLabel}' requires 'enable_library'.",
+                            "Add \"enable_library\":\"<web resource JS file>\" to the item. Use manage_webresource(action='list') to find valid names.", null);
                 if (string.IsNullOrWhiteSpace(itemEnFunc))
-                    return ($"Item '{itemLabel}' requires 'enable_function'.", null, null);
+                    return ($"Item '{itemLabel}' requires 'enable_function'.",
+                            "Add \"enable_function\":\"<JavaScript function name>\" to the item.", null);
 
                 var libErr = _validation.ValidateWebResourceExists(itemLib);
-                if (libErr != null) return (libErr, null, null);
+                if (libErr != null) return (libErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
                 var enLibErr = _validation.ValidateWebResourceExists(itemEnLib);
-                if (enLibErr != null) return (enLibErr, null, null);
+                if (enLibErr != null) return (enLibErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
 
                 var itemImage = RibbonXmlHelpers.GetJsonString(item, "modern_image");
                 if (!string.IsNullOrWhiteSpace(itemImage))
                 {
                     var imgErr = _validation.ValidateWebResourceExists(itemImage);
-                    if (imgErr != null) return (imgErr, null, null);
+                    if (imgErr != null) return (imgErr, "Use manage_webresource(action='list') to find valid image web resources (e.g. svg).", null);
                 }
 
                 var itemSlug = RibbonXmlHelpers.GenerateSlug(itemLabel);
@@ -649,7 +674,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (!string.IsNullOrWhiteSpace(modernImage))
             {
                 var imgErr = _validation.ValidateWebResourceExists(modernImage);
-                if (imgErr != null) return (imgErr, null, null);
+                if (imgErr != null) return (imgErr, "Use manage_webresource(action='list') to find valid image web resources (e.g. svg).", null);
             }
 
             var flyoutSlug = RibbonXmlHelpers.GenerateSlug(label);
@@ -877,7 +902,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             else
             {
                 if (string.IsNullOrWhiteSpace(labelHint))
-                    return ("update_flyout_static requires 'flyout_id' or 'label' to identify the flyout.", null, null);
+                    return ("update_flyout_static requires 'flyout_id' or 'label' to identify the flyout.",
+                            "Provide 'flyout_id' or 'label' of an existing flyout; use manage_ribbon(action='buttons') to list Ids.", null);
                 var slug = RibbonXmlHelpers.GenerateSlug(labelHint);
                 flyoutEl = ribbonDoc.Root
                     ?.Element("CustomActions")
@@ -937,7 +963,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (!string.IsNullOrWhiteSpace(newImage))
             {
                 var imgErr = _validation.ValidateWebResourceExists(newImage);
-                if (imgErr != null) return (imgErr, null, null);
+                if (imgErr != null) return (imgErr, "Use manage_webresource(action='list') to find valid image web resources (e.g. svg).", null);
                 flyoutEl.SetAttributeValue("Image16by16", $"$webresource:{newImage}");
                 flyoutEl.SetAttributeValue("Image32by32", $"$webresource:{newImage}");
                 flyoutEl.SetAttributeValue("ModernImage", $"$webresource:{newImage}");
@@ -959,7 +985,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 {
                     var itemLabel = RibbonXmlHelpers.GetJsonString(item, "item_label");
                     if (string.IsNullOrWhiteSpace(itemLabel))
-                        return ("Each item in update_flyout_static requires 'item_label' to identify which button to update.", null, null);
+                        return ("Each item in update_flyout_static requires 'item_label' to identify which button to update.",
+                                "Add \"item_label\":\"<existing item label>\" to each item to update.", null);
 
                     var itemSlug = RibbonXmlHelpers.GenerateSlug(itemLabel);
                     var itemBtnId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Button";
@@ -995,7 +1022,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     if (!string.IsNullOrWhiteSpace(newItemImage))
                     {
                         var imgErr = _validation.ValidateWebResourceExists(newItemImage);
-                        if (imgErr != null) return (imgErr, null, null);
+                        if (imgErr != null) return (imgErr, "Use manage_webresource(action='list') to find valid image web resources (e.g. svg).", null);
                         btnEl.SetAttributeValue("Image16by16", $"$webresource:{newItemImage}");
                         btnEl.SetAttributeValue("Image32by32", $"$webresource:{newItemImage}");
                         btnEl.SetAttributeValue("ModernImage", $"$webresource:{newItemImage}");
@@ -1013,7 +1040,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     if (!string.IsNullOrWhiteSpace(newItemLib))
                     {
                         var libErr = _validation.ValidateWebResourceExists(newItemLib);
-                        if (libErr != null) return (libErr, null, null);
+                        if (libErr != null) return (libErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
                         var cmdDefEl = ribbonDoc.Root?.Element("CommandDefinitions")
                             ?.Elements("CommandDefinition")
                             .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemCmdId, StringComparison.OrdinalIgnoreCase));
@@ -1035,7 +1062,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     if (!string.IsNullOrWhiteSpace(newItemEnLib))
                     {
                         var libErr = _validation.ValidateWebResourceExists(newItemEnLib);
-                        if (libErr != null) return (libErr, null, null);
+                        if (libErr != null) return (libErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
                         var enRuleEl = ribbonDoc.Root?.Element("RuleDefinitions")
                             ?.Element("EnableRules")
                             ?.Elements("EnableRule")
@@ -1068,8 +1095,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
         public (string error, string hint, string summary) ExecuteHideFlyoutItem(XDocument ribbonDoc, string entityName, JsonElement op)
         {
-            var (flyoutId, itemBtnId, itemCmdId, err) = ResolveFlyoutItemIds(ribbonDoc, entityName, op);
-            if (err != null) return (err, null, null);
+            var (flyoutId, itemBtnId, itemCmdId, err, errHint) = ResolveFlyoutItemIds(ribbonDoc, entityName, op);
+            if (err != null) return (err, errHint, null);
 
             var commandDefEl = ribbonDoc.Root
                 ?.Element("CommandDefinitions")
@@ -1077,7 +1104,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemCmdId, StringComparison.OrdinalIgnoreCase));
 
             if (commandDefEl == null)
-                return ($"CommandDefinition '{itemCmdId}' not found for item '{itemBtnId}'.", null, null);
+                return ($"CommandDefinition '{itemCmdId}' not found for item '{itemBtnId}'.",
+                        "Use manage_ribbon(action='buttons') to verify the flyout item.", null);
 
             var alwaysDisabledRuleId = $"devkit.{entityName}.AlwaysDisabled.EnableRule";
 
@@ -1105,8 +1133,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
         public (string error, string hint, string summary) ExecuteShowFlyoutItem(XDocument ribbonDoc, string entityName, JsonElement op)
         {
-            var (flyoutId, itemBtnId, itemCmdId, err) = ResolveFlyoutItemIds(ribbonDoc, entityName, op);
-            if (err != null) return (err, null, null);
+            var (flyoutId, itemBtnId, itemCmdId, err, errHint) = ResolveFlyoutItemIds(ribbonDoc, entityName, op);
+            if (err != null) return (err, errHint, null);
 
             var alwaysDisabledRuleId = $"devkit.{entityName}.AlwaysDisabled.EnableRule";
 
@@ -1141,7 +1169,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             return (null, null, $"show_flyout_item: '{itemBtnId}' → AlwaysDisabled EnableRule removed from '{itemCmdId}'");
         }
 
-        private (string flyoutId, string itemBtnId, string itemCmdId, string error) ResolveFlyoutItemIds(
+        private (string flyoutId, string itemBtnId, string itemCmdId, string error, string hint) ResolveFlyoutItemIds(
             XDocument ribbonDoc, string entityName, JsonElement op)
         {
             var flyoutIdParam = RibbonXmlHelpers.GetJsonString(op, "flyout_id");
@@ -1149,7 +1177,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             var itemLabel = RibbonXmlHelpers.GetJsonString(op, "item_label");
 
             if (string.IsNullOrWhiteSpace(itemLabel))
-                return (null, null, null, "'item_label' is required to identify the flyout item.");
+                return (null, null, null, "'item_label' is required to identify the flyout item.",
+                    "Provide 'item_label' matching an existing flyout item label.");
 
             string flyoutId;
             XElement flyoutEl2;
@@ -1170,10 +1199,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 flyoutId = flyoutEl2?.Attribute("Id")?.Value ?? $"devkit.{entityName}.{RibbonXmlHelpers.GenerateSlug(flyoutLabel)}.FlyoutAnchor";
             }
             else
-                return (null, null, null, "'flyout_id' or 'flyout_label' is required to identify the flyout.");
+                return (null, null, null, "'flyout_id' or 'flyout_label' is required to identify the flyout.",
+                    "Provide 'flyout_id' (or 'flyout_label') of an existing flyout; use manage_ribbon(action='buttons') to list Ids.");
 
             if (flyoutEl2 == null)
-                return (null, null, null, $"FlyoutAnchor '{flyoutId}' not found.");
+                return (null, null, null, $"FlyoutAnchor '{flyoutId}' not found.",
+                    "Use manage_ribbon(action='buttons') to list flyout Ids.");
 
             var flyoutPrefix2 = flyoutId;
             var prefixStrip2 = $"devkit.{entityName}.";
@@ -1191,10 +1222,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (btnEl == null)
             {
                 var existing = string.Join(", ", flyoutEl2.Descendants("Button").Select(b => b.Attribute("Id")?.Value ?? "?"));
-                return (null, null, null, $"Item button '{itemBtnId}' not found in flyout.\nExisting items: {existing}");
+                return (null, null, null, $"Item button '{itemBtnId}' not found in flyout.\nExisting items: {existing}",
+                    "Check item_label against the existing items listed above.");
             }
 
-            return (flyoutId, itemBtnId, itemCmdId, null);
+            return (flyoutId, itemBtnId, itemCmdId, null, null);
         }
     }
 }

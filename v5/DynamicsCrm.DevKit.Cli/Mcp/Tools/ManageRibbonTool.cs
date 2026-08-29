@@ -78,7 +78,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     case "buttons":
                         if (string.IsNullOrWhiteSpace(entity_name))
-                            return Error("entity_name is required for action='buttons'.");
+                            return Error("entity_name is required for action='buttons'.",
+                                "Provide entity_name, e.g. entity_name='account'. Use get_tables to find valid entity names.");
                         {
                             var (entityName, entityError) = ResolveEntityLogicalName(entity_name);
                             if (entityError != null) return entityError;
@@ -88,7 +89,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     case "detail":
                         if (string.IsNullOrWhiteSpace(entity_name))
-                            return Error("entity_name is required for action='detail'.");
+                            return Error("entity_name is required for action='detail'.",
+                                "Provide entity_name, e.g. entity_name='account'. Use get_tables to find valid entity names.");
                         {
                             var (entityName, entityError) = ResolveEntityLogicalName(entity_name);
                             if (entityError != null) return entityError;
@@ -98,7 +100,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     case "update":
                         if (string.IsNullOrWhiteSpace(entity_name))
-                            return Error("entity_name is required for action='update'.");
+                            return Error("entity_name is required for action='update'.",
+                                "Provide entity_name, e.g. entity_name='account'. Use get_tables to find valid entity names.");
                         _workspaceFolder = await WorkspaceFolderHelper.GetAsync(server);
                         {
                             var (updateEntityName, updateEntityError) = ResolveEntityLogicalName(entity_name);
@@ -131,7 +134,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     case "undo":
                         if (string.IsNullOrWhiteSpace(entity_name))
-                            return Error("entity_name is required for action='undo'.");
+                            return Error("entity_name is required for action='undo'.",
+                                "Provide entity_name, e.g. entity_name='account'. Use get_tables to find valid entity names.");
                         if (string.IsNullOrWhiteSpace(ribbonxml))
                             return Error(
                                 "ribbonxml is required for action='undo'.",

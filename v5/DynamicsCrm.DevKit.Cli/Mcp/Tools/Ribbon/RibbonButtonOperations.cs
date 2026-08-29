@@ -27,26 +27,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             var enableFunction = RibbonXmlHelpers.GetJsonString(op, "enable_function");
 
             if (string.IsNullOrWhiteSpace(surface))
-                return ("add_button requires 'surface' (form, main_grid, or sub_grid).", null, null);
+                return ("add_button requires 'surface' (form, main_grid, or sub_grid).",
+                        "Add \"surface\":\"form\" (valid: form, main_grid, sub_grid).", null);
             if (string.IsNullOrWhiteSpace(label))
-                return ("add_button requires 'label' (button display text).", null, null);
+                return ("add_button requires 'label' (button display text).",
+                        "Add \"label\":\"<button display text>\".", null);
             if (string.IsNullOrWhiteSpace(library))
-                return ("add_button requires 'library' (web resource JS file for button click).", null, null);
+                return ("add_button requires 'library' (web resource JS file for button click).",
+                        "Add \"library\":\"<web resource JS file>\". Use manage_webresource(action='list') to find valid names.", null);
             if (string.IsNullOrWhiteSpace(function))
-                return ("add_button requires 'function' (JavaScript function name for button click).", null, null);
+                return ("add_button requires 'function' (JavaScript function name for button click).",
+                        "Add \"function\":\"<JavaScript function name>\" defined in the library.", null);
             if (string.IsNullOrWhiteSpace(enableLibrary))
-                return ("add_button requires 'enable_library' (web resource JS file for enable rule).", null, null);
+                return ("add_button requires 'enable_library' (web resource JS file for enable rule).",
+                        "Add \"enable_library\":\"<web resource JS file>\" for the enable rule. Use manage_webresource(action='list') to find valid names.", null);
             if (string.IsNullOrWhiteSpace(enableFunction))
-                return ("add_button requires 'enable_function' (JavaScript function name for enable rule).", null, null);
+                return ("add_button requires 'enable_function' (JavaScript function name for enable rule).",
+                        "Add \"enable_function\":\"<JavaScript function name>\" for the enable rule.", null);
 
             surface = surface.Trim().ToLowerInvariant();
             if (!RibbonXmlHelpers.SurfaceLocationMap.ContainsKey(surface))
                 return ($"Invalid surface '{surface}'.", "Valid: form, main_grid, sub_grid.", null);
 
             var libError = _validation.ValidateWebResourceExists(library);
-            if (libError != null) return (libError, null, null);
+            if (libError != null) return (libError, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
             var enableLibError = _validation.ValidateWebResourceExists(enableLibrary);
-            if (enableLibError != null) return (enableLibError, null, null);
+            if (enableLibError != null) return (enableLibError, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
 
             var modernImage = RibbonXmlHelpers.GetJsonString(op, "modern_image");
             var tooltipTitle = RibbonXmlHelpers.GetJsonString(op, "tooltip_title");
@@ -54,14 +60,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             var sequence = RibbonXmlHelpers.GetJsonInt(op, "sequence", 85);
             var selectionOptions = ReadSelectionCountOptions(op);
             if (selectionOptions.error != null)
-                return (selectionOptions.error, null, null);
+                return (selectionOptions.error, "Pass integer values >= 0; selection_min must not exceed selection_max.", null);
             if (selectionOptions.hasRule && surface == "form")
-                return ("add_button selection_min/selection_max are only supported for main_grid or sub_grid.", null, null);
+                return ("add_button selection_min/selection_max are only supported for main_grid or sub_grid.",
+                        "Use surface 'main_grid' or 'sub_grid' for selection_min/selection_max, or remove them.", null);
 
             if (!string.IsNullOrWhiteSpace(modernImage))
             {
                 var imgError = _validation.ValidateWebResourceExists(modernImage);
-                if (imgError != null) return (imgError, null, null);
+                if (imgError != null) return (imgError, "Use manage_webresource(action='list') to find valid image web resources (e.g. svg).", null);
             }
 
             var slug = RibbonXmlHelpers.GenerateSlug(label);
@@ -176,7 +183,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (string.IsNullOrWhiteSpace(buttonId))
             {
                 if (string.IsNullOrWhiteSpace(labelHint))
-                    return ("update_button requires 'button_id' or 'label' to identify the button.", null, null);
+                    return ("update_button requires 'button_id' or 'label' to identify the button.",
+                            "Provide 'button_id' (see manage_ribbon action='buttons') or 'label' of an existing custom button.", null);
 
                 var labelResolution = ResolveCustomButtonIdByLabel(ribbonDoc, labelHint);
                 if (labelResolution.error != null)
@@ -199,7 +207,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 return ($"Button '{buttonId}' not found in existing RibbonDiffXml. " +
                         "This is likely an OOB (out-of-the-box) button. " +
                         "update_button only supports custom buttons defined in RibbonDiffXml. " +
-                        "For OOB buttons, only hide_button and show_button are supported.", null, null);
+                        "For OOB buttons, only hide_button and show_button are supported.",
+                        "Use manage_ribbon(action='buttons') to list custom Button Ids.", null);
 
             var commandId = buttonId.Replace(".Button", ".Command");
             var enableRuleId = buttonId.Replace(".Button", ".EnableRule");
@@ -256,7 +265,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (!string.IsNullOrWhiteSpace(newModernImage))
             {
                 var imgError = _validation.ValidateWebResourceExists(newModernImage);
-                if (imgError != null) return (imgError, null, null);
+                if (imgError != null) return (imgError, "Use manage_webresource(action='list') to find valid image web resources (e.g. svg).", null);
                 buttonEl.SetAttributeValue("Image16by16", $"$webresource:{newModernImage}");
                 buttonEl.SetAttributeValue("Image32by32", $"$webresource:{newModernImage}");
                 buttonEl.SetAttributeValue("ModernImage", $"$webresource:{newModernImage}");
@@ -267,7 +276,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (!string.IsNullOrWhiteSpace(newLibrary))
             {
                 var libError = _validation.ValidateWebResourceExists(newLibrary);
-                if (libError != null) return (libError, null, null);
+                if (libError != null) return (libError, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
                 if (commandDefEl != null)
                     commandDefEl.Element("Actions")?.Element("JavaScriptFunction")?.SetAttributeValue("Library", $"$webresource:{newLibrary}");
                 updatedFields.Add("library");
@@ -285,7 +294,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (!string.IsNullOrWhiteSpace(newEnableLibrary))
             {
                 var libError = _validation.ValidateWebResourceExists(newEnableLibrary);
-                if (libError != null) return (libError, null, null);
+                if (libError != null) return (libError, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
                 enableRuleEl?.Element("CustomRule")?.SetAttributeValue("Library", $"$webresource:{newEnableLibrary}");
                 updatedFields.Add("enable_library");
             }
@@ -428,7 +437,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
                 var commandId = buttonEl.Attribute("Command")?.Value;
                 if (string.IsNullOrWhiteSpace(commandId))
-                    return ($"Button '{buttonId}' has no Command attribute.", null, null);
+                    return ($"Button '{buttonId}' has no Command attribute.",
+                            "Use manage_ribbon(action='buttons') to verify the Button Id; the button must have a CommandDefinition.", null);
 
                 var commandDefEl = ribbonDoc.Root
                     ?.Element("CommandDefinitions")
@@ -436,7 +446,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, commandId, StringComparison.OrdinalIgnoreCase));
 
                 if (commandDefEl == null)
-                    return ($"CommandDefinition '{commandId}' not found for button '{buttonId}'.", null, null);
+                    return ($"CommandDefinition '{commandId}' not found for button '{buttonId}'.",
+                            "Use manage_ribbon(action='buttons') to verify the Button Id.", null);
 
                 var alwaysDisabledRuleId = $"devkit.{entityName}.AlwaysDisabled.EnableRule";
 
@@ -494,7 +505,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, buttonId, StringComparison.OrdinalIgnoreCase));
 
                 if (buttonEl == null)
-                    return ($"Button '{buttonId}' not found in RibbonDiffXml.", null, null);
+                    return ($"Button '{buttonId}' not found in RibbonDiffXml.",
+                            "Use manage_ribbon(action='buttons') to verify the Button Id.", null);
 
                 var commandId = buttonEl.Attribute("Command")?.Value;
                 var commandDefEl = ribbonDoc.Root
