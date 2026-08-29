@@ -57,6 +57,7 @@ namespace DynamicsCrm.DevKit.Lib
             replacements["$Pack-Both.bat$"] = await ReadBatResourceAsync("bat.solutionpackager.pack.both.bat", crmConnection);
             replacements["$download.reports.bat$"] = await ReadBatResourceAsync("bat.download.reports.bat", crmConnection);
             replacements["$upload.reports.bat$"] = await ReadBatResourceAsync("bat.upload.reports.bat", crmConnection);
+            replacements["$report$"] = await VsixHelper.ReadEmbeddedResourceAsync("ReportTemplate.rdl");
             replacements["$Helper.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("Helper.cs");
             replacements["$Program.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("Program.cs");
             replacements["$TracingServiceFake.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("TracingServiceFake.cs");
