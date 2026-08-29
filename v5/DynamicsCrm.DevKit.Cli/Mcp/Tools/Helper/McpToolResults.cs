@@ -126,12 +126,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
         /// <summary>
         /// Dry-run result describing what would happen without making Dataverse changes.
+        /// The summary is duplicated into the structured payload as a <c>summary</c>
+        /// property — byte-identical to the Content text line (prefix included) —
+        /// same convention as <see cref="Success"/>: clients that surface only the
+        /// structured side would otherwise lose the <c>[DryRun]</c> signal entirely.
         /// </summary>
-        internal static CallToolResult DryRun(string summary, object structured) => new()
+        internal static CallToolResult DryRun(string summary, object structured)
         {
-            Content = [new TextContentBlock { Text = $"{DryRunPrefix} {StripPrefix(summary, DryRunPrefix)}" }],
-            StructuredContent = JsonSerializer.SerializeToElement(structured)
-        };
+            var text = $"{DryRunPrefix} {StripPrefix(summary, DryRunPrefix)}";
+            var payload = JsonSerializer.SerializeToNode(structured) as JsonObject ?? new JsonObject();
+            payload["summary"] = text;
+            return new()
+            {
+                Content = [new TextContentBlock { Text = text }],
+                StructuredContent = JsonSerializer.SerializeToElement(payload)
+            };
+        }
 
         /// <summary>
         /// Strip a legacy literal prefix that older call sites embedded themselves,

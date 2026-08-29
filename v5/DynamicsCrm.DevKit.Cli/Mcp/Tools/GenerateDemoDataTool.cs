@@ -39,10 +39,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class GenerateDemoDataTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
+        private readonly McpDryRunOptions _options;
 
-        public GenerateDemoDataTool(ServiceClient serviceClient)
+        public GenerateDemoDataTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
             _serviceClient = serviceClient;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
         private static readonly ConcurrentDictionary<string, EntityMetadata> MetadataCache = new(StringComparer.OrdinalIgnoreCase);
@@ -198,6 +200,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (overrides.Count > 0)
                         ApplyOverrides(faker, record, overrides, warnings);
                     records.Add(record);
+                }
+
+                var dryRunFieldNames = selectedAttrs.Select(a => a.LogicalName).ToList();
+                if (!dryRunFieldNames.Contains("overriddencreatedon"))
+                    dryRunFieldNames.Insert(0, "overriddencreatedon");
+
+                if (_options.DryRun)
+                {
+                    var dryRunStructured = new GenerateDemoDataResult
+                    {
+                        Entity = entityName,
+                        Count = count,
+                        Status = "not_executed",
+                        RecordsGenerated = records.Count,
+                        FieldsGenerated = dryRunFieldNames.Count,
+                        FieldList = dryRunFieldNames.Count > 0 ? dryRunFieldNames : null,
+                        Seed = actualSeed,
+                        Records = records,
+                        OverridesApplied = overrides.Count > 0
+                            ? overrides.Select(o => $"{o.LogicalName} ({o.Operator})").ToList()
+                            : null,
+                        LookupsSampled = lookupsSampled.Count > 0 ? lookupsSampled : null,
+                        Warnings = warnings.Count > 0 ? warnings : null
+                    };
+                    return DryRun(
+                        $"Would generate {records.Count} '{entityName}' record(s) — payload returned inline, no file written.",
+                        dryRunStructured);
                 }
 
                 // Save to {workspace}/.devkit/generate_demo_data/{entity}/

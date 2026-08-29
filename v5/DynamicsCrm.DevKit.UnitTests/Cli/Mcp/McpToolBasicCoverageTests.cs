@@ -35,7 +35,7 @@ public class McpToolBasicCoverageTests
     [TestMethod]
     public async Task GenerateDemoData_MissingEntityName_ReturnsError()
     {
-        var tool = new GenerateDemoDataTool(null!);
+        var tool = new GenerateDemoDataTool(null!, new McpDryRunOptions());
 
         var result = await tool.generate_demo_data(null!, "", "2026-01-01", "2026-01-31");
 
@@ -46,7 +46,7 @@ public class McpToolBasicCoverageTests
     [TestMethod]
     public async Task GenerateDemoData_MissingDates_ReturnsError()
     {
-        var tool = new GenerateDemoDataTool(null!);
+        var tool = new GenerateDemoDataTool(null!, new McpDryRunOptions());
 
         var result = await tool.generate_demo_data(null!, "account", "", "");
 
@@ -57,7 +57,7 @@ public class McpToolBasicCoverageTests
     [TestMethod]
     public async Task GenerateDemoData_InvalidDateRange_ReturnsError()
     {
-        var tool = new GenerateDemoDataTool(null!);
+        var tool = new GenerateDemoDataTool(null!, new McpDryRunOptions());
 
         var result = await tool.generate_demo_data(null!, "account", "2026-02-01", "2026-01-01");
 
@@ -68,7 +68,7 @@ public class McpToolBasicCoverageTests
     [TestMethod]
     public async Task GenerateDemoData_MissingWorkspaceFolder_ReturnsError()
     {
-        var tool = new GenerateDemoDataTool(null!);
+        var tool = new GenerateDemoDataTool(null!, new McpDryRunOptions());
 
         // workspace_folder param removed (workspace auto-resolved from MCP roots,
         // cwd fallback when roots unavailable) — a null server no longer fails
@@ -83,7 +83,7 @@ public class McpToolBasicCoverageTests
     [TestMethod]
     public async Task GenerateDemoData_CountAboveLimit_ReturnsError()
     {
-        var tool = new GenerateDemoDataTool(null!);
+        var tool = new GenerateDemoDataTool(null!, new McpDryRunOptions());
 
         var result = await tool.generate_demo_data(null!, "account", "2026-01-01", "2026-01-31", count: 501);
 

@@ -11,6 +11,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("count")]
         public int Count { get; set; }
 
+        [JsonPropertyName("status")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Status { get; set; }
+
+        [JsonPropertyName("records")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<Dictionary<string, object>> Records { get; set; }
+
         [JsonPropertyName("recordsGenerated")]
         public int RecordsGenerated { get; set; }
 

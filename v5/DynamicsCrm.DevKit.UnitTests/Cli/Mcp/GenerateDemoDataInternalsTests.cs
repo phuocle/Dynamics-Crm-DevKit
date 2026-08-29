@@ -1,4 +1,5 @@
 using Bogus;
+using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
@@ -110,7 +111,7 @@ public class GenerateDemoDataInternalsTests
     [TestMethod]
     public void GenerateRecord_GeneratesSupportedPrimitiveChoiceAndLookupValues()
     {
-        var tool = new GenerateDemoDataTool(null!);
+        var tool = new GenerateDemoDataTool(null!, new McpDryRunOptions());
         var faker = new Faker { Random = new Randomizer(321) };
         var warnings = new List<string>();
         var accountId = Guid.NewGuid();

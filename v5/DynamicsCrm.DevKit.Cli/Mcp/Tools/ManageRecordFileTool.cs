@@ -260,7 +260,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             result.BlockCount = blockCount;
             if (_options.DryRun)
             {
-                result.Status = "dry_run";
+                result.Status = "not_executed";
                 return DryRun(
                     $"Would upload '{resolvedFileName}' ({data.LongLength:N0} bytes, {blockCount} block(s)) from {sourceDescription} to {entityLogical}.{columnLogical} on record {recordId}.",
                     result);
@@ -351,7 +351,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 result.FileName = record.GetAttributeValue<string>(columnLogical + "_name");
                 if (_options.DryRun)
                 {
-                    result.Status = "dry_run";
+                    result.Status = "not_executed";
                     return DryRun($"Would delete file '{result.FileName}' (FileId {fileId.Value}) from {entityLogical}.{columnLogical} on record {recordId}. The record itself is kept.", result);
                 }
                 DataverseMutationExecutor.Execute(_context, _serviceClient, new DeleteFileRequest { FileId = fileId.Value });
@@ -365,7 +365,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         "The column is already empty — check the current value with action='info'.");
                 if (_options.DryRun)
                 {
-                    result.Status = "dry_run";
+                    result.Status = "not_executed";
                     return DryRun($"Would clear image column {entityLogical}.{columnLogical} on record {recordId}. The record itself is kept.", result);
                 }
                 DataverseMutationExecutor.Update(_context, _serviceClient, new Entity(entityLogical, recordId) { [columnLogical] = null });
