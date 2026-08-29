@@ -63,8 +63,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("2=Main, 5=Mobile, 6=QuickView, 7=QuickCreate. 0 or omit = all types.")] int form_type = 0,
             [Description("List mode only — include formxml in each entry. Detail always includes formxml.")] bool include_formxml = false,
             [Description("update (advanced) / undo: raw FormXML string or backup file path (.formxml). Auto-detects. Use 'operations' for the recommended flow.")] string formxml = "",
-            [Description("update (recommended): JSON array of form operations. Read docs://instructions_for_formxml for format and examples.")] string operations = "",
-            [Description("XSD validate FormXML before write.")] bool validate = true)
+            [Description("update (recommended): JSON array of form operations. Read docs://instructions_for_formxml for format and examples.")] string operations = "")
         {
             try
             {
@@ -93,9 +92,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "list" => HandleList(entityName, form_name, form_type, include_formxml),
                     "detail" => HandleDetail(entityName, form_id, form_name, form_type),
-                    "update" => HandleUpdate(entityName, form_id, formxml, operations, validate),
+                    "update" => HandleUpdate(entityName, form_id, formxml, operations),
                     "rename" => HandleRename(entityName, form_id, form_name),
-                    "undo" => HandleUndo(entityName, form_id, formxml, validate),
+                    "undo" => HandleUndo(entityName, form_id, formxml),
                     _ => Error($"'{action}' is not a valid action.", "Valid actions: list, detail, update, rename, undo.")
                 };
             }
@@ -204,7 +203,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleDetail(string entityName, string formId, string formName, int formType = 0)
         {
             if (string.IsNullOrWhiteSpace(formId) && string.IsNullOrWhiteSpace(formName))
-                return Error("form_id or form_name is required when action='detail'.");
+                return Error("form_id or form_name is required when action='detail'.",
+                    $"Pass form_id (GUID) or form_name (name filter). Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             if (formType != 0 && !ValidFormTypes.Contains(formType))
                 return Error($"form_type={formType} is not valid.", "Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. Use 0 or omit for all types.");
@@ -212,7 +212,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(formId))
             {
                 if (!Guid.TryParse(formId.Trim(), out var id))
-                    return Error($"'{formId}' is not a valid GUID.");
+                    return Error($"'{formId}' is not a valid GUID.",
+                        $"Pass a form GUID (e.g. from manage_form(action='list', entity_name='{entityName}')), or use form_name instead.");
                 return GetFormDetailResult(entityName, id);
             }
 
@@ -307,13 +308,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Action: update ────────────────────────────────────────────────
 
         private CallToolResult HandleUpdate(string entityName, string formId,
-            string formxml, string operations, bool validate)
+            string formxml, string operations)
         {
             if (string.IsNullOrWhiteSpace(formId))
-                return Error("form_id is required when action='update'.");
+                return Error("form_id is required when action='update'.",
+                    $"Pass the target form GUID. Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             if (!Guid.TryParse(formId.Trim(), out var id))
-                return Error($"'{formId}' is not a valid GUID.");
+                return Error($"'{formId}' is not a valid GUID.",
+                    $"Pass a form GUID (e.g. from manage_form(action='list', entity_name='{entityName}')).");
 
             var hasOperations = !string.IsNullOrWhiteSpace(operations);
             var hasFormxml    = !string.IsNullOrWhiteSpace(formxml);
@@ -329,13 +332,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Use 'operations' for the recommended inline build+import flow; 'formxml' for advanced/undo scenarios only.");
 
             if (hasOperations)
-                return HandleUpdateWithOperations(entityName, id, operations, validate);
+                return HandleUpdateWithOperations(entityName, id, operations);
 
-            return HandleUpdateWithFormXml(entityName, id, formxml, validate);
+            return HandleUpdateWithFormXml(entityName, id, formxml);
         }
 
         private CallToolResult HandleUpdateWithOperations(string entityName, Guid id,
-            string operations, bool validate)
+            string operations)
         {
             // 1. Parse operations JSON (JsonException bubbles to entry catch)
             var ops = JsonSerializer.Deserialize<List<JsonElement>>(operations);
@@ -359,39 +362,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"Use action='list' entity_name='{entityName}' to find forms for that entity.");
 
             if (string.IsNullOrWhiteSpace(currentFormXml))
-                return Error($"Form '{id}' has empty FormXML.");
+                return Error($"Form '{id}' has empty FormXML.",
+                    "The form record has no FormXML to modify. Restore it from a backup with action='undo', or edit the form in the maker portal.");
 
             // 3. Apply operations via runner (exceptions bubble to entry catch)
             var runner = new FormXmlOperationsRunner(_serviceClient);
             var (modifiedFormXml, opSummaries, classIdMap) = runner.Run(currentFormXml, entityName, ops);
 
-            // 5. Validate XSD
-            List<string> validationWarnings = null;
-            if (validate)
+            // 5. Validate XSD (always — no bypass)
+            var (errors, warnings) = ValidateFormXml(modifiedFormXml);
+            List<string> validationWarnings = warnings.Count > 0 ? warnings : null;
+            if (errors.Count > 0)
             {
-                var (errors, warnings) = ValidateFormXml(modifiedFormXml);
-                validationWarnings = warnings.Count > 0 ? warnings : null;
-                if (errors.Count > 0)
-                {
-                    var allIssues = new List<string>(errors);
-                    if (warnings.Count > 0) allIssues.AddRange(warnings);
-                    return Error(
-                        $"FormXML validation failed for form '{formName}' ({id}) — {errors.Count} error(s). First: {errors[0]}",
-                        "Fix the FormXML errors and retry. Read schema://formxml and docs://instructions_for_formxml.",
-                        new UpsertFormResult
-                        {
-                            Action = "update",
-                            Entity = entityName,
-                            FormId = id.ToString(),
-                            FormName = formName,
-                            Status = "blocked_validation",
-                            Validated = true,
-                            ValidationErrors = allIssues,
-                            ValidationWarnings = validationWarnings,
-                            Published = false,
-                            OperationsCount = ops?.Count
-                        });
-                }
+                var allIssues = new List<string>(errors);
+                if (warnings.Count > 0) allIssues.AddRange(warnings);
+                return Error(
+                    $"FormXML validation failed for form '{formName}' ({id}) — {errors.Count} error(s). First: {errors[0]}",
+                    "Fix the FormXML errors and retry. Read schema://formxml and docs://instructions_for_formxml.",
+                    new UpsertFormResult
+                    {
+                        Action = "update",
+                        Entity = entityName,
+                        FormId = id.ToString(),
+                        FormName = formName,
+                        Status = "blocked_validation",
+                        Validated = true,
+                        ValidationErrors = allIssues,
+                        ValidationWarnings = validationWarnings,
+                        Published = false,
+                        OperationsCount = ops?.Count
+                    });
             }
 
             // 6. Update + Publish
@@ -405,7 +405,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     FormId = id.ToString(),
                     FormName = formName,
                     Status = "not_executed",
-                    Validated = validate,
+                    Validated = true,
                     ValidationWarnings = validationWarnings,
                     Published = false,
                     OperationsCount = ops?.Count
@@ -425,14 +425,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         Action = "updated", Entity = entityName, FormId = id.ToString(),
                         FormName = formName, Status = "updated_publish_failed",
-                        Validated = validate, BackupPath = backupPath, Published = false,
+                        Validated = true, BackupPath = backupPath, Published = false,
                         OperationsCount = ops.Count, FieldsResolved = classIdMap.Count,
                         ValidationWarnings = validationWarnings
                     });
 
             // 7. Build success response
             var summary = $"Updated form '{formName}' ({id}) on '{entityName}' — {ops.Count} operation(s)" +
-                $", {(validate ? "validated" : "validation skipped")}" +
+                $", validated" +
                 $", {(published ? "published" : "publish pending")}" +
                 ". Backup saved." +
                 (classIdMap.Count > 0 ? $" {classIdMap.Count} field(s) resolved." : "") +
@@ -442,14 +442,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 Action = "updated", Entity = entityName, FormId = id.ToString(),
                 FormName = formName, Status = "updated",
-                Validated = validate, ValidationWarnings = validationWarnings,
+                Validated = true, ValidationWarnings = validationWarnings,
                 BackupPath = backupPath, Published = published,
                 OperationsCount = ops.Count, FieldsResolved = classIdMap.Count
             });
         }
 
         private CallToolResult HandleUpdateWithFormXml(string entityName, Guid id,
-            string formxml, bool validate)
+            string formxml)
         {
             // Resolve formxml: if it's a file path, read content from file
             var resolvedFormXml = ResolveFormXmlInput(formxml.Trim());
@@ -478,33 +478,29 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Strip XML declaration from input
             var newFormXml = StripXmlDeclaration(resolvedFormXml);
 
-            // Step 3: Validate new FormXML against XSD
-            List<string> validationWarnings = null;
-            if (validate)
-            {
-                var (errors, warnings) = ValidateFormXml(newFormXml);
-                validationWarnings = warnings.Count > 0 ? warnings : null;
+            // Step 3: Validate new FormXML against XSD (always — no bypass)
+            var (errors, warnings) = ValidateFormXml(newFormXml);
+            List<string> validationWarnings = warnings.Count > 0 ? warnings : null;
 
-                if (errors.Count > 0)
-                {
-                    var allIssues = new List<string>(errors);
-                    if (warnings.Count > 0) allIssues.AddRange(warnings);
-                    return Error(
-                        $"FormXML validation failed for form '{formName}' ({id}) — {errors.Count} error(s). First: {errors[0]}",
-                        "Fix the FormXML errors and retry. Read schema://formxml and docs://instructions_for_formxml.",
-                        new UpsertFormResult
-                        {
-                            Action = "update",
-                            Entity = entityName,
-                            FormId = id.ToString(),
-                            FormName = formName,
-                            Status = "blocked_validation",
-                            Validated = true,
-                            ValidationErrors = allIssues,
-                            ValidationWarnings = validationWarnings,
-                            Published = false
-                        });
-                }
+            if (errors.Count > 0)
+            {
+                var allIssues = new List<string>(errors);
+                if (warnings.Count > 0) allIssues.AddRange(warnings);
+                return Error(
+                    $"FormXML validation failed for form '{formName}' ({id}) — {errors.Count} error(s). First: {errors[0]}",
+                    "Fix the FormXML errors and retry. Read schema://formxml and docs://instructions_for_formxml.",
+                    new UpsertFormResult
+                    {
+                        Action = "update",
+                        Entity = entityName,
+                        FormId = id.ToString(),
+                        FormName = formName,
+                        Status = "blocked_validation",
+                        Validated = true,
+                        ValidationErrors = allIssues,
+                        ValidationWarnings = validationWarnings,
+                        Published = false
+                    });
             }
 
             // Step 4: Update form record in Dataverse
@@ -518,7 +514,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     FormId = id.ToString(),
                     FormName = formName,
                     Status = "not_executed",
-                    Validated = validate,
+                    Validated = true,
                     Published = false
                 });
 
@@ -539,7 +535,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         FormId = id.ToString(),
                         FormName = formName,
                         Status = "updated_publish_failed",
-                        Validated = validate,
+                        Validated = true,
                         ValidationWarnings = validationWarnings,
                         BackupPath = backupPath,
                         Published = false
@@ -547,7 +543,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Step 6: Return success
             var summary = $"Updated form '{formName}' ({id}) on '{entityName}' — raw FormXML import" +
-                $", {(validate ? "validated" : "validation skipped")}" +
+                $", validated" +
                 $", {(published ? "published" : "publish pending")}" +
                 ". Backup saved." +
                 (validationWarnings?.Count > 0 ? $" {validationWarnings.Count} validation warning(s) (see validationWarnings)." : "");
@@ -559,7 +555,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 FormId = id.ToString(),
                 FormName = formName,
                 Status = "updated",
-                Validated = validate,
+                Validated = true,
                 ValidationWarnings = validationWarnings,
                 BackupPath = backupPath,
                 Published = published
@@ -571,13 +567,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleRename(string entityName, string formId, string formName)
         {
             if (string.IsNullOrWhiteSpace(formId))
-                return Error("form_id is required when action='rename'.");
+                return Error("form_id is required when action='rename'.",
+                    $"Pass the target form GUID. Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             if (!Guid.TryParse(formId.Trim(), out var id))
-                return Error($"'{formId}' is not a valid GUID.");
+                return Error($"'{formId}' is not a valid GUID.",
+                    $"Pass a form GUID (e.g. from manage_form(action='list', entity_name='{entityName}')).");
 
             if (string.IsNullOrWhiteSpace(formName))
-                return Error("form_name is required when action='rename'.");
+                return Error("form_name is required when action='rename'.",
+                    "Pass the new form name in form_name.");
 
             formName = formName.Trim();
 
@@ -667,16 +666,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Action: undo ──────────────────────────────────────────────────
 
         private CallToolResult HandleUndo(string entityName, string formId,
-            string backupFilePath, bool validate)
+            string backupFilePath)
         {
             if (string.IsNullOrWhiteSpace(formId))
-                return Error("form_id is required when action='undo'.");
+                return Error("form_id is required when action='undo'.",
+                    $"Pass the target form GUID. Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             if (!Guid.TryParse(formId.Trim(), out var id))
-                return Error($"'{formId}' is not a valid GUID.");
+                return Error($"'{formId}' is not a valid GUID.",
+                    $"Pass a form GUID (e.g. from manage_form(action='list', entity_name='{entityName}')).");
 
             if (string.IsNullOrWhiteSpace(backupFilePath))
-                return Error("formxml (backup file path) is required when action='undo'.");
+                return Error("formxml (backup file path) is required when action='undo'.",
+                    "Pass the backupPath returned by a previous update/rename as formxml. Backup files live at .devkit/manage_form/{entity}/.");
 
             backupFilePath = backupFilePath.Trim();
 
@@ -711,20 +713,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"Form '{id}' belongs to '{objectTypeCode}', not '{entityName}'.",
                     $"Use action='list' entity_name='{entityName}' to find forms for that entity.");
 
-            // Step 3: Validate restored FormXML against XSD (no backup, but still validate!)
-            List<string> validationWarnings = null;
-            if (validate)
-            {
-                var (errors, warnings) = ValidateFormXml(restoredFormXml);
-                validationWarnings = warnings.Count > 0 ? warnings : null;
+            // Step 3: Validate restored FormXML against XSD (always — no backup, but still validate!)
+            var (errors, warnings) = ValidateFormXml(restoredFormXml);
+            List<string> validationWarnings = warnings.Count > 0 ? warnings : null;
 
-                if (errors.Count > 0)
-                {
-                    var allIssues = new List<string>(errors);
-                    if (warnings.Count > 0) allIssues.AddRange(warnings);
-                    return Error(
-                        $"Backup file failed FormXML validation for form '{formName}' ({id}) — {errors.Count} error(s). First: {errors[0]}",
-                        "The backup file may be corrupted. Set validate=false to force restore (not recommended). Read schema://formxml for valid structure.",
+            if (errors.Count > 0)
+            {
+                var allIssues = new List<string>(errors);
+                if (warnings.Count > 0) allIssues.AddRange(warnings);
+                return Error(
+                    $"Backup file failed FormXML validation for form '{formName}' ({id}) — {errors.Count} error(s). First: {errors[0]}",
+                    "The backup file may be corrupted. Re-run update/rename to create a fresh backup, or fix the FormXML in the file. Read schema://formxml for valid structure.",
                         new UpsertFormResult
                         {
                             Action = "undo",
@@ -738,7 +737,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             RestoredFromBackup = backupFilePath,
                             Published = false
                         });
-                }
             }
 
             // Step 4: Update form with restored FormXML (NO backup — we're restoring!)
@@ -752,7 +750,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     FormId = id.ToString(),
                     FormName = formName,
                     Status = "not_executed",
-                    Validated = validate,
+                    Validated = true,
                     RestoredFromBackup = backupFilePath,
                     Published = false
                 });
@@ -771,7 +769,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         FormId = id.ToString(),
                         FormName = formName,
                         Status = "restored_publish_failed",
-                        Validated = validate,
+                        Validated = true,
                         ValidationWarnings = validationWarnings,
                         RestoredFromBackup = backupFilePath,
                         Published = false
@@ -779,7 +777,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Step 6: Return success
             var summary = $"Restored form '{formName}' ({id}) on '{entityName}' from '{backupFilePath}'" +
-                $", {(validate ? "validated" : "validation skipped")}" +
+                $", validated" +
                 $", {(published ? "published" : "publish pending")}" +
                 (validationWarnings?.Count > 0 ? $" {validationWarnings.Count} validation warning(s) (see validationWarnings)." : "");
 
@@ -790,7 +788,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 FormId = id.ToString(),
                 FormName = formName,
                 Status = "restored",
-                Validated = validate,
+                Validated = true,
                 ValidationWarnings = validationWarnings,
                 RestoredFromBackup = backupFilePath,
                 Published = published
