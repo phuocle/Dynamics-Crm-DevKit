@@ -684,7 +684,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             var crmValue = new XElement(XNamespace.Get("mscrm") + "MSCRM", new XText(reportFilter.ToString(SaveOptions.DisableFormatting)));
             if (customValue != null)
-                customValue.ReplaceWith(new XElement(reportNamespace + "Value", XElement.Parse(crmValue.ToString(SaveOptions.DisableFormatting))));
+                customValue.ReplaceWith(new XElement(reportNamespace + "Value", crmValue.ToString(SaveOptions.DisableFormatting)));
             return fetch;
         }
 

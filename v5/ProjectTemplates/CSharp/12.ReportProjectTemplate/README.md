@@ -28,12 +28,14 @@ Streamlines Dataverse report development using SQL Server Data Tools (SSDT) and 
 1. **[Install SSDT with Visual Studio 2019](https://learn.microsoft.com/en-us/sql/ssdt/download-sql-server-data-tools-ssdt?view=sql-server-ver15#install-ssdt-with-visual-studio-2019)**
    - SQL Server Data Tools for Visual Studio
 
-2. **[Install Microsoft Reporting Services Projects Extension](https://marketplace.visualstudio.com/items?itemName=ProBITools.MicrosoftReportProjectsforVisualStudio)**
+2. **[Install Microsoft Reporting Services Projects Extension](https://marketplace.visualstudio.com/items?itemName=ProBITools.MicrosoftReportProjectsforVisualStudio2022)**
    - Visual Studio extension for report projects
 
 3. **[Install Dynamics 365 Report Authoring Extension](https://www.microsoft.com/en-us/download/details.aspx?id=56973)**
    - Version 9.0.26.7 or later
    - Includes FetchXML support and Dataverse-specific features
+
+> **Support note:** Visual Studio 2019 is past mainstream support, although Microsoft lists extended support through April 10, 2029 ([lifecycle details](https://learn.microsoft.com/en-us/lifecycle/products/visual-studio-2019)). DevKit has no updated report-designer integration, so an existing VS 2019 installation can still be used for this workflow. Microsoft does not have a Visual Studio 2016 product release; the older supported option listed for the Report Authoring Extension is Visual Studio 2015, which can be used for design without preview. Use the MCP `manage_report` tool to add or update datasets.
 
 ## Key Components
 
