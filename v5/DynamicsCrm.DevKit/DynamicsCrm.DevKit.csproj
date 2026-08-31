@@ -61,15 +61,20 @@
     <Compile Include="Commands\CommandNewWebResource.cs" />
     <Compile Include="Commands\CommandTypeScriptRelease.cs" />
     <Compile Include="Commands\CommandWebResource.cs" />
+    <Compile Include="Commands\CommandUploadReport.cs" />
     <Compile Include="DevKitPackageVsct.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DevKitPackageVsct.vsct</DependentUpon>
     </Compile>
     <Compile Include="Lib\CacheHelper.cs" />
+    <Compile Include="Lib\ReportConfigHelper.cs" />
     <Compile Include="Lib\Forms\BaseDialogWindow.cs" />
     <Compile Include="Lib\Forms\FormConnection.xaml.cs">
       <DependentUpon>FormConnection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Lib\Forms\FormReportMapping.xaml.cs">
+      <DependentUpon>FormReportMapping.xaml</DependentUpon>
     </Compile>
     <Compile Include="Lib\Forms\FormCustom.xaml.cs">
       <DependentUpon>FormCustom.xaml</DependentUpon>
@@ -229,6 +234,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Lib\Forms\FormConnection.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Lib\Forms\FormReportMapping.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

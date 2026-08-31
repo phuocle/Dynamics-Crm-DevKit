@@ -73,6 +73,15 @@
 					<ButtonText>Deploy New TypeScript (Release)</ButtonText>
 				</Strings>
 			</Button>
+			<Button guid="GuidSetDeployWebResource" id="CommandUploadReport" type="Button" priority="0x0006">
+				<Icon guid="guidImages" id="bmpPic" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>TextChanges</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<ButtonText>Deploy Report</ButtonText>
+				</Strings>
+			</Button>
 		</Buttons>
 		<Bitmaps>
 			<Bitmap guid="guidImages" href="icon16.png" usedList="bmpPic"/>
@@ -102,6 +111,9 @@
 			<Parent guid="GuidSetDeployWebResource" id="GroupDeployCommands"/>
 		</CommandPlacement>
 		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployNewTypeScriptRelease" priority="0x0004">
+			<Parent guid="GuidSetDeployWebResource" id="GroupDeployCommands"/>
+		</CommandPlacement>
+		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandUploadReport" priority="0x0005">
 			<Parent guid="GuidSetDeployWebResource" id="GroupDeployCommands"/>
 		</CommandPlacement>
 
@@ -170,6 +182,7 @@
 			<IDSymbol name="CommandDeployNewWebResource" value="0x1002" />
 			<IDSymbol name="CommandDeployTypeScriptRelease" value="0x1004" />
 			<IDSymbol name="CommandDeployNewTypeScriptRelease" value="0x1005" />
+			<IDSymbol name="CommandUploadReport" value="0x1006" />
 		</GuidSymbol>
 	</Symbols>
 </CommandTable>
