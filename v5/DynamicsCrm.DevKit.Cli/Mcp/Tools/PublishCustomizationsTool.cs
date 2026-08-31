@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Security;
+using System.Text;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
@@ -24,6 +26,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
+        }
+
+        // Kept as a small, deterministic formatter for callers that need to
+        // inspect the PublishXml payload without connecting to Dataverse.
+        private static string BuildParameterXml(List<string> entities, bool includeGlobalOptionSets, bool includeSiteMap)
+        {
+            var sb = new StringBuilder("<importexportxml><entities>");
+            foreach (var entity in entities ?? [])
+            {
+                if (!string.IsNullOrWhiteSpace(entity))
+                    sb.Append("<entity>").Append(SecurityElement.Escape(entity)).Append("</entity>");
+            }
+
+            sb.Append("</entities>");
+            if (includeGlobalOptionSets)
+                sb.Append("<optionsets><optionset>all</optionset></optionsets>");
+            else
+                sb.Append("<optionsets />");
+
+            sb.Append(includeSiteMap ? "<sitemaps><sitemap /></sitemaps>" : "<sitemaps />");
+            return sb.Append("</importexportxml>").ToString();
         }
 
         [McpServerTool(Name = "publish_customizations", Title = "Publish customizations to make changes visible",

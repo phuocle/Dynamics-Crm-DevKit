@@ -241,6 +241,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             {
                 $"{ErrorPrefix} {kind}: {message}"
             };
+            if (ex.InnerException != null)
+            {
+                var innerMessages = new List<string>();
+                for (var current = ex.InnerException; current != null; current = current.InnerException)
+                    innerMessages.Add($"{current.GetType().Name}: {current.Message ?? "(no message)"}");
+                textLines.Add($"InnerException: {string.Join(" → ", innerMessages)}");
+            }
             if (hint != null)
                 textLines.Add($"[Hint] {hint}");
             textLines.Add($"[Detail] {JsonSerializer.Serialize(details)}");
