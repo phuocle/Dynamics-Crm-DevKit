@@ -1,4 +1,5 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
@@ -12,6 +13,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Globalization;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
@@ -43,8 +45,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Manage Dataverse SSRS reports (report entity). Actions: 'list', 'detail', 'create', 'download', 'update', 'delete'.\n" +
             "- list/detail are read-only; create/download/update/delete are mutations\n" +
-            "- create: provide file_path to an .rdl file, or omit it to use the embedded ReportTemplate.rdl (single source of truth)\n" +
-            "- download writes bodytext to .devkit/manage_report/{report}/ as .rdl (in dry-run no file is written; sha256 is computed in-memory)\n" +
+            "- create: provide file_path to an .rdl file, or omit it to use the embedded ReportTemplate.rdl (single source of truth); the embedded template is normalized for the connected organization and language defaults to the organization's base language\n" +
+            "- create uploads the report, then downloads its bodytext to .devkit/manage_report/{languageCode}/ as {report}.rdl; existing Dataverse reports and local output files fail fast\n" +
+            "- download writes bodytext to .devkit/manage_report/{languageCode}/ as {report}.rdl and returns the saved path and SHA-256\n" +
             "- update replaces bodytext (.rdl content) and/or description; reports need no publish after update\n" +
             "- managed reports (isManaged=true) cannot be created/updated/deleted\n\n" +
             "WHEN TO USE:\n" +
@@ -62,7 +65,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("create/update: local .rdl file path. Relative paths resolve against the workspace folder (auto-resolved from MCP roots or server cwd). Omit on create to use the embedded ReportTemplate.rdl.")] string file_path = "",
             [Description("create: report display name. Default: file name without extension, or 'Report Template' when using the embedded template.")] string name = "",
             [Description("create/update: report description.")] string description = "",
-            [Description("create: language name (e.g. 'English') or LCID. Default: 1033.")] string language = "",
+            [Description("create: language name (e.g. 'English') or LCID. Default: organization's base language.")] string language = "",
             [Description("list/create: solution unique or display name. list: filter reports by solution; create: add the new report to this solution.")] string solution_name = "",
             [Description("list: case-insensitive contains filter on report name or file name.")] string name_filter = "",
             [Description("list: max records, 1-500. Default 50.")] int max_records = 50)
@@ -135,7 +138,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <filter type='and'>
 {filters}    </filter>
     <order attribute='name'/>
-    <link-entity name='languagelocale' from='localeid' to='languagecode' link-type='left' alias='l'>
+    <link-entity name='languagelocale' from='localeid' to='languagecode' link-type='outer' alias='l'>
       <attribute name='language'/>
     </link-entity>{solutionJoin}
   </entity>
@@ -173,6 +176,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"Report '{reportId}' not found.",
                              "Use action='list' to find valid report IDs.");
             var entry = MapEntry(entity);
+            if (string.IsNullOrWhiteSpace(entry.Language) && entry.LanguageCode.HasValue)
+            {
+                var languageFetch = $@"<fetch top='1'>
+  <entity name='languagelocale'>
+    <attribute name='language'/>
+    <filter>
+      <condition attribute='localeid' operator='eq' value='{entry.LanguageCode.Value}'/>
+    </filter>
+  </entity>
+</fetch>";
+                var languageRows = _serviceClient.RetrieveMultiple(new FetchExpression(languageFetch));
+                entry.Language = languageRows.Entities.FirstOrDefault()?.GetAttributeValue<string>("language");
+            }
             entry.Description = NullIfEmpty(entity.GetAttributeValue<string>("description"));
             entry.IsCustomizable = entity.GetAttributeValue<BooleanManagedProperty>("iscustomizable")?.Value;
             var bodyText = entity.GetAttributeValue<string>("bodytext") ?? "";
@@ -213,10 +229,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string createSource;
             if (string.IsNullOrWhiteSpace(filePath))
             {
-                bodyText = await DynamicsCrm.DevKit.Shared.Helper.ReadEmbeddedResourceAsync("DynamicsCrm.DevKit.Shared.Resources.ReportTemplate.rdl");
+                bodyText = await DynamicsCrm.DevKit.Shared.Helper.ReadEmbeddedResourceAsync("DynamicsCrm.DevKit.Cli.Resources.ReportTemplate.rdl");
                 if (string.IsNullOrEmpty(bodyText))
                     return Error("Embedded ReportTemplate.rdl resource not found.",
                                  "Rebuild the CLI — the resource is embedded from DynamicsCrm.DevKit.Shared/Resources/ReportTemplate.rdl.");
+                bodyText = PrepareEmbeddedReportTemplate(bodyText);
                 createSource = "embedded_template";
             }
             else
@@ -231,10 +248,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 bodyText = await FileHelper.ReadAllTextAsync(resolvedPath);
                 createSource = "file";
             }
-            var languageCode = await new DeploymentService(_serviceClient).GetLanguageCodeAsync(language);
-            if (languageCode == null)
-                return Error($"Language '{language}' not found.",
+            var languageCode = string.IsNullOrWhiteSpace(language)
+                ? McpHelper.GetBaseLanguageCode(_serviceClient)
+                : await new DeploymentService(_serviceClient).GetLanguageCodeAsync(language);
+            if (languageCode == null || languageCode <= 0)
+                return string.IsNullOrWhiteSpace(language)
+                    ? Error("Organization base language could not be resolved.",
+                             "Verify the Dataverse connection can read organization.languagecode, then retry the create operation.")
+                    : Error($"Language '{language}' not found.",
                              "Provide a language name (e.g. 'English') or LCID (e.g. 1033) that is provisioned in the organization.");
+            var provisionedLanguageError = await ValidateProvisionedLanguageAsync(language, languageCode.Value);
+            if (provisionedLanguageError != null)
+                return provisionedLanguageError;
             var fileName = string.IsNullOrWhiteSpace(filePath)
                 ? "ReportTemplate.rdl"
                 : Path.GetFileName(filePath.Trim());
@@ -246,6 +271,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (duplicates.Count > 0)
                 return Error($"Report name '{reportName}' already exists (ID: {duplicates[0].ReportId}, language {duplicates[0].Language}).",
                              "Use action='update' to modify it, or provide a different name.");
+            var outputPath = GetReportOutputPath(workspaceFolder, reportName, languageCode.Value);
+            if (File.Exists(outputPath))
+                return Error($"Local report file '{outputPath}' already exists.",
+                             "Choose a different report name or remove the existing local file before creating the report.");
             var solutionUniqueName = (string)null;
             if (!string.IsNullOrWhiteSpace(solutionName))
             {
@@ -295,7 +324,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     reportId,
                     ReportComponentType,
                     solutionUniqueName);
-            var summary = $"Created report '{reportName}' ({reportId}): language={languageCode.Value}, source={createSource}" +
+            Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
+            await FileHelper.ForceWriteAllTextAsync(outputPath, bodyText);
+            var sha256 = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(bodyText))).ToLowerInvariant();
+            var summary = $"Created report '{reportName}' ({reportId}) and downloaded to file (see savedPath): language={languageCode.Value}, source={createSource}" +
                 (solutionUniqueName == null
                     ? "."
                     : addResult.IsAddToSolution
@@ -304,6 +336,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success(summary, new ManageReportResult
             {
                 Action = "created",
+                Status = "created_and_downloaded",
                 TotalCount = 1,
                 Reports =
                 [
@@ -322,8 +355,92 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 CreateMode = createSource,
                 IsAddToSolution = addResult?.IsAddToSolution ?? false,
                 AddToSolutionMethod = addResult?.AddToSolutionMethod,
-                AddToSolutionWarning = addResult?.AddToSolutionWarning
+                AddToSolutionWarning = addResult?.AddToSolutionWarning,
+                SavedPath = outputPath,
+                Sha256 = sha256
             });
+        }
+
+        private async Task<CallToolResult> ValidateProvisionedLanguageAsync(string language, int languageCode)
+        {
+            var response = (RetrieveProvisionedLanguagesResponse)await _serviceClient.ExecuteAsync(
+                new RetrieveProvisionedLanguagesRequest());
+            if (response.RetrieveProvisionedLanguages.Contains(languageCode))
+                return null;
+
+            var requestedLanguage = string.IsNullOrWhiteSpace(language) ? "organization base language" : $"'{language}'";
+            return Error(
+                $"Language {requestedLanguage} (LCID {languageCode}) is not installed in the organization.",
+                "Install/provision this language in Dataverse, or choose a language already listed by the organization, then retry.");
+        }
+
+        private string PrepareEmbeddedReportTemplate(string bodyText)
+        {
+            var document = XDocument.Parse(bodyText, LoadOptions.PreserveWhitespace);
+            var reportNamespace = document.Root?.GetDefaultNamespace()
+                ?? throw new InvalidOperationException("Embedded ReportTemplate.rdl has no report-definition namespace.");
+            var baseUrl = _serviceClient.ConnectedOrgUriActual?.GetLeftPart(UriPartial.Authority)?.TrimEnd('/');
+            var orgUniqueName = _serviceClient.ConnectedOrgUniqueName?.Trim();
+            if (string.IsNullOrWhiteSpace(baseUrl) || string.IsNullOrWhiteSpace(orgUniqueName))
+                throw new InvalidOperationException("Connected Dataverse organization URL or unique name is unavailable.");
+
+            var connectString = document.Descendants(reportNamespace + "ConnectString").FirstOrDefault();
+            if (connectString == null)
+                throw new InvalidOperationException("Embedded ReportTemplate.rdl has no Dynamics 365 ConnectString.");
+            connectString.Value = $"{baseUrl}/;{orgUniqueName}";
+
+            var languageCode = McpHelper.GetBaseLanguageCode(_serviceClient);
+            if (languageCode <= 0)
+                throw new InvalidOperationException("The organization's base language could not be resolved.");
+
+            var languageParameter = document.Descendants(reportNamespace + "ReportParameter")
+                .FirstOrDefault(p => string.Equals((string)p.Attribute("Name"), "CRM_UILanguageId", StringComparison.Ordinal));
+            SetReportParameterDefault(languageParameter, languageCode.ToString(CultureInfo.InvariantCulture));
+
+            var crmUrlParameter = document.Descendants(reportNamespace + "ReportParameter")
+                .FirstOrDefault(p => string.Equals((string)p.Attribute("Name"), "CRM_URL", StringComparison.Ordinal));
+            SetReportParameterDefault(crmUrlParameter, baseUrl);
+
+            foreach (var parameterName in new[] { "CRM_FullName", "CRM_UserTimeZoneName" })
+            {
+                var parameter = document.Descendants(reportNamespace + "ReportParameter")
+                    .FirstOrDefault(p => string.Equals((string)p.Attribute("Name"), parameterName, StringComparison.Ordinal));
+                parameter?.Element(reportNamespace + "DefaultValue")?.Remove();
+            }
+
+            var reportLanguage = document.Root.Element(reportNamespace + "Language");
+            try
+            {
+                var culture = CultureInfo.GetCultureInfo(languageCode);
+                if (reportLanguage != null && !string.IsNullOrWhiteSpace(culture.Name))
+                    reportLanguage.Value = culture.Name;
+            }
+            catch (CultureNotFoundException)
+            {
+                // The Dataverse LCID remains authoritative; keep the template culture when .NET has no mapping.
+            }
+
+            return document.ToString(SaveOptions.DisableFormatting);
+        }
+
+        private static void SetReportParameterDefault(XElement parameter, string value)
+        {
+            if (parameter == null) return;
+            var reportNamespace = parameter.Name.Namespace;
+            var defaultValue = parameter.Element(reportNamespace + "DefaultValue");
+            if (defaultValue == null)
+            {
+                defaultValue = new XElement(reportNamespace + "DefaultValue");
+                parameter.AddFirst(defaultValue);
+            }
+            var values = defaultValue.Element(reportNamespace + "Values");
+            if (values == null)
+            {
+                values = new XElement(reportNamespace + "Values");
+                defaultValue.Add(values);
+            }
+            values.RemoveNodes();
+            values.Add(new XElement(reportNamespace + "Value", value));
         }
 
         private async Task<CallToolResult> HandleDownload(string reportId, string workspaceFolder)
@@ -346,8 +463,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var downloadFileName = !string.IsNullOrWhiteSpace(entry.FileName)
                 ? entry.FileName
                 : FileColumnTransferHelper.SanitizeFolderName(entry.Name) + ".rdl";
-            var folder = Path.Combine(workspaceFolder, ".devkit", "manage_report",
-                FileColumnTransferHelper.SanitizeFolderName(entry.Name ?? resolved.Id.Value.ToString()));
+            var folder = GetReportOutputFolder(workspaceFolder, entry.LanguageCode);
             if (_options.DryRun)
             {
                 var dryRunResult = new ManageReportResult
@@ -589,6 +705,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (Path.IsPathRooted(trimmed))
                 return trimmed;
             return Path.GetFullPath(Path.Combine(workspaceFolder, trimmed));
+        }
+
+        private static string GetReportOutputFolder(string workspaceFolder, int? languageCode)
+        {
+            var languageFolder = FileColumnTransferHelper.SanitizeFolderName((languageCode ?? 1033).ToString());
+            return Path.Combine(workspaceFolder, ".devkit", "manage_report", languageFolder);
+        }
+
+        private static string GetReportOutputPath(string workspaceFolder, string reportName, int languageCode)
+        {
+            var fileName = FileColumnTransferHelper.SanitizeFolderName(reportName) + ".rdl";
+            return Path.Combine(GetReportOutputFolder(workspaceFolder, languageCode), fileName);
         }
 
         private static string NullIfEmpty(string value) =>

@@ -18,8 +18,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                         return lang.Value;
                 }
             }
-            catch { /* best-effort language code query — returns default 1033 (English) on failure */ }
-            return 1033;
+            catch { /* caller reports the connection/query failure instead of guessing a language */ }
+            return 0;
         }
     }
 }
