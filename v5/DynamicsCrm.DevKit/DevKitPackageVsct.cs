@@ -51,5 +51,6 @@ namespace DynamicsCrm.DevKit
         public const int CommandDeployTypeScriptRelease = 0x1004;
         public const int CommandDeployNewTypeScriptRelease = 0x1005;
         public const int CommandUploadReport = 0x1006;
+        public const int CommandNewReport = 0x1007;
     }
 }

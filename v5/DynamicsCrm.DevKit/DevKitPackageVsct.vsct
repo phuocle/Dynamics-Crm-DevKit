@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<Extern href="stdidcmd.h"/>
 	<Extern href="vsshlids.h"/>
@@ -79,7 +79,15 @@
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<ButtonText>Deploy Report</ButtonText>
+					<ButtonText>Upload Dynamics 365 Report</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="GuidSetDeployWebResource" id="CommandNewReport" type="Button" priority="0x0007">
+				<Icon guid="guidImages" id="bmpPic" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<ButtonText>Deploy New Report</ButtonText>
 				</Strings>
 			</Button>
 		</Buttons>
@@ -114,6 +122,9 @@
 			<Parent guid="GuidSetDeployWebResource" id="GroupDeployCommands"/>
 		</CommandPlacement>
 		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandUploadReport" priority="0x0005">
+			<Parent guid="GuidSetDeployWebResource" id="GroupDeployCommands"/>
+		</CommandPlacement>
+		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandNewReport" priority="0x0006">
 			<Parent guid="GuidSetDeployWebResource" id="GroupDeployCommands"/>
 		</CommandPlacement>
 
@@ -183,6 +194,7 @@
 			<IDSymbol name="CommandDeployTypeScriptRelease" value="0x1004" />
 			<IDSymbol name="CommandDeployNewTypeScriptRelease" value="0x1005" />
 			<IDSymbol name="CommandUploadReport" value="0x1006" />
+			<IDSymbol name="CommandNewReport" value="0x1007" />
 		</GuidSymbol>
 	</Symbols>
 </CommandTable>

@@ -8,7 +8,7 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
     <StackPanel Margin="10">
-        <Border BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="0,0,0,10">
+        <Border x:Name="ExistingReport" BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="0,0,0,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="110" />
@@ -24,6 +24,25 @@
                 <ComboBox Grid.Row="1" Grid.Column="1" x:Name="comboReports" DisplayMemberPath="DisplayReportName" Margin="0,0,0,5" SelectionChanged="ComboReports_SelectionChanged" />
             </Grid>
         </Border>
+        <Border x:Name="NewReport" BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="0,0,0,10" Visibility="Collapsed">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="Report name" VerticalAlignment="Center" />
+                <TextBox Grid.Row="0" Grid.Column="1" x:Name="textboxNewReportName" Margin="0,0,0,5" TextChanged="TextboxNewReportName_TextChanged" />
+                <Label Grid.Row="1" Grid.Column="0" Content="Language" VerticalAlignment="Center" />
+                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="comboLanguages" DisplayMemberPath="DisplayName" Margin="0,0,0,5" SelectionChanged="ComboLanguages_SelectionChanged" />
+                <Label Grid.Row="2" Grid.Column="0" Content="Solution" VerticalAlignment="Center" />
+                <ComboBox Grid.Row="2" Grid.Column="1" x:Name="comboSolutions" DisplayMemberPath="SolutionUniqueName" SelectionChanged="ComboSolutions_SelectionChanged" />
+            </Grid>
+        </Border>
         <TextBlock x:Name="textStatus" Foreground="Red" Margin="5,0,5,8" Visibility="Collapsed" />
         <Grid>
             <Grid.ColumnDefinitions>
@@ -31,7 +50,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" x:Name="buttonOK" Content="OK" Width="100" Height="30" Margin="5,0,5,0" Click="ButtonOK_Click" />
+            <Button Grid.Column="1" x:Name="buttonOK" Content="OK" Width="100" Height="30" Margin="5,0,5,0" Click="ButtonOK_Click" IsEnabled="False" />
             <Button Grid.Column="2" Content="Cancel" Width="100" Height="30" Margin="5,0,0,0" IsCancel="True" Click="ButtonCancel_Click" />
         </Grid>
     </StackPanel>

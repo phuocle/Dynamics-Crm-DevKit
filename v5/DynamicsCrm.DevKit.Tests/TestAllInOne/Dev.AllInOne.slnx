@@ -15,6 +15,12 @@
   <Project Path="Dev.AllInOne.Package2.Test/Dev.AllInOne.Package2.Test.csproj" />
   <Project Path="Dev.AllInOne.Package2/Dev.AllInOne.Package2.csproj" />
   <Project Path="Dev.AllInOne.ProxyTypes/Dev.AllInOne.ProxyTypes.csproj" />
+  <Project Path="Dev.AllInOne.Report.2/Dev.AllInOne.Report.2.rptproj">
+    <Deploy />
+  </Project>
+  <Project Path="Dev.AllInOne.Report/Dev.AllInOne.Report.rptproj">
+    <Deploy />
+  </Project>
   <Project Path="Dev.AllInOne.Server.Test/Dev.AllInOne.Server.Test.csproj" />
   <Project Path="Dev.AllInOne.Server/Dev.AllInOne.Server.csproj" />
   <Project Path="Dev.AllInOne.Server2.Test/Dev.AllInOne.Server2.Test.csproj" />

@@ -8,14 +8,18 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Commands
 {
     [Command(PackageIds.CommandUploadReport)]
-    internal sealed class CommandUploadReport : BaseCommand<CommandUploadReport>
+    public sealed class CommandUploadReport : BaseCommand<CommandUploadReport>
     {
+        private static readonly ConcurrentDictionary<string, DeployReport> CachedReports =
+            new(StringComparer.OrdinalIgnoreCase);
+
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {
             await VsixHelper.ExecuteCommandAsync("File.Save");
@@ -34,14 +38,20 @@ namespace DynamicsCrm.DevKit.Commands
                 await TypeScriptBuildHelper.ShowStatusAsync(url, "Connected");
                 var configFileName = await VsixHelper.GetDynamicsCrmDevKitConfigJsonFullFileNameAsync();
                 var config = ReportConfigHelper.ReadConfig(configFileName);
-                var report = ReportConfigHelper.GetReport(config, fullFileName);
+                var report = CachedReports.TryGetValue(fullFileName, out var cachedReport)
+                    ? cachedReport
+                    : null;
                 if (report == null)
                 {
                     await TypeScriptBuildHelper.ShowStatusAsync(url, "Loading report mapping ...");
-                    var form = new FormReportMapping(serviceClient, fullFileName, null);
+                    // Match web resource behavior: show the selector once per VS session,
+                    // while using the solution config as the default selection.
+                    var configuredReport = ReportConfigHelper.GetReport(config, fullFileName);
+                    var form = new FormReportMapping(serviceClient, fullFileName, configuredReport);
                     if (form.ShowModal() != true) return;
                     report = form.SelectedReport;
                     await ReportConfigHelper.SaveReportAsync(configFileName, config, report);
+                    CachedReports[fullFileName] = report;
                 }
                 if (report.IsManaged)
                 {
@@ -72,15 +82,20 @@ namespace DynamicsCrm.DevKit.Commands
 
         protected override void BeforeQueryStatus(EventArgs e)
         {
+            // Reset synchronously so a previous .rdl selection cannot leak into
+            // the next context-menu query before the async lookup completes.
+            this.Command.Visible = false;
+            this.Command.Enabled = false;
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
                 var extension = await VsixHelper.SelectedItem.GetExtensionAsync();
-                Command.Visible = string.Equals(extension, ".rdl", StringComparison.OrdinalIgnoreCase);
-                Command.Enabled = Command.Visible;
+                this.Command.Visible = string.Equals(extension, ".rdl", StringComparison.OrdinalIgnoreCase);
+                this.Command.Enabled = this.Command.Visible;
             });
         }
 
         private static bool IsReportFile(string filePath) =>
             string.Equals(Path.GetExtension(filePath), ".rdl", StringComparison.OrdinalIgnoreCase);
+
     }
 }
