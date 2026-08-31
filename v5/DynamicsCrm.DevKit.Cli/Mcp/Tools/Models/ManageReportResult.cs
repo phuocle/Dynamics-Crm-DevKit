@@ -43,8 +43,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SavedPath { get; set; }
 
+        [JsonPropertyName("backupPath")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string BackupPath { get; set; }
+
         [JsonPropertyName("sha256")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Sha256 { get; set; }
+
+        [JsonPropertyName("datasetName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string DatasetName { get; set; }
+
+        [JsonPropertyName("fieldNames")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> FieldNames { get; set; }
     }
 }
