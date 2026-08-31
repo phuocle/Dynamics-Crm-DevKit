@@ -173,4 +173,16 @@ public class InstructionResourcesTests
         StringAssert.Contains(result, "get_workflows");
         StringAssert.Contains(result, "get_flows");
     }
+
+    [TestMethod]
+    public void SqlInstructions_ContainsSchemaAndQueryRules()
+    {
+        var result = InstructionResources.SqlInstructions();
+
+        Assert.IsTrue(result.Length > 0);
+        StringAssert.Contains(result, "# Dataverse SQL Query Rules");
+        StringAssert.Contains(result, "SELECT *");
+        StringAssert.Contains(result, "DATEADD");
+        StringAssert.Contains(result, "get_tables");
+    }
 }

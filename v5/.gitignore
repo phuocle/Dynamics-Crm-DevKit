@@ -1,5 +1,6 @@
 # Code coverage reports
 **/CoverageReport/
+**/CliCoverageReport/
 **/ReportGenerator_Summary/
 **/coverage/
 *.coverage
