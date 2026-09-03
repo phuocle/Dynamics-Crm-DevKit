@@ -2,11 +2,29 @@
         x:Class="DynamicsCrm.DevKit.Lib.Forms.FormReportMapping"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:wpfcontrols="clr-namespace:DynamicsCrm.DevKit.Lib.WpfControls"
+        mc:Ignorable="d"
         Title="Deploy Dynamics 365 Report"
         Width="720"
         SizeToContent="Height"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
+    <forms:BaseDialogWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="StyleResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </forms:BaseDialogWindow.Resources>
+    <StackPanel>
+        <TextBlock x:Name="wikiMapping" Padding="10,5,10,5" Visibility="Visible" Background="Green">
+            <wpfcontrols:ExternalBrowserHyperlink NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Mapping-Report" Foreground="White">WIKI: Mapping Report</wpfcontrols:ExternalBrowserHyperlink>
+        </TextBlock>
+        <TextBlock x:Name="wikiNewReport" Padding="10,5,10,5" Visibility="Collapsed" Background="Green">
+            <wpfcontrols:ExternalBrowserHyperlink NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/New-Report" Foreground="White">WIKI: New Report</wpfcontrols:ExternalBrowserHyperlink>
+        </TextBlock>
     <StackPanel Margin="10">
         <Border x:Name="ExistingReport" BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="0,0,0,10">
             <Grid>
@@ -53,5 +71,6 @@
             <Button Grid.Column="1" x:Name="buttonOK" Content="OK" Width="100" Height="30" Margin="5,0,5,0" Click="ButtonOK_Click" IsEnabled="False" />
             <Button Grid.Column="2" Content="Cancel" Width="100" Height="30" Margin="5,0,0,0" IsCancel="True" Click="ButtonCancel_Click" />
         </Grid>
+    </StackPanel>
     </StackPanel>
 </forms:BaseDialogWindow>

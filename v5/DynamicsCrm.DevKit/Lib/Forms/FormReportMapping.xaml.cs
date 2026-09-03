@@ -49,7 +49,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             Title = "Deploy New Dynamics 365 Report";
             textboxFile.Text = fullFileName;
             ExistingReport.Visibility = Visibility.Collapsed;
+            wikiMapping.Visibility = Visibility.Collapsed;
             NewReport.Visibility = Visibility.Visible;
+            wikiNewReport.Visibility = Visibility.Visible;
             textboxNewReportName.Text = Path.GetFileNameWithoutExtension(fullFileName);
             comboSolutions.ItemsSource = solutions ?? new List<NameValueGuidExtend>();
             LoadLanguages();
