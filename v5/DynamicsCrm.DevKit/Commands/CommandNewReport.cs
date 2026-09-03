@@ -66,7 +66,8 @@ namespace DynamicsCrm.DevKit.Commands
                     ["filename"] = report.ReportFileName,
                     ["bodytext"] = await FileHelper.ReadAllTextAsync(fullFileName),
                     ["languagecode"] = report.LanguageCode,
-                    ["reporttypecode"] = new OptionSetValue(1)
+                    ["reporttypecode"] = new OptionSetValue(1),
+                    ["ispersonal"] = false
                 };
                 var reportId = await serviceClient.CreateAsync(created);
                 await serviceClient.ExecuteAsync(new AddSolutionComponentRequest

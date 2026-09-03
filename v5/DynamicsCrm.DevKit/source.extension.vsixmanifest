@@ -3,7 +3,7 @@
   <Metadata>
     <Identity Id="PL.DynamicsCrm.DevKit.B1629928-D42A-4437-ACFD-D0E417F5FA22" Version="4.44.44.44" Language="en-US" Publisher="PhuocLe" />
     <DisplayName>DynamicsCrm.DevKit</DisplayName>
-    <Description xml:space="preserve">[D] A collection of projects/items template for develop Dynamics 365 CRM/CDS/Dataverse (Build: xxxx.yy.zz HH.mm.ss)</Description>
+    <Description xml:space="preserve">[E] A collection of projects/items template for develop Dynamics 365 CRM/CDS/Dataverse (Build: xxxx.yy.zz HH.mm.ss)</Description>
     <MoreInfo>https://github.com/phuocle/Dynamics-Crm-DevKit</MoreInfo>
     <License>License.txt</License>
     <Icon>icon32.png</Icon>

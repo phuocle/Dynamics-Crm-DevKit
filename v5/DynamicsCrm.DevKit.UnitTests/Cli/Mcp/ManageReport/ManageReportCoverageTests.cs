@@ -187,7 +187,7 @@ public sealed class ManageReportCoverageTests
         Assert.IsTrue(((CallToolResult)Invoke(tool, "HandleList", "", "", 0)).Contains("max_records must be between"));
         Assert.IsTrue(((CallToolResult)Invoke(tool, "HandleDetail", "")).Contains("report_id is required"));
         Assert.IsTrue(((CallToolResult)InvokeTask(tool, "HandleDatasetLocal", "add_dataset", "", "Dataset", "<fetch />", "", "")).Contains("file_path is required"));
-        Assert.IsTrue(((CallToolResult)InvokeTask(tool, "HandleDownload", "", "")).Contains("report_id is required"));
+        Assert.IsTrue(((CallToolResult)InvokeTask(tool, "HandleDownload", "", "", "")).Contains("report_id is required"));
         Assert.IsTrue(((CallToolResult)InvokeTask(tool, "HandleUpdate", "", "", "", "")).Contains("report_id is required"));
         Assert.IsTrue(((CallToolResult)Invoke(tool, "HandleDelete", "")).Contains("report_id is required"));
     }

@@ -51,6 +51,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Sha256 { get; set; }
 
+        [JsonPropertyName("rptprojPath")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string RptprojPath { get; set; }
+
+        [JsonPropertyName("rptprojStatus")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string RptprojStatus { get; set; }
+
         [JsonPropertyName("datasetName")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string DatasetName { get; set; }
