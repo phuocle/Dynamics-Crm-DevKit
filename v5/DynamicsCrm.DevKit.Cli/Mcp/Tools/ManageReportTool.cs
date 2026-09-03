@@ -39,51 +39,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        private const int ReportComponentType = 31;
         private const string DiscoverReportsHint = "Use manage_report(action='list') to discover reports.";
 
         [McpServerTool(Name = "manage_report", Title = "Manage SSRS reports",
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageReportResult)),
         Description(
-            "Manage Dataverse SSRS reports (report entity). Actions: 'list', 'detail', 'create', 'download', 'update', 'delete', 'add_dataset', 'update_dataset', 'delete_dataset'.\n" +
-            "- list/detail are read-only; create/download/update/delete mutate Dataverse; dataset actions mutate only the local RDL file\n" +
-            "- create: provide file_path to an .rdl file, or omit it to use the embedded ReportTemplate.rdl (single source of truth); the embedded template is normalized for the connected organization and language defaults to the organization's base language\n" +
-            "- create uploads the report, then downloads its bodytext to .devkit/manage_report/downloads/{languageCode}/ as {report}.rdl; existing Dataverse reports and local output files fail fast\n" +
+            "Manage Dataverse SSRS reports (report entity). Actions: 'list', 'detail', 'create', 'download', 'update', 'add_dataset', 'update_dataset', 'delete_dataset'.\n" +
+            "- list/detail/download read Dataverse; update is the ONLY action that writes to Dataverse; create and dataset actions work on local .rdl files only\n" +
+            "- create: LOCAL ONLY — never touches Dataverse; saves a new .rdl built from the embedded ReportTemplate.rdl (normalized for the connected organization) or from file_path content; name defaults: name > file_path file name > 'Report Template'; existing local output files fail fast; default output is .devkit/manage_report/\n" +
             "- download writes bodytext to .devkit/manage_report/downloads/{languageCode}/ as {report}.rdl and returns the saved path and SHA-256\n" +
             "- create/download: output_folder saves the .rdl into that local folder instead of the default .devkit folder; when the folder contains exactly one .rptproj, the saved .rdl is auto-added as a Report item if not already present (0 or multiple .rptproj files = the project is left untouched)\n" +
-            "- update replaces bodytext (.rdl content) and/or description; reports need no publish after update\n" +
+            "- update replaces bodytext (.rdl content) and/or description of an existing report; when report_id is a name, language selects which language copy to update (multiple reports can share a name across languages) — default is the organization's base language; reports need no publish after update; NEW reports are created by the VSIX/CLI deploy, not by this tool\n" +
             "- add_dataset/update_dataset/delete_dataset require file_path and edit only that local RDL; all dataset actions create a pre-change backup under .devkit/manage_report/backups; add_dataset/update_dataset accept FetchXML or a system view name with entity_name; delete_dataset removes the dataset by name only\n" +
-            "- managed reports (isManaged=true) cannot be created/updated/deleted\n\n" +
+            "- managed reports (isManaged=true) cannot be updated\n\n" +
             "WHEN TO USE:\n" +
             "- List or inspect reports of the organization or of a solution (solution component type 31)\n" +
-            "- Create a new report from a local .rdl file or from the built-in template\n" +
+            "- Create a new local .rdl file from the built-in template to design a report locally\n" +
             "- Download a report definition (.rdl) to local disk for editing\n" +
-            "- Deploy an updated .rdl back to an existing report, or delete an unmanaged report\n" +
+            "- Deploy an updated local .rdl back to an existing report\n" +
             "- Add, update, or delete a simple local RDL dataset before designing it in SSRS\n\n" +
             "RELATED TOOLS:\n" +
             "- get_solution_components → find valid solution names and report components\n" +
             "- execute_fetchxml → query report records directly")]
         public async Task<CallToolResult> manage_report(
             McpServer server,
-            [Description("'list', 'detail', 'create', 'download', 'update', 'delete', 'add_dataset', 'update_dataset', 'delete_dataset'.")] string action = "",
-            [Description("Report identifier: GUID, report name, or .rdl file name. Required for detail/download/update/delete.")] string report_id = "",
-            [Description("create/update: local .rdl file path. Relative paths resolve against the workspace folder (auto-resolved from MCP roots or server cwd). Omit on create to use the embedded ReportTemplate.rdl.")] string file_path = "",
-            [Description("create: report display name. Default: file name without extension, or 'Report Template' when using the embedded template.")] string name = "",
-            [Description("create/update: report description.")] string description = "",
-            [Description("create: language name (e.g. 'English') or LCID. Default: organization's base language.")] string language = "",
-            [Description("list/create: solution unique or display name. list: filter reports by solution; create: add the new report to this solution.")] string solution_name = "",
+            [Description("'list', 'detail', 'create', 'download', 'update', 'add_dataset', 'update_dataset', 'delete_dataset'.")] string action = "",
+            [Description("Report identifier: GUID, report name, or .rdl file name. Required for detail/download/update.")] string report_id = "",
+            [Description("create/update: local .rdl file path. Relative paths resolve against the workspace folder (auto-resolved from MCP roots or server cwd). create: content source for the new local file — omit to use the embedded ReportTemplate.rdl.")] string file_path = "",
+            [Description("create: report name, also used for the new local file name. Default: file_path file name without extension, or 'Report Template' when using the embedded template.")] string name = "",
+            [Description("update: report description.")] string description = "",
+            [Description("update: language name (e.g. 'English') or LCID selecting which language copy of a same-named report to update. Ignored when report_id is a GUID. Default: organization's base language.")] string language = "",
+            [Description("list: filter reports by solution unique or display name.")] string solution_name = "",
             [Description("list: case-insensitive contains filter on report name or file name.")] string name_filter = "",
             [Description("list: max records, 1-500. Default 50.")] int max_records = 50,
             [Description("add_dataset/update_dataset/delete_dataset: dataset name to create, update, or delete. Required for dataset actions.")] string dataset_name = "",
             [Description("add_dataset/update_dataset: simple FetchXML or a system view name. A view name also requires entity_name. Required for add_dataset/update_dataset; ignored by delete_dataset.")] string fetchxml = "",
             [Description("add_dataset/update_dataset: entity display/logical name required when fetchxml is a system view name; optional for direct FetchXML and validated when supplied.")] string entity_name = "",
-            [Description("create/download: local folder to save the .rdl into instead of the default .devkit/manage_report/downloads/{languageCode} folder. Relative paths resolve against the workspace folder. If the folder contains exactly one .rptproj, the saved .rdl is added to it as a Report item when missing.")] string output_folder = "")
+            [Description("create/download: local folder to save the .rdl into instead of the default folder (.devkit/manage_report/ for create, .devkit/manage_report/downloads/{languageCode}/ for download). Relative paths resolve against the workspace folder. If the folder contains exactly one .rptproj, the saved .rdl is added to it as a Report item when missing.")] string output_folder = "")
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(action))
-                    return Error("action is required.", "Valid values: 'list', 'detail', 'create', 'download', 'update', 'delete', 'add_dataset', 'update_dataset', 'delete_dataset'.");
+                    return Error("action is required.", "Valid values: 'list', 'detail', 'create', 'download', 'update', 'add_dataset', 'update_dataset', 'delete_dataset'.");
                 var normalizedAction = action.Trim().ToLowerInvariant();
                 var workspaceFolder = normalizedAction is "create" or "download" or "update" or "add_dataset" or "update_dataset" or "delete_dataset"
                     ? await WorkspaceFolderHelper.GetAsync(server)
@@ -92,13 +90,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "list" => HandleList(name_filter, solution_name, max_records),
                     "detail" => HandleDetail(report_id),
-                    "create" => await HandleCreate(file_path, name, description, language, solution_name, workspaceFolder, output_folder),
+                    "create" => await HandleCreate(file_path, name, workspaceFolder, output_folder),
                     "download" => await HandleDownload(report_id, workspaceFolder, output_folder),
-                    "update" => await HandleUpdate(report_id, file_path, description, workspaceFolder),
-                    "delete" => HandleDelete(report_id),
+                    "update" => await HandleUpdate(report_id, file_path, description, language, workspaceFolder),
                     "add_dataset" or "update_dataset" or "delete_dataset" =>
                         await HandleDatasetLocal(normalizedAction, file_path, dataset_name, fetchxml, entity_name, workspaceFolder),
-                    _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'create', 'download', 'update', 'delete', 'add_dataset', 'update_dataset', 'delete_dataset'.")
+                    _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'create', 'download', 'update', 'add_dataset', 'update_dataset', 'delete_dataset'.")
                 };
             }
             catch (Exception ex)
@@ -234,8 +231,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success($"Report '{entry.Name}' ({entry.ReportId}), language {entry.Language} ({entry.LanguageCode}).", structured);
         }
 
-        private async Task<CallToolResult> HandleCreate(string filePath, string name, string description,
-            string language, string solutionName, string workspaceFolder, string outputFolder)
+        private async Task<CallToolResult> HandleCreate(string filePath, string name, string workspaceFolder, string outputFolder)
         {
             string bodyText;
             string createSource;
@@ -260,61 +256,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 bodyText = await FileHelper.ReadAllTextAsync(resolvedPath);
                 createSource = "file";
             }
-            var languageCode = string.IsNullOrWhiteSpace(language)
-                ? McpHelper.GetBaseLanguageCode(_serviceClient)
-                : await new DeploymentService(_serviceClient).GetLanguageCodeAsync(language);
-            if (languageCode == null || languageCode <= 0)
-                return string.IsNullOrWhiteSpace(language)
-                    ? Error("Organization base language could not be resolved.",
-                             "Verify the Dataverse connection can read organization.languagecode, then retry the create operation.")
-                    : Error($"Language '{language}' not found.",
-                             "Provide a language name (e.g. 'English') or LCID (e.g. 1033) that is provisioned in the organization.");
-            var provisionedLanguageError = await ValidateProvisionedLanguageAsync(language, languageCode.Value);
-            if (provisionedLanguageError != null)
-                return provisionedLanguageError;
-            var fileName = string.IsNullOrWhiteSpace(filePath)
-                ? "ReportTemplate.rdl"
-                : Path.GetFileName(filePath.Trim());
             var reportName = !string.IsNullOrWhiteSpace(name)
                 ? name.Trim()
-                : (string.IsNullOrWhiteSpace(filePath) ? "Report Template" : Path.GetFileNameWithoutExtension(fileName));
-            var existing = await new DeploymentService(_serviceClient).GetReportsAsync(reportName, languageCode);
-            var duplicates = existing.Where(r => string.Equals(r.ReportName, reportName, StringComparison.OrdinalIgnoreCase)).ToList();
-            if (duplicates.Count > 0)
-                return Error($"Report name '{reportName}' already exists (ID: {duplicates[0].ReportId}, language {duplicates[0].Language}).",
-                             "Use action='update' to modify it, or provide a different name.");
+                : (string.IsNullOrWhiteSpace(filePath) ? "Report Template" : Path.GetFileNameWithoutExtension(filePath.Trim()));
+            var fileName = !string.IsNullOrWhiteSpace(filePath)
+                ? Path.GetFileName(filePath.Trim())
+                : (!string.IsNullOrWhiteSpace(name)
+                    ? FileColumnTransferHelper.SanitizeFolderName(reportName) + ".rdl"
+                    : "ReportTemplate.rdl");
             var useCustomOutputFolder = !string.IsNullOrWhiteSpace(outputFolder);
             var outputFolderPath = useCustomOutputFolder
                 ? ResolveFilePath(outputFolder, workspaceFolder)
-                : GetReportOutputFolder(workspaceFolder, languageCode.Value);
+                : Path.Combine(workspaceFolder, ".devkit", "manage_report");
             var savedFileName = FileColumnTransferHelper.SanitizeFolderName(reportName) + ".rdl";
             var outputPath = Path.Combine(outputFolderPath, savedFileName);
             if (File.Exists(outputPath))
                 return Error($"Local report file '{outputPath}' already exists.",
                              "Choose a different report name or remove the existing local file before creating the report.");
-            var solutionUniqueName = (string)null;
-            if (!string.IsNullOrWhiteSpace(solutionName))
-            {
-                var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
-                if (!solResult.IsSuccess)
-                    return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
-                solutionUniqueName = solResult.UniqueName;
-            }
-            var report = new Entity("report")
-            {
-                ["name"] = reportName,
-                ["filename"] = fileName,
-                ["bodytext"] = bodyText,
-                ["languagecode"] = languageCode.Value,
-                ["reporttypecode"] = new OptionSetValue(1),
-                ["ispersonal"] = false
-            };
-            if (!string.IsNullOrWhiteSpace(description))
-                report["description"] = description.Trim();
             var dryRunRptproj = useCustomOutputFolder ? SyncSingleRptProj(outputFolderPath, savedFileName, dryRun: true) : (null, null);
             if (_options.DryRun)
-                return DryRun($"Would CREATE report '{reportName}' (language {languageCode.Value}, source: {createSource})" +
-                    (solutionUniqueName != null ? $" and add it to solution '{solutionUniqueName}'." : ".") +
+                return DryRun($"Would CREATE local report file '{outputPath}' (source: {createSource}) — no Dataverse changes." +
                     RptprojSummarySuffix(dryRunRptproj), new ManageReportResult
                 {
                     Action = "create",
@@ -326,60 +287,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         {
                             Name = reportName,
                             FileName = fileName,
-                            LanguageCode = languageCode.Value,
-                            BodyTextSize = bodyText.Length,
-                            Description = NullIfEmpty(description)
+                            BodyTextSize = bodyText.Length
                         }
                     ],
-                    SolutionName = solutionUniqueName,
                     CreateMode = createSource,
-                    IsAddToSolution = solutionUniqueName != null,
-                    AddToSolutionMethod = solutionUniqueName != null ? "AddSolutionComponentRequest" : null,
                     RptprojPath = dryRunRptproj.RptProjPath,
                     RptprojStatus = dryRunRptproj.Status
                 });
-            var reportId = DataverseMutationExecutor.Create(_context, _serviceClient, report);
-            SolutionComponentCreateResult addResult = null;
-            if (solutionUniqueName != null)
-                addResult = SolutionComponentCreateHelper.AddExistingComponent(
-                    _context, _serviceClient,
-                    reportId,
-                    ReportComponentType,
-                    solutionUniqueName);
             Directory.CreateDirectory(outputFolderPath);
             await FileHelper.ForceWriteAllTextAsync(outputPath, bodyText);
             var sha256 = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(bodyText))).ToLowerInvariant();
             var rptproj = useCustomOutputFolder ? SyncSingleRptProj(outputFolderPath, savedFileName, dryRun: false) : (null, null);
-            var summary = $"Created report '{reportName}' ({reportId}) and downloaded to file (see savedPath): language={languageCode.Value}, source={createSource}" +
-                (solutionUniqueName == null
-                    ? "."
-                    : addResult.IsAddToSolution
-                        ? $", added to solution '{solutionUniqueName}'."
-                        : $". Not added to solution '{solutionUniqueName}' (see addToSolutionWarning).") +
+            var summary = $"[Success] Created local report file '{outputPath}' (source: {createSource}) — no Dataverse changes; deploy it with the VSIX report dialog or the CLI." +
                 RptprojSummarySuffix(rptproj);
             return Success(summary, new ManageReportResult
             {
                 Action = "created",
-                Status = "created_and_downloaded",
+                Status = "created_local",
                 TotalCount = 1,
                 Reports =
                 [
                     new ReportEntry
                     {
-                        ReportId = reportId.ToString(),
                         Name = reportName,
                         FileName = fileName,
-                        LanguageCode = languageCode.Value,
-                        IsManaged = false,
-                        BodyTextSize = bodyText.Length,
-                        Description = NullIfEmpty(description)
+                        BodyTextSize = bodyText.Length
                     }
                 ],
-                SolutionName = solutionUniqueName,
                 CreateMode = createSource,
-                IsAddToSolution = addResult?.IsAddToSolution ?? false,
-                AddToSolutionMethod = addResult?.AddToSolutionMethod,
-                AddToSolutionWarning = addResult?.AddToSolutionWarning,
                 SavedPath = outputPath,
                 Sha256 = sha256,
                 RptprojPath = rptproj.RptProjPath,
@@ -941,15 +876,56 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
         }
 
-        private async Task<CallToolResult> HandleUpdate(string reportId, string filePath, string description, string workspaceFolder)
+        private async Task<CallToolResult> HandleUpdate(string reportId, string filePath, string description, string language, string workspaceFolder)
         {
             if (string.IsNullOrWhiteSpace(reportId))
                 return Error("report_id is required for 'update'.",
                              "Use action='list' to find report IDs.");
-            var resolved = ResolveReportIdInput(reportId);
-            if (!string.IsNullOrEmpty(resolved.Error))
-                return Error(resolved.Error.Split("\r\n")[0], DiscoverReportsHint);
-            var id = resolved.Id.Value;
+            Guid id;
+            if (Guid.TryParse(reportId.Trim(), out var guid))
+            {
+                id = guid;
+            }
+            else
+            {
+                var languageCode = string.IsNullOrWhiteSpace(language)
+                    ? McpHelper.GetBaseLanguageCode(_serviceClient)
+                    : await new DeploymentService(_serviceClient).GetLanguageCodeAsync(language.Trim());
+                if (languageCode == null || languageCode <= 0)
+                    return string.IsNullOrWhiteSpace(language)
+                        ? Error("Organization base language could not be resolved.",
+                                 "Verify the Dataverse connection can read organization.languagecode, then retry the update operation.")
+                        : Error($"Language '{language}' not found.",
+                                 "Provide a language name (e.g. 'English') or LCID (e.g. 1033) that is provisioned in the organization.");
+                if (!string.IsNullOrWhiteSpace(language))
+                {
+                    var provisionedLanguageError = await ValidateProvisionedLanguageAsync(language, languageCode.Value);
+                    if (provisionedLanguageError != null)
+                        return provisionedLanguageError;
+                }
+                var safe = EscapeXml(reportId.Trim());
+                var fetch = "<fetch>\n" +
+                    "  <entity name='report'>\n" +
+                    "    <attribute name='reportid'/>\n" +
+                    "    <attribute name='name'/>\n" +
+                    "    <attribute name='filename'/>\n" +
+                    "    <attribute name='languagecode'/>\n" +
+                    "    <filter type='or'>\n" +
+                    $"      <condition attribute='name' operator='eq' value='{safe}'/>\n" +
+                    $"      <condition attribute='filename' operator='eq' value='{safe}'/>\n" +
+                    "    </filter>\n" +
+                    "  </entity>\n" +
+                    "</fetch>";
+                var candidates = _serviceClient.RetrieveMultiple(new FetchExpression(fetch)).Entities;
+                var matches = candidates.Where(r => r.GetAttributeValue<int?>("languagecode") == languageCode.Value).ToList();
+                if (matches.Count == 0)
+                    return Error($"Report '{reportId}' not found for language {languageCode.Value}.",
+                                 "Use action='list' to find report names and languages; pass language to target a non-base-language copy.");
+                if (matches.Count > 1)
+                    return Error($"Multiple reports match '{reportId}' for language {languageCode.Value}.",
+                                 "Use action='list' to get the report GUID and pass it as report_id.");
+                id = matches[0].Id;
+            }
             var existing = RetrieveById(id, new ColumnSet("reportid", "name", "filename", "languagecode", "ismanaged", "iscustomizable", "bodytext"));
             if (existing == null)
                 return Error($"Report '{reportId}' not found.",
@@ -1037,62 +1013,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             });
         }
 
-        private CallToolResult HandleDelete(string reportId)
-        {
-            if (string.IsNullOrWhiteSpace(reportId))
-                return Error("report_id is required for 'delete'.",
-                             "Use action='list' to find report IDs.");
-            var resolved = ResolveReportIdInput(reportId);
-            if (!string.IsNullOrEmpty(resolved.Error))
-                return Error(resolved.Error.Split("\r\n")[0], DiscoverReportsHint);
-            var id = resolved.Id.Value;
-            var existing = RetrieveById(id, new ColumnSet("reportid", "name", "filename", "languagecode", "ismanaged", "iscustomizable"));
-            if (existing == null)
-                return Error($"Report '{reportId}' not found.",
-                             "Use action='list' to find valid report IDs.");
-            var isManaged = existing.GetAttributeValue<bool?>("ismanaged");
-            var isCustomizable = existing.GetAttributeValue<BooleanManagedProperty>("iscustomizable");
-            if (isManaged == true && isCustomizable?.Value == false)
-                return Error($"Cannot delete report '{reportId}' — it is managed and not customizable.",
-                             "Only unmanaged reports can be deleted — use action='list' to find one (isManaged=false).");
-            var existingName = existing.GetAttributeValue<string>("name") ?? "";
-            if (_options.DryRun)
-                return DryRun($"Would DELETE report '{existingName}' ({id}).", new ManageReportResult
-                {
-                    Action = "delete",
-                    Status = "not_executed",
-                    TotalCount = 1,
-                    Reports =
-                    [
-                        new ReportEntry
-                        {
-                            ReportId = id.ToString(),
-                            Name = existingName,
-                            FileName = NullIfEmpty(existing.GetAttributeValue<string>("filename")),
-                            LanguageCode = existing.GetAttributeValue<int?>("languagecode"),
-                            IsManaged = isManaged ?? false
-                        }
-                    ]
-                });
-            DataverseMutationExecutor.Delete(_context, _serviceClient, "report", id);
-            return Success($"Deleted report '{existingName}' ({id}).", new ManageReportResult
-            {
-                Action = "deleted",
-                TotalCount = 1,
-                Reports =
-                [
-                    new ReportEntry
-                    {
-                        ReportId = id.ToString(),
-                        Name = existingName,
-                        FileName = NullIfEmpty(existing.GetAttributeValue<string>("filename")),
-                        LanguageCode = existing.GetAttributeValue<int?>("languagecode"),
-                        IsManaged = isManaged ?? false
-                    }
-                ]
-            });
-        }
-
         private Entity RetrieveById(Guid id, ColumnSet columnSet)
         {
             var query = new QueryExpression("report")
@@ -1157,6 +1077,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var languageFolder = FileColumnTransferHelper.SanitizeFolderName((languageCode ?? 1033).ToString());
             return Path.Combine(workspaceFolder, ".devkit", "manage_report", "downloads", languageFolder);
+        }
+
+        private static string GetReportOutputPath(string workspaceFolder, string reportName, int? languageCode)
+        {
+            var fileName = FileColumnTransferHelper.SanitizeFolderName(reportName) + ".rdl";
+            return Path.Combine(GetReportOutputFolder(workspaceFolder, languageCode), fileName);
         }
 
         private static readonly XNamespace MsBuildNamespace = "http://schemas.microsoft.com/developer/msbuild/2003";

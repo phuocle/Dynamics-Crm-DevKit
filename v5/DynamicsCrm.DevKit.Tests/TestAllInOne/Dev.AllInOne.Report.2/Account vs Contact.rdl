@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Description>Report Template</Description>
   <Author>DynamicsCrm.DevKit</Author>
@@ -36,7 +36,7 @@
         </Field>
       </Fields>
     </DataSet>
-  </DataSets>
+  <DataSet Name="Contact"><Query><DataSourceName>Dynamics365</DataSourceName><QueryParameters><QueryParameter Name="CRM_FilteredContact"><Value>=Parameters!CRM_FilteredContact.Value</Value></QueryParameter></QueryParameters><CommandText>&lt;fetch&gt;&lt;entity name="contact" enableprefiltering="1" prefilterparametername="CRM_FilteredContact"&gt;&lt;attribute name="fullname" /&gt;&lt;attribute name="emailaddress1" /&gt;&lt;attribute name="parentcustomerid" /&gt;&lt;attribute name="contactid" /&gt;&lt;/entity&gt;&lt;/fetch&gt;</CommandText></Query><Fields><Field Name="fullname" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner"><DataField>fullname</DataField><rd:TypeName>System.String</rd:TypeName></Field><Field Name="emailaddress1" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner"><DataField>emailaddress1</DataField><rd:TypeName>System.String</rd:TypeName></Field><Field Name="parentcustomerid" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner"><DataField>parentcustomerid</DataField><rd:TypeName>System.String</rd:TypeName></Field><Field Name="contactid" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner"><DataField>contactid</DataField><rd:TypeName>System.Guid</rd:TypeName></Field></Fields></DataSet></DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
@@ -333,7 +333,7 @@
       <Prompt>CRM_URL</Prompt>
       <Hidden>true</Hidden>
     </ReportParameter>
-  </ReportParameters>
+  <ReportParameter Name="CRM_FilteredContact"><DataType>String</DataType><DefaultValue><Values><Value>&lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&gt;&lt;entity name="contact"&gt;&lt;all-attributes /&gt;&lt;filter type="and"&gt;&lt;condition attribute="contactid" operator="not-null" /&gt;&lt;/filter&gt;&lt;/entity&gt;&lt;/fetch&gt;</Value></Values></DefaultValue><Prompt>CRM_FilteredContact</Prompt><Hidden>true</Hidden></ReportParameter></ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
       <NumberOfColumns>8</NumberOfColumns>
@@ -469,13 +469,13 @@
           <RowIndex>3</RowIndex>
           <ParameterName>CRM_URL</ParameterName>
         </CellDefinition>
-      </CellDefinitions>
+      <CellDefinition><ColumnIndex>3</ColumnIndex><RowIndex>3</RowIndex><ParameterName>CRM_FilteredContact</ParameterName></CellDefinition></CellDefinitions>
     </GridLayoutDefinition>
   </ReportParametersLayout>
   <CustomProperties>
     <CustomProperty>
       <Name>Custom</Name>
-      <Value>&lt;MSCRM xmlns="mscrm"&gt;&amp;lt;ReportFilter&amp;gt;&amp;lt;ReportEntity paramname="CRM_FilteredAccount" displayname="Accounts" donotconvert="1"&amp;gt;&amp;lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&amp;gt;&amp;lt;entity name="account"&amp;gt;&amp;lt;all-attributes/&amp;gt;&amp;lt;filter type="and"&amp;gt;&amp;lt;condition attribute="accountid" operator="not-null"/&amp;gt;&amp;lt;/filter&amp;gt;&amp;lt;/entity&amp;gt;&amp;lt;/fetch&amp;gt;&amp;lt;/ReportEntity&amp;gt;&amp;lt;/ReportFilter&amp;gt;&lt;/MSCRM&gt;</Value>
+      <Value>&lt;MSCRM xmlns="mscrm"&gt;&amp;lt;ReportFilter&amp;gt;&amp;lt;ReportEntity paramname="CRM_FilteredAccount" displayname="Accounts" donotconvert="1"&amp;gt;&amp;lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&amp;gt;&amp;lt;entity name="account"&amp;gt;&amp;lt;all-attributes /&amp;gt;&amp;lt;filter type="and"&amp;gt;&amp;lt;condition attribute="accountid" operator="not-null" /&amp;gt;&amp;lt;/filter&amp;gt;&amp;lt;/entity&amp;gt;&amp;lt;/fetch&amp;gt;&amp;lt;/ReportEntity&amp;gt;&amp;lt;ReportEntity paramname="CRM_FilteredContact" displayname="contact" donotconvert="1"&amp;gt;&amp;amp;lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&amp;amp;gt;&amp;amp;lt;entity name="contact"&amp;amp;gt;&amp;amp;lt;all-attributes /&amp;amp;gt;&amp;amp;lt;filter type="and"&amp;amp;gt;&amp;amp;lt;condition attribute="contactid" operator="not-null" /&amp;amp;gt;&amp;amp;lt;/filter&amp;amp;gt;&amp;amp;lt;/entity&amp;amp;gt;&amp;amp;lt;/fetch&amp;amp;gt;&amp;lt;/ReportEntity&amp;gt;&amp;lt;/ReportFilter&amp;gt;&lt;/MSCRM&gt;</Value>
     </CustomProperty>
   </CustomProperties>
   <Language>en-US</Language>

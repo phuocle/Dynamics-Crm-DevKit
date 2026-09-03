@@ -26,39 +26,39 @@
             <wpfcontrols:ExternalBrowserHyperlink NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/New-Report" Foreground="White">WIKI: New Report</wpfcontrols:ExternalBrowserHyperlink>
         </TextBlock>
     <StackPanel Margin="10">
-        <Border x:Name="ExistingReport" BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="0,0,0,10">
+        <Border x:Name="ExistingReport" BorderBrush="Gray" BorderThickness="1" Padding="10,15,10,10" Margin="0,0,0,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="110" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Label Grid.Row="0" Grid.Column="0" Content="File" VerticalAlignment="Center" />
-                <TextBox Grid.Row="0" Grid.Column="1" x:Name="textboxFile" IsReadOnly="True" Margin="0,0,0,5" />
-                <Label Grid.Row="1" Grid.Column="0" Content="Report" VerticalAlignment="Center" />
-                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="comboReports" DisplayMemberPath="DisplayReportName" Margin="0,0,0,5" SelectionChanged="ComboReports_SelectionChanged" />
+                <Label Grid.Row="0" Grid.Column="0" Content="File" Margin="0,0,0,5" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <TextBox Grid.Row="0" Grid.Column="1" x:Name="textboxFile" IsReadOnly="True" Margin="0,0,0,5" VerticalAlignment="Center" VerticalContentAlignment="Center" Padding="0,5,0,5" />
+                <Label Grid.Row="1" Grid.Column="0" Content="Report" Margin="0,0,0,5" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="comboReports" DisplayMemberPath="DisplayReportName" Margin="0,0,0,5" VerticalAlignment="Center" SelectionChanged="ComboReports_SelectionChanged" />
             </Grid>
         </Border>
-        <Border x:Name="NewReport" BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="0,0,0,10" Visibility="Collapsed">
+        <Border x:Name="NewReport" BorderBrush="Gray" BorderThickness="1" Padding="10,15,10,10" Margin="0,0,0,10" Visibility="Collapsed">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="110" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Label Grid.Row="0" Grid.Column="0" Content="Report name" VerticalAlignment="Center" />
-                <TextBox Grid.Row="0" Grid.Column="1" x:Name="textboxNewReportName" Margin="0,0,0,5" TextChanged="TextboxNewReportName_TextChanged" />
-                <Label Grid.Row="1" Grid.Column="0" Content="Language" VerticalAlignment="Center" />
-                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="comboLanguages" DisplayMemberPath="DisplayName" Margin="0,0,0,5" SelectionChanged="ComboLanguages_SelectionChanged" />
-                <Label Grid.Row="2" Grid.Column="0" Content="Solution" VerticalAlignment="Center" />
-                <ComboBox Grid.Row="2" Grid.Column="1" x:Name="comboSolutions" DisplayMemberPath="SolutionUniqueName" SelectionChanged="ComboSolutions_SelectionChanged" />
+                <Label Grid.Row="0" Grid.Column="0" Content="Report name" Margin="0,0,0,5" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <TextBox Grid.Row="0" Grid.Column="1" x:Name="textboxNewReportName" Margin="0,0,0,5" VerticalAlignment="Center" VerticalContentAlignment="Center" Padding="0,5,0,5" TextChanged="TextboxNewReportName_TextChanged" />
+                <Label Grid.Row="1" Grid.Column="0" Content="Language" Margin="0,0,0,5" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="comboLanguages" DisplayMemberPath="DisplayName" Margin="0,0,0,5" VerticalAlignment="Center" SelectionChanged="ComboLanguages_SelectionChanged" />
+                <Label Grid.Row="2" Grid.Column="0" Content="Solution" Margin="0,0,0,5" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <ComboBox Grid.Row="2" Grid.Column="1" x:Name="comboSolutions" DisplayMemberPath="SolutionUniqueName" Margin="0,0,0,5" VerticalAlignment="Center" SelectionChanged="ComboSolutions_SelectionChanged" />
             </Grid>
         </Border>
         <TextBlock x:Name="textStatus" Foreground="Red" Margin="5,0,5,8" Visibility="Collapsed" />

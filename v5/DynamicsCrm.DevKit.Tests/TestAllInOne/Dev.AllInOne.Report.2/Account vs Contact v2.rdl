@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Description>Report Template</Description>
   <Author>DynamicsCrm.DevKit</Author>
@@ -7,7 +7,7 @@
     <DataSource Name="Dynamics365">
       <ConnectionProperties>
         <DataProvider>MSCRMFETCH</DataProvider>
-        <ConnectString>https://disco.crm8.dynamics.com/;orga23aac6b</ConnectString>
+        <ConnectString>https://dynamics-crm-devkit-v4.crm.dynamics.com/;unq82131d861aa7f011870600224806e</ConnectString>
         <IntegratedSecurity>true</IntegratedSecurity>
       </ConnectionProperties>
       <rd:SecurityType>Integrated</rd:SecurityType>
@@ -64,22 +64,14 @@
     <ReportParameter Name="CRM_FullName">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value>Prakas Omer</Value>
-        </Values>
-      </DefaultValue>
+      
       <AllowBlank>true</AllowBlank>
       <Prompt>CRM_FullName</Prompt>
       <Hidden>true</Hidden>
     </ReportParameter>
     <ReportParameter Name="CRM_UserTimeZoneName">
       <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>N. Central Asia Standard Time</Value>
-        </Values>
-      </DefaultValue>
+      
       <AllowBlank>true</AllowBlank>
       <Prompt>CRM_UserTimeZoneName</Prompt>
       <Hidden>true</Hidden>
@@ -87,9 +79,7 @@
     <ReportParameter Name="CRM_UILanguageId">
       <DataType>Integer</DataType>
       <DefaultValue>
-        <Values>
-          <Value>1033</Value>
-        </Values>
+        <Values><Value>1033</Value></Values>
       </DefaultValue>
       <Prompt>CRM_UILanguageId</Prompt>
       <Hidden>true</Hidden>
@@ -325,9 +315,7 @@
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <DefaultValue>
-        <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
-        </Values>
+        <Values><Value>https://dynamics-crm-devkit-v4.crm.dynamics.com</Value></Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
       <Prompt>CRM_URL</Prompt>
