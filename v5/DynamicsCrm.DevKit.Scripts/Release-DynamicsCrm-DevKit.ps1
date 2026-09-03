@@ -174,6 +174,28 @@ function Clear-VsixGeneratedOutputs {
     }
 }
 
+function Assert-VsixTemplateContent {
+    param ([string]$VsixPath)
+
+    if (-not (Test-Path $VsixPath)) {
+        throw "VSIX file not found for template validation: $VsixPath"
+    }
+
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    $archive = [System.IO.Compression.ZipFile]::OpenRead($VsixPath)
+    try {
+        $projectTemplates = @($archive.Entries | Where-Object { $_.FullName -like "ProjectTemplates/*.vstemplate" })
+        $itemTemplates = @($archive.Entries | Where-Object { $_.FullName -like "ItemTemplates/*.vstemplate" })
+
+        if ($projectTemplates.Count -ne 13 -or $itemTemplates.Count -ne 16) {
+            throw "VSIX template validation failed. Expected 13 project templates and 16 item templates; found $($projectTemplates.Count) project templates and $($itemTemplates.Count) item templates."
+        }
+    }
+    finally {
+        $archive.Dispose()
+    }
+}
+
 function Stop-DevKitProcesses {
     Write-Host "Killing running CLI/devkit processes (MCP server)..." -ForegroundColor Yellow
     $killed = 0
@@ -314,6 +336,7 @@ try {
 
     & $msbuild $vsixBuildArgs
     if ($LASTEXITCODE -ne 0) { throw "VSIX Project Build failed with exit code $LASTEXITCODE" }
+    Assert-VsixTemplateContent -VsixPath (Join-Path $ProjectRoot "DynamicsCrm.DevKit\bin\$Configuration\DynamicsCrm.DevKit.vsix")
     Write-Host "VSIX Project Build Success." -ForegroundColor Green
 
     Write-Host "`nCreating NuGet Packages..." -ForegroundColor Yellow

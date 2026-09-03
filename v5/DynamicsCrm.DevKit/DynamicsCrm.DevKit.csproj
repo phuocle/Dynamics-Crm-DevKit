@@ -496,6 +496,20 @@
   <Target Name="CopySharedIcon" BeforeTargets="BeforeBuild">
     <Copy SourceFiles="..\images\icon.png" DestinationFiles="$(MSBuildProjectDirectory)\icon32.png" />
   </Target>
+  <Target Name="IncludeTemplateArchivesInVsix" AfterTargets="GetVsixSourceItems" BeforeTargets="GenerateFileManifest">
+    <!-- MSBuild 18 no longer carries TemplateProjectOutputGroup outputs from legacy project
+         references into VSIXSourceItem. Include only the archive produced by each template project. -->
+    <ItemGroup>
+      <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\*\bin\$(Configuration)\ProjectTemplates\**\*.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\*\bin\$(Configuration)\ItemTemplates\**\*.zip" />
+      <VSIXSourceItem Include="@(_ProjectTemplateArchive)">
+        <VSIXSubPath>ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033</VSIXSubPath>
+      </VSIXSourceItem>
+      <VSIXSourceItem Include="@(_ItemTemplateArchive)">
+        <VSIXSubPath>ItemTemplates\CSharp\DynamicsCrm.DevKit\1033</VSIXSubPath>
+      </VSIXSourceItem>
+    </ItemGroup>
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
