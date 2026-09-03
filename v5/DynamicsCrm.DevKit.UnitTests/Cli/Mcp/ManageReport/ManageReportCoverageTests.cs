@@ -126,6 +126,58 @@ public sealed class ManageReportCoverageTests
     }
 
     [TestMethod]
+    public void ReportEntryAndParameterHelpers_MapAndMutateExpectedValues()
+    {
+        var id = Guid.NewGuid();
+        var entity = new Entity("report", id)
+        {
+            ["name"] = " Quarterly report ",
+            ["filename"] = " quarterly.rdl ",
+            ["languagecode"] = 1033,
+            ["ismanaged"] = true,
+            ["modifiedon"] = new DateTime(2026, 8, 31, 11, 12, 13),
+            ["modifiedby"] = new EntityReference("systemuser", Guid.NewGuid()) { Name = "Jane" },
+            ["l.language"] = new AliasedValue("languagelocale", "language", "English")
+        };
+        var entry = InvokeStatic("MapEntry", entity);
+        Assert.AreEqual(id.ToString(), entry.GetType().GetProperty("ReportId")!.GetValue(entry));
+        Assert.AreEqual("quarterly.rdl", entry.GetType().GetProperty("FileName")!.GetValue(entry));
+        Assert.AreEqual("2026-08-31 11:12:13", entry.GetType().GetProperty("ModifiedOn")!.GetValue(entry));
+
+        var ns = XNamespace.Get("urn:rdl");
+        var parameter = new XElement(ns + "ReportParameter");
+        InvokeStatic("SetReportParameterDefault", parameter, "1033");
+        InvokeStatic("SetReportParameterDefault", parameter, "1041");
+        Assert.AreEqual("1041", parameter.Descendants(ns + "Value").Single().Value);
+        InvokeStatic("SetReportParameterDefault", null!, "ignored");
+    }
+
+    [TestMethod]
+    public void DatasetActionValidation_CoversRdlStructureErrors()
+    {
+        var tool = CreateTool();
+        var basePath = Path.Combine(Path.GetTempPath(), "devkit-report-" + Guid.NewGuid().ToString("N"));
+        try
+        {
+            var nonRdl = basePath + ".txt";
+            var malformed = basePath + ".rdl";
+            File.WriteAllText(malformed, "<Report");
+            Assert.IsTrue(((CallToolResult)InvokeTask(tool, "HandleDatasetLocal", "add_dataset", nonRdl, "Data", "<fetch />", "", Path.GetTempPath())).Contains("not an .rdl"));
+            Assert.IsTrue(((CallToolResult)InvokeTask(tool, "HandleDatasetLocal", "add_dataset", malformed, "Data", "<fetch />", "", Path.GetTempPath())).Contains("not well-formed XML"));
+
+            File.WriteAllText(malformed, "<root />");
+            Assert.IsTrue(((CallToolResult)InvokeTask(tool, "HandleDatasetLocal", "add_dataset", malformed, "Data", "<fetch />", "", Path.GetTempPath())).Contains("not a valid RDL"));
+            File.WriteAllText(malformed, "<Report xmlns='urn:rdl' />");
+            Assert.IsTrue(((CallToolResult)InvokeTask(tool, "HandleDatasetLocal", "add_dataset", malformed, "Data", "<fetch />", "", Path.GetTempPath())).Contains("no DataSets container"));
+        }
+        finally
+        {
+            var candidate = basePath + ".rdl";
+            if (File.Exists(candidate)) File.Delete(candidate);
+        }
+    }
+
+    [TestMethod]
     public async Task PublicAndLocalActionValidation_ReturnsActionableErrors()
     {
         var tool = CreateTool();

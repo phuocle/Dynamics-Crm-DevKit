@@ -72,6 +72,46 @@ public sealed class GetTablesAdditionalCoverageTests
         Assert.AreEqual(1, matches.Count);
     }
 
+    [TestMethod]
+    public void BuildAttribute_CoversMetadataDetailSwitchVariants()
+    {
+        AttributeMetadata[] attributes =
+        {
+            new MemoAttributeMetadata { LogicalName = "memo", MaxLength = 200 },
+            new IntegerAttributeMetadata { LogicalName = "whole", MinValue = -2, MaxValue = 9 },
+            new BigIntAttributeMetadata { LogicalName = "big" },
+            new DecimalAttributeMetadata { LogicalName = "decimal", MinValue = 0m, MaxValue = 99m, Precision = 2 },
+            new DoubleAttributeMetadata { LogicalName = "double", MinValue = 0, MaxValue = 10, Precision = 3 },
+            new MoneyAttributeMetadata { LogicalName = "money", MinValue = 0, MaxValue = 100, Precision = 2 },
+            new DateTimeAttributeMetadata { LogicalName = "when" },
+            new BooleanAttributeMetadata { LogicalName = "flag" },
+            new LookupAttributeMetadata { LogicalName = "owner", Targets = new[] { "systemuser", "team" } },
+            new ImageAttributeMetadata { LogicalName = "image" },
+            new FileAttributeMetadata { LogicalName = "file", MaxSizeInKB = 512 }
+        };
+
+        foreach (var attribute in attributes)
+        {
+            attribute.SchemaName = attribute.LogicalName;
+            Assert.IsNotNull(InvokeStatic("BuildAttribute", "account", attribute, "full"));
+        }
+
+        var optionSet = new OptionSetMetadata
+        {
+            IsGlobal = true,
+            Name = "new_choices",
+            Options =
+            {
+                new OptionMetadata(new Microsoft.Xrm.Sdk.Label("Two", 1033), 2) { Color = "#222222" },
+                new OptionMetadata(new Microsoft.Xrm.Sdk.Label("One", 1033), 1)
+            }
+        };
+        var picklist = new PicklistAttributeMetadata { LogicalName = "choice", OptionSet = optionSet, DefaultFormValue = -1 };
+        Assert.IsNotNull(InvokeStatic("BuildAttribute", "account", picklist, "standard"));
+        var multi = new MultiSelectPicklistAttributeMetadata { LogicalName = "choices", OptionSet = optionSet };
+        Assert.IsNotNull(InvokeStatic("BuildAttribute", "account", multi, "full"));
+    }
+
     private static object InvokeStatic(string methodName, params object?[] args) =>
         ToolType.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Static)!.Invoke(null, args)!;
 

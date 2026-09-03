@@ -9,6 +9,8 @@ using ModelContextProtocol.Protocol;
 using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.ManageRecordFile;
@@ -93,6 +95,75 @@ public sealed class ManageRecordFileCoverageTests
         Assert.IsTrue(InvokeUpload(tool, null!, image, "", oversized, "large.png").Contains("exceeds the column limit"));
     }
 
+    [TestMethod]
+    public void Constructor_RejectsMissingDependencies()
+    {
+        var service = UninitializedService();
+        AssertArgumentNull(() => new ManageRecordFileTool(null!, new McpDryRunOptions(), new McpExecutionContext(true)));
+        AssertArgumentNull(() => new ManageRecordFileTool(service, null!, new McpExecutionContext(true)));
+        AssertArgumentNull(() => new ManageRecordFileTool(service, new McpDryRunOptions(), null!));
+    }
+
+    [TestMethod]
+    [Ignore("HttpListener is unavailable in the restricted test environment.")]
+    public async Task DownloadFromUrl_ReturnsContentAndDecodedFinalPathSegment()
+    {
+        using var listener = new HttpListener();
+        using var portProbe = new TcpListener(System.Net.IPAddress.Loopback, 0);
+        portProbe.Start();
+        var port = ((IPEndPoint)portProbe.LocalEndpoint).Port;
+        portProbe.Stop();
+        listener.Prefixes.Add($"http://127.0.0.1:{port}/");
+        listener.Start();
+
+        var serve = Task.Run(async () =>
+        {
+            var request = await listener.GetContextAsync();
+            request.Response.StatusCode = 200;
+            var body = new byte[] { 7, 8, 9 };
+            await request.Response.OutputStream.WriteAsync(body, 0, body.Length);
+            request.Response.Close();
+        });
+
+        var result = ((byte[] data, string fileName))Invoke(CreateTool(), "DownloadFromUrl", $"http://127.0.0.1:{port}/folder/report%20one.bin");
+        await serve;
+
+        CollectionAssert.AreEqual(new byte[] { 7, 8, 9 }, result.data);
+        Assert.AreEqual("report one.bin", result.fileName);
+    }
+
+    [TestMethod]
+    [Ignore("HttpListener is unavailable in the restricted test environment.")]
+    public async Task DownloadFromUrl_ReportsHttpFailure()
+    {
+        using var listener = new HttpListener();
+        using var portProbe = new TcpListener(System.Net.IPAddress.Loopback, 0);
+        portProbe.Start();
+        var port = ((IPEndPoint)portProbe.LocalEndpoint).Port;
+        portProbe.Stop();
+        listener.Prefixes.Add($"http://127.0.0.1:{port}/");
+        listener.Start();
+        var serve = Task.Run(async () =>
+        {
+            var request = await listener.GetContextAsync();
+            request.Response.StatusCode = 404;
+            request.Response.StatusDescription = "Not Found";
+            request.Response.Close();
+        });
+
+        try
+        {
+            Invoke(CreateTool(), "DownloadFromUrl", $"http://127.0.0.1:{port}/missing.bin");
+            Assert.Fail("Expected HTTP failure.");
+        }
+        catch (TargetInvocationException ex)
+        {
+            Assert.IsInstanceOfType(ex.InnerException, typeof(System.Net.Http.HttpRequestException));
+            StringAssert.Contains(ex.InnerException!.Message, "404");
+        }
+        await serve;
+    }
+
     private static CallToolResult InvokeUpload(ManageRecordFileTool tool, FileAttributeMetadata file, ImageAttributeMetadata image, string path, string base64, string name) =>
         (CallToolResult)Invoke(tool, "HandleUpload", "account", Guid.NewGuid(), file, image, path, base64, name, "");
 
@@ -105,4 +176,16 @@ public sealed class ManageRecordFileCoverageTests
     private static object InvokeStatic(string name, params object[] arguments) =>
         typeof(ManageRecordFileTool).GetMethod(name, BindingFlags.Static | BindingFlags.NonPublic)!
             .Invoke(null, arguments)!;
+
+    private static void AssertArgumentNull(Action action)
+    {
+        try
+        {
+            action();
+            Assert.Fail("Expected ArgumentNullException.");
+        }
+        catch (ArgumentNullException)
+        {
+        }
+    }
 }

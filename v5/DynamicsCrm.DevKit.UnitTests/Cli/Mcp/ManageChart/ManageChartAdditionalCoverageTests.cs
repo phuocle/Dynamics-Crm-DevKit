@@ -4,7 +4,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.ManageChart;
 
@@ -65,6 +67,59 @@ public sealed class ManageChartAdditionalCoverageTests
         {
             if (File.Exists(path)) File.Delete(path);
         }
+    }
+
+    [TestMethod]
+    public void TemplateAndPresentationBuilders_CoverAllSupportedTemplates()
+    {
+        var supportedTypes = new[] { "Column", "Bar", "Line", "Pie", "Doughnut", "Donut", "Funnel", "Area", "Bubble", "Radar", "unknown" };
+        foreach (var chartType in supportedTypes)
+        {
+            var xml = InvokeStatic<string>("LoadChartTemplateXml", chartType);
+            var doc = XDocument.Parse(xml);
+            Assert.AreEqual("Chart", doc.Root!.Name.LocalName, chartType);
+            Assert.IsNotNull(InvokeStatic<string>("BuildPresentationDescription", chartType, "My chart", "aggregate_column"));
+        }
+
+        Assert.IsNull(InvokeStatic("ReadChartTemplateXml", "does-not-exist"));
+    }
+
+    [TestMethod]
+    public void MultiSeriesPresentationAndDataDescription_UseSeriesAliasesAndFilters()
+    {
+        var parsed = InvokeStatic("ParseMeasures", "revenue:sum:Revenue;count:count");
+        var measures = (IList)parsed.GetType().GetField("Item1")!.GetValue(parsed)!;
+        var filtersTuple = InvokeStatic("ParseFilter", "name like A&B; statecode!=1");
+        var filters = (IList)filtersTuple.GetType().GetField("Item1")!.GetValue(filtersTuple)!;
+
+        var multiXml = InvokeStatic<string>("BuildPresentationDescriptionMulti", "Column", measures);
+        var multiDoc = XDocument.Parse(multiXml);
+        Assert.AreEqual(2, multiDoc.Descendants("Series").Count(s => s.Attribute("Name") != null));
+        Assert.IsNotNull(multiDoc.Descendants("Legend").FirstOrDefault());
+
+        var data = InvokeStatic("BuildDataDescriptionMulti", "account", "statecode", measures, filters);
+        var dataXml = (string)data.GetType().GetField("Item1")!.GetValue(data)!;
+        StringAssert.Contains(dataXml, "aggregate_column_1");
+        StringAssert.Contains(dataXml, "A&amp;B");
+
+        var missingGroup = InvokeStatic("BuildDataDescriptionMulti", "account", "", measures, null!);
+        Assert.IsNotNull(missingGroup);
+    }
+
+    [TestMethod]
+    public void DataDescriptionAndValidation_CoverRemainingBranches()
+    {
+        var missingEntity = InvokeStatic("BuildDataDescriptionFromEntity", "", "statecode", "count", "count", null!);
+        var missingCategory = InvokeStatic("BuildDataDescriptionFromEntity", "account", "", "count", "count", null!);
+        var missingLegend = InvokeStatic("BuildDataDescriptionFromEntity", "account", "statecode", "", "count", null!);
+        Assert.IsNotNull(missingEntity);
+        Assert.IsNotNull(missingCategory);
+        Assert.IsNotNull(missingLegend);
+
+        var warnings = InvokeStatic("ValidateChartXmls", "<datadefinition />", "<Chart><Series ChartType='Pie' /></Chart>");
+        Assert.AreEqual(0, ((IList)warnings.GetType().GetField("Item1")!.GetValue(warnings)!).Count);
+        Assert.IsNull(InvokeStatic<string>("ResolveXmlInput", new object?[] { null }));
+        Assert.AreEqual("", InvokeStatic<string>("ResolveXmlInput", ""));
     }
 
     private static object InvokeStatic(string methodName, params object?[] args) =>
