@@ -48,18 +48,41 @@ public sealed class ManageReportCoverageTests
         Assert.AreEqual("__DATASET_NAME__", (string)dataSet.Attribute("Name"));
         Assert.AreEqual("Dynamics365", (string)dataSet.Element(ns + "Query")!.Element(ns + "DataSourceName"));
         Assert.AreEqual("account.name", (string)dataSet.Element(ns + "Fields")!.Element(ns + "Field")!.Attribute("Name"));
-        Assert.AreEqual("System.Boolean", InvokeStatic("GetRdlTypeName", AttributeTypeCode.Boolean));
-        Assert.AreEqual("System.DateTime", InvokeStatic("GetRdlTypeName", AttributeTypeCode.DateTime));
-        Assert.AreEqual("System.Decimal", InvokeStatic("GetRdlTypeName", AttributeTypeCode.Decimal));
-        Assert.AreEqual("System.Decimal", InvokeStatic("GetRdlTypeName", AttributeTypeCode.Money));
-        Assert.AreEqual("System.Double", InvokeStatic("GetRdlTypeName", AttributeTypeCode.Double));
-        Assert.AreEqual("System.Int32", InvokeStatic("GetRdlTypeName", AttributeTypeCode.Integer));
-        Assert.AreEqual("System.Int32", InvokeStatic("GetRdlTypeName", AttributeTypeCode.Picklist));
-        Assert.AreEqual("System.Int32", InvokeStatic("GetRdlTypeName", AttributeTypeCode.State));
-        Assert.AreEqual("System.Int32", InvokeStatic("GetRdlTypeName", AttributeTypeCode.Status));
-        Assert.AreEqual("System.Int64", InvokeStatic("GetRdlTypeName", AttributeTypeCode.BigInt));
-        Assert.AreEqual("System.Guid", InvokeStatic("GetRdlTypeName", AttributeTypeCode.Uniqueidentifier));
-        Assert.AreEqual("System.String", InvokeStatic("GetRdlTypeName", (object)null!));
+        Assert.AreEqual("System.Boolean", InvokeStatic("GetRdlValueTypeName", AttributeTypeCode.Boolean));
+        Assert.AreEqual("System.DateTime", InvokeStatic("GetRdlValueTypeName", AttributeTypeCode.DateTime));
+        Assert.AreEqual("System.Decimal", InvokeStatic("GetRdlValueTypeName", AttributeTypeCode.Decimal));
+        Assert.AreEqual("System.Decimal", InvokeStatic("GetRdlValueTypeName", AttributeTypeCode.Money));
+        Assert.AreEqual("System.Double", InvokeStatic("GetRdlValueTypeName", AttributeTypeCode.Double));
+        Assert.AreEqual("System.Int32", InvokeStatic("GetRdlValueTypeName", AttributeTypeCode.Integer));
+        Assert.AreEqual("System.Int32", InvokeStatic("GetRdlValueTypeName", AttributeTypeCode.Picklist));
+        Assert.AreEqual("System.Int32", InvokeStatic("GetRdlValueTypeName", AttributeTypeCode.State));
+        Assert.AreEqual("System.Int32", InvokeStatic("GetRdlValueTypeName", AttributeTypeCode.Status));
+        Assert.AreEqual("System.Int64", InvokeStatic("GetRdlValueTypeName", AttributeTypeCode.BigInt));
+        Assert.AreEqual("System.Guid", InvokeStatic("GetRdlValueTypeName", AttributeTypeCode.Lookup));
+        Assert.AreEqual("System.Guid", InvokeStatic("GetRdlValueTypeName", AttributeTypeCode.Customer));
+        Assert.AreEqual("System.Guid", InvokeStatic("GetRdlValueTypeName", AttributeTypeCode.Owner));
+        Assert.IsNull(InvokeStatic("GetRdlValueTypeName", AttributeTypeCode.Uniqueidentifier));
+        Assert.IsNull(InvokeStatic("GetRdlValueTypeName", AttributeTypeCode.String));
+        Assert.IsNull(InvokeStatic("GetRdlValueTypeName", AttributeTypeCode.Memo));
+        Assert.IsNull(InvokeStatic("GetRdlValueTypeName", (object)null!));
+
+        var rd = XNamespace.Get("http://schemas.microsoft.com/SQLServer/reporting/reportdesigner");
+        var stringFields = (List<XElement>)InvokeStatic("CreateRdlFields", ns, "name", AttributeTypeCode.String);
+        Assert.AreEqual(1, stringFields.Count);
+        Assert.AreEqual("System.String", (string)stringFields[0].Element(rd + "TypeName")!);
+
+        var lookupFields = (List<XElement>)InvokeStatic("CreateRdlFields", ns, "ownerid", AttributeTypeCode.Owner);
+        Assert.AreEqual(3, lookupFields.Count);
+        Assert.AreEqual("ownerid", (string)lookupFields[0].Attribute("Name"));
+        Assert.AreEqual("owneridValue", (string)lookupFields[1].Attribute("Name"));
+        Assert.AreEqual("System.Guid", (string)lookupFields[1].Element(rd + "TypeName")!);
+        Assert.AreEqual("owneridEntityName", (string)lookupFields[2].Attribute("Name"));
+        Assert.AreEqual("System.String", (string)lookupFields[2].Element(rd + "TypeName")!);
+
+        Assert.IsTrue((bool)InvokeStatic("IsUnsupportedReportAttribute", new MultiSelectPicklistAttributeMetadata()));
+        Assert.IsTrue((bool)InvokeStatic("IsUnsupportedReportAttribute", new FileAttributeMetadata()));
+        Assert.IsTrue((bool)InvokeStatic("IsUnsupportedReportAttribute", new ImageAttributeMetadata()));
+        Assert.IsFalse((bool)InvokeStatic("IsUnsupportedReportAttribute", new StringAttributeMetadata()));
     }
 
     [TestMethod]

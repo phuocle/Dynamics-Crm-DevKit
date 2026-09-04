@@ -113,7 +113,7 @@
             "SolutionUniqueName": "all_in_one"
         }
     ],
-    "Reports": [
+            "Reports": [
         {
             "File": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Report.2\\Account and Contact Reports.rdl",
             "ReportId": "a08f2cb0-85a7-f111-aaab-6045bd01c905",

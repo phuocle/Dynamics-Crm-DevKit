@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:am="http://schemas.microsoft.com/sqlserver/reporting/authoringmetadata">
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Description>Report Template</Description>
-  <am:AuthoringMetadata>
-    <am:CreatedBy>
-      <am:Name>SSDTRS</am:Name>
-      <am:Version>18.8.12105.206</am:Version>
-    </am:CreatedBy>
-    <am:UpdatedBy>
-      <am:Name>SSDTRS</am:Name>
-      <am:Version>18.8.12105.206</am:Version>
-    </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-09-03T10:49:36.2843487Z</am:LastModifiedTimestamp>
-  </am:AuthoringMetadata>
   <Author>DynamicsCrm.DevKit</Author>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -26,24 +15,53 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="Account">
+    <DataSet Name="AllInOne">
       <Query>
         <DataSourceName>Dynamics365</DataSourceName>
         <QueryParameters>
-          <QueryParameter Name="CRM_FilteredAccount">
-            <Value>=Parameters!CRM_FilteredAccount.Value</Value>
+          <QueryParameter Name="CRM_FilteredAllInOne">
+            <Value>=Parameters!CRM_FilteredAllInOne.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>&lt;fetch distinct="false" no-lock="false" mapping="logical"&gt;&lt;entity name="account" enableprefiltering="1" prefilterparametername="CRM_FilteredAccount"&gt;&lt;attribute name="name" alias="name" /&gt;&lt;attribute name="accountid" /&gt;&lt;/entity&gt;&lt;/fetch&gt;</CommandText>
+        <CommandText>&lt;fetch distinct="false" no-lock="false" mapping="logical"&gt;&lt;entity name="all_in_one" enableprefiltering="1" prefilterparametername="CRM_FilteredAllInOne"&gt;&lt;attribute name="all_in_oneid" /&gt;&lt;attribute name="all_name" /&gt;&lt;attribute name="ownerid" /&gt;&lt;attribute name="all_39powerfx" /&gt;&lt;attribute name="all_40calculated" /&gt;&lt;attribute name="all_41rollup" /&gt;&lt;/entity&gt;&lt;/fetch&gt;</CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
-        <Field Name="name">
-          <DataField>name</DataField>
+        <Field Name="all_in_oneid">
+          <DataField>all_in_oneid</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="accountid">
-          <DataField>accountid</DataField>
+        <Field Name="all_name">
+          <DataField>all_name</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ownerid">
+          <DataField>ownerid</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="owneridValue">
+          <DataField>owneridValue</DataField>
+          <rd:TypeName>System.Guid</rd:TypeName>
+        </Field>
+        <Field Name="owneridEntityName">
+          <DataField>owneridEntityName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="all_39powerfx">
+          <DataField>all_39powerfx</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="all_40calculated">
+          <DataField>all_40calculated</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="all_41rollup">
+          <DataField>all_41rollup</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="all_41rollupValue">
+          <DataField>all_41rollupValue</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -52,25 +70,28 @@
     <ReportSection>
       <Body>
         <ReportItems>
-          <Textbox Name="Textbox1">
+          <Textbox Name="Title">
             <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>ABCD</Value>
-                    <Style />
+                    <Value>All In One Report</Value>
+                    <Style>
+                      <FontSize>16pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>3.8106cm</Top>
-            <Left>5.97263cm</Left>
-            <Height>0.6cm</Height>
-            <Width>2.5cm</Width>
+            <rd:DefaultName>Title</rd:DefaultName>
+            <Top>0.5cm</Top>
+            <Left>0.5cm</Left>
+            <Height>1cm</Height>
+            <Width>10cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -81,6 +102,391 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Tablix Name="Tablix1">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>3.8cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>3.8cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>3.8cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>3.8cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>3.8cm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="NameHeader">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Name</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>NameHeader</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>LightGrey</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="OwnerHeader">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Owner</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>OwnerHeader</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>LightGrey</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="PowerFxHeader">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>PowerFx</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>PowerFxHeader</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>LightGrey</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="CalculatedHeader">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Calculated</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>CalculatedHeader</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>LightGrey</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="RollupHeader">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Rollup</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>RollupHeader</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>LightGrey</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="all_name">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!all_name.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>all_name</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="ownerid">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!ownerid.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>ownerid</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="all_39powerfx">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!all_39powerfx.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>all_39powerfx</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="all_40calculated">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!all_40calculated.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>all_40calculated</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="all_41rollup">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!all_41rollup.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>all_41rollup</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember>
+                  <Group Name="Details">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!all_in_oneid.Value</GroupExpression>
+                    </GroupExpressions>
+                  </Group>
+                  <SortExpressions>
+                    <SortExpression>
+                      <Value>=Fields!all_name.Value</Value>
+                    </SortExpression>
+                  </SortExpressions>
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>AllInOne</DataSetName>
+            <Top>1.8cm</Top>
+            <Left>0.5cm</Left>
+            <Height>1.2cm</Height>
+            <Width>19cm</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
         </ReportItems>
         <Height>27.7cm</Height>
         <Style>
@@ -89,7 +495,7 @@
           </Border>
         </Style>
       </Body>
-      <Width>19cm</Width>
+      <Width>19.5cm</Width>
       <Page>
         <PageHeight>29.7cm</PageHeight>
         <PageWidth>21cm</PageWidth>
@@ -106,12 +512,22 @@
     <ReportParameter Name="CRM_FullName">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value />
+        </Values>
+      </DefaultValue>
       <AllowBlank>true</AllowBlank>
       <Prompt>CRM_FullName</Prompt>
       <Hidden>true</Hidden>
     </ReportParameter>
     <ReportParameter Name="CRM_UserTimeZoneName">
       <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value />
+        </Values>
+      </DefaultValue>
       <AllowBlank>true</AllowBlank>
       <Prompt>CRM_UserTimeZoneName</Prompt>
       <Hidden>true</Hidden>
@@ -343,14 +759,14 @@
       <Prompt>CRM_FilterText</Prompt>
       <Hidden>true</Hidden>
     </ReportParameter>
-    <ReportParameter Name="CRM_FilteredAccount">
+    <ReportParameter Name="CRM_FilteredAllInOne">
       <DataType>String</DataType>
       <DefaultValue>
         <Values>
-          <Value>&lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&gt;&lt;entity name="account"&gt;&lt;all-attributes/&gt;&lt;/entity&gt;&lt;/fetch&gt;</Value>
+          <Value>&lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&gt;&lt;entity name="all_in_one"&gt;&lt;all-attributes/&gt;&lt;/entity&gt;&lt;/fetch&gt;</Value>
         </Values>
       </DefaultValue>
-      <Prompt>CRM_FilteredAccount</Prompt>
+      <Prompt>CRM_FilteredAllInOne</Prompt>
       <Hidden>true</Hidden>
     </ReportParameter>
     <ReportParameter Name="CRM_URL">
@@ -494,12 +910,12 @@
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>3</RowIndex>
-          <ParameterName>CRM_FilteredAccount</ParameterName>
+          <ParameterName>CRM_URL</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
           <RowIndex>3</RowIndex>
-          <ParameterName>CRM_URL</ParameterName>
+          <ParameterName>CRM_FilteredAllInOne</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>
@@ -507,7 +923,7 @@
   <CustomProperties>
     <CustomProperty>
       <Name>Custom</Name>
-      <Value>&lt;MSCRM xmlns="mscrm"&gt;&amp;lt;ReportFilter&amp;gt;&amp;lt;ReportEntity paramname="CRM_FilteredAccount" displayname="Accounts" donotconvert="1"&amp;gt;&amp;lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&amp;gt;&amp;lt;entity name="account"&amp;gt;&amp;lt;all-attributes/&amp;gt;&amp;lt;filter type="and"&amp;gt;&amp;lt;condition attribute="accountid" operator="not-null"/&amp;gt;&amp;lt;/filter&amp;gt;&amp;lt;/entity&amp;gt;&amp;lt;/fetch&amp;gt;&amp;lt;/ReportEntity&amp;gt;&amp;lt;/ReportFilter&amp;gt;&lt;/MSCRM&gt;</Value>
+      <Value>&lt;MSCRM xmlns="mscrm"&gt;&amp;lt;ReportFilter&amp;gt;&amp;lt;ReportEntity paramname="CRM_FilteredAllInOne" displayname="All In Ones" donotconvert="1"&amp;gt;&amp;lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&amp;gt;&amp;lt;entity name="all_in_one"&amp;gt;&amp;lt;all-attributes/&amp;gt;&amp;lt;/entity&amp;gt;&amp;lt;/fetch&amp;gt;&amp;lt;/ReportEntity&amp;gt;&amp;lt;/ReportFilter&amp;gt;&lt;/MSCRM&gt;</Value>
     </CustomProperty>
   </CustomProperties>
   <Language>en-US</Language>

@@ -50,8 +50,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- create: LOCAL ONLY — never touches Dataverse; saves a new .rdl built from the embedded ReportTemplate.rdl (normalized for the connected organization) or from file_path content; name defaults: name > file_path file name > 'Report Template'; existing local output files fail fast; default output is .devkit/manage_report/\n" +
             "- download writes bodytext to .devkit/manage_report/downloads/{languageCode}/ as {report}.rdl and returns the saved path and SHA-256\n" +
             "- create/download: output_folder saves the .rdl into that local folder instead of the default .devkit folder; when the folder contains exactly one .rptproj, the saved .rdl is auto-added as a Report item if not already present (0 or multiple .rptproj files = the project is left untouched)\n" +
-            "- update replaces bodytext (.rdl content) and/or description of an existing report; when report_id is a name, language selects which language copy to update (multiple reports can share a name across languages) — default is the organization's base language; reports need no publish after update; NEW reports are created by the VSIX/CLI deploy, not by this tool\n" +
+            "- update replaces bodytext (.rdl content) and/or description of an existing report; when report_id is a name, language selects which language copy to update (multiple reports can share a name across languages) — default is the organization's base language; reports need no publish after update; NEW reports are created by the VSIX/CLI deploy, not by this tool; when file_path is provided and the RDL has a ReportFilter, report.defaultfilter is synced from it (Dataverse only extracts it on create, so redeploys otherwise leave it stale)\n" +
             "- add_dataset/update_dataset/delete_dataset require file_path and edit only that local RDL; all dataset actions create a pre-change backup under .devkit/manage_report/backups; add_dataset/update_dataset accept FetchXML or a system view name with entity_name; delete_dataset removes the dataset by name only\n" +
+            "- dataset FetchXML must list attributes explicitly — <all-attributes/> is rejected — and must not include MultiSelectPicklist, File, or Image attributes (the SSRS fetch extension cannot query them); generated fields follow the SSRS designer model: every attribute yields a formatted System.String field, plus a typed <name>Value companion (and <name>EntityName for lookup/customer/owner)\n" +
             "- managed reports (isManaged=true) cannot be updated\n\n" +
             "WHEN TO USE:\n" +
             "- List or inspect reports of the organization or of a solution (solution component type 31)\n" +
@@ -442,7 +443,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (attributeMetadata == null)
                     return Error($"Attribute '{attributeName}' was not found on entity '{source.EntityLogicalName}'.",
                         "Use get_tables to verify the entity and attribute logical names.");
-                fields.Add(CreateRdlField(reportNamespace, fieldName, GetRdlTypeName(attributeMetadata.AttributeType)));
+                if (IsUnsupportedReportAttribute(attributeMetadata))
+                    return Error($"Attribute '{attributeName}' (type '{attributeMetadata.AttributeTypeName?.Value}') is not supported by the SSRS fetch extension (MSCRMFETCH).",
+                        "Remove MultiSelectPicklist, File, and Image attributes from the FetchXML — the Dynamics 365 Report Authoring Extension cannot query them.");
+                fields.AddRange(CreateRdlFields(reportNamespace, fieldName, attributeMetadata.AttributeType));
             }
             var linkedEntity = rootEntity.Elements("link-entity").SingleOrDefault();
             if (linkedEntity != null)
@@ -459,7 +463,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (attributeMetadata == null)
                         return Error($"Attribute '{attributeName}' was not found on linked entity '{linkedLogicalName}'.",
                             "Use get_tables to verify the linked entity and attribute logical names.");
-                    fields.Add(CreateRdlField(reportNamespace, fieldName, GetRdlTypeName(attributeMetadata.AttributeType)));
+                    if (IsUnsupportedReportAttribute(attributeMetadata))
+                        return Error($"Attribute '{attributeName}' (type '{attributeMetadata.AttributeTypeName?.Value}') is not supported by the SSRS fetch extension (MSCRMFETCH).",
+                            "Remove MultiSelectPicklist, File, and Image attributes from the FetchXML — the Dynamics 365 Report Authoring Extension cannot query them.");
+                    fields.AddRange(CreateRdlFields(reportNamespace, fieldName, attributeMetadata.AttributeType));
                 }
             }
             if (fields.Count == 0)
@@ -527,6 +534,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var linkedEntities = rootEntity?.Elements("link-entity").ToList() ?? [];
             if (rootEntity == null || linkedEntities.Count > 1 || fetch.Descendants("link-entity").Any(e => e.Descendants("link-entity").Any()))
                 return (false, "Only one level with at most one linked entity is supported for dataset actions.", "Use simple FetchXML with one root entity and at most one link-entity.", null, null);
+            if (rootEntity.Element("all-attributes") != null || linkedEntities.Any(l => l.Element("all-attributes") != null))
+                return (false, "FetchXML with <all-attributes /> is not supported for dataset actions.",
+                    "List the attributes explicitly. Note: MultiSelectPicklist, File, and Image attributes are not supported by the SSRS fetch extension and will be rejected.", null, null);
             if (!string.IsNullOrWhiteSpace(entityName) && input.StartsWith("<", StringComparison.Ordinal))
             {
                 var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "manage_report");
@@ -580,16 +590,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             rootEntity.SetAttributeValue("enableprefiltering", "1");
             rootEntity.SetAttributeValue("prefilterparametername", parameterName);
 
+            // No <filter> here: a generated condition on the primary id breaks the Edit Filter
+            // dialog when the id attribute is not valid for Advanced Find (all-attributes is
+            // valid in the default filter fetch — only CommandText requires explicit attributes).
             var defaultFetch = new XDocument(new XElement("fetch",
                 new XAttribute("version", "1.0"),
                 new XAttribute("output-format", "xml-platform"),
                 new XAttribute("mapping", "logical"),
                 new XAttribute("distinct", "false"),
                 new XElement("entity", new XAttribute("name", logicalName),
-                    new XElement("all-attributes"),
-                    new XElement("filter", new XAttribute("type", "and"),
-                        new XElement("condition", new XAttribute("attribute", logicalName + "id"),
-                            new XAttribute("operator", "not-null"))))));
+                    new XElement("all-attributes"))));
 
             var reportParameters = reportRoot.Element(reportNamespace + "ReportParameters");
             if (reportParameters == null)
@@ -707,7 +717,59 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 new XAttribute(XNamespace.Xmlns + "rd", "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner"),
                 new XElement(XNamespace.Get("http://schemas.microsoft.com/SQLServer/reporting/reportdesigner") + "TypeName", typeName));
 
-        private static string GetRdlTypeName(AttributeTypeCode? type) => type switch
+        // Extracts the MSCRM ReportFilter from an RDL body in the plain-XML shape the
+        // report.defaultfilter column stores (fetch as child elements, no displayname).
+        private static string ExtractDefaultFilter(string rdlBodyText)
+        {
+            try
+            {
+                var document = XDocument.Parse(rdlBodyText);
+                var reportNamespace = document.Root?.GetDefaultNamespace();
+                if (reportNamespace == null) return null;
+                var customValue = document.Descendants(reportNamespace + "CustomProperty")
+                    .FirstOrDefault(p => string.Equals((string)p.Element(reportNamespace + "Name"), "Custom", StringComparison.OrdinalIgnoreCase))
+                    ?.Element(reportNamespace + "Value")?.Value;
+                if (string.IsNullOrWhiteSpace(customValue)) return null;
+                var mscrm = XDocument.Parse(customValue);
+                var reportFilterText = mscrm.Root?.Value;
+                if (string.IsNullOrWhiteSpace(reportFilterText)) return null;
+                var reportFilter = XDocument.Parse(reportFilterText).Root;
+                if (reportFilter == null || reportFilter.Name.LocalName != "ReportFilter") return null;
+                foreach (var reportEntity in reportFilter.Elements("ReportEntity"))
+                {
+                    reportEntity.Attribute("displayname")?.Remove();
+                    var fetchText = reportEntity.Value.Trim();
+                    if (fetchText.StartsWith("<", StringComparison.Ordinal))
+                    {
+                        try { reportEntity.ReplaceNodes(XDocument.Parse(fetchText).Root); }
+                        catch (XmlException) { }
+                    }
+                }
+                return reportFilter.ToString(SaveOptions.DisableFormatting);
+            }
+            catch (XmlException) { return null; }
+        }
+
+        private static bool IsUnsupportedReportAttribute(AttributeMetadata attributeMetadata) =>
+            attributeMetadata is MultiSelectPicklistAttributeMetadata
+                or FileAttributeMetadata
+                or ImageAttributeMetadata;
+
+        // MSCRMFETCH returns every field as a formatted string; the typed companions
+        // (<name>Value, and <name>EntityName for lookup-family) match what the SSRS
+        // designer produces on refresh fields.
+        private static List<XElement> CreateRdlFields(XNamespace ns, string fieldName, AttributeTypeCode? type)
+        {
+            var fields = new List<XElement> { CreateRdlField(ns, fieldName, "System.String") };
+            var valueTypeName = GetRdlValueTypeName(type);
+            if (valueTypeName != null)
+                fields.Add(CreateRdlField(ns, fieldName + "Value", valueTypeName));
+            if (type is AttributeTypeCode.Lookup or AttributeTypeCode.Customer or AttributeTypeCode.Owner)
+                fields.Add(CreateRdlField(ns, fieldName + "EntityName", "System.String"));
+            return fields;
+        }
+
+        private static string GetRdlValueTypeName(AttributeTypeCode? type) => type switch
         {
             AttributeTypeCode.Boolean => "System.Boolean",
             AttributeTypeCode.DateTime => "System.DateTime",
@@ -715,8 +777,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             AttributeTypeCode.Double => "System.Double",
             AttributeTypeCode.Integer or AttributeTypeCode.Picklist or AttributeTypeCode.State or AttributeTypeCode.Status => "System.Int32",
             AttributeTypeCode.BigInt => "System.Int64",
-            AttributeTypeCode.Uniqueidentifier => "System.Guid",
-            _ => "System.String"
+            AttributeTypeCode.Lookup or AttributeTypeCode.Customer or AttributeTypeCode.Owner => "System.Guid",
+            _ => null
         };
 
         private async Task<CallToolResult> SaveDatasetRdlAsync(XDocument document, string resolvedPath,
@@ -772,13 +834,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var crmUrlParameter = document.Descendants(reportNamespace + "ReportParameter")
                 .FirstOrDefault(p => string.Equals((string)p.Attribute("Name"), "CRM_URL", StringComparison.Ordinal));
             SetReportParameterDefault(crmUrlParameter, baseUrl);
-
-            foreach (var parameterName in new[] { "CRM_FullName", "CRM_UserTimeZoneName" })
-            {
-                var parameter = document.Descendants(reportNamespace + "ReportParameter")
-                    .FirstOrDefault(p => string.Equals((string)p.Attribute("Name"), parameterName, StringComparison.Ordinal));
-                parameter?.Element(reportNamespace + "DefaultValue")?.Remove();
-            }
 
             var reportLanguage = document.Root.Element(reportNamespace + "Language");
             try
@@ -926,7 +981,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                                  "Use action='list' to get the report GUID and pass it as report_id.");
                 id = matches[0].Id;
             }
-            var existing = RetrieveById(id, new ColumnSet("reportid", "name", "filename", "languagecode", "ismanaged", "iscustomizable", "bodytext"));
+            var existing = RetrieveById(id, new ColumnSet("reportid", "name", "filename", "languagecode", "ismanaged", "iscustomizable", "bodytext", "defaultfilter"));
             if (existing == null)
                 return Error($"Report '{reportId}' not found.",
                              "Use action='list' to find valid report IDs.");
@@ -950,7 +1005,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var hasDescription = !string.IsNullOrWhiteSpace(description);
             if (newBodyText == null && !hasDescription)
                 return Error("No fields to update.", "Provide at least one of: file_path, description.");
-            if (newBodyText != null && DynamicsCrm.DevKit.Shared.Helper.IsTheSame(existing.GetAttributeValue<string>("bodytext"), newBodyText))
+            // Dataverse extracts ReportFilter into report.defaultfilter only when the report is
+            // created — bodytext updates never re-sync it, so a stale filter survives deploys and
+            // keeps breaking the Edit Filter dialog. Sync it here from the RDL being uploaded.
+            var newDefaultFilter = newBodyText != null ? ExtractDefaultFilter(newBodyText) : null;
+            var defaultFilterChanged = newDefaultFilter != null
+                && !string.Equals(newDefaultFilter, existing.GetAttributeValue<string>("defaultfilter") ?? "", StringComparison.Ordinal);
+            if (newBodyText != null && !defaultFilterChanged && DynamicsCrm.DevKit.Shared.Helper.IsTheSame(existing.GetAttributeValue<string>("bodytext"), newBodyText))
                 return Success($"Report '{existing.GetAttributeValue<string>("name")}' ({id}) is up-to-date — bodytext identical, nothing to do.",
                     new ManageReportResult
                     {
@@ -969,6 +1030,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (hasDescription)
             {
                 update["description"] = description.Trim();
+                fieldsUpdated++;
+            }
+            if (defaultFilterChanged)
+            {
+                update["defaultfilter"] = newDefaultFilter;
                 fieldsUpdated++;
             }
             var existingName = existing.GetAttributeValue<string>("name") ?? "";

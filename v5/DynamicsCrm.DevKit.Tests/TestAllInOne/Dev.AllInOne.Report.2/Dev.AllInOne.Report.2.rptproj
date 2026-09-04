@@ -39,6 +39,6 @@
     <None Include="notes.txt" />
     <Report Include="ReportTemplate.rdl" />
     <Report Include="Top10Account.rdl" />
-  <Report Include="Account vs Contact.rdl" /><Report Include="Account vs Contact v2.rdl" /><Report Include="Account and Contact Reports.rdl" /></ItemGroup>
+  <Report Include="Account vs Contact.rdl" /><Report Include="Account vs Contact v2.rdl" /><Report Include="Account and Contact Reports.rdl" /><Report Include="All in One.rdl" /></ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Reporting Services\Microsoft.ReportingServices.MSBuilder.targets" />
 </Project>
