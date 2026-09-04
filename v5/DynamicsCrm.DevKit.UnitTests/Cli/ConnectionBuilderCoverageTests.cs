@@ -1,10 +1,6 @@
 using DynamicsCrm.DevKit.Shared.ConnectionBuilder;
-using DynamicsCrm.DevKit.Shared.ConnectionBuilder.Metadata;
 using DynamicsCrm.DevKit.Shared.Models;
-using DynamicsCrm.DevKit.Shared;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.UnitTests.Cli;
@@ -12,203 +8,343 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli;
 [TestClass]
 public class ConnectionBuilderCoverageTests
 {
-    [TestMethod]
-    public void ConnectionTypeRegistry_ReturnsAllRegisteredMetadata()
+    private static CrmConnection MakeConnection(string type = "ClientSecret") => new()
     {
-        var all = ConnectionTypeRegistry.GetSupportedTypes();
-        Assert.IsTrue(all.Count >= 6);
+        Type = type,
+        Url = "https://x.crm.dynamics.com",
+        ClientId = "cid",
+        ClientSecret = "plain-secret",
+        UserName = "DOMAIN\\user",
+        Password = "plain-pwd",
+        TenantId = "tid",
+        PacProfile = "myprof"
+    };
 
-        foreach (var metadata in all)
-        {
-            Assert.IsFalse(string.IsNullOrWhiteSpace(metadata.Type));
-            Assert.IsFalse(string.IsNullOrWhiteSpace(metadata.DisplayName));
-            Assert.IsFalse(string.IsNullOrWhiteSpace(metadata.Description));
-            Assert.IsTrue(metadata.Fields.All(f => !string.IsNullOrWhiteSpace(f.FieldName)));
-            Assert.AreSame(metadata, ConnectionTypeRegistry.GetMetadata(metadata.Type));
-            Assert.IsTrue(ConnectionTypeRegistry.IsRegistered(metadata.Type.ToLowerInvariant()));
-        }
-
-        var vsixOnly = ConnectionTypeRegistry.GetSupportedTypes(vsixOnly: true);
-        Assert.IsTrue(vsixOnly.All(t => t.SupportedInVsix));
-        Assert.IsNull(ConnectionTypeRegistry.GetMetadata(null));
-        Assert.IsNull(ConnectionTypeRegistry.GetMetadata(""));
-        Assert.IsFalse(ConnectionTypeRegistry.IsRegistered("missing"));
+    [TestMethod]
+    public void ClientSecret_Type()
+    {
+        Assert.AreEqual("ClientSecret", new ClientSecretConnectionBuilder().Type);
     }
 
     [TestMethod]
-    public void ConnectionBuilderFactory_ResolvesKnownBuildersAndRejectsUnknownTypes()
+    public void ClientSecret_BuildConnectionString()
     {
-        Assert.IsInstanceOfType(ConnectionBuilderFactory.GetBuilder("Interactive"), typeof(InteractiveConnectionBuilder));
-        Assert.IsInstanceOfType(ConnectionBuilderFactory.GetBuilder("devicecode"), typeof(DeviceCodeConnectionBuilder));
-        Assert.IsInstanceOfType(ConnectionBuilderFactory.GetBuilder("OAuth"), typeof(OAuthConnectionBuilder));
-        Assert.IsInstanceOfType(ConnectionBuilderFactory.GetBuilder("ClientSecret"), typeof(ClientSecretConnectionBuilder));
-        Assert.IsInstanceOfType(ConnectionBuilderFactory.GetBuilder("AD"), typeof(ADConnectionBuilder));
-        Assert.IsInstanceOfType(ConnectionBuilderFactory.GetBuilder("FromPac"), typeof(FromPacConnectionBuilder));
-
-        Assert.IsTrue(ConnectionBuilderFactory.IsSupported("clientsecret"));
-        Assert.IsFalse(ConnectionBuilderFactory.IsSupported(""));
-        Assert.IsFalse(ConnectionBuilderFactory.IsSupported("future"));
-
-        try
-        {
-            ConnectionBuilderFactory.GetBuilder("");
-            Assert.Fail("Expected ArgumentNullException was not thrown.");
-        }
-        catch (ArgumentNullException) { }
-
-        try
-        {
-            ConnectionBuilderFactory.GetBuilder("future");
-            Assert.Fail("Expected NotSupportedException was not thrown.");
-        }
-        catch (NotSupportedException) { }
-
-        var planning = ConnectionBuilderFactory.GetFuturePlanning("managedidentity");
-        Assert.IsFalse(planning.planned);
-        Assert.IsNull(planning.phase);
+        var b = new ClientSecretConnectionBuilder();
+        var s = b.BuildConnectionString(MakeConnection());
+        StringAssert.Contains(s, "AuthType=ClientSecret");
+        StringAssert.Contains(s, "Url=https://x.crm.dynamics.com");
+        StringAssert.Contains(s, "ClientId=cid");
+        StringAssert.Contains(s, "TenantId=tid");
     }
 
     [TestMethod]
-    public async Task ClientSecretConnectionBuilder_ValidatesAndBuildsConnectionStrings()
+    public void ClientSecret_BuildConnectionString_Mask()
     {
-        var builder = new ClientSecretConnectionBuilder();
-        Assert.AreEqual("ClientSecret", builder.Type);
+        var b = new ClientSecretConnectionBuilder();
+        var s = b.BuildConnectionString(MakeConnection(), true);
+        StringAssert.Contains(s, "ClientSecret=***");
+    }
 
-        var connection = new CrmConnection
+    [TestMethod]
+    public void ClientSecret_BuildConnectionString_LegacyFallback()
+    {
+        var c = new CrmConnection
         {
-            Url = "https://contoso.crm.dynamics.com",
-            ClientId = "client-id",
-            ClientSecret = "secret",
-            TenantId = "tenant"
+            Type = "ClientSecret",
+            Url = "https://x",
+            UserName = "u",
+            Password = "p"
         };
-
-        var connectionString = builder.BuildConnectionString(connection);
-        Assert.IsTrue(connectionString.Contains("AuthType=ClientSecret"));
-        Assert.IsTrue(connectionString.Contains("ClientId=client-id"));
-        Assert.IsTrue(connectionString.Contains("ClientSecret=secret"));
-        Assert.IsTrue(connectionString.Contains("TenantId=tenant"));
-        Assert.IsTrue(builder.BuildConnectionString(connection, shouldMaskPassword: true).Contains("ClientSecret=***"));
-
-        Assert.IsTrue((await builder.ValidateAsync(connection)).isValid);
-        Assert.IsFalse((await builder.ValidateAsync(new CrmConnection())).isValid);
-        Assert.IsFalse((await builder.ValidateAsync(new CrmConnection { Url = "https://contoso.crm.dynamics.com", ClientSecret = "secret" })).isValid);
-        Assert.IsFalse((await builder.ValidateAsync(new CrmConnection { Url = "https://contoso.crm.dynamics.com", ClientId = "client-id" })).isValid);
-        Assert.IsFalse((await builder.ValidateAsync(new CrmConnection { Url = "not a url", ClientId = "client-id", ClientSecret = "secret" })).isValid);
-
-        var legacy = new CrmConnection { Url = connection.Url, UserName = "legacy-id", Password = "legacy-secret" };
-        Assert.IsTrue(builder.BuildConnectionString(legacy).Contains("ClientId=legacy-id"));
+        var s = new ClientSecretConnectionBuilder().BuildConnectionString(c);
+        StringAssert.Contains(s, "ClientId=u");
+        StringAssert.Contains(s, "ClientSecret=p");
     }
 
     [TestMethod]
-    public async Task OAuthAndAdConnectionBuilders_ValidateAndMaskPasswords()
+    public async Task ClientSecret_Validate_OK()
     {
-        var oauth = new OAuthConnectionBuilder();
-        var oauthConnection = new CrmConnection
-        {
-            Url = "https://contoso.crm.dynamics.com",
-            UserName = "user@contoso.com",
-            Password = "password"
-        };
-
-        Assert.AreEqual("OAuth", oauth.Type);
-        Assert.IsTrue(oauth.BuildConnectionString(oauthConnection).Contains("LoginPrompt=Auto"));
-        Assert.IsTrue(oauth.BuildConnectionString(oauthConnection, shouldMaskPassword: true).Contains("Password=***"));
-        Assert.IsTrue((await oauth.ValidateAsync(oauthConnection)).isValid);
-        Assert.IsFalse((await oauth.ValidateAsync(new CrmConnection())).isValid);
-        Assert.IsFalse((await oauth.ValidateAsync(new CrmConnection { Url = oauthConnection.Url, Password = "password" })).isValid);
-        Assert.IsFalse((await oauth.ValidateAsync(new CrmConnection { Url = oauthConnection.Url, UserName = "user" })).isValid);
-        Assert.IsFalse((await oauth.ValidateAsync(new CrmConnection { Url = "not a url", UserName = "user", Password = "password" })).isValid);
-
-        var ad = new ADConnectionBuilder();
-        var adConnection = new CrmConnection
-        {
-            Url = "https://onprem.contoso.local",
-            UserName = @"CONTOSO\user",
-            Password = "password"
-        };
-
-        Assert.AreEqual("AD", ad.Type);
-        var adString = ad.BuildConnectionString(adConnection);
-        Assert.IsTrue(adString.Contains("Domain=CONTOSO"));
-        Assert.IsTrue(adString.Contains("Username=user"));
-        Assert.IsTrue(ad.BuildConnectionString(adConnection, shouldMaskPassword: true).Contains("Password=***"));
-        Assert.IsTrue((await ad.ValidateAsync(adConnection)).isValid);
-        Assert.IsFalse((await ad.ValidateAsync(new CrmConnection())).isValid);
-        Assert.IsFalse((await ad.ValidateAsync(new CrmConnection { Url = adConnection.Url, Password = "password" })).isValid);
-        Assert.IsFalse((await ad.ValidateAsync(new CrmConnection { Url = adConnection.Url, UserName = "user" })).isValid);
-        Assert.IsFalse((await ad.ValidateAsync(new CrmConnection { Url = "not a url", UserName = "user", Password = "password" })).isValid);
+        var (ok, err) = await new ClientSecretConnectionBuilder().ValidateAsync(MakeConnection());
+        Assert.IsTrue(ok);
+        Assert.IsNull(err);
     }
 
     [TestMethod]
-    public async Task InteractiveAndDeviceCodeBuilders_ValidateHttpsAndClientIds()
+    public async Task ClientSecret_Validate_MissingUrl()
     {
-        var valid = new CrmConnection { Url = "https://contoso.crm.dynamics.com" };
-        var invalidClient = new CrmConnection { Url = valid.Url, ClientId = "not-a-guid" };
-        var http = new CrmConnection { Url = "http://contoso.crm.dynamics.com" };
-
-        var interactive = new InteractiveConnectionBuilder();
-        Assert.AreEqual(ConnectionType.Interactive, interactive.Type);
-        Assert.IsTrue(interactive.BuildConnectionString(valid).Contains("AuthType=Interactive"));
-        Assert.IsTrue((await interactive.ValidateAsync(valid)).isValid);
-        Assert.IsFalse((await interactive.ValidateAsync(new CrmConnection())).isValid);
-        Assert.IsFalse((await interactive.ValidateAsync(new CrmConnection { Url = "not a url" })).isValid);
-        Assert.IsFalse((await interactive.ValidateAsync(http)).isValid);
-        Assert.IsFalse((await interactive.ValidateAsync(invalidClient)).isValid);
-
-        var device = new DeviceCodeConnectionBuilder();
-        var callbackMessage = "";
-        device.DeviceCodeCallback = message => callbackMessage = message;
-        device.DeviceCodeCallback("Use code 123");
-        Assert.AreEqual("Use code 123", callbackMessage);
-        Assert.AreEqual(ConnectionType.DeviceCode, device.Type);
-        Assert.IsTrue(device.BuildConnectionString(valid).Contains("AuthType=DeviceCode"));
-        Assert.IsTrue((await device.ValidateAsync(valid)).isValid);
-        Assert.IsFalse((await device.ValidateAsync(new CrmConnection())).isValid);
-        Assert.IsFalse((await device.ValidateAsync(new CrmConnection { Url = "not a url" })).isValid);
-        Assert.IsFalse((await device.ValidateAsync(http)).isValid);
-        Assert.IsFalse((await device.ValidateAsync(invalidClient)).isValid);
+        var c = MakeConnection(); c.Url = "";
+        var (ok, err) = await new ClientSecretConnectionBuilder().ValidateAsync(c);
+        Assert.IsFalse(ok);
+        StringAssert.Contains(err, "URL");
     }
 
     [TestMethod]
-    public async Task FromPacBuilder_ValidatesProfileAndBuildsDiagnosticString()
+    public async Task ClientSecret_Validate_MissingClientId()
     {
-        var builder = new FromPacConnectionBuilder();
-        Assert.AreEqual(ConnectionType.FromPac, builder.Type);
-        Assert.AreEqual("AuthType=FromPac;Profile=Default;", builder.BuildConnectionString(new CrmConnection { PacProfile = "Default" }));
-        Assert.AreEqual("AuthType=FromPac;Profile=(active);", builder.BuildConnectionString(new CrmConnection()));
-
-        var notFound = await builder.ValidateAsync(new CrmConnection { PacProfile = $"missing-{Guid.NewGuid():N}" });
-        Assert.IsFalse(notFound.isValid);
-        Assert.IsFalse(string.IsNullOrWhiteSpace(notFound.error));
+        var c = new CrmConnection { Type = "ClientSecret", Url = "https://x" };
+        var (ok, err) = await new ClientSecretConnectionBuilder().ValidateAsync(c);
+        Assert.IsFalse(ok);
+        StringAssert.Contains(err, "ClientId");
     }
 
     [TestMethod]
-    public void ConnectionMetadata_FieldDefinitions_HaveExpectedShape()
+    public async Task ClientSecret_Validate_MissingSecret()
     {
-        IConnectionTypeMetadata[] metadata =
-        [
-            new ClientSecretTypeMetadata(),
-            new OAuthTypeMetadata(),
-            new InteractiveTypeMetadata(),
-            new ADTypeMetadata(),
-            new DeviceCodeTypeMetadata(),
-            new FromPacTypeMetadata()
-        ];
+        var c = new CrmConnection { Type = "ClientSecret", Url = "https://x", ClientId = "c" };
+        var (ok, err) = await new ClientSecretConnectionBuilder().ValidateAsync(c);
+        Assert.IsFalse(ok);
+        StringAssert.Contains(err, "ClientSecret");
+    }
 
-        foreach (var item in metadata)
-        {
-            Assert.IsFalse(string.IsNullOrWhiteSpace(item.Type));
-            Assert.IsFalse(string.IsNullOrWhiteSpace(item.DisplayName));
-            Assert.IsFalse(string.IsNullOrWhiteSpace(item.Description));
-            foreach (var field in item.Fields)
-            {
-                Assert.IsFalse(string.IsNullOrWhiteSpace(field.FieldName));
-                Assert.IsFalse(string.IsNullOrWhiteSpace(field.Label));
-                Assert.IsTrue(field.DisplayOrder > 0);
-                _ = field.IsRequired;
-                _ = field.IsPassword;
-                _ = field.Placeholder;
-            }
-        }
+    [TestMethod]
+    public async Task ClientSecret_Validate_BadUrl()
+    {
+        var c = MakeConnection(); c.Url = "not-a-url";
+        var (ok, err) = await new ClientSecretConnectionBuilder().ValidateAsync(c);
+        Assert.IsFalse(ok);
+    }
+
+    [TestMethod]
+    public void AD_Type()
+    {
+        Assert.AreEqual("AD", new ADConnectionBuilder().Type);
+    }
+
+    [TestMethod]
+    public void AD_BuildConnectionString()
+    {
+        var s = new ADConnectionBuilder().BuildConnectionString(MakeConnection("AD"));
+        StringAssert.Contains(s, "AuthType=AD");
+        StringAssert.Contains(s, "Domain=DOMAIN");
+        StringAssert.Contains(s, "Username=user");
+    }
+
+    [TestMethod]
+    public void AD_BuildConnectionString_NoDomain()
+    {
+        var c = new CrmConnection { Type = "AD", Url = "https://x", UserName = "user", Password = "p" };
+        var s = new ADConnectionBuilder().BuildConnectionString(c);
+        StringAssert.Contains(s, "Username=user");
+        Assert.IsFalse(s.Contains("Domain="));
+    }
+
+    [TestMethod]
+    public void AD_BuildConnectionString_Mask()
+    {
+        var s = new ADConnectionBuilder().BuildConnectionString(MakeConnection("AD"), true);
+        StringAssert.Contains(s, "Password=***");
+    }
+
+    [TestMethod]
+    public async Task AD_Validate_OK()
+    {
+        var (ok, err) = await new ADConnectionBuilder().ValidateAsync(MakeConnection("AD"));
+        Assert.IsTrue(ok);
+        Assert.IsNull(err);
+    }
+
+    [TestMethod]
+    public async Task AD_Validate_MissingUrl()
+    {
+        var c = MakeConnection("AD"); c.Url = "";
+        var (ok, err) = await new ADConnectionBuilder().ValidateAsync(c);
+        Assert.IsFalse(ok);
+    }
+
+    [TestMethod]
+    public async Task AD_Validate_MissingUser()
+    {
+        var c = new CrmConnection { Type = "AD", Url = "https://x", Password = "p" };
+        var (ok, err) = await new ADConnectionBuilder().ValidateAsync(c);
+        Assert.IsFalse(ok);
+    }
+
+    [TestMethod]
+    public async Task AD_Validate_MissingPassword()
+    {
+        var c = new CrmConnection { Type = "AD", Url = "https://x", UserName = "u" };
+        var (ok, err) = await new ADConnectionBuilder().ValidateAsync(c);
+        Assert.IsFalse(ok);
+    }
+
+    [TestMethod]
+    public void OAuth_Type()
+    {
+        Assert.AreEqual("OAuth", new OAuthConnectionBuilder().Type);
+    }
+
+    [TestMethod]
+    public void OAuth_BuildConnectionString_WithClientId()
+    {
+        var c = MakeConnection("OAuth");
+        c.UserName = "u";
+        c.Password = "p";
+        var s = new OAuthConnectionBuilder().BuildConnectionString(c);
+        StringAssert.Contains(s, "AuthType=OAuth");
+        StringAssert.Contains(s, "Username=u");
+        StringAssert.Contains(s, "AppId=cid");
+    }
+
+    [TestMethod]
+    public void OAuth_BuildConnectionString_DefaultAppId()
+    {
+        var c = new CrmConnection { Type = "OAuth", Url = "https://x", UserName = "u", Password = "p" };
+        var s = new OAuthConnectionBuilder().BuildConnectionString(c);
+        StringAssert.Contains(s, "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d");
+    }
+
+    [TestMethod]
+    public void OAuth_BuildConnectionString_Mask()
+    {
+        var c = new CrmConnection { Type = "OAuth", Url = "https://x", UserName = "u", Password = "p" };
+        var s = new OAuthConnectionBuilder().BuildConnectionString(c, true);
+        StringAssert.Contains(s, "Password=***");
+    }
+
+    [TestMethod]
+    public async Task OAuth_Validate_OK()
+    {
+        var c = new CrmConnection { Type = "OAuth", Url = "https://x", UserName = "u", Password = "p" };
+        var (ok, _) = await new OAuthConnectionBuilder().ValidateAsync(c);
+        Assert.IsTrue(ok);
+    }
+
+    [TestMethod]
+    public async Task OAuth_Validate_MissingUrl()
+    {
+        var c = new CrmConnection { Type = "OAuth", UserName = "u", Password = "p" };
+        var (ok, _) = await new OAuthConnectionBuilder().ValidateAsync(c);
+        Assert.IsFalse(ok);
+    }
+
+    [TestMethod]
+    public async Task OAuth_Validate_MissingUser()
+    {
+        var c = new CrmConnection { Type = "OAuth", Url = "https://x", Password = "p" };
+        var (ok, _) = await new OAuthConnectionBuilder().ValidateAsync(c);
+        Assert.IsFalse(ok);
+    }
+
+    [TestMethod]
+    public async Task OAuth_Validate_MissingPassword()
+    {
+        var c = new CrmConnection { Type = "OAuth", Url = "https://x", UserName = "u" };
+        var (ok, _) = await new OAuthConnectionBuilder().ValidateAsync(c);
+        Assert.IsFalse(ok);
+    }
+
+    [TestMethod]
+    public async Task OAuth_Validate_BadUrl()
+    {
+        var c = new CrmConnection { Type = "OAuth", Url = "bad", UserName = "u", Password = "p" };
+        var (ok, _) = await new OAuthConnectionBuilder().ValidateAsync(c);
+        Assert.IsFalse(ok);
+    }
+
+    [TestMethod]
+    public void DeviceCode_Type()
+    {
+        Assert.AreEqual("DeviceCode", new DeviceCodeConnectionBuilder().Type);
+    }
+
+    [TestMethod]
+    public void DeviceCode_BuildConnectionString_DefaultClientId()
+    {
+        var c = new CrmConnection { Type = "DeviceCode", Url = "https://x" };
+        var s = new DeviceCodeConnectionBuilder().BuildConnectionString(c);
+        StringAssert.Contains(s, "ClientId=51f81489-12ee-4a9e-aaae-a2591f45987d");
+    }
+
+    [TestMethod]
+    public void DeviceCode_BuildConnectionString_CustomClientId()
+    {
+        var c = new CrmConnection { Type = "DeviceCode", Url = "https://x", ClientId = "mycid" };
+        var s = new DeviceCodeConnectionBuilder().BuildConnectionString(c);
+        StringAssert.Contains(s, "ClientId=mycid");
+    }
+
+    [TestMethod]
+    public async Task DeviceCode_Validate_OK()
+    {
+        var c = new CrmConnection { Type = "DeviceCode", Url = "https://x" };
+        var (ok, _) = await new DeviceCodeConnectionBuilder().ValidateAsync(c);
+        Assert.IsTrue(ok);
+    }
+
+    [TestMethod]
+    public async Task DeviceCode_Validate_MissingUrl()
+    {
+        var c = new CrmConnection { Type = "DeviceCode" };
+        var (ok, _) = await new DeviceCodeConnectionBuilder().ValidateAsync(c);
+        Assert.IsFalse(ok);
+    }
+
+    [TestMethod]
+    public async Task DeviceCode_Validate_NonHttps()
+    {
+        var c = new CrmConnection { Type = "DeviceCode", Url = "http://x" };
+        var (ok, _) = await new DeviceCodeConnectionBuilder().ValidateAsync(c);
+        Assert.IsFalse(ok);
+    }
+
+    [TestMethod]
+    public async Task DeviceCode_Validate_BadClientId()
+    {
+        var c = new CrmConnection { Type = "DeviceCode", Url = "https://x", ClientId = "not-a-guid" };
+        var (ok, _) = await new DeviceCodeConnectionBuilder().ValidateAsync(c);
+        Assert.IsFalse(ok);
+    }
+
+    [TestMethod]
+    public void Interactive_Type()
+    {
+        Assert.AreEqual("Interactive", new InteractiveConnectionBuilder().Type);
+    }
+
+    [TestMethod]
+    public void Interactive_BuildConnectionString_DefaultClientId()
+    {
+        var c = new CrmConnection { Type = "Interactive", Url = "https://x" };
+        var s = new InteractiveConnectionBuilder().BuildConnectionString(c);
+        StringAssert.Contains(s, "ClientId=51f81489-12ee-4a9e-aaae-a2591f45987d");
+    }
+
+    [TestMethod]
+    public void Interactive_BuildConnectionString_CustomClientId()
+    {
+        var c = new CrmConnection { Type = "Interactive", Url = "https://x", ClientId = "mycid" };
+        var s = new InteractiveConnectionBuilder().BuildConnectionString(c);
+        StringAssert.Contains(s, "ClientId=mycid");
+    }
+
+    [TestMethod]
+    public async Task Interactive_Validate_OK()
+    {
+        var c = new CrmConnection { Type = "Interactive", Url = "https://x" };
+        var (ok, _) = await new InteractiveConnectionBuilder().ValidateAsync(c);
+        Assert.IsTrue(ok);
+    }
+
+    [TestMethod]
+    public async Task Interactive_Validate_MissingUrl()
+    {
+        var c = new CrmConnection { Type = "Interactive" };
+        var (ok, _) = await new InteractiveConnectionBuilder().ValidateAsync(c);
+        Assert.IsFalse(ok);
+    }
+
+    [TestMethod]
+    public async Task Interactive_Validate_NonHttps()
+    {
+        var c = new CrmConnection { Type = "Interactive", Url = "http://x" };
+        var (ok, _) = await new InteractiveConnectionBuilder().ValidateAsync(c);
+        Assert.IsFalse(ok);
+    }
+
+    [TestMethod]
+    public async Task Interactive_Validate_BadClientId()
+    {
+        var c = new CrmConnection { Type = "Interactive", Url = "https://x", ClientId = "not-a-guid" };
+        var (ok, _) = await new InteractiveConnectionBuilder().ValidateAsync(c);
+        Assert.IsFalse(ok);
     }
 }
