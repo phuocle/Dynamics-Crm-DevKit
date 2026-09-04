@@ -113,7 +113,7 @@
             "SolutionUniqueName": "all_in_one"
         }
     ],
-            "Reports": [
+    "Reports": [
         {
             "File": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Report.2\\Account and Contact Reports.rdl",
             "ReportId": "a08f2cb0-85a7-f111-aaab-6045bd01c905",
@@ -123,6 +123,16 @@
             "Language": "English",
             "IsManaged": false,
             "DisplayReportName": "Account and Contact Reports (Account and Contact Reports.rdl) - English"
+        },
+        {
+            "File": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Report.2\\All in One.rdl",
+            "ReportId": "550edff8-40a8-f111-aaab-6045bd01c905",
+            "ReportName": "All in One",
+            "ReportFileName": "All in One.rdl",
+            "LanguageCode": 1033,
+            "Language": "English (1033)",
+            "IsManaged": false,
+            "DisplayReportName": "All in One (All in One.rdl) - English (1033)"
         },
         {
             "File": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Report.2\\Top10Account.rdl",
