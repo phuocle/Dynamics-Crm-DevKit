@@ -120,9 +120,9 @@
             "ReportName": "Account and Contact Reports",
             "ReportFileName": "Account and Contact Reports.rdl",
             "LanguageCode": 1033,
-            "Language": "English (1033)",
+            "Language": "English",
             "IsManaged": false,
-            "DisplayReportName": "Account and Contact Reports (Account and Contact Reports.rdl) - English (1033)"
+            "DisplayReportName": "Account and Contact Reports (Account and Contact Reports.rdl) - English"
         },
         {
             "File": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Report.2\\Top10Account.rdl",

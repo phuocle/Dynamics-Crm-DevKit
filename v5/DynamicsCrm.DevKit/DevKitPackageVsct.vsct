@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<Extern href="stdidcmd.h"/>
 	<Extern href="vsshlids.h"/>
 	<Include href="KnownImageIds.vsct"/>
@@ -79,7 +80,7 @@
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<ButtonText>Upload Dynamics 365 Report</ButtonText>
+					<ButtonText>Deploy Report</ButtonText>
 				</Strings>
 			</Button>
 			<Button guid="GuidSetDeployWebResource" id="CommandNewReport" type="Button" priority="0x0007">
@@ -134,19 +135,19 @@
 		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
 			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
 		</CommandPlacement>
-		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployWebResource" priority="0x0001" >
+		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployWebResource" priority="0x0001">
 			<Parent guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource"/>
 		</CommandPlacement>
 		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandAddCrmPluginRegistration" priority="0xFFFF">
 			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
 		</CommandPlacement>
-		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandAddCrmPluginRegistration" priority="0x0003" >
+		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandAddCrmPluginRegistration" priority="0x0003">
 			<Parent guid="GuidSetDeployWebResource" id="GroupCommandAddCrmPluginRegistration"/>
 		</CommandPlacement>
 		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployTypeScriptRelease" priority="0xFFFF">
 			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
 		</CommandPlacement>
-		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployTypeScriptRelease" priority="0x0004" >
+		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployTypeScriptRelease" priority="0x0004">
 			<Parent guid="GuidSetDeployWebResource" id="GroupCommandDeployTypeScriptRelease"/>
 		</CommandPlacement>
 
@@ -167,7 +168,7 @@
 
 	<Symbols>
 		<GuidSymbol name="DynamicsCrmDevKit" value="{525190A4-9C61-4AA5-8319-7C5FB75DAE58}" />
-		<GuidSymbol name="guidImages" value="{68759F95-6F1D-4A77-87EA-192FC8D811F1}" >
+		<GuidSymbol name="guidImages" value="{68759F95-6F1D-4A77-87EA-192FC8D811F1}">
 			<IDSymbol name="bmpPic" value="1" />
 		</GuidSymbol>
 		<GuidSymbol name="CssEditorWindows" value="{64DA400E-B4AD-4D67-AA92-4B7ACB01ECD5}">
