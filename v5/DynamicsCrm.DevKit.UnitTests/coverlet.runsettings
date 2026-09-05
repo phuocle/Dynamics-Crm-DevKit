@@ -8,7 +8,7 @@
       <DataCollector friendlyName="XPlat Code Coverage">
         <Configuration>
           <Format>cobertura,json,lcov,opencover</Format>
-          <Include>[DynamicsCrm.DevKit.Analyzers]*</Include>
+          <Include>[DynamicsCrm.DevKit.Analyzers]*,[DynamicsCrm.DevKit.Cli]*</Include>
           <IncludeByFile>**/CrmAnalyzers/UpdateMessageShouldHaveFilteringAttributesAnalyzer.cs</IncludeByFile>
         </Configuration>
       </DataCollector>
