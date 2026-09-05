@@ -46,25 +46,34 @@ public sealed class TaskWebResourceDependencyCoverageTests
     }
 
     [TestMethod]
-    [Ignore("Configured dependency expansion requires a live ServiceClient metadata endpoint; no production seam is allowed.")]
     public async Task GetDependenciesAsync_ReturnsEmptyForFastDeployAndCachesConfiguredDependencies()
     {
         var fast = new TaskWebResource(new CommandLineArgs { File = "single.js" }, new JsonWebResource { includefiles = [], excludefiles = [], dependencies = [] });
         var empty = await Invoke<Task<List<Dependency>>>(fast, "GetDependenciesAsync");
         Assert.AreEqual(0, empty.Count);
 
-        var json = new JsonWebResource
+        var root = Path.Combine(Path.GetTempPath(), "DevKitCliDependency", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(root);
+        try
         {
-            rootfolder = ".",
-            includefiles = [],
-            excludefiles = [],
-            dependencies = [new Dependency { webresources = ["shared.js"], dependencies = ["common.css"] }]
-        };
-        var configured = new TaskWebResource(new CommandLineArgs(), json);
-        var first = await Invoke<Task<List<Dependency>>>(configured, "GetDependenciesAsync");
-        var second = await Invoke<Task<List<Dependency>>>(configured, "GetDependenciesAsync");
-        Assert.AreSame(first, second);
-        Assert.AreEqual(1, first.Count);
+            File.WriteAllText(Path.Combine(root, "Account.form.js"), "// form");
+            var json = new JsonWebResource
+            {
+                rootfolder = ".",
+                includefiles = ["Account.form.js"],
+                excludefiles = [],
+                dependencies = [new Dependency { webresources = ["shared.js"], dependencies = ["common.css"] }]
+            };
+            var configured = new TaskWebResource(new CommandLineArgs(), json) { CurrentDirectory = root, SolutionPrefix = "devkit" };
+            var first = await Invoke<Task<List<Dependency>>>(configured, "GetDependenciesAsync");
+            var second = await Invoke<Task<List<Dependency>>>(configured, "GetDependenciesAsync");
+            Assert.AreSame(first, second);
+            Assert.AreEqual(1, first.Count);
+        }
+        finally
+        {
+            if (Directory.Exists(root)) Directory.Delete(root, true);
+        }
     }
 
     private static T Invoke<T>(object target, string name, params object[] args) =>

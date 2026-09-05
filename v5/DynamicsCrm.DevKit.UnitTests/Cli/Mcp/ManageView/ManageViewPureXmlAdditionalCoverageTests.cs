@@ -69,7 +69,7 @@ public sealed class ManageViewPureXmlAdditionalCoverageTests
             ["layoutxml"] = "<grid><row><cell name='name' width='200'/><cell name='accountnumber' ishidden='1'/></row></grid>",
             ["layoutjson"] = "{ }"
         };
-        var tool = new ManageViewTool(null!, new McpDryRunOptions(), new McpExecutionContext(true));
+        var tool = new ManageViewTool(null!, new McpDryRunOptions(), new McpExecutionContext(true), null!);
         var systemResult = InvokeInstance(tool, "BuildViewDetailResult", system);
         StringAssert.Contains(Text(systemResult), "QuickFind view, system, default, active, 2 columns (1 hidden)");
 

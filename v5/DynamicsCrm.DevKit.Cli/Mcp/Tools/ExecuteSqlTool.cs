@@ -16,12 +16,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ExecuteSqlTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IWebApiExecutor _webApi;
         private readonly MetadataService _metadataService;
 
-        public ExecuteSqlTool(ServiceClient serviceClient, MetadataService metadataService)
+        public ExecuteSqlTool(IWebApiExecutor webApi, MetadataService metadataService)
         {
-            _serviceClient = serviceClient ?? throw new ArgumentNullException(nameof(serviceClient));
+            _webApi = webApi ?? throw new ArgumentNullException(nameof(webApi));
             _metadataService = metadataService ?? throw new ArgumentNullException(nameof(metadataService));
         }
 
@@ -126,7 +126,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 while (true)
                 {
-                    var response = await _serviceClient.ExecuteWebRequestAsync(
+                    var response = await _webApi.ExecuteWebRequestAsync(
                         HttpMethod.Get,
                         requestUrl,
                         null,

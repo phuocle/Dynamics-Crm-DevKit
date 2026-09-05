@@ -149,7 +149,7 @@ public sealed class ManageViewHelperCoverageTests
         StringAssert.Contains(TupleField<string>(InvokeStatic("ParseCellUpdates", "[{\"cell_name\":\"name\",\"remove_attributes\":[\"width\"]}]"), "Item2"), "protected");
         Assert.IsNull(TupleField<string>(InvokeStatic("ParseCellUpdates", "[{\"cell_name\":\"name\",\"set_attributes\":{\"width\":\"100\"}}]"), "Item2"));
 
-        var tool = new ManageViewTool(null!, new McpDryRunOptions(), new McpExecutionContext(true));
+        var tool = new ManageViewTool(null!, new McpDryRunOptions(), new McpExecutionContext(true), null!);
         var fnError = (string)InvokeInstance(tool, "NormalizeAndValidateIconUpdates", new List<CellUpdateInstruction>
         {
             new() { CellName = "name", SetAttributes = new Dictionary<string, string> { ["imageproviderfunctionname"] = "bad function" } }
@@ -191,7 +191,7 @@ public sealed class ManageViewHelperCoverageTests
         var unchanged = InvokeStatic<string>("EnsureLayoutBuildableFetchXml", "<fetch><entity name='account' /></fetch>", meta);
         StringAssert.Contains(unchanged, "name=\"name\"");
 
-        var tool = new ManageViewTool(null!, new McpDryRunOptions(), new McpExecutionContext(true));
+        var tool = new ManageViewTool(null!, new McpDryRunOptions(), new McpExecutionContext(true), null!);
         var built = InvokeInstance(tool, "BuildLayoutXmlFromFetch", "account",
             "<fetch><entity name='account'><attribute name='accountid'/><attribute name='name'/><attribute name='email'/><attribute name='active'/><attribute name='createdon'/></entity></fetch>", meta);
         Assert.AreEqual(4, TupleField<int>(built, "Item2"));
@@ -212,7 +212,7 @@ public sealed class ManageViewHelperCoverageTests
     [TestMethod]
     public async Task PublicValidation_ReturnsErrorsBeforeDataverse()
     {
-        var tool = new ManageViewTool(null!, new McpDryRunOptions(), new McpExecutionContext(true));
+        var tool = new ManageViewTool(null!, new McpDryRunOptions(), new McpExecutionContext(true), null!);
         var missingAction = await tool.manage_view(null!, "", "account");
         StringAssert.Contains(Text(missingAction), "action is required");
         var missingEntity = await tool.manage_view(null!, "list", "");

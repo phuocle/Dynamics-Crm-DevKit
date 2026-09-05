@@ -16,7 +16,7 @@ public sealed class ManageReportPlannerMoreCoverageTests
     [TestMethod]
     public void ResolveReportIdInput_HandlesGuidMissingAndOfflineNames()
     {
-        var tool = new ManageReportTool(null!, new McpDryRunOptions(), new McpExecutionContext(true));
+        var tool = new ManageReportTool(null!, new McpDryRunOptions(), new McpExecutionContext(true), null!);
         var id = Guid.NewGuid();
         var valid = ((Guid? Id, string Error))Instance(tool, "ResolveReportIdInput", " " + id + " ");
         var missing = ((Guid? Id, string Error))Instance(tool, "ResolveReportIdInput", " ");

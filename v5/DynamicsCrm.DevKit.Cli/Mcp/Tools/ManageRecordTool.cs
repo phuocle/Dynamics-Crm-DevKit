@@ -18,13 +18,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageRecordTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public ManageRecordTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageRecordTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -92,7 +92,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (normalizedAction == "create" && !string.IsNullOrWhiteSpace(record_id))
                     return Error("record_id must be empty for 'create'. Use 'update' to modify an existing record.", "Omit record_id when creating a new record.");
 
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "manage_record");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "manage_record");
                 if (!entityResult.IsSuccess)
                     return Error(entityResult.Error, "Use get_tables to discover valid entity logical/display names.");
 
@@ -142,8 +142,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     FieldsUpdated = fieldCount
                 });
 
-            var entity = EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, fieldsJson);
-            var newId = DataverseMutationExecutor.Create(_context, _serviceClient, entity);
+            var entity = EntityParserHelper.ParseFieldsToEntity(_orgService, entityName, fieldsJson);
+            var newId = DataverseMutationExecutor.Create(_context, _orgService, entity);
 
             var structured = new CrudResult
             {
@@ -160,8 +160,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var id = Guid.Parse(recordId.Trim());
 
-            var columnSet = BuildColumnSet(_serviceClient, entityName, columns);
-            var entity = _serviceClient.Retrieve(entityName, id, columnSet);
+            var columnSet = BuildColumnSet(_orgService, entityName, columns);
+            var entity = _orgService.Retrieve(entityName, id, columnSet);
             var text = FormatRecord(entity);
 
             var structured = new CrudResult
@@ -190,8 +190,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     FieldsUpdated = fieldCount
                 });
 
-            var entity = EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, fieldsJson, id);
-            DataverseMutationExecutor.Update(_context, _serviceClient, entity);
+            var entity = EntityParserHelper.ParseFieldsToEntity(_orgService, entityName, fieldsJson, id);
+            DataverseMutationExecutor.Update(_context, _orgService, entity);
 
             var structured = new CrudResult
             {
@@ -217,7 +217,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = "not_executed"
                 });
 
-            DataverseMutationExecutor.Delete(_context, _serviceClient, entityName, id);
+            DataverseMutationExecutor.Delete(_context, _orgService, entityName, id);
 
             var structured = new CrudResult { Action = "delete", Entity = entityName, Id = id.ToString(), Status = "deleted" };
             return Success($"Deleted {entityName} {id}", structured);
@@ -228,7 +228,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var id1 = Guid.Parse(recordId.Trim());
             var id2 = Guid.Parse(relatedRecordId.Trim());
 
-            var relatedEntityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, relatedEntityName.Trim(), "manage_record");
+            var relatedEntityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, relatedEntityName.Trim(), "manage_record");
             if (!relatedEntityResult.IsSuccess)
                 return Error(relatedEntityResult.Error, "Use get_tables to discover valid related entity names.");
             var resolvedRelatedEntity = relatedEntityResult.Value.LogicalName;
@@ -244,7 +244,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var relationship = new Relationship(relationshipName.Trim());
             var relatedEntities = new EntityReferenceCollection { new EntityReference(resolvedRelatedEntity, id2) };
-            DataverseMutationExecutor.Associate(_context, _serviceClient, entityName, id1, relationship, relatedEntities);
+            DataverseMutationExecutor.Associate(_context, _orgService, entityName, id1, relationship, relatedEntities);
 
             var structured = new CrudResult { Action = "associate", Entity = entityName, Id = id1.ToString(), Status = "associated" };
             return Success($"Associated {entityName} {id1} with {resolvedRelatedEntity} {id2}", structured);
@@ -255,7 +255,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var id1 = Guid.Parse(recordId.Trim());
             var id2 = Guid.Parse(relatedRecordId.Trim());
 
-            var relatedEntityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, relatedEntityName.Trim(), "manage_record");
+            var relatedEntityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, relatedEntityName.Trim(), "manage_record");
             if (!relatedEntityResult.IsSuccess)
                 return Error(relatedEntityResult.Error, "Use get_tables to discover valid related entity names.");
             var resolvedRelatedEntity = relatedEntityResult.Value.LogicalName;
@@ -271,13 +271,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var relationship = new Relationship(relationshipName.Trim());
             var relatedEntities = new EntityReferenceCollection { new EntityReference(resolvedRelatedEntity, id2) };
-            DataverseMutationExecutor.Disassociate(_context, _serviceClient, entityName, id1, relationship, relatedEntities);
+            DataverseMutationExecutor.Disassociate(_context, _orgService, entityName, id1, relationship, relatedEntities);
 
             var structured = new CrudResult { Action = "disassociate", Entity = entityName, Id = id1.ToString(), Status = "disassociated" };
             return Success($"Disassociated {entityName} {id1} from {resolvedRelatedEntity} {id2}", structured);
         }
 
-        private static ColumnSet BuildColumnSet(ServiceClient serviceClient, string entityName, string columns)
+        private static ColumnSet BuildColumnSet(IOrganizationService orgService, string entityName, string columns)
         {
             if (string.IsNullOrWhiteSpace(columns))
                 return new ColumnSet(true);
@@ -285,7 +285,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var cols = new List<string>();
             foreach (var column in columns.Split(',').Select(c => c.Trim()).Where(c => !string.IsNullOrEmpty(c)))
             {
-                var resolved = DisplayNameFirstResolver.ResolveAttribute(serviceClient, entityName, column, "manage_record");
+                var resolved = DisplayNameFirstResolver.ResolveAttribute(orgService, entityName, column, "manage_record");
                 if (!resolved.IsSuccess)
                     throw new ArgumentException($"Column '{column}': {resolved.Error}", "columns");
                 cols.Add(resolved.Value.LogicalName);

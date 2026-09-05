@@ -20,12 +20,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
 
-        public static string GetCsCode(ServiceClient service, EntityMetadata entityMetadata, string rootNameSpace, string shareProject = null)
+        public static string GetCsCode(IOrganizationServiceAsync2 orgServiceAsync, EntityMetadata entityMetadata, string rootNameSpace, string shareProject = null)
         {
             EntityMetadata = entityMetadata;
             if (EntityMetadata.Attributes == null)
             {
-                var metadataService = new MetadataService(service);
+                var metadataService = new MetadataService(orgServiceAsync);
                 EntityMetadata = metadataService.FetchEntityMetadata(entityMetadata.LogicalName);
             }
             RootNamespace = rootNameSpace;

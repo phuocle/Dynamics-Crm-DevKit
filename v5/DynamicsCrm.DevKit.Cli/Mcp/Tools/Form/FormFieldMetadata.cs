@@ -1,4 +1,5 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
@@ -13,11 +14,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 {
     internal sealed class FormFieldMetadata
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
 
-        public FormFieldMetadata(ServiceClient serviceClient)
+        public FormFieldMetadata(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         public Dictionary<string, AttributeMetadata> LoadEntityAttributeMap(string entityName)
@@ -27,7 +28,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 LogicalName = entityName,
                 EntityFilters = EntityFilters.Attributes
             };
-            var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+            var response = (RetrieveEntityResponse)_orgService.Execute(request);
             var attrMap = response.EntityMetadata.Attributes
                 .ToDictionary(a => a.LogicalName, a => a, StringComparer.OrdinalIgnoreCase);
 

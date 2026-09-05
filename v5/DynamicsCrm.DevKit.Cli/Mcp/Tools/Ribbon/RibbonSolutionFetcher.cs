@@ -16,13 +16,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 {
     internal sealed class RibbonSolutionFetcher
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private readonly McpExecutionContext _context;
         private const string SOLUTION_NAME = "devkit_ribbon";
 
-        public RibbonSolutionFetcher(ServiceClient serviceClient, McpExecutionContext context)
+        public RibbonSolutionFetcher(IOrganizationService orgService, McpExecutionContext context)
         {
-            _serviceClient = serviceClient ?? throw new ArgumentNullException(nameof(serviceClient));
+            _orgService = orgService ?? throw new ArgumentNullException(nameof(orgService));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
@@ -42,7 +42,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     SolutionName = SOLUTION_NAME,
                     Managed = false
                 };
-                var exportResp = (ExportSolutionResponse)_serviceClient.Execute(exportReq);
+                var exportResp = (ExportSolutionResponse)_orgService.Execute(exportReq);
                 var zipBytes = exportResp.ExportSolutionFile;
 
                 using var ms = new MemoryStream(zipBytes);
@@ -90,7 +90,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
         /// </summary>
         public string ReadRibbonWithoutMutation(string entityName, RibbonLocationFilters filter = RibbonLocationFilters.Form)
         {
-            var response = (RetrieveEntityRibbonResponse)_serviceClient.Execute(new RetrieveEntityRibbonRequest
+            var response = (RetrieveEntityRibbonResponse)_orgService.Execute(new RetrieveEntityRibbonRequest
             {
                 EntityName = entityName,
                 RibbonLocationFilter = filter
@@ -118,7 +118,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
             SolutionComponentCreateHelper.AddExistingComponent(
                 _context,
-                _serviceClient,
+                _orgService,
                 metadataId.Value,
                 1,
                 SOLUTION_NAME,
@@ -128,7 +128,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
         private Guid? GetEntityMetadataId(string entityName)
         {
-            var response = (RetrieveEntityResponse)_serviceClient.Execute(new RetrieveEntityRequest
+            var response = (RetrieveEntityResponse)_orgService.Execute(new RetrieveEntityRequest
             {
                 LogicalName = entityName,
                 EntityFilters = EntityFilters.Entity,
@@ -153,7 +153,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 }
             };
 
-            foreach (var component in _serviceClient.RetrieveMultiple(query).Entities)
+            foreach (var component in _orgService.RetrieveMultiple(query).Entities)
             {
                 var componentId = component.GetAttributeValue<Guid>("objectid");
                 var componentType = component.GetAttributeValue<OptionSetValue>("componenttype")?.Value;
@@ -162,7 +162,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
                 SolutionComponentCreateHelper.RemoveExistingComponent(
                     _context,
-                    _serviceClient,
+                    _orgService,
                     componentId,
                     componentType.Value,
                     SOLUTION_NAME);
@@ -180,7 +180,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 </entity>
             </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetch));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetch));
             return result.Entities.Count > 0 ? result.Entities[0].Id : null;
         }
     }

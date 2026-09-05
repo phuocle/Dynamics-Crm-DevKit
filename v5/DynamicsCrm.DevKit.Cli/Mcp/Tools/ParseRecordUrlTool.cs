@@ -1,4 +1,5 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using ModelContextProtocol.Protocol;
@@ -15,11 +16,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ParseRecordUrlTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
 
-        public ParseRecordUrlTool(ServiceClient serviceClient)
+        public ParseRecordUrlTool(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         [McpServerTool(Name = "parse_record_url", Title = "Parse a Dynamics 365 URL to entity and record ID",
@@ -302,7 +303,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 EntityFilters = EntityFilters.Entity,
                 RetrieveAsIfPublished = true
             };
-            var response = (RetrieveAllEntitiesResponse)_serviceClient.Execute(request);
+            var response = (RetrieveAllEntitiesResponse)_orgService.Execute(request);
             var entity = response.EntityMetadata
                 .FirstOrDefault(e => e.ObjectTypeCode == objectTypeCode);
             return entity?.LogicalName;
@@ -310,7 +311,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string ResolveEntitySetName(string entitySetName)
         {
-            if (_serviceClient == null)
+            if (_orgService == null)
                 return null;
 
             var request = new RetrieveAllEntitiesRequest
@@ -318,7 +319,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 EntityFilters = EntityFilters.Entity,
                 RetrieveAsIfPublished = true
             };
-            var response = (RetrieveAllEntitiesResponse)_serviceClient.Execute(request);
+            var response = (RetrieveAllEntitiesResponse)_orgService.Execute(request);
             var entity = response.EntityMetadata
                 .FirstOrDefault(e => string.Equals(e.EntitySetName, entitySetName, StringComparison.OrdinalIgnoreCase));
             return entity?.LogicalName;

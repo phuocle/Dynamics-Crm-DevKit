@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private const string DIALOG_NAMESPACE = "DevKitDialog";
 
-        public static async Task<string> GetTsDialogCodeAsync(ServiceClient serviceClient, SystemForm dialogForm)
+        public static async Task<string> GetTsDialogCodeAsync(IOrganizationServiceAsync2 orgServiceAsync, SystemForm dialogForm)
         {
             await Helper.DelayAsync(1);
             var dialogUniqueName = dialogForm.UniqueName;

@@ -27,7 +27,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageFormTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private static XmlSchemaSet _cachedSchemaSet;
         private static readonly object _schemaLock = new();
 
@@ -35,9 +35,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpExecutionContext _context;
         private string _workspaceFolder;
 
-        public ManageFormTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageFormTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -75,14 +75,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var normalizedAction = action.Trim().ToLowerInvariant();
                 var entityName = entity_name.Trim();
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_form");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_form");
                 if (!entityResult.IsSuccess)
                     return Error(entityResult.Error);
                 entityName = entityResult.Value.LogicalName;
 
                 // Rule12: gate mutation actions (update/rename/undo) behind System Administrator.
                 if (normalizedAction is "update" or "rename" or "undo"
-                    && RoleGateHelper.EnsureSystemAdministrator(_serviceClient) is { } gate)
+                    && RoleGateHelper.EnsureSystemAdministrator(_orgService) is { } gate)
                     return gate;
 
                 if (normalizedAction is "update" or "rename")
@@ -118,7 +118,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"form_type={formType} is not valid.", "Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. Use 0 or omit for all types.");
 
             var query = BuildListQuery(entityName, formType, includeFormXml);
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             var forms = result.Entities;
 
             if (forms.Count == 0)
@@ -147,7 +147,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var escapedName = formName.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
             query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{escapedName}%");
 
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             var forms = result.Entities;
 
             if (forms.Count == 0)
@@ -223,7 +223,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var escapedName = nameFilter.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
             query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{escapedName}%");
 
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             var forms = result.Entities;
 
             if (forms.Count == 0)
@@ -257,7 +257,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             query.Criteria.AddCondition("formid", ConditionOperator.Equal, formId);
 
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
 
             if (result.Entities.Count == 0)
                 return Error(
@@ -366,7 +366,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "The form record has no FormXML to modify. Restore it from a backup with action='undo', or edit the form in the maker portal.");
 
             // 3. Apply operations via runner (exceptions bubble to entry catch)
-            var runner = new FormXmlOperationsRunner(_serviceClient);
+            var runner = new FormXmlOperationsRunner(_orgService);
             var (modifiedFormXml, opSummaries, classIdMap) = runner.Run(currentFormXml, entityName, ops);
 
             // 5. Validate XSD (always — no bypass)
@@ -413,10 +413,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Backup (fail-safe: exception bubbles to entry catch) — only when actually mutating
             var backupPath = SaveBackup(entityName, id, formName, currentFormXml);
-            DataverseMutationExecutor.Update(_context, _serviceClient, updateEntity);
+            DataverseMutationExecutor.Update(_context, _orgService, updateEntity);
 
             // Publish via helper (swallows faults, returns false on failure)
-            var published = PublishHelper.PublishEntity(_context, _serviceClient, objectTypeCode);
+            var published = PublishHelper.PublishEntity(_context, _orgService, objectTypeCode);
 
             if (!published)
                 return Partial(
@@ -521,10 +521,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Backup (fail-safe: exception bubbles to entry catch) — only when actually mutating
             var backupPath = SaveBackup(entityName, id, formName, currentFormXml);
-            DataverseMutationExecutor.Update(_context, _serviceClient, update);
+            DataverseMutationExecutor.Update(_context, _orgService, update);
 
             // Step 5: Publish via helper (swallows faults, returns false on failure)
-            var published = PublishHelper.PublishEntity(_context, _serviceClient, objectTypeCode);
+            var published = PublishHelper.PublishEntity(_context, _orgService, objectTypeCode);
 
             if (!published)
                 return Partial(
@@ -627,10 +627,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Backup (fail-safe: exception bubbles to entry catch) — only when actually mutating
             var currentFormXml = currentForm.GetAttributeValue<string>("formxml") ?? "";
             var backupPath = SaveBackup(entityName, id, oldName, currentFormXml);
-            DataverseMutationExecutor.Update(_context, _serviceClient, update);
+            DataverseMutationExecutor.Update(_context, _orgService, update);
 
             // Step 5: Publish via helper (swallows faults, returns false on failure)
-            var published = PublishHelper.PublishEntity(_context, _serviceClient, objectTypeCode);
+            var published = PublishHelper.PublishEntity(_context, _orgService, objectTypeCode);
 
             if (!published)
                 return Partial(
@@ -755,10 +755,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     RestoredFromBackup = backupFilePath,
                     Published = false
                 });
-            DataverseMutationExecutor.Update(_context, _serviceClient, update);
+            DataverseMutationExecutor.Update(_context, _orgService, update);
 
             // Step 5: Publish via helper (swallows faults, returns false on failure)
-            var published = PublishHelper.PublishEntity(_context, _serviceClient, objectTypeCode);
+            var published = PublishHelper.PublishEntity(_context, _orgService, objectTypeCode);
 
             if (!published)
                 return Partial(
@@ -868,7 +868,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 TopCount = 1
             };
             query.Criteria.AddCondition("formid", ConditionOperator.Equal, formId);
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
@@ -956,7 +956,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (excludeFormId.HasValue)
                 query.Criteria.AddCondition("formid", ConditionOperator.NotEqual, excludeFormId.Value);
 
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 

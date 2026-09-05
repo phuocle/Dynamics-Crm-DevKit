@@ -18,11 +18,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class GetWorkflowsTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
 
-        public GetWorkflowsTool(ServiceClient serviceClient)
+        public GetWorkflowsTool(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         private static readonly HashSet<string> ValidModes = new(StringComparer.OrdinalIgnoreCase)
@@ -90,7 +90,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             int? objectTypeCode = null;
             if (!string.IsNullOrWhiteSpace(entityName))
             {
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "get_workflows");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "get_workflows");
                 if (!entityResult.IsSuccess)
                 {
                     if (entityResult.Status == ResolveStatus.Ambiguous)
@@ -118,7 +118,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (!string.IsNullOrWhiteSpace(triggerField))
                 {
-                    var fieldResult = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entityName, triggerField.Trim(), "get_workflows");
+                    var fieldResult = DisplayNameFirstResolver.ResolveAttribute(_orgService, entityName, triggerField.Trim(), "get_workflows");
                     if (!fieldResult.IsSuccess)
                         return Error(
                             $"trigger_field '{triggerField.Trim()}': {fieldResult.Error.Split("\r\n")[0]}",
@@ -133,7 +133,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // When trigger_field is set, we use a server-side like-filter on triggeronupdateattributelist
             // to avoid the fetch-before-filter false-zero bug (match on a later page would be missed).
             var fetchXml = BuildListFetchXml(objectTypeCode, normalizedMode, normalizedStatus, triggerField, nameFilter, maxRecords);
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             var matchedEntities = result.Entities.ToList();
 
             if (matchedEntities.Count == 0)
@@ -236,7 +236,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
                 return Error($"Classic workflow '{workflowId.Trim()}' not found.", "Ensure it is category=0 (classic workflow), not a BPF or modern flow.");
 
@@ -454,7 +454,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 LogicalName = entityName,
                 EntityFilters = EntityFilters.Entity
             };
-            var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+            var response = (RetrieveEntityResponse)_orgService.Execute(request);
             return response.EntityMetadata.ObjectTypeCode;
         }
     }

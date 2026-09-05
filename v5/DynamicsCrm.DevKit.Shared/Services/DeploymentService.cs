@@ -14,11 +14,11 @@ namespace DynamicsCrm.DevKit.Shared.Services
 {
     public class DeploymentService
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationServiceAsync2 _orgServiceAsync;
 
-        public DeploymentService(ServiceClient serviceClient)
+        public DeploymentService(IOrganizationServiceAsync2 orgServiceAsync)
         {
-            _serviceClient = serviceClient;
+            _orgServiceAsync = orgServiceAsync;
         }
 
         public async Task<List<Entity>> RetrieveAllRecordsByFetchXmlAsync(string fetchXml)
@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                 var pagedFetchXml = CreatePagedFetchXml(fetchXml, pageNumber, pagingCookie);
 
                 XrmHelper.COUNT_RetrieveMultipleAsync++;
-                var response = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(pagedFetchXml));
+                var response = await _orgServiceAsync.RetrieveMultipleAsync(new FetchExpression(pagedFetchXml));
 
                 allRecords.AddRange(response.Entities);
 
@@ -85,7 +85,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
 </fetch>";
 
             XrmHelper.COUNT_RetrieveMultipleAsync++;
-            var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var rows = await _orgServiceAsync.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return (false, Guid.Empty, string.Empty);
             var entity = rows.Entities[0];
             var solutionId = entity.Id;
@@ -124,7 +124,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
 </fetch>";
 
             XrmHelper.COUNT_RetrieveMultipleAsync++;
-            var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var rows = await _orgServiceAsync.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var list = new List<DownloadFile>();
             foreach (var entity in rows.Entities)
             {
@@ -144,7 +144,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
             var update = new Entity("report", reportId);
             update["bodytext"] = await FileHelper.ReadAllTextAsync(fullFileName);
             XrmHelper.COUNT_UpdateAsync++;
-            await _serviceClient.UpdateAsync(update);
+            await _orgServiceAsync.UpdateAsync(update);
         }
 
         public async Task<int?> GetLanguageCodeAsync(string language)
@@ -165,7 +165,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
   </entity>
 </fetch>";
             XrmHelper.COUNT_RetrieveMultipleAsync++;
-            var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var rows = await _orgServiceAsync.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return null;
             return rows.Entities[0].GetAttributeValue<int>("localeid");
         }
@@ -207,7 +207,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
   </entity>
 </fetch>";
             XrmHelper.COUNT_RetrieveMultipleAsync++;
-            var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var rows = await _orgServiceAsync.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var list = new List<DeployReport>();
             foreach (var entity in rows.Entities)
             {
@@ -252,7 +252,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
   </entity>
 </fetch>";
             XrmHelper.COUNT_RetrieveMultipleAsync++;
-            var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var rows = await _orgServiceAsync.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var webResources = new List<DeployWebResource>();
             foreach (var entity in rows.Entities)
             {
@@ -274,7 +274,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                 webResource["content"] = Convert.ToBase64String(File.ReadAllBytes(fullFileName));
                 var request = new UpdateRequest { Target = webResource };
                 XrmHelper.COUNT_ExecuteAsync++;
-                var response = await _serviceClient.ExecuteAsync(request);
+                var response = await _orgServiceAsync.ExecuteAsync(request);
                 return (true, string.Empty);
             }
             catch (Exception e)
@@ -347,7 +347,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                     {
                         var req = new RetrieveProvisionedLanguagesRequest();
                         XrmHelper.COUNT_ExecuteAsync++;
-                        var res = (RetrieveProvisionedLanguagesResponse)await _serviceClient.ExecuteAsync(req);
+                        var res = (RetrieveProvisionedLanguagesResponse)await _orgServiceAsync.ExecuteAsync(req);
                         if (res.RetrieveProvisionedLanguages.Contains(languagecode))
                         {
                             webResource["languagecode"] = languagecode;
@@ -359,7 +359,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                     }
                 }
                 XrmHelper.COUNT_CreateAsync++;
-                var webResourceId = await _serviceClient.CreateAsync(webResource);
+                var webResourceId = await _orgServiceAsync.CreateAsync(webResource);
                 return (webResourceId, string.Empty);
             }
             catch (Exception e)
@@ -375,7 +375,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                 var publishXml = $"<importexportxml><webresources><webresource>{webResourceId}</webresource></webresources></importexportxml>";
                 var request = new PublishXmlRequest { ParameterXml = publishXml };
                 XrmHelper.COUNT_ExecuteAsync++;
-                var response = await _serviceClient.ExecuteAsync(request);
+                var response = await _orgServiceAsync.ExecuteAsync(request);
                 return (true, string.Empty);
             }
             catch (Exception e)
@@ -414,7 +414,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
   </entity>
 </fetch>";
             XrmHelper.COUNT_RetrieveMultipleAsync++;
-            var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var rows = await _orgServiceAsync.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var list = new List<NameValueGuidExtend>();
             foreach (var entity in rows.Entities)
             {
@@ -452,7 +452,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
   </entity>
 </fetch>";
             XrmHelper.COUNT_RetrieveMultipleAsync++;
-            var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var rows = await _orgServiceAsync.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var list = new List<DownloadFile>();
             foreach (var entity in rows.Entities)
             {
@@ -483,7 +483,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                 SolutionUniqueName = solutionUniqueName
             };
             XrmHelper.COUNT_ExecuteAsync++;
-            await _serviceClient.ExecuteAsync(request);
+            await _orgServiceAsync.ExecuteAsync(request);
         }
 
         public static async Task<ServiceClient> IsConnectedAsync(string connectionString)
@@ -542,7 +542,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
   </entity>
 </fetch>";
             XrmHelper.COUNT_RetrieveMultipleAsync++;
-            var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var rows = await _orgServiceAsync.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return null;
             return rows.Entities[0];
         }
@@ -551,7 +551,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
         {
             var request = new RetrieveVersionRequest();
             XrmHelper.COUNT_ExecuteAsync++;
-            var response = (RetrieveVersionResponse)await _serviceClient.ExecuteAsync(request);
+            var response = (RetrieveVersionResponse)await _orgServiceAsync.ExecuteAsync(request);
             return new Version(response.Version) >= new Version("9.1.0.18950");
         }
     }

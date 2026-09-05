@@ -18,11 +18,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class GetBusinessRulesTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
 
-        public GetBusinessRulesTool(ServiceClient serviceClient)
+        public GetBusinessRulesTool(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         [McpServerTool(Name = "get_business_rules", Title = "List business rules for an entity",
@@ -65,7 +65,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error("entity_name is required for list and detail modes.",
                         "Use get_tables to discover names.");
 
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_business_rules");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "get_business_rules");
                 if (!entityResult.IsSuccess)
                     return Error(
                         entityResult.Error.Split("\r\n")[0],
@@ -127,7 +127,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             var rules = result.Entities.Select(e => new BusinessRuleSummaryEntry
             {
                 RuleId = e.Id.ToString(),
@@ -159,7 +159,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "description", "category")
             };
             query.Criteria.AddCondition("workflowid", ConditionOperator.Equal, ruleId);
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             if (result.Entities.Count == 0)
                 return Error($"Business rule '{ruleId}' not found.",
                     "Use get_business_rules in list mode to find a valid ruleId.");
@@ -219,7 +219,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 LogicalName = entityName,
                 EntityFilters = EntityFilters.Entity
             };
-            var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+            var response = (RetrieveEntityResponse)_orgService.Execute(request);
             return response.EntityMetadata.ObjectTypeCode;
         }
 

@@ -70,7 +70,7 @@ Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (leg
 ## Conventions
 
 - `ServiceClient` variable → `serviceClient`
-- `IOrganizationService` variable → `crmService`
+- `IOrganizationService` variable → `orgService` (field: `_orgService`); `IOrganizationServiceAsync2` variable → `orgServiceAsync`
 - Preserve existing public command names, tool names, and JSON keys
 - Prefer existing helpers in `DynamicsCrm.DevKit.Shared` and `Mcp/Tools/Helper/` before creating new ones
 - All docs → `DynamicsCrm.DevKit.Docs/{ComponentName}/` as `.md` files

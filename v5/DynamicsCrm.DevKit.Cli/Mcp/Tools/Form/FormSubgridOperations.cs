@@ -1,5 +1,6 @@
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Linq;
@@ -10,11 +11,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 {
     internal sealed class FormSubgridOperations
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
 
-        public FormSubgridOperations(ServiceClient serviceClient)
+        public FormSubgridOperations(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         public string ExecuteAddSubgrid(XDocument formDoc, JsonElement op)
@@ -143,7 +144,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 
         private string ResolveDefaultViewId(string targetEntity)
         {
-            if (_serviceClient == null)
+            if (_orgService == null)
                 throw new InvalidOperationException("view_id is required when no Dataverse service client is available.");
 
             var query = new QueryExpression("savedquery")
@@ -157,7 +158,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             query.AddOrder("isdefault", OrderType.Descending);
             query.AddOrder("name", OrderType.Ascending);
 
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             var view = result.Entities.FirstOrDefault()
                 ?? throw new InvalidOperationException($"No active public view found for target_entity '{targetEntity}'. Provide view_id explicitly.");
 

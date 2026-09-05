@@ -1,4 +1,5 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
 using System;
@@ -9,11 +10,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 {
     public class FormXmlOperations : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
 
-        public FormXmlOperations(ServiceClient serviceClient)
+        public FormXmlOperations(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         [Description(
@@ -63,7 +64,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             // Attempt Dataverse call
             try
             {
-                var form = _serviceClient.Retrieve("systemform", parsedFormId,
+                var form = _orgService.Retrieve("systemform", parsedFormId,
                     new ColumnSet("formxml", "name", "objecttypecode"));
                 return Success($"[BuildFormXML] Form '{form?.GetAttributeValue<string>("name")}' updated successfully.", null);
             }

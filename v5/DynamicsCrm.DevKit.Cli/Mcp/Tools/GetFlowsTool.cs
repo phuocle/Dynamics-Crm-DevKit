@@ -16,11 +16,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class GetFlowsTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
 
-        public GetFlowsTool(ServiceClient serviceClient)
+        public GetFlowsTool(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         private const int PagingPageSize = 5000;
@@ -165,7 +165,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 while (matched.Count < maxRecords)
                 {
                     var pagedFetchXml = FetchXmlPagingHelper.ApplyPaging(fetchXml, page, PagingPageSize, pagingCookie);
-                    var pageResult = _serviceClient.RetrieveMultiple(new FetchExpression(pagedFetchXml));
+                    var pageResult = _orgService.RetrieveMultiple(new FetchExpression(pagedFetchXml));
 
                     foreach (var e in pageResult.Entities)
                     {
@@ -184,7 +184,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             else
             {
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
                 entities = result.Entities.ToList();
             }
 
@@ -224,7 +224,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
                 return Error($"Cloud flow '{flowId}' not found (or not a cloud flow).",
                     "Use get_flows without flow_id to list available flows.");
@@ -280,7 +280,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             var runs = result.Entities.Select(MapRunEntry).ToList();
 
             var summary = new FlowRunSummary
@@ -333,7 +333,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             return result.Entities.Select(MapRunEntry).ToList();
         }
 
@@ -349,7 +349,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             return result.Entities.Count > 0
                 ? result.Entities[0].GetAttributeValue<string>("name")
                 : null;

@@ -1,5 +1,6 @@
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 {
 public static class PublishHelper
     {
-        public static bool PublishEntities(McpExecutionContext context, ServiceClient serviceClient, IEnumerable<string> entityNames, int waitSeconds = 5)
+        public static bool PublishEntities(McpExecutionContext context, IOrganizationService orgService, IEnumerable<string> entityNames, int waitSeconds = 5)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
-            if (serviceClient == null)
-                throw new ArgumentNullException(nameof(serviceClient));
+            if (orgService == null)
+                throw new ArgumentNullException(nameof(orgService));
 
             var entities = entityNames?.Where(n => !string.IsNullOrWhiteSpace(n)).ToList();
             if (entities == null || entities.Count == 0)
@@ -26,7 +27,7 @@ public static class PublishHelper
             try
             {
                 context.AssertMutationAllowed($"PublishXmlRequest entities={string.Join(",", entities)}");
-                serviceClient.Execute(new PublishXmlRequest { ParameterXml = parameterXml });
+                orgService.Execute(new PublishXmlRequest { ParameterXml = parameterXml });
                 MetadataOperationWaitHelper.WaitAfterMutation(waitSeconds);
                 return true;
             }
@@ -36,19 +37,19 @@ public static class PublishHelper
             }
         }
 
-        public static bool PublishEntity(McpExecutionContext context, ServiceClient serviceClient, string entityName, int waitSeconds = 5)
+        public static bool PublishEntity(McpExecutionContext context, IOrganizationService orgService, string entityName, int waitSeconds = 5)
         {
             if (string.IsNullOrWhiteSpace(entityName))
                 throw new ArgumentException("Entity name is required.", nameof(entityName));
 
-            return PublishEntities(context, serviceClient, new[] { entityName }, waitSeconds);
+            return PublishEntities(context, orgService, new[] { entityName }, waitSeconds);
         }
 
-        public static bool PublishOptionSets(McpExecutionContext context, ServiceClient serviceClient, IEnumerable<string> optionSetNames, int waitSeconds = 3)
+        public static bool PublishOptionSets(McpExecutionContext context, IOrganizationService orgService, IEnumerable<string> optionSetNames, int waitSeconds = 3)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
-            if (serviceClient == null)
-                throw new ArgumentNullException(nameof(serviceClient));
+            if (orgService == null)
+                throw new ArgumentNullException(nameof(orgService));
 
             var optionSets = optionSetNames?.Where(n => !string.IsNullOrWhiteSpace(n)).ToList();
             if (optionSets == null || optionSets.Count == 0)
@@ -60,7 +61,7 @@ public static class PublishHelper
             try
             {
                 context.AssertMutationAllowed($"PublishXmlRequest optionsets={string.Join(",", optionSets)}");
-                serviceClient.Execute(new PublishXmlRequest { ParameterXml = parameterXml });
+                orgService.Execute(new PublishXmlRequest { ParameterXml = parameterXml });
                 MetadataOperationWaitHelper.WaitAfterMutation(waitSeconds);
                 return true;
             }
@@ -70,18 +71,18 @@ public static class PublishHelper
             }
         }
 
-        public static bool PublishOptionSet(McpExecutionContext context, ServiceClient serviceClient, string optionSetName, int waitSeconds = 3)
+        public static bool PublishOptionSet(McpExecutionContext context, IOrganizationService orgService, string optionSetName, int waitSeconds = 3)
         {
             if (string.IsNullOrWhiteSpace(optionSetName))
                 throw new ArgumentException("Option set name is required.", nameof(optionSetName));
 
-            return PublishOptionSets(context, serviceClient, new[] { optionSetName }, waitSeconds);
+            return PublishOptionSets(context, orgService, new[] { optionSetName }, waitSeconds);
         }
 
-        public static bool PublishWebResources(McpExecutionContext context, ServiceClient serviceClient, IEnumerable<Guid> webResourceIds, int waitSeconds = 3)
+        public static bool PublishWebResources(McpExecutionContext context, IOrganizationService orgService, IEnumerable<Guid> webResourceIds, int waitSeconds = 3)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
-            if (serviceClient == null) throw new ArgumentNullException(nameof(serviceClient));
+            if (orgService == null) throw new ArgumentNullException(nameof(orgService));
 
             var ids = webResourceIds?.Where(id => id != Guid.Empty).Distinct().ToList();
             if (ids == null || ids.Count == 0)
@@ -93,7 +94,7 @@ public static class PublishHelper
             try
             {
                 context.AssertMutationAllowed($"PublishWebResources {string.Join(",", ids)}");
-                serviceClient.Execute(new PublishXmlRequest { ParameterXml = parameterXml });
+                orgService.Execute(new PublishXmlRequest { ParameterXml = parameterXml });
                 MetadataOperationWaitHelper.WaitAfterMutation(waitSeconds);
                 return true;
             }
@@ -103,20 +104,20 @@ public static class PublishHelper
             }
         }
 
-        public static bool PublishWebResource(McpExecutionContext context, ServiceClient serviceClient, Guid webResourceId, int waitSeconds = 3)
+        public static bool PublishWebResource(McpExecutionContext context, IOrganizationService orgService, Guid webResourceId, int waitSeconds = 3)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
-            if (serviceClient == null) throw new ArgumentNullException(nameof(serviceClient));
+            if (orgService == null) throw new ArgumentNullException(nameof(orgService));
             if (webResourceId == Guid.Empty)
                 throw new ArgumentException("Webresource id is required.", nameof(webResourceId));
 
-            return PublishWebResources(context, serviceClient, new[] { webResourceId }, waitSeconds);
+            return PublishWebResources(context, orgService, new[] { webResourceId }, waitSeconds);
         }
 
-        public static bool PublishAppModules(McpExecutionContext context, ServiceClient serviceClient, IEnumerable<Guid> appModuleIds, int waitSeconds = 5)
+        public static bool PublishAppModules(McpExecutionContext context, IOrganizationService orgService, IEnumerable<Guid> appModuleIds, int waitSeconds = 5)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
-            if (serviceClient == null) throw new ArgumentNullException(nameof(serviceClient));
+            if (orgService == null) throw new ArgumentNullException(nameof(orgService));
 
             var ids = appModuleIds?.Where(id => id != Guid.Empty).Distinct().ToList();
             if (ids == null || ids.Count == 0)
@@ -128,7 +129,7 @@ public static class PublishHelper
             try
             {
                 context.AssertMutationAllowed($"PublishAppModules {string.Join(",", ids)}");
-                serviceClient.Execute(new PublishXmlRequest { ParameterXml = parameterXml });
+                orgService.Execute(new PublishXmlRequest { ParameterXml = parameterXml });
                 MetadataOperationWaitHelper.WaitAfterMutation(waitSeconds);
                 return true;
             }
@@ -138,25 +139,25 @@ public static class PublishHelper
             }
         }
 
-        public static bool PublishAppModule(McpExecutionContext context, ServiceClient serviceClient, Guid appModuleId, int waitSeconds = 5)
+        public static bool PublishAppModule(McpExecutionContext context, IOrganizationService orgService, Guid appModuleId, int waitSeconds = 5)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
-            if (serviceClient == null) throw new ArgumentNullException(nameof(serviceClient));
+            if (orgService == null) throw new ArgumentNullException(nameof(orgService));
             if (appModuleId == Guid.Empty)
                 throw new ArgumentException("App module id is required.", nameof(appModuleId));
 
-            return PublishAppModules(context, serviceClient, new[] { appModuleId }, waitSeconds);
+            return PublishAppModules(context, orgService, new[] { appModuleId }, waitSeconds);
         }
 
-        public static bool PublishRibbon(McpExecutionContext context, ServiceClient serviceClient, int waitSeconds = 5)
+        public static bool PublishRibbon(McpExecutionContext context, IOrganizationService orgService, int waitSeconds = 5)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
-            if (serviceClient == null) throw new ArgumentNullException(nameof(serviceClient));
+            if (orgService == null) throw new ArgumentNullException(nameof(orgService));
 
             try
             {
                 context.AssertMutationAllowed("PublishRibbon");
-                serviceClient.Execute(new PublishXmlRequest
+                orgService.Execute(new PublishXmlRequest
                 {
                     ParameterXml = "<importexportxml><ribbons><ribbon></ribbon></ribbons></importexportxml>"
                 });
@@ -169,10 +170,10 @@ public static class PublishHelper
             }
         }
 
-        public static bool PublishDashboards(McpExecutionContext context, ServiceClient serviceClient, IEnumerable<Guid> dashboardIds, int waitSeconds = 5)
+        public static bool PublishDashboards(McpExecutionContext context, IOrganizationService orgService, IEnumerable<Guid> dashboardIds, int waitSeconds = 5)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
-            if (serviceClient == null) throw new ArgumentNullException(nameof(serviceClient));
+            if (orgService == null) throw new ArgumentNullException(nameof(orgService));
 
             var ids = dashboardIds?.Where(id => id != Guid.Empty).Distinct().ToList();
             if (ids == null || ids.Count == 0)
@@ -184,7 +185,7 @@ public static class PublishHelper
             try
             {
                 context.AssertMutationAllowed($"PublishDashboards {string.Join(",", ids)}");
-                serviceClient.Execute(new PublishXmlRequest { ParameterXml = parameterXml });
+                orgService.Execute(new PublishXmlRequest { ParameterXml = parameterXml });
                 MetadataOperationWaitHelper.WaitAfterMutation(waitSeconds);
                 return true;
             }
@@ -194,23 +195,23 @@ public static class PublishHelper
             }
         }
 
-        public static bool PublishDashboard(McpExecutionContext context, ServiceClient serviceClient, Guid dashboardId, int waitSeconds = 5)
+        public static bool PublishDashboard(McpExecutionContext context, IOrganizationService orgService, Guid dashboardId, int waitSeconds = 5)
         {
             if (dashboardId == Guid.Empty)
                 throw new ArgumentException("Dashboard id is required.", nameof(dashboardId));
 
-            return PublishDashboards(context, serviceClient, new[] { dashboardId }, waitSeconds);
+            return PublishDashboards(context, orgService, new[] { dashboardId }, waitSeconds);
         }
 
-        public static bool PublishSiteMap(McpExecutionContext context, ServiceClient serviceClient, int waitSeconds = 5)
+        public static bool PublishSiteMap(McpExecutionContext context, IOrganizationService orgService, int waitSeconds = 5)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
-            if (serviceClient == null) throw new ArgumentNullException(nameof(serviceClient));
+            if (orgService == null) throw new ArgumentNullException(nameof(orgService));
 
             try
             {
                 context.AssertMutationAllowed("PublishSiteMap");
-                serviceClient.Execute(new PublishXmlRequest
+                orgService.Execute(new PublishXmlRequest
                 {
                     ParameterXml = "<importexportxml><sitemaps><sitemap></sitemap></sitemaps></importexportxml>"
                 });
@@ -223,10 +224,10 @@ public static class PublishHelper
             }
         }
 
-        public static bool PublishTargeted(McpExecutionContext context, ServiceClient serviceClient, PublishTargetedPayload payload, int waitSeconds = 5)
+        public static bool PublishTargeted(McpExecutionContext context, IOrganizationService orgService, PublishTargetedPayload payload, int waitSeconds = 5)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
-            if (serviceClient == null) throw new ArgumentNullException(nameof(serviceClient));
+            if (orgService == null) throw new ArgumentNullException(nameof(orgService));
             if (payload == null) throw new ArgumentNullException(nameof(payload));
 
             var parameterXml = BuildTargetedXml(payload);
@@ -236,7 +237,7 @@ public static class PublishHelper
             try
             {
                 context.AssertMutationAllowed("PublishXmlRequest (targeted)");
-                serviceClient.Execute(new PublishXmlRequest { ParameterXml = parameterXml });
+                orgService.Execute(new PublishXmlRequest { ParameterXml = parameterXml });
                 MetadataOperationWaitHelper.WaitAfterMutation(waitSeconds);
                 return true;
             }
@@ -313,25 +314,25 @@ public static class PublishHelper
             return sb.ToString();
         }
 
-        public static Guid PublishAllAsync(McpExecutionContext context, ServiceClient serviceClient)
+        public static Guid PublishAllAsync(McpExecutionContext context, IOrganizationService orgService)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
-            if (serviceClient == null) throw new ArgumentNullException(nameof(serviceClient));
+            if (orgService == null) throw new ArgumentNullException(nameof(orgService));
 
             context.AssertMutationAllowed("PublishAllXmlAsyncRequest");
-            var response = (PublishAllXmlAsyncResponse)serviceClient.Execute(new PublishAllXmlAsyncRequest());
+            var response = (PublishAllXmlAsyncResponse)orgService.Execute(new PublishAllXmlAsyncRequest());
             return response.AsyncOperationId;
         }
 
-        public static bool PublishAllXml(McpExecutionContext context, ServiceClient serviceClient, int waitSeconds = 20)
+        public static bool PublishAllXml(McpExecutionContext context, IOrganizationService orgService, int waitSeconds = 20)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
-            if (serviceClient == null) throw new ArgumentNullException(nameof(serviceClient));
+            if (orgService == null) throw new ArgumentNullException(nameof(orgService));
 
             try
             {
                 context.AssertMutationAllowed("PublishAllXmlRequest");
-                serviceClient.Execute(new PublishAllXmlRequest());
+                orgService.Execute(new PublishAllXmlRequest());
                 MetadataOperationWaitHelper.WaitAfterMutation(waitSeconds);
                 return true;
             }

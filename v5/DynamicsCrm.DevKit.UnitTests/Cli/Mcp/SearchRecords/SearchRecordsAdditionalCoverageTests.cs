@@ -31,7 +31,7 @@ public sealed class SearchRecordsAdditionalCoverageTests
         "SetRecordNames", BindingFlags.NonPublic | BindingFlags.Instance)!;
 
     private static DynamicsCrm.DevKit.Cli.Mcp.Tools.SearchRecordsTool CreateTool()
-        => new(null!, new McpDryRunOptions());
+        => new(null!, new McpDryRunOptions(), null!);
 
     [TestMethod]
     public async Task SearchRecords_EmptyAction_ReturnsRequiredError()

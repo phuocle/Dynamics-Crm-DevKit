@@ -14,15 +14,15 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private const string NEW_LINE = "\r\n";
         private const string TAB = "\t";
 
-        private static ServiceClient ServiceClient { get; set; }
+        private static IOrganizationServiceAsync2 OrgServiceAsync { get; set; }
         private static MetadataService _metadataService;
-        private static MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
+        private static MetadataService Metadata => _metadataService ??= new MetadataService(OrgServiceAsync);
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
 
-        public static async Task<string> GetTsWebApiCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata)
+        public static async Task<string> GetTsWebApiCodeAsync(IOrganizationServiceAsync2 orgServiceAsync, EntityMetadata entityMetadata)
         {
-            ServiceClient = serviceClient;
+            OrgServiceAsync = orgServiceAsync;
             _metadataService = null;
             EntityMetadata = entityMetadata;
             if (EntityMetadata.Attributes == null) EntityMetadata = await Metadata.FetchEntityMetadataAsync(entityMetadata.LogicalName);
@@ -166,7 +166,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
                     if (lookup.Targets.Any()) {
                           var target = lookup.Targets[0];
-                          await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(ServiceClient, target);
+                          await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(OrgServiceAsync, target);
                           var targetMeta = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == target);
                           if(targetMeta != null) {
                               properties = properties.Replace($"logicalName: '{attribute.LogicalName}'", $"schemaName: '{attribute.SchemaName}', logicalName: '_{attribute.LogicalName}_value'");

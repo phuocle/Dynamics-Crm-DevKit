@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Step 2: Preserve existing RibbonDiffXml nodes that are not present in the supplied XML.
             // Raw ribbonxml updates are treated as patches so adding one button cannot delete siblings.
-            var fetcher = new RibbonSolutionFetcher(_serviceClient, _context);
+            var fetcher = new RibbonSolutionFetcher(_orgService, _context);
             var existingXml = fetcher.FetchExistingRibbonDiffXml(entityName);
             var targetDoc = XDocument.Parse(resolvedXml);
             var existingDoc = XDocument.Parse(existingXml);
@@ -56,10 +56,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Step 5: Import solution. Execute returns only after Dataverse finishes the import request.
             var solutionZip = BuildSolutionZip(entityName, resolvedXml);
-            SolutionImportHelper.Import(_context, _serviceClient, solutionZip);
+            SolutionImportHelper.Import(_context, _orgService, solutionZip);
 
             // Step 6: Publish immediately after import completes (PublishAll async).
-            var asyncJobId = PublishHelper.PublishAllAsync(_context, _serviceClient);
+            var asyncJobId = PublishHelper.PublishAllAsync(_context, _orgService);
             var functionSignatures = BuildFunctionSignatures(resolvedXml);
 
             // Step 7: Return result
@@ -72,7 +72,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult UpdateRibbonFromOperations(string entityName, string operationsJson)
         {
             // Step 1: Validate entity
-            var validation = new RibbonValidation(_serviceClient);
+            var validation = new RibbonValidation(_orgService);
             var entityError = validation.ValidateEntityExists(entityName);
             if (entityError != null)
                 return Error(entityError, "Use get_tables to find valid entity names.");
@@ -103,14 +103,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ops = normalizedOps;
 
             // Step 3: Fetch existing RibbonDiffXml from devkit-ribbon solution
-            var fetcher = new RibbonSolutionFetcher(_serviceClient, _context);
+            var fetcher = new RibbonSolutionFetcher(_orgService, _context);
             var existingXml = fetcher.FetchExistingRibbonDiffXml(entityName);
 
             // Step 4: Parse existing XML
             var ribbonDoc = XDocument.Parse(existingXml);
 
             // Step 5: Execute operations via helper classes
-            var lcid = McpHelper.GetBaseLanguageCode(_serviceClient);
+            var lcid = McpHelper.GetBaseLanguageCode(_orgService);
             var btnOps = new RibbonButtonOperations(validation, lcid);
             var flyoutOps = new RibbonFlyoutOperations(validation, lcid);
 
@@ -175,10 +175,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Step 9: Build solution ZIP + import. Execute returns only after Dataverse finishes the import request.
             var solutionZip = BuildSolutionZip(entityName, xmlString);
-            SolutionImportHelper.Import(_context, _serviceClient, solutionZip);
+            SolutionImportHelper.Import(_context, _orgService, solutionZip);
 
             // Step 10: Publish immediately after import completes (PublishAll async).
-            var asyncJobId = PublishHelper.PublishAllAsync(_context, _serviceClient);
+            var asyncJobId = PublishHelper.PublishAllAsync(_context, _orgService);
 
             // Step 11: Build result
             return BuildUpdateResult(entityName, backupPath, asyncJobId, functionSignatures,
@@ -245,10 +245,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Build and import. Execute returns only after Dataverse finishes the import request.
             var solutionZip = BuildSolutionZip(entityName, restoredXml);
-            SolutionImportHelper.Import(_context, _serviceClient, solutionZip);
+            SolutionImportHelper.Import(_context, _orgService, solutionZip);
 
             // Publish immediately after import completes (PublishAll async).
-            var asyncJobId = PublishHelper.PublishAllAsync(_context, _serviceClient);
+            var asyncJobId = PublishHelper.PublishAllAsync(_context, _orgService);
 
             return Success(
                 $"manage_ribbon undo — {entityName}: restored from {backupFilePath}, PublishAll started asynchronously ({asyncJobId}).",
@@ -406,7 +406,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // FetchExistingRibbonDiffXml returns an empty RibbonDiffXml when the devkit_ribbon
             // solution does not exist yet, so no swallow-catch is needed here. A genuine fetch
             // failure bubbles up to the caller, which decides whether to block the update.
-            var fetcher = new RibbonSolutionFetcher(_serviceClient, _context);
+            var fetcher = new RibbonSolutionFetcher(_orgService, _context);
             var currentXml = fetcher.FetchExistingRibbonDiffXml(entityName);
 
             if (string.IsNullOrWhiteSpace(currentXml))
@@ -448,7 +448,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     </filter>
                 </entity>
             </fetch>";
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetch));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetch));
             return result.Entities.Count > 0 ? result.Entities[0].Id : null;
         }
 

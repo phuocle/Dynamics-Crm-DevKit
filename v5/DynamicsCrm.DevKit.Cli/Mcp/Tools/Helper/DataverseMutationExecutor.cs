@@ -42,13 +42,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// </summary>
         internal static Task<Guid> CreateAsync(
             McpExecutionContext context,
-            Microsoft.PowerPlatform.Dataverse.Client.ServiceClient serviceClient,
+            Microsoft.PowerPlatform.Dataverse.Client.IOrganizationServiceAsync2 service,
             Entity entity,
             CancellationToken cancellationToken)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
             context.AssertMutationAllowed($"CreateAsync {entity?.LogicalName ?? "(unknown)"}");
-            return serviceClient.CreateAsync(entity, cancellationToken);
+            return service.CreateAsync(entity, cancellationToken);
         }
 
         /// <summary>
@@ -126,13 +126,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// </summary>
         internal static async Task<OrganizationResponse> ExecuteAsync(
             McpExecutionContext context,
-            Microsoft.PowerPlatform.Dataverse.Client.ServiceClient serviceClient,
+            Microsoft.PowerPlatform.Dataverse.Client.IOrganizationServiceAsync2 service,
             OrganizationRequest request,
             CancellationToken cancellationToken)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
             context.AssertMutationAllowed($"ExecuteAsync {request?.RequestName ?? "(unknown)"}");
-            return await serviceClient.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
+            return await service.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>

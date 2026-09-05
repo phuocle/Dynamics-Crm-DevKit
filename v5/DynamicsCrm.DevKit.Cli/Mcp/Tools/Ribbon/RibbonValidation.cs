@@ -1,5 +1,6 @@
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
@@ -21,13 +22,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
     internal sealed class RibbonValidation : IRibbonValidation
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private static XmlSchemaSet _cachedSchemaSet;
         private static readonly object _schemaLock = new();
 
-        public RibbonValidation(ServiceClient serviceClient)
+        public RibbonValidation(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         public string ValidateEntityExists(string entityName)
@@ -42,7 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                         </filter>
                     </entity>
                 </fetch>";
-                var results = _serviceClient.RetrieveMultiple(new FetchExpression(fetch));
+                var results = _orgService.RetrieveMultiple(new FetchExpression(fetch));
                 if (results.Entities.Count == 0)
                     return $"Entity '{entityName}' not found in Dataverse.";
                 return null;
@@ -71,7 +72,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                         </filter>
                     </entity>
                 </fetch>";
-                var results = _serviceClient.RetrieveMultiple(new FetchExpression(fetch));
+                var results = _orgService.RetrieveMultiple(new FetchExpression(fetch));
                 if (results.Entities.Count == 0)
                     return $"Web resource '{name}' not found in Dataverse.";
                 return null;
@@ -175,7 +176,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     EntityName = entityName,
                     RibbonLocationFilter = filter
                 };
-                var response = (RetrieveEntityRibbonResponse)_serviceClient.Execute(request);
+                var response = (RetrieveEntityRibbonResponse)_orgService.Execute(request);
 
                 using var ms = new MemoryStream(response.CompressedEntityXml);
                 using var zip = new ZipArchive(ms, ZipArchiveMode.Read);

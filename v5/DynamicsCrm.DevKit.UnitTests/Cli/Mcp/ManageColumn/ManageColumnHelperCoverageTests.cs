@@ -108,7 +108,7 @@ public sealed class ManageColumnHelperCoverageTests
     [TestMethod]
     public void FormulaCloneValidation_ReturnsUsefulErrorsBeforeServiceCalls()
     {
-        var tool = new ManageColumnTool(null!, new McpDryRunOptions(), new McpExecutionContext(true));
+        var tool = new ManageColumnTool(null!, new McpDryRunOptions(), new McpExecutionContext(true), null!);
         var args = new object[] { "bad", null, 0, null, null, null, null };
         Assert.IsFalse((bool)InvokeInstance(tool, "TryResolveFormulaCloneSource", args));
         StringAssert.Contains((string)args[6], "Invalid formula_definition");
@@ -123,7 +123,7 @@ public sealed class ManageColumnHelperCoverageTests
     [TestMethod]
     public void ResultAndExceptionFormatters_CoverBranchesWithoutDataverse()
     {
-        var tool = new ManageColumnTool(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true));
+        var tool = new ManageColumnTool(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true), null!);
         var duplicate = (CallToolResult)InvokeInstance(tool, "HandleException", new InvalidOperationException("duplicate attribute already exists"), "account", "name", "devkit");
         StringAssert.Contains(Text(duplicate), "already exists");
         var entityMissing = (CallToolResult)InvokeInstance(tool, "HandleException", new InvalidOperationException("entity does not exist"), "account", "name", "devkit");

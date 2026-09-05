@@ -16,11 +16,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class GetCustomApisTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
 
-        public GetCustomApisTool(ServiceClient serviceClient)
+        public GetCustomApisTool(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         private static readonly Dictionary<int, string> ParameterTypeMap = new()
@@ -104,7 +104,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     : entity_name.Trim().ToLowerInvariant();
                 if (!string.IsNullOrWhiteSpace(entity_name))
                 {
-                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_custom_apis");
+                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "get_custom_apis");
                     if (!entityResult.IsSuccess)
                         return Error(
                             entityResult.Error.Split("\r\n")[0],
@@ -155,7 +155,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             var entities = result.Entities.ToList();
 
             var apis = entities.Select(MapListEntry).ToList();
@@ -196,7 +196,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var apiResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchApi));
+            var apiResult = _orgService.RetrieveMultiple(new FetchExpression(fetchApi));
             if (apiResult.Entities.Count == 0)
                 return Error(
                     $"Custom API '{apiName}' not found.",
@@ -234,8 +234,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var paramsResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchParams));
-            var responseResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchResponse));
+            var paramsResult = _orgService.RetrieveMultiple(new FetchExpression(fetchParams));
+            var responseResult = _orgService.RetrieveMultiple(new FetchExpression(fetchResponse));
 
             var entry = MapDetailEntry(api);
             if (!string.IsNullOrEmpty(entry.SolutionId) && string.IsNullOrEmpty(entry.SolutionName))
@@ -353,14 +353,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     </filter>
   </entity>
 </fetch>";
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             return result.Entities.Count > 0 ? result.Entities[0].GetAttributeValue<string>("friendlyname") : null;
         }
 
         private ResolveResult<Entity> ResolveCustomApi(string apiName)
         {
             return DisplayNameFirstResolver.ResolveDataverseRecord(
-                _serviceClient,
+                _orgService,
                 apiName,
                 entityName: "customapi",
                 idColumn: "customapiid",

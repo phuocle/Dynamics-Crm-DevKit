@@ -18,13 +18,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageTableTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public ManageTableTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageTableTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -81,7 +81,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 string resolvedSolutionUniqueName = null;
                 if (!string.IsNullOrWhiteSpace(solution_name))
                 {
-                    var solResult = SolutionResolverHelper.Resolve(_serviceClient, solution_name);
+                    var solResult = SolutionResolverHelper.Resolve(_orgService, solution_name);
                     if (!solResult.IsSuccess)
                         return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
                     resolvedPrefix = solResult.Prefix;
@@ -91,7 +91,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrWhiteSpace(logical_name))
                 {
                     EntityMetadata existingEntity = null;
-                    var entityResolve = DisplayNameFirstResolver.ResolveEntity(_serviceClient, logical_name, "manage_table");
+                    var entityResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, logical_name, "manage_table");
                     if (entityResolve.IsSuccess)
                     {
                         existingEntity = entityResolve.Value;
@@ -193,7 +193,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (string.IsNullOrWhiteSpace(logical_name))
             {
-                var collisionResolve = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_table");
+                var collisionResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_table");
                 if (collisionResolve.IsSuccess)
                     return Error(
                         $"Cannot create table '{display_name}' because derived logical name '{entityName}' already exists.",
@@ -276,8 +276,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = entityName,
-                DisplayName = new Label(display_name, McpHelper.GetBaseLanguageCode(_serviceClient)),
-                DisplayCollectionName = new Label(display_collection_name, McpHelper.GetBaseLanguageCode(_serviceClient)),
+                DisplayName = new Label(display_name, McpHelper.GetBaseLanguageCode(_orgService)),
+                DisplayCollectionName = new Label(display_collection_name, McpHelper.GetBaseLanguageCode(_orgService)),
                 OwnershipType = ownershipTypeValue,
                 IsActivity = is_activity,
                 IsAuditEnabled = new BooleanManagedProperty(is_audit_enabled ?? true),
@@ -286,7 +286,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
 
             if (!string.IsNullOrWhiteSpace(description))
-                entityMetadata.Description = new Label(description, McpHelper.GetBaseLanguageCode(_serviceClient));
+                entityMetadata.Description = new Label(description, McpHelper.GetBaseLanguageCode(_orgService));
 
             if (isElastic)
             {
@@ -301,7 +301,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = primarySchemaName,
                 LogicalName = primary_attribute_name,
-                DisplayName = new Label(primary_attribute_display_name, McpHelper.GetBaseLanguageCode(_serviceClient)),
+                DisplayName = new Label(primary_attribute_display_name, McpHelper.GetBaseLanguageCode(_orgService)),
                 MaxLength = primary_attribute_max_length,
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(AttributeRequiredLevel.None)
             };
@@ -313,7 +313,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             SolutionComponentCreateHelper.ApplySolutionUniqueName(request, resolvedSolutionUniqueName ?? solution_name);
 
-            var response = (CreateEntityResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, request);
+            var response = (CreateEntityResponse)DataverseMutationExecutor.Execute(_context, _orgService, request);
             var entityId = response.EntityId;
 
             var retrieveRequest = new RetrieveEntityRequest
@@ -321,11 +321,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 LogicalName = entityName,
                 EntityFilters = EntityFilters.Entity
             };
-            var createdMetadata = ((RetrieveEntityResponse)_serviceClient.Execute(retrieveRequest)).EntityMetadata;
+            var createdMetadata = ((RetrieveEntityResponse)_orgService.Execute(retrieveRequest)).EntityMetadata;
 
             MetadataOperationWaitHelper.WaitAfterTableCreation();
 
-            var published = PublishHelper.PublishEntity(_context, _serviceClient, entityName);
+            var published = PublishHelper.PublishEntity(_context, _orgService, entityName);
 
             var structured = new ManageTableResult
             {
@@ -379,7 +379,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var oldVal = effectiveDisplayName;
                 if (oldVal != displayName)
                 {
-                    existingMetadata.DisplayName = new Label(displayName, McpHelper.GetBaseLanguageCode(_serviceClient));
+                    existingMetadata.DisplayName = new Label(displayName, McpHelper.GetBaseLanguageCode(_orgService));
                     effectiveDisplayName = displayName;
                     changes.Add($"DisplayName: \"{oldVal}\" -> \"{displayName}\"");
                     structuredChanges["displayName"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = displayName };
@@ -391,7 +391,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var oldVal = effectiveDisplayCollectionName;
                 if (oldVal != displayCollectionName)
                 {
-                    existingMetadata.DisplayCollectionName = new Label(displayCollectionName, McpHelper.GetBaseLanguageCode(_serviceClient));
+                    existingMetadata.DisplayCollectionName = new Label(displayCollectionName, McpHelper.GetBaseLanguageCode(_orgService));
                     effectiveDisplayCollectionName = displayCollectionName;
                     changes.Add($"DisplayCollectionName: \"{oldVal}\" -> \"{displayCollectionName}\"");
                     structuredChanges["displayCollectionName"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = displayCollectionName };
@@ -403,7 +403,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var oldVal = effectiveDescription;
                 if (oldVal != description)
                 {
-                    existingMetadata.Description = new Label(description, McpHelper.GetBaseLanguageCode(_serviceClient));
+                    existingMetadata.Description = new Label(description, McpHelper.GetBaseLanguageCode(_orgService));
                     effectiveDescription = description;
                     changes.Add($"Description: \"{oldVal}\" -> \"{description}\"");
                     structuredChanges["description"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = description };
@@ -518,9 +518,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Entity = existingMetadata
             };
 
-            DataverseMutationExecutor.Execute(_context, _serviceClient, updateRequest);
+            DataverseMutationExecutor.Execute(_context, _orgService, updateRequest);
 
-            var published = PublishHelper.PublishEntity(_context, _serviceClient, entityName);
+            var published = PublishHelper.PublishEntity(_context, _orgService, entityName);
 
             var summary = $"Updated table '{entityName}' ({existingMetadata.MetadataId}) — {changes.Count} change(s), published={(published ? "yes" : "no")}.";
             if (warnings.Count > 0)

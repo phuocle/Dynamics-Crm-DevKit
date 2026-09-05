@@ -1,4 +1,5 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
@@ -15,7 +16,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public partial class ManageRibbonTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
         private string _workspaceFolder;
@@ -28,11 +29,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private const string PublishWaitTimeoutInstruction =
             "After the third get_system_jobs poll, if the PublishAll system job is not Succeeded or no result is returned, stop waiting, do not call manage_ribbon(buttons/detail), and report the ribbon result to the user with a note that Dataverse publish is still running or did not complete successfully and the user must wait/check the job.";
 
-        public ManageRibbonTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageRibbonTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
         {
             // Keep null service construction usable for argument-validation tests;
             // any Dataverse action still fails safely when it reaches the service.
-            _serviceClient = serviceClient;
+            _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -111,7 +112,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             if (updateBusy != null) return updateBusy;
 
                             // Gate destructive ribbon mutation behind System Administrator role.
-                            if (RoleGateHelper.EnsureSystemAdministrator(_serviceClient) is { } updateGate)
+                            if (RoleGateHelper.EnsureSystemAdministrator(_orgService) is { } updateGate)
                                 return updateGate;
 
                             if (_options.DryRun)
@@ -146,7 +147,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             var undoBusy = TryBlockRibbonActionWhenBusy("undo", entityName, isReadback: false);
 
                             // Gate destructive ribbon restore behind System Administrator role.
-                            if (RoleGateHelper.EnsureSystemAdministrator(_serviceClient) is { } undoGate)
+                            if (RoleGateHelper.EnsureSystemAdministrator(_orgService) is { } undoGate)
                                 return undoGate;
 
                             if (_options.DryRun)

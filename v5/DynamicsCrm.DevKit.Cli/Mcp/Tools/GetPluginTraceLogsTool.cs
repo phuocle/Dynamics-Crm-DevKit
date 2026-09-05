@@ -15,11 +15,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class GetPluginTraceLogsTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
 
-        public GetPluginTraceLogsTool(ServiceClient serviceClient)
+        public GetPluginTraceLogsTool(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         [McpServerTool(Name = "get_plugin_trace_logs", Title = "List and inspect plugin trace logs",
@@ -62,7 +62,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             "requestid", "issystemcreated", "createdon", "messageblock", "exceptiondetails")
                     };
                     detailQuery.Criteria.AddCondition("plugintracelogid", ConditionOperator.Equal, detailId);
-                    var detailResult = _serviceClient.RetrieveMultiple(detailQuery);
+                    var detailResult = _orgService.RetrieveMultiple(detailQuery);
                     if (detailResult.Entities.Count == 0)
                         return Error($"Plugin trace log '{detailId}' not found.",
                             "Use get_plugin_trace_logs in list mode to find a valid record_id.");
@@ -98,7 +98,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 string primaryEntityLogical = null;
                 if (!string.IsNullOrWhiteSpace(entity_name))
                 {
-                    var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_plugin_trace_logs");
+                    var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "get_plugin_trace_logs");
                     if (!resolved.IsSuccess)
                         return Error(
                             $"entity_name '{entity_name.Trim()}': {resolved.Error.Split("\r\n")[0]}",
@@ -108,7 +108,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 // ── Fetch ───────────────────────────────────────────────────
                 var fetchXml = BuildListFetchXml(type_name, primaryEntityLogical, minutes_ago, correlation_id, message_name, mode, max_records);
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
 
                 var timeScope = FormatTimeScope(minutes_ago);
 

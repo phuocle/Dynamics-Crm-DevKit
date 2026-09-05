@@ -27,7 +27,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return (null, Error("entity_name is required.",
                     "Provide entity_name, e.g. entity_name='account'. Use get_tables to find valid entity names."));
             var trimmed = entityName.Trim();
-            var result = DisplayNameFirstResolver.ResolveEntity(_serviceClient, trimmed, "manage_ribbon", withNotFoundTip: false);
+            var result = DisplayNameFirstResolver.ResolveEntity(_orgService, trimmed, "manage_ribbon", withNotFoundTip: false);
             if (result.IsSuccess)
                 return (result.Value.LogicalName, null);
             if (result.Status == ResolveStatus.NotFound)
@@ -113,7 +113,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             query.Criteria.AddCondition("startedon", ConditionOperator.OnOrAfter, DateTime.UtcNow.AddMinutes(-60));
             query.AddOrder("startedon", OrderType.Descending);
 
-            return _serviceClient.RetrieveMultiple(query).Entities.FirstOrDefault();
+            return _orgService.RetrieveMultiple(query).Entities.FirstOrDefault();
         }
 
         private static string GetRibbonJobOperationType(Entity job)
@@ -210,7 +210,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (name.StartsWith("$webresource:", StringComparison.OrdinalIgnoreCase))
                 name = name.Substring("$webresource:".Length);
 
-            var result = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, name, "manage_ribbon", withNotFoundTip: false);
+            var result = DisplayNameFirstResolver.ResolveWebResource(_orgService, name, "manage_ribbon", withNotFoundTip: false);
             if (result.IsSuccess)
                 return result.Value.GetAttributeValue<string>("name") ?? result.CanonicalName;
 

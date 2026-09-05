@@ -1,6 +1,7 @@
 #nullable enable
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using System;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
@@ -10,7 +11,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
     {
         internal static void Import(
             McpExecutionContext context,
-            ServiceClient serviceClient,
+            IOrganizationService orgService,
             byte[] solutionZip,
             bool overwriteUnmanagedCustomizations = true,
             bool publishWorkflows = true)
@@ -19,8 +20,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             if (solutionZip == null || solutionZip.Length == 0)
                 throw new ArgumentException("Solution zip is required.", nameof(solutionZip));
             context.AssertMutationAllowed("ImportSolutionRequest");
-            if (serviceClient == null) throw new ArgumentNullException(nameof(serviceClient));
-            serviceClient.Execute(new ImportSolutionRequest
+            if (orgService == null) throw new ArgumentNullException(nameof(orgService));
+            orgService.Execute(new ImportSolutionRequest
             {
                 CustomizationFile = solutionZip,
                 OverwriteUnmanagedCustomizations = overwriteUnmanagedCustomizations,

@@ -163,7 +163,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         }
 
         internal static ResolveResult<EntityMetadata> ResolveEntity(
-            ServiceClient serviceClient,
+            IOrganizationService orgService,
             string input,
             string callerToolName,
             bool withNotFoundTip = true)
@@ -175,7 +175,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     EntityFilters = EntityFilters.Entity,
                     RetrieveAsIfPublished = true
                 };
-                var response = (RetrieveAllEntitiesResponse)serviceClient.Execute(request);
+                var response = (RetrieveAllEntitiesResponse)orgService.Execute(request);
                 var candidates = response.EntityMetadata.Select(e => new DisplayNameFirstCandidate<EntityMetadata>
                 {
                     Value = e,
@@ -202,7 +202,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         }
 
         internal static ResolveResult<AttributeMetadata> ResolveAttribute(
-            ServiceClient serviceClient,
+            IOrganizationService orgService,
             string entityLogicalName,
             string input,
             string callerToolName)
@@ -215,7 +215,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     EntityFilters = EntityFilters.Attributes,
                     RetrieveAsIfPublished = true
                 };
-                var response = (RetrieveEntityResponse)serviceClient.Execute(request);
+                var response = (RetrieveEntityResponse)orgService.Execute(request);
                 var candidates = response.EntityMetadata.Attributes.Select(a => new DisplayNameFirstCandidate<AttributeMetadata>
                 {
                     Value = a,
@@ -242,13 +242,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         }
 
         internal static ResolveResult<OptionSetMetadataBase> ResolveGlobalOptionSet(
-            ServiceClient serviceClient,
+            IOrganizationService orgService,
             string input,
             string callerToolName)
         {
             try
             {
-                var response = (RetrieveAllOptionSetsResponse)serviceClient.Execute(new RetrieveAllOptionSetsRequest());
+                var response = (RetrieveAllOptionSetsResponse)orgService.Execute(new RetrieveAllOptionSetsRequest());
                 var candidates = response.OptionSetMetadata.Select(os => new DisplayNameFirstCandidate<OptionSetMetadataBase>
                 {
                     Value = os,
@@ -274,12 +274,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         }
 
         internal static ResolveResult<Entity> ResolveApp(
-            ServiceClient serviceClient,
+            IOrganizationService orgService,
             string input,
             string callerToolName)
         {
             return ResolveDataverseRecord(
-                serviceClient,
+                orgService,
                 input,
                 entityName: "appmodule",
                 idColumn: "appmoduleid",
@@ -296,13 +296,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         }
 
         internal static ResolveResult<Entity> ResolveWebResource(
-            ServiceClient serviceClient,
+            IOrganizationService orgService,
             string input,
             string callerToolName,
             bool withNotFoundTip = true)
         {
             return ResolveDataverseRecord(
-                serviceClient,
+                orgService,
                 input,
                 entityName: "webresource",
                 idColumn: "webresourceid",
@@ -319,13 +319,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         }
 
         internal static ResolveResult<Entity> ResolveReport(
-            ServiceClient serviceClient,
+            IOrganizationService orgService,
             string input,
             string callerToolName,
             bool withNotFoundTip = true)
         {
             return ResolveDataverseRecord(
-                serviceClient,
+                orgService,
                 input,
                 entityName: "report",
                 idColumn: "reportid",
@@ -342,12 +342,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         }
 
         internal static ResolveResult<Entity> ResolveEnvironmentVariableDefinition(
-            ServiceClient serviceClient,
+            IOrganizationService orgService,
             string input,
             string callerToolName)
         {
             return ResolveDataverseRecord(
-                serviceClient,
+                orgService,
                 input,
                 entityName: "environmentvariabledefinition",
                 idColumn: "environmentvariabledefinitionid",
@@ -364,7 +364,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         }
 
         internal static ResolveResult<Entity> ResolveDataverseRecord(
-            ServiceClient serviceClient,
+            IOrganizationService orgService,
             string input,
             string entityName,
             string idColumn,
@@ -379,7 +379,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             string notFoundTip,
             string retryParameterName)
         {
-            if (serviceClient == null)
+            if (orgService == null)
                 return Error<Entity>("IOrganizationService is null.");
             if (string.IsNullOrWhiteSpace(input))
                 return Error<Entity>("Input cannot be empty.");
@@ -406,7 +406,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
                 query.Criteria = filter;
 
-                var rows = serviceClient.RetrieveMultiple(query).Entities;
+                var rows = orgService.RetrieveMultiple(query).Entities;
                 var candidates = rows.Select(e => new DisplayNameFirstCandidate<Entity>
                 {
                     Value = e,

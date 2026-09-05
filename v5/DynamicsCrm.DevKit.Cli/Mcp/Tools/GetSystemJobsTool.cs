@@ -17,11 +17,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class GetSystemJobsTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
 
-        public GetSystemJobsTool(ServiceClient serviceClient)
+        public GetSystemJobsTool(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         private static readonly HashSet<string> ValidStatuses = new(StringComparer.OrdinalIgnoreCase)
@@ -95,7 +95,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             int? primaryEntityTypeCode = null;
             if (!string.IsNullOrWhiteSpace(entityName))
             {
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "get_system_jobs");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "get_system_jobs");
                 if (!entityResult.IsSuccess)
                     return Error(
                         $"entity_name {entityResult.Error.Split("\r\n")[0]}",
@@ -110,7 +110,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // ── Build FetchXML ──────────────────────────────────────────
             var fetchXml = BuildListFetchXml(status, operationType, entityName, primaryEntityTypeCode, nameFilter, correlationId, minutesAgo, maxRecords);
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
 
             var timeScope = FormatTimeScope(minutesAgo);
 
@@ -201,7 +201,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
                 return Error($"System job '{recordId.Trim()}' not found.", "Use get_system_jobs in list mode (record_id empty) to find a valid jobId.");
 
@@ -441,7 +441,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 LogicalName = entityLogicalName,
                 EntityFilters = EntityFilters.Entity
             };
-            var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+            var response = (RetrieveEntityResponse)_orgService.Execute(request);
             return response.EntityMetadata.ObjectTypeCode;
         }
 

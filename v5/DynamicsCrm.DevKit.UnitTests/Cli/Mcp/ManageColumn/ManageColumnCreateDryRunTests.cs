@@ -15,7 +15,7 @@ public class ManageColumnCreateDryRunTests
 {
     private static readonly Type ToolType = typeof(CliManageColumnTool);
 
-    private readonly CliManageColumnTool _tool = new(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true));
+    private readonly CliManageColumnTool _tool = new(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true), null!);
 
     [TestMethod]
     public void CreateStringAttribute_DryRun_BuildsMetadataWithoutServiceCall()

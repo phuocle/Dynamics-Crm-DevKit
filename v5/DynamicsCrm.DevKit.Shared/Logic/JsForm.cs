@@ -30,9 +30,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             public List<string> Fields { get; set; }
         }
 
-        private static ServiceClient ServiceClient { get; set; }
+        private static IOrganizationServiceAsync2 OrgServiceAsync { get; set; }
         private static MetadataService _metadataService;
-        private static MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
+        private static MetadataService Metadata => _metadataService ??= new MetadataService(OrgServiceAsync);
 
         private static EntityMetadata EntityMetadata { get; set; }
 
@@ -41,10 +41,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static List<string> FormNames;
 
-        public static async Task<(string code, string dts)> GetJsFormCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootNamespace, bool isJsWebApiExist)
+        public static async Task<(string code, string dts)> GetJsFormCodeAsync(IOrganizationServiceAsync2 orgServiceAsync, EntityMetadata entityMetadata, string rootNamespace, bool isJsWebApiExist)
         {
             FormNames = new List<string>();
-            ServiceClient = serviceClient;
+            OrgServiceAsync = orgServiceAsync;
             _metadataService = null;
             EntityMetadata = entityMetadata;
             if (EntityMetadata.Attributes == null) EntityMetadata = await Metadata.FetchEntityMetadataAsync(entityMetadata.LogicalName);
@@ -73,7 +73,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 code += GetQuickCreateFormCode(form, @namespace);
             code += $"}})({@namespace} || ({@namespace} = /** @type {{any}} */ ({{}})));{NEW_LINE}";
             code += $"{Helper.GeneratorOptionSet(EntityMetadata)}";
-            var dts = await JsTypeScriptDeclaration.GetCodeAsync(serviceClient, EntityMetadata, rootNamespace, true, isJsWebApiExist);
+            var dts = await JsTypeScriptDeclaration.GetCodeAsync(OrgServiceAsync, EntityMetadata, rootNamespace, true, isJsWebApiExist);
             return (code, dts);
         }
 
@@ -211,7 +211,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
             fields = fields.OrderBy(x => x.Name).ToList();
-            await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(ServiceClient, quickViewXml.entityLogicalName);
+            await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(OrgServiceAsync, quickViewXml.entityLogicalName);
             var quickViewMetadata = XrmHelper.EntitiesMetadata.Where(x => x.LogicalName == quickViewXml.entityLogicalName).FirstOrDefault();
             if (quickViewMetadata == null) return String.Empty;
             if (quickViewMetadata.Attributes == null) quickViewMetadata = await Metadata.FetchEntityMetadataAsync(quickViewXml.entityLogicalName);
@@ -228,7 +228,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static async Task<string> GetFormXmlAsync(string formId, string entityLogicalName)
         {
-            await XrmHelper.EntitiesFormXml.AddIfNotExistAsync(ServiceClient, entityLogicalName);
+            await XrmHelper.EntitiesFormXml.AddIfNotExistAsync(OrgServiceAsync, entityLogicalName);
             var form = XrmHelper.EntitiesFormXml.FirstOrDefault(x => x.FormType == FormType.QuickView && x.FormId == Guid.Parse(formId));
             if (form != null)
             {
@@ -324,7 +324,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static async Task<string> GetJsProcessCodeAsync()
         {
             var code = string.Empty;
-            await XrmHelper.EntitiesProcessForm.AddIfNotExistAsync(ServiceClient, EntityMetadata.LogicalName);
+            await XrmHelper.EntitiesProcessForm.AddIfNotExistAsync(OrgServiceAsync, EntityMetadata.LogicalName);
             var processes = XrmHelper.EntitiesProcessForm.Where(x => x.EntityLogicalName == EntityMetadata.LogicalName).OrderBy(x => x.Name);
             if (processes.Count() == 0) return string.Empty;
             foreach (var process in processes)

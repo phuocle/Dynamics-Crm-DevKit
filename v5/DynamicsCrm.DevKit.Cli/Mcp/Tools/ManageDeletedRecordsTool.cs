@@ -1,4 +1,5 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
@@ -29,13 +30,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static Guid? _cachedOrganizationEntityId;
 
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
+        private readonly IWebApiExecutor _webApi;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public ManageDeletedRecordsTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageDeletedRecordsTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, IWebApiExecutor webApi)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
+            _webApi = webApi;
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
@@ -104,7 +107,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             entityName = entityName.Trim();
             nameFilter = nameFilter?.Trim() ?? "";
 
-            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_deleted_records");
+            var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_deleted_records");
             if (!entityResult.IsSuccess)
                 return Error(entityResult.Error.Split("\r\n")[0], "Use get_tables to list entities.");
             var logicalName = entityResult.Value.LogicalName;
@@ -113,7 +116,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var primaryName = entityResult.Value.PrimaryNameAttribute ?? GetPrimaryNameAttribute(logicalName);
 
             var fetchXml = BuildListFetchXml(logicalName, primaryKey, primaryName, nameFilter, maxRecords);
-            var ec = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var ec = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
 
             var maxRetentionDays = GetMaxRetentionDays();
 
@@ -188,7 +191,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             entityName = entityName.Trim();
 
-            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_deleted_records");
+            var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_deleted_records");
             if (!entityResult.IsSuccess)
                 return Error(entityResult.Error.Split("\r\n")[0], "Use get_tables to list entities.");
             var logicalName = entityResult.Value.LogicalName;
@@ -206,7 +209,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                            $"  </entity>" +
                            $"</fetch>";
 
-            EntityCollection ec = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            EntityCollection ec = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
 
             if (ec.Entities.Count == 0)
             {
@@ -283,7 +286,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Pass entity_name (e.g. 'Account' or 'account'). Even when restoring mixed entities, entity_name is required to build the Target Entity.");
 
             entityName = entityName.Trim();
-            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_deleted_records");
+            var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_deleted_records");
             if (!entityResult.IsSuccess)
                 return Error(entityResult.Error.Split("\r\n")[0], "Use get_tables to list entities.");
             var logicalName = entityResult.Value.LogicalName;
@@ -330,7 +333,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                                 $"    </filter>" +
                                 $"  </entity>" +
                                 $"</fetch>";
-                var binNames = _serviceClient.RetrieveMultiple(new FetchExpression(nameFetch));
+                var binNames = _orgService.RetrieveMultiple(new FetchExpression(nameFetch));
                 foreach (var e in binNames.Entities)
                 {
                     var n = e.GetAttributeValue<string>(primaryName);
@@ -354,7 +357,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             ["Target"] = target
                         }
                     };
-                    DataverseMutationExecutor.Execute(_context, _serviceClient, restore);
+                    DataverseMutationExecutor.Execute(_context, _orgService, restore);
                     results.Add(new RestoreResultEntry
                     {
                         RecordId = g,
@@ -431,7 +434,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                 }
             };
-            enabledTableCount = _serviceClient.RetrieveMultiple(qe).Entities.Count;
+            enabledTableCount = _orgService.RetrieveMultiple(qe).Entities.Count;
 
             var warnings = new List<string>();
             if (!isOn.HasValue)
@@ -508,9 +511,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             const string requiredRoleName = DynamicsCrm.DevKit.Shared.Const.SystemAdministratorRoleName;
-            if (!RoleGateHelper.IsSystemAdministrator(_serviceClient))
+            if (!RoleGateHelper.IsSystemAdministrator(_orgService))
             {
-                var haveRoles = RoleGateHelper.GetCurrentRoleNames(_serviceClient);
+                var haveRoles = RoleGateHelper.GetCurrentRoleNames(_orgService);
                 var haveList = haveRoles.Count > 0
                     ? string.Join(", ", haveRoles)
                     : "(no roles assigned)";
@@ -591,7 +594,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 State = new OptionSetValue(1),
                 Status = new OptionSetValue(2)
             };
-            DataverseMutationExecutor.Execute(_context, _serviceClient, setState);
+            DataverseMutationExecutor.Execute(_context, _orgService, setState);
             return id;
         }
 
@@ -610,7 +613,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     State = new OptionSetValue(0),
                     Status = new OptionSetValue(1)
                 };
-                    DataverseMutationExecutor.Execute(_context, _serviceClient, setState);
+                    DataverseMutationExecutor.Execute(_context, _orgService, setState);
 
                 var currentDays = row.GetAttributeValue<int?>("cleanupintervalindays");
                 if (!currentDays.HasValue || currentDays.Value != retentionDays)
@@ -619,7 +622,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         ["cleanupintervalindays"] = retentionDays
                     };
-                    DataverseMutationExecutor.Update(_context, _serviceClient, update);
+                    DataverseMutationExecutor.Update(_context, _orgService, update);
                 }
 
                 return row.Id.ToString();
@@ -642,7 +645,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             using var resp = DataverseWebApiMutationExecutor.Execute(
                 _context,
-                _serviceClient,
+                _webApi,
                 HttpMethod.Post,
                 "recyclebinconfigs",
                 payload,
@@ -716,7 +719,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                 }
             };
-            var result = _serviceClient.RetrieveMultiple(qe);
+            var result = _orgService.RetrieveMultiple(qe);
             return result.Entities.Count == 1 ? result.Entities[0] : null;
         }
 
@@ -734,7 +737,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                 }
             };
-            var result = _serviceClient.RetrieveMultiple(qe);
+            var result = _orgService.RetrieveMultiple(qe);
             if (result.Entities.Count == 0)
                 throw new InvalidOperationException("entity row not found for logicalname='organization'");
             _cachedOrganizationEntityId = result.Entities[0].Id;

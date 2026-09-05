@@ -21,7 +21,7 @@ public sealed class ManageColumnBranchCoverageTests
     [TestMethod]
     public void ManageColumn_EarlyValidation_CoversTypeFormatAndBehaviorErrors()
     {
-        var tool = new ManageColumnTool(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true));
+        var tool = new ManageColumnTool(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true), null!);
 
         AssertError(tool.manage_column(entity_name: "account", attribute_type: "unsupported"), "Unknown attribute_type");
         AssertError(tool.manage_column(entity_name: "account", required_level: "Mandatory"), "Invalid required_level");
@@ -34,7 +34,7 @@ public sealed class ManageColumnBranchCoverageTests
     [TestMethod]
     public void ApplyTypeSpecificUpdates_CoversAllMetadataBranchesAndClamps()
     {
-        var tool = new ManageColumnTool(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true));
+        var tool = new ManageColumnTool(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true), null!);
 
         var stringMeta = new StringAttributeMetadata { MaxLength = 20, FormatName = StringFormatName.Text };
         var stringResult = Apply(tool, stringMeta, 5000, null, null, -1, "Email");
@@ -97,7 +97,7 @@ public sealed class ManageColumnBranchCoverageTests
     [TestMethod]
     public void OptionManagement_InvalidAndIgnoredPaths_DoNotCallDataverse()
     {
-        var tool = new ManageColumnTool(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true));
+        var tool = new ManageColumnTool(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true), null!);
 
         var warning = Invoke<List<string>>(tool, "ManagePicklistOptions", "account", "name",
             new StringAttributeMetadata(), "[{}]", "", "");
@@ -126,7 +126,7 @@ public sealed class ManageColumnBranchCoverageTests
     [TestMethod]
     public void LookupAndRollupHelpers_CoverValidationWithoutServiceCalls()
     {
-        var tool = new ManageColumnTool(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true));
+        var tool = new ManageColumnTool(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true), null!);
         var lookupError = Invoke<CallToolResult>(tool, "CreateLookupAttribute", "account", "devkit_contact", "devkit_Contact",
             "Contact", "", "", "", "", "devkit", (object?)null);
         AssertError(lookupError, "lookup_target is required");

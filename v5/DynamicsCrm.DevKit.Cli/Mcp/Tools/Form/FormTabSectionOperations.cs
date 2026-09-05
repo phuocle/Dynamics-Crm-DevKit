@@ -1,4 +1,5 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
@@ -11,12 +12,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 {
     internal sealed class FormTabSectionOperations
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private readonly FormXmlBuilder _builder;
 
-        public FormTabSectionOperations(ServiceClient serviceClient, FormXmlBuilder builder)
+        public FormTabSectionOperations(IOrganizationService orgService, FormXmlBuilder builder)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
             _builder = builder;
         }
 
@@ -69,7 +70,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             tabElement.Add(new XElement("labels",
                 new XElement("label",
                     new XAttribute("description", label),
-                    new XAttribute("languagecode", McpHelper.GetBaseLanguageCode(_serviceClient).ToString()))));
+                    new XAttribute("languagecode", McpHelper.GetBaseLanguageCode(_orgService).ToString()))));
 
             var columnsElement = new XElement("columns");
             var columnWidths = FormXmlHelpers.GetTabColumnWidths(tabColumns);

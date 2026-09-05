@@ -1,4 +1,5 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
@@ -17,13 +18,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class PublishCustomizationsTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public PublishCustomizationsTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public PublishCustomizationsTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -75,9 +76,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 const string requiredRoleName = DynamicsCrm.DevKit.Shared.Const.SystemAdministratorRoleName;
-                if (!RoleGateHelper.IsSystemAdministrator(_serviceClient))
+                if (!RoleGateHelper.IsSystemAdministrator(_orgService))
                 {
-                    var haveRoles = RoleGateHelper.GetCurrentRoleNames(_serviceClient);
+                    var haveRoles = RoleGateHelper.GetCurrentRoleNames(_orgService);
                     var haveList = haveRoles.Count > 0
                         ? string.Join(", ", haveRoles)
                         : "(no roles assigned)";
@@ -164,7 +165,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (!hasSpecificTargets)
                 {
-                    var jobId = PublishHelper.PublishAllAsync(_context, _serviceClient);
+                    var jobId = PublishHelper.PublishAllAsync(_context, _orgService);
                     sw.Stop();
 
                     var structured = new PublishResult
@@ -190,7 +191,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     IncludeRibbons = include_ribbons,
                     IncludeSiteMap = include_sitemap
                 };
-                var published = PublishHelper.PublishTargeted(_context, _serviceClient, payload, waitSeconds: 20);
+                var published = PublishHelper.PublishTargeted(_context, _orgService, payload, waitSeconds: 20);
 
                 sw.Stop();
 
@@ -236,7 +237,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var resolvedNames = new List<string>();
             foreach (var input in inputs)
             {
-                var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, input, "publish_customizations");
+                var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, input, "publish_customizations");
                 if (!resolved.IsSuccess)
                     return null;
 
@@ -269,7 +270,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     continue;
                 }
 
-                var resolved = DisplayNameFirstResolver.ResolveApp(_serviceClient, input, "publish_customizations");
+                var resolved = DisplayNameFirstResolver.ResolveApp(_orgService, input, "publish_customizations");
                 if (!resolved.IsSuccess)
                     return null;
 
@@ -373,7 +374,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     TopCount = 1
                 };
                 query.Criteria.AddCondition("name", Microsoft.Xrm.Sdk.Query.ConditionOperator.Equal, raw);
-                var res = _serviceClient.RetrieveMultiple(query);
+                var res = _orgService.RetrieveMultiple(query);
                 if (res.Entities.Count == 0)
                     return null;
                 result.Add(res.Entities[0].GetAttributeValue<Guid>("webresourceid").ToString("D"));

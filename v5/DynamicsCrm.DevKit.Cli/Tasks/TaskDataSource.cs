@@ -16,7 +16,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     public class TaskDataSource(CommandLineArgs arg, JsonDataSource json) : ITask
     {
         public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
-        public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
+        public IOrganizationServiceAsync2 OrgServiceAsync { get; set; } = arg.ServiceClient;
         public string TaskType => $"[{nameof(CliType.datasources).ToUpper()}]";
         public CommandLineArgs Arg { get; set; } = arg;
         private JsonDataSource Json { get; set; } = json;
@@ -27,9 +27,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private string DataSourceLogicalName { get; set; }
 
         private DeploymentService _deploymentService;
-        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(ServiceClient);
+        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(OrgServiceAsync);
         private MetadataService _metadataService;
-        private MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
+        private MetadataService Metadata => _metadataService ??= new MetadataService(OrgServiceAsync);
 
         public async Task<bool> IsValidAsync()
         {
@@ -161,7 +161,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             else
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
             XrmHelper.COUNT_ExecuteAsync++;
-            var response = (CreateEntityResponse)await ServiceClient.ExecuteAsync(request);
+            var response = (CreateEntityResponse)await OrgServiceAsync.ExecuteAsync(request);
             var entityId = response.EntityId;
             var retrieveEntityRequest = new RetrieveEntityRequest()
             {
@@ -169,7 +169,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 MetadataId = entityId
             };
             XrmHelper.COUNT_ExecuteAsync++;
-            EntityMetadata entityMetadata = ((RetrieveEntityResponse)await ServiceClient.ExecuteAsync(retrieveEntityRequest)).EntityMetadata;
+            EntityMetadata entityMetadata = ((RetrieveEntityResponse)await OrgServiceAsync.ExecuteAsync(retrieveEntityRequest)).EntityMetadata;
 
             var requestId = new RetrieveAttributeRequest()
             {
@@ -177,7 +177,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 LogicalName = string.Format("{0}id", entityMetadata.LogicalName)
             };
             XrmHelper.COUNT_ExecuteAsync++;
-            var attributeMetadataId = ((RetrieveAttributeResponse)await ServiceClient.ExecuteAsync(requestId)).AttributeMetadata;
+            var attributeMetadataId = ((RetrieveAttributeResponse)await OrgServiceAsync.ExecuteAsync(requestId)).AttributeMetadata;
             attributeMetadataId.ExternalName = $"{DataSourceSchemaName}Id";
             var updateRequestId = new UpdateAttributeRequest()
             {
@@ -186,14 +186,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 MergeLabels = false
             };
             XrmHelper.COUNT_ExecuteAsync++;
-            await ServiceClient.ExecuteAsync(updateRequestId);
+            await OrgServiceAsync.ExecuteAsync(updateRequestId);
             var requestName = new RetrieveAttributeRequest()
             {
                 EntityLogicalName = entityMetadata.LogicalName,
                 LogicalName = string.Format("{0}name", DataSourceLogicalName)
             };
             XrmHelper.COUNT_ExecuteAsync++;
-            var attributeMetadataName = ((RetrieveAttributeResponse)await ServiceClient.ExecuteAsync(requestName)).AttributeMetadata;
+            var attributeMetadataName = ((RetrieveAttributeResponse)await OrgServiceAsync.ExecuteAsync(requestName)).AttributeMetadata;
             attributeMetadataName.ExternalName = $"{DataSourceSchemaName}Name";
             var updateRequestName = new UpdateAttributeRequest()
             {
@@ -202,13 +202,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 MergeLabels = false
             };
             XrmHelper.COUNT_ExecuteAsync++;
-            await ServiceClient.ExecuteAsync(updateRequestName);
+            await OrgServiceAsync.ExecuteAsync(updateRequestName);
 
             try
             {
                 PublishAllXmlRequest publishAllXmlRequest = new();
                 XrmHelper.COUNT_ExecuteAsync++;
-                PublishAllXmlResponse publishAllXmlResponse = (PublishAllXmlResponse)await ServiceClient.ExecuteAsync(publishAllXmlRequest);
+                PublishAllXmlResponse publishAllXmlResponse = (PublishAllXmlResponse)await OrgServiceAsync.ExecuteAsync(publishAllXmlRequest);
             }
             catch
             {

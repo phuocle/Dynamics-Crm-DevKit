@@ -19,13 +19,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageChoiceTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public ManageChoiceTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageChoiceTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -82,7 +82,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult HandleList(string filter = "")
         {
-            var response = (RetrieveAllOptionSetsResponse)_serviceClient.Execute(new RetrieveAllOptionSetsRequest());
+            var response = (RetrieveAllOptionSetsResponse)_orgService.Execute(new RetrieveAllOptionSetsRequest());
             var all = response.OptionSetMetadata.OrderBy(x => x.Name).ToList();
             var sorted = string.IsNullOrWhiteSpace(filter)
                 ? all
@@ -145,7 +145,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var addStartValue = 0;
             if (!string.IsNullOrWhiteSpace(addOptions) && !string.IsNullOrWhiteSpace(solutionName))
             {
-                var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName);
+                var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName);
                 if (!solResult.IsSuccess)
                     return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
                 var maxExisting = existingMeta.Options != null && existingMeta.Options.Count > 0
@@ -274,10 +274,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var updateMeta = new OptionSetMetadata { Name = name, IsGlobal = true };
                 if (hasDisplayName)
-                    updateMeta.DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                    updateMeta.DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
                 if (hasDescription)
-                    updateMeta.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
-                DataverseMutationExecutor.Execute(_context, _serviceClient, new UpdateOptionSetRequest { OptionSet = updateMeta });
+                    updateMeta.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
+                DataverseMutationExecutor.Execute(_context, _orgService, new UpdateOptionSetRequest { OptionSet = updateMeta });
                 metadataMutated = true;
             }
 
@@ -286,7 +286,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var deleteReq = InitializeRequest(new DeleteOptionValueRequest());
                 deleteReq.OptionSetName = name;
                 deleteReq.Value = value;
-                DataverseMutationExecutor.Execute(_context, _serviceClient, deleteReq);
+                DataverseMutationExecutor.Execute(_context, _orgService, deleteReq);
                 metadataMutated = true;
             }
 
@@ -295,14 +295,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var insertReq = InitializeRequest(new InsertOptionValueRequest());
                 insertReq.OptionSetName = name;
                 insertReq.Value = value;
-                insertReq.Label = new Label(label, McpHelper.GetBaseLanguageCode(_serviceClient));
+                insertReq.Label = new Label(label, McpHelper.GetBaseLanguageCode(_orgService));
                 if (colorMap.TryGetValue(value.ToString(), out var insertColor))
                 {
                     SetRequestParameter(insertReq, "Color", insertColor);
                     colorAppliedValues.Add(value);
                     coloredSummary.Add($"{value}:{label}:{insertColor}");
                 }
-                DataverseMutationExecutor.Execute(_context, _serviceClient, insertReq);
+                DataverseMutationExecutor.Execute(_context, _orgService, insertReq);
                 metadataMutated = true;
             }
 
@@ -312,7 +312,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var updateReq = InitializeRequest(new UpdateOptionValueRequest());
                 updateReq.OptionSetName = name;
                 updateReq.Value = value;
-                updateReq.Label = new Label(newLabel, McpHelper.GetBaseLanguageCode(_serviceClient));
+                updateReq.Label = new Label(newLabel, McpHelper.GetBaseLanguageCode(_orgService));
                 updateReq.MergeLabels = true;
                 if (colorMap.TryGetValue(value.ToString(), out var updateColor) && !ColorEquals(GetOptionColor(existingMeta, value), updateColor))
                 {
@@ -320,7 +320,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     colorAppliedValues.Add(value);
                     coloredSummary.Add($"{value}:{newLabel}:{updateColor}");
                 }
-                DataverseMutationExecutor.Execute(_context, _serviceClient, updateReq);
+                DataverseMutationExecutor.Execute(_context, _orgService, updateReq);
                 metadataMutated = true;
             }
 
@@ -336,7 +336,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 colorReq.Value = val;
                 colorReq.MergeLabels = true;
                 SetRequestParameter(colorReq, "Color", kv.Value);
-                DataverseMutationExecutor.Execute(_context, _serviceClient, colorReq);
+                DataverseMutationExecutor.Execute(_context, _orgService, colorReq);
                 coloredSummary.Add($"{val}:{lbl}:{kv.Value}");
                 metadataMutated = true;
             }
@@ -354,7 +354,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var requiresPublish = metadataMutated && (hasDisplayName || hasDescription || optionsToInsert.Count > 0 || hasUpdate || hasColors);
-            var published = requiresPublish && PublishHelper.PublishOptionSet(_context, _serviceClient, name);
+            var published = requiresPublish && PublishHelper.PublishOptionSet(_context, _orgService, name);
 
             // Removed choices are automatically published by Dataverse — no PublishXml needed for remove-only updates.
             var changeParts = new List<string>();
@@ -385,7 +385,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             optionsetName = optionsetName.Trim().ToLowerInvariant();
 
-            var resolved = DisplayNameFirstResolver.ResolveGlobalOptionSet(_serviceClient, optionsetName, "manage_choice");
+            var resolved = DisplayNameFirstResolver.ResolveGlobalOptionSet(_orgService, optionsetName, "manage_choice");
             if (!resolved.IsSuccess)
                 return Error(resolved.Error.Split("\r\n")[0], "Use manage_choice(action='list') to see all available global option sets.");
 
@@ -438,7 +438,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Provide label-only values separated by semicolons (e.g. 'Draft;Confirmed;Paid'), or explicit 'value:label' pairs.");
 
             var identityInput = string.IsNullOrWhiteSpace(optionsetName) ? displayName : optionsetName;
-            var existingChoice = DisplayNameFirstResolver.ResolveGlobalOptionSet(_serviceClient, identityInput, "manage_choice");
+            var existingChoice = DisplayNameFirstResolver.ResolveGlobalOptionSet(_orgService, identityInput, "manage_choice");
             if (existingChoice.IsSuccess)
                 return Error(
                     $"Global option set '{identityInput.Trim()}' already exists as '{existingChoice.Value.Name}' ({existingChoice.Value.DisplayName?.UserLocalizedLabel?.Label ?? ""}).",
@@ -454,7 +454,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "solution_name is required for 'create'.",
                     "Provide the solution unique name or display name so the publisher's customizationoptionvalueprefix can be resolved and option integer values can be assigned correctly.");
 
-            var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName);
+            var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName);
             if (!solResult.IsSuccess)
                 return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
 
@@ -512,7 +512,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
 
-            var langCode = McpHelper.GetBaseLanguageCode(_serviceClient);
+            var langCode = McpHelper.GetBaseLanguageCode(_orgService);
             var optionSetMetadata = new OptionSetMetadata
             {
                 Name = name,
@@ -536,7 +536,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             CreateOptionSetResponse createResp = null;
             var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
             {
-                createResp = (CreateOptionSetResponse)DataverseMutationExecutor.Execute(_context, _serviceClient,
+                createResp = (CreateOptionSetResponse)DataverseMutationExecutor.Execute(_context, _orgService,
                     new CreateOptionSetRequest { OptionSet = optionSetMetadata });
             }, $"create global option set '{name}'");
 
@@ -548,7 +548,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var addResult = SolutionComponentCreateHelper.AddExistingComponent(
-                _context, _serviceClient,
+                _context, _orgService,
                 createResp.OptionSetId,
                 9,
                 solResult.IsSuccess ? solResult.UniqueName : solutionName.Trim());
@@ -593,7 +593,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private OptionSetMetadata RetrieveOptionSetMetadata(string name)
         {
-            var resp = (RetrieveOptionSetResponse)_serviceClient.Execute(new RetrieveOptionSetRequest { Name = name });
+            var resp = (RetrieveOptionSetResponse)_orgService.Execute(new RetrieveOptionSetRequest { Name = name });
             return resp.OptionSetMetadata as OptionSetMetadata;
         }
 
@@ -763,7 +763,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             resolvedName = null;
             error = null;
-            var resolved = DisplayNameFirstResolver.ResolveGlobalOptionSet(_serviceClient, nameOrDisplay, "manage_choice");
+            var resolved = DisplayNameFirstResolver.ResolveGlobalOptionSet(_orgService, nameOrDisplay, "manage_choice");
             if (resolved.IsSuccess)
             {
                 resolvedName = resolved.CanonicalName ?? resolved.Value.Name;

@@ -79,7 +79,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     itemEntity["onclickeventjavascriptparameters"] = defaultParams;
             }
 
-            var newId = DataverseMutationExecutor.Create(_context, _serviceClient, itemEntity);
+            var newId = DataverseMutationExecutor.Create(_context, _orgService, itemEntity);
             return (null, newId.ToString());
         }
 
@@ -96,7 +96,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <order attribute='sequence'/>
   </entity>
 </fetch>";
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             return result.Entities.Count > 0 ? result.Entities[0].Id : (Guid?)null;
         }
 
@@ -118,7 +118,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     </link-entity>
   </entity>
 </fetch>";
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count > 0)
             {
                 var val = result.Entities[0].GetAttributeValue<AliasedValue>("cnt");
@@ -169,7 +169,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return null;
             }
 
-            var result = DisplayNameFirstResolver.ResolveApp(_serviceClient, appName.Trim(), "manage_command");
+            var result = DisplayNameFirstResolver.ResolveApp(_orgService, appName.Trim(), "manage_command");
             if (result.IsSuccess)
                 return result.Value.Id;
 
@@ -182,7 +182,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (Guid.TryParse(nameOrGuid, out var parsed))
                 return parsed;
 
-            var result = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, nameOrGuid, "manage_command");
+            var result = DisplayNameFirstResolver.ResolveWebResource(_orgService, nameOrGuid, "manage_command");
             if (!result.IsSuccess)
                 throw new InvalidOperationException($"web_resource '{nameOrGuid}': {result.Error}");
 
@@ -210,7 +210,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
                 return result.Entities.Select(e =>
                 {
                     var typeValue = e.GetAttributeValue<OptionSetValue>("type")?.Value;
@@ -247,7 +247,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-                var directResult = _serviceClient.RetrieveMultiple(new FetchExpression(directFetch));
+                var directResult = _orgService.RetrieveMultiple(new FetchExpression(directFetch));
                 var items = new List<CommandChildEntry>();
 
                 foreach (var e in directResult.Entities)
@@ -379,7 +379,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     </filter>
   </entity>
 </fetch>";
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             return result.Entities.Count == 0 ? null : result.Entities[0];
         }
 

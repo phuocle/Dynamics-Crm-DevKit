@@ -19,14 +19,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageRoleTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
         private string _workspaceFolder;
 
-        public ManageRoleTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageRoleTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -142,7 +142,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             query.AddOrder("name", OrderType.Ascending);
 
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             var roles = result.Entities;
 
             if (roles.Count == 0)
@@ -301,7 +301,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var rolesResult = _serviceClient.RetrieveMultiple(new FetchExpression(rolesFetchXml));
+            var rolesResult = _orgService.RetrieveMultiple(new FetchExpression(rolesFetchXml));
 
             var roleEntries = new List<RoleEntry>();
             var roleIds = new List<Guid>();
@@ -485,13 +485,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (isAssign)
-                DataverseMutationExecutor.Associate(_context, _serviceClient,
+                DataverseMutationExecutor.Associate(_context, _orgService,
                     targetLogical,
                     targetId,
                     new Relationship(relationship),
                     new EntityReferenceCollection { new EntityReference("role", roleGuid) });
             else
-                DataverseMutationExecutor.Disassociate(_context, _serviceClient,
+                DataverseMutationExecutor.Disassociate(_context, _orgService,
                     targetLogical,
                     targetId,
                     new Relationship(relationship),
@@ -522,7 +522,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ColumnSet = new ColumnSet("name")
                 };
                 buQuery.Criteria.AddCondition("businessunitid", ConditionOperator.Equal, buId);
-                var buResult = _serviceClient.RetrieveMultiple(buQuery);
+                var buResult = _orgService.RetrieveMultiple(buQuery);
                 if (buResult.Entities.Count == 0)
                     return Error($"No business unit found with ID '{businessUnitId}'.",
                         "Pass the businessunitid GUID of an existing business unit, or omit business_unit_id to use the root business unit.");
@@ -535,7 +535,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ColumnSet = new ColumnSet("businessunitid", "name")
                 };
                 rootBuQuery.Criteria.AddCondition("parentbusinessunitid", ConditionOperator.Null);
-                var rootResult = _serviceClient.RetrieveMultiple(rootBuQuery);
+                var rootResult = _orgService.RetrieveMultiple(rootBuQuery);
                 if (rootResult.Entities.Count == 0)
                     return Error("Could not find the root business unit.",
                         "Pass business_unit_id of an existing business unit explicitly.");
@@ -559,7 +559,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ["businessunitid"] = new EntityReference("businessunit", buId)
             };
 
-            var newId = DataverseMutationExecutor.Create(_context, _serviceClient, roleEntity);
+            var newId = DataverseMutationExecutor.Create(_context, _orgService, roleEntity);
 
             return Success($"Created role '{roleName}' ({newId}) in business unit '{buName}'.", new ManageRoleResult
             {
@@ -638,7 +638,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var depthError = ValidateDepth(change.Depth);
                     if (depthError != null) return Error(depthError.Value.Message, depthError.Value.Hint);
 
-                    var resolvedEntity = DisplayNameFirstResolver.ResolveEntity(_serviceClient, change.Entity?.Trim(), "manage_role");
+                    var resolvedEntity = DisplayNameFirstResolver.ResolveEntity(_orgService, change.Entity?.Trim(), "manage_role");
                     if (!resolvedEntity.IsSuccess)
                     {
                         if (resolvedEntity.Status == ResolveStatus.Ambiguous)
@@ -714,7 +714,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     ["name"] = roleName.Trim()
                 };
-                DataverseMutationExecutor.Update(_context, _serviceClient, updateEntity);
+                DataverseMutationExecutor.Update(_context, _orgService, updateEntity);
             }
 
             if (changes != null)
@@ -731,7 +731,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     i++;
                 }
 
-                DataverseMutationExecutor.Execute(_context, _serviceClient, new ReplacePrivilegesRoleRequest
+                DataverseMutationExecutor.Execute(_context, _orgService, new ReplacePrivilegesRoleRequest
                 {
                     RoleId = id,
                     Privileges = finalPrivileges
@@ -845,7 +845,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 TopCount = 2
             };
             query.Criteria.AddCondition("name", ConditionOperator.Like, name);
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             return result.Entities.Count == 1 ? result.Entities[0].GetAttributeValue<Guid>("privilegeid") : null;
         }
 
@@ -891,7 +891,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var backupPath = RoleBackupHelper.SaveBackup(id, roleName, deleteBuRef?.Id ?? Guid.Empty,
                 GetRolePrivileges(id).Select(ToBackupPrivilege).ToList(), _workspaceFolder);
 
-            DataverseMutationExecutor.Delete(_context, _serviceClient, "role", id);
+            DataverseMutationExecutor.Delete(_context, _orgService, "role", id);
 
             return Success($"Deleted role '{roleName}' ({id}). Backup saved.", new ManageRoleResult
             {
@@ -943,7 +943,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ["name"] = roleName,
                 ["businessunitid"] = new EntityReference("businessunit", buId)
             };
-            var newRoleId = DataverseMutationExecutor.Create(_context, _serviceClient, newRoleEntity);
+            var newRoleId = DataverseMutationExecutor.Create(_context, _orgService, newRoleEntity);
 
             if (privileges.Count > 0)
             {
@@ -963,7 +963,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     RoleId = newRoleId,
                     Privileges = privilegeInfos
                 };
-                DataverseMutationExecutor.Execute(_context, _serviceClient, addPrivRequest);
+                DataverseMutationExecutor.Execute(_context, _orgService, addPrivRequest);
             }
 
             return Success($"Copied role '{sourceRoleName}' ({sourceId}) → '{roleName}' ({newRoleId}) with {privileges.Count} privileges.", new ManageRoleResult
@@ -1038,7 +1038,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         ["name"] = restoreName
                     };
-                    DataverseMutationExecutor.Update(_context, _serviceClient, renameEntity);
+                    DataverseMutationExecutor.Update(_context, _orgService, renameEntity);
                 }
 
                 var finalPrivileges = new RolePrivilege[snapshotPrivileges.Count];
@@ -1050,7 +1050,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Depth = (PrivilegeDepth)ReverseDepthMask(snapshotPrivileges[i].Depth)
                     };
                 }
-                DataverseMutationExecutor.Execute(_context, _serviceClient, new ReplacePrivilegesRoleRequest
+                DataverseMutationExecutor.Execute(_context, _orgService, new ReplacePrivilegesRoleRequest
                 {
                     RoleId = backupRoleId,
                     Privileges = finalPrivileges
@@ -1082,7 +1082,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             if (buId != Guid.Empty)
                 newRoleEntity["businessunitid"] = new EntityReference("businessunit", buId);
-            var newRoleId = DataverseMutationExecutor.Create(_context, _serviceClient, newRoleEntity);
+            var newRoleId = DataverseMutationExecutor.Create(_context, _orgService, newRoleEntity);
 
             if (snapshotPrivileges.Count > 0)
             {
@@ -1095,7 +1095,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Depth = (PrivilegeDepth)ReverseDepthMask(snapshotPrivileges[i].Depth)
                     };
                 }
-                DataverseMutationExecutor.Execute(_context, _serviceClient, new AddPrivilegesRoleRequest
+                DataverseMutationExecutor.Execute(_context, _orgService, new AddPrivilegesRoleRequest
                 {
                     RoleId = newRoleId,
                     Privileges = addPrivileges
@@ -1122,10 +1122,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult RequireSystemAdministrator(string action)
         {
-            if (RoleGateHelper.IsSystemAdministrator(_serviceClient))
+            if (RoleGateHelper.IsSystemAdministrator(_orgService))
                 return null;
 
-            var haveRoles = RoleGateHelper.GetCurrentRoleNames(_serviceClient);
+            var haveRoles = RoleGateHelper.GetCurrentRoleNames(_orgService);
             var haveList = haveRoles.Count > 0
                 ? string.Join(", ", haveRoles)
                 : "(no roles assigned)";
@@ -1181,7 +1181,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{escapedName}%");
             query.AddOrder("name", OrderType.Ascending);
 
-            return _serviceClient.RetrieveMultiple(query).Entities;
+            return _orgService.RetrieveMultiple(query).Entities;
         }
 
         private Entity RetrieveRole(Guid roleId)
@@ -1193,7 +1193,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "iscustomizable", "createdon")
             };
             query.Criteria.AddCondition("roleid", ConditionOperator.Equal, roleId);
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
@@ -1209,7 +1209,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             else
                 userQuery.Criteria.AddCondition("internalemailaddress", ConditionOperator.Equal, userId);
 
-            var userResult = _serviceClient.RetrieveMultiple(userQuery);
+            var userResult = _orgService.RetrieveMultiple(userQuery);
             if (userResult.Entities.Count == 0)
                 return (null, $"No user found with '{userId}'.", null);
 
@@ -1245,7 +1245,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             else
                 query.Criteria.AddCondition("name", ConditionOperator.Equal, teamId);
 
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             if (result.Entities.Count == 0)
                 return (null, $"No team found with '{teamId}'.", null);
 
@@ -1293,7 +1293,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var teams = _serviceClient.RetrieveMultiple(new FetchExpression(teamsFetchXml)).Entities;
+            var teams = _orgService.RetrieveMultiple(new FetchExpression(teamsFetchXml)).Entities;
             if (teams.Count == 0)
                 return [];
 
@@ -1315,7 +1315,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-                var teamRoles = _serviceClient.RetrieveMultiple(new FetchExpression(teamRolesFetchXml)).Entities;
+                var teamRoles = _orgService.RetrieveMultiple(new FetchExpression(teamRolesFetchXml)).Entities;
                 foreach (var teamRole in teamRoles)
                 {
                     entries.Add(new TeamRoleEntry
@@ -1370,7 +1370,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
 
                 foreach (var entity in result.Entities)
                 {
@@ -1431,7 +1431,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(entityFilter))
                 return null;
 
-            return DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityFilter.Trim(), "manage_role");
+            return DisplayNameFirstResolver.ResolveEntity(_orgService, entityFilter.Trim(), "manage_role");
         }
 
         private CallToolResult EntityFilterError(string entityFilter, string action, ResolveResult<EntityMetadata> resolved)

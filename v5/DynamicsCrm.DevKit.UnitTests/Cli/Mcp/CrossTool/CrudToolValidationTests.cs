@@ -331,7 +331,7 @@ public class CrudToolValidationTests
     // ──────────────────────────────────────────────
 
     private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.SearchRecordsTool _searchTool =
-        new(null!, new McpDryRunOptions());
+        new(null!, new McpDryRunOptions(), null!);
 
     [TestMethod]
     public async Task Search_EmptySearchTerm_ReturnsError()

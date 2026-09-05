@@ -21,7 +21,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
 
-        public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
+        public IOrganizationServiceAsync2 OrgServiceAsync { get; set; } = arg.ServiceClient;
 
         public string TaskType { get; set; } = $"[{nameof(CliType.generators).ToUpper()} - {json.type.ToUpper()}]";
 
@@ -33,9 +33,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public string SolutionPrefix { get; set; }
 
         private MetadataService _metadataService;
-        private MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
+        private MetadataService Metadata => _metadataService ??= new MetadataService(OrgServiceAsync);
         private CodeGenService _codeGenService;
-        private CodeGenService CodeGen => _codeGenService ??= new CodeGenService(ServiceClient);
+        private CodeGenService CodeGen => _codeGenService ??= new CodeGenService(OrgServiceAsync);
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)
@@ -85,7 +85,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var schemaNames = await GetSchemaNamesAsync();
                 if (schemaNames.Count > 500)
-                    await ReadEntitiesMetadataAsync(ServiceClient, EntityFilters.Attributes);
+                    await ReadEntitiesMetadataAsync(OrgServiceAsync, EntityFilters.Attributes);
                 else
                     XrmHelper.EntitiesMetadata = await Metadata.GetEntitiesMetadataAsync(schemaNames);
                 schemaNames = [.. XrmHelper.EntitiesMetadata.Select(x => x.SchemaName)];
@@ -123,7 +123,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 SpectreLog.WriteHighLight("Filter by: ", "json.entities", " with values: ", Json.entities.Trim(), ".");
                 SpectreLog.WriteLine();
-                await ReadEntitiesMetadataAsync(ServiceClient, EntityFilters.Attributes);
+                await ReadEntitiesMetadataAsync(OrgServiceAsync, EntityFilters.Attributes);
                 return [.. XrmHelper.EntitiesMetadata.Select(x => x.SchemaName)];
             }
             else if (Json.entities == null || Json.entities.Trim().Length == 0 || Json.entities.Trim().ToLower() == "folder")
@@ -164,7 +164,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
                     var oldDTS = await FileHelper.ReadAllTextAsync(dtsFile);
                     var isJsFormExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.form.js"));
-                    var (newCode, newDTS) = await JsWebApi.GetJsWebApiCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsFormExist);
+                    var (newCode, newDTS) = await JsWebApi.GetJsWebApiCodeAsync(OrgServiceAsync, entityMetadata, Json.rootnamespace, isJsFormExist);
                     if (!File.Exists(file))
                     {
                         await FileHelper.ForceWriteAllTextAsync(file, Helper.GetDefaultFileWithWebApi(entityMetadata.SchemaName));
@@ -225,7 +225,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
                     var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
                     var isJsFormExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.form.js"));
-                    var newCode = await TsWebApi.GetTsWebApiCodeAsync(ServiceClient, entityMetadata);
+                    var newCode = await TsWebApi.GetTsWebApiCodeAsync(OrgServiceAsync, entityMetadata);
 
                     SpectreLog.ClearProgress();
                     if (Helper.IsTheSame(oldCode, newCode))
@@ -275,7 +275,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
                     var oldDTS = await FileHelper.ReadAllTextAsync(dtsFile);
                     var isJsWebApiExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.webapi.js"));
-                    var (newCode, newDTS) = await JsForm.GetJsFormCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsWebApiExist);
+                    var (newCode, newDTS) = await JsForm.GetJsFormCodeAsync(OrgServiceAsync, entityMetadata, Json.rootnamespace, isJsWebApiExist);
 
                     // Skip if no forms exist for this entity
                     SpectreLog.ClearProgress();
@@ -345,7 +345,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
                     var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
                     var isJsWebApiExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.webapi.js"));
-                    var newCode = await TsForm.GetTsFormCodeAsync(ServiceClient, entityMetadata);
+                    var newCode = await TsForm.GetTsFormCodeAsync(OrgServiceAsync, entityMetadata);
 
                     // Skip if no forms exist for this entity
                     SpectreLog.ClearProgress();
@@ -395,7 +395,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var optionSetFile = Path.Combine(CurrentFolder, "OptionSet.ts");
                 var existingContent = await FileHelper.ReadAllTextAsync(optionSetFile);
-                var newOptionSetCode = await TsOptionSet.GetTsOptionSetCodeAsync(ServiceClient, processedEntities, existingContent);
+                var newOptionSetCode = await TsOptionSet.GetTsOptionSetCodeAsync(OrgServiceAsync, processedEntities, existingContent);
 
                 if (Helper.IsTheSame(existingContent, newOptionSetCode))
                 {
@@ -431,7 +431,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
                     var oldCode = await FileHelper.ReadAllTextFromLine6Async(fileEndsWith);
                     if (Json.@namespace != null && Json.@namespace.Trim().Length == 0) Json.@namespace = null;
-                    var _GeneratedClass_ = CSharpLateBound.GetCsCode(ServiceClient, entityMetadata, Json.rootnamespace, Json.@namespace);
+                    var _GeneratedClass_ = CSharpLateBound.GetCsCode(OrgServiceAsync, entityMetadata, Json.rootnamespace, Json.@namespace);
                     var newCode = await Helper.ReadContentFromLine6Async(_GeneratedClass_);
                     SpectreLog.ClearProgress();
                     if (File.Exists(fileEndsWith) && Helper.IsTheSame(oldCode, newCode))
@@ -476,7 +476,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             SpectreLog.ActionWithLevel0(CliAction.UPDATED, Path.GetFileName(customFile));
         }
 
-        private async Task ReadEntitiesMetadataAsync(ServiceClient serviceClient, EntityFilters entityFilters)
+        private async Task ReadEntitiesMetadataAsync(IOrganizationServiceAsync2 orgServiceAsync, EntityFilters entityFilters)
         {
             if (XrmHelper.EntitiesMetadata.Count == 0 && XrmHelper.EntitiesFormXml.Count == 0 && XrmHelper.EntitiesProcessForm.Count == 0)
             {
@@ -485,7 +485,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var waitingTask = Task.Run(() => SpectreLog.WaitingWithCancellation("Reading entities Metadata ", cancellationTokenSource.Token), cancellationTokenSource.Token);
                     try
                     {
-                        await new MetadataService(serviceClient).ReadEntitiesMetadataAsync(entityFilters);
+                        await new MetadataService(orgServiceAsync).ReadEntitiesMetadataAsync(entityFilters);
                     }
                     finally
                     {
@@ -507,7 +507,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         var waitingTask = Task.Run(() => SpectreLog.WaitingWithCancellation("Reading entities FormXml ", cancellationTokenSource.Token), cancellationTokenSource.Token);
                         try
                         {
-                            await new MetadataService(serviceClient).ReadEntitiesFormXmlAsync();
+                            await new MetadataService(orgServiceAsync).ReadEntitiesFormXmlAsync();
                         }
                         finally
                         {

@@ -1,5 +1,6 @@
 #nullable enable
-using Microsoft.PowerPlatform.Dataverse.Client;
+using DynamicsCrm.DevKit.Shared.Services;
+using DynamicsCrm.DevKit.Cli.Mcp;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -13,7 +14,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
     {
         internal static HttpResponseMessage Execute(
             McpExecutionContext context,
-            ServiceClient serviceClient,
+            IWebApiExecutor webApi,
             HttpMethod method,
             string url,
             string? body,
@@ -38,9 +39,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             if (Uri.TryCreate(trimmedUrl, UriKind.Absolute, out _))
                 throw new ArgumentException("Web API URL must be a relative Dataverse path.", nameof(url));
 
-            if (serviceClient == null) throw new ArgumentNullException(nameof(serviceClient));
+            if (webApi == null) throw new ArgumentNullException(nameof(webApi));
 
-            return serviceClient.ExecuteWebRequest(method, trimmedUrl, body, headers, contentType);
+            return webApi.ExecuteWebRequest(method, trimmedUrl, body, headers, contentType);
         }
     }
 }

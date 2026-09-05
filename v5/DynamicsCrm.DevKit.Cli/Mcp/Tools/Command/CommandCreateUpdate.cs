@@ -131,8 +131,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     entity["onclickeventjavascriptparameters"] = defaultParams;
             }
 
-            var newId = DataverseMutationExecutor.Create(_context, _serviceClient, entity);
-            PublishHelper.PublishEntity(_context, _serviceClient, createEntityLogical.Trim().ToLowerInvariant());
+            var newId = DataverseMutationExecutor.Create(_context, _orgService, entity);
+            PublishHelper.PublishEntity(_context, _orgService, createEntityLogical.Trim().ToLowerInvariant());
 
             var structured = new ManageCommandResult
             {
@@ -259,9 +259,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("No fields to update.",
                     "Provide at least one field to change (label, sequence, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description). Use action='hide'/'show' to change visibility.");
 
-            DataverseMutationExecutor.Update(_context, _serviceClient, entity);
+            DataverseMutationExecutor.Update(_context, _orgService, entity);
             var updateEntityLogical = existing.GetAttributeValue<string>("contextvalue");
-            PublishHelper.PublishEntity(_context, _serviceClient, updateEntityLogical.Trim().ToLowerInvariant());
+            PublishHelper.PublishEntity(_context, _orgService, updateEntityLogical.Trim().ToLowerInvariant());
 
             var commandName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
             var message = $"Command '{commandName}' updated: {string.Join(", ", changes)}. Entity published.";

@@ -1,3 +1,4 @@
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
@@ -23,13 +24,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageColumnTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
+        private readonly IWebApiExecutor _webApi;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public ManageColumnTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageColumnTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, IWebApiExecutor webApi)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
+            _webApi = webApi;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -170,7 +173,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             // --- Resolve entity_name: Display Name first, then logical/schema contains ---
-            var (resolvedEntity, entityError) = ResolveEntityName(_serviceClient, entity_name);
+            var (resolvedEntity, entityError) = ResolveEntityName(_orgService, entity_name);
             if (entityError != null)
                 return Error(entityError.Split("\r\n")[0], "Use get_tables to list entities.");
             entity_name = resolvedEntity;
@@ -180,7 +183,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string resolvedSolutionUniqueName = null;
             if (!string.IsNullOrWhiteSpace(solution_name))
             {
-                var solResult = SolutionResolverHelper.Resolve(_serviceClient, solution_name);
+                var solResult = SolutionResolverHelper.Resolve(_orgService, solution_name);
                 if (!solResult.IsSuccess)
                     return Error(
                         solResult.Error.Split("\r\n")[0],
@@ -197,7 +200,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(logical_name))
             {
                 var requestedLogicalName = logical_name;
-                var attributeResolve = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, logical_name, "manage_column");
+                var attributeResolve = DisplayNameFirstResolver.ResolveAttribute(_orgService, entity_name, logical_name, "manage_column");
                 if (attributeResolve.IsSuccess)
                 {
                     var hasFormulaCreateIntent = !string.IsNullOrWhiteSpace(formula_definition) &&
@@ -219,7 +222,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             else if (!string.IsNullOrWhiteSpace(display_name))
             {
                 // No explicit logical_name but display_name given → try resolving by display_name (convenience).
-                var displayNameResolve = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, display_name, "manage_column");
+                var displayNameResolve = DisplayNameFirstResolver.ResolveAttribute(_orgService, entity_name, display_name, "manage_column");
                 if (displayNameResolve.IsSuccess)
                 {
                     existingMetadata = displayNameResolve.Value;
@@ -328,7 +331,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // or pick a different display_name.
             if (string.IsNullOrWhiteSpace(logical_name))
             {
-                var collisionResolve = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, attributeName, "manage_column");
+                var collisionResolve = DisplayNameFirstResolver.ResolveAttribute(_orgService, entity_name, attributeName, "manage_column");
                 if (collisionResolve.IsSuccess)
                     return Error(
                         $"Cannot create column '{display_name}' because derived logical name '{attributeName}' already exists on entity '{entity_name}'.",
@@ -504,12 +507,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService)),
                 MaxLength = maxLength,
                 FormatName = resolvedFormat
             };
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
             // Apply flag overrides (audit / advanced find / field security / sort).
             // When createFlags is null or a flag is null, the property is left unset and
             // Dataverse falls back to its per-attribute-type create default
@@ -568,12 +571,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService)),
                 MaxLength = maxLength,
                 FormatName = memoFormat
             };
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
             // Apply flag overrides (audit / advanced find / field security / sort).
             createFlags?.Apply(attr);
             formula?.Apply(attr);
@@ -626,13 +629,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService)),
                 Format = resolvedFormat
             };
             if (minValue.HasValue) attr.MinValue = (int)minValue.Value;
             if (maxValue.HasValue) attr.MaxValue = (int)maxValue.Value;
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
             // Apply flag overrides (audit / advanced find / field security / sort).
             createFlags?.Apply(attr);
             formula?.Apply(attr);
@@ -688,13 +691,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService)),
                 Precision = precision
             };
             if (minValue.HasValue) attr.MinValue = (decimal)minValue.Value;
             if (maxValue.HasValue) attr.MaxValue = (decimal)maxValue.Value;
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
             // Apply flag overrides (audit / advanced find / field security / sort).
             createFlags?.Apply(attr);
             formula?.Apply(attr);
@@ -752,14 +755,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService)),
                 Precision = precision,
                 PrecisionSource = precisionSource
             };
             if (minValue.HasValue) attr.MinValue = minValue.Value;
             if (maxValue.HasValue) attr.MaxValue = maxValue.Value;
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
             // Apply flag overrides (audit / advanced find / field security / sort).
             createFlags?.Apply(attr);
             formula?.Apply(attr);
@@ -818,13 +821,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService)),
                 Precision = precision
             };
             if (minValue.HasValue) attr.MinValue = minValue.Value;
             if (maxValue.HasValue) attr.MaxValue = maxValue.Value;
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
             // Apply flag overrides (audit / advanced find / field security / sort).
             createFlags?.Apply(attr);
             formula?.Apply(attr);
@@ -881,13 +884,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService)),
                 OptionSet = new BooleanOptionSetMetadata(
-                    new OptionMetadata(new Label(trueLabel.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)), 1),
-                    new OptionMetadata(new Label(falseLabel.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)), 0))
+                    new OptionMetadata(new Label(trueLabel.Trim(), McpHelper.GetBaseLanguageCode(_orgService)), 1),
+                    new OptionMetadata(new Label(falseLabel.Trim(), McpHelper.GetBaseLanguageCode(_orgService)), 0))
             };
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
 
             // Apply default value: accepts 'true'/'false' or '1'/'0'. false is the Dataverse convention for unchecked.
             if (!string.IsNullOrWhiteSpace(defaultValue))
@@ -961,12 +964,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService)),
                 Format = dateFormat,
                 DateTimeBehavior = dtBehavior
             };
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
             // Apply flag overrides (audit / advanced find / field security / sort).
             createFlags?.Apply(attr);
             formula?.Apply(attr);
@@ -1043,7 +1046,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var targets = new List<string>();
             foreach (var targetInput in targetInputs)
             {
-                var targetResolve = DisplayNameFirstResolver.ResolveEntity(_serviceClient, targetInput, "manage_column");
+                var targetResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, targetInput, "manage_column");
                 if (!targetResolve.IsSuccess)
                     return Error($"lookup_target '{targetInput}': {targetResolve.Error.Split("\r\n")[0]}", "Use get_tables to find valid entity logical names.");
                 targets.Add(targetResolve.Value.LogicalName);
@@ -1092,11 +1095,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     SchemaName = schemaName,
                     LogicalName = logicalName,
-                    DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient))
+                    DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService))
                 }
             };
             if (!string.IsNullOrWhiteSpace(description))
-                request.Lookup.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                request.Lookup.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
             // Apply flag overrides (audit / advanced find / field security / sort).
             createFlags?.Apply(request.Lookup);
             SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solutionName);
@@ -1107,7 +1110,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Guid metadataId = Guid.Empty;
             var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
             {
-                var response = (CreateOneToManyResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, request);
+                var response = (CreateOneToManyResponse)DataverseMutationExecutor.Execute(_context, _orgService, request);
                 metadataId = response.AttributeId;
             }, $"create Lookup column '{logicalName}' on entity '{entityName}'");
 
@@ -1177,10 +1180,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient))
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService))
             };
             if (!string.IsNullOrWhiteSpace(description))
-                lookup.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                lookup.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
             // Apply flag overrides (audit / advanced find / field security / sort).
             createFlags?.Apply(lookup);
 
@@ -1199,7 +1202,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Guid metadataId = Guid.Empty;
             var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
             {
-                var response = DataverseMutationExecutor.Execute(_context, _serviceClient, request);
+                var response = DataverseMutationExecutor.Execute(_context, _orgService, request);
                 metadataId = (Guid)response.Results["AttributeId"];
             }, $"create PolymorphicLookup column '{logicalName}' on entity '{entityName}'");
 
@@ -1247,10 +1250,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient))
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService))
             };
             if (!string.IsNullOrWhiteSpace(description))
-                lookup.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                lookup.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
             // Apply flag overrides (audit / advanced find / field security / sort).
             createFlags?.Apply(lookup);
 
@@ -1311,7 +1314,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Guid metadataId = Guid.Empty;
             var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
             {
-                var response = (CreateCustomerRelationshipsResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, request);
+                var response = (CreateCustomerRelationshipsResponse)DataverseMutationExecutor.Execute(_context, _orgService, request);
                 metadataId = response.AttributeId;
             }, $"create Customer column '{logicalName}' on entity '{entityName}'");
 
@@ -1361,7 +1364,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(globalOptionSetName))
             {
-                var choiceResolve = DisplayNameFirstResolver.ResolveGlobalOptionSet(_serviceClient, globalOptionSetName, "manage_column");
+                var choiceResolve = DisplayNameFirstResolver.ResolveGlobalOptionSet(_orgService, globalOptionSetName, "manage_column");
                 if (!choiceResolve.IsSuccess)
                     return Error($"global_optionset_name '{globalOptionSetName.Trim()}': {choiceResolve.Error.Split("\r\n")[0]}", "Use manage_choice(action='list') to find valid option set names.");
                 globalOptionSetName = choiceResolve.Value.Name;
@@ -1373,7 +1376,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         SchemaName = schemaName,
                         LogicalName = logicalName,
-                        DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
+                        DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService)),
                         OptionSet = new OptionSetMetadata { IsGlobal = true, Name = globalOptionSetName.Trim() }
                     };
                 }
@@ -1383,7 +1386,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         SchemaName = schemaName,
                         LogicalName = logicalName,
-                        DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
+                        DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService)),
                         OptionSet = new OptionSetMetadata { IsGlobal = true, Name = globalOptionSetName.Trim() }
                     };
                 }
@@ -1407,7 +1410,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var optionSet = new OptionSetMetadata { IsGlobal = false, OptionSetType = OptionSetType.Picklist };
                 foreach (var opt in parsedOptions)
                 {
-                    var optMeta = new OptionMetadata(new Label(opt.Label, McpHelper.GetBaseLanguageCode(_serviceClient)), opt.Value);
+                    var optMeta = new OptionMetadata(new Label(opt.Label, McpHelper.GetBaseLanguageCode(_orgService)), opt.Value);
                     if (!string.IsNullOrWhiteSpace(opt.Color) && ManageChoiceTool.TryNormalizeHexColor(opt.Color, out var hex))
                         optMeta.Color = hex;
                     optionSet.Options.Add(optMeta);
@@ -1420,7 +1423,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         SchemaName = schemaName,
                         LogicalName = logicalName,
-                        DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
+                        DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService)),
                         OptionSet = optionSet
                     };
                 }
@@ -1430,7 +1433,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         SchemaName = schemaName,
                         LogicalName = logicalName,
-                        DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
+                        DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService)),
                         OptionSet = optionSet
                     };
                 }
@@ -1441,7 +1444,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
             // Apply flag overrides (audit / advanced find / field security / sort).
             createFlags?.Apply(attr);
 
@@ -1489,10 +1492,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient))
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService))
             };
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
             // Apply flag overrides (required / audit / advanced find / field security / sort).
             createFlags?.Apply(attr);
 
@@ -1538,12 +1541,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService)),
                 IsPrimaryImage = false,
                 CanStoreFullImage = canStoreFullImage == true
             };
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
             // Apply flag overrides (required / audit / advanced find / field security / sort).
             createFlags?.Apply(attr);
 
@@ -1594,11 +1597,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService)),
                 MaxSizeInKB = maxSizeInKB
             };
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
             // Apply flag overrides (required / audit / advanced find / field security / sort).
             createFlags?.Apply(attr);
 
@@ -1649,7 +1652,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (_options.DryRun) return Guid.Empty;
 
-            var response = (CreateAttributeResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, request);
+            var response = (CreateAttributeResponse)DataverseMutationExecutor.Execute(_context, _orgService, request);
             return response.AttributeId;
         }
 
@@ -1666,13 +1669,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sourceRelationshipName = match.Groups["relationship"].Value;
             var sourceLookupAttribute = match.Groups["lookup"].Value;
 
-            var sourceMetadata = ((RetrieveEntityResponse)_serviceClient.Execute(new RetrieveEntityRequest
+            var sourceMetadata = ((RetrieveEntityResponse)_orgService.Execute(new RetrieveEntityRequest
             {
                 EntityFilters = EntityFilters.Relationships,
                 LogicalName = sourceEntityName,
                 RetrieveAsIfPublished = true
             })).EntityMetadata;
-            var targetMetadata = ((RetrieveEntityResponse)_serviceClient.Execute(new RetrieveEntityRequest
+            var targetMetadata = ((RetrieveEntityResponse)_orgService.Execute(new RetrieveEntityRequest
             {
                 EntityFilters = EntityFilters.Relationships,
                 LogicalName = targetEntityName,
@@ -1701,7 +1704,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private bool PublishIfNeeded(string entityName)
         {
-            return PublishHelper.PublishEntity(_context, _serviceClient, entityName);
+            return PublishHelper.PublishEntity(_context, _orgService, entityName);
         }
 
         private static StringBuilder FormatHeader(string entityName, string logicalName, string typeName, string displayName, AttributeRequiredLevel reqLevel)
@@ -1769,7 +1772,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             try
             {
-                var response = (RetrieveAttributeResponse)_serviceClient.Execute(new RetrieveAttributeRequest
+                var response = (RetrieveAttributeResponse)_orgService.Execute(new RetrieveAttributeRequest
                 {
                     EntityLogicalName = entityName,
                     MetadataId = metadataId,
@@ -1832,7 +1835,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             AttributeMetadata metadata;
             try
             {
-                var response = (RetrieveAttributeResponse)_serviceClient.Execute(new RetrieveAttributeRequest
+                var response = (RetrieveAttributeResponse)_orgService.Execute(new RetrieveAttributeRequest
                 {
                     EntityLogicalName = sourceEntity,
                     LogicalName = sourceAttribute,
@@ -2096,7 +2099,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var oldVal = metadata.DisplayName?.UserLocalizedLabel?.Label ?? "";
                     if (oldVal != displayName.Trim())
                     {
-                        metadata.DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                        metadata.DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
                         changes.Add($"DisplayName: \"{oldVal}\" -> \"{displayName.Trim()}\"");
                         structuredChanges["displayName"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = displayName.Trim() };
                     }
@@ -2107,7 +2110,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var oldVal = metadata.Description?.UserLocalizedLabel?.Label ?? "";
                     if (oldVal != description.Trim())
                     {
-                        metadata.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                        metadata.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
                         changes.Add($"Description: \"{oldVal}\" -> \"{description.Trim()}\"");
                         structuredChanges["description"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = description.Trim() };
                     }
@@ -2232,7 +2235,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Attribute = metadata,
                         MergeLabels = true
                     };
-                    DataverseMutationExecutor.Execute(_context, _serviceClient, updateRequest);
+                    DataverseMutationExecutor.Execute(_context, _orgService, updateRequest);
 
                     // WORKAROUND: UpdateAttributeRequest silently fails to persist
                     // RequiredLevel on an existing attribute (the request succeeds
@@ -2254,7 +2257,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             {
                                 DataverseWebApiMutationExecutor.Execute(
                                     _context,
-                                    _serviceClient,
+                                    _webApi,
                                     HttpMethod.Put,
                                     route,
                                     putBody,
@@ -2426,14 +2429,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrWhiteSpace(trueLabel))
                 {
                     var oldVal = boolMeta.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label ?? "Yes";
-                    boolMeta.OptionSet.TrueOption.Label = new Label(trueLabel.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                    boolMeta.OptionSet.TrueOption.Label = new Label(trueLabel.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
                     changes.Add($"TrueLabel: \"{oldVal}\" -> \"{trueLabel.Trim()}\"");
                     structuredChanges["trueLabel"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = trueLabel.Trim() };
                 }
                 if (!string.IsNullOrWhiteSpace(falseLabel))
                 {
                     var oldVal = boolMeta.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label ?? "No";
-                    boolMeta.OptionSet.FalseOption.Label = new Label(falseLabel.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                    boolMeta.OptionSet.FalseOption.Label = new Label(falseLabel.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
                     changes.Add($"FalseLabel: \"{oldVal}\" -> \"{falseLabel.Trim()}\"");
                     structuredChanges["falseLabel"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = falseLabel.Trim() };
                 }
@@ -2520,7 +2523,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 else if (opts != null)
                     foreach (var opt in opts)
                     {
-                        var req = new InsertOptionValueRequest { Label = new Label(opt.Label, McpHelper.GetBaseLanguageCode(_serviceClient)) };
+                        var req = new InsertOptionValueRequest { Label = new Label(opt.Label, McpHelper.GetBaseLanguageCode(_orgService)) };
                         if (isGlobal && !string.IsNullOrWhiteSpace(optionSetName))
                             req.OptionSetName = optionSetName;
                         else
@@ -2531,7 +2534,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         if (opt.Value.HasValue) req.Value = opt.Value.Value;
                         if (!string.IsNullOrWhiteSpace(opt.Color) && ManageChoiceTool.TryNormalizeHexColor(opt.Color, out var hexAdd))
                             req.Parameters["Color"] = hexAdd;
-                        var resp = (InsertOptionValueResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, req);
+                        var resp = (InsertOptionValueResponse)DataverseMutationExecutor.Execute(_context, _orgService, req);
                         results.Add(string.IsNullOrWhiteSpace(opt.Color)
                             ? $"OptionsAdded: {opt.Label} ({resp.NewOptionValue})"
                             : $"OptionsAdded: {opt.Label} ({resp.NewOptionValue}) [{opt.Color}]");
@@ -2547,7 +2550,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     foreach (var opt in opts)
                     {
                         if (!opt.Value.HasValue) continue;
-                        var req = new UpdateOptionValueRequest { Value = opt.Value.Value, Label = new Label(opt.Label, McpHelper.GetBaseLanguageCode(_serviceClient)), MergeLabels = true };
+                        var req = new UpdateOptionValueRequest { Value = opt.Value.Value, Label = new Label(opt.Label, McpHelper.GetBaseLanguageCode(_orgService)), MergeLabels = true };
                         if (isGlobal && !string.IsNullOrWhiteSpace(optionSetName))
                             req.OptionSetName = optionSetName;
                         else
@@ -2557,7 +2560,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         }
                         if (!string.IsNullOrWhiteSpace(opt.Color) && ManageChoiceTool.TryNormalizeHexColor(opt.Color, out var hexUpd))
                             req.Parameters["Color"] = hexUpd;
-                        DataverseMutationExecutor.Execute(_context, _serviceClient, req);
+                        DataverseMutationExecutor.Execute(_context, _orgService, req);
                         results.Add(string.IsNullOrWhiteSpace(opt.Color)
                             ? $"OptionsRenamed: {opt.Value.Value} -> \"{opt.Label}\""
                             : $"OptionsRenamed: {opt.Value.Value} -> \"{opt.Label}\" [{opt.Color}]");
@@ -2580,7 +2583,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             req.EntityLogicalName = entityName;
                             req.AttributeLogicalName = attributeName;
                         }
-                        DataverseMutationExecutor.Execute(_context, _serviceClient, req);
+                        DataverseMutationExecutor.Execute(_context, _orgService, req);
                         results.Add($"OptionsDeleted: {val}");
                     }
             }
@@ -2610,11 +2613,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         {
                             EntityLogicalName = entityName,
                             AttributeLogicalName = attributeName,
-                            Label = new Label(opt.Label, McpHelper.GetBaseLanguageCode(_serviceClient)),
+                            Label = new Label(opt.Label, McpHelper.GetBaseLanguageCode(_orgService)),
                             StateCode = stateValue
                         };
                         if (opt.Value.HasValue) req.Value = opt.Value.Value;
-                        var resp = (InsertStatusValueResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, req);
+                        var resp = (InsertStatusValueResponse)DataverseMutationExecutor.Execute(_context, _orgService, req);
                         results.Add($"OptionsAdded: {opt.Label} ({resp.NewOptionValue}) [state={stateValue}]");
                     }
             }
@@ -2633,10 +2636,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             EntityLogicalName = entityName,
                             AttributeLogicalName = attributeName,
                             Value = opt.Value.Value,
-                            Label = new Label(opt.Label, McpHelper.GetBaseLanguageCode(_serviceClient)),
+                            Label = new Label(opt.Label, McpHelper.GetBaseLanguageCode(_orgService)),
                             MergeLabels = true
                         };
-                        DataverseMutationExecutor.Execute(_context, _serviceClient, req);
+                        DataverseMutationExecutor.Execute(_context, _orgService, req);
                         results.Add($"OptionsRenamed: {opt.Value.Value} -> \"{opt.Label}\"");
                     }
             }
@@ -2655,7 +2658,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             AttributeLogicalName = attributeName,
                             Value = val
                         };
-                        DataverseMutationExecutor.Execute(_context, _serviceClient, req);
+                        DataverseMutationExecutor.Execute(_context, _orgService, req);
                         results.Add($"OptionsDeleted: {val}");
                     }
             }
@@ -2690,9 +2693,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             catch (JsonException ex) { return (null, $"Invalid JSON: {ex.Message}"); }
         }
 
-        private static (string ResolvedName, string Error) ResolveEntityName(ServiceClient serviceClient, string entityName)
+        private static (string ResolvedName, string Error) ResolveEntityName(IOrganizationService orgService, string entityName)
         {
-            var resolved = DisplayNameFirstResolver.ResolveEntity(serviceClient, entityName, "manage_column");
+            var resolved = DisplayNameFirstResolver.ResolveEntity(orgService, entityName, "manage_column");
             if (resolved.IsSuccess)
                 return (resolved.Value.LogicalName, null);
 

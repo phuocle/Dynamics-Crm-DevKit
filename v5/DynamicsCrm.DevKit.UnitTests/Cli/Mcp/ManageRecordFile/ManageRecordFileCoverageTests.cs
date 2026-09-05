@@ -105,25 +105,9 @@ public sealed class ManageRecordFileCoverageTests
     }
 
     [TestMethod]
-    [Ignore("HttpListener is unavailable in the restricted test environment.")]
     public async Task DownloadFromUrl_ReturnsContentAndDecodedFinalPathSegment()
     {
-        using var listener = new HttpListener();
-        using var portProbe = new TcpListener(System.Net.IPAddress.Loopback, 0);
-        portProbe.Start();
-        var port = ((IPEndPoint)portProbe.LocalEndpoint).Port;
-        portProbe.Stop();
-        listener.Prefixes.Add($"http://127.0.0.1:{port}/");
-        listener.Start();
-
-        var serve = Task.Run(async () =>
-        {
-            var request = await listener.GetContextAsync();
-            request.Response.StatusCode = 200;
-            var body = new byte[] { 7, 8, 9 };
-            await request.Response.OutputStream.WriteAsync(body, 0, body.Length);
-            request.Response.Close();
-        });
+        var (port, serve) = ServeOnce("HTTP/1.1 200 OK", new byte[] { 7, 8, 9 });
 
         var result = ((byte[] data, string fileName))Invoke(CreateTool(), "DownloadFromUrl", $"http://127.0.0.1:{port}/folder/report%20one.bin");
         await serve;
@@ -133,23 +117,9 @@ public sealed class ManageRecordFileCoverageTests
     }
 
     [TestMethod]
-    [Ignore("HttpListener is unavailable in the restricted test environment.")]
     public async Task DownloadFromUrl_ReportsHttpFailure()
     {
-        using var listener = new HttpListener();
-        using var portProbe = new TcpListener(System.Net.IPAddress.Loopback, 0);
-        portProbe.Start();
-        var port = ((IPEndPoint)portProbe.LocalEndpoint).Port;
-        portProbe.Stop();
-        listener.Prefixes.Add($"http://127.0.0.1:{port}/");
-        listener.Start();
-        var serve = Task.Run(async () =>
-        {
-            var request = await listener.GetContextAsync();
-            request.Response.StatusCode = 404;
-            request.Response.StatusDescription = "Not Found";
-            request.Response.Close();
-        });
+        var (port, serve) = ServeOnce("HTTP/1.1 404 Not Found", Array.Empty<byte>());
 
         try
         {
@@ -162,6 +132,31 @@ public sealed class ManageRecordFileCoverageTests
             StringAssert.Contains(ex.InnerException!.Message, "404");
         }
         await serve;
+    }
+
+    private static (int port, Task serve) ServeOnce(string statusLine, byte[] body)
+    {
+        var listener = new TcpListener(IPAddress.Loopback, 0);
+        listener.Start();
+        var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+        var serve = Task.Run(async () =>
+        {
+            using var client = await listener.AcceptTcpClientAsync();
+            using var stream = client.GetStream();
+            var request = new System.Text.StringBuilder();
+            var buffer = new byte[4096];
+            while (!request.ToString().Contains("\r\n\r\n"))
+            {
+                var read = await stream.ReadAsync(buffer, 0, buffer.Length);
+                if (read == 0) break;
+                request.Append(System.Text.Encoding.ASCII.GetString(buffer, 0, read));
+            }
+            var header = System.Text.Encoding.ASCII.GetBytes($"{statusLine}\r\nContent-Length: {body.Length}\r\nConnection: close\r\n\r\n");
+            await stream.WriteAsync(header, 0, header.Length);
+            await stream.WriteAsync(body, 0, body.Length);
+            listener.Stop();
+        });
+        return (port, serve);
     }
 
     private static CallToolResult InvokeUpload(ManageRecordFileTool tool, FileAttributeMetadata file, ImageAttributeMetadata image, string path, string base64, string name) =>

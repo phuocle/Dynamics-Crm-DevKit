@@ -1,4 +1,5 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 {
     internal sealed class FormXmlOperationsRunner
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
 
-        public FormXmlOperationsRunner(ServiceClient serviceClient)
+        public FormXmlOperationsRunner(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         /// <summary>
@@ -32,7 +33,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             var attrMap = new Dictionary<string, AttributeMetadata>(StringComparer.OrdinalIgnoreCase);
             if (referencedFields.Count > 0)
             {
-                var fieldMeta = new FormFieldMetadata(_serviceClient);
+                var fieldMeta = new FormFieldMetadata(_orgService);
                 try
                 {
                     attrMap = fieldMeta.LoadEntityAttributeMap(entityName);
@@ -61,10 +62,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             }
 
             // 3. Init operation helpers
-            var builder  = new FormXmlBuilder(_serviceClient);
-            var tabSec   = new FormTabSectionOperations(_serviceClient, builder);
-            var fieldEvt = new FormFieldEventOperations(_serviceClient, builder);
-            var subgridOps = new FormSubgridOperations(_serviceClient);
+            var builder  = new FormXmlBuilder(_orgService);
+            var tabSec   = new FormTabSectionOperations(_orgService, builder);
+            var fieldEvt = new FormFieldEventOperations(_orgService, builder);
+            var subgridOps = new FormSubgridOperations(_orgService);
             var classIdMap  = new Dictionary<string, string>();
             var opSummaries = new List<string>();
 

@@ -24,8 +24,11 @@ public sealed class ExecuteSqlAdditionalCoverageTests
     private static MetadataService UninitializedMetadataService()
         => (MetadataService)RuntimeHelpers.GetUninitializedObject(typeof(MetadataService));
 
+    private static DynamicsCrm.DevKit.Shared.Services.ServiceClientWebApiExecutor UninitializedWebApi()
+        => new(UninitializedServiceClient());
+
     private static DynamicsCrm.DevKit.Cli.Mcp.Tools.ExecuteSqlTool CreateTool()
-        => new(UninitializedServiceClient(), UninitializedMetadataService());
+        => new(UninitializedWebApi(), UninitializedMetadataService());
 
     [TestMethod]
     public void Constructor_NullServiceClient_Throws()
@@ -38,7 +41,7 @@ public sealed class ExecuteSqlAdditionalCoverageTests
     public void Constructor_NullMetadataService_Throws()
     {
         AssertArgumentNull(() =>
-            new DynamicsCrm.DevKit.Cli.Mcp.Tools.ExecuteSqlTool(UninitializedServiceClient(), null!));
+            new DynamicsCrm.DevKit.Cli.Mcp.Tools.ExecuteSqlTool(UninitializedWebApi(), null!));
     }
 
     [TestMethod]

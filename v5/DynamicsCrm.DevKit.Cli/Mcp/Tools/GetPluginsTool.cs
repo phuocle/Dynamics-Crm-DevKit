@@ -18,11 +18,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class GetPluginsTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
 
-        public GetPluginsTool(ServiceClient serviceClient)
+        public GetPluginsTool(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         private const int PACK = 50;
@@ -134,7 +134,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // entity_name → steps on entity (wins over assembly_name)
                 if (!string.IsNullOrWhiteSpace(entity_name))
                 {
-                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_plugins");
+                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "get_plugins");
                     if (!entityResult.IsSuccess)
                         return Error(
                             $"entity_name '{entity_name.Trim()}': {entityResult.Error.Split("\r\n")[0]}",
@@ -276,7 +276,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             return result.Entities.Select(e => MapAssemblyEntry(e, null)).ToList();
         }
 
@@ -297,7 +297,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var typesResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchTypes));
+            var typesResult = _orgService.RetrieveMultiple(new FetchExpression(fetchTypes));
             return typesResult.Entities.Select(MapTypeEntry).ToList();
         }
 
@@ -396,7 +396,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             return result.Entities.Select(e => MapStepEntry(e, includeConfig)).ToList();
         }
 
@@ -428,7 +428,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-                var imgResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchImages));
+                var imgResult = _orgService.RetrieveMultiple(new FetchExpression(fetchImages));
                 foreach (var img in imgResult.Entities)
                 {
                     var stepRef = img.GetAttributeValue<EntityReference>("sdkmessageprocessingstepid");
@@ -466,7 +466,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 </fetch>";
 
             var counts = new Dictionary<Guid, int>();
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             foreach (var e in result.Entities)
             {
                 var asmIdAlias = e.GetAttributeValue<AliasedValue>("asmId");
@@ -496,7 +496,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             return result.Entities.Count > 0 ? result.Entities[0].Id.ToString() : null;
         }
 
@@ -514,7 +514,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
               </entity>
             </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0) return [];
 
             // Get assembly names per package
@@ -530,7 +530,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
               </entity>
             </fetch>";
 
-            var asmResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchAsm));
+            var asmResult = _orgService.RetrieveMultiple(new FetchExpression(fetchAsm));
             foreach (var asm in asmResult.Entities)
             {
                 var pkgRef = asm.GetAttributeValue<EntityReference>("packageid");
@@ -566,7 +566,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 LogicalName = entityName,
                 EntityFilters = EntityFilters.Entity
             };
-            var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+            var response = (RetrieveEntityResponse)_orgService.Execute(request);
             return response.EntityMetadata.ObjectTypeCode;
         }
 

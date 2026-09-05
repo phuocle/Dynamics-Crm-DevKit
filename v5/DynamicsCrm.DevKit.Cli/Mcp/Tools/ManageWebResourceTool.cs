@@ -19,12 +19,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageWebResourceTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
-        public ManageWebResourceTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageWebResourceTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -142,7 +142,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var solutionJoin = "";
             if (!string.IsNullOrWhiteSpace(solutionName))
             {
-                var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
+                var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim());
                 if (!solResult.IsSuccess)
                     return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
 
@@ -172,7 +172,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
             {
                 var emptyResult = new ManageWebResourceResult { Action = "list", TotalCount = 0 };
@@ -211,7 +211,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "solutionid", "introducedversion", "dependencyxml")
             };
             query.Criteria.AddCondition("webresourceid", ConditionOperator.Equal, resolved.Id.Value);
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             if (result.Entities.Count == 0)
                 return Error($"Web resource '{webResourceId}' not found.",
                              "Use action='list' to find valid web resource IDs.");
@@ -264,13 +264,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("solution_name is required for 'create'.",
                              "Provide the solution unique name or display name. Use get_solution_components to find available solutions.");
 
-            var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
+            var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim());
             if (!solResult.IsSuccess)
                 return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
 
             name = name.Trim();
 
-            var existingByInput = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, name, "manage_webresource");
+            var existingByInput = DisplayNameFirstResolver.ResolveWebResource(_orgService, name, "manage_webresource");
             if (existingByInput.IsSuccess)
             {
                 var existingName = existingByInput.Value.GetAttributeValue<string>("name") ?? existingByInput.CanonicalName ?? existingByInput.Value.Id.ToString();
@@ -281,7 +281,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(displayName))
             {
-                var existingByDisplayName = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, displayName.Trim(), "manage_webresource");
+                var existingByDisplayName = DisplayNameFirstResolver.ResolveWebResource(_orgService, displayName.Trim(), "manage_webresource");
                 if (existingByDisplayName.IsSuccess)
                 {
                     var existingName = existingByDisplayName.Value.GetAttributeValue<string>("name") ?? existingByDisplayName.CanonicalName ?? existingByDisplayName.Value.Id.ToString();
@@ -345,10 +345,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
 
-            var webResourceId = DataverseMutationExecutor.Create(_context, _serviceClient, webResource);
+            var webResourceId = DataverseMutationExecutor.Create(_context, _orgService, webResource);
 
             var addResult = SolutionComponentCreateHelper.AddExistingComponent(
-                _context, _serviceClient,
+                _context, _orgService,
                 webResourceId,
                 61,
                 solResult.UniqueName,
@@ -357,7 +357,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ? null
                 : $"Failed to add to solution '{solResult.UniqueName}': {addResult.AddToSolutionWarning}";
 
-            PublishHelper.PublishWebResource(_context, _serviceClient, webResourceId);
+            PublishHelper.PublishWebResource(_context, _orgService, webResourceId);
 
             var typeLabel = TypeCodeMap.TryGetValue(typeCode, out var t) ? t : typeCode.ToString();
 
@@ -464,9 +464,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
             }
 
-            DataverseMutationExecutor.Update(_context, _serviceClient, update);
+            DataverseMutationExecutor.Update(_context, _orgService, update);
 
-            PublishHelper.PublishWebResource(_context, _serviceClient, id);
+            PublishHelper.PublishWebResource(_context, _orgService, id);
             var existingName = existing.GetAttributeValue<string>("name") ?? "";
 
             return Success($"Updated web resource '{existingName}' ({id}): fieldsUpdated={fieldsUpdated}, published.", new ManageWebResourceResult
@@ -534,7 +534,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
 
-            DataverseMutationExecutor.Delete(_context, _serviceClient, "webresource", id);
+            DataverseMutationExecutor.Delete(_context, _orgService, "webresource", id);
 
             return Success($"Deleted web resource '{existingName}' ({id}).", new ManageWebResourceResult
             {
@@ -565,7 +565,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 },
                 TopCount = 1
             };
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             return result.Entities.FirstOrDefault();
         }
 
@@ -605,10 +605,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (Guid.TryParse(trimmed, out var guid))
                 return (guid, null);
 
-            if (_serviceClient == null)
+            if (_orgService == null)
                 return (null, $"'{trimmed}' is not a valid GUID. Use action='list' to find valid web resource IDs.");
 
-            var resolved = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, trimmed, "manage_webresource");
+            var resolved = DisplayNameFirstResolver.ResolveWebResource(_orgService, trimmed, "manage_webresource");
             if (!resolved.IsSuccess)
                 return (null, resolved.Error);
 

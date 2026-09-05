@@ -23,7 +23,7 @@ public class ManageViewToolTests
     // Input validation via public method
     // ──────────────────────────────────────────────
 
-    private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageViewTool _tool = new(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true));
+    private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageViewTool _tool = new(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), new DynamicsCrm.DevKit.Cli.Mcp.McpExecutionContext(true), null!);
 
     [TestMethod]
     public async Task GetViews_EmptyEntityName_ReturnsError()

@@ -18,11 +18,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
         public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
-        public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
+        public IOrganizationServiceAsync2 OrgServiceAsync { get; set; } = arg.ServiceClient;
         public string TaskType => $"[{nameof(CliType.uploadreports).ToUpper()}]";
 
         private DeploymentService _deploymentService;
-        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(ServiceClient);
+        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(OrgServiceAsync);
         public async Task<bool> IsValidAsync()
         {
             if (!string.IsNullOrEmpty(Arg.File))
@@ -146,7 +146,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return;
             }
             XrmHelper.COUNT_RetrieveAsync++;
-            var existing = await ServiceClient.RetrieveAsync("report", report.ReportId, new ColumnSet("bodytext", "iscustomizable"));
+            var existing = await OrgServiceAsync.RetrieveAsync("report", report.ReportId, new ColumnSet("bodytext", "iscustomizable"));
             if (existing == null)
             {
                 SpectreLog.ActionError($"Report not found: {report.DisplayReportName}");

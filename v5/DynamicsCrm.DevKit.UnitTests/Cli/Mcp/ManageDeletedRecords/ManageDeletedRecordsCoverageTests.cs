@@ -13,7 +13,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.ManageDeletedRecords;
 public sealed class ManageDeletedRecordsCoverageTests
 {
     private static ManageDeletedRecordsTool CreateTool(bool dryRun = true) =>
-        new(null!, new McpDryRunOptions { DryRun = dryRun }, new McpExecutionContext(true));
+        new(null!, new McpDryRunOptions { DryRun = dryRun }, new McpExecutionContext(true), null!);
 
     [TestMethod]
     public void FetchAndNameHelpers_BuildExpectedValues()

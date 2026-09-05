@@ -355,7 +355,7 @@ public class ManageColumnToolTests
     [TestMethod]
     public void ManageColumn_EmptyEntityName_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext(), null!);
         var result = tool.manage_column(entity_name: "", logical_name: "new_test", attribute_type: "string", display_name: "Test");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -365,7 +365,7 @@ public class ManageColumnToolTests
     [TestMethod]
     public void ManageColumn_InvalidAttributeType_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext(), null!);
         var result = tool.manage_column(entity_name: "account", logical_name: "new_test", attribute_type: "invalidtype", display_name: "Test");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -375,7 +375,7 @@ public class ManageColumnToolTests
     [TestMethod]
     public void ManageColumn_InvalidRequiredLevel_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext(), null!);
         var result = tool.manage_column(entity_name: "account", logical_name: "new_test", attribute_type: "string", display_name: "Test", required_level: "bogus");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -385,7 +385,7 @@ public class ManageColumnToolTests
     [TestMethod]
     public void ManageColumn_InvalidStringFormat_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext(), null!);
         var result = tool.manage_column(entity_name: "account", logical_name: "new_test", attribute_type: "string", display_name: "Test", format: "BadFormat");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -396,7 +396,7 @@ public class ManageColumnToolTests
     [TestMethod]
     public void ManageColumn_InvalidIntegerFormat_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext(), null!);
         var result = tool.manage_column(entity_name: "account", logical_name: "new_test", attribute_type: "integer", display_name: "Test", format: "BadFormat");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -407,7 +407,7 @@ public class ManageColumnToolTests
     [TestMethod]
     public void ManageColumn_InvalidMemoFormat_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext(), null!);
         var result = tool.manage_column(entity_name: "account", logical_name: "new_test", attribute_type: "memo", display_name: "Test", format: "BadFormat");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -418,7 +418,7 @@ public class ManageColumnToolTests
     [TestMethod]
     public void ManageColumn_InvalidDateTimeBehavior_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext(), null!);
         var result = tool.manage_column(entity_name: "account", logical_name: "new_test", attribute_type: "datetime", display_name: "Test", behavior: "BadBehavior");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
@@ -488,7 +488,7 @@ public class ManageColumnToolTests
         // Pass logical_name="statuscode" with no option params and no other changes.
         // The tool resolves entity_name before reaching Dataverse (null serviceClient
         // causes the resolve to fail with entity_name error), so we verify early-exit.
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext(), null!);
         var result = tool.manage_column(entity_name: "", logical_name: "statuscode");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;

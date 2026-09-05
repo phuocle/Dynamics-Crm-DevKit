@@ -11,20 +11,20 @@ namespace DynamicsCrm.DevKit.Shared.Logic
     {
         private const string NEW_LINE = "\r\n";
         private const string TAB = "\t";
-        private static ServiceClient ServiceClient { get; set; }
+        private static IOrganizationServiceAsync2 OrgServiceAsync { get; set; }
         private static MetadataService _metadataService;
-        private static MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
+        private static MetadataService Metadata => _metadataService ??= new MetadataService(OrgServiceAsync);
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
 
-        public static async Task<(string code, string dts)> GetJsWebApiCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootNamespace, bool isJsFormExist)
+        public static async Task<(string code, string dts)> GetJsWebApiCodeAsync(IOrganizationServiceAsync2 orgServiceAsync, EntityMetadata entityMetadata, string rootNamespace, bool isJsFormExist)
         {
-            ServiceClient = serviceClient;
+            OrgServiceAsync = orgServiceAsync;
             _metadataService = null;
             EntityMetadata = entityMetadata;
             if (EntityMetadata.Attributes == null) EntityMetadata = await Metadata.FetchEntityMetadataAsync(entityMetadata.LogicalName);
             RootNamespace = rootNamespace;
-            var dts = await JsTypeScriptDeclaration.GetCodeAsync(serviceClient, EntityMetadata, rootNamespace, isJsFormExist, true);
+            var dts = await JsTypeScriptDeclaration.GetCodeAsync(OrgServiceAsync, EntityMetadata, rootNamespace, isJsFormExist, true);
             var code = string.Empty;
             var @namespace = Helper.GetNameSpace(RootNamespace);
             var logicalName = Helper.SafeIdentifier(entityMetadata.LogicalName);
@@ -159,7 +159,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     if (lookup.Targets.Count() == 1)
                     {
                         var entityLogicalName = lookup.Targets[0];
-                        await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(ServiceClient, entityLogicalName);
+                        await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(OrgServiceAsync, entityLogicalName);
                         var entityMetadata = XrmHelper.EntitiesMetadata.First(x => x.LogicalName == entityLogicalName);
                         var b = $"b: '{((attribute.IsCustomAttribute ?? false) ? attributeSchemaName : attribute.LogicalName)}'";
                         var c = $"c: '{entityMetadata.LogicalCollectionName}'";
@@ -179,7 +179,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                             {
                                 var navigation = EntityMetadata.ManyToOneRelationships?.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
                                 var b = $"b: '{navigation?.ReferencingEntityNavigationPropertyName}'";
-                                await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(ServiceClient, entityLogicalName);
+                                await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(OrgServiceAsync, entityLogicalName);
                                 var c = $"c: '{XrmHelper.EntitiesMetadata.First(x => x.LogicalName == entityLogicalName)?.LogicalCollectionName}'";
                                 var d = $"d: '{entityLogicalName}'";
                                 if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName?.Length > 0)

@@ -20,12 +20,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class GetAuditHistoryTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private const int PagingPageSize = 5000;
 
-        public GetAuditHistoryTool(ServiceClient serviceClient)
+        public GetAuditHistoryTool(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         // Action name → int for the audit 'action' field
@@ -117,7 +117,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // ── Resolve entity → logical name ───────────────────────────────────
             if (!string.IsNullOrWhiteSpace(entityName))
             {
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "get_audit_history");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "get_audit_history");
                 if (!entityResult.IsSuccess)
                     return Error($"entity_name '{entityName}': {entityResult.Error}");
                 entityName = entityResult.Value.LogicalName;
@@ -126,7 +126,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // ── Resolve attribute → logical name (detail mode only) ─────────────
             if (!string.IsNullOrWhiteSpace(recordId) && !string.IsNullOrWhiteSpace(attributeName))
             {
-                var attributeResult = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entityName, attributeName, "get_audit_history");
+                var attributeResult = DisplayNameFirstResolver.ResolveAttribute(_orgService, entityName, attributeName, "get_audit_history");
                 if (!attributeResult.IsSuccess)
                     return Error($"attribute_name '{attributeName}': {attributeResult.Error}");
                 attributeName = attributeResult.Value.LogicalName;
@@ -206,7 +206,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         PagingCookie = pagingCookie
                     }
                 };
-                var response = (RetrieveRecordChangeHistoryResponse)_serviceClient.Execute(request);
+                var response = (RetrieveRecordChangeHistoryResponse)_orgService.Execute(request);
                 var auditDetails = response.AuditDetailCollection;
 
                 if (auditDetails?.AuditDetails != null && auditDetails.AuditDetails.Count > 0)
@@ -250,7 +250,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var empty = new AttributeMetadataCache();
             if (string.IsNullOrWhiteSpace(entityName)) return empty;
 
-            var response = (RetrieveEntityResponse)_serviceClient.Execute(new RetrieveEntityRequest
+            var response = (RetrieveEntityResponse)_orgService.Execute(new RetrieveEntityRequest
                 {
                     LogicalName = entityName,
                     EntityFilters = EntityFilters.Attributes
@@ -469,7 +469,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 while (filtered.Count < maxRecords)
                 {
                     var pagedFetchXml = FetchXmlPagingHelper.ApplyPaging(fetchXml, page, PagingPageSize, pagingCookie);
-                    var pageResult = _serviceClient.RetrieveMultiple(new FetchExpression(pagedFetchXml));
+                    var pageResult = _orgService.RetrieveMultiple(new FetchExpression(pagedFetchXml));
 
                     foreach (var e in pageResult.Entities)
                     {
@@ -488,7 +488,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             else
             {
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
                 filtered.AddRange(result.Entities);
             }
 
@@ -541,7 +541,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             query.Criteria.AddCondition("internalemailaddress", ConditionOperator.Equal, userFilter);
 
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             if (result.Entities.Count > 1)
                 return "[AMBIGUOUS_USER]" + FormatMultipleUsers(userFilter, result.Entities);
             if (result.Entities.Count == 1)
@@ -577,7 +577,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private int? ResolveObjectTypeCode(string entityName)
         {
-            var response = (RetrieveEntityResponse)_serviceClient.Execute(new RetrieveEntityRequest
+            var response = (RetrieveEntityResponse)_orgService.Execute(new RetrieveEntityRequest
             {
                 LogicalName = entityName,
                 EntityFilters = EntityFilters.Entity

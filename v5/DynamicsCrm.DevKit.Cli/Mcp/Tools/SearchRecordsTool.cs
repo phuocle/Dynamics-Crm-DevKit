@@ -1,4 +1,6 @@
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using ModelContextProtocol.Protocol;
@@ -23,12 +25,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class SearchRecordsTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
+        private readonly IWebApiExecutor _webApi;
         private readonly McpDryRunOptions _options;
 
-        public SearchRecordsTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public SearchRecordsTool(IOrganizationService orgService, McpDryRunOptions options, IWebApiExecutor webApi)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
+            _webApi = webApi;
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
@@ -118,7 +122,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             var requestBody = BuildSearchRequestBody(trimmedTerm, resolvedEntities.Values, top, filter);
 
-            var response = _serviceClient.ExecuteWebRequest(
+            var response = _webApi.ExecuteWebRequest(
                 HttpMethod.Post, "searchquery", requestBody, null, "application/json");
             var json = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
@@ -191,7 +195,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string ExecuteStatusEndpoint(string endpoint)
         {
-            var response = _serviceClient.ExecuteWebRequest(
+            var response = _webApi.ExecuteWebRequest(
                 HttpMethod.Get, endpoint, string.Empty, null, "application/json");
             var json = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
@@ -210,7 +214,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var resolved = new List<string>();
             foreach (var input in entities.Split(',').Select(e => e.Trim()).Where(e => !string.IsNullOrEmpty(e)))
             {
-                var r = DisplayNameFirstResolver.ResolveEntity(_serviceClient, input, "search_records");
+                var r = DisplayNameFirstResolver.ResolveEntity(_orgService, input, "search_records");
                 if (!r.IsSuccess)
                     return (null, (input, r));
                 if (!string.IsNullOrWhiteSpace(r.Value?.LogicalName))
@@ -347,7 +351,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrEmpty(entityLogicalName)) return null;
             if (_primaryNameMap == null)
             {
-                var response = (RetrieveAllEntitiesResponse)_serviceClient.Execute(new RetrieveAllEntitiesRequest
+                var response = (RetrieveAllEntitiesResponse)_orgService.Execute(new RetrieveAllEntitiesRequest
                 {
                     EntityFilters = EntityFilters.Entity,
                     RetrieveAsIfPublished = true

@@ -18,7 +18,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.ManageReport;
 public sealed class ManageReportCoverageTests
 {
     private static ManageReportTool CreateTool() =>
-        new(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true));
+        new(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true), null!);
 
     [TestMethod]
     public void RdlNameAndPathHelpers_ValidateAndNormalizeValues()

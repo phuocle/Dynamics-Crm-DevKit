@@ -46,14 +46,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Pie", "Doughnut", "Donut", "Funnel"
         };
 
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
         private string _workspaceFolder;
 
-        public ManageChartTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageChartTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -140,7 +140,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(entityName))
                 query.Criteria.AddCondition("primaryentitytypecode", ConditionOperator.Equal, entityName);
 
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
 
             var charts = result.Entities.Select(entity => new ChartListEntry
             {
@@ -207,7 +207,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(chartName))
                 return Error("chart_name is required when action='create'.", "Pass chart_name for the new chart.");
 
-            var entityResolve = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityNameInput.Trim(), "manage_chart");
+            var entityResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, entityNameInput.Trim(), "manage_chart");
             if (!entityResolve.IsSuccess)
                 return Error(entityResolve.Error.Split("\r\n")[0], "Use get_tables to list entities before calling manage_chart.");
 
@@ -388,7 +388,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string resolvedSolutionUniqueName = null;
             if (!string.IsNullOrWhiteSpace(solutionName))
             {
-                var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
+                var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim());
                 if (!solResult.IsSuccess)
                     return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
                 if (string.IsNullOrWhiteSpace(solResult.UniqueName))
@@ -435,13 +435,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             if (!string.IsNullOrWhiteSpace(description)) chartRecord["description"] = description;
 
-            var newId = DataverseMutationExecutor.Create(_context, _serviceClient, chartRecord);
+            var newId = DataverseMutationExecutor.Create(_context, _orgService, chartRecord);
 
             string solutionWarning = null;
             if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
                 solutionWarning = AddToSolution(newId, resolvedSolutionUniqueName);
 
-            var published = publish && PublishHelper.PublishEntity(_context, _serviceClient, entityName);
+            var published = publish && PublishHelper.PublishEntity(_context, _orgService, entityName);
 
             var text = $"Created chart '{chartName.Trim()}' ({newId}) on '{entityName}': type={chartType}, category={groupByCol}" +
                 (measures != null
@@ -588,7 +588,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string resolvedSolutionUniqueName = null;
             if (!string.IsNullOrWhiteSpace(solutionName))
             {
-                var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
+                var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim());
                 if (!solResult.IsSuccess)
                     return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
                 if (string.IsNullOrWhiteSpace(solResult.UniqueName))
@@ -621,13 +621,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             if (description != null && description != "") updateRecord["description"] = description;
 
-            DataverseMutationExecutor.Update(_context, _serviceClient, updateRecord);
+            DataverseMutationExecutor.Update(_context, _orgService, updateRecord);
 
             string solutionWarning = null;
             if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
                 solutionWarning = AddToSolution(chartId, resolvedSolutionUniqueName);
 
-            bool published = publish && PublishHelper.PublishEntity(_context, _serviceClient, primaryEntity);
+            bool published = publish && PublishHelper.PublishEntity(_context, _orgService, primaryEntity);
 
             var text = $"Updated chart '{chartName}' ({chartId}) on '{primaryEntity}'. Backup saved.";
             if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
@@ -682,13 +682,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 ["name"] = chartNameInput.Trim()
             };
-            DataverseMutationExecutor.Update(_context, _serviceClient, updateRecord);
+            DataverseMutationExecutor.Update(_context, _orgService, updateRecord);
 
             string solutionWarning = null;
             if (!string.IsNullOrWhiteSpace(solutionName))
                 solutionWarning = AddToSolution(chartId, solutionName.Trim());
 
-            bool published = publish && PublishHelper.PublishEntity(_context, _serviceClient, primaryEntity);
+            bool published = publish && PublishHelper.PublishEntity(_context, _orgService, primaryEntity);
 
             var text = $"Renamed chart {chartId} to '{chartNameInput.Trim()}'.";
             if (solutionWarning != null)
@@ -735,16 +735,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             query.Criteria.AddCondition("primaryentitytypecode", ConditionOperator.Equal, primaryEntity);
             query.Criteria.AddCondition("isdefault", ConditionOperator.Equal, true);
 
-            var existingDefaults = _serviceClient.RetrieveMultiple(query);
+            var existingDefaults = _orgService.RetrieveMultiple(query);
             foreach (var existing in existingDefaults.Entities)
             {
                 if (existing.Id == chartId) continue;
-                DataverseMutationExecutor.Update(_context, _serviceClient, new Entity("savedqueryvisualization", existing.Id) { ["isdefault"] = false });
+                DataverseMutationExecutor.Update(_context, _orgService, new Entity("savedqueryvisualization", existing.Id) { ["isdefault"] = false });
             }
 
-            DataverseMutationExecutor.Update(_context, _serviceClient, new Entity("savedqueryvisualization", chartId) { ["isdefault"] = true });
+            DataverseMutationExecutor.Update(_context, _orgService, new Entity("savedqueryvisualization", chartId) { ["isdefault"] = true });
 
-            bool published = publish && PublishHelper.PublishEntity(_context, _serviceClient, primaryEntity);
+            bool published = publish && PublishHelper.PublishEntity(_context, _orgService, primaryEntity);
 
             var text = $"Set chart '{chartName}' ({chartId}) as default for '{primaryEntity}'.";
             if (!published) text += " Not published (publish=false).";
@@ -794,14 +794,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (backupData.DataDescription != null) updateRecord["datadescription"] = backupData.DataDescription;
             if (backupData.PresentationDescription != null) updateRecord["presentationdescription"] = backupData.PresentationDescription;
 
-            DataverseMutationExecutor.Update(_context, _serviceClient, updateRecord);
+            DataverseMutationExecutor.Update(_context, _orgService, updateRecord);
 
             string solutionWarning = null;
             if (!string.IsNullOrWhiteSpace(solutionName))
                 solutionWarning = AddToSolution(chartId, solutionName.Trim());
 
             bool published = publish && !string.IsNullOrEmpty(backupData.Entity)
-                && PublishHelper.PublishEntity(_context, _serviceClient, backupData.Entity);
+                && PublishHelper.PublishEntity(_context, _orgService, backupData.Entity);
 
             var text = $"Restored chart {chartId} from backup '{backupPathInput}'.";
             if (solutionWarning != null)
@@ -1292,7 +1292,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var result = SolutionComponentCreateHelper.AddExistingComponent(
                 _context,
-                _serviceClient,
+                _orgService,
                 chartId,
                 59, // SavedQueryVisualization (System Chart)
                 solutionUniqueName,
@@ -1317,7 +1317,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     hint = "Pass a chart GUID (e.g. from manage_chart(action='list')), or use chart_name instead.";
                     return null;
                 }
-                var entity = _serviceClient.Retrieve(table, guid, new ColumnSet(idCol, "name", "description", "datadescription", "presentationdescription", "isdefault", "primaryentitytypecode"));
+                var entity = _orgService.Retrieve(table, guid, new ColumnSet(idCol, "name", "description", "datadescription", "presentationdescription", "isdefault", "primaryentitytypecode"));
                 if (entity == null)
                 {
                     error = $"Chart with ID '{chartIdInput}' not found.";
@@ -1341,7 +1341,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         query.Criteria.AddCondition("primaryentitytypecode", ConditionOperator.Equal, logicalName);
                 }
 
-                var res = _serviceClient.RetrieveMultiple(query);
+                var res = _orgService.RetrieveMultiple(query);
                 if (res.Entities.Count == 0)
                 {
                     error = $"No chart found matching name '{chartNameInput}'.";
@@ -1359,7 +1359,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private string ResolveEntityLogicalName(string entityNameInput)
         {
             if (string.IsNullOrWhiteSpace(entityNameInput)) return "";
-            var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityNameInput.Trim(), "manage_chart");
+            var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entityNameInput.Trim(), "manage_chart");
             return resolved.IsSuccess ? resolved.Value.LogicalName : entityNameInput.Trim().ToLowerInvariant();
         }
 

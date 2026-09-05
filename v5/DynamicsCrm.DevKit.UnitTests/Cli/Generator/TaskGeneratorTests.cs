@@ -437,7 +437,7 @@ public class TaskGeneratorTests
         var task = new TaskGenerator(arg, json);
 
         // Assert
-        Assert.AreEqual(arg.ServiceClient, task.ServiceClient);
+        Assert.AreEqual(arg.ServiceClient, task.OrgServiceAsync);
     }
 
     #endregion

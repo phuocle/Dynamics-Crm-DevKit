@@ -29,12 +29,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageReportTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationServiceAsync2 _orgServiceAsync;
+        private readonly IMcpConnectionInfo _connectionInfo;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
-        public ManageReportTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageReportTool(IOrganizationServiceAsync2 orgServiceAsync, McpDryRunOptions options, McpExecutionContext context, IMcpConnectionInfo connectionInfo)
         {
-            _serviceClient = serviceClient;
+            _orgServiceAsync = orgServiceAsync;
+            _connectionInfo = connectionInfo;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -123,7 +125,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var resolvedSolutionName = (string)null;
             if (!string.IsNullOrWhiteSpace(solutionName))
             {
-                var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
+                var solResult = SolutionResolverHelper.Resolve(_orgServiceAsync, solutionName.Trim());
                 if (!solResult.IsSuccess)
                     return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
                 resolvedSolutionName = solResult.UniqueName;
@@ -153,7 +155,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     </link-entity>{solutionJoin}
   </entity>
 </fetch>";
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgServiceAsync.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
             {
                 var emptyResult = new ManageReportResult { Action = "list", TotalCount = 0, SolutionName = resolvedSolutionName };
@@ -196,7 +198,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     </filter>
   </entity>
 </fetch>";
-                var languageRows = _serviceClient.RetrieveMultiple(new FetchExpression(languageFetch));
+                var languageRows = _orgServiceAsync.RetrieveMultiple(new FetchExpression(languageFetch));
                 entry.Language = languageRows.Entities.FirstOrDefault()?.GetAttributeValue<string>("language");
             }
             entry.Description = NullIfEmpty(entity.GetAttributeValue<string>("description"));
@@ -325,7 +327,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private async Task<CallToolResult> ValidateProvisionedLanguageAsync(string language, int languageCode)
         {
-            var response = (RetrieveProvisionedLanguagesResponse)await _serviceClient.ExecuteAsync(
+            var response = (RetrieveProvisionedLanguagesResponse)await _orgServiceAsync.ExecuteAsync(
                 new RetrieveProvisionedLanguagesRequest());
             if (response.RetrieveProvisionedLanguages.Contains(languageCode))
                 return null;
@@ -511,7 +513,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (string.IsNullOrWhiteSpace(entityName))
                     return (false, "entity_name is required when fetchxml is a system view name.", "Provide the entity display/logical name together with the system view name.", null, null);
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "manage_report");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgServiceAsync, entityName.Trim(), "manage_report");
                 if (!entityResult.IsSuccess)
                     return (false, entityResult.Error.Split("\r\n")[0], "Use get_tables to resolve a valid entity name.", null, null);
                 logicalName = entityResult.Value.LogicalName;
@@ -522,7 +524,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 };
                 viewQuery.Criteria.AddCondition("name", ConditionOperator.Equal, input);
                 viewQuery.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, logicalName);
-                var views = _serviceClient.RetrieveMultiple(viewQuery).Entities;
+                var views = _orgServiceAsync.RetrieveMultiple(viewQuery).Entities;
                 if (views.Count == 0)
                     return (false, $"System view '{input}' was not found for entity '{logicalName}'.", "Use a valid system view name; personal views are not supported.", null, null);
                 if (views.Count > 1)
@@ -539,20 +541,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "List the attributes explicitly. Note: MultiSelectPicklist, File, and Image attributes are not supported by the SSRS fetch extension and will be rejected.", null, null);
             if (!string.IsNullOrWhiteSpace(entityName) && input.StartsWith("<", StringComparison.Ordinal))
             {
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "manage_report");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgServiceAsync, entityName.Trim(), "manage_report");
                 if (!entityResult.IsSuccess || !string.Equals(entityResult.Value.LogicalName, logicalName, StringComparison.OrdinalIgnoreCase))
                     return (false, $"entity_name '{entityName}' does not match FetchXML entity '{logicalName}'.", "Use the matching entity display/logical name.", null, null);
             }
             var validationFetch = new XDocument(fetch);
             validationFetch.Root.SetAttributeValue("top", "1");
-            try { _serviceClient.RetrieveMultiple(new FetchExpression(validationFetch.ToString(SaveOptions.DisableFormatting))); }
+            try { _orgServiceAsync.RetrieveMultiple(new FetchExpression(validationFetch.ToString(SaveOptions.DisableFormatting))); }
             catch (Exception ex) { return (false, $"FetchXML validation failed: {ex.Message}", "Fix the FetchXML or system view, then retry.", null, null); }
             return (true, null, null, logicalName, fetch);
         }
 
         private async Task<EntityMetadata> GetEntityMetadataAsync(string logicalName)
         {
-            var response = (RetrieveEntityResponse)await _serviceClient.ExecuteAsync(new RetrieveEntityRequest
+            var response = (RetrieveEntityResponse)await _orgServiceAsync.ExecuteAsync(new RetrieveEntityRequest
             {
                 LogicalName = logicalName,
                 EntityFilters = EntityFilters.Attributes
@@ -813,8 +815,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var document = XDocument.Parse(bodyText, LoadOptions.PreserveWhitespace);
             var reportNamespace = document.Root?.GetDefaultNamespace()
                 ?? throw new InvalidOperationException("Embedded ReportTemplate.rdl has no report-definition namespace.");
-            var baseUrl = _serviceClient.ConnectedOrgUriActual?.GetLeftPart(UriPartial.Authority)?.TrimEnd('/');
-            var orgUniqueName = _serviceClient.ConnectedOrgUniqueName?.Trim();
+            var baseUrl = _connectionInfo.ConnectedOrgUri?.GetLeftPart(UriPartial.Authority)?.TrimEnd('/');
+            var orgUniqueName = _connectionInfo.ConnectedOrgUniqueName?.Trim();
             if (string.IsNullOrWhiteSpace(baseUrl) || string.IsNullOrWhiteSpace(orgUniqueName))
                 throw new InvalidOperationException("Connected Dataverse organization URL or unique name is unavailable.");
 
@@ -823,7 +825,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 throw new InvalidOperationException("Embedded ReportTemplate.rdl has no Dynamics 365 ConnectString.");
             connectString.Value = $"{baseUrl}/;{orgUniqueName}";
 
-            var languageCode = McpHelper.GetBaseLanguageCode(_serviceClient);
+            var languageCode = McpHelper.GetBaseLanguageCode(_orgServiceAsync);
             if (languageCode <= 0)
                 throw new InvalidOperationException("The organization's base language could not be resolved.");
 
@@ -944,8 +946,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             else
             {
                 var languageCode = string.IsNullOrWhiteSpace(language)
-                    ? McpHelper.GetBaseLanguageCode(_serviceClient)
-                    : await new DeploymentService(_serviceClient).GetLanguageCodeAsync(language.Trim());
+                    ? McpHelper.GetBaseLanguageCode(_orgServiceAsync)
+                    : await new DeploymentService(_orgServiceAsync).GetLanguageCodeAsync(language.Trim());
                 if (languageCode == null || languageCode <= 0)
                     return string.IsNullOrWhiteSpace(language)
                         ? Error("Organization base language could not be resolved.",
@@ -971,7 +973,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "    </filter>\n" +
                     "  </entity>\n" +
                     "</fetch>";
-                var candidates = _serviceClient.RetrieveMultiple(new FetchExpression(fetch)).Entities;
+                var candidates = _orgServiceAsync.RetrieveMultiple(new FetchExpression(fetch)).Entities;
                 var matches = candidates.Where(r => r.GetAttributeValue<int?>("languagecode") == languageCode.Value).ToList();
                 if (matches.Count == 0)
                     return Error($"Report '{reportId}' not found for language {languageCode.Value}.",
@@ -1058,7 +1060,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         }
                     ]
                 });
-            DataverseMutationExecutor.Update(_context, _serviceClient, update);
+            DataverseMutationExecutor.Update(_context, _orgServiceAsync, update);
             return Success($"Updated report '{existingName}' ({id}): fieldsUpdated={fieldsUpdated}. No publish needed for reports.", new ManageReportResult
             {
                 Action = "updated",
@@ -1090,7 +1092,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 },
                 TopCount = 1
             };
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgServiceAsync.RetrieveMultiple(query);
             return result.Entities.FirstOrDefault();
         }
 
@@ -1118,9 +1120,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return (null, "report_id is required.");
             if (Guid.TryParse(trimmed, out var guid))
                 return (guid, null);
-            if (_serviceClient == null)
+            if (_orgServiceAsync == null)
                 return (null, $"'{trimmed}' is not a valid GUID. Use action='list' to find valid report IDs.");
-            var resolved = DisplayNameFirstResolver.ResolveReport(_serviceClient, trimmed, "manage_report");
+            var resolved = DisplayNameFirstResolver.ResolveReport(_orgServiceAsync, trimmed, "manage_report");
             if (!resolved.IsSuccess)
                 return (null, resolved.Error);
             var resolvedId = resolved.Value.Id;

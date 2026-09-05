@@ -1,4 +1,5 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
@@ -20,11 +21,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// <see cref="DynamicsCrm.DevKit.Shared.Const.SystemAdministratorRoleName"/>.
         /// Comparison is case-insensitive and trimmed, matching how Dataverse stores role names.
         /// </summary>
-        public static bool IsSystemAdministrator(ServiceClient serviceClient)
+        public static bool IsSystemAdministrator(IOrganizationService orgService)
         {
-            if (serviceClient == null) return false;
+            if (orgService == null) return false;
 
-            var who = (WhoAmIResponse)serviceClient.Execute(new WhoAmIRequest());
+            var who = (WhoAmIResponse)orgService.Execute(new WhoAmIRequest());
             var userId = who.UserId;
 
             var fetchXml = $@"
@@ -40,7 +41,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     </entity>
                 </fetch>";
 
-            var qResult = serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var qResult = orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (qResult?.Entities == null) return false;
 
             var required = (DynamicsCrm.DevKit.Shared.Const.SystemAdministratorRoleName ?? "").Trim();
@@ -60,12 +61,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// Returns the directly-assigned role names for the calling user.
         /// Used by error messages to tell the user what they DO have when a gate rejects them.
         /// </summary>
-        public static List<string> GetCurrentRoleNames(ServiceClient serviceClient)
+        public static List<string> GetCurrentRoleNames(IOrganizationService orgService)
         {
             var names = new List<string>();
-            if (serviceClient == null) return names;
+            if (orgService == null) return names;
 
-            var who = (WhoAmIResponse)serviceClient.Execute(new WhoAmIRequest());
+            var who = (WhoAmIResponse)orgService.Execute(new WhoAmIRequest());
             var userId = who.UserId;
 
             var fetchXml = $@"
@@ -81,7 +82,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     </entity>
                 </fetch>";
 
-            var qResult = serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var qResult = orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (qResult?.Entities == null) return names;
 
             foreach (var role in qResult.Entities)
@@ -97,15 +98,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// One-call guard for mutation tools. Returns null when the calling user
         /// IS a System Administrator (caller proceeds); returns a pre-built
         /// <see cref="CallToolResult"/> error when not (caller returns it).
-        /// Usage: <code>if (RoleGateHelper.EnsureSystemAdministrator(_serviceClient) is { } gate) return gate;</code>
+        /// Usage: <code>if (RoleGateHelper.EnsureSystemAdministrator(_orgService) is { } gate) return gate;</code>
         /// </summary>
-        internal static CallToolResult EnsureSystemAdministrator(ServiceClient serviceClient)
+        internal static CallToolResult EnsureSystemAdministrator(IOrganizationService orgService)
         {
-            if (IsSystemAdministrator(serviceClient))
+            if (IsSystemAdministrator(orgService))
                 return null;
 
             const string requiredRoleName = DynamicsCrm.DevKit.Shared.Const.SystemAdministratorRoleName;
-            var haveRoles = GetCurrentRoleNames(serviceClient);
+            var haveRoles = GetCurrentRoleNames(orgService);
             var haveList = haveRoles.Count > 0
                 ? string.Join(", ", haveRoles)
                 : "(no roles assigned)";

@@ -43,7 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SolutionName = SOLUTION_NAME,
                 Managed = false
             };
-            var exportResp = (ExportSolutionResponse)_serviceClient.Execute(exportReq);
+            var exportResp = (ExportSolutionResponse)_orgService.Execute(exportReq);
             var zipBytes = exportResp.ExportSolutionFile;
 
             var entities = ExtractEntitiesFromSolution(zipBytes);
@@ -104,7 +104,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         EntityName = entityName,
                         RibbonLocationFilter = filter
                     };
-                    var response = _serviceClient.Execute(request) as RetrieveEntityRibbonResponse;
+                    var response = _orgService.Execute(request) as RetrieveEntityRibbonResponse;
                     var compressed = response?.CompressedEntityXml;
                     var xml = compressed is { Length: > 0 } ? UnzipRibbonXml(compressed) : null;
 
@@ -155,7 +155,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // FetchExistingRibbonDiffXml returns an empty RibbonDiffXml when the devkit_ribbon
             // solution does not exist yet, so no swallow-catch is needed here.
-            var fetcher = new RibbonSolutionFetcher(_serviceClient, _context);
+            var fetcher = new RibbonSolutionFetcher(_orgService, _context);
             var ribbonDiffXml = fetcher.FetchExistingRibbonDiffXml(entityName);
             if (string.IsNullOrWhiteSpace(ribbonDiffXml)) return;
 
@@ -268,7 +268,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult DetailRibbon(string entityName)
         {
-            var fetcher = new RibbonSolutionFetcher(_serviceClient, _context);
+            var fetcher = new RibbonSolutionFetcher(_orgService, _context);
             var ribbonXml = _options.DryRun
                 ? fetcher.ReadRibbonWithoutMutation(entityName)
                 : fetcher.FetchExistingRibbonDiffXml(entityName);

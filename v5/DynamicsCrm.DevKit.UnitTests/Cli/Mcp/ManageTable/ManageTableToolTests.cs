@@ -50,8 +50,8 @@ public class ManageTableToolTests
 
         var ctor = constructors[0];
         var parameters = ctor.GetParameters();
-        Assert.IsTrue(parameters.Length >= 2, "Constructor must have at least 2 parameters (serviceClient + options)");
-        Assert.AreEqual("serviceClient", parameters[0].Name, "First parameter should be serviceClient");
+        Assert.IsTrue(parameters.Length >= 2, "Constructor must have at least 2 parameters (orgService + options)");
+        Assert.AreEqual("orgService", parameters[0].Name, "First parameter should be orgService");
         Assert.AreEqual("options", parameters[1].Name, "Second parameter should be options");
     }
 

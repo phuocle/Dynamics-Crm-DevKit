@@ -12,14 +12,14 @@ namespace DynamicsCrm.DevKit.Cli
 {
     public class DeploymentValidator
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationServiceAsync2 _orgServiceAsync;
 
         private DeploymentService _deploymentService;
-        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(_serviceClient);
+        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(_orgServiceAsync);
 
-        public DeploymentValidator(ServiceClient serviceClient)
+        public DeploymentValidator(IOrganizationServiceAsync2 orgServiceAsync)
         {
-            _serviceClient = serviceClient;
+            _orgServiceAsync = orgServiceAsync;
         }
 
         public async Task<List<string>> ValidateServerDeploymentAsync(CommandLineArgs args, JsonServer json)

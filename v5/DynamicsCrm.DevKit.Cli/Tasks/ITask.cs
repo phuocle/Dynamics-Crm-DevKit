@@ -9,7 +9,7 @@ namespace DynamicsCrm.DevKit.Cli
     {
         string CurrentDirectory { get; set; }
         string TaskType { get; }
-        ServiceClient ServiceClient { get; set; }
+        IOrganizationServiceAsync2 OrgServiceAsync { get; set; }
         CommandLineArgs Arg { get; set; }
         Task RunAsync();
         Task<bool> IsValidAsync();

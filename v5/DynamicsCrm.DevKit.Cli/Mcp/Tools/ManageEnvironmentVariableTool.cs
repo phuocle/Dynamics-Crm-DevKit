@@ -17,13 +17,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageEnvironmentVariableTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public ManageEnvironmentVariableTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageEnvironmentVariableTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -86,7 +86,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("type is required for 'create'.",
                     "Valid values: 'string', 'number', 'boolean', 'json', 'datasource', 'secret'.");
 
-            var existingByDisplayName = DisplayNameFirstResolver.ResolveEnvironmentVariableDefinition(_serviceClient, displayName.Trim(), "manage_environment_variable");
+            var existingByDisplayName = DisplayNameFirstResolver.ResolveEnvironmentVariableDefinition(_orgService, displayName.Trim(), "manage_environment_variable");
             if (existingByDisplayName.IsSuccess)
             {
                 var existingSchemaName = existingByDisplayName.Value.GetAttributeValue<string>("schemaname") ?? existingByDisplayName.CanonicalName ?? existingByDisplayName.Value.Id.ToString();
@@ -103,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "The schema name prefix is derived from the solution's publisher — do not invent it. Ask the user which solution this environment variable belongs to.");
 
             // Resolve solution → publisher prefix
-            var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
+            var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim());
             if (!solResult.IsSuccess)
                 return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
 
@@ -117,7 +117,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var prefix = solResult.Prefix.Trim().ToLowerInvariant();
             var variableName = $"{prefix}_{displayName.Trim().Replace(" ", "")}";
 
-            var existingByVariableName = DisplayNameFirstResolver.ResolveEnvironmentVariableDefinition(_serviceClient, variableName, "manage_environment_variable");
+            var existingByVariableName = DisplayNameFirstResolver.ResolveEnvironmentVariableDefinition(_orgService, variableName, "manage_environment_variable");
             if (existingByVariableName.IsSuccess)
             {
                 var existingSchemaName = existingByVariableName.Value.GetAttributeValue<string>("schemaname") ?? existingByVariableName.CanonicalName ?? existingByVariableName.Value.Id.ToString();
@@ -151,14 +151,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(solutionName))
             {
-                var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
+                var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim());
                 if (!solResult.IsSuccess)
                     return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
                 solutionName = solResult.UniqueName;
             }
 
             var fetchXml = BuildListFetchXml(solutionName, maxRecords);
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             var definitions = result.Entities;
 
             if (definitions.Count == 0)
@@ -293,10 +293,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
 
-            var defId = DataverseMutationExecutor.Create(_context, _serviceClient, newDef);
+            var defId = DataverseMutationExecutor.Create(_context, _orgService, newDef);
 
             var addResult = SolutionComponentCreateHelper.AddExistingComponent(
-                _context, _serviceClient,
+                _context, _orgService,
                 defId,
                 380,
                 solutionName);
@@ -385,7 +385,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
 
             if (hasDefChanges)
-                DataverseMutationExecutor.Update(_context, _serviceClient, update);
+                DataverseMutationExecutor.Update(_context, _orgService, update);
 
             var curVal = "";
             if (hasValueChange)
@@ -484,7 +484,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
             DeleteCurrentValue(defId);
-            DataverseMutationExecutor.Delete(_context, _serviceClient, "environmentvariabledefinition", defId);
+            DataverseMutationExecutor.Delete(_context, _orgService, "environmentvariabledefinition", defId);
 
             var structured = new ManageEnvironmentVariableResult
             {
@@ -514,7 +514,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 TopCount = 1
             };
 
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             return result.Entities.FirstOrDefault();
         }
 
@@ -535,7 +535,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             };
 
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             foreach (var entity in result.Entities)
             {
                 var defRef = entity.GetAttributeValue<EntityReference>("environmentvariabledefinitionid");
@@ -563,7 +563,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 TopCount = 1
             };
 
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             return result.Entities.Count > 0
                 ? result.Entities[0].GetAttributeValue<string>("value")
                 : null;
@@ -584,12 +584,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 TopCount = 1
             };
 
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             if (result.Entities.Count > 0)
             {
                 var existing = result.Entities[0];
                 existing["value"] = value;
-                DataverseMutationExecutor.Update(_context, _serviceClient, existing);
+                DataverseMutationExecutor.Update(_context, _orgService, existing);
             }
             else
             {
@@ -598,7 +598,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ["value"] = value,
                     ["environmentvariabledefinitionid"] = new EntityReference("environmentvariabledefinition", definitionId)
                 };
-                DataverseMutationExecutor.Create(_context, _serviceClient, newValue);
+                DataverseMutationExecutor.Create(_context, _orgService, newValue);
             }
         }
 
@@ -617,10 +617,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 TopCount = 1
             };
 
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             if (result.Entities.Count > 0)
             {
-                DataverseMutationExecutor.Delete(_context, _serviceClient, "environmentvariablevalue", result.Entities[0].Id);
+                DataverseMutationExecutor.Delete(_context, _orgService, "environmentvariablevalue", result.Entities[0].Id);
             }
         }
 
@@ -699,7 +699,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(trimmed))
                 return (null, null, "variable_name is required.");
 
-            var resolved = DisplayNameFirstResolver.ResolveEnvironmentVariableDefinition(_serviceClient, trimmed, "manage_environment_variable");
+            var resolved = DisplayNameFirstResolver.ResolveEnvironmentVariableDefinition(_orgService, trimmed, "manage_environment_variable");
             if (!resolved.IsSuccess)
                 return (null, null, $"variable_name '{trimmed}': {resolved.Error}");
 

@@ -1,3 +1,4 @@
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
@@ -26,14 +27,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private static readonly object _schemaLock = new();
 
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
+        private readonly IWebApiExecutor _webApi;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
         private string _workspaceFolder;
 
-        public ManageViewTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageViewTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, IWebApiExecutor webApi)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
+            _webApi = webApi;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -78,7 +81,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error($"'{view_id}' is not a valid GUID.",
                         "Use manage_view action='list' to find views, then pass a valid view_id GUID.");
 
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_view");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_view");
                 if (!entityResult.IsSuccess)
                 {
                     if (entityResult.Status == ResolveStatus.Ambiguous)
@@ -334,9 +337,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     LayoutXml = newLayoutXml
                 });
 
-            var newViewId = DataverseMutationExecutor.Create(_context, _serviceClient, newView);
+            var newViewId = DataverseMutationExecutor.Create(_context, _orgService, newView);
 
-            var published = PublishHelper.PublishEntity(_context, _serviceClient, entityName);
+            var published = PublishHelper.PublishEntity(_context, _orgService, entityName);
 
             var text = $"Created view '{viewName}' ({newViewId}) on '{entityName}' — Public view, {layout.ColumnCount} columns auto-generated from FetchXML" +
                 ", validated (client + server), published.";
@@ -532,9 +535,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
 
             var (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, updateId, currentViewName, currentFetchXml, currentLayoutXml, _workspaceFolder);
-            DataverseMutationExecutor.Update(_context, _serviceClient, update);
+            DataverseMutationExecutor.Update(_context, _orgService, update);
 
-            var published = PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
+            var published = PublishHelper.PublishEntity(_context, _orgService, returnedTypeCode);
 
             var quickFindColumns = currentQueryType == 4 ? ExtractQuickFindColumns(effectiveFetchXml) : null;
 
@@ -617,9 +620,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Backup only when actually mutating
             var (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, renameId, oldName, currentFetchXml, currentLayoutXml, _workspaceFolder);
-            DataverseMutationExecutor.Update(_context, _serviceClient, update);
+            DataverseMutationExecutor.Update(_context, _orgService, update);
 
-            var published = PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
+            var published = PublishHelper.PublishEntity(_context, _orgService, returnedTypeCode);
 
             var text = $"Renamed view '{oldName}' to '{viewName}' ({renameId}) on '{entityName}', published. Backup saved.";
 
@@ -674,7 +677,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             prevQuery.Criteria.AddCondition("querytype", ConditionOperator.Equal, 0);
             prevQuery.Criteria.AddCondition("isdefault", ConditionOperator.Equal, true);
             prevQuery.Criteria.AddCondition("savedqueryid", ConditionOperator.NotEqual, targetId);
-            var previousDefaults = _serviceClient.RetrieveMultiple(prevQuery).Entities;
+            var previousDefaults = _orgService.RetrieveMultiple(prevQuery).Entities;
 
             if (_options.DryRun)
                 return DryRun($"Would SET DEFAULT view '{viewName}' ({targetId}) on entity '{entityName}'" +
@@ -690,12 +693,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
 
             foreach (var prev in previousDefaults)
-                DataverseMutationExecutor.Update(_context, _serviceClient, new Entity("savedquery", prev.Id) { ["isdefault"] = false });
+                DataverseMutationExecutor.Update(_context, _orgService, new Entity("savedquery", prev.Id) { ["isdefault"] = false });
 
             var update = new Entity("savedquery", targetId) { ["isdefault"] = true };
-            DataverseMutationExecutor.Update(_context, _serviceClient, update);
+            DataverseMutationExecutor.Update(_context, _orgService, update);
 
-            var published = PublishHelper.PublishEntity(_context, _serviceClient, entityName);
+            var published = PublishHelper.PublishEntity(_context, _orgService, entityName);
 
             var clearedText = previousDefaults.Count > 0 ? $", cleared {previousDefaults.Count} previous default(s)" : "";
             return Success($"Set default view for '{entityName}' to '{viewName}' ({targetId}){clearedText}, published.", new UpsertViewResult
@@ -841,9 +844,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Backup pre-restore state only when actually mutating
             var (preFetchBackupPath, preLayoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, undoId, viewName, currentFetchXml, currentLayoutXml, _workspaceFolder);
-            DataverseMutationExecutor.Update(_context, _serviceClient, update);
+            DataverseMutationExecutor.Update(_context, _orgService, update);
 
-            var published = PublishHelper.PublishEntity(_context, _serviceClient, returnedTypeCode);
+            var published = PublishHelper.PublishEntity(_context, _orgService, returnedTypeCode);
 
             var text = $"Restored view '{viewName}' ({undoId}) on '{entityName}' from backup pair" +
                 ", validated, published." +
@@ -1003,7 +1006,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
             query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{nameFilter}%");
             query.AddOrder("name", OrderType.Ascending);
-            return _serviceClient.RetrieveMultiple(query).Entities;
+            return _orgService.RetrieveMultiple(query).Entities;
         }
 
         private DataCollection<Entity> FindPersonalViewsByNameContains(string entityName, string nameFilter)
@@ -1016,7 +1019,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
             query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{nameFilter}%");
             query.AddOrder("name", OrderType.Ascending);
-            return _serviceClient.RetrieveMultiple(query).Entities;
+            return _orgService.RetrieveMultiple(query).Entities;
         }
 
         private DataCollection<Entity> GetSystemViews(string entityName)
@@ -1029,7 +1032,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
             query.AddOrder("querytype", OrderType.Ascending);
             query.AddOrder("name", OrderType.Ascending);
-            return _serviceClient.RetrieveMultiple(query).Entities;
+            return _orgService.RetrieveMultiple(query).Entities;
         }
 
         private DataCollection<Entity> GetPersonalViews(string entityName)
@@ -1041,14 +1044,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
             query.AddOrder("querytype", OrderType.Ascending);
             query.AddOrder("name", OrderType.Ascending);
-            return _serviceClient.RetrieveMultiple(query).Entities;
+            return _orgService.RetrieveMultiple(query).Entities;
         }
 
         private Entity TryGetSystemView(Guid viewId)
         {
             var query = new QueryExpression("savedquery") { ColumnSet = new ColumnSet(true) };
             query.Criteria.AddCondition("savedqueryid", ConditionOperator.Equal, viewId);
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
@@ -1056,7 +1059,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var query = new QueryExpression("userquery") { ColumnSet = new ColumnSet(true) };
             query.Criteria.AddCondition("userqueryid", ConditionOperator.Equal, viewId);
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
@@ -1155,7 +1158,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private string ValidateFetchXmlExpression(string fetchXml)
         {
             var param = System.Net.WebUtility.UrlEncode("'" + fetchXml + "'");
-            using var resp = _serviceClient.ExecuteWebRequest(
+            using var resp = _webApi.ExecuteWebRequest(
                 HttpMethod.Get, $"ValidateFetchXmlExpression(FetchXml=@p1)?@p1={param}",
                 null, new Dictionary<string, List<string>>
                 {
@@ -1201,7 +1204,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (excludeViewId.HasValue)
                 query.Criteria.AddCondition("savedqueryid", ConditionOperator.NotEqual, excludeViewId.Value);
 
-            var result = _serviceClient.RetrieveMultiple(query);
+            var result = _orgService.RetrieveMultiple(query);
             return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
@@ -1353,7 +1356,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string ResolveEntityInput(string input, List<string> errors, string context)
         {
-            var result = DisplayNameFirstResolver.ResolveEntity(_serviceClient, input, "manage_view");
+            var result = DisplayNameFirstResolver.ResolveEntity(_orgService, input, "manage_view");
             if (result.IsSuccess) return result.Value.LogicalName;
 
             errors.Add($"{context}: {result.Error}");
@@ -1397,7 +1400,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 EntityFilters = EntityFilters.Attributes,
                 RetrieveAsIfPublished = true
             };
-            var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+            var response = (RetrieveEntityResponse)_orgService.Execute(request);
             var candidates = response.EntityMetadata.Attributes.Select(a => new DisplayNameFirstCandidate<AttributeMetadata>
             {
                 Value = a,
@@ -1483,7 +1486,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 LogicalName = entityName,
                 EntityFilters = EntityFilters.Attributes
             };
-            var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+            var response = (RetrieveEntityResponse)_orgService.Execute(request);
             attrMap = response.EntityMetadata.Attributes
                 .ToDictionary(a => a.LogicalName, a => a, StringComparer.OrdinalIgnoreCase);
 
@@ -1511,7 +1514,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         LogicalName = linkedEntityName,
                         EntityFilters = EntityFilters.Attributes
                     };
-                    var linkResponse = (RetrieveEntityResponse)_serviceClient.Execute(linkRequest);
+                    var linkResponse = (RetrieveEntityResponse)_orgService.Execute(linkRequest);
                     linkMap = linkResponse.EntityMetadata.Attributes
                         .ToDictionary(a => a.LogicalName, a => a, StringComparer.OrdinalIgnoreCase);
                     linkAttrMaps[linkedEntityName] = linkMap;
@@ -1631,7 +1634,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             query.Criteria.AddCondition("name", ConditionOperator.Equal, name);
             query.Criteria.AddCondition("webresourcetype", ConditionOperator.Equal, 3); // JS only — icon provider must be a script
-            return _serviceClient.RetrieveMultiple(query).Entities.Count > 0;
+            return _orgService.RetrieveMultiple(query).Entities.Count > 0;
         }
 
         private static (List<CellUpdateInstruction> Instructions, string Error) ParseCellUpdates(string cellUpdatesJson)
@@ -1706,7 +1709,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 LogicalName = entityName,
                 EntityFilters = EntityFilters.Entity
             };
-            var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+            var response = (RetrieveEntityResponse)_orgService.Execute(request);
             var otc = response.EntityMetadata.ObjectTypeCode;
             if (otc.HasValue)
             {
@@ -1723,7 +1726,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 LogicalName = entityName,
                 EntityFilters = EntityFilters.Entity | EntityFilters.Attributes
             };
-            return ((RetrieveEntityResponse)_serviceClient.Execute(request)).EntityMetadata;
+            return ((RetrieveEntityResponse)_orgService.Execute(request)).EntityMetadata;
         }
 
         private static string EnsureLayoutBuildableFetchXml(string fetchXml, EntityMetadata meta)
@@ -1877,7 +1880,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ColumnSet = new ColumnSet("fetchxml", "layoutxml", "name", "returnedtypecode", "querytype")
             };
             sqQuery.Criteria.AddCondition("savedqueryid", ConditionOperator.Equal, viewId);
-            var sqResult = _serviceClient.RetrieveMultiple(sqQuery);
+            var sqResult = _orgService.RetrieveMultiple(sqQuery);
             if (sqResult.Entities.Count > 0) return sqResult.Entities[0];
 
             var uqQuery = new QueryExpression("userquery")
@@ -1885,7 +1888,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ColumnSet = new ColumnSet("fetchxml", "layoutxml", "name", "returnedtypecode", "querytype")
             };
             uqQuery.Criteria.AddCondition("userqueryid", ConditionOperator.Equal, viewId);
-            var uqResult = _serviceClient.RetrieveMultiple(uqQuery);
+            var uqResult = _orgService.RetrieveMultiple(uqQuery);
             return uqResult.Entities.Count > 0 ? uqResult.Entities[0] : null;
         }
     }

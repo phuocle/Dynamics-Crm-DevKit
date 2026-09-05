@@ -18,11 +18,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class GetBusinessProcessFlowsTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
 
-        public GetBusinessProcessFlowsTool(ServiceClient serviceClient)
+        public GetBusinessProcessFlowsTool(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         private static readonly Dictionary<int, string> StageCategoryMap = new()
@@ -89,7 +89,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 string? resolvedEntityName = null;
                 if (!string.IsNullOrWhiteSpace(entity_name))
                 {
-                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_business_process_flows");
+                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "get_business_process_flows");
                     if (!entityResult.IsSuccess)
                         return Error(
                             entityResult.Error.Split("\r\n")[0],
@@ -210,7 +210,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
                 return Error($"Business Process Flow '{bpfId}' not found (or not a BPF workflow).",
                     "Use get_business_process_flows without bpf_id to list available BPFs.");
@@ -288,7 +288,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 while (true)
                 {
                     var pagedFetchXml = FetchXmlPagingHelper.ApplyPaging(fetchXml, page, 5000, pagingCookie);
-                    var pageResult = _serviceClient.RetrieveMultiple(new FetchExpression(pagedFetchXml));
+                    var pageResult = _orgService.RetrieveMultiple(new FetchExpression(pagedFetchXml));
                     entities.AddRange(pageResult.Entities);
                     if (!pageResult.MoreRecords || pageResult.Entities.Count == 0)
                         break;
@@ -298,7 +298,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             else
             {
-                entities = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml)).Entities.ToList();
+                entities = _orgService.RetrieveMultiple(new FetchExpression(fetchXml)).Entities.ToList();
             }
 
             if (!string.IsNullOrWhiteSpace(entityName))
@@ -331,7 +331,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             var stages = result.Entities.Select(e =>
             {
                 var categoryValue = e.GetAttributeValue<OptionSetValue>("stagecategory")?.Value;
@@ -433,7 +433,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             foreach (var e in result.Entities)
             {
                 var processIdValue = e.GetAttributeValue<AliasedValue>("processId")?.Value;

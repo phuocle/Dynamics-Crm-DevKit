@@ -64,6 +64,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
 
             builder.Services.AddSingleton(_serviceClient);
             builder.Services.AddSingleton(new MetadataService(_serviceClient));
+            // Test seams: tools depend on interfaces, not concrete ServiceClient.
+            // ServiceClient implements IOrganizationService/IOrganizationServiceAsync2,
+            // so production behavior is unchanged — same live instance behind each interface.
+            builder.Services.AddSingleton<Microsoft.Xrm.Sdk.IOrganizationService>(sp => sp.GetRequiredService<ServiceClient>());
+            builder.Services.AddSingleton<IOrganizationServiceAsync2>(sp => sp.GetRequiredService<ServiceClient>());
+            builder.Services.AddSingleton<IMcpConnectionInfo>(sp => new ServiceClientConnectionInfo(sp.GetRequiredService<ServiceClient>()));
+            builder.Services.AddSingleton<IWebApiExecutor>(sp => new ServiceClientWebApiExecutor(sp.GetRequiredService<ServiceClient>()));
             var executionPolicy = new McpExecutionPolicy(mutationsBlocked: dryRun, impersonatedUserDisplay: impersonatedUserDisplay);
             builder.Services.AddSingleton(executionPolicy);
             builder.Services.AddSingleton(executionPolicy.Options);

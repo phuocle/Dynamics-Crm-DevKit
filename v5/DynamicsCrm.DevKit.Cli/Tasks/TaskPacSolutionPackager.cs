@@ -23,10 +23,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private JsonSolutionPackager Json { get; set; } = json;
         public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
         public string TaskType => $"[{nameof(CliType.solutionpackagers).ToUpper()}]";
-        public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
+        public IOrganizationServiceAsync2 OrgServiceAsync { get; set; } = arg.ServiceClient;
 
         private DeploymentService _deploymentService;
-        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(ServiceClient);
+        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(OrgServiceAsync);
         private string SolutionXmlFile => $"{CurrentDirectory}\\{Json.folder}\\{Json.solutiontype}\\Other\\Solution.xml";
 
         public async Task<bool> IsValidAsync()
@@ -174,7 +174,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             // Need to get CRM version for filename
             var crmVersion = await GetCrmVersionFromInstanceAsync();
             XrmHelper.COUNT_ExecuteAsync++;
-            var response = (ExportSolutionResponse)await ServiceClient.ExecuteAsync(request);
+            var response = (ExportSolutionResponse)await OrgServiceAsync.ExecuteAsync(request);
 
             var fileName = FormatSolutionVersionString(Json.solution, System.Version.Parse(crmVersion), Json.solutiontype);
             var solutionFile = Path.Combine(CurrentDirectory, Json.folder, "Solutions-Extract", fileName);
@@ -207,7 +207,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
   </entity>
 </fetch>";
             XrmHelper.COUNT_RetrieveMultipleAsync++;
-            var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            var rows = await OrgServiceAsync.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return "4.44.44.44";
             var solution = rows.Entities[0];
             return solution.GetAttributeValue<string>("version");

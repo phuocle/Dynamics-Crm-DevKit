@@ -16,12 +16,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ExecuteFetchXmlTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private const int DataversePageLimit = 5000;
 
-        public ExecuteFetchXmlTool(ServiceClient serviceClient)
+        public ExecuteFetchXmlTool(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         [McpServerTool(Name = "execute_fetchxml", Title = "Run a FetchXML query",
@@ -95,7 +95,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private FetchXmlResult ExecuteSinglePage(string fetchxml, int maxRecords)
         {
             var effectiveFetchXml = FetchXmlPagingHelper.ApplyPaging(fetchxml, 1, maxRecords);
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(effectiveFetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(effectiveFetchXml));
             var records = ConvertEntities(result.Entities.Take(maxRecords));
 
             return new FetchXmlResult
@@ -120,7 +120,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var count = Math.Min(DataversePageLimit, remaining);
                 var effectiveFetchXml = FetchXmlPagingHelper.ApplyPaging(fetchxml, page, count, pagingCookie);
 
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(effectiveFetchXml));
+                var result = _orgService.RetrieveMultiple(new FetchExpression(effectiveFetchXml));
                 allRecords.AddRange(ConvertEntities(result.Entities));
 
                 hasMore = result.MoreRecords;

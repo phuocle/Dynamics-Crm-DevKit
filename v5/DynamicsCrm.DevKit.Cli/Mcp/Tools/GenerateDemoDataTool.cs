@@ -1,5 +1,6 @@
 using Bogus;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
@@ -38,12 +39,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class GenerateDemoDataTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
 
-        public GenerateDemoDataTool(ServiceClient serviceClient, McpDryRunOptions options)
+        public GenerateDemoDataTool(IOrganizationService orgService, McpDryRunOptions options)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
@@ -105,7 +106,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 count = Math.Max(1, count);
 
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "generate_demo_data");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "generate_demo_data");
                 if (!entityResult.IsSuccess)
                 {
                     if (entityResult.Status == ResolveStatus.Ambiguous)
@@ -863,7 +864,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     LogicalName = name,
                     EntityFilters = EntityFilters.Attributes
                 };
-                var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+                var response = (RetrieveEntityResponse)_orgService.Execute(request);
                 return response.EntityMetadata;
             });
         }
@@ -895,7 +896,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <order attribute='modifiedon' descending='true'/>
   </entity>
 </fetch>";
-                var results = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                var results = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
                 return results.Entities.Select(e => e.Id).ToList();
             });
         }

@@ -1,4 +1,5 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
@@ -11,12 +12,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 {
     internal sealed class FormFieldEventOperations
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private readonly FormXmlBuilder _builder;
 
-        public FormFieldEventOperations(ServiceClient serviceClient, FormXmlBuilder builder)
+        public FormFieldEventOperations(IOrganizationService orgService, FormXmlBuilder builder)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
             _builder = builder;
         }
 

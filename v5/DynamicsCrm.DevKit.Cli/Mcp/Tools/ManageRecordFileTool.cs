@@ -23,7 +23,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageRecordFileTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
         private static readonly HttpClient _httpClient = new() { Timeout = TimeSpan.FromMinutes(5) };
@@ -31,9 +31,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private const long MaxBase64UploadBytes = 1L * 1024 * 1024; // 1 MB
         private static readonly string[] ImageExtensions = [".gif", ".jpeg", ".jpg", ".tiff", ".tif", ".bmp", ".png"];
 
-        public ManageRecordFileTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageRecordFileTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
         {
-            _serviceClient = serviceClient ?? throw new ArgumentNullException(nameof(serviceClient));
+            _orgService = orgService ?? throw new ArgumentNullException(nameof(orgService));
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -80,7 +80,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!Guid.TryParse(record_id?.Trim(), out var recordId))
                     return Error("record_id must be a valid GUID.", "Use search_records or parse_record_url to find the record id.");
 
-                var entityResolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "manage_record_file");
+                var entityResolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "manage_record_file");
                 if (!entityResolved.IsSuccess)
                     return entityResolved.Status == ResolveStatus.NotFound
                         ? Error(entityResolved.Error.Split("\r\n")[0],
@@ -88,7 +88,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         : Error(entityResolved.Error);
                 var entityLogical = entityResolved.Value.LogicalName;
 
-                var attrResolved = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entityLogical, column_name.Trim(), "manage_record_file");
+                var attrResolved = DisplayNameFirstResolver.ResolveAttribute(_orgService, entityLogical, column_name.Trim(), "manage_record_file");
                 if (!attrResolved.IsSuccess)
                     return attrResolved.Status == ResolveStatus.NotFound
                         ? Error(attrResolved.Error.Split("\r\n")[0],
@@ -138,7 +138,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (fileId.HasValue)
                 {
                     var init = (InitializeFileBlocksDownloadResponse)DataverseMutationExecutor.ExecuteReadOnly(
-                        _serviceClient,
+                        _orgService,
                         new InitializeFileBlocksDownloadRequest
                         {
                             Target = new EntityReference(entityLogical, recordId),
@@ -267,7 +267,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var (fileId, blocks) = FileColumnTransferHelper.Upload(
-                _context, _serviceClient, new EntityReference(entityLogical, recordId), columnLogical, resolvedFileName, data);
+                _context, _orgService, new EntityReference(entityLogical, recordId), columnLogical, resolvedFileName, data);
             result.Status = "uploaded";
             result.FileId = fileId.ToString();
             result.BlockCount = blocks;
@@ -289,7 +289,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!fileId.HasValue)
                     return Error($"File column '{columnLogical}' on {entityLogical}({recordId}) is empty — nothing to download.",
                         "Upload a value first with action='upload'.");
-                var (bytes, serverName) = FileColumnTransferHelper.Download(_serviceClient, new EntityReference(entityLogical, recordId), columnLogical);
+                var (bytes, serverName) = FileColumnTransferHelper.Download(_orgService, new EntityReference(entityLogical, recordId), columnLogical);
                 data = bytes;
                 downloadFileName = FirstNonEmpty(serverName, record.GetAttributeValue<string>(columnLogical + "_name"), "file.bin");
             }
@@ -303,7 +303,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     record.GetAttributeValue<long?>(columnLogical + "_timestamp") == null)
                     return Error($"Image column '{columnLogical}' on {entityLogical}({recordId}) is empty — nothing to download.",
                         "Upload a value first with action='upload'.");
-                var (bytes, serverName) = FileColumnTransferHelper.Download(_serviceClient, new EntityReference(entityLogical, recordId), columnLogical);
+                var (bytes, serverName) = FileColumnTransferHelper.Download(_orgService, new EntityReference(entityLogical, recordId), columnLogical);
                 data = bytes;
                 downloadFileName = FirstNonEmpty(serverName, columnLogical + DetectImageExtension(data));
             }
@@ -369,7 +369,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     result.Status = "not_executed";
                     return DryRun($"Would delete file '{result.FileName}' (FileId {fileId.Value}) from {entityLogical}.{columnLogical} on record {recordId}. The record itself is kept.", result);
                 }
-                DataverseMutationExecutor.Execute(_context, _serviceClient, new DeleteFileRequest { FileId = fileId.Value });
+                DataverseMutationExecutor.Execute(_context, _orgService, new DeleteFileRequest { FileId = fileId.Value });
             }
             else
             {
@@ -383,7 +383,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     result.Status = "not_executed";
                     return DryRun($"Would clear image column {entityLogical}.{columnLogical} on record {recordId}. The record itself is kept.", result);
                 }
-                DataverseMutationExecutor.Update(_context, _serviceClient, new Entity(entityLogical, recordId) { [columnLogical] = null });
+                DataverseMutationExecutor.Update(_context, _orgService, new Entity(entityLogical, recordId) { [columnLogical] = null });
             }
             result.Status = "deleted";
             return Success(
@@ -401,7 +401,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             columnLogical = (fileAttr ?? (AttributeMetadata)imageAttr).LogicalName;
             primaryName = null;
             var metadata = (RetrieveEntityResponse)DataverseMutationExecutor.ExecuteReadOnly(
-                _serviceClient,
+                _orgService,
                 new RetrieveEntityRequest
                 {
                     LogicalName = entityLogical,
@@ -427,7 +427,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 columns = new ColumnSet(names.ToArray());
             }
 
-            var record = _serviceClient.Retrieve(entityLogical, recordId, columns);
+            var record = _orgService.Retrieve(entityLogical, recordId, columns);
             if (!idOnly && !string.IsNullOrEmpty(primaryNameAttr))
                 primaryName = record.GetAttributeValue<string>(primaryNameAttr);
             return record;

@@ -26,7 +26,7 @@ public sealed class DeepMcpCoverageTests
     [TestMethod]
     public async Task ViewActions_CoverValidationAndBackupGuards()
     {
-        var tool = new ManageViewTool(null!, new McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var tool = new ManageViewTool(null!, new McpDryRunOptions(), DryRunTestHelpers.BlockedContext(), null!);
 
         Assert.Contains("action is required", Text(await tool.manage_view(null!, "", "account")));
         Assert.Contains("entity_name is required", Text(await tool.manage_view(null!, "list", "")));
@@ -119,7 +119,7 @@ public sealed class DeepMcpCoverageTests
         })
             Invoke(type, null, "ParseCellUpdates", json);
 
-        var tool = new ManageViewTool(null!, new McpDryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var tool = new ManageViewTool(null!, new McpDryRunOptions(), DryRunTestHelpers.BlockedContext(), null!);
         Invoke(type, tool, "NormalizeAndValidateIconUpdates", new List<CellUpdateInstruction>());
         Invoke(type, tool, "NormalizeAndValidateIconUpdates", new List<CellUpdateInstruction>
         {

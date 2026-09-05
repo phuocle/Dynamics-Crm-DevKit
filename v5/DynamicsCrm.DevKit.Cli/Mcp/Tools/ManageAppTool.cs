@@ -36,14 +36,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static XmlSchemaSet _cachedSiteMapSchemaSet;
         private static readonly object _schemaLock = new();
 
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
         private string _workspaceFolder;
 
-        public ManageAppTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageAppTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -197,7 +197,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("display_name is required for action='create'.",
                     "Provide the app display name shown to users.");
 
-            var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
+            var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim());
             if (!solResult.IsSuccess)
             {
                 if (solResult.Status == ResolveStatus.Ambiguous)
@@ -232,7 +232,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (iconError != null)
                 return Error(iconError, "Provide an existing image web resource name/GUID (allowed types: png, jpg, gif, svg, ico), or omit icon_webresource to use the default icon.");
 
-            var baseLanguage = McpHelper.GetBaseLanguageCode(_serviceClient);
+            var baseLanguage = McpHelper.GetBaseLanguageCode(_orgService);
             var starterSiteMapXml = BuildStarterSiteMapXml(baseLanguage);
             var (xsdErrors, xsdWarnings) = ValidateSiteMapXml(starterSiteMapXml);
             if (xsdErrors.Count > 0)
@@ -276,7 +276,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(description))
                 appModule["description"] = description.Trim();
 
-            var appModuleId = DataverseMutationExecutor.Create(_context, _serviceClient, appModule);
+            var appModuleId = DataverseMutationExecutor.Create(_context, _orgService, appModule);
             var createdApp = RetrieveCreatedApp(appModuleId, appUniqueName);
             appModuleIdUnique = createdApp.GetAttributeValue<Guid>("appmoduleidunique");
 
@@ -286,16 +286,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ["sitemapnameunique"] = $"{appUniqueName}SiteMap",
                 ["sitemapxml"] = starterSiteMapXml
             };
-            var siteMapId = DataverseMutationExecutor.Create(_context, _serviceClient, siteMap);
+            var siteMapId = DataverseMutationExecutor.Create(_context, _orgService, siteMap);
 
             var starterComponents = BuildEntityAppComponents("account");
             starterComponents.Insert(0, new EntityReference("sitemap", siteMapId));
             AddAppComponents(appModuleId, starterComponents);
 
             var appSolutionResult = SolutionComponentCreateHelper.AddExistingComponent(
-                _context, _serviceClient, appModuleId, 80, solResult.UniqueName, addRequiredComponents: true);
+                _context, _orgService, appModuleId, 80, solResult.UniqueName, addRequiredComponents: true);
             var siteMapSolutionResult = SolutionComponentCreateHelper.AddExistingComponent(
-                _context, _serviceClient, siteMapId, 62, solResult.UniqueName, addRequiredComponents: true);
+                _context, _orgService, siteMapId, 62, solResult.UniqueName, addRequiredComponents: true);
 
             PublishAppModule(appModuleId);
 
@@ -388,7 +388,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Snapshot only when actually mutating
             var backupPath = SaveAppSnapshot(appModule);
 
-            DataverseMutationExecutor.Update(_context, _serviceClient, update);
+            DataverseMutationExecutor.Update(_context, _orgService, update);
             PublishAppModule(appModule.Id);
             var refreshQuery = new QueryExpression("appmodule")
             {
@@ -508,7 +508,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var doc = XDocument.Parse(currentSiteMapXml);
                 navResult = AppNavigationOperationsHelper.ApplyOperations(
-                    doc, ops, McpHelper.GetBaseLanguageCode(_serviceClient));
+                    doc, ops, McpHelper.GetBaseLanguageCode(_orgService));
             }
             catch (AppNavigationOperationException ex)
             {
@@ -623,7 +623,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 ["sitemapxml"] = navResult.ModifiedSiteMapXml
             };
-            DataverseMutationExecutor.Update(_context, _serviceClient, updateSiteMap);
+            DataverseMutationExecutor.Update(_context, _orgService, updateSiteMap);
 
             if (entityComponentRefs.Count > 0)
                 AddAppComponents(appModule.Id, entityComponentRefs);
@@ -748,7 +748,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Snapshot current state only when actually restoring
             var currentBackupPath = SaveAppSnapshot(appModule);
 
-            DataverseMutationExecutor.Update(_context, _serviceClient, new Entity("sitemap", siteMapId.Value)
+            DataverseMutationExecutor.Update(_context, _orgService, new Entity("sitemap", siteMapId.Value)
             {
                 ["sitemapxml"] = snapshot.SiteMapXml
             });
@@ -862,7 +862,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var entity = GetJsonString(obj, "entity");
                     if (!string.IsNullOrWhiteSpace(entity))
                     {
-                        var result = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity, "manage_app");
+                        var result = DisplayNameFirstResolver.ResolveEntity(_orgService, entity, "manage_app");
                         if (result.IsSuccess)
                         {
                             obj["entity"] = result.Value.LogicalName;
@@ -911,12 +911,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private List<Entity> RetrieveAppModules(QueryExpression query)
         {
             var byId = new Dictionary<Guid, Entity>();
-            foreach (var entity in _serviceClient.RetrieveMultiple(query).Entities)
+            foreach (var entity in _orgService.RetrieveMultiple(query).Entities)
                 byId[entity.Id] = entity;
 
             try
             {
-                var unpublished = (RetrieveUnpublishedMultipleResponse)_serviceClient.Execute(new RetrieveUnpublishedMultipleRequest
+                var unpublished = (RetrieveUnpublishedMultipleResponse)_orgService.Execute(new RetrieveUnpublishedMultipleRequest
                 {
                     Query = query
                 });
@@ -983,7 +983,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             };
 
-            var component = _serviceClient.RetrieveMultiple(query).Entities.FirstOrDefault();
+            var component = _orgService.RetrieveMultiple(query).Entities.FirstOrDefault();
             var siteMapId = component?.GetAttributeValue<Guid?>("objectid");
             if (siteMapId.HasValue)
                 return siteMapId;
@@ -1003,7 +1003,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             query.Criteria.AddCondition("sitemapnameunique", ConditionOperator.Equal, siteMapNameUnique);
 
-            return _serviceClient.RetrieveMultiple(query).Entities.FirstOrDefault()?.Id;
+            return _orgService.RetrieveMultiple(query).Entities.FirstOrDefault()?.Id;
         }
 
         private string RetrieveSiteMapXml(Guid siteMapId)
@@ -1014,7 +1014,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 TopCount = 1
             };
             query.Criteria.AddCondition("sitemapid", ConditionOperator.Equal, siteMapId);
-            return _serviceClient.RetrieveMultiple(query).Entities.FirstOrDefault()?.GetAttributeValue<string>("sitemapxml");
+            return _orgService.RetrieveMultiple(query).Entities.FirstOrDefault()?.GetAttributeValue<string>("sitemapxml");
         }
 
         private Guid ResolveEntityMetadataId(string entityLogicalName)
@@ -1025,14 +1025,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 EntityFilters = EntityFilters.Entity,
                 RetrieveAsIfPublished = true
             };
-            var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+            var response = (RetrieveEntityResponse)_orgService.Execute(request);
             return response.EntityMetadata.MetadataId
                 ?? throw new InvalidOperationException($"Entity metadata id not found for '{entityLogicalName}'.");
         }
 
         private EntityMetadata ResolveEntityMetadata(string entityLogicalName)
         {
-            var response = (RetrieveEntityResponse)_serviceClient.Execute(new RetrieveEntityRequest
+            var response = (RetrieveEntityResponse)_orgService.Execute(new RetrieveEntityRequest
             {
                 LogicalName = entityLogicalName,
                 EntityFilters = EntityFilters.Entity,
@@ -1058,7 +1058,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private void AddAppComponents(Guid appModuleId, EntityReferenceCollection components)
         {
-            DataverseMutationExecutor.Execute(_context, _serviceClient, new AddAppComponentsRequest
+            DataverseMutationExecutor.Execute(_context, _orgService, new AddAppComponentsRequest
             {
                 AppId = appModuleId,
                 Components = components
@@ -1081,7 +1081,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     TopCount = 1
                 };
                 iconQuery.Criteria.AddCondition("webresourceid", ConditionOperator.Equal, iconId);
-                icon = _serviceClient.RetrieveMultiple(iconQuery).Entities.FirstOrDefault();
+                icon = _orgService.RetrieveMultiple(iconQuery).Entities.FirstOrDefault();
                 if (icon == null)
                 {
                     error = $"icon_webresource GUID '{trimmed}' was not found.";
@@ -1089,7 +1089,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }            }
             else
             {
-                var result = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, trimmed, "manage_app");
+                var result = DisplayNameFirstResolver.ResolveWebResource(_orgService, trimmed, "manage_app");
                 if (!result.IsSuccess)
                 {
                     error = $"icon_webresource '{trimmed}': {result.Error}";
@@ -1128,7 +1128,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Orders = { new OrderExpression("componenttype", OrderType.Ascending) }
             };
 
-            return _serviceClient.RetrieveMultiple(query).Entities.ToList();
+            return _orgService.RetrieveMultiple(query).Entities.ToList();
         }
 
         private static string BuildStarterSiteMapXml(int baseLanguage) => $@"<SiteMap>
@@ -1313,7 +1313,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     ["AppModuleId"] = appModuleId
                 };
-                var response = _serviceClient.Execute(request);
+                var response = _orgService.Execute(request);
                 return AppValidationResult.FromResponse(response);
             }
             catch (Exception ex)
@@ -1383,7 +1383,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private void PublishAppModule(Guid appModuleId)
         {
-            PublishHelper.PublishAppModule(_context, _serviceClient, appModuleId);
+            PublishHelper.PublishAppModule(_context, _orgService, appModuleId);
         }
 
         private static List<string> MergeWarnings(List<string> validationWarnings, List<string> xsdWarnings)

@@ -16,7 +16,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         private static readonly ConcurrentDictionary<string, AttributeMetadataIndex> MetadataCache = new();
 
         public static Entity ParseFieldsToEntity(
-            ServiceClient serviceClient,
+            IOrganizationService orgService,
             string entityLogicalName,
             string fieldsJson,
             Guid? recordId = null)
@@ -29,7 +29,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             if (fields == null || fields.Count == 0)
                 throw new ArgumentException("fields_json must be a non-empty JSON object.");
 
-            var attrIndex = GetAttributeIndex(serviceClient, entityLogicalName);
+            var attrIndex = GetAttributeIndex(orgService, entityLogicalName);
             var seenLogicalNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             foreach (var (key, jsonVal) in fields)
@@ -44,7 +44,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     throw new ArgumentException(
                         $"fields_json key '{key}' resolves to field '{resolvedField}', but a previous key already resolved to the same field. Duplicate field mapping is not allowed. Tip: Use get_tables(entity_name='{entityLogicalName}') to find unique field names.");
 
-                var targetEntity = ResolveTargetEntity(serviceClient, targetEntityInput);
+                var targetEntity = ResolveTargetEntity(orgService, targetEntityInput);
 
                 if (jsonVal.ValueKind == JsonValueKind.Null || jsonVal.ValueKind == JsonValueKind.Undefined)
                 {
@@ -63,7 +63,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             MetadataCache.Clear();
         }
 
-        private static AttributeMetadataIndex GetAttributeIndex(ServiceClient serviceClient, string entityLogicalName)
+        private static AttributeMetadataIndex GetAttributeIndex(IOrganizationService orgService, string entityLogicalName)
         {
             return MetadataCache.GetOrAdd(entityLogicalName, _ =>
             {
@@ -73,7 +73,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     EntityFilters = EntityFilters.Attributes,
                     RetrieveAsIfPublished = true
                 };
-                var response = (RetrieveEntityResponse)serviceClient.Execute(request);
+                var response = (RetrieveEntityResponse)orgService.Execute(request);
                 return AttributeMetadataIndex.From(response.EntityMetadata.Attributes);
             });
         }
@@ -97,12 +97,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             throw new ArgumentException(resolved.Error);
         }
 
-        private static string ResolveTargetEntity(ServiceClient serviceClient, string targetEntityInput)
+        private static string ResolveTargetEntity(IOrganizationService orgService, string targetEntityInput)
         {
             if (string.IsNullOrWhiteSpace(targetEntityInput))
                 return null;
 
-            var resolved = DisplayNameFirstResolver.ResolveEntity(serviceClient, targetEntityInput, "manage_record/create_records");
+            var resolved = DisplayNameFirstResolver.ResolveEntity(orgService, targetEntityInput, "manage_record/create_records");
             if (resolved.IsSuccess)
                 return resolved.Value.LogicalName;
 

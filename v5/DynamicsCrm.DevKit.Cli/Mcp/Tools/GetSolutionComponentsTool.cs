@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class GetSolutionComponentsTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
 
         // Static dict: componenttype value → display name (avoids querying solutioncomponentdefinition + option set at runtime)
         private static readonly Dictionary<int, string> ComponentTypeNames = new()
@@ -117,9 +117,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             { 10326, "App Action" },
         };
 
-        public GetSolutionComponentsTool(ServiceClient serviceClient)
+        public GetSolutionComponentsTool(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         [McpServerTool(Name = "get_solution_components", Title = "List all components inside a solution",
@@ -233,7 +233,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             pubLink.Columns = new ColumnSet("friendlyname");
             pubLink.EntityAlias = "pub";
 
-            var results = _serviceClient.RetrieveMultiple(query).Entities;
+            var results = _orgService.RetrieveMultiple(query).Entities;
             var candidates = results.Select(s => new DisplayNameFirstCandidate<Entity>
             {
                 Value = s,
@@ -275,7 +275,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             while (true)
             {
-                var page = _serviceClient.RetrieveMultiple(componentQuery);
+                var page = _orgService.RetrieveMultiple(componentQuery);
                 allComponents.AddRange(page.Entities);
                 if (!page.MoreRecords)
                     break;
@@ -318,7 +318,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Properties = new MetadataPropertiesExpression("MetadataId", "LogicalName")
                 };
 
-                var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
+                var response = (RetrieveMetadataChangesResponse)_orgService.Execute(
                     new RetrieveMetadataChangesRequest { Query = entityQuery });
 
                 foreach (var em in response.EntityMetadata)
@@ -520,7 +520,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 query.Criteria.Conditions.Add(
                     new MetadataConditionExpression("MetadataId", MetadataConditionOperator.Equals, id));
 
-            var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
+            var response = (RetrieveMetadataChangesResponse)_orgService.Execute(
                 new RetrieveMetadataChangesRequest { Query = query });
 
             foreach (var em in response.EntityMetadata)
@@ -545,7 +545,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 query.AttributeQuery.Criteria.Conditions.Add(
                     new MetadataConditionExpression("MetadataId", MetadataConditionOperator.Equals, id));
 
-            var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
+            var response = (RetrieveMetadataChangesResponse)_orgService.Execute(
                 new RetrieveMetadataChangesRequest { Query = query });
 
             foreach (var em in response.EntityMetadata)
@@ -571,7 +571,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 query.RelationshipQuery.Criteria.Conditions.Add(
                     new MetadataConditionExpression("MetadataId", MetadataConditionOperator.Equals, id));
 
-            var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
+            var response = (RetrieveMetadataChangesResponse)_orgService.Execute(
                 new RetrieveMetadataChangesRequest { Query = query });
 
             foreach (var em in response.EntityMetadata)
@@ -611,7 +611,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Conditions = { new ConditionExpression(pkAttribute, ConditionOperator.In, chunk) }
                     }
                 };
-                foreach (var e in _serviceClient.RetrieveMultiple(query).Entities)
+                foreach (var e in _orgService.RetrieveMultiple(query).Entities)
                     nameMap.TryAdd(e.Id, nameSelector(e) ?? "");
             }
         }
@@ -638,7 +638,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 link.Columns = new ColumnSet("schemaname", "displayname");
                 link.EntityAlias = "def";
 
-                foreach (var e in _serviceClient.RetrieveMultiple(query).Entities)
+                foreach (var e in _orgService.RetrieveMultiple(query).Entities)
                 {
                     var schemaName = e.GetAttributeValue<AliasedValue>("def.schemaname")?.Value as string;
                     var displayName = e.GetAttributeValue<AliasedValue>("def.displayname")?.Value as string;
@@ -810,7 +810,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (bulk.Requests.Count == 200 || i == components.Count - 1)
                 {
-                    var bulkResponse = (ExecuteMultipleResponse)_serviceClient.Execute(bulk);
+                    var bulkResponse = (ExecuteMultipleResponse)_orgService.Execute(bulk);
                     foreach (var response in bulkResponse.Responses)
                     {
                         if (response.Fault != null)

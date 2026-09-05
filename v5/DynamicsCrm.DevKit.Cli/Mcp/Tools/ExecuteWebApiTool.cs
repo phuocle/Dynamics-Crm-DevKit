@@ -1,3 +1,4 @@
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
@@ -17,13 +18,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ExecuteWebApiTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IWebApiExecutor _webApi;
+        private readonly IMcpConnectionInfo _connectionInfo;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public ExecuteWebApiTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ExecuteWebApiTool(IWebApiExecutor webApi, McpDryRunOptions options, McpExecutionContext context, IMcpConnectionInfo connectionInfo)
         {
-            _serviceClient = serviceClient;
+            _webApi = webApi;
+            _connectionInfo = connectionInfo;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -116,7 +119,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     response = DataverseWebApiMutationExecutor.Execute(
                         _context,
-                        _serviceClient,
+                        _webApi,
                         httpMethod,
                         trimmedUrl,
                         requestBody,
@@ -128,7 +131,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var getHeaders = customHeaders ?? new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
                     if (isMetadata)
                     {
-                        if (_serviceClient.ConnectedOrgUriActual == null)
+                        if (_connectionInfo.ConnectedOrgUri == null)
                             return Error("ServiceClient is not connected to a Dataverse organization. Call whoami first to verify the connection.");
                         if (!getHeaders.Keys.Any(k => string.Equals(k, "Accept", StringComparison.OrdinalIgnoreCase)))
                             getHeaders["Accept"] = new List<string> { "application/xml" };
@@ -136,7 +139,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                     else
                     {
-                        response = _serviceClient.ExecuteWebRequest(httpMethod, trimmedUrl, requestBody, getHeaders, "application/json");
+                        response = _webApi.ExecuteWebRequest(httpMethod, trimmedUrl, requestBody, getHeaders, "application/json");
                     }
                 }
                 var statusCode = (int)response.StatusCode;
@@ -514,8 +517,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private HttpResponseMessage GetMetadataRaw(string relativeUrl, Dictionary<string, List<string>> headers)
         {
-            var baseHost = _serviceClient.ConnectedOrgUriActual.GetLeftPart(UriPartial.Authority);
-            var token = _serviceClient.CurrentAccessToken;
+            var baseHost = _connectionInfo.ConnectedOrgUri.GetLeftPart(UriPartial.Authority);
+            var token = _webApi.CurrentAccessToken;
             var fullUrl = $"{baseHost}/api/data/v9.2/{relativeUrl.TrimStart('/')}";
             using var http = new HttpClient();
             using var req = new HttpRequestMessage(HttpMethod.Get, fullUrl);

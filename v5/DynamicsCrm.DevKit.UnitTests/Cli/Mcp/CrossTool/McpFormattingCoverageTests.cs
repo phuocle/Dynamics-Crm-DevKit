@@ -31,7 +31,7 @@ public class McpFormattingCoverageTests
     [TestMethod]
     public void ManageView_BuildViewListEntries_MapsSystemAndPersonalViews()
     {
-        var tool = new ManageViewTool(null!, new McpDryRunOptions(), new McpExecutionContext(true));
+        var tool = new ManageViewTool(null!, new McpDryRunOptions(), new McpExecutionContext(true), null!);
         var systemViews = new EntityCollection().Entities;
         systemViews.Add(new Entity("savedquery")
         {

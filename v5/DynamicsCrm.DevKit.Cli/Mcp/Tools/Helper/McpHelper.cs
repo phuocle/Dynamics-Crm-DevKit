@@ -1,16 +1,17 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 {
     internal static class McpHelper
     {
-        internal static int GetBaseLanguageCode(ServiceClient serviceClient)
+        internal static int GetBaseLanguageCode(IOrganizationService orgService)
         {
             try
             {
                 var fetch = "<fetch top='1'><entity name='organization'><attribute name='languagecode' /></entity></fetch>";
-                var results = serviceClient.RetrieveMultiple(new FetchExpression(fetch));
+                var results = orgService.RetrieveMultiple(new FetchExpression(fetch));
                 if (results.Entities.Count > 0)
                 {
                     var lang = results.Entities[0].GetAttributeValue<int?>("languagecode");

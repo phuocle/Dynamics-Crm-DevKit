@@ -18,7 +18,7 @@ public sealed class ManageViewActionValidationCoverageTests
     [TestMethod]
     public void MutationHandlers_RejectInvalidInputsBeforeAnyDataverseCall()
     {
-        var tool = new ManageViewTool(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true));
+        var tool = new ManageViewTool(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true), null!);
 
         StringAssert.Contains(Text(Invoke(tool, "HandleCreate", "account", "", "")), "view_name is required");
         StringAssert.Contains(Text(Invoke(tool, "HandleUpdate", "account", "", "", false, "", "")), "view_id or view_name is required");

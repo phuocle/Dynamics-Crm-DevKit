@@ -1,4 +1,5 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using System.Collections.Generic;
 using System.Text.Json;
@@ -9,11 +10,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 {
     internal sealed class FormXmlBuilder
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
 
-        public FormXmlBuilder(ServiceClient serviceClient)
+        public FormXmlBuilder(IOrganizationService orgService)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         public XElement BuildSectionElement(string name, string label, int sectionColumns,
@@ -35,7 +36,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             section.Add(new XElement("labels",
                 new XElement("label",
                     new XAttribute("description", label),
-                    new XAttribute("languagecode", McpHelper.GetBaseLanguageCode(_serviceClient).ToString()))));
+                    new XAttribute("languagecode", McpHelper.GetBaseLanguageCode(_orgService).ToString()))));
 
             var rowsElement = new XElement("rows");
 
@@ -87,7 +88,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             cell.Add(new XElement("labels",
                 new XElement("label",
                     new XAttribute("description", label),
-                    new XAttribute("languagecode", McpHelper.GetBaseLanguageCode(_serviceClient).ToString()))));
+                    new XAttribute("languagecode", McpHelper.GetBaseLanguageCode(_orgService).ToString()))));
 
             var control = new XElement("control",
                 new XAttribute("id", controlId),

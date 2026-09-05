@@ -15,16 +15,16 @@ namespace DynamicsCrm.DevKit.Shared.Logic
     {
         private const string NEW_LINE = "\r\n";
         private const string TAB = "\t";
-        private static ServiceClient ServiceClient { get; set; }
+        private static IOrganizationServiceAsync2 OrgServiceAsync { get; set; }
         private static MetadataService _metadataService;
-        private static MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
+        private static MetadataService Metadata => _metadataService ??= new MetadataService(OrgServiceAsync);
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
         private static List<string> FormNames = new List<string>();
 
-        public static async Task<string> GetCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootNamespace, bool isJsFormExist, bool isJsWebApiExist)
+        public static async Task<string> GetCodeAsync(IOrganizationServiceAsync2 orgServiceAsync, EntityMetadata entityMetadata, string rootNamespace, bool isJsFormExist, bool isJsWebApiExist)
         {
-            ServiceClient = serviceClient;
+            OrgServiceAsync = orgServiceAsync;
             _metadataService = null;
             EntityMetadata = entityMetadata;
             if (EntityMetadata.Attributes == null) EntityMetadata = await Metadata.FetchEntityMetadataAsync(entityMetadata.LogicalName);
@@ -673,7 +673,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static async Task<string> GetForm_d_ts_ProcessAsync(string formXml)
         {
             var code = string.Empty;
-            await XrmHelper.EntitiesProcessForm.AddIfNotExistAsync(ServiceClient, EntityMetadata.LogicalName);
+            await XrmHelper.EntitiesProcessForm.AddIfNotExistAsync(OrgServiceAsync, EntityMetadata.LogicalName);
             var processes = XrmHelper.EntitiesProcessForm.Where(x => x.EntityLogicalName == EntityMetadata.LogicalName).OrderBy(x => x.Name);
             var _d_ts = string.Empty;
             var part1 = string.Empty;
@@ -821,7 +821,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
             fields = fields.OrderBy(x => x.Name).ToList();
-            await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(ServiceClient, quickViewXml.entityLogicalName);
+            await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(OrgServiceAsync, quickViewXml.entityLogicalName);
             var quickViewMetadata = XrmHelper.EntitiesMetadata.Where(x => x.LogicalName == quickViewXml.entityLogicalName).FirstOrDefault();
             if (quickViewMetadata == null) return String.Empty;
             if (quickViewMetadata.Attributes == null) quickViewMetadata = await Metadata.FetchEntityMetadataAsync(quickViewXml.entityLogicalName);
@@ -854,7 +854,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static async Task<string> GetFormXmlAsync(string formId, string entityLogicalName)
         {
-            await XrmHelper.EntitiesFormXml.AddIfNotExistAsync(ServiceClient, entityLogicalName);
+            await XrmHelper.EntitiesFormXml.AddIfNotExistAsync(OrgServiceAsync, entityLogicalName);
             var form = XrmHelper.EntitiesFormXml.FirstOrDefault(x => x.FormType == FormType.QuickView && x.FormId == Guid.Parse(formId));
             if (form != null)
             {

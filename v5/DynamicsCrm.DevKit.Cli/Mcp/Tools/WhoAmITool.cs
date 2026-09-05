@@ -20,12 +20,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class WhoAmITool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
+        private readonly IMcpConnectionInfo _connectionInfo;
         private readonly McpExecutionContext _context;
 
-        public WhoAmITool(ServiceClient serviceClient, McpExecutionContext context)
+        public WhoAmITool(IOrganizationService orgService, McpExecutionContext context, IMcpConnectionInfo connectionInfo)
         {
-            _serviceClient = serviceClient;
+            _orgService = orgService;
+            _connectionInfo = connectionInfo;
             _context = context;
         }
 
@@ -44,19 +46,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             try
             {
-                var response = (WhoAmIResponse)_serviceClient.Execute(new WhoAmIRequest());
+                var response = (WhoAmIResponse)_orgService.Execute(new WhoAmIRequest());
 
                 var structured = new WhoAmIResult
                 {
                     UserId = response.UserId.ToString(),
                     BusinessUnitId = response.BusinessUnitId.ToString(),
                     OrganizationId = response.OrganizationId.ToString(),
-                    EnvironmentUrl = GetBaseUrl(_serviceClient.ConnectedOrgUriActual),
-                    Version = _serviceClient.ConnectedOrgVersion?.ToString(),
-                    OrgFriendlyName = _serviceClient.ConnectedOrgFriendlyName,
-                    OrgUniqueName = _serviceClient.ConnectedOrgUniqueName,
-                    TenantId = _serviceClient.TenantId.ToString(),
-                    EnvironmentId = _serviceClient.EnvironmentId.ToString(),
+                    EnvironmentUrl = GetBaseUrl(_connectionInfo.ConnectedOrgUri),
+                    Version = _connectionInfo.ConnectedOrgVersion?.ToString(),
+                    OrgFriendlyName = _connectionInfo.ConnectedOrgFriendlyName,
+                    OrgUniqueName = _connectionInfo.ConnectedOrgUniqueName,
+                    TenantId = _connectionInfo.TenantId.ToString(),
+                    EnvironmentId = _connectionInfo.EnvironmentId.ToString(),
                     DevKit = BuildDevKitRuntimeInfo()
                 };
 
@@ -90,7 +92,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private void PopulateUserDetails(WhoAmIResult result, Guid userId)
         {
-            var user = _serviceClient.Retrieve("systemuser", userId,
+            var user = _orgService.Retrieve("systemuser", userId,
                 new ColumnSet("fullname", "domainname", "internalemailaddress"));
             result.FullName = NullIfEmpty(user.GetAttributeValue<string>("fullname"));
             result.DomainName = NullIfEmpty(user.GetAttributeValue<string>("domainname"));
@@ -107,7 +109,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 TopCount = 1
             };
 
-            var qResult = _serviceClient.RetrieveMultiple(query);
+            var qResult = _orgService.RetrieveMultiple(query);
             if (qResult.Entities.Count == 0) return;
 
             var org = qResult.Entities[0];
@@ -143,7 +145,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     </entity>
                 </fetch>";
 
-            var qResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var qResult = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (qResult.Entities.Count == 0) return;
 
             var roles = new List<Models.RoleInfo>(qResult.Entities.Count);

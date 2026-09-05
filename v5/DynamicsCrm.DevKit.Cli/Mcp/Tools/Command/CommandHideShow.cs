@@ -52,8 +52,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var commandName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
                     var contextValue = existing.GetAttributeValue<string>("contextvalue");
-                    DataverseMutationExecutor.Delete(_context, _serviceClient, "appaction", cmdGuid);
-                    PublishHelper.PublishEntity(_context, _serviceClient, contextValue.Trim().ToLowerInvariant());
+                    DataverseMutationExecutor.Delete(_context, _orgService, "appaction", cmdGuid);
+                    PublishHelper.PublishEntity(_context, _orgService, contextValue.Trim().ToLowerInvariant());
 
                     var deletedMsg = $"OOB command override '{commandName}' deleted. Entity published.";
                     var deletedResult = new ManageCommandResult { Action = verb, Status = "success", CommandId = commandId.Trim(), Message = deletedMsg };
@@ -71,8 +71,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var update = new Entity("appaction", cmdGuid);
                 update["hidden"] = wantHidden;
-                DataverseMutationExecutor.Update(_context, _serviceClient, update);
-                PublishHelper.PublishEntity(_context, _serviceClient, existing.GetAttributeValue<string>("contextvalue").Trim().ToLowerInvariant());
+                DataverseMutationExecutor.Update(_context, _orgService, update);
+                PublishHelper.PublishEntity(_context, _orgService, existing.GetAttributeValue<string>("contextvalue").Trim().ToLowerInvariant());
 
                 var doneMsg = $"Command '{existing.GetAttributeValue<string>("name") ?? commandId.Trim()}' is now {(wantHidden ? "hidden" : "visible")}. Entity published.";
                 var doneResult = new ManageCommandResult { Action = verb, Status = "success", CommandId = commandId.Trim(), Message = doneMsg };
@@ -111,8 +111,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var commandName = found.GetAttributeValue<string>("name") ?? label.Trim();
                     var contextValue = found.GetAttributeValue<string>("contextvalue");
-                    DataverseMutationExecutor.Delete(_context, _serviceClient, "appaction", found.Id);
-                    PublishHelper.PublishEntity(_context, _serviceClient, contextValue.Trim().ToLowerInvariant());
+                    DataverseMutationExecutor.Delete(_context, _orgService, "appaction", found.Id);
+                    PublishHelper.PublishEntity(_context, _orgService, contextValue.Trim().ToLowerInvariant());
 
                     var deletedMsg2 = $"OOB command override '{commandName}' deleted. Entity published.";
                     var deletedResult2 = new ManageCommandResult { Action = verb, Status = "success", CommandId = found.Id.ToString(), Message = deletedMsg2 };
@@ -130,8 +130,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var update2 = new Entity("appaction", found.Id);
                 update2["hidden"] = wantHidden;
-                DataverseMutationExecutor.Update(_context, _serviceClient, update2);
-                PublishHelper.PublishEntity(_context, _serviceClient, found.GetAttributeValue<string>("contextvalue").Trim().ToLowerInvariant());
+                DataverseMutationExecutor.Update(_context, _orgService, update2);
+                PublishHelper.PublishEntity(_context, _orgService, found.GetAttributeValue<string>("contextvalue").Trim().ToLowerInvariant());
 
                 var doneMsg2 = $"Command '{label.Trim()}' is now {(wantHidden ? "hidden" : "visible")}. Entity published.";
                 var doneResult2 = new ManageCommandResult { Action = verb, Status = "success", CommandId = found.Id.ToString(), Message = doneMsg2 };
@@ -221,8 +221,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 newEntity["sequence"] = (decimal)100;
             }
 
-            var newId = DataverseMutationExecutor.Create(_context, _serviceClient, newEntity);
-            PublishHelper.PublishEntity(_context, _serviceClient, entityLogical.Trim().ToLowerInvariant());
+            var newId = DataverseMutationExecutor.Create(_context, _orgService, newEntity);
+            PublishHelper.PublishEntity(_context, _orgService, entityLogical.Trim().ToLowerInvariant());
 
             var createdMsg = $"Created appaction override: command '{label.Trim()}' on {entityName} ({LocationMap[locationValue]}) is now hidden. Entity published.";
             var createdResult = new ManageCommandResult { Action = verb, Status = "success", CommandId = newId.ToString(), Message = createdMsg, CreateMode = SolutionComponentCreateMode.None.ToString() };
@@ -247,7 +247,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
@@ -280,7 +280,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
@@ -289,7 +289,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Custom ribbon buttons are always in the devkit_ribbon solution.
             // Export it and scan LocLabel titles — same approach as ManageRibbonTool.
             var exportReq = new ExportSolutionRequest { SolutionName = "devkit_ribbon", Managed = false };
-            var exportResp = (ExportSolutionResponse)_serviceClient.Execute(exportReq);
+            var exportResp = (ExportSolutionResponse)_orgService.Execute(exportReq);
             var ribbonXml = ExtractRibbonDiffXmlForEntity(exportResp.ExportSolutionFile, entityName);
             if (string.IsNullOrWhiteSpace(ribbonXml)) return false;
 
@@ -331,7 +331,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string ResolveAppUniqueName(Guid appModuleId)
         {
-            var result = _serviceClient.Retrieve("appmodule", appModuleId, new ColumnSet("uniquename"));
+            var result = _orgService.Retrieve("appmodule", appModuleId, new ColumnSet("uniquename"));
             return result?.GetAttributeValue<string>("uniquename") ?? appModuleId.ToString("N");
         }
 
@@ -347,7 +347,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(entityName))
                 return (null, "entity_name is required.");
 
-            var result = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "manage_command");
+            var result = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "manage_command");
             return result.IsSuccess
                 ? (result.Value.LogicalName, null)
                 : (null, $"entity_name '{entityName.Trim()}': {result.Error}");
@@ -363,7 +363,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     </filter>
   </entity>
 </fetch>";
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             return result.Entities.Count > 0 ? result.Entities[0].Id : (Guid?)null;
         }
 
@@ -374,7 +374,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 LogicalName = entityLogicalName,
                 EntityFilters = Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity
             };
-            var response = (Microsoft.Xrm.Sdk.Messages.RetrieveEntityResponse)_serviceClient.Execute(request);
+            var response = (Microsoft.Xrm.Sdk.Messages.RetrieveEntityResponse)_orgService.Execute(request);
             return response?.EntityMetadata?.SchemaName ?? entityLogicalName;
         }
     }

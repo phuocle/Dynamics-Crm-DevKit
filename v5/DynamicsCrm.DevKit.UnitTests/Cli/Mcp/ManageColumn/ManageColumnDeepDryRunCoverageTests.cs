@@ -13,7 +13,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.ManageColumn;
 public sealed class ManageColumnDeepDryRunCoverageTests
 {
     private static readonly Type ToolType = typeof(ManageColumnTool);
-    private readonly ManageColumnTool _tool = new(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true));
+    private readonly ManageColumnTool _tool = new(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true), null!);
 
     [TestMethod]
     public void CreateAttributes_DryRunAppliesExplicitFlagsAndDescriptions()

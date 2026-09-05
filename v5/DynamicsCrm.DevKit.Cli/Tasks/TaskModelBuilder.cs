@@ -20,7 +20,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
         public string TaskType => $"[{nameof(CliType.modelbuilders).ToUpper()}]";
-        public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
+        public IOrganizationServiceAsync2 OrgServiceAsync { get; set; } = arg.ServiceClient;
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
@@ -158,9 +158,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 IOrganizationService orgService = null;
                 if (modelBuilder.IsLiveConnectionRequired)
                 {
-                    if (ServiceClient != null)
+                    if (OrgServiceAsync != null)
                     {
-                        orgService = ServiceClient as IOrganizationService;
+                        orgService = OrgServiceAsync;
                     }
                     else
                     {

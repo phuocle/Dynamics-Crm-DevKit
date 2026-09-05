@@ -18,13 +18,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageRelationshipTool : McpToolBase
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public ManageRelationshipTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        public ManageRelationshipTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
         {
-            _serviceClient = serviceClient ?? throw new ArgumentNullException(nameof(serviceClient));
+            _orgService = orgService ?? throw new ArgumentNullException(nameof(orgService));
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -126,7 +126,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("solution_name is required for create_1n so the publisher prefix can be resolved.",
                     "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix. Use get_solution_components to find valid solution names.");
 
-            var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName);
+            var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName);
             if (!solResult.IsSuccess) return Error(solResult.Error);
 
             if (string.IsNullOrWhiteSpace(relationshipName))
@@ -161,7 +161,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     SchemaName = lookupSchemaName,
                     LogicalName = lookupLogicalName,
-                    DisplayName = new Label(lookupDisplayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
+                    DisplayName = new Label(lookupDisplayName.Trim(), McpHelper.GetBaseLanguageCode(_orgService)),
                     RequiredLevel = new AttributeRequiredLevelManagedProperty(AttributeRequiredLevel.None)
                 }
             };
@@ -190,7 +190,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Guid metadataId = Guid.Empty;
             var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
             {
-                var response = (CreateOneToManyResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, request);
+                var response = (CreateOneToManyResponse)DataverseMutationExecutor.Execute(_context, _orgService, request);
                 metadataId = response.RelationshipId;
             }, $"create 1:N relationship '{relationshipName}' ({referencedEntity} -> {referencingEntity})");
 
@@ -207,7 +207,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"  5. Create all relationships");
             }
 
-            var published = PublishHelper.PublishEntity(_context, _serviceClient, referencingEntity, waitSeconds: 20);
+            var published = PublishHelper.PublishEntity(_context, _orgService, referencingEntity, waitSeconds: 20);
 
             return Success($"Created 1:N relationship '{relationshipName}' ({referencedEntity} -> {referencingEntity}) with lookup '{lookupLogicalName}', published={(published ? "yes" : "no")}.", new ManageRelationshipResult
             {
@@ -253,7 +253,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("solution_name is required for create_nn so the publisher prefix can be resolved.",
                     "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix. Use get_solution_components to find valid solution names.");
 
-            var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName);
+            var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName);
             if (!solResult.IsSuccess) return Error(solResult.Error);
 
             if (string.IsNullOrWhiteSpace(relationshipName))
@@ -308,9 +308,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
 
-            var response = (CreateManyToManyResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, request);
+            var response = (CreateManyToManyResponse)DataverseMutationExecutor.Execute(_context, _orgService, request);
             var metadataId = response.ManyToManyRelationshipId;
-            var published = PublishHelper.PublishEntity(_context, _serviceClient, entity1);
+            var published = PublishHelper.PublishEntity(_context, _orgService, entity1);
 
             return Success($"Created N:N relationship '{relationshipName}' between '{entity1}' and '{entity2}' (intersect: '{intersectEntityName}'), published={(published ? "yes" : "no")}.", new ManageRelationshipResult
             {
@@ -340,7 +340,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             relationshipName = relationshipName.Trim();
 
-            var retrieveResponse = (RetrieveRelationshipResponse)_serviceClient.Execute(new RetrieveRelationshipRequest { Name = relationshipName });
+            var retrieveResponse = (RetrieveRelationshipResponse)_orgService.Execute(new RetrieveRelationshipRequest { Name = relationshipName });
             var metadata = retrieveResponse.RelationshipMetadata;
 
             var changes = new Dictionary<string, UpdateAttributeChange>();
@@ -434,11 +434,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Relationship = metadata,
                     MergeLabels = true
                 };
-                DataverseMutationExecutor.Execute(_context, _serviceClient, updateRequest);
+                DataverseMutationExecutor.Execute(_context, _orgService, updateRequest);
             }
 
             var published = changes.Count > 0 && entityToPublish != null
-                && PublishHelper.PublishEntity(_context, _serviceClient, entityToPublish);
+                && PublishHelper.PublishEntity(_context, _orgService, entityToPublish);
 
             var summary = $"Updated relationship '{relationshipName}' with {changes.Count} change(s), published={(published ? "yes" : "no")}.";
 
@@ -464,7 +464,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             relationshipName = relationshipName.Trim();
 
-            var retrieveResponse = (RetrieveRelationshipResponse)_serviceClient.Execute(new RetrieveRelationshipRequest { Name = relationshipName });
+            var retrieveResponse = (RetrieveRelationshipResponse)_orgService.Execute(new RetrieveRelationshipRequest { Name = relationshipName });
             var metadata = retrieveResponse.RelationshipMetadata;
 
             if (_options.DryRun)
@@ -476,7 +476,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
 
-            DataverseMutationExecutor.Execute(_context, _serviceClient, new DeleteRelationshipRequest { Name = relationshipName });
+            DataverseMutationExecutor.Execute(_context, _orgService, new DeleteRelationshipRequest { Name = relationshipName });
 
             var typeLabel = metadata is OneToManyRelationshipMetadata otm
                 ? $"1:N ({otm.ReferencedEntity} -> {otm.ReferencingEntity})"
@@ -524,7 +524,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("solution_name is required for add_target so the publisher prefix can be resolved.",
                     "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix. Use get_solution_components to find valid solution names.");
 
-            var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName);
+            var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName);
             if (!solResult.IsSuccess) return Error(solResult.Error);
 
             var relName = $"{solResult.Prefix}_{referencedEntity}_{entityName}_{attributeName}";
@@ -564,9 +564,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = false
                 });
 
-            var response = (CreateOneToManyResponse)DataverseMutationExecutor.Execute(_context, _serviceClient, request);
+            var response = (CreateOneToManyResponse)DataverseMutationExecutor.Execute(_context, _orgService, request);
             var metadataId = response.RelationshipId;
-            var published = PublishHelper.PublishEntity(_context, _serviceClient, entityName);
+            var published = PublishHelper.PublishEntity(_context, _orgService, entityName);
 
             var summary = $"Added target '{referencedEntity}' to polymorphic lookup '{entityName}.{attributeName}' (relationship: '{relName}'), published={(published ? "yes" : "no")}. IMPORTANT: existing form controls still display the OLD entity list — remove and re-add the field via manage_form to refresh.";
 
@@ -608,7 +608,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var prefix = attributeName.Split('_')[0];
             var relName = $"{prefix}_{referencedEntity}_{entityName}_{attributeName}";
 
-            var retrieveResponse = (RetrieveRelationshipResponse)_serviceClient.Execute(
+            var retrieveResponse = (RetrieveRelationshipResponse)_orgService.Execute(
                 new RetrieveRelationshipRequest { Name = relName });
             var rel = retrieveResponse.RelationshipMetadata as OneToManyRelationshipMetadata;
 
@@ -625,7 +625,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Warnings = new List<string> { "Data in this lookup target will be lost." }
                 });
 
-            DataverseMutationExecutor.Execute(_context, _serviceClient, new DeleteRelationshipRequest { Name = relName });
+            DataverseMutationExecutor.Execute(_context, _orgService, new DeleteRelationshipRequest { Name = relName });
 
             return Success($"Removed target '{referencedEntity}' from polymorphic lookup '{entityName}.{attributeName}' (deleted relationship '{relName}'). WARNING: data stored in this lookup target has been lost.", new ManageRelationshipResult
             {
@@ -645,7 +645,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             logicalName = null;
             errorResult = null;
 
-            var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, input, "manage_relationship");
+            var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, input, "manage_relationship");
             if (resolved.IsSuccess)
             {
                 logicalName = resolved.Value.LogicalName;
@@ -661,7 +661,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             attribute = null;
             errorResult = null;
 
-            var resolved = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entityLogicalName, input, "manage_relationship");
+            var resolved = DisplayNameFirstResolver.ResolveAttribute(_orgService, entityLogicalName, input, "manage_relationship");
             if (resolved.IsSuccess)
             {
                 attribute = resolved.Value;

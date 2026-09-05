@@ -93,18 +93,18 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         /// <summary>
         /// Generate OptionSet.ts content for the given entities
         /// </summary>
-        /// <param name="serviceClient">The service client</param>
+        /// <param name="orgServiceAsync">The organization service</param>
         /// <param name="entities">List of EntityMetadata to generate optionsets for</param>
         /// <param name="existingContent">Optional existing file content to merge with</param>
         /// <returns>Complete OptionSet.ts content</returns>
         public static async Task<string> GetTsOptionSetCodeAsync(
-            ServiceClient serviceClient,
+            IOrganizationServiceAsync2 orgServiceAsync,
             List<EntityMetadata> entities,
             string existingContent = null)
         {
             // Parse existing entities from content
             var existingEntities = ParseExistingEntities(existingContent);
-            var metadataService = new MetadataService(serviceClient);
+            var metadataService = new MetadataService(orgServiceAsync);
 
             // Generate optionsets for each new entity
             foreach (var entity in entities)

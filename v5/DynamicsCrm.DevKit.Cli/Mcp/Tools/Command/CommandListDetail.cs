@@ -99,7 +99,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         EntityName = entityName,
                         RibbonLocationFilter = filter
                     };
-                    var response = (RetrieveEntityRibbonResponse)_serviceClient.Execute(request);
+                    var response = (RetrieveEntityRibbonResponse)_orgService.Execute(request);
                     var ribbonXml = UnzipRibbonXml(response.CompressedEntityXml);
                     var buttons = ParseButtonsFromRibbon(ribbonXml, entityName, groupSuffix, locLabels);
 
@@ -168,7 +168,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     </filter>
   </entity>
 </fetch>";
-                var entities = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                var entities = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
                 foreach (var e in entities.Entities)
                 {
                     var lbl = e.GetAttributeValue<string>("buttonlabeltext") ?? "";
@@ -283,7 +283,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var locLabels = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             var exportReq = new ExportSolutionRequest { SolutionName = "devkit_ribbon", Managed = false };
-            var exportResp = (ExportSolutionResponse)_serviceClient.Execute(exportReq);
+            var exportResp = (ExportSolutionResponse)_orgService.Execute(exportReq);
             var ribbonXml = ExtractRibbonDiffXmlForEntity(exportResp.ExportSolutionFile, entityName);
             if (string.IsNullOrWhiteSpace(ribbonXml)) return locLabels;
 
@@ -367,7 +367,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
             {
                 var emptyResult = new ManageCommandResult { Action = "list", Status = "success", TotalCount = 0, Commands = [] };
@@ -422,7 +422,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
                 return Error($"Command '{commandId}' not found.",
                     "Use manage_command(action='list') to find valid command IDs.");
@@ -489,7 +489,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
 
             if (result.Entities.Count == 0)
                 return Error($"No command found with label containing '{label}'" +

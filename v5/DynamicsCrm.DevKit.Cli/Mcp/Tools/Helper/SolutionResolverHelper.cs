@@ -13,9 +13,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
     /// </summary>
     internal static class SolutionResolverHelper
     {
-        internal static SolutionResolveResult Resolve(ServiceClient serviceClient, string solutionInput)
+        internal static SolutionResolveResult Resolve(IOrganizationService orgService, string solutionInput)
         {
-            if (serviceClient == null)
+            if (orgService == null)
                 return SolutionResolveResult.Fail("IOrganizationService is null.");
             if (string.IsNullOrWhiteSpace(solutionInput))
                 return SolutionResolveResult.Fail("Solution name cannot be empty.");
@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             try
             {
                 var resolved = DisplayNameFirstResolver.ResolveDataverseRecord(
-                    serviceClient,
+                    orgService,
                     solutionInput,
                     entityName: "solution",
                     idColumn: "solutionid",
@@ -43,7 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 if (!resolved.IsSuccess)
                     return SolutionResolveResult.Fail(resolved.Error, resolved.Status, resolved.Candidates);
 
-                return BuildResult(serviceClient, resolved.Value, solutionInput);
+                return BuildResult(orgService, resolved.Value, solutionInput);
             }
             catch (Exception ex)
             {
@@ -51,7 +51,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             }
         }
 
-        private static SolutionResolveResult BuildResult(ServiceClient serviceClient, Entity sol, string solutionInput)
+        private static SolutionResolveResult BuildResult(IOrganizationService orgService, Entity sol, string solutionInput)
         {
             var publisherRef = sol.GetAttributeValue<EntityReference>("publisherid");
             if (publisherRef == null)
@@ -59,7 +59,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
             try
             {
-                var publisher = serviceClient.Retrieve("publisher", publisherRef.Id,
+                var publisher = orgService.Retrieve("publisher", publisherRef.Id,
                     new ColumnSet("customizationprefix", "customizationoptionvalueprefix"));
                 var prefix = publisher.GetAttributeValue<string>("customizationprefix");
                 var optionValuePrefix = publisher.GetAttributeValue<int>("customizationoptionvalueprefix");

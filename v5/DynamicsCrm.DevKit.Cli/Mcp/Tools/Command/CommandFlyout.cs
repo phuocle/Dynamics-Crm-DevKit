@@ -111,7 +111,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(tooltipDescription))
                 dropdown["buttontooltipdescription"] = tooltipDescription.Trim();
 
-            var dropdownId = DataverseMutationExecutor.Create(_context, _serviceClient, dropdown);
+            var dropdownId = DataverseMutationExecutor.Create(_context, _orgService, dropdown);
 
             // Create Group (invisible container, no label)
             var groupName = $"{publisherPrefix}.{entityLogical}.{safeLabel}.{locPrefix}.Group";
@@ -134,7 +134,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             group["origin"] = new OptionSetValue(0);
             group["parentappactionid"] = new EntityReference("appaction", dropdownId);
 
-            var groupId = DataverseMutationExecutor.Create(_context, _serviceClient, group);
+            var groupId = DataverseMutationExecutor.Create(_context, _orgService, group);
 
             // Create items as Standard Buttons under the Group
             var createdItems = new List<string>();
@@ -272,7 +272,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("No fields to update.",
                     "Provide at least one: label, sequence, font_icon, icon_webresource, tooltip_title, tooltip_description.");
 
-            DataverseMutationExecutor.Update(_context, _serviceClient, entity);
+            DataverseMutationExecutor.Update(_context, _orgService, entity);
 
             var commandName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
             var message = $"Flyout '{commandName}' updated: {string.Join(", ", changes)}.";
@@ -415,7 +415,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(tooltipDescription))
                 split["buttontooltipdescription"] = tooltipDescription.Trim();
 
-            var splitId = DataverseMutationExecutor.Create(_context, _serviceClient, split);
+            var splitId = DataverseMutationExecutor.Create(_context, _orgService, split);
 
             // Create Group (internal container under the Split Button)
             var groupName = $"{publisherPrefix}.{entityLogical}.{safeLabel}.{locPrefix}.Group";
@@ -438,7 +438,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             group["origin"] = new OptionSetValue(0);
             group["parentappactionid"] = new EntityReference("appaction", splitId);
 
-            var groupId = DataverseMutationExecutor.Create(_context, _serviceClient, group);
+            var groupId = DataverseMutationExecutor.Create(_context, _orgService, group);
 
             // Create dropdown items as Standard Buttons under the Group
             var createdItems = new List<string>();
@@ -599,7 +599,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("No fields to update.",
                     "Provide at least one: label, sequence, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description.");
 
-            DataverseMutationExecutor.Update(_context, _serviceClient, entity);
+            DataverseMutationExecutor.Update(_context, _orgService, entity);
 
             var commandName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
             var message = $"Split Button '{commandName}' updated: {string.Join(", ", changes)}.";
@@ -688,7 +688,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 groupEntity["origin"] = new OptionSetValue(0);
                 groupEntity["parentappactionid"] = new EntityReference("appaction", flyoutGuid);
 
-                groupId = DataverseMutationExecutor.Create(_context, _serviceClient, groupEntity);
+                groupId = DataverseMutationExecutor.Create(_context, _orgService, groupEntity);
             }
 
             // Count existing items to auto-assign sequence
@@ -778,7 +778,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var itemName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
             var itemLabel = existing.GetAttributeValue<string>("buttonlabeltext") ?? itemName;
 
-            DataverseMutationExecutor.Delete(_context, _serviceClient, "appaction", cmdGuid);
+            DataverseMutationExecutor.Delete(_context, _orgService, "appaction", cmdGuid);
 
             var message = $"Flyout item '{itemLabel}' ({itemName}) deleted successfully.";
             var structured = new ManageCommandResult

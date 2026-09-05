@@ -13,13 +13,13 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.ManageColumn;
 [TestClass]
 public sealed class ManageColumnValidationCoverageTests
 {
-    private readonly ManageColumnTool _tool = new(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true));
+    private readonly ManageColumnTool _tool = new(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true), null!);
 
     [TestMethod]
     public void Constructor_RequiresOptionsAndContext()
     {
-        Assert.Throws<ArgumentNullException>(() => new ManageColumnTool(null!, null!, new McpExecutionContext(true)));
-        Assert.Throws<ArgumentNullException>(() => new ManageColumnTool(null!, new McpDryRunOptions(), null!));
+        Assert.Throws<ArgumentNullException>(() => new ManageColumnTool(null!, null!, new McpExecutionContext(true), null!));
+        Assert.Throws<ArgumentNullException>(() => new ManageColumnTool(null!, new McpDryRunOptions(), null!, null!));
     }
 
     [TestMethod]

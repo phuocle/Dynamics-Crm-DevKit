@@ -10,9 +10,9 @@ namespace DynamicsCrm.DevKit.Shared.Services
 {
     public class CodeGenService
     {
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationServiceAsync2 _orgServiceAsync;
         private MetadataService _metadataService;
-        private MetadataService Metadata => _metadataService ??= new MetadataService(_serviceClient);
+        private MetadataService Metadata => _metadataService ??= new MetadataService(_orgServiceAsync);
 
         private const string NEW_LINE = "\r\n";
         private const string TAB = "\t";
@@ -39,9 +39,9 @@ namespace DynamicsCrm.DevKit.Shared.Services
             "void", "while", "with", "const"
         };
 
-        public CodeGenService(ServiceClient serviceClient)
+        public CodeGenService(IOrganizationServiceAsync2 orgServiceAsync)
         {
-            _serviceClient = serviceClient;
+            _orgServiceAsync = orgServiceAsync;
         }
 
         private static string GetSafeEntityName(string entityName)

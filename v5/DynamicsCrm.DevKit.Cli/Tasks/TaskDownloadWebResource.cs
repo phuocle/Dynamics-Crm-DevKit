@@ -12,7 +12,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     {
         public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
         public string TaskType => $"[{nameof(CliType.downloadwebresources).ToUpper()}]";
-        public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
+        public IOrganizationServiceAsync2 OrgServiceAsync { get; set; } = arg.ServiceClient;
         public CommandLineArgs Arg { get; set; } = arg;
         private JsonDownloadWebResource Json { get; set; } = json;
         public bool IsOk { get; set; }
@@ -20,7 +20,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public string SolutionPrefix { get; set; }
 
         private DeploymentService _deploymentService;
-        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(ServiceClient);
+        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(OrgServiceAsync);
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)

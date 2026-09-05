@@ -13,13 +13,13 @@ public sealed class ManageDeletedRecordsAdditionalCoverageTests
     private static readonly Type ToolType = typeof(ManageDeletedRecordsTool);
 
     private static ManageDeletedRecordsTool Tool(bool dryRun = true, bool mutationAllowed = true) =>
-        new(null!, new McpDryRunOptions { DryRun = dryRun }, new McpExecutionContext(mutationAllowed));
+        new(null!, new McpDryRunOptions { DryRun = dryRun }, new McpExecutionContext(mutationAllowed), null!);
 
     [TestMethod]
     public void Constructor_RequiresOptionsAndContext()
     {
-        Assert.Throws<ArgumentNullException>(() => new ManageDeletedRecordsTool(null!, null!, new McpExecutionContext(true)));
-        Assert.Throws<ArgumentNullException>(() => new ManageDeletedRecordsTool(null!, new McpDryRunOptions(), null!));
+        Assert.Throws<ArgumentNullException>(() => new ManageDeletedRecordsTool(null!, null!, new McpExecutionContext(true), null!));
+        Assert.Throws<ArgumentNullException>(() => new ManageDeletedRecordsTool(null!, new McpDryRunOptions(), null!, null!));
     }
 
     [TestMethod]

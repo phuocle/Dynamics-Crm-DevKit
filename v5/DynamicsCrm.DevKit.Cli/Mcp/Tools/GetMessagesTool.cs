@@ -18,12 +18,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class GetMessagesTool : McpToolBase
     {
         private readonly MetadataService _metadataService;
-        private readonly ServiceClient _serviceClient;
+        private readonly IOrganizationService _orgService;
 
-        public GetMessagesTool(MetadataService metadataService, ServiceClient serviceClient)
+        public GetMessagesTool(MetadataService metadataService, IOrganizationService orgService)
         {
             _metadataService = metadataService;
-            _serviceClient = serviceClient;
+            _orgService = orgService;
         }
 
         private static readonly Dictionary<int, string> AvailabilityMap = new()
@@ -115,7 +115,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 entityName.Trim().Equals("none", StringComparison.OrdinalIgnoreCase))
                 return ("none", null);
 
-            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "get_messages");
+            var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "get_messages");
             if (!entityResult.IsSuccess)
                 return (null, $"entity_name '{entityName.Trim()}': {entityResult.Error}");
 
@@ -252,7 +252,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
@@ -282,7 +282,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
@@ -299,7 +299,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             return result.Entities
                 .Select(e => e.GetAttributeValue<string>("primaryobjecttypecode") ?? "")
                 .Where(s => !string.IsNullOrWhiteSpace(s) && s != "none")
@@ -327,7 +327,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count > 0)
             {
                 var alias = result.Entities[0].GetAttributeValue<AliasedValue>("cnt");
@@ -350,7 +350,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0) return (inputs, outputs);
 
             var xaml = result.Entities[0].GetAttributeValue<string>("xaml") ?? "";
