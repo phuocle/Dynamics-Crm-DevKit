@@ -5,9 +5,9 @@
 SDK test projects use the `coverlet.collector` "XPlat Code Coverage" data collector. Projects with a `coverlet.runsettings` define their include filter and output formats (cobertura, json, lcov, opencover); `DynamicsCrm.DevKit.Tool.UnitTests` has no runsettings and uses the collector default (cobertura). Results land under each test project's `TestResults\<guid>\coverage.cobertura.xml`. Which assembly is measured is decided by the `Include` filter in each project's runsettings.
 
 ```powershell
-dotnet test "DynamicsCrm.DevKit.Cli.UnitTests\DynamicsCrm.DevKit.Cli.UnitTests.csproj" -f net10.0 --settings "DynamicsCrm.DevKit.Cli.UnitTests\coverlet.runsettings"
+dotnet test "DynamicsCrm.DevKit.Cli.UnitTests\DynamicsCrm.DevKit.Cli.UnitTests.csproj" --settings "DynamicsCrm.DevKit.Cli.UnitTests\coverlet.runsettings"
 dotnet test "DynamicsCrm.DevKit.Tool.UnitTests\DynamicsCrm.DevKit.Tool.UnitTests.csproj" --collect:"XPlat Code Coverage"
-dotnet test "DynamicsCrm.DevKit.UnitTests\DynamicsCrm.DevKit.UnitTests.csproj" -f net10.0 --settings "DynamicsCrm.DevKit.UnitTests\coverlet.runsettings"
+dotnet test "DynamicsCrm.DevKit.UnitTests\DynamicsCrm.DevKit.UnitTests.csproj" --settings "DynamicsCrm.DevKit.UnitTests\coverlet.runsettings"
 dotnet test "DynamicsCrm.DevKit.Analyzers.UnitTests\DynamicsCrm.DevKit.Analyzers.UnitTests.csproj" --settings "DynamicsCrm.DevKit.Analyzers.UnitTests\coverlet.runsettings"
 ```
 

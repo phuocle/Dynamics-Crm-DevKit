@@ -5,10 +5,11 @@ using System.IO.Compression;
 using System.Reflection;
 using System.Text;
 using Microsoft.Xrm.Sdk;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
+namespace DynamicsCrm.DevKit.UnitTests.Lib
 {
+    [TestClass]
     public class DevKitJsonCompactTest
     {
         #region Helpers
@@ -147,18 +148,18 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
 
         #region Compact Size Reduction
 
-        [Fact]
+        [TestMethod]
         public void Compact_IsSmallerThanFull()
         {
             var ctx = BuildTestContext();
             var full = DevKitJson.Serialize(ctx);
             var compact = DevKitJson.SerializeCompact(ctx);
 
-            Assert.True(compact.Length < full.Length,
+            Assert.IsTrue(compact.Length < full.Length,
                 $"Compact ({compact.Length}) should be smaller than Full ({full.Length})");
         }
 
-        [Fact]
+        [TestMethod]
         public void Compact_Entity_IsSmallerThanFull()
         {
             var entity = new Entity("account", Guid.NewGuid());
@@ -171,29 +172,29 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             var full = DevKitJson.Serialize(entity);
             var compact = DevKitJson.SerializeCompact(entity);
 
-            Assert.True(compact.Length < full.Length,
+            Assert.IsTrue(compact.Length < full.Length,
                 $"Compact ({compact.Length}) should be smaller than Full ({full.Length})");
         }
 
-        [Fact]
+        [TestMethod]
         public void CompactContext_IsSmallerThanFull()
         {
             var ctx = BuildTestContext();
             var full = DevKitJson.SerializeContextFull(ctx);
             var compact = DevKitJson.SerializeContext(ctx);
 
-            Assert.True(compact.Length < full.Length,
+            Assert.IsTrue(compact.Length < full.Length,
                 $"Compact ({compact.Length}) should be smaller than Full ({full.Length})");
 
             var savings = 100.0 * (full.Length - compact.Length) / full.Length;
-            Assert.True(savings > 10, $"Expected >10% savings, got {savings:F1}%");
+            Assert.IsTrue(savings > 10, $"Expected >10% savings, got {savings:F1}%");
         }
 
         #endregion
 
         #region Compact Roundtrip - Primitives & Dataverse Types
 
-        [Fact]
+        [TestMethod]
         public void Compact_Entity_Roundtrip()
         {
             var id = Guid.NewGuid();
@@ -210,15 +211,15 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.DoesNotContain("\"LogicalName\"", compact);
 
             var result = DevKitJson.Deserialize<Entity>(compact);
-            Assert.Equal("account", result.LogicalName);
-            Assert.Equal(id, result.Id);
-            Assert.Equal("Contoso", result["name"]);
-            Assert.Equal(500, result["numberofemployees"]);
-            Assert.Equal(1000000m, ((Money)result["revenue"]).Value);
-            Assert.Equal("John", ((EntityReference)result["primarycontactid"]).Name);
+            Assert.AreEqual("account", result.LogicalName);
+            Assert.AreEqual(id, result.Id);
+            Assert.AreEqual("Contoso", result["name"]);
+            Assert.AreEqual(500, result["numberofemployees"]);
+            Assert.AreEqual(1000000m, ((Money)result["revenue"]).Value);
+            Assert.AreEqual("John", ((EntityReference)result["primarycontactid"]).Name);
         }
 
-        [Fact]
+        [TestMethod]
         public void Compact_EntityWithFormattedValues_Roundtrip()
         {
             var entity = new Entity("account", Guid.NewGuid());
@@ -230,10 +231,10 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.DoesNotContain("\"FormattedValues\"", compact);
 
             var result = DevKitJson.Deserialize<Entity>(compact);
-            Assert.Equal("Active", result.FormattedValues["statuscode"]);
+            Assert.AreEqual("Active", result.FormattedValues["statuscode"]);
         }
 
-        [Fact]
+        [TestMethod]
         public void Compact_Money_Roundtrip()
         {
             var money = new Money(1234.56m);
@@ -242,10 +243,10 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.Contains("\"v\":", compact);
 
             var result = DevKitJson.Deserialize<Money>(compact);
-            Assert.Equal(1234.56m, result.Value);
+            Assert.AreEqual(1234.56m, result.Value);
         }
 
-        [Fact]
+        [TestMethod]
         public void Compact_OptionSetValue_Roundtrip()
         {
             var osv = new OptionSetValue(100000001);
@@ -253,10 +254,10 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.Contains("\"_t\":\"O\"", compact);
 
             var result = DevKitJson.Deserialize<OptionSetValue>(compact);
-            Assert.Equal(100000001, result.Value);
+            Assert.AreEqual(100000001, result.Value);
         }
 
-        [Fact]
+        [TestMethod]
         public void Compact_OptionSetValueCollection_Roundtrip()
         {
             var osvc = new OptionSetValueCollection { new OptionSetValue(1), new OptionSetValue(2), new OptionSetValue(3) };
@@ -264,11 +265,11 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.Contains("\"_t\":\"OC\"", compact);
 
             var result = DevKitJson.Deserialize<OptionSetValueCollection>(compact);
-            Assert.Equal(3, result.Count);
-            Assert.Equal(1, result[0].Value);
+            Assert.AreEqual(3, result.Count);
+            Assert.AreEqual(1, result[0].Value);
         }
 
-        [Fact]
+        [TestMethod]
         public void Compact_EntityReference_Roundtrip()
         {
             var id = Guid.NewGuid();
@@ -279,12 +280,12 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.Contains("\"n\":\"Contoso\"", compact);
 
             var result = DevKitJson.Deserialize<EntityReference>(compact);
-            Assert.Equal("account", result.LogicalName);
-            Assert.Equal(id, result.Id);
-            Assert.Equal("Contoso", result.Name);
+            Assert.AreEqual("account", result.LogicalName);
+            Assert.AreEqual(id, result.Id);
+            Assert.AreEqual("Contoso", result.Name);
         }
 
-        [Fact]
+        [TestMethod]
         public void Compact_AliasedValue_Roundtrip()
         {
             var av = new AliasedValue("contact", "fullname", "Jane Doe");
@@ -293,12 +294,12 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.Contains("\"eln\":\"contact\"", compact);
 
             var result = DevKitJson.Deserialize<AliasedValue>(compact);
-            Assert.Equal("contact", result.EntityLogicalName);
-            Assert.Equal("fullname", result.AttributeLogicalName);
-            Assert.Equal("Jane Doe", result.Value);
+            Assert.AreEqual("contact", result.EntityLogicalName);
+            Assert.AreEqual("fullname", result.AttributeLogicalName);
+            Assert.AreEqual("Jane Doe", result.Value);
         }
 
-        [Fact]
+        [TestMethod]
         public void Compact_BooleanManagedProperty_Roundtrip()
         {
             var bmp = new BooleanManagedProperty(true) { CanBeChanged = false };
@@ -307,11 +308,11 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.Contains("\"cc\":", compact);
 
             var result = DevKitJson.Deserialize<BooleanManagedProperty>(compact);
-            Assert.True(result.Value);
-            Assert.False(result.CanBeChanged);
+            Assert.IsTrue(result.Value);
+            Assert.IsFalse(result.CanBeChanged);
         }
 
-        [Fact]
+        [TestMethod]
         public void Compact_EntityCollection_Roundtrip()
         {
             var ec = new EntityCollection { EntityName = "account" };
@@ -325,12 +326,12 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.Contains("\"es\":[", compact);
 
             var result = DevKitJson.Deserialize<EntityCollection>(compact);
-            Assert.Equal("account", result.EntityName);
-            Assert.Single(result.Entities);
-            Assert.Equal("Contoso", result.Entities[0]["name"]);
+            Assert.AreEqual("account", result.EntityName);
+            Assert.HasCount(1, result.Entities);
+            Assert.AreEqual("Contoso", result.Entities[0]["name"]);
         }
 
-        [Fact]
+        [TestMethod]
         public void Compact_DateTime_Roundtrip()
         {
             var dt = new DateTime(2025, 3, 15, 14, 30, 0, DateTimeKind.Utc);
@@ -338,10 +339,10 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.Contains("\"_t\":\"DT\"", compact);
 
             var result = DevKitJson.Deserialize<DateTime>(compact);
-            Assert.Equal(dt, result);
+            Assert.AreEqual(dt, result);
         }
 
-        [Fact]
+        [TestMethod]
         public void Compact_Guid_Roundtrip()
         {
             var guid = Guid.Parse("a1b2c3d4-e5f6-7890-abcd-ef1234567890");
@@ -349,10 +350,10 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.Contains("\"_t\":\"G\"", compact);
 
             var result = DevKitJson.Deserialize<Guid>(compact);
-            Assert.Equal(guid, result);
+            Assert.AreEqual(guid, result);
         }
 
-        [Fact]
+        [TestMethod]
         public void Compact_ByteArray_Roundtrip()
         {
             var data = new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F };
@@ -360,14 +361,14 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.Contains("\"_t\":\"F\"", compact);
 
             var result = (byte[])DevKitJson.Deserialize(compact);
-            Assert.Equal(data, result);
+            CollectionAssert.AreEqual(data, result);
         }
 
         #endregion
 
         #region Compact Roundtrip - RemoteExecutionContext
 
-        [Fact]
+        [TestMethod]
         public void Compact_RemoteExecutionContext_Roundtrip()
         {
             var ctx = BuildTestContext();
@@ -380,22 +381,22 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.DoesNotContain("\"MessageName\"", compact);
 
             var result = DevKitJson.Deserialize<RemoteExecutionContext>(compact);
-            Assert.Equal("Update", result.MessageName);
-            Assert.Equal("account", result.PrimaryEntityName);
-            Assert.Equal(1, result.Depth);
-            Assert.Equal(40, result.Stage);
-            Assert.Equal("ContosoOrg", result.OrganizationName);
+            Assert.AreEqual("Update", result.MessageName);
+            Assert.AreEqual("account", result.PrimaryEntityName);
+            Assert.AreEqual(1, result.Depth);
+            Assert.AreEqual(40, result.Stage);
+            Assert.AreEqual("ContosoOrg", result.OrganizationName);
 
             var target = (Entity)result.InputParameters["Target"];
-            Assert.Equal("Contoso Ltd", target["name"]);
-            Assert.Equal(5000000m, ((Money)target["revenue"]).Value);
-            Assert.Equal("Jane Smith", ((EntityReference)target["primarycontactid"]).Name);
+            Assert.AreEqual("Contoso Ltd", target["name"]);
+            Assert.AreEqual(5000000m, ((Money)target["revenue"]).Value);
+            Assert.AreEqual("Jane Smith", ((EntityReference)target["primarycontactid"]).Name);
 
             var preImage = result.PreEntityImages["PreImage"];
-            Assert.Equal("Old Contoso", preImage["name"]);
+            Assert.AreEqual("Old Contoso", preImage["name"]);
         }
 
-        [Fact]
+        [TestMethod]
         public void CompactContext_MockContext_Roundtrip()
         {
             var mock = new MockPluginExecutionContext
@@ -437,13 +438,13 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.Contains("\"_t\":\"RC\"", compact);
 
             var result = DevKitJson.Deserialize<RemoteExecutionContext>(compact);
-            Assert.Equal("Create", result.MessageName);
-            Assert.Equal("contact", result.PrimaryEntityName);
-            Assert.Equal(2, result.Depth);
-            Assert.Equal(20, result.Stage);
+            Assert.AreEqual("Create", result.MessageName);
+            Assert.AreEqual("contact", result.PrimaryEntityName);
+            Assert.AreEqual(2, result.Depth);
+            Assert.AreEqual(20, result.Stage);
         }
 
-        [Fact]
+        [TestMethod]
         public void FullFormat_AllDataverseTypesJson_StillWorks()
         {
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
@@ -451,18 +452,18 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             var json = File.ReadAllText(path);
 
             var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(json);
-            Assert.Equal("Update", ctx.MessageName);
-            Assert.Equal("account", ctx.PrimaryEntityName);
+            Assert.AreEqual("Update", ctx.MessageName);
+            Assert.AreEqual("account", ctx.PrimaryEntityName);
 
             var target = (Entity)ctx.InputParameters["Target"];
-            Assert.Equal("Contoso Ltd", target["name"]);
+            Assert.AreEqual("Contoso Ltd", target["name"]);
         }
 
         #endregion
 
         #region Single Quote in Data
 
-        [Fact]
+        [TestMethod]
         public void Compact_EntityWithSingleQuoteInData_Roundtrip()
         {
             var entity = new Entity("account", Guid.NewGuid());
@@ -473,11 +474,11 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.Contains("it's a test", compact);
 
             var result = DevKitJson.Deserialize<Entity>(compact);
-            Assert.Equal("it's a test", result["name"]);
-            Assert.Equal("McDonald's restaurant", result["description"]);
+            Assert.AreEqual("it's a test", result["name"]);
+            Assert.AreEqual("McDonald's restaurant", result["description"]);
         }
 
-        [Fact]
+        [TestMethod]
         public void Compact_EntityWithDoubleQuoteInData_Roundtrip()
         {
             var entity = new Entity("account", Guid.NewGuid());
@@ -485,10 +486,10 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
 
             var compact = DevKitJson.SerializeCompact(entity);
             var result = DevKitJson.Deserialize<Entity>(compact);
-            Assert.Equal("he said \"hello\"", result["name"]);
+            Assert.AreEqual("he said \"hello\"", result["name"]);
         }
 
-        [Fact]
+        [TestMethod]
         public void Compact_EntityWithBothQuotesInData_Roundtrip()
         {
             var entity = new Entity("account", Guid.NewGuid());
@@ -497,15 +498,15 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
 
             var compact = DevKitJson.SerializeCompact(entity);
             var result = DevKitJson.Deserialize<Entity>(compact);
-            Assert.Equal("it's a \"test\"", result["name"]);
-            Assert.Equal("McDonald's says \"I'm lovin' it\"", result["description"]);
+            Assert.AreEqual("it's a \"test\"", result["name"]);
+            Assert.AreEqual("McDonald's says \"I'm lovin' it\"", result["description"]);
         }
 
         #endregion
 
         #region DebugContext Output Format - No Single Quote
 
-        [Fact]
+        [TestMethod]
         public void DebugOutput_NoSingleQuote_UsesReplaceFormat()
         {
             var ctx = BuildTestContext();
@@ -515,23 +516,23 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.EndsWith("\".Replace(\"'\", \"\\\"\");", output);
 
             var json = ExtractJsonFromDebugOutput(output);
-            Assert.NotNull(json);
+            Assert.IsNotNull(json);
 
             var result = DevKitJson.Deserialize<RemoteExecutionContext>(json);
-            Assert.Equal("Update", result.MessageName);
-            Assert.Equal("account", result.PrimaryEntityName);
-            Assert.Equal(40, result.Stage);
+            Assert.AreEqual("Update", result.MessageName);
+            Assert.AreEqual("account", result.PrimaryEntityName);
+            Assert.AreEqual(40, result.Stage);
 
             var target = (Entity)result.InputParameters["Target"];
-            Assert.Equal("Contoso Ltd", target["name"]);
-            Assert.Equal(5000000m, ((Money)target["revenue"]).Value);
+            Assert.AreEqual("Contoso Ltd", target["name"]);
+            Assert.AreEqual(5000000m, ((Money)target["revenue"]).Value);
         }
 
         #endregion
 
         #region DebugContext Output Format - With Single Quote
 
-        [Fact]
+        [TestMethod]
         public void DebugOutput_WithSingleQuote_UsesDoubledQuoteFormat()
         {
             var ctx = BuildTestContext();
@@ -544,19 +545,19 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.DoesNotContain(".Replace(", output);
 
             var json = ExtractJsonFromDebugOutput(output);
-            Assert.NotNull(json);
+            Assert.IsNotNull(json);
 
             var result = DevKitJson.Deserialize<RemoteExecutionContext>(json);
-            Assert.Equal("Update", result.MessageName);
+            Assert.AreEqual("Update", result.MessageName);
             var target = (Entity)result.InputParameters["Target"];
-            Assert.Equal("McDonald's Corp", target["name"]);
+            Assert.AreEqual("McDonald's Corp", target["name"]);
         }
 
         #endregion
 
         #region DebugContext Output Format - Both Quotes in Data
 
-        [Fact]
+        [TestMethod]
         public void DebugOutput_WithBothQuotes_UsesDoubledQuoteFormat_DataPreserved()
         {
             var ctx = BuildTestContext();
@@ -569,19 +570,19 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             Assert.EndsWith("\";", output);
 
             var json = ExtractJsonFromDebugOutput(output);
-            Assert.NotNull(json);
+            Assert.IsNotNull(json);
 
             var result = DevKitJson.Deserialize<RemoteExecutionContext>(json);
             var target = (Entity)result.InputParameters["Target"];
-            Assert.Equal("it's a \"test\"", target["name"]);
-            Assert.Equal("McDonald's says \"I'm lovin' it\"", target["description"]);
+            Assert.AreEqual("it's a \"test\"", target["name"]);
+            Assert.AreEqual("McDonald's says \"I'm lovin' it\"", target["description"]);
         }
 
         #endregion
 
         #region Compress / Decompress Roundtrip
 
-        [Fact]
+        [TestMethod]
         public void CompressDecompress_Roundtrip()
         {
             var ctx = BuildTestContext();
@@ -590,14 +591,14 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             var compressed = Compress(json);
             var decompressed = Decompress(compressed);
 
-            Assert.Equal(json, decompressed);
+            Assert.AreEqual(json, decompressed);
 
             var result = DevKitJson.Deserialize<RemoteExecutionContext>(decompressed);
-            Assert.Equal("Update", result.MessageName);
-            Assert.Equal("account", result.PrimaryEntityName);
+            Assert.AreEqual("Update", result.MessageName);
+            Assert.AreEqual("account", result.PrimaryEntityName);
         }
 
-        [Fact]
+        [TestMethod]
         public void DebugOutput_Compressed_ExtractsCorrectJson()
         {
             var ctx = BuildTestContext();
@@ -607,36 +608,36 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             var debugOutput = $"var json = \"{compressed}\".Decompress();";
 
             var extracted = ExtractJsonFromDebugOutput(debugOutput);
-            Assert.NotNull(extracted);
-            Assert.Equal(json, extracted);
+            Assert.IsNotNull(extracted);
+            Assert.AreEqual(json, extracted);
 
             var result = DevKitJson.Deserialize<RemoteExecutionContext>(extracted);
-            Assert.Equal("Update", result.MessageName);
+            Assert.AreEqual("Update", result.MessageName);
         }
 
         #endregion
 
         #region Mixed Format - Full JSON deserializes after compact changes
 
-        [Fact]
+        [TestMethod]
         public void Deserialize_FullFormat_StillWorksAfterCompactChanges()
         {
             var fullJson = "{\"__type\":\"Entity\",\"LogicalName\":\"account\",\"Id\":\"d4e5f6a7-b8c9-0123-defa-234567890123\",\"Attributes\":{\"name\":\"Test\"}}";
             var result = DevKitJson.Deserialize<Entity>(fullJson);
-            Assert.Equal("account", result.LogicalName);
-            Assert.Equal("Test", result["name"]);
+            Assert.AreEqual("account", result.LogicalName);
+            Assert.AreEqual("Test", result["name"]);
         }
 
-        [Fact]
+        [TestMethod]
         public void Deserialize_CompactFormat_Works()
         {
             var compactJson = "{\"_t\":\"E\",\"ln\":\"account\",\"id\":\"d4e5f6a7-b8c9-0123-defa-234567890123\",\"a\":{\"name\":\"Test\"}}";
             var result = DevKitJson.Deserialize<Entity>(compactJson);
-            Assert.Equal("account", result.LogicalName);
-            Assert.Equal("Test", result["name"]);
+            Assert.AreEqual("account", result.LogicalName);
+            Assert.AreEqual("Test", result["name"]);
         }
 
-        [Fact]
+        [TestMethod]
         public void Compact_SerializeThenFull_Deserialize_SameResult()
         {
             var entity = new Entity("account", Guid.NewGuid());
@@ -649,17 +650,17 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             var fromFull = DevKitJson.Deserialize<Entity>(full);
             var fromCompact = DevKitJson.Deserialize<Entity>(compact);
 
-            Assert.Equal(fromFull.LogicalName, fromCompact.LogicalName);
-            Assert.Equal(fromFull.Id, fromCompact.Id);
-            Assert.Equal(fromFull["name"], fromCompact["name"]);
-            Assert.Equal(((Money)fromFull["revenue"]).Value, ((Money)fromCompact["revenue"]).Value);
+            Assert.AreEqual(fromFull.LogicalName, fromCompact.LogicalName);
+            Assert.AreEqual(fromFull.Id, fromCompact.Id);
+            Assert.AreEqual(fromFull["name"], fromCompact["name"]);
+            Assert.AreEqual(((Money)fromFull["revenue"]).Value, ((Money)fromCompact["revenue"]).Value);
         }
 
         #endregion
 
         #region Entity with all attribute types - Compact Roundtrip
 
-        [Fact]
+        [TestMethod]
         public void Compact_Entity_AllAttributeTypes_Roundtrip()
         {
             var contactId = Guid.NewGuid();
@@ -689,24 +690,24 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             var compact = DevKitJson.SerializeCompact(entity);
             var result = DevKitJson.Deserialize<Entity>(compact);
 
-            Assert.Equal("Contoso Ltd", result["name"]);
-            Assert.Equal(500, result["numberofemployees"]);
-            Assert.Equal(9876543210L, (long)result["versionnumber"]);
-            Assert.Equal(47.6062, (double)result["new_latitude"], 4);
-            Assert.Equal(true, result["donotphone"]);
-            Assert.IsType<DateTime>(result["createdon"]);
-            Assert.IsType<Guid>(result["processid"]);
-            Assert.Equal(rawGuid, (Guid)result["processid"]);
-            Assert.Equal(5000000.99m, ((Money)result["revenue"]).Value);
-            Assert.Equal(1, ((OptionSetValue)result["statuscode"]).Value);
-            Assert.Equal(2, ((OptionSetValueCollection)result["new_industries"]).Count);
-            Assert.Equal("John Doe", ((EntityReference)result["primarycontactid"]).Name);
-            Assert.Equal("Jane Smith", ((AliasedValue)result["contact.fullname"]).Value);
-            Assert.True(((BooleanManagedProperty)result["iscustomizable"]).Value);
-            Assert.Equal(fileData, (byte[])result["entityimage"]);
-            Assert.Null(result["description"]);
-            Assert.Equal("Active", result.FormattedValues["statuscode"]);
-            Assert.Equal("$5,000,000.99", result.FormattedValues["revenue"]);
+            Assert.AreEqual("Contoso Ltd", result["name"]);
+            Assert.AreEqual(500, result["numberofemployees"]);
+            Assert.AreEqual(9876543210L, (long)result["versionnumber"]);
+            Assert.AreEqual(47.6062, (double)result["new_latitude"], 4);
+            Assert.AreEqual(true, result["donotphone"]);
+            Assert.IsInstanceOfType(result["createdon"], typeof(DateTime));
+            Assert.IsInstanceOfType(result["processid"], typeof(Guid));
+            Assert.AreEqual(rawGuid, (Guid)result["processid"]);
+            Assert.AreEqual(5000000.99m, ((Money)result["revenue"]).Value);
+            Assert.AreEqual(1, ((OptionSetValue)result["statuscode"]).Value);
+            Assert.AreEqual(2, ((OptionSetValueCollection)result["new_industries"]).Count);
+            Assert.AreEqual("John Doe", ((EntityReference)result["primarycontactid"]).Name);
+            Assert.AreEqual("Jane Smith", ((AliasedValue)result["contact.fullname"]).Value);
+            Assert.IsTrue(((BooleanManagedProperty)result["iscustomizable"]).Value);
+            CollectionAssert.AreEqual((byte[])fileData, (byte[])result["entityimage"]);
+            Assert.IsNull(result["description"]);
+            Assert.AreEqual("Active", result.FormattedValues["statuscode"]);
+            Assert.AreEqual("$5,000,000.99", result.FormattedValues["revenue"]);
         }
 
         #endregion
@@ -727,7 +728,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             return File.ReadAllText(path);
         }
 
-        [Fact]
+        [TestMethod]
         public void CompactFile_IsSmallerThanFullFile()
         {
             var full = ReadFullJsonFile();
@@ -737,45 +738,45 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             var compactBytes = Encoding.UTF8.GetByteCount(compact);
             var savings = 100.0 * (fullBytes - compactBytes) / fullBytes;
 
-            Assert.True(compactBytes < fullBytes,
+            Assert.IsTrue(compactBytes < fullBytes,
                 $"Compact ({compactBytes} bytes) should be smaller than Full ({fullBytes} bytes). Savings: {savings:F1}%");
         }
 
-        [Fact]
+        [TestMethod]
         public void CompactFile_DeserializesToRemoteExecutionContext()
         {
             var json = ReadCompactJsonFile();
             var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(json);
-            Assert.NotNull(ctx);
-            Assert.IsType<RemoteExecutionContext>(ctx);
+            Assert.IsNotNull(ctx);
+            Assert.IsInstanceOfType(ctx, typeof(RemoteExecutionContext));
         }
 
-        [Fact]
+        [TestMethod]
         public void CompactFile_ContextProperties_MatchFullFile()
         {
             var fullCtx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadFullJsonFile());
             var compactCtx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadCompactJsonFile());
 
-            Assert.Equal(fullCtx.BusinessUnitId, compactCtx.BusinessUnitId);
-            Assert.Equal(fullCtx.CorrelationId, compactCtx.CorrelationId);
-            Assert.Equal(fullCtx.Depth, compactCtx.Depth);
-            Assert.Equal(fullCtx.InitiatingUserId, compactCtx.InitiatingUserId);
-            Assert.Equal(fullCtx.IsExecutingOffline, compactCtx.IsExecutingOffline);
-            Assert.Equal(fullCtx.IsInTransaction, compactCtx.IsInTransaction);
-            Assert.Equal(fullCtx.IsolationMode, compactCtx.IsolationMode);
-            Assert.Equal(fullCtx.MessageName, compactCtx.MessageName);
-            Assert.Equal(fullCtx.Mode, compactCtx.Mode);
-            Assert.Equal(fullCtx.OrganizationId, compactCtx.OrganizationId);
-            Assert.Equal(fullCtx.OrganizationName, compactCtx.OrganizationName);
-            Assert.Equal(fullCtx.PrimaryEntityId, compactCtx.PrimaryEntityId);
-            Assert.Equal(fullCtx.PrimaryEntityName, compactCtx.PrimaryEntityName);
-            Assert.Equal(fullCtx.RequestId, compactCtx.RequestId);
-            Assert.Equal(fullCtx.SecondaryEntityName, compactCtx.SecondaryEntityName);
-            Assert.Equal(fullCtx.Stage, compactCtx.Stage);
-            Assert.Equal(fullCtx.UserId, compactCtx.UserId);
+            Assert.AreEqual(fullCtx.BusinessUnitId, compactCtx.BusinessUnitId);
+            Assert.AreEqual(fullCtx.CorrelationId, compactCtx.CorrelationId);
+            Assert.AreEqual(fullCtx.Depth, compactCtx.Depth);
+            Assert.AreEqual(fullCtx.InitiatingUserId, compactCtx.InitiatingUserId);
+            Assert.AreEqual(fullCtx.IsExecutingOffline, compactCtx.IsExecutingOffline);
+            Assert.AreEqual(fullCtx.IsInTransaction, compactCtx.IsInTransaction);
+            Assert.AreEqual(fullCtx.IsolationMode, compactCtx.IsolationMode);
+            Assert.AreEqual(fullCtx.MessageName, compactCtx.MessageName);
+            Assert.AreEqual(fullCtx.Mode, compactCtx.Mode);
+            Assert.AreEqual(fullCtx.OrganizationId, compactCtx.OrganizationId);
+            Assert.AreEqual(fullCtx.OrganizationName, compactCtx.OrganizationName);
+            Assert.AreEqual(fullCtx.PrimaryEntityId, compactCtx.PrimaryEntityId);
+            Assert.AreEqual(fullCtx.PrimaryEntityName, compactCtx.PrimaryEntityName);
+            Assert.AreEqual(fullCtx.RequestId, compactCtx.RequestId);
+            Assert.AreEqual(fullCtx.SecondaryEntityName, compactCtx.SecondaryEntityName);
+            Assert.AreEqual(fullCtx.Stage, compactCtx.Stage);
+            Assert.AreEqual(fullCtx.UserId, compactCtx.UserId);
         }
 
-        [Fact]
+        [TestMethod]
         public void CompactFile_TargetEntity_AllAttributes_MatchFullFile()
         {
             var fullCtx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadFullJsonFile());
@@ -784,44 +785,44 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             var fullTarget = (Entity)fullCtx.InputParameters["Target"];
             var compactTarget = (Entity)compactCtx.InputParameters["Target"];
 
-            Assert.Equal(fullTarget.LogicalName, compactTarget.LogicalName);
-            Assert.Equal(fullTarget.Id, compactTarget.Id);
+            Assert.AreEqual(fullTarget.LogicalName, compactTarget.LogicalName);
+            Assert.AreEqual(fullTarget.Id, compactTarget.Id);
 
-            Assert.Equal(fullTarget["name"], compactTarget["name"]);
-            Assert.Equal(((Money)fullTarget["revenue"]).Value, ((Money)compactTarget["revenue"]).Value);
-            Assert.Equal(((Money)fullTarget["creditlimit"]).Value, ((Money)compactTarget["creditlimit"]).Value);
-            Assert.Equal(((OptionSetValue)fullTarget["statuscode"]).Value, ((OptionSetValue)compactTarget["statuscode"]).Value);
-            Assert.Equal(((OptionSetValue)fullTarget["industrycode"]).Value, ((OptionSetValue)compactTarget["industrycode"]).Value);
+            Assert.AreEqual(fullTarget["name"], compactTarget["name"]);
+            Assert.AreEqual(((Money)fullTarget["revenue"]).Value, ((Money)compactTarget["revenue"]).Value);
+            Assert.AreEqual(((Money)fullTarget["creditlimit"]).Value, ((Money)compactTarget["creditlimit"]).Value);
+            Assert.AreEqual(((OptionSetValue)fullTarget["statuscode"]).Value, ((OptionSetValue)compactTarget["statuscode"]).Value);
+            Assert.AreEqual(((OptionSetValue)fullTarget["industrycode"]).Value, ((OptionSetValue)compactTarget["industrycode"]).Value);
 
             var fullContact = (EntityReference)fullTarget["primarycontactid"];
             var compactContact = (EntityReference)compactTarget["primarycontactid"];
-            Assert.Equal(fullContact.LogicalName, compactContact.LogicalName);
-            Assert.Equal(fullContact.Id, compactContact.Id);
-            Assert.Equal(fullContact.Name, compactContact.Name);
+            Assert.AreEqual(fullContact.LogicalName, compactContact.LogicalName);
+            Assert.AreEqual(fullContact.Id, compactContact.Id);
+            Assert.AreEqual(fullContact.Name, compactContact.Name);
 
             var fullBmp = (BooleanManagedProperty)fullTarget["ismanaged"];
             var compactBmp = (BooleanManagedProperty)compactTarget["ismanaged"];
-            Assert.Equal(fullBmp.Value, compactBmp.Value);
-            Assert.Equal(fullBmp.CanBeChanged, compactBmp.CanBeChanged);
+            Assert.AreEqual(fullBmp.Value, compactBmp.Value);
+            Assert.AreEqual(fullBmp.CanBeChanged, compactBmp.CanBeChanged);
 
-            Assert.Equal(fullTarget["numberofemployees"], compactTarget["numberofemployees"]);
-            Assert.Equal(fullTarget["versionnumber"], compactTarget["versionnumber"]);
-            Assert.Equal(fullTarget["donotphone"], compactTarget["donotphone"]);
-            Assert.Equal(fullTarget["donotemail"], compactTarget["donotemail"]);
+            Assert.AreEqual(fullTarget["numberofemployees"], compactTarget["numberofemployees"]);
+            Assert.AreEqual(fullTarget["versionnumber"], compactTarget["versionnumber"]);
+            Assert.AreEqual(fullTarget["donotphone"], compactTarget["donotphone"]);
+            Assert.AreEqual(fullTarget["donotemail"], compactTarget["donotemail"]);
 
-            Assert.Equal((DateTime)fullTarget["createdon"], (DateTime)compactTarget["createdon"]);
-            Assert.Equal((Guid)fullTarget["accountid"], (Guid)compactTarget["accountid"]);
-            Assert.Equal((byte[])fullTarget["entityimage"], (byte[])compactTarget["entityimage"]);
-            Assert.Null(compactTarget["nullfield"]);
+            Assert.AreEqual((DateTime)fullTarget["createdon"], (DateTime)compactTarget["createdon"]);
+            Assert.AreEqual((Guid)fullTarget["accountid"], (Guid)compactTarget["accountid"]);
+            CollectionAssert.AreEqual((byte[])fullTarget["entityimage"], (byte[])compactTarget["entityimage"]);
+            Assert.IsNull(compactTarget["nullfield"]);
 
             var fullDesc = (string)fullTarget["description"];
             var compactDesc = (string)compactTarget["description"];
-            Assert.Equal(fullDesc, compactDesc);
+            Assert.AreEqual(fullDesc, compactDesc);
             Assert.Contains("\"quotes\"", compactDesc);
             Assert.Contains("\\backslash", compactDesc);
         }
 
-        [Fact]
+        [TestMethod]
         public void CompactFile_AliasedValues_MatchFullFile()
         {
             var fullCtx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadFullJsonFile());
@@ -832,22 +833,22 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
 
             var fullAlias = (AliasedValue)fullTarget["c.fullname"];
             var compactAlias = (AliasedValue)compactTarget["c.fullname"];
-            Assert.Equal(fullAlias.EntityLogicalName, compactAlias.EntityLogicalName);
-            Assert.Equal(fullAlias.AttributeLogicalName, compactAlias.AttributeLogicalName);
-            Assert.Equal(fullAlias.Value, compactAlias.Value);
+            Assert.AreEqual(fullAlias.EntityLogicalName, compactAlias.EntityLogicalName);
+            Assert.AreEqual(fullAlias.AttributeLogicalName, compactAlias.AttributeLogicalName);
+            Assert.AreEqual(fullAlias.Value, compactAlias.Value);
 
             var fullAliasRef = (AliasedValue)fullTarget["c.parentcustomerid"];
             var compactAliasRef = (AliasedValue)compactTarget["c.parentcustomerid"];
             var fullRef = (EntityReference)fullAliasRef.Value;
             var compactRef = (EntityReference)compactAliasRef.Value;
-            Assert.Equal(fullRef.LogicalName, compactRef.LogicalName);
-            Assert.Equal(fullRef.Id, compactRef.Id);
-            Assert.Equal(fullRef.Name, compactRef.Name);
+            Assert.AreEqual(fullRef.LogicalName, compactRef.LogicalName);
+            Assert.AreEqual(fullRef.Id, compactRef.Id);
+            Assert.AreEqual(fullRef.Name, compactRef.Name);
 
-            Assert.Null(((AliasedValue)compactTarget["c.middlename"]).Value);
+            Assert.IsNull(((AliasedValue)compactTarget["c.middlename"]).Value);
         }
 
-        [Fact]
+        [TestMethod]
         public void CompactFile_EntityCollection_MatchFullFile()
         {
             var fullCtx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadFullJsonFile());
@@ -858,18 +859,18 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
 
             var fullEc = (EntityCollection)fullTarget["email_to"];
             var compactEc = (EntityCollection)compactTarget["email_to"];
-            Assert.Equal(fullEc.EntityName, compactEc.EntityName);
-            Assert.Equal(fullEc.Entities.Count, compactEc.Entities.Count);
+            Assert.AreEqual(fullEc.EntityName, compactEc.EntityName);
+            Assert.AreEqual(fullEc.Entities.Count, compactEc.Entities.Count);
 
-            Assert.Equal(
+            Assert.AreEqual(
                 ((EntityReference)fullEc.Entities[0]["partyid"]).Name,
                 ((EntityReference)compactEc.Entities[0]["partyid"]).Name);
-            Assert.Equal(
+            Assert.AreEqual(
                 ((EntityReference)fullEc.Entities[1]["partyid"]).Name,
                 ((EntityReference)compactEc.Entities[1]["partyid"]).Name);
         }
 
-        [Fact]
+        [TestMethod]
         public void CompactFile_FormattedValues_MatchFullFile()
         {
             var fullCtx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadFullJsonFile());
@@ -878,44 +879,44 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib
             var fullTarget = (Entity)fullCtx.InputParameters["Target"];
             var compactTarget = (Entity)compactCtx.InputParameters["Target"];
 
-            Assert.Equal(fullTarget.FormattedValues.Count, compactTarget.FormattedValues.Count);
+            Assert.AreEqual(fullTarget.FormattedValues.Count, compactTarget.FormattedValues.Count);
             foreach (var key in fullTarget.FormattedValues.Keys)
             {
-                Assert.Equal(fullTarget.FormattedValues[key], compactTarget.FormattedValues[key]);
+                Assert.AreEqual(fullTarget.FormattedValues[key], compactTarget.FormattedValues[key]);
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void CompactFile_Images_MatchFullFile()
         {
             var fullCtx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadFullJsonFile());
             var compactCtx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadCompactJsonFile());
 
-            Assert.Equal(
+            Assert.AreEqual(
                 fullCtx.PreEntityImages["PreImage"]["name"],
                 compactCtx.PreEntityImages["PreImage"]["name"]);
-            Assert.Equal(
+            Assert.AreEqual(
                 ((Money)fullCtx.PreEntityImages["PreImage"]["revenue"]).Value,
                 ((Money)compactCtx.PreEntityImages["PreImage"]["revenue"]).Value);
 
-            Assert.Equal(
+            Assert.AreEqual(
                 fullCtx.PostEntityImages["PostImage"]["name"],
                 compactCtx.PostEntityImages["PostImage"]["name"]);
-            Assert.Equal(
+            Assert.AreEqual(
                 ((Money)fullCtx.PostEntityImages["PostImage"]["revenue"]).Value,
                 ((Money)compactCtx.PostEntityImages["PostImage"]["revenue"]).Value);
         }
 
-        [Fact]
+        [TestMethod]
         public void CompactFile_SharedVariables_MatchFullFile()
         {
             var fullCtx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadFullJsonFile());
             var compactCtx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadCompactJsonFile());
 
-            Assert.Equal(fullCtx.SharedVariables.Count, compactCtx.SharedVariables.Count);
-            Assert.Equal(fullCtx.SharedVariables["IsAutoTransact"], compactCtx.SharedVariables["IsAutoTransact"]);
-            Assert.Equal(fullCtx.SharedVariables["PluginStep"], compactCtx.SharedVariables["PluginStep"]);
-            Assert.Equal(fullCtx.SharedVariables["RetryCount"], compactCtx.SharedVariables["RetryCount"]);
+            Assert.AreEqual(fullCtx.SharedVariables.Count, compactCtx.SharedVariables.Count);
+            Assert.AreEqual(fullCtx.SharedVariables["IsAutoTransact"], compactCtx.SharedVariables["IsAutoTransact"]);
+            Assert.AreEqual(fullCtx.SharedVariables["PluginStep"], compactCtx.SharedVariables["PluginStep"]);
+            Assert.AreEqual(fullCtx.SharedVariables["RetryCount"], compactCtx.SharedVariables["RetryCount"]);
         }
 
         #endregion
