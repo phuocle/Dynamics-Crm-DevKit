@@ -34,6 +34,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.ManageRibbon;
 /// asyncoperation, solutioncomponent) are intercepted with hand-built collections.
 /// </summary>
 [TestClass]
+[DoNotParallelize]
 public sealed class ManageRibbonFakeXrmEasySweepTests
 {
     private static readonly string OrigCwd = Environment.CurrentDirectory;

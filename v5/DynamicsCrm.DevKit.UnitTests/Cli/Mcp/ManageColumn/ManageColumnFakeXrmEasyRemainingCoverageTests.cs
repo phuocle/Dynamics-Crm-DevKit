@@ -37,6 +37,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.ManageColumn;
 /// propagation waits are skipped; "published" is always false in these tests.
 /// </summary>
 [TestClass]
+[DoNotParallelize]
 public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
 {
     private static readonly string OrigCwd = Environment.CurrentDirectory;

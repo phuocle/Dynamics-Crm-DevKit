@@ -32,6 +32,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.ManageView;
 /// IWebApiExecutor; mutations hit FakeXrmEasy CRUD.
 /// </summary>
 [TestClass]
+[DoNotParallelize]
 public sealed class ManageViewFakeXrmEasyFullCoverageTests
 {
     private static readonly string OrigCwd = Environment.CurrentDirectory;

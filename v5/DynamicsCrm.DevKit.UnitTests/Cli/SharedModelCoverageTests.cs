@@ -11,6 +11,7 @@ using System.Reflection;
 namespace DynamicsCrm.DevKit.UnitTests.Cli;
 
 [TestClass]
+[DoNotParallelize]
 public class SharedModelCoverageTests
 {
     [TestMethod]

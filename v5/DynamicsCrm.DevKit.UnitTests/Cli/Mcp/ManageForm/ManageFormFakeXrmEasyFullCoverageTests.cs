@@ -28,6 +28,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.ManageForm;
 /// FormOrgService decorator; form row CRUD hits FakeXrmEasy.
 /// </summary>
 [TestClass]
+[DoNotParallelize]
 public sealed class ManageFormFakeXrmEasyFullCoverageTests
 {
     private static readonly string OrigCwd = Environment.CurrentDirectory;

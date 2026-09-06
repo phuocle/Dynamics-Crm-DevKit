@@ -30,6 +30,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.ManageReport;
 /// locally; create/download/update touch only the temp workspace on disk.
 /// </summary>
 [TestClass]
+[DoNotParallelize]
 public sealed class ManageReportFakeXrmEasyFullCoverageTests
 {
     private static readonly string OrigCwd = Environment.CurrentDirectory;

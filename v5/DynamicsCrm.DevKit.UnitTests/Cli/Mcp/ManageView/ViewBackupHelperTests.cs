@@ -8,6 +8,7 @@ using DynamicsCrm.DevKit.UnitTests.Cli.Mcp.Shared;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.ManageView;
 
 [TestClass]
+[DoNotParallelize]
 public class ViewBackupHelperTests
 {
     private static readonly Assembly CliAssembly =

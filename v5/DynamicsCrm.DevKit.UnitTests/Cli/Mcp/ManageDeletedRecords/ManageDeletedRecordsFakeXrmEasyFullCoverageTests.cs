@@ -36,6 +36,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.ManageDeletedRecords;
 /// IWebApiExecutor POST /recyclebinconfigs.
 /// </summary>
 [TestClass]
+[DoNotParallelize]
 public sealed class ManageDeletedRecordsFakeXrmEasyFullCoverageTests
 {
     private static readonly string OrigCwd = Environment.CurrentDirectory;

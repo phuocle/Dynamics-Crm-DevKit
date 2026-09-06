@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.Infrastructure;
 
 [TestClass]
+[DoNotParallelize]
 public class McpCommandCoverageTests
 {
     [TestMethod]

@@ -31,6 +31,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.GetSolutionComponents;
 /// exception branch. All Dataverse answers are hand-built in a decorator org service.
 /// </summary>
 [TestClass]
+[DoNotParallelize]
 public sealed class GetSolutionComponentsFakeXrmEasySweepTests
 {
     private static readonly string OrigCwd = Environment.CurrentDirectory;

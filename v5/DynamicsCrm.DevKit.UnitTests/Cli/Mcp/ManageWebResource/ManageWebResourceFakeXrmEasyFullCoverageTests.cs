@@ -31,6 +31,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.ManageWebResource;
 /// Environment.CurrentDirectory and removed in TestCleanup.
 /// </summary>
 [TestClass]
+[DoNotParallelize]
 public sealed class ManageWebResourceFakeXrmEasyFullCoverageTests
 {
     private static readonly string OrigCwd = Environment.CurrentDirectory;

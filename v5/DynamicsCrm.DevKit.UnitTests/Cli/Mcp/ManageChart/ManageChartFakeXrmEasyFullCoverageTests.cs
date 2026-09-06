@@ -28,6 +28,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.ManageChart;
 /// publish requests go through the ChartOrgService decorator; mutations hit FakeXrmEasy.
 /// </summary>
 [TestClass]
+[DoNotParallelize]
 public sealed class ManageChartFakeXrmEasyFullCoverageTests
 {
     private static readonly string OrigCwd = Environment.CurrentDirectory;

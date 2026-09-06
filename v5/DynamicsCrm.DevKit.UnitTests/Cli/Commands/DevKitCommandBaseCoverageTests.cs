@@ -21,6 +21,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Commands;
 /// documented never-throw catch paths.
 /// </summary>
 [TestClass]
+[DoNotParallelize]
 public sealed class DevKitCommandBaseCoverageTests
 {
     private static readonly string OrigCwd = Environment.CurrentDirectory;

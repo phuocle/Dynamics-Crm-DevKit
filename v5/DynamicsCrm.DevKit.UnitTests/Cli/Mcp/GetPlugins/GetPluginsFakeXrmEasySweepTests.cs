@@ -31,6 +31,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.GetPlugins;
 /// decorator org service that parses the fetch and filters seeded rows.
 /// </summary>
 [TestClass]
+[DoNotParallelize]
 public sealed class GetPluginsFakeXrmEasySweepTests
 {
     private static readonly string OrigCwd = Environment.CurrentDirectory;

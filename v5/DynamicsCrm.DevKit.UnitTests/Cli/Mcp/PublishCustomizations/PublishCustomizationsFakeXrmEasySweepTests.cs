@@ -31,6 +31,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp.PublishCustomizations;
 /// All Dataverse answers are hand-built in a decorator org service.
 /// </summary>
 [TestClass]
+[DoNotParallelize]
 public sealed class PublishCustomizationsFakeXrmEasySweepTests
 {
     private static readonly string OrigCwd = Environment.CurrentDirectory;
