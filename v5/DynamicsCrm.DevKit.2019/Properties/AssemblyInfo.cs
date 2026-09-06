@@ -31,3 +31,5 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("4.44.44.44")]
 [assembly: AssemblyFileVersion("4.44.44.44")]
+
+[assembly: InternalsVisibleTo("DynamicsCrm.DevKit.2019.UnitTests")]

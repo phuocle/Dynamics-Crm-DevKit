@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Task = System.Threading.Tasks.Task;
@@ -29,6 +30,7 @@ namespace DynamicsCrm.DevKit2019
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExistsAndFullyLoaded_string, PackageAutoLoadFlags.BackgroundLoad)]
     [Guid(DynamicsCrmDevKit2019Package.PackageGuidString)]
+    [ExcludeFromCodeCoverage]
     public sealed class DynamicsCrmDevKit2019Package : AsyncPackage
     {
          /// <summary>
