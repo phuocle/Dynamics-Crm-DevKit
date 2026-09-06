@@ -9,11 +9,13 @@ using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Task = System.Threading.Tasks.Task;
 
 namespace DynamicsCrm.DevKit2019
 {
+    [ExcludeFromCodeCoverage]
     internal sealed class UploadReportCommand
     {
         private readonly AsyncPackage package;

@@ -1,10 +1,12 @@
 ﻿using Microsoft.Xrm.Tooling.CrmConnectControl;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Threading;
 
 namespace DynamicsCrm.DevKit2019
 {
+    [ExcludeFromCodeCoverage]
     public partial class FormLogin
     {
         private bool bIsConnectedComplete = false;

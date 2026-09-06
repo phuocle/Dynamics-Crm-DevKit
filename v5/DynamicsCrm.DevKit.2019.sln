@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Tool.Uni
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Tool", "DynamicsCrm.DevKit.Tool\DynamicsCrm.DevKit.Tool.csproj", "{9174E39C-178B-44F2-8BA5-990B11D855D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.2019.UnitTests", "DynamicsCrm.DevKit.2019.UnitTests\DynamicsCrm.DevKit.2019.UnitTests.csproj", "{08642750-AF4C-4E93-919F-CAD96E3A179C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{9174E39C-178B-44F2-8BA5-990B11D855D3}.Release|x64.Build.0 = Release|Any CPU
 		{9174E39C-178B-44F2-8BA5-990B11D855D3}.Release|x86.ActiveCfg = Release|Any CPU
 		{9174E39C-178B-44F2-8BA5-990B11D855D3}.Release|x86.Build.0 = Release|Any CPU
+		{08642750-AF4C-4E93-919F-CAD96E3A179C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08642750-AF4C-4E93-919F-CAD96E3A179C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08642750-AF4C-4E93-919F-CAD96E3A179C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{08642750-AF4C-4E93-919F-CAD96E3A179C}.Debug|x64.Build.0 = Debug|Any CPU
+		{08642750-AF4C-4E93-919F-CAD96E3A179C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{08642750-AF4C-4E93-919F-CAD96E3A179C}.Debug|x86.Build.0 = Debug|Any CPU
+		{08642750-AF4C-4E93-919F-CAD96E3A179C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08642750-AF4C-4E93-919F-CAD96E3A179C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08642750-AF4C-4E93-919F-CAD96E3A179C}.Release|x64.ActiveCfg = Release|Any CPU
+		{08642750-AF4C-4E93-919F-CAD96E3A179C}.Release|x64.Build.0 = Release|Any CPU
+		{08642750-AF4C-4E93-919F-CAD96E3A179C}.Release|x86.ActiveCfg = Release|Any CPU
+		{08642750-AF4C-4E93-919F-CAD96E3A179C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

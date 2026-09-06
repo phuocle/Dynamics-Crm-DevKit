@@ -15,13 +15,13 @@ namespace DynamicsCrm.DevKit2019
 {
     public partial class FormReportMapping : Window
     {
-        private readonly CrmServiceClient serviceClient;
+        private readonly IOrganizationService serviceClient;
         private readonly string fullFileName;
         private readonly DeployReport cachedMapping;
 
         public DeployReport SelectedReport { get; private set; }
 
-        public FormReportMapping(CrmServiceClient serviceClient, string fullFileName, DeployReport cachedMapping)
+        public FormReportMapping(IOrganizationService serviceClient, string fullFileName, DeployReport cachedMapping)
         {
             InitializeComponent();
             this.serviceClient = serviceClient;
@@ -88,7 +88,7 @@ namespace DynamicsCrm.DevKit2019
             DialogResult = false;
         }
 
-        private static List<DeployReport> GetReports(CrmServiceClient serviceClient, string fullFileName)
+        private static List<DeployReport> GetReports(IOrganizationService serviceClient, string fullFileName)
         {
             var reportName = Path.GetFileNameWithoutExtension(fullFileName);
             var reportFileName = Path.GetFileName(fullFileName);
