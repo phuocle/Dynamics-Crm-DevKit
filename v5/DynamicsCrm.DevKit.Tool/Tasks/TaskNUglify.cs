@@ -29,8 +29,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             {
                 case ".html": result = Uglify.Html(content); break;
                 case ".css": result = Uglify.Css(content); break;
-                case ".js": result = Uglify.Js(content); break;
-                default: return;
+                default: result = Uglify.Js(content); break;
             }
 
             if (result.HasErrors)
