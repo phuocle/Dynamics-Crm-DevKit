@@ -20,20 +20,25 @@ namespace DynamicsCrm.DevKit.Tool.Commands
         }
     }
 
-    internal sealed class DecryptCommand : Command<DecryptSettings>
+    internal class DecryptCommand : Command<DecryptSettings>
     {
         protected override int Execute(CommandContext context, DecryptSettings settings, CancellationToken cancellation)
         {
             try
             {
-                TaskDecrypt.Run(settings.Password);
-                return 0;
+                return RunTask(settings);
             }
             catch (System.Exception ex)
             {
                 AnsiConsole.MarkupLine($"[red]Error:[/] {Markup.Escape(ex.Message)}");
                 return 1;
             }
+        }
+
+        internal virtual int RunTask(DecryptSettings settings)
+        {
+            TaskDecrypt.Run(settings.Password);
+            return 0;
         }
     }
 }

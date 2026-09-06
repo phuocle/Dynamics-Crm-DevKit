@@ -26,20 +26,25 @@ namespace DynamicsCrm.DevKit.Tool.Commands
         }
     }
 
-    internal sealed class NUglifyCommand : Command<NUglifySettings>
+    internal class NUglifyCommand : Command<NUglifySettings>
     {
         protected override int Execute(CommandContext context, NUglifySettings settings, CancellationToken cancellation)
         {
             try
             {
-                TaskNUglify.Run(settings.Source, settings.Destination);
-                return 0;
+                return RunTask(settings);
             }
             catch (System.Exception ex)
             {
                 AnsiConsole.MarkupLine($"[red]Error:[/] {Markup.Escape(ex.Message)}");
                 return 1;
             }
+        }
+
+        internal virtual int RunTask(NUglifySettings settings)
+        {
+            TaskNUglify.Run(settings.Source, settings.Destination);
+            return 0;
         }
     }
 }

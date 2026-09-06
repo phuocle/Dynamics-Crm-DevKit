@@ -13,6 +13,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
 {
     internal class TaskCreateEntity
     {
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static void Run(string connectionString, string solution, string entityDisplayName, string entityType)
         {
             AnsiConsole.MarkupLine($"[cyan]Connecting to Dataverse...[/]");
@@ -20,8 +21,12 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             if (!serviceClient.IsReady)
                 throw new Exception($"Cannot connect to Dataverse: {serviceClient.LastError}");
             AnsiConsole.MarkupLine($"[green]Connected![/]");
+            Run((IOrganizationService)serviceClient, solution, entityDisplayName, entityType);
+        }
 
-            var prefix = GetPrefix(serviceClient, solution);
+        internal static void Run(IOrganizationService service, string solution, string entityDisplayName, string entityType)
+        {
+            var prefix = GetPrefix(service, solution);
             if (prefix == null)
                 throw new Exception($"Cannot find publisher prefix for solution '{solution}'.");
 
@@ -29,14 +34,14 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             AnsiConsole.MarkupLine($"[cyan]Creating entity:[/] [yellow]{entityLogicalName}[/] (type: {entityType})");
 
             var request = BuildCreateEntityRequest(prefix, entityLogicalName, entityDisplayName, entityType, solution);
-            serviceClient.Execute(request);
+            service.Execute(request);
             AnsiConsole.MarkupLine($"[green]Entity created successfully![/]");
 
-            CreateDebugContextAttribute(serviceClient, prefix, entityLogicalName, solution);
+            CreateDebugContextAttribute(service, prefix, entityLogicalName, solution);
 
-            UpdateMainForm(serviceClient, entityLogicalName, entityDisplayName, entityType);
-            UpdateQuickViewForm(serviceClient, entityLogicalName, entityDisplayName);
-            UpdateCardForm(serviceClient, entityLogicalName, entityDisplayName);
+            UpdateMainForm(service, entityLogicalName, entityDisplayName, entityType);
+            UpdateQuickViewForm(service, entityLogicalName, entityDisplayName);
+            UpdateCardForm(service, entityLogicalName, entityDisplayName);
 
             AnsiConsole.MarkupLine($"[green]All forms updated for entity[/] [yellow]{entityLogicalName}[/]");
         }
@@ -100,7 +105,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             return request;
         }
 
-        private static void CreateDebugContextAttribute(ServiceClient serviceClient, string prefix, string entityLogicalName, string solution)
+        private static void CreateDebugContextAttribute(IOrganizationService service, string prefix, string entityLogicalName, string solution)
         {
             AnsiConsole.MarkupLine($"[cyan]Creating debug_context attribute...[/]");
             var debugContextRequest = new CreateAttributeRequest
@@ -119,15 +124,15 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 },
                 SolutionUniqueName = solution
             };
-            serviceClient.Execute(debugContextRequest);
+            service.Execute(debugContextRequest);
             AnsiConsole.MarkupLine($"[green]debug_context attribute created![/]");
         }
 
-        private static void UpdateMainForm(ServiceClient serviceClient, string entityLogicalName, string entityDisplayName, string entityType)
+        private static void UpdateMainForm(IOrganizationService service, string entityLogicalName, string entityDisplayName, string entityType)
         {
             AnsiConsole.MarkupLine($"[cyan]Updating main form...[/]");
             var fetchXml = BuildFormFetchXml(entityLogicalName, formType: "2");
-            var rows = serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return;
 
             var formxml = ResourceHelper.ReadResource($"{entityType}.xml");
@@ -140,15 +145,15 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 ["formxml"] = updatedXml,
                 ["name"] = entityDisplayName
             };
-            serviceClient.Update(update);
+            service.Update(update);
             AnsiConsole.MarkupLine($"[green]Main form updated![/]");
         }
 
-        private static void UpdateQuickViewForm(ServiceClient serviceClient, string entityLogicalName, string entityDisplayName)
+        private static void UpdateQuickViewForm(IOrganizationService service, string entityLogicalName, string entityDisplayName)
         {
             AnsiConsole.MarkupLine($"[cyan]Updating quick view form...[/]");
             var fetchXml = BuildFormFetchXml(entityLogicalName, formType: "6");
-            var rows = serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return;
 
             var formid = rows.Entities.First().GetAttributeValue<Guid>("formid");
@@ -156,15 +161,15 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             {
                 ["name"] = $"{entityDisplayName} Quick View"
             };
-            serviceClient.Update(update);
+            service.Update(update);
             AnsiConsole.MarkupLine($"[green]Quick view form updated![/]");
         }
 
-        private static void UpdateCardForm(ServiceClient serviceClient, string entityLogicalName, string entityDisplayName)
+        private static void UpdateCardForm(IOrganizationService service, string entityLogicalName, string entityDisplayName)
         {
             AnsiConsole.MarkupLine($"[cyan]Updating card form...[/]");
             var fetchXml = BuildFormFetchXml(entityLogicalName, formType: "11");
-            var rows = serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return;
 
             var formid = rows.Entities.First().GetAttributeValue<Guid>("formid");
@@ -172,7 +177,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             {
                 ["name"] = $"{entityDisplayName} Card"
             };
-            serviceClient.Update(update);
+            service.Update(update);
             AnsiConsole.MarkupLine($"[green]Card form updated![/]");
         }
 
@@ -196,7 +201,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
 </fetch>";
         }
 
-        private static string GetPrefix(ServiceClient serviceClient, string solution)
+        private static string GetPrefix(IOrganizationService service, string solution)
         {
             var solutionQuery = new QueryExpression("solution")
             {
@@ -209,13 +214,13 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                     }
                 }
             };
-            var solutionEntity = serviceClient.RetrieveMultiple(solutionQuery).Entities.FirstOrDefault();
+            var solutionEntity = service.RetrieveMultiple(solutionQuery).Entities.FirstOrDefault();
             if (solutionEntity == null) return null;
 
             var publisherReference = solutionEntity.GetAttributeValue<EntityReference>("publisherid");
             if (publisherReference == null) return null;
 
-            var publisher = serviceClient.Retrieve("publisher", publisherReference.Id, new ColumnSet("customizationprefix"));
+            var publisher = service.Retrieve("publisher", publisherReference.Id, new ColumnSet("customizationprefix"));
             return publisher.GetAttributeValue<string>("customizationprefix");
         }
     }

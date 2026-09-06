@@ -41,20 +41,31 @@ namespace DynamicsCrm.DevKit.Tool.Commands
         }
     }
 
-    internal sealed class CreateEntityCommand : Command<CreateEntitySettings>
+    internal class CreateEntityCommand : Command<CreateEntitySettings>
     {
         protected override int Execute(CommandContext context, CreateEntitySettings settings, CancellationToken cancellation)
         {
             try
             {
-                TaskCreateEntity.Run(settings.Connection, settings.Solution, settings.EntityDisplayName, settings.EntityType);
-                return 0;
+                return RunTask(settings);
             }
             catch (System.Exception ex)
             {
                 AnsiConsole.MarkupLine($"[red]Error:[/] {Markup.Escape(ex.Message)}");
                 return 1;
             }
+        }
+
+        internal virtual int RunTask(CreateEntitySettings settings)
+        {
+            RunTaskCore(settings);
+            return 0;
+        }
+
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal virtual void RunTaskCore(CreateEntitySettings settings)
+        {
+            TaskCreateEntity.Run(settings.Connection, settings.Solution, settings.EntityDisplayName, settings.EntityType);
         }
     }
 }

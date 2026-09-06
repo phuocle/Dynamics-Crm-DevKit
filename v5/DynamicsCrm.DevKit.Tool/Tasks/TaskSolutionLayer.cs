@@ -95,6 +95,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
 
         private static List<Tuple<int, string>> componentDefs;
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static void Run(string connectionString, string[] solutions, string outputFile)
         {
             AnsiConsole.MarkupLine("[cyan]Connecting to Dataverse...[/]");
@@ -102,14 +103,18 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             if (!serviceClient.IsReady)
                 throw new Exception($"Cannot connect to Dataverse: {serviceClient.LastError}");
             AnsiConsole.MarkupLine("[green]Connected![/]");
+            Run((IOrganizationService)serviceClient, solutions, outputFile);
+        }
 
+        internal static void Run(IOrganizationService service, string[] solutions, string outputFile)
+        {
             var stopwatch = Stopwatch.StartNew();
-            LoadComponentDefinitions(serviceClient);
+            LoadComponentDefinitions(service);
             var result = new StringBuilder();
 
             foreach (var solutionName in solutions)
             {
-                result.Append(CheckSolution(serviceClient, solutionName));
+                result.Append(CheckSolution(service, solutionName));
                 if (outputFile != null)
                 {
                     File.WriteAllText(outputFile, result.ToString(), new UTF8Encoding(false));
@@ -130,11 +135,11 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             }
         }
 
-        private static void LoadComponentDefinitions(ServiceClient serviceClient)
+        private static void LoadComponentDefinitions(IOrganizationService service)
         {
             componentDefs = new List<Tuple<int, string>>();
 
-            var allDefs = serviceClient.RetrieveMultiple(new QueryExpression("solutioncomponentdefinition")
+            var allDefs = service.RetrieveMultiple(new QueryExpression("solutioncomponentdefinition")
             {
                 NoLock = true,
                 ColumnSet = new ColumnSet("solutioncomponenttype", "name")
@@ -145,7 +150,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 componentDefs.Add(new Tuple<int, string>(d.GetAttributeValue<int>("solutioncomponenttype"), d.GetAttributeValue<string>("name")));
             }
 
-            var response = (RetrieveOptionSetResponse)serviceClient.Execute(
+            var response = (RetrieveOptionSetResponse)service.Execute(
                 new RetrieveOptionSetRequest { Name = "componenttype" });
             var options = ((OptionSetMetadata)response.OptionSetMetadata).Options;
 
@@ -157,7 +162,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             componentDefs.Add(new Tuple<int, string>(80, "Model driven app"));
         }
 
-        private static Guid GetSolutionId(ServiceClient serviceClient, string solutionName)
+        private static Guid GetSolutionId(IOrganizationService service, string solutionName)
         {
             var query = new QueryExpression("solution")
             {
@@ -166,16 +171,16 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             };
             query.Criteria.AddCondition("uniquename", ConditionOperator.Equal, solutionName);
 
-            var rows = serviceClient.RetrieveMultiple(query);
+            var rows = service.RetrieveMultiple(query);
             if (rows.Entities.Count != 1)
                 throw new Exception($"Solution '{solutionName}' not found in this environment");
 
             return rows.Entities[0].Id;
         }
 
-        private static List<Entity> LoadComponents(ServiceClient serviceClient, Guid solutionId)
+        private static List<Entity> LoadComponents(IOrganizationService service, Guid solutionId)
         {
-            var allComponents = serviceClient.RetrieveMultiple(new QueryExpression("solutioncomponent")
+            var allComponents = service.RetrieveMultiple(new QueryExpression("solutioncomponent")
             {
                 NoLock = true,
                 ColumnSet = new ColumnSet("objectid", "componenttype", "rootcomponentbehavior"),
@@ -201,7 +206,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                     },
                     Properties = new MetadataPropertiesExpression("MetadataId", "LogicalName", "ManyToOneRelationships")
                 };
-                var activityMetadatas = ((RetrieveMetadataChangesResponse)serviceClient.Execute(
+                var activityMetadatas = ((RetrieveMetadataChangesResponse)service.Execute(
                     new RetrieveMetadataChangesRequest { Query = activityQuery })).EntityMetadata.ToList();
 
                 var excludeIds = activityMetadatas
@@ -259,7 +264,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                         }
                     }
                 };
-                var entityMetadatas = ((RetrieveMetadataChangesResponse)serviceClient.Execute(
+                var entityMetadatas = ((RetrieveMetadataChangesResponse)service.Execute(
                     new RetrieveMetadataChangesRequest { Query = entityQuery })).EntityMetadata.ToList();
 
                 var entityLogicalNames = entityMetadatas.Select(e => e.LogicalName).ToArray();
@@ -292,7 +297,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                         ["componenttype"] = new OptionSetValue(3)
                     }));
 
-                var forms = serviceClient.RetrieveMultiple(new QueryExpression("systemform")
+                var forms = service.RetrieveMultiple(new QueryExpression("systemform")
                 {
                     NoLock = true,
                     ColumnSet = new ColumnSet("formid"),
@@ -310,7 +315,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                     ["componenttype"] = new OptionSetValue(60)
                 }));
 
-                var views = serviceClient.RetrieveMultiple(new QueryExpression("savedquery")
+                var views = service.RetrieveMultiple(new QueryExpression("savedquery")
                 {
                     NoLock = true,
                     ColumnSet = new ColumnSet("savedqueryid"),
@@ -328,7 +333,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                     ["componenttype"] = new OptionSetValue(26)
                 }));
 
-                var charts = serviceClient.RetrieveMultiple(new QueryExpression("savedqueryvisualization")
+                var charts = service.RetrieveMultiple(new QueryExpression("savedqueryvisualization")
                 {
                     NoLock = true,
                     ColumnSet = new ColumnSet("savedqueryvisualizationid"),
@@ -350,11 +355,11 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             return components;
         }
 
-        private static string CheckSolution(ServiceClient serviceClient, string solutionName)
+        private static string CheckSolution(IOrganizationService service, string solutionName)
         {
             AnsiConsole.MarkupLine($"[cyan]Checking solution:[/] [yellow]{Markup.Escape(solutionName)}[/]");
-            var solutionId = GetSolutionId(serviceClient, solutionName);
-            var components = LoadComponents(serviceClient, solutionId);
+            var solutionId = GetSolutionId(service, solutionName);
+            var components = LoadComponents(service, solutionId);
 
             var grouped = components.GroupBy(c => c.GetAttributeValue<OptionSetValue>("componenttype")?.Value).OrderBy(g => g.Key);
             var result = new StringBuilder();
@@ -371,14 +376,14 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 result.Append($"\t{def.Item2} ({entities.Count})\r\n");
                 AnsiConsole.MarkupLine($"  [dim]Checking:[/] {Markup.Escape(def.Item2)} ({entities.Count})");
                 
-                result.Append(CheckActiveLayers(serviceClient, entities));
+                result.Append(CheckActiveLayers(service, entities));
                 result.Append("\r\n");
             }
             AnsiConsole.MarkupLine($"[green]Done:[/] [yellow]{Markup.Escape(solutionName)}[/]");
             return result.ToString();
         }
 
-        private static string CheckActiveLayers(ServiceClient serviceClient, List<Entity> entities)
+        private static string CheckActiveLayers(IOrganizationService service, List<Entity> entities)
         {
             var result = new StringBuilder();
             var bulk = new ExecuteMultipleRequest
@@ -431,8 +436,8 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
 
                 if (bulk.Requests.Count == 200 || i == entities.Count - 1)
                 {
-                    var bulkResponse = (ExecuteMultipleResponse)serviceClient.Execute(bulk);
-                    result.Append(ProcessBatchResults(serviceClient, bulk, bulkResponse));
+                    var bulkResponse = (ExecuteMultipleResponse)service.Execute(bulk);
+                    result.Append(ProcessBatchResults(service, bulk, bulkResponse));
                     bulk.Requests.Clear();
                 }
             }
@@ -440,7 +445,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             return result.ToString();
         }
 
-        private static string ProcessBatchResults(ServiceClient serviceClient, ExecuteMultipleRequest bulk, ExecuteMultipleResponse bulkResponse)
+        private static string ProcessBatchResults(IOrganizationService service, ExecuteMultipleRequest bulk, ExecuteMultipleResponse bulkResponse)
         {
             var result = new StringBuilder();
             var entityIds = new List<Guid>();
@@ -518,7 +523,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 entityIds.ForEach(id =>
                     entityQuery.Criteria.Conditions.Add(
                         new MetadataConditionExpression("MetadataId", MetadataConditionOperator.Equals, id)));
-                var emds = ((RetrieveMetadataChangesResponse)serviceClient.Execute(
+                var emds = ((RetrieveMetadataChangesResponse)service.Execute(
                     new RetrieveMetadataChangesRequest { Query = entityQuery })).EntityMetadata.ToList();
 
                 foreach (var response in bulkResponse.Responses)

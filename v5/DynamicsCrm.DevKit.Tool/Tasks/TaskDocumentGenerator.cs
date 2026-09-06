@@ -123,8 +123,6 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
 
         private static string ParseFormulaXml(string xml, int sourceType)
         {
-            try
-            {
                 if (sourceType == 2)
                 {
                     var aggMatch = Regex.Match(xml, @"ExpressionOperator""\>(?<op>Sum|Count|Min|Max|Avg)\<");
@@ -180,7 +178,6 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                         case "Add": operators.Add("+"); break;
                         case "Subtract": operators.Add("-"); break;
                         case "Divide": operators.Add("/"); break;
-                        default: operators.Add(op); break;
                     }
                 }
                 if (fieldRefs.Count == 1 && operators.Count == 0)
@@ -198,11 +195,6 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 if (allOperands.Count > 0)
                     return string.Join(", ", allOperands);
                 return "See Dataverse UI";
-            }
-            catch
-            {
-                return "See Dataverse UI";
-            }
         }
 
         private static string GetToolName()
@@ -224,7 +216,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             return trimmed;
         }
 
-        private static EntityMetadata[] ReadEntityMetadata(ServiceClient service)
+        private static EntityMetadata[] ReadEntityMetadata(IOrganizationService service)
         {
             var request = new RetrieveAllEntitiesRequest()
             {
@@ -239,7 +231,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
         /// 1. input.TimeZone override (e.g. "+7", "-6", "SE Asia Standard Time")
         /// 2. WhoAmI user's timezone from Dataverse usersettings → timezonedefinition
         /// </summary>
-        private static TimeSpan ResolveTimeZoneOffset(string timeZoneInput, ServiceClient serviceClient)
+        private static TimeSpan ResolveTimeZoneOffset(string timeZoneInput, IOrganizationService service)
         {
             if (!string.IsNullOrWhiteSpace(timeZoneInput))
             {
@@ -256,15 +248,15 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 }
                 catch (TimeZoneNotFoundException) { }
             }
-            return GetUserTimeZoneOffset(serviceClient);
+            return GetUserTimeZoneOffset(service);
         }
 
-        private static TimeSpan GetUserTimeZoneOffset(ServiceClient serviceClient)
+        private static TimeSpan GetUserTimeZoneOffset(IOrganizationService service)
         {
             try
             {
-                var whoAmI = (Microsoft.Crm.Sdk.Messages.WhoAmIResponse)serviceClient.Execute(new Microsoft.Crm.Sdk.Messages.WhoAmIRequest());
-                var userSettings = serviceClient.Retrieve("usersettings", whoAmI.UserId, new ColumnSet("timezonecode"));
+                var whoAmI = (Microsoft.Crm.Sdk.Messages.WhoAmIResponse)service.Execute(new Microsoft.Crm.Sdk.Messages.WhoAmIRequest());
+                var userSettings = service.Retrieve("usersettings", whoAmI.UserId, new ColumnSet("timezonecode"));
                 var timeZoneCode = userSettings.GetAttributeValue<int?>("timezonecode");
                 if (timeZoneCode == null) return TimeSpan.Zero;
 
@@ -276,7 +268,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
     </filter>
   </entity>
 </fetch>";
-                var tzRows = serviceClient.RetrieveMultiple(new FetchExpression(tzFetch));
+                var tzRows = service.RetrieveMultiple(new FetchExpression(tzFetch));
                 if (tzRows.Entities.Count > 0)
                 {
                     var standardName = tzRows.Entities[0].GetAttributeValue<string>("standardname");
@@ -294,42 +286,48 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static void Run(string connectionString, string folder, string solution, string timeZone)
         {
             AnsiConsole.MarkupLine($"[cyan]Connecting to Dataverse...[/]");
 
-            var serviceClient = new ServiceClient(connectionString);
-            if (!serviceClient.IsReady)
-                throw new InvalidOperationException($"Cannot connect to Dataverse: {serviceClient.LastError}");
+            var service = new ServiceClient(connectionString);
+            if (!service.IsReady)
+                throw new InvalidOperationException($"Cannot connect to Dataverse: {service.LastError}");
 
+            Run((IOrganizationService)service, folder, solution, timeZone);
+        }
+
+        internal static void Run(IOrganizationService service, string folder, string solution, string timeZone)
+        {
             if (!Path.IsPathRooted(folder))
                 folder = Path.GetFullPath(folder);
             Directory.CreateDirectory(folder);
 
             var instance = new TaskDocumentGenerator();
-            instance.Generate(serviceClient, folder, solution, timeZone);
+            instance.Generate(service, folder, solution, timeZone);
         }
 
         private string outputFolder;
         private string solutionName;
 
-        private void Generate(ServiceClient serviceClient, string folder, string solution, string timeZone)
+        private void Generate(IOrganizationService service, string folder, string solution, string timeZone)
         {
             outputFolder = folder;
             solutionName = solution;
 
-            userTimeZoneOffset = ResolveTimeZoneOffset(timeZone, serviceClient);
+            userTimeZoneOffset = ResolveTimeZoneOffset(timeZone, service);
             var tzSign = userTimeZoneOffset >= TimeSpan.Zero ? "+" : "";
             var tzSource = string.IsNullOrWhiteSpace(timeZone) ? " (from WhoAmI user settings)" : $" (from input: {timeZone})";
             AnsiConsole.MarkupLine($"[cyan]Timezone:[/] UTC{tzSign}{userTimeZoneOffset.Hours:D2}:{userTimeZoneOffset.Minutes:D2}{tzSource}");
 
-            EntityMetadata[] entityMetadatas = ReadEntityMetadata(serviceClient);
+            EntityMetadata[] entityMetadatas = ReadEntityMetadata(service);
             metadataDict = entityMetadatas.ToDictionary(x => x.LogicalName.ToLower(), x => x);
-            entities = GetEntityBySolution(solution, serviceClient);
-            SolutionOptionSets = GetOptionSetsBySolution(solution, serviceClient);
-            businessRulesDict = GetBusinessRules(serviceClient);
-            formsDict = GetForms(serviceClient);
-            viewsDict = GetViews(serviceClient);
+            entities = GetEntityBySolution(solution, service);
+            SolutionOptionSets = GetOptionSetsBySolution(solution, service);
+            businessRulesDict = GetBusinessRules(service);
+            formsDict = GetForms(service);
+            viewsDict = GetViews(service);
 
             AnsiConsole.MarkupLine($"[cyan]Solution:[/] {Markup.Escape(solution)} ({entities.Count} entities)");
 
@@ -1015,7 +1013,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             }
         }
 
-        private static List<string> GetEntityBySolution(string solutionName, ServiceClient serviceClient)
+        private static List<string> GetEntityBySolution(string solutionName, IOrganizationService service)
         {
             var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
 <fetch version=""1.0"" output-format=""xml-platform"" mapping=""logical"" distinct=""true"">
@@ -1032,7 +1030,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
   </entity>
 </fetch>";
             var list = new List<string>();
-            var rows = serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
             foreach (var row in rows.Entities)
             {
                 var entityName = row.GetAttributeValue<AliasedValue>("entity.name").Value.ToString();
@@ -1041,7 +1039,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             return list;
         }
 
-        private static HashSet<string> GetOptionSetsBySolution(string solutionName, ServiceClient serviceClient)
+        private static HashSet<string> GetOptionSetsBySolution(string solutionName, IOrganizationService service)
         {
             var fetchXml = $@"<?xml version=""1.0"" encoding=""utf-16""?>
 <fetch>
@@ -1060,7 +1058,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
   </entity>
 </fetch>";
             var set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            var rows = serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
             foreach (var row in rows.Entities)
             {
                 var optionsetName = row.GetAttributeValue<AliasedValue>("optionset.name")?.Value?.ToString();
@@ -1070,7 +1068,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             return set;
         }
 
-        private Dictionary<string, List<FormInfo>> GetForms(ServiceClient serviceClient)
+        private Dictionary<string, List<FormInfo>> GetForms(IOrganizationService service)
         {
             var dict = new Dictionary<string, List<FormInfo>>(StringComparer.OrdinalIgnoreCase);
             try
@@ -1089,7 +1087,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
     </filter>
   </entity>
 </fetch>";
-                var rows = serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
                 foreach (var row in rows.Entities)
                 {
                     var objectTypeCode = row.GetAttributeValue<string>("objecttypecode");
@@ -1114,7 +1112,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             return dict;
         }
 
-        private Dictionary<string, List<ViewInfo>> GetViews(ServiceClient serviceClient)
+        private Dictionary<string, List<ViewInfo>> GetViews(IOrganizationService service)
         {
             var dict = new Dictionary<string, List<ViewInfo>>(StringComparer.OrdinalIgnoreCase);
             try
@@ -1132,7 +1130,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
     </filter>
   </entity>
 </fetch>";
-                var rows = serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
                 foreach (var row in rows.Entities)
                 {
                     var returnedTypeCode = row.GetAttributeValue<string>("returnedtypecode");
@@ -1157,7 +1155,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             return dict;
         }
 
-        private static Dictionary<string, List<BusinessRuleInfo>> GetBusinessRules(ServiceClient serviceClient)
+        private static Dictionary<string, List<BusinessRuleInfo>> GetBusinessRules(IOrganizationService service)
         {
             var dict = new Dictionary<string, List<BusinessRuleInfo>>(StringComparer.OrdinalIgnoreCase);
             try
@@ -1176,7 +1174,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
     </filter>
   </entity>
 </fetch>";
-                var rows = serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
                 foreach (var row in rows.Entities)
                 {
                     var primaryEntity = row.GetAttributeValue<string>("primaryentity");

@@ -36,20 +36,31 @@ namespace DynamicsCrm.DevKit.Tool.Commands
         }
     }
 
-    internal sealed class DocumentGeneratorCommand : Command<DocumentGeneratorSettings>
+    internal class DocumentGeneratorCommand : Command<DocumentGeneratorSettings>
     {
         protected override int Execute(CommandContext context, DocumentGeneratorSettings settings, CancellationToken cancellation)
         {
             try
             {
-                TaskDocumentGenerator.Run(settings.Connection, settings.Folder, settings.Solution, settings.TimeZone);
-                return 0;
+                return RunTask(settings);
             }
             catch (System.Exception ex)
             {
                 AnsiConsole.MarkupLine($"[red]Error:[/] {Markup.Escape(ex.Message)}");
                 return 1;
             }
+        }
+
+        internal virtual int RunTask(DocumentGeneratorSettings settings)
+        {
+            RunTaskCore(settings);
+            return 0;
+        }
+
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal virtual void RunTaskCore(DocumentGeneratorSettings settings)
+        {
+            TaskDocumentGenerator.Run(settings.Connection, settings.Folder, settings.Solution, settings.TimeZone);
         }
     }
 }

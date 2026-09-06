@@ -9,6 +9,11 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
     {
         internal static void Run(string coverage, string xml, string dlls)
         {
+            Run(coverage, xml, dlls, psi => StartDotNetCoverage(psi));
+        }
+
+        internal static void Run(string coverage, string xml, string dlls, Func<ProcessStartInfo, (int ExitCode, string Output, string Error)> runProcess)
+        {
             if (!File.Exists(coverage))
                 throw new FileNotFoundException($"Coverage file not found: {coverage}");
 
@@ -29,7 +34,21 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 CreateNoWindow = true
             };
 
-            using var process = Process.Start(psi);
+            var (exitCode, output, error) = runProcess(psi);
+
+            if (exitCode != 0)
+            {
+                var msg = !string.IsNullOrWhiteSpace(error) ? error : output;
+                throw new InvalidOperationException(
+                    $"dotnet-coverage failed (exit code {exitCode}): {msg.Trim()}");
+            }
+
+            AnsiConsole.MarkupLine($"[green]Done![/] Output: {Markup.Escape(xml)}");
+        }
+
+        internal static (int ExitCode, string Output, string Error) StartDotNetCoverage(ProcessStartInfo psi, Func<ProcessStartInfo, Process> processStarter = null)
+        {
+            var process = (processStarter ?? Process.Start)(psi);
             if (process == null)
                 throw new InvalidOperationException(
                     "Failed to start dotnet-coverage. Install it with: dotnet tool install -g dotnet-coverage");
@@ -38,14 +57,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             var error = process.StandardError.ReadToEnd();
             process.WaitForExit();
 
-            if (process.ExitCode != 0)
-            {
-                var msg = !string.IsNullOrWhiteSpace(error) ? error : output;
-                throw new InvalidOperationException(
-                    $"dotnet-coverage failed (exit code {process.ExitCode}): {msg.Trim()}");
-            }
-
-            AnsiConsole.MarkupLine($"[green]Done![/] Output: {Markup.Escape(xml)}");
+            return (process.ExitCode, output, error);
         }
     }
 }

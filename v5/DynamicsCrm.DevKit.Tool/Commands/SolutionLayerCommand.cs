@@ -30,22 +30,33 @@ namespace DynamicsCrm.DevKit.Tool.Commands
         }
     }
 
-    internal sealed class SolutionLayerCommand : Command<SolutionLayerSettings>
+    internal class SolutionLayerCommand : Command<SolutionLayerSettings>
     {
         protected override int Execute(CommandContext context, SolutionLayerSettings settings, CancellationToken cancellation)
         {
             try
             {
-                var solutionNames = settings.Solutions
-                    .Split(',', System.StringSplitOptions.RemoveEmptyEntries | System.StringSplitOptions.TrimEntries);
-                TaskSolutionLayer.Run(settings.Connection, solutionNames, settings.Output);
-                return 0;
+                return RunTask(settings);
             }
             catch (System.Exception ex)
             {
                 AnsiConsole.MarkupLine($"[red]Error:[/] {Markup.Escape(ex.Message)}");
                 return 1;
             }
+        }
+
+        internal virtual int RunTask(SolutionLayerSettings settings)
+        {
+            RunTaskCore(settings);
+            return 0;
+        }
+
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        internal virtual void RunTaskCore(SolutionLayerSettings settings)
+        {
+            var solutionNames = settings.Solutions
+                .Split(',', System.StringSplitOptions.RemoveEmptyEntries | System.StringSplitOptions.TrimEntries);
+            TaskSolutionLayer.Run(settings.Connection, solutionNames, settings.Output);
         }
     }
 }

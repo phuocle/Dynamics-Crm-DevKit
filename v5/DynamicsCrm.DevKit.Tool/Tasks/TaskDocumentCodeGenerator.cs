@@ -198,55 +198,51 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
         {
             foreach (var method in type.Methods)
             {
-                try
+                foreach (var attr in method.CustomAttributes)
                 {
-                    foreach (var attr in method.CustomAttributes)
+                    if (!string.Equals(attr.AttributeType.Name, AttributeShortName, StringComparison.Ordinal))
+                        continue;
+
+                    string wi = string.Empty, desc = string.Empty, stage = string.Empty;
+                    string message = string.Empty, fields = string.Empty, entity = string.Empty;
+
+                    var ctorArgs = attr.ConstructorArguments;
+                    if (ctorArgs != null && ctorArgs.Count >= 6)
                     {
-                        if (!string.Equals(attr.AttributeType.Name, AttributeShortName, StringComparison.Ordinal))
-                            continue;
-
-                        string wi = string.Empty, desc = string.Empty, stage = string.Empty;
-                        string message = string.Empty, fields = string.Empty, entity = string.Empty;
-
-                        var ctorArgs = attr.ConstructorArguments;
-                        if (ctorArgs != null && ctorArgs.Count >= 6)
-                        {
-                            wi = CecilArgToString(ctorArgs[0]);
-                            desc = CecilArgToString(ctorArgs[1]);
-                            stage = CecilEnumToName(ctorArgs[2], StageEnumMap);
-                            entity = CecilArgToString(ctorArgs[3]);
-                            message = CecilEnumToName(ctorArgs[4], MessageEnumMap);
-                            fields = CecilArgToString(ctorArgs[5]);
-                        }
-
-                        if (attr.HasProperties)
-                        {
-                            foreach (var prop in attr.Properties)
-                            {
-                                var name = prop.Name;
-                                if (string.Equals(name, "WI", StringComparison.OrdinalIgnoreCase)) wi = CecilArgToString(prop.Argument);
-                                else if (string.Equals(name, "Description", StringComparison.OrdinalIgnoreCase)) desc = CecilArgToString(prop.Argument);
-                                else if (string.Equals(name, "Fields", StringComparison.OrdinalIgnoreCase)) fields = CecilArgToString(prop.Argument);
-                                else if (string.Equals(name, "Stage", StringComparison.OrdinalIgnoreCase)) stage = CecilEnumToName(prop.Argument, StageEnumMap);
-                                else if (string.Equals(name, "Message", StringComparison.OrdinalIgnoreCase)) message = CecilEnumToName(prop.Argument, MessageEnumMap);
-                                else if (string.Equals(name, "Entity", StringComparison.OrdinalIgnoreCase)) entity = CecilArgToString(prop.Argument);
-                            }
-                        }
-
-                        rows.Add(new Row
-                        {
-                            TypeFullName = type.FullName.Replace("/", "."),
-                            MethodName = method.Name,
-                            Stage = stage,
-                            Message = message,
-                            WI = wi,
-                            Fields = fields,
-                            Description = desc,
-                            Entity = entity
-                        });
+                        wi = CecilArgToString(ctorArgs[0]);
+                        desc = CecilArgToString(ctorArgs[1]);
+                        stage = CecilEnumToName(ctorArgs[2], StageEnumMap);
+                        entity = CecilArgToString(ctorArgs[3]);
+                        message = CecilEnumToName(ctorArgs[4], MessageEnumMap);
+                        fields = CecilArgToString(ctorArgs[5]);
                     }
+
+                    if (attr.HasProperties)
+                    {
+                        foreach (var prop in attr.Properties)
+                        {
+                            var name = prop.Name;
+                            if (string.Equals(name, "WI", StringComparison.OrdinalIgnoreCase)) wi = CecilArgToString(prop.Argument);
+                            else if (string.Equals(name, "Description", StringComparison.OrdinalIgnoreCase)) desc = CecilArgToString(prop.Argument);
+                            else if (string.Equals(name, "Fields", StringComparison.OrdinalIgnoreCase)) fields = CecilArgToString(prop.Argument);
+                            else if (string.Equals(name, "Stage", StringComparison.OrdinalIgnoreCase)) stage = CecilEnumToName(prop.Argument, StageEnumMap);
+                            else if (string.Equals(name, "Message", StringComparison.OrdinalIgnoreCase)) message = CecilEnumToName(prop.Argument, MessageEnumMap);
+                            else if (string.Equals(name, "Entity", StringComparison.OrdinalIgnoreCase)) entity = CecilArgToString(prop.Argument);
+                        }
+                    }
+
+                    rows.Add(new Row
+                    {
+                        TypeFullName = type.FullName.Replace("/", "."),
+                        MethodName = method.Name,
+                        Stage = stage,
+                        Message = message,
+                        WI = wi,
+                        Fields = fields,
+                        Description = desc,
+                        Entity = entity
+                    });
                 }
-                catch { /* skip types/methods that fail Cecil attribute inspection (e.g. missing dependencies) */ }
             }
         }
 
@@ -266,19 +262,12 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
 
         private static bool ContentChangedIgnoringFooter(string existingPath, string newContent)
         {
-            try
-            {
-                if (!File.Exists(existingPath)) return true;
-                var oldLines = File.ReadAllLines(existingPath);
-                var newLines = SplitLines(newContent);
-                var oldCore = GetCoreContentForCompare(oldLines);
-                var newCore = GetCoreContentForCompare(newLines);
-                return !string.Equals(oldCore, newCore, StringComparison.Ordinal);
-            }
-            catch
-            {
-                return true;
-            }
+            if (!File.Exists(existingPath)) return true;
+            var oldLines = File.ReadAllLines(existingPath);
+            var newLines = SplitLines(newContent);
+            var oldCore = GetCoreContentForCompare(oldLines);
+            var newCore = GetCoreContentForCompare(newLines);
+            return !string.Equals(oldCore, newCore, StringComparison.Ordinal);
         }
 
         private static string GetCoreContentForCompare(string[] lines)
@@ -306,70 +295,52 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
 
         private static string BuildSourceLink(string assemblyRootName, string typeFullName, string codeRootDir, string outputDirectory)
         {
-            try
+            if (string.IsNullOrEmpty(assemblyRootName) || string.IsNullOrEmpty(typeFullName)) return string.Empty;
+            if (codeRootDir == null) return string.Empty;
+
+            string rest = null;
+            if (typeFullName.StartsWith(assemblyRootName + ".", StringComparison.Ordinal))
             {
-                if (string.IsNullOrEmpty(assemblyRootName) || string.IsNullOrEmpty(typeFullName)) return string.Empty;
-
-                string rest = null;
-                if (typeFullName.StartsWith(assemblyRootName + ".", StringComparison.Ordinal))
-                {
-                    rest = typeFullName.Substring(assemblyRootName.Length + 1);
-                }
-                else
-                {
-                    var nsPrefix = Regex.Replace(assemblyRootName, @"\.(\d)", "._$1");
-                    if (typeFullName.StartsWith(nsPrefix + ".", StringComparison.Ordinal))
-                        rest = typeFullName.Substring(nsPrefix.Length + 1);
-                }
-                if (rest == null) rest = typeFullName;
-
-                var parts = rest.Split('.');
-                if (parts.Length == 0) return string.Empty;
-                var csFileName = parts[parts.Length - 1] + ".cs";
-                var subDirs = parts.Take(parts.Length - 1).ToArray();
-                var targetFullPath = Path.Combine(codeRootDir, Path.Combine(subDirs.Length > 0 ? Path.Combine(subDirs) : string.Empty), csFileName);
-
-                var relative = MakeRelativePath(AppendDirectorySeparator(outputDirectory), targetFullPath);
-                return relative.Replace("\\", "/");
+                rest = typeFullName.Substring(assemblyRootName.Length + 1);
             }
-            catch
+            else
             {
-                return string.Empty;
+                var nsPrefix = Regex.Replace(assemblyRootName, @"\.(\d)", "._$1");
+                if (typeFullName.StartsWith(nsPrefix + ".", StringComparison.Ordinal))
+                    rest = typeFullName.Substring(nsPrefix.Length + 1);
             }
+            if (rest == null) rest = typeFullName;
+
+            var parts = rest.Split('.');
+            if (parts.Length == 0) return string.Empty;
+            var csFileName = parts[parts.Length - 1] + ".cs";
+            var subDirs = parts.Take(parts.Length - 1).ToArray();
+            var targetFullPath = Path.Combine(codeRootDir, Path.Combine(subDirs.Length > 0 ? Path.Combine(subDirs) : string.Empty), csFileName);
+
+            var relative = MakeRelativePath(AppendDirectorySeparator(outputDirectory), targetFullPath);
+            return relative.Replace("\\", "/");
         }
 
         private static string FindSiblingProjectRoot(string startingDir, string projectFolderName)
         {
-            try
+            var dir = new DirectoryInfo(startingDir);
+            while (dir != null && dir.Parent != null)
             {
-                var dir = new DirectoryInfo(startingDir);
-                while (dir != null && dir.Parent != null)
-                {
-                    var sibling = Path.Combine(dir.Parent.FullName, projectFolderName);
-                    if (Directory.Exists(sibling))
-                        return sibling;
-                    dir = dir.Parent;
-                }
+                var sibling = Path.Combine(dir.Parent.FullName, projectFolderName);
+                if (Directory.Exists(sibling))
+                    return sibling;
+                dir = dir.Parent;
             }
-            catch { /* best-effort sibling project directory search — falls back to parent path */ }
-            var parent = Directory.GetParent(startingDir);
-            return parent == null ? projectFolderName : Path.Combine(parent.FullName, projectFolderName);
+            return null;
         }
 
         private static string MakeRelativePath(string fromDirectory, string toPath)
         {
-            try
-            {
-                var fromUri = new Uri(AppendDirectorySeparator(fromDirectory));
-                var toUri = new Uri(toPath);
-                var relativeUri = fromUri.MakeRelativeUri(toUri);
-                var relativePath = Uri.UnescapeDataString(relativeUri.ToString());
-                return relativePath.Replace('/', Path.DirectorySeparatorChar);
-            }
-            catch
-            {
-                return toPath;
-            }
+            var fromUri = new Uri(AppendDirectorySeparator(fromDirectory));
+            var toUri = new Uri(toPath);
+            var relativeUri = fromUri.MakeRelativeUri(toUri);
+            var relativePath = Uri.UnescapeDataString(relativeUri.ToString());
+            return relativePath.Replace('/', Path.DirectorySeparatorChar);
         }
 
         private static string AppendDirectorySeparator(string path)

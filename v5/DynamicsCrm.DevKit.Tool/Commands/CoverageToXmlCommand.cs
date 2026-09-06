@@ -32,20 +32,25 @@ namespace DynamicsCrm.DevKit.Tool.Commands
         }
     }
 
-    internal sealed class CoverageToXmlCommand : Command<CoverageToXmlSettings>
+    internal class CoverageToXmlCommand : Command<CoverageToXmlSettings>
     {
         protected override int Execute(CommandContext context, CoverageToXmlSettings settings, CancellationToken cancellation)
         {
             try
             {
-                TaskCoverageToXml.Run(settings.Coverage, settings.Xml, settings.Dlls);
-                return 0;
+                return RunTask(settings);
             }
             catch (System.Exception ex)
             {
                 AnsiConsole.MarkupLine($"[red]Error:[/] {Markup.Escape(ex.Message)}");
                 return 1;
             }
+        }
+
+        internal virtual int RunTask(CoverageToXmlSettings settings)
+        {
+            TaskCoverageToXml.Run(settings.Coverage, settings.Xml, settings.Dlls);
+            return 0;
         }
     }
 }
