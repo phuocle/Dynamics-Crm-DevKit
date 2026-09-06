@@ -135,7 +135,9 @@
     <Platform Solution="*|arm64" Project="arm64" />
     <Platform Solution="*|x86" Project="x86" />
   </Project>
-  <Project Path="DynamicsCrm.DevKit.UnitTests/DynamicsCrm.DevKit.UnitTests.csproj" />
+  <Project Path="DynamicsCrm.DevKit.Cli.UnitTests/DynamicsCrm.DevKit.Cli.UnitTests.csproj" />
   <Project Path="DynamicsCrm.DevKit.Analyzers.UnitTests/DynamicsCrm.DevKit.Analyzers.UnitTests.csproj" />
-  <Project Path="DynamicsCrm.DevKit.UnitTests2/DynamicsCrm.DevKit.UnitTests.csproj" />
+  <Project Path="DynamicsCrm.DevKit.UnitTests/DynamicsCrm.DevKit.UnitTests.csproj" />
+  <Project Path="DynamicsCrm.DevKit.Tool.UnitTests/DynamicsCrm.DevKit.Tool.UnitTests.csproj" />
+  <Project Path="DynamicsCrm.DevKit.2019.UnitTests/DynamicsCrm.DevKit.2019.UnitTests.csproj" />
 </Solution>

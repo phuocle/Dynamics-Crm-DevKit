@@ -51,7 +51,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-	    <_Parameter1>DynamicsCrm.DevKit.UnitTests</_Parameter1>
+	    <_Parameter1>DynamicsCrm.DevKit.Cli.UnitTests</_Parameter1>
 	  </AssemblyAttribute>
 	</ItemGroup>
 	<PropertyGroup>
