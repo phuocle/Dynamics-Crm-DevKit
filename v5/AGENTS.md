@@ -84,7 +84,7 @@ Codex App/ChatGPT is the only supported AI client for this repository.
 - `AGENTS.md` is the single source of repository instructions and is maintained directly.
 - `.codex/config.toml.example` is the only tracked MCP client example. It must use the fixed process alias `devkit-codex`.
 - `.codex/rules/*.md` contains optional, detailed rules. Do not apply them automatically; read and follow one only when the user points to that rule file.
-- `.codex/workflows/*.md` contains the 13 core project workflows referenced below.
+- `.codex/workflows/*.md` contains the 14 core project workflows referenced below.
 - `.codex/config.toml` is local, may contain per-user settings, and must not be committed.
 - Do not add generated adapters or configuration for Claude, GitHub Copilot, Antigravity, Cursor, or other AI clients.
 
@@ -102,7 +102,8 @@ Detailed Codex workflows live in `.codex/workflows/`. When the user names a work
 | Build VSIX | `.codex/workflows/build-vsix.md` |
 | Full timestamped build | `.codex/workflows/build-debug.md` |
 | Full configured release | `.codex/workflows/build-release.md` |
-| All unit tests plus Analyzer coverage | `.codex/workflows/unit-test.md` |
+| Unit tests (pass/fail) | `.codex/workflows/unit-test.md` |
+| Code coverage (unit tests + line/branch/method) | `.codex/workflows/code-coverage.md` |
 | Client-code pipeline | `.codex/workflows/client-code-01-clean.md` through `.codex/workflows/client-code-05-test.md` |
 | Prepare and commit changes | `.codex/workflows/commit.md` |
 
