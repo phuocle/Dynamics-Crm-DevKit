@@ -109,6 +109,7 @@
     <PackageReference Include="MSTest.TestAdapter" Version="4.3.3" />
     <PackageReference Include="MSTest.TestFramework" Version="4.3.3" />
     <PackageReference Include="FakeXrmEasy.v9" Version="3.9.4" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" />
   </ItemGroup>
 
   <!-- Shared test infrastructure -->
