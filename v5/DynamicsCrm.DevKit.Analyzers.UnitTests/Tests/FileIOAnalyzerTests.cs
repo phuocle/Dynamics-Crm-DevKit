@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
-using DynamicsCrm.DevKit.UnitTests.Analyzers.Verifier;
+using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
 using Xunit;
 
-namespace DynamicsCrm.DevKit.UnitTests.Analyzers.Tests
+namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
     public class FileIOAnalyzerTests
     {

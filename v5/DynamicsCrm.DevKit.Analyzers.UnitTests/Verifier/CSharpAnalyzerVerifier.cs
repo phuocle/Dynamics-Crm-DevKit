@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
-namespace DynamicsCrm.DevKit.UnitTests.Analyzers.Verifier
+namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier
 {
     public static class CSharpAnalyzerVerifier<TAnalyzer>
         where TAnalyzer : DiagnosticAnalyzer, new()

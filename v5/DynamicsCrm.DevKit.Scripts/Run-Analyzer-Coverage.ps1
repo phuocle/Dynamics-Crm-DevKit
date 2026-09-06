@@ -1,5 +1,5 @@
 # Run Unit Tests with Code Coverage for DynamicsCrm.DevKit.Analyzers
-# This script runs tests for DynamicsCrm.DevKit.UnitTests (analyzer tests)
+# This script runs tests for DynamicsCrm.DevKit.Analyzers.UnitTests (analyzer tests)
 # and shows coverage percentage for DynamicsCrm.DevKit.Analyzers.dll
 # Generates HTML reports using ReportGenerator
 
@@ -483,8 +483,8 @@ Write-Host "Target Assembly: DynamicsCrm.DevKit.Analyzers.dll" -ForegroundColor 
 Write-Host ""
 
 # Define paths
-$testProjectPath = "..\DynamicsCrm.DevKit.UnitTests\DynamicsCrm.DevKit.UnitTests.csproj"
-$runSettingsPath = "..\DynamicsCrm.DevKit.UnitTests\coverlet.runsettings"
+$testProjectPath = "..\DynamicsCrm.DevKit.Analyzers.UnitTests\DynamicsCrm.DevKit.Analyzers.UnitTests.csproj"
+$runSettingsPath = "..\DynamicsCrm.DevKit.Analyzers.UnitTests\coverlet.runsettings"
 
 # Check if test project exists
 if (-not (Test-Path $testProjectPath)) {
@@ -525,7 +525,7 @@ if (-not $hasReportGenerator) {
 # Define test projects
 $testProjects = @(
     @{
-        Name = "DynamicsCrm.DevKit.UnitTests"
+        Name = "DynamicsCrm.DevKit.Analyzers.UnitTests"
         ProjectPath = $testProjectPath
         RunSettingsPath = $runSettingsPath
         ReportFolder = "..\DynamicsCrm.DevKit.Analyzers\CoverageReport"

@@ -9,8 +9,8 @@ Apply this rule only when the user explicitly points Codex to this file.
 | `DynamicsCrm.DevKit.Analyzers/` | Analyzer project targeting `netstandard2.0` |
 | `DynamicsCrm.DevKit.Analyzers/CrmAnalyzers/` | Analyzer implementations |
 | `DynamicsCrm.DevKit.Analyzers/Core/` | IDs, descriptors, base classes, and helpers |
-| `DynamicsCrm.DevKit.UnitTests/Analyzers/Tests/` | xUnit/Roslyn analyzer tests |
-| `DynamicsCrm.DevKit.UnitTests/Analyzers/Verifier/` | `CSharpAnalyzerVerifier<T>` |
+| `DynamicsCrm.DevKit.Analyzers.UnitTests/Tests/` | xUnit/Roslyn analyzer tests |
+| `DynamicsCrm.DevKit.Analyzers.UnitTests/Verifier/` | `CSharpAnalyzerVerifier<T>` |
 | `DynamicsCrm.DevKit.Tests/TestAnalyzers/` | Visual Studio integration samples |
 | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers/` | Analyzer documentation |
 

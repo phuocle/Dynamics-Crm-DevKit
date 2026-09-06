@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 using Xunit;
 
-namespace DynamicsCrm.DevKit.UnitTests.Analyzers.Tests
+namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
     public class AnalyzerPrivateHelperCoverageTests
     {

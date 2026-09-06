@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net48</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <!-- Unit tests only use public packages; keep VS solution restore independent from the local release feed. -->
+    <RestoreSources Condition="'$(RestoreSources)' == ''">https://api.nuget.org/v3/index.json</RestoreSources>
+    <RestoreIgnoreFailedSources>true</RestoreIgnoreFailedSources>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Nullable>disable</Nullable>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj" />
+  </ItemGroup>
+
+  <!-- Analyzer test packages (net48 only) -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing" Version="1.1.4" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" Version="1.1.4" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzer.Testing" Version="1.1.4" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net48" Version="1.0.3" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.60" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="4.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="10.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="coverlet.runsettings" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+</Project>
