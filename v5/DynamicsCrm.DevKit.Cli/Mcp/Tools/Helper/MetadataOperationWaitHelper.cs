@@ -21,6 +21,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         public const int WebResourceWaitSeconds = 3;
 
         /// <summary>
+        /// Scales every metadata wait. Production default 100 (real waits).
+        /// Unit tests set 0 through InternalsVisibleTo: the in-memory fake
+        /// service has no propagation delay, so sleeping is pure test time.
+        /// </summary>
+        internal static int WaitScalePercent { get; set; } = 100;
+
+        /// <summary>
         /// Generic wait after metadata mutation. Use specific methods when available.
         /// </summary>
         /// <param name="seconds">Number of seconds to wait (0 or negative = no wait)</param>
@@ -29,7 +36,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             if (seconds <= 0)
                 return;
 
-            Thread.Sleep(TimeSpan.FromSeconds(seconds));
+            var scaled = (int)Math.Round(seconds * (WaitScalePercent / 100.0), MidpointRounding.AwayFromZero);
+            if (scaled <= 0)
+                return;
+
+            Thread.Sleep(TimeSpan.FromSeconds(scaled));
         }
 
         /// <summary>

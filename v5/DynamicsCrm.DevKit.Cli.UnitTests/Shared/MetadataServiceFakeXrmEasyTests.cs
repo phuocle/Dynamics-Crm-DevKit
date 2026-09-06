@@ -26,6 +26,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Shared;
 /// ctor takes IOrganizationServiceAsync2).
 /// </summary>
 [TestClass]
+[DoNotParallelize]
 public sealed class MetadataServiceFakeXrmEasyTests
 {
     private IXrmFakedContext _context = null!;

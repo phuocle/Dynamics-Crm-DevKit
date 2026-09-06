@@ -7,6 +7,7 @@ using System.Collections.Generic;
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli;
 
 [TestClass]
+[DoNotParallelize]
 public class XrmHelperCoverageTests
 {
     [TestInitialize]

@@ -280,3 +280,8 @@ __pycache__/
 *.exe
 /test/3.44.44.44/UnitTestDevKit/.nyc_output
 /test/3.44.44.44/UnitTestDevKit/coverage
+
+# Test run artifacts (TRX, coverage, measurement scratch)
+*.trx
+TestResults/
+PerfTrx/

@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Generator;
 
 [TestClass]
+[DoNotParallelize]
 public class TaskGeneratorTests
 {
     private IXrmFakedContext _context = null!;

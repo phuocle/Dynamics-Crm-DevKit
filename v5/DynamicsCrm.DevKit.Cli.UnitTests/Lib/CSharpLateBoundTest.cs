@@ -12,6 +12,7 @@ using System.Reflection;
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Lib;
 
 [TestClass]
+[DoNotParallelize]
 public class CSharpLateBoundTest
 {
     private const string RootNamespace = "Dev.DevKit.Entities";

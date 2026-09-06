@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli;
 
 [TestClass]
+[DoNotParallelize]
 public class HelperTests
 {
     [TestMethod]

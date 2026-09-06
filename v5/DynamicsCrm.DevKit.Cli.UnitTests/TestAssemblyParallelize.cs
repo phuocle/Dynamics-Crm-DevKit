@@ -4,5 +4,5 @@
 // statics) are marked [DoNotParallelize] and stay sequential.
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-[assembly: Parallelize(Workers = 0, Scope = ExecutionScope.ClassLevel)]
+[assembly: Parallelize(Workers = 0, Scope = ExecutionScope.MethodLevel)]
 #endif

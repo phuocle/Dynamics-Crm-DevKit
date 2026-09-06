@@ -42,7 +42,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
                     // Exponential backoff: 10s, 20s, 30s, 40s
                     var waitSeconds = BaseRetryDelaySeconds * (attempt + 1);
-                    Thread.Sleep(TimeSpan.FromSeconds(waitSeconds));
+                    Thread.Sleep(TimeSpan.FromSeconds(ScaledSeconds(waitSeconds)));
                 }
             }
 
@@ -82,7 +82,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
                     // Exponential backoff: 10s, 20s, 30s, 40s
                     var waitSeconds = BaseRetryDelaySeconds * (attempt + 1);
-                    Thread.Sleep(TimeSpan.FromSeconds(waitSeconds));
+                    Thread.Sleep(TimeSpan.FromSeconds(ScaledSeconds(waitSeconds)));
                 }
             }
 
@@ -92,6 +92,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 $"Reason: Another metadata operation may be running or metadata has not propagated.\n" +
                 $"Action: Wait 30 seconds and retry manually, or check for other running operations.",
                 lastException);
+        }
+
+        /// <summary>
+        /// Scales retry backoff sleeps through the same knob as
+        /// <see cref="MetadataOperationWaitHelper"/> so unit tests can skip
+        /// real waits against the in-memory fake service.
+        /// </summary>
+        private static int ScaledSeconds(int seconds)
+        {
+            var scaled = (int)Math.Round(seconds * (MetadataOperationWaitHelper.WaitScalePercent / 100.0), MidpointRounding.AwayFromZero);
+            return Math.Max(scaled, 0);
         }
 
         /// <summary>

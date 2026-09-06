@@ -19,6 +19,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Generator;
 /// and test actual file generation for Account entity.
 /// </summary>
 [TestClass]
+[DoNotParallelize]
 public class GeneratorIntegrationTests
 {
     private IXrmFakedContext _context = null!;
