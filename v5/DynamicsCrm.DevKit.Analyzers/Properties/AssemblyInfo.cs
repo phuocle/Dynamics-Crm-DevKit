@@ -19,3 +19,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("4.44.44.44")]
 [assembly: AssemblyFileVersion("4.44.44.44")]
 [assembly: InternalsVisibleTo("DynamicsCrm.DevKit.UnitTests")]
+[assembly: InternalsVisibleTo("DynamicsCrm.DevKit.Analyzers.UnitTests")]

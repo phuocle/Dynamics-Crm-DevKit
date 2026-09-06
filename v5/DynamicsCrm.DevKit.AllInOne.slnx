@@ -136,4 +136,6 @@
     <Platform Solution="*|x86" Project="x86" />
   </Project>
   <Project Path="DynamicsCrm.DevKit.UnitTests/DynamicsCrm.DevKit.UnitTests.csproj" />
+  <Project Path="DynamicsCrm.DevKit.Analyzers.UnitTests/DynamicsCrm.DevKit.Analyzers.UnitTests.csproj" />
+  <Project Path="DynamicsCrm.DevKit.UnitTests2/DynamicsCrm.DevKit.UnitTests.csproj" />
 </Solution>

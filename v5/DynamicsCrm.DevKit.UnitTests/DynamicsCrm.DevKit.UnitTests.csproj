@@ -44,15 +44,14 @@
     </Content>
   </ItemGroup>
 
-  <!-- Exclude CLI/T4 tests from net48, Analyzer tests from net10.0 -->
+  <!-- Exclude CLI/Shared tests from net48, Lib tests from net10.0 -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <Compile Remove="Cli\**\*.cs" />
-    <Compile Remove="T4\**\*.cs" />
+    <Compile Remove="Shared\**\*.cs" />
     <Compile Remove="Lib\CSharpLateBoundTest.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
-    <Compile Remove="Analyzers\**\*.cs" />
     <Compile Remove="Lib\**\*.cs" />
     <Compile Include="Lib\CSharpLateBoundTest.cs" />
   </ItemGroup>
@@ -78,24 +77,15 @@
     <None Include="Lib\UnitTestEntity.cs" />
   </ItemGroup>
 
-  <!-- Analyzer project reference (net48 only) -->
-  <ItemGroup Condition="'$(TargetFramework)' == '' or '$(TargetFramework)' == 'net48'">
-    <ProjectReference Include="..\DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj" />
-  </ItemGroup>
-
   <!-- CLI project reference (net10.0 only) -->
   <ItemGroup Condition="'$(TargetFramework)' == '' or '$(TargetFramework)' == 'net10.0'">
     <ProjectReference Include="..\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" />
   </ItemGroup>
 
-  <!-- Analyzer test packages (net48 only) -->
+  <!-- net48 test packages -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing" Version="1.1.4" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" Version="1.1.4" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzer.Testing" Version="1.1.4" />
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net48" Version="1.0.3" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.60" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net48" Version="1.0.3" PrivateAssets="all" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="4.0.0">
       <PrivateAssets>all</PrivateAssets>
