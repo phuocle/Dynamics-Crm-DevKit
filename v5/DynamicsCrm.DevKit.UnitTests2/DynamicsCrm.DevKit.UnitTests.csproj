@@ -1,0 +1,69 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net48;net10.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <!-- Unit tests only use public packages; keep VS solution restore independent from the local release feed. -->
+    <RestoreSources Condition="'$(RestoreSources)' == ''">https://api.nuget.org/v3/index.json</RestoreSources>
+    <RestoreIgnoreFailedSources>true</RestoreIgnoreFailedSources>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net48'">
+    <Nullable>disable</Nullable>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <!-- VSIX template code under test (net48 only) -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <Compile Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\Date.cs" Link="Lib\Date.cs" />
+    <Compile Remove="T4\**\*.cs" />
+  </ItemGroup>
+
+  <!-- Exclude net48-only tests from net10.0 -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <Compile Remove="Lib\**\*.cs" />
+  </ItemGroup>
+
+  <!-- net48 test packages (xUnit) -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net48" Version="1.0.3" PrivateAssets="all" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="4.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!-- net10.0 test packages (MSTest); Shared types resolve through the CLI assembly -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.3.3" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.3.3" />
+  </ItemGroup>
+
+  <!-- Shared test infrastructure -->
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="10.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == '' or '$(TargetFramework)' == 'net10.0'">
+    <ProjectReference Include="..\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="coverlet.runsettings" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+</Project>
