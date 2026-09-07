@@ -1,12 +1,13 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
 using Microsoft.CodeAnalysis.Testing;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class UpdateMessageShouldHaveFilteringAttributesAnalyzerTests
     {
         private const string AttributeStub = @"
@@ -40,42 +41,42 @@ public class PluginSample
 
         #region Non-diagnostic tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostics_When_NotCrmPluginRegistration()
         {
             var src = WrapInClass("[SomeOtherAttribute(\"anything\")] ");
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostics_When_NoArguments()
         {
             var src = WrapInClass("[CrmPluginRegistration]");
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostics_When_Update_Missing_FilteringAttributes()
         {
             var src = WrapInClass("[CrmPluginRegistration(\"update\")] ");
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostics_When_Update_FilteringAttributes_NonEmpty()
         {
             var src = WrapInClass("[CrmPluginRegistration(\"update\", null, 0, \"account\", \"firstname,lastname\")] ");
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostics_When_Create_FilteringAttributes_NonEmpty()
         {
             var src = WrapInClass("[CrmPluginRegistration(\"create\", null, 0, \"account\", \"firstname,lastname\")] ");
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostics_When_Message_Not_CreateOrUpdateFamily()
         {
             // Delete, Retrieve, RetrieveMultiple should not trigger
@@ -87,7 +88,7 @@ public class PluginSample
 
         #region Create messages - Warning severity
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Create_FilteringAttributes_Empty()
         {
             var src = WrapInClass("[CrmPluginRegistration(\"create\", null, 0, \"account\", \"\")] ");
@@ -97,7 +98,7 @@ public class PluginSample
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Create_FilteringAttributes_All_Asterisk()
         {
             var src = WrapInClass("[CrmPluginRegistration(\"create\", null, 0, \"account\", \"*\")] ");
@@ -107,7 +108,7 @@ public class PluginSample
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_CreateMultiple_FilteringAttributes_Empty()
         {
             var src = WrapInClass("[CrmPluginRegistration(\"createmultiple\", null, 0, \"account\", \"\")] ");
@@ -117,7 +118,7 @@ public class PluginSample
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_OnExternalCreated_FilteringAttributes_Empty()
         {
             var src = WrapInClass("[CrmPluginRegistration(\"onexternalcreated\", null, 0, \"account\", \"\")] ");
@@ -131,7 +132,7 @@ public class PluginSample
 
         #region Update messages - Error severity
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Update_FilteringAttributes_Empty()
         {
             var src = WrapInClass("[CrmPluginRegistration(\"update\", null, 0, \"account\", \"\")] ");
@@ -141,7 +142,7 @@ public class PluginSample
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Update_FilteringAttributes_All_Asterisk()
         {
             var src = WrapInClass("[CrmPluginRegistration(\"update\", null, 0, \"account\", \"*\")] ");
@@ -151,7 +152,7 @@ public class PluginSample
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_UpdateMultiple_FilteringAttributes_Empty()
         {
             var src = WrapInClass("[CrmPluginRegistration(\"updatemultiple\", null, 0, \"account\", \"\")] ");
@@ -161,7 +162,7 @@ public class PluginSample
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_UpdateMultiple_FilteringAttributes_All_Asterisk()
         {
             var src = WrapInClass("[CrmPluginRegistration(\"updatemultiple\", null, 0, \"account\", \"*\")] ");
@@ -171,7 +172,7 @@ public class PluginSample
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src, expected);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_OnExternalUpdated_FilteringAttributes_Empty()
         {
             var src = WrapInClass("[CrmPluginRegistration(\"onexternalupdated\", null, 0, \"account\", \"\")] ");
@@ -185,21 +186,21 @@ public class PluginSample
 
         #region Named Argument Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Update_NamedArgs_FilteringAttributes_Empty()
         {
             var src = WrapInClass("[CrmPluginRegistration(message: \"update\", [|filteringAttributes: \"\"|])]");
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Create_NamedArgs_FilteringAttributes_Asterisk()
         {
             var src = WrapInClass("[CrmPluginRegistration(message: \"create\", [|filteringAttributes: \"*\"|])]");
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostics_When_Message_Uses_Nameof_Fallback()
         {
             var src = $@"

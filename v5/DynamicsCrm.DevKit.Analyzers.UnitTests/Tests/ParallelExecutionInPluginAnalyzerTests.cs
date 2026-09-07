@@ -1,10 +1,11 @@
 using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class ParallelExecutionInPluginAnalyzerTests
     {
         private const string Stubs = @"
@@ -59,14 +60,14 @@ public class RegularClass
 
         #region Task.Run Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_TaskRun()
         {
             var src = WrapInPlugin("[|System.Threading.Tasks.Task.Run|](() => { });");
             await CSharpAnalyzerVerifier<ParallelExecutionInPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_NonPlugin_Uses_TaskRun()
         {
             var src = WrapInRegularClass("System.Threading.Tasks.Task.Run(() => { });");
@@ -77,21 +78,21 @@ public class RegularClass
 
         #region Parallel Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ParallelForEach()
         {
             var src = WrapInPlugin("var list = new System.Collections.Generic.List<int>(); [|System.Threading.Tasks.Parallel.ForEach|](list, x => { });");
             await CSharpAnalyzerVerifier<ParallelExecutionInPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ParallelFor()
         {
             var src = WrapInPlugin("[|System.Threading.Tasks.Parallel.For|](0, 10, i => { });");
             await CSharpAnalyzerVerifier<ParallelExecutionInPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ParallelInvoke()
         {
             var src = WrapInPlugin("[|System.Threading.Tasks.Parallel.Invoke|](() => { }, () => { });");
@@ -102,7 +103,7 @@ public class RegularClass
 
         #region Thread Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_NewThread()
         {
             var src = WrapInPlugin("var thread = [|new System.Threading.Thread|](() => { });");
@@ -113,7 +114,7 @@ public class RegularClass
 
         #region ThreadPool Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ThreadPoolQueueUserWorkItem()
         {
             var src = WrapInPlugin("[|System.Threading.ThreadPool.QueueUserWorkItem|](state => { });");
@@ -124,7 +125,7 @@ public class RegularClass
 
         #region TaskFactory.StartNew Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_TaskFactoryStartNew()
         {
             var src = WrapInPlugin("[|System.Threading.Tasks.Task.Factory.StartNew|](() => { });");
@@ -135,14 +136,14 @@ public class RegularClass
 
         #region Workflow Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Workflow_Uses_TaskRun()
         {
             var src = WrapInWorkflow("[|System.Threading.Tasks.Task.Run|](() => { });");
             await CSharpAnalyzerVerifier<ParallelExecutionInPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Workflow_Uses_ParallelForEach()
         {
             var src = WrapInWorkflow("var list = new System.Collections.Generic.List<int>(); [|System.Threading.Tasks.Parallel.ForEach|](list, x => { });");
@@ -153,18 +154,18 @@ public class RegularClass
 
         #region Edge Case Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Not_Parallel_Method_In_Plugin()
         {
             var src = WrapInPlugin("System.Console.WriteLine(\"test\");");
             await CSharpAnalyzerVerifier<ParallelExecutionInPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public void Initialize_WithNullContext_ThrowsArgumentNullException()
         {
             var analyzer = new ParallelExecutionInPluginAnalyzer();
-            Assert.Throws<System.ArgumentNullException>(() => analyzer.Initialize(null));
+            Assert.ThrowsExactly<System.ArgumentNullException>(() => analyzer.Initialize(null));
         }
 
         #endregion

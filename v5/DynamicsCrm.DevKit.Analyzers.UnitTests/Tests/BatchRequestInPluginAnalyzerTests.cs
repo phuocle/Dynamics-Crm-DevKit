@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class BatchRequestInPluginAnalyzerTests
     {
         private const string XrmSdkStub = @"
@@ -68,21 +69,21 @@ public class RegularClass
 
         #region ExecuteMultipleRequest Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_ExecuteMultipleRequest_In_Plugin()
         {
             var src = WrapInPlugin("var r = [|new Microsoft.Xrm.Sdk.Messages.ExecuteMultipleRequest()|];");
             await CSharpAnalyzerVerifier<BatchRequestInPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_ExecuteMultipleRequest_In_Workflow()
         {
             var src = WrapInWorkflow("var r = [|new Microsoft.Xrm.Sdk.Messages.ExecuteMultipleRequest()|];");
             await CSharpAnalyzerVerifier<BatchRequestInPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_ExecuteMultipleRequest_In_RegularClass()
         {
             var src = WrapInRegularClass("var r = new Microsoft.Xrm.Sdk.Messages.ExecuteMultipleRequest();");
@@ -93,7 +94,7 @@ public class RegularClass
 
         #region ExecuteTransactionRequest Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_ExecuteTransactionRequest_In_Plugin()
         {
             var src = WrapInPlugin("var r = [|new Microsoft.Xrm.Sdk.Messages.ExecuteTransactionRequest()|];");
@@ -104,7 +105,7 @@ public class RegularClass
 
         #region CreateMultipleRequest Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_CreateMultipleRequest_In_Plugin()
         {
             var src = WrapInPlugin("var r = [|new Microsoft.Xrm.Sdk.Messages.CreateMultipleRequest()|];");
@@ -115,7 +116,7 @@ public class RegularClass
 
         #region UpdateMultipleRequest Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_UpdateMultipleRequest_In_Plugin()
         {
             var src = WrapInPlugin("var r = [|new Microsoft.Xrm.Sdk.Messages.UpdateMultipleRequest()|];");
@@ -126,7 +127,7 @@ public class RegularClass
 
         #region UpsertMultipleRequest Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_UpsertMultipleRequest_In_Plugin()
         {
             var src = WrapInPlugin("var r = [|new Microsoft.Xrm.Sdk.Messages.UpsertMultipleRequest()|];");
@@ -137,7 +138,7 @@ public class RegularClass
 
         #region Non-Batch Request Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_NonBatch_Request_In_Plugin()
         {
             var src = WrapInPlugin("var r = new Microsoft.Xrm.Sdk.Messages.CreateRequest();");
@@ -148,7 +149,7 @@ public class RegularClass
 
         #region NativeActivity Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_ExecuteMultipleRequest_In_NativeActivity()
         {
             var src = $@"

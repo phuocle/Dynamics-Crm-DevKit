@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class RetrieveAsIfPublishedAnalyzerTests
     {
         private const string Stubs = @"
@@ -57,7 +58,7 @@ namespace Microsoft.Xrm.Sdk.Messages
 
         #region Diagnostic Tests - Object Initializer
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_ObjectInitializer_RetrieveAsIfPublished_True()
         {
             var src = $@"
@@ -77,7 +78,7 @@ public class MyClass
             await CSharpAnalyzerVerifier<RetrieveAsIfPublishedAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_RetrieveAllEntities_RetrieveAsIfPublished_True()
         {
             var src = $@"
@@ -100,7 +101,7 @@ public class MyClass
 
         #region Diagnostic Tests - Assignment Expression
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Assignment_RetrieveAsIfPublished_True()
         {
             var src = $@"
@@ -121,7 +122,7 @@ public class MyClass
 
         #region No Diagnostic Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_RetrieveAsIfPublished_False()
         {
             var src = $@"
@@ -140,7 +141,7 @@ public class MyClass
             await CSharpAnalyzerVerifier<RetrieveAsIfPublishedAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Assignment_RetrieveAsIfPublished_False()
         {
             var src = $@"
@@ -157,7 +158,7 @@ public class MyClass
             await CSharpAnalyzerVerifier<RetrieveAsIfPublishedAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_ObjectInitializer_Is_Not_Metadata_Request()
         {
             var src = $@"
@@ -180,7 +181,7 @@ public class OtherRequest
             await CSharpAnalyzerVerifier<RetrieveAsIfPublishedAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_RetrieveAsIfPublished_NotSet()
         {
             var src = $@"
@@ -203,7 +204,7 @@ public class MyClass
 
         #region Diagnostic Tests - Individual Type Assignments
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_RetrieveAttributeRequest_RetrieveAsIfPublished_True()
         {
             var src = $@"
@@ -224,7 +225,7 @@ public class MyClass
 
         #region Edge Case Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Non_Metadata_Type()
         {
             var src = $@"
@@ -241,7 +242,7 @@ public class MyClass
             await CSharpAnalyzerVerifier<RetrieveAsIfPublishedAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_RetrieveAllOptionSets_RetrieveAsIfPublished_True()
         {
             var src = $@"
@@ -258,7 +259,7 @@ public class MyClass
             await CSharpAnalyzerVerifier<RetrieveAsIfPublishedAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_RetrieveOptionSet_RetrieveAsIfPublished_True()
         {
             var src = $@"
@@ -275,7 +276,7 @@ public class MyClass
             await CSharpAnalyzerVerifier<RetrieveAsIfPublishedAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_RetrieveEntityKey_ObjectInitializer_True()
         {
             var src = $@"

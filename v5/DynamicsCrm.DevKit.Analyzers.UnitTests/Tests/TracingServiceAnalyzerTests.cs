@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class TracingServiceAnalyzerTests
     {
         private const string Stubs = @"
@@ -57,7 +58,7 @@ public class RegularClass
 
         #region Diagnostic Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_DoesNot_Use_TracingService()
         {
             var src = $@"
@@ -77,14 +78,14 @@ public class [|TestPlugin|] : Microsoft.Xrm.Sdk.IPlugin
 
         #region No Diagnostic Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Uses_TracingService()
         {
             var src = WrapInPluginWithTracing();
             await CSharpAnalyzerVerifier<TracingServiceAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_NonPlugin_Class()
         {
             var src = WrapInRegularClass(@"// regular code");
@@ -95,7 +96,7 @@ public class [|TestPlugin|] : Microsoft.Xrm.Sdk.IPlugin
 
         #region Edge Case Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Uses_ITracingService_Via_Interface_Reference()
         {
             var src = $@"
@@ -112,7 +113,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<TracingServiceAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Has_ITracingService_In_Lambda()
         {
             var src = $@"

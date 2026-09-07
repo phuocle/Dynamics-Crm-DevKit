@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class ConsoleOutputAnalyzerTests
     {
         private const string Stubs = @"
@@ -59,21 +60,21 @@ public class RegularClass
 
         #region Console.WriteLine Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleWriteLine()
         {
             var src = WrapInPlugin("[|System.Console.WriteLine|](\"test\");");
             await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleWriteLine_WithFormat()
         {
             var src = WrapInPlugin("[|System.Console.WriteLine|](\"value: {0}\", 42);");
             await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_NonPlugin_Uses_ConsoleWriteLine()
         {
             var src = WrapInRegularClass("System.Console.WriteLine(\"test\");");
@@ -84,7 +85,7 @@ public class RegularClass
 
         #region Console.Write Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleWrite()
         {
             var src = WrapInPlugin("[|System.Console.Write|](\"test\");");
@@ -95,21 +96,21 @@ public class RegularClass
 
         #region Other Console Methods
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleClear()
         {
             var src = WrapInPlugin("[|System.Console.Clear|]();");
             await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleBeep()
         {
             var src = WrapInPlugin("[|System.Console.Beep|]();");
             await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleResetColor()
         {
             var src = WrapInPlugin("[|System.Console.ResetColor|]();");
@@ -120,7 +121,7 @@ public class RegularClass
 
         #region Console.SetOut Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleSetOut()
         {
             var src = WrapInPlugin("[|System.Console.SetOut|](null);");
@@ -131,7 +132,7 @@ public class RegularClass
 
         #region Console.SetError Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleSetError()
         {
             var src = WrapInPlugin("[|System.Console.SetError|](null);");
@@ -142,28 +143,28 @@ public class RegularClass
 
         #region Console Cursor/Window Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleSetCursorPosition()
         {
             var src = WrapInPlugin("[|System.Console.SetCursorPosition|](0, 0);");
             await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleSetWindowPosition()
         {
             var src = WrapInPlugin("[|System.Console.SetWindowPosition|](0, 0);");
             await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleSetWindowSize()
         {
             var src = WrapInPlugin("[|System.Console.SetWindowSize|](80, 25);");
             await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ConsoleSetBufferSize()
         {
             var src = WrapInPlugin("[|System.Console.SetBufferSize|](80, 300);");
@@ -174,14 +175,14 @@ public class RegularClass
 
         #region Edge Case Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Uses_NonConsole_Method()
         {
             var src = WrapInPlugin("System.Diagnostics.Debug.WriteLine(\"test\");");
             await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Uses_ConsoleOpenStandardOutput()
         {
             var src = WrapInPlugin("System.Console.OpenStandardOutput();");
@@ -192,14 +193,14 @@ public class RegularClass
 
         #region Workflow Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Workflow_Uses_ConsoleWriteLine()
         {
             var src = WrapInWorkflow("[|System.Console.WriteLine|](\"test\");");
             await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Workflow_Uses_ConsoleWrite()
         {
             var src = WrapInWorkflow("[|System.Console.Write|](\"test\");");

@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class EntityReferenceMaybeNullAnalyzerTests
     {
         private const string EntityReferenceStub = @"
@@ -31,28 +32,28 @@ public class Sample
 }}
 ";
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Interpolated_String_Uses_Name()
         {
             var src = WrapInMethod("var s = $\"Name: {er.[|Name|]}\";");
             await CSharpAnalyzerVerifier<EntityReferenceMaybeNullAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Binary_Uses_Id()
         {
             var src = WrapInMethod("var s = er.[|Name|] + \"x\";");
             await CSharpAnalyzerVerifier<EntityReferenceMaybeNullAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Assign_To_String_From_LogicalName()
         {
             var src = WrapInMethod("string s = er.[|LogicalName|];");
             await CSharpAnalyzerVerifier<EntityReferenceMaybeNullAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Assigning_Same_Member_RightSide()
         {
             // Left equals same member access; analyzer reports on RHS
@@ -60,14 +61,14 @@ public class Sample
             await CSharpAnalyzerVerifier<EntityReferenceMaybeNullAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Other_Member()
         {
             var src = WrapInMethod("var x = er.ToString();");
             await CSharpAnalyzerVerifier<EntityReferenceMaybeNullAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Assigning_Id_To_GuidNullable()
         {
             // Assigning EntityReference.Id (Guid?) to a variable triggers the NullableTargetTypes check
@@ -75,7 +76,7 @@ public class Sample
             await CSharpAnalyzerVerifier<EntityReferenceMaybeNullAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Assigning_LeftSide_Of_Assignment()
         {
             // When EntityReference is on the left side of an assignment, it's not dereferenced

@@ -1,7 +1,7 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
@@ -9,6 +9,7 @@ namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
     /// Regression tests for Policy A: generated code is NOT analyzed (GeneratedCodeAnalysisFlags.None).
     /// All analyzers must skip files/types marked with [System.CodeDom.Compiler.GeneratedCode].
     /// </summary>
+    [TestClass]
     public class GeneratedCodePolicyTests
     {
         private const string Stubs = @"
@@ -35,7 +36,7 @@ namespace System
         /// Policy A: a plugin class marked [GeneratedCode] that subscribes to AppDomain events
         /// must NOT produce DEVKIT1001 diagnostics.
         /// </summary>
-        [Fact]
+        [TestMethod]
         public async Task AppDomainEventAnalyzer_GeneratedCodeClass_NoDiagnostic()
         {
             var src = $@"
@@ -57,7 +58,7 @@ public class GeneratedPlugin : Microsoft.Xrm.Sdk.IPlugin
         /// Baseline: same code WITHOUT [GeneratedCode] MUST produce a diagnostic.
         /// This confirms Policy A only suppresses generated code, not all code.
         /// </summary>
-        [Fact]
+        [TestMethod]
         public async Task AppDomainEventAnalyzer_NonGeneratedCodeClass_ProducesDiagnostic()
         {
             var src = $@"

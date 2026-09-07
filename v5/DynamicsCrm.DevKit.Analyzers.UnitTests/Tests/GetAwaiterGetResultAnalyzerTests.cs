@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class GetAwaiterGetResultAnalyzerTests
     {
         private const string Stubs = @"
@@ -42,7 +43,7 @@ namespace System.Threading.Tasks
 
         #region Diagnostic Tests - GetAwaiter().GetResult()
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_GetAwaiterGetResult()
         {
             var src = $@"
@@ -63,7 +64,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 
         #region Diagnostic Tests - Task.Wait()
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_TaskWait()
         {
             var src = $@"
@@ -84,7 +85,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 
         #region Diagnostic Tests - Task.Result
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_TaskResult()
         {
             var src = $@"
@@ -105,7 +106,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 
         #region No Diagnostic Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_NonPlugin_Uses_GetAwaiterGetResult()
         {
             var src = $@"
@@ -126,7 +127,7 @@ public class RegularClass
 
         #region Workflow Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Workflow_Uses_GetAwaiterGetResult()
         {
             var src = $@"
@@ -150,7 +151,7 @@ public class TestWorkflow : System.Activities.CodeActivity
             await CSharpAnalyzerVerifier<GetAwaiterGetResultAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Workflow_Uses_TaskWait()
         {
             var src = $@"
@@ -178,7 +179,7 @@ public class TestWorkflow : System.Activities.CodeActivity
 
         #region Task<T>.Wait Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_Generic_TaskWait()
         {
             var src = $@"
@@ -199,7 +200,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 
         #region Edge Case Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Uses_GetResult_Without_GetAwaiter()
         {
             var src = $@"
@@ -216,7 +217,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<GetAwaiterGetResultAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Uses_Standalone_GetResult()
         {
             var src = $@"
@@ -234,7 +235,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<GetAwaiterGetResultAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Waits_On_NonTask_Type()
         {
             var src = $@"
@@ -256,7 +257,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<GetAwaiterGetResultAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_TaskResult_Is_Outside_Plugin()
         {
             var src = $@"
@@ -273,7 +274,7 @@ public class RegularClass
             await CSharpAnalyzerVerifier<GetAwaiterGetResultAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Result_Is_On_Dynamic_Value()
         {
             var src = $@"
@@ -290,7 +291,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<GetAwaiterGetResultAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Uses_Result_On_NonGeneric_Task()
         {
             var src = $@"
@@ -307,7 +308,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<GetAwaiterGetResultAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Result_Used_In_ToString_Chain()
         {
             var src = $@"

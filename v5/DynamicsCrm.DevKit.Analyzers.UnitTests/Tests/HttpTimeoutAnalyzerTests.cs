@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class HttpTimeoutAnalyzerTests
     {
         private const string Stubs = @"
@@ -67,21 +68,21 @@ public class RegularClass
 
         #region HttpClient Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_HttpClient()
         {
             var src = WrapInPlugin("using (var client = [|new System.Net.Http.HttpClient()|]) { }");
             await CSharpAnalyzerVerifier<HttpTimeoutAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Workflow_Uses_HttpClient()
         {
             var src = WrapInWorkflow("using (var client = [|new System.Net.Http.HttpClient()|]) { }");
             await CSharpAnalyzerVerifier<HttpTimeoutAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_NonPlugin_Uses_HttpClient()
         {
             var src = WrapInRegularClass("using (var client = new System.Net.Http.HttpClient()) { }");
@@ -89,7 +90,7 @@ public class RegularClass
         }
 
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Sets_Timeout()
         {
             var src = WrapInPlugin(@"
@@ -101,7 +102,7 @@ public class RegularClass
             await CSharpAnalyzerVerifier<HttpTimeoutAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_HttpClient_Assigned_To_Field()
         {
             var src = $@"

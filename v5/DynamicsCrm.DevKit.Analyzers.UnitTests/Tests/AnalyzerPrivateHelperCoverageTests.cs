@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -10,35 +10,36 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class AnalyzerPrivateHelperCoverageTests
     {
-        [Fact]
+        [TestMethod]
         public void GetAwaiterGetResult_PrivateHelpers_Handle_Null_And_NonMember_Shapes()
         {
             var analyzerType = typeof(GetAwaiterGetResultAnalyzer);
 
-            Assert.False((bool)InvokeStatic(
+            Assert.IsFalse((bool)InvokeStatic(
                 analyzerType,
                 "IsTaskType",
                 new object[] { null }));
 
-            Assert.False((bool)InvokeStatic(
+            Assert.IsFalse((bool)InvokeStatic(
                 analyzerType,
                 "IsGenericTaskType",
                 new object[] { null }));
 
-            Assert.False((bool)InvokeStatic(
+            Assert.IsFalse((bool)InvokeStatic(
                 analyzerType,
                 "IsGetAwaiterCall",
                 SyntaxFactory.IdentifierName("value"),
                 null,
                 CancellationToken.None));
 
-            Assert.False((bool)InvokeStatic(
+            Assert.IsFalse((bool)InvokeStatic(
                 analyzerType,
                 "IsGetAwaiterCall",
                 SyntaxFactory.ParseExpression("GetAwaiter()"),
@@ -46,122 +47,122 @@ namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
                 CancellationToken.None));
         }
 
-        [Fact]
+        [TestMethod]
         public void PluginImage_PrivateHelpers_Handle_Missing_And_NonLiteral_Arguments()
         {
             var analyzerType = typeof(PluginImageAnalyzer);
 
             var imageConfig = InvokeStatic(analyzerType, "GetImageConfig", null, 1);
-            Assert.NotNull(imageConfig);
+            Assert.IsNotNull(imageConfig);
 
-            Assert.Null(InvokeStatic(analyzerType, "GetStringValue", new object[] { null }));
-            Assert.Null(InvokeStatic(analyzerType, "GetExpressionStringValue", new object[] { null }));
+            Assert.IsNull(InvokeStatic(analyzerType, "GetStringValue", new object[] { null }));
+            Assert.IsNull(InvokeStatic(analyzerType, "GetExpressionStringValue", new object[] { null }));
 
             var argument = SyntaxFactory.AttributeArgument(SyntaxFactory.IdentifierName("MessageName"));
-            Assert.Equal("essageNam", InvokeStatic(analyzerType, "GetStringValue", argument));
+            Assert.AreEqual("essageNam", InvokeStatic(analyzerType, "GetStringValue", argument));
 
-            Assert.Equal("mageColumn", InvokeStatic(
+            Assert.AreEqual("mageColumn", InvokeStatic(
                 analyzerType,
                 "GetExpressionStringValue",
                 SyntaxFactory.IdentifierName("ImageColumns")));
         }
 
-        [Fact]
+        [TestMethod]
         public void HttpTimeout_PrivateHelper_Returns_Null_For_Unparented_Creation()
         {
             var analyzer = new HttpTimeoutAnalyzer();
             var objectCreation = (ObjectCreationExpressionSyntax)SyntaxFactory.ParseExpression("new System.Net.Http.HttpClient()");
 
-            Assert.Null(InvokeInstance(analyzer, "GetVariableName", objectCreation));
+            Assert.IsNull(InvokeInstance(analyzer, "GetVariableName", objectCreation));
         }
 
-        [Fact]
+        [TestMethod]
         public void KeepAlive_PrivateHelper_Returns_Null_For_Unparented_Creation()
         {
             var analyzer = new KeepAliveFalseAnalyzer();
             var objectCreation = (ObjectCreationExpressionSyntax)SyntaxFactory.ParseExpression("new System.Net.Http.HttpClient()");
 
-            Assert.Null(InvokeInstance(analyzer, "GetVariableName", objectCreation));
+            Assert.IsNull(InvokeInstance(analyzer, "GetVariableName", objectCreation));
         }
 
-        [Fact]
+        [TestMethod]
         public void ParallelExecution_PrivateHelpers_Return_Defaults_For_Unknown_Methods()
         {
             var analyzerType = typeof(ParallelExecutionInPluginAnalyzer);
 
-            Assert.False((bool)InvokeStatic(
+            Assert.IsFalse((bool)InvokeStatic(
                 analyzerType,
                 "IsParallelExecutionMethod",
                 "Contoso.Worker",
                 "Run"));
 
-            Assert.Equal("Run()", InvokeStatic(
+            Assert.AreEqual("Run()", InvokeStatic(
                 analyzerType,
                 "GetParallelPatternName",
                 "Contoso.Worker",
                 "Run"));
         }
 
-        [Fact]
+        [TestMethod]
         public void ConsoleOutput_PrivateHelpers_Return_Defaults_For_NonConsole_Methods()
         {
             var analyzerType = typeof(ConsoleOutputAnalyzer);
 
-            Assert.False((bool)InvokeStatic(
+            Assert.IsFalse((bool)InvokeStatic(
                 analyzerType,
                 "IsConsoleOutputMethod",
                 "Contoso.Console",
                 "WriteLine"));
 
-            Assert.False((bool)InvokeStatic(
+            Assert.IsFalse((bool)InvokeStatic(
                 analyzerType,
                 "IsConsoleOutputMethod",
                 "System.Console",
                 "ReadLine"));
 
-            Assert.Equal("Console.ReadLine()", InvokeStatic(
+            Assert.AreEqual("Console.ReadLine()", InvokeStatic(
                 analyzerType,
                 "GetConsoleMethodName",
                 "ReadLine"));
         }
 
-        [Fact]
+        [TestMethod]
         public void InvalidPluginExecutionException_PrivateHelper_Returns_False_For_Null_Type()
         {
-            Assert.False((bool)InvokeStatic(
+            Assert.IsFalse((bool)InvokeStatic(
                 typeof(InvalidPluginExecutionExceptionAnalyzer),
                 "IsInvalidPluginExecutionException",
                 new object[] { null }));
         }
 
-        [Fact]
+        [TestMethod]
         public void EntityReferenceMaybeNull_PrivateHelpers_Handle_Unassigned_MemberAccess()
         {
             var analyzerType = typeof(EntityReferenceMaybeNullAnalyzer);
             var memberAccess = (MemberAccessExpressionSyntax)SyntaxFactory.ParseExpression("entityRef.Id");
 
-            Assert.False((bool)InvokeStatic(
+            Assert.IsFalse((bool)InvokeStatic(
                 analyzerType,
                 "IsLeftSideOfAssignment",
                 memberAccess));
 
-            Assert.False((bool)InvokeStatic(
+            Assert.IsFalse((bool)InvokeStatic(
                 analyzerType,
                 "IsInsideBinaryOrInterpolation",
                 memberAccess));
         }
 
-        [Fact]
+        [TestMethod]
         public void TracingServiceInCatch_PrivateHelper_Returns_False_For_Missing_Block()
         {
-            Assert.False((bool)InvokeStatic(
+            Assert.IsFalse((bool)InvokeStatic(
                 typeof(TracingServiceInCatchAnalyzer),
                 "UsesTracingServiceInCatch",
                 SyntaxFactory.CatchClause(),
                 null));
         }
 
-        [Fact]
+        [TestMethod]
         public void RetrieveMultiple_PrivateHelper_Returns_Null_For_NonConstant_Argument()
         {
             var syntaxTree = CSharpSyntaxTree.ParseText("[A(typeof(string))] class C { }");
@@ -175,7 +176,7 @@ namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
                 new[] { MetadataReference.CreateFromFile(typeof(object).Assembly.Location) });
             var semanticModel = compilation.GetSemanticModel(syntaxTree);
 
-            Assert.Null(InvokeInstance(
+            Assert.IsNull(InvokeInstance(
                 new RetrieveMultiplePluginAnalyzer(),
                 "GetArgumentValue",
                 argument,
@@ -183,16 +184,16 @@ namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
                 CancellationToken.None));
         }
 
-        [Fact]
+        [TestMethod]
         public void UpdateFilteringAttributes_PrivateHelper_Returns_Null_For_Null_Argument()
         {
-            Assert.Null(InvokeStatic(
+            Assert.IsNull(InvokeStatic(
                 typeof(UpdateMessageShouldHaveFilteringAttributesAnalyzer),
                 "GetArgumentStringValue",
                 new object[] { null }));
         }
 
-        [Fact]
+        [TestMethod]
         public void AnalyzeCallbacks_Return_When_Dispatched_With_Unexpected_Node_Kinds()
         {
             var semanticModel = CreateSemanticModel("class C { void M() { int x = 0; } }");
@@ -228,7 +229,7 @@ namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
             InvokeInstance(new UpdateMessageShouldHaveFilteringAttributesAnalyzer(), "AnalyzeAttribute", CreateContext(wrongNode, semanticModel));
         }
 
-        [Fact]
+        [TestMethod]
         public void AnalyzeCallbacks_Return_When_SemanticModel_Is_Missing()
         {
             var classNode = SyntaxFactory.ClassDeclaration("C");
@@ -239,7 +240,7 @@ namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
             InvokeInstance(new TracingServiceInCatchAnalyzer(), "AnalyzeCatchClause", CreateContext(catchNode, null));
         }
 
-        [Fact]
+        [TestMethod]
         public void EntityReference_Analyze_Returns_For_NullSemanticModel_And_NonEntityReferenceType()
         {
             var memberAccess = (MemberAccessExpressionSyntax)SyntaxFactory.ParseExpression("entityRef.Id");
@@ -265,7 +266,7 @@ class C
             InvokeInstance(new EntityReferenceMaybeNullAnalyzer(), "AnalyzeEntityReferenceAccess", CreateContext(idAccess, semanticModel));
         }
 
-        [Fact]
+        [TestMethod]
         public void AnalyzeCallbacks_Return_For_Unresolved_Symbols_And_NonPlugin_ObjectCreation()
         {
             var unresolvedInvocationModel = CreateSemanticModel(PluginSource(@"
@@ -293,7 +294,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             InvokeInstance(new ParallelExecutionInPluginAnalyzer(), "AnalyzeObjectCreation", CreateContext(threadCreation, threadModel));
         }
 
-        [Fact]
+        [TestMethod]
         public void AttributeAnalyzers_Return_For_Missing_Empty_Or_NonConstant_Arguments()
         {
             var pluginImageMissingMessageModel = CreateSemanticModel(AttributeSource(@"
@@ -330,7 +331,7 @@ public class EmptyMessagePlugin { }"));
                 CreateContext(FindNode<AttributeSyntax>(updateMessageModel, null), updateMessageModel));
         }
 
-        [Fact]
+        [TestMethod]
         public void RetrieveAsIfPublished_ObjectInitializer_Skips_NonAssignment_Expressions()
         {
             var semanticModel = CreateSemanticModel(@"
@@ -358,7 +359,7 @@ class C
             InvokeInstance(new RetrieveAsIfPublishedAnalyzer(), "AnalyzeObjectInitializer", CreateContext(objectCreation, semanticModel));
         }
 
-        [Fact]
+        [TestMethod]
         public void Stateless_AnalyzeAssignment_Returns_For_Property_Without_Setter()
         {
             var semanticModel = CreateSemanticModel(PluginSource(@"
@@ -378,7 +379,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             InvokeInstance(new StatelessPluginAnalyzer(), "AnalyzeAssignment", CreateContext(assignment, semanticModel));
         }
 
-        [Fact]
+        [TestMethod]
         public void PluginDepth_AnalyzeClass_Returns_For_Abstract_Execute_Method()
         {
             var semanticModel = CreateSemanticModel(PluginSource(@"
@@ -393,7 +394,7 @@ public abstract class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             InvokeInstance(new PluginDepthAnalyzer(), "AnalyzeClassDeclaration", CreateContext(classDeclaration, semanticModel));
         }
 
-        [Fact]
+        [TestMethod]
         public void AppDomain_AnalyzeEventSubscription_Returns_For_NonMember_Assignment_Left()
         {
             var semanticModel = CreateSemanticModel(PluginSource(@"
@@ -413,7 +414,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             InvokeInstance(new AppDomainEventAnalyzer(), "AnalyzeEventSubscription", CreateContext(assignment, semanticModel));
         }
 
-        [Fact]
+        [TestMethod]
         public void InvalidPluginExecutionException_AnalyzeThrow_Returns_For_Unresolved_Exception_Type()
         {
             var semanticModel = CreateSemanticModel(PluginSource(@"
@@ -429,7 +430,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             InvokeInstance(new InvalidPluginExecutionExceptionAnalyzer(), "AnalyzeThrowStatement", CreateContext(throwStatement, semanticModel));
         }
 
-        [Fact]
+        [TestMethod]
         public void DataProvider_PrivateStringHelper_Returns_Null_For_NonConstant_Argument()
         {
             var syntaxTree = CSharpSyntaxTree.ParseText("[A(Value)] class C { public static string Value = \"\"; }");
@@ -443,7 +444,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
                 new[] { MetadataReference.CreateFromFile(typeof(object).Assembly.Location) });
             var semanticModel = compilation.GetSemanticModel(syntaxTree);
 
-            Assert.Null(InvokeInstance(
+            Assert.IsNull(InvokeInstance(
                 new DataProviderDataSourceAnalyzer(),
                 "GetStringValue",
                 argument,
@@ -451,7 +452,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
                 CancellationToken.None));
         }
 
-        [Fact]
+        [TestMethod]
         public void NotUseColumnSetTrue_PrivateReporter_Ignores_Empty_Text_Or_Missing_Tree()
         {
             var semanticModel = CreateSemanticModel("class C { }");

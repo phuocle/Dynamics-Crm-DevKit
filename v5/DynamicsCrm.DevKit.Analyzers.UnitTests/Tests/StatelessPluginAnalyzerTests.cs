@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class StatelessPluginAnalyzerTests
     {
         private const string XrmSdkStub = @"
@@ -28,7 +29,7 @@ namespace System.Activities
 
         #region Field Assignment Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Assigning_To_Instance_Field_In_Execute()
         {
             var src = $@"
@@ -46,7 +47,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<StatelessPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Assigning_To_This_Field_In_Execute()
         {
             var src = $@"
@@ -64,7 +65,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<StatelessPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Assigning_To_Readonly_Field_In_Constructor()
         {
             var src = $@"
@@ -86,7 +87,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<StatelessPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Assigning_To_Static_Field()
         {
             var src = $@"
@@ -104,7 +105,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<StatelessPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Assigning_To_Local_Variable()
         {
             var src = $@"
@@ -126,7 +127,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 
         #region Property Assignment Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Assigning_To_Instance_Property_In_Execute()
         {
             var src = $@"
@@ -144,7 +145,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<StatelessPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Assigning_To_Static_Property()
         {
             var src = $@"
@@ -162,7 +163,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<StatelessPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Assigning_To_Readonly_Property_NoSetter()
         {
             var src = $@"
@@ -185,7 +186,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 
         #region Non-IPlugin Class Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Regular_Class()
         {
             var src = $@"
@@ -207,7 +208,7 @@ public class RegularClass
 
         #region Helper Method Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Assigning_In_Helper_Method_Called_From_Execute()
         {
             var src = $@"
@@ -234,7 +235,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 
         #region CodeActivity Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Assigning_To_Instance_Field_In_CodeActivity()
         {
             var src = $@"
@@ -252,7 +253,7 @@ public class TestWorkflow : System.Activities.CodeActivity
             await CSharpAnalyzerVerifier<StatelessPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_CodeActivity_Constructor_Assignment()
         {
             var src = $@"
@@ -278,7 +279,7 @@ public class TestWorkflow : System.Activities.CodeActivity
 
         #region Edge Case Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Assigning_Field_Of_Different_Class()
         {
             var src = $@"
@@ -299,7 +300,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<StatelessPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Assigning_Property_Of_Different_Class()
         {
             var src = $@"
@@ -320,7 +321,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<StatelessPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Assigning_Readonly_Field()
         {
             var src = $@"
@@ -345,7 +346,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<StatelessPluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Assigning_Field_Of_BaseClass_In_Execute()
         {
             var src = $@"

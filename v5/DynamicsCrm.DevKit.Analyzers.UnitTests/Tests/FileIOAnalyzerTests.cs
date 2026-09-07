@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class FileIOAnalyzerTests
     {
         private const string Stubs = @"
@@ -88,14 +89,14 @@ public class RegularClass
 
         #region File.ReadAllText Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_FileReadAllText()
         {
             var src = WrapInPlugin("[|System.IO.File.ReadAllText|](\"test.txt\");");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_NonPlugin_Uses_FileReadAllText()
         {
             var src = WrapInRegularClass("System.IO.File.ReadAllText(\"test.txt\");");
@@ -106,14 +107,14 @@ public class RegularClass
 
         #region File Write Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_FileWriteAllText()
         {
             var src = WrapInPlugin("[|System.IO.File.WriteAllText|](\"test.txt\", \"content\");");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_FileWriteAllBytes()
         {
             var src = WrapInPlugin("[|System.IO.File.WriteAllBytes|](\"test.bin\", new byte[0]);");
@@ -124,14 +125,14 @@ public class RegularClass
 
         #region File Exists/Delete Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_FileExists()
         {
             var src = WrapInPlugin("var exists = [|System.IO.File.Exists|](\"test.txt\");");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_FileDelete()
         {
             var src = WrapInPlugin("[|System.IO.File.Delete|](\"test.txt\");");
@@ -142,21 +143,21 @@ public class RegularClass
 
         #region Stream Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_NewFileStream()
         {
             var src = WrapInPlugin("var fs = [|new System.IO.FileStream|](\"test.txt\", System.IO.FileMode.Open);");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_NewStreamReader()
         {
             var src = WrapInPlugin("var sr = [|new System.IO.StreamReader|](\"test.txt\");");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_NewStreamWriter()
         {
             var src = WrapInPlugin("var sw = [|new System.IO.StreamWriter|](\"test.txt\");");
@@ -167,7 +168,7 @@ public class RegularClass
 
         #region BinaryReader Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_NewBinaryReader()
         {
             var src = WrapInPlugin("var br = [|new System.IO.BinaryReader|](null);");
@@ -178,7 +179,7 @@ public class RegularClass
 
         #region DirectoryInfo Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_NewDirectoryInfo()
         {
             var src = WrapInPlugin("var di = [|new System.IO.DirectoryInfo|](\"somepath\");");
@@ -189,21 +190,21 @@ public class RegularClass
 
         #region Directory Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_DirectoryCreateDirectory()
         {
             var src = WrapInPlugin("[|System.IO.Directory.CreateDirectory|](\"path\");");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_DirectoryDelete()
         {
             var src = WrapInPlugin("[|System.IO.Directory.Delete|](\"path\");");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_DirectoryExists()
         {
             var src = WrapInPlugin("[|System.IO.Directory.Exists|](\"path\");");
@@ -214,7 +215,7 @@ public class RegularClass
 
         #region File.ReadAllBytes Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_FileReadAllBytes()
         {
             var src = WrapInPlugin("[|System.IO.File.ReadAllBytes|](\"test.txt\");");
@@ -225,7 +226,7 @@ public class RegularClass
 
         #region File.ReadAllLines Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_FileReadAllLines()
         {
             var src = WrapInPlugin("[|System.IO.File.ReadAllLines|](\"test.txt\");");
@@ -236,14 +237,14 @@ public class RegularClass
 
         #region Workflow Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Workflow_Uses_FileReadAllText()
         {
             var src = WrapInWorkflow("[|System.IO.File.ReadAllText|](\"test.txt\");");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Workflow_Uses_NewStreamWriter()
         {
             var src = WrapInWorkflow("var sw = [|new System.IO.StreamWriter|](\"test.txt\");");

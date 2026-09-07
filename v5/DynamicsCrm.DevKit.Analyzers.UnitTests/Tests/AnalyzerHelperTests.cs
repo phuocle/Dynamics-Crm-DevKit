@@ -1,173 +1,174 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using DynamicsCrm.DevKit.Analyzers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class AnalyzerHelperTests
     {
         #region InheritsFromWorkflowBase Tests
 
-        [Fact]
+        [TestMethod]
         public void InheritsFromWorkflowBase_NullSymbol_ReturnsFalse()
         {
-            Assert.False(AnalyzerHelper.InheritsFromWorkflowBase(null));
+            Assert.IsFalse(AnalyzerHelper.InheritsFromWorkflowBase(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void InheritsFromWorkflowBase_OrdinaryClass_ReturnsFalse()
         {
             var symbol = GetClassSymbol("public class TestClass { }");
-            Assert.False(AnalyzerHelper.InheritsFromWorkflowBase(symbol));
+            Assert.IsFalse(AnalyzerHelper.InheritsFromWorkflowBase(symbol));
         }
 
-        [Fact]
+        [TestMethod]
         public void InheritsFromWorkflowBase_InheritsFromCodeActivity_ReturnsTrue()
         {
             var symbol = GetClassSymbol(@"
 public class TestClass : System.Activities.CodeActivity { }
 namespace System.Activities { public class CodeActivity { } }", "TestClass");
-            Assert.True(AnalyzerHelper.InheritsFromWorkflowBase(symbol));
+            Assert.IsTrue(AnalyzerHelper.InheritsFromWorkflowBase(symbol));
         }
 
-        [Fact]
+        [TestMethod]
         public void InheritsFromWorkflowBase_InheritsFromNativeActivity_ReturnsTrue()
         {
             var symbol = GetClassSymbol(@"
 public class TestClass : System.Activities.NativeActivity { }
 namespace System.Activities { public class NativeActivity { } }", "TestClass");
-            Assert.True(AnalyzerHelper.InheritsFromWorkflowBase(symbol));
+            Assert.IsTrue(AnalyzerHelper.InheritsFromWorkflowBase(symbol));
         }
 
-        [Fact]
+        [TestMethod]
         public void InheritsFromWorkflowBase_InheritsFromActivity_ReturnsTrue()
         {
             var symbol = GetClassSymbol(@"
 public class TestClass : System.Activities.Activity { }
 namespace System.Activities { public class Activity { } }", "TestClass");
-            Assert.True(AnalyzerHelper.InheritsFromWorkflowBase(symbol));
+            Assert.IsTrue(AnalyzerHelper.InheritsFromWorkflowBase(symbol));
         }
 
-        [Fact]
+        [TestMethod]
         public void InheritsFromWorkflowBase_DeepInheritance_ReturnsTrue()
         {
             var symbol = GetClassSymbol(@"
 public class TestClass : BaseClass { }
 public class BaseClass : System.Activities.CodeActivity { }
 namespace System.Activities { public class CodeActivity { } }", "TestClass");
-            Assert.True(AnalyzerHelper.InheritsFromWorkflowBase(symbol));
+            Assert.IsTrue(AnalyzerHelper.InheritsFromWorkflowBase(symbol));
         }
 
         #endregion
 
         #region ImplementsIPlugin Tests
 
-        [Fact]
+        [TestMethod]
         public void ImplementsIPlugin_NullSymbol_ReturnsFalse()
         {
-            Assert.False(AnalyzerHelper.ImplementsIPlugin(null));
+            Assert.IsFalse(AnalyzerHelper.ImplementsIPlugin(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void ImplementsIPlugin_ClassNotImplementingIPlugin_ReturnsFalse()
         {
             var symbol = GetClassSymbol("public class TestClass { }");
-            Assert.False(AnalyzerHelper.ImplementsIPlugin(symbol));
+            Assert.IsFalse(AnalyzerHelper.ImplementsIPlugin(symbol));
         }
 
         #endregion
 
         #region IsPluginOrWorkflowClass Tests
 
-        [Fact]
+        [TestMethod]
         public void IsPluginOrWorkflowClass_NullSymbol_ReturnsFalse()
         {
-            Assert.False(AnalyzerHelper.IsPluginOrWorkflowClass(null));
+            Assert.IsFalse(AnalyzerHelper.IsPluginOrWorkflowClass(null));
         }
 
         #endregion
 
         #region IsInsidePluginOrWorkflow Tests
 
-        [Fact]
+        [TestMethod]
         public void IsInsidePluginOrWorkflow_NullNode_ReturnsFalse()
         {
             var tree = CSharpSyntaxTree.ParseText("class C { }");
             var compilation = CreateCompilation(tree);
             var model = compilation.GetSemanticModel(tree);
-            Assert.False(AnalyzerHelper.IsInsidePluginOrWorkflow(null, model, CancellationToken.None));
+            Assert.IsFalse(AnalyzerHelper.IsInsidePluginOrWorkflow(null, model, CancellationToken.None));
         }
 
-        [Fact]
+        [TestMethod]
         public void IsInsidePluginOrWorkflow_NullSemanticModel_ReturnsFalse()
         {
             var tree = CSharpSyntaxTree.ParseText("class C { public void M() { var x = 1; } }");
             var node = tree.GetRoot().DescendantNodes().OfType<LocalDeclarationStatementSyntax>().First();
-            Assert.False(AnalyzerHelper.IsInsidePluginOrWorkflow(node, null, CancellationToken.None));
+            Assert.IsFalse(AnalyzerHelper.IsInsidePluginOrWorkflow(node, null, CancellationToken.None));
         }
 
-        [Fact]
+        [TestMethod]
         public void IsInsidePluginOrWorkflow_NotInsideClass_ReturnsFalse()
         {
             var tree = CSharpSyntaxTree.ParseText("namespace N { }");
             var compilation = CreateCompilation(tree);
             var model = compilation.GetSemanticModel(tree);
             var nsNode = tree.GetRoot().DescendantNodes().OfType<NamespaceDeclarationSyntax>().First();
-            Assert.False(AnalyzerHelper.IsInsidePluginOrWorkflow(nsNode, model, CancellationToken.None));
+            Assert.IsFalse(AnalyzerHelper.IsInsidePluginOrWorkflow(nsNode, model, CancellationToken.None));
         }
 
         #endregion
 
         #region RemoveQuote Tests
 
-        [Fact]
+        [TestMethod]
         public void RemoveQuote_Null_ReturnsNull()
         {
-            Assert.Null(AnalyzerHelper.RemoveQuote(null));
+            Assert.IsNull(AnalyzerHelper.RemoveQuote(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void RemoveQuote_RemovesSurroundingQuotes()
         {
-            Assert.Equal("hello", AnalyzerHelper.RemoveQuote("\"hello\""));
+            Assert.AreEqual("hello", AnalyzerHelper.RemoveQuote("\"hello\""));
         }
 
         #endregion
 
         #region TestIsEmpty Tests
 
-        [Fact]
+        [TestMethod]
         public void TestIsEmpty_NullString_ReturnsFalse()
         {
-            Assert.False(AnalyzerHelper.TestIsEmpty(null));
+            Assert.IsFalse(AnalyzerHelper.TestIsEmpty(null));
         }
 
-        [Fact]
+        [TestMethod]
         public void TestIsEmpty_EmptyString_ReturnsFalse()
         {
-            Assert.False(AnalyzerHelper.TestIsEmpty(""));
+            Assert.IsFalse(AnalyzerHelper.TestIsEmpty(""));
         }
 
-        [Fact]
+        [TestMethod]
         public void TestIsEmpty_OnlyWhitespace_BetweenQuotes_ReturnsTrue()
         {
-            Assert.True(AnalyzerHelper.TestIsEmpty("\"   \""));
+            Assert.IsTrue(AnalyzerHelper.TestIsEmpty("\"   \""));
         }
 
-        [Fact]
+        [TestMethod]
         public void TestIsEmpty_NonEmptyString_ReturnsFalse()
         {
-            Assert.False(AnalyzerHelper.TestIsEmpty("\"hello\""));
+            Assert.IsFalse(AnalyzerHelper.TestIsEmpty("\"hello\""));
         }
 
-        [Fact]
+        [TestMethod]
         public void TestIsEmpty_EmptyQuotes_ReturnsTrue()
         {
-            Assert.True(AnalyzerHelper.TestIsEmpty("\"\""));
+            Assert.IsTrue(AnalyzerHelper.TestIsEmpty("\"\""));
         }
 
         #endregion

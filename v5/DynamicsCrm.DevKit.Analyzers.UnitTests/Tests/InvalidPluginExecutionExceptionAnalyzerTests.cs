@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class InvalidPluginExecutionExceptionAnalyzerTests
     {
         private const string Stubs = @"
@@ -63,28 +64,28 @@ public class RegularClass
 
         #region Diagnostic Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Throws_Exception()
         {
             var src = WrapInPlugin(@"[|throw new System.Exception|](""error"");");
             await CSharpAnalyzerVerifier<InvalidPluginExecutionExceptionAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Throws_ArgumentException()
         {
             var src = WrapInPlugin(@"[|throw new System.ArgumentException|](""invalid arg"");");
             await CSharpAnalyzerVerifier<InvalidPluginExecutionExceptionAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Workflow_Throws_Exception()
         {
             var src = WrapInWorkflow(@"[|throw new System.Exception|](""error"");");
             await CSharpAnalyzerVerifier<InvalidPluginExecutionExceptionAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ThrowExpression()
         {
             var src = WrapInPlugin(@"var x = ""test"" ?? [|throw new System.InvalidOperationException|](""null"");");
@@ -95,14 +96,14 @@ public class RegularClass
 
         #region No Diagnostic Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Throws_InvalidPluginExecutionException()
         {
             var src = WrapInPlugin(@"throw new Microsoft.Xrm.Sdk.InvalidPluginExecutionException(""error"");");
             await CSharpAnalyzerVerifier<InvalidPluginExecutionExceptionAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Throws_Subclass_Of_IPEE()
         {
             var src = $@"
@@ -122,14 +123,14 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<InvalidPluginExecutionExceptionAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Rethrows()
         {
             var src = WrapInPlugin(@"try { } catch { throw; }");
             await CSharpAnalyzerVerifier<InvalidPluginExecutionExceptionAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_NonPlugin_Throws_Exception()
         {
             var src = WrapInRegularClass(@"throw new System.Exception(""error"");");
@@ -140,7 +141,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 
         #region Edge Case Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Throws_Variable()
         {
             var src = WrapInPlugin(@"var ex = new System.InvalidOperationException(""test""); throw [|ex|];");

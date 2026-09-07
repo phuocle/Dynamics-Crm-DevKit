@@ -1,10 +1,11 @@
 using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class TracingServiceInCatchAnalyzerTests
     {
         private const string Stubs = @"
@@ -71,7 +72,7 @@ public class RegularClass
 
         #region Diagnostic Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_CatchBlock_DoesNotUse_TracingService()
         {
             var src = WrapInPlugin(@"
@@ -87,7 +88,7 @@ try
             await CSharpAnalyzerVerifier<TracingServiceInCatchAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Workflow_CatchBlock_DoesNotUse_TracingService()
         {
             var src = WrapInWorkflow(@"
@@ -103,7 +104,7 @@ try
             await CSharpAnalyzerVerifier<TracingServiceInCatchAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_CatchBlock_WithCode_NoTracing()
         {
             var src = WrapInPlugin(@"
@@ -120,7 +121,7 @@ try
             await CSharpAnalyzerVerifier<TracingServiceInCatchAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_MultipleCatchBlocks_OneWithoutTracing()
         {
             var src = WrapInPlugin(@"
@@ -146,7 +147,7 @@ catch (System.ArgumentException ex)
 
         #region No Diagnostic Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_CatchBlock_Uses_TracingService()
         {
             var src = WrapInPlugin(@"
@@ -164,7 +165,7 @@ catch (System.Exception ex)
             await CSharpAnalyzerVerifier<TracingServiceInCatchAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_CatchBlock_Uses_ITracingService_Variable()
         {
             var src = WrapInPlugin(@"
@@ -181,7 +182,7 @@ catch (System.Exception ex)
             await CSharpAnalyzerVerifier<TracingServiceInCatchAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_NonPlugin_HasCatch_WithoutTracing()
         {
             var src = WrapInRegularClass(@"
@@ -197,7 +198,7 @@ catch (System.Exception ex)
             await CSharpAnalyzerVerifier<TracingServiceInCatchAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_CatchBlock_Uses_Trace_Method()
         {
             var src = WrapInPlugin(@"
@@ -216,7 +217,7 @@ catch (System.ArgumentNullException ex)
             await CSharpAnalyzerVerifier<TracingServiceInCatchAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Workflow_CatchBlock_Uses_TracingService()
         {
             var src = WrapInWorkflow(@"
@@ -233,7 +234,7 @@ catch (System.Exception ex)
             await CSharpAnalyzerVerifier<TracingServiceInCatchAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_CatchBlock_Uses_CustomTracerClass()
         {
             var src = $@"
@@ -264,7 +265,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 
 
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_CatchBlock_Uses_Static_Trace_Method()
         {
             var src = $@"
@@ -296,11 +297,11 @@ namespace CustomTest
             await CSharpAnalyzerVerifier<TracingServiceInCatchAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public void Initialize_WithNullContext_ThrowsArgumentNullException()
         {
             var analyzer = new TracingServiceInCatchAnalyzer();
-            Assert.Throws<System.ArgumentNullException>(() => analyzer.Initialize(null));
+            Assert.ThrowsExactly<System.ArgumentNullException>(() => analyzer.Initialize(null));
         }
 
         #endregion

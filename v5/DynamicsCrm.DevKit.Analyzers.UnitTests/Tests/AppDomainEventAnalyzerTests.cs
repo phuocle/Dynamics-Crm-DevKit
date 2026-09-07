@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class AppDomainEventAnalyzerTests
     {
         private const string Stubs = @"
@@ -41,7 +42,7 @@ namespace System
 
         #region Diagnostic Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Subscribes_To_UnhandledException()
         {
             var src = $@"
@@ -57,7 +58,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<AppDomainEventAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Subscribes_To_AssemblyResolve()
         {
             var src = $@"
@@ -73,7 +74,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<AppDomainEventAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Subscribes_To_ProcessExit()
         {
             var src = $@"
@@ -93,7 +94,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 
         #region No Diagnostic Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_NonPlugin_Class()
         {
             var src = $@"
@@ -113,7 +114,7 @@ public class RegularClass
 
         #region Workflow Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Workflow_Subscribes_To_UnhandledException()
         {
             var src = $@"
@@ -133,7 +134,7 @@ public class TestWorkflow : System.Activities.CodeActivity
 
         #region DomainUnload Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Subscribes_To_DomainUnload()
         {
             var src = $@"
@@ -153,7 +154,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 
         #region Unsubscribe Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Unsubscribes_From_AppDomainEvent()
         {
             var src = $@"
@@ -173,7 +174,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 
         #region Edge Case Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_NonAppDomain_Event()
         {
             var src = $@"
@@ -197,7 +198,7 @@ namespace System.Windows.Forms
             await CSharpAnalyzerVerifier<AppDomainEventAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_ProblematicEventName_On_NonAppDomain_Type()
         {
             var src = $@"

@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class RetrieveMultiplePluginAnalyzerTests
     {
         private const string Stubs = @"
@@ -39,7 +40,7 @@ public class {className} : Microsoft.Xrm.Sdk.IPlugin
 
         #region Retrieve Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Registered_On_Retrieve()
         {
             var src = WrapCode(
@@ -48,7 +49,7 @@ public class {className} : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<RetrieveMultiplePluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Registered_On_RetrieveMultiple()
         {
             var src = WrapCode(
@@ -61,7 +62,7 @@ public class {className} : Microsoft.Xrm.Sdk.IPlugin
 
         #region Negative Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Registered_On_Create()
         {
             var src = WrapCode(
@@ -70,7 +71,7 @@ public class {className} : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<RetrieveMultiplePluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Registered_On_Update()
         {
             var src = WrapCode(
@@ -83,7 +84,7 @@ public class {className} : Microsoft.Xrm.Sdk.IPlugin
 
         #region Case-Insensitive Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Registered_On_retrieve_Lowercase()
         {
             var src = WrapCode(
@@ -96,7 +97,7 @@ public class {className} : Microsoft.Xrm.Sdk.IPlugin
 
         #region Edge Case Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Not_CrmPluginRegistration()
         {
             var src = $@"
@@ -110,7 +111,7 @@ public class NotAPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<RetrieveMultiplePluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Message_Is_Nameof_Constant()
         {
             var src = $@"
@@ -125,7 +126,7 @@ public class PluginWithConst : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<RetrieveMultiplePluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Attribute_Has_No_Arguments()
         {
             var src = $@"
@@ -139,7 +140,7 @@ public class NoArgsPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<RetrieveMultiplePluginAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Message_Is_RetrieveMultiple_Lowercase()
         {
             var src = WrapCode(

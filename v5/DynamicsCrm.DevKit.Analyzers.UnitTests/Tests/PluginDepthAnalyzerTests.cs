@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class PluginDepthAnalyzerTests
     {
         private const string Stubs = @"
@@ -52,7 +53,7 @@ public class RegularClass
 
         #region Diagnostic Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_DoesNot_Check_Depth()
         {
             var src = @"
@@ -69,7 +70,7 @@ public class [|TestPlugin|] : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<PluginDepthAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Checks_Depth()
         {
             var src = @"
@@ -87,7 +88,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<PluginDepthAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Uses_Depth_In_Condition()
         {
             var src = @"
@@ -111,14 +112,14 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 
         #region No Diagnostic Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_NonPlugin_Class()
         {
             var src = WrapInRegularClass("var x = 1;");
             await CSharpAnalyzerVerifier<PluginDepthAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Logs_Depth()
         {
             var src = @"
@@ -140,7 +141,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 
         #region ExpressionBody Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_ExpressionBody()
         {
             var src = $@"
@@ -158,7 +159,7 @@ public class [|TestPlugin|] : Microsoft.Xrm.Sdk.IPlugin
 
         #region Edge Case Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Class_Not_Implementing_IPlugin_Has_Execute()
         {
             var src = $@"
@@ -174,7 +175,7 @@ public class NotAPlugin
             await CSharpAnalyzerVerifier<PluginDepthAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Has_No_Execute_Method()
         {
             var src = @"
@@ -192,7 +193,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<PluginDepthAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_IPlugin_Is_From_Different_Namespace()
         {
             var src = @"
@@ -211,7 +212,7 @@ public class TestPlugin : Other.IPlugin
             await CSharpAnalyzerVerifier<PluginDepthAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Has_Another_Interface()
         {
             var src = $@"

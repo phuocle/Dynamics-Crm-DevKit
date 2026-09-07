@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class DataProviderDataSourceAnalyzerTests
     {
         private const string Stubs = @"
@@ -39,7 +40,7 @@ public class {className} : Microsoft.Xrm.Sdk.IPlugin
 
         #region Diagnostic Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_DataProvider_Has_Empty_DataSource()
         {
             var src = WrapCode(
@@ -48,7 +49,7 @@ public class {className} : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<DataProviderDataSourceAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_DataProvider_Has_No_DataSource()
         {
             var src = WrapCode(
@@ -61,7 +62,7 @@ public class {className} : Microsoft.Xrm.Sdk.IPlugin
 
         #region Negative Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_DataProvider_Has_Valid_DataSource()
         {
             var src = WrapCode(
@@ -70,7 +71,7 @@ public class {className} : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<DataProviderDataSourceAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_PluginType_Is_Plugin()
         {
             var src = WrapCode(
@@ -79,7 +80,7 @@ public class {className} : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<DataProviderDataSourceAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_PluginType_Is_CustomApi()
         {
             var src = WrapCode(
@@ -88,7 +89,7 @@ public class {className} : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<DataProviderDataSourceAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_DataProvider_Named_PluginType_No_DataSource()
         {
             // PluginType as named argument
@@ -120,7 +121,7 @@ public class RetrieveDataProviderNamed : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<DataProviderDataSourceAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_PluginType_Is_Workflow()
         {
             var src = WrapCode(
@@ -133,7 +134,7 @@ public class RetrieveDataProviderNamed : Microsoft.Xrm.Sdk.IPlugin
 
         #region Edge Case Tests
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_NonDataProvider_PluginType_With_Empty_DataSource()
         {
             var src = WrapCode(
@@ -142,7 +143,7 @@ public class RetrieveDataProviderNamed : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<DataProviderDataSourceAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Not_CrmPluginRegistration()
         {
             var src = @"
@@ -172,7 +173,7 @@ namespace DynamicsCrm.DevKit.Shared
             await CSharpAnalyzerVerifier<DataProviderDataSourceAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_DataSource_Named_Arg_Empty_String()
         {
             var src = @"
@@ -203,7 +204,7 @@ public class RetrieveDataProviderEmptyDS : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<DataProviderDataSourceAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_DataSource_Is_Empty_Constant()
         {
             var src = @"
@@ -236,7 +237,7 @@ public class RetrieveDataProviderConstDS : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<DataProviderDataSourceAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_TooFew_Arguments()
         {
             var src = @"

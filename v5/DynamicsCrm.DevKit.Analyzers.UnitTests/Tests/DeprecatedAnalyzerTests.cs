@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class DeprecatedAnalyzerTests
     {
         private const string DeprecatedTypesStub = @"
@@ -29,35 +30,35 @@ public class Sample
 }}
 ";
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_New_Deprecated_Request()
         {
             var src = WrapInMethod("var r = [|new Microsoft.Crm.Sdk.Messages.ExecuteFetchRequest()|];");
             await CSharpAnalyzerVerifier<DeprecatedAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Cast_To_Deprecated_Request()
         {
             var src = WrapInMethod("var r = ([|Microsoft.Crm.Sdk.Messages.ExecuteFetchRequest|])new object();");
             await CSharpAnalyzerVerifier<DeprecatedAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_As_To_Deprecated_Request()
         {
             var src = WrapInMethod("var r = new object() as [|Microsoft.Crm.Sdk.Messages.ExecuteFetchRequest|];");
             await CSharpAnalyzerVerifier<DeprecatedAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_New_ExecuteFetchResponse()
         {
             var src = WrapInMethod("var r = [|new Microsoft.Crm.Sdk.Messages.ExecuteFetchResponse()|];");
             await CSharpAnalyzerVerifier<DeprecatedAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Not_Deprecated_Request()
         {
             var src = WrapInMethod("var r = new Microsoft.Crm.Sdk.Messages.RetrieveRequest();");

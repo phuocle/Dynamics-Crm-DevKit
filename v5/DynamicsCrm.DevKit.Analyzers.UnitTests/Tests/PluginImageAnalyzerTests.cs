@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class PluginImageAnalyzerTests
     {
         private const string AttributeStub = @"
@@ -36,7 +37,7 @@ public class Sample
 }}
 ";
 
-        [Fact]
+        [TestMethod]
         public async Task PreCreate_With_PreImage_And_PostImage()
         {
             var attr = "[CrmPluginRegistration(\"create\", stage: StageEnum.PreOperation, {|DEVKIT1003:Image1Type = ImageTypeEnum.PreImage|}, Image1Attributes = \"name\", {|DEVKIT1003:Image2Type = ImageTypeEnum.PostImage|}, Image2Attributes = \"name\")]";
@@ -44,7 +45,7 @@ public class Sample
             await CSharpAnalyzerVerifier<PluginImageAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task PostCreate_With_PreImage()
         {
             var attr = "[CrmPluginRegistration(\"create\", stage: StageEnum.PostOperation, {|DEVKIT1003:Image1Type = ImageTypeEnum.PreImage|}, Image1Attributes = \"name\")]";
@@ -52,7 +53,7 @@ public class Sample
             await CSharpAnalyzerVerifier<PluginImageAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task PreUpdate_With_PostImage()
         {
             var attr = "[CrmPluginRegistration(\"update\", stage: StageEnum.PreOperation, {|DEVKIT1003:Image1Type = ImageTypeEnum.PostImage|}, Image1Attributes = \"name\")]";
@@ -60,7 +61,7 @@ public class Sample
             await CSharpAnalyzerVerifier<PluginImageAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task PreDelete_With_PostImage()
         {
             var attr = "[CrmPluginRegistration(\"delete\", stage: StageEnum.PreOperation, {|DEVKIT1003:Image1Type = ImageTypeEnum.PostImage|}, Image1Attributes = \"name\")]";
@@ -68,7 +69,7 @@ public class Sample
             await CSharpAnalyzerVerifier<PluginImageAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task PostDelete_With_PostImage()
         {
             var attr = "[CrmPluginRegistration(\"delete\", stage: StageEnum.PostOperation, {|DEVKIT1003:Image1Type = ImageTypeEnum.PostImage|}, Image1Attributes = \"name\")]";
@@ -76,7 +77,7 @@ public class Sample
             await CSharpAnalyzerVerifier<PluginImageAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Unsupported_Message_With_Pre_And_Post_Image()
         {
             var attr = "[CrmPluginRegistration(\"Deactivate\", stage: StageEnum.PreOperation, {|DEVKIT1003:Image1Type = ImageTypeEnum.PreImage|}, Image1Attributes = \"name\", {|DEVKIT1003:Image2Type = ImageTypeEnum.PostImage|}, Image2Attributes = \"name\")]";
@@ -84,7 +85,7 @@ public class Sample
             await CSharpAnalyzerVerifier<PluginImageAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostics_When_No_Images()
         {
             var attr = "[CrmPluginRegistration(\"create\", stage: StageEnum.PreOperation)]";
@@ -94,7 +95,7 @@ public class Sample
 
         #region Image3 / Image4 Tests
 
-        [Fact]
+        [TestMethod]
         public async Task PreCreate_With_Image3Type_PreImage()
         {
             var attr = "[CrmPluginRegistration(\"create\", stage: StageEnum.PreOperation, {|DEVKIT1003:Image3Type = ImageTypeEnum.PreImage|}, Image3Attributes = \"name\")]";
@@ -102,7 +103,7 @@ public class Sample
             await CSharpAnalyzerVerifier<PluginImageAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task PreDelete_With_Image4Type_PostImage()
         {
             var attr = "[CrmPluginRegistration(\"delete\", stage: StageEnum.PreOperation, {|DEVKIT1003:Image4Type = ImageTypeEnum.PostImage|}, Image4Attributes = \"name\")]";

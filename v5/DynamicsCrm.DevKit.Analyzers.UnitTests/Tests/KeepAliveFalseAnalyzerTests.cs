@@ -1,10 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
 using DynamicsCrm.DevKit.Analyzers.UnitTests.Verifier;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Analyzers.UnitTests.Tests
 {
+    [TestClass]
     public class KeepAliveFalseAnalyzerTests
     {
         private const string Stubs = @"
@@ -76,21 +77,21 @@ public class RegularClass
 
         #region HttpClient Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_HttpClient()
         {
             var src = WrapInPlugin("using (var client = [|new System.Net.Http.HttpClient()|]) { }");
             await CSharpAnalyzerVerifier<KeepAliveFalseAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Workflow_Uses_HttpClient()
         {
             var src = WrapInWorkflow("using (var client = [|new System.Net.Http.HttpClient()|]) { }");
             await CSharpAnalyzerVerifier<KeepAliveFalseAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_NonPlugin_Uses_HttpClient()
         {
             var src = WrapInRegularClass("using (var client = new System.Net.Http.HttpClient()) { }");
@@ -98,7 +99,7 @@ public class RegularClass
         }
 
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Sets_ConnectionClose_True()
         {
             var src = WrapInPlugin(@"
@@ -114,21 +115,21 @@ public class RegularClass
 
         #region WebRequest Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_NewWebRequest()
         {
             var src = WrapInPlugin("var r = [|new System.Net.WebRequest()|];");
             await CSharpAnalyzerVerifier<KeepAliveFalseAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_Plugin_Uses_NewHttpWebRequest()
         {
             var src = WrapInPlugin("var r = [|new System.Net.HttpWebRequest()|];");
             await CSharpAnalyzerVerifier<KeepAliveFalseAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task NoDiagnostic_When_Plugin_Sets_KeepAlive_False()
         {
             var src = WrapInPlugin(@"
@@ -142,7 +143,7 @@ public class RegularClass
 
         #region Edge Case Tests
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_WebRequest_Assigned_To_Field()
         {
             var src = $@"
@@ -159,7 +160,7 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
             await CSharpAnalyzerVerifier<KeepAliveFalseAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Diagnostic_When_HttpClient_Assigned_To_Field()
         {
             var src = $@"
