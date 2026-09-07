@@ -504,9 +504,34 @@ namespace DynamicsCrm.DevKit.Lib
             }
         }
 
-        internal static async Task ExecuteCommandAsync(string command)
+        internal static async Task SaveSelectedItemAsync()
         {
-            await VS.Commands.ExecuteAsync(command);
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            var dte = await VS.GetServiceAsync<DTE, DTE>();
+
+            if (dte?.SelectedItems != null && dte.SelectedItems.Count > 0)
+            {
+                var selectedItem = dte.SelectedItems.Item(1);
+                var projectItem = selectedItem?.ProjectItem;
+                if (projectItem != null)
+                {
+                    var selectedPath = TryGetProjectItemFullPath(projectItem);
+                    if (!string.IsNullOrWhiteSpace(selectedPath) && dte.Documents != null)
+                    {
+                        foreach (Document document in dte.Documents)
+                        {
+                            if (string.Equals(document?.FullName, selectedPath, StringComparison.OrdinalIgnoreCase))
+                            {
+                                document.Save();
+                                break;
+                            }
+                        }
+                    }
+                }
+                return;
+            }
+
+            dte?.ActiveDocument?.Save();
         }
 
         internal static string TryGetProjectItemFullPath(ProjectItem projectItem)
