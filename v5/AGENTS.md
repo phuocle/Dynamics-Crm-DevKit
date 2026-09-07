@@ -1,38 +1,53 @@
 # DynamicsCrm.DevKit
 
-## Component Boundaries
+## Core operating rules
 
-If unsure whether a change belongs in `Cli`, `Shared`, or `DynamicsCrm.DevKit.Vsix` (VSIX) — ask. Different frameworks, different binaries.
+- Preserve unrelated working-tree changes. Never stage, commit, or push unless explicitly requested; never use `git add .` or `git add -A`.
+- Run the smallest build covering the changed component. Full debug/release packaging requires an explicit user request; component-specific installation requirements are listed below.
+- Keep source version `4.44.44.44`. Build scripts may replace only `xxxx.yy.zz HH.mm.ss`; verify the placeholder is restored afterward and before any commit.
+- Preserve public command names, tool names, and JSON keys unless the task explicitly changes them.
+- Identify the affected component before editing. If its ownership remains unclear between CLI, Shared, and VSIX, ask: they use different frameworks and binaries.
+
+## Guidance and workflows
+
+`AGENTS.md` is the canonical, client-neutral repository guidance. Keep `CLAUDE.md` and `.github/copilot-instructions.md` as thin bridges without duplicated rules. Client configuration belongs in `.codex/`, `.vscode/`, `.zcode/`, or `.mcp.json`; never commit credentials or local configuration.
+
+Read relevant rules under `DynamicsCrm.DevKit.AI/rules/` only when applicable. When a workflow is named or required, read its complete file before executing it. These are instruction recipes, not generated slash commands. All workflow paths below are relative to `DynamicsCrm.DevKit.AI/workflows/`.
+
+| Task | Workflow file |
+|---|---|
+| Build analyzer | `build-analyzer.md` |
+| Build and install CLI / Tool | `build-cli.md` / `build-tool.md` |
+| Build VSIX | `build-vsix.md` |
+| Full timestamped build / configured release | `build-debug.md` / `build-release.md` |
+| Unit tests (pass/fail) / coverage reports | `unit-test.md` / `code-coverage.md` |
+| Client-code pipeline | `client-code-01-clean.md` through `client-code-05-test.md` |
+| Prepare and commit changes | `commit.md` |
+
+For long tasks or context handoffs, retain the current objective, affected components, user constraints, completed checks, and remaining work. Re-read applicable guidance if context is missing.
+
+## Component boundaries
+
+Paths are relative to this directory; abbreviated paths in later sections are relative to their component.
 
 | Component | Path | Framework |
 |---|---|---|
-| VSIX (VS 2026 extension) | `DynamicsCrm.DevKit.Vsix/` | .NET Framework 4.8 |
-| CLI (`devkit` tool) | `DynamicsCrm.DevKit.Cli/` | .NET 10.0 |
-| Analyzers (DEVKIT1001–1021) | `DynamicsCrm.DevKit.Analyzers/` | .NET Standard 2.0 |
-| Shared (code gen + Dataverse) | `DynamicsCrm.DevKit.Shared/` | Shared Project (.shproj) |
-| MCP server (33 tools) | `DynamicsCrm.DevKit.Cli/Mcp/` | inside CLI |
+| VSIX (VS 2026) | `DynamicsCrm.DevKit.Vsix/` | .NET Framework 4.8 |
+| CLI (`devkit`) | `DynamicsCrm.DevKit.Cli/` | .NET 10.0 |
+| Analyzers | `DynamicsCrm.DevKit.Analyzers/` | .NET Standard 2.0 |
+| Shared (code generation + Dataverse) | `DynamicsCrm.DevKit.Shared/` | Shared Project (.shproj) |
+| MCP server | `DynamicsCrm.DevKit.Cli/Mcp/` | Inside CLI |
 
-Key entry points:
-- CLI: `DynamicsCrm.DevKit.Cli/Program.cs` → `CommandApp` (Spectre.Console.Cli)
-- CLI base command: `Commands/DevKitCommand<T>` → connection, validation, output
-- MCP: `Mcp/McpServerHost.cs` → `ToolCategoryMap` controls which tools load per tier
-- Code gen: `Shared/Helper.cs`, `Shared/XrmHelper.cs` (large by design — do not refactor unless asked)
-- VSIX: `DynamicsCrm.DevKit.Vsix/DevKitPackage.cs` → 13 ProjectTemplates, 17 ItemTemplates
+- CLI entry: `Program.cs` → Spectre.Console.Cli `CommandApp`.
+- VSIX entry: `DevKitPackage.cs`.
+- Shared: `Helper.cs` and `XrmHelper.cs` are large by design; do not refactor unless asked.
+- Analyzers inherit `BaseDiagnosticAnalyzer`; core files in `Core/`: `DiagnosticIdentifiers.cs`, `DiagnosticDescriptors.cs`, `AnalyzerHelper.cs`.
 
----
+## CLI
 
-## CLI Architecture
+`Commands/DevKitCommand<T>` handles connection, validation, header, output, and exit codes. Arguments derive from `Models/DevKitCommandArgs`; implementations in `Tasks/` implement `ITask`. MCP uses `Mcp/McpServerHost.cs` with `Tools/`, `Resources/`, and `Services/`.
 
-```
-Commands/  → DevKitCommand<T> (base: connection, validation, header, exit codes)
-Models/    → DevKitCommandArgs (base) → specific args per command
-Tasks/     → ITask → TaskXxx implementations
-Mcp/       → McpServerHost + Tools/ + Resources/ + Services/
-```
-
-Command → Task mapping:
-
-| Command | Task |
+| Command | Implementation |
 |---|---|
 | `generator` | `TaskGenerator` |
 | `server` | `TaskServer` |
@@ -41,115 +56,55 @@ Command → Task mapping:
 | `solution` | `TaskPacSolutionPackager` |
 | `mcp` | `McpServerHost` |
 
-Deprecated: `plugin`, `workflow`, `dataprovider` → use `server`; `proxytype` → use `modelbuilder`; `legacy-solution` → use `solution`
+Deprecated: `plugin`, `workflow`, `dataprovider` → `server`; `proxytype` → `modelbuilder`; `legacy-solution` → `solution`.
 
-Auth priority:
-- Normal CLI commands: `--conn` > `--auth/--url/...` > project `.env` (`DEVKIT_*`) > empty
-- `devkit mcp`: `--conn` > `--auth/--url/...` > OS env vars (`DEVKIT_*`) > empty
-Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (legacy), `AD` (on-prem)
+Auth priority: `--conn` > `--auth/--url/...` > fallback > empty. Normal commands use project `.env` (`DEVKIT_*`) as fallback; `devkit mcp` uses OS environment variables. Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (legacy), `AD` (on-prem).
 
----
+## MCP
 
-## Unit Tests
-
-Five components, five matching UnitTests projects — all MSTest:
-
-| Component | UnitTests project | Target framework |
-|---|---|---|
-| CLI | `DynamicsCrm.DevKit.Cli.UnitTests` | net10.0 |
-| Tool | `DynamicsCrm.DevKit.Tool.UnitTests` | net10.0 |
-| VSIX | `DynamicsCrm.DevKit.Vsix.UnitTests` | net48 |
-| Analyzers | `DynamicsCrm.DevKit.Analyzers.UnitTests` | net48 |
-| VSIX 2019 | `DynamicsCrm.DevKit.Vsix.2019.UnitTests` | net472 (non-SDK — VS MSBuild + `vstest.console`, not `dotnet test`) |
-
-- Unit tests (run + pass/fail only) → `DynamicsCrm.DevKit.AI/workflows/unit-test.md`
-- Code coverage (line/branch/method + HTML reports) → `DynamicsCrm.DevKit.AI/workflows/code-coverage.md`, or one command: `DynamicsCrm.DevKit.Scripts/Run-Coverage.ps1` (all five, or `-Components Cli,Tool` for a subset)
-- net10.0 suites run MethodLevel-parallel; mark shared-state classes `[DoNotParallelize]`, and keep the `WaitScalePercent` knob when adding slow metadata wait paths (tests zero it)
-
----
-
-## MCP Tools
-
-38 tools (one per tool class) across 2 categories: `readonly` (17 tools) and `all` (default, every tool) — the old `basic`/`standard`/`advanced` tiers were removed.
-
-- Only tool classes get `[McpServerToolType]` — never on helper classes
-- Category derives from `[McpServerTool(ReadOnly = ...)]` on each tool method — single source of truth, no manual mapping
-- When splitting a large tool: entry class stays in `DynamicsCrm.DevKit.Cli.Mcp.Tools`, domain helpers go in subnamespaces (`Tools.Form`, `Tools.Ribbon`, `Tools.SiteMap`)
-- `Mcp/McpServerHost.cs` holds `DisabledToolSet` / `ToolResourceMap` / `CategoryLevel` — `nameof()` for compile-time safety; preserve when adding tools, keep in sync
-- Editing `Cli\Mcp\Tools\*` — preserve existing error text, output shape, structured result fields, and temp-file paths unless the task explicitly changes them
-
----
-
-## Analyzers
-
-21 analyzers, IDs `DEVKIT1001`–`DEVKIT1021`. All inherit `BaseDiagnosticAnalyzer`. Core in `Analyzers/Core/`: `DiagnosticIdentifiers.cs`, `DiagnosticDescriptors.cs`, `AnalyzerHelper.cs`. Unit tests use MSTest targeting net48.
-
----
-
-## Conventions
-
-- `ServiceClient` variable → `serviceClient`
-- `IOrganizationService` variable → `orgService` (field: `_orgService`); `IOrganizationServiceAsync2` variable → `orgServiceAsync`
-- Preserve existing public command names, tool names, and JSON keys
-- Prefer existing helpers in `DynamicsCrm.DevKit.Shared` and `Mcp/Tools/Helper/` before creating new ones
-- All docs → `DynamicsCrm.DevKit.Docs/{ComponentName}/` as `.md` files
-
----
-
-## AI Client Instructions
-
-This repository supports multiple AI clients. Keep project guidance client-neutral:
-
-- `AGENTS.md` is the canonical always-on repository instruction file.
-- Shared rules and workflows live under `DynamicsCrm.DevKit.AI/` and should be read when the task names or requires them.
-- `CLAUDE.md` and `.github/copilot-instructions.md` are thin compatibility bridges; do not duplicate project rules in them.
-- `.codex/`, `.vscode/`, `.zcode/`, and `.mcp.json` contain client-specific configuration only. Never commit credentials or local configuration.
-
-## Core Operating Rules
-
-- Run the smallest build that covers the changed component.
-- Never run full debug or release packaging unless the user explicitly requests that workflow.
-- Preserve unrelated working-tree changes.
-- Never use `git add .` or `git add -A`.
-- Never stage, commit, or push unless the user explicitly requests it.
-- `4.44.44.44` is the stable source version. Build scripts may replace only `xxxx.yy.zz HH.mm.ss`; verify that placeholder is restored afterward.
-- When a workflow is named or required by the task, read the complete workflow file before executing it.
-
-## Build and Verification
-
-Run the smallest relevant build; do not run the full debug/release packaging scripts unless the user explicitly requests them.
-
-Detailed project workflows live in `DynamicsCrm.DevKit.AI/workflows/`. When the user names a workflow (for example `build-cli`, `build-vsix`, `unit-test`, or `client-code-05-test`), read that file completely and execute it. These are reusable instruction recipes, not generated slash commands.
-
-| Workflow | File |
-|---|---|
-| Build analyzer | `DynamicsCrm.DevKit.AI/workflows/build-analyzer.md` |
-| Build and install CLI | `DynamicsCrm.DevKit.AI/workflows/build-cli.md` |
-| Build and install Tool | `DynamicsCrm.DevKit.AI/workflows/build-tool.md` |
-| Build VSIX | `DynamicsCrm.DevKit.AI/workflows/build-vsix.md` |
-| Full timestamped build | `DynamicsCrm.DevKit.AI/workflows/build-debug.md` |
-| Full configured release | `DynamicsCrm.DevKit.AI/workflows/build-release.md` |
-| Unit tests (pass/fail) | `DynamicsCrm.DevKit.AI/workflows/unit-test.md` |
-| Code coverage (unit tests + line/branch/method) | `DynamicsCrm.DevKit.AI/workflows/code-coverage.md` |
-| Client-code pipeline | `DynamicsCrm.DevKit.AI/workflows/client-code-01-clean.md` through `client-code-05-test.md` |
-| Prepare and commit changes | `DynamicsCrm.DevKit.AI/workflows/commit.md` |
-
-| Changed component | Verification |
-|---|---|
-| `DynamicsCrm.DevKit.Analyzers/**` | `dotnet build DynamicsCrm.DevKit.Analyzers/DynamicsCrm.DevKit.Analyzers.csproj --configuration Debug --no-incremental`, then `DynamicsCrm.DevKit.Scripts/Run-Analyzer-Coverage.ps1` |
-| `DynamicsCrm.DevKit.Cli/**` | `dotnet build DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj`; run focused `net10.0` tests |
-| `DynamicsCrm.DevKit.Tool/**` | `DynamicsCrm.DevKit.Scripts/Release.DynamicsCrm.DevKit.Tool.ps1` when the installed tool must be refreshed |
-| `DynamicsCrm.DevKit.Vsix/**` | Build with Visual Studio MSBuild, not `dotnet build` |
-
-For CLI changes that must refresh the installed `devkit` tool, run `DynamicsCrm.DevKit.Scripts/Release.DynamicsCrm.DevKit.Cli.ps1`. The release scripts restore date-replacement files in `finally`; still verify the working tree afterward.
+- Categories: `readonly` and `all` (default). Derive membership from each method's `[McpServerTool(ReadOnly = ...)]`; do not add manual category mappings or restore the removed `basic`/`standard`/`advanced` tiers.
+- Apply `[McpServerToolType]` only to tool classes, never helpers.
+- Keep entry classes in `DynamicsCrm.DevKit.Cli.Mcp.Tools`; put extracted domain helpers in subnamespaces such as `Tools.Form`, `Tools.Ribbon`, and `Tools.SiteMap`.
+- Maintain `DisabledToolSet`, `ToolResourceMap`, and `CategoryLevel` in `McpServerHost.cs` when adding tools; use `nameof()` for tool type references.
+- When editing `Mcp/Tools/`, preserve error text, output shape, structured result fields, and temp-file paths unless explicitly changed by the task.
 
 After editing `DynamicsCrm.DevKit.Cli/Mcp/**`:
 
-1. Rebuild and reinstall the CLI with `Release.DynamicsCrm.DevKit.Cli.ps1`.
+1. Rebuild and reinstall using `DynamicsCrm.DevKit.Scripts/Release.DynamicsCrm.DevKit.Cli.ps1`.
 2. Restart the active MCP client connector and call `whoami` to start a fresh DevKit MCP process.
-3. Verify runtime version, build timestamp, process start time, and assembly SHA against the build manifest under `Published/<version>/`.
+3. Verify runtime version, build timestamp, process start time, and assembly SHA against the manifest under `Published/<version>/`.
 
-## Watch Out
+## Verification
 
-- `4.44.44.44` is the stable source version. Release/debug scripts replace only the build-date placeholder `xxxx.yy.zz HH.mm.ss`; never commit files while date replacements are still applied.
-- Editing a single component → run only that component's build, not the full solution
+For a requested full release verification, read and follow these two workflows in order:
+
+1. [Full configured release](DynamicsCrm.DevKit.AI/workflows/build-release.md): wait for completion, verify installed CLI/Tool versions and all four Analyzer/CLI/Tool/VSIX artifacts under `Published/<version>/`, and confirm temporary build-date replacements are restored.
+2. [Code coverage](DynamicsCrm.DevKit.AI/workflows/code-coverage.md): run `DynamicsCrm.DevKit.Scripts/Run-Coverage.ps1` without `-Components` to build and test all five `*.UnitTests` projects: Cli, Tool, Vsix, Analyzers, and Vsix.2019. Allow roughly 5 minutes for coverage (an estimate, not a timeout); wait for completion. Report pass/fail per project, then measured line/branch/method coverage per assembly and HTML report locations. Report failures and any collected coverage; never infer success from the release build alone.
+
+For component-scoped changes, use the checks below; a full release still requires an explicit user request.
+
+| Changed component | Required verification |
+|---|---|
+| Analyzers | `dotnet build DynamicsCrm.DevKit.Analyzers/DynamicsCrm.DevKit.Analyzers.csproj --configuration Debug --no-incremental`, then `DynamicsCrm.DevKit.Scripts/Run-Analyzer-Coverage.ps1` |
+| CLI | `dotnet build DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj`; run focused net10.0 tests |
+| Tool | `DynamicsCrm.DevKit.Scripts/Release.DynamicsCrm.DevKit.Tool.ps1` when the installed tool must be refreshed |
+| VSIX | Build with Visual Studio MSBuild, not `dotnet build` |
+
+When CLI changes require refreshing the installed `devkit`, use `DynamicsCrm.DevKit.Scripts/Release.DynamicsCrm.DevKit.Cli.ps1`. Release scripts restore date-replacement files in `finally`; still inspect the working tree afterward.
+
+All test projects use MSTest and are named `DynamicsCrm.DevKit.<Component>.UnitTests`:
+
+| Component | Test framework target / runner |
+|---|---|
+| `Cli`, `Tool` | net10.0 |
+| `Vsix`, `Analyzers` | net48 |
+| `Vsix.2019` | net472, non-SDK; VS MSBuild + `vstest.console`, not `dotnet test` |
+
+- net10.0 suites run MethodLevel-parallel: mark shared-state classes `[DoNotParallelize]`. Preserve `WaitScalePercent` when adding slow metadata wait paths; tests set it to zero.
+- Coverage entry point: `DynamicsCrm.DevKit.Scripts/Run-Coverage.ps1` (all five suites, or a subset such as `-Components Cli,Tool`); follow the coverage workflow above.
+
+## Conventions
+
+- Name `ServiceClient` variables `serviceClient`; `IOrganizationService` variables `orgService` (field `_orgService`); `IOrganizationServiceAsync2` variables `orgServiceAsync`.
+- Prefer existing helpers in `DynamicsCrm.DevKit.Shared/` and `DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/` before creating new ones.
+- Product documentation belongs in `DynamicsCrm.DevKit.Docs/{ComponentName}/` as `.md`; AI rules and workflows belong in `DynamicsCrm.DevKit.AI/`.
