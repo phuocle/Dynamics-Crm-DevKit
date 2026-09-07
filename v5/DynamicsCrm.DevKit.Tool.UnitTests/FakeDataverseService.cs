@@ -16,11 +16,11 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
     /// </summary>
     internal class FakeDataverseService : IOrganizationService
     {
-        public Func<OrganizationRequest, OrganizationResponse> ExecuteHandler;
-        public Func<QueryBase, EntityCollection> RetrieveMultipleHandler;
-        public Func<string, Guid, ColumnSet, Entity> RetrieveHandler;
-        public Func<Entity, Guid> CreateHandler;
-        public Action<Entity> UpdateAction;
+        public Func<OrganizationRequest, OrganizationResponse> ExecuteHandler { get; set; }
+        public Func<QueryBase, EntityCollection> RetrieveMultipleHandler { get; set; }
+        public Func<string, Guid, ColumnSet, Entity> RetrieveHandler { get; set; }
+        public Func<Entity, Guid> CreateHandler { get; set; }
+        public Action<Entity> UpdateAction { get; set; }
         public List<Entity> Updated { get; } = new List<Entity>();
         public List<OrganizationRequest> Executed { get; } = new List<OrganizationRequest>();
         public List<QueryBase> Queried { get; } = new List<QueryBase>();

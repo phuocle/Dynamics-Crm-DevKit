@@ -41,7 +41,7 @@ Command → Task mapping:
 | `solution` | `TaskPacSolutionPackager` |
 | `mcp` | `McpServerHost` |
 
-Deprecated: `plugin`, `workflow`, `dataprovider` → use `server`; `proxytype` → use `modelbuilder`
+Deprecated: `plugin`, `workflow`, `dataprovider` → use `server`; `proxytype` → use `modelbuilder`; `legacy-solution` → use `solution`
 
 Auth priority:
 - Normal CLI commands: `--conn` > `--auth/--url/...` > project `.env` (`DEVKIT_*`) > empty
@@ -50,13 +50,32 @@ Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (leg
 
 ---
 
+## Unit Tests
+
+Five components, five matching UnitTests projects — all MSTest:
+
+| Component | UnitTests project | Target framework |
+|---|---|---|
+| CLI | `DynamicsCrm.DevKit.Cli.UnitTests` | net10.0 |
+| Tool | `DynamicsCrm.DevKit.Tool.UnitTests` | net10.0 |
+| VSIX | `DynamicsCrm.DevKit.UnitTests` | net48 |
+| Analyzers | `DynamicsCrm.DevKit.Analyzers.UnitTests` | net48 |
+| VSIX 2019 | `DynamicsCrm.DevKit.2019.UnitTests` | net472 (non-SDK — VS MSBuild + `vstest.console`, not `dotnet test`) |
+
+- Unit tests (run + pass/fail only) → `.codex/workflows/unit-test.md`
+- Code coverage (line/branch/method + HTML reports) → `.codex/workflows/code-coverage.md`, or one command: `DynamicsCrm.DevKit.Scripts/Run-Coverage.ps1` (all five, or `-Components Cli,Tool` for a subset)
+- net10.0 suites run MethodLevel-parallel; mark shared-state classes `[DoNotParallelize]`, and keep the `WaitScalePercent` knob when adding slow metadata wait paths (tests zero it)
+
+---
+
 ## MCP Tools
 
-33 tools across 3 tiers (`basic` / `standard` / `advanced`).
+38 tools (one per tool class) across 2 categories: `readonly` (17 tools) and `all` (default, every tool) — the old `basic`/`standard`/`advanced` tiers were removed.
 
 - Only tool classes get `[McpServerToolType]` — never on helper classes
+- Category derives from `[McpServerTool(ReadOnly = ...)]` on each tool method — single source of truth, no manual mapping
 - When splitting a large tool: entry class stays in `DynamicsCrm.DevKit.Cli.Mcp.Tools`, domain helpers go in subnamespaces (`Tools.Form`, `Tools.Ribbon`, `Tools.SiteMap`)
-- `ToolCategoryMap` uses `nameof()` for compile-time safety — preserve when adding tools, keep in sync
+- `Mcp/McpServerHost.cs` holds `DisabledToolSet` / `ToolResourceMap` / `CategoryLevel` — `nameof()` for compile-time safety; preserve when adding tools, keep in sync
 - Editing `Cli\Mcp\Tools\*` — preserve existing error text, output shape, structured result fields, and temp-file paths unless the task explicitly changes them
 
 ---

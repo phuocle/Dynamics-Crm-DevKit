@@ -25,7 +25,7 @@ public class McpModelCoverageTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ModelTypes), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ModelTypes))]
     public void AllModelTypes_CanBeConstructedAndSerialized(Type t)
     {
         var instance = Activator.CreateInstance(t);

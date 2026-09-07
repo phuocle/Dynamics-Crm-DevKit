@@ -32,7 +32,6 @@ public sealed class TaskUploadReportCoverageTests
     private Entity? _lastUpdated;
     private List<Entity> _reportRows = new();
     private Entity? _reportRecord;
-    private string _reportBodyText = "old report";
 
     [TestInitialize]
     public void Setup()
@@ -46,7 +45,6 @@ public sealed class TaskUploadReportCoverageTests
         _lastUpdated = null;
         _reportRows = new List<Entity>();
         _reportRecord = null;
-        _reportBodyText = "old report";
 
         A.CallTo(() => _service.RetrieveMultipleAsync(A<QueryBase>.Ignored))
             .ReturnsLazily(call => Task.FromResult(OnRetrieveMultiple((QueryBase)call.Arguments[0])));

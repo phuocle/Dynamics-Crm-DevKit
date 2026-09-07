@@ -44,8 +44,8 @@ public class UpdateCheckerCoverageTests
         // First call hits network (or returns None on failure), second call should be cached
         var first = await UpdateChecker.CheckAsync();
         var second = await UpdateChecker.CheckAsync();
-        Assert.IsNotNull(first);
-        Assert.IsNotNull(second);
+        Assert.AreEqual(first.HasUpdate, second.HasUpdate);
+        Assert.AreEqual(first.LatestVersion, second.LatestVersion);
     }
 
     [TestMethod]

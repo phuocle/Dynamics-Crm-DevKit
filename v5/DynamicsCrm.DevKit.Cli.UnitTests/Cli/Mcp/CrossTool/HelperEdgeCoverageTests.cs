@@ -76,8 +76,10 @@ public sealed class HelperEdgeCoverageTests
     {
         MetadataOperationWaitHelper.WaitAfterMutation(0);
         MetadataOperationWaitHelper.WaitAfterMutation(-1);
+#pragma warning disable MSTEST0032 // Testing constant contract
         Assert.AreEqual(15, MetadataOperationWaitHelper.DefaultWaitSeconds);
         Assert.AreEqual(4 * 1024 * 1024, FileColumnTransferHelper.BlockSize);
+#pragma warning restore MSTEST0032
     }
 
     [TestMethod]

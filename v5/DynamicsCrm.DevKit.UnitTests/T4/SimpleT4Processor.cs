@@ -69,7 +69,7 @@ public static class SimpleT4Processor
     private static (string replacement, int endPos) ParseAndEvaluateIfChain(string template, int start, T4Context context)
     {
         var branches = new List<(string condition, string body)>();
-        string? elseBody = null;
+        string elseBody = null;
         var pos = start;
 
         var ifHeaderEnd = template.IndexOf("{#>", pos, StringComparison.Ordinal);
@@ -271,7 +271,7 @@ public static class SimpleT4Processor
         return reader.ReadToEnd();
     }
 
-    private static string? FindTtFolder()
+    private static string FindTtFolder()
     {
         var dir = new DirectoryInfo(AppContext.BaseDirectory);
         while (dir != null)

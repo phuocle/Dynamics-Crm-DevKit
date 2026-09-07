@@ -160,7 +160,7 @@ public sealed class WhoAmILanguageTableCoverageTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(LanguageTable), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(LanguageTable))]
     public void GetLanguageName_KnownLcid_ReturnsName(int lcid, string expected)
     {
         Assert.AreEqual(expected, GetLanguageName(lcid));

@@ -1,30 +1,75 @@
-<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>net472</TargetFramework>
-		<RuntimeIdentifier>win</RuntimeIdentifier>
-		<Nullable>disable</Nullable>
-		<LangVersion>latest</LangVersion>
-		<IsPackable>false</IsPackable>
-	</PropertyGroup>
-	<ItemGroup>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
-		<PackageReference Include="MSTest.TestAdapter" Version="4.3.3" />
-		<PackageReference Include="MSTest.TestFramework" Version="4.3.3" />
-		<PackageReference Include="coverlet.collector" Version="6.0.4">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="EnvDTE80" Version="8.0.3" />
-	</ItemGroup>
-	<ItemGroup>
-		<Reference Include="WindowsBase" />
-		<Reference Include="PresentationCore" />
-		<Reference Include="PresentationFramework" />
-		<Reference Include="System.Xaml" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\DynamicsCrm.DevKit.2019\DynamicsCrm.DevKit.2019.csproj" />
-	</ItemGroup>
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B9635E71-6C23-4DF8-BA35-C4F8F49F4E5A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DynamicsCrm.DevKit.UnitTests</RootNamespace>
+    <AssemblyName>DynamicsCrm.DevKit.2019.UnitTests</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">16.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <LangVersion>latest</LangVersion>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <NETCoreSdkVersion Condition="'$(NETCoreSdkVersion)' == ''">0.0.0</NETCoreSdkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\net472\win\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\net472\win\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FormReportMappingTests.cs" />
+    <Compile Include="ModelsTests.cs" />
+    <Compile Include="ReportConfigHelperTests.cs" />
+    <Compile Include="TestInfrastructure\FakeCrmServiceClient.cs" />
+    <Compile Include="TestInfrastructure\FakeDte.cs" />
+    <Compile Include="TestInfrastructure\InterfaceProxy.cs" />
+    <Compile Include="TestInfrastructure\StaRunner.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.3.3" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.3.3" />
+    <PackageReference Include="coverlet.collector" Version="6.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="EnvDTE80" Version="8.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DynamicsCrm.DevKit.2019\DynamicsCrm.DevKit.2019.csproj">
+      <Project>{48CE91B9-F2C9-4060-B222-8F16D67F5BA0}</Project>
+      <Name>DynamicsCrm.DevKit.2019</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

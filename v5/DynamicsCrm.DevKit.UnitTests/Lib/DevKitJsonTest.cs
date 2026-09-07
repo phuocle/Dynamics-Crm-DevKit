@@ -199,7 +199,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             Assert.IsNull(result);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(null)]
         [DataRow("")]
         [DataRow("   ")]

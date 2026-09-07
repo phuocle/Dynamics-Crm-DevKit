@@ -8,6 +8,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli;
 public class DevKitExceptionsCoverageTests
 {
     [TestMethod]
+#pragma warning disable MSTEST0032 // Testing constant contract
     public void ExitCodes_HasExpectedValues()
     {
         Assert.AreEqual(0, ExitCodes.Success);
@@ -16,6 +17,7 @@ public class DevKitExceptionsCoverageTests
         Assert.AreEqual(3, ExitCodes.RuntimeError);
         Assert.AreEqual(4, ExitCodes.ConfigurationError);
     }
+#pragma warning restore MSTEST0032
 
     [TestMethod]
     public void DevKitValidationException_MessageCtor_SetsMessage()

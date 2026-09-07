@@ -30,7 +30,6 @@ public sealed class ManageTableFakeSdkCoverageTests
     private FakeSdkClient _fake = null!;
     private List<EntityMetadata> _entities = null!;
     private Entity? _solutionRow;
-    private EntityMetadata? _createdMetadata;
     private CreateEntityRequest? _capturedCreate;
 
     [TestInitialize]
@@ -44,7 +43,6 @@ public sealed class ManageTableFakeSdkCoverageTests
             ["uniquename"] = "DevKitSolution",
             ["publisherid"] = new EntityReference("publisher", Guid.NewGuid())
         };
-        _createdMetadata = null;
         _fake.OnExecute = ExecuteHandler;
         _fake.OnRetrieveMultiple = RetrieveMultipleHandler;
         _fake.OnRetrieve = (entityName, id, _) =>
