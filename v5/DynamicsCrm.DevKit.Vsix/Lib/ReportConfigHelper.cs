@@ -1,6 +1,6 @@
 using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Shared;
-using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Lib;
 using System;
 using System.IO;
 using System.Linq;

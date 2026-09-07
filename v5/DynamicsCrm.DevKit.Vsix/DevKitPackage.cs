@@ -1,4 +1,4 @@
-using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Lib;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using System;
@@ -18,7 +18,7 @@ namespace DynamicsCrm.DevKit
     [Guid(PackageGuids.DynamicsCrmDevKitString)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExistsAndFullyLoaded_string, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideBindingPath] // Helps VS resolve assemblies from VSIX location automatically
-    public sealed partial class DevKitPackage : ToolkitPackage
+    public sealed partial class DevKitPackage : AsyncPackage
     {
         private static bool _assembliesLoaded = false;
         private static readonly object _lockObject = new object();
@@ -30,13 +30,15 @@ namespace DynamicsCrm.DevKit
             // Load assemblies in background - NO need for main thread
             await Task.Run(() => LoadRequiredAssemblies(), cancellationToken);
 
+            VsServices.Initialize(this);
+
             // Preload NuGet package versions in background (fire-and-forget)
             // Start early so cache is ready by the time user creates a project
             Shared.NuGetVersionCache.StartPreload();
 
             // Only switch to main thread for UI-related operations (command registration)
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-            await this.RegisterCommandsAsync();
+            await CommandRegistrar.RegisterAsync(this);
         }
 
         private void LoadRequiredAssemblies()

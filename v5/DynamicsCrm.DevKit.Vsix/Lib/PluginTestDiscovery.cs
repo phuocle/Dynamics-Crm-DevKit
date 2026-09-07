@@ -1,4 +1,4 @@
-using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Lib;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.Collections.Concurrent;

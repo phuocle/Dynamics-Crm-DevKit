@@ -1,4 +1,4 @@
-using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.ConnectionBuilder;
 using DynamicsCrm.DevKit.Shared.Models;
@@ -265,7 +265,8 @@ namespace DynamicsCrm.DevKit.Lib
         public static async Task<string> GetActiveProjectFolderAsync()
         {
             var project = await VS.Solutions.GetActiveProjectAsync();
-            return $"{Path.GetDirectoryName(project.FullPath)}";
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            return $"{Path.GetDirectoryName(project.FullName)}";
         }
 
         public static async Task<string> GetSharedProjectAsync()
@@ -276,10 +277,7 @@ namespace DynamicsCrm.DevKit.Lib
 
         public static async Task<bool> IsProjectExistAsync(string projectName)
         {
-            if (string.IsNullOrEmpty(projectName))
-                return false;
-            var projects = await VS.Solutions.GetAllProjectsAsync(ProjectStateFilter.All);
-            return projects.Any(x => x.Name == projectName);
+            return await VS.Solutions.ContainsProjectAsync(projectName);
         }
 
 

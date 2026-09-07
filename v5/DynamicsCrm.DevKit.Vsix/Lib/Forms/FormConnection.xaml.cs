@@ -1,4 +1,4 @@
-﻿using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.ConnectionBuilder;
 using DynamicsCrm.DevKit.Shared.ConnectionBuilder.Metadata;
@@ -368,7 +368,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     buttonCheckConnection.IsEnabled = false;
                     buttonOK.IsEnabled = false;
                     buttonCancel.IsEnabled = false;
-                }).FireAndForget();
+                }).Task.Forget();
 #pragma warning restore VSSDK007
             };
         }

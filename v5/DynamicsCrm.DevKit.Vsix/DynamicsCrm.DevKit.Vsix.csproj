@@ -111,6 +111,7 @@
     <Compile Include="Lib\T4Helper.cs" />
     <Compile Include="Lib\VsixHelper.cs" />
     <Compile Include="Lib\TypeScriptBuildHelper.cs" />
+    <Compile Include="Lib\VsServices.cs" />
     <Compile Include="Lib\WpfControls\ExternalBrowserHyperlink.cs" />
     <Compile Include="Lib\WpfControls\UserControlConnection.xaml.cs">
       <DependentUpon>UserControlConnection.xaml</DependentUpon>
@@ -166,6 +167,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -173,10 +175,6 @@
   </ItemGroup>
   <ItemGroup>
     <!-- NuGet Package References -->
-    <PackageReference Include="Community.VisualStudio.Toolkit" Version="17.0.76.309" />
-    <PackageReference Include="Community.VisualStudio.Toolkit.17">
-      <Version>17.0.551</Version>
-    </PackageReference>
     <PackageReference Include="Community.VisualStudio.VSCT">
       <Version>16.0.29.14</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
