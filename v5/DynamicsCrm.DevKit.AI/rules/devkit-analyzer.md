@@ -36,7 +36,7 @@ Read:
 
 ## Verification
 
-Execute `.codex/workflows/build-analyzer.md`. If only a narrow test is needed during iteration, run it first, but complete the analyzer workflow before handoff.
+Execute `DynamicsCrm.DevKit.AI/workflows/build-analyzer.md`. If only a narrow test is needed during iteration, run it first, but complete the analyzer workflow before handoff.
 
 When adding a new analyzer, also update:
 

@@ -62,8 +62,8 @@ Five components, five matching UnitTests projects — all MSTest:
 | Analyzers | `DynamicsCrm.DevKit.Analyzers.UnitTests` | net48 |
 | VSIX 2019 | `DynamicsCrm.DevKit.Vsix.2019.UnitTests` | net472 (non-SDK — VS MSBuild + `vstest.console`, not `dotnet test`) |
 
-- Unit tests (run + pass/fail only) → `.codex/workflows/unit-test.md`
-- Code coverage (line/branch/method + HTML reports) → `.codex/workflows/code-coverage.md`, or one command: `DynamicsCrm.DevKit.Scripts/Run-Coverage.ps1` (all five, or `-Components Cli,Tool` for a subset)
+- Unit tests (run + pass/fail only) → `DynamicsCrm.DevKit.AI/workflows/unit-test.md`
+- Code coverage (line/branch/method + HTML reports) → `DynamicsCrm.DevKit.AI/workflows/code-coverage.md`, or one command: `DynamicsCrm.DevKit.Scripts/Run-Coverage.ps1` (all five, or `-Components Cli,Tool` for a subset)
 - net10.0 suites run MethodLevel-parallel; mark shared-state classes `[DoNotParallelize]`, and keep the `WaitScalePercent` knob when adding slow metadata wait paths (tests zero it)
 
 ---
@@ -96,35 +96,34 @@ Five components, five matching UnitTests projects — all MSTest:
 
 ---
 
-## Codex App
+## AI Client Instructions
 
-Codex App/ChatGPT is the only supported AI client for this repository.
+This repository supports multiple AI clients. Keep project guidance client-neutral:
 
-- `AGENTS.md` is the single source of repository instructions and is maintained directly.
-- `.codex/config.toml.example` is the only tracked MCP client example. It must use the fixed process alias `devkit-codex`.
-- `.codex/rules/*.md` contains optional, detailed rules. Do not apply them automatically; read and follow one only when the user points to that rule file.
-- `.codex/workflows/*.md` contains the 14 core project workflows referenced below.
-- `.codex/config.toml` is local, may contain per-user settings, and must not be committed.
-- Do not add generated adapters or configuration for Claude, GitHub Copilot, Antigravity, Cursor, or other AI clients.
+- `AGENTS.md` is the canonical always-on repository instruction file.
+- Shared rules and workflows live under `DynamicsCrm.DevKit.AI/` and should be read when the task names or requires them.
+- `CLAUDE.md` and `.github/copilot-instructions.md` are thin compatibility bridges; do not duplicate project rules in them.
+- `.codex/`, `.vscode/`, `.zcode/`, and `.mcp.json` contain client-specific configuration only. Never commit credentials or local configuration.
+- `.codex/config.toml.example` is the tracked Codex MCP example and must use the fixed process alias `devkit-codex`.
 
 ## Build and Verification
 
 Run the smallest relevant build; do not run the full debug/release packaging scripts unless the user explicitly requests them.
 
-Detailed Codex workflows live in `.codex/workflows/`. When the user names a workflow (for example `build-cli`, `build-vsix`, `unit-test`, or `client-code-05-test`), read that file completely and execute it. These are Codex instruction recipes, not generated slash commands.
+Detailed project workflows live in `DynamicsCrm.DevKit.AI/workflows/`. When the user names a workflow (for example `build-cli`, `build-vsix`, `unit-test`, or `client-code-05-test`), read that file completely and execute it. These are reusable instruction recipes, not generated slash commands.
 
 | Workflow | File |
 |---|---|
-| Build analyzer | `.codex/workflows/build-analyzer.md` |
-| Build and install CLI | `.codex/workflows/build-cli.md` |
-| Build and install Tool | `.codex/workflows/build-tool.md` |
-| Build VSIX | `.codex/workflows/build-vsix.md` |
-| Full timestamped build | `.codex/workflows/build-debug.md` |
-| Full configured release | `.codex/workflows/build-release.md` |
-| Unit tests (pass/fail) | `.codex/workflows/unit-test.md` |
-| Code coverage (unit tests + line/branch/method) | `.codex/workflows/code-coverage.md` |
-| Client-code pipeline | `.codex/workflows/client-code-01-clean.md` through `.codex/workflows/client-code-05-test.md` |
-| Prepare and commit changes | `.codex/workflows/commit.md` |
+| Build analyzer | `DynamicsCrm.DevKit.AI/workflows/build-analyzer.md` |
+| Build and install CLI | `DynamicsCrm.DevKit.AI/workflows/build-cli.md` |
+| Build and install Tool | `DynamicsCrm.DevKit.AI/workflows/build-tool.md` |
+| Build VSIX | `DynamicsCrm.DevKit.AI/workflows/build-vsix.md` |
+| Full timestamped build | `DynamicsCrm.DevKit.AI/workflows/build-debug.md` |
+| Full configured release | `DynamicsCrm.DevKit.AI/workflows/build-release.md` |
+| Unit tests (pass/fail) | `DynamicsCrm.DevKit.AI/workflows/unit-test.md` |
+| Code coverage (unit tests + line/branch/method) | `DynamicsCrm.DevKit.AI/workflows/code-coverage.md` |
+| Client-code pipeline | `DynamicsCrm.DevKit.AI/workflows/client-code-01-clean.md` through `client-code-05-test.md` |
+| Prepare and commit changes | `DynamicsCrm.DevKit.AI/workflows/commit.md` |
 
 | Changed component | Verification |
 |---|---|
@@ -138,7 +137,7 @@ For CLI changes that must refresh the installed `devkit` tool, run `DynamicsCrm.
 After editing `DynamicsCrm.DevKit.Cli/Mcp/**`:
 
 1. Rebuild and reinstall the CLI with `Release.DynamicsCrm.DevKit.Cli.ps1`.
-2. Restart the Codex MCP connector and call `whoami` to start a fresh `devkit mcp devkit-codex` process.
+2. Restart the active MCP client connector and call `whoami` to start a fresh DevKit MCP process.
 3. Verify runtime version, build timestamp, process start time, and assembly SHA against the build manifest under `Published/<version>/`.
 
 Never stage, commit, or push unless the user explicitly requests it.

@@ -45,11 +45,11 @@ Respect the scope named by the user. If no narrower JS/TS or UnitTest/AICode/VSI
 
 1. Reproduce and identify the source-of-truth defect.
 2. Fix the source, not a synchronized copy.
-3. Execute `.codex/workflows/client-code-03-generate.md` when generated entities can change.
-4. Execute `.codex/workflows/client-code-04-sync.md` to distribute source and generated files.
-5. Execute `.codex/workflows/client-code-05-test.md` for complete checks, builds, and tests.
+3. Execute `DynamicsCrm.DevKit.AI/workflows/client-code-03-generate.md` when generated entities can change.
+4. Execute `DynamicsCrm.DevKit.AI/workflows/client-code-04-sync.md` to distribute source and generated files.
+5. Execute `DynamicsCrm.DevKit.AI/workflows/client-code-05-test.md` for complete checks, builds, and tests.
 
-Use `.codex/workflows/client-code-01-clean.md` and `client-code-02-install.md` only when cleanup or dependency installation is actually needed.
+Use `DynamicsCrm.DevKit.AI/workflows/client-code-01-clean.md` and `client-code-02-install.md` only when cleanup or dependency installation is actually needed.
 
 ## Sync map
 

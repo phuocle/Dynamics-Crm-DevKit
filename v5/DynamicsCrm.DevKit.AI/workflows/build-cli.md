@@ -15,4 +15,4 @@ Wait for the script to finish. Read the version from `DynamicsCrm.DevKit.Scripts
 - `Published/<version>/DynamicsCrm.DevKit.Cli.<version>.build-manifest.json` exists.
 - `git status` contains no unintended build-date replacements; `DynamicsCrm.DevKit.Shared/Const.cs` contains `xxxx.yy.zz HH.mm.ss` again.
 
-If MCP code changed, restart the Codex MCP connector, call `whoami`, and compare its runtime version, build timestamp, process start time, assembly path, and SHA with the build manifest.
+If MCP code changed, restart the active MCP client connector, call `whoami`, and compare its runtime version, build timestamp, process start time, assembly path, and SHA with the build manifest.
