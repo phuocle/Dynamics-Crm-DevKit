@@ -104,7 +104,16 @@ This repository supports multiple AI clients. Keep project guidance client-neutr
 - Shared rules and workflows live under `DynamicsCrm.DevKit.AI/` and should be read when the task names or requires them.
 - `CLAUDE.md` and `.github/copilot-instructions.md` are thin compatibility bridges; do not duplicate project rules in them.
 - `.codex/`, `.vscode/`, `.zcode/`, and `.mcp.json` contain client-specific configuration only. Never commit credentials or local configuration.
-- `.codex/config.toml.example` is the tracked Codex MCP example and must use the fixed process alias `devkit-codex`.
+
+## Core Operating Rules
+
+- Run the smallest build that covers the changed component.
+- Never run full debug or release packaging unless the user explicitly requests that workflow.
+- Preserve unrelated working-tree changes.
+- Never use `git add .` or `git add -A`.
+- Never stage, commit, or push unless the user explicitly requests it.
+- `4.44.44.44` is the stable source version. Build scripts may replace only `xxxx.yy.zz HH.mm.ss`; verify that placeholder is restored afterward.
+- When a workflow is named or required by the task, read the complete workflow file before executing it.
 
 ## Build and Verification
 
@@ -139,8 +148,6 @@ After editing `DynamicsCrm.DevKit.Cli/Mcp/**`:
 1. Rebuild and reinstall the CLI with `Release.DynamicsCrm.DevKit.Cli.ps1`.
 2. Restart the active MCP client connector and call `whoami` to start a fresh DevKit MCP process.
 3. Verify runtime version, build timestamp, process start time, and assembly SHA against the build manifest under `Published/<version>/`.
-
-Never stage, commit, or push unless the user explicitly requests it.
 
 ## Watch Out
 
