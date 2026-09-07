@@ -83,6 +83,6 @@ var account = service.Retrieve("account", id, new ColumnSet(true));
 
 - [Repository README](../../README.md)
 - [NuGet package](https://www.nuget.org/packages/DynamicsCrm.DevKit.Analyzers)
-- [Visual Studio extension](../DynamicsCrm.DevKit/README.md)
+- [Visual Studio extension](../DynamicsCrm.DevKit.Vsix/README.md)
 - [CLI](../DynamicsCrm.DevKit.Cli/README.md)
 - [Issues](https://github.com/phuocle/Dynamics-Crm-DevKit/issues)

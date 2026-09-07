@@ -161,9 +161,9 @@ function Clear-VsixGeneratedOutputs {
     param ($ProjectRoot, $Configuration)
 
     $paths = @(
-        "DynamicsCrm.DevKit\obj\$Configuration\extension.vsixmanifest",
-        "DynamicsCrm.DevKit\bin\$Configuration\extension.vsixmanifest",
-        "DynamicsCrm.DevKit\bin\$Configuration\DynamicsCrm.DevKit.vsix"
+        "DynamicsCrm.DevKit.Vsix\obj\$Configuration\extension.vsixmanifest",
+        "DynamicsCrm.DevKit.Vsix\bin\$Configuration\extension.vsixmanifest",
+        "DynamicsCrm.DevKit.Vsix\bin\$Configuration\DynamicsCrm.DevKit.vsix"
     )
 
     foreach ($path in $paths) {
@@ -259,7 +259,7 @@ try {
     Write-Host "Using MSBuild: $msbuild" -ForegroundColor DarkGray
 
     $analyzerProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj"
-    $vsixProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit\DynamicsCrm.DevKit.csproj"
+    $vsixProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Vsix\DynamicsCrm.DevKit.Vsix.csproj"
     $cliProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj"
     $toolProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Tool\DynamicsCrm.DevKit.Tool.csproj"
     $publishDirName = $Version
@@ -295,7 +295,7 @@ try {
         (Join-Path $publishDir "DynamicsCrm.DevKit.Analyzers.$Version.nupkg"),
         (Join-Path $publishDir "DynamicsCrm.DevKit.Cli.$Version.nupkg"),
         (Join-Path $publishDir "DynamicsCrm.DevKit.Tool.$Version.nupkg"),
-        (Join-Path $publishDir "DynamicsCrm.DevKit.$Version.vsix")
+        (Join-Path $publishDir "DynamicsCrm.DevKit.Vsix.$Version.vsix")
     )
     foreach ($artifact in $ownedArtifacts) {
         if (Test-Path $artifact) {
@@ -336,7 +336,7 @@ try {
 
     & $msbuild $vsixBuildArgs
     if ($LASTEXITCODE -ne 0) { throw "VSIX Project Build failed with exit code $LASTEXITCODE" }
-    Assert-VsixTemplateContent -VsixPath (Join-Path $ProjectRoot "DynamicsCrm.DevKit\bin\$Configuration\DynamicsCrm.DevKit.vsix")
+    Assert-VsixTemplateContent -VsixPath (Join-Path $ProjectRoot "DynamicsCrm.DevKit.Vsix\bin\$Configuration\DynamicsCrm.DevKit.vsix")
     Write-Host "VSIX Project Build Success." -ForegroundColor Green
 
     Write-Host "`nCreating NuGet Packages..." -ForegroundColor Yellow
@@ -418,9 +418,9 @@ try {
     }
 
     Write-Host "`nCopying VSIX..." -ForegroundColor Yellow
-    $vsixSource = Join-Path $ProjectRoot "DynamicsCrm.DevKit\bin\$Configuration\DynamicsCrm.DevKit.vsix"
+    $vsixSource = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Vsix\bin\$Configuration\DynamicsCrm.DevKit.vsix"
     if (Test-Path $vsixSource) {
-        $vsixDestName = "DynamicsCrm.DevKit.$Version.vsix"
+        $vsixDestName = "DynamicsCrm.DevKit.Vsix.$Version.vsix"
         $vsixDest = Join-Path $publishDir $vsixDestName
         Copy-Item $vsixSource $vsixDest -Force
         Write-Host "Copied VSIX to $vsixDest" -ForegroundColor Green

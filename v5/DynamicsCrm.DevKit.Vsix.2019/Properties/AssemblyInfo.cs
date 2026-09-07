@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -32,4 +32,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("4.44.44.44")]
 [assembly: AssemblyFileVersion("4.44.44.44")]
 
-[assembly: InternalsVisibleTo("DynamicsCrm.DevKit.2019.UnitTests")]
+[assembly: InternalsVisibleTo("DynamicsCrm.DevKit.Vsix.2019.UnitTests")]

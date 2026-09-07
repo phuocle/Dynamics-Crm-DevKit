@@ -42,12 +42,12 @@ Dataverse lưu SSRS reports trong entity **`report`** với solution component t
 #### VSIX (VS 2022/2026)
 - **Project Template**: `12.ReportProjectTemplate` — tạo `.rptproj` với sample `ReportTemplate.rdl`
 - **Batch scripts**: `download.reports.bat` và `upload.reports.bat` delegate deploy qua CLI
-- File: [`Report.cs`](file:///d:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit/Wizard/ProjectTemplates/Report.cs)
+- File: [`Report.cs`](file:///d:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Vsix/Wizard/ProjectTemplates/Report.cs)
 
 #### VSIX 2019
-- **Upload Report**: Right-click context menu trên `.rdl` → [`UploadReportCommand.cs`](file:///d:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.2019/UploadReportCommand.cs)
-- **Report Mapping GUI**: [`FormReportMapping.xaml.cs`](file:///d:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.2019/FormReportMapping.xaml.cs) — map local `.rdl` ↔ Dataverse `report` record
-- **Config Helper**: [`ReportConfigHelper.cs`](file:///d:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.2019/ReportConfigHelper.cs) — đọc/ghi mapping vào `DynamicsCrm.DevKit.Config.json`
+- **Upload Report**: Right-click context menu trên `.rdl` → [`UploadReportCommand.cs`](file:///d:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Vsix.2019/UploadReportCommand.cs)
+- **Report Mapping GUI**: [`FormReportMapping.xaml.cs`](file:///d:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Vsix.2019/FormReportMapping.xaml.cs) — map local `.rdl` ↔ Dataverse `report` record
+- **Config Helper**: [`ReportConfigHelper.cs`](file:///d:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Vsix.2019/ReportConfigHelper.cs) — đọc/ghi mapping vào `DynamicsCrm.DevKit.Config.json`
 
 #### CLI
 | Command | File | Mô tả |

@@ -2,11 +2,11 @@
 
 ## Component Boundaries
 
-If unsure whether a change belongs in `Cli`, `Shared`, or `DynamicsCrm.DevKit` (VSIX) — ask. Different frameworks, different binaries.
+If unsure whether a change belongs in `Cli`, `Shared`, or `DynamicsCrm.DevKit.Vsix` (VSIX) — ask. Different frameworks, different binaries.
 
 | Component | Path | Framework |
 |---|---|---|
-| VSIX (VS 2026 extension) | `DynamicsCrm.DevKit/` | .NET Framework 4.8 |
+| VSIX (VS 2026 extension) | `DynamicsCrm.DevKit.Vsix/` | .NET Framework 4.8 |
 | CLI (`devkit` tool) | `DynamicsCrm.DevKit.Cli/` | .NET 10.0 |
 | Analyzers (DEVKIT1001–1021) | `DynamicsCrm.DevKit.Analyzers/` | .NET Standard 2.0 |
 | Shared (code gen + Dataverse) | `DynamicsCrm.DevKit.Shared/` | Shared Project (.shproj) |
@@ -17,7 +17,7 @@ Key entry points:
 - CLI base command: `Commands/DevKitCommand<T>` → connection, validation, output
 - MCP: `Mcp/McpServerHost.cs` → `ToolCategoryMap` controls which tools load per tier
 - Code gen: `Shared/Helper.cs`, `Shared/XrmHelper.cs` (large by design — do not refactor unless asked)
-- VSIX: `DynamicsCrm.DevKit/DevKitPackage.cs` → 13 ProjectTemplates, 17 ItemTemplates
+- VSIX: `DynamicsCrm.DevKit.Vsix/DevKitPackage.cs` → 13 ProjectTemplates, 17 ItemTemplates
 
 ---
 
@@ -58,9 +58,9 @@ Five components, five matching UnitTests projects — all MSTest:
 |---|---|---|
 | CLI | `DynamicsCrm.DevKit.Cli.UnitTests` | net10.0 |
 | Tool | `DynamicsCrm.DevKit.Tool.UnitTests` | net10.0 |
-| VSIX | `DynamicsCrm.DevKit.UnitTests` | net48 |
+| VSIX | `DynamicsCrm.DevKit.Vsix.UnitTests` | net48 |
 | Analyzers | `DynamicsCrm.DevKit.Analyzers.UnitTests` | net48 |
-| VSIX 2019 | `DynamicsCrm.DevKit.2019.UnitTests` | net472 (non-SDK — VS MSBuild + `vstest.console`, not `dotnet test`) |
+| VSIX 2019 | `DynamicsCrm.DevKit.Vsix.2019.UnitTests` | net472 (non-SDK — VS MSBuild + `vstest.console`, not `dotnet test`) |
 
 - Unit tests (run + pass/fail only) → `.codex/workflows/unit-test.md`
 - Code coverage (line/branch/method + HTML reports) → `.codex/workflows/code-coverage.md`, or one command: `DynamicsCrm.DevKit.Scripts/Run-Coverage.ps1` (all five, or `-Components Cli,Tool` for a subset)
@@ -131,7 +131,7 @@ Detailed Codex workflows live in `.codex/workflows/`. When the user names a work
 | `DynamicsCrm.DevKit.Analyzers/**` | `dotnet build DynamicsCrm.DevKit.Analyzers/DynamicsCrm.DevKit.Analyzers.csproj --configuration Debug --no-incremental`, then `DynamicsCrm.DevKit.Scripts/Run-Analyzer-Coverage.ps1` |
 | `DynamicsCrm.DevKit.Cli/**` | `dotnet build DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj`; run focused `net10.0` tests |
 | `DynamicsCrm.DevKit.Tool/**` | `DynamicsCrm.DevKit.Scripts/Release.DynamicsCrm.DevKit.Tool.ps1` when the installed tool must be refreshed |
-| `DynamicsCrm.DevKit/**` | Build with Visual Studio MSBuild, not `dotnet build` |
+| `DynamicsCrm.DevKit.Vsix/**` | Build with Visual Studio MSBuild, not `dotnet build` |
 
 For CLI changes that must refresh the installed `devkit` tool, run `DynamicsCrm.DevKit.Scripts/Release.DynamicsCrm.DevKit.Cli.ps1`. The release scripts restore date-replacement files in `finally`; still verify the working tree afterward.
 

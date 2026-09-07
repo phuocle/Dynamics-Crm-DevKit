@@ -19,8 +19,8 @@ $BuildDate = "31.12.2026 23.59.59"
 $PublishedRoot = Join-Path $ProjectRoot "Published"
 $PublishDir = Join-Path $PublishedRoot $Version
 $SolutionFile = Join-Path $ProjectRoot "DynamicsCrm.DevKit.2019.sln"
-$VsixSource = Join-Path $ProjectRoot "DynamicsCrm.DevKit.2019\bin\$Configuration\DynamicsCrm.DevKit.2019.vsix"
-$VsixDest = Join-Path $PublishDir "DynamicsCrm.DevKit.2019.$Version.vsix"
+$VsixSource = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Vsix.2019\bin\$Configuration\DynamicsCrm.DevKit.2019.vsix"
+$VsixDest = Join-Path $PublishDir "DynamicsCrm.DevKit.Vsix.2019.$Version.vsix"
 
 function Get-MSBuild2019Path {
     $paths = @(

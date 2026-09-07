@@ -130,12 +130,12 @@
   <Project Path="DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj" />
   <Project Path="DynamicsCrm.DevKit.Shared/DynamicsCrm.DevKit.Shared.shproj" />
   <Project Path="DynamicsCrm.DevKit.Tool/DynamicsCrm.DevKit.Tool.csproj" />
-  <Project Path="DynamicsCrm.DevKit/DynamicsCrm.DevKit.csproj" Id="a886e86e-65bc-40c1-8494-fe7e80b7e1a3">
+  <Project Path="DynamicsCrm.DevKit.Vsix/DynamicsCrm.DevKit.Vsix.csproj" Id="a886e86e-65bc-40c1-8494-fe7e80b7e1a3">
     <Platform Solution="*|arm64" Project="arm64" />
     <Platform Solution="*|x86" Project="x86" />
   </Project>
   <Project Path="DynamicsCrm.DevKit.Cli.UnitTests/DynamicsCrm.DevKit.Cli.UnitTests.csproj" />
   <Project Path="DynamicsCrm.DevKit.Analyzers.UnitTests/DynamicsCrm.DevKit.Analyzers.UnitTests.csproj" />
-  <Project Path="DynamicsCrm.DevKit.UnitTests/DynamicsCrm.DevKit.UnitTests.csproj" />
+  <Project Path="DynamicsCrm.DevKit.Vsix.UnitTests/DynamicsCrm.DevKit.Vsix.UnitTests.csproj" />
   <Project Path="DynamicsCrm.DevKit.Tool.UnitTests/DynamicsCrm.DevKit.Tool.UnitTests.csproj" />
 </Solution>

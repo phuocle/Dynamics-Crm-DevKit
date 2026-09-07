@@ -3,17 +3,17 @@
 ## Cách chạy lại (AI tiếp theo đọc kỹ)
 
 ```powershell
-dotnet test D:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.UnitTests/DynamicsCrm.DevKit.UnitTests.csproj -f net10.0 --collect:"XPlat Code Coverage" --nologo -v q
+dotnet test D:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Vsix.UnitTests/DynamicsCrm.DevKit.Vsix.UnitTests.csproj -f net10.0 --collect:"XPlat Code Coverage" --nologo -v q
 ```
 
 - Chỉ chạy `-f net10.0` (net48 không có MSTest/FakeXrmEasy packages).
 - Thời gian chạy: ~4m30s (2895 tests). Nên chạy background, output file nằm ở `%TEMP%\claude\...\tasks\*.output`.
-- Sau khi xong, coverage XML nằm ở `DynamicsCrm.DevKit.UnitTests/TestResults/{GUID}/coverage.cobertura.xml` — lấy folder **mới nhất** (`ls -t | head -1`).
+- Sau khi xong, coverage XML nằm ở `DynamicsCrm.DevKit.Vsix.UnitTests/TestResults/{GUID}/coverage.cobertura.xml` — lấy folder **mới nhất** (`ls -t | head -1`).
 
 ### Report script có sẵn
 
 ```powershell
-node DynamicsCrm.DevKit.UnitTests/cov-byfile.js "<đường-dẫn-coverage.cobertura.xml>" 40
+node DynamicsCrm.DevKit.Vsix.UnitTests/cov-byfile.js "<đường-dẫn-coverage.cobertura.xml>" 40
 ```
 
 - `cov-byfile.js`: top N file missed-lines nhiều nhất + breakdown theo thư mục.
@@ -114,7 +114,7 @@ Coverage XML: `TestResults/ae29c07e-ba40-4b42-9397-83b382d927d8/coverage.cobertu
 
 ## Context cho AI tiếp theo (2026-09-06+)
 
-- Đợt sweep refactor + coverage CLI/Shared đang diễn ra: các tool manage_* đã được test full qua FakeXrmEasy (xem `DynamicsCrm.DevKit.UnitTests/Cli/Mcp/` — mới nhất là `ManageColumn/`, `ManageChoice/`, `ManageRole/`).
+- Đợt sweep refactor + coverage CLI/Shared đang diễn ra: các tool manage_* đã được test full qua FakeXrmEasy (xem `DynamicsCrm.DevKit.Vsix.UnitTests/Cli/Mcp/` — mới nhất là `ManageColumn/`, `ManageChoice/`, `ManageRole/`).
 - Gotcha đã biết (từ memory):
   - KHÔNG dùng Agent tool/fork/Workflow (aP cấm) — làm trực tiếp session chính.
   - Coverage runner chậm (~4m30s) → chạy background + `sleep`, không poll liên tục.

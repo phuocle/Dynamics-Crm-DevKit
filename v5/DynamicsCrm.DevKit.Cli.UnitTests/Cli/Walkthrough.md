@@ -25,6 +25,6 @@ DynamicsCrm.DevKit.Cli.UnitTests/Cli/
 ## Run Tests
 
 ```powershell
-cd DynamicsCrm.DevKit.UnitTests
+cd DynamicsCrm.DevKit.Vsix.UnitTests
 dotnet test --framework net10.0
 ```

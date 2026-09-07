@@ -263,6 +263,6 @@ MCP resources are bundled with the server so AI agents can read the exact schema
 
 - [Repository README](../../README.md)
 - [NuGet package](https://www.nuget.org/packages/DynamicsCrm.DevKit.Cli)
-- [Visual Studio extension](../DynamicsCrm.DevKit/README.md)
+- [Visual Studio extension](../DynamicsCrm.DevKit.Vsix/README.md)
 - [Companion tool](../DynamicsCrm.DevKit.Tool/README.md)
 - [Issues](https://github.com/phuocle/Dynamics-Crm-DevKit/issues)

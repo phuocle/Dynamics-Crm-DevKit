@@ -87,6 +87,6 @@ devkit-tool solutionlayer --conn "AuthType=..." --solutions "SolutionA,SolutionB
 - [Repository README](../../README.md)
 - [NuGet package](https://www.nuget.org/packages/DynamicsCrm.DevKit.Tool)
 - [CLI](../DynamicsCrm.DevKit.Cli/README.md)
-- [Visual Studio extension](../DynamicsCrm.DevKit/README.md)
+- [Visual Studio extension](../DynamicsCrm.DevKit.Vsix/README.md)
 - [Analyzers](../DynamicsCrm.DevKit.Analyzers/README.md)
 - [Issues](https://github.com/phuocle/Dynamics-Crm-DevKit/issues)

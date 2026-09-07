@@ -45,7 +45,7 @@
     <EmbeddedResource Remove="TestResults\**" />
     <None Remove="CoverageReport\**" />
     <None Remove="TestResults\**" />
-    <None Remove="DynamicsCrm.DevKit.UnitTests.coverage" />
+    <None Remove="DynamicsCrm.DevKit.Vsix.UnitTests.coverage" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,6 +1,6 @@
-# DynamicsCrm.DevKit.2019.UnitTests
+# DynamicsCrm.DevKit.Vsix.2019.UnitTests
 
-Unit test project for the `DynamicsCrm.DevKit.2019` VSIX. Target framework: `net472`. Current status: **100% line coverage** of all instrumented code (42 tests).
+Unit test project for the `DynamicsCrm.DevKit.Vsix.2019` VSIX. Target framework: `net472`. Current status: **100% line coverage** of all instrumented code (42 tests).
 
 ## Running
 

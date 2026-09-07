@@ -65,15 +65,15 @@ $allComponents = @(
         Mode = "coverlet-collect"; Filter = "+DynamicsCrm.DevKit.Tool"
     },
     @{
-        Key = "Vsix"; Project = "DynamicsCrm.DevKit.UnitTests"; ReportDir = "DynamicsCrm.DevKit.UnitTests"
-        Mode = "dotnet-coverage"; Filter = "+DynamicsCrm.DevKit.UnitTests"
+        Key = "Vsix"; Project = "DynamicsCrm.DevKit.Vsix.UnitTests"; ReportDir = "DynamicsCrm.DevKit.Vsix.UnitTests"
+        Mode = "dotnet-coverage"; Filter = "+DynamicsCrm.DevKit.Vsix.UnitTests"
     },
     @{
         Key = "Analyzers"; Project = "DynamicsCrm.DevKit.Analyzers.UnitTests"; ReportDir = "DynamicsCrm.DevKit.Analyzers"
         Mode = "dotnet-coverage"; Filter = "+DynamicsCrm.DevKit.Analyzers"
     },
     @{
-        Key = "2019"; Project = "DynamicsCrm.DevKit.2019.UnitTests"; ReportDir = "DynamicsCrm.DevKit.2019.UnitTests"
+        Key = "2019"; Project = "DynamicsCrm.DevKit.Vsix.2019.UnitTests"; ReportDir = "DynamicsCrm.DevKit.Vsix.2019.UnitTests"
         Mode = "dotnet-coverage-vstest"; Filter = "+DynamicsCrm.DevKit.2019*"
     }
 )

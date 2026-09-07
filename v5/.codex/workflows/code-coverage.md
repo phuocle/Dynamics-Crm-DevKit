@@ -25,14 +25,14 @@ dotnet test "DynamicsCrm.DevKit.Cli.UnitTests\DynamicsCrm.DevKit.Cli.UnitTests.c
 # Tool (net10.0) — no runsettings; collector default measures everything, filter at report time
 dotnet test "DynamicsCrm.DevKit.Tool.UnitTests\DynamicsCrm.DevKit.Tool.UnitTests.csproj" --no-build --collect:"XPlat Code Coverage"
 
-# Vsix (net48) — wrapped; coverlet.runsettings includes [DynamicsCrm.DevKit.UnitTests]*
-dotnet-coverage collect -f cobertura -o "DynamicsCrm.DevKit.UnitTests\TestResults\coverage.cobertura.xml" dotnet test "DynamicsCrm.DevKit.UnitTests\DynamicsCrm.DevKit.UnitTests.csproj" --no-build -v:q --nologo
+# Vsix (net48) — wrapped; coverlet.runsettings includes [DynamicsCrm.DevKit.Vsix.UnitTests]*
+dotnet-coverage collect -f cobertura -o "DynamicsCrm.DevKit.Vsix.UnitTests\TestResults\coverage.cobertura.xml" dotnet test "DynamicsCrm.DevKit.Vsix.UnitTests\DynamicsCrm.DevKit.Vsix.UnitTests.csproj" --no-build -v:q --nologo
 
 # Analyzers (net48) — wrapped
 dotnet-coverage collect -f cobertura -o "DynamicsCrm.DevKit.Analyzers.UnitTests\TestResults\coverage.cobertura.xml" dotnet test "DynamicsCrm.DevKit.Analyzers.UnitTests\DynamicsCrm.DevKit.Analyzers.UnitTests.csproj" --no-build -v:q --nologo
 
 # 2019 (net472, non-SDK) — build with VS MSBuild (see unit-test.md), then wrapped vstest.console
-dotnet-coverage collect -f cobertura -o "DynamicsCrm.DevKit.2019.UnitTests\TestResults\coverage.cobertura.xml" "C:\Program Files\Microsoft Visual Studio\18\Professional\Common7\IDE\Extensions\TestPlatform\vstest.console.exe" "DynamicsCrm.DevKit.2019.UnitTests\bin\Debug\net472\win\DynamicsCrm.DevKit.2019.UnitTests.dll"
+dotnet-coverage collect -f cobertura -o "DynamicsCrm.DevKit.Vsix.2019.UnitTests\TestResults\coverage.cobertura.xml" "C:\Program Files\Microsoft Visual Studio\18\Professional\Common7\IDE\Extensions\TestPlatform\vstest.console.exe" "DynamicsCrm.DevKit.Vsix.2019.UnitTests\bin\Debug\net472\win\DynamicsCrm.DevKit.2019.UnitTests.dll"
 ```
 
 The wrapper output path (`-o`) and the collector's `TestResults\<guid>\coverage.cobertura.xml` both live under the test project's `TestResults\`. Which assembly is measured: the Cli and Vsix runsettings `Include` filters decide; Tool and the `dotnet-coverage` wrapper runs capture everything and are trimmed at report time by `-assemblyfilters`.
@@ -47,6 +47,6 @@ Turn each `coverage.cobertura.xml` into an HTML report with ReportGenerator — 
 reportgenerator -reports:"DynamicsCrm.DevKit.Cli.UnitTests\TestResults\**\coverage.cobertura.xml" -targetdir:"DynamicsCrm.DevKit.Cli\CoverageReport" -reporttypes:"Html;HtmlSummary;Badges;XmlSummary" -assemblyfilters:"+DynamicsCrm.DevKit.Cli"
 ```
 
-Report targets: Cli → `DynamicsCrm.DevKit.Cli\CoverageReport`, Tool → `DynamicsCrm.DevKit.Tool\CoverageReport`, Vsix → `DynamicsCrm.DevKit.UnitTests\CoverageReport`, Analyzers → `DynamicsCrm.DevKit.Analyzers\CoverageReport`, 2019 → `DynamicsCrm.DevKit.2019.UnitTests\CoverageReport` (its summary contains both the product assembly `DynamicsCrm.DevKit.2019` and the test harness).
+Report targets: Cli → `DynamicsCrm.DevKit.Cli\CoverageReport`, Tool → `DynamicsCrm.DevKit.Tool\CoverageReport`, Vsix → `DynamicsCrm.DevKit.Vsix.UnitTests\CoverageReport`, Analyzers → `DynamicsCrm.DevKit.Analyzers\CoverageReport`, 2019 → `DynamicsCrm.DevKit.Vsix.2019.UnitTests\CoverageReport` (its summary contains both the product assembly `DynamicsCrm.DevKit.2019` and the test harness).
 
 Report pass/fail per project first, then the coverage numbers (line / branch / method) per tested assembly. If tests fail, report the failures as in `unit-test.md` and still report whatever coverage was collected.

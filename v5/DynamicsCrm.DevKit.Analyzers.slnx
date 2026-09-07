@@ -2,5 +2,5 @@
   <Project Path="DynamicsCrm.DevKit.Cli.UnitTests/DynamicsCrm.DevKit.Cli.UnitTests.csproj" />
   <Project Path="DynamicsCrm.DevKit.Analyzers/DynamicsCrm.DevKit.Analyzers.csproj" />
   <Project Path="DynamicsCrm.DevKit.Analyzers.UnitTests/DynamicsCrm.DevKit.Analyzers.UnitTests.csproj" />
-  <Project Path="DynamicsCrm.DevKit.UnitTests/DynamicsCrm.DevKit.UnitTests.csproj" />
+  <Project Path="DynamicsCrm.DevKit.Vsix.UnitTests/DynamicsCrm.DevKit.Vsix.UnitTests.csproj" />
 </Solution>

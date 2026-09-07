@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DynamicsCrm.DevKit.UnitTests</RootNamespace>
-    <AssemblyName>DynamicsCrm.DevKit.2019.UnitTests</AssemblyName>
+    <AssemblyName>DynamicsCrm.DevKit.Vsix.2019.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -66,9 +66,9 @@
     <PackageReference Include="EnvDTE80" Version="8.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DynamicsCrm.DevKit.2019\DynamicsCrm.DevKit.2019.csproj">
+    <ProjectReference Include="..\DynamicsCrm.DevKit.Vsix.2019\DynamicsCrm.DevKit.Vsix.2019.csproj">
       <Project>{48CE91B9-F2C9-4060-B222-8F16D67F5BA0}</Project>
-      <Name>DynamicsCrm.DevKit.2019</Name>
+      <Name>DynamicsCrm.DevKit.Vsix.2019</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
