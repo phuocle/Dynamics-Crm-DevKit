@@ -21,7 +21,7 @@ namespace DynamicsCrm.DevKit.Commands
 
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {
-            await VsixHelper.ExecuteCommandAsync("File.Save");
+            await VsixHelper.ExecuteCommandAsync("File.SaveSelectedItems");
             await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
             try
             {

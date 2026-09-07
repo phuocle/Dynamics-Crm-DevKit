@@ -17,7 +17,7 @@ namespace DynamicsCrm.DevKit.Commands
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {
             // Save current document before processing (equivalent to Ctrl+S)
-            await VsixHelper.ExecuteCommandAsync("File.Save");
+            await VsixHelper.ExecuteCommandAsync("File.SaveSelectedItems");
 
             await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
             var serviceClient = await CacheHelper.GetServiceClientAsync();

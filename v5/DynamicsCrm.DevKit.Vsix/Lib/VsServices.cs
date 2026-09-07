@@ -45,7 +45,7 @@ namespace DynamicsCrm.DevKit.Lib
     internal interface ICommandBinding
     {
         void Bind(OleMenuCommand command);
-        void Invoke(OleMenuCmdEventArgs e);
+        void Invoke(EventArgs e);
     }
 
     public abstract class BaseCommand<T> : ICommandBinding where T : BaseCommand<T>
@@ -71,17 +71,30 @@ namespace DynamicsCrm.DevKit.Lib
             BeforeQueryStatus(e);
         }
 
-        private void Invoke(OleMenuCmdEventArgs e)
+        private void Invoke(EventArgs e)
         {
+            var commandArgs = e as OleMenuCmdEventArgs ?? new OleMenuCmdEventArgs(null, IntPtr.Zero);
+
             // MenuCommand callbacks are synchronous; detach the async command after handing it to JTF.
 #pragma warning disable VSSDK007
-            ThreadHelper.JoinableTaskFactory.RunAsync(() => ExecuteAsync(e)).Task.Forget();
+            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            {
+                try
+                {
+                    await ExecuteAsync(commandArgs);
+                }
+                catch (Exception ex)
+                {
+                    ActivityLog.LogError("DynamicsCrm.DevKit", ex.ToString());
+                    await VS.MessageBox.ShowErrorAsync(ex.Message);
+                }
+            }).Task.Forget();
 #pragma warning restore VSSDK007
         }
 
         void ICommandBinding.Bind(OleMenuCommand command) => Bind(command);
 
-        void ICommandBinding.Invoke(OleMenuCmdEventArgs e) => Invoke(e);
+        void ICommandBinding.Invoke(EventArgs e) => Invoke(e);
     }
 
     internal static class CommandRegistrar
@@ -105,7 +118,7 @@ namespace DynamicsCrm.DevKit.Lib
                 var instance = Activator.CreateInstance(commandType);
                 var commandId = new CommandID(PackageGuids.GuidSetDeployWebResource, attribute.CommandId);
                 var menuCommand = new OleMenuCommand(
-                    (sender, args) => ((ICommandBinding)instance).Invoke(new OleMenuCmdEventArgs(null, IntPtr.Zero)),
+                    (sender, args) => ((ICommandBinding)instance).Invoke(args),
                     commandId);
 
                 ((ICommandBinding)instance).Bind(menuCommand);
