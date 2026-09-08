@@ -147,14 +147,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             const string endsWith = ".webapi.js";
             var totalFiles = schemaNames.Count();
-            var len = totalFiles.ToString().Length;
             SpectreLog.WriteHighLight("Found: ", totalFiles.ToString(), " entities");
             SpectreLog.WriteLine();
-            var i = 0;
             foreach (var schemaName in schemaNames)
             {
-                i++;
-                SpectreLog.WriteProgress(i, totalFiles);
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
                 if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
                 {
@@ -169,7 +165,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         await FileHelper.ForceWriteAllTextAsync(file, Helper.GetDefaultFileWithWebApi(entityMetadata.SchemaName));
                     }
-                    SpectreLog.ClearProgress();
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Helper.IsTheSame(oldDTS, newDTS))
@@ -200,7 +195,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    SpectreLog.ClearProgress();
                     SpectreLog.ActionError($"entity schema name: {schemaName} not found in the current instance !!!");
                 }
             }
@@ -210,14 +204,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             const string endsWith = ".webapi.ts";
             var totalFiles = schemaNames.Count();
-            var len = totalFiles.ToString().Length;
             SpectreLog.WriteHighLight("Found: ", totalFiles.ToString(), " entities");
             SpectreLog.WriteLine();
-            var i = 0;
             foreach (var schemaName in schemaNames)
             {
-                i++;
-                SpectreLog.WriteProgress(i, totalFiles);
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
                 if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
                 {
@@ -227,7 +217,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var isJsFormExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.form.js"));
                     var newCode = await TsWebApi.GetTsWebApiCodeAsync(OrgServiceAsync, entityMetadata);
 
-                    SpectreLog.ClearProgress();
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
                         SpectreLog.ActionWithLevel0(CliAction.DO_NOTHING, $"{schemaName}{endsWith}");
@@ -248,7 +237,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    SpectreLog.ClearProgress();
                     SpectreLog.ActionError($"entity schema name: {schemaName} not found in the current instance !!!");
                 }
             }
@@ -258,14 +246,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             const string endsWith = ".form.js";
             var totalFiles = schemaNames.Count();
-            var len = totalFiles.ToString().Length;
             SpectreLog.WriteHighLight("Found: ", totalFiles.ToString(), " entities");
             SpectreLog.WriteLine();
-            var i = 0;
             foreach (var schemaName in schemaNames)
             {
-                i++;
-                SpectreLog.WriteProgress(i, totalFiles);
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
                 if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
                 {
@@ -278,7 +262,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var (newCode, newDTS) = await JsForm.GetJsFormCodeAsync(OrgServiceAsync, entityMetadata, Json.rootnamespace, isJsWebApiExist);
 
                     // Skip if no forms exist for this entity
-                    SpectreLog.ClearProgress();
                     if (string.IsNullOrEmpty(newCode))
                     {
                         SpectreLog.ActionWithLevel0(CliAction.DO_NOTHING, $"{schemaName}{endsWith}", "(no forms)");
@@ -319,7 +302,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    SpectreLog.ClearProgress();
                     SpectreLog.ActionError($"entity schema name: {schemaName} not found in the current instance !!!");
                 }
             }
@@ -329,15 +311,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             const string endsWith = ".form.ts";
             var totalFiles = schemaNames.Count();
-            var len = totalFiles.ToString().Length;
             SpectreLog.WriteHighLight("Found: ", totalFiles.ToString(), " entities");
             SpectreLog.WriteLine();
             var processedEntities = new List<EntityMetadata>();
-            var i = 0;
             foreach (var schemaName in schemaNames)
             {
-                i++;
-                SpectreLog.WriteProgress(i, totalFiles);
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
                 if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
                 {
@@ -348,7 +326,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var newCode = await TsForm.GetTsFormCodeAsync(OrgServiceAsync, entityMetadata);
 
                     // Skip if no forms exist for this entity
-                    SpectreLog.ClearProgress();
                     if (string.IsNullOrEmpty(newCode))
                     {
                         SpectreLog.ActionWithLevel0(CliAction.DO_NOTHING, $"{schemaName}{endsWith}", "(no forms)");
@@ -385,7 +362,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    SpectreLog.ClearProgress();
                     SpectreLog.ActionError($"entity schema name: {schemaName} not found in the current instance !!!");
                 }
             }
@@ -416,14 +392,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             const string endsWith = ".generated.cs";
             var totalFiles = schemaNames.Count();
-            var len = totalFiles.ToString().Length;
             SpectreLog.WriteHighLight("Found: ", totalFiles.ToString(), " entities");
             SpectreLog.WriteLine();
-            var i = 0;
             foreach (var schemaName in schemaNames)
             {
-                i++;
-                SpectreLog.WriteProgress(i, totalFiles);
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
                 if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
                 {
@@ -433,7 +405,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (Json.@namespace != null && Json.@namespace.Trim().Length == 0) Json.@namespace = null;
                     var _GeneratedClass_ = CSharpLateBound.GetCsCode(OrgServiceAsync, entityMetadata, Json.rootnamespace, Json.@namespace);
                     var newCode = await Helper.ReadContentFromLine6Async(_GeneratedClass_);
-                    SpectreLog.ClearProgress();
                     if (File.Exists(fileEndsWith) && Helper.IsTheSame(oldCode, newCode))
                     {
                         SpectreLog.ActionWithLevel0(CliAction.DO_NOTHING, $"{schemaName}{endsWith}");
@@ -459,7 +430,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    SpectreLog.ClearProgress();
                     SpectreLog.ActionError($"entity schema name: {schemaName} not found in the current instance !!!");
                 }
             }
