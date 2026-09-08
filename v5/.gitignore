@@ -40,8 +40,10 @@ DynamicsCrm.DevKit.Tool/Test/
 .DS_Store
 Thumbs.db
 
-# Build output / release packages
-Published/
+# Build output / release packages (but track coverage summary)
+Published/**
+!Published/**/
+!Published/*/CoverageReport.md
 
 # Codex App MCP example is tracked; local configuration stays ignored
 !.codex/

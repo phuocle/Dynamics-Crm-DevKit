@@ -81,8 +81,18 @@ $allComponents = @(
 $root = $PSScriptRoot | Split-Path
 Set-Location $root
 
+# Read version from release config (same source as Release-DynamicsCrm-DevKit.ps1)
+$ConfigFile = Join-Path $PSScriptRoot "DevKit.ReleaseConfig.json"
+if (-not (Test-Path $ConfigFile)) {
+    Write-Host "Configuration file not found: $ConfigFile" -ForegroundColor $ColorError
+    exit 1
+}
+$Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
+$Version = $Config.version
+
 Write-Header "DevKit Unit Tests with Code Coverage"
 Write-Host "Workspace: $root" -ForegroundColor $ColorInfo
+Write-Host "Version:    $Version" -ForegroundColor $ColorInfo
 Write-Host "Components: $($Components -join ', ')" -ForegroundColor $ColorInfo
 Write-Host ""
 
@@ -127,7 +137,7 @@ foreach ($c in $selected) {
     }
     if ($LASTEXITCODE -ne 0) {
         Write-Host "Build failed for $($c.Project)!" -ForegroundColor $ColorError
-        $results += @{ Key = $c.Key; TestPassed = $false; Report = $null }
+        $results += @{ Key = $c.Key; Project = $c.Project; TestPassed = $false; Report = $null }
         continue
     }
 
@@ -159,7 +169,7 @@ foreach ($c in $selected) {
 
     if (-not $testsPassed) {
         Write-Host "Tests failed for $($c.Project)!" -ForegroundColor $ColorError
-        $results += @{ Key = $c.Key; TestPassed = $false; Report = $null }
+        $results += @{ Key = $c.Key; Project = $c.Project; TestPassed = $false; Report = $null }
         continue
     }
     Write-Host "Tests passed!" -ForegroundColor $ColorSuccess
@@ -173,7 +183,7 @@ foreach ($c in $selected) {
         -title:"$($c.Project) Code Coverage" | Out-Null
     if ($LASTEXITCODE -ne 0 -or -not (Test-Path (Join-Path $reportDir "index.html"))) {
         Write-Host "ReportGenerator failed for $($c.Project)!" -ForegroundColor $ColorError
-        $results += @{ Key = $c.Key; TestPassed = $true; Report = $null }
+        $results += @{ Key = $c.Key; Project = $c.Project; TestPassed = $true; Report = $null }
         continue
     }
 
@@ -184,7 +194,7 @@ foreach ($c in $selected) {
         if ($content -ne $new) { $new | Set-Content $_.FullName -NoNewline -Encoding UTF8 }
     }
 
-    $results += @{ Key = $c.Key; TestPassed = $true; Report = (Join-Path $reportDir "index.html") }
+    $results += @{ Key = $c.Key; Project = $c.Project; TestPassed = $true; Report = (Join-Path $reportDir "index.html") }
 }
 
 # Summary (line / branch / method per measured assembly, from XmlSummary)
@@ -211,8 +221,90 @@ foreach ($r in $results) {
     Write-Host "  Report: $($r.Report)" -ForegroundColor $ColorSuccess
 }
 
+# Generate Published/<version>/CoverageReport.md from Summary.xml data
+$publishedDir = Join-Path $root (Join-Path "Published" $Version)
+$coverageMd = Join-Path $publishedDir "CoverageReport.md"
+$mdLines = @()
+$mdLines += "# Code Coverage Report"
+$mdLines += ""
+$mdLines += "> **Version:** ``$Version`` | **Generated:** $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+$mdLines += ""
+
+# --- Summary table ---
+$mdLines += "## Summary"
+$mdLines += ""
+$mdLines += "| # | Component | Test Project | Status | Line | Branch | Method |"
+$mdLines += "|---|---|---|---|---|---|---|"
+
+$index = 0
+foreach ($r in $results) {
+    $index++
+    if (-not $r.TestPassed) {
+        $mdLines += "| $index | $($r.Key) | $($r.Project) | ❌ Fail | N/A | N/A | N/A |"
+        continue
+    }
+    if (-not $r.Report) {
+        $mdLines += "| $index | $($r.Key) | $($r.Project) | ⚠️ No report | N/A | N/A | N/A |"
+        continue
+    }
+    $summaryXml = Join-Path (Split-Path $r.Report) "Summary.xml"
+    if (Test-Path $summaryXml) {
+        [xml]$x = Get-Content $summaryXml
+        $assemblies = $x.SelectNodes("//Assembly")
+        $first = $true
+        foreach ($a in $assemblies) {
+            $num = if ($first) { "$index" } else { "" }
+            $comp = if ($first) { $r.Key } else { "" }
+            $proj = if ($first) { $r.Project } else { "" }
+            $status = if ($first) { "✅ Pass" } else { "" }
+            $mdLines += "| $num | $comp | $proj | $status | $($a.coverage)% | $($a.branchcoverage)% | $($a.methodcoverage)% |"
+            $first = $false
+        }
+    }
+}
+
+# --- Details table ---
+$mdLines += ""
+$mdLines += "## Details"
+$mdLines += ""
+$mdLines += "| Assembly | Lines | Branches | Methods | Classes |"
+$mdLines += "|---|---|---|---|---|"
+
+foreach ($r in $results) {
+    if (-not $r.Report) { continue }
+    $summaryXml = Join-Path (Split-Path $r.Report) "Summary.xml"
+    if (-not (Test-Path $summaryXml)) { continue }
+    [xml]$x = Get-Content $summaryXml
+    foreach ($a in $x.SelectNodes("//Assembly")) {
+        $lineText = "$($a.coveredlines)/$($a.coverablelines)"
+        $branchText = "$($a.coveredbranches)/$($a.totalbranches)"
+        $methodText = "$($a.coveredmethods)/$($a.totalmethods)"
+        $mdLines += "| $($a.name) | $lineText | $branchText | $methodText | $($a.classes) |"
+    }
+}
+
+$mdLines += ""
+$mdLines += "---"
+$mdLines += "*Generated by ``Run-Coverage.ps1``*"
+
+New-Item -Path $publishedDir -ItemType Directory -Force | Out-Null
+$mdLines -join "`n" | Set-Content $coverageMd -Encoding UTF8 -NoNewline
+Write-Header "Coverage Report (Markdown)"
+Write-Host "Generated: $coverageMd" -ForegroundColor $ColorSuccess
+
+# Delete local CoverageReport directories (single source of truth is the .md in Published/)
+foreach ($r in $results) {
+    if ($r.Report) {
+        $localReportDir = Split-Path $r.Report
+        if (Test-Path $localReportDir) {
+            Remove-Item $localReportDir -Recurse -Force
+            Write-Host "  Deleted local: $localReportDir" -ForegroundColor $ColorWarning
+        }
+    }
+}
+
 if ($OpenReport) {
-    $results | Where-Object { $_.Report } | ForEach-Object { Start-Process $_.Report }
+    if (Test-Path $coverageMd) { Start-Process $coverageMd }
 }
 
 if (-not $allPassed) { exit 1 }

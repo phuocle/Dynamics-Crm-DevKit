@@ -41,12 +41,14 @@ The 2019 suite must keep **100% line coverage** of the product assembly `Dynamic
 
 ## Reports
 
-Turn each `coverage.cobertura.xml` into an HTML report with ReportGenerator — requires the global tools `dotnet-coverage` and `dotnet-reportgenerator-globaltool` (install on demand). Write each component's report under that component's `CoverageReport\` folder (git-ignored via `**/CoverageReport/`), and use `XmlSummary` so the line/branch/method numbers can be read back from `Summary.xml`:
+Turn each `coverage.cobertura.xml` into an HTML report with ReportGenerator — requires the global tools `dotnet-coverage` and `dotnet-reportgenerator-globaltool` (install on demand). Reports are generated locally under each component's `CoverageReport\` folder (git-ignored via `**/CoverageReport/`), and use `XmlSummary` so the line/branch/method numbers can be read back from `Summary.xml`:
 
 ```powershell
 reportgenerator -reports:"DynamicsCrm.DevKit.Cli.UnitTests\TestResults\**\coverage.cobertura.xml" -targetdir:"DynamicsCrm.DevKit.Cli\CoverageReport" -reporttypes:"Html;HtmlSummary;Badges;XmlSummary" -assemblyfilters:"+DynamicsCrm.DevKit.Cli"
 ```
 
-Report targets: Cli → `DynamicsCrm.DevKit.Cli\CoverageReport`, Tool → `DynamicsCrm.DevKit.Tool\CoverageReport`, Vsix → `DynamicsCrm.DevKit.Vsix.UnitTests\CoverageReport`, Analyzers → `DynamicsCrm.DevKit.Analyzers\CoverageReport`, 2019 → `DynamicsCrm.DevKit.Vsix.2019.UnitTests\CoverageReport` (its summary contains both the product assembly `DynamicsCrm.DevKit.2019` and the test harness).
+Local report targets: Cli → `DynamicsCrm.DevKit.Cli\CoverageReport`, Tool → `DynamicsCrm.DevKit.Tool\CoverageReport`, Vsix → `DynamicsCrm.DevKit.Vsix.UnitTests\CoverageReport`, Analyzers → `DynamicsCrm.DevKit.Analyzers\CoverageReport`, 2019 → `DynamicsCrm.DevKit.Vsix.2019.UnitTests\CoverageReport` (its summary contains both the product assembly `DynamicsCrm.DevKit.2019` and the test harness).
+
+After collecting all results, the script generates a single `Published/<version>/CoverageReport.md` summarizing pass/fail and line/branch/method coverage per assembly (version read from `DevKit.ReleaseConfig.json`). This markdown file is tracked by git (negated in `.gitignore`) and viewable directly on GitHub. Local `CoverageReport\` folders are deleted after the markdown is generated.
 
 Report pass/fail per project first, then the coverage numbers (line / branch / method) per tested assembly. If tests fail, report the failures as in `unit-test.md` and still report whatever coverage was collected.
