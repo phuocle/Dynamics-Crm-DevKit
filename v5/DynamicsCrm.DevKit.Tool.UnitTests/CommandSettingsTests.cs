@@ -3,10 +3,12 @@ using DynamicsCrm.DevKit.Shared;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace DynamicsCrm.DevKit.Tool.UnitTests
 {
     [TestClass]
+    [DoNotParallelize]
     public class CommandSettingsTests
     {
         private readonly Dictionary<string, string> environment = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -64,11 +66,36 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
         }
 
         [TestMethod]
-        public void DataverseSettings_AcceptDevKitEnvironmentConnection()
+        public void DataverseSettings_IgnoreMachineEnvironmentConnection()
         {
             Environment.SetEnvironmentVariable(ProjectEnvironment.AuthType, "ClientSecret");
             Environment.SetEnvironmentVariable(ProjectEnvironment.Url, "https://org.crm.dynamics.com");
-            Assert.IsTrue(new DocumentGeneratorSettings { Folder = "b", Solution = "c" }.Validate().Successful);
+            Assert.IsFalse(new DocumentGeneratorSettings { Folder = "b", Solution = "c" }.Validate().Successful);
+        }
+
+        [TestMethod]
+        public void DataverseSettings_AcceptProjectEnvironmentConnection()
+        {
+            var originalDirectory = Directory.GetCurrentDirectory();
+            var directory = Path.Combine(Path.GetTempPath(), "devkit-tool-env-" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(directory);
+
+            try
+            {
+                File.WriteAllLines(Path.Combine(directory, ProjectEnvironment.FileName), new[]
+                {
+                    $"{ProjectEnvironment.AuthType}=ClientSecret",
+                    $"{ProjectEnvironment.Url}=https://project.crm.dynamics.com"
+                });
+                Directory.SetCurrentDirectory(directory);
+
+                Assert.IsTrue(new DocumentGeneratorSettings { Folder = "b", Solution = "c" }.Validate().Successful);
+            }
+            finally
+            {
+                Directory.SetCurrentDirectory(originalDirectory);
+                Directory.Delete(directory, true);
+            }
         }
 
         [TestMethod]

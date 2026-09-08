@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.ConnectionBuilder;
@@ -11,9 +12,10 @@ namespace DynamicsCrm.DevKit.Tool.Lib
     {
         internal static bool HasValues()
         {
+            var values = ReadProjectValues();
             foreach (var key in ProjectEnvironment.ConnectionKeys)
             {
-                if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(key))) return true;
+                if (!string.IsNullOrWhiteSpace(ProjectEnvironment.GetValue(values, key))) return true;
             }
 
             return false;
@@ -24,29 +26,30 @@ namespace DynamicsCrm.DevKit.Tool.Lib
             if (!string.IsNullOrWhiteSpace(explicitConnection))
                 return EnsureReady(new ServiceClient(explicitConnection));
 
-            var connectionString = Environment.GetEnvironmentVariable(ProjectEnvironment.Connection);
+            var values = ReadProjectValues();
+            var connectionString = ProjectEnvironment.GetValue(values, ProjectEnvironment.Connection);
             if (!string.IsNullOrWhiteSpace(connectionString))
                 return EnsureReady(new ServiceClient(connectionString));
 
-            var authType = Environment.GetEnvironmentVariable(ProjectEnvironment.AuthType);
+            var authType = ProjectEnvironment.GetValue(values, ProjectEnvironment.AuthType);
             if (string.IsNullOrWhiteSpace(authType))
-                throw new InvalidOperationException("--conn or DEVKIT_* connection settings are required");
+                throw new InvalidOperationException("--conn or project .env DEVKIT_* connection settings are required");
 
             var connection = new CrmConnection
             {
                 Type = authType,
-                Url = Get(ProjectEnvironment.Url),
-                ClientId = Get(ProjectEnvironment.ClientId),
-                ClientSecret = Get(ProjectEnvironment.ClientSecret),
-                PacProfile = Get(ProjectEnvironment.PacProfile),
-                UserName = Get(ProjectEnvironment.Username),
-                Password = Get(ProjectEnvironment.Password),
+                Url = Get(values, ProjectEnvironment.Url),
+                ClientId = Get(values, ProjectEnvironment.ClientId),
+                ClientSecret = Get(values, ProjectEnvironment.ClientSecret),
+                PacProfile = Get(values, ProjectEnvironment.PacProfile),
+                UserName = Get(values, ProjectEnvironment.Username),
+                Password = Get(values, ProjectEnvironment.Password),
                 Name = "DynamicsCrm.DevKit.Tool"
             };
 
             if (authType.Equals("AD", StringComparison.OrdinalIgnoreCase))
             {
-                var domain = Get(ProjectEnvironment.Domain);
+                var domain = Get(values, ProjectEnvironment.Domain);
                 if (!string.IsNullOrWhiteSpace(domain) && !string.IsNullOrWhiteSpace(connection.UserName) &&
                     !connection.UserName.Contains("\\"))
                     connection.UserName = $"{domain}\\{connection.UserName}";
@@ -59,7 +62,14 @@ namespace DynamicsCrm.DevKit.Tool.Lib
             return EnsureReady(await builder.CreateServiceClientAsync(connection).ConfigureAwait(false));
         }
 
-        private static string Get(string key) => Environment.GetEnvironmentVariable(key) ?? string.Empty;
+        private static Dictionary<string, string> ReadProjectValues()
+        {
+            var file = ProjectEnvironment.FindFile(Environment.CurrentDirectory);
+            return ProjectEnvironment.Read(file);
+        }
+
+        private static string Get(Dictionary<string, string> values, string key) =>
+            ProjectEnvironment.GetValue(values, key) ?? string.Empty;
 
         private static ServiceClient EnsureReady(ServiceClient serviceClient)
         {

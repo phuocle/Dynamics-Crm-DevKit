@@ -58,7 +58,7 @@ devkit-tool createentity --conn "AuthType=..." --solution "MySolution" --entity 
 devkit-tool solutionlayer --conn "AuthType=..." --solutions "SolutionA,SolutionB" --output ".\layers.md"
 ```
 
-For Dataverse commands, `--conn` takes priority. When it is omitted, the Tool accepts the same OS `DEVKIT_*` connection variables as the CLI:
+For Dataverse commands, `--conn` takes priority. When it is omitted, the Tool searches for `.env` in the current directory and its parent directories, using the same project-level `DEVKIT_*` fallback as the CLI. OS-level `DEVKIT_*` variables are not used by normal Tool commands, which prevents one project configuration from leaking into another project:
 
 | Variable | Purpose |
 |---|---|
@@ -71,13 +71,15 @@ For Dataverse commands, `--conn` takes priority. When it is omitted, the Tool ac
 | `DEVKIT_USERNAME` / `DEVKIT_PASSWORD` | Username and password for `OAuth` or `AD`. |
 | `DEVKIT_DOMAIN` | Domain for `AD`. |
 
-Example for unattended use:
+Example using the project `.env`:
 
 ```powershell
-$env:DEVKIT_AUTH_TYPE = "ClientSecret"
-$env:DEVKIT_URL = "https://org.crm.dynamics.com"
-$env:DEVKIT_CLIENT_ID = "00000000-0000-0000-0000-000000000000"
-$env:DEVKIT_CLIENT_SECRET = "client-secret"
+@"
+DEVKIT_AUTH_TYPE=ClientSecret
+DEVKIT_URL=https://org.crm.dynamics.com
+DEVKIT_CLIENT_ID=00000000-0000-0000-0000-000000000000
+DEVKIT_CLIENT_SECRET=client-secret
+"@ | Set-Content .env
 devkit-tool documentgenerator --folder ".\docs" --solution "MySolution"
 ```
 
@@ -85,13 +87,13 @@ devkit-tool documentgenerator --folder ".\docs" --solution "MySolution"
 
 | Command | Required options | Optional options |
 |---|---|---|
-| `documentgenerator` | `--conn` or `DEVKIT_*`, `--folder`, `--solution` | `--timezone` |
+| `documentgenerator` | `--conn` or project `.env`, `--folder`, `--solution` | `--timezone` |
 | `documentcodegenerator` | `--folder`, `--output` | `--devops`, `--org`, `--project` |
 | `coveragetoxml` | `--coverage`, `--xml`, `--dlls` | |
 | `nuglify` | `--source`, `--destination` | |
 | `decrypt` | `--password` | |
-| `createentity` | `--conn` or `DEVKIT_*`, `--solution`, `--entity`, `--type` | |
-| `solutionlayer` | `--conn` or `DEVKIT_*`, `--solutions` | `--output` |
+| `createentity` | `--conn` or project `.env`, `--solution`, `--entity`, `--type` | |
+| `solutionlayer` | `--conn` or project `.env`, `--solutions` | `--output` |
 
 ## 🏗️ Entity Types
 
