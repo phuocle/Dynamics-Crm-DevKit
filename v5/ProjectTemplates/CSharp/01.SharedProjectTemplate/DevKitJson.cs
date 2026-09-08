@@ -79,8 +79,10 @@ public static class DevKitJson
 
         public static T Deserialize<T>(string json)
         {
-            if (string.IsNullOrWhiteSpace(json))
-                throw CreateDeserializationException(typeof(T), json, null, new FormatException("JSON cannot be null or whitespace."));
+            // Match System.Text.Json / Newtonsoft convention: null/whitespace input → default(T).
+            // Returning default instead of throwing lets callers handle the "no payload" case
+            // uniformly with `model?.field`, without each call site having to null-check first.
+            if (string.IsNullOrWhiteSpace(json)) return default(T);
 
             object result;
             try
@@ -119,6 +121,12 @@ public static class DevKitJson
         /// </summary>
         public static bool TryDeserialize<T>(string json, out T value)
         {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                value = default(T);
+                return false;
+            }
+
             try
             {
                 value = Deserialize<T>(json);
