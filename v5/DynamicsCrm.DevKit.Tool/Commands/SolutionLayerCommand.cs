@@ -1,17 +1,15 @@
 using System.ComponentModel;
 using System.Threading;
 using DynamicsCrm.DevKit.Tool.Tasks;
+using DynamicsCrm.DevKit.Tool.Lib;
+using Microsoft.Xrm.Sdk;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace DynamicsCrm.DevKit.Tool.Commands
 {
-    internal sealed class SolutionLayerSettings : CommandSettings
+    internal sealed class SolutionLayerSettings : DataverseCommandSettings
     {
-        [CommandOption("--conn <CONNECTION>")]
-        [Description("Dataverse connection string")]
-        public string Connection { get; set; }
-
         [CommandOption("--solutions <SOLUTIONS>")]
         [Description("Comma-separated solution unique names to check")]
         public string Solutions { get; set; }
@@ -22,7 +20,7 @@ namespace DynamicsCrm.DevKit.Tool.Commands
 
         public override ValidationResult Validate()
         {
-            if (string.IsNullOrWhiteSpace(Connection))
+            if (!HasConnectionConfiguration)
                 return ValidationResult.Error("--conn is required");
             if (string.IsNullOrWhiteSpace(Solutions))
                 return ValidationResult.Error("--solutions is required");
@@ -56,7 +54,8 @@ namespace DynamicsCrm.DevKit.Tool.Commands
         {
             var solutionNames = settings.Solutions
                 .Split(',', System.StringSplitOptions.RemoveEmptyEntries | System.StringSplitOptions.TrimEntries);
-            TaskSolutionLayer.Run(settings.Connection, solutionNames, settings.Output);
+            var serviceClient = ToolConnectionEnvironment.ConnectAsync(settings.ExplicitConnection).GetAwaiter().GetResult();
+            TaskSolutionLayer.Run((IOrganizationService)serviceClient, solutionNames, settings.Output);
         }
     }
 }

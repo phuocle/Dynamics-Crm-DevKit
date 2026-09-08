@@ -1,17 +1,15 @@
 using System.ComponentModel;
 using System.Threading;
 using DynamicsCrm.DevKit.Tool.Tasks;
+using DynamicsCrm.DevKit.Tool.Lib;
+using Microsoft.Xrm.Sdk;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace DynamicsCrm.DevKit.Tool.Commands
 {
-    internal sealed class DocumentGeneratorSettings : CommandSettings
+    internal sealed class DocumentGeneratorSettings : DataverseCommandSettings
     {
-        [CommandOption("--conn <CONNECTION>")]
-        [Description("Dataverse connection string")]
-        public string Connection { get; set; }
-
         [CommandOption("--folder <FOLDER>")]
         [Description("Output folder for generated markdown files")]
         public string Folder { get; set; }
@@ -26,7 +24,7 @@ namespace DynamicsCrm.DevKit.Tool.Commands
 
         public override ValidationResult Validate()
         {
-            if (string.IsNullOrWhiteSpace(Connection))
+            if (!HasConnectionConfiguration)
                 return ValidationResult.Error("--conn is required");
             if (string.IsNullOrWhiteSpace(Folder))
                 return ValidationResult.Error("--folder is required");
@@ -60,7 +58,8 @@ namespace DynamicsCrm.DevKit.Tool.Commands
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal virtual void RunTaskCore(DocumentGeneratorSettings settings)
         {
-            TaskDocumentGenerator.Run(settings.Connection, settings.Folder, settings.Solution, settings.TimeZone);
+            var serviceClient = ToolConnectionEnvironment.ConnectAsync(settings.ExplicitConnection).GetAwaiter().GetResult();
+            TaskDocumentGenerator.Run((IOrganizationService)serviceClient, settings.Folder, settings.Solution, settings.TimeZone);
         }
     }
 }

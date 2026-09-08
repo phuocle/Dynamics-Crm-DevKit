@@ -58,17 +58,40 @@ devkit-tool createentity --conn "AuthType=..." --solution "MySolution" --entity 
 devkit-tool solutionlayer --conn "AuthType=..." --solutions "SolutionA,SolutionB" --output ".\layers.md"
 ```
 
+For Dataverse commands, `--conn` takes priority. When it is omitted, the Tool accepts the same OS `DEVKIT_*` connection variables as the CLI:
+
+| Variable | Purpose |
+|---|---|
+| `DEVKIT_CONNECTION` | Complete Dataverse connection string. |
+| `DEVKIT_AUTH_TYPE` | `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth`, or `AD`. |
+| `DEVKIT_URL` | Dataverse environment URL. |
+| `DEVKIT_CLIENT_ID` | Azure AD application (client) ID. |
+| `DEVKIT_CLIENT_SECRET` | Client secret for `ClientSecret`. |
+| `DEVKIT_PAC_PROFILE` | PAC CLI profile for `FromPac`. |
+| `DEVKIT_USERNAME` / `DEVKIT_PASSWORD` | Username and password for `OAuth` or `AD`. |
+| `DEVKIT_DOMAIN` | Domain for `AD`. |
+
+Example for unattended use:
+
+```powershell
+$env:DEVKIT_AUTH_TYPE = "ClientSecret"
+$env:DEVKIT_URL = "https://org.crm.dynamics.com"
+$env:DEVKIT_CLIENT_ID = "00000000-0000-0000-0000-000000000000"
+$env:DEVKIT_CLIENT_SECRET = "client-secret"
+devkit-tool documentgenerator --folder ".\docs" --solution "MySolution"
+```
+
 ## ⚙️ Command Options
 
 | Command | Required options | Optional options |
 |---|---|---|
-| `documentgenerator` | `--conn`, `--folder`, `--solution` | `--timezone` |
+| `documentgenerator` | `--conn` or `DEVKIT_*`, `--folder`, `--solution` | `--timezone` |
 | `documentcodegenerator` | `--folder`, `--output` | `--devops`, `--org`, `--project` |
 | `coveragetoxml` | `--coverage`, `--xml`, `--dlls` | |
 | `nuglify` | `--source`, `--destination` | |
 | `decrypt` | `--password` | |
-| `createentity` | `--conn`, `--solution`, `--entity`, `--type` | |
-| `solutionlayer` | `--conn`, `--solutions` | `--output` |
+| `createentity` | `--conn` or `DEVKIT_*`, `--solution`, `--entity`, `--type` | |
+| `solutionlayer` | `--conn` or `DEVKIT_*`, `--solutions` | `--output` |
 
 ## 🏗️ Entity Types
 

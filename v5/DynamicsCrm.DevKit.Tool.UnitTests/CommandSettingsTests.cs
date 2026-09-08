@@ -1,11 +1,33 @@
 using DynamicsCrm.DevKit.Tool.Commands;
+using DynamicsCrm.DevKit.Shared;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
 
 namespace DynamicsCrm.DevKit.Tool.UnitTests
 {
     [TestClass]
     public class CommandSettingsTests
     {
+        private readonly Dictionary<string, string> environment = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        [TestInitialize]
+        public void ClearDevKitEnvironment()
+        {
+            foreach (var key in ProjectEnvironment.ConnectionKeys)
+            {
+                environment[key] = Environment.GetEnvironmentVariable(key);
+                Environment.SetEnvironmentVariable(key, null);
+            }
+        }
+
+        [TestCleanup]
+        public void RestoreDevKitEnvironment()
+        {
+            foreach (var pair in environment)
+                Environment.SetEnvironmentVariable(pair.Key, pair.Value);
+        }
+
         [TestMethod]
         public void DecryptSettings_PasswordRequired()
         {
@@ -39,6 +61,14 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
             Assert.AreEqual("--folder is required", new DocumentGeneratorSettings { Connection = "a" }.Validate().Message);
             Assert.AreEqual("--solution is required", new DocumentGeneratorSettings { Connection = "a", Folder = "b" }.Validate().Message);
             Assert.IsTrue(new DocumentGeneratorSettings { Connection = "a", Folder = "b", Solution = "c" }.Validate().Successful);
+        }
+
+        [TestMethod]
+        public void DataverseSettings_AcceptDevKitEnvironmentConnection()
+        {
+            Environment.SetEnvironmentVariable(ProjectEnvironment.AuthType, "ClientSecret");
+            Environment.SetEnvironmentVariable(ProjectEnvironment.Url, "https://org.crm.dynamics.com");
+            Assert.IsTrue(new DocumentGeneratorSettings { Folder = "b", Solution = "c" }.Validate().Successful);
         }
 
         [TestMethod]

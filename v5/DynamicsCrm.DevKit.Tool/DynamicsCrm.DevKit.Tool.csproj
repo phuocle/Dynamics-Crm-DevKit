@@ -45,6 +45,18 @@
 	<ItemGroup>
 	  <Compile Include="..\DynamicsCrm.DevKit.Shared\Const.cs" Link="Lib\Const.cs" />
 	  <Compile Include="..\DynamicsCrm.DevKit.Shared\Enum.cs" Link="Lib\Enum.cs" />
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\ProjectEnvironment.cs" Link="Lib\ProjectEnvironment.cs" />
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\SecureTokenCache.cs" Link="Lib\SecureTokenCache.cs" />
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\CrmConnection.cs" Link="Lib\CrmConnection.cs" />
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\ConnectionBuilder\IConnectionBuilder.cs" Link="Lib\ConnectionBuilder\IConnectionBuilder.cs" />
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\ConnectionBuilder\ConnectionBuilderFactory.cs" Link="Lib\ConnectionBuilder\ConnectionBuilderFactory.cs" />
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\ConnectionBuilder\InteractiveConnectionBuilder.cs" Link="Lib\ConnectionBuilder\InteractiveConnectionBuilder.cs" />
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\ConnectionBuilder\DeviceCodeConnectionBuilder.cs" Link="Lib\ConnectionBuilder\DeviceCodeConnectionBuilder.cs" />
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\ConnectionBuilder\ClientSecretConnectionBuilder.cs" Link="Lib\ConnectionBuilder\ClientSecretConnectionBuilder.cs" />
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\ConnectionBuilder\OAuthConnectionBuilder.cs" Link="Lib\ConnectionBuilder\OAuthConnectionBuilder.cs" />
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\ConnectionBuilder\ADConnectionBuilder.cs" Link="Lib\ConnectionBuilder\ADConnectionBuilder.cs" />
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\ConnectionBuilder\FromPacConnectionBuilder.cs" Link="Lib\ConnectionBuilder\FromPacConnectionBuilder.cs" />
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\ConnectionBuilder\PacProfileHelper.cs" Link="Lib\ConnectionBuilder\PacProfileHelper.cs" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Content Include="icon.ico" />
@@ -64,6 +76,7 @@
 	  <PackageReference Include="Spectre.Console" Version="0.57.2" />
 	  <PackageReference Include="Spectre.Console.Cli" Version="0.55.0" />
 	  <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.26" />
+	  <PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.88.0" />
 	  <PackageReference Include="Mono.Cecil" Version="0.11.6" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	  <PackageReference Include="NUglify" Version="1.22.4" />
