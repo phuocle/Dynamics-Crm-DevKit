@@ -16,11 +16,11 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static void Run(string connectionString, string solution, string entityDisplayName, string entityType)
         {
-            AnsiConsole.MarkupLine($"[cyan]Connecting to Dataverse...[/]");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[cyan]Connecting to Dataverse...[/]");
             var serviceClient = new ServiceClient(connectionString);
             if (!serviceClient.IsReady)
                 throw new Exception($"Cannot connect to Dataverse: {serviceClient.LastError}");
-            AnsiConsole.MarkupLine($"[green]Connected![/]");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[green]Connected![/]");
             Run((IOrganizationService)serviceClient, solution, entityDisplayName, entityType);
         }
 
@@ -31,11 +31,11 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 throw new Exception($"Cannot find publisher prefix for solution '{solution}'.");
 
             var entityLogicalName = $"{prefix}_{entityDisplayName.ToLower().Replace(" ", "_")}";
-            AnsiConsole.MarkupLine($"[cyan]Creating entity:[/] [yellow]{entityLogicalName}[/] (type: {entityType})");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[cyan]Creating entity:[/] [yellow]{entityLogicalName}[/] (type: {entityType})");
 
             var request = BuildCreateEntityRequest(prefix, entityLogicalName, entityDisplayName, entityType, solution);
             service.Execute(request);
-            AnsiConsole.MarkupLine($"[green]Entity created successfully![/]");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[green]Entity created successfully![/]");
 
             CreateDebugContextAttribute(service, prefix, entityLogicalName, solution);
 
@@ -43,7 +43,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             UpdateQuickViewForm(service, entityLogicalName, entityDisplayName);
             UpdateCardForm(service, entityLogicalName, entityDisplayName);
 
-            AnsiConsole.MarkupLine($"[green]All forms updated for entity[/] [yellow]{entityLogicalName}[/]");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[green]All forms updated for entity[/] [yellow]{entityLogicalName}[/]");
         }
 
         private static CreateEntityRequest BuildCreateEntityRequest(string prefix, string entityLogicalName, string entityDisplayName, string entityType, string solution)
@@ -107,7 +107,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
 
         private static void CreateDebugContextAttribute(IOrganizationService service, string prefix, string entityLogicalName, string solution)
         {
-            AnsiConsole.MarkupLine($"[cyan]Creating debug_context attribute...[/]");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[cyan]Creating debug_context attribute...[/]");
             var debugContextRequest = new CreateAttributeRequest
             {
                 EntityName = entityLogicalName,
@@ -125,12 +125,12 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 SolutionUniqueName = solution
             };
             service.Execute(debugContextRequest);
-            AnsiConsole.MarkupLine($"[green]debug_context attribute created![/]");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[green]debug_context attribute created![/]");
         }
 
         private static void UpdateMainForm(IOrganizationService service, string entityLogicalName, string entityDisplayName, string entityType)
         {
-            AnsiConsole.MarkupLine($"[cyan]Updating main form...[/]");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[cyan]Updating main form...[/]");
             var fetchXml = BuildFormFetchXml(entityLogicalName, formType: "2");
             var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return;
@@ -146,12 +146,12 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 ["name"] = entityDisplayName
             };
             service.Update(update);
-            AnsiConsole.MarkupLine($"[green]Main form updated![/]");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[green]Main form updated![/]");
         }
 
         private static void UpdateQuickViewForm(IOrganizationService service, string entityLogicalName, string entityDisplayName)
         {
-            AnsiConsole.MarkupLine($"[cyan]Updating quick view form...[/]");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[cyan]Updating quick view form...[/]");
             var fetchXml = BuildFormFetchXml(entityLogicalName, formType: "6");
             var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return;
@@ -162,12 +162,12 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 ["name"] = $"{entityDisplayName} Quick View"
             };
             service.Update(update);
-            AnsiConsole.MarkupLine($"[green]Quick view form updated![/]");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[green]Quick view form updated![/]");
         }
 
         private static void UpdateCardForm(IOrganizationService service, string entityLogicalName, string entityDisplayName)
         {
-            AnsiConsole.MarkupLine($"[cyan]Updating card form...[/]");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[cyan]Updating card form...[/]");
             var fetchXml = BuildFormFetchXml(entityLogicalName, formType: "11");
             var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return;
@@ -178,7 +178,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 ["name"] = $"{entityDisplayName} Card"
             };
             service.Update(update);
-            AnsiConsole.MarkupLine($"[green]Card form updated![/]");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[green]Card form updated![/]");
         }
 
         private static string BuildFormFetchXml(string entityLogicalName, string formType)

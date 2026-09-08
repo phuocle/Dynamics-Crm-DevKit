@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using DynamicsCrm.DevKit.Tool.Lib;
+using DynamicsCrm.DevKit.Tool;
 using NUglify;
 using Spectre.Console;
 
@@ -20,8 +21,8 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             if (!Supported.Contains(extension))
                 throw new NotSupportedException($"Unsupported extension: {extension}. Supported: {string.Join(", ", Supported)}");
 
-            AnsiConsole.MarkupLine($"[cyan]Source:[/] {Markup.Escape(source)}");
-            AnsiConsole.MarkupLine($"[cyan]Type:[/] {Markup.Escape(extension)}");
+            ToolConsole.MarkupLine($"[cyan]Source:[/] {Markup.Escape(source)}");
+            ToolConsole.MarkupLine($"[cyan]Type:[/] {Markup.Escape(extension)}");
 
             var content = File.ReadAllText(source);
             UglifyResult result;
@@ -36,7 +37,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 throw new InvalidOperationException($"Minification failed: {string.Join("; ", result.Errors.Select(e => e.Message))}");
 
             Utility.ForceWriteAllText(destination, result.Code);
-            AnsiConsole.MarkupLine($"[green]Done![/] Output: {Markup.Escape(destination)}");
+            ToolConsole.MarkupLine($"[green]Done![/] Output: {Markup.Escape(destination)}");
         }
     }
 }

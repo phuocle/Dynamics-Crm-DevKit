@@ -289,7 +289,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static void Run(string connectionString, string folder, string solution, string timeZone)
         {
-            AnsiConsole.MarkupLine($"[cyan]Connecting to Dataverse...[/]");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[cyan]Connecting to Dataverse...[/]");
 
             var service = new ServiceClient(connectionString);
             if (!service.IsReady)
@@ -319,7 +319,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             userTimeZoneOffset = ResolveTimeZoneOffset(timeZone, service);
             var tzSign = userTimeZoneOffset >= TimeSpan.Zero ? "+" : "";
             var tzSource = string.IsNullOrWhiteSpace(timeZone) ? " (from WhoAmI user settings)" : $" (from input: {timeZone})";
-            AnsiConsole.MarkupLine($"[cyan]Timezone:[/] UTC{tzSign}{userTimeZoneOffset.Hours:D2}:{userTimeZoneOffset.Minutes:D2}{tzSource}");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[cyan]Timezone:[/] UTC{tzSign}{userTimeZoneOffset.Hours:D2}:{userTimeZoneOffset.Minutes:D2}{tzSource}");
 
             EntityMetadata[] entityMetadatas = ReadEntityMetadata(service);
             metadataDict = entityMetadatas.ToDictionary(x => x.LogicalName.ToLower(), x => x);
@@ -329,7 +329,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             formsDict = GetForms(service);
             viewsDict = GetViews(service);
 
-            AnsiConsole.MarkupLine($"[cyan]Solution:[/] {Markup.Escape(solution)} ({entities.Count} entities)");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[cyan]Solution:[/] {Markup.Escape(solution)} ({entities.Count} entities)");
 
             foreach (var entity in entities)
             {
@@ -338,13 +338,13 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                     continue;
                 var fileName = Path.Combine(folder, $"{entity}.md");
                 CreateDocumentFile(entity, fileName, entityMetadatas);
-                AnsiConsole.MarkupLine($"  [dim]Generated:[/] {entity}.md");
+                DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"  [dim]Generated:[/] {entity}.md");
             }
             DocumentGlobalOptionSet(Path.Combine(folder, "GlobalOptionSet.md"));
-            AnsiConsole.MarkupLine($"  [dim]Generated:[/] GlobalOptionSet.md");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"  [dim]Generated:[/] GlobalOptionSet.md");
             DocumentErd(Path.Combine(folder, "Erd.md"), entityMetadatas);
-            AnsiConsole.MarkupLine($"  [dim]Generated:[/] Erd.md");
-            AnsiConsole.MarkupLine($"[green]Done![/] Output: {Markup.Escape(folder)}");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"  [dim]Generated:[/] Erd.md");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[green]Done![/] Output: {Markup.Escape(folder)}");
         }
 
         private void DocumentErd(string file, EntityMetadata[] entityMetadatas)

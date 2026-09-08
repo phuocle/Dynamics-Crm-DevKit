@@ -65,13 +65,13 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
 
             Directory.CreateDirectory(output);
 
-            AnsiConsole.MarkupLine($"[cyan]Folder:[/] {Markup.Escape(folder)}");
-            AnsiConsole.MarkupLine($"[cyan]Output:[/] {Markup.Escape(output)}");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[cyan]Folder:[/] {Markup.Escape(folder)}");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[cyan]Output:[/] {Markup.Escape(output)}");
 
             if (!string.IsNullOrWhiteSpace(devOps))
-                AnsiConsole.MarkupLine($"[cyan]DevOps:[/] {Markup.Escape(devOps)} (Org: {Markup.Escape(org ?? "")}, Project: {Markup.Escape(project ?? "")})");
+                DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[cyan]DevOps:[/] {Markup.Escape(devOps)} (Org: {Markup.Escape(org ?? "")}, Project: {Markup.Escape(project ?? "")})");
             else
-                AnsiConsole.MarkupLine("[dim]DevOps link: disabled (WI shown as plain text)[/]");
+                DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine("[dim]DevOps link: disabled (WI shown as plain text)[/]");
 
             var dllFiles = Directory.GetFiles(folder, "*.dll", SearchOption.TopDirectoryOnly);
             var resolver = new DefaultAssemblyResolver();
@@ -95,7 +95,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                             {
                                 File.WriteAllText(outFile, content, Encoding.UTF8);
                             }
-                            AnsiConsole.MarkupLine($"  [dim]Generated:[/] {Path.GetFileName(outFile)}");
+                            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"  [dim]Generated:[/] {Path.GetFileName(outFile)}");
                             generated++;
                         }
                     }
@@ -104,10 +104,10 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 {
                     var content = GenerateErrorMarkdown(fileName, ex);
                     File.WriteAllText(outFile, content, Encoding.UTF8);
-                    AnsiConsole.MarkupLine($"  [red]Error:[/] {Markup.Escape(fileName)} - {Markup.Escape(ex.Message)}");
+                    DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"  [red]Error:[/] {Markup.Escape(fileName)} - {Markup.Escape(ex.Message)}");
                 }
             }
-            AnsiConsole.MarkupLine($"[green]Done![/] {generated} file(s) generated. Output: {Markup.Escape(output)}");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[green]Done![/] {generated} file(s) generated. Output: {Markup.Escape(output)}");
         }
 
         private static string GenerateMarkdownForModule(ModuleDefinition module, string fileName, string devOps, string org, string project, string outputDirectory)

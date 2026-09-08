@@ -98,11 +98,11 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         internal static void Run(string connectionString, string[] solutions, string outputFile)
         {
-            AnsiConsole.MarkupLine("[cyan]Connecting to Dataverse...[/]");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine("[cyan]Connecting to Dataverse...[/]");
             var serviceClient = new ServiceClient(connectionString);
             if (!serviceClient.IsReady)
                 throw new Exception($"Cannot connect to Dataverse: {serviceClient.LastError}");
-            AnsiConsole.MarkupLine("[green]Connected![/]");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine("[green]Connected![/]");
             Run((IOrganizationService)serviceClient, solutions, outputFile);
         }
 
@@ -127,11 +127,11 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             if (outputFile != null)
             {
                 File.WriteAllText(outputFile, result.ToString(), new UTF8Encoding(false));
-                AnsiConsole.MarkupLine($"[green]Report saved to:[/] {Markup.Escape(outputFile)}");
+                DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[green]Report saved to:[/] {Markup.Escape(outputFile)}");
             }
             else
             {
-                AnsiConsole.WriteLine(result.ToString());
+                DynamicsCrm.DevKit.Tool.ToolConsole.WriteLine(result.ToString());
             }
         }
 
@@ -357,7 +357,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
 
         private static string CheckSolution(IOrganizationService service, string solutionName)
         {
-            AnsiConsole.MarkupLine($"[cyan]Checking solution:[/] [yellow]{Markup.Escape(solutionName)}[/]");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[cyan]Checking solution:[/] [yellow]{Markup.Escape(solutionName)}[/]");
             var solutionId = GetSolutionId(service, solutionName);
             var components = LoadComponents(service, solutionId);
 
@@ -374,12 +374,12 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
 
                 var entities = grp.ToList();
                 result.Append($"\t{def.Item2} ({entities.Count})\r\n");
-                AnsiConsole.MarkupLine($"  [dim]Checking:[/] {Markup.Escape(def.Item2)} ({entities.Count})");
+                DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"  [dim]Checking:[/] {Markup.Escape(def.Item2)} ({entities.Count})");
                 
                 result.Append(CheckActiveLayers(service, entities));
                 result.Append("\r\n");
             }
-            AnsiConsole.MarkupLine($"[green]Done:[/] [yellow]{Markup.Escape(solutionName)}[/]");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[green]Done:[/] [yellow]{Markup.Escape(solutionName)}[/]");
             return result.ToString();
         }
 
@@ -454,7 +454,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             {
                 if (response.Fault != null)
                 {
-                    AnsiConsole.MarkupLine($"[red]Fault:[/] {response.Fault.Message}");
+                    DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[red]Fault:[/] {response.Fault.Message}");
                     continue;
                 }
 

@@ -17,8 +17,8 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             if (!File.Exists(coverage))
                 throw new FileNotFoundException($"Coverage file not found: {coverage}");
 
-            AnsiConsole.MarkupLine($"[cyan]Coverage:[/] {Markup.Escape(coverage)}");
-            AnsiConsole.MarkupLine($"[cyan]Output:[/] {Markup.Escape(xml)}");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[cyan]Coverage:[/] {Markup.Escape(coverage)}");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[cyan]Output:[/] {Markup.Escape(xml)}");
 
             var xmlDir = Path.GetDirectoryName(xml);
             if (!string.IsNullOrEmpty(xmlDir) && !Directory.Exists(xmlDir))
@@ -43,7 +43,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                     $"dotnet-coverage failed (exit code {exitCode}): {msg.Trim()}");
             }
 
-            AnsiConsole.MarkupLine($"[green]Done![/] Output: {Markup.Escape(xml)}");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[green]Done![/] Output: {Markup.Escape(xml)}");
         }
 
         internal static (int ExitCode, string Output, string Error) StartDotNetCoverage(ProcessStartInfo psi, Func<ProcessStartInfo, Process> processStarter = null)

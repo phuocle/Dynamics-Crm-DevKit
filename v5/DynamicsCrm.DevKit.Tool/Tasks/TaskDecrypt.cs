@@ -8,7 +8,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
         internal static void Run(string password)
         {
             var decrypted = Helper.DecryptString(password);
-            AnsiConsole.MarkupLine($"[cyan]Decrypted:[/] {Markup.Escape(decrypted)}");
+            DynamicsCrm.DevKit.Tool.ToolConsole.MarkupLine($"[cyan]Decrypted:[/] {Markup.Escape(decrypted)}");
         }
     }
 }

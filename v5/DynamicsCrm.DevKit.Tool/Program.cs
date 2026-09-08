@@ -12,11 +12,12 @@ namespace DynamicsCrm.DevKit.Tool
         static int Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+            AnsiConsole.Profile.Width = 8000;
 
             if (args == null || args.Length == 0 ||
                 (args.Length == 1 && (args[0] == "--help" || args[0] == "-h" || args[0] == "/?")))
             {
-                WriteBanner();
+                WriteBannerIfSupported();
                 WriteHelp();
                 return 0;
             }
@@ -28,7 +29,7 @@ namespace DynamicsCrm.DevKit.Tool
                 return 0;
             }
 
-            WriteBanner();
+            WriteBannerIfSupported();
 
             var app = new CommandApp();
             app.Configure(config =>
@@ -68,19 +69,29 @@ namespace DynamicsCrm.DevKit.Tool
             var colorBox = "green";
             var colorText = "white";
             AnsiConsole.MarkupLine($"[{colorBox}]╔{new string('═', width)}╗[/]");
-            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}]  ____                              _           ____                  ____             _  ___ _   _____           _ [/][{colorBox}]  ║[/]");
-            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_|_   _|__   ___ | |[/][{colorBox}]  ║[/]");
-            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __| | |/ _ \\ / _ \\| |[/][{colorBox}]  ║[/]");
-            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ _| | (_) | (_) | |[/][{colorBox}]  ║[/]");
-            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)_|\\___/ \\___/|_|[/][{colorBox}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorText}]║[/] [{colorText}]  ____                              _           ____                  ____             _  ___ _   _____           _ [/][{colorText}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorText}]║[/] [{colorText}] |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_|_   _|__   ___ | |[/][{colorText}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorText}]║[/] [{colorText}] | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __| | |/ _ \\ / _ \\| |[/][{colorText}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorText}]║[/] [{colorText}] | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ _| | (_) | (_) | |[/][{colorText}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorText}]║[/] [{colorText}] |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)_|\\___/ \\___/|_|[/][{colorText}]  ║[/]");
             var part1 = "        |___/                   ";
             var part2 = "https://github.com/phuocle/Dynamics-Crm-DevKit ";
             var part3 = $"{Const.Version} [green]Build:[/] {Const.Build}";
             var part3Len = $"{Const.Version} Build: {Const.Build}".Length;
             var currentLen = part1.Length + part2.Length + part3Len;
             var padding = new string(' ', 116 - currentLen);
-            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}]{part1}[/][green]{part2}[/][{colorText}]{part3}{padding}[/][{colorBox}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorText}]║[/] [{colorText}]{part1}[/][green]{part2}[/][{colorText}]{part3}{padding}[/][{colorText}]  ║[/]");
             AnsiConsole.MarkupLine($"[{colorBox}]╚{new string('═', width)}╝[/]");
+        }
+
+        private static void WriteBannerIfSupported()
+        {
+            var noBanner = string.Equals(Environment.GetEnvironmentVariable("DEVKIT_NO_BANNER"), "1", StringComparison.OrdinalIgnoreCase) ||
+                           string.Equals(Environment.GetEnvironmentVariable("DEVKIT_NO_BANNER"), "true", StringComparison.OrdinalIgnoreCase);
+            if (noBanner)
+                return;
+
+            WriteBanner();
         }
 
         private static void WriteHelp()
