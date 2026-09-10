@@ -64,6 +64,7 @@
     <Compile Include="Commands\CommandWebResource.cs" />
     <Compile Include="Commands\CommandUploadReport.cs" />
     <Compile Include="Commands\CommandNewReport.cs" />
+    <Compile Include="Commands\CommandManageReportDatasets.cs" />
     <Compile Include="DevKitPackageVsct.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -78,6 +79,15 @@
     <Compile Include="Lib\Forms\FormReportMapping.xaml.cs">
       <DependentUpon>FormReportMapping.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Lib\Forms\FormReportDatasets.xaml.cs">
+      <DependentUpon>FormReportDatasets.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Lib\Models\ReportDatasetFieldInfo.cs" />
+    <Compile Include="Lib\Models\ReportDatasetParameterInfo.cs" />
+    <Compile Include="Lib\Models\ReportFetchEntityInfo.cs" />
+    <Compile Include="Lib\Models\ReportDatasetValidationResult.cs" />
+    <Compile Include="Lib\Models\ReportDatasetInfo.cs" />
+    <Compile Include="Lib\ReportDatasetService.cs" />
     <Compile Include="Lib\Forms\FormCustom.xaml.cs">
       <DependentUpon>FormCustom.xaml</DependentUpon>
     </Compile>
@@ -238,6 +248,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Lib\Forms\FormReportMapping.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Lib\Forms\FormReportDatasets.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
