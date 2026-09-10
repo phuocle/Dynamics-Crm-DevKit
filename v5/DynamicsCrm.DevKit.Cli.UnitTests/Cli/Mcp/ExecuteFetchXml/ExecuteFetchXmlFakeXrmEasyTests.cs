@@ -23,7 +23,7 @@ public sealed class ExecuteFetchXmlFakeXrmEasyTests
     private static IXrmFakedContext NewContext() => MiddlewareBuilder.New()
         .AddCrud()
         .UseCrud()
-        .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.NonCommercial)
+        .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.RPL_1_5)
         .Build();
 
     private static void SeedAccount(IXrmFakedContext context, string name, string telephone)

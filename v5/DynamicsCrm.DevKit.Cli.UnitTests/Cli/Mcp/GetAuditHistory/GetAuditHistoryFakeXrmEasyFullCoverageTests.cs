@@ -37,7 +37,7 @@ public sealed class GetAuditHistoryFakeXrmEasyFullCoverageTests
             .AddFakeMessageExecutors()
             .UseCrud()
             .UseMessages()
-            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.NonCommercial)
+            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.RPL_1_5)
             .Build();
         _ctx.GetOrganizationService().Create(new Entity("organization", Guid.NewGuid()) { ["languagecode"] = 1033 });
         _service = new AuditOrgService(_ctx.GetOrganizationService());

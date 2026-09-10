@@ -37,7 +37,7 @@ public sealed class WhoAmIFakeXrmEasyFullCoverageTests
             .AddFakeMessageExecutors()
             .UseCrud()
             .UseMessages()
-            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.NonCommercial)
+            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.RPL_1_5)
             .Build();
         _userId = Guid.NewGuid();
         _ctx.GetOrganizationService().Create(new Entity("systemuser", _userId)

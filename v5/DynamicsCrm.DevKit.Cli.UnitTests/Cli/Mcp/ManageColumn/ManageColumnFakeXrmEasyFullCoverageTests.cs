@@ -39,7 +39,7 @@ public sealed class ManageColumnFakeXrmEasyFullCoverageTests
             .AddFakeMessageExecutor(_metadata)
             .UseCrud()
             .UseMessages()
-            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.NonCommercial)
+            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.RPL_1_5)
             .Build();
 
         // Organization record for McpHelper.GetBaseLanguageCode

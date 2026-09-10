@@ -43,7 +43,7 @@ public sealed class CommandListDetailFakeXrmEasyFullCoverageTests
             .AddFakeMessageExecutor(new FakeRetrieveAllEntitiesExecutor(SharedEntities))
             .UseCrud()
             .UseMessages()
-            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.NonCommercial)
+            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.RPL_1_5)
             .Build();
         _ctx.GetOrganizationService().Create(new Entity("organization", Guid.NewGuid()) { ["languagecode"] = 1033 });
         // appaction metadata with the attributes referenced by FetchExpression

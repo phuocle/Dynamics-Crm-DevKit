@@ -32,7 +32,7 @@ public class CSharpLateBoundTest
             .AddFakeMessageExecutors()
             .UseCrud()
             .UseMessages()
-            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.NonCommercial)
+            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.RPL_1_5)
             .Build();
 
         _fullMetadata = BuildFullEntityMetadata();

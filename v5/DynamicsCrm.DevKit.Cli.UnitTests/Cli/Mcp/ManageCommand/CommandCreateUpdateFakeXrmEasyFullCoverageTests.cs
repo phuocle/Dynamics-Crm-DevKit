@@ -36,7 +36,7 @@ public sealed class CommandCreateUpdateFakeXrmEasyFullCoverageTests
             .AddFakeMessageExecutors()
             .UseCrud()
             .UseMessages()
-            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.NonCommercial)
+            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.RPL_1_5)
             .Build();
 
         // Seed organization row + a publisher for DisplayNameFirstResolver

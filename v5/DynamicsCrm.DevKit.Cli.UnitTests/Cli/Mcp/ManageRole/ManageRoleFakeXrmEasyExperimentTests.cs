@@ -18,7 +18,7 @@ public sealed class ManageRoleFakeXrmEasyExperimentTests
     {
         var context = MiddlewareBuilder.New()
             .AddCrud().UseCrud()
-            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.NonCommercial)
+            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.RPL_1_5)
             .Build();
         var roleId = Guid.NewGuid();
         context.Initialize(new[]

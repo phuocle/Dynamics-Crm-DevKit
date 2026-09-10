@@ -1,14 +1,14 @@
 # Code Coverage Report
 
-> **Version:** `4.44.44.44` | **Generated:** 2026-09-08 13:57:55
+> **Version:** `4.44.44.44` | **Generated:** 2026-09-10 11:17:21
 
 ## Summary
 
 | # | Component | Test Project | Status | Line | Branch | Method |
 |---|---|---|---|---|---|---|
 | 1 | Cli | DynamicsCrm.DevKit.Cli.UnitTests | ✅ Pass | 84.4% | 72.5% | 91.8% |
-| 2 | Tool | DynamicsCrm.DevKit.Tool.UnitTests | ✅ Pass | 70.5% | 60.8% | 58.9% |
-| 3 | Vsix | DynamicsCrm.DevKit.Vsix.UnitTests | ✅ Pass | 98.4% | 74.4% | 99.5% |
+| 2 | Tool | DynamicsCrm.DevKit.Tool.UnitTests | ✅ Pass | 71.8% | 62.9% | 60.8% |
+| 3 | Vsix | DynamicsCrm.DevKit.Vsix.UnitTests | ✅ Pass | 98.4% | 72.4% | 99.2% |
 | 4 | Analyzers | DynamicsCrm.DevKit.Analyzers.UnitTests | ✅ Pass | 100% | 84.1% | 100% |
 | 5 | 2019 | DynamicsCrm.DevKit.Vsix.2019.UnitTests | ✅ Pass | 98.9% | 90.2% | 100% |
 
@@ -16,9 +16,9 @@
 
 | Assembly | Lines | Branches | Methods | Classes |
 |---|---|---|---|---|
-| DynamicsCrm.DevKit.Cli | 42831/50710 | 18787/25882 | 3551/3864 | 347 |
-| DynamicsCrm.DevKit.Tool | 2378/3372 | 798/1312 | 168/285 | 44 |
-| DynamicsCrm.DevKit.Vsix.UnitTests | 5109/5190 | 195/262 | 618/621 | 11 |
+| DynamicsCrm.DevKit.Cli | 42801/50680 | 18785/25882 | 3550/3864 | 347 |
+| DynamicsCrm.DevKit.Tool | 2437/3393 | 831/1320 | 176/289 | 45 |
+| DynamicsCrm.DevKit.Vsix.UnitTests | 5277/5362 | 213/294 | 663/668 | 13 |
 | DynamicsCrm.DevKit.Analyzers | 1571/1571 | 693/824 | 131/131 | 27 |
 | DynamicsCrm.DevKit.2019 | 290/293 | 166/184 | 30/30 | 7 |
 

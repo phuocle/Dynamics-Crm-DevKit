@@ -46,7 +46,7 @@ public sealed class ManageRoleFakeXrmEasyFullCoverageTests
             .AddFakeMessageExecutor(new FakeAddPrivilegesRoleExecutor())
             .UseCrud()
             .UseMessages()
-            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.NonCommercial)
+            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.RPL_1_5)
             .Build();
         // Entity metadata for ResolveEntity / entity_filter paths (account, contact)
         _entityExecutor.Metadata.Add(EntityMeta("account", "Account"));

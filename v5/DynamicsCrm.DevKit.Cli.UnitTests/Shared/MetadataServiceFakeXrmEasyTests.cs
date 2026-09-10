@@ -47,7 +47,7 @@ public sealed class MetadataServiceFakeXrmEasyTests
             .AddFakeMessageExecutor(_allMetadataExecutor)
             .UseCrud()
             .UseMessages()
-            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.NonCommercial)
+            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.RPL_1_5)
             .Build();
         _context.InitializeMetadata(SystemFormMetadata());
         _context.InitializeMetadata(WorkflowMetadata());
@@ -92,7 +92,7 @@ public sealed class MetadataServiceFakeXrmEasyTests
     }
 
     /// <summary>
-    /// RetrieveEntityRequest is not supported by the non-commercial FakeXrmEasy
+    /// RetrieveEntityRequest is not supported by the FakeXrmEasy middleware
     /// middleware, so answer it from a local metadata list.
     /// </summary>
     private sealed class FakeRetrieveEntityExecutor : FakeXrmEasy.Abstractions.FakeMessageExecutors.IFakeMessageExecutor
@@ -115,7 +115,7 @@ public sealed class MetadataServiceFakeXrmEasyTests
     }
 
     /// <summary>
-    /// RetrieveAllEntitiesRequest is not supported by the non-commercial FakeXrmEasy
+    /// RetrieveAllEntitiesRequest is not supported by the FakeXrmEasy middleware
     /// middleware, so answer it from a local metadata list.
     /// </summary>
     private sealed class FakeRetrieveAllEntitiesExecutor : FakeXrmEasy.Abstractions.FakeMessageExecutors.IFakeMessageExecutor
@@ -173,7 +173,7 @@ public sealed class MetadataServiceFakeXrmEasyTests
         Assert.AreEqual(1036, await _service.GetLanguageCodeAsync());
 
         var empty = MiddlewareBuilder.New().AddCrud().UseCrud()
-            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.NonCommercial).Build();
+            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.RPL_1_5).Build();
         var service = new MetadataService(empty.GetAsyncOrganizationService2());
         Assert.AreEqual(1033, await service.GetLanguageCodeAsync());
     }

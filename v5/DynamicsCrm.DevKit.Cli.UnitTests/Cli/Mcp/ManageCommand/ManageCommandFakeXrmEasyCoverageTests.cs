@@ -29,7 +29,7 @@ public sealed class ManageCommandFakeXrmEasyCoverageTests
         var context = MiddlewareBuilder.New()
             .AddCrud()
             .UseCrud()
-            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.NonCommercial)
+            .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.RPL_1_5)
             .Build();
         var fakeService = context.GetOrganizationService();
         var commandId = Guid.NewGuid();
