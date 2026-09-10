@@ -82,6 +82,9 @@
     <None Include="PluginCore.cs" />
     <None Include="Extension.cs" />
     <None Include="EntityBase.cs" />
+    <None Include="PluginExecutionContext7Wrapper.cs" />
+    <None Include="DevKitJson.cs" />
+    <None Include="DocumentMethodAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

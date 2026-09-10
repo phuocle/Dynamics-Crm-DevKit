@@ -13,7 +13,7 @@ namespace <#=Context.PluginNameSpace#>
 
         public void Execute(IServiceProvider serviceProvider)
         {
-            var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+            var context = serviceProvider.GetExecutionContext7();
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);
@@ -28,7 +28,7 @@ namespace <#=Context.PluginNameSpace#>
                     context.OutputParameters[output.Key] = output.Value;
         }
 
-        private ParameterCollection ExecuteCustomApi(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
+        private ParameterCollection ExecuteCustomApi(IPluginExecutionContext7 context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
         {
             var outputs = new ParameterCollection();
             //YOUR CUSTOM ACTION BEGIN HERE

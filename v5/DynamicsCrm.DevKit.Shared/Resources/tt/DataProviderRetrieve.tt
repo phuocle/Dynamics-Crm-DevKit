@@ -30,7 +30,7 @@ namespace <#=Context.PluginNameSpace#>
 
         public void Execute(IServiceProvider serviceProvider)
         {
-            var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+            var context = serviceProvider.GetExecutionContext7();
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);
@@ -43,7 +43,7 @@ namespace <#=Context.PluginNameSpace#>
             ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing, dataSource);
         }
 
-        private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing, Entity dataSource)
+        private void ExecutePlugin(IPluginExecutionContext7 context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing, Entity dataSource)
         {
             //Get Parameter from DataSource
             //var ??? = dataSource.GetAttributeValue<string>("???");

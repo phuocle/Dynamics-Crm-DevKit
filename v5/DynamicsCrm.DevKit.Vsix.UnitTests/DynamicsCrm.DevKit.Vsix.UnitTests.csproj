@@ -29,6 +29,7 @@
   <ItemGroup>
     <Compile Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\Date.cs" Link="Lib\Date.cs" />
     <Compile Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\DevKitJson.cs" Link="Lib\DevKitJson.cs" />
+    <Compile Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\PluginExecutionContext7Wrapper.cs" Link="Lib\PluginExecutionContext7Wrapper.cs" />
   </ItemGroup>
 
   <!-- Shared model under test by the T4 suite (Shared is a .shproj with no assembly of its own) -->
