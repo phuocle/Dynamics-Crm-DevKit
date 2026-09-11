@@ -34,14 +34,5 @@
     <DataSets>@(DataSet)</DataSets>
     <Reports>@(Report)</Reports>
   </PropertyGroup>
-  <ItemGroup>
-    <Report Include="Account and Contact Reports.rdl" />
-    <Report Include="Account vs Contact v2.rdl" />
-    <Report Include="Account vs Contact.rdl" />
-    <Report Include="All in One.rdl" />
-    <Report Include="Report1.rdl" />
-    <Report Include="ReportTemplate.rdl" />
-    <Report Include="Top10Account.rdl" />
-  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Reporting Services\Microsoft.ReportingServices.MSBuilder.targets" />
 </Project>
