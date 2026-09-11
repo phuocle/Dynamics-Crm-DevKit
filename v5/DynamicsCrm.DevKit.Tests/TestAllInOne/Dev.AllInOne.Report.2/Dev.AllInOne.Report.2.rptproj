@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <FullPath>Debug</FullPath>
@@ -35,10 +35,13 @@
     <Reports>@(Report)</Reports>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="download.reports.bat" />
-    <None Include="notes.txt" />
+    <Report Include="Account and Contact Reports.rdl" />
+    <Report Include="Account vs Contact v2.rdl" />
+    <Report Include="Account vs Contact.rdl" />
+    <Report Include="All in One.rdl" />
+    <Report Include="Report1.rdl" />
     <Report Include="ReportTemplate.rdl" />
     <Report Include="Top10Account.rdl" />
-  <Report Include="Account vs Contact.rdl" /><Report Include="Account vs Contact v2.rdl" /><Report Include="Account and Contact Reports.rdl" /><Report Include="All in One.rdl" /></ItemGroup>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Reporting Services\Microsoft.ReportingServices.MSBuilder.targets" />
 </Project>

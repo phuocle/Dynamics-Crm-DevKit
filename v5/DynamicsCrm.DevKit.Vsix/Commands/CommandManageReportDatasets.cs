@@ -19,6 +19,7 @@ namespace DynamicsCrm.DevKit.Commands
                 var file = await VsixHelper.SelectedItem.GetFullFileNameAsync();
                 if (!string.Equals(Path.GetExtension(file), ".rdl", StringComparison.OrdinalIgnoreCase) || !File.Exists(file))
                     return;
+                ReportDatasetService.ValidateFileForDatasetManagement(file);
                 var form = new FormReportDatasets(file, () => CacheHelper.GetServiceClientAsync());
                 form.ShowModal();
             }

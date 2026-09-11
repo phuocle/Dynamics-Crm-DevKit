@@ -19,6 +19,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private ReportDatasetInfo current;
         private ReportDatasetValidationResult validation;
         private bool adding;
+        private bool synchronizingPrefilters;
         public FormReportDatasets(string filePath, Func<Task<ServiceClient>> connectionFactory)
         {
             InitializeComponent();
@@ -29,33 +30,48 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             textStatus.Text = FormatMessages(service.Warnings).TrimStart();
         }
 
-        private void Refresh()
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            gridDatasets.ItemsSource = null;
+            FormatXml_Click(buttonFormat, e);
+        }
+
+        private void Refresh(string selectDatasetName = null)
+        {
+            comboDataset.ItemsSource = null;
             var datasets = service.List();
-            gridDatasets.ItemsSource = datasets;
-            if (datasets.Count > 0 && gridDatasets.SelectedItem == null) gridDatasets.SelectedIndex = 0;
+            comboDataset.ItemsSource = datasets;
+            if (!string.IsNullOrWhiteSpace(selectDatasetName))
+            {
+                comboDataset.SelectedItem = datasets.FirstOrDefault(x =>
+                    string.Equals(x.Name, selectDatasetName, StringComparison.OrdinalIgnoreCase));
+            }
+            else if (datasets.Count > 0 && comboDataset.SelectedItem == null) comboDataset.SelectedIndex = 0;
             else if (datasets.Count == 0) StartAdd();
         }
 
         private void Dataset_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            current = gridDatasets.SelectedItem as ReportDatasetInfo;
-            adding = false;
+            current = comboDataset.SelectedItem as ReportDatasetInfo;
             validation = null;
-            buttonApply.Content = "Update Dataset";
-            if (current == null) return;
+            // Clearing the selection is part of entering New mode. Do not let
+            // that transient SelectionChanged event cancel the add state.
+            if (current == null)
+            {
+                if (!adding)
+                    textboxName.IsReadOnly = false;
+                return;
+            }
+            adding = false;
             textboxName.Text = current.Name;
-            textboxName.IsReadOnly = true;
             textboxFetchXml.Text = current.CommandText;
+            FormatXml_Click(buttonFormat, e);
             gridFields.ItemsSource = current.Fields;
             gridParameters.ItemsSource = current.Parameters;
-            gridPrefilters.ItemsSource = current.FetchEntities;
-            checkboxPrefilter.IsChecked = current.FetchEntities.Any(x => x.IsPreFiltered);
+            SetPrefilterItemsSource(current.FetchEntities);
             textStatus.Text = FormatMessages(current.Warnings).TrimStart();
         }
 
-        private void Add_Click(object sender, RoutedEventArgs e)
+        private void New_Click(object sender, RoutedEventArgs e)
         {
             StartAdd();
         }
@@ -65,55 +81,29 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             adding = true;
             current = null;
             validation = null;
-            buttonApply.Content = "Add Dataset";
+            comboDataset.SelectedItem = null;
             textboxName.IsReadOnly = false;
             var existingNames = new HashSet<string>(service.List().Select(x => x.Name), StringComparer.OrdinalIgnoreCase);
             var suffix = 1;
             while (existingNames.Contains("Dataset" + suffix)) suffix++;
             textboxName.Text = "Dataset" + suffix;
             textboxFetchXml.Clear();
-            checkboxPrefilter.IsChecked = false;
             gridFields.ItemsSource = null;
             gridParameters.ItemsSource = null;
-            gridPrefilters.ItemsSource = null;
+            SetPrefilterItemsSource(null);
         }
 
         [SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "WPF event handler catches and reports all failures.")]
         private async void Validate_Click(object sender, RoutedEventArgs e)
         {
-            gridPrefilters.CommitEdit();
-            gridPrefilters.CommitEdit(System.Windows.Controls.DataGridEditingUnit.Row, true);
-            var syntax = service.ValidateSyntax(textboxFetchXml.Text);
-            if (!syntax.IsSuccess)
-            {
-                textStatus.Text = string.Join(" | ", syntax.Errors);
-                return;
-            }
             SetBusy(true);
             try
             {
-                var client = await connectionFactory();
-                if (client == null)
+                if (await ValidateCurrentAsync())
                 {
-                    textStatus.Text = "Dataverse connection was cancelled; metadata validation was not run.";
-                    return;
+                    if (ApplyCurrentChanges())
+                        textStatus.Text = "Dataset validated and applied to the working copy. Click Save RDL to write the RDL file.";
                 }
-                validation = await service.ValidateAsync(client, textboxFetchXml.Text, Selections(), adding ? null : current?.Name);
-                if (checkboxPrefilter.IsChecked != true)
-                {
-                    foreach (var entity in validation.FetchEntities) entity.IsPreFiltered = false;
-                }
-                else if (!validation.FetchEntities.Any(x => x.IsPreFiltered))
-                {
-                    var root = validation.FetchEntities.FirstOrDefault(x => x.IsRoot);
-                    if (root != null) root.IsPreFiltered = true;
-                }
-                gridFields.ItemsSource = validation.Fields;
-                gridParameters.ItemsSource = validation.Parameters;
-                gridPrefilters.ItemsSource = validation.FetchEntities;
-                textStatus.Text = validation.IsSuccess
-                    ? "Projection validated. Fields were generated from metadata." + FormatMessages(validation.Warnings)
-                    : string.Join(" | ", validation.Errors);
             }
             catch (Exception ex)
             {
@@ -125,65 +115,96 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
-        private void Apply_Click(object sender, RoutedEventArgs e)
+        private async Task<bool> ValidateCurrentAsync()
         {
-            try
+            if (adding && string.IsNullOrWhiteSpace(textboxName.Text))
             {
-                if (validation == null || !validation.IsSuccess)
-                {
-                    textStatus.Text = "Validate FetchXML before adding or updating the dataset.";
-                    return;
-                }
-                if (!string.Equals(validation.FetchXml, textboxFetchXml.Text, StringComparison.Ordinal))
-                {
-                    textStatus.Text = "FetchXML changed after validation. Validate again before Add/Update.";
-                    return;
-                }
-                gridParameters.CommitEdit();
-                gridParameters.CommitEdit(System.Windows.Controls.DataGridEditingUnit.Row, true);
-                gridPrefilters.CommitEdit();
-                gridPrefilters.CommitEdit(System.Windows.Controls.DataGridEditingUnit.Row, true);
-                if (!adding && current != null)
-                {
-                    var removed = current.Fields.Select(x => x.Name).Except(validation.Fields.Select(x => x.Name), StringComparer.OrdinalIgnoreCase).ToList();
-                    var removeMessage = "The following fields will be removed from the dataset:\n" +
-                        string.Join("\n", removed) +
-                        "\n\nContinue with the update?";
-                    if (removed.Count > 0 && MessageBox.Show(
-                        removeMessage,
-                        "Removed fields",
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Warning,
-                        MessageBoxResult.No) != MessageBoxResult.Yes) return;
-                }
-                if (adding) service.Add(textboxName.Text.Trim(), validation);
-                else service.Update(textboxName.Text.Trim(), validation);
-                var warnings = validation.Warnings.ToList();
-                Refresh();
-                textStatus.Text = "Dataset staged; press Save to write the RDL." + FormatMessages(warnings);
+                textStatus.Text = "Dataset name is required.";
+                return false;
             }
-            catch (Exception ex)
+            var syntax = service.ValidateSyntax(textboxFetchXml.Text);
+            if (!syntax.IsSuccess)
             {
-                textStatus.Text = ex.Message;
+                textStatus.Text = string.Join(" | ", syntax.Errors);
+                return false;
             }
+            var client = await connectionFactory();
+            if (client == null)
+            {
+                textStatus.Text = "Dataverse connection was cancelled; metadata validation was not run.";
+                return false;
+            }
+            validation = await service.ValidateAsync(client, textboxFetchXml.Text, Selections(), adding ? null : current?.Name);
+            gridFields.ItemsSource = validation.Fields;
+            gridParameters.ItemsSource = validation.Parameters;
+            SetPrefilterItemsSource(validation.FetchEntities);
+            textStatus.Text = validation.IsSuccess
+                ? "Projection validated. Fields were generated from metadata."
+                + FormatMessages(validation.Warnings)
+                : string.Join(" | ", validation.Errors);
+            return validation.IsSuccess;
+        }
+
+        private bool ApplyCurrentChanges()
+        {
+            if (validation == null || !validation.IsSuccess)
+            {
+                textStatus.Text = "The dataset could not be saved because validation failed.";
+                return false;
+            }
+            if (!string.Equals(validation.FetchXml, textboxFetchXml.Text, StringComparison.Ordinal))
+            {
+                textStatus.Text = "FetchXML changed during validation. Save again to validate the latest content.";
+                return false;
+            }
+            gridParameters.CommitEdit();
+            gridParameters.CommitEdit(System.Windows.Controls.DataGridEditingUnit.Row, true);
+            if (!adding && current != null)
+            {
+                var removed = current.Fields.Select(x => x.Name).Except(validation.Fields.Select(x => x.Name), StringComparer.OrdinalIgnoreCase).ToList();
+                var removeMessage = "The following fields will be removed from the dataset:\n" +
+                    string.Join("\n", removed) +
+                    "\n\nContinue with the update?";
+                if (removed.Count > 0 && MessageBox.Show(
+                    removeMessage,
+                    "Removed fields",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning,
+                    MessageBoxResult.No) != MessageBoxResult.Yes) return false;
+            }
+            var datasetName = textboxName.Text.Trim();
+            if (adding) service.Add(datasetName, validation);
+            else
+            {
+                var originalName = current?.Name;
+                if (string.IsNullOrWhiteSpace(originalName))
+                    throw new InvalidOperationException("Select a dataset before updating it.");
+                service.Update(originalName, datasetName, validation);
+            }
+            Refresh(datasetName);
+            return true;
         }
 
         [SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "WPF event handler catches and reports all failures.")]
         private async void Save_Click(object sender, RoutedEventArgs e)
         {
-            if (HasUnappliedEditorChanges())
-            {
-                textStatus.Text = "Apply the current dataset editor changes before Save.";
-                return;
-            }
-            SetBusy(true);
             try
             {
+                if (HasUnappliedEditorChanges())
+                {
+                    textStatus.Text = "Validating FetchXML and resolving Dataverse metadata...";
+                    // Keep the dialog responsive while the connection prompt is displayed.
+                    await Task.Yield();
+                    if (!await ValidateCurrentAsync()) return;
+                    SetBusy(true);
+                    if (!ApplyCurrentChanges()) return;
+                }
+                else SetBusy(true);
                 string solutionFolder = null;
                 try { solutionFolder = await VsixHelper.GetSolutionFolderAsync(); }
                 catch { }
                 var backup = await service.SaveAsync(solutionFolder);
-                textStatus.Text = backup == null ? "No changes." : "Saved; backup: " + Path.GetFileName(backup);
+                textStatus.Text = backup == null ? "No changes." : "Report dataset saved successfully. Backup: " + Path.GetFileName(backup);
                 if (backup != null) DialogResult = true;
             }
             catch (Exception ex)
@@ -196,56 +217,81 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
-        private void Delete_Click(object sender, RoutedEventArgs e)
+        private void FetchXml_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            if (current == null) return;
-            var references = service.FindReferences(current.Name).ToList();
-            var deleteMessage = "This dataset is referenced by the following report locations:\n" +
-                string.Join("\n", references) +
-                "\n\nDelete anyway?";
-            if (references.Count > 0 && MessageBox.Show(
-                deleteMessage,
-                "Confirm",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning,
-                MessageBoxResult.No) != MessageBoxResult.Yes) return;
-            service.Delete(current.Name);
-            validation = null;
-            Refresh();
-            textStatus.Text = "Dataset deleted from the working copy; press Save to write the RDL.";
+            if (synchronizingPrefilters) return;
+            RebuildPrefilterGridFromXml();
         }
 
-        private void Reload_Click(object sender, RoutedEventArgs e)
+        private void Prefilter_Click(object sender, RoutedEventArgs e)
         {
-            if ((service.IsDirty || HasUnappliedEditorChanges()) && MessageBox.Show(
-                "Discard unsaved changes and reload the RDL from disk?",
-                "Reload",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning,
-                MessageBoxResult.No) != MessageBoxResult.Yes) return;
-            service.Reload();
-            validation = null;
-            Refresh();
-            textStatus.Text = "RDL reloaded from disk.";
+            var checkBox = sender as System.Windows.Controls.CheckBox;
+            SetPrefilterFromGrid(sender, checkBox?.IsChecked == true);
         }
 
-        private void PrefilterToggle_Click(object sender, RoutedEventArgs e)
+        private void SetPrefilterFromGrid(object sender, bool enabled)
         {
-            var entities = gridPrefilters.ItemsSource as IEnumerable<ReportFetchEntityInfo>;
-            if (entities == null) return;
-            var items = entities.ToList();
-            if (checkboxPrefilter.IsChecked == true && !items.Any(x => x.IsPreFiltered))
+            if (synchronizingPrefilters) return;
+            var checkBox = sender as System.Windows.Controls.CheckBox;
+            var entity = checkBox?.DataContext as ReportFetchEntityInfo;
+            if (entity == null || string.IsNullOrWhiteSpace(entity.Path)) return;
+            try
             {
-                var root = items.FirstOrDefault(x => x.IsRoot);
-                if (root != null) root.IsPreFiltered = true;
+                var fetch = XDocument.Parse(textboxFetchXml.Text, LoadOptions.PreserveWhitespace);
+                var node = ReportDatasetService.FindFetchEntityForEditor(fetch, entity.Path);
+                if (node == null) return;
+                if (enabled)
+                {
+                    node.SetAttributeValue("enableprefiltering", "1");
+                    node.SetAttributeValue("prefilterparametername", entity.PrefilterParameterName);
+                }
+                else
+                {
+                    node.Attribute("enableprefiltering")?.Remove();
+                    node.Attribute("prefilterparametername")?.Remove();
+                }
+                synchronizingPrefilters = true;
+                textboxFetchXml.Text = fetch.ToString(SaveOptions.None);
+                validation = null;
+                textStatus.Text = enabled
+                    ? "Pre-filter enabled for " + entity.DisplayName + ". Validate the FetchXML before saving."
+                    : "Pre-filter disabled for " + entity.DisplayName + ". Validate the FetchXML before saving.";
             }
-            else if (checkboxPrefilter.IsChecked != true)
-                foreach (var entity in items) entity.IsPreFiltered = false;
-            gridPrefilters.Items.Refresh();
+            catch (Exception ex)
+            {
+                textStatus.Text = "Cannot update pre-filter: " + ex.Message;
+            }
+            finally
+            {
+                synchronizingPrefilters = false;
+                RebuildPrefilterGridFromXml();
+            }
+        }
+
+        private void RebuildPrefilterGridFromXml()
+        {
+            if (synchronizingPrefilters) return;
+            var entities = ReportDatasetService.ReadFetchEntitiesForEditor(textboxFetchXml.Text).ToList();
+            SetPrefilterItemsSource(entities);
+        }
+
+        private void SetPrefilterItemsSource(IEnumerable<ReportFetchEntityInfo> entities)
+        {
+            var previous = synchronizingPrefilters;
+            synchronizingPrefilters = true;
+            try
+            {
+                gridPrefilters.ItemsSource = entities;
+            }
+            finally
+            {
+                synchronizingPrefilters = previous;
+            }
         }
 
         private void FormatXml_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(textboxFetchXml.Text)) return;
             try
             {
                 textboxFetchXml.Text = XDocument.Parse(textboxFetchXml.Text).ToString(SaveOptions.None);
@@ -258,7 +304,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e)
+        private void Close_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
         }
@@ -281,7 +327,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 .Where(x => !string.IsNullOrWhiteSpace(x.Path))
                 .ToDictionary(
                     x => x.Path,
-                    x => checkboxPrefilter.IsChecked == true && x.IsPreFiltered,
+                    x => x.IsPreFiltered,
                     StringComparer.OrdinalIgnoreCase);
         }
 
@@ -301,9 +347,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void SetBusy(bool isBusy)
         {
             contentGrid.IsEnabled = !isBusy;
+            comboDataset.IsEnabled = !isBusy;
+            buttonNew.IsEnabled = !isBusy;
             buttonFormat.IsEnabled = !isBusy;
             buttonValidate.IsEnabled = !isBusy;
-            buttonApply.IsEnabled = !isBusy;
             buttonSave.IsEnabled = !isBusy;
             if (isBusy) textStatus.Text = "Working...";
         }

@@ -1,4 +1,4 @@
-﻿
+
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Description>Report Template</Description>
   <Author>DynamicsCrm.DevKit</Author>
@@ -16,25 +16,13 @@
   </DataSources>
   <DataSets>
     <DataSet Name="Account">
-      <Query>
-        <DataSourceName>Dynamics365</DataSourceName>
-        <QueryParameters>
-          <QueryParameter Name="CRM_FilteredAccount">
-            <Value>=Parameters!CRM_FilteredAccount.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
-        <CommandText>&lt;fetch distinct="false" no-lock="false" mapping="logical"&gt;&lt;entity name="account" enableprefiltering="1" prefilterparametername="CRM_FilteredAccount"&gt;&lt;attribute name="name" alias="name" /&gt;&lt;attribute name="accountid" /&gt;&lt;/entity&gt;&lt;/fetch&gt;</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="name">
-          <DataField>name</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="accountid">
-          <DataField>accountid</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
+      <Query><DataSourceName>Dynamics365</DataSourceName><QueryParameters><QueryParameter Name="CRM_FilteredAccount"><Value>=Parameters!CRM_FilteredAccount.Value</Value></QueryParameter></QueryParameters><CommandText>&lt;fetch distinct="false" no-lock="false" mapping="logical"&gt;
+  &lt;entity name="account" enableprefiltering="1" prefilterparametername="CRM_FilteredAccount"&gt;
+    &lt;attribute name="name" alias="name" /&gt;
+    &lt;attribute name="accountid" /&gt;
+  &lt;/entity&gt;
+&lt;/fetch&gt;</CommandText></Query>
+      <Fields><Field Name="name"><DataField>name</DataField><rd:TypeName>System.String</rd:TypeName></Field><Field Name="accountid"><DataField>accountid</DataField><rd:TypeName>System.String</rd:TypeName></Field></Fields>
     </DataSet>
   </DataSets>
   <ReportSections>
@@ -303,11 +291,7 @@
     </ReportParameter>
     <ReportParameter Name="CRM_FilteredAccount">
       <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>&lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&gt;&lt;entity name="account"&gt;&lt;all-attributes/&gt;&lt;/entity&gt;&lt;/fetch&gt;</Value>
-        </Values>
-      </DefaultValue>
+      <DefaultValue><Values><Value>&lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&gt;&lt;entity name="account"&gt;&lt;all-attributes /&gt;&lt;/entity&gt;&lt;/fetch&gt;</Value></Values></DefaultValue>
       <Prompt>CRM_FilteredAccount</Prompt>
       <Hidden>true</Hidden>
     </ReportParameter>
@@ -463,7 +447,7 @@
   <CustomProperties>
     <CustomProperty>
       <Name>Custom</Name>
-      <Value>&lt;MSCRM xmlns="mscrm"&gt;&amp;lt;ReportFilter&amp;gt;&amp;lt;ReportEntity paramname="CRM_FilteredAccount" displayname="Accounts" donotconvert="1"&amp;gt;&amp;lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&amp;gt;&amp;lt;entity name="account"&amp;gt;&amp;lt;all-attributes/&amp;gt;&amp;lt;filter type="and"&amp;gt;&amp;lt;condition attribute="accountid" operator="not-null"/&amp;gt;&amp;lt;/filter&amp;gt;&amp;lt;/entity&amp;gt;&amp;lt;/fetch&amp;gt;&amp;lt;/ReportEntity&amp;gt;&amp;lt;/ReportFilter&amp;gt;&lt;/MSCRM&gt;</Value>
+      <Value>&lt;MSCRM xmlns="mscrm"&gt;&amp;lt;ReportFilter&amp;gt;&amp;lt;ReportEntity paramname="CRM_FilteredAccount" displayname="Accounts" donotconvert="1"&amp;gt;&amp;lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&amp;gt;&amp;lt;entity name="account"&amp;gt;&amp;lt;all-attributes /&amp;gt;&amp;lt;filter type="and"&amp;gt;&amp;lt;condition attribute="accountid" operator="not-null" /&amp;gt;&amp;lt;/filter&amp;gt;&amp;lt;/entity&amp;gt;&amp;lt;/fetch&amp;gt;&amp;lt;/ReportEntity&amp;gt;&amp;lt;/ReportFilter&amp;gt;&lt;/MSCRM&gt;</Value>
     </CustomProperty>
   </CustomProperties>
   <Language>en-US</Language>

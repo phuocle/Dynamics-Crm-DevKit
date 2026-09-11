@@ -11,7 +11,7 @@ Các quyết định đã chốt:
 - Tên context menu: **`Manage Datasets...`**.
 - Title dialog: **`Manage Report Datasets`**.
 - **Chỉ hỗ trợ người dùng nhập/chỉnh FetchXML trực tiếp.** Bỏ hoàn toàn System View mode của kế hoạch cũ.
-- Target là **organization-owned Dataverse Fetch-based report** dùng provider `MSCRMFETCH`; không hỗ trợ SQL report, personal report hay datasource khác.
+- Target là **FetchXML report**; không hỗ trợ SQL report hoặc RDL không có dataset FetchXML.
 - Không cấm aggregate, group-by, `<all-attributes/>`, nhiều `link-entity`, nested link, các link type mới hoặc FetchXML nâng cao chỉ vì MCP hiện chưa xử lý được.
 - Mọi `link-entity` phải có alias do user chỉ định; thiếu alias thì fail fast, không tự sinh alias ngẫu nhiên như Microsoft extension cũ.
 - Fields phải được suy ra từ FetchXML projection và Dataverse metadata, **không suy ra từ record trả về**.
@@ -130,7 +130,7 @@ Kết luận: **decompile là hữu ích và đã đủ để chốt thuật to�
 `DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageReportTool.cs` hiện có `add_dataset`, `update_dataset`, `delete_dataset`. Các phần nên tái sử dụng về mặt hành vi:
 
 - validate `.rdl` và report namespace;
-- tìm data source `Dynamics365`;
+- giữ nguyên `DataSourceName` theo dataset hiện có; không hard-code tên datasource;
 - dataset name rule;
 - tạo Query/Fields;
 - field property mapping cơ bản;
@@ -163,7 +163,7 @@ Chỉ dùng **một dialog master-detail** `FormReportDatasets`, có thể resiz
   - text `WIKI: Manage Report Datasets`;
   - URL `https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Manage-Report-Datasets`.
 - File path read-only.
-- Badge `Organization Fetch report / MSCRMFETCH` để user hiểu scope.
+- Badge `FetchXML report` để user hiểu scope.
 
 ### 6.2. Danh sách bên trái — Read
 
@@ -185,7 +185,7 @@ Dataset query phức tạp hoặc parse lỗi vẫn phải hiện để user xem
 Controls:
 
 - `Dataset name`: editable lúc Add, read-only lúc Update.
-- `Data source`: read-only `Dynamics365`.
+- `Data source`: read-only reference hiện có trong dataset; không hard-code tên datasource.
 - FetchXML multiline editor, monospace, word-wrap off, đủ scrollbars.
 - `Format XML` chỉ format text trong editor khi user chủ động bấm; không tự format lúc load.
 - `Validate & Refresh Fields`.
@@ -199,23 +199,23 @@ Không có System View radio, ComboBox hoặc service nào.
 
 ### 6.4. Pre-filter UI
 
-Không dùng một checkbox mơ hồ áp vào root một cách ngầm định. Dùng:
+Pre-filtering belongs to the selected dataset only. Use:
 
 - checkbox tổng `Enable pre-filtering`, mặc định **unchecked** khi Add;
-- bên dưới là tree/list entity path lấy từ FetchXML;
-- mỗi root/link entity có:
-  - checkbox `Pre-filter`;
+- bên dưới là danh sách readonly các entity/link path lấy từ FetchXML;
+- mỗi root/link entity chỉ hiển thị:
   - entity logical name;
   - link alias/path;
-  - editable parameter name.
+  - parameter name readonly.
 
 Khi bật checkbox tổng:
 
 - mặc định chỉ tick root entity;
 - tên mặc định root: `CRM_Filtered{PascalLogicalName}`;
 - tên mặc định linked entity: `CRM_Filtered{PascalAlias}` để tránh trùng khi cùng entity xuất hiện nhiều lần;
-- user có thể bỏ root và chọn một hoặc nhiều linked entity;
-- mọi parameter name phải bắt đầu `CRM_` và unique không phân biệt hoa thường.
+- checkbox tổng là nơi duy nhất để bật/tắt pre-filtering của dataset;
+- khi bật mà query chưa có selection, hệ thống mặc định chọn root entity;
+- mọi parameter name vẫn phải bắt đầu `CRM_` và unique không phân biệt hoa thường.
 
 Khi Update, đọc `enableprefiltering`/`prefilterparametername` hiện có để restore chính xác selection. Nếu query hiện có không bật prefilter, checkbox tổng tắt.
 
@@ -312,8 +312,8 @@ Tất cả type là `internal`; không tạo public API.
 3. Parse `XDocument` với `PreserveWhitespace | SetLineInfo`.
 4. Root `LocalName` phải là `Report`.
 5. Dùng namespace lấy từ root, không hard-code RDL version.
-6. Tìm direct `DataSources/DataSource Name="Dynamics365"` không phân biệt hoa thường.
-7. Xác nhận provider là `MSCRMFETCH` nếu provider information có trong RDL. Nếu data source là shared reference và không thể inspect provider, cho phép tiếp tục với warning.
+6. Không kiểm tra tên hoặc provider của datasource; dialog được gọi trong scope đã xác định là FetchXML report.
+7. Đọc và giữ nguyên `DataSourceName` hiện có khi update; khi create, dùng reference datasource đầu tiên của report nếu cần.
 8. `DataSets` có thể chưa tồn tại; Read trả danh sách rỗng, Create chèn container ở vị trí hợp lệ sau `DataSources`.
 
 ### 10.2. Working copy
@@ -523,7 +523,7 @@ Không merge hoặc đổi tên hai loại này.
 - Fail nếu trùng `OrdinalIgnoreCase`.
 - Validate FetchXML hoàn chỉnh theo mục 11.
 - Tạo `DataSet/Query/DataSourceName/CommandText/QueryParameters/Fields`.
-- DataSourceName luôn `Dynamics365`.
+- DataSourceName giữ theo reference datasource hiện có; không hard-code tên.
 - Apply prefilter artifacts theo selection.
 - Thêm dataset cuối `DataSets`.
 
@@ -620,7 +620,7 @@ Merge `StyleResourceDictionary.xaml`; wiki dùng `ExternalBrowserHyperlink` hi�
 
 Page tiếng Anh phải mô tả:
 
-- organization Fetch-based report/MSCRMFETCH scope;
+- FetchXML report scope;
 - direct FetchXML only;
 - recursive link/aggregate/all-attributes support;
 - alias rule;
@@ -706,7 +706,7 @@ Thành công khi:
 - Menu là `Manage Datasets...`, chỉ dành cho `.rdl`, chỉ trong VSIX chính.
 - Dialog kế thừa `BaseDialogWindow`, dùng style chung và wiki link hợp lệ.
 - Input duy nhất là FetchXML; không còn System View.
-- Target là organization Fetch-based report với `MSCRMFETCH`/`Dynamics365`.
+- Target là FetchXML report; datasource name/provider không phải điều kiện do dialog tự kiểm tra.
 - Không có giới hạn tùy tiện với aggregate/link depth/link count/all-attributes.
 - Mọi link thiếu alias fail fast, không auto-generate.
 - Field discovery dựa trên projection + metadata, không dựa trên row data.

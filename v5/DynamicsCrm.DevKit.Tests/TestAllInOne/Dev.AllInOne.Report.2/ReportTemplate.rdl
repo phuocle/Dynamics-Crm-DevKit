@@ -16,25 +16,25 @@
   </DataSources>
   <DataSets>
     <DataSet Name="Account">
-      <Query>
-        <DataSourceName>Dynamics365</DataSourceName>
-        <QueryParameters>
-          <QueryParameter Name="CRM_FilteredAccount">
-            <Value>=Parameters!CRM_FilteredAccount.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
-        <CommandText>&lt;fetch distinct="false" no-lock="false" mapping="logical"&gt;&lt;entity name="account" enableprefiltering="1" prefilterparametername="CRM_FilteredAccount"&gt;&lt;attribute name="name" alias="name" /&gt;&lt;attribute name="accountid" /&gt;&lt;/entity&gt;&lt;/fetch&gt;</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="name">
-          <DataField>name</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="accountid">
-          <DataField>accountid</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
+      <Query><DataSourceName>Dynamics365</DataSourceName><QueryParameters><QueryParameter Name="CRM_FilteredAccount"><Value>=Parameters!CRM_FilteredAccount.Value</Value></QueryParameter></QueryParameters><CommandText>&lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&gt;
+  &lt;entity name="account" enableprefiltering="1" prefilterparametername="CRM_FilteredAccount"&gt;
+    &lt;attribute name="modifiedon" /&gt;
+    &lt;attribute name="name" /&gt;
+    &lt;attribute name="address1_city" /&gt;
+    &lt;attribute name="primarycontactid" /&gt;
+    &lt;attribute name="telephone1" /&gt;
+    &lt;attribute name="accountnumber" /&gt;
+    &lt;attribute name="accountid" /&gt;
+    &lt;order attribute="name" descending="false" /&gt;
+    &lt;filter type="and"&gt;
+      &lt;condition attribute="statecode" operator="eq" value="0" /&gt;
+    &lt;/filter&gt;
+    &lt;link-entity name="contact" from="contactid" to="primarycontactid" visible="false" link-type="outer" alias="accountprimarycontactidcontactcontactid"&gt;
+      &lt;attribute name="emailaddress1" /&gt;
+    &lt;/link-entity&gt;
+  &lt;/entity&gt;
+&lt;/fetch&gt;</CommandText></Query>
+      <Fields><Field Name="modifiedon"><DataField>modifiedon</DataField><rd:TypeName>System.String</rd:TypeName></Field><Field Name="modifiedonValue"><DataField>modifiedonValue</DataField><rd:TypeName>System.DateTime</rd:TypeName></Field><Field Name="name"><DataField>name</DataField><rd:TypeName>System.String</rd:TypeName></Field><Field Name="address1_city"><DataField>address1_city</DataField><rd:TypeName>System.String</rd:TypeName></Field><Field Name="primarycontactid"><DataField>primarycontactid</DataField><rd:TypeName>System.String</rd:TypeName></Field><Field Name="primarycontactidValue"><DataField>primarycontactidValue</DataField><rd:TypeName>System.Guid</rd:TypeName></Field><Field Name="primarycontactidEntityName"><DataField>primarycontactidEntityName</DataField><rd:TypeName>System.String</rd:TypeName></Field><Field Name="telephone1"><DataField>telephone1</DataField><rd:TypeName>System.String</rd:TypeName></Field><Field Name="accountnumber"><DataField>accountnumber</DataField><rd:TypeName>System.String</rd:TypeName></Field><Field Name="accountid"><DataField>accountid</DataField><rd:TypeName>System.String</rd:TypeName></Field><Field Name="accountprimarycontactidcontactcontactid_emailaddress1"><DataField>accountprimarycontactidcontactcontactid_emailaddress1</DataField><rd:TypeName>System.String</rd:TypeName></Field></Fields>
     </DataSet>
   </DataSets>
   <ReportSections>
@@ -313,11 +313,7 @@
     </ReportParameter>
     <ReportParameter Name="CRM_FilteredAccount">
       <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>&lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&gt;&lt;entity name="account"&gt;&lt;all-attributes/&gt;&lt;/entity&gt;&lt;/fetch&gt;</Value>
-        </Values>
-      </DefaultValue>
+      <DefaultValue><Values><Value>&lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&gt;&lt;entity name="account"&gt;&lt;all-attributes /&gt;&lt;/entity&gt;&lt;/fetch&gt;</Value></Values></DefaultValue>
       <Prompt>CRM_FilteredAccount</Prompt>
       <Hidden>true</Hidden>
     </ReportParameter>
@@ -475,7 +471,7 @@
   <CustomProperties>
     <CustomProperty>
       <Name>Custom</Name>
-      <Value>&lt;MSCRM xmlns="mscrm"&gt;&amp;lt;ReportFilter&amp;gt;&amp;lt;ReportEntity paramname="CRM_FilteredAccount" displayname="Accounts" donotconvert="1"&amp;gt;&amp;lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&amp;gt;&amp;lt;entity name="account"&amp;gt;&amp;lt;all-attributes/&amp;gt;&amp;lt;filter type="and"&amp;gt;&amp;lt;condition attribute="accountid" operator="not-null"/&amp;gt;&amp;lt;/filter&amp;gt;&amp;lt;/entity&amp;gt;&amp;lt;/fetch&amp;gt;&amp;lt;/ReportEntity&amp;gt;&amp;lt;/ReportFilter&amp;gt;&lt;/MSCRM&gt;</Value>
+      <Value>&lt;MSCRM xmlns="mscrm"&gt;&amp;lt;ReportFilter&amp;gt;&amp;lt;ReportEntity paramname="CRM_FilteredAccount" displayname="Accounts" donotconvert="1"&amp;gt;&amp;lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&amp;gt;&amp;lt;entity name="account"&amp;gt;&amp;lt;all-attributes /&amp;gt;&amp;lt;filter type="and"&amp;gt;&amp;lt;condition attribute="accountid" operator="not-null" /&amp;gt;&amp;lt;/filter&amp;gt;&amp;lt;/entity&amp;gt;&amp;lt;/fetch&amp;gt;&amp;lt;/ReportEntity&amp;gt;&amp;lt;/ReportFilter&amp;gt;&lt;/MSCRM&gt;</Value>
     </CustomProperty>
   </CustomProperties>
   <Language>en-US</Language>

@@ -30,11 +30,17 @@ namespace DynamicsCrm.DevKit.Lib
         private bool originalHasBom;
         private string originalNewLine;
         private string originalXmlDeclarationPrefix;
+        private string fetchDataSourceName;
 
         public ReportDatasetService(string filePath)
         {
             this.filePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
             Reload();
+        }
+
+        internal static void ValidateFileForDatasetManagement(string filePath)
+        {
+            _ = new ReportDatasetService(filePath);
         }
 
         public XDocument Document => document;
@@ -55,7 +61,8 @@ namespace DynamicsCrm.DevKit.Lib
             if (document.Root == null || !string.Equals(document.Root.Name.LocalName, "Report", StringComparison.Ordinal))
                 throw new InvalidDataException("The selected file has no RDL Report root.");
             Warnings.Clear();
-            ValidateReportDataSource(document.Root, Warnings);
+            ValidateFetchReportContract(document.Root);
+            fetchDataSourceName = ResolveDataSourceName(document.Root);
             originalHash = Hash(bytes);
             IsDirty = false;
         }
@@ -152,14 +159,14 @@ namespace DynamicsCrm.DevKit.Lib
                 if (dataSources != null) dataSources.AddAfterSelf(dataSets);
                 else root.AddFirst(dataSets);
             }
-            var dataSet = BuildDataSet(ns, name, validation);
+            var dataSet = BuildDataSet(ns, name, validation, fetchDataSourceName);
             ApplyPrefilterAndParameters(root, dataSet, validation);
             dataSets.Add(dataSet);
             document = working;
             IsDirty = true;
         }
 
-        public void Update(string name, ReportDatasetValidationResult validation)
+        public void Update(string originalName, string name, ReportDatasetValidationResult validation)
         {
             EnsureSuccessfulValidation(validation);
             ValidateParameterMappings(validation);
@@ -167,9 +174,13 @@ namespace DynamicsCrm.DevKit.Lib
             var working = new XDocument(document);
             var root = working.Root ?? throw new InvalidOperationException("RDL has no Report root.");
             var ns = root.GetDefaultNamespace();
-            var existing = root.Element(ns + "DataSets")?.Elements(ns + "DataSet")
-                .FirstOrDefault(x => string.Equals((string)x.Attribute("Name"), name, StringComparison.OrdinalIgnoreCase));
-            if (existing == null) throw new InvalidOperationException($"Dataset '{name}' was not found.");
+            var dataSets = root.Element(ns + "DataSets");
+            var existing = dataSets?.Elements(ns + "DataSet")
+                .FirstOrDefault(x => string.Equals((string)x.Attribute("Name"), originalName, StringComparison.OrdinalIgnoreCase));
+            if (existing == null) throw new InvalidOperationException($"Dataset '{originalName}' was not found.");
+            if (!string.Equals(originalName, name, StringComparison.OrdinalIgnoreCase) &&
+                dataSets.Elements(ns + "DataSet").Any(x => string.Equals((string)x.Attribute("Name"), name, StringComparison.OrdinalIgnoreCase)))
+                throw new InvalidOperationException($"Dataset '{name}' already exists.");
             var previousPrefilterParameters = ReadFetchEntities(existing.Element(ns + "Query")?.Element(ns + "CommandText")?.Value)
                 .Where(x => x.IsPreFiltered && !string.IsNullOrWhiteSpace(x.PrefilterParameterName))
                 .Select(x => x.PrefilterParameterName)
@@ -178,7 +189,13 @@ namespace DynamicsCrm.DevKit.Lib
                 .Where(x => !string.IsNullOrWhiteSpace(x.FetchToken))
                 .Select(x => x.ReportParameterName)
                 .ToList();
-            var replacement = BuildDataSet(ns, name, validation);
+            var existingDataSourceName = existing.Element(ns + "Query")?.Element(ns + "DataSourceName")?.Value?.Trim();
+            var replacement = BuildDataSet(ns, name, validation, existingDataSourceName ?? fetchDataSourceName);
+            if (!string.Equals(originalName, name, StringComparison.Ordinal))
+            {
+                existing.SetAttributeValue("Name", name);
+                RenameDatasetReferences(root, originalName, name, existing);
+            }
             ReplaceOrAdd(existing, ns + "Query", replacement.Element(ns + "Query"));
             ReplaceOrAdd(existing, ns + "Fields", replacement.Element(ns + "Fields"));
             ApplyPrefilterAndParameters(root, existing, validation);
@@ -198,6 +215,21 @@ namespace DynamicsCrm.DevKit.Lib
                     string.Join(", ", removedUserParameters) + ".");
             document = working;
             IsDirty = true;
+        }
+
+        private static void RenameDatasetReferences(XElement reportRoot, string originalName, string newName, XElement datasetElement)
+        {
+            foreach (var element in reportRoot.Descendants().ToList())
+            {
+                if (element == datasetElement) continue;
+                if (element.Name.LocalName == "DataSetName" &&
+                    string.Equals(element.Value.Trim(), originalName, StringComparison.OrdinalIgnoreCase))
+                    element.Value = newName;
+                foreach (var attribute in element.Attributes().Where(a =>
+                    (a.Name.LocalName == "DataSetName" || a.Name.LocalName == "Dataset") &&
+                    string.Equals(a.Value.Trim(), originalName, StringComparison.OrdinalIgnoreCase)).ToList())
+                    attribute.Value = newName;
+            }
         }
 
         public void Delete(string name)
@@ -562,13 +594,13 @@ namespace DynamicsCrm.DevKit.Lib
                 $"Attribute '{metadata.LogicalName}' on entity '{logicalName}' has unsupported report type '{typeName}'.");
         }
 
-        private static XElement BuildDataSet(XNamespace ns, string name, ReportDatasetValidationResult validation)
+        private static XElement BuildDataSet(XNamespace ns, string name, ReportDatasetValidationResult validation, string dataSourceName)
         {
             var designerNamespace = XNamespace.Get("http://schemas.microsoft.com/SQLServer/reporting/reportdesigner");
             return new XElement(ns + "DataSet",
                 new XAttribute("Name", name),
                 new XElement(ns + "Query",
-                    new XElement(ns + "DataSourceName", "Dynamics365"),
+                    new XElement(ns + "DataSourceName", dataSourceName),
                     new XElement(ns + "QueryParameters"),
                     new XElement(ns + "CommandText", validation.FetchXml)),
                 new XElement(ns + "Fields", validation.Fields.Select(field =>
@@ -635,6 +667,22 @@ namespace DynamicsCrm.DevKit.Lib
                 }
                 if (commandText != null) commandText.Value = fetchDocument.ToString(SaveOptions.DisableFormatting);
             }
+            // QueryParameters is optional in the RDL schema, but when present it must
+            // contain at least one QueryParameter. Remove parameters that no longer
+            // exist in the edited FetchXML (including disabled pre-filters), then
+            // remove the container when it becomes empty.
+            var retainedQueryParameterNames = new HashSet<string>(
+                validation.Parameters.Select(x => x.QueryParameterName)
+                    .Concat(validation.FetchEntities.Where(x => x.IsPreFiltered)
+                        .Select(x => x.PrefilterParameterName)),
+                StringComparer.OrdinalIgnoreCase);
+            foreach (var queryParameter in parameters.Elements(ns + "QueryParameter").ToList())
+            {
+                if (!retainedQueryParameterNames.Contains((string)queryParameter.Attribute("Name")))
+                    queryParameter.Remove();
+            }
+            if (!parameters.Elements(ns + "QueryParameter").Any())
+                parameters.Remove();
             foreach (var parameter in validation.Parameters)
             {
                 EnsureReportParameter(reportRoot, parameter.ReportParameterName, parameter.DataType, parameter.IsMultiValue, false, null);
@@ -927,6 +975,11 @@ namespace DynamicsCrm.DevKit.Lib
             foreach (var entity in EnumerateFetchEntities(root, (string)root?.Attribute("name"))) yield return entity;
         }
 
+        internal static IEnumerable<ReportFetchEntityInfo> ReadFetchEntitiesForEditor(string commandText)
+        {
+            return ReadFetchEntities(commandText);
+        }
+
         private static IEnumerable<ReportFetchEntityInfo> EnumerateFetchEntities(XElement entity, string path)
         {
             if (entity == null) yield break;
@@ -972,6 +1025,11 @@ namespace DynamicsCrm.DevKit.Lib
                 if (current == null) return null;
             }
             return current;
+        }
+
+        internal static XElement FindFetchEntityForEditor(XDocument fetch, string path)
+        {
+            return FindFetchEntity(fetch, path);
         }
 
         private static bool ReadBool(IDictionary<string, bool> values, string path, string existing)
@@ -1088,17 +1146,65 @@ namespace DynamicsCrm.DevKit.Lib
             }
         }
 
-        private static void ValidateReportDataSource(XElement reportRoot, ICollection<string> warnings)
+        private static string ResolveDataSourceName(XElement reportRoot)
         {
             var ns = reportRoot.GetDefaultNamespace();
-            var dataSource = reportRoot.Element(ns + "DataSources")?.Elements(ns + "DataSource")
-                .FirstOrDefault(x => string.Equals((string)x.Attribute("Name"), "Dynamics365", StringComparison.OrdinalIgnoreCase));
-            if (dataSource == null) throw new InvalidDataException("This dialog supports organization Fetch reports with the Dynamics365 data source only.");
-            var provider = dataSource.Descendants().FirstOrDefault(x => x.Name.LocalName == "DataProvider")?.Value;
-            if (!string.IsNullOrWhiteSpace(provider) && !string.Equals(provider, "MSCRMFETCH", StringComparison.OrdinalIgnoreCase))
-                throw new InvalidDataException($"Data source 'Dynamics365' uses provider '{provider}', not MSCRMFETCH.");
-            if (string.IsNullOrWhiteSpace(provider))
-                warnings?.Add("The Dynamics365 data source provider could not be inspected; continuing as a shared Fetch data source.");
+            var referencedSource = reportRoot.Element(ns + "DataSets")?.Elements(ns + "DataSet")
+                .Select(x => x.Element(ns + "Query")?.Element(ns + "DataSourceName")?.Value?.Trim())
+                .FirstOrDefault(x => !string.IsNullOrWhiteSpace(x));
+            if (!string.IsNullOrWhiteSpace(referencedSource))
+                return referencedSource;
+            return reportRoot.Element(ns + "DataSources")?.Elements(ns + "DataSource")
+                .Select(x => (string)x.Attribute("Name"))
+                .FirstOrDefault(x => !string.IsNullOrWhiteSpace(x));
+        }
+
+        private static void ValidateFetchReportContract(XElement reportRoot)
+        {
+            var ns = reportRoot.GetDefaultNamespace();
+            var dataSets = reportRoot.Element(ns + "DataSets")?.Elements(ns + "DataSet").ToList();
+            if (dataSets == null || dataSets.Count == 0)
+                throw new InvalidDataException("The selected RDL contains no datasets and is not a FetchXML report.");
+
+            foreach (var dataSet in dataSets)
+            {
+                var name = (string)dataSet.Attribute("Name") ?? "(unnamed)";
+                var commandText = dataSet.Element(ns + "Query")?.Element(ns + "CommandText")?.Value;
+                if (!TryValidateFetchXmlContract(commandText, out var error))
+                    throw new InvalidDataException($"Dataset '{name}' is not a valid FetchXML dataset: {error}");
+            }
+        }
+
+        private static bool TryValidateFetchXmlContract(string fetchXml, out string error)
+        {
+            error = null;
+            if (string.IsNullOrWhiteSpace(fetchXml))
+            {
+                error = "CommandText is empty.";
+                return false;
+            }
+            try
+            {
+                var fetch = XDocument.Parse(fetchXml, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo);
+                if (fetch.Root == null || !string.Equals(fetch.Root.Name.LocalName, "fetch", StringComparison.Ordinal))
+                {
+                    error = "CommandText root must be <fetch>.";
+                    return false;
+                }
+                var entities = fetch.Root.Elements().Where(x => x.Name.LocalName == "entity").ToList();
+                if (entities.Count != 1)
+                {
+                    error = "FetchXML must contain exactly one root <entity>.";
+                    return false;
+                }
+                ValidateEntityGraph(entities[0], true, new HashSet<string>(StringComparer.OrdinalIgnoreCase));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+                return false;
+            }
         }
 
         private static string ReadText(byte[] bytes)
