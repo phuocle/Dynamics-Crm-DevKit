@@ -125,6 +125,16 @@
             "DisplayReportName": "Account and Contact Reports (Account and Contact Reports.rdl) - English"
         },
         {
+            "File": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Report.2\\AccountContactEn.rdl",
+            "ReportId": "eccbdce4-d5ad-f111-aaac-7ced8d3d94a8",
+            "ReportName": "AccountContactEn",
+            "ReportFileName": "AccountContactEn.rdl",
+            "LanguageCode": 1033,
+            "Language": "English",
+            "IsManaged": false,
+            "DisplayReportName": "AccountContactEn (AccountContactEn.rdl) - English"
+        },
+        {
             "File": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Report.2\\All in One.rdl",
             "ReportId": "550edff8-40a8-f111-aaab-6045bd01c905",
             "ReportName": "All in One",
