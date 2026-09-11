@@ -187,8 +187,13 @@ function Assert-VsixTemplateContent {
         $projectTemplates = @($archive.Entries | Where-Object { $_.FullName -like "ProjectTemplates/*.vstemplate" })
         $itemTemplates = @($archive.Entries | Where-Object { $_.FullName -like "ItemTemplates/*.vstemplate" })
 
-        if ($projectTemplates.Count -ne 13 -or $itemTemplates.Count -ne 16) {
-            throw "VSIX template validation failed. Expected 13 project templates and 16 item templates; found $($projectTemplates.Count) project templates and $($itemTemplates.Count) item templates."
+        $reportCatalogRoot = "ItemTemplates/CSharp/DynamicsCrm.DevKit/1033/ReportProject"
+        $reportCatalogFiles = @("DevKitReportItems.vsdir", "DevKitReport.vsz", "DevKitReport.ico")
+        $missingReportCatalogFiles = @($reportCatalogFiles | Where-Object { $null -eq $archive.GetEntry("$reportCatalogRoot/$_") })
+
+        if ($projectTemplates.Count -ne 13 -or $itemTemplates.Count -ne 16 -or $missingReportCatalogFiles.Count -ne 0) {
+            $missingReportCatalog = if ($missingReportCatalogFiles.Count -eq 0) { "none" } else { $missingReportCatalogFiles -join ", " }
+            throw "VSIX template validation failed. Expected 13 project templates, 16 C# item templates, and the DevKit Report legacy catalog; found $($projectTemplates.Count) project templates, $($itemTemplates.Count) item templates, missing report catalog files: $missingReportCatalog."
         }
     }
     finally {

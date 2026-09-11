@@ -71,6 +71,11 @@
       <Platform Solution="*|x86" Project="x86" />
     </Project>
   </Folder>
+  <Folder Name="/ItemTemplates/CSharp/18.ReportItemTemplate/">
+    <File Path="ItemTemplates/CSharp/18.ReportItemTemplate/DevKitReport.ico" />
+    <File Path="ItemTemplates/CSharp/18.ReportItemTemplate/DevKitReport.vsz" />
+    <File Path="ItemTemplates/CSharp/18.ReportItemTemplate/DevKitReportItems.vsdir" />
+  </Folder>
   <Folder Name="/ProjectTemplates/" />
   <Folder Name="/ProjectTemplates/CSharp/">
     <Project Path="ProjectTemplates/CSharp/01.SharedProjectTemplate/01.SharedProjectTemplate.csproj" Id="4170cd81-a77b-4c9a-bbae-29de390a4f9c">
@@ -128,7 +133,6 @@
   </Folder>
   <Project Path="DynamicsCrm.DevKit.Shared/DynamicsCrm.DevKit.Shared.shproj" />
   <Project Path="DynamicsCrm.DevKit.Vsix/DynamicsCrm.DevKit.Vsix.csproj" Id="a886e86e-65bc-40c1-8494-fe7e80b7e1a3">
-    <Platform Solution="*|Any CPU" Project="Any CPU" />
     <Platform Solution="*|arm64" Project="arm64" />
     <Platform Solution="*|x86" Project="x86" />
   </Project>

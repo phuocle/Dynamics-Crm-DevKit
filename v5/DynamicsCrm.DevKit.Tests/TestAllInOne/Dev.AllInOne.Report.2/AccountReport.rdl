@@ -1,203 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:am="http://schemas.microsoft.com/sqlserver/reporting/authoringmetadata">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Description>Report Template</Description>
-  <am:AuthoringMetadata>
-    <am:CreatedBy>
-      <am:Name>SSDTRS</am:Name>
-      <am:Version>18.9.12120.119</am:Version>
-    </am:CreatedBy>
-    <am:UpdatedBy>
-      <am:Name>SSDTRS</am:Name>
-      <am:Version>18.9.12120.119</am:Version>
-    </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-09-11T06:24:35.5619999Z</am:LastModifiedTimestamp>
-  </am:AuthoringMetadata>
   <Author>DynamicsCrm.DevKit</Author>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
     <DataSource Name="Dynamics365">
       <ConnectionProperties>
         <DataProvider>MSCRMFETCH</DataProvider>
-        <ConnectString>https://disco.crm8.dynamics.com/;orga23aac6b</ConnectString>
+        <ConnectString>https://dynamics-crm-devkit-v4.crm.dynamics.com/;unq82131d861aa7f011870600224806e</ConnectString>
         <IntegratedSecurity>true</IntegratedSecurity>
       </ConnectionProperties>
       <rd:SecurityType>Integrated</rd:SecurityType>
-      <rd:DataSourceID>f4f8fdea-75c5-4e86-8513-749e7913d354</rd:DataSourceID>
+      <rd:DataSourceID>445e9a74-29d5-4ad7-aa98-d6c4cda1bcf2</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="Account">
       <Query>
         <DataSourceName>Dynamics365</DataSourceName>
-        <CommandText>&lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&gt;
-  &lt;entity name="account"&gt;
-    &lt;attribute name="modifiedon" /&gt;
-    &lt;attribute name="name" /&gt;
-    &lt;attribute name="address1_city" /&gt;
-    &lt;attribute name="primarycontactid" /&gt;
-    &lt;attribute name="telephone1" /&gt;
-    &lt;attribute name="accountnumber" /&gt;
-    &lt;attribute name="accountid" /&gt;
-    &lt;order attribute="name" descending="false" /&gt;
-    &lt;filter type="and"&gt;
-      &lt;condition attribute="statecode" operator="eq" value="0" /&gt;
-    &lt;/filter&gt;
-    &lt;link-entity name="contact" from="contactid" to="primarycontactid" visible="false" link-type="outer" alias="accountprimarycontactidcontactcontactid"&gt;
-      &lt;attribute name="emailaddress1" /&gt;
-    &lt;/link-entity&gt;
-  &lt;/entity&gt;
-&lt;/fetch&gt;</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="modifiedon">
-          <DataField>modifiedon</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="modifiedonValue">
-          <DataField>modifiedonValue</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="name">
-          <DataField>name</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="address1_city">
-          <DataField>address1_city</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="primarycontactid">
-          <DataField>primarycontactid</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="primarycontactidValue">
-          <DataField>primarycontactidValue</DataField>
-          <rd:TypeName>System.Guid</rd:TypeName>
-        </Field>
-        <Field Name="primarycontactidEntityName">
-          <DataField>primarycontactidEntityName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="telephone1">
-          <DataField>telephone1</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="accountnumber">
-          <DataField>accountnumber</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="accountid">
-          <DataField>accountid</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="accountprimarycontactidcontactcontactid_emailaddress1">
-          <DataField>accountprimarycontactidcontactcontactid_emailaddress1</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
-      <Filters>
-        <Filter>
-          <FilterExpression>=Fields!modifiedon.Value</FilterExpression>
-          <Operator>Equal</Operator>
-          <FilterValues>
-            <FilterValue>1</FilterValue>
-          </FilterValues>
-        </Filter>
-      </Filters>
-    </DataSet>
-    <DataSet Name="Contact">
-      <Query>
-        <DataSourceName>Dynamics365</DataSourceName>
         <QueryParameters>
-          <QueryParameter Name="CRM_FilteredContact">
-            <Value>=Parameters!CRM_FilteredContact.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
-        <CommandText>&lt;fetch&gt;&lt;entity name="contact" enableprefiltering="1" prefilterparametername="CRM_FilteredContact"&gt;&lt;attribute name="fullname" /&gt;&lt;attribute name="emailaddress1" /&gt;&lt;attribute name="parentcustomerid" /&gt;&lt;attribute name="contactid" /&gt;&lt;/entity&gt;&lt;/fetch&gt;</CommandText>
+
+        <QueryParameter Name="CRM_FilteredAccount"><Value>=Parameters!CRM_FilteredAccount.Value</Value></QueryParameter></QueryParameters>
+        <CommandText>&lt;fetch distinct="false" no-lock="false" mapping="logical"&gt;&lt;entity name="account" enableprefiltering="1" prefilterparametername="CRM_FilteredAccount"&gt;&lt;attribute name="name" alias="name" /&gt;&lt;attribute name="accountid" /&gt;&lt;/entity&gt;&lt;/fetch&gt;</CommandText>
       </Query>
       <Fields>
-        <Field Name="fullname">
-          <DataField>fullname</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="emailaddress1">
-          <DataField>emailaddress1</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="parentcustomerid">
-          <DataField>parentcustomerid</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="contactid">
-          <DataField>contactid</DataField>
-          <rd:TypeName>System.Guid</rd:TypeName>
-        </Field>
-      </Fields>
-    </DataSet>
-    <DataSet Name="User">
-      <Query>
-        <DataSourceName>Dynamics365</DataSourceName>
-        <QueryParameters>
-          <QueryParameter Name="@usertype">
-            <Value>=Parameters!usertype.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
-        <CommandText>&lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&gt;
-  &lt;entity name="systemuser"&gt;
-    &lt;attribute name="fullname" /&gt;
-    &lt;attribute name="businessunitid" /&gt;
-    &lt;attribute name="title" /&gt;
-    &lt;attribute name="address1_telephone1" /&gt;
-    &lt;attribute name="positionid" /&gt;
-    &lt;attribute name="systemuserid" /&gt;
-    &lt;order attribute="fullname" descending="false" /&gt;
-    &lt;filter type="and"&gt;
-      &lt;condition attribute="systemmanagedusertype" operator="eq" value="@usertype" /&gt;
-    &lt;/filter&gt;
-  &lt;/entity&gt;
-&lt;/fetch&gt;</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="fullname">
-          <DataField>fullname</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="businessunitid">
-          <DataField>businessunitid</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="businessunitidValue">
-          <DataField>businessunitidValue</DataField>
-          <rd:TypeName>System.Guid</rd:TypeName>
-        </Field>
-        <Field Name="businessunitidEntityName">
-          <DataField>businessunitidEntityName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="title">
-          <DataField>title</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="address1_telephone1">
-          <DataField>address1_telephone1</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="positionid">
-          <DataField>positionid</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="positionidValue">
-          <DataField>positionidValue</DataField>
-          <rd:TypeName>System.Guid</rd:TypeName>
-        </Field>
-        <Field Name="positionidEntityName">
-          <DataField>positionidEntityName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="systemuserid">
-          <DataField>systemuserid</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
+
+
+      <Field Name="name"><DataField>name</DataField><rd:TypeName>System.String</rd:TypeName></Field><Field Name="accountid"><DataField>accountid</DataField><rd:TypeName>System.String</rd:TypeName></Field></Fields>
     </DataSet>
   </DataSets>
   <ReportSections>
@@ -229,7 +58,7 @@
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value>Prakas Omer</Value>
+          <Value />
         </Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
@@ -240,7 +69,7 @@
       <DataType>String</DataType>
       <DefaultValue>
         <Values>
-          <Value>N. Central Asia Standard Time</Value>
+          <Value />
         </Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
@@ -478,10 +307,10 @@
       <DataType>String</DataType>
       <DefaultValue>
         <Values>
-          <Value>&lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&gt;&lt;entity name="account"&gt;&lt;all-attributes/&gt;&lt;/entity&gt;&lt;/fetch&gt;</Value>
+          <Value>&lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&gt;&lt;entity name="account"&gt;&lt;all-attributes /&gt;&lt;filter type="and"&gt;&lt;condition attribute="accountid" operator="not-null" /&gt;&lt;/filter&gt;&lt;/entity&gt;&lt;/fetch&gt;</Value>
         </Values>
       </DefaultValue>
-      <Prompt>CRM_FilteredAccount</Prompt>
+      <Prompt>Accounts</Prompt>
       <Hidden>true</Hidden>
     </ReportParameter>
     <ReportParameter Name="CRM_URL">
@@ -489,36 +318,12 @@
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">https://dynamics-crm-devkit-v4.crm.dynamics.com</Value>
         </Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
       <Prompt>CRM_URL</Prompt>
       <Hidden>true</Hidden>
-    </ReportParameter>
-    <ReportParameter Name="CRM_FilteredContact">
-      <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>&lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&gt;&lt;entity name="contact"&gt;&lt;all-attributes /&gt;&lt;filter type="and"&gt;&lt;condition attribute="contactid" operator="not-null" /&gt;&lt;/filter&gt;&lt;/entity&gt;&lt;/fetch&gt;</Value>
-        </Values>
-      </DefaultValue>
-      <Prompt>CRM_FilteredContact</Prompt>
-      <Hidden>true</Hidden>
-    </ReportParameter>
-    <ReportParameter Name="CRM_FilteredSystemuser">
-      <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>&lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&gt;&lt;entity name="systemuser"&gt;&lt;all-attributes /&gt;&lt;/entity&gt;&lt;/fetch&gt;</Value>
-        </Values>
-      </DefaultValue>
-      <Prompt>CRM_FilteredSystemuser</Prompt>
-      <Hidden>true</Hidden>
-    </ReportParameter>
-    <ReportParameter Name="usertype">
-      <DataType>Integer</DataType>
-      <Prompt>usertype</Prompt>
     </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
@@ -656,28 +461,13 @@
           <RowIndex>3</RowIndex>
           <ParameterName>CRM_URL</ParameterName>
         </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>3</ColumnIndex>
-          <RowIndex>3</RowIndex>
-          <ParameterName>CRM_FilteredContact</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>2</ColumnIndex>
-          <RowIndex>3</RowIndex>
-          <ParameterName>CRM_FilteredSystemuser</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>4</ColumnIndex>
-          <RowIndex>3</RowIndex>
-          <ParameterName>usertype</ParameterName>
-        </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>
   </ReportParametersLayout>
   <CustomProperties>
     <CustomProperty>
       <Name>Custom</Name>
-      <Value>&lt;MSCRM xmlns="mscrm"&gt;&amp;lt;ReportFilter&amp;gt;&amp;lt;ReportEntity paramname="CRM_FilteredAccount" displayname="Accounts" donotconvert="1"&amp;gt;&amp;lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&amp;gt;&amp;lt;entity name="account"&amp;gt;&amp;lt;all-attributes /&amp;gt;&amp;lt;filter type="and"&amp;gt;&amp;lt;condition attribute="accountid" operator="not-null" /&amp;gt;&amp;lt;/filter&amp;gt;&amp;lt;/entity&amp;gt;&amp;lt;/fetch&amp;gt;&amp;lt;/ReportEntity&amp;gt;&amp;lt;ReportEntity paramname="CRM_FilteredContact" displayname="contact" donotconvert="1"&amp;gt;&amp;amp;lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&amp;amp;gt;&amp;amp;lt;entity name="contact"&amp;amp;gt;&amp;amp;lt;all-attributes /&amp;amp;gt;&amp;amp;lt;filter type="and"&amp;amp;gt;&amp;amp;lt;condition attribute="contactid" operator="not-null" /&amp;amp;gt;&amp;amp;lt;/filter&amp;amp;gt;&amp;amp;lt;/entity&amp;amp;gt;&amp;amp;lt;/fetch&amp;amp;gt;&amp;lt;/ReportEntity&amp;gt;&amp;lt;ReportEntity paramname="CRM_FilteredSystemuser" displayname="systemuser" donotconvert="1"&amp;gt;&amp;amp;lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&amp;amp;gt;&amp;amp;lt;entity name="systemuser"&amp;amp;gt;&amp;amp;lt;all-attributes /&amp;amp;gt;&amp;amp;lt;/entity&amp;amp;gt;&amp;amp;lt;/fetch&amp;amp;gt;&amp;lt;/ReportEntity&amp;gt;&amp;lt;/ReportFilter&amp;gt;&lt;/MSCRM&gt;</Value>
+      <Value>&lt;MSCRM xmlns="mscrm"&gt;&amp;lt;ReportFilter&amp;gt;&amp;lt;ReportEntity paramname="CRM_FilteredAccount" displayname="Accounts" donotconvert="1"&amp;gt;&amp;lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&amp;gt;&amp;lt;entity name="account"&amp;gt;&amp;lt;all-attributes /&amp;gt;&amp;lt;filter type="and"&amp;gt;&amp;lt;condition attribute="accountid" operator="not-null" /&amp;gt;&amp;lt;/filter&amp;gt;&amp;lt;/entity&amp;gt;&amp;lt;/fetch&amp;gt;&amp;lt;/ReportEntity&amp;gt;&amp;lt;/ReportFilter&amp;gt;&lt;/MSCRM&gt;</Value>
     </CustomProperty>
   </CustomProperties>
   <Language>en-US</Language>

@@ -15,6 +15,8 @@ namespace DynamicsCrm.DevKit
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [InstalledProductRegistration(Vsix.Name, Vsix.Description, Vsix.Version)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
+    [ProvideObject(typeof(Wizard.ItemTemplates.ReportItemWizard), RegisterUsing = RegistrationMethod.CodeBase)]
+    [ReportProjectItemTemplateRegistration]
     [Guid(PackageGuids.DynamicsCrmDevKitString)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExistsAndFullyLoaded_string, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideBindingPath] // Helps VS resolve assemblies from VSIX location automatically
