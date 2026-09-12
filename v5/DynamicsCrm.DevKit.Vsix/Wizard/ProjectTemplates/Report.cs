@@ -4,6 +4,7 @@ using DynamicsCrm.DevKit.Shared;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -35,12 +36,34 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
                 await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 var reportFile = Path.Combine(Path.GetDirectoryName(project.FullName), Path.GetFileNameWithoutExtension(project.FullName) + ".rptproj");
                 var csFile = Path.Combine(Path.GetDirectoryName(project.FullName), Path.GetFileNameWithoutExtension(project.FullName) + ".csproj");
-                this.DTE.Solution.Remove(project);
                 var content = await VsixHelper.ReadEmbeddedResourceAsync("ReportProjectTemplate.rptproj");
-                content= content.Replace("$DevKitVersion$", Const.VersionBuild);
+                content = content.Replace("$DevKitVersion$", Const.VersionBuild);
                 await FileHelper.ForceWriteAllTextAsync(reportFile, content);
-                this.DTE.Solution.AddFromFile(reportFile);
-                Helper.TryDeleteFile(csFile);
+
+                // Reporting Services owns the .rptproj project factory but does not expose a
+                // supported VSTemplate ProjectType. Bootstrap through the C# template catalog,
+                // then let Visual Studio reopen the generated file with the installed report factory.
+                var projectRemoved = false;
+                try
+                {
+                    this.DTE.Solution.Remove(project);
+                    projectRemoved = true;
+                    var reportProject = this.DTE.Solution.AddFromFile(reportFile);
+                    if (reportProject == null)
+                        throw new InvalidOperationException($"Visual Studio could not load the generated report project: {reportFile}");
+                    Helper.TryDeleteFile(csFile);
+                }
+                catch
+                {
+                    // Keep the generated files recoverable and put the scaffold back in the
+                    // solution when the Reporting Services project factory cannot load them.
+                    if (projectRemoved && File.Exists(csFile))
+                    {
+                        try { this.DTE.Solution.AddFromFile(csFile); }
+                        catch { }
+                    }
+                    throw;
+                }
             });
         }
 

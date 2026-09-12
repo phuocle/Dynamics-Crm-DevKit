@@ -10,61 +10,59 @@
 
 # DynamicsCrm.DevKit Report Project
 
-Streamlines Dataverse report development using SQL Server Data Tools (SSDT) and Report Authoring Extension, enabling creation, modification, and deployment of SSRS reports for Dynamics 365 / Power Apps model-driven apps.
-
-## Features
-
-* Pre-configured for Dynamics 365 Report Authoring
-* Integration with SQL Server Reporting Services (SSRS)
-* FetchXML-based data sources
-* Report Designer with Dynamics 365 extensions
-* Support for paginated reports
-* Integration with DynamicsCrm.DevKit CLI for deployment
+This is an empty Reporting Services project (`.rptproj`) for Dynamics 365 and Dataverse FetchXML reports. The project template no longer creates a sample `ReportTemplate.rdl`; add each report with the **DevKit Report** item template so it is generated for the Dataverse table you select.
 
 ## Requirements
 
-**IMPORTANT:** Install components in this exact order:
+1. Install [DynamicsCrm.DevKit](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrmDevKit) in a supported Visual Studio version.
+2. Install [Microsoft Reporting Services Projects](https://marketplace.visualstudio.com/items?itemName=ProBITools.MicrosoftReportProjectsforVisualStudio2022) so Visual Studio can load `.rptproj` projects and open Report Designer.
+3. Have access to the target Dynamics 365 or Dataverse environment.
 
-1. **[Install SSDT with Visual Studio 2019](https://learn.microsoft.com/en-us/sql/ssdt/download-sql-server-data-tools-ssdt?view=sql-server-ver15#install-ssdt-with-visual-studio-2019)**
-   - SQL Server Data Tools for Visual Studio
+The main DynamicsCrm.DevKit VSIX includes the report project template, the **DevKit Report** item template, and the **Manage Datasets...** command. The separate `DynamicsCrm.DevKit.2019` VSIX is a lightweight upload-only extension for legacy Visual Studio 2019 report-authoring workflows; it does not provide these newer report creation and dataset-management features.
 
-2. **[Install Microsoft Reporting Services Projects Extension](https://marketplace.visualstudio.com/items?itemName=ProBITools.MicrosoftReportProjectsforVisualStudio2022)**
-   - Visual Studio extension for report projects
+The Dynamics 365 Report Authoring Extension remains tied to Visual Studio 2019-era tooling. Install it only when your workflow needs its legacy FetchXML designer or preview integration. DevKit can create a FetchXML report and manage its datasets without that extension.
 
-3. **[Install Dynamics 365 Report Authoring Extension](https://www.microsoft.com/en-us/download/details.aspx?id=56973)**
-   - Version 9.0.26.7 or later
-   - Includes FetchXML support and Dataverse-specific features
+## Create a Report
 
-> **Support note:** Visual Studio 2019 is past mainstream support, although Microsoft lists extended support through April 10, 2029 ([lifecycle details](https://learn.microsoft.com/en-us/lifecycle/products/visual-studio-2019)). DevKit has no updated report-designer integration, so an existing VS 2019 installation can still be used for this workflow. Microsoft does not have a Visual Studio 2016 product release; the older supported option listed for the Report Authoring Extension is Visual Studio 2015, which can be used for design without preview. Use the MCP `manage_report` tool to add or update datasets.
+1. Right-click the report project or its **Reports** node, then select **Add > New Item...**.
+2. Select the **DynamicsCrm.DevKit** category.
+3. Select **DevKit Report**, enter an `.rdl` file name, and select **Add**.
+4. Connect to Dynamics 365 or Dataverse and select the table for the report.
+5. Confirm the dialog. DevKit generates the `.rdl`, adds it to this project, and opens Report Designer.
 
-## Key Components
+The generated report includes a Dataverse data source, an initial FetchXML dataset, table metadata, and the Dynamics pre-filtering artifacts required for the selected table.
 
-* **.rdl files** - Report Definition Language files
-* **Shared Data Sources** - Connection to Dataverse
-* **FetchXML Queries** - Data retrieval from Dataverse
+## Manage FetchXML Datasets
 
-## Development Workflow
+Right-click an `.rdl` file in Solution Explorer and select **DynamicsCrm.DevKit > Manage Datasets...**. The VSIX can:
 
-1. Create reports using Report Designer
-2. Use FetchXML for data queries
-3. Test reports locally
-4. Deploy to Dataverse using DynamicsCrm.DevKit CLI
+* Inspect the report's existing FetchXML datasets.
+* Add a dataset or update its FetchXML.
+* Validate FetchXML against Dataverse metadata and refresh the RDL field definitions.
+* Configure pre-filtering for root and linked tables.
+* Preserve the existing data-source reference and save a backup before replacing the local RDL.
 
-## Deployment
+Dataset changes are made only to the local `.rdl`. Deploy the report separately after reviewing the changes.
 
-For Visual Studio report authoring, the Dynamics 365 Report Authoring Extension is still tied to Visual Studio 2019-era tooling. A lightweight `DynamicsCrm.DevKit.2019` VSIX is available from [GitHub Releases](https://github.com/phuocle/Dynamics-Crm-DevKit/releases) for report upload only. It is not published to Visual Studio Marketplace.
+## Deploy and Download Reports
 
-```bash
-# Upload report to Dataverse
-devkit uploadreport /report:"YourReport.rdl"
+For an `.rdl` selected in Solution Explorer, use the DynamicsCrm.DevKit context menu:
 
-# Download report from Dataverse
-devkit downloadreport /report:"Report Name"
+* **Deploy New Report** creates the Dataverse report and adds it to a solution.
+* **Deploy Report** updates an existing mapped report.
+
+The generated batch files remain available for profile-based CLI workflows:
+
+```bat
+download.reports.bat
+upload.reports.bat
 ```
 
 ## References
 
-* [Report Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template)
+* [Report Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template)
+* [DevKit Report Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DevKit-Report-Item-Template)
+* [Manage Report Datasets](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Manage-Report-Datasets)
 * [DynamicsCrm.DevKit GitHub Releases](https://github.com/phuocle/Dynamics-Crm-DevKit/releases)
 * [Add reporting to your model-driven app](https://learn.microsoft.com/en-us/power-apps/maker/model-driven-apps/add-reporting-to-app)
-* [Download Report Authoring Extension](https://www.microsoft.com/en-us/download/details.aspx?id=56973)
+* [Dynamics 365 Report Authoring Extension](https://www.microsoft.com/en-us/download/details.aspx?id=56973)

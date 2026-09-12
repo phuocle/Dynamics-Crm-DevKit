@@ -15,10 +15,10 @@ DynamicsCrm.DevKit Visual Studio Extension is the VSIX package for Dataverse, Dy
 ## ✨ Highlights
 
 - 13 Visual Studio project templates for server-side, client-side, ALM, report, test, and utility projects.
-- 16 Visual Studio item templates for plugins, workflows, custom APIs, data providers, JavaScript, TypeScript, dialogs, resources, and support files.
+- 17 Visual Studio item templates for plugins, workflows, custom APIs, data providers, reports, JavaScript, TypeScript, dialogs, resources, and support files.
 - Connection dialog supports **Use project .env** so private `DEVKIT_*` values can live in a solution-level `.env` file while `DynamicsCrm.DevKit.json` stores only the connection marker.
 - Wizard-driven project and item creation with Dataverse-specific metadata prompts.
-- Context-menu commands for deploying web resources, new web resources, TypeScript release output, and plugin registration attributes.
+- Context-menu commands for deploying web resources and reports, managing report datasets, producing TypeScript release output, and adding plugin registration attributes.
 - Connection UI and shared DevKit configuration support for deployment and generation workflows.
 
 ## 📦 Install
@@ -73,6 +73,7 @@ The item template names below match the display names shown by Visual Studio.
 | 14. TypeScript WebApi | TypeScript Web API script with typed interfaces. | [TypeScript WebApi Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-WebApi-Item-Template) |
 | 15. TypeScript Dialog | TypeScript dialog script with typed dialog interfaces. | [TypeScript Dialog Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-Dialog-Item-Template) |
 | 16. JavaScript Dialog | JavaScript dialog script with typed dialog interfaces. | [JavaScript Dialog Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Dialog-Item-Template) |
+| 18. DevKit Report | Entity-aware FetchXML report for a Reporting Services project. | [DevKit Report Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DevKit-Report-Item-Template) |
 
 Item template catalog: [Items Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Items-Template)
 
@@ -85,6 +86,9 @@ Item template catalog: [Items Template](https://github.com/phuocle/Dynamics-Crm-
 | Deploy TypeScript (Release) | Solution Explorer, code editor |
 | Deploy New TypeScript (Release) | Solution Explorer |
 | Add CrmPluginRegistration | Code editor |
+| Deploy Report | Solution Explorer, `.rdl` files |
+| Deploy New Report | Solution Explorer, `.rdl` files |
+| Manage Datasets... | Solution Explorer, `.rdl` files |
 
 ## 🔗 Links
 

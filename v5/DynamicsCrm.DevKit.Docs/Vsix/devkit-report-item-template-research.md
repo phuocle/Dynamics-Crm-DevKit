@@ -93,7 +93,7 @@ Wiring đúng của report catalog:
 - `Resources/ReportProjectTemplate.rptproj`
 - `Resources/ReportTemplate.rdl`
 
-`ProjectTemplates/CSharp/12.ReportProjectTemplate/ReportTemplate.rdl` chỉ chứa token `$report$`, và wizard project template dùng `Replacement.SetEmbeddedResourceAsync` để thay token này bằng toàn bộ embedded RDL. Điều này chứng minh codebase hiện tại đã có tiền lệ đưa nguyên nội dung RDL vào template.
+Trước khi project template chuyển sang mô hình project rỗng, `ProjectTemplates/CSharp/12.ReportProjectTemplate/ReportTemplate.rdl` chỉ chứa token `$report$`, và wizard project template thay token này bằng toàn bộ embedded RDL. File token và replacement đó nay đã được loại bỏ: `18.ReportItemTemplate` tạo report theo entity khi người dùng cần. Embedded `Resources/ReportTemplate.rdl` vẫn là single source of truth cho item wizard và MCP.
 
 ### 3.4. Logic chuẩn hóa môi trường đã tồn tại
 
