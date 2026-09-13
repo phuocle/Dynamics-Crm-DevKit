@@ -76,6 +76,16 @@ public sealed class FakeSdkClient : IDisposable
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(ServiceClient), "ExecuteOrganizationRequestImpl",
+            typeof(OrganizationRequest), typeof(string), typeof(bool), typeof(bool))]
+        public static bool ExecuteOrgRequestImplPrefix(ServiceClient __instance, OrganizationRequest req, ref OrganizationResponse __result)
+        {
+            if (!Registry.TryGetValue(__instance, out var fake) || fake.OnExecute is null) return true;
+            __result = fake.OnExecute(req);
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(ServiceClient), nameof(ServiceClient.RetrieveMultiple), typeof(QueryBase))]
         public static bool RetrieveMultiplePrefix(ServiceClient __instance, QueryBase query, ref EntityCollection __result)
         {
@@ -117,6 +127,34 @@ public sealed class FakeSdkClient : IDisposable
         {
             if (!Registry.TryGetValue(__instance, out var fake) || fake.OnDelete is null) return true;
             fake.OnDelete(entityName, id);
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(ServiceClient), nameof(ServiceClient.Associate))]
+        public static bool AssociatePrefix(ServiceClient __instance, string entityName, Guid entityId, Relationship relationship, EntityReferenceCollection relatedEntities)
+        {
+            if (!Registry.TryGetValue(__instance, out var fake)) return true;
+            fake.OnExecute?.Invoke(new Microsoft.Xrm.Sdk.Messages.AssociateRequest
+            {
+                Target = new EntityReference(entityName, entityId),
+                Relationship = relationship,
+                RelatedEntities = relatedEntities
+            });
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(ServiceClient), nameof(ServiceClient.Disassociate))]
+        public static bool DisassociatePrefix(ServiceClient __instance, string entityName, Guid entityId, Relationship relationship, EntityReferenceCollection relatedEntities)
+        {
+            if (!Registry.TryGetValue(__instance, out var fake)) return true;
+            fake.OnExecute?.Invoke(new Microsoft.Xrm.Sdk.Messages.DisassociateRequest
+            {
+                Target = new EntityReference(entityName, entityId),
+                Relationship = relationship,
+                RelatedEntities = relatedEntities
+            });
             return false;
         }
 
@@ -183,20 +221,22 @@ public sealed class FakeSdkClient : IDisposable
         [HarmonyPrefix]
         [HarmonyPatch(typeof(ServiceClient), nameof(ServiceClient.UpdateAsync),
             typeof(Entity), typeof(CancellationToken))]
-        public static bool UpdateAsyncPrefix(ServiceClient __instance, Entity entity)
+        public static bool UpdateAsyncPrefix(ServiceClient __instance, Entity entity, ref Task __result)
         {
             if (!Registry.TryGetValue(__instance, out var fake) || fake.OnUpdate is null) return true;
             fake.OnUpdate(entity);
+            __result = Task.CompletedTask;
             return false;
         }
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(ServiceClient), nameof(ServiceClient.DeleteAsync),
             typeof(string), typeof(Guid), typeof(CancellationToken))]
-        public static bool DeleteAsyncPrefix(ServiceClient __instance, string entityName, Guid id)
+        public static bool DeleteAsyncPrefix(ServiceClient __instance, string entityName, Guid id, ref Task __result)
         {
             if (!Registry.TryGetValue(__instance, out var fake) || fake.OnDelete is null) return true;
             fake.OnDelete(entityName, id);
+            __result = Task.CompletedTask;
             return false;
         }
 
