@@ -48,8 +48,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
-        private static readonly ConcurrentDictionary<string, EntityMetadata> MetadataCache = new(StringComparer.OrdinalIgnoreCase);
-        private static readonly ConcurrentDictionary<string, List<Guid>> LookupPoolCache = new(StringComparer.OrdinalIgnoreCase);
+        private readonly ConcurrentDictionary<string, EntityMetadata> _metadataCache = new(StringComparer.OrdinalIgnoreCase);
+        private readonly ConcurrentDictionary<string, List<Guid>> _lookupPoolCache = new(StringComparer.OrdinalIgnoreCase);
 
         private const int MaxCount = 500;
         private const int LookupPoolSize = 100;
@@ -857,7 +857,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private EntityMetadata LoadEntityMetadata(string entityName)
         {
-            return MetadataCache.GetOrAdd(entityName, name =>
+            return _metadataCache.GetOrAdd(entityName, name =>
             {
                 var request = new RetrieveEntityRequest
                 {
@@ -871,7 +871,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private List<Guid> FetchLookupPool(string targetEntity)
         {
-            return LookupPoolCache.GetOrAdd(targetEntity, target =>
+            return _lookupPoolCache.GetOrAdd(targetEntity, target =>
             {
                 // Check if entity has statecode attribute before adding filter
                 var hasStateCode = false;
