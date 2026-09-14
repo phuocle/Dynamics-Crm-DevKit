@@ -12,6 +12,8 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
     public class CommandSettingsTests
     {
         private readonly Dictionary<string, string> environment = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private string originalDirectory;
+        private string tempTestDirectory;
 
         [TestInitialize]
         public void ClearDevKitEnvironment()
@@ -21,11 +23,19 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
                 environment[key] = Environment.GetEnvironmentVariable(key);
                 Environment.SetEnvironmentVariable(key, null);
             }
+            originalDirectory = Directory.GetCurrentDirectory();
+            tempTestDirectory = Path.Combine(Path.GetTempPath(), "devkit-tool-test-" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempTestDirectory);
+            Directory.SetCurrentDirectory(tempTestDirectory);
         }
 
         [TestCleanup]
         public void RestoreDevKitEnvironment()
         {
+            Directory.SetCurrentDirectory(originalDirectory);
+            if (Directory.Exists(tempTestDirectory))
+                Directory.Delete(tempTestDirectory, true);
+
             foreach (var pair in environment)
                 Environment.SetEnvironmentVariable(pair.Key, pair.Value);
         }

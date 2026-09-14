@@ -138,7 +138,7 @@ public static class TestMetadata
         return label;
     }
 
-    private static void Set<T>(T target, string property, object? value)
+    public static void Set<T>(T target, string property, object? value)
     {
         typeof(T).GetProperty(property, BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy)!
             .SetValue(target, value);

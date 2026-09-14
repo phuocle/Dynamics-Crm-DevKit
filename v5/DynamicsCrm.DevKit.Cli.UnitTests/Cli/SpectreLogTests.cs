@@ -158,6 +158,18 @@ public class SpectreLogTests
         throw new NotSupportedException(type.FullName);
     }
 
+    [TestMethod]
+    public void RichOutput_WriteHelpAndProgress_DoNotThrow()
+    {
+        SpectreLog.IsPlain = false;
+        SpectreLog.WriteHelp();
+        SpectreLog.WriteHeader();
+        SpectreLog.ClearProgress();
+        SpectreLog.WriteProgress(2, 5);
+        SpectreLog.WriteException(new Exception("test exception"));
+        SpectreLog.WaitingWithCancellation("test wait", new CancellationToken(canceled: true));
+    }
+
     private static async Task<string> CaptureConsoleAsync(Func<Task> action)
     {
         var oldOut = Console.Out;
@@ -174,3 +186,4 @@ public class SpectreLogTests
         }
     }
 }
+
