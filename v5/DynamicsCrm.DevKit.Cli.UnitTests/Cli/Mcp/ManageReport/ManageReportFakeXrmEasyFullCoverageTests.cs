@@ -758,13 +758,13 @@ public sealed class ManageReportFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
-    public async Task AddDataset_AggregateFetch_ReturnsError()
+    public async Task AddDataset_AggregateFetch_RequiresAlias()
     {
         var rdl = await WriteRdlAsync("agg.rdl", "Main");
         const string agg = "<fetch aggregate='true'><entity name='account'><attribute name='name' aggregate='count'/></entity></fetch>";
         var result = await NewTool().manage_report(null!, "add_dataset", file_path: rdl, dataset_name: "New", fetchxml: agg);
         Assert.IsTrue(result.IsError == true);
-        StringAssert.Contains(Text(result), "Aggregate and group-by FetchXML is not supported");
+        StringAssert.Contains(Text(result), "Missing alias for attribute");
     }
 
     [TestMethod]
@@ -777,13 +777,13 @@ public sealed class ManageReportFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
-    public async Task AddDataset_AllAttributes_ReturnsError()
+    public async Task AddDataset_AllAttributes_RejectsUnsupportedMetadata()
     {
         var rdl = await WriteRdlAsync("allattrs.rdl", "Main");
         var result = await NewTool().manage_report(null!, "add_dataset", file_path: rdl, dataset_name: "New",
             fetchxml: "<fetch><entity name='account'><all-attributes/></entity></fetch>");
         Assert.IsTrue(result.IsError == true);
-        StringAssert.Contains(Text(result), "<all-attributes /> is not supported");
+        StringAssert.Contains(Text(result), "not supported by the SSRS fetch extension");
     }
 
     [TestMethod]
@@ -886,23 +886,35 @@ public sealed class ManageReportFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
-    public async Task DeleteDataset_Existing_Succeeds()
+    public async Task UpdateDataset_PrefilterFalse_LeavesRootUnfiltered()
     {
-        var rdl = await WriteRdlAsync("delok.rdl", "Main");
-        var result = await NewTool().manage_report(null!, "delete_dataset", file_path: rdl, dataset_name: "Main");
+        var rdl = await WriteRdlAsync("updnofilter.rdl", "Main");
+        var result = await NewTool().manage_report(null!, "update_dataset", file_path: rdl,
+            dataset_name: "Main", fetchxml: SimpleFetch, prefilter: false);
+
         Assert.IsFalse(result.IsError == true);
-        StringAssert.Contains(Text(result), "dataset action 'delete_dataset' completed for 'Main'");
         var saved = await File.ReadAllTextAsync(rdl);
-        Assert.IsFalse(saved.Contains("\"Main\""));
+        Assert.IsFalse(saved.Contains("enableprefiltering"));
+        Assert.IsFalse(saved.Contains("prefilterparametername"));
+        Assert.IsFalse(saved.Contains("CRM_FilteredAccount"));
     }
 
     [TestMethod]
-    public async Task DeleteDataset_Missing_ReturnsError()
+    public async Task DeleteDataset_IsNotSupported()
+    {
+        var rdl = await WriteRdlAsync("delok.rdl", "Main");
+        var result = await NewTool().manage_report(null!, "delete_dataset", file_path: rdl, dataset_name: "Main");
+        Assert.IsTrue(result.IsError == true);
+        StringAssert.Contains(Text(result), "Invalid action");
+    }
+
+    [TestMethod]
+    public async Task DeleteDataset_IsNotSupported_EvenWhenMissing()
     {
         var rdl = await WriteRdlAsync("delmiss.rdl", "Main");
         var result = await NewTool().manage_report(null!, "delete_dataset", file_path: rdl, dataset_name: "Ghost");
         Assert.IsTrue(result.IsError == true);
-        StringAssert.Contains(Text(result), "was not found in");
+        StringAssert.Contains(Text(result), "Invalid action");
     }
 
     // ──────────────────────────────────────────────

@@ -21,6 +21,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.GenerateDemoData;
 /// driven fake-data generation, lookup pools, and field overrides.
 /// </summary>
 [TestClass]
+[DoNotParallelize]
 public sealed class GenerateDemoDataFakeSdkCoverageTests
 {
     private FakeSdkClient _fake = null!;
@@ -137,15 +138,19 @@ public sealed class GenerateDemoDataFakeSdkCoverageTests
     [TestMethod]
     public async Task Generate_EmptyLookupPool_WarnsAndSkips()
     {
-        SeedAccount();
+        var entity = TestMetadata.Entity("gdd_acc_empty", "Gdd Acc Empty",
+            TestMetadata.String("name", "Name"),
+            TestMetadata.Lookup("parentaccountid", "Parent Account", "gdd_empty_parent"));
+        _entities.Add(entity);
 
         var tool = new GenerateDemoDataTool(_fake.Client, new McpDryRunOptions());
         var result = await tool.generate_demo_data(
-            null!, entity_name: "gdd_acc", from_date: "2026-01-01", to_date: "2026-04-30", count: 2, seed: 7);
+            null!, entity_name: "gdd_acc_empty", from_date: "2026-01-01", to_date: "2026-04-30", count: 2, seed: 7);
 
         Assert.IsFalse(result.IsError == true, result.GetText());
         var json = Structured(result);
-        var warnings = json.GetProperty("warnings").EnumerateArray().Select(w => w.GetString()!).ToList();
+        Assert.IsTrue(json.TryGetProperty("warnings", out var wProp), "expected warnings property: " + json.GetRawText());
+        var warnings = wProp.EnumerateArray().Select(w => w.GetString()!).ToList();
         Assert.IsTrue(warnings.Any(w => w.Contains("no active records")), string.Join("|", warnings));
     }
 }

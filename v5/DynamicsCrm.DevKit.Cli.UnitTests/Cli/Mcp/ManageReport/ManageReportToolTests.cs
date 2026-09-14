@@ -20,5 +20,9 @@ public sealed class ManageReportToolTests
         var attribute = method.GetCustomAttribute<McpServerToolAttribute>();
 
         Assert.AreEqual("manage_report", attribute!.Name);
+
+        var prefilter = method.GetParameters().Single(parameter => parameter.Name == "prefilter");
+        Assert.AreEqual(typeof(bool), prefilter.ParameterType);
+        Assert.IsTrue((bool)prefilter.DefaultValue!);
     }
 }

@@ -53,8 +53,14 @@ public sealed class ManageReportPlannerMoreCoverageTests
         StringAssert.Contains((string)Static("GetReportOutputPath", "C:\\work", "Report:/Name", 1033), "Report__Name.rdl");
     }
 
-    private static object Static(string name, params object[] args) =>
-        ToolType.GetMethod(name, BindingFlags.Static | BindingFlags.NonPublic)!.Invoke(null, args)!;
+    private static object Static(string name, params object[] args)
+    {
+        if (name == "EnsurePrefilter" && args.Length == 4)
+            args = args.Append(true).ToArray();
+        return ToolType.GetMethods(BindingFlags.Static | BindingFlags.NonPublic)
+            .Single(m => m.Name == name && m.GetParameters().Length == args.Length)
+            .Invoke(null, args)!;
+    }
 
     private static object Instance(ManageReportTool tool, string name, params object[] args) =>
         ToolType.GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(tool, args)!;

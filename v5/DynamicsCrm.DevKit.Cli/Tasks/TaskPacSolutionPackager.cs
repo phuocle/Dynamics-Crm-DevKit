@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (Json == null)
             {
-                SpectreLog.ActionError($"{TaskType} 'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'profile' not found: '{Arg.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.solution == "???" || (Json.solution != null && Json?.solution?.Trim().Length == 0))

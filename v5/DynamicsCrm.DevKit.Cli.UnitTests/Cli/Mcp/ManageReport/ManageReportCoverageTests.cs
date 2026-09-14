@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.ManageReport;
@@ -107,6 +108,41 @@ public sealed class ManageReportCoverageTests
         var second = (XDocument)InvokeStatic("EnsurePrefilter", report, fetch, "account", ns);
         Assert.IsNotNull(second.Root);
         Assert.AreEqual(1, report.Element(ns + "ReportParameters")!.Elements(ns + "ReportParameter").Count());
+    }
+
+    [TestMethod]
+    public void EnsurePrefilter_WhenDisabled_LeavesRootAndDatasetUnparameterized()
+    {
+        var ns = XNamespace.Get("urn:test-report");
+        var report = new XElement(ns + "Report");
+        var fetch = XDocument.Parse("<fetch><entity name='account' enableprefiltering='1' prefilterparametername='CRM_FilteredAccount'><attribute name='name'/><link-entity name='contact' alias='c' enableprefiltering='1' prefilterparametername='CRM_FilteredContact'><attribute name='fullname'/></link-entity></entity></fetch>");
+
+        var result = (XDocument)InvokeStatic("EnsurePrefilter", report, fetch, "account", ns, false);
+        var dataSet = (XElement)InvokeStatic("CreateRdlDataSetWithPrefilter", ns, result, new List<XElement>(), false);
+
+        Assert.IsNull(result.Root!.Element("entity")!.Attribute("enableprefiltering"));
+        Assert.IsNull(result.Root.Element("entity")!.Attribute("prefilterparametername"));
+        Assert.IsNull(result.Root.Element("entity")!.Element("link-entity")!.Attribute("enableprefiltering"));
+        Assert.IsNull(result.Root.Element("entity")!.Element("link-entity")!.Attribute("prefilterparametername"));
+        Assert.IsNull(dataSet.Element(ns + "Query")!.Element(ns + "QueryParameters"));
+        Assert.IsNull(report.Element(ns + "ReportParameters"));
+    }
+
+    [TestMethod]
+    public void FetchEntityGraph_AllowsNestedLinks_ButRequiresAliases()
+    {
+        var fetch = XDocument.Parse("<fetch><entity name='account'><link-entity name='contact' alias='c'><link-entity name='systemuser' alias='u'/></link-entity></entity></fetch>");
+        InvokeStatic("ValidateFetchEntityGraph", fetch.Root!.Element("entity"), new HashSet<string>(StringComparer.OrdinalIgnoreCase));
+
+        var invalid = XDocument.Parse("<fetch><entity name='account'><link-entity name='contact'/></entity></fetch>");
+        TargetInvocationException error = null;
+        try
+        {
+            InvokeStatic("ValidateFetchEntityGraph", invalid.Root!.Element("entity"), new HashSet<string>(StringComparer.OrdinalIgnoreCase));
+        }
+        catch (TargetInvocationException ex) { error = ex; }
+        Assert.IsNotNull(error);
+        StringAssert.Contains(error.InnerException!.Message, "missing alias");
     }
 
     [TestMethod]
@@ -215,15 +251,23 @@ public sealed class ManageReportCoverageTests
     }
 
     private static object Invoke(object instance, string name, params object[] arguments) =>
-        typeof(ManageReportTool).GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic)!
+        typeof(ManageReportTool).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic)
+            .Single(m => m.Name == name && m.GetParameters().Length == arguments.Length)
             .Invoke(instance, arguments)!;
 
-    private static object InvokeStatic(string name, params object[] arguments) =>
-        typeof(ManageReportTool).GetMethod(name, BindingFlags.Static | BindingFlags.NonPublic)!
+    private static object InvokeStatic(string name, params object[] arguments)
+    {
+        if (name == "EnsurePrefilter" && arguments.Length == 4)
+            arguments = arguments.Append(true).ToArray();
+        return typeof(ManageReportTool).GetMethods(BindingFlags.Static | BindingFlags.NonPublic)
+            .Single(m => m.Name == name && m.GetParameters().Length == arguments.Length)
             .Invoke(null, arguments)!;
+    }
 
     private static object InvokeTask(object instance, string name, params object[] arguments)
     {
+        if (name == "HandleDatasetLocal" && arguments.Length == 6)
+            arguments = arguments.Append(true).ToArray();
         var task = (System.Threading.Tasks.Task)Invoke(instance, name, arguments);
         task.GetAwaiter().GetResult();
         return task.GetType().GetProperty("Result")!.GetValue(task)!;

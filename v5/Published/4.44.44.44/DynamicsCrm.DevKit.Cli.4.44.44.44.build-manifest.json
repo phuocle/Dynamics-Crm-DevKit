@@ -1,15 +1,15 @@
-{
-  "version": "4.44.44.44",
-  "buildDate": "08.09.2026 14:52:09",
-  "configuration": "Debug",
-  "builtAt": "2026-09-08T14:52:33.5629473+07:00",
-  "sourceRoot": "D:\\github\\Dynamics-Crm-DevKit\\v5",
-  "gitCommit": "74a5ff6b0bfedd407644cbe76845ae80c3339311",
-  "gitDirty": true,
-  "packagePath": "D:\\github\\Dynamics-Crm-DevKit\\v5\\Published\\4.44.44.44\\DynamicsCrm.DevKit.Cli.4.44.44.44.nupkg",
-  "packageSha256": "EF13ACDE5B900DCEA6884FD97F475522628D018A6700F127E8A15860DC09041B",
-  "installedAssemblyPath": "C:\\Users\\p\\.dotnet\\tools\\.store\\dynamicscrm.devkit.cli\\4.44.44.44\\dynamicscrm.devkit.cli\\4.44.44.44\\tools\\net10.0\\any\\DynamicsCrm.DevKit.Cli.dll",
-  "installedAssemblySha256": "DE3D6AC218FB2A2CC16C412DFFF0F5840A2F48D9FC30FFD052069DF87B24C470",
-  "devkitVersionOutput": "4.44.44.44 Build: 08.09.2026 14:52:09",
-  "mcpRuntimeVerification": "Call MCP whoami and compare structuredContent.devkit.version/build/assemblySha256/processStartTime with this manifest."
+﻿{
+    "version":  "4.44.44.44",
+    "buildDate":  "12.09.2026 11:11:20",
+    "configuration":  "Debug",
+    "builtAt":  "2026-09-12T11:12:26.2082016+07:00",
+    "sourceRoot":  "D:\\github\\Dynamics-Crm-DevKit\\v5",
+    "gitCommit":  "39a0c5e9a7dfa971fde944c14a0f37d83eb3f8d8",
+    "gitDirty":  true,
+    "packagePath":  "D:\\github\\Dynamics-Crm-DevKit\\v5\\Published\\4.44.44.44\\DynamicsCrm.DevKit.Cli.4.44.44.44.nupkg",
+    "packageSha256":  "5421DB830702BE3BD06FD1BDA478A7D5849C6635E97D57A12C33C85576E576AD",
+    "installedAssemblyPath":  "C:\\Users\\p\\.dotnet\\tools\\.store\\dynamicscrm.devkit.cli\\4.44.44.44\\dynamicscrm.devkit.cli\\4.44.44.44\\tools\\net10.0\\any\\DynamicsCrm.DevKit.Cli.dll",
+    "installedAssemblySha256":  "228BADA463670DECF0026C4B5CAE160597225248F11CFA9FE407C33E9BFAA349",
+    "devkitVersionOutput":  "4.44.44.44 Build: xxxx.yy.zz HH.mm.ss",
+    "mcpRuntimeVerification":  "Call MCP whoami and compare structuredContent.devkit.version/build/assemblySha256/processStartTime with this manifest."
 }

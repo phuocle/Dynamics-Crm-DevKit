@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml;
@@ -47,14 +48,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageReportResult)),
         Description(
-            "Manage Dataverse SSRS reports (report entity). Actions: 'list', 'detail', 'create', 'download', 'update', 'add_dataset', 'update_dataset', 'delete_dataset'.\n" +
+            "Manage Dataverse SSRS reports (report entity). Actions: 'list', 'detail', 'create', 'download', 'update', 'add_dataset', 'update_dataset'.\n" +
             "- list/detail/download read Dataverse; update is the ONLY action that writes to Dataverse; create and dataset actions work on local .rdl files only\n" +
             "- create: LOCAL ONLY — never touches Dataverse; saves a new .rdl built from the embedded ReportTemplate.rdl (normalized for the connected organization) or from file_path content; name defaults: name > file_path file name > 'Report Template'; existing local output files fail fast; default output is .devkit/manage_report/\n" +
             "- download writes bodytext to .devkit/manage_report/downloads/{languageCode}/ as {report}.rdl and returns the saved path and SHA-256\n" +
             "- create/download: output_folder saves the .rdl into that local folder instead of the default .devkit folder; when the folder contains exactly one .rptproj, the saved .rdl is auto-added as a Report item if not already present (0 or multiple .rptproj files = the project is left untouched)\n" +
             "- update replaces bodytext (.rdl content) and/or description of an existing report; when report_id is a name, language selects which language copy to update (multiple reports can share a name across languages) — default is the organization's base language; reports need no publish after update; NEW reports are created by the VSIX/CLI deploy, not by this tool; when file_path is provided and the RDL has a ReportFilter, report.defaultfilter is synced from it (Dataverse only extracts it on create, so redeploys otherwise leave it stale)\n" +
-            "- add_dataset/update_dataset/delete_dataset require file_path and edit only that local RDL; all dataset actions create a pre-change backup under .devkit/manage_report/backups; add_dataset/update_dataset accept FetchXML or a system view name with entity_name; delete_dataset removes the dataset by name only\n" +
-            "- dataset FetchXML must list attributes explicitly — <all-attributes/> is rejected — and must not include MultiSelectPicklist, File, or Image attributes (the SSRS fetch extension cannot query them); generated fields follow the SSRS designer model: every attribute yields a formatted System.String field, plus a typed <name>Value companion (and <name>EntityName for lookup/customer/owner)\n" +
+            "- add_dataset/update_dataset require file_path and edit only that local RDL; both actions create a pre-change backup under .devkit/manage_report/backups and accept FetchXML or a system view name with entity_name; prefilter controls only the root entity (linked-entity prefiltering is not supported)\n" +
+            "- dataset FetchXML follows the VSIX projection model: explicit or <all-attributes/> fields, aggregate/group-by aliases, nested linked entities with explicit aliases, and FetchXML parameters are supported; MultiSelectPicklist, File, and Image attributes remain unsupported by MSCRMFETCH; generated fields include formatted strings plus typed companions\n" +
             "- managed reports (isManaged=true) cannot be updated\n\n" +
             "WHEN TO USE:\n" +
             "- List or inspect reports of the organization or of a solution (solution component type 31)\n" +
@@ -67,7 +68,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- execute_fetchxml → query report records directly")]
         public async Task<CallToolResult> manage_report(
             McpServer server,
-            [Description("'list', 'detail', 'create', 'download', 'update', 'add_dataset', 'update_dataset', 'delete_dataset'.")] string action = "",
+            [Description("'list', 'detail', 'create', 'download', 'update', 'add_dataset', 'update_dataset'.")] string action = "",
             [Description("Report identifier: GUID, report name, or .rdl file name. Required for detail/download/update.")] string report_id = "",
             [Description("create/update: local .rdl file path. Relative paths resolve against the workspace folder (auto-resolved from MCP roots or server cwd). create: content source for the new local file — omit to use the embedded ReportTemplate.rdl.")] string file_path = "",
             [Description("create: report name, also used for the new local file name. Default: file_path file name without extension, or 'Report Template' when using the embedded template.")] string name = "",
@@ -76,17 +77,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("list: filter reports by solution unique or display name.")] string solution_name = "",
             [Description("list: case-insensitive contains filter on report name or file name.")] string name_filter = "",
             [Description("list: max records, 1-500. Default 50.")] int max_records = 50,
-            [Description("add_dataset/update_dataset/delete_dataset: dataset name to create, update, or delete. Required for dataset actions.")] string dataset_name = "",
-            [Description("add_dataset/update_dataset: simple FetchXML or a system view name. A view name also requires entity_name. Required for add_dataset/update_dataset; ignored by delete_dataset.")] string fetchxml = "",
+            [Description("add_dataset/update_dataset: dataset name to create or update. Required for dataset actions.")] string dataset_name = "",
+            [Description("add_dataset/update_dataset: FetchXML or a system view name. A view name also requires entity_name. Required for add_dataset/update_dataset.")] string fetchxml = "",
             [Description("add_dataset/update_dataset: entity display/logical name required when fetchxml is a system view name; optional for direct FetchXML and validated when supplied.")] string entity_name = "",
-            [Description("create/download: local folder to save the .rdl into instead of the default folder (.devkit/manage_report/ for create, .devkit/manage_report/downloads/{languageCode}/ for download). Relative paths resolve against the workspace folder. If the folder contains exactly one .rptproj, the saved .rdl is added to it as a Report item when missing.")] string output_folder = "")
+            [Description("create/download: local folder to save the .rdl into instead of the default folder (.devkit/manage_report/ for create, .devkit/manage_report/downloads/{languageCode}/ for download). Relative paths resolve against the workspace folder. If the folder contains exactly one .rptproj, the saved .rdl is added to it as a Report item when missing.")] string output_folder = "",
+            [Description("add_dataset/update_dataset: enable the VSIX-style pre-filter for the root entity. Linked entities are never pre-filtered.")] bool prefilter = true)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(action))
-                    return Error("action is required.", "Valid values: 'list', 'detail', 'create', 'download', 'update', 'add_dataset', 'update_dataset', 'delete_dataset'.");
+                    return Error("action is required.", "Valid values: 'list', 'detail', 'create', 'download', 'update', 'add_dataset', 'update_dataset'.");
                 var normalizedAction = action.Trim().ToLowerInvariant();
-                var workspaceFolder = normalizedAction is "create" or "download" or "update" or "add_dataset" or "update_dataset" or "delete_dataset"
+                var workspaceFolder = normalizedAction is "create" or "download" or "update" or "add_dataset" or "update_dataset"
                     ? await WorkspaceFolderHelper.GetAsync(server)
                     : "";
                 return normalizedAction switch
@@ -96,9 +98,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "create" => await HandleCreate(file_path, name, workspaceFolder, output_folder),
                     "download" => await HandleDownload(report_id, workspaceFolder, output_folder),
                     "update" => await HandleUpdate(report_id, file_path, description, language, workspaceFolder),
-                    "add_dataset" or "update_dataset" or "delete_dataset" =>
-                        await HandleDatasetLocal(normalizedAction, file_path, dataset_name, fetchxml, entity_name, workspaceFolder),
-                    _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'create', 'download', 'update', 'add_dataset', 'update_dataset', 'delete_dataset'.")
+                    "add_dataset" or "update_dataset" =>
+                        await HandleDatasetLocal(normalizedAction, file_path, dataset_name, fetchxml, entity_name, workspaceFolder, prefilter),
+                    _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'create', 'download', 'update', 'add_dataset', 'update_dataset'.")
                 };
             }
             catch (Exception ex)
@@ -339,7 +341,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private async Task<CallToolResult> HandleDatasetLocal(string action, string filePath,
-            string datasetName, string fetchXmlOrViewName, string entityName, string workspaceFolder)
+            string datasetName, string fetchXmlOrViewName, string entityName, string workspaceFolder, bool prefilter)
         {
             if (string.IsNullOrWhiteSpace(filePath))
                 return Error("file_path is required for dataset actions.",
@@ -398,24 +400,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var existingDataset = datasets.Elements(reportNamespace + "DataSet")
                 .FirstOrDefault(d => string.Equals((string)d.Attribute("Name"), trimmedDatasetName, StringComparison.OrdinalIgnoreCase));
 
-            if (action == "delete_dataset")
-            {
-                if (existingDataset == null)
-                    return Error($"Dataset '{trimmedDatasetName}' was not found in '{filePath}'.",
-                        "Provide an existing dataset_name; use action='detail' on the report or open the RDL in SSRS Designer to list datasets.");
-                var removedFields = existingDataset.Element(reportNamespace + "Fields")?
-                    .Elements(reportNamespace + "Field")
-                    .Select(f => (string)f.Attribute("Name"))
-                    .Where(n => !string.IsNullOrWhiteSpace(n))
-                    .ToList();
-                existingDataset.Remove();
-                return await SaveDatasetRdlAsync(document, resolvedPath, action, trimmedDatasetName,
-                    removedFields, null, workspaceFolder);
-            }
-
             if (string.IsNullOrWhiteSpace(fetchXmlOrViewName))
                 return Error($"fetchxml is required for '{action}'.",
-                    "Provide simple FetchXML or a system view name; view names also require entity_name.");
+                    "Provide FetchXML or a system view name; view names also require entity_name.");
             if (action == "add_dataset" && existingDataset != null)
                 return Error($"Dataset '{trimmedDatasetName}' already exists in '{filePath}'.",
                     "Use action='update_dataset' or choose a different dataset_name.");
@@ -427,56 +414,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!source.IsSuccess)
                 return Error(source.Error, source.Hint);
 
-            var metadata = await GetEntityMetadataAsync(source.EntityLogicalName);
-            if (metadata == null)
-                return Error($"Entity '{source.EntityLogicalName}' metadata could not be resolved.",
-                    "Provide a valid entity name and attributes in the FetchXML, then retry.");
-            var fields = new List<XElement>();
-            var rootEntity = source.Fetch.Root.Element("entity");
-            foreach (var attribute in rootEntity.Elements("attribute"))
+            List<XElement> fields;
+            try
             {
-                var attributeName = (string)attribute.Attribute("name");
-                var fieldName = (string)attribute.Attribute("alias") ?? attributeName;
-                if (string.IsNullOrWhiteSpace(attributeName) || string.IsNullOrWhiteSpace(fieldName))
-                    return Error("FetchXML contains an attribute without a valid name or alias.",
-                        "Provide simple FetchXML attributes with valid names.");
-                var attributeMetadata = metadata.Attributes.FirstOrDefault(a =>
-                    string.Equals(a.LogicalName, attributeName, StringComparison.OrdinalIgnoreCase));
-                if (attributeMetadata == null)
-                    return Error($"Attribute '{attributeName}' was not found on entity '{source.EntityLogicalName}'.",
-                        "Use get_tables to verify the entity and attribute logical names.");
-                if (IsUnsupportedReportAttribute(attributeMetadata))
-                    return Error($"Attribute '{attributeName}' (type '{attributeMetadata.AttributeTypeName?.Value}') is not supported by the SSRS fetch extension (MSCRMFETCH).",
-                        "Remove MultiSelectPicklist, File, and Image attributes from the FetchXML — the Dynamics 365 Report Authoring Extension cannot query them.");
-                fields.AddRange(CreateRdlFields(reportNamespace, fieldName, attributeMetadata.AttributeType));
+                fields = await BuildDatasetFieldsAsync(source.Fetch, reportNamespace);
             }
-            var linkedEntity = rootEntity.Elements("link-entity").SingleOrDefault();
-            if (linkedEntity != null)
+            catch (InvalidOperationException ex)
             {
-                var linkedLogicalName = (string)linkedEntity.Attribute("name");
-                var linkedAlias = (string)linkedEntity.Attribute("alias") ?? linkedLogicalName;
-                var linkedMetadata = await GetEntityMetadataAsync(linkedLogicalName);
-                foreach (var attribute in linkedEntity.Elements("attribute"))
-                {
-                    var attributeName = (string)attribute.Attribute("name");
-                    var fieldName = (string)attribute.Attribute("alias") ?? $"{linkedAlias}.{attributeName}";
-                    var attributeMetadata = linkedMetadata?.Attributes.FirstOrDefault(a =>
-                        string.Equals(a.LogicalName, attributeName, StringComparison.OrdinalIgnoreCase));
-                    if (attributeMetadata == null)
-                        return Error($"Attribute '{attributeName}' was not found on linked entity '{linkedLogicalName}'.",
-                            "Use get_tables to verify the linked entity and attribute logical names.");
-                    if (IsUnsupportedReportAttribute(attributeMetadata))
-                        return Error($"Attribute '{attributeName}' (type '{attributeMetadata.AttributeTypeName?.Value}') is not supported by the SSRS fetch extension (MSCRMFETCH).",
-                            "Remove MultiSelectPicklist, File, and Image attributes from the FetchXML — the Dynamics 365 Report Authoring Extension cannot query them.");
-                    fields.AddRange(CreateRdlFields(reportNamespace, fieldName, attributeMetadata.AttributeType));
-                }
+                return Error(ex.Message, "Fix the FetchXML projection and retry.");
             }
-            if (fields.Count == 0)
-                return Error("FetchXML must contain at least one simple attribute.",
-                    "Add one or more <attribute name='...'/ > elements to the FetchXML.");
-
-            var prefilteredFetch = EnsurePrefilter(reportRoot, source.Fetch, source.EntityLogicalName, reportNamespace);
-            var sourceDataSet = CreateRdlDataSet(reportNamespace, prefilteredFetch, fields);
+            var prefilteredFetch = EnsurePrefilter(reportRoot, source.Fetch, source.EntityLogicalName, reportNamespace, prefilter);
+            var sourceDataSet = CreateRdlDataSetWithPrefilter(reportNamespace, prefilteredFetch, fields, prefilter);
+            ApplyFetchParameters(reportRoot, sourceDataSet, source.Fetch, reportNamespace);
             if (existingDataset == null)
                 datasets.Add(sourceDataSet);
             else
@@ -501,13 +450,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 try { fetch = XDocument.Parse(input, LoadOptions.PreserveWhitespace); }
                 catch (Exception ex) { return (false, $"fetchxml is not well-formed XML: {ex.Message}", "Fix the FetchXML and retry.", null, null); }
                 if (fetch.Root?.Name.LocalName != "fetch")
-                    return (false, "fetchxml must contain one <fetch> document.", "Provide simple FetchXML starting with <fetch>.", null, null);
-                if (fetch.Descendants().Any(e => e.Attribute("aggregate") != null || e.Attribute("groupby") != null))
-                    return (false, "Aggregate and group-by FetchXML is not supported for dataset actions.", "Use direct attributes with at most one linked entity.", null, null);
+                    return (false, "fetchxml must contain one <fetch> document.", "Provide FetchXML starting with <fetch>.", null, null);
                 var entity = fetch.Root.Element("entity");
                 logicalName = (string)entity?.Attribute("name");
                 if (string.IsNullOrWhiteSpace(logicalName))
-                    return (false, "fetchxml must contain one root entity with a name.", "Provide a valid simple FetchXML document.", null, null);
+                    return (false, "fetchxml must contain one root entity with a name.", "Provide a valid FetchXML document.", null, null);
             }
             else
             {
@@ -532,21 +479,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 try { fetch = XDocument.Parse(views[0].GetAttributeValue<string>("fetchxml") ?? ""); }
                 catch (Exception ex) { return (false, $"System view '{input}' has invalid FetchXML: {ex.Message}", "Repair the system view FetchXML, then retry.", null, null); }
             }
-            var rootEntity = fetch.Root.Element("entity");
-            var linkedEntities = rootEntity?.Elements("link-entity").ToList() ?? [];
-            if (rootEntity == null || linkedEntities.Count > 1 || fetch.Descendants("link-entity").Any(e => e.Descendants("link-entity").Any()))
-                return (false, "Only one level with at most one linked entity is supported for dataset actions.", "Use simple FetchXML with one root entity and at most one link-entity.", null, null);
-            if (rootEntity.Element("all-attributes") != null || linkedEntities.Any(l => l.Element("all-attributes") != null))
-                return (false, "FetchXML with <all-attributes /> is not supported for dataset actions.",
-                    "List the attributes explicitly. Note: MultiSelectPicklist, File, and Image attributes are not supported by the SSRS fetch extension and will be rejected.", null, null);
+            var rootEntity = fetch.Root.Elements().Where(e => e.Name.LocalName == "entity").ToList();
+            if (rootEntity.Count != 1)
+                return (false, "fetchxml must contain exactly one root entity.", "Provide one root <entity> in the FetchXML.", null, null);
+            try { ValidateFetchEntityGraph(rootEntity[0], new HashSet<string>(StringComparer.OrdinalIgnoreCase)); }
+            catch (InvalidOperationException ex) { return (false, ex.Message, "Fix the FetchXML entity/link aliases and retry.", null, null); }
             if (!string.IsNullOrWhiteSpace(entityName) && input.StartsWith("<", StringComparison.Ordinal))
             {
                 var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgServiceAsync, entityName.Trim(), "manage_report");
                 if (!entityResult.IsSuccess || !string.Equals(entityResult.Value.LogicalName, logicalName, StringComparison.OrdinalIgnoreCase))
                     return (false, $"entity_name '{entityName}' does not match FetchXML entity '{logicalName}'.", "Use the matching entity display/logical name.", null, null);
             }
-            var validationFetch = new XDocument(fetch);
-            validationFetch.Root.SetAttributeValue("top", "1");
+            var validationFetch = BuildFetchProbe(fetch);
             try { _orgServiceAsync.RetrieveMultiple(new FetchExpression(validationFetch.ToString(SaveOptions.DisableFormatting))); }
             catch (Exception ex) { return (false, $"FetchXML validation failed: {ex.Message}", "Fix the FetchXML or system view, then retry.", null, null); }
             return (true, null, null, logicalName, fetch);
@@ -562,7 +506,196 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return response.EntityMetadata;
         }
 
+        private async Task<List<XElement>> BuildDatasetFieldsAsync(XDocument fetch, XNamespace reportNamespace)
+        {
+            var root = fetch?.Root?.Elements().SingleOrDefault(e => e.Name.LocalName == "entity")
+                ?? throw new InvalidOperationException("fetchxml must contain exactly one root entity.");
+            var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var fields = new List<XElement>();
+            await AppendDatasetFieldsAsync(root, true, root.Attribute("name")?.Value, fields, names, reportNamespace,
+                IsTrue((string)fetch.Root.Attribute("aggregate")));
+            if (fetch.Root.Attribute("page") != null || fetch.Root.Attribute("count") != null)
+            {
+                AddDatasetFields(fields, names, reportNamespace, "PagingCookie", null, null, AttributeTypeCode.String);
+                AddDatasetFields(fields, names, reportNamespace, "MoreRecords", null, null, AttributeTypeCode.Boolean);
+            }
+            if (fields.Count == 0)
+                throw new InvalidOperationException("FetchXML must contain at least one attribute or all-attributes projection.");
+            return fields;
+        }
+
+        private async Task AppendDatasetFieldsAsync(XElement entity, bool isRoot, string path,
+            List<XElement> fields, ISet<string> names, XNamespace reportNamespace, bool aggregateFetch)
+        {
+            var logicalName = (string)entity.Attribute("name");
+            if (string.IsNullOrWhiteSpace(logicalName))
+                throw new InvalidOperationException("Every entity/link-entity requires a name.");
+            var alias = (string)entity.Attribute("alias");
+            var metadata = await GetEntityMetadataAsync(logicalName);
+            if (metadata == null)
+                throw new InvalidOperationException($"Entity '{logicalName}' metadata could not be resolved.");
+
+            var attributes = entity.Elements().Where(e => e.Name.LocalName == "attribute").ToList();
+            if (attributes.Count > 0)
+            {
+                foreach (var attribute in attributes)
+                {
+                    var attributeName = (string)attribute.Attribute("name");
+                    if (string.IsNullOrWhiteSpace(attributeName))
+                        throw new InvalidOperationException("Every <attribute> requires a name.");
+                    var attributeMetadata = metadata.Attributes.FirstOrDefault(a =>
+                        string.Equals(a.LogicalName, attributeName, StringComparison.OrdinalIgnoreCase));
+                    if (attributeMetadata == null)
+                        throw new InvalidOperationException($"Attribute '{attributeName}' was not found on entity '{logicalName}'.");
+                    if (!IsSupportedReportAttribute(attributeMetadata))
+                        throw new InvalidOperationException($"Attribute '{attributeName}' on entity '{logicalName}' is not supported by the SSRS fetch extension (MSCRMFETCH).");
+                    var aggregate = (string)attribute.Attribute("aggregate");
+                    var grouped = IsTrue((string)attribute.Attribute("groupby"));
+                    if ((aggregateFetch || !string.IsNullOrWhiteSpace(aggregate) || grouped) &&
+                        string.IsNullOrWhiteSpace((string)attribute.Attribute("alias")))
+                        throw new InvalidOperationException($"Aggregate/grouped attribute '{attributeName}' requires an explicit alias.");
+                    var integerOverride = !string.IsNullOrWhiteSpace(aggregate) &&
+                        (aggregate.Equals("count", StringComparison.OrdinalIgnoreCase) || aggregate.Equals("countcolumn", StringComparison.OrdinalIgnoreCase));
+                    integerOverride = integerOverride || grouped && attributeMetadata.AttributeType == AttributeTypeCode.DateTime && attribute.Attribute("dategrouping") != null;
+                    var baseName = (string)attribute.Attribute("alias");
+                    if (string.IsNullOrWhiteSpace(baseName)) baseName = isRoot ? attributeName : alias + "." + attributeName;
+                    AddDatasetFields(fields, names, reportNamespace, NormalizeFieldName(baseName), attributeName, path,
+                        integerOverride ? AttributeTypeCode.Integer : attributeMetadata.AttributeType);
+                }
+            }
+            else if (entity.Elements().Any(e => e.Name.LocalName == "all-attributes"))
+            {
+                foreach (var attributeMetadata in metadata.Attributes.Where(a => a.IsValidForRead != false && a.AttributeOf == null))
+                {
+                    if (!IsSupportedReportAttribute(attributeMetadata))
+                        throw new InvalidOperationException($"Attribute '{attributeMetadata.LogicalName}' on entity '{logicalName}' is not supported by the SSRS fetch extension (MSCRMFETCH).");
+                    var baseName = isRoot ? attributeMetadata.LogicalName : alias + "." + attributeMetadata.LogicalName;
+                    AddDatasetFields(fields, names, reportNamespace, NormalizeFieldName(baseName), attributeMetadata.LogicalName, path, attributeMetadata.AttributeType);
+                }
+            }
+
+            foreach (var link in GetOwnedLinks(entity))
+            {
+                var childName = (string)link.Attribute("name");
+                var childAlias = (string)link.Attribute("alias");
+                await AppendDatasetFieldsAsync(link, false,
+                    path + "/" + childName + "[" + childAlias + "]", fields, names, reportNamespace, aggregateFetch);
+            }
+        }
+
+        private static void AddDatasetFields(List<XElement> fields, ISet<string> names, XNamespace reportNamespace, string fieldName,
+            string sourceAttribute, string sourcePath, AttributeTypeCode? type)
+        {
+            foreach (var field in CreateRdlFields(reportNamespace, fieldName, type))
+            {
+                var generatedName = (string)field.Attribute("Name");
+                if (!names.Add(generatedName))
+                    throw new InvalidOperationException($"Duplicate generated RDL field '{generatedName}'. Add explicit FetchXML aliases.");
+                fields.Add(field);
+            }
+        }
+
+        private static bool IsSupportedReportAttribute(AttributeMetadata metadata) =>
+            !IsUnsupportedReportAttribute(metadata) && metadata.AttributeType.HasValue &&
+            new[] { AttributeTypeCode.BigInt, AttributeTypeCode.Boolean, AttributeTypeCode.Customer, AttributeTypeCode.DateTime,
+                AttributeTypeCode.Decimal, AttributeTypeCode.Double, AttributeTypeCode.EntityName, AttributeTypeCode.Integer,
+                AttributeTypeCode.Lookup, AttributeTypeCode.Memo, AttributeTypeCode.Money, AttributeTypeCode.Owner,
+                AttributeTypeCode.Picklist, AttributeTypeCode.State, AttributeTypeCode.Status, AttributeTypeCode.String,
+                AttributeTypeCode.Uniqueidentifier }.Contains(metadata.AttributeType.Value);
+
+        private static IEnumerable<XElement> GetOwnedLinks(XElement entity) =>
+            entity.Descendants().Where(x => x.Name.LocalName == "link-entity")
+                .Where(x => x.Ancestors().FirstOrDefault(a => a.Name.LocalName == "entity" || a.Name.LocalName == "link-entity") == entity);
+
+        private static bool IsTrue(string value) =>
+            string.Equals(value, "true", StringComparison.OrdinalIgnoreCase) || value == "1";
+
+        private static string NormalizeFieldName(string name) =>
+            Regex.Replace(name ?? string.Empty, "[^A-Za-z0-9_]", "_");
+
+        private static void ValidateFetchEntityGraph(XElement entity, ISet<string> aliases)
+        {
+            var name = (string)entity.Attribute("name");
+            if (string.IsNullOrWhiteSpace(name)) throw new InvalidOperationException("Every entity/link-entity requires a name.");
+            var alias = (string)entity.Attribute("alias");
+            if (entity.Name.LocalName == "link-entity" && string.IsNullOrWhiteSpace(alias))
+                throw new InvalidOperationException($"link-entity '{name}' is missing alias; add an explicit alias.");
+            if (!string.IsNullOrWhiteSpace(alias) && !aliases.Add(alias))
+                throw new InvalidOperationException($"Duplicate entity alias '{alias}'.");
+            foreach (var link in GetOwnedLinks(entity)) ValidateFetchEntityGraph(link, aliases);
+        }
+
+        private static XDocument BuildFetchProbe(XDocument source)
+        {
+            var clone = new XDocument(source);
+            foreach (var filter in clone.Descendants().Where(x => x.Name.LocalName == "filter").ToList()) filter.Remove();
+            foreach (var name in new[] { "page", "count", "paging-cookie", "returntotalrecordcount" }) clone.Root?.Attribute(name)?.Remove();
+            if (IsTrue((string)clone.Root?.Attribute("aggregate"))) clone.Root?.Attribute("top")?.Remove();
+            else clone.Root?.SetAttributeValue("top", "1");
+            foreach (var entity in clone.Descendants().Where(x => x.Name.LocalName == "entity" || x.Name.LocalName == "link-entity"))
+            {
+                entity.Attribute("enableprefiltering")?.Remove();
+                entity.Attribute("prefilterparametername")?.Remove();
+            }
+            return clone;
+        }
+
+        private static void ApplyFetchParameters(XElement reportRoot, XElement dataSet, XDocument fetch, XNamespace reportNamespace)
+        {
+            var query = dataSet.Element(reportNamespace + "Query");
+            if (query == null) return;
+            var commandText = query.Element(reportNamespace + "CommandText");
+            var queryParameters = query.Element(reportNamespace + "QueryParameters");
+            var tokens = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var condition in fetch.Descendants().Where(x => x.Name.LocalName == "condition"))
+            {
+                AddParameterToken(tokens, (string)condition.Attribute("value"));
+                foreach (var value in condition.Elements().Where(x => x.Name.LocalName == "value"))
+                    AddParameterToken(tokens, value.Value.Trim());
+            }
+            foreach (var attribute in new[] { "page", "count", "paging-cookie" })
+                AddParameterToken(tokens, (string)fetch.Root?.Attribute(attribute));
+
+            foreach (var token in tokens)
+            {
+                var name = token.TrimStart('@');
+                queryParameters ??= new XElement(reportNamespace + "QueryParameters");
+                if (query.Element(reportNamespace + "QueryParameters") == null) query.Add(queryParameters);
+                if (!queryParameters.Elements(reportNamespace + "QueryParameter")
+                    .Any(p => string.Equals((string)p.Attribute("Name"), token, StringComparison.OrdinalIgnoreCase)))
+                    queryParameters.Add(new XElement(reportNamespace + "QueryParameter",
+                        new XAttribute("Name", token),
+                        new XElement(reportNamespace + "Value", $"=Parameters!{name}.Value")));
+                EnsureReportParameter(reportRoot, reportNamespace, name);
+            }
+        }
+
+        private static void AddParameterToken(ISet<string> tokens, string value)
+        {
+            if (Regex.IsMatch(value ?? string.Empty, @"^@[A-Za-z_][A-Za-z0-9_]*$")) tokens.Add(value);
+        }
+
+        private static void EnsureReportParameter(XElement reportRoot, XNamespace ns, string name)
+        {
+            var parameters = reportRoot.Element(ns + "ReportParameters");
+            if (parameters == null)
+            {
+                parameters = new XElement(ns + "ReportParameters");
+                reportRoot.Add(parameters);
+            }
+            if (!parameters.Elements(ns + "ReportParameter").Any(p =>
+                string.Equals((string)p.Attribute("Name"), name, StringComparison.OrdinalIgnoreCase)))
+                parameters.Add(new XElement(ns + "ReportParameter",
+                    new XAttribute("Name", name),
+                    new XElement(ns + "DataType", "String"),
+                    new XElement(ns + "Prompt", name)));
+            EnsureReportParameterLayoutCell(reportRoot, ns, name);
+        }
+
         private static XElement CreateRdlDataSet(XNamespace ns, XDocument fetch, List<XElement> fields)
+            => CreateRdlDataSetWithPrefilter(ns, fetch, fields, true);
+
+        private static XElement CreateRdlDataSetWithPrefilter(XNamespace ns, XDocument fetch, List<XElement> fields, bool prefilter)
         {
             var dataSourceName = "Dynamics365";
             var rootEntity = fetch.Root?.Element("entity");
@@ -572,15 +705,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 new XAttribute("Name", "__DATASET_NAME__"),
                 new XElement(ns + "Query",
                     new XElement(ns + "DataSourceName", dataSourceName),
-                    new XElement(ns + "QueryParameters",
+                    prefilter ? new XElement(ns + "QueryParameters",
                         new XElement(ns + "QueryParameter",
                             new XAttribute("Name", prefilterParameter),
-                            new XElement(ns + "Value", $"=Parameters!{prefilterParameter}.Value"))),
+                            new XElement(ns + "Value", $"=Parameters!{prefilterParameter}.Value"))) : null,
                     new XElement(ns + "CommandText", fetch.ToString(SaveOptions.DisableFormatting))),
                 new XElement(ns + "Fields", fields));
         }
 
-        private static XDocument EnsurePrefilter(XElement reportRoot, XDocument sourceFetch, string entityLogicalName, XNamespace reportNamespace)
+        private static XDocument EnsurePrefilter(XElement reportRoot, XDocument sourceFetch, string entityLogicalName, XNamespace reportNamespace, bool enabled = true)
         {
             var fetch = new XDocument(new XElement(sourceFetch.Root));
             var rootEntity = fetch.Root?.Element("entity");
@@ -589,6 +722,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var logicalName = entityLogicalName.Trim().ToLowerInvariant();
             var parameterName = "CRM_Filtered" + char.ToUpperInvariant(logicalName[0]) + logicalName.Substring(1);
+            // MCP intentionally supports the root pre-filter switch only. Strip any
+            // link-entity pre-filter attributes supplied by a view or caller.
+            foreach (var link in fetch.Descendants("link-entity"))
+            {
+                link.Attribute("enableprefiltering")?.Remove();
+                link.Attribute("prefilterparametername")?.Remove();
+            }
+            if (!enabled)
+            {
+                rootEntity.Attribute("enableprefiltering")?.Remove();
+                rootEntity.Attribute("prefilterparametername")?.Remove();
+                return fetch;
+            }
             rootEntity.SetAttributeValue("enableprefiltering", "1");
             rootEntity.SetAttributeValue("prefilterparametername", parameterName);
 
