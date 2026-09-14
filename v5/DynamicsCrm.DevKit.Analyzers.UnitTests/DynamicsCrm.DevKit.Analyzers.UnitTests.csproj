@@ -31,6 +31,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="4.3.3" />
     <PackageReference Include="MSTest.TestFramework" Version="4.3.3" />
+    <PackageReference Include="System.Text.Encodings.Web" Version="10.0.11" />
     <PackageReference Include="coverlet.collector" Version="10.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -38,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="coverlet.runsettings" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
