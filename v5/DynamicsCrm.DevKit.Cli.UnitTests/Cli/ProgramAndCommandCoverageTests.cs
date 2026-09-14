@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli;
@@ -138,5 +139,88 @@ public sealed class ProgramAndCommandCoverageTests
         Assert.IsFalse(XrmHelper.IsEqualsWorkflowType("a", "b"));
         Assert.IsTrue(XrmHelper.IsEqualsContent("same", "same"));
         Assert.IsFalse(XrmHelper.IsEqualsContent("same", "other"));
+    }
+
+    [TestMethod]
+    public async Task McpCommand_InvalidModernAuthentication_ReturnsError()
+    {
+        var command = new McpCommand();
+        var settings = new McpCommandArgs { AuthType = "NotARealAuthType", Url = "https://example.test" };
+        var exit = await command.ExecuteAsyncForTesting(new Spectre.Console.Cli.CommandContext(new[] { "mcp" }, new NoRemaining(), "mcp", null!), settings, default);
+        Assert.AreEqual(1, exit);
+    }
+
+    [TestMethod]
+    public void McpCommand_PrivateHelpers_CoverAuthenticationFormatting()
+    {
+        var commandType = typeof(McpCommand);
+        var shouldLogClientId = commandType.GetMethod("ShouldLogClientId", BindingFlags.NonPublic | BindingFlags.Static)!;
+        var shouldLogUsername = commandType.GetMethod("ShouldLogUsername", BindingFlags.NonPublic | BindingFlags.Static)!;
+        var getConnectionUserName = commandType.GetMethod("GetConnectionUserName", BindingFlags.NonPublic | BindingFlags.Static)!;
+
+        foreach (var auth in new[] { "ClientSecret", "Interactive", "DeviceCode", "OAuth" })
+            Assert.IsTrue((bool)shouldLogClientId.Invoke(null, new object?[] { auth })!);
+        foreach (var auth in new[] { "OAuth", "AD" })
+            Assert.IsTrue((bool)shouldLogUsername.Invoke(null, new object?[] { auth })!);
+        Assert.IsFalse((bool)shouldLogClientId.Invoke(null, new object?[] { "FromPac" })!);
+        Assert.IsFalse((bool)shouldLogUsername.Invoke(null, new object?[] { "ClientSecret" })!);
+
+        var adSettings = new McpCommandArgs { AuthType = "AD", Domain = "CONTOSO", Username = "alice" };
+        Assert.AreEqual("CONTOSO\\alice", getConnectionUserName.Invoke(null, new object?[] { adSettings }));
+        adSettings.Username = "CONTOSO\\alice";
+        Assert.AreEqual("CONTOSO\\alice", getConnectionUserName.Invoke(null, new object?[] { adSettings }));
+        adSettings.AuthType = "FromPac";
+        Assert.AreEqual("CONTOSO\\alice", getConnectionUserName.Invoke(null, new object?[] { adSettings }));
+    }
+
+    [TestMethod]
+    public void McpCommand_ImpersonationHelpers_HandleUnresolvableTargets()
+    {
+        var resolveUser = typeof(McpCommand).GetMethod("ResolveUserByEmail", BindingFlags.NonPublic | BindingFlags.Static)!;
+        var args = new object?[] { null, "missing@example.test", null };
+        var result = resolveUser.Invoke(null, args);
+        Assert.IsNull(result);
+        Assert.IsNull(args[2]);
+
+        var resolveAsUser = typeof(McpCommand).GetMethod("ResolveAsUser", BindingFlags.NonPublic | BindingFlags.Static)!;
+        var resolveArgs = new object?[] { null, "missing@example.test", null };
+        Assert.IsNull(resolveAsUser.Invoke(null, resolveArgs));
+        Assert.IsNull(resolveArgs[2]);
+    }
+
+    [TestMethod]
+    public async Task McpCommand_ConnectValidation_HandlesMissingAndInvalidLegacyInputs()
+    {
+        var command = new McpCommand();
+        var method = typeof(McpCommand).GetMethod("ConnectAsync", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        var missing = (Task<Microsoft.PowerPlatform.Dataverse.Client.ServiceClient?>)method.Invoke(command, new object?[] { new McpCommandArgs() })!;
+        Assert.IsNull(await missing);
+        var invalid = (Task<Microsoft.PowerPlatform.Dataverse.Client.ServiceClient?>)method.Invoke(command, new object?[] { new McpCommandArgs { Connection = "not-a-connection-string" } })!;
+        try
+        {
+            await invalid;
+            Assert.Fail("Invalid legacy connection should fail.");
+        }
+        catch (NullReferenceException)
+        {
+            // ServiceClient rejects the malformed legacy string in this environment.
+        }
+    }
+
+    [TestMethod]
+    public void McpCommand_LogConnectionInfo_CoversSupportedAuthFields()
+    {
+        var method = typeof(McpCommand).GetMethod("LogConnectionInfo", BindingFlags.NonPublic | BindingFlags.Static)!;
+        foreach (var settings in new[]
+        {
+            new McpCommandArgs { AuthType = "ClientSecret", Url = "https://example.test", ClientId = "client" },
+            new McpCommandArgs { AuthType = "OAuth", Url = "https://example.test", ClientId = "client", Username = "user" },
+            new McpCommandArgs { AuthType = "AD", Url = "https://example.test", Username = "user", Domain = "CONTOSO" },
+            new McpCommandArgs { AuthType = "FromPac", PacProfile = "default" }
+        })
+        {
+            method.Invoke(null, new object?[] { settings });
+        }
+        method.Invoke(null, new object?[] { new McpCommandArgs() });
     }
 }

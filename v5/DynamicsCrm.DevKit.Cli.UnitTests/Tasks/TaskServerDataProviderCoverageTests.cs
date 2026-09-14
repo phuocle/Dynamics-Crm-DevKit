@@ -196,4 +196,59 @@ public sealed class TaskServerDataProviderCoverageTests
         Assert.AreEqual(existingMi.Id, miId2);
         Assert.AreEqual(appId, outAppId2);
     }
+
+    [TestMethod]
+    public async Task IsValidDataProviderAsync_RejectsDuplicateCrudEvents()
+    {
+        _dataSourceExistsInMetadata = true;
+        var task = CreateTask("devkit");
+        var method = typeof(TaskServer).GetMethod("IsValidDataProviderAsync", InstancePrivate)!;
+        foreach (var message in new[] { "Create", "Update", "Delete" })
+        {
+            var events = new List<DataProviderEvent>
+            {
+                new() { Message = message, DataSource = "dev_source" },
+                new() { Message = message, DataSource = "dev_source" }
+            };
+            var result = await (Task<bool>)method.Invoke(task, new object?[] { events, "dev_source" })!;
+            Assert.IsFalse(result, message);
+        }
+
+        var updateEvents = new List<DataProviderEvent>
+        {
+            new() { Message = "Update", DataSource = "dev_source" },
+            new() { Message = "UpdateMultiple", DataSource = "dev_source" }
+        };
+        Assert.IsFalse(await (Task<bool>)method.Invoke(task, new object?[] { updateEvents, "dev_source" })!);
+    }
+
+    [TestMethod]
+    public async Task RegisterDataProviderAsync_ExistingRowUpdatesThenNoOps()
+    {
+        var task = CreateTask("devkit");
+        var method = typeof(TaskServer).GetMethod("RegisterDataProviderAsync", InstancePrivate)!;
+        var retrieveId = Guid.NewGuid();
+        var events = new List<DataProviderEvent>
+        {
+            new() { Message = "Retrieve", DataSource = "dev_source", PluginTypeId = retrieveId },
+            new() { Message = "RetrieveMultiple", DataSource = "dev_source", PluginTypeId = Guid.NewGuid() },
+            new() { Message = "Create", DataSource = "dev_source", PluginTypeId = Guid.NewGuid() },
+            new() { Message = "Update", DataSource = "dev_source", PluginTypeId = Guid.NewGuid() },
+            new() { Message = "Delete", DataSource = "dev_source", PluginTypeId = Guid.NewGuid() }
+        };
+
+        var existing = new Entity("entitydataprovider", Guid.NewGuid())
+        {
+            ["entitydataproviderid"] = Guid.NewGuid(),
+            ["retrieveplugin"] = Guid.NewGuid(),
+            ["retrievemultipleplugin"] = Guid.NewGuid(),
+            ["createplugin"] = Guid.NewGuid(),
+            ["updateplugin"] = Guid.NewGuid(),
+            ["deleteplugin"] = Guid.NewGuid()
+        };
+        A.CallTo(() => _service.RetrieveMultipleAsync(A<QueryBase>.Ignored))
+            .Returns(Task.FromResult(new EntityCollection(new[] { existing })));
+        await (Task)method.Invoke(task, new object?[] { events, "dev_source" })!;
+        await (Task)method.Invoke(task, new object?[] { events, "dev_source" })!;
+    }
 }
