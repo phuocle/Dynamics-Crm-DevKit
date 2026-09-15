@@ -69,7 +69,7 @@
 	  <!-- NuGet for package operations -->
 	  <PackageReference Include="NuGet.Packaging" Version="7.3.1" />
 	  <PackageReference Include="NuGet.Protocol" Version="7.3.1" />
-	  <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.6" />
+	  <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.11" />
 	  <!-- CodeDom for .NET 10 compatibility -->
 	  <PackageReference Include="System.CodeDom" Version="10.0.3" />
 	  <!-- Phase 2: Modern Interactive Authentication -->
