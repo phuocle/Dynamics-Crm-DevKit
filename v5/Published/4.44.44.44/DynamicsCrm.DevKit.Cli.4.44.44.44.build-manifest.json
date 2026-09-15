@@ -1,15 +1,15 @@
-﻿{
-    "version":  "4.44.44.44",
-    "buildDate":  "31.12.2026 23.59.59",
-    "configuration":  "Release",
-    "builtAt":  "2026-09-15T14:19:39.8543471+07:00",
-    "sourceRoot":  "D:\\github\\Dynamics-Crm-DevKit\\v5",
-    "gitCommit":  "6066f0ae0b0c5887bc24c56657fe39e1803e0636",
-    "gitDirty":  true,
-    "packagePath":  "D:\\github\\Dynamics-Crm-DevKit\\v5\\Published\\4.44.44.44\\DynamicsCrm.DevKit.Cli.4.44.44.44.nupkg",
-    "packageSha256":  "B2D2F9E347444DD3FF806849D8B3329E3667CA5505CA1C3605D3B4B02A28C7DC",
-    "installedAssemblyPath":  "C:\\Users\\p\\.dotnet\\tools\\.store\\dynamicscrm.devkit.cli\\4.44.44.44\\dynamicscrm.devkit.cli\\4.44.44.44\\tools\\net10.0\\any\\DynamicsCrm.DevKit.Cli.dll",
-    "installedAssemblySha256":  "6BAE6C321A716E206CBC18ADF9C2DCF83C41A1CAD456848036CF00F2C235D63F",
-    "devkitVersionOutput":  "4.44.44.44 Build: 31.12.2026 23.59.59",
-    "mcpRuntimeVerification":  "Call MCP whoami and compare structuredContent.devkit.version/build/assemblySha256/processStartTime with this manifest."
+{
+  "version": "4.44.44.44",
+  "buildDate": "31.12.2026 23.59.59",
+  "configuration": "Release",
+  "builtAt": "2026-09-15T17:21:09.0551677+07:00",
+  "sourceRoot": "D:\\github\\Dynamics-Crm-DevKit\\v5",
+  "gitCommit": "ce035a62446cc26f8381a7f75f5a05783bd8f0a8",
+  "gitDirty": true,
+  "packagePath": "D:\\github\\Dynamics-Crm-DevKit\\v5\\Published\\4.44.44.44\\DynamicsCrm.DevKit.Cli.4.44.44.44.nupkg",
+  "packageSha256": "65ED5AA915D96BBD0EFFD72DC627C2BEBE7C6C0AE1F0E23BA2DD6297E46B7884",
+  "installedAssemblyPath": "C:\\Users\\p\\.dotnet\\tools\\.store\\dynamicscrm.devkit.cli\\4.44.44.44\\dynamicscrm.devkit.cli\\4.44.44.44\\tools\\net10.0\\any\\DynamicsCrm.DevKit.Cli.dll",
+  "installedAssemblySha256": "DC60747B99EEAE697AE6298EE5CD866C43F3663772F7B102F86B5A21050F997E",
+  "devkitVersionOutput": "4.44.44.44 Build: 31.12.2026 23.59.59",
+  "mcpRuntimeVerification": "Call MCP whoami and compare structuredContent.devkit.version/build/assemblySha256/processStartTime with this manifest."
 }

@@ -24,11 +24,13 @@ namespace DynamicsCrm.DevKit2019.UnitTests
             // SetWindowIcon looks for icon32.png next to the DynamicsCrm.DevKit.2019 assembly.
             var assemblyDir = Path.GetDirectoryName(typeof(FormReportMapping).Assembly.Location);
             var iconTarget = Path.Combine(assemblyDir, "icon32.png");
-            var iconSource = FindRepoFile("DynamicsCrm.DevKit.2019", "icon32.png");
-            if (iconSource != null && !File.Exists(iconTarget))
+            var iconSource = FindRepoFile("DynamicsCrm.DevKit.Vsix.2019", "icon32.png");
+            Assert.IsNotNull(iconSource, "The window-icon fixture must be present in the renamed VSIX 2019 project.");
+            if (!File.Exists(iconTarget))
             {
                 File.Copy(iconSource, iconTarget);
             }
+            Assert.IsTrue(File.Exists(iconTarget), "The window-icon fixture must be copied beside the product assembly.");
         }
 
         private static string FindRepoFile(string projectDir, string fileName)
@@ -88,6 +90,7 @@ namespace DynamicsCrm.DevKit2019.UnitTests
             StaRunner.Run(() =>
             {
                 form = new FormReportMapping(client, @"C:\x\a.rdl", cached);
+                Assert.IsNotNull(form.Icon, "The form must load the window-icon fixture.");
                 Assert.AreEqual(cached.ReportId, ((DeployReport)form.comboReports.SelectedItem).ReportId);
                 Assert.IsTrue(form.buttonOK.IsEnabled);
                 Assert.AreEqual(System.Windows.Visibility.Collapsed, form.textStatus.Visibility);

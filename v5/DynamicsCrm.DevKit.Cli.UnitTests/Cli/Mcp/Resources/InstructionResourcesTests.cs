@@ -185,4 +185,73 @@ public class InstructionResourcesTests
         StringAssert.Contains(result, "DATEADD");
         StringAssert.Contains(result, "get_tables");
     }
+
+    [TestMethod]
+    public void SqlInstructions_UsesCurrentMetadataParametersAndDateDetailLevel()
+    {
+        var result = InstructionResources.SqlInstructions();
+
+        StringAssert.Contains(result, "get_tables(entity_name='account', detail_level='standard')");
+        StringAssert.Contains(result, "get_tables(entity_name='account', filter='createdon', detail_level='full')");
+        Assert.IsFalse(result.Contains("get_tables(name="));
+        Assert.IsFalse(result.Contains("include_columns"));
+        StringAssert.Contains(result, "primaryIdAttribute");
+        StringAssert.Contains(result, "`email` is `activityid`");
+        StringAssert.Contains(result, "`behavior` field (`DateTimeBehavior`");
+        foreach (var behavior in new[] { "UserLocal", "DateOnly", "TimeZoneIndependent" })
+            StringAssert.Contains(result, behavior);
+    }
+
+    [TestMethod]
+    public void SqlInstructions_RewritesMembershipAndAggregateFiltersWithoutChangingTheirMeaning()
+    {
+        var result = InstructionResources.SqlInstructions();
+
+        StringAssert.Contains(result, "SELECT a.accountid, a.name FROM account AS a WHERE a.accountid IN (SELECT c.parentcustomerid FROM contact AS c WHERE c.statecode = 0)");
+        StringAssert.Contains(result, "SELECT DISTINCT a.accountid, a.name FROM account AS a INNER JOIN contact AS c ON a.accountid = c.parentcustomerid WHERE c.statecode = 0");
+        Assert.IsFalse(result.Contains("WHERE id IN"));
+        Assert.IsFalse(result.Contains("SELECT accountid FROM contact"));
+        StringAssert.Contains(result, "Do not assume every `EXISTS` or `NOT EXISTS`");
+        StringAssert.Contains(result, "keep `contact_count > 5` client-side");
+        StringAssert.Contains(result, "checking `result_truncated=false`");
+        StringAssert.Contains(result, "`WHERE` filters input before aggregation");
+        StringAssert.Contains(result, "not equivalent to filtering groups");
+        StringAssert.Contains(result, "derive the year and count rows per year client-side after checking `result_truncated=false`");
+    }
+
+    [TestMethod]
+    public void SqlInstructions_ExplainsOutputCompletenessAndTopConversion()
+    {
+        var result = InstructionResources.SqlInstructions();
+
+        foreach (var contract in new[]
+        {
+            "1–50000, default 5000", "get_all=false", "get_all=true",
+            "TOP n", "TOP (n)", "DISTINCT TOP n", "min(max_records, n)",
+            "result_truncated=true", "rows were omitted", "continuation was left unread",
+            "Reaching the cap alone does not prove truncation", " (partial results)",
+            "`request_url` is the last request made", "not a resume token",
+            "0x8004E023", "not fixed by lowering `max_records`"
+        })
+            StringAssert.Contains(result, contract);
+        StringAssert.Contains(result, "returns guidance to call `execute_sql`; it does not execute SQL");
+        Assert.IsFalse(result.Contains("redirected here"));
+    }
+
+    [TestMethod]
+    public void SqlInstructions_LinksSqlRulesAndLimitsJoinAndDateFunctionAdvice()
+    {
+        var result = InstructionResources.SqlInstructions();
+        const string sqlDocumentation = "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/query/sql";
+
+        StringAssert.Contains(result, sqlDocumentation + ")");
+        StringAssert.Contains(result, sqlDocumentation + "#additional-on-filters");
+        StringAssert.Contains(result, sqlDocumentation + "#using-dateadd-and-getutcdate-functions");
+        StringAssert.Contains(result, "equality between a column from each table");
+        StringAssert.Contains(result, "using `AND`");
+        StringAssert.Contains(result, "apply those filters to the joined table");
+        StringAssert.Contains(result, "applies in `WHERE` and `ON`");
+        StringAssert.Contains(result, "never to column arguments");
+        StringAssert.Contains(result, "#ordering-and-paging");
+    }
 }

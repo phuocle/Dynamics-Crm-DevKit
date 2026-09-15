@@ -44,7 +44,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- get_tables → discover entity and attribute logical names before querying\n" +
             "- execute_fetchxml → alternative for FetchXML-specific conditions or deep hierarchies\n" +
-            "- execute_webapi → raw REST calls (non-SQL; the ?sql= query option is redirected here)\n" +
+            "- execute_webapi → raw REST calls (non-SQL; ?sql= returns guidance to call execute_sql)\n" +
             "- docs://instructions_for_sql → Dataverse SQL syntax rules and conversion cheat sheet")]
         public async Task<CallToolResult> execute_sql(
             [Description("SQL SELECT query. Lowercase logical names. No SELECT *.")] string sql = "",
@@ -85,7 +85,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (!int.TryParse(topText, out var top) || top < 1)
                         return Error("TOP must be a positive integer supported by execute_sql.",
                             "Use TOP n or TOP (n), where n is a positive integer, or pass the limit with max_records.");
-                    if (Regex.IsMatch(sql.Substring(topMatch.Length), @"^\s*(?:percent\b|with\s+ties\b)", RegexOptions.IgnoreCase))
+                    // Reject a numeric prefix of an expression or malformed parentheses before rewriting TOP.
+                    // A following '*' is left to the existing SELECT-star guard below.
+                    if (Regex.IsMatch(sql.Substring(topMatch.Length), @"^\s*(?:percent\b|with\s+ties\b|[(),.+\-/%&|^~<>=])", RegexOptions.IgnoreCase))
                         return Error("TOP must be a positive integer supported by execute_sql.",
                             "Use TOP n or TOP (n), where n is a positive integer, or pass the limit with max_records.");
                     max_records = Math.Min(max_records, top);
@@ -198,8 +200,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         break;
                     }
 
-                    // Guard: a page that fills max_records exactly must stop here —
-                    // following nextLink would request odata.maxpagesize=0 (server rejects it).
+                    // Stop at the cap without probing another page. The cap alone does not prove truncation.
                     if (rows.Count >= max_records)
                     {
                         truncated = hasNextLink;
@@ -297,10 +298,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             for (var current = exception; current != null; current = current.InnerException)
             {
                 if (current is FaultException<OrganizationServiceFault> fault && fault.Detail != null &&
-                    (fault.Detail.ErrorCode == unchecked((int)0x80041102) ||
-                     fault.Detail.ErrorCode == -2147217150))
-                    return true;
-                if (current.Message?.IndexOf("QueryBuilderNoEntity", StringComparison.OrdinalIgnoreCase) >= 0)
+                    fault.Detail.ErrorCode == unchecked((int)0x80041102))
                     return true;
             }
             return false;
