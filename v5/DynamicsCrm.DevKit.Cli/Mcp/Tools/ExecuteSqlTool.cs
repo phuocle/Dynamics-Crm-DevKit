@@ -7,9 +7,12 @@ using System.ComponentModel;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Shared.Services;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -36,7 +39,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Run a SQL SELECT query against Dataverse in single-page or auto-paging mode.\n\n" +
             "WHEN TO USE:\n" +
-            "- Query Dataverse records with standard SQL SELECT syntax (JOINs, aggregates, WHERE, ORDER BY)\n" +
+            "- Query Dataverse records with the Dataverse Web API SQL subset (JOINs, aggregates, WHERE, ORDER BY)\n" +
             "- Read-only analytical queries, multi-table joins, or summaries after validating logical names\n\n" +
             "RELATED TOOLS:\n" +
             "- get_tables → discover entity and attribute logical names before querying\n" +
@@ -66,12 +69,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         "execute_sql accepts a single SELECT statement only — remove the extra statements separated by ';'. " +
                         "Dataverse SQL is read-only; use manage_record for create, update, or delete operations.");
 
+                if (max_records < 1 || max_records > 50000)
+                    return Error("max_records must be between 1 and 50000.",
+                        "Use a value from 1 to 50000. Default is 5000; use 10-100 for samples.");
+
                 // Unwrap TOP n — the ?sql= endpoint rejects TOP; convert it to max_records instead.
+                if (SqlQueryResult.TopKeywordRegex.IsMatch(sql) && !SqlQueryResult.TopRegex.IsMatch(sql))
+                    return Error("TOP must be a positive integer supported by execute_sql.",
+                        "Use TOP n or TOP (n), where n is a positive integer, or pass the limit with max_records.");
+
                 var topMatch = SqlQueryResult.TopRegex.Match(sql);
                 if (topMatch.Success)
                 {
-                    if (int.TryParse(topMatch.Groups[2].Value, out var top) && top >= 1 && top <= max_records)
-                        max_records = top;
+                    var topText = topMatch.Groups[2].Success ? topMatch.Groups[2].Value : topMatch.Groups[3].Value;
+                    if (!int.TryParse(topText, out var top) || top < 1)
+                        return Error("TOP must be a positive integer supported by execute_sql.",
+                            "Use TOP n or TOP (n), where n is a positive integer, or pass the limit with max_records.");
+                    if (Regex.IsMatch(sql.Substring(topMatch.Length), @"^\s*(?:percent\b|with\s+ties\b)", RegexOptions.IgnoreCase))
+                        return Error("TOP must be a positive integer supported by execute_sql.",
+                            "Use TOP n or TOP (n), where n is a positive integer, or pass the limit with max_records.");
+                    max_records = Math.Min(max_records, top);
                     sql = SqlQueryResult.TopRegex.Replace(sql, m => "SELECT " + m.Groups[1].Value, 1).Trim();
                 }
 
@@ -84,26 +101,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error("Only SELECT statements are supported.",
                         "Dataverse SQL is read-only. Use manage_record for create, update, or delete operations.");
 
-                if (SqlQueryResult.SelectStarRegex.IsMatch(sql))
+                var syntaxSql = MaskStringLiterals(sql);
+
+                if (SqlQueryResult.SelectStarRegex.IsMatch(syntaxSql))
                     return Error("SELECT * is not supported.",
-                        "Call get_tables(name='...', include_columns=true) to view column names, then name required columns explicitly.");
+                        "Call get_tables(entity_name='<table>', detail_level='standard') to view column names, then name required columns explicitly.");
 
-                if (SqlQueryResult.HavingRegex.IsMatch(sql))
+                if (SqlQueryResult.HavingRegex.IsMatch(syntaxSql))
                     return Error("HAVING clause is not supported.",
-                        "Filter with WHERE before aggregation, or aggregate client-side from the returned rows.");
+                        "Filter with WHERE before aggregation, or aggregate client-side from the returned rows. Filtering aggregate groups client-side is a separate operation and must account for partial results.");
 
-                if (Regex.IsMatch(sql, @"\bwhere\b[^)]*\(\s*select\b", RegexOptions.IgnoreCase) ||
-                    SqlQueryResult.ExistsRegex.IsMatch(sql))
+                if (Regex.IsMatch(syntaxSql, @"\bwhere\b[^)]*\(\s*select\b", RegexOptions.IgnoreCase) ||
+                    SqlQueryResult.ExistsRegex.IsMatch(syntaxSql))
                     return Error("Subqueries in WHERE clause are not supported.",
                         "Rewrite with INNER JOIN on the related table instead. Read docs://instructions_for_sql for the conversion cheat sheet.");
 
-                if (SqlQueryResult.OffsetFetchRegex.IsMatch(sql))
+                if (SqlQueryResult.OffsetFetchRegex.IsMatch(syntaxSql))
                     return Error("OFFSET/FETCH is not supported.",
                         "Use max_records and get_all parameters for paging instead.");
-
-                if (max_records < 1 || max_records > 50000)
-                    return Error("max_records must be between 1 and 50000.",
-                        "Use a value from 1 to 50000. Default is 5000; use 10-100 for samples.");
 
                 // Validate base table (FROM clause) and resolve it to the entity set name
                 // required as the URL path segment of the ?sql= endpoint.
@@ -112,17 +127,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (fromMatch.Success)
                 {
                     var table = fromMatch.Groups[1].Value.ToLowerInvariant();
-                    var entityMetadata = await _metadataService.GetEntityMetadataAsync(table);
-                    // Note: GetEntityMetadataAsync returns a stub EntityMetadata (EntitySetName == null) when the table does not exist.
+                    EntityMetadata entityMetadata;
+                    try
+                    {
+                        entityMetadata = await _metadataService.FetchEntityMetadataAsync(table);
+                    }
+                    catch (Exception metadataException)
+                    {
+                        if (IsEntityNotFound(metadataException))
+                            return Error($"Table '{table}' was not found.",
+                                "Call get_tables(entity_name='<table>', detail_level='standard') to check the correct logical name, or get_tables() to list all tables.");
+                        return ThrowExceptionFriendly(metadataException);
+                    }
                     if (entityMetadata == null || string.IsNullOrEmpty(entityMetadata.EntitySetName))
-                        return Error($"Table '{table}' was not found.",
-                            "Call get_tables(name='<table>') to check the correct logical name, or get_tables() to list all tables.");
+                        return Error("Metadata response is missing EntitySetName.",
+                            "Retry metadata discovery with get_tables(entity_name='<table>', detail_level='standard').");
                     entitySetName = entityMetadata.EntitySetName;
                 }
 
                 var rows = new List<Dictionary<string, object>>();
                 var requestUrl = $"{entitySetName ?? "accounts"}?sql={Uri.EscapeDataString(sql)}";
                 var truncated = false;
+                var pageSize = Math.Min(max_records, 5000);
 
                 while (true)
                 {
@@ -134,7 +160,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         {
                             ["Prefer"] = new List<string>
                             {
-                                $"odata.maxpagesize={Math.Min(max_records - rows.Count, 5000)}",
+                                $"odata.maxpagesize={pageSize}",
                                 "odata.include-annotations=\"*\""
                             }
                         },
@@ -146,6 +172,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     using var doc = JsonDocument.Parse(body);
                     var root = doc.RootElement;
+
+                    var hasNextLink = root.TryGetProperty("@odata.nextLink", out var nextLink) &&
+                        nextLink.ValueKind == JsonValueKind.String &&
+                        !string.IsNullOrWhiteSpace(nextLink.GetString());
 
                     if (root.TryGetProperty("value", out var value) && value.ValueKind == JsonValueKind.Array)
                     {
@@ -159,15 +189,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         }
                     }
 
-                    if (truncated || !get_all) break;
+                    if (truncated)
+                        break;
+
+                    if (!get_all)
+                    {
+                        truncated = hasNextLink;
+                        break;
+                    }
 
                     // Guard: a page that fills max_records exactly must stop here —
                     // following nextLink would request odata.maxpagesize=0 (server rejects it).
-                    if (rows.Count >= max_records) { truncated = true; break; }
+                    if (rows.Count >= max_records)
+                    {
+                        truncated = hasNextLink;
+                        break;
+                    }
 
-                    if (root.TryGetProperty("@odata.nextLink", out var nextLink) &&
-                        nextLink.ValueKind == JsonValueKind.String &&
-                        !string.IsNullOrWhiteSpace(nextLink.GetString()))
+                    if (hasNextLink)
                     {
                         var next = nextLink.GetString();
                         var apiIndex = next.IndexOf("/api/data/", StringComparison.OrdinalIgnoreCase);
@@ -216,6 +255,53 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 if (c == '\'') inLiteral = true;
                 else if (c == ';') return true;
+            }
+            return false;
+        }
+
+        private static string MaskStringLiterals(string sql)
+        {
+            var chars = sql.ToCharArray();
+            var inLiteral = false;
+            for (var i = 0; i < chars.Length; i++)
+            {
+                if (inLiteral)
+                {
+                    if (chars[i] == '\'')
+                    {
+                        if (i + 1 < chars.Length && chars[i + 1] == '\'')
+                        {
+                            chars[i] = ' ';
+                            chars[++i] = ' ';
+                            continue;
+                        }
+                        chars[i] = ' ';
+                        inLiteral = false;
+                    }
+                    else
+                    {
+                        chars[i] = ' ';
+                    }
+                }
+                else if (chars[i] == '\'')
+                {
+                    chars[i] = ' ';
+                    inLiteral = true;
+                }
+            }
+            return new string(chars);
+        }
+
+        private static bool IsEntityNotFound(Exception exception)
+        {
+            for (var current = exception; current != null; current = current.InnerException)
+            {
+                if (current is FaultException<OrganizationServiceFault> fault && fault.Detail != null &&
+                    (fault.Detail.ErrorCode == unchecked((int)0x80041102) ||
+                     fault.Detail.ErrorCode == -2147217150))
+                    return true;
+                if (current.Message?.IndexOf("QueryBuilderNoEntity", StringComparison.OrdinalIgnoreCase) >= 0)
+                    return true;
             }
             return false;
         }

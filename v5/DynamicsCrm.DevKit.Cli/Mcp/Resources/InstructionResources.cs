@@ -1110,9 +1110,9 @@ NotSpecified(0), Paused(1), Running(2), Waiting(3), Succeeded(4), Skipped(5), Su
 
 ## CRITICAL: Inspect Table Schema Before Composing SQL
 - Never guess column names or publisher prefixes on custom tables (e.g. `new_`, `hs_`, `crm_`).
-- ALWAYS call `get_tables(name='...', include_columns=true)` FIRST if you do not know the exact column logical names.
+- ALWAYS call `get_tables(entity_name='account', detail_level='standard')` FIRST if you do not know the exact column logical names; replace `account` with the real logical name. Use `get_tables()` to list tables.
 - `SELECT *` is STRICTLY UNSUPPORTED. You must explicitly specify every column you need.
-- Primary Key is ALWAYS `{entity_logical_name}id` (e.g. `accountid`, `contactid`).
+- Read `primaryIdAttribute` from the table metadata result. Do not assume it is `{entity_logical_name}id` (for example, the primary key of `email` is `activityid`).
 
 ## Column Type Specifics
 1. **Choice / OptionSet / StateCode / StatusCode**:
@@ -1123,8 +1123,15 @@ NotSpecified(0), Paused(1), Running(2), Waiting(3), Succeeded(4), Skipped(5), Su
    - 1 (parent) table uses primary key (`accountid`).
    - Example: `INNER JOIN account AS a ON c.parentcustomerid = a.accountid`
 3. **Dates**:
-   - Stored in UTC. Use ISO date literals `'2026-01-15'`.
-   - Only `DATEADD(day/month/year, -N, GETUTCDATE())` or `DATEADD(..., 'literal')` are allowed in WHERE/ON.
+   - Read the column's `DateTimeBehavior` before constructing filters. Distinguish `UserLocal`, `DateOnly`, and `TimeZoneIndependent`; do not assume every stored value is UTC or convert every returned date value.
+   - Use the date functions and date parts illustrated in the linked Dataverse SQL documentation; do not infer broader SQL Server function support.
+
+## Paging and Limits
+- `execute_sql` returns the Dataverse Web API SQL subset, not standard SQL or the full SQL Server dialect. Read this resource before composing complex queries.
+- When `execute_webapi` receives a `?sql=` query option, it returns guidance to call `execute_sql`; it does not execute SQL on behalf of the caller.
+- Use `ORDER BY` with a suitable distinguishing key for stable paging. Do not add a key to `SELECT` or `ORDER BY` automatically because that can change `DISTINCT` or grouping semantics.
+- `max_records` is the tool's output cap (1–50000), while aggregate queries have a separate 50000-record input limit. Error `0x8004E023` is not fixed by lowering `max_records`.
+- Keep JOIN conditions in `ON`; additional `ON` filters are supported as documented by Dataverse SQL.
 
 ## Conversion Cheat Sheet (Standard SQL -> Dataverse SQL)
 
@@ -1132,11 +1139,11 @@ NotSpecified(0), Paused(1), Running(2), Waiting(3), Succeeded(4), Skipped(5), Su
 |-----------------------------------|--------------------------|------------|
 | `SELECT * FROM account` | `SELECT a.name, a.telephone1 FROM account AS a` | `SELECT *` not supported. Name all columns explicitly. |
 | `SELECT TOP 10 name FROM account` | Pass `max_records: 10` parameter (or write TOP — it is converted automatically) | Paging is controlled by the tool, not the SQL. |
-| `SELECT name FROM account WHERE id IN (SELECT accountid FROM contact)` | `SELECT DISTINCT a.name FROM account AS a INNER JOIN contact AS c ON a.accountid = c.parentcustomerid` | Subqueries in `WHERE` are unsupported. Use `JOIN`. |
+| `SELECT name FROM account WHERE id IN (SELECT accountid FROM contact)` | `SELECT DISTINCT a.accountid, a.name FROM account AS a INNER JOIN contact AS c ON a.accountid = c.parentcustomerid` | Subqueries in `WHERE` are unsupported. Use `JOIN`, preserving the identifying key and the original relationship/condition. |
 | `WHERE a.modifiedon > a.createdon` | Filter client-side or use `execute_fetchxml` | Column-to-column comparison unsupported. |
-| `SELECT COUNT(*) ... HAVING COUNT(*) > 5` | Filter with `WHERE` prior to aggregation, or aggregate in client | `HAVING` clause is unsupported. |
+| `SELECT COUNT(*) ... HAVING COUNT(*) > 5` | Filter with `WHERE` prior to aggregation, or aggregate in client | `HAVING` clause is unsupported. Filtering groups by aggregate client-side is a separate operation and must account for partial results. |
 | `SELECT YEAR(createdon), COUNT(*)` | Group by entity attribute only; process date parts in client | Functions in `SELECT` / `GROUP BY` are unsupported. |
-| `WHERE createdon >= GETDATE() - 7` | `WHERE createdon >= DATEADD(day, -7, GETUTCDATE())` | Only `DATEADD` and `GETUTCDATE()` supported in WHERE. |
+| `WHERE createdon >= GETDATE() - 7` | `WHERE createdon >= DATEADD(day, -7, GETUTCDATE())` | Use the documented DATEADD/GETUTCDATE exception in WHERE; do not generalize it to all functions or dateparts. |
 | `SELECT 'Total', COUNT(*)` | `SELECT COUNT(*) AS total_count` | Literal values in `SELECT` list unsupported. |
 | `WHERE 1=1` | Omit dummy condition | Literal-to-literal comparisons unsupported. |
 ";
