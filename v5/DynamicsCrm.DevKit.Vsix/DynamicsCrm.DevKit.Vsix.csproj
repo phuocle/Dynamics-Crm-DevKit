@@ -197,10 +197,10 @@
     <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="9.0.2.60" />
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.1.65" />
     <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client">
-      <Version>1.2.26</Version>
+      <Version>1.2.27</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Identity.Client.Extensions.Msal">
-      <Version>4.88.0</Version>
+      <Version>4.90.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.14.40265" ExcludeAssets="runtime">
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -526,9 +526,35 @@
     <!-- MSBuild 18 no longer carries TemplateProjectOutputGroup outputs from legacy project
          references into VSIXSourceItem. Include only the archive produced by each template project. -->
     <ItemGroup>
-      <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\*\bin\$(Configuration)\ProjectTemplates\**\*.zip" />
-      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\*\bin\$(Configuration)\ItemTemplates\**\*.zip"
-                            Exclude="..\ItemTemplates\CSharp\18.ReportItemTemplate\bin\$(Configuration)\ItemTemplates\**\*.zip" />
+      <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\bin\$(Configuration)\ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpSharedProjectTemplate.zip" />
+      <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\02.ConsoleProjectTemplate\bin\$(Configuration)\ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpConsoleProjectTemplate.zip" />
+      <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\03.ConsoleCoreProjectTemplate\bin\$(Configuration)\ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpConsoleCoreProjectTemplate.zip" />
+      <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\04.ServerProjectTemplate\bin\$(Configuration)\ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpServerProjectTemplate.zip" />
+      <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\05.PackageProjectTemplate\bin\$(Configuration)\ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpPackageProjectTemplate.zip" />
+      <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\bin\$(Configuration)\ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpWebResourceProjectTemplate.zip" />
+      <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\bin\$(Configuration)\ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpSharedTestProjectTemplate.zip" />
+      <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\08.ProxyTypesProjectTemplate\bin\$(Configuration)\ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpProxyTypesProjectTemplate.zip" />
+      <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\09.TestProjectTemplate\bin\$(Configuration)\ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpTestProjectTemplate.zip" />
+      <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\10.TestUiProjectTemplate\bin\$(Configuration)\ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpTestUiProjectTemplate.zip" />
+      <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\11.SolutionPackagerProjectTemplate\bin\$(Configuration)\ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpSolutionPackagerProjectTemplate.zip" />
+      <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\12.ReportProjectTemplate\bin\$(Configuration)\ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpReportProjectTemplate.zip" />
+      <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\bin\$(Configuration)\ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpWebResourceTsProjectTemplate.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\01.LateBoundItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpLateBoundItemTemplate.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\02.JsFormItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpJsFormItemTemplate.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\03.JsWebApiItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpJsWebApiItemTemplate.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\04.PluginItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpPluginItemTemplate.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\05.CustomActionItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpCustomActionItemTemplate.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\06.CustomApiItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpCustomApiItemTemplate.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\07.WorkflowItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpWorkflowItemTemplate.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\08.DataProviderItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpDataProviderItemTemplate.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\09.TestItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpTestItemTemplate.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\10.UiTestItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpUiTestItemTemplate.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\11.ResourceStringItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpResourceStringItemTemplate.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\13.BatFileItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\BatFileItemTemplate.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\14.JsFormTsItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpJsFormTsItemTemplate.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\15.TsWebApiItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpTsWebApiItemTemplate.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\16.TsDialogItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpTsDialogItemTemplate.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\17.JsDialogItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpJsDialogItemTemplate.zip" />
       <VSIXSourceItem Include="@(_ProjectTemplateArchive)">
         <VSIXSubPath>ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033</VSIXSubPath>
       </VSIXSourceItem>

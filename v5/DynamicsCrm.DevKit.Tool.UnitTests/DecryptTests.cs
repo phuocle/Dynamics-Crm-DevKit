@@ -29,6 +29,10 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
         {
             var cipher = Encrypt("secret-password");
             Assert.AreEqual("secret-password", Helper.DecryptString(cipher));
+            Assert.AreEqual("secret-password", DynamicsCrm.DevKit.Shared.Helper.DecryptString(cipher));
+            Assert.AreEqual(string.Empty, DynamicsCrm.DevKit.Shared.Helper.DecryptString(null));
+            Assert.AreEqual(string.Empty, DynamicsCrm.DevKit.Shared.Helper.DecryptString(string.Empty));
+            Assert.AreEqual("not base64", DynamicsCrm.DevKit.Shared.Helper.DecryptString("not base64"));
         }
 
         [TestMethod]
