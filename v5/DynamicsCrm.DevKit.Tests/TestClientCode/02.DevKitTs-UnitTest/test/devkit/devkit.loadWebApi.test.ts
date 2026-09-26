@@ -7,7 +7,7 @@
  * - Execute and ExecuteMultiple
  * - RetrieveRecords with FetchXML parsing and factory/constructor support
  * - Online.Execute and Online.ExecuteMultiple
- * - Offline.IsAvailable
+ * - Offline.IsAvailable and Offline.IsAvailableOffline
  * - extractEntityName helper for FetchXML parsing
  * - Edge cases (null WebApi, callback vs promise patterns)
  * 
@@ -76,7 +76,7 @@ describe('loadWebApi Tests', () => {
                 executeMultiple: (requests: any[]) => Promise.resolve([{ online: true }])
             },
             offline: {
-                isAvailable: (entity: string) => entity === 'account'
+                isAvailableOffline: (entity: string) => entity === 'account'
             }
         };
 
@@ -328,16 +328,18 @@ describe('loadWebApi Tests', () => {
     // ========================================================================
 
     describe('Offline', () => {
-        test('Offline.IsAvailable should return true for account', () => {
+        test('Offline.IsAvailable and Offline.IsAvailableOffline should return true for account', () => {
             setupWebApiMock();
             const form = getForm();
             expect(form.WebApi.Offline.IsAvailable('account')).toBe(true);
+            expect(form.WebApi.Offline.IsAvailableOffline('account')).toBe(true);
         });
 
-        test('Offline.IsAvailable should return false for contact', () => {
+        test('Offline.IsAvailable and Offline.IsAvailableOffline should return false for contact', () => {
             setupWebApiMock();
             const form = getForm();
             expect(form.WebApi.Offline.IsAvailable('contact')).toBe(false);
+            expect(form.WebApi.Offline.IsAvailableOffline('contact')).toBe(false);
         });
     });
 
@@ -626,12 +628,13 @@ describe('loadWebApi Tests', () => {
             expect(() => form.WebApi.Online.Execute({})).not.toThrow();
         });
 
-        test('Offline.IsAvailable should return undefined when offline is null', () => {
+        test('Offline.IsAvailable and Offline.IsAvailableOffline should return undefined when offline is null', () => {
             (global as any).Xrm = { WebApi: { offline: null } };
             (global as any).window.Xrm = (global as any).Xrm;
 
             const form = getForm();
             expect(form.WebApi.Offline.IsAvailable('account')).toBeUndefined();
+            expect(form.WebApi.Offline.IsAvailableOffline('account')).toBeUndefined();
         });
     });
 

@@ -78,7 +78,7 @@ describe('devkit.ts - Utility Loading', () => {
             execute: jest.fn(),
             executeMultiple: jest.fn(),
             online: { execute: jest.fn(), executeMultiple: jest.fn() },
-            offline: { isAvailable: jest.fn() }
+            offline: { isAvailableOffline: jest.fn() }
         };
         (Xrm as any).Encoding = {
             htmlAttributeEncode: (a: string) => `htmlAttr:${a}`,

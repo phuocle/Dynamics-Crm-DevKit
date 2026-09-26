@@ -906,7 +906,8 @@ const devKit = (function () {
         });
         getter(obj, 'Offline', () => {
             const offline = {};
-            offline.IsAvailable = entityLogicalName => getOffline?.isAvailable(entityLogicalName);
+            offline.IsAvailable = entityLogicalName => getOffline?.isAvailableOffline(entityLogicalName);
+            offline.IsAvailableOffline = entityLogicalName => getOffline?.isAvailableOffline(entityLogicalName);
             return offline;
         });
         return obj;

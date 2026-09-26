@@ -589,7 +589,8 @@ function loadWebApi(): DevKit.IWebApi {
     });
     getter(obj, 'Offline', () => {
         const offline: any = {};
-        offline.IsAvailable = (entityLogicalName: string) => (getOffline as any)?.isAvailable(entityLogicalName);
+        offline.IsAvailable = (entityLogicalName: string) => (getOffline as any)?.isAvailableOffline(entityLogicalName);
+        offline.IsAvailableOffline = (entityLogicalName: string) => (getOffline as any)?.isAvailableOffline(entityLogicalName);
         return offline;
     });
     return obj;

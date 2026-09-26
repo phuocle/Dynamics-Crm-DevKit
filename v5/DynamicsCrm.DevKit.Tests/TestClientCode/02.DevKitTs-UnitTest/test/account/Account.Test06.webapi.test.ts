@@ -34,7 +34,7 @@ describe('devkit.ts - WebApi Loading', () => {
                 executeMultiple: jest.fn().mockResolvedValue([{ response: 'online-ok' }])
             },
             offline: {
-                isAvailable: jest.fn().mockReturnValue(true)
+                isAvailableOffline: jest.fn().mockReturnValue(true)
             }
         };
 
@@ -379,14 +379,18 @@ describe('devkit.ts - WebApi Loading', () => {
             expect(successCallback).toHaveBeenCalledWith([{ response: 'online-ok' }]);
         });
 
-        test('Offline.IsAvailable should call WebApi.offline.isAvailable', () => {
+        test('Offline.IsAvailable and Offline.IsAvailableOffline should call WebApi.offline.isAvailableOffline', () => {
             const formContext = createFormContext();
             const executionContext = { getFormContext: () => formContext };
             const form = new FormBase(executionContext, 'test', {});
 
             const result = form.WebApi.Offline.IsAvailable('account');
-            expect(mockWebApi.offline.isAvailable).toHaveBeenCalledWith('account');
+            expect(mockWebApi.offline.isAvailableOffline).toHaveBeenCalledWith('account');
             expect(result).toBe(true);
+
+            const resultOffline = form.WebApi.Offline.IsAvailableOffline('account');
+            expect(mockWebApi.offline.isAvailableOffline).toHaveBeenCalledWith('account');
+            expect(resultOffline).toBe(true);
         });
 
         test('RetrieveRecord with factory should transform result', async () => {

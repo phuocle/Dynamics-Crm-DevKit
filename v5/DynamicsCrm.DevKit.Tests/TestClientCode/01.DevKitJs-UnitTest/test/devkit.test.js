@@ -1568,7 +1568,7 @@ describe('devKit', () => {
                     executeMultiple: function () { onlineExecuteMultipleCalled = true; return mockPromise; }
                 },
                 offline: {
-                    isAvailable: function (entityName) { offlineAvailableCalled = true; return true; }
+                    isAvailableOffline: function (entityName) { offlineAvailableCalled = true; return true; }
                 }
             }
         };
@@ -1645,12 +1645,14 @@ describe('devKit', () => {
 
         online.ExecuteMultiple([{ getMetadata: () => ({}) }], successCallback, errorCallback);
 
-        // Test Offline.IsAvailable
+        // Test Offline.IsAvailable and Offline.IsAvailableOffline
         var offline = webApi.Offline;
         expect(offline).toBeDefined();
         var isAvailable = offline.IsAvailable("account");
         expect(offlineAvailableCalled).toBe(true);
         expect(isAvailable).toBe(true);
+        var isAvailableOffline = offline.IsAvailableOffline("account");
+        expect(isAvailableOffline).toBe(true);
     });
     test('devKit.LoadWebApi - Execute/ExecuteMultiple offline mode handling', () => {
         // Setup mock WebApi with offline mode enabled
@@ -2109,7 +2111,7 @@ describe('devKit', () => {
                     executeMultiple: function () { return mockPromise; }
                 },
                 offline: {
-                    isAvailable: function () { return true; }
+                    isAvailableOffline: function () { return true; }
                 }
             },
             Copilot: {
@@ -2170,7 +2172,7 @@ describe('devKit', () => {
         global.Xrm = {
             App: { addGlobalNotification: function () { return mockPromise; }, clearGlobalNotification: function () { return mockPromise; }, sidePanes: { state: 0, createPane: function () { return mockPromise; }, getPane: function () { }, getAllPanes: function () { }, getSelectedPane: function () { } } },
             Utility: { getGlobalContext: function () { return { client: {}, organizationSettings: {}, userSettings: { getTimeZoneOffsetMinutes: function () { } }, getClientUrl: function () { }, getVersion: function () { } }; } },
-            WebApi: { createRecord: function () { return mockPromise; }, online: { execute: function () { return mockPromise; }, executeMultiple: function () { return mockPromise; } }, offline: { isAvailable: function () { } } },
+            WebApi: { createRecord: function () { return mockPromise; }, online: { execute: function () { return mockPromise; }, executeMultiple: function () { return mockPromise; } }, offline: { isAvailableOffline: function () { } } },
             Copilot: { executeEvent: function () { return mockPromise; }, executePrompt: function () { return mockPromise; } }
         };
 
@@ -2211,7 +2213,7 @@ describe('devKit', () => {
         global.Xrm = {
             App: { addGlobalNotification: function () { return mockPromise; }, clearGlobalNotification: function () { return mockPromise; }, sidePanes: { state: 0, createPane: function () { return mockPromise; }, getPane: function () { }, getAllPanes: function () { }, getSelectedPane: function () { } } },
             Utility: { getGlobalContext: function () { return { client: {}, organizationSettings: {}, userSettings: { getTimeZoneOffsetMinutes: function () { } }, getClientUrl: function () { }, getVersion: function () { } }; } },
-            WebApi: { createRecord: function () { return mockPromise; }, online: { execute: function () { return mockPromise; }, executeMultiple: function () { return mockPromise; } }, offline: { isAvailable: function () { } } },
+            WebApi: { createRecord: function () { return mockPromise; }, online: { execute: function () { return mockPromise; }, executeMultiple: function () { return mockPromise; } }, offline: { isAvailableOffline: function () { } } },
             Copilot: { executeEvent: function () { return mockPromise; }, executePrompt: function () { return mockPromise; } }
         };
 
@@ -2250,7 +2252,7 @@ describe('devKit', () => {
         global.Xrm = {
             App: { addGlobalNotification: function () { return mockPromise; }, clearGlobalNotification: function () { return mockPromise; }, sidePanes: { state: 0, createPane: function () { return mockPromise; }, getPane: function () { }, getAllPanes: function () { }, getSelectedPane: function () { } } },
             Utility: { getGlobalContext: function () { return { client: {}, organizationSettings: {}, userSettings: { getTimeZoneOffsetMinutes: function () { } }, getClientUrl: function () { }, getVersion: function () { } }; } },
-            WebApi: { createRecord: function () { return mockPromise; }, online: { execute: function () { return mockPromise; }, executeMultiple: function () { return mockPromise; } }, offline: { isAvailable: function () { } } },
+            WebApi: { createRecord: function () { return mockPromise; }, online: { execute: function () { return mockPromise; }, executeMultiple: function () { return mockPromise; } }, offline: { isAvailableOffline: function () { } } },
             Copilot: { executeEvent: function () { return mockPromise; }, executePrompt: function () { return mockPromise; } }
         };
 
@@ -2297,7 +2299,7 @@ describe('devKit', () => {
         global.Xrm = {
             App: { addGlobalNotification: function () { return mockPromise; }, clearGlobalNotification: function () { return mockPromise; }, sidePanes: { state: 0, createPane: function () { return mockPromise; }, getPane: function () { }, getAllPanes: function () { }, getSelectedPane: function () { } } },
             Utility: { getGlobalContext: function () { return { client: {}, organizationSettings: {}, userSettings: { getTimeZoneOffsetMinutes: function () { } }, getClientUrl: function () { }, getVersion: function () { } }; } },
-            WebApi: { createRecord: function () { return mockPromise; }, online: { execute: function () { return mockPromise; }, executeMultiple: function () { return mockPromise; } }, offline: { isAvailable: function () { } } },
+            WebApi: { createRecord: function () { return mockPromise; }, online: { execute: function () { return mockPromise; }, executeMultiple: function () { return mockPromise; } }, offline: { isAvailableOffline: function () { } } },
             Copilot: { executeEvent: function () { return mockPromise; }, executePrompt: function () { return mockPromise; } }
         };
 
