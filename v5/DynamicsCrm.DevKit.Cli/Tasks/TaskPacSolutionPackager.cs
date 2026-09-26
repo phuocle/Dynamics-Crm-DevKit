@@ -128,7 +128,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                 };
                 process.Start();
+
+                // "pac help" output exceeds the OS pipe buffer: without draining
+                // both pipes concurrently the child blocks on a full pipe while
+                // WaitForExit waits for the child to exit (mutual wait, hangs).
+                var outputTask = process.StandardOutput.ReadToEndAsync();
+                var errorTask = process.StandardError.ReadToEndAsync();
                 process.WaitForExit();
+                _ = outputTask.GetAwaiter().GetResult();
+                _ = errorTask.GetAwaiter().GetResult();
                 return process.ExitCode == 0;
             }
             catch
