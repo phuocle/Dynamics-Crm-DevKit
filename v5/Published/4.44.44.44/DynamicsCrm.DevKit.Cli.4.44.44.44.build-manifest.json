@@ -1,15 +1,15 @@
-{
-  "version": "4.44.44.44",
-  "buildDate": "31.12.2026 23.59.59",
-  "configuration": "Release",
-  "builtAt": "2026-09-15T17:21:09.0551677+07:00",
-  "sourceRoot": "D:\\github\\Dynamics-Crm-DevKit\\v5",
-  "gitCommit": "ce035a62446cc26f8381a7f75f5a05783bd8f0a8",
-  "gitDirty": true,
-  "packagePath": "D:\\github\\Dynamics-Crm-DevKit\\v5\\Published\\4.44.44.44\\DynamicsCrm.DevKit.Cli.4.44.44.44.nupkg",
-  "packageSha256": "65ED5AA915D96BBD0EFFD72DC627C2BEBE7C6C0AE1F0E23BA2DD6297E46B7884",
-  "installedAssemblyPath": "C:\\Users\\p\\.dotnet\\tools\\.store\\dynamicscrm.devkit.cli\\4.44.44.44\\dynamicscrm.devkit.cli\\4.44.44.44\\tools\\net10.0\\any\\DynamicsCrm.DevKit.Cli.dll",
-  "installedAssemblySha256": "DC60747B99EEAE697AE6298EE5CD866C43F3663772F7B102F86B5A21050F997E",
-  "devkitVersionOutput": "4.44.44.44 Build: 31.12.2026 23.59.59",
-  "mcpRuntimeVerification": "Call MCP whoami and compare structuredContent.devkit.version/build/assemblySha256/processStartTime with this manifest."
+﻿{
+    "version":  "4.44.44.44",
+    "buildDate":  "26.09.2026 16:16:11",
+    "configuration":  "Debug",
+    "builtAt":  "2026-09-26T16:16:17.7089652+07:00",
+    "sourceRoot":  "E:\\src\\github\\Dynamics-Crm-DevKit\\v5",
+    "gitCommit":  "a9f2d967209d1642e0fb49ca83f870c3d3810591",
+    "gitDirty":  true,
+    "packagePath":  "E:\\src\\github\\Dynamics-Crm-DevKit\\v5\\Published\\4.44.44.44\\DynamicsCrm.DevKit.Cli.4.44.44.44.nupkg",
+    "packageSha256":  "48EE4DFB7D26AE3C79B13C43885C8F6F2D201BF87A4B1E28E90A859CF6C20D7F",
+    "installedAssemblyPath":  "C:\\Users\\dev\\.dotnet\\tools\\.store\\dynamicscrm.devkit.cli\\4.44.44.44\\dynamicscrm.devkit.cli\\4.44.44.44\\tools\\net10.0\\any\\DynamicsCrm.DevKit.Cli.dll",
+    "installedAssemblySha256":  "F202A2A983317F841652E08190446CEDE4E9F3BD713090F7A8FCAE3E1FEC0449",
+    "devkitVersionOutput":  "4.44.44.44 Build: 26.09.2026 16:16:11",
+    "mcpRuntimeVerification":  "Call MCP whoami and compare structuredContent.devkit.version/build/assemblySha256/processStartTime with this manifest."
 }
