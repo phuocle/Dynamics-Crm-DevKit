@@ -66,3 +66,4 @@ D:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAddCrmPluginRegist
 
 # ZCode local session data
 .zcode/
+.zcodeignore
