@@ -1,4 +1,4 @@
-# Run Unit Tests with Code Coverage for all five DevKit components
+﻿# Run Unit Tests with Code Coverage for all five DevKit components
 # (Cli, Tool, Vsix, Analyzers, 2019) and generate a per-component HTML
 # report under <component project>\CoverageReport\.
 #
@@ -15,7 +15,7 @@
 param(
     [string[]]$Components = @("Cli", "Tool", "Vsix", "Analyzers", "2019"),
     [switch]$OpenReport = $false,
-    [string]$VSMSBuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
+    [string]$VSMSBuild = ""
 )
 
 $ColorTitle = "Cyan"
@@ -106,15 +106,33 @@ if ($unknown) {
     exit 1
 }
 
-# VS MSBuild is only needed for the legacy non-SDK 2019 suite.
+# VS MSBuild is only needed for the legacy non-SDK 2019 suite. It is located by
+# explicit parameter > vswhere discovery > known VS edition install paths.
 $vstest = $null
 if ($selected.Key -contains "2019") {
+    if ([string]::IsNullOrWhiteSpace($VSMSBuild)) {
+        $candidates = @()
+        $vswhere = Join-Path ${env:ProgramFiles(x86)} "Microsoft Visual Studio\Installer\vswhere.exe"
+        if (Test-Path $vswhere) {
+            $installPath = & $vswhere -latest -products '*' -requires Microsoft.Component.MSBuild -property installationPath | Select-Object -First 1
+            if ($installPath) { $candidates += (Join-Path $installPath "MSBuild\Current\Bin\MSBuild.exe") }
+        }
+        $candidates += @("Professional", "Enterprise", "Community", "BuildTools") | ForEach-Object {
+            "C:\Program Files\Microsoft Visual Studio\18\$_\MSBuild\Current\Bin\MSBuild.exe"
+        }
+        $VSMSBuild = $candidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+    }
+    if ([string]::IsNullOrWhiteSpace($VSMSBuild) -or -not (Test-Path $VSMSBuild)) {
+        Write-Host "VS MSBuild not found (pass -VSMSBuild explicitly)" -ForegroundColor $ColorError
+        exit 1
+    }
     $vsRoot = Split-Path (Split-Path (Split-Path (Split-Path $VSMSBuild)))
     $vstest = Join-Path $vsRoot "Common7\IDE\Extensions\TestPlatform\vstest.console.exe"
     if (-not (Test-Path $vstest)) {
         Write-Host "vstest.console.exe not found at $vstest (check -VSMSBuild)" -ForegroundColor $ColorError
         exit 1
     }
+    Write-Host "VS MSBuild: $VSMSBuild" -ForegroundColor $ColorInfo
 }
 
 $results = @()
