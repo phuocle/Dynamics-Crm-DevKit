@@ -305,18 +305,30 @@ public sealed class DevKitCommandBaseCoverageTests
     }
 
     [TestMethod]
-    public void ResolveMachineEnvironmentDefaults_FillsFromOsEnv()
+    public void ResolveProjectEnvironmentDefaults_IgnoresOsEnvironmentVariables()
     {
+        // Even with DEVKIT_* variables present, the project resolver must fill
+        // nothing: only the .env file is consulted, and the clean temp working
+        // directory has none in its walk-up chain.
+        var originalDirectory = Environment.CurrentDirectory;
+        var directory = Path.Combine(Path.GetTempPath(), $"devkit-no-env-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(directory);
         var args = new TestArgs();
         Environment.SetEnvironmentVariable("DEVKIT_AUTH_TYPE", "DeviceCode");
+        Environment.SetEnvironmentVariable("DEVKIT_URL", "https://machine.crm.dynamics.com");
         try
         {
-            args.ResolveMachineEnvironmentDefaults();
-            Assert.AreEqual("DeviceCode", args.AuthType);
+            Environment.CurrentDirectory = directory;
+            args.ResolveProjectEnvironmentDefaults();
+            Assert.AreEqual(string.Empty, args.AuthType);
+            Assert.AreEqual(string.Empty, args.Url);
         }
         finally
         {
             Environment.SetEnvironmentVariable("DEVKIT_AUTH_TYPE", null);
+            Environment.SetEnvironmentVariable("DEVKIT_URL", null);
+            Environment.CurrentDirectory = originalDirectory;
+            Directory.Delete(directory, recursive: true);
         }
     }
 

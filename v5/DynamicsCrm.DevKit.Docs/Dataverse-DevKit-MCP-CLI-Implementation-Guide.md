@@ -46,7 +46,7 @@ The following observations are grounded in the source at the time of this rewrit
 | Results | Tools return `CallToolResult`. [McpToolResults.cs](../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/McpToolResults.cs) preserves text, structured content, and error status. |
 | Mutation policy | [McpServerOptions.cs](../DynamicsCrm.DevKit.Cli/Mcp/McpServerOptions.cs) creates consistent dry-run options and an execution context; mutation helpers enforce that context. |
 | Workspace | [WorkspaceFolderHelper.cs](../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/WorkspaceFolderHelper.cs) resolves MCP roots with a current-directory fallback. Some tools accept an injected `McpServer` for this purpose. |
-| Authentication | [DevKitCommandArgs.cs](../DynamicsCrm.DevKit.Cli/Models/DevKitCommandArgs.cs) provides existing authentication arguments and fallback resolvers. MCP uses machine environment variables; ordinary commands use project `.env` fallback. |
+| Authentication | [DevKitCommandArgs.cs](../DynamicsCrm.DevKit.Cli/Models/DevKitCommandArgs.cs) provides existing authentication arguments and the project `.env` fallback resolver, which searches from the current directory upward to the drive root. Ordinary commands and `tool call` use it; `devkit mcp` accepts explicit connection arguments only. |
 | Verification | Follow [AGENTS.md](../AGENTS.md) and the applicable repository workflow for the code actually changed. |
 
 Do not maintain a second list of 38 tools. Discovery and tests must work when another tool is added through the existing registration mechanism.
@@ -290,7 +290,7 @@ Reject incompatible ancestor/descendant assignments and incompatible types rathe
 
 ## 6. Authentication and process behavior
 
-Reuse the existing connection builders and supported authentication types. The new `tool call` branch uses the MCP machine-environment fallback so the same host configuration can serve both adapters. It must not silently load the project's `.env` or change fallback behavior for existing commands.
+Reuse the existing connection builders and supported authentication types. The new `tool call` branch uses the same project `.env` fallback as ordinary commands: the `.env` file is searched from the current directory upward to the drive root and the search stops there. OS environment variables are never consulted for connection values, and `devkit mcp` accepts explicit connection arguments only (it is a globally installed tool whose working directory is arbitrary, so file discovery is meaningless there).
 
 The repository's required priority is:
 
@@ -556,7 +556,7 @@ PowerShell equivalent:
     devkit tool call manage_view --input - --output json
 ```
 
-These stdin examples assume authentication is already configured through machine environment variables.
+These stdin examples assume authentication is already configured through a project `.env` file found by the upward search, or passed explicitly.
 
 ### CI
 
@@ -642,7 +642,7 @@ Cover behavior that can break real invocations:
 - Stdin consumption and cancellation.
 - Offline discovery and validation without authentication or network access.
 - Category filtering and refusal to invoke disabled or unavailable tools.
-- Connection precedence, environment fallback, impersonation diagnostics, and secret redaction.
+- Connection precedence, `.env` fallback with its upward search boundary, refusal to consult OS environment variables, impersonation diagnostics, and secret redaction.
 - Valid JSON on stdout across the full executable lifecycle, including parsing failures and update notifications.
 - Output-file failures before and after invocation, with no duplicate handler execution.
 - Partial tool results, dry-run statuses, exit codes, and preservation of structured content.

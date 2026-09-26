@@ -1,7 +1,9 @@
 using DynamicsCrm.DevKit.Cli.Commands;
+using DynamicsCrm.DevKit.Shared;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,14 +22,16 @@ namespace DynamicsCrm.DevKit.Cli
                 // Force console width to 8000 to prevent wrapping
                 AnsiConsole.Profile.Width = 8000;
 
-                // Detect plain mode: --plain flag > NO_COLOR env var > default (rich)
+                // Detect plain mode: --plain flag > DEVKIT_NO_COLOR in the project
+                // .env (searched from the current directory upward to the drive
+                // root) > default (rich). Environment variables are never read.
                 if (args != null && args.Any(a => a.Equals("--plain", StringComparison.OrdinalIgnoreCase)))
                 {
                     SpectreLog.IsPlain = true;
                     // Remove --plain from args so Spectre.Console.Cli doesn't reject it
                     args = args.Where(a => !a.Equals("--plain", StringComparison.OrdinalIgnoreCase)).ToArray();
                 }
-                else if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("NO_COLOR")))
+                else if (IsPlainFromProjectEnvironment())
                 {
                     SpectreLog.IsPlain = true;
                 }
@@ -106,7 +110,7 @@ namespace DynamicsCrm.DevKit.Cli
                           .WithDescription("Create data source entities");
 
                     config.AddCommand<McpCommand>("mcp")
-                          .WithDescription("Start MCP server for AI agent integration")
+                          .WithDescription("Start MCP server for AI agent integration. Connection is taken ONLY from explicit arguments (--auth/--url/--clientid/--clientsecret/--conn/--pacprofile...): no .env file and no environment variables are read")
                           .WithExample(new[] { "mcp", "--tools" })
                           .WithExample(new[] { "mcp", "--setup-guide" })
                           .WithExample(new[] { "mcp", "--auth", "ClientSecret", "--url", "https://org.crm.dynamics.com", "--clientid", "APP_ID", "--clientsecret", "SECRET" })
@@ -133,6 +137,27 @@ namespace DynamicsCrm.DevKit.Cli
                 SpectreLog.WriteException(ex);
                 SpectreLog.WaitForKeyPress();
                 return 1;
+            }
+        }
+
+        /// <summary>
+        /// Plain output is also requested through DEVKIT_NO_COLOR in the project
+        /// .env file, found by the same walk-up search as connection values:
+        /// from the current directory upward to the drive root. Any non-empty
+        /// value enables plain output; OS environment variables are never read.
+        /// </summary>
+        internal static bool IsPlainFromProjectEnvironment()
+        {
+            try
+            {
+                var envFile = ProjectEnvironment.FindFile(Directory.GetCurrentDirectory());
+                if (envFile == null) return false;
+                var value = ProjectEnvironment.GetValue(ProjectEnvironment.Read(envFile), ProjectEnvironment.NoColor);
+                return !string.IsNullOrWhiteSpace(value);
+            }
+            catch
+            {
+                return false;
             }
         }
     }

@@ -9,6 +9,7 @@ using ModelContextProtocol.Server;
 using Spectre.Console.Cli;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -17,6 +18,7 @@ using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Commands
 {
+    [Description("Start MCP server for AI agent integration. Connection is taken ONLY from explicit arguments (--auth/--url/--clientid/--clientsecret/--conn/--pacprofile...): no .env file and no environment variables are read, because the globally installed tool runs with an arbitrary working directory.")]
     public class McpCommand : AsyncCommand<McpCommandArgs>
     {
         private static TextWriter Stderr => Console.Error;
@@ -40,7 +42,10 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     return 0;
                 }
 
-                settings.ResolveMachineEnvironmentDefaults();
+                // MCP connections come from explicit command-line args ONLY: the
+                // globally installed tool runs with an arbitrary working directory,
+                // so .env discovery is meaningless here, and OS environment
+                // variables are never consulted either.
                 LogConnectionInfo(settings);
                 var serviceClient = await ConnectAsync(settings);
                 if (serviceClient == null) return 2;
@@ -241,9 +246,10 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         /// target user. Returns <c>null</c> if the user cannot be resolved, does not
         /// exist, or is disabled. Never throws — the caller checks for <c>null</c>.
         /// Privilege check is done separately via <see cref="RoleGateHelper.IsSystemAdministrator"/>
-        /// before calling this method.
+        /// before calling this method. Internal so the <c>devkit tool call</c> branch
+        /// shares the identical resolution (and its stderr diagnostics).
         /// </summary>
-        private static Guid? ResolveAsUser(ServiceClient serviceClient, string asUser, out string display)
+        internal static Guid? ResolveAsUser(ServiceClient serviceClient, string asUser, out string display)
         {
             display = null;
 
@@ -359,19 +365,23 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("-------------------------------------------------------------------------");
             Console.WriteLine("   dotnet tool install -g DynamicsCrm.DevKit.Cli");
             Console.WriteLine();
-            Console.WriteLine("2. ENVIRONMENT VARIABLES");
+            Console.WriteLine("2. CONNECTION (COMMAND-LINE ARGUMENTS ONLY)");
             Console.WriteLine("-------------------------------------------------------------------------");
-            Console.WriteLine("   Required:");
-            Console.WriteLine("   DEVKIT_AUTH_TYPE     : Interactive, DeviceCode, ClientSecret, FromPac, OAuth, AD");
-            Console.WriteLine("   DEVKIT_URL           : https://org.crm.dynamics.com (except FromPac)");
+            Console.WriteLine("   devkit mcp reads connection values from explicit arguments ONLY.");
+            Console.WriteLine("   No .env file and no environment variables are read: this tool is");
+            Console.WriteLine("   installed globally and runs with an arbitrary working directory.");
             Console.WriteLine();
-            Console.WriteLine("   Optional (auto-detected for Interactive/DeviceCode):");
-            Console.WriteLine("   DEVKIT_CLIENT_ID     : Azure AD Application (Client) ID");
-            Console.WriteLine("   DEVKIT_CLIENT_SECRET : Azure AD Client Secret (required for ClientSecret)");
-            Console.WriteLine("   DEVKIT_PAC_PROFILE   : PAC CLI profile name (required for FromPac)");
-            Console.WriteLine("   DEVKIT_USERNAME      : Username");
-            Console.WriteLine("   DEVKIT_PASSWORD      : Password");
-            Console.WriteLine("   DEVKIT_DOMAIN        : Domain");
+            Console.WriteLine("   --auth               : Interactive, DeviceCode, ClientSecret, FromPac, OAuth, AD");
+            Console.WriteLine("   --url                : https://org.crm.dynamics.com (except FromPac)");
+            Console.WriteLine("   --clientid           : Azure AD Application (Client) ID");
+            Console.WriteLine("   --clientsecret       : Azure AD Client Secret (required for ClientSecret)");
+            Console.WriteLine("   --pacprofile         : PAC CLI profile name (required for FromPac)");
+            Console.WriteLine("   --username           : Username (OAuth)");
+            Console.WriteLine("   --password           : Password (OAuth, can be encrypted)");
+            Console.WriteLine("   --domain             : Domain (AD, on-premises)");
+            Console.WriteLine("   --conn               : Full legacy connection string (alternative to the above)");
+            Console.WriteLine();
+            Console.WriteLine("   Example: devkit mcp devkit-claude --auth ClientSecret --url https://org.crm.dynamics.com --clientid APP_ID --clientsecret SECRET");
             Console.WriteLine();
             Console.WriteLine($"3. AVAILABLE TOOLS ({tools.Count} Tools)");
             Console.WriteLine("-------------------------------------------------------------------------");
@@ -405,11 +415,13 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("     \"mcpServers\": {");
             Console.WriteLine("       \"dynamicscrm-devkit\": {");
             Console.WriteLine("         \"command\": \"devkit\",");
-            Console.WriteLine("         \"args\": [\"mcp\", \"devkit-claude\"],");
-            Console.WriteLine("         \"env\": {");
-            Console.WriteLine("           \"DEVKIT_AUTH_TYPE\": \"FromPac\",");
-            Console.WriteLine("           \"DEVKIT_PAC_PROFILE\": \"default\"");
-            Console.WriteLine("         }");
+            Console.WriteLine("         \"args\": [");
+            Console.WriteLine("           \"mcp\", \"devkit-claude\",");
+            Console.WriteLine("           \"--auth\", \"ClientSecret\",");
+            Console.WriteLine("           \"--url\", \"https://org.crm.dynamics.com\",");
+            Console.WriteLine("           \"--clientid\", \"APP_ID\",");
+            Console.WriteLine("           \"--clientsecret\", \"SECRET\"");
+            Console.WriteLine("         ]");
             Console.WriteLine("       }");
             Console.WriteLine("     }");
             Console.WriteLine("   }");
@@ -417,16 +429,12 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("   [Codex - .codex/config.toml.example -> .codex/config.toml]");
             Console.WriteLine("   [mcp_servers.dynamicscrm-devkit]");
             Console.WriteLine("   command = \"devkit\"");
-            Console.WriteLine("   args = [\"mcp\", \"devkit-codex\"]");
-            Console.WriteLine("   env_vars = [");
-            Console.WriteLine("     \"DEVKIT_AUTH_TYPE\",");
-            Console.WriteLine("     \"DEVKIT_URL\",");
-            Console.WriteLine("     \"DEVKIT_CLIENT_ID\",");
-            Console.WriteLine("     \"DEVKIT_CLIENT_SECRET\",");
-            Console.WriteLine("     \"DEVKIT_PAC_PROFILE\",");
-            Console.WriteLine("     \"DEVKIT_USERNAME\",");
-            Console.WriteLine("     \"DEVKIT_PASSWORD\",");
-            Console.WriteLine("     \"DEVKIT_DOMAIN\"");
+            Console.WriteLine("   args = [");
+            Console.WriteLine("     \"mcp\", \"devkit-codex\",");
+            Console.WriteLine("     \"--auth\", \"ClientSecret\",");
+            Console.WriteLine("     \"--url\", \"https://org.crm.dynamics.com\",");
+            Console.WriteLine("     \"--clientid\", \"APP_ID\",");
+            Console.WriteLine("     \"--clientsecret\", \"SECRET\"");
             Console.WriteLine("   ]");
             Console.WriteLine("   startup_timeout_sec = 20");
             Console.WriteLine("   tool_timeout_sec = 120");
@@ -437,12 +445,12 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("       \"dynamicscrm-devkit\": {");
             Console.WriteLine("         \"type\": \"stdio\",");
             Console.WriteLine("         \"command\": \"devkit\",");
-            Console.WriteLine("         \"args\": [\"mcp\", \"devkit-copilot\"],");
-            Console.WriteLine("         \"env\": {");
-            Console.WriteLine("           \"DEVKIT_AUTH_TYPE\": \"${input:devkitAuthType}\",");
-            Console.WriteLine("           \"DEVKIT_URL\": \"${input:devkitUrl}\",");
-            Console.WriteLine("           \"DEVKIT_PAC_PROFILE\": \"${input:devkitPacProfile}\"");
-            Console.WriteLine("         }");
+            Console.WriteLine("         \"args\": [");
+            Console.WriteLine("           \"mcp\", \"devkit-copilot\",");
+            Console.WriteLine("           \"--auth\", \"${input:devkitAuthType}\",");
+            Console.WriteLine("           \"--url\", \"${input:devkitUrl}\",");
+            Console.WriteLine("           \"--pacprofile\", \"${input:devkitPacProfile}\"");
+            Console.WriteLine("         ]");
             Console.WriteLine("       }");
             Console.WriteLine("     }");
             Console.WriteLine("   }");
@@ -452,11 +460,11 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("     \"mcpServers\": {");
             Console.WriteLine("       \"dynamicscrm-devkit\": {");
             Console.WriteLine("         \"command\": \"devkit\",");
-            Console.WriteLine("         \"args\": [\"mcp\", \"devkit-antigravity\"],");
-            Console.WriteLine("         \"env\": {");
-            Console.WriteLine("           \"DEVKIT_AUTH_TYPE\": \"FromPac\",");
-            Console.WriteLine("           \"DEVKIT_PAC_PROFILE\": \"default\"");
-            Console.WriteLine("         }");
+            Console.WriteLine("         \"args\": [");
+            Console.WriteLine("           \"mcp\", \"devkit-antigravity\",");
+            Console.WriteLine("           \"--auth\", \"FromPac\",");
+            Console.WriteLine("           \"--pacprofile\", \"default\"");
+            Console.WriteLine("         ]");
             Console.WriteLine("       }");
             Console.WriteLine("     }");
             Console.WriteLine("   }");

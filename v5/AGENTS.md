@@ -58,7 +58,7 @@ Paths are relative to this directory; abbreviated paths in later sections are re
 
 Deprecated: `plugin`, `workflow`, `dataprovider` → `server`; `proxytype` → `modelbuilder`; `legacy-solution` → `solution`.
 
-Auth priority: `--conn` > `--auth/--url/...` > fallback > empty. Normal commands use project `.env` (`DEVKIT_*`) as fallback; `devkit mcp` uses OS environment variables. Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (legacy), `AD` (on-prem).
+Auth priority: `--conn` > `--auth/--url/...` > fallback > empty. Normal commands and `devkit tool call` use project `.env` (`DEVKIT_*`, searched from the current directory upward to the drive root) as fallback; `devkit mcp` accepts explicit connection arguments only (no .env, no environment variables). Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (legacy), `AD` (on-prem).
 
 ## MCP
 

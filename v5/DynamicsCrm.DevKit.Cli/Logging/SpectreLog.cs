@@ -106,15 +106,17 @@ namespace DynamicsCrm.DevKit.Cli
                 "  devkit server --auth FromPac --pacprofile DEVKITV4 --json cli.json --profile DEBUG\n" +
                 "  devkit server --auth ClientSecret --url URL --clientid ID --clientsecret SEC --json cli.json --profile CI\n" +
                 "  devkit mcp --auth ClientSecret --url URL --clientid ID --clientsecret SEC\n\n" +
-                "Project .env / MCP Environment Variables (DEVKIT_*):\n" +
-                "  Normal commands: CLI args > project .env > validation error.\n" +
-                "  MCP command: CLI args > OS DEVKIT_* environment variables > validation error.\n" +
+                "Project .env Fallback (DEVKIT_*):\n" +
+                "  Normal commands & tool call: CLI args > project .env > validation error.\n" +
+                "  The .env file is searched from the current directory upward to the drive root.\n" +
+                "  MCP command: explicit CLI args ONLY (no .env, no environment variables).\n" +
                 "  DEVKIT_AUTH_TYPE     Auth type (Interactive, ClientSecret, FromPac, ...)\n" +
                 "  DEVKIT_URL           Environment URL\n" +
                 "  DEVKIT_CLIENT_ID     Azure AD application (client) ID\n" +
                 "  DEVKIT_CLIENT_SECRET Client secret\n" +
                 "  DEVKIT_PAC_PROFILE   PAC CLI profile name\n" +
-                "  NO_COLOR             Set to any value to enable plain text output\n\n" +
+                "  DEVKIT_NO_COLOR      Any non-empty value enables plain output\n" +
+                "                       (same walk-up search; --plain arg does the same)\n\n" +
                 "MCP Server (AI Agent Integration):\n" +
                 $"  devkit mcp                   {mcpToolCount} tools + 10 resources: metadata, upsert, FetchXML, search, WebAPI, publish, trace logs, URL parser, forms, views, security, audit, sitemap, schema, env vars, business rules, workflows, Custom APIs, cloud flows, BPFs, system jobs, plugins, ribbon customizations, web resources, relationships\n" +
                 "  devkit mcp --setup-guide     Setup instructions for all IDEs\n";
@@ -181,7 +183,8 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]DEVKIT_CLIENT_ID[/]     Azure AD application (client) ID\n" +
                     "  [cyan]DEVKIT_CLIENT_SECRET[/] Client secret\n" +
                     "  [cyan]DEVKIT_PAC_PROFILE[/]   PAC CLI profile name\n" +
-                    "  [cyan]NO_COLOR[/]             Set to any value to enable plain text output\n\n" +
+                    "  [cyan]DEVKIT_NO_COLOR[/]      Any non-empty value enables plain output\n" +
+                    "                       (same walk-up search; --plain arg does the same)\n\n" +
                     "[green]MCP Server (AI Agent Integration):[/]\n" +
                     $"  devkit [cyan]mcp[/]                  {mcpToolCount} tools + 10 resources: metadata, upsert, FetchXML, search, WebAPI, publish, trace logs, URL parser, forms, views, security, audit, sitemap, schema, env vars, business rules, workflows, Custom APIs, cloud flows, BPFs, system jobs, plugins, ribbon customizations, web resources, relationships\n" +
                     "  devkit [cyan]mcp[/] --setup-guide    Setup instructions for all IDEs\n"

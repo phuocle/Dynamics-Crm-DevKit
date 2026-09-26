@@ -53,35 +53,37 @@ public class SharedModelCoverageTests
     }
 
     [TestMethod]
-    public void CommandArgs_ResolveMachineEnvironmentDefaults_UsesEnvWhenArgsAreEmpty()
+    public void CommandArgs_ResolveProjectEnvironmentDefaults_FindsEnvInAncestorDirectory()
     {
-        var args = new CommandLineArgs();
-        var vars = new Dictionary<string, string?>
-        {
-            ["DEVKIT_CONNECTION"] = "AuthType=ClientSecret;",
-            ["DEVKIT_AUTH_TYPE"] = "ClientSecret",
-            ["DEVKIT_URL"] = "https://contoso.crm.dynamics.com",
-            ["DEVKIT_CLIENT_ID"] = "client-id",
-            ["DEVKIT_CLIENT_SECRET"] = "secret",
-            ["DEVKIT_PAC_PROFILE"] = "pac-profile",
-            ["DEVKIT_USERNAME"] = "user@contoso.com",
-            ["DEVKIT_PASSWORD"] = "password",
-            ["DEVKIT_DOMAIN"] = "CONTOSO"
-        };
+        // The .env lives in an ANCESTOR of the current directory: the walk-up
+        // search climbs toward the drive root and must find it there.
+        var originalDirectory = Environment.CurrentDirectory;
+        var root = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"devkit-ancestor-{Guid.NewGuid():N}");
+        var child = System.IO.Path.Combine(root, "child", "grandchild");
+        System.IO.Directory.CreateDirectory(child);
 
-        WithEnvironment(vars, () =>
+        try
         {
-            args.ResolveMachineEnvironmentDefaults();
-            Assert.AreEqual("AuthType=ClientSecret;", args.Connection);
-            Assert.AreEqual("ClientSecret", args.AuthType);
-            Assert.AreEqual("https://contoso.crm.dynamics.com", args.Url);
-            Assert.AreEqual("client-id", args.ClientId);
-            Assert.AreEqual("secret", args.ClientSecret);
-            Assert.AreEqual("pac-profile", args.PacProfile);
-            Assert.AreEqual("user@contoso.com", args.Username);
-            Assert.AreEqual("password", args.Password);
-            Assert.AreEqual("CONTOSO", args.Domain);
-        });
+            System.IO.File.WriteAllLines(System.IO.Path.Combine(root, ".env"), new[]
+            {
+                "DEVKIT_AUTH_TYPE=DeviceCode",
+                "DEVKIT_URL=https://ancestor.crm.dynamics.com"
+            });
+
+            Environment.CurrentDirectory = child;
+
+            var args = new CommandLineArgs();
+            args.ResolveProjectEnvironmentDefaults();
+            Assert.AreEqual("DeviceCode", args.AuthType);
+            Assert.AreEqual("https://ancestor.crm.dynamics.com", args.Url);
+            Assert.AreEqual(string.Empty, args.Connection);
+        }
+        finally
+        {
+            Environment.CurrentDirectory = originalDirectory;
+            if (System.IO.Directory.Exists(root))
+                System.IO.Directory.Delete(root, recursive: true);
+        }
     }
 
     [TestMethod]
@@ -124,6 +126,33 @@ public class SharedModelCoverageTests
             Environment.CurrentDirectory = originalDirectory;
             if (System.IO.Directory.Exists(directory))
                 System.IO.Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    [TestMethod]
+    public void Program_IsPlainFromProjectEnvironment_FoundThroughWalkUp()
+    {
+        // DEVKIT_NO_COLOR in an ancestor .env enables plain output; with no .env
+        // in the walk-up chain it stays off. OS environment variables are never read.
+        var originalDirectory = Environment.CurrentDirectory;
+        var root = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"devkit-nocolor-{Guid.NewGuid():N}");
+        var child = System.IO.Path.Combine(root, "child");
+        System.IO.Directory.CreateDirectory(child);
+
+        try
+        {
+            Environment.CurrentDirectory = child;
+            Assert.IsFalse(DynamicsCrm.DevKit.Cli.Program.IsPlainFromProjectEnvironment());
+
+            System.IO.File.WriteAllText(
+                System.IO.Path.Combine(root, ".env"), "DEVKIT_NO_COLOR=1");
+            Assert.IsTrue(DynamicsCrm.DevKit.Cli.Program.IsPlainFromProjectEnvironment());
+        }
+        finally
+        {
+            Environment.CurrentDirectory = originalDirectory;
+            if (System.IO.Directory.Exists(root))
+                System.IO.Directory.Delete(root, recursive: true);
         }
     }
 

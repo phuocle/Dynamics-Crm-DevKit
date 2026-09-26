@@ -33,9 +33,13 @@ public class McpCommandCoverageTests
 
         Assert.AreEqual(0, exitCode);
         StringAssert.Contains(stdout, "DevKit MCP Setup Guide");
-        StringAssert.Contains(stdout, "DEVKIT_AUTH_TYPE");
+        // The guide teaches args-only connection config: no env-var instructions.
+        StringAssert.Contains(stdout, "CONNECTION (COMMAND-LINE ARGUMENTS ONLY)");
+        StringAssert.Contains(stdout, "--auth");
         StringAssert.Contains(stdout, "devkit-claude");
         StringAssert.Contains(stdout, "AVAILABLE TOOLS");
+        Assert.IsFalse(stdout.Contains("ENVIRONMENT VARIABLES"), "the setup guide must not teach env-var configuration");
+        Assert.IsFalse(stdout.Contains("\"env\""), "config examples must pass connection values via args");
         Assert.AreEqual("", stderr);
     }
 
@@ -48,6 +52,61 @@ public class McpCommandCoverageTests
         Assert.AreEqual("", stdout);
         StringAssert.Contains(stderr, "Auth: (legacy --conn)");
         StringAssert.Contains(stderr, "--auth or --conn is required");
+    }
+
+    [TestMethod]
+    public async Task ExecuteAsync_EnvironmentVariablesPresent_StillRequiresArgs()
+    {
+        // MCP is args-only: even with full DEVKIT_* variables in the process
+        // environment, an invocation without explicit connection args fails.
+        var (exitCode, _, stderr) = await ExecuteWithEnvironmentAsync(new Dictionary<string, string>
+        {
+            ["DEVKIT_AUTH_TYPE"] = "ClientSecret",
+            ["DEVKIT_URL"] = "https://machine.example.test",
+            ["DEVKIT_CLIENT_ID"] = "machine-client",
+            ["DEVKIT_CLIENT_SECRET"] = "machine-secret",
+        }, new McpCommandArgs());
+
+        Assert.AreEqual(2, exitCode);
+        StringAssert.Contains(stderr, "--auth or --conn is required");
+    }
+
+    private static async Task<(int ExitCode, string Stdout, string Stderr)> ExecuteWithEnvironmentAsync(
+        Dictionary<string, string> variables, McpCommandArgs args)
+    {
+        var envNames = new[]
+        {
+            "DEVKIT_CONNECTION",
+            "DEVKIT_AUTH_TYPE",
+            "DEVKIT_URL",
+            "DEVKIT_CLIENT_ID",
+            "DEVKIT_CLIENT_SECRET",
+            "DEVKIT_PAC_PROFILE",
+            "DEVKIT_USERNAME",
+            "DEVKIT_PASSWORD",
+            "DEVKIT_DOMAIN"
+        };
+        var oldEnv = envNames.ToDictionary(name => name, Environment.GetEnvironmentVariable);
+        var oldOut = Console.Out;
+        var oldErr = Console.Error;
+        using var stdout = new StringWriter();
+        using var stderr = new StringWriter();
+        Console.SetOut(stdout);
+        Console.SetError(stderr);
+        try
+        {
+            foreach (var (name, value) in variables)
+                Environment.SetEnvironmentVariable(name, value);
+            var exitCode = await new McpCommand().ExecuteAsyncForTesting(null!, args, CancellationToken.None);
+            return (exitCode, stdout.ToString(), stderr.ToString());
+        }
+        finally
+        {
+            foreach (var pair in oldEnv)
+                Environment.SetEnvironmentVariable(pair.Key, pair.Value);
+            Console.SetOut(oldOut);
+            Console.SetError(oldErr);
+        }
     }
 
     [TestMethod]

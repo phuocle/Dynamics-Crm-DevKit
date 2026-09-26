@@ -143,6 +143,9 @@ namespace DynamicsCrm.DevKit.Shared.Models
         /// <summary>
         /// Fill empty connection properties from project .env.
         /// Priority: CLI args > project .env > empty string.
+        /// The .env file is searched from the current directory (or the resolved
+        /// --json file's directory) upward to the drive root; OS environment
+        /// variables are never consulted for connection values.
         /// </summary>
         public void ResolveProjectEnvironmentDefaults()
         {
@@ -150,15 +153,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
                 ProjectEnvironment.ResolveFileFromJsonOrDirectory(JsonFile, CurrentDirectory));
 
             ResolveDefaults(key => ProjectEnvironment.GetValue(projectEnvironment, key));
-        }
-
-        /// <summary>
-        /// Fill empty connection properties from OS DEVKIT_* environment variables.
-        /// Priority: CLI args > environment variables > empty string.
-        /// </summary>
-        public void ResolveMachineEnvironmentDefaults()
-        {
-            ResolveDefaults(Environment.GetEnvironmentVariable);
         }
 
         private void ResolveDefaults(Func<string, string> getValue)

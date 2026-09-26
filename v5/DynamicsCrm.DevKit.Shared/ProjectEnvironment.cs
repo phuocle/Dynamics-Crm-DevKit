@@ -20,6 +20,12 @@ namespace DynamicsCrm.DevKit.Shared
         public const string Password = "DEVKIT_PASSWORD";
         public const string Domain = "DEVKIT_DOMAIN";
 
+        /// <summary>
+        /// Plain-text output switch read from the .env file (any non-empty value
+        /// enables it). Not a connection key: never part of <see cref="ConnectionKeys"/>.
+        /// </summary>
+        public const string NoColor = "DEVKIT_NO_COLOR";
+
         public static readonly string[] ConnectionKeys =
         {
             Connection,
@@ -159,7 +165,7 @@ namespace DynamicsCrm.DevKit.Shared
             return new[]
             {
                 "# DynamicsCrm.DevKit project-level connection values.",
-                "# CLI arguments override these values. MCP uses OS DEVKIT_* variables instead.",
+                "# CLI arguments override these values.",
                 AuthTypeHelpComment,
                 $"{AuthType}=",
                 $"{Url}=",
