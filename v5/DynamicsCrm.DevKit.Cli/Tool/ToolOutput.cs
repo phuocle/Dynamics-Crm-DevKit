@@ -147,8 +147,11 @@ internal static class ToolOutput
                          propertiesElement.ValueKind == JsonValueKind.Object
             ? propertiesElement
             : default;
-        if (properties.ValueKind != JsonValueKind.Object)
+        if (properties.ValueKind != JsonValueKind.Object || !properties.EnumerateObject().Any())
+        {
+            WriteStdoutLine("inputs: (none — this tool takes no parameters)");
             return;
+        }
 
         WriteStdoutLine("inputs:");
         var requiredNames = RequiredNames(entry.InputSchema);

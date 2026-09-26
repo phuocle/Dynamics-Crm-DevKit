@@ -3,6 +3,8 @@ using DynamicsCrm.DevKit.Cli.Tool;
 using DynamicsCrm.DevKit.Cli.Tool.Commands;
 using DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Infrastructure;
 using DynamicsCrm.DevKit.Shared;
+using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -253,6 +255,16 @@ public sealed class ToolCommandExitCodeTests
         Assert.AreEqual("object", parsed["type"]!.GetValue<string>());
         Assert.IsNotNull(parsed["properties"]!["action"]);
         Assert.IsNull(parsed["name"], "schema mode must not include the tool definition wrapper");
+    }
+
+    [TestMethod]
+    public async Task Describe_ParameterlessTool_NotesNoParameters()
+    {
+        var (exit, stdout, _) = await RunAsync(() =>
+            new ToolDescribeCommand().ExecuteAsyncForTesting(null!, new ToolDescribeSettings { ToolName = "whoami" }, CancellationToken.None));
+
+        Assert.AreEqual(ToolExitCodes.Success, exit);
+        StringAssert.Contains(stdout, "inputs: (none — this tool takes no parameters)");
     }
 
     [TestMethod]
@@ -778,6 +790,67 @@ public sealed class ToolCommandExitCodeTests
         var envelope = JsonNode.Parse(stdout)!;
         Assert.AreEqual("CLI_SYNTAX", envelope["error"]!["code"]!.GetValue<string>());
         StringAssert.Contains(stderr, "Unknown option");
+    }
+
+    [TestMethod]
+    public async Task Call_ServicesCannotResolveDependencies_ReturnsSix()
+    {
+        // An execution scope that cannot construct the tool class: the invocation
+        // fails without a tool result and the envelope reports INVOCATION_FAILED.
+        var settings = new ToolCallSettings { ToolName = "whoami", Output = "json" };
+        var (exit, stdout, stderr) = await WithoutDevKitEnvironmentAsync(() =>
+            new ToolCallCommand
+            {
+                InvocationServicesResolver = (_, _) => Task.FromResult<IServiceProvider>(
+                    new ServiceCollection().BuildServiceProvider()),
+            }.ExecuteAsyncForTesting(null!, settings, CancellationToken.None));
+
+        Assert.AreEqual(ToolExitCodes.InvocationFailed, exit);
+        var envelope = JsonNode.Parse(stdout)!;
+        Assert.AreEqual("INVOCATION_FAILED", envelope["error"]!["code"]!.GetValue<string>());
+        StringAssert.Contains(stderr, "without a returned tool result");
+    }
+
+    [TestMethod]
+    public async Task Call_ServicesDisposeThrows_StillReturnsSuccess()
+    {
+        // A throwing disposal must never change the command's outcome: the tool
+        // result is already rendered when the scope is torn down.
+        using var fake = new FakeSdkClient();
+        fake.OnExecute = request => request is RetrieveAllEntitiesRequest
+            ? RetrieveAllEntities(ContactMetadata())
+            : new OrganizationResponse();
+        fake.OnRetrieveMultiple = query => query is QueryExpression { EntityName: "savedquery" }
+            ? SavedQueryCollection()
+            : new EntityCollection();
+
+        var inner = ToolServices.CreateInvocationServices(fake.Client, dryRun: false, impersonatedUserDisplay: null);
+        var settings = new ToolCallSettings
+        {
+            ToolName = "manage_view",
+            Output = "json",
+            Set = new[] { "action=list", "entity_name=contact" },
+        };
+        var (exit, stdout, _) = await WithoutDevKitEnvironmentAsync(() =>
+            new ToolCallCommand
+            {
+                InvocationServicesResolver = (_, _) => Task.FromResult<IServiceProvider>(new ThrowingDisposeServiceProvider(inner)),
+            }.ExecuteAsyncForTesting(null!, settings, CancellationToken.None));
+
+        Assert.AreEqual(ToolExitCodes.Success, exit);
+        var envelope = JsonNode.Parse(stdout)!;
+        Assert.AreEqual(true, envelope["success"]!.GetValue<bool>());
+    }
+
+    private sealed class ThrowingDisposeServiceProvider : IServiceProvider, IAsyncDisposable
+    {
+        private readonly IServiceProvider _inner;
+
+        public ThrowingDisposeServiceProvider(IServiceProvider inner) => _inner = inner;
+
+        public object? GetService(Type serviceType) => _inner.GetService(serviceType);
+
+        public ValueTask DisposeAsync() => throw new InvalidOperationException("boom on dispose");
     }
 
     // ──────────────────────────────────────────────

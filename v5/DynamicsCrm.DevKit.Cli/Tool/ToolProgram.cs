@@ -63,15 +63,24 @@ public static class ToolProgram
             config.AddBranch<CommandSettings>("tool", branch =>
             {
                 branch.AddCommand<ToolListCommand>("list")
-                      .WithDescription("List available tools");
+                      .WithDescription("List available tools (name + concise description). Run 'devkit tool describe <tool>' to see every parameter with its type, default and description.")
+                      .WithExample(new[] { "tool", "list", "view" })
+                      .WithExample(new[] { "tool", "list", "--output", "json" });
                 branch.AddCommand<ToolDescribeCommand>("describe")
-                      .WithDescription("Describe a tool's input contract");
+                      .WithDescription("Show a tool's full contract: every input parameter with its type, default, required-ness and description — the same definitions the MCP server advertises. Use --output schema for the raw input schema or --output json for the canonical tool definition.")
+                      .WithExample(new[] { "tool", "describe", "manage_view" })
+                      .WithExample(new[] { "tool", "describe", "manage_view", "--output", "schema" });
                 branch.AddCommand<ToolExampleCommand>("example")
-                      .WithDescription("Generate a JSON request template for a tool");
+                      .WithDescription("Generate a JSON request template for a tool: schema defaults filled in, clearly-incomplete placeholders elsewhere (each placeholder path is reported on stderr).")
+                      .WithExample(new[] { "tool", "example", "manage_view", "--output-file", "request.json" });
                 branch.AddCommand<ToolValidateCommand>("validate")
-                      .WithDescription("Validate input against a tool's contract without invoking it");
+                      .WithDescription("Validate input against a tool's contract without invoking it. Builds the request exactly like 'call' does: --input file (or '-' for stdin) plus --set/--add/--file modifiers. Run 'devkit tool describe <tool>' first to learn each parameter.")
+                      .WithExample(new[] { "tool", "validate", "manage_view", "--set", "action=list", "--set", "entity_name=contact" });
                 branch.AddCommand<ToolCallCommand>("call")
-                      .WithDescription("Invoke a tool in process against Dataverse. Connection: explicit args first, then a project .env found by walking up from the current directory to the drive root (environment variables are never read)");
+                      .WithDescription("Invoke a tool in process against Dataverse. Connection: explicit args first, then a project .env found by walking up from the current directory to the drive root (environment variables are never read). Run 'devkit tool describe <tool>' to learn each parameter's name, type and description.")
+                      .WithExample(new[] { "tool", "call", "whoami", "--output", "json" })
+                      .WithExample(new[] { "tool", "call", "manage_view", "--set", "action=list", "--set", "entity_name=contact", "--output", "json" })
+                      .WithExample(new[] { "tool", "call", "manage_view", "--input", "request.json", "--output", "json", "--output-file", "result.json" });
             });
         });
 
