@@ -11,8 +11,8 @@
     SizeToContent="Manual"
     Width="1600"
     Height="1000"
-    MinWidth="1200"
-    MinHeight="800"
+    MinWidth="1000"
+    MinHeight="600"
     d:DesignWidth="1600"
     d:DesignHeight="1000"
     ResizeMode="CanResize"
@@ -85,9 +85,9 @@
         <Grid x:Name="contentGrid" Grid.Row="3" Margin="0,8,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="3*" MinHeight="260" />
+                <RowDefinition Height="3*" MinHeight="180" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="2*" MinHeight="180" />
+                <RowDefinition Height="2*" MinHeight="140" />
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" Text="FetchXML" FontWeight="SemiBold" Margin="0,0,0,4" />

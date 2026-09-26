@@ -7,7 +7,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Interop;
 using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
@@ -30,9 +32,93 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             textStatus.Text = FormatMessages(service.Warnings).TrimStart();
         }
 
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            var handle = new WindowInteropHelper(this).Handle;
+            HwndSource.FromHwnd(handle)?.AddHook(WindowProc);
+        }
+
+        private const int WM_GETMINMAXINFO = 0x0024;
+        private const uint MONITOR_DEFAULTTONEAREST = 0x00000002;
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr MonitorFromWindow(IntPtr handle, uint flags);
+
+        [DllImport("user32.dll")]
+        private static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO lpmi);
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct POINT
+        {
+            public int x;
+            public int y;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct MINMAXINFO
+        {
+            public POINT ptReserved;
+            public POINT ptMaxSize;
+            public POINT ptMaxPosition;
+            public POINT ptMinTrackSize;
+            public POINT ptMaxTrackSize;
+        }
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+        private struct MONITORINFO
+        {
+            public int cbSize;
+            public RECT rcMonitor;
+            public RECT rcWork;
+            public uint dwFlags;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct RECT
+        {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
+
+        private IntPtr WindowProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            if (msg == WM_GETMINMAXINFO)
+            {
+                WmGetMinMaxInfo(hwnd, lParam);
+                handled = true;
+            }
+            return IntPtr.Zero;
+        }
+
+        private static void WmGetMinMaxInfo(IntPtr hwnd, IntPtr lParam)
+        {
+            var mmi = (MINMAXINFO)Marshal.PtrToStructure(lParam, typeof(MINMAXINFO));
+            var monitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+            if (monitor != IntPtr.Zero)
+            {
+                var monitorInfo = new MONITORINFO { cbSize = Marshal.SizeOf(typeof(MONITORINFO)) };
+                if (GetMonitorInfo(monitor, ref monitorInfo))
+                {
+                    var rcWork = monitorInfo.rcWork;
+                    var rcMonitor = monitorInfo.rcMonitor;
+
+                    mmi.ptMaxPosition.x = Math.Abs(rcWork.Left - rcMonitor.Left);
+                    mmi.ptMaxPosition.y = Math.Abs(rcWork.Top - rcMonitor.Top);
+                    mmi.ptMaxSize.x = Math.Abs(rcWork.Right - rcWork.Left);
+                    mmi.ptMaxSize.y = Math.Abs(rcWork.Bottom - rcWork.Top);
+                    mmi.ptMaxTrackSize.x = mmi.ptMaxSize.x;
+                    mmi.ptMaxTrackSize.y = mmi.ptMaxSize.y;
+                }
+            }
+            Marshal.StructureToPtr(mmi, lParam, true);
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            FormatXml_Click(buttonFormat, e);
+            WindowState = WindowState.Maximized;
         }
 
         private void Refresh(string selectDatasetName = null)
@@ -63,8 +149,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
             adding = false;
             textboxName.Text = current.Name;
-            textboxFetchXml.Text = current.CommandText;
-            FormatXml_Click(buttonFormat, e);
+            textboxFetchXml.Text = FormatXmlText(current.CommandText);
             gridFields.ItemsSource = current.Fields;
             gridParameters.ItemsSource = current.Parameters;
             SetPrefilterItemsSource(current.FetchEntities);
@@ -341,7 +426,39 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (validation != null) return true;
             if (adding) return !string.IsNullOrWhiteSpace(textboxFetchXml.Text);
-            return current != null && !string.Equals(current.CommandText, textboxFetchXml.Text, StringComparison.Ordinal);
+            if (current == null) return false;
+            if (!string.Equals(current.Name, textboxName.Text?.Trim(), StringComparison.Ordinal)) return true;
+            return !IsXmlEqual(current.CommandText, textboxFetchXml.Text);
+        }
+
+        private static string FormatXmlText(string xml)
+        {
+            if (string.IsNullOrWhiteSpace(xml)) return string.Empty;
+            try
+            {
+                return XDocument.Parse(xml).ToString(SaveOptions.None);
+            }
+            catch
+            {
+                return xml;
+            }
+        }
+
+        private static bool IsXmlEqual(string xml1, string xml2)
+        {
+            if (string.Equals(xml1, xml2, StringComparison.Ordinal)) return true;
+            if (string.IsNullOrWhiteSpace(xml1) && string.IsNullOrWhiteSpace(xml2)) return true;
+            if (string.IsNullOrWhiteSpace(xml1) || string.IsNullOrWhiteSpace(xml2)) return false;
+            try
+            {
+                var doc1 = XDocument.Parse(xml1);
+                var doc2 = XDocument.Parse(xml2);
+                return XNode.DeepEquals(doc1, doc2);
+            }
+            catch
+            {
+                return string.Equals(xml1?.Trim(), xml2?.Trim(), StringComparison.Ordinal);
+            }
         }
 
         private void SetBusy(bool isBusy)
