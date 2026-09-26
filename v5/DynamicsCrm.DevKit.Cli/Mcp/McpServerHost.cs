@@ -62,19 +62,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                 options.LogToStandardErrorThreshold = Microsoft.Extensions.Logging.LogLevel.Trace;
             });
 
-            builder.Services.AddSingleton(_serviceClient);
-            builder.Services.AddSingleton(new MetadataService(_serviceClient));
-            // Test seams: tools depend on interfaces, not concrete ServiceClient.
-            // ServiceClient implements IOrganizationService/IOrganizationServiceAsync2,
-            // so production behavior is unchanged — same live instance behind each interface.
-            builder.Services.AddSingleton<Microsoft.Xrm.Sdk.IOrganizationService>(sp => sp.GetRequiredService<ServiceClient>());
-            builder.Services.AddSingleton<IOrganizationServiceAsync2>(sp => sp.GetRequiredService<ServiceClient>());
-            builder.Services.AddSingleton<IMcpConnectionInfo>(sp => new ServiceClientConnectionInfo(sp.GetRequiredService<ServiceClient>()));
-            builder.Services.AddSingleton<IWebApiExecutor>(sp => new ServiceClientWebApiExecutor(sp.GetRequiredService<ServiceClient>()));
-            var executionPolicy = new McpExecutionPolicy(mutationsBlocked: dryRun, impersonatedUserDisplay: impersonatedUserDisplay);
-            builder.Services.AddSingleton(executionPolicy);
-            builder.Services.AddSingleton(executionPolicy.Options);
-            builder.Services.AddSingleton(executionPolicy.Context);
+            RegisterSharedServices(builder.Services, _serviceClient, dryRun, impersonatedUserDisplay);
 
             var displayCategory = normalizedCategory;
             var serverName = string.IsNullOrWhiteSpace(instanceName)
@@ -140,7 +128,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             await builder.Build().RunAsync();
         }
 
-        private static HashSet<string> GetFilteredToolTypeNames(int requestedLevel)
+        /// <summary>
+        /// Registers the shared tool dependencies used by both the MCP stdio host
+        /// (RunAsync) and the CLI invocation scope (ToolServices.CreateInvocationServices):
+        /// the connected ServiceClient, its interface projections, connection info,
+        /// Web API executor, and the startup execution policy with its projections.
+        /// </summary>
+        internal static void RegisterSharedServices(IServiceCollection services, ServiceClient serviceClient, bool dryRun, string impersonatedUserDisplay)
+        {
+            services.AddSingleton(serviceClient);
+            services.AddSingleton(new MetadataService(serviceClient));
+            // Test seams: tools depend on interfaces, not concrete ServiceClient.
+            // ServiceClient implements IOrganizationService/IOrganizationServiceAsync2,
+            // so production behavior is unchanged — same live instance behind each interface.
+            services.AddSingleton<Microsoft.Xrm.Sdk.IOrganizationService>(sp => sp.GetRequiredService<ServiceClient>());
+            services.AddSingleton<IOrganizationServiceAsync2>(sp => sp.GetRequiredService<ServiceClient>());
+            services.AddSingleton<IMcpConnectionInfo>(sp => new ServiceClientConnectionInfo(sp.GetRequiredService<ServiceClient>()));
+            services.AddSingleton<IWebApiExecutor>(sp => new ServiceClientWebApiExecutor(sp.GetRequiredService<ServiceClient>()));
+            var executionPolicy = new McpExecutionPolicy(mutationsBlocked: dryRun, impersonatedUserDisplay: impersonatedUserDisplay);
+            services.AddSingleton(executionPolicy);
+            services.AddSingleton(executionPolicy.Options);
+            services.AddSingleton(executionPolicy.Context);
+        }
+
+        internal static HashSet<string> GetFilteredToolTypeNames(int requestedLevel)
         {
             var assembly = Assembly.GetExecutingAssembly();
             var allToolTypes = assembly.GetTypes()
