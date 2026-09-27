@@ -276,7 +276,7 @@ namespace DynamicsCrm.DevKit.Shared
             if (index <= 0) return null;
 
             var key = trimmed.Substring(0, index).Trim();
-            return string.IsNullOrWhiteSpace(key) ? null : key;
+            return key;
         }
 
         private static string Unquote(string value)

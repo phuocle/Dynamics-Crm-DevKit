@@ -412,7 +412,6 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
                 var pastUnix = DateTimeOffset.UtcNow.AddHours(-2).ToUnixTimeSeconds().ToString();
 
                 var jsonTokens = $@"{{
-                    ""tDiffUser"": {{ ""client_id"": ""wrong@test.com"", ""realm"": ""tid-1"", ""target"": ""https://org.crm.dynamics.com/.default"", ""home_account_id"": ""hid1"", ""expires_on"": ""{futureUnix}"", ""secret"": ""s1"" }},
                     ""tDiffRealm"": {{ ""client_id"": ""u@test.com"", ""realm"": ""wrong-tid"", ""target"": ""https://org.crm.dynamics.com/.default"", ""home_account_id"": ""hid1"", ""expires_on"": ""{futureUnix}"", ""secret"": ""s2"" }},
                     ""tDiffTarget"": {{ ""client_id"": ""u@test.com"", ""realm"": ""tid-1"", ""target"": ""https://other.crm.dynamics.com/.default"", ""home_account_id"": ""hid1"", ""expires_on"": ""{futureUnix}"", ""secret"": ""s3"" }},
                     ""tDiffHomeAcc"": {{ ""client_id"": ""u@test.com"", ""realm"": ""tid-1"", ""target"": ""https://org.crm.dynamics.com/.default"", ""home_account_id"": ""wrong-hid"", ""expires_on"": ""{futureUnix}"", ""secret"": ""s4"" }},
@@ -425,7 +424,7 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
                 var accessTokens = docTokens.RootElement;
 
                 var token = (string)findAccessTokenMethod.Invoke(null, new object[] {
-                    accessTokens, profileData, "https://org.crm.dynamics.com", "hid1", true, "error msg"
+                    accessTokens, profileData, "https://org.crm.dynamics.com", "hid1", "error msg"
                 });
                 Assert.AreEqual("valid-secret", token);
 
@@ -433,7 +432,7 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
                 var ex = Assert.ThrowsExactly<TargetInvocationException>(() =>
                 {
                     findAccessTokenMethod.Invoke(null, new object[] {
-                        emptyTokensDoc.RootElement, profileData, "https://org.crm.dynamics.com", "hid1", false, "custom error"
+                        emptyTokensDoc.RootElement, profileData, "https://org.crm.dynamics.com", "hid1", "custom error"
                     });
                 });
                 Assert.IsInstanceOfType(ex.InnerException, typeof(InvalidOperationException));

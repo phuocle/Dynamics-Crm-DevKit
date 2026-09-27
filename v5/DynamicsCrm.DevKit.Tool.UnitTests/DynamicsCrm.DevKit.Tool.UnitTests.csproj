@@ -10,6 +10,10 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="4.4.1" />
     <PackageReference Include="MSTest.TestFramework" Version="4.4.1" />
+    <!-- Detour ServiceClient constructors/properties and MSAL token acquisition
+         so connection builders are exercised offline (same technique as the
+         Cli.UnitTests FakeSdkClient harness). -->
+    <PackageReference Include="Lib.Harmony" Version="2.4.2" />
 		<PackageReference Include="coverlet.collector" Version="10.0.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

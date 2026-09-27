@@ -211,7 +211,6 @@ public sealed class FromPacConnectionBuilderCoverageTests
             profileData,
             "https://org.crm.dynamics.com",
             "home1",
-            false,
             "err"
         ]);
         Assert.AreEqual("valid-secret", token);
@@ -240,7 +239,6 @@ public sealed class FromPacConnectionBuilderCoverageTests
                 profileData,
                 "https://org.crm.dynamics.com",
                 "home1",
-                true,
                 "Custom token error message"
             ]);
         });

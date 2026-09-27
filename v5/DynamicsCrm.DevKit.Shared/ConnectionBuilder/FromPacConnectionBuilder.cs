@@ -29,10 +29,10 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
 
             await Task.Delay(100).ConfigureAwait(false);
 
-            if (serviceClient?.IsReady != true)
+            if (serviceClient.IsReady != true)
             {
                 throw new InvalidOperationException(
-                    $"Failed to connect using PAC CLI profile. Error: {serviceClient?.LastError}");
+                    $"Failed to connect using PAC CLI profile. Error: {serviceClient.LastError}");
             }
 
             return serviceClient;
@@ -131,20 +131,19 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             var userToken = await TryGetUserTokenFromMsalAsync(profileData, instanceUrl).ConfigureAwait(false);
             if (!string.IsNullOrWhiteSpace(userToken)) return userToken;
 
-            var cacheFileName = isApplicationProfile ? "tokencache_spn_msalv3.dat" : "tokencache_msalv3.dat";
+            var cacheFileName = "tokencache_msalv3.dat";
             var cacheBytes = await LoadPacCacheAsync(cacheFileName).ConfigureAwait(false);
             using var document = JsonDocument.Parse(cacheBytes);
 
             if (!document.RootElement.TryGetProperty("AccessToken", out var accessTokens))
                 throw new InvalidOperationException("PAC CLI token cache does not contain access tokens.");
 
-            var homeAccountId = isApplicationProfile ? null : GetHomeAccountId(document, profileData);
+            var homeAccountId = GetHomeAccountId(document, profileData);
             return FindAccessToken(
                 accessTokens,
                 profileData,
                 instanceUrl,
                 homeAccountId,
-                requireClientIdMatch: isApplicationProfile,
                 "No valid PAC CLI access token was found for this profile/environment. Run 'pac auth who' for the selected profile, then run this command again.");
         }
 
@@ -180,7 +179,6 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             PacProfileData profileData,
             string instanceUrl,
             string homeAccountId,
-            bool requireClientIdMatch,
             string errorMessage)
         {
             var targetHost = new Uri(instanceUrl).Host;
@@ -189,14 +187,12 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             foreach (var tokenProperty in accessTokens.EnumerateObject())
             {
                 var token = tokenProperty.Value;
-                var clientId = GetJsonString(token, "client_id");
                 var realm = GetJsonString(token, "realm");
                 var target = GetJsonString(token, "target");
                 var tokenHomeAccountId = GetJsonString(token, "home_account_id");
                 var expiresOn = GetJsonString(token, "expires_on");
                 var secret = GetJsonString(token, "secret");
 
-                if (requireClientIdMatch && !string.Equals(clientId, profileData.User, StringComparison.OrdinalIgnoreCase)) continue;
                 if (!string.Equals(realm, profileData.TenantId, StringComparison.OrdinalIgnoreCase)) continue;
                 if (string.IsNullOrWhiteSpace(target) || !target.Contains(targetHost, StringComparison.OrdinalIgnoreCase)) continue;
                 if (!string.IsNullOrWhiteSpace(homeAccountId) && !string.Equals(tokenHomeAccountId, homeAccountId, StringComparison.OrdinalIgnoreCase)) continue;
