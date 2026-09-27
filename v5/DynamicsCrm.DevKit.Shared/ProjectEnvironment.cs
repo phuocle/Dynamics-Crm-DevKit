@@ -83,7 +83,6 @@ namespace DynamicsCrm.DevKit.Shared
                 if (index <= 0) continue;
 
                 var key = line.Substring(0, index).Trim();
-                if (string.IsNullOrWhiteSpace(key)) continue;
 
                 var value = line.Substring(index + 1).Trim();
                 values[key] = Unquote(value);

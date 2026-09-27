@@ -17,7 +17,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             if (!File.Exists(source))
                 throw new FileNotFoundException($"Source file not found: {source}");
 
-            var extension = Path.GetExtension(source)?.ToLowerInvariant();
+            var extension = Path.GetExtension(source).ToLowerInvariant();
             if (!Supported.Contains(extension))
                 throw new NotSupportedException($"Unsupported extension: {extension}. Supported: {string.Join(", ", Supported)}");
 
