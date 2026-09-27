@@ -207,7 +207,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                     string message = string.Empty, fields = string.Empty, entity = string.Empty;
 
                     var ctorArgs = attr.ConstructorArguments;
-                    if (ctorArgs != null && ctorArgs.Count >= 6)
+                    if (ctorArgs.Count >= 6)
                     {
                         wi = CecilArgToString(ctorArgs[0]);
                         desc = CecilArgToString(ctorArgs[1]);
@@ -312,7 +312,6 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             if (rest == null) rest = typeFullName;
 
             var parts = rest.Split('.');
-            if (parts.Length == 0) return string.Empty;
             var csFileName = parts[parts.Length - 1] + ".cs";
             var subDirs = parts.Take(parts.Length - 1).ToArray();
             var targetFullPath = Path.Combine(codeRootDir, Path.Combine(subDirs.Length > 0 ? Path.Combine(subDirs) : string.Empty), csFileName);
@@ -324,7 +323,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
         private static string FindSiblingProjectRoot(string startingDir, string projectFolderName)
         {
             var dir = new DirectoryInfo(startingDir);
-            while (dir != null && dir.Parent != null)
+            while (dir.Parent != null)
             {
                 var sibling = Path.Combine(dir.Parent.FullName, projectFolderName);
                 if (Directory.Exists(sibling))

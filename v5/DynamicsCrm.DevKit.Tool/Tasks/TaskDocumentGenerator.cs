@@ -132,7 +132,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                     if (targetMatch.Success)
                     {
                         var parts = targetMatch.Groups["rel"].Value.Split('.');
-                        if (parts.Length > 0) relatedEntity = parts[0];
+                        relatedEntity = parts[0];
                     }
                     var srcAttrMatch = Regex.Match(xml, @"Aggregate.*?GetEntityProperty\s+Attribute=""(?<attr>[^""]+)"".*?EntityName=""(?<ent>[^""]+)""", RegexOptions.Singleline);
                     var srcAttr = srcAttrMatch.Success ? srcAttrMatch.Groups["attr"].Value : "?";
@@ -158,7 +158,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                     if (entityRef.StartsWith("related_"))
                     {
                         var relParts = entityRef.Replace("related_", "").Split('#');
-                        var lookupField = relParts.Length > 0 ? relParts[0] : "?";
+                        var lookupField = relParts[0];
                         var relEntity = relParts.Length > 1 ? relParts[1] : "?";
                         fieldRefs.Add($"{relEntity}({lookupField}).{attrName}");
                     }
@@ -371,8 +371,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 EntityMetadata metadata;
                 if (!metadataDict.TryGetValue(entity.ToLower(), out metadata)) continue;
                 if (metadata.IsIntersect ?? false) continue;
-                HashSet<string> lookups;
-                if (!allLookupSchemas.TryGetValue(entity, out lookups)) continue;
+                var lookups = allLookupSchemas[entity];
                 AppendErdEdges(sb, metadata, metadata.SchemaName, metadataDict, lookups, globalErdEdges);
             }
 
@@ -715,7 +714,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 sb.Append(NEW_LINE);
             }
 
-            if (!(businessRulesDict.TryGetValue(entityName, out _) && rules != null && rules.Count > 0) && !powerFxColumns.Any())
+            if (!(businessRulesDict.TryGetValue(entityName, out _) && rules.Count > 0) && !powerFxColumns.Any())
             {
                 sb.Append($"> *No business rules or Power Fx*{NEW_LINE}");
             }
@@ -828,8 +827,8 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 line = line.Substring(3) + "**";
                 line = line.Replace("****", "");
             }
-            if ((attribute.DisplayName?.UserLocalizedLabel?.Label.Contains("[") ?? false) &&
-                 (attribute.DisplayName?.UserLocalizedLabel?.Label.Contains("]") ?? false))
+            var userLabel = attribute.DisplayName?.UserLocalizedLabel?.Label;
+            if (userLabel?.Contains("[") == true && userLabel.Contains("]"))
             {
                 line = line.Replace("|", "~~|~~");
                 line = line.Substring(3) + "~~";
@@ -905,7 +904,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
         {
             if (attribute is LookupAttributeMetadata lookup)
             {
-                var value = $"{attribute.AttributeType.ToWikiOptionSetString()}";
+                var value = attribute.AttributeType.ToWikiOptionSetString();
                 value += "<ul>";
                 foreach (var item in lookup.Targets.OrderBy(x => x, StringComparer.OrdinalIgnoreCase))
                     value += $"<li>{EntityWikiLink(item)}</li>";
@@ -914,7 +913,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             }
             else if (attribute is StateAttributeMetadata state)
             {
-                var value = $"{attribute.AttributeType.ToWikiOptionSetString()}";
+                var value = attribute.AttributeType.ToWikiOptionSetString();
                 value += "<ul>";
                 foreach (var item in state.OptionSet.Options.OrderBy(x => x.Label.ToWikiString(), StringComparer.OrdinalIgnoreCase).ThenBy(x => x.Value))
                     value += $"<li>{item.Label.ToWikiString()} [{item.Value}]</li>";
@@ -923,7 +922,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             }
             else if (attribute is StatusAttributeMetadata status)
             {
-                var value = $"{attribute.AttributeType.ToWikiOptionSetString()}";
+                var value = attribute.AttributeType.ToWikiOptionSetString();
                 value += "<ul>";
                 foreach (var item in status.OptionSet.Options.OrderBy(x => x.Label.ToWikiString(), StringComparer.OrdinalIgnoreCase).ThenBy(x => x.Value))
                     value += $"<li>{item.Label.ToWikiString()} [{item.Value}]</li>";
@@ -932,7 +931,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             }
             else if (attribute is PicklistAttributeMetadata picklist)
             {
-                var value = $"{attribute.AttributeType.ToWikiOptionSetString()}";
+                var value = attribute.AttributeType.ToWikiOptionSetString();
                 if (picklist.OptionSet.IsGlobal ?? false)
                 {
                     value += "<ul>";

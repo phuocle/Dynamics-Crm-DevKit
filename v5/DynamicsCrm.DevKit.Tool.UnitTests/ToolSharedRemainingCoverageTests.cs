@@ -317,6 +317,116 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
             Assert.IsFalse(cache.HasCache(connectionName));
         }
 
+        [TestMethod]
+        public void SecureTokenCache_AfterAccess_StateChanged_PersistsCache()
+        {
+            var cache = new SecureTokenCache();
+            var connectionName = "tool-afteraccess-test";
+            cache.Clear(connectionName);
+
+            var app = PublicClientApplicationBuilder
+                .Create("51f81489-12ee-4a9e-aaae-a2591f45987d")
+                .WithRedirectUri("http://localhost")
+                .Build();
+            cache.RegisterCache(app, connectionName);
+
+            // Fire the installed before/after-access callbacks directly, the way
+            // MSAL does on cache reads and token writes.
+            var userTokenCache = app.UserTokenCache;
+            var argsType = BuildNotificationArgs(userTokenCache, hasStateChanged: true);
+
+            var afterAccess = userTokenCache.GetType()
+                .GetField("<AfterAccess>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic)
+                ?.GetValue(userTokenCache);
+            Assert.IsNotNull(afterAccess, "RegisterCache must install the after-access callback.");
+            afterAccess.GetType().GetMethod("Invoke").Invoke(afterAccess, new[] { argsType });
+
+            Assert.IsTrue(cache.HasCache(connectionName),
+                "a state-changed notification must persist the serialized cache.");
+
+            // With no cache file on disk the before-access callback sees null data
+            // and skips the deserialize.
+            cache.Clear(connectionName);
+            var beforeAccess = userTokenCache.GetType()
+                .GetField("<BeforeAccess>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic)
+                ?.GetValue(userTokenCache);
+            Assert.IsNotNull(beforeAccess, "RegisterCache must install the before-access callback.");
+            var readArgs = BuildNotificationArgs(userTokenCache, hasStateChanged: false);
+            beforeAccess.GetType().GetMethod("Invoke").Invoke(beforeAccess, new[] { readArgs });
+
+            cache.Clear(connectionName);
+            Assert.IsFalse(cache.HasCache(connectionName));
+        }
+
+        private static object BuildNotificationArgs(object userTokenCache, bool hasStateChanged)
+        {
+            var afterAccessProbe = userTokenCache.GetType()
+                .GetField("<AfterAccess>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic)
+                ?.GetValue(userTokenCache);
+            Assert.IsNotNull(afterAccessProbe);
+            var argsType = afterAccessProbe.GetType().GetMethod("Invoke").GetParameters()[0].ParameterType;
+            var constructor = argsType
+                .GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                .OrderBy(ctor => ctor.GetParameters().Length)
+                .First();
+            return constructor.Invoke(new object[]
+            {
+                (Microsoft.Identity.Client.ITokenCacheSerializer)userTokenCache,
+                "51f81489-12ee-4a9e-aaae-a2591f45987d",
+                null,
+                hasStateChanged,   // HasStateChanged → the after-access lambda serializes and saves
+                false,             // isApplicationCache
+                null,              // suggestedCacheKey
+                true,              // hasTokens
+                null,              // suggestedCacheExpiry
+                System.Threading.CancellationToken.None
+            });
+        }
+
+        [TestMethod]
+        public void SecureTokenCache_IO_Failures_Are_Swallowed()
+        {
+            var cache = new SecureTokenCache();
+            var locationField = typeof(SecureTokenCache).GetField("_cacheLocation", BindingFlags.Instance | BindingFlags.NonPublic);
+            var originalLocation = (string)locationField.GetValue(cache);
+
+            // SaveCacheData against a file-as-directory target fails and is swallowed.
+            var blockerFile = Path.Combine(Path.GetTempPath(), "stc-block-" + Guid.NewGuid().ToString("N") + ".txt");
+            File.WriteAllText(blockerFile, "a file, not a directory");
+            var lockedDir = Path.Combine(Path.GetTempPath(), "stc-locked-" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(lockedDir);
+            try
+            {
+                locationField.SetValue(cache, blockerFile);
+                InvokeInstance(cache, "SaveCacheData", "tool-catch-test", new byte[] { 1, 2, 3 });
+                Assert.IsFalse(cache.HasCache("tool-catch-test"), "the write failed and left no cache file.");
+
+                // ClearAll against a directory holding an open handle fails and is swallowed.
+                locationField.SetValue(cache, lockedDir);
+                var lockedFile = Path.Combine(lockedDir, "locked.msalcache");
+                using (File.Open(lockedFile, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
+                {
+                    cache.ClearAll();
+                    Assert.IsTrue(Directory.Exists(lockedDir), "the recursive delete failed as expected.");
+                }
+
+                // Clear against a cache file held open with FileShare.None fails and is swallowed.
+                var lockedCache = Path.Combine(lockedDir, "tool-lockedclear.msalcache");
+                File.WriteAllBytes(lockedCache, new byte[] { 1 });
+                using (File.Open(lockedCache, FileMode.Open, FileAccess.Read, FileShare.None))
+                {
+                    cache.Clear("tool-lockedclear");
+                    Assert.IsTrue(File.Exists(lockedCache), "File.Delete failed as expected; the catch swallowed it.");
+                }
+            }
+            finally
+            {
+                locationField.SetValue(cache, originalLocation);
+                try { if (Directory.Exists(lockedDir)) Directory.Delete(lockedDir, true); } catch { /* best-effort cleanup */ }
+                if (File.Exists(blockerFile)) File.Delete(blockerFile);
+            }
+        }
+
         #endregion
 
         #region PacProfileHelper

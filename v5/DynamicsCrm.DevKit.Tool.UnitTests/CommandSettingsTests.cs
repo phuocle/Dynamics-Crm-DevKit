@@ -139,5 +139,14 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
             Assert.AreEqual("--solutions is required", new SolutionLayerSettings { Connection = "a" }.Validate().Message);
             Assert.IsTrue(new SolutionLayerSettings { Connection = "a", Solutions = "b" }.Validate().Successful);
         }
+
+        [TestMethod]
+        public void DocumentGenerator_And_SolutionLayer_Settings_Optional_Properties_ReadBack()
+        {
+            var documentSettings = new DocumentGeneratorSettings { TimeZone = "+7" };
+            Assert.AreEqual("+7", documentSettings.TimeZone);
+            var solutionSettings = new SolutionLayerSettings { Output = "out.md" };
+            Assert.AreEqual("out.md", solutionSettings.Output);
+        }
     }
 }

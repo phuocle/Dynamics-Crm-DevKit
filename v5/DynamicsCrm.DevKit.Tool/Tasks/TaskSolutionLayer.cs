@@ -367,7 +367,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
 
             foreach (var grp in grouped)
             {
-                if (grp == null || grp.Key == null) continue;
+                if (grp.Key == null) continue;
                 
                 var def = componentDefs.FirstOrDefault(d => d.Item1 == grp.Key.Value);
                 if (def == null) continue;
@@ -411,8 +411,6 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 {
                     componentApiName = GetSolutionComponentName(componentTypeValue.ToString());
                 }
-
-                if (componentApiName == "418") componentApiName = "msdyn_dataflow";
 
                 var req = new RetrieveMultipleRequest
                 {

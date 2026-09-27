@@ -356,6 +356,21 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
             openLabel.UserLocalizedLabel = openLabel.LocalizedLabels[0];
             MetadataExtensionsTests.SetProp(openBracket, "DisplayName", openLabel);
             Assert.IsNotNull((string)Invoke("FormatColumnRow", openBracket, 1));
+
+            var noBracket = MakeString("title", "Title");
+            var plainLabel = new Label();
+            plainLabel.LocalizedLabels.Add(new LocalizedLabel("Plain Title", 1033));
+            plainLabel.UserLocalizedLabel = plainLabel.LocalizedLabels[0];
+            MetadataExtensionsTests.SetProp(noBracket, "DisplayName", plainLabel);
+            var plainLabelLine = (string)Invoke("FormatColumnRow", noBracket, 1);
+            Assert.IsFalse(plainLabelLine.Contains("~~"), "labels without brackets stay unescaped.");
+
+            // display name present but no user-localized label (?. short-circuits to null)
+            var noUll = MakeString("title", "Title");
+            var bareLabel = new Label();
+            bareLabel.LocalizedLabels.Add(new LocalizedLabel("Bare Label", 1033));
+            MetadataExtensionsTests.SetProp(noUll, "DisplayName", bareLabel);
+            Assert.IsNotNull((string)Invoke("FormatColumnRow", noUll, 1));
         }
 
         [TestMethod]
@@ -461,7 +476,12 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
         public void GetForms_Skips_Missing_Unknown_And_Foreign_Rows()
         {
             var account = MakeEntity("account", "Account");
-            SetField("metadataDict", new Dictionary<string, EntityMetadata>(StringComparer.OrdinalIgnoreCase) { ["account"] = account });
+            var contact = MakeEntity("contact", "Contact");
+            SetField("metadataDict", new Dictionary<string, EntityMetadata>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["account"] = account,
+                ["contact"] = contact
+            });
             SetField("entities", new List<string> { "account" });
 
             var service = new FakeDataverseService();
@@ -478,7 +498,7 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
             };
 
             var forms = (System.Collections.IDictionary)Invoke("GetForms", service);
-            Assert.AreEqual(1, forms.Count);
+            Assert.AreEqual(1, forms.Count, "rows for known-but-unsolutioned entities are skipped.");
             var accountForms = (System.Collections.IList)forms["account"];
             Assert.AreEqual(2, accountForms.Count);
         }
@@ -487,7 +507,12 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
         public void GetViews_Skips_Missing_Unknown_And_Foreign_Rows()
         {
             var account = MakeEntity("account", "Account");
-            SetField("metadataDict", new Dictionary<string, EntityMetadata>(StringComparer.OrdinalIgnoreCase) { ["account"] = account });
+            var contact = MakeEntity("contact", "Contact");
+            SetField("metadataDict", new Dictionary<string, EntityMetadata>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["account"] = account,
+                ["contact"] = contact
+            });
             SetField("entities", new List<string> { "account" });
 
             var service = new FakeDataverseService
@@ -501,7 +526,7 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
             };
 
             var views = (System.Collections.IDictionary)Invoke("GetViews", service);
-            Assert.AreEqual(1, views.Count);
+            Assert.AreEqual(1, views.Count, "rows for known-but-unsolutioned entities are skipped.");
             var accountViews = (System.Collections.IList)views["account"];
             Assert.AreEqual(2, accountViews.Count);
         }
@@ -547,6 +572,348 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
         #endregion
 
         #region Remaining stragglers
+
+        [TestMethod]
+        public void ParseFormulaXml_AggregateFallback_And_RelatedWithoutHash()
+        {
+            // sourceType 2 xml with no aggregate operator falls back to "AGGREGATE"
+            Assert.AreEqual("AGGREGATE(?)", Invoke("ParseFormulaXml", "<nothing here />", 2));
+
+            // related_ entity reference without a '#' segment keeps the "?" entity
+            var relatedNoHash = @"<GetEntityProperty Attribute=""fullname"" Entity=""[InputEntities(&quot;related_account&quot;)]"" />";
+            Assert.AreEqual("?(account).fullname", Invoke("ParseFormulaXml", relatedNoHash, 0));
+        }
+
+        [TestMethod]
+        public void DocumentErd_Intersect_Edge_Null_And_Unknown_Ends()
+        {
+            var account = MakeEntity("account", "Account");
+            var contact = MakeEntity("contact", "Contact");
+            var noRelIntersect = MakeEntity("ix_norel", "IxNoRel");
+            MetadataExtensionsTests.SetProp(noRelIntersect, "IsIntersect", true);
+            var nullEndsIntersect = MakeEntity("ix_null", "IxNull");
+            MetadataExtensionsTests.SetProp(nullEndsIntersect, "IsIntersect", true);
+            var ghostIntersect = MakeEntity("ix_ghost", "IxGhost");
+            MetadataExtensionsTests.SetProp(ghostIntersect, "IsIntersect", true);
+
+            MetadataExtensionsTests.SetProp(account, "ManyToManyRelationships", new[]
+            {
+                new ManyToManyRelationshipMetadata { IntersectEntityName = "ix_null" }
+            });
+            MetadataExtensionsTests.SetProp(contact, "ManyToManyRelationships", new[]
+            {
+                new ManyToManyRelationshipMetadata
+                {
+                    IntersectEntityName = "ix_ghost",
+                    Entity1LogicalName = "missing1",
+                    Entity2LogicalName = "missing2"
+                }
+            });
+
+            SetField("metadataDict", new Dictionary<string, EntityMetadata>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["account"] = account,
+                ["contact"] = contact,
+                ["ix_norel"] = noRelIntersect,
+                ["ix_null"] = nullEndsIntersect,
+                ["ix_ghost"] = ghostIntersect
+            });
+            SetField("entities", new List<string> { "account", "contact", "ix_norel", "ix_null", "ix_ghost" });
+
+            var file = Path.Combine(Path.GetTempPath(), "erd-edge-" + Guid.NewGuid().ToString("N") + ".md");
+            try
+            {
+                Invoke("DocumentErd", file, new[] { account, contact, noRelIntersect, nullEndsIntersect, ghostIntersect });
+                var text = File.ReadAllText(file);
+                Assert.IsFalse(text.Contains("*--*"), "no intersect edge survives null or unknown ends.");
+            }
+            finally
+            {
+                if (File.Exists(file)) File.Delete(file);
+            }
+        }
+
+        #region CreateDocumentFile crafted scenarios
+
+        private static readonly DateTime DocStamp = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        private static void Stamp(AttributeMetadata attribute)
+        {
+            MetadataExtensionsTests.SetProp(attribute, "CreatedOn", DocStamp);
+            MetadataExtensionsTests.SetProp(attribute, "ModifiedOn", DocStamp);
+        }
+
+        private static StringAttributeMetadata DocString(string logicalName, int? sourceType = null, string formula = null)
+        {
+            var attribute = new StringAttributeMetadata { LogicalName = logicalName, SchemaName = logicalName };
+            if (formula != null) attribute.FormulaDefinition = formula;
+            if (sourceType.HasValue) MetadataExtensionsTests.SetProp(attribute, "SourceType", sourceType);
+            attribute.DisplayName = new Label(logicalName, 1033);
+            attribute.DisplayName.UserLocalizedLabel = new LocalizedLabel(logicalName, 1033);
+            attribute.IsSearchable = true;
+            attribute.IsAuditEnabled = new BooleanManagedProperty(true);
+            attribute.RequiredLevel = new AttributeRequiredLevelManagedProperty(AttributeRequiredLevel.None);
+            Stamp(attribute);
+            return attribute;
+        }
+
+        private static EntityMetadata MakeDocEntity(string logicalName, string schemaName, params AttributeMetadata[] attributes)
+        {
+            var metadata = new EntityMetadata
+            {
+                SchemaName = schemaName,
+                DisplayName = new Label(schemaName, 1033),
+                DisplayCollectionName = new Label(schemaName + "s", 1033),
+                Description = new Label(schemaName + " description", 1033)
+            };
+            metadata.DisplayName.UserLocalizedLabel = new LocalizedLabel(schemaName, 1033);
+            metadata.DisplayCollectionName.UserLocalizedLabel = new LocalizedLabel(schemaName + "s", 1033);
+            MetadataExtensionsTests.SetProp(metadata, "LogicalName", logicalName);
+            MetadataExtensionsTests.SetProp(metadata, "PrimaryIdAttribute", logicalName + "id");
+            MetadataExtensionsTests.SetProp(metadata, "PrimaryNameAttribute", "name");
+            MetadataExtensionsTests.SetProp(metadata, "Attributes", attributes);
+            MetadataExtensionsTests.SetProp(metadata, "Keys", Array.Empty<EntityKeyMetadata>());
+            MetadataExtensionsTests.SetProp(metadata, "ManyToOneRelationships", Array.Empty<OneToManyRelationshipMetadata>());
+            MetadataExtensionsTests.SetProp(metadata, "OneToManyRelationships", Array.Empty<OneToManyRelationshipMetadata>());
+            MetadataExtensionsTests.SetProp(metadata, "ManyToManyRelationships", Array.Empty<ManyToManyRelationshipMetadata>());
+            MetadataExtensionsTests.SetProp(metadata, "CreatedOn", DocStamp);
+            MetadataExtensionsTests.SetProp(metadata, "ModifiedOn", DocStamp);
+            MetadataExtensionsTests.SetProp(metadata, "IsCustomEntity", true);
+            return metadata;
+        }
+
+        private void StageSingleEntity(EntityMetadata entity)
+        {
+            SetField("metadataDict", new Dictionary<string, EntityMetadata>(StringComparer.OrdinalIgnoreCase)
+            {
+                [entity.LogicalName] = entity
+            });
+            SetField("entities", new List<string> { entity.LogicalName });
+        }
+
+        private string InvokeCreateDocumentFile(EntityMetadata entity)
+        {
+            var file = Path.Combine(Path.GetTempPath(), "cdf-" + Guid.NewGuid().ToString("N") + ".md");
+            try
+            {
+                Invoke("CreateDocumentFile", entity.LogicalName, file, new[] { entity });
+                return File.ReadAllText(file);
+            }
+            finally
+            {
+                if (File.Exists(file)) File.Delete(file);
+            }
+        }
+
+        [TestMethod]
+        public void CreateDocumentFile_EmptyDisplayName_UsesSchemaName_And_ProcessFlagSet()
+        {
+            // DisplayName stays null → the header falls back to the schema name;
+            // IsBusinessProcessEnabled is set so the null-conditional takes its value branch.
+            var entity = MakeDocEntity("p42_flagged", "P42Flagged", DocString("p42_name"));
+            MetadataExtensionsTests.SetProp(entity, "DisplayName", (Label)null);
+            MetadataExtensionsTests.SetProp(entity, "IsBusinessProcessEnabled", true);
+            StageSingleEntity(entity);
+            var text = InvokeCreateDocumentFile(entity);
+            StringAssert.Contains(text, $"# P42Flagged - P42Flagged - p42_flagged");
+            StringAssert.Contains(text, "✅Process");
+        }
+
+        [TestMethod]
+        public void CreateDocumentFile_PlainFormula_KeptRaw_And_NullPowerFxFormula_Flagged()
+        {
+            // FormulaDefinition without <?xml stays raw; Power Fx attr with no
+            // FormulaDefinition falls back to "*Definition not available*".
+            var entity = MakeDocEntity("p43_formulas", "P43Formulas",
+                DocString("p43_calc", sourceType: 1, formula: "plain formula text"),
+                DocString("p43_powerfx", sourceType: 3, formula: null));
+            StageSingleEntity(entity);
+            var text = InvokeCreateDocumentFile(entity);
+            StringAssert.Contains(text, "`plain formula text`");
+            StringAssert.Contains(text, "*Definition not available*");
+        }
+
+        [TestMethod]
+        public void CreateDocumentFile_Blacklisted_Relationship_Positions_Filtered()
+        {
+            var entity = MakeDocEntity("p44_rels", "P44Rels", DocString("p44_name"));
+            MetadataExtensionsTests.SetProp(entity, "ManyToOneRelationships", new[]
+            {
+                new OneToManyRelationshipMetadata
+                {
+                    SchemaName = "r1", ReferencingEntity = "p44_rels", ReferencedEntity = "syncerror",
+                    ReferencingAttribute = "attr_a", ReferencedAttribute = "attr_b"
+                },
+                new OneToManyRelationshipMetadata
+                {
+                    SchemaName = "r2", ReferencingEntity = "p44_rels", ReferencedEntity = "p44_rels",
+                    ReferencingAttribute = "attr_c", ReferencedAttribute = "owner"
+                },
+                new OneToManyRelationshipMetadata
+                {
+                    SchemaName = "r3", ReferencingEntity = "p44_rels", ReferencedEntity = "p44_rels",
+                    ReferencingAttribute = "createdby", ReferencedAttribute = "attr_d"
+                },
+                new OneToManyRelationshipMetadata
+                {
+                    SchemaName = "r4", ReferencingEntity = "p44_rels", ReferencedEntity = "p44_rels",
+                    ReferencingAttribute = "attr_e", ReferencedAttribute = "attr_f"
+                }
+            });
+            StageSingleEntity(entity);
+            var text = InvokeCreateDocumentFile(entity);
+            Assert.IsFalse(text.Contains("|r1|"), "blacklisted referenced entity is filtered from N-1.");
+            Assert.IsFalse(text.Contains("|r2|"), "blacklisted referenced attribute is filtered from N-1.");
+            Assert.IsFalse(text.Contains("|r3|"), "blacklisted referencing attribute is filtered from N-1.");
+            StringAssert.Contains(text, "|r4", "the clean relationship stays.");
+        }
+
+        [TestMethod]
+        public void CreateDocumentFile_DoubleUnderscore_SchemaName_PascalizesEmptyPart()
+        {
+            var entity = MakeDocEntity("p45_weird", "new__weird", DocString("p45_name"));
+            StageSingleEntity(entity);
+            var folder = Path.Combine(Path.GetTempPath(), "cdf-weird-" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(folder);
+            // A sibling md with a "## " header drives the server-code walk, where the
+            // PascalCase split sees the empty part between the double underscores.
+            File.WriteAllText(Path.Combine(folder, "Sibling.md"),
+                "## Steps.Some.Plugin.Whatever\r\nsome line\r\n---\r\n>Generated by tool\r\n");
+            var file = Path.Combine(folder, $"{entity.LogicalName}.md");
+            try
+            {
+                Invoke("CreateDocumentFile", entity.LogicalName, file, new[] { entity });
+                var text = File.ReadAllText(file);
+                StringAssert.Contains(text, "# new__weird - new__weird - p45_weird");
+                StringAssert.Contains(text, "> *No server-side code registered*",
+                    "the non-matching sibling is scanned (pascalize split) but contributes nothing.");
+            }
+            finally
+            {
+                if (Directory.Exists(folder)) Directory.Delete(folder, true);
+            }
+        }
+
+        [TestMethod]
+        public void AppendErdEdges_Deduplicates_Edges_To_The_Same_Target()
+        {
+            var account = MakeEntity("account", "Account",
+                MakeLookup("primarycontactid", "PrimaryContactId", "contact"),
+                MakeLookup("othercontactid", "OtherContactId", "contact"));
+            var contact = MakeEntity("contact", "Contact");
+            MetadataExtensionsTests.SetProp(account, "ManyToOneRelationships", new[]
+            {
+                new OneToManyRelationshipMetadata
+                {
+                    SchemaName = "account_primary_contact", ReferencingEntity = "account", ReferencedEntity = "contact",
+                    ReferencingAttribute = "primarycontactid", ReferencedAttribute = "contactid"
+                },
+                new OneToManyRelationshipMetadata
+                {
+                    SchemaName = "account_other_contact", ReferencingEntity = "account", ReferencedEntity = "contact",
+                    ReferencingAttribute = "othercontactid", ReferencedAttribute = "contactid"
+                }
+            });
+
+            var lookupSchemas = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "account_primary_contact", "account_other_contact"
+            };
+            var edgeTracker = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var sb = new StringBuilder();
+            Invoke("AppendErdEdges", sb, account, "Account",
+                new Dictionary<string, EntityMetadata>(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["account"] = account, ["contact"] = contact
+                },
+                lookupSchemas, edgeTracker);
+
+            Assert.AreEqual(1, edgeTracker.Count, "the second relationship to the same target is a duplicate edge.");
+            var text = sb.ToString();
+            StringAssert.Contains(text, "Account --* Contact");
+            Assert.AreEqual(1, text.Split(new[] { "Account --* Contact" }, StringSplitOptions.None).Length - 1,
+                "no duplicated edge lines.");
+        }
+
+        [TestMethod]
+        public void CreateDocumentFile_RulesList_Empty_Behaves_Like_NoRules()
+        {
+            var brInfoType = generatorType.GetNestedType("BusinessRuleInfo", BindingFlags.NonPublic);
+            Assert.IsNotNull(brInfoType);
+            var dict = (System.Collections.IDictionary)Activator.CreateInstance(
+                generatorType.GetField("businessRulesDict", BindingFlags.Instance | BindingFlags.NonPublic).FieldType);
+            dict["p47_empty_rules"] = Activator.CreateInstance(typeof(List<>).MakeGenericType(brInfoType));
+            SetField("businessRulesDict", dict);
+
+            var withPowerFx = MakeDocEntity("p47_empty_rules", "P47EmptyRules", DocString("p47_field", sourceType: 3));
+            StageSingleEntity(withPowerFx);
+            var withPowerFxText = InvokeCreateDocumentFile(withPowerFx);
+            Assert.IsFalse(withPowerFxText.Contains("### Business Rules"),
+                "an empty rules list renders no business-rules table.");
+            StringAssert.Contains(withPowerFxText, "### Power Fx",
+                "power-fx columns still render next to empty rules.");
+
+            var withoutPowerFx = MakeDocEntity("p47b_empty_rules", "P47bEmptyRules", DocString("p47b_field"));
+            StageSingleEntity(withoutPowerFx);
+            var withoutPowerFxText = InvokeCreateDocumentFile(withoutPowerFx);
+            StringAssert.Contains(withoutPowerFxText, "> *No business rules or Power Fx*",
+                "an empty rules list with no Power Fx columns falls back to the placeholder.");
+        }
+
+        [TestMethod]
+        public void CreateDocumentFile_MissingDirectory_SkipsWalk_ThenFailsOnWrite()
+        {
+            var entity = MakeDocEntity("p48_nodir", "P48NoDir", DocString("p48_field"));
+            StageSingleEntity(entity);
+            var file = Path.Combine(Path.GetTempPath(), "p48-no-such-dir-" + Guid.NewGuid().ToString("N"), "doc.md");
+            try
+            {
+                Invoke("CreateDocumentFile", entity.LogicalName, file, new[] { entity });
+                Assert.Fail("writing into a missing directory must throw.");
+            }
+            catch (System.Reflection.TargetInvocationException ex)
+            {
+                Assert.IsInstanceOfType(ex.InnerException, typeof(DirectoryNotFoundException),
+                    "the skipped directory walk reaches the final write, which fails.");
+            }
+        }
+
+        [TestMethod]
+        public void ProjectEnvironment_Find_Helpers_Swallow_Invalid_Paths()
+        {
+            var findFile = typeof(ProjectEnvironment).GetMethod("FindFile",
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+            Assert.IsNotNull(findFile);
+            var findGitIgnore = typeof(ProjectEnvironment).GetMethod("FindNearestGitIgnore",
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+
+            // a NUL character inside the path makes DirectoryInfo throw (ArgumentException),
+            // which both helpers swallow and turn into a null result.
+            var invalid = "C:\\a\\b\u0000c";
+            Assert.IsNull(findFile.Invoke(null, new object[] { invalid }),
+                "an invalid path must be swallowed by the catch.");
+            Assert.IsNull(findGitIgnore.Invoke(null, new object[] { invalid }),
+                "an invalid path must be swallowed by the catch.");
+        }
+
+        [TestMethod]
+        public void Utility_ForceWriteAllText_Overwritable_Existing_File()
+        {
+            var plainFile = Path.Combine(Path.GetTempPath(), "fwt-" + Guid.NewGuid().ToString("N") + ".txt");
+            try
+            {
+                File.WriteAllText(plainFile, "old");
+                DynamicsCrm.DevKit.Tool.Lib.Utility.ForceWriteAllText(plainFile, "new");
+                Assert.AreEqual("new", File.ReadAllText(plainFile),
+                    "a writable existing file is overwritten without touching attributes.");
+            }
+            finally
+            {
+                if (File.Exists(plainFile)) File.Delete(plainFile);
+            }
+        }
+
+        #endregion
 
         [TestMethod]
         public void Straggler_Branches()

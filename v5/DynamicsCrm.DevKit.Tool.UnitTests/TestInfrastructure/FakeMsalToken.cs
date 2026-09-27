@@ -21,11 +21,19 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests.TestInfrastructure;
 public static class FakeMsalToken
 {
     private const string AccessToken = "fake-access-token";
+    internal const string AccessTokenValue = AccessToken;
     internal const string DefaultUsername = "user@contoso.com";
     private static readonly object Gate = new();
     private static bool patched;
 
     public static bool ThrowOnSilent { get; set; }
+
+    /// <summary>When set, silent acquisition throws MsalServiceException instead (service outage path).</summary>
+    public static bool ThrowServiceOnSilent { get; set; }
+
+    /// <summary>When set, device-code acquisition returns a canceled task (timeout path).</summary>
+    public static bool CancelDeviceCode { get; set; }
+
     public static string LastCallbackMessage { get; private set; }
 
     /// <summary>Accounts returned by the detoured GetAccountsAsync.</summary>
@@ -73,11 +81,11 @@ public static class FakeMsalToken
                 harmony.Patch(method, prefix: prefix);
             }
 
-            var getAccounts = typeof(PublicClientApplication).GetMethod("GetAccountsAsync", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly, null, Type.EmptyTypes, null);
-            if (getAccounts != null && getAccounts.ReturnType == typeof(Task<IEnumerable<IAccount>>))
-            {
-                harmony.Patch(getAccounts, prefix: new HarmonyMethod(typeof(Patches), nameof(Patches.GetAccountsPrefix)));
-            }
+            var getAccounts = typeof(ClientApplicationBase).GetMethod("GetAccountsAsync", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly, null, Type.EmptyTypes, null);
+            if (getAccounts == null || getAccounts.ReturnType != typeof(Task<IEnumerable<IAccount>>))
+                throw new InvalidOperationException(
+                    "FakeMsalToken could not locate ClientApplicationBase.GetAccountsAsync(); the MSAL surface may have moved.");
+            harmony.Patch(getAccounts, prefix: new HarmonyMethod(typeof(Patches), nameof(Patches.GetAccountsPrefix)));
         }
     }
 
@@ -125,14 +133,22 @@ public static class FakeMsalToken
     {
         public static bool ExecuteAsyncPrefix(object __instance, ref Task<AuthenticationResult> __result)
         {
-            if (ThrowOnSilent && __instance.GetType().Name == "AcquireTokenSilentParameterBuilder")
+            if (__instance.GetType().Name == "AcquireTokenSilentParameterBuilder")
             {
-                throw new MsalUiRequiredException("fake_ui_required", "No cached token in tests.");
+                if (ThrowServiceOnSilent)
+                    throw new MsalServiceException("fake_service_error", "MSAL service down in tests.");
+                if (ThrowOnSilent)
+                    throw new MsalUiRequiredException("fake_ui_required", "No cached token in tests.");
             }
 
             if (__instance.GetType().Name == "AcquireTokenWithDeviceCodeParameterBuilder")
             {
                 InvokeDeviceCodeCallback(__instance);
+                if (CancelDeviceCode)
+                {
+                    __result = Task.FromCanceled<AuthenticationResult>(new CancellationToken(canceled: true));
+                    return false;
+                }
             }
 
             __result = Task.FromResult(CreateResult());
@@ -148,17 +164,24 @@ public static class FakeMsalToken
 
         private static void InvokeDeviceCodeCallback(object builder)
         {
-            var callbackField = builder.GetType()
-                .GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
-                .FirstOrDefault(field =>
-                    field.FieldType.IsGenericType &&
-                    field.FieldType.GetGenericTypeDefinition() == typeof(Func<,>) &&
-                    field.FieldType.GetGenericArguments()[0].Name == "DeviceCodeResult");
+            // The device-code callback is not stored on the builder itself; it
+            // lives on the AcquireTokenWithDeviceCodeParameters instance held
+            // in the builder's <Parameters> backing field.
+            var parameters = builder.GetType()
+                .GetField("<Parameters>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic)
+                ?.GetValue(builder);
+            if (parameters == null) return;
 
-            if (callbackField?.GetValue(builder) is not Delegate callback) return;
+            var callback = parameters.GetType()
+                .GetField("<DeviceCodeResultCallback>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic)
+                ?.GetValue(parameters) as Delegate;
+            if (callback == null) return;
 
             var deviceCodeResultType = callback.Method.GetParameters()[0].ParameterType;
             var bareResult = (DeviceCodeResult)RuntimeHelpers.GetUninitializedObject(deviceCodeResultType);
+            deviceCodeResultType
+                .GetField("<Message>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic)
+                ?.SetValue(bareResult, "fake device code message");
             try
             {
                 callback.DynamicInvoke(bareResult);

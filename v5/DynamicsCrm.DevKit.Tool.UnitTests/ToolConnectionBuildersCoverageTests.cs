@@ -609,6 +609,377 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
         }
 
         [TestMethod]
+        public async Task DeviceCode_ValidateAsync_AcceptsNullClientId()
+        {
+            var (isValid, error) = await new DeviceCodeConnectionBuilder().ValidateAsync(new CrmConnection
+            {
+                Url = EnvironmentUrl
+            });
+            Assert.IsTrue(isValid);
+            Assert.IsNull(error);
+        }
+
+        [TestMethod]
+        public async Task DeviceCode_SilentFails_InvokesTheDeviceCodeCallback()
+        {
+            FakeServiceClientCtor.EnqueueNext(() => true);
+            FakeMsalToken.Accounts = new List<IAccount> { new FakeMsalToken.FakeAccount() };
+            FakeMsalToken.ThrowOnSilent = true;
+            try
+            {
+                var builder = new DeviceCodeConnectionBuilder { DeviceCodeCallback = _ => { } };
+                var connection = new CrmConnection { Url = EnvironmentUrl, UserName = "user@contoso.com" };
+                var client = await builder.CreateServiceClientAsync(connection);
+                Assert.IsNotNull(client);
+                Assert.AreEqual("invoked", FakeMsalToken.LastCallbackMessage,
+                    "the silent failure must fall through to the device-code flow and fire its display callback.");
+            }
+            finally
+            {
+                FakeMsalToken.ThrowOnSilent = false;
+            }
+        }
+
+        [TestMethod]
+        public async Task ClientSecret_CreateServiceClientAsync_PollsAtLeastOnce_BeforeReady()
+        {
+            var originalTimeout = ClientSecretConnectionBuilder.ConnectionTimeout;
+            ClientSecretConnectionBuilder.ConnectionTimeout = TimeSpan.FromSeconds(30);
+            try
+            {
+                var polls = 0;
+                FakeServiceClientCtor.EnqueueNext(() => polls++ >= 1);
+                var client = await new ClientSecretConnectionBuilder().CreateServiceClientAsync(new CrmConnection
+                {
+                    Url = EnvironmentUrl,
+                    ClientId = Guid.NewGuid().ToString(),
+                    ClientSecret = "secret"
+                });
+                Assert.IsNotNull(client);
+                Assert.IsTrue(polls >= 2, "the wait loop must observe not-ready once, then ready.");
+            }
+            finally
+            {
+                ClientSecretConnectionBuilder.ConnectionTimeout = originalTimeout;
+            }
+        }
+
+        [TestMethod]
+        public async Task OAuth_CreateServiceClientAsync_Timeout_NullLastError_ReportsConnectionTimeout()
+        {
+            var originalTimeout = OAuthConnectionBuilder.ConnectionTimeout;
+            OAuthConnectionBuilder.ConnectionTimeout = TimeSpan.Zero;
+            try
+            {
+                FakeServiceClientCtor.EnqueueNext(() => false, () => null);
+                var thrown = await CatchAsync<Exception>(() =>
+                    new OAuthConnectionBuilder().CreateServiceClientAsync(new CrmConnection
+                    {
+                        Url = EnvironmentUrl,
+                        UserName = "user@contoso.com",
+                        Password = "secret"
+                    }));
+                Assert.IsNotNull(thrown);
+                StringAssert.Contains(thrown.Message, "Connection timeout");
+            }
+            finally
+            {
+                OAuthConnectionBuilder.ConnectionTimeout = originalTimeout;
+            }
+        }
+
+        [TestMethod]
+        public async Task OAuth_CreateServiceClientAsync_PollsAtLeastOnce_BeforeReady()
+        {
+            var originalTimeout = OAuthConnectionBuilder.ConnectionTimeout;
+            OAuthConnectionBuilder.ConnectionTimeout = TimeSpan.FromSeconds(30);
+            try
+            {
+                var polls = 0;
+                FakeServiceClientCtor.EnqueueNext(() => polls++ >= 1);
+                var client = await new OAuthConnectionBuilder().CreateServiceClientAsync(new CrmConnection
+                {
+                    Url = EnvironmentUrl,
+                    UserName = "user@contoso.com",
+                    Password = "secret"
+                });
+                Assert.IsNotNull(client);
+                Assert.IsTrue(polls >= 2, "the wait loop must observe not-ready once, then ready.");
+            }
+            finally
+            {
+                OAuthConnectionBuilder.ConnectionTimeout = originalTimeout;
+            }
+        }
+
+        [TestMethod]
+        public async Task AD_CreateServiceClientAsync_PollsAtLeastOnce_BeforeReady()
+        {
+            var originalTimeout = ADConnectionBuilder.ConnectionTimeout;
+            ADConnectionBuilder.ConnectionTimeout = TimeSpan.FromSeconds(30);
+            try
+            {
+                var polls = 0;
+                FakeServiceClientCtor.EnqueueNext(() => polls++ >= 1);
+                var client = await new ADConnectionBuilder().CreateServiceClientAsync(new CrmConnection
+                {
+                    Url = EnvironmentUrl,
+                    UserName = "CONTOSO\\user",
+                    Password = "secret"
+                });
+                Assert.IsNotNull(client);
+                Assert.IsTrue(polls >= 2, "the wait loop must observe not-ready once, then ready.");
+            }
+            finally
+            {
+                ADConnectionBuilder.ConnectionTimeout = originalTimeout;
+            }
+        }
+
+        [TestMethod]
+        public async Task AD_CreateServiceClientAsync_Timeout_NullLastError_ReportsConnectionTimeout()
+        {
+            var originalTimeout = ADConnectionBuilder.ConnectionTimeout;
+            ADConnectionBuilder.ConnectionTimeout = TimeSpan.Zero;
+            try
+            {
+                FakeServiceClientCtor.EnqueueNext(() => false, () => null);
+                var thrown = await CatchAsync<Exception>(() =>
+                    new ADConnectionBuilder().CreateServiceClientAsync(new CrmConnection
+                    {
+                        Url = EnvironmentUrl,
+                        UserName = "CONTOSO\\user",
+                        Password = "secret"
+                    }));
+                Assert.IsNotNull(thrown);
+                StringAssert.Contains(thrown.Message, "Connection timeout");
+            }
+            finally
+            {
+                ADConnectionBuilder.ConnectionTimeout = originalTimeout;
+            }
+        }
+
+        #region FromPac token provider — explicit invocations of the captured provider
+
+        [TestMethod]
+        public async Task FromPac_TokenProvider_SilentToken_ReturnsBeforeCacheScan()
+        {
+            WritePacProfiles(ProfilesJson);
+            WritePacCache("tokencache_msalv3.dat", MsalCacheJson);
+            FakeMsalToken.Accounts = new List<IAccount> { new FakeMsalToken.FakeAccount() };
+            FakeServiceClientCtor.EnqueueNext(() => true);
+
+            var builder = new FromPacConnectionBuilder();
+            await builder.CreateServiceClientAsync(new CrmConnection { PacProfile = "prod" });
+            var token = await FakeServiceClientCtor.LastEntry.TokenProvider(EnvironmentUrl);
+            Assert.AreEqual(FakeMsalToken.AccessTokenValue, token,
+                "a successful silent acquisition short-circuits the PAC cache scan.");
+        }
+
+        [TestMethod]
+        public async Task FromPac_TokenProvider_SilentFails_ScanMatchesAccountAndToken()
+        {
+            WritePacProfiles(ProfilesJson);
+            WritePacCache("tokencache_msalv3.dat", MsalCacheJson);
+            FakeMsalToken.Accounts = new List<IAccount> { new FakeMsalToken.FakeAccount() };
+            FakeMsalToken.ThrowOnSilent = true;
+            FakeServiceClientCtor.EnqueueNext(() => true);
+
+            var builder = new FromPacConnectionBuilder();
+            await builder.CreateServiceClientAsync(new CrmConnection { PacProfile = "prod" });
+            var token = await FakeServiceClientCtor.LastEntry.TokenProvider(EnvironmentUrl);
+            Assert.AreEqual("pac-cache-secret", token);
+        }
+
+        [TestMethod]
+        public async Task FromPac_TokenProvider_EdgeTokens_And_EmptyAccountSection_AreSkipped()
+        {
+            var edgeCache = @"{
+  ""AccessToken"": {
+    ""no-target"": { ""realm"": """ + TenantId + @""", ""home_account_id"": ""uid.11111111-1111-1111-1111-111111111111"", ""secret"": ""s"", ""expires_on"": ""4102444800"" },
+    ""wrong-host"": { ""realm"": """ + TenantId + @""", ""target"": ""https://other.crm.dynamics.com/.default"", ""home_account_id"": ""uid.11111111-1111-1111-1111-111111111111"", ""secret"": ""s"", ""expires_on"": ""4102444800"" },
+    ""bad-expires"": { ""realm"": """ + TenantId + @""", ""target"": ""https://org.crm.dynamics.com/.default"", ""home_account_id"": ""uid.11111111-1111-1111-1111-111111111111"", ""secret"": ""s"", ""expires_on"": ""not-a-number"" },
+    ""expired"": { ""realm"": """ + TenantId + @""", ""target"": ""https://org.crm.dynamics.com/.default"", ""home_account_id"": ""uid.11111111-1111-1111-1111-111111111111"", ""secret"": ""s"", ""expires_on"": ""1000000000"" },
+    ""blank-secret"": { ""realm"": """ + TenantId + @""", ""target"": ""https://org.crm.dynamics.com/.default"", ""home_account_id"": ""uid.11111111-1111-1111-1111-111111111111"", ""secret"": "" "", ""expires_on"": ""4102444800"" },
+    ""good"": { ""realm"": """ + TenantId + @""", ""target"": ""https://org.crm.dynamics.com/.default"", ""home_account_id"": ""uid.11111111-1111-1111-1111-111111111111"", ""secret"": ""edge-secret"", ""expires_on"": ""4102444800"" }
+  },
+  ""Account"": {}
+}";
+            WritePacProfiles(ProfilesJson);
+            WritePacCache("tokencache_msalv3.dat", edgeCache);
+            FakeMsalToken.Accounts = new List<IAccount> { new FakeMsalToken.FakeAccount() };
+            FakeMsalToken.ThrowOnSilent = true;
+            FakeServiceClientCtor.EnqueueNext(() => true);
+
+            var builder = new FromPacConnectionBuilder();
+            await builder.CreateServiceClientAsync(new CrmConnection { PacProfile = "prod" });
+            var token = await FakeServiceClientCtor.LastEntry.TokenProvider(EnvironmentUrl);
+            Assert.AreEqual("edge-secret", token);
+        }
+
+        [TestMethod]
+        public async Task FromPac_TokenProvider_MismatchedAccounts_AreSkipped()
+        {
+            var mismatchedCache = @"{
+  ""AccessToken"": { ""good"": { ""realm"": """ + TenantId + @""", ""target"": ""https://org.crm.dynamics.com/.default"", ""home_account_id"": ""uid.11111111-1111-1111-1111-111111111111"", ""secret"": ""mismatch-secret"", ""expires_on"": ""4102444800"" } },
+  ""Account"": {
+    ""a-wrong-username"": { ""home_account_id"": ""uid.11111111-1111-1111-1111-111111111111"", ""environment"": ""login.windows.net"", ""realm"": """ + TenantId + @""", ""username"": ""different@contoso.com"", ""authority_type"": ""MSSTS"" },
+    ""a-wrong-realm"": { ""home_account_id"": ""uid.11111111-1111-1111-1111-111111111111"", ""environment"": ""login.windows.net"", ""realm"": ""22222222-2222-2222-2222-222222222222"", ""username"": ""user@contoso.com"", ""authority_type"": ""MSSTS"" }
+  }
+}";
+            WritePacProfiles(ProfilesJson);
+            WritePacCache("tokencache_msalv3.dat", mismatchedCache);
+            FakeMsalToken.Accounts = new List<IAccount> { new FakeMsalToken.FakeAccount() };
+            FakeMsalToken.ThrowOnSilent = true;
+            FakeServiceClientCtor.EnqueueNext(() => true);
+
+            var builder = new FromPacConnectionBuilder();
+            await builder.CreateServiceClientAsync(new CrmConnection { PacProfile = "prod" });
+            var token = await FakeServiceClientCtor.LastEntry.TokenProvider(EnvironmentUrl);
+            Assert.AreEqual("mismatch-secret", token);
+        }
+
+        [TestMethod]
+        public async Task FromPac_TokenProvider_ProfileUserWithoutAccount_ScansCacheDirectly()
+        {
+            WritePacProfiles("{\"Profiles\":[{\"Name\":\"other\",\"User\":\"someone@else.com\",\"Resource\":\"https://org.crm.dynamics.com\",\"TenantId\":\"" + TenantId + "\",\"Authority\":\"https://login.microsoftonline.com/" + TenantId + "\"}]}");
+            WritePacCache("tokencache_msalv3.dat", MsalCacheJson);
+            FakeMsalToken.Accounts = new List<IAccount> { new FakeMsalToken.FakeAccount() };
+            FakeMsalToken.ThrowOnSilent = true;
+            FakeServiceClientCtor.EnqueueNext(() => true);
+
+            var builder = new FromPacConnectionBuilder();
+            await builder.CreateServiceClientAsync(new CrmConnection { PacProfile = "other" });
+            var token = await FakeServiceClientCtor.LastEntry.TokenProvider(EnvironmentUrl);
+            Assert.AreEqual("pac-cache-secret", token,
+                "a profile user with no MSAL account falls straight through to the cache scan.");
+        }
+
+        [TestMethod]
+        public async Task FromPac_TokenProvider_ApplicationProfile_GoodSecret_Extracted()
+        {
+            WritePacProfiles(SpnProfilesJson);
+            WritePacCache("pac.spn.cache.dat", "{\"app-id\":\"spn-secret\"}");
+            FakeServiceClientCtor.EnqueueNext(() => true);
+
+            var builder = new FromPacConnectionBuilder();
+            await builder.CreateServiceClientAsync(new CrmConnection { PacProfile = "spn" });
+            var token = await FakeServiceClientCtor.LastEntry.TokenProvider(EnvironmentUrl);
+            Assert.AreEqual(FakeMsalToken.AccessTokenValue, token,
+                "a good SPN secret flows into the confidential-client acquisition.");
+        }
+
+        [TestMethod]
+        public async Task FromPac_ValidateAsync_NullJson_And_MissingProfiles_AreNoProfiles()
+        {
+            WritePacProfiles("null");
+            var (nullJsonValid, nullJsonError) = await new FromPacConnectionBuilder().ValidateAsync(new CrmConnection());
+            Assert.IsFalse(nullJsonValid);
+            StringAssert.Contains(nullJsonError, "No profiles found");
+
+            WritePacProfiles("{}");
+            var (noProfilesValid, noProfilesError) = await new FromPacConnectionBuilder().ValidateAsync(new CrmConnection());
+            Assert.IsFalse(noProfilesValid);
+            StringAssert.Contains(noProfilesError, "No profiles found");
+        }
+
+        [TestMethod]
+        public async Task FromPac_ValidateAsync_ZeroIndex_IsOutOfBounds()
+        {
+            WritePacProfiles(ProfilesJson);
+            var (isValid, error) = await new FromPacConnectionBuilder().ValidateAsync(new CrmConnection { PacProfile = "0" });
+            Assert.IsFalse(isValid);
+            StringAssert.Contains(error, "PAC CLI profile '0' not found");
+        }
+
+        [TestMethod]
+        public async Task FromPac_ValidateAsync_BlankProfile_WithoutCurrent_ListsActiveFallback()
+        {
+            WritePacProfiles("{\"Profiles\":[{\"Name\":\"a\",\"Resource\":\"https://org.crm.dynamics.com\"}]}");
+            var (isValid, error) = await new FromPacConnectionBuilder().ValidateAsync(new CrmConnection());
+            Assert.IsFalse(isValid);
+            StringAssert.Contains(error, "No active PAC CLI profile found");
+        }
+
+        [TestMethod]
+        public async Task Interactive_SilentServiceError_FallsBackToInteractive()
+        {
+            FakeServiceClientCtor.EnqueueNext(() => true);
+            FakeMsalToken.Accounts = new List<IAccount> { new FakeMsalToken.FakeAccount() };
+            FakeMsalToken.ThrowServiceOnSilent = true;
+            try
+            {
+                var connection = new CrmConnection { Url = EnvironmentUrl, UserName = "user@contoso.com" };
+                var client = await new InteractiveConnectionBuilder().CreateServiceClientAsync(connection);
+                Assert.IsNotNull(client);
+                Assert.AreEqual("user@contoso.com", connection.UserName,
+                    "the service-error fallback signed in interactively.");
+            }
+            finally
+            {
+                FakeMsalToken.ThrowServiceOnSilent = false;
+            }
+        }
+
+        [TestMethod]
+        public async Task DeviceCode_SilentServiceError_FallsBackToDeviceCode()
+        {
+            FakeServiceClientCtor.EnqueueNext(() => true);
+            FakeMsalToken.Accounts = new List<IAccount> { new FakeMsalToken.FakeAccount() };
+            FakeMsalToken.ThrowServiceOnSilent = true;
+            try
+            {
+                var connection = new CrmConnection { Url = EnvironmentUrl, UserName = "user@contoso.com" };
+                var client = await new DeviceCodeConnectionBuilder().CreateServiceClientAsync(connection);
+                Assert.IsNotNull(client);
+                Assert.AreEqual("user@contoso.com", connection.UserName);
+            }
+            finally
+            {
+                FakeMsalToken.ThrowServiceOnSilent = false;
+            }
+        }
+
+        [TestMethod]
+        public async Task DeviceCode_CanceledAcquisition_RaisesTimeout()
+        {
+            // no ServiceClient is constructed on this path, so no queue entry is enqueued
+            FakeMsalToken.CancelDeviceCode = true;
+            try
+            {
+                var thrown = await CatchAsync<TimeoutException>(() =>
+                    new DeviceCodeConnectionBuilder().CreateServiceClientAsync(new CrmConnection { Url = EnvironmentUrl }));
+                Assert.IsNotNull(thrown);
+                StringAssert.Contains(thrown.Message, "timed out");
+            }
+            finally
+            {
+                FakeMsalToken.CancelDeviceCode = false;
+            }
+        }
+
+        [TestMethod]
+        public async Task Interactive_And_DeviceCode_TokenProviders_RefreshTokens()
+        {
+            FakeServiceClientCtor.EnqueueNext(() => true);
+            var interactive = await new InteractiveConnectionBuilder().CreateServiceClientAsync(new CrmConnection { Url = EnvironmentUrl });
+            Assert.IsNotNull(interactive);
+            var interactiveToken = await FakeServiceClientCtor.LastEntry.TokenProvider(EnvironmentUrl);
+            Assert.AreEqual(FakeMsalToken.AccessTokenValue, interactiveToken,
+                "the interactive token provider must serve tokens on refresh.");
+
+            FakeServiceClientCtor.EnqueueNext(() => true);
+            var deviceCode = await new DeviceCodeConnectionBuilder().CreateServiceClientAsync(new CrmConnection { Url = EnvironmentUrl });
+            Assert.IsNotNull(deviceCode);
+            var deviceToken = await FakeServiceClientCtor.LastEntry.TokenProvider(EnvironmentUrl);
+            Assert.AreEqual(FakeMsalToken.AccessTokenValue, deviceToken,
+                "the device-code token provider must serve tokens on refresh.");
+        }
+
+        #endregion
+
+        [TestMethod]
         public async Task OAuth_CreateServiceClientAsync_Timeout_Throws()
         {
             var originalTimeout = OAuthConnectionBuilder.ConnectionTimeout;
