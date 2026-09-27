@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.ConnectionBuilder;
 using DynamicsCrm.DevKit.Tool.Lib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -90,6 +91,8 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
             Directory.CreateDirectory(tempDir);
             File.WriteAllText(Path.Combine(tempDir, ".env"), "DEVKIT_CONNECTION=AuthType=ClientSecret;Url=https://invalid.test;ClientId=x;ClientSecret=y\n");
             var prevDir = Environment.CurrentDirectory;
+            var originalTimeout = ClientSecretConnectionBuilder.ConnectionTimeout;
+            ClientSecretConnectionBuilder.ConnectionTimeout = TimeSpan.Zero;
             try
             {
                 Environment.CurrentDirectory = tempDir;
@@ -101,6 +104,7 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
             }
             finally
             {
+                ClientSecretConnectionBuilder.ConnectionTimeout = originalTimeout;
                 Environment.CurrentDirectory = prevDir;
                 if (Directory.Exists(tempDir)) Directory.Delete(tempDir, recursive: true);
             }
@@ -182,6 +186,8 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
             Directory.CreateDirectory(tempDir);
             File.WriteAllText(Path.Combine(tempDir, ".env"), "DEVKIT_AUTH_TYPE=ClientSecret\nDEVKIT_URL=https://127.0.0.1:54321\nDEVKIT_CLIENT_ID=00000000-0000-0000-0000-000000000000\nDEVKIT_CLIENT_SECRET=testsecret\n");
             var prevDir = Environment.CurrentDirectory;
+            var originalTimeout = ClientSecretConnectionBuilder.ConnectionTimeout;
+            ClientSecretConnectionBuilder.ConnectionTimeout = TimeSpan.Zero;
             try
             {
                 Environment.CurrentDirectory = tempDir;
@@ -193,6 +199,7 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
             }
             finally
             {
+                ClientSecretConnectionBuilder.ConnectionTimeout = originalTimeout;
                 Environment.CurrentDirectory = prevDir;
                 if (Directory.Exists(tempDir)) Directory.Delete(tempDir, recursive: true);
             }

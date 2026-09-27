@@ -112,15 +112,24 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
         public async Task AD_CreateServiceClientAsync_ThrowsConnectionException()
         {
             var b = new ADConnectionBuilder();
-            await Assert.ThrowsAsync<Exception>(async () =>
+            var originalTimeout = ADConnectionBuilder.ConnectionTimeout;
+            ADConnectionBuilder.ConnectionTimeout = TimeSpan.Zero;
+            try
             {
-                await b.CreateServiceClientAsync(new CrmConnection
+                await Assert.ThrowsAsync<Exception>(async () =>
                 {
-                    Url = "https://127.0.0.1:54321",
-                    UserName = "DOMAIN\\user",
-                    Password = "pwd"
+                    await b.CreateServiceClientAsync(new CrmConnection
+                    {
+                        Url = "https://127.0.0.1:54321",
+                        UserName = "DOMAIN\\user",
+                        Password = "pwd"
+                    });
                 });
-            });
+            }
+            finally
+            {
+                ADConnectionBuilder.ConnectionTimeout = originalTimeout;
+            }
         }
 
         [TestMethod]
@@ -245,15 +254,24 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
         public async Task OAuth_CreateServiceClientAsync_ThrowsConnectionException()
         {
             var b = new OAuthConnectionBuilder();
-            await Assert.ThrowsAsync<Exception>(async () =>
+            var originalTimeout = OAuthConnectionBuilder.ConnectionTimeout;
+            OAuthConnectionBuilder.ConnectionTimeout = TimeSpan.Zero;
+            try
             {
-                await b.CreateServiceClientAsync(new CrmConnection
+                await Assert.ThrowsAsync<Exception>(async () =>
                 {
-                    Url = "https://127.0.0.1:54321",
-                    UserName = "u",
-                    Password = "p"
+                    await b.CreateServiceClientAsync(new CrmConnection
+                    {
+                        Url = "https://127.0.0.1:54321",
+                        UserName = "u",
+                        Password = "p"
+                    });
                 });
-            });
+            }
+            finally
+            {
+                OAuthConnectionBuilder.ConnectionTimeout = originalTimeout;
+            }
         }
 
         [TestMethod]

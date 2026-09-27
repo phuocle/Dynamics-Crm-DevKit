@@ -13,6 +13,9 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
     {
         public string Type => "ClientSecret";
 
+        /// <summary>Connection-wait timeout; internal so tests can shorten the 30s default.</summary>
+        internal static TimeSpan ConnectionTimeout = TimeSpan.FromSeconds(30);
+
         public async Task<ServiceClient> CreateServiceClientAsync(CrmConnection connection)
         {
             // Build connection string from parameters
@@ -22,7 +25,7 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             var serviceClient = new ServiceClient(connectionString);
 
             // Wait for connection to be ready
-            var timeout = TimeSpan.FromSeconds(30);
+            var timeout = ConnectionTimeout;
             var start = DateTime.Now;
             while (!serviceClient.IsReady && DateTime.Now - start < timeout)
             {

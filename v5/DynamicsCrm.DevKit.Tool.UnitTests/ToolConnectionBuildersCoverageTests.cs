@@ -284,33 +284,49 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
         [TestMethod]
         public async Task ClientSecret_CreateServiceClientAsync_Timeout_ReportsLastError()
         {
-            using var delayPatch = new TemporaryTaskDelayPatch();
-            FakeServiceClientCtor.EnqueueNext(() => false, () => "boom");
-            var thrown = await CatchAsync<Exception>(() =>
-                new ClientSecretConnectionBuilder().CreateServiceClientAsync(new CrmConnection
-                {
-                    Url = EnvironmentUrl,
-                    ClientId = Guid.NewGuid().ToString(),
-                    ClientSecret = "secret"
-                }));
-            Assert.IsNotNull(thrown);
-            StringAssert.Contains(thrown.Message, "boom");
+            var originalTimeout = ClientSecretConnectionBuilder.ConnectionTimeout;
+            ClientSecretConnectionBuilder.ConnectionTimeout = TimeSpan.Zero;
+            try
+            {
+                FakeServiceClientCtor.EnqueueNext(() => false, () => "boom");
+                var thrown = await CatchAsync<Exception>(() =>
+                    new ClientSecretConnectionBuilder().CreateServiceClientAsync(new CrmConnection
+                    {
+                        Url = EnvironmentUrl,
+                        ClientId = Guid.NewGuid().ToString(),
+                        ClientSecret = "secret"
+                    }));
+                Assert.IsNotNull(thrown);
+                StringAssert.Contains(thrown.Message, "boom");
+            }
+            finally
+            {
+                ClientSecretConnectionBuilder.ConnectionTimeout = originalTimeout;
+            }
         }
 
         [TestMethod]
         public async Task ClientSecret_CreateServiceClientAsync_Timeout_NullLastError_ReportsConnectionTimeout()
         {
-            using var delayPatch = new TemporaryTaskDelayPatch();
-            FakeServiceClientCtor.EnqueueNext(() => false, () => null);
-            var thrown = await CatchAsync<Exception>(() =>
-                new ClientSecretConnectionBuilder().CreateServiceClientAsync(new CrmConnection
-                {
-                    Url = EnvironmentUrl,
-                    UserName = "legacy-user",
-                    Password = "legacy-secret"
-                }));
-            Assert.IsNotNull(thrown);
-            StringAssert.Contains(thrown.Message, "Connection timeout");
+            var originalTimeout = ClientSecretConnectionBuilder.ConnectionTimeout;
+            ClientSecretConnectionBuilder.ConnectionTimeout = TimeSpan.Zero;
+            try
+            {
+                FakeServiceClientCtor.EnqueueNext(() => false, () => null);
+                var thrown = await CatchAsync<Exception>(() =>
+                    new ClientSecretConnectionBuilder().CreateServiceClientAsync(new CrmConnection
+                    {
+                        Url = EnvironmentUrl,
+                        UserName = "legacy-user",
+                        Password = "legacy-secret"
+                    }));
+                Assert.IsNotNull(thrown);
+                StringAssert.Contains(thrown.Message, "Connection timeout");
+            }
+            finally
+            {
+                ClientSecretConnectionBuilder.ConnectionTimeout = originalTimeout;
+            }
         }
 
         [TestMethod]
@@ -595,40 +611,55 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
         [TestMethod]
         public async Task OAuth_CreateServiceClientAsync_Timeout_Throws()
         {
-            using var delayPatch = new TemporaryTaskDelayPatch();
-            FakeServiceClientCtor.EnqueueNext(() => false, () => "oauth-down");
-            var thrown = await CatchAsync<Exception>(() =>
-                new OAuthConnectionBuilder().CreateServiceClientAsync(new CrmConnection
-                {
-                    Url = EnvironmentUrl,
-                    UserName = "user@contoso.com",
-                    Password = "secret"
-                }));
-            Assert.IsNotNull(thrown);
-            StringAssert.Contains(thrown.Message, "oauth-down");
+            var originalTimeout = OAuthConnectionBuilder.ConnectionTimeout;
+            OAuthConnectionBuilder.ConnectionTimeout = TimeSpan.Zero;
+            try
+            {
+                FakeServiceClientCtor.EnqueueNext(() => false, () => "oauth-down");
+                var thrown = await CatchAsync<Exception>(() =>
+                    new OAuthConnectionBuilder().CreateServiceClientAsync(new CrmConnection
+                    {
+                        Url = EnvironmentUrl,
+                        UserName = "user@contoso.com",
+                        Password = "secret"
+                    }));
+                Assert.IsNotNull(thrown);
+                StringAssert.Contains(thrown.Message, "oauth-down");
+            }
+            finally
+            {
+                OAuthConnectionBuilder.ConnectionTimeout = originalTimeout;
+            }
         }
 
         [TestMethod]
         public async Task AD_CreateServiceClientAsync_Timeout_Throws()
         {
-            using var delayPatch = new TemporaryTaskDelayPatch();
-            FakeServiceClientCtor.EnqueueNext(() => false, () => "ad-down");
-            var thrown = await CatchAsync<Exception>(() =>
-                new ADConnectionBuilder().CreateServiceClientAsync(new CrmConnection
-                {
-                    Url = EnvironmentUrl,
-                    UserName = "CONTOSO\\user",
-                    Password = "secret"
-                }));
-            Assert.IsNotNull(thrown);
-            StringAssert.Contains(thrown.Message, "ad-down");
+            var originalTimeout = ADConnectionBuilder.ConnectionTimeout;
+            ADConnectionBuilder.ConnectionTimeout = TimeSpan.Zero;
+            try
+            {
+                FakeServiceClientCtor.EnqueueNext(() => false, () => "ad-down");
+                var thrown = await CatchAsync<Exception>(() =>
+                    new ADConnectionBuilder().CreateServiceClientAsync(new CrmConnection
+                    {
+                        Url = EnvironmentUrl,
+                        UserName = "CONTOSO\\user",
+                        Password = "secret"
+                    }));
+                Assert.IsNotNull(thrown);
+                StringAssert.Contains(thrown.Message, "ad-down");
+            }
+            finally
+            {
+                ADConnectionBuilder.ConnectionTimeout = originalTimeout;
+            }
         }
 
         [TestMethod]
         public async Task FromPac_CreateServiceClientAsync_NotReady_Throws()
         {
             WritePacProfiles(ProfilesJson);
-            using var delayPatch = new TemporaryTaskDelayPatch();
             FakeServiceClientCtor.EnqueueNext(() => false, () => "pac-down");
             var thrown = await CatchAsync<InvalidOperationException>(() =>
                 new FromPacConnectionBuilder().CreateServiceClientAsync(new CrmConnection { PacProfile = "prod" }));
@@ -831,51 +862,6 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
             catch (TException exception)
             {
                 return exception;
-            }
-        }
-
-        /// <summary>
-        /// Makes Task.Delay calls complete instantly so the 30-second connection
-        /// timeout loops spin through in microseconds. Scoped to a single test.
-        /// </summary>
-        private sealed class TemporaryTaskDelayPatch : IDisposable
-        {
-            private static readonly object Gate = new();
-            private static Harmony harmony;
-            private static int users;
-
-            public TemporaryTaskDelayPatch()
-            {
-                lock (Gate)
-                {
-                    if (harmony == null)
-                    {
-                        harmony = new Harmony("devkit.test.instantdelay");
-                        var prefix = new HarmonyMethod(typeof(TemporaryTaskDelayPatch), nameof(DelayPrefix));
-                        harmony.Patch(AccessTools.Method(typeof(Task), nameof(Task.Delay), new[] { typeof(int) }), prefix: prefix);
-                        harmony.Patch(AccessTools.Method(typeof(Task), nameof(Task.Delay), new[] { typeof(TimeSpan) }), prefix: prefix);
-                    }
-                    users++;
-                }
-            }
-
-            private static bool DelayPrefix(ref Task __result)
-            {
-                __result = Task.CompletedTask;
-                return false;
-            }
-
-            public void Dispose()
-            {
-                lock (Gate)
-                {
-                    users--;
-                    if (users == 0 && harmony != null)
-                    {
-                        harmony.UnpatchAll(harmony.Id);
-                        harmony = null;
-                    }
-                }
             }
         }
     }

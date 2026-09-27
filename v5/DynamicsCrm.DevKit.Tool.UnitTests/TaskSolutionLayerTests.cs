@@ -12,6 +12,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DynamicsCrm.DevKit.Tool.UnitTests
 {
+    /// <summary>DoNotParallelize: TaskSolutionLayer.Run mutates a static componentDefs cache.</summary>
+    [DoNotParallelize]
     [TestClass]
     public class TaskSolutionLayerTests
     {
