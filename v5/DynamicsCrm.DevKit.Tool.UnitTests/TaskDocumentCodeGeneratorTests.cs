@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using DynamicsCrm.DevKit.Tool.Lib;
@@ -227,7 +228,7 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
             obsoleteMethod.CustomAttributes.Add(new CustomAttribute(obsoleteCtor));
             obsoleteMethod.Body.GetILProcessor().Emit(OpCodes.Ret);
 
-            // method with an out-of-range enum stage value → raw string fallback
+            // method with an out-of-range enum stage value â†’ raw string fallback
             var outOfRangeMethod = new MethodDefinition("OutOfRangeMethod",
                 MethodAttributes.Public | MethodAttributes.HideBySig, module.TypeSystem.Void);
             helperType.Methods.Add(outOfRangeMethod);
@@ -452,5 +453,125 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
             type.Methods.Add(method);
             method.Body.GetILProcessor().Emit(OpCodes.Ret);
         }
+
+        #region Remaining branch coverage
+
+        private static object InvokeStaticPrivate(Type type, string method, params object[] args)
+        {
+            return type
+.GetMethods(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public)
+                .Single(candidate => candidate.Name == method && candidate.GetParameters().Length == args.Length)
+                .Invoke(null, args);
+        }
+
+        [TestMethod]
+        public void CodeGen_PrivateHelpers_Cover_Edges()
+        {
+            // SplitLines
+            Assert.AreEqual(0, ((string[])InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "SplitLines", new object[] { null })).Length);
+            Assert.AreEqual(3, ((string[])InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "SplitLines", "a\rb\nc")).Length);
+
+            // BuildSourceLink - null guards and both prefix shapes
+            Assert.AreEqual(string.Empty, InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "BuildSourceLink", null, "T", "root", "out"));
+            Assert.AreEqual(string.Empty, InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "BuildSourceLink", "Root", null, "root", "out"));
+            Assert.AreEqual(string.Empty, InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "BuildSourceLink", "Root", "T", null, "out"));
+            var root = Path.Combine(Path.GetTempPath(), "codegen-links", Guid.NewGuid().ToString("N"), "code");
+            Directory.CreateDirectory(Path.Combine(root, "Data"));
+            var outDir = Path.Combine(Path.GetTempPath(), "codegen-links", Guid.NewGuid().ToString("N"), "out");
+            Directory.CreateDirectory(outDir);
+            var direct = (string)InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "BuildSourceLink", "Plugin", "Plugin.Data.Plugin", root, outDir);
+            StringAssert.Contains(direct, "Data/Plugin.cs");
+            var nsPrefixed = (string)InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "BuildSourceLink", "DynamicsCrm.DevKit.2019", "DynamicsCrm.DevKit.2019.Data.Plugin", root, outDir);
+            StringAssert.Contains(nsPrefixed, ".cs");
+            var fallback = (string)InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "BuildSourceLink", "Other", "Something.Else", root, outDir);
+            StringAssert.Contains(fallback, "Else.cs");
+
+            // FindSiblingProjectRoot - no sibling anywhere (walks to drive root) and found
+            Assert.IsNull(InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "FindSiblingProjectRoot", Path.GetTempPath(), "no-such-project-" + Guid.NewGuid().ToString("N")));
+            var baseDir = Path.Combine(Path.GetTempPath(), "codegen-sib", Guid.NewGuid().ToString("N"));
+            var start = Path.Combine(baseDir, "src", "deep", "deeper");
+            var sibling = Path.Combine(baseDir, "src", "TestCodeGenPlugin");
+            Directory.CreateDirectory(start);
+            Directory.CreateDirectory(sibling);
+            var found = (string)InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "FindSiblingProjectRoot", start, "TestCodeGenPlugin");
+            Assert.AreEqual(sibling, found);
+
+            // AppendDirectorySeparator
+            Assert.AreEqual(string.Empty, InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "AppendDirectorySeparator", ""));
+            Assert.IsNull(InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "AppendDirectorySeparator", new object[] { null }));
+            var noSep = (string)InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "AppendDirectorySeparator", "C:\\x");
+            Assert.IsTrue(noSep.EndsWith(Path.DirectorySeparatorChar.ToString()));
+            Assert.AreEqual("C:\\x\\", InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "AppendDirectorySeparator", "C:\\x\\"));
+
+            // GetWiSortKey - min tracking incl. n >= min, whitespace, non-numeric
+            Assert.AreEqual(int.MaxValue, InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "GetWiSortKey", " "));
+            Assert.AreEqual(int.MaxValue, InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "GetWiSortKey", "abc, def"));
+            Assert.AreEqual(3, InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "GetWiSortKey", "3, 5"));
+            Assert.AreEqual(3, InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "GetWiSortKey", "5, 3"));
+
+            // FormatFields â€” whitespace-only becomes empty
+            Assert.AreEqual(string.Empty, InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "FormatFields", " , , "));
+            StringAssert.Contains((string)InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "FormatFields", "a , b"), "`a`, `b`");
+
+            // FormatWi â€” numeric + non-numeric ids, with and without DevOps
+            var plain = (string)InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "FormatWi", "12, abc", null, null, null);
+            StringAssert.Contains(plain, "abc");
+            StringAssert.Contains(plain, "12");
+            var linked = (string)InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "FormatWi", "12", "AzureDevOps", "org", "proj");
+            StringAssert.Contains(linked, "https://dev.azure.com/org/proj/_workitems/edit/12");
+
+            // BuildWorkItemUrl â€” whitespace guard
+            Assert.IsNull(DynamicsCrm.DevKit.Tool.Tasks.DevOpsLinkBuilder.BuildWorkItemUrl("  ", "org", "proj", "1"));
+
+            // ContentChangedIgnoringFooter â€” missing file
+            Assert.IsTrue((bool)InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "ContentChangedIgnoringFooter",
+                Path.Combine(tempDir, "no-such.md"), "content"));
+
+            // GetCoreContentForCompare - null/empty/whitespace/footer variants
+            Assert.AreEqual(string.Empty, InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "GetCoreContentForCompare", new object[] { null }));
+            Assert.AreEqual(string.Empty, InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "GetCoreContentForCompare", new object[] { Array.Empty<string>() }));
+            Assert.AreEqual(string.Empty, InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "GetCoreContentForCompare", new object[] { new[] { "  ", "\t" } }));
+            var core = (string)InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "GetCoreContentForCompare", new object[]
+            {
+                new[]
+                {
+                    "body",
+                    ">This file generated by tool extra",
+                    ">***This file modified on:*** x",
+                    ">Generated by tool x",
+                    "---",
+                    "   "
+                }
+            });
+            Assert.AreEqual("body", core);
+
+            // CecilEnumToName — map hit, map miss, null argument value
+            var module = ModuleDefinition.ReadModule(typeof(TaskDocumentCodeGeneratorTests).Assembly.Location);
+            var typeRef = new TypeReference("System", "Int32", module, module);
+            var map = new Dictionary<string, string> { ["raw"] = "mapped" };
+            Assert.AreEqual("mapped", InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "CecilEnumToName",
+                new CustomAttributeArgument(typeRef, "raw"), map));
+            Assert.AreEqual("unmapped", InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "CecilEnumToName",
+                new CustomAttributeArgument(typeRef, "unmapped"), map));
+            Assert.AreEqual(string.Empty, InvokeStaticPrivate(typeof(TaskDocumentCodeGenerator), "CecilEnumToName",
+                new CustomAttributeArgument(typeRef, null), map));
+        }
+
+        [TestMethod]
+        public void Run_DevOps_WithNullOrgAndProject_StillLinks()
+        {
+            var folder = Path.Combine(tempDir, "src-null-org");
+            Directory.CreateDirectory(folder);
+            var output = Path.Combine(tempDir, "out-null-org");
+            BuildTestAssembly(Path.Combine(folder, "TestCodeGenPlugin.dll"));
+
+            TaskDocumentCodeGenerator.Run(folder, output, "AzureDevOps", null, null);
+
+            var md = Path.Combine(output, "TestCodeGenPlugin.md");
+            Assert.IsTrue(File.Exists(md));
+        }
+
+        #endregion
     }
 }
+

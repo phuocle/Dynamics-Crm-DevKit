@@ -80,9 +80,9 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             var generated = 0;
             foreach (var dll in dllFiles)
             {
-                var fileName = Path.GetFileName(dll) ?? "assembly";
+                var fileName = Path.GetFileName(dll);
                 var outFile = Path.Combine(output, Path.GetFileNameWithoutExtension(fileName) + ".md");
-                var outputDir = Path.GetDirectoryName(outFile) ?? output;
+                var outputDir = Path.GetDirectoryName(outFile);
 
                 try
                 {

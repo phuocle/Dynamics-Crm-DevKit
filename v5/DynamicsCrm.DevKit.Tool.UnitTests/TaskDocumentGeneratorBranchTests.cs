@@ -182,7 +182,7 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
             var blacklisted = new OneToManyRelationshipMetadata
             {
                 SchemaName = "account_workflow",
-                ReferencingEntity = "workflow",
+                ReferencingEntity = "syncerror",
                 ReferencedEntity = "account",
                 ReferencingAttribute = "workflowid",
                 ReferencedAttribute = "accountid"
