@@ -162,6 +162,21 @@ namespace DynamicsCrm.DevKit2019.UnitTests
             });
         }
 
+        [TestMethod]
+        public void Ctor_AliasedValueWithNullValue_MapsLanguageToEmpty()
+        {
+            var entity = ReportEntity("Localised", "a.rdl", 1033, "placeholder", false);
+            entity["l.language"] = new Microsoft.Xrm.Sdk.AliasedValue("languagelocale", "language", null);
+            var client = FakeClient(entity);
+
+            FormReportMapping form = null;
+            StaRunner.Run(() =>
+            {
+                form = new FormReportMapping(client, @"C:\x\a.rdl", null);
+                Assert.AreEqual(string.Empty, ((DeployReport)form.comboReports.SelectedItem).Language);
+            });
+        }
+
         #endregion
 
         #region Interactions

@@ -28,7 +28,6 @@ namespace DynamicsCrm.DevKit2019
             {
                 Reports = json["Reports"]?.ToObject<System.Collections.Generic.List<DeployReport>>() ?? new System.Collections.Generic.List<DeployReport>()
             };
-            config.Reports = config.Reports ?? new System.Collections.Generic.List<DeployReport>();
             return config;
         }
 

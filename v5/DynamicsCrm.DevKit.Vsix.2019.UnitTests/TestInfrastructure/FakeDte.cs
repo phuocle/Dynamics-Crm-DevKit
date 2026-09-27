@@ -26,5 +26,14 @@ namespace DynamicsCrm.DevKit2019.UnitTests.TestInfrastructure
                 throw new NotSupportedException(key);
             });
         }
+
+        public static DTE2 CreateWithoutSolution()
+        {
+            return InterfaceProxy.Create<DTE2>((key, args) =>
+            {
+                if (key.EndsWith(".get_Solution")) return null;
+                throw new NotSupportedException(key);
+            });
+        }
     }
 }

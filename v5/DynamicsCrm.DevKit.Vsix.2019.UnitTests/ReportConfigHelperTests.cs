@@ -355,5 +355,80 @@ namespace DynamicsCrm.DevKit2019.UnitTests
         }
 
         #endregion
+
+        #region Remaining branch coverage
+
+        [TestMethod]
+        public void GetConfigFileName_SolutionNull_ReturnsNull()
+        {
+            Assert.IsNull(ReportConfigHelper.GetConfigFileName(FakeDte.CreateWithoutSolution()));
+        }
+
+        [TestMethod]
+        public void GetReport_NullReportsList_ReturnsNull()
+        {
+            Assert.IsNull(ReportConfigHelper.GetReport(new ConfigJson { Reports = null }, "a.rdl"));
+        }
+
+        [TestMethod]
+        public void SaveReport_NullReportsList_AddsReport()
+        {
+            var file = TempFile("null-reports.json");
+            ReportConfigHelper.SaveReport(file, new ConfigJson { Reports = null }, new DeployReport { File = "b.rdl" });
+            var saved = ReportConfigHelper.ReadConfig(file);
+            Assert.AreEqual(1, saved.Reports.Count);
+            Assert.AreEqual("b.rdl", saved.Reports[0].File);
+        }
+
+        [TestMethod]
+        public void SaveReport_ReplacesReports_ContainingEscapedQuotes()
+        {
+            var file = TempFile("escaped.json");
+            var first = new ConfigJson
+            {
+                Reports = new List<DeployReport>
+                {
+                    new DeployReport { File = "a.rdl", ReportName = "Quote\"Name" }
+                }
+            };
+            ReportConfigHelper.SaveReport(file, first, first.Reports[0]);
+            // Re-parsing the existing file walks the array with an escaped quote
+            // inside FindValueEnd/FindContainerEnd before replacing it.
+            ReportConfigHelper.SaveReport(file, new ConfigJson(), new DeployReport { File = "b.rdl" });
+
+            var saved = ReportConfigHelper.ReadConfig(file);
+            Assert.AreEqual(1, saved.Reports.Count);
+            Assert.AreEqual("b.rdl", saved.Reports[0].File);
+        }
+
+        [TestMethod]
+        public void SaveReport_ExistingFile_UnicodeAndBigEndianEncodings()
+        {
+            var unicodeFile = TempFile("unicode.json");
+            File.WriteAllText(unicodeFile, "{}", Encoding.Unicode);
+            ReportConfigHelper.SaveReport(unicodeFile, new ConfigJson(), new DeployReport { File = "u.rdl" });
+            StringAssert.Contains(File.ReadAllText(unicodeFile, Encoding.Unicode), "\"Reports\"");
+
+            var bigEndianFile = TempFile("big-endian.json");
+            File.WriteAllText(bigEndianFile, "{}", Encoding.BigEndianUnicode);
+            ReportConfigHelper.SaveReport(bigEndianFile, new ConfigJson(), new DeployReport { File = "b.rdl" });
+            StringAssert.Contains(File.ReadAllText(bigEndianFile, Encoding.BigEndianUnicode), "\"Reports\"");
+        }
+
+        [TestMethod]
+        public void PrivateScanners_Cover_Terminator_And_Edge_Outcomes()
+        {
+            // Property name is the last token before end-of-text: SkipWhiteSpace
+            // runs past the end and FindPropertyStart returns -1.
+            Assert.AreEqual(-1, InvokePrivate("FindPropertyStart", "{ \"Reports\"   ", "Reports"));
+
+            // FindValueEnd scalar terminators: ',', '\r', '\n' and end-of-text.
+            Assert.AreEqual(7, InvokePrivate("FindValueEnd", "{ \"A\": 1, \"B\": 2 }", 7));
+            Assert.AreEqual(7, InvokePrivate("FindValueEnd", "{ \"A\": 1\r\n}", 7));
+            Assert.AreEqual(7, InvokePrivate("FindValueEnd", "{ \"A\": 1\n}", 7));
+            Assert.AreEqual(7, InvokePrivate("FindValueEnd", "{ \"A\": 1", 7));
+        }
+
+        #endregion
     }
 }
