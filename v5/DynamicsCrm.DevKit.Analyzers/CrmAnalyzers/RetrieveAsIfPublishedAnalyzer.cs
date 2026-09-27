@@ -109,9 +109,9 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (semanticModel == null) return;
 
             var typeInfo = semanticModel.GetTypeInfo(objectCreation, context.CancellationToken);
-            var typeName = typeInfo.Type?.ToDisplayString();
+            var typeName = typeInfo.Type.ToDisplayString();
 
-            if (typeName == null || !MetadataRequestTypes.Contains(typeName))
+            if (!MetadataRequestTypes.Contains(typeName))
                 return;
 
             // Check for object initializer

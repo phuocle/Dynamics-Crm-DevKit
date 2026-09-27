@@ -78,8 +78,8 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
         /// </summary>
         private static void ReportIfDeprecated(SyntaxNodeAnalysisContext context, TypeInfo typeInfo, Location location)
         {
-            var typeName = typeInfo.Type?.ToDisplayString();
-            if (typeName != null && AnalyzerHelper.DeprecatedRequests.Contains(typeName))
+            var typeName = typeInfo.Type.ToDisplayString();
+            if (AnalyzerHelper.DeprecatedRequests.Contains(typeName))
             {
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.DeprecatedRequest, location);
             }

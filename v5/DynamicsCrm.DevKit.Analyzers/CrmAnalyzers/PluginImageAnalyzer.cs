@@ -89,8 +89,8 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 return;
 
             // Check if this is a CrmPluginRegistration attribute
-            var attributeName = attribute.Name?.ToString();
-            if (attributeName == null || !attributeName.Contains("CrmPluginRegistration"))
+            var attributeName = attribute.Name.ToString();
+            if (!attributeName.Contains("CrmPluginRegistration"))
                 return;
 
             // Get message argument
@@ -194,15 +194,15 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
             var arguments = argumentList.Arguments;
             
-            var imageTypeArg = arguments.FirstOrDefault(x => 
-                x?.NameEquals?.Name?.Identifier.ValueText == $"Image{index}Type");
-            var imageAttributesArg = arguments.FirstOrDefault(x => 
-                x?.NameEquals?.Name?.Identifier.ValueText == $"Image{index}Attributes");
+            var imageTypeArg = arguments.FirstOrDefault(x =>
+                x.NameEquals?.Name.Identifier.ValueText == $"Image{index}Type");
+            var imageAttributesArg = arguments.FirstOrDefault(x =>
+                x.NameEquals?.Name.Identifier.ValueText == $"Image{index}Attributes");
 
             return new ImageConfig
             {
                 ImageAttributes = GetExpressionStringValue(imageAttributesArg?.Expression),
-                ImageType = imageTypeArg?.Expression?.NormalizeWhitespace()?.ToFullString(),
+                ImageType = imageTypeArg?.Expression.NormalizeWhitespace().ToFullString(),
                 Location = imageTypeArg?.GetLocation()
             };
         }
@@ -221,7 +221,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 return literal.Token.ValueText;
             }
 
-            return AnalyzerHelper.RemoveQuote(argument.ToFullString()?.Trim());
+            return AnalyzerHelper.RemoveQuote(argument.ToFullString().Trim());
         }
 
         /// <summary>
@@ -238,7 +238,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 return literal.Token.ValueText;
             }
 
-            return AnalyzerHelper.RemoveQuote(expression.NormalizeWhitespace()?.ToFullString());
+            return AnalyzerHelper.RemoveQuote(expression.NormalizeWhitespace().ToFullString());
         }
     }
 }

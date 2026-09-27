@@ -105,7 +105,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (!(symbolInfo.Symbol is IMethodSymbol methodSymbol))
                 return;
 
-            var containingTypeName = methodSymbol.ContainingType?.ToDisplayString();
+            var containingTypeName = methodSymbol.ContainingType.ToDisplayString();
             var fullMethodName = $"{containingTypeName}.{methodSymbol.Name}";
 
             // Check for blocked types or methods
@@ -132,10 +132,10 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
             // Get the type being created
             var typeInfo = semanticModel.GetTypeInfo(objectCreation, context.CancellationToken);
-            var typeName = typeInfo.Type?.ToDisplayString();
+            var typeName = typeInfo.Type.ToDisplayString();
 
             // Check for blocked types
-            if (typeName != null && BlockedTypes.Contains(typeName))
+            if (BlockedTypes.Contains(typeName))
             {
                 // Highlight only 'new TypeName' (excluding arguments) to reduce visual noise
                 var startSpan = objectCreation.NewKeyword.SpanStart;

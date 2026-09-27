@@ -304,7 +304,6 @@ function Run-TestProject {
     param(
         [string]$ProjectName,
         [string]$ProjectPath,
-        [string]$RunSettingsPath,
         [bool]$HasDotnetCoverage,
         [string]$TargetDllName,
         [string]$AssemblyFilter = "+DynamicsCrm.DevKit.Analyzers"
@@ -335,7 +334,9 @@ function Run-TestProject {
 
     if ($HasDotnetCoverage) {
         # Use dotnet-coverage to run tests and collect coverage
-        $testCommand = "dotnet test `"$ProjectPath`" --settings `"$RunSettingsPath`" --no-build --logger `"console;verbosity=minimal`""
+        # This is a net48 test project. Coverlet's XPlat collector does not
+        # produce coverage on .NET Framework; dotnet-coverage owns collection.
+        $testCommand = "dotnet test `"$ProjectPath`" --no-build --logger `"console;verbosity=minimal`""
 
         Write-Host "  Command: dotnet-coverage collect -o $coverageFile -f coverage $testCommand" -ForegroundColor $ColorInfo
 
@@ -484,18 +485,10 @@ Write-Host ""
 
 # Define paths
 $testProjectPath = "..\DynamicsCrm.DevKit.Analyzers.UnitTests\DynamicsCrm.DevKit.Analyzers.UnitTests.csproj"
-$runSettingsPath = "..\DynamicsCrm.DevKit.Analyzers.UnitTests\coverlet.runsettings"
 
 # Check if test project exists
 if (-not (Test-Path $testProjectPath)) {
     Write-Host "Error: Test project not found at $testProjectPath!" -ForegroundColor $ColorError
-    Read-Host "Press Enter to exit"
-    exit 1
-}
-
-# Check if runsettings exists
-if (-not (Test-Path $runSettingsPath)) {
-    Write-Host "Error: coverlet.runsettings not found at $runSettingsPath!" -ForegroundColor $ColorError
     Read-Host "Press Enter to exit"
     exit 1
 }
@@ -527,7 +520,6 @@ $testProjects = @(
     @{
         Name = "DynamicsCrm.DevKit.Analyzers.UnitTests"
         ProjectPath = $testProjectPath
-        RunSettingsPath = $runSettingsPath
         ReportFolder = "..\DynamicsCrm.DevKit.Analyzers\CoverageReport"
         TargetDll = "DynamicsCrm.DevKit.Analyzers.dll"
         AssemblyFilter = "+DynamicsCrm.DevKit.Analyzers"
@@ -540,7 +532,7 @@ $allSuccess = $true
 $generatedReports = @()
 
 foreach ($project in $testProjects) {
-    $result = Run-TestProject -ProjectName $project.Name -ProjectPath $project.ProjectPath -RunSettingsPath $project.RunSettingsPath -HasDotnetCoverage $hasDotnetCoverage -TargetDllName $project.TargetDll -AssemblyFilter $project.AssemblyFilter
+    $result = Run-TestProject -ProjectName $project.Name -ProjectPath $project.ProjectPath -HasDotnetCoverage $hasDotnetCoverage -TargetDllName $project.TargetDll -AssemblyFilter $project.AssemblyFilter
     $results += @{
         ProjectName = $project.Name
         Result = $result

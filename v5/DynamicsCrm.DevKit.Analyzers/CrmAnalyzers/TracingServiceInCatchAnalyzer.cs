@@ -72,8 +72,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
         /// </summary>
         private static bool UsesTracingServiceInCatch(CatchClauseSyntax catchClause, SemanticModel semanticModel)
         {
-            var invocations = catchClause.Block?.DescendantNodes().OfType<InvocationExpressionSyntax>() 
-                ?? Enumerable.Empty<InvocationExpressionSyntax>();
+            var invocations = catchClause.Block.DescendantNodes().OfType<InvocationExpressionSyntax>();
 
             foreach (var invocation in invocations)
             {

@@ -56,7 +56,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
             var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration, context.CancellationToken) as INamedTypeSymbol;
             // Check if class implements IPlugin (using centralized method)
-            if (classSymbol == null || !AnalyzerHelper.ImplementsIPlugin(classSymbol))
+            if (!AnalyzerHelper.ImplementsIPlugin(classSymbol))
                 return;
 
             // Check if class uses ITracingService

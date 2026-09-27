@@ -51,7 +51,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
             // Check if this class implements IPlugin
             var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration, context.CancellationToken);
-            if (classSymbol == null || !ImplementsIPlugin(classSymbol))
+            if (!ImplementsIPlugin(classSymbol))
                 return;
 
             // Find the Execute method
@@ -85,8 +85,8 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             // Check if class directly implements IPlugin
             foreach (var iface in classSymbol.AllInterfaces)
             {
-                if (iface.Name == "IPlugin" && 
-                    iface.ContainingNamespace?.ToDisplayString() == "Microsoft.Xrm.Sdk")
+                if (iface.Name == "IPlugin" &&
+                    iface.ContainingNamespace.ToDisplayString() == "Microsoft.Xrm.Sdk")
                 {
                     return true;
                 }

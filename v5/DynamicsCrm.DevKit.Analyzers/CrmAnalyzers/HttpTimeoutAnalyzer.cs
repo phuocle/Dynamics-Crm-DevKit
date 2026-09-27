@@ -56,7 +56,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
             // Get the type being created
             var typeInfo = semanticModel.GetTypeInfo(objectCreation, context.CancellationToken);
-            var typeName = typeInfo.Type?.ToDisplayString();
+            var typeName = typeInfo.Type.ToDisplayString();
 
             // Check for HttpClient instantiation
             if (typeName == "System.Net.Http.HttpClient")

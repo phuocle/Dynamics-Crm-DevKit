@@ -49,9 +49,9 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 return;
 
             var typeInfo = semanticModel.GetTypeInfo(objectCreation, context.CancellationToken);
-            var typeName = typeInfo.Type?.ToDisplayString();
-            
-            if (typeName == null || !AnalyzerHelper.BatchRequestTypes.Contains(typeName))
+            var typeName = typeInfo.Type.ToDisplayString();
+
+            if (!AnalyzerHelper.BatchRequestTypes.Contains(typeName))
                 return;
 
             // Check if we're inside an IPlugin or CodeActivity class

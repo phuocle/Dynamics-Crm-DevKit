@@ -76,8 +76,8 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 return;
 
             // Check if this is a CrmPluginRegistration attribute
-            var attributeName = attribute.Name?.ToString();
-            if (attributeName == null || !attributeName.Contains("CrmPluginRegistration"))
+            var attributeName = attribute.Name.ToString();
+            if (!attributeName.Contains("CrmPluginRegistration"))
                 return;
 
             // Get the message argument (first positional or named "message")
@@ -139,7 +139,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
             // Fallback: use the old method for other expression types
             var fullString = argument.ToFullString();
-            return AnalyzerHelper.RemoveQuote(fullString?.Trim());
+            return AnalyzerHelper.RemoveQuote(fullString.Trim());
         }
     }
 }

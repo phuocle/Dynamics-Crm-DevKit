@@ -57,7 +57,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (!(symbolInfo.Symbol is IMethodSymbol methodSymbol))
                 return;
 
-            var containingTypeName = methodSymbol.ContainingType?.ToDisplayString();
+            var containingTypeName = methodSymbol.ContainingType.ToDisplayString();
             var methodName = methodSymbol.Name;
 
             // Check for Console output methods

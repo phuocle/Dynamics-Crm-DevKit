@@ -71,12 +71,12 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 return;
 
             // Check if accessing Id, Name, or LogicalName
-            var propertyName = memberAccess.Name?.ToString();
-            if (propertyName == null || !EntityReferenceProperties.Contains(propertyName))
+            var propertyName = memberAccess.Name.ToString();
+            if (!EntityReferenceProperties.Contains(propertyName))
                 return;
 
             var semanticModel = context.SemanticModel;
-            if (semanticModel == null || memberAccess.Expression == null)
+            if (semanticModel == null)
                 return;
 
             // Check if the expression type is EntityReference
@@ -96,8 +96,8 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             }
 
             // Report if being converted to nullable types
-            var convertedType = semanticModel.GetTypeInfo(memberAccess).ConvertedType?.ToDisplayString();
-            if (convertedType != null && NullableTargetTypes.Contains(convertedType))
+            var convertedType = semanticModel.GetTypeInfo(memberAccess).ConvertedType.ToDisplayString();
+            if (NullableTargetTypes.Contains(convertedType))
             {
                 ReportDiagnostic(context, memberAccess.Name.GetLocation());
             }

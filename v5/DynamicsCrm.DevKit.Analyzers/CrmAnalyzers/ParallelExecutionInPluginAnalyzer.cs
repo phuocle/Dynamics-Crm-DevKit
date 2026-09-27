@@ -61,7 +61,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (!(symbolInfo.Symbol is IMethodSymbol methodSymbol))
                 return;
 
-            var containingTypeName = methodSymbol.ContainingType?.ToDisplayString();
+            var containingTypeName = methodSymbol.ContainingType.ToDisplayString();
             var methodName = methodSymbol.Name;
 
             // Check for parallel execution patterns
@@ -88,7 +88,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
             // Get the type being created
             var typeInfo = semanticModel.GetTypeInfo(objectCreation, context.CancellationToken);
-            var typeName = typeInfo.Type?.ToDisplayString();
+            var typeName = typeInfo.Type.ToDisplayString();
 
             // Check for Thread instantiation
             if (typeName == "System.Threading.Thread")

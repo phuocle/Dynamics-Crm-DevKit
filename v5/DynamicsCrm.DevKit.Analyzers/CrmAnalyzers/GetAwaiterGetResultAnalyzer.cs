@@ -160,8 +160,8 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (namedType == null)
                 return false;
 
-            return namedType.IsGenericType && 
-                   namedType.ConstructedFrom?.ToDisplayString() == "System.Threading.Tasks.Task<TResult>";
+            return namedType.IsGenericType &&
+                   namedType.ConstructedFrom.ToDisplayString() == "System.Threading.Tasks.Task<TResult>";
         }
     }
 }

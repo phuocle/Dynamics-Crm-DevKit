@@ -53,7 +53,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (classDeclaration == null) return;
 
             var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration, context.CancellationToken) as INamedTypeSymbol;
-            if (classSymbol == null || !AnalyzerHelper.IsPluginOrWorkflowClass(classSymbol))
+            if (!AnalyzerHelper.IsPluginOrWorkflowClass(classSymbol))
                 return;
 
             // Skip if we're in a constructor

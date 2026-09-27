@@ -59,7 +59,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (semanticModel == null) return;
 
             var typeInfo = semanticModel.GetTypeInfo(objectCreation, context.CancellationToken);
-            if (typeInfo.Type?.ToDisplayString() != ColumnSetTypeName)
+            if (typeInfo.Type.ToDisplayString() != ColumnSetTypeName)
                 return;
 
             // Check constructor argument: new ColumnSet(true)
@@ -81,7 +81,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 foreach (var expression in objectCreation.Initializer.Expressions)
                 {
                     if (expression is AssignmentExpressionSyntax assignment &&
-                        assignment.Left?.ToString() == AllColumnsProperty &&
+                        assignment.Left.ToString() == AllColumnsProperty &&
                         assignment.Right is LiteralExpressionSyntax rightLiteral &&
                         rightLiteral.Token.IsKind(SyntaxKind.TrueKeyword))
                     {
@@ -112,7 +112,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (semanticModel == null) return;
 
             var typeInfo = semanticModel.GetTypeInfo(memberAccess.Expression, context.CancellationToken);
-            if (typeInfo.Type?.ToDisplayString() == ColumnSetTypeName)
+            if (typeInfo.Type.ToDisplayString() == ColumnSetTypeName)
             {
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, 
                     assignment.GetLocation());
