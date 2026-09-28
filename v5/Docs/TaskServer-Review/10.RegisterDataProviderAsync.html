@@ -1,0 +1,180 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>10 · RegisterDataProviderAsync · Giữ CRUD provider và kiểm tra message routing · TaskServer Review</title><style>
+:root{--ink:#16303b;--muted:#566e78;--teal:#12685d;--line:#d9e3e4;--paper:#f2f5f4;--nav:#12323c;--gold:#ffdc80}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.7 "Segoe UI",Arial,sans-serif}a{color:#09655e;text-underline-offset:3px;overflow-wrap:anywhere}a:hover{color:#9a4b1c}aside{width:260px;position:fixed;inset:0 auto 0 0;background:var(--nav);color:#d7e7e8;overflow:auto;padding:27px 18px}.brand{font-weight:800;color:var(--gold);letter-spacing:1px;font-size:19px;text-decoration:none;display:block;margin-bottom:8px}.rail-caption{font-size:12px;line-height:1.6;margin-bottom:22px;opacity:.8}nav a{display:block;padding:9px 11px;color:#d7e7e8;text-decoration:none;font-size:12px;border-radius:5px;line-height:1.45;margin:2px 0;overflow-wrap:anywhere}nav a.active{background:#294a53;color:#ffdf86;border-left:3px solid #ffdf86}nav a:hover{background:#294a53;color:white}main{margin-left:260px;max-width:1390px;padding:32px 40px 65px}.hero{background:var(--nav);color:#fff;padding:34px 39px;border-radius:15px}.eyebrow{color:#a9d2cd;font-size:12px;font-weight:700;letter-spacing:1.8px;margin-bottom:16px}.hero h1{font-size:clamp(27px,3vw,40px);line-height:1.3;margin:8px 0 16px;overflow-wrap:anywhere}.hero p{max-width:940px;color:#cddedf;margin:0}.status{margin-top:24px;display:flex;gap:10px;flex-wrap:wrap}.badge{display:inline-block;border-radius:6px;padding:5px 9px;font-size:11px;font-weight:700;background:#fff0c9;color:#735124}.badge.quiet{background:#244852;color:#d3e9e8}.meta{font-size:12px;color:var(--muted);margin:17px 2px 23px;overflow-wrap:anywhere}section{background:white;border:1px solid var(--line);border-radius:12px;padding:29px 34px;margin:20px 0}h2{font-size:24px;line-height:1.4;margin:0 0 18px}h3{font-size:18px;margin:24px 0 10px}p{margin:10px 0 15px}li{margin:8px 0}ul,ol{padding-left:23px}.callout{border-left:4px solid var(--teal);background:#edf6f3;padding:17px 20px;margin:20px 0;border-radius:4px}.callout.warn{border-color:#c68420;background:#fff7e7}.muted{color:var(--muted);font-size:13px}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0}table{border-collapse:collapse;width:100%;min-width:580px;font-size:14px}th{text-align:left;background:#eaf1ef;font-size:12px;padding:13px 16px}td{padding:14px 16px;vertical-align:top;border-top:1px solid #e3eaea}tr:nth-child(even) td{background:#fafcfc}td small{display:block;color:var(--muted);margin-top:4px}code{font:13px/1.6 Consolas,monospace;overflow-wrap:anywhere}p code,li code{background:#eef3f3;padding:2px 4px;border-radius:3px}pre{background:#132d36;color:#ddecf1;border-radius:8px;padding:20px;overflow:auto;font:12px/1.6 Consolas,monospace;white-space:pre}.prompt{white-space:pre-wrap;overflow-wrap:anywhere}.evidence{border:1px solid var(--line);padding:14px 18px;border-radius:7px;margin:13px 0}.evidence summary{cursor:pointer;font-size:13px;font-weight:600;overflow-wrap:anywhere}.evidence p{font-size:12px}.references{font-size:14px}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.card{background:#f2f7f5;border:1px solid #dce6e3;padding:19px;border-radius:8px}.card b{display:block;color:var(--teal)}.card p{font-size:14px;margin-bottom:0}footer{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:26px 0}.compact{font-size:14px}a:focus-visible,summary:focus-visible{outline:3px solid #b97913;outline-offset:3px}
+@media(max-width:1050px){aside{width:224px}main{margin-left:224px;padding:25px}section{padding:25px}.hero{padding:29px}.cards{grid-template-columns:1fr}}
+@media(max-width:760px){aside{position:relative;width:auto;padding:19px}aside nav{display:grid;grid-template-columns:1fr 1fr}.rail-caption{margin-bottom:12px}main{margin:0;padding:16px}.hero{padding:23px}section{padding:22px 18px}h2{font-size:22px}.hero h1{font-size:28px}}
+@media print{aside,.status{display:none}main{margin:0;padding:0;max-width:none}body{background:white;color:black;font-size:10pt}.hero{background:white;color:black;border-bottom:2px solid #333;padding:14px 0}.hero p,.eyebrow{color:#333}section{border:0;padding:15px 0;margin:0;border-bottom:1px solid #bbb}h2,h3{break-after:avoid}tr,.card{break-inside:avoid}table{min-width:0;font-size:9pt}pre{white-space:pre-wrap;background:#f2f2f2;color:#111;font-size:8pt}a{color:#111}.table-wrap{overflow:visible}.evidence{break-inside:auto}@page{size:A4;margin:16mm}}
+</style></head><body><aside><a class="brand" href="00.BugFix-Logging-Optimization.html">TASKSERVER / REVIEW</a><p class="rail-caption">Giữ chức năng hiện tại.<br>Chứng minh lỗi. Sửa từng việc nhỏ.</p><nav aria-label="Các hồ sơ review"><a href="00.BugFix-Logging-Optimization.html">00.BugFix-Logging-Optimization</a><a href="01.CliLogSecureUnsecure.html">01.CliLogSecureUnsecure</a><a href="02.DeployPluginStepAsync.html">02.DeployPluginStepAsync</a><a href="03.DeployPluginImageAsync.html">03.DeployPluginImageAsync</a><a href="04.DeployPackageAsync.html">04.DeployPackageAsync</a><a href="05.RunAsync.html">05.RunAsync</a><a href="06.DeployCustomApiStepAsync.html">06.DeployCustomApiStepAsync</a><a href="07.GetTypes.html">07.GetTypes</a><a href="08.DeployAssemblyAsync.html">08.DeployAssemblyAsync</a><a href="09.DeployManagedIdentityAsync.html">09.DeployManagedIdentityAsync</a><a class="active" aria-current="page" href="10.RegisterDataProviderAsync.html">10.RegisterDataProviderAsync</a><a href="11.DeployPluginTypeAsync.html">11.DeployPluginTypeAsync</a><a href="12.UnregisterPluginTypeAsync.html">12.UnregisterPluginTypeAsync</a><a href="13.LoadAllPluginTypesAsync.html">13.LoadAllPluginTypesAsync</a></nav><p class="rail-caption">28.09.2026<br>CLI · .NET 10<br>Tài liệu chuẩn bị, chưa sửa source</p></aside><main><header class="hero"><div class="eyebrow">HỒ SƠ 10 / REVIEW &amp; SỬA LỖI CÓ GIỚI HẠN</div><h1>RegisterDataProviderAsync · Giữ CRUD provider và kiểm tra message routing</h1><p>Rà mapping của các operation đang có. Không thêm slot/provider capability mới trong nhiệm vụ này.</p><div class="status"><span class="badge">NGHI VẤN CỤ THỂ · R07</span><span class="badge quiet">CHƯA CHẠY TEST / CHƯA SỬA CODE</span></div></header><div class="meta">Snapshot: <code>6cc55c1d9f2913fed470c6f6f646356ab895cb2b</code> · Source version <code>4.44.44.44</code> · <a href="00.BugFix-Logging-Optimization.html">Bắt đầu từ file 00</a> · <a href="../TaskServer-Dataverse-Server-Side-Analysis.html">Báo cáo gốc giữ nguyên</a></div><section><h2>1. Phạm vi của một lượt làm việc</h2><p>Code gắn năm slot CRUD, kiểm tra data source trước, có version gate cho Create/Update/Delete. Handler thiếu được gán GUID fallback. Nhánh Update chọn bằng Shared Helper.IsMessageUpdate, vốn nhận cả UpdateMultiple và OnExternalUpdated.</p><div class="callout warn"><b>Trạng thái bằng chứng</b><p>Với DataProviderEvent.Message=UpdateMultiple, predicate hiện tại có thể gán handler đó vào updateplugin. Đường mapping nhìn thấy trong source; cần xác định input có được validation chấp nhận và dự án nào đang phụ thuộc. Thêm updatemultipleplugin là mở rộng, không phải cách sửa mặc định ở đây.</p></div><p class="muted">Chủ sở hữu: CLI. Shared/helpers, tests và wrapper được đọc để hiểu ảnh hưởng; việc đọc không có nghĩa phải sửa chúng. Đây là hồ sơ chuẩn bị cho lượt AI tiếp theo, không phải bản sửa đã áp dụng.</p></section>
+<section><h2>2. Những hành vi phải giữ nguyên</h2><ul><li>Giữ Retrieve/RetrieveMultiple/Create/Update/Delete đang chạy được.</li><li>Giữ data source prerequisite, prefix, solution association và version gate.</li><li>Giữ GUID fallback cho đến khi hiểu rõ vai trò nền tảng; không tự đổi thành null.</li><li>Không sửa Helper.IsMessageUpdate dùng chung vì có thể phá plug-in bulk và VSIX.</li></ul><p>Thay đổi hành vi chỉ chấp nhận trong case lỗi đã được xác định. Một điểm chưa hoàn chỉnh không tự động là lý do thay đổi contract đang dùng.</p></section>
+<section><h2>3. Cách phân tích và sửa nhỏ nhất</h2><ol><li>Tạo fixture cho Update, UpdateMultiple, OnExternalUpdated và duplicate messages qua validation + registration.</li><li>Nếu chứng minh unsupported message đang bị map sai, cân nhắc validation/predicate cục bộ cho data provider; ghi rõ ảnh hưởng dự án cũ trước khi chọn.</li><li>Kiểm tra no-op trên môi trường có/không hỗ trợ CRUD, đặc biệt fields absent so với Guid.Empty; chỉ tối ưu sau khi thấy request thừa thực.</li></ol><div class="callout"><b>Điều kiện hoàn thành</b><p>Fixture chứng minh routing/validation hoặc no-op bug, sửa cục bộ và giữ provider CRUD hợp lệ. Không bổ sung data source schema hay advanced slots.</p></div></section>
+<section><h2>4. Ma trận regression cần xem xét</h2><div class="table-wrap"><table><thead><tr><th>Tình huống</th><th>Điều cần chứng minh</th></tr></thead><tbody><tr><td>CRUD hợp lệ</td><td>Mỗi handler vào đúng slot và đúng provider.</td></tr><tr><td>UpdateMultiple/OnExternalUpdated</td><td>Không âm thầm chứng nhận là CRUD Update đúng; tái hiện và phân loại.</td></tr><tr><td>Duplicate handler / data source thiếu</td><td>Dừng đúng chỗ, không cập nhật provider một phần ngoài dự kiến.</td></tr><tr><td>Server dưới version gate</td><td>Không gửi các field CRUD không được hỗ trợ.</td></tr><tr><td>Handler thiếu</td><td>Giữ fallback semantics hiện tại; không tự yêu cầu đủ cả năm.</td></tr><tr><td>Existing provider không đổi</td><td>Không Update thừa; đo request trước khi sửa comparison.</td></tr></tbody></table></div><h3>Test source nên đọc trước</h3><ul class="compact"><li><a href="../../DynamicsCrm.DevKit.Cli.UnitTests/Tasks/TaskServerDataProviderCoverageTests.cs">Tasks/TaskServerDataProviderCoverageTests.cs</a></li><li><a href="../../DynamicsCrm.DevKit.Cli.UnitTests/Cli/TaskServerDataProviderAndManagedIdentityCoverageTests.cs">Cli/TaskServerDataProviderAndManagedIdentityCoverageTests.cs</a></li></ul><p class="muted">Tên test/class là điểm bắt đầu, không phải bằng chứng đã cover đúng case hoặc đã pass. Đọc assertion và test doubles; fake không được tự sửa payload sai mà che mất bug.</p><details class="evidence"><summary>Lệnh kiểm chứng gợi ý sau khi đã sửa code</summary><p>Chạy tại repository root. Đọc <a href="../../DynamicsCrm.DevKit.AI/workflows/unit-test.md">workflow unit-test</a> hiện hành trước khi thực thi; kiểm tra class/filter còn tồn tại. Nếu thêm test class mới, bổ sung vào filter. Lượt tạo tài liệu này không chạy các lệnh dưới.</p><pre><code>dotnet build &quot;DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj&quot;
+dotnet test &quot;DynamicsCrm.DevKit.Cli.UnitTests/DynamicsCrm.DevKit.Cli.UnitTests.csproj&quot; --framework net10.0 --filter &quot;FullyQualifiedName~TaskServerDataProviderCoverageTests|FullyQualifiedName~TaskServerDataProviderAndManagedIdentityCoverageTests&quot;</code></pre><p>Không thu coverage/full release nếu không được yêu cầu. Test có state chung cần [DoNotParallelize]; giữ WaitScalePercent theo quy ước. Nếu thực sự sửa Shared hoặc command base, chọn thêm regression cho các consumer bị ảnh hưởng theo AGENTS.md.</p></details></section>
+<section><h2>5. Điểm dễ làm hỏng phần đang chạy</h2><p>Data provider chạy ở MainOperation và có thể phục vụ đọc/ghi dữ liệu ngoài. Một predicate dùng chung tưởng nhỏ có thể ảnh hưởng cả plug-in thường. Thay default handler có thể biến operation đang bị từ chối thành hành vi khác.</p><p><b>Liên quan:</b> <a href="05.RunAsync.html">05.RunAsync.html</a> · <a href="13.LoadAllPluginTypesAsync.html">13.LoadAllPluginTypesAsync.html</a></p><p class="muted">Một patch nên có một root cause. Hồ sơ liên quan giúp kiểm tra ảnh hưởng, không phải yêu cầu kéo tất cả vào cùng lần sửa. Quyền triển khai hoặc thay đổi scope đến từ yêu cầu mới của người dùng.</p></section>
+<section><h2>6. Bằng chứng source và tài liệu tham chiếu</h2><details class="evidence"><summary>DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs · 1046–1087, 1089–1135, 1149–1182</summary><p><a href="../../DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs">Mở file source</a> · Dòng tại snapshot, cần kiểm tra lại khi code đổi.</p><pre><code>1046          private async Task&lt;bool&gt; IsValidDataProviderAsync(List&lt;DataProviderEvent&gt; dataProviderEvents, string dataSource)
+1047          {
+1048              var checkDataSource = dataSource.ToLower().StartsWith(SolutionPrefix.ToLower()) ? dataSource : $&quot;{SolutionPrefix?.ToLower()}{dataSource}&quot;;
+1049              if (!await Metadata.IsExistDataSourceAsync($&quot;{checkDataSource}&quot;))
+1050              {
+1051                  SpectreLog.ActionError($&quot;DataSource {dataSource} with prefix {SolutionPrefix.ToLower()} not exist ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.&quot;);
+1052                  return false;
+1053              }
+1054              var countRetrieve = dataProviderEvents.Count(x =&gt; x.Message == &quot;Retrieve&quot; &amp;&amp; x.DataSource == dataSource);
+1055              if (countRetrieve != 0 &amp;&amp; countRetrieve != 1)
+1056              {
+1057                  SpectreLog.ActionError($&quot;Multiple message Retrieve found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.&quot;);
+1058                  return false;
+1059              }
+1060              var countRetrieveMultiple = dataProviderEvents.Count(x =&gt; x.Message == &quot;RetrieveMultiple&quot; &amp;&amp; x.DataSource == dataSource);
+1061              if (countRetrieveMultiple != 0 &amp;&amp; countRetrieveMultiple != 1)
+1062              {
+1063                  SpectreLog.ActionError($&quot;Multiple message RetrieveMultiple found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.&quot;);
+1064                  return false;
+1065              }
+1066              if (await Deployment.IsVirtualTableSupportCRUDAsync())
+1067              {
+1068                  var countCreate = dataProviderEvents.Count(x =&gt; x.Message == &quot;Create&quot; &amp;&amp; x.DataSource == dataSource);
+1069                  if (countCreate != 0 &amp;&amp; countCreate != 1)
+1070                  {
+1071                      SpectreLog.ActionError($&quot;Multiple message Create found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.&quot;);
+1072                      return false;
+1073                  }
+1074                  var countUpdate = dataProviderEvents.Count(x =&gt; Helper.IsMessageUpdate(x.Message) &amp;&amp; x.DataSource == dataSource);
+1075                  if (countUpdate != 0 &amp;&amp; countUpdate != 1)
+1076                  {
+1077                      SpectreLog.ActionError($&quot;Multiple message Update found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.&quot;);
+1078                      return false;
+1079                  }
+1080                  var countDelete = dataProviderEvents.Count(x =&gt; x.Message == &quot;Delete&quot; &amp;&amp; x.DataSource == dataSource);
+1081                  if (countDelete != 0 &amp;&amp; countDelete != 1)
+1082                  {
+1083                      SpectreLog.ActionError($&quot;Multiple message Delete found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.&quot;);
+1084                      return false;
+1085                  }
+1086              }
+1087              return true;
+
+…
+
+1089          private async Task RegisterDataProviderAsync(List&lt;DataProviderEvent&gt; dataProviderEvents, string dataSource)
+1090          {
+1091              var events = string.Empty;
+1092              var logicalNameDataSource = dataSource.ToLower().StartsWith(SolutionPrefix.ToLower()) ? dataSource.ToLower() : $&quot;{SolutionPrefix?.ToLower()}{dataSource}&quot;.ToLower();
+1093              var entity = new Entity(&quot;entitydataprovider&quot;);
+1094              entity.Attributes.Add(&quot;name&quot;, logicalNameDataSource);
+1095              entity.Attributes.Add(&quot;datasourcelogicalname&quot;, logicalNameDataSource);
+1096              entity.Attributes.Add(&quot;solutionid&quot;, SolutionId);
+1097              var retrieve = dataProviderEvents.Where(x =&gt; x.Message == &quot;Retrieve&quot; &amp;&amp; x.DataSource == dataSource).FirstOrDefault();
+1098              if (retrieve == null)
+1099                  entity.Attributes.Add(&quot;retrieveplugin&quot;, new Guid(&quot;{c1919979-0021-4f11-a587-a8f904bdfdf9}&quot;));
+1100              else
+1101              {
+1102                  entity.Attributes.Add(&quot;retrieveplugin&quot;, retrieve.PluginTypeId);
+1103                  events += &quot;Retrieve, &quot;;
+1104              }
+1105              var retrievemultiple = dataProviderEvents.Where(x =&gt; x.Message == &quot;RetrieveMultiple&quot; &amp;&amp; x.DataSource == dataSource).FirstOrDefault();
+1106              if (retrievemultiple == null)
+1107                  entity.Attributes.Add(&quot;retrievemultipleplugin&quot;, new Guid(&quot;{c1919979-0021-4f11-a587-a8f904bdfdf9}&quot;));
+1108              else
+1109              {
+1110                  entity.Attributes.Add(&quot;retrievemultipleplugin&quot;, retrievemultiple.PluginTypeId);
+1111                  events += &quot;RetrieveMultiple, &quot;;
+1112              }
+1113              if (await Deployment.IsVirtualTableSupportCRUDAsync())
+1114              {
+1115                  var create = dataProviderEvents.Where(x =&gt; x.Message == &quot;Create&quot; &amp;&amp; x.DataSource == dataSource).FirstOrDefault();
+1116                  if (create == null)
+1117                      entity.Attributes.Add(&quot;createplugin&quot;, new Guid(&quot;{c1919979-0021-4f11-a587-a8f904bdfdf9}&quot;));
+1118                  else
+1119                  {
+1120                      entity.Attributes.Add(&quot;createplugin&quot;, create.PluginTypeId);
+1121                      events += &quot;Create, &quot;;
+1122                  }
+1123                  var update = dataProviderEvents.Where(x =&gt; Helper.IsMessageUpdate(x.Message) &amp;&amp; x.DataSource == dataSource).FirstOrDefault();
+1124                  if (update == null)
+1125                      entity.Attributes.Add(&quot;updateplugin&quot;, new Guid(&quot;{c1919979-0021-4f11-a587-a8f904bdfdf9}&quot;));
+1126                  else
+1127                  {
+1128                      entity.Attributes.Add(&quot;updateplugin&quot;, update.PluginTypeId);
+1129                      events += &quot;Update, &quot;;
+1130                  }
+1131                  var delete = dataProviderEvents.Where(x =&gt; x.Message == &quot;Delete&quot; &amp;&amp; x.DataSource == dataSource).FirstOrDefault();
+1132                  if (delete == null)
+1133                      entity.Attributes.Add(&quot;deleteplugin&quot;, new Guid(&quot;{c1919979-0021-4f11-a587-a8f904bdfdf9}&quot;));
+1134                  else
+1135                  {
+
+…
+
+1149                  request.Parameters.Add(&quot;SolutionUniqueName&quot;, Json.solution);
+1150                  SpectreLog.ActionWithLevel2(CliAction.REGISTERED, PluginType.DataSource.ToString(), logicalNameDataSource, events.Split(&quot;,&quot;.ToCharArray()).ToList().Select(x =&gt; x.Trim()).ToList());
+1151                  XrmHelper.COUNT_ExecuteAsync++;
+1152                  await OrgServiceAsync.ExecuteAsync(request);
+1153              }
+1154              else
+1155              {
+1156                  var entitydataproviderid = entityDataProvider.GetAttributeValue&lt;Guid?&gt;(&quot;entitydataproviderid&quot;);
+1157                  var retrieveplugin = entityDataProvider.GetAttributeValue&lt;Guid?&gt;(&quot;retrieveplugin&quot;);
+1158                  var retrievemultipleplugin = entityDataProvider.GetAttributeValue&lt;Guid?&gt;(&quot;retrievemultipleplugin&quot;);
+1159                  var createplugin = entityDataProvider.GetAttributeValue&lt;Guid?&gt;(&quot;createplugin&quot;);
+1160                  var deleteplugin = entityDataProvider.GetAttributeValue&lt;Guid?&gt;(&quot;deleteplugin&quot;);
+1161                  var updateplugin = entityDataProvider.GetAttributeValue&lt;Guid?&gt;(&quot;updateplugin&quot;);
+1162                  if (retrievemultipleplugin != entity.GetAttributeValue&lt;Guid&gt;(&quot;retrievemultipleplugin&quot;) ||
+1163                      retrieveplugin != entity.GetAttributeValue&lt;Guid&gt;(&quot;retrieveplugin&quot;) ||
+1164                      createplugin != entity.GetAttributeValue&lt;Guid&gt;(&quot;createplugin&quot;) ||
+1165                      deleteplugin != entity.GetAttributeValue&lt;Guid&gt;(&quot;deleteplugin&quot;) ||
+1166                      updateplugin != entity.GetAttributeValue&lt;Guid&gt;(&quot;updateplugin&quot;)
+1167                      )
+1168                  {
+1169                      entity.Attributes.Add(&quot;entitydataproviderid&quot;, entitydataproviderid.Value);
+1170                      var request = new UpdateRequest
+1171                      {
+1172                          Target = entity
+1173                      };
+1174                      SpectreLog.ActionWithLevel2(CliAction.UPDATED, PluginType.DataSource.ToString(), logicalNameDataSource, events.Split(&quot;,&quot;.ToCharArray()).ToList().Select(x =&gt; x.Trim()).ToList());
+1175                      XrmHelper.COUNT_ExecuteAsync++;
+1176                      await OrgServiceAsync.ExecuteAsync(request);
+1177                  }
+1178                  else
+1179                  {
+1180                      SpectreLog.ActionWithLevel2(CliAction.DO_NOTHING, PluginType.DataSource.ToString(), logicalNameDataSource, events.Split(&quot;,&quot;.ToCharArray()).ToList().Select(x =&gt; x.Trim()).ToList());
+1181                  }
+1182              }</code></pre></details><details class="evidence"><summary>DynamicsCrm.DevKit.Shared/Helper.cs · 739–756</summary><p><a href="../../DynamicsCrm.DevKit.Shared/Helper.cs">Mở file source</a> · Dòng tại snapshot, cần kiểm tra lại khi code đổi.</p><pre><code> 739          public static bool IsMessageUpdate(string message)
+ 740          {
+ 741              return message.ToLower() switch
+ 742              {
+ 743                  &quot;update&quot; or
+ 744                  &quot;updatemultiple&quot; or
+ 745                  &quot;onexternalupdated&quot; =&gt; true,
+ 746                  _ =&gt; false,
+ 747              };
+ 748          }
+ 749
+ 750          public static bool IsMessageCreate(string message)
+ 751          {
+ 752              return message.ToLower() switch
+ 753              {
+ 754                  &quot;create&quot; or
+ 755                  &quot;createmultiple&quot; or
+ 756                  &quot;onexternalcreated&quot; =&gt; true,</code></pre></details><details class="evidence"><summary>DynamicsCrm.DevKit.Shared/Services/DeploymentService.cs · 549–557</summary><p><a href="../../DynamicsCrm.DevKit.Shared/Services/DeploymentService.cs">Mở file source</a> · Dòng tại snapshot, cần kiểm tra lại khi code đổi.</p><pre><code> 549
+ 550          public async Task&lt;bool&gt; IsVirtualTableSupportCRUDAsync()
+ 551          {
+ 552              var request = new RetrieveVersionRequest();
+ 553              XrmHelper.COUNT_ExecuteAsync++;
+ 554              var response = (RetrieveVersionResponse)await _orgServiceAsync.ExecuteAsync(request);
+ 555              return new Version(response.Version) &gt;= new Version(&quot;9.1.0.18950&quot;);
+ 556          }
+ 557      }</code></pre></details><h3>Microsoft Learn đã dùng trong báo cáo gốc</h3><ul class="references"><li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/virtual-entities/custom-ve-data-providers" target="_blank" rel="noopener noreferrer">S53 · Custom virtual table data providers (Microsoft Dataverse) - Power Apps | Microsoft Learn</a></li><li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/virtual-entities/api-considerations-ve" target="_blank" rel="noopener noreferrer">S54 · API considerations of virtual tables (Microsoft Dataverse) - Power Apps | Microsoft Learn</a></li><li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/entitydataprovider" target="_blank" rel="noopener noreferrer">S61 · Virtual Entity Data Provider (EntityDataProvider) table/entity reference (Microsoft Dataverse) - Power Apps | Microsoft Learn</a></li></ul><p class="muted">Nguồn được khảo sát ngày 28/09/2026. Nếu quyết định sửa phụ thuộc quy tắc Dataverse hiện hành, mở lại trang tương ứng; mock không thay thế kiểm chứng giới hạn nền tảng.</p></section>
+<section><h2>7. Prompt dùng với AI ở lượt tiếp theo</h2><h3>Chỉ phân tích lại</h3><pre class="prompt">Đọc Docs/TaskServer-Review/10.RegisterDataProviderAsync.html và AGENTS.md hiện tại.
+Phân tích lại hồ sơ này trên source hiện tại. Lượt này chỉ review và đề xuất, chưa chỉnh sửa source.
+Component chính: CLI .NET 10. Trọng tâm: RegisterDataProviderAsync — Giữ CRUD provider và kiểm tra message routing.
+Tài liệu được viết từ snapshot 6cc55c1d9f2913fed470c6f6f646356ab895cb2b; không coi line number hay nhận định là luôn đúng ở HEAD mới.
+Giữ chức năng đang có, public command/JSON/attribute và hành vi hợp lệ. Không thêm feature, refactor rộng, tự prune/migrate hoặc đổi policy deployment để làm test pass.
+Trước tiên chỉ ra điều kiện gây lỗi, caller/callee và side effects; phân biệt bug, giới hạn có chủ đích, nghi vấn và tối ưu chưa đo.
+Nếu sửa: dùng fixture/regression chứng minh lỗi, giữ assertion payload/Id/no-op, rồi chạy build CLI và tests nhỏ nhất có liên quan. Không dùng secret thật; không deploy live, stage, commit hay push nếu tôi chưa yêu cầu.
+Kết quả: kết luận có/không có bug; bằng chứng; phạm vi thay đổi tối thiểu; điều giữ nguyên; test và kết quả thật; ảnh hưởng/giới hạn còn lại. Nếu chưa đủ bằng chứng, báo rõ thiếu gì; không bù bằng một thiết kế mới.</pre><details class="evidence"><summary>Khi bạn đã chọn một bug và muốn AI thực hiện sửa</summary><pre class="prompt">Đọc Docs/TaskServer-Review/10.RegisterDataProviderAsync.html và AGENTS.md hiện tại.
+Tái hiện và sửa duy nhất một bug đã được xác nhận trong hồ sơ này. Chọn phạm vi nhỏ nhất; không làm toàn bộ checklist thành một patch.
+Component chính: CLI .NET 10. Trọng tâm: RegisterDataProviderAsync — Giữ CRUD provider và kiểm tra message routing.
+Tài liệu được viết từ snapshot 6cc55c1d9f2913fed470c6f6f646356ab895cb2b; không coi line number hay nhận định là luôn đúng ở HEAD mới.
+Giữ chức năng đang có, public command/JSON/attribute và hành vi hợp lệ. Không thêm feature, refactor rộng, tự prune/migrate hoặc đổi policy deployment để làm test pass.
+Trước tiên chỉ ra điều kiện gây lỗi, caller/callee và side effects; phân biệt bug, giới hạn có chủ đích, nghi vấn và tối ưu chưa đo.
+Nếu sửa: dùng fixture/regression chứng minh lỗi, giữ assertion payload/Id/no-op, rồi chạy build CLI và tests nhỏ nhất có liên quan. Không dùng secret thật; không deploy live, stage, commit hay push nếu tôi chưa yêu cầu.
+Kết quả: kết luận có/không có bug; bằng chứng; phạm vi thay đổi tối thiểu; điều giữ nguyên; test và kết quả thật; ảnh hưởng/giới hạn còn lại. Nếu chưa đủ bằng chứng, báo rõ thiếu gì; không bù bằng một thiết kế mới.</pre></details></section><footer><a href="09.DeployManagedIdentityAsync.html">← File trước</a><span>Không có thư viện, font hoặc script ngoài. Dùng riêng từng file với AI.</span><a href="11.DeployPluginTypeAsync.html">File tiếp theo →</a></footer></main></body></html>

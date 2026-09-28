@@ -1,0 +1,134 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>11 · DeployPluginTypeAsync · Type metadata và workflow activity · TaskServer Review</title><style>
+:root{--ink:#16303b;--muted:#566e78;--teal:#12685d;--line:#d9e3e4;--paper:#f2f5f4;--nav:#12323c;--gold:#ffdc80}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.7 "Segoe UI",Arial,sans-serif}a{color:#09655e;text-underline-offset:3px;overflow-wrap:anywhere}a:hover{color:#9a4b1c}aside{width:260px;position:fixed;inset:0 auto 0 0;background:var(--nav);color:#d7e7e8;overflow:auto;padding:27px 18px}.brand{font-weight:800;color:var(--gold);letter-spacing:1px;font-size:19px;text-decoration:none;display:block;margin-bottom:8px}.rail-caption{font-size:12px;line-height:1.6;margin-bottom:22px;opacity:.8}nav a{display:block;padding:9px 11px;color:#d7e7e8;text-decoration:none;font-size:12px;border-radius:5px;line-height:1.45;margin:2px 0;overflow-wrap:anywhere}nav a.active{background:#294a53;color:#ffdf86;border-left:3px solid #ffdf86}nav a:hover{background:#294a53;color:white}main{margin-left:260px;max-width:1390px;padding:32px 40px 65px}.hero{background:var(--nav);color:#fff;padding:34px 39px;border-radius:15px}.eyebrow{color:#a9d2cd;font-size:12px;font-weight:700;letter-spacing:1.8px;margin-bottom:16px}.hero h1{font-size:clamp(27px,3vw,40px);line-height:1.3;margin:8px 0 16px;overflow-wrap:anywhere}.hero p{max-width:940px;color:#cddedf;margin:0}.status{margin-top:24px;display:flex;gap:10px;flex-wrap:wrap}.badge{display:inline-block;border-radius:6px;padding:5px 9px;font-size:11px;font-weight:700;background:#fff0c9;color:#735124}.badge.quiet{background:#244852;color:#d3e9e8}.meta{font-size:12px;color:var(--muted);margin:17px 2px 23px;overflow-wrap:anywhere}section{background:white;border:1px solid var(--line);border-radius:12px;padding:29px 34px;margin:20px 0}h2{font-size:24px;line-height:1.4;margin:0 0 18px}h3{font-size:18px;margin:24px 0 10px}p{margin:10px 0 15px}li{margin:8px 0}ul,ol{padding-left:23px}.callout{border-left:4px solid var(--teal);background:#edf6f3;padding:17px 20px;margin:20px 0;border-radius:4px}.callout.warn{border-color:#c68420;background:#fff7e7}.muted{color:var(--muted);font-size:13px}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0}table{border-collapse:collapse;width:100%;min-width:580px;font-size:14px}th{text-align:left;background:#eaf1ef;font-size:12px;padding:13px 16px}td{padding:14px 16px;vertical-align:top;border-top:1px solid #e3eaea}tr:nth-child(even) td{background:#fafcfc}td small{display:block;color:var(--muted);margin-top:4px}code{font:13px/1.6 Consolas,monospace;overflow-wrap:anywhere}p code,li code{background:#eef3f3;padding:2px 4px;border-radius:3px}pre{background:#132d36;color:#ddecf1;border-radius:8px;padding:20px;overflow:auto;font:12px/1.6 Consolas,monospace;white-space:pre}.prompt{white-space:pre-wrap;overflow-wrap:anywhere}.evidence{border:1px solid var(--line);padding:14px 18px;border-radius:7px;margin:13px 0}.evidence summary{cursor:pointer;font-size:13px;font-weight:600;overflow-wrap:anywhere}.evidence p{font-size:12px}.references{font-size:14px}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.card{background:#f2f7f5;border:1px solid #dce6e3;padding:19px;border-radius:8px}.card b{display:block;color:var(--teal)}.card p{font-size:14px;margin-bottom:0}footer{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:26px 0}.compact{font-size:14px}a:focus-visible,summary:focus-visible{outline:3px solid #b97913;outline-offset:3px}
+@media(max-width:1050px){aside{width:224px}main{margin-left:224px;padding:25px}section{padding:25px}.hero{padding:29px}.cards{grid-template-columns:1fr}}
+@media(max-width:760px){aside{position:relative;width:auto;padding:19px}aside nav{display:grid;grid-template-columns:1fr 1fr}.rail-caption{margin-bottom:12px}main{margin:0;padding:16px}.hero{padding:23px}section{padding:22px 18px}h2{font-size:22px}.hero h1{font-size:28px}}
+@media print{aside,.status{display:none}main{margin:0;padding:0;max-width:none}body{background:white;color:black;font-size:10pt}.hero{background:white;color:black;border-bottom:2px solid #333;padding:14px 0}.hero p,.eyebrow{color:#333}section{border:0;padding:15px 0;margin:0;border-bottom:1px solid #bbb}h2,h3{break-after:avoid}tr,.card{break-inside:avoid}table{min-width:0;font-size:9pt}pre{white-space:pre-wrap;background:#f2f2f2;color:#111;font-size:8pt}a{color:#111}.table-wrap{overflow:visible}.evidence{break-inside:auto}@page{size:A4;margin:16mm}}
+</style></head><body><aside><a class="brand" href="00.BugFix-Logging-Optimization.html">TASKSERVER / REVIEW</a><p class="rail-caption">Giữ chức năng hiện tại.<br>Chứng minh lỗi. Sửa từng việc nhỏ.</p><nav aria-label="Các hồ sơ review"><a href="00.BugFix-Logging-Optimization.html">00.BugFix-Logging-Optimization</a><a href="01.CliLogSecureUnsecure.html">01.CliLogSecureUnsecure</a><a href="02.DeployPluginStepAsync.html">02.DeployPluginStepAsync</a><a href="03.DeployPluginImageAsync.html">03.DeployPluginImageAsync</a><a href="04.DeployPackageAsync.html">04.DeployPackageAsync</a><a href="05.RunAsync.html">05.RunAsync</a><a href="06.DeployCustomApiStepAsync.html">06.DeployCustomApiStepAsync</a><a href="07.GetTypes.html">07.GetTypes</a><a href="08.DeployAssemblyAsync.html">08.DeployAssemblyAsync</a><a href="09.DeployManagedIdentityAsync.html">09.DeployManagedIdentityAsync</a><a href="10.RegisterDataProviderAsync.html">10.RegisterDataProviderAsync</a><a class="active" aria-current="page" href="11.DeployPluginTypeAsync.html">11.DeployPluginTypeAsync</a><a href="12.UnregisterPluginTypeAsync.html">12.UnregisterPluginTypeAsync</a><a href="13.LoadAllPluginTypesAsync.html">13.LoadAllPluginTypesAsync</a></nav><p class="rail-caption">28.09.2026<br>CLI · .NET 10<br>Tài liệu chuẩn bị, chưa sửa source</p></aside><main><header class="hero"><div class="eyebrow">HỒ SƠ 11 / REVIEW &amp; SỬA LỖI CÓ GIỚI HẠN</div><h1>DeployPluginTypeAsync · Type metadata và workflow activity</h1><p>Tách xử lý type khỏi step để không sửa lỗi plug-in rồi làm hỏng workflow activity.</p><div class="status"><span class="badge">REVIEW · GIỮ HỢP ĐỒNG HIỆN TẠI</span><span class="badge quiet">CHƯA CHẠY TEST / CHƯA SỬA CODE</span></div></header><div class="meta">Snapshot: <code>6cc55c1d9f2913fed470c6f6f646356ab895cb2b</code> · Source version <code>4.44.44.44</code> · <a href="00.BugFix-Logging-Optimization.html">Bắt đầu từ file 00</a> · <a href="../TaskServer-Dataverse-Server-Side-Analysis.html">Báo cáo gốc giữ nguyên</a></div><section><h2>1. Phạm vi của một lượt làm việc</h2><p>Type lookup theo full name; DLL create/update metadata name, friendly name, description, workflow group. Với NuGet và type đã có, hàm no-op. DeployFileAsync bỏ qua step khi IsWorkflowType trả true.</p><div class="callout warn"><b>Trạng thái bằng chứng</b><p>Cần kiểm chứng duplicate full type name giữa assembly, null/default metadata và no-op update. NuGet type no-op có thể liên quan ownership của package trên server; không đổi thành update giống DLL mà chưa hiểu quy tắc. Đây chủ yếu là vùng regression cần bảo vệ, không danh sách bug đã xác nhận.</p></div><p class="muted">Chủ sở hữu: CLI. Shared/helpers, tests và wrapper được đọc để hiểu ảnh hưởng; việc đọc không có nghĩa phải sửa chúng. Đây là hồ sơ chuẩn bị cho lượt AI tiếp theo, không phải bản sửa đã áp dụng.</p></section>
+<section><h2>2. Những hành vi phải giữ nguyên</h2><ul><li>Workflow vẫn đăng ký type mà không tạo sdkmessageprocessingstep thông thường.</li><li>Giữ FriendlyName/Description/GroupName và giá trị mặc định hiện có.</li><li>Giữ validation registered type bị bỏ khỏi assembly.</li><li>Không đổi signature input/output của CodeActivity hoặc hỗ trợ workflow trong NuGet.</li></ul><p>Thay đổi hành vi chỉ chấp nhận trong case lỗi đã được xác định. Một điểm chưa hoàn chỉnh không tự động là lý do thay đổi contract đang dùng.</p></section>
+<section><h2>3. Cách phân tích và sửa nhỏ nhất</h2><ol><li>Lập request snapshots có chọn lọc cho DLL plug-in, workflow type và NuGet existing type.</li><li>Tái hiện case identity cùng file 08/13; nếu chung root cause thì sửa một nơi, không nhiều patch chồng nhau.</li><li>Null/default metadata chỉ sửa khi có input thực được hỗ trợ dẫn đến lỗi; không chuẩn hóa toàn model Shared theo cảm tính.</li></ol><div class="callout"><b>Điều kiện hoàn thành</b><p>Chỉ bug type metadata/lookup đã chứng minh được sửa; workflow và NuGet behavior được giữ bằng regression liên quan.</p></div></section>
+<section><h2>4. Ma trận regression cần xem xét</h2><div class="table-wrap"><table><thead><tr><th>Tình huống</th><th>Điều cần chứng minh</th></tr></thead><tbody><tr><td>Plug-in DLL mới/đổi/no-op</td><td>Đúng Id, metadata, số request.</td></tr><tr><td>Workflow type</td><td>Có workflowactivitygroupname; không có step thường.</td></tr><tr><td>FriendlyName/Description mặc định</td><td>Giữ ý nghĩa null/empty theo contract.</td></tr><tr><td>NuGet existing type</td><td>Giữ no-op trừ khi có chứng minh cần đổi.</td></tr><tr><td>Hai assembly cùng typename</td><td>Không cập nhật type của assembly khác.</td></tr><tr><td>Type bị bỏ khỏi DLL</td><td>Giữ guard hiện tại; không tự unregister để build/deploy chạy qua.</td></tr></tbody></table></div><h3>Test source nên đọc trước</h3><ul class="compact"><li><a href="../../DynamicsCrm.DevKit.Cli.UnitTests/Cli/Tasks/TaskServerCoverageTests.cs">Cli/Tasks/TaskServerCoverageTests.cs</a></li><li><a href="../../DynamicsCrm.DevKit.Cli.UnitTests/Tasks/TaskServerHelperCoverageTests.cs">Tasks/TaskServerHelperCoverageTests.cs</a></li><li><a href="../../DynamicsCrm.DevKit.Cli.UnitTests/Cli/TaskServerTests.cs">Cli/TaskServerTests.cs</a></li></ul><p class="muted">Tên test/class là điểm bắt đầu, không phải bằng chứng đã cover đúng case hoặc đã pass. Đọc assertion và test doubles; fake không được tự sửa payload sai mà che mất bug.</p><details class="evidence"><summary>Lệnh kiểm chứng gợi ý sau khi đã sửa code</summary><p>Chạy tại repository root. Đọc <a href="../../DynamicsCrm.DevKit.AI/workflows/unit-test.md">workflow unit-test</a> hiện hành trước khi thực thi; kiểm tra class/filter còn tồn tại. Nếu thêm test class mới, bổ sung vào filter. Lượt tạo tài liệu này không chạy các lệnh dưới.</p><pre><code>dotnet build &quot;DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj&quot;
+dotnet test &quot;DynamicsCrm.DevKit.Cli.UnitTests/DynamicsCrm.DevKit.Cli.UnitTests.csproj&quot; --framework net10.0 --filter &quot;FullyQualifiedName~TaskServerCoverageTests|FullyQualifiedName~TaskServerHelperCoverageTests|FullyQualifiedName~TaskServerTests&quot;</code></pre><p>Không thu coverage/full release nếu không được yêu cầu. Test có state chung cần [DoNotParallelize]; giữ WaitScalePercent theo quy ước. Nếu thực sự sửa Shared hoặc command base, chọn thêm regression cho các consumer bị ảnh hưởng theo AGENTS.md.</p></details></section>
+<section><h2>5. Điểm dễ làm hỏng phần đang chạy</h2><p>Workflow definitions có thể phụ thuộc type và activity arguments. Đổi tên/type identity hoặc tự xóa type có thể làm hỏng process đang dùng. Nếu phải động vào Shared model, phạm vi regression sẽ vượt CLI.</p><p><b>Liên quan:</b> <a href="07.GetTypes.html">07.GetTypes.html</a> · <a href="08.DeployAssemblyAsync.html">08.DeployAssemblyAsync.html</a> · <a href="12.UnregisterPluginTypeAsync.html">12.UnregisterPluginTypeAsync.html</a> · <a href="13.LoadAllPluginTypesAsync.html">13.LoadAllPluginTypesAsync.html</a></p><p class="muted">Một patch nên có một root cause. Hồ sơ liên quan giúp kiểm tra ảnh hưởng, không phải yêu cầu kéo tất cả vào cùng lần sửa. Quyền triển khai hoặc thay đổi scope đến từ yêu cầu mới của người dùng.</p></section>
+<section><h2>6. Bằng chứng source và tài liệu tham chiếu</h2><details class="evidence"><summary>DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs · 1782–1847, 1867–1897, 2071–2075</summary><p><a href="../../DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs">Mở file source</a> · Dòng tại snapshot, cần kiểm tra lại khi code đổi.</p><pre><code>1782          private async Task&lt;Guid?&gt; DeployPluginTypeAsync(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute, DeployFileType deployFileType)
+1783          {
+1784              var rows = _PluginTypesCache.Where(x =&gt; x.Key == type.FullName).Select(x =&gt; x.Value).ToList();
+1785              if (rows.Count &gt; 0)
+1786              {
+1787                  if (rows.Count &gt; 0 &amp;&amp; rows.Count != 1)
+1788                  {
+1789                      SpectreLog.ActionError($&quot;Found more than 1 type name {type.FullName}. Assemply deployed, but the deployment of this assembly stopped.&quot;);
+1790                      return null;
+1791                  }
+1792                  if (deployFileType == DeployFileType.Nuget)
+1793                  {
+1794                      SpectreLog.ActionWithLevel2(CliAction.DO_NOTHING, attribute.PluginType.ToString(), type.FullName);
+1795                      return rows[0].Id;
+1796                  }
+1797              }
+1798              var pluginType = new Entity(&quot;plugintype&quot;);
+1799              pluginType[&quot;name&quot;] = attribute.Name;
+1800              pluginType[&quot;pluginassemblyid&quot;] = new EntityReference(&quot;pluginassembly&quot;, pluginAssemblyId);
+1801              pluginType[&quot;typename&quot;] = type.FullName;
+1802              pluginType[&quot;friendlyname&quot;] = attribute.FriendlyName?.Length == 0 ? type.FullName : attribute.FriendlyName;
+1803              pluginType[&quot;description&quot;] = attribute.Description?.Length == 0 ? null : attribute.Description;
+1804              if (attribute.PluginType == PluginType.Workflow)
+1805                  pluginType[&quot;workflowactivitygroupname&quot;] = attribute.GroupName;
+1806              if (rows.Count == 0)
+1807              {
+1808                  var request = new CreateRequest
+1809                  {
+1810                      Target = pluginType
+1811                  };
+1812                  request.Parameters.Add(&quot;SolutionUniqueName&quot;, Json.solution);
+1813                  SpectreLog.ActionWithLevel2(CliAction.REGISTERED, attribute.PluginType.ToString(), type.FullName);
+1814                  XrmHelper.COUNT_ExecuteAsync++;
+1815                  var response = (CreateResponse)await OrgServiceAsync.ExecuteAsync(request);
+1816                  return response.id;
+1817              }
+1818              else
+1819              {
+1820                  var old = _PluginTypesCache
+1821                          .Select(x =&gt; x.Value)
+1822                          .FirstOrDefault(x =&gt; x.GetAttributeValue&lt;Guid&gt;(&quot;plugintypeid&quot;) == rows[0].Id);
+1823                  if (
+1824                      pluginType.GetAttributeValue&lt;string&gt;(&quot;name&quot;) != old.GetAttributeValue&lt;string&gt;(&quot;name&quot;) ||
+1825                      pluginType.GetAttributeValue&lt;string&gt;(&quot;typename&quot;) != old.GetAttributeValue&lt;string&gt;(&quot;typename&quot;) ||
+1826                      pluginType.GetAttributeValue&lt;string&gt;(&quot;friendlyname&quot;) != old.GetAttributeValue&lt;string&gt;(&quot;friendlyname&quot;) ||
+1827                      pluginType.GetAttributeValue&lt;string&gt;(&quot;workflowactivitygroupname&quot;) != old.GetAttributeValue&lt;string&gt;(&quot;workflowactivitygroupname&quot;) ||
+1828                      pluginType.GetAttributeValue&lt;string&gt;(&quot;description&quot;) != old.GetAttributeValue&lt;string&gt;(&quot;description&quot;)
+1829                      )
+1830                  {
+1831                      pluginType[&quot;plugintypeid&quot;] = rows[0].Id;
+1832                      var request = new UpdateRequest
+1833                      {
+1834                          Target = pluginType
+1835                      };
+1836                      request.Parameters.Add(&quot;SolutionUniqueName&quot;, Json.solution);
+1837                      XrmHelper.COUNT_ExecuteAsync++;
+1838                      await OrgServiceAsync.ExecuteAsync(request);
+1839                      SpectreLog.ActionWithLevel2(CliAction.UPDATED, attribute.PluginType.ToString(), type.FullName);
+1840                  }
+1841                  else
+1842                  {
+1843                      SpectreLog.ActionWithLevel2(CliAction.DO_NOTHING, attribute.PluginType.ToString(), type.FullName);
+1844                  }
+1845              }
+1846              return rows[0].Id;
+1847          }
+
+…
+
+1867          private async Task&lt;bool&gt; IsValidTypesWithCDSAsync(List&lt;TypeInfo&gt; types, string fileNameWithoutExtension)
+1868          {
+1869              var fetchData = new
+1870              {
+1871                  name = fileNameWithoutExtension
+1872              };
+1873              var fetchXml = $@&quot;&lt;?xml version=&quot;&quot;1.0&quot;&quot; encoding=&quot;&quot;utf-16&quot;&quot;?&gt;
+1874  &lt;fetch&gt;
+1875    &lt;entity name=&quot;&quot;sdkmessageprocessingstep&quot;&quot;&gt;
+1876      &lt;link-entity name=&quot;&quot;plugintype&quot;&quot; from=&quot;&quot;plugintypeid&quot;&quot; to=&quot;&quot;plugintypeid&quot;&quot; alias=&quot;&quot;plugintype&quot;&quot;&gt;
+1877        &lt;attribute name=&quot;&quot;typename&quot;&quot; /&gt;
+1878        &lt;link-entity name=&quot;&quot;pluginassembly&quot;&quot; from=&quot;&quot;pluginassemblyid&quot;&quot; to=&quot;&quot;pluginassemblyid&quot;&quot;&gt;
+1879          &lt;filter&gt;
+1880            &lt;condition attribute=&quot;&quot;name&quot;&quot; operator=&quot;&quot;eq&quot;&quot; value=&quot;&quot;{fetchData.name}&quot;&quot; /&gt;
+1881          &lt;/filter&gt;
+1882        &lt;/link-entity&gt;
+1883      &lt;/link-entity&gt;
+1884    &lt;/entity&gt;
+1885  &lt;/fetch&gt;&quot;;
+1886              XrmHelper.COUNT_RetrieveMultipleAsync++;
+1887              var rows = await OrgServiceAsync.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+1888              if (rows.Entities.Count == 0) return true;
+1889              foreach (var entity in rows.Entities)
+1890              {
+1891                  var typeName = entity.GetAttributeValue&lt;AliasedValue&gt;(&quot;plugintype.typename&quot;)?.Value.ToString();
+1892                  if (types.Count(x =&gt; x.FullName == typeName) == 0)
+1893                  {
+1894                      SpectreLog.ActionError($&quot;Type: &#x27;{typeName}&#x27; not found in the assembly file. This type: &#x27;{typeName}&#x27; already registered to CRM/CDS. Assemply deployed, but the deployment of this assembly stopped.&quot;);
+1895                      SpectreLog.ActionError($&quot;If you need to deploy this assembly. Please manually remove this type from Plugin Registration Tool and try it again.&quot;);
+1896                      return false;
+1897                  }
+
+…
+
+2071          private bool IsWorkflowType(Type type)
+2072          {
+2073              if (type?.FullName == &quot;System.Activities.CodeActivity&quot;) return true;
+2074              if (type?.BaseType != null) return IsWorkflowType(type?.BaseType);
+2075              return false;</code></pre></details><h3>Microsoft Learn đã dùng trong báo cáo gốc</h3><ul class="references"><li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/build-and-package" target="_blank" rel="noopener noreferrer">S18 · Build and package plug-in code - Power Apps | Microsoft Learn</a></li><li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/register-plug-in" target="_blank" rel="noopener noreferrer">S19 · Register a plug-in (Microsoft Dataverse) - Power Apps | Microsoft Learn</a></li><li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/workflow/workflow-extensions" target="_blank" rel="noopener noreferrer">S31 · Create Workflow Extensions for Microsoft Dataverse - Power Apps | Microsoft Learn</a></li></ul><p class="muted">Nguồn được khảo sát ngày 28/09/2026. Nếu quyết định sửa phụ thuộc quy tắc Dataverse hiện hành, mở lại trang tương ứng; mock không thay thế kiểm chứng giới hạn nền tảng.</p></section>
+<section><h2>7. Prompt dùng với AI ở lượt tiếp theo</h2><h3>Chỉ phân tích lại</h3><pre class="prompt">Đọc Docs/TaskServer-Review/11.DeployPluginTypeAsync.html và AGENTS.md hiện tại.
+Phân tích lại hồ sơ này trên source hiện tại. Lượt này chỉ review và đề xuất, chưa chỉnh sửa source.
+Component chính: CLI .NET 10. Trọng tâm: DeployPluginTypeAsync — Type metadata và workflow activity.
+Tài liệu được viết từ snapshot 6cc55c1d9f2913fed470c6f6f646356ab895cb2b; không coi line number hay nhận định là luôn đúng ở HEAD mới.
+Giữ chức năng đang có, public command/JSON/attribute và hành vi hợp lệ. Không thêm feature, refactor rộng, tự prune/migrate hoặc đổi policy deployment để làm test pass.
+Trước tiên chỉ ra điều kiện gây lỗi, caller/callee và side effects; phân biệt bug, giới hạn có chủ đích, nghi vấn và tối ưu chưa đo.
+Nếu sửa: dùng fixture/regression chứng minh lỗi, giữ assertion payload/Id/no-op, rồi chạy build CLI và tests nhỏ nhất có liên quan. Không dùng secret thật; không deploy live, stage, commit hay push nếu tôi chưa yêu cầu.
+Kết quả: kết luận có/không có bug; bằng chứng; phạm vi thay đổi tối thiểu; điều giữ nguyên; test và kết quả thật; ảnh hưởng/giới hạn còn lại. Nếu chưa đủ bằng chứng, báo rõ thiếu gì; không bù bằng một thiết kế mới.</pre><details class="evidence"><summary>Khi bạn đã chọn một bug và muốn AI thực hiện sửa</summary><pre class="prompt">Đọc Docs/TaskServer-Review/11.DeployPluginTypeAsync.html và AGENTS.md hiện tại.
+Tái hiện và sửa duy nhất một bug đã được xác nhận trong hồ sơ này. Chọn phạm vi nhỏ nhất; không làm toàn bộ checklist thành một patch.
+Component chính: CLI .NET 10. Trọng tâm: DeployPluginTypeAsync — Type metadata và workflow activity.
+Tài liệu được viết từ snapshot 6cc55c1d9f2913fed470c6f6f646356ab895cb2b; không coi line number hay nhận định là luôn đúng ở HEAD mới.
+Giữ chức năng đang có, public command/JSON/attribute và hành vi hợp lệ. Không thêm feature, refactor rộng, tự prune/migrate hoặc đổi policy deployment để làm test pass.
+Trước tiên chỉ ra điều kiện gây lỗi, caller/callee và side effects; phân biệt bug, giới hạn có chủ đích, nghi vấn và tối ưu chưa đo.
+Nếu sửa: dùng fixture/regression chứng minh lỗi, giữ assertion payload/Id/no-op, rồi chạy build CLI và tests nhỏ nhất có liên quan. Không dùng secret thật; không deploy live, stage, commit hay push nếu tôi chưa yêu cầu.
+Kết quả: kết luận có/không có bug; bằng chứng; phạm vi thay đổi tối thiểu; điều giữ nguyên; test và kết quả thật; ảnh hưởng/giới hạn còn lại. Nếu chưa đủ bằng chứng, báo rõ thiếu gì; không bù bằng một thiết kế mới.</pre></details></section><footer><a href="10.RegisterDataProviderAsync.html">← File trước</a><span>Không có thư viện, font hoặc script ngoài. Dùng riêng từng file với AI.</span><a href="12.UnregisterPluginTypeAsync.html">File tiếp theo →</a></footer></main></body></html>

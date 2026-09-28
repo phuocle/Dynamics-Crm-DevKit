@@ -1,0 +1,187 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>07 · GetTypes · Khám phá type, dependency và lỗi reflection · TaskServer Review</title><style>
+:root{--ink:#16303b;--muted:#566e78;--teal:#12685d;--line:#d9e3e4;--paper:#f2f5f4;--nav:#12323c;--gold:#ffdc80}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.7 "Segoe UI",Arial,sans-serif}a{color:#09655e;text-underline-offset:3px;overflow-wrap:anywhere}a:hover{color:#9a4b1c}aside{width:260px;position:fixed;inset:0 auto 0 0;background:var(--nav);color:#d7e7e8;overflow:auto;padding:27px 18px}.brand{font-weight:800;color:var(--gold);letter-spacing:1px;font-size:19px;text-decoration:none;display:block;margin-bottom:8px}.rail-caption{font-size:12px;line-height:1.6;margin-bottom:22px;opacity:.8}nav a{display:block;padding:9px 11px;color:#d7e7e8;text-decoration:none;font-size:12px;border-radius:5px;line-height:1.45;margin:2px 0;overflow-wrap:anywhere}nav a.active{background:#294a53;color:#ffdf86;border-left:3px solid #ffdf86}nav a:hover{background:#294a53;color:white}main{margin-left:260px;max-width:1390px;padding:32px 40px 65px}.hero{background:var(--nav);color:#fff;padding:34px 39px;border-radius:15px}.eyebrow{color:#a9d2cd;font-size:12px;font-weight:700;letter-spacing:1.8px;margin-bottom:16px}.hero h1{font-size:clamp(27px,3vw,40px);line-height:1.3;margin:8px 0 16px;overflow-wrap:anywhere}.hero p{max-width:940px;color:#cddedf;margin:0}.status{margin-top:24px;display:flex;gap:10px;flex-wrap:wrap}.badge{display:inline-block;border-radius:6px;padding:5px 9px;font-size:11px;font-weight:700;background:#fff0c9;color:#735124}.badge.quiet{background:#244852;color:#d3e9e8}.meta{font-size:12px;color:var(--muted);margin:17px 2px 23px;overflow-wrap:anywhere}section{background:white;border:1px solid var(--line);border-radius:12px;padding:29px 34px;margin:20px 0}h2{font-size:24px;line-height:1.4;margin:0 0 18px}h3{font-size:18px;margin:24px 0 10px}p{margin:10px 0 15px}li{margin:8px 0}ul,ol{padding-left:23px}.callout{border-left:4px solid var(--teal);background:#edf6f3;padding:17px 20px;margin:20px 0;border-radius:4px}.callout.warn{border-color:#c68420;background:#fff7e7}.muted{color:var(--muted);font-size:13px}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0}table{border-collapse:collapse;width:100%;min-width:580px;font-size:14px}th{text-align:left;background:#eaf1ef;font-size:12px;padding:13px 16px}td{padding:14px 16px;vertical-align:top;border-top:1px solid #e3eaea}tr:nth-child(even) td{background:#fafcfc}td small{display:block;color:var(--muted);margin-top:4px}code{font:13px/1.6 Consolas,monospace;overflow-wrap:anywhere}p code,li code{background:#eef3f3;padding:2px 4px;border-radius:3px}pre{background:#132d36;color:#ddecf1;border-radius:8px;padding:20px;overflow:auto;font:12px/1.6 Consolas,monospace;white-space:pre}.prompt{white-space:pre-wrap;overflow-wrap:anywhere}.evidence{border:1px solid var(--line);padding:14px 18px;border-radius:7px;margin:13px 0}.evidence summary{cursor:pointer;font-size:13px;font-weight:600;overflow-wrap:anywhere}.evidence p{font-size:12px}.references{font-size:14px}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.card{background:#f2f7f5;border:1px solid #dce6e3;padding:19px;border-radius:8px}.card b{display:block;color:var(--teal)}.card p{font-size:14px;margin-bottom:0}footer{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:26px 0}.compact{font-size:14px}a:focus-visible,summary:focus-visible{outline:3px solid #b97913;outline-offset:3px}
+@media(max-width:1050px){aside{width:224px}main{margin-left:224px;padding:25px}section{padding:25px}.hero{padding:29px}.cards{grid-template-columns:1fr}}
+@media(max-width:760px){aside{position:relative;width:auto;padding:19px}aside nav{display:grid;grid-template-columns:1fr 1fr}.rail-caption{margin-bottom:12px}main{margin:0;padding:16px}.hero{padding:23px}section{padding:22px 18px}h2{font-size:22px}.hero h1{font-size:28px}}
+@media print{aside,.status{display:none}main{margin:0;padding:0;max-width:none}body{background:white;color:black;font-size:10pt}.hero{background:white;color:black;border-bottom:2px solid #333;padding:14px 0}.hero p,.eyebrow{color:#333}section{border:0;padding:15px 0;margin:0;border-bottom:1px solid #bbb}h2,h3{break-after:avoid}tr,.card{break-inside:avoid}table{min-width:0;font-size:9pt}pre{white-space:pre-wrap;background:#f2f2f2;color:#111;font-size:8pt}a{color:#111}.table-wrap{overflow:visible}.evidence{break-inside:auto}@page{size:A4;margin:16mm}}
+</style></head><body><aside><a class="brand" href="00.BugFix-Logging-Optimization.html">TASKSERVER / REVIEW</a><p class="rail-caption">Giữ chức năng hiện tại.<br>Chứng minh lỗi. Sửa từng việc nhỏ.</p><nav aria-label="Các hồ sơ review"><a href="00.BugFix-Logging-Optimization.html">00.BugFix-Logging-Optimization</a><a href="01.CliLogSecureUnsecure.html">01.CliLogSecureUnsecure</a><a href="02.DeployPluginStepAsync.html">02.DeployPluginStepAsync</a><a href="03.DeployPluginImageAsync.html">03.DeployPluginImageAsync</a><a href="04.DeployPackageAsync.html">04.DeployPackageAsync</a><a href="05.RunAsync.html">05.RunAsync</a><a href="06.DeployCustomApiStepAsync.html">06.DeployCustomApiStepAsync</a><a class="active" aria-current="page" href="07.GetTypes.html">07.GetTypes</a><a href="08.DeployAssemblyAsync.html">08.DeployAssemblyAsync</a><a href="09.DeployManagedIdentityAsync.html">09.DeployManagedIdentityAsync</a><a href="10.RegisterDataProviderAsync.html">10.RegisterDataProviderAsync</a><a href="11.DeployPluginTypeAsync.html">11.DeployPluginTypeAsync</a><a href="12.UnregisterPluginTypeAsync.html">12.UnregisterPluginTypeAsync</a><a href="13.LoadAllPluginTypesAsync.html">13.LoadAllPluginTypesAsync</a></nav><p class="rail-caption">28.09.2026<br>CLI · .NET 10<br>Tài liệu chuẩn bị, chưa sửa source</p></aside><main><header class="hero"><div class="eyebrow">HỒ SƠ 07 / REVIEW &amp; SỬA LỖI CÓ GIỚI HẠN</div><h1>GetTypes · Khám phá type, dependency và lỗi reflection</h1><p>Làm rõ type bị bỏ qua trước khi thay đổi discovery. Không quét thêm assembly hay sửa cấu trúc package chỉ vì thấy thiếu độ phủ.</p><div class="status"><span class="badge">NGHI VẤN · CẦN FIXTURE / F09</span><span class="badge quiet">CHƯA CHẠY TEST / CHƯA SỬA CODE</span></div></header><div class="meta">Snapshot: <code>6cc55c1d9f2913fed470c6f6f646356ab895cb2b</code> · Source version <code>4.44.44.44</code> · <a href="00.BugFix-Logging-Optimization.html">Bắt đầu từ file 00</a> · <a href="../TaskServer-Dataverse-Server-Side-Analysis.html">Báo cáo gốc giữ nguyên</a></div><section><h2>1. Phạm vi của một lượt làm việc</h2><p>GetTypes chỉ giữ type đọc được CrmPluginRegistration. Có catch rỗng trong quá trình đọc type/attribute. Assembly cache theo filename; NuGet chọn DLL bằng heuristic và ExtractZip đưa lib files vào thư mục giải nén. Resolver còn thử thư mục .NET Framework Windows.</p><div class="callout warn"><b>Trạng thái bằng chứng</b><p>Có khả năng DLL hợp lệ về file nhưng thiếu handler trong danh sách deploy do dependency/attribute reflection lỗi. Chưa có fixture chứng minh từng nguyên nhân. “Không có attribute” là trường hợp bỏ qua hợp lệ, khác “không đọc được attribute” do lỗi.</p></div><p class="muted">Chủ sở hữu: CLI. Shared/helpers, tests và wrapper được đọc để hiểu ảnh hưởng; việc đọc không có nghĩa phải sửa chúng. Đây là hồ sơ chuẩn bị cho lượt AI tiếp theo, không phải bản sửa đã áp dụng.</p></section>
+<section><h2>2. Những hành vi phải giữ nguyên</h2><ul><li>Giữ opt-in bằng CrmPluginRegistration; không tự deploy mọi IPlugin.</li><li>Giữ cách chọn main DLL và workflow package rejection trong patch chẩn đoán.</li><li>Không đổi temp path, global resolver hoặc cache identity khi chưa có regression rõ.</li><li>Giữ pipeline hiện có trên Windows; không công bố hỗ trợ workflow cross-platform chỉ vì sửa resolver.</li></ul><p>Thay đổi hành vi chỉ chấp nhận trong case lỗi đã được xác định. Một điểm chưa hoàn chỉnh không tự động là lý do thay đổi contract đang dùng.</p></section>
+<section><h2>3. Cách phân tích và sửa nhỏ nhất</h2><ol><li>Tạo assembly fixture không attribute, thiếu dependency, attribute lỗi và dependency trùng filename; ghi expected/actual types.</li><li>Lần theo exception nào bị bỏ qua và caller có còn biết deployment thiếu handler không.</li><li>Sửa chẩn đoán tại ranh giới nhỏ nhất khi có lỗi thực, tránh dump binary/secret. Fail-fast chỉ khi chứng minh đang bỏ mất registration có chủ đích.</li></ol><div class="callout"><b>Điều kiện hoàn thành</b><p>Có fixture cụ thể cho lỗi được sửa, message chẩn đoán đủ dùng và happy path không đổi. Nếu chỉ xác nhận một nguy cơ chưa xảy ra, ghi “chưa sửa vì chưa tái hiện”, không tạo refactor dự phòng.</p></div></section>
+<section><h2>4. Ma trận regression cần xem xét</h2><div class="table-wrap"><table><thead><tr><th>Tình huống</th><th>Điều cần chứng minh</th></tr></thead><tbody><tr><td>Type không attribute</td><td>Bỏ qua như trước, không biến thành lỗi.</td></tr><tr><td>Type có attribute hợp lệ</td><td>Đọc đầy đủ nhiều attributes; thứ tự giữ nguyên.</td></tr><tr><td>Thiếu dependency/attribute không đọc được</td><td>Có chẩn đoán đủ tên file/type và loại lỗi; không báo deploy đủ nếu mất handler.</td></tr><tr><td>Hai dependency cùng filename</td><td>Fixture xác nhận có/không va chạm trước khi đổi cache.</td></tr><tr><td>Workflow .NET Framework</td><td>Không phá resolver và IsWorkflowType.</td></tr><tr><td>Nupkg main DLL selection</td><td>Bộ package đang được hỗ trợ vẫn chọn cùng DLL; không mở rộng discovery ngầm.</td></tr></tbody></table></div><h3>Test source nên đọc trước</h3><ul class="compact"><li><a href="../../DynamicsCrm.DevKit.Cli.UnitTests/Cli/TaskServerTests.cs">Cli/TaskServerTests.cs</a></li><li><a href="../../DynamicsCrm.DevKit.Cli.UnitTests/Cli/TaskServerPackageCoverageTests.cs">Cli/TaskServerPackageCoverageTests.cs</a></li><li><a href="../../DynamicsCrm.DevKit.Cli.UnitTests/Tasks/TaskServerHelperCoverageTests.cs">Tasks/TaskServerHelperCoverageTests.cs</a></li></ul><p class="muted">Tên test/class là điểm bắt đầu, không phải bằng chứng đã cover đúng case hoặc đã pass. Đọc assertion và test doubles; fake không được tự sửa payload sai mà che mất bug.</p><details class="evidence"><summary>Lệnh kiểm chứng gợi ý sau khi đã sửa code</summary><p>Chạy tại repository root. Đọc <a href="../../DynamicsCrm.DevKit.AI/workflows/unit-test.md">workflow unit-test</a> hiện hành trước khi thực thi; kiểm tra class/filter còn tồn tại. Nếu thêm test class mới, bổ sung vào filter. Lượt tạo tài liệu này không chạy các lệnh dưới.</p><pre><code>dotnet build &quot;DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj&quot;
+dotnet test &quot;DynamicsCrm.DevKit.Cli.UnitTests/DynamicsCrm.DevKit.Cli.UnitTests.csproj&quot; --framework net10.0 --filter &quot;FullyQualifiedName~TaskServerTests|FullyQualifiedName~TaskServerPackageCoverageTests|FullyQualifiedName~TaskServerHelperCoverageTests&quot;</code></pre><p>Không thu coverage/full release nếu không được yêu cầu. Test có state chung cần [DoNotParallelize]; giữ WaitScalePercent theo quy ước. Nếu thực sự sửa Shared hoặc command base, chọn thêm regression cho các consumer bị ảnh hưởng theo AGENTS.md.</p></details></section>
+<section><h2>5. Điểm dễ làm hỏng phần đang chạy</h2><p>Assembly.Load và AppDomain resolver có state trong process; unit tests có thể ảnh hưởng lẫn nhau. Dùng fixture tách biệt và [DoNotParallelize] nếu động tới state dùng chung. Đổi cache key có thể ảnh hưởng mọi DLL trong một lần chạy.</p><p><b>Liên quan:</b> <a href="04.DeployPackageAsync.html">04.DeployPackageAsync.html</a> · <a href="08.DeployAssemblyAsync.html">08.DeployAssemblyAsync.html</a> · <a href="11.DeployPluginTypeAsync.html">11.DeployPluginTypeAsync.html</a></p><p class="muted">Một patch nên có một root cause. Hồ sơ liên quan giúp kiểm tra ảnh hưởng, không phải yêu cầu kéo tất cả vào cùng lần sửa. Quyền triển khai hoặc thay đổi scope đến từ yêu cầu mới của người dùng.</p></section>
+<section><h2>6. Bằng chứng source và tài liệu tham chiếu</h2><details class="evidence"><summary>DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs · 603–637, 1934–1959, 1962–2012, 2038–2064, 2077–2086</summary><p><a href="../../DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs">Mở file source</a> · Dòng tại snapshot, cần kiểm tra lại khi code đổi.</p><pre><code> 603          private string GetDllFileFromNugetPackage(string file)
+ 604          {
+ 605              var tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(file));
+ 606              Helper.TryDeleteFile(tempFile);
+ 607              File.Copy(file, tempFile);
+ 608              using PackageArchiveReader packageArchiveReader = new(tempFile);
+ 609              var folder = $&quot;{CurrentFolder}\\DynamicsCrm.DevKit.Cli.Temp&quot;;
+ 610              Helper.TryDeleteDirectory(folder);
+ 611              ExtractZip(packageArchiveReader, folder);
+ 612              var currentDllFiles = Directory.GetFiles(CurrentFolder, &quot;*.dll&quot;, SearchOption.AllDirectories);
+ 613              foreach (var dllFile in currentDllFiles)
+ 614              {
+ 615                  var destFile = Path.Combine(folder, Path.GetFileName(dllFile));
+ 616                  if (!File.Exists(destFile))
+ 617                  {
+ 618                      File.Copy(dllFile, destFile);
+ 619                  }
+ 620              }
+ 621              var files = Directory.GetFiles(folder).ToList();
+ 622              var fileNameWithoutExtention = Path.GetFileNameWithoutExtension(file);
+ 623              var nugetVerion = packageArchiveReader.NuspecReader.GetVersion().ToFullString();
+ 624              fileNameWithoutExtention = fileNameWithoutExtention.Substring(0, fileNameWithoutExtention.Length - nugetVerion.Length);
+ 625              var returnFiles = files.Where(x =&gt; x.Contains(fileNameWithoutExtention)).ToList();
+ 626              if (returnFiles.Count == 1)
+ 627              {
+ 628                  var returnFile = returnFiles.First();
+ 629                  foreach (var _file in files)
+ 630                  {
+ 631                      if (_file == returnFile) continue;
+ 632                      LoadAssemblyIntoCache(_file);
+ 633                  }
+ 634                  LoadAssemblyIntoCache(returnFile);
+ 635                  return returnFile;
+ 636              }
+ 637              return string.Empty;
+
+…
+
+1934          private Assembly LoadAssemblyIntoCache(string file)
+1935          {
+1936              var normalizedPath = Path.GetFullPath(file);
+1937              string fileName = Path.GetFileName(file);
+1938              if (_assemblyCache.TryGetValue(fileName, out var cachedAssembly))
+1939              {
+1940                  return cachedAssembly;
+1941              }
+1942              Assembly assembly = null;
+1943              try
+1944              {
+1945                  _currentAssemblyDirectory = Path.GetDirectoryName(file);
+1946                  var assemblyBytes = File.ReadAllBytes(file);
+1947                  AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+1948                  assembly = Assembly.Load(assemblyBytes);
+1949                  AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
+1950                  if (assembly != null)
+1951                  {
+1952                      _assemblyCache[fileName] = assembly;
+1953                  }
+1954              }
+1955              catch
+1956              {
+1957                  // Silently continue - this is expected for dependency DLLs that may not load
+1958                  // (e.g., Microsoft.Xrm.Sdk.Workflow.dll in packages with Workflow activities)
+1959              }
+
+…
+
+1962          private List&lt;TypeInfo&gt; GetTypes(string file)
+1963          {
+1964              _currentAssemblyDirectory = Path.GetDirectoryName(file);
+1965              var assembly = LoadAssemblyIntoCache(file);
+1966              if (assembly == null) return new List&lt;TypeInfo&gt;();
+1967              var types = new List&lt;TypeInfo&gt;();
+1968              try
+1969              {
+1970                  AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+1971                  var allTypes = assembly.DefinedTypes;
+1972                  AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
+1973                  foreach (var type in allTypes)
+1974                  {
+1975                      try
+1976                      {
+1977                          var attributes = type?.GetCustomAttributesData();
+1978                          if (attributes.Any(a =&gt; a.AttributeType.Name == typeof(CrmPluginRegistrationAttribute).Name))
+1979                              types.Add(type);
+1980                      }
+1981                      catch { /* skip types that fail attribute inspection (e.g. missing dependencies) */ }
+1982                  }
+1983              }
+1984              catch (ReflectionTypeLoadException ex)
+1985              {
+1986                  // Handle case where some types cannot be loaded (e.g., Workflow types with System.Activities dependency)
+1987                  // Use ex.Types to get types that were successfully loaded
+1988                  AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
+1989                  var loadedTypes = ex.Types?.Where(t =&gt; t != null).OfType&lt;TypeInfo&gt;().ToList() ?? new List&lt;TypeInfo&gt;();
+1990                  foreach (var type in loadedTypes)
+1991                  {
+1992                      try
+1993                      {
+1994                          var attributes = type?.GetCustomAttributesData();
+1995                          if (attributes != null &amp;&amp; attributes.Any(a =&gt; a.AttributeType.Name == typeof(CrmPluginRegistrationAttribute).Name))
+1996                              types.Add(type);
+1997                      }
+1998                      catch { }
+1999                  }
+2000              }
+2001              catch (Exception ex)
+2002              {
+2003                  SpectreLog.ActionError($&quot;Failed to read types from assembly {file}: {ex.Message}&quot;);
+2004              }
+2005              types = [.. types.OrderBy(x =&gt; x.FullName)];
+2006              _AttributesCache.Clear();
+2007              foreach (var type in types)
+2008              {
+2009                  var attributes = GetCrmPluginRegistrationAttributes(type);
+2010                  _AttributesCache.Add(new KeyValuePair&lt;string, List&lt;CrmPluginRegistrationAttribute&gt;&gt;(type.FullName, attributes));
+2011              }
+2012              return types;
+
+…
+
+2038                  }
+2039
+2040                  // Try to load from .NET Framework 4.x directory for WF4 assemblies (e.g., System.Activities)
+2041                  // This is required for loading Workflow types that extend CodeActivity
+2042                  var netFxPaths = new[]
+2043                  {
+2044                      Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), @&quot;Microsoft.NET\Framework64\v4.0.30319&quot;),
+2045                      Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), @&quot;Microsoft.NET\Framework\v4.0.30319&quot;)
+2046                  };
+2047
+2048                  foreach (var netFxPath in netFxPaths)
+2049                  {
+2050                      if (Directory.Exists(netFxPath))
+2051                      {
+2052                          var netFxAssemblyPath = Path.Combine(netFxPath, assemblyName + &quot;.dll&quot;);
+2053                          if (File.Exists(netFxAssemblyPath))
+2054                          {
+2055                              var assemblyBytes = File.ReadAllBytes(netFxAssemblyPath);
+2056                              var loaded = Assembly.Load(assemblyBytes);
+2057                              _assemblyCache[assemblyName + &quot;.dll&quot;] = loaded;
+2058                              return loaded;
+2059                          }
+2060                      }
+2061                  }
+2062
+2063                  // Cannot resolve - return null (do NOT call Assembly.Load(args.Name) as it triggers infinite recursion)
+2064                  return null;
+
+…
+
+2077          private void ExtractZip(PackageArchiveReader packageArchiveReader, string folder)
+2078          {
+2079              Helper.TryDeleteDirectory(folder);
+2080              if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+2081              var libFiles = packageArchiveReader.GetFiles(&quot;lib&quot;);
+2082              foreach (var libFile in libFiles)
+2083              {
+2084                  var zip = packageArchiveReader.GetEntry(libFile);
+2085                  zip.ExtractToFile($&quot;{folder}\\{zip.Name}&quot;, true);
+2086              }</code></pre></details><h3>Microsoft Learn đã dùng trong báo cáo gốc</h3><ul class="references"><li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/build-and-package" target="_blank" rel="noopener noreferrer">S18 · Build and package plug-in code - Power Apps | Microsoft Learn</a></li><li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/workflow/workflow-extensions" target="_blank" rel="noopener noreferrer">S31 · Create Workflow Extensions for Microsoft Dataverse - Power Apps | Microsoft Learn</a></li></ul><p class="muted">Nguồn được khảo sát ngày 28/09/2026. Nếu quyết định sửa phụ thuộc quy tắc Dataverse hiện hành, mở lại trang tương ứng; mock không thay thế kiểm chứng giới hạn nền tảng.</p></section>
+<section><h2>7. Prompt dùng với AI ở lượt tiếp theo</h2><h3>Chỉ phân tích lại</h3><pre class="prompt">Đọc Docs/TaskServer-Review/07.GetTypes.html và AGENTS.md hiện tại.
+Phân tích lại hồ sơ này trên source hiện tại. Lượt này chỉ review và đề xuất, chưa chỉnh sửa source.
+Component chính: CLI .NET 10. Trọng tâm: GetTypes — Khám phá type, dependency và lỗi reflection.
+Tài liệu được viết từ snapshot 6cc55c1d9f2913fed470c6f6f646356ab895cb2b; không coi line number hay nhận định là luôn đúng ở HEAD mới.
+Giữ chức năng đang có, public command/JSON/attribute và hành vi hợp lệ. Không thêm feature, refactor rộng, tự prune/migrate hoặc đổi policy deployment để làm test pass.
+Trước tiên chỉ ra điều kiện gây lỗi, caller/callee và side effects; phân biệt bug, giới hạn có chủ đích, nghi vấn và tối ưu chưa đo.
+Nếu sửa: dùng fixture/regression chứng minh lỗi, giữ assertion payload/Id/no-op, rồi chạy build CLI và tests nhỏ nhất có liên quan. Không dùng secret thật; không deploy live, stage, commit hay push nếu tôi chưa yêu cầu.
+Kết quả: kết luận có/không có bug; bằng chứng; phạm vi thay đổi tối thiểu; điều giữ nguyên; test và kết quả thật; ảnh hưởng/giới hạn còn lại. Nếu chưa đủ bằng chứng, báo rõ thiếu gì; không bù bằng một thiết kế mới.</pre><details class="evidence"><summary>Khi bạn đã chọn một bug và muốn AI thực hiện sửa</summary><pre class="prompt">Đọc Docs/TaskServer-Review/07.GetTypes.html và AGENTS.md hiện tại.
+Tái hiện và sửa duy nhất một bug đã được xác nhận trong hồ sơ này. Chọn phạm vi nhỏ nhất; không làm toàn bộ checklist thành một patch.
+Component chính: CLI .NET 10. Trọng tâm: GetTypes — Khám phá type, dependency và lỗi reflection.
+Tài liệu được viết từ snapshot 6cc55c1d9f2913fed470c6f6f646356ab895cb2b; không coi line number hay nhận định là luôn đúng ở HEAD mới.
+Giữ chức năng đang có, public command/JSON/attribute và hành vi hợp lệ. Không thêm feature, refactor rộng, tự prune/migrate hoặc đổi policy deployment để làm test pass.
+Trước tiên chỉ ra điều kiện gây lỗi, caller/callee và side effects; phân biệt bug, giới hạn có chủ đích, nghi vấn và tối ưu chưa đo.
+Nếu sửa: dùng fixture/regression chứng minh lỗi, giữ assertion payload/Id/no-op, rồi chạy build CLI và tests nhỏ nhất có liên quan. Không dùng secret thật; không deploy live, stage, commit hay push nếu tôi chưa yêu cầu.
+Kết quả: kết luận có/không có bug; bằng chứng; phạm vi thay đổi tối thiểu; điều giữ nguyên; test và kết quả thật; ảnh hưởng/giới hạn còn lại. Nếu chưa đủ bằng chứng, báo rõ thiếu gì; không bù bằng một thiết kế mới.</pre></details></section><footer><a href="06.DeployCustomApiStepAsync.html">← File trước</a><span>Không có thư viện, font hoặc script ngoài. Dùng riêng từng file với AI.</span><a href="08.DeployAssemblyAsync.html">File tiếp theo →</a></footer></main></body></html>

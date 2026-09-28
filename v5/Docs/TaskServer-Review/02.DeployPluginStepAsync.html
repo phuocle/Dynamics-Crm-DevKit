@@ -1,0 +1,121 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>02 · DeployPluginStepAsync · Wildcard và tính ổn định khi đăng ký step · TaskServer Review</title><style>
+:root{--ink:#16303b;--muted:#566e78;--teal:#12685d;--line:#d9e3e4;--paper:#f2f5f4;--nav:#12323c;--gold:#ffdc80}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.7 "Segoe UI",Arial,sans-serif}a{color:#09655e;text-underline-offset:3px;overflow-wrap:anywhere}a:hover{color:#9a4b1c}aside{width:260px;position:fixed;inset:0 auto 0 0;background:var(--nav);color:#d7e7e8;overflow:auto;padding:27px 18px}.brand{font-weight:800;color:var(--gold);letter-spacing:1px;font-size:19px;text-decoration:none;display:block;margin-bottom:8px}.rail-caption{font-size:12px;line-height:1.6;margin-bottom:22px;opacity:.8}nav a{display:block;padding:9px 11px;color:#d7e7e8;text-decoration:none;font-size:12px;border-radius:5px;line-height:1.45;margin:2px 0;overflow-wrap:anywhere}nav a.active{background:#294a53;color:#ffdf86;border-left:3px solid #ffdf86}nav a:hover{background:#294a53;color:white}main{margin-left:260px;max-width:1390px;padding:32px 40px 65px}.hero{background:var(--nav);color:#fff;padding:34px 39px;border-radius:15px}.eyebrow{color:#a9d2cd;font-size:12px;font-weight:700;letter-spacing:1.8px;margin-bottom:16px}.hero h1{font-size:clamp(27px,3vw,40px);line-height:1.3;margin:8px 0 16px;overflow-wrap:anywhere}.hero p{max-width:940px;color:#cddedf;margin:0}.status{margin-top:24px;display:flex;gap:10px;flex-wrap:wrap}.badge{display:inline-block;border-radius:6px;padding:5px 9px;font-size:11px;font-weight:700;background:#fff0c9;color:#735124}.badge.quiet{background:#244852;color:#d3e9e8}.meta{font-size:12px;color:var(--muted);margin:17px 2px 23px;overflow-wrap:anywhere}section{background:white;border:1px solid var(--line);border-radius:12px;padding:29px 34px;margin:20px 0}h2{font-size:24px;line-height:1.4;margin:0 0 18px}h3{font-size:18px;margin:24px 0 10px}p{margin:10px 0 15px}li{margin:8px 0}ul,ol{padding-left:23px}.callout{border-left:4px solid var(--teal);background:#edf6f3;padding:17px 20px;margin:20px 0;border-radius:4px}.callout.warn{border-color:#c68420;background:#fff7e7}.muted{color:var(--muted);font-size:13px}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0}table{border-collapse:collapse;width:100%;min-width:580px;font-size:14px}th{text-align:left;background:#eaf1ef;font-size:12px;padding:13px 16px}td{padding:14px 16px;vertical-align:top;border-top:1px solid #e3eaea}tr:nth-child(even) td{background:#fafcfc}td small{display:block;color:var(--muted);margin-top:4px}code{font:13px/1.6 Consolas,monospace;overflow-wrap:anywhere}p code,li code{background:#eef3f3;padding:2px 4px;border-radius:3px}pre{background:#132d36;color:#ddecf1;border-radius:8px;padding:20px;overflow:auto;font:12px/1.6 Consolas,monospace;white-space:pre}.prompt{white-space:pre-wrap;overflow-wrap:anywhere}.evidence{border:1px solid var(--line);padding:14px 18px;border-radius:7px;margin:13px 0}.evidence summary{cursor:pointer;font-size:13px;font-weight:600;overflow-wrap:anywhere}.evidence p{font-size:12px}.references{font-size:14px}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.card{background:#f2f7f5;border:1px solid #dce6e3;padding:19px;border-radius:8px}.card b{display:block;color:var(--teal)}.card p{font-size:14px;margin-bottom:0}footer{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:26px 0}.compact{font-size:14px}a:focus-visible,summary:focus-visible{outline:3px solid #b97913;outline-offset:3px}
+@media(max-width:1050px){aside{width:224px}main{margin-left:224px;padding:25px}section{padding:25px}.hero{padding:29px}.cards{grid-template-columns:1fr}}
+@media(max-width:760px){aside{position:relative;width:auto;padding:19px}aside nav{display:grid;grid-template-columns:1fr 1fr}.rail-caption{margin-bottom:12px}main{margin:0;padding:16px}.hero{padding:23px}section{padding:22px 18px}h2{font-size:22px}.hero h1{font-size:28px}}
+@media print{aside,.status{display:none}main{margin:0;padding:0;max-width:none}body{background:white;color:black;font-size:10pt}.hero{background:white;color:black;border-bottom:2px solid #333;padding:14px 0}.hero p,.eyebrow{color:#333}section{border:0;padding:15px 0;margin:0;border-bottom:1px solid #bbb}h2,h3{break-after:avoid}tr,.card{break-inside:avoid}table{min-width:0;font-size:9pt}pre{white-space:pre-wrap;background:#f2f2f2;color:#111;font-size:8pt}a{color:#111}.table-wrap{overflow:visible}.evidence{break-inside:auto}@page{size:A4;margin:16mm}}
+</style></head><body><aside><a class="brand" href="00.BugFix-Logging-Optimization.html">TASKSERVER / REVIEW</a><p class="rail-caption">Giữ chức năng hiện tại.<br>Chứng minh lỗi. Sửa từng việc nhỏ.</p><nav aria-label="Các hồ sơ review"><a href="00.BugFix-Logging-Optimization.html">00.BugFix-Logging-Optimization</a><a href="01.CliLogSecureUnsecure.html">01.CliLogSecureUnsecure</a><a class="active" aria-current="page" href="02.DeployPluginStepAsync.html">02.DeployPluginStepAsync</a><a href="03.DeployPluginImageAsync.html">03.DeployPluginImageAsync</a><a href="04.DeployPackageAsync.html">04.DeployPackageAsync</a><a href="05.RunAsync.html">05.RunAsync</a><a href="06.DeployCustomApiStepAsync.html">06.DeployCustomApiStepAsync</a><a href="07.GetTypes.html">07.GetTypes</a><a href="08.DeployAssemblyAsync.html">08.DeployAssemblyAsync</a><a href="09.DeployManagedIdentityAsync.html">09.DeployManagedIdentityAsync</a><a href="10.RegisterDataProviderAsync.html">10.RegisterDataProviderAsync</a><a href="11.DeployPluginTypeAsync.html">11.DeployPluginTypeAsync</a><a href="12.UnregisterPluginTypeAsync.html">12.UnregisterPluginTypeAsync</a><a href="13.LoadAllPluginTypesAsync.html">13.LoadAllPluginTypesAsync</a></nav><p class="rail-caption">28.09.2026<br>CLI · .NET 10<br>Tài liệu chuẩn bị, chưa sửa source</p></aside><main><header class="hero"><div class="eyebrow">HỒ SƠ 02 / REVIEW &amp; SỬA LỖI CÓ GIỚI HẠN</div><h1>DeployPluginStepAsync · Wildcard và tính ổn định khi đăng ký step</h1><p>Tái hiện lỗi null khi FilteringAttributes=&quot;*&quot;; sửa đường hiển thị mà vẫn giữ nghĩa “mọi thuộc tính” trong registration.</p><div class="status"><span class="badge">BUG · B02 / F03</span><span class="badge quiet">CHƯA CHẠY TEST / CHƯA SỬA CODE</span></div></header><div class="meta">Snapshot: <code>6cc55c1d9f2913fed470c6f6f646356ab895cb2b</code> · Source version <code>4.44.44.44</code> · <a href="00.BugFix-Logging-Optimization.html">Bắt đầu từ file 00</a> · <a href="../TaskServer-Dataverse-Server-Side-Analysis.html">Báo cáo gốc giữ nguyên</a></div><section><h2>1. Phạm vi của một lượt làm việc</h2><p>Hàm kiểm tra filter cho các message thuộc nhóm Update, chuyển wildcard thành null, tạo payload step và ghi log bằng CliLogUpdateFields. Shared Helper nhận UpdateMultiple và OnExternalUpdated; nhóm Create cũng có nhiều alias.</p><div class="callout warn"><b>Trạng thái bằng chứng</b><p>Đường Update gọi FilteringAttributes.Split sau khi wildcard đã được đổi thành null. Nhánh Create gọi FilteringAttributes.Length, nên cũng cần kiểm tra đường wildcard/null có đi qua hay không. Lỗi này có thể xảy ra sau khi secure config được tạo. Không suy rằng mọi null từ caller đều hợp lệ: phải kiểm tra default/validation của attribute.</p></div><p class="muted">Chủ sở hữu: CLI. Shared/helpers, tests và wrapper được đọc để hiểu ảnh hưởng; việc đọc không có nghĩa phải sửa chúng. Đây là hồ sơ chuẩn bị cho lượt AI tiếp theo, không phải bản sửa đã áp dụng.</p></section>
+<section><h2>2. Những hành vi phải giữ nguyên</h2><ul><li>Giữ lookup bằng explicit step Id rồi fallback theo type/name và quy tắc phát hiện duplicate.</li><li>Giữ stage, mode, rank, RunAs, async auto-delete, state/status và solution association.</li><li>Giữ phân biệt input rỗng bị validation từ chối với wildcard có chủ đích; không biến mọi null thành yêu cầu hợp lệ.</li><li>Không sửa Shared Helper chỉ để chữa lỗi log ở CLI.</li></ul><p>Thay đổi hành vi chỉ chấp nhận trong case lỗi đã được xác định. Một điểm chưa hoàn chỉnh không tự động là lý do thay đổi contract đang dùng.</p></section>
+<section><h2>3. Cách phân tích và sửa nhỏ nhất</h2><ol><li>Lập bảng input → validation → normalized field → log; bao gồm alias message mà Helper hiện hỗ trợ.</li><li>Tái hiện create step và update step với wildcard, mock ghi lại request thật trước khi trả response.</li><li>Đánh giá null-safe formatter cục bộ hoặc giữ biến hiển thị riêng. Tránh sửa rộng normalization trong một patch nếu chưa cần.</li><li>Kiểm tra chạy lại cùng attribute trong test vì code hiện mutate object; nếu sửa mutation, ghi rõ ảnh hưởng cache/caller.</li></ol><div class="callout"><b>Điều kiện hoàn thành</b><p>Regression tái hiện lỗi trước patch, pass sau patch; các trường payload ngoài lỗi và hành vi no-op/state không đổi.</p></div></section>
+<section><h2>4. Ma trận regression cần xem xét</h2><div class="table-wrap"><table><thead><tr><th>Tình huống</th><th>Điều cần chứng minh</th></tr></thead><tbody><tr><td>Update mới, filter &quot;*&quot;</td><td>Không exception; payload filteringattributes null như trước; có step Id.</td></tr><tr><td>Update hiện có, wildcard no-op/change</td><td>Phân biệt DO NOTHING/UPDATED đúng; không Split null.</td></tr><tr><td>UpdateMultiple / OnExternalUpdated</td><td>Dùng cùng semantics hiện có; không bỏ sót nhánh alias.</td></tr><tr><td>Create và CreateMultiple</td><td>Thử wildcard và default; không Length null nếu input tới được log.</td></tr><tr><td>Filter cụ thể / rỗng / whitespace</td><td>Filter hợp lệ giữ payload; input không hợp lệ vẫn bị xử lý theo contract cũ.</td></tr><tr><td>Activate/deactivate + secure config</td><td>Không đổi state, mode hay số record chỉ vì sửa log.</td></tr></tbody></table></div><h3>Test source nên đọc trước</h3><ul class="compact"><li><a href="../../DynamicsCrm.DevKit.Cli.UnitTests/Tasks/TaskServerHelperCoverageTests.cs">Tasks/TaskServerHelperCoverageTests.cs</a></li><li><a href="../../DynamicsCrm.DevKit.Cli.UnitTests/Tasks/TaskServerPluginStepFakeSdkCoverageTests.cs">Tasks/TaskServerPluginStepFakeSdkCoverageTests.cs</a></li><li><a href="../../DynamicsCrm.DevKit.Cli.UnitTests/Cli/Tasks/TaskServerCoverageTests.cs">Cli/Tasks/TaskServerCoverageTests.cs</a></li></ul><p class="muted">Tên test/class là điểm bắt đầu, không phải bằng chứng đã cover đúng case hoặc đã pass. Đọc assertion và test doubles; fake không được tự sửa payload sai mà che mất bug.</p><details class="evidence"><summary>Lệnh kiểm chứng gợi ý sau khi đã sửa code</summary><p>Chạy tại repository root. Đọc <a href="../../DynamicsCrm.DevKit.AI/workflows/unit-test.md">workflow unit-test</a> hiện hành trước khi thực thi; kiểm tra class/filter còn tồn tại. Nếu thêm test class mới, bổ sung vào filter. Lượt tạo tài liệu này không chạy các lệnh dưới.</p><pre><code>dotnet build &quot;DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj&quot;
+dotnet test &quot;DynamicsCrm.DevKit.Cli.UnitTests/DynamicsCrm.DevKit.Cli.UnitTests.csproj&quot; --framework net10.0 --filter &quot;FullyQualifiedName~TaskServerHelperCoverageTests|FullyQualifiedName~TaskServerPluginStepFakeSdkCoverageTests|FullyQualifiedName~TaskServerCoverageTests&quot;</code></pre><p>Không thu coverage/full release nếu không được yêu cầu. Test có state chung cần [DoNotParallelize]; giữ WaitScalePercent theo quy ước. Nếu thực sự sửa Shared hoặc command base, chọn thêm regression cho các consumer bị ảnh hưởng theo AGENTS.md.</p></details></section>
+<section><h2>5. Điểm dễ làm hỏng phần đang chạy</h2><p>Đổi null thành chuỗi rỗng trong payload có thể đổi semantics Dataverse. Đổi validation sẽ ảnh hưởng dự án đang dùng attribute cũ. Không dùng test chỉ kiểm tra hàm formatter mà bỏ qua đường DeployPluginStepAsync thực tế.</p><p><b>Liên quan:</b> <a href="01.CliLogSecureUnsecure.html">01.CliLogSecureUnsecure.html</a> · <a href="03.DeployPluginImageAsync.html">03.DeployPluginImageAsync.html</a> · <a href="05.RunAsync.html">05.RunAsync.html</a></p><p class="muted">Một patch nên có một root cause. Hồ sơ liên quan giúp kiểm tra ảnh hưởng, không phải yêu cầu kéo tất cả vào cùng lần sửa. Quyền triển khai hoặc thay đổi scope đến từ yêu cầu mới của người dùng.</p></section>
+<section><h2>6. Bằng chứng source và tài liệu tham chiếu</h2><details class="evidence"><summary>DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs · 1358–1383, 1393–1413, 1608–1649</summary><p><a href="../../DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs">Mở file source</a> · Dòng tại snapshot, cần kiểm tra lại khi code đổi.</p><pre><code>1358          private async Task&lt;Guid?&gt; DeployPluginStepAsync(Guid pluginTypeId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
+1359          {
+1360              if (Helper.IsMessageUpdate(attribute?.Message))
+1361              {
+1362                  if (attribute?.FilteringAttributes?.Trim().Length == 0)
+1363                  {
+1364                      SpectreLog.ActionError($&quot;{type.FullName} The {attribute?.Message} message need provide FilteringAttributes value. Assemply deployed, but the deployment of this assembly stopped.&quot;);
+1365                      return null;
+1366                  }
+1367                  if (attribute?.FilteringAttributes.Trim() == &quot;*&quot;)
+1368                  {
+1369                      attribute.FilteringAttributes = null;
+1370                  }
+1371              }
+1372              // Try to find existing step by Id first (for idempotent deployments)
+1373              List&lt;Entity&gt; rows = new List&lt;Entity&gt;();
+1374              if (!string.IsNullOrEmpty(attribute.Id) &amp;&amp; Guid.TryParse(attribute.Id, out Guid stepId))
+1375              {
+1376                  rows = _PluginStepsCache.Where(x =&gt; x.Value.Id == stepId).Select(x =&gt; x.Value).ToList();
+1377              }
+1378              // Fall back to Name-based lookup if Id not found or not provided
+1379              if (rows.Count == 0)
+1380              {
+1381                  var key = $&quot;{pluginTypeId}-{attribute.Name}&quot;;
+1382                  rows = _PluginStepsCache.Where(x =&gt; x.Key == key).Select(x =&gt; x.Value).ToList();
+1383              }
+
+…
+
+1393              var sdkMessageFilterId = GetSdkMessageFilterId(attribute.EntityLogicalName, attribute.Message);
+1394              var sdkMessageId = GetSdkMessageId(attribute.EntityLogicalName, attribute.Message);
+1395              var impersonatingUserId = await Metadata.GetImpersonatingUserIdAsync(attribute.RunAs);
+1396
+1397              if (attribute.ExecutionMode == 0) attribute.DeleteAsyncOperation = false;
+1398              var pluginStep = new Entity(&quot;sdkmessageprocessingstep&quot;)
+1399              {
+1400                  [&quot;name&quot;] = attribute.Name,
+1401                  [&quot;configuration&quot;] = attribute.UnSecureConfiguration,
+1402                  [&quot;mode&quot;] = new OptionSetValue(attribute.ExecutionMode == ExecutionModeEnum.Asynchronous ? 1 : 0),
+1403                  [&quot;rank&quot;] = attribute.ExecutionOrder,
+1404                  [&quot;stage&quot;] = new OptionSetValue((int)attribute.Stage),
+1405                  [&quot;asyncautodelete&quot;] = attribute.DeleteAsyncOperation,
+1406                  [&quot;plugintypeid&quot;] = new EntityReference(&quot;plugintype&quot;, pluginTypeId),
+1407                  [&quot;sdkmessagefilterid&quot;] = sdkMessageFilterId,
+1408                  [&quot;sdkmessageid&quot;] = sdkMessageId,
+1409                  [&quot;filteringattributes&quot;] = attribute.FilteringAttributes?.Replace(&quot; &quot;, &quot;&quot;),
+1410                  [&quot;impersonatinguserid&quot;] = impersonatingUserId != null ? new EntityReference(&quot;systemuser&quot;, impersonatingUserId.Value) : null,
+1411                  [&quot;supporteddeployment&quot;] = (attribute.Server &amp;&amp; attribute.Offline) ? new OptionSetValue(2) : (!attribute.Server &amp;&amp; attribute.Offline ? new OptionSetValue(1) : new OptionSetValue(0)),
+1412                  [&quot;description&quot;] = attribute.Description
+1413              };
+
+…
+
+1608              void CliLogUpdateFields()
+1609              {
+1610                  if (Helper.IsMessageUpdate(attribute.Message))
+1611                  {
+1612                      if (rows.Count == 0)
+1613                      {
+1614                          SpectreLog.ActionWithLevel4(CliAction.REGISTERED, &quot;Update&quot;, &quot;Fields&quot;, attribute.FilteringAttributes.Split(&quot;,&quot;.ToCharArray()).ToList());
+1615                      }
+1616                      else
+1617                      {
+1618                          if (rows[0].GetAttributeValue&lt;string&gt;(&quot;filteringattributes&quot;) == attribute.FilteringAttributes?.Replace(&quot; &quot;, &quot;&quot;))
+1619                          {
+1620                              SpectreLog.ActionWithLevel4(CliAction.DO_NOTHING, &quot;Update&quot;, &quot;Fields&quot;, attribute.FilteringAttributes.Split(&quot;,&quot;.ToCharArray()).ToList());
+1621                          }
+1622                          else
+1623                          {
+1624                              SpectreLog.ActionWithLevel4(CliAction.UPDATED, &quot;Update&quot;, &quot;Fields&quot;, attribute.FilteringAttributes.Split(&quot;,&quot;.ToCharArray()).ToList());
+1625                          }
+1626                      }
+1627                  }
+1628                  else if (Helper.IsMessageCreate(attribute.Message))
+1629                  {
+1630                      if (attribute.FilteringAttributes.Length &gt; 0)
+1631                      {
+1632                          if (rows.Count == 0)
+1633                          {
+1634                              SpectreLog.ActionWithLevel4(CliAction.REGISTERED, &quot;Create&quot;, &quot;Fields&quot;, attribute.FilteringAttributes.Split(&quot;,&quot;.ToCharArray()).ToList());
+1635                          }
+1636                          else
+1637                          {
+1638                              if (rows[0].GetAttributeValue&lt;string&gt;(&quot;filteringattributes&quot;) == attribute.FilteringAttributes?.Replace(&quot; &quot;, &quot;&quot;))
+1639                              {
+1640                                  SpectreLog.ActionWithLevel4(CliAction.DO_NOTHING, &quot;Create&quot;, &quot;Fields&quot;, attribute.FilteringAttributes.Split(&quot;,&quot;.ToCharArray()).ToList());
+1641                              }
+1642                              else
+1643                              {
+1644                                  SpectreLog.ActionWithLevel4(CliAction.UPDATED, &quot;Create&quot;, &quot;Fields&quot;, attribute.FilteringAttributes.Split(&quot;,&quot;.ToCharArray()).ToList());
+1645                              }
+1646                          }
+1647                      }
+1648                  }
+1649              }</code></pre></details><h3>Microsoft Learn đã dùng trong báo cáo gốc</h3><ul class="references"><li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/register-plug-in" target="_blank" rel="noopener noreferrer">S19 · Register a plug-in (Microsoft Dataverse) - Power Apps | Microsoft Learn</a></li><li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/write-plugin-multiple-operation" target="_blank" rel="noopener noreferrer">S27 · Write plug-ins for CreateMultiple and UpdateMultiple - Power Apps | Microsoft Learn</a></li><li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/include-filtering-attributes-plugin-registration" target="_blank" rel="noopener noreferrer">S65 · Include filtering attributes with plug-in registration - Power Apps | Microsoft Learn</a></li></ul><p class="muted">Nguồn được khảo sát ngày 28/09/2026. Nếu quyết định sửa phụ thuộc quy tắc Dataverse hiện hành, mở lại trang tương ứng; mock không thay thế kiểm chứng giới hạn nền tảng.</p></section>
+<section><h2>7. Prompt dùng với AI ở lượt tiếp theo</h2><h3>Chỉ phân tích lại</h3><pre class="prompt">Đọc Docs/TaskServer-Review/02.DeployPluginStepAsync.html và AGENTS.md hiện tại.
+Phân tích lại hồ sơ này trên source hiện tại. Lượt này chỉ review và đề xuất, chưa chỉnh sửa source.
+Component chính: CLI .NET 10. Trọng tâm: DeployPluginStepAsync — Wildcard và tính ổn định khi đăng ký step.
+Tài liệu được viết từ snapshot 6cc55c1d9f2913fed470c6f6f646356ab895cb2b; không coi line number hay nhận định là luôn đúng ở HEAD mới.
+Giữ chức năng đang có, public command/JSON/attribute và hành vi hợp lệ. Không thêm feature, refactor rộng, tự prune/migrate hoặc đổi policy deployment để làm test pass.
+Trước tiên chỉ ra điều kiện gây lỗi, caller/callee và side effects; phân biệt bug, giới hạn có chủ đích, nghi vấn và tối ưu chưa đo.
+Nếu sửa: dùng fixture/regression chứng minh lỗi, giữ assertion payload/Id/no-op, rồi chạy build CLI và tests nhỏ nhất có liên quan. Không dùng secret thật; không deploy live, stage, commit hay push nếu tôi chưa yêu cầu.
+Kết quả: kết luận có/không có bug; bằng chứng; phạm vi thay đổi tối thiểu; điều giữ nguyên; test và kết quả thật; ảnh hưởng/giới hạn còn lại. Nếu chưa đủ bằng chứng, báo rõ thiếu gì; không bù bằng một thiết kế mới.</pre><details class="evidence"><summary>Khi bạn đã chọn một bug và muốn AI thực hiện sửa</summary><pre class="prompt">Đọc Docs/TaskServer-Review/02.DeployPluginStepAsync.html và AGENTS.md hiện tại.
+Tái hiện và sửa duy nhất một bug đã được xác nhận trong hồ sơ này. Chọn phạm vi nhỏ nhất; không làm toàn bộ checklist thành một patch.
+Component chính: CLI .NET 10. Trọng tâm: DeployPluginStepAsync — Wildcard và tính ổn định khi đăng ký step.
+Tài liệu được viết từ snapshot 6cc55c1d9f2913fed470c6f6f646356ab895cb2b; không coi line number hay nhận định là luôn đúng ở HEAD mới.
+Giữ chức năng đang có, public command/JSON/attribute và hành vi hợp lệ. Không thêm feature, refactor rộng, tự prune/migrate hoặc đổi policy deployment để làm test pass.
+Trước tiên chỉ ra điều kiện gây lỗi, caller/callee và side effects; phân biệt bug, giới hạn có chủ đích, nghi vấn và tối ưu chưa đo.
+Nếu sửa: dùng fixture/regression chứng minh lỗi, giữ assertion payload/Id/no-op, rồi chạy build CLI và tests nhỏ nhất có liên quan. Không dùng secret thật; không deploy live, stage, commit hay push nếu tôi chưa yêu cầu.
+Kết quả: kết luận có/không có bug; bằng chứng; phạm vi thay đổi tối thiểu; điều giữ nguyên; test và kết quả thật; ảnh hưởng/giới hạn còn lại. Nếu chưa đủ bằng chứng, báo rõ thiếu gì; không bù bằng một thiết kế mới.</pre></details></section><footer><a href="01.CliLogSecureUnsecure.html">← File trước</a><span>Không có thư viện, font hoặc script ngoài. Dùng riêng từng file với AI.</span><a href="03.DeployPluginImageAsync.html">File tiếp theo →</a></footer></main></body></html>

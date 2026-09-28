@@ -1,0 +1,116 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>03 · DeployPluginImageAsync · Update đúng image Id, giữ nguyên semantics hiện có · TaskServer Review</title><style>
+:root{--ink:#16303b;--muted:#566e78;--teal:#12685d;--line:#d9e3e4;--paper:#f2f5f4;--nav:#12323c;--gold:#ffdc80}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.7 "Segoe UI",Arial,sans-serif}a{color:#09655e;text-underline-offset:3px;overflow-wrap:anywhere}a:hover{color:#9a4b1c}aside{width:260px;position:fixed;inset:0 auto 0 0;background:var(--nav);color:#d7e7e8;overflow:auto;padding:27px 18px}.brand{font-weight:800;color:var(--gold);letter-spacing:1px;font-size:19px;text-decoration:none;display:block;margin-bottom:8px}.rail-caption{font-size:12px;line-height:1.6;margin-bottom:22px;opacity:.8}nav a{display:block;padding:9px 11px;color:#d7e7e8;text-decoration:none;font-size:12px;border-radius:5px;line-height:1.45;margin:2px 0;overflow-wrap:anywhere}nav a.active{background:#294a53;color:#ffdf86;border-left:3px solid #ffdf86}nav a:hover{background:#294a53;color:white}main{margin-left:260px;max-width:1390px;padding:32px 40px 65px}.hero{background:var(--nav);color:#fff;padding:34px 39px;border-radius:15px}.eyebrow{color:#a9d2cd;font-size:12px;font-weight:700;letter-spacing:1.8px;margin-bottom:16px}.hero h1{font-size:clamp(27px,3vw,40px);line-height:1.3;margin:8px 0 16px;overflow-wrap:anywhere}.hero p{max-width:940px;color:#cddedf;margin:0}.status{margin-top:24px;display:flex;gap:10px;flex-wrap:wrap}.badge{display:inline-block;border-radius:6px;padding:5px 9px;font-size:11px;font-weight:700;background:#fff0c9;color:#735124}.badge.quiet{background:#244852;color:#d3e9e8}.meta{font-size:12px;color:var(--muted);margin:17px 2px 23px;overflow-wrap:anywhere}section{background:white;border:1px solid var(--line);border-radius:12px;padding:29px 34px;margin:20px 0}h2{font-size:24px;line-height:1.4;margin:0 0 18px}h3{font-size:18px;margin:24px 0 10px}p{margin:10px 0 15px}li{margin:8px 0}ul,ol{padding-left:23px}.callout{border-left:4px solid var(--teal);background:#edf6f3;padding:17px 20px;margin:20px 0;border-radius:4px}.callout.warn{border-color:#c68420;background:#fff7e7}.muted{color:var(--muted);font-size:13px}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0}table{border-collapse:collapse;width:100%;min-width:580px;font-size:14px}th{text-align:left;background:#eaf1ef;font-size:12px;padding:13px 16px}td{padding:14px 16px;vertical-align:top;border-top:1px solid #e3eaea}tr:nth-child(even) td{background:#fafcfc}td small{display:block;color:var(--muted);margin-top:4px}code{font:13px/1.6 Consolas,monospace;overflow-wrap:anywhere}p code,li code{background:#eef3f3;padding:2px 4px;border-radius:3px}pre{background:#132d36;color:#ddecf1;border-radius:8px;padding:20px;overflow:auto;font:12px/1.6 Consolas,monospace;white-space:pre}.prompt{white-space:pre-wrap;overflow-wrap:anywhere}.evidence{border:1px solid var(--line);padding:14px 18px;border-radius:7px;margin:13px 0}.evidence summary{cursor:pointer;font-size:13px;font-weight:600;overflow-wrap:anywhere}.evidence p{font-size:12px}.references{font-size:14px}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.card{background:#f2f7f5;border:1px solid #dce6e3;padding:19px;border-radius:8px}.card b{display:block;color:var(--teal)}.card p{font-size:14px;margin-bottom:0}footer{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:26px 0}.compact{font-size:14px}a:focus-visible,summary:focus-visible{outline:3px solid #b97913;outline-offset:3px}
+@media(max-width:1050px){aside{width:224px}main{margin-left:224px;padding:25px}section{padding:25px}.hero{padding:29px}.cards{grid-template-columns:1fr}}
+@media(max-width:760px){aside{position:relative;width:auto;padding:19px}aside nav{display:grid;grid-template-columns:1fr 1fr}.rail-caption{margin-bottom:12px}main{margin:0;padding:16px}.hero{padding:23px}section{padding:22px 18px}h2{font-size:22px}.hero h1{font-size:28px}}
+@media print{aside,.status{display:none}main{margin:0;padding:0;max-width:none}body{background:white;color:black;font-size:10pt}.hero{background:white;color:black;border-bottom:2px solid #333;padding:14px 0}.hero p,.eyebrow{color:#333}section{border:0;padding:15px 0;margin:0;border-bottom:1px solid #bbb}h2,h3{break-after:avoid}tr,.card{break-inside:avoid}table{min-width:0;font-size:9pt}pre{white-space:pre-wrap;background:#f2f2f2;color:#111;font-size:8pt}a{color:#111}.table-wrap{overflow:visible}.evidence{break-inside:auto}@page{size:A4;margin:16mm}}
+</style></head><body><aside><a class="brand" href="00.BugFix-Logging-Optimization.html">TASKSERVER / REVIEW</a><p class="rail-caption">Giữ chức năng hiện tại.<br>Chứng minh lỗi. Sửa từng việc nhỏ.</p><nav aria-label="Các hồ sơ review"><a href="00.BugFix-Logging-Optimization.html">00.BugFix-Logging-Optimization</a><a href="01.CliLogSecureUnsecure.html">01.CliLogSecureUnsecure</a><a href="02.DeployPluginStepAsync.html">02.DeployPluginStepAsync</a><a class="active" aria-current="page" href="03.DeployPluginImageAsync.html">03.DeployPluginImageAsync</a><a href="04.DeployPackageAsync.html">04.DeployPackageAsync</a><a href="05.RunAsync.html">05.RunAsync</a><a href="06.DeployCustomApiStepAsync.html">06.DeployCustomApiStepAsync</a><a href="07.GetTypes.html">07.GetTypes</a><a href="08.DeployAssemblyAsync.html">08.DeployAssemblyAsync</a><a href="09.DeployManagedIdentityAsync.html">09.DeployManagedIdentityAsync</a><a href="10.RegisterDataProviderAsync.html">10.RegisterDataProviderAsync</a><a href="11.DeployPluginTypeAsync.html">11.DeployPluginTypeAsync</a><a href="12.UnregisterPluginTypeAsync.html">12.UnregisterPluginTypeAsync</a><a href="13.LoadAllPluginTypesAsync.html">13.LoadAllPluginTypesAsync</a></nav><p class="rail-caption">28.09.2026<br>CLI · .NET 10<br>Tài liệu chuẩn bị, chưa sửa source</p></aside><main><header class="hero"><div class="eyebrow">HỒ SƠ 03 / REVIEW &amp; SỬA LỖI CÓ GIỚI HẠN</div><h1>DeployPluginImageAsync · Update đúng image Id, giữ nguyên semantics hiện có</h1><p>Ưu tiên trường hợp chỉ đổi alias: request Update hiện có đường không được gán Id.</p><div class="status"><span class="badge">BUG · B03 / F05</span><span class="badge quiet">CHƯA CHẠY TEST / CHƯA SỬA CODE</span></div></header><div class="meta">Snapshot: <code>6cc55c1d9f2913fed470c6f6f646356ab895cb2b</code> · Source version <code>4.44.44.44</code> · <a href="00.BugFix-Logging-Optimization.html">Bắt đầu từ file 00</a> · <a href="../TaskServer-Dataverse-Server-Side-Analysis.html">Báo cáo gốc giữ nguyên</a></div><section><h2>1. Phạm vi của một lượt làm việc</h2><p>Wrapper xử lý bốn image slot. Overload chính tìm image bằng step Id + image name + image type; normalize &quot;*&quot; thành null trong payload. Có nhánh no-op, create, update và nhánh xóa khi cấu hình columns rỗng.</p><div class="callout warn"><b>Trạng thái bằng chứng</b><p>Khi alias đổi nhưng attributes cũ/mới bằng nhau và khác null, điều kiện “có thay đổi” đúng nhưng nhánh gán sdkmessageprocessingstepimageid không chạy. UpdateAsync vẫn được gọi. Fake SDK có thể che lỗi nếu tự gán Id, vì vậy test phải chặn request tại ranh giới service.</p></div><p class="muted">Chủ sở hữu: CLI. Shared/helpers, tests và wrapper được đọc để hiểu ảnh hưởng; việc đọc không có nghĩa phải sửa chúng. Đây là hồ sơ chuẩn bị cho lượt AI tiếp theo, không phải bản sửa đã áp dụng.</p></section>
+<section><h2>2. Những hành vi phải giữ nguyên</h2><ul><li>Giữ tên, type, alias và messagepropertyname đúng registration đang có.</li><li>Giữ bốn slot và Pre/Post/Both; không đổi model attribute.</li><li>Giữ khác biệt wildcard, empty và absent sau khi đã đọc caller; không tự thống nhất chúng.</li><li>Đổi tên/type không mặc nhiên cho phép xóa image cũ; không thêm tự dọn image.</li></ul><p>Thay đổi hành vi chỉ chấp nhận trong case lỗi đã được xác định. Một điểm chưa hoàn chỉnh không tự động là lý do thay đổi contract đang dùng.</p></section>
+<section><h2>3. Cách phân tích và sửa nhỏ nhất</h2><ol><li>Tạo existing image với columns cụ thể và alias A; đầu vào chỉ đổi sang alias B. Assert Update dùng chính existing Id.</li><li>Kiểm tra mọi nhánh update có Id trước khi gửi, nhưng không đẩy nhánh delete sang update do đặt code sai vị trí.</li><li>Rà thêm null inputs và wildcard→empty trong caller thật; phân loại thành issue riêng nếu chưa xác định hợp đồng mong muốn.</li></ol><div class="callout"><b>Điều kiện hoàn thành</b><p>Alias-only update có request hợp lệ, idempotent khi chạy lại; không thay đổi vòng đời image ngoài bug được chọn.</p></div></section>
+<section><h2>4. Ma trận regression cần xem xét</h2><div class="table-wrap"><table><thead><tr><th>Tình huống</th><th>Điều cần chứng minh</th></tr></thead><tbody><tr><td>Chỉ đổi alias, columns không đổi</td><td>Một Update đúng existing Id; không Create/Delete.</td></tr><tr><td>Chỉ đổi columns</td><td>Id giữ nguyên; payload columns đúng.</td></tr><tr><td>Không đổi gì</td><td>Không ghi dữ liệu.</td></tr><tr><td>Wildcard và columns cụ thể</td><td>Null trong Dataverse được so sánh đúng; không update lặp.</td></tr><tr><td>Empty/absent cấu hình</td><td>Giữ đường xóa/bỏ qua hiện tại; ghi rõ case nếu semantics chưa nhất quán.</td></tr><tr><td>Đổi name/type, 4 slot, Both</td><td>Không xóa ngoài phạm vi; regression xác nhận hành vi cũ.</td></tr><tr><td>SDK từ chối image</td><td>Kết quả failure được caller nhận đúng; không nuốt lỗi rồi báo thành công.</td></tr></tbody></table></div><h3>Test source nên đọc trước</h3><ul class="compact"><li><a href="../../DynamicsCrm.DevKit.Cli.UnitTests/Tasks/TaskServerHelperCoverageTests.cs">Tasks/TaskServerHelperCoverageTests.cs</a></li><li><a href="../../DynamicsCrm.DevKit.Cli.UnitTests/Tasks/TaskServerExtraCoverageTests.cs">Tasks/TaskServerExtraCoverageTests.cs</a></li><li><a href="../../DynamicsCrm.DevKit.Cli.UnitTests/Cli/TaskServerDataProviderAndManagedIdentityCoverageTests.cs">Cli/TaskServerDataProviderAndManagedIdentityCoverageTests.cs</a></li></ul><p class="muted">Tên test/class là điểm bắt đầu, không phải bằng chứng đã cover đúng case hoặc đã pass. Đọc assertion và test doubles; fake không được tự sửa payload sai mà che mất bug.</p><details class="evidence"><summary>Lệnh kiểm chứng gợi ý sau khi đã sửa code</summary><p>Chạy tại repository root. Đọc <a href="../../DynamicsCrm.DevKit.AI/workflows/unit-test.md">workflow unit-test</a> hiện hành trước khi thực thi; kiểm tra class/filter còn tồn tại. Nếu thêm test class mới, bổ sung vào filter. Lượt tạo tài liệu này không chạy các lệnh dưới.</p><pre><code>dotnet build &quot;DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj&quot;
+dotnet test &quot;DynamicsCrm.DevKit.Cli.UnitTests/DynamicsCrm.DevKit.Cli.UnitTests.csproj&quot; --framework net10.0 --filter &quot;FullyQualifiedName~TaskServerHelperCoverageTests|FullyQualifiedName~TaskServerExtraCoverageTests|FullyQualifiedName~TaskServerDataProviderAndManagedIdentityCoverageTests&quot;</code></pre><p>Không thu coverage/full release nếu không được yêu cầu. Test có state chung cần [DoNotParallelize]; giữ WaitScalePercent theo quy ước. Nếu thực sự sửa Shared hoặc command base, chọn thêm regression cho các consumer bị ảnh hưởng theo AGENTS.md.</p></details></section>
+<section><h2>5. Điểm dễ làm hỏng phần đang chạy</h2><p>Một dòng gán Id có vẻ nhỏ nhưng đặt trước nhánh delete có thể làm lệch log hoặc flow. Không lấy Guid.NewGuid trả về ở một số nhánh làm bằng chứng image mới đã được tạo; đó đang là giá trị điều khiển nội bộ.</p><p><b>Liên quan:</b> <a href="02.DeployPluginStepAsync.html">02.DeployPluginStepAsync.html</a> · <a href="05.RunAsync.html">05.RunAsync.html</a> · <a href="12.UnregisterPluginTypeAsync.html">12.UnregisterPluginTypeAsync.html</a></p><p class="muted">Một patch nên có một root cause. Hồ sơ liên quan giúp kiểm tra ảnh hưởng, không phải yêu cầu kéo tất cả vào cùng lần sửa. Quyền triển khai hoặc thay đổi scope đến từ yêu cầu mới của người dùng.</p></section>
+<section><h2>6. Bằng chứng source và tài liệu tham chiếu</h2><details class="evidence"><summary>DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs · 1223–1234, 1236–1261, 1299–1344</summary><p><a href="../../DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs">Mở file source</a> · Dòng tại snapshot, cần kiểm tra lại khi code đổi.</p><pre><code>1223          private async Task&lt;Guid?&gt; DeployPluginImageAsync(Guid pluginStepId, CrmPluginRegistrationAttribute attribute)
+1224          {
+1225              Guid? check = null;
+1226              if (attribute?.Image1Name?.Length &gt; 0) check = await DeployPluginImageAsync(attribute.Message, attribute.Image1Name, attribute.Image1Alias, attribute.Image1Type, attribute.Image1Attributes, pluginStepId, attribute.Name);
+1227              if (check == Guid.Empty) return null;
+1228              if (attribute?.Image2Name?.Length &gt; 0) check = await DeployPluginImageAsync(attribute.Message, attribute.Image2Name, attribute.Image2Alias, attribute.Image2Type, attribute.Image2Attributes, pluginStepId, attribute.Name);
+1229              if (check == Guid.Empty) return null;
+1230              if (attribute?.Image3Name?.Length &gt; 0) check = await DeployPluginImageAsync(attribute.Message, attribute.Image3Name, attribute.Image3Alias, attribute.Image3Type, attribute.Image3Attributes, pluginStepId, attribute.Name);
+1231              if (check == Guid.Empty) return null;
+1232              if (attribute?.Image4Name?.Length &gt; 0) check = await DeployPluginImageAsync(attribute.Message, attribute.Image4Name, attribute.Image4Alias, attribute.Image4Type, attribute.Image4Attributes, pluginStepId, attribute.Name);
+1233              if (check == Guid.Empty) return null;
+1234              return check;
+
+…
+
+1236          private async Task&lt;Guid&gt; DeployPluginImageAsync(string message, string imageName, string imageAliasName, ImageTypeEnum imageType, string imageAttributes, Guid pluginStepId, string pluginStepName)
+1237          {
+1238              if (imageAliasName.Length == 0) imageAliasName = imageName;
+1239              imageAttributes = imageAttributes?.Replace(&quot; &quot;, string.Empty);
+1240              var key = $&quot;{pluginStepId}-{imageName}-{(int)imageType}&quot;;
+1241              var rows = _PluginImagesCache.Where(x =&gt; x.Key == key).Select(x =&gt; x.Value).ToList();
+1242              if (rows.Count &gt; 0)
+1243              {
+1244                  if (rows.Count &gt; 0 &amp;&amp; rows.Count != 1)
+1245                  {
+1246                      SpectreLog.ActionError($&quot;Found more than 1 plugin image name {imageName}. Assemply deployed, but the deployment of this assembly stopped.&quot;);
+1247                      return Guid.Empty;
+1248                  }
+1249              }
+1250              var pluginImage = new Entity(&quot;sdkmessageprocessingstepimage&quot;)
+1251              {
+1252                  [&quot;name&quot;] = imageName,
+1253                  [&quot;imagetype&quot;] = new OptionSetValue((int)imageType),
+1254                  [&quot;sdkmessageprocessingstepid&quot;] = new EntityReference(&quot;sdkmessageprocessingstep&quot;, pluginStepId),
+1255                  [&quot;attributes&quot;] = imageAttributes.Trim() == &quot;*&quot; ? null : imageAttributes,
+1256                  [&quot;entityalias&quot;] = imageAliasName,
+1257                  [&quot;messagepropertyname&quot;] = Helper.GetMessagePropertyName(message)
+1258              };
+1259              if (rows.Count == 0)
+1260              {
+1261                  if (imageName.Length &gt; 0 &amp;&amp; imageAttributes.Length == 0)
+
+…
+
+1299                  var row = rows[0];
+1300                  var name = row.GetAttributeValue&lt;string&gt;(&quot;name&quot;);
+1301                  var entityalias = row.GetAttributeValue&lt;string&gt;(&quot;entityalias&quot;);
+1302                  var attributes = row.GetAttributeValue&lt;string&gt;(&quot;attributes&quot;);
+1303                  var imagetype = row.GetAttributeValue&lt;OptionSetValue&gt;(&quot;imagetype&quot;).Value;
+1304                  if (name == imageName &amp;&amp;
+1305                      entityalias == imageAliasName &amp;&amp;
+1306                      attributes == (imageAttributes.Trim() == &quot;*&quot; ? null : imageAttributes) &amp;&amp;
+1307                      imagetype == (int)imageType)
+1308                  {
+1309                      SpectreLog.ActionWithLevel4(CliAction.DO_NOTHING, imageType.ToString(), &quot;Fields&quot;, imageAttributes.Split(&quot;,&quot;.ToCharArray()).ToList());
+1310                  }
+1311                  else
+1312                  {
+1313                      if (attributes == null || (attributes != (imageAttributes.Trim() == &quot;*&quot; ? null : imageAttributes) &amp;&amp; imageAttributes.Length != 0))
+1314                      {
+1315                          pluginImage[&quot;sdkmessageprocessingstepimageid&quot;] = rows[0].Id;
+1316                          SpectreLog.ActionWithLevel4(CliAction.UPDATED, imageType.ToString(), &quot;Fields&quot;, imageAttributes.Split(&quot;,&quot;.ToCharArray()).ToList());
+1317                      }
+1318                      else if (imageAttributes.Length == 0)
+1319                      {
+1320                          SpectreLog.ActionWithLevel4(CliAction.DELETED, imageType.ToString(), &quot;Fields&quot;, imageAttributes.Split(&quot;,&quot;.ToCharArray()).ToList());
+1321                          XrmHelper.COUNT_DeleteAsync++;
+1322                          await OrgServiceAsync.DeleteAsync(&quot;sdkmessageprocessingstepimage&quot;, rows[0].Id);
+1323                          return Guid.NewGuid();
+1324                      }
+1325                      try
+1326                      {
+1327                          XrmHelper.COUNT_UpdateAsync++;
+1328                          await OrgServiceAsync.UpdateAsync(pluginImage);
+1329                      }
+1330                      catch (Exception fe)
+1331                      {
+1332                          if (fe.Message.Contains(&quot;entity doesn&#x27;t contain attribute with&quot;))
+1333                          {
+1334                              SpectreLog.ActionError($&quot;{pluginStepName} have invalid {imageType} Attribute {imageAttributes}. Assemply deployed, but the deployment of this assembly stopped.&quot;);
+1335                          }
+1336                          if (fe.Message.Contains(&quot;does not support this image type&quot;) || fe.Message.Contains(&quot;does not support Post Image&quot;))
+1337                          {
+1338                              SpectreLog.ActionError($&quot;{pluginStepName} does not support this image type {imageType}. Assemply deployed, but the deployment of this assembly stopped.&quot;);
+1339                          }
+1340                          return Guid.Empty;
+1341                      }
+1342                  }
+1343                  return rows[0].Id;
+1344              }</code></pre></details><h3>Microsoft Learn đã dùng trong báo cáo gốc</h3><ul class="references"><li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/register-plug-in" target="_blank" rel="noopener noreferrer">S19 · Register a plug-in (Microsoft Dataverse) - Power Apps | Microsoft Learn</a></li><li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/write-plugin-multiple-operation" target="_blank" rel="noopener noreferrer">S27 · Write plug-ins for CreateMultiple and UpdateMultiple - Power Apps | Microsoft Learn</a></li></ul><p class="muted">Nguồn được khảo sát ngày 28/09/2026. Nếu quyết định sửa phụ thuộc quy tắc Dataverse hiện hành, mở lại trang tương ứng; mock không thay thế kiểm chứng giới hạn nền tảng.</p></section>
+<section><h2>7. Prompt dùng với AI ở lượt tiếp theo</h2><h3>Chỉ phân tích lại</h3><pre class="prompt">Đọc Docs/TaskServer-Review/03.DeployPluginImageAsync.html và AGENTS.md hiện tại.
+Phân tích lại hồ sơ này trên source hiện tại. Lượt này chỉ review và đề xuất, chưa chỉnh sửa source.
+Component chính: CLI .NET 10. Trọng tâm: DeployPluginImageAsync — Update đúng image Id, giữ nguyên semantics hiện có.
+Tài liệu được viết từ snapshot 6cc55c1d9f2913fed470c6f6f646356ab895cb2b; không coi line number hay nhận định là luôn đúng ở HEAD mới.
+Giữ chức năng đang có, public command/JSON/attribute và hành vi hợp lệ. Không thêm feature, refactor rộng, tự prune/migrate hoặc đổi policy deployment để làm test pass.
+Trước tiên chỉ ra điều kiện gây lỗi, caller/callee và side effects; phân biệt bug, giới hạn có chủ đích, nghi vấn và tối ưu chưa đo.
+Nếu sửa: dùng fixture/regression chứng minh lỗi, giữ assertion payload/Id/no-op, rồi chạy build CLI và tests nhỏ nhất có liên quan. Không dùng secret thật; không deploy live, stage, commit hay push nếu tôi chưa yêu cầu.
+Kết quả: kết luận có/không có bug; bằng chứng; phạm vi thay đổi tối thiểu; điều giữ nguyên; test và kết quả thật; ảnh hưởng/giới hạn còn lại. Nếu chưa đủ bằng chứng, báo rõ thiếu gì; không bù bằng một thiết kế mới.</pre><details class="evidence"><summary>Khi bạn đã chọn một bug và muốn AI thực hiện sửa</summary><pre class="prompt">Đọc Docs/TaskServer-Review/03.DeployPluginImageAsync.html và AGENTS.md hiện tại.
+Tái hiện và sửa duy nhất một bug đã được xác nhận trong hồ sơ này. Chọn phạm vi nhỏ nhất; không làm toàn bộ checklist thành một patch.
+Component chính: CLI .NET 10. Trọng tâm: DeployPluginImageAsync — Update đúng image Id, giữ nguyên semantics hiện có.
+Tài liệu được viết từ snapshot 6cc55c1d9f2913fed470c6f6f646356ab895cb2b; không coi line number hay nhận định là luôn đúng ở HEAD mới.
+Giữ chức năng đang có, public command/JSON/attribute và hành vi hợp lệ. Không thêm feature, refactor rộng, tự prune/migrate hoặc đổi policy deployment để làm test pass.
+Trước tiên chỉ ra điều kiện gây lỗi, caller/callee và side effects; phân biệt bug, giới hạn có chủ đích, nghi vấn và tối ưu chưa đo.
+Nếu sửa: dùng fixture/regression chứng minh lỗi, giữ assertion payload/Id/no-op, rồi chạy build CLI và tests nhỏ nhất có liên quan. Không dùng secret thật; không deploy live, stage, commit hay push nếu tôi chưa yêu cầu.
+Kết quả: kết luận có/không có bug; bằng chứng; phạm vi thay đổi tối thiểu; điều giữ nguyên; test và kết quả thật; ảnh hưởng/giới hạn còn lại. Nếu chưa đủ bằng chứng, báo rõ thiếu gì; không bù bằng một thiết kế mới.</pre></details></section><footer><a href="02.DeployPluginStepAsync.html">← File trước</a><span>Không có thư viện, font hoặc script ngoài. Dùng riêng từng file với AI.</span><a href="04.DeployPackageAsync.html">File tiếp theo →</a></footer></main></body></html>
