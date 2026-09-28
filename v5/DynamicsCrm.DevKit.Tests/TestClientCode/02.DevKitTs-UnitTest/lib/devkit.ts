@@ -87,6 +87,7 @@ function loadField(formContext: any, field: any, attribute: any, control: any): 
         return control?.addNotification(notification);
     };
     field.AddOnChange = (callback: any) => attribute?.addOnChange(callback);
+    field.AddEventHandler = (name: string, callback: (executionContext: any) => void) => control?.addEventHandler(name, callback);
     field.AddOnOutputChange = (callback: any) => control?.addOnOutputChange(callback);
     field.AddOption = (text: string, value: number, index?: number) => control?.addOption({ text: text, value: value }, index);
     field.AddPostSearch = (callback: any) => control?.addOnPostSearch(callback);
@@ -599,6 +600,16 @@ function loadCopilot(): DevKit.ICopilot {
     const obj: any = {} as DevKit.ICopilot;
     const xrm = getXrm();
     const getCopilot = (xrm as any)?.Copilot;
+    obj.AddActionHandler = function (actionId: string, actionHandler: Function, successCallback?: any, errorCallback?: any) {
+        const promise = getCopilot?.addActionHandler(actionId, actionHandler);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    obj.AddDefaultActionHandlers = function (actionId: string, successCallback?: any, errorCallback?: any) {
+        const promise = getCopilot?.addDefaultActionHandlers(actionId);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
     obj.ExecuteEvent = function (eventName: string, eventParameters: any, successCallback?: any, errorCallback?: any) {
         const promise = getCopilot?.executeEvent(eventName, eventParameters);
         if (successCallback) {
@@ -614,6 +625,41 @@ function loadCopilot(): DevKit.ICopilot {
         } else {
             return promise;
         }
+    };
+    obj.GetCurrentAgent = function (successCallback?: any, errorCallback?: any) {
+        const promise = getCopilot?.getCurrentAgent();
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    obj.IsM365CopilotEnabled = function (successCallback?: any, errorCallback?: any) {
+        const promise = getCopilot?.isM365CopilotEnabled();
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    obj.OpenM365CopilotPanel = function (successCallback?: any, errorCallback?: any) {
+        const promise = getCopilot?.openM365CopilotPanel();
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    obj.RemoveActionHandler = function (actionId: string, actionHandler: Function, successCallback?: any, errorCallback?: any) {
+        const promise = getCopilot?.removeActionHandler(actionId, actionHandler);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    obj.RemoveDefaultActionHandlers = function (actionId: string, successCallback?: any, errorCallback?: any) {
+        const promise = getCopilot?.removeDefaultActionHandlers(actionId);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    obj.SendPromptToM365Copilot = function (promptText: string, options?: DevKit.SendPromptToM365CopilotOptions, successCallback?: any, errorCallback?: any) {
+        const promise = getCopilot?.sendPromptToM365Copilot(promptText, options);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
+    };
+    obj.UpdateContext = function (context: DevKit.PowerAppsContent, successCallback?: any, errorCallback?: any) {
+        const promise = getCopilot?.updateContext(context);
+        if (successCallback) promise?.then(successCallback, errorCallback);
+        else return promise;
     };
     return obj;
 }

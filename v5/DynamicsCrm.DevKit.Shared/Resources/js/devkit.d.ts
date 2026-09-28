@@ -35,6 +35,13 @@ declare namespace DevKit {
          */
         interface IControl {
             /**
+             * Adds an event handler for a named event on a custom code component control.
+             * @param name The name of the custom event configured for the custom component.
+             * @param callback The function to add to the named event.
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addeventhandler
+             */
+            AddEventHandler(name: string, callback: (executionContext: any) => void): void;
+            /**
              * Sets a function to be called when the OnChange event occurs
              * @param callback
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/addonchange
@@ -1397,6 +1404,12 @@ declare namespace DevKit {
               */
             readonly Object: any;
             /**
+             * Gets or sets the data query string parameter passed to a web resource.
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdata
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdata
+             */
+            Data: string;
+            /**
              * Get/Set the current URL being displayed in an IFRAME or web resource
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getsrc
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setsrc
@@ -2450,8 +2463,48 @@ declare namespace DevKit {
          */
         IsAvailableOffline(entityLogicalName: string): boolean;
     }
+    type M365CopilotAgentMode = "agentPage" | "mentioned";
+    interface M365CopilotAgent {
+        agentId: string | null;
+        mode: M365CopilotAgentMode | null;
+    }
+    interface MCSResponse {
+        type: string;
+        id?: string;
+        locale?: string;
+        replyToId?: string;
+        timestamp?: string;
+        speak?: string;
+        text?: string;
+        textFormat?: "plain" | "markdown" | "xml";
+        suggestedActions?: { actions: any[]; to?: string[] };
+        value?: unknown;
+        valueType?: string;
+        name?: string;
+        attachmentLayout?: "list" | "carousel";
+        attachments?: Array<{ content: unknown; contentType?: string }>;
+    }
+    interface PowerAppsContent {
+        schemaVersion?: string;
+        appType?: "ModelApp" | "CanvasApp" | "CodeApp";
+        appId?: string;
+        orgId?: string;
+        geo?: string;
+        entity?: string;
+        filterXML?: string;
+        filterId?: string;
+        extendedContext?: Array<Record<string, unknown>>;
+        telemetryContext?: { clientSessionId?: string; clientRequestId?: string };
+        selectedRecords?: { selectedContents: any[] };
+        messageAnnotationAppContext?: string;
+    }
+    interface SendPromptToM365CopilotOptions {
+        gptId?: string;
+        autoSubmit?: boolean;
+    }
     /**
-     * Provides methods to interact with Microsoft Copilot Studio topics (Preview feature)
+     * Provides methods to interact with Microsoft 365 Copilot and Copilot Studio.
+     * Some methods remain preview; see the linked Microsoft documentation.
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
      */
     interface Copilot {
@@ -2463,7 +2516,7 @@ declare namespace DevKit {
          * @param errorCallback The function that will be called if the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/executeevent
          */
-        ExecuteEvent(eventName: string, eventParameters: any, successCallback: (result: Array<any>) => void, errorCallback?: (error: any) => void): void;
+        ExecuteEvent(eventName: string, eventParameters: any, successCallback: (result: Array<MCSResponse>) => void, errorCallback?: (error: any) => void): void;
         /**
          * Executes a Copilot Studio topic by event name and returns a promise
          * @param eventName The name of the event configured in Copilot Studio
@@ -2471,7 +2524,7 @@ declare namespace DevKit {
          * @returns Promise that resolves with the Copilot Studio response
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/executeevent
          */
-        ExecuteEvent(eventName: string, eventParameters?: any): Promise<Array<any>>;
+        ExecuteEvent(eventName: string, eventParameters?: any): Promise<Array<MCSResponse>>;
         /**
          * Executes a Copilot Studio topic by sending a natural language prompt
          * @param promptText The natural language prompt to send to Copilot Studio
@@ -2479,14 +2532,23 @@ declare namespace DevKit {
          * @param errorCallback The function to call if the operation fails
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/executeprompt
          */
-        ExecutePrompt(promptText: string, successCallback: (result: Array<any>) => void, errorCallback?: (error: any) => void): void;
+        ExecutePrompt(promptText: string, successCallback: (result: Array<MCSResponse>) => void, errorCallback?: (error: any) => void): void;
         /**
          * Executes a Copilot Studio topic by sending a natural language prompt and returns a promise
          * @param promptText The natural language prompt to send to Copilot Studio
          * @returns Promise that resolves with the Copilot Studio response
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/executeprompt
          */
-        ExecutePrompt(promptText: string): Promise<Array<any>>;
+        ExecutePrompt(promptText: string): Promise<Array<MCSResponse>>;
+        AddActionHandler(actionId: string, actionHandler: Function, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        AddDefaultActionHandlers(actionId: string, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        GetCurrentAgent(successCallback?: (agent: M365CopilotAgent | undefined) => void, errorCallback?: (error: any) => void): Promise<M365CopilotAgent | undefined> | void;
+        IsM365CopilotEnabled(successCallback?: (enabled: boolean) => void, errorCallback?: (error: any) => void): Promise<boolean> | void;
+        OpenM365CopilotPanel(successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        RemoveActionHandler(actionId: string, actionHandler: Function, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        RemoveDefaultActionHandlers(actionId: string, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        SendPromptToM365Copilot(promptText: string, options?: SendPromptToM365CopilotOptions, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
+        UpdateContext(context: PowerAppsContent, successCallback?: () => void, errorCallback?: (error: any) => void): Promise<void> | void;
     }
     /**
      * Base interface for entity attribute metadata
@@ -3314,7 +3376,7 @@ declare namespace DevKit {
          * @param errorCallback A function to execute when the operation fails.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
          */
-        NavigateTo(pageInput: PageInputEntityList | PageInputHtmlWebResource | PageInputEntityRecord | PageInputDashboard, navigationOptions?: NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: Error) => void): void;
+        NavigateTo(pageInput: PageInputEntityList | PageInputHtmlWebResource | PageInputEntityRecord | PageInputDashboard | PageInputCustom | PageInputGenerative, navigationOptions?: NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: Error) => void): void;
         /**
          * Navigates to the specified page and returns a promise
          * @param pageInput Input about the page to navigate to. The object definition changes depending on the type of page to navigate to: entity list or HTML web resource.
@@ -3322,7 +3384,7 @@ declare namespace DevKit {
          * @returns Promise that resolves on successful navigation to the page when navigating inline and on closing the dialog when navigating to a dialog.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
          */
-        NavigateTo(pageInput: PageInputEntityList | PageInputHtmlWebResource | PageInputEntityRecord | PageInputDashboard, navigationOptions?: NavigationOptions): Promise<any>;
+        NavigateTo(pageInput: PageInputEntityList | PageInputHtmlWebResource | PageInputEntityRecord | PageInputDashboard | PageInputCustom | PageInputGenerative, navigationOptions?: NavigationOptions): Promise<any>;
         /**
          * Opens a dialog box to select files from your computer (web client) or mobile device (mobile clients).
          * @param filePickOption An object pick file option
@@ -4182,6 +4244,21 @@ declare namespace DevKit {
         /** The ID of the dashboard to load. If you don't specify the ID, navigates to the default dashboard. */
         dashboardId: string
     }
+    /** Page input for navigating to a custom page. */
+    interface PageInputCustom {
+        pageType: "custom";
+        name: string;
+        entityName?: string;
+        recordId?: string;
+    }
+    /** Page input for navigating to a generative page. */
+    interface PageInputGenerative {
+        pageType: "generative";
+        pageId: string;
+        recordId?: string;
+        entityName?: string;
+        data?: Record<string, any>;
+    }
     /**
      * Navigation options for navigateTo method
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
@@ -4409,7 +4486,7 @@ declare namespace DevKit {
         /** Specify whether the pane should be selected or expanded. */
         select(): void,
         /** Opens a page within the selected pane. This is similar to the navigateTo method. */
-        navigate(pageInput: PageInputEntityList | PageInputHtmlWebResource | PageInputEntityRecord | PageInputDashboard, navigationOptions?: NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: Error) => void): void,
+        navigate(pageInput: PageInputEntityList | PageInputHtmlWebResource | PageInputEntityRecord | PageInputDashboard | PageInputCustom, navigationOptions?: NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: Error) => void): void,
         /** The badge to be displayed on the pane. */
         badge?: number
     }

@@ -31,7 +31,7 @@ describe('loadCopilot Tests', () => {
         return mockCopilot;
     }
 
-    function getForm(): any {
+    function getForm(fieldControl?: any): any {
         const formContext = {
             data: {
                 getIsDirty: () => false, isValid: () => true, refresh: () => Promise.resolve(), save: () => Promise.resolve(),
@@ -49,11 +49,11 @@ describe('loadCopilot Tests', () => {
                 clearFormNotification: () => true, setFormNotification: () => true, close: () => { }, refreshRibbon: () => { },
                 addLoaded: () => { }, removeLoaded: () => { }, addOnLoad: () => { }, removeOnLoad: () => { }, setFormEntityName: () => { }
             },
-            getControl: () => null, getAttribute: () => null, getFormContext: function () { return this; }
+            getControl: () => fieldControl || null, getAttribute: () => null, getFormContext: function () { return this; }
         };
 
         return new FormBase({ getFormContext: () => formContext }, 'test', {
-            body: [], header: [], tab: [], grid: [], navigation: [], quick: [], bpf: []
+            body: fieldControl ? ['name'] : [], header: [], tab: [], grid: [], navigation: [], quick: [], bpf: []
         });
     }
 
@@ -209,6 +209,61 @@ describe('loadCopilot Tests', () => {
             form.Copilot.ExecutePrompt('Fail prompt', successCallback, errorCallback);
             await new Promise(r => setTimeout(r, 10));
             expect(errorCallback).toHaveBeenCalled();
+        });
+    });
+
+    describe('M365 Copilot APIs', () => {
+        test('forwards every M365 method and supports Promise and callback wrapper forms', () => {
+            const mockPromise = { then: jest.fn().mockReturnThis() };
+            const nativeCopilot = {
+                addActionHandler: jest.fn(() => mockPromise),
+                addDefaultActionHandlers: jest.fn(() => mockPromise),
+                getCurrentAgent: jest.fn(() => mockPromise),
+                isM365CopilotEnabled: jest.fn(() => mockPromise),
+                openM365CopilotPanel: jest.fn(() => mockPromise),
+                removeActionHandler: jest.fn(() => mockPromise),
+                removeDefaultActionHandlers: jest.fn(() => mockPromise),
+                sendPromptToM365Copilot: jest.fn(() => mockPromise),
+                updateContext: jest.fn(() => mockPromise)
+            };
+            (global as any).Xrm = { ...(global as any).Xrm, Copilot: nativeCopilot };
+            (global as any).window.Xrm = (global as any).Xrm;
+
+            const form = getForm();
+            const copilot = form.Copilot;
+            const action = () => { };
+            const success = jest.fn();
+            const error = jest.fn();
+            const context = { entity: 'account' };
+            const options = { autoSubmit: true };
+
+            expect(copilot.AddActionHandler('action', action)).toBe(mockPromise);
+            copilot.AddActionHandler('action', action, success, error);
+            expect(copilot.AddDefaultActionHandlers('action')).toBe(mockPromise);
+            copilot.AddDefaultActionHandlers('action', success, error);
+            expect(copilot.GetCurrentAgent()).toBe(mockPromise);
+            copilot.GetCurrentAgent(success, error);
+            expect(copilot.IsM365CopilotEnabled()).toBe(mockPromise);
+            copilot.IsM365CopilotEnabled(success, error);
+            expect(copilot.OpenM365CopilotPanel()).toBe(mockPromise);
+            copilot.OpenM365CopilotPanel(success, error);
+            expect(copilot.RemoveActionHandler('action', action)).toBe(mockPromise);
+            copilot.RemoveActionHandler('action', action, success, error);
+            expect(copilot.RemoveDefaultActionHandlers('action')).toBe(mockPromise);
+            copilot.RemoveDefaultActionHandlers('action', success, error);
+            expect(copilot.SendPromptToM365Copilot('hello', options)).toBe(mockPromise);
+            copilot.SendPromptToM365Copilot('hello', options, success, error);
+            expect(copilot.UpdateContext(context)).toBe(mockPromise);
+            copilot.UpdateContext(context, success, error);
+
+            const addEventHandler = jest.fn();
+            const formWithEventControl = getForm({ getAttribute: () => null, addEventHandler });
+            const eventHandler = jest.fn();
+            formWithEventControl.Body.name.AddEventHandler('customEvent', eventHandler);
+            expect(addEventHandler).toHaveBeenCalledWith('customEvent', eventHandler);
+
+            Object.values(nativeCopilot).forEach(method => expect(method).toHaveBeenCalledTimes(2));
+            expect(mockPromise.then).toHaveBeenCalledTimes(9);
         });
     });
 

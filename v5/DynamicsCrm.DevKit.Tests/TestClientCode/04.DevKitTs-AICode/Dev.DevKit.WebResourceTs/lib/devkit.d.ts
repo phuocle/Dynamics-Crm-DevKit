@@ -152,6 +152,13 @@ declare namespace DevKit {
          */
         interface IControl {
             /**
+             * Adds an event handler for a named event on a custom code component control.
+             * @param name The name of the custom event configured for the custom component.
+             * @param callback The function to add to the named event.
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addeventhandler
+             */
+            AddEventHandler(name: string, callback: (executionContext: any) => void): void;
+            /**
              * Sets a function to be called when the OnChange event occurs
              * @param callback The function to be executed on the OnChange event
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/addonchange
@@ -2985,11 +2992,21 @@ declare namespace DevKit {
         recordId?: string;
     }
 
+    /** Page input for navigating to a generative page. */
+    interface IPageInputGenerative {
+        pageType: "generative";
+        pageId: string;
+        recordId?: string;
+        entityName?: string;
+        data?: Record<string, any>;
+    }
+
     /**
      * Union type for all page input types used in NavigateTo
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
      */
-    type IPageInput = IPageInputEntityList | IPageInputEntityRecord | IPageInputDashboard | IPageInputWebResource | IPageInputCustom;
+    type IPageInput = IPageInputEntityList | IPageInputEntityRecord | IPageInputDashboard | IPageInputWebResource | IPageInputCustom | IPageInputGenerative;
+    type IPageInputSidePane = IPageInputEntityList | IPageInputEntityRecord | IPageInputDashboard | IPageInputWebResource | IPageInputCustom;
 
     /**
      * Navigation options for the NavigateTo method
@@ -3731,7 +3748,7 @@ declare namespace DevKit {
         /** Specify whether the pane should be selected or expanded. */
         select(): void;
         /** Opens a page within the selected pane. This is similar to the navigateTo method. */
-        navigate(pageInput: any, navigationOptions?: any, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): void;
+        navigate(pageInput: IPageInputSidePane, navigationOptions?: any, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): void;
         /** Badge count to display on the pane tab. */
         badge?: number;
     }
@@ -3965,8 +3982,47 @@ declare namespace DevKit {
     // Copilot Interface
     // ============================================================================
 
+    type M365CopilotAgentMode = "agentPage" | "mentioned";
+    interface M365CopilotAgent {
+        agentId: string | null;
+        mode: M365CopilotAgentMode | null;
+    }
+    interface MCSResponse {
+        type: string;
+        id?: string;
+        locale?: string;
+        replyToId?: string;
+        timestamp?: string;
+        speak?: string;
+        text?: string;
+        textFormat?: "plain" | "markdown" | "xml";
+        suggestedActions?: { actions: any[]; to?: string[] };
+        value?: unknown;
+        valueType?: string;
+        name?: string;
+        attachmentLayout?: "list" | "carousel";
+        attachments?: Array<{ content: unknown; contentType?: string }>;
+    }
+    interface PowerAppsContent {
+        schemaVersion?: string;
+        appType?: "ModelApp" | "CanvasApp" | "CodeApp";
+        appId?: string;
+        orgId?: string;
+        geo?: string;
+        entity?: string;
+        filterXML?: string;
+        filterId?: string;
+        extendedContext?: Array<Record<string, unknown>>;
+        telemetryContext?: { clientSessionId?: string; clientRequestId?: string };
+        selectedRecords?: { selectedContents: any[] };
+        messageAnnotationAppContext?: string;
+    }
+    interface SendPromptToM365CopilotOptions {
+        gptId?: string;
+        autoSubmit?: boolean;
+    }
     /**
-     * Interface for Copilot API (Preview)
+     * Interface for Microsoft 365 Copilot and Copilot Studio APIs. Some methods are preview.
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
      */
     interface ICopilot {
@@ -3977,7 +4033,8 @@ declare namespace DevKit {
          * @param successCallback Function called on success
          * @param errorCallback Function called on error
          */
-        ExecuteEvent(eventName: string, eventParameters: any, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
+        ExecuteEvent(eventName: string, eventParameters: any, successCallback: (result: MCSResponse[]) => void, errorCallback?: (error: IXrmError) => void): void;
+        ExecuteEvent(eventName: string, eventParameters?: any): Promise<MCSResponse[]>;
 
         /**
          * Executes a Copilot prompt
@@ -3985,7 +4042,16 @@ declare namespace DevKit {
          * @param successCallback Function called on success
          * @param errorCallback Function called on error
          */
-        ExecutePrompt(promptText: string, successCallback?: (result: any) => void, errorCallback?: (error: IXrmError) => void): Promise<any> | void;
+        ExecutePrompt(promptText: string, successCallback?: (result: MCSResponse[]) => void, errorCallback?: (error: IXrmError) => void): Promise<MCSResponse[]> | void;
+        AddActionHandler(actionId: string, actionHandler: Function, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
+        AddDefaultActionHandlers(actionId: string, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
+        GetCurrentAgent(successCallback?: (agent: M365CopilotAgent | undefined) => void, errorCallback?: (error: IXrmError) => void): Promise<M365CopilotAgent | undefined> | void;
+        IsM365CopilotEnabled(successCallback?: (enabled: boolean) => void, errorCallback?: (error: IXrmError) => void): Promise<boolean> | void;
+        OpenM365CopilotPanel(successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
+        RemoveActionHandler(actionId: string, actionHandler: Function, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
+        RemoveDefaultActionHandlers(actionId: string, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
+        SendPromptToM365Copilot(promptText: string, options?: SendPromptToM365CopilotOptions, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
+        UpdateContext(context: PowerAppsContent, successCallback?: () => void, errorCallback?: (error: IXrmError) => void): Promise<void> | void;
     }
 
 

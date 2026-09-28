@@ -287,6 +287,7 @@ const devKit = (function () {
             return control?.addNotification(notification);
         };
         field.AddOnChange = callback => attribute?.addOnChange(callback);
+        field.AddEventHandler = (name, callback) => control?.addEventHandler(name, callback);
         field.AddOnOutputChange = callback => control?.addOnOutputChange(callback);
         field.AddOption = (text, value, index) => control?.addOption({ text: text, value: value }, index);
         field.AddPostSearch = callback => control?.addOnPostSearch(callback);
@@ -915,6 +916,16 @@ const devKit = (function () {
     function loadCopilot() {
         const obj = {};
         const getCopilot = Xrm?.Copilot;
+        obj.AddActionHandler = function (actionId, actionHandler, successCallback, errorCallback) {
+            const promise = getCopilot?.addActionHandler(actionId, actionHandler);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        obj.AddDefaultActionHandlers = function (actionId, successCallback, errorCallback) {
+            const promise = getCopilot?.addDefaultActionHandlers(actionId);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
         obj.ExecuteEvent = function (eventName, eventParameters, successCallback, errorCallback) {
             const promise = getCopilot?.executeEvent(eventName, eventParameters);
             if (successCallback) {
@@ -930,6 +941,41 @@ const devKit = (function () {
             } else {
                 return promise;
             }
+        };
+        obj.GetCurrentAgent = function (successCallback, errorCallback) {
+            const promise = getCopilot?.getCurrentAgent();
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        obj.IsM365CopilotEnabled = function (successCallback, errorCallback) {
+            const promise = getCopilot?.isM365CopilotEnabled();
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        obj.OpenM365CopilotPanel = function (successCallback, errorCallback) {
+            const promise = getCopilot?.openM365CopilotPanel();
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        obj.RemoveActionHandler = function (actionId, actionHandler, successCallback, errorCallback) {
+            const promise = getCopilot?.removeActionHandler(actionId, actionHandler);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        obj.RemoveDefaultActionHandlers = function (actionId, successCallback, errorCallback) {
+            const promise = getCopilot?.removeDefaultActionHandlers(actionId);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        obj.SendPromptToM365Copilot = function (promptText, options, successCallback, errorCallback) {
+            const promise = getCopilot?.sendPromptToM365Copilot(promptText, options);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        obj.UpdateContext = function (context, successCallback, errorCallback) {
+            const promise = getCopilot?.updateContext(context);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
         };
         return obj;
     }

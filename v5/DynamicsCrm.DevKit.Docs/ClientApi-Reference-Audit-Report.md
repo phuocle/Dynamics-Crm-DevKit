@@ -1,214 +1,80 @@
 # Client API Reference Audit & Analysis Report
 
-**Date of Audit**: September 26, 2026  
-**Source of Truth**: [Client API Reference for model-driven apps - Power Apps | Microsoft Learn](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference)  
-**Target Codebase Files**:
-- `DynamicsCrm.DevKit.Shared/Resources/js/devkit.d.ts`
+**Updated**: September 28, 2026
+**Microsoft source**: [Client API Reference for model-driven apps](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference)
+**Repository scope reviewed**:
 - `DynamicsCrm.DevKit.Shared/Resources/js/devkit.js`
+- `DynamicsCrm.DevKit.Shared/Resources/js/devkit.d.ts`
+- `DynamicsCrm.DevKit.Shared/Resources/ts/devkit.ts`
+- `DynamicsCrm.DevKit.Shared/Resources/ts/devkit.d.ts`
 
----
+This is a focused discrepancy audit, not a complete method-by-method parity inventory of every page in Microsoft Learn. The September 26 link-liveness figures below are retained as a historical snapshot; the request script, response log, and exact scanned revision were not present, so those aggregate figures have not been independently reproduced in this update.
 
-## 1. Executive Summary
+## Summary
 
-An exhaustive audit of the Microsoft Learn Client API Reference documentation repository (`MicrosoftDocs/powerapps-docs`) was conducted against DynamicsCrm.DevKit's client wrapper files (`devkit.d.ts` and `devkit.js`).
+- The earlier `Xrm.WebApi.offline.isAvailableOffline` runtime finding is stale: both current runtimes call the native `isAvailableOffline` method for `IsAvailable` and `IsAvailableOffline`.
+- The old broken section links have already been corrected in the JavaScript declarations.
+- The previously missing `Xrm.Copilot` methods, `control.addEventHandler`, custom/generative page input types, and JS `WebResource.Data` declaration have now been added to the source-of-truth wrappers and/or declarations as described below.
+- Microsoft documents `executeEvent`, `executePrompt`, and `updateContext` as preview. `Xrm.Copilot` as a whole must not be described as GA.
+- Runtime behavior and declarations pass the client-code checks listed in section 3. Generated entity files did not change.
 
-### Key Metrics
-- **Total Unique URLs in `devkit.d.ts`**: 353
-- **Live URLs (HTTP 200)**: 347 (98.3%)
-- **Redirected URLs (HTTP 301)**: 1 (0.3%)
-- **Dead URLs (HTTP 404)**: 6 (1.7%)
-- **New Methods Added by Microsoft (Unimplemented in DevKit)**: 10 methods
-- **New Navigation Page Types Added by Microsoft**: 2 types (`generative`, `custom`)
-- **New Interfaces / Supporting Types in Client API**: 5 types
-- **Runtime Discrepancies in `devkit.js`**: 1 method (`Xrm.WebApi.offline.isAvailableOffline` vs `isAvailable`)
-- **Type Declaration Missing in `devkit.d.ts`**: 1 property (`IControl.Data`)
+## 1. Historical Link-Liveness Snapshot
 
----
+The September 26, 2026 audit reported 353 unique JSDoc URLs: 347 HTTP 200, one redirect, and six HTTP 404. The old table combined the redirect with the 404 entries. The redirect was the section root; the six child-page URLs were the reported 404s. The current JavaScript declarations use the replacement `formcontext-ui-tab-sections` path at all affected section links.
 
-## 2. Part 1: Link Liveness Audit Results
+The historic counts should be treated as unverified until the original checker and raw results are recovered or the links are checked again. A reproducible future run should save the scanned source revision, extracted unique URL list, request date, redirect/final URL, final HTTP status, and checker script. Count a redirect separately from a dead URL.
 
-All 353 URLs embedded inside JSDoc comments of `devkit.d.ts` were checked via HTTP requests with automated redirect handling.
+## 2. API Discrepancies and Current Status
 
-### 2.1. Dead Links (HTTP 404)
+### 2.1. `Xrm.Copilot`
 
-All 6 dead links stem from a single documentation restructure by Microsoft: the path segment `formcontext-ui-sections` was updated to `formcontext-ui-tab-sections`. The root URL redirects, but the sub-method URLs return HTTP 404.
+The earlier audit identified nine Microsoft 365 Copilot methods not exposed by the wrapper. They are now exposed in both JS and TS wrappers and declarations:
 
-| # | Line in `devkit.d.ts` | Dead URL (HTTP 404) | Replacement Live URL (HTTP 200) |
-|---|----------------------|---------------------|---------------------------------|
-| 1 | 1544 | `.../reference/formcontext-ui-sections` (301 redirect) | `https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tab-sections` |
-| 2 | 1549 | `.../reference/formcontext-ui-sections/getname` | `https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tab-sections/getname` |
-| 3 | 1554 | `.../reference/formcontext-ui-sections/getparent` | `https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tab-sections/getparent` |
-| 4 | 1559 | `.../reference/formcontext-ui-sections/getlabel` | `https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tab-sections/getlabel` |
-| 5 | 1560 | `.../reference/formcontext-ui-sections/setlabel` | `https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tab-sections/setlabel` |
-| 6 | 1565 | `.../reference/formcontext-ui-sections/getvisible` | `https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tab-sections/getvisible` |
-| 7 | 1566 | `.../reference/formcontext-ui-sections/setvisible` | `https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tab-sections/setvisible` |
+- `addActionHandler`
+- `addDefaultActionHandlers`
+- `getCurrentAgent`
+- `isM365CopilotEnabled`
+- `openM365CopilotPanel`
+- `removeActionHandler`
+- `removeDefaultActionHandlers`
+- `sendPromptToM365Copilot`
+- `updateContext`
 
----
+The wrapper keeps DevKit's PascalCase naming and callback convenience pattern. Microsoft’s native APIs return Promises; their success/error callbacks are Promise handlers, as shown by the native syntax `Xrm.Copilot.addActionHandler(...).then(successCallback, errorCallback)`. These wrapper callbacks are therefore DevKit wrapper parameters, not native method parameters.
 
-## 3. Part 2: Microsoft Learn Updates & Discrepancies
+Supporting declarations were added for `M365CopilotAgent`, `M365CopilotAgentMode`, `MCSResponse`, `PowerAppsContent`, and `SendPromptToM365CopilotOptions`. Microsoft currently marks `executeEvent`, `executePrompt`, and `updateContext` preview. See [Xrm.Copilot reference](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot) and [updateContext](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/updatecontext).
 
-### 3.1. Complete M365 Copilot & Copilot Studio APIs (`Xrm.Copilot`)
+### 2.2. `control.addEventHandler`
 
-DevKit currently only supports 2 preview methods: `ExecuteEvent` and `ExecutePrompt`.  
-Microsoft has officially graduated `Xrm.Copilot` to General Availability (GA) and added 9 new methods for Microsoft 365 Copilot Agent integration (documented June-August 2026).
+Microsoft documents this method for custom code component controls. It is now surfaced as `AddEventHandler` by the JS and TS wrappers and declared on the common control interface. The wrapper forwards the event name and handler to the native control. See [addEventHandler](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addeventhandler).
 
-#### New Methods in `Xrm.Copilot`:
+### 2.3. `navigateTo` page input types
 
-1. **`addActionHandler(actionId: string, actionHandler: Function, successCallback?: Function, errorCallback?: Function): Promise<void>`**
-   - Registers a custom handler function for a Microsoft 365 Copilot action.
-   - [Microsoft Documentation](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/addactionhandler)
+The JS and TS declarations now include custom and generative page inputs for `NavigateTo`. Custom page input is also included in the side-pane navigation type. Generative page input is deliberately excluded from side-pane navigation because Microsoft documents that opening a generative page in a side pane is unsupported. The runtime navigation wrappers already forward the page input to the native API; this discrepancy was in compile-time declarations. See [navigateTo](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto), [custom page examples](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/navigate-to-custom-page-examples), and [generative page examples](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/navigate-to-generative-page-examples).
 
-2. **`addDefaultActionHandlers(actionId: string, successCallback?: Function, errorCallback?: Function): Promise<void>`**
-   - Restores the platform-default handlers for a Microsoft 365 Copilot action.
-   - [Microsoft Documentation](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/adddefaultactionhandlers)
+### 2.4. Web resource `Data`
 
-3. **`getCurrentAgent(successCallback?: Function, errorCallback?: Function): Promise<M365CopilotAgent | undefined>`**
-   - Returns the currently active Microsoft 365 Copilot agent.
-   - [Microsoft Documentation](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/getcurrentagent)
+`loadField` already maps `Data` to native `getData()` / `setData()`. The JS declaration now exposes `Data: string` on `Controls.WebResource`, matching the API’s supported control type and return type. The TS declaration already had this property. It is not declared on the generic `IControl`, since Microsoft documents `getData` for Web resource controls. See [control.getData](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdata) and [control.setData](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdata).
 
-4. **`isM365CopilotEnabled(successCallback?: Function, errorCallback?: Function): Promise<boolean>`**
-   - Returns whether Microsoft 365 Copilot is enabled in the current environment.
-   - [Microsoft Documentation](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/ism365copilotenabled)
+### 2.5. Offline availability name
 
-5. **`openM365CopilotPanel(successCallback?: Function, errorCallback?: Function): Promise<void>`**
-   - Opens the Microsoft 365 Copilot side panel.
-   - [Microsoft Documentation](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/openm365copilotpanel)
+The earlier report described a runtime mismatch at `devkit.js` line 673. That finding no longer applies to the current source: JS and TS wrappers map both DevKit names `IsAvailable` and `IsAvailableOffline` to native `isAvailableOffline`. Both declaration files already expose those DevKit names. Microsoft’s native method is `Xrm.WebApi.offline.isAvailableOffline`; no runtime fix was needed in this update. See [Xrm.WebApi.offline](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/offline).
 
-6. **`removeActionHandler(actionId: string, actionHandler: Function, successCallback?: Function, errorCallback?: Function): Promise<void>`**
-   - Removes a previously registered custom handler for a Microsoft 365 Copilot action.
-   - [Microsoft Documentation](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/removeactionhandler)
+## 3. Scope and Reproducibility Limits
 
-7. **`removeDefaultActionHandlers(actionId: string, successCallback?: Function, errorCallback?: Function): Promise<void>`**
-   - Removes the platform-default handlers for a Microsoft 365 Copilot action.
-   - [Microsoft Documentation](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/removedefaultactionhandlers)
+This review updates the discrepancies identified by the previous report across the JS and TS source-of-truth files. It does not establish complete parity across every Client API topic, nor does it independently validate Microsoft 365 Copilot behavior in a live Dataverse environment. Copilot methods are wrappers around native APIs; runtime availability depends on the platform and environment.
 
-8. **`sendPromptToM365Copilot(promptText: string, options?: SendPromptToM365CopilotOptions, successCallback?: Function, errorCallback?: Function): Promise<void>`**
-   - Sends a prompt to the Microsoft 365 Copilot side panel, causing Copilot to process and respond on behalf of the user.
-   - [Microsoft Documentation](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/sendprompttom365copilot)
+The repository client-code workflow synchronized the four source files into all six TestClientCode projects. `04.Sync-All.ps1` completed; the workflow's generated entity copy step produced no generated-file changes. `03.Generate-All.ps1` was not needed because these changes do not alter generated entity output. The final `05.Check-Build-Test.ps1` run completed with **6 successful projects and 0 failures**.
 
-9. **`updateContext(context: PowerAppsContent, successCallback?: Function, errorCallback?: Function): Promise<void>`**
-   - Sends updated app context to the Microsoft 365 Copilot side panel.
-   - [Microsoft Documentation](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot/updatecontext)
+### Verification results
 
-#### New Interfaces / Supporting Types:
-- **`M365CopilotAgent`**:
-  ```typescript
-  interface M365CopilotAgent {
-      agentId: string | null;
-      mode: M365CopilotAgentMode | null;
-  }
-  type M365CopilotAgentMode = "agentPage" | "mentioned";
-  ```
-- **`MCSResponse`**: Returned by `executeEvent` and `executePrompt`:
-  ```typescript
-  interface MCSResponse {
-      type: string;
-      id?: string;
-      locale?: string;
-      replyToId?: string;
-      timestamp?: string;
-      speak?: string;
-      text?: string;
-      textFormat?: "plain" | "markdown" | "xml";
-      suggestedActions?: { actions: any[]; to?: string[] };
-      value?: unknown;
-      valueType?: string;
-      name?: string;
-      attachmentLayout?: "list" | "carousel";
-      attachments?: Array<{ content: unknown; contentType?: string }>;
-  }
-  ```
-- **`PowerAppsContent`**:
-  ```typescript
-  interface PowerAppsContent {
-      schemaVersion?: string;
-      appType?: "ModelApp" | "CanvasApp" | "CodeApp";
-      appId?: string;
-      orgId?: string;
-      geo?: string;
-      entity?: string;
-      filterXML?: string;
-      filterId?: string;
-      extendedContext?: Array<Record<string, unknown>>;
-      telemetryContext?: { clientSessionId?: string; clientRequestId?: string };
-      selectedRecords?: { selectedContents: any[] };
-      messageAnnotationAppContext?: string;
-  }
-  ```
-- **`SendPromptToM365CopilotOptions`**:
-  ```typescript
-  interface SendPromptToM365CopilotOptions {
-      gptId?: string;
-      autoSubmit?: boolean;
-  }
-  ```
+| Project | Result |
+|---|---|
+| `01.DevKitJs-UnitTest` | Pass: 136/136 tests; 100% statements, branches, functions, and lines |
+| `02.DevKitTs-UnitTest` | Pass: 25 suites, 880/880 tests; 100% statements, branches, functions, and lines; release test build passed |
+| `03.DevKitJs-AICode` | No check/build/test scripts in workflow |
+| `04.DevKitTs-AICode` | Pass: TypeScript check and release build |
+| `05.DevKitJs-Vsix` | No check/build/test scripts in workflow |
+| `06.DevKitTs-Vsix` | Pass: TypeScript check and release build |
 
----
-
-### 3.2. New Control Event Handler: `control.addEventHandler` (March 2025)
-
-Microsoft added `addEventHandler` to controls for PCF custom code components:
-- **Syntax**: `control.addEventHandler(name: string, function: (executionContext: any) => void): void;`
-- **Purpose**: Attaches custom event handlers to custom PCF component events on forms.
-- **Reference**: [addEventHandler (Client API reference)](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/addeventhandler)
-- **Status in DevKit**: Missing in both `devkit.d.ts` and `devkit.js`.
-
----
-
-### 3.3. New Navigation Targets in `Xrm.Navigation.navigateTo` (April 2026)
-
-Microsoft documented two additional page types for `navigateTo` and `ISidePane.navigate`:
-1. **Generative Pages (`pageType: "generative"`)**:
-   ```typescript
-   interface PageInputGenerative {
-       pageType: "generative";
-       pageId: string;
-       recordId?: string;
-       entityName?: string;
-       data?: Record<string, any>;
-   }
-   ```
-   Reference: [Navigate to generative page](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/navigate-to-generative-page-examples)
-
-2. **Custom Pages (`pageType: "custom"`)**:
-   ```typescript
-   interface PageInputCustom {
-       pageType: "custom";
-       name: string;
-       entityName?: string;
-       recordId?: string;
-   }
-   ```
-   Reference: [Navigate to custom page](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/navigate-to-custom-page-examples)
-
----
-
-### 3.4. Runtime API Name Inconsistency in `devkit.js` (`Xrm.WebApi.offline`)
-
-In `devkit.js` line 673:
-```javascript
-getter(obj, 'Offline', () => {
-    const offline = {};
-    offline.IsAvailable = entityLogicalName => getOffline?.isAvailable(entityLogicalName);
-    return offline;
-});
-```
-- Microsoft official API is: `Xrm.WebApi.offline.isAvailableOffline(entityLogicalName)`
-- In `devkit.js`, calling `getOffline?.isAvailable` causes an issue if `isAvailable` is undefined on the native Dataverse offline object.
-- **Recommendation**: Update to:
-  ```javascript
-  offline.IsAvailable = entityLogicalName => (getOffline?.isAvailableOffline ? getOffline.isAvailableOffline(entityLogicalName) : getOffline?.isAvailable?.(entityLogicalName));
-  ```
-
----
-
-### 3.5. Missing Declaration in `devkit.d.ts`: `IControl.Data`
-
-In `devkit.js` line 262:
-```javascript
-getterSetter(field, 'Data', () => control?.getData(), value => { control?.setData(value); });
-```
-DevKit's runtime supports `field.Data` accessing `control.getData()` / `control.setData()`. However, `Data: any;` is missing from the `Controls.IControl` interface in `devkit.d.ts`.
-- References:
-  - [control.getData](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getdata)
-  - [control.setData](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setdata)
+An earlier workflow attempt exposed missing coverage for newly added wrapper methods. Tests were added, then the complete workflow was rerun successfully. The final run passed the JS and TS unit suites, both TS sample release builds, and all TypeScript checks.

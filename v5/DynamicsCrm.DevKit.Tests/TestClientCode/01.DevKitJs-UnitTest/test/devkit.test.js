@@ -1956,6 +1956,51 @@ describe('devKit', () => {
         // Test ExecutePrompt with callbacks
         copilot.ExecutePrompt("What is the weather?", successCallback, errorCallback);
     });
+    test('devKit.LoadCopilot exposes M365 Copilot methods', () => {
+        let thenCalls = 0;
+        const mockPromise = { then: function () { thenCalls++; return mockPromise; } };
+        const nativeMethods = [
+            'addActionHandler', 'addDefaultActionHandlers', 'getCurrentAgent', 'isM365CopilotEnabled',
+            'openM365CopilotPanel', 'removeActionHandler', 'removeDefaultActionHandlers',
+            'sendPromptToM365Copilot', 'updateContext'
+        ];
+        const calls = {};
+        const nativeCopilot = {};
+        nativeMethods.forEach(name => {
+            calls[name] = 0;
+            nativeCopilot[name] = function () { calls[name]++; return mockPromise; };
+        });
+        global.Xrm = { Copilot: nativeCopilot };
+
+        const copilot = devKit.LoadCopilot();
+        const action = () => { };
+        const success = () => { };
+        const error = () => { };
+        const context = { entity: 'account' };
+        const options = { autoSubmit: true };
+
+        expect(copilot.AddActionHandler('action', action)).toBe(mockPromise);
+        copilot.AddActionHandler('action', action, success, error);
+        expect(copilot.AddDefaultActionHandlers('action')).toBe(mockPromise);
+        copilot.AddDefaultActionHandlers('action', success, error);
+        expect(copilot.GetCurrentAgent()).toBe(mockPromise);
+        copilot.GetCurrentAgent(success, error);
+        expect(copilot.IsM365CopilotEnabled()).toBe(mockPromise);
+        copilot.IsM365CopilotEnabled(success, error);
+        expect(copilot.OpenM365CopilotPanel()).toBe(mockPromise);
+        copilot.OpenM365CopilotPanel(success, error);
+        expect(copilot.RemoveActionHandler('action', action)).toBe(mockPromise);
+        copilot.RemoveActionHandler('action', action, success, error);
+        expect(copilot.RemoveDefaultActionHandlers('action')).toBe(mockPromise);
+        copilot.RemoveDefaultActionHandlers('action', success, error);
+        expect(copilot.SendPromptToM365Copilot('hello', options)).toBe(mockPromise);
+        copilot.SendPromptToM365Copilot('hello', options, success, error);
+        expect(copilot.UpdateContext(context)).toBe(mockPromise);
+        copilot.UpdateContext(context, success, error);
+
+        nativeMethods.forEach(name => expect(calls[name]).toBe(2));
+        expect(thenCalls).toBe(9);
+    });
     test('devKit.LoadFormV2 - comprehensive form loading', () => {
         // Setup complex mock form context
         var attributes = new ItemCollectionMock([
@@ -2138,6 +2183,14 @@ describe('devKit', () => {
         };
 
         var form = devKit.LoadFormV2(executionContext, "web-resource", formConfig);
+
+        var eventNameReceived = null;
+        var eventHandlerReceived = null;
+        stringControl.addEventHandler = function (name, callback) { eventNameReceived = name; eventHandlerReceived = callback; };
+        var customEventHandler = function () { };
+        form.Body.Name.AddEventHandler("customEvent", customEventHandler);
+        expect(eventNameReceived).toBe("customEvent");
+        expect(eventHandlerReceived).toBe(customEventHandler);
 
         // Verify form structure
         expect(form).toBeDefined();
