@@ -1,6 +1,6 @@
-﻿# Code Coverage Report
+# Code Coverage Report
 
-> **Version:** `4.44.44.44` | **Generated:** 2026-09-27 22:26:58
+> **Version:** `4.44.44.44` | **Generated:** 2026-09-28 15:11:42
 
 ## Summary
 
@@ -16,7 +16,7 @@
 
 | Assembly | Lines | Branches | Methods | Classes |
 |---|---|---|---|---|
-| DynamicsCrm.DevKit.Cli | 47843/53135 | 21070/27099 | 3967/4090 | 378 |
+| DynamicsCrm.DevKit.Cli | 47839/53135 | 21069/27099 | 3967/4090 | 378 |
 | DynamicsCrm.DevKit.Tool | 3390/3390 | 1270/1270 | 292/292 | 45 |
 | DynamicsCrm.DevKit.Vsix.UnitTests | 5277/5362 | 213/294 | 663/668 | 13 |
 | DynamicsCrm.DevKit.Analyzers | 1570/1570 | 740/740 | 131/131 | 27 |
