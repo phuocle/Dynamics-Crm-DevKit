@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevKit MCP → Copilot Studio: khả năng port và thiết kế connection</title>
+<style>
+:root{--ink:#193044;--muted:#556c7b;--line:#dce5ec;--blue:#1264a3;--bg:#f3f6f9}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 "Segoe UI",Arial,sans-serif}main{max-width:1120px;margin:32px auto;padding:40px 52px;background:white;border-radius:14px;box-shadow:0 8px 30px #1930440c}h1{font-size:35px;line-height:1.25;letter-spacing:-.7px}h2{font-size:25px;margin-top:46px;border-bottom:2px solid var(--line);padding-bottom:10px}h3{font-size:19px;margin-top:27px}a{color:var(--blue);overflow-wrap:anywhere}.meta,.source{color:var(--muted);font-size:14px}.lead{font-size:19px}.callout{padding:18px 24px;background:#eaf4fc;border-left:5px solid var(--blue);border-radius:5px}.caution{background:#fff5df;border-left-color:#b87d13}table{border-collapse:collapse;width:100%;margin:20px 0;font-size:14px}th,td{padding:12px 14px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:#eef3f7}tr:nth-child(even){background:#fafcfe}code{font-family:Consolas,monospace;font-size:.9em;background:#eef3f7;padding:2px 5px;border-radius:3px}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#142b3b;color:#e1edf4;padding:20px;border-radius:8px;font:14px/1.65 Consolas,monospace}pre code{background:none;color:inherit;padding:0}.toc{columns:2;gap:28px;padding:18px 28px;background:#f6f9fc;border-radius:8px}.toc a{display:block;margin:5px 0}li{margin:6px 0}.badge{display:inline-block;background:#eaf4fc;color:#1264a3;font-size:12px;border-radius:12px;padding:2px 10px}footer{margin-top:36px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted)}@media(max-width:760px){main{margin:0;padding:24px 18px;border-radius:0}h1{font-size:28px}.toc{columns:1}table{display:block;overflow-x:auto}}@media print{body{background:white}main{margin:0;max-width:none;padding:0;box-shadow:none}h2,h3{break-after:avoid}tr,pre,.callout{break-inside:avoid}a{color:#193044}}
+</style>
+</head>
+<body><main>
+<span class="badge">Báo cáo nghiên cứu source + tài liệu chính thức</span>
+<h1>Đưa DevKit MCP vào Copilot Studio<br>Transport, độ khó và cách lưu connection</h1>
+<p class="meta">Ngày nghiên cứu: 30/09/2026 · Múi giờ Asia/Saigon · Source: v5 · HEAD <code>4a1a4c3d9458c576e0a2200551906622407ea945</code><br>Phiên bản source: <code>4.44.44.44</code> · Build placeholder: <code>xxxx.yy.zz HH.mm.ss</code></p>
+<p class="lead">Có thể port. DevKit hiện đã có phần nghiệp vụ MCP để tái sử dụng; cần bổ sung server HTTP và thiết kế lại vòng đời connection nếu phục vụ nhiều người dùng.</p>
+<div class="callout"><strong>Trả lời trực tiếp:</strong> Hiểu “phải có HTTP endpoint” là đúng. Nhưng endpoint phải nói <strong>MCP Streamable HTTP</strong>, chứ một API REST nhận JSON bất kỳ hoặc một bước HTTP request trong flow chưa đủ. Với một Dataverse environment và application user cố định, việc làm bản thử nghiệm tương đối thuận lợi. Nếu mỗi người phải dùng đúng quyền Dataverse của mình, OAuth/OBO, DI scope và token isolation là phần việc chính.</div>
+<p class="source">Phạm vi: phân tích tĩnh source và nghiên cứu tài liệu, chưa implement HTTP host, chưa kết nối tenant Copilot Studio, chưa kiểm thử runtime HTTP. Tình trạng MCP hiện đang hoạt động lấy từ thông tin người dùng; không suy ra rằng cấu hình cloud đã được kiểm chứng.</p>
+<nav class="toc" aria-label="Mục lục">
+<a href="#answer">1. HTTP request hay MCP HTTP?</a><a href="#source">2. Source hiện tại thực sự làm gì?</a><a href="#reuse">3. Phần tái sử dụng và phần cần thay đổi</a><a href="#connections">4. Connection lưu ở đâu?</a><a href="#app">5. Phương án application user</a><a href="#obo">6. Phương án quyền của từng người dùng</a><a href="#files">7. Files, schema và vận hành cloud</a><a href="#implementation">8. Thiết kế port đề xuất</a><a href="#studio">9. Cấu hình Copilot Studio</a><a href="#plan">10. Lộ trình và ước lượng</a><a href="#verify">11. Tiêu chí nghiệm thu</a><a href="#alternative">12. So sánh Dataverse MCP của Microsoft</a><a href="#refs">13. Tài liệu tham chiếu</a>
+</nav>
+
+<section id="answer"><h2>1. “Setup MCP là một HTTP request” có đúng không?</h2>
+<p>Copilot Studio là MCP client. Nó cần một URL HTTPS có thể truy cập từ hạ tầng chạy connector. MCP server vẫn chạy ở backend do mình host; Copilot Studio không tải executable <code>devkit</code> trên máy developer rồi chạy process local.</p>
+<p>Tài liệu Microsoft hiện ghi nhận Streamable HTTP; transport HTTP+SSE cũ đã ngừng được hỗ trợ sau tháng 08/2025. Đăng ký server qua wizard hoặc custom connector, với API key hoặc OAuth 2.0. <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/mcp-add-existing-server-to-agent">[S1]</a></p>
+<pre>Hiện tại:
+IDE / MCP client local ── stdin/stdout ── devkit mcp ── ServiceClient ── Dataverse
+
+Khi đưa vào Copilot Studio:
+Người chat ── Copilot Studio ── Power Platform MCP connector
+                                     │ HTTPS / MCP
+                                     ▼
+                               DevKit HTTP host
+                                     │ SDK / Web API
+                                     ▼
+                                 Dataverse</pre>
+<p>MCP mang JSON-RPC với quy trình khởi tạo, khám phá tool và gọi tool: ví dụ <code>initialize</code>, <code>tools/list</code>, <code>tools/call</code>. Một URL thường dùng là <code>https://devkit.example.com/mcp</code>. Streamable HTTP có thể trả JSON hoặc dùng SSE cho một response stream; điều này khác transport SSE cũ với endpoint tách riêng. Các chi tiết header, session, GET/POST và version negotiation nên để SDK xử lý. <a href="https://modelcontextprotocol.io/specification/2025-11-25/basic/transports">[S3]</a></p>
+<p><strong>Hai cách tích hợp khác nhau:</strong> nếu chọn MCP tool của Copilot Studio, ta cung cấp endpoint MCP và giữ khả năng khám phá tool. Nếu chọn REST API/custom action/HTTP trong flow, ta phải thiết kế API action riêng, và tự quản lý inputs, outputs, auth, lỗi. Cách REST có thể phù hợp cho vài thao tác nghiệp vụ cố định nhưng không phải port nguyên MCP hiện tại.</p>
+<p>MCP trong Copilot Studio cần generative orchestration. Microsoft hiện mô tả hỗ trợ tools và resources; không nên mặc định prompts, roots, sampling hoặc mọi capability của desktop client đều dùng được. <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/agent-extend-action-mcp">[S2]</a></p></section>
+
+<section id="source"><h2>2. Source DevKit hiện tại thực sự làm gì?</h2>
+<p>Component bị ảnh hưởng nếu triển khai là <strong>CLI/MCP và phần connection trong Shared</strong>; chưa có lý do phải thay VSIX hoặc Analyzers. Báo cáo này chỉ tạo tài liệu trong <code>Docs</code> theo yêu cầu.</p>
+<table><thead><tr><th>Bằng chứng source</th><th>Hành vi xác nhận</th><th>Ý nghĩa khi port</th></tr></thead><tbody>
+<tr><td><a href="../DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj">CLI .csproj</a></td><td><code>net10.0</code>, SDK project thông thường; <code>ModelContextProtocol 2.2.0</code>, Dataverse Client <code>1.2.27</code>. Chưa reference <code>ModelContextProtocol.AspNetCore</code>.</td><td>Có nền tảng .NET phù hợp, nhưng chưa có ASP.NET Core MCP HTTP host.</td></tr>
+<tr><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/McpServerHost.cs">McpServerHost.cs: 55–131</a></td><td><code>Host.CreateApplicationBuilder()</code>, <code>WithStdioServerTransport()</code>, tools/resources từ assembly. Log console đi stderr.</td><td>Transport đang là stdio. Không có <code>MapMcp</code>, URL listen hay HTTP authentication tại entry này.</td></tr>
+<tr><td><a href="../DynamicsCrm.DevKit.Cli/Models/McpCommandArgs.cs">McpCommandArgs.cs</a> và <a href="../DynamicsCrm.DevKit.Cli/Commands/McpCommand.cs">McpCommand.cs</a></td><td>Có option <code>--transport</code> mặc định <code>stdio</code>, nhưng execution path không đọc <code>settings.Transport</code>; host luôn dùng stdio.</td><td><strong>Chỉ thêm <code>--transport http</code> hiện tại không tạo HTTP server.</strong></td></tr>
+<tr><td>McpCommand.cs: <code>ExecuteAsync</code>, <code>ConnectAsync</code>, <code>ConnectModernAsync</code></td><td>Tạo connection trước khi chạy host; nhận explicit arguments, không đọc .env hoặc OS env cho connection. Nhánh thực thi kiểm tra <code>AuthType</code> trước <code>Connection</code>.</td><td>Không suy luận Azure app settings sẽ tự làm CLI kết nối. Cần configuration adapter riêng. Khi truyền cả <code>--auth</code> và <code>--conn</code>, code MCP hiện ưu tiên nhánh auth dù guidance tổng quát nêu conn trước.</td></tr>
+<tr><td>McpServerHost.cs: <code>RegisterSharedServices</code></td><td>Singleton <code>ServiceClient</code>, <code>MetadataService</code>, projections <code>IOrganizationService</code>/<code>IOrganizationServiceAsync2</code>, <code>IMcpConnectionInfo</code>, <code>IWebApiExecutor</code> và execution policy.</td><td>Phù hợp một identity/environment cố định trong process. Không phù hợp bê nguyên sang server nhiều identity.</td></tr>
+<tr><td>McpCommand.cs: xử lý <code>--as-user</code></td><td>Đặt <code>serviceClient.CallerId</code> trước host startup; nếu resolve/gate không đạt thì warning và tiếp tục dưới identity kết nối.</td><td>Đây là impersonation cố định lúc startup, không phải OAuth từng người. HTTP mode cần từ chối khi impersonation bắt buộc thất bại, tránh fallback thành identity nhiều quyền.</td></tr>
+<tr><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/RoleGateHelper.cs">RoleGateHelper.cs</a></td><td>Query direct role assignment, so tên System Administrator; không cache role gate.</td><td>Custom role đủ quyền Dataverse vẫn có thể bị DevKit chặn ở thao tác có gate. Không tự cấp System Administrator để “chạy được”.</td></tr>
+<tr><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/McpToolBase.cs">McpToolBase.cs</a>, <a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/McpToolResults.cs">McpToolResults.cs</a></td><td>Kết quả có text summary, structured JSON; error/partial có quy ước <code>IsError</code>.</td><td>Đã có contract MCP để tái sử dụng. Cần kiểm tra Copilot Studio đọc được cả text và structured output.</td></tr>
+<tr><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/WorkspaceFolderHelper.cs">WorkspaceFolderHelper.cs</a></td><td>Hỏi <code>roots/list</code> rồi fallback <code>Environment.CurrentDirectory</code>.</td><td>Ở cloud, cwd là thư mục server. Root từ client không đồng nghĩa server truy cập được filesystem client.</td></tr>
+</tbody></table>
+<p>Đếm tĩnh các attribute trong tool entry files cho thấy <strong>38 tool methods, trong đó 17 đánh dấu ReadOnly=true</strong>; <code>DisabledToolSet</code> hiện rỗng. Đây là số từ source, không phải kết quả <code>tools/list</code> trên binary đã cài. Category hiện có <code>readonly</code> và <code>all</code>, suy ra từ attribute. Tool có nhiều action được đánh dấu mutating sẽ bị loại toàn bộ khỏi readonly, kể cả action chỉ đọc bên trong.</p>
+<p>Có 11 resource attributes ở <code>InstructionResources.cs</code> và <code>SchemaResources.cs</code>. Host đăng ký resources riêng; category readonly hiện lọc tools, không tự lọc toàn bộ resources tương ứng. Vì vậy không dùng category như hàng rào phân quyền dữ liệu.</p></section>
+
+<section id="reuse"><h2>3. Port dễ ở đâu, khó ở đâu?</h2>
+<table><thead><tr><th>Hạng mục</th><th>Khả năng tái sử dụng</th><th>Công việc còn lại</th></tr></thead><tbody>
+<tr><td>FetchXML, metadata, audit, plugins, workflows, jobs</td><td>Cao: phần lớn nhận service interfaces và trả MCP result.</td><td>DI đúng identity; pagination, schema và response size.</td></tr>
+<tr><td>Tool descriptions, names, JSON keys, resources</td><td>Cao.</td><td>Giữ contract; xác nhận schema thực tế được Copilot Studio nhận.</td></tr>
+<tr><td>Transport</td><td>SDK có hỗ trợ HTTP.</td><td>ASP.NET Core host, package HTTP cùng release compatible, auth middleware, HTTPS và ingress.</td></tr>
+<tr><td>Application user cố định</td><td>Connection builder ClientSecret đã có.</td><td>Nguồn config/secrets cho host; application user + roles; inbound auth riêng.</td></tr>
+<tr><td>Per-user delegated auth</td><td>Interface seams hữu ích, nhưng chưa có flow này trong host.</td><td>Entra registrations, OBO token acquisition, scope/caching/expiry, isolation và consent.</td></tr>
+<tr><td>Upload, download, backup, restore</td><td>Phần Dataverse giữ được; filesystem semantics cần xem lại.</td><td>Storage server, path sandbox, artifact delivery và phân quyền từng file.</td></tr>
+<tr><td>Parallel create và thao tác dài</td><td><code>CreateRecordsTool</code> dùng concrete ServiceClient, clone worker và copy CallerId.</td><td>Kiểm tra clone với token callback/OBO; kiểm soát concurrency, timeout và retry duplicate.</td></tr>
+</tbody></table>
+<p><strong>Đánh giá:</strong> transport-only demo dễ hơn đáng kể so với production nhiều người dùng. Không đủ bằng chứng để tuyên bố “chỉ đổi một dòng” hoặc “mọi tool dùng được ngay”.</p></section>
+
+<section id="connections"><h2>4. Connection lưu ở đâu? Tách hai chặng xác thực</h2>
+<pre>Connection A: Copilot Studio / connector → DevKit HTTP endpoint
+  API key hoặc OAuth token cho DevKit API
+
+Connection B: DevKit HTTP host → Dataverse
+  Application user hoặc delegated token của người dùng</pre>
+<p><strong>Hai connection này không tự trở thành một.</strong> Đăng nhập được vào agent hoặc DevKit endpoint chưa chứng minh SDK đã kết nối Dataverse dưới đúng identity.</p>
+<table><thead><tr><th>Thông tin</th><th>Nơi quản lý đề xuất</th><th>Có nằm trong tool arguments/chat không?</th></tr></thead><tbody>
+<tr><td>URL endpoint MCP, mô tả connector, auth type, scopes</td><td>Connector configuration trong Power Platform.</td><td>Không cần đưa vào mỗi tool call.</td></tr>
+<tr><td>API key / OAuth connection tới MCP</td><td>Power Platform connection framework; agent tham chiếu connection.</td><td>Không gửi key/token dưới dạng business argument.</td></tr>
+<tr><td>TenantId, Dataverse URL, application ClientId, policy</td><td>HTTP host configuration / deployment config.</td><td>Không để model tùy ý đổi environment hoặc quyền.</td></tr>
+<tr><td>Dataverse application secret / private certificate</td><td>Azure Key Vault; host dùng managed identity để đọc.</td><td>Không.</td></tr>
+<tr><td>Downstream delegated Dataverse token</td><td>Token acquisition/cache thuộc HTTP backend, phân vùng identity + resource; mã hóa nếu persisted.</td><td>Không trả trong MCP result/log.</td></tr>
+<tr><td>Environment profile mapping</td><td>Registry phía server, chứa secret reference và allowed principals.</td><td>Nếu cần profile selector thì chỉ là ID đã được server authorize.</td></tr>
+<tr><td>Connection reference khi vận chuyển solution</td><td>Binding môi trường triển khai tới connection thực.</td><td>Không phải kho chứa Dataverse password/secret trong solution.</td></tr>
+</tbody></table>
+<p>Copilot Studio có Connection Settings để chọn/tạo connection và xem Connected, Expired, Stale. Nên mô tả chính xác rằng <strong>connection được quản lý qua Power Platform</strong>, không khẳng định “Copilot Studio tự lưu password”. Microsoft nêu Copilot Studio không lưu credentials trực tiếp. <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-connections">[S10]</a> <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/configure-enduser-authentication">[S11]</a></p>
+<p><strong>Không lấy cách mã hóa legacy trong source làm vault cloud:</strong> <code>Shared/Helper.cs</code> dùng AES-CBC với passphrase và IV cố định trong code, auto-fallback về nguyên input khi decrypt lỗi. Đây là cơ chế tương thích hiện hữu, không cung cấp ranh giới bảo vệ secrets độc lập khỏi ứng dụng. Backend cloud nên lấy secret từ vault; không sao chép encrypted string local như phương án bảo mật chính.</p>
+<p>App Service hỗ trợ Key Vault references bằng identity của app; có cơ chế cache/refresh nên secret rotation cần đưa vào quy trình vận hành và test. <a href="https://learn.microsoft.com/en-us/azure/app-service/app-service-key-vault-references">[S12]</a></p></section>
+
+<section id="app"><h2>5. Phương án A: một application user cho một environment</h2>
+<p><strong>Khuyến nghị cho PoC nội bộ:</strong> một host, một Dataverse environment, một application user chỉ có các quyền cần thử. Inbound có thể API key qua header để làm demo nhanh; production nên cân nhắc Entra OAuth để kiểm soát người truy cập endpoint. Dù inbound là per-user OAuth, downstream vẫn là application user nếu chọn kiến trúc A.</p>
+<pre>Copilot Studio ── X-DevKit-Key hoặc OAuth ── DevKit HTTP host
+                                               │
+                                URL + AppId + secret từ Key Vault
+                                               ▼
+                                Dataverse application user</pre>
+<p>Source <code>ClientSecretConnectionBuilder</code> đã tạo ServiceClient từ URL, ClientId, ClientSecret và TenantId khi có. Host mới phải resolve config/vault rồi tạo client qua factory; <code>devkit mcp</code> hiện không tự đọc những giá trị này từ environment.</p>
+<p>Cần tạo application user trong Dataverse environment và gán security role. Microsoft cho phép chọn app registration hoặc Azure Managed Identity Application ID khi tạo application user. <a href="https://learn.microsoft.com/en-us/power-platform/admin/manage-application-users">[S8]</a></p>
+<p><strong>Hệ quả:</strong> mọi người gọi tool đều nhận dữ liệu/quyền của application user. Backend biết người gọi MCP để audit/authorize, nhưng Dataverse không tự áp dụng quyền row-level của người chat. Đây là lựa chọn hợp lý cho tác vụ nội bộ có phạm vi dữ liệu được xác định; không phù hợp nếu yêu cầu “user A chỉ thấy records của A” mà chưa xây dựng lớp authorization tương ứng.</p>
+<p>Có thể giữ client singleton trong một host identity cố định nếu không thay đổi CallerId/config giữa request và đã xác minh concurrency/lifecycle của SDK. Nếu cần nhiều environment, chọn process/deployment riêng hoặc pool được khóa theo profile + identity; không cho model cung cấp arbitrary URL + client secret.</p>
+<h3>Config minh họa cho HTTP host mới, không phải config CLI đã hỗ trợ</h3>
+<pre>{
+  "Dataverse": {
+    "Url": "https://example.crm.dynamics.com",
+    "TenantId": "&lt;tenant-id&gt;",
+    "ClientId": "&lt;application-id&gt;",
+    "ClientSecretReference": "&lt;Key Vault secret reference&gt;"
+  },
+  "McpPolicy": {
+    "Category": "readonly",
+    "MutationsBlocked": true
+  }
+}</pre>
+<p>Các key trong ví dụ là <strong>đề xuất mới</strong>. Registry phải validate HTTPS, exact allowed host, tenant và principal. API key không phải Dataverse client secret; ưu tiên header thay query để giảm lộ qua URL/access logs.</p>
+<h3>Managed identity có dùng được không?</h3>
+<p>Hai việc riêng: managed identity để đọc Key Vault, và managed identity/application identity để lấy Dataverse token. Việc đầu không làm việc sau tự hoạt động. DevKit connection registry hiện không có auth type ManagedIdentity; muốn dùng cần adapter lấy token cho Dataverse resource và application user/roles tương ứng. ServiceClient có constructor nhận token provider do caller quản lý. <a href="https://learn.microsoft.com/en-us/dotnet/api/microsoft.powerplatform.dataverse.client.serviceclient?view=dataverse-sdk-latest">[S7]</a></p></section>
+
+<section id="obo"><h2>6. Phương án B: dùng đúng quyền Dataverse của từng người</h2>
+<p><strong>Khuyến nghị khi phát hành cho người dùng nghiệp vụ:</strong> user authentication tới DevKit API, sau đó DevKit backend dùng OBO lấy delegated token cho Dataverse.</p>
+<pre>User → Copilot Studio → connector → token A [audience = DevKit API]
+                                            │ validate JWT + scope
+                                            ▼
+                                       DevKit backend
+                                            │ OBO exchange tại Entra
+                                            ▼
+                                token B [audience = Dataverse]
+                                            │ ServiceClient(token provider)
+                                            ▼
+                                  Dataverse quyền của user</pre>
+<p>Cần phân biệt <strong>connector OBO/SSO tới API</strong> và <strong>backend OBO tới Dataverse</strong>. Bật OBO trong connector không tự viết đoạn đổi token downstream trong DevKit. Token có audience DevKit không dùng trực tiếp để gọi Dataverse; API chỉ được đổi token dành cho chính mình trong OBO flow. <a href="https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-on-behalf-of-flow">[S6]</a></p>
+<p>Thiết kế app registration: một service app đại diện DevKit API với delegated scope; connector app được cấp scope đó và callback URL; DevKit service app có delegated permission Dataverse phù hợp, consent và credential cho confidential client. Backend dùng MSAL/Microsoft.Identity.Web để acquire token cho <code>https://&lt;org&gt;.crm.dynamics.com/.default</code> với user assertion, sau đó cung cấp token callback cho ServiceClient. Scope <code>.default</code> không có nghĩa cấp mọi quyền; dựa trên permissions đã cấu hình và consent.</p>
+<p>Tài liệu connector OBO yêu cầu cấu hình Entra, Resource URL, scope, <code>Enable on-behalf-of login</code>, redirect và chia sẻ connector cho end users. Có thể vẫn có consent “Allow”; không cam kết mọi kênh đều đăng nhập im lặng. <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/advanced-custom-connector-on-behalf-of">[S5]</a></p>
+<h3>Thay đổi connection lifetime bắt buộc</h3>
+<ul>
+<li>Validate signature, issuer, audience, expiry và scopes trước tool execution. Claims đã validate quyết định identity; không dùng email/GUID do model truyền làm bằng chứng đăng nhập.</li>
+<li>ServiceClient, MetadataService, connection info, Web API executor và execution context phải cùng một identity/environment scope. Không dùng singleton client của user A cho user B.</li>
+<li>Thiết kế request/invocation scope theo cách SDK HTTP resolve services thực tế; nếu stateful session thì phải bind với identity. Transport session ID không phải credential.</li>
+<li>Token cache dùng thư viện chuẩn, phân vùng tenant/account/resource, xử lý expiry/revocation; nếu cache phân tán phải bảo vệ cả dữ liệu và quyền truy cập. Không chỉ lưu token trong biến global hoặc bảng plaintext.</li>
+<li>Không mutate <code>CallerId</code> trên singleton. Nếu dùng impersonation thay delegated token, clone/client riêng, mapping principal được verify và không fallback sang application identity khi thất bại.</li>
+<li>Kiểm tra Web API code đọc <code>CurrentAccessToken</code> và worker <code>Clone()</code> trong create_records. Không mặc định token-provider client có hành vi clone giống ClientSecret client.</li>
+</ul>
+<p>ServiceClient constructor nhận <code>Func&lt;string, Task&lt;string&gt;&gt;</code> được Microsoft khuyến nghị cho web applications/OBO; callback cần acquire/refresh on demand, không trả mãi một token đã hết hạn. <a href="https://learn.microsoft.com/en-us/dotnet/api/microsoft.powerplatform.dataverse.client.serviceclient?view=dataverse-sdk-latest">[S7]</a></p>
+<p>Giới hạn kênh cần kiểm tra sớm: user auth cho tools hỗ trợ Teams/custom website theo tài liệu, Demo Website không hỗ trợ; Teams có yêu cầu SSO riêng. Test thành công trong Studio chưa đủ cho kênh đã publish. <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/configure-enduser-authentication">[S11]</a></p>
+<h3>Vì sao --as-user, FromPac, DeviceCode không thay được mô hình này?</h3>
+<p><code>--as-user</code> là server-side impersonation, cần quyền kết nối và mapping đáng tin cậy; không chứng minh user đã sign in. <code>FromPac</code> dựa vào profile/token local của PAC. <code>Interactive</code>/<code>DeviceCode</code> phù hợp người vận hành local nhưng không tạo connection per-user tự động ở cloud. Không dùng password OAuth legacy hoặc AD credentials như thiết kế mặc định cho agent cloud.</p></section>
+
+<section id="files"><h2>7. File local, schema và vận hành: các điểm dễ bỏ sót</h2>
+<h3>7.1. Files không đi theo người chat</h3>
+<p><code>CreateRecordsTool</code> đọc CSV/JSON path; <code>ManageRecordFileTool</code> đọc local path/URL/base64 và download ghi <code>.devkit/manage_record_file</code>, trả <code>savedPath</code>. Các tool form/view/chart/app/ribbon/role/webresource/report có nhánh backup/restore hoặc đọc file. <code>GenerateDemoDataTool</code> ghi <code>.devkit/generate_demo_data</code>. Một <code>E:\...</code> của laptop không tồn tại trên HTTP server.</p>
+<p>Đề xuất PoC bắt đầu bằng tools dùng inline JSON/query, chưa mở local-file tools. Giai đoạn sau có artifact store và download endpoint có authorization/expiry, sandbox đường dẫn theo tenant/principal, chống traversal, giới hạn size và retention. URL upload cần kiểm soát SSRF và egress. Disk container tạm không nên là backup duy nhất.</p>
+<p>Không âm thầm biến <code>savedPath</code> thành URL hoặc đổi temp-file convention của tool hiện tại. Tạo cloud adapter/resource riêng hoặc thay contract có chủ đích sau khi được yêu cầu; giữ stdio behavior. Nếu cloud cần field bổ sung, phải kiểm tra tương thích client/schema.</p>
+<h3>7.2. Tool schema và resources</h3>
+<p>Microsoft ghi nhận vấn đề với reference types, array of multiple types, enums và <code>exclusiveMinimum</code>. Lấy <code>tools/list</code> thực tế để kiểm tra input/output schema, nested DTO, <code>$ref</code>, nullable union và enum trước khi cho rằng cả 38 tools được discovery. Trang troubleshooting còn nhắc SSE dù trang onboarding đã ngừng hỗ trợ transport cũ; áp dụng hướng dẫn transport mới, dùng mục schema làm danh sách kiểm thử. <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/mcp-troubleshooting">[S9]</a></p>
+<p>Không bỏ resources chỉ vì ví dụ HTTP đơn giản chỉ dùng tools. DevKit có hướng dẫn/schema hữu ích; kiểm tra <code>resources/list</code>/<code>resources/read</code> và cách orchestrator thực sự sử dụng. Metadata/resource không được tiết lộ environment của user khác.</p>
+<h3>7.3. HTTP session và scaling</h3>
+<p>SDK C# chính thức tách package ASP.NET Core để hỗ trợ HTTP transport. Nên bắt đầu stateless nếu không cần server-to-client requests/subscriptions, nhưng cần kiểm tra API/default của đúng version được chọn thay vì copy ví dụ main branch. Stateless transport không có nghĩa backend được bỏ phân quyền hay bỏ token cache. <a href="https://github.com/modelcontextprotocol/csharp-sdk">[S4]</a></p>
+<p>Stateful mode cần lifecycle, session binding và phương án routing/storage khi nhiều replicas. Reverse proxy cần giữ Content-Type/Accept/MCP headers và streaming, không redirect sang trang HTML sign-in. Backend trả challenge/lỗi HTTP phù hợp thay vì form đăng nhập.</p>
+<h3>7.4. Thao tác dài và quyền ghi</h3>
+<p>Source connection có timeout tới một giờ, một số transfer có HttpClient timeout năm phút; những giá trị này không bảo đảm Copilot Studio chờ được lâu tương ứng. Đo timeout của đúng đường connector/channel. Query nên lấy trang nhỏ; bulk/publish dài có thể cần job + status nếu vượt budget thực tế.</p>
+<p>Không retry mù khi create/update timeout: lệnh có thể đã thực hiện nhưng response bị mất. Cần idempotency/correlation và cách kiểm tra kết quả. ReadOnly/Destructive annotations giúp client hiểu tool, không thay Dataverse security hoặc backend authorization. Với agent rộng người dùng, chia deployment/profile và policy server-side; không chỉ dựa prompt “đừng xóa”.</p></section>
+
+<section id="implementation"><h2>8. Thiết kế port đề xuất cho repository này</h2>
+<p><strong>Hướng ưu tiên:</strong> bổ sung entry HTTP bên cạnh stdio, giữ tools/resources và contracts. Có thể dùng nhánh HTTP trong CLI hoặc web host project riêng. PoC một identity có thể làm nhánh CLI nhanh; production nhiều identity hợp lý hơn với web host riêng và thư viện nghiệp vụ dùng chung. Việc tách thư viện cần cân nhắc Shared Project, internal access và assembly scanning.</p>
+<ol>
+<li>Tách “đăng ký MCP tool/resource + filter” khỏi “khởi động stdio process” với phạm vi nhỏ; giữ <code>readonly/all</code>, <code>DisabledToolSet</code>, <code>ToolResourceMap</code> và <code>nameof</code>.</li>
+<li>Thêm <code>ModelContextProtocol.AspNetCore</code> cùng phiên bản release compatible với <code>ModelContextProtocol</code>; Web SDK/framework reference phù hợp. Không đổi SDK/version chỉ để khớp ví dụ Internet.</li>
+<li>HTTP path dùng <code>WebApplication</code>, <code>WithHttpTransport</code>, <code>MapMcp("/mcp")</code>, authentication và authorization. Health/readiness không lộ secret hoặc dữ liệu organization.</li>
+<li>Connection factory cho HTTP lấy config/vault ở backend hoặc OBO identity. Không thay quy tắc explicit arguments của stdio khi chưa được yêu cầu.</li>
+<li>Nếu tools vẫn ở CLI assembly thì scan <strong>đúng assembly chứa tools</strong>; <code>WithToolsFromAssembly()</code> trên web assembly mới có thể bỏ sót. Filter hiện dùng <code>Assembly.GetExecutingAssembly()</code>, cần rà lại khi move code.</li>
+<li>ServerInstructions hiện chứa organization/environment cố định lúc startup. Với per-user/multi-environment cần xây context thích hợp hoặc dùng instructions chung và <code>whoami</code> để lấy context; không nhúng thông tin tenant khác.</li>
+<li>Không public mọi file/mutation tools trong lần thử đầu. Chỉ mở sau khi có storage isolation, schema compatibility và identity tests.</li>
+</ol>
+<h3>Khung minh họa, không phải patch có thể build ngay</h3>
+<pre>// ASP.NET Core host mới; auth, factory, policy và filtering phải được implement.
+var builder = WebApplication.CreateBuilder(args);
+
+// Register HTTP authentication/authorization.
+// Resolve Dataverse client per fixed application identity or per invocation user.
+// Register all adapters, resources, policy and tool filters from DevKit.
+
+builder.Services.AddMcpServer()
+    .WithHttpTransport()
+    .WithToolsFromAssembly(typeof(WhoAmITool).Assembly)
+    .WithResourcesFromAssembly(typeof(WhoAmITool).Assembly);
+
+var app = builder.Build();
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapMcp("/mcp").RequireAuthorization();
+app.Run();</pre>
+<p>Ví dụ chỉ mô tả cấu trúc. Cần đối chiếu overload/session options với package 2.2.0 và DI thực tế, thêm factory/policy/filter. <code>RequireAuthorization()</code> không tự triển khai API key validation. Trong application-user PoC có thể reuse registration singleton hiện hữu; trong OBO không gọi nguyên <code>RegisterSharedServices</code> để bind client mọi người.</p></section>
+
+<section id="studio"><h2>9. Cấu hình phía Copilot Studio</h2>
+<p>Sau khi endpoint hoạt động, dùng Tools → Add a tool → New tool → Model Context Protocol; nhập URL HTTPS, tên/mô tả, chọn authentication và tạo/chọn connection. Với OAuth manual, lấy callback URL để đăng ký. Custom connector có extension <code>x-ms-agentic-protocol: mcp-streamable-1.0</code>. DLP của Power Platform áp dụng cho connector/MCP. <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/mcp-add-existing-server-to-agent">[S1]</a></p>
+<p>Không mặc định Entra hỗ trợ DCR cho app này; manual OAuth/custom connector là hướng kiểm soát được khi chưa triển khai dynamic registration/discovery. Kết nối riêng cho DEV/UAT/PROD, tránh profile tự do do AI chọn. Connection reference trong solution được bind lại ở environment đích, không export credentials vào HTML/source.</p>
+<p>Phải chọn rõ user authentication hay maker/agent-author credentials ở chặng connector. Dùng maker credentials có thể làm người chat truy cập với quyền của maker; admin có thể hạn chế chế độ này. <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/configure-no-maker-authentication">[S13]</a></p>
+<p>Ngay cả khi connector dùng user auth, kiến trúc A vẫn gọi Dataverse dưới application user. Kiến trúc B mới truyền quyền user xuống Dataverse qua delegated token. Ghi rõ lựa chọn này trong deployment và audit.</p></section>
+
+<section id="plan"><h2>10. Lộ trình và ước lượng công sức</h2>
+<p><strong>Đây là ước lượng kỹ thuật từ source, chưa phải cam kết tiến độ.</strong> Giả định một engineer quen .NET/Entra/Dataverse, có sẵn tenant, quyền cấu hình và hosting; không tính chờ admin, procurement hoặc chính sách tổ chức.</p>
+<table><thead><tr><th>Mốc</th><th>Phạm vi</th><th>Ước lượng</th></tr></thead><tbody>
+<tr><td>PoC transport + application user</td><td>HTTP host, một environment, API key/header hoặc auth có sẵn, readonly, whoami/get_tables/query và Studio discovery.</td><td>Khoảng 2–4 ngày làm việc.</td></tr>
+<tr><td>Pilot nội bộ</td><td>Vault, Entra inbound auth, audit, schema/resource checks, publish channel, concurrency và error handling.</td><td>Thêm khoảng 4–8 ngày.</td></tr>
+<tr><td>Per-user OAuth/OBO</td><td>Registrations/consent, backend token acquisition, DI isolation, cache, 2-user tests, expiry và SSO/channel.</td><td>Thêm khoảng 5–10 ngày; có thể hơn do tenant policy.</td></tr>
+<tr><td>Toàn bộ file/mutation tools</td><td>Storage/restore, artifact delivery, schema khác biệt, long-running/retry và quyền mỗi action.</td><td>Khoảng 1–3 tuần bổ sung tùy các tool thật sự cần.</td></tr>
+</tbody></table>
+<p>Làm trước <code>whoami</code>, <code>get_tables</code>, <code>execute_fetchxml</code> với kết quả nhỏ; sau đó thử <code>execute_sql</code> nếu endpoint Dataverse tương ứng hỗ trợ. Chạy <code>readonly</code> và mutation policy chặn ghi trong thử nghiệm. Chưa nên bắt đầu bằng bulk create, upload hay publish toàn bộ.</p>
+<p><strong>Đề xuất quyết định:</strong> nếu mục tiêu là agent kỹ thuật nội bộ, chọn A để xác minh khả năng tích hợp trước. Nếu mục tiêu phục vụ nhiều business users có quyền khác nhau, chọn B ngay ở thiết kế pilot; không dùng shared app identity rồi hứa sẽ tự có per-user permissions.</p></section>
+
+<section id="verify"><h2>11. Tiêu chí nghiệm thu trước khi nói “port OK”</h2>
+<table><thead><tr><th>Nhóm kiểm tra</th><th>Điều kiện đạt</th></tr></thead><tbody>
+<tr><td>Transport</td><td>Initialize và version negotiation, tools/list, tools/call, resources/list/read qua HTTPS từ Copilot Studio; tên/tool schema không mất ngoài dự kiến.</td></tr>
+<tr><td>Connection A/B</td><td>whoami trả đúng org và downstream identity. Ghi riêng MCP caller và Dataverse effective caller; không lộ token.</td></tr>
+<tr><td>Hai người dùng song song</td><td>Trong OBO, A/B thấy đúng records/quyền riêng, không đổi CallerId/token/output của nhau. Test xen kẽ và concurrent requests.</td></tr>
+<tr><td>Quyền và policy</td><td>Thiếu token sai audience/tenant/scope bị từ chối trước tool; dry-run chặn mutation ở boundary; readonly không expose mutating methods.</td></tr>
+<tr><td>Tuổi thọ</td><td>Token expiry/revocation, secret rotation, host restart, nhiều replica và connection stale được xử lý đúng, không fallback identity.</td></tr>
+<tr><td>Files</td><td>Không đọc file client-local; không traversal/cross-user storage; artifact download được authorize và cleanup/retention rõ.</td></tr>
+<tr><td>Response/lỗi</td><td>Studio hiểu Success/Error/Partial + structured result; nested output/schema hoạt động; query/payload trong budget đo được.</td></tr>
+<tr><td>Ghi/bulk</td><td>Thao tác timeout/retry không tạo duplicate ngoài dự kiến; worker clones giữ đúng identity.</td></tr>
+<tr><td>Kênh publish</td><td>Test với end user mới trên kênh đích, chưa có connection; consent, share và DLP thực sự cho phép.</td></tr>
+<tr><td>Stdio regression</td><td>MCP local hiện hữu vẫn dùng explicit auth, cùng tool names/JSON/temp paths, version và build placeholder giữ nguyên.</td></tr>
+</tbody></table>
+<p>Khi triển khai source MCP, tuân thủ <code>AGENTS.md</code>: build CLI nhỏ nhất + focused tests; đọc workflow build-cli, rebuild/reinstall bằng release script, restart active connector, whoami và kiểm tra version/build/start time/assembly SHA với manifest. HTTP deployment cần kiểm tra artifact riêng. Báo cáo-only không yêu cầu build/install và lần nghiên cứu này không chạy chúng.</p></section>
+
+<section id="alternative"><h2>12. Có cần port nếu Microsoft đã có Dataverse MCP?</h2>
+<p>Microsoft có Dataverse MCP tích hợp vào Copilot Studio, cần environment cho phép client tương ứng và một Dataverse connection. Đây là lựa chọn nên thử nếu nhu cầu chủ yếu hỏi/tra cứu dữ liệu. <a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/data-platform-mcp-copilot-studio">[S15]</a></p>
+<p>Reference hiện gắn nhãn preview, liệt kê query/search/fetch, CRUD record và table/schema tools. Không có đủ bằng chứng để kết luận thay thế mọi DevKit tool; danh sách reference không liệt kê toàn bộ form/ribbon/webresource/report/role và runtime diagnostics mà DevKit cung cấp. Tool names/parameters preview có thể thay đổi. <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/mcp-dataverse">[S14]</a></p>
+<table><thead><tr><th>Mục tiêu</th><th>Hướng chọn</th></tr></thead><tbody>
+<tr><td>Hỏi dữ liệu, query và CRUD đơn giản</td><td>Đánh giá Dataverse MCP Microsoft hoặc connector chuẩn trước; xác nhận trạng thái preview và requirements tenant.</td></tr>
+<tr><td>Giữ DevKit tools, logic customization, diagnostics</td><td>Port DevKit HTTP host có giá trị; chủ động auth/storage/ops.</td></tr>
+<tr><td>Vài workflow nghiệp vụ cố định</td><td>Có thể REST/custom connector action riêng, giảm tool surface và schema tổng quát.</td></tr>
+</tbody></table>
+<div class="callout"><strong>Kết luận cho DevKit:</strong> Nên bổ sung HTTP host dùng chung tool layer, làm PoC một environment trước. Connection tới MCP được quản lý qua connector; connection tới Dataverse do backend quản lý. App credentials đặt trong vault; nếu cần quyền người chat thì backend phải có OBO và isolation thực sự. Khó nhất của production là identity, files và vận hành, không phải viết lại FetchXML hay metadata tools.</div></section>
+
+<section id="refs"><h2>13. Nguồn và giới hạn xác minh</h2>
+<p>Tài liệu được đọc ngày 30/09/2026. Ưu tiên Microsoft Learn, specification MCP và SDK chính thức. Một số Learn pages hiển thị banner yêu cầu authorization nhưng nội dung bài vẫn được trình duyệt nghiên cứu trả về; không coi banner là bằng chứng tính năng không dùng được. UI, rollout, licensing và channel support phải xác minh trong tenant triển khai.</p>
+<ol>
+<li id="s1"><a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/mcp-add-existing-server-to-agent">S1 — Connect an existing MCP server</a>: transport, wizard, auth, connector extension, DLP; cập nhật 28/05/2026.</li>
+<li><a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/agent-extend-action-mcp">S2 — Extend your agent with MCP</a>: orchestration/tools/resources; cập nhật 26/08/2026.</li>
+<li><a href="https://modelcontextprotocol.io/specification/2025-11-25/basic/transports">S3 — MCP transports, revision 2025-11-25</a>: nền tảng transport; version cụ thể cần negotiation khi implement.</li>
+<li><a href="https://github.com/modelcontextprotocol/csharp-sdk">S4 — Official MCP C# SDK</a>: HTTP/ASP.NET Core; main branch có thể khác package source 2.2.0.</li>
+<li><a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/advanced-custom-connector-on-behalf-of">S5 — Configure OBO for custom connectors</a>: connector-side setup; cập nhật 29/05/2026.</li>
+<li><a href="https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-on-behalf-of-flow">S6 — Entra OAuth OBO flow</a>: audience, middle-tier và delegated flow.</li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/api/microsoft.powerplatform.dataverse.client.serviceclient?view=dataverse-sdk-latest">S7 — ServiceClient reference</a>: external token callback/web/OBO constructor.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-platform/admin/manage-application-users">S8 — Manage application users</a>: app/managed identity mapping và roles.</li>
+<li><a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/mcp-troubleshooting">S9 — MCP troubleshooting</a>: schema caveats; cập nhật 19/08/2026.</li>
+<li><a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-connections">S10 — Configure and manage connections</a>: connection lifecycle; cập nhật 25/08/2026.</li>
+<li><a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/configure-enduser-authentication">S11 — User authentication for tools</a>: credential handling và channel support; cập nhật 07/04/2026.</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/app-service/app-service-key-vault-references">S12 — App Service Key Vault references</a>: secret resolution/refresh.</li>
+<li><a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/configure-no-maker-authentication">S13 — Control maker-provided credentials</a>: governance.</li>
+<li><a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/mcp-dataverse">S14 — Dataverse MCP reference (preview)</a>: tools và preview status; cập nhật 03/08/2026.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/data-platform-mcp-copilot-studio">S15 — Connect native Dataverse MCP to Studio</a>: prerequisites/setup; cập nhật 05/06/2026.</li>
+<li><a href="https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization">Bổ sung — MCP HTTP authorization specification</a>.</li>
+</ol>
+<p><strong>Những gì đã xác nhận:</strong> code transport stdio, dependencies, singleton DI, auth entry, impersonation, result shape, role gate, local filesystem behavior và đếm source attributes. <strong>Những gì là đề xuất:</strong> HTTP host, vault/profile registry, OBO/cache/scopes, storage và tiến độ. <strong>Những gì còn cần runtime test:</strong> schema chính xác SDK export, auth/channel tenant cụ thể, token-provider clone, streaming/session compatibility, latency/timeout và toàn bộ tool behavior trên Copilot Studio.</p>
+</section>
+<footer>Tạo theo yêu cầu lưu HTML ở folder Docs. Không thay đổi executable source, không deploy, không stage/commit/push. Các source links tương đối hoạt động khi mở file cùng repository.</footer>
+</main></body></html>
