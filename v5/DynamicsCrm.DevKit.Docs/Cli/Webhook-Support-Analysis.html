@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Webhook Support Analysis – DynamicsCrm.DevKit CLI</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1a1a2e;
+    --accent: #0078d4;
+    --accent-light: #e8f4fd;
+    --border: #d2d6dc;
+    --code-bg: #f6f8fa;
+    --warn-bg: #fff8e1;
+    --warn-border: #f9a825;
+    --success-bg: #e8f5e9;
+    --success-border: #43a047;
+    --danger-bg: #fce4ec;
+    --danger-border: #e53935;
+    --info-bg: #e3f2fd;
+    --info-border: #1976d2;
+    --section-bg: #fafbfc;
+    --header-gradient: linear-gradient(135deg, #0078d4 0%, #00b4d8 100%);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background: var(--bg);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+  }
+  header {
+    background: var(--header-gradient);
+    color: #fff;
+    padding: 40px 32px;
+    margin: 0 -24px 40px;
+    border-radius: 0 0 12px 12px;
+  }
+  header h1 { font-size: 2em; font-weight: 700; margin-bottom: 8px; }
+  header p { font-size: 1.05em; opacity: .92; max-width: 800px; }
+  header .meta { margin-top: 16px; font-size: .85em; opacity: .75; }
+
+  h2 { font-size: 1.45em; color: var(--accent); margin: 40px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); }
+  h3 { font-size: 1.15em; margin: 24px 0 10px; color: #333; }
+  h4 { font-size: 1em; margin: 16px 0 8px; color: #555; }
+  p, li { margin-bottom: 8px; }
+  ul, ol { padding-left: 24px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: .92em; }
+  th { background: var(--accent); color: #fff; padding: 10px 14px; text-align: left; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--section-bg); }
+
+  code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+    font-size: .88em;
+    color: #c7254e;
+  }
+  pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 18px 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: .85em;
+    line-height: 1.6;
+    margin: 12px 0;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  .kw { color: #569cd6; }
+  .str { color: #ce9178; }
+  .cmt { color: #6a9955; }
+  .tp { color: #4ec9b0; }
+  .num { color: #b5cea8; }
+
+  .callout {
+    padding: 16px 20px;
+    border-left: 4px solid;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+  }
+  .callout-info { background: var(--info-bg); border-color: var(--info-border); }
+  .callout-warn { background: var(--warn-bg); border-color: var(--warn-border); }
+  .callout-success { background: var(--success-bg); border-color: var(--success-border); }
+  .callout-danger { background: var(--danger-bg); border-color: var(--danger-border); }
+  .callout strong { display: block; margin-bottom: 4px; }
+
+  .flow-diagram {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0;
+    font-size: .9em;
+  }
+  .flow-box {
+    background: var(--accent-light);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 600;
+    text-align: center;
+    min-width: 100px;
+  }
+  .flow-box.new { background: #e8f5e9; border-color: #43a047; }
+  .flow-arrow { font-size: 1.4em; color: var(--accent); }
+
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 16px 0; }
+  .compare-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .compare-card h4 { background: var(--section-bg); padding: 10px 16px; margin: 0; border-bottom: 1px solid var(--border); }
+  .compare-card .body { padding: 12px 16px; }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .toc { background: var(--section-bg); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin: 0 0 32px; }
+  .toc h3 { margin-top: 0; }
+  .toc ol { counter-reset: toc; list-style: none; padding-left: 0; }
+  .toc li { counter-increment: toc; margin-bottom: 4px; }
+  .toc li::before { content: counter(toc) ". "; font-weight: 600; color: var(--accent); }
+  .toc a { font-weight: 500; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: .78em;
+    font-weight: 600;
+    vertical-align: middle;
+  }
+  .badge-new { background: #e8f5e9; color: #2e7d32; }
+  .badge-mod { background: #fff3e0; color: #e65100; }
+  .badge-exist { background: #e3f2fd; color: #1565c0; }
+
+  @media (max-width: 768px) {
+    .compare-grid { grid-template-columns: 1fr; }
+    header { padding: 24px 20px; }
+    body { padding: 0 12px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🔗 Webhook Support Analysis</h1>
+  <p>Phân tích chi tiết về Dataverse Webhooks và đề xuất mở rộng DynamicsCrm.DevKit CLI (<code>devkit server</code>) để hỗ trợ đăng ký, quản lý Webhook endpoints.</p>
+  <div class="meta">
+    Ngày tạo: 2026-09-30 &nbsp;|&nbsp;
+    Dựa trên: <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/use-webhooks" style="color:#fff;text-decoration:underline">Microsoft Learn – Use Webhooks</a>
+    &amp; <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/register-web-hook" style="color:#fff;text-decoration:underline">Register a Webhook</a>
+  </div>
+</header>
+
+<!-- ═══════════════════════════ TOC ═══════════════════════════ -->
+<nav class="toc">
+  <h3>📑 Mục lục</h3>
+  <ol>
+    <li><a href="#s1">Webhook trong Dataverse – Tổng quan</a></li>
+    <li><a href="#s2">Kiến trúc Dataverse: ServiceEndpoint + SdkMessageProcessingStep</a></li>
+    <li><a href="#s3">Phân tích CLI hiện tại – TaskServer</a></li>
+    <li><a href="#s4">Khoảng trống (Gap Analysis): Tại sao chưa hỗ trợ Webhook</a></li>
+    <li><a href="#s5">Đề xuất mở rộng CLI: Kiến trúc tổng thể</a></li>
+    <li><a href="#s6">Mở rộng CrmPluginRegistrationAttribute</a></li>
+    <li><a href="#s7">Mở rộng JSON config (DynamicsCrm.DevKit.Cli.json)</a></li>
+    <li><a href="#s8">Mở rộng TaskServer – Luồng deploy mới</a></li>
+    <li><a href="#s9">API Dataverse cần dùng</a></li>
+    <li><a href="#s10">MCP Tools – Đề xuất bổ sung</a></li>
+    <li><a href="#s11">So sánh Plugin vs Webhook Registration</a></li>
+    <li><a href="#s12">Rủi ro và lưu ý</a></li>
+    <li><a href="#s13">Lộ trình triển khai (Phased Roadmap)</a></li>
+  </ol>
+</nav>
+
+<!-- ═══════════════════════════ SECTION 1 ═══════════════════════════ -->
+<h2 id="s1">1. Webhook trong Dataverse – Tổng quan</h2>
+
+<p>Webhook là cơ chế cho phép Dataverse gửi HTTP POST request chứa execution context (JSON) đến một endpoint bên ngoài khi một event xảy ra (Create, Update, Delete, …). Khác với Azure Service Bus (queue-based), Webhook gửi trực tiếp, đơn giản hơn, nhưng giới hạn bởi throughput của endpoint nhận.</p>
+
+<h3>So sánh Webhook vs Azure Service Bus vs Plugin</h3>
+<table>
+  <tr>
+    <th>Tiêu chí</th>
+    <th>Plugin</th>
+    <th>Webhook</th>
+    <th>Azure Service Bus</th>
+  </tr>
+  <tr>
+    <td><strong>Chạy ở đâu</strong></td>
+    <td>Sandbox trong Dataverse</td>
+    <td>External HTTP endpoint</td>
+    <td>Azure Service Bus queue/topic</td>
+  </tr>
+  <tr>
+    <td><strong>Execution mode</strong></td>
+    <td>Sync &amp; Async</td>
+    <td>Sync &amp; Async</td>
+    <td>Chỉ Async</td>
+  </tr>
+  <tr>
+    <td><strong>Ngôn ngữ</strong></td>
+    <td>C# (.NET)</td>
+    <td>Bất kỳ (HTTP endpoint)</td>
+    <td>Bất kỳ (consumer)</td>
+  </tr>
+  <tr>
+    <td><strong>Payload</strong></td>
+    <td>IPluginExecutionContext</td>
+    <td>RemoteExecutionContext (JSON)</td>
+    <td>RemoteExecutionContext (JSON)</td>
+  </tr>
+  <tr>
+    <td><strong>Auth</strong></td>
+    <td>N/A (internal)</td>
+    <td>HttpHeader / WebhookKey / HttpQueryString</td>
+    <td>SAS token</td>
+  </tr>
+  <tr>
+    <td><strong>Timeout</strong></td>
+    <td>2 phút</td>
+    <td>60 giây</td>
+    <td>N/A (queue)</td>
+  </tr>
+  <tr>
+    <td><strong>Retry</strong></td>
+    <td>Không (fail = rollback sync)</td>
+    <td>1 lần retry (nếu 502/503/504)</td>
+    <td>Queue-based retry</td>
+  </tr>
+  <tr>
+    <td><strong>Đăng ký qua</strong></td>
+    <td>pluginassembly + plugintype + step</td>
+    <td><strong>serviceendpoint</strong> + step</td>
+    <td>serviceendpoint + step</td>
+  </tr>
+</table>
+
+<h3>Ba loại Authentication cho Webhook</h3>
+<table>
+  <tr>
+    <th>Type</th>
+    <th>Giá trị <code>authtype</code></th>
+    <th>Mô tả</th>
+    <th>Ví dụ</th>
+  </tr>
+  <tr>
+    <td><strong>HttpHeader</strong></td>
+    <td>4</td>
+    <td>Key-Value pairs trong HTTP header</td>
+    <td><code>Authorization: Bearer xxx</code></td>
+  </tr>
+  <tr>
+    <td><strong>WebhookKey</strong></td>
+    <td>5</td>
+    <td>Query string với key <code>code</code> (dùng cho Azure Functions)</td>
+    <td><code>?code=abc123</code></td>
+  </tr>
+  <tr>
+    <td><strong>HttpQueryString</strong></td>
+    <td>6</td>
+    <td>Custom key-value pairs trong query string</td>
+    <td><code>?key1=val1&amp;key2=val2</code></td>
+  </tr>
+</table>
+
+<h3>Dữ liệu Dataverse gửi đến Webhook</h3>
+<ul>
+  <li><strong>Headers:</strong> <code>x-ms-dynamics-organization</code>, <code>x-ms-dynamics-entity-name</code>, <code>x-ms-dynamics-request-name</code>, <code>x-ms-correlation-request-id</code>, <code>x-ms-dynamics-msg-size-exceeded</code> (khi payload &gt; 256KB)</li>
+  <li><strong>Body:</strong> JSON serialization của <code>RemoteExecutionContext</code> – chứa <code>InputParameters</code>, <code>OutputParameters</code>, <code>PreEntityImages</code>, <code>PostEntityImages</code>, <code>MessageName</code>, <code>PrimaryEntityName</code>, v.v.</li>
+  <li><strong>Query String:</strong> Chỉ chứa auth values (nếu dùng WebhookKey hoặc HttpQueryString)</li>
+</ul>
+
+<div class="callout callout-warn">
+  <strong>⚠️ Giới hạn quan trọng</strong>
+  <ul>
+    <li>Webhook chỉ hỗ trợ port <strong>80</strong> (HTTP) và <strong>443</strong> (HTTPS).</li>
+    <li>Khi payload &gt; 256KB, <code>ParentContext</code>, <code>InputParameters</code>, <code>PreEntityImages</code>, <code>PostEntityImages</code> bị loại bỏ.</li>
+    <li>Timeout 60 giây. Nếu không response hoặc status code ngoài <code>2xx</code> → fail. Retry chỉ với 502/503/504.</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════ SECTION 2 ═══════════════════════════ -->
+<h2 id="s2">2. Kiến trúc Dataverse: ServiceEndpoint + SdkMessageProcessingStep</h2>
+
+<h3>Mô hình Entity</h3>
+<p>Dataverse lưu trữ Webhook như một <strong>ServiceEndpoint</strong> record – đây là điểm khác biệt cốt lõi so với Plugin:</p>
+
+<div class="flow-diagram">
+  <div class="flow-box">ServiceEndpoint<br><small>(contract=8, webhook)</small></div>
+  <span class="flow-arrow">→</span>
+  <div class="flow-box">SdkMessageProcessingStep<br><small>(eventhandler → serviceendpoint)</small></div>
+  <span class="flow-arrow">→</span>
+  <div class="flow-box">SdkMessageProcessingStepImage<br><small>(optional pre/post images)</small></div>
+</div>
+
+<h3>ServiceEndpoint Entity – Các trường quan trọng</h3>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Mô tả</th></tr>
+  <tr>
+    <td><code>serviceendpointid</code></td>
+    <td>Guid</td>
+    <td>Primary key</td>
+  </tr>
+  <tr>
+    <td><code>name</code></td>
+    <td>String</td>
+    <td>Tên duy nhất mô tả webhook</td>
+  </tr>
+  <tr>
+    <td><code>contract</code></td>
+    <td>OptionSet</td>
+    <td><strong>8 = Webhook</strong> (1=Queue, 2=Topic, 7=EventHub, 9=EventGrid)</td>
+  </tr>
+  <tr>
+    <td><code>url</code></td>
+    <td>String</td>
+    <td>Endpoint URL (chỉ port 80/443)</td>
+  </tr>
+  <tr>
+    <td><code>authtype</code></td>
+    <td>OptionSet</td>
+    <td>4=HttpHeader, 5=WebhookKey, 6=HttpQueryString</td>
+  </tr>
+  <tr>
+    <td><code>authvalue</code></td>
+    <td>String</td>
+    <td>Giá trị auth (write-only, không thể retrieve sau khi set)</td>
+  </tr>
+  <tr>
+    <td><code>messageformat</code></td>
+    <td>OptionSet</td>
+    <td>Format body (thường JSON)</td>
+  </tr>
+  <tr>
+    <td><code>description</code></td>
+    <td>String</td>
+    <td>Mô tả</td>
+  </tr>
+</table>
+
+<h3>SdkMessageProcessingStep cho Webhook – Khác biệt với Plugin</h3>
+<table>
+  <tr><th>Field</th><th>Plugin Step</th><th>Webhook Step</th></tr>
+  <tr>
+    <td><code>plugintypeid</code></td>
+    <td>✅ Trỏ tới <code>plugintype</code></td>
+    <td>❌ NULL</td>
+  </tr>
+  <tr>
+    <td><code>eventhandler</code></td>
+    <td>Trỏ tới <code>plugintype</code></td>
+    <td>✅ <strong>Trỏ tới <code>serviceendpoint</code></strong></td>
+  </tr>
+  <tr>
+    <td><code>sdkmessageid</code></td>
+    <td>✅</td>
+    <td>✅ (cùng logic)</td>
+  </tr>
+  <tr>
+    <td><code>sdkmessagefilterid</code></td>
+    <td>✅</td>
+    <td>✅ (cùng logic)</td>
+  </tr>
+  <tr>
+    <td><code>stage</code></td>
+    <td>Pre/Post</td>
+    <td>Pre/Post</td>
+  </tr>
+  <tr>
+    <td><code>mode</code></td>
+    <td>Sync/Async</td>
+    <td>Sync/Async</td>
+  </tr>
+  <tr>
+    <td><code>configuration</code></td>
+    <td>Unsecure config</td>
+    <td><strong>Không hỗ trợ</strong> (không truyền configuration cho webhook)</td>
+  </tr>
+  <tr>
+    <td><code>filteringattributes</code></td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+</table>
+
+<div class="callout callout-info">
+  <strong>💡 Điểm mấu chốt</strong>
+  Webhook step dùng <code>eventhandler</code> (polymorphic lookup) trỏ tới <code>serviceendpoint</code> thay vì <code>plugintypeid</code> trỏ tới <code>plugintype</code>. Đây là thay đổi kiến trúc quan trọng nhất khi mở rộng TaskServer.
+</div>
+
+<!-- ═══════════════════════════ SECTION 3 ═══════════════════════════ -->
+<h2 id="s3">3. Phân tích CLI hiện tại – TaskServer</h2>
+
+<h3>3.1 Tổng quan TaskServer</h3>
+<p><strong>File:</strong> <code>DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs</code> (2,114 dòng)</p>
+<p>TaskServer là engine chính của lệnh <code>devkit server</code>, chịu trách nhiệm deploy toàn bộ server-side components vào Dataverse.</p>
+
+<h4>Luồng thực thi chính</h4>
+<div class="flow-diagram">
+  <div class="flow-box">RunAsync()</div>
+  <span class="flow-arrow">→</span>
+  <div class="flow-box">LoadAllObjectTypeCodeAsync()</div>
+  <span class="flow-arrow">→</span>
+  <div class="flow-box">DeployFilesAsync()</div>
+  <span class="flow-arrow">→</span>
+  <div class="flow-box">Foreach .dll/.nupkg</div>
+</div>
+<div class="flow-diagram">
+  <div class="flow-box">DeployAssemblyAsync()<br><small>pluginassembly</small></div>
+  <span class="flow-arrow">→</span>
+  <div class="flow-box">DeployPluginTypeAsync()<br><small>plugintype</small></div>
+  <span class="flow-arrow">→</span>
+  <div class="flow-box">DeployPluginStepAsync()<br><small>sdkmessageprocessingstep</small></div>
+  <span class="flow-arrow">→</span>
+  <div class="flow-box">DeployPluginImageAsync()<br><small>sdkmessageprocessingstepimage</small></div>
+</div>
+
+<h3>3.2 Các PluginType được hỗ trợ hiện tại</h3>
+<table>
+  <tr><th>PluginType Enum</th><th>Giá trị</th><th>Xử lý trong TaskServer</th></tr>
+  <tr><td>Plugin</td><td>0</td><td>DeployPluginStepAsync → DeployPluginImageAsync</td></tr>
+  <tr><td>Workflow</td><td>1</td><td>DeployPluginTypeAsync (chỉ type, không step)</td></tr>
+  <tr><td>CustomAction</td><td>2</td><td>DeployPluginStepAsync (giống Plugin)</td></tr>
+  <tr><td>DataProvider</td><td>3</td><td>RegisterDataProviderAsync (virtual table)</td></tr>
+  <tr><td>CustomApi</td><td>4</td><td>DeployCustomApiStepAsync</td></tr>
+  <tr><td>DataSource</td><td>5</td><td>Khai báo entity (metadata)</td></tr>
+</table>
+
+<h3>3.3 CrmPluginRegistrationAttribute – Mô hình khai báo</h3>
+<p><strong>File:</strong> <code>DynamicsCrm.DevKit.Shared/Models/CrmPluginRegistrationAttribute.cs</code></p>
+<p>Đây là attribute được developer đặt trên class Plugin/Workflow/CustomApi. TaskServer đọc attribute này từ assembly (.dll) và dùng nó để:</p>
+<ul>
+  <li>Tạo/cập nhật <code>plugintype</code> record</li>
+  <li>Tạo/cập nhật <code>sdkmessageprocessingstep</code> record</li>
+  <li>Tạo/cập nhật <code>sdkmessageprocessingstepimage</code> record</li>
+</ul>
+
+<h4>Các property quan trọng</h4>
+<pre><code><span class="kw">public class</span> <span class="tp">CrmPluginRegistrationAttribute</span> : <span class="tp">Attribute</span>
+{
+    <span class="kw">public</span> <span class="tp">PluginType</span> PluginType { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public string</span> Message { <span class="kw">get</span>; <span class="kw">set</span>; }          <span class="cmt">// Create, Update, Delete, ...</span>
+    <span class="kw">public string</span> EntityLogicalName { <span class="kw">get</span>; <span class="kw">set</span>; } <span class="cmt">// contact, account, ...</span>
+    <span class="kw">public string</span> FilteringAttributes { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> <span class="tp">StageEnum</span> Stage { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> <span class="tp">ExecutionModeEnum</span> ExecutionMode { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public int</span> ExecutionOrder { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public string</span> Image1Name { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="cmt">// ... Image1-4, SecureConfiguration, ...</span>
+}</code></pre>
+
+<h3>3.4 Điểm nối quan trọng – DeployPluginStepAsync (Line 1358)</h3>
+<p>Phương thức này tạo <code>sdkmessageprocessingstep</code> entity với:</p>
+<pre><code><span class="kw">var</span> pluginStep = <span class="kw">new</span> <span class="tp">Entity</span>(<span class="str">"sdkmessageprocessingstep"</span>)
+{
+    [<span class="str">"name"</span>] = attribute.Name,
+    [<span class="str">"configuration"</span>] = attribute.UnSecureConfiguration,
+    [<span class="str">"mode"</span>] = <span class="kw">new</span> <span class="tp">OptionSetValue</span>(...),
+    [<span class="str">"rank"</span>] = attribute.ExecutionOrder,
+    [<span class="str">"stage"</span>] = <span class="kw">new</span> <span class="tp">OptionSetValue</span>((<span class="kw">int</span>)attribute.Stage),
+    [<span class="str">"asyncautodelete"</span>] = attribute.DeleteAsyncOperation,
+    <span class="cmt">// ⚠️ HARDCODED: luôn trỏ tới plugintype</span>
+    [<span class="str">"plugintypeid"</span>] = <span class="kw">new</span> <span class="tp">EntityReference</span>(<span class="str">"plugintype"</span>, pluginTypeId),
+    [<span class="str">"sdkmessagefilterid"</span>] = sdkMessageFilterId,
+    [<span class="str">"sdkmessageid"</span>] = sdkMessageId,
+    [<span class="str">"filteringattributes"</span>] = attribute.FilteringAttributes,
+    <span class="cmt">// ...</span>
+};</code></pre>
+
+<div class="callout callout-danger">
+  <strong>🔴 Vấn đề cốt lõi</strong>
+  <code>plugintypeid</code> luôn trỏ tới <code>plugintype</code> – không bao giờ dùng <code>eventhandler</code> trỏ tới <code>serviceendpoint</code>. Đây chính là lý do TaskServer không hỗ trợ Webhook.
+</div>
+
+<h3>3.5 In-Memory Caches</h3>
+<table>
+  <tr><th>Cache</th><th>Dataverse Entity</th><th>Key Pattern</th></tr>
+  <tr><td><code>_PluginTypesCache</code></td><td>plugintype</td><td>typename</td></tr>
+  <tr><td><code>_PluginStepsCache</code></td><td>sdkmessageprocessingstep</td><td>{plugintypeid}-{name}</td></tr>
+  <tr><td><code>_PluginImagesCache</code></td><td>sdkmessageprocessingstepimage</td><td>{stepid}-{name}-{imageType}</td></tr>
+  <tr><td><code>_SecureEntitiesCache</code></td><td>sdkmessageprocessingstepsecureconfig</td><td>{stepid}</td></tr>
+  <tr><td><code>_SdkMessagesCache</code></td><td>sdkmessage</td><td>{entity}-{message}</td></tr>
+  <tr><td><code>_SdkMessageFiltersCache</code></td><td>sdkmessagefilter</td><td>{entity}-{message}</td></tr>
+  <tr><td><code>_CustomApisCache</code></td><td>customapi</td><td>uniquename</td></tr>
+  <tr><td class="badge badge-new" style="background:none;color:inherit"><em>Chưa có</em></td><td><strong>serviceendpoint</strong></td><td><em>N/A</em></td></tr>
+</table>
+
+<h3>3.6 JsonServer Model</h3>
+<pre><code><span class="kw">public class</span> <span class="tp">JsonServer</span>
+{
+    <span class="kw">public string</span> profile { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public string</span> folder { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public string</span> solution { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> List&lt;<span class="kw">string</span>&gt; includefiles { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> List&lt;<span class="kw">string</span>&gt; excludefiles { <span class="kw">get</span>; <span class="kw">set</span>; }
+}</code></pre>
+
+<!-- ═══════════════════════════ SECTION 4 ═══════════════════════════ -->
+<h2 id="s4">4. Gap Analysis: Tại sao chưa hỗ trợ Webhook</h2>
+
+<table>
+  <tr>
+    <th>#</th>
+    <th>Khía cạnh</th>
+    <th>Trạng thái hiện tại</th>
+    <th>Cần thay đổi</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>ServiceEndpoint entity</td>
+    <td>❌ Không có code nào tạo/cập nhật <code>serviceendpoint</code></td>
+    <td>Cần method <code>DeployServiceEndpointAsync()</code></td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Step registration</td>
+    <td>❌ <code>DeployPluginStepAsync</code> luôn dùng <code>plugintypeid</code></td>
+    <td>Cần nhánh logic dùng <code>eventhandler → serviceendpoint</code></td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>PluginType enum</td>
+    <td>❌ Không có giá trị <code>Webhook</code></td>
+    <td>Thêm <code>Webhook = 6</code></td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>CrmPluginRegistrationAttribute</td>
+    <td>❌ Thiếu <code>WebhookUrl</code>, <code>WebhookAuthType</code>, <code>WebhookAuthValue</code></td>
+    <td>Thêm properties cho webhook config</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>ServiceEndpoint cache</td>
+    <td>❌ Không tồn tại</td>
+    <td>Thêm <code>_ServiceEndpointsCache</code></td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>JSON config</td>
+    <td>❌ Không có section <code>webhooks</code></td>
+    <td>Tùy chọn A (attribute-driven) hoặc B (JSON-driven)</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>Keyword search "<code>webhook</code>"</td>
+    <td>❌ 0 kết quả trong toàn bộ source .cs</td>
+    <td>Tính năng hoàn toàn mới</td>
+  </tr>
+  <tr>
+    <td>8</td>
+    <td>MCP Tools</td>
+    <td>❌ Không có tool nào liên quan webhook</td>
+    <td>Thêm query/list/register tools</td>
+  </tr>
+</table>
+
+<!-- ═══════════════════════════ SECTION 5 ═══════════════════════════ -->
+<h2 id="s5">5. Đề xuất mở rộng CLI: Kiến trúc tổng thể</h2>
+
+<h3>Hai approach khả thi</h3>
+<div class="compare-grid">
+  <div class="compare-card">
+    <h4>🅰️ Approach A: Attribute-Driven (Khuyến nghị)</h4>
+    <div class="body">
+      <p><strong>Giống cách plugin hiện tại:</strong> Developer khai báo <code>[CrmPluginRegistration]</code> trên class, TaskServer đọc attribute từ assembly và tự động register webhook + step.</p>
+      <ul>
+        <li>✅ Nhất quán với mô hình hiện tại</li>
+        <li>✅ Webhook config nằm trong code → version controlled</li>
+        <li>✅ Tái sử dụng ~80% luồng xử lý của TaskServer</li>
+        <li>⚠️ Cần "dummy class" chỉ mang attribute (không có logic)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="compare-card">
+    <h4>🅱️ Approach B: JSON-Driven (Config only)</h4>
+    <div class="body">
+      <p><strong>Webhook config nằm trong JSON file:</strong> Không cần assembly, khai báo endpoint + steps trực tiếp trong <code>DynamicsCrm.DevKit.Cli.json</code>.</p>
+      <ul>
+        <li>✅ Không cần compile assembly</li>
+        <li>✅ Phù hợp với team không dùng C#</li>
+        <li>⚠️ Khác biệt kiến trúc so với plugin/server flow</li>
+        <li>⚠️ Cần command hoàn toàn mới (e.g., <code>devkit webhook</code>)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="callout callout-success">
+  <strong>✅ Khuyến nghị: Kết hợp cả hai</strong>
+  <p><strong>Approach A (primary):</strong> Mở rộng TaskServer + <code>CrmPluginRegistrationAttribute</code> để developer khai báo webhook trên class – giữ nguyên trải nghiệm <code>devkit server</code>.</p>
+  <p><strong>Approach B (secondary):</strong> Thêm JSON section <code>"webhooks"</code> cho trường hợp chỉ cần register webhook endpoint mà không cần assembly. Xử lý trước khi deploy .dll/.nupkg trong <code>RunAsync()</code>.</p>
+</div>
+
+<!-- ═══════════════════════════ SECTION 6 ═══════════════════════════ -->
+<h2 id="s6">6. Mở rộng CrmPluginRegistrationAttribute <span class="badge badge-mod">Modified</span></h2>
+
+<h3>6.1 Thêm giá trị PluginType</h3>
+<pre><code><span class="kw">public enum</span> <span class="tp">PluginType</span>
+{
+    Plugin = <span class="num">0</span>,
+    Workflow = <span class="num">1</span>,
+    CustomAction = <span class="num">2</span>,
+    DataProvider = <span class="num">3</span>,
+    CustomApi = <span class="num">4</span>,
+    DataSource = <span class="num">5</span>,
+    <span class="cmt">// ═══ MỚI ═══</span>
+    Webhook = <span class="num">6</span>
+}</code></pre>
+
+<h3>6.2 Thêm enum WebhookAuthType</h3>
+<pre><code><span class="kw">public enum</span> <span class="tp">WebhookAuthTypeEnum</span>
+{
+    HttpHeader = <span class="num">4</span>,
+    WebhookKey = <span class="num">5</span>,
+    HttpQueryString = <span class="num">6</span>
+}</code></pre>
+
+<h3>6.3 Thêm properties vào CrmPluginRegistrationAttribute</h3>
+<pre><code><span class="cmt">// ═══ Webhook-specific properties ═══</span>
+<span class="kw">public string</span> WebhookName { <span class="kw">get</span>; <span class="kw">set</span>; } = <span class="str">""</span>;
+<span class="kw">public string</span> WebhookUrl { <span class="kw">get</span>; <span class="kw">set</span>; } = <span class="str">""</span>;
+<span class="kw">public</span> <span class="tp">WebhookAuthTypeEnum</span> WebhookAuthType { <span class="kw">get</span>; <span class="kw">set</span>; }
+    = <span class="tp">WebhookAuthTypeEnum</span>.HttpHeader;
+<span class="kw">public string</span> WebhookAuthValue { <span class="kw">get</span>; <span class="kw">set</span>; } = <span class="str">""</span>;
+<span class="cmt">// Mô tả cho ServiceEndpoint</span>
+<span class="kw">public string</span> WebhookDescription { <span class="kw">get</span>; <span class="kw">set</span>; } = <span class="str">""</span>;</code></pre>
+
+<h3>6.4 Ví dụ sử dụng trên class</h3>
+<pre><code><span class="cmt">// Khai báo một Webhook step cho entity "contact" message "Update"</span>
+[<span class="tp">CrmPluginRegistration</span>(
+    PluginType = <span class="tp">PluginType</span>.Webhook,
+    Message = <span class="str">"Update"</span>,
+    EntityLogicalName = <span class="str">"contact"</span>,
+    FilteringAttributes = <span class="str">"firstname,lastname"</span>,
+    Stage = <span class="tp">StageEnum</span>.PostOperation,
+    ExecutionMode = <span class="tp">ExecutionModeEnum</span>.Asynchronous,
+    Name = <span class="str">"Contact Update → Azure Function"</span>,
+    WebhookName = <span class="str">"MyAzureFunction"</span>,
+    WebhookUrl = <span class="str">"https://myfunc.azurewebsites.net/api/ContactUpdate"</span>,
+    WebhookAuthType = <span class="tp">WebhookAuthTypeEnum</span>.WebhookKey,
+    WebhookAuthValue = <span class="str">"my-function-key-here"</span>
+)]
+<span class="kw">public class</span> <span class="tp">ContactUpdateWebhook</span> { }
+<span class="cmt">// Class rỗng – chỉ mang metadata, không cần logic</span></code></pre>
+
+<!-- ═══════════════════════════ SECTION 7 ═══════════════════════════ -->
+<h2 id="s7">7. Mở rộng JSON config (DynamicsCrm.DevKit.Cli.json)</h2>
+
+<h3>Approach A – Webhook trong section "servers"</h3>
+<p>Không cần thay đổi JSON – webhook config nằm trong attribute trên class, assembly nằm trong <code>folder</code>.</p>
+
+<h3>Approach B – Section "webhooks" mới (Optional)</h3>
+<pre><code>{
+  <span class="str">"webhooks"</span>: [
+    {
+      <span class="str">"profile"</span>: <span class="str">"DEV"</span>,
+      <span class="str">"solution"</span>: <span class="str">"MySolution"</span>,
+      <span class="str">"endpoints"</span>: [
+        {
+          <span class="str">"name"</span>: <span class="str">"MyAzureFunction"</span>,
+          <span class="str">"url"</span>: <span class="str">"https://myfunc.azurewebsites.net/api/webhook"</span>,
+          <span class="str">"authtype"</span>: <span class="str">"WebhookKey"</span>,
+          <span class="str">"authvalue"</span>: <span class="str">"my-function-key"</span>,
+          <span class="str">"steps"</span>: [
+            {
+              <span class="str">"name"</span>: <span class="str">"Contact Create → Azure Function"</span>,
+              <span class="str">"message"</span>: <span class="str">"Create"</span>,
+              <span class="str">"entity"</span>: <span class="str">"contact"</span>,
+              <span class="str">"stage"</span>: <span class="str">"PostOperation"</span>,
+              <span class="str">"mode"</span>: <span class="str">"Asynchronous"</span>,
+              <span class="str">"filteringattributes"</span>: <span class="str">""</span>,
+              <span class="str">"executionorder"</span>: <span class="num">1</span>,
+              <span class="str">"deleteasyncoperation"</span>: <span class="kw">true</span>
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}</code></pre>
+
+<!-- ═══════════════════════════ SECTION 8 ═══════════════════════════ -->
+<h2 id="s8">8. Mở rộng TaskServer – Luồng deploy mới</h2>
+
+<h3>8.1 Luồng deploy webhook (Approach A – Attribute-Driven)</h3>
+<div class="flow-diagram">
+  <div class="flow-box">GetTypes(file)</div>
+  <span class="flow-arrow">→</span>
+  <div class="flow-box">Filter PluginType.Webhook</div>
+  <span class="flow-arrow">→</span>
+  <div class="flow-box new">DeployServiceEndpointAsync()<br><small>serviceendpoint (contract=8)</small></div>
+  <span class="flow-arrow">→</span>
+  <div class="flow-box new">DeployWebhookStepAsync()<br><small>step (eventhandler)</small></div>
+  <span class="flow-arrow">→</span>
+  <div class="flow-box">DeployPluginImageAsync()<br><small>(reuse existing)</small></div>
+</div>
+
+<h3>8.2 Methods cần thêm vào TaskServer</h3>
+<table>
+  <tr>
+    <th>Method</th>
+    <th>Trạng thái</th>
+    <th>Mô tả</th>
+  </tr>
+  <tr>
+    <td><code>LoadAllServiceEndpointsAsync()</code></td>
+    <td><span class="badge badge-new">NEW</span></td>
+    <td>Load cache <code>_ServiceEndpointsCache</code> bằng FetchXML lọc <code>contract = 8</code></td>
+  </tr>
+  <tr>
+    <td><code>DeployServiceEndpointAsync()</code></td>
+    <td><span class="badge badge-new">NEW</span></td>
+    <td>Create/Update <code>serviceendpoint</code> record (name, url, authtype, authvalue, contract=8)</td>
+  </tr>
+  <tr>
+    <td><code>DeployWebhookStepAsync()</code></td>
+    <td><span class="badge badge-new">NEW</span></td>
+    <td>Tạo <code>sdkmessageprocessingstep</code> với <code>eventhandler → serviceendpoint</code> thay vì <code>plugintypeid</code></td>
+  </tr>
+  <tr>
+    <td><code>UnregisterServiceEndpointAsync()</code></td>
+    <td><span class="badge badge-new">NEW</span></td>
+    <td>Xóa serviceendpoint + tất cả steps liên quan</td>
+  </tr>
+  <tr>
+    <td><code>DeployFileAsync()</code></td>
+    <td><span class="badge badge-mod">MOD</span></td>
+    <td>Thêm nhánh <code>case PluginType.Webhook:</code> trong switch (line ~994)</td>
+  </tr>
+  <tr>
+    <td><code>IsValidTypes()</code></td>
+    <td><span class="badge badge-mod">MOD</span></td>
+    <td>Cho phép <code>PluginType.Webhook</code> có nhiều attribute (mỗi attribute = 1 step trên cùng endpoint)</td>
+  </tr>
+  <tr>
+    <td><code>GetTypes()</code></td>
+    <td><span class="badge badge-exist">KEEP</span></td>
+    <td>Không cần thay đổi – đã tìm tất cả class có <code>CrmPluginRegistrationAttribute</code></td>
+  </tr>
+</table>
+
+<h3>8.3 Pseudo-code cho DeployServiceEndpointAsync</h3>
+<pre><code><span class="kw">private async</span> Task&lt;<span class="tp">Guid</span>?&gt; DeployServiceEndpointAsync(
+    <span class="tp">CrmPluginRegistrationAttribute</span> attribute)
+{
+    <span class="cmt">// 1. Tìm existing endpoint bằng name</span>
+    <span class="kw">var</span> existing = _ServiceEndpointsCache
+        .FirstOrDefault(x =&gt; x.Key == attribute.WebhookName);
+
+    <span class="kw">var</span> endpoint = <span class="kw">new</span> <span class="tp">Entity</span>(<span class="str">"serviceendpoint"</span>)
+    {
+        [<span class="str">"name"</span>]       = attribute.WebhookName,
+        [<span class="str">"url"</span>]        = attribute.WebhookUrl,
+        [<span class="str">"contract"</span>]   = <span class="kw">new</span> <span class="tp">OptionSetValue</span>(<span class="num">8</span>),  <span class="cmt">// Webhook</span>
+        [<span class="str">"authtype"</span>]   = <span class="kw">new</span> <span class="tp">OptionSetValue</span>(
+            (<span class="kw">int</span>)attribute.WebhookAuthType),
+        [<span class="str">"authvalue"</span>]  = attribute.WebhookAuthValue,
+    };
+
+    <span class="kw">if</span> (existing.Value == <span class="kw">null</span>)
+    {
+        <span class="cmt">// CREATE</span>
+        <span class="kw">var</span> request = <span class="kw">new</span> <span class="tp">CreateRequest</span> { Target = endpoint };
+        request.Parameters.Add(<span class="str">"SolutionUniqueName"</span>, Json.solution);
+        <span class="kw">var</span> response = <span class="kw">await</span> OrgServiceAsync.ExecuteAsync(request);
+        <span class="kw">return</span> ((<span class="tp">CreateResponse</span>)response).id;
+    }
+    <span class="kw">else</span>
+    {
+        <span class="cmt">// UPDATE (url hoặc authtype thay đổi)</span>
+        endpoint[<span class="str">"serviceendpointid"</span>] = existing.Value.Id;
+        <span class="kw">var</span> request = <span class="kw">new</span> <span class="tp">UpdateRequest</span> { Target = endpoint };
+        request.Parameters.Add(<span class="str">"SolutionUniqueName"</span>, Json.solution);
+        <span class="kw">await</span> OrgServiceAsync.ExecuteAsync(request);
+        <span class="kw">return</span> existing.Value.Id;
+    }
+}</code></pre>
+
+<h3>8.4 Pseudo-code cho DeployWebhookStepAsync</h3>
+<pre><code><span class="kw">private async</span> Task&lt;<span class="tp">Guid</span>?&gt; DeployWebhookStepAsync(
+    <span class="tp">Guid</span> serviceEndpointId,
+    <span class="tp">CrmPluginRegistrationAttribute</span> attribute)
+{
+    <span class="kw">var</span> sdkMessageFilterId = GetSdkMessageFilterId(
+        attribute.EntityLogicalName, attribute.Message);
+    <span class="kw">var</span> sdkMessageId = GetSdkMessageId(
+        attribute.EntityLogicalName, attribute.Message);
+
+    <span class="kw">var</span> step = <span class="kw">new</span> <span class="tp">Entity</span>(<span class="str">"sdkmessageprocessingstep"</span>)
+    {
+        [<span class="str">"name"</span>] = attribute.Name,
+        [<span class="str">"mode"</span>] = <span class="kw">new</span> <span class="tp">OptionSetValue</span>(
+            attribute.ExecutionMode ==
+                <span class="tp">ExecutionModeEnum</span>.Asynchronous ? <span class="num">1</span> : <span class="num">0</span>),
+        [<span class="str">"rank"</span>] = attribute.ExecutionOrder,
+        [<span class="str">"stage"</span>] = <span class="kw">new</span> <span class="tp">OptionSetValue</span>((<span class="kw">int</span>)attribute.Stage),
+        [<span class="str">"asyncautodelete"</span>] = attribute.DeleteAsyncOperation,
+        [<span class="str">"sdkmessagefilterid"</span>] = sdkMessageFilterId,
+        [<span class="str">"sdkmessageid"</span>] = sdkMessageId,
+        [<span class="str">"filteringattributes"</span>] =
+            attribute.FilteringAttributes?.Replace(<span class="str">" "</span>, <span class="str">""</span>),
+        [<span class="str">"description"</span>] = attribute.Description,
+        <span class="cmt">// ⭐ KHÁC BIỆT: dùng eventhandler thay vì plugintypeid</span>
+        [<span class="str">"eventhandler"</span>] = <span class="kw">new</span> <span class="tp">EntityReference</span>(
+            <span class="str">"serviceendpoint"</span>, serviceEndpointId),
+    };
+    <span class="cmt">// Không set plugintypeid!</span>
+    <span class="cmt">// Không set configuration (webhook không hỗ trợ)</span>
+    <span class="cmt">// ... Create/Update logic tương tự DeployPluginStepAsync</span>
+}</code></pre>
+
+<h3>8.5 Thay đổi trong DeployFileAsync (Line ~994)</h3>
+<pre><code><span class="kw">foreach</span> (<span class="kw">var</span> attribute <span class="kw">in</span> attributes)
+{
+    <span class="kw">switch</span> (attribute.PluginType)
+    {
+        <span class="kw">case</span> <span class="tp">PluginType</span>.Plugin:
+        <span class="kw">case</span> <span class="tp">PluginType</span>.CustomAction:
+            <span class="cmt">// ... existing code ...</span>
+            <span class="kw">break</span>;
+
+        <span class="cmt">// ═══ MỚI ═══</span>
+        <span class="kw">case</span> <span class="tp">PluginType</span>.Webhook:
+            <span class="kw">var</span> endpointId = <span class="kw">await</span> DeployServiceEndpointAsync(attribute);
+            <span class="kw">if</span> (endpointId == <span class="kw">null</span>) <span class="kw">return</span>;
+            <span class="kw">var</span> whStepId = <span class="kw">await</span> DeployWebhookStepAsync(
+                endpointId.Value, attribute);
+            <span class="kw">if</span> (whStepId == <span class="kw">null</span>) <span class="kw">return</span>;
+            <span class="kw">if</span> (HasPluginImage(attribute))
+            {
+                <span class="kw">await</span> DeployPluginImageAsync(whStepId.Value, attribute);
+            }
+            <span class="kw">break</span>;
+
+        <span class="kw">case</span> <span class="tp">PluginType</span>.DataProvider:
+            <span class="cmt">// ... existing code ...</span>
+            <span class="kw">break</span>;
+    }
+}</code></pre>
+
+<!-- ═══════════════════════════ SECTION 9 ═══════════════════════════ -->
+<h2 id="s9">9. API Dataverse cần dùng</h2>
+
+<h3>9.1 Query Webhook registrations</h3>
+<pre><code><span class="cmt">&lt;!-- FetchXML: Lấy tất cả ServiceEndpoint loại Webhook --&gt;</span>
+&lt;fetch&gt;
+  &lt;entity name=<span class="str">"serviceendpoint"</span>&gt;
+    &lt;attribute name=<span class="str">"serviceendpointid"</span> /&gt;
+    &lt;attribute name=<span class="str">"name"</span> /&gt;
+    &lt;attribute name=<span class="str">"url"</span> /&gt;
+    &lt;attribute name=<span class="str">"authtype"</span> /&gt;
+    &lt;filter&gt;
+      &lt;condition attribute=<span class="str">"contract"</span>
+               operator=<span class="str">"eq"</span> value=<span class="str">"8"</span> /&gt;
+    &lt;/filter&gt;
+  &lt;/entity&gt;
+&lt;/fetch&gt;</code></pre>
+
+<h3>9.2 Query Steps cho một Webhook</h3>
+<pre><code><span class="cmt">&lt;!-- FetchXML: Lấy steps của một ServiceEndpoint --&gt;</span>
+&lt;fetch&gt;
+  &lt;entity name=<span class="str">"sdkmessageprocessingstep"</span>&gt;
+    &lt;attribute name=<span class="str">"name"</span> /&gt;
+    &lt;attribute name=<span class="str">"filteringattributes"</span> /&gt;
+    &lt;attribute name=<span class="str">"stage"</span> /&gt;
+    &lt;attribute name=<span class="str">"mode"</span> /&gt;
+    &lt;attribute name=<span class="str">"description"</span> /&gt;
+    &lt;link-entity name=<span class="str">"serviceendpoint"</span>
+                 from=<span class="str">"serviceendpointid"</span>
+                 to=<span class="str">"eventhandler"</span>
+                 link-type=<span class="str">"inner"</span>&gt;
+      &lt;attribute name=<span class="str">"name"</span> /&gt;
+      &lt;filter&gt;
+        &lt;condition attribute=<span class="str">"serviceendpointid"</span>
+                 operator=<span class="str">"eq"</span>
+                 value=<span class="str">"{serviceendpointid}"</span> /&gt;
+      &lt;/filter&gt;
+    &lt;/link-entity&gt;
+    &lt;link-entity name=<span class="str">"sdkmessagefilter"</span>
+                 from=<span class="str">"sdkmessagefilterid"</span>
+                 to=<span class="str">"sdkmessagefilterid"</span>
+                 link-type=<span class="str">"inner"</span>&gt;
+      &lt;attribute name=<span class="str">"primaryobjecttypecode"</span> /&gt;
+    &lt;/link-entity&gt;
+    &lt;link-entity name=<span class="str">"sdkmessage"</span>
+                 from=<span class="str">"sdkmessageid"</span>
+                 to=<span class="str">"sdkmessageid"</span>
+                 link-type=<span class="str">"inner"</span>&gt;
+      &lt;attribute name=<span class="str">"name"</span> /&gt;
+    &lt;/link-entity&gt;
+  &lt;/entity&gt;
+&lt;/fetch&gt;</code></pre>
+
+<h3>9.3 Query failed async jobs cho Webhook step</h3>
+<pre><code><span class="cmt">&lt;!-- FetchXML: Lấy lỗi của một webhook step --&gt;</span>
+&lt;fetch&gt;
+  &lt;entity name=<span class="str">"asyncoperation"</span>&gt;
+    &lt;attribute name=<span class="str">"name"</span> /&gt;
+    &lt;attribute name=<span class="str">"friendlymessage"</span> /&gt;
+    &lt;attribute name=<span class="str">"errorcode"</span> /&gt;
+    &lt;attribute name=<span class="str">"message"</span> /&gt;
+    &lt;attribute name=<span class="str">"completedon"</span> /&gt;
+    &lt;filter&gt;
+      &lt;condition attribute=<span class="str">"owningextensionid"</span>
+               operator=<span class="str">"eq"</span>
+               value=<span class="str">"{stepid}"</span> /&gt;
+      &lt;condition attribute=<span class="str">"statuscode"</span>
+               operator=<span class="str">"eq"</span> value=<span class="str">"31"</span> /&gt;
+    &lt;/filter&gt;
+    &lt;order attribute=<span class="str">"completedon"</span> descending=<span class="str">"true"</span> /&gt;
+  &lt;/entity&gt;
+&lt;/fetch&gt;</code></pre>
+
+<!-- ═══════════════════════════ SECTION 10 ═══════════════════════════ -->
+<h2 id="s10">10. MCP Tools – Đề xuất bổ sung</h2>
+
+<table>
+  <tr><th>Tool Name</th><th>ReadOnly</th><th>Mô tả</th></tr>
+  <tr>
+    <td><code>ListWebhooks</code></td>
+    <td>✅ Yes</td>
+    <td>Liệt kê tất cả ServiceEndpoint có <code>contract=8</code> và steps kèm theo</td>
+  </tr>
+  <tr>
+    <td><code>GetWebhookDetails</code></td>
+    <td>✅ Yes</td>
+    <td>Chi tiết 1 webhook: endpoint info, steps, images, recent async job errors</td>
+  </tr>
+  <tr>
+    <td><code>RegisterWebhook</code></td>
+    <td>❌ No</td>
+    <td>Tạo ServiceEndpoint + Step(s) mới</td>
+  </tr>
+  <tr>
+    <td><code>UpdateWebhook</code></td>
+    <td>❌ No</td>
+    <td>Cập nhật URL, auth, hoặc thêm/xóa steps</td>
+  </tr>
+  <tr>
+    <td><code>DeleteWebhook</code></td>
+    <td>❌ No</td>
+    <td>Xóa ServiceEndpoint và tất cả steps liên quan</td>
+  </tr>
+  <tr>
+    <td><code>TestWebhook</code></td>
+    <td>❌ No</td>
+    <td>Gửi test request đến URL endpoint để kiểm tra connectivity</td>
+  </tr>
+</table>
+
+<!-- ═══════════════════════════ SECTION 11 ═══════════════════════════ -->
+<h2 id="s11">11. So sánh Plugin vs Webhook Registration Flow</h2>
+
+<div class="compare-grid">
+  <div class="compare-card">
+    <h4>🔌 Plugin Registration (Hiện tại)</h4>
+    <div class="body">
+      <ol>
+        <li><code>pluginassembly</code> → Upload DLL content</li>
+        <li><code>plugintype</code> → Register class name</li>
+        <li><code>sdkmessageprocessingstep</code>
+          <br>→ <code>plugintypeid</code> trỏ tới <code>plugintype</code></li>
+        <li><code>sdkmessageprocessingstepimage</code> → Pre/Post images</li>
+      </ol>
+      <p><strong>Cần assembly:</strong> ✅ Bắt buộc</p>
+      <p><strong>Endpoint ngoài:</strong> ❌ Không</p>
+    </div>
+  </div>
+  <div class="compare-card">
+    <h4>🔗 Webhook Registration (Đề xuất)</h4>
+    <div class="body">
+      <ol>
+        <li><code>serviceendpoint</code> → Register URL + auth<br><small>(contract=8)</small></li>
+        <li><em>Không cần pluginassembly/plugintype</em></li>
+        <li><code>sdkmessageprocessingstep</code>
+          <br>→ <code>eventhandler</code> trỏ tới <code>serviceendpoint</code></li>
+        <li><code>sdkmessageprocessingstepimage</code> → Pre/Post images</li>
+      </ol>
+      <p><strong>Cần assembly:</strong> ❌ Không bắt buộc</p>
+      <p><strong>Endpoint ngoài:</strong> ✅ HTTP endpoint</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ SECTION 12 ═══════════════════════════ -->
+<h2 id="s12">12. Rủi ro và lưu ý</h2>
+
+<div class="callout callout-warn">
+  <strong>⚠️ Bảo mật AuthValue</strong>
+  <p><code>authvalue</code> là write-only – sau khi set không thể retrieve lại từ Dataverse. Cần:</p>
+  <ul>
+    <li>Không log giá trị <code>authvalue</code> ra console</li>
+    <li>Cân nhắc đọc từ biến môi trường hoặc .env thay vì hardcode trong attribute</li>
+    <li>Khi cập nhật endpoint, luôn gửi lại <code>authvalue</code> (không thể kiểm tra giá trị cũ)</li>
+  </ul>
+</div>
+
+<div class="callout callout-warn">
+  <strong>⚠️ Change Detection cho ServiceEndpoint</strong>
+  <p>Không thể so sánh <code>authvalue</code> cũ vs mới (vì không đọc được giá trị cũ). Chiến lược:</p>
+  <ul>
+    <li>So sánh <code>url</code> và <code>authtype</code> để quyết định update</li>
+    <li>Luôn gửi <code>authvalue</code> trong mọi update request (force update)</li>
+    <li>Hoặc: chỉ update khi user explicitly request (flag <code>--force-auth-update</code>)</li>
+  </ul>
+</div>
+
+<div class="callout callout-info">
+  <strong>💡 Webhook class "rỗng"</strong>
+  <p>Với Approach A (attribute-driven), class Webhook chỉ mang metadata – không cần kế thừa <code>IPlugin</code> hay <code>CodeActivity</code>. Cần đảm bảo:</p>
+  <ul>
+    <li><code>GetTypes()</code> vẫn tìm được class này (đã OK vì chỉ check <code>CrmPluginRegistrationAttribute.Name</code>)</li>
+    <li><code>DeployPluginTypeAsync()</code> KHÔNG được gọi cho Webhook type (không cần <code>plugintype</code> record)</li>
+    <li><code>DeployAssemblyAsync()</code> cũng KHÔNG bắt buộc – nhưng nếu webhook class nằm chung DLL với plugin thì vẫn deploy assembly bình thường</li>
+  </ul>
+</div>
+
+<div class="callout callout-danger">
+  <strong>🔴 Không hỗ trợ Unsecure/Secure Configuration</strong>
+  <p>Webhook steps không hỗ trợ <code>configuration</code> (unsecure) hay <code>sdkmessageprocessingstepsecureconfigid</code>. Nếu developer set các giá trị này trên Webhook attribute, CLI nên bỏ qua và cảnh báo.</p>
+</div>
+
+<!-- ═══════════════════════════ SECTION 13 ═══════════════════════════ -->
+<h2 id="s13">13. Lộ trình triển khai (Phased Roadmap)</h2>
+
+<table>
+  <tr>
+    <th>Phase</th>
+    <th>Mô tả</th>
+    <th>File cần thay đổi</th>
+    <th>Ước lượng</th>
+  </tr>
+  <tr>
+    <td><strong>Phase 1</strong><br>Model &amp; Enum</td>
+    <td>
+      Thêm <code>PluginType.Webhook</code>, <code>WebhookAuthTypeEnum</code>, properties mới vào <code>CrmPluginRegistrationAttribute</code>
+    </td>
+    <td>
+      <code>CrmPluginRegistrationAttribute.cs</code><br>
+      <code>Helper.cs</code> (ConvertAttributeToCrmPluginRegistration)
+    </td>
+    <td>Nhỏ</td>
+  </tr>
+  <tr>
+    <td><strong>Phase 2</strong><br>ServiceEndpoint CRUD</td>
+    <td>
+      Thêm <code>_ServiceEndpointsCache</code>, <code>LoadAllServiceEndpointsAsync()</code>, <code>DeployServiceEndpointAsync()</code>, <code>UnregisterServiceEndpointAsync()</code>
+    </td>
+    <td>
+      <code>TaskServer.cs</code>
+    </td>
+    <td>Trung bình</td>
+  </tr>
+  <tr>
+    <td><strong>Phase 3</strong><br>Webhook Step Registration</td>
+    <td>
+      Thêm <code>DeployWebhookStepAsync()</code>, sửa <code>DeployFileAsync()</code> switch, sửa validation
+    </td>
+    <td>
+      <code>TaskServer.cs</code><br>
+      <code>IsValidTypes()</code>
+    </td>
+    <td>Trung bình</td>
+  </tr>
+  <tr>
+    <td><strong>Phase 4</strong><br>JSON Config (Optional)</td>
+    <td>
+      Thêm model <code>JsonWebhook</code>, section <code>"webhooks"</code> trong <code>Json</code> class, xử lý trong <code>RunAsync()</code>
+    </td>
+    <td>
+      <code>JsonServer.cs</code> hoặc mới <code>JsonWebhook.cs</code><br>
+      <code>Json.cs</code><br>
+      <code>TaskServer.cs</code>
+    </td>
+    <td>Nhỏ–Trung bình</td>
+  </tr>
+  <tr>
+    <td><strong>Phase 5</strong><br>MCP Tools</td>
+    <td>
+      Thêm <code>ListWebhooksTool</code>, <code>GetWebhookDetailsTool</code> (readonly) và <code>RegisterWebhookTool</code>, <code>DeleteWebhookTool</code> (write)
+    </td>
+    <td>
+      <code>DynamicsCrm.DevKit.Cli/Mcp/Tools/</code><br>
+      <code>McpServerHost.cs</code>
+    </td>
+    <td>Trung bình</td>
+  </tr>
+  <tr>
+    <td><strong>Phase 6</strong><br>Unit Tests</td>
+    <td>
+      Tests cho ServiceEndpoint CRUD, Webhook step registration, validation rules, attribute parsing
+    </td>
+    <td>
+      <code>DynamicsCrm.DevKit.Cli.UnitTests/</code>
+    </td>
+    <td>Trung bình</td>
+  </tr>
+</table>
+
+<div class="callout callout-success">
+  <strong>✅ Tổng kết</strong>
+  <p>Webhook support là tính năng hoàn toàn mới cho CLI nhưng có thể xây dựng trên nền tảng TaskServer hiện tại bằng cách:</p>
+  <ol>
+    <li>Mở rộng <code>PluginType</code> enum và <code>CrmPluginRegistrationAttribute</code></li>
+    <li>Thêm CRUD logic cho <code>serviceendpoint</code> entity</li>
+    <li>Tạo nhánh mới trong <code>DeployFileAsync</code> switch dùng <code>eventhandler</code> thay vì <code>plugintypeid</code></li>
+    <li>Tái sử dụng tối đa: SdkMessage/Filter resolution, Image deployment, Solution binding, Change detection pattern</li>
+  </ol>
+  <p>Ước lượng tổng thể: ~600-800 dòng code mới trong TaskServer, ~30-50 dòng trong Shared models.</p>
+</div>
+
+<hr style="margin: 40px 0;">
+<footer style="color: #888; font-size: .85em; text-align: center;">
+  <p>DynamicsCrm.DevKit &bull; Webhook Support Analysis &bull; Generated 2026-09-30</p>
+  <p>
+    References:
+    <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/use-webhooks">Use Webhooks</a> &bull;
+    <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/register-web-hook">Register a Webhook</a> &bull;
+    <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/serviceendpoint">ServiceEndpoint Table</a> &bull;
+    <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/sdkmessageprocessingstep">SdkMessageProcessingStep Table</a>
+  </p>
+</footer>
+
+</body>
+</html>

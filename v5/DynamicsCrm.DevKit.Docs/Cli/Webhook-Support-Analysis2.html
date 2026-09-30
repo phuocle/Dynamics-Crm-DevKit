@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Webhook Support Analysis 2 — ALM và URL theo môi trường</title>
+<style>
+:root{--ink:#172235;--muted:#5d687a;--line:#dce3ed;--blue:#185abd}
+*{box-sizing:border-box}body{margin:0;background:#f2f5fa;color:var(--ink);font:16px/1.65 "Segoe UI",Arial,sans-serif}
+header{padding:42px max(22px,calc((100% - 1000px)/2));background:linear-gradient(120deg,#102a54,#2266d8);color:white}
+header small{letter-spacing:.14em;text-transform:uppercase;opacity:.75}h1{font-size:32px;line-height:1.2;margin:12px 0}header p{max-width:850px;color:#e4edff;margin:0}
+main{max-width:1000px;margin:28px auto;padding:0 20px 60px}.card{background:white;border:1px solid var(--line);border-radius:14px;padding:23px;margin:17px 0;box-shadow:0 5px 18px #13294a0a}
+h2{font-size:21px;margin:0 0 12px}.pill{display:inline-block;padding:3px 10px;background:#e7efff;color:#174b9b;border-radius:99px;font-size:12px;font-weight:700}
+table{width:100%;border-collapse:collapse;margin:12px 0}td,th{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}th{background:#f4f7fb}code{background:#eef2f7;color:#223a5b;padding:2px 5px;border-radius:4px}
+.call{padding:14px 16px;border-radius:9px;margin:12px 0}.blue{background:#edf4ff;border:1px solid #c6d8ff}.green{background:#eaf7f3;border:1px solid #b9e2d5}.amber{background:#fff5e7;border:1px solid #efd1a3;color:#69430d}
+a{color:var(--blue);overflow-wrap:anywhere}.muted{color:var(--muted);font-size:14px}ul,ol{padding-left:22px}li{margin:5px 0}.step{display:grid;grid-template-columns:44px 1fr;gap:12px;margin:13px 0}.num{background:#e8f0ff;color:#184e9e;border-radius:50%;width:34px;height:34px;text-align:center;line-height:34px;font-weight:700}
+@media(max-width:650px){header{padding:30px 22px}h1{font-size:26px}.card{padding:17px}}
+</style></head><body>
+<header><small>DynamicsCrm.DevKit · Webhook Support Analysis · Addendum 2</small>
+<h1>Webhook URL giữa DEV, UAT, PROD và ALM</h1>
+<p>Phân tích tiếp theo trên cơ sở báo cáo Webhook-Support-Analysis.html: URL nằm trong registration metadata hay attribute/config; vai trò của solution; và cách triển khai URL khác nhau theo môi trường.</p></header>
+<main>
+<section class="card"><span class="pill">Kết luận nhanh</span>
+<p><b>Nếu giữ thiết kế trong báo cáo gốc và gán URL literal vào WebhookUrl trên attribute, URL sẽ theo binary/config được build.</b> Build một lần rồi dùng cùng assembly cho DEV, UAT, PROD sẽ không tự đổi endpoint. Build riêng từng môi trường có thể làm được nhưng dễ nhầm, khó kiểm soát, và buộc rebuild code cho config.</p>
+<p><b>ServiceEndpoint/Webhook registration có thể là solution component và được đưa qua solution.</b> Tuy nhiên, đưa component qua solution không tự chọn endpoint URL đúng cho từng đích. Cần target-specific override trong deployment pipeline sau import hoặc registration logic đọc cấu hình của môi trường đích.</p>
+<div class="call blue"><b>Khuyến nghị:</b> tách định nghĩa webhook/step (tên ổn định, message, table, stage, mode, filters) khỏi cấu hình endpoint theo môi trường. Dùng một source package và cấp URL riêng qua deployment settings/config cho DEV, UAT, PROD; deployment job tạo/cập nhật ServiceEndpoint.url trong chính môi trường đích. Không để URL hoặc auth secret của môi trường trong attribute assembly hay JSON được commit.</div>
+</section>
+
+<section class="card"><h2>1. Báo cáo gốc đang đặt URL ở đâu?</h2>
+<p>Trong ví dụ attribute-driven ở báo cáo gốc, WebhookUrl được gán literal, ví dụ https://myfunc.azurewebsites.net/api/ContactUpdate. Báo cáo cũng nêu JSON endpoint config như approach thay thế, có profile DEV và url.</p>
+<p>Đây mới là đề xuất kiến trúc; repo hiện tại chưa triển khai webhook registration. Code hiện tại không có PluginType.Webhook, WebhookUrl, hoặc CRUD đăng ký ServiceEndpoint trong TaskServer. Vì vậy hiện chưa có flow để tự chuyển URL DEV sang UAT/PROD.</p>
+<div class="call amber"><b>Lưu ý:</b> JSON có profile chỉ hữu ích khi deployment chọn đúng profile theo target environment rồi dùng giá trị đó để tạo/cập nhật endpoint. Khai báo profile tự nó không đổi URL.</div></section>
+
+<section class="card"><h2>2. ServiceEndpoint có đưa vào solution được không?</h2>
+<p><b>Có.</b> Microsoft liệt kê Service endpoint là solution component. Webhook registration được lưu trong ServiceEndpoint với contract=8; SDK step tham chiếu endpoint đó.</p>
+<p>Điều này cho phép vận chuyển phần registration/step qua solution ALM. Nhưng solution không tự suy ra mapping DEV → dev URL, UAT → uat URL, PROD → prod URL. Không nên giả định import solution thuần sẽ tự thay URL theo tên môi trường.</p>
+<div class="call green"><b>Trả lời:</b> đưa component registration vào solution được; muốn URL theo môi trường, cần target-specific deployment setting/post-import step cập nhật serviceendpoint.url.</div></section>
+
+<section class="card"><h2>3. ALM có làm được không?</h2>
+<p><b>Có, nếu pipeline có bước cấu hình endpoint theo môi trường.</b> Tài liệu Microsoft cho ALM Accelerator (được đánh dấu deprecated) có deployment setting webhookurl.webookname để cập nhật URL webhook trong deployment environment. Đây là bằng chứng cụ thể cho mô hình “import solution, rồi pipeline thay URL”. Đây là capability được tài liệu của ALM Accelerator mô tả, không phải bảo đảm mọi pipeline hoặc lần import solution chuẩn đều tự làm.</p>
+<p>Với pipeline khác, có thể làm tương tự bằng script/tool sau import: tra ServiceEndpoint ổn định theo tên hoặc key, rồi PATCH URL target. Cần đảm bảo đúng endpoint và step liên kết trong chính môi trường đích.</p>
+<table><thead><tr><th>Giai đoạn</th><th>URL cấu hình</th><th>Hành vi</th></tr></thead><tbody>
+<tr><td>DEV</td><td>https://dev-api.example/...</td><td>Registration DEV trỏ về endpoint dev.</td></tr>
+<tr><td>UAT</td><td>https://uat-api.example/...</td><td>Pipeline import solution, rồi override URL thành endpoint UAT.</td></tr>
+<tr><td>PROD</td><td>https://api.example/...</td><td>Pipeline import cùng artifact, override bằng production URL và secret.</td></tr>
+</tbody></table></section>
+
+<section class="card"><h2>4. Environment variable hay deployment setting?</h2>
+<table><thead><tr><th>Phương án</th><th>Phù hợp khi</th><th>Lưu ý</th></tr></thead><tbody>
+<tr><td><b>Pipeline/deployment settings</b></td><td>Job sau import cập nhật trực tiếp ServiceEndpoint.url.</td><td>Tường minh, phù hợp cấu hình theo target; ALM Accelerator docs có ví dụ webhook URL. Pipeline khác cần tự thêm step.</td></tr>
+<tr><td><b>Environment variable + deployer</b></td><td>Muốn quản lý URL như key/value trong solution.</td><td>Environment variable không tự bind tới ServiceEndpoint.url. Importer/DevKit deployer phải đọc giá trị ở target rồi ghi vào endpoint.</td></tr>
+<tr><td><b>Config profile ngoài source</b></td><td>DevKit CLI nhận file deployment settings riêng cho DEV/UAT/PROD.</td><td>Hợp với registration CLI nếu config được inject/chọn theo target; không commit URL/secret nhạy cảm vào repo.</td></tr>
+<tr><td><b>Build riêng theo môi trường</b></td><td>Legacy workflow không có config injection.</td><td>Có thể hoạt động nhưng không khuyến nghị: dễ deploy nhầm binary và giảm khả năng tái lập.</td></tr>
+</tbody></table></section>
+
+<section class="card"><h2>5. Luồng ALM đề xuất</h2>
+<div class="step"><div class="num">1</div><div><b>DEV authoring:</b> định nghĩa endpoint key/name và webhook step trong solution. Dùng URL dev để test; không lưu production secret trong mã nguồn.</div></div>
+<div class="step"><div class="num">2</div><div><b>Export/build:</b> đóng gói solution và mapping endpoint key. Nếu URL nguồn được export, coi đó là giá trị dev và bắt buộc override ở target.</div></div>
+<div class="step"><div class="num">3</div><div><b>Import vào UAT/PROD:</b> dùng cùng solution artifact để giữ registration/step nhất quán.</div></div>
+<div class="step"><div class="num">4</div><div><b>Post-import configure:</b> pipeline lấy URL từ protected deployment variable/secret store rồi cập nhật serviceendpoint.url ở môi trường hiện tại.</div></div>
+<div class="step"><div class="num">5</div><div><b>Verify:</b> đọc lại tên/URL, xác nhận step trỏ đúng endpoint và chạy smoke test. AuthValue không thể đọc lại; secret cần quản lý riêng và không log.</div></div>
+<div class="call amber"><b>Auth secret:</b> Microsoft ghi AuthValue không thể retrieve sau khi set. Không thể đọc-back để so sánh secret cũ; pipeline phải quản lý rõ thao tác update và tránh log secret.</div></section>
+
+<section class="card"><h2>6. Hướng hỗ trợ nên thiết kế cho DevKit</h2>
+<ul>
+<li>Định nghĩa registration không chứa môi trường: endpoint key/name, message, table, stage, mode, filter, image.</li>
+<li>URL là deployment input riêng: ví dụ deployment.DEV.json / deployment.UAT.json / deployment.PROD.json; không commit secret.</li>
+<li>Upsert ServiceEndpoint bằng key/name ổn định, không dựa GUID khác nhau giữa môi trường; bind step tới endpoint của target.</li>
+<li>Đưa endpoint và step vào solution nguồn để transport; deployer xử lý URL override sau import.</li>
+<li>Fail fast nếu thiếu profile target hoặc endpoint UAT/PROD vẫn trỏ về DEV.</li>
+</ul>
+<p>Cùng assembly/solution artifact có thể đi qua các stage; chỉ deployment settings thay theo môi trường. Không cần build lại plugin chỉ để đổi URL.</p></section>
+
+<section class="card"><h2>Trả lời trực tiếp</h2><table><tbody>
+<tr><th>Câu hỏi</th><th>Trả lời</th></tr>
+<tr><td>URL literal trong attribute có đổi theo env không?</td><td>Không. Cùng binary giữ nguyên literal, trừ khi build replacement hoặc deploy-time override.</td></tr>
+<tr><td>UAT/PROD đăng ký webhook được không?</td><td>Được. Registration là ServiceEndpoint + step trong mỗi Dataverse environment.</td></tr>
+<tr><td>ALM làm được không?</td><td>Được nếu pipeline có deployment setting/post-import step cập nhật URL. ALM Accelerator docs có setting cụ thể; pipeline khác cần implement tương đương.</td></tr>
+<tr><td>Add vào solution đủ chưa?</td><td>Đủ để vận chuyển component registration; không đủ để đảm bảo URL tự đổi đúng cho target.</td></tr>
+<tr><td>Thiết kế nên chọn gì?</td><td>Cùng artifact DEV→UAT→PROD; URL/secret inject từ target config; post-import upsert endpoint và verify.</td></tr>
+</tbody></table></section>
+
+<section class="card"><h2>Nguồn</h2><ol>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/register-web-hook">Register a webhook</a> — ServiceEndpoint, URL/auth và step.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/serviceendpoint">ServiceEndpoint table reference</a> — operations/properties gồm create, retrieve, update, URL, AuthValue.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-platform/alm/dependency-tracking-solution-components">Solution component dependency tracking</a> — liệt kê Service endpoint là solution component.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-platform/guidance/alm-accelerator/deployment-settings-payload">ALM Accelerator deployment settings</a> — setting cập nhật webhook URL trong deployment environment; tài liệu đánh dấu accelerator deprecated.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/environmentvariables">Environment variables in solutions</a> — tách cấu hình theo environment; cần component tiêu thụ giá trị và cập nhật endpoint.</li>
+</ol>
+<p class="muted">Addendum tạo 30/09/2026 (Asia/Bangkok). Đã đọc báo cáo gốc nhưng không sửa file đó; đọc source để xác nhận repo hiện chưa implement webhook. Không deploy hoặc gọi Dataverse.</p></section>
+</main></body></html>

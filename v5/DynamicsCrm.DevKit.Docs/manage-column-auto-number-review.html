@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Đánh giá manage_column — Auto-number</title>
+<style>
+:root{--ink:#182235;--muted:#5c677a;--line:#d9e1ec;--blue:#1c5dcc;--pale:#f3f7fd;--green:#0b705e;--amber:#8a4b08}
+*{box-sizing:border-box}body{margin:0;background:#f2f5fa;color:var(--ink);font:16px/1.65 "Segoe UI",Arial,sans-serif}
+header{padding:42px max(22px,calc((100% - 980px)/2));color:#fff;background:linear-gradient(120deg,#102b54,#2164d8)}
+header small{text-transform:uppercase;letter-spacing:.15em;opacity:.75}h1{font-size:34px;line-height:1.2;margin:12px 0}header p{max-width:800px;color:#e2ebff;margin:0}
+main{max-width:980px;margin:26px auto;padding:0 20px 60px}.card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:23px;margin:17px 0;box-shadow:0 4px 18px #14294a0a}
+h2{font-size:21px;margin:0 0 12px}h3{font-size:16px;margin:18px 0 8px}.verdict{border-left:5px solid var(--blue)}.tag{display:inline-block;border-radius:99px;background:#e7efff;color:#174b9d;padding:3px 10px;font-size:12px;font-weight:700}
+table{width:100%;border-collapse:collapse;margin:12px 0}th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:10px}th{background:#f5f8fc}code{background:#eff3f8;border-radius:4px;padding:2px 5px;color:#203859}.note{background:#fff5e7;color:#70440b;border:1px solid #efd2a6;border-radius:9px;padding:14px}.ok{background:#eaf7f3;color:#15574c;border:1px solid #bce4d8;border-radius:9px;padding:14px}
+a{color:var(--blue);overflow-wrap:anywhere}.muted{color:var(--muted);font-size:14px}ul,ol{padding-left:22px}li{margin:5px 0}@media(max-width:650px){header{padding:30px 22px}h1{font-size:27px}.card{padding:17px}}
+</style></head><body>
+<header><small>DynamicsCrm.DevKit · MCP</small><h1>manage_column có hỗ trợ Auto-number không?</h1><p>Đối chiếu tài liệu Microsoft về tạo auto-number columns với schema và implementation hiện tại của MCP tool.</p></header>
+<main>
+<section class="card verdict"><span class="tag">Kết luận</span>
+<p><b>Chưa hỗ trợ trực tiếp qua <code>manage_column</code>.</b> Tool tạo được cột kiểu <code>string</code>, nhưng không nhận hoặc gán thuộc tính <code>AutoNumberFormat</code>. Vì vậy người gọi MCP không thể chỉ định mẫu sinh số tự động qua tool này.</p>
+<p>Đây là kết luận từ đọc source; không chạy MCP, không gọi Dataverse và không sửa code.</p></section>
+
+<section class="card"><h2>Đối chiếu source</h2>
+<table><thead><tr><th>Vị trí</th><th>Quan sát</th><th>Kết quả</th></tr></thead><tbody>
+<tr><td><code>DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageColumnTool.cs</code>, signature <code>manage_column</code></td><td>Exposes <code>attribute_type</code>, <code>format</code>, <code>max_length</code> and others, but no <code>auto_number_format</code> / equivalent.</td><td>Caller cannot send the auto-number pattern.</td></tr>
+<tr><td>Type and parameter descriptions</td><td>Types include <code>string</code>, but string formats are Text/Email/URL/Phone/TextArea/TickerSymbol/RichText only.</td><td>No auto-number option is documented in tool schema.</td></tr>
+<tr><td>String create handler</td><td>Creates <code>StringAttributeMetadata</code>, assigns <code>FormatName</code>, <code>MaxLength</code>, labels/required level; no <code>AutoNumberFormat</code> assignment.</td><td>Created column is ordinary string metadata, absent additional mechanism.</td></tr>
+<tr><td>Update flow</td><td>No exposed input for <code>AutoNumberFormat</code> on create or update.</td><td>Cannot configure or revise a pattern with this tool.</td></tr>
+</tbody></table>
+<p class="muted">Relevant source region: <code>ManageColumnTool.cs</code> parameter signature near lines 80–120; string create handler near lines 500–555. Line numbers may shift as the file changes.</p></section>
+
+<section class="card"><h2>Microsoft Learn yêu cầu gì?</h2>
+<p>Tài liệu mô tả auto-number column như một <code>StringAttributeMetadata</code> có thêm thuộc tính <code>AutoNumberFormat</code>. Ví dụ pattern:</p>
+<ul><li><code>INV-{SEQNUM:5}</code> — số tuần tự có độ dài tối thiểu.</li><li><code>CASE-{SEQNUM:4}-{RANDSTRING:6}</code> — ghép tuần tự và chuỗi ngẫu nhiên.</li><li>Có thể ghép placeholder UTC datetime.</li></ul>
+<p><code>FormatName</code> cần là <code>Text</code>. Không nên đặt <code>MaxLength</code> chỉ bằng độ dài ban đầu của chuỗi mẫu, vì phần tuần tự có thể dài thêm. Microsoft cũng nói lỗi placeholder có thể chỉ xuất hiện khi lưu record, không nhất thiết lúc tạo column.</p>
+<div class="note"><b>Scope:</b> Link được hỏi tập trung vào cấu hình thuộc tính auto-number và ví dụ Web API/SDK. Các khả năng seed/reset sequential counter là phần riêng, không được chứng minh là có trong <code>manage_column</code>.</div></section>
+
+<section class="card"><h2>Có cách gọi vòng hiện tại không?</h2>
+<div class="ok"><b>Có thể thử raw <code>execute_webapi</code></b> để POST metadata theo Web API Microsoft mô tả, nếu endpoint được tool hỗ trợ và payload metadata đi qua được. Đó là workaround bằng tool tổng quát, không phải <code>manage_column</code> có hỗ trợ auto-number. Cần kiểm chứng riêng trong môi trường Dataverse phù hợp; báo cáo này không gọi endpoint.</div>
+<p>Nếu muốn hỗ trợ native, thay đổi tối thiểu là thêm tham số create-only (ví dụ <code>auto_number_format</code>), chỉ cho phép với <code>attribute_type="string"</code>, gán sang <code>StringAttributeMetadata.AutoNumberFormat</code>, cập nhật output/docs và test metadata. Nên tránh coi chuỗi mẫu là <code>format</code> hiện có: tham số <code>format</code> đang có nghĩa là loại định dạng UI như Text/Email/Phone.</p></section>
+
+<section class="card"><h2>Nguồn</h2>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/create-auto-number-attributes?tabs=webapi">Create autonumber columns — Microsoft Learn</a></li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/stringattributemetadata">StringAttributeMetadata Web API reference</a></li></ul>
+<p class="muted">Ngày truy cập: 30/09/2026 (Asia/Bangkok). Chỉ phân tích code và docs; không gọi MCP, không truy cập Dataverse, không build/test và không sửa tool.</p></section>
+</main></body></html>

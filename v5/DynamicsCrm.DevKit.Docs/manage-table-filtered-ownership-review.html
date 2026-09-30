@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đánh giá MCP manage_table — Filtered record ownership</title>
+<style>
+:root{--ink:#172033;--muted:#596579;--line:#dce3ed;--bg:#f3f6fb;--card:#fff;--blue:#175cd3;--teal:#087e73;--amber:#8a4b08;--red:#a52b2b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",Arial,sans-serif}
+header{background:linear-gradient(120deg,#102a56,#175cd3);color:#fff;padding:44px max(24px,calc((100% - 1050px)/2))}
+header .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.78}h1{font-size:34px;line-height:1.2;margin:12px 0}header p{max-width:800px;color:#e0eaff;margin:0}
+main{max-width:1050px;margin:28px auto;padding:0 20px 64px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin:18px 0;box-shadow:0 5px 18px #102a560a}
+h2{font-size:22px;margin:0 0 14px}h3{font-size:17px;margin:18px 0 8px}.verdict{border-left:5px solid var(--blue)}.verdict strong{font-size:19px}
+.badge{display:inline-block;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;background:#e7f0ff;color:#174ea6}
+table{width:100%;border-collapse:collapse;margin:10px 0}th,td{text-align:left;vertical-align:top;padding:11px 12px;border-bottom:1px solid var(--line)}th{background:#f6f8fc}code{background:#f0f3f8;padding:2px 5px;border-radius:4px;color:#263a5c}
+.callout{padding:14px 16px;border-radius:9px;background:#fff5e8;border:1px solid #f2d1a8;color:#663a08}
+.good{background:#eaf8f5;border:1px solid #b9e3d8;color:#14584f;padding:14px 16px;border-radius:9px}
+ul,ol{padding-left:22px}li{margin:5px 0}a{color:#175cd3;overflow-wrap:anywhere}.muted{color:var(--muted)}.small{font-size:13px}
+@media(max-width:650px){header{padding:30px 22px}h1{font-size:27px}.card{padding:18px}table{font-size:14px}}
+</style>
+</head>
+<body>
+<header>
+<div class="eyebrow">DynamicsCrm.DevKit · MCP schema tools</div>
+<h1>manage_table có cần cập nhật?</h1>
+<p>Đánh giá khả năng hỗ trợ Filtered record ownership (preview) của Dataverse dựa trên ba tài liệu Microsoft Learn và implementation hiện tại trong repository.</p>
+</header>
+<main>
+<section class="card verdict">
+<span class="badge">Kết luận</span>
+<p><strong>Có — cần cập nhật nếu mục tiêu là để MCP tạo được filtered-ownership table.</strong></p>
+<p>Hiện <code>manage_table</code> chỉ nhận <code>User</code> hoặc <code>Organization</code>. Tài liệu SDK yêu cầu tạo bảng với <code>OwnershipTypes.Filtered</code>. Bổ sung <code>Filtered</code> vào lựa chọn ownership và mô tả tham số là thay đổi tối thiểu.</p>
+<p class="muted">Phạm vi kết luận: hỗ trợ tạo bảng. Tạo filter, gắn filter với bảng và cấp quyền trong security role là các bước cấu hình riêng, không được thực hiện chỉ bằng ownership_type.</p>
+</section>
+
+<section class="card">
+<h2>Microsoft đang mô tả điều gì?</h2>
+<ul>
+<li><b>Filtered ownership là row-level security dựa trên điều kiện cột.</b> Record filter chứa FetchXML; entity record filter gắn filter với table; security role cấp các quyền Create, Read, Write, Delete, Append và Append to tương ứng.</li>
+<li><b>Bảng không có record owner.</b> Không thể share hoặc assign từng row cho user. Quyền truy cập là hợp của các filter người dùng nhận từ security roles và teams. System Administrator được cấp filter “All records”.</li>
+<li><b>Đây là preview.</b> Tài liệu maker ghi rõ tính năng preview; không nên ngầm quảng bá đây là ownership thông thường đã sẵn sàng cho production.</li>
+<li><b>Ownership không đổi được sau khi tạo.</b> Cần chọn chính xác lúc CREATE; UPDATE hiện tại vẫn nên giữ tính immutable.</li>
+<li><b>Filter cũng áp dụng được cho một số bảng ownership hiện hữu.</b> SDK doc nói filter có thể dùng trên bảng user/team và organization hiện có; đó là khả năng của hệ thống filter, không có nghĩa đổi ownership_type của bảng cũ.</li>
+</ul>
+</section>
+
+<section class="card">
+<h2>Đối chiếu với code hiện tại</h2>
+<table>
+<thead><tr><th>Nơi kiểm tra</th><th>Hiện trạng</th><th>Hệ quả</th></tr></thead>
+<tbody>
+<tr><td><code>DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageTableTool.cs</code></td><td>Tham số mô tả <code>'User' or 'Organization'</code>; parser chỉ ánh xạ sang <code>UserOwned</code>/<code>OrganizationOwned</code>; giá trị khác trả lỗi.</td><td><b>Không thể yêu cầu tạo Filtered.</b> Đây là sửa đổi chức năng bắt buộc.</td></tr>
+<tr><td>Cùng file, nhánh activity</td><td><code>is_activity</code> luôn ép ownership về User.</td><td>Giữ hành vi hiện tại; không cho kết hợp Filtered với activity. Nên mô tả/ràng buộc rõ để tránh caller tưởng lựa chọn được giữ.</td></tr>
+<tr><td>Update existing table</td><td>Ownership được xem là create-only/immutable; input khác metadata hiện tại phát warning.</td><td>Giữ nguyên; filtered ownership không cho phép chuyển loại sau tạo.</td></tr>
+<tr><td><code>InstructionResources.cs</code> và tool descriptions</td><td>Schema guide hiện chỉ liệt kê User/Organization.</td><td>Cập nhật hướng dẫn MCP cùng lúc, nếu implementation được sửa.</td></tr>
+<tr><td><code>DynamicsCrm.DevKit.Docs/testcall/35.manage_table.md</code>, Wiki</td><td>Tài liệu đầu vào/schema vẫn chỉ ghi hai lựa chọn.</td><td>Cập nhật tài liệu sản phẩm/testcall để tránh lệch với MCP schema.</td></tr>
+<tr><td>Structured result / get_tables</td><td>Ownership trả dạng chuỗi lấy từ enum metadata.</td><td>Khả năng cao tự biểu diễn <code>Filtered</code> khi SDK trả metadata; xác nhận sau khi build/kiểm thử. Chưa thấy cần đổi JSON key hay shape.</td></tr>
+</tbody>
+</table>
+<div class="callout"><b>Kiểm tra SDK cần làm trước khi implement:</b> CLI đang tham chiếu <code>Microsoft.PowerPlatform.Dataverse.Client 1.2.27</code>. Microsoft Learn yêu cầu enum <code>OwnershipTypes.Filtered</code> (giá trị 32). Cần xác nhận package đang dùng expose member này và build được. Nếu enum không có, phải đánh giá nâng package; không nên âm thầm cast số 32 trước khi xác nhận tương thích API/SDK.</div>
+</section>
+
+<section class="card">
+<h2>Khuyến nghị thay đổi theo thứ tự</h2>
+<ol>
+<li>Kiểm tra SDK 1.2.27 có <code>OwnershipTypes.Filtered</code>; xác nhận giá trị metadata 32 và hỗ trợ ở Dataverse environment đích.</li>
+<li>Thêm lựa chọn <code>Filtered</code> vào <code>ownership_type</code> và map trực tiếp tới enum của SDK. Giữ mặc định <code>User</code> để không phá hành vi hiện có.</li>
+<li>Ràng buộc <code>Filtered</code> không dùng chung với <code>is_activity=true</code> (lỗi rõ ràng thay vì silently ép về User). Với activity, giữ quy tắc User hiện tại.</li>
+<li>Cập nhật MCP tool description, <code>SchemaToolsGuide</code>, tài liệu <code>testcall/35.manage_table.md</code>, Wiki, và test ownership hợp lệ/không hợp lệ + activity interaction.</li>
+<li>Build CLI và chạy test tập trung của ManageTable. Kiểm tra metadata trả về là <code>Filtered</code> trên Dataverse có bật preview trước khi tuyên bố end-to-end.</li>
+</ol>
+</section>
+
+<section class="card">
+<h2>Điều gì nằm ngoài thay đổi tối thiểu?</h2>
+<div class="good"><b>manage_table chỉ tạo metadata của table.</b> Để hoàn tất cấu hình bảo mật, cần có workflow quản lý recordfilter/entityrecordfilter và gán filter privilege cho security role. Tài liệu hướng dẫn cũng mô tả tạo filter từ FetchXML trong maker UI.</div>
+<p>Có thể dùng Web API/Dataverse SDK tổng quát để thao tác các entity cấu hình này, nhưng hiện repo chưa được khảo sát đầy đủ để khẳng định có sẵn MCP workflow chuyên dụng. Nếu muốn MCP hỗ trợ end-to-end, nên đánh giá thành yêu cầu riêng: công cụ CRUD filter, gắn filter với table, quản lý privilege/role, kiểm soát quyền admin, và test bằng user không phải administrator.</p>
+<p>Đừng mô tả filtered table như “Organization-owned”: không có owner, và security semantics khác cả UserOwned lẫn OrganizationOwned.</p>
+</section>
+
+<section class="card">
+<h2>Các giới hạn cần phản ánh cho người dùng</h2>
+<ul>
+<li>Preview, có thể thay đổi và có thể hạn chế.</li>
+<li>Không share/assign row vì không có owner.</li>
+<li>Hiệu năng: filter được áp vào mọi query; thiết kế filter cần hiệu quả.</li>
+<li>Dataverse Search với filter có link-entity chỉ trả kết quả từ primary table theo giới hạn tài liệu.</li>
+<li>Không áp dụng hiện tại cho external virtual tables.</li>
+<li>Không thể đổi ownership type sau khi table được tạo.</li>
+</ul>
+</section>
+
+<section class="card">
+<h2>Nguồn Microsoft Learn</h2>
+<ol>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/filtered-record-ownership?tabs=sdk">Filtered record ownership by using code (preview)</a> — SDK/Web API, enum <code>Filtered</code>, Record Filter và EntityRecordFilter, gán quyền security role, và giới hạn.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/filtered-view-record-ownership">Filtered record ownership (preview)</a> — quy trình maker, mô hình truy cập và FAQ.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/add-filtered-view-security-ownership-tables">Add filtered view security to ownership tables</a> — hướng dẫn maker bổ sung filter security vào các loại bảng ownership.</li>
+</ol>
+<p class="small muted">Các trang Microsoft Learn là tài liệu prerelease và có thể thay đổi. Ngày truy cập theo client: 30/09/2026. Báo cáo này chỉ đọc/đối chiếu, không sửa source code, không build hoặc chạy test.</p>
+</section>
+</main>
+</body>
+</html>
