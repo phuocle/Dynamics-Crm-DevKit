@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevKitJson · Một file C#, không thư viện JSON ngoài</title>
+<style>
+:root{--ink:#152a38;--muted:#526875;--paper:#f4f6f5;--line:#dce5e4;--teal:#087f79;--light:#eaf7f4;--amber:#96500c;--red:#a22f3d;--nav:#102a38}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 'Segoe UI',Arial,sans-serif}a{color:#076d85;text-underline-offset:3px}p{margin:10px 0 16px}strong{font-weight:650}h1,h2,h3{line-height:1.2}h1{font-size:clamp(36px,4vw,56px);font-weight:650;letter-spacing:-1.8px;margin:24px 0}h2{font-size:29px;letter-spacing:-.6px;margin:0 0 20px}h3{font-size:20px;margin:25px 0 12px}code,pre{font-family:Consolas,'Cascadia Code',monospace}code{font-size:.88em;background:#eaf0f1;border-radius:4px;padding:2px 5px;overflow-wrap:anywhere}pre{background:#112d3c;color:#e4f0ee;padding:22px;border-radius:10px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px}pre code{padding:0;background:none;color:inherit;font-size:inherit}ul,ol{padding-left:24px}li{margin:8px 0}.layout{display:grid;grid-template-columns:240px minmax(0,1fr);max-width:1570px;margin:auto}.sidebar{background:var(--nav);color:#e0efef;padding:34px 22px;position:sticky;top:0;height:100vh;overflow:auto}.brand{font-size:19px;font-weight:700;letter-spacing:-.5px}.sidebar small{color:#9db8c2;display:block;margin-top:8px}.sidebar nav{margin-top:38px;display:grid;gap:4px}.sidebar nav a{color:#c4d8dd;text-decoration:none;padding:9px 10px;border-radius:6px;font-size:14px}.sidebar nav a:hover,.sidebar nav a:focus{background:#244454;color:#fff}.sidebar .foot{font-size:12px;color:#a8c5ce;border-top:1px solid #36515d;margin-top:30px;padding-top:20px}.main{min-width:0;padding:36px 48px 80px}.hero{padding:25px 0 36px}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:2px;font-weight:700;color:var(--teal)}.status{display:inline-block;color:var(--amber);background:#fff0d6;border:1px solid #ead4aa;padding:5px 12px;border-radius:30px;font-size:13px;font-weight:650}.lead{max-width:850px;font-size:20px;color:#385360}.hero .lead strong{color:var(--ink)}.meta{font-size:13px;color:var(--muted)}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0}.stat{background:white;border:1px solid var(--line);border-radius:12px;padding:20px}.stat b{display:block;font-size:30px;line-height:1.25;color:var(--teal)}.stat span{font-size:13px;color:var(--muted)}section{background:#fff;border:1px solid var(--line);border-radius:14px;padding:32px;margin:0 0 24px}.num{color:var(--teal);font-size:13px;display:block;letter-spacing:2px;margin-bottom:8px}.callout{padding:18px 22px;background:var(--light);border-left:4px solid var(--teal);border-radius:0 8px 8px 0;margin:20px 0}.callout.warn{background:#fff5e8;border-color:#c28533}.callout.danger{background:#fff0f1;border-color:var(--red)}.callout p:last-child{margin-bottom:0}.small{font-size:13px;color:var(--muted)}.scroll{overflow:auto;margin:18px 0}table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;background:#ecf2f3;font-size:12px;text-transform:uppercase;letter-spacing:.5px}td,th{padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:top}td:first-child{font-weight:600}tbody tr:hover{background:#f8fbfa}.badge{display:inline-block;border-radius:4px;padding:2px 7px;font-size:12px;background:#eaf1f2;font-weight:600}.badge.p1{color:var(--red);background:#fce8eb}.badge.p2{color:var(--amber);background:#fff0d6}.badge.ok{color:#066d58;background:#e4f4eb}.columns{display:grid;grid-template-columns:1fr 1fr;gap:22px}.card{border:1px solid var(--line);border-radius:10px;padding:22px}.card h3{margin-top:0}.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}.flow div{background:#edf7f5;border:1px solid #cde4de;border-radius:8px;padding:18px;font-size:14px}.flow b{display:block;margin-bottom:8px;color:#066960}.step{border-left:2px solid #c0dad5;padding:0 0 15px 23px;margin-left:10px}.step h3{margin-top:15px}details{border:1px solid var(--line);border-radius:9px;margin:14px 0;padding:16px 20px}summary{cursor:pointer;font-weight:650}details[open] summary{margin-bottom:12px}.findings details p:last-child{margin-bottom:0}.source{font-size:12px;color:var(--muted)}.sources li{font-size:14px}.decision{background:#102f3f;color:#ecf5f5;border-color:#102f3f}.decision h2,.decision h3{color:#fff}.decision code{background:#264656;color:#e9f4f3}.decision .num{color:#8fddd0}.decision p{color:#d0e3e5}.decision ul{color:#d0e3e5}.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.toolbar button{background:#fff;border:1px solid #c2d2d5;color:var(--ink);border-radius:6px;padding:8px 12px;cursor:pointer;font:inherit;font-size:13px}.footer{font-size:12px;color:var(--muted);padding:15px 2px} .nowrap{white-space:nowrap}
+@media(max-width:1100px){.layout{grid-template-columns:190px minmax(0,1fr)}.main{padding:24px}.sidebar{padding:28px 15px}.columns{grid-template-columns:1fr}}
+@media(max-width:760px){.layout{display:block}.sidebar{height:auto;position:relative;padding:20px}.sidebar nav{display:flex;overflow:auto;margin-top:15px;gap:10px}.sidebar nav a{white-space:nowrap}.sidebar .foot{display:none}.main{padding:20px 14px}.hero{padding:16px 8px}section{padding:23px 18px}.stats,.flow{grid-template-columns:1fr}.stats{gap:8px}.stat{padding:12px 18px}.stat b{font-size:24px}h1{letter-spacing:-1px}.lead{font-size:18px}td,th{min-width:130px}}
+@media print{.sidebar,.toolbar{display:none}.layout{display:block}.main{padding:0}.hero{padding-top:0}body{font-size:11pt;background:white}section{break-inside:auto;border:0;border-top:1px solid #aaa;border-radius:0;padding:22px 0}h2,h3,summary{break-after:avoid}.decision{background:white;color:var(--ink)}.decision h2,.decision h3,.decision p,.decision ul{color:var(--ink)}pre{background:#f4f6f5;color:#152a38}.stats{break-inside:avoid}a{color:inherit}details{break-inside:avoid}.footer{font-size:9pt}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="brand">DynamicsCrm.DevKit</div><small>Engineering review / 02.10.2026</small>
+  <nav aria-label="Mục lục">
+    <a href="#verdict">01 · Kết luận</a><a href="#scope">02 · Phạm vi thực tế</a><a href="#findings">03 · Lỗi đã xác minh</a><a href="#context">04 · Context7 &amp; replay</a><a href="#contract">05 · “Chính xác” là gì?</a><a href="#architecture">06 · Tổ chức trong một file</a><a href="#engine">07 · Hoàn thiện lõi tự viết</a><a href="#trace">08 · Giới hạn trace 10 KB</a><a href="#migration">09 · Tương thích &amp; lộ trình</a><a href="#tests">10 · Unit test bắt buộc</a><a href="#approval">11 · Phạm vi cần duyệt</a><a href="#evidence">12 · Bằng chứng &amp; nguồn</a>
+  </nav>
+  <div class="foot">Một file DevKitJson.cs.<br>Không Newtonsoft.Json.<br>Không System.Text.Json.<br>Không thêm JSON package.<br><br>Chưa sửa production code hoặc unit test trong repository.</div>
+</aside>
+<main class="main">
+<header class="hero">
+  <div class="toolbar"><span class="status">ĐỀ XUẤT · CHỜ APPROVE</span><button type="button" onclick="window.print()">In / lưu PDF</button></div>
+  <h1>DevKitJson<br>Một file C# tự đủ.<br>Round-trip đáng tin cậy.</h1>
+  <p class="lead">Giữ nguyên lựa chọn tự viết JSON và serialize/deserialize trong <strong>duy nhất DevKitJson.cs</strong>, dùng BCL và SDK Dataverse sẵn có. Không thêm Newtonsoft.Json, System.Text.Json hoặc một JSON engine bên ngoài. Đề xuất tập trung hoàn thiện parser, writer và mapping để bảo toàn dữ liệu, rồi tối ưu compact/nén cho trace.</p>
+  <div class="callout"><strong>Ràng buộc đã chốt theo yêu cầu của bạn:</strong> một file nguồn dễ đưa vào plugin và console, không thêm dependency JSON. Các phần được tách trong tài liệu là trách nhiệm logic hoặc nested type ngay trong file đó; không phải các project, package hay file C# mới.</div>
+  <p class="meta">Review ngày 02/10/2026 · Asia/Saigon · Source: <code>ProjectTemplates/CSharp/01.SharedProjectTemplate/DevKitJson.cs</code></p>
+  <div class="stats"><div class="stat"><b>378 / 378</b><span>Test hiện có pass · net48 · gồm wrapper</span></div><div class="stat"><b>22 / 22</b><span>Test hiện có pass · net10.0 · DevKitJson</span></div><div class="stat"><b>10 KB</b><span>Ngân sách tổng trace; không phải mỗi lần Trace()</span></div></div>
+  <p class="small">Hai con số test là baseline theo filter, không phải toàn bộ suite hay coverage. Giới hạn trace theo <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/logging-tracing">Microsoft Learn</a>.</p>
+</header>
+
+<section id="verdict">
+<span class="num">01 / KẾT LUẬN</span><h2>Hướng một file tự viết phù hợp với ràng buộc của dự án.</h2>
+<div class="columns"><div class="card"><h3>Điểm nên giữ</h3><ul><li>Toàn bộ serializer trong <code>DevKitJson.cs</code>, dùng chung server và console.</li><li>Codec riêng cho <code>Entity</code>, <code>Money</code>, <code>EntityReference</code> và execution context.</li><li>Compact key theo schema đã biết; đọc được log full/compact cũ.</li><li>Nén Deflate + Base64 bằng BCL khi có lợi về kích thước.</li></ul></div><div class="card"><h3>Điểm cần hoàn thiện</h3><ul><li>Parser/writer tự viết phải tuân thủ JSON grammar và có giới hạn rõ.</li><li>Mapping CLR phải giữ kiểu và giá trị, thống nhất root với nested.</li><li>Context7 cần giữ được những trường RemoteExecutionContext không có.</li><li>Compact/nén chỉ thay representation; không tự bỏ thông tin để đạt 10 KB.</li></ul></div></div>
+<div class="callout"><strong>Khuyến nghị:</strong> tiếp tục phát triển chính file hiện tại thành <strong>serializer tự đủ với parser strict, writer an toàn, bộ chuyển đổi kiểu và định dạng có phiên bản</strong>. Các lỗi đã xác minh cho thấy cần củng cố implementation và contract; chúng không phải lý do bắt dự án chuyển sang thư viện JSON ngoài.</div>
+<p>Không thể cam kết “mọi object mà C# tạo được” đều khôi phục nguyên trạng từ JSON. Có thể cam kết mạnh hơn và kiểm chứng được: <strong>mọi kiểu trong contract hỗ trợ phải giữ đúng giá trị, đúng kiểu cần thiết và đủ dữ liệu replay; kiểu ngoài contract phải báo rõ lỗi</strong>.</p>
+</section>
+
+<section id="scope">
+<span class="num">02 / PHẠM VI</span><h2>Một source, nhiều môi trường thực thi.</h2>
+<div class="scroll"><table><thead><tr><th>Thành phần</th><th>Vai trò đã kiểm tra</th><th>Hệ quả khi sửa</th></tr></thead><tbody>
+<tr><td>Shared project template</td><td><code>DevKitJson.cs</code>, <code>Extension.cs</code>, <code>PluginExecutionContext7Wrapper.cs</code></td><td>Source được chép vào dự án người dùng, không chỉ là thư viện nội bộ VSIX.</td></tr>
+<tr><td>Plugin + console Framework sinh ra</td><td><code>04.ServerProjectTemplate/ProjectTemplate.csproj.template</code> và console Framework dùng <strong>net462</strong>.</td><td>Không nhầm với csproj đóng gói template hoặc VSIX dùng net48. Cần compile smoke net462.</td></tr>
+<tr><td>Console Core sinh ra</td><td><code>03.ConsoleCoreProjectTemplate/ProjectTemplate.csproj.template</code>: net10.0.</td><td>Phải đọc payload do plugin Framework ghi, và ngược lại khi dùng fixtures.</td></tr>
+<tr><td>Console debugger</td><td><code>DynamicsCrm.DevKit.Shared/Resources/Helper.cs:90</code>: <code>DebugPluginWith&lt;T&gt;</code> deserialize vào <code>RemoteExecutionContext</code>.</td><td>Nâng serializer thôi chưa đủ; cần cập nhật đường đưa context vào service provider.</td></tr>
+<tr><td>FakeXrmEasy</td><td><code>07.SharedTestProjectTemplate/TestHelper.cs</code>, <code>PluginContextBuilder.cs</code>, <code>TestDataLoader.cs</code>.</td><td>Giữ đọc log cũ; bổ sung mapping snapshot mới và thông báo hạn chế replay.</td></tr>
+<tr><td>CLI</td><td><code>DynamicsCrm.DevKit.Cli.csproj:41</code> link compile cùng file, đặt link dưới <code>Mcp/DevKitJson.cs</code>.</td><td>Thay template ảnh hưởng cả assembly CLI; phải build/test CLI dù file nguồn không nằm trong thư mục CLI.</td></tr>
+</tbody></table></div>
+<p class="small">Trong lần review này chỉ tạo HTML theo yêu cầu tại <code>Docs/</code>. Không sửa source, template, package, version hay test trong repository; không stage/commit/push. File HTML không liên quan đã có trong working tree được giữ nguyên.</p>
+<p><strong>Luồng hiện tại:</strong> <code>Serialize</code> ghi full; <code>SerializeCompact</code> ghi compact theo lựa chọn của caller; <code>SerializeContext</code> luôn compact. <code>DebugContext</code> trong Extension mới kiểm tra kích thước và nén. Vì vậy hiện tại không có cơ chế chung “object lớn thì tự compact” bên trong <code>Serialize</code>.</p>
+</section>
+
+<section id="findings" class="findings">
+<span class="num">03 / PHÁT HIỆN</span><h2>Các lỗi ảnh hưởng trực tiếp đến độ chính xác.</h2>
+<p>Ví dụ dưới đây chạy bằng harness tạm, link trực tiếp source hiện tại, trên net48 và net10.0. Các kết quả về mất dữ liệu giống nhau trên hai runtime. P1 = nên sửa trước khi xem payload là bản sao đáng tin cậy; P2 = thiếu hỗ trợ hoặc rủi ro cần ràng buộc.</p>
+<details open><summary><span class="badge p1">P1</span> F01 · Decimal và Money bị làm tròn qua double</summary><pre>123456789012345678.123456789m
+→ Serialize → Deserialize&lt;decimal&gt;
+→ 123456789012346000m</pre><p><code>WriteValue</code> ghi decimal đúng dạng chữ, nhưng <code>ParseNumber</code> đọc số có dấu chấm hoặc exponent bằng <code>double.TryParse</code>. Convert ngược sang decimal không thể lấy lại chữ số đã mất. <code>Money</code> đi cùng đường này. Giá trị lớn dùng ở đây kiểm chứng codec CLR; không có nghĩa mọi cột Money Dataverse đều cho phép giá trị đó.</p><p><strong>Sửa:</strong> giữ numeric token chính xác đến lúc biết kiểu đích; decimal/Money parse trực tiếp decimal. Với vị trí kiểu <code>object</code>, phải có type discriminator để phân biệt decimal, double, float, int và long.</p><p class="source">DevKitJson.cs:199–205, 404–408, 762–778, 801, 1125–1129.</p></details>
+<details open><summary><span class="badge p1">P1</span> F02 · DateTime mất ticks và thay đổi Kind</summary><pre>2026-10-02T01:02:03.1234567Z
+→ 2026-10-02T01:02:03.1230000Z   (mất 4.567 ticks)
+DateTimeKind.Unspecified → DateTimeKind.Utc</pre><p>Writer gọi <code>ToUniversalTime()</code> và format <code>fff</code>. Với Unspecified, việc quy về UTC còn phụ thuộc timezone máy chạy. Chuỗi ISO có 7 chữ số chỉ giải quyết precision, chưa đủ giữ nguyên ý nghĩa Kind/local time.</p><p><strong>Sửa:</strong> contract thời gian rõ ràng: DateTime lưu ticks + Kind; DateTimeOffset lưu ticks + offset. Nếu cần chuyển “giờ local” thành instant xuyên timezone, phải lưu thêm offset/timezone theo nghiệp vụ. Không tự suy đoán.</p><p class="source">DevKitJson.cs:16–20, 220, 519, 810–812.</p></details>
+<details open><summary><span class="badge p1">P1</span> F03 · Một số thuộc tính SDK không được ghi</summary><div class="scroll"><table><thead><tr><th>Kiểu</th><th>Dữ liệu mất đã tái hiện</th><th>Ảnh hưởng</th></tr></thead><tbody><tr><td>Entity</td><td><code>KeyAttributes</code>, <code>RowVersion</code>, <code>RelatedEntities</code></td><td>Alternate key, optimistic concurrency, relationship graph không được giữ.</td></tr><tr><td>EntityReference</td><td><code>KeyAttributes</code>, <code>RowVersion</code></td><td>Reference chỉ bằng alternate key có thể thành reference với Guid.Empty và không còn key.</td></tr><tr><td>EntityCollection</td><td><code>MoreRecords</code>, <code>PagingCookie</code>, <code>TotalRecordCount</code>, <code>TotalRecordCountLimitExceeded</code>, <code>MinActiveRowVersion</code></td><td>Replay paging có thể dừng sai; counts bị đổi.</td></tr></tbody></table></div><p><strong>Sửa:</strong> lập danh sách property được hỗ trợ cho từng SDK type, kiểm tra cả metadata và null/default. <code>EntityState</code>, kiểu early-bound và <code>ExtensionData</code> cũng cần quyết định contract riêng; không dùng tên test “AllDataverseTypes” thay cho bằng chứng đủ mọi property.</p><p class="source">DevKitJson.cs:356–401, 456–472, 819–839, 875–882.</p></details>
+<details open><summary><span class="badge p1">P1</span> F04 · Context7 được ghi ra nhưng không khôi phục đủ</summary><p>Context7 có <code>IsApplicationUser=true</code>, <code>EnvironmentId="env-123"</code>, TenantId và 1 phần tử <code>PreEntityImagesCollection</code>. Sau <code>Deserialize&lt;RemoteExecutionContext&gt;</code> rồi bọc bằng wrapper: <strong>false, chuỗi rỗng, Guid.Empty, mảng rỗng</strong>. Deserialize trực tiếp thành <code>IPluginExecutionContext7</code> ném exception.</p><p>Ngoài ra, <code>RemoteExecutionContext.InitiatingUserAgent</code> và AAD id có giá trị nhưng writer không ghi: chúng nằm trong <code>KnownContextProperties</code> nên bị <code>WriteExtraContextProperties</code> bỏ qua, trong khi writer thủ công chưa ghi chúng.</p><p class="source">DevKitJson.cs:21–39, 505–547, 582–598, 902–968, 1070–1080. Phân tích chi tiết tại mục 04.</p></details>
+<details open><summary><span class="badge p1">P1</span> F05 · JSON bị cắt vẫn được chấp nhận</summary><pre>{"x":1        → accepted, trả về {"x":1}
+[1,2          → accepted, trả về [1,2]
+"abc          → accepted, trả về "abc"
+{"x" 1}       → accepted, thiếu dấu :
+[1 2]         → accepted, thiếu dấu ,
+"a\qz"        → accepted, trả về "az"</pre><p>Parser không bắt buộc dấu kết thúc, dấu phân cách và escape hợp lệ. Trên trace có thể bị cắt, đây là lỗi đáng ưu tiên: payload thiếu trông như deserialize thành công. Duplicate key hiện ghi đè giá trị trước; đề xuất strict mode từ chối duplicate để tránh mơ hồ, dù RFC chỉ khuyến nghị key duy nhất.</p><p><strong>Sửa:</strong> parser/reader strict, kiểm tra hết input, báo vị trí và JSON path. <code>TryDeserialize</code> phải false cho dữ liệu hỏng. API trích payload khỏi trace phải nằm ngoài JSON parser.</p><p class="source">DevKitJson.cs:675–778. Chuẩn tham chiếu: <a href="https://www.rfc-editor.org/rfc/rfc8259">RFC 8259</a>, sections 4–7.</p></details>
+<details><summary><span class="badge p1">P1</span> F06 · Writer sinh JSON không hợp lệ</summary><p>Chuỗi có <code>U+0001</code> được ghi nguyên ký tự điều khiển. <code>double.NaN</code> ra literal <code>NaN</code>. Getter ném lỗi tạo chuỗi <code>{"Value":}</code>: writer đã ghi tên property rồi nuốt exception.</p><p><strong>Sửa:</strong> escape đầy đủ control characters; reject hoặc encode rõ non-finite numbers bằng tagged value; getter lỗi phải làm serialization thất bại có path. Không trả lại JSON dang dở. RFC không cho phép literal NaN/Infinity hay control character chưa escape.</p><p class="source">DevKitJson.cs:201–203, 238–263, 331–349; catch tương tự tại 582–634. <a href="https://www.rfc-editor.org/rfc/rfc8259">RFC 8259</a>.</p></details>
+<details><summary><span class="badge p1">P1</span> F07 · Key dữ liệu người dùng bị hiểu thành metadata</summary><pre>Dictionary { "_t": "M", "v": 5 }
+→ Serialize → Deserialize → Microsoft.Xrm.Sdk.Money
+
+{ "_t": "business", "id": 7 }
+→ { "__type": "business", "Id": 7 }</pre><p>Mọi object có <code>_t</code> đều bị expand key; <code>__type</code> cũng kích hoạt reconstruct. Va chạm có thể xảy ra ở root, DTO lồng nhau, Attributes hoặc Parameters.</p><p><strong>Sửa:</strong> metadata nằm trong grammar/envelope riêng. Dictionary nghiệp vụ được encode thành node dictionary, không quét key nghiệp vụ để đoán kiểu. Legacy payload đã va chạm thì không thể đoán chắc ý định; phải có chế độ đọc rõ ràng.</p><p class="source">DevKitJson.cs:721–728, 1014–1025.</p></details>
+<details><summary><span class="badge p2">P2</span> F08 · Hỗ trợ C# không nhất quán giữa root và property</summary><ul><li><code>Deserialize&lt;int[]&gt;</code> và <code>Deserialize&lt;List&lt;int&gt;&gt;</code> lỗi ở root, dù property lồng trong POCO có một số nhánh coercion.</li><li><code>Dictionary&lt;string,int&gt; { ["a"]=1 }</code> serialize thành <code>["[a, 1]"]</code>; không phải JSON object.</li><li><code>Dictionary&lt;string,string&gt;</code> với value null ném NullReferenceException.</li><li><code>ulong.MaxValue</code> ra string; enum long lớn hơn Int32 ném OverflowException.</li><li>Class chỉ có public field có thể serialize thành tên class qua ToString().</li></ul><p>Custom struct, tuple, immutable object, constructor có tham số, polymorphism và collection đặc biệt chưa có contract thống nhất. <strong>Sửa:</strong> dùng cùng mapping pipeline cho root/nested; unsupported type phải fail rõ, không fallback ToString.</p><p class="source">DevKitJson.cs:80–124, 223–235, 303–315, 1083–1176.</p></details>
+<details><summary><span class="badge p2">P2</span> F09 · ThreadStatic không giải quyết re-entrancy</summary><p>Trong một getter được gọi bởi <code>SerializeCompact</code>, lệnh <code>Serialize(new Money(1))</code> đáng lẽ full lại trả compact vì dùng chung <code>_compact</code>. Chiều ngược lại, một lệnh compact lồng nhau reset cờ của lệnh bên ngoài.</p><p><strong>Sửa:</strong> mode nằm trong writer/options của từng lần gọi. Không gọi đây là lỗi ghi đè giữa hai thread: <code>ThreadStatic</code> đã tách thread; vấn đề được tái hiện là gọi lồng nhau trên cùng thread.</p><p class="source">DevKitJson.cs:45–74, 158–187. Harness đã kiểm chứng lệnh Serialize bên trong SerializeCompact.</p></details>
+<details><summary><span class="badge p2">P2</span> F10 · Giới hạn recursion và giải nén chưa được định nghĩa</summary><p>Đọc source thấy thiếu cycle detection / max depth / max collection size; giải nén dùng <code>CopyTo</code> không giới hạn output. Chưa chạy thử stack overflow trong review để tránh làm crash test host.</p><p><strong>Sửa:</strong> giới hạn theo operation, phát hiện cycle bằng reference identity, thông báo path. Graph có reference dùng chung cần chọn giữ identity bằng object-id/ref hoặc tuyên bố chỉ giữ value semantics. Giới hạn input và decompressed bytes phải áp dụng trước khi cấp phát toàn bộ buffer.</p><p class="source">DevKitJson.cs:194–235, 318–349, 628–632, 641–759; Extension.cs:554–565.</p></details>
+<details><summary><span class="badge p1">P1</span> F11 · Ngân sách trace được đo trước khi bọc C# snippet</summary><pre>JSON compact: 10.228 bytes   ≤ 10.240
+C# snippet:   10.261 bytes   &gt; 10.240</pre><p>Nhánh không nén chỉ kiểm tra JSON trước khi thêm <code>var json = ...</code> và escape dấu nháy. Chưa tính các dòng trace khác trong cùng execution. <strong>Sửa:</strong> đo đúng chuỗi cuối cùng sẽ Trace; không dùng riêng ngưỡng JSON để quyết định.</p><p class="source">Extension.cs:511–535. Harness mô phỏng đúng công thức snippet của nhánh có dấu apostrophe.</p></details>
+</section>
+
+<section id="context">
+<span class="num">04 / CONTEXT &amp; REPLAY</span><h2>Giữ đủ Context7 ngay trong DevKitJson.cs.</h2>
+<p><code>IPluginExecutionContext7</code> là interface kế thừa các phiên bản trước; <code>RemoteExecutionContext</code> là concrete SDK type phục vụ remote execution, không có toàn bộ bề mặt Context7. Wrapper hiện tại giúp cast/call an toàn bằng default khi thiếu property. Default đó không chứng minh dữ liệu gốc là false, empty hay null. <a href="https://learn.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.ipluginexecutioncontext7?view=dataverse-sdk-latest">Context7</a> · <a href="https://learn.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.remoteexecutioncontext?view=dataverse-sdk-latest">RemoteExecutionContext</a>.</p>
+<div class="flow"><div><b>1. Capture theo interface</b>Đọc base + v2…v7 qua interface contract. Thu được cả explicit interface implementations; tránh quét riêng public property của runtime class.</div><div><b>2. ContextData nội bộ</b>Nested type trong DevKitJson.cs chứa dữ liệu, context version, property presence, parent, Parameters và image arrays.</div><div><b>3. ReplayContext nội bộ</b>Nested type cùng file implement IPluginExecutionContext7; giữ dữ liệu mà RemoteExecutionContext không có. Không tạo project/file adapter mới.</div></div>
+<ul><li><strong>ParentContext:</strong> capture recursively có giới hạn; mỗi parent giữ capability/presence riêng. Image arrays phải giữ thứ tự và quan hệ với từng target trong bulk operation.</li><li><strong>RemoteExecutionContext:</strong> dùng public setter cho property hỗ trợ; dùng collection public để điền dữ liệu. Harness xác nhận nhiều setter public đang sẵn có. Không dựa vào private backing field hoặc fuzzy substring.</li><li><strong>Context phiên bản tương lai:</strong> dữ liệu không biết giữ trong extension bag của snapshot, hoặc báo unsupported trong strict restore. Không hứa tự động hỗ trợ interface mới chỉ nhờ reflection.</li><li><strong>Console:</strong> cấp cùng replay context cho các interface được hỗ trợ, đặc biệt base và v7. Hiện Helper cấp một mock khác cho <code>IExecutionContext</code>; cần test service-provider mapping.</li><li><strong>Replay không phải tái tạo server:</strong> snapshot không lưu transaction đang mở, service object, toàn bộ database hoặc thứ tự side effect bên ngoài. Test plugin logic phải dùng dịch vụ giả lập hoặc fixture phù hợp.</li></ul>
+<div class="callout warn"><strong>Giữ tương thích:</strong> <code>Deserialize&lt;RemoteExecutionContext&gt;</code> vẫn có đường đọc legacy. API replay mới (ví dụ <code>DeserializeContext</code>, tên chưa chốt) trả snapshot/adapter và diagnostics. Nếu ép snapshot v7 sang RemoteExecutionContext làm mất trường, strict conversion phải từ chối; đường legacy phải thông báo rõ phần không biểu diễn được.</div>
+</section>
+
+<section id="contract">
+<span class="num">05 / HỢP ĐỒNG DỮ LIỆU</span><h2>“Chính xác” phải kiểm tra được bằng assertion.</h2>
+<div class="scroll"><table><thead><tr><th>Nhóm</th><th>Cam kết đề xuất</th><th>Giới hạn cần ghi rõ</th></tr></thead><tbody>
+<tr><td>Scalar .NET</td><td>Giữ giá trị và kiểu cho các số nguyên signed/unsigned, bool, char, string, Guid, byte[], decimal, float/double.</td><td>Vị trí object cần type tag; JSON number đơn thuần không phân biệt <code>1</code>, <code>1L</code>, <code>1m</code>. Có policy cho -0, NaN/Infinity; không ghi literal JSON sai.</td></tr>
+<tr><td>Ngày / giờ</td><td>DateTime ticks + Kind; DateTimeOffset ticks + offset; TimeSpan ticks.</td><td>Không tự normalize Unspecified sang UTC. DateOnly/TimeOnly chỉ ở runtime hỗ trợ, dùng contract rõ khi trao đổi với net462.</td></tr>
+<tr><td>Enum / nullable</td><td>Underlying type đúng, đủ 64-bit; null khác default; giữ identity enum khi nằm trong object.</td><td>Type alias đăng ký; không tự load arbitrary CLR type theo tên từ payload.</td></tr>
+<tr><td>Collections</td><td>Array, List, collection interfaces phổ biến, Dictionary với key/value có codec; root và nested cùng hành vi.</td><td>Dictionary key không phải string encode entry-pairs; không gọi ToString làm mất kiểu. Comparer tùy biến / multidimensional array cần hỗ trợ riêng hoặc từ chối.</td></tr>
+<tr><td>POCO / record / struct</td><td>Property/field trong contract; nested objects; constructor mapping có khai báo; custom converter khi cần.</td><td>Phải chốt members nào thuộc contract, naming/casing, readonly/constructor policy. Object không có contract đầy đủ không được báo “lossless”.</td></tr>
+<tr><td>Polymorphism</td><td>Giữ derived type đã đăng ký khi property là base/interface/object.</td><td>Stable alias, danh sách kiểu cho phép. Không thể suy ra class gốc chỉ từ shape JSON; không bật tự do assembly-qualified type names.</td></tr>
+<tr><td>Dataverse</td><td>SDK types hiện có + metadata còn thiếu; mỗi type có bảng property được hỗ trợ và test deep equality.</td><td>Relationship, EntityReferenceCollection, OrganizationRequest/Response, QueryExpression/FetchExpression và early-bound có dữ liệu riêng cần codec/contract riêng trước khi công bố hỗ trợ.</td></tr>
+<tr><td>Object graph</td><td>Giai đoạn đầu: value semantics, cycle fail có path. Chỉ bật identity preservation khi có protocol object-id/ref và tests.</td><td>Không hứa <code>ReferenceEquals</code> sau round-trip; aliasing có thể ảnh hưởng replay nên strict mode cần cảnh báo/từ chối graph ngoài contract.</td></tr>
+<tr><td>Đối tượng có runtime state</td><td>Báo unsupported có path và type.</td><td>Delegate, stream, service client, task, handle, pointer, reflection object, lazy sequence chưa materialize… không phải snapshot dữ liệu thông thường.</td></tr>
+</tbody></table></div>
+<p>Đây là giới hạn của việc biểu diễn và khôi phục dữ liệu: JSON không tự lưu constructor, runtime resources hay danh tính CLR type. File tự viết vẫn có thể hỗ trợ rộng các class dữ liệu C#, miễn là quy tắc mapping, type metadata và các trường hợp không hỗ trợ được xác định rõ.</p>
+<p><strong>Strict mặc định cho dữ liệu cần replay:</strong> không âm thầm đổi null thành 0, không bỏ getter lỗi, không fallback ToString, không drop member ngoài contract. Có thể thêm chế độ inspection chấp nhận một phần, nhưng kết quả phải mang trạng thái <code>Incomplete</code> và danh sách đường dẫn thiếu; không trả một object “đã khôi phục đầy đủ”.</p>
+</section>
+
+<section id="architecture">
+<span class="num">06 / TỔ CHỨC TRONG MỘT FILE</span><h2>Một file vật lý, các trách nhiệm được phân định rõ.</h2>
+<div class="flow"><div><b>A · Parser tự viết</b>Đọc đúng grammar; tạo node nội bộ; giữ numeric lexeme nguyên vẹn; chưa ép mọi số thành double.</div><div><b>B · Binder tự viết</b>Node → kiểu CLR đích. Cùng một đường xử lý cho root, POCO property, collections và Dataverse values.</div><div><b>C · Writer tự viết</b>CLR → JSON hợp lệ. Options, cycle tracking, depth và mode nằm trong từng operation.</div><div><b>D · Codec Dataverse</b>Property mapping tường minh; giữ metadata. Full/compact map theo loại node và version.</div><div><b>E · Context data</b>Nested ContextData/ReplayContext để giữ đủ v1–v7; ánh xạ Remote qua public API.</div><div><b>Facade giữ nguyên</b>Serialize, SerializeCompact, Deserialize, TryDeserialize, MapTo. Tất cả vẫn trong DevKitJson.cs.</div></div>
+<pre><code>// Cấu trúc đề xuất, chưa phải implementation.
+internal static class DevKitJson
+{
+    // Public API hiện có
+    // Private nested types: Parser, Writer, JsonNode, NumberToken
+    // Private helpers: BindValue, BindObject, BindCollection
+    // Dataverse codecs + compact key tables
+    // Nested ContextData / ReplayContext : IPluginExecutionContext7
+    // Per-operation options/limits; type registry khi cần
+}</code></pre>
+<p>Không yêu cầu người dùng copy thêm serializer file hoặc cài package. Các tiện ích trace/nén đang có trong <code>Extension.cs</code> giữ vai trò call site; có thể sửa tính budget tại đó khi được duyệt. Nếu cần helper codec/frame dùng chung, đặt nó trong chính <code>DevKitJson.cs</code>, không tạo thư viện riêng.</p>
+<h3>Định dạng mới cần version và grammar không va chạm</h3>
+<pre><code>// Minh họa thiết kế v2; chưa phải API/JSON đã được triển khai.
+{
+  "$devkit": 2,
+  "kind": "snapshot",
+  "data": {
+    "t": "map",
+    "entries": [["_t", {"t":"string", "v":"M"}],
+                ["v",  {"t":"int32",  "v":5}]]
+  }
+}</code></pre>
+<p>Trong ví dụ, <code>_t</code> là dữ liệu người dùng và luôn được giữ nguyên. Node metadata được đọc ở vị trí do protocol quy định, không dò tên property tùy ý. DTO member map và Dataverse attribute map dùng cùng nguyên tắc. Schema-specific node có thể dùng field key ngắn để giảm overhead.</p>
+<ul><li><strong>Full/compact:</strong> cùng dữ liệu ngữ nghĩa. Map theo <em>version + type</em>; không global replace tên hoặc giá trị string. Log legacy không bị đổi key hàng loạt.</li><li><strong>Numeric:</strong> custom object values có tag; decimal lưu invariant text và parse decimal trực tiếp. Với finite float/double, dùng representation bảo toàn round-trip; kiểm tra -0 bằng bits. Nếu contract yêu cầu giữ bit pattern/decimal scale thì encode bits/scale rõ ràng.</li><li><strong>Unknown version/type:</strong> fail rõ trong strict replay, có thể giữ opaque node khi chỉ inspect. Không tự đoán format tương lai.</li><li><strong>Limits:</strong> max depth, entries, string length, input bytes và decompressed bytes. Ngưỡng cụ thể chốt bằng corpus thực tế; lỗi phải có code/path thay vì trả default.</li></ul>
+<p class="small">Envelope và tags làm payload dài hơn. Đây là chi phí để biết chính xác kiểu và completeness; phải đo cả compact + compressed cuối cùng. Không thể chữa thông tin đã mất chỉ bằng nén tốt hơn.</p>
+</section>
+
+<section id="engine">
+<span class="num">07 / HOÀN THIỆN LÕI TỰ VIẾT</span><h2>Giải quyết bằng thuật toán và contract trong chính file này.</h2>
+<h3>7.1 · Parser hai bước: đúng cú pháp trước, đúng kiểu sau</h3>
+<p>Dùng recursive descent parser cho sáu loại JSON: null, boolean, string, number, array, object. Mỗi hàm bắt buộc tiêu thụ đúng token kết thúc; dấu comma/colon phải đúng vị trí. Node số giữ nguyên đoạn chữ, ví dụ <code>123456789012345678.123456789</code>, trong nested <code>NumberToken</code>. Sau đó binder mới chuyển sang kiểu đích.</p>
+<pre><code>JSON text
+  → Parser: syntax tree + NumberToken nguyên văn
+  → BindValue(node, expectedType, options, path)
+  → CLR object / Dataverse object
+
+expectedType == decimal → decimal.Parse(token, InvariantCulture)
+expectedType == double  → double.Parse(token, InvariantCulture)
+expectedType == Money   → đọc Value thành decimal trực tiếp
+expectedType == object → type tag v2, hoặc quy tắc untyped legacy rõ ràng</code></pre>
+<p>Đọc generic <code>Deserialize&lt;T&gt;</code> phải truyền T vào binder từ đầu. Không đi vòng qua object đã bị ép sang double rồi Convert lại. <code>Deserialize</code> không có T vẫn cần giữ quy ước legacy khi đọc legacy; nếu cần khôi phục đúng kiểu số gốc ở vị trí object thì writer phải ghi metadata kiểu trong v2. Parser không thể đoán int/long/decimal từ một literal <code>1</code>.</p>
+<p>Ngữ pháp số phải kiểm tra trước khi gọi TryParse: sign, integer part, fraction, exponent; từ chối leading zero sai và thiếu exponent digits. String parser kiểm tra escape, Unicode và dấu quote cuối; giới hạn depth/length/entries nằm trong Parser instance. Strict mode từ chối duplicate key theo policy của DevKit. <a href="https://www.rfc-editor.org/rfc/rfc8259">RFC 8259</a> là chuẩn cú pháp; không cần một runtime JSON library để thực hiện.</p>
+<h3>7.2 · Writer dùng state riêng và không trả kết quả dang dở</h3>
+<ul><li><code>Writer</code> nested type chứa StringBuilder, mode, path, giới hạn và tập reference đang đi qua. Bỏ ThreadStatic mode.</li><li>Đọc getter và kiểm tra kiểu trước khi ghi member. Getter/codec lỗi làm operation thất bại có path; không catch rồi tiếp tục với JSON hỏng.</li><li>Escape đầy đủ U+0000…U+001F; xử lý surrogate theo contract đã chọn. Số dùng invariant formatting và các tag cần thiết; không ghi NaN/Infinity như bare number.</li><li>Cycle được nhận diện trước khi đệ quy. Collection lười/vô hạn không được enumerate không giới hạn; support policy chỉ chấp nhận các dạng có thể materialize trong budget.</li></ul>
+<h3>7.3 · Một binder cho mọi vị trí dữ liệu</h3>
+<div class="scroll"><table><thead><tr><th>Nhánh binding</th><th>Quy tắc triển khai đề xuất</th></tr></thead><tbody>
+<tr><td>Scalar / nullable / enum</td><td>Chuyển kiểu có kiểm tra overflow và nullability. Enum dùng underlying type đúng; không hard-code Convert.ToInt32. Giữ tag cho giá trị object-typed khi cần fidelity.</td></tr>
+<tr><td>Array / list / dictionary</td><td>Gọi lại BindValue cho từng phần tử/key/value, kể cả tại root. Dictionary generic không rơi vào nhánh IEnumerable ghi KeyValuePair.ToString().</td></tr>
+<tr><td>POCO / fields / struct</td><td>Reflection theo contract public members; cache metadata theo Type và options. Constructor mặc định + setters/fields là bước đầu. Struct được dựng và trả lại đúng giá trị boxed/unboxed.</td></tr>
+<tr><td>Immutable / readonly</td><td>Constructor binding chỉ khi có mapping xác định hoặc converter/factory được caller đăng ký. Nếu không thể gán đủ contract thì báo lỗi; không tạo object với các giá trị mặc định im lặng.</td></tr>
+<tr><td>Interface / base / object</td><td>Type alias do caller đăng ký khi thực sự có đa hình; kiểu cụ thể đã biết từ T/property không cần đăng ký mọi lần. Unknown alias fail; không tự load assembly hay Type.GetType từ payload tùy ý.</td></tr>
+<tr><td>Dataverse / context</td><td>Codec tường minh ưu tiên trước POCO reflection. Cùng property set cho full/compact. Remote dùng public setters; v7 dùng nested ReplayContext.</td></tr>
+</tbody></table></div>
+<p>Nếu cần mở rộng theo dự án, interface converter/options/registry cũng được khai báo trong <code>DevKitJson.cs</code>. Caller chỉ đăng ký các kiểu đặc thù; điều đó không tạo dependency JSON mới cho serializer. Không tự sao chép một thư viện JSON lớn vào file để thay thế implementation hiện tại.</p>
+<h3>7.4 · Làm đúng trước rồi mới tối ưu allocation</h3>
+<p>Syntax tree nội bộ giúp tách lỗi precision khỏi mapping và dễ test. Sau khi fidelity pass mới đo chi phí trên payload thật: reflection cache, tránh ToCharArray dư thừa, đọc số bằng slice, giảm temporary buffers hoặc streaming một số nhánh. Mỗi tối ưu phải giữ nguyên corpus round-trip; không hy sinh tính đúng để giảm vài byte hoặc vài allocation.</p>
+<div class="callout"><strong>Dependency contract:</strong> BCL tương thích net462 + SDK Dataverse đã có. Không thêm Newtonsoft.Json, System.Text.Json, DataContractJsonSerializer làm backend, JSON NuGet package, service hay DLL serializer. Cùng một file và cùng implementation chạy ở plugin/console; khác runtime vẫn đọc được cùng wire format.</div>
+</section>
+
+<section id="trace">
+<span class="num">08 / TRACE 10 KB</span><h2>Nén giúp tăng xác suất vừa; không bảo đảm luôn vừa.</h2>
+<p>Theo Microsoft, các lần Trace được gom vào MessageBlock và các dòng cũ có thể bị loại khi vượt 10 KB. Chia payload thành nhiều Trace call trong cùng execution không tăng tổng dung lượng. Vì vậy “đã vừa lúc ghi” vẫn không bảo đảm payload còn nguyên sau các trace tiếp theo. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/logging-tracing">Logging and tracing</a>.</p>
+<h3>Đo trên mã hiện tại · bytes / ký tự Base64 ASCII</h3>
+<div class="scroll"><table><thead><tr><th>Payload / runtime</th><th>Full JSON</th><th>Compact JSON</th><th>Full + Deflate + Base64</th><th>Compact + Deflate + Base64</th></tr></thead><tbody>
+<tr><td>Fixture Dataverse · net48</td><td>5.202</td><td>3.661</td><td>2.136</td><td>1.776</td></tr>
+<tr><td>Fixture Dataverse · net10</td><td>5.202</td><td>3.661</td><td>2.620</td><td>2.228</td></tr>
+<tr><td>20.000 ký tự A · net48</td><td>20.119</td><td>20.092</td><td>264</td><td>232</td></tr>
+<tr><td>12.000 byte giả ngẫu nhiên · net48</td><td>16.138</td><td>16.100</td><td>16.416</td><td>16.380</td></tr>
+</tbody></table></div>
+<p class="small">Deflate CompressionLevel.Fastest, dữ liệu tổng hợp; fixture là object đọc từ AllDataverseTypes.json bằng implementation hiện tại. Đây là đo kích thước, không phải benchmark hiệu năng hay chứng minh fixture được bảo toàn. Chưa cộng C# snippet/envelope. Byte nén thay đổi theo runtime nên test cross-runtime phải so dữ liệu giải nén, không so Base64 giống hệt.</p>
+<p>Với fixture net48, compact giảm khoảng 30% JSON thô và khoảng 17% sau nén. Có lợi thật, nhưng dữ liệu gần ngẫu nhiên vẫn vượt giới hạn sau nén. Base64 có chi phí <code>4 × ceil(compressedBytes / 3)</code> ký tự, trước wrapper.</p>
+<h3>Luồng ghi đề xuất</h3>
+<ol><li>Capture snapshot đủ dữ liệu theo contract. Nếu lỗi capture, trả diagnostics có cấu trúc; không làm ra snapshot giả đủ.</li><li>Tạo các candidate lossless: full, compact và phiên bản nén khi kích thước cần. Chọn chuỗi cuối ngắn nhất phù hợp budget; ưu tiên readable khi đáp ứng yêu cầu.</li><li>Bọc frame có version, encoding, chiều dài và checksum trên bytes gốc. Đo cả prefix/suffix, newline, Base64 và phần snippet nếu vẫn xuất snippet.</li><li>Ngân sách có headroom cấu hình cho các trace khác. Ví dụ target payload 8 KB chỉ là khởi điểm cần đo; không phải bảo đảm của platform. Ghi payload ở thời điểm cuối hợp lý và kiểm tra record thật.</li><li>Reader xác minh frame, length/checksum và completeness trước khi deserialize/replay. Checksum phát hiện hỏng/cắt; không phải chữ ký xác thực nguồn.</li><li>Nếu vẫn quá lớn, trả <code>TooLarge</code> kèm sizes/correlation id; không cắt JSON. Có thể xuất bản tóm tắt ghi rõ incomplete để xem, nhưng cấm dùng như full replay.</li></ol>
+<div class="callout"><strong>Nếu bắt buộc giữ toàn bộ snapshot lớn:</strong> cần sink khác được cấu hình rõ, như storage hoặc file column phù hợp, rồi trace chỉ giữ reference/correlation id. Đó là hạng mục riêng về dung lượng, quyền và transaction; không tự thêm upload hay lưu dữ liệu ngoài trong lần sửa này. Console có thể lưu artifact file đầy đủ khi có dữ liệu; console không thể tái tạo phần server chưa ghi.</div>
+<p><code>DebugContext</code> và <code>LogMessage</code> hiện nằm trong <code>#if DEBUG</code>. Test phải xác nhận hành vi Debug/Release. Serializer strict nên ném lỗi; lớp tracing có thể catch và ghi thông báo capture-failed để việc chẩn đoán không phá nghiệp vụ, nhưng không được ngụy trang thành snapshot thành công.</p>
+</section>
+
+<section id="migration">
+<span class="num">09 / TƯƠNG THÍCH</span><h2>Đọc log cũ trước; thay writer theo version.</h2>
+<div class="step"><h3>Giai đoạn 1 · Sửa lỗi đã có bằng chứng</h3><p>Thêm regression trước, rồi sửa numeric precision, DateTime precision trong giới hạn format cũ, SDK metadata, property Remote bị bỏ qua, parser/writer, root mapping và per-call state. Giữ command/tool names, API hiện tại và JSON keys hiện có. Những thay đổi semantics như giữ Kind hoặc type-tag số phải được tách thành format v2; không giả vờ sửa lossless hoàn toàn chỉ bằng đổi <code>fff</code> thành <code>fffffff</code>.</p></div>
+<div class="step"><h3>Giai đoạn 2 · Context7, CLR mapping và wire v2 trong cùng file</h3><p>Thêm nested ContextData/ReplayContext, binder thống nhất, registry cho đa hình, dictionary collision-free, metadata số/thời gian và frame/budget trace. Tất cả logic serializer mới ở DevKitJson.cs; không đổi backend hoặc mô hình đóng gói. Chỉ cập nhật các caller console/test helper hiện có khi cần sử dụng kết quả khôi phục Context7.</p></div>
+<div class="step"><h3>Giai đoạn 3 · Chuyển mặc định sau kiểm thử tương thích</h3><p>Reader nhận legacy full, legacy compact, compressed legacy và v2 bằng routing rõ. Writer v2 chỉ thành mặc định khi release note, fixtures và sample migration đã sẵn sàng. Cho phép tạm dùng legacy writer khi cần tương tác với console cũ.</p></div>
+<div class="scroll"><table><thead><tr><th>Producer → consumer</th><th>Chính sách</th></tr></thead><tbody><tr><td>Legacy → reader mới</td><td>Đọc payload hợp lệ; giữ known limitations. JSON đã bị cắt hoặc mơ hồ không coi là đầy đủ.</td></tr><tr><td>v2 → reader mới</td><td>Exact theo contract, xác minh version/length/checksum.</td></tr><tr><td>v2 → reader cũ</td><td>Không hứa tương thích. Trì hoãn đổi default hoặc dùng legacy writer rõ ràng.</td></tr><tr><td>Log cũ đã mất ticks/metadata</td><td>Không thể phục hồi thông tin chưa từng được lưu. Diagnostics cho missing capability.</td></tr></tbody></table></div>
+<p><strong>Vùng code dự kiến:</strong> toàn bộ serializer tại <code>01.SharedProjectTemplate/DevKitJson.cs</code>; sửa budget tại Extension hiện có; cập nhật <code>DynamicsCrm.DevKit.Shared/Resources/Helper.cs</code> và shared-test helpers nếu cần Context7; cập nhật hai test projects. Không thêm source file serializer, project hay package; không thay template inclusion chỉ để chia nhỏ code. Chỉ cập nhật bản generated/sample khi đã xác định cần đồng bộ, không sửa hàng loạt các bản sao dưới <code>DynamicsCrm.DevKit.Tests</code>.</p>
+<p>Giữ version source <code>4.44.44.44</code> và placeholder build date. Sau thay đổi: build nhỏ nhất cho template/tests và CLI; nếu động tới mã VSIX thì build bằng VS MSBuild. Không full package/release khi chưa được yêu cầu; không tự reinstall MCP chỉ vì đang viết tài liệu review.</p>
+</section>
+
+<section id="tests">
+<span class="num">10 / KIỂM THỬ</span><h2>Unit tests là điều kiện hoàn thành, không phải bước bổ sung.</h2>
+<p><strong>Hiện tại đã chạy:</strong> 378 test net48 (DevKitJson + wrapper), 22 test net10 DevKitJson; tất cả pass, không skip. Chưa sửa test trong repo vì đang chờ duyệt implementation.</p>
+<p><strong>Lỗ hổng assertion cụ thể:</strong> <code>DevKitJsonCliCoverageTests.cs:135</code> tạo paging metadata nhưng chỉ assert EntityName/entities. <code>DevKitJsonTest.cs:1561</code> assert extra context field có trong JSON, nhưng sau deserialize chỉ assert MessageName/PrimaryEntityName. Các test này cần nâng lên kiểm tra cả trước và sau, không chỉ thêm số lượng test.</p>
+<div class="scroll"><table><thead><tr><th>Bộ test cần thêm / sửa</th><th>Assertion bắt buộc</th></tr></thead><tbody>
+<tr><td>Numeric fidelity</td><td>Decimal 28–29 chữ số, min/max, scale theo contract; Money; long/ulong boundaries; float/double R và -0; object-typed values kiểm tra cả GetType.</td></tr>
+<tr><td>Time fidelity</td><td>Ticks có 7 fractional digits; UTC/Local/Unspecified; DateTimeOffset không tròn giờ; TimeSpan; chạy producer/consumer khác timezone.</td></tr>
+<tr><td>SDK metadata</td><td>Entity key/row version/relationships/state; EntityReference alternate key và Name null/empty; EntityCollection toàn bộ pagination/counts; nested AliasedValue và collections.</td></tr>
+<tr><td>Context base → v7</td><td>Từng property với non-default value; explicit implementation; Remote extra props; null/empty/missing; parent nhiều cấp; arrays của images có nhiều targets và đúng thứ tự.</td></tr>
+<tr><td>Replay end-to-end</td><td>Fake plugin đọc IsApplicationUser, TenantId, EnvironmentId, UserAgent và images từ service provider; kết quả như trước serialize. Dùng mock services, không gọi môi trường thật từ unit test.</td></tr>
+<tr><td>CLR root / nested</td><td>Cùng corpus ở root, POCO member, Dictionary&lt;string,object&gt;, Entity.Attributes, Parameters; arrays/list/dictionary/null strings; enum 64-bit; struct và immutable DTO thuộc contract.</td></tr>
+<tr><td>Marker collisions</td><td>_t, __type, v, id, ln, tên trùng metadata v2 và strings chứa JSON đều giữ nguyên dữ liệu nghiệp vụ; unknown version/type fail đúng policy.</td></tr>
+<tr><td>Strict parser/writer</td><td>EOF ở mọi token, thiếu colon/comma/closing quote, invalid escape, U+0000…001F, surrogate cases, leading zero, duplicate keys theo policy, NaN/Infinity. Dùng fixtures hợp lệ/không hợp lệ theo RFC và expected tokens độc lập; không chỉ để parser và writer tự xác nhận lẫn nhau.</td></tr>
+<tr><td>Errors / limits</td><td>Getter/setter lỗi, constructor không hỗ trợ, overflow, cycle, max depth/entries/bytes, compressed payload hỏng. Không trả partial object như success.</td></tr>
+<tr><td>Re-entrancy / concurrency</td><td>Serialize gọi SerializeCompact và ngược lại trong getter; nhiều calls song song. Options không rò sang operation khác.</td></tr>
+<tr><td>Trace transport</td><td>ASCII/Tiếng Việt/emoji/apostrophe; ngay dưới/bằng/trên budget sau encoding; trace khác trước/sau; payload không nén được; frame bị cắt; checksum sai; TooLarge và Debug/Release behavior.</td></tr>
+<tr><td>Legacy &amp; cross-runtime</td><td>Golden log full/compact/compressed giữ trong repo; net462/Framework ↔ net10 fixtures hai chiều; so semantic data sau giải nén, không buộc compressed bytes giống nhau.</td></tr>
+<tr><td>Broad compatibility &amp; dependency</td><td>Compile source duy nhất trên net462 với BCL + SDK; net48 MSTest; net10 MSTest. Kiểm tra DevKitJson không tham chiếu JSON library, kể cả lấy từ dependency bắc cầu của SDK. SDK public-property inventory phát hiện field mới chưa được phân loại.</td></tr>
+</tbody></table></div>
+<p><strong>Vị trí:</strong> nâng <code>DynamicsCrm.DevKit.Vsix.UnitTests/Lib/DevKitJsonTest.cs</code>, <code>DevKitJsonCompactTest.cs</code>, <code>PluginExecutionContext7WrapperTest.cs</code>; cập nhật ba file <code>DevKitJson*CoverageTests.cs</code> trong CLI tests. Fixtures/contract tests dùng chung để tránh lệch expectations. Test transport phải gọi production helper sau substitution template phù hợp, không chỉ chép lại công thức vào test.</p>
+<pre><code>dotnet test DynamicsCrm.DevKit.Vsix.UnitTests/DynamicsCrm.DevKit.Vsix.UnitTests.csproj --filter "FullyQualifiedName~DevKitJson|FullyQualifiedName~PluginExecutionContext7Wrapper"
+dotnet test DynamicsCrm.DevKit.Cli.UnitTests/DynamicsCrm.DevKit.Cli.UnitTests.csproj --filter "FullyQualifiedName~DevKitJson"</code></pre>
+<p class="small">Lệnh trên là baseline đã chạy. Khi thêm class test mới, mở rộng filter để không bỏ sót. Net10 tests có thay global culture/shared state cần DoNotParallelize hoặc process isolation. Nếu yêu cầu coverage riêng, dùng workflow coverage của repo; lần này không thu coverage.</p>
+</section>
+
+<section id="approval" class="decision">
+<span class="num">11 / QUYẾT ĐỊNH CẦN DUYỆT</span><h2>Hoàn thiện serializer một file, không dependency JSON.</h2>
+<p><strong>Phạm vi đề xuất để duyệt:</strong> thực hiện giai đoạn 1 và 2 theo thứ tự regression → sửa lõi → bổ sung contract v2 opt-in. Đích là fidelity cho Dataverse/Context7 và các kiểu dữ liệu C# trong support matrix, bằng chính parser/writer/binder của DevKitJson.cs.</p>
+<ul><li>Giữ duy nhất một source file serializer; nested classes/helpers nằm trong file đó. Không Newtonsoft.Json, System.Text.Json hoặc backend serializer khác; không đổi deployment.</li><li>Sửa F01–F11 theo mức ưu tiên; dữ liệu cần type/Kind metadata mới dùng v2 opt-in. Giữ API hiện có và reader legacy; không tự đổi mặc định writer.</li><li>Khôi phục đủ Context7 bằng type do DevKit sở hữu trong cùng file. Không coi wrapper trả default là round-trip thành công.</li><li>Cập nhật unit test và assertions yếu; chạy net48/net10, build CLI và smoke compile template net462; kiểm tra dependency contract.</li><li>Chỉ sửa caller/helper hiện có khi cần tính budget hoặc dùng Context7. Không tạo bộ nhiều file/framework mới, không thêm external storage.</li></ul>
+<p><strong>Tiêu chí hoàn thành:</strong> các kiểu đã công bố hỗ trợ pass deep round-trip cả full/compact/v2 phù hợp; input hỏng và kiểu không thể khôi phục báo lỗi rõ; log cũ hợp lệ đọc được; source giữ mô hình một file. Giai đoạn 3 đổi writer mặc định sẽ được duyệt riêng sau khi có kết quả tương thích.</p>
+<p>Tài liệu này không ghi nhận approval tự động. Theo yêu cầu của bạn: <em>“để tôi approve bạn mới làm”</em>, thay đổi source và unit tests trong repository chỉ bắt đầu sau khi bạn duyệt phạm vi.</p>
+</section>
+
+<section id="evidence">
+<span class="num">12 / BẰNG CHỨNG</span><h2>Có thể đối chiếu và tái chạy.</h2>
+<p>Review source ở commit <code>4eed8a301b3372411d462dcf696bb02f533c1a7f</code>. SHA-256 của file được review: <code>FDDB2205E57E48F39EF22A22F0F9E864D016B6A0997672A44D6B7FBBE5A7F638</code>. Line numbers trong báo cáo tương ứng snapshot này.</p>
+<p>Harness dùng source link từ đúng file, không chép implementation sửa đổi. net48 dùng CoreAssemblies 9.0.2.60; net10 dùng Dataverse.Client 1.2.27 như CLI. Framework runtime báo 4.0.30319.42000, .NET runtime 10.0.12. Source harness và output được nhúng bên dưới; không phải unit tests mới đã tích hợp.</p>
+<p class="small">Phạm vi chưa kiểm chứng: Dataverse sandbox thật, truncation/encoding thực tế của MessageBlock với Unicode, SDK runtime khác, performance latency/allocation, graph cycles gây stack overflow, và implementation v2 được đề xuất. Harness restore có NuGet audit warnings của dependency tree SDK; không nâng package trong review này. Kết quả pass baseline không phải chứng nhận deployment/coverage. HTML đã kiểm tra cấu trúc; chưa kiểm tra ảnh render vì công cụ browser chặn URL file cục bộ.</p>
+<details><summary>Output net48 (nguy&#234;n văn)</summary><pre><code>Runtime=4.0.30319.42000; SDK=9.0.0.0
+decimal =&gt; 123456789012345678.123456789 -&gt; 123456789012346000; equal=False
+money =&gt; 123456789012345678.123456789 -&gt; 123456789012346000
+decimal.max =&gt; 79228162514264337593543950335
+datetime =&gt; 2026-10-02T01:02:03.1234567Z -&gt; 2026-10-02T01:02:03.1230000Z; ticks lost=4567
+datetime.unspecified =&gt; Unspecified -&gt; Utc
+entity.metadata =&gt; keys=0; related=0; rowVersion=null
+reference.metadata =&gt; keys=0; rowVersion=null
+collection.metadata =&gt; MoreRecords=False; cookie=null; count=0; limit=False; min=null
+parse {&quot;x&quot;:1 =&gt; accepted; result={&quot;x&quot;:1}
+parse [1,2 =&gt; accepted; result=[1,2]
+parse &quot;abc =&gt; accepted; result=&quot;abc&quot;
+parse {&quot;x&quot; 1} =&gt; accepted; result={&quot;x&quot;:1}
+parse [1 2] =&gt; accepted; result=[1,2]
+parse [1,] =&gt; accepted; result=[1]
+parse &quot;a\qz&quot; =&gt; accepted; result=&quot;az&quot;
+parse 01 =&gt; accepted; result=1
+parse {&quot;x&quot;:1,&quot;x&quot;:2} =&gt; accepted; result={&quot;x&quot;:2}
+control U+0001 =&gt; literal control emitted=True
+NaN =&gt; NaN
+dictionary marker =&gt; Microsoft.Xrm.Sdk.Money
+dictionary unknown marker =&gt; {&quot;__type&quot;:&quot;business&quot;,&quot;Id&quot;:7}
+root int array =&gt; THREW InvalidOperationException
+root list int =&gt; THREW InvalidOperationException
+typed dictionary =&gt; [&quot;[a, 1]&quot;]
+dictionary null string =&gt; THREW NullReferenceException
+ulong =&gt; &quot;18446744073709551615&quot;
+enum64 =&gt; THREW OverflowException
+fields =&gt; &quot;FieldDto&quot;
+throwing getter =&gt; {&quot;Value&quot;:}
+reentry =&gt; {&quot;Json&quot;:&quot;{\&quot;_t\&quot;:\&quot;M\&quot;,\&quot;v\&quot;:1}&quot;}
+remote agent =&gt; agent key=False; agent=null; AAD=00000000-0000-0000-0000-000000000000
+context7 via remote wrapper =&gt; written xau=True; restored IsApplicationUser=False; env=; tenant=00000000-0000-0000-0000-000000000000; image arrays=0; agent=ReviewAgent/1.0
+context7 direct =&gt; THREW InvalidOperationException
+remote public setters =&gt; Stage,Mode,MessageName,PrimaryEntityName,SecondaryEntityName,RequestId,UserId,InitiatingUserId,BusinessUnitId,OrganizationId,OrganizationName,CorrelationId,Depth,IsExecutingOffline,IsOfflinePlayback,IsolationMode,IsInTransaction,OperationId,OwningExtension,PrimaryEntityId,OperationCreatedOn,ParentContext,UserAzureActiveDirectoryObjectId,InitiatingUserAzureActiveDirectoryObjectId,InitiatingUserAgent,ExtensionData
+size fixture =&gt; full=5202; compact=3661; full deflate base64=2136; compact deflate base64=1776; compact snippet=3695
+size repeated =&gt; full=20119; compact=20092; full deflate base64=264; compact deflate base64=232; compact snippet=20126
+size random =&gt; full=16138; compact=16100; full deflate base64=16416; compact deflate base64=16380; compact snippet=16134
+snippet budget =&gt; JSON bytes=10228; snippet bytes=10261
+</code></pre></details>
+<details><summary>Output net10.0 (nguy&#234;n văn)</summary><pre><code>Runtime=10.0.12; SDK=9.0.0.0
+decimal =&gt; 123456789012345678.123456789 -&gt; 123456789012346000; equal=False
+money =&gt; 123456789012345678.123456789 -&gt; 123456789012346000
+decimal.max =&gt; 79228162514264337593543950335
+datetime =&gt; 2026-10-02T01:02:03.1234567Z -&gt; 2026-10-02T01:02:03.1230000Z; ticks lost=4567
+datetime.unspecified =&gt; Unspecified -&gt; Utc
+entity.metadata =&gt; keys=0; related=0; rowVersion=null
+reference.metadata =&gt; keys=0; rowVersion=null
+collection.metadata =&gt; MoreRecords=False; cookie=null; count=0; limit=False; min=null
+parse {&quot;x&quot;:1 =&gt; accepted; result={&quot;x&quot;:1}
+parse [1,2 =&gt; accepted; result=[1,2]
+parse &quot;abc =&gt; accepted; result=&quot;abc&quot;
+parse {&quot;x&quot; 1} =&gt; accepted; result={&quot;x&quot;:1}
+parse [1 2] =&gt; accepted; result=[1,2]
+parse [1,] =&gt; accepted; result=[1]
+parse &quot;a\qz&quot; =&gt; accepted; result=&quot;az&quot;
+parse 01 =&gt; accepted; result=1
+parse {&quot;x&quot;:1,&quot;x&quot;:2} =&gt; accepted; result={&quot;x&quot;:2}
+control U+0001 =&gt; literal control emitted=True
+NaN =&gt; NaN
+dictionary marker =&gt; Microsoft.Xrm.Sdk.Money
+dictionary unknown marker =&gt; {&quot;__type&quot;:&quot;business&quot;,&quot;Id&quot;:7}
+root int array =&gt; THREW InvalidOperationException
+root list int =&gt; THREW InvalidOperationException
+typed dictionary =&gt; [&quot;[a, 1]&quot;]
+dictionary null string =&gt; THREW NullReferenceException
+ulong =&gt; &quot;18446744073709551615&quot;
+enum64 =&gt; THREW OverflowException
+fields =&gt; &quot;FieldDto&quot;
+throwing getter =&gt; {&quot;Value&quot;:}
+reentry =&gt; {&quot;Json&quot;:&quot;{\&quot;_t\&quot;:\&quot;M\&quot;,\&quot;v\&quot;:1}&quot;}
+remote agent =&gt; agent key=False; agent=null; AAD=00000000-0000-0000-0000-000000000000
+context7 via remote wrapper =&gt; written xau=True; restored IsApplicationUser=False; env=; tenant=00000000-0000-0000-0000-000000000000; image arrays=0; agent=ReviewAgent/1.0
+context7 direct =&gt; THREW InvalidOperationException
+remote public setters =&gt; Stage,Mode,MessageName,PrimaryEntityName,SecondaryEntityName,RequestId,UserId,InitiatingUserId,BusinessUnitId,OrganizationId,OrganizationName,CorrelationId,Depth,IsExecutingOffline,IsOfflinePlayback,IsolationMode,IsInTransaction,OperationId,OwningExtension,PrimaryEntityId,OperationCreatedOn,ParentContext,UserAzureActiveDirectoryObjectId,InitiatingUserAzureActiveDirectoryObjectId,InitiatingUserAgent,ExtensionData
+size fixture =&gt; full=5202; compact=3661; full deflate base64=2620; compact deflate base64=2228; compact snippet=3695
+size repeated =&gt; full=20119; compact=20092; full deflate base64=388; compact deflate base64=352; compact snippet=20126
+size random =&gt; full=16138; compact=16100; full deflate base64=21460; compact deflate base64=21424; compact snippet=16134
+snippet budget =&gt; JSON bytes=10228; snippet bytes=10261
+</code></pre></details>
+<details><summary>Harness C# d&#249;ng để t&#225;i hiện</summary><pre><code>using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.IO;
+using System.IO.Compression;
+using System.Text;
+using Microsoft.Xrm.Sdk;
+
+public class Throwing { public int Value { get { throw new Exception(&quot;getter&quot;); } } }
+public class FieldDto { public int Count = 7; }
+public class Reentry { public string Json { get { return DevKitJson.Serialize(new Money(1m)); } } }
+public enum LargeEnum : long { Large = 2147483648L }
+public class Context7 : IPluginExecutionContext7
+{
+ public int Mode {get;set;} public int IsolationMode {get;set;} public int Depth {get;set;}
+ public string MessageName {get;set;} public string PrimaryEntityName {get;set;} public Guid? RequestId {get;set;} public string SecondaryEntityName {get;set;}
+ public ParameterCollection InputParameters {get;set;} = new ParameterCollection(); public ParameterCollection OutputParameters {get;set;} = new ParameterCollection(); public ParameterCollection SharedVariables {get;set;} = new ParameterCollection();
+ public Guid UserId {get;set;} public Guid InitiatingUserId {get;set;} public Guid BusinessUnitId {get;set;} public Guid OrganizationId {get;set;} public string OrganizationName {get;set;} public Guid PrimaryEntityId {get;set;}
+ public EntityImageCollection PreEntityImages {get;set;} = new EntityImageCollection(); public EntityImageCollection PostEntityImages {get;set;} = new EntityImageCollection();
+ public EntityReference OwningExtension {get;set;} public Guid CorrelationId {get;set;} public bool IsExecutingOffline {get;set;} public bool IsOfflinePlayback {get;set;} public bool IsInTransaction {get;set;}
+ public Guid OperationId {get;set;} public DateTime OperationCreatedOn {get;set;} public IPluginExecutionContext ParentContext {get;set;} public int Stage {get;set;}
+ public Guid UserAzureActiveDirectoryObjectId {get;set;} public Guid InitiatingUserAzureActiveDirectoryObjectId {get;set;} public Guid InitiatingUserApplicationId {get;set;} public Guid PortalsContactId {get;set;} public bool IsPortalsClientCall {get;set;} public Guid AuthenticatedUserId {get;set;}
+ public EntityImageCollection[] PreEntityImagesCollection {get;set;} public EntityImageCollection[] PostEntityImagesCollection {get;set;}
+ public string InitiatingUserAgent {get;set;} public string EnvironmentId {get;set;} public Guid TenantId {get;set;} public bool IsApplicationUser {get;set;}
+}
+public static class Program
+{
+ static string F(object x) { return x == null ? &quot;null&quot; : Convert.ToString(x, CultureInfo.InvariantCulture); }
+ static void Probe(string name, Func&lt;string&gt; f) { try { Console.WriteLine(name + &quot; =&gt; &quot; + f()); } catch(Exception e) { Console.WriteLine(name + &quot; =&gt; THREW &quot; + e.GetType().Name); } }
+ static string Compress(string text) { using(var ms=new MemoryStream()) { using(var ds=new DeflateStream(ms,CompressionLevel.Fastest,true)) { var b=Encoding.UTF8.GetBytes(text); ds.Write(b,0,b.Length); } return Convert.ToBase64String(ms.ToArray()); } }
+ static string Snippet(string json) { if(json.Contains(&quot;&#39;&quot;)) return &quot;var json = @\&quot;&quot;+json.Replace(&quot;\&quot;&quot;,&quot;\&quot;\&quot;&quot;)+&quot;\&quot;;&quot;; return &quot;var json = @\&quot;&quot;+json.Replace(&quot;\&quot;&quot;,&quot;&#39;&quot;)+&quot;\&quot;.Replace(\&quot;&#39;\&quot;, \&quot;\\\&quot;\&quot;);&quot;; }
+ static string Sizes(object x) { var f=DevKitJson.Serialize(x);var c=DevKitJson.SerializeCompact(x); return &quot;full=&quot;+Encoding.UTF8.GetByteCount(f)+&quot;; compact=&quot;+Encoding.UTF8.GetByteCount(c)+&quot;; full deflate base64=&quot;+Compress(f).Length+&quot;; compact deflate base64=&quot;+Compress(c).Length+&quot;; compact snippet=&quot;+Encoding.UTF8.GetByteCount(Snippet(c)); }
+ public static void Main()
+ {
+  Console.WriteLine(&quot;Runtime=&quot; + Environment.Version + &quot;; SDK=&quot; + typeof(Entity).Assembly.GetName().Version);
+  Probe(&quot;decimal&quot;, () =&gt; { var x=123456789012345678.123456789m; var y=DevKitJson.Deserialize&lt;decimal&gt;(DevKitJson.Serialize(x)); return F(x)+&quot; -&gt; &quot;+F(y)+&quot;; equal=&quot;+(x==y); });
+  Probe(&quot;money&quot;, () =&gt; { var x=new Money(123456789012345678.123456789m); var y=DevKitJson.Deserialize&lt;Money&gt;(DevKitJson.Serialize(x)); return F(x.Value)+&quot; -&gt; &quot;+F(y.Value); });
+  Probe(&quot;decimal.max&quot;, () =&gt; F(DevKitJson.Deserialize&lt;decimal&gt;(DevKitJson.Serialize(decimal.MaxValue))));
+  Probe(&quot;datetime&quot;, () =&gt; { var x=new DateTime(2026,10,2,1,2,3,DateTimeKind.Utc).AddTicks(1234567); var y=DevKitJson.Deserialize&lt;DateTime&gt;(DevKitJson.Serialize(x)); return x.ToString(&quot;O&quot;)+&quot; -&gt; &quot;+y.ToString(&quot;O&quot;)+&quot;; ticks lost=&quot;+(x.Ticks-y.Ticks); });
+  Probe(&quot;datetime.unspecified&quot;, () =&gt; { var x=new DateTime(2026,10,2,1,2,3,DateTimeKind.Unspecified); var y=DevKitJson.Deserialize&lt;DateTime&gt;(DevKitJson.Serialize(x)); return x.Kind+&quot; -&gt; &quot;+y.Kind; });
+  Probe(&quot;entity.metadata&quot;, () =&gt; { var x=new Entity(&quot;account&quot;){RowVersion=&quot;42&quot;}; x.KeyAttributes[&quot;accountnumber&quot;]=&quot;A1&quot;; x.RelatedEntities[new Relationship(&quot;account_contacts&quot;)]=new EntityCollection(new List&lt;Entity&gt;{new Entity(&quot;contact&quot;)}); var y=DevKitJson.Deserialize&lt;Entity&gt;(DevKitJson.Serialize(x)); return &quot;keys=&quot;+y.KeyAttributes.Count+&quot;; related=&quot;+y.RelatedEntities.Count+&quot;; rowVersion=&quot;+F(y.RowVersion); });
+  Probe(&quot;reference.metadata&quot;, () =&gt; { var x=new EntityReference(&quot;account&quot;,&quot;accountnumber&quot;,&quot;A1&quot;){RowVersion=&quot;42&quot;}; var y=DevKitJson.Deserialize&lt;EntityReference&gt;(DevKitJson.Serialize(x)); return &quot;keys=&quot;+y.KeyAttributes.Count+&quot;; rowVersion=&quot;+F(y.RowVersion); });
+  Probe(&quot;collection.metadata&quot;, () =&gt; { var x=new EntityCollection(){MoreRecords=true,PagingCookie=&quot;cookie&quot;,TotalRecordCount=123,TotalRecordCountLimitExceeded=true,MinActiveRowVersion=&quot;42&quot;}; var y=DevKitJson.Deserialize&lt;EntityCollection&gt;(DevKitJson.Serialize(x)); return &quot;MoreRecords=&quot;+y.MoreRecords+&quot;; cookie=&quot;+F(y.PagingCookie)+&quot;; count=&quot;+y.TotalRecordCount+&quot;; limit=&quot;+y.TotalRecordCountLimitExceeded+&quot;; min=&quot;+F(y.MinActiveRowVersion); });
+  foreach(var input in new[]{&quot;{\&quot;x\&quot;:1&quot;, &quot;[1,2&quot;, &quot;\&quot;abc&quot;, &quot;{\&quot;x\&quot; 1}&quot;, &quot;[1 2]&quot;, &quot;[1,]&quot;, &quot;\&quot;a\\qz\&quot;&quot;, &quot;01&quot;, &quot;{\&quot;x\&quot;:1,\&quot;x\&quot;:2}&quot;}) { var s=input; Probe(&quot;parse &quot;+s, () =&gt; &quot;accepted; result=&quot;+DevKitJson.Serialize(DevKitJson.Deserialize(s))); }
+  Probe(&quot;control U+0001&quot;, () =&gt; { var s=DevKitJson.Serialize(&quot;A\u0001B&quot;); return &quot;literal control emitted=&quot;+s.Contains(&quot;\u0001&quot;); });
+  Probe(&quot;NaN&quot;, () =&gt; DevKitJson.Serialize(double.NaN));
+  Probe(&quot;dictionary marker&quot;, () =&gt; { var x=new Dictionary&lt;string,object&gt;{{&quot;_t&quot;,&quot;M&quot;},{&quot;v&quot;,5}}; var y=DevKitJson.Deserialize(DevKitJson.Serialize(x)); return y.GetType().FullName; });
+  Probe(&quot;dictionary unknown marker&quot;, () =&gt; DevKitJson.Serialize(DevKitJson.Deserialize(&quot;{\&quot;_t\&quot;:\&quot;business\&quot;,\&quot;id\&quot;:7}&quot;)));
+  Probe(&quot;root int array&quot;, () =&gt; F(DevKitJson.Deserialize&lt;int[]&gt;(DevKitJson.Serialize(new[]{1,2})).Length));
+  Probe(&quot;root list int&quot;, () =&gt; F(DevKitJson.Deserialize&lt;List&lt;int&gt;&gt;(DevKitJson.Serialize(new List&lt;int&gt;{1,2})).Count));
+  Probe(&quot;typed dictionary&quot;, () =&gt; DevKitJson.Serialize(new Dictionary&lt;string,int&gt;{{&quot;a&quot;,1}}));
+  Probe(&quot;dictionary null string&quot;, () =&gt; DevKitJson.Serialize(new Dictionary&lt;string,string&gt;{{&quot;x&quot;,null}}));
+  Probe(&quot;ulong&quot;, () =&gt; DevKitJson.Serialize(ulong.MaxValue));
+  Probe(&quot;enum64&quot;, () =&gt; DevKitJson.Serialize(LargeEnum.Large));
+  Probe(&quot;fields&quot;, () =&gt; DevKitJson.Serialize(new FieldDto()));
+  Probe(&quot;throwing getter&quot;, () =&gt; DevKitJson.Serialize(new Throwing()));
+  Probe(&quot;reentry&quot;, () =&gt; DevKitJson.SerializeCompact(new Reentry()));
+  Probe(&quot;remote agent&quot;, () =&gt; { var x=new RemoteExecutionContext{InitiatingUserAgent=&quot;ReviewAgent/1.0&quot;,InitiatingUserAzureActiveDirectoryObjectId=Guid.Parse(&quot;11111111-1111-1111-1111-111111111111&quot;)}; var json=DevKitJson.SerializeContextFull(x); var y=DevKitJson.Deserialize&lt;RemoteExecutionContext&gt;(json); return &quot;agent key=&quot;+json.Contains(&quot;InitiatingUserAgent&quot;)+&quot;; agent=&quot;+F(y.InitiatingUserAgent)+&quot;; AAD=&quot;+y.InitiatingUserAzureActiveDirectoryObjectId; });
+  var ctx=new Context7{EnvironmentId=&quot;env-123&quot;,TenantId=Guid.Parse(&quot;11111111-1111-1111-1111-111111111111&quot;),IsApplicationUser=true,InitiatingUserAgent=&quot;ReviewAgent/1.0&quot;,PreEntityImagesCollection=new[]{new EntityImageCollection{{&quot;pre&quot;,new Entity(&quot;account&quot;)}}},PostEntityImagesCollection=new EntityImageCollection[0]};
+  Probe(&quot;context7 via remote wrapper&quot;, () =&gt; { var json=DevKitJson.SerializeContext(ctx); var remote=DevKitJson.Deserialize&lt;RemoteExecutionContext&gt;(json); var y=new PluginExecutionContext7Wrapper(remote); return &quot;written xau=&quot;+json.Contains(&quot;\&quot;xau\&quot;:true&quot;)+&quot;; restored IsApplicationUser=&quot;+y.IsApplicationUser+&quot;; env=&quot;+y.EnvironmentId+&quot;; tenant=&quot;+y.TenantId+&quot;; image arrays=&quot;+y.PreEntityImagesCollection.Length+&quot;; agent=&quot;+F(y.InitiatingUserAgent); });
+  Probe(&quot;context7 direct&quot;, () =&gt; F(DevKitJson.Deserialize&lt;IPluginExecutionContext7&gt;(DevKitJson.SerializeContext(ctx))));
+  Probe(&quot;remote public setters&quot;, () =&gt; string.Join(&quot;,&quot;,typeof(RemoteExecutionContext).GetProperties().Where(p=&gt;p.SetMethod!=null &amp;&amp; p.SetMethod.IsPublic).Select(p=&gt;p.Name)));
+  Probe(&quot;size fixture&quot;, () =&gt; Sizes(DevKitJson.Deserialize(File.ReadAllText(&quot;E:/src/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Vsix.UnitTests/Lib/AllDataverseTypes.json&quot;))));
+  Probe(&quot;size repeated&quot;, () =&gt; Sizes(new Entity(&quot;account&quot;){[&quot;description&quot;]=new string(&#39;A&#39;,20000)}));
+  Probe(&quot;size random&quot;, () =&gt; { var data=new byte[12000];new Random(42).NextBytes(data);return Sizes(new Entity(&quot;account&quot;){[&quot;file&quot;]=data}); });
+  Probe(&quot;snippet budget&quot;, () =&gt; { var json=DevKitJson.SerializeCompact(new Entity(&quot;account&quot;){[&quot;description&quot;]=&quot;&#39;&quot;+new string(&#39;A&#39;,10135)}); return &quot;JSON bytes=&quot;+Encoding.UTF8.GetByteCount(json)+&quot;; snippet bytes=&quot;+Encoding.UTF8.GetByteCount(Snippet(json)); });
+ }
+}
+</code></pre></details>
+<details><summary>Project của harness</summary><pre><code>&lt;Project Sdk=&quot;Microsoft.NET.Sdk&quot;&gt;
+  &lt;PropertyGroup&gt;&lt;TargetFrameworks&gt;net48;net10.0&lt;/TargetFrameworks&gt;&lt;OutputType&gt;Exe&lt;/OutputType&gt;&lt;LangVersion&gt;latest&lt;/LangVersion&gt;&lt;RestoreSources&gt;https://api.nuget.org/v3/index.json&lt;/RestoreSources&gt;&lt;/PropertyGroup&gt;
+  &lt;ItemGroup&gt;
+    &lt;Compile Include=&quot;E:/src/github/Dynamics-Crm-DevKit/v5/ProjectTemplates/CSharp/01.SharedProjectTemplate/DevKitJson.cs&quot; Link=&quot;DevKitJson.cs&quot; /&gt;
+    &lt;Compile Include=&quot;E:/src/github/Dynamics-Crm-DevKit/v5/ProjectTemplates/CSharp/01.SharedProjectTemplate/PluginExecutionContext7Wrapper.cs&quot; Link=&quot;PluginExecutionContext7Wrapper.cs&quot; /&gt;
+    &lt;PackageReference Include=&quot;Microsoft.CrmSdk.CoreAssemblies&quot; Version=&quot;9.0.2.60&quot; Condition=&quot;&#39;$(TargetFramework)&#39;==&#39;net48&#39;&quot; /&gt;
+    &lt;PackageReference Include=&quot;Microsoft.PowerPlatform.Dataverse.Client&quot; Version=&quot;1.2.27&quot; Condition=&quot;&#39;$(TargetFramework)&#39;==&#39;net10.0&#39;&quot; /&gt;
+    &lt;PackageReference Include=&quot;Microsoft.NETFramework.ReferenceAssemblies.net48&quot; Version=&quot;1.0.3&quot; PrivateAssets=&quot;all&quot; Condition=&quot;&#39;$(TargetFramework)&#39;==&#39;net48&#39;&quot; /&gt;
+  &lt;/ItemGroup&gt;
+&lt;/Project&gt;
+</code></pre></details>
+<h3>Nguồn chính thức đã đối chiếu</h3>
+<ol class="sources">
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/logging-tracing">Microsoft · Logging and tracing</a> — giới hạn tổng 10 KB và loại trace line cũ.</li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.ipluginexecutioncontext7?view=dataverse-sdk-latest">Microsoft · IPluginExecutionContext7</a> và <a href="https://learn.microsoft.com/en-us/dotnet/api/microsoft.xrm.sdk.remoteexecutioncontext?view=dataverse-sdk-latest">RemoteExecutionContext</a> — phân biệt interface và concrete context.</li>
+<li><a href="https://www.rfc-editor.org/rfc/rfc8259">RFC 8259</a> — JSON grammar, numbers, escaping và object member names.</li>
+</ol>
+<p class="small">Các đề xuất kiến trúc, priority và lộ trình là nhận định của reviewer dựa trên source + probes; không phải khuyến nghị sản phẩm chính thức của Microsoft. Nguồn web đối chiếu ngày 02/10/2026.</p>
+</section>
+<footer class="footer">DevKitJson review · 02/10/2026 · Chỉ tài liệu · Không thay đổi version/build timestamp · Chờ duyệt implementation.</footer>
+</main></div>
+</body></html>
