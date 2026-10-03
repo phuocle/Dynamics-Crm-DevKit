@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Webhook Support Analysis 3 — Code audit và ALM DEV/UAT/PROD</title>
+<style>
+:root{--ink:#18283d;--muted:#546579;--line:#d9e2ed;--blue:#155bc0;--paper:#fff;--bg:#eef3f8}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:var(--bg);font:16px/1.7 "Segoe UI",Arial,sans-serif}
+header{padding:48px max(24px,calc((100% - 1160px)/2));background:#132e52;color:white;border-bottom:6px solid #39b9ad}
+header small{letter-spacing:.12em;color:#a8dcd9}h1{font-size:36px;line-height:1.22;max-width:950px;margin:14px 0}header p{color:#dce8f5;max-width:990px}main{max-width:1208px;margin:auto;padding:26px 24px 70px}
+section,nav{background:var(--paper);padding:28px;border:1px solid var(--line);border-radius:12px;margin:20px 0}h2{font-size:25px;line-height:1.35;margin:0 0 18px}h3{font-size:19px;margin:26px 0 10px}p{margin:12px 0}
+a{color:var(--blue);overflow-wrap:anywhere}header a{color:#a5dbff}code{font:14px/1.6 Consolas,monospace;background:#edf2f7;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}
+pre{background:#14253c;color:#e3eefc;padding:20px;border-radius:8px;overflow:auto;font:14px/1.65 Consolas,monospace}pre code{color:inherit;background:none;padding:0;white-space:pre;overflow-wrap:normal}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:15px}th,td{padding:12px;text-align:left;vertical-align:top;border:1px solid var(--line)}th{background:#edf3fb}tr:nth-child(even) td{background:#fafcff}
+.call{border-left:5px solid #2170d0;background:#edf5ff;padding:16px 20px;margin:18px 0}.warn{border-color:#d99425;background:#fff6e7}.danger{border-color:#c54649;background:#fff0f0}.ok{border-color:#198876;background:#eaf8f3}
+.meta{color:var(--muted);font-size:14px}.tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.05em;background:#e6eef8;color:#28527d;padding:3px 8px;border-radius:4px;margin-right:5px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:24px}.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:20px 0}.flow div{padding:16px;background:#edf4fc;border-top:4px solid #2474bd;border-radius:6px}.flow strong{display:block}.toc{columns:2;column-gap:35px}
+li{margin:7px 0}td p{margin:0 0 8px}.scroll{overflow-x:auto}section{scroll-margin-top:16px}footer{color:var(--muted);font-size:14px;padding:15px}
+@media(max-width:800px){h1{font-size:28px}main{padding:12px}section,nav{padding:18px}.cols,.flow{grid-template-columns:1fr}.toc{columns:1}table{font-size:14px}th,td{padding:8px}}
+@media print{body{background:white;font-size:11pt}header{background:white;color:#152d4b;padding:15px}header p,header small{color:#394f69}main{max-width:none;padding:0}section,nav{border:0;padding:12px 0;break-inside:auto}pre{white-space:pre-wrap;background:#f2f4f8;color:#172a42}a{color:#154d88}.flow{display:block}.flow div{margin:5px 0}tr{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header>
+<small>DYNAMICSCRM.DEVKIT · PHÂN TÍCH LẦN 3</small>
+<h1>Webhook đi từ DEV sang UAT, PROD: code hiện có, phần còn thiếu và kế hoạch ALM</h1>
+<p>Mục tiêu: dùng cùng artifact để triển khai nhiều môi trường, đăng ký đúng webhook, cấp đúng URL và xác thực, ngăn gọi chéo môi trường, và có bằng chứng hoạt động trước khi kết thúc deployment.</p>
+<p class="meta" style="color:#c9d9eb">Ngày phân tích: 30/09/2026 · Asia/Saigon · Nhánh v5.5 · Commit <code>4a1a4c3d9458c576e0a2200551906622407ea945</code><br>Phạm vi hiện trạng: CLI + Shared; MCP được đọc để xác nhận khả năng hiện có. Đây là tài liệu phân tích và kế hoạch triển khai, chưa sửa runtime hoặc triển khai lên Dataverse.</p>
+</header>
+<main>
+<section id="answer">
+<h2>1. Trả lời thẳng vấn đề DEV → UAT → PROD</h2>
+<div class="call warn"><strong>Cập nhật sau khi tra sâu tài liệu Microsoft và blog (30/09/2026):</strong> bản phân tích đầu chưa khảo sát đủ khả năng native. PAC CLI đã tài liệu hóa việc tạo/liên kết managed identity cho <code>ServiceEndpoint</code> (Preview). Cần phân biệt hỗ trợ này với binding URL bằng environment variable và xác thực outbound của riêng <code>contract=8</code>. <a href="#native">Đọc kết quả, nguồn và quyết định thiết kế đã sửa ở mục 15.</a></div>
+<div class="call ok"><strong>Có thể triển khai webhook qua solution ALM và dùng URL khác nhau cho từng môi trường, không cần rebuild assembly chỉ để đổi URL.</strong> Điều kiện là phải có một bước cấu hình trên môi trường đích và kiểm soát việc kích hoạt webhook. Repository hiện tại chưa có bước đó dành riêng cho webhook.</div>
+<table>
+<thead><tr><th>Câu hỏi</th><th>Kết luận áp dụng cho repo này</th></tr></thead>
+<tbody>
+<tr><td>URL đã hardcode trong code chưa?</td><td><strong>Chưa có triển khai WebhookUrl trong TaskServer.</strong> Literal URL và secret xuất hiện trong ví dụ đề xuất của bản 1. Nếu hiện thực nguyên mẫu đó, mỗi lần CLI đăng ký lại có thể ghi URL DEV vào target.</td></tr>
+<tr><td>Deploy plugin DLL sang UAT thì webhook tự xuất hiện không?</td><td><strong>Không theo code hiện tại.</strong> TaskServer triển khai assembly/type/plugin step; chưa tạo ServiceEndpoint và webhook step. Dataverse không tự chạy logic đọc attribute của DevKit khi import DLL/solution.</td></tr>
+<tr><td>Đăng ký webhook mới tại UAT/PROD được không?</td><td>Có: import registration từ solution, hoặc dùng Plug-in Registration Tool (PRT)/SDK/Web API tạo registration trên target. Hai cách cần ownership rõ ràng; không tạo thêm một bản thủ công khi solution đã chứa cùng webhook.</td></tr>
+<tr><td>Add vào solution có được không?</td><td>Có. Cần endpoint, step và image cần thiết. Solution mang registration; dịch vụ HTTP nhận webhook phải được triển khai riêng. Chỉ add assembly là chưa đủ.</td></tr>
+<tr><td>URL UAT/PROD đổi ở đâu?</td><td>Ở <code>serviceendpoint.url</code> của môi trường đích. Pipeline lấy URL/secret của target, cập nhật endpoint hiện có, kiểm chứng rồi bật các step được phép hoạt động.</td></tr>
+<tr><td>Đổi environment variable hoặc đặt profile UAT có tự đổi URL không?</td><td>Không có cơ chế ấy trong code đã đọc. Cần resolver/deployer đọc cấu hình rồi ghi endpoint. Profile JSON, connection Dataverse và URL webhook là ba đầu vào riêng.</td></tr>
+<tr><td>Đã bảo đảm triển khai thành công mọi môi trường chưa?</td><td><strong>Chưa có bằng chứng live.</strong> Báo cáo xác định thiết kế, task và điều kiện nghiệm thu. Chỉ được đánh dấu sẵn sàng sau khi chạy ma trận ở mục 13 với target, solution và receiver thực tế.</td></tr>
+</tbody></table>
+<p class="meta">Cơ sở nền tảng: <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/register-web-hook">Microsoft: Register a webhook</a> và <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/solutioncomponent?view=dataverse-latest">Solution component types</a>. Kết luận về DevKit được đối chiếu source ở mục 3.</p>
+</section>
+
+<nav aria-label="Mục lục"><h2>Mục lục</h2><ol class="toc">
+<li><a href="#answer">Trả lời trực tiếp</a></li><li><a href="#model">Webhook, plugin và ba lớp cấu hình</a></li>
+<li><a href="#audit">Audit source tại commit hiện tại</a></li><li><a href="#corrections">Những điểm phải sửa trong hai bản trước</a></li>
+<li><a href="#strategy">Chọn mô hình ALM và ownership</a></li><li><a href="#config">Hợp đồng cấu hình từng môi trường</a></li>
+<li><a href="#solution">Đưa registration vào solution</a></li><li><a href="#runbook">Runbook triển khai có kiểm soát</a></li>
+<li><a href="#api">API minh họa và thuật toán configure</a></li><li><a href="#lifecycle">Nâng cấp, retry, rotation, rollback, copy</a></li>
+<li><a href="#receiver">Điều kiện của receiver</a></li><li><a href="#tasks">Các task triển khai theo thứ tự</a></li>
+<li><a href="#acceptance">Ma trận nghiệm thu</a></li><li><a href="#evidence">Bằng chứng, giới hạn và nguồn</a></li>
+<li><a href="#native">Bổ sung: environment variables, Key Vault, managed identity và blog</a></li>
+</ol></nav>
+
+<section id="model">
+<h2>2. Trước hết phải phân biệt đúng đối tượng đang deploy</h2>
+<div class="cols">
+<div><h3>Plugin C# thông thường</h3><pre><code>pluginassembly
+  └─ plugintype
+       └─ sdkmessageprocessingstep
+            └─ step image (nếu có)</code></pre><p>Dataverse chạy code plugin. Nếu chính plugin có <code>HttpClient</code> gọi URL literal, sửa registration webhook không sửa được literal trong plugin đó. Cần sửa cách plugin đọc cấu hình.</p></div>
+<div><h3>Webhook registration gốc của Dataverse</h3><pre><code>serviceendpoint (contract = 8)
+  └─ sdkmessageprocessingstep
+       eventhandler → serviceendpoint
+       └─ step image (nếu có)
+
+Dataverse → HTTP POST → Receiver</code></pre><p>Dataverse gửi sự kiện đến URL trong registration. Không cần một plugin DLL chỉ để tạo đường gọi này. Class gắn attribute nếu dùng chỉ là input cho công cụ deploy.</p></div>
+</div>
+<p>Một plugin cũng có thể chủ động gọi ServiceEndpoint qua <code>IServiceEndpointNotificationService</code>; khi đó phải giải quyết endpoint identity mà plugin dùng. Báo cáo này chọn mô hình <strong>webhook step tự kích hoạt theo sự kiện Dataverse</strong>. Không đồng thời thêm plugin gọi cùng endpoint cho cùng sự kiện nếu chưa có chủ đích, vì dễ phát sinh gọi kép. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/use-webhooks">Nguồn Microsoft</a>.</p>
+<table><thead><tr><th>Lớp</th><th>Ví dụ</th><th>Ai chịu trách nhiệm?</th></tr></thead><tbody>
+<tr><td>Định nghĩa ổn định</td><td>Endpoint key; step ID; message Update; table contact; PostOperation; Asynchronous; filtering attributes; images.</td><td>Source và solution. Review và version cùng tính năng.</td></tr>
+<tr><td>Cấu hình deployment</td><td>OrganizationId đích; URL endpoint UAT; loại auth; tham chiếu secret/version; danh sách step cần bật.</td><td>Pipeline/config quản lý riêng cho từng target.</td></tr>
+<tr><td>Runtime</td><td>Giá trị thực trong serviceendpoint và step; receiver xử lý payload; log và retry.</td><td>Dataverse + hệ thống nhận. Deployer phải đọc lại metadata và thực hiện kiểm tra xuyên suốt.</td></tr>
+</tbody></table>
+<div class="call"><strong>Vòng đời attribute:</strong> source → compile → DevKit đọc metadata → ghi record Dataverse. Sau đó runtime dùng record đã ghi. Sửa URL trên record có hiệu lực độc lập với DLL; chạy lại một deployer còn mang URL DEV có thể ghi đè nó lần nữa. Vì vậy cần bỏ literal môi trường khỏi nguồn cấu hình có quyền ghi.</div>
+</section>
+
+<section id="audit">
+<h2>3. Source hiện tại thực sự làm gì?</h2>
+<p><span class="tag">ĐÃ ĐỐI CHIẾU SOURCE</span> Các liên kết dưới đây trỏ đúng commit để số dòng không thay đổi khi nhánh cập nhật.</p>
+<table><thead><tr><th>Điểm kiểm tra</th><th>Bằng chứng</th><th>Hệ quả đối với webhook/ALM</th></tr></thead><tbody>
+<tr><td>Command server</td><td><a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Cli/Commands/ServerCommand.cs#L35">ServerCommand.RunTaskAsync:35</a> deserialize JSON, truyền connection, profile và OnlyUpdateAssembly vào TaskServer.</td><td>Không có command mode configure webhook sau import.</td></tr>
+<tr><td>Chọn profile</td><td><a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs#L46">TaskServer constructor:46</a> dùng <code>FirstOrDefault(x =&gt; x.profile == arg.Profile)</code>.</td><td>Profile không được đối chiếu với OrganizationId. Chọn tên UAT không chứng minh connection cũng là UAT.</td></tr>
+<tr><td>Model JSON</td><td><a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Shared/Models/JsonServer.cs#L5">JsonServer:5</a> chỉ có profile/folder/solution/includefiles/excludefiles; <a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Shared/Models/Json.cs#L5">Json:5</a> chưa có section webhooks.</td><td>Không có nơi nhận URL/secret reference hoặc chính sách endpoint theo target.</td></tr>
+<tr><td>Đầu vào bắt buộc gắn file</td><td><a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs#L71">RunAsync:71</a> lấy files từ folder; nếu không có file thì ghi lỗi. <a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs#L578">IsValidAsync:578</a> kiểm tra profile/folder/solution.</td><td>Webhook thuần JSON không có DLL cần đường thực thi riêng trước kiểm tra file hiện tại.</td></tr>
+<tr><td>Enum</td><td><a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Shared/Models/CrmPluginRegistrationAttribute.cs#L139">PluginType:139</a> chỉ có Plugin=0, Workflow=1, CustomAction=2, DataProvider=3, CustomApi=4, DataSource=5.</td><td>Chưa có Webhook. Không được coi pseudo-code bản 1 là code đã có.</td></tr>
+<tr><td>Đọc attribute</td><td><a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs#L1962">GetTypes:1962</a> tìm theo tên CrmPluginRegistrationAttribute; <a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Shared/Helper.cs#L314">ConvertAttributeToCrmPluginRegistration:314</a> map named arguments bằng switch.</td><td>Có thể tìm thấy class chỉ mang metadata, nhưng property mới phải được thêm vào mapping. Phát hiện class không có nghĩa deploy class ấy thành công.</td></tr>
+<tr><td>Thứ tự deploy</td><td><a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs#L928">DeployFileAsync:928</a> gọi DeployAssemblyAsync ở dòng 940, xử lý Unregister ở 971, DeployPluginTypeAsync ở 989, rồi mới switch ở 994.</td><td>Thêm case Webhook bên trong switch là quá muộn. Phải tách loại trước upload/type/unregister; tránh yêu cầu class webhook là IPlugin.</td></tr>
+<tr><td>Cache step</td><td><a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs#L686">LoadAllPluginStepsAsync:686</a> query theo plugintypeid; key <code>{plugintypeid}-{name}</code>.</td><td>Không nạp webhook step qua serviceendpoint; không dùng nguyên cache này cho upsert webhook.</td></tr>
+<tr><td>Ghi plugin step</td><td><a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs#L1358">DeployPluginStepAsync:1358</a> đặt <code>plugintypeid</code> dòng 1406, xử lý secure/unsecure configuration, lookup ID rồi fallback tên.</td><td>Webhook cần eventhandler → serviceendpoint, bỏ plugin secure/unsecure path, kiểm tra identity và ownership của record được tìm.</td></tr>
+<tr><td>Kích hoạt</td><td><a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs#L1577">Deactivation logic:1577</a> có nhánh tạo step trước, rồi request đổi state thành disabled.</td><td>Không dùng mẫu tạo-rồi-disable như một bảo đảm không có khoảng thời gian active. Thiết kế mới cần receiver/traffic gate và kiểm tra trạng thái trước khi nhận event.</td></tr>
+<tr><td>Validation nhiều attribute</td><td><a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs#L1901">IsValidTypes:1901</a> đã cho phép nhiều attribute nếu cùng PluginType và không phải workflow.</td><td>Không phải chỉ “mở khóa nhiều attribute”; cần kiểm tra consistency của endpoint key, cấu hình và ID cho nhóm webhook.</td></tr>
+<tr><td>Validation gắn assembly</td><td><a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs#L1867">IsValidTypesWithCDSAsync:1867</a> join step → plugintype → pluginassembly.</td><td>Không xác nhận dependency hay identity của webhook.</td></tr>
+<tr><td>Solution binding</td><td>Create/Update hiện dùng <code>SolutionUniqueName</code>, ví dụ <a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs#L1432">create step:1432</a>. <a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Shared/Services/DeploymentService.cs#L68">IsExistSolutionAsync:68</a> query solution ID/publisher prefix.</td><td>Có pattern để tái sử dụng, nhưng kiểm tra “solution tồn tại” không chứng minh managed component cho phép sửa hay component mới đã thuộc solution cần export.</td></tr>
+<tr><td>Lệnh solution</td><td><a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Cli/Tasks/TaskPacSolutionPackager.cs#L290">RunPacAsync:290</a> xây args cho pack/unpack, map extract → unpack.</td><td>Luồng pack/unpack đã đọc không có post-import hook cập nhật webhook. Không trình bày <code>devkit solution</code> như một pipeline ALM đầy đủ đã có sẵn.</td></tr>
+<tr><td>MCP hiện có</td><td><a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Cli/Mcp/Tools/GetSolutionComponentsTool.cs#L493">GetSolutionComponents:493</a> resolve ServiceEndpoint type 95. <a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Cli/Mcp/Tools/ExecuteWebApiTool.cs#L259">ExecuteWebApi:259</a> có block serviceendpoints cho phương thức ghi thuộc guard; <a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Cli/Mcp/Tools/ExecuteWebApiTool.cs#L453">GetBlocked:453</a> cho thấy logic cụ thể.</td><td>Nói “không có gì liên quan serviceendpoint” là quá rộng. Có đọc component tổng quát; chưa có workflow webhook chuyên dụng. PATCH qua execute_webapi bị chặn; không lấy đó làm đường triển khai của đề xuất.</td></tr>
+<tr><td>Schema solution trong repo</td><td><a href="https://github.com/phuocle/Dynamics-Crm-DevKit/blob/4a1a4c3d9458c576e0a2200551906622407ea945/v5/DynamicsCrm.DevKit.Shared/Resources/xsd/CustomizationsSolution.xsd#L394">serviceendpointtype:394</a> có Contract, AuthType, IsCustomizable, Url, ServiceEndpointId.</td><td>Củng cố việc URL là registration metadata. XSD này không thay thế thử export/import bằng platform hiện tại, đặc biệt với secret.</td></tr>
+</tbody></table>
+<p><strong>Phạm vi kết luận:</strong> đã tìm trong CLI/Shared và các test CLI, chưa thấy triển khai webhook chuyên dụng trong TaskServer hoặc test chuyên dụng tương ứng. Các tham chiếu NotificationService/template/schema và tool đọc chung không cấu thành tính năng deploy webhook theo môi trường.</p>
+</section>
+
+<section id="corrections">
+<h2>4. Hai bản trước cần sửa hoặc bổ sung những gì?</h2>
+<table><thead><tr><th>Mức độ</th><th>Nhận định trước</th><th>Kết luận sau kiểm tra</th></tr></thead><tbody>
+<tr><td><strong>Lỗi thực tế</strong></td><td>Bản 1: HttpHeader=4, WebhookKey=5.</td><td><strong>Đúng là WebhookKey=4, HttpHeader=5, HttpQueryString=6.</strong> Copy enum cũ sẽ chọn sai cơ chế auth. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/serviceendpoint?view=dataverse-latest">ServiceEndpoint metadata</a>.</td></tr>
+<tr><td>Lỗi thực tế</td><td>Bản 1: contract 1=Queue, 2=Topic.</td><td>Đúng là 1=OneWay, 2=Queue, 5=Topic, 8=Webhook. Giữ contract=8 cho phạm vi này. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/serviceendpoint">Entity reference</a>.</td></tr>
+<tr><td>Thiếu đường thực thi</td><td>Thêm case Webhook vào switch và class rỗng là đủ.</td><td>Assembly/type được deploy trước switch. Phải phân nhánh sớm; webhook-only không upload dummy assembly, mixed DLL chỉ deploy các type thực thi phù hợp.</td></tr>
+<tr><td>Thiếu ALM ngay từ đầu</td><td>URL và secret nằm trong attribute; JSON optional.</td><td>Cấu hình target là yêu cầu bắt buộc của DEV/UAT/PROD. Attribute chỉ giữ định danh/definition; secrets qua kho bí mật. Không để lần deploy sau ghi ngược URL nguồn.</td></tr>
+<tr><td>Quá rộng</td><td>Không có MCP nào liên quan webhook.</td><td>Có khả năng đọc serviceendpoint dưới dạng solution component; chưa có orchestrator chuyên dụng. Phải phân biệt đọc tổng quát với deploy có kiểm soát.</td></tr>
+<tr><td>Suy luận chưa đủ</td><td>Luôn gửi authvalue trong mọi update vì không đọc lại được.</td><td>Không đọc secret không kéo theo bắt buộc ghi lại cho mọi thay đổi description/URL. Thiết kế cần hai chính sách rõ: preserve khi không thay auth; replace có giá trị bí mật được resolve. Deployment sang target mới và rotation phải cấp auth target; không gửi chuỗi rỗng ngầm.</td></tr>
+<tr><td>Identity</td><td>Bản 2: không dựa GUID vì khác môi trường; upsert theo tên.</td><td>Không giả định mọi GUID đều đổi. Luồng solution có identity từ artifact; ưu tiên component ID đã được kiểm chứng trên target. Luồng tạo độc lập có thể có GUID riêng. Tên không được chứng minh là alternate key duy nhất: gặp 0/1/nhiều record phải xử lý rõ.</td></tr>
+<tr><td>Managed ALM</td><td>Sau import chỉ cần PATCH URL.</td><td>Cần quyền, managed property/layer, secret đúng target, identity và trạng thái step. PATCH có thể bị từ chối; phải thử trên managed solution thật trước khi chấp nhận kiến trúc này.</td></tr>
+<tr><td>Khoảng trống vận hành</td><td>Import → đổi URL → test.</td><td>Trong khoảng giữa import và configure, event có thể đi nhầm nếu step đã active. Cần gate từ trước import, xử lý pending async jobs, verify và release traffic có kiểm soát.</td></tr>
+<tr><td>Nhầm khả năng công cụ</td><td>Deployment settings nói chung có thể chứa webhook URL.</td><td>Setting <code>webhookurl.webookname</code> thuộc ALM Accelerator đã deprecated. File PAC/Build Tools phổ biến mô tả EnvironmentVariables/ConnectionReferences; cần code tiêu thụ riêng cho webhook. <a href="https://learn.microsoft.com/en-us/power-platform/guidance/alm-accelerator/deployment-settings-payload">Accelerator</a> · <a href="https://learn.microsoft.com/en-us/power-platform/alm/conn-ref-env-variables-build-tools">Build Tools</a>.</td></tr>
+<tr><td>Ước lượng</td><td>Tái sử dụng 80%, thêm 600–800 dòng.</td><td>Không có bằng chứng đủ để dùng các con số này lập cam kết. Khối lượng chính là lifecycle, ownership, gating và xác minh managed ALM; cần chia task có tiêu chí hoàn tất.</td></tr>
+</tbody></table>
+<div class="call warn">URL không chứa thông tin bí mật có thể lưu trong cấu hình version control theo chính sách dự án. Điều bắt buộc là không nhúng URL riêng của DEV thành giá trị mặc định có thể chạy ở PROD, và không commit secret hoặc URL chứa token.</div>
+</section>
+
+<section id="strategy">
+<h2>5. Quyết định kiến trúc: solution sở hữu definition, deployer sở hữu cấu hình target</h2>
+<p><span class="tag">ĐỀ XUẤT</span> Chọn mô hình A làm đường chính cho DevKit. Các lựa chọn khác được ghi rõ để tránh hai hệ thống cùng tạo một registration.</p>
+<table><thead><tr><th>Mô hình</th><th>Lợi ích</th><th>Giới hạn / quyết định</th></tr></thead><tbody>
+<tr><td><strong>A. Solution mang endpoint + step</strong><br>Pipeline configure sau import</td><td>Giữ definition/version/dependency trong solution; cùng managed ZIP đi UAT → PROD. Target job chỉ đổi URL/auth và trạng thái vận hành được cho phép.</td><td><strong>Khuyến nghị.</strong> Cần thử quyền cập nhật managed endpoint/step và kiểm soát activation. Configure phải update-only; thiếu component là fail.</td></tr>
+<tr><td>B. Script tạo toàn bộ registration từng môi trường</td><td>Không phụ thuộc transport của webhook component; target config được dùng ngay khi create.</td><td>ALM bằng code/config vẫn làm được, nhưng lifecycle/cleanup/dependency của registration thuộc script. Không đồng thời đưa chính registration ấy qua solution A. Xóa solution nghiệp vụ không tự chứng minh đã xóa các registration script tạo.</td></tr>
+<tr><td>C. Endpoint gateway chung, route theo nguồn</td><td>Có thể giữ URL ổn định, backend thay theo target.</td><td>Tăng vận hành gateway và cách ly dữ liệu. Receiver phải xác thực rồi kiểm tra nguồn; không tin header tổ chức như bằng chứng auth. Chỉ chọn nếu thực sự cần.</td></tr>
+<tr><td>D. Transform solution/package theo target</td><td>URL được đặt trong artifact trước import.</td><td>Mỗi target có artifact/hash khác; vẫn phải giải quyết auth, activation và upgrade. Không phải lựa chọn mặc định cho yêu cầu cùng artifact.</td></tr>
+<tr><td>E. Build DLL riêng DEV/UAT/PROD</td><td>Có thể thay literal khi build.</td><td>Biến config thành khác biệt binary; khó promote chính xác artifact đã test. Không cần thiết cho registration URL.</td></tr>
+</tbody></table>
+<h3>Quy tắc ownership của mô hình A</h3>
+<ul>
+<li><strong>Authoring ở DEV/build environment:</strong> được create/update endpoint, step, image và thêm component vào unmanaged solution nguồn.</li>
+<li><strong>Configure ở UAT/PROD:</strong> resolve đúng component đã import; chỉ cập nhật các field cấu hình được cho phép. Không upload lại assembly, không tạo plugin type, không tạo endpoint thay thế nếu thiếu.</li>
+<li><strong>Thay đổi definition:</strong> đổi message, filtering attributes, image, thêm/xóa step qua phiên bản solution mới. Không “tiện tay” sửa definition bằng target configuration.</li>
+<li><strong>Mỗi target một deployment lock:</strong> hai job không được cùng đổi URL/key/state. Khóa do pipeline quản lý; thao tác lặp lại phải không sinh duplicate.</li>
+</ul>
+<h3>ALM nào hỗ trợ việc này?</h3>
+<p>Azure DevOps/GitHub Actions có thể chạy SDK/Web API job sau khi import hoàn tất. Power Platform Pipelines có cơ chế extension/event; cần cấu hình extension tương ứng, không suy luận rằng một lần deploy mặc định sẽ đổi webhook URL. Sự kiện sau deployment không tự làm cấu hình webhook trở thành phần giao dịch import. Trạng thái “import completed” cần tách khỏi trạng thái “integration ready”. <a href="https://learn.microsoft.com/en-us/power-platform/alm/extend-pipelines">Microsoft: Extend pipelines</a>.</p>
+<p>ALM Accelerator cung cấp một tiền lệ cụ thể cho URL override nhưng đã deprecated; không chọn nó làm nền tảng mới chỉ để có setting webhook. Bản 3 đề xuất bước configure có thể chạy độc lập với loại pipeline.</p>
+</section>
+
+<section id="config">
+<h2>6. Hợp đồng cấu hình: tách definition, environment và secret</h2>
+<p><strong>Tất cả JSON và tên field mới trong mục này là schema đề xuất, chưa được DevKit hiện tại parse.</strong> Không chép vào DynamicsCrm.DevKit.Cli.json rồi kỳ vọng có tác dụng ngay. Khi triển khai cần bổ sung model, validation và command routing, giữ tương thích các public command/JSON key đang có.</p>
+<h3>6.1 Definition chung được version hóa</h3>
+<pre><code>{
+  "schemaVersion": 1,
+  "solutionUniqueName": "ContosoIntegration",
+  "webhooks": [
+    {
+      "key": "contoso.contact.changed",
+      "name": "contoso.ContactChanged",
+      "componentId": "11111111-1111-4111-8111-111111111111",
+      "steps": [
+        {
+          "key": "contact.update.post.async",
+          "componentId": "22222222-2222-4222-8222-222222222222",
+          "name": "contoso.ContactChanged.Update",
+          "message": "Update",
+          "table": "contact",
+          "stage": "PostOperation",
+          "mode": "Asynchronous",
+          "filteringAttributes": ["firstname", "lastname"],
+          "rank": 1,
+          "desiredEnabled": true,
+          "images": []
+        }
+      ]
+    }
+  ]
+}</code></pre>
+<p>Các GUID trên chỉ minh họa. Với definition đã tồn tại, manifest phải chứa ID lấy từ source solution đã export và kiểm chứng. Không phát sinh GUID mới mỗi lần build. Muốn đổi tên thì giữ identity; muốn thay thế component thì phải có migration rõ ràng.</p>
+<h3>6.2 Target configuration cho UAT</h3>
+<pre><code>{
+  "schemaVersion": 1,
+  "environment": "UAT",
+  "expectedOrganizationId": "33333333-3333-4333-8333-333333333333",
+  "expectedDataverseUrl": "https://contoso-uat.crm.dynamics.com",
+  "solutionUniqueName": "ContosoIntegration",
+  "webhooks": {
+    "contoso.contact.changed": {
+      "url": "https://uat-api.example.com/dataverse/contact",
+      "authType": "WebhookKey",
+      "secretReference": "secret-store://uat/contact-webhook/key",
+      "allowedHosts": ["uat-api.example.com"],
+      "enableAfterVerification": true
+    }
+  }
+}</code></pre>
+<p><code>secret-store://...</code> là ký hiệu minh họa cho adapter kho bí mật sẽ xây dựng, không phải URI được DevKit hoặc Dataverse tự hiểu. Deployer resolve reference thành giá trị trong bộ nhớ rồi ghi authvalue; không ghi secret vào report, command arguments hay file JSON lưu trữ lâu dài.</p>
+<table><thead><tr><th>Đầu vào</th><th>DEV</th><th>UAT</th><th>PROD</th></tr></thead><tbody>
+<tr><td>Definition/artifact</td><td colspan="3">Cùng endpoint key và definition; promote cùng managed ZIP/hash từ UAT sang PROD</td></tr>
+<tr><td>Target URL Dataverse</td><td>contoso-dev.crm.dynamics.com</td><td>contoso-uat.crm.dynamics.com</td><td>contoso.crm.dynamics.com</td></tr>
+<tr><td>Receiver URL</td><td>https://dev-api.example.com/dataverse/contact</td><td>https://uat-api.example.com/dataverse/contact</td><td>https://api.example.com/dataverse/contact</td></tr>
+<tr><td>Secret reference</td><td>dev/contact-webhook/key</td><td>uat/contact-webhook/key</td><td>prod/contact-webhook/key</td></tr>
+<tr><td>Expected OrganizationId</td><td>ID thực của DEV</td><td>ID thực của UAT</td><td>ID thực của PROD</td></tr>
+</tbody></table>
+<h3>6.3 Chính sách resolve phải xác định, không đoán môi trường</h3>
+<ol>
+<li>Deployment bắt buộc chỉ định target config; kiểm tra OrganizationId từ connection thực tế. Tên profile UAT là nhãn, không phải bằng chứng.</li>
+<li>URL phải tồn tại, là HTTPS theo chính sách đề xuất, host thuộc danh sách chính xác của target, không chứa userinfo hoặc credential. Port được validate theo nền tảng; không chỉ tìm chuỗi “dev” trong hostname.</li>
+<li>Không có target profile, URL, endpoint key hoặc secret khi cần replace: fail trước write. Không fallback sang DEV, giá trị source hay giá trị môi trường khác.</li>
+<li>Cấu hình mỗi endpoint chỉ resolve một lần cho cả nhóm step. Nhiều declaration cùng key nhưng URL/auth khác nhau phải fail, không “last wins”.</li>
+<li>Binding 1 endpoint → nhiều step nghĩa là đổi URL sẽ đổi nơi nhận cho tất cả step ấy. Verify đầy đủ tập step trước write.</li>
+</ol>
+<h3>6.4 Nếu muốn dùng Dataverse environment variables</h3>
+<p>Có thể tạo definition như <code>contoso_ContactWebhookUrl</code> trong solution rồi cấp current value theo target khi import. Cần thêm resolver đọc effective value và ghi vào serviceendpoint. Chưa có bằng chứng về binding tự động giữa biến ấy với <code>serviceendpoint.url</code> trong luồng đang phân tích; không điền <code>${contoso_ContactWebhookUrl}</code> vào URL rồi trông chờ platform tự thay thế.</p>
+<p>Resolver đề xuất: ưu tiên current value hợp lệ; default chỉ được sử dụng khi policy cho phép. Với UAT/PROD, yêu cầu target value rõ ràng để không thừa hưởng default DEV. Không đóng gói current value DEV như một cấu hình có thể promote. Nếu cả file target và environment variable cùng được cấu hình, chọn một nguồn có thẩm quyền hoặc fail khi mâu thuẫn. Thay biến sau deployment không làm endpoint đổi ngay nếu chưa chạy reconcile. <a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/environmentvariables">Environment variables</a>.</p>
+<p><strong>Điều chỉnh thiết kế:</strong> khảo sát native auth trước khi xây adapter secret riêng; PAC đã có hỗ trợ ServiceEndpoint, không còn chỉ là suy đoán từ metadata. Tuy nhiên, Secret environment variable, KeyVaultReference và managed identity là ba cơ chế khác nhau. Không thiết kế CLI gọi <code>RetrieveEnvironmentVariableSecretValue</code> trực tiếp: Microsoft giới hạn API này trong Power Automate Flow. Xem <a href="#native">mục 15</a> để chọn đường phù hợp và xác minh riêng webhook.</p>
+</section>
+
+<section id="solution">
+<h2>7. Đưa webhook vào solution đúng cách</h2>
+<p>Trong source unmanaged solution, kiểm tra đủ component <strong>Service Endpoint (95)</strong>, <strong>SDK Message Processing Step (92)</strong>, và image nếu có <strong>(93)</strong>. Không nhầm component type 95 với <code>contract=8</code>; chúng thuộc hai enum khác nhau. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/solutioncomponent?view=dataverse-latest">Microsoft: component types</a>.</p>
+<ol>
+<li>Dùng PRT đăng ký webhook trên DEV, hoặc triển khai authoring service của DevKit; tạo step và image phù hợp.</li>
+<li>Thêm component vào đúng unmanaged solution bằng giao diện nếu có hoặc SDK <code>AddSolutionComponentRequest</code>. Kiểm tra dependency thật; không giả định chọn assembly kéo theo webhook.</li>
+<li>Export và kiểm tra artifact: có đúng endpoint ID, step ID, binding, message/table, filter, image và trạng thái yêu cầu. Không suy từ “add thành công” ra “export đủ”.</li>
+<li>Import managed artifact vào target sạch. Chờ job hoàn tất, kiểm tra import log và dependency.</li>
+<li>Chạy configure trên các component vừa import. Không tạo một endpoint UAT thứ hai rồi để step vẫn trỏ endpoint mang URL DEV.</li>
+</ol>
+<pre><code>// Minh họa SDK trong SOURCE unmanaged solution, không phải lệnh DevKit đã có.
+await orgServiceAsync.ExecuteAsync(new AddSolutionComponentRequest
+{
+    ComponentId = endpointId,
+    ComponentType = 95,
+    SolutionUniqueName = "ContosoIntegration",
+    AddRequiredComponents = true
+});
+// Làm tương tự cho step (92), image (93) cần đưa vào solution.
+// Sau đó kiểm tra solutioncomponent và artifact export.</code></pre>
+<p><a href="https://learn.microsoft.com/en-us/dotnet/api/microsoft.crm.sdk.messages.addsolutioncomponentrequest?view=dataverse-sdk-latest">SDK: AddSolutionComponentRequest</a>.</p>
+<h3>Managed solution và customization</h3>
+<p>ServiceEndpoint có thuộc tính IsCustomizable; managed properties có thể giới hạn customization. Vì vậy cần chứng minh trên UAT rằng identity triển khai được phép cập nhật URL/auth và trạng thái step với đúng managed properties của artifact. <a href="https://learn.microsoft.com/en-us/power-platform/alm/use-managed-properties">Microsoft: managed properties</a>.</p>
+<p><strong>Không kết luận “managed luôn sửa được” hoặc “managed luôn không sửa được”.</strong> Thực hiện spike cài mới + nâng cấp + cấu hình bằng chính app user dự định dùng ở PROD. Xác định tác động lên solution layer/effective value bằng read-back. Nếu cấu hình bị khóa, chỉnh managed properties từ source khi phù hợp rồi xuất bản mới, hoặc chọn mô hình B có ownership riêng; không dùng bản duplicate để lách lỗi.</p>
+<h3>Auth có đi theo solution không?</h3>
+<p>AuthValue không retrieve được. Điều này <strong>không đủ để chứng minh chính xác mọi auth field được export/import như thế nào</strong>. Tài liệu “Update a service endpoint imported from a solution” xác nhận thiếu SAS key khi export đối với SAS endpoint, không phải bằng chứng riêng cho mọi kiểu webhook auth. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/walkthrough-update-service-endpoint-imported-solution">Nguồn và phạm vi SAS</a>.</p>
+<p>Với auth bằng key, thiết kế không phụ thuộc secret được transport: artifact không chứa secret thực; target deploy lấy credential đúng target từ secret store. Nếu native managed identity hoặc Key Vault được xác minh phù hợp, deployment cấu hình identity/reference tương ứng thay vì bắt buộc sao chép key. Spike dùng credential giả và import vào môi trường sạch. Không đoán secret đang là DEV hay PROD chỉ từ masked UI.</p>
+</section>
+
+<section id="runbook">
+<h2>8. Runbook triển khai: phải an toàn trước khi PATCH URL</h2>
+<div class="flow"><div><strong>1 · Preflight</strong>Đúng target, artifact, quyền, config</div><div><strong>2 · Gate</strong>Chặn traffic không kiểm soát</div><div><strong>3 · Import</strong>Chờ thành công, kiểm tra identity</div><div><strong>4 · Configure</strong>URL + auth + read-back</div><div><strong>5 · Verify</strong>Canary → release → theo dõi</div></div>
+<h3>8.1 Chuẩn bị receiver và target trước deployment</h3>
+<p>Triển khai receiver UAT/PROD cùng version tương thích; chuẩn bị DNS/TLS, quyền truy cập, auth và telemetry. App user dùng để sửa Dataverse khác với credential mà Dataverse dùng để gọi receiver. Kiểm tra đủ quyền cho import, đọc endpoint/step, update endpoint và đổi state; một health check từ build agent không chứng minh Dataverse gọi được receiver.</p>
+<p>Đối chiếu target OrganizationId/URL bằng connection thật; ghi artifact hash, solution version và endpoint/step manifest. Khóa deployment theo OrganizationId. Nếu preflight fail thì không bắt đầu import.</p>
+<h3>8.2 Tránh cửa sổ gọi nhầm giữa import và configure</h3>
+<div class="call danger"><strong>Import rồi lập tức PATCH vẫn có khoảng thời gian rủi ro.</strong> “Disable sau import” cũng chưa chứng minh an toàn cho bước vừa được thêm. Nếu event được gửi sang DEV thì sửa URL sau đó không thu hồi được dữ liệu đã gửi.</div>
+<p><strong>Quy trình đề xuất:</strong> artifact phát hành chứa webhook step disabled; chuẩn bị ở build environment riêng hoặc quy trình export có kiểm soát, rồi thử nghiệm trạng thái sau import trên target sạch và target nâng cấp. Nếu không chứng minh được state được bảo toàn, phải giữ nguồn phát sự kiện dừng trong toàn bộ cửa sổ import/configure.</p>
+<p>Đối với target đang chạy, dừng có kiểm soát các luồng ghi liên quan, kiểm tra pending/in-flight async jobs và disable các step cũ thuộc phạm vi. Sau import kiểm tra lại cả step cũ lẫn step mới. Không coi disable là hủy các job đã xếp hàng hoặc request đang bay; cần drain/hold/reconcile được kiểm chứng cho workload thật.</p>
+<p>Receiver có thêm gate theo target và credential riêng để từ chối xử lý nhầm môi trường. Gate receiver chỉ bảo vệ việc xử lý; nếu payload đã đến receiver DEV thì dữ liệu đã đi sai nơi. Yêu cầu không rò dữ liệu cần chặn phát/gửi trước. Không trả 2xx rồi bỏ payload trong lúc gate đóng: Dataverse có thể coi là hoàn tất.</p>
+<h3>8.3 Import → configure → kiểm tra metadata</h3>
+<ol>
+<li>Import đúng solution ZIP, chờ trạng thái cuối cùng; không chỉ chờ process bắt đầu thành công.</li>
+<li>Resolve endpoint/step theo manifest và solution; xác nhận contract=8 và binding. Thiếu/duplicate/sai handler → fail, giữ gate.</li>
+<li>Cấp URL và cấu hình auth đúng target. Với auth bằng key, đề xuất gửi bộ URL/auth đã resolve đầy đủ trong cùng request endpoint để giảm trạng thái nửa chừng. Native identity/reference nếu được chọn phải có luồng provisioning riêng đã xác minh; toàn pipeline không phải một transaction.</li>
+<li>Read-back URL/authtype và liên kết step/image. Không cố đọc authvalue; ghi nhận secret version/reference đã dùng, không ghi value.</li>
+<li>Đọc effective configuration của tất cả endpoint dự kiến. Nhiều endpoint: một endpoint fail thì release chưa đạt, không bật một phần ngoài ý định.</li>
+</ol>
+<h3>8.4 Canary và release</h3>
+<ol>
+<li>Trong khi traffic nghiệp vụ còn được giữ, mở receiver đúng target và bật tập step cần cho canary.</li>
+<li>Tạo/cập nhật bản ghi test đã chuẩn bị với field nằm trong filter; gắn mã đối chiếu để nối Dataverse event với receiver log.</li>
+<li>Kiểm tra payload đến đúng receiver, đúng source org, message/table, auth và kết quả nghiệp vụ; kiểm tra async job nếu dùng async. URL đọc lại đúng chưa đủ.</li>
+<li>Nếu canary fail: đóng gate phù hợp, disable các step vừa bật, ghi lỗi và giữ deployment failed. Không chỉ in warning rồi exit 0.</li>
+<li>Nếu pass: bật đúng tập step desiredEnabled, giữ các step vốn cố ý disabled; mở lại traffic, theo dõi lỗi/duplicate/backlog trong khoảng thời gian vận hành quy định.</li>
+</ol>
+<p><strong>Giới hạn:</strong> quy trình dừng traffic đơn giản có thể tạo downtime. Muốn zero downtime và không mất event phải thiết kế buffering/durable queue hoặc chuyển đổi tương thích riêng, thử nghiệm in-flight jobs; không thể suy ra bảo đảm đó từ một PATCH URL.</p>
+</section>
+
+<section id="api">
+<h2>9. API và thuật toán minh họa cho configure sau import</h2>
+<p><span class="tag">MINH HỌA THIẾT KẾ</span> Các request sau dùng Web API của Dataverse trực tiếp trong deployment job được xác thực. Placeholder phải được thay và dữ liệu query phải được escape/encode. Đây không phải thao tác đã thực thi và không phải chỉ dẫn dùng MCP execute_webapi đang bị guard chặn.</p>
+<h3>9.1 Resolve, validate, rồi update đúng ID</h3>
+<pre><code>GET {org}/api/data/v9.2/serviceendpoints({endpointId})
+    ?$select=serviceendpointid,name,contract,url,authtype,ismanaged,iscustomizable
+
+GET {org}/api/data/v9.2/sdkmessageprocessingsteps({stepId})
+    ?$select=name,stage,mode,statecode,statuscode,filteringattributes
+    &amp;$expand=eventhandler_serviceendpoint($select=serviceendpointid,name),
+             sdkmessageid($select=name),
+             sdkmessagefilterid($select=primaryobjecttypecode)</code></pre>
+<p>ID là identity được kỳ vọng từ manifest, vẫn phải kiểm tra tồn tại, loại và solution membership trên target. Chỉ fallback name trong authoring/migration đã định nghĩa rõ: lọc contract=8 và scope, 0 record thì create khi mode cho phép, 1 record thì kiểm tra identity, nhiều record thì fail. Không lấy <code>FirstOrDefault</code> rồi ghi tùy ý.</p>
+<h3>9.2 Update endpoint và trạng thái step</h3>
+<pre><code>PATCH {org}/api/data/v9.2/serviceendpoints({endpointId})
+If-Match: *
+Content-Type: application/json
+
+{
+  "url": "https://uat-api.example.com/dataverse/contact",
+  "authtype": 4,
+  "authvalue": "&lt;giá trị key UAT được resolve trong bộ nhớ&gt;"
+}
+
+PATCH {org}/api/data/v9.2/sdkmessageprocessingsteps({stepId})
+Content-Type: application/json
+
+{ "statecode": 1, "statuscode": 2 }
+
+# Chỉ bật sau khi đã kiểm tra cấu hình và sẵn sàng canary:
+PATCH {org}/api/data/v9.2/sdkmessageprocessingsteps({stepId})
+Content-Type: application/json
+
+{ "statecode": 0, "statuscode": 1 }</code></pre>
+<p><code>If-Match: *</code> yêu cầu record đã tồn tại; không có nghĩa là phát hiện mọi cập nhật đồng thời. Dùng target deployment lock; nếu muốn ETag concurrency cần kiểm tra hỗ trợ của entity rồi áp dụng đúng cơ chế. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/update-delete-entities-using-web-api">Microsoft: update/delete</a>.</p>
+<p>State 1/status 2 là Disabled; state 0/status 1 là Enabled. Webhook dùng <code>eventhandler_serviceendpoint</code> trong Web API; SDK dùng <code>eventhandler = new EntityReference("serviceendpoint", endpointId)</code>. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/sdkmessageprocessingstep?view=dataverse-latest">Step reference</a>.</p>
+<h3>9.3 Thuật toán đề xuất</h3>
+<pre><code>ConfigureImportedWebhooks(manifest, targetConfig, connection):
+    acquire deployment lock for expectedOrganizationId
+    verify actual organization, solution version and artifact identity
+    resolve target URLs and prerequisites for the selected auth mode
+    validate all definitions, host allowlists and component ownership
+    assert traffic gate / step state preconditions
+
+    for each endpoint in manifest:
+        require exactly the imported component expected by manifest
+        verify contract, linked steps and target customization capability
+        update allowed endpoint settings with resolved target credentials
+        read back URL, auth type, step bindings and state
+        update deployment journal (IDs and secret version, never secret)
+
+    if any failure:
+        preserve gate; do not mark integration ready; return failure
+
+    activate only the canary-required desired steps under controlled traffic
+    verify event delivery and receiver business outcome
+    if verification fails:
+        disable affected steps; preserve recovery evidence; return failure
+
+    restore intended enabled/disabled state for all owned steps
+    release business traffic; persist verification evidence; return success</code></pre>
+<h3>9.4 Quy tắc auth</h3>
+<p>WebhookKey gửi key với tham số code; HttpHeader và HttpQueryString là các lựa chọn khác. Không dùng chuỗi “Bearer …” cố định như bằng chứng đã có cơ chế OAuth token refresh. Với nhiều cặp key/value phải có serializer đúng định dạng platform/PRT, được thử nghiệm, thay vì tự nối JSON rồi giả định hợp lệ. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/register-web-hook">Microsoft: authentication options</a>.</p>
+<p><strong>Policy cho auth bằng key:</strong> first deployment, target change, auth type change hoặc rotation → replace bằng secret target; cập nhật metadata không đổi auth → preserve bằng cách bỏ field authvalue khỏi request. Thiếu secret trong replace → fail. Không ngầm clear secret. Khi timeout sau write, retry dùng cùng secret version và đọc lại metadata. Policy này không áp dụng máy móc cho managed identity/Key Vault native; xem mục 15.</p>
+</section>
+
+<section id="lifecycle">
+<h2>10. Những tình huống một bản phân tích ALM phải giải quyết</h2>
+<table><thead><tr><th>Tình huống</th><th>Cách xử lý đề xuất</th><th>Bằng chứng cần lưu</th></tr></thead><tbody>
+<tr><td>UAT/PROD hoàn toàn mới</td><td>Provision receiver → import solution A → update-only configure. Không có registration sau import là lỗi artifact/dependency, không tự tạo bù âm thầm.</td><td>Import log; endpoint/step IDs; URL effective; canary receiver.</td></tr>
+<tr><td>Chạy deployment lại</td><td>Giữ ID, không thêm step; reconcile cùng config; chỉ retry trong phạm vi sở hữu.</td><td>Số lượng endpoint/step trước và sau không tăng; một sự kiện không gây gọi kép do duplicate registration.</td></tr>
+<tr><td>Managed update/upgrade</td><td>Gate từ trước; sau import đọc lại vì URL/state có thể đổi hoặc bị layer cũ giữ. Reapply target settings; kiểm tra step thêm/sửa/xóa. Chờ apply upgrade hoàn tất nếu dùng holding solution.</td><td>Solution version/layers liên quan; step graph mới; canary; không còn step cũ hoạt động ngoài ý định.</td></tr>
+<tr><td>Đổi hostname/path UAT</td><td>Prepare receiver mới, gate/drain, update endpoint cùng auth đúng đích, verify rồi release. Không cần rebuild plugin chỉ cho URL registration.</td><td>URL sau update, log receiver mới; kiểm tra event phát sinh quanh thời điểm chuyển.</td></tr>
+<tr><td>Rotate key</td><td>Nếu receiver hỗ trợ hai key đồng thời: tạo key mới → update authvalue → canary → thu hồi key cũ. Nếu không, cần cửa sổ chuyển đổi/gate rõ ràng.</td><td>Secret version mới; receiver xác nhận auth thành công; không log giá trị.</td></tr>
+<tr><td>Hai endpoint trùng tên</td><td>Fail với danh sách ID/solution đã che dữ liệu nhạy cảm. Dùng migration chọn component chính; không xóa tự động endpoint “còn lại”.</td><td>Kết quả kiểm tra identity/dependency trước khi can thiệp.</td></tr>
+<tr><td>Đổi tên endpoint/step</td><td>Dùng manifest ID để update definition qua source solution. Rename không được gây create duplicate vì lookup name thất bại.</td><td>Identity giữ nguyên hoặc migration thay thế được ghi rõ.</td></tr>
+<tr><td>Một endpoint được nhiều step/solution dùng</td><td>Liệt kê toàn bộ dependent steps trước đổi/xóa. Ngoài ownership manifest thì dừng để xử lý dependency. Không tự “delete endpoint và tất cả step”.</td><td>Danh sách phụ thuộc và quyết định migration.</td></tr>
+<tr><td>Configure lỗi sau import</td><td>Giữ deployment failed và gate; không giả định rollback import tự động. Retry configure bằng cùng artifact/config; sửa nguyên nhân quyền/secret.</td><td>Journal từng checkpoint, current state của step, lỗi đã được sanitize.</td></tr>
+<tr><td>Rollback</td><td>Ưu tiên phục hồi URL/auth version target đã biết hoạt động và disable step mới khi cần. Rollback solution không đồng nghĩa import ZIP version thấp hơn luôn hợp lệ; xử lý qua quy trình platform riêng.</td><td>Known-good target config, receiver version, khả năng phục hồi credential, kế hoạch xử lý dữ liệu đã nhận.</td></tr>
+<tr><td>Copy/restore PROD → UAT</td><td>Đặt UAT trong chế độ cách ly trước cho phép workload; inventory endpoints/jobs, cấp lại UAT URL/key, canary rồi mở. Không giữ production credential từ bản copy như cấu hình UAT.</td><td>OrganizationId đích sau copy, toàn bộ endpoint effective, bằng chứng không có payload UAT được gửi sang PROD trong kiểm thử.</td></tr>
+<tr><td>Decommission</td><td>Ngừng trigger và xử lý backlog trước; remove theo ownership/dependency; thu hồi secret khi không còn dùng; giữ audit cần thiết.</td><td>Không còn active step tham chiếu endpoint đã ngừng; receiver không nhận event mới ngoài kỳ vọng.</td></tr>
+</tbody></table>
+<p>Không thể thu hồi side effect ngoài Dataverse chỉ bằng rollback record hoặc solution. Receiver cần xử lý duplicate/idempotency và reconciliation. Nếu phải bảo đảm không mất event trong thời gian disable, cần dừng nguồn ghi hoặc có nguồn dữ liệu để replay; event không phát sinh do step đã tắt không tự biến thành hàng đợi.</p>
+</section>
+
+<section id="receiver">
+<h2>11. URL đúng vẫn chưa đủ: điều kiện để webhook chạy ổn định</h2>
+<p>Dataverse gửi POST; timeout 60 giây, lỗi 502/503/504 được thử lại thêm một lần theo tài liệu. Payload lớn hơn 256 KB có thể bị lược bớt ParentContext/InputParameters/images; response body không dùng để cập nhật kết quả Dataverse. Synchronous webhook có thể phát request ra ngoài dù giao dịch sau đó rollback. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/use-webhooks">Microsoft: runtime behavior</a>.</p>
+<ul>
+<li><strong>Receiver theo môi trường:</strong> xác thực credential trước, đối chiếu source org như kiểm tra bổ sung, ghi nhận môi trường tiếp nhận. Header source org tự nó không phải credential.</li>
+<li><strong>Hiệu năng:</strong> xử lý nhanh hoặc nhận bền vững vào queue trước khi trả thành công. Nếu trả 2xx rồi mất việc xử lý, Dataverse không biết để gửi lại.</li>
+<li><strong>Duplicate:</strong> dùng khóa idempotency nghiệp vụ đủ phân biệt event; không chỉ entity ID vì một record có nhiều lần Update hợp lệ. Thử nghiệm replay và retry để chọn khóa đúng.</li>
+<li><strong>Filtering/image:</strong> chỉ gửi dữ liệu cần thiết, kiểm tra alias/image/message tương thích; tránh giả định mọi Update chứa tất cả cột hoặc mọi payload luôn có images.</li>
+<li><strong>Kết nối:</strong> kiểm tra từ chính Dataverse đến receiver; receiver private-only/firewall/TLS sai sẽ fail dù agent trong mạng nội bộ gọi được.</li>
+<li><strong>Log:</strong> correlation, org, endpoint key, message, thời gian và kết quả; che credentials và payload nhạy cảm. Không dùng public request logger để xác minh dữ liệu PROD.</li>
+<li><strong>Async:</strong> test thành công dựa cả receiver và System Job khi có; cấu hình auto-delete có thể xóa success jobs, nên “không thấy job fail” không chứng minh delivery thành công.</li>
+</ul>
+<p>Đề xuất mặc định cho thông báo tích hợp là PostOperation/Asynchronous, nhưng lựa chọn cuối phải theo nghiệp vụ. Nếu yêu cầu ngăn thao tác Dataverse khi receiver lỗi, cần đánh giá synchronous và side effect; không tự đổi semantics chỉ để deployment dễ hơn.</p>
+</section>
+
+<section id="tasks">
+<h2>12. Các task nên làm sau phân tích, theo thứ tự</h2>
+<p><strong>Phạm vi đề xuất chính: CLI + Shared.</strong> Chưa cần mở rộng MCP/VSIX cho MVP chỉ để giải quyết URL theo môi trường. Các tên lớp/field dưới đây là đề xuất; public command hiện tại phải được giữ tương thích.</p>
+<table><thead><tr><th>Task / ưu tiên</th><th>Thực hiện cụ thể</th><th>Điều kiện hoàn tất</th></tr></thead><tbody>
+<tr><td><strong>T0 · P0</strong><br>Native capability + ALM spike</td><td>Thực hiện N01–N06 ở mục 15 trước khi chốt auth. Đồng thời: tạo webhook test; add 95/92/93; export managed; import target sạch; thử URL/auth/state update bằng app user; upgrade lần hai. Kiểm tra export và layer/state.</td><td>Ghi rõ cơ chế native nào chạy được với contract=8, giới hạn Preview, transport, editability, ID và trạng thái. Chốt native hay adapter dựa trên bằng chứng.</td></tr>
+<tr><td><strong>T1 · P0</strong><br>Target config/resolver</td><td>Định nghĩa URL environment variable và current value từng target làm phương án chính để đánh giá; resolver URL trong CLI/pipeline nếu không có native binding đã xác minh. Auth adapter phụ thuộc kết quả T0: native identity/reference hoặc secret store. OrganizationId guard, host allowlist, không fallback DEV.</td><td>Không xây cơ chế lấy secret trùng khả năng native đã dùng được; không gọi API secret bị giới hạn Flow từ CLI. Config thiếu/mismatch bị chặn; không lộ secret.</td></tr>
+<tr><td><strong>T2 · P0</strong><br>Configure imported webhook</td><td>Tạo service điều phối riêng, inject IOrganizationServiceAsync2; đọc manifest/solution, update-only endpoint URL/auth, read-back step binding và state. Có plan/diff đã che secret, journal, target lock và exit status đáng tin cậy.</td><td>Chạy trên managed solution T0; chỉ sửa component sở hữu; missing/duplicate/locked component không bị create bù; repeated run không tăng record.</td></tr>
+<tr><td><strong>T3 · P0</strong><br>Gating và pipeline</td><td>Preflight → gate/drain → import hoàn tất → configure → canary → activate/release. Cấu hình receiver UAT/PROD và script kiểm chứng. Biến pipeline chỉ là input; có job tiêu thụ thật.</td><td>Cố ý đưa URL DEV/key sai vào UAT làm deployment fail mà không xử lý sai môi trường. Import success nhưng configure/canary fail phải cho kết quả integration failed.</td></tr>
+<tr><td><strong>T4 · P1</strong><br>Authoring webhook ở DEV</td><td>Thêm create/update endpoint, eventhandler step, image và solution membership theo definition. Hỗ trợ webhook-only không cần DLL. Có lookup identity/duplicate/dependency; không tự xóa ngoài ownership.</td><td>Export được definition đầy đủ; clean install từ artifact chạy qua T2/T3. T4 có thể làm sau MVP nếu DEV authoring tạm bằng PRT.</td></tr>
+<tr><td><strong>T5 · P1</strong><br>Tích hợp attribute tùy nhu cầu</td><td>Nếu muốn trải nghiệm C#: thêm PluginType.Webhook và key/definition properties; cập nhật Helper mapping. Phân tách type trước DeployAssembly/DeployPluginType/Unregister; cache webhook riêng; kiểm tra mixed DLL, package, OnlyUpdateAssembly. Đồng bộ nơi cung cấp attribute/template cho người dùng.</td><td>Class metadata không bị đăng ký plugintype; webhook-only không upload DLL không cần thiết; plugin/workflow/custom API/data provider giữ hành vi cũ. OnlyUpdateAssembly không âm thầm đổi webhook settings.</td></tr>
+<tr><td><strong>T6 · P1</strong><br>Lifecycle</td><td>Managed update/upgrade, rename, rotation, resume sau lỗi, drift detection và copy/restore runbook. Journal lưu secret reference/version, không lưu secret value.</td><td>Qua ma trận nâng cấp/rotation/retry/copy và recovery; không tăng duplicate hoặc enable step ngoài ý định.</td></tr>
+<tr><td><strong>T7 · P2</strong><br>MCP/VSIX bổ sung</td><td>Chỉ sau core ALM ổn định mới cân nhắc tool/list/configure hoặc UI authoring, dùng chung domain service. Nếu sửa MCP phải theo quy trình rebuild/reinstall/restart/whoami và đối chiếu manifest của repo.</td><td>Không có hai triển khai deploy lệch nhau giữa CLI/MCP; giữ output/tool names hiện hữu.</td></tr>
+</tbody></table>
+<div class="call ok"><strong>Đường ngắn nhất giải quyết yêu cầu hiện tại:</strong> T0 → T1 → T2 → T3, dùng PRT để author ở DEV trong giai đoạn đầu. Không cần chờ dummy C# class hay hàng loạt MCP tools để có ALM URL theo môi trường.</div>
+<p>Khi triển khai code CLI: đọc workflow phù hợp, chạy build CLI nhỏ nhất và focused net10.0 tests. Các test dùng fake service để kiểm tra algorithm, thêm integration test trên Dataverse riêng cho behavior platform. Shared thay đổi phải rà soát consumer; không tự full release packaging. Báo cáo hiện tại chỉ thêm HTML theo định dạng người dùng yêu cầu nên không cần build runtime.</p>
+</section>
+
+<section id="acceptance">
+<h2>13. Ma trận nghiệm thu: khi nào mới được nói “deploy các môi trường OK”?</h2>
+<p><span class="tag">CHƯA CHẠY LIVE</span> Mỗi hàng là một kiểm tra phải có kết quả, không phải khẳng định đã pass. Tối thiểu UAT phải qua đầy đủ trước khi promote; PROD chạy preflight, read-back và canary trong cửa sổ triển khai được kiểm soát. Môi trường bổ sung phải có config riêng và chạy cùng bộ gate.</p>
+<table><thead><tr><th>ID</th><th>Scenario</th><th>Tiêu chí pass</th></tr></thead><tbody>
+<tr><td>A01</td><td>Install vào target sạch</td><td>Đúng 1 endpoint mong đợi; đúng tập step/image; target URL/auth hoạt động; không cần rebuild DLL.</td></tr>
+<tr><td>A02</td><td>Promote UAT → PROD</td><td>Cùng artifact hash; OrganizationId và receiver đổi đúng cấu hình; PROD event chỉ được receiver PROD xử lý.</td></tr>
+<tr><td>A03</td><td>Profile UAT nhưng connection PROD</td><td>Fail trước write theo expectedOrganizationId; không chỉ dựa tên profile.</td></tr>
+<tr><td>A04</td><td>Thiếu profile, URL hoặc điều kiện auth của mode đã chọn</td><td>Fail trước write; không fallback DEV. Chỉ yêu cầu secret value cho mode cần secret; identity/reference phải qua kiểm tra riêng.</td></tr>
+<tr><td>A05</td><td>URL DEV trong config UAT</td><td>Host allowlist/target mapping chặn; không phát payload tới DEV trong kiểm tra.</td></tr>
+<tr><td>A06</td><td>Auth enum/serialization</td><td>WebhookKey=4, HttpHeader=5, HttpQueryString=6; key/value thực tế được receiver hiểu; không phụ thuộc ví dụ enum bản 1.</td></tr>
+<tr><td>A07</td><td>Managed property hoặc quyền bị khóa</td><td>Preflight/spike xác định; deployment thất bại rõ; không tạo registration thay thế hoặc bật step.</td></tr>
+<tr><td>A08</td><td>Re-run cùng deployment</td><td>Identity và số lượng không đổi, không tạo webhook/step duplicate.</td></tr>
+<tr><td>A09</td><td>Hai endpoint cùng tên/sai contract</td><td>Fail hoặc resolve chính xác theo manifest/ownership, không FirstOrDefault tùy ý.</td></tr>
+<tr><td>A10</td><td>Managed update/upgrade</td><td>Target settings được reconcile; step mới/cũ theo version; metadata effective và receiver đều đúng sau import.</td></tr>
+<tr><td>A11</td><td>Event trong cửa sổ import/configure</td><td>Không gửi sai môi trường; chứng minh gate/disabled-state và xử lý backlog, không chỉ kiểm tra trạng thái sau cùng.</td></tr>
+<tr><td>A12</td><td>Auth sai, 401/403, endpoint không tới được</td><td>Metadata đúng vẫn bị đánh deployment failed; không release traffic chỉ vì import/PATCH thành công.</td></tr>
+<tr><td>A13</td><td>Rotation key không đổi URL</td><td>Key mới thật sự dùng được, receiver xác nhận, thu hồi key cũ theo kế hoạch; không dựa compare authvalue.</td></tr>
+<tr><td>A14</td><td>Lỗi network sau request update / configure nửa chừng</td><td>Resume idempotent với cùng input; gate còn hiệu lực; journal đủ biết endpoint nào đã đổi.</td></tr>
+<tr><td>A15</td><td>Copy/restore PROD → UAT</td><td>Rebind toàn bộ target config trước workload; không gọi production receiver bằng credentials sao chép.</td></tr>
+<tr><td>A16</td><td>Webhook-only và mixed assembly</td><td>Không yêu cầu pluginassembly cho webhook-only; mixed flow không tạo plugintype cho metadata class; existing plugin regression pass.</td></tr>
+<tr><td>A17</td><td>Step intended disabled / shared endpoint</td><td>Không bật tất cả step bừa bãi; mọi step bị ảnh hưởng đã được kiểm kê; không xóa ngoài ownership.</td></tr>
+<tr><td>A18</td><td>Filtering/image và payload lớn</td><td>Receiver xử lý đúng payload thực, không phụ thuộc field/image có thể thiếu; event không liên quan filter không gây xử lý ngoài ý định.</td></tr>
+<tr><td>A19</td><td>Replay/duplicate/502–504</td><td>Receiver không tạo side effect trùng; đo kết quả nghiệp vụ theo event, không chỉ HTTP status.</td></tr>
+<tr><td>A20</td><td>Log/artifact hygiene</td><td>Không chứa secret thật, URL có token, header credential hoặc response lỗi làm lộ secret; evidence vẫn đủ chẩn đoán.</td></tr>
+</tbody></table>
+<h3>Bản ghi kết quả tối thiểu cho mỗi target</h3>
+<pre><code>Deployment ID / thời gian / operator hoặc app user
+Actual OrganizationId + target URL
+Solution unique name + version + artifact SHA256
+Endpoint key + ID + contract + URL (đã che query nhạy cảm) + auth type
+Secret reference/version (không value)
+Step IDs + eventhandler ID + message/table + mode/stage + effective state
+Import outcome + configure outcome + canary outcome
+Canary record/event correlation + receiver environment + business result
+Async job evidence khi áp dụng + known backlog
+Recovery checkpoint nếu failed
+IntegrationReady: true chỉ khi toàn bộ điều kiện bắt buộc đạt</code></pre>
+<p><strong>Không dùng “all environments OK” như một trạng thái suy ra từ code review.</strong> Danh sách target hỗ trợ phải được xác định; môi trường mới chỉ đạt sau khi có config, quyền, receiver và bằng chứng cùng tiêu chuẩn.</p>
+</section>
+
+<section id="evidence">
+<h2>14. Đã xác minh gì, còn phải xác minh gì?</h2>
+<table><thead><tr><th>Loại bằng chứng</th><th>Trạng thái trong lần phân tích này</th></tr></thead><tbody>
+<tr><td>Đọc hai báo cáo cũ</td><td>Đã đọc bản 1 và 2, đối chiếu các claim kiến trúc, enum, ALM và pseudo-code.</td></tr>
+<tr><td>Đọc source</td><td>Đã đọc đường thực thi CLI/Shared và các phần MCP liên quan tại commit ghi trên đầu tài liệu; liên kết source ở mục 3.</td></tr>
+<tr><td>Đối chiếu Microsoft</td><td>Đã tra tài liệu chính thức về registration, entity metadata, solution components, settings, managed properties và pipeline extensions. Nguồn bổ sung SDK/API được liệt kê dưới.</td></tr>
+<tr><td>Thay đổi repo</td><td>Chỉ tạo Webhook-Support-Analysis3.html. Không implement các field/command/service được đề xuất, không sửa hai bản cũ.</td></tr>
+<tr><td>Build/unit test</td><td>Không chạy cho thay đổi tài liệu. Các test trong ma trận là công việc nghiệm thu khi có implementation.</td></tr>
+<tr><td>Export/import/deploy thực tế</td><td>Chưa thực hiện. Chưa có solution artifact, target config, credentials/receiver hoặc kết quả thực nghiệm DEV/UAT/PROD trong yêu cầu này.</td></tr>
+<tr><td>Điểm phải đóng trước PROD</td><td>T0: secret transport, managed editability, import/upgrade state, identity; T3: traffic/job gating và canary; toàn bộ điều kiện target-specific của mục 13.</td></tr>
+</tbody></table>
+<h3>Nguồn chính thức để đối chiếu</h3>
+<ol>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/register-web-hook">Register a webhook</a> — registration, auth và step configuration.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/use-webhooks">Use webhooks</a> — request/response, timeout/retry, payload và synchronous side effects.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/serviceendpoint">ServiceEndpoint entity reference</a> và <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/serviceendpoint?view=dataverse-latest">Web API reference</a> — contract/authtype/field metadata.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/sdkmessageprocessingstep?view=dataverse-latest">SdkMessageProcessingStep</a> — handler và state/status.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/solutioncomponent?view=dataverse-latest">SolutionComponent</a> — component type 92/93/95.</li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/api/microsoft.crm.sdk.messages.addsolutioncomponentrequest?view=dataverse-sdk-latest">AddSolutionComponentRequest</a> — thêm component vào solution.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-platform/alm/conn-ref-env-variables-build-tools">Deployment settings của Build Tools</a> — environment variables và connection references.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/environmentvariables">Environment variables</a> — cấu hình theo môi trường cần consumer.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-platform/guidance/alm-accelerator/deployment-settings-payload">ALM Accelerator settings — deprecated</a> — tiền lệ webhook URL override, không phải capability mặc định của mọi importer.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-platform/alm/extend-pipelines">Extend Power Platform Pipelines</a> — hook và extension cho deployment.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-platform/alm/use-managed-properties">Use managed properties</a> — giới hạn customization sau managed import.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/walkthrough-update-service-endpoint-imported-solution">Update service endpoint after solution import</a> — lưu ý phạm vi bài này là SAS key.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/update-delete-entities-using-web-api">Update and delete rows using Web API</a> — PATCH và If-Match.</li>
+</ol>
+<p><strong>Quyết định sau nghiên cứu bổ sung:</strong> một definition/solution artifact; cấu hình target rõ ràng; ưu tiên native auth sau capability spike; resolver URL nếu cần; configure sau import; gate trước event và verify đến receiver. Mục 15 cập nhật quyết định auth và thứ tự T0–T3.</p>
+</section>
+<section id="native">
+<h2>15. Tra cứu bổ sung: Microsoft đã hỗ trợ native đến đâu?</h2>
+<p class="meta">Ngày tra cứu: 30/09/2026. Phạm vi chính xác: Dataverse outbound webhook, bảng ServiceEndpoint, contract=8. Các kết luận dưới đây dựa trên tài liệu và source công khai; chưa phải kết quả chạy trên tenant của dự án.</p>
+<div class="call"><strong>Điểm sửa so với bản trước:</strong> không nên chốt ngay rằng cần tự quản lý toàn bộ auth. Microsoft có khả năng native đáng khảo sát. Nhưng “có environment variables”, “có managed identity cho ServiceEndpoint” và “webhook tự resolve URL/key từ biến” không đồng nghĩa.</div>
+
+<h3>15.1 Ma trận khả năng và mức chắc chắn</h3>
+<table><thead><tr><th>Nhu cầu</th><th>Kết quả tìm được</th><th>Hệ quả cho thiết kế</th></tr></thead><tbody>
+<tr><td>URL khác nhau theo DEV/UAT/PROD</td><td>Environment variable có thể mang cấu hình target; consumer phải sử dụng giá trị. Chưa tìm được hướng dẫn Microsoft về binding trực tiếp từ ServiceEndpoint.url tới một definition.</td><td>Dùng biến để quản lý URL được; hiện chưa có cơ sở bỏ bước resolve → cập nhật endpoint.</td></tr>
+<tr><td>Secret trong Azure Key Vault qua environment variable</td><td>Có, nhưng danh sách consumer được tài liệu hóa có giới hạn; xem 15.3.</td><td>Không coi mọi field authvalue là một consumer tự động.</td></tr>
+<tr><td>Native Key Vault trên ServiceEndpoint</td><td>Metadata có UseKeyVaultConfiguration và KeyVaultReferenceId.</td><td>Là hướng native cần xác minh; chưa đủ hướng dẫn cho payload secret và tổ hợp webhook/auth cụ thể.</td></tr>
+<tr><td>Managed identity cho ServiceEndpoint</td><td>PAC tài liệu hóa component type này; xem 15.4.</td><td>Phải khảo sát trước khi quyết định tự sao chép key.</td></tr>
+<tr><td>Webhook contract=8 tự gửi bearer token phù hợp receiver</td><td>Chưa tìm được hướng dẫn end-to-end xác định audience, cấu hình receiver và tổ hợp auth cho đúng trường hợp này.</td><td>Không suy ra từ enum chung; chưa hứa có thể bỏ function key.</td></tr>
+</tbody></table>
+
+<h3>15.2 URL: environment variable có tác dụng ở tầng nào?</h3>
+<p><a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/environmentvariables">Tài liệu environment variables</a> mô tả cấu hình có thể thay đổi giữa môi trường. Với webhook, câu hỏi cần trả lời thêm là thành phần nào đọc biến và áp dụng nó. Không tìm thấy cú pháp Microsoft xác nhận như <code>${schemaName}</code>, <code>{%schemaName%}</code> hay <code>@Microsoft.KeyVault(...)</code> cho field <code>serviceendpoint.url</code>.</p>
+<p><strong>Bằng chứng thực thi từ Microsoft:</strong> <a href="https://github.com/microsoft/coe-alm-accelerator-templates/blob/59abea30f78b9c05b29d5bba7b1a2b562f9bff56/PowerShell/webhookurl-helper.ps1">webhookurl-helper.ps1, commit 59abea3</a> đọc cấu hình deployment, tìm endpoint rồi ghi giá trị cụ thể vào cột URL. Đây là cấu hình tại deploy time. Thay đổi biến sau đó không được script này tự theo dõi.</p>
+<pre><code>Environment variable/current value hoặc target settings
+            ↓ resolver trong deployment
+serviceendpoint.url = https://receiver-uat.example.com/api/contact
+            ↓ Dataverse runtime
+HTTP POST tới URL đã lưu</code></pre>
+<p>ALM Accelerator đã deprecated; source trên là bằng chứng về cách triển khai, không phải đề nghị cài mới Accelerator. Không copy nguyên helper: nó chọn kết quả đầu theo tên và log URL; implementation dự án cần identity/ownership rõ ràng và che token trong URL. <a href="https://learn.microsoft.com/en-us/power-platform/guidance/alm-accelerator/deployment-settings-payload">Microsoft: deployment settings payload</a>.</p>
+<p><strong>Kết luận có giới hạn:</strong> chưa tìm thấy native URL binding được Microsoft tài liệu hóa cho webhook trong lần tra cứu này. Không biến sự thiếu tài liệu thành khẳng định platform vĩnh viễn không hỗ trợ. Nếu tenant/PRT mới có UI hoặc API riêng, cần ghi nhận phiên bản và kiểm chứng N01.</p>
+
+<h3>15.3 Auth key: tách ba đường Key Vault</h3>
+<table><thead><tr><th>Đường</th><th>Ai đọc secret?</th><th>Điều đã xác minh</th></tr></thead><tbody>
+<tr><td>Secret environment variable</td><td>Consumer được platform hỗ trợ.</td><td><a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/environmentvariables-azure-key-vault-secrets">Microsoft</a> giới hạn consumer ở Power Automate flows, Copilot Studio agents và custom connectors; không công bố ServiceEndpoint webhook trong danh sách đó.</td></tr>
+<tr><td>KeyVaultReference của ServiceEndpoint</td><td>Đường tích hợp native tương ứng của platform.</td><td><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/serviceendpoint">ServiceEndpoint</a> có flag sử dụng auth từ Key Vault và lookup riêng. Đây không phải lookup tới environmentvariabledefinition.</td></tr>
+<tr><td>Pipeline → Key Vault → authvalue</td><td>Deployment identity đọc vault; deployer ghi credential.</td><td>Đây là phương án adapter đề xuất, không phải native runtime binding. Rotation cần chạy lại configure và kiểm tra receiver.</td></tr>
+</tbody></table>
+<p><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/keyvaultreference">KeyVaultReference metadata</a> có keyvaulturi, keyname và managedidentityid. Metadata chưa giải thích đầy đủ định dạng secret mà webhook mong đợi: raw key, XML settings cho header/query hay cấu trúc khác. Cũng chưa đủ để chốt cache/rotation và việc mang reference qua managed solution. Không viết payload suy đoán rồi coi đó là recipe đã hỗ trợ.</p>
+<div class="call warn"><strong>Giới hạn API quan trọng:</strong> <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/retrieveenvironmentvariablesecretvalue?view=dataverse-latest">RetrieveEnvironmentVariableSecretValue</a> được tài liệu hóa chỉ dùng trong Power Automate Flow, không gọi trực tiếp từ code. Vì vậy “CLI đọc Secret environment variable bằng action này” không phải phương án được tài liệu hiện tại cho phép.</div>
+<p><a href="https://www.microsoft.com/en-us/power-platform/blog/2022/02/02/how-to-use-environment-variables-with-akv-secrets-in-the-ci-cd-pipeline-when-deploying-applications/">Blog Power Platform của Microsoft ngày 02/02/2022</a> minh họa secret environment variables trong CI/CD. Bài đó củng cố khả năng ALM của secret reference; không thiết lập liên kết tự động từ reference ấy tới webhook authvalue.</p>
+
+<h3>15.4 Managed identity: có bằng chứng native mới, cần xác định đúng phạm vi</h3>
+<p><a href="https://learn.microsoft.com/en-us/power-platform/developer/cli/reference/managed-identity">PAC managed-identity</a> hiện ghi Preview, nêu ServiceEndpoint trong component types và có create, configure-fic, get, show-fic, verify-fic. Đây là bằng chứng về provisioning/liên kết, mạnh hơn chỉ thấy field metadata.</p>
+<pre><code># Mẫu kiểm tra read-only; thay placeholder bằng target/ID thật khi thực hiện spike
+pac managed-identity get --component-type ServiceEndpoint --component-id &lt;endpoint-guid&gt; --environment &lt;target-url&gt;
+pac managed-identity show-fic --component-type ServiceEndpoint --component-id &lt;endpoint-guid&gt; --environment &lt;target-url&gt;</code></pre>
+<p>Các lệnh trên chưa được chạy trong lần nghiên cứu này. Thành công của get/show-fic hoặc create/link chỉ xác nhận cấu hình tương ứng, chưa chứng minh một webhook HTTP đã gửi token được receiver chấp nhận.</p>
+<p><a href="https://learn.microsoft.com/en-us/power-platform/admin/set-up-managed-identity">Hướng dẫn managed identity cho plug-in</a> là bằng chứng Microsoft đã mở rộng hỗ trợ native mà người dùng nhắc đến: cấu hình identity/FIC và gắn vào plugin assembly/package. Không tự áp dụng recipe dành cho plugin sang webhook. Khi promote target phải rà soát FIC và liên kết của target; không giả định import solution tự cấp Azure permissions.</p>
+<p><strong>Hai hướng khác nhau cần thử:</strong> (a) managed identity giúp platform đọc auth key từ Key Vault, receiver vẫn nhận key; (b) platform dùng identity lấy token để gọi receiver, không cần key chia sẻ. Cùng có chữ managed identity nhưng điều kiện receiver, quyền và rotation khác nhau. Chưa xác minh được hướng nào áp dụng đầy đủ cho contract=8 trong tenant này.</p>
+<p>Metadata chung có <code>authtype=9</code> nhưng bảng ServiceEndpoint dùng cho nhiều contract. Không lấy tích Descartes của enum contract × authtype làm danh sách tổ hợp được hỗ trợ. Không sử dụng <code>RuntimeIntegrationProperties</code> như cấu hình public vì metadata đánh dấu nội bộ.</p>
+
+<h3>15.5 Đối chiếu blog: bài nào thực sự chứng minh điều gì?</h3>
+<table><thead><tr><th>Nguồn trực tiếp</th><th>Nội dung liên quan</th><th>Phạm vi có thể kết luận</th></tr></thead><tbody>
+<tr><td><a href="https://devblogs.microsoft.com/ise/registering-plugins-in-dataverse/">Sweta Kumari, Microsoft ISE — Plugins in Dataverse</a><br>08/03/2024</td><td>Ví dụ Web API tạo ServiceEndpoint contract=8, authtype=5, URL cụ thể và authvalue dạng settings.</td><td>Có cơ sở tự động hóa registration. Bài không chứng minh native env-var binding hoặc phủ định khả năng mới xuất hiện sau đó.</td></tr>
+<tr><td><a href="https://community.dynamics.com/blogs/post/?postid=b632bc44-0034-42fd-92d5-a1ca7a49dfc3">Scott Durow — Environment Variables in Smart Buttons</a><br>Bản tác giả được đăng lại trên Dynamics Community</td><td>Smart Buttons cho phép biểu diễn FlowUrl bằng schema name theo cú pháp riêng.</td><td>Consumer là Smart Buttons. Không lấy cú pháp đó điền vào PRT Endpoint URL.</td></tr>
+<tr><td><a href="https://www.bendenblanken.com/synchronous-and-on-demand-flow-inside-model-apps/">Ben den Blanken — Synchronous and on-demand Flow inside Model-driven Apps</a></td><td>Demo Smart Button gọi Flow; bàn về URL khác khi deploy và hướng hỗ trợ environment variable trong Smart Buttons.</td><td>Luồng UI/client gọi Flow; không phải Dataverse event pipeline gửi webhook.</td></tr>
+<tr><td><a href="https://temmyraharjo.wordpress.com/2025/07/20/dataverse-learn-how-to-implement-azure-durable-functions-payment-scenario/">Temmy Wahyu Raharjo — Azure Durable Functions payment scenario</a><br>20/07/2025</td><td>Demo đăng ký Function URL và HTTP header qua PRT.</td><td>Ví dụ thực hành cơ chế truyền thống, không xác nhận feature matrix mới nhất.</td></tr>
+</tbody></table>
+<p><strong>Kiểm tra độ tin cậy:</strong> tìm kiếm cũng trả về bài dùng lệnh <code>pac plugin webhook add</code> và auth AzureAD. <a href="https://learn.microsoft.com/en-us/power-platform/developer/cli/reference/plugin">Command reference chính thức của pac plugin</a> chỉ liệt kê init/push. Không đưa các lệnh blog chưa đối chiếu được vào runbook. Một bài có từ “managed identity” có thể đang mô tả Function gọi vào Dataverse, không phải Dataverse gọi ra Function.</p>
+<p>Một ví dụ Microsoft có webhook + managed identity thật là <a href="https://learn.microsoft.com/en-us/dynamics365/contact-center/extend/configure-custom-messaging-channel">Contact Center custom messaging channel</a>. Recipe đó dùng component <code>msdyn_occustommessagingchannel</code>; không phải bằng chứng trực tiếp cho ServiceEndpoint contract=8. Cần luôn kiểm tra sản phẩm, chiều gọi và loại component trước khi áp dụng.</p>
+
+<h3>15.6 Quyết định thiết kế đã sửa và task cần làm tiếp</h3>
+<ol>
+<li><strong>URL:</strong> ưu tiên definition trong solution và current value theo target. Nếu native binding chưa được chứng minh, chỉ cần một bước nhỏ đọc URL rồi cập nhật đúng ServiceEndpoint ID sau import. Không nhúng URL target vào attribute/DLL.</li>
+<li><strong>Auth:</strong> đưa native Key Vault/managed identity vào T0 bắt buộc. Nếu áp dụng được cho đúng webhook và đáp ứng yêu cầu vận hành, dùng khả năng platform ấy; không xây thêm secret-copy adapter chỉ vì thiết kế cũ đã đề xuất.</li>
+<li><strong>Phương án dự phòng:</strong> khi native chưa đáp ứng hoặc Preview chưa phù hợp yêu cầu triển khai, pipeline dùng identity được cấp quyền đọc Key Vault và cấu hình auth kiểu truyền thống. Đây là lựa chọn triển khai có điều kiện, không phải khẳng định native không tồn tại.</li>
+<li><strong>ALM:</strong> solution mang definition/registration. Target configuration còn bao gồm URL, identity/reference, quyền Azure và FIC nếu dùng. Đổi môi trường phải đổi đúng các liên kết này; không chỉ thay tên profile.</li>
+<li><strong>Reconcile:</strong> xác định thay biến hoặc rotate key có cần deployment chạy lại hay platform tự refresh. Ghi rõ hành vi đã đo cho mode lựa chọn, không quảng cáo “tự động theo environment variable” khi chỉ cập nhật một lần lúc import.</li>
+</ol>
+
+<h3>15.7 Spike bổ sung: bằng chứng cần có trước khi chọn native</h3>
+<p>Đây là kế hoạch xác minh, chưa thực hiện. Dùng môi trường test và receiver kiểm soát được; mỗi kết quả lưu phiên bản Dataverse/PAC/PRT, loại contract/auth, cấu hình đã che bí mật và timestamp. Nếu không có hướng dẫn public đủ để tạo cấu hình hợp lệ, cần xác nhận với Microsoft trước khi coi là supported production recipe.</p>
+<table><thead><tr><th>ID</th><th>Thao tác cần xác minh</th><th>Tiêu chí kết luận</th></tr></thead><tbody>
+<tr><td>N01 · URL binding</td><td>Kiểm tra UI/API hiện hành có cơ chế chọn environment variable cho webhook URL; nếu có, cấu hình theo hướng dẫn rồi đổi current value khi không chạy deployer.</td><td>Event tiếp theo đi đúng URL mới và xác định delay/cache. Nếu chỉ resolver của pipeline cập nhật record, ghi rõ deploy-time resolution. Không thử placeholder tùy đoán rồi coi thất bại là bằng chứng phủ định mọi native support.</td></tr>
+<tr><td>N02 · Native Key Vault</td><td>Xác nhận contract=8 và auth type cần dùng được hỗ trợ; xác định schema secret, tạo reference/identity/quyền đúng hướng dẫn; gọi receiver rồi rotate key.</td><td>Receiver chấp nhận credential đúng; xác định cache/version/refresh; không cần copy authvalue nếu đường native thực sự đáp ứng.</td></tr>
+<tr><td>N03 · Native outbound identity</td><td>Xác nhận cấu hình public cho webhook8; provision target identity/FIC; thiết lập audience/receiver permissions theo tài liệu phù hợp.</td><td>Receiver xác thực token đúng issuer/audience/principal; quyền sai bị từ chối. Chỉ lưu kết quả xác thực đã lọc, không log bearer token. Gắn MI thành công chưa đủ.</td></tr>
+<tr><td>N04 · Managed solution</td><td>Export/import target sạch và upgrade lần hai với mode đã chọn; kiểm tra URL, endpoint ID, identity/reference và dependencies.</td><td>Không còn DEV URL/key/identity ngoài thiết kế; có danh sách bước target provisioning thực tế; không phát event trong khoảng cấu hình sai.</td></tr>
+<tr><td>N05 · Rotation và lỗi quyền</td><td>Đổi secret version hoặc quyền của identity; quan sát job/receiver; phục hồi cấu hình.</td><td>Đo được thời gian hiệu lực, cách phục hồi và lỗi rõ ràng; không fallback sang credential DEV hoặc auth mode khác.</td></tr>
+<tr><td>N06 · DEV/UAT/PROD isolation</td><td>Đối chiếu OrganizationId, target URL, vault/identity/FIC mapping; gửi canary định danh target.</td><td>Chỉ receiver đích nhận và xác nhận đúng target; kết quả đạt trên từng môi trường trước khi đánh dấu deployment hoàn tất.</td></tr>
+</tbody></table>
+<div class="call ok"><strong>Trả lời câu hỏi của người dùng:</strong> có hỗ trợ native đáng kể cần tận dụng, và bản trước đã chưa nghiên cứu đủ. Điều đã xác nhận mới là support provisioning managed identity cho ServiceEndpoint và các khả năng Key Vault/Secret environment variable với phạm vi riêng. Chưa đủ bằng chứng để nói webhook tự lấy cả URL và auth key từ biến môi trường. Kế hoạch đúng là khảo sát native trước, chỉ bổ sung phần cấu hình mà platform chưa đáp ứng, rồi nghiệm thu trên từng target.</div>
+</section>
+<footer>Báo cáo số 3 · Tạo theo yêu cầu lưu HTML cùng thư mục · Các ví dụ domain/GUID/secret reference đều là dữ liệu minh họa · Không có thao tác ghi lên Dataverse trong lần phân tích này.</footer>
+</main>
+</body>
+</html>
