@@ -73,10 +73,12 @@ until the format is confirmed on a sandbox.
 
 Other verified ALM findings baked into the design:
 
-- The `MSCRM.SolutionUniqueName` header does not assign Custom API/FxExpression
-  records to the named solution on the test org — records landed in the Default
-  solution. Solution membership must therefore be explicit
-  (`SolutionComponentCreateHelper` pattern) when authoring is enabled.
+- The `MSCRM.SolutionUniqueName` header leaves `solutionid` on the Custom API
+  record pointing at the Default solution, but the platform creates the
+  solutioncomponent row (componenttype 10036) in the named solution — so
+  membership-based discovery works with the header. Explicit
+  `SolutionComponentCreateHelper` is still the robust path when authoring
+  ships.
 - `fxexpression.context` is the compiler symbol table
   (`{"Tables":[],"CustomApis":[],"ConnectionReferences":[],...}`) and is parsed
   strictly (`CustomApis` entries are unique-name strings).
@@ -114,10 +116,16 @@ offline without calling Dataverse.
   4628/4628 pass.
 - `devkit mcp --tools` (offline): 39 tools; `manage_function` listed between
   `manage_form` and `manage_record`; readonly 17 / mutation 22.
-- Installed build `03.10.2026 10:38:49`, SHA `FAD699434B4A44D817B7233C9D368550BAEA9265CF4311B70A28D0CEFB269FC6`
+- Installed build `03.10.2026 21:37:05`, SHA `14DF172B4179A62163FBB7873EA9E8D1E23926A3FAD2F9A325694CE243545458`
   — matches `Published/4.44.44.44/DynamicsCrm.DevKit.Cli.4.44.44.44.build-manifest.json`
-  and MCP `whoami` runtime evidence.
+  and MCP `whoami` runtime evidence. (The 21:37:05 build adds a fix found during
+  test-call capture: the list solution filter queries solutioncomponent by
+  `componenttype` 10036, not `objecttypecode`.)
 - Live smoke on 🟢DEVKITV4 with test function `all_DevKitTestFunction`
   (formula `{ Total: 2 }`, response property `Total`/Float): list, detail,
-  validate (`serverValidated=true`), invoke (`Total: 2`, 1373 ms) and the
-  `create` gate error all behaved as documented.
+  validate (`serverValidated=true`), invoke (`Total: 2`), the `create` gate
+  error, and the invoke dry-run path all behaved as documented.
+- Test-call doc `DynamicsCrm.DevKit.Docs/testcall/29.manage_function.md` —
+  15 tests captured live on build 21:37:05 (6 success, 8 error, 1 dry-run);
+  description byte-identical and parameters 8/8 verified against the live
+  schema. Files 29-38 renamed 30-39 for the new tool position.
