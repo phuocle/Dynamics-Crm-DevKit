@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevKit MCP · Tool 39 · Dataverse Functions</title>
+<style>
+:root{--ink:#183344;--muted:#526b7a;--line:#d8e3e9;--blue:#17689b;--teal:#087e78;--bg:#f1f5f7;--paper:#fff}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.72 "Segoe UI",Arial,sans-serif}main{max-width:1180px;margin:32px auto;background:var(--paper);padding:44px 56px;border-radius:16px;box-shadow:0 8px 32px #1833440c}h1{font-size:40px;line-height:1.16;letter-spacing:-1px;margin:20px 0}h2{font-size:26px;line-height:1.3;margin:48px 0 20px;border-top:1px solid var(--line);padding-top:28px}h3{font-size:19px;margin:28px 0 12px}a{color:var(--blue);overflow-wrap:anywhere}p{margin:12px 0}li{margin:7px 0}code{font:0.9em Consolas,monospace;background:#edf3f6;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#122e40;color:#e4f3f8;padding:22px;border-radius:9px;white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.7 Consolas,monospace}pre code{background:none;padding:0;font:inherit;color:inherit}.tag{display:inline-block;background:#e0f3ef;color:#09645f;border-radius:16px;padding:4px 13px;font-size:13px;font-weight:600}.meta,.source{font-size:13px;color:var(--muted)}.lead{font-size:20px;line-height:1.55}.callout{background:#eaf4fb;border-left:5px solid var(--blue);border-radius:5px;padding:18px 23px;margin:20px 0}.warn{background:#fff5df;border-color:#b77a11}.good{background:#e9f7f1;border-color:var(--teal)}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:26px 0}.metric{padding:18px 20px;border:1px solid var(--line);border-radius:9px}.metric strong{display:block;font-size:27px;line-height:1.3;color:var(--teal)}.metric span{font-size:13px;color:var(--muted)}.toc{display:grid;grid-template-columns:1fr 1fr;gap:5px 26px;background:#f6f9fb;border-radius:9px;padding:22px 26px}.toc a{text-decoration:none;font-size:14px}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px;margin:20px 0}th,td{border:1px solid var(--line);padding:12px 14px;text-align:left;vertical-align:top}th{background:#eaf1f5;font-weight:650}tr:nth-child(even){background:#fafcfd}.diagram{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;background:#f5f9fb;padding:24px;border-radius:9px}.node{border:1px solid #b9d4df;background:white;border-radius:8px;padding:14px 18px;text-align:center}.node b{display:block}.arrow{color:var(--teal);font-size:24px}.small{font-size:13px}.state{font-size:12px;display:inline-block;padding:2px 8px;border-radius:8px;background:#edf1f4;white-space:nowrap}.verified{background:#dbf1e6;color:#146447}.proposed{background:#e4effb;color:#285a90}.pending{background:#fff0d1;color:#815608}footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;color:var(--muted);font-size:13px}@media(max-width:760px){main{margin:0;padding:26px 18px;border-radius:0}h1{font-size:31px}h2{font-size:23px}.toc{grid-template-columns:1fr}.metrics{grid-template-columns:1fr}th,td{padding:9px}table{min-width:650px}}@media print{body{background:white}main{max-width:none;margin:0;padding:0;box-shadow:none}.toc{display:none}h2,h3{break-after:avoid}tr,.callout,.metrics{break-inside:avoid}a{color:inherit}pre{white-space:pre-wrap}.table-wrap{overflow:visible}table{min-width:0}h1{font-size:30px}}
+body{overflow-wrap:anywhere}th:first-child{min-width:160px}
+</style>
+</head>
+<body><main>
+<span class="tag">NGHIÊN CỨU &amp; THIẾT KẾ TRIỂN KHAI</span>
+<h1>Dataverse Functions<br>Tool thứ 39 cho DevKit MCP</h1>
+<p class="lead">Đề xuất <code>manage_function</code>: quản lý logic Power Fx chạy phía Dataverse, kế thừa kiến trúc <code>manage_*</code> hiện có.</p>
+<p class="meta">Nghiên cứu ngày 03/10/2026 · Asia/Saigon · Component khi triển khai: <strong>CLI / MCP (.NET 10)</strong><br>Source HEAD: <code>e8e40d44c0131076df08b0d9c7d3bfb17f6e193a</code> · Version: <code>4.44.44.44</code> · Build: <code>xxxx.yy.zz HH.mm.ss</code></p>
+<div class="callout good"><strong>Kết luận:</strong> Đúng, tiền thân là <strong>instant low-code plug-ins</strong>. Microsoft đã chuyển hướng sang <strong>Dataverse Functions</strong>. Có cơ sở để thiết kế tool mới; phần khám phá và gọi Function có nền tảng API rõ ràng, còn authoring đầy đủ cần một đợt kiểm chứng trên sandbox trước khi chốt cách tạo/sửa/xóa.</div>
+<div class="metrics"><div class="metric"><strong>38 → 39</strong><span>Một tool MCP mới, nhiều action</span></div><div class="metric"><strong>17 / 22</strong><span>ReadOnly / Mutation sau khi thêm</span></div><div class="metric"><strong>Preview</strong><span>Trạng thái trên tài liệu Microsoft đã đọc</span></div></div>
+<p class="source">Phạm vi bàn giao: tài liệu HTML trong <code>Docs/</code> theo yêu cầu. Đã đọc source và chạy lệnh liệt kê tool cài trên máy. Chưa viết implementation, chưa gọi tenant Dataverse, chưa thực hiện CRUD hoặc kiểm thử Functions trên môi trường thật. Các contract mới dưới đây là <strong>đề xuất DevKit</strong>, không phải payload Microsoft đã xác nhận.</p>
+<nav class="toc" aria-label="Mục lục">
+<a href="#history">01 · Instant plug-ins đã bị bỏ thế nào?</a><a href="#terms">02 · Phân biệt ba nghĩa của “function”</a>
+<a href="#platform">03 · Giới hạn nền tảng cần biết</a><a href="#evidence">04 · Dữ liệu và API đã có bằng chứng</a>
+<a href="#patterns">05 · Kế thừa pattern trong repository</a><a href="#contract">06 · Contract đề xuất cho tool</a>
+<a href="#examples">07 · Payload và kết quả mẫu</a><a href="#lifecycle">08 · Thiết kế từng thao tác</a>
+<a href="#discovery">09 · Tự xuất hiện trong --tools</a><a href="#files">10 · File cần tạo hoặc cập nhật</a>
+<a href="#spike">11 · Đợt kiểm chứng API còn thiếu</a><a href="#migration">12 · Chuyển instant plug-in cũ</a>
+<a href="#tests">13 · Kiểm thử và tiêu chí nghiệm thu</a><a href="#delivery">14 · Thứ tự triển khai</a>
+<a href="#sources">15 · Nguồn Microsoft và bằng chứng local</a>
+</nav>
+
+<section id="history"><h2>01 · Instant plug-ins đã bị bỏ thế nào?</h2>
+<p>Microsoft nói rõ: <q>Instant low-code plug-ins are deprioritized and aren't being delivered as a feature. Instant low-code plug-ins are replaced with functions.</q> Đây là thay đổi hướng sản phẩm; chưa phải bằng chứng rằng Microsoft đã xóa mọi instant plug-in đang tồn tại trong mọi tenant. Không có ngày ngừng chạy hoặc cam kết migration tự động trong các trang đã kiểm tra. <a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/low-code-plug-ins">[S1]</a></p>
+<div class="table-wrap"><table><thead><tr><th>Mốc tài liệu</th><th>Bằng chứng</th><th>Quyết định cho DevKit</th></tr></thead><tbody>
+<tr><td>10/10/2023</td><td>Microsoft công bố public preview low-code plug-ins; trải nghiệm gắn với Dataverse Accelerator. <a href="https://www.microsoft.com/en-us/power-platform/blog/power-apps/dataverse-low-code-plug-ins-now-in-public-preview/">[S2]</a></td><td>Nhận diện tài liệu và component cũ để hỗ trợ đọc/migration.</td></tr>
+<tr><td>Tài liệu Functions hiện hành</td><td>Functions được mô tả là tên kế tiếp của instant low-code plug-ins. <a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/functions-overview">[S3]</a></td><td>Đặt tên tool mới <code>manage_function</code>.</td></tr>
+<tr><td>23/02/2026</td><td>Trang Dataverse Accelerator ghi Accelerator, monitor plug-ins và API playground bị deprioritized. Đây là trạng thái của nhóm trải nghiệm đó. <a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/dataverse-accelerator/dataverse-accelerator">[S4]</a></td><td>Không xây tool mới phụ thuộc vào app Accelerator cũ.</td></tr>
+</tbody></table></div>
+<p>Low-code plug-ins còn có nhánh <strong>automated</strong>, gắn với sự kiện bảng. Thông báo thay bằng Functions nhắm vào nhánh <strong>instant</strong>; không suy rộng thành việc mọi automated plug-in hoặc plug-in C# bị thay thế. <a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/low-code-plug-ins">[S1]</a></p>
+</section>
+
+<section id="terms"><h2>02 · Phân biệt ba nghĩa của “function”</h2>
+<div class="table-wrap"><table><thead><tr><th>Khái niệm</th><th>Ý nghĩa</th><th>Hệ quả thiết kế</th></tr></thead><tbody>
+<tr><td>Dataverse Functions</td><td>Trải nghiệm viết logic bằng Power Fx, dựa trên khả năng Custom API của Dataverse. <a href="https://learn.microsoft.com/en-us/power-platform/architecture/reference-architectures/optimize-performance-canvas-apps">[S5]</a></td><td>Là đối tượng chính tool này quản lý.</td></tr>
+<tr><td>OData / Custom API Function</td><td>Loại operation đọc được gọi bằng GET; khác Custom API Action gọi bằng POST. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/use-web-api-functions">[S6]</a> <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/use-web-api-actions">[S7]</a></td><td>Đọc metadata <code>isfunction</code>, binding và parameter để chọn cách gọi. Không đoán theo tên sản phẩm.</td></tr>
+<tr><td>Hàm Power Fx như <code>Filter()</code></td><td>Là thành phần trong biểu thức nghiệp vụ. Tập được hỗ trợ phụ thuộc host Functions. <a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/functions-supported-power-fx">[S8]</a></td><td>Không biến mỗi hàm Power Fx thành một MCP tool.</td></tr>
+</tbody></table></div>
+<div class="diagram" role="img" aria-label="MCP client gọi manage_function, tool dùng service và mutation executor hiện có để đọc hoặc quản lý Custom API và FxExpression trên Dataverse">
+<div class="node"><b>MCP client / devkit tool</b><span class="small">Một contract manage_function</span></div><span class="arrow">→</span>
+<div class="node"><b>ManageFunctionTool</b><span class="small">Resolver · Validator · Result DTO</span></div><span class="arrow">→</span>
+<div class="node"><b>SDK / Web API hiện có</b><span class="small">Execution context · Mutation executor</span></div><span class="arrow">→</span>
+<div class="node"><b>Dataverse</b><span class="small">Custom API ↔ FxExpression</span></div>
+</div>
+<p><strong>Quyết định DevKit:</strong> một entry <code>manage_function</code> xử lý nhiều Function nghiệp vụ. Không đăng ký thêm một MCP tool cho mỗi Function trong tenant. Vì vậy số tool tăng đúng một, không phụ thuộc số Function trong môi trường.</p>
+</section>
+
+<section id="platform"><h2>03 · Giới hạn nền tảng cần biết</h2>
+<p>Microsoft vẫn gắn nhãn <strong>preview</strong>. Overview nêu sáu kiểu parameter: Boolean, String, Float, Decimal, DateTime, Integer; tối đa năm table references. Quyền thiết kế: System Customizer hoặc cao hơn; thực thi dùng ngữ cảnh người gọi. Tên, display name và description được mô tả là không đổi sau khi tạo. <a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/functions-overview">[S3]</a></p>
+<p>Trải nghiệm authoring: mở solution → <strong>New → Automation → Function</strong>. Biểu thức trả output dưới dạng record. Tài liệu hướng dẫn edit formula, test có chạy thật, và cảnh báo xóa qua Solutions có thể để lại orphan components; hướng dẫn xóa qua khu vực Functions. <a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/functions-create">[S9]</a></p>
+<p>Host hỗ trợ đọc/ghi bảng với <code>Collect</code>, <code>Patch</code>, <code>Filter</code>, <code>LookUp</code> trong transaction; <code>Defaults</code> không được hỗ trợ. <code>With</code> được dùng cho alias; một số hàm canvas như <code>ClearCollect</code>, <code>Concurrent</code>, <code>Search</code> không được hỗ trợ. <a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/functions-supported-power-fx">[S8]</a></p>
+<div class="callout warn"><strong>Đề xuất phạm vi v1:</strong> tạo Function global với sáu kiểu scalar; cập nhật formula nhưng giữ nguyên signature. Đọc binding của Function hiện có; chỉ cho invoke các binding đã có test. Chưa hỗ trợ tạo automated plug-ins, sửa registration của plug-in C#, tự migrate hàng loạt hoặc tự cấu hình connector.</div>
+<p><strong>Không tự đồng nhất table references với binding.</strong> Trong thiết kế DevKit, danh sách bảng phục vụ formula và bảng của bound API là hai khái niệm riêng. Khả năng connector, region/cloud và quyền application user phải được xác nhận trên môi trường đích; không lấy yêu cầu của Accelerator cũ làm điều kiện cứng cho Functions mới.</p>
+<p><strong>Validation đề xuất:</strong> kiểm tra cấu trúc contract, kiểu dữ liệu và metadata trước. Parser Power Fx local, nếu dùng, chỉ cung cấp chẩn đoán bổ sung; không chứng minh formula chạy được trên host Dataverse. Không dùng regex để khẳng định formula read-only hoặc đã biên dịch thành công.</p>
+</section>
+
+<section id="evidence"><h2>04 · Dữ liệu và API: biết chắc gì, còn thiếu gì?</h2>
+<div class="table-wrap"><table><thead><tr><th>Bề mặt</th><th>Bằng chứng Microsoft</th><th>Ứng dụng đề xuất</th></tr></thead><tbody>
+<tr><td><code>fxexpression</code></td><td>Entity set <code>fxexpressions</code>; có GET/POST/PATCH/DELETE. Các field gồm <code>expression</code>, <code>parameters</code>, <code>context</code>, <code>compiledexpression</code>, <code>dependencies</code>. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/fxexpression?view=dataverse-latest">[S10]</a></td><td>Đọc definition; không tự phát minh nội dung serialized của các field nội bộ.</td></tr>
+<tr><td>Phân loại expression</td><td>Reference công khai liệt kê <code>category=0</code> Workflow, <code>1</code> Business Rule; có liên kết tới Custom API và SDK step. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/fxexpression">[S11]</a></td><td>Không dùng <code>category=1</code> để nhận diện Function; không xem mọi expression là instant Function.</td></tr>
+<tr><td>Quan hệ Custom API</td><td><code>customapi.fxexpressionid</code>; Web API lookup <code>_fxexpressionid_value</code>, navigation <code>fxexpression</code>. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/customapi?view=dataverse-latest">[S12]</a></td><td>Khởi đầu discovery từ Custom API có expression; đây là tập ứng viên Power Fx, chưa đủ phân biệt mọi thế hệ sản phẩm.</td></tr>
+<tr><td>Delete relationship</td><td>Reference của quan hệ <code>fxexpression_customapi</code> ghi <code>Delete: RemoveLink</code>. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/customapi#fxexpression_customapi">[S13]</a></td><td>Xóa expression không phải bằng chứng Custom API liên quan cũng được xóa. Phải kiểm chứng cleanup toàn bộ graph.</td></tr>
+<tr><td>Input / output</td><td><code>customapirequestparameter</code>, <code>customapiresponseproperty</code>; Custom API hỗ trợ nhiều kiểu hơn Functions UI. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/custom-api-tables">[S14]</a></td><td>Giới hạn authoring theo Functions; đừng cho phép toàn bộ Custom API types chỉ vì SDK có enum.</td></tr>
+<tr><td>Invoke</td><td>Có thể gọi bằng Web API hoặc <code>OrganizationRequest</code> với unique name và tên parameter chính xác. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/custom-api#invoking-custom-apis">[S15]</a></td><td>Ưu tiên SDK late-bound để tái dùng connection, impersonation và executor.</td></tr>
+<tr><td>Tạo Custom API</td><td>Microsoft có ví dụ tạo bằng code và chọn solution qua <code>MSCRM.SolutionUniqueName</code>. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/create-custom-api-with-code">[S16]</a></td><td>Chỉ chứng minh authoring Custom API; không chứng minh từng bước authoring Functions.</td></tr>
+</tbody></table></div>
+<div class="callout"><strong>Khoảng trống cần kiểm chứng:</strong> schema thực tế của <code>parameters/context/dependencies</code>, cơ chế compile và recompile, thứ tự tạo graph, solution membership, đặc tính publish, cleanup, khác biệt component legacy. Trong nguồn đã đọc chưa tìm được hướng dẫn public end-to-end đủ để khẳng định “POST một fxexpression là tạo xong Function”.</div>
+<p>Đề xuất trạng thái capability: <code>read</code>, <code>invoke</code>, <code>author</code>, <code>delete</code> được xác định độc lập. Metadata tồn tại chỉ chứng minh có bảng/column; không chứng minh compiler hoạt động hoặc identity hiện tại đủ quyền. Lỗi access denied cần trả đúng là thiếu quyền, không đổi thành “Functions không được hỗ trợ”.</p>
+<h3>Query khám phá chỉ đọc, dùng sau khi xác nhận metadata</h3>
+<pre><code>GET /api/data/v9.2/customapis?
+  $select=customapiid,uniquename,displayname,isfunction,bindingtype,
+          boundentitylogicalname,_fxexpressionid_value
+  &amp;$filter=_fxexpressionid_value ne null
+  &amp;$top=50
+
+GET /api/data/v9.2/fxexpressions(&lt;fxexpression-id&gt;)?
+  $select=fxexpressionid,uniquename,name,expression,parameters,
+          context,dependencies,statecode,statuscode,versionnumber</code></pre>
+<p class="source">URL được ngắt dòng để đọc; client phải dựng URI và encode query đúng cách. Đây là query đề xuất dựa trên field công khai [S10–S12], chưa được chạy trên tenant. <code>compiledexpression</code> không cần đưa vào output mặc định.</p>
+</section>
+
+<section id="patterns"><h2>05 · Kế thừa pattern trong repository</h2>
+<div class="table-wrap"><table><thead><tr><th>Pattern đã kiểm tra</th><th>Nguồn local</th><th>Cách áp dụng</th></tr></thead><tbody>
+<tr><td>Một tool, nhiều action</td><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageEnvironmentVariableTool.cs">ManageEnvironmentVariableTool.cs</a></td><td>Chuẩn hóa action bằng trim/lowercase; switch dispatch; action sai trả Error + Hint; catch ở entry.</td></tr>
+<tr><td>Base class và result</td><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/McpToolBase.cs">McpToolBase.cs</a>, <a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/McpToolResults.cs">McpToolResults.cs</a></td><td>Kế thừa <code>McpToolBase</code>; dùng Success/Error/DryRun/Partial/Failed; không tự thêm prefix lần nữa. Success tự bổ sung <code>summary</code> trong JSON.</td></tr>
+<tr><td>Attribute và JSON DTO</td><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Models/ManageEnvironmentVariableResult.cs">ManageEnvironmentVariableResult.cs</a></td><td><code>UseStructuredContent=true</code>, <code>OutputSchemaType</code>; DTO có JsonPropertyName rõ ràng, bỏ optional null theo quy ước hiện tại.</td></tr>
+<tr><td>Connection / test seam</td><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/McpServerHost.cs">RegisterSharedServices</a></td><td>Dùng <code>IOrganizationService _orgService</code>; chỉ thêm async/Web API khi cần. Dùng identity có sẵn, không login lần hai.</td></tr>
+<tr><td>Dry-run hai lớp</td><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/McpExecutionContext.cs">McpExecutionContext.cs</a>, <a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/DataverseMutationExecutor.cs">DataverseMutationExecutor.cs</a></td><td>Preview ở action và guard ở mọi mutation boundary. <code>invoke</code> cũng đi qua guard. Policy được cấu hình lúc khởi động, không thành tham số tool/resource.</td></tr>
+<tr><td>Resolve tên và solution</td><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/DisplayNameFirstResolver.cs">DisplayNameFirstResolver.cs</a>, <a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/SolutionResolverHelper.cs">SolutionResolverHelper.cs</a></td><td>Tái dùng resolver bảng/solution. Function resolver theo cùng convention: xử lý ambiguity; không chọn record đầu tiên. Create lấy prefix của publisher, chặn prefix <code>new</code> theo pattern hiện hành.</td></tr>
+<tr><td>Solution membership</td><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/SolutionComponentCreateHelper.cs">SolutionComponentCreateHelper.cs</a></td><td>Tái dùng helper sau khi xác minh component type và lifecycle; kiểm tra <code>IsAddToSolution</code>, không bỏ qua warning.</td></tr>
+<tr><td>JSON input phức hợp</td><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageFormTool.cs">ManageFormTool.cs</a></td><td>Có tiền lệ nhận operations JSON string. <code>definition_json</code> dưới đây dùng cùng cách truyền, parser/domain model riêng.</td></tr>
+<tr><td>File backup</td><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/WorkspaceFolderHelper.cs">WorkspaceFolderHelper.cs</a>, <a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/ReportBackupHelper.cs">ReportBackupHelper.cs</a></td><td>Đề xuất namespace file mới <code>.devkit/manage_function/backups/</code>, dùng GUID + timestamp; giữ nguyên path của tool cũ.</td></tr>
+<tr><td>Offline catalog</td><td><a href="../DynamicsCrm.DevKit.Cli/Tool/ToolCatalog.cs">ToolCatalog.cs</a>, <a href="../DynamicsCrm.DevKit.Cli/Tool/ToolServices.cs">ToolServices.cs</a></td><td>Tool mới phải xuất hiện cả MCP và <code>devkit tool</code>; schema chạy offline, không vô tình expose service/policy types.</td></tr>
+</tbody></table></div>
+<p><strong>Không cần chỉnh Shared, VSIX hoặc Analyzers cho thiết kế này.</strong> Domain helpers đặt dưới <code>DynamicsCrm.DevKit.Cli.Mcp.Tools.Function</code>. Entry class ở <code>...Mcp.Tools</code>; chỉ entry có <code>[McpServerToolType]</code>. Không đưa logic Function vào các file Shared lớn.</p>
+</section>
+
+<section id="contract"><h2>06 · Contract đề xuất cho <code>manage_function</code></h2>
+<p><span class="state proposed">Đề xuất</span> Tên public: <code>manage_function</code>; Title: <code>Manage Dataverse Power Fx functions</code>. Flags toàn tool: <code>ReadOnly=false</code>, <code>Destructive=true</code>, <code>Idempotent=false</code>. Dù list/detail là đọc, tool hỗn hợp vẫn thuộc nhóm Mutation như các tool quản lý hiện có.</p>
+<div class="table-wrap"><table><thead><tr><th>Action</th><th>Hành vi</th><th>Điều kiện phát hành</th></tr></thead><tbody>
+<tr><td><code>list</code></td><td>Danh sách ứng viên Function, lọc solution/managed; kết quả gọn, có giới hạn và dấu hiệu còn dữ liệu.</td><td>Kiểm chứng truy vấn và phân loại trên sandbox.</td></tr>
+<tr><td><code>detail</code></td><td>Formula, signature, table references nếu decode được, API binding, các ID và cảnh báo.</td><td>Không giả vờ hiểu serialized format chưa biết.</td></tr>
+<tr><td><code>validate</code></td><td>Kiểm tra contract + metadata. Không gọi Function; kết quả ghi <code>validationLevel</code>, <code>serverValidated</code>.</td><td>Không quảng cáo là compiler server nếu chỉ kiểm tra local.</td></tr>
+<tr><td><code>invoke</code></td><td>Gọi Function đã resolve, convert arguments theo signature; trả output thực tế.</td><td>Thực thi thật, có thể ghi dữ liệu; không tự gọi sau create/update.</td></tr>
+<tr><td><code>create</code></td><td>Tạo graph Function, xác nhận solution membership và definition đã đọc lại.</td><td>Chỉ bật khi đợt kiểm chứng authoring đạt; không tự upsert.</td></tr>
+<tr><td><code>update</code></td><td>V1 chỉ thay formula, giữ signature và table references; backup trước khi ghi.</td><td>Đã chứng minh recompile và concurrency behavior.</td></tr>
+<tr><td><code>delete</code></td><td>Kiểm tra dependencies, backup definition, cleanup đúng graph sở hữu.</td><td>Phải chứng minh không orphan; chưa đạt thì không quảng cáo action là hoạt động.</td></tr>
+</tbody></table></div>
+<p><strong>Không thêm <code>test</code> đồng nghĩa invoke.</strong> Một action <code>invoke</code> đủ thể hiện việc chạy thật. Không thêm <code>migrate</code>, <code>undo</code>, <code>publish</code>, <code>activate</code> ở v1 khi semantics chưa được xác minh. Backup definition không hoàn tác được dữ liệu nghiệp vụ do invoke đã thay đổi.</p>
+<div class="table-wrap"><table><thead><tr><th>Tham số</th><th>Kiểu / mặc định</th><th>Contract dự kiến</th></tr></thead><tbody>
+<tr><td><code>action</code></td><td>string, <code>""</code></td><td>Bắt buộc; tập giá trị đúng bảng trên, tùy milestone đã phát hành.</td></tr>
+<tr><td><code>function_name</code></td><td>string, <code>""</code></td><td>Display name, unique name hoặc GUID của Custom API; GUID có nghĩa duy nhất, không dò cả hai loại ID. Bắt buộc detail/update/delete/invoke.</td></tr>
+<tr><td><code>solution_name</code></td><td>string, <code>""</code></td><td>Create bắt buộc; list dùng làm filter. Resolve về unique name + publisher.</td></tr>
+<tr><td><code>definition_json</code></td><td>string, <code>""</code></td><td>Create/validate: definition theo schema DevKit. Update: object chỉ chứa <code>formula</code>.</td></tr>
+<tr><td><code>arguments_json</code></td><td>string, <code>""</code></td><td>Invoke: JSON object theo tên input. API không có input cho phép bỏ trống hoặc <code>{}</code>.</td></tr>
+<tr><td><code>record_id</code></td><td>string, <code>""</code></td><td>Chỉ cho invoke entity-bound đã xác minh. Tên bảng lấy từ binding metadata; không nhận URL endpoint tùy ý.</td></tr>
+<tr><td><code>max_records</code></td><td>int, <code>50</code></td><td>List; giá trị ≤0 dùng 50, trên 500 dùng 500 theo convention các tool đọc. Lấy thêm một record để trả <code>hasMore</code>; không đặt tên số trả về là tổng toàn tenant.</td></tr>
+<tr><td><code>include_managed</code></td><td>bool, <code>false</code></td><td>Chỉ ảnh hưởng discovery. V1 đề xuất không sửa/xóa managed Function dù caller nhìn thấy nó.</td></tr>
+</tbody></table></div>
+<p>Không nhận <code>connection</code>, token, caller override hoặc switch bỏ qua mutation policy trong input. Các field chưa hỗ trợ phải báo lỗi rõ ràng; không bỏ qua field lạ rồi trả Success.</p>
+<h3>Kiểu parameter và conversion dự kiến</h3>
+<div class="table-wrap"><table><thead><tr><th>Kiểu contract</th><th>Custom API type</th><th>SDK value / kiểm tra</th></tr></thead><tbody>
+<tr><td><code>boolean</code></td><td>0</td><td><code>bool</code>; chấp nhận JSON true/false, không ép chuỗi tùy tiện.</td></tr>
+<tr><td><code>datetime</code></td><td>1</td><td>Chuỗi ISO 8601 có offset → DateTime theo contract đã kiểm chứng; không phụ thuộc culture máy.</td></tr>
+<tr><td><code>decimal</code></td><td>2</td><td><code>decimal</code>; kiểm tra range/precision, không đi vòng qua double.</td></tr>
+<tr><td><code>float</code></td><td>6</td><td><code>double</code>; hữu hạn.</td></tr>
+<tr><td><code>integer</code></td><td>7</td><td><code>int</code>; trong Int32, không nhận phần thập phân.</td></tr>
+<tr><td><code>string</code></td><td>10</td><td><code>string</code>; giữ nguyên Unicode.</td></tr>
+</tbody></table></div>
+<p class="source">Mã Custom API types từ [S14], cũng đang có trong <a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetCustomApisTool.cs">GetCustomApisTool.cs</a>. Cách conversion là đề xuất DevKit. V1 create dùng input bắt buộc; optional/default chỉ thêm khi xác minh. Khi invoke Function hiện có phải đọc <code>isoptional</code>, phân biệt missing/null với <code>0</code>, <code>false</code>, <code>""</code>.</p>
+</section>
+
+<section id="examples"><h2>07 · Payload và kết quả mẫu</h2>
+<p><span class="state proposed">Chưa có trong binary</span> Ví dụ giả định solution <code>SalesAutomation</code> có publisher prefix <code>sales</code>. Tên solution và prefix phải lấy từ môi trường thật.</p>
+<h3>Definition của DevKit, không phải JSON ghi thẳng vào fxexpression.parameters</h3>
+<pre><code>{
+  "displayName": "Calculate Total",
+  "description": "Tính tổng từ số lượng và đơn giá.",
+  "formula": "{ Total: Quantity * UnitPrice }",
+  "inputs": [
+    { "name": "Quantity", "type": "integer" },
+    { "name": "UnitPrice", "type": "decimal" }
+  ],
+  "outputs": [ { "name": "Total", "type": "decimal" } ],
+  "tableReferences": []
+}</code></pre>
+<p>Schema name đề xuất được tạo từ publisher prefix và display name chuẩn hóa thành identifier: <code>sales_CalculateTotal</code>. Trước khi cố định thuật toán, cần kiểm tra conventions của Functions và xử lý display name Unicode; nếu không tạo được identifier hợp lệ thì trả lỗi cụ thể, không tự cắt thành tên rỗng.</p>
+<h3>MCP tools/call cho create và invoke</h3>
+<pre><code>{
+  "name": "manage_function",
+  "arguments": {
+    "action": "create",
+    "solution_name": "SalesAutomation",
+    "definition_json": "{\"displayName\":\"Calculate Total\",\"description\":\"Compute total\",\"formula\":\"{ Total: Quantity * UnitPrice }\",\"inputs\":[{\"name\":\"Quantity\",\"type\":\"integer\"},{\"name\":\"UnitPrice\",\"type\":\"decimal\"}],\"outputs\":[{\"name\":\"Total\",\"type\":\"decimal\"}],\"tableReferences\":[]}"
+  }
+}
+
+{
+  "name": "manage_function",
+  "arguments": {
+    "action": "invoke",
+    "function_name": "sales_CalculateTotal",
+    "arguments_json": "{\"Quantity\":3,\"UnitPrice\":12.5}"
+  }
+}</code></pre>
+<h3>Structured result đề xuất</h3>
+<pre><code>{
+  "action": "invoke",
+  "status": "executed",
+  "functionName": "sales_CalculateTotal",
+  "customApiId": "&lt;guid&gt;",
+  "fxExpressionId": "&lt;guid&gt;",
+  "outputs": { "Total": 37.5 },
+  "durationMs": 83,
+  "summary": "[Success] Invoked function 'sales_CalculateTotal'."
+}</code></pre>
+<p class="source">Đây là output minh họa, không phải kết quả đã chạy. <code>durationMs</code> là ví dụ. <code>summary</code> do <code>Success()</code> bổ sung; handler không tự ghép prefix.</p>
+<p>DTO chung <code>ManageFunctionResult</code> nên có <code>action</code>, <code>status</code>, các ID; optional <code>count/functions/hasMore</code>, <code>definition</code>, <code>outputs</code>, <code>warnings</code>, <code>backupPath</code>, <code>validationLevel</code>, <code>serverValidated</code>, <code>solutionName</code>, <code>isAddToSolution</code>. Error giữ shape <code>error/hint/details</code> do factory hiện tại tạo. Không thay shape của <code>get_custom_apis</code>.</p>
+<h3>Mẫu entry class — khung thiết kế, không phải implementation hoàn chỉnh</h3>
+<pre><code>namespace DynamicsCrm.DevKit.Cli.Mcp.Tools;
+
+[McpServerToolType]
+public sealed class ManageFunctionTool : McpToolBase
+{
+    // Inject IOrganizationService orgService,
+    // McpDryRunOptions options, McpExecutionContext context.
+
+    [McpServerTool(Name = "manage_function",
+        Title = "Manage Dataverse Power Fx functions",
+        ReadOnly = false, Destructive = true, Idempotent = false,
+        UseStructuredContent = true,
+        OutputSchemaType = typeof(ManageFunctionResult))]
+    // Description theo mẫu WHEN TO USE / RELATED TOOLS.
+    // Một public method; switch action; catch → ThrowExceptionFriendly(ex).
+}</code></pre>
+</section>
+
+<section id="lifecycle"><h2>08 · Thiết kế từng thao tác</h2>
+<h3>Discovery và detail</h3>
+<ol>
+<li>Probe metadata cần thiết, theo environment/organization hiện tại. Phân biệt capability không có với quyền không đủ; không đọc toàn bộ dữ liệu tenant để “thử”.</li>
+<li>Query Custom API có liên kết expression, dùng ColumnSet tối thiểu và paging có giới hạn. Lọc solution qua membership, không dựa vào prefix của tên.</li>
+<li>Resolve GUID Custom API hoặc tên theo convention DisplayNameFirstResolver. Nếu display name trùng, trả candidate ID/unique name và yêu cầu chọn cụ thể; không mutation.</li>
+<li>Đọc expression, input/output bằng batch phù hợp. Chỉ detail mới đưa formula. Giữ trạng thái <code>unverified</code> nếu không biết format; không tự gán “modern Function” chỉ từ tên hoặc <code>isfunction</code>.</li>
+<li>Nếu expression còn dùng bởi SDK steps hoặc API khác: đánh dấu shared/legacy candidate. Không cho update/delete theo giả định sở hữu độc quyền.</li>
+</ol>
+<h3>Create — trình tự logic cần chứng minh trong sandbox</h3>
+<ol>
+<li>Parse definition; reject key lạ, tên parameter trùng, loại ngoài phạm vi, formula rỗng, table reference không resolve được. Không tự lowercase tên input/output dùng trong formula.</li>
+<li>Resolve unmanaged solution và publisher; kiểm tra collision tên trước mutation. Xác minh capability authoring, các quyền và metadata cần thiết.</li>
+<li>Chuẩn bị plan gồm graph, table references, solution membership. Dry-run trả <code>status=not_executed</code> và không ghi Dataverse hay backup artifact.</li>
+<li>Thực hiện bằng authoring adapter có contract đã xác minh. Nếu API public và transaction support cho phép, dùng request transaction qua mutation executor; không mặc định mọi bước đều hỗ trợ transaction.</li>
+<li>Đọc lại ID, expression, signature, solution membership. Không coi HTTP 201/204 của một record là toàn bộ Function đã hoàn thành.</li>
+<li>Nếu graph dở dang: trả <code>Partial</code> với ID đã tạo, bước lỗi và recovery plan. Chỉ bù trừ các record do thao tác này tạo và khi cleanup đã được chứng minh; không xóa graph mù.</li>
+</ol>
+<p><strong>Không tự invoke để “test” create.</strong> Read-back là kiểm tra definition; nếu chưa server-compile thì ghi đúng trạng thái. Caller chỉ invoke khi muốn thực thi nghiệp vụ.</p>
+<h3>Update</h3>
+<p>V1 chỉ nhận <code>{"formula":"..."}</code>. Không tự sửa name/description/signature/table references. Backup cả definition graph và version/hash trước khi ghi; nếu record thay đổi từ lúc đọc thì từ chối hoặc dùng optimistic concurrency khi capability hỗ trợ. Patch formula chỉ là một bước ứng viên: phải kiểm chứng compiler cập nhật, metadata không bị stale và lời gọi sau đó chạy logic mới. Không ghi lại <code>compiledexpression</code> lấy từ backup.</p>
+<h3>Invoke</h3>
+<pre><code>// Pseudocode: function/signature đã được resolve và kiểm tra.
+var request = new OrganizationRequest(resolvedUniqueName);
+// Add parameters đã convert thành CLR types đúng metadata.
+// Entity-bound đã được hỗ trợ: request["Target"] = EntityReference(...).
+
+if (_options.DryRun)
+    return DryRun("Would invoke the selected function.", preview);
+
+var response = DataverseMutationExecutor.Execute(_context, _orgService, request);
+return Success("Invoked the selected function.", MapResponse(response));</code></pre>
+<p>Chỉ gọi API đã qua Function resolver; không biến tool thành executor của mọi OrganizationRequest. Khi dùng Web API, dựng endpoint từ metadata tin cậy, encode literal đúng chuẩn; không nhận URL ngoài environment. Toàn bộ invocation qua mutation boundary trong v1, kể cả formula trông giống tính toán thuần túy. Không tự retry invoke sau timeout: lần đầu có thể đã commit, retry có thể ghi dữ liệu lần nữa. Trả lỗi kèm cảnh báo kết quả thực thi chưa biết nếu timeout.</p>
+<h3>Delete và solution lifecycle</h3>
+<p>Kiểm tra dependencies, graph dùng chung, managed/customizable state; lưu backup; thực hiện lifecycle đã xác minh rồi query lại để phát hiện orphan. Không dùng đơn lẻ <code>DELETE fxexpressions(id)</code> làm định nghĩa “delete Function thành công”. Nếu chưa tìm được đường cleanup ổn định, hướng dẫn thao tác trong Functions UI; không thử ghép endpoint private hoặc phá dependency để ép xóa.</p>
+<p>Không tự thêm PublishAll sau create/update. Đợt kiểm chứng phải xác định Save có đủ, cần operation publish cụ thể hay metadata cần chờ. Nếu cần chờ, dùng bounded retry chỉ cho đọc và giữ cơ chế <code>WaitScalePercent</code> để unit tests không ngủ thật.</p>
+</section>
+
+<section id="discovery"><h2>09 · Làm sao tự xuất hiện trong <code>devkit mcp --tools</code>?</h2>
+<p><span class="state verified">Đã chạy local</span> Output hiện tại: <code>DevKit MCP Tools (38)</code>, <code>ReadOnly (17 tools)</code>, <code>Mutation (21 tools)</code>. Đếm source cũng có 38 tool classes. Đây là lệnh offline liệt kê catalog, chưa phải handshake MCP với tenant.</p>
+<ol>
+<li>Thêm đúng một class và một method có attribute tại <code>Mcp/Tools/ManageFunctionTool.cs</code>. Assembly discovery trong host và lệnh <code>--tools</code> tự tìm thấy.</li>
+<li><code>DisabledToolSet</code> hiện rỗng. Chỉ thêm <code>nameof(Tools.ManageFunctionTool)</code> nếu đang chủ ý chưa phát hành; muốn count lên 39 thì không được để tool ở disabled set.</li>
+<li><code>CategoryLevel</code> giữ nguyên <code>readonly=1</code>, <code>all=2</code>. Membership suy từ <code>ReadOnly</code>; không thêm category <code>functions</code> hay map thủ công.</li>
+<li>Nếu thêm resource <code>instructions_for_function</code>, cập nhật <code>ToolResourceMap</code> bằng <code>nameof(Tools.ManageFunctionTool)</code> để resource bị ẩn khi tool bị disable. Resource không làm tăng số tool.</li>
+<li>Catalog in-process <code>devkit tool</code> cũng dùng assembly và filter của host; chạy schema/parity tests để xác nhận DI không lọt vào input JSON.</li>
+</ol>
+<div class="callout"><strong>“Tool thứ 39” là tổng số tool, không phải dòng số 39.</strong> <code>PrintTools()</code> sắp xếp theo nhóm rồi theo tên. Khi thêm <code>manage_function</code>, nó dự kiến ở dòng <strong>29</strong>, giữa <code>manage_form</code> và <code>manage_record</code>; tổng là 39, ReadOnly vẫn 17 và Mutation là 22.</div>
+<p>Vì tool hỗn hợp có <code>ReadOnly=false</code>, <code>--category readonly</code> không đưa cả tool này vào server, kể cả action list/detail. Muốn giữ đúng 39 tool và đúng pattern hiện hành thì chấp nhận điều này; không đổi attribute thành true để ép lọt vào readonly.</p>
+<pre><code># Sau khi implementation và reinstall hoàn thành:
+devkit mcp --tools
+devkit tool list
+devkit tool describe manage_function --output schema
+devkit tool validate manage_function --set action=validate --file definition_json=./calculate-total.function.json
+
+# Chạy thật khi caller chủ ý tạo hoặc invoke, sau khi các action đã được hỗ trợ:
+devkit tool call manage_function --set action=create --set solution_name=SalesAutomation --file definition_json=./calculate-total.function.json
+devkit tool call manage_function --set action=invoke --set function_name=sales_CalculateTotal --file arguments_json=./calculate-total.arguments.json
+
+# Khởi động MCP với explicit connection arguments của người dùng:
+devkit mcp --category all --auth FromPac --pacprofile &lt;profile-name&gt;</code></pre>
+<p class="source">Các lệnh tương lai minh họa, chưa chạy với tool mới. Hai file JSON chứa definition/arguments như mục 07. <code>--file</code> nạp nội dung file vào string property; <code>devkit tool validate</code> chỉ kiểm tra input/schema offline, không chạy action <code>validate</code> của tool. Muốn action này kiểm tra metadata cần <code>devkit tool call ... --set action=validate</code> với connection hợp lệ. MCP không tự dùng .env; <code>devkit tool call</code> vẫn dùng pipeline auth hiện có. Không tạo connection/config chứa secrets trong tài liệu.</p>
+</section>
+
+<section id="files"><h2>10 · File cần tạo hoặc cập nhật khi triển khai</h2>
+<p>Các đường dẫn tương đối trong bảng là kế hoạch thay đổi, không phải file đã tạo.</p>
+<div class="table-wrap"><table><thead><tr><th>Đường dẫn</th><th>Thay đổi dự kiến</th></tr></thead><tbody>
+<tr><td><code>DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageFunctionTool.cs</code></td><td>Entry, attributes, descriptions, dispatch, result và exception handling.</td></tr>
+<tr><td><code>.../Mcp/Tools/Function/</code></td><td>FunctionResolver, FunctionDefinitionValidator, FunctionMetadataReader; authoring/invocation/backup helpers theo nhu cầu thực tế. Helpers không có tool attribute.</td></tr>
+<tr><td><code>.../Mcp/Tools/Models/ManageFunctionResult.cs</code> và DTO liên quan</td><td>Typed schema với JsonPropertyName; phân biệt definition và invocation output.</td></tr>
+<tr><td><code>.../Mcp/Resources/InstructionResources.cs</code></td><td>Nếu dùng JSON definition: resource giải thích schema/examples; chỉ quảng cáo action thực sự đã hỗ trợ.</td></tr>
+<tr><td><code>.../Mcp/McpServerHost.cs</code></td><td>Rà DisabledToolSet, ToolResourceMap, CategoryLevel. Thêm resource mapping nếu có; DI helper chỉ khi cần instance service mới.</td></tr>
+<tr><td><code>.../Tool/ToolServices.cs</code></td><td>Rà schema service set nếu có dependency mới. Ưu tiên các interface đã đăng ký để không phải thay.</td></tr>
+<tr><td><code>DynamicsCrm.DevKit.Cli.UnitTests/Cli/Mcp/ManageFunction/</code></td><td>MSTest tập trung resolver, validate, mutation guard, lifecycle và output.</td></tr>
+<tr><td><code>...UnitTests/Cli/Mcp/Infrastructure/McpServerHostCoverageTests.cs</code></td><td>Đổi expected all 38→39 và thông báo category; readonly giữ 17.</td></tr>
+<tr><td><code>...UnitTests/Tool/ToolCatalogTests.cs</code></td><td>Parity MCP/CLI, schema, không expose infrastructure types.</td></tr>
+<tr><td><code>DynamicsCrm.DevKit.Docs/Cli/</code>, <code>DynamicsCrm.DevKit.Wiki/mcp/</code></td><td>Hướng dẫn sản phẩm .md khi implement, theo convention repo; báo cáo nghiên cứu hiện tại vẫn là HTML trong Docs theo yêu cầu.</td></tr>
+</tbody></table></div>
+<p><strong>Chỉ sửa tool cũ khi thật sự cần:</strong> <code>get_custom_apis</code> tiếp tục liệt kê Custom API; <code>get_plugins</code> tiếp tục phản ánh registrations. Không đổi tên hoặc JSON keys của chúng. <code>GetSolutionComponentsTool</code> hiện có resolver Custom API/parameter/response nhưng chưa thấy resolver riêng <code>fxexpression</code>; chỉ bổ sung sau khi biết component type chính xác, không hardcode số đoán.</p>
+<p><code>execute_webapi</code> hiện có cơ chế redirect/block các endpoint sở hữu bởi tool chuyên biệt, nhưng chưa thấy rule riêng cho Functions. Không block toàn bộ <code>customapis</code> vì còn Custom API C# khác; không sửa broad policy trong đợt nghiên cứu. Khi thêm rule sau này phải kiểm tra record có thuộc Function được tool hỗ trợ và giữ nguyên đọc cần thiết.</p>
+</section>
+
+<section id="spike"><h2>11 · Đợt kiểm chứng API còn thiếu</h2>
+<p><span class="state pending">Chưa thực hiện</span> Đây là công việc trên sandbox dành cho đợt implementation. Tạo một solution dùng riêng cho thử nghiệm với publisher hợp lệ; xác nhận môi trường, identity và quyền trước khi tạo component.</p>
+<div class="table-wrap"><table><thead><tr><th>Bước</th><th>Thực nghiệm cần làm</th><th>Bằng chứng phải giữ</th></tr></thead><tbody>
+<tr><td>A. Baseline</td><td>Đọc version, metadata bảng/column/relationship, capability và membership. Kiểm tra Functions UI có sẵn.</td><td>Environment/version đã bỏ dữ liệu nhạy cảm; schema cần thiết; không lưu token/cookie.</td></tr>
+<tr><td>B. Function chuẩn</td><td>Tạo bằng maker UI: 2 input scalar, 1 output, không table reference; tiếp theo một Function đọc bảng; thêm case ghi bảng dùng dữ liệu test.</td><td>Definition records và solution export có kiểm soát; ID graph; format parameters/context/dependencies và binding thực.</td></tr>
+<tr><td>C. Authoring API</td><td>Đối chiếu public SDK/Web API với hành vi Save. Nếu cần xem request của maker, chỉ dùng làm bằng chứng kỹ thuật; request nội bộ không tự trở thành API public được hỗ trợ.</td><td>Request sequence tối thiểu, trường do client/server sinh, lỗi validation, bằng chứng contract hỗ trợ.</td></tr>
+<tr><td>D. Update</td><td>Đổi formula và gọi lại; thử formula lỗi; sửa từ UI và API để kiểm tra editor tương thích. Quan sát compile/publish/metadata refresh.</td><td>Read-back, output trước/sau, thời gian chờ, rollback khi lỗi, version/concurrency behavior.</td></tr>
+<tr><td>E. Solution round-trip</td><td>Export/import sang sandbox thứ hai; gọi Function và mở lại trong maker; kiểm tra dependencies bảng/connector nếu có.</td><td>Function chạy đúng sau import; không GUID/prefix hardcode từ môi trường nguồn.</td></tr>
+<tr><td>F. Delete</td><td>Xóa Function độc lập và Function có dependency; so sánh xóa qua Functions UI với graph trước/sau. Test expression được dùng chung.</td><td>Không orphan Custom API/parameters/expression; không xóa SDK steps hoặc component ngoài phạm vi.</td></tr>
+<tr><td>G. Legacy</td><td>Nếu có instant plug-in cũ: chụp graph read-only và so với Function mới; kiểm tra shared expression/steps.</td><td>Quy tắc phân loại dựa trên dữ liệu thực. Nếu không phân biệt chắc, giữ <code>unverified</code>.</td></tr>
+<tr><td>H. Identity</td><td>Kiểm tra maker, application user và impersonated identity theo yêu cầu triển khai; test thiếu quyền đọc bảng/execute privilege.</td><td>Không elevation, đúng user context, lỗi có thông tin khắc phục.</td></tr>
+</tbody></table></div>
+<div class="callout warn"><strong>Cổng quyết định authoring:</strong> chỉ bật create/update/delete khi đã có contract kiểm chứng và test lifecycle. Nếu còn phụ thuộc endpoint private hoặc serialized format không ổn định, phát hành phạm vi list/detail/validate/invoke được ghi rõ; phần authoring tiếp tục dùng maker UI/solution ALM. Không gắn nhãn “quản lý đầy đủ” cho một tool chỉ đọc và gọi.</div>
+</section>
+
+<section id="migration"><h2>12 · Chuyển instant plug-in cũ: quy trình đề xuất</h2>
+<p>Chưa có bằng chứng trong các nguồn đã đọc về một migration API public hoặc tự động chuyển toàn bộ component. Do đó tool mới không nên tự xóa/đổi tên instant plug-in cũ chỉ vì Microsoft đã đổi hướng sản phẩm.</p>
+<ol>
+<li>Inventory API/expression/signature/binding/solutions/dependencies và nơi đang gọi: canvas app, flow, code hoặc agent.</li>
+<li>Tạo Function mới trong sandbox với unique name riêng, giữ bản cũ để so sánh. Không copy compiled representation; chuyển formula và reference theo contract mới đã xác minh.</li>
+<li>Kiểm tra các hàm Power Fx, kiểu parameter, table references, identity và tác động ghi. Chạy bộ input giống nhau trên dữ liệu test; so output và side effects.</li>
+<li>Cập nhật caller có kiểm soát; kiểm tra cache metadata và solution dependencies. Chỉ giữ lại unique name cũ nếu lifecycle và collision behavior đã có bằng chứng hỗ trợ.</li>
+<li>Export/import, xác nhận caller dùng component mới. Dọn bản cũ là thao tác riêng sau khi hết dependency; không nằm ẩn trong create/update.</li>
+</ol>
+</section>
+
+<section id="tests"><h2>13 · Kiểm thử và tiêu chí nghiệm thu</h2>
+<div class="table-wrap"><table><thead><tr><th>Nhóm</th><th>Ca kiểm thử có ý nghĩa</th></tr></thead><tbody>
+<tr><td>Discovery / contract</td><td>38→39; readonly 17; manage_function có một entry; resource bị disable đúng; schema không chứa services, auth hay execution policy; help/action list đúng phạm vi đã phát hành.</td></tr>
+<tr><td>Resolver</td><td>GUID vs tên; display name trùng; API C# không có expression; expression dùng chung; legacy/unverified; solution filter; managed; không quyền; giới hạn/paging.</td></tr>
+<tr><td>Definition</td><td>JSON sai/key lạ; duplicate key/parameter; formula rỗng; type ngoài sáu scalar; tên không hợp lệ; prefix collision; table không resolve; quá giới hạn reference.</td></tr>
+<tr><td>Invocation</td><td>Missing/extra/null; 0/false/chuỗi rỗng; Int32 overflow; decimal precision; DateTime offset; unsupported bound type; server fault; timeout không tự retry; mapping response giữ kiểu.</td></tr>
+<tr><td>Mutation policy</td><td>Mỗi create/update/delete/invoke/publish/add-to-solution không gửi SDK write khi dry-run. Gọi helper trực tiếp vẫn bị guard; không ghi backup trong dry-run.</td></tr>
+<tr><td>Lifecycle</td><td>Compiler lỗi; tạo dở graph; add-to-solution thất bại; read-back lệch; concurrent edit; backup thất bại trước mutation; dependency/shared expression; cleanup và không orphan.</td></tr>
+<tr><td>Output / bảo mật dữ liệu</td><td>Success text và summary; Error/Partial có IsError; field JSON ổn định; không stack trace/token; không dump input/output nghiệp vụ vào log mặc định; backup không ghi đè file khác.</td></tr>
+<tr><td>Live integration</td><td>Maker ↔ API compatibility, formula update thật, CRUD theo phạm vi đã bật, solution export/import, caller identity, invoke ghi dữ liệu test đúng một lần.</td></tr>
+</tbody></table></div>
+<p>FakeXrmEasy/mocks kiểm được orchestration và mutation guard; không chứng minh Power Fx compiler, solution import hoặc server-generated metadata hoạt động. Các điểm này cần sandbox integration. Test đụng shared/static state phải <code>[DoNotParallelize]</code>; các đợi metadata giữ <code>WaitScalePercent</code>.</p>
+<h3>Lệnh component-scoped sau khi viết code</h3>
+<p>Trước khi thực thi đọc trọn <a href="../DynamicsCrm.DevKit.AI/workflows/unit-test.md">unit-test.md</a> và <a href="../DynamicsCrm.DevKit.AI/workflows/build-cli.md">build-cli.md</a>. Bộ lọc bên dưới là dự kiến, điều chỉnh cho class test thực sự được thêm.</p>
+<pre><code>dotnet build DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj
+dotnet test DynamicsCrm.DevKit.Cli.UnitTests/DynamicsCrm.DevKit.Cli.UnitTests.csproj --framework net10.0 --filter "FullyQualifiedName~ManageFunction|FullyQualifiedName~McpServerHostCoverageTests|FullyQualifiedName~McpCommandCoverageTests|FullyQualifiedName~ToolCatalogTests"
+
+# Khi sửa MCP source: rebuild/reinstall theo workflow CLI.
+&amp; ./DynamicsCrm.DevKit.Scripts/Release.DynamicsCrm.DevKit.Cli.ps1</code></pre>
+<p>Sau reinstall: restart connector đang dùng, gọi <code>whoami</code> từ process MCP mới; đối chiếu runtime version, build timestamp, process start time và assembly SHA với manifest trong <code>Published/&lt;version&gt;/</code>. Kiểm tra <code>devkit mcp --tools</code> và MCP <code>tools/list</code>. Source version vẫn <code>4.44.44.44</code>; date placeholder phải được phục hồi. Không yêu cầu full release/coverage toàn bộ năm component cho thay đổi CLI này.</p>
+<p><strong>Trạng thái kiểm tra trong đợt nghiên cứu này:</strong> chỉ chạy catalog hiện tại và kiểm tra tài liệu HTML; chưa chạy các lệnh build/test/release nói trên vì chưa sửa code. File đang có sẵn <code>DynamicsCrm.DevKit.Docs/Cli/Webhook-Support-Analysis3.html</code> được giữ nguyên; không stage, commit hoặc push.</p>
+</section>
+
+<section id="delivery"><h2>14 · Thứ tự triển khai đề xuất</h2>
+<ol>
+<li><strong>Chốt nền tảng:</strong> hoàn thành đợt kiểm chứng mục 11, ghi capability matrix và request contracts đã xác minh. Đây là phần quyết định khả năng authoring.</li>
+<li><strong>Thêm tool shell + read path:</strong> DTO, resolver, list/detail, validate, resource nếu cần; integration với catalog và category. Không quảng cáo action chưa có.</li>
+<li><strong>Thêm invoke:</strong> conversion theo metadata, mutation guard, output/fault mapping, timeout behavior; test dữ liệu sandbox.</li>
+<li><strong>Thêm authoring đã đủ bằng chứng:</strong> create, formula update, solution membership, backup/concurrency và cleanup. Delete có cổng nghiệm thu riêng.</li>
+<li><strong>Hoàn tất phát hành component:</strong> focused tests, CLI release/install, restart connector, whoami verification, docs và mẫu sử dụng.</li>
+</ol>
+<p><strong>Mức sẵn sàng hiện tại:</strong> tên tool, cách đăng ký, pattern source, ranh giới action và tiêu chí nghiệm thu đã đủ rõ để bắt đầu. Còn phải xác minh contract authoring trên Dataverse trước khi kết luận tool quản lý Functions đầy đủ có thể phát hành. Không cần thiết kế framework MCP mới hoặc đổi 38 tool cũ.</p>
+</section>
+
+<section id="sources"><h2>15 · Nguồn Microsoft và bằng chứng local</h2>
+<p class="source">Tra cứu ngày 03/10/2026. Các nhãn preview và giới hạn là trạng thái tài liệu tại thời điểm đọc; cần kiểm tra lại khi implementation. Các đoạn thiết kế mang nhãn đề xuất là nhận định kỹ thuật cho DevKit. Không dùng bài blog cộng đồng để khẳng định API contract.</p>
+<ol>
+<li id="s1"><a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/low-code-plug-ins">S1 · Use low-code plug-ins in Dataverse</a> — thông báo instant → functions; phân biệt instant/automated.</li>
+<li id="s2"><a href="https://www.microsoft.com/en-us/power-platform/blog/power-apps/dataverse-low-code-plug-ins-now-in-public-preview/">S2 · Microsoft: Low-code plug-ins public preview</a> — mốc 10/10/2023.</li>
+<li id="s3"><a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/functions-overview">S3 · Functions overview</a> — tiền thân, preview, parameters, references và permissions; trang ghi cập nhật 01/05/2025.</li>
+<li id="s4"><a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/dataverse-accelerator/dataverse-accelerator">S4 · Dataverse Accelerator</a> — thông báo deprioritized; cập nhật 23/02/2026.</li>
+<li id="s5"><a href="https://learn.microsoft.com/en-us/power-platform/architecture/reference-architectures/optimize-performance-canvas-apps">S5 · Microsoft reference architecture</a> — Functions là abstraction trên Custom API; cập nhật 05/01/2026.</li>
+<li id="s6"><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/use-web-api-functions">S6 · Use Web API functions</a> — invocation của OData Function.</li>
+<li id="s7"><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/use-web-api-actions">S7 · Use Web API actions</a> — invocation của OData Action.</li>
+<li id="s8"><a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/functions-supported-power-fx">S8 · Supported functions / Power Fx</a> — host limitations; trang ghi cập nhật 27/04/2026.</li>
+<li id="s9"><a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/functions-create">S9 · Create and use Functions</a> — maker workflow, edit/test và cảnh báo delete; cập nhật 24/02/2025.</li>
+<li id="s10"><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/fxexpression?view=dataverse-latest">S10 · FxExpression Web API EntityType</a> — entity set, properties, relations.</li>
+<li id="s11"><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/fxexpression">S11 · FxExpression table reference</a> — columns, category options, relationships.</li>
+<li id="s12"><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/customapi?view=dataverse-latest">S12 · Custom API Web API EntityType</a> — lookup/navigation đến FxExpression.</li>
+<li id="s13"><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/customapi">S13 · Custom API table reference</a> — FxExpression lookup và Delete RemoveLink.</li>
+<li id="s14"><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/custom-api-tables">S14 · Custom API tables</a> — request/response types, binding và signature.</li>
+<li id="s15"><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/custom-api#invoking-custom-apis">S15 · Invoke Custom APIs</a> — Web API / SDK OrganizationRequest.</li>
+<li id="s16"><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/create-custom-api-with-code">S16 · Create Custom API with code</a> — API authoring, solution header; không phải hướng dẫn authoring Functions hoàn chỉnh.</li>
+</ol>
+<p>Nguồn local trọng tâm đã link tại mục 05 và 10; quy tắc repository: <a href="../AGENTS.md">AGENTS.md</a>. Các file nguồn liên kết tương đối để tài liệu vẫn mở được trong checkout khác.</p>
+</section>
+<footer>DynamicsCrm.DevKit · Báo cáo nghiên cứu cho tool MCP thứ 39 · HTML tự chứa, không tải font/script/CDN bên ngoài · Không thay đổi runtime trong đợt này.</footer>
+</main></body></html>

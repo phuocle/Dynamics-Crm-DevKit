@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevKit MCP · Automated low-code plug-ins · Phân tích tool 39</title>
+<style>
+:root{--ink:#183344;--muted:#526b7a;--line:#d8e3e9;--blue:#17689b;--teal:#087e78;--bg:#f1f5f7}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.72 "Segoe UI",Arial,sans-serif;overflow-wrap:anywhere}main{max-width:1180px;margin:32px auto;background:white;padding:44px 56px;border-radius:16px;box-shadow:0 8px 32px #1833440c}h1{font-size:39px;line-height:1.18;letter-spacing:-1px;margin:20px 0}h2{font-size:25px;line-height:1.35;margin:46px 0 20px;border-top:1px solid var(--line);padding-top:27px}h3{font-size:19px;margin:28px 0 12px}a{color:var(--blue);overflow-wrap:anywhere}p{margin:12px 0}li{margin:7px 0}code{font:0.9em Consolas,monospace;background:#edf3f6;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#122e40;color:#e4f3f8;padding:22px;border-radius:9px;white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.7 Consolas,monospace}pre code{background:none;padding:0;font:inherit;color:inherit}.tag{display:inline-block;background:#e0f3ef;color:#09645f;border-radius:16px;padding:4px 13px;font-size:13px;font-weight:600}.meta,.source{font-size:13px;color:var(--muted)}.lead{font-size:20px;line-height:1.55}.callout{background:#eaf4fb;border-left:5px solid var(--blue);border-radius:5px;padding:18px 23px;margin:20px 0}.warn{background:#fff5df;border-color:#b77a11}.good{background:#e9f7f1;border-color:var(--teal)}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:26px 0}.metric{padding:18px 20px;border:1px solid var(--line);border-radius:9px}.metric strong{display:block;font-size:24px;line-height:1.35;color:var(--teal)}.metric span{font-size:13px;color:var(--muted)}.toc{display:grid;grid-template-columns:1fr 1fr;gap:6px 26px;background:#f6f9fb;border-radius:9px;padding:22px 26px}.toc a{text-decoration:none;font-size:14px}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px;margin:20px 0}th,td{border:1px solid var(--line);padding:12px 14px;text-align:left;vertical-align:top}th{background:#eaf1f5;font-weight:650}th:first-child{min-width:150px}tr:nth-child(even){background:#fafcfd}.diagram{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;background:#f5f9fb;padding:24px;border-radius:9px}.node{border:1px solid #b9d4df;background:white;border-radius:8px;padding:14px 18px;text-align:center}.node b{display:block}.arrow{color:var(--teal);font-size:24px}.small{font-size:13px}.badge{font-size:12px;display:inline-block;padding:2px 8px;border-radius:8px;background:#e4effb;color:#285a90}.pending{background:#fff0d1;color:#815608}footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;color:var(--muted);font-size:13px}@media(max-width:760px){main{margin:0;padding:26px 18px;border-radius:0}h1{font-size:30px}h2{font-size:23px}.toc,.metrics{grid-template-columns:1fr}th,td{padding:9px}table{min-width:650px}}@media print{body{background:white}main{max-width:none;margin:0;padding:0;box-shadow:none}.toc{display:none}h2,h3{break-after:avoid}tr,.callout,.metrics{break-inside:avoid}a{color:inherit}.table-wrap{overflow:visible}table{min-width:0}h1{font-size:29px}}
+</style>
+</head>
+<body><main>
+<span class="tag">NGHIÊN CỨU TOOL 39 THEO YÊU CẦU</span>
+<h1>Automated low-code plug-ins<br>Thiết kế <code>manage_lowcode_plugin</code></h1>
+<p class="lead">Đăng ký logic Power Fx tự chạy theo sự kiện Dataverse — và kiểm chứng liệu logic đó có gọi được Function tùy chỉnh hay không.</p>
+<p class="meta">03/10/2026 · Asia/Saigon · Component khi triển khai: CLI / MCP (.NET 10)<br>HEAD: <code>e8e40d44c0131076df08b0d9c7d3bfb17f6e193a</code> · Source version: <code>4.44.44.44</code> · Build placeholder: <code>xxxx.yy.zz HH.mm.ss</code></p>
+<div class="callout warn"><strong>Trả lời câu hỏi chính:</strong> Không thể chốt rằng automated low-code plug-in sẽ gọi trực tiếp custom Dataverse Function do tool trước tạo. Tài liệu Microsoft hiện giới hạn lời gọi lồng từ Power Fx plug-ins ở các action do Microsoft cung cấp. Vì vậy, thiết kế v1 dùng <strong>formula trực tiếp trong automated plug-in</strong>. Nếu cần gọi lại Function, đường <strong>plug-in C# → SDK → Custom API của Function</strong> là phương án khác cần kiểm chứng.</div>
+<div class="metrics"><div class="metric"><strong>Event → Power Fx</strong><span>Dataverse tự thực thi sau khi đã đăng ký</span></div><div class="metric"><strong>MCP ≠ runtime</strong><span>Không cần mở DevKit khi record được tạo</span></div><div class="metric"><strong>Nested call: giới hạn</strong><span>Không hứa hỗ trợ gọi Function tùy chỉnh từ formula</span></div></div>
+<p class="source">Đã đọc source và tài liệu Microsoft; đã chạy <code>devkit mcp --tools</code>. Chưa viết tool, chưa kết nối tenant, chưa tạo hoặc chạy low-code plug-in. Các schema, class và ví dụ DevKit bên dưới là đề xuất. Tài liệu này bổ sung cho <a href="DevKit-MCP-Dataverse-Functions-Analysis-2026-10-03.html">báo cáo Dataverse Functions trước đó</a>.</p>
+<nav class="toc" aria-label="Mục lục">
+<a href="#answer">01 · Tool này có gọi Function được không?</a><a href="#numbering">02 · Tool 38, 39 và catalog thực tế</a>
+<a href="#runtime">03 · Hai tầng: quản lý và thực thi</a><a href="#sales">04 · Thiết kế cho Sales Line</a>
+<a href="#reuse-function">05 · Khi cần tái sử dụng Function</a><a href="#data">06 · Data model và API cần xác minh</a>
+<a href="#patterns">07 · Pattern DevKit phải kế thừa</a><a href="#contract">08 · Contract đề xuất</a>
+<a href="#lifecycle">09 · Lifecycle và ranh giới mutation</a><a href="#implementation">10 · File và tích hợp catalog</a>
+<a href="#spike">11 · Thử nghiệm sandbox bắt buộc</a><a href="#tests">12 · Kiểm thử và phát hành component</a>
+<a href="#decision">13 · Quyết định triển khai</a><a href="#sources">14 · Nguồn và mức độ bằng chứng</a>
+</nav>
+
+<section id="answer"><h2>01 · “Tool 39 gọi Function do tool 38 tạo” — cần phân biệt ba việc</h2>
+<p>Microsoft ghi tại mục <em>Limitations → Nested support</em>: <q>Plug-ins can only call first-party actions published by Microsoft from Power Fx expressions.</q> Trang được ghi cập nhật ngày 08/05/2026. <a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/low-code-plug-ins#limitations">[S1]</a></p>
+<p><strong>Suy luận cho yêu cầu này:</strong> Function do mình tạo là custom component, không phải first-party action của Microsoft. Vì vậy chưa có căn cứ để coi <code>automated Power Fx → custom Function</code> là đường gọi được hỗ trợ. Không có bằng chứng mới trong các nguồn đã kiểm tra cho thấy giới hạn này đã được gỡ.</p>
+<div class="table-wrap"><table><thead><tr><th>Ý nghĩa của “call”</th><th>Kết luận</th><th>Quyết định thiết kế</th></tr></thead><tbody>
+<tr><td>Client gọi MCP để tạo/sửa low-code plug-in</td><td>Đây là chức năng của <code>manage_lowcode_plugin</code> dự kiến.</td><td>Tạo definition và registration theo API authoring được kiểm chứng.</td></tr>
+<tr><td>Client gọi một Function đã tồn tại</td><td>SDK có cơ chế gọi Custom API theo unique name và parameters. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/custom-api#invoke-custom-apis-from-the-sdk-for-net">[S2]</a></td><td>Dùng action <code>invoke</code> của <code>manage_function</code> dự kiến; không cần lặp lại ở tool low-code.</td></tr>
+<tr><td>Record Create → automated Power Fx → custom Function</td><td>Vướng giới hạn nested support [S1].</td><td><strong>Không hỗ trợ trong contract v1.</strong> Không sinh formula kiểu <code>Environment.sales_CalculateTotal(...)</code> rồi tuyên bố đã chạy được.</td></tr>
+<tr><td>Record Create → plug-in C# → Custom API của Function</td><td>Có nền tảng SDK để xây dựng [S2]; chưa được thử với Function cụ thể trong tenant này.</td><td>Phương án bridge riêng. Đây là plug-in C#, không phải automated low-code plug-in thuần Power Fx.</td></tr>
+</tbody></table></div>
+<p>Một tool manager có thể tái sử dụng helper gọi SDK ở phía CLI, nhưng việc đó chỉ chạy tại thời điểm gọi MCP. Nó không tự tạo liên kết thực thi trong Dataverse. Không dùng việc “MCP gọi Function thành công” làm bằng chứng rằng Power Fx plug-in có quyền gọi lồng Function ấy.</p>
+<div class="callout"><strong>Điều chỉnh kỳ vọng từ trao đổi trước:</strong> phần trước đã phân biệt đúng Functions và automated plug-ins, nhưng chưa kiểm chứng khả năng nối hai loại với nhau. Báo cáo này chốt rõ: quản lý được cả hai loại không đồng nghĩa tự động ghép được runtime call giữa chúng.</div>
+</section>
+
+<section id="numbering"><h2>02 · Số thứ tự: repo hiện có 38 tool, chưa có hai tool mới</h2>
+<p>Kết quả lệnh local hiện tại: <code>DevKit MCP Tools (38)</code>; <code>ReadOnly (17 tools)</code>; <code>Mutation (21 tools)</code>. Dòng số 38 trong danh sách đang là <code>publish_customizations</code>. Source chưa có <code>manage_function</code> hoặc <code>manage_lowcode_plugin</code>.</p>
+<div class="table-wrap"><table><thead><tr><th>Trường hợp triển khai</th><th>Tổng tool</th><th>ReadOnly / Mutation</th></tr></thead><tbody>
+<tr><td>Chỉ thêm <code>manage_lowcode_plugin</code> vào source hiện tại</td><td>39</td><td>17 / 22</td></tr>
+<tr><td>Chỉ thêm <code>manage_function</code></td><td>39</td><td>17 / 22</td></tr>
+<tr><td>Thêm cả hai</td><td>40</td><td>17 / 23</td></tr>
+</tbody></table></div>
+<p>Tài liệu giữ cách gọi “tool 39” theo yêu cầu, hiểu là hạng mục automated low-code plug-in. Nếu Function được triển khai trước thì hạng mục này đưa tổng lên 40. Không đổi tên/xóa tool cũ để khớp số. MCP gọi tool bằng <strong>tên</strong>, không bằng số thứ tự hiển thị.</p>
+<p>Tool plug-in hiện có là <code>get_plugins</code>, chưa có <code>manage_plugins</code>. Nó mang <code>ReadOnly=true</code>, trả assembly/type/step/image. Trong query steps, source inner-join <code>plugintype</code> và <code>pluginassembly</code>, lọc assembly ẩn, chưa chọn <code>fxexpressionid</code>/<code>powerfxruleid</code>. Vì vậy không thể mặc định nó discovery đầy đủ mọi automated Power Fx component. <a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetPluginsTool.cs">Bằng chứng source</a>.</p>
+</section>
+
+<section id="runtime"><h2>03 · Hai tầng độc lập: quản lý và thực thi</h2>
+<h3>Tầng quản lý — chạy trên máy có DevKit</h3>
+<div class="diagram" role="img" aria-label="MCP client gọi manage_lowcode_plugin, sử dụng resolver và mutation executor để cấu hình expression và registration trong Dataverse">
+<div class="node"><b>MCP client</b><span class="small">Yêu cầu tạo / sửa / enable</span></div><span class="arrow">→</span>
+<div class="node"><b>DevKit CLI</b><span class="small">manage_lowcode_plugin</span></div><span class="arrow">→</span>
+<div class="node"><b>Dataverse configuration</b><span class="small">Expression + event registration</span></div>
+</div>
+<h3>Tầng thực thi — chạy trong Dataverse</h3>
+<div class="diagram" role="img" aria-label="Create Sales Line kích hoạt step preoperation, chạy Power Fx và lưu record có thành tiền">
+<div class="node"><b>Create Sales Line</b><span class="small">App / API / import phù hợp</span></div><span class="arrow">→</span>
+<div class="node"><b>PreOperation step</b><span class="small">Power Fx cập nhật giá trị</span></div><span class="arrow">→</span>
+<div class="node"><b>Main operation</b><span class="small">Lưu record có Thành tiền</span></div>
+</div>
+<p>Automated low-code plug-in được tài liệu mô tả là handler cho Create/Update/Delete với pre/post operation. Đó là cơ chế Dataverse thực thi sau khi đăng ký. <a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/low-code-plug-ins#low-code-plug-ins">[S1]</a> Không có process MCP ở giữa mỗi lần lưu record.</p>
+<p><strong>Hệ quả DevKit:</strong> không cần action <code>invoke</code> cho automated handler. Muốn test trigger phải tạo/sửa/xóa một record thật trong sandbox bằng công cụ phù hợp, rồi đọc kết quả và trace. Gọi <code>validate</code> chỉ kiểm tra cấu hình, không giả lập pipeline và không ghi dữ liệu nghiệp vụ.</p>
+<p>Session dry-run của DevKit chỉ ngăn thao tác mà session đó sắp gửi. Nó không tắt các plug-in đã được đăng ký trong tenant; record do ứng dụng khác tạo vẫn có thể kích hoạt chúng. Trạng thái enable/disable là cấu hình Dataverse riêng.</p>
+</section>
+
+<section id="sales"><h2>04 · Thiết kế cho Sales Line: tính Thành tiền khi Create</h2>
+<p>Ví dụ trong báo cáo dùng một <strong>bảng custom</strong> <code>sales_salesline</code>, các cột <code>sales_quantity</code>, <code>sales_unitprice</code>, <code>sales_amount</code>. Đây là tên minh họa, không phải metadata đã tồn tại. Nếu dùng bảng dòng sản phẩm chuẩn của Dynamics 365 Sales, phải khảo sát logic pricing có sẵn trước khi thiết kế step.</p>
+<div class="table-wrap"><table><thead><tr><th>Quyết định</th><th>Thiết kế đề xuất</th></tr></thead><tbody>
+<tr><td>Message / stage</td><td><code>Create</code>, <code>PreOperation</code>, synchronous cho bài toán cập nhật record đang tạo.</td></tr>
+<tr><td>Logic</td><td>Đọc Quantity và Unit Price từ ngữ cảnh hiện tại; tính Amount; gán vào record trước khi lưu.</td></tr>
+<tr><td>Update sau này</td><td>Một registration <code>Update</code> riêng, chỉ lọc các input cần thiết; thử trường hợp request chỉ chứa Quantity hoặc chỉ Unit Price.</td></tr>
+<tr><td>Null / zero / precision</td><td>Quy định rõ thiếu giá trị là lỗi hay tính 0; 0 hợp lệ không đồng nghĩa thiếu. Chốt quy tắc làm tròn và kiểu Decimal/Money theo metadata.</td></tr>
+<tr><td>Thành tiền bị sửa trực tiếp</td><td>Chọn chính sách nghiệp vụ: chặn sửa, tự tính lại hay cho override. UI read-only không thay thế kiểm soát server.</td></tr>
+<tr><td>Chia sẻ expression</td><td>V1 đề xuất một expression do một registration sở hữu. Không tự dùng chung expression của Function hoặc của hai step nếu lifecycle chưa được chứng minh.</td></tr>
+</tbody></table></div>
+<p>Microsoft đặt PreOperation trước main operation, trong transaction, và khuyến nghị sửa giá trị record tại stage này. PostOperation sửa lại record sẽ phát sinh Update mới. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/event-framework#event-execution-pipeline">[S3]</a></p>
+<h3>Cú pháp Power Fx cần kiểm chứng theo host</h3>
+<p>Tài liệu maker automated cũ dùng <code>ThisRecord</code> [S1], còn trang Functions mới có <code>NewRecord</code>/<code>OldRecord</code> và ví dụ <code>Set</code>. <a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/functions-supported-power-fx">[S4]</a> Discussion của Microsoft mô tả chuyển sang <code>Set(NewRecord.Field, ...)</code>, nhưng tự ghi là <strong>proposal</strong>, không phải cam kết mọi tenant đã triển khai. <a href="https://github.com/microsoft/Power-Fx/discussions/2371">[S5]</a></p>
+<pre><code>// Mẫu ý tưởng cho host có NewRecord + Set; chưa xác nhận trên tenant.
+Set(
+    NewRecord.'Amount',
+    NewRecord.'Unit Price' * NewRecord.'Quantity'
+)</code></pre>
+<p><strong>Không dùng mẫu trên như snippet đã kiểm thử.</strong> Cần tạo một automated plug-in bằng maker UI trên sandbox, xác nhận symbol và cách gán field được compiler chấp nhận, rồi kiểm tra record được lưu thực sự. Đặc biệt kiểm tra field type Money, dữ liệu Update chưa đủ cột và cơ chế truy cập giá trị cũ.</p>
+<p>Không tự thay bằng <code>Patch(SalesLines, ThisRecord, ...)</code> sau Create chỉ để đạt kết quả nhìn thấy. Microsoft cảnh báo post-operation patching có thể gây vòng lặp, đồng thời nêu giới hạn timeout hai phút. <a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/low-code-plug-ins-tips">[S6]</a></p>
+<p>Với Update, filtering attributes của SDK step dựa vào việc column <strong>có mặt trong request</strong>, không bảo đảm giá trị thực sự khác trước. Không đưa primary key vào filter. Nếu cần “thay đổi thật”, so sánh old/new theo host đã xác minh. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/register-plug-in#general-configuration-information-fields">[S7]</a></p>
+</section>
+
+<section id="reuse-function"><h2>05 · Nếu bắt buộc dùng chung Function đã tạo</h2>
+<div class="table-wrap"><table><thead><tr><th>Phương án</th><th>Quan hệ với Function</th><th>Đánh giá cho Sales Line</th></tr></thead><tbody>
+<tr><td>Automated low-code plug-in chứa formula trực tiếp</td><td>Không có nested custom Function call.</td><td>Đúng đối tượng tool đang nghiên cứu; phù hợp logic đơn giản nếu host/API authoring được kiểm chứng.</td></tr>
+<tr><td>Plug-in C# PreOperation gọi Function qua SDK</td><td>Gọi Custom API unique name, truyền scalar input, nhận output.</td><td>Đề xuất nếu cần tái sử dụng Function và cần Amount được ghi trong lần Create. Cần integration test transaction, identity và kiểu dữ liệu.</td></tr>
+<tr><td>Power Automate trigger → Function → cập nhật Sales Line</td><td>Flow gọi action tương ứng khi connector hỗ trợ signature/binding.</td><td>Phù hợp xử lý sau sự kiện; không dùng để cam kết Amount có sẵn trong transaction Create ban đầu. <a href="https://learn.microsoft.com/en-us/power-automate/dataverse/create-update-delete-trigger">[S8]</a></td></tr>
+<tr><td>DevKit sinh cùng một công thức vào hai component</td><td>Sao chép logic lúc triển khai, không gọi chung lúc runtime.</td><td>Có nguy cơ lệch phiên bản; không gọi đây là “Function reuse”. Cần quy trình cập nhật và test riêng.</td></tr>
+</tbody></table></div>
+<h3>Bridge C# — thiết kế minh họa</h3>
+<p>Giả định Function <code>sales_CalculateTotal</code> tồn tại, có input <code>Quantity</code> Integer, <code>UnitPrice</code> Decimal và output <code>Total</code> Decimal. Kiểm tra signature thực bằng metadata trước khi dùng. SDK cho phép <code>OrganizationRequest</code> với unique name và parameter tương ứng. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/custom-api#invoke-custom-apis-from-the-sdk-for-net">[S2]</a></p>
+<pre><code>// Phần ý tưởng bên trong plug-in C#, không phải code CLI/MCP.
+// orgService lấy từ execution context của plug-in, dùng identity đúng.
+// quantity/unitPrice đã lấy từ Target + pre-image khi cần và đã validate.
+var request = new OrganizationRequest("sales_CalculateTotal");
+request["Quantity"] = quantity;
+request["UnitPrice"] = unitPrice;
+
+var response = orgService.Execute(request);
+var amount = (decimal)response["Total"];
+
+// Ví dụ cột Amount là Money; kiểm tra metadata trước khi triển khai.
+target["sales_amount"] = new Money(amount);
+// Không orgService.Update(target) trong PreOperation.</code></pre>
+<p>Đây là suy luận kiến trúc dựa trên SDK invocation [S2] và pipeline [S3], chưa phải chứng nhận bridge đã chạy trong environment hiện tại. Trong Create PreOperation, không thiết kế Function phải retrieve Sales Line từ database để lấy input: record mới chưa được insert. Truyền giá trị scalar và trả Amount; bridge gán vào Target.</p>
+<p>Trong C# Update, Target có thể chỉ chứa các cột được gửi. Kết hợp với pre-image đã đăng ký để lấy giá trị còn thiếu; không biến null chủ ý thành giá trị cũ. Cơ chế input parameters và images được mô tả trong <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/understand-the-data-context">execution context [S9]</a>.</p>
+<p><strong>Ranh giới component:</strong> nếu chọn bridge, phần assembly/step đi qua quy trình <code>devkit server</code> hiện có. Không đặt C# bridge ẩn trong <code>manage_lowcode_plugin</code>, không nhúng assembly CLI .NET 10 vào Dataverse. Code chạy trong plug-in dùng <code>IOrganizationService</code> của platform; không dùng <code>McpExecutionContext</code> hoặc mutation executor của CLI.</p>
+<p>Không dùng custom connector gọi vòng về cùng Dataverse như giải pháp v1 cho nested restriction: nguồn hiện tại không chứng minh giữ được transaction, identity, latency và lifecycle của bridge nội bộ. Một đường đi hoạt động về HTTP chưa đủ để đáp ứng yêu cầu PreOperation.</p>
+</section>
+
+<section id="data"><h2>06 · Data model: có quan hệ công khai, còn thiếu contract authoring</h2>
+<div class="table-wrap"><table><thead><tr><th>Đối tượng</th><th>Bằng chứng</th><th>Cách dùng trong thiết kế</th></tr></thead><tbody>
+<tr><td><code>sdkmessageprocessingstep</code></td><td>Reference công khai có <code>fxexpressionid</code>, <code>sdkmessageid</code>, <code>sdkmessagefilterid</code>, <code>stage</code>, <code>mode</code>, <code>rank</code>, <code>filteringattributes</code>. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/sdkmessageprocessingstep">[S10]</a></td><td>Registration là identity chính của một automated handler. Resolve message/entity từ metadata, không hardcode GUID.</td></tr>
+<tr><td><code>fxexpression</code></td><td>Có expression/context/parameters/dependencies và compiled representation; category options là Workflow/Business Rule. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/fxexpression">[S11]</a></td><td>Đọc definition; không coi category là enum Instant/Automated; không tự serialize compiler state.</td></tr>
+<tr><td><code>powerfxrule</code></td><td>Cũng có entity reference công khai và liên kết tới steps/Custom API. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/powerfxrule?view=dataverse-latest">[S12]</a></td><td>Probe runtime metadata và sample thực. Chưa có cơ sở kết luận đây là tên thay thế fxexpression hoặc mọi tenant dùng cùng một backend.</td></tr>
+<tr><td><code>customapi</code></td><td>Reference có các lookup tới FxExpression và PowerfxRule. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/customapi?view=dataverse-latest">[S13]</a></td><td>Kiểm tra definition có bị dùng chung với Function trước khi sửa/xóa. Quan hệ FK không tự chứng minh nested call support.</td></tr>
+<tr><td>Solution / dependencies / images</td><td>Là các thành phần của vòng đời registration và ALM cần đọc lại trên environment đích.</td><td>Không đoán component type, image mapping, compile/publish sequence hoặc serializer format từ tên bảng.</td></tr>
+</tbody></table></div>
+<div class="callout warn"><strong>Khác biệt delete đáng chú ý:</strong> quan hệ <code>fxexpression_sdkmessageprocessingstep</code> được tài liệu ghi <code>Delete: Cascade</code>. Xóa expression có thể kéo theo nhiều step tham chiếu nó. Không được suy ra chỉ có một step, và không áp dụng cleanup của Functions một cách máy móc. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/sdkmessageprocessingstep#fxexpression_sdkmessageprocessingstep">[S10]</a></div>
+<h3>Discovery SDK đề xuất — chỉ đọc, sau metadata probe</h3>
+<pre><code>var query = new QueryExpression("sdkmessageprocessingstep")
+{
+    ColumnSet = new ColumnSet(
+        "name", "fxexpressionid", "sdkmessageid", "sdkmessagefilterid",
+        "stage", "mode", "rank", "statecode", "filteringattributes"),
+    TopCount = 51 // ví dụ 50 + 1 để phát hiện còn dữ liệu
+};
+query.Criteria.AddCondition("fxexpressionid", ConditionOperator.NotNull);
+query.AddOrder("name", OrderType.Ascending);
+query.AddOrder("sdkmessageprocessingstepid", OrderType.Ascending);
+var rows = _orgService.RetrieveMultiple(query);</code></pre>
+<p class="source">Đây là query mẫu chưa chạy tenant. Chỉ truy vấn field khi metadata báo có. Nếu backend là powerfxrule thì adapter dùng quan hệ đã xác minh; không coi query trên trả 0 nghĩa là environment không có low-code plug-ins.</p>
+<p>Resolver phải kiểm tra graph, message/table, managed/customizable state và backend format. Không nhận GUID tùy ý rồi sửa mọi SDK step. Những record nhận diện chưa chắc chỉ trả detail kèm trạng thái <code>unverified</code>; mutation không được đi tiếp.</p>
+<p><strong>Điểm chưa chứng minh:</strong> thứ tự ghi expression/registration, handler nội bộ cần thiết, compile/validate endpoint, trạng thái enable, activation atomicity, solution membership và export/import. CRUD của bảng không thay thế tài liệu public end-to-end cho low-code authoring.</p>
+</section>
+
+<section id="patterns"><h2>07 · Pattern DevKit phải kế thừa</h2>
+<div class="table-wrap"><table><thead><tr><th>Pattern</th><th>Nguồn source</th><th>Áp dụng cho tool mới</th></tr></thead><tbody>
+<tr><td>Entry và action dispatch</td><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageEnvironmentVariableTool.cs">ManageEnvironmentVariableTool.cs</a></td><td>Một entry, normalize action, switch handler, validate đầu vào, catch trả lỗi thân thiện.</td></tr>
+<tr><td>Result shape</td><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/McpToolBase.cs">McpToolBase.cs</a> và <a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/McpToolResults.cs">McpToolResults.cs</a></td><td>Success/Error/DryRun/Partial/Failed; không tự ghép prefix. DTO JsonPropertyName; <code>summary</code> do factory bổ sung.</td></tr>
+<tr><td>Test seam / identity</td><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/McpServerHost.cs">RegisterSharedServices</a></td><td>Inject <code>IOrganizationService</code> đặt tên <code>_orgService</code>; dùng connection hiện có. Async/Web API chỉ khi cần, không login lần hai.</td></tr>
+<tr><td>Mutation guard</td><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/McpExecutionContext.cs">McpExecutionContext.cs</a> và <a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/DataverseMutationExecutor.cs">DataverseMutationExecutor.cs</a></td><td>Preview cấp action và guard ở mọi SDK write/Execute; enable/disable, solution changes, cleanup đều phải qua boundary.</td></tr>
+<tr><td>Tên / solution / prefix</td><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/DisplayNameFirstResolver.cs">DisplayNameFirstResolver.cs</a>, <a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/SolutionResolverHelper.cs">SolutionResolverHelper.cs</a></td><td>Resolve display/logical names; ambiguity trả candidates. Create yêu cầu solution; publisher prefix không tự đoán, chặn <code>new</code> theo pattern hiện có.</td></tr>
+<tr><td>Solution membership</td><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/SolutionComponentCreateHelper.cs">SolutionComponentCreateHelper.cs</a></td><td>Tái dùng helper khi biết component type. Nếu add thất bại phải trả phần đã thành công và phần lỗi.</td></tr>
+<tr><td>Backup / workspace</td><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/WorkspaceFolderHelper.cs">WorkspaceFolderHelper.cs</a>, <a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/ReportBackupHelper.cs">ReportBackupHelper.cs</a></td><td>Đề xuất folder mới <code>.devkit/manage_lowcode_plugin/backups/</code>, tên file bằng step GUID + timestamp; giữ nguyên paths của tool cũ.</td></tr>
+<tr><td>CLI invocation parity</td><td><a href="../DynamicsCrm.DevKit.Cli/Tool/ToolCatalog.cs">ToolCatalog.cs</a>, <a href="../DynamicsCrm.DevKit.Cli/Tool/ToolServices.cs">ToolServices.cs</a></td><td>MCP và <code>devkit tool</code> cùng schema/catalog/DI; schema offline không cần tenant.</td></tr>
+<tr><td>Registration kinh nghiệm hiện có</td><td><a href="../DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs">TaskServer.cs</a></td><td>Tham khảo cách resolve message/filter, filtering attributes và solution. Không gọi thẳng toàn bộ deployment C# pipeline cho low-code.</td></tr>
+</tbody></table></div>
+<p>Entry class ở <code>DynamicsCrm.DevKit.Cli.Mcp.Tools</code>; helpers ở <code>...Tools.LowCodePlugin</code>. Chỉ entry có <code>[McpServerToolType]</code>. Việc thêm tool không cần refactor Shared, VSIX hoặc Analyzers.</p>
+<p>Không đổi <code>get_plugins</code> thành tool ghi. Không đổi tool names/JSON keys/error shape hiện có. Nếu bổ sung discovery cho tool cũ trong tương lai thì đó là thay đổi riêng có regression tests.</p>
+</section>
+
+<section id="contract"><h2>08 · Contract đề xuất cho <code>manage_lowcode_plugin</code></h2>
+<p><span class="badge">Thiết kế, chưa implement</span> Tool quản lý <strong>automated</strong> Power Fx handlers; không có action gọi Function tùy chỉnh, không có thao tác compile/deploy assembly C#.</p>
+<div class="table-wrap"><table><thead><tr><th>Action</th><th>Đầu ra / hành vi</th><th>Điều kiện hỗ trợ</th></tr></thead><tbody>
+<tr><td><code>list</code></td><td>Danh sách registrations theo bảng/event/solution; không trả mọi formula mặc định.</td><td>Metadata/query/classification được test với backend thực.</td></tr>
+<tr><td><code>detail</code></td><td>Definition, step identity, event/stage, expression references, state và cảnh báo graph dùng chung.</td><td>Không giả định decode được mọi compiler format.</td></tr>
+<tr><td><code>validate</code></td><td>Kiểm tra schema, metadata, phạm vi v1; <code>validationLevel</code>, <code>serverValidated</code>.</td><td>Không thực thi trigger hoặc tạo business record.</td></tr>
+<tr><td><code>create</code></td><td>Tạo một expression + registration trong solution, mặc định disabled theo chính sách đề xuất.</td><td>Đường tạo disabled/atomic đã xác minh; không tạo step active tạm rồi mới tắt để giả lập.</td></tr>
+<tr><td><code>update</code></td><td>V1 thay formula của registration sở hữu độc quyền và đang disabled.</td><td>Backup/concurrency/recompile đã kiểm chứng. Giữ nguyên bảng/event/stage.</td></tr>
+<tr><td><code>enable</code> / <code>disable</code></td><td>Chuyển trạng thái step/definition theo lifecycle platform, read-back xác nhận.</td><td>Không chỉ PATCH state của expression rồi coi step đã được tắt.</td></tr>
+<tr><td><code>delete</code></td><td>Xóa handler disabled và definition độc quyền, kiểm tra dependency/cascade.</td><td>Không ảnh hưởng step/Function khác; recovery path đã được thử.</td></tr>
+</tbody></table></div>
+<p><strong>Phạm vi authoring v1 đề xuất:</strong> Create/Update events, PreOperation synchronous, một registration mỗi lần; ưu tiên bài toán Sales Line. List/detail có thể phản ánh Delete/PostOperation nếu gặp. Chỉ thêm authoring Delete/PostOperation sau khi kiểm chứng context và lifecycle tương ứng. Đây là giới hạn DevKit đề xuất, không phải kết luận Dataverse chỉ có hai event.</p>
+<div class="table-wrap"><table><thead><tr><th>Tham số</th><th>Contract dự kiến</th></tr></thead><tbody>
+<tr><td><code>action</code></td><td>string bắt buộc; action không hỗ trợ trả Error + Hint.</td></tr>
+<tr><td><code>plugin_id</code></td><td>GUID của <code>sdkmessageprocessingstep</code>, không phải expression/assembly ID. Selector ưu tiên; nếu đi kèm tên mâu thuẫn phải báo lỗi.</td></tr>
+<tr><td><code>plugin_name</code></td><td>Selector tên registration khi không có ID. Nhiều record cùng tên → trả candidates, không chọn đầu tiên.</td></tr>
+<tr><td><code>entity_name</code>, <code>message_name</code></td><td>List filters và hỗ trợ phân giải tên trùng. Create lấy entity/message trong definition; không cho hai nguồn mâu thuẫn.</td></tr>
+<tr><td><code>solution_name</code></td><td>Create bắt buộc; list optional. Resolve về unique name và publisher.</td></tr>
+<tr><td><code>definition_json</code></td><td>JSON string theo schema DevKit; create/validate dùng đầy đủ, update chỉ nhận formula.</td></tr>
+<tr><td><code>max_records</code></td><td>List mặc định 50; ≤0 dùng 50, &gt;500 dùng 500; trả <code>hasMore</code> chính xác, không gọi count là tổng tenant.</td></tr>
+<tr><td><code>include_managed</code></td><td>Default false cho list. V1 đọc managed được nhưng không sửa/xóa.</td></tr>
+</tbody></table></div>
+<h3>Definition minh họa</h3>
+<pre><code>{
+  "displayName": "Sales Line Calculate Amount On Create",
+  "entityName": "sales_salesline",
+  "message": "Create",
+  "stage": "preoperation",
+  "executionOrder": 20,
+  "formula": "Set(NewRecord.'Amount', NewRecord.'Unit Price' * NewRecord.'Quantity')",
+  "tableReferences": []
+}</code></pre>
+<p class="source">Đây là schema DevKit tự thiết kế, không phải request gửi trực tiếp lên Dataverse. Formula chỉ minh họa host NewRecord/Set; phải xác minh theo mục 04. Create v1 luôn tạo disabled, không có input <code>enabled=true</code> để bypass quy trình. Thứ tự 20 là ví dụ, không có ý nghĩa chuẩn cố định.</p>
+<p>Definition Update-event tương ứng phải khai báo <code>filteringAttributes</code> cho input cần tính, ví dụ <code>["sales_quantity","sales_unitprice"]</code>, nếu backend hỗ trợ. Không chuyển <code>*</code> thành tất cả cột một cách âm thầm. Không áp dụng giới hạn năm table references của Functions cho automated host nếu chưa có bằng chứng.</p>
+<h3>MCP request mẫu</h3>
+<pre><code>{
+  "name": "manage_lowcode_plugin",
+  "arguments": {
+    "action": "create",
+    "solution_name": "SalesAutomation",
+    "definition_json": "{\"displayName\":\"Sales Line Calculate Amount On Create\",\"entityName\":\"sales_salesline\",\"message\":\"Create\",\"stage\":\"preoperation\",\"executionOrder\":20,\"formula\":\"Set(NewRecord.'Amount', NewRecord.'Unit Price' * NewRecord.'Quantity')\",\"tableReferences\":[]}"
+  }
+}</code></pre>
+<h3>Structured result mẫu — chưa phải output live</h3>
+<pre><code>{
+  "action": "create",
+  "status": "created",
+  "pluginId": "&lt;step-guid&gt;",
+  "pluginName": "Sales Line Calculate Amount On Create",
+  "entityName": "sales_salesline",
+  "messageName": "Create",
+  "stage": "preoperation",
+  "enabled": false,
+  "definitionBackend": "fxexpression",
+  "definitionId": "&lt;definition-guid&gt;",
+  "solutionName": "SalesAutomation",
+  "isAddToSolution": true,
+  "summary": "[Success] Created automated low-code plug-in in disabled state."
+}</code></pre>
+<p>DTO <code>ManageLowCodePluginResult</code> dùng <code>JsonPropertyName</code>, omit optional null. Optional fields: <code>plugins/count/hasMore</code>, <code>formula</code>, <code>stepIds</code>, <code>sharedReferences</code>, <code>backupPath</code>, <code>warnings</code>, <code>validationLevel</code>, <code>serverValidated</code>. Giữ lỗi theo <code>error/hint/details</code> của factory hiện có.</p>
+<p>V1 <strong>không có</strong> <code>function_name</code>, <code>target_function</code> hoặc action <code>invoke</code>. Nếu người dùng gửi các field này, trả lỗi giải thích nested custom Function chưa được hỗ trợ, không bỏ qua field rồi tạo formula trống. Không expose session dry-run/context/impersonation policy trong tool schema.</p>
+</section>
+
+<section id="lifecycle"><h2>09 · Lifecycle và ranh giới mutation</h2>
+<h3>Create</h3>
+<ol>
+<li>Parse definition, reject field lạ/duplicate keys; normalize action/event, giữ nguyên nội dung formula. Resolve solution/publisher, bảng/column, message/filter hợp lệ và capability của backend.</li>
+<li>Kiểm tra display/unique-name collision, managed state, metadata permissions; không tự đoán internal handler GUID hoặc framework assembly.</li>
+<li>Chuẩn bị plan graph và solution membership. Nếu dry-run: trả <code>not_executed</code>, không gửi write, không tạo backup file.</li>
+<li>Tạo definition/registration theo authoring contract đã xác minh, bảo đảm chưa active. Nếu platform không có cách tạo disabled an toàn thì không hỗ trợ create v1 theo contract này.</li>
+<li>Compile/validate qua cơ chế được hỗ trợ nếu có; đọc lại graph và solution membership. Chỉ trả created khi đủ các điều kiện của contract.</li>
+<li>Nếu một bước thành công rồi bước khác lỗi: trả Partial với IDs và bước lỗi. Chỉ cleanup phần do request này tạo, có bằng chứng không cascade sang component khác.</li>
+</ol>
+<h3>Enable / disable</h3>
+<p>Enable là điểm làm logic bắt đầu ảnh hưởng record tương lai. Trước enable, kiểm tra formula version/hash và graph chưa đổi từ lúc validate; server-validation cần đã đạt nếu platform cung cấp. Nếu chưa có compile-only endpoint, trả rõ mức đã kiểm chứng, không gắn nhãn runtime-tested chỉ từ parse local. Disable không cam kết hủy invocation đang chạy; cần xác minh behavior platform.</p>
+<h3>Update</h3>
+<p>V1 yêu cầu handler đã disabled và definition không dùng chung. Lưu backup graph trước mutation; version/ETag guard nếu backend hỗ trợ. Chỉ thay formula, read-back và recompile; không tự enable lại. Nếu lỗi, không báo Success chỉ vì PATCH một record đã trả 204.</p>
+<h3>Delete</h3>
+<p>Backup, dependency check, đọc toàn bộ các step/API tham chiếu definition. Nếu có shared reference thì từ chối mutation trong v1; không force-delete. Sau xóa, query lại graph và membership để phát hiện orphan. Do có cascade, tuyệt đối không xóa expression theo ID của một step khi chưa kiểm tra các tham chiếu khác.</p>
+<h3>Validation và capability</h3>
+<p>Phân biệt <code>schema</code>, <code>metadata</code>, <code>server-compile</code>, <code>runtime-test</code>. Local Power Fx parser không thay được symbol binding của Dataverse. Lỗi access denied không được đổi thành “feature missing”. Metadata tồn tại không chứng minh authoring endpoint/compiler sẵn sàng.</p>
+<p>Không tự test bằng cách Create một Sales Line trong action validate/create/enable. Không retry mutation mù sau timeout; trạng thái thực có thể đã thay đổi. Chỉ bounded retry các read-back phù hợp, giữ <code>WaitScalePercent</code> nếu bổ sung đường chờ metadata. Tất cả SDK mutations và cleanup đi qua executor hiện có.</p>
+</section>
+
+<section id="implementation"><h2>10 · File và tích hợp catalog</h2>
+<div class="table-wrap"><table><thead><tr><th>File / khu vực</th><th>Thay đổi dự kiến</th></tr></thead><tbody>
+<tr><td><code>DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageLowCodePluginTool.cs</code></td><td>Entry class duy nhất, kế thừa McpToolBase; action dispatch và typed output.</td></tr>
+<tr><td><code>.../Tools/LowCodePlugin/</code></td><td>Resolver, metadata reader, definition validator, authoring adapter, lifecycle và backup helper; chia theo trách nhiệm thực tế.</td></tr>
+<tr><td><code>.../Tools/Models/ManageLowCodePluginResult.cs</code></td><td>DTO kết quả; definition DTO riêng cho JSON parsing.</td></tr>
+<tr><td><code>.../Mcp/Resources/InstructionResources.cs</code></td><td>Resource <code>instructions_for_lowcode_plugin</code> nếu cần schema JSON/examples; ghi nested limitation rõ ràng.</td></tr>
+<tr><td><code>.../Mcp/McpServerHost.cs</code></td><td>Rà DisabledToolSet; thêm ToolResourceMap nếu có resource; giữ CategoryLevel readonly/all, DI registrations khi cần.</td></tr>
+<tr><td><code>.../Tool/ToolServices.cs</code></td><td>Rà schema service set nếu dùng dependency mới; không expose dependency thành argument.</td></tr>
+<tr><td><code>DynamicsCrm.DevKit.Cli.UnitTests/Cli/Mcp/ManageLowCodePlugin/</code></td><td>Focused tests cho resolver, lifecycle, mutation guard và DTO.</td></tr>
+<tr><td><code>...UnitTests/Cli/Mcp/Infrastructure/</code> và <code>...UnitTests/Tool/ToolCatalogTests.cs</code></td><td>Discovery counts/category/schema parity; không chỉ sửa expected count mà bỏ assertion hành vi.</td></tr>
+<tr><td><code>DynamicsCrm.DevKit.Docs/Cli/</code> và wiki MCP</td><td>Tài liệu .md khi implementation; HTML hiện tại là nghiên cứu theo yêu cầu.</td></tr>
+</tbody></table></div>
+<pre><code>[McpServerToolType]
+public sealed class ManageLowCodePluginTool : McpToolBase
+{
+    // IOrganizationService orgService, McpDryRunOptions options,
+    // McpExecutionContext context; thêm workspace service nếu cần file.
+
+    [McpServerTool(Name = "manage_lowcode_plugin",
+        Title = "Manage automated low-code plug-ins",
+        ReadOnly = false, Destructive = true, Idempotent = false,
+        UseStructuredContent = true,
+        OutputSchemaType = typeof(ManageLowCodePluginResult))]
+    // Một public tool method; các helpers không gắn tool attribute.
+}</code></pre>
+<p class="source">Đây là skeleton thiết kế, chưa phải C# implementation biên dịch được.</p>
+<p><code>WithToolsFromAssembly()</code> và <code>McpCommand.GetMcpToolInfos()</code> tự khám phá attribute. Không hardcode tên tool vào một danh sách category. <code>ToolResourceMap</code> dùng <code>nameof(Tools.ManageLowCodePluginTool)</code>; chỉ thêm entry resource nếu thực sự tạo resource. Tool có mutations nên không xuất hiện trong <code>--category readonly</code>, kể cả action đọc bên trong.</p>
+<p>Giữ <code>get_plugins</code>, <code>get_custom_apis</code>, <code>get_plugin_trace_logs</code> làm công cụ đọc liên quan. Không mở chặn raw <code>execute_webapi</code> cho toàn bộ SDK steps: nhiều step là C# hoặc hệ thống. Backend chuyên biệt dùng injected SDK và mutation executor, không gọi vòng qua một MCP tool khác.</p>
+<pre><code># Lệnh dự kiến sau khi implement, không phải đã chạy:
+devkit mcp --tools
+devkit tool list
+devkit tool describe manage_lowcode_plugin --output schema
+devkit tool validate manage_lowcode_plugin --set action=create --set solution_name=SalesAutomation --file definition_json=./salesline-create.lowcode.json
+
+# Có connection hợp lệ: chạy action validate để kiểm tra metadata.
+devkit tool call manage_lowcode_plugin --set action=validate --set solution_name=SalesAutomation --file definition_json=./salesline-create.lowcode.json</code></pre>
+<p><code>devkit tool validate</code> là kiểm tra input offline, không thực thi handler validate của tool. <code>--file</code> nạp nội dung vào string property. <code>devkit mcp</code> vẫn chỉ dùng explicit connection arguments; <code>devkit tool call</code> dùng pipeline auth hiện có.</p>
+</section>
+
+<section id="spike"><h2>11 · Thử nghiệm sandbox trước khi viết authoring adapter</h2>
+<p><span class="badge pending">Chưa thực hiện</span> Mục tiêu là chứng minh platform contract, không chỉ thử CRUD được một bảng. Tài liệu vẫn gắn preview; Accelerator authoring cũ có thông báo deprioritized. <a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/dataverse-accelerator/dataverse-accelerator">[S14]</a> Vì vậy khả năng tạo/sửa trên environment đích phải được xác nhận trực tiếp.</p>
+<div class="table-wrap"><table><thead><tr><th>Thử nghiệm</th><th>Tiêu chí thu được</th></tr></thead><tbody>
+<tr><td>Baseline và UI authoring</td><td>Phiên bản môi trường, capability, role cần thiết; tạo một automated Create/PreOperation bằng trải nghiệm sẵn có. Không có UI/backend thì ghi rõ blocker.</td></tr>
+<tr><td>Record graph</td><td>Backend thực fxexpression/powerfxrule/khác; handler link, step/filter/message, images, states và solution components. Lưu snapshot đã bỏ token/dữ liệu nhạy cảm.</td></tr>
+<tr><td>Cú pháp và record context</td><td>ThisRecord hay NewRecord; cách gán Amount; field Money/Decimal; behavior với null và Update chỉ gửi một column.</td></tr>
+<tr><td>Authoring bằng API</td><td>Sequence tối thiểu; compile-only có hay không; public/documented contract so với endpoint private. Request maker dùng chỉ là bằng chứng, không tự được coi supported API.</td></tr>
+<tr><td>Nested custom Function</td><td>Tạo Function tính toán thuần; gọi bằng SDK để có baseline. Thử từ formula trong sandbox và ghi compile/runtime result riêng. Nếu tenant chạy được, vẫn cần xác nhận hỗ trợ công khai trước khi đổi contract v1 trái với [S1].</td></tr>
+<tr><td>Lifecycle disabled → update → enabled</td><td>Không tồn tại khoảng thời gian step active trước formula hợp lệ; read-back đúng; record chỉ bắt đầu bị ảnh hưởng sau enable.</td></tr>
+<tr><td>Create/Update thực</td><td>3 × 12.5 → 37.5; đổi Quantity thành 4 → 50; cập nhật column khác không kích hoạt; test request gửi giá trị không đổi; test input thiếu/null/zero.</td></tr>
+<tr><td>Failure / transaction</td><td>Formula lỗi làm gì với record và Amount; rollback; permission failure; thời gian chạy; không lặp Update vô hạn.</td></tr>
+<tr><td>Delete/shared graph</td><td>Hai steps dùng chung expression hoặc API tham chiếu cùng definition; công cụ không xóa nhầm. Kiểm tra cascade/orphans trên solution test.</td></tr>
+<tr><td>ALM và bridge</td><td>Export/import sandbox thứ hai và maker edit lại. Nếu chọn bridge, test SDK invoke trong PreOperation, identity, return type, rollback và tránh retrieve record chưa được insert.</td></tr>
+</tbody></table></div>
+<p>Đầu ra cần một capability matrix theo runtime đã thử, fixtures schema đã ẩn dữ liệu nhạy cảm, request contracts và danh sách action được hỗ trợ. Nếu chỉ discovery/read path đạt, ghi rõ tool mới chỉ list/detail/validate; không quảng cáo authoring hoặc enable chưa hoạt động.</p>
+</section>
+
+<section id="tests"><h2>12 · Kiểm thử và phát hành component</h2>
+<div class="table-wrap"><table><thead><tr><th>Nhóm kiểm thử</th><th>Ca bắt buộc</th></tr></thead><tbody>
+<tr><td>Classification</td><td>Step C# không bị sửa; hidden/internal handler không bị loại khỏi discovery nếu là candidate hợp lệ; backend khác; lookup thiếu; shared API/step; ambiguity tên.</td></tr>
+<tr><td>Definition validation</td><td>JSON sai/key lạ/duplicate keys; unsupported event/stage; filtering attributes sai; prefix collision; formula trống; target Function field bị từ chối.</td></tr>
+<tr><td>Dry-run</td><td>create/update/enable/disable/delete/solution/cleanup đều không gửi writes; gọi helper trực tiếp vẫn bị chặn; không tạo backup file.</td></tr>
+<tr><td>Lifecycle</td><td>Create graph dở; add-to-solution fail; compile fail; read-back lệch; formula update trên active/shared handler bị từ chối; backup fail; concurrency conflict.</td></tr>
+<tr><td>Delete</td><td>Không cascade sang step ngoài phạm vi; managed/dependency block; không orphan; timeout trả trạng thái chưa biết, không retry mù.</td></tr>
+<tr><td>Catalog / output</td><td>Một method mới; all +1; readonly vẫn 17; resource disable; MCP/CLI schema parity; Error/Partial có IsError; structured keys và summary đúng factory.</td></tr>
+<tr><td>Runtime integration</td><td>Sales Line scenarios, Update partial input, money precision, context versions, security, rollback, solution round-trip và nested limitation.</td></tr>
+</tbody></table></div>
+<p>MSTest/FakeXrmEasy/mocks xác minh orchestration và guard; không chứng minh Dataverse compiler/trigger thực sự chạy. Các lớp dùng shared/static state phải <code>[DoNotParallelize]</code>; giữ <code>WaitScalePercent</code> để tests không đợi thật.</p>
+<p>Trước khi thực thi, đọc đầy đủ <a href="../DynamicsCrm.DevKit.AI/workflows/unit-test.md">unit-test.md</a> và <a href="../DynamicsCrm.DevKit.AI/workflows/build-cli.md">build-cli.md</a>. Sau khi có code, bộ lệnh dự kiến:</p>
+<pre><code>dotnet build DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj
+dotnet test DynamicsCrm.DevKit.Cli.UnitTests/DynamicsCrm.DevKit.Cli.UnitTests.csproj --framework net10.0 --filter "FullyQualifiedName~ManageLowCodePlugin|FullyQualifiedName~McpServerHostCoverageTests|FullyQualifiedName~McpCommandCoverageTests|FullyQualifiedName~ToolCatalogTests"
+&amp; ./DynamicsCrm.DevKit.Scripts/Release.DynamicsCrm.DevKit.Cli.ps1</code></pre>
+<p>Sửa MCP source thì phải rebuild/reinstall CLI, restart connector đang dùng, gọi <code>whoami</code> từ process mới; so runtime version, build timestamp, process start time, assembly SHA với manifest <code>Published/&lt;version&gt;/</code>. Kiểm tra catalog CLI và <code>tools/list</code> thực. Giữ source version <code>4.44.44.44</code>, phục hồi build placeholder. Không cần full release khi chỉ thay CLI.</p>
+<p><strong>Đợt hiện tại chỉ tạo tài liệu.</strong> Không chạy build/test/release của code chưa viết, không chỉnh registration trong tenant, không stage/commit/push. Các HTML đang có trước được giữ nguyên.</p>
+</section>
+
+<section id="decision"><h2>13 · Quyết định triển khai đề xuất</h2>
+<ol>
+<li><strong>Giữ tên <code>manage_lowcode_plugin</code></strong>, chỉ dành cho automated Power Fx handlers. Functions dùng <code>manage_function</code>; C# deployments dùng <code>devkit server</code>.</li>
+<li><strong>Lấy Sales Line inline formula làm scenario đầu tiên.</strong> Xác minh maker/backend và cú pháp trước; triển khai read/validate path, rồi lifecycle mutations đã có bằng chứng.</li>
+<li><strong>Không thêm nested custom Function call vào v1.</strong> Nếu yêu cầu bắt buộc một logic dùng chung, thử bridge C# → Function như một hạng mục riêng; không đổi nhãn nó thành low-code.</li>
+<li><strong>Đánh số theo baseline thực.</strong> Tool này có thể đưa tổng lên 39 nếu thêm trước, hoặc 40 nếu Functions đã được thêm. Không đánh đồng số catalog với tên chức năng.</li>
+<li><strong>Chỉ phát hành action đã kiểm chứng.</strong> Preview API có bảng CRUD không đủ để hứa create/update/delete hoàn chỉnh; acceptance phải gồm trigger thực, compiler, identity và ALM.</li>
+</ol>
+<p>Phần đã rõ: cách chia tool, pattern source, schema dự kiến, giới hạn gọi Function và tiêu chí nghiệm thu. Phần cần nghiên cứu thực nghiệm: authoring contract và runtime Power Fx của automated plug-ins trong môi trường đích.</p>
+</section>
+
+<section id="sources"><h2>14 · Nguồn và mức độ bằng chứng</h2>
+<p class="source">Tra cứu ngày 03/10/2026. Nguồn Microsoft Learn dùng cho platform facts; discussion trong repository Microsoft chỉ dùng làm bối cảnh đề xuất programming model. Không coi kết quả tìm kiếm hay một FK là chứng nhận lifecycle hoạt động. Những đoạn ghi “đề xuất”, “minh họa”, “cần kiểm chứng” là phân tích cho DevKit.</p>
+<ol>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/low-code-plug-ins">S1 · Use low-code plug-ins in Dataverse</a> — automated events/stages, context cũ và nested restriction; trang ghi 08/05/2026.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/custom-api#invoke-custom-apis-from-the-sdk-for-net">S2 · Invoke Custom APIs from SDK</a> — OrganizationRequest, unique name và parameters.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/event-framework">S3 · Event framework</a> — pipeline/transaction, PreOperation và PostOperation; trang ghi 10/03/2026.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/functions-supported-power-fx">S4 · Supported Functions / Power Fx</a> — nguồn mới dùng NewRecord/OldRecord; không tự suy ra mọi automated host tương thích; trang ghi 27/04/2026.</li>
+<li><a href="https://github.com/microsoft/Power-Fx/discussions/2371">S5 · Low Code Plugin Programming Model</a> — proposal của Microsoft, mở 04/05/2024; không phải release guarantee.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/low-code-plug-ins-tips">S6 · Low-code plug-in tips</a> — recursive patching và timeout.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/register-plug-in">S7 · Register a plug-in</a> — filtering attributes, execution order, images và context.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-automate/dataverse/create-update-delete-trigger">S8 · Dataverse row trigger for Power Automate</a> — đường xử lý qua flow.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/understand-the-data-context">S9 · Understand execution context</a> — input parameters và entity images.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/sdkmessageprocessingstep">S10 · SDK Message Processing Step reference</a> — FxExpression lookup và cascade relation; không phải công thức authoring low-code hoàn chỉnh.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/reference/entities/fxexpression">S11 · FxExpression reference</a> — definition properties, category và relationships.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/powerfxrule?view=dataverse-latest">S12 · PowerfxRule reference</a> — backend candidate bổ sung cần probe.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/customapi?view=dataverse-latest">S13 · Custom API reference</a> — expression/rule links, binding và IsFunction.</li>
+<li><a href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/dataverse-accelerator/dataverse-accelerator">S14 · Dataverse Accelerator</a> — thông báo deprioritized; cần xác minh authoring experience thực.</li>
+</ol>
+<p>Nguồn local: <a href="../AGENTS.md">AGENTS.md</a>, <a href="../DynamicsCrm.DevKit.Cli/Commands/McpCommand.cs">McpCommand.cs</a>, <a href="../DynamicsCrm.DevKit.Cli/Mcp/McpServerHost.cs">McpServerHost.cs</a> và các file đã link ở mục 07. Báo cáo liên quan: <a href="DevKit-MCP-Dataverse-Functions-Analysis-2026-10-03.html">Dataverse Functions</a>.</p>
+</section>
+<footer>DynamicsCrm.DevKit · Nghiên cứu automated low-code plug-ins · HTML tự chứa, không CDN/script ngoài · Không sửa runtime hoặc môi trường Dataverse trong đợt này.</footer>
+</main></body></html>
