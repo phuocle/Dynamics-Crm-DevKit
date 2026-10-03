@@ -97,7 +97,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Function
       </filter>
     </link-entity>
     <filter>
-      <condition attribute='objecttypecode' operator='eq' value='customapi'/>
+      <condition attribute='componenttype' operator='eq' value='10036'/>
     </filter>
   </entity>
 </fetch>";
