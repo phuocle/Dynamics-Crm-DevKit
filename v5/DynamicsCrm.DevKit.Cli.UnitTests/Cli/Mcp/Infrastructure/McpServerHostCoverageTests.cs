@@ -16,7 +16,7 @@ public sealed class McpServerHostCoverageTests
         var allCount = McpServerHost.GetToolCount(2);
 
         Assert.AreEqual(17, readOnlyCount);
-        Assert.AreEqual(38, allCount);
+        Assert.AreEqual(39, allCount);
         Assert.IsTrue(allCount > readOnlyCount);
     }
 
@@ -27,7 +27,7 @@ public sealed class McpServerHostCoverageTests
         var all = InvokeFilteredToolNames(2);
 
         Assert.AreEqual(17, readOnly.Count);
-        Assert.AreEqual(38, all.Count);
+        Assert.AreEqual(39, all.Count);
         CollectionAssert.IsSubsetOf(readOnly.ToList(), all.ToList());
         Assert.IsTrue(all.Except(readOnly).Any());
     }
@@ -39,7 +39,7 @@ public sealed class McpServerHostCoverageTests
             () => new McpServerHost(null!).RunAsync("basic").GetAwaiter().GetResult());
 
         StringAssert.Contains(exception.Message, "Unknown tool category 'basic'");
-        StringAssert.Contains(exception.Message, "readonly (17 tools), all (38 tools)");
+        StringAssert.Contains(exception.Message, "readonly (17 tools), all (39 tools)");
         StringAssert.Contains(exception.Message, "basic/standard/advanced were removed");
     }
 

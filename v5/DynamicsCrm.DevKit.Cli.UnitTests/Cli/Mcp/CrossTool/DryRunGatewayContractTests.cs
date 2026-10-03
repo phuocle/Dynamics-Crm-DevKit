@@ -91,7 +91,7 @@ internal static class DryRunTestHelpers
 public class DryRunGatewayContractTests
 {
     [TestMethod]
-    public void MutatingToolInventory_IsExactlyTheReviewedTwentyOne()
+    public void MutatingToolInventory_IsExactlyTheReviewedTwentyTwo()
     {
         var expected = new HashSet<string>(StringComparer.Ordinal)
         {
@@ -100,7 +100,8 @@ public class DryRunGatewayContractTests
             "manage_chart", "manage_view", "manage_form", "manage_webresource",
             "manage_choice", "manage_table", "manage_relationship", "manage_app",
             "manage_command", "execute_webapi", "manage_column", "manage_ribbon",
-            "generate_demo_data", "manage_record_file", "manage_report"
+            "generate_demo_data", "manage_record_file", "manage_report",
+            "manage_function"
         };
 
         var actual = typeof(CreateRecordsTool).Assembly
