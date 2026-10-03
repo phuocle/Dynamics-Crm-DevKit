@@ -1,14 +1,14 @@
 # TESTCALL FORMAT TEMPLATE
 
-Rules for every `testcall/{N}.{tool}.md` file (37 files, one shared Wiki format). Keep this file short on purpose — every rule below matters.
+Rules for every `testcall/{N}.{tool}.md` file (39 files, one shared Wiki format). Keep this file short on purpose — every rule below matters.
 
 **Golden reference: `3.get_audit_history.md`** — reviewed and approved by anh Phước. Read it first; compare your file side-by-side with it before reporting done. More approved examples: `1`, `4`, `5`.
 
 ## 📍 CURRENT PHASE (2026-08-29): DRY-RUN TESTING
 
-All 37 tools are refactored (rule6 + hints) and their testcall files are fully live-captured and ✅-approved. The phase now is **testing every dry-run path** of every tool that supports it, via the separate `devkit-claude-dry-run` MCP server. Read rule 5 (rewritten for this phase) and the dry-run workflow below before touching any file. If this task gets interrupted, resume here: pick the next dry-run-capable tool without a dry-run block at the end of its testcall file and continue.
+All 37 tools are refactored (rule6 + hints) and their testcall files are fully live-captured and ✅-approved. `29.manage_function` was added 2026-10-03 with the tool-39 release — its file is fresh-captured (live + error + dry-run via `devkit tool call --dry-run`), not yet ✅-approved. The phase now is **testing every dry-run path** of every tool that supports it, via the separate `devkit-claude-dry-run` MCP server. Read rule 5 (rewritten for this phase) and the dry-run workflow below before touching any file. If this task gets interrupted, resume here: pick the next dry-run-capable tool without a dry-run block at the end of its testcall file and continue.
 
-Dry-run-capable tools (grep `_options.DryRun` / `return DryRun(` under `DynamicsCrm.DevKit.Cli/Mcp/Tools/`): `18.create_records`, `19.execute_webapi` (non-GET only), `21.manage_app`, `22.manage_chart`, `23.manage_choice`, `24.manage_column`, `25.manage_command`, `26.manage_deleted_records`, `27.manage_environment_variable`, `28.manage_form`, `29.manage_record`, `30.manage_record_file` (uses `Status="dry_run"` in structured output, not the `[DryRun]` prefix — verify), `31.manage_relationship`, `32.manage_report`, `33.manage_ribbon`, `34.manage_role`, `35.manage_table`, `36.manage_view`, `37.manage_webresource`, `38.publish_customizations`. Read-only `get_*`/`search_records`/`whoami`/`parse_record_url`/`execute_fetchxml`/`execute_sql` have no dry-run path — skip them.
+Dry-run-capable tools (grep `_options.DryRun` / `return DryRun(` under `DynamicsCrm.DevKit.Cli/Mcp/Tools/`): `18.create_records`, `19.execute_webapi` (non-GET only), `21.manage_app`, `22.manage_chart`, `23.manage_choice`, `24.manage_column`, `25.manage_command`, `26.manage_deleted_records`, `27.manage_environment_variable`, `28.manage_form`, `29.manage_function` (invoke only), `30.manage_record`, `31.manage_record_file` (uses `Status="dry_run"` in structured output, not the `[DryRun]` prefix — verify), `32.manage_relationship`, `33.manage_report`, `34.manage_ribbon`, `35.manage_role`, `36.manage_table`, `37.manage_view`, `38.manage_webresource`, `39.publish_customizations`. Read-only `get_*`/`search_records`/`whoami`/`parse_record_url`/`execute_fetchxml`/`execute_sql` have no dry-run path — skip them.
 
 ## ⛔ MANDATORY RULES — violations AI made before; check EVERY file, BEFORE and AFTER editing
 
