@@ -33,10 +33,17 @@ public sealed class FakeMetadataExecutors : IFakeMessageExecutor
     /// <summary>Attribute updates received via UpdateAttributeRequest.</summary>
     public List<AttributeMetadata> Updated { get; } = [];
 
+    /// <summary>Seed requests received via SetAutoNumberSeedRequest (in order).</summary>
+    public List<Microsoft.Crm.Sdk.Messages.SetAutoNumberSeedRequest> Seeds { get; } = [];
+
+    /// <summary>When true, SetAutoNumberSeedRequest throws (non-contention failure).</summary>
+    public bool FailSeed { get; set; }
+
     public bool CanExecute(OrganizationRequest request) => request is RetrieveAllEntitiesRequest
         or RetrieveEntityRequest or RetrieveAttributeRequest
         or CreateAttributeRequest or UpdateAttributeRequest
         or CreateOneToManyRequest or CreateCustomerRelationshipsRequest
+        or Microsoft.Crm.Sdk.Messages.SetAutoNumberSeedRequest
         or OrganizationRequest { RequestName: PolymorphicLookupRequestName };
 
     public OrganizationResponse Execute(OrganizationRequest request, IXrmFakedContext context) => request switch
@@ -46,6 +53,7 @@ public sealed class FakeMetadataExecutors : IFakeMessageExecutor
         RetrieveAttributeRequest r => RetrieveAttr(r),
         CreateAttributeRequest r => CreateAttr(r),
         UpdateAttributeRequest r => UpdateAttr(r),
+        Microsoft.Crm.Sdk.Messages.SetAutoNumberSeedRequest s => Seed(s),
         CreateOneToManyRequest r => CreateLookup(r.Lookup,
             new[] { r.OneToManyRelationship.ReferencedEntity },
             r.OneToManyRelationship.ReferencingEntity, new CreateOneToManyResponse()),
@@ -125,6 +133,14 @@ public sealed class FakeMetadataExecutors : IFakeMessageExecutor
     private OrganizationResponse UpdateAttr(UpdateAttributeRequest request)
     {
         Updated.Add(request.Attribute);
+        return new OrganizationResponse();
+    }
+
+    private OrganizationResponse Seed(Microsoft.Crm.Sdk.Messages.SetAutoNumberSeedRequest request)
+    {
+        if (FailSeed)
+            throw new InvalidOperationException("Seed executor forced failure.");
+        Seeds.Add(request);
         return new OrganizationResponse();
     }
 

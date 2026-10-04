@@ -22,7 +22,7 @@ public class ManageColumnCreateDryRunTests
     {
         var result = InvokeCreate("CreateStringAttribute",
             "account", "devkit_text", "devkit_Text", "Text", "Description",
-            9000, "Email", "devkit", null, null);
+            9000, "Email", "devkit", null, null, null, null, null);
 
         AssertDryRun(result, "String", "devkit_text");
     }

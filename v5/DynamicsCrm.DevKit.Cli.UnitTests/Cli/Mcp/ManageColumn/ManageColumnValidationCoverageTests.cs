@@ -54,7 +54,7 @@ public sealed class ManageColumnValidationCoverageTests
     [TestMethod]
     public void CreateMethods_RejectInvalidFormatsBeforeAnyServiceOperation()
     {
-        AssertError(Invoke("CreateStringAttribute", "account", "devkit_name", "devkit_Name", "Name", "", 100, "bad", "devkit", null, null), "Invalid format");
+        AssertError(Invoke("CreateStringAttribute", "account", "devkit_name", "devkit_Name", "Name", "", 100, "bad", "devkit", null, null, null, null, null), "Invalid format");
         AssertError(Invoke("CreateMemoAttribute", "account", "devkit_notes", "devkit_Notes", "Notes", "", 100, "bad", "devkit", null, null), "Invalid format");
         AssertError(Invoke("CreateIntegerAttribute", "account", "devkit_duration", "devkit_Duration", "Duration", "", null, null, "bad", "devkit", null, null), "Invalid format");
     }
@@ -78,7 +78,8 @@ public sealed class ManageColumnValidationCoverageTests
 
         var result = Invoke("UpdateExistingAttribute", "account", "devkit_name", metadata,
             "New name", "New description", "Required", 5000, null, null, -1, "Email", "", "",
-            "", "", "", true, true, true, true, "", -1, "", null);
+            "", "", "", true, true, true, true, "", -1, "", null,
+            "", false, null, null, 0);
 
         Assert.IsFalse(result.IsError == true);
         var text = result.Content!.OfType<TextContentBlock>().Single().Text!;
@@ -96,14 +97,16 @@ public sealed class ManageColumnValidationCoverageTests
     {
         var picklist = new PicklistAttributeMetadata { LogicalName = "devkit_choice", DefaultFormValue = 1 };
         var picklistResult = Invoke("UpdateExistingAttribute", "account", "devkit_choice", picklist,
-            "", "", "", 0, null, null, -1, "", "", "", "[]", "", "", null, null, null, null, "", -1, "2", null);
+            "", "", "", 0, null, null, -1, "", "", "", "[]", "", "", null, null, null, null, "", -1, "2", null,
+            "", false, null, null, 0);
         Assert.IsFalse(picklistResult.IsError == true);
         StringAssert.Contains(picklistResult.Content!.OfType<TextContentBlock>().Single().Text!, "DefaultFormValue");
         StringAssert.Contains(picklistResult.Content!.OfType<TextContentBlock>().Single().Text!, "add options");
 
         var boolean = new BooleanAttributeMetadata { LogicalName = "devkit_enabled", DefaultValue = false };
         var booleanResult = Invoke("UpdateExistingAttribute", "account", "devkit_enabled", boolean,
-            "", "", "", 0, null, null, -1, "", "", "", "", "", "", null, null, null, null, "", -1, "true", null);
+            "", "", "", 0, null, null, -1, "", "", "", "", "", "", null, null, null, null, "", -1, "true", null,
+            "", false, null, null, 0);
         Assert.IsFalse(booleanResult.IsError == true);
         Assert.IsTrue(boolean.DefaultValue == true);
     }
@@ -113,7 +116,8 @@ public sealed class ManageColumnValidationCoverageTests
     {
         var multi = new MultiSelectPicklistAttributeMetadata { LogicalName = "devkit_tags" };
         var result = Invoke("UpdateExistingAttribute", "account", "devkit_tags", multi,
-            "", "", "", 0, null, null, -1, "", "", "", "", "", "", null, null, null, null, "", -1, "1", null);
+            "", "", "", 0, null, null, -1, "", "", "", "", "", "", null, null, null, null, "", -1, "1", null,
+            "", false, null, null, 0);
         AssertError(result, "not supported for multipicklist");
     }
 

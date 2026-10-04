@@ -40,6 +40,7 @@ public sealed class MetadataOrgService : IOrganizationService
         RetrieveAllEntitiesRequest or RetrieveEntityRequest or RetrieveAttributeRequest
             or CreateAttributeRequest or UpdateAttributeRequest or PublishXmlRequest
             or CreateOneToManyRequest or CreateCustomerRelationshipsRequest
+            or Microsoft.Crm.Sdk.Messages.SetAutoNumberSeedRequest
             or OrganizationRequest { RequestName: FakeMetadataExecutors.PolymorphicLookupRequestName }
             => _metadata.Execute(request),
         _ => _inner.Execute(request)

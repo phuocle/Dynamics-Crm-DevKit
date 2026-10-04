@@ -136,12 +136,12 @@ public sealed class ManageColumnBranchCoverageTests
         StringAssert.Contains(mapping.ToString(), "Could not find the Rollup relationship reference");
 
         var previewMethod = ToolType.GetMethods(PrivateInstance)
-            .Single(method => method.Name == "DryRunCreatePreview" && method.GetParameters().Length == 7 &&
+            .Single(method => method.Name == "DryRunCreatePreview" && method.GetParameters().Length == 10 &&
                 method.GetParameters()[3].ParameterType == typeof(AttributeMetadata));
         var preview = (CallToolResult)previewMethod.Invoke(tool, new object?[]
         {
             "account", "devkit_name", "devkit_Name", new StringAttributeMetadata(), "Name",
-            AttributeRequiredLevel.None, "devkit"
+            AttributeRequiredLevel.None, "devkit", null, null, null
         })!;
         StringAssert.Contains(Text(preview), "Would CREATE String column");
     }
@@ -154,7 +154,8 @@ public sealed class ManageColumnBranchCoverageTests
         var changes = new List<string>();
         var structured = new Dictionary<string, UpdateAttributeChange>();
         return Invoke<string>(tool, "ApplyTypeSpecificUpdates", metadata, maxLength, minValue, maxValue, precision,
-            format, trueLabel, falseLabel, behavior, precisionSource, changes, structured, canStoreFullImage);
+            format, trueLabel, falseLabel, behavior, precisionSource, changes, structured, canStoreFullImage,
+            "", false, 0, null);
     }
 
     private static void AssertError(CallToolResult result, string expected)
