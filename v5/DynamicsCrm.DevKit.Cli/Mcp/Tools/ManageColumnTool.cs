@@ -55,7 +55,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- formula clone (PowerFx/Calculated/Rollup): pass only get_tables' `formulaDefinition` reference into formula_definition. Format: `source_table_logical_name:source_column_logical_name`. Pass it unchanged; never provide formula content directly.\n" +
             "- The server retrieves the raw source formula and kind directly from Dataverse, then rewrites entity/column/relationship references for the target. Supported underlying types: string/memo/integer/decimal/money/float/boolean/datetime.\n" +
             "- To intentionally create an empty formula column, omit formula_definition and pass formula_source_type as powerfx, calculated, or rollup.\n" +
-            "- 5 create flags (so a column can be cloned in a SINGLE create call, no follow-up update): required_level (None/Recommended/Required — default None), is_audit_enabled (default true), is_valid_for_advanced_find (default true), is_secured (default false), is_sortable (default true when supported). On UPDATE, omit=null to keep current.\n\n" +
+            "- 5 create flags (so a column can be cloned in a SINGLE create call, no follow-up update): required_level (None/Recommended/Required — default None), is_audit_enabled (default true), is_valid_for_advanced_find (default true), is_secured (default false), is_sortable (default true when supported). On UPDATE, omit=null to keep current.\n" +
+            "- Autonumber (string only): auto_number_format sets the pattern — placeholders {SEQNUM:n} (n≥1, minimum zero-padded length), {RANDSTRING:n} (1-6), {DATETIMEUTC:format}; literal text allowed. format must stay 'Text'. auto_number_seed (≥1) sets the start value via SetAutoNumberSeed after the metadata create/update (environment-only: NOT carried in solutions). UPDATE: change the pattern via auto_number_format, remove it via clear_auto_number=true. Patterns are validated client-side — Dataverse only rejects bad patterns at record-save time. Set form controls bound to autonumber columns read-only.\n\n" +
 
             "CREATE resolves the publisher prefix from solution_name (required for CREATE) and adds the column to that solution.\n" +
             "Statuscode (statuscode / StatusType): pass logical_name='statuscode' and use add_options/update_options/delete_options.\n" +
@@ -66,6 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- Create a new attribute on an existing table (need attribute_type + display_name)\n" +
             "- Clone a PowerFx, Calculated, or Rollup column read by get_tables (CREATE only)\n" +
+            "- Create/convert a string column to Autonumber or change its pattern/seed\n" +
             "- Update mutable metadata, format, required_level, and picklist options\n" +
             "- Add/rename/remove options on an existing picklist via add_options/update_options/delete_options\n\n" +
 
@@ -108,7 +110,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("SchemaName for the new column (e.g. 'devkit_InvoiceLineId'). If provided, used AS-IS as SchemaName (skip auto-derive from display_name). Caller responsible for casing. Create only — ignored on update. Must start with the publisher prefix.")] string schema_name = "",
             [Description("Create-only formula clone reference returned by get_tables, exactly `source_table_logical_name:source_column_logical_name` (for example `account:new_total`). Pass it unchanged; the server retrieves and rewrites the source formula directly. Omit it and pass formula_source_type only to create an empty formula column.")] string formula_definition = "",
             [Description("Create only. Use powerfx, calculated, or rollup only when creating an empty formula column without formula_definition. Clone mode derives the kind from the referenced source column.")] string formula_source_type = "",
-            [Description("image only. CREATE: true = store the full-sized image (default false). UPDATE: omit = keep current.")] bool? can_store_full_image = null)
+            [Description("image only. CREATE: true = store the full-sized image (default false). UPDATE: omit = keep current.")] bool? can_store_full_image = null,
+            [Description("Autonumber pattern for string columns, e.g. 'TKT-{SEQNUM:5}-{RANDSTRING:3}'. Placeholders: {SEQNUM:n} (n>=1, minimum zero-padded length), {RANDSTRING:n} (1-6), {DATETIMEUTC:format}. CREATE: sets the pattern; UPDATE: changes it (omit = keep current). format must be Text. Validated client-side — Dataverse only rejects bad patterns at record-save time.")] string auto_number_format = "",
+            [Description("string UPDATE only: true removes the autonumber pattern, turning the column back into plain text. Mutually exclusive with auto_number_format.")] bool? clear_auto_number = null,
+            [Description("Autonumber seed (>=1; Dataverse default sequence starts at 1000). String autonumber columns only. Executed via SetAutoNumberSeed after the metadata create/update succeeds. Environment-only: NOT carried in solutions. Omit to keep the current seed.")] long? auto_number_seed = null)
         {
             // --- Validate required parameters ---
             if (string.IsNullOrWhiteSpace(entity_name))
@@ -169,6 +174,43 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     ResolveDateTimeBehavior(behavior, out var behaviorErr);
                     if (behaviorErr != null) return Error(behaviorErr, "Valid values: 'UserLocal' (default), 'DateOnly', 'TimeZoneIndependent'.");
+                }
+            }
+
+            // --- Autonumber early validation (mode-independent; also covers DryRun) ---
+            // Dataverse does NOT validate autonumber patterns on create/update — a bad
+            // pattern only fails when the first record is saved — so the pattern is
+            // validated here, client-side, before any Dataverse call.
+            var autoNumberFormat = auto_number_format?.Trim() ?? "";
+            var clearAutoNumber = clear_auto_number == true;
+            var autoNumberSeed = auto_number_seed;
+            var autoNumberMinLength = 0;
+            List<string> autoNumberWarnings = null;
+
+            if (clearAutoNumber && !string.IsNullOrWhiteSpace(auto_number_format))
+                return Error(
+                    "clear_auto_number and auto_number_format are mutually exclusive.",
+                    "Pass auto_number_format to set or change the pattern, or clear_auto_number=true to remove it (back to plain text).");
+
+            if (autoNumberSeed.HasValue && autoNumberSeed.Value < 1)
+                return Error(
+                    $"Invalid auto_number_seed {autoNumberSeed.Value} — must be >= 1.",
+                    "The Dataverse default sequence starts at 1000; pass e.g. 10000 to start higher.");
+
+            if (!string.IsNullOrWhiteSpace(autoNumberFormat) || clearAutoNumber || autoNumberSeed.HasValue)
+            {
+                // attribute_type is ignored on UPDATE, so a non-string attribute_type
+                // always means CREATE intent here.
+                if (!string.IsNullOrWhiteSpace(attribute_type) && attribute_type.Trim().ToLowerInvariant() != "string")
+                    return Error(
+                        "auto_number_format is only supported for attribute_type 'string'.",
+                        "An autonumber column is a StringAttributeMetadata with AutoNumberFormat set. Use attribute_type 'string' (or drop the autonumber parameters).");
+
+                if (!string.IsNullOrWhiteSpace(autoNumberFormat))
+                {
+                    var patternError = AutoNumberFormatValidator.Validate(autoNumberFormat, out autoNumberMinLength, out autoNumberWarnings);
+                    if (patternError != null)
+                        return Error(patternError, "Fix the pattern; see docs://schema_tools_guide → Autonumber (string).");
                 }
             }
 
@@ -249,7 +291,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     precision, format, true_label, false_label,
                     add_options, update_options, delete_options,
                     is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, behavior, precision_source,
-                    default_value, can_store_full_image);
+                    default_value, can_store_full_image,
+                    autoNumberFormat, clearAutoNumber, autoNumberSeed, autoNumberWarnings, autoNumberMinLength);
             }
 
             // --- CREATE MODE ---
@@ -269,6 +312,44 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Required for create: attribute_type + display_name + solution_name.");
 
             attribute_type = attribute_type.Trim().ToLowerInvariant();
+
+            // --- Autonumber CREATE cross-parameter validation (mode-aware; runs before
+            //     any Dataverse mutation so DryRun previews report the same errors) ---
+            if (clearAutoNumber)
+                return Error(
+                    "clear_auto_number is UPDATE-only — it removes the autonumber pattern from an existing string column.",
+                    "To create an autonumber column pass auto_number_format. To convert an existing column back to plain text, call manage_column with logical_name + clear_auto_number=true.");
+
+            if (autoNumberSeed.HasValue && string.IsNullOrWhiteSpace(autoNumberFormat))
+                return Error(
+                    "auto_number_seed requires auto_number_format on CREATE.",
+                    "Pass auto_number_format (the pattern) together with auto_number_seed.");
+
+            if (!string.IsNullOrWhiteSpace(autoNumberFormat))
+            {
+                if (!string.IsNullOrWhiteSpace(format))
+                {
+                    var resolvedCreateFormat = ResolveStringFormat(format, out _);
+                    if (resolvedCreateFormat != StringFormatName.Text)
+                        return Error(
+                            $"Autonumber columns require format 'Text', but format '{format.Trim()}' was requested.",
+                            "Remove format (Text is the default) or set format='Text' together with auto_number_format.");
+                }
+
+                if (!string.IsNullOrWhiteSpace(formula_definition) || !string.IsNullOrWhiteSpace(formula_source_type))
+                    return Error(
+                        "auto_number_format cannot be combined with formula_definition/formula_source_type.",
+                        "An autonumber value and a formula-computed value conflict — create the column as one or the other.");
+
+                var effectiveCreateMaxLength = max_length == 0 ? 100 : Math.Min(max_length, 4000);
+                if (effectiveCreateMaxLength < autoNumberMinLength)
+                    return Error(
+                        $"max_length {effectiveCreateMaxLength} is smaller than the pattern's minimum output length {autoNumberMinLength}.",
+                        "Increase max_length: it must exceed the pattern's minimum (literal text + SEQNUM digits + RANDSTRING characters + formatted DATETIMEUTC length) and leave room for the sequence to grow.");
+                if (effectiveCreateMaxLength < autoNumberMinLength + 5)
+                    (autoNumberWarnings ??= new List<string>()).Add(
+                        $"max_length {effectiveCreateMaxLength} is close to the pattern's minimum length {autoNumberMinLength} — leave room for the sequence to grow.");
+            }
 
             // The publisher prefix comes only from solution_name — required for CREATE.
             if (string.IsNullOrWhiteSpace(solution_name) && string.IsNullOrWhiteSpace(resolvedPrefix))
@@ -425,7 +506,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 switch (attribute_type)
                 {
                     case "string":
-                        return CreateStringAttribute(entity_name, logical_name, schemaName, display_name, description, max_length == 0 ? 100 : max_length, format, effectiveSolutionName, formulaSpec, createFlags);
+                        return CreateStringAttribute(entity_name, logical_name, schemaName, display_name, description, max_length == 0 ? 100 : max_length, format, effectiveSolutionName, formulaSpec, createFlags, autoNumberFormat, autoNumberSeed, autoNumberWarnings);
                     case "memo":
                         return CreateMemoAttribute(entity_name, logical_name, schemaName, display_name, description, max_length == 0 ? 2000 : max_length, format, effectiveSolutionName, formulaSpec, createFlags);
                     case "integer":
@@ -494,7 +575,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult CreateStringAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description,
             int maxLength, string format, string solutionName, FormulaColumnSpec formula = null,
-            ColumnFlags createFlags = null)
+            ColumnFlags createFlags = null, string autoNumberFormat = null, long? autoNumberSeed = null,
+            List<string> autoNumberWarnings = null)
         {
             var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             if (maxLength < 1) maxLength = 100;
@@ -511,6 +593,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 MaxLength = maxLength,
                 FormatName = resolvedFormat
             };
+            if (!string.IsNullOrWhiteSpace(autoNumberFormat))
+                attr.AutoNumberFormat = autoNumberFormat;
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_orgService));
             // Apply flag overrides (audit / advanced find / field security / sort).
@@ -535,11 +619,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRunCreatePreview(entityName, logicalName, schemaName, attr, displayName, reqLevel, solutionName);
+                return DryRunCreatePreview(entityName, logicalName, schemaName, attr, displayName, reqLevel, solutionName, autoNumberFormat, autoNumberSeed, autoNumberWarnings);
 
             var sb = FormatHeader(entityName, logicalName, "String", displayName, reqLevel);
             sb.AppendLine($"MaxLength: {maxLength}");
             sb.AppendLine($"Format: {attr.FormatName?.Value ?? "Text"}");
+            if (!string.IsNullOrWhiteSpace(autoNumberFormat))
+                sb.AppendLine($"AutoNumberFormat: {autoNumberFormat}");
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -548,11 +634,42 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 MetadataOperationWaitHelper.WaitAfterColumnCreation();
             }
 
+            // Seed is NOT a metadata change and NOT carried in solutions — execute it
+            // after publish so the attribute is visible. The actual logical name is used
+            // (Dataverse may normalize it). A seed failure after a successful create
+            // must not fail the whole call — it becomes a warning instead.
+            var actualName = ResolveCreatedAttributeLogicalName(entityName, metadataId, logicalName);
+            string seedWarning = null;
+            if (autoNumberSeed.HasValue)
+            {
+                try
+                {
+                    seedWarning = ExecuteAutoNumberSeed(entityName, actualName, autoNumberSeed.Value, "created");
+                }
+                catch (InvalidOperationException) when (_context.MutationsBlocked)
+                {
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    seedWarning = $"Column created but SetAutoNumberSeed failed: {ex.Message}";
+                }
+            }
+
             AppendFooter(sb, solutionName, published, metadataId);
 
+            var extra = new Dictionary<string, string> { { "maxLength", maxLength.ToString() }, { "format", attr.FormatName?.Value ?? "Text" } };
+            if (!string.IsNullOrWhiteSpace(autoNumberFormat))
+                extra["autoNumberFormat"] = autoNumberFormat;
+            if (autoNumberSeed.HasValue)
+                extra["autoNumberSeed"] = autoNumberSeed.Value.ToString();
+
+            List<string> warnings = null;
+            if (autoNumberWarnings is { Count: > 0 }) warnings = new List<string>(autoNumberWarnings);
+            if (seedWarning != null) (warnings ??= new List<string>()).Add(seedWarning);
+
             return BuildResult(sb, entityName, logicalName, schemaName, "String", displayName, reqLevel, metadataId, solutionName, published,
-                extra: new Dictionary<string, string> { { "maxLength", maxLength.ToString() }, { "format", attr.FormatName?.Value ?? "Text" } },
-                description: description);
+                extra: extra, description: description, warnings: warnings);
         }
 
         // --- Memo ---
@@ -1733,7 +1850,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult BuildResult(StringBuilder sb, string entityName, string logicalName, string schemaName, string typeName,
             string displayName, AttributeRequiredLevel reqLevel, Guid metadataId, string solutionName, bool published,
-            Dictionary<string, string> extra = null, string description = null)
+            Dictionary<string, string> extra = null, string description = null, List<string> warnings = null)
         {
             var actualLogicalName = ResolveCreatedAttributeLogicalName(entityName, metadataId, logicalName);
             if (!string.Equals(actualLogicalName, logicalName, StringComparison.OrdinalIgnoreCase))
@@ -1756,13 +1873,44 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 AddToSolutionMethod = string.IsNullOrWhiteSpace(solutionName) ? "none" : "SolutionUniqueName",
                 Published = published,
                 Status = "created",
-                Extra = extra?.Count > 0 ? extra : null
+                Extra = extra?.Count > 0 ? extra : null,
+                Warnings = warnings is { Count: > 0 } ? warnings : null
             };
 
             // Text = one-line summary (factory duplicates it into the payload as "summary");
             // the former multi-line detail lines all live in the structured payload.
             var firstLine = sb.ToString().Split('\n')[0].TrimEnd('\r');
+            if (warnings is { Count: > 0 })
+                firstLine += $" {warnings.Count} warning(s).";
             return Success(firstLine, structured);
+        }
+
+        /// <summary>
+        /// Execute <see cref="SetAutoNumberSeedRequest"/> with lock-contention retry.
+        /// The seed is environment-only (not metadata, not in solutions — no publish).
+        /// Returns null on success, or a warning message when all retries failed.
+        /// Non-contention failures propagate to the caller.
+        /// </summary>
+        private string ExecuteAutoNumberSeed(string entityName, string attributeName, long seed, string succeededAction)
+        {
+            var request = new Microsoft.Crm.Sdk.Messages.SetAutoNumberSeedRequest
+            {
+                EntityName = entityName,
+                AttributeName = attributeName,
+                Value = seed
+            };
+            // Fail fast in readonly mode BEFORE the retry loop: the block refusal
+            // ("Mutation blocked: …") contains the substring "lock", which
+            // MetadataRetryHelper's contention check would otherwise classify as a
+            // retryable lock error and turn the refusal into a warning.
+            _context.AssertMutationAllowed($"Execute {request.RequestName}");
+            var ok = MetadataRetryHelper.RetryOnLockContention(
+                () => { DataverseMutationExecutor.Execute(_context, _orgService, request); },
+                $"set autonumber seed {seed} on '{entityName}.{attributeName}'");
+            if (ok) return null;
+            return
+                $"Column {succeededAction} but SetAutoNumberSeed failed after multiple retry attempts " +
+                $"(lock contention). The column itself is fine — retry the seed: manage_column with logical_name='{attributeName}' and auto_number_seed={seed}.";
         }
 
         private string ResolveCreatedAttributeLogicalName(string entityName, Guid metadataId, string fallbackLogicalName)
@@ -2086,12 +2234,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string trueLabel, string falseLabel,
             string addOptions, string updateOptions, string deleteOptions,
             bool? isAuditEnabled, bool? isValidForAdvancedFind, bool? isSecured, bool? isSortable, string behavior, int precisionSource,
-            string defaultValue = "", bool? canStoreFullImage = null)
+            string defaultValue = "", bool? canStoreFullImage = null,
+            string autoNumberFormat = "", bool clearAutoNumber = false, long? autoNumberSeed = null,
+            List<string> autoNumberWarnings = null, int autoNumberMinLength = 0)
         {
             try
             {
                 var changes = new List<string>();
                 var structuredChanges = new Dictionary<string, UpdateAttributeChange>();
+                var hasAutoNumberRequest = !string.IsNullOrWhiteSpace(autoNumberFormat) || clearAutoNumber || autoNumberSeed.HasValue;
 
                 // --- Generic property updates (all types) ---
                 if (!string.IsNullOrWhiteSpace(displayName))
@@ -2145,11 +2296,61 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     requiredLevelExplicit: parsedRequiredLevel.HasValue);
                 updateFlags.TryApplyForUpdate(metadata, changes, structuredChanges);
 
+                // --- Autonumber update validation (needs the existing metadata) ---
+                // Seed is NOT a metadata change — it is tracked separately (seedRequested)
+                // and executed after the metadata update + publish.
+                var seedRequested = autoNumberSeed.HasValue;
+                if (hasAutoNumberRequest)
+                {
+                    if (metadata is not StringAttributeMetadata)
+                        return Error(
+                            $"auto_number_format/auto_number_seed/clear_auto_number are only supported for string columns, but '{attributeName}' is {GetAttributeTypeName(metadata)}.",
+                            "An autonumber column is a StringAttributeMetadata with AutoNumberFormat set. get_tables shows the column type.");
+
+                    var autoNumberStringMeta = (StringAttributeMetadata)metadata;
+
+                    // Effective format (new `format` if passed, else current) must be Text.
+                    if (!string.IsNullOrWhiteSpace(format))
+                    {
+                        var resolvedUpdateFormat = ResolveStringFormat(format, out var formatErr);
+                        if (formatErr == null && resolvedUpdateFormat != StringFormatName.Text)
+                            return Error(
+                                $"Autonumber columns require format 'Text', but format '{format.Trim()}' was requested.",
+                                "Remove format or set format='Text' together with auto_number_format.");
+                    }
+                    else if (autoNumberStringMeta.FormatName?.Value is not (null or "Text"))
+                    {
+                        return Error(
+                            $"Autonumber columns require format 'Text', but '{attributeName}' currently uses format '{autoNumberStringMeta.FormatName.Value}'.",
+                            "Change format to 'Text' first (format='Text'), then pass auto_number_format in the same or a follow-up call.");
+                    }
+
+                    // Seed needs an autonumber pattern AFTER this call completes.
+                    if (seedRequested)
+                    {
+                        var effectivePattern =
+                            !string.IsNullOrWhiteSpace(autoNumberFormat) ? autoNumberFormat :
+                            clearAutoNumber ? "" :
+                            (autoNumberStringMeta.AutoNumberFormat ?? "");
+                        if (string.IsNullOrEmpty(effectivePattern))
+                            return Error(
+                                $"auto_number_seed requires an autonumber pattern, but '{attributeName}' would have none after this call.",
+                                "Pass auto_number_format together with auto_number_seed, or seed an existing autonumber column (get_tables shows autoNumberFormat).");
+                    }
+                }
+
                 // --- Type-specific property updates ---
                 var typeError = ApplyTypeSpecificUpdates(metadata, maxLength, minValue, maxValue, precision, format,
-                    trueLabel, falseLabel, behavior, precisionSource, changes, structuredChanges, canStoreFullImage);
+                    trueLabel, falseLabel, behavior, precisionSource, changes, structuredChanges, canStoreFullImage,
+                    autoNumberFormat, clearAutoNumber, autoNumberMinLength, autoNumberWarnings);
                 if (typeError != null)
                     return Error(typeError, "Check format/behavior values against the attribute type; see docs://schema_tools_guide.");
+
+                // Seed is tracked in the structured changes (OldValue "" — reading the
+                // current seed would cost an extra request per update) but NOT in the
+                // metadata `changes`, so a seed-only call sends no UpdateAttributeRequest.
+                if (seedRequested)
+                    structuredChanges["autoNumberSeed"] = new UpdateAttributeChange { OldValue = "", NewValue = autoNumberSeed.Value.ToString() };
 
                 // --- Picklist / Boolean default value update ---
                 if (!string.IsNullOrWhiteSpace(defaultValue))
@@ -2205,15 +2406,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // Plan the complete mutation before any metadata, Web API, option,
                 // or publish request. This also covers option-only updates: they
                 // must not fall through to PublishIfNeeded below.
-                if (_options.DryRun && (changes.Count > 0 || hasOptionRequests))
+                if (_options.DryRun && (changes.Count > 0 || hasOptionRequests || seedRequested))
                 {
                     var plannedParts = new List<string>(changes);
                     if (!string.IsNullOrWhiteSpace(addOptions)) plannedParts.Add("add options");
                     if (!string.IsNullOrWhiteSpace(updateOptions)) plannedParts.Add("update options");
                     if (!string.IsNullOrWhiteSpace(deleteOptions)) plannedParts.Add("delete options");
+                    if (seedRequested) plannedParts.Add($"set autonumber seed {autoNumberSeed.Value}");
 
+                    var dryRunSummary =
+                        $"Would UPDATE column '{entityName}.{attributeName}' with changes: {string.Join(", ", plannedParts)}";
+                    if (autoNumberWarnings is { Count: > 0 })
+                        dryRunSummary += $" {autoNumberWarnings.Count} warning(s).";
                     return DryRun(
-                        $"Would UPDATE column '{entityName}.{attributeName}' with changes: {string.Join(", ", plannedParts)}",
+                        dryRunSummary,
                         new ManageColumnResult
                         {
                             EntityName = entityName,
@@ -2222,7 +2428,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             AttributeType = GetAttributeTypeName(metadata),
                             Changes = structuredChanges.Count > 0 ? structuredChanges : null,
                             Status = "not_executed",
-                            Published = false
+                            Published = false,
+                            Warnings = autoNumberWarnings is { Count: > 0 } ? autoNumberWarnings : null
                         });
                 }
 
@@ -2290,13 +2497,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     optionResults.AddRange(statusResults);
                 }
 
-                if (changes.Count == 0 && optionResults.Count == 0)
+                if (changes.Count == 0 && optionResults.Count == 0 && !seedRequested)
                     return Error(
                         $"No changes specified for '{entityName}.{attributeName}'.",
-                        "Provide at least one updatable parameter: display_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, true_label, false_label, add_options, update_options, delete_options, default_value (picklist/boolean), is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, can_store_full_image (image), or statuscode add/update/delete_options (for statuscode attribute).");
+                        "Provide at least one updatable parameter: display_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, true_label, false_label, add_options, update_options, delete_options, default_value (picklist/boolean), is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, can_store_full_image (image), auto_number_format, clear_auto_number, auto_number_seed (string), or statuscode add/update/delete_options (for statuscode attribute).");
 
-                // --- Publish ---
-                var published = PublishIfNeeded(entityName);
+                // --- Publish (skipped for a seed-only update — the seed is not a
+                //     metadata change and needs no publish) ---
+                var published = changes.Count > 0 || optionResults.Count > 0
+                    ? PublishIfNeeded(entityName)
+                    : false;
+
+                // --- Execute the seed (after UpdateAttributeRequest + publish — the
+                //     pattern must exist first). A failure after successful metadata
+                //     changes must not fail the whole call — it becomes a warning. ---
+                string seedWarning = null;
+                if (seedRequested)
+                {
+                    try
+                    {
+                        seedWarning = ExecuteAutoNumberSeed(entityName, attributeName, autoNumberSeed.Value, "updated");
+                    }
+                    catch (InvalidOperationException) when (_context.MutationsBlocked)
+                    {
+                        throw;
+                    }
+                    catch (Exception ex)
+                    {
+                        seedWarning = $"Column updated but SetAutoNumberSeed failed: {ex.Message}";
+                    }
+                }
 
                 // --- Format output ---
                 var typeName = GetAttributeTypeName(metadata);
@@ -2317,7 +2547,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (structured.OptionsRenamed?.Count == 0) structured.OptionsRenamed = null;
                 if (structured.OptionsDeleted?.Count == 0) structured.OptionsDeleted = null;
 
-                return Success($"Updated column '{attributeName}' on entity '{entityName}'.", structured);
+                var updateWarnings = new List<string>();
+                if (autoNumberWarnings is { Count: > 0 }) updateWarnings.AddRange(autoNumberWarnings);
+                if (seedWarning != null) updateWarnings.Add(seedWarning);
+                if (updateWarnings.Count > 0) structured.Warnings = updateWarnings;
+
+                var updateSummary = $"Updated column '{attributeName}' on entity '{entityName}'.";
+                if (updateWarnings.Count > 0) updateSummary += $" {updateWarnings.Count} warning(s).";
+                return Success(updateSummary, structured);
             }
             catch (Exception ex)
             {
@@ -2343,7 +2580,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             int maxLength, double? minValue, double? maxValue, int precision, string format,
             string trueLabel, string falseLabel, string behavior, int precisionSource,
             List<string> changes, Dictionary<string, UpdateAttributeChange> structuredChanges,
-            bool? canStoreFullImage = null)
+            bool? canStoreFullImage = null,
+            string autoNumberFormat = "", bool clearAutoNumber = false,
+            int autoNumberMinLength = 0, List<string> autoNumberWarnings = null)
         {
             if (metadata is StringAttributeMetadata stringMeta)
             {
@@ -2363,6 +2602,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     stringMeta.FormatName = resolved;
                     changes.Add($"Format: {oldVal} -> {stringMeta.FormatName.Value}");
                     structuredChanges["format"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = stringMeta.FormatName.Value };
+                }
+                // Autonumber pattern: set/change via auto_number_format, remove via
+                // clear_auto_number=true. Same pattern / already-plain → no change entry.
+                if (!string.IsNullOrWhiteSpace(autoNumberFormat))
+                {
+                    var effectiveMaxLength = maxLength > 0 ? maxLength : stringMeta.MaxLength ?? 100;
+                    if (effectiveMaxLength < autoNumberMinLength)
+                        return $"max_length {effectiveMaxLength} is smaller than the pattern's minimum output length {autoNumberMinLength}.";
+                    if (effectiveMaxLength < autoNumberMinLength + 5)
+                        (autoNumberWarnings ??= new List<string>()).Add(
+                            $"max_length {effectiveMaxLength} is close to the pattern's minimum length {autoNumberMinLength} — leave room for the sequence to grow.");
+                    var oldPattern = stringMeta.AutoNumberFormat ?? "";
+                    if (oldPattern != autoNumberFormat)
+                    {
+                        stringMeta.AutoNumberFormat = autoNumberFormat;
+                        changes.Add($"AutoNumberFormat: \"{oldPattern}\" -> \"{autoNumberFormat}\"");
+                        structuredChanges["autoNumberFormat"] = new UpdateAttributeChange { OldValue = oldPattern, NewValue = autoNumberFormat };
+                    }
+                }
+                else if (clearAutoNumber && !string.IsNullOrEmpty(stringMeta.AutoNumberFormat))
+                {
+                    var oldPattern = stringMeta.AutoNumberFormat;
+                    stringMeta.AutoNumberFormat = "";
+                    changes.Add($"AutoNumberFormat: \"{oldPattern}\" -> \"\"");
+                    structuredChanges["autoNumberFormat"] = new UpdateAttributeChange { OldValue = oldPattern, NewValue = "" };
                 }
                 return null;
             }
@@ -2704,29 +2968,47 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult DryRunCreatePreview(string entityName, string logicalName, string schemaName,
-            AttributeMetadata attribute, string displayName, AttributeRequiredLevel reqLevel, string solutionName)
-            => DryRunCreatePreview(entityName, logicalName, schemaName, GetAttributeTypeName(attribute), displayName, reqLevel, solutionName);
+            AttributeMetadata attribute, string displayName, AttributeRequiredLevel reqLevel, string solutionName,
+            string autoNumberFormat = null, long? autoNumberSeed = null, List<string> autoNumberWarnings = null)
+            => DryRunCreatePreview(entityName, logicalName, schemaName, GetAttributeTypeName(attribute), displayName, reqLevel, solutionName, autoNumberFormat, autoNumberSeed, autoNumberWarnings);
 
         private CallToolResult DryRunCreatePreview(string entityName, string logicalName, string schemaName,
-            string typeName, string displayName, AttributeRequiredLevel reqLevel, string solutionName)
-            => DryRun(
-                $"Would CREATE {typeName} column '{logicalName}' on entity '{entityName}'.",
-                new ManageColumnResult
-                {
-                    EntityName = entityName,
-                    AttributeName = logicalName,
-                    LogicalName = logicalName,
-                    SchemaName = schemaName,
-                    AttributeType = typeName,
-                    DisplayName = displayName,
-                    RequiredLevel = reqLevel.ToString(),
-                    SolutionName = string.IsNullOrWhiteSpace(solutionName) ? null : solutionName,
-                    CreateMode = "MetadataCreateRequest",
-                    IsAddToSolution = !string.IsNullOrWhiteSpace(solutionName),
-                    AddToSolutionMethod = string.IsNullOrWhiteSpace(solutionName) ? "none" : "SolutionUniqueName",
-                    Status = "not_executed",
-                    Published = false
-                });
+            string typeName, string displayName, AttributeRequiredLevel reqLevel, string solutionName,
+            string autoNumberFormat = null, long? autoNumberSeed = null, List<string> autoNumberWarnings = null)
+        {
+            var summary = $"Would CREATE {typeName} column '{logicalName}' on entity '{entityName}'.";
+            var extra = new Dictionary<string, string>();
+            if (!string.IsNullOrWhiteSpace(autoNumberFormat))
+            {
+                summary += $" AutoNumberFormat: {autoNumberFormat}.";
+                extra["autoNumberFormat"] = autoNumberFormat;
+            }
+            if (autoNumberSeed.HasValue)
+            {
+                summary += $" Would SetAutoNumberSeed={autoNumberSeed.Value}.";
+                extra["autoNumberSeed"] = autoNumberSeed.Value.ToString();
+            }
+            if (autoNumberWarnings is { Count: > 0 })
+                summary += $" {autoNumberWarnings.Count} warning(s).";
+            return DryRun(summary, new ManageColumnResult
+            {
+                EntityName = entityName,
+                AttributeName = logicalName,
+                LogicalName = logicalName,
+                SchemaName = schemaName,
+                AttributeType = typeName,
+                DisplayName = displayName,
+                RequiredLevel = reqLevel.ToString(),
+                SolutionName = string.IsNullOrWhiteSpace(solutionName) ? null : solutionName,
+                CreateMode = "MetadataCreateRequest",
+                IsAddToSolution = !string.IsNullOrWhiteSpace(solutionName),
+                AddToSolutionMethod = string.IsNullOrWhiteSpace(solutionName) ? "none" : "SolutionUniqueName",
+                Status = "not_executed",
+                Published = false,
+                Extra = extra.Count > 0 ? extra : null,
+                Warnings = autoNumberWarnings is { Count: > 0 } ? autoNumberWarnings : null
+            });
+        }
 
         // Warnings ride in the structured payload (manage_table convention); the custom
         // [FormulaCloneWarning] tag is gone — the summary line just gains "1 warning(s).".

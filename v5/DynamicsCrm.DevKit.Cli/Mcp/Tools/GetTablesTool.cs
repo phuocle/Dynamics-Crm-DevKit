@@ -595,6 +595,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 case StringAttributeMetadata str:
                     entry.MaxLength = str.MaxLength;
                     entry.Format = str.FormatName?.Value;
+                    entry.AutoNumberFormat = string.IsNullOrEmpty(str.AutoNumberFormat) ? null : str.AutoNumberFormat;
                     break;
 
                 case MemoAttributeMetadata memo:

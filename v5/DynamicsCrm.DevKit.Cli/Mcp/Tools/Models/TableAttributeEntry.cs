@@ -68,6 +68,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Format { get; set; }
 
+        /// <summary>
+        /// Autonumber pattern for string columns (SDK <c>AutoNumberFormat</c>).
+        /// Null when the column is a plain text string. Pass it to manage_column's
+        /// <c>auto_number_format</c> to clone or change the pattern; seed with
+        /// <c>auto_number_seed</c> (environment-only, not in solutions).
+        /// </summary>
+        [JsonPropertyName("autoNumberFormat")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AutoNumberFormat { get; set; }
+
         [JsonPropertyName("behavior")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Behavior { get; set; }

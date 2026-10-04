@@ -652,7 +652,7 @@ These CANNOT be turned off once enabled.
 
 | Type | Required Params (Create) | Optional Params | Defaults |
 |------|-------------------------|-----------------|----------|
-| string | entity_name, logical_name, attribute_type, display_name | max_length, format, required_level | max_length=100, format='Text' |
+| string | entity_name, logical_name, attribute_type, display_name | max_length, format, required_level, auto_number_format, auto_number_seed | max_length=100, format='Text' |
 | memo | same | max_length, format | max_length=2000 |
 | integer | same | min_value, max_value, format | format='None' |
 | bigint | same | -- | No range limits |
@@ -684,6 +684,38 @@ These CANNOT be turned off once enabled.
 | 0 | Attribute (use column's precision setting) |
 | 1 | Organization (use org-level pricing precision) |
 | 2 | Currency (use currency record's precision) |
+
+### Autonumber (string)
+
+An autonumber column is a plain `string` column with an `auto_number_format` pattern.
+Only `string` supports it (not memo or any other type); `format` must stay `Text`
+(Email/Phone/TextArea/... are rejected together with a pattern).
+
+Placeholders (patterns are validated client-side — Dataverse itself only rejects a
+bad pattern when the first record is saved):
+
+| Placeholder | Rule |
+|-------------|------|
+| `{SEQNUM:n}` | n >= 1 — a MINIMUM zero-padded length; the number keeps growing beyond n |
+| `{RANDSTRING:n}` | n must be 1-6 (7+ fails at record save time); may appear multiple times |
+| `{DATETIMEUTC:format}` | any .NET date/time format string (e.g. `yyyyMMddhhmmss`) |
+
+- Literal text around placeholders is allowed: `WID-{SEQNUM:5}-{RANDSTRING:6}-{DATETIMEUTC:yyyyMMddhhmmss}`.
+- A pattern without `{SEQNUM:n}` is accepted with a warning (values may not be unique).
+- `max_length` must exceed the pattern's minimum output length and leave room for the
+  sequence to grow (the default 100 is usually fine).
+- `auto_number_seed` (>= 1) sets the start value via `SetAutoNumberSeed` after the
+  metadata create/update succeeds. The default sequence starts at 1000. The seed is
+  environment-only: it is NOT carried in solutions and needs no publish.
+- UPDATE: change the pattern with `auto_number_format`, remove it with
+  `clear_auto_number=true` (back to plain text); a seed-only update is valid and sends
+  no metadata update.
+- In model-driven forms, set controls bound to autonumber columns read-only.
+
+Examples:
+- Create: manage_column(entity_name='devkit_ticket', attribute_type='string', display_name='Ticket Number', solution_name='all_in_one', auto_number_format='TKT-{SEQNUM:5}-{RANDSTRING:3}', auto_number_seed=10000)
+- Convert an existing Text column: manage_column(entity_name='devkit_ticket', logical_name='devkit_code', auto_number_format='CODE-{SEQNUM:6}')
+- get_tables shows the current pattern in `autoNumberFormat`.
 
 ### Picklist Options Format (Create)
 JSON array: [{""label"": ""Low"", ""value"": 100000000}, {""label"": ""Medium"", ""value"": 100000001}, {""label"": ""High"", ""value"": 100000002}]

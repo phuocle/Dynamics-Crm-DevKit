@@ -293,9 +293,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
         private static string FormatConstraints(AttributeMetadata attr) => attr switch
         {
-            StringAttributeMetadata s => s.FormatName?.Value is not null and not "Text"
-                ? $"MaxLen={s.MaxLength} {s.FormatName.Value}"
-                : $"MaxLen={s.MaxLength}",
+            StringAttributeMetadata s => string.IsNullOrEmpty(s.AutoNumberFormat)
+                ? (s.FormatName?.Value is not null and not "Text"
+                    ? $"MaxLen={s.MaxLength} {s.FormatName.Value}"
+                    : $"MaxLen={s.MaxLength}")
+                : $"MaxLen={s.MaxLength} AutoNumber={s.AutoNumberFormat}",
             MemoAttributeMetadata m => m.FormatName?.Value is not null and not "Text"
                 ? $"MaxLen={m.MaxLength} {m.FormatName.Value}"
                 : $"MaxLen={m.MaxLength}",
