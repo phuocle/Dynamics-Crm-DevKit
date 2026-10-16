@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Phân tích viết mới DynamicsCrm.DevKit.VsCode bằng TypeScript, dialog và template, cùng khả năng phát triển plugin .NET Framework 4.8 trên Windows, macOS và Linux.">
+  <title>DevKit VS Code — Viết mới bằng TypeScript | 08.10.2026</title>
+  <style>
+    :root{--ink:#18273c;--muted:#58697e;--paper:#f4f6fb;--line:#dce3ef;--blue:#244fc2;--violet:#7150a4;--green:#11644f;--amber:#8b5a13;--red:#983f49;--radius:16px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:20px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.75 "Segoe UI",Arial,sans-serif}a{color:var(--blue);text-underline-offset:3px}a:hover{color:var(--violet)}a:focus-visible,summary:focus-visible{outline:3px solid #f1ad40;outline-offset:4px}p{margin:.6em 0 1em}strong{font-weight:650}code{font-family:Consolas,"Courier New",monospace;background:#edf1f8;border-radius:4px;padding:.1em .3em;font-size:.9em;overflow-wrap:anywhere}pre{background:#17273e;color:#e5eefb;border-radius:12px;padding:23px;overflow-x:auto;font:13px/1.65 Consolas,"Courier New",monospace;tab-size:2}pre code{background:none;color:inherit;padding:0;font-size:inherit;overflow-wrap:normal}h1,h2,h3,h4{line-height:1.25;letter-spacing:-.025em}h1{font-size:clamp(34px,4vw,58px);max-width:930px;margin:20px 0}h2{font-size:30px;margin:0 0 22px}h3{font-size:21px;margin:30px 0 12px}h4{font-size:17px;margin:18px 0 8px}ul,ol{padding-left:25px}li{margin:8px 0}.wrap{max-width:1250px;margin:auto;padding:0 30px}.hero{background:linear-gradient(125deg,#152940,#29366b 65%,#594377);color:#fff;padding:54px 0 46px}.eyebrow{text-transform:uppercase;letter-spacing:.18em;font-size:12px;font-weight:700;color:#c6d5ff}.hero .lead{font-size:21px;max-width:990px;line-height:1.65;color:#e5ebfd}.meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}.meta span{border:1px solid #7784a5;border-radius:30px;padding:5px 13px;font-size:13px;color:#e4eaff}.hero code{color:#fff;background:#ffffff14}.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:32px;padding-top:32px;padding-bottom:50px}nav{align-self:start;position:sticky;top:22px;font-size:13px;line-height:1.45}nav .nav-title{text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-size:11px;font-weight:700;margin:8px 0 12px}nav a{display:block;text-decoration:none;border-left:2px solid var(--line);padding:7px 0 7px 13px;color:#405672}nav a:hover{border-left-color:var(--blue);background:#e9eef9}main{min-width:0}section{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:32px;margin-bottom:24px;box-shadow:0 3px 12px #17273e03}.section-no{color:var(--violet);font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;margin-bottom:9px}.callout{border-left:4px solid var(--blue);background:#f0f4ff;padding:17px 20px;border-radius:0 10px 10px 0;margin:22px 0}.callout.good{border-color:var(--green);background:#eef8f3}.callout.warn{border-color:#c08a2d;background:#fff8e9}.callout p:last-child{margin-bottom:0}.callout strong{color:inherit}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:25px 0}.card{border:1px solid var(--line);background:#f8faff;border-radius:12px;padding:19px}.card .big{font-size:23px;font-weight:750;line-height:1.3;margin-bottom:10px}.card p{font-size:14px;margin-bottom:0}.label{display:inline-block;border-radius:5px;padding:2px 7px;font-size:11px;letter-spacing:.04em;font-weight:700;vertical-align:middle}.fact{color:#155a76;background:#e9f4fc}.proposal{color:#66478d;background:#f1ebfb}.poc{color:#835500;background:#fff2d5}.yes{color:var(--green);font-weight:650}.maybe{color:var(--amber);font-weight:650}.no{color:var(--red);font-weight:650}.small,.source-note{font-size:13px;color:var(--muted)}.source-note{margin-top:12px}.table-scroll{overflow-x:auto;margin:20px 0;border:1px solid var(--line);border-radius:10px}table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}th{background:#ecf0f8;text-align:left;font-weight:650;color:#324965}td,th{padding:13px 14px;vertical-align:top;border-bottom:1px solid var(--line)}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#fbfcfe}td ul{margin:0;padding-left:17px}.wide{min-width:730px}.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:10px;margin:23px 0}.flow .node{flex:1 1 130px;padding:16px 12px;border-radius:10px;background:#edf3ff;border:1px solid #cdd9ef;text-align:center;font-size:14px}.flow .node strong{display:block;margin-bottom:6px}.flow .arrow{align-self:center;color:#5d6c83;font-size:24px}.split{display:grid;grid-template-columns:1fr 1fr;gap:20px}.split>div{min-width:0}.step{position:relative;padding:0 0 25px 25px;border-left:2px solid #d6dff0;margin-left:6px}.step:before{content:"";width:12px;height:12px;border-radius:50%;background:var(--blue);position:absolute;left:-7px;top:8px}.step:last-child{padding-bottom:0}.step h3{margin:0 0 10px}.step p{margin-bottom:8px}.sources{padding-left:22px;font-size:14px}.sources li{padding:6px 0 10px;border-bottom:1px solid #ecf0f6}.sources .desc{display:block;font-size:12px;color:var(--muted);margin-top:4px}details{border:1px solid var(--line);padding:15px 18px;border-radius:10px;margin:16px 0}summary{cursor:pointer;font-weight:650;color:#2b4263}footer{color:var(--muted);font-size:12px;padding:5px 0 35px}.checklist li::marker{color:var(--blue)}.decision{font-size:20px;line-height:1.65}.pill{display:inline-block;border:1px solid var(--line);background:#f8faff;border-radius:20px;padding:4px 11px;font-size:12px;margin:0 5px 8px 0}.nowrap{white-space:nowrap}
+    @media(max-width:1050px){.layout{grid-template-columns:180px minmax(0,1fr);gap:20px}.wrap{padding:0 20px}section{padding:25px}.cards{grid-template-columns:1fr}.card .big{font-size:20px}}
+    @media(max-width:760px){body{font-size:15px}.hero{padding:35px 0}.hero .lead{font-size:18px}.layout{display:block;padding-top:20px}nav{position:static;margin-bottom:22px;display:grid;grid-template-columns:1fr 1fr;gap:2px 10px}nav .nav-title{grid-column:1/-1}.split{grid-template-columns:1fr}.wrap{padding:0 14px}section{padding:23px 18px}h2{font-size:25px}h3{font-size:19px}.flow .arrow{display:none}pre{padding:16px;font-size:12px}.decision{font-size:18px}}
+    @media print{@page{size:A4;margin:16mm}body{background:white;font-size:10.5pt;line-height:1.5}.hero{background:#fff;color:#18273c;padding:0 0 20px}.hero .lead,.eyebrow,.meta span{color:#324965}.hero code{color:#18273c;background:#eee}h1{font-size:29pt}h2{font-size:20pt}h3{font-size:14pt}.wrap{padding:0;max-width:none}.layout{display:block;padding:0}nav{display:none}section{padding:20px 0;border:0;border-top:1px solid #bbb;box-shadow:none;border-radius:0;break-inside:auto}.cards{grid-template-columns:repeat(3,1fr)}.card,pre,.callout,tr{break-inside:avoid}.table-scroll{overflow:visible}.wide{min-width:0}table{font-size:9pt}td,th{padding:8px}pre{white-space:pre-wrap;color:#18273c;background:#f1f3f7;font-size:8pt}.step{break-inside:avoid}a{color:#244fc2;text-decoration:underline}.small,.source-note{font-size:9pt}details{break-inside:avoid}footer{padding:10px 0}.meta span{border-color:#bbb}}
+  </style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">DynamicsCrm.DevKit · Nghiên cứu phương án viết mới</div>
+    <h1>VS Code + TypeScript.<br>Viết mới từ đầu có khả thi?</h1>
+    <p class="lead"><strong>Có.</strong> Có thể xây một DevKit độc lập trong <code>DynamicsCrm.DevKit.VsCode</code>, chạy trên Windows, macOS và Linux. Có thể thiết kế luồng tạo, build và deploy plugin <strong>.NET Framework 4.8</strong> từ Mac/Linux. Phần cần phân biệt rõ là <strong>biên dịch DLL</strong> và <strong>chạy/debug DLL đó trên máy phát triển</strong>.</p>
+    <div class="meta"><span>Ngày đối chiếu: 08.10.2026</span><span>Hướng greenfield · Không tái sử dụng backend DevKit</span><span>Ưu tiên: plugin net48 · dialogs · templates</span><span>Chỉ nghiên cứu · Chưa triển khai hoặc thử nghiệm đa OS</span></div>
+  </div>
+</header>
+<div class="wrap layout">
+  <nav aria-label="Mục lục báo cáo">
+    <div class="nav-title">Nội dung review</div>
+    <a href="#verdict">01 · Quyết định tổng thể</a>
+    <a href="#net48">02 · net48 trên Mac/Linux</a>
+    <a href="#build">03 · Project và strong name</a>
+    <a href="#architecture">04 · Kiến trúc thuần TypeScript</a>
+    <a href="#registration">05 · Đăng ký plugin qua API</a>
+    <a href="#dialogs">06 · Thiết kế các dialog</a>
+    <a href="#templates">07 · Project / item templates</a>
+    <a href="#scope">08 · Mức độ tương đương VSIX</a>
+    <a href="#roadmap">09 · Lộ trình làm từng phần</a>
+    <a href="#proof">10 · Các PoC cần chứng minh</a>
+    <a href="#decisions">11 · Đề xuất chốt cho bản mới</a>
+    <a href="#sources">12 · Tài liệu và nguồn</a>
+  </nav>
+  <main>
+    <section id="verdict">
+      <div class="section-no">01 / Kết luận để ra quyết định</div>
+      <h2>Nên làm một sản phẩm mới, bắt đầu bằng một workflow hoàn chỉnh</h2>
+      <p class="decision">Đề xuất: <strong>extension TypeScript độc lập + template assets mới + Dataverse Web API trực tiếp</strong>. Không bắt buộc cài DevKit CLI, không gọi Shared, không cần VSIX hoặc Visual Studio để tạo và triển khai một plugin cơ bản.</p>
+      <div class="cards">
+        <div class="card"><div class="big yes">Extension: khả thi</div><p>Commands, explorer, chọn environment, wizard, form nhiều trường, preview, tiến độ và log đều có bề mặt phù hợp trong VS Code.</p></div>
+        <div class="card"><div class="big yes">net48: build được</div><p>SDK-style library + .NET SDK + reference assemblies là cơ sở chính thức để biên dịch .NET Framework trên hệ điều hành khác Windows.</p></div>
+        <div class="card"><div class="big maybe">Debug: có giới hạn</div><p>VS Code không có hỗ trợ debugger .NET Framework tương đương Visual Studio. Không hứa chạy F5 plugin net48 trên Mac/Linux.</p></div>
+      </div>
+      <p class="source-note">Căn cứ: <a href="https://code.visualstudio.com/api/extension-guides/webview">Webview API</a>, <a href="https://github.com/microsoft/dotnet/blob/main/releases/reference-assemblies/README.md">Microsoft reference assemblies</a>, <a href="https://code.visualstudio.com/docs/csharp/cs-dev-kit-faq">C# Dev Kit FAQ</a>. Các quyết định thiết kế bên dưới là đề xuất cho DevKit, không phải tính năng đã tồn tại.</p>
+      <div class="callout good"><strong>Phạm vi phù hợp với mục tiêu của bạn:</strong> người dùng Mac/Linux tạo C# plugin, build DLL, đăng ký vào Dataverse Online, kích hoạt nghiệp vụ trên server và đọc trace từ VS Code. Chuỗi này không đòi hỏi CLR .NET Framework chạy trên Mac/Linux.</div>
+      <h3>“Viết mọi thứ bằng TypeScript” nên được hiểu thế nào?</h3>
+      <div class="table-scroll"><table><thead><tr><th>Lớp</th><th>Ngôn ngữ / công cụ đề xuất</th><th>Ý nghĩa</th></tr></thead><tbody>
+        <tr><td>Toàn bộ logic extension</td><td>TypeScript chạy trong Node extension host</td><td>UI orchestration, auth, HTTP, generator, registration, quản lý file và process.</td></tr>
+        <tr><td>UI phức tạp</td><td>HTML/CSS + TypeScript trong webview</td><td>Viết mới giao diện theo trải nghiệm VS Code; không cần WPF.</td></tr>
+        <tr><td>Output plugin</td><td>C# + <code>.csproj</code> + .NET SDK</td><td>TypeScript sinh source và gọi compiler. Plugin thông thường vẫn phải là assembly .NET đáp ứng hợp đồng Dataverse.</td></tr>
+        <tr><td>Output client code</td><td>JavaScript / TypeScript / declaration files</td><td>Sinh trực tiếp từ mô hình metadata mới bằng TypeScript.</td></tr>
+        <tr><td>Backend DevKit hiện tại</td><td>Không nằm trong dependency graph</td><td>Không dùng DevKit CLI, Shared, T4 engine, EnvDTE hay Visual Studio automation.</td></tr>
+      </tbody></table></div>
+      <p>Như vậy, <strong>100% logic của extension có thể là TypeScript</strong>; điều đó không biến Dataverse C# plugin thành TypeScript plugin và không loại bỏ compiler .NET khỏi máy có nhu cầu build C#. Microsoft mô tả plugin thông thường là lớp trong assembly .NET Framework triển khai <code>IPlugin</code>. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/write-plug-in">[Write a plug-in]</a></p>
+      <p class="small"><span class="label fact">TÀI LIỆU</span> Khả năng được nguồn chính thức mô tả. <span class="label proposal">ĐỀ XUẤT</span> Phán đoán kiến trúc cho sản phẩm mới. <span class="label poc">CẦN PoC</span> Chưa được chạy và xác nhận trong nghiên cứu này.</p>
+    </section>
+
+    <section id="net48">
+      <div class="section-no">02 / Câu hỏi quan trọng nhất</div>
+      <h2>Tạo project plugin .NET 4.8 trên Mac/Linux: được đến đâu?</h2>
+      <div class="callout"><p><strong>Nên gọi chính xác là .NET Framework 4.8, TFM <code>net48</code>.</strong> Tại thời điểm nghiên cứu, trang <em>Supported customizations</em> của Dataverse hỗ trợ plugin/custom workflow target .NET Framework 4.6.2–4.8 và khuyến nghị project mới dùng 4.8. Trang này cũng nêu assembly target .NET Core không được hỗ trợ cho plugin/custom workflow. Đây là căn cứ mạnh hơn việc suy từ target <code>net462</code> của template DevKit hiện tại. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/supported-customizations">[Microsoft Learn, cập nhật 16.07.2026]</a></p></div>
+      <div class="table-scroll"><table class="wide"><thead><tr><th>Hoạt động</th><th>Windows</th><th>macOS / Linux</th><th>Điều kiện / giới hạn thực tế</th></tr></thead><tbody>
+        <tr><td>Tạo folder, <code>.csproj</code>, file C#</td><td class="yes">Có</td><td class="yes">Có</td><td>Scaffolder TypeScript ghi file; bước này không cần runtime .NET Framework.</td></tr>
+        <tr><td>Soạn thảo source</td><td class="yes">Có</td><td class="yes">Có</td><td>Text editor hoạt động. Chất lượng IntelliSense, load project, diagnostics phải PoC với C# extension và đúng project net48.</td></tr>
+        <tr><td>Restore và build managed DLL</td><td class="yes">Có</td><td class="yes">Có cơ sở chính thức</td><td>.NET SDK + SDK-style library + reference assemblies; toàn bộ NuGet/build task phụ thuộc cũng phải phù hợp.</td></tr>
+        <tr><td>Ký strong name bằng private key</td><td class="yes">Có</td><td class="maybe">Khả thi; phải chứng minh</td><td>Roslyn có đường ký bằng khóa RSA. PoC sử dụng file <code>.snk</code> hợp lệ và xác minh DLL được Dataverse chấp nhận.</td></tr>
+        <tr><td>Upload DLL, type, step, image</td><td class="yes">Có API</td><td class="yes">Có API</td><td>HTTPS + OAuth + quyền trên environment. Cần viết registration engine hoàn chỉnh bằng TS.</td></tr>
+        <tr><td>Plugin thực thi trong Dataverse Online</td><td class="yes">Trên server</td><td class="yes">Trên server</td><td>OS tạo DLL không phải OS chạy plugin; assembly vẫn phải đúng target và quy tắc sandbox.</td></tr>
+        <tr><td>Chạy local bằng CLR .NET Framework 4.8</td><td class="yes">Runtime có trên Windows</td><td class="no">Không được hỗ trợ</td><td>.NET Framework là runtime Windows. Cài .NET SDK mới trên Mac không cài CLR Framework 4.8.</td></tr>
+        <tr><td>Local tests trực tiếp trên net48</td><td class="yes">Có với runner phù hợp</td><td class="no">Không cam kết</td><td>Không coi Mono hoặc compatibility layer là bảo đảm tương đương môi trường Dataverse.</td></tr>
+        <tr><td>F5 / attach / profiler replay như Visual Studio</td><td class="maybe">Dùng tooling phù hợp trên Windows</td><td class="no">Không có parity mặc định</td><td>Debugger chuẩn của VS Code không hỗ trợ .NET Framework. Chạy VS Code trên Windows cũng không tự thêm hỗ trợ đó.</td></tr>
+        <tr><td>Integration test và đọc trace online</td><td class="yes">Khả thi</td><td class="yes">Khả thi</td><td>Kích hoạt event trong Dataverse rồi đọc kết quả và trace nếu environment đã bật trace và user có quyền.</td></tr>
+      </tbody></table></div>
+      <p class="source-note">Căn cứ theo từng lớp: <a href="https://github.com/microsoft/dotnet/blob/main/releases/reference-assemblies/README.md">build đa OS</a>; <a href="https://dotnet.microsoft.com/en-us/learn/dotnet/what-is-dotnet-framework">runtime Windows</a>; <a href="https://code.visualstudio.com/docs/csharp/cs-dev-kit-faq">giới hạn debugger/C# Dev Kit</a>; <a href="https://github.com/dotnet/roslyn/blob/main/src/Compilers/Core/Portable/StrongName/DesktopStrongNameProvider.cs">source Roslyn signing</a>; <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/register-plug-in">registration và execution</a>. Các ô “khả thi” không phải kết quả test trên máy Mac/Linux trong task này.</p>
+      <h3>Ba khái niệm thường bị trộn lẫn</h3>
+      <div class="flow" aria-label="Luồng build đa nền tảng và chạy trên server">
+        <div class="node"><strong>Máy phát triển</strong>Mac / Linux / Windows<br>VS Code + .NET SDK</div><span class="arrow" aria-hidden="true">→</span>
+        <div class="node"><strong>Output compiler</strong>Managed DLL<br>Target: net48</div><span class="arrow" aria-hidden="true">→</span>
+        <div class="node"><strong>Đăng ký bằng TS</strong>OAuth + Web API<br>Assembly / type / step</div><span class="arrow" aria-hidden="true">→</span>
+        <div class="node"><strong>Nơi thực thi</strong>Dataverse server<br>Runtime do nền tảng quản lý</div>
+      </div>
+      <p><strong>Ví dụ:</strong> một .NET SDK hiện đại có thể chạy compiler trên Mac và dùng bộ reference assemblies net48 để tạo DLL. DLL không cần được load hoặc chạy trong process Node của extension. Dùng SDK 10 để build cũng không có nghĩa output trở thành plugin <code>net10.0</code>.</p>
+      <h3>Còn unit test và trải nghiệm C#?</h3>
+      <p><span class="label proposal">ĐỀ XUẤT</span> Tách business logic ít phụ thuộc platform thành thư viện có target tương thích cả plugin và test host hiện đại, sau khi kiểm tra dependency cụ thể. Test logic đó trên macOS/Linux; giữ integration test qua Dataverse để kiểm chứng event pipeline. Những test thực sự cần CLR net48 vẫn cần môi trường Windows phù hợp. Test logic trên .NET mới không chứng minh tương đương toàn bộ sandbox/plugin context.</p>
+      <p>Không lấy “C# Dev Kit đã load được project” làm tiêu chí hoàn thành. Microsoft nêu giới hạn .NET Framework trong FAQ và hướng sử dụng C# extension. Cần thử đúng project đã chọn với completion, references, navigation, build diagnostics; nếu chưa ổn thì mô tả rõ mức hỗ trợ của bản DevKit đầu tiên. <a href="https://code.visualstudio.com/docs/csharp/cs-dev-kit-faq">[C# Dev Kit FAQ]</a></p>
+    </section>
+
+    <section id="build">
+      <div class="section-no">03 / Thiết kế project mới</div>
+      <h2>Template plugin net48 nên đơn giản và ít phụ thuộc OS</h2>
+      <p>Kiểm tra template hiện có trong repo cho thấy server project đang là SDK-style <code>net462</code>, có signing, <code>.snk</code>, <code>.projitems</code> và các thao tác triển khai cũ. Đây chỉ là dữ kiện tham khảo. Với sản phẩm mới, đề xuất bắt đầu bằng một C# class library độc lập, dependency tường minh, không phát sinh <code>.bat</code> hoặc yêu cầu Visual Studio targets.</p>
+      <p class="small">Bằng chứng repo: <code>ProjectTemplates/CSharp/04.ServerProjectTemplate/ProjectTemplate.csproj.template</code>; package project hiện tại ở <code>ProjectTemplates/CSharp/05.PackageProjectTemplate</code>. Đây là các đường dẫn tương đối từ thư mục <code>v5</code>; templates nằm cạnh component VSIX. Không có file source nào được sửa.</p>
+      <h3>Hình dạng .csproj đề xuất — chỉ minh họa</h3>
+      <pre><code>&lt;Project Sdk="Microsoft.NET.Sdk"&gt;
+  &lt;PropertyGroup&gt;
+    &lt;TargetFramework&gt;net48&lt;/TargetFramework&gt;
+    &lt;OutputType&gt;Library&lt;/OutputType&gt;
+    &lt;PlatformTarget&gt;AnyCPU&lt;/PlatformTarget&gt;
+    &lt;SignAssembly&gt;true&lt;/SignAssembly&gt;
+    &lt;AssemblyOriginatorKeyFile&gt;keys/Contoso.Plugins.snk&lt;/AssemblyOriginatorKeyFile&gt;
+  &lt;/PropertyGroup&gt;
+  &lt;ItemGroup&gt;
+    &lt;PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies"
+                      Version="1.0.3" PrivateAssets="all" /&gt;
+    &lt;PackageReference Include="Microsoft.CrmSdk.CoreAssemblies"
+                      Version="9.0.2.60" /&gt;
+  &lt;/ItemGroup&gt;
+&lt;/Project&gt;</code></pre>
+      <p class="small">Đây là snippet nghiên cứu, chưa phải template đã build. <code>9.0.2.60</code> là mốc package trong <code>DynamicsCrm.DevKit.Vsix/DynamicsCrm.DevKit.Vsix.csproj</code> và <code>DynamicsCrm.DevKit.Shared/NuGetHelper.cs</code>, không khẳng định là bản mới nhất hoặc đã xác nhận cho baseline mới. Cần pin lại sau PoC; file private key phải thực sự tồn tại. Không thêm package workflow nếu chỉ tạo plugin <code>IPlugin</code>. Không thay version của bất kỳ source hiện có nào.</p>
+      <p>NuGet reference assemblies cung cấp các hợp đồng compile-time, không cung cấp CLR để chạy net48. Tài liệu Microsoft cũng lưu ý SDK-style project có thể tự thêm reference package; khai báo explicit ở đây giúp thể hiện và pin dependency của template. <a href="https://learn.microsoft.com/en-us/dotnet/framework/migration-guide/reference-assemblies">[Build without an installed targeting pack]</a></p>
+      <pre><code># Lệnh minh họa do extension có thể gọi qua process/task API
+# Chưa chạy trong nghiên cứu này
+dotnet restore Contoso.Plugins.csproj
+dotnet build Contoso.Plugins.csproj --configuration Release
+
+# Output dự kiến: bin/Release/net48/Contoso.Plugins.dll
+# Extension đọc bytes và gọi Dataverse Web API để triển khai.</code></pre>
+      <div class="callout warn"><strong>Không dùng <code>dotnet new classlib -f net48</code> như một giả định.</strong> Template classlib có sẵn chỉ nhận các target mà template/SDK đó hỗ trợ. Hướng mới này tự sinh <code>.csproj</code> net48 từ assets của DevKit; nếu muốn dùng <code>dotnet new</code> thì phải cung cấp custom template phù hợp. <a href="https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-new">[dotnet new]</a></div>
+      <h3>Strong name: giải quyết sớm, trước khi làm nhiều UI</h3>
+      <div class="table-scroll"><table><thead><tr><th>Vấn đề</th><th>Đề xuất cho bản mới</th><th>Điểm cần chứng minh</th></tr></thead><tbody>
+        <tr><td>Ký assembly standalone</td><td>Private-key signing thật bằng Roslyn/<code>SignAssembly</code>. Không dựa vào <code>sn.exe</code> trong luồng build thường ngày.</td><td>Build trên từng OS, upload được và thực thi thành công trong Dataverse.</td></tr>
+        <tr><td>Khóa của người dùng</td><td>PoC đầu tiên dùng khóa <code>.snk</code> hợp lệ do người phát triển cung cấp. Bản phát hành “New Project” cần có tạo khóa hoặc nhập khóa rõ ràng.</td><td>Nếu tự tạo bằng Node crypto: phải serialize đúng định dạng SNK và verify với compiler/server. Đây là hạng mục riêng, không coi là đã giải quyết.</td></tr>
+        <tr><td><code>PublicSign</code> / <code>DelaySign</code></td><td>Không dùng như cách thay cho strong-name signing hoàn chỉnh của DLL standalone.</td><td>Microsoft mô tả PublicSign không thực hiện ký bằng private key; DelaySign chỉ dành chỗ cho chữ ký.</td></tr>
+        <tr><td>Khóa mặc định trong extension</td><td>Không phát một private key dùng chung cho tất cả project. Chính sách giữ/backup khóa thuộc project của người dùng.</td><td>Rebuild/update cùng assembly phải giữ đúng identity; báo rõ hệ quả khi thay khóa.</td></tr>
+        <tr><td>Plugin package có dependencies</td><td>Đưa vào giai đoạn sau. Dataverse hỗ trợ hướng package có thể chứa unsigned assemblies.</td><td>Không đồng nhất plugin package <code>.nupkg</code> với solution ZIP hoặc Package Deployer; có giới hạn riêng.</td></tr>
+      </tbody></table></div>
+      <p class="source-note">Nguồn: <a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/security">compiler signing options</a>, <a href="https://github.com/dotnet/roslyn/blob/main/src/Compilers/Core/Portable/StrongName/DesktopStrongNameProvider.cs">Roslyn signing implementation</a>, <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/build-and-package">dependent assemblies / plugin packages</a>. Khả năng ký trong source compiler là bằng chứng kỹ thuật; PoC triển khai vẫn cần để xác nhận tổ hợp SDK, key, package và target đã chọn.</p>
+      <p><span class="label proposal">ĐỀ XUẤT</span> Mặc định output managed library, tránh RID như <code>linux-x64</code>, tránh native dependency, COM, WPF, WinForms và build hook gọi shell đặc thù OS. Đây là cách giữ template mới gọn và có thể kiểm chứng. Không suy từ một template thành công rằng mọi project net48 cũ đều build đa nền tảng.</p>
+    </section>
+
+    <section id="architecture">
+      <div class="section-no">04 / Một component mới và độc lập</div>
+      <h2><code>DynamicsCrm.DevKit.VsCode</code> có thể chứa toàn bộ sản phẩm mới</h2>
+      <p><span class="label proposal">ĐỀ XUẤT</span> Một package extension, một codebase TypeScript, chia module nội bộ theo trách nhiệm. Chưa cần tách thành nhiều npm package hoặc tạo service backend. Các assets C#/JS là nội dung template được đóng gói cùng extension.</p>
+      <pre><code>DynamicsCrm.DevKit.VsCode/          # Chỉ là cấu trúc đề xuất; chưa tạo
+├─ package.json                    # VS Code manifest, commands, views
+├─ tsconfig.json
+├─ src/
+│  ├─ extension.ts                 # Composition root, activation
+│  ├─ commands/                    # Use cases từ command/menu
+│  ├─ ui/                          # QuickPick, tree, progress, webview host
+│  ├─ domain/                      # Project spec, metadata, registration plan
+│  ├─ auth/                        # MSAL adapter, accounts, token cache
+│  ├─ dataverse/                   # HTTP/OData client, metadata, repositories
+│  ├─ scaffolding/                 # Plan → preview → generate files
+│  ├─ generation/                  # C# / JS / TS emitters mới
+│  ├─ plugins/                     # Assembly, type, step, image orchestration
+│  ├─ webresources/                # Upload, publish, conflict checks
+│  └─ platform/                    # Files, process, SDK discovery, logs
+├─ webviews/                       # HTML/CSS/TS cho form phức tạp
+├─ templates/
+│  ├─ projects/plugin-net48/
+│  ├─ projects/webresource-ts/
+│  └─ items/plugin-class/
+├─ schemas/                        # Schema versioned của cấu hình mới
+├─ test/                           # Unit, generated output, extension tests
+├─ fixtures/                       # Metadata và project mẫu đã khử dữ liệu nhạy cảm
+├─ scripts/                        # Build/package/test cho component này
+└─ docs/                           # Thiết kế, support matrix, release notes</code></pre>
+      <div class="split">
+        <div><h3>Ranh giới nên giữ</h3><ul><li><code>domain</code> không import VS Code API, không phụ thuộc giao diện.</li><li>Webview gửi request có kiểu; extension host xác thực request rồi thực thi.</li><li>Dataverse client chỉ xử lý transport/auth/serialization; nghiệp vụ registration ở module riêng.</li><li>Generator tạo kế hoạch file trước khi ghi; deployment engine tạo kế hoạch remote trước khi apply.</li></ul></div>
+        <div><h3>Dependencies hợp lý</h3><ul><li>VS Code API và Node runtime của extension host.</li><li>Thư viện MSAL Node cho identity.</li><li>.NET SDK khi người dùng build C# project.</li><li>npm/TypeScript toolchain của project người dùng nếu họ build web resources TS.</li><li>Không yêu cầu DevKit CLI, Shared hoặc cài Visual Studio.</li></ul></div>
+      </div>
+      <h3>Gọi Dataverse trực tiếp bằng TypeScript</h3>
+      <p>Dataverse Web API cho phép truy cập từ ngôn ngữ hỗ trợ HTTP có xác thực. Vì vậy extension có thể dùng HTTP client trong Node để đọc metadata, thao tác record, gọi action/function và triển khai các thành phần có API tương ứng. Không cần bọc <code>ServiceClient</code> trong một process C# chỉ để thực hiện CRUD. Tuy nhiên phải kiểm tra endpoint cho từng tính năng; Web API không đồng nghĩa mọi tiện ích của SDK .NET đã có wrapper TS. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/overview">[Dataverse Web API overview]</a></p>
+      <p><strong>Không gọi <code>Xrm.WebApi</code> từ extension host.</strong> Đối tượng đó thuộc môi trường model-driven app. Phần extension mới dùng Web API qua HTTPS; code JS được generator sinh cho form có thể dùng API client của model-driven app theo mục đích của nó.</p>
+      <h3>Authentication cũng viết mới, nhưng dùng thư viện identity chuẩn</h3>
+      <p><span class="label proposal">ĐỀ XUẤT</span> MSAL Node public client, ưu tiên authorization code + PKCE qua browser, silent acquisition cho phiên còn hiệu lực; device code là phương án bổ sung nếu chính sách tenant cho phép. Cần app registration của sản phẩm hoặc cấu hình client ID do tổ chức cung cấp, redirect URI và quyền Dataverse phù hợp. Không nhúng client secret vào extension phát hành, không lấy client ID mẫu làm danh tính sản phẩm. <a href="https://learn.microsoft.com/en-us/entra/msal/javascript/node/acquire-token-requests">[MSAL Node flows]</a> <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/authenticate-oauth">[Dataverse OAuth]</a></p>
+      <p>Thiết kế cache adapter tích hợp <code>SecretStorage</code>; chỉ lưu environment URL, tenant/client ID và lựa chọn project trong config thường. Không đưa token vào webview, output log hoặc file project. Tách tài khoản và environment để tránh dùng nhầm token khi chuyển tổ chức. Remote/SSH cần thử riêng callback đăng nhập và nơi lưu secrets; không suy từ đăng nhập local thành hỗ trợ remote hoàn chỉnh. <a href="https://code.visualstudio.com/api/references/vscode-api#SecretStorage">[SecretStorage]</a></p>
+      <h3>Desktop trước, remote sau, browser sau cùng</h3>
+      <p>Đề xuất bản đầu là Node extension chạy trong workspace extension host; khi workspace ở SSH/container thì compiler và file operations phải chạy ở host chứa workspace. VS Code có hướng dẫn riêng cho remote extension. VS Code for the Web có runtime hạn chế và không thể được coi như môi trường có sẵn local process để chạy <code>dotnet</code>. Vì vậy <strong>“Mac/Linux desktop” là một cam kết khác “vscode.dev build C# trong browser”.</strong> <a href="https://code.visualstudio.com/api/advanced-topics/remote-extensions">[Remote extensions]</a> <a href="https://code.visualstudio.com/api/extension-guides/web-extensions">[Web extensions]</a></p>
+      <p>Extension VS Code cũng có thể đóng gói thành file <code>.vsix</code>, nhưng package và host khác Visual Studio VSIX. Hướng JS thuần giúp đơn giản hóa phân phối; thêm binary/native module sau này sẽ phải quản lý OS/architecture riêng. <a href="https://code.visualstudio.com/api/working-with-extensions/publishing-extension">[Publishing extensions]</a></p>
+    </section>
+
+    <section id="registration">
+      <div class="section-no">05 / Backend plugin hoàn toàn mới</div>
+      <h2>Không cần CLR reflection cho luồng “project do DevKit tạo”</h2>
+      <p>Đây là điểm quyết định để giữ backend thuần TypeScript. Một extension Node không tự có <code>Assembly.Load</code> hay reflection .NET. Với project được tạo mới, DevKit có thể sinh đồng thời <strong>source plugin và manifest đăng ký</strong>, rồi dùng manifest để biết type, message, table, stage, mode và images.</p>
+      <div class="callout good"><strong>Chọn manifest-first cho bản đầu.</strong> Cấu hình registration là dữ liệu có schema, có review và diff. Extension không cần load/execute DLL của người dùng để tìm lớp plugin. Việc đọc metadata từ DLL bất kỳ là một tính năng mở rộng có chi phí riêng.</div>
+      <h3>Luồng triển khai đề xuất</h3>
+      <ol>
+        <li><strong>Create Project:</strong> tạo project net48, source <code>IPlugin</code>, cấu hình build và manifest mới. Người dùng có thể làm bước này offline.</li>
+        <li><strong>Add Plugin / Step:</strong> chọn message, table, stage, mode và attributes từ metadata của environment đang kết nối; sinh class và cấu hình liên quan.</li>
+        <li><strong>Build:</strong> gọi <code>dotnet</code>, đọc diagnostics, xác định đúng output DLL của project/configuration; dừng nếu build thất bại hoặc artifact không đúng.</li>
+        <li><strong>Plan:</strong> so sánh manifest, identity assembly và trạng thái server; hiện assembly/type/step/image sẽ được tạo hoặc cập nhật.</li>
+        <li><strong>Deploy:</strong> upload/update assembly, đọc trạng thái type, tạo/cập nhật registration phù hợp; bổ sung vào solution theo loại component.</li>
+        <li><strong>Verify:</strong> đọc lại các record đã triển khai, lưu mapping ID theo environment, cung cấp cách kích hoạt event và xem trace.</li>
+      </ol>
+      <div class="table-scroll"><table><thead><tr><th>Đối tượng</th><th>Cơ sở API</th><th>Công việc DevKit vẫn phải tự viết</th></tr></thead><tbody>
+        <tr><td>Assembly</td><td><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/pluginassembly?view=dataverse-latest">pluginassembly</a></td><td>Đọc DLL, content base64, identity/version, create/update, báo lỗi target/signing/dependency.</td></tr>
+        <tr><td>Plugin type</td><td><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/plugintype?view=dataverse-latest">plugintype</a></td><td>Reconcile fully qualified type name với assembly và record trên server; kiểm chứng hành vi discovery/create trong PoC.</td></tr>
+        <tr><td>Step</td><td><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/sdkmessageprocessingstep?view=dataverse-latest">sdkmessageprocessingstep</a></td><td>Resolve message/filter/type, stage/mode/rank, filtering attributes, impersonation/config theo scope hỗ trợ.</td></tr>
+        <tr><td>Solution membership</td><td><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/addsolutioncomponent?view=dataverse-latest">AddSolutionComponent</a></td><td>Đảm bảo thành phần cần thiết được thêm vào đúng unmanaged solution; upload assembly không tự hoàn tất mọi membership.</td></tr>
+      </tbody></table></div>
+      <p class="source-note">Quy trình đăng ký đầy đủ còn có step images và các ràng buộc nghiệp vụ: <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/register-plug-in">Register a plug-in</a>. Bảng trên chứng minh các API nền tảng tồn tại, không chứng minh một lệnh upload đơn lẻ đã tương đương toàn bộ VSIX.</p>
+      <details open>
+        <summary>Ví dụ manifest ý tưởng cho sản phẩm mới</summary>
+        <p class="small">Tên file <code>devkit.vscode.json</code> và toàn bộ keys dưới đây là đề xuất thiết kế mới; chưa phải hợp đồng JSON hiện có, chưa tạo file hoặc đổi schema của DevKit cũ.</p>
+        <pre><code>{
+  "schemaVersion": 1,
+  "project": "src/Contoso.Plugins/Contoso.Plugins.csproj",
+  "assembly": "bin/Release/net48/Contoso.Plugins.dll",
+  "solutionUniqueName": "ContosoCore",
+  "plugins": [
+    {
+      "typeName": "Contoso.Plugins.AccountPreCreate",
+      "steps": [
+        {
+          "key": "account-create-pre-sync",
+          "message": "Create",
+          "table": "account",
+          "stage": "PreOperation",
+          "mode": "Synchronous",
+          "rank": 1
+        }
+      ]
+    }
+  ]
+}</code></pre>
+        <p class="small">Manifest mô tả ý định. Nó chưa chứng minh type thực sự tồn tại trong DLL hoặc triển khai đúng <code>IPlugin</code>. Build, kiểm tra metadata khi có, phản hồi registration và test server vẫn cần thiết. Không lưu token hay secure configuration dạng rõ trong manifest.</p>
+      </details>
+      <h3>Nếu người dùng đưa vào DLL bất kỳ?</h3>
+      <p><span class="label proposal">ĐỀ XUẤT</span> Bản đầu yêu cầu khai báo type hoặc dùng wizard tạo type cùng source. Về sau có thể đọc ECMA-335 metadata bằng implementation/thư viện TS đã thẩm định để discover types/attributes. Một helper .NET sẽ đơn giản hóa phần này, nhưng trở thành quyết định thay đổi ranh giới “mọi logic mới bằng TS”. Không cần đưa helper đó vào kiến trúc khởi đầu.</p>
+      <p>Không dùng regex đọc C# làm nguồn chân lý cho type trong DLL: namespace, partial class, generated source, conditional compilation và attribute semantics khiến cách đó thiếu tin cậy. Không cần chạy DLL để đọc metadata; đặc biệt không chạy assembly người dùng trong host của extension.</p>
+      <h3>Độ khó thật nằm ở cập nhật an toàn và kết quả có thể lặp lại</h3>
+      <ul>
+        <li><strong>Idempotency:</strong> chạy deploy hai lần không tạo step trùng. Mapping server ID phải gắn với environment và logical key; không nhận diện chỉ bằng display name.</li>
+        <li><strong>Partial failure:</strong> server có thể nhận assembly nhưng bước tạo step thất bại. Hiển thị trạng thái từng bước và cách tiếp tục; không hứa rollback atomic cho cả deployment.</li>
+        <li><strong>Timeout/retry:</strong> xử lý throttling theo <code>Retry-After</code>; khi POST timeout phải reconcile trước khi gửi lại để tránh tạo trùng. <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/api-limits">[Service protection limits]</a></li>
+        <li><strong>Update identity:</strong> thay version, key hoặc bỏ type đang được step sử dụng cần kế hoạch rõ; không tự xóa hàng loạt để “đồng bộ”.</li>
+        <li><strong>Scope:</strong> MVP chỉ Dataverse Online + plugin sandbox + bộ registration cơ bản. Custom workflow, on-premises và plugin package là các phạm vi bổ sung.</li>
+      </ul>
+    </section>
+
+    <section id="dialogs">
+      <div class="section-no">06 / Dialogs</div>
+      <h2>Có thể giữ đủ chức năng, nhưng cần thiết kế đúng kiểu VS Code</h2>
+      <p>Dialog đơn giản dùng native UI; cấu hình nhiều trường dùng webview trong editor tab. Đây là các API được VS Code hỗ trợ. Không có đường biến WPF thành native dialog VS Code bằng cách đổi ngôn ngữ. Khả năng đạt tương đương về <em>kết quả công việc</em> là cao; pixel, modality và vòng đời cửa sổ sẽ khác. <a href="https://code.visualstudio.com/api/ux-guidelines/quick-picks">[Quick Picks]</a> <a href="https://code.visualstudio.com/api/extension-guides/webview">[Webviews]</a></p>
+      <div class="table-scroll"><table class="wide"><thead><tr><th>Điểm tham chiếu VSIX</th><th>UI mới đề xuất</th><th>Thiết kế thực tế</th><th>Ưu tiên</th></tr></thead><tbody>
+        <tr><td><code>FormInput</code></td><td>InputBox</td><td>Tên project/class, namespace; validate trực tiếp; cancel không ghi file.</td><td>P0</td></tr>
+        <tr><td><code>FormProject</code></td><td>QuickPick nhiều bước + chọn folder</td><td>Template → tên → vị trí → namespace → preview. Chỉ mở form lớn khi có nhiều tùy chọn.</td><td>P0</td></tr>
+        <tr><td><code>FormItem</code></td><td>QuickPick + context menu</td><td>Xác định project đích từ workspace; template item phù hợp với project; preview file sắp tạo.</td><td>P0</td></tr>
+        <tr><td><code>FormConnection</code></td><td>Environment tree + native picks</td><td>Tenant, URL, account; browser login; status bar chỉ environment đang active.</td><td>P1</td></tr>
+        <tr><td><code>FormPlugin</code></td><td>Webview editor</td><td>Message/table/stage/mode, filtering attributes, image, validation liên trường và review registration.</td><td>P1</td></tr>
+        <tr><td><code>FormReview</code></td><td>Preview tree + text diff</td><td>File mới/cập nhật, remote changes, explicit apply; giữ state khi chuyển tab.</td><td>P0–P1</td></tr>
+        <tr><td><code>FormBuildOutput</code></td><td>OutputChannel + progress + Problems</td><td>Build qua Tasks/process; log theo operation; diagnostics bấm mở đúng file/line.</td><td>P0</td></tr>
+        <tr><td><code>FormWebResource</code></td><td>Tree + multi-select + form mapping</td><td>Chọn files, tên remote, solution, conflict, upload/publish tách rõ.</td><td>P2</td></tr>
+        <tr><td><code>FormCustom</code></td><td>Form theo schema mới</td><td>Giữ ý tưởng tùy biến nhưng xác định lại field contract; không chạy T4/user script ngầm.</td><td>P2–P3</td></tr>
+        <tr><td><code>FormReportDatasets</code></td><td>Webview hoặc custom editor</td><td>Danh sách datasets, query, fields, validation; đọc/ghi đúng RDL mới có giá trị.</td><td>P3</td></tr>
+        <tr><td><code>FormReportMapping</code></td><td>Webview bảng mapping</td><td>Mapping trước/sau, diagnostics và preview; không cam kết thay toàn bộ SSDT/report designer.</td><td>P3</td></tr>
+      </tbody></table></div>
+      <p class="small">11 tên form lấy từ khảo sát component VSIX trong repo; đây là bảng thiết kế tương đương chức năng cho sản phẩm mới, không phải kế hoạch chuyển XAML. P0/P1/P2/P3 liên hệ các giai đoạn ở mục 09.</p>
+      <h3>Một màn hình Plugin Registration nên hoạt động thế nào?</h3>
+      <p><span class="label proposal">ĐỀ XUẤT</span> Mở trong editor tab với ba khu vực: lựa chọn assembly/type ở đầu; form cấu hình step ở giữa; bảng thay đổi và diagnostics ở cuối. Đổi table sẽ cập nhật danh sách thuộc tính và kiểm tra lại images/filtering. Tách thao tác lưu manifest khỏi deploy để người dùng có thể chuẩn bị cấu hình offline và review bằng Git.</p>
+      <div class="split">
+        <div><h4>UI state và tính dễ dùng</h4><ul><li>Hỗ trợ keyboard, theme và screen reader.</li><li>Không mất form khi webview bị ẩn hoặc reload.</li><li>Metadata load có progress/cancel và thông báo cache cũ.</li><li>Validation cạnh field; lỗi deploy hiển thị theo record.</li></ul></div>
+        <div><h4>Ranh giới webview / host</h4><ul><li>Message protocol có version, request ID và schema validation.</li><li>Host thực hiện auth, filesystem và network.</li><li>Token không đi qua HTML hoặc message payload.</li><li>CSP, tài nguyên local giới hạn, escape tên lấy từ metadata.</li></ul></div>
+      </div>
+      <p>Nếu chỉnh trực tiếp một file cấu hình/RDL với undo, save và dirty state, cân nhắc <code>CustomEditorProvider</code>. Nếu chỉ là wizard tạm thời, <code>WebviewPanel</code> đơn giản hơn. TreeView phù hợp với environment/solution và các nhóm component. <a href="https://code.visualstudio.com/api/extension-guides/custom-editors">[Custom editors]</a> <a href="https://code.visualstudio.com/api/extension-guides/tree-view">[Tree View]</a></p>
+      <div class="callout warn"><strong>Không bắt đầu dự án mới trên VS Code Webview UI Toolkit cũ.</strong> Repository Microsoft thông báo toolkit đã deprecated từ 01.01.2025. Có thể dùng HTML semantic, CSS variables của VS Code và UI layer nhỏ; chọn framework/component library riêng sau khi PoC accessibility và maintenance. <a href="https://github.com/microsoft/vscode-webview-ui-toolkit">[Thông báo chính chủ]</a></div>
+    </section>
+
+    <section id="templates">
+      <div class="section-no">07 / Project và item templates</div>
+      <h2>Với greenfield, template engine mới bằng TS là lựa chọn hợp lý</h2>
+      <p>Không cần giữ <code>.vstemplate</code>, <code>IWizard</code>, <code>IDTWizard</code>, DTE hoặc tương thích T4. Đề xuất đóng gói template assets cùng extension và xây một engine TS nhỏ để tính inputs, preview, render và ghi nhiều file. Native snippets chỉ phù hợp chèn một đoạn text, chưa đủ cho project scaffold có nhiều file và metadata.</p>
+      <div class="flow" aria-label="Các bước tạo project hoặc item mới">
+        <div class="node"><strong>Catalog</strong>Template + schema<br>Yêu cầu host/project</div><span class="arrow" aria-hidden="true">→</span>
+        <div class="node"><strong>Inputs</strong>Tên, namespace<br>Metadata nếu cần</div><span class="arrow" aria-hidden="true">→</span>
+        <div class="node"><strong>Plan + preview</strong>Đường dẫn / nội dung<br>Collision / validation</div><span class="arrow" aria-hidden="true">→</span>
+        <div class="node"><strong>Apply</strong>Ghi file có kiểm soát<br>Open project / build</div>
+      </div>
+      <h3>Hai loại template cần phân biệt</h3>
+      <div class="table-scroll"><table><thead><tr><th>Loại</th><th>Ví dụ</th><th>Implementation đề xuất</th></tr></thead><tbody>
+        <tr><td>Scaffold cố định</td><td>Plugin project, class <code>IPlugin</code>, npm project, manifest, tasks</td><td>Assets + placeholder được định nghĩa rõ + điều kiện chọn file. Không cần embedded scripting engine tổng quát.</td></tr>
+        <tr><td>Code generation theo metadata</td><td>Table classes, option sets, JS/TS Form API, Web API helpers</td><td>Dataverse metadata → typed domain model → generator/emitters theo ngôn ngữ → formatter/validation.</td></tr>
+      </tbody></table></div>
+      <p><strong>Generator metadata không chỉ là string replace.</strong> Cần xử lý reserved words, tên trùng, escaping string/XML/comment, nullability, choice/lookup/relationship, ngày giờ và ổn định thứ tự output. Tách mô hình dữ liệu khỏi renderer để có thể kiểm thử bằng fixture offline và giảm khác biệt không cần thiết khi regenerate.</p>
+      <h3>Template đầu tiên nên gồm những gì?</h3>
+      <div class="split">
+        <div><h4>Project: Dataverse Plugin (.NET Framework 4.8)</h4><ul><li>SDK-style <code>.csproj</code> tối giản.</li><li>Class <code>IPlugin</code> mới, namespace hợp lệ.</li><li>Key workflow tạo/nhập rõ ràng.</li><li>Manifest đăng ký mới, chưa chứa credentials.</li><li>VS Code build task và hướng dẫn deploy/trace.</li><li>Không cần connection để tạo skeleton offline.</li></ul></div>
+        <div><h4>Item: New Plugin Class / New Step</h4><ul><li>Chọn đúng project trong multi-root workspace.</li><li>Tên class + fully qualified namespace.</li><li>Table/message từ metadata khi online.</li><li>Source và manifest thay đổi cùng một kế hoạch.</li><li>Preview collisions trước khi ghi.</li><li>Không tự upload chỉ vì người dùng thêm class.</li></ul></div>
+      </div>
+      <h3>Những chi tiết thường làm template hỏng trên Mac/Linux</h3>
+      <ul>
+        <li><strong>Path:</strong> dùng URI/path API, không nối bằng dấu <code>\</code>; hỗ trợ khoảng trắng, Unicode và filesystem phân biệt hoa/thường.</li>
+        <li><strong>Process:</strong> truyền executable và argument array, dùng process execution; không tạo chuỗi lệnh <code>cmd.exe</code> hoặc giả định có PowerShell.</li>
+        <li><strong>File ownership:</strong> đánh dấu file generated và file user-owned. Regenerate không ghi đè business code người dùng đã sửa.</li>
+        <li><strong>Rollback cục bộ:</strong> plan và staging trước; nếu ghi một phần thất bại chỉ cleanup file do operation đó tạo, tránh xóa file đã tồn tại.</li>
+        <li><strong>Project discovery:</strong> chọn project theo thông tin thực tế thay vì giả định có một solution đang mở như Visual Studio.</li>
+        <li><strong>Template version:</strong> record version để biết project được sinh bằng template nào; nâng cấp output là luồng có preview riêng.</li>
+      </ul>
+      <p>VS Code Task Provider có thể tích hợp build tasks và diagnostics. Workspace Trust cần được xét trước khi chạy process hoặc task từ workspace; cho phép đọc/scaffold ở phạm vi hợp lý và chỉ chạy hành động nhạy cảm theo trạng thái trust. <a href="https://code.visualstudio.com/api/extension-guides/task-provider">[Task Provider]</a> <a href="https://code.visualstudio.com/api/extension-guides/workspace-trust">[Workspace Trust]</a></p>
+      <h3>Có nên dùng dotnet new ngay từ đầu?</h3>
+      <p><span class="label proposal">ĐỀ XUẤT</span> Chưa cần. Với mục tiêu toàn bộ trải nghiệm nằm trong extension TS, bundled templates giúp user tạo skeleton ngay cả khi chưa cài SDK. <code>dotnet new</code> có giá trị khi muốn template dùng được ngoài VS Code/CI; có thể bổ sung một template pack sau khi contract ổn định. Không bắt buộc thiết kế dự án mới quanh engine hoặc tên template cũ.</p>
+      <p>Tương tự, không cần sinh lại đủ 13 project templates và 16 item templates hiện có ngay trong bản đầu. Gộp các biến thể thành inputs của một template khi hợp lý; giữ catalog nhỏ cho đến khi workflow tương ứng build/deploy được và có support matrix rõ ràng.</p>
+    </section>
+
+    <section id="scope">
+      <div class="section-no">08 / “Support như VSIX” đến mức nào?</div>
+      <h2>Chức năng DevKit có thể viết lại; dịch vụ của Visual Studio cần xét riêng</h2>
+      <p>Khảo sát repo cho thấy phần VSIX vừa có UI/automation của DevKit, vừa dựa vào host IDE, compiler và các tooling khác. Khi viết mới, nên định nghĩa parity theo use case mà người dùng hoàn thành, thay vì đếm số dialog hoặc yêu cầu toàn bộ IDE giống nhau.</p>
+      <div class="table-scroll"><table class="wide"><thead><tr><th>Nhóm chức năng</th><th>Khả thi với TS mới</th><th>Chi phí tương đối</th><th>Đề xuất phạm vi</th></tr></thead><tbody>
+        <tr><td>Project/item scaffold</td><td class="yes">Cao</td><td>Thấp–vừa</td><td>Plugin net48 + plugin class trước; mở rộng catalog theo workflow.</td></tr>
+        <tr><td>Connection + metadata explorer</td><td class="yes">Cao</td><td>Vừa</td><td>Dataverse Online, OAuth, pagination/cache/refresh có chủ đích.</td></tr>
+        <tr><td>Plugin assembly/step/images</td><td class="yes">Cao, có API nền tảng</td><td>Vừa–cao</td><td>Manifest-first; triển khai lặp lại không trùng, báo partial failure.</td></tr>
+        <tr><td>JS/TS generation + web resources</td><td class="yes">Cao</td><td>Vừa–cao</td><td>Generator viết mới; loại metadata hỗ trợ tăng dần; upload/publish có review.</td></tr>
+        <tr><td>Custom API / Action / Data Provider</td><td class="maybe">Khả thi theo từng loại</td><td>Cao</td><td>Đánh giá endpoint và registration graph riêng; không chỉ thêm file class.</td></tr>
+        <tr><td>Custom workflow activity</td><td class="maybe">Có thể scaffold/build</td><td>Cao</td><td>Workflow dependencies/designer và deployment cần nhánh nghiên cứu riêng; không gộp vào plugin package.</td></tr>
+        <tr><td>Solution pack/unpack và ALM</td><td class="maybe">Có thể làm, phạm vi lớn</td><td>Cao</td><td>Direct API đáp ứng một phần; format/transformation của solution source là bài toán riêng. Adapter PAC tùy chọn nếu sau này chấp nhận dependency ngoài.</td></tr>
+        <tr><td>RDL datasets / mapping</td><td class="maybe">UI có thể làm</td><td>Cao</td><td>Chỉnh dữ liệu có cấu trúc trước; full visual report designer là một sản phẩm lớn hơn.</td></tr>
+        <tr><td>Đọc DLL bất kỳ + attributes</td><td class="maybe">Có thể nghiên cứu</td><td>Cao</td><td>Cần metadata reader; không là điều kiện của project do DevKit mới tạo.</td></tr>
+        <tr><td>Roslyn analyzers như hiện có</td><td class="maybe">Không tự có từ TS UI</td><td>Cao nếu viết mới tương đương</td><td>Analyzer compiler là component .NET riêng. Lint bằng TS không mặc nhiên tương đương phân tích semantic của Roslyn.</td></tr>
+        <tr><td>Local net48 debugger/profiler parity</td><td class="no">Không trong baseline</td><td>Rất cao / ràng buộc tooling</td><td>Trace và integration tests online; nhu cầu replay trên Windows ghi nhận riêng.</td></tr>
+        <tr><td>On-prem AD/legacy auth</td><td class="maybe">Cần khảo sát riêng</td><td>Cao</td><td>Để sau. Không lấy Dataverse Online hoạt động làm bằng chứng on-prem hoạt động.</td></tr>
+      </tbody></table></div>
+      <p class="small">Mức chi phí là đánh giá thiết kế tương đối, không phải estimate đo từ implementation. Giới hạn plugin package đối với custom workflow/on-prem/native dependency xem <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/build-and-package">Build and package plug-in code</a>; giới hạn debugger xem <a href="https://code.visualstudio.com/docs/csharp/cs-dev-kit-faq">C# FAQ</a>.</p>
+      <h3>Tham khảo hệ sinh thái Microsoft nhưng không suy diễn parity</h3>
+      <p>Microsoft có Power Platform Tools cho VS Code và repository chính chủ, minh họa một sản phẩm Power Platform hoạt động trên VS Code. Tuy nhiên kiến trúc đó có sử dụng PAC; sự tồn tại của extension này không chứng minh mọi tác vụ của Visual Studio hoặc mọi subcommand đều đa nền tảng. Với giả định viết mới của báo cáo này, chúng chỉ là nguồn tham khảo UX/tooling, không là backend bắt buộc. <a href="https://learn.microsoft.com/en-us/power-platform/developer/tools">[Developer tools]</a> <a href="https://github.com/microsoft/powerplatform-vscode">[Repository Microsoft]</a></p>
+      <div class="callout"><strong>Chi phí đáng kể nhất của greenfield:</strong> bạn tự chịu trách nhiệm cho các trường hợp biên đã được xử lý trong sản phẩm cũ: metadata đặc biệt, đặt tên, cập nhật assembly, retry, state, compatibility và diagnostics. Đổi lại, không bị ràng buộc bởi host Windows và không phải duy trì một lớp tương thích VSIX/T4.</div>
+    </section>
+
+    <section id="roadmap">
+      <div class="section-no">09 / Làm từ từ nhưng mỗi bước dùng được</div>
+      <h2>Lộ trình đề xuất: plugin trước, mở rộng sau</h2>
+      <p>Không đặt deadline giả khi chưa có PoC. Mỗi giai đoạn có một kết quả có thể demo và một điều kiện để mở rộng. Các bước này là kế hoạch tương lai; nghiên cứu hiện tại không tạo project, không chạy build hoặc thay đổi môi trường Dataverse.</p>
+      <div class="step"><h3>P0a · Chứng minh đường net48 trên ba OS</h3><p>Chọn SDK/package baseline, tạo project tối thiểu, build + strong-name signing với key hợp lệ trên Windows, macOS và Linux; thử editor C#. Đăng ký DLL thử trong Dataverse test environment bằng một PoC có thể bỏ đi.</p><p><strong>Qua bước khi:</strong> có DLL từ từng OS chạy được cùng kịch bản plugin trên server; biết rõ phần C# tooling nào hỗ trợ được. Không dùng Windows build agent thay cho bằng chứng Mac/Linux.</p></div>
+      <div class="step"><h3>P0b · Extension và template offline đầu tiên</h3><p>Khởi tạo component <code>DynamicsCrm.DevKit.VsCode</code>; command Create Plugin Project, Add Plugin Class, preview, key setup, build task, output/diagnostics. Tất cả logic mới bằng TS; template assets C# trong component.</p><p><strong>Qua bước khi:</strong> từ folder trống có thể tạo project, build được, cancel không để file rác, đường dẫn có khoảng trắng/Unicode hoạt động.</p></div>
+      <div class="step"><h3>P1a · Connection và metadata chỉ đọc</h3><p>MSAL, app registration, account/environment selection, secret cache; tree solutions/tables/messages. Hỗ trợ refresh, pagination, hủy thao tác và lỗi quyền rõ ràng.</p><p><strong>Qua bước khi:</strong> login và đổi environment hoạt động trên ba OS; không lẫn tài khoản/token; metadata được dùng để validate wizard.</p></div>
+      <div class="step"><h3>P1b · Plugin workflow hoàn chỉnh</h3><p>Webview cấu hình step/images, manifest có schema, build → plan → deploy → verify → trace. Trước hết hỗ trợ một số message/stage hợp lệ, sau đó mở rộng theo nhu cầu.</p><p><strong>Qua bước khi:</strong> tạo mới, cập nhật, deploy lặp lại, xử lý conflict và retry có kết quả kiểm chứng; lỗi một bước không được báo thành công toàn bộ.</p></div>
+      <div class="step"><h3>P2 · Client generation và web resources</h3><p>WebResource TS project, metadata model mới, generator Form/Web API, upload/publish, preview diff. Ưu tiên loại field/entity mà người dùng thực tế cần trước.</p><p><strong>Qua bước khi:</strong> generated output compile được và chạy đúng trên model-driven app; regenerate giữ nguyên user code; deploy không ghi đè nhầm resource.</p></div>
+      <div class="step"><h3>P3 · Mở rộng parity theo giá trị</h3><p>Custom API, plugin packages, solution operations, dataset/mapping, nâng cao generator, remote hosts. Với workflow/on-prem/report designer, mở PoC riêng trước khi đưa vào support matrix.</p><p><strong>Qua bước khi:</strong> từng tính năng có phạm vi hỗ trợ, fixtures, kiểm thử tích hợp và hạn chế được ghi rõ; không chạy theo số lượng template.</p></div>
+      <h3>Phát hành nhỏ, độc lập với VSIX</h3>
+      <p><span class="label proposal">ĐỀ XUẤT</span> Package/publisher/extension ID và release cadence riêng. Có thể cài song song với VSIX vì là hai host khác nhau. Không cần chờ đạt toàn bộ parity mới dùng thử; mỗi release công bố rõ supported workflows. Pin <code>engines.vscode</code>, lock dependencies, đóng gói assets đầy đủ và smoke-test extension thực tế trên ba OS. <a href="https://code.visualstudio.com/api/working-with-extensions/publishing-extension">[Publishing]</a> <a href="https://code.visualstudio.com/api/working-with-extensions/testing-extension">[Extension testing]</a></p>
+      <div class="callout good"><strong>Mốc đầu tiên đáng đầu tư:</strong> “Từ Mac/Linux, mở folder trống → tạo plugin net48 → build/sign → đăng ký một step → nhìn thấy kết quả và trace trên Dataverse.” Chứng minh được chuỗi này thì mở rộng các dialog và template mới có nền tảng vững.</div>
+    </section>
+
+    <section id="proof">
+      <div class="section-no">10 / Độ chắc chắn và các câu hỏi còn mở</div>
+      <h2>Đừng dùng “extension chạy được” thay cho “workflow chạy được”</h2>
+      <p><span class="label poc">CHƯA CHẠY</span> Nghiên cứu này chỉ đọc repository và tài liệu mạng. Không có build, signing, deploy, test Mac/Linux, kiểm tra tenant hoặc cài extension. Các phép thử dưới đây là tiêu chí nghiệm thu tương lai.</p>
+      <div class="table-scroll"><table class="wide"><thead><tr><th>PoC / test</th><th>Bằng chứng cần thu</th><th>Nếu thất bại thì điều chỉnh gì?</th></tr></thead><tbody>
+        <tr><td>SDK-style net48 build</td><td>OS/architecture, SDK version, package lock, lệnh restore/build, diagnostics, DLL hash.</td><td>Loại build task phụ thuộc Windows; đơn giản hóa template; xác nhận NuGet dependency và targeting references.</td></tr>
+        <tr><td>Signing + load trong Dataverse</td><td>Strong-name identity, key format, DLL từ từng OS được register và thực thi.</td><td>Sửa key generation/signing; đánh giá package route nếu phù hợp. Không chuyển âm thầm sang PublicSign.</td></tr>
+        <tr><td>C# editing</td><td>Project load, completion, go-to-definition, build errors và file navigation trên mỗi OS.</td><td>Chọn/configure C# extension phù hợp, ghi giới hạn. Không quảng cáo hỗ trợ debugger net48.</td></tr>
+        <tr><td>Authentication</td><td>Browser/PKCE, silent refresh, account switch, denied consent, proxy và tenant policy.</td><td>Hoàn thiện app registration/callback/cache; fallback flow chỉ trong policy cho phép.</td></tr>
+        <tr><td>Deploy từ manifest</td><td>Create/update assembly/type/step/image; solution membership; triển khai lần hai không trùng.</td><td>Sửa reconciliation, identity keys, state theo environment. Không giải quyết bằng xóa/tạo lại toàn bộ.</td></tr>
+        <tr><td>Output thực thi</td><td>Tạo/update record thử kích hoạt plugin; xác minh kết quả và trace/correlation.</td><td>Phân biệt lỗi generator, registration, permission và business code.</td></tr>
+        <tr><td>Template reliability</td><td>Unicode, case-sensitive paths, existing file, cancel, multi-root, offline generation.</td><td>Sửa file planning và validation trước khi tăng số template.</td></tr>
+        <tr><td>UI chất lượng</td><td>Keyboard, theme, screen reader, restore state, no secret leakage, untrusted workspace.</td><td>Hoàn thiện host/webview boundary và UX, không bổ sung API đặc quyền tùy tiện.</td></tr>
+        <tr><td>Remote host</td><td>Build trên đúng workspace host, token flow, path và task cancellation trong SSH/container.</td><td>Giới hạn support matrix ở local desktop cho đến khi qua gate.</td></tr>
+      </tbody></table></div>
+      <h3>Ma trận tối thiểu trước khi ghi “cross-platform supported”</h3>
+      <p><span class="pill">Windows x64</span><span class="pill">macOS Apple Silicon</span><span class="pill">Linux x64</span><span class="pill">Tổ hợp khác: chỉ công bố sau khi test</span></p>
+      <p>Unit test TS dùng metadata fixtures không thay cho extension-host test; extension-host test không thay cho build output C#; build output C# không thay cho Dataverse execution test. Chỉ mở rộng CI theo tính năng đang triển khai, không yêu cầu mọi tổ hợp có cùng độ ưu tiên ngay từ đầu. <a href="https://code.visualstudio.com/api/working-with-extensions/testing-extension">[Testing extensions]</a> <a href="https://code.visualstudio.com/api/working-with-extensions/continuous-integration">[Continuous integration]</a></p>
+      <h3>Các rủi ro cần ghi vào kế hoạch, không cần chặn khởi đầu</h3>
+      <ul class="checklist">
+        <li><strong>Chính sách auth của tenant:</strong> public client, redirect/consent/device code có thể khác nhau; chốt tenant thử nghiệm sớm.</li>
+        <li><strong>Khóa ký:</strong> trải nghiệm tạo project hoàn chỉnh cần key setup đa OS, không chỉ nút tạo folder.</li>
+        <li><strong>Metadata volume:</strong> môi trường lớn cần pagination/cache và cancellation, không tải tất cả mỗi lần mở wizard.</li>
+        <li><strong>Template compatibility:</strong> viết mới cho phép schema mới; nếu tương lai muốn mở project cũ, đó là scope bổ sung, không được tính là miễn phí.</li>
+        <li><strong>Claim parity:</strong> full report designer, debugger và semantic analyzers có chi phí khác hẳn form CRUD.</li>
+      </ul>
+    </section>
+
+    <section id="decisions">
+      <div class="section-no">11 / Đề xuất chốt cho phương án mới</div>
+      <h2>Có thể bắt đầu độc lập và phát triển từng phần</h2>
+      <div class="table-scroll"><table><thead><tr><th>Quyết định</th><th>Đề xuất</th></tr></thead><tbody>
+        <tr><td>Component</td><td><code>DynamicsCrm.DevKit.VsCode</code>; tất cả implementation mới của extension nằm trong đây.</td></tr>
+        <tr><td>Ngôn ngữ</td><td>TypeScript cho logic extension và generator; C# chỉ là output/plugin assets của người dùng.</td></tr>
+        <tr><td>Backend</td><td>Dataverse Web API trực tiếp, MSAL Node; không phụ thuộc backend DevKit cũ.</td></tr>
+        <tr><td>Host support ban đầu</td><td>VS Code desktop trên Windows/macOS/Linux; Dataverse Online.</td></tr>
+        <tr><td>Project đầu tiên</td><td>SDK-style plugin <code>net48</code>, managed library, dependency tối giản, ký thật.</td></tr>
+        <tr><td>Registration</td><td>Manifest-first; source/type/step được thiết kế cùng nhau; có plan, apply, verify và trace.</td></tr>
+        <tr><td>Dialogs</td><td>Native QuickPick/InputBox cho việc nhỏ; webview cho cấu hình nhiều trường; tree/diff/output cho duyệt và review.</td></tr>
+        <tr><td>Template engine</td><td>Assets + schema + renderer/generator TS mới; không yêu cầu tương thích T4 hoặc VS template engine.</td></tr>
+        <tr><td>Debug</td><td>Không hứa local net48 F5 trên Mac/Linux; ưu tiên server trace/integration tests và test logic tách riêng.</td></tr>
+        <tr><td>Thứ tự</td><td>PoC net48/signing → scaffold/build → auth/metadata → plugin registration → client/webresources → mở rộng.</td></tr>
+      </tbody></table></div>
+      <p class="decision"><strong>Trả lời trực tiếp:</strong> hướng bạn đề xuất khả thi và phù hợp để làm dần. Một project plugin <code>net48</code> mới có thể được tạo và biên dịch từ Mac/Linux, rồi chạy trên Dataverse. Phần không tự có là CLR/debugger .NET Framework chạy local như Visual Studio. Nếu chấp nhận ranh giới đó, không có lý do kiến trúc buộc DevKit mới phải lệ thuộc VSIX hoặc Windows.</p>
+      <p class="small">Tài liệu này độc lập với báo cáo migration ngày 08.10.2026. Báo cáo cũ giữ nguyên. Task chỉ bổ sung file HTML nghiên cứu trong <code>Docs</code>; chưa tạo component VS Code, chưa đổi source và chưa chạy quy trình build/release.</p>
+    </section>
+
+    <section id="sources">
+      <div class="section-no">12 / Nguồn kiểm chứng</div>
+      <h2>Tài liệu đã đối chiếu và cách đọc bằng chứng</h2>
+      <p>Ưu tiên Microsoft Learn, VS Code documentation và source/repository chính chủ. Các liên kết nằm ngay cạnh nhận định tương ứng; danh sách dưới đây giúp review sâu. Nội dung được kiểm tra ngày <strong>08.10.2026</strong>. “Khả thi” là kết luận tổng hợp từ hợp đồng nền tảng và thiết kế đề xuất, không phải kết quả chạy thử sản phẩm chưa tồn tại.</p>
+      <ol class="sources">
+        <li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/supported-customizations">Dataverse — Supported customizations</a><span class="desc">Nguồn quyết định target plugin: Framework 4.6.2–4.8, khuyến nghị 4.8 cho project mới; không suy target plugin từ version SDK trên máy.</span></li>
+        <li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/write-plug-in">Dataverse — Write a plug-in</a><span class="desc">Hợp đồng plugin assembly và IPlugin.</span></li>
+        <li><a href="https://github.com/microsoft/dotnet/blob/main/releases/reference-assemblies/README.md">Microsoft .NET — Reference assembly packages</a><span class="desc">Bằng chứng trực tiếp về build thư viện .NET Framework trên các OS được .NET SDK hỗ trợ.</span></li>
+        <li><a href="https://learn.microsoft.com/en-us/dotnet/framework/migration-guide/reference-assemblies">Build .NET Framework without the installed targeting pack</a><span class="desc">Reference assemblies NuGet và SDK-style project.</span></li>
+        <li><a href="https://dotnet.microsoft.com/en-us/learn/dotnet/what-is-dotnet-framework">What is .NET Framework?</a><span class="desc">Phân biệt runtime Windows của .NET Framework với .NET đa nền tảng.</span></li>
+        <li><a href="https://code.visualstudio.com/docs/csharp/cs-dev-kit-faq">C# Dev Kit FAQ</a><span class="desc">Giới hạn .NET Framework, project support và debugger trong VS Code.</span></li>
+        <li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/security">C# compiler options — signing</a><span class="desc">KeyFile, PublicSign và DelaySign; không đồng nhất public signing với private-key signing.</span></li>
+        <li><a href="https://github.com/dotnet/roslyn/blob/main/src/Compilers/Core/Portable/StrongName/DesktopStrongNameProvider.cs">Roslyn — Strong-name provider implementation</a><span class="desc">Đường ký PE bằng RSA trong compiler; không thay cho deployment PoC.</span></li>
+        <li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/build-and-package">Dataverse — Build and package plug-in code</a><span class="desc">Standalone assemblies, signing, plugin package, dependent assemblies và giới hạn.</span></li>
+        <li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/overview">Dataverse Web API overview</a><span class="desc">HTTP/OData từ nhiều ngôn ngữ, cơ sở cho backend TypeScript trực tiếp.</span></li>
+        <li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/authenticate-oauth">Use OAuth with Dataverse</a> · <a href="https://learn.microsoft.com/en-us/entra/msal/javascript/node/acquire-token-requests">MSAL Node token acquisition</a><span class="desc">App identity, authorization-code/PKCE, device code và silent token acquisition.</span></li>
+        <li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/register-plug-in">Register a plug-in</a><span class="desc">Các thành phần registration và những thao tác ngoài upload assembly.</span></li>
+        <li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/pluginassembly?view=dataverse-latest">pluginassembly</a> · <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/plugintype?view=dataverse-latest">plugintype</a> · <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/sdkmessageprocessingstep?view=dataverse-latest">sdkmessageprocessingstep</a><span class="desc">Entity reference cho registration engine mới.</span></li>
+        <li><a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/addsolutioncomponent?view=dataverse-latest">AddSolutionComponent action</a> · <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/api-limits">Service protection API limits</a><span class="desc">Solution membership và xử lý giới hạn dịch vụ.</span></li>
+        <li><a href="https://code.visualstudio.com/api/ux-guidelines/quick-picks">VS Code — Quick Picks</a> · <a href="https://code.visualstudio.com/api/extension-guides/tree-view">Tree View</a><span class="desc">UI native cho chọn lựa và duyệt đối tượng.</span></li>
+        <li><a href="https://code.visualstudio.com/api/extension-guides/webview">VS Code — Webviews</a> · <a href="https://code.visualstudio.com/api/extension-guides/custom-editors">Custom editors</a><span class="desc">Form phức tạp, editor state, message passing và security boundary.</span></li>
+        <li><a href="https://github.com/microsoft/vscode-webview-ui-toolkit">Microsoft Webview UI Toolkit repository</a><span class="desc">Thông báo deprecated; không chọn toolkit cũ làm nền tảng cho greenfield.</span></li>
+        <li><a href="https://code.visualstudio.com/api/references/vscode-api#SecretStorage">VS Code API — SecretStorage</a> · <a href="https://code.visualstudio.com/api/extension-guides/workspace-trust">Workspace Trust</a><span class="desc">Credential storage và hành động liên quan workspace/process.</span></li>
+        <li><a href="https://code.visualstudio.com/api/extension-guides/task-provider">VS Code — Task Provider</a><span class="desc">Build task integration thay cho shell script đặc thù Windows.</span></li>
+        <li><a href="https://code.visualstudio.com/api/advanced-topics/remote-extensions">Remote extensions</a> · <a href="https://code.visualstudio.com/api/extension-guides/web-extensions">Web extensions</a><span class="desc">Phân biệt local, remote workspace và browser runtime.</span></li>
+        <li><a href="https://code.visualstudio.com/api/working-with-extensions/publishing-extension">Publishing extensions</a> · <a href="https://code.visualstudio.com/api/working-with-extensions/testing-extension">Testing extensions</a> · <a href="https://code.visualstudio.com/api/working-with-extensions/continuous-integration">Continuous integration</a><span class="desc">Đóng gói, cài thử và kiểm chứng extension.</span></li>
+        <li><a href="https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-new">dotnet new</a><span class="desc">Template-specific options; không giả định classlib mặc định nhận target net48.</span></li>
+        <li><a href="https://learn.microsoft.com/en-us/power-platform/developer/tools">Power Platform developer tools</a> · <a href="https://github.com/microsoft/powerplatform-vscode">Microsoft Power Platform VS Code repository</a><span class="desc">Nguồn tham khảo chính chủ về hệ sinh thái; không là bằng chứng full Visual Studio parity hoặc backend thuần TS.</span></li>
+      </ol>
+      <h3>Dữ kiện repository và giới hạn khảo sát</h3>
+      <p>Đọc repository tại <code>E:\src\github\Dynamics-Crm-DevKit\v5</code>, mốc HEAD khảo sát <code>33ea4a535</code>. Tham chiếu component VSIX, project/item templates và bộ dialog để xác định chức năng tương đương; không lấy implementation cũ làm dependency. Các số 11 dialog, 13 project templates, 16 item templates là inventory tham chiếu, không phải cam kết số tính năng của MVP.</p>
+      <p class="small">Báo cáo không xác nhận một phiên bản compiler/package cụ thể đã pass, không kiểm chứng credentials/quyền Dataverse, không đo effort thực tế, và không xác nhận hỗ trợ runtime net48 ngoài Windows. Những hạn chế này đã được chuyển thành các PoC cụ thể ở mục 10.</p>
+    </section>
+    <footer>DynamicsCrm.DevKit · Greenfield VS Code / TypeScript research · 08.10.2026<br>HTML tự chứa, không tải script/font từ mạng. Các liên kết nguồn cần Internet khi mở.</footer>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Phân tích chiến lược hỗ trợ Item Templates và Project Templates của DynamicsCrm.DevKit trên macOS, Linux và Windows: So sánh VS Code Extension vs CLI vs CLI MCP.">
+<title>DynamicsCrm.DevKit · Chiến lược Đa nền tảng cho Project &amp; Item Templates (VS Code vs CLI vs CLI MCP)</title>
+<style>
+:root{--ink:#162f3d;--muted:#506671;--paper:#f2f5f4;--white:#fff;--line:#dbe4e3;--teal:#087e7c;--blue:#24639a;--amber:#8c570e;--purple:#5e35b1;--nav:#132e3b;--soft:#e7f3ef;--danger:#b42318}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.72 "Segoe UI",system-ui,-apple-system,Arial,sans-serif}a{color:var(--blue);text-underline-offset:3px}a:hover{color:var(--teal)}code{font:13px/1.6 Consolas,Monaco,monospace;background:#edf2f4;padding:2px 6px;border-radius:4px;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#142e3b;color:#edf8f5;border-radius:12px;padding:20px;font:13.5px/1.75 Consolas,Monaco,monospace;margin:16px 0}pre code{background:transparent;color:inherit;padding:0}.layout{display:grid;grid-template-columns:256px minmax(0,1fr)}aside{background:var(--nav);color:#c1d6db;padding:28px 22px;position:sticky;top:0;height:100vh;overflow-y:auto}aside .brand{font-size:17px;color:white;font-weight:700}aside .caption{font-size:12px;color:#9fb9c2;margin:8px 0 22px;line-height:1.5}nav{display:grid;gap:4px}nav a{color:#c1d6db;text-decoration:none;border-radius:6px;padding:7px 10px;font-size:13px;transition:background .15s}nav a:hover{background:#294753;color:#fff}aside .note{margin-top:28px;font-size:12px;line-height:1.65;color:#9fb9c2;border-top:1px solid #284654;padding-top:16px}main{max-width:1440px;padding:40px 48px 36px;min-width:0}.hero{padding:10px 0 30px}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:2px;font-weight:700;color:var(--teal)}h1{font-size:clamp(32px,3.5vw,52px);line-height:1.14;letter-spacing:-1.2px;margin:16px 0 20px;max-width:980px}h2{font-size:26px;letter-spacing:-.4px;line-height:1.3;margin:0 0 16px}h3{font-size:18.5px;line-height:1.4;margin:24px 0 10px}p{margin:12px 0}.lead{font-size:19px;max-width:1050px;line-height:1.68;color:#233e4c}.meta,.small{font-size:13px;color:var(--muted)}.tag{display:inline-block;font-size:11px;letter-spacing:.4px;text-transform:uppercase;padding:4px 9px;border-radius:5px;background:var(--soft);color:#17604e;font-weight:700;margin-right:6px}.tag.warn{background:#fff0d6;color:var(--amber)}.tag.purple{background:#ede7f6;color:var(--purple)}.tag.blue{background:#e3f2fd;color:var(--blue)}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:26px}.stat{background:white;border:1px solid var(--line);border-radius:12px;padding:18px}.stat b{display:block;font-size:28px;line-height:1.2;color:var(--teal)}.stat span{display:block;font-size:12.5px;margin-top:8px;color:var(--muted)}section{margin:0 0 24px;background:white;border:1px solid var(--line);border-radius:15px;padding:30px 32px;min-width:0}.num{color:var(--teal);font-size:12.5px;font-weight:700;letter-spacing:1.5px;display:block;margin-bottom:8px;text-transform:uppercase}.callout{padding:18px 22px;border-left:4px solid var(--teal);background:#eef7f4;border-radius:0 10px 10px 0;margin:20px 0}.callout.warn{background:#fff6e7;border-color:#d2993c}.callout.blue{background:#edf4fb;border-color:var(--blue)}.callout.purple{background:#f3eefc;border-color:var(--purple)}.decision{background:#163846;color:#eff8f6;border:0}.decision .num{color:#81ddd1}.decision p,.decision li{color:#dceceb}.decision strong{color:white}.decision code{background:#2d505f;color:#fff}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{border:1px solid var(--line);border-radius:11px;padding:20px;min-width:0;background:#fcfdfd}.card h3{margin-top:0}.card p{font-size:14.5px}.table-scroll{overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:10px}table{width:100%;border-collapse:collapse;font-size:14px;text-align:left;line-height:1.6}th{background:#edf3f3;font-weight:700;color:#264b59}th,td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}tr:last-child td{border-bottom:0}td:first-child{font-weight:600}ul,ol{padding-left:22px}li{margin:6px 0}.pill{display:inline-block;border:1px solid #cbddda;padding:2px 8px;border-radius:99px;font-size:11.5px;font-weight:600;white-space:nowrap}.pill.good{background:#e6f4ea;color:#116346;border-color:#b7dfc4}.pill.mid{background:#fff6e5;color:#8c570e;border-color:#f0d29c}.pill.bad{background:#fdeceb;color:#b42318;border-color:#f5c2c0}.score-bar{display:flex;align-items:center;gap:8px;font-weight:700}.footer{color:var(--muted);font-size:12.5px;padding:12px 4px 28px}
+@media(max-width:1150px){.layout{grid-template-columns:210px minmax(0,1fr)}main{padding:28px 25px}.stats,.grid3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.layout{display:block}aside{position:relative;height:auto;padding:20px}.stats,.grid2,.grid3{grid-template-columns:1fr}main{padding:20px 14px}section{padding:22px 18px}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <div class="brand">DynamicsCrm.DevKit</div>
+  <div class="caption">ARCHITECTURE ANALYSIS · 16.10.2026<br>CROSS-PLATFORM TEMPLATES</div>
+  <nav aria-label="Mục lục">
+    <a href="#executive-summary">01 · Kết luận &amp; Đề xuất cốt lõi</a>
+    <a href="#current-state">02 · Giải phẫu VSIX Templates hiện tại</a>
+    <a href="#three-options">03 · Phân tích 3 phương án (VS Code / CLI / MCP)</a>
+    <a href="#comparison-matrix">04 · Ma trận so sánh đa chiều</a>
+    <a href="#hybrid-architecture">05 · Kiến trúc "Core CLI + MCP + VS Code"</a>
+    <a href="#template-audit">06 · Đánh giá 13 Project &amp; 17 Item Templates</a>
+    <a href="#os-blockers">07 · Rào cản kỹ thuật trên macOS &amp; Linux</a>
+    <a href="#design-commands">08 · Thiết kế CLI &amp; MCP Tools đề xuất</a>
+    <a href="#roadmap">09 · Lộ trình triển khai (Phased Roadmap)</a>
+  </nav>
+  <div class="note">
+    <strong>Mục tiêu:</strong> Đưa hệ thống Project &amp; Item Templates của VSIX chạy đa nền tảng (Windows, macOS, Linux).<br><br>
+    <strong>Phạm vi:</strong> So sánh kiến trúc VS Code Extension, DevKit CLI và DevKit CLI MCP dựa trên mã nguồn thực tế của nhánh <code>v5</code>.
+  </div>
+</aside>
+
+<main>
+  <header class="hero">
+    <div class="eyebrow">Cross-Platform Template Architecture · macOS / Linux / Windows</div>
+    <h1>Nên chọn VS Code Extension, CLI hay CLI MCP để chạy Project &amp; Item Templates?</h1>
+    <p class="lead">
+      VSIX hiện tại sở hữu <strong>13 Project Templates</strong> và <strong>17 Item Templates</strong> cực kỳ mạnh mẽ nhưng bị khóa chặt vào <code>.NET Framework 4.8</code>, <code>EnvDTE</code>, <code>WPF Dialog</code> và dịch vụ <code>STextTemplating</code> của Visual Studio trên Windows. Để chạy trên <strong>macOS và Linux</strong>, câu trả lời tốt nhất không phải là chọn 1 bỏ 2, mà là <strong>đặt toàn bộ Template Engine vào CLI (.NET 10) làm lõi duy nhất</strong>, đồng thời mở ra <strong>CLI Interactive + CLI MCP Tools</strong> ngay trong cùng binary, và dùng <strong>VS Code Extension mỏng (thin wrapper)</strong> ở giai đoạn sau.
+    </p>
+    <p>
+      <span class="tag">Khuyến nghị số 1: CLI Core + CLI MCP</span>
+      <span class="tag blue">Tái sử dụng 85% Shared + Services</span>
+      <span class="tag purple">Zero-UI Lock-in trên Mac/Linux</span>
+    </p>
+    <div class="stats">
+      <div class="stat"><b>13</b><span>Project Templates trong VSIX (<code>Server</code>, <code>WebResourceTs</code>, <code>Shared</code>, <code>ConsoleCore</code>...)</span></div>
+      <div class="stat"><b>16 + 1</b><span>Item Templates + <code>ReportItemWizard</code> phụ thuộc Metadata &amp; T4</span></div>
+      <div class="stat"><b>1 Binary</b><span><code>DynamicsCrm.DevKit.Cli</code> (.NET 10) đã chứa cả CLI, <code>devkit tool</code> và <code>devkit mcp</code></span></div>
+      <div class="stat"><b>3 OS</b><span>Windows · macOS (Intel/Apple Silicon) · Linux (x64/ARM64)</span></div>
+    </div>
+  </header>
+
+  <!-- 01. EXECUTIVE SUMMARY -->
+  <section id="executive-summary" class="decision">
+    <span class="num">01 / KẾT LUẬN &amp; KHUYẾN NGHỊ CHIẾN LƯỢC</span>
+    <h2>Đừng bắt đầu bằng VS Code Extension đơn lẻ — hãy bắt đầu từ CLI + CLI MCP.</h2>
+    <p>
+      Qua phân tích mã nguồn thực tế tại <code>DynamicsCrm.DevKit.Vsix/Wizard/</code>, <code>DynamicsCrm.DevKit.Shared/</code> và <code>DynamicsCrm.DevKit.Cli/</code>, bản chất của việc tạo Project/Item Template trong DevKit gồm <strong>3 bước</strong>:
+      (1) Kết nối Dataverse &amp; lấy Metadata (Entities, Forms, Messages, CustomApis, Solutions),
+      (2) Render nội dung qua <code>CodeGenService</code> + <code>T4Helper</code> + <code>Replacement</code>, và
+      (3) Ghi file xuống ổ đĩa + cập nhật cấu trúc Solution/Project (<code>.sln</code> / <code>.csproj</code> / <code>devkit.json</code>).
+    </p>
+    <ul>
+      <li><strong>Tại sao KHÔNG nên làm VS Code Extension độc lập trước?</strong> Viết VS Code Extension bằng TypeScript đòi hỏi phải dựng lại 11 màn hình WPF sang Webview/QuickPick, đồng thời vẫn phải gọi xuống một tiến trình .NET bên dưới để lấy Metadata từ Dataverse và chạy T4/CodeGen. Nếu logic tạo template nằm ở tầng VS Code, người dùng dùng JetBrains Rider trên Mac, dùng Neovim, chạy CI/CD hoặc dùng Claude Code / Cursor CLI sẽ không dùng được.</li>
+      <li><strong>Tại sao CLI + CLI MCP là bước đi chiến lược?</strong> Trong kiến trúc hiện tại của <code>v5</code>, <code>DynamicsCrm.DevKit.Cli</code> đã tích hợp sẵn cả 3 chế độ:
+        <ul>
+          <li><strong>Normal CLI</strong> (<code>devkit ...</code> dùng <code>Spectre.Console.Cli</code> — hỗ trợ cả truyền tham số lẫn menu tương tác đẹp mắt trên Terminal Mac/Linux).</li>
+          <li><strong>MCP Server</strong> (<code>devkit mcp</code> — cho phép AI Agent như Claude Desktop, Cursor, VS Code Copilot, Antigravity tự động tra cứu table/message rồi tạo project/item chuẩn xác bằng ngôn ngữ tự nhiên).</li>
+          <li><strong>Tool Invoker</strong> (<code>devkit tool call &lt;tool_name&gt;</code> — gọi trực tiếp MCP tool từ dòng lệnh hoặc script với JSON schema tự động).</li>
+        </ul>
+      </li>
+      <li><strong>Kết luận:</strong> Hãy xây dựng <strong>Cross-Platform Template Engine ngay trong <code>DynamicsCrm.DevKit.Shared</code> + <code>DynamicsCrm.DevKit.Cli</code></strong>. Khi có CLI (`devkit new ...`) và MCP Tools (`scaffold_project`, `scaffold_item`), bạn lập tức hỗ trợ được Mac/Linux trên <strong>mọi IDE</strong> (VS Code, Rider, Cursor, Antigravity, Terminal). Sau đó, nếu cần trải nghiệm chuột phải trên VS Code, chỉ mất 15% công sức để bọc một VS Code Extension siêu mỏng gọi `devkit` CLI bên dưới.</li>
+    </ul>
+  </section>
+
+  <!-- 02. CURRENT STATE -->
+  <section id="current-state">
+    <span class="num">02 / GIẢI PHẪU VSIX HIỆN TẠI</span>
+    <h2>Điều gì làm cho Project &amp; Item Templates của VSIX "quá hay" — và điều gì đang giữ chân nó trên Windows?</h2>
+    <p>
+      Không giống như các template tĩnh thông thường (chỉ đổi tên file và namespace), các template trong <code>DynamicsCrm.DevKit.Vsix</code> là <strong>Metadata-Driven Interactive Wizards</strong> (Wizard thông minh kết nối trực tiếp vào Dataverse):
+    </p>
+    <div class="grid2">
+      <div class="card">
+        <h3>Điểm mạnh cốt lõi của VSIX Templates</h3>
+        <ul>
+          <li><strong>Kết nối sống tới Dataverse:</strong> Tự động tải danh sách Entities, Messages, Stages, Execution Modes, Solutions, Forms, Custom APIs, Virtual Entity Data Sources ngay lúc tạo file.</li>
+          <li><strong>T4 Template tùy biến được:</strong> <code>T4Helper.cs</code> nạp file <code>.tt</code> từ <code>DynamicsCrm.DevKit.Shared/Resources/tt/</code> (hoặc Custom Template nén trong cấu hình) và truyền <code>T4Context</code> để sinh code C# chuẩn chỉnh kèm <code>[CrmPluginRegistration]</code>.</li>
+          <li><strong>Sinh bộ file kép thông minh:</strong> Ví dụ <code>JsForm</code> sinh cùng lúc <code>Account.js</code>, <code>Account.form.js</code>, <code>Account.d.ts</code> (kiểm tra xem <code>Account.webapi.js</code> đã tồn tại chưa để gộp Intellisense). <code>LateBound</code> sinh <code>Account.cs</code> và <code>Account.generated.cs</code>.</li>
+          <li><strong>Tự động hóa NuGet &amp; Signing:</strong> <code>Replacement.cs</code> tự tra phiên bản NuGet mới nhất, điền <code>$CliConnectionArgs$</code> vào các file script, và <code>SigningHelper</code> tự tạo khóa <code>.snk</code>.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Các thành phần đang khóa chặt vào VS 2026 / Windows</h3>
+        <ul>
+          <li><strong>UI Layer (WPF):</strong> <code>FormProject</code>, <code>FormPlugin</code>, <code>FormItem</code>, <code>FormConnection2</code> dùng <code>PresentationFramework</code> (chỉ chạy trên Windows).</li>
+          <li><strong>IDE Automation (<code>EnvDTE</code> &amp; <code>VS.Shell</code>):</strong> <code>IWizard</code>, <code>VsixHelper.SelectedItem</code>, <code>TrySetDependentUpon</code>, <code>FixProjectFolder</code> phụ thuộc COM API của Visual Studio.</li>
+          <li><strong>Visual Studio T4 Host:</strong> <code>T4Helper.ProcessTemplateAsync</code> gọi <code>VS.GetServiceAsync&lt;STextTemplating, ITextTemplating&gt;()</code> của Visual Studio thay vì engine T4 độc lập.</li>
+          <li><strong>Cấu trúc Project cũ:</strong> Template <code>Shared</code> tạo <code>.shproj</code> (Shared Project của VS) và các script tự động sinh ra đều là file <code>.bat</code> (Windows Batch) thay vì đa nền tảng.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03. THREE OPTIONS -->
+  <section id="three-options">
+    <span class="num">03 / PHÂN TÍCH CHI TIẾT 3 PHƯƠNG ÁN</span>
+    <h2>Đặt lên bàn cân: VS Code Extension vs CLI vs CLI MCP</h2>
+
+    <div class="grid3">
+      <!-- Option 1 -->
+      <div class="card">
+        <span class="tag blue">Phương án 1</span>
+        <h3>VS Code Extension</h3>
+        <p>Xây dựng extension TypeScript trên VS Code Marketplace, cung cấp menu chuột phải trong Explorer ("DevKit: New Project / New Item") và giao diện QuickPick / Webview.</p>
+        <p><strong>Ưu điểm:</strong></p>
+        <ul>
+          <li>Trải nghiệm gần giống VSIX nhất cho lập trình viên thích giao diện đồ họa (click chuột phải vào thư mục → chọn Entity → tạo file).</li>
+          <li>Hỗ trợ tốt việc mở file vừa tạo, hiển thị diff và cây thư mục trực quan.</li>
+        </ul>
+        <p><strong>Nhược điểm lớn:</strong></p>
+        <ul>
+          <li><strong>Không thể tự chạy một mình:</strong> Node.js của VS Code không có sẵn <code>ServiceClient</code> của Dataverse, không có bộ sinh code C# trong <code>DynamicsCrm.DevKit.Shared</code> và không chạy được T4 C#. Bạn <em>vẫn bắt buộc</em> phải viết CLI backend bên dưới để VS Code gọi sang!</li>
+          <li>Tốn nhiều công sức duy trì 2 codebase (TypeScript UI + C# Backend).</li>
+          <li>Bị khóa vào VS Code (không hỗ trợ JetBrains Rider trên Mac/Linux hay chạy tự động qua CI/CD).</li>
+        </ul>
+      </div>
+
+      <!-- Option 2 -->
+      <div class="card">
+        <span class="tag">Phương án 2</span>
+        <h3>DevKit CLI (<code>devkit new</code>)</h3>
+        <p>Mở rộng <code>DynamicsCrm.DevKit.Cli</code> (.NET 10) với lệnh <code>devkit new project</code> và <code>devkit new item</code>, hỗ trợ cả 2 chế độ: <strong>Interactive Wizard trên Terminal</strong> (dùng <code>Spectre.Console</code>) và <strong>Non-interactive Flags</strong>.</p>
+        <p><strong>Ưu điểm:</strong></p>
+        <ul>
+          <li><strong>100% cùng ngôn ngữ &amp; chia sẻ code trực tiếp:</strong> Gọi thẳng <code>MetadataService</code>, <code>CodeGenService</code>, <code>CSharpLateBound</code>, <code>JsForm</code>, <code>TsForm</code> trong <code>DynamicsCrm.DevKit.Shared</code> mà không cần viết lại.</li>
+          <li><strong>Spectre.Console Wizard cực mạnh:</strong> Có sẵn trong CLI! Hỗ trợ chọn Entity có tìm kiếm/lọc, chọn Message/Stage bằng phím mũi tên trên Terminal của macOS/Linux/Windows.</li>
+          <li><strong>Chạy ở mọi nơi:</strong> VS Code Terminal, JetBrains Rider, iTerm2 (Mac), bash/zsh (Linux), GitHub Actions / Azure DevOps.</li>
+        </ul>
+        <p><strong>Nhược điểm:</strong></p>
+        <ul>
+          <li>Người dùng phải gõ lệnh hoặc thao tác trên Terminal thay vì bấm chuột phải trên cây thư mục (trừ khi kết hợp VS Code Tasks hoặc Extension mỏng).</li>
+        </ul>
+      </div>
+
+      <!-- Option 3 -->
+      <div class="card">
+        <span class="tag purple">Phương án 3</span>
+        <h3>DevKit CLI MCP (<code>devkit mcp</code>)</h3>
+        <p>Bổ sung nhóm MCP Tools (ví dụ: <code>list_templates</code>, <code>scaffold_project</code>, <code>scaffold_item</code>) vào MCP Server sẵn có trong <code>DynamicsCrm.DevKit.Cli/Mcp/</code>.</p>
+        <p><strong>Ưu điểm:</strong></p>
+        <ul>
+          <li><strong>Trải nghiệm hiện đại nhất (AI-Native):</strong> Developer trên Mac/Linux chỉ cần gõ trong Claude Code / Cursor / VS Code Copilot / Antigravity: <em>"Tạo cho tôi plugin PreValidationUpdate cho bảng account kiểm tra hạn mức tín dụng và kèm unit test"</em>.</li>
+          <li><strong>Không cần dựng UI phức tạp:</strong> AI Agent đóng vai trò là "Wizard thông minh" — tự gọi <code>get_tables</code>, <code>get_messages</code> để tra cứu metadata rồi gọi <code>scaffold_item</code> để tạo đúng file từ T4 template và viết luôn logic nghiệp vụ bên trong!</li>
+          <li><strong>Mua 1 được 2 nhờ <code>devkit tool</code>:</strong> Mọi MCP Tool trong DevKit đều tự động chạy được như lệnh CLI qua <code>devkit tool call &lt;tool&gt;</code> (kèm <code>describe</code>, <code>example</code>, <code>validate</code>).</li>
+        </ul>
+        <p><strong>Nhược điểm:</strong></p>
+        <ul>
+          <li>Khi không dùng AI (hoặc muốn tạo nhanh 1 file offline/deterministic mà không tốn token), người dùng vẫn cần một lệnh CLI ngắn gọn.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04. COMPARISON MATRIX -->
+  <section id="comparison-matrix">
+    <span class="num">04 / MA TRẬN SO SÁNH ĐA CHIỀU</span>
+    <h2>Đánh giá định lượng giữa 3 phương án và phương án Kết hợp</h2>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Tiêu chí đánh giá</th>
+            <th>1. Chỉ làm VS Code Extension</th>
+            <th>2. Chỉ làm DevKit CLI</th>
+            <th>3. Chỉ làm CLI MCP</th>
+            <th>⭐ Khuyến nghị: CLI + CLI MCP (Lõi chung)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Chạy trên macOS &amp; Linux</td>
+            <td><span class="pill mid">Phụ thuộc CLI ngầm</span></td>
+            <td><span class="pill good">Native (.NET 10)</span></td>
+            <td><span class="pill good">Native (.NET 10)</span></td>
+            <td><span class="pill good">Hoàn hảo trên cả 3 OS</span></td>
+          </tr>
+          <tr>
+            <td>Tái sử dụng code <code>DynamicsCrm.DevKit.Shared</code></td>
+            <td><span class="pill bad">Thấp nếu viết TS; phải gọi CLI</span></td>
+            <td><span class="pill good">100% trực tiếp (C#)</span></td>
+            <td><span class="pill good">100% trực tiếp (C#)</span></td>
+            <td><span class="pill good">100% dùng chung <code>TemplateService</code></span></td>
+          </tr>
+          <tr>
+            <td>Chi phí phát triển &amp; bảo trì</td>
+            <td><span class="pill bad">Rất cao (TS + Webview + C#)</span></td>
+            <td><span class="pill good">Thấp – Trung bình</span></td>
+            <td><span class="pill good">Rất thấp (không cần làm UI)</span></td>
+            <td><span class="pill good">Tối ưu nhất (1 codebase C#)</span></td>
+          </tr>
+          <tr>
+            <td>Hỗ trợ IDE trên Mac/Linux</td>
+            <td>Chỉ VS Code / Cursor</td>
+            <td>Mọi IDE (VS Code, Rider, Vim...)</td>
+            <td>Mọi AI Client (Claude, Cursor, VS Code, AGY)</td>
+            <td><strong>Tất cả IDE + Tất cả AI Agents + CI/CD</strong></td>
+          </tr>
+          <tr>
+            <td>Trải nghiệm chọn Entity / Message / Stage</td>
+            <td>Webview Form / QuickPick</td>
+            <td>Spectre.Console Interactive Prompt</td>
+            <td>Ngôn ngữ tự nhiên (AI tự tra cứu)</td>
+            <td>Cả Interactive Prompt lẫn AI Agent</td>
+          </tr>
+          <tr>
+            <td>Khả năng mở rộng lên VS Code GUI sau này</td>
+            <td>Đã có sẵn UI</td>
+            <td>Dễ dàng bọc bằng VS Code Extension</td>
+            <td>Gọi qua MCP hoặc <code>devkit tool call</code></td>
+            <td><strong>Sẵn sàng 90% backend cho VS Code Extension</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 05. HYBRID ARCHITECTURE -->
+  <section id="hybrid-architecture">
+    <span class="num">05 / KIẾN TRÚC ĐỀ XUẤT</span>
+    <h2>Kiến trúc 3 tầng "One Engine, Three Surfaces" (Một Lõi, Ba Giao Diện)</h2>
+    <p>
+      Điểm đặc biệt của repository <code>DynamicsCrm.DevKit</code> ở phiên bản <code>v5</code> là <strong>CLI và MCP đã nằm chung trong một project <code>DynamicsCrm.DevKit.Cli</code></strong>, và đã có sẵn lớp <code>Tool/</code> (<code>devkit tool list|describe|example|call</code>) biến mọi MCP Tool thành lệnh CLI chuẩn JSON.
+      Vì vậy, bạn <strong>không phải chọn giữa CLI hay CLI MCP</strong> — chỉ cần viết một <code>TemplateEngineService</code> trong <code>DynamicsCrm.DevKit.Shared</code> và mở nó ra cả 2 đường trong vòng vài chục dòng code!
+    </p>
+    <pre><code>┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                        NGƯỜI DÙNG TRÊN MACOS / LINUX / WINDOWS                      │
+├───────────────────────────┬─────────────────────────────┬───────────────────────────┤
+│   1. Terminal / Developer │     2. AI Agent / IDE       │  3. VS Code GUI (Phase 2) │
+│   $ devkit new project    │   Claude Code / Cursor /    │  Thin VS Code Extension   │
+│   $ devkit new item       │   VS Code Copilot / AGY     │  (QuickPick / ContextMenu)│
+│   (Spectre.Console UI     │   (Gọi qua giao thức MCP)   │  (Gọi devkit tool call)   │
+│    hoặc truyền flags)     │                             │                           │
+└─────────────┬─────────────┴──────────────┬──────────────┴─────────────┬─────────────┘
+              │                            │                            │
+              ▼                            ▼                            ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                        DynamicsCrm.DevKit.Cli (.NET 10 Cross-Platform)              │
+│  ┌────────────────────────────────────┐   ┌──────────────────────────────────────┐  │
+│  │ Commands/NewCommand.cs             │   │ Mcp/Tools/ScaffoldTemplateTool.cs    │  │
+│  │ - Chế độ Interactive (Prompt)      │   │ - [McpServerTool] scaffold_project   │  │
+│  │ - Chế độ Flags (--type, --entity)  │   │ - [McpServerTool] scaffold_item      │  │
+│  └─────────────────┬──────────────────┘   └──────────────────┬───────────────────┘  │
+└────────────────────┼─────────────────────────────────────────┼──────────────────────┘
+                     │                                         │
+                     ▼                                         ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                LÕI DÙNG CHUNG: DynamicsCrm.DevKit.Shared (TemplateEngine)           │
+│  ┌────────────────────┐ ┌──────────────────────┐ ┌───────────────────────────────┐  │
+│  │ MetadataService    │ │ Cross-Platform T4    │ │ Workspace &amp; Project Mutator   │  │
+│  │ &amp; CodeGenService   │ │ (Mono.TextTemplating)│ │ - Tạo .csproj / .sln / .snk   │  │
+│  │ - JsForm / TsForm  │ │ - Render *.tt từ     │ │ - Cập nhật devkit.json        │  │
+│  │ - LateBound / Test │ │   Resources/tt/*.tt  │ │ - Sinh script đa nền tảng     │  │
+│  └────────────────────┘ └──────────────────────┘ └───────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────────────┘</code></pre>
+
+    <div class="callout">
+      <strong>Tại sao kiến trúc này thắng tuyệt đối?</strong>
+      <ul>
+        <li><strong>Khi bạn code xong Lõi (Shared) + MCP Tool:</strong> Người dùng dùng AI (Claude, Copilot, Cursor, Antigravity) dùng được ngay lập tức qua <code>devkit mcp</code>; script tự động hóa hoặc VS Code Extension dùng được ngay qua <code>devkit tool call scaffold_item --input @params.json</code>.</li>
+        <li><strong>Khi bạn thêm <code>NewCommand</code> dùng <code>Spectre.Console</code>:</strong> Người dùng mở Terminal trên Mac/Linux gõ <code>devkit new</code> sẽ có một Wizard chọn Project/Item, chọn Entity, chọn Message/Stage mượt mà không kém gì hộp thoại WPF trên Visual Studio!</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 06. TEMPLATE AUDIT -->
+  <section id="template-audit">
+    <span class="num">06 / ĐÁNH GIÁ CHI TIẾT 13 PROJECT &amp; 17 ITEM TEMPLATES</span>
+    <h2>Phân loại mức độ sẵn sàng chuyển đổi sang macOS / Linux</h2>
+
+    <h3>A. Nhóm 13 Project Templates (trong <code>Wizard/ProjectTemplates/</code>)</h3>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Project Template</th>
+            <th>Target hiện tại</th>
+            <th>Độ tương thích Mac/Linux</th>
+            <th>Thay đổi cần thiết khi đưa vào CLI / MCP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>WebResource</code> (JS)<br><code>WebResourceTs</code> (TS)</td>
+            <td>Node.js / <code>package.json</code> + SDK <code>.csproj</code></td>
+            <td><span class="pill good">Rất cao (95%)</span></td>
+            <td>Đổi script <code>.bat</code> sang <code>npm scripts</code> trong <code>package.json</code> hoặc gọi trực tiếp <code>devkit webresource</code> / <code>devkit generator</code>.</td>
+          </tr>
+          <tr>
+            <td><code>ConsoleCore</code></td>
+            <td><code>net10.0</code> SDK-style</td>
+            <td><span class="pill good">Rất cao (95%)</span></td>
+            <td>Hoàn toàn chạy native trên Mac/Linux. Chỉ cần lưu cấu hình kết nối vào <code>AppSettings.json</code> hoặc <code>.env</code>.</td>
+          </tr>
+          <tr>
+            <td><code>SolutionPackager</code></td>
+            <td>SDK-style + PAC CLI</td>
+            <td><span class="pill good">Cao (90%)</span></td>
+            <td>Gọi <code>devkit solution</code> (bọc <code>pac solution</code> đa nền tảng) thay cho file <code>Extract-Both.bat</code> / <code>Pack-Both.bat</code>.</td>
+          </tr>
+          <tr>
+            <td><code>Server</code><br><code>Package</code></td>
+            <td>SDK-style <code>net462</code></td>
+            <td><span class="pill good">Cao (85%)</span></td>
+            <td><code>dotnet build</code> trên Mac/Linux biên dịch tốt <code>net462</code> nhờ gói <code>Microsoft.NETFramework.ReferenceAssemblies</code>. Cần tạo khóa <code>.snk</code> bằng <code>RSA.Create(2048)</code> trong .NET 10 thay vì gọi <code>sn.exe</code> của Windows.</td>
+          </tr>
+          <tr>
+            <td><code>ProxyTypes</code></td>
+            <td>SDK-style <code>net462</code></td>
+            <td><span class="pill good">Cao (85%)</span></td>
+            <td>Thay <code>run.bat</code> bằng lệnh <code>devkit modelbuilder</code> (đã chạy đa nền tảng trên .NET 10).</td>
+          </tr>
+          <tr>
+            <td><code>Shared</code><br><code>SharedTest</code></td>
+            <td><code>.shproj</code> (VS Shared Project)</td>
+            <td><span class="pill mid">Cần điều chỉnh nhẹ</span></td>
+            <td><code>dotnet sln add</code> trên CLI không nhận file <code>.shproj</code>, nhưng MSBuild vẫn hiểu <code>&lt;Import Project="..\Shared\Shared.projitems" Label="Shared" /&gt;</code>! Giải pháp trên CLI/Mac/Linux: tạo <code>.shproj</code> + <code>.projitems</code> và tự chèn dòng <code>&lt;Import&gt;</code> vào <code>.csproj</code> của <code>Server</code>/<code>Test</code>, hoặc cho phép chọn tạo <code>Class Library</code> thông thường.</td>
+          </tr>
+          <tr>
+            <td><code>Test</code><br><code>UiTest</code></td>
+            <td><code>net462</code> + FakeXrmEasy / EasyRepro</td>
+            <td><span class="pill mid">Trung bình</span></td>
+            <td>Scaffolding project chạy 100% trên Mac/Linux. Tuy nhiên để <em>chạy</em> <code>dotnet test</code> trên Mac/Linux, nên hỗ trợ thêm multi-target <code>&lt;TargetFrameworks&gt;net462;net10.0&lt;/TargetFrameworks&gt;</code> hoặc hướng dẫn chạy qua container/CI nếu thư viện test khóa vào <code>net462</code>.</td>
+          </tr>
+          <tr>
+            <td><code>Console</code> (.NET FX)<br><code>Report</code> (.rptproj)</td>
+            <td><code>net462</code> / SSRS Report Designer</td>
+            <td><span class="pill bad">Chỉ tạo khung / Legacy</span></td>
+            <td>Trên Mac/Linux nên khuyên dùng <code>ConsoleCore</code> thay cho <code>Console</code>. Với <code>Report</code>, CLI vẫn tải/upload file <code>.rdl</code> qua <code>devkit download-report</code> / <code>upload-report</code> được, nhưng không có trình thiết kế SSRS GUI của Visual Studio.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>B. Nhóm 17 Item Templates (trong <code>Wizard/ItemTemplates/</code>)</h3>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Item Template</th>
+            <th>Cơ chế sinh code trong VSIX</th>
+            <th>Độ tương thích Mac/Linux</th>
+            <th>Cách chuyển sang CLI &amp; CLI MCP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Plugin</code>, <code>Workflow</code>, <code>CustomAction</code>, <code>CustomApi</code>, <code>DataProvider</code>, <code>Test</code>, <code>UiTest</code></td>
+            <td>Lấy Metadata + chạy <code>T4Helper.ProcessTemplateAsync</code> với các file <code>Resources/tt/*.tt</code></td>
+            <td><span class="pill good">100% khả thi</span></td>
+            <td><code>DynamicsCrm.DevKit.Cli</code> <strong>đã cài sẵn gói <code>Mono.TextTemplating</code></strong>! Chỉ cần viết <code>CrossPlatformT4Service</code> dùng <code>Mono.TextTemplating.TemplateGenerator</code> nhận đối tượng <code>T4Context</code> là render được toàn bộ 11 file <code>.tt</code> (và cả Custom Template của user) trên Mac/Linux không cần Visual Studio.</td>
+          </tr>
+          <tr>
+            <td><code>JsForm</code>, <code>TsForm</code>, <code>JsWebApi</code>, <code>TsWebApi</code>, <code>LateBound</code></td>
+            <td>Gọi <code>CodeGenService</code> + <code>JsForm</code> / <code>TsForm</code> / <code>CSharpLateBound</code> trong <code>Shared</code></td>
+            <td><span class="pill good">100% sẵn sàng</span></td>
+            <td>Toàn bộ logic sinh code đã nằm trong <code>DynamicsCrm.DevKit.Shared</code> (và <code>TaskGenerator.cs</code> của CLI đã dùng một phần). Chỉ cần bổ sung bước tạo file khởi đầu (stub file <code>Account.ts</code> / <code>Account.cs</code>) khi file chưa tồn tại, giống hệt <code>ItemTemplateBase.cs</code>.</td>
+          </tr>
+          <tr>
+            <td><code>JsDialog</code>, <code>TsDialog</code>, <code>ResourceString</code> (<code>.resx</code>), <code>BatFile</code></td>
+            <td>Thay thế biến qua <code>Replacement.cs</code> + đọc Embedded Resource</td>
+            <td><span class="pill good">100% sẵn sàng</span></td>
+            <td>Đọc trực tiếp từ Embedded Resource của <code>Shared</code>. Đặc biệt với <code>BatFile</code>, trên Mac/Linux nên hỗ trợ sinh thêm file <code>.sh</code> (cấp quyền <code>chmod +x</code>) hoặc cấu hình vào <code>.vscode/tasks.json</code>.</td>
+          </tr>
+          <tr>
+            <td><code>ReportItemWizard</code> (<code>.rdl</code>)</td>
+            <td>Kết nối Dataverse lấy FetchXml / Dataset tạo file RDL</td>
+            <td><span class="pill mid">90% khả thi</span></td>
+            <td>Có thể tạo file <code>.rdl</code> XML chuẩn từ FetchXml/Entity thông qua CLI hoặc MCP Tool mà không cần COM <code>IDTWizard</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 07. OS BLOCKERS -->
+  <section id="os-blockers">
+    <span class="num">07 / RÀO CẢN KỸ THUẬT TRÊN MACOS &amp; LINUX VÀ CÁCH XỬ LÝ</span>
+    <h2>5 điểm trong source code cần xử lý để chạy mượt trên Mac &amp; Linux</h2>
+    <p>Khi kiểm tra mã nguồn hiện tại của <code>DynamicsCrm.DevKit.Vsix</code>, <code>Shared</code> và <code>Cli</code>, có 5 điểm phụ thuộc Windows cần được thay thế bằng giải pháp chuẩn .NET 10 đa nền tảng:</p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Vấn đề trong Source hiện tại</th>
+            <th>Vị trí file</th>
+            <th>Giải pháp Đa nền tảng (.NET 10 trên Mac/Linux)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><strong>T4 Engine phụ thuộc VS COM Service</strong><br>Gọi <code>VS.GetServiceAsync&lt;STextTemplating, ITextTemplating&gt;()</code></td>
+            <td><code>Vsix/Lib/T4Helper.cs</code></td>
+            <td>Sử dụng <code>Mono.TextTemplating</code> (đã được tham chiếu sẵn trong <code>DynamicsCrm.DevKit.Cli.csproj</code>). Truyền <code>T4Context</code> qua <code>TemplateGenerator.CreateSession()</code> để giữ nguyên 100% cú pháp <code>&lt;#@ parameter type="DynamicsCrm.DevKit.Shared.Models.T4Context" name="Context"#&gt;</code> của mọi file <code>.tt</code> hiện có.</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><strong>Đường dẫn cứng dùng dấu <code>\</code> (Backslash)</strong><br>Ví dụ: <code>$"{replacements?["$solutiondirectory$"]}\\{form.ProjectName}"</code> hoặc ghép path trong <code>TaskGenerator</code></td>
+            <td><code>Vsix/Lib/Replacement.cs</code><br><code>Cli/Tasks/TaskGenerator.cs</code></td>
+            <td>Chuyển toàn bộ sang <code>Path.Combine(...)</code> và chuẩn hóa dấu phân cách trong file <code>.csproj</code> / <code>.projitems</code> để chạy đúng trên hệ thống file phân biệt hoa-thường (case-sensitive) của Linux/macOS.</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><strong>Sinh file <code>.bat</code> và gọi <code>cmd.exe</code></strong><br>Các template sinh ra <code>deploy.debug.bat</code>, <code>generator.form.bat</code>; <code>TaskWebResource</code> gọi <code>cmd.exe</code> khi build TS</td>
+            <td><code>Vsix/Lib/Replacement.cs</code><br><code>Cli/Tasks/TaskWebResource.cs</code></td>
+            <td>
+              <ul>
+                <li>Trong <code>TaskWebResource</code>: Trên Mac/Linux gọi <code>/bin/sh -c</code> hoặc chạy trực tiếp <code>npx</code> / <code>npm</code> qua <code>ProcessStartInfo</code> đa nền tảng.</li>
+                <li>Trong Project Templates: Hỗ trợ sinh song song script <code>.sh</code> (hoặc <code>Makefile</code> / <code>package.json scripts</code> / <code>.vscode/tasks.json</code>) thay vì chỉ sinh file <code>.bat</code>.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><strong>Thao tác Solution/Project qua <code>EnvDTE</code></strong><br>Thêm project vào Solution, thêm file vào <code>.shproj</code>, đặt <code>DependentUpon</code></td>
+            <td><code>Vsix/Helper/VsixHelper.cs</code></td>
+            <td>
+              <ul>
+                <li>Thêm project vào <code>.sln</code> / <code>.slnx</code>: Gọi <code>dotnet sln add &lt;project.csproj&gt;</code> hoặc sửa trực tiếp XML/SLN.</li>
+                <li>Với SDK-style <code>.csproj</code>: Chỉ cần ghi file <code>.cs</code> vào thư mục là MSBuild tự nhận, không cần sửa <code>.csproj</code>!</li>
+                <li>Với <code>.projitems</code> (Shared Project): Dùng <code>XDocument</code> thêm thẻ <code>&lt;Compile Include="$(MSBuildThisFileDirectory)..." /&gt;</code>.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><strong>Mã hóa mật khẩu &amp; Token Cache bằng Windows DPAPI</strong><br><code>ProtectedData.Protect</code> chỉ hỗ trợ Windows</td>
+            <td><code>Shared/Helper.cs</code><br><code>Cli/Services/SecureTokenCache.cs</code></td>
+            <td>Trên Mac/Linux, ưu tiên dùng cơ chế cấu hình <code>.env</code> (<code>DEVKIT_*</code>), <code>FromPac</code>, hoặc <code>MSAL Microsoft.Identity.Client.Extensions.Msal</code> (hỗ trợ Keychain trên macOS và Libsecret/Keyring trên Linux).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 08. DESIGN COMMANDS & MCP -->
+  <section id="design-commands">
+    <span class="num">08 / THIẾT KẾ GIAO DIỆN CLI &amp; CLI MCP ĐỀ XUẤT</span>
+    <h2>Trải nghiệm thực tế trên macOS / Linux sẽ trông như thế nào?</h2>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>1. Trải nghiệm qua DevKit CLI (<code>devkit template</code> / <code>devkit new</code>)</h3>
+        <p>Hỗ trợ cả <strong>Interactive Mode</strong> (khi chỉ gõ <code>devkit new</code>) lẫn <strong>Command-line Flags</strong> (cho script/VS Code):</p>
+        <pre><code># 1. Chế độ Interactive Wizard (Spectre.Console trên Mac/Linux):
+$ devkit new
+? Chọn loại muốn tạo:
+  &gt; Item Template (Plugin, JsForm, TsForm, LateBound, CustomApi...)
+    Project Template (Server, WebResourceTs, Shared, ConsoleCore...)
+? Chọn Item Template: [Plugin]
+? Chọn Bảng (Entity): [account (Account)]
+? Chọn Message: [Update]
+? Chọn Stage: [PreOperation (20)]
+? Chọn Execution Mode: [Synchronous]
+✔ Đã sinh file: PreOperationAccountUpdateSynchronous.cs (T4: Default)
+
+# 2. Chế độ Non-Interactive (nhanh, dùng trong script / VS Code):
+$ devkit new project --type WebResourceTs --name Contoso.WebResource
+$ devkit new project --type Server --name Contoso.Plugin
+
+$ devkit new item --type TsForm --entity account --out ./src/entities
+$ devkit new item --type Plugin --entity contact --message Create \
+  --stage PreOperation --execution Synchronous --out ./Contact</code></pre>
+      </div>
+
+      <div class="card">
+        <h3>2. Trải nghiệm qua DevKit CLI MCP (<code>devkit mcp</code> &amp; <code>devkit tool</code>)</h3>
+        <p>Chỉ cần thêm <strong>3 MCP Tools</strong> vào <code>DynamicsCrm.DevKit.Cli/Mcp/Tools/</code>:</p>
+        <ul>
+          <li><code>list_devkit_templates</code> (<code>ReadOnly = true</code>): Trả về danh sách 13 Project Templates &amp; 17 Item Templates cùng schema tham số cần thiết và danh sách Custom T4 templates trong <code>DynamicsCrm.DevKit.Cli.json</code>.</li>
+          <li><code>scaffold_devkit_project</code> (<code>ReadOnly = false</code>): Tạo Project Template (<code>Server</code>, <code>WebResourceTs</code>, <code>ConsoleCore</code>, <code>Shared</code>...), tạo key <code>.snk</code>, cập nhật <code>.sln</code> và <code>DynamicsCrm.DevKit.Cli.json</code>.</li>
+          <li><code>scaffold_devkit_item</code> (<code>ReadOnly = false</code>): Kết nối Dataverse lấy Metadata của Entity/Message/CustomApi/DataSource, chạy <code>Mono.TextTemplating</code> hoặc <code>CodeGenService</code> để sinh các file Item Template (<code>Plugin</code>, <code>TsForm</code>, <code>JsForm</code>, <code>LateBound</code>, <code>CustomApi</code>, <code>Workflow</code>, <code>Test</code>...).</li>
+        </ul>
+        <pre><code># Gọi qua AI Agent (Claude / Cursor / Copilot / Antigravity):
+"Tạo project WebResourceTs tên Contoso.WebResource và tạo luôn
+item TsForm + TsWebApi cho 2 bảng account và contact"
+→ AI tự gọi:
+  1. scaffold_devkit_project(type="WebResourceTs", name="Contoso.WebResource")
+  2. scaffold_devkit_item(type="TsForm", entity="account", ...)
+  3. scaffold_devkit_item(type="TsForm", entity="contact", ...)
+
+# Hoặc gọi trực tiếp qua CLI Tool:
+$ devkit tool call scaffold_devkit_item \
+  --input '{"type":"Plugin","entity":"account","message":"Update","stage":"PreOperation"}'</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09. ROADMAP -->
+  <section id="roadmap">
+    <span class="num">09 / LỘ TRÌNH TRIỂN KHAI (PHASED ROADMAP)</span>
+    <h2>Làm theo thứ tự nào để có kết quả nhanh nhất và ít rủi ro nhất?</h2>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Giai đoạn</th>
+            <th>Hạng mục công việc</th>
+            <th>Giá trị mang lại trên Mac / Linux</th>
+            <th>Ước lượng công sức</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Phase 1: Core Template Engine &amp; T4 độc lập</strong><br><span class="small">(Nền tảng trong <code>Shared</code> + <code>Cli</code>)</span></td>
+            <td>
+              <ul>
+                <li>Tách logic của <code>Replacement.cs</code> và <code>T4Helper.cs</code> từ VSIX sang <code>DynamicsCrm.DevKit.Shared</code> (hoặc <code>Cli/Services/</code>) không phụ thuộc <code>EnvDTE</code>.</li>
+                <li>Dùng <code>Mono.TextTemplating</code> để chạy toàn bộ 11 file <code>Resources/tt/*.tt</code> với <code>T4Context</code>.</li>
+                <li>Nhúng các file khung <code>.csproj.template</code> vào Shared/CLI resources.</li>
+              </ul>
+            </td>
+            <td>Chạy được toàn bộ logic sinh code Item &amp; Project trên .NET 10 (Windows, macOS, Linux) mà không cần Visual Studio.</td>
+            <td><strong>3 – 5 ngày</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Phase 2: Mở giao diện CLI MCP + CLI Command</strong><br><span class="small">(Dùng được ngay trên Mac/Linux)</span></td>
+            <td>
+              <ul>
+                <li>Thêm 3 MCP Tools: <code>list_devkit_templates</code>, <code>scaffold_devkit_project</code>, <code>scaffold_devkit_item</code>.</li>
+                <li>Thêm lệnh CLI <code>devkit template</code> (hoặc <code>devkit new</code>) với chế độ Interactive <code>Spectre.Console</code> + Flags.</li>
+                <li>Hỗ trợ sinh script đa nền tảng (<code>.sh</code> / <code>npm scripts</code>) bên cạnh <code>.bat</code>.</li>
+              </ul>
+            </td>
+            <td>Developer trên Mac/Linux tạo được mọi Project &amp; Item Templates bằng cả <strong>Terminal Interactive</strong>, <strong>CLI Flags</strong> và <strong>AI Agents (MCP)</strong>.</td>
+            <td><strong>3 – 4 ngày</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Phase 3: Thin VS Code Extension (Tùy chọn)</strong><br><span class="small">(Dành cho người thích bấm chuột GUI)</span></td>
+            <td>
+              <ul>
+                <li>Tạo một VS Code Extension siêu nhẹ (TypeScript).</li>
+                <li>Menu chuột phải "DevKit: Add New Item..." / "DevKit: New Project...".</li>
+                <li>Sử dụng VS Code QuickPick để hỏi tham số và gọi xuống <code>devkit tool call scaffold_devkit_item</code>.</li>
+              </ul>
+            </td>
+            <td>Mang lại trải nghiệm click chuột phải trên cây thư mục VS Code giống hệt VSIX, nhưng tốn chỉ 1/5 công sức nhờ toàn bộ logic nằm ở CLI.</td>
+            <td><strong>3 – 5 ngày</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout purple">
+      <strong>Tóm tắt câu trả lời cho bài toán của bạn:</strong>
+      <ol>
+        <li><strong>Bước 1 (Quan trọng nhất — Làm ngay):</strong> Đưa bộ tạo Item/Project Templates vào <strong>DevKit CLI + CLI MCP</strong> (vì cả hai nằm chung trong project <code>DynamicsCrm.DevKit.Cli</code> chạy .NET 10). Nhờ đó Mac và Linux có thể dùng ngay qua cả dòng lệnh tương tác (<code>devkit new</code>), lệnh tự động (<code>devkit tool call</code>) và AI Agent (<code>devkit mcp</code>).</li>
+        <li><strong>Bước 2 (Bổ sung khi cần GUI):</strong> Viết một <strong>VS Code Extension mỏng</strong> chỉ làm nhiệm vụ hiển thị QuickPick/Menu chuột phải và gọi xuống CLI ở Bước 1. Không bao giờ viết lại logic template bằng TypeScript.</li>
+      </ol>
+    </div>
+  </section>
+
+  <footer class="footer">
+    Tài liệu phân tích kiến trúc · DynamicsCrm.DevKit v5 · Lưu tại <code>Docs/DevKit-CrossPlatform-Templates-Strategy-2026-10-16.html</code>
+  </footer>
+</main>
+</div>
+</body>
+</html>
