@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Commands
 {
-    [Description("Start MCP server for AI agent integration. Connection is taken ONLY from explicit arguments (--auth/--url/--clientid/--clientsecret/--conn/--pacprofile...): no .env file and no environment variables are read, because the globally installed tool runs with an arbitrary working directory.")]
+    [Description("Start MCP server for AI agent integration. Connection priority: explicit CLI args, then DEVKIT_* values from a project .env found from the process working directory upward. OS environment variables are not read.")]
     public class McpCommand : AsyncCommand<McpCommandArgs>
     {
         private static TextWriter Stderr => Console.Error;
@@ -42,10 +42,10 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     return 0;
                 }
 
-                // MCP connections come from explicit command-line args ONLY: the
-                // globally installed tool runs with an arbitrary working directory,
-                // so .env discovery is meaningless here, and OS environment
-                // variables are never consulted either.
+                // Use the process working directory to find the project .env.
+                // MCP clients should start this global tool with the workspace as
+                // cwd; explicit CLI args retain priority over .env values.
+                settings.ResolveProjectEnvironmentDefaults();
                 LogConnectionInfo(settings);
                 var serviceClient = await ConnectAsync(settings);
                 if (serviceClient == null) return 2;
@@ -106,7 +106,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         {
             if (string.IsNullOrEmpty(settings.AuthType) && string.IsNullOrEmpty(settings.Connection))
             {
-                LogError("--auth or --conn is required for MCP server.");
+                LogError("--auth or --conn is required for MCP server. Provide connection arguments or set DEVKIT_* values in a project .env file.");
                 return null;
             }
 
@@ -365,11 +365,21 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("-------------------------------------------------------------------------");
             Console.WriteLine("   dotnet tool install -g DynamicsCrm.DevKit.Cli");
             Console.WriteLine();
-            Console.WriteLine("2. CONNECTION (COMMAND-LINE ARGUMENTS ONLY)");
+            Console.WriteLine("2. CONNECTION (PROJECT .env OR COMMAND-LINE ARGUMENTS)");
             Console.WriteLine("-------------------------------------------------------------------------");
-            Console.WriteLine("   devkit mcp reads connection values from explicit arguments ONLY.");
-            Console.WriteLine("   No .env file and no environment variables are read: this tool is");
-            Console.WriteLine("   installed globally and runs with an arbitrary working directory.");
+            Console.WriteLine("   Connection priority: explicit command-line arguments > project .env.");
+            Console.WriteLine("   MCP reads DEVKIT_* connection values from the first .env found by");
+            Console.WriteLine("   searching from the process working directory upward to the drive root.");
+            Console.WriteLine("   OS environment variables are not read for connection values.");
+            Console.WriteLine("   Configure the MCP client to launch devkit with the project/workspace as");
+            Console.WriteLine("   its working directory. Global installation does not change this directory.");
+            Console.WriteLine("   Keep .env local and ignored by Git; commit the MCP config without secrets.");
+            Console.WriteLine();
+            Console.WriteLine("   Example project .env (do not commit):");
+            Console.WriteLine("     DEVKIT_AUTH_TYPE=ClientSecret");
+            Console.WriteLine("     DEVKIT_URL=https://org.crm.dynamics.com");
+            Console.WriteLine("     DEVKIT_CLIENT_ID=APP_ID");
+            Console.WriteLine("     DEVKIT_CLIENT_SECRET=SECRET");
             Console.WriteLine();
             Console.WriteLine("   --auth               : Interactive, DeviceCode, ClientSecret, FromPac, OAuth, AD");
             Console.WriteLine("   --url                : https://org.crm.dynamics.com (except FromPac)");
@@ -381,7 +391,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("   --domain             : Domain (AD, on-premises)");
             Console.WriteLine("   --conn               : Full legacy connection string (alternative to the above)");
             Console.WriteLine();
-            Console.WriteLine("   Example: devkit mcp devkit-claude --auth ClientSecret --url https://org.crm.dynamics.com --clientid APP_ID --clientsecret SECRET");
+            Console.WriteLine("   Example: devkit mcp devkit-claude (reads connection from project .env)");
             Console.WriteLine();
             Console.WriteLine($"3. AVAILABLE TOOLS ({tools.Count} Tools)");
             Console.WriteLine("-------------------------------------------------------------------------");
@@ -416,11 +426,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("       \"dynamicscrm-devkit\": {");
             Console.WriteLine("         \"command\": \"devkit\",");
             Console.WriteLine("         \"args\": [");
-            Console.WriteLine("           \"mcp\", \"devkit-claude\",");
-            Console.WriteLine("           \"--auth\", \"ClientSecret\",");
-            Console.WriteLine("           \"--url\", \"https://org.crm.dynamics.com\",");
-            Console.WriteLine("           \"--clientid\", \"APP_ID\",");
-            Console.WriteLine("           \"--clientsecret\", \"SECRET\"");
+            Console.WriteLine("           \"mcp\", \"devkit-claude\"");
             Console.WriteLine("         ]");
             Console.WriteLine("       }");
             Console.WriteLine("     }");
@@ -430,11 +436,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("   [mcp_servers.dynamicscrm-devkit]");
             Console.WriteLine("   command = \"devkit\"");
             Console.WriteLine("   args = [");
-            Console.WriteLine("     \"mcp\", \"devkit-codex\",");
-            Console.WriteLine("     \"--auth\", \"ClientSecret\",");
-            Console.WriteLine("     \"--url\", \"https://org.crm.dynamics.com\",");
-            Console.WriteLine("     \"--clientid\", \"APP_ID\",");
-            Console.WriteLine("     \"--clientsecret\", \"SECRET\"");
+            Console.WriteLine("     \"mcp\", \"devkit-codex\"");
             Console.WriteLine("   ]");
             Console.WriteLine("   startup_timeout_sec = 20");
             Console.WriteLine("   tool_timeout_sec = 120");
@@ -446,10 +448,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("         \"type\": \"stdio\",");
             Console.WriteLine("         \"command\": \"devkit\",");
             Console.WriteLine("         \"args\": [");
-            Console.WriteLine("           \"mcp\", \"devkit-copilot\",");
-            Console.WriteLine("           \"--auth\", \"${input:devkitAuthType}\",");
-            Console.WriteLine("           \"--url\", \"${input:devkitUrl}\",");
-            Console.WriteLine("           \"--pacprofile\", \"${input:devkitPacProfile}\"");
+            Console.WriteLine("           \"mcp\", \"devkit-copilot\"");
             Console.WriteLine("         ]");
             Console.WriteLine("       }");
             Console.WriteLine("     }");
@@ -461,9 +460,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("       \"dynamicscrm-devkit\": {");
             Console.WriteLine("         \"command\": \"devkit\",");
             Console.WriteLine("         \"args\": [");
-            Console.WriteLine("           \"mcp\", \"devkit-antigravity\",");
-            Console.WriteLine("           \"--auth\", \"FromPac\",");
-            Console.WriteLine("           \"--pacprofile\", \"default\"");
+            Console.WriteLine("           \"mcp\", \"devkit-antigravity\"");
             Console.WriteLine("         ]");
             Console.WriteLine("       }");
             Console.WriteLine("     }");
@@ -475,7 +472,8 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("     .vscode/mcp.json.example");
             Console.WriteLine("     .agents/mcp_config.json.example");
             Console.WriteLine();
-            Console.WriteLine("   Copy an example to the real local config file and keep secrets local.");
+            Console.WriteLine("   Copy an example to the real local config file. The config can be committed:");
+            Console.WriteLine("   connection secrets belong in the ignored project .env, never in MCP args.");
             Console.WriteLine("   Antigravity Editor custom MCP config: ~/.gemini/config/mcp_config.json");
             Console.WriteLine("   Antigravity CLI global MCP config: ~/.gemini/antigravity-cli/mcp_config.json");
             Console.WriteLine("=========================================================================");

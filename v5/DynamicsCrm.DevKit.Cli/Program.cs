@@ -117,7 +117,7 @@ namespace DynamicsCrm.DevKit.Cli
                           .WithDescription("Create data source entities");
 
                     config.AddCommand<McpCommand>("mcp")
-                          .WithDescription("Start MCP server for AI agent integration. Connection is taken ONLY from explicit arguments (--auth/--url/--clientid/--clientsecret/--conn/--pacprofile...): no .env file and no environment variables are read")
+                          .WithDescription("Start MCP server for AI agent integration. Connection priority: explicit CLI args, then DEVKIT_* values from a project .env found from the process working directory upward. OS environment variables are not read")
                           .WithExample(new[] { "mcp", "--tools" })
                           .WithExample(new[] { "mcp", "--setup-guide" })
                           .WithExample(new[] { "mcp", "--auth", "ClientSecret", "--url", "https://org.crm.dynamics.com", "--clientid", "APP_ID", "--clientsecret", "SECRET" })

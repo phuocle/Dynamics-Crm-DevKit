@@ -33,13 +33,16 @@ public class McpCommandCoverageTests
 
         Assert.AreEqual(0, exitCode);
         StringAssert.Contains(stdout, "DevKit MCP Setup Guide");
-        // The guide teaches args-only connection config: no env-var instructions.
-        StringAssert.Contains(stdout, "CONNECTION (COMMAND-LINE ARGUMENTS ONLY)");
+        // The guide explains project .env support so the MCP config can be committed safely.
+        StringAssert.Contains(stdout, "CONNECTION (PROJECT .env OR COMMAND-LINE ARGUMENTS)");
+        StringAssert.Contains(stdout, "project .env");
+        StringAssert.Contains(stdout, "working directory");
+        StringAssert.Contains(stdout, "connection secrets belong in the ignored project .env");
         StringAssert.Contains(stdout, "--auth");
         StringAssert.Contains(stdout, "devkit-claude");
         StringAssert.Contains(stdout, "AVAILABLE TOOLS");
-        Assert.IsFalse(stdout.Contains("ENVIRONMENT VARIABLES"), "the setup guide must not teach env-var configuration");
-        Assert.IsFalse(stdout.Contains("\"env\""), "config examples must pass connection values via args");
+        Assert.IsFalse(stdout.Contains("\"--clientsecret\""), "MCP config examples must not expose secrets");
+        Assert.IsFalse(stdout.Contains("\"SECRET\""), "MCP config examples must not expose secrets");
         Assert.AreEqual("", stderr);
     }
 
@@ -55,10 +58,9 @@ public class McpCommandCoverageTests
     }
 
     [TestMethod]
-    public async Task ExecuteAsync_EnvironmentVariablesPresent_StillRequiresArgs()
+    public async Task ExecuteAsync_EnvironmentVariablesPresent_DoesNotUseThemForConnection()
     {
-        // MCP is args-only: even with full DEVKIT_* variables in the process
-        // environment, an invocation without explicit connection args fails.
+        // MCP reads project .env, not DEVKIT_* variables from the process environment.
         var (exitCode, _, stderr) = await ExecuteWithEnvironmentAsync(new Dictionary<string, string>
         {
             ["DEVKIT_AUTH_TYPE"] = "ClientSecret",
@@ -69,6 +71,29 @@ public class McpCommandCoverageTests
 
         Assert.AreEqual(2, exitCode);
         StringAssert.Contains(stderr, "--auth or --conn is required");
+    }
+
+    [TestMethod]
+    public async Task ExecuteAsync_UsesProjectEnvForConnectionDefaults()
+    {
+        var originalDirectory = Environment.CurrentDirectory;
+        var tempDirectory = Path.Combine(Path.GetTempPath(), "devkit-mcp-env-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDirectory);
+        File.WriteAllText(Path.Combine(tempDirectory, ".env"), "DEVKIT_AUTH_TYPE=ClientSecret\n");
+        try
+        {
+            Environment.CurrentDirectory = tempDirectory;
+            var (exitCode, _, stderr) = await ExecuteWithConsoleAsync(new McpCommandArgs());
+
+            Assert.AreEqual(1, exitCode);
+            StringAssert.Contains(stderr, "Auth: ClientSecret");
+            StringAssert.Contains(stderr, "--url is required");
+        }
+        finally
+        {
+            Environment.CurrentDirectory = originalDirectory;
+            Directory.Delete(tempDirectory, recursive: true);
+        }
     }
 
     private static async Task<(int ExitCode, string Stdout, string Stderr)> ExecuteWithEnvironmentAsync(

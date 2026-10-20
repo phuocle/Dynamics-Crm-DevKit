@@ -109,7 +109,7 @@ namespace DynamicsCrm.DevKit.Cli
                 "Project .env Fallback (DEVKIT_*):\n" +
                 "  Normal commands & tool call: CLI args > project .env > validation error.\n" +
                 "  The .env file is searched from the current directory upward to the drive root.\n" +
-                "  MCP command: explicit CLI args ONLY (no .env, no environment variables).\n" +
+                "  MCP command: CLI args > project .env (searched from current directory upward); OS environment variables are not read.\n" +
                 "  DEVKIT_AUTH_TYPE     Auth type (Interactive, ClientSecret, FromPac, ...)\n" +
                 "  DEVKIT_URL           Environment URL\n" +
                 "  DEVKIT_CLIENT_ID     Azure AD application (client) ID\n" +
@@ -175,9 +175,9 @@ namespace DynamicsCrm.DevKit.Cli
                     "  devkit server --auth [cyan]FromPac[/] --pacprofile [cyan]DEVKITV4[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/]\n" +
                     "  devkit server --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/] --json [cyan]cli.json[/] --profile [cyan]CI[/]\n" +
                     "  devkit mcp --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/]\n\n" +
-                    "[green]Project .env / MCP Environment Variables (DEVKIT_*):[/]\n" +
+                    "[green]Project .env values (DEVKIT_*):[/]\n" +
                     "  Normal commands: CLI args > project .env > validation error.\n" +
-                    "  MCP command: CLI args > OS DEVKIT_* environment variables > validation error.\n" +
+                    "  MCP command: CLI args > project .env (searched from current directory upward) > validation error; OS environment variables are not read.\n" +
                     "  [cyan]DEVKIT_AUTH_TYPE[/]     Auth type (Interactive, ClientSecret, FromPac, ...)\n" +
                     "  [cyan]DEVKIT_URL[/]           Environment URL\n" +
                     "  [cyan]DEVKIT_CLIENT_ID[/]     Azure AD application (client) ID\n" +
