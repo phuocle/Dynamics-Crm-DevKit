@@ -41,6 +41,16 @@ namespace DynamicsCrm.DevKit.Cli
                 var originalArgs = args;
                 args = LegacyArgConverter.Convert(args);
 
+                // Friendly alias: "devkit new list" -> "devkit new --kind list"
+                // (Spectre.Console.Cli would otherwise parse "list" as an
+                // unknown subcommand of the leaf command "new").
+                if (args != null && args.Length == 2 &&
+                    args[0].Equals("new", StringComparison.OrdinalIgnoreCase) &&
+                    args[1].Equals("list", StringComparison.OrdinalIgnoreCase))
+                {
+                    args = new[] { "new", "--kind", "list" };
+                }
+
                 // `devkit tool` runs in its own lifecycle: no update check, no
                 // WaitForKeyPress, parse errors mapped to the branch's exit codes.
                 if (args != null && args.Length > 0 && string.Equals(args[0], "tool", StringComparison.OrdinalIgnoreCase))
@@ -115,6 +125,12 @@ namespace DynamicsCrm.DevKit.Cli
 
                     config.AddCommand<DataSourceCommand>("datasource")
                           .WithDescription("Create data source entities");
+
+                    config.AddCommand<NewCommand>("new")
+                          .WithDescription("Create DevKit project or item templates (cross-platform wizard & CLI)")
+                          .WithExample(new[] { "new", "list" })
+                          .WithExample(new[] { "new", "--kind", "project", "--type", "Shared", "--name", "Contoso.Shared" })
+                          .WithExample(new[] { "new", "--kind", "item", "--type", "LateBound", "--entity", "Account", "--offline" });
 
                     config.AddCommand<McpCommand>("mcp")
                           .WithDescription("Start MCP server for AI agent integration. Connection priority: explicit CLI args, then DEVKIT_* values from a project .env found from the process working directory upward. OS environment variables are not read")

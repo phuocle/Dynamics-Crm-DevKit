@@ -80,6 +80,7 @@ namespace DynamicsCrm.DevKit.Cli
                 "  uploadreport           Upload reports to a solution\n" +
                 "  downloadwebresource    Download web resources from a solution\n" +
                 "  datasource             Create data source entities\n" +
+                "  new                    Create DevKit project/item templates (cross-platform wizard)\n" +
                 "  mcp                    Start MCP server for AI agent integration\n\n" +
                 "Connection Options:\n" +
                 "  --conn STRING          Dynamics 365 connection string (legacy)\n" +
@@ -303,6 +304,12 @@ namespace DynamicsCrm.DevKit.Cli
         {
             if (IsPlain) { Console.WriteLine($"{PLAIN_PREFIX} [ERROR] {message}"); return; }
             AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(CliAction.ERROR)} [/][red on grey23]{Escape(message)}[/]");
+        }
+
+        public static void ActionWarning(string message)
+        {
+            if (IsPlain) { Console.WriteLine($"{PLAIN_PREFIX} [WARN] {message}"); return; }
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]WARNING [/][yellow on grey23]{Escape(message)}[/]");
         }
 
         #endregion

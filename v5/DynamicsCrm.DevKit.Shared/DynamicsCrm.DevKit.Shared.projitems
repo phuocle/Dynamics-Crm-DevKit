@@ -255,4 +255,134 @@
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ribbon\ribbon.zip" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- Cross-platform template scaffolding core (Vsix2CliAndMcp step 0): shared by VSIX, CLI and MCP. -->
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Models\TemplateModels.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\TemplateCatalog.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\TemplateManifest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\TemplatePayload.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\TokenEngine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\SigningService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\SolutionMutator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\WorkspaceScanner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\ScaffoldingEngine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\T4\ITextTransformer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\T4\T4ContextFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\T4\T4TemplateResolver.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Template payloads embedded for the cross-platform scaffolding engine (Vsix2CliAndMcp step 0).
+         Physical source of truth stays in ProjectTemplates/ItemTemplates; VSIX zip builds keep reading
+         the same folders. Excluded: build csproj, vstemplate, icons, Properties, bin/obj/.vs, README,
+         sample key.snk (CLI always generates a fresh key). -->
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\Date.cs" LogicalName="Resources.templates.project.shared.Date.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\DevKitJson.cs" LogicalName="Resources.templates.project.shared.DevKitJson.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\DocumentMethodAttribute.cs" LogicalName="Resources.templates.project.shared.DocumentMethodAttribute.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\EntityBase.cs" LogicalName="Resources.templates.project.shared.EntityBase.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\Extension.cs" LogicalName="Resources.templates.project.shared.Extension.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\generator.bat" LogicalName="Resources.templates.project.shared.generator.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\PluginCore.cs" LogicalName="Resources.templates.project.shared.PluginCore.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\PluginExecutionContext7Wrapper.cs" LogicalName="Resources.templates.project.shared.PluginExecutionContext7Wrapper.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\Shared.projitems" LogicalName="Resources.templates.project.shared.Shared.projitems" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\Shared.shproj" LogicalName="Resources.templates.project.shared.Shared.shproj" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\02.ConsoleProjectTemplate\App.config.template" LogicalName="Resources.templates.project.console.App.config.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\02.ConsoleProjectTemplate\App.cs" LogicalName="Resources.templates.project.console.App.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\02.ConsoleProjectTemplate\Helper.cs" LogicalName="Resources.templates.project.console.Helper.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\02.ConsoleProjectTemplate\Program.cs" LogicalName="Resources.templates.project.console.Program.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\02.ConsoleProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.console.ProjectTemplate.csproj.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\02.ConsoleProjectTemplate\TracingServiceFake.cs" LogicalName="Resources.templates.project.console.TracingServiceFake.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\03.ConsoleCoreProjectTemplate\App.cs" LogicalName="Resources.templates.project.consolecore.App.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\03.ConsoleCoreProjectTemplate\AppSettings.json" LogicalName="Resources.templates.project.consolecore.AppSettings.json" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\03.ConsoleCoreProjectTemplate\Helper.cs" LogicalName="Resources.templates.project.consolecore.Helper.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\03.ConsoleCoreProjectTemplate\Program.cs" LogicalName="Resources.templates.project.consolecore.Program.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\03.ConsoleCoreProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.consolecore.ProjectTemplate.csproj.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\03.ConsoleCoreProjectTemplate\TracingServiceFake.cs" LogicalName="Resources.templates.project.consolecore.TracingServiceFake.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\04.ServerProjectTemplate\deploy.debug.bat" LogicalName="Resources.templates.project.server.deploy.debug.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\04.ServerProjectTemplate\deploy.debug.only.bat" LogicalName="Resources.templates.project.server.deploy.debug.only.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\04.ServerProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.server.ProjectTemplate.csproj.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\05.PackageProjectTemplate\deploy.debug.bat" LogicalName="Resources.templates.project.package.deploy.debug.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\05.PackageProjectTemplate\deploy.debug.only.bat" LogicalName="Resources.templates.project.package.deploy.debug.only.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\05.PackageProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.package.ProjectTemplate.csproj.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\deploy.debug.bat" LogicalName="Resources.templates.project.webresource.deploy.debug.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\DevKit.d.ts" LogicalName="Resources.templates.project.webresource.DevKit.d.ts" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\devkit.js" LogicalName="Resources.templates.project.webresource.devkit.js" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\generator.form.bat" LogicalName="Resources.templates.project.webresource.generator.form.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\generator.webapi.bat" LogicalName="Resources.templates.project.webresource.generator.webapi.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\jsconfig.json" LogicalName="Resources.templates.project.webresource.jsconfig.json" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\package.json" LogicalName="Resources.templates.project.webresource.package.json" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.webresource.ProjectTemplate.csproj.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\CalculateRollupFieldRequestExecutor.cs" LogicalName="Resources.templates.project.sharedtest.CalculateRollupFieldRequestExecutor.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\Extension.cs" LogicalName="Resources.templates.project.sharedtest.Extension.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\FakerHelper.cs" LogicalName="Resources.templates.project.sharedtest.FakerHelper.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\FakeXrmEasyTestBase.cs" LogicalName="Resources.templates.project.sharedtest.FakeXrmEasyTestBase.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\Guids.cs" LogicalName="Resources.templates.project.sharedtest.Guids.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\PluginContextBuilder.cs" LogicalName="Resources.templates.project.sharedtest.PluginContextBuilder.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\Shared.projitems" LogicalName="Resources.templates.project.sharedtest.Shared.projitems" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\Shared.shproj" LogicalName="Resources.templates.project.sharedtest.Shared.shproj" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\TestDataLoader.cs" LogicalName="Resources.templates.project.sharedtest.TestDataLoader.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\TestHelper.cs" LogicalName="Resources.templates.project.sharedtest.TestHelper.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\TestTracingService.cs" LogicalName="Resources.templates.project.sharedtest.TestTracingService.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\08.ProxyTypesProjectTemplate\GeneratedCode.cs" LogicalName="Resources.templates.project.proxytypes.GeneratedCode.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\08.ProxyTypesProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.proxytypes.ProjectTemplate.csproj.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\08.ProxyTypesProjectTemplate\ProxyTypesAssembly.cs" LogicalName="Resources.templates.project.proxytypes.ProxyTypesAssembly.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\08.ProxyTypesProjectTemplate\run.bat" LogicalName="Resources.templates.project.proxytypes.run.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\09.TestProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.test.ProjectTemplate.csproj.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\10.TestUiProjectTemplate\App.config" LogicalName="Resources.templates.project.uitest.App.config" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\10.TestUiProjectTemplate\App.cs" LogicalName="Resources.templates.project.uitest.App.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\10.TestUiProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.uitest.ProjectTemplate.csproj.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\10.TestUiProjectTemplate\TestSettings.cs" LogicalName="Resources.templates.project.uitest.TestSettings.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\10.TestUiProjectTemplate\UiTest.runsettings" LogicalName="Resources.templates.project.uitest.UiTest.runsettings" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\11.SolutionPackagerProjectTemplate\Extract-Both.bat" LogicalName="Resources.templates.project.solutionpackager.Extract-Both.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\11.SolutionPackagerProjectTemplate\mapping.xml" LogicalName="Resources.templates.project.solutionpackager.mapping.xml" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\11.SolutionPackagerProjectTemplate\Pack-Both.bat" LogicalName="Resources.templates.project.solutionpackager.Pack-Both.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\11.SolutionPackagerProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.solutionpackager.ProjectTemplate.csproj.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\12.ReportProjectTemplate\download.reports.bat" LogicalName="Resources.templates.project.report.download.reports.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\12.ReportProjectTemplate\ProjectTemplate.csproj" LogicalName="Resources.templates.project.report.ProjectTemplate.csproj" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\12.ReportProjectTemplate\upload.reports.bat" LogicalName="Resources.templates.project.report.upload.reports.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\.eslintrc.json" LogicalName="Resources.templates.project.webresourcets..eslintrc.json" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\build.js" LogicalName="Resources.templates.project.webresourcets.build.js" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\deploy.debug.bat" LogicalName="Resources.templates.project.webresourcets.deploy.debug.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\deploy.release.bat" LogicalName="Resources.templates.project.webresourcets.deploy.release.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\devkit.ts" LogicalName="Resources.templates.project.webresourcets.devkit.ts" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\devkitts.d.ts" LogicalName="Resources.templates.project.webresourcets.devkitts.d.ts" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\generator.form.bat" LogicalName="Resources.templates.project.webresourcets.generator.form.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\generator.webapi.bat" LogicalName="Resources.templates.project.webresourcets.generator.webapi.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\package.json" LogicalName="Resources.templates.project.webresourcets.package.json" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.webresourcets.ProjectTemplate.csproj.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\tsconfig.json" LogicalName="Resources.templates.project.webresourcets.tsconfig.json" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\01.LateBoundItemTemplate\Class.cs" LogicalName="Resources.templates.item.latebound.Class.cs" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\01.LateBoundItemTemplate\GeneratedClass.cs" LogicalName="Resources.templates.item.latebound.GeneratedClass.cs" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\02.JsFormItemTemplate\Javascript.d.ts" LogicalName="Resources.templates.item.jsform.Javascript.d.ts" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\02.JsFormItemTemplate\Javascript.form.js" LogicalName="Resources.templates.item.jsform.Javascript.form.js" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\02.JsFormItemTemplate\Javascript.js" LogicalName="Resources.templates.item.jsform.Javascript.js" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\03.JsWebApiItemTemplate\Javascript.d.ts" LogicalName="Resources.templates.item.jswebapi.Javascript.d.ts" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\03.JsWebApiItemTemplate\Javascript.js" LogicalName="Resources.templates.item.jswebapi.Javascript.js" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\03.JsWebApiItemTemplate\Javascript.webapi.js" LogicalName="Resources.templates.item.jswebapi.Javascript.webapi.js" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\04.PluginItemTemplate\Class.cs" LogicalName="Resources.templates.item.plugin.Class.cs" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\05.CustomActionItemTemplate\Class.cs" LogicalName="Resources.templates.item.customaction.Class.cs" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\06.CustomApiItemTemplate\Class.cs" LogicalName="Resources.templates.item.customapi.Class.cs" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\07.WorkflowItemTemplate\Class.cs" LogicalName="Resources.templates.item.workflow.Class.cs" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\08.DataProviderItemTemplate\Create.cs" LogicalName="Resources.templates.item.dataprovider.Create.cs" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\08.DataProviderItemTemplate\Delete.cs" LogicalName="Resources.templates.item.dataprovider.Delete.cs" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\08.DataProviderItemTemplate\Retrieve.cs" LogicalName="Resources.templates.item.dataprovider.Retrieve.cs" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\08.DataProviderItemTemplate\RetrieveMultiple.cs" LogicalName="Resources.templates.item.dataprovider.RetrieveMultiple.cs" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\08.DataProviderItemTemplate\Update.cs" LogicalName="Resources.templates.item.dataprovider.Update.cs" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\09.TestItemTemplate\Class.cs" LogicalName="Resources.templates.item.test.Class.cs" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\10.UiTestItemTemplate\Class.cs" LogicalName="Resources.templates.item.uitest.Class.cs" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\11.ResourceStringItemTemplate\ResourceString.resx" LogicalName="Resources.templates.item.resourcestring.ResourceString.resx" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\13.BatFileItemTemplate\batfile.bat" LogicalName="Resources.templates.item.batfile.batfile.bat" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\13.BatFileItemTemplate\devkit.d.ts" LogicalName="Resources.templates.item.batfile.devkit.d.ts" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\13.BatFileItemTemplate\devkit.js" LogicalName="Resources.templates.item.batfile.devkit.js" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\13.BatFileItemTemplate\Plugin-Managed-Identity.md" LogicalName="Resources.templates.item.batfile.Plugin-Managed-Identity.md" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\13.BatFileItemTemplate\Plugin-Managed-Identity-Config.json" LogicalName="Resources.templates.item.batfile.Plugin-Managed-Identity-Config.json" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\14.JsFormTsItemTemplate\TypeScript.form.ts" LogicalName="Resources.templates.item.tsform.TypeScript.form.ts" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\14.JsFormTsItemTemplate\TypeScript.ts" LogicalName="Resources.templates.item.tsform.TypeScript.ts" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\15.TsWebApiItemTemplate\TypeScript.ts" LogicalName="Resources.templates.item.tswebapi.TypeScript.ts" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\15.TsWebApiItemTemplate\TypeScript.webapi.ts" LogicalName="Resources.templates.item.tswebapi.TypeScript.webapi.ts" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\16.TsDialogItemTemplate\TypeScript.dialog.ts" LogicalName="Resources.templates.item.tsdialog.TypeScript.dialog.ts" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\16.TsDialogItemTemplate\TypeScript.ts" LogicalName="Resources.templates.item.tsdialog.TypeScript.ts" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\17.JsDialogItemTemplate\JavaScript.d.ts" LogicalName="Resources.templates.item.jsdialog.JavaScript.d.ts" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\17.JsDialogItemTemplate\JavaScript.dialog.js" LogicalName="Resources.templates.item.jsdialog.JavaScript.dialog.js" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\17.JsDialogItemTemplate\JavaScript.js" LogicalName="Resources.templates.item.jsdialog.JavaScript.js" />
+  </ItemGroup>
 </Project>
