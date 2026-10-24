@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VSIX → CLI &amp; MCP — Tái sử dụng Project/Item Templates đa nền tảng (Source of Truth)</title>
+<style>
+  :root {
+    --blue: #0b5cad; --blue-light: #e8f1fa; --green: #107c10; --green-light: #eaf6ea;
+    --amber: #8a6d00; --amber-light: #fff8e1; --red: #b00; --red-light: #fdeaea;
+    --ink: #1f2733; --muted: #5b6b7d; --line: #d9e1ea; --bg: #f5f7fa; --card: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", system-ui, sans-serif; color: var(--ink); background: var(--bg); margin: 0; line-height: 1.55; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 24px 20px 64px; }
+  header.hero { background: linear-gradient(135deg, #0b3d6b, #0b5cad 60%, #1273c4); color: #fff; border-radius: 14px; padding: 28px 30px; margin-bottom: 22px; }
+  header.hero h1 { margin: 0 0 6px; font-size: 26px; }
+  header.hero p { margin: 4px 0; opacity: .93; }
+  .badge { display: inline-block; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.35); border-radius: 999px; padding: 2px 12px; font-size: 12.5px; margin-right: 6px; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; }
+  h2 { font-size: 19px; margin: 0 0 12px; color: #0b3d6b; border-bottom: 2px solid var(--blue-light); padding-bottom: 6px; }
+  h3 { font-size: 15.5px; margin: 18px 0 8px; color: var(--blue); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { border: 1px solid var(--line); padding: 6px 9px; text-align: left; vertical-align: top; }
+  th { background: var(--blue-light); color: #0b3d6b; }
+  tr:nth-child(even) td { background: #fbfcfe; }
+  code, .mono { font-family: Consolas, "Cascadia Mono", monospace; font-size: 12.5px; background: #eef2f7; padding: 1px 5px; border-radius: 4px; }
+  .verdict { background: var(--green-light); border: 1px solid #bfe3bf; border-radius: 10px; padding: 12px 16px; font-size: 15px; }
+  .verdict strong { color: var(--green); }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 860px) { .cols { grid-template-columns: 1fr; } }
+  .card { border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; }
+  .card h4 { margin: 2px 0 8px; font-size: 14px; }
+  .plus h4 { color: var(--green); } .minus h4 { color: var(--red); }
+  .plus { background: var(--green-light); border-color: #bfe3bf; }
+  .minus { background: var(--red-light); border-color: #f2c4c4; }
+  ul { margin: 6px 0; padding-left: 20px; }
+  li { margin: 3px 0; }
+  .arch { background: #0e2233; color: #d8e6f2; border-radius: 10px; padding: 16px 18px; font-family: Consolas, monospace; font-size: 12.3px; white-space: pre; overflow-x: auto; line-height: 1.45; }
+  .tag { display: inline-block; border-radius: 4px; padding: 1px 7px; font-size: 11.5px; font-weight: 600; }
+  .t-green { background: var(--green-light); color: var(--green); }
+  .t-amber { background: var(--amber-light); color: var(--amber); }
+  .t-red { background: var(--red-light); color: var(--red); }
+  .t-blue { background: var(--blue-light); color: var(--blue); }
+  .flow { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .flow li { background: var(--blue-light); border: 1px solid #bcd4ec; border-radius: 8px; padding: 6px 12px; font-size: 13px; font-weight: 600; color: #0b3d6b; }
+  .flow li.done { background: var(--green-light); border-color: #bfe3bf; color: var(--green); }
+  .note { background: var(--amber-light); border: 1px solid #ecdc9a; border-radius: 8px; padding: 10px 14px; font-size: 13.5px; }
+  footer { text-align: center; color: var(--muted); font-size: 12.5px; margin-top: 8px; }
+  a { color: var(--blue); }
+  .toc a { text-decoration: none; }
+  .num { font-family: Consolas, monospace; font-weight: 700; color: var(--blue); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>VSIX → CLI &amp; MCP: Tái sử dụng Project / Item Templates đa nền tảng</h1>
+  <p>Phân tích tổng quan — làm được hay không, kiến trúc <strong>Source of Truth</strong> duy nhất trong <code style="background:rgba(255,255,255,.14);color:#fff">DynamicsCrm.DevKit.Shared</code>, ưu tiên CLI trước, MCP sau.</p>
+  <p>
+    <span class="badge">13 Project Templates</span>
+    <span class="badge">17 Item Templates</span>
+    <span class="badge">3 nền tảng: VSIX · CLI · MCP</span>
+    <span class="badge">Không clone code</span>
+  </p>
+</header>
+
+<section id="tomtat">
+  <h2>1. Kết luận nhanh (Executive Summary)</h2>
+  <div class="verdict">
+    <strong>✅ KHẢ THI — và mức đầu tư hợp lý.</strong> Toàn bộ "trí tuệ" của template (nội dung payload, token, T4, metadata codegen) <u>đã</u> nằm ở dạng có thể chia sẻ được: payload là file vật lý trong repo, logic sinh code nằm trong <code>DynamicsCrm.DevKit.Shared</code> (Logic/, Services/, Resources/tt) — phần bị khóa Windows/VS chỉ là <em>lớp vỏ</em>: WPF forms, <code>IWizard</code>/EnvDTE, T4 COM service, P/Invoke sinh <code>.snk</code>. Chiến lược: tách phần vỏ đó bằng một <strong>Template Scaffolding Core</strong> đặt trong Shared (.shproj đã được cả VSIX net48 lẫn CLI net10 import), mỗi nền tảng chỉ còn <em>adapter</em> mỏng thu thập input (WPF / Spectre.Console hỏi–đáp / tham số MCP).
+  </div>
+  <ul>
+    <li><strong>Ưu tiên 1 — CLI:</strong> lệnh mới <code>devkit new</code> (chế độ hỏi–đáp tương tác như CLI hiện đại + flag cho automation), chạy Windows / macOS / Linux.</li>
+    <li><strong>Ưu tiên 2 — MCP:</strong> 3 tool <code>get_templates</code>, <code>scaffold_project</code>, <code>scaffold_item</code> gọi thẳng core — <em>không viết lại logic</em>.</li>
+    <li><strong>VSIX giữ nguyên hành vi:</strong> từng wizard VSIX hội nhập dần về core (tùy chọn, theo từng file P/I), payload không di chuyển.</li>
+  </ul>
+</section>
+
+<section id="hientrang">
+  <h2>2. Hiện trạng — vì sao đang bị khóa vào VS 2026+ / Windows</h2>
+  <table>
+    <tr><th>Thành phần template</th><th>Nơi hiện nay</th><th>Ràng buộc nền tảng</th></tr>
+    <tr><td>13 Project Templates (payload + <code>.vstemplate</code>)</td><td><code>ProjectTemplates/CSharp/01..13.*</code></td><td>Cơ chế template của VS (zip + manifest), Windows</td></tr>
+    <tr><td>17 Item Templates (payload + <code>.vstemplate</code>)</td><td><code>ItemTemplates/CSharp/01..18.*</code> (không có số 12)</td><td>Như trên; số 18 (Report) còn dùng <code>.vsz/.vsdir</code></td></tr>
+    <tr><td>Wizard logic (30 class <code>IWizard</code>)</td><td><code>DynamicsCrm.DevKit.Vsix/Wizard/{Project,Item}Templates/*.cs</code></td><td><code>EnvDTE</code>, UI thread VS</td></tr>
+    <tr><td>Thu thập input (WPF forms)</td><td><code>DynamicsCrm.DevKit.Vsix/Lib/Forms/*.xaml</code></td><td>WPF — Windows</td></tr>
+    <tr><td>Điền token</td><td><code>DynamicsCrm.DevKit.Vsix/Lib/Replacement.cs</code></td><td>Phụ thuộc form + <code>VsixHelper</code> (DTE)</td></tr>
+    <tr><td>Xử lý T4</td><td><code>DynamicsCrm.DevKit.Vsix/Lib/T4Helper.cs</code> (COM <code>STextTemplating</code>)</td><td>Visual Studio</td></tr>
+    <tr><td>Sinh <code>.snk</code></td><td><code>DynamicsCrm.DevKit.Vsix/Lib/SigningHelper.cs</code> (P/Invoke <code>mscoree</code>)</td><td>Windows</td></tr>
+    <tr><td><strong>Đã trung lập sẵn:</strong> T4 templates, bat/js/ts/cs resources, Logic codegen (LateBound, JsForm, TsForm…), MetadataService, NuGetHelper, T4Context</td><td><code>DynamicsCrm.DevKit.Shared/**</code></td><td><span class="tag t-green">dùng chung được ngay</span></td></tr>
+    <tr><td>CLI đã có sẵn: Spectre.Console.Cli, Mono.TextTemplating 3.0.0, tham chiếu Shared qua <code>.projitems</code></td><td><code>DynamicsCrm.DevKit.Cli/**</code></td><td><span class="tag t-green">hạ tầng đã sẵn sàng</span></td></tr>
+  </table>
+  <div class="note"><strong>Điểm mấu chốt:</strong> <code>DynamicsCrm.DevKit.Shared.shproj</code> đã được import bởi cả VSIX (net48, csproj dòng 519) và CLI (net10, csproj dòng 84). Đặt core trong Shared ⇒ sửa một chỗ, <strong>cả 3 nền tảng tự cập nhật</strong> (MCP nằm trong CLI nên hưởng theo).</div>
+</section>
+
+<section id="kientruc">
+  <h2>3. Kiến trúc đích — Source of Truth 3 lớp (không clone code)</h2>
+  <div class="arch">┌────────────────────────────────────────────────────────────────────┐
+│ LỚP 3 · PAYLOAD — vật lý DUY NHẤT, không copy                      │
+│   ProjectTemplates/CSharp/01..13.*   ItemTemplates/CSharp/01..18.* │
+│   (VSIX zip build vẫn đọc ở đây · Shared embed làm resource qua    │
+│    .projitems: EmbeddedResource trỏ thẳng file gốc)               │
+└──────────────────────────────┬─────────────────────────────────────┘
+                               │ embed / đọc
+┌──────────────────────────────▼─────────────────────────────────────┐
+│ LỚP 2 · TEMPLATE CORE — MỚI, trong DynamicsCrm.DevKit.Shared       │
+│   Templates/TemplateCatalog    danh mục 13 P + 17 I (id, params)  │
+│   Templates/TemplateManifest   file payload + token từng template │
+│   Templates/TokenEngine        port Replacement.cs (nhận DTO)     │
+│   Templates/ScaffoldingEngine  input → render → ghi file → result │
+│   Templates/T4/*               ITextTransformer + Mono impl       │
+│   Templates/SigningService     .snk RSA thuần (thay mscoree)      │
+│   Templates/SolutionMutator    sửa .sln/.slnx/.projitems thuần    │
+│   Templates/WorkspaceScanner   tìm sln/shared/namespace           │
+│   Templates/Models/*           ProjectTemplateInput/ItemTemplate… │
+└──────────────────────────────┬─────────────────────────────────────┘
+                               │ gọi chung (mỗi adapter CHỈ thu thập input)
+   ┌───────────────────────────┼────────────────────────────────────┐
+   │ VSIX (net48)              │ CLI (net10)          🤖 MCP (P2)   │
+   │ IWizard + WPF form →      │ devkit new           Mcp/Tools →   │
+   │ TemplateInput → Core      │ Spectre hỏi–đáp →    TemplateInput │
+   │ (hội nhập từng bước)      │ TemplateInput → Core │ → Core       │
+   └───────────────────────────┴────────────────────────────────────┘</div>
+  <h3>Nguyên tắc bất di bất dịch</h3>
+  <ul>
+    <li>Logic scaffolding tồn tại <strong>đúng 1 lần</strong> trong Shared. Adapter không chứa logic nghiệp vụ, chỉ map input/output.</li>
+    <li>Payload không bao giờ sao chép sang chỗ khác — 1 nguồn vật lý, các nền tảng đọc từ đó (VSIX: zip build; CLI/MCP: embedded resource).</li>
+    <li>Code trong Shared phải compile cho cả net48 + net10 (thói quen netstandard2.0; cấm EnvDTE/WPF/P-Invoke trong Shared).</li>
+    <li>Mọi thay đổi payload/token: sửa tại nguồn + cập nhật <code>TemplateManifest</code> + <code>.vstemplate</code> cùng lúc (điểm đồng bộ còn lại duy nhất, đã ghi rõ trong từng file .md).</li>
+  </ul>
+</section>
+
+<section id="danhsach">
+  <h2>4. Danh mục 30 templates &amp; mức độ khả thi</h2>
+  <p>Số thứ tự giữ nguyên theo folder gốc của VSIX. Độ phức tượng trưng khối lượng port: <span class="tag t-green">● Thấp</span> chủ yếu copy payload + token; <span class="tag t-amber">●● Vừa</span> thêm T4/sn k/sln; <span class="tag t-red">●●● Cao</span> thêm metadata Dataverse live. <em>Conn</em> = cần kết nối Dataverse khi scaffold.</p>
+
+  <h3>4.1 Project Templates (13) — file phân tích <code>P.&lt;n&gt;.&lt;Tên&gt;.md</code></h3>
+  <table>
+    <tr><th>#</th><th>Template</th><th>Payload chính</th><th>Yêu cầu đặc biệt</th><th>Conn</th><th>Khối lượng</th></tr>
+    <tr><td class="num">P.1</td><td><a href="P.1.Shared.md">Shared</a> (shproj)</td><td>.shproj/.projitems, PluginCore, Extension, Entities…</td><td>Tạo DynamicsCrm.DevKit.Cli.json, .sln shproj entry</td><td>Không</td><td><span class="tag t-amber">●●</span></td></tr>
+    <tr><td class="num">P.2</td><td><a href="P.2.Console.md">Console</a> (net462)</td><td>csproj template, App.config/App.cs theo loại kết nối, Helper, Program</td><td>NuGet versions, App theo AuthType</td><td>Không</td><td><span class="tag t-amber">●●</span></td></tr>
+    <tr><td class="num">P.3</td><td><a href="P.3.ConsoleCore.md">ConsoleCore</a> (net10)</td><td>Như P.2 + AppSettings.json, sinh ra build được trên Linux/mac</td><td>Như P.2</td><td>Không</td><td><span class="tag t-amber">●●</span></td></tr>
+    <tr><td class="num">P.4</td><td><a href="P.4.Server.md">Server</a> (plugin assembly)</td><td>csproj, deploy.debug(.only).bat, .snk</td><td>Bắt buộc có Shared trước; snk đa nền tảng</td><td>Không</td><td><span class="tag t-amber">●●</span></td></tr>
+    <tr><td class="num">P.5</td><td><a href="P.5.Package.md">Package</a> (Package Deployer)</td><td>csproj + deploy bat</td><td>Tương tự P.4</td><td>Không</td><td><span class="tag t-green">●</span></td></tr>
+    <tr><td class="num">P.6</td><td><a href="P.6.WebResource.md">WebResource</a> (JS)</td><td>package.json, jsconfig, devkit.js/.d.ts, deploy + generator bat</td><td>Nhúng resource js/ts</td><td>Không</td><td><span class="tag t-amber">●●</span></td></tr>
+    <tr><td class="num">P.7</td><td><a href="P.7.SharedTest.md">SharedTest</a> (shproj)</td><td>.shproj/.projitems, FakeXrmEasy base, faker…</td><td>Như P.1</td><td>Không</td><td><span class="tag t-amber">●●</span></td></tr>
+    <tr><td class="num">P.8</td><td><a href="P.8.ProxyTypes.md">ProxyTypes</a></td><td>csproj, run.bat, GeneratedCode.cs</td><td>Giới thiệu lệnh modelbuilder</td><td>Khi chạy</td><td><span class="tag t-green">●</span></td></tr>
+    <tr><td class="num">P.9</td><td><a href="P.9.Test.md">Test</a></td><td>csproj + snk</td><td>Như P.4</td><td>Không</td><td><span class="tag t-green">●</span></td></tr>
+    <tr><td class="num">P.10</td><td><a href="P.10.UiTest.md">UiTest</a></td><td>csproj, App.config, TestSettings, runsettings</td><td>Như P.4 + cấu hình Selenium</td><td>Không</td><td><span class="tag t-green">●</span></td></tr>
+    <tr><td class="num">P.11</td><td><a href="P.11.SolutionPackager.md">SolutionPackager</a></td><td>Extract/Pack-Both.bat, mapping.xml, csproj</td><td>Bat + bản .sh tương đương</td><td>Khi chạy</td><td><span class="tag t-green">●</span></td></tr>
+    <tr><td class="num">P.12</td><td><a href="P.12.Report.md">Report</a></td><td>.rptproj, download/upload.reports.bat</td><td>Tích hợp CLI report có sẵn</td><td>Khi chạy</td><td><span class="tag t-green">●</span></td></tr>
+    <tr><td class="num">P.13</td><td><a href="P.13.WebResourceTs.md">WebResourceTs</a> (TS)</td><td>tsconfig, build.js, jest/eslint, devkit.ts/.d.ts, deploy bat</td><td>Nhúng resource ts; npm build đa nền tảng</td><td>Không</td><td><span class="tag t-amber">●●</span></td></tr>
+  </table>
+
+  <h3>4.2 Item Templates (17) — file phân tích <code>I.&lt;n&gt;.&lt;Tên&gt;.md</code> <span class="tag t-blue">giữ số gốc: không có I.12</span></h3>
+  <table>
+    <tr><th>#</th><th>Template</th><th>Sinh ra file</th><th>Cơ chế chính</th><th>Conn</th><th>Khối lượng</th></tr>
+    <tr><td class="num">I.1</td><td><a href="I.1.LateBound.md">LateBound</a></td><td>{Entity}.cs + {Entity}.generated.cs</td><td>CSharpLateBound.GetCsCode (Shared sẵn)</td><td>Có</td><td><span class="tag t-amber">●●</span></td></tr>
+    <tr><td class="num">I.2</td><td><a href="I.2.JsForm.md">JsForm</a></td><td>{Entity}.js + .form.js + .d.ts</td><td>CodeGenService + Logic/JsForm (Shared sẵn)</td><td>Có</td><td><span class="tag t-amber">●●</span></td></tr>
+    <tr><td class="num">I.3</td><td><a href="I.3.JsWebApi.md">JsWebApi</a></td><td>{Entity}.js + .webapi.js + .d.ts</td><td>Logic/JsWebApi</td><td>Có</td><td><span class="tag t-amber">●●</span></td></tr>
+    <tr><td class="num">I.4</td><td><a href="I.4.Plugin.md">Plugin</a></td><td>{Class}.cs</td><td>T4 Plugin.tt (+ custom T4)</td><td>Có*</td><td><span class="tag t-red">●●●</span></td></tr>
+    <tr><td class="num">I.5</td><td><a href="I.5.CustomAction.md">CustomAction</a></td><td>{Class}.cs</td><td>T4 CustomAction.tt + validate message</td><td>Có</td><td><span class="tag t-red">●●●</span></td></tr>
+    <tr><td class="num">I.6</td><td><a href="I.6.CustomApi.md">CustomApi</a></td><td>{Class}.cs</td><td>T4 CustomApi.tt + validate message</td><td>Có</td><td><span class="tag t-red">●●●</span></td></tr>
+    <tr><td class="num">I.7</td><td><a href="I.7.Workflow.md">Workflow</a></td><td>{Class}.cs</td><td>T4 Workflow.tt</td><td>Có*</td><td><span class="tag t-amber">●●</span></td></tr>
+    <tr><td class="num">I.8</td><td><a href="I.8.DataProvider.md">DataProvider</a></td><td>Create/Update/Delete/Retrieve/RetrieveMultiple.cs</td><td>5 T4 DataProvider*.tt</td><td>Có</td><td><span class="tag t-red">●●●</span></td></tr>
+    <tr><td class="num">I.9</td><td><a href="I.9.Test.md">Test</a></td><td>{Class}Test.cs</td><td>T4 Test.tt</td><td>Có*</td><td><span class="tag t-amber">●●</span></td></tr>
+    <tr><td class="num">I.10</td><td><a href="I.10.UiTest.md">UiTest</a></td><td>{Class}UiTest.cs</td><td>T4 UiTest.tt</td><td>Không*</td><td><span class="tag t-green">●</span></td></tr>
+    <tr><td class="num">I.11</td><td><a href="I.11.ResourceString.md">ResourceString</a></td><td>{Entity}.{LCID}.resx</td><td>Copy payload .resx + đổi tên</td><td>Không</td><td><span class="tag t-green">●</span></td></tr>
+    <tr><td class="num">I.13</td><td><a href="I.13.BatFile.md">BatFile</a></td><td>deploy bat, devkit.js/.d.ts, Managed-Identity…</td><td>Resource nhúng + $CliConnectionArgs$</td><td>Không</td><td><span class="tag t-green">●</span></td></tr>
+    <tr><td class="num">I.14</td><td><a href="I.14.JsFormTs.md">JsFormTs (TsForm)</a></td><td>{Entity}.ts + .form.ts</td><td>CodeGenService + Logic/TsForm</td><td>Có</td><td><span class="tag t-amber">●●</span></td></tr>
+    <tr><td class="num">I.15</td><td><a href="I.15.TsWebApi.md">TsWebApi</a></td><td>{Entity}.ts + .webapi.ts</td><td>Logic/TsWebApi</td><td>Có</td><td><span class="tag t-amber">●●</span></td></tr>
+    <tr><td class="num">I.16</td><td><a href="I.16.TsDialog.md">TsDialog</a></td><td>{Name}.ts + .dialog.ts</td><td>Logic/TsDialog</td><td>Không</td><td><span class="tag t-green">●</span></td></tr>
+    <tr><td class="num">I.17</td><td><a href="I.17.JsDialog.md">JsDialog</a></td><td>{Name}.js + .dialog.js + .d.ts</td><td>Logic/JsDialog</td><td>Không</td><td><span class="tag t-green">●</span></td></tr>
+    <tr><td class="num">I.18</td><td><a href="I.18.Report.md">Report</a></td><td>{Name}.rdl (+ mapping)</td><td>Đặc biệt: .vsz/.vsdir + FormReportDatasets/Mapping</td><td>Có</td><td><span class="tag t-amber">●●</span></td></tr>
+  </table>
+  <p style="font-size:12.5px;color:var(--muted)">(*) Có thể chạy offline nếu user tự cung cấp đủ tham số (entity/message/stage…);Conn chỉ cần khi phải query metadata Dataverse để hiển thị danh sách chọn.</p>
+</section>
+
+<section id="proscons">
+  <h2>5. Ưu điểm — Nhược điểm của phương án</h2>
+  <div class="cols">
+    <div class="card plus">
+      <h4>✅ Pros</h4>
+      <ul>
+        <li><strong>1 nguồn sự thật:</strong> sửa template 1 lần ⇒ VSIX + CLI + MCP đồng bộ; không thể "lệch bản" giữa các nền tảng.</li>
+        <li><strong>Mở khóa user Linux/macOS</strong> cho toàn bộ 30 templates bằng 1 lệnh quen thuộc <code>devkit new</code>.</li>
+        <li><strong>Tái dùng gần như toàn bộ:</strong> T4 (.tt), resource bat/js/ts/cs, Logic codegen, MetadataService, NuGetHelper đều đã trong Shared từ trước.</li>
+        <li><strong>MCP gần như free:</strong> chỉ là adapter tham số → cùng engine; AI agent scaffold project trực tiếp qua MCP.</li>
+        <li><strong>CLI hỏi–đáp (Spectre.Console)</strong> cho trải nghiệm ngang wizard WPF: chọn entity/message từ metadata live.</li>
+        <li><strong>Kém rủi ro cho VSIX:</strong> VSIX không phải đổi ngay; hội nhập từng wizard về core theo từng file P/I (mỗi bước đều build + test được).</li>
+        <li><strong>Non-interactive flags</strong> cho CI/CD, script, và cho chính MCP dùng lại.</li>
+      </ul>
+    </div>
+    <div class="card minus">
+      <h4>⚠️ Cons / Rủi ro &amp; cách xử lý</h4>
+      <ul>
+        <li><strong>Shared phải compile cả net48 + net10</strong> — dễ vi phạm nếu dùng API .NET mới. ⇒ Giới hạn API mức netstandard2.0; build 2 phía sau mỗi thay đổi (bắt buộc trong nghiệm thu).</li>
+        <li><strong>T4 output khác engine?</strong> VS COM T4 vs Mono.TextTemplating có thể lệch chi tiết. ⇒ Test chéo snapshot output 2 engine trên cùng T4Context; end-game khuyến nghị cả VSIX chuyển sang Mono impl.</li>
+        <li><strong>Token semantics của VS phải mô phỏng đúng</strong> ($fileinputname$, $SafeProjectName$…). ⇒ TokenEngine port sát Replacement.cs + test từng token.</li>
+        <li><strong>.shproj không add được bằng <code>dotnet sln</code></strong> ⇒ SolutionMutator tự chèn entry + GlobalSection theo đúng format VS.</li>
+        <li><strong>Bat là Windows-only về bản chất</strong> ⇒ các template có bat sinh thêm bản <code>.sh</code> tương đương trên Linux/macOS (sinh cả hai, theo OS).</li>
+        <li><strong>Embed payload làm tăng size assembly</strong> (VSIX + CLI) ⇒ chỉ nhúng file thật sự cần, loại icon/bin/obj; chấp nhận tăng nhẹ.</li>
+        <li><strong>Khối lượng công việc 30 templates</strong> ⇒ chính là lý do có 31 file .md chia nhỏ theo từng template, làm/check/bàn giao lần lượt.</li>
+        <li><strong>Cần network cho NuGet versions</strong> ⇒ fallback offline về bộ version an toàn (đã có sẵn ý tưởng trong Replacement).</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="lotrinh">
+  <h2>6. Lộ trình thực hiện &amp; quy trình làm việc theo file</h2>
+  <ul class="flow">
+    <li>0.md — nền móng</li>
+    <li>P.1 → P.13 (CLI project)</li>
+    <li>I.1 → I.11, I.13 → I.18 (CLI item)</li>
+    <li>🤖 MCP Phase 2</li>
+    <li>VSIX hội nhập (tùy chọn, từng bước)</li>
+  </ul>
+  <h3>Quy trình cho AI với MỖI file .md (bắt buộc)</h3>
+  <ol>
+    <li><strong>Đọc đúng 1 file .md</strong> của template đang làm (+ <code>0.md</code> nếu cần nền) — không đọc tất cả.</li>
+    <li><strong>Đọc các file nguồn</strong> được liệt kê ở mục "Nguồn sự thật hiện tại" của file đó (wizard VSIX, payload, .vstemplate, form).</li>
+    <li>Implement theo mục "Việc phải làm" — handler trong Shared + đăng ký catalog + CLI wiring.</li>
+    <li>Chạy <strong>build + test</strong> theo mục "Test &amp; nghiệm thu" của file đó (dotnet build 0 err/0 warn, dotnet test, smoke CLI).</li>
+    <li><strong>Bàn giao</strong> theo checklist cuối file → user duyệt → mới được mở file kế tiếp.</li>
+  </ol>
+  <div class="note">Mục đích của cấu trúc này: mỗi file là một đơn vị công việc đóng hộp (scope + thiết kế + nghiệm thu), AI chỉ cần ngữ cảnh tối thiểu, giảm token đọc, có điểm kiểm soát chất lượng sau từng template.</div>
+</section>
+
+<section id="index">
+  <h2>7. Chỉ mục toàn bộ file phân tích</h2>
+  <h3>Nền móng</h3>
+  <ul>
+    <li><a href="0.md"><code>0.md</code></a> — Template Scaffolding Core trong Shared (bắt buộc làm đầu tiên)</li>
+  </ul>
+  <h3>Project Templates</h3>
+  <p>
+    <a href="P.1.Shared.md">P.1.Shared</a> · <a href="P.2.Console.md">P.2.Console</a> · <a href="P.3.ConsoleCore.md">P.3.ConsoleCore</a> · <a href="P.4.Server.md">P.4.Server</a> · <a href="P.5.Package.md">P.5.Package</a> · <a href="P.6.WebResource.md">P.6.WebResource</a> · <a href="P.7.SharedTest.md">P.7.SharedTest</a> · <a href="P.8.ProxyTypes.md">P.8.ProxyTypes</a> · <a href="P.9.Test.md">P.9.Test</a> · <a href="P.10.UiTest.md">P.10.UiTest</a> · <a href="P.11.SolutionPackager.md">P.11.SolutionPackager</a> · <a href="P.12.Report.md">P.12.Report</a> · <a href="P.13.WebResourceTs.md">P.13.WebResourceTs</a>
+  </p>
+  <h3>Item Templates (giữ số gốc — không có I.12)</h3>
+  <p>
+    <a href="I.1.LateBound.md">I.1.LateBound</a> · <a href="I.2.JsForm.md">I.2.JsForm</a> · <a href="I.3.JsWebApi.md">I.3.JsWebApi</a> · <a href="I.4.Plugin.md">I.4.Plugin</a> · <a href="I.5.CustomAction.md">I.5.CustomAction</a> · <a href="I.6.CustomApi.md">I.6.CustomApi</a> · <a href="I.7.Workflow.md">I.7.Workflow</a> · <a href="I.8.DataProvider.md">I.8.DataProvider</a> · <a href="I.9.Test.md">I.9.Test</a> · <a href="I.10.UiTest.md">I.10.UiTest</a> · <a href="I.11.ResourceString.md">I.11.ResourceString</a> · <a href="I.13.BatFile.md">I.13.BatFile</a> · <a href="I.14.JsFormTs.md">I.14.JsFormTs</a> · <a href="I.15.TsWebApi.md">I.15.TsWebApi</a> · <a href="I.16.TsDialog.md">I.16.TsDialog</a> · <a href="I.17.JsDialog.md">I.17.JsDialog</a> · <a href="I.18.Report.md">I.18.Report</a>
+  </p>
+</section>
+
+<footer>DynamicsCrm.DevKit — Vsix2CliAndMcp · File tổng quan (html duy nhất của loạt bài). Phân tích chi tiết nằm ở các file .md kèm theo. Cập nhật: 2026-10-24.</footer>
+</div>
+</body>
+</html>
