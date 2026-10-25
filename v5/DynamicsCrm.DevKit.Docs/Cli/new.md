@@ -46,13 +46,14 @@ Các flag khác (`--message`, `--stage`, `--execution`, `--order`, `--template`,
 - **Project `Console` (Ready)**: scaffold console **net462** (7 payload files: csproj SDK-style, `App.cs`, `App.config`, `Program.cs`, `Lib/Helper.cs`, `Lib/TracingServiceFake.cs`, `README.md`) + add csproj vào `.sln`/`.slnx` kèm consumer line `SharedItemsImports = 5` của Shared project **khi có `--solution`**. **`App.cs`/`App.config` đổi theo connection type** (`Interactive`, `ClientSecret`, `OAuth`, `AD` — net462 không hỗ trợ `DeviceCode`/`FromPac`, dùng Console Core): interactive terminal sẽ hỏi AuthType + URL/ClientId/Secret/Username/Password (default gợi ý từ `.env`); non-interactive/`--offline` lấy marker từ `.env` (`DEVKIT_AUTH_TYPE`) hoặc bake placeholder `ClientSecret`.
 - **Project `ConsoleCore` (Ready)**: scaffold console **net10.0** đa nền tảng (7 payload files: csproj SDK-style, `App.cs`, `AppSettings.json`, `Program.cs`, `Lib/Helper.cs`, `Lib/TracingServiceFake.cs`, `README.md`) + add csproj vào `.sln`/`.slnx` kèm consumer line `SharedItemsImports = 5` **khi có `--solution`**. **`App.cs`/`AppSettings.json` đổi theo connection type** (`Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` — net10 không hỗ trợ `AD` vì WCF/ServiceModel, dùng Console net462). Project sinh ra là template duy nhất **`dotnet build` được thật trên Linux/macOS**. Prompt/fallback connection giống Console.
 - **Project `Server` (Ready)**: scaffold plugin assembly **net462** (csproj SDK-style `SignAssembly` + `AssemblyOriginatorKeyFile`, `README.md`, 2 deploy scripts) + **sinh strong-name key mới `{Name}.snk`** (RSA 2048, cross-platform — không dùng mẫu) + add csproj vào `.sln`/`.slnx` kèm consumer line `SharedItemsImports = 5` **khi có `--solution`**. **Bắt buộc có Shared project trước** (thiếu → lỗi kèm hint scaffold Shared; interactive sẽ hỏi scaffold luôn); rerun giữ nguyên key cũ (`--force` để sinh lại). Deploy scripts: Windows `deploy.debug(.only).bat`, macOS/Linux `deploy.debug(.only).sh` (executable) — nhúng CLI connection args khi connection explicit, rỗng khi dựa `.env`. Hỗ trợ đủ 6 AuthType (payload không đổi theo connection type).
+- **Project `Package` (Ready)**: scaffold Package Deployer **net462** (csproj SDK-style với `Microsoft.PowerApps.MSBuild.Plugin` build definitions + `GeneratePackageOnBuild`, `README.md`, 2 deploy scripts của bộ plugin — package deploy qua `devkit server`) + add csproj vào `.sln`/`.slnx` **khi có `--solution`**. **Không sinh `.snk` và không yêu cầu Shared** (csproj import `.projitems` với `Condition Exists` — consumer line chỉ thêm khi workspace có Shared). Deploy scripts/platform + fallback connection giống `Server`; hỗ trợ đủ 6 AuthType.
 - Các type còn lại: theo lộ trình `DynamicsCrm.DevKit.Docs/Vsix2CliAndMcp/P.*.md` / `I.*.md` — cột Ready sẽ chuyển `yes` dần từng bản.
 
 ## Hành vi quan trọng
 
 - **Idempotent**: chạy lại không đè file user (skipped); `--force` để ghi đè; kết quả liệt kê Created/Updated/Skipped/Unchanged từng file.
 - **Solution là opt-in (`--solution`)**: CLI chỉ insert project vào `.sln`/`.slnx` khi được chỉ định tường minh `--solution <file>` (file phải tồn tại — sai → lỗi trước khi tạo file nào). Không có `--solution` → **chỉ tạo project** dưới `--out`, không đụng solution nào (1 folder có thể có nhiều solution — CLI không tự đoán; VSIX thì luôn add vào solution đang mở vì nó biết chắc). `--solution` cũng là anchor cho việc tìm Shared project và tên mặc định `{SolutionName}.{Type}`.
-- **Connection**: không bắt buộc cho scaffold; generator scripts dựa vào `.env` fallback (`DEVKIT_*`, tìm từ thư mục hiện hành lên trên). Riêng `Console`/`ConsoleCore` dùng connection để chọn biến thể `App.cs`/`App.config` hoặc `App.cs`/`AppSettings.json`, và `Server` dùng connection để nhúng args vào deploy scripts (xem trên).
+- **Connection**: không bắt buộc cho scaffold; generator scripts dựa vào `.env` fallback (`DEVKIT_*`, tìm từ thư mục hiện hành lên trên). Riêng `Console`/`ConsoleCore` dùng connection để chọn biến thể `App.cs`/`App.config` hoặc `App.cs`/`AppSettings.json`, và `Server`/`Package` dùng connection để nhúng args vào deploy scripts (xem trên).
 
 ## Examples
 
@@ -71,6 +72,9 @@ devkit new --kind project --type Server --name Contoso.Server --out .
 
 # Server project và add vào solution chỉ định (CLI không tự đoán solution)
 devkit new --kind project --type Server --name Contoso.Server --out . --solution MySolution.slnx
+
+# Package Deployer project (net462, không cần .snk, không cần Shared)
+devkit new --kind project --type Package --name Contoso.Package --out .
 
 # Scaffold vào folder solution khác
 devkit new --kind project --type Shared --name Dev.AllInOne.Shared --out /path/to/solution
