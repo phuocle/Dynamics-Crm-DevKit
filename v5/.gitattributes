@@ -1,6 +1,9 @@
 # Store text canonically as LF in Git; Windows checkouts use CRLF.
 * text=auto eol=crlf
 
+# Shell scripts must stay LF on every platform (bash breaks with CRLF).
+*.sh text eol=lf
+
 # Never perform text conversion on binary or packaged files.
 *.png binary
 *.jpg binary
