@@ -6,7 +6,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
     public class McpCommandArgs : DevKitCommandArgs
     {
         [CommandArgument(0, "[name]")]
-        [Description("Optional display name for this MCP server instance (e.g. 'devkit-anti'). Shown in Task Manager and reported to MCP clients.")]
+        [Description("Optional display name for this MCP server instance (shown to MCP clients)")]
         public string Name { get; set; }
         [CommandOption("--transport")]
         [Description("MCP transport type: stdio (default)")]
@@ -24,7 +24,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public bool ListTools { get; set; }
 
         [CommandOption("--category")]
-        [Description("Tool category: readonly (read-only tools only) or all (loads everything). Default: all.")]
+        [Description("Tool category: readonly or all. Default: all.")]
         [DefaultValue("all")]
         public string Category { get; set; } = "all";
 
@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public bool DryRun { get; set; }
 
         [CommandOption("--as-user")]
-        [Description("Impersonate this user for the entire MCP session. Accepts a systemuserid GUID or email. The connecting user must be a System Administrator (or have prvActOnBehalfOfAnotherUser assigned directly).")]
+        [Description("Impersonate this user (GUID or email) for the session; requires admin privileges")]
         public string AsUser { get; set; }
     }
 }

@@ -106,6 +106,7 @@ namespace DynamicsCrm.DevKit.Cli
                 "  devkit server --auth Interactive --url https://org.crm.dynamics.com --json cli.json --profile PROD\n" +
                 "  devkit server --auth FromPac --pacprofile DEVKITV4 --json cli.json --profile DEBUG\n" +
                 "  devkit server --auth ClientSecret --url URL --clientid ID --clientsecret SEC --json cli.json --profile CI\n" +
+                "  devkit new --kind project --type Shared --name Contoso.Shared\n" +
                 "  devkit mcp --auth ClientSecret --url URL --clientid ID --clientsecret SEC\n\n" +
                 "Project .env Fallback (DEVKIT_*):\n" +
                 "  Normal commands & tool call: CLI args > project .env > validation error.\n" +
@@ -150,6 +151,7 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]uploadreport[/]           Upload reports to a solution\n" +
                     "  [cyan]downloadwebresource[/]    Download web resources from a solution\n" +
                     "  [cyan]datasource[/]             Create data source entities\n" +
+                    "  [cyan]new[/]                    Create DevKit project/item templates (run: devkit new list)\n" +
                     "  [cyan]mcp[/]                    Start MCP server for AI agent integration\n\n" +
                     "[green]Connection Options:[/]\n" +
                     "  --conn [yellow]STRING[/]          Dynamics 365 connection string (legacy)\n" +
@@ -175,6 +177,7 @@ namespace DynamicsCrm.DevKit.Cli
                     "  devkit server --auth [cyan]Interactive[/] --url [cyan]https://org.crm.dynamics.com[/] --json [cyan]cli.json[/] --profile [cyan]PROD[/]\n" +
                     "  devkit server --auth [cyan]FromPac[/] --pacprofile [cyan]DEVKITV4[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/]\n" +
                     "  devkit server --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/] --json [cyan]cli.json[/] --profile [cyan]CI[/]\n" +
+                    "  devkit [cyan]new[/] --kind project --type [cyan]Shared[/] --name [cyan]Contoso.Shared[/]\n" +
                     "  devkit mcp --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/]\n\n" +
                     "[green]Project .env values (DEVKIT_*):[/]\n" +
                     "  Normal commands: CLI args > project .env > validation error.\n" +

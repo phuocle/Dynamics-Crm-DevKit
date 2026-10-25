@@ -133,7 +133,7 @@ namespace DynamicsCrm.DevKit.Cli
                           .WithExample(new[] { "new", "--kind", "item", "--type", "LateBound", "--entity", "Account", "--offline" });
 
                     config.AddCommand<McpCommand>("mcp")
-                          .WithDescription("Start MCP server for AI agent integration. Connection priority: explicit CLI args, then DEVKIT_* values from a project .env found from the process working directory upward. OS environment variables are not read")
+                          .WithDescription("Start MCP server for AI agent integration (auth: CLI args > project .env; see --setup-guide)")
                           .WithExample(new[] { "mcp", "--tools" })
                           .WithExample(new[] { "mcp", "--setup-guide" })
                           .WithExample(new[] { "mcp", "--auth", "ClientSecret", "--url", "https://org.crm.dynamics.com", "--clientid", "APP_ID", "--clientsecret", "SECRET" })
