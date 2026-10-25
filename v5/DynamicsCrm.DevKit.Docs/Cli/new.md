@@ -47,13 +47,14 @@ Các flag khác (`--message`, `--stage`, `--execution`, `--order`, `--template`,
 - **Project `ConsoleCore` (Ready)**: scaffold console **net10.0** đa nền tảng (7 payload files: csproj SDK-style, `App.cs`, `AppSettings.json`, `Program.cs`, `Lib/Helper.cs`, `Lib/TracingServiceFake.cs`, `README.md`) + add csproj vào `.sln`/`.slnx` kèm consumer line `SharedItemsImports = 5` **khi có `--solution`**. **`App.cs`/`AppSettings.json` đổi theo connection type** (`Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` — net10 không hỗ trợ `AD` vì WCF/ServiceModel, dùng Console net462). Project sinh ra là template duy nhất **`dotnet build` được thật trên Linux/macOS**. Prompt/fallback connection giống Console.
 - **Project `Server` (Ready)**: scaffold plugin assembly **net462** (csproj SDK-style `SignAssembly` + `AssemblyOriginatorKeyFile`, `README.md`, 2 deploy scripts) + **sinh strong-name key mới `{Name}.snk`** (RSA 2048, cross-platform — không dùng mẫu) + add csproj vào `.sln`/`.slnx` kèm consumer line `SharedItemsImports = 5` **khi có `--solution`**. **Bắt buộc có Shared project trước** (thiếu → lỗi kèm hint scaffold Shared; interactive sẽ hỏi scaffold luôn); rerun giữ nguyên key cũ (`--force` để sinh lại). Deploy scripts: Windows `deploy.debug(.only).bat`, macOS/Linux `deploy.debug(.only).sh` (executable) — nhúng CLI connection args khi connection explicit, rỗng khi dựa `.env`. Hỗ trợ đủ 6 AuthType (payload không đổi theo connection type).
 - **Project `Package` (Ready)**: scaffold Package Deployer **net462** (csproj SDK-style với `Microsoft.PowerApps.MSBuild.Plugin` build definitions + `GeneratePackageOnBuild`, `README.md`, 2 deploy scripts của bộ plugin — package deploy qua `devkit server`) + add csproj vào `.sln`/`.slnx` **khi có `--solution`**. **Không sinh `.snk` và không yêu cầu Shared** (csproj import `.projitems` với `Condition Exists` — consumer line chỉ thêm khi workspace có Shared). Deploy scripts/platform + fallback connection giống `Server`; hỗ trợ đủ 6 AuthType.
+- **Project `WebResource` (Ready)**: scaffold web resource **JavaScript net462** (csproj SDK-style với duy nhất `DynamicsCrm.DevKit.Analyzers`, `README.md`, `deploy.debug.bat/.sh`, `package.json`, `jsconfig.json`, `entities/devkit.d.ts` (giữ BOM như payload), `lib/devkit.js`, `entities/generator.form.bat/.sh`, `entities/generator.webapi.bat/.sh` — nội dung js/ts/json lấy từ resource dùng chung với VSIX) + tạo sẵn 7 thư mục rỗng của vstemplate (`lib`, `entities`, `images`, `resources`, `html`, `css`, `js`) + add csproj vào `.sln`/`.slnx` **khi có `--solution`** (entry thường — csproj không import `.projitems`, không có consumer line). **Không sinh `.snk` và không yêu cầu Shared.** Scripts: Windows bat / macOS/Linux sh (executable), `deploy.debug` chạy `devkit webresource` profile `DEBUG`, generators chạy `devkit generator` profile `JS-FORM`/`JS-WEBAPI`; nhúng CLI connection args khi connection explicit, rỗng khi dựa `.env`. Hỗ trợ đủ 6 AuthType.
 - Các type còn lại: theo lộ trình `DynamicsCrm.DevKit.Docs/Vsix2CliAndMcp/P.*.md` / `I.*.md` — cột Ready sẽ chuyển `yes` dần từng bản.
 
 ## Hành vi quan trọng
 
 - **Idempotent**: chạy lại không đè file user (skipped); `--force` để ghi đè; kết quả liệt kê Created/Updated/Skipped/Unchanged từng file.
 - **Solution là opt-in (`--solution`)**: CLI chỉ insert project vào `.sln`/`.slnx` khi được chỉ định tường minh `--solution <file>` (file phải tồn tại — sai → lỗi trước khi tạo file nào). Không có `--solution` → **chỉ tạo project** dưới `--out`, không đụng solution nào (1 folder có thể có nhiều solution — CLI không tự đoán; VSIX thì luôn add vào solution đang mở vì nó biết chắc). `--solution` cũng là anchor cho việc tìm Shared project và tên mặc định `{SolutionName}.{Type}`.
-- **Connection**: không bắt buộc cho scaffold; generator scripts dựa vào `.env` fallback (`DEVKIT_*`, tìm từ thư mục hiện hành lên trên). Riêng `Console`/`ConsoleCore` dùng connection để chọn biến thể `App.cs`/`App.config` hoặc `App.cs`/`AppSettings.json`, và `Server`/`Package` dùng connection để nhúng args vào deploy scripts (xem trên).
+- **Connection**: không bắt buộc cho scaffold; generator scripts dựa vào `.env` fallback (`DEVKIT_*`, tìm từ thư mục hiện hành lên trên). Riêng `Console`/`ConsoleCore` dùng connection để chọn biến thể `App.cs`/`App.config` hoặc `App.cs`/`AppSettings.json`, và `Server`/`Package`/`WebResource` dùng connection để nhúng args vào deploy/generator scripts (xem trên).
 
 ## Examples
 
@@ -75,6 +76,9 @@ devkit new --kind project --type Server --name Contoso.Server --out . --solution
 
 # Package Deployer project (net462, không cần .snk, không cần Shared)
 devkit new --kind project --type Package --name Contoso.Package --out .
+
+# WebResource project (JavaScript net462, không cần .snk, không cần Shared)
+devkit new --kind project --type WebResource --name Contoso.WebResource --out .
 
 # Scaffold vào folder solution khác
 devkit new --kind project --type Shared --name Dev.AllInOne.Shared --out /path/to/solution
