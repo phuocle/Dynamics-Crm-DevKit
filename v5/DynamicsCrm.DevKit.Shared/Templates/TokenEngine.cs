@@ -247,6 +247,23 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             {
                 replacements["$deploy.debug.only.sh$"] = deployDebugOnlySh;
             }
+            // Non-Windows twins of the WebResource deploy + JS generator
+            // scripts (bash) — same set-only-when-exists contract.
+            var webResourceDeploySh = await ReadBatResourceAsync("sh.webresource.deploy.debug.sh", crmConnection);
+            if (webResourceDeploySh != null)
+            {
+                replacements["$webresource.deploy.debug.sh$"] = webResourceDeploySh;
+            }
+            var generatorFormSh = await ReadBatResourceAsync("sh.generator.form.sh", crmConnection);
+            if (generatorFormSh != null)
+            {
+                replacements["$generator.form.sh$"] = generatorFormSh;
+            }
+            var generatorWebApiSh = await ReadBatResourceAsync("sh.generator.webapi.sh", crmConnection);
+            if (generatorWebApiSh != null)
+            {
+                replacements["$generator.webapi.sh$"] = generatorWebApiSh;
+            }
             replacements["$run.bat$"] = await ReadBatResourceAsync("bat.proxytypes.run.bat", crmConnection);
             replacements["$Extract-Both.bat$"] = await ReadBatResourceAsync("bat.solutionpackager.extract.both.bat", crmConnection);
             replacements["$Pack-Both.bat$"] = await ReadBatResourceAsync("bat.solutionpackager.pack.both.bat", crmConnection);

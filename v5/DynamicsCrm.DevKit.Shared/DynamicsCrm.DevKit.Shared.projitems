@@ -158,6 +158,7 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\webresource.deploy.debug.bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\webresource.deploy.debug.ts_bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\webresource.deploy.release.ts_bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\webresource.deploy.debug.sh" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\devkit.d.ts" />
@@ -166,6 +167,8 @@
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.form.bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.webapi.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\generator.form.sh" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\generator.webapi.sh" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\package.json" />
@@ -277,6 +280,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\SharedProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ServerProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\PackageProjectTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\WebResourceProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TemplateHandlers.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -323,13 +327,17 @@
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\05.PackageProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.package.ProjectTemplate.csproj.template" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\05.PackageProjectTemplate\README.md" LogicalName="Resources.templates.project.package.README.md" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\deploy.debug.bat" LogicalName="Resources.templates.project.webresource.deploy.debug.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\deploy.debug.sh" LogicalName="Resources.templates.project.webresource.deploy.debug.sh" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\DevKit.d.ts" LogicalName="Resources.templates.project.webresource.DevKit.d.ts" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\devkit.js" LogicalName="Resources.templates.project.webresource.devkit.js" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\generator.form.bat" LogicalName="Resources.templates.project.webresource.generator.form.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\generator.form.sh" LogicalName="Resources.templates.project.webresource.generator.form.sh" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\generator.webapi.bat" LogicalName="Resources.templates.project.webresource.generator.webapi.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\generator.webapi.sh" LogicalName="Resources.templates.project.webresource.generator.webapi.sh" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\jsconfig.json" LogicalName="Resources.templates.project.webresource.jsconfig.json" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\package.json" LogicalName="Resources.templates.project.webresource.package.json" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.webresource.ProjectTemplate.csproj.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\README.md" LogicalName="Resources.templates.project.webresource.README.md" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\CalculateRollupFieldRequestExecutor.cs" LogicalName="Resources.templates.project.sharedtest.CalculateRollupFieldRequestExecutor.cs" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\Extension.cs" LogicalName="Resources.templates.project.sharedtest.Extension.cs" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\FakerHelper.cs" LogicalName="Resources.templates.project.sharedtest.FakerHelper.cs" />
