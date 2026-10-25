@@ -271,6 +271,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\T4\T4ContextFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\T4\T4TemplateResolver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ConsoleProjectTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ConsoleCoreProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\SharedProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TemplateHandlers.cs" />
   </ItemGroup>
@@ -304,6 +305,7 @@
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\03.ConsoleCoreProjectTemplate\Program.cs" LogicalName="Resources.templates.project.consolecore.Program.cs" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\03.ConsoleCoreProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.consolecore.ProjectTemplate.csproj.template" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\03.ConsoleCoreProjectTemplate\TracingServiceFake.cs" LogicalName="Resources.templates.project.consolecore.TracingServiceFake.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\03.ConsoleCoreProjectTemplate\README.md" LogicalName="Resources.templates.project.consolecore.README.md" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\04.ServerProjectTemplate\deploy.debug.bat" LogicalName="Resources.templates.project.server.deploy.debug.bat" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\04.ServerProjectTemplate\deploy.debug.only.bat" LogicalName="Resources.templates.project.server.deploy.debug.only.bat" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\04.ServerProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.server.ProjectTemplate.csproj.template" />

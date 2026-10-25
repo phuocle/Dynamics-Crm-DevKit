@@ -15,6 +15,8 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             TemplateManifests.Register(SharedProjectTemplateHandler.CreateManifest());
             ScaffoldingEngine.RegisterHandler(new ConsoleProjectTemplateHandler());
             TemplateManifests.Register(ConsoleProjectTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(new ConsoleCoreProjectTemplateHandler());
+            TemplateManifests.Register(ConsoleCoreProjectTemplateHandler.CreateManifest());
         }
     }
 }
