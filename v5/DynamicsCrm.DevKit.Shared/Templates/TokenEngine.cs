@@ -57,7 +57,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 }
             }
             AddCommonTokens(replacements, workspace);
-            await AddNuGetTokensAsync(replacements);
+            await AddNuGetTokensAsync(replacements, input.Offline);
             SetConnectionValues(replacements, input.CrmConnection);
             await SetEmbeddedResourceTokensAsync(replacements, input.CrmConnection);
 
@@ -159,26 +159,38 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             replacements["$PasswordConfigComment$"] = Comment(ProjectEnvironment.Password);
         }
 
-        private static async Task AddNuGetTokensAsync(Dictionary<string, string> replacements)
+        /// <summary>
+        /// Every package the project templates stamp — one shared list so
+        /// the live-first batch and the offline table stay in sync with the
+        /// NuGetVersionCache preload list.
+        /// </summary>
+        private static readonly string[] NuGetPackages =
         {
-            await NuGetHelper.SetReplacementAsync(replacements, "DynamicsCrm.DevKit.Analyzers");
-            await NuGetHelper.SetReplacementAsync(replacements, "DynamicsCrm.DevKit.Cli");
-            await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.CrmSdk.CoreAssemblies");
-            await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.CrmSdk.Workflow");
-            await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.CrmSdk.CoreTools");
-            await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.PowerPlatform.Dataverse.Client");
-            await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.Identity.Client.Extensions.Msal");
-            await NuGetHelper.SetReplacementAsync(replacements, "Azure.Identity");
-            await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.Extensions.Configuration");
-            await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.Extensions.Configuration.Json");
-            await NuGetHelper.SetReplacementAsync(replacements, "NSubstitute");
-            await NuGetHelper.SetReplacementAsync(replacements, "MSTest.TestAdapter");
-            await NuGetHelper.SetReplacementAsync(replacements, "MSTest.TestFramework");
-            await NuGetHelper.SetReplacementAsync(replacements, "Dynamics365.UIAutomation.Api");
-            await NuGetHelper.SetReplacementAsync(replacements, "Bogus");
-            await NuGetHelper.SetReplacementAsync(replacements, "Selenium.WebDriver");
-            await NuGetHelper.SetReplacementAsync(replacements, "Selenium.WebDriver.ChromeDriver");
-            await NuGetHelper.SetReplacementAsync(replacements, "Selenium.Support");
+            "DynamicsCrm.DevKit.Analyzers",
+            "DynamicsCrm.DevKit.Cli",
+            "Microsoft.CrmSdk.CoreAssemblies",
+            "Microsoft.CrmSdk.Workflow",
+            "Microsoft.CrmSdk.CoreTools",
+            "Microsoft.PowerPlatform.Dataverse.Client",
+            "Microsoft.Identity.Client.Extensions.Msal",
+            "Azure.Identity",
+            "Microsoft.Extensions.Configuration",
+            "Microsoft.Extensions.Configuration.Json",
+            "NSubstitute",
+            "MSTest.TestAdapter",
+            "MSTest.TestFramework",
+            "Dynamics365.UIAutomation.Api",
+            "Bogus",
+            "Selenium.WebDriver",
+            "Selenium.WebDriver.ChromeDriver",
+            "Selenium.Support",
+        };
+
+        private static Task AddNuGetTokensAsync(Dictionary<string, string> replacements, bool offline)
+        {
+            // Online scaffolds stamp the live nuget.org latest (VSIX parity);
+            // --offline (or a failed query) falls back to DefaultVersions.
+            return NuGetHelper.SetReplacementsAsync(replacements, NuGetPackages, offline);
         }
 
         /// <summary>

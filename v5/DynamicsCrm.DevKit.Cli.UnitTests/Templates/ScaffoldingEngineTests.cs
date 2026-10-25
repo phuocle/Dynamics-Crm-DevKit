@@ -75,6 +75,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
                 TemplateId = "Shared",
                 ProjectName = "Contoso.Shared",
                 OutputDirectory = _directory,
+                Offline = true,
             });
 
             Assert.IsTrue(result.Success, string.Join("; ", result.Errors));
@@ -100,7 +101,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             });
             TemplateManifests.Register(manifest);
 
-            var input = new ProjectTemplateInput { TemplateId = "Shared", ProjectName = "Contoso.Shared", OutputDirectory = _directory };
+            var input = new ProjectTemplateInput { TemplateId = "Shared", ProjectName = "Contoso.Shared", OutputDirectory = _directory, Offline = true };
             var first = await ScaffoldingEngine.ScaffoldProjectAsync(input);
             Assert.AreEqual(1, first.Files.Count(file => file.Action == "Created"));
 

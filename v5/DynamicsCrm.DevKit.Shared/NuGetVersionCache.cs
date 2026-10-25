@@ -27,6 +27,7 @@ namespace DynamicsCrm.DevKit.Shared
             "Microsoft.CrmSdk.Workflow",
             "Microsoft.CrmSdk.CoreTools",
             "Microsoft.PowerPlatform.Dataverse.Client",
+            "Microsoft.Identity.Client.Extensions.Msal",
             "Azure.Identity",
             "Microsoft.Extensions.Configuration",
             "Microsoft.Extensions.Configuration.Json",

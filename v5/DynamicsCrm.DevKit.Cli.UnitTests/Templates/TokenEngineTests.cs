@@ -53,6 +53,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
                 TemplateId = "Server",
                 ProjectName = "Contoso.Plugin",
                 OutputDirectory = outputDirectory,
+                Offline = true,
             }, workspace);
 
             Assert.AreEqual("Contoso.Plugin", replacements["$ProjectName$"]);

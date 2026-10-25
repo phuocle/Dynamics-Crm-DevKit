@@ -15,8 +15,12 @@ namespace DynamicsCrm.DevKit.Shared
     internal class NuGetHelper
     {
         /// <summary>
-        /// Default NuGet package versions (fetched on 2026-03-19).
+        /// Default NuGet package versions (fetched on 2026-10-25).
         /// Used as fallback when NuGet API is slow/unreachable to prevent UI hang.
+        /// Keep in sync with the packages stamped by the project templates — a stale
+        /// pin leaks into generated projects whenever the preload cache is not ready
+        /// yet (Microsoft.Identity.Client.Extensions.Msal 4.83.1 pulled a vulnerable
+        /// System.Security.Cryptography.Xml 8.0.2).
         /// </summary>
         internal static readonly Dictionary<string, (string Version, string TargetFramework)> DefaultVersions = new(StringComparer.OrdinalIgnoreCase)
         {
@@ -25,12 +29,12 @@ namespace DynamicsCrm.DevKit.Shared
             ["Microsoft.CrmSdk.CoreAssemblies"]             = ("9.0.2.60",    "net462"),
             ["Microsoft.CrmSdk.Workflow"]                   = ("9.0.2.60",    "net462"),
             ["Microsoft.CrmSdk.CoreTools"]                  = ("9.1.0.179",   "net462"),
-            ["Microsoft.PowerPlatform.Dataverse.Client"]    = ("1.2.10",      "net462"),
-            ["Microsoft.Identity.Client.Extensions.Msal"]   = ("4.83.1",      "netstandard2.0"),
-            ["Azure.Identity"]                              = ("1.19.0",      "net462"),
-            ["Microsoft.Extensions.Configuration"]          = ("10.0.5",      "net462"),
-            ["Microsoft.Extensions.Configuration.Json"]     = ("10.0.5",      "net462"),
-            ["NSubstitute"]                                 = ("5.3.0",       "net462"),
+            ["Microsoft.PowerPlatform.Dataverse.Client"]    = ("1.2.27",      "net462"),
+            ["Microsoft.Identity.Client.Extensions.Msal"]   = ("4.91.1",      "netstandard2.0"),
+            ["Azure.Identity"]                              = ("1.21.0",      "net462"),
+            ["Microsoft.Extensions.Configuration"]          = ("10.0.13",     "net462"),
+            ["Microsoft.Extensions.Configuration.Json"]     = ("10.0.13",     "net462"),
+            ["NSubstitute"]                                 = ("6.2.0",       "net462"),
             ["MSTest.TestAdapter"]                          = ("4.1.0",       "net462"),
             ["MSTest.TestFramework"]                        = ("4.1.0",       "net462"),
             ["Dynamics365.UIAutomation.Api"]                = ("9.2.21084.148", "net462"),
@@ -117,9 +121,9 @@ namespace DynamicsCrm.DevKit.Shared
         {
             // Use cache for instant response if available (preloaded when form opened)
             var cached = NuGetVersionCache.TryGetCached(nuget);
-            
+
             string versionString, targetFramework, xmlPackage;
-            
+
             if (cached.HasValue)
             {
                 versionString = cached.Value.Version;
@@ -144,10 +148,41 @@ namespace DynamicsCrm.DevKit.Shared
                     xmlPackage = data.XmlPackage;
                 }
             }
-            
+
             replacements[$"${nuget}.Version$"] = versionString;
             replacements[$"${nuget}.TargetFramework$"] = targetFramework;
             replacements[$"${nuget}.XmlPackage$"] = xmlPackage;
+        }
+
+        /// <summary>
+        /// Stamps the NuGet tokens of many packages at once — the path the
+        /// cross-platform scaffolding engine uses. Online mode queries
+        /// nuget.org for every package in parallel (each query has its own
+        /// timeout and falls back to DefaultVersions), so CLI scaffolds
+        /// stamp the same live-latest versions the VSIX wizard preloads;
+        /// offline mode stamps the table instantly with no network access.
+        /// </summary>
+        internal static async Task SetReplacementsAsync(Dictionary<string, string> replacements, IReadOnlyList<string> nugets, bool offline)
+        {
+            if (replacements == null) throw new ArgumentNullException(nameof(replacements));
+            if (nugets == null) throw new ArgumentNullException(nameof(nugets));
+
+            if (offline)
+            {
+                foreach (var nuget in nugets)
+                {
+                    await SetReplacementAsync(replacements, nuget);
+                }
+                return;
+            }
+
+            var results = await Task.WhenAll(nugets.Select(NuGetVersionCache.GetVersionAsync));
+            for (var index = 0; index < nugets.Count; index++)
+            {
+                replacements[$"${nugets[index]}.Version$"] = results[index].Version;
+                replacements[$"${nugets[index]}.TargetFramework$"] = results[index].TargetFramework;
+                replacements[$"${nugets[index]}.XmlPackage$"] = results[index].XmlPackage;
+            }
         }
     }
 }

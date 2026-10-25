@@ -68,6 +68,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
                 ProjectName = "Contoso.Shared",
                 OutputDirectory = _directory,
                 Force = force,
+                Offline = true,
             };
         }
 
@@ -280,6 +281,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
                     TemplateId = "Shared",
                     ProjectName = "Contoso.Shared",
                     OutputDirectory = isolated,
+                    Offline = true,
                 };
                 var result = await ScaffoldingEngine.ScaffoldProjectAsync(input);
 
