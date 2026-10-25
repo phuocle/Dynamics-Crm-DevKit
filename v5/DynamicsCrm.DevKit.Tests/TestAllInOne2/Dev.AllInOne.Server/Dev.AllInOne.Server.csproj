@@ -34,7 +34,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.60" />
     <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="9.0.2.60" />
-    <PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.12.34.56">
+    <PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.44.44.44">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
