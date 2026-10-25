@@ -109,7 +109,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             // caller names it, or adds the project by hand later.
             var projectDirectory = Path.Combine(workspace.SolutionDirectory, input.ProjectName);
             var csprojPath = Path.Combine(projectDirectory, input.ProjectName + ".csproj");
-            if (File.Exists(csprojPath))
+            if (File.Exists(csprojPath) && !input.Force)
             {
                 result.AddWarning($"Project '{input.ProjectName}' already exists — existing files are skipped (use --force to overwrite).");
             }
