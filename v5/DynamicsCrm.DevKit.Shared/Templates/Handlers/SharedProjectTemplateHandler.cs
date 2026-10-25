@@ -69,17 +69,16 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
                 return result;
             }
             var workspace = request.Workspace ?? WorkspaceContext.Empty(input.OutputDirectory);
-            if (!workspace.HasSolution)
-            {
-                result.AddError($"--out '{input.OutputDirectory}': no .sln/.slnx found here or in any parent folder. The Shared project template must be scaffolded into a solution folder.");
-                return result;
-            }
             if (!IsValidProjectName(input.ProjectName))
             {
                 result.AddError($"--name '{input.ProjectName}': invalid project name.");
                 return result;
             }
 
+            // Without --solution the scaffold is create-only: the project
+            // lands under --out and no solution file is touched. With
+            // several solutions in one tree the CLI cannot pick one — the
+            // caller names it, or adds the project by hand later.
             var projectDirectory = Path.Combine(workspace.SolutionDirectory, input.ProjectName);
             var shprojPath = Path.Combine(projectDirectory, input.ProjectName + ".shproj");
             if (File.Exists(shprojPath))
@@ -114,8 +113,11 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
                 result.Files.Add(new ScaffoldFileResult(Const.DynamicsCrmDevKitJson, ensuredDevKitJson, devKitJsonExisted ? "Unchanged" : "Created"));
             }
 
-            var solutionChanged = await SolutionMutator.AddSharedProjectToSolutionAsync(workspace.SolutionFile, shprojPath);
-            result.Files.Add(new ScaffoldFileResult(Path.GetFileName(workspace.SolutionFile), workspace.SolutionFile, solutionChanged ? "Updated" : "Unchanged"));
+            if (!string.IsNullOrEmpty(input.SolutionFile))
+            {
+                var solutionChanged = await SolutionMutator.AddSharedProjectToSolutionAsync(workspace.SolutionFile, shprojPath);
+                result.Files.Add(new ScaffoldFileResult(Path.GetFileName(workspace.SolutionFile), workspace.SolutionFile, solutionChanged ? "Updated" : "Unchanged"));
+            }
 
             return result;
         }

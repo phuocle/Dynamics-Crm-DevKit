@@ -69,7 +69,10 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             Directory.CreateDirectory(_directory);
             var context = WorkspaceScanner.Scan(_directory);
             Assert.IsFalse(context.HasSolution);
-            Assert.AreEqual(".Shared.Test", context.SharedTestProjectName);
+            // No solution in play (create-only scaffold): derived names
+            // join non-empty parts only — never a stray leading dot.
+            Assert.AreEqual("Shared.Test", context.SharedTestProjectName);
+            Assert.AreEqual("ProxyTypes", context.ProxyTypesProjectName);
         }
 
         [TestMethod]

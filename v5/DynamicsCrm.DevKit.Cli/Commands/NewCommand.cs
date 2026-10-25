@@ -32,6 +32,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 new[] { "           --type", settings.Type },
                 new[] { "           --name", settings.Name },
                 new[] { "           --out", settings.Out },
+                new[] { "           --solution", settings.Solution },
                 new[] { "           --offline", settings.Offline ? "true" : "false" },
                 new[] { "           --force", settings.Force ? "true" : "false" }
             };

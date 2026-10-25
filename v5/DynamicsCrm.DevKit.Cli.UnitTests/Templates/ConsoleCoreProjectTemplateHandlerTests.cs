@@ -73,6 +73,9 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
                 TemplateId = "ConsoleCore",
                 ProjectName = "Contoso.ConsoleCore",
                 OutputDirectory = _directory,
+                // The solution to register in is now explicit (--solution):
+                // the walk-up auto-pick is gone.
+                SolutionFile = _solutionFile,
                 CrmConnection = connection,
                 Force = force,
                 // Deterministic NuGet stamps: the DefaultVersions table,
@@ -92,6 +95,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
                 TemplateId = "Shared",
                 ProjectName = "Contoso.Shared",
                 OutputDirectory = _directory,
+                SolutionFile = _solutionFile,
                 Offline = true,
             });
             Assert.IsTrue(result.Success, string.Join("; ", result.Errors));
@@ -135,8 +139,11 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
         }
 
         [TestMethod]
-        public async Task ScaffoldAsync_WithoutSolution_Fails()
+        public async Task ScaffoldAsync_WithoutSolution_CreatesProjectOnly()
         {
+            // No --solution = create-only: the project lands under --out
+            // and NO solution file is touched (the caller adds it by hand,
+            // or several solutions in the tree make the pick ambiguous).
             var isolated = Path.Combine(Path.GetTempPath(), "devkit-consolecore-nosln", Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(isolated);
             try
@@ -150,13 +157,31 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
                 };
                 var result = await ScaffoldingEngine.ScaffoldProjectAsync(input);
 
-                Assert.IsFalse(result.Success);
-                StringAssert.Contains(result.Errors[0], "no .sln");
+                Assert.IsTrue(result.Success, string.Join("; ", result.Errors));
+                Assert.IsTrue(File.Exists(Path.Combine(isolated, "Contoso.ConsoleCore", "Contoso.ConsoleCore.csproj")));
+                Assert.IsFalse(Directory.GetFiles(isolated, "*.sln").Any());
+                Assert.IsFalse(Directory.GetFiles(isolated, "*.slnx").Any());
+                Assert.IsFalse(result.Files.Any(file => file.FileName.EndsWith(".sln", StringComparison.OrdinalIgnoreCase) || file.FileName.EndsWith(".slnx", StringComparison.OrdinalIgnoreCase)));
             }
             finally
             {
                 Directory.Delete(isolated, true);
             }
+        }
+
+        [TestMethod]
+        public async Task ScaffoldAsync_SolutionFileNotFound_FailsBeforeCreatingFiles()
+        {
+            // --solution names the file to register in; a typo must fail
+            // BEFORE any project file is created (the engine validates it
+            // while building the workspace, ahead of the handler).
+            var input = Input(Marker("ClientSecret"));
+            input.SolutionFile = Path.Combine(_directory, "Missing.sln");
+            var result = await ScaffoldingEngine.ScaffoldProjectAsync(input);
+
+            Assert.IsFalse(result.Success);
+            StringAssert.Contains(result.Errors[0], "solution file not found");
+            Assert.IsFalse(Directory.Exists(Path.Combine(_directory, "Contoso.ConsoleCore")));
         }
 
         [TestMethod]
@@ -372,6 +397,9 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             var slnx = Path.Combine(_directory, "Contoso.slnx");
             File.WriteAllText(slnx, "<Solution>\n</Solution>\n");
             File.Delete(_solutionFile);
+            // --solution anchors at the named file: retarget the helper's
+            // solution to the slnx that replaces the deleted .sln.
+            _solutionFile = slnx;
 
             await ScaffoldSharedAsync();
             Assert.IsTrue((await ScaffoldingEngine.ScaffoldProjectAsync(Input(Marker("ClientSecret")))).Success);

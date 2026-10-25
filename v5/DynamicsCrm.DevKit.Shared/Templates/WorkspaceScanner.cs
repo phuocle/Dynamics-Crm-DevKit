@@ -42,26 +42,68 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 directory = directory.Parent;
             }
 
+            ApplyDerived(context, startDirectory);
+            return context;
+        }
+
+        /// <summary>
+        /// Builds the workspace context anchored at an explicitly named
+        /// solution file (the --solution argument of 'devkit new'): the
+        /// solution directory becomes the project parent and the Shared
+        /// lookup root, regardless of which solution the walk-up scan
+        /// would have picked. Callers validate existence first; a missing
+        /// file yields the plain context of Scan.
+        /// </summary>
+        public static WorkspaceContext FromSolution(string solutionFile, string startDirectory)
+        {
+            var context = WorkspaceContext.Empty(startDirectory);
+            if (string.IsNullOrEmpty(solutionFile) || !File.Exists(solutionFile))
+            {
+                ApplyDerived(context, startDirectory);
+                return context;
+            }
+
+            context.SolutionFile = Path.GetFullPath(solutionFile);
+            context.SolutionName = Path.GetFileNameWithoutExtension(context.SolutionFile);
+            context.SolutionDirectory = Path.GetDirectoryName(context.SolutionFile);
+            ApplyDerived(context, startDirectory);
+            return context;
+        }
+
+        private static void ApplyDerived(WorkspaceContext context, string startDirectory)
+        {
+            // Without a solution the start directory doubles as the search
+            // root — a create-only scaffold (no --solution) still finds a
+            // Shared project scaffolded earlier at the same root.
             context.SharedProjectFile = FindSharedProjectFile(context);
             context.SharedProjectName = string.IsNullOrEmpty(context.SharedProjectFile)
                 ? string.Empty
                 : Path.GetFileNameWithoutExtension(context.SharedProjectFile);
             context.SharedProjectNameSpace = context.SharedProjectName;
-            context.SharedTestProjectName = $"{context.SolutionName}.{ProjectType.Shared}.{ProjectType.Test}";
-            context.ProxyTypesProjectName = $"{context.SolutionName}.{ProjectType.ProxyTypes}";
+            context.SharedTestProjectName = JoinNonEmpty(context.SolutionName, ProjectType.Shared.ToString(), ProjectType.Test.ToString());
+            context.ProxyTypesProjectName = JoinNonEmpty(context.SolutionName, ProjectType.ProxyTypes.ToString());
             context.RootNamespace = FindRootNamespace(startDirectory);
-            return context;
         }
 
         /// <summary>
-        /// Locates the shared project (.shproj) of the solution: the one
+        /// Joins non-empty name parts with '.' so workspace-derived names
+        /// never start with a stray dot when no solution is in play
+        /// ("Contoso.Shared.Test" with a solution, "Shared.Test" without).
+        /// </summary>
+        private static string JoinNonEmpty(params string[] parts)
+        {
+            return string.Join(".", parts.Where(part => !string.IsNullOrEmpty(part)));
+        }
+
+        /// <summary>
+        /// Locates the shared project (.shproj) of the workspace: the one
         /// named {SolutionName}.Shared when present, else the shallowest
-        /// match. Returns the full path, or null when the solution has no
-        /// shared project yet.
+        /// match. Returns the full path, or null when no shared project is
+        /// around.
         /// </summary>
         private static string FindSharedProjectFile(WorkspaceContext context)
         {
-            if (!context.HasSolution) return null;
+            if (string.IsNullOrEmpty(context.SolutionDirectory) || !Directory.Exists(context.SolutionDirectory)) return null;
 
             var shprojFiles = Directory.GetFiles(context.SolutionDirectory, "*.shproj", SearchOption.AllDirectories)
                 .Where(path => path.IndexOf("\\bin\\", StringComparison.OrdinalIgnoreCase) < 0

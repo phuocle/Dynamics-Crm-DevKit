@@ -5,6 +5,7 @@ using DynamicsCrm.DevKit.Shared.Templates.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Shared.Templates
@@ -25,13 +26,20 @@ namespace DynamicsCrm.DevKit.Shared.Templates
         {
             if (replacements == null) throw new ArgumentNullException(nameof(replacements));
             var solutionName = workspace?.SolutionName ?? string.Empty;
+            // Name parts join without a stray leading dot when no solution
+            // is in play (create-only scaffolds — see --solution): an empty
+            // solution name degrades "Contoso.Shared" to "Shared".
+            string Scoped(params string[] parts)
+            {
+                return string.Join(".", parts.Where(part => !string.IsNullOrEmpty(part)));
+            }
             replacements["$DevKitVersion$"] = Const.VersionBuild;
-            replacements["$SharedNameSpace$"] = $"{solutionName}.{ProjectType.Shared}";
+            replacements["$SharedNameSpace$"] = Scoped(solutionName, ProjectType.Shared.ToString());
             replacements["$SharedProject$"] = !string.IsNullOrEmpty(workspace?.SharedProjectName)
                 ? workspace.SharedProjectName
-                : $"{solutionName}.{ProjectType.Shared}";
-            replacements["$SharedTestProject$"] = $"{solutionName}.{ProjectType.Shared}.{ProjectType.Test}";
-            replacements["$ProjectProxyTypes$"] = $"{solutionName}.{ProjectType.ProxyTypes}";
+                : Scoped(solutionName, ProjectType.Shared.ToString());
+            replacements["$SharedTestProject$"] = Scoped(solutionName, ProjectType.Shared.ToString(), ProjectType.Test.ToString());
+            replacements["$ProjectProxyTypes$"] = Scoped(solutionName, ProjectType.ProxyTypes.ToString());
         }
 
         /// <summary>
@@ -226,6 +234,18 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             if (lateBoundSh != null)
             {
                 replacements["$generator.latebound.sh$"] = lateBoundSh;
+            }
+            // Non-Windows twins of the Server deploy scripts (bash) — same
+            // set-only-when-exists contract.
+            var deployDebugSh = await ReadBatResourceAsync("sh.plugin.deploy.debug.sh", crmConnection);
+            if (deployDebugSh != null)
+            {
+                replacements["$deploy.debug.sh$"] = deployDebugSh;
+            }
+            var deployDebugOnlySh = await ReadBatResourceAsync("sh.plugin.deploy.debug.only.sh", crmConnection);
+            if (deployDebugOnlySh != null)
+            {
+                replacements["$deploy.debug.only.sh$"] = deployDebugOnlySh;
             }
             replacements["$run.bat$"] = await ReadBatResourceAsync("bat.proxytypes.run.bat", crmConnection);
             replacements["$Extract-Both.bat$"] = await ReadBatResourceAsync("bat.solutionpackager.extract.both.bat", crmConnection);

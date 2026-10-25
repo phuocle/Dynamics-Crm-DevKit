@@ -99,6 +99,21 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             }
 
             var workspace = WorkspaceScanner.Scan(ResolveOutputDirectory(input.OutputDirectory));
+            if (!string.IsNullOrWhiteSpace(input.SolutionFile))
+            {
+                // The caller named the solution to register the project in
+                // (--solution). Validate before anything is created so a
+                // typo leaves no debris, then anchor the workspace at that
+                // file — not whatever the walk-up scan would have picked.
+                var solutionFile = Path.GetFullPath(input.SolutionFile);
+                if (!File.Exists(solutionFile))
+                {
+                    var notFound = new ScaffoldResult { TemplateId = input.TemplateId };
+                    notFound.AddError($"--solution '{input.SolutionFile}': solution file not found.");
+                    return notFound;
+                }
+                workspace = WorkspaceScanner.FromSolution(solutionFile, ResolveOutputDirectory(input.OutputDirectory));
+            }
             Directory.CreateDirectory(ResolveOutputDirectory(input.OutputDirectory));
             var tokens = new Dictionary<string, string>(StringComparer.Ordinal);
             await TokenEngine.AddProjectTokensAsync(tokens, input, workspace);

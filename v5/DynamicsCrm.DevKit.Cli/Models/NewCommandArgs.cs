@@ -58,6 +58,10 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("Output directory (default: current directory)")]
         public string Out { get; set; } = string.Empty;
 
+        [CommandOption("--solution")]
+        [Description("Solution file (.sln/.slnx) to add the new project to")]
+        public string Solution { get; set; } = string.Empty;
+
         [CommandOption("--namespace")]
         [Description("Explicit namespace override for item templates")]
         public string Namespace { get; set; } = string.Empty;

@@ -116,6 +116,8 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.form.ts_bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.latebound.bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\generator.latebound.sh" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\plugin.deploy.debug.sh" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\plugin.deploy.debug.only.sh" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\WebApi.js" />
   </ItemGroup>
   <ItemGroup>
@@ -273,6 +275,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ConsoleProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ConsoleCoreProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\SharedProjectTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ServerProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TemplateHandlers.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -308,7 +311,10 @@
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\03.ConsoleCoreProjectTemplate\README.md" LogicalName="Resources.templates.project.consolecore.README.md" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\04.ServerProjectTemplate\deploy.debug.bat" LogicalName="Resources.templates.project.server.deploy.debug.bat" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\04.ServerProjectTemplate\deploy.debug.only.bat" LogicalName="Resources.templates.project.server.deploy.debug.only.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\04.ServerProjectTemplate\deploy.debug.only.sh" LogicalName="Resources.templates.project.server.deploy.debug.only.sh" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\04.ServerProjectTemplate\deploy.debug.sh" LogicalName="Resources.templates.project.server.deploy.debug.sh" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\04.ServerProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.server.ProjectTemplate.csproj.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\04.ServerProjectTemplate\README.md" LogicalName="Resources.templates.project.server.README.md" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\05.PackageProjectTemplate\deploy.debug.bat" LogicalName="Resources.templates.project.package.deploy.debug.bat" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\05.PackageProjectTemplate\deploy.debug.only.bat" LogicalName="Resources.templates.project.package.deploy.debug.only.bat" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\05.PackageProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.package.ProjectTemplate.csproj.template" />

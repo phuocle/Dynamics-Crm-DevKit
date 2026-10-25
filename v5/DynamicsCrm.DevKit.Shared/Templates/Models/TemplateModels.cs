@@ -79,6 +79,15 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Models
         public string ProjectName { get; set; }
         public CrmConnection CrmConnection { get; set; }
         public string OutputDirectory { get; set; }
+
+        /// <summary>
+        /// Explicit solution file (.sln/.slnx) to register the scaffolded
+        /// project in. Projects are added to a solution ONLY when the host
+        /// names one — with several solutions in one tree the CLI cannot
+        /// pick, and the VSIX never needs to (its wizard runs inside the
+        /// solution the user opened). Null/empty = create the project only.
+        /// </summary>
+        public string SolutionFile { get; set; }
         public bool Force { get; set; }
         public bool Offline { get; set; }
     }

@@ -67,6 +67,9 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
                 TemplateId = "Shared",
                 ProjectName = "Contoso.Shared",
                 OutputDirectory = _directory,
+                // The solution to register in is now explicit (--solution):
+                // the walk-up auto-pick is gone.
+                SolutionFile = _solutionFile,
                 Force = force,
                 Offline = true,
             };
@@ -270,8 +273,12 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
         }
 
         [TestMethod]
-        public async Task ScaffoldAsync_WithoutSolution_Fails()
+        public async Task ScaffoldAsync_WithoutSolution_CreatesProjectOnly()
         {
+            // No --solution = create-only: the Shared project lands under
+            // --out (Cli.json still ensured at --out) and NO solution file
+            // is touched — with several solutions in one tree the CLI
+            // cannot pick one.
             var isolated = Path.Combine(Path.GetTempPath(), "devkit-shared-nosln", Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(isolated);
             try
@@ -285,13 +292,32 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
                 };
                 var result = await ScaffoldingEngine.ScaffoldProjectAsync(input);
 
-                Assert.IsFalse(result.Success);
-                StringAssert.Contains(result.Errors[0], "no .sln");
+                Assert.IsTrue(result.Success, string.Join("; ", result.Errors));
+                Assert.IsTrue(File.Exists(Path.Combine(isolated, "Contoso.Shared", "Contoso.Shared.shproj")));
+                Assert.IsTrue(File.Exists(Path.Combine(isolated, "DynamicsCrm.DevKit.Cli.json")));
+                Assert.IsFalse(Directory.GetFiles(isolated, "*.sln").Any());
+                Assert.IsFalse(Directory.GetFiles(isolated, "*.slnx").Any());
+                Assert.IsFalse(result.Files.Any(file => file.FileName.EndsWith(".sln", StringComparison.OrdinalIgnoreCase) || file.FileName.EndsWith(".slnx", StringComparison.OrdinalIgnoreCase)));
             }
             finally
             {
                 Directory.Delete(isolated, true);
             }
+        }
+
+        [TestMethod]
+        public async Task ScaffoldAsync_SolutionFileNotFound_FailsBeforeCreatingFiles()
+        {
+            // --solution names the file to register in; a typo must fail
+            // BEFORE any project file is created (the engine validates it
+            // while building the workspace, ahead of the handler).
+            var input = Input();
+            input.SolutionFile = Path.Combine(_directory, "Missing.sln");
+            var result = await ScaffoldingEngine.ScaffoldProjectAsync(input);
+
+            Assert.IsFalse(result.Success);
+            StringAssert.Contains(result.Errors[0], "solution file not found");
+            Assert.IsFalse(Directory.Exists(Path.Combine(_directory, "Contoso.Shared")));
         }
 
         [TestMethod]

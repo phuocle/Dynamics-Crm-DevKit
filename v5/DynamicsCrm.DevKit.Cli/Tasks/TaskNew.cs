@@ -93,21 +93,68 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     TemplateId = descriptor.Id,
                     ProjectName = args.Name,
                     OutputDirectory = args.Out,
+                    // The project is registered in a solution ONLY when the
+                    // caller names one (--solution): several .sln/.slnx in
+                    // one tree make an auto-pick ambiguous, and the VSIX
+                    // host always supplies its opened solution.
+                    SolutionFile = args.Solution,
                     Force = args.Force,
                     Offline = args.Offline,
                 };
                 // The Console/ConsoleCore templates bake the connection
-                // type into App.cs/App.config or App.cs/AppSettings.json —
-                // ask for it like FormProject does (defaults from .env,
-                // AuthType list filtered to what the template supports);
-                // non-interactive hosts leave it null and the handler falls
-                // back to the .env marker.
-                if ((descriptor.Id == nameof(ProjectType.Console) || descriptor.Id == nameof(ProjectType.ConsoleCore)) && !args.Offline && CanPrompt(args))
+                // type into App.cs/App.config or App.cs/AppSettings.json,
+                // and the Server deploy scripts bake the CLI connection
+                // arguments — ask for it like FormProject does (defaults
+                // from .env, AuthType list filtered to what the template
+                // supports); non-interactive hosts leave it null and the
+                // handler falls back to the .env marker.
+                if ((descriptor.Id == nameof(ProjectType.Console) || descriptor.Id == nameof(ProjectType.ConsoleCore) || descriptor.Id == nameof(ProjectType.Server)) && !args.Offline && CanPrompt(args))
                 {
                     var supportedTypes = descriptor.Id == nameof(ProjectType.ConsoleCore)
                         ? ConsoleCoreProjectTemplateHandler.SupportedConnectionTypes
-                        : ConsoleProjectTemplateHandler.SupportedConnectionTypes;
+                        : descriptor.Id == nameof(ProjectType.Console)
+                            ? ConsoleProjectTemplateHandler.SupportedConnectionTypes
+                            : ServerProjectTemplateHandler.SupportedConnectionTypes;
                     input.CrmConnection = ConnectionPrompter.Prompt(supportedTypes, args.Out);
+                }
+                // The Server template requires the Shared project (its
+                // .csproj imports the Shared .projitems) — offer the Shared
+                // scaffold when it is missing, the interactive counterpart
+                // of the VSIX wizard's blocking "Please add Shared project"
+                // message (the handler still refuses without it). The
+                // Shared scaffold joins the same --solution when given.
+                if (descriptor.Id == nameof(ProjectType.Server) && CanPrompt(args))
+                {
+                    var directory = string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : Path.GetFullPath(args.Out);
+                    var workspace = string.IsNullOrWhiteSpace(args.Solution)
+                        ? WorkspaceScanner.Scan(directory)
+                        : File.Exists(args.Solution)
+                            ? WorkspaceScanner.FromSolution(args.Solution, directory)
+                            : WorkspaceScanner.Scan(directory);
+                    if (string.IsNullOrEmpty(workspace.SharedProjectFile))
+                    {
+                        var sharedName = string.IsNullOrEmpty(workspace.SolutionName)
+                            ? $"{input.ProjectName}.{ProjectType.Shared}"
+                            : $"{workspace.SolutionName}.{ProjectType.Shared}";
+                        if (AnsiConsole.Confirm($"No Shared project found. Scaffold [green]{sharedName}[/] now?", true))
+                        {
+                            var sharedResult = await ScaffoldingEngine.ScaffoldProjectAsync(new ProjectTemplateInput
+                            {
+                                TemplateId = nameof(ProjectType.Shared),
+                                ProjectName = sharedName,
+                                OutputDirectory = args.Out,
+                                SolutionFile = args.Solution,
+                                CrmConnection = input.CrmConnection,
+                                Force = args.Force,
+                                Offline = args.Offline,
+                            });
+                            WriteResult(sharedResult);
+                            if (!sharedResult.Success)
+                            {
+                                throw new DevKitValidationException(string.Join(Environment.NewLine, sharedResult.Errors));
+                            }
+                        }
+                    }
                 }
                 result = await ScaffoldingEngine.ScaffoldProjectAsync(input);
             }

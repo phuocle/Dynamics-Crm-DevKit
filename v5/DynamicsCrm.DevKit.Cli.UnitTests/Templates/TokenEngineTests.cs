@@ -39,7 +39,10 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
         {
             var replacements = new Dictionary<string, string>();
             TokenEngine.AddCommonTokens(replacements, WorkspaceContext.Empty(null));
-            Assert.AreEqual(".Shared", replacements["$SharedProject$"]);
+            // No solution in play (create-only scaffold): the fallback
+            // joins non-empty parts only — never a stray leading dot.
+            Assert.AreEqual("Shared", replacements["$SharedProject$"]);
+            Assert.AreEqual("Shared.Test", replacements["$SharedTestProject$"]);
         }
 
         [TestMethod]

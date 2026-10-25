@@ -71,11 +71,6 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
                 return result;
             }
             var workspace = request.Workspace ?? WorkspaceContext.Empty(input.OutputDirectory);
-            if (!workspace.HasSolution)
-            {
-                result.AddError($"--out '{input.OutputDirectory}': no .sln/.slnx found here or in any parent folder. The Console Core project template must be scaffolded into a solution folder.");
-                return result;
-            }
             if (!SharedProjectTemplateHandler.IsValidProjectName(input.ProjectName))
             {
                 result.AddError($"--name '{input.ProjectName}': invalid project name.");
@@ -108,6 +103,10 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             // the engine has no host service, so the handler mints it.
             request.Tokens["$year$"] = DateTime.Now.Year.ToString();
 
+            // Without --solution the scaffold is create-only: the project
+            // lands under --out and no solution file is touched. With
+            // several solutions in one tree the CLI cannot pick one — the
+            // caller names it, or adds the project by hand later.
             var projectDirectory = Path.Combine(workspace.SolutionDirectory, input.ProjectName);
             var csprojPath = Path.Combine(projectDirectory, input.ProjectName + ".csproj");
             if (File.Exists(csprojPath))
@@ -119,10 +118,14 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             await ScaffoldingEngine.RenderManifestFilesAsync(CreateManifest(), request.Tokens, projectDirectory, input.Force, result);
 
             // The csproj imports ..\{Shared}\{Shared}.projitems; when the
-            // shared project exists, the .sln also gains the consumer line
-            // of GlobalSection(SharedMSBuildProjectFiles).
-            var solutionChanged = await SolutionMutator.AddProjectToSolutionAsync(workspace.SolutionFile, csprojPath, workspace.SharedProjectFile);
-            result.Files.Add(new ScaffoldFileResult(Path.GetFileName(workspace.SolutionFile), workspace.SolutionFile, solutionChanged ? "Updated" : "Unchanged"));
+            // shared project exists AND a solution was named, the .sln
+            // gains the consumer line of GlobalSection(
+            // SharedMSBuildProjectFiles). No --solution = create-only.
+            if (!string.IsNullOrEmpty(input.SolutionFile))
+            {
+                var solutionChanged = await SolutionMutator.AddProjectToSolutionAsync(workspace.SolutionFile, csprojPath, workspace.SharedProjectFile);
+                result.Files.Add(new ScaffoldFileResult(Path.GetFileName(workspace.SolutionFile), workspace.SolutionFile, solutionChanged ? "Updated" : "Unchanged"));
+            }
 
             return result;
         }
