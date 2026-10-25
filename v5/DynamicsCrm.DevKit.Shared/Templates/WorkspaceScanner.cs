@@ -24,10 +24,13 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             var directory = new DirectoryInfo(startDirectory);
             while (directory != null)
             {
-                var solution = Directory.GetFiles(directory.FullName, "*.sln").FirstOrDefault();
+                // Prefer .slnx (the modern Visual Studio default) over .sln
+                // when both sit in the same folder — mixed folders usually
+                // keep the live solution in .slnx and a stale .sln behind.
+                var solution = Directory.GetFiles(directory.FullName, "*.slnx").FirstOrDefault();
                 if (solution == null)
                 {
-                    solution = Directory.GetFiles(directory.FullName, "*.slnx").FirstOrDefault();
+                    solution = Directory.GetFiles(directory.FullName, "*.sln").FirstOrDefault();
                 }
                 if (solution != null)
                 {

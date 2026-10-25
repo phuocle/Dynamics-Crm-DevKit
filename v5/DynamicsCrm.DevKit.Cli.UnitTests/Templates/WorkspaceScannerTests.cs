@@ -71,5 +71,21 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             Assert.IsFalse(context.HasSolution);
             Assert.AreEqual(".Shared.Test", context.SharedTestProjectName);
         }
+
+        [TestMethod]
+        public void Scan_PrefersSlnxOverStaleSln()
+        {
+            // Mixed folder (reference TestAllInOne shape): the live solution
+            // is the .slnx, the .sln is a stale leftover.
+            Directory.CreateDirectory(_directory);
+            File.WriteAllText(Path.Combine(_directory, "Dev.AllInOne.2019.sln"), "stale");
+            File.WriteAllText(Path.Combine(_directory, "Dev.AllInOne.slnx"), "<Solution />");
+
+            var context = WorkspaceScanner.Scan(_directory);
+
+            Assert.IsTrue(context.HasSolution);
+            Assert.AreEqual("Dev.AllInOne", context.SolutionName);
+            StringAssert.EndsWith(context.SolutionFile, "Dev.AllInOne.slnx");
+        }
     }
 }
