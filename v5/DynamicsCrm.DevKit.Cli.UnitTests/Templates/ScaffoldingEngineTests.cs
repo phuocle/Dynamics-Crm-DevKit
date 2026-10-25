@@ -52,7 +52,9 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
         [TestMethod]
         public async Task ScaffoldProjectAsync_NotImplemented_FailsGracefully()
         {
-            var result = await ScaffoldingEngine.ScaffoldProjectAsync(new ProjectTemplateInput { TemplateId = "Report", ProjectName = "X", Offline = true });
+            // The fixture tracks the next un-ported project template (P.11
+            // SolutionPackager after P.10 UiTest landed its handler).
+            var result = await ScaffoldingEngine.ScaffoldProjectAsync(new ProjectTemplateInput { TemplateId = "SolutionPackager", ProjectName = "X", Offline = true });
             Assert.IsFalse(result.Success);
             StringAssert.Contains(result.Errors[0], "not implemented yet");
         }

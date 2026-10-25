@@ -108,7 +108,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // (defaults from .env, AuthType list filtered to what the
                 // template supports); non-interactive hosts leave it null
                 // and the handler falls back to the .env marker.
-                if ((descriptor.Id == nameof(ProjectType.Console) || descriptor.Id == nameof(ProjectType.ConsoleCore) || descriptor.Id == nameof(ProjectType.Server) || descriptor.Id == nameof(ProjectType.Package) || descriptor.Id == nameof(ProjectType.WebResource) || descriptor.Id == nameof(ProjectType.ProxyTypes) || descriptor.Id == nameof(ProjectType.WebResourceTs)) && !args.Offline && CanPrompt(args))
+                if ((descriptor.Id == nameof(ProjectType.Console) || descriptor.Id == nameof(ProjectType.ConsoleCore) || descriptor.Id == nameof(ProjectType.Server) || descriptor.Id == nameof(ProjectType.Package) || descriptor.Id == nameof(ProjectType.WebResource) || descriptor.Id == nameof(ProjectType.ProxyTypes) || descriptor.Id == nameof(ProjectType.WebResourceTs) || descriptor.Id == nameof(ProjectType.UiTest)) && !args.Offline && CanPrompt(args))
                 {
                     var supportedTypes = descriptor.Id == nameof(ProjectType.ConsoleCore)
                         ? ConsoleCoreProjectTemplateHandler.SupportedConnectionTypes
@@ -122,7 +122,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                         ? ProxyTypesProjectTemplateHandler.SupportedConnectionTypes
                                         : descriptor.Id == nameof(ProjectType.WebResourceTs)
                                             ? WebResourceTsProjectTemplateHandler.SupportedConnectionTypes
-                                            : ServerProjectTemplateHandler.SupportedConnectionTypes;
+                                            : descriptor.Id == nameof(ProjectType.UiTest)
+                                                ? UiTestProjectTemplateHandler.SupportedConnectionTypes
+                                                : ServerProjectTemplateHandler.SupportedConnectionTypes;
                     input.CrmConnection = ConnectionPrompter.Prompt(supportedTypes, args.Out);
                 }
                 // The Server template requires the Shared project (its
