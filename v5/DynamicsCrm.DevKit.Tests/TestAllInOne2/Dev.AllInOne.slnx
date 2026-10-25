@@ -7,6 +7,7 @@
   <Project Path="Dev.AllInOne.Shared.Test/Dev.AllInOne.Shared.Test.shproj" Id="283b5ee9-5637-4d47-9e95-6b4ca79fc002" />
   <Project Path="Dev.AllInOne.Shared/Dev.AllInOne.Shared.shproj" Id="ba6b438f-e1dc-4ab9-bc5e-8638f3c38ebf" />
   <Project Path="Dev.AllInOne.Test/Dev.AllInOne.Test.csproj" />
+  <Project Path="Dev.AllInOne.UiTest/Dev.AllInOne.UiTest.csproj" />
   <Project Path="Dev.AllInOne.WebResource/Dev.AllInOne.WebResource.csproj" />
   <Project Path="Dev.AllInOne.WebResourceTs/Dev.AllInOne.WebResourceTs.csproj" />
 </Solution>

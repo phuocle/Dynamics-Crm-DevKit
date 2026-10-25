@@ -36,8 +36,8 @@
 	<ItemGroup>
 		<PackageReference Include="Azure.Identity" Version="1.21.0" />
 		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.44.44.44" />
-		<PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.13" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.13" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.14" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.14" />
 		<PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.91.1" />
 		<PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.27" />
 		<PackageReference Include="NSubstitute" Version="6.2.0" />

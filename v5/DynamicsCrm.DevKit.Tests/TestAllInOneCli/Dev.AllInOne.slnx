@@ -9,4 +9,5 @@
   <Project Path="Dev.AllInOne.ProxyTypes/Dev.AllInOne.ProxyTypes.csproj" />
   <Project Path="Dev.AllInOne.Test/Dev.AllInOne.Test.csproj" />
   <Project Path="Dev.AllInOne.WebResourceTs/Dev.AllInOne.WebResourceTs.csproj" />
+  <Project Path="Dev.AllInOne.UiTest/Dev.AllInOne.UiTest.csproj" />
 </Solution>
