@@ -589,5 +589,26 @@ namespace Microsoft.Xrm.Sdk
             if (!collection.ContainsKey(imageName)) return null;
             return collection[imageName];
         }
+
+        /// <summary>
+        /// Retrieves or wraps the execution context as IPluginExecutionContext7 safely,
+        /// avoiding InvalidCastException when running under RemoteExecutionContext or test mocks.
+        /// </summary>
+        public static IPluginExecutionContext7 GetExecutionContext7(this IServiceProvider serviceProvider)
+        {
+            if (serviceProvider == null) throw new InvalidPluginExecutionException("Service provider cannot be null");
+            var baseContext = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext))
+                ?? throw new InvalidPluginExecutionException("Execution context cannot be null");
+            return baseContext as IPluginExecutionContext7 ?? new PluginExecutionContext7Wrapper(baseContext);
+        }
+
+        /// <summary>
+        /// Casts or wraps an existing IPluginExecutionContext to IPluginExecutionContext7.
+        /// </summary>
+        public static IPluginExecutionContext7 ToContext7(this IPluginExecutionContext context)
+        {
+            if (context == null) return null;
+            return context as IPluginExecutionContext7 ?? new PluginExecutionContext7Wrapper(context);
+        }
     }
 }

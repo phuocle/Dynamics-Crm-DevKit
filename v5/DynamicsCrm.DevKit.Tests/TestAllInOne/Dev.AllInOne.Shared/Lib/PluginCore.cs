@@ -52,7 +52,7 @@ namespace Dev.AllInOne.Shared
         CustomAction = 2,
         DataProvider = 3,
         CustomApi = 4
-    }
+	}
 
     [DebuggerNonUserCode()]
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
@@ -81,10 +81,10 @@ namespace Dev.AllInOne.Shared
 
         public CrmPluginRegistrationAttribute(string name, string message, PluginType pluginType)
         {
-            Name = name;
+			Name = name;
             Message = message;
             PluginType = pluginType;
-        }
+		}
         public string Id { get; set; } = string.Empty;
         public bool Unregister { get; set; } = false;
         public string RunAs { get; set; } = string.Empty;
