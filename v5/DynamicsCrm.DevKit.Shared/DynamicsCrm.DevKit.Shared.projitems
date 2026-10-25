@@ -159,6 +159,11 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\webresource.deploy.debug.ts_bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\webresource.deploy.release.ts_bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\webresource.deploy.debug.sh" />
+    <!-- WithCulture=false: "ts" is a valid ICU culture (Tsonga) — without it
+         AssignCulture silently drops these *.ts.sh files from the assembly
+         on .NET 10 (same class of bug as proxytypes.run.bat). -->
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\webresource.deploy.debug.ts.sh" WithCulture="false" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\webresource.deploy.release.ts.sh" WithCulture="false" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\devkit.d.ts" />
@@ -169,6 +174,8 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.webapi.bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\generator.form.sh" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\generator.webapi.sh" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\generator.form.ts.sh" WithCulture="false" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\generator.webapi.ts.sh" WithCulture="false" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\package.json" />
@@ -288,6 +295,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ServerProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\PackageProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\WebResourceProjectTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\WebResourceTsProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ProxyTypesProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TestProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TemplateHandlers.cs" />
@@ -382,13 +390,18 @@
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\.eslintrc.json" LogicalName="Resources.templates.project.webresourcets..eslintrc.json" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\build.js" LogicalName="Resources.templates.project.webresourcets.build.js" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\deploy.debug.bat" LogicalName="Resources.templates.project.webresourcets.deploy.debug.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\deploy.debug.sh" LogicalName="Resources.templates.project.webresourcets.deploy.debug.sh" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\deploy.release.bat" LogicalName="Resources.templates.project.webresourcets.deploy.release.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\deploy.release.sh" LogicalName="Resources.templates.project.webresourcets.deploy.release.sh" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\devkit.ts" LogicalName="Resources.templates.project.webresourcets.devkit.ts" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\devkitts.d.ts" LogicalName="Resources.templates.project.webresourcets.devkitts.d.ts" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\generator.form.bat" LogicalName="Resources.templates.project.webresourcets.generator.form.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\generator.form.sh" LogicalName="Resources.templates.project.webresourcets.generator.form.sh" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\generator.webapi.bat" LogicalName="Resources.templates.project.webresourcets.generator.webapi.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\generator.webapi.sh" LogicalName="Resources.templates.project.webresourcets.generator.webapi.sh" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\package.json" LogicalName="Resources.templates.project.webresourcets.package.json" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.webresourcets.ProjectTemplate.csproj.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\README.md" LogicalName="Resources.templates.project.webresourcets.README.md" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\tsconfig.json" LogicalName="Resources.templates.project.webresourcets.tsconfig.json" />
     <EmbeddedResource Include="..\ItemTemplates\CSharp\01.LateBoundItemTemplate\Class.cs" LogicalName="Resources.templates.item.latebound.Class.cs" />
     <EmbeddedResource Include="..\ItemTemplates\CSharp\01.LateBoundItemTemplate\GeneratedClass.cs" LogicalName="Resources.templates.item.latebound.GeneratedClass.cs" />

@@ -264,6 +264,28 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             {
                 replacements["$generator.webapi.sh$"] = generatorWebApiSh;
             }
+            // Non-Windows twins of the WebResource TypeScript deploy +
+            // generator scripts (bash) — same set-only-when-exists contract.
+            var webResourceDeployDebugTsSh = await ReadBatResourceAsync("sh.webresource.deploy.debug.ts.sh", crmConnection);
+            if (webResourceDeployDebugTsSh != null)
+            {
+                replacements["$webresource.deploy.debug.ts.sh$"] = webResourceDeployDebugTsSh;
+            }
+            var webResourceDeployReleaseTsSh = await ReadBatResourceAsync("sh.webresource.deploy.release.ts.sh", crmConnection);
+            if (webResourceDeployReleaseTsSh != null)
+            {
+                replacements["$webresource.deploy.release.ts.sh$"] = webResourceDeployReleaseTsSh;
+            }
+            var generatorFormTsSh = await ReadBatResourceAsync("sh.generator.form.ts.sh", crmConnection);
+            if (generatorFormTsSh != null)
+            {
+                replacements["$generator.form.ts.sh$"] = generatorFormTsSh;
+            }
+            var generatorWebApiTsSh = await ReadBatResourceAsync("sh.generator.webapi.ts.sh", crmConnection);
+            if (generatorWebApiTsSh != null)
+            {
+                replacements["$generator.webapi.ts.sh$"] = generatorWebApiTsSh;
+            }
             replacements["$run.bat$"] = await ReadBatResourceAsync("bat.proxytypes.run.bat", crmConnection);
             // Non-Windows twin of the modelbuilder runner (bash) — same
             // set-only-when-exists contract.
