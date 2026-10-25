@@ -67,3 +67,6 @@ D:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAddCrmPluginRegist
 # ZCode local session data
 .zcode/
 .zcodeignore
+
+# DynamicsCrm.DevKit local project environment
+E:/src/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAllInOneCli/.env

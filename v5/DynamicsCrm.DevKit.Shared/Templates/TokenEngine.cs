@@ -197,6 +197,13 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             replacements["$package.json$"] = await TemplatePayload.ReadSharedResourceAsync("js.package.json");
             replacements["$jsconfig.json$"] = await TemplatePayload.ReadSharedResourceAsync("js.jsconfig.json");
             replacements["$generator.latebound.bat$"] = await ReadBatResourceAsync("bat.generator.latebound.bat", crmConnection);
+            // Non-Windows twin of the late-bound generator (bash). Only set
+            // when the resource exists so the token never leaks verbatim.
+            var lateBoundSh = await ReadBatResourceAsync("sh.generator.latebound.sh", crmConnection);
+            if (lateBoundSh != null)
+            {
+                replacements["$generator.latebound.sh$"] = lateBoundSh;
+            }
             replacements["$run.bat$"] = await ReadBatResourceAsync("bat.proxytypes.run.bat", crmConnection);
             replacements["$Extract-Both.bat$"] = await ReadBatResourceAsync("bat.solutionpackager.extract.both.bat", crmConnection);
             replacements["$Pack-Both.bat$"] = await ReadBatResourceAsync("bat.solutionpackager.pack.both.bat", crmConnection);

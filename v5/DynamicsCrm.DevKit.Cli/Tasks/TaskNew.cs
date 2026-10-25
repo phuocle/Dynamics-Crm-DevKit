@@ -1,9 +1,12 @@
+using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Shared.Templates;
+using DynamicsCrm.DevKit.Shared.Templates.Handlers;
 using DynamicsCrm.DevKit.Shared.Templates.Models;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,6 +23,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     {
         public static async Task RunAsync(NewCommandArgs args)
         {
+            TemplateHandlers.RegisterAll();
+
             var kind = (args.Kind ?? string.Empty).Trim();
             if (kind.Equals("list", StringComparison.OrdinalIgnoreCase))
             {
@@ -75,8 +80,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (string.IsNullOrWhiteSpace(args.Name) && CanPrompt(args))
                 {
-                    args.Name = AnsiConsole.Prompt(
-                        new TextPrompt<string>($"[green]{descriptor.DisplayName}[/] project name:"));
+                    var prompt = new TextPrompt<string>($"[green]{descriptor.DisplayName}[/] project name:");
+                    var defaultName = GetDefaultProjectName(descriptor, args.Out);
+                    if (!string.IsNullOrEmpty(defaultName))
+                    {
+                        prompt.DefaultValue(defaultName);
+                    }
+                    args.Name = AnsiConsole.Prompt(prompt);
                 }
                 var input = new ProjectTemplateInput
                 {
@@ -142,7 +152,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 foreach (var descriptor in descriptors)
                 {
                     var kind = descriptor.Kind == TemplateKind.Project ? "project" : "item";
-                    Console.WriteLine($"| {kind,-7} | {descriptor.Order,2} | {descriptor.Id,-15} | {(descriptor.RequiresConnection ? "yes" : "no "),3} | {descriptor.Description}");
+                    Console.WriteLine($"| {kind,-7} | {descriptor.Order,2} | {descriptor.Id,-15} | {(IsReady(descriptor) ? "yes" : "no "),3} | {(descriptor.RequiresConnection ? "yes" : "no "),3} | {descriptor.Description}");
                 }
             }
             else
@@ -152,12 +162,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 table.AddColumn(new TableColumn("[green]#[/]").Width(3));
                 table.AddColumn(new TableColumn("[green]Type (--type)[/]"));
                 table.AddColumn(new TableColumn("[green]Name[/]"));
+                table.AddColumn(new TableColumn("[green]Ready[/]").Width(5));
                 table.AddColumn(new TableColumn("[green]Conn[/]").Width(4));
                 table.AddColumn(new TableColumn("[green]Description[/]"));
                 foreach (var descriptor in descriptors)
                 {
                     var kind = descriptor.Kind == TemplateKind.Project ? "project" : "item";
-                    table.AddRow(kind, $"{descriptor.Order}", $"[yellow]{descriptor.Id}[/]", descriptor.DisplayName, descriptor.RequiresConnection ? "yes" : "no", descriptor.Description);
+                    table.AddRow(kind, $"{descriptor.Order}", $"[yellow]{descriptor.Id}[/]", descriptor.DisplayName, IsReady(descriptor) ? "[green]yes[/]" : "[grey]no[/]", descriptor.RequiresConnection ? "yes" : "no", descriptor.Description);
                 }
                 AnsiConsole.Write(table);
             }
@@ -165,6 +176,36 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             SpectreLog.WriteLine();
             SpectreLog.WriteHighLight("Usage: ", "devkit new", " --kind project --type Shared --name Contoso.Shared");
             return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// True when a handler or manifest is registered for the template —
+        /// the "Ready" column of 'devkit new list' tells users and AI agents
+        /// which types scaffold today.
+        /// </summary>
+        private static bool IsReady(TemplateDescriptor descriptor)
+        {
+            return ScaffoldingEngine.FindHandler(descriptor.Id) != null
+                || TemplateManifests.TryGet(descriptor.Id, out _);
+        }
+
+        /// <summary>
+        /// Default project name shown by the interactive prompt. Mirrors the
+        /// pre-filled name of FormProject: {SolutionName}.{ProjectType} for
+        /// every project template except SharedTest ({SolutionName}.Shared.Test).
+        /// </summary>
+        private static string GetDefaultProjectName(TemplateDescriptor descriptor, string outputDirectory)
+        {
+            var directory = string.IsNullOrWhiteSpace(outputDirectory)
+                ? Environment.CurrentDirectory
+                : outputDirectory;
+            var workspace = WorkspaceScanner.Scan(Path.GetFullPath(directory));
+            if (!workspace.HasSolution) return null;
+            if (descriptor.Id == nameof(ProjectType.SharedTest))
+            {
+                return $"{workspace.SolutionName}.{ProjectType.Shared}.{ProjectType.Test}";
+            }
+            return $"{workspace.SolutionName}.{descriptor.Id}";
         }
 
         private static string PromptTemplate(TemplateKind kind)

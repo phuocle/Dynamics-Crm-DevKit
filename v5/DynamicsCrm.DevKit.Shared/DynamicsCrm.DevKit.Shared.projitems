@@ -115,6 +115,7 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.webapi.ts_bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.form.ts_bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.latebound.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\generator.latebound.sh" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\WebApi.js" />
   </ItemGroup>
   <ItemGroup>
@@ -269,6 +270,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\T4\ITextTransformer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\T4\T4ContextFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\T4\T4TemplateResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\SharedProjectTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TemplateHandlers.cs" />
   </ItemGroup>
   <ItemGroup>
     <!-- Template payloads embedded for the cross-platform scaffolding engine (Vsix2CliAndMcp step 0).
@@ -281,8 +284,10 @@
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\EntityBase.cs" LogicalName="Resources.templates.project.shared.EntityBase.cs" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\Extension.cs" LogicalName="Resources.templates.project.shared.Extension.cs" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\generator.bat" LogicalName="Resources.templates.project.shared.generator.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\generator.sh" LogicalName="Resources.templates.project.shared.generator.sh" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\PluginCore.cs" LogicalName="Resources.templates.project.shared.PluginCore.cs" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\PluginExecutionContext7Wrapper.cs" LogicalName="Resources.templates.project.shared.PluginExecutionContext7Wrapper.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\README.md" LogicalName="Resources.templates.project.shared.README.md" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\Shared.projitems" LogicalName="Resources.templates.project.shared.Shared.projitems" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\Shared.shproj" LogicalName="Resources.templates.project.shared.Shared.shproj" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\02.ConsoleProjectTemplate\App.config.template" LogicalName="Resources.templates.project.console.App.config.template" />

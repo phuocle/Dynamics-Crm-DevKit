@@ -15,7 +15,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Kind { get; set; } = string.Empty;
 
         [CommandOption("--type")]
-        [Description("Template type: Shared, Console, ConsoleCore, Server, Package, WebResource, SharedTest, ProxyTypes, Test, UiTest, SolutionPackager, Report, WebResourceTs, LateBound, JsForm, JsWebApi, Plugin, CustomAction, CustomApi, Workflow, DataProvider, ResourceString, BatFile, TsForm, TsWebApi, TsDialog, JsDialog")]
+        [Description("Template type id — run 'devkit new list' to see all types")]
         public string Type { get; set; } = string.Empty;
 
         [CommandOption("--name")]

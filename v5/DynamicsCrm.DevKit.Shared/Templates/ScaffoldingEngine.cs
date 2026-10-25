@@ -64,6 +64,19 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             }
         }
 
+        /// <summary>
+        /// Removes every registered handler — the test-isolation counterpart
+        /// of TemplateManifests.Clear(), letting tests exercise the
+        /// manifest-fallback path for template ids that have handlers.
+        /// </summary>
+        public static void ClearHandlers()
+        {
+            lock (Lock)
+            {
+                Handlers.Clear();
+            }
+        }
+
         public static async Task<ScaffoldResult> ScaffoldProjectAsync(ProjectTemplateInput input)
         {
             var result = new ScaffoldResult { TemplateId = input?.TemplateId };
@@ -140,12 +153,13 @@ namespace DynamicsCrm.DevKit.Shared.Templates
 
             foreach (var file in manifest.Files)
             {
-                var content = await TemplatePayload.ReadAsync(file.ResourceName);
-                if (content == null)
+                var payload = await TemplatePayload.ReadContentAsync(file.ResourceName);
+                if (payload == null)
                 {
                     result.AddError($"resource not found: {file.ResourceName}");
                     continue;
                 }
+                var content = payload.Content;
 
                 var targetFileName = TokenEngine.ApplyReplacements(file.TargetFileName, tokens);
                 var fullPath = Path.Combine(outputDirectory ?? string.Empty, targetFileName);
@@ -170,11 +184,44 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                     continue;
                 }
 
-                await FileHelper.ForceWriteAllTextAsync(fullPath, content);
+                // Byte-faithful to Visual Studio: the payload keeps the BOM
+                // state of its source file (VS preserves per-file encodings).
+                if (payload.HasBom)
+                {
+                    await FileHelper.ForceWriteAllTextAsync(fullPath, content);
+                }
+                else
+                {
+                    await FileHelper.ForceWriteAllTextWithoutUTF8Async(fullPath, content);
+                }
                 result.Files.Add(new ScaffoldFileResult(targetFileName, fullPath, exists ? "Updated" : "Created"));
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Marks a generated shell script executable on macOS/Linux so it
+        /// runs directly (files written by code carry no executable bit).
+        /// No-op on Windows; the net48 VSIX host compiles an empty body.
+        /// </summary>
+        public static void MarkExecutable(string path)
+        {
+            if (string.IsNullOrEmpty(path) || !File.Exists(path)) return;
+#if NET10_0_OR_GREATER
+            if (OperatingSystem.IsWindows()) return;
+            try
+            {
+                File.SetUnixFileMode(path,
+                    UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute |
+                    UnixFileMode.GroupRead | UnixFileMode.GroupExecute |
+                    UnixFileMode.OtherRead | UnixFileMode.OtherExecute);
+            }
+            catch
+            {
+                // Best effort — the script still runs via "bash <script>".
+            }
+#endif
         }
 
         private static async Task<ScaffoldResult> DispatchAsync(TemplateDescriptor descriptor, WorkspaceContext workspace, Dictionary<string, string> tokens, ProjectTemplateInput projectInput, ItemTemplateInput itemInput)

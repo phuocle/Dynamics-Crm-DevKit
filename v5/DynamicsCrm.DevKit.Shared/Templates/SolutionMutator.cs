@@ -1,7 +1,10 @@
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Models;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -36,41 +39,58 @@ namespace DynamicsCrm.DevKit.Shared.Templates
 
             if (IsSlnx(solutionFile))
             {
-                return AddProjectToSlnx(solutionFile, projectFile, projectTypeGuid);
+                return AddProjectToSlnx(solutionFile, projectFile, null);
             }
 
-            return await AddProjectToSlnAsync(solutionFile, projectFile, projectTypeGuid);
+            return await AddProjectToSlnAsync(solutionFile, projectFile, projectTypeGuid, null, includeConfigurationEntries: true);
         }
 
         /// <summary>
-        /// Adds a shared project (.shproj) to a .sln file including the
-        /// GlobalSection(SharedMSBuildProjectFiles) entries that Visual
-        /// Studio requires ("dotnet sln add" does not support .shproj).
+        /// Adds a shared project (.shproj) to a .sln file the way Visual
+        /// Studio does: a Project entry reusing the ProjectGuid stored in
+        /// the .shproj (shared projects get no ProjectConfigurationPlatforms
+        /// entries) plus the owner line of GlobalSection(
+        /// SharedMSBuildProjectFiles) —
+        /// "{path}.projitems*{guid-lowercase}*SharedItemsImports = 13".
+        /// "dotnet sln add" does not support .shproj.
         /// </summary>
         public static async Task<bool> AddSharedProjectToSolutionAsync(string solutionFile, string shprojFile)
         {
             if (string.IsNullOrEmpty(solutionFile) || !File.Exists(solutionFile)) return false;
             if (string.IsNullOrEmpty(shprojFile) || !File.Exists(shprojFile)) return false;
 
+            var projectGuid = ReadProjectGuid(shprojFile) ?? Guid.NewGuid().ToString("D");
+            if (IsSlnx(solutionFile))
+            {
+                return AddProjectToSlnx(solutionFile, shprojFile, projectGuid);
+            }
+
             // The Project entry may already exist (for example when the
             // solution template wrote it) — the SharedMSBuildProjectFiles
             // section still has to be ensured.
-            await AddProjectToSolutionAsync(solutionFile, shprojFile);
-            if (IsSlnx(solutionFile)) return true;
+            var added = await AddProjectToSlnAsync(solutionFile, shprojFile, SharedProjectTypeGuid, projectGuid, includeConfigurationEntries: false);
+            var sectionAdded = EnsureSharedMsBuildProjectFiles(solutionFile, shprojFile, projectGuid);
+            return added || sectionAdded;
+        }
 
+        /// <summary>
+        /// Ensures the GlobalSection(SharedMSBuildProjectFiles) owner line
+        /// for a shared project exists in the solution file. Returns true
+        /// when the section or the line was added.
+        /// </summary>
+        private static bool EnsureSharedMsBuildProjectFiles(string solutionFile, string shprojFile, string projectGuid)
+        {
             var solutionDirectory = Path.GetDirectoryName(solutionFile);
-            var relativePath = SolutionMutator.GetRelativePath(solutionDirectory, shprojFile).Replace('/', '\\');
-            var projectGuid = FindProjectGuid(solutionFile, shprojFile);
-            if (projectGuid == null) return false;
+            var relativeProjitems = SolutionMutator.GetRelativePath(solutionDirectory, shprojFile).Replace('/', '\\');
+            relativeProjitems = Path.ChangeExtension(relativeProjitems, ".projitems");
 
-            var projitemsName = Path.GetFileNameWithoutExtension(shprojFile) + ".projitems";
-            var projitemsRelative = Path.ChangeExtension(relativePath, ".projitems");
-            var entry = $"\t\t{projectGuid}*{projitemsName}*{projitemsRelative} = {projitemsRelative}";
+            var guidLower = "{" + projectGuid.Trim('{', '}').ToLowerInvariant() + "}";
+            var ownerEntry = $"\t\t{relativeProjitems}*{guidLower}*SharedItemsImports = 13";
 
             var lines = File.ReadAllLines(solutionFile).ToList();
-            if (lines.Any(line => line.Trim().StartsWith($"{projectGuid}*", StringComparison.OrdinalIgnoreCase)))
+            if (lines.Any(line => line.IndexOf(ownerEntry, StringComparison.OrdinalIgnoreCase) >= 0))
             {
-                return true;
+                return false;
             }
 
             var sectionStart = lines.FindIndex(line => line.Trim().StartsWith("GlobalSection(SharedMSBuildProjectFiles)", StringComparison.OrdinalIgnoreCase));
@@ -79,17 +99,40 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 var globalIndex = lines.FindIndex(line => line.Trim() == "Global");
                 var insertAt = globalIndex + 1;
                 lines.Insert(insertAt, "\tGlobalSection(SharedMSBuildProjectFiles) = preSolution");
-                lines.Insert(insertAt + 1, entry);
+                lines.Insert(insertAt + 1, ownerEntry);
                 lines.Insert(insertAt + 2, "\tEndGlobalSection");
             }
             else
             {
                 var endSection = lines.FindIndex(sectionStart, line => line.Trim() == "EndGlobalSection");
-                lines.Insert(endSection, entry);
+                lines.Insert(endSection, ownerEntry);
             }
 
             File.WriteAllLines(solutionFile, lines);
             return true;
+        }
+
+        /// <summary>
+        /// Reads the ProjectGuid of a .shproj (the same value the payload
+        /// uses for SharedGUID in the matching .projitems). Returns null
+        /// when the file has no readable ProjectGuid.
+        /// </summary>
+        private static string ReadProjectGuid(string shprojFile)
+        {
+            try
+            {
+                var document = XDocument.Load(shprojFile);
+                var ns = document.Root.Name.Namespace;
+                var projectGuid = document.Root
+                    .Descendants(ns + "ProjectGuid")
+                    .FirstOrDefault()?.Value?.Trim()
+                    .Trim('{', '}');
+                return string.IsNullOrEmpty(projectGuid) ? null : projectGuid;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -126,20 +169,105 @@ namespace DynamicsCrm.DevKit.Shared.Templates
 
         /// <summary>
         /// Ensures DynamicsCrm.DevKit.Cli.json exists in the solution
-        /// directory, creating it from the embedded resource. Returns the
-        /// full path. Port of VsixHelper.AddDynamicsCrmDevKitCliJsonAsync.
+        /// directory, creating it from the embedded resource (with the
+        /// ??? file patterns bound to the solution name) and ensuring the
+        /// .env/.env.example project environment files. Returns the full
+        /// path, or null when the directory is empty. Port of
+        /// VsixHelper.AddDynamicsCrmDevKitCliJsonAsync.
         /// </summary>
-        public static async Task<string> EnsureDevKitCliJsonAsync(string solutionDirectory)
+        public static async Task<string> EnsureDevKitCliJsonAsync(string solutionDirectory, string solutionName = null)
         {
             if (string.IsNullOrEmpty(solutionDirectory)) return null;
             var path = Path.Combine(solutionDirectory, Const.DynamicsCrmDevKitCliJson);
-            if (File.Exists(path)) return path;
+            if (File.Exists(path))
+            {
+                ProjectEnvironment.EnsureFile(solutionDirectory);
+                return path;
+            }
 
             var content = await TemplatePayload.ReadSharedResourceAsync(Const.DynamicsCrmDevKitCliJson);
             if (string.IsNullOrEmpty(content)) return null;
+            if (!string.IsNullOrEmpty(solutionName))
+            {
+                content = content
+                    .Replace("???.Plugin.*.dll", $"{solutionName}.Plugin.*.dll")
+                    .Replace("???.Plugin.*.nupkg", $"{solutionName}.Plugin.*.nupkg")
+                    .Replace("???.CustomAction.*.dll", $"{solutionName}.CustomAction.*.dll")
+                    .Replace("???.CustomApi.*.dll", $"{solutionName}.CustomApi.*.dll")
+                    .Replace("???.Workflow.*.dll", $"{solutionName}.Workflow.*.dll")
+                    .Replace("???.DataProvider.*.dll", $"{solutionName}.DataProvider.*.dll")
+                    .Replace("???.*.Test.dll", $"{solutionName}.*.Test.dll");
+            }
             Directory.CreateDirectory(solutionDirectory);
             await FileHelper.ForceWriteAllTextAsync(path, content);
+            ProjectEnvironment.EnsureFile(solutionDirectory);
             return path;
+        }
+
+        /// <summary>
+        /// Ensures DynamicsCrm.DevKit.json (the VSIX connection store) exists
+        /// in the solution directory, so opening the solution in Visual
+        /// Studio already offers a working connection. When no connection is
+        /// passed, the connection is derived from the project .env
+        /// (DEVKIT_AUTH_TYPE) with UseProjectEnvironment=true — secrets are
+        /// never written to this file, they are read from .env at connect
+        /// time. Secrets of an explicitly passed connection are encrypted
+        /// with Helper.EncryptString like the VSIX form does. An existing
+        /// file is never touched.
+        /// </summary>
+        public static async Task<string> EnsureDevKitJsonAsync(string solutionDirectory, CrmConnection crmConnection = null)
+        {
+            if (string.IsNullOrEmpty(solutionDirectory)) return null;
+            var path = Path.Combine(solutionDirectory, Const.DynamicsCrmDevKitJson);
+            if (File.Exists(path)) return path;
+
+            var connection = crmConnection ?? BuildConnectionFromProjectEnvironment(solutionDirectory);
+            var connections = new DevKitConnections
+            {
+                CrmConnections = new System.Collections.Generic.List<CrmConnection>(),
+            };
+            if (connection != null)
+            {
+                if (!string.IsNullOrEmpty(connection.Password)) connection.Password = Helper.EncryptString(connection.Password);
+                if (!string.IsNullOrEmpty(connection.ClientSecret)) connection.ClientSecret = Helper.EncryptString(connection.ClientSecret);
+                connections.CrmConnections.Add(connection);
+                connections.DefaultCrmConnection = connection.Name;
+            }
+
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            };
+            var json = JsonSerializer.Serialize(connections, options);
+            Directory.CreateDirectory(solutionDirectory);
+            await FileHelper.ForceWriteAllTextAsync(path, json);
+            return path;
+        }
+
+        /// <summary>
+        /// Derives a connection entry from the project .env: name and type
+        /// come from DEVKIT_AUTH_TYPE and secrets stay in .env
+        /// (UseProjectEnvironment=true) — the same shape the VSIX connection
+        /// dialog saves.
+        /// </summary>
+        private static CrmConnection BuildConnectionFromProjectEnvironment(string solutionDirectory)
+        {
+            var envFile = ProjectEnvironment.FindFile(solutionDirectory);
+            if (envFile == null) return null;
+            var values = ProjectEnvironment.Read(envFile);
+            var type = ProjectEnvironment.GetValue(values, ProjectEnvironment.AuthType);
+            if (string.IsNullOrEmpty(type)) return null;
+
+            var now = DateTime.UtcNow;
+            return new CrmConnection
+            {
+                Name = type,
+                Type = type,
+                UseProjectEnvironment = true,
+                CreatedAt = now,
+                ModifiedAt = now,
+            };
         }
 
         private static bool IsSlnx(string solutionFile)
@@ -183,7 +311,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             return fullPath.Split(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }, System.StringSplitOptions.RemoveEmptyEntries);
         }
 
-        private static async Task<bool> AddProjectToSlnAsync(string solutionFile, string projectFile, string projectTypeGuid)
+        private static async Task<bool> AddProjectToSlnAsync(string solutionFile, string projectFile, string projectTypeGuid, string projectGuid, bool includeConfigurationEntries)
         {
             var solutionDirectory = Path.GetDirectoryName(solutionFile);
             var relativePath = SolutionMutator.GetRelativePath(solutionDirectory, projectFile).Replace('/', '\\');
@@ -195,10 +323,13 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 return false;
             }
 
-            var projectGuid = $"{{{Guid.NewGuid().ToString().ToUpperInvariant()}}}";
+            var guid = string.IsNullOrEmpty(projectGuid)
+                ? Guid.NewGuid().ToString("D")
+                : projectGuid.Trim('{', '}');
+            var projectGuidToken = $"{{{guid.ToUpperInvariant()}}}";
             var projectBlock = new[]
             {
-                $"Project(\"{projectTypeGuid}\") = \"{projectName}\", \"{relativePath}\", \"{projectGuid}\"",
+                $"Project(\"{projectTypeGuid}\") = \"{projectName}\", \"{relativePath}\", \"{projectGuidToken}\"",
                 "EndProject"
             };
 
@@ -216,17 +347,23 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 lines.Add("\t\tRelease|Any CPU = Release|Any CPU");
                 lines.Add("\tEndGlobalSection");
                 lines.Add("\tGlobalSection(ProjectConfigurationPlatforms) = postSolution");
-                lines.Add($"\t\t{projectGuid}.Debug|Any CPU.ActiveCfg = Debug|Any CPU");
-                lines.Add($"\t\t{projectGuid}.Debug|Any CPU.Build.0 = Debug|Any CPU");
-                lines.Add($"\t\t{projectGuid}.Release|Any CPU.ActiveCfg = Release|Any CPU");
-                lines.Add($"\t\t{projectGuid}.Release|Any CPU.Build.0 = Release|Any CPU");
+                if (includeConfigurationEntries)
+                {
+                    lines.Add($"\t\t{projectGuidToken}.Debug|Any CPU.ActiveCfg = Debug|Any CPU");
+                    lines.Add($"\t\t{projectGuidToken}.Debug|Any CPU.Build.0 = Debug|Any CPU");
+                    lines.Add($"\t\t{projectGuidToken}.Release|Any CPU.ActiveCfg = Release|Any CPU");
+                    lines.Add($"\t\t{projectGuidToken}.Release|Any CPU.Build.0 = Release|Any CPU");
+                }
                 lines.Add("\tEndGlobalSection");
                 lines.Add("EndGlobal");
             }
             else
             {
                 lines.InsertRange(globalIndex, projectBlock);
-                AddConfigurationEntries(lines, projectGuid);
+                if (includeConfigurationEntries)
+                {
+                    AddConfigurationEntries(lines, projectGuidToken);
+                }
             }
 
             await FileHelper.ForceWriteAllTextAsync(solutionFile, string.Join(Environment.NewLine, lines) + Environment.NewLine);
@@ -259,7 +396,14 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             }
         }
 
-        private static bool AddProjectToSlnx(string solutionFile, string projectFile, string projectTypeGuid)
+        /// <summary>
+        /// Adds a project to a .slnx solution the way Visual Studio does:
+        /// csproj entries carry only the Path; shared projects (.shproj)
+        /// additionally carry Id — the ProjectGuid of the .shproj in lower
+        /// case. No project-type attribute exists in the slnx format. The
+        /// file keeps its original shape (XML declaration and BOM state).
+        /// </summary>
+        private static bool AddProjectToSlnx(string solutionFile, string projectFile, string projectGuid)
         {
             var solutionDirectory = Path.GetDirectoryName(solutionFile);
             var relativePath = SolutionMutator.GetRelativePath(solutionDirectory, projectFile).Replace('\\', '/');
@@ -271,31 +415,31 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             if (projectElement != null) return false;
 
             projectElement = new XElement("Project",
-                new XAttribute("Type", projectTypeGuid),
-                new XAttribute("Id", Guid.NewGuid().ToString().ToUpperInvariant()),
                 new XAttribute("Path", relativePath));
-            document.Root.Add(projectElement);
-            document.Save(solutionFile);
-            return true;
-        }
-
-        private static string FindProjectGuid(string solutionFile, string projectFile)
-        {
-            var solutionDirectory = Path.GetDirectoryName(solutionFile);
-            var relativePath = SolutionMutator.GetRelativePath(solutionDirectory, projectFile).Replace('/', '\\');
-            foreach (var line in File.ReadAllLines(solutionFile))
+            if (!string.IsNullOrEmpty(projectGuid))
             {
-                if (line.Trim().StartsWith("Project(", StringComparison.Ordinal) &&
-                    line.IndexOf(relativePath, StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    var parts = line.Split(',');
-                    if (parts.Length == 3)
-                    {
-                        return parts[2].Trim().Trim('"');
-                    }
-                }
+                projectElement.SetAttributeValue("Id", projectGuid.Trim('{', '}').ToLowerInvariant());
             }
-            return null;
+            document.Root.Add(projectElement);
+
+            var hadDeclaration = document.Declaration != null;
+            var head = new byte[3];
+            using (var existing = File.OpenRead(solutionFile))
+            {
+                existing.Read(head, 0, head.Length);
+            }
+            var hadBom = head[0] == 0xEF && head[1] == 0xBB && head[2] == 0xBF;
+            var settings = new System.Xml.XmlWriterSettings
+            {
+                OmitXmlDeclaration = !hadDeclaration,
+                Indent = true,
+                Encoding = new System.Text.UTF8Encoding(hadBom)
+            };
+            using (var writer = System.Xml.XmlWriter.Create(solutionFile, settings))
+            {
+                document.Save(writer);
+            }
+            return true;
         }
     }
 }

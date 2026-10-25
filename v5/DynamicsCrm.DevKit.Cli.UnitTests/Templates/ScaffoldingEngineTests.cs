@@ -20,12 +20,16 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             _directory = Path.Combine(Path.GetTempPath(), "devkit-engine-tests", Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(_directory);
             TemplateManifests.Clear();
+            // This class exercises the manifest-fallback path, so any real
+            // handler registered for a template id (Shared since P.1) must go.
+            ScaffoldingEngine.ClearHandlers();
         }
 
         [TestCleanup]
         public void Cleanup()
         {
             TemplateManifests.Clear();
+            ScaffoldingEngine.ClearHandlers();
             Directory.Delete(_directory, true);
         }
 

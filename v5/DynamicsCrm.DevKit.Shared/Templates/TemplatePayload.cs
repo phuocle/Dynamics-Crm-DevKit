@@ -22,6 +22,18 @@ namespace DynamicsCrm.DevKit.Shared.Templates
     /// </summary>
     public static class TemplatePayload
     {
+        /// <summary>
+        /// Payload content plus the BOM state of its source file, so hosts
+        /// can rewrite generated files byte-faithful to what Visual Studio
+        /// produces (VS preserves the per-file encoding when copying the
+        /// .vstemplate payload).
+        /// </summary>
+        public sealed class PayloadContent
+        {
+            public string Content { get; set; }
+            public bool HasBom { get; set; }
+        }
+
         public static string Prefix(TemplateKind kind, string templateId)
         {
             var kindName = kind == TemplateKind.Project ? "project" : "item";
@@ -30,10 +42,11 @@ namespace DynamicsCrm.DevKit.Shared.Templates
 
         /// <summary>
         /// Reads an embedded resource by name suffix (for example
-        /// "Resources.templates.project.shared.generator.bat"). Returns null
-        /// when the resource does not exist.
+        /// "Resources.templates.project.shared.generator.bat") including the
+        /// BOM state of the source. Returns null when the resource does not
+        /// exist.
         /// </summary>
-        public static async Task<string> ReadAsync(string resourceName)
+        public static async Task<PayloadContent> ReadContentAsync(string resourceName)
         {
             if (string.IsNullOrWhiteSpace(resourceName)) return null;
             var assembly = Assembly.GetExecutingAssembly();
@@ -44,11 +57,29 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             using (var stream = assembly.GetManifestResourceStream(fullName))
             {
                 if (stream == null) return null;
-                using (var reader = new StreamReader(stream))
+                using (var buffer = new MemoryStream())
                 {
-                    return await reader.ReadToEndAsync();
+                    await stream.CopyToAsync(buffer);
+                    var bytes = buffer.ToArray();
+                    var hasBom = bytes.Length >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF;
+                    using (var reader = new StreamReader(new MemoryStream(bytes)))
+                    {
+                        var content = await reader.ReadToEndAsync();
+                        return new PayloadContent { Content = content, HasBom = hasBom };
+                    }
                 }
             }
+        }
+
+        /// <summary>
+        /// Reads an embedded resource by name suffix (for example
+        /// "Resources.templates.project.shared.generator.bat"). Returns null
+        /// when the resource does not exist.
+        /// </summary>
+        public static async Task<string> ReadAsync(string resourceName)
+        {
+            var payload = await ReadContentAsync(resourceName);
+            return payload?.Content;
         }
 
         /// <summary>
