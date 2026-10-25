@@ -10,4 +10,8 @@
   <Project Path="Dev.AllInOne.Test/Dev.AllInOne.Test.csproj" />
   <Project Path="Dev.AllInOne.WebResourceTs/Dev.AllInOne.WebResourceTs.csproj" />
   <Project Path="Dev.AllInOne.UiTest/Dev.AllInOne.UiTest.csproj" />
+  <Project Path="Dev.AllInOne.SolutionPackager/Dev.AllInOne.SolutionPackager.csproj" />
+  <Project Path="Dev.AllInOne.Report/Dev.AllInOne.Report.rptproj">
+    <Deploy />
+  </Project>
 </Solution>

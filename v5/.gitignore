@@ -76,3 +76,6 @@ E:/src/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAllInOne/.env
 
 # DynamicsCrm.DevKit local project environment
 E:/src/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAllInOne2/.env
+
+# Visual Studio Report Designer user state (created when the solution loads a .rptproj project)
+*.rptproj.rsuser
