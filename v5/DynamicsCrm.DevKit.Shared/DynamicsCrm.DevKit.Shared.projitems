@@ -216,6 +216,8 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\proxytypes.run.bat" WithCulture="false" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\solutionpackager.extract.both.bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\solutionpackager.pack.both.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\solutionpackager.extract.both.sh" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\solutionpackager.pack.both.sh" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\proxytypes.run.sh" WithCulture="false" />
@@ -299,6 +301,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ProxyTypesProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TestProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\UiTestProjectTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\SolutionPackagerProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TemplateHandlers.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -383,9 +386,12 @@
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\10.TestUiProjectTemplate\TestSettings.cs" LogicalName="Resources.templates.project.uitest.TestSettings.cs" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\10.TestUiProjectTemplate\UiTest.runsettings" LogicalName="Resources.templates.project.uitest.UiTest.runsettings" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\11.SolutionPackagerProjectTemplate\Extract-Both.bat" LogicalName="Resources.templates.project.solutionpackager.Extract-Both.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\11.SolutionPackagerProjectTemplate\Extract-Both.sh" LogicalName="Resources.templates.project.solutionpackager.Extract-Both.sh" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\11.SolutionPackagerProjectTemplate\mapping.xml" LogicalName="Resources.templates.project.solutionpackager.mapping.xml" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\11.SolutionPackagerProjectTemplate\Pack-Both.bat" LogicalName="Resources.templates.project.solutionpackager.Pack-Both.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\11.SolutionPackagerProjectTemplate\Pack-Both.sh" LogicalName="Resources.templates.project.solutionpackager.Pack-Both.sh" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\11.SolutionPackagerProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.solutionpackager.ProjectTemplate.csproj.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\11.SolutionPackagerProjectTemplate\README.md" LogicalName="Resources.templates.project.solutionpackager.README.md" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\12.ReportProjectTemplate\download.reports.bat" LogicalName="Resources.templates.project.report.download.reports.bat" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\12.ReportProjectTemplate\ProjectTemplate.csproj" LogicalName="Resources.templates.project.report.ProjectTemplate.csproj" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\12.ReportProjectTemplate\upload.reports.bat" LogicalName="Resources.templates.project.report.upload.reports.bat" />

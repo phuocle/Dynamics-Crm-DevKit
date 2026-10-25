@@ -296,6 +296,18 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             }
             replacements["$Extract-Both.bat$"] = await ReadBatResourceAsync("bat.solutionpackager.extract.both.bat", crmConnection);
             replacements["$Pack-Both.bat$"] = await ReadBatResourceAsync("bat.solutionpackager.pack.both.bat", crmConnection);
+            // Non-Windows twins of the Solution Packager scripts (bash) —
+            // same set-only-when-exists contract.
+            var solutionPackagerExtractBothSh = await ReadBatResourceAsync("sh.solutionpackager.extract.both.sh", crmConnection);
+            if (solutionPackagerExtractBothSh != null)
+            {
+                replacements["$Extract-Both.sh$"] = solutionPackagerExtractBothSh;
+            }
+            var solutionPackagerPackBothSh = await ReadBatResourceAsync("sh.solutionpackager.pack.both.sh", crmConnection);
+            if (solutionPackagerPackBothSh != null)
+            {
+                replacements["$Pack-Both.sh$"] = solutionPackagerPackBothSh;
+            }
             replacements["$download.reports.bat$"] = await ReadBatResourceAsync("bat.download.reports.bat", crmConnection);
             replacements["$upload.reports.bat$"] = await ReadBatResourceAsync("bat.upload.reports.bat", crmConnection);
             replacements["$Helper.cs$"] = await TemplatePayload.ReadSharedResourceAsync("Helper.cs");
