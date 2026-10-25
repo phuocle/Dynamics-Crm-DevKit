@@ -203,9 +203,15 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\deploy.datasource.bat" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\proxytypes.run.bat" />
+    <!-- WithCulture=false: MSBuild AssignCulture reads "something.run.anything"
+         as culture "run" (a valid ICU culture on .NET 10) and silently drops the
+         file from the main assembly; the VSIX net48 build is unaffected. -->
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\proxytypes.run.bat" WithCulture="false" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\solutionpackager.extract.both.bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\solutionpackager.pack.both.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\proxytypes.run.sh" WithCulture="false" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Helper.cs" />
@@ -282,6 +288,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ServerProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\PackageProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\WebResourceProjectTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ProxyTypesProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TemplateHandlers.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -354,7 +361,9 @@
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\08.ProxyTypesProjectTemplate\GeneratedCode.cs" LogicalName="Resources.templates.project.proxytypes.GeneratedCode.cs" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\08.ProxyTypesProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.proxytypes.ProjectTemplate.csproj.template" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\08.ProxyTypesProjectTemplate\ProxyTypesAssembly.cs" LogicalName="Resources.templates.project.proxytypes.ProxyTypesAssembly.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\08.ProxyTypesProjectTemplate\README.md" LogicalName="Resources.templates.project.proxytypes.README.md" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\08.ProxyTypesProjectTemplate\run.bat" LogicalName="Resources.templates.project.proxytypes.run.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\08.ProxyTypesProjectTemplate\run.sh" LogicalName="Resources.templates.project.proxytypes.run.sh" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\09.TestProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.test.ProjectTemplate.csproj.template" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\10.TestUiProjectTemplate\App.config" LogicalName="Resources.templates.project.uitest.App.config" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\10.TestUiProjectTemplate\App.cs" LogicalName="Resources.templates.project.uitest.App.cs" />

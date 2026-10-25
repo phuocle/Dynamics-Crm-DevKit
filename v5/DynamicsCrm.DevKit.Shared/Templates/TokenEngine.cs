@@ -265,6 +265,13 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 replacements["$generator.webapi.sh$"] = generatorWebApiSh;
             }
             replacements["$run.bat$"] = await ReadBatResourceAsync("bat.proxytypes.run.bat", crmConnection);
+            // Non-Windows twin of the modelbuilder runner (bash) — same
+            // set-only-when-exists contract.
+            var proxyTypesRunSh = await ReadBatResourceAsync("sh.proxytypes.run.sh", crmConnection);
+            if (proxyTypesRunSh != null)
+            {
+                replacements["$run.sh$"] = proxyTypesRunSh;
+            }
             replacements["$Extract-Both.bat$"] = await ReadBatResourceAsync("bat.solutionpackager.extract.both.bat", crmConnection);
             replacements["$Pack-Both.bat$"] = await ReadBatResourceAsync("bat.solutionpackager.pack.both.bat", crmConnection);
             replacements["$download.reports.bat$"] = await ReadBatResourceAsync("bat.download.reports.bat", crmConnection);
