@@ -8,4 +8,5 @@
   <Project Path="Dev.AllInOne.Shared/Dev.AllInOne.Shared.shproj" Id="ba6b438f-e1dc-4ab9-bc5e-8638f3c38ebf" />
   <Project Path="Dev.AllInOne.Test/Dev.AllInOne.Test.csproj" />
   <Project Path="Dev.AllInOne.WebResource/Dev.AllInOne.WebResource.csproj" />
+  <Project Path="Dev.AllInOne.WebResourceTs/Dev.AllInOne.WebResourceTs.csproj" />
 </Solution>

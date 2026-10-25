@@ -8,4 +8,5 @@
   <Project Path="Dev.AllInOne.Shared.Test/Dev.AllInOne.Shared.Test.shproj" Id="9bbcb6da-798f-4477-a255-a7c219daa274" />
   <Project Path="Dev.AllInOne.ProxyTypes/Dev.AllInOne.ProxyTypes.csproj" />
   <Project Path="Dev.AllInOne.Test/Dev.AllInOne.Test.csproj" />
+  <Project Path="Dev.AllInOne.WebResourceTs/Dev.AllInOne.WebResourceTs.csproj" />
 </Solution>
