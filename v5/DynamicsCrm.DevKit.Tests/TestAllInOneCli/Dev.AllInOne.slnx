@@ -3,4 +3,5 @@
   <Project Path="Dev.AllInOne.ConsoleCore/Dev.AllInOne.ConsoleCore.csproj" />
   <Project Path="Dev.AllInOne.Server/Dev.AllInOne.Server.csproj" />
   <Project Path="Dev.AllInOne.Shared/Dev.AllInOne.Shared.shproj" Id="e2544411-67a7-40f3-ba67-69779d80f3a5" />
+  <Project Path="Dev.AllInOne.Package/Dev.AllInOne.Package.csproj" />
 </Solution>
