@@ -26,9 +26,14 @@ namespace DynamicsCrm.DevKit.Shared.Templates
         /// <summary>
         /// Adds a project (.csproj/.shproj) to a .sln or .slnx file.
         /// Returns false when the file is missing or the project is
-        /// already referenced.
+        /// already referenced. When the project consumes a shared project
+        /// (imports its .projitems), pass the shared project file so the
+        /// .sln also gains the GlobalSection(SharedMSBuildProjectFiles)
+        /// consumer line Visual Studio writes —
+        /// "{path}.projitems*{project-guid-lowercase}*SharedItemsImports = 5"
+        /// (the .slnx format has no such section).
         /// </summary>
-        public static async Task<bool> AddProjectToSolutionAsync(string solutionFile, string projectFile)
+        public static async Task<bool> AddProjectToSolutionAsync(string solutionFile, string projectFile, string sharedProjectFile = null)
         {
             if (string.IsNullOrEmpty(solutionFile) || !File.Exists(solutionFile)) return false;
             if (string.IsNullOrEmpty(projectFile) || !File.Exists(projectFile)) return false;
@@ -42,7 +47,18 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 return AddProjectToSlnx(solutionFile, projectFile, null);
             }
 
-            return await AddProjectToSlnAsync(solutionFile, projectFile, projectTypeGuid, null, includeConfigurationEntries: true);
+            // The consumer line must carry the GUID of the solution entry;
+            // reuse the GUID of an existing entry or mint the one the new
+            // entry below will use (SDK-style csproj files store no
+            // ProjectGuid of their own).
+            var projectGuid = ReadProjectGuidFromSolution(solutionFile, projectFile) ?? Guid.NewGuid().ToString("D");
+            var added = await AddProjectToSlnAsync(solutionFile, projectFile, projectTypeGuid, projectGuid, includeConfigurationEntries: true);
+            var consumerAdded = false;
+            if (!string.IsNullOrEmpty(sharedProjectFile) && File.Exists(sharedProjectFile))
+            {
+                consumerAdded = EnsureSharedMsBuildConsumerLine(solutionFile, projectFile, sharedProjectFile, projectGuid);
+            }
+            return added || consumerAdded;
         }
 
         /// <summary>
@@ -86,9 +102,35 @@ namespace DynamicsCrm.DevKit.Shared.Templates
 
             var guidLower = "{" + projectGuid.Trim('{', '}').ToLowerInvariant() + "}";
             var ownerEntry = $"\t\t{relativeProjitems}*{guidLower}*SharedItemsImports = 13";
+            return EnsureSharedMsBuildProjectFileEntry(solutionFile, ownerEntry);
+        }
 
+        /// <summary>
+        /// Ensures the GlobalSection(SharedMSBuildProjectFiles) consumer
+        /// line for a project that imports a shared project's .projitems:
+        /// "{path}.projitems*{project-guid-lowercase}*SharedItemsImports = 5".
+        /// Returns true when the section or the line was added.
+        /// </summary>
+        private static bool EnsureSharedMsBuildConsumerLine(string solutionFile, string projectFile, string sharedProjectFile, string projectGuid)
+        {
+            var solutionDirectory = Path.GetDirectoryName(solutionFile);
+            var relativeProjitems = SolutionMutator.GetRelativePath(solutionDirectory, sharedProjectFile).Replace('/', '\\');
+            relativeProjitems = Path.ChangeExtension(relativeProjitems, ".projitems");
+
+            var guidLower = "{" + projectGuid.Trim('{', '}').ToLowerInvariant() + "}";
+            var consumerEntry = $"\t\t{relativeProjitems}*{guidLower}*SharedItemsImports = 5";
+            return EnsureSharedMsBuildProjectFileEntry(solutionFile, consumerEntry);
+        }
+
+        /// <summary>
+        /// Inserts one GlobalSection(SharedMSBuildProjectFiles) line,
+        /// creating the section right after Global when missing. Idempotent
+        /// per line.
+        /// </summary>
+        private static bool EnsureSharedMsBuildProjectFileEntry(string solutionFile, string entryLine)
+        {
             var lines = File.ReadAllLines(solutionFile).ToList();
-            if (lines.Any(line => line.IndexOf(ownerEntry, StringComparison.OrdinalIgnoreCase) >= 0))
+            if (lines.Any(line => line.IndexOf(entryLine, StringComparison.OrdinalIgnoreCase) >= 0))
             {
                 return false;
             }
@@ -99,17 +141,41 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 var globalIndex = lines.FindIndex(line => line.Trim() == "Global");
                 var insertAt = globalIndex + 1;
                 lines.Insert(insertAt, "\tGlobalSection(SharedMSBuildProjectFiles) = preSolution");
-                lines.Insert(insertAt + 1, ownerEntry);
+                lines.Insert(insertAt + 1, entryLine);
                 lines.Insert(insertAt + 2, "\tEndGlobalSection");
             }
             else
             {
                 var endSection = lines.FindIndex(sectionStart, line => line.Trim() == "EndGlobalSection");
-                lines.Insert(endSection, ownerEntry);
+                lines.Insert(endSection, entryLine);
             }
 
             File.WriteAllLines(solutionFile, lines);
             return true;
+        }
+
+        /// <summary>
+        /// Reads the project GUID a .sln already uses for a project entry
+        /// (the value between the braces of the third field). Returns null
+        /// when the project is not referenced yet.
+        /// </summary>
+        private static string ReadProjectGuidFromSolution(string solutionFile, string projectFile)
+        {
+            var solutionDirectory = Path.GetDirectoryName(solutionFile);
+            var relativePath = SolutionMutator.GetRelativePath(solutionDirectory, projectFile).Replace('/', '\\');
+
+            foreach (var line in File.ReadAllLines(solutionFile))
+            {
+                var trimmed = line.Trim();
+                if (!trimmed.StartsWith("Project(", StringComparison.Ordinal)) continue;
+                var fields = trimmed.Split(',');
+                if (fields.Length < 3) continue;
+                var pathField = fields[1].Trim().Trim('"');
+                if (!string.Equals(pathField, relativePath, StringComparison.OrdinalIgnoreCase)) continue;
+                var guidField = fields[2].Trim().Trim('"').Trim('{', '}');
+                return guidField;
+            }
+            return null;
         }
 
         /// <summary>
@@ -221,7 +287,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             var path = Path.Combine(solutionDirectory, Const.DynamicsCrmDevKitJson);
             if (File.Exists(path)) return path;
 
-            var connection = crmConnection ?? BuildConnectionFromProjectEnvironment(solutionDirectory);
+            var connection = crmConnection ?? ConnectionFromProjectEnvironment(solutionDirectory);
             var connections = new DevKitConnections
             {
                 CrmConnections = new System.Collections.Generic.List<CrmConnection>(),
@@ -249,9 +315,11 @@ namespace DynamicsCrm.DevKit.Shared.Templates
         /// Derives a connection entry from the project .env: name and type
         /// come from DEVKIT_AUTH_TYPE and secrets stay in .env
         /// (UseProjectEnvironment=true) — the same shape the VSIX connection
-        /// dialog saves.
+        /// dialog saves. Returns null when no .env or no DEVKIT_AUTH_TYPE is
+        /// found. Shared with the template handlers so non-interactive hosts
+        /// (CLI/AI/CI, MCP later) resolve the same fallback connection.
         /// </summary>
-        private static CrmConnection BuildConnectionFromProjectEnvironment(string solutionDirectory)
+        public static CrmConnection ConnectionFromProjectEnvironment(string solutionDirectory)
         {
             var envFile = ProjectEnvironment.FindFile(solutionDirectory);
             if (envFile == null) return null;
@@ -426,7 +494,13 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             var head = new byte[3];
             using (var existing = File.OpenRead(solutionFile))
             {
-                existing.Read(head, 0, head.Length);
+                // Inexact-read safe loop (netstandard2.0 has no ReadExactly).
+                for (var read = 0; read < head.Length;)
+                {
+                    var count = existing.Read(head, read, head.Length - read);
+                    if (count <= 0) break;
+                    read += count;
+                }
             }
             var hadBom = head[0] == 0xEF && head[1] == 0xBB && head[2] == 0xBF;
             var settings = new System.Xml.XmlWriterSettings

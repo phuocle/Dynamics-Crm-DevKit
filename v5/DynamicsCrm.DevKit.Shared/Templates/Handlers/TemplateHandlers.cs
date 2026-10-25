@@ -13,6 +13,8 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
         {
             ScaffoldingEngine.RegisterHandler(new SharedProjectTemplateHandler());
             TemplateManifests.Register(SharedProjectTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(new ConsoleProjectTemplateHandler());
+            TemplateManifests.Register(ConsoleProjectTemplateHandler.CreateManifest());
         }
     }
 }

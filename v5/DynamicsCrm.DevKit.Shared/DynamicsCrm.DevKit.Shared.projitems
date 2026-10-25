@@ -270,6 +270,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\T4\ITextTransformer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\T4\T4ContextFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\T4\T4TemplateResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ConsoleProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\SharedProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TemplateHandlers.cs" />
   </ItemGroup>
@@ -295,6 +296,7 @@
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\02.ConsoleProjectTemplate\Helper.cs" LogicalName="Resources.templates.project.console.Helper.cs" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\02.ConsoleProjectTemplate\Program.cs" LogicalName="Resources.templates.project.console.Program.cs" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\02.ConsoleProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.console.ProjectTemplate.csproj.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\02.ConsoleProjectTemplate\README.md" LogicalName="Resources.templates.project.console.README.md" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\02.ConsoleProjectTemplate\TracingServiceFake.cs" LogicalName="Resources.templates.project.console.TracingServiceFake.cs" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\03.ConsoleCoreProjectTemplate\App.cs" LogicalName="Resources.templates.project.consolecore.App.cs" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\03.ConsoleCoreProjectTemplate\AppSettings.json" LogicalName="Resources.templates.project.consolecore.AppSettings.json" />

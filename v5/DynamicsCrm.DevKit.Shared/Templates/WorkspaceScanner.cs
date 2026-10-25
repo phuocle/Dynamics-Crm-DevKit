@@ -42,7 +42,10 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 directory = directory.Parent;
             }
 
-            context.SharedProjectName = FindSharedProjectName(context);
+            context.SharedProjectFile = FindSharedProjectFile(context);
+            context.SharedProjectName = string.IsNullOrEmpty(context.SharedProjectFile)
+                ? string.Empty
+                : Path.GetFileNameWithoutExtension(context.SharedProjectFile);
             context.SharedProjectNameSpace = context.SharedProjectName;
             context.SharedTestProjectName = $"{context.SolutionName}.{ProjectType.Shared}.{ProjectType.Test}";
             context.ProxyTypesProjectName = $"{context.SolutionName}.{ProjectType.ProxyTypes}";
@@ -50,21 +53,26 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             return context;
         }
 
-        private static string FindSharedProjectName(WorkspaceContext context)
+        /// <summary>
+        /// Locates the shared project (.shproj) of the solution: the one
+        /// named {SolutionName}.Shared when present, else the shallowest
+        /// match. Returns the full path, or null when the solution has no
+        /// shared project yet.
+        /// </summary>
+        private static string FindSharedProjectFile(WorkspaceContext context)
         {
-            if (!context.HasSolution) return string.Empty;
+            if (!context.HasSolution) return null;
 
             var shprojFiles = Directory.GetFiles(context.SolutionDirectory, "*.shproj", SearchOption.AllDirectories)
                 .Where(path => path.IndexOf("\\bin\\", StringComparison.OrdinalIgnoreCase) < 0
                     && path.IndexOf("\\obj\\", StringComparison.OrdinalIgnoreCase) < 0)
                 .ToList();
-            if (shprojFiles.Count == 0) return string.Empty;
+            if (shprojFiles.Count == 0) return null;
 
             var preferred = $"{context.SolutionName}.{ProjectType.Shared}";
             var preferredFile = shprojFiles.FirstOrDefault(path =>
                 string.Equals(Path.GetFileNameWithoutExtension(path), preferred, StringComparison.OrdinalIgnoreCase));
-            var chosen = preferredFile ?? shprojFiles.OrderBy(path => path.Length).First();
-            return Path.GetFileNameWithoutExtension(chosen);
+            return preferredFile ?? shprojFiles.OrderBy(path => path.Length).First();
         }
 
         private static string FindRootNamespace(string startDirectory)

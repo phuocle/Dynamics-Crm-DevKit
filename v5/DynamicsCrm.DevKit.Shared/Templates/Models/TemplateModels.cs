@@ -46,6 +46,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Models
         public string SolutionFile { get; set; }
         public string SolutionDirectory { get; set; }
         public string SharedProjectName { get; set; }
+        public string SharedProjectFile { get; set; }
         public string SharedProjectNameSpace { get; set; }
         public string SharedTestProjectName { get; set; }
         public string ProxyTypesProjectName { get; set; }

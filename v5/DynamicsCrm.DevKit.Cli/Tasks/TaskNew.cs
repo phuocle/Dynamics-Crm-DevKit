@@ -96,6 +96,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     Force = args.Force,
                     Offline = args.Offline,
                 };
+                // The Console template bakes the connection type into
+                // App.cs/App.config — ask for it like FormProject does
+                // (defaults from .env); non-interactive hosts leave it null
+                // and the handler falls back to the .env marker.
+                if (descriptor.Id == nameof(ProjectType.Console) && !args.Offline && CanPrompt(args))
+                {
+                    input.CrmConnection = ConnectionPrompter.Prompt(ConsoleProjectTemplateHandler.SupportedConnectionTypes, args.Out);
+                }
                 result = await ScaffoldingEngine.ScaffoldProjectAsync(input);
             }
             else

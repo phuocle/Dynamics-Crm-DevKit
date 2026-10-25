@@ -1,4 +1,5 @@
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.ConnectionBuilder;
 using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Shared.Templates.Models;
 using System;
@@ -44,6 +45,17 @@ namespace DynamicsCrm.DevKit.Shared.Templates
         {
             if (replacements == null) throw new ArgumentNullException(nameof(replacements));
             if (input == null) throw new ArgumentNullException(nameof(input));
+            // Resource names are case-sensitive: normalize the connection
+            // type to its canonical registry casing (clientsecret →
+            // ClientSecret) before any connection-dependent lookup.
+            if (input.CrmConnection != null && !string.IsNullOrEmpty(input.CrmConnection.Type))
+            {
+                var registryType = ConnectionTypeRegistry.GetMetadata(input.CrmConnection.Type);
+                if (registryType != null)
+                {
+                    input.CrmConnection.Type = registryType.Type;
+                }
+            }
             AddCommonTokens(replacements, workspace);
             await AddNuGetTokensAsync(replacements);
             SetConnectionValues(replacements, input.CrmConnection);
@@ -178,7 +190,6 @@ namespace DynamicsCrm.DevKit.Shared.Templates
         public static async Task SetEmbeddedResourceTokensAsync(Dictionary<string, string> replacements, CrmConnection crmConnection)
         {
             if (replacements == null) throw new ArgumentNullException(nameof(replacements));
-            var connectionType = crmConnection?.Type;
 
             replacements["$deploy.debug.bat$"] = await ReadBatResourceAsync("bat.plugin.deploy.debug.bat", crmConnection);
             replacements["$deploy.debug.only.bat$"] = await ReadBatResourceAsync("bat.plugin.deploy.debug.only.bat", crmConnection);
@@ -214,34 +225,58 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             replacements["$TracingServiceFake.cs$"] = await TemplatePayload.ReadSharedResourceAsync("TracingServiceFake.cs");
             replacements["$Runtime$"] = await TemplatePayload.ReadSharedResourceAsync("cs.console.runtime.xml");
 
-            if (!string.IsNullOrEmpty(connectionType))
-            {
-                var appCsResource = await TemplatePayload.ReadSharedResourceAsync($"cs.console.App.{connectionType}.cs");
-                if (!string.IsNullOrEmpty(appCsResource))
-                {
-                    replacements["$App.cs$"] = ApplyReplacements(appCsResource, replacements);
-                }
+            await SetConsoleResourceTokensAsync(replacements, crmConnection);
+            await SetConsoleCoreResourceTokensAsync(replacements, crmConnection);
+        }
 
-                var appConfigResource = await TemplatePayload.ReadSharedResourceAsync($"cs.console.App.config.{connectionType}");
-                if (!string.IsNullOrEmpty(appConfigResource))
-                {
-                    replacements["$App.config$"] = ApplyReplacements(appConfigResource, replacements);
-                }
+        /// <summary>
+        /// Connection-type-specific App.cs/App.config tokens of the Console
+        /// (net462) project template: the resource variant selected by the
+        /// connection type, with the current replacements applied once
+        /// (nested tokens such as $UrlValue$ resolve here; $NameSpace$
+        /// resolves on the outer payload pass — the same two-step pipeline
+        /// as Replacement.SetEmbeddedResourceAsync in the VSIX).
+        /// </summary>
+        public static async Task SetConsoleResourceTokensAsync(Dictionary<string, string> replacements, CrmConnection crmConnection)
+        {
+            if (replacements == null) throw new ArgumentNullException(nameof(replacements));
+            var connectionType = crmConnection?.Type;
+            if (string.IsNullOrEmpty(connectionType)) return;
+
+            var appCsResource = await TemplatePayload.ReadSharedResourceAsync($"cs.console.App.{connectionType}.cs");
+            if (!string.IsNullOrEmpty(appCsResource))
+            {
+                replacements["$App.cs$"] = ApplyReplacements(appCsResource, replacements);
             }
 
-            if (!string.IsNullOrEmpty(connectionType))
+            var appConfigResource = await TemplatePayload.ReadSharedResourceAsync($"cs.console.App.config.{connectionType}");
+            if (!string.IsNullOrEmpty(appConfigResource))
             {
-                var appCsCoreResource = await TemplatePayload.ReadSharedResourceAsync($"cs.consolecore.App.{connectionType}.cs");
-                if (!string.IsNullOrEmpty(appCsCoreResource))
-                {
-                    replacements["$AppCore.cs$"] = ApplyReplacements(appCsCoreResource, replacements);
-                }
+                replacements["$App.config$"] = ApplyReplacements(appConfigResource, replacements);
+            }
+        }
 
-                var appSettingsResource = await TemplatePayload.ReadSharedResourceAsync($"cs.consolecore.AppSettings.{connectionType}.json");
-                if (!string.IsNullOrEmpty(appSettingsResource))
-                {
-                    replacements["$AppSettings.json$"] = ApplyReplacements(appSettingsResource, replacements);
-                }
+        /// <summary>
+        /// Connection-type-specific AppCore.cs/AppSettings.json tokens of
+        /// the Console Core project template — same selection scheme as
+        /// SetConsoleResourceTokensAsync.
+        /// </summary>
+        public static async Task SetConsoleCoreResourceTokensAsync(Dictionary<string, string> replacements, CrmConnection crmConnection)
+        {
+            if (replacements == null) throw new ArgumentNullException(nameof(replacements));
+            var connectionType = crmConnection?.Type;
+            if (string.IsNullOrEmpty(connectionType)) return;
+
+            var appCsCoreResource = await TemplatePayload.ReadSharedResourceAsync($"cs.consolecore.App.{connectionType}.cs");
+            if (!string.IsNullOrEmpty(appCsCoreResource))
+            {
+                replacements["$AppCore.cs$"] = ApplyReplacements(appCsCoreResource, replacements);
+            }
+
+            var appSettingsResource = await TemplatePayload.ReadSharedResourceAsync($"cs.consolecore.AppSettings.{connectionType}.json");
+            if (!string.IsNullOrEmpty(appSettingsResource))
+            {
+                replacements["$AppSettings.json$"] = ApplyReplacements(appSettingsResource, replacements);
             }
         }
 
