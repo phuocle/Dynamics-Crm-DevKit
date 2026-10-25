@@ -515,7 +515,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             // No strong-name key in this template.
             Assert.IsFalse(csproj.Contains("<SignAssembly>"));
             // The hardcoded build definitions of the deployer template.
-            StringAssert.Contains(csproj, "<PackageReference Include=\"Microsoft.PowerApps.MSBuild.Plugin\" Version=\"2.8.1\" PrivateAssets=\"All\" />");
+            StringAssert.Contains(csproj, "<PackageReference Include=\"Microsoft.PowerApps.MSBuild.Plugin\" Version=\"2.14.1\" PrivateAssets=\"All\" />");
             StringAssert.Contains(csproj, "<PackageReference Include=\"Microsoft.NETFramework.ReferenceAssemblies\" Version=\"1.0.*\" PrivateAssets=\"All\" />");
             StringAssert.Contains(csproj, "Microsoft.PowerApps.VisualStudio.Plugin.props");
             StringAssert.Contains(csproj, "Microsoft.PowerApps.VisualStudio.Plugin.targets");
