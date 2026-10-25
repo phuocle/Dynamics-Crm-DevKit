@@ -1,0 +1,12 @@
+﻿{
+  "DefaultCrmConnection": "ClientSecret",
+  "CrmConnections": [
+    {
+      "Name": "ClientSecret",
+      "Type": "ClientSecret",
+      "UseProjectEnvironment": true,
+      "CreatedAt": "2026-10-25T04:18:54.7726615Z",
+      "ModifiedAt": "2026-10-25T04:18:54.7726615Z"
+    }
+  ]
+}
