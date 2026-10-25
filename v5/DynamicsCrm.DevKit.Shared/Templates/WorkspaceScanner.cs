@@ -81,7 +81,9 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 : Path.GetFileNameWithoutExtension(context.SharedProjectFile);
             context.SharedProjectNameSpace = context.SharedProjectName;
             context.SharedTestProjectName = JoinNonEmpty(context.SolutionName, ProjectType.Shared.ToString(), ProjectType.Test.ToString());
+            context.SharedTestProjectFile = FindNamedProjectFile(context, context.SharedTestProjectName, ".shproj");
             context.ProxyTypesProjectName = JoinNonEmpty(context.SolutionName, ProjectType.ProxyTypes.ToString());
+            context.ProxyTypesProjectFile = FindNamedProjectFile(context, context.ProxyTypesProjectName, ".csproj");
             context.RootNamespace = FindRootNamespace(startDirectory);
         }
 
@@ -115,6 +117,25 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             var preferredFile = shprojFiles.FirstOrDefault(path =>
                 string.Equals(Path.GetFileNameWithoutExtension(path), preferred, StringComparison.OrdinalIgnoreCase));
             return preferredFile ?? shprojFiles.OrderBy(path => path.Length).First();
+        }
+
+        /// <summary>
+        /// Locates a project file by its exact expected name ({solution}-
+        /// scoped convention, e.g. "{SolutionName}.Shared.Test" or
+        /// "{SolutionName}.ProxyTypes") — the name the VSIX wizard checks
+        /// with IsProjectExistAsync before the Test template may run. No
+        /// fallback: a differently named project fails the wizard too.
+        /// Returns the full path, or null.
+        /// </summary>
+        private static string FindNamedProjectFile(WorkspaceContext context, string projectName, string extension)
+        {
+            if (string.IsNullOrEmpty(context.SolutionDirectory) || !Directory.Exists(context.SolutionDirectory)) return null;
+            if (string.IsNullOrEmpty(projectName)) return null;
+
+            return Directory.GetFiles(context.SolutionDirectory, "*" + extension, SearchOption.AllDirectories)
+                .Where(path => path.IndexOf("\\bin\\", StringComparison.OrdinalIgnoreCase) < 0
+                    && path.IndexOf("\\obj\\", StringComparison.OrdinalIgnoreCase) < 0)
+                .FirstOrDefault(path => string.Equals(Path.GetFileNameWithoutExtension(path), projectName, StringComparison.OrdinalIgnoreCase));
         }
 
         private static string FindRootNamespace(string startDirectory)

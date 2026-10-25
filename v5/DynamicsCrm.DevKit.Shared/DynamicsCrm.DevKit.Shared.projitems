@@ -289,6 +289,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\PackageProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\WebResourceProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ProxyTypesProjectTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TestProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TemplateHandlers.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -365,6 +366,7 @@
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\08.ProxyTypesProjectTemplate\run.bat" LogicalName="Resources.templates.project.proxytypes.run.bat" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\08.ProxyTypesProjectTemplate\run.sh" LogicalName="Resources.templates.project.proxytypes.run.sh" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\09.TestProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.test.ProjectTemplate.csproj.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\09.TestProjectTemplate\README.md" LogicalName="Resources.templates.project.test.README.md" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\10.TestUiProjectTemplate\App.config" LogicalName="Resources.templates.project.uitest.App.config" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\10.TestUiProjectTemplate\App.cs" LogicalName="Resources.templates.project.uitest.App.cs" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\10.TestUiProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.uitest.ProjectTemplate.csproj.template" />

@@ -26,14 +26,15 @@ namespace DynamicsCrm.DevKit.Shared.Templates
         /// <summary>
         /// Adds a project (.csproj/.shproj) to a .sln or .slnx file.
         /// Returns false when the file is missing or the project is
-        /// already referenced. When the project consumes a shared project
-        /// (imports its .projitems), pass the shared project file so the
-        /// .sln also gains the GlobalSection(SharedMSBuildProjectFiles)
-        /// consumer line Visual Studio writes —
+        /// already referenced. When the project consumes one or more
+        /// shared projects (imports their .projitems), pass the shared
+        /// project files so the .sln also gains one
+        /// GlobalSection(SharedMSBuildProjectFiles) consumer line per
+        /// import, the way Visual Studio writes them —
         /// "{path}.projitems*{project-guid-lowercase}*SharedItemsImports = 5"
         /// (the .slnx format has no such section).
         /// </summary>
-        public static async Task<bool> AddProjectToSolutionAsync(string solutionFile, string projectFile, string sharedProjectFile = null)
+        public static async Task<bool> AddProjectToSolutionAsync(string solutionFile, string projectFile, params string[] sharedProjectFiles)
         {
             if (string.IsNullOrEmpty(solutionFile) || !File.Exists(solutionFile)) return false;
             if (string.IsNullOrEmpty(projectFile) || !File.Exists(projectFile)) return false;
@@ -54,9 +55,15 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             var projectGuid = ReadProjectGuidFromSolution(solutionFile, projectFile) ?? Guid.NewGuid().ToString("D");
             var added = await AddProjectToSlnAsync(solutionFile, projectFile, projectTypeGuid, projectGuid, includeConfigurationEntries: true);
             var consumerAdded = false;
-            if (!string.IsNullOrEmpty(sharedProjectFile) && File.Exists(sharedProjectFile))
+            if (sharedProjectFiles != null)
             {
-                consumerAdded = EnsureSharedMsBuildConsumerLine(solutionFile, projectFile, sharedProjectFile, projectGuid);
+                foreach (var sharedProjectFile in sharedProjectFiles)
+                {
+                    if (!string.IsNullOrEmpty(sharedProjectFile) && File.Exists(sharedProjectFile))
+                    {
+                        consumerAdded |= EnsureSharedMsBuildConsumerLine(solutionFile, projectFile, sharedProjectFile, projectGuid);
+                    }
+                }
             }
             return added || consumerAdded;
         }

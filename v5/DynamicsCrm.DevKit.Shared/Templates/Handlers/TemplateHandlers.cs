@@ -27,6 +27,8 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             TemplateManifests.Register(SharedTestProjectTemplateHandler.CreateManifest());
             ScaffoldingEngine.RegisterHandler(new ProxyTypesProjectTemplateHandler());
             TemplateManifests.Register(ProxyTypesProjectTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(new TestProjectTemplateHandler());
+            TemplateManifests.Register(TestProjectTemplateHandler.CreateManifest());
         }
     }
 }
