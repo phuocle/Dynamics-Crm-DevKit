@@ -52,7 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
         [TestMethod]
         public async Task ScaffoldProjectAsync_NotImplemented_FailsGracefully()
         {
-            var result = await ScaffoldingEngine.ScaffoldProjectAsync(new ProjectTemplateInput { TemplateId = "WebResourceTs", ProjectName = "X", Offline = true });
+            var result = await ScaffoldingEngine.ScaffoldProjectAsync(new ProjectTemplateInput { TemplateId = "Report", ProjectName = "X", Offline = true });
             Assert.IsFalse(result.Success);
             StringAssert.Contains(result.Errors[0], "not implemented yet");
         }
