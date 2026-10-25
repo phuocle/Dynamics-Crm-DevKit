@@ -276,6 +276,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ConsoleCoreProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\SharedProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ServerProjectTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\PackageProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TemplateHandlers.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -317,7 +318,10 @@
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\04.ServerProjectTemplate\README.md" LogicalName="Resources.templates.project.server.README.md" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\05.PackageProjectTemplate\deploy.debug.bat" LogicalName="Resources.templates.project.package.deploy.debug.bat" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\05.PackageProjectTemplate\deploy.debug.only.bat" LogicalName="Resources.templates.project.package.deploy.debug.only.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\05.PackageProjectTemplate\deploy.debug.only.sh" LogicalName="Resources.templates.project.package.deploy.debug.only.sh" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\05.PackageProjectTemplate\deploy.debug.sh" LogicalName="Resources.templates.project.package.deploy.debug.sh" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\05.PackageProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.package.ProjectTemplate.csproj.template" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\05.PackageProjectTemplate\README.md" LogicalName="Resources.templates.project.package.README.md" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\deploy.debug.bat" LogicalName="Resources.templates.project.webresource.deploy.debug.bat" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\DevKit.d.ts" LogicalName="Resources.templates.project.webresource.DevKit.d.ts" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\06.WebResourceProjectTemplate\devkit.js" LogicalName="Resources.templates.project.webresource.devkit.js" />
