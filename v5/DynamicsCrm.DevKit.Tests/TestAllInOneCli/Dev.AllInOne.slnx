@@ -5,4 +5,5 @@
   <Project Path="Dev.AllInOne.Shared/Dev.AllInOne.Shared.shproj" Id="e2544411-67a7-40f3-ba67-69779d80f3a5" />
   <Project Path="Dev.AllInOne.Package/Dev.AllInOne.Package.csproj" />
   <Project Path="Dev.AllInOne.WebResource/Dev.AllInOne.WebResource.csproj" />
+  <Project Path="Dev.AllInOne.Shared.Test/Dev.AllInOne.Shared.Test.shproj" Id="9bbcb6da-798f-4477-a255-a7c219daa274" />
 </Solution>
