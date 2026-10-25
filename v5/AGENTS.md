@@ -20,6 +20,7 @@ Read relevant rules under `DynamicsCrm.DevKit.AI/rules/` only when applicable. W
 | Build and install CLI / Tool | `build-cli.md` / `build-tool.md` |
 | Build VSIX | `build-vsix.md` |
 | Full timestamped build / configured release | `build-debug.md` / `build-release.md` |
+| Configured release without tests/coverage (user-requested fast mode) | `build-release-only.md` |
 | Unit tests (pass/fail) / coverage reports | `unit-test.md` / `code-coverage.md` |
 | Client-code pipeline | `client-code-01-clean.md` through `client-code-05-test.md` |
 | Prepare and commit changes | `commit.md` |
@@ -80,6 +81,8 @@ For a requested full release verification, read and follow these two workflows i
 
 1. [Full configured release](DynamicsCrm.DevKit.AI/workflows/build-release.md): wait for completion, verify installed CLI/Tool versions and all four Analyzer/CLI/Tool/VSIX artifacts under `Published/<version>/`, and confirm temporary build-date replacements are restored.
 2. [Code coverage](DynamicsCrm.DevKit.AI/workflows/code-coverage.md): run `DynamicsCrm.DevKit.Scripts/Run-Coverage.ps1` without `-Components` to build and test all five `*.UnitTests` projects: Cli, Tool, Vsix, Analyzers, and Vsix.2019. Allow roughly 5 minutes for coverage (an estimate, not a timeout); wait for completion. Report pass/fail per project, then measured line/branch/method coverage per assembly and HTML report locations. Report failures and any collected coverage; never infer success from the release build alone.
+
+When the user explicitly requests a release without test verification, follow [Fast Configured Release](DynamicsCrm.DevKit.AI/workflows/build-release-only.md) instead: it runs the same release script with output verification only and skips the coverage pass by user decision.
 
 For component-scoped changes, use the checks below; a full release still requires an explicit user request.
 
