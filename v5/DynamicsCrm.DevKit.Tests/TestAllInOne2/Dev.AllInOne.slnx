@@ -2,6 +2,7 @@
   <Project Path="Dev.AllInOne.Console/Dev.AllInOne.Console.csproj" />
   <Project Path="Dev.AllInOne.ConsoleCore/Dev.AllInOne.ConsoleCore.csproj" />
   <Project Path="Dev.AllInOne.Package/Dev.AllInOne.Package.csproj" />
+  <Project Path="Dev.AllInOne.ProxyTypes/Dev.AllInOne.ProxyTypes.csproj" />
   <Project Path="Dev.AllInOne.Server/Dev.AllInOne.Server.csproj" />
   <Project Path="Dev.AllInOne.Shared.Test/Dev.AllInOne.Shared.Test.shproj" Id="283b5ee9-5637-4d47-9e95-6b4ca79fc002" />
   <Project Path="Dev.AllInOne.Shared/Dev.AllInOne.Shared.shproj" Id="ba6b438f-e1dc-4ab9-bc5e-8638f3c38ebf" />
