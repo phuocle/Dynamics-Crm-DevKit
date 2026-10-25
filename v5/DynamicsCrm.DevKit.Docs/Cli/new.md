@@ -16,7 +16,8 @@ Rule of thumb cho AI: **chỉ scaffold type có `Ready=yes`**; type khác báo "
 ## Synopsis
 
 ```
-devkit new --kind project --type Shared --name Contoso.Shared [--out DIR] [--force] [--offline]
+devkit new --kind project --type Shared  --name Contoso.Shared  [--out DIR] [--force] [--offline]
+devkit new --kind project --type Console --name Contoso.Console [--out DIR] [--force] [--offline]
 devkit new --kind item    --type LateBound --entity Account [--out DIR] ...
 devkit new list
 ```
@@ -42,19 +43,23 @@ Các flag khác (`--message`, `--stage`, `--execution`, `--order`, `--template`,
 ## Hiện trạng templates (2026-10-25)
 
 - **Project `Shared` (Ready)**: scaffold `.shproj` + 11 payload files vào `{SolutionDir}/{Name}/`, add vào `.sln`/`.slnx` đúng format VS, tạo `DynamicsCrm.DevKit.Cli.json` + `DynamicsCrm.DevKit.json` (connections store cho VSIX, connection sinh từ `.env`) ở solution root. Windows sinh `Entities/generator.bat`, macOS/Linux sinh `Entities/generator.sh` (executable).
+- **Project `Console` (Ready)**: scaffold console **net462** (7 payload files: csproj SDK-style, `App.cs`, `App.config`, `Program.cs`, `Lib/Helper.cs`, `Lib/TracingServiceFake.cs`, `README.md`) + add csproj vào `.sln`/`.slnx` kèm consumer line `SharedItemsImports = 5` của Shared project. **`App.cs`/`App.config` đổi theo connection type** (`Interactive`, `ClientSecret`, `OAuth`, `AD` — net462 không hỗ trợ `DeviceCode`/`FromPac`, dùng Console Core): interactive terminal sẽ hỏi AuthType + URL/ClientId/Secret/Username/Password (default gợi ý từ `.env`); non-interactive/`--offline` lấy marker từ `.env` (`DEVKIT_AUTH_TYPE`) hoặc bake placeholder `ClientSecret`.
 - Các type còn lại: theo lộ trình `DynamicsCrm.DevKit.Docs/Vsix2CliAndMcp/P.*.md` / `I.*.md` — cột Ready sẽ chuyển `yes` dần từng bản.
 
 ## Hành vi quan trọng
 
 - **Idempotent**: chạy lại không đè file user (skipped); `--force` để ghi đè; kết quả liệt kê Created/Updated/Skipped/Unchanged từng file.
 - **Yêu cầu solution**: project templates cần `.sln`/`.slnx` (tìm từ `--out` lên trên); thiếu → lỗi rõ ràng.
-- **Connection**: không bắt buộc cho scaffold; generator scripts dựa vào `.env` fallback (`DEVKIT_*`, tìm từ thư mục hiện hành lên trên).
+- **Connection**: không bắt buộc cho scaffold; generator scripts dựa vào `.env` fallback (`DEVKIT_*`, tìm từ thư mục hiện hành lên trên). Riêng `Console` dùng connection để chọn biến thể `App.cs`/`App.config` (xem trên).
 
 ## Examples
 
 ```bash
 # Shared project vào solution hiện tại
 devkit new --kind project --type Shared --name Contoso.Shared --out .
+
+# Console project (net462) — hỏi connection type + fields khi tương tác
+devkit new --kind project --type Console --name Contoso.Console --out .
 
 # Scaffold vào folder solution khác
 devkit new --kind project --type Shared --name Dev.AllInOne.Shared --out /path/to/solution
