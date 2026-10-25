@@ -310,6 +310,18 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             }
             replacements["$download.reports.bat$"] = await ReadBatResourceAsync("bat.download.reports.bat", crmConnection);
             replacements["$upload.reports.bat$"] = await ReadBatResourceAsync("bat.upload.reports.bat", crmConnection);
+            // Non-Windows twins of the report download/upload scripts (bash)
+            // — same set-only-when-exists contract.
+            var downloadReportsSh = await ReadBatResourceAsync("sh.download.reports.sh", crmConnection);
+            if (downloadReportsSh != null)
+            {
+                replacements["$download.reports.sh$"] = downloadReportsSh;
+            }
+            var uploadReportsSh = await ReadBatResourceAsync("sh.upload.reports.sh", crmConnection);
+            if (uploadReportsSh != null)
+            {
+                replacements["$upload.reports.sh$"] = uploadReportsSh;
+            }
             replacements["$Helper.cs$"] = await TemplatePayload.ReadSharedResourceAsync("Helper.cs");
             replacements["$Program.cs$"] = await TemplatePayload.ReadSharedResourceAsync("Program.cs");
             replacements["$TracingServiceFake.cs$"] = await TemplatePayload.ReadSharedResourceAsync("TracingServiceFake.cs");

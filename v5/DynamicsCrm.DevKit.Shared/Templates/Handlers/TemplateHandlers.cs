@@ -33,6 +33,8 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             TemplateManifests.Register(UiTestProjectTemplateHandler.CreateManifest());
             ScaffoldingEngine.RegisterHandler(new SolutionPackagerProjectTemplateHandler());
             TemplateManifests.Register(SolutionPackagerProjectTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(new ReportProjectTemplateHandler());
+            TemplateManifests.Register(ReportProjectTemplateHandler.CreateManifest());
             ScaffoldingEngine.RegisterHandler(new WebResourceTsProjectTemplateHandler());
             TemplateManifests.Register(WebResourceTsProjectTemplateHandler.CreateManifest());
         }

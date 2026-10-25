@@ -21,6 +21,12 @@ namespace DynamicsCrm.DevKit.Shared.Templates
     {
         public const string SdkCSharpProjectTypeGuid = "{9A19103F-16F7-4668-BE54-9A1E7A4F7556}";
         public const string SharedProjectTypeGuid = "{D954291E-2A0B-460D-934E-DC6B0785DB48}";
+        /// <summary>
+        /// The Visual Studio project factory of Reporting Services projects
+        /// (.rptproj) — the type GUID of the Project entry a .sln carries
+        /// for them (evidence: v4 TestAllInOne/Dev.AllInOne.2019.sln).
+        /// </summary>
+        public const string ReportProjectTypeGuid = "{F14B399A-7131-4C87-9E4B-1186C45EF12D}";
         private const string DefaultAnyCpu = "Debug|Any CPU.ActiveCfg = Debug|Any CPU";
 
         /// <summary>
@@ -66,6 +72,31 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 }
             }
             return added || consumerAdded;
+        }
+
+        /// <summary>
+        /// Adds a Reporting Services project (.rptproj) to a .sln or .slnx
+        /// file the way Visual Studio does — the .rptproj IS the project
+        /// (the bootstrap csproj of the wizard is gone by then): the .sln
+        /// entry carries the Reporting Services type GUID and per-solution
+        /// configuration entries whose platform is Debug/Release with a
+        /// Deploy.0 line; the .slnx entry is
+        /// "&lt;Project Path="...rptproj"&gt;&lt;Deploy /&gt;&lt;/Project&gt;"
+        /// (the slnx counterpart of the Deploy.0 lines). Returns false when
+        /// the file is missing or the project is already referenced.
+        /// </summary>
+        public static async Task<bool> AddReportProjectToSolutionAsync(string solutionFile, string rptprojFile)
+        {
+            if (string.IsNullOrEmpty(solutionFile) || !File.Exists(solutionFile)) return false;
+            if (string.IsNullOrEmpty(rptprojFile) || !File.Exists(rptprojFile)) return false;
+
+            if (IsSlnx(solutionFile))
+            {
+                return AddReportProjectToSlnx(solutionFile, rptprojFile);
+            }
+
+            var projectGuid = ReadProjectGuidFromSolution(solutionFile, rptprojFile) ?? Guid.NewGuid().ToString("D");
+            return await AddProjectToSlnAsync(solutionFile, rptprojFile, ReportProjectTypeGuid, projectGuid, includeConfigurationEntries: true, reportConfigurationEntries: true);
         }
 
         /// <summary>
@@ -386,7 +417,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             return fullPath.Split(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }, System.StringSplitOptions.RemoveEmptyEntries);
         }
 
-        private static async Task<bool> AddProjectToSlnAsync(string solutionFile, string projectFile, string projectTypeGuid, string projectGuid, bool includeConfigurationEntries)
+        private static async Task<bool> AddProjectToSlnAsync(string solutionFile, string projectFile, string projectTypeGuid, string projectGuid, bool includeConfigurationEntries, bool reportConfigurationEntries = false)
         {
             var solutionDirectory = Path.GetDirectoryName(solutionFile);
             var relativePath = SolutionMutator.GetRelativePath(solutionDirectory, projectFile).Replace('/', '\\');
@@ -424,10 +455,17 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 lines.Add("\tGlobalSection(ProjectConfigurationPlatforms) = postSolution");
                 if (includeConfigurationEntries)
                 {
-                    lines.Add($"\t\t{projectGuidToken}.Debug|Any CPU.ActiveCfg = Debug|Any CPU");
-                    lines.Add($"\t\t{projectGuidToken}.Debug|Any CPU.Build.0 = Debug|Any CPU");
-                    lines.Add($"\t\t{projectGuidToken}.Release|Any CPU.ActiveCfg = Release|Any CPU");
-                    lines.Add($"\t\t{projectGuidToken}.Release|Any CPU.Build.0 = Release|Any CPU");
+                    if (reportConfigurationEntries)
+                    {
+                        lines.AddRange(ReportConfigurationEntries(projectGuidToken));
+                    }
+                    else
+                    {
+                        lines.Add($"\t\t{projectGuidToken}.Debug|Any CPU.ActiveCfg = Debug|Any CPU");
+                        lines.Add($"\t\t{projectGuidToken}.Debug|Any CPU.Build.0 = Debug|Any CPU");
+                        lines.Add($"\t\t{projectGuidToken}.Release|Any CPU.ActiveCfg = Release|Any CPU");
+                        lines.Add($"\t\t{projectGuidToken}.Release|Any CPU.Build.0 = Release|Any CPU");
+                    }
                 }
                 lines.Add("\tEndGlobalSection");
                 lines.Add("EndGlobal");
@@ -437,7 +475,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 lines.InsertRange(globalIndex, projectBlock);
                 if (includeConfigurationEntries)
                 {
-                    AddConfigurationEntries(lines, projectGuidToken);
+                    AddConfigurationEntries(lines, projectGuidToken, reportConfigurationEntries);
                 }
             }
 
@@ -445,7 +483,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             return true;
         }
 
-        private static void AddConfigurationEntries(System.Collections.Generic.List<string> lines, string projectGuid)
+        private static void AddConfigurationEntries(System.Collections.Generic.List<string> lines, string projectGuid, bool reportConfigurationEntries = false)
         {
             var sectionStart = lines.FindIndex(line => line.Trim().StartsWith("GlobalSection(ProjectConfigurationPlatforms)", StringComparison.Ordinal));
             if (sectionStart < 0)
@@ -457,18 +495,40 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             }
 
             var endSection = lines.FindIndex(sectionStart, line => line.Trim() == "EndGlobalSection");
-            var entries = new[]
-            {
-                $"\t\t{projectGuid}.Debug|Any CPU.ActiveCfg = Debug|Any CPU",
-                $"\t\t{projectGuid}.Debug|Any CPU.Build.0 = Debug|Any CPU",
-                $"\t\t{projectGuid}.Release|Any CPU.ActiveCfg = Release|Any CPU",
-                $"\t\t{projectGuid}.Release|Any CPU.Build.0 = Release|Any CPU"
-            };
+            var entries = reportConfigurationEntries
+                ? ReportConfigurationEntries(projectGuid)
+                : new[]
+                {
+                    $"\t\t{projectGuid}.Debug|Any CPU.ActiveCfg = Debug|Any CPU",
+                    $"\t\t{projectGuid}.Debug|Any CPU.Build.0 = Debug|Any CPU",
+                    $"\t\t{projectGuid}.Release|Any CPU.ActiveCfg = Release|Any CPU",
+                    $"\t\t{projectGuid}.Release|Any CPU.Build.0 = Release|Any CPU"
+                };
 
             for (var i = 0; i < entries.Length; i++)
             {
                 lines.Insert(endSection + i, entries[i]);
             }
+        }
+
+        /// <summary>
+        /// The per-solution configuration entries Visual Studio writes for
+        /// Reporting Services projects: the platform of the project is
+        /// Debug/Release (not "Any CPU") and each configuration carries a
+        /// Deploy.0 line (v4 TestAllInOne/Dev.AllInOne.2019.sln evidence) —
+        /// the .sln shape behind the .slnx "&lt;Deploy /&gt;" child element.
+        /// </summary>
+        private static string[] ReportConfigurationEntries(string projectGuid)
+        {
+            return new[]
+            {
+                $"\t\t{projectGuid}.Debug|Any CPU.ActiveCfg = Debug",
+                $"\t\t{projectGuid}.Debug|Any CPU.Build.0 = Debug",
+                $"\t\t{projectGuid}.Debug|Any CPU.Deploy.0 = Debug",
+                $"\t\t{projectGuid}.Release|Any CPU.ActiveCfg = Release",
+                $"\t\t{projectGuid}.Release|Any CPU.Build.0 = Release",
+                $"\t\t{projectGuid}.Release|Any CPU.Deploy.0 = Release"
+            };
         }
 
         /// <summary>
@@ -497,6 +557,43 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             }
             document.Root.Add(projectElement);
 
+            SaveSlnxPreservingShape(document, solutionFile);
+            return true;
+        }
+
+        /// <summary>
+        /// Adds a Reporting Services project (.rptproj) to a .slnx solution
+        /// the way Visual Studio does:
+        /// "&lt;Project Path="...rptproj"&gt;&lt;Deploy /&gt;&lt;/Project&gt;"
+        /// — no Id (the .rptproj stores no project GUID of its own) and the
+        /// empty Deploy child element (the slnx counterpart of the Deploy.0
+        /// configuration entries the .sln shape writes).
+        /// </summary>
+        private static bool AddReportProjectToSlnx(string solutionFile, string rptprojFile)
+        {
+            var solutionDirectory = Path.GetDirectoryName(solutionFile);
+            var relativePath = SolutionMutator.GetRelativePath(solutionDirectory, rptprojFile).Replace('\\', '/');
+
+            var document = XDocument.Load(solutionFile);
+            var projectElement = document.Root
+                .Elements("Project")
+                .FirstOrDefault(element => string.Equals((string)element.Attribute("Path"), relativePath, StringComparison.OrdinalIgnoreCase));
+            if (projectElement != null) return false;
+
+            document.Root.Add(new XElement("Project",
+                new XAttribute("Path", relativePath),
+                new XElement("Deploy")));
+
+            SaveSlnxPreservingShape(document, solutionFile);
+            return true;
+        }
+
+        /// <summary>
+        /// Saves a .slnx document keeping the original file shape (XML
+        /// declaration and BOM state).
+        /// </summary>
+        private static void SaveSlnxPreservingShape(XDocument document, string solutionFile)
+        {
             var hadDeclaration = document.Declaration != null;
             var head = new byte[3];
             using (var existing = File.OpenRead(solutionFile))
@@ -520,7 +617,6 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             {
                 document.Save(writer);
             }
-            return true;
         }
     }
 }

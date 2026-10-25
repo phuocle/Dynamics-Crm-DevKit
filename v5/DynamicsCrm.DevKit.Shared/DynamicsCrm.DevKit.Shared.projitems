@@ -184,6 +184,8 @@
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\download.reports.bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\upload.reports.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\download.reports.sh" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\upload.reports.sh" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ReportProjectTemplate.rptproj" />
@@ -302,6 +304,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TestProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\UiTestProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\SolutionPackagerProjectTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ReportProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TemplateHandlers.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -393,8 +396,10 @@
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\11.SolutionPackagerProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.solutionpackager.ProjectTemplate.csproj.template" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\11.SolutionPackagerProjectTemplate\README.md" LogicalName="Resources.templates.project.solutionpackager.README.md" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\12.ReportProjectTemplate\download.reports.bat" LogicalName="Resources.templates.project.report.download.reports.bat" />
-    <EmbeddedResource Include="..\ProjectTemplates\CSharp\12.ReportProjectTemplate\ProjectTemplate.csproj" LogicalName="Resources.templates.project.report.ProjectTemplate.csproj" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\12.ReportProjectTemplate\download.reports.sh" LogicalName="Resources.templates.project.report.download.reports.sh" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\12.ReportProjectTemplate\README.md" LogicalName="Resources.templates.project.report.README.md" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\12.ReportProjectTemplate\upload.reports.bat" LogicalName="Resources.templates.project.report.upload.reports.bat" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\12.ReportProjectTemplate\upload.reports.sh" LogicalName="Resources.templates.project.report.upload.reports.sh" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\.eslintrc.json" LogicalName="Resources.templates.project.webresourcets..eslintrc.json" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\build.js" LogicalName="Resources.templates.project.webresourcets.build.js" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\deploy.debug.bat" LogicalName="Resources.templates.project.webresourcets.deploy.debug.bat" />
