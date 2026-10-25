@@ -278,6 +278,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ConsoleProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ConsoleCoreProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\SharedProjectTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\SharedTestProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ServerProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\PackageProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\WebResourceProjectTemplateHandler.cs" />
@@ -344,6 +345,7 @@
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\FakeXrmEasyTestBase.cs" LogicalName="Resources.templates.project.sharedtest.FakeXrmEasyTestBase.cs" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\Guids.cs" LogicalName="Resources.templates.project.sharedtest.Guids.cs" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\PluginContextBuilder.cs" LogicalName="Resources.templates.project.sharedtest.PluginContextBuilder.cs" />
+    <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\README.md" LogicalName="Resources.templates.project.sharedtest.README.md" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\Shared.projitems" LogicalName="Resources.templates.project.sharedtest.Shared.projitems" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\Shared.shproj" LogicalName="Resources.templates.project.sharedtest.Shared.shproj" />
     <EmbeddedResource Include="..\ProjectTemplates\CSharp\07.SharedTestProjectTemplate\TestDataLoader.cs" LogicalName="Resources.templates.project.sharedtest.TestDataLoader.cs" />
