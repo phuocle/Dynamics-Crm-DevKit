@@ -27,7 +27,7 @@
 		<PackageOutputPath>..\Release\dll</PackageOutputPath>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.44.44.44" PrivateAssets="All" />
+		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.12.34.56" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.60" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.PowerApps.MSBuild.Plugin" Version="2.14.1" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.*" PrivateAssets="All" />
