@@ -45,21 +45,31 @@ namespace DynamicsCrm.DevKit.Shared.Templates
         private static readonly object Lock = new object();
         private static readonly Dictionary<string, ITemplateHandler> Handlers = new Dictionary<string, ITemplateHandler>(StringComparer.OrdinalIgnoreCase);
 
-        public static void RegisterHandler(ITemplateHandler handler)
+        /// <summary>
+        /// Registry key — scoped by kind so project and item templates may
+        /// share an id (Test, UiTest and Report exist in both catalogs)
+        /// without one registration shadowing the other.
+        /// </summary>
+        private static string Key(TemplateKind kind, string templateId)
+        {
+            return $"{kind}:{templateId.Trim()}";
+        }
+
+        public static void RegisterHandler(TemplateKind kind, ITemplateHandler handler)
         {
             if (handler == null || string.IsNullOrWhiteSpace(handler.TemplateId)) return;
             lock (Lock)
             {
-                Handlers[handler.TemplateId.Trim()] = handler;
+                Handlers[Key(kind, handler.TemplateId)] = handler;
             }
         }
 
-        public static ITemplateHandler FindHandler(string templateId)
+        public static ITemplateHandler FindHandler(TemplateKind kind, string templateId)
         {
             if (string.IsNullOrWhiteSpace(templateId)) return null;
             lock (Lock)
             {
-                Handlers.TryGetValue(templateId.Trim(), out var handler);
+                Handlers.TryGetValue(Key(kind, templateId), out var handler);
                 return handler;
             }
         }
@@ -250,7 +260,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 ItemInput = itemInput,
             };
 
-            var handler = FindHandler(descriptor.Id);
+            var handler = FindHandler(descriptor.Kind, descriptor.Id);
             if (handler != null)
             {
                 var handlerResult = await handler.ScaffoldAsync(request);
@@ -262,7 +272,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 return handlerResult;
             }
 
-            TemplateManifests.TryGet(descriptor.Id, out var manifest);
+            TemplateManifests.TryGet(descriptor.Kind, descriptor.Id, out var manifest);
             if (manifest != null)
             {
                 var outputDirectory = ResolveOutputDirectory(projectInput?.OutputDirectory ?? itemInput?.OutputDirectory);

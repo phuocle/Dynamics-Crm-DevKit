@@ -1,4 +1,5 @@
 using DynamicsCrm.DevKit.Shared.Templates;
+using DynamicsCrm.DevKit.Shared.Templates.Handlers;
 using DynamicsCrm.DevKit.Shared.Templates.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -12,6 +13,21 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
     [DoNotParallelize]
     public class ScaffoldingEngineTests
     {
+        /// <summary>
+        /// Minimal handler used to prove the registries are kind-scoped:
+        /// the real handlers all live behind RegisterAll (no test registers
+        /// one directly), so a stub keeps this test independent of them.
+        /// </summary>
+        private sealed class StubHandler : ITemplateHandler
+        {
+            public string TemplateId { get; set; }
+
+            public Task<ScaffoldResult> ScaffoldAsync(ScaffoldRequest request)
+            {
+                return Task.FromResult(new ScaffoldResult { TemplateId = TemplateId });
+            }
+        }
+
         private string _directory;
 
         [TestInitialize]
@@ -125,6 +141,36 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             var result = await ScaffoldingEngine.ScaffoldItemAsync(new ItemTemplateInput { TemplateId = "Nope", Name = "X" });
             Assert.IsFalse(result.Success);
             StringAssert.Contains(result.Errors[0], "unknown item template");
+        }
+
+        [TestMethod]
+        public void Registry_RegistrationsAreKindScoped()
+        {
+            // Test/UiTest/Report exist in BOTH catalogs — a project
+            // registration must never answer for the item id of the same
+            // name (the registries key on (Kind, TemplateId)).
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Project, new StubHandler { TemplateId = "Test" });
+            Assert.IsNotNull(ScaffoldingEngine.FindHandler(TemplateKind.Project, "Test"));
+            Assert.IsNull(ScaffoldingEngine.FindHandler(TemplateKind.Item, "Test"));
+
+            var manifest = new TemplateManifest { TemplateId = "Test", Kind = TemplateKind.Project };
+            TemplateManifests.Register(manifest);
+            Assert.IsTrue(TemplateManifests.TryGet(TemplateKind.Project, "Test", out _));
+            Assert.IsFalse(TemplateManifests.TryGet(TemplateKind.Item, "Test", out _));
+        }
+
+        [TestMethod]
+        public async Task ScaffoldItemAsync_ProjectIdCollision_DoesNotDispatchProjectHandler()
+        {
+            // Locks the live bug found by the P.1..P.13 review: before the
+            // registries became kind-scoped, 'devkit new --kind item --type
+            // Test' dispatched into the PROJECT Test handler (ProjectInput
+            // null → "input: required") and 'devkit new list' lit item
+            // Test/UiTest/Report as Ready even though I.* is not ported.
+            TemplateHandlers.RegisterAll();
+            var result = await ScaffoldingEngine.ScaffoldItemAsync(new ItemTemplateInput { TemplateId = "Test", Name = "Account", Offline = true });
+            Assert.IsFalse(result.Success);
+            StringAssert.Contains(result.Errors[0], "not implemented yet");
         }
 
         [TestMethod]

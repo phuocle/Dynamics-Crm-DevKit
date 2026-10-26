@@ -253,14 +253,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
 
         /// <summary>
-        /// True when a handler or manifest is registered for the template —
-        /// the "Ready" column of 'devkit new list' tells users and AI agents
-        /// which types scaffold today.
+        /// True when a kind-matching handler or manifest is registered for
+        /// the template — the "Ready" column of 'devkit new list' tells
+        /// users and AI agents which types scaffold today. The registry is
+        /// scoped by kind, so project Test/UiTest/Report never light up
+        /// their not-yet-ported item twins.
         /// </summary>
         private static bool IsReady(TemplateDescriptor descriptor)
         {
-            return ScaffoldingEngine.FindHandler(descriptor.Id) != null
-                || TemplateManifests.TryGet(descriptor.Id, out _);
+            return ScaffoldingEngine.FindHandler(descriptor.Kind, descriptor.Id) != null
+                || TemplateManifests.TryGet(descriptor.Kind, descriptor.Id, out _);
         }
 
         /// <summary>

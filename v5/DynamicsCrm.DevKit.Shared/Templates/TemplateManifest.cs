@@ -32,6 +32,12 @@ namespace DynamicsCrm.DevKit.Shared.Templates
     public sealed class TemplateManifest
     {
         public string TemplateId { get; set; }
+
+        /// <summary>
+        /// Scopes the registry key of this manifest — CreateManifest
+        /// implementations must set it explicitly (Test, UiTest and Report
+        /// exist in both kinds).
+        /// </summary>
         public TemplateKind Kind { get; set; }
         public List<TemplatePayloadFile> Files { get; } = new List<TemplatePayloadFile>();
     }
@@ -39,29 +45,36 @@ namespace DynamicsCrm.DevKit.Shared.Templates
     /// <summary>
     /// Registry of the manifests registered by template handlers. Handlers
     /// register on startup of their host; the registry is the extension
-    /// point filled in by the P.* / I.* work units.
+    /// point filled in by the P.* / I.* work units. Entries are keyed by
+    /// (Kind, TemplateId) — project and item templates may share an id
+    /// (Test, UiTest, Report) without one manifest shadowing the other.
     /// </summary>
     public static class TemplateManifests
     {
         private static readonly object Lock = new object();
         private static readonly Dictionary<string, TemplateManifest> All = new Dictionary<string, TemplateManifest>(StringComparer.OrdinalIgnoreCase);
 
+        private static string Key(TemplateKind kind, string templateId)
+        {
+            return $"{kind}:{templateId.Trim()}";
+        }
+
         public static void Register(TemplateManifest manifest)
         {
             if (manifest == null || string.IsNullOrWhiteSpace(manifest.TemplateId)) return;
             lock (Lock)
             {
-                All[manifest.TemplateId.Trim()] = manifest;
+                All[Key(manifest.Kind, manifest.TemplateId)] = manifest;
             }
         }
 
-        public static bool TryGet(string templateId, out TemplateManifest manifest)
+        public static bool TryGet(TemplateKind kind, string templateId, out TemplateManifest manifest)
         {
             manifest = null;
             if (string.IsNullOrWhiteSpace(templateId)) return false;
             lock (Lock)
             {
-                return All.TryGetValue(templateId.Trim(), out manifest);
+                return All.TryGetValue(Key(kind, templateId), out manifest);
             }
         }
 
