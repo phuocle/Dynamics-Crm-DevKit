@@ -448,7 +448,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
         {
             // The golden proof of P.5: the generated net462 Package Deployer
             // project compiles with plain 'dotnet build' — the hardcoded
-            // Microsoft.PowerApps.MSBuild.Plugin 2.8.1 build definitions
+            // Microsoft.PowerApps.MSBuild.Plugin 2.14.1 build definitions
             // and the floating Microsoft.NETFramework.ReferenceAssemblies
             // resolve from the NuGet cache.
             Assert.IsTrue((await ScaffoldingEngine.ScaffoldProjectAsync(Input(Marker("ClientSecret")))).Success);

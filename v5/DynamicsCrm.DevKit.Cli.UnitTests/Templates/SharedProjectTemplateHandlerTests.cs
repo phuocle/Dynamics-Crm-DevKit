@@ -101,7 +101,8 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             CollectionAssert.Contains(targets, "Lib/DevKitJson.cs");
             CollectionAssert.Contains(targets, "Lib/PluginExecutionContext7Wrapper.cs");
             CollectionAssert.Contains(targets, "Lib/DocumentMethodAttribute.cs");
-            CollectionAssert.Contains(targets, "Entities/generator.bat");
+            // The generator runner target itself is asserted platform-aware
+            // below (Entities/generator.bat on Windows, generator.sh elsewhere).
 
             // ReplaceParameters flags follow the .vstemplate declaration.
             Assert.IsFalse(manifest.Files.Single(file => file.TargetFileName == "README.md").ReplaceParameters);

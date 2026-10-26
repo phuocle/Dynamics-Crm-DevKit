@@ -6,6 +6,7 @@ using DynamicsCrm.DevKit.Shared.Templates.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -550,6 +551,42 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
         private static string Comment(string environmentVariable, bool useProjectEnvironment)
         {
             return useProjectEnvironment ? $"<!-- Value is read from project .env: {environmentVariable} -->" : string.Empty;
+        }
+
+        [TestMethod]
+        public async Task ScaffoldAsync_GeneratedProject_BuildsNet462()
+        {
+            // The golden proof of P.2 (added after the P.1..P.13 review, the
+            // only project template whose golden build was demo-only): the
+            // generated net462 Console project compiles with plain
+            // 'dotnet build'. Shared must be scaffolded first — Lib/Helper.cs
+            // consumes DevKitJson, which compiles into the Console assembly
+            // through the Shared .projitems import (the realistic workspace
+            // sequence, same as the original P.2 demo in TestAllInOneCli).
+            await ScaffoldSharedAsync();
+            Assert.IsTrue((await ScaffoldingEngine.ScaffoldProjectAsync(Input(Marker("ClientSecret")))).Success);
+
+            var (exitCode, output) = DotnetBuild(Path.Combine(_projectDirectory, "Contoso.Console.csproj"));
+            Assert.AreEqual(0, exitCode, output);
+        }
+
+        private static (int ExitCode, string Output) DotnetBuild(string projectPath)
+        {
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "dotnet",
+                Arguments = $"build \"{projectPath}\" --nologo --verbosity quiet",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+            };
+            using (var process = Process.Start(startInfo))
+            {
+                var output = process.StandardOutput.ReadToEnd() + process.StandardError.ReadToEnd();
+                process.WaitForExit();
+                return (process.ExitCode, output);
+            }
         }
 
         private static bool HasBom(string file)

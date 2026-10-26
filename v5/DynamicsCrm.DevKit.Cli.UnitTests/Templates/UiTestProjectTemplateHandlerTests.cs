@@ -202,6 +202,22 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
         }
 
         [TestMethod]
+        public async Task ScaffoldAsync_EnvMarkerClientSecret_Fails()
+        {
+            // The aP-chốt rule under test (P.1..P.13 review P3): the
+            // non-interactive .env marker is validated like any explicit
+            // connection — a ClientSecret marker from the project .env is
+            // rejected by the OAuth-only rule, not silently accepted.
+            File.WriteAllText(Path.Combine(_directory, ".env"), "DEVKIT_AUTH_TYPE=ClientSecret\r\n");
+
+            var result = await ScaffoldingEngine.ScaffoldProjectAsync(Input());
+            Assert.IsFalse(result.Success);
+            StringAssert.Contains(result.Errors[0], "The connection type 'ClientSecret' is not supported for the UI Test project template");
+            StringAssert.Contains(result.Errors[0], "Supported types: OAuth");
+            Assert.IsFalse(Directory.Exists(_projectDirectory));
+        }
+
+        [TestMethod]
         [DataRow("ClientSecret")]
         [DataRow("Interactive")]
         [DataRow("DeviceCode")]
