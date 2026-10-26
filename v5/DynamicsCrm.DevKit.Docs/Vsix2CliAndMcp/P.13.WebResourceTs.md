@@ -16,7 +16,7 @@
 
 ## 2. Template tạo ra gì
 
-Project webresource **TypeScript** hoàn chỉnh: toolchain build (`build.js` + `tsconfig` + eslint + jest qua package.json), thư viện `lib/devkit.ts` + `devkit.d.ts`, bat generator (sinh form/webapi TS — family với I.14/I.15), bat deploy debug/release (`devkit webresource`).
+Project webresource **TypeScript** hoàn chỉnh: toolchain build (`build.js` + `tsconfig` + eslint qua package.json — **đính chính 2026-10-26 sau review: package.json KHÔNG có jest** — scripts debug/release/check, devDeps @types/xrm, @typescript-eslint, esbuild, eslint, typescript), thư viện `lib/devkit.ts` + `devkit.d.ts`, bat generator (sinh form/webapi TS — family với I.14/I.15), bat deploy debug/release (`devkit webresource`).
 
 ## 3. Logic wizard hiện tại
 
@@ -60,7 +60,7 @@ Hỏi–đáp: project name → connection (cho bat). TaskNew đã thêm `WebRes
 
 ## 10. Deviation / Lesson (ghi nhận cho aP)
 
-1. **Vstemplate declare 7 folder** (lib, entities, build, images, resources, html, css) — handoff/work file ghi "chỉ 2 folder" và "src/" đã cũ; theo vstemplate thật. csproj.template mirror đủ 7 (`Folder Include`).
+1. **Vstemplate declare 7 folder** (lib, entities, build, images, resources, html, css) — handoff/work file ghi "chỉ 2 folder" và "src/" đã cũ; theo vstemplate thật. csproj.template mirror đủ 7 (**đính chính 2026-10-26 sau review: 6 `<Folder Include>` — `build` xử lý bằng `<Compile Remove="build\**" />`; handler vẫn tạo đủ 7 folder vật lý**).
 2. **Bẫy AssignCulture tái xuất (P.8)**: handoff đoán `"ts" không phải culture` — SAI, **`ts` = Tsonga, culture ICU hợp lệ**. 4 resource `Resources/sh/*.ts.sh` không LogicalName bị drop âm thầm khỏi assembly net10; test `IsNotNull` bắt được ngay. Fix `WithCulture="false"` + comment XML trong projitems (precedent `proxytypes.run.bat`/`proxytypes.run.sh`). 4 stub payload không dính vì đều có LogicalName tường minh.
 3. **Stub trailing CRLF**: payload stub `devkit.ts`/`devkitts.d.ts`/`build.js` (và `deploy.release.bat`) trong folder 13 có trailing CRLF (VSIX gốc) — file render = resource + `\r\n`. Test assert theo byte-faithful (resource + `\r\n`), không "sửa" payload. Stub `deploy.debug.bat`/`generator.*.bat` không có trailing.
 4. **Profile DEBUGTS cho release**: bat `webresource.deploy.release.ts_bat` chạy `npm run release` rồi deploy `--profile "DEBUGTS"` — đây KHÔNG phải bug: Cli.json chỉ có 1 profile TS webresource là `DEBUGTS` (không có RELEASETS). sh twin mirror verbatim. Nếu aP muốn profile `RELEASETS` riêng thì phải sửa cả VSIX resource + Cli.json (ngoài scope P.13).

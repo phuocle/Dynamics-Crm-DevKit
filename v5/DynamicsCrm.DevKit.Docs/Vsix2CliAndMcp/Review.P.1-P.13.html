@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review P.1..P.13 — Vsix2CliAndMcp (báo cáo sai/thiếu, report-only)</title>
+<style>
+  :root {
+    --blue: #0b5cad; --blue-light: #e8f1fa; --green: #107c10; --green-light: #eaf6ea;
+    --amber: #8a6d00; --amber-light: #fff8e1; --red: #b00; --red-light: #fdeaea;
+    --ink: #1f2733; --muted: #5b6b7d; --line: #d9e1ea; --bg: #f5f7fa; --card: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--ink); margin: 0; padding: 24px; }
+  .wrap { max-width: 1180px; margin: 0 auto; }
+  header.hero { background: linear-gradient(135deg, #0b3d6b, #0b5cad 60%, #1273c4); color: #fff; border-radius: 14px; padding: 28px 30px; margin-bottom: 22px; }
+  header.hero h1 { margin: 0 0 6px; font-size: 26px; }
+  header.hero p { margin: 4px 0; opacity: .93; }
+  .badge { display: inline-block; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.35); border-radius: 999px; padding: 2px 12px; font-size: 12.5px; margin-right: 6px; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; }
+  h2 { font-size: 19px; margin: 0 0 12px; color: #0b3d6b; border-bottom: 2px solid var(--blue-light); padding-bottom: 6px; }
+  h3 { font-size: 15.5px; margin: 18px 0 8px; color: var(--blue); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { border: 1px solid var(--line); padding: 6px 9px; text-align: left; vertical-align: top; }
+  th { background: var(--blue-light); color: #0b3d6b; }
+  tr:nth-child(even) td { background: #fbfcfe; }
+  code, .mono { font-family: Consolas, "Cascadia Mono", monospace; font-size: 12.5px; background: #eef2f7; padding: 1px 5px; border-radius: 4px; }
+  .verdict { background: var(--green-light); border: 1px solid #bfe3bf; border-radius: 10px; padding: 12px 16px; font-size: 15px; }
+  .verdict strong { color: var(--green); }
+  .verdict.warn { background: var(--amber-light); border-color: #ecdc9a; }
+  .verdict.warn strong { color: var(--amber); }
+  .card { border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; margin-bottom: 12px; }
+  .card h4 { margin: 2px 0 8px; font-size: 14px; }
+  .minus { background: var(--red-light); border-color: #f2c4c4; } .minus h4 { color: var(--red); }
+  .amber { background: var(--amber-light); border-color: #ecdc9a; } .amber h4 { color: var(--amber); }
+  .plus { background: var(--green-light); border-color: #bfe3bf; } .plus h4 { color: var(--green); }
+  ul { margin: 6px 0; padding-left: 20px; }
+  li { margin: 3px 0; }
+  .tag { display: inline-block; border-radius: 4px; padding: 1px 7px; font-size: 11.5px; font-weight: 600; }
+  .t-green { background: var(--green-light); color: var(--green); }
+  .t-amber { background: var(--amber-light); color: var(--amber); }
+  .t-red { background: var(--red-light); color: var(--red); }
+  .t-blue { background: var(--blue-light); color: var(--blue); }
+  .note { background: var(--amber-light); border: 1px solid #ecdc9a; border-radius: 8px; padding: 10px 14px; font-size: 13.5px; }
+  footer { text-align: center; color: var(--muted); font-size: 12.5px; margin-top: 8px; }
+  a { color: var(--blue); }
+  .ok { color: var(--green); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>Review toàn bộ track P.1..P.13 — Vsix2CliAndMcp</h1>
+  <p>Session review thuần (report-only, không sửa code/test/docs): đối chiếu 4 lớp — work file <code style="background:rgba(255,255,255,.14);color:#fff">P.N.*.md</code> ↔ code (handler/engine) ↔ tests ↔ fixtures — cho 13 project templates port từ VSIX wizard sang <code style="background:rgba(255,255,255,.14);color:#fff">devkit new</code>.</p>
+  <p>
+    <span class="badge">0 × [P1]</span>
+    <span class="badge">1 × [P2]</span>
+    <span class="badge">~16 × [P3]</span>
+    <span class="badge">Full suite 5002/5002 chạy thật</span>
+    <span class="badge">Fixture 13/13 cấu trúc identical</span>
+    <span class="badge">Working tree sạch</span>
+  </p>
+</header>
+
+<section id="tomtat">
+  <h2>1. Kết luận nhanh</h2>
+  <div class="verdict">
+    <strong>✅ TRACK P.1..P.13 ĐẠT PARITY RẤT CAO.</strong> Cả 13 template pass đủ 4 lớp check (manifest/projitems/wizard-behavior/tests); fixtures so trực diện <em>TestAllInOne2</em> (VSIX wizard) vs <em>TestAllInOneCli</em> (CLI): 13/13 project <strong>file lists identical</strong>, các diff nội dung còn lại đều thuộc 12 lệch đã phê. Không có finding [P1] nào trong 13 template. Finding duy nhất mức [P2] nằm ở <strong>engine</strong> (ngoài phạm vi 13 template): registry handler/manifest phân biệt theo <code>TemplateId</code> mà không theo <code>Kind</code>.
+  </div>
+  <ul>
+    <li><strong>Phương pháp:</strong> 5 sub-agent chạy song song (mỗi agent 2–3 template × 4 check, với bằng chứng <code>file:line</code> hai bên, có context 12 lệch đã phê); phần engine/projitems/CLI surface/fixtures/build/test/probe thật do session chính tự làm. Mọi claim của agent đều được spot-verify bằng lệnh trước khi đưa vào báo cáo.</li>
+    <li><strong>Đã verify bằng lệnh thật:</strong> <code>dotnet build</code> CLI 0 err/0 warn; <code>dotnet test</code> full <strong>5002/5002</strong> (khớp baseline bàn giao); 2 warning CA2022 xuất hiện đúng 2 site đã phê.</li>
+  </ul>
+</section>
+
+<section id="matran">
+  <h2>2. Ma trận parity 13 templates</h2>
+  <table>
+    <tr><th>#</th><th>Template</th><th>Manifest vs .vstemplate</th><th>projitems</th><th>Wizard behavior</th><th>Tests</th><th>Fixture</th></tr>
+    <tr><td>1</td><td>Shared</td><td><span class="tag t-green">OK</span> 11 file, đúng thứ tự + flag RP</td><td><span class="tag t-green">OK</span></td><td><span class="tag t-green">OK</span> Cli.json + DevKit.json; owner <code>=13</code>; format v4 khớp từng chi tiết</td><td><span class="tag t-green">OK</span> 10 test, Offline=true, BOM khớp xxd</td><td><span class="tag t-green">OK</span></td></tr>
+    <tr><td>2</td><td>Console</td><td><span class="tag t-green">OK</span> 7 file; App.config.template → App.config</td><td><span class="tag t-green">OK</span></td><td><span class="tag t-green">OK</span> 4 loại (chặn DeviceCode/FromPac); không Cli.json; consumer <code>=5</code></td><td><span class="tag t-green">OK</span> 22 case, BOM khớp</td><td><span class="tag t-green">byte-identical toàn bộ</span></td></tr>
+    <tr><td>3</td><td>ConsoleCore</td><td><span class="tag t-green">OK</span> 7 file; token <code>$AppCore.cs$</code></td><td><span class="tag t-green">OK</span></td><td><span class="tag t-green">OK</span> 5 loại (chặn AD); golden net10 PASS</td><td><span class="tag t-green">OK</span> 24 case</td><td><span class="tag t-green">OK</span> csproj khác 1 dòng NuGet live-drift (expected)</td></tr>
+    <tr><td>4</td><td>Server</td><td><span class="tag t-green">OK</span> key.snk → .snk sinh mới (đã phê)</td><td><span class="tag t-green">OK</span></td><td><span class="tag t-green">OK</span> SigningService RSA2 tên <code>{Name}.snk</code> ≡ wizard; Shared-required; idempotency</td><td><span class="tag t-green">OK</span> 24 case, golden SignAssembly PASS</td><td><span class="tag t-green">OK</span> SignAssembly casing = VS normalize</td></tr>
+    <tr><td>5</td><td>Package</td><td><span class="tag t-green">OK</span> 4 file</td><td><span class="tag t-green">OK</span></td><td><span class="tag t-green">OK</span> không snk/Cli.json; đủ 6 loại</td><td><span class="tag t-green">OK</span> 24 case, golden PASS</td><td><span class="tag t-green">byte-identical toàn bộ</span></td></tr>
+    <tr><td>6</td><td>WebResource</td><td><span class="tag t-green">OK</span> 9 file + <strong>7 Folder</strong> khớp tên</td><td><span class="tag t-green">OK</span></td><td><span class="tag t-green">OK</span> không consumer line; 7 folder tạo vô điều kiện</td><td><span class="tag t-green">OK</span> 27 case, golden PASS</td><td><span class="tag t-green">OK</span> 3 bat khác = lean-bat (đã phê)</td></tr>
+    <tr><td>7</td><td>SharedTest</td><td><span class="tag t-green">OK</span> 12 file</td><td><span class="tag t-green">OK</span></td><td><span class="tag t-green">OK</span> Cli.json + DevKit.json như Shared; owner <code>=13</code></td><td><span class="tag t-green">OK</span> 8 test, BOM 2 file khớp</td><td><span class="tag t-green">OK</span> chỉ GUID mint + using-sort (đã phê)</td></tr>
+    <tr><td>8</td><td>ProxyTypes</td><td><span class="tag t-green">OK</span> 5 file, đúng thứ tự</td><td><span class="tag t-green">OK</span> WithCulture đúng</td><td><span class="tag t-green">OK</span> không consumer; hint modelbuilder qua Warning</td><td><span class="tag t-green">OK</span> 27 case, BOM 2 placeholder .cs</td><td><span class="tag t-green">byte-identical toàn bộ</span></td></tr>
+    <tr><td>9</td><td>Test</td><td><span class="tag t-green">OK</span> 2 file</td><td><span class="tag t-green">OK</span></td><td><span class="tag t-green">OK</span> 3 blocking Shared→ProxyTypes→SharedTest đúng thứ tự wizard; <strong>2 consumer line <code>=5</code></strong></td><td><span class="tag t-green">OK</span> 15 test, golden PASS</td><td><span class="tag t-green">byte-identical toàn bộ</span></td></tr>
+    <tr><td>10</td><td>UiTest</td><td><span class="tag t-green">OK</span> 6 file; retarget <code>$SafeProjectName$.runsettings</code> khớp vstemplate</td><td><span class="tag t-green">OK</span></td><td><span class="tag t-green">OK</span> <strong>OAuth-only + reject marker ClientSecret</strong>; fallback OAuth</td><td><span class="tag t-green">OK</span> 23 case, golden PASS</td><td><span class="tag t-green">OK</span> 5/6 byte-same</td></tr>
+    <tr><td>11</td><td>SolutionPackager</td><td><span class="tag t-green">OK</span> 5 file (mapping.xml)</td><td><span class="tag t-green">OK</span> mapping.xml BOM khớp</td><td><span class="tag t-green">OK</span> FixProjectFolder port đúng end-state; đủ 6 loại</td><td><span class="tag t-green">OK</span> 24 case, golden PASS</td><td><span class="tag t-green">byte-identical toàn bộ</span></td></tr>
+    <tr><td>12</td><td>Report</td><td><span class="tag t-green">OK</span> README RP=true duy nhất catalog; csproj loại CỐ Ý (ruling trong XML-doc)</td><td><span class="tag t-green">OK</span> rptproj từ shared resource</td><td><span class="tag t-green">OK</span> slnx <code>&lt;Deploy/&gt;</code>; .sln GUID <code>{F14B399A-…}</code> + Deploy.0; rerun Skipped/force</td><td><span class="tag t-green">OK</span> 26 case, không golden đúng thiết kế</td><td><span class="tag t-green">OK</span> rptproj BOM + annual stamp byte-same, không csproj ✓</td></tr>
+    <tr><td>13</td><td>WebResourceTs</td><td><span class="tag t-green">OK</span> 12 file + 7 Folder</td><td><span class="tag t-green">OK</span> 4 <code>WithCulture="false"</code> đúng</td><td><span class="tag t-green">OK</span> không consumer; npm hint; MarkExecutable ×4</td><td><span class="tag t-green">OK</span> 28 case, golden PASS</td><td><span class="tag t-green">OK</span> 11/12 byte-same</td></tr>
+  </table>
+  <div class="note"><strong>Cross-cutting tự verify (session chính):</strong> <code>ScaffoldingEngine</code> (dispatch handler-beats-manifest, BOM fidelity, idempotency, <code>--solution</code> validate trước khi tạo file), <code>TokenEngine</code> (18 package live-first, token .sh set-only-when-exists, <code>$NameSpace$</code> outer-pass), <code>SolutionMutator</code> (owner <code>=13</code>/consumer <code>=5</code> cùng GUID entry, <code>???</code> verbatim, DevKit.json không lưu secret, slnx shape-preserving), <code>TemplateCatalog</code> 30 mục, <code>SigningService</code> CSP blob, <code>WorkspaceScanner</code>, projitems (29 Compile, 6 <code>WithCulture="false"</code> đúng rule), <code>TaskNew</code>/<code>ConnectionPrompter</code>, force-guard <code>&amp;&amp; !input.Force</code> đủ <strong>13/13 handler</strong>.</div>
+</section>
+
+<section id="findings">
+  <h2>3. Findings</h2>
+
+  <div class="card minus">
+    <h4>[P2] Registry handler/manifest kind-blind với id trùng giữa project và item (Test, UiTest, Report)</h4>
+    <p style="margin:4px 0 10px"><span class="tag t-green">✅ ĐÃ FIX 2026-10-26</span> — registry key đổi sang <code>(Kind, TemplateId)</code> tại <code>ScaffoldingEngine.cs</code> (RegisterHandler/FindHandler/DispatchAsync) + <code>TemplateManifest.cs</code> (TemplateManifests) + <code>TemplateHandlers.RegisterAll</code> + <code>TaskNew.IsReady</code>; 2 regression test mới trong <code>ScaffoldingEngineTests</code> (<code>Registry_RegistrationsAreKindScoped</code>, <code>ScaffoldItemAsync_ProjectIdCollision_DoesNotDispatchProjectHandler</code>). Verified: build 0/0, Templates 328/328, full <strong>5004/5004</strong>; live: item Test/UiTest/Report Ready=no, <code>--kind item --type Test</code> → "not implemented yet" exit 1, project Test vẫn dispatch đúng handler.</p>
+    <ul>
+      <li><strong>Bằng chứng:</strong> <code>ScaffoldingEngine.cs:46</code> (dictionary theo TemplateId), <code>:253</code> (<code>FindHandler(descriptor.Id)</code> không có Kind), <code>TaskNew.cs:260-264</code> (<code>IsReady</code> cũng chỉ tra Id). Chạy thật: <code>devkit new list --plain</code> hiện <strong>item 9 Test / 10 UiTest / 18 Report = Ready=yes</strong> dù I.* chưa làm; <code>devkit new --kind item --type Test --name Account --offline</code> → <code>[ERROR] Error: input: required</code> exit 1 (dispatch nhầm vào <code>TestProjectTemplateHandler</code> với ProjectInput=null — không handler nào có guard null), trong khi item không trùng id (JsForm) trả đúng <code>"Template 'JsForm' is not implemented yet"</code>.</li>
+      <li><strong>Vi phạm:</strong> thiết kế 0.md ("type chưa triển khai → lỗi graceful 'not implemented yet' exit 1") + rule trong <code>new.md</code> ("chỉ scaffold type có Ready=yes").</li>
+      <li><strong>Latent blocker cho I.*:</strong> khi I.9/I.10/I.18 đăng ký item handler cùng id, <code>RegisterHandler</code> sẽ <strong>đè mất project handler</strong> cùng tên. Registry cần key <code>(Kind, Id)</code> trước khi làm I.*.</li>
+    </ul>
+  </div>
+
+  <h3>3.1. [P3] — chờ anh quyết (3 mục chính) — <span class="tag t-green">✅ CẢ 3 ĐÃ FIX 2026-10-26</span></h3>
+  <ul>
+    <li><span class="tag t-green">✅ ĐÃ FIX</span> <strong>P.2 Console golden <code>dotnet build</code></strong> — thêm <code>ScaffoldAsync_GeneratedProject_BuildsNet462</code> (scaffold Shared trước rồi Console — Lib/Helper.cs tiêu thụ <code>DevKitJson</code> qua import projitems; lesson: golden đứng một mình FAIL CS0103, khớp demo gốc P.2 trong TestAllInOneCli).</li>
+    <li><span class="tag t-green">✅ ĐÃ FIX</span> <strong>P.10 UiTest marker test</strong> — thêm <code>ScaffoldAsync_EnvMarkerClientSecret_Fails</code> (marker <code>.env</code> ClientSecret bị reject qua cùng nhánh <code>ValidateConnection</code> + không tạo file nào).</li>
+    <li><span class="tag t-green">✅ ĐÃ FIX</span> <strong>Fixture Package Analyzers</strong> — <code>TestAllInOneCli/Dev.AllInOne.Package.csproj:30</code> đổi 4.44.44.44 → 4.12.34.56; từ giờ Package thuộc cùng diff-class đã phê như Test/UiTest/WebResourceTs (VSIX local-feed vs CLI live).</li>
+  </ul>
+  <div class="note"><strong>Ghi nhận (không fix — không phải thứ sửa được):</strong> <code>TestAllInOne2/.env</code> md5 = <code>5bd73218…</code> (anh rotate key 25.10); <code>SignAssembly True</code> bên VSIX = VS normalize sau scaffold (reformat family).</div>
+
+  <h3>3.2. [P3] — drift tài liệu — <span class="tag t-green">✅ ĐÃ CẬP NHẬT TẤT CẢ 2026-10-26</span> (sửa tại chỗ kèm ghi "đính chính 2026-10-26 sau review", giữ nguyên tính lịch sử)</h3>
+  <table>
+    <tr><th>Nơi</th><th>Stale gì</th></tr>
+    <tr><td><code>P.1.Shared.md:20</code></td><td>"7 test" → thực tế 10 <code>[TestMethod]</code></td></tr>
+    <tr><td><code>P.1.Shared.md:32</code> (lệch #3)</td><td>message "no .sln/.slnx found" không còn tồn tại — superseded bởi ROUND 3 opt-in <code>--solution</code></td></tr>
+    <tr><td><code>SharedProjectTemplateHandlerTests.cs:104</code></td><td>assert hard-code <code>"Entities/generator.bat"</code> — sẽ fail nếu chạy test trên macOS/Linux (Windows CI vô hại)</td></tr>
+    <tr><td><code>P.7.SharedTest.md:17</code></td><td>đếm <code>$NameSpace$</code> "9 chỗ" → thực tế 11</td></tr>
+    <tr><td>P.2/P.3/P.4 work files</td><td>test counts 21/23/23 → thực tế 22/24/24 (P.4 ROUND 3 thêm test ×4 class); <code>P.4.md:36</code> số học "4796+6=4800" không khớp (thực chất +4)</td></tr>
+    <tr><td><code>P.5.Package.md:17,54</code></td><td>ghi MSBuild.Plugin <strong>2.8.1</strong> — payload/test/fixture hiện <strong>2.14.1</strong> (commit <code>bb288b4f9</code> sau khi work file approved); <code>PackageProjectTemplateHandlerTests.cs:451</code> comment còn 2.8.1</td></tr>
+    <tr><td><code>P.13.WebResourceTs.md</code> §10.1, §2</td><td>"csproj mirror đủ 7 Folder Include" (thực 6 + <code>Compile Remove</code>); "jest qua package.json" (package.json không có jest)</td></tr>
+  </table>
+
+  <h3>3.3. [P3] — fixture/observation — <span class="tag t-green">✅ BATS ĐÃ LEAN 2026-10-26</span></h3>
+  <ul>
+    <li><span class="tag t-green">✅ ĐÃ FIX</span> <code>TestAllInOne2/Dev.AllInOne.WebResource/{deploy.debug.bat, entities/generator.form.bat, entities/generator.webapi.bat}</code> — xóa nốt block "where devkit" (copy lean từ CLI side; diff trước đó là block-only <code>2,21d1</code>) → 3 file <strong>byte-identical</strong> với CLI side. Resource gốc đã lean từ P.8 ROUND 2 — remnant duy nhất là fixture.</li>
+    <li><code>Dev.AllInOne.Server.csproj:9</code>: VSIX <code>True</code> vs payload/CLI <code>true</code> — VS normalize boolean sau scaffold (reformat family, không sửa).</li>
+  </ul>
+</section>
+
+<section id="lechphê">
+  <h2>4. Lệch đã phê — recheck 12/12 vẫn đúng hiện trạng</h2>
+  <table>
+    <tr><th>#</th><th>Lệch đã phê</th><th>Trạng thái</th></tr>
+    <tr><td>1</td><td>NuGet live-first online (Analyzers 4.12.34.56 đúng; bảng chỉ fallback <code>--offline</code>)</td><td><span class="tag t-green">✓ đúng</span> code online-first + fixture Test/UiTest/WebResourceTs đúng EXPECTED</td></tr>
+    <tr><td>2</td><td>slnx: CLI append-cuối vs VS alphabetical + trailing-newline nit</td><td><span class="tag t-green">✓ đúng</span> diff trực diện đúng mô tả</td></tr>
+    <tr><td>3</td><td>VS-reformat family (usings sort, tab↔space…)</td><td><span class="tag t-green">✓ đúng</span> FakeXrmEasyTestBase, PluginExecutionContext7Wrapper, PluginCore, trailing space DevKitJson</td></tr>
+    <tr><td>4</td><td>Report ROUND 2: không csproj, .rptproj là project, slnx <code>&lt;Deploy/&gt;</code>, .sln GUID F14B399A + Deploy.0, .rsuser gitignored</td><td><span class="tag t-green">✓ đúng</span> XML-doc + test <code>DoesNotEmitBootstrapCsproj</code> + fixture entry</td></tr>
+    <tr><td>5</td><td>UiTest OAuth-only (kể cả reject marker ClientSecret)</td><td><span class="tag t-green">✓ đúng</span></td></tr>
+    <tr><td>6</td><td>Hardcode versions giữ payload</td><td><span class="tag t-green">✓ đúng</span> payload == fixture == test asserts (MSBuild.Plugin 2.14.1, FakeXrmEasy 2.*, MSTest 4.5.1, Selenium 4.51.0, ChromeDriver 156.0.8078.4700, UIAutomation 9.2.21084.148)</td></tr>
+    <tr><td>7</td><td>Server .snk idempotency (rerun giữ key, --force regen)</td><td><span class="tag t-green">✓ đúng</span> tests:451-488</td></tr>
+    <tr><td>8</td><td>CA2022 ×2 + NU1902/1903 pre-existing</td><td><span class="tag t-green">✓ đúng</span> xuất hiện đúng 2 site trong lần chạy thật</td></tr>
+    <tr><td>9</td><td>NotImplemented dùng "Report" + comment</td><td><span class="tag t-green">✓ đúng</span> comment "All 13 project templates have handlers since P.12"</td></tr>
+    <tr><td>10</td><td>Bats lean 17/17; 2 ts_bat giữ node/npm</td><td><span class="tag t-green">✓ đúng</span> fixture VSIX side fat là artifact (mục 3.3)</td></tr>
+    <tr><td>11</td><td>Version 4.44.44.44 + Const.Build placeholder</td><td><span class="tag t-green">✓ đúng</span> Const.cs:9 nguyên; devkit in annual stamp</td></tr>
+    <tr><td>12</td><td>Fixture non-compare files (DevKit.json/Config.json/.editorconfig/Entities/bin/obj/rsuser)</td><td><span class="tag t-green">✓ đúng</span> tôn trọng trong toàn bộ compare</td></tr>
+  </table>
+</section>
+
+<section id="lenh">
+  <h2>5. Lệnh đã chạy + kết quả thật</h2>
+  <table>
+    <tr><th>Lệnh</th><th>Kết quả</th></tr>
+    <tr><td><code>git branch/status/log</code></td><td><code>vsix2cliandmcp</code>, sạch, top = <code>ba01a0d98</code></td></tr>
+    <tr><td><code>devkit new list --plain</code></td><td>13 project Ready=yes (version 4.44.44.44 Build: 31.12.2026 23.59.59)</td></tr>
+    <tr><td><code>md5sum</code> .env ×3</td><td>TestAllInOne + TestAllInOneCli = <code>52cfb0b7…</code> nguyên vẹn; TestAllInOne2 = <code>5bd73218…</code> (không đụng)</td></tr>
+    <tr><td><code>ls Published/4.44.44.44/</code></td><td>đủ 4 artifacts (Oct 26 06:38) + manifest</td></tr>
+    <tr><td><code>grep Const.cs</code></td><td>placeholder <code>xxxx.yy.zz HH.mm.ss</code> restored</td></tr>
+    <tr><td><code>dotnet build DynamicsCrm.DevKit.Cli.csproj</code></td><td><strong>0 Error / 0 Warning</strong></td></tr>
+    <tr><td><code>dotnet test --filter FQN~Templates</code></td><td><strong>326/326 PASS</strong> (38s)</td></tr>
+    <tr><td><code>dotnet test</code> full <code>--no-build</code></td><td><strong>5002/5002 PASS</strong> (50s) — khớp baseline bàn giao</td></tr>
+    <tr><td>Fixture compare</td><td>slnx diff (13 entry 2 bên); file-list 13/13 project <strong>identical</strong>; per-file <code>cmp</code>/<code>diff --strip-trailing-cr</code> — diff còn lại đều thuộc lệch đã phê; Cli.json solution-level <strong>IDENTICAL</strong>; payload-vs-CLI byte check (DevKitJson/PluginExecutionContext7Wrapper/Date IDENTICAL, PluginCore/Extension chỉ khác token đã thay)</td></tr>
+    <tr><td>Probe <code>devkit</code> thật (TEMP, <code>--offline</code>, đã dọn)</td><td>item Test/UiTest/Report → <code>input: required</code> exit 1; item JsForm → "not implemented yet" (bằng chứng [P2])</td></tr>
+  </table>
+</section>
+
+<section id="dexuat">
+  <h2>6. Đề xuất thứ tự xử lý</h2>
+  <div class="verdict warn">
+    <strong>Thứ tự đề xuất:</strong> (1) chốt [P2] registry <code>(Kind, Id)</code> — <span class="tag t-green">✅ ĐÃ FIX 2026-10-26</span>; (2) 3 [P3] chính — <span class="tag t-green">✅ ĐÃ FIX 2026-10-26</span> (golden P.2 + test marker UiTest + fixture Package Analyzers); (3) doc-drift — <span class="tag t-green">✅ ĐÃ CẬP NHẬT</span>; (4) bats fixture — <span class="tag t-green">✅ ĐÃ LEAN</span>. Verified sau fix: build CLI 0/0, Templates <strong>330/330</strong>, full suite <strong>5006/5006</strong>, fixtures: WebResource bats byte-identical 2 bên, Package csproj còn đúng 1 dòng Analyzers (diff-class đã phê), <code>.env</code> md5 nguyên. Gate I.* mở — registry sẵn sàng nhận <code>TemplateKind.Item</code>.
+  </div>
+</section>
+
+<footer>
+  Review session 2026-10-26 · report-only: 0 file code/test/docs bị sửa, không commit/push/release · working tree sạch trước khi lưu file .html này (theo yêu cầu riêng của anh Phước) · bằng chứng đầy đủ trong hội thoại session review.
+</footer>
+
+</div>
+</body>
+</html>
