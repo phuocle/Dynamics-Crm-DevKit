@@ -42,6 +42,8 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             TemplateManifests.Register(WebResourceTsProjectTemplateHandler.CreateManifest());
             ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new LateBoundItemTemplateHandler());
             TemplateManifests.Register(LateBoundItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new JsFormItemTemplateHandler());
+            TemplateManifests.Register(JsFormItemTemplateHandler.CreateManifest());
         }
     }
 }
