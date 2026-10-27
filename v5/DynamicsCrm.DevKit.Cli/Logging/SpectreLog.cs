@@ -107,6 +107,7 @@ namespace DynamicsCrm.DevKit.Cli
                 "  devkit server --auth FromPac --pacprofile DEVKITV4 --json cli.json --profile DEBUG\n" +
                 "  devkit server --auth ClientSecret --url URL --clientid ID --clientsecret SEC --json cli.json --profile CI\n" +
                 "  devkit new --kind project --type Shared --name Contoso.Shared\n" +
+                "  devkit new --kind item --type LateBound --entity account\n" +
                 "  devkit mcp --auth ClientSecret --url URL --clientid ID --clientsecret SEC\n\n" +
                 "Project .env Fallback (DEVKIT_*):\n" +
                 "  Normal commands & tool call: CLI args > project .env > validation error.\n" +
@@ -178,6 +179,7 @@ namespace DynamicsCrm.DevKit.Cli
                     "  devkit server --auth [cyan]FromPac[/] --pacprofile [cyan]DEVKITV4[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/]\n" +
                     "  devkit server --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/] --json [cyan]cli.json[/] --profile [cyan]CI[/]\n" +
                     "  devkit [cyan]new[/] --kind project --type [cyan]Shared[/] --name [cyan]Contoso.Shared[/]\n" +
+                    "  devkit [cyan]new[/] --kind item --type [cyan]LateBound[/] --entity [cyan]account[/]\n" +
                     "  devkit mcp --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/]\n\n" +
                     "[green]Project .env values (DEVKIT_*):[/]\n" +
                     "  Normal commands: CLI args > project .env > validation error.\n" +

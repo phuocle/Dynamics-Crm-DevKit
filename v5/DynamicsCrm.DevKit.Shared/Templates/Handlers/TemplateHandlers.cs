@@ -40,6 +40,8 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             TemplateManifests.Register(ReportProjectTemplateHandler.CreateManifest());
             ScaffoldingEngine.RegisterHandler(TemplateKind.Project, new WebResourceTsProjectTemplateHandler());
             TemplateManifests.Register(WebResourceTsProjectTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new LateBoundItemTemplateHandler());
+            TemplateManifests.Register(LateBoundItemTemplateHandler.CreateManifest());
         }
     }
 }

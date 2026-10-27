@@ -1,8 +1,11 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using DynamicsCrm.DevKit.Shared.Templates;
 using DynamicsCrm.DevKit.Shared.Templates.Handlers;
 using DynamicsCrm.DevKit.Shared.Templates.Models;
+using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk.Metadata;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
@@ -174,18 +177,34 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-                if (string.IsNullOrWhiteSpace(args.Name) && string.IsNullOrWhiteSpace(args.Entity) && CanPrompt(args))
+                // Entity-driven item templates (LateBound) generate from
+                // live entity metadata — there is no offline fallback: the
+                // generated class is built from the entity's attributes.
+                if (descriptor.RequiresConnection && args.Offline)
                 {
-                    var promptLabel = descriptor.RequiresConnection ? "[green]Entity[/] schema name (e.g. Account):" : "[green]Name[/]:";
-                    var answer = AnsiConsole.Prompt(new TextPrompt<string>(promptLabel).AllowEmpty());
-                    if (descriptor.RequiresConnection)
+                    throw new DevKitValidationException($"--offline: template '{descriptor.Id}' requires a Dataverse connection to read entity metadata. Run without --offline and pass --auth/--conn (or run from a folder with a project .env).");
+                }
+                if (descriptor.RequiresConnection)
+                {
+                    // Connected and interactive: pick the entity from the org
+                    // (searchable, the CLI twin of the FormItem list). The
+                    // metadata read once into the XrmHelper cache also feeds
+                    // the codegen. Non-interactive runs pass --entity.
+                    if (string.IsNullOrWhiteSpace(args.Entity) && args.ServiceClient != null && CanPrompt(args))
                     {
-                        args.Entity = answer;
+                        await new MetadataService(args.ServiceClient).ReadEntitiesMetadataAsync(EntityFilters.Attributes);
+                        var schemas = XrmHelper.EntitiesMetadata.Select(x => x.SchemaName).OrderBy(x => x, StringComparer.OrdinalIgnoreCase).ToList();
+                        args.Entity = AnsiConsole.Prompt(
+                            new SelectionPrompt<string>()
+                                .Title("Select an [green]entity[/] [grey](--entity)[/]:")
+                                .PageSize(20)
+                                .EnableSearch()
+                                .AddChoices(schemas));
                     }
-                    else
-                    {
-                        args.Name = answer;
-                    }
+                }
+                else if (string.IsNullOrWhiteSpace(args.Name) && CanPrompt(args))
+                {
+                    args.Name = AnsiConsole.Prompt(new TextPrompt<string>("[green]Name[/]:").AllowEmpty());
                 }
                 var input = new ItemTemplateInput
                 {
@@ -201,6 +220,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     TemplateTitle = args.Template,
                     RootNamespace = args.Namespace,
                     OutputDirectory = args.Out,
+                    ServiceClient = args.ServiceClient,
                     Force = args.Force,
                     Offline = args.Offline,
                 };
