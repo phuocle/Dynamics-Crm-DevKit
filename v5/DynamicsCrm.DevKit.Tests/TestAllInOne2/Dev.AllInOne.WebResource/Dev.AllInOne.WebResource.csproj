@@ -38,7 +38,6 @@
   <ItemGroup>
 		<Folder Include="html\" />
 		<Folder Include="css\" />
-		<Folder Include="entities\" />
     <Folder Include="js\" />
 		<Folder Include="lib\" />
 		<Folder Include="images\" />
@@ -46,6 +45,14 @@
 	</ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="entities\Account.d.ts">
+      <DependentUpon>Account.js</DependentUpon>
+    </None>
+    <None Update="entities\Account.form.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </None>
   </ItemGroup>
 </Project>
 <!-- v.4.44.44.44 - Build: 31.12.2026 23.59.59 -->
