@@ -1,15 +1,15 @@
 ﻿{
     "version":  "4.44.44.44",
-    "buildDate":  "25.10.2026 13:59:11",
+    "buildDate":  "28.10.2026 06:18:25",
     "configuration":  "Debug",
-    "builtAt":  "2026-10-25T13:59:18.4903282+07:00",
+    "builtAt":  "2026-10-28T06:18:37.3890826+07:00",
     "sourceRoot":  "E:\\src\\github\\Dynamics-Crm-DevKit\\v5",
-    "gitCommit":  "fc007c5238f49fdd9543961281ad9767174bfaa3",
+    "gitCommit":  "0fe15f3ffe71127593b32d4a6d47aa16b1c21ae7",
     "gitDirty":  true,
     "packagePath":  "E:\\src\\github\\Dynamics-Crm-DevKit\\v5\\Published\\4.44.44.44\\DynamicsCrm.DevKit.Cli.4.44.44.44.nupkg",
-    "packageSha256":  "3908C0F708D7B4B4F25BF6D710A59222EEDC7CCE201D6B28D23DF4E816D9D09C",
+    "packageSha256":  "C42BFF75E5BAC37EBCBE109C7F15E086012F328D35DB84BD6400AC856F29AD35",
     "installedAssemblyPath":  "C:\\Users\\dev\\.dotnet\\tools\\.store\\dynamicscrm.devkit.cli\\4.44.44.44\\dynamicscrm.devkit.cli\\4.44.44.44\\tools\\net10.0\\any\\DynamicsCrm.DevKit.Cli.dll",
-    "installedAssemblySha256":  "F23B5642151BBB4B4FE4CB873B4893403F78A87173A17A0961ED76692B6B1D66",
-    "devkitVersionOutput":  "4.44.44.44 Build: 25.10.2026 13:59:11",
+    "installedAssemblySha256":  "0DAA36F63B666B40B4AB3B5E3144E6BFDE402FFE0AD6C7352BD3D7BE5E6FCC43",
+    "devkitVersionOutput":  "4.44.44.44 Build: 28.10.2026 06:18:25",
     "mcpRuntimeVerification":  "Call MCP whoami and compare structuredContent.devkit.version/build/assemblySha256/processStartTime with this manifest."
 }
