@@ -41,5 +41,27 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             await Assert.ThrowsExactlyAsync<InvalidOperationException>(() =>
                 transformer.TransformAsync("<#= ThisDoesNotExist #>", new T4Context()));
         }
+
+        [TestMethod]
+        public async Task TransformAsync_SortsLeadingUsingsLikeTheVsHost()
+        {
+            // The VS T4 host organizes the leading using directives of its
+            // output alphabetically (I.4 wizard compare) — the CLI engine
+            // mirrors that.
+            var transformer = new MonoTextTransformer();
+            var template = "using System;\r\nusing Microsoft.Xrm.Sdk;\r\nusing <#= Context.PluginSharedNameSpace #>;\r\n\r\nnamespace X { }\r\n";
+            var output = await transformer.TransformAsync(template, new T4Context { PluginSharedNameSpace = "Dev.AllInOne.Shared" });
+            Assert.AreEqual(
+                "using Dev.AllInOne.Shared;\r\nusing Microsoft.Xrm.Sdk;\r\nusing System;\r\n\r\nnamespace X { }\r\n",
+                output);
+        }
+
+        [TestMethod]
+        public async Task TransformAsync_SingleLeadingUsing_StaysPut()
+        {
+            var transformer = new MonoTextTransformer();
+            var output = await transformer.TransformAsync("using System;\r\nnamespace X { }\r\n", new T4Context());
+            Assert.AreEqual("using System;\r\nnamespace X { }\r\n", output);
+        }
     }
 }
