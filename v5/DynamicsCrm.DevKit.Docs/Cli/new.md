@@ -29,16 +29,17 @@ Shell không tương tác (AI/CI) thiếu flag → lỗi validation exit 1.
 
 | Flag | Ý nghĩa |
 |---|---|
-| `--kind` | `project`, `item` hoặc `list` |
+| `--kind` | `project`, `item` hoặc `list` — **bắt buộc** (thiếu → wizard hỏi khi TTY / lỗi khi non-TTY) |
 | `--type` | Template id — xem `devkit new list` (vd `Shared`, `Console`, `LateBound`, `Plugin`…) |
 | `--name` | Tên project (project templates) / class-dialog-report name |
 | `--entity` | Entity schema name cho item templates theo entity (LateBound, JsForm…) |
+| `--project` | **REQUIRED cho mọi item templates** (quyết định aP 2026-10-28): tên project item scaffold vào. Sai tên → lỗi; `--out` bỏ trống → output = thư mục project đó. Namespace (`$rootnamespace$`) đọc từ file project đó (RootNamespace element / tên file). Interactive thiếu → prompt **gợi ý** nearest project (đi lên từ `--out` từng cấp, cấp đầu chứa `.csproj`/`.shproj`) — user xác nhận, CLI KHÔNG tự đoán; non-TTY thiếu → lỗi và dừng |
+| `--solution` | **REQUIRED cho mọi project templates** (quyết định aP 2026-10-28 — đảo ruling cũ opt-in): project được đăng ký vào solution đó. Interactive thiếu → prompt gợi ý nearest `.slnx`/`.sln` (walk-up); non-TTY thiếu → lỗi và dừng. File không tồn tại → lỗi |
 | `--out` | Thư mục đích (default: current directory; engine tự tìm `.sln/.slnx` lên phía trên) |
 | `--force` | Ghi đè file user đã sửa (mặc định KHÔNG bao giờ đè) |
 | `--offline` | Không kết nối Dataverse (template nào cần metadata sẽ báo) |
-| `-i/--interactive` | Ép wizard hỏi–đáp |
 
-Các flag khác (`--message`, `--stage`, `--execution`, `--order`, `--template`, `--datasource`, `--language`, `--namespace`) dành cho item templates cụ thể — xem help từng loại.
+Các flag khác (`--message`, `--stage`, `--execution`, `--order`, `--template`, `--t4`, `--datasource`, `--language`, `--namespace`) dành cho item templates cụ thể — xem help từng loại.
 
 ## Hiện trạng templates (2026-10-27)
 
@@ -58,73 +59,78 @@ Các flag khác (`--message`, `--stage`, `--execution`, `--order`, `--template`,
 - **Item `LateBound` (Ready — item template đầu tiên, I.1)**: sinh **2 file từ entity metadata thật** vào `--out` (thư mục đích trong project — thường `Entities/` của Shared project): `{Entity}.cs` (class partial user chỉnh sửa) + `{Entity}.generated.cs` (late-bound class đầy đủ: struct `Fields`, properties, OptionSets, static `Read_Record` trong `{Entity}.cs`). **Bắt buộc kết nối Dataverse** — generated class sinh từ attributes của entity, `--offline` bị chặn với lỗi rõ ràng. Interactive terminal chọn entity bằng list **searchable** đọc từ org; non-interactive truyền `--entity` (nhận cả logical name `account` lẫn schema name `Account` — file/class luôn đặt theo SchemaName, VD `Account.cs`). `$rootnamespace$` = namespace project + folder đích (VD `Dev.AllInOne.Shared.Entities` — đúng cách VS compose). Idempotency đúng wizard VSIX: `{Entity}.cs` **không bao giờ đè** trừ `--force` (chạy lại chuẩn hóa `public partial` cũ → `internal partial`), `{Entity}.generated.cs` **luôn update khi nội dung thật đổi** (so sánh từ dòng 6 — header có stamp ngày sinh nên so nguyên file sẽ luôn thấy khác). Target nằm trong Shared project → tự thêm 2 `<Compile>` entries vào `.projitems` (giống VS khi add item); SDK-style csproj tự glob không cần đụng.
 - **Item `JsForm` (Ready — I.2)**: sinh **3 file từ form metadata của entity** vào `--out` (thư mục đích trong WebResource project — thường `entities/`): `{Entity}.js` (stub user: reference `.d.ts` + khung form events comment-out), `{Entity}.form.js` (form events sinh từ FormXml — body/tabs/sections/header/navigation/BPF, kèm `OptionSet.{Entity}`), `{Entity}.d.ts` (typing devkit: namespace Form*, interface Body/Header/Tab, enum OptionSet). **Bắt buộc kết nối Dataverse** (codegen đọc forms + BPF processes qua cache lazy — `--offline` bị chặn). Interactive terminal chọn entity searchable như LateBound; `--entity` nhận cả logical lẫn schema name — file luôn đặt theo SchemaName. **Tự nhận biết `{Entity}.webapi.js`** tồn tại trong thư mục đích → bật section `{Entity}Api` trong `.d.ts` (phối hợp item JsWebApi I.3). Idempotency đúng wizard VSIX: `{Entity}.js` **không bao giờ đè** trừ `--force`; `{Entity}.form.js`/`{Entity}.d.ts` **luôn update khi nội dung thật đổi** (so full content — không có timestamp header nên không cần so-từ-dòng-N). Entity **không có form Main/QuickCreate** → chỉ sinh stub `.js` (fallback webapi-style), `.form.js`/`.d.ts` bị skip kèm warning "(no forms)" (tiền lệ `devkit generator`).
 - **Item `JsWebApi` (Ready — I.3)**: sinh **3 file từ attribute metadata của entity** vào `--out` (thư mục đích trong WebResource project — thường `entities/`): `{Entity}.js` (stub user 2 dòng: `//@ts-check` + reference `.d.ts`), `{Entity}.webapi.js` (webapi CRUD sinh từ attributes — field config theo từng nhánh kiểu: plain/DateTime suffix/picklist `g:'Integer'`/lookup OData navigation `b`+`_x_value`+`@odata.bind`, kèm `OptionSet.{Entity}`), `{Entity}.d.ts` (typing: **section `{Entity}Api` luôn bật** + section Form khi `{Entity}.form.js` tồn tại + enum OptionSet). **Bắt buộc kết nối Dataverse** (codegen đọc attributes + metadata của mọi lookup target qua cache lazy — `--offline` bị chặn; khi `{Entity}.form.js` tồn tại cần cả forms + BPF processes cho section Form). `--entity` nhận cả logical lẫn schema name — file luôn đặt theo SchemaName. Idempotency đúng wizard VSIX: `{Entity}.js` **không bao giờ đè** trừ `--force`; `{Entity}.webapi.js`/`{Entity}.d.ts` **luôn update khi nội dung thật đổi** (so full content — không có timestamp header).
-- **Item templates còn lại (I.4..I.18)**: theo lộ trình `DynamicsCrm.DevKit.Docs/Vsix2CliAndMcp/I.*.md` — cột Ready sẽ chuyển `yes` dần từng bản.
+- **Item `Plugin` (Ready — I.4, item T4 đầu tiên, COMPARE CHỐT 2/2 BYTE-IDENTICAL với wizard VSIX)**: render **T4 thật** (`Plugin.tt` built-in) qua `MonoTextTransformer` rồi ghi **1 file `{Class}{Order}.cs`** vào project Server (`--out`; suffix `{Order}` biến mất khi order=1 — đúng hợp đồng vstemplate `$Class$$PluginOrder$.cs`). Nội dung: class `IPlugin` đầy đủ `[CrmPluginRegistration]` (stage/execution/message/entity/order + Image1/2 theo message) + comment block **tự đọc từ org** (InputParameters/OutputParameters của message qua `GetPluginCommentAsync` — như wizard). **`MonoTextTransformer` mirror behavior VS T4 host: sắp xếp lại block `using` đầu file theo tên namespace alphabetically, prefix-first** (`Microsoft.Xrm.Sdk` trước `Microsoft.Xrm.Sdk.Extensions` — I.4 wizard compare phát hiện, byte-identical sau mirror). Chuỗi prompt **đúng thứ tự field của FormPlugin**: entity (searchable từ org) → message (radio từ sdk messages **của entity đó**, `GetSdkMessagesAsync` — chỉ message chuẩn; custom action/api thuộc item khác) → stage (PreValidation/PreOperation/PostOperation) → execution (**PreValidation/PreOperation khóa `Synchronous`** — `Asynchronous` chỉ ở PostOperation, vi phạm → lỗi) → class name (gợi ý `{Stage}{Schema}{Message}{Execution}`, `PreOperation`/`PostOperation` rút còn `Pre`/`Post`) → custom template (Default + titles từ Cli.json khi có). **KHÔNG prompt order** (form wizard không có field order) — order lấy từ `--order` (default 1). **`--project` bắt buộc như mọi item** (xem bảng options — gate ở engine, áp cho TẤT CẢ I*). **Offline ĐƯỢC PHÉP** (khác I.1–I.3): gõ tay toàn bộ, không validate metadata, kèm warning. Custom T4: `--template <title>` từ `DynamicsCrm.DevKit.Cli.json` (custom title → render qua context ĐẦY ĐỦ như wizard) hoặc `--t4 <đường-dẫn-.tt>` trỏ thẳng file (ghi đè `--template`; cả hai cùng cung cấp → lỗi). Idempotency: file plugin là **user file** — không bao giờ đè trừ `--force`.
+- **Item templates còn lại (I.5..I.18)**: theo lộ trình `DynamicsCrm.DevKit.Docs/Vsix2CliAndMcp/I.*.md` — cột Ready sẽ chuyển `yes` dần từng bản.
 
 ## Hành vi quan trọng
 
+- **Interactive tự trigger (không có flag ép)**: wizard hỏi–đáp tự chạy khi terminal TTY và giá trị bắt buộc còn thiếu — giống dialog VSIX (vd item `Plugin`: chọn entity xong tự hỏi message → stage → execution → class → template). Redirected/plain (AI/CI) không bao giờ prompt: thiếu giá trị bắt buộc → lỗi rõ ràng exit 1.
+- **Required args theo kind (ruling aP 2026-10-28)**: `--kind` luôn bắt buộc (thiếu → wizard hỏi / lỗi); **kind=item → `--project` bắt buộc**; **kind=project → `--solution` bắt buộc** (đảo ruling "opt-in" trước đây 2026-10-26 — project template giờ LUÔN đăng ký vào solution); ngoài đó `--type`/`--name` theo template. Engine (`ScaffoldingEngine`) giữ fallback nearest-project cho caller lập trình (MCP/tests), nhưng CLI surface luôn yêu cầu tường minh.
 - **Idempotent**: chạy lại không đè file user (skipped); `--force` để ghi đè; kết quả liệt kê Created/Updated/Skipped/Unchanged từng file.
-- **Solution là opt-in (`--solution`)**: CLI chỉ insert project vào `.sln`/`.slnx` khi được chỉ định tường minh `--solution <file>` (file phải tồn tại — sai → lỗi trước khi tạo file nào). Không có `--solution` → **chỉ tạo project** dưới `--out`, không đụng solution nào (1 folder có thể có nhiều solution — CLI không tự đoán; VSIX thì luôn add vào solution đang mở vì nó biết chắc). `--solution` cũng là anchor cho việc tìm Shared project và tên mặc định `{SolutionName}.{Type}`.
-- **Connection**: không bắt buộc cho scaffold; generator scripts dựa vào `.env` fallback (`DEVKIT_*`, tìm từ thư mục hiện hành lên trên). Riêng `Console`/`ConsoleCore` dùng connection để chọn biến thể `App.cs`/`App.config` hoặc `App.cs`/`AppSettings.json`, `Server`/`Package`/`WebResource`/`ProxyTypes`/`WebResourceTs`/`SolutionPackager`/`Report` dùng connection để nhúng args vào deploy/generator/run scripts, và `UiTest` bake giá trị OAuth vào `App.config` (chỉ nhận `OAuth` — EasyRepro browser login; xem trên). Riêng item `LateBound` **bắt buộc kết nối** để đọc entity metadata, item `JsForm` **bắt buộc kết nối** để đọc entity metadata + form xml (`--offline` bị chặn), item `JsWebApi` **bắt buộc kết nối** để đọc entity metadata (+ form xml/BPF khi `{Entity}.form.js` tồn tại) (`--offline` bị chặn).
+- **Connection**: không bắt buộc cho scaffold; generator scripts dựa vào `.env` fallback (`DEVKIT_*`, tìm từ thư mục hiện hành lên trên). Riêng `Console`/`ConsoleCore` dùng connection để chọn biến thể `App.cs`/`App.config` hoặc `App.cs`/`AppSettings.json`, `Server`/`Package`/`WebResource`/`ProxyTypes`/`WebResourceTs`/`SolutionPackager`/`Report` dùng connection để nhúng args vào deploy/generator/run scripts, và `UiTest` bake giá trị OAuth vào `App.config` (chỉ nhận `OAuth` — EasyRepro browser login; xem trên). Riêng item `LateBound` **bắt buộc kết nối** để đọc entity metadata, item `JsForm` **bắt buộc kết nối** để đọc entity metadata + form xml (`--offline` bị chặn), item `JsWebApi` **bắt buộc kết nối** để đọc entity metadata (+ form xml/BPF khi `{Entity}.form.js` tồn tại) (`--offline` bị chặn); item `Plugin` **offline được phép** (render T4 từ giá trị gõ tay + warning, work unit I.4 §5).
 
 ## Examples
 
 ```bash
-# Shared project vào solution hiện tại
-devkit new --kind project --type Shared --name Contoso.Shared --out .
+# Shared project — --solution REQUIRED cho mọi project template
+devkit new --kind project --type Shared --name Contoso.Shared --solution MySolution.slnx --out .
 
 # Console project (net462) — hỏi connection type + fields khi tương tác
-devkit new --kind project --type Console --name Contoso.Console --out .
+devkit new --kind project --type Console --name Contoso.Console --solution MySolution.slnx --out .
 
 # Console Core project (net10 đa nền tảng, dotnet build được luôn)
-devkit new --kind project --type ConsoleCore --name Contoso.ConsoleCore --out .
+devkit new --kind project --type ConsoleCore --name Contoso.ConsoleCore --solution MySolution.slnx --out .
 
 # Server project (plugin assembly net462 — cần Shared project trước, sinh .snk mới)
-devkit new --kind project --type Server --name Contoso.Server --out .
-
-# Server project và add vào solution chỉ định (CLI không tự đoán solution)
-devkit new --kind project --type Server --name Contoso.Server --out . --solution MySolution.slnx
+devkit new --kind project --type Server --name Contoso.Server --solution MySolution.slnx --out .
 
 # Package Deployer project (net462, không cần .snk, không cần Shared)
-devkit new --kind project --type Package --name Contoso.Package --out .
+devkit new --kind project --type Package --name Contoso.Package --solution MySolution.slnx --out .
 
 # WebResource project (JavaScript net462, không cần .snk, không cần Shared)
-devkit new --kind project --type WebResource --name Contoso.WebResource --out .
+devkit new --kind project --type WebResource --name Contoso.WebResource --solution MySolution.slnx --out .
 
 # WebResourceTs project (TypeScript net462 — chạy 'npm install' trong project trước khi build)
-devkit new --kind project --type WebResourceTs --name Contoso.WebResourceTs --out .
+devkit new --kind project --type WebResourceTs --name Contoso.WebResourceTs --solution MySolution.slnx --out .
 
 # UiTest project (net462 EasyRepro — chỉ nhận connection OAuth, bake giá trị vào App.config)
-devkit new --kind project --type UiTest --name Contoso.UiTest --out .
+devkit new --kind project --type UiTest --name Contoso.UiTest --solution MySolution.slnx --out .
 
 # SolutionPackager project (extract/pack solution — bat gọi 'devkit solution' profile Extract-Both/Pack-Both)
-devkit new --kind project --type SolutionPackager --name Contoso.SolutionPackager --out .
+devkit new --kind project --type SolutionPackager --name Contoso.SolutionPackager --solution MySolution.slnx --out .
 
 # Report project (SSRS — project là {Name}.rptproj CÓ BOM, KHÔNG sinh csproj)
-devkit new --kind project --type Report --name Contoso.Report --out .
+devkit new --kind project --type Report --name Contoso.Report --solution MySolution.slnx --out .
 
 # SharedTest project (.shproj hạ tầng test FakeXrmEasy, không cần .snk/connection)
-devkit new --kind project --type SharedTest --name Contoso.Shared.Test --out .
+devkit new --kind project --type SharedTest --name Contoso.Shared.Test --solution MySolution.slnx --out .
 
 # ProxyTypes project (early-bound types net462 — sau đó chạy run.bat hoặc 'devkit modelbuilder' để sinh types)
-devkit new --kind project --type ProxyTypes --name Contoso.ProxyTypes --out .
+devkit new --kind project --type ProxyTypes --name Contoso.ProxyTypes --solution MySolution.slnx --out .
 
 # Test project (MSTest + FakeXrmEasy net462 — cần Shared + ProxyTypes + SharedTest trước)
-devkit new --kind project --type Test --name Contoso.Test --out .
+devkit new --kind project --type Test --name Contoso.Test --solution MySolution.slnx --out .
 
-# LateBound item (2 file {Entity}.cs + {Entity}.generated.cs sinh từ entity metadata — bắt buộc kết nối;
-# interactive sẽ hiện list entity searchable, --entity nhận cả logical name lẫn schema name)
-devkit new --kind item --type LateBound --entity account --out Contoso.Shared/Entities
+# LateBound item — --project REQUIRED cho mọi item template (2 file {Entity}.cs + {Entity}.generated.cs
+# sinh từ entity metadata — bắt buộc kết nối; interactive hiện list entity searchable, --entity nhận cả logical lẫn schema name)
+devkit new --kind item --type LateBound --entity account --project Contoso.Shared --out Contoso.Shared/Entities
 
-# JsForm item (3 file {Entity}.js + {Entity}.form.js + {Entity}.d.ts sinh từ form metadata — bắt buộc kết nối;
-# thường trỏ vào folder entities/ của WebResource project)
-devkit new --kind item --type JsForm --entity account --out Contoso.WebResource/entities
+# JsForm item (3 file {Entity}.js + {Entity}.form.js + {Entity}.d.ts sinh từ form metadata — bắt buộc kết nối)
+devkit new --kind item --type JsForm --entity account --project Contoso.WebResource --out Contoso.WebResource/entities
 
-# JsWebApi item (3 file {Entity}.js + {Entity}.webapi.js + {Entity}.d.ts sinh từ attribute metadata — bắt buộc kết nối;
-# thường trỏ vào folder entities/ của WebResource project)
-devkit new --kind item --type JsWebApi --entity account --out Contoso.WebResource/entities
+# JsWebApi item (3 file {Entity}.js + {Entity}.webapi.js + {Entity}.d.ts sinh từ attribute metadata — bắt buộc kết nối)
+devkit new --kind item --type JsWebApi --entity account --project Contoso.WebResource --out Contoso.WebResource/entities
+
+# Plugin item (T4 render {Class}.cs vào project Server — comment block tự đọc từ org;
+# PreValidation/PreOperation luôn Synchronous, Asynchronous chỉ ở PostOperation;
+# interactive thiếu gì tự hỏi theo thứ tự form wizard: Entity→Message→Stage→Execution→Class→Template, KHÔNG hỏi order)
+devkit new --kind item --type Plugin --entity account --message Update --stage PreOperation --execution Synchronous --order 1 --name PreAccountUpdateSynchronous --project Contoso.Server --out Contoso.Server
+
+# Plugin item với custom T4 từ file .tt
+devkit new --kind item --type Plugin --entity account --message Create --stage PostOperation --execution Asynchronous --name PostAccountCreate --project Contoso.Server --out Contoso.Server --t4 C:/templates/MyPlugin.tt
 
 # Scaffold vào folder solution khác
-devkit new --kind project --type Shared --name Dev.AllInOne.Shared --out /path/to/solution
+devkit new --kind project --type Shared --name Dev.AllInOne.Shared --solution /path/to/solution/Dev.AllInOne.slnx --out /path/to/solution
 
 # List toàn bộ template (plain cho AI)
 devkit new list --plain
