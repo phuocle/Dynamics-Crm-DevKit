@@ -1,6 +1,7 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -60,6 +61,25 @@ namespace DynamicsCrm.DevKit.Shared.Templates.T4
                     return await TemplatePayload.ReadSharedResourceAsync("tt.DataProviderRetrieveMultiple.tt");
             }
             return null;
+        }
+
+        /// <summary>
+        /// The custom template titles of one item type from
+        /// DynamicsCrm.DevKit.Cli.json — the contents of the FormPlugin
+        /// template combo minus the built-in "Default" (callers list that
+        /// first themselves). File order, like the wizard's combo.
+        /// </summary>
+        public static List<string> GetCustomTemplateTitles(ItemType itemType, string configJsonDirectory = null)
+        {
+            var fileName = FindConfigJsonPath(configJsonDirectory);
+            if (fileName == null || !File.Exists(fileName)) return new List<string>();
+            var configJson = JsonHelper.Deserialize<ConfigJson>(File.ReadAllText(fileName));
+            var customTemplates = configJson?.CustomTemplates;
+            if (customTemplates == null) return new List<string>();
+            return customTemplates
+                .Where(x => x.Type == $"{itemType}" && !string.IsNullOrWhiteSpace(x.Title))
+                .Select(x => x.Title)
+                .ToList();
         }
 
         private static async Task<CustomTemplate> FindCustomTemplateAsync(ItemType itemType, string templateTitle, string configJsonDirectory)

@@ -20,6 +20,14 @@ namespace DynamicsCrm.DevKit.Shared.Templates
         public ItemTemplateInput ItemInput { get; set; }
         public WorkspaceContext Workspace { get; set; }
         public Dictionary<string, string> Tokens { get; set; }
+
+        /// <summary>
+        /// The project file the item scaffolds into — resolved by the
+        /// engine from --project or the nearest project at/above the output
+        /// directory, and REQUIRED for every item template (the wizard
+        /// always knows the project: the Solution Explorer selection).
+        /// </summary>
+        public string ProjectFile { get; set; }
     }
 
     /// <summary>
@@ -153,14 +161,31 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             }
 
             var workspace = WorkspaceScanner.Scan(ResolveOutputDirectory(input.OutputDirectory));
+
+            // Every item template scaffolds INTO a project (the wizard's
+            // Solution Explorer selection): the project file names the
+            // RootNamespace the generated code compiles under. Required for
+            // ALL item templates — nothing resolves → error and stop, the
+            // VSIX wizard could never reach this state.
+            var outputDirectory = ResolveOutputDirectory(input.OutputDirectory);
+            var projectFile = ResolveItemProjectFile(input.ProjectName, outputDirectory, workspace);
+            if (projectFile == null)
+            {
+                result.AddError(!string.IsNullOrWhiteSpace(input.ProjectName)
+                    ? $"--project '{input.ProjectName}': project not found. Run 'devkit new' inside the project folder or check the name."
+                    : $"--project: required for item template '{descriptor.Id}' — run inside a project folder or pass --project <name>.");
+                return result;
+            }
             if (string.IsNullOrEmpty(input.RootNamespace))
             {
-                input.RootNamespace = workspace.RootNamespace;
+                // Read the data from the project file (aP): the RootNamespace
+                // element, or the file name like the scanner's fallback.
+                input.RootNamespace = ReadProjectRootNamespace(projectFile) ?? Path.GetFileNameWithoutExtension(projectFile);
             }
             var tokens = new Dictionary<string, string>(StringComparer.Ordinal);
             TokenEngine.AddItemTokens(tokens, input, workspace);
 
-            return await DispatchAsync(descriptor, workspace, tokens, null, input);
+            return await DispatchAsync(descriptor, workspace, tokens, null, input, projectFile);
         }
 
         /// <summary>
@@ -249,7 +274,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
 #endif
         }
 
-        private static async Task<ScaffoldResult> DispatchAsync(TemplateDescriptor descriptor, WorkspaceContext workspace, Dictionary<string, string> tokens, ProjectTemplateInput projectInput, ItemTemplateInput itemInput)
+        private static async Task<ScaffoldResult> DispatchAsync(TemplateDescriptor descriptor, WorkspaceContext workspace, Dictionary<string, string> tokens, ProjectTemplateInput projectInput, ItemTemplateInput itemInput, string projectFile = null)
         {
             var request = new ScaffoldRequest
             {
@@ -258,6 +283,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 Tokens = tokens,
                 ProjectInput = projectInput,
                 ItemInput = itemInput,
+                ProjectFile = projectFile,
             };
 
             var handler = FindHandler(descriptor.Kind, descriptor.Id);
@@ -292,6 +318,81 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             return string.IsNullOrWhiteSpace(outputDirectory)
                 ? System.IO.Directory.GetCurrentDirectory()
                 : Path.GetFullPath(outputDirectory);
+        }
+
+        /// <summary>
+        /// The project file an item scaffold targets. The named --project
+        /// wins (the walk up from the output directory first, then the
+        /// whole solution tree — the same bin/obj exclusions the scanner
+        /// applies); without a name the NEAREST project file at or above
+        /// the output directory stands: walking up parent by parent, the
+        /// first directory holding a .csproj (or a .shproj) names it —
+        /// the file-system equivalent of right-clicking inside a project
+        /// in Solution Explorer. Null when nothing matches.
+        /// </summary>
+        private static string ResolveItemProjectFile(string projectName, string outputDirectory, WorkspaceContext workspace)
+        {
+            if (!string.IsNullOrWhiteSpace(projectName))
+            {
+                var named = FindNamedProjectUp(outputDirectory, projectName, ".csproj") ??
+                            FindNamedProjectUp(outputDirectory, projectName, ".shproj");
+                if (named != null) return named;
+                var solutionDirectory = workspace?.SolutionDirectory;
+                if (!string.IsNullOrEmpty(solutionDirectory) && System.IO.Directory.Exists(solutionDirectory))
+                {
+                    var inSolution = System.IO.Directory
+                        .GetFiles(solutionDirectory, "*.csproj", SearchOption.AllDirectories)
+                        .Concat(System.IO.Directory.GetFiles(solutionDirectory, "*.shproj", SearchOption.AllDirectories))
+                        .Where(path => path.IndexOf("\\bin\\", StringComparison.OrdinalIgnoreCase) < 0 &&
+                                       path.IndexOf("\\obj\\", StringComparison.OrdinalIgnoreCase) < 0)
+                        .FirstOrDefault(path => string.Equals(Path.GetFileNameWithoutExtension(path), projectName, StringComparison.OrdinalIgnoreCase));
+                    if (inSolution != null) return inSolution;
+                }
+                return null;
+            }
+
+            var directory = new DirectoryInfo(outputDirectory);
+            while (directory != null)
+            {
+                var projectFile = System.IO.Directory.GetFiles(directory.FullName, "*.csproj").FirstOrDefault() ??
+                                  System.IO.Directory.GetFiles(directory.FullName, "*.shproj").FirstOrDefault();
+                if (projectFile != null) return projectFile;
+                directory = directory.Parent;
+            }
+            return null;
+        }
+
+        private static string FindNamedProjectUp(string startDirectory, string projectName, string extension)
+        {
+            var directory = new DirectoryInfo(string.IsNullOrWhiteSpace(startDirectory)
+                ? System.IO.Directory.GetCurrentDirectory()
+                : startDirectory);
+            while (directory != null)
+            {
+                var match = System.IO.Directory.GetFiles(directory.FullName, "*" + extension)
+                    .FirstOrDefault(path => string.Equals(Path.GetFileNameWithoutExtension(path), projectName, StringComparison.OrdinalIgnoreCase));
+                if (match != null) return match;
+                directory = directory.Parent;
+            }
+            return null;
+        }
+
+        private static string ReadProjectRootNamespace(string projectFile)
+        {
+            try
+            {
+                if (!projectFile.EndsWith(".csproj", StringComparison.OrdinalIgnoreCase)) return null;
+                var document = System.Xml.Linq.XDocument.Load(projectFile);
+                return document.Root?
+                    .Descendants("RootNamespace")
+                    .FirstOrDefault(element => !element.HasElements)?
+                    .Value?
+                    .Trim();
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

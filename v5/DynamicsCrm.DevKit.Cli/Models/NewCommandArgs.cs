@@ -46,9 +46,17 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("T4 template title from DynamicsCrm.DevKit.Cli.json (default: Default)")]
         public string Template { get; set; } = "Default";
 
+        [CommandOption("--t4")]
+        [Description("Path to a custom plugin .tt T4 file (default: built-in)")]
+        public string T4 { get; set; } = string.Empty;
+
         [CommandOption("--datasource")]
         [Description("Data source logical name (DataProvider item)")]
         public string Datasource { get; set; } = string.Empty;
+
+        [CommandOption("--project")]
+        [Description("REQUIRED for item templates: the project to scaffold into")]
+        public string Project { get; set; } = string.Empty;
 
         [CommandOption("--language")]
         [Description("Language code (LCID) for ResourceString items (e.g. 1033)")]
@@ -59,7 +67,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Out { get; set; } = string.Empty;
 
         [CommandOption("--solution")]
-        [Description("Solution file (.sln/.slnx) to add the new project to")]
+        [Description("REQUIRED for project templates: the .sln/.slnx to register in")]
         public string Solution { get; set; } = string.Empty;
 
         [CommandOption("--namespace")]
@@ -73,9 +81,5 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [CommandOption("--force")]
         [Description("Overwrite existing user files")]
         public bool Force { get; set; }
-
-        [CommandOption("-i|--interactive")]
-        [Description("Force the interactive wizard prompts")]
-        public bool Interactive { get; set; }
     }
 }

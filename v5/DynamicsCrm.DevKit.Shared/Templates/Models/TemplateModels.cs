@@ -109,11 +109,44 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Models
         public int Order { get; set; } = 1;
         public string Class { get; set; }
         public string DataSource { get; set; }
+
+        /// <summary>
+        /// The T4 template title from DynamicsCrm.DevKit.Cli.json
+        /// ("Default" = built-in resource) — the FormPlugin template combo.
+        /// </summary>
         public string TemplateTitle { get; set; } = "Default";
+
+        /// <summary>
+        /// Direct path to a custom .tt T4 file (CLI convenience; the wizard
+        /// only knows Cli.json titles). When set it wins over TemplateTitle.
+        /// </summary>
+        public string T4Path { get; set; }
+
+        /// <summary>
+        /// The comment rendered into the template's comment block — the
+        /// org-derived InputParameters/OutputParameters doc of the wizard.
+        /// Empty when the host has none (offline).
+        /// </summary>
+        public string Comment { get; set; }
+
+        /// <summary>
+        /// The project the item scaffolds into (the wizard's selected
+        /// project): names the .csproj/.shproj the RootNamespace and
+        /// $rootnamespace$ are read from. Empty = the nearest project at or
+        /// above the output directory.
+        /// </summary>
+        public string ProjectName { get; set; }
         public string RootNamespace { get; set; }
         public string OutputDirectory { get; set; }
         public CrmConnection CrmConnection { get; set; }
         public ServiceClient ServiceClient { get; set; }
+
+        /// <summary>
+        /// The host's T4 engine (CLI: MonoTextTransformer; the VSIX keeps
+        /// its VS T4 service). The Shared handlers render through this
+        /// contract — the Mono package is not referenced by the VSIX.
+        /// </summary>
+        public Templates.T4.ITextTransformer Transformer { get; set; }
         public bool Force { get; set; }
         public bool Offline { get; set; }
     }

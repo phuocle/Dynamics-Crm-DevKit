@@ -2,6 +2,8 @@ using DynamicsCrm.DevKit.Shared.Templates.T4;
 using DynamicsCrm.DevKit.Shared.Models;
 using System;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Templates
@@ -48,7 +50,54 @@ namespace DynamicsCrm.DevKit.Cli.Templates
                 throw new InvalidOperationException($"T4 transformation failed:{Environment.NewLine}{errors}");
             }
 
-            return result.Item2;
+            return SortLeadingUsings(result.Item2);
+        }
+
+        /// <summary>
+        /// The Visual Studio T4 host organizes the leading using directives
+        /// of its output alphabetically (the I.4 wizard compare: the
+        /// rendered plugin file opens with the Shared namespace, not the
+        /// template's literal order). The CLI engine mirrors that so T4
+        /// renders stay byte-identical across hosts.
+        /// </summary>
+        private static string SortLeadingUsings(string output)
+        {
+            if (string.IsNullOrEmpty(output)) return output;
+
+            var directives = new System.Collections.Generic.List<string>();
+            var position = 0;
+            var match = LeadingUsing().Match(output, position);
+            while (match.Success && match.Index == position)
+            {
+                directives.Add(match.Value);
+                position = match.Index + match.Length;
+                match = LeadingUsing().Match(output, position);
+            }
+            if (directives.Count < 2) return output;
+
+            // The host sorts by the namespace NAME — "Microsoft.Xrm.Sdk"
+            // precedes "Microsoft.Xrm.Sdk.Extensions" (prefix first; the
+            // raw line's ';' would sort the other way).
+            directives.Sort((left, right) => string.Compare(
+                UsingName().Match(left).Groups[1].Value,
+                UsingName().Match(right).Groups[1].Value,
+                StringComparison.OrdinalIgnoreCase));
+            return string.Concat(directives) + output.Substring(position);
+        }
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        private static Regex LeadingUsing()
+        {
+            // One leading using directive line, its line ending included
+            // (Multiline anchors ^ at every line start while the block scan
+            // advances through the output).
+            return new Regex("^using [^;\r\n]+;[ \t]*(?:\r?\n|$)", RegexOptions.Compiled | RegexOptions.Multiline);
+        }
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        private static Regex UsingName()
+        {
+            return new Regex("^using[ \t]+([^;\r\n]+);[ \t]*(?:\r?\n)?$", RegexOptions.Compiled);
         }
     }
 }

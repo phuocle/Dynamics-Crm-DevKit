@@ -121,8 +121,12 @@ namespace DynamicsCrm.DevKit.Shared.Templates.T4
 
         private static string BuildComment(ItemTemplateInput input)
         {
-            // The VSIX forms derive the comment from the dialog selection;
-            // hosts may pass it pre-built through Name when Class is set.
+            // The wizard derives the comment from the org (the plugin
+            // message's InputParameters/OutputParameters doc); hosts pass it
+            // pre-built through Comment — an EMPTY string is a provided
+            // "no comment" (offline), null falls back to the legacy
+            // Name-when-Class-is-set hosts.
+            if (input.Comment != null) return input.Comment;
             return !string.IsNullOrEmpty(input.Class) && !string.IsNullOrEmpty(input.Name) ? input.Name : input.Class ?? input.Name;
         }
     }
