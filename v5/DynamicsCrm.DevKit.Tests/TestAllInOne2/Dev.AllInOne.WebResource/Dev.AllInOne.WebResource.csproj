@@ -53,6 +53,9 @@
     <None Update="entities\Account.form.js">
       <DependentUpon>Account.js</DependentUpon>
     </None>
+    <None Update="entities\Account.webapi.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </None>
   </ItemGroup>
 </Project>
 <!-- v.4.44.44.44 - Build: 31.12.2026 23.59.59 -->
