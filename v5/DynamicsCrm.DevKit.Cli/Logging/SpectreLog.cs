@@ -80,7 +80,8 @@ namespace DynamicsCrm.DevKit.Cli
                 "  uploadreport           Upload reports to a solution\n" +
                 "  downloadwebresource    Download web resources from a solution\n" +
                 "  datasource             Create data source entities\n" +
-                "  new                    Create DevKit project/item templates (cross-platform wizard)\n" +
+                "  new-project            Create a DevKit PROJECT template in the required solution\n" +
+                "  new-item               Create a DevKit ITEM template in the required project\n" +
                 "  mcp                    Start MCP server for AI agent integration\n\n" +
                 "Connection Options:\n" +
                 "  --conn STRING          Dynamics 365 connection string (legacy)\n" +
@@ -106,8 +107,8 @@ namespace DynamicsCrm.DevKit.Cli
                 "  devkit server --auth Interactive --url https://org.crm.dynamics.com --json cli.json --profile PROD\n" +
                 "  devkit server --auth FromPac --pacprofile DEVKITV4 --json cli.json --profile DEBUG\n" +
                 "  devkit server --auth ClientSecret --url URL --clientid ID --clientsecret SEC --json cli.json --profile CI\n" +
-                "  devkit new --kind project --type Shared --name Contoso.Shared\n" +
-                "  devkit new --kind item --type LateBound --entity account\n" +
+                "  devkit new-project --type Shared --name Contoso.Shared --solution MySolution.slnx\n" +
+                "  devkit new-item --type Plugin --entity Account --message Update --stage PreOperation --name PreAccountUpdate --project Contoso.Server\n" +
                 "  devkit mcp --auth ClientSecret --url URL --clientid ID --clientsecret SEC\n\n" +
                 "Project .env Fallback (DEVKIT_*):\n" +
                 "  Normal commands & tool call: CLI args > project .env > validation error.\n" +
@@ -152,7 +153,8 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]uploadreport[/]           Upload reports to a solution\n" +
                     "  [cyan]downloadwebresource[/]    Download web resources from a solution\n" +
                     "  [cyan]datasource[/]             Create data source entities\n" +
-                    "  [cyan]new[/]                    Create DevKit project/item templates (run: devkit new list)\n" +
+                    "  [cyan]new-project[/]            Create a DevKit PROJECT template in the required solution\n" +
+                    "  [cyan]new-item[/]               Create a DevKit ITEM template in the required project\n" +
                     "  [cyan]mcp[/]                    Start MCP server for AI agent integration\n\n" +
                     "[green]Connection Options:[/]\n" +
                     "  --conn [yellow]STRING[/]          Dynamics 365 connection string (legacy)\n" +
@@ -178,8 +180,8 @@ namespace DynamicsCrm.DevKit.Cli
                     "  devkit server --auth [cyan]Interactive[/] --url [cyan]https://org.crm.dynamics.com[/] --json [cyan]cli.json[/] --profile [cyan]PROD[/]\n" +
                     "  devkit server --auth [cyan]FromPac[/] --pacprofile [cyan]DEVKITV4[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/]\n" +
                     "  devkit server --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/] --json [cyan]cli.json[/] --profile [cyan]CI[/]\n" +
-                    "  devkit [cyan]new[/] --kind project --type [cyan]Shared[/] --name [cyan]Contoso.Shared[/]\n" +
-                    "  devkit [cyan]new[/] --kind item --type [cyan]LateBound[/] --entity [cyan]account[/]\n" +
+                    "  devkit [cyan]new-project[/] --type [cyan]Shared[/] --name [cyan]Contoso.Shared[/] --solution [cyan]MySolution.slnx[/]\n" +
+                    "  devkit [cyan]new-item[/] --type [cyan]Plugin[/] --entity [cyan]Account[/] --message [cyan]Update[/] --stage [cyan]PreOperation[/] --name [cyan]PreAccountUpdate[/] --project [cyan]Contoso.Server[/]\n" +
                     "  devkit mcp --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/]\n\n" +
                     "[green]Project .env values (DEVKIT_*):[/]\n" +
                     "  Normal commands: CLI args > project .env > validation error.\n" +

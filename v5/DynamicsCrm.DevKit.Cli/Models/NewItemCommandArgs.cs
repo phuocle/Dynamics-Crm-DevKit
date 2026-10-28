@@ -4,22 +4,23 @@ using System.ComponentModel;
 namespace DynamicsCrm.DevKit.Shared.Models
 {
     /// <summary>
-    /// Settings for 'devkit new' - scaffold DevKit project/item templates
-    /// cross-platform. Interactive wizard prompts (Spectre.Console) fill
-    /// missing values when the command runs in an interactive terminal.
+    /// Settings for 'devkit new-item' - scaffolds one DevKit ITEM template
+    /// (LateBound, JsForm, Plugin, ...) into the required project. Split
+    /// from the old combined 'devkit new' so the command owns exactly the
+    /// arguments its templates take.
     /// </summary>
-    public class NewCommandArgs : DevKitCommandArgs
+    public class NewItemCommandArgs : DevKitCommandArgs
     {
-        [CommandOption("--kind")]
-        [Description("project, item or list")]
-        public string Kind { get; set; } = string.Empty;
+        [CommandArgument(0, "[list]")]
+        [Description("Show the available item templates")]
+        public string List { get; set; } = string.Empty;
 
         [CommandOption("--type")]
-        [Description("Template type id — run 'devkit new list' to see all types")]
+        [Description("Template type id — run 'devkit new-item list' to see all types")]
         public string Type { get; set; } = string.Empty;
 
         [CommandOption("--name")]
-        [Description("Project name, class name, dialog name or report name")]
+        [Description("Class name, dialog name or report name")]
         public string Name { get; set; } = string.Empty;
 
         [CommandOption("--entity")]
@@ -54,25 +55,21 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("Data source logical name (DataProvider item)")]
         public string Datasource { get; set; } = string.Empty;
 
-        [CommandOption("--project")]
-        [Description("REQUIRED for item templates: the project to scaffold into")]
-        public string Project { get; set; } = string.Empty;
-
         [CommandOption("--language")]
         [Description("Language code (LCID) for ResourceString items (e.g. 1033)")]
         public string Language { get; set; } = string.Empty;
 
-        [CommandOption("--out")]
-        [Description("Output directory (default: current directory)")]
-        public string Out { get; set; } = string.Empty;
-
-        [CommandOption("--solution")]
-        [Description("REQUIRED for project templates: the .sln/.slnx to register in")]
-        public string Solution { get; set; } = string.Empty;
-
         [CommandOption("--namespace")]
         [Description("Explicit namespace override for item templates")]
         public string Namespace { get; set; } = string.Empty;
+
+        [CommandOption("--project")]
+        [Description("The project the item scaffolds into")]
+        public string Project { get; set; } = string.Empty;
+
+        [CommandOption("--out")]
+        [Description("Output directory (default: the project directory)")]
+        public string Out { get; set; } = string.Empty;
 
         [CommandOption("--offline")]
         [Description("Skip live Dataverse connection (validate nothing, bake placeholders)")]

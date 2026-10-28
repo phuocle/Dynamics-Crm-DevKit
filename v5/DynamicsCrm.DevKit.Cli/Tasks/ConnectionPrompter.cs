@@ -11,19 +11,29 @@ using System.Linq;
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     /// <summary>
-    /// Interactive connection prompt of 'devkit new' — the CLI twin of the
-    /// VSIX FormConnection dialog: pick the connection type, then answer the
-    /// per-type questions with defaults suggested from the project .env.
-    /// Accepting the .env shortcut produces the same UseProjectEnvironment
-    /// marker connection the VSIX "use project .env" checkbox saves.
+    /// Interactive connection prompt of 'devkit new-project' — the CLI twin
+    /// of the VSIX FormConnection dialog: pick the connection type, then
+    /// answer the per-type questions with defaults suggested from the
+    /// project .env. Accepting the .env shortcut produces the same
+    /// UseProjectEnvironment marker connection the VSIX "use project .env"
+    /// checkbox saves. The prompt is skippable — the VSIX dialog allows OK
+    /// without connecting, and skipping here returns null so the generated
+    /// files bake the project .env markers (aP: no --offline flag on
+    /// new-project).
     /// </summary>
     internal static class ConnectionPrompter
     {
+        private const string SkipChoice = "(skip — configure later via the project .env)";
+
         public static CrmConnection Prompt(IReadOnlyList<string> supportedTypes, string outputDirectory)
         {
             var environment = ReadEnvironment(outputDirectory);
 
             var type = PromptType(supportedTypes, environment);
+            if (type == null)
+            {
+                return null;
+            }
             if (type == "FromPac")
             {
                 return PromptFromPac();
@@ -55,21 +65,25 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private static string PromptType(IReadOnlyList<string> supportedTypes, IDictionary<string, string> environment)
         {
-            var choices = supportedTypes.ToList();
-            // The .env auth type (when supported here) leads the list — the
-            // suggested default of the prompt.
-            var suggested = SuggestType(environment, choices);
+            // The skip choice leads when the .env suggests nothing — the
+            // Enter-to-skip mirror of pressing OK in the VSIX dialog without
+            // connecting. With an .env AuthType present that suggestion
+            // keeps the lead (its "use the project .env values" flow bakes
+            // the same markers).
+            var choices = new List<string> { SkipChoice };
+            choices.AddRange(supportedTypes);
+            var suggested = SuggestType(environment, supportedTypes);
             if (suggested != null)
             {
                 choices.Remove(suggested);
-                choices.Insert(0, suggested);
+                choices.Insert(1, suggested);
             }
 
             var choice = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
-                    .Title("Select a [green]connection type[/] [grey](AuthType)[/]:")
+                    .Title("Configure the [green]connection[/] now? [grey](pick a type, or skip and the generated files use the project .env)[/]:")
                     .AddChoices(choices));
-            return choice;
+            return choice == SkipChoice ? null : choice;
         }
 
         private static string SuggestType(IDictionary<string, string> environment, IReadOnlyList<string> choices)

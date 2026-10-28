@@ -107,7 +107,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             var descriptor = TemplateCatalog.Find(input.TemplateId, TemplateKind.Project);
             if (descriptor == null)
             {
-                result.AddError($"--type '{input.TemplateId}': unknown project template. Use 'devkit new list' to see all templates.");
+                result.AddError($"--type '{input.TemplateId}': unknown project template. Use 'devkit new-project list' to see all templates.");
                 return result;
             }
             if (string.IsNullOrWhiteSpace(input.ProjectName))
@@ -132,6 +132,17 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 }
                 workspace = WorkspaceScanner.FromSolution(solutionFile, ResolveOutputDirectory(input.OutputDirectory));
             }
+
+            // The VSIX project wizards are run-once: a project that already
+            // exists is an ERROR, never a regeneration (aP ruling — the CLI
+            // carries no --force). The engine-level Force stays as the
+            // test/MCP escape hatch.
+            var projectDirectory = Path.Combine(ResolveOutputDirectory(input.OutputDirectory), input.ProjectName);
+            if (!input.Force && Directory.Exists(projectDirectory) && Directory.EnumerateFileSystemEntries(projectDirectory).Any())
+            {
+                result.AddError($"--name '{input.ProjectName}': project already exists — remove it or scaffold with another name.");
+                return result;
+            }
             Directory.CreateDirectory(ResolveOutputDirectory(input.OutputDirectory));
             var tokens = new Dictionary<string, string>(StringComparer.Ordinal);
             await TokenEngine.AddProjectTokensAsync(tokens, input, workspace);
@@ -151,7 +162,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             var descriptor = TemplateCatalog.Find(input.TemplateId, TemplateKind.Item);
             if (descriptor == null)
             {
-                result.AddError($"--type '{input.TemplateId}': unknown item template. Use 'devkit new list' to see all templates.");
+                result.AddError($"--type '{input.TemplateId}': unknown item template. Use 'devkit new-item list' to see all templates.");
                 return result;
             }
             if (string.IsNullOrWhiteSpace(input.Name) && string.IsNullOrWhiteSpace(input.Entity))
@@ -172,7 +183,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             if (projectFile == null)
             {
                 result.AddError(!string.IsNullOrWhiteSpace(input.ProjectName)
-                    ? $"--project '{input.ProjectName}': project not found. Run 'devkit new' inside the project folder or check the name."
+                    ? $"--project '{input.ProjectName}': project not found. Run 'devkit new-item' inside the project folder or check the name."
                     : $"--project: required for item template '{descriptor.Id}' — run inside a project folder or pass --project <name>.");
                 return result;
             }

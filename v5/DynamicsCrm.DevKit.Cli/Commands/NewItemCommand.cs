@@ -12,34 +12,36 @@ using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.Commands
 {
     /// <summary>
-    /// Command for 'devkit new' - scaffolds DevKit project/item templates
-    /// cross-platform through the shared ScaffoldingEngine. Scaffolding a
-    /// new project in an empty folder needs neither a profile nor a
-    /// DynamicsCrm.DevKit.Cli.json, and most templates generate offline,
-    /// so validation requires no Dataverse connection.
+    /// Command for 'devkit new-item' — scaffolds one DevKit ITEM template
+    /// into the required --project. Item templates marked
+    /// RequiresConnection (LateBound, JsForm, JsWebApi) generate from live
+    /// entity metadata and connect here, while the others generate fully
+    /// offline.
     /// </summary>
-    public class NewCommand : DevKitCommand<NewCommandArgs>
+    public class NewItemCommand : DevKitCommand<NewItemCommandArgs>
     {
-        protected override bool IsProfileRequired(NewCommandArgs settings)
+        protected override bool IsProfileRequired(NewItemCommandArgs settings)
         {
             return false;
         }
 
-        protected override bool IsJsonRequired(NewCommandArgs settings)
+        protected override bool IsJsonRequired(NewItemCommandArgs settings)
         {
             return false;
         }
 
-        protected override async Task<bool> IsValidAsync(NewCommandArgs settings)
+        protected override async Task<bool> IsValidAsync(NewItemCommandArgs settings)
         {
+            // 'devkit new-item list' is a catalog print — no args table and
+            // no connection.
+            if (!string.IsNullOrWhiteSpace(settings.List)) return true;
             var argRows = new List<string[]>
             {
-                new[] { "Arguments: --kind", settings.Kind },
-                new[] { "           --type", settings.Type },
+                new[] { "Arguments: --type", settings.Type },
                 new[] { "           --name", settings.Name },
                 new[] { "           --entity", settings.Entity },
+                new[] { "           --project", settings.Project },
                 new[] { "           --out", settings.Out },
-                new[] { "           --solution", settings.Solution },
                 new[] { "           --offline", settings.Offline ? "true" : "false" },
                 new[] { "           --force", settings.Force ? "true" : "false" }
             };
@@ -47,8 +49,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
             // Item templates marked RequiresConnection (LateBound) generate
             // from live entity metadata — connect here like the base command
-            // does, while the project templates and 'new list' stay fully
-            // offline.
+            // does, while the remaining item templates stay fully offline.
             if (ItemConnectionRequired(settings))
             {
                 settings.ServiceClient = await ConnectAsync(settings);
@@ -59,15 +60,13 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             return true;
         }
 
-        protected override async Task RunTaskAsync(NewCommandArgs settings)
+        protected override async Task RunTaskAsync(NewItemCommandArgs settings)
         {
-            await TaskNew.RunAsync(settings);
+            await TaskNewItem.RunAsync(settings);
         }
 
-        private static bool ItemConnectionRequired(NewCommandArgs settings)
+        private static bool ItemConnectionRequired(NewItemCommandArgs settings)
         {
-            var kind = (settings.Kind ?? string.Empty).Trim();
-            if (!kind.Equals("item", StringComparison.OrdinalIgnoreCase)) return false;
             if (string.IsNullOrWhiteSpace(settings.Type) || settings.Offline) return false;
             var descriptor = TemplateCatalog.Find(settings.Type, TemplateKind.Item);
             return descriptor?.RequiresConnection == true;
@@ -78,7 +77,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         /// the project .env fallback is already applied by
         /// ResolveProjectEnvironmentDefaults), else the legacy --conn string.
         /// </summary>
-        private async Task<ServiceClient> ConnectAsync(NewCommandArgs settings)
+        private async Task<ServiceClient> ConnectAsync(NewItemCommandArgs settings)
         {
             if (!string.IsNullOrWhiteSpace(settings.AuthType))
             {
