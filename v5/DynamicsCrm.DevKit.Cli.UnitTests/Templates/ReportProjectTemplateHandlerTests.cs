@@ -386,19 +386,20 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
         }
 
         [TestMethod]
-        public async Task ScaffoldAsync_ReportProject_RerunKeepsUserEdits()
+        public async Task ScaffoldAsync_ReportProject_RerunFails_ForcedRegenerates()
         {
             Assert.IsTrue((await ScaffoldingEngine.ScaffoldProjectAsync(Input(Marker("ClientSecret")))).Success);
 
             // The .rptproj is user territory (reports, datasets and data
-            // sources are registered there): a rerun keeps the edited file
-            // on disk (Skipped), --force regenerates it (Updated).
+            // sources are registered there). Run-once (aP): a rerun over an
+            // existing project is an error; the engine-level Force is the
+            // only regeneration path.
             var reportFile = Path.Combine(_projectDirectory, "Contoso.Report.rptproj");
             File.WriteAllText(reportFile, "<Project ToolsVersion=\"Current\" user-edited />");
 
             var second = await ScaffoldingEngine.ScaffoldProjectAsync(Input(Marker("ClientSecret")));
-            Assert.IsTrue(second.Success);
-            Assert.AreEqual("Skipped", second.Files.Single(file => file.FilePath == reportFile).Action);
+            Assert.IsFalse(second.Success);
+            StringAssert.Contains(second.Errors.Single(), "already exists");
             Assert.AreEqual("<Project ToolsVersion=\"Current\" user-edited />", File.ReadAllText(reportFile));
 
             var forced = await ScaffoldingEngine.ScaffoldProjectAsync(Input(Marker("ClientSecret"), force: true));
@@ -512,9 +513,10 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
 
             var second = await ScaffoldingEngine.ScaffoldProjectAsync(Input(Marker("ClientSecret")));
 
-            Assert.IsTrue(second.Success);
-            Assert.IsTrue(second.Warnings.Any(warning => warning.Contains("already exists")));
-            Assert.IsTrue(second.Files.All(file => file.Action == "Skipped" || file.Action == "Unchanged"));
+            // Run-once (aP): the second scaffold over an existing project
+            // fails - the CLI has no --force and nothing is touched.
+            Assert.IsFalse(second.Success);
+            StringAssert.Contains(second.Errors.Single(), "already exists");
             Assert.AreEqual("customized by user", File.ReadAllText(userFile));
         }
 

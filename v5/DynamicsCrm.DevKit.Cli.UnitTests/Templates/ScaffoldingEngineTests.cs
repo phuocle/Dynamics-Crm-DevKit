@@ -111,8 +111,10 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
         }
 
         [TestMethod]
-        public async Task ScaffoldProjectAsync_RerunSkipsUserFiles()
+        public async Task ScaffoldProjectAsync_RerunFailsWithAlreadyExists()
         {
+            // Run-once (aP): the second scaffold over an existing project
+            // fails - the CLI has no --force and nothing is touched.
             var manifest = new TemplateManifest { TemplateId = "Shared", Kind = TemplateKind.Project };
             manifest.Files.Add(new TemplatePayloadFile
             {
@@ -126,13 +128,9 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             var first = await ScaffoldingEngine.ScaffoldProjectAsync(input);
             Assert.AreEqual(1, first.Files.Count(file => file.Action == "Created"));
 
-            // A user edit must never be overwritten by a re-run.
-            var generated = Path.Combine(_directory, "Contoso.Shared", "generator.bat");
-            File.WriteAllText(generated, "rem customized by user");
-
             var second = await ScaffoldingEngine.ScaffoldProjectAsync(input);
-            Assert.AreEqual("Skipped", second.Files[0].Action);
-            Assert.AreEqual("rem customized by user", File.ReadAllText(generated));
+            Assert.IsFalse(second.Success);
+            StringAssert.Contains(second.Errors.Single(), "already exists");
         }
 
         [TestMethod]

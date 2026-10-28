@@ -336,9 +336,10 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
 
             var second = await ScaffoldingEngine.ScaffoldProjectAsync(Input());
 
-            Assert.IsTrue(second.Success);
-            Assert.IsTrue(second.Warnings.Any(warning => warning.Contains("already exists")));
-            Assert.IsTrue(second.Files.All(file => file.Action == "Skipped" || file.Action == "Unchanged"));
+            // Run-once (aP): the second scaffold over an existing project
+            // fails - the CLI has no --force and nothing is touched.
+            Assert.IsFalse(second.Success);
+            StringAssert.Contains(second.Errors.Single(), "already exists");
             Assert.AreEqual("customized by user", File.ReadAllText(userFile));
         }
 

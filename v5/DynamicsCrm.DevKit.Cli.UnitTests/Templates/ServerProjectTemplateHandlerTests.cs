@@ -449,7 +449,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
         }
 
         [TestMethod]
-        public async Task ScaffoldAsync_RerunSkipsAndKeepsSnk()
+        public async Task ScaffoldAsync_RerunFailsAndKeepsSnk()
         {
             await ScaffoldSharedAsync();
             Assert.IsTrue((await ScaffoldingEngine.ScaffoldProjectAsync(Input(Marker("ClientSecret")))).Success);
@@ -461,10 +461,10 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
 
             var second = await ScaffoldingEngine.ScaffoldProjectAsync(Input(Marker("ClientSecret")));
 
-            Assert.IsTrue(second.Success);
-            Assert.IsTrue(second.Warnings.Any(warning => warning.Contains("already exists")));
-            Assert.IsTrue(second.Files.All(file => file.Action == "Skipped" || file.Action == "Unchanged"));
-            Assert.AreEqual("Skipped", second.Files.Single(file => file.FilePath == snkPath).Action);
+            // Run-once (aP): the second scaffold over an existing project
+            // fails - the CLI has no --force and nothing is touched.
+            Assert.IsFalse(second.Success);
+            StringAssert.Contains(second.Errors.Single(), "already exists");
             // The key is kept: regenerating would silently change the
             // assembly identity of an already-deployed plugin.
             CollectionAssert.AreEqual(snkBefore, File.ReadAllBytes(snkPath));
