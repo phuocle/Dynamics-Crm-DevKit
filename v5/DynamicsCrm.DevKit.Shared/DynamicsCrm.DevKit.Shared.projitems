@@ -308,6 +308,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\JsFormItemTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\JsWebApiItemTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\PluginItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\CustomActionItemTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\LateBoundItemTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TemplateHandlers.cs" />
   </ItemGroup>

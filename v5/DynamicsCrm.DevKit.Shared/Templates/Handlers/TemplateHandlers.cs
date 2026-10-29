@@ -48,6 +48,8 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             TemplateManifests.Register(JsWebApiItemTemplateHandler.CreateManifest());
             ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new PluginItemTemplateHandler());
             TemplateManifests.Register(PluginItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new CustomActionItemTemplateHandler());
+            TemplateManifests.Register(CustomActionItemTemplateHandler.CreateManifest());
         }
     }
 }

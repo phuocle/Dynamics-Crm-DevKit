@@ -61,6 +61,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (string.IsNullOrWhiteSpace(args.Stage)) missing.Add("--stage <PreValidation|PreOperation|PostOperation>");
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <class-name>");
                 }
+                else if (typeDescriptor?.Id == ItemType.CustomAction.ToString())
+                {
+                    if (string.IsNullOrWhiteSpace(args.Entity)) missing.Add("--entity <schema-name|none>");
+                    if (string.IsNullOrWhiteSpace(args.Message)) missing.Add("--message <custom-action>");
+                    if (string.IsNullOrWhiteSpace(args.Stage)) missing.Add("--stage <PreValidation|PreOperation|PostOperation>");
+                    if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <class-name>");
+                }
                 else if (typeDescriptor != null &&
                          (typeDescriptor.Id == ItemType.LateBound.ToString() ||
                           typeDescriptor.Id == ItemType.JsForm.ToString() ||
@@ -112,10 +119,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             // Entity-driven item templates (LateBound) generate from
             // live entity metadata — there is no offline fallback: the
             // generated class is built from the entity's attributes.
-            // The T4 items (Plugin first, I.4) render from the typed
-            // values: work unit §5 allows full manual input offline
-            // with a warning in the result.
-            if (descriptor.RequiresConnection && args.Offline && descriptor.Id != ItemType.Plugin.ToString())
+            // The T4 items (Plugin first, I.4; CustomAction, I.5) render
+            // from the typed values: work unit §5 allows full manual
+            // input offline with a warning in the result.
+            var isPlugin = descriptor.Id == ItemType.Plugin.ToString();
+            var isCustomAction = descriptor.Id == ItemType.CustomAction.ToString();
+            if (descriptor.RequiresConnection && args.Offline && !isPlugin && !isCustomAction)
             {
                 throw new DevKitValidationException($"--offline: template '{descriptor.Id}' requires a Dataverse connection to read entity metadata. Run without --offline and pass --auth/--conn (or run from a folder with a project .env).");
             }
@@ -125,7 +134,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // (searchable, the CLI twin of the FormItem list). The
                 // metadata read once into the XrmHelper cache also feeds
                 // the codegen. Non-interactive runs pass --entity.
-                if (string.IsNullOrWhiteSpace(args.Entity) && args.ServiceClient != null && TaskNewShared.CanPrompt())
+                // CustomAction is excluded: its dialog inserts the "None"
+                // choice at the top, so its chain owns the entity prompt.
+                if (!isCustomAction &&
+                    string.IsNullOrWhiteSpace(args.Entity) && args.ServiceClient != null && TaskNewShared.CanPrompt())
                 {
                     await new MetadataService(args.ServiceClient).ReadEntitiesMetadataAsync(EntityFilters.Attributes);
                     var schemas = XrmHelper.EntitiesMetadata.Select(x => x.SchemaName).OrderBy(x => x, StringComparer.OrdinalIgnoreCase).ToList();
@@ -141,12 +153,20 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 args.Name = AnsiConsole.Prompt(new TextPrompt<string>("[green]Name[/]:").AllowEmpty());
             }
-            var isPlugin = descriptor.Id == ItemType.Plugin.ToString();
             if (isPlugin)
             {
                 // The FormPlugin twin: entity → message → stage →
                 // execution → class name → custom template.
                 await PromptPluginItemAsync(args);
+            }
+            else if (isCustomAction)
+            {
+                // The FormPlugin twin for CustomAction: entity (the
+                // wizard's None choice first) → custom action → stage →
+                // execution → class name → custom template. No execution
+                // prompt difference: the dialog locks Synchronous for
+                // PreValidation/PreOperation exactly like Plugin.
+                await PromptCustomActionItemAsync(args);
             }
             var input = new ItemTemplateInput
             {
@@ -337,6 +357,191 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var configDirectory = string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : args.Out;
                 var titles = T4TemplateResolver.GetCustomTemplateTitles(ItemType.Plugin, configDirectory);
+                if (titles.Count > 0)
+                {
+                    args.Template = AnsiConsole.Prompt(
+                        new SelectionPrompt<string>()
+                            .Title("Select a [green]template[/] [grey](--template)[/]:")
+                            .AddChoices(new[] { T4TemplateResolver.DefaultTemplateTitle }.Concat(titles)));
+                }
+            }
+        }
+
+        /// <summary>
+        /// The CustomAction item prompt chain — the CLI twin of FormPlugin
+        /// with ItemType.CustomAction: entity (the wizard inserts "None"
+        /// at the top — an unbound custom action registration) → custom
+        /// action (MetadataService.GetCustomActionsAsync, the dialog's own
+        /// message combo) → stage → execution (PreValidation/PreOperation
+        /// lock Synchronous) → class name (the FormPlugin suggestion) →
+        /// custom T4 template. Every prompt is skipped when its flag is
+        /// present; non-interactive runs fail on a missing required value
+        /// instead of prompting. Order is not prompted (the dialog has no
+        /// order field) — it comes from --order.
+        /// </summary>
+        private static async Task PromptCustomActionItemAsync(NewItemCommandArgs args)
+        {
+            var canPrompt = TaskNewShared.CanPrompt();
+
+            if (string.IsNullOrWhiteSpace(args.Entity))
+            {
+                if (!canPrompt)
+                {
+                    throw new DevKitValidationException("--entity: required for template 'CustomAction' — a schema name or 'none' for an unbound custom action.");
+                }
+                if (args.ServiceClient != null)
+                {
+                    await new MetadataService(args.ServiceClient).ReadEntitiesMetadataAsync(EntityFilters.Entity);
+                    // FormPlugin.Connection_Connected: the entities ordered
+                    // by logical name with "None" inserted at the top.
+                    var schemas = XrmHelper.EntitiesMetadata
+                        .Select(x => x.LogicalName)
+                        .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
+                        .ToList();
+                    args.Entity = AnsiConsole.Prompt(
+                        new SelectionPrompt<string>()
+                            .Title("Select an [green]entity[/] [grey](--entity, 'None' for an unbound custom action)[/]:")
+                            .PageSize(20)
+                            .EnableSearch()
+                            .AddChoices(new[] { CustomActionItemTemplateHandler.NoneSchemaName }.Concat(schemas)));
+                }
+                else
+                {
+                    args.Entity = AnsiConsole.Prompt(new TextPrompt<string>("Entity [green]schema name[/] [grey](--entity, 'none' for an unbound custom action)[/]:"));
+                }
+            }
+
+            // The wizard's None choice: SchemaName "None", LogicalName
+            // "none" — the unbound registration. Any other value resolves
+            // through the org metadata (connected) or is typed and trusted
+            // (offline).
+            string schemaName;
+            string logicalName;
+            if (CustomActionItemTemplateHandler.IsNoneEntity(args.Entity))
+            {
+                schemaName = CustomActionItemTemplateHandler.NoneSchemaName;
+                logicalName = CustomActionItemTemplateHandler.NoneLogicalName;
+            }
+            else if (args.ServiceClient != null)
+            {
+                if (XrmHelper.EntitiesMetadata.Count == 0)
+                {
+                    await new MetadataService(args.ServiceClient).ReadEntitiesMetadataAsync(EntityFilters.Entity);
+                }
+                var metadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x =>
+                    string.Equals(x.SchemaName, args.Entity, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(x.LogicalName, args.Entity, StringComparison.OrdinalIgnoreCase));
+                if (metadata == null)
+                {
+                    throw new DevKitValidationException($"--entity '{args.Entity}': entity not found in the current instance.");
+                }
+                schemaName = metadata.SchemaName;
+                logicalName = metadata.LogicalName;
+            }
+            else
+            {
+                schemaName = args.Entity;
+                logicalName = args.Entity.ToLowerInvariant();
+            }
+
+            if (string.IsNullOrWhiteSpace(args.Message))
+            {
+                if (!canPrompt)
+                {
+                    throw new DevKitValidationException("--message: required for template 'CustomAction'.");
+                }
+                if (args.ServiceClient != null)
+                {
+                    var actions = logicalName == CustomActionItemTemplateHandler.NoneLogicalName
+                        ? await new MetadataService(args.ServiceClient).GetCustomActionsAsync()
+                        : await new MetadataService(args.ServiceClient).GetCustomActionsAsync(logicalName);
+                    args.Message = AnsiConsole.Prompt(
+                        new SelectionPrompt<string>()
+                            .Title("Select a [green]custom action[/] [grey](--message)[/]:")
+                            .PageSize(20)
+                            .EnableSearch()
+                            .AddChoices(actions.Select(x => x.Name)));
+                }
+                else
+                {
+                    args.Message = AnsiConsole.Prompt(new TextPrompt<string>("Dataverse [green]custom action[/] [grey](--message)[/]:"));
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(args.Stage))
+            {
+                if (!canPrompt)
+                {
+                    throw new DevKitValidationException("--stage: required for template 'CustomAction'. Use PreValidation, PreOperation or PostOperation.");
+                }
+                args.Stage = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("Select the [green]stage[/] [grey](--stage)[/]:")
+                        .AddChoices("PreValidation", "PreOperation", "PostOperation"));
+            }
+            else if (!args.Stage.Equals("PreValidation", StringComparison.OrdinalIgnoreCase) &&
+                     !args.Stage.Equals("PreOperation", StringComparison.OrdinalIgnoreCase) &&
+                     !args.Stage.Equals("PostOperation", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new DevKitValidationException($"--stage '{args.Stage}': invalid. Use PreValidation, PreOperation or PostOperation.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(args.Execution) &&
+                !args.Execution.Equals("Synchronous", StringComparison.OrdinalIgnoreCase) &&
+                !args.Execution.Equals("Asynchronous", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new DevKitValidationException($"--execution '{args.Execution}': invalid. Use Synchronous or Asynchronous.");
+            }
+
+            // FormPlugin locks the execution combo to Synchronous for
+            // PreValidation/PreOperation (CustomAction included); the
+            // Asynchronous choice is PostOperation's (prompted like the
+            // wizard's enabled combo).
+            if (args.Stage.Equals("PreValidation", StringComparison.OrdinalIgnoreCase) ||
+                args.Stage.Equals("PreOperation", StringComparison.OrdinalIgnoreCase))
+            {
+                if (args.Execution.Equals("Asynchronous", StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new DevKitValidationException("--execution 'Asynchronous': requires stage PostOperation — PreValidation/PreOperation steps run Synchronous.");
+                }
+                args.Execution = "Synchronous";
+            }
+            else if (string.IsNullOrWhiteSpace(args.Execution))
+            {
+                if (canPrompt)
+                {
+                    args.Execution = AnsiConsole.Prompt(
+                        new SelectionPrompt<string>()
+                            .Title("Select the [green]execution mode[/] [grey](--execution)[/]:")
+                            .AddChoices("Synchronous", "Asynchronous"));
+                }
+                else
+                {
+                    args.Execution = "Synchronous";
+                }
+            }
+
+            // No order prompt — the FormPlugin carries no order field (the
+            // wizard computes the registration order itself); the CLI takes
+            // it from --order (default 1).
+
+            if (string.IsNullOrWhiteSpace(args.Name))
+            {
+                if (!canPrompt)
+                {
+                    throw new DevKitValidationException("--name: required for template 'CustomAction' — the custom action class name.");
+                }
+                var suggestion = CustomActionItemTemplateHandler.SuggestClassName(args.Stage, schemaName, args.Message, args.Execution);
+                args.Name = AnsiConsole.Prompt(new TextPrompt<string>("Class [green]name[/] [grey](--name)[/]:").DefaultValue(suggestion));
+            }
+
+            // The FormPlugin template combo: Default plus the custom
+            // titles from DynamicsCrm.DevKit.Cli.json — only when a choice
+            // actually exists and the flags did not already pick one.
+            if (canPrompt && string.IsNullOrWhiteSpace(args.T4) && args.Template.Equals("Default", StringComparison.Ordinal))
+            {
+                var configDirectory = string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : args.Out;
+                var titles = T4TemplateResolver.GetCustomTemplateTitles(ItemType.CustomAction, configDirectory);
                 if (titles.Count > 0)
                 {
                     args.Template = AnsiConsole.Prompt(
