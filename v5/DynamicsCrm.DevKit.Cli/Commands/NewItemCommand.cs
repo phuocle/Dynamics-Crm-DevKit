@@ -13,10 +13,10 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 {
     /// <summary>
     /// Command for 'devkit new-item' — scaffolds one DevKit ITEM template
-    /// into the required --project. Item templates marked
-    /// RequiresConnection (LateBound, JsForm, JsWebApi) generate from live
-    /// entity metadata and connect here, while the others generate fully
-    /// offline.
+    /// into the required --project. Every add connects to Dataverse first
+    /// (aP ruling 2026-10-29 — the VSIX wizard connects before any item
+    /// dialog opens; --offline is removed from this command, the engine
+    /// keeps its offline path for tests/MCP).
     /// </summary>
     public class NewItemCommand : DevKitCommand<NewItemCommandArgs>
     {
@@ -42,34 +42,22 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 new[] { "           --entity", settings.Entity },
                 new[] { "           --project", settings.Project },
                 new[] { "           --out", settings.Out },
-                new[] { "           --offline", settings.Offline ? "true" : "false" },
                 new[] { "           --force", settings.Force ? "true" : "false" }
             };
             SpectreLog.WriteTable(argRows);
 
-            // Item templates marked RequiresConnection (LateBound) generate
-            // from live entity metadata — connect here like the base command
-            // does, while the remaining item templates stay fully offline.
-            if (ItemConnectionRequired(settings))
-            {
-                settings.ServiceClient = await ConnectAsync(settings);
-                ServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
-                var timeout = (int)ServiceClient.MaxConnectionTimeout.TotalSeconds;
-                SpectreLog.WriteHighLight("Connected: ", settings.ServiceClient.ConnectedUrl(), " with connection timeout: ", $"{timeout:#,###}", " (seconds)");
-            }
+            // Connect FIRST like the wizard: the connection dialog opens
+            // before any item dialog, whatever the item template is.
+            settings.ServiceClient = await ConnectAsync(settings);
+            ServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
+            var timeout = (int)ServiceClient.MaxConnectionTimeout.TotalSeconds;
+            SpectreLog.WriteHighLight("Connected: ", settings.ServiceClient.ConnectedUrl(), " with connection timeout: ", $"{timeout:#,###}", " (seconds)");
             return true;
         }
 
         protected override async Task RunTaskAsync(NewItemCommandArgs settings)
         {
             await TaskNewItem.RunAsync(settings);
-        }
-
-        private static bool ItemConnectionRequired(NewItemCommandArgs settings)
-        {
-            if (string.IsNullOrWhiteSpace(settings.Type) || settings.Offline) return false;
-            var descriptor = TemplateCatalog.Find(settings.Type, TemplateKind.Item);
-            return descriptor?.RequiresConnection == true;
         }
 
         /// <summary>
@@ -91,7 +79,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 var builder = ConnectionBuilderFactory.GetBuilder(crmConn.Type);
                 return await builder.CreateServiceClientAsync(crmConn);
             }
-            throw new DevKitConnectionException($"--conn or --auth: required (or a project .env). The '{settings.Type}' item template reads entity metadata from Dataverse.");
+            throw new DevKitConnectionException("--conn or --auth: required (or a project .env) — adding an item always connects to Dataverse.");
         }
     }
 }

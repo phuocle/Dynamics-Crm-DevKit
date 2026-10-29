@@ -122,16 +122,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
 
-            // The T4 items (Plugin I.4, CustomAction I.5, CustomApi I.6)
-            // render from the typed values: work unit §5 allows full
-            // manual input offline with a warning in the result.
+            // Every add is connected (aP ruling 2026-10-29 — the command
+            // connects before this task runs, like the VSIX wizard); the
+            // engine keeps its offline path for tests/MCP only.
             var isPlugin = descriptor.Id == ItemType.Plugin.ToString();
             var isCustomAction = descriptor.Id == ItemType.CustomAction.ToString();
             var isCustomApi = descriptor.Id == ItemType.CustomApi.ToString();
-            if (descriptor.RequiresConnection && args.Offline && !isPlugin && !isCustomAction && !isCustomApi)
-            {
-                throw new DevKitValidationException($"--offline: template '{descriptor.Id}' requires a Dataverse connection to read entity metadata. Run without --offline and pass --auth/--conn (or run from a folder with a project .env).");
-            }
             if (descriptor.RequiresConnection)
             {
                 // Connected and interactive: pick the entity from the org
@@ -204,7 +200,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // through the ITextTransformer contract (I.4).
                 Transformer = new MonoTextTransformer(),
                 Force = args.Force,
-                Offline = args.Offline,
             };
             var result = await ScaffoldingEngine.ScaffoldItemAsync(input);
             TaskNewShared.WriteResult(result);

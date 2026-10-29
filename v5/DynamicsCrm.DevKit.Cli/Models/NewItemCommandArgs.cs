@@ -71,10 +71,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("Output directory (default: the project directory)")]
         public string Out { get; set; } = string.Empty;
 
-        [CommandOption("--offline")]
-        [Description("Skip live Dataverse connection (validate nothing, bake placeholders)")]
-        public bool Offline { get; set; }
-
         [CommandOption("--force")]
         [Description("Overwrite existing user files")]
         public bool Force { get; set; }
