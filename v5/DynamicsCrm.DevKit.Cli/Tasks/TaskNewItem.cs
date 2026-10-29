@@ -68,6 +68,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (string.IsNullOrWhiteSpace(args.Stage)) missing.Add("--stage <PreValidation|PreOperation|PostOperation>");
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <class-name>");
                 }
+                else if (typeDescriptor?.Id == ItemType.CustomApi.ToString())
+                {
+                    if (string.IsNullOrWhiteSpace(args.Entity)) missing.Add("--entity <schema-name|none>");
+                    if (string.IsNullOrWhiteSpace(args.Message)) missing.Add("--message <custom-api>");
+                    if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <class-name>");
+                }
                 else if (typeDescriptor != null &&
                          (typeDescriptor.Id == ItemType.LateBound.ToString() ||
                           typeDescriptor.Id == ItemType.JsForm.ToString() ||
@@ -116,15 +122,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
 
-            // Entity-driven item templates (LateBound) generate from
-            // live entity metadata — there is no offline fallback: the
-            // generated class is built from the entity's attributes.
-            // The T4 items (Plugin first, I.4; CustomAction, I.5) render
-            // from the typed values: work unit §5 allows full manual
-            // input offline with a warning in the result.
+            // The T4 items (Plugin I.4, CustomAction I.5, CustomApi I.6)
+            // render from the typed values: work unit §5 allows full
+            // manual input offline with a warning in the result.
             var isPlugin = descriptor.Id == ItemType.Plugin.ToString();
             var isCustomAction = descriptor.Id == ItemType.CustomAction.ToString();
-            if (descriptor.RequiresConnection && args.Offline && !isPlugin && !isCustomAction)
+            var isCustomApi = descriptor.Id == ItemType.CustomApi.ToString();
+            if (descriptor.RequiresConnection && args.Offline && !isPlugin && !isCustomAction && !isCustomApi)
             {
                 throw new DevKitValidationException($"--offline: template '{descriptor.Id}' requires a Dataverse connection to read entity metadata. Run without --offline and pass --auth/--conn (or run from a folder with a project .env).");
             }
@@ -134,9 +138,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // (searchable, the CLI twin of the FormItem list). The
                 // metadata read once into the XrmHelper cache also feeds
                 // the codegen. Non-interactive runs pass --entity.
-                // CustomAction is excluded: its dialog inserts the "None"
-                // choice at the top, so its chain owns the entity prompt.
-                if (!isCustomAction &&
+                // CustomAction and CustomApi are excluded: their dialog
+                // inserts the "None" choice at the top, so their chains
+                // own the entity prompt.
+                if (!isCustomAction && !isCustomApi &&
                     string.IsNullOrWhiteSpace(args.Entity) && args.ServiceClient != null && TaskNewShared.CanPrompt())
                 {
                     await new MetadataService(args.ServiceClient).ReadEntitiesMetadataAsync(EntityFilters.Attributes);
@@ -163,10 +168,20 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 // The FormPlugin twin for CustomAction: entity (the
                 // wizard's None choice first) → custom action → stage →
-                // execution → class name → custom template. No execution
-                // prompt difference: the dialog locks Synchronous for
-                // PreValidation/PreOperation exactly like Plugin.
+                // execution lock → class name → custom template. No
+                // execution prompt difference: the dialog locks
+                // Synchronous for PreValidation/PreOperation exactly like
+                // Plugin.
                 await PromptCustomActionItemAsync(args);
+            }
+            else if (isCustomApi)
+            {
+                // The FormPlugin twin for CustomApi: entity (the wizard's
+                // None choice first) → custom api → class name → custom
+                // template. No stage or execution — the dialog hides both
+                // combos (a custom api step has no stage or execution
+                // mode) and the class suggestion is {message}Request.
+                await PromptCustomApiItemAsync(args);
             }
             var input = new ItemTemplateInput
             {
@@ -542,6 +557,133 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var configDirectory = string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : args.Out;
                 var titles = T4TemplateResolver.GetCustomTemplateTitles(ItemType.CustomAction, configDirectory);
+                if (titles.Count > 0)
+                {
+                    args.Template = AnsiConsole.Prompt(
+                        new SelectionPrompt<string>()
+                            .Title("Select a [green]template[/] [grey](--template)[/]:")
+                            .AddChoices(new[] { T4TemplateResolver.DefaultTemplateTitle }.Concat(titles)));
+                }
+            }
+        }
+
+        /// <summary>
+        /// The CustomApi item prompt chain — the CLI twin of FormPlugin
+        /// with ItemType.CustomApi: entity (the wizard inserts "None" at
+        /// the top — an unbound custom api registration) → custom api
+        /// (MetadataService.GetCustomApisAsync, the dialog's own message
+        /// combo — one call for the bound entity and "none") → class name
+        /// (the FormPlugin suggestion {message}Request) → custom T4
+        /// template. No stage or execution prompts: the dialog hides both
+        /// combos — a custom api step has no stage or execution mode.
+        /// Every prompt is skipped when its flag is present; non-
+        /// interactive runs fail on a missing required value instead of
+        /// prompting. Order is not prompted (the dialog has no order
+        /// field) — it comes from --order.
+        /// </summary>
+        private static async Task PromptCustomApiItemAsync(NewItemCommandArgs args)
+        {
+            var canPrompt = TaskNewShared.CanPrompt();
+
+            if (string.IsNullOrWhiteSpace(args.Entity))
+            {
+                if (!canPrompt)
+                {
+                    throw new DevKitValidationException("--entity: required for template 'CustomApi' — a schema name or 'none' for an unbound custom api.");
+                }
+                if (args.ServiceClient != null)
+                {
+                    await new MetadataService(args.ServiceClient).ReadEntitiesMetadataAsync(EntityFilters.Entity);
+                    // FormPlugin.Connection_Connected: the entities ordered
+                    // by logical name with "None" inserted at the top.
+                    var schemas = XrmHelper.EntitiesMetadata
+                        .Select(x => x.LogicalName)
+                        .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
+                        .ToList();
+                    args.Entity = AnsiConsole.Prompt(
+                        new SelectionPrompt<string>()
+                            .Title("Select an [green]entity[/] [grey](--entity, 'None' for an unbound custom api)[/]:")
+                            .PageSize(20)
+                            .EnableSearch()
+                            .AddChoices(new[] { CustomApiItemTemplateHandler.NoneSchemaName }.Concat(schemas)));
+                }
+                else
+                {
+                    args.Entity = AnsiConsole.Prompt(new TextPrompt<string>("Entity [green]schema name[/] [grey](--entity, 'none' for an unbound custom api)[/]:"));
+                }
+            }
+
+            // The wizard's None choice: SchemaName "None", LogicalName
+            // "none" — the unbound registration. Any other value resolves
+            // through the org metadata (connected) or is typed and trusted
+            // (offline).
+            string logicalName;
+            if (CustomApiItemTemplateHandler.IsNoneEntity(args.Entity))
+            {
+                logicalName = CustomApiItemTemplateHandler.NoneLogicalName;
+            }
+            else if (args.ServiceClient != null)
+            {
+                if (XrmHelper.EntitiesMetadata.Count == 0)
+                {
+                    await new MetadataService(args.ServiceClient).ReadEntitiesMetadataAsync(EntityFilters.Entity);
+                }
+                var metadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x =>
+                    string.Equals(x.SchemaName, args.Entity, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(x.LogicalName, args.Entity, StringComparison.OrdinalIgnoreCase));
+                if (metadata == null)
+                {
+                    throw new DevKitValidationException($"--entity '{args.Entity}': entity not found in the current instance.");
+                }
+                logicalName = metadata.LogicalName;
+            }
+            else
+            {
+                logicalName = args.Entity.ToLowerInvariant();
+            }
+
+            if (string.IsNullOrWhiteSpace(args.Message))
+            {
+                if (!canPrompt)
+                {
+                    throw new DevKitValidationException("--message: required for template 'CustomApi'.");
+                }
+                if (args.ServiceClient != null)
+                {
+                    // FormPlugin fills the message combo with one call —
+                    // GetCustomApisAsync handles the "none" unbound case
+                    // itself (boundentitylogicalname null).
+                    var apis = await new MetadataService(args.ServiceClient).GetCustomApisAsync(logicalName);
+                    args.Message = AnsiConsole.Prompt(
+                        new SelectionPrompt<string>()
+                            .Title("Select a [green]custom api[/] [grey](--message)[/]:")
+                            .PageSize(20)
+                            .EnableSearch()
+                            .AddChoices(apis.Select(x => x.Name)));
+                }
+                else
+                {
+                    args.Message = AnsiConsole.Prompt(new TextPrompt<string>("Dataverse [green]custom api[/] [grey](--message)[/]:"));
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(args.Name))
+            {
+                if (!canPrompt)
+                {
+                    throw new DevKitValidationException("--name: required for template 'CustomApi' — the custom api class name.");
+                }
+                var suggestion = CustomApiItemTemplateHandler.SuggestClassName(args.Message);
+                args.Name = AnsiConsole.Prompt(new TextPrompt<string>("Class [green]name[/] [grey](--name)[/]:").DefaultValue(suggestion));
+            }
+
+            // The FormPlugin template combo: Default plus the custom
+            // titles from DynamicsCrm.DevKit.Cli.json — only when a choice
+            // actually exists and the flags did not already pick one.
+            if (canPrompt && string.IsNullOrWhiteSpace(args.T4) && args.Template.Equals("Default", StringComparison.Ordinal))
+            {
+                var configDirectory = string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : args.Out;
+                var titles = T4TemplateResolver.GetCustomTemplateTitles(ItemType.CustomApi, configDirectory);
                 if (titles.Count > 0)
                 {
                     args.Template = AnsiConsole.Prompt(
