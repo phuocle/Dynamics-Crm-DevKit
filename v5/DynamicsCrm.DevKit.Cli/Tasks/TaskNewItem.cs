@@ -80,6 +80,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     // the class name is the only dialog input.
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <class-name>");
                 }
+                else if (typeDescriptor?.Id == ItemType.DataProvider.ToString())
+                {
+                    // FormPlugin.DataProviderItem collapses the class,
+                    // message, stage and execution fields — the data source
+                    // combo (the relabeled entity list) is the only input.
+                    if (string.IsNullOrWhiteSpace(args.Datasource)) missing.Add("--datasource <data-source-logical-name>");
+                }
                 else if (typeDescriptor != null &&
                          (typeDescriptor.Id == ItemType.LateBound.ToString() ||
                           typeDescriptor.Id == ItemType.JsForm.ToString() ||
@@ -135,6 +142,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var isCustomAction = descriptor.Id == ItemType.CustomAction.ToString();
             var isCustomApi = descriptor.Id == ItemType.CustomApi.ToString();
             var isWorkflow = descriptor.Id == ItemType.Workflow.ToString();
+            var isDataProvider = descriptor.Id == ItemType.DataProvider.ToString();
             if (descriptor.RequiresConnection)
             {
                 // Connected and interactive: pick the entity from the org
@@ -145,7 +153,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // inserts the "None" choice at the top, so their chains
                 // own the entity prompt. Workflow is excluded too: its
                 // dialog collapses the entity combo (no org input at all).
-                if (!isCustomAction && !isCustomApi && !isWorkflow &&
+                // DataProvider is excluded as well: its dialog relabels
+                // the combo "Data Source" and fills it with the provider's
+                // virtual tables, not the entities.
+                if (!isCustomAction && !isCustomApi && !isWorkflow && !isDataProvider &&
                     string.IsNullOrWhiteSpace(args.Entity) && args.ServiceClient != null && TaskNewShared.CanPrompt())
                 {
                     await new MetadataService(args.ServiceClient).ReadEntitiesMetadataAsync(EntityFilters.Attributes);
@@ -194,6 +205,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // stage and execution combos and reads nothing from the
                 // org) → custom T4 template.
                 await PromptWorkflowItemAsync(args);
+            }
+            else if (isDataProvider)
+            {
+                // The FormPlugin twin for DataProvider: data source (the
+                // dialog's relabeled entity combo, filled from the
+                // provider's virtual tables) → nothing else — the dialog
+                // collapses the class, message, stage and execution
+                // fields and hides the template panel.
+                await PromptDataProviderItemAsync(args);
             }
             var input = new ItemTemplateInput
             {
@@ -742,6 +762,62 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             .Title("Select a [green]template[/] [grey](--template)[/]:")
                             .AddChoices(new[] { T4TemplateResolver.DefaultTemplateTitle }.Concat(titles)));
                 }
+            }
+        }
+
+        /// <summary>
+        /// The DataProvider item prompt chain — the CLI twin of FormPlugin
+        /// with ItemType.DataProvider: data source (the dialog's relabeled
+        /// entity combo, filled from
+        /// MetadataService.GetAllDataSourceAsync — the virtual tables
+        /// backed by the DevKit data provider) and nothing else. The
+        /// dialog collapses the class, message, stage and execution
+        /// fields (the five classes are named Create, Update, Delete,
+        /// Retrieve and RetrieveMultiple in the templates themselves) and
+        /// hides the template panel, so there is no class, order or
+        /// template prompt. A --datasource given up front is verified
+        /// against the org list like the Plugin entity lookup.
+        /// </summary>
+        private static async Task PromptDataProviderItemAsync(NewItemCommandArgs args)
+        {
+            var canPrompt = TaskNewShared.CanPrompt();
+
+            if (string.IsNullOrWhiteSpace(args.Datasource))
+            {
+                if (!canPrompt)
+                {
+                    throw new DevKitValidationException("--datasource: required for template 'DataProvider' — the virtual table data source logical name.");
+                }
+                if (args.ServiceClient != null)
+                {
+                    var dataSources = await new MetadataService(args.ServiceClient).GetAllDataSourceAsync();
+                    if (dataSources.Count == 0)
+                    {
+                        throw new DevKitValidationException("--datasource: no data source found in the current instance — no virtual table is backed by the DevKit data provider.");
+                    }
+                    args.Datasource = AnsiConsole.Prompt(
+                        new SelectionPrompt<string>()
+                            .Title("Select a [green]data source[/] [grey](--datasource)[/]:")
+                            .PageSize(20)
+                            .EnableSearch()
+                            .AddChoices(dataSources.Select(x => x.LogicalName)));
+                }
+                else
+                {
+                    args.Datasource = AnsiConsole.Prompt(new TextPrompt<string>("Data source [green]logical name[/] [grey](--datasource)[/]:"));
+                }
+            }
+            else if (args.ServiceClient != null)
+            {
+                // The wizard's combo only offers the provider's virtual
+                // tables — a flag value resolves through the same list.
+                var dataSources = await new MetadataService(args.ServiceClient).GetAllDataSourceAsync();
+                var match = dataSources.FirstOrDefault(x => string.Equals(x.LogicalName, args.Datasource, StringComparison.OrdinalIgnoreCase));
+                if (match == null)
+                {
+                    throw new DevKitValidationException($"--datasource '{args.Datasource}': data source not found in the current instance.");
+                }
+                args.Datasource = match.LogicalName;
             }
         }
 
