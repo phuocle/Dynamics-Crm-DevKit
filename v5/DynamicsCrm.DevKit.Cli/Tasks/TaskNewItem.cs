@@ -74,6 +74,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (string.IsNullOrWhiteSpace(args.Message)) missing.Add("--message <custom-api>");
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <class-name>");
                 }
+                else if (typeDescriptor?.Id == ItemType.Workflow.ToString())
+                {
+                    // FormPlugin.WorkflowItem collapses every org combo —
+                    // the class name is the only dialog input.
+                    if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <class-name>");
+                }
                 else if (typeDescriptor != null &&
                          (typeDescriptor.Id == ItemType.LateBound.ToString() ||
                           typeDescriptor.Id == ItemType.JsForm.ToString() ||
@@ -128,6 +134,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var isPlugin = descriptor.Id == ItemType.Plugin.ToString();
             var isCustomAction = descriptor.Id == ItemType.CustomAction.ToString();
             var isCustomApi = descriptor.Id == ItemType.CustomApi.ToString();
+            var isWorkflow = descriptor.Id == ItemType.Workflow.ToString();
             if (descriptor.RequiresConnection)
             {
                 // Connected and interactive: pick the entity from the org
@@ -136,8 +143,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // the codegen. Non-interactive runs pass --entity.
                 // CustomAction and CustomApi are excluded: their dialog
                 // inserts the "None" choice at the top, so their chains
-                // own the entity prompt.
-                if (!isCustomAction && !isCustomApi &&
+                // own the entity prompt. Workflow is excluded too: its
+                // dialog collapses the entity combo (no org input at all).
+                if (!isCustomAction && !isCustomApi && !isWorkflow &&
                     string.IsNullOrWhiteSpace(args.Entity) && args.ServiceClient != null && TaskNewShared.CanPrompt())
                 {
                     await new MetadataService(args.ServiceClient).ReadEntitiesMetadataAsync(EntityFilters.Attributes);
@@ -178,6 +186,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // combos (a custom api step has no stage or execution
                 // mode) and the class suggestion is {message}Request.
                 await PromptCustomApiItemAsync(args);
+            }
+            else if (isWorkflow)
+            {
+                // The FormPlugin twin for Workflow: class name (the only
+                // dialog input — the wizard collapses the entity, message,
+                // stage and execution combos and reads nothing from the
+                // org) → custom T4 template.
+                await PromptWorkflowItemAsync(args);
             }
             var input = new ItemTemplateInput
             {
@@ -679,6 +695,46 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var configDirectory = string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : args.Out;
                 var titles = T4TemplateResolver.GetCustomTemplateTitles(ItemType.CustomApi, configDirectory);
+                if (titles.Count > 0)
+                {
+                    args.Template = AnsiConsole.Prompt(
+                        new SelectionPrompt<string>()
+                            .Title("Select a [green]template[/] [grey](--template)[/]:")
+                            .AddChoices(new[] { T4TemplateResolver.DefaultTemplateTitle }.Concat(titles)));
+                }
+            }
+        }
+
+        /// <summary>
+        /// The Workflow item prompt chain — the CLI twin of FormPlugin
+        /// with ItemType.Workflow: class name (the only dialog input —
+        /// the wizard collapses the entity, message, stage and execution
+        /// combos, so nothing is read from the org) → custom T4 template.
+        /// The dialog carries no class suggestion for a workflow (no
+        /// combo drives UpdateClassName), so the prompt starts empty.
+        /// Order is not prompted (the dialog has no order field) — it
+        /// comes from --order.
+        /// </summary>
+        private static async Task PromptWorkflowItemAsync(NewItemCommandArgs args)
+        {
+            var canPrompt = TaskNewShared.CanPrompt();
+
+            if (string.IsNullOrWhiteSpace(args.Name))
+            {
+                if (!canPrompt)
+                {
+                    throw new DevKitValidationException("--name: required for template 'Workflow' — the workflow class name.");
+                }
+                args.Name = AnsiConsole.Prompt(new TextPrompt<string>("Class [green]name[/] [grey](--name)[/]:"));
+            }
+
+            // The FormPlugin template combo: Default plus the custom
+            // titles from DynamicsCrm.DevKit.Cli.json — only when a choice
+            // actually exists and the flags did not already pick one.
+            if (canPrompt && string.IsNullOrWhiteSpace(args.T4) && args.Template.Equals("Default", StringComparison.Ordinal))
+            {
+                var configDirectory = string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : args.Out;
+                var titles = T4TemplateResolver.GetCustomTemplateTitles(ItemType.Workflow, configDirectory);
                 if (titles.Count > 0)
                 {
                     args.Template = AnsiConsole.Prompt(
