@@ -50,7 +50,23 @@ namespace DynamicsCrm.DevKit.Cli.Templates
                 throw new InvalidOperationException($"T4 transformation failed:{Environment.NewLine}{errors}");
             }
 
-            return SortLeadingUsings(result.Item2);
+            return CollapseWhitespaceOnlyLines(SortLeadingUsings(result.Item2));
+        }
+
+        /// <summary>
+        /// The Visual Studio T4 host does not keep whitespace-only output
+        /// lines: a template line whose control blocks emit nothing leaves
+        /// an EMPTY line in the render — the I.6 wizard compare caught the
+        /// unbound CustomApi guard line (the <#if ...#> of CustomApi.tt)
+        /// collapsing to a bare CRLF while Mono keeps the template's
+        /// literal indentation. Mirror that so T4 renders stay
+        /// byte-identical across hosts; lines with content keep their
+        /// leading (and any trailing) whitespace untouched.
+        /// </summary>
+        private static string CollapseWhitespaceOnlyLines(string output)
+        {
+            if (string.IsNullOrEmpty(output)) return output;
+            return WhitespaceOnlyLine().Replace(output, string.Empty);
         }
 
         /// <summary>
@@ -92,6 +108,16 @@ namespace DynamicsCrm.DevKit.Cli.Templates
             // (Multiline anchors ^ at every line start while the block scan
             // advances through the output).
             return new Regex("^using [^;\r\n]+;[ \t]*(?:\r?\n|$)", RegexOptions.Compiled | RegexOptions.Multiline);
+        }
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        private static Regex WhitespaceOnlyLine()
+        {
+            // The indentation of a whitespace-only line, right before its
+            // line ending (Multiline ^ anchors at every line start; the
+            // lookahead keeps content lines — their spaces are followed by
+            // a non-whitespace character — untouched).
+            return new Regex("^[ \t]+(?=\r?\n)", RegexOptions.Compiled | RegexOptions.Multiline);
         }
 
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
