@@ -111,6 +111,17 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Models
         public string DataSource { get; set; }
 
         /// <summary>
+        /// The full class name of the plugin/workflow the test targets
+        /// (the wizard's test-plugin combo selection). The handler
+        /// resolves it against the PluginTestDiscovery scan of the test
+        /// project's references and takes the missing message, stage,
+        /// execution and entity fields from the candidate — the dialog's
+        /// combos are collapsed and the candidate is their only voice.
+        /// Empty = the plain (guard-less) test skeleton.
+        /// </summary>
+        public string TestTarget { get; set; }
+
+        /// <summary>
         /// The T4 template title from DynamicsCrm.DevKit.Cli.json
         /// ("Default" = built-in resource) — the FormPlugin template combo.
         /// </summary>

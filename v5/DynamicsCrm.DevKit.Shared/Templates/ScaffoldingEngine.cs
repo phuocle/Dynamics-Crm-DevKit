@@ -165,7 +165,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 result.AddError($"--type '{input.TemplateId}': unknown item template. Use 'devkit new-item list' to see all templates.");
                 return result;
             }
-            if (string.IsNullOrWhiteSpace(input.Name) && string.IsNullOrWhiteSpace(input.Entity) && string.IsNullOrWhiteSpace(input.DataSource))
+            if (string.IsNullOrWhiteSpace(input.Name) && string.IsNullOrWhiteSpace(input.Entity) && string.IsNullOrWhiteSpace(input.DataSource) && string.IsNullOrWhiteSpace(input.TestTarget))
             {
                 result.AddError("--name (or --entity): required");
                 return result;

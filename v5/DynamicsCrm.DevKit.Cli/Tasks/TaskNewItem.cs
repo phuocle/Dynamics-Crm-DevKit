@@ -87,6 +87,47 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     // combo (the relabeled entity list) is the only input.
                     if (string.IsNullOrWhiteSpace(args.Datasource)) missing.Add("--datasource <data-source-logical-name>");
                 }
+                else if (typeDescriptor?.Id == ItemType.Test.ToString())
+                {
+                    // FormPlugin.TestItem: candidates on the test-plugin
+                    // combo (the scan of the test project's ProjectReference
+                    // folders) make the SELECTION the only requirement —
+                    // the class textbox auto-fills from the picked candidate
+                    // (ApplySelectedTestPluginToForm). An empty scan is the
+                    // wizard's empty combo: the class name is typed. A
+                    // --test-target given up front supplies the default
+                    // class itself, so nothing is required from the gate.
+                    if (string.IsNullOrWhiteSpace(args.TestTarget) && !string.IsNullOrWhiteSpace(args.Project))
+                    {
+                        var startDirectory = string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : Path.GetFullPath(args.Out);
+                        var testProjectDirectory = ResolveProjectDirectory(args.Project, startDirectory);
+                        if (testProjectDirectory != null)
+                        {
+                            var testProjectFile = Directory.GetFiles(testProjectDirectory, "*.csproj").FirstOrDefault() ??
+                                                  Directory.GetFiles(testProjectDirectory, "*.shproj").FirstOrDefault();
+                            if (testProjectFile != null)
+                            {
+                                var candidates = await PluginTestDiscovery.GetTestCandidatesAsync(testProjectFile);
+                                if (candidates.Count > 0)
+                                {
+                                    missing.Add("--test-target <plugin-or-workflow-full-class-name>");
+                                }
+                                else if (string.IsNullOrWhiteSpace(args.Name))
+                                {
+                                    missing.Add("--name <test-class-name>");
+                                }
+                            }
+                            else if (string.IsNullOrWhiteSpace(args.Name))
+                            {
+                                missing.Add("--name <test-class-name>");
+                            }
+                        }
+                        else if (string.IsNullOrWhiteSpace(args.Name))
+                        {
+                            missing.Add("--name <test-class-name>");
+                        }
+                    }
+                }
                 else if (typeDescriptor != null &&
                          (typeDescriptor.Id == ItemType.LateBound.ToString() ||
                           typeDescriptor.Id == ItemType.JsForm.ToString() ||
@@ -143,6 +184,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var isCustomApi = descriptor.Id == ItemType.CustomApi.ToString();
             var isWorkflow = descriptor.Id == ItemType.Workflow.ToString();
             var isDataProvider = descriptor.Id == ItemType.DataProvider.ToString();
+            var isTest = descriptor.Id == ItemType.Test.ToString();
             if (descriptor.RequiresConnection)
             {
                 // Connected and interactive: pick the entity from the org
@@ -155,8 +197,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // dialog collapses the entity combo (no org input at all).
                 // DataProvider is excluded as well: its dialog relabels
                 // the combo "Data Source" and fills it with the provider's
-                // virtual tables, not the entities.
-                if (!isCustomAction && !isCustomApi && !isWorkflow && !isDataProvider &&
+                // virtual tables, not the entities. Test is excluded for
+                // the same reason: the dialog collapses the entity combo
+                // (the entity rides in with the test-plugin candidate).
+                if (!isCustomAction && !isCustomApi && !isWorkflow && !isDataProvider && !isTest &&
                     string.IsNullOrWhiteSpace(args.Entity) && args.ServiceClient != null && TaskNewShared.CanPrompt())
                 {
                     await new MetadataService(args.ServiceClient).ReadEntitiesMetadataAsync(EntityFilters.Attributes);
@@ -215,6 +259,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // fields and hides the template panel.
                 await PromptDataProviderItemAsync(args);
             }
+            else if (isTest)
+            {
+                // The FormPlugin twin for Test: the test-plugin combo (the
+                // scan of the test project's ProjectReference folders)
+                // when it has candidates, then the class name (auto-filled
+                // with the picked class), then the custom T4 template —
+                // the dialog's entity, message, stage and execution
+                // combos are collapsed and their values ride in with the
+                // picked candidate (resolved by the handler).
+                await PromptTestItemAsync(args);
+            }
             var input = new ItemTemplateInput
             {
                 TemplateId = descriptor.Id,
@@ -226,6 +281,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 Order = args.Order,
                 Class = args.Name,
                 DataSource = args.Datasource,
+                TestTarget = args.TestTarget,
                 TemplateTitle = args.Template,
                 T4Path = args.T4,
                 ProjectName = args.Project,
@@ -818,6 +874,117 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     throw new DevKitValidationException($"--datasource '{args.Datasource}': data source not found in the current instance.");
                 }
                 args.Datasource = match.LogicalName;
+            }
+        }
+
+        /// <summary>
+        /// The Test item prompt chain — the CLI twin of FormPlugin with
+        /// ItemType.Test: the test-plugin combo (the scan of the test
+        /// project's ProjectReference folders — PluginTestDiscovery, the
+        /// wizard's own loader) when it has candidates, then the class
+        /// name (auto-filled with the picked class name, its trailing
+        /// Test stripped by the handler), then the custom T4 template.
+        /// The dialog's entity, message, stage and execution combos are
+        /// collapsed — their values ride in with the picked candidate and
+        /// the handler takes them from the same scan; nothing is read
+        /// from the org (the scan is file-system only). Order is not
+        /// prompted (the dialog has no order field) — it comes from
+        /// --order.
+        /// </summary>
+        private static async Task PromptTestItemAsync(NewItemCommandArgs args)
+        {
+            var canPrompt = TaskNewShared.CanPrompt();
+
+            var startDirectory = string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : Path.GetFullPath(args.Out);
+            var testProjectDirectory = ResolveProjectDirectory(args.Project, startDirectory);
+            var testProjectFile = testProjectDirectory != null
+                ? Directory.GetFiles(testProjectDirectory, "*.csproj").FirstOrDefault() ??
+                  Directory.GetFiles(testProjectDirectory, "*.shproj").FirstOrDefault()
+                : null;
+            var candidates = testProjectFile != null
+                ? await PluginTestDiscovery.GetTestCandidatesAsync(testProjectFile)
+                : new List<PluginTestCandidate>();
+
+            if (candidates.Count > 0)
+            {
+                // The flag resolution scans EVERY testable class (an
+                // existing {ClassName}Test only leaves the wizard's combo,
+                // it never blocks a --test-target rerun).
+                var resolvable = testProjectFile != null
+                    ? await PluginTestDiscovery.GetAllTestCandidatesAsync(testProjectFile)
+                    : candidates;
+
+                if (string.IsNullOrWhiteSpace(args.TestTarget))
+                {
+                    if (!canPrompt)
+                    {
+                        throw new DevKitValidationException("--test-target: required for template 'Test' — the full class name of the plugin or workflow to test.");
+                    }
+                    // The wizard auto-selects the first candidate and
+                    // searches by display name.
+                    args.TestTarget = AnsiConsole.Prompt(
+                        new SelectionPrompt<string>()
+                            .Title("Select the [green]plugin or workflow to test[/] [grey](--test-target)[/]:")
+                            .PageSize(20)
+                            .EnableSearch()
+                            .AddChoices(candidates.Select(x => x.DisplayName)));
+                    args.TestTarget = candidates.First(x => x.DisplayName == args.TestTarget).FullClassName;
+                }
+                else
+                {
+                    // A flag value resolves through the same scan like the
+                    // Plugin entity lookup — the wizard's combo only
+                    // offers the scanned candidates.
+                    var named = resolvable.FirstOrDefault(x => string.Equals(x.FullClassName, args.TestTarget, StringComparison.OrdinalIgnoreCase));
+                    if (named == null)
+                    {
+                        throw new DevKitValidationException($"--test-target '{args.TestTarget}': not found among the plugin/workflow classes of the project references.");
+                    }
+                    args.TestTarget = named.FullClassName;
+                }
+
+                if (string.IsNullOrWhiteSpace(args.Name))
+                {
+                    // FormPlugin.ApplySelectedTestPluginToForm: the class
+                    // textbox auto-fills with the picked class name —
+                    // interactive runs prompt with the same default,
+                    // non-interactive runs take it directly.
+                    var selected = resolvable.First(x => string.Equals(x.FullClassName, args.TestTarget, StringComparison.OrdinalIgnoreCase));
+                    if (!canPrompt)
+                    {
+                        args.Name = selected.SuggestedTestClassBaseName;
+                    }
+                    else
+                    {
+                        args.Name = AnsiConsole.Prompt(new TextPrompt<string>("Class [green]name[/] [grey](--name)[/]:").DefaultValue(selected.SuggestedTestClassBaseName));
+                    }
+                }
+            }
+            else if (string.IsNullOrWhiteSpace(args.Name))
+            {
+                // The wizard's empty combo: the typed class name is the
+                // only input.
+                if (!canPrompt)
+                {
+                    throw new DevKitValidationException("--name: required for template 'Test' — the test class name.");
+                }
+                args.Name = AnsiConsole.Prompt(new TextPrompt<string>("Class [green]name[/] [grey](--name)[/]:"));
+            }
+
+            // The FormPlugin template combo: Default plus the custom
+            // titles from DynamicsCrm.DevKit.Cli.json — only when a choice
+            // actually exists and the flags did not already pick one.
+            if (canPrompt && string.IsNullOrWhiteSpace(args.T4) && args.Template.Equals("Default", StringComparison.Ordinal))
+            {
+                var configDirectory = string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : args.Out;
+                var titles = T4TemplateResolver.GetCustomTemplateTitles(ItemType.Test, configDirectory);
+                if (titles.Count > 0)
+                {
+                    args.Template = AnsiConsole.Prompt(
+                        new SelectionPrompt<string>()
+                            .Title("Select a [green]template[/] [grey](--template)[/]:")
+                            .AddChoices(new[] { T4TemplateResolver.DefaultTemplateTitle }.Concat(titles)));
+                }
             }
         }
 

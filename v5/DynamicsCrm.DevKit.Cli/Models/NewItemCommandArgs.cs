@@ -55,6 +55,10 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("Data source logical name (DataProvider item)")]
         public string Datasource { get; set; } = string.Empty;
 
+        [CommandOption("--test-target")]
+        [Description("Full class name of the plugin/workflow to test (Test item)")]
+        public string TestTarget { get; set; } = string.Empty;
+
         [CommandOption("--language")]
         [Description("Language code (LCID) for ResourceString items (e.g. 1033)")]
         public string Language { get; set; } = string.Empty;
