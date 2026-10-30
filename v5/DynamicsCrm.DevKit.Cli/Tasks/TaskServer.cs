@@ -845,7 +845,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var fetchXml = $@"
 <fetch>
-  <entity name='sdkmessage'>4
+  <entity name='sdkmessage'>
     <attribute name='sdkmessageid' />
     <attribute name='name' />
     <link-entity name='sdkmessagefilter' from='sdkmessageid' to='sdkmessageid' link-type='inner' alias='s'>
