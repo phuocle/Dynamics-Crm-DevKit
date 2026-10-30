@@ -128,6 +128,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         }
                     }
                 }
+                else if (typeDescriptor?.Id == ItemType.UiTest.ToString())
+                {
+                    // FormPlugin.UiTestItem collapses every org combo —
+                    // the class name is the only dialog input.
+                    if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <class-name>");
+                }
                 else if (typeDescriptor != null &&
                          (typeDescriptor.Id == ItemType.LateBound.ToString() ||
                           typeDescriptor.Id == ItemType.JsForm.ToString() ||
@@ -185,6 +191,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var isWorkflow = descriptor.Id == ItemType.Workflow.ToString();
             var isDataProvider = descriptor.Id == ItemType.DataProvider.ToString();
             var isTest = descriptor.Id == ItemType.Test.ToString();
+            var isUiTest = descriptor.Id == ItemType.UiTest.ToString();
             if (descriptor.RequiresConnection)
             {
                 // Connected and interactive: pick the entity from the org
@@ -213,8 +220,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             .AddChoices(schemas));
                 }
             }
-            else if (string.IsNullOrWhiteSpace(args.Name) && TaskNewShared.CanPrompt())
+            else if (!isUiTest && string.IsNullOrWhiteSpace(args.Name) && TaskNewShared.CanPrompt())
             {
+                // UiTest is excluded: its chain owns the class-name prompt
+                // (the FormPlugin twin — the dialog's collapsed combos make
+                // the class the only input).
                 args.Name = AnsiConsole.Prompt(new TextPrompt<string>("[green]Name[/]:").AllowEmpty());
             }
             if (isPlugin)
@@ -269,6 +279,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // combos are collapsed and their values ride in with the
                 // picked candidate (resolved by the handler).
                 await PromptTestItemAsync(args);
+            }
+            else if (isUiTest)
+            {
+                // The FormPlugin twin for UiTest: class name (the only
+                // dialog input — the wizard collapses the entity, message,
+                // stage and execution combos and reads nothing from the
+                // org; the preview label shows the generated class name)
+                // → custom T4 template.
+                await PromptUiTestItemAsync(args);
             }
             var input = new ItemTemplateInput
             {
@@ -978,6 +997,45 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var configDirectory = string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : args.Out;
                 var titles = T4TemplateResolver.GetCustomTemplateTitles(ItemType.Test, configDirectory);
+                if (titles.Count > 0)
+                {
+                    args.Template = AnsiConsole.Prompt(
+                        new SelectionPrompt<string>()
+                            .Title("Select a [green]template[/] [grey](--template)[/]:")
+                            .AddChoices(new[] { T4TemplateResolver.DefaultTemplateTitle }.Concat(titles)));
+                }
+            }
+        }
+
+        /// <summary>
+        /// The UiTest item prompt chain — the CLI twin of FormPlugin with
+        /// ItemType.UiTest: class name (the only dialog input — the
+        /// wizard collapses the entity, message, stage and execution
+        /// combos, so nothing is read from the org; the dialog carries no
+        /// class suggestion, the preview label just shows the generated
+        /// class name) → custom T4 template. Order is not prompted (the
+        /// dialog has no order field) — it comes from --order.
+        /// </summary>
+        private static async Task PromptUiTestItemAsync(NewItemCommandArgs args)
+        {
+            var canPrompt = TaskNewShared.CanPrompt();
+
+            if (string.IsNullOrWhiteSpace(args.Name))
+            {
+                if (!canPrompt)
+                {
+                    throw new DevKitValidationException("--name: required for template 'UiTest' — the UI test class name.");
+                }
+                args.Name = AnsiConsole.Prompt(new TextPrompt<string>("Class [green]name[/] [grey](--name)[/]:"));
+            }
+
+            // The FormPlugin template combo: Default plus the custom
+            // titles from DynamicsCrm.DevKit.Cli.json — only when a choice
+            // actually exists and the flags did not already pick one.
+            if (canPrompt && string.IsNullOrWhiteSpace(args.T4) && args.Template.Equals("Default", StringComparison.Ordinal))
+            {
+                var configDirectory = string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : args.Out;
+                var titles = T4TemplateResolver.GetCustomTemplateTitles(ItemType.UiTest, configDirectory);
                 if (titles.Count > 0)
                 {
                     args.Template = AnsiConsole.Prompt(
