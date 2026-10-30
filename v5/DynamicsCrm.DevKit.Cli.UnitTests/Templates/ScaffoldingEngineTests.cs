@@ -163,16 +163,18 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             // Locks the live bug found by the P.1..P.13 review: before the
             // registries became kind-scoped, 'devkit new --kind item --type
             // Test' dispatched into the PROJECT Test handler (ProjectInput
-            // null → "input: required") and 'devkit new list' lit item
-            // Test/UiTest/Report as Ready even though I.* is not ported.
-            // Items scaffold into a project (required, engine gate) — the
-            // fixture carries one.
+            // null → "input: required"). Items scaffold into a project
+            // (required, engine gate) — the fixture carries one. Since I.9
+            // the item id has its own handler: the ITEM handler's own
+            // error (no transformer) proves the dispatch, and the project
+            // handler's signature never shows.
             File.WriteAllText(Path.Combine(_directory, "Contoso.Server.csproj"),
                 "<Project Sdk=\"Microsoft.NET.Sdk\">\r\n  <PropertyGroup>\r\n    <TargetFramework>net48</TargetFramework>\r\n  </PropertyGroup>\r\n</Project>");
             TemplateHandlers.RegisterAll();
             var result = await ScaffoldingEngine.ScaffoldItemAsync(new ItemTemplateInput { TemplateId = "Test", Name = "Account", Offline = true, OutputDirectory = _directory });
             Assert.IsFalse(result.Success);
-            StringAssert.Contains(result.Errors[0], "not implemented yet");
+            StringAssert.Contains(result.Errors[0], "T4 transformer: required");
+            Assert.IsFalse(result.Errors[0].Contains("input: required"), "the PROJECT Test handler answered for the item id");
         }
 
         [TestMethod]
