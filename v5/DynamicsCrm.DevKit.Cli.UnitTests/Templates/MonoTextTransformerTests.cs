@@ -63,5 +63,29 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             var output = await transformer.TransformAsync("using System;\r\nnamespace X { }\r\n", new T4Context());
             Assert.AreEqual("using System;\r\nnamespace X { }\r\n", output);
         }
+
+        [TestMethod]
+        public async Task TransformAsync_CollapsesWhitespaceOnlyLinesLikeTheVsHost()
+        {
+            // The VS T4 host removes a template line whose control blocks
+            // emit nothing, leaving the NEXT (empty) template line as the
+            // only break (I.6 wizard compare — the unbound CustomApi guard
+            // line of CustomApi.tt). Mono instead emits the template line's
+            // literal indentation, which merges with the empty line's
+            // newline into a whitespace-only output line. The transform
+            // collapses that back to the empty line the VS host produces;
+            // content lines keep their indentation.
+            var transformer = new MonoTextTransformer();
+            var template = "            <#if (Context.PluginLogicalName != \"none\") { #>if (guard) throw;<# } #>\r\n\r\n            tracing?.DebugContext(context);\r\n";
+
+            var unbound = await transformer.TransformAsync(template, new T4Context { PluginLogicalName = "none" });
+            Assert.AreEqual("\r\n            tracing?.DebugContext(context);\r\n", unbound);
+
+            // Bound: both hosts swallow the empty template line after the
+            // block-ended guard line — the render was already byte-
+            // identical there (the transform must not touch it).
+            var bound = await transformer.TransformAsync(template, new T4Context { PluginLogicalName = "account" });
+            Assert.AreEqual("            if (guard) throw;\r\n            tracing?.DebugContext(context);\r\n", bound);
+        }
     }
 }

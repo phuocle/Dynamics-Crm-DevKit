@@ -289,6 +289,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\SolutionMutator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\WorkspaceScanner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\ScaffoldingEngine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\PluginTestDiscovery.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\T4\ITextTransformer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\T4\T4ContextFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\T4\T4TemplateResolver.cs" />
@@ -309,6 +310,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\JsWebApiItemTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\PluginItemTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\CustomActionItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\CustomApiItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\WorkflowItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\DataProviderItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TestItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\UiTestItemTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\LateBoundItemTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TemplateHandlers.cs" />
   </ItemGroup>

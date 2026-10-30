@@ -50,6 +50,16 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             TemplateManifests.Register(PluginItemTemplateHandler.CreateManifest());
             ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new CustomActionItemTemplateHandler());
             TemplateManifests.Register(CustomActionItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new CustomApiItemTemplateHandler());
+            TemplateManifests.Register(CustomApiItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new WorkflowItemTemplateHandler());
+            TemplateManifests.Register(WorkflowItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new DataProviderItemTemplateHandler());
+            TemplateManifests.Register(DataProviderItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new TestItemTemplateHandler());
+            TemplateManifests.Register(TestItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new UiTestItemTemplateHandler());
+            TemplateManifests.Register(UiTestItemTemplateHandler.CreateManifest());
         }
     }
 }
