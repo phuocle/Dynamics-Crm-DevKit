@@ -337,7 +337,9 @@ namespace DynamicsCrm.DevKit.Shared.Templates
         /// whole solution tree — the same bin/obj exclusions the scanner
         /// applies); without a name the NEAREST project file at or above
         /// the output directory stands: walking up parent by parent, the
-        /// first directory holding a .csproj (or a .shproj) names it —
+        /// first directory holding a .csproj (or a .shproj, or a .rptproj
+        /// — the Reporting Services project the Report item scaffolds
+        /// into, the wizard's Solution Explorer selection) names it —
         /// the file-system equivalent of right-clicking inside a project
         /// in Solution Explorer. Null when nothing matches.
         /// </summary>
@@ -346,7 +348,8 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             if (!string.IsNullOrWhiteSpace(projectName))
             {
                 var named = FindNamedProjectUp(outputDirectory, projectName, ".csproj") ??
-                            FindNamedProjectUp(outputDirectory, projectName, ".shproj");
+                            FindNamedProjectUp(outputDirectory, projectName, ".shproj") ??
+                            FindNamedProjectUp(outputDirectory, projectName, ".rptproj");
                 if (named != null) return named;
                 var solutionDirectory = workspace?.SolutionDirectory;
                 if (!string.IsNullOrEmpty(solutionDirectory) && System.IO.Directory.Exists(solutionDirectory))
@@ -354,6 +357,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                     var inSolution = System.IO.Directory
                         .GetFiles(solutionDirectory, "*.csproj", SearchOption.AllDirectories)
                         .Concat(System.IO.Directory.GetFiles(solutionDirectory, "*.shproj", SearchOption.AllDirectories))
+                        .Concat(System.IO.Directory.GetFiles(solutionDirectory, "*.rptproj", SearchOption.AllDirectories))
                         .Where(path => path.IndexOf("\\bin\\", StringComparison.OrdinalIgnoreCase) < 0 &&
                                        path.IndexOf("\\obj\\", StringComparison.OrdinalIgnoreCase) < 0)
                         .FirstOrDefault(path => string.Equals(Path.GetFileNameWithoutExtension(path), projectName, StringComparison.OrdinalIgnoreCase));
@@ -366,7 +370,8 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             while (directory != null)
             {
                 var projectFile = System.IO.Directory.GetFiles(directory.FullName, "*.csproj").FirstOrDefault() ??
-                                  System.IO.Directory.GetFiles(directory.FullName, "*.shproj").FirstOrDefault();
+                                  System.IO.Directory.GetFiles(directory.FullName, "*.shproj").FirstOrDefault() ??
+                                  System.IO.Directory.GetFiles(directory.FullName, "*.rptproj").FirstOrDefault();
                 if (projectFile != null) return projectFile;
                 directory = directory.Parent;
             }

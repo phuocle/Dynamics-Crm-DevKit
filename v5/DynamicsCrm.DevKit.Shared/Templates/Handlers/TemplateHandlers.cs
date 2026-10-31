@@ -72,6 +72,8 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             TemplateManifests.Register(TsDialogItemTemplateHandler.CreateManifest());
             ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new JsDialogItemTemplateHandler());
             TemplateManifests.Register(JsDialogItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new ReportItemTemplateHandler());
+            TemplateManifests.Register(ReportItemTemplateHandler.CreateManifest());
         }
     }
 }

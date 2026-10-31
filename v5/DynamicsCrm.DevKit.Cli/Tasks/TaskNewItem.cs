@@ -172,6 +172,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     // SystemForm (its UniqueName).
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <dialog-name>");
                 }
+                else if (typeDescriptor?.Id == ItemType.Report.ToString())
+                {
+                    // FormItem.ReportItem (the 18.ReportItemTemplate .vsz
+                    // wizard): the entity combo is the dialog's only input.
+                    // The .rdl file name is the VS Add New Item dialog's
+                    // name box, defaulting to the .vsdir's Report.rdl —
+                    // --name is optional (the handler normalizes it like
+                    // the wizard's NormalizeFileName).
+                    if (string.IsNullOrWhiteSpace(args.Entity)) missing.Add("--entity <schema-name>");
+                }
                 else if (typeDescriptor != null &&
                          (typeDescriptor.Id == ItemType.LateBound.ToString() ||
                           typeDescriptor.Id == ItemType.JsForm.ToString() ||
@@ -236,6 +246,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var isBatFile = descriptor.Id == ItemType.BatFile.ToString();
             var isTsDialog = descriptor.Id == ItemType.TsDialog.ToString();
             var isJsDialog = descriptor.Id == ItemType.JsDialog.ToString();
+            var isReport = descriptor.Id == ItemType.Report.ToString();
             if (descriptor.RequiresConnection)
             {
                 // Connected and interactive: pick the entity from the org
@@ -295,6 +306,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             .PageSize(20)
                             .EnableSearch()
                             .AddChoices(dialogNames));
+                }
+
+                // The Report item's .rdl file name — the VS Add New Item
+                // dialog's name box, defaulting to the .vsdir's Report.rdl
+                // (an empty answer keeps the default: the handler's
+                // NormalizeFileName falls back the same way).
+                if (isReport && string.IsNullOrWhiteSpace(args.Name) && TaskNewShared.CanPrompt())
+                {
+                    args.Name = AnsiConsole.Prompt(new TextPrompt<string>("Report [green]file name[/] [grey](--name)[/]:").DefaultValue("Report.rdl").AllowEmpty());
                 }
             }
             else if (!isUiTest && !isBatFile && string.IsNullOrWhiteSpace(args.Name) && TaskNewShared.CanPrompt())
@@ -1251,7 +1271,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         /// <summary>
         /// The nearest project name at or above the start directory — the
-        /// suggested default of the interactive --project prompt.
+        /// suggested default of the interactive --project prompt. The
+        /// .rptproj counts (the Reporting Services project the Report
+        /// item scaffolds into).
         /// </summary>
         private static string FindNearestProjectName(string startDirectory)
         {
@@ -1259,7 +1281,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             while (directory != null)
             {
                 var projectFile = Directory.GetFiles(directory.FullName, "*.csproj").FirstOrDefault() ??
-                                  Directory.GetFiles(directory.FullName, "*.shproj").FirstOrDefault();
+                                  Directory.GetFiles(directory.FullName, "*.shproj").FirstOrDefault() ??
+                                  Directory.GetFiles(directory.FullName, "*.rptproj").FirstOrDefault();
                 if (projectFile != null) return Path.GetFileNameWithoutExtension(projectFile);
                 directory = directory.Parent;
             }
@@ -1269,8 +1292,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         /// <summary>
         /// Locates the named project for --project: the walk up from the
         /// start directory first, then the whole solution tree (the same
-        /// bin/obj exclusions the workspace scanner applies). Returns the
-        /// project directory, or null when nothing matches.
+        /// bin/obj exclusions the workspace scanner applies). The .rptproj
+        /// counts (the Reporting Services project the Report item
+        /// scaffolds into). Returns the project directory, or null when
+        /// nothing matches.
         /// </summary>
         private static string ResolveProjectDirectory(string projectName, string startDirectory)
         {
@@ -1279,6 +1304,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var match = Directory.GetFiles(directory.FullName, "*.csproj")
                     .Concat(Directory.GetFiles(directory.FullName, "*.shproj"))
+                    .Concat(Directory.GetFiles(directory.FullName, "*.rptproj"))
                     .FirstOrDefault(path => string.Equals(Path.GetFileNameWithoutExtension(path), projectName, StringComparison.OrdinalIgnoreCase));
                 if (match != null) return Path.GetDirectoryName(match);
                 directory = directory.Parent;
@@ -1293,6 +1319,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var solutionMatch = Directory.GetFiles(directory.FullName, "*.csproj", SearchOption.AllDirectories)
                         .Concat(Directory.GetFiles(directory.FullName, "*.shproj", SearchOption.AllDirectories))
+                        .Concat(Directory.GetFiles(directory.FullName, "*.rptproj", SearchOption.AllDirectories))
                         .Where(path => path.IndexOf("\\bin\\", StringComparison.OrdinalIgnoreCase) < 0 &&
                                        path.IndexOf("\\obj\\", StringComparison.OrdinalIgnoreCase) < 0)
                         .FirstOrDefault(path => string.Equals(Path.GetFileNameWithoutExtension(path), projectName, StringComparison.OrdinalIgnoreCase));
