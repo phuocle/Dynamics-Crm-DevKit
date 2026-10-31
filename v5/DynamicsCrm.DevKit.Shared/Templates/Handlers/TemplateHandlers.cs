@@ -66,6 +66,8 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             TemplateManifests.Register(BatFileItemTemplateHandler.CreateManifest());
             ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new TsFormItemTemplateHandler());
             TemplateManifests.Register(TsFormItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new TsWebApiItemTemplateHandler());
+            TemplateManifests.Register(TsWebApiItemTemplateHandler.CreateManifest());
         }
     }
 }
