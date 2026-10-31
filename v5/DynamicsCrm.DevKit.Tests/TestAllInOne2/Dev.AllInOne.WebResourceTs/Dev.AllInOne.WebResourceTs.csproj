@@ -42,7 +42,6 @@
 		<Folder Include="html\" />
 		<Folder Include="css\" />
 		<Compile Remove="build\**" />
-		<Folder Include="entities\" />
 		<Folder Include="lib\" />
 		<Folder Include="images\" />
 		<Folder Include="resources\" />
@@ -68,6 +67,11 @@
 	  <None Remove="build\**" />
 	  <None Remove="node_modules\**" />
 	  <None Remove="package-lock.json" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="entities\Account.form.ts">
+	    <DependentUpon>Account.ts</DependentUpon>
+	  </None>
 	</ItemGroup>
 </Project>
 <!-- v.4.44.44.44 - Build: 31.12.2026 23.59.59 -->
