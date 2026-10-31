@@ -52,30 +52,12 @@ Published/**
 # Local Codex config may contain credentials or per-user settings
 .codex/config.toml
 
-# DynamicsCrm.DevKit local project environment
-D:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAllInOneEnvVar/.env
-
-# DynamicsCrm.DevKit local project environment
-D:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAllInOne/.env
-
-# DynamicsCrm.DevKit local project environment
-D:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAddCrmPluginRegistration/2.after/.env
-
 # Local Claude Code MCP server config (may contain credentials)
 .mcp.json
 
 # ZCode local session data
 .zcode/
 .zcodeignore
-
-# DynamicsCrm.DevKit local project environment
-E:/src/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAllInOneCli/.env
-
-# DynamicsCrm.DevKit local project environment
-E:/src/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAllInOne/.env
-
-# DynamicsCrm.DevKit local project environment
-E:/src/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAllInOne2/.env
 
 # Visual Studio Report Designer user state (created when the solution loads a .rptproj project)
 *.rptproj.rsuser

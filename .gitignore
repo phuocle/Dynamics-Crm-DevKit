@@ -286,6 +286,10 @@ __pycache__/
 TestResults/
 PerfTrx/
 
+# Environment secrets — every .env at any depth (CLI project-connection files
+# carry real credentials; .env.example stays trackable, fixtures copy only it)
+.env
+
 # CLI demo sandbox at the repo root (I.14+ work units): scratch infrastructure
 # for live demos — carries a real project .env (credentials), .vs/ and build
 # output; stays on disk, never committed. The compare fixtures are mirrored
