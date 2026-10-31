@@ -72,6 +72,9 @@
 	  <None Update="entities\Account.form.ts">
 	    <DependentUpon>Account.ts</DependentUpon>
 	  </None>
+	  <None Update="entities\Account.webapi.ts">
+	    <DependentUpon>Account.ts</DependentUpon>
+	  </None>
 	</ItemGroup>
 </Project>
 <!-- v.4.44.44.44 - Build: 31.12.2026 23.59.59 -->
