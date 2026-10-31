@@ -156,7 +156,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 else if (typeDescriptor != null &&
                          (typeDescriptor.Id == ItemType.LateBound.ToString() ||
                           typeDescriptor.Id == ItemType.JsForm.ToString() ||
-                          typeDescriptor.Id == ItemType.JsWebApi.ToString()) &&
+                          typeDescriptor.Id == ItemType.JsWebApi.ToString() ||
+                          typeDescriptor.Id == ItemType.TsForm.ToString()) &&
                          string.IsNullOrWhiteSpace(args.Entity))
                 {
                     missing.Add("--entity <schema-name>");

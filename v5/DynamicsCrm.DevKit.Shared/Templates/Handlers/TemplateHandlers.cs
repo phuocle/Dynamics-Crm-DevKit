@@ -64,6 +64,8 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             TemplateManifests.Register(ResourceStringItemTemplateHandler.CreateManifest());
             ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new BatFileItemTemplateHandler());
             TemplateManifests.Register(BatFileItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new TsFormItemTemplateHandler());
+            TemplateManifests.Register(TsFormItemTemplateHandler.CreateManifest());
         }
     }
 }
