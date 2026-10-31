@@ -64,22 +64,61 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         /// Same chain as the base command: modern auth (--auth/--url/... —
         /// the project .env fallback is already applied by
         /// ResolveProjectEnvironmentDefaults), else the legacy --conn string.
+        /// The connected connection rides with the settings either way — the
+        /// BatFile bats embed the CLI connection arguments. A .env-only
+        /// connection (every connection argument arrived empty and the
+        /// project .env filled them) behaves like the wizard's
+        /// UseProjectEnvironment connections from DynamicsCrm.DevKit.json:
+        /// CliArgsBuilder emits no arguments and the bat picks the project
+        /// .env up at runtime. Built HERE so the shared connect flow in
+        /// DevKitCommand stays untouched.
         /// </summary>
         private async Task<ServiceClient> ConnectAsync(NewItemCommandArgs settings)
         {
             if (!string.IsNullOrWhiteSpace(settings.AuthType))
             {
-                return await ConnectWithModernAuthAsync(settings);
+                var serviceClient = await ConnectWithModernAuthAsync(settings);
+                settings.CrmConnection = new CrmConnection
+                {
+                    Name = settings.Profile,
+                    Url = settings.Url,
+                    UserName = GetConnectionUserName(settings),
+                    Password = settings.Password,
+                    ClientId = settings.ClientId,
+                    ClientSecret = settings.ClientSecret,
+                    Type = settings.AuthType,
+                    PacProfile = settings.PacProfile,
+                    UseProjectEnvironment = settings.ConnectionFromProjectEnvironment,
+                };
+                return serviceClient;
             }
             if (!string.IsNullOrWhiteSpace(settings.Connection))
             {
                 var legacyBuilder = new LegacyConnectionBuilder();
                 var crmConn = legacyBuilder.ParseConnectionString(settings.Connection);
                 if (crmConn == null) throw new DevKitConnectionException("Invalid connection string");
+                settings.CrmConnection = crmConn;
                 var builder = ConnectionBuilderFactory.GetBuilder(crmConn.Type);
                 return await builder.CreateServiceClientAsync(crmConn);
             }
             throw new DevKitConnectionException("--conn or --auth: required (or a project .env) — adding an item always connects to Dataverse.");
+        }
+
+        /// <summary>
+        /// The connection user name — AD joins the domain (the same rule
+        /// DevKitCommand applies to the connection it validates with; kept
+        /// here so the shared connect flow stays untouched).
+        /// </summary>
+        private static string GetConnectionUserName(NewItemCommandArgs settings)
+        {
+            if (!settings.AuthType.Equals("AD", StringComparison.OrdinalIgnoreCase) ||
+                string.IsNullOrEmpty(settings.Domain) ||
+                string.IsNullOrEmpty(settings.Username) ||
+                settings.Username.Contains("\\"))
+            {
+                return settings.Username;
+            }
+            return $"{settings.Domain}\\{settings.Username}";
         }
     }
 }

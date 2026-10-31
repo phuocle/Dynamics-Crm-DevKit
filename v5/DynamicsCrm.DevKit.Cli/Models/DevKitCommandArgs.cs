@@ -94,6 +94,26 @@ namespace DynamicsCrm.DevKit.Shared.Models
 
         public ServiceClient ServiceClient { get; set; }
 
+        /// <summary>
+        /// True when the connection came entirely from the project .env —
+        /// no explicit connection argument was passed on the command line.
+        /// The BatFile bats then embed no connection arguments (the wizard's
+        /// UseProjectEnvironment connections from DynamicsCrm.DevKit.json —
+        /// the generated bat picks the project .env up itself at runtime);
+        /// any explicit argument makes the connection explicit and the
+        /// arguments ride in (runtime carrier, not a command option).
+        /// </summary>
+        public bool ConnectionFromProjectEnvironment { get; private set; }
+
+        /// <summary>
+        /// The CrmConnection the command connected with (runtime carrier,
+        /// not a command option — the modern-auth and legacy --conn paths
+        /// stash it after building). Item templates that embed the CLI
+        /// connection arguments in generated content (the BatFile bats)
+        /// read it from here, like the wizard dialog's connection.
+        /// </summary>
+        public CrmConnection CrmConnection { get; set; }
+
         private static string ResolveJsonFile(string json, string currentDirectory)
         {
             if (string.IsNullOrWhiteSpace(json)) return null;
@@ -157,6 +177,21 @@ namespace DynamicsCrm.DevKit.Shared.Models
 
         private void ResolveDefaults(Func<string, string> getValue)
         {
+            // The connection-defining arguments: when ALL of them arrive
+            // empty the connection is the project .env's (resolved below) —
+            // ConnectionFromProjectEnvironment marks it so the BatFile bats
+            // stay argument-free like the wizard's .env connections.
+            ConnectionFromProjectEnvironment =
+                string.IsNullOrEmpty(Connection) &&
+                string.IsNullOrEmpty(AuthType) &&
+                string.IsNullOrEmpty(Url) &&
+                string.IsNullOrEmpty(ClientId) &&
+                string.IsNullOrEmpty(ClientSecret) &&
+                string.IsNullOrEmpty(PacProfile) &&
+                string.IsNullOrEmpty(Username) &&
+                string.IsNullOrEmpty(Password) &&
+                string.IsNullOrEmpty(Domain);
+
             if (string.IsNullOrEmpty(Connection))
                 Connection = getValue(ProjectEnvironment.Connection) ?? string.Empty;
 

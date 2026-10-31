@@ -145,6 +145,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (string.IsNullOrWhiteSpace(args.Language)) missing.Add("--language <lcid>");
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <class-name>");
                 }
+                else if (typeDescriptor?.Id == ItemType.BatFile.ToString())
+                {
+                    // FormPlugin.BatFileItem: the relabeled entity combo
+                    // ("File", the six static utility files) is the
+                    // dialog's only input — the pick names the output file
+                    // itself (the wizard's $batfilename$).
+                    if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <utility-file>");
+                }
                 else if (typeDescriptor != null &&
                          (typeDescriptor.Id == ItemType.LateBound.ToString() ||
                           typeDescriptor.Id == ItemType.JsForm.ToString() ||
@@ -204,6 +212,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var isTest = descriptor.Id == ItemType.Test.ToString();
             var isUiTest = descriptor.Id == ItemType.UiTest.ToString();
             var isResourceString = descriptor.Id == ItemType.ResourceString.ToString();
+            var isBatFile = descriptor.Id == ItemType.BatFile.ToString();
             if (descriptor.RequiresConnection)
             {
                 // Connected and interactive: pick the entity from the org
@@ -235,11 +244,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             .AddChoices(schemas));
                 }
             }
-            else if (!isUiTest && string.IsNullOrWhiteSpace(args.Name) && TaskNewShared.CanPrompt())
+            else if (!isUiTest && !isBatFile && string.IsNullOrWhiteSpace(args.Name) && TaskNewShared.CanPrompt())
             {
                 // UiTest is excluded: its chain owns the class-name prompt
                 // (the FormPlugin twin — the dialog's collapsed combos make
-                // the class the only input).
+                // the class the only input). BatFile is excluded too: its
+                // chain owns the file prompt (the dialog's relabeled
+                // "File" combo — a selection, not a typed name).
                 args.Name = AnsiConsole.Prompt(new TextPrompt<string>("[green]Name[/]:").AllowEmpty());
             }
             if (isPlugin)
@@ -315,6 +326,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // template prompt.
                 await PromptResourceStringItemAsync(args);
             }
+            else if (isBatFile)
+            {
+                // The FormPlugin twin for BatFile: file (the dialog's
+                // relabeled entity combo, the six static utility files —
+                // the wizard's combo is static, no org call) and nothing
+                // else. The dialog hides the message, stage and execution
+                // combos, the class textbox and the template panel — no
+                // message, stage, execution, class, order or custom
+                // template prompt.
+                await PromptBatFileItemAsync(args);
+            }
             var input = new ItemTemplateInput
             {
                 TemplateId = descriptor.Id,
@@ -334,6 +356,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 RootNamespace = args.Namespace,
                 OutputDirectory = args.Out,
                 ServiceClient = args.ServiceClient,
+                CrmConnection = args.CrmConnection,
                 // The host's T4 engine — the Shared handlers render
                 // through the ITextTransformer contract (I.4).
                 Transformer = new MonoTextTransformer(),
@@ -1144,6 +1167,33 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 args.Name = AnsiConsole.Prompt(new TextPrompt<string>("Resource [green]class name[/] [grey](--name)[/]:"));
             }
+        }
+
+        /// <summary>
+        /// The BatFile item prompt chain — the CLI twin of FormPlugin with
+        /// ItemType.BatFile: file (the dialog's relabeled entity combo
+        /// "File", filled with the six static utility files — the wizard's
+        /// combo is static, filled on connect without an org call) and
+        /// nothing else. A --name given up front passes through: the
+        /// handler resolves it against the same static list (the
+        /// wizard's combo only ever offers those six).
+        /// </summary>
+        private static Task PromptBatFileItemAsync(NewItemCommandArgs args)
+        {
+            var canPrompt = TaskNewShared.CanPrompt();
+
+            if (string.IsNullOrWhiteSpace(args.Name))
+            {
+                if (!canPrompt)
+                {
+                    throw new DevKitValidationException("--name: required for template 'BatFile' — the utility file to add.");
+                }
+                args.Name = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("Select a [green]file[/] [grey](--name)[/]:")
+                        .AddChoices(BatFileItemTemplateHandler.UtilityFiles));
+            }
+            return Task.CompletedTask;
         }
 
         /// <summary>
