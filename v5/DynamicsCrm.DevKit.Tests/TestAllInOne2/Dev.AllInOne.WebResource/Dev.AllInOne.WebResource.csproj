@@ -55,6 +55,12 @@
     <None Update="entities\Account.webapi.js">
       <DependentUpon>Account.js</DependentUpon>
     </None>
+    <None Update="entities\pl_dataversedialogbuilder_demo.dialog.d.ts">
+      <DependentUpon>pl_dataversedialogbuilder_demo.js</DependentUpon>
+    </None>
+    <None Update="entities\pl_dataversedialogbuilder_demo.dialog.js">
+      <DependentUpon>pl_dataversedialogbuilder_demo.js</DependentUpon>
+    </None>
   </ItemGroup>
 </Project>
 <!-- v.4.44.44.44 - Build: 31.12.2026 23.59.59 -->
