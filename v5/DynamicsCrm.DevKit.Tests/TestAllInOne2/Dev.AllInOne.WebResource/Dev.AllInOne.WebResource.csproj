@@ -41,7 +41,6 @@
     <Folder Include="js\" />
 		<Folder Include="lib\" />
 		<Folder Include="images\" />
-		<Folder Include="resources\" />
 	</ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
