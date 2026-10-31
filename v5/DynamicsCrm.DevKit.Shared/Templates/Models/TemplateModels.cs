@@ -122,6 +122,14 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Models
         public string TestTarget { get; set; }
 
         /// <summary>
+        /// The language code (LCID, e.g. "1033") of the ResourceString
+        /// item — the FormPlugin entity combo relabeled "Language", filled
+        /// with the org's provisioned languages (the XrmEntity LogicalName
+        /// is the LCID string). Empty for every other item template.
+        /// </summary>
+        public string Language { get; set; }
+
+        /// <summary>
         /// The T4 template title from DynamicsCrm.DevKit.Cli.json
         /// ("Default" = built-in resource) — the FormPlugin template combo.
         /// </summary>

@@ -134,6 +134,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     // the class name is the only dialog input.
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <class-name>");
                 }
+                else if (typeDescriptor?.Id == ItemType.ResourceString.ToString())
+                {
+                    // FormPlugin.ResourceStringItem: the relabeled entity
+                    // combo ("Language", filled on connect with the
+                    // provisioned languages) holds the LCID and the
+                    // relabeled class textbox ("Resource") holds the
+                    // resource base name — the dialog's two fields, class
+                    // last.
+                    if (string.IsNullOrWhiteSpace(args.Language)) missing.Add("--language <lcid>");
+                    if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <class-name>");
+                }
                 else if (typeDescriptor != null &&
                          (typeDescriptor.Id == ItemType.LateBound.ToString() ||
                           typeDescriptor.Id == ItemType.JsForm.ToString() ||
@@ -192,6 +203,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var isDataProvider = descriptor.Id == ItemType.DataProvider.ToString();
             var isTest = descriptor.Id == ItemType.Test.ToString();
             var isUiTest = descriptor.Id == ItemType.UiTest.ToString();
+            var isResourceString = descriptor.Id == ItemType.ResourceString.ToString();
             if (descriptor.RequiresConnection)
             {
                 // Connected and interactive: pick the entity from the org
@@ -207,7 +219,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // virtual tables, not the entities. Test is excluded for
                 // the same reason: the dialog collapses the entity combo
                 // (the entity rides in with the test-plugin candidate).
-                if (!isCustomAction && !isCustomApi && !isWorkflow && !isDataProvider && !isTest &&
+                // ResourceString is excluded too: its dialog relabels the
+                // combo "Language" and fills it with the org's provisioned
+                // languages, not the entities.
+                if (!isCustomAction && !isCustomApi && !isWorkflow && !isDataProvider && !isTest && !isResourceString &&
                     string.IsNullOrWhiteSpace(args.Entity) && args.ServiceClient != null && TaskNewShared.CanPrompt())
                 {
                     await new MetadataService(args.ServiceClient).ReadEntitiesMetadataAsync(EntityFilters.Attributes);
@@ -289,6 +304,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // → custom T4 template.
                 await PromptUiTestItemAsync(args);
             }
+            else if (isResourceString)
+            {
+                // The FormPlugin twin for ResourceString: language (the
+                // dialog's relabeled entity combo, filled from the org's
+                // provisioned languages) → class name (the dialog's
+                // relabeled "Resource" textbox). The dialog hides the
+                // message, stage and execution combos and the template
+                // panel — no message, stage, execution, order or custom
+                // template prompt.
+                await PromptResourceStringItemAsync(args);
+            }
             var input = new ItemTemplateInput
             {
                 TemplateId = descriptor.Id,
@@ -301,6 +327,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 Class = args.Name,
                 DataSource = args.Datasource,
                 TestTarget = args.TestTarget,
+                Language = args.Language,
                 TemplateTitle = args.Template,
                 T4Path = args.T4,
                 ProjectName = args.Project,
@@ -1043,6 +1070,79 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             .Title("Select a [green]template[/] [grey](--template)[/]:")
                             .AddChoices(new[] { T4TemplateResolver.DefaultTemplateTitle }.Concat(titles)));
                 }
+            }
+        }
+
+        /// <summary>
+        /// The ResourceString item prompt chain — the CLI twin of FormPlugin
+        /// with ItemType.ResourceString: language (the dialog's relabeled
+        /// entity combo, filled from
+        /// MetadataService.GetProvisionedLanguagesAsync — the org's
+        /// provisioned languages, the XrmEntity LogicalName being the LCID)
+        /// → class name (the dialog's relabeled "Resource" textbox). The
+        /// dialog hides the
+        /// message, stage and execution combos and the template panel, so
+        /// there is no message, stage, execution, order or template prompt.
+        /// A --language given up front is verified against the org list
+        /// like the Plugin entity lookup; offline runs type it. The class
+        /// carries no suggestion (no combo drives UpdateClassName) — the
+        /// prompt starts empty.
+        /// </summary>
+        private static async Task PromptResourceStringItemAsync(NewItemCommandArgs args)
+        {
+            var canPrompt = TaskNewShared.CanPrompt();
+
+            if (string.IsNullOrWhiteSpace(args.Language))
+            {
+                if (!canPrompt)
+                {
+                    throw new DevKitValidationException("--language: required for template 'ResourceString' — the LCID of a language provisioned in the instance (e.g. 1033).");
+                }
+                if (args.ServiceClient != null)
+                {
+                    var languages = await new MetadataService(args.ServiceClient).GetProvisionedLanguagesAsync();
+                    if (languages.Count == 0)
+                    {
+                        throw new DevKitValidationException("--language: no provisioned language found in the current instance.");
+                    }
+                    // FormPlugin.Connection_Connected: the combo displays
+                    // the language name (XrmEntity SchemaName) and carries
+                    // the LCID (LogicalName) as the wizard's $LanguageCode$
+                    // value.
+                    var selected = AnsiConsole.Prompt(
+                        new SelectionPrompt<string>()
+                            .Title("Select a [green]language[/] [grey](--language)[/]:")
+                            .PageSize(20)
+                            .EnableSearch()
+                            .AddChoices(languages.Select(x => x.SchemaName)));
+                    args.Language = languages.First(x => x.SchemaName == selected).LogicalName;
+                }
+                else
+                {
+                    args.Language = AnsiConsole.Prompt(new TextPrompt<string>("Language [green]LCID[/] [grey](--language)[/]:"));
+                }
+            }
+            else if (args.ServiceClient != null)
+            {
+                // The wizard's combo only offers the provisioned languages
+                // — a flag value resolves through the same list like the
+                // Plugin entity lookup.
+                var languages = await new MetadataService(args.ServiceClient).GetProvisionedLanguagesAsync();
+                var match = languages.FirstOrDefault(x => string.Equals(x.LogicalName, args.Language, StringComparison.Ordinal));
+                if (match == null)
+                {
+                    throw new DevKitValidationException($"--language '{args.Language}': language not provisioned in the current instance.");
+                }
+                args.Language = match.LogicalName;
+            }
+
+            if (string.IsNullOrWhiteSpace(args.Name))
+            {
+                if (!canPrompt)
+                {
+                    throw new DevKitValidationException("--name: required for template 'ResourceString' — the resource class name.");
+                }
+                args.Name = AnsiConsole.Prompt(new TextPrompt<string>("Resource [green]class name[/] [grey](--name)[/]:"));
             }
         }
 

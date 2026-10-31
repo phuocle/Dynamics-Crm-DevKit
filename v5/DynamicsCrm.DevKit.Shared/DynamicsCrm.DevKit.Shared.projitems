@@ -315,6 +315,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\DataProviderItemTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TestItemTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\UiTestItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ResourceStringItemTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\LateBoundItemTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TemplateHandlers.cs" />
   </ItemGroup>
@@ -446,7 +447,12 @@
     <EmbeddedResource Include="..\ItemTemplates\CSharp\08.DataProviderItemTemplate\Update.cs" LogicalName="Resources.templates.item.dataprovider.Update.cs" />
     <EmbeddedResource Include="..\ItemTemplates\CSharp\09.TestItemTemplate\Class.cs" LogicalName="Resources.templates.item.test.Class.cs" />
     <EmbeddedResource Include="..\ItemTemplates\CSharp\10.UiTestItemTemplate\Class.cs" LogicalName="Resources.templates.item.uitest.Class.cs" />
-    <EmbeddedResource Include="..\ItemTemplates\CSharp\11.ResourceStringItemTemplate\ResourceString.resx" LogicalName="Resources.templates.item.resourcestring.ResourceString.resx" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\11.ResourceStringItemTemplate\ResourceString.resx" LogicalName="Resources.templates.item.resourcestring.ResourceString.resx">
+      <!-- Raw bytes: without this the resx is compiled to a binary
+           .resources blob (GenerateResource) and TemplatePayload reads
+           mojibake — the payload must be copied through unchanged. -->
+      <Type>Non-Resx</Type>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\ItemTemplates\CSharp\13.BatFileItemTemplate\batfile.bat" LogicalName="Resources.templates.item.batfile.batfile.bat" />
     <EmbeddedResource Include="..\ItemTemplates\CSharp\13.BatFileItemTemplate\devkit.d.ts" LogicalName="Resources.templates.item.batfile.devkit.d.ts" />
     <EmbeddedResource Include="..\ItemTemplates\CSharp\13.BatFileItemTemplate\devkit.js" LogicalName="Resources.templates.item.batfile.devkit.js" />
