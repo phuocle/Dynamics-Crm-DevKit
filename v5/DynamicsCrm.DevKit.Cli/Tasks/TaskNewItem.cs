@@ -153,6 +153,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     // itself (the wizard's $batfilename$).
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <utility-file>");
                 }
+                else if (typeDescriptor?.Id == ItemType.TsDialog.ToString())
+                {
+                    // FormItem.TsDialogItem: the relabeled entity combo
+                    // ("Dialog", filled on connect with the org's active
+                    // unmanaged dialogs) is the dialog's only input — the
+                    // pick's display Name is --name, and the file names plus
+                    // the generated namespace/class ride in with the picked
+                    // SystemForm (its UniqueName).
+                    if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <dialog-name>");
+                }
                 else if (typeDescriptor != null &&
                          (typeDescriptor.Id == ItemType.LateBound.ToString() ||
                           typeDescriptor.Id == ItemType.JsForm.ToString() ||
@@ -215,6 +225,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var isUiTest = descriptor.Id == ItemType.UiTest.ToString();
             var isResourceString = descriptor.Id == ItemType.ResourceString.ToString();
             var isBatFile = descriptor.Id == ItemType.BatFile.ToString();
+            var isTsDialog = descriptor.Id == ItemType.TsDialog.ToString();
             if (descriptor.RequiresConnection)
             {
                 // Connected and interactive: pick the entity from the org
@@ -232,8 +243,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // (the entity rides in with the test-plugin candidate).
                 // ResourceString is excluded too: its dialog relabels the
                 // combo "Language" and fills it with the org's provisioned
-                // languages, not the entities.
-                if (!isCustomAction && !isCustomApi && !isWorkflow && !isDataProvider && !isTest && !isResourceString &&
+                // languages, not the entities. TsDialog is excluded for the
+                // same shape of reason: its dialog relabels the combo
+                // "Dialog" and fills it with the org's active unmanaged
+                // dialogs, not the entities.
+                if (!isCustomAction && !isCustomApi && !isWorkflow && !isDataProvider && !isTest && !isResourceString && !isTsDialog &&
                     string.IsNullOrWhiteSpace(args.Entity) && args.ServiceClient != null && TaskNewShared.CanPrompt())
                 {
                     await new MetadataService(args.ServiceClient).ReadEntitiesMetadataAsync(EntityFilters.Attributes);
@@ -244,6 +258,32 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             .PageSize(20)
                             .EnableSearch()
                             .AddChoices(schemas));
+                }
+
+                // The TsDialog twin of that combo: the wizard's relabeled
+                // "Dialog" combo, filled on connect with the org's active
+                // unmanaged dialogs (MetadataService.GetEntityDialogFormsAsync)
+                // and picked by display name — the CLI twin reads the same
+                // list into a searchable prompt. The handler resolves the
+                // picked name to the SystemForm (a second read of the same
+                // fetch — the wizard reuses the form's selection instead;
+                // there is no dialog cache to share). An empty list is the
+                // wizard's disabled OK button: nothing to scaffold from.
+                if (isTsDialog && string.IsNullOrWhiteSpace(args.Name) && args.ServiceClient != null && TaskNewShared.CanPrompt())
+                {
+                    var dialogNames = (await new MetadataService(args.ServiceClient).GetEntityDialogFormsAsync())
+                        .Select(x => x.Name)
+                        .ToList();
+                    if (dialogNames.Count == 0)
+                    {
+                        throw new DevKitValidationException("--name: required — the connected instance has no active dialogs to pick.");
+                    }
+                    args.Name = AnsiConsole.Prompt(
+                        new SelectionPrompt<string>()
+                            .Title("Select a [green]dialog[/] [grey](--name)[/]:")
+                            .PageSize(20)
+                            .EnableSearch()
+                            .AddChoices(dialogNames));
                 }
             }
             else if (!isUiTest && !isBatFile && string.IsNullOrWhiteSpace(args.Name) && TaskNewShared.CanPrompt())
