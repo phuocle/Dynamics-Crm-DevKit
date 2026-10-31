@@ -163,6 +163,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     // SystemForm (its UniqueName).
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <dialog-name>");
                 }
+                else if (typeDescriptor?.Id == ItemType.JsDialog.ToString())
+                {
+                    // FormItem.JsDialogItem: the same relabeled "Dialog"
+                    // combo as TsDialogItem (the twin) — the pick's display
+                    // Name is --name, and all three file names plus the
+                    // generated namespace/class ride in with the picked
+                    // SystemForm (its UniqueName).
+                    if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <dialog-name>");
+                }
                 else if (typeDescriptor != null &&
                          (typeDescriptor.Id == ItemType.LateBound.ToString() ||
                           typeDescriptor.Id == ItemType.JsForm.ToString() ||
@@ -226,6 +235,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var isResourceString = descriptor.Id == ItemType.ResourceString.ToString();
             var isBatFile = descriptor.Id == ItemType.BatFile.ToString();
             var isTsDialog = descriptor.Id == ItemType.TsDialog.ToString();
+            var isJsDialog = descriptor.Id == ItemType.JsDialog.ToString();
             if (descriptor.RequiresConnection)
             {
                 // Connected and interactive: pick the entity from the org
@@ -243,11 +253,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // (the entity rides in with the test-plugin candidate).
                 // ResourceString is excluded too: its dialog relabels the
                 // combo "Language" and fills it with the org's provisioned
-                // languages, not the entities. TsDialog is excluded for the
-                // same shape of reason: its dialog relabels the combo
-                // "Dialog" and fills it with the org's active unmanaged
-                // dialogs, not the entities.
-                if (!isCustomAction && !isCustomApi && !isWorkflow && !isDataProvider && !isTest && !isResourceString && !isTsDialog &&
+                // languages, not the entities. TsDialog and JsDialog are
+                // excluded for the same shape of reason: their dialogs
+                // relabel the combo "Dialog" and fill it with the org's
+                // active unmanaged dialogs, not the entities.
+                if (!isCustomAction && !isCustomApi && !isWorkflow && !isDataProvider && !isTest && !isResourceString && !isTsDialog && !isJsDialog &&
                     string.IsNullOrWhiteSpace(args.Entity) && args.ServiceClient != null && TaskNewShared.CanPrompt())
                 {
                     await new MetadataService(args.ServiceClient).ReadEntitiesMetadataAsync(EntityFilters.Attributes);
@@ -260,16 +270,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             .AddChoices(schemas));
                 }
 
-                // The TsDialog twin of that combo: the wizard's relabeled
-                // "Dialog" combo, filled on connect with the org's active
-                // unmanaged dialogs (MetadataService.GetEntityDialogFormsAsync)
-                // and picked by display name — the CLI twin reads the same
-                // list into a searchable prompt. The handler resolves the
-                // picked name to the SystemForm (a second read of the same
-                // fetch — the wizard reuses the form's selection instead;
-                // there is no dialog cache to share). An empty list is the
-                // wizard's disabled OK button: nothing to scaffold from.
-                if (isTsDialog && string.IsNullOrWhiteSpace(args.Name) && args.ServiceClient != null && TaskNewShared.CanPrompt())
+                // The TsDialog/JsDialog twin of that combo: the wizard's
+                // relabeled "Dialog" combo, filled on connect with the
+                // org's active unmanaged dialogs
+                // (MetadataService.GetEntityDialogFormsAsync) and picked by
+                // display name — the CLI twin reads the same list into a
+                // searchable prompt. The handler resolves the picked name
+                // to the SystemForm (a second read of the same fetch — the
+                // wizard reuses the form's selection instead; there is no
+                // dialog cache to share). An empty list is the wizard's
+                // disabled OK button: nothing to scaffold from.
+                if ((isTsDialog || isJsDialog) && string.IsNullOrWhiteSpace(args.Name) && args.ServiceClient != null && TaskNewShared.CanPrompt())
                 {
                     var dialogNames = (await new MetadataService(args.ServiceClient).GetEntityDialogFormsAsync())
                         .Select(x => x.Name)
