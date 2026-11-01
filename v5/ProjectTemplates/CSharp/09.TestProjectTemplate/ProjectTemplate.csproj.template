@@ -23,13 +23,13 @@
 		<Optimize>false</Optimize>
 		<OutputPath>bin\Debug\</OutputPath>
 		<DefineConstants>DEBUG;TRACE</DefineConstants>
-		<NoWarn>MSTEST0001</NoWarn>
+		<NoWarn>MSTEST0001;CS0436</NoWarn>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 		<OutputPath>..\Release\test\</OutputPath>
 		<DebugType>full</DebugType>
 		<Optimize>false</Optimize>
-		<NoWarn>CS8032;MSTEST0001</NoWarn>
+		<NoWarn>CS8032;MSTEST0001;CS0436</NoWarn>
 		<DebugSymbols>true</DebugSymbols>
 	</PropertyGroup>
 	<ItemGroup>
