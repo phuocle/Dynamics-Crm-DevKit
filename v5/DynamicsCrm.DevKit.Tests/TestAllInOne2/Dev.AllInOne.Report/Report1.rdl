@@ -11,7 +11,7 @@
         <IntegratedSecurity>true</IntegratedSecurity>
       </ConnectionProperties>
       <rd:SecurityType>Integrated</rd:SecurityType>
-      <rd:DataSourceID>64208862-25c5-4092-8be8-27ff9d4c9de8</rd:DataSourceID>
+      <rd:DataSourceID>93d2aa4b-ed1c-40b8-9094-067e0d6fe7b0</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>

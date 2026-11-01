@@ -33,7 +33,7 @@
 		<DebugSymbols>true</DebugSymbols>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.44.44.44">
+		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.12.34.56">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>

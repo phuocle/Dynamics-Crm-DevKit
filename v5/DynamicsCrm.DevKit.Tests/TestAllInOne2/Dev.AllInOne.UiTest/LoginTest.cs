@@ -1,4 +1,4 @@
-using Microsoft.Dynamics365.UIAutomation.Api.UCI;
+﻿using Microsoft.Dynamics365.UIAutomation.Api.UCI;
 using Microsoft.Dynamics365.UIAutomation.Browser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;

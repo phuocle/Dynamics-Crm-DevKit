@@ -4,20 +4,20 @@ using System;
 
 namespace Dev.AllInOne.Server
 {
-    [CrmPluginRegistration("Archive", "none", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.AllInOne.Server.PostNoneArchiveAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction, DeleteAsyncOperation = true)]
-    public class PostNoneArchiveAsynchronous : IPlugin
+    [CrmPluginRegistration("v4_CustomAction", "none", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "Dev.AllInOne.Server.PostNonev4_CustomActionSynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction)]
+    public class PostNonev4_CustomActionSynchronous : IPlugin
     {
         /*
         InputParameters:
-            Target                           Microsoft.Xrm.Sdk.EntityReference - require
-            OperationId                      System.Guid
+            f         System.String - require
+            input     System.String
         OutputParameters:
-            EntityArchivedCountCollection    Microsoft.Xrm.Sdk.EntityRecordCountCollection - require
+            output    System.String - require
         */
 
         //private readonly string unSecureConfiguration = null;
         //private readonly string secureConfiguration = null;
-        //public PostNoneArchiveAsynchronous(string unSecureConfiguration, string secureConfiguration)
+        //public PostNonev4_CustomActionSynchronous(string unSecureConfiguration, string secureConfiguration)
         //{
         //    this.unSecureConfiguration = unSecureConfiguration;
         //    this.secureConfiguration = secureConfiguration;
@@ -28,9 +28,9 @@ namespace Dev.AllInOne.Server
             var context = serviceProvider.GetExecutionContext7();
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             if (!int.Equals(context.Stage, (int)StageEnum.PostOperation)) throw new InvalidPluginExecutionException("Stage does not equals PostOperation");
-            if (!string.Equals(context.MessageName, "Archive", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("MessageName does not equals Archive");
+            if (!string.Equals(context.MessageName, "v4_CustomAction", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("MessageName does not equals v4_CustomAction");
             if (!string.Equals(context.PrimaryEntityName, "none", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals none");
-            if (!int.Equals(context.Mode, (int)ExecutionModeEnum.Asynchronous)) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
+            if (!int.Equals(context.Mode, (int)ExecutionModeEnum.Synchronous)) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);
             var service = serviceFactory.CreateOrganizationService(context.UserId);

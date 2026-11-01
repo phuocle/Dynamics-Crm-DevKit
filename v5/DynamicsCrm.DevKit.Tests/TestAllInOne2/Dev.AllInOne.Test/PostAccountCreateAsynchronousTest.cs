@@ -1,21 +1,21 @@
-using Dev.AllInOne.Shared;
+﻿using Dev.AllInOne.Shared;
 using Dev.AllInOne.Shared.Test;
 using FakeXrmEasy.Plugins;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TargetPlugin = Dev.AllInOne.Server.PreAccountUpdateSynchronous;
+using TargetPlugin = Dev.AllInOne.Server.PostAccountCreateAsynchronous;
 
 namespace Dev.AllInOne.Test
 {
     [TestClass]
-    public class PreAccountUpdateSynchronousTest : FakeXrmEasyTestBase
+    public class PostAccountCreateAsynchronousTest : FakeXrmEasyTestBase
     {
-        private const StageEnum PLUGIN_STAGE = StageEnum.PreOperation;
-        private const string PLUGIN_MESSAGE = "Update";
+        private const StageEnum PLUGIN_STAGE = StageEnum.PostOperation;
+        private const string PLUGIN_MESSAGE = "Create";
         private const string PLUGIN_ENTITY_LOGICAL_NAME = "account";
-        private const ExecutionModeEnum PLUGIN_EXECUTION_MODE = ExecutionModeEnum.Synchronous;
+        private const ExecutionModeEnum PLUGIN_EXECUTION_MODE = ExecutionModeEnum.Asynchronous;
 
         [TestMethod]
-        public void PreAccountUpdateSynchronousTest_00()
+        public void PostAccountCreateAsynchronousTest_00()
         {
             AssertInvalidPluginContext<TargetPlugin>(
                 pluginContext => pluginContext.Stage = -1,
@@ -51,7 +51,7 @@ namespace Dev.AllInOne.Test
         }
 
         [TestMethod]
-        public void PreAccountUpdateSynchronousTest_01()
+        public void PostAccountCreateAsynchronousTest_01()
         {
             ////setup
             //var json = @"";

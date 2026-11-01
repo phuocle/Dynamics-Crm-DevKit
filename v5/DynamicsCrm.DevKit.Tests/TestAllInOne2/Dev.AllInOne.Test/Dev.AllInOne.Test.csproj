@@ -34,7 +34,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Bogus" Version="35.6.5" />
-		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.44.44.44">
+		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.12.34.56">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
@@ -46,8 +46,8 @@
 		<PackageReference Include="FakeXrmEasy.CodeActivities.v9" Version="2.*" />
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.60" />
 		<PackageReference Include="Microsoft.CrmSdk.Workflow" Version="9.0.2.60" />
-		<PackageReference Include="MSTest.TestAdapter" Version="4.5.1" />
-		<PackageReference Include="MSTest.TestFramework" Version="4.5.1" />
+		<PackageReference Include="MSTest.TestAdapter" Version="4.5.2" />
+		<PackageReference Include="MSTest.TestFramework" Version="4.5.2" />
 		<PackageReference Include="NSubstitute" Version="6.2.0" />
 	</ItemGroup>
 	<ItemGroup>
@@ -57,6 +57,7 @@
 	<ItemGroup>
 		<None Include="README.md" />
 	</ItemGroup>
+	<Import Project="..\Dev.AllInOne.Shared\Dev.AllInOne.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.AllInOne.Shared\Dev.AllInOne.Shared.projitems')" />
 	<Import Project="..\Dev.AllInOne.Shared.Test\Dev.AllInOne.Shared.Test.projitems" Label="Shared" Condition="Exists('..\Dev.AllInOne.Shared.Test\Dev.AllInOne.Shared.Test.projitems')" />
 </Project>
 <!-- v.4.44.44.44 - Build: 31.12.2026 23.59.59 -->

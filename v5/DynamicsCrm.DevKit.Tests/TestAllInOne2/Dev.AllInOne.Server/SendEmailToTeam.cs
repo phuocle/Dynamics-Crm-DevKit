@@ -5,8 +5,8 @@ using System.Activities;
 
 namespace Dev.AllInOne.Server
 {
-    [CrmPluginRegistration("v4_WorkflowActivity", "v4_WorkflowActivity", "", "Dev.AllInOne.Server", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
-    public class v4_WorkflowActivity : CodeActivity
+    [CrmPluginRegistration("SendEmailToTeam", "SendEmailToTeam", "", "Dev.AllInOne.Server", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
+    public class SendEmailToTeam : CodeActivity
     {
         // https://learn.microsoft.com/en-us/power-apps/developer/data-platform/workflow/workflow-extensions#add-parameters
         // Supported Input/Output types: bool, DateTime, Decimal, Double, EntityReference, int, Money, OptionSetValue, string
