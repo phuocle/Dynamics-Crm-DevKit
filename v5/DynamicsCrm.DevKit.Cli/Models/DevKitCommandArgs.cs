@@ -177,13 +177,16 @@ namespace DynamicsCrm.DevKit.Shared.Models
 
         private void ResolveDefaults(Func<string, string> getValue)
         {
-            // The connection-defining arguments: when ALL of them arrive
+            // The connection-defining VALUE arguments: when ALL of them arrive
             // empty the connection is the project .env's (resolved below) —
             // ConnectionFromProjectEnvironment marks it so the BatFile bats
-            // stay argument-free like the wizard's .env connections.
+            // stay argument-free like the wizard's .env connections. --auth
+            // is a TYPE selector, not a value: `--auth OAuth` keeps the
+            // project-environment bake (the values still come from the
+            // project .env); any value argument makes the connection
+            // explicit and the merged arguments ride in.
             ConnectionFromProjectEnvironment =
                 string.IsNullOrEmpty(Connection) &&
-                string.IsNullOrEmpty(AuthType) &&
                 string.IsNullOrEmpty(Url) &&
                 string.IsNullOrEmpty(ClientId) &&
                 string.IsNullOrEmpty(ClientSecret) &&

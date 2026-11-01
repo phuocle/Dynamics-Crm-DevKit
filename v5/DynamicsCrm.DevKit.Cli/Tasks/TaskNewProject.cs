@@ -124,6 +124,31 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                                     : ServerProjectTemplateHandler.SupportedConnectionTypes;
                 input.CrmConnection = ConnectionPrompter.Prompt(supportedTypes, args.Out);
             }
+            else if (!TaskNewShared.CanPrompt() && !string.IsNullOrEmpty(args.AuthType))
+            {
+                // Non-interactive hosts cannot open the connection dialog:
+                // build the connection from the merged settings (aP
+                // per-field ruling) — --auth selects the TYPE, the project
+                // .env fills the values, and any explicit value argument
+                // makes the connection explicit. Without --auth the
+                // handler falls back to the project .env markers exactly
+                // as before.
+                input.CrmConnection = new CrmConnection
+                {
+                    Name = args.AuthType,
+                    Type = args.AuthType,
+                    UseProjectEnvironment = args.ConnectionFromProjectEnvironment
+                };
+                if (!args.ConnectionFromProjectEnvironment)
+                {
+                    input.CrmConnection.Url = args.Url;
+                    input.CrmConnection.ClientId = args.ClientId;
+                    input.CrmConnection.ClientSecret = args.ClientSecret;
+                    input.CrmConnection.UserName = args.Username;
+                    input.CrmConnection.Password = args.Password;
+                    input.CrmConnection.PacProfile = args.PacProfile;
+                }
+            }
             // The Server template requires the Shared project (its
             // .csproj imports the Shared .projitems) — offer the Shared
             // scaffold when it is missing, the interactive counterpart
