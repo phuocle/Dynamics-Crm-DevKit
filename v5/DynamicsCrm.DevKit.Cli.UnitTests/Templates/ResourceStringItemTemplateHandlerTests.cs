@@ -119,13 +119,13 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             Assert.AreEqual(fullPath, file.FilePath);
             Assert.IsTrue(File.Exists(fullPath));
 
-            // Byte-faithful to the WIZARD OUTPUT, not the payload marker:
-            // the Resource.1033.resx the current wizard produced starts
-            // directly with "<?xml" — no BOM (like the Test/UiTest items;
-            // unlike the payload-carrying LateBound stubs).
+            // Byte-faithful to the WIZARD OUTPUT: the Resource.1033.resx the
+            // current wizard (4.44.44.44) produced starts with a UTF-8 BOM
+            // before "<?xml" (like the Test/UiTest items).
             var bytes = File.ReadAllBytes(fullPath);
-            Assert.AreEqual((byte)'<', bytes[0]);
-            Assert.AreEqual((byte)'?', bytes[1]);
+            Assert.AreEqual(0xEF, bytes[0]);
+            Assert.AreEqual(0xBB, bytes[1]);
+            Assert.AreEqual(0xBF, bytes[2]);
             var payload = await TemplatePayload.ReadContentAsync("Resources.templates.item.resourcestring.ResourceString.resx");
             Assert.AreEqual(payload.Content, File.ReadAllText(fullPath));
 

@@ -186,12 +186,12 @@ namespace Dev.Contoso.Server
             Assert.IsTrue(File.Exists(fullPath));
 
             // Byte-faithful to the WIZARD OUTPUT, not the payload marker:
-            // the Test item file the wizard produces starts directly with
-            // the first using — no BOM (unlike Plugin/Workflow, whose
-            // outputs carry the payload's BOM through).
+            // the Test item file the current wizard (4.44.44.44) produces
+            // starts with a UTF-8 BOM, like the UiTest/ResourceString items.
             var bytes = File.ReadAllBytes(fullPath);
-            Assert.AreEqual((byte)'u', bytes[0]);
-            Assert.AreEqual((byte)'s', bytes[1]);
+            Assert.AreEqual(0xEF, bytes[0]);
+            Assert.AreEqual(0xBB, bytes[1]);
+            Assert.AreEqual(0xBF, bytes[2]);
 
             var code = File.ReadAllText(fullPath);
             StringAssert.Contains(code, "using Contoso.Shared;");
@@ -248,7 +248,7 @@ namespace Dev.Contoso.Server
             Assert.AreEqual("PreAccountUpdateTest.cs", result.Files.Single().FileName);
             var fullPath = Path.Combine(_testDirectory, "PreAccountUpdateTest.cs");
             var bytes = File.ReadAllBytes(fullPath);
-            Assert.AreEqual((byte)'u', bytes[0], "the wizard writes the Test item without a BOM");
+            Assert.AreEqual(0xEF, bytes[0], "the wizard writes the Test item with a UTF-8 BOM");
             var code = File.ReadAllText(fullPath);
             StringAssert.Contains(code, "using TargetPlugin = Dev.Contoso.Server.PreAccountUpdate;");
             // The wizard's <#}#> line keeps its newline when the if-block

@@ -140,7 +140,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
                 return result;
             }
             var content = TokenEngine.ApplyReplacements(payload.Content, request.Tokens);
-            await FileHelper.ForceWriteAllTextWithoutUTF8Async(fullPath, content);
+            await FileHelper.ForceWriteAllTextAsync(fullPath, content);
             result.Files.Add(new ScaffoldFileResult(targetFileName, fullPath, exists ? "Updated" : "Created"));
             return result;
         }

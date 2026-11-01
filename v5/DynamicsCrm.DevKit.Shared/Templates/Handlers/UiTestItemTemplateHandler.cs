@@ -175,7 +175,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
                 result.Files.Add(new ScaffoldFileResult(targetFileName, fullPath, "Skipped"));
                 return result;
             }
-            await FileHelper.ForceWriteAllTextWithoutUTF8Async(fullPath, code);
+            await FileHelper.ForceWriteAllTextAsync(fullPath, code);
             result.Files.Add(new ScaffoldFileResult(targetFileName, fullPath, exists ? "Updated" : "Created"));
             return result;
         }

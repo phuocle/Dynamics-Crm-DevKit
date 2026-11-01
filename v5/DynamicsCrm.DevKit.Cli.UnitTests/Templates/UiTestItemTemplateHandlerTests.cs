@@ -121,15 +121,13 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             Assert.IsTrue(File.Exists(fullPath));
 
             // Byte-faithful to the WIZARD OUTPUT, not the payload marker:
-            // the LoginTest.cs the current wizard produced
-            // (TestAllInOne2/Dev.AllInOne.UiTest) starts directly with the
-            // first using — no BOM, like the Test item (the
-            // original-workspace file carries a stale BOM from an older
-            // VSIX). Unlike Plugin/Workflow, whose outputs carry the
-            // payload's BOM through.
+            // the LoginTest.cs the current wizard (4.44.44.44) produced
+            // (TestAllInOne2/Dev.AllInOne.UiTest) starts with a UTF-8 BOM,
+            // like the Test/ResourceString items.
             var bytes = File.ReadAllBytes(fullPath);
-            Assert.AreEqual((byte)'u', bytes[0]);
-            Assert.AreEqual((byte)'s', bytes[1]);
+            Assert.AreEqual(0xEF, bytes[0]);
+            Assert.AreEqual(0xBB, bytes[1]);
+            Assert.AreEqual(0xBF, bytes[2]);
 
             var code = File.ReadAllText(fullPath);
             // The wizard output's usings are sorted (the VS T4 host orders
