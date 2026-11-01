@@ -11,15 +11,17 @@ namespace Dev.AllInOne.Shared.Test
 {
     public static class TestHelper
     {
-        internal static List<CrmPluginRegistrationAttribute> GetRegisteredPlugins(object obj)
+        internal static List<Attribute> GetRegisteredPlugins(object obj)
         {
-            var registeredPlugins = new List<CrmPluginRegistrationAttribute>();
+            var registeredPlugins = new List<Attribute>();
             foreach (var attribute in System.Attribute.GetCustomAttributes(obj.GetType()))
             {
-                if (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))
+                // Match by attribute type NAME: the plugin assembly compiles its
+                // own copy of CrmPluginRegistrationAttribute, so a typeof-based
+                // comparison across assemblies never matches.
+                if (string.Equals(attribute.GetType().Name, "CrmPluginRegistrationAttribute", StringComparison.Ordinal))
                 {
-                    var registeredPlugin = attribute as CrmPluginRegistrationAttribute;
-                    registeredPlugins.Add(registeredPlugin);
+                    registeredPlugins.Add(attribute);
                 }
             }
             return registeredPlugins;

@@ -7,8 +7,8 @@
     <Deploy />
   </Project>
   <Project Path="Dev.AllInOne.Server/Dev.AllInOne.Server.csproj" />
-  <Project Path="Dev.AllInOne.Shared.Test/Dev.AllInOne.Shared.Test.shproj" Id="dd9d3a8d-9664-4f4c-8bc2-1407776df074" />
-  <Project Path="Dev.AllInOne.Shared/Dev.AllInOne.Shared.shproj" Id="ff7cac7c-4a21-4d36-aec3-41349110dfda" />
+  <Project Path="Dev.AllInOne.Shared.Test/Dev.AllInOne.Shared.Test.shproj" Id="0bc4e028-a45b-4f8b-9c86-4bade1e7cd35" />
+  <Project Path="Dev.AllInOne.Shared/Dev.AllInOne.Shared.shproj" Id="a3fdfe93-82f5-4b55-97dc-f2bdcade1197" />
   <Project Path="Dev.AllInOne.SolutionPackager/Dev.AllInOne.SolutionPackager.csproj" />
   <Project Path="Dev.AllInOne.Test/Dev.AllInOne.Test.csproj" />
   <Project Path="Dev.AllInOne.UiTest/Dev.AllInOne.UiTest.csproj" />
