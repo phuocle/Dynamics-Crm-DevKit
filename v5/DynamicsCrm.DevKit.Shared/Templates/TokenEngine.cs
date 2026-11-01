@@ -192,6 +192,8 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             "Selenium.WebDriver",
             "Selenium.WebDriver.ChromeDriver",
             "Selenium.Support",
+            "System.Security.Cryptography.Pkcs",
+            "System.Security.Cryptography.Xml",
         };
 
         private static Task AddNuGetTokensAsync(Dictionary<string, string> replacements, bool offline)
