@@ -38,11 +38,11 @@
 		</PackageReference>
 		<PackageReference Include="Dynamics365.UIAutomation.Api" Version="9.2.21084.148" />
 		<PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.27" />
-		<PackageReference Include="MSTest.TestAdapter" Version="4.5.1" />
-		<PackageReference Include="MSTest.TestFramework" Version="4.5.1" />
-		<PackageReference Include="Selenium.WebDriver" Version="4.51.0" />
-		<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="156.0.8078.4700" />
-		<PackageReference Include="Selenium.Support" Version="4.51.0" />
+		<PackageReference Include="MSTest.TestAdapter" Version="4.5.2" />
+		<PackageReference Include="MSTest.TestFramework" Version="4.5.2" />
+		<PackageReference Include="Selenium.WebDriver" Version="4.52.0" />
+		<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="156.0.8078.8000" />
+		<PackageReference Include="Selenium.Support" Version="4.52.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="Dev.AllInOne.UiTest.runsettings" />
