@@ -32,7 +32,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.T4
                 PluginSharedNameSpace = workspace?.SharedProjectNameSpace,
                 DataSource = input.DataSource,
                 EntitySetName = input.Entity,
-                TestTargetFullClassName = input.Class,
+                TestTargetFullClassName = input.TestTarget,
             };
         }
 
@@ -72,7 +72,11 @@ namespace DynamicsCrm.DevKit.Shared.Templates.T4
         }
 
         /// <summary>
-        /// Context for Test.tt. Mirrors T4Helper.BuildTestContextAsync.
+        /// Context for Test.tt. Mirrors T4Helper.BuildTestContextAsync:
+        /// no comment (the wizard's default-title path reads nothing from
+        /// the org) and the guard target — the resolved test target, set
+        /// only when the picked candidate matches the default plugin
+        /// template shape (the handler clears it otherwise).
         /// </summary>
         public static T4Context BuildTestContext(ItemTemplateInput input, WorkspaceContext workspace)
         {
@@ -87,7 +91,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.T4
                 PluginOrder = input.Order,
                 Class = BuildClassName(input),
                 PluginSharedNameSpace = workspace?.SharedProjectNameSpace,
-                TestTargetFullClassName = input.Class,
+                TestTargetFullClassName = input.TestTarget,
             };
         }
 
@@ -121,8 +125,12 @@ namespace DynamicsCrm.DevKit.Shared.Templates.T4
 
         private static string BuildComment(ItemTemplateInput input)
         {
-            // The VSIX forms derive the comment from the dialog selection;
-            // hosts may pass it pre-built through Name when Class is set.
+            // The wizard derives the comment from the org (the plugin
+            // message's InputParameters/OutputParameters doc); hosts pass it
+            // pre-built through Comment — an EMPTY string is a provided
+            // "no comment" (offline), null falls back to the legacy
+            // Name-when-Class-is-set hosts.
+            if (input.Comment != null) return input.Comment;
             return !string.IsNullOrEmpty(input.Class) && !string.IsNullOrEmpty(input.Name) ? input.Name : input.Class ?? input.Name;
         }
     }

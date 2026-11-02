@@ -111,8 +111,10 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
         }
 
         [TestMethod]
-        public async Task ScaffoldProjectAsync_RerunSkipsUserFiles()
+        public async Task ScaffoldProjectAsync_RerunFailsWithAlreadyExists()
         {
+            // Run-once (aP): the second scaffold over an existing project
+            // fails - the CLI has no --force and nothing is touched.
             var manifest = new TemplateManifest { TemplateId = "Shared", Kind = TemplateKind.Project };
             manifest.Files.Add(new TemplatePayloadFile
             {
@@ -126,13 +128,9 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             var first = await ScaffoldingEngine.ScaffoldProjectAsync(input);
             Assert.AreEqual(1, first.Files.Count(file => file.Action == "Created"));
 
-            // A user edit must never be overwritten by a re-run.
-            var generated = Path.Combine(_directory, "Contoso.Shared", "generator.bat");
-            File.WriteAllText(generated, "rem customized by user");
-
             var second = await ScaffoldingEngine.ScaffoldProjectAsync(input);
-            Assert.AreEqual("Skipped", second.Files[0].Action);
-            Assert.AreEqual("rem customized by user", File.ReadAllText(generated));
+            Assert.IsFalse(second.Success);
+            StringAssert.Contains(second.Errors.Single(), "already exists");
         }
 
         [TestMethod]
@@ -165,12 +163,78 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             // Locks the live bug found by the P.1..P.13 review: before the
             // registries became kind-scoped, 'devkit new --kind item --type
             // Test' dispatched into the PROJECT Test handler (ProjectInput
-            // null → "input: required") and 'devkit new list' lit item
-            // Test/UiTest/Report as Ready even though I.* is not ported.
+            // null → "input: required"). Items scaffold into a project
+            // (required, engine gate) — the fixture carries one. Since I.9
+            // the item id has its own handler: the ITEM handler's own
+            // error (no transformer) proves the dispatch, and the project
+            // handler's signature never shows.
+            File.WriteAllText(Path.Combine(_directory, "Contoso.Server.csproj"),
+                "<Project Sdk=\"Microsoft.NET.Sdk\">\r\n  <PropertyGroup>\r\n    <TargetFramework>net48</TargetFramework>\r\n  </PropertyGroup>\r\n</Project>");
             TemplateHandlers.RegisterAll();
-            var result = await ScaffoldingEngine.ScaffoldItemAsync(new ItemTemplateInput { TemplateId = "Test", Name = "Account", Offline = true });
+            var result = await ScaffoldingEngine.ScaffoldItemAsync(new ItemTemplateInput { TemplateId = "Test", Name = "Account", Offline = true, OutputDirectory = _directory });
             Assert.IsFalse(result.Success);
-            StringAssert.Contains(result.Errors[0], "not implemented yet");
+            StringAssert.Contains(result.Errors[0], "T4 transformer: required");
+            Assert.IsFalse(result.Errors[0].Contains("input: required"), "the PROJECT Test handler answered for the item id");
+        }
+
+        [TestMethod]
+        public async Task ScaffoldItemAsync_NoProject_FailsForEveryItem()
+        {
+            // aP ruling (2026-10-28): every I* item template REQUIRES a
+            // project — the wizard always knows it (Solution Explorer
+            // selection). Nothing resolves at/above the target → error
+            // and stop, before any handler runs.
+            var result = await ScaffoldingEngine.ScaffoldItemAsync(new ItemTemplateInput { TemplateId = "Test", Name = "Account", Offline = true, OutputDirectory = _directory });
+            Assert.IsFalse(result.Success);
+            StringAssert.Contains(result.Errors[0], "--project: required for item template 'Test'");
+        }
+
+        [TestMethod]
+        public async Task ScaffoldItemAsync_NamedProjectNotFound_Fails()
+        {
+            var result = await ScaffoldingEngine.ScaffoldItemAsync(new ItemTemplateInput { TemplateId = "Test", Name = "Account", Offline = true, OutputDirectory = _directory, ProjectName = "Ghost.Project" });
+            Assert.IsFalse(result.Success);
+            StringAssert.Contains(result.Errors[0], "--project 'Ghost.Project': project not found");
+        }
+
+        [TestMethod]
+        public async Task ScaffoldItemAsync_ResolvesProjectFileAndNamespace()
+        {
+            // The engine reads the data from the project file: the
+            // resolved file reaches the request and the RootNamespace
+            // derives from its RootNamespace element.
+            File.WriteAllText(Path.Combine(_directory, "Contoso.Server.csproj"),
+                "<Project Sdk=\"Microsoft.NET.Sdk\">\r\n  <PropertyGroup>\r\n    <TargetFramework>net48</TargetFramework>\r\n    <RootNamespace>Dev.Contoso.Server</RootNamespace>\r\n  </PropertyGroup>\r\n</Project>");
+            string seenProjectFile = null;
+            string seenNamespace = null;
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new CapturingHandler(request =>
+            {
+                seenProjectFile = request.ProjectFile;
+                seenNamespace = request.ItemInput.RootNamespace;
+            }));
+            var result = await ScaffoldingEngine.ScaffoldItemAsync(new ItemTemplateInput { TemplateId = "Test", Name = "Account", Offline = true, OutputDirectory = _directory });
+
+            Assert.IsTrue(result.Success, string.Join("; ", result.Errors));
+            Assert.AreEqual(Path.Combine(_directory, "Contoso.Server.csproj"), seenProjectFile);
+            Assert.AreEqual("Dev.Contoso.Server", seenNamespace);
+        }
+
+        private sealed class CapturingHandler : ITemplateHandler
+        {
+            private readonly Action<ScaffoldRequest> _capture;
+
+            public CapturingHandler(Action<ScaffoldRequest> capture)
+            {
+                _capture = capture;
+            }
+
+            public string TemplateId { get { return "Test"; } }
+
+            public Task<ScaffoldResult> ScaffoldAsync(ScaffoldRequest request)
+            {
+                _capture(request);
+                return Task.FromResult(new ScaffoldResult { TemplateId = TemplateId });
+            }
         }
 
         [TestMethod]

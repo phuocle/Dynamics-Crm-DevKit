@@ -363,7 +363,9 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             var guid = Regex.Match(before, "Contoso\\.ConsoleCore\\\\Contoso\\.ConsoleCore\\.csproj\", \"\\{([0-9A-Fa-f-]+)\\}\"").Groups[1].Value;
 
             await ScaffoldSharedAsync();
-            var result = await ScaffoldingEngine.ScaffoldProjectAsync(Input(Marker("ClientSecret")));
+            // The CLI refuses reruns (run-once, aP) - the engine-level Force
+            // is what still wires the consumer line for hosts that regenerate.
+            var result = await ScaffoldingEngine.ScaffoldProjectAsync(Input(Marker("ClientSecret"), force: true));
             Assert.IsTrue(result.Success);
 
             var after = File.ReadAllText(_solutionFile);
@@ -439,9 +441,10 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
 
             var second = await ScaffoldingEngine.ScaffoldProjectAsync(Input(Marker("ClientSecret")));
 
-            Assert.IsTrue(second.Success);
-            Assert.IsTrue(second.Warnings.Any(warning => warning.Contains("already exists")));
-            Assert.IsTrue(second.Files.All(file => file.Action == "Skipped" || file.Action == "Unchanged"));
+            // Run-once (aP): the second scaffold over an existing project
+            // fails - the CLI has no --force and nothing is touched.
+            Assert.IsFalse(second.Success);
+            StringAssert.Contains(second.Errors.Single(), "already exists");
             Assert.AreEqual("// customized by user", File.ReadAllText(userFile));
         }
 

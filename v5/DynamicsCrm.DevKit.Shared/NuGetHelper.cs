@@ -42,6 +42,8 @@ namespace DynamicsCrm.DevKit.Shared
             ["Selenium.WebDriver"]                          = ("3.141.0",     "net462"),
             ["Selenium.WebDriver.ChromeDriver"]             = ("149.0.7827.15500", "net462"),
             ["Selenium.Support"]                            = ("3.141.0",     "net462"),
+            ["System.Security.Cryptography.Pkcs"]           = ("10.0.14",     "net462"),
+            ["System.Security.Cryptography.Xml"]            = ("10.0.14",     "net462"),
         };
 
         /// <summary>

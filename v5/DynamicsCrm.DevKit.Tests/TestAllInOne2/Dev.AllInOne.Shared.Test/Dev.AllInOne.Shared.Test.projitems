@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>283b5ee9-5637-4d47-9e95-6b4ca79fc002</SharedGUID>
+    <SharedGUID>0bc4e028-a45b-4f8b-9c86-4bade1e7cd35</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>Dev.AllInOne.Shared.Test</Import_RootNamespace>

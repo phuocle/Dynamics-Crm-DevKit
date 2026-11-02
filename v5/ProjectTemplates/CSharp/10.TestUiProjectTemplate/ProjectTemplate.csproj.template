@@ -15,6 +15,8 @@
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<!-- MSB3277: Selenium's net462 assembly references System.ValueTuple 4.0.5.0, which no package ships — unification to the 4.5.0 package's 4.0.3.0 is correct. -->
+		<MSBuildWarningsAsMessages>MSB3277</MSBuildWarningsAsMessages>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DebugSymbols>true</DebugSymbols>

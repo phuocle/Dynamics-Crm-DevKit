@@ -41,6 +41,8 @@
 		<PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" Version="$Microsoft.Identity.Client.Extensions.Msal.Version$" />
 		<PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="$Microsoft.PowerPlatform.Dataverse.Client.Version$" />
 		<PackageReference Include="NSubstitute" Version="$NSubstitute.Version$" />
+		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="$System.Security.Cryptography.Pkcs.Version$" />
+		<PackageReference Include="System.Security.Cryptography.Xml" Version="$System.Security.Cryptography.Xml.Version$" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="AppSettings.json">

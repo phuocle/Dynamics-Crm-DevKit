@@ -63,11 +63,15 @@ namespace $NameSpace$
             var attributes = TestHelper.GetRegisteredPlugins(new TPlugin());
             if (attributes.Count > registrationIndex)
             {
+                // The registration attribute instance comes from the plugin
+                // assembly's own copy of CrmPluginRegistrationAttribute — read
+                // its properties by reflection instead of casting.
                 var reg = attributes[registrationIndex];
-                builder._pluginContext.MessageName = reg.Message;
-                builder._pluginContext.Stage = (int)reg.Stage;
-                builder._pluginContext.Mode = (int)reg.ExecutionMode;
-                builder._pluginContext.PrimaryEntityName = reg.EntityLogicalName;
+                var regType = reg.GetType();
+                builder._pluginContext.MessageName = regType.GetProperty("Message")?.GetValue(reg) as string;
+                builder._pluginContext.Stage = Convert.ToInt32(regType.GetProperty("Stage")?.GetValue(reg));
+                builder._pluginContext.Mode = Convert.ToInt32(regType.GetProperty("ExecutionMode")?.GetValue(reg));
+                builder._pluginContext.PrimaryEntityName = regType.GetProperty("EntityLogicalName")?.GetValue(reg) as string;
             }
             return builder;
         }

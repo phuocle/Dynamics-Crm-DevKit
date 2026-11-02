@@ -52,11 +52,11 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Dev.AllInOne.ProxyTypes\Dev.AllInOne.ProxyTypes.csproj" />
+		<ProjectReference Include="..\Dev.AllInOne.Server\Dev.AllInOne.Server.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="README.md" />
 	</ItemGroup>
-	<Import Project="..\Dev.AllInOne.Shared\Dev.AllInOne.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.AllInOne.Shared\Dev.AllInOne.Shared.projitems')" />
 	<Import Project="..\Dev.AllInOne.Shared.Test\Dev.AllInOne.Shared.Test.projitems" Label="Shared" Condition="Exists('..\Dev.AllInOne.Shared.Test\Dev.AllInOne.Shared.Test.projitems')" />
 </Project>
 <!-- v.4.44.44.44 - Build: 31.12.2026 23.59.59 -->

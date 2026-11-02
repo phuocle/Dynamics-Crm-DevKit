@@ -30,7 +30,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.44.44.44">
+    <PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.12.34.56">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -38,14 +38,29 @@
   <ItemGroup>
 		<Folder Include="html\" />
 		<Folder Include="css\" />
-		<Folder Include="entities\" />
     <Folder Include="js\" />
 		<Folder Include="lib\" />
 		<Folder Include="images\" />
-		<Folder Include="resources\" />
 	</ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="entities\Account.d.ts">
+      <DependentUpon>Account.js</DependentUpon>
+    </None>
+    <None Update="entities\Account.form.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </None>
+    <None Update="entities\Account.webapi.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </None>
+    <None Update="entities\pl_dataversedialogbuilder_demo.dialog.d.ts">
+      <DependentUpon>pl_dataversedialogbuilder_demo.js</DependentUpon>
+    </None>
+    <None Update="entities\pl_dataversedialogbuilder_demo.dialog.js">
+      <DependentUpon>pl_dataversedialogbuilder_demo.js</DependentUpon>
+    </None>
   </ItemGroup>
 </Project>
 <!-- v.4.44.44.44 - Build: 31.12.2026 23.59.59 -->

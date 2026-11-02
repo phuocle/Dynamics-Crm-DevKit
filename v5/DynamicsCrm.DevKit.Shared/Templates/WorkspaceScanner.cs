@@ -48,7 +48,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
 
         /// <summary>
         /// Builds the workspace context anchored at an explicitly named
-        /// solution file (the --solution argument of 'devkit new'): the
+        /// solution file (the --solution argument of 'devkit new-project'): the
         /// solution directory becomes the project parent and the Shared
         /// lookup root, regardless of which solution the walk-up scan
         /// would have picked. Callers validate existence first; a missing

@@ -40,6 +40,40 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             TemplateManifests.Register(ReportProjectTemplateHandler.CreateManifest());
             ScaffoldingEngine.RegisterHandler(TemplateKind.Project, new WebResourceTsProjectTemplateHandler());
             TemplateManifests.Register(WebResourceTsProjectTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new LateBoundItemTemplateHandler());
+            TemplateManifests.Register(LateBoundItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new JsFormItemTemplateHandler());
+            TemplateManifests.Register(JsFormItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new JsWebApiItemTemplateHandler());
+            TemplateManifests.Register(JsWebApiItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new PluginItemTemplateHandler());
+            TemplateManifests.Register(PluginItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new CustomActionItemTemplateHandler());
+            TemplateManifests.Register(CustomActionItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new CustomApiItemTemplateHandler());
+            TemplateManifests.Register(CustomApiItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new WorkflowItemTemplateHandler());
+            TemplateManifests.Register(WorkflowItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new DataProviderItemTemplateHandler());
+            TemplateManifests.Register(DataProviderItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new TestItemTemplateHandler());
+            TemplateManifests.Register(TestItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new UiTestItemTemplateHandler());
+            TemplateManifests.Register(UiTestItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new ResourceStringItemTemplateHandler());
+            TemplateManifests.Register(ResourceStringItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new BatFileItemTemplateHandler());
+            TemplateManifests.Register(BatFileItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new TsFormItemTemplateHandler());
+            TemplateManifests.Register(TsFormItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new TsWebApiItemTemplateHandler());
+            TemplateManifests.Register(TsWebApiItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new TsDialogItemTemplateHandler());
+            TemplateManifests.Register(TsDialogItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new JsDialogItemTemplateHandler());
+            TemplateManifests.Register(JsDialogItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new ReportItemTemplateHandler());
+            TemplateManifests.Register(ReportItemTemplateHandler.CreateManifest());
         }
     }
 }

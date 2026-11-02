@@ -289,6 +289,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\SolutionMutator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\WorkspaceScanner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\ScaffoldingEngine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\PluginTestDiscovery.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\T4\ITextTransformer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\T4\T4ContextFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\T4\T4TemplateResolver.cs" />
@@ -305,6 +306,23 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\UiTestProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\SolutionPackagerProjectTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ReportProjectTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\JsFormItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\JsWebApiItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\PluginItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\CustomActionItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\CustomApiItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\WorkflowItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\DataProviderItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TestItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\UiTestItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ResourceStringItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\BatFileItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TsFormItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TsWebApiItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TsDialogItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\JsDialogItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\ReportItemTemplateHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\LateBoundItemTemplateHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TemplateHandlers.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -435,7 +453,12 @@
     <EmbeddedResource Include="..\ItemTemplates\CSharp\08.DataProviderItemTemplate\Update.cs" LogicalName="Resources.templates.item.dataprovider.Update.cs" />
     <EmbeddedResource Include="..\ItemTemplates\CSharp\09.TestItemTemplate\Class.cs" LogicalName="Resources.templates.item.test.Class.cs" />
     <EmbeddedResource Include="..\ItemTemplates\CSharp\10.UiTestItemTemplate\Class.cs" LogicalName="Resources.templates.item.uitest.Class.cs" />
-    <EmbeddedResource Include="..\ItemTemplates\CSharp\11.ResourceStringItemTemplate\ResourceString.resx" LogicalName="Resources.templates.item.resourcestring.ResourceString.resx" />
+    <EmbeddedResource Include="..\ItemTemplates\CSharp\11.ResourceStringItemTemplate\ResourceString.resx" LogicalName="Resources.templates.item.resourcestring.ResourceString.resx">
+      <!-- Raw bytes: without this the resx is compiled to a binary
+           .resources blob (GenerateResource) and TemplatePayload reads
+           mojibake — the payload must be copied through unchanged. -->
+      <Type>Non-Resx</Type>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\ItemTemplates\CSharp\13.BatFileItemTemplate\batfile.bat" LogicalName="Resources.templates.item.batfile.batfile.bat" />
     <EmbeddedResource Include="..\ItemTemplates\CSharp\13.BatFileItemTemplate\devkit.d.ts" LogicalName="Resources.templates.item.batfile.devkit.d.ts" />
     <EmbeddedResource Include="..\ItemTemplates\CSharp\13.BatFileItemTemplate\devkit.js" LogicalName="Resources.templates.item.batfile.devkit.js" />

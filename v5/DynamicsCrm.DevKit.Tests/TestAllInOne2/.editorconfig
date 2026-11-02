@@ -32,6 +32,7 @@ dotnet_diagnostic.DEVKIT1018.severity = none
 dotnet_diagnostic.DEVKIT1019.severity = none
 dotnet_diagnostic.DEVKIT1020.severity = none
 dotnet_diagnostic.DEVKIT1021.severity = none
+dotnet_diagnostic.MSTEST0032.severity = none
 
 #### Core EditorConfig Options ####
 

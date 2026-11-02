@@ -336,9 +336,10 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
 
             var second = await ScaffoldingEngine.ScaffoldProjectAsync(Input());
 
-            Assert.IsTrue(second.Success);
-            Assert.IsTrue(second.Warnings.Any(warning => warning.Contains("already exists")));
-            Assert.IsTrue(second.Files.All(file => file.Action == "Skipped" || file.Action == "Unchanged"));
+            // Run-once (aP): the second scaffold over an existing project
+            // fails - the CLI has no --force and nothing is touched.
+            Assert.IsFalse(second.Success);
+            StringAssert.Contains(second.Errors.Single(), "already exists");
             Assert.AreEqual("customized by user", File.ReadAllText(userFile));
         }
 
@@ -436,7 +437,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             StringAssert.Contains(csproj, "<AssemblyName>Contoso.Test</AssemblyName>");
             StringAssert.Contains(csproj, "<PlatformTarget>x64</PlatformTarget>");
             StringAssert.Contains(csproj, "<IsTestProject>true</IsTestProject>");
-            StringAssert.Contains(csproj, "<NoWarn>MSTEST0001</NoWarn>");
+            StringAssert.Contains(csproj, "<NoWarn>MSTEST0001;CS0436</NoWarn>");
             StringAssert.Contains(csproj, $"<Copyright>Copyright © {DateTime.Now.Year}</Copyright>");
             // No strong-name key in this template.
             Assert.IsFalse(csproj.Contains("<SignAssembly>"));

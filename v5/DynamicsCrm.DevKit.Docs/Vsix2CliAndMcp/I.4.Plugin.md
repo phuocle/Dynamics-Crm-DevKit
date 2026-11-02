@@ -2,7 +2,7 @@
 
 > **Vị trí:** `DynamicsCrm.DevKit.Docs/Vsix2CliAndMcp/I.4.Plugin.md`
 > **Điều kiện tiên quyết:** `0.md` (T4 abstraction bắt buộc); target: project Server (P.4).
-> **Trạng thái:** ☐ Chưa làm
+> **Trạng thái:** ✅ **COMPARE CHỐT 2/2 BYTE-IDENTICAL** (aP tạo VSIX-side 22.57–22.58: PreAccountUpdateSynchronous 3312 bytes + PostAccountCreateAsynchronous 3343 bytes — cmp thuần bằng nhau sau khi mirror sort-usings của VS T4 host). Chờ aP gõ lệnh duyệt → `commit.md` (5 lô, KHÔNG push).
 > **Ghi chú:** wizard đã đọc nguyên văn; đại diện cho cả nhóm T4 (I.4–I.9).
 
 ## 1. Nguồn sự thật hiện tại (bắt buộc đọc trước khi làm)
@@ -33,13 +33,21 @@
   - Dùng `T4TemplateResolver` + `T4ContextFactory` (port ở bước 0) + `ITextTransformer` (Mono impl) — **không phụ thuộc VS**.
   - Kết quả render + tên class → ghi file `{Class}.cs` trực tiếp (không cần token $plugin$ trung gian như VS — engine CLI tự thay).
 - **Quan trọng:** `Plugin.pac.tt` (bản pac) — kiểm tra wizard nào dùng nó và bảo đảm resolver hỗ trợ `subType` (tham số thứ 3 của `GetT4CodeAsync`).
+  - **KẾT LUẬN (đã verify):** `Plugin.pac.tt` **không wizard nào dùng** — chỉ `Vsix.UnitTests/T4/*` (diagnostic) nhắc tên. `GetDefaultCustomTemplateBodyAsync(Plugin)` chỉ trả `tt.Plugin.tt`; `subType` chỉ có DataProvider dùng. Resolver bước 0 đã hỗ trợ `subType` đủ (mirror 1-1) → không phải sửa gì.
+- **ITextTransformer inject qua input** (deviation đã phê bước 0: Mono ở CLI, VSIX net48 không có package): `ItemTemplateInput.Transformer` — `TaskNew` gán `new MonoTextTransformer()`; handler Shared chỉ gọi qua contract.
 
 ## 5. Việc phải làm (CLI)
 
-- [ ] Handler + manifest (id `Plugin`, order I.4) + embed payload `Class.cs` (làm template token).
-- [ ] Prompt hỏi–đáp mô phỏng FormPlugin: entity (search metadata) → message (danh sách message chuẩn + custom) → stage (PreValidation/PreOperation/PostOperation) → execution (Sync/Async) → order (default 1) → class name (gợi ý `{Message}{Entity}...`) → comment → custom template (Default + danh sách từ Cli.json).
-- [ ] Offline mode: cho phép gõ tay toàn bộ (không validate metadata) — cảnh báo trong result.
-- [ ] Đăng ký `[CrmPluginRegistration]` đúng format (so sánh byte với output VSIX trên cùng input — test vàng).
+- [x] Handler + manifest (id `Plugin`, order I.4) + embed payload `Class.cs` (làm template token) — payload đã embed sẵn từ bước 0 (`Resources.templates.item.plugin.Class.cs`, projitems 430; chỉ thêm Compile entry handler vào .projitems — gotcha P.1).
+- [x] Prompt hỏi–đáp mô phỏng FormPlugin: entity (search metadata) → message (danh sách message chuẩn + custom) → stage (PreValidation/PreOperation/PostOperation) → execution (Sync/Async) → order (default 1) → class name (gợi ý `{Message}{Entity}...`) → comment → custom template (Default + danh sách từ Cli.json).
+  - **Đã sửa theo wizard thật:** message = `GetSdkMessagesAsync(entityLogicalName)` — **CHỈ message chuẩn** của entity (fetch loại `CustomOperation`/`CustomApi` — chúng thuộc item CustomAction/CustomApi); work file ghi "+ custom" nhưng wizard Plugin không làm vậy → làm theo wizard.
+  - **Thứ tự prompt (ruling aP sau COMPARE — theo đúng thứ tự field FormPlugin):** entity → message → stage → execution → class → custom template. **KHÔNG prompt order** (form wizard không có field order) — `--order` flag-only, default 1.
+  - Class gợi ý thật: `{Stage}{SchemaName}{Message}{Execution}` với `.Replace("Operation","")` — `PreOperation`→`Pre`, `PostOperation`→`Post`, `PreValidation` giữ nguyên.
+  - Execution: `PreValidation`/`PreOperation` **khóa `Synchronous`** (FormPlugin disable combo); `--execution Asynchronous` + stage Pre* → lỗi. `PostOperation` mới prompt/chọn được.
+  - Comment: KHÔNG prompt — tự đọc org (`GetPluginCommentAsync` = doc InputParameters/OutputParameters của message); offline → rỗng.
+  - Order: KHÔNG auto-bump như wizard (wizard scan `{Class}{n}.cs` siblings) — CLI dùng `--order` tường minh, default 1 (theo đúng spec §6). File tồn tại → Skipped (user file, an toàn).
+- [x] Offline mode: cho phép gõ tay toàn bộ (không validate metadata) — cảnh báo trong result. Carve-out `RequiresConnection && --offline` trong TaskNew chỉ cho `Plugin` (LateBound/JsForm/JsWebApi giữ nguyên bị chặn).
+- [x] Đăng ký `[CrmPluginRegistration]` đúng format (so sánh byte với output VSIX trên cùng input — test vàng). *(test vàng unit đã chốt shape + Roslyn parse 0 lỗi; so byte 1-1 với wizard do aP chạy — xem §9)*
 
 ## 6. CLI surface
 
@@ -48,6 +56,18 @@ devkit new --kind item --type Plugin --name PreAccountUpdate --entity account --
   --stage PreOperation --execution Synchronous --order 1 --out <server dir> [--template Default] [--offline]
 ```
 
+Mới trong I.4 (theo yêu cầu aP giữa session):
+- **LÔ 3 rules required/interactive (2026-10-28):** `--project` REQUIRED cho TẤT CẢ item templates; `--solution` REQUIRED cho TẤT CẢ project templates (ĐẢO ruling "opt-in" 2026-10-26); BỎ flag `-i/--interactive` (prompts tự trigger theo TTY — giống dialog VSIX; redirected/plain → lỗi rõ ràng); Prompt chain Plugin theo thứ tự field FormPlugin: Entity → Message → Stage → Execution → Class → Template — **KHÔNG prompt order** (`--order` flag-only default 1).
+- **LÔ 4 refactor command split (2026-10-28):** **REFACTOR: `devkit new` tách thành `devkit new-project` + `devkit new-item`** (ruling aP: một lệnh gộp project+item là SAI — hai bộ args không own được requirement). `devkit new` chỉ còn **list catalog** (legacy `--kind project|item` → lỗi chỉ đường rõ ràng). Mỗi lệnh args riêng: `NewProjectCommandArgs` (--solution required), `NewItemCommandArgs` (--project required + đầy đủ --message/--stage/--execution/--order/--template/--t4/--datasource/--language/--namespace); Tasks: `TaskNewProject` / `TaskNewItem` / `TaskNewShared` (CanPrompt + PromptTemplate + WriteResult + ListAsync). Flow project KHÔNG đổi logic (aP: "kind=project đã làm đúng"); connection chỉ `new-item` khi RequiresConnection (NewProjectCommand không connect).
+- **LÔ 5 — xoá `devkit new`, list per-command (2026-10-29):** `devkit new` **XOÁ hoàn toàn** (aP: "để nhiều làm gì") — script cũ → lỗi chỉ đường (Program.cs intercept, exit 1). List catalog per kind: **`devkit new-project list`** (13 project) / **`devkit new-item list`** (17 item) qua positional argument `[list]` (giá trị khác → lỗi). Bảng Arguments tự ẩn khi list mode. `TaskNewShared.ListAsync(TemplateKind)` + Usage hint theo kind. Engine messages cập nhật (`new-project list`/`new-item list`).
+- **`--offline` trên new-project (giải thích aP):** project templates KHÔNG đọc org, NHƯNG bake connection vào file sinh ra (Console/App.config, ConsoleCore/AppSettings.json, Server/Package deploy scripts, UiTest App.config…). Không `--offline` (TTY) → hỏi connection rồi bake giá trị thật; `--offline` → bỏ qua câu hỏi, bake marker/placeholder → resolve lúc runtime qua `.env` (`DEVKIT_*`). Non-TTY không flag → prompt tự skip (cùng hiệu quả marker).
+- **LÔ 7 — bỏ `--offline` khỏi new-project (ruling aP 2026-10-29):** `NewProjectCommandArgs` gỡ flag + bảng args gỡ dòng; `TaskNewProject` gỡ `!args.Offline` khỏi điều kiện prompt connection + 2 chỗ `Offline = args.Offline` (engine `ProjectTemplateInput.Offline` GIỮ NGUYÊN cho tests/MCP — CLI không set → default false). **`ConnectionPrompter.Prompt` skip được**: lựa chọn **"(skip — configure later via the project .env)"** đứng đầu khi `.env` không gợi ý AuthType (có gợi ý thì suggested đứng đầu, skip thứ 2) → return null → bake marker — đúng hành vi "bấm OK chưa connect" của dialog VSIX. NuGet lookup tự fallback khi không gọi được (AddNuGetTokensAsync). Lý do bỏ: non-TTY flag là near-no-op (prompts tự skip + NuGet tự fallback), TTY thì VSIX-parity đúng nghĩa = connection optional tại prompt. **`--offline` trên new-item GIỮ NGUYÊN** (Plugin carve-out work file §5 — chờ aP chốt riêng). Suites 5066/253/571/310/48 green; help new-project 0 hit offline; new-project Shared demo 13 Created (marker); new-item giữ --offline ✓.
+- **LÔ 8 — create-once, bỏ `--force` new-project (ruling aP 2026-10-29 "vsix đang thiết kế là run 1 lần"):** project templates **run-once** — engine `ScaffoldProjectAsync` pre-check `{out}/{ProjectName}` có nội dung → **ERROR** `"--name 'X': project already exists — remove it or scaffold with another name."` (trước CreateDirectory, sau solution validation; `input.Force` = engine escape cho tests/MCP, CLI không có flag). Bỏ `--force` khỏi NewProjectCommandArgs + bảng args + TaskNewProject (2 chỗ). **~16 test rerun viết lại** thành assert error (RerunSkips* → RerunFails*; Server giữ snk-bytes check; Report RerunKeepsUserEdits → RerunFails_ForcedRegenerates — engine Force vẫn regenerate); **2 test `AddsConsumerLineOnRerun` (Console/ConsoleCore — tính năng P.3) GIỮ được qua `force: true`** — CLI chặn rerun nhưng engine-level attach consumer line vẫn covered cho MCP. Hệ quả ghi nhận: crash-recovery thủ công (xoá folder nửa vời); Console/ConsoleCore scaffold SAU Shared thì consumer line chỉ wire lúc first-run. Suites 5066/253/571/310/48 green; demo: Server tồn tại → ERROR ✓, fresh 7 Created ✓, rerun → ERROR ✓.
+- **LÔ 6 — gate keeper (ruling aP 2026-10-29):** KHÔNG làm `[Required]` attribute (aP "ko làm attribute required nữa"; Spectre.Console.Cli 0.55 xác nhận KHÔNG có — các hit "RequiredAttribute" trong DLL chỉ là JetBrains annotations), KHÔNG rải text "REQUIRED:" trong help. **Required args kiểm MỘT LẦN ở gate keeper đầu mỗi Task, báo MỘT lỗi liệt kê đủ**: `required arguments missing: --type <template-id>, --project <project-name>, ...` — AI/human đọc 1 lần sửa liền. TTY thiếu → wizard tự hỏi từng bước (prompt `--project`/`--solution` gợi ý nearest). Bộ required: new-project = `--type, --name, --solution`; new-item = `--type, --project` + theo type (Plugin: `--entity, --message, --stage, --name`; LateBound/JsForm/JsWebApi: `--entity`). Help descriptions bỏ REQUIRED (Solution: "Solution file (.sln/.slnx) the project is registered in"; Project: "The project the item scaffolds into"). Root help `SpectreLog.WriteHelp` hardcode đã stale (còn `new`) — sửa CẢ plain + rich panel → new-project/new-item; verify 3 surface. `devkit help <cmd>` KHÔNG tồn tại (Spectre 0.55 không có built-in help command) — help surface duy nhất `--help`/`-h`. Live demo gate: new-project thiếu hết → 1 lỗi 3 args ✓; new-item Plugin thiếu 4 → 1 lỗi ✓; LateBound → entity+project ✓; help sạch ✓.
+- **`[Required]` attribute: Spectre.Console.Cli 0.55 CHƯA CÓ** (compile-proved CS0246) → requirement enforced bằng guard trong từng Task (message rõ + help ghi REQUIRED); không nâng Spectre chỉ vì attribute.
+- Live demo: `devkit new --plain` list 30 ✓; legacy guard ✓; `new-item` thiếu --project → lỗi ✓; `new-project` thiếu --solution → lỗi ✓; `new-item` đủ args → Skipped (fixture BYTE-IDENTICAL giữ nguyên) ✓; `new-project` Shared (13 Created) → ConsoleCore (7 Created) → `dotnet build` 0 lỗi ✓.
+- **`--t4 <đường-dẫn-.tt>`**: custom plugin T4 từ file trực tiếp; **không cung cấp → default như VSIX** (resource `Plugin.tt` hoặc title từ Cli.json qua `--template`). `--t4` + `--template` ≠ Default cùng lúc → lỗi "use one custom T4 source". Custom T4 (cả 2 đường) render qua context ĐẦY ĐỦ `BuildContext` (title-based, đúng Plugin.cs).
+
 ## 7. 🤖 MCP (Phase 2 — CHỈ ĐÁNH DẤU, CHƯA LÀM)
 
 <!-- MCP-PHASE-2 -->
@@ -55,11 +75,32 @@ devkit new --kind item --type Plugin --name PreAccountUpdate --entity account --
 
 ## 8. Test & nghiệm thu
 
-- [ ] Unit test: render `Plugin.tt` bằng MonoTextTransformer với T4Context mẫu → output compile được (Roslyn `CSharpSyntaxTree.ParseText` 0 lỗi) + chứa `[CrmPluginRegistration(` đúng tham số.
-- [ ] Test custom T4 từ Cli.json (nén/giải nén `Helper.Compress/Decompress`).
-- [ ] Test `$PluginOrder$` rỗng khi order=1.
-- [ ] Build CLI 0/0; test pass.
+- [x] Unit test: render `Plugin.tt` bằng MonoTextTransformer với T4Context mẫu → output compile được (Roslyn `CSharpSyntaxTree.ParseText` 0 lỗi) + chứa `[CrmPluginRegistration(` đúng tham số. — 19 tests `PluginItemTemplateHandlerTests` (Cli.UnitTests): manifest mirror vstemplate, golden render (BOM + attribute + namespace + using Shared + parse 0 lỗi), order=1 không suffix / order=2 suffix file+class, Delete/PostOperation/Async (`DeleteAsyncOperation = true` + PreImage — **post-image list KHÔNG có "delete"**), Create target, rerun Skipped / `--force` Updated, custom T4 Cli.json (nén/giải nén `Helper.Compress/Decompress`) + `--t4` path + cả hai → lỗi + title lạ fallback default body (vẫn full context), thiếu/`--project` không thấy → lỗi, `--project` + subfolder → `ns.steps`, thiếu Transformer → lỗi, 6 validation lỗi, token `$PluginOrder$` rỗng khi order=1.
+- [x] Test custom T4 từ Cli.json (nén/giải nén `Helper.Compress/Decompress`).
+- [x] Test `$PluginOrder$` rỗng khi order=1.
+- [x] Build CLI 0/0; test pass. **Full suites: Cli 5066** (+24: 19 Plugin + 3 engine gate + 2 usings-sort) **/ Tool 253 / Vsix 571 / Analyzers 310 / Vsix.2019 48 — tất cả Pass.**
+- [x] Release refresh installed devkit (`Release.DynamicsCrm.DevKit.Cli.ps1` x4 — cuối: Build 28.10.2026 23:34:18); **build-release-only xong sau đó** (annual `31.12.2026 23.59.59`, 4 artifacts `Published/4.44.44.44/` fresh 23.36–23.37, 21 date-replacement restored, sweep nguồn sạch).
+- [x] Live demo lô required/interactive: item thiếu `--project` → lỗi ✓; project thiếu `--solution` → lỗi ✓; lệnh đủ args → Skipped ✓; help hiện REQUIRED + không còn `-i` ✓.
 
 ## 9. Bàn giao
 
 - [ ] Báo cáo + user duyệt → qua `I.5.CustomAction.md`.
+
+### State chờ aP (2026-10-28)
+
+- Branch `vsix2cliandmcp_items`, tree KHÔNG commit: 13 file sửa (NewCommandArgs, TaskNew, MonoTextTransformer, projitems, TemplateHandlers, TemplateModels, ScaffoldingEngine, T4ContextFactory, T4TemplateResolver, MonoTextTransformerTests, ScaffoldingEngineTests, new.md, I.4.md) + 2 file mới (PluginItemTemplateHandler.cs, PluginItemTemplateHandlerTests.cs) + 5 Published artifacts (release script).
+- **COMPARE CHỐT (aP tạo VSIX-side 22.57–22.58, CLI re-render 23.17):**
+  - `PreAccountUpdateSynchronous.cs` — **BYTE-IDENTICAL (cmp thuần, 3312 bytes)**.
+  - `PostAccountCreateAsynchronous.cs` — **BYTE-IDENTICAL (cmp thuần, 3343 bytes)**.
+  - Lệch family csproj I.1–I.3 KHÔNG xảy ra: Server csproj SDK-style, VS không đụng (git status TestAllInOne2 chỉ 2 untracked .cs).
+  - Fix mang lại: **VS T4 host sort block `using` đầu file theo tên namespace alphabetically, prefix-first** — mirror ở `MonoTextTransformer.SortLeadingUsings` (regex block-leading, sort theo group tên, OrdinalIgnoreCase). 2 vòng sửa: (1) sort raw-line sai vì `;` (0x3B) > `.` (0x2E) → `Microsoft.Xrm.Sdk.Extensions` nhảy trước `Microsoft.Xrm.Sdk`; (2) sort theo TÊN namespace → khớp.
+- Live checks: connected Created ✓, rerun Skipped ✓, `--project` ✓, gate I.1/I.3 thiếu project lỗi ✓, `--project` sai tên lỗi ✓, validation async-Pre*/message-Bogus lỗi ✓, offline Created + WARNING ✓.
+
+### Lệch/bài học ghi lại
+
+1. `Plugin.pac.tt` chỉ là biến thể test/diagnostic — không wizard nào dùng (mục §4).
+2. Work file ghi message "chuẩn + custom" — wizard thật chỉ message chuẩn của entity → làm theo wizard (§5).
+3. Wizard auto-bump order (scan siblings) — CLI theo spec §5/§6: `--order` tường minh default 1, không auto; rerun Skipped là lớp bảo vệ.
+4. `ItemTemplateInput.Comment`: `null` = legacy fallback (Name), `""` = comment rỗng CÓ Ý (offline) — sửa `T4ContextFactory.BuildComment` phân biệt null/rỗng.
+5. Gotcha `GetRelativePath` khi `--out` == project root: trả về path tuyệt đối làm nổ namespace (`Dev.Contoso.Server.C:.Users…`) — đã fix trả rỗng khi cùng thư mục, null khi không nằm dưới project (không thêm suffix).
+6. Xoá nhầm không — `projitems` cần Compile entry cho handler mới (gotcha P.1 lặp lại lần 3).

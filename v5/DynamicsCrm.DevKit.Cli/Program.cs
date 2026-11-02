@@ -41,14 +41,14 @@ namespace DynamicsCrm.DevKit.Cli
                 var originalArgs = args;
                 args = LegacyArgConverter.Convert(args);
 
-                // Friendly alias: "devkit new list" -> "devkit new --kind list"
-                // (Spectre.Console.Cli would otherwise parse "list" as an
-                // unknown subcommand of the leaf command "new").
-                if (args != null && args.Length == 2 &&
-                    args[0].Equals("new", StringComparison.OrdinalIgnoreCase) &&
-                    args[1].Equals("list", StringComparison.OrdinalIgnoreCase))
+                // 'devkit new' was removed with the new-project/new-item
+                // split (aP: keeping a list-only 'new' serves no purpose —
+                // listing lives in 'devkit new-project list' and
+                // 'devkit new-item list'). Point old scripts the right way.
+                if (args != null && args.Length > 0 && args[0].Equals("new", StringComparison.OrdinalIgnoreCase))
                 {
-                    args = new[] { "new", "--kind", "list" };
+                    SpectreLog.WriteException(new InvalidOperationException("'devkit new' was removed — the scaffold split into 'devkit new-project' and 'devkit new-item'. List templates with 'devkit new-project list' / 'devkit new-item list'."));
+                    return 1;
                 }
 
                 // `devkit tool` runs in its own lifecycle: no update check, no
@@ -126,11 +126,21 @@ namespace DynamicsCrm.DevKit.Cli
                     config.AddCommand<DataSourceCommand>("datasource")
                           .WithDescription("Create data source entities");
 
-                    config.AddCommand<NewCommand>("new")
-                          .WithDescription("Create DevKit project or item templates (cross-platform wizard & CLI)")
-                          .WithExample(new[] { "new", "list" })
-                          .WithExample(new[] { "new", "--kind", "project", "--type", "Shared", "--name", "Contoso.Shared" })
-                          .WithExample(new[] { "new", "--kind", "item", "--type", "LateBound", "--entity", "Account", "--offline" });
+                    // The 'new' family split (aP): one combined scaffold
+                    // command mixed two argument sets and could not own its
+                    // requirements — 'devkit new-project' and
+                    // 'devkit new-item' scaffold with their own required
+                    // arguments, and each lists its own catalog ('list').
+                    config.AddCommand<NewProjectCommand>("new-project")
+                          .WithDescription("Create a DevKit project template (Shared, Console, Server, ...) in the required solution")
+                          .WithExample(new[] { "new-project", "list" })
+                          .WithExample(new[] { "new-project", "--type", "Shared", "--name", "Contoso.Shared", "--solution", "MySolution.slnx" });
+
+                    config.AddCommand<NewItemCommand>("new-item")
+                          .WithDescription("Create a DevKit item template (LateBound, Plugin, ...) in the required project")
+                          .WithExample(new[] { "new-item", "list" })
+                          .WithExample(new[] { "new-item", "--type", "LateBound", "--entity", "Account", "--project", "Contoso.Shared" })
+                          .WithExample(new[] { "new-item", "--type", "Plugin", "--entity", "Account", "--message", "Update", "--stage", "PreOperation", "--name", "PreAccountUpdate", "--project", "Contoso.Server" });
 
                     config.AddCommand<McpCommand>("mcp")
                           .WithDescription("Start MCP server for AI agent integration (auth: CLI args > project .env; see --setup-guide)")

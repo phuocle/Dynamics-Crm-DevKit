@@ -273,7 +273,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelMessage.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxMessage.Visibility = System.Windows.Visibility.Collapsed;
                     TemplatePanel.Visibility = System.Windows.Visibility.Hidden;
-                    LabelClass.Content = "Resouce";
+                    LabelClass.Content = "Resource";
                     LabelEntity.Content = "Language";
                 }
                 void BatFileItem()

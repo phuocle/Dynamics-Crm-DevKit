@@ -33,7 +33,7 @@
 		<DebugSymbols>true</DebugSymbols>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.44.44.44">
+		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.12.34.56">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
@@ -42,7 +42,6 @@
 		<Folder Include="html\" />
 		<Folder Include="css\" />
 		<Compile Remove="build\**" />
-		<Folder Include="entities\" />
 		<Folder Include="lib\" />
 		<Folder Include="images\" />
 		<Folder Include="resources\" />
@@ -68,6 +67,17 @@
 	  <None Remove="build\**" />
 	  <None Remove="node_modules\**" />
 	  <None Remove="package-lock.json" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="entities\Account.form.ts">
+	    <DependentUpon>Account.ts</DependentUpon>
+	  </None>
+	  <None Update="entities\Account.webapi.ts">
+	    <DependentUpon>Account.ts</DependentUpon>
+	  </None>
+	  <None Update="entities\pl_dataversedialogbuilder_demo.dialog.ts">
+	    <DependentUpon>pl_dataversedialogbuilder_demo.ts</DependentUpon>
+	  </None>
 	</ItemGroup>
 </Project>
 <!-- v.4.44.44.44 - Build: 31.12.2026 23.59.59 -->

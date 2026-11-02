@@ -156,6 +156,8 @@ namespace DynamicsCrm.DevKit.Lib
             await NuGetHelper.SetReplacementAsync(replacements, "Selenium.WebDriver");
             await NuGetHelper.SetReplacementAsync(replacements, "Selenium.WebDriver.ChromeDriver");
             await NuGetHelper.SetReplacementAsync(replacements, "Selenium.Support");
+            await NuGetHelper.SetReplacementAsync(replacements, "System.Security.Cryptography.Pkcs");
+            await NuGetHelper.SetReplacementAsync(replacements, "System.Security.Cryptography.Xml");
         }
 
         public static void SetConnectionValues(Dictionary<string, string> replacements, CrmConnection crmConnection)

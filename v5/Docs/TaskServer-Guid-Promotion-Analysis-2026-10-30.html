@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TaskServer — Deploy plugin DEV → UAT → TEST bằng cùng GUID</title>
+<style>
+:root{--ink:#173042;--muted:#576b7a;--accent:#087f79;--line:#d7e3e7}*{box-sizing:border-box}body{margin:0;background:#edf3f5;color:var(--ink);font:16px/1.75 "Segoe UI",Arial,sans-serif}header{background:#112e3e;color:white;padding:55px max(24px,calc((100vw - 1120px)/2));border-bottom:6px solid #3bd6b7}h1{font-size:clamp(30px,4vw,46px);line-height:1.2;margin:15px 0;max-width:1000px}header p{font-size:19px;color:#d3e3ea;max-width:940px}.eyebrow{font-size:13px;letter-spacing:2px;color:#8ce8d3}.meta{font-size:13px;color:#b7cdd8}.layout{max-width:1240px;padding:0 24px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:25px;margin:32px auto}nav{position:sticky;top:20px;align-self:start;font-size:14px}nav a{display:block;border-left:2px solid #c9dcdf;padding:7px 12px;text-decoration:none}a{color:var(--accent);text-underline-offset:3px}nav a:hover{background:#dceee9}main{min-width:0}section{background:white;border:1px solid var(--line);border-radius:14px;padding:28px 30px;margin-bottom:22px;scroll-margin-top:20px}h2{font-size:26px;line-height:1.3;margin:0 0 15px}h3{font-size:19px;margin:22px 0 7px}p{margin:10px 0}.lead{font-size:19px}.tag{display:inline-block;background:#dff3e9;color:#156848;font-size:12px;font-weight:bold;padding:3px 10px;border-radius:20px;margin-bottom:10px}.tag.warn-tag{background:#fff0d0;color:#8a5a00}.note,.warn,.bad{padding:15px 18px;border-left:4px solid #1c9d91;background:#edf8f5;border-radius:7px;margin:18px 0}.warn{background:#fff6e1;border-color:#c18b24}.bad{background:#fdecec;border-color:#c0392b}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}.card{border:1px solid var(--line);border-radius:10px;padding:18px}.card h3{margin-top:0}code{font:0.88em Consolas,monospace;background:#edf2f5;padding:2px 4px;border-radius:4px;overflow-wrap:anywhere}pre{background:#153344;color:#e2f3f5;padding:19px;border-radius:9px;overflow:auto;line-height:1.6;font-size:13px}pre code{background:none;padding:0;overflow-wrap:normal}.table{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px;margin:15px 0}th,td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}th{background:#eaf2f5}li{margin:7px 0}.small{font-size:13px;color:var(--muted)}.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:6px;margin:22px 0}.node{flex:1 1 150px;background:#edf8f5;border:1px solid #bedbd4;border-radius:9px;padding:13px;text-align:center;font-size:14px}.node.old{background:#fdf1f1;border-color:#e3bcbc}.arrow{align-self:center;font-size:22px;padding:0 2px}.good{color:#146b49;font-weight:bold}.no{color:#a32b1f;font-weight:bold}.mid{color:#8a5a00;font-weight:bold}footer{text-align:center;padding:20px 24px 40px;color:var(--muted);font-size:13px}@media(max-width:900px){.layout{grid-template-columns:1fr}nav{position:static;display:flex;flex-wrap:wrap}nav a{border:1px solid var(--line);border-radius:5px}header{padding:35px 24px}.grid3{grid-template-columns:1fr}}@media(max-width:600px){.grid{grid-template-columns:1fr}.layout{padding:0 12px}section{padding:22px}h2{font-size:23px}}@media print{body{background:white;font-size:11pt}.layout{display:block;margin:0;padding:0;max-width:none}nav{display:none}header{background:white;color:var(--ink);padding:10px 0}header p,.meta,.eyebrow{color:var(--muted)}section{border:0;border-bottom:1px solid var(--line);padding:16px 0;border-radius:0}tr,.card,.note,.warn{break-inside:avoid}pre{white-space:pre-wrap}.table{overflow:visible}}
+</style></head><body>
+<header><div class="eyebrow">DYNAMICSCRM.DEVKIT · CLI · TASKSERVER · NGHIÊN CỨU</div>
+<h1>Deploy plugin DEV → UAT → TEST chỉ bằng đổi connection, tái sử dụng GUID trong <code style="background:none;color:#8ce8d3">CrmPluginRegistration</code></h1>
+<p><strong>Kết luận: làm được.</strong> Phần "đổi connection rồi deploy thẳng vào UAT" thực tế TaskServer đã làm được ngay hôm nay. Phần "mọi môi trường có cùng GUID" mới chỉ có cho <em>step</em>; cần mở rộng cho assembly, type, image, package và thêm cơ chế ghi ngược GUID vào attribute. Riêng plugin package (.nupkg) có giới hạn nền tảng.</p>
+<div class="meta">30/10/2026 · Nhánh vsix2cliandmcp_items · Commit khảo sát d48f0179c · Source version 4.44.44.44 · Báo cáo phân tích, chưa sửa code</div></header>
+<div class="layout"><nav aria-label="Mục lục">
+<a href="#verdict">01 · Trả lời ngắn</a>
+<a href="#problem">02 · Bài toán & quy trình cũ</a>
+<a href="#today">03 · TaskServer hôm nay</a>
+<a href="#matrix">04 · Ma trận GUID</a>
+<a href="#why">05 · Khi nào GUID phải giống nhau</a>
+<a href="#findings">06 · Phát hiện trong code</a>
+<a href="#options">07 · Các phương án</a>
+<a href="#design">08 · Thiết kế đề xuất</a>
+<a href="#rules">09 · Quy tắc xử lý xung đột</a>
+<a href="#writeback">10 · Ghi ngược GUID</a>
+<a href="#limits">11 · Giới hạn & rủi ro</a>
+<a href="#scope">12 · Phạm vi thay đổi</a>
+<a href="#spike">13 · Spike cần xác minh</a>
+<a href="#questions">14 · Câu hỏi cần chốt</a>
+<a href="#sources">15 · Bằng chứng</a>
+</nav><main>
+
+<section id="verdict"><span class="tag">LÀM ĐƯỢC · CHIA 2 TẦNG</span><h2>01. Trả lời ngắn</h2>
+<div class="grid">
+<div class="card"><h3>Tầng 1 — Deploy nhanh sang UAT/TEST <span class="good">(đã có)</span></h3>
+<p>TaskServer không cần solution được tạo/add component bằng tay. Mỗi lần chạy, CLI tự tìm record theo khoá tự nhiên (tên assembly, typename, tên step, tên image), <em>create hoặc update</em>, và gắn tham số <code>SolutionUniqueName</code> nên component được add thẳng vào solution trong <code>DynamicsCrm.DevKit.Cli.json</code>.</p>
+<p>Điều kiện duy nhất: solution có cùng <code>uniquename</code> phải <strong>tồn tại sẵn ở môi trường đích</strong> (<code>IsValidAsync</code> chặn nếu thiếu). Tạo một solution rỗng ở UAT/TEST một lần là đủ, không cần add assembly/type/step thủ công nữa.</p></div>
+<div class="card"><h3>Tầng 2 — Cùng GUID ở mọi môi trường <span class="mid">(mới có một phần)</span></h3>
+<p>Hiện chỉ <strong>step</strong> tái sử dụng GUID từ <code>CrmPluginRegistration(Id = "...")</code>. Assembly, plugin type, image, package, managed identity đều do server (hoặc <code>Guid.NewGuid()</code>) sinh mới ở từng môi trường → DEV ≠ UAT ≠ TEST.</p>
+<p>Muốn đồng nhất cần: thêm thuộc tính chứa GUID cho assembly/type/image/package, cho CLI <em>tìm theo GUID rồi mới tìm theo tên</em>, <em>create với GUID chỉ định</em>, và ghi ngược GUID vào source sau lần deploy DEV.</p></div>
+</div>
+<div class="note"><strong>Khuyến nghị:</strong> triển khai theo thứ tự (1) chuẩn hóa quy trình dùng TaskServer cho UAT/TEST ngay — không cần đổi code; (2) mở rộng "explicit GUID" cho type/image/assembly/package + báo cáo drift; (3) bổ sung lệnh ghi ngược GUID; (4) tuỳ chọn GUID tất định (UUID v5) cho component mới để giảm nhu cầu ghi ngược. Chi tiết ở <a href="#design">§08</a>.</div>
+<div class="warn"><strong>Ngoại lệ quan trọng:</strong> với <code>.nupkg</code> (plugin package), Dataverse tự tạo <code>pluginassembly</code>/<code>plugintype</code> từ package; code hiện tại cũng không tạo type cho nuget (<code>DeployPluginTypeAsync</code> trả về record có sẵn). Vì vậy với package chỉ kiểm soát được GUID của package, step, image — không kiểm soát được GUID assembly/type (cần spike xác nhận, <a href="#spike">§13</a>).</div>
+</section>
+
+<section id="problem"><h2>02. Bài toán và quy trình hiện tại của team</h2>
+<div class="flow">
+<div class="node old">DEV: <code>devkit server</code><br><small>đăng ký plugin</small></div><div class="arrow">→</div>
+<div class="node old">Tạo solution PluginA, PluginB…<br><small>thủ công</small></div><div class="arrow">→</div>
+<div class="node old">Add assembly → type → step<br><small>thủ công, dễ sót</small></div><div class="arrow">→</div>
+<div class="node old">Export unmanaged<br><small>import UAT, rồi TEST</small></div>
+</div>
+<p><strong>Mong muốn:</strong></p>
+<div class="flow">
+<div class="node">DEV: <code>devkit server</code><br><small>GUID ghi ngược vào attribute</small></div><div class="arrow">→</div>
+<div class="node">Đổi connection → UAT<br><small><code>devkit server</code></small></div><div class="arrow">→</div>
+<div class="node">Đổi connection → TEST<br><small><code>devkit server</code></small></div><div class="arrow">→</div>
+<div class="node">UAT export <strong>managed</strong> → PROD<br><small>ngoài phạm vi</small></div>
+</div>
+<p>Phạm vi: DEV/UAT/TEST đều unmanaged. PROD nhận managed export từ UAT nên PROD tự mang GUID của UAT — không nghiên cứu ở đây, nhưng thiết kế phải giữ được tính chất "UAT GUID = DEV GUID" để PROD cũng đồng nhất.</p>
+</section>
+
+<section id="today"><h2>03. TaskServer hôm nay làm gì khi deploy</h2>
+<p>Luồng chính trong <a href="../DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs">TaskServer.cs</a>:</p>
+<ol>
+<li><code>IsValidAsync</code> (dòng 578–602): kiểm tra profile, folder, và <code>Deployment.IsExistSolutionAsync(Json.solution)</code>; lấy prefix publisher.</li>
+<li><code>DeployFilesAsync</code> (106–196): với mỗi <code>.dll</code>/<code>.nupkg</code> → ký managed identity nếu có → deploy.</li>
+<li><code>DeployFileAsync</code> (928–1045): nạp cache type/step/image/secure config/sdkmessage/custom API theo lô 50, rồi deploy assembly → type → step → image → custom API binding → data provider.</li>
+<li>Mọi Create/Update quan trọng đều gửi <code>request.Parameters.Add("SolutionUniqueName", Json.solution)</code> ⇒ component vào solution tự động.</li>
+<li>So sánh nội dung/thuộc tính trước khi Update ⇒ chạy lại nhiều lần là idempotent (log <code>DO_NOTHING</code>).</li>
+</ol>
+<div class="note">Hệ quả thực tế: chỉ cần trong UAT có solution trống <code>PluginA</code> (cùng publisher prefix), chạy <code>devkit server</code> với connection UAT là UAT có đủ assembly/type/step/image <strong>và</strong> chúng nằm trong solution <code>PluginA</code>. Bước tạo solution + add component thủ công có thể bỏ ngay mà không cần sửa code.</div>
+<pre><code># Ví dụ — cùng profile, chỉ đổi connection
+devkit server --profile DEV  --conn "AuthType=OAuth;Url=https://contoso-dev.crm.dynamics.com;..."
+devkit server --profile DEV  --conn "AuthType=OAuth;Url=https://contoso-uat.crm.dynamics.com;..."
+devkit server --profile DEV  --conn "AuthType=OAuth;Url=https://contoso-test.crm.dynamics.com;..."</code></pre>
+<p class="small">Minh họa cú pháp; dùng <code>--conn</code> hoặc <code>.env</code> (<code>DEVKIT_*</code>) theo thứ tự ưu tiên auth của CLI. Không ghi secret vào file commit.</p>
+</section>
+
+<section id="matrix"><h2>04. Ma trận GUID — hiện trạng từng component</h2>
+<div class="table"><table><thead><tr><th>Component (bảng)</th><th>Tìm record hiện có bằng</th><th>GUID khi create</th><th>Có chỗ chứa GUID trong attribute?</th><th>Cùng GUID giữa môi trường?</th></tr></thead><tbody>
+<tr><td>Plugin package (<code>pluginpackage</code>)</td><td><code>name = prefix + nuspec id</code> (197–306)</td><td>Server sinh</td><td>Không</td><td class="no">Không</td></tr>
+<tr><td>Assembly (<code>pluginassembly</code>)</td><td><code>name</code> (307–456)</td><td>Server sinh (biến <code>Guid.NewGuid()</code> dòng 367 bị ghi đè bởi <code>response.id</code>, không gửi lên server)</td><td>Không</td><td class="no">Không</td></tr>
+<tr><td>Plugin type (<code>plugintype</code>)</td><td><code>typename</code> (1782–1847)</td><td>Server sinh; với nuget do platform tạo</td><td>Không (VSIX có ghi <code>Id</code> = plugintypeid cho workflow nhưng CLI bỏ qua)</td><td class="no">Không</td></tr>
+<tr><td>Step (<code>sdkmessageprocessingstep</code>)</td><td><code>Id</code> trước, fallback <code>plugintypeid + name</code> (1372–1383)</td><td><strong>Dùng <code>Id</code> nếu có</strong> (1418–1422)</td><td><code>Id</code></td><td class="good">Có, nếu attribute có Id và UAT chưa có step trùng tên</td></tr>
+<tr><td>Image (<code>sdkmessageprocessingstepimage</code>)</td><td><code>stepId + name + imagetype</code> (1240)</td><td>Server sinh</td><td>Không</td><td class="no">Không</td></tr>
+<tr><td>Secure config</td><td>Qua step</td><td>Server sinh</td><td>—</td><td>Không cần: bảng không solution-aware</td></tr>
+<tr><td>Managed identity</td><td><code>applicationid + tenantid</code> (485–542)</td><td><code>Guid.NewGuid()</code> phía client mỗi lần create (512)</td><td>Không</td><td class="no">Không (ngẫu nhiên)</td></tr>
+<tr><td>Custom API binding</td><td><code>customapi.uniquename</code> (1184–1222)</td><td>Không tạo customapi, chỉ set <code>plugintypeid</code></td><td>—</td><td>Phụ thuộc GUID type</td></tr>
+<tr><td>Data provider (<code>entitydataprovider</code>)</td><td>Tên data source (1089–1183)</td><td>Server sinh</td><td>Không</td><td class="no">Không</td></tr>
+</tbody></table></div>
+<p>Model nội bộ <a href="../DynamicsCrm.DevKit.Shared/Models/CrmPluginRegistrationAttribute.cs">CrmPluginRegistrationAttribute.cs</a> và bản template người dùng <a href="../ProjectTemplates/CSharp/01.SharedProjectTemplate/PluginCore.cs">PluginCore.cs</a> chỉ có một thuộc tính <code>Id</code>. <a href="../DynamicsCrm.DevKit.Shared/Helper.cs">Helper.ConvertAttributeToCrmPluginRegistration</a> (314–488) đọc named argument theo tên, nên thêm thuộc tính mới vẫn tương thích ngược: project cũ không có thuộc tính đó thì giữ hành vi hiện tại.</p>
+</section>
+
+<section id="why"><h2>05. Khi nào GUID bắt buộc phải giống nhau, khi nào không</h2>
+<div class="table"><table><thead><tr><th>Tình huống</th><th>Cần cùng GUID?</th><th>Lý do</th></tr></thead><tbody>
+<tr><td>Chỉ dùng <code>devkit server</code> cho plugin ở mọi môi trường, các thứ khác (table, form…) đi bằng solution riêng</td><td class="mid">Nên có, không bắt buộc</td><td>CLI khớp theo tên nên vẫn chạy đúng. GUID lệch chỉ gây khó khi so sánh/điều tra (trace log, audit, script theo ID).</td></tr>
+<tr><td><strong>Custom API</strong> tạo ở DEV và chuyển sang UAT bằng solution import</td><td class="no">Bắt buộc</td><td><code>customapi</code> lưu lookup <code>plugintypeid</code>. Import vào UAT tham chiếu GUID type của DEV; nếu type ở UAT có GUID khác → lỗi "lookup not resolvable"/thiếu dependency.</td></tr>
+<tr><td>Virtual table data provider đi theo solution</td><td class="no">Bắt buộc</td><td><code>entitydataprovider</code> tham chiếu GUID plugin type cho Retrieve/RetrieveMultiple/Create/Update/Delete.</td></tr>
+<tr><td>Trộn: lúc deploy bằng CLI, lúc import solution có chứa assembly/step từ DEV</td><td class="no">Bắt buộc</td><td>Solution import khớp component theo ID. Cùng tên khác ID → trùng/xung đột hoặc import lỗi.</td></tr>
+<tr><td>UAT export managed → PROD</td><td class="good">Tự đồng nhất UAT ↔ PROD</td><td>PROD nhận GUID của UAT. Nếu DEV ≠ UAT thì về sau mọi thao tác dựa trên solution DEV → PROD sẽ lệch.</td></tr>
+<tr><td>Flow/Power Automate, script, test tự động tham chiếu step ID</td><td class="mid">Nên có</td><td>Script bật/tắt step theo ID chạy được ở mọi môi trường.</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="findings"><h2>06. Phát hiện trong code liên quan trực tiếp</h2>
+<ol>
+<li><strong><code>Id</code> đang mang hai nghĩa.</strong> VSIX <a href="../DynamicsCrm.DevKit.Vsix/Commands/CommandAddCrmPluginRegistration.cs">CommandAddCrmPluginRegistration.cs</a>: plugin ghi <code>Id = stepId</code> (dòng 392), workflow ghi <code>Id = pluginTypeId</code> (dòng 299). CLI chỉ hiểu <code>Id</code> là step ID; với workflow (không có step) giá trị này bị bỏ qua. Cần chốt ngữ nghĩa trước khi mở rộng.</li>
+<li><strong>Không được đặt tên thuộc tính mới là <code>TypeId</code>.</strong> <code>System.Attribute</code> đã có property ảo <code>TypeId</code>; dùng <code>PluginTypeId</code>.</li>
+<li><strong>Drift im lặng.</strong> Khi attribute có <code>Id</code> nhưng UAT đã có step cùng tên được tạo trước đó (GUID khác), lookup theo Id thất bại, fallback theo tên tìm thấy → CLI update record UAT và giữ GUID cũ. GUID lệch tồn tại mãi mà không có cảnh báo.</li>
+<li><strong>Lookup theo Id không kiểm tra type sở hữu.</strong> Cache step được nạp theo các type của assembly; tìm bằng Id không xác nhận step đó thuộc <code>pluginTypeId</code> đang xử lý, và comparer <code>IsChangedPluginStep</code> không so <code>plugintypeid</code> (đã ghi nhận trong <a href="TaskServer-Scoped-Enhancement-Analysis-2026-09-29.html">phân tích 29/09</a>).</li>
+<li><strong>Copy-paste class kèm Id rất nguy hiểm.</strong> Hai attribute trùng <code>Id</code> → bước thứ hai update đè step của bước thứ nhất. Chưa có preflight hay analyzer phát hiện trùng Id.</li>
+<li><strong>VSIX "Update Crm Plugin Registration"</strong> chỉ chèn <code>Id</code> step khi khớp tên step (regex <code>StepNameRegex</code>); không ghi GUID image/type/assembly và phụ thuộc định dạng attribute dạng chuỗi.</li>
+<li><strong>Managed identity</strong> tạo với <code>Guid.NewGuid()</code> phía client; app ID đầu tiên trong danh sách luôn được bind (biến <code>isDevApplication</code>). Đa môi trường cần ánh xạ app theo môi trường — không chỉ là chuyện GUID.</li>
+<li><strong>Lỗi nhỏ:</strong> FetchXML dòng 848 có ký tự thừa <code>&lt;entity name='sdkmessage'&gt;4</code>; <code>DeployPackageAsync</code> nhánh no-op không gán <code>PluginPackageId</code> (B04 trong phân tích 29/09). Không chặn đề xuất này nhưng nên sửa cùng đợt.</li>
+</ol>
+</section>
+
+<section id="options"><h2>07. Các phương án</h2>
+<div class="table"><table><thead><tr><th>Phương án</th><th>Cách làm</th><th>Ưu</th><th>Nhược</th></tr></thead><tbody>
+<tr><td><strong>A. Chỉ đổi quy trình</strong></td><td>Tạo solution rỗng một lần ở UAT/TEST, sau đó <code>devkit server</code> theo connection.</td><td>Không sửa code; bỏ ngay phần thủ công tốn thời gian.</td><td>GUID chỉ đồng nhất cho step có Id. Không an toàn với Custom API/data provider đi theo solution.</td></tr>
+<tr><td><strong>B. Explicit GUID trong attribute</strong> (đề xuất của anh)</td><td>Thêm GUID cho assembly/type/image/package; CLI tìm theo GUID rồi theo tên; create với GUID; ghi ngược GUID sau lần deploy DEV.</td><td>Rõ ràng, review được trong code, đúng mô hình đang có cho step; xử lý được dữ liệu DEV đã tồn tại.</td><td>Phải sửa source tự động (Roslyn/VSIX); GUID "rác" trong code; rủi ro copy-paste; merge conflict.</td></tr>
+<tr><td><strong>C. GUID tất định (UUID v5)</strong></td><td>GUID = hash(namespace của project, khoá tự nhiên). Ví dụ <code>type:{FullName}</code>, <code>step:{FullName}|{Name}</code>, <code>image:{stepKey}|{ImageName}|{ImageType}</code>.</td><td>Không cần ghi ngược; mọi môi trường mới tự ra cùng GUID.</td><td>Record DEV hiện có mang GUID ngẫu nhiên → vẫn lệch. Đổi tên step = GUID mới (record mới).</td></tr>
+<tr><td><strong>D. File manifest GUID</strong></td><td>CLI ghi <code>*.ids.json</code> (khoá tự nhiên → GUID) cạnh project, commit vào git, deploy đọc file này.</td><td>Không đụng source C#; diff sạch; CLI tự làm được không cần Roslyn.</td><td>Thêm một nguồn sự thật tách khỏi attribute; khác hướng anh muốn.</td></tr>
+</tbody></table></div>
+<p><strong>Chọn:</strong> <strong>B làm nền</strong> (đúng yêu cầu, xử lý được dữ liệu cũ) + <strong>C tuỳ chọn</strong> cho component chưa có GUID (để lần deploy DEV đầu tiên đã ra GUID ổn định, ghi ngược chỉ còn là "chốt" chứ không bắt buộc). A áp dụng ngay trong lúc chờ.</p>
+</section>
+
+<section id="design"><h2>08. Thiết kế đề xuất</h2>
+<h3>8.1 Thuộc tính chứa GUID</h3>
+<div class="table"><table><thead><tr><th>Component</th><th>Vị trí</th><th>Tên đề xuất</th><th>Ghi chú</th></tr></thead><tbody>
+<tr><td>Assembly</td><td>Attribute cấp assembly mới, ví dụ <code>[assembly: CrmPluginAssemblyRegistration(Id = "...")]</code></td><td><code>Id</code></td><td>Một assembly một GUID; không lặp trên từng class.</td></tr>
+<tr><td>Package (.nupkg)</td><td>Cùng attribute cấp assembly</td><td><code>PackageId</code></td><td>Chỉ dùng khi deploy nuget.</td></tr>
+<tr><td>Plugin type</td><td><code>CrmPluginRegistration</code></td><td><code>PluginTypeId</code></td><td>Lặp trên mọi attribute của class phải giống nhau → preflight kiểm tra. Workflow: chấp nhận <code>Id</code> cũ như PluginTypeId để tương thích code VSIX đã sinh.</td></tr>
+<tr><td>Step</td><td><code>CrmPluginRegistration</code></td><td><code>Id</code> (giữ nguyên)</td><td>Không đổi public API.</td></tr>
+<tr><td>Image 1..4</td><td><code>CrmPluginRegistration</code></td><td><code>Image1Id</code> … <code>Image4Id</code></td><td>Theo đúng mẫu <code>Image1Name</code>/<code>Image1Alias</code>.</td></tr>
+</tbody></table></div>
+<pre><code>[assembly: CrmPluginAssemblyRegistration(Id = "6f1c...-a001")]
+
+[CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous,
+    "name,telephone1", "Contoso.Plugins.AccountPreUpdate", 1, IsolationModeEnum.Sandbox,
+    PluginTypeId = "2b7e...-b001",
+    Id           = "9d40...-c001",
+    Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage,
+    Image1Attributes = "name,telephone1",
+    Image1Id     = "c3aa...-d001")]
+public class AccountPreUpdate : IPlugin { ... }</code></pre>
+<p class="small">Ví dụ minh họa — tên attribute cấp assembly và property mới là đề xuất, chưa tồn tại.</p>
+
+<h3>8.2 Thuật toán deploy cho mỗi component</h3>
+<ol>
+<li><strong>Preflight</strong> (trước mọi mutation): GUID đúng định dạng; không trùng GUID trong cùng loại; <code>PluginTypeId</code> nhất quán trong một class; với nuget cảnh báo nếu có <code>PluginTypeId</code>/assembly Id (không áp dụng được).</li>
+<li><strong>Lookup theo GUID</strong> (nạp cache bằng cả <code>id in (...)</code>, không chỉ theo tên).</li>
+<li>Không thấy → <strong>lookup theo khoá tự nhiên</strong> như hiện nay.</li>
+<li>Không thấy cả hai → <strong>Create với GUID chỉ định</strong> (đặt <code>pluginassemblyid</code>/<code>plugintypeid</code>/<code>sdkmessageprocessingstepid</code>/<code>sdkmessageprocessingstepimageid</code>/<code>pluginpackageid</code> trên Entity). Nếu attribute không có GUID: dùng GUID tất định (tuỳ chọn C) hoặc để server sinh.</li>
+<li>Thấy theo tên nhưng GUID khác → <strong>drift</strong>, xử lý theo <a href="#rules">§09</a>.</li>
+<li>Thu thập mọi GUID đã dùng/tạo vào <strong>báo cáo deploy</strong> (JSON) — đầu vào cho bước ghi ngược.</li>
+</ol>
+
+<h3>8.3 Luồng đầy đủ sau khi triển khai</h3>
+<div class="flow">
+<div class="node">DEV<br><code>devkit server</code><br><small>create theo GUID / sinh GUID</small></div><div class="arrow">→</div>
+<div class="node">Ghi ngược GUID<br><small>vào attribute, review, commit</small></div><div class="arrow">→</div>
+<div class="node">UAT<br><code>devkit server</code><br><small>create cùng GUID</small></div><div class="arrow">→</div>
+<div class="node">TEST<br><code>devkit server</code><br><small>create cùng GUID</small></div><div class="arrow">→</div>
+<div class="node">UAT → PROD managed<br><small>GUID đồng nhất toàn chuỗi</small></div>
+</div>
+
+<h3>8.4 Solution ở môi trường đích</h3>
+<p>Giữ hành vi hiện tại (báo lỗi nếu solution không tồn tại) là an toàn nhất. Có thể bổ sung sau một tuỳ chọn tạo solution khi thiếu, nhưng cần chốt publisher (uniquename/prefix) phải giống DEV — prefix sai sẽ ảnh hưởng tên package và data source (<code>SolutionPrefix</code> được dùng trong <code>DeployPackageAsync</code>, <code>IsValidDataProviderAsync</code>).</p>
+</section>
+
+<section id="rules"><h2>09. Quy tắc xử lý xung đột (đề xuất)</h2>
+<div class="table"><table><thead><tr><th>Trạng thái ở môi trường đích</th><th>Mặc định</th><th>Tuỳ chọn chặt</th></tr></thead><tbody>
+<tr><td>Có GUID trong attribute, record theo GUID tồn tại</td><td>Update nếu khác, DO_NOTHING nếu giống.</td><td>—</td></tr>
+<tr><td>Có GUID, không có record theo GUID, không có record cùng tên</td><td>Create với GUID đó.</td><td>—</td></tr>
+<tr><td>Có GUID, không thấy theo GUID, <strong>thấy cùng tên GUID khác</strong></td><td>Cảnh báo <code>DRIFT</code> (in cả 2 GUID), update record đang có, không mất dữ liệu.</td><td><code>--strict-ids</code>: dừng trước mutation. Tuỳ chọn tái tạo (xoá rồi tạo lại với GUID đúng) chỉ cho step/image, cần xác nhận rõ ràng.</td></tr>
+<tr><td>Record theo GUID tồn tại nhưng thuộc parent khác (step thuộc type khác, image thuộc step khác)</td><td>Lỗi, dừng assembly.</td><td>—</td></tr>
+<tr><td>Không có GUID trong attribute</td><td>Hành vi hiện tại (khớp theo tên); ghi GUID vào báo cáo để ghi ngược.</td><td>Có thể bắt buộc GUID khi deploy môi trường không phải DEV.</td></tr>
+<tr><td>Trùng GUID trong source</td><td>Preflight lỗi, không deploy.</td><td>—</td></tr>
+</tbody></table></div>
+<div class="bad"><strong>Không tự động "sửa" drift cho assembly/type.</strong> Muốn đổi GUID của assembly/type phải xoá toàn bộ step/image/type phụ thuộc và gỡ binding Custom API/data provider rồi tạo lại — có thể làm gián đoạn plugin đang chạy ở UAT/TEST. Việc này cần thao tác chủ động, ngoài luồng deploy thường.</div>
+</section>
+
+<section id="writeback"><h2>10. Ghi ngược GUID vào <code>CrmPluginRegistration</code></h2>
+<div class="grid3">
+<div class="card"><h3>Lựa chọn 1 — VSIX</h3><p>Mở rộng <code>CommandAddCrmPluginRegistration</code>: đọc DEV, chèn <code>PluginTypeId</code>, <code>Id</code>, <code>ImageNId</code>, attribute cấp assembly.</p><p><span class="good">+</span> Đã có sẵn khung, dùng EnvDTE CodeModel.<br><span class="no">−</span> Chỉ trên Visual Studio, theo từng class; không chạy trong CI/AI agent; regex theo chuỗi dễ vỡ.</p></div>
+<div class="card"><h3>Lựa chọn 2 — CLI + Roslyn</h3><p>Sau khi deploy DEV, CLI dùng báo cáo GUID, tìm class theo FullName trong thư mục source, khớp attribute theo tên step, chèn named argument.</p><p><span class="good">+</span> Một lệnh cho cả project, chạy được với AI/CI.<br><span class="no">−</span> Thêm dependency <code>Microsoft.CodeAnalysis.CSharp</code> (CLI hiện chưa có); phải giữ formatting và hỗ trợ <code>partial</code>/nhiều file.</p></div>
+<div class="card"><h3>Lựa chọn 3 — Báo cáo JSON + áp dụng riêng</h3><p>CLI luôn xuất <code>ids.json</code>; bước áp dụng do VSIX, AI agent, hoặc lệnh riêng thực hiện.</p><p><span class="good">+</span> Tách deploy (ghi Dataverse) khỏi sửa source; dễ test.<br><span class="no">−</span> Thêm một bước.</p></div>
+</div>
+<p><strong>Đề xuất:</strong> CLI luôn xuất báo cáo GUID (Lựa chọn 3) làm hợp đồng chung; sau đó cung cấp lệnh ghi ngược dựa trên Roslyn (Lựa chọn 2) và cập nhật VSIX dùng cùng báo cáo. Ghi ngược phải là hành động tường minh (cờ/lệnh riêng), <strong>không</strong> tự sửa source khi deploy UAT/TEST.</p>
+<div class="warn">Không ghi <code>SecureConfiguration</code> lấy từ môi trường vào source khi ghi ngược. VSIX hiện đã chèn secure config từ DEV vào attribute (dòng 414–416) — đây là rủi ro lộ bí mật cần xem lại, độc lập với chuyện GUID.</div>
+</section>
+
+<section id="limits"><h2>11. Giới hạn và rủi ro</h2>
+<ul>
+<li><strong>Plugin package:</strong> GUID assembly/type do platform tạo khi upload package; chỉ kiểm soát được package/step/image. Nếu dùng Custom API với nuget, phải bảo đảm Custom API tới UAT không mang lookup type của DEV (ví dụ để CLI bind sau theo uniquename — đúng cách <code>DeployCustomApiStepAsync</code> đang làm).</li>
+<li><strong>Thứ tự deploy:</strong> table/column phải có ở UAT trước khi deploy plugin (filtering attributes, image attributes, Custom API). Solution dữ liệu nên import trước <code>devkit server</code>.</li>
+<li><strong>Cấu hình theo môi trường:</strong> <code>UnSecureConfiguration</code>, <code>SecureConfiguration</code>, <code>RunAs</code> (tìm user theo tên ở môi trường đích), managed identity app ID đang nằm cố định trong source. Đổi connection mà không đổi các giá trị này có thể sai ở UAT/TEST. Đề xuất cơ chế override theo profile/.env ở giai đoạn sau.</li>
+<li><strong>Môi trường đã có dữ liệu cũ:</strong> UAT/TEST từng được import solution từ DEV thì GUID đã giống DEV — tốt. Nếu từng đăng ký tay bằng Plugin Registration Tool thì sẽ drift; cần chạy báo cáo drift trước khi chuyển quy trình.</li>
+<li><strong>Đổi tên step:</strong> với GUID tường minh, đổi tên giữ nguyên record (tốt). Với GUID tất định theo tên, đổi tên tạo record mới → step cũ cần được dọn.</li>
+<li><strong>Xoá component:</strong> TaskServer hiện không tự xoá step đã bỏ khỏi code (chỉ <code>Unregister</code> theo type). Đồng nhất GUID không giải quyết dọn rác giữa các môi trường.</li>
+</ul>
+</section>
+
+<section id="scope"><h2>12. Phạm vi thay đổi khi triển khai</h2>
+<div class="table"><table><thead><tr><th>Thành phần</th><th>File chính</th><th>Thay đổi</th></tr></thead><tbody>
+<tr><td>Shared</td><td><code>Shared/Models/CrmPluginRegistrationAttribute.cs</code>, model attribute cấp assembly mới, <code>Shared/Helper.cs</code></td><td>Thêm <code>PluginTypeId</code>, <code>Image1Id..Image4Id</code>; đọc named args mới; đọc attribute cấp assembly.</td></tr>
+<tr><td>Template</td><td><code>ProjectTemplates/CSharp/01.SharedProjectTemplate/PluginCore.cs</code> (+ bản sao trong <code>DynamicsCrm.DevKit.Tests</code>)</td><td>Thêm property tương ứng. Project người dùng cũ cần cập nhật <code>PluginCore.cs</code> mới dùng được tính năng.</td></tr>
+<tr><td>CLI</td><td><code>Cli/Tasks/TaskServer.cs</code></td><td>Preflight; cache theo ID; create với ID cho package/assembly/type/image; báo cáo drift; xuất báo cáo GUID; cờ <code>--strict-ids</code> (tên đề xuất).</td></tr>
+<tr><td>CLI (ghi ngược)</td><td>Lệnh/tuỳ chọn mới + dependency Roslyn</td><td>Áp dụng báo cáo GUID vào source.</td></tr>
+<tr><td>VSIX</td><td><code>Vsix/Commands/CommandAddCrmPluginRegistration.cs</code></td><td>Ghi thêm type/image/assembly ID; thống nhất ngữ nghĩa <code>Id</code> workflow; xem lại việc chèn secure config.</td></tr>
+<tr><td>Analyzers</td><td>Analyzer mới</td><td>Phát hiện GUID sai định dạng, trùng <code>Id</code>/<code>ImageNId</code>, <code>PluginTypeId</code> không nhất quán trong class.</td></tr>
+<tr><td>Tests / Docs</td><td><code>Cli.UnitTests/.../TaskServerCoverageTests.cs</code>, <code>DynamicsCrm.DevKit.Docs/Cli/</code></td><td>Kịch bản: create theo ID, lookup ID, drift, trùng ID, nuget, tương thích ngược khi không có ID.</td></tr>
+</tbody></table></div>
+<p class="small">Kiểm chứng theo AGENTS.md: CLI build + focused net10.0 tests; Analyzers build + <code>Run-Analyzer-Coverage.ps1</code>; VSIX build bằng Visual Studio MSBuild. Ước lượng thô (chưa có số đo): spike 0.5–1 ngày; CLI lõi 2–3 ngày; ghi ngược 2–3 ngày; analyzer + VSIX 1–2 ngày; test 2 ngày.</p>
+</section>
+
+<section id="spike"><h2>13. Spike cần xác minh trên tenant trước khi code</h2>
+<div class="table"><table><thead><tr><th>#</th><th>Câu hỏi</th><th>Cách thử</th><th>Mức tin cậy hiện tại</th></tr></thead><tbody>
+<tr><td>S1</td><td>Create <code>sdkmessageprocessingstep</code> với ID chỉ định</td><td>Đã dùng trong code hiện tại</td><td class="good">Đã chạy thực tế</td></tr>
+<tr><td>S2</td><td>Create <code>pluginassembly</code>, <code>plugintype</code>, <code>sdkmessageprocessingstepimage</code> với ID chỉ định qua SDK (kèm <code>SolutionUniqueName</code>)</td><td>CreateRequest đặt primary key; đọc lại ID; export solution kiểm tra ID</td><td class="mid">Solution import làm được điều này nên khả năng cao SDK cũng cho phép; chưa thử trong repo</td></tr>
+<tr><td>S3</td><td>Create <code>pluginpackage</code> với ID chỉ định; GUID assembly/type do platform tạo có ổn định/giống nhau giữa môi trường không</td><td>Upload cùng nupkg vào 2 môi trường, so ID</td><td class="no">Dự kiến không kiểm soát được assembly/type</td></tr>
+<tr><td>S4</td><td>Import solution chứa Custom API từ DEV vào UAT sau khi CLI đã tạo type cùng GUID</td><td>Kịch bản end-to-end DEV → UAT</td><td class="mid">Kỳ vọng hết lỗi lookup</td></tr>
+<tr><td>S5</td><td>Hành vi khi Create với ID đã tồn tại ở bảng (thông báo lỗi) để thiết kế thông điệp</td><td>Create trùng ID</td><td class="mid">Chưa thử</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="questions"><h2>14. Câu hỏi cần anh chốt</h2>
+<ol>
+<li>Ghi ngược GUID ưu tiên ở đâu: CLI (chạy được trong AI/CI) hay VSIX trước?</li>
+<li>Có bật GUID tất định (UUID v5) cho component chưa có GUID không? Nếu có, namespace GUID đặt ở attribute cấp assembly hay trong <code>DynamicsCrm.DevKit.Cli.json</code>?</li>
+<li>Drift mặc định là cảnh báo hay dừng? Ở UAT/TEST có bắt buộc mọi component phải có GUID không?</li>
+<li>Workflow: giữ <code>Id</code> = plugin type ID (tương thích VSIX đã sinh) hay chuyển sang <code>PluginTypeId</code> và coi <code>Id</code> workflow là lỗi analyzer?</li>
+<li>Có cần tuỳ chọn CLI tạo solution ở đích khi thiếu, hay giữ yêu cầu tạo tay một lần?</li>
+<li>Cấu hình theo môi trường (unsecure/secure config, RunAs, managed identity) có đưa vào cùng đợt không?</li>
+</ol>
+</section>
+
+<section id="sources"><h2>15. Bằng chứng</h2>
+<ul>
+<li><a href="../DynamicsCrm.DevKit.Cli/Tasks/TaskServer.cs">TaskServer.cs</a>: <code>DeployPackageAsync</code> 197–306; <code>DeployAssemblyAsync</code> 307–456; <code>DeployManagedIdentityAsync</code> 485–542; <code>IsValidAsync</code> 578–602; cache 645–927; <code>DeployFileAsync</code> 928–1045; <code>DeployPluginImageAsync</code> 1223–1345; <code>DeployPluginStepAsync</code> 1358–1691; <code>DeployPluginTypeAsync</code> 1782–1847.</li>
+<li><a href="../DynamicsCrm.DevKit.Shared/Models/CrmPluginRegistrationAttribute.cs">CrmPluginRegistrationAttribute.cs</a> dòng 155 (<code>Id</code>); <a href="../DynamicsCrm.DevKit.Shared/Helper.cs">Helper.cs</a> 314–488.</li>
+<li><a href="../ProjectTemplates/CSharp/01.SharedProjectTemplate/PluginCore.cs">PluginCore.cs</a> dòng 59–88 (attribute trong project người dùng).</li>
+<li><a href="../DynamicsCrm.DevKit.Vsix/Commands/CommandAddCrmPluginRegistration.cs">CommandAddCrmPluginRegistration.cs</a>: 143–189 (chèn Id), 299 (workflow Id = plugintypeid), 392 (plugin Id = stepId), 414–416 (secure config).</li>
+<li>Phân tích trước: <a href="TaskServer-Scoped-Enhancement-Analysis-2026-09-29.html">TaskServer-Scoped-Enhancement-Analysis-2026-09-29.html</a>, <a href="TaskServer-Dataverse-Server-Side-Analysis.html">TaskServer-Dataverse-Server-Side-Analysis.html</a>.</li>
+<li>Microsoft Learn — plug-in package và dependent assemblies: <a href="https://learn.microsoft.com/en-us/power-apps/developer/data-platform/dependent-assembly-plugins">dependent-assembly-plugins</a>.</li>
+</ul>
+<p class="small">Báo cáo chỉ đọc code và tài liệu; không chạy deploy, không kết nối tenant, không sửa source.</p>
+</section>
+</main></div>
+<footer>DynamicsCrm.DevKit · TaskServer GUID promotion analysis · 30/10/2026</footer>
+</body></html>
