@@ -54,8 +54,8 @@ For an `.rdl` selected in Solution Explorer, use the DynamicsCrm.DevKit context 
 The generated batch files remain available for profile-based CLI workflows:
 
 ```bat
-download.reports.bat
-upload.reports.bat
+download.reports.bat (Windows) / download.reports.sh (Linux/macOS)
+upload.reports.bat (Windows) / upload.reports.sh (Linux/macOS)
 ```
 
 ## References

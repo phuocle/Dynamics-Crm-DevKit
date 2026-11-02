@@ -17,7 +17,7 @@ Generates and maintains early-bound proxy types for Dataverse entities, providin
 * Early-bound entity class generation
 * Strong typing for entities, attributes, and relationships
 * ProxyTypesAssembly for test initialization
-* run.bat script for regenerating proxy types
+* run.bat (Windows) / run.sh (Linux/macOS) script for regenerating proxy types
 * Compatible with FakeXrmEasy framework
 * Pre-configured with required SDK assemblies
 
@@ -37,11 +37,11 @@ Before creating this project, ensure you have:
 
 * **GeneratedCode.cs** - Container for generated entity classes
 * **ProxyTypesAssembly.cs** - Assembly attribute for FakeXrmEasy test initialization
-* **run.bat** - Script to regenerate proxy types from Dataverse metadata
+* **run.bat (Windows) / run.sh (Linux/macOS)** - Script to regenerate proxy types from Dataverse metadata
 
 ## Usage
 
-1. Run `run.bat` to generate proxy types from your Dataverse environment
+1. Run `run.bat (Windows) / run.sh (Linux/macOS)` to generate proxy types from your Dataverse environment
 2. Reference this project from:
    * Server Projects (for early-bound entity access)
    * Console Projects

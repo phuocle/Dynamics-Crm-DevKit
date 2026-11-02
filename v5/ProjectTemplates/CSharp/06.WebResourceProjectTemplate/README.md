@@ -16,9 +16,9 @@ Streamlines Dataverse web resource development with devkit.js library, providing
 
 * devkit.js library for type-safe form development
 * devkit.d.ts TypeScript definitions
-* Form code generator (generator.form.bat)
-* Web API code generator (generator.webapi.bat)
-* Automated deployment script (deploy.debug.bat)
+* Form code generator (generator.form.bat (Windows) / generator.form.sh (Linux/macOS))
+* Web API code generator (generator.webapi.bat (Windows) / generator.webapi.sh (Linux/macOS))
+* Automated deployment script (deploy.debug.bat (Windows) / deploy.debug.sh (Linux/macOS))
 * Pre-configured folder structure (entities, lib, js, html, css, images, resources)
 * jsconfig.json for IntelliSense support
 * package.json for npm dependencies
@@ -44,9 +44,9 @@ Before creating this project, ensure you have:
 
 * **devkit.js** - Core library for Dataverse form scripting
 * **devkit.d.ts** - TypeScript definitions for IntelliSense
-* **generator.form.bat** - Generate typed form code
-* **generator.webapi.bat** - Generate Web API client code
-* **deploy.debug.bat** - Deploy web resources to Dataverse
+* **generator.form.bat (Windows) / generator.form.sh (Linux/macOS)** - Generate typed form code
+* **generator.webapi.bat (Windows) / generator.webapi.sh (Linux/macOS)** - Generate Web API client code
+* **deploy.debug.bat (Windows) / deploy.debug.sh (Linux/macOS)** - Deploy web resources to Dataverse
 
 ## References
 

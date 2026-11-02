@@ -32,7 +32,7 @@ This is a foundational shared project that other templates depend on.
 * **EntityBase.cs** - Base class for entity operations
 * **DevKitJson.cs** - Lightweight JSON serialization/deserialization
 * **Date.cs** - Date utility functions
-* **generator.bat** - Code generation script for entities
+* **generator.bat (Windows) / generator.sh (Linux/macOS)** - Code generation script for entities
 
 ## Usage
 

@@ -16,7 +16,7 @@ Accelerates Dataverse server-side development for plugins, workflows, custom act
 
 * Pre-configured for .NET Framework 4.6.2
 * Strong-name key (SNK) file for assembly signing
-* Automated deployment scripts (deploy.debug.bat, deploy.debug.only.bat)
+* Automated deployment scripts (deploy.debug.bat (Windows) / deploy.debug.sh (Linux/macOS), deploy.debug.only.bat (Windows) / deploy.debug.only.sh (Linux/macOS))
 * Support for plugins, workflows, custom actions
 * Support for custom API and data providers
 * Reference to Shared Project for common code
@@ -38,17 +38,17 @@ Before creating this project, ensure you have:
 ## Key Components
 
 * **key.snk** - Strong-name key for assembly signing
-* **deploy.debug.bat** - Deploy and register server-side components
-* **deploy.debug.only.bat** - Deploy only (without building)
+* **deploy.debug.bat (Windows) / deploy.debug.sh (Linux/macOS)** - Deploy and register server-side components
+* **deploy.debug.only.bat (Windows) / deploy.debug.only.sh (Linux/macOS)** - Deploy only (without building)
 
 ## Deployment
 
 ```bash
 # Build and deploy
-deploy.debug.bat
+deploy.debug.bat (Windows) / deploy.debug.sh (Linux/macOS)
 
 # Deploy only
-deploy.debug.only.bat
+deploy.debug.only.bat (Windows) / deploy.debug.only.sh (Linux/macOS)
 ```
 
 ## References

@@ -194,6 +194,9 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             Assert.AreNotEqual(string.Empty, guid);
             StringAssert.Contains(projitemsContent, $"<SharedGUID>{guid}</SharedGUID>");
             StringAssert.Contains(projitemsContent, "<Import_RootNamespace>Contoso.Shared</Import_RootNamespace>");
+            var generatorExtension = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows) ? "bat" : "sh";
+            StringAssert.Contains(projitemsContent, $"Entities\\generator.{generatorExtension}");
+            StringAssert.DoesNotContain(projitemsContent, $"Entities\\generator.{(generatorExtension == "bat" ? "sh" : "bat")}");
             StringAssert.Contains(shprojContent, "<Import Project=\"Contoso.Shared.projitems\" Label=\"Shared\" />");
             StringAssert.Contains(File.ReadAllText(Path.Combine(_projectDirectory, "Lib", "Extension.cs")), "using Contoso.Shared;");
 

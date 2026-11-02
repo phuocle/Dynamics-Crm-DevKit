@@ -18,9 +18,9 @@ Modern web resource development template using TypeScript, esbuild bundler, and 
 * devkit.ts library with full TypeScript support
 * devkitts.d.ts TypeScript definitions
 * esbuild for fast bundling and minification
-* Form code generator (generator.form.bat)
-* Web API code generator (generator.webapi.bat)
-* Automated deployment script (deploy.debug.bat)
+* Form code generator (generator.form.bat (Windows) / generator.form.sh (Linux/macOS))
+* Web API code generator (generator.webapi.bat (Windows) / generator.webapi.sh (Linux/macOS))
+* Automated deployment script (deploy.debug.bat (Windows) / deploy.debug.sh (Linux/macOS))
 * Pre-configured folder structure (entities, lib, build, html, css, images, resources)
 * tsconfig.json for TypeScript compilation
 * package.json with build scripts
@@ -50,9 +50,9 @@ Before creating this project, ensure you have:
 * **devkitts.d.ts** - TypeScript definitions for IntelliSense and type checking
 * **build.js** - esbuild configuration for bundling
 * **tsconfig.json** - TypeScript compiler configuration
-* **generator.form.bat** - Generate typed form code
-* **generator.webapi.bat** - Generate Web API client code
-* **deploy.debug.bat** - Deploy web resources to Dataverse
+* **generator.form.bat (Windows) / generator.form.sh (Linux/macOS)** - Generate typed form code
+* **generator.webapi.bat (Windows) / generator.webapi.sh (Linux/macOS)** - Generate Web API client code
+* **deploy.debug.bat (Windows) / deploy.debug.sh (Linux/macOS)** - Deploy web resources to Dataverse
 
 ## Build Process
 

@@ -14,8 +14,8 @@ Streamlines Dataverse solution management for Application Lifecycle Management (
 
 ## Features
 
-* Extract-Both.bat for unpacking solutions
-* Pack-Both.bat for packing solutions
+* Extract-Both.bat (Windows) / Extract-Both.sh (Linux/macOS) for unpacking solutions
+* Pack-Both.bat (Windows) / Pack-Both.sh (Linux/macOS) for packing solutions
 * mapping.xml for customizing file mappings
 * Pre-configured for both managed and unmanaged solutions
 * Integration with source control systems
@@ -38,15 +38,15 @@ After extraction, the following folders will be created:
 ## Key Components
 
 * **mapping.xml** - Customizes how solution components map to files and folders
-* **Extract-Both.bat** - Extracts both managed and unmanaged solutions
-* **Pack-Both.bat** - Packs both managed and unmanaged solutions
+* **Extract-Both.bat (Windows) / Extract-Both.sh (Linux/macOS)** - Extracts both managed and unmanaged solutions
+* **Pack-Both.bat (Windows) / Pack-Both.sh (Linux/macOS)** - Packs both managed and unmanaged solutions
 
 ## Usage
 
 1. Place your solution .zip files in the project directory
-2. Run `Extract-Both.bat` to extract solution components to source control
+2. Run `Extract-Both.bat (Windows) / Extract-Both.sh (Linux/macOS)` to extract solution components to source control
 3. Modify solution components as needed
-4. Run `Pack-Both.bat` to repack solutions for deployment
+4. Run `Pack-Both.bat (Windows) / Pack-Both.sh (Linux/macOS)` to repack solutions for deployment
 
 ## References
 

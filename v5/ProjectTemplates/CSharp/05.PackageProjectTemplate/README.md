@@ -16,7 +16,7 @@ Enables Dataverse plugin development with dependent assemblies using NuGet packa
 
 * NuGet package support for dependent assemblies
 * Pre-configured for .NET Framework 4.6.2
-* Automated deployment scripts (deploy.debug.bat, deploy.debug.only.bat)
+* Automated deployment scripts (deploy.debug.bat (Windows) / deploy.debug.sh (Linux/macOS), deploy.debug.only.bat (Windows) / deploy.debug.only.sh (Linux/macOS))
 * Support for plugins with external dependencies
 * Reference to Shared Project for common code
 * DynamicsCrm.DevKit.Analyzers for code quality
@@ -36,8 +36,8 @@ Before creating this project, ensure you have:
 
 ## Key Components
 
-* **deploy.debug.bat** - Build, merge, and deploy package plugin
-* **deploy.debug.only.bat** - Deploy only (without building)
+* **deploy.debug.bat (Windows) / deploy.debug.sh (Linux/macOS)** - Build, merge, and deploy package plugin
+* **deploy.debug.only.bat (Windows) / deploy.debug.only.sh (Linux/macOS)** - Deploy only (without building)
 * **README.md** - This file (included in NuGet package metadata)
 
 ## Usage
@@ -46,10 +46,10 @@ Add your NuGet package dependencies in the .csproj file. The deployment script w
 
 ```bash
 # Build, merge dependencies, and deploy
-deploy.debug.bat
+deploy.debug.bat (Windows) / deploy.debug.sh (Linux/macOS)
 
 # Deploy only
-deploy.debug.only.bat
+deploy.debug.only.bat (Windows) / deploy.debug.only.sh (Linux/macOS)
 ```
 
 ## References
