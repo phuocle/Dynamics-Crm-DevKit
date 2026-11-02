@@ -7,5 +7,6 @@ The user trusts the AI to make reasonable decisions about scope, file selection,
 1. Run `git status --short` and inspect every changed/untracked file.
 2. Read `DynamicsCrm.DevKit.Scripts/DevKit.ReleaseConfig.json` and check every `files.dateReplacement` entry. Restore the source placeholder `xxxx.yy.zz HH.mm.ss` if a build left a real timestamp behind; keep stable version `4.44.44.44` unchanged.
 3. Select only files belonging to the requested change. Never use `git add .` or `git add -A`.
+   - When a release/build was part of the requested change and produced updated artifacts under `Published/<version>/`, include the artifacts produced by that release in the commit unless the user explicitly asks to keep build outputs local. Do not include unrelated or pre-existing Published files.
 4. Stage explicit paths and create a concise commit with a conventional-commit title and a brief explanatory body that summarizes the why (not a re-statement of the diff).
 5. Report the resulting commit hash, files changed, and final working-tree status. Never push unless separately requested.
