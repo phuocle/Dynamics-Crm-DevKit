@@ -37,7 +37,7 @@
         <None Include="download.reports.bat" />
 		<None Include="upload.reports.bat" />
         <None Include="README.md" />
-    </ItemGroup>
+    <Report Include="Account.rdl" /></ItemGroup>
     <Import Project="$(MSBuildExtensionsPath)\Reporting Services\Microsoft.ReportingServices.MSBuilder.targets" />
 </Project>
 <!-- v.4.44.44.44 - Build: 31.12.2026 23.59.59 -->
