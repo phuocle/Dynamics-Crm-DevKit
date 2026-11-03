@@ -61,3 +61,6 @@ Published/**
 
 # Visual Studio Report Designer user state (created when the solution loads a .rptproj project)
 *.rptproj.rsuser
+
+# Local Antigravity MCP config
+.agents/mcp_config.json

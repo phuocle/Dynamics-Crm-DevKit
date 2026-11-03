@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "devkit": {
+      "command": "devkit",
+      "args": [
+        "mcp",
+        "devkit-anti-agent-v5"
+      ]
+    }
+  }
+}
