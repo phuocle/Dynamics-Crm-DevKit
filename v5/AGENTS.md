@@ -23,7 +23,8 @@ Read relevant rules under `DynamicsCrm.DevKit.AI/rules/` only when applicable. W
 | Configured release without tests/coverage (user-requested fast mode) | `build-release-only.md` |
 | Unit tests (pass/fail) / coverage reports | `unit-test.md` / `code-coverage.md` |
 | Client-code pipeline | `client-code-01-clean.md` through `client-code-05-test.md` |
-| Prepare and commit changes | `commit.md` |
+
+Prepare and commit changes: use the skill `.agents/skills/devkit-skill-commit/SKILL.md` (read it completely before committing).
 
 For long tasks or context handoffs, retain the current objective, affected components, user constraints, completed checks, and remaining work. Re-read applicable guidance if context is missing.
 

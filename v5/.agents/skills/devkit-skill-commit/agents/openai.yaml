@@ -1,0 +1,3 @@
+interface:
+  display_name: "DevKit Skill Commit"
+  short_description: "Restore placeholders, stage explicit paths, create local commits"
