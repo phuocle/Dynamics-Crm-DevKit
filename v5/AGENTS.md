@@ -12,19 +12,19 @@
 
 `AGENTS.md` is the canonical, client-neutral repository guidance. Keep `CLAUDE.md` and `.github/copilot-instructions.md` as thin bridges without duplicated rules. Client configuration belongs in `.codex/`, `.vscode/`, `.zcode/`, or `.mcp.json`; never commit credentials or local configuration.
 
-Read relevant rules under `DynamicsCrm.DevKit.AI/rules/` only when applicable. When a workflow is named or required, read its complete file before executing it. These are instruction recipes, not generated slash commands. All workflow paths below are relative to `DynamicsCrm.DevKit.AI/workflows/`.
+Executable recipes live as agent skills under `.agents/skills/` — read the complete `SKILL.md` of a skill before executing it; these are instruction recipes, not generated slash commands. `README.md` in that folder indexes all skills; `devkit-skill-shared` owns the shared PowerShell scripts and `DevKit.ReleaseConfig.json` that the other skills invoke.
 
-| Task | Workflow file |
+| Task | Skill |
 |---|---|
-| Build analyzer | `build-analyzer.md` |
-| Build and install CLI / Tool | `build-cli.md` / `build-tool.md` |
-| Build VSIX | `build-vsix.md` |
-| Full timestamped build / configured release | `build-debug.md` / `build-release.md` |
-| Configured release without tests/coverage (user-requested fast mode) | `build-release-only.md` |
-| Unit tests (pass/fail) / coverage reports | `unit-test.md` / `code-coverage.md` |
-| Client-code pipeline | `client-code-01-clean.md` through `client-code-05-test.md` |
-
-Prepare and commit changes: use the skill `.agents/skills/devkit-skill-commit/SKILL.md` (read it completely before committing).
+| Build analyzer (incl. analyzer dev rules) | `devkit-skill-build-analyzer` |
+| Build and install CLI / Tool | `devkit-skill-build-cli` / `devkit-skill-build-tool` |
+| Build VSIX | `devkit-skill-build-vsix` |
+| Full timestamped build / configured release | `devkit-skill-build-debug` / `devkit-skill-build-release` |
+| Configured release without tests/coverage (user-requested fast mode) | `devkit-skill-build-release-only` |
+| Visual Studio 2019 configured release | `devkit-skill-build-release-2019` |
+| Unit tests (pass/fail) / coverage reports | `devkit-skill-unit-test` / `devkit-skill-code-coverage` |
+| Client-code pipeline (clean/install/generate/sync/test) | `devkit-skill-client-code` |
+| Prepare and commit changes | `devkit-skill-commit` |
 
 For long tasks or context handoffs, retain the current objective, affected components, user constraints, completed checks, and remaining work. Re-read applicable guidance if context is missing.
 
@@ -72,29 +72,29 @@ Auth priority: `--conn` > `--auth/--url/...` > fallback > empty. Normal commands
 
 After editing `DynamicsCrm.DevKit.Cli/Mcp/**`:
 
-1. Rebuild and reinstall using `DynamicsCrm.DevKit.Scripts/Release.DynamicsCrm.DevKit.Cli.ps1`.
+1. Rebuild and reinstall using the devkit-skill-build-cli skill (`.agents/skills/devkit-skill-shared/scripts/Release.DynamicsCrm.DevKit.Cli.ps1`).
 2. Restart the active MCP client connector and call `whoami` to start a fresh DevKit MCP process.
 3. Verify runtime version, build timestamp, process start time, and assembly SHA against the manifest under `Published/<version>/`.
 
 ## Verification
 
-For a requested full release verification, read and follow these two workflows in order:
+For a requested full release verification, read and follow these two skills in order:
 
-1. [Full configured release](DynamicsCrm.DevKit.AI/workflows/build-release.md): wait for completion, verify installed CLI/Tool versions and all four Analyzer/CLI/Tool/VSIX artifacts under `Published/<version>/`, and confirm temporary build-date replacements are restored.
-2. [Code coverage](DynamicsCrm.DevKit.AI/workflows/code-coverage.md): run `DynamicsCrm.DevKit.Scripts/Run-Coverage.ps1` without `-Components` to build and test all five `*.UnitTests` projects: Cli, Tool, Vsix, Analyzers, and Vsix.2019. Allow roughly 5 minutes for coverage (an estimate, not a timeout); wait for completion. Report pass/fail per project, then measured line/branch/method coverage per assembly and HTML report locations. Report failures and any collected coverage; never infer success from the release build alone.
+1. `devkit-skill-build-release`: wait for completion, verify installed CLI/Tool versions and all four Analyzer/CLI/Tool/VSIX artifacts under `Published/<version>/`, and confirm temporary build-date replacements are restored.
+2. `devkit-skill-code-coverage`: run `Run-Coverage.ps1` without `-Components` to build and test all five `*.UnitTests` projects: Cli, Tool, Vsix, Analyzers, and Vsix.2019. Allow roughly 5 minutes for coverage (an estimate, not a timeout); wait for completion. Report pass/fail per project, then measured line/branch/method coverage per assembly and HTML report locations. Report failures and any collected coverage; never infer success from the release build alone.
 
-When the user explicitly requests a release without test verification, follow [Fast Configured Release](DynamicsCrm.DevKit.AI/workflows/build-release-only.md) instead: it runs the same release script with output verification only and skips the coverage pass by user decision.
+When the user explicitly requests a release without test verification, follow `devkit-skill-build-release-only` instead: it runs the same release script with output verification only and skips the coverage pass by user decision.
 
 For component-scoped changes, use the checks below; a full release still requires an explicit user request.
 
 | Changed component | Required verification |
 |---|---|
-| Analyzers | `dotnet build DynamicsCrm.DevKit.Analyzers/DynamicsCrm.DevKit.Analyzers.csproj --configuration Debug --no-incremental`, then `DynamicsCrm.DevKit.Scripts/Run-Analyzer-Coverage.ps1` |
+| Analyzers | `dotnet build DynamicsCrm.DevKit.Analyzers/DynamicsCrm.DevKit.Analyzers.csproj --configuration Debug --no-incremental`, then the devkit-skill-build-analyzer skill (`Run-Analyzer-Coverage.ps1`) |
 | CLI | `dotnet build DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj`; run focused net10.0 tests |
-| Tool | `DynamicsCrm.DevKit.Scripts/Release.DynamicsCrm.DevKit.Tool.ps1` when the installed tool must be refreshed |
+| Tool | the devkit-skill-build-tool skill (`Release.DynamicsCrm.DevKit.Tool.ps1`) when the installed tool must be refreshed |
 | VSIX | Build with Visual Studio MSBuild, not `dotnet build` |
 
-When CLI changes require refreshing the installed `devkit`, use `DynamicsCrm.DevKit.Scripts/Release.DynamicsCrm.DevKit.Cli.ps1`. Release scripts restore date-replacement files in `finally`; still inspect the working tree afterward.
+When CLI changes require refreshing the installed `devkit`, use the devkit-skill-build-cli skill (`Release.DynamicsCrm.DevKit.Cli.ps1`). Release scripts restore date-replacement files in `finally`; still inspect the working tree afterward.
 
 All test projects use MSTest and are named `DynamicsCrm.DevKit.<Component>.UnitTests`:
 
@@ -105,10 +105,10 @@ All test projects use MSTest and are named `DynamicsCrm.DevKit.<Component>.UnitT
 | `Vsix.2019` | net472, non-SDK; VS MSBuild + `vstest.console`, not `dotnet test` |
 
 - net10.0 suites run MethodLevel-parallel: mark shared-state classes `[DoNotParallelize]`. Preserve `WaitScalePercent` when adding slow metadata wait paths; tests set it to zero.
-- Coverage entry point: `DynamicsCrm.DevKit.Scripts/Run-Coverage.ps1` (all five suites, or a subset such as `-Components Cli,Tool`); follow the coverage workflow above.
+- Coverage entry point: `.agents/skills/devkit-skill-shared/scripts/Run-Coverage.ps1` (all five suites, or a subset such as `-Components Cli,Tool`); follow the devkit-skill-code-coverage skill.
 
 ## Conventions
 
 - Name `ServiceClient` variables `serviceClient`; `IOrganizationService` variables `orgService` (field `_orgService`); `IOrganizationServiceAsync2` variables `orgServiceAsync`.
 - Prefer existing helpers in `DynamicsCrm.DevKit.Shared/` and `DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/` before creating new ones.
-- Product documentation belongs in `DynamicsCrm.DevKit.Docs/{ComponentName}/` as `.md`; AI rules and workflows belong in `DynamicsCrm.DevKit.AI/`.
+- Product documentation belongs in `DynamicsCrm.DevKit.Docs/{ComponentName}/` as `.md`; agent skills belong in `.agents/skills/`.

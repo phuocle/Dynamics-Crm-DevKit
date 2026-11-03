@@ -15,7 +15,7 @@ Create local commit(s) that accurately represent the changes the user requested.
 ## Review before staging
 
 1. Read the repository's `AGENTS.md` plus the session context, then run `git status --short` and inspect EVERY changed/untracked file; also note the current branch, staged diff, and unstaged diff.
-2. Read `DynamicsCrm.DevKit.Scripts/DevKit.ReleaseConfig.json` and check every `files.dateReplacement` entry. Restore the source placeholder `xxxx.yy.zz HH.mm.ss` if a build left a real timestamp behind; the stable version `4.44.44.44` never changes.
+2. Read `.agents/skills/devkit-skill-shared/scripts/DevKit.ReleaseConfig.json` and check every `files.dateReplacement` entry. Restore the source placeholder `xxxx.yy.zz HH.mm.ss` if a build left a real timestamp behind; the stable version `4.44.44.44` never changes.
 3. Select the files belonging to the requested change. **Never use `git add .` or `git add -A`** — this repository forbids it; always stage explicit paths.
    - When the user asks to commit everything ("hết tất cả các code", "tất cả", "all changes", or equivalent), treat the wording as full authorization: do not re-ask and do not restrict the scope to files edited by the current session. Review the entire diff and every eligible untracked file first, then stage each file as an explicit path.
    - When a release/build was part of the requested change and produced updated artifacts under `Published/<version>/`, include the artifacts produced by that release in the commit unless the user explicitly asks to keep build outputs local. Do not include unrelated or pre-existing Published files.
