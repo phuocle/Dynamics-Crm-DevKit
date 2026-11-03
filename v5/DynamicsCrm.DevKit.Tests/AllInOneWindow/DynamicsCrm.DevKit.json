@@ -1,0 +1,10 @@
+﻿{
+  "DefaultCrmConnection": "ClientSecret",
+  "CrmConnections": [
+    {
+      "Name": "ClientSecret",
+      "Type": "ClientSecret",
+      "UseProjectEnvironment": true
+    }
+  ]
+}

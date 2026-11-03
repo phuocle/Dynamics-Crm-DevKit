@@ -64,3 +64,6 @@ Published/**
 
 # Local Antigravity MCP config
 .agents/mcp_config.json
+
+# DynamicsCrm.DevKit local project environment
+E:/src/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/AllInOneWindow/.env
