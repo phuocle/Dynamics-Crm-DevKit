@@ -227,14 +227,19 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             var projitemsPath = Path.ChangeExtension(workspace.SharedProjectFile, ".projitems");
             var sharedDirectory = Path.GetDirectoryName(Path.GetFullPath(workspace.SharedProjectFile));
             var changed = false;
-            foreach (var fileName in new[] { $"{schemaName}.cs", $"{schemaName}.generated.cs" })
+
+            var userRelative = GetRelativePath(sharedDirectory, Path.Combine(outputDirectory, $"{schemaName}.cs"));
+            if (SolutionMutator.AddCompileItemToProjitems(projitemsPath, userRelative))
             {
-                var relative = GetRelativePath(sharedDirectory, Path.Combine(outputDirectory, fileName));
-                if (SolutionMutator.AddCompileItemToProjitems(projitemsPath, relative))
-                {
-                    changed = true;
-                }
+                changed = true;
             }
+
+            var generatedRelative = GetRelativePath(sharedDirectory, Path.Combine(outputDirectory, $"{schemaName}.generated.cs"));
+            if (SolutionMutator.AddCompileItemToProjitems(projitemsPath, generatedRelative, $"{schemaName}.cs"))
+            {
+                changed = true;
+            }
+
             result.Files.Add(new ScaffoldFileResult(Path.GetFileName(projitemsPath), projitemsPath, changed ? "Updated" : "Unchanged"));
         }
 

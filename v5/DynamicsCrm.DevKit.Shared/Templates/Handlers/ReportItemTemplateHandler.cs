@@ -146,6 +146,12 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             }
             await FileHelper.ForceWriteAllTextAsync(fullPath, report);
             result.AddWarning("Use 'devkit uploadreport' to upload the report to Dataverse.");
+            if (!string.IsNullOrEmpty(request.ProjectFile) &&
+                string.Equals(Path.GetExtension(request.ProjectFile), ".rptproj", StringComparison.OrdinalIgnoreCase))
+            {
+                var rptprojChanged = SolutionMutator.AddReportItemToRptproj(request.ProjectFile, fileName);
+                result.Files.Add(new ScaffoldFileResult(Path.GetFileName(request.ProjectFile), request.ProjectFile, rptprojChanged ? "Updated" : "Unchanged"));
+            }
             result.Files.Add(new ScaffoldFileResult(fileName, fullPath, action));
             return result;
         }

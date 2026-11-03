@@ -181,14 +181,22 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
                 "</Project>");
 
             Assert.IsTrue(SolutionMutator.AddCompileItemToProjitems(projitems, "Entities\\Account.cs"));
+            Assert.IsTrue(SolutionMutator.AddCompileItemToProjitems(projitems, "Entities\\Account.generated.cs", "Account.cs"));
             var document = XDocument.Load(projitems);
             var ns = document.Root.Name.Namespace;
-            var include = document.Root.Elements(ns + "ItemGroup")
+            var compileElements = document.Root.Elements(ns + "ItemGroup")
                 .SelectMany(group => group.Elements(ns + "Compile"))
-                .Select(compile => (string)compile.Attribute("Include"))
                 .ToList();
-            CollectionAssert.Contains(include, "$(MSBuildThisFileDirectory)Entities\\Account.cs");
+            var accountCompile = compileElements.FirstOrDefault(c => (string)c.Attribute("Include") == "$(MSBuildThisFileDirectory)Entities\\Account.cs");
+            var generatedCompile = compileElements.FirstOrDefault(c => (string)c.Attribute("Include") == "$(MSBuildThisFileDirectory)Entities\\Account.generated.cs");
+
+            Assert.IsNotNull(accountCompile);
+            Assert.IsNull(accountCompile.Element(ns + "DependentUpon"));
+            Assert.IsNotNull(generatedCompile);
+            Assert.AreEqual("Account.cs", (string)generatedCompile.Element(ns + "DependentUpon"));
+
             Assert.IsFalse(SolutionMutator.AddCompileItemToProjitems(projitems, "Entities\\Account.cs"));
+            Assert.IsFalse(SolutionMutator.AddCompileItemToProjitems(projitems, "Entities\\Account.generated.cs", "Account.cs"));
         }
 
         [TestMethod]

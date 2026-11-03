@@ -168,6 +168,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             var projitems = File.ReadAllText(_projitemsFile);
             StringAssert.Contains(projitems, "$(MSBuildThisFileDirectory)Entities\\Account.cs");
             StringAssert.Contains(projitems, "$(MSBuildThisFileDirectory)Entities\\Account.generated.cs");
+            StringAssert.Contains(projitems, "<DependentUpon>Account.cs</DependentUpon>");
         }
 
         [TestMethod]

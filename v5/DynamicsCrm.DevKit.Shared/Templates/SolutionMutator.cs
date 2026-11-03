@@ -240,11 +240,54 @@ namespace DynamicsCrm.DevKit.Shared.Templates
         }
 
         /// <summary>
+        /// Adds a Report (.rdl) item to a Reporting Services project (.rptproj)
+        /// file if not already listed. Preserves BOM and declaration.
+        /// Returns false when the file is missing or the report is already included.
+        /// </summary>
+        public static bool AddReportItemToRptproj(string rptprojPath, string relativeFilePath)
+        {
+            if (string.IsNullOrEmpty(rptprojPath) || !File.Exists(rptprojPath)) return false;
+            var fileName = Path.GetFileName(relativeFilePath);
+            if (string.IsNullOrEmpty(fileName)) return false;
+
+            XDocument document;
+            try
+            {
+                document = XDocument.Load(rptprojPath, LoadOptions.PreserveWhitespace);
+            }
+            catch
+            {
+                return false;
+            }
+
+            var root = document.Root;
+            if (root == null) return false;
+            var ns = root.Name.Namespace;
+
+            var alreadyPresent = document.Descendants(ns + "Report")
+                .Any(r => string.Equals(Path.GetFileName((string)r.Attribute("Include") ?? string.Empty), fileName, StringComparison.OrdinalIgnoreCase));
+            if (alreadyPresent) return false;
+
+            var itemGroup = root.Elements(ns + "ItemGroup").FirstOrDefault(g => g.Elements(ns + "Report").Any())
+                ?? root.Elements(ns + "ItemGroup").FirstOrDefault();
+            if (itemGroup == null)
+            {
+                itemGroup = new XElement(ns + "ItemGroup");
+                var import = root.Elements(ns + "Import").FirstOrDefault();
+                if (import != null) import.AddBeforeSelf(itemGroup); else root.Add(itemGroup);
+            }
+
+            itemGroup.Add(new XElement(ns + "Report", new XAttribute("Include", fileName)));
+            SaveSlnxPreservingShape(document, rptprojPath);
+            return true;
+        }
+
+        /// <summary>
         /// Appends a Compile item to a .projitems file using
         /// $(MSBuildThisFileDirectory) so it resolves from the shared
         /// project location. Returns false when the item already exists.
         /// </summary>
-        public static bool AddCompileItemToProjitems(string projitemsPath, string relativeFilePath)
+        public static bool AddCompileItemToProjitems(string projitemsPath, string relativeFilePath, string dependentUpon = null)
         {
             if (string.IsNullOrEmpty(projitemsPath) || !File.Exists(projitemsPath)) return false;
             var normalized = relativeFilePath.Replace('/', '\\');
@@ -260,13 +303,35 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 document.Root.Add(compileGroup);
             }
 
-            if (compileGroup.Elements(ns + "Compile").Any(compile =>
-                string.Equals((string)compile.Attribute("Include"), include, StringComparison.OrdinalIgnoreCase)))
+            var existing = compileGroup.Elements(ns + "Compile").FirstOrDefault(compile =>
+                string.Equals((string)compile.Attribute("Include"), include, StringComparison.OrdinalIgnoreCase));
+            if (existing != null)
             {
+                if (!string.IsNullOrEmpty(dependentUpon))
+                {
+                    var dep = existing.Element(ns + "DependentUpon");
+                    if (dep == null)
+                    {
+                        existing.Add(new XElement(ns + "DependentUpon", dependentUpon));
+                        document.Save(projitemsPath);
+                        return true;
+                    }
+                    else if (dep.Value != dependentUpon)
+                    {
+                        dep.Value = dependentUpon;
+                        document.Save(projitemsPath);
+                        return true;
+                    }
+                }
                 return false;
             }
 
-            compileGroup.Add(new XElement(ns + "Compile", new XAttribute("Include", include)));
+            var compileElement = new XElement(ns + "Compile", new XAttribute("Include", include));
+            if (!string.IsNullOrEmpty(dependentUpon))
+            {
+                compileElement.Add(new XElement(ns + "DependentUpon", dependentUpon));
+            }
+            compileGroup.Add(compileElement);
             document.Save(projitemsPath);
             return true;
         }

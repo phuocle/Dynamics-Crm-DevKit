@@ -426,5 +426,28 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             Assert.IsTrue(result.Success, string.Join("; ", result.Errors));
             Assert.AreEqual("Created", result.Files.Single(file => file.FileName == "Account.rdl").Action);
         }
+        [TestMethod]
+        public async Task Scaffold_RptprojTarget_AddsReportToRptproj()
+        {
+            UseFakeHandler();
+            var rptproj = Path.Combine(_reportsDirectory, "Contoso.Report.rptproj");
+            File.WriteAllText(rptproj,
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
+                "<Project ToolsVersion=\"Current\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">\r\n" +
+                "  <ItemGroup>\r\n" +
+                "    <None Include=\"README.md\" />\r\n" +
+                "  </ItemGroup>\r\n" +
+                "  <Import Project=\"$(MSBuildExtensionsPath)\\Reporting Services\\Microsoft.ReportingServices.MSBuilder.targets\" />\r\n" +
+                "</Project>");
+
+            var input = Input(name: "Account.rdl");
+            input.ProjectName = "Contoso.Report";
+            var result = await ScaffoldingEngine.ScaffoldItemAsync(input);
+
+            Assert.IsTrue(result.Success, string.Join("; ", result.Errors));
+            var updatedRptproj = File.ReadAllText(rptproj);
+            StringAssert.Contains(updatedRptproj, "<Report Include=\"Account.rdl\" />");
+            Assert.IsTrue(result.Files.Any(f => f.FileName == "Contoso.Report.rptproj" && f.Action == "Updated"));
+        }
     }
 }
