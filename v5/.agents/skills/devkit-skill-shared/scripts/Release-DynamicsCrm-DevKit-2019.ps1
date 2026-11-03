@@ -23,18 +23,7 @@ $VsixSource = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Vsix.2019\bin\$Configur
 $VsixDest = Join-Path $PublishDir "DynamicsCrm.DevKit.Vsix.2019.$Version.vsix"
 
 function Get-MSBuild2019Path {
-    $paths = @(
-        "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe",
-        "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe",
-        "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
-    )
-
-    foreach ($path in $paths) {
-        if (Test-Path $path) {
-            return $path
-        }
-    }
-
+    # 1. Use vswhere to find VS 2019 installation across drives and editions
     $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
     if (Test-Path $vswhere) {
         $foundPath = & $vswhere -version "[16.0,17.0)" -latest -requires Microsoft.Component.MSBuild -find "MSBuild\**\Bin\MSBuild.exe" | Select-Object -First 1
@@ -43,7 +32,20 @@ function Get-MSBuild2019Path {
         }
     }
 
-    throw "MSBuild.exe for Visual Studio 2019 not found."
+    # 2. Check candidate editions across 32-bit and 64-bit Program Files drives
+    $editions = @("Enterprise", "Professional", "Community", "BuildTools")
+    $drives = @(${env:ProgramFiles(x86)}, "C:\Program Files (x86)", "D:\Program Files (x86)", "E:\Program Files (x86)") | Where-Object { $_ -and (Test-Path $_) } | Select-Object -Unique
+
+    foreach ($drive in $drives) {
+        foreach ($ed in $editions) {
+            $candidate = Join-Path $drive "Microsoft Visual Studio\2019\$ed\MSBuild\Current\Bin\MSBuild.exe"
+            if (Test-Path $candidate) {
+                return $candidate
+            }
+        }
+    }
+
+    throw "MSBuild.exe for Visual Studio 2019 not found (checked vswhere and candidate editions Enterprise/Professional/Community across drives)."
 }
 
 Write-Host "DynamicsCrm.DevKit.2019 Release" -ForegroundColor Cyan

@@ -5,15 +5,15 @@ Write-Host ""
 
 # Build CLI
 Write-Host "Building CLI..." -ForegroundColor Cyan
-$msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
-$project = "..\..\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj"
-& $msbuild -t:Build -p:Configuration=Release $project -restore -verbosity:minimal
+# MSBuild resolved dynamically via dotnet build
+$project = Join-Path $PSScriptRoot "..\..\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj"
+dotnet build $project -c Release -v minimal
 if ($LASTEXITCODE -ne 0) {
     Write-Host "[ERROR] Failed to build CLI" -ForegroundColor Red
     exit 1
 }
 
-$cliPath = "D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Cli\bin\Release\net10.0\DynamicsCrm.DevKit.Cli.dll"
+$cliPath = Join-Path $PSScriptRoot "..\..\DynamicsCrm.DevKit.Cli\bin\Release\net10.0\DynamicsCrm.DevKit.Cli.dll"
 
 # Check if CLI exists
 if (-not (Test-Path $cliPath)) {

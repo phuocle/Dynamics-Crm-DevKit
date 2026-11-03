@@ -42,28 +42,44 @@ $PublishedRoot = Join-Path $ProjectRoot $Config.buildConfig.publishedRoot
 $DateFiles = @($Config.files.dateReplacement)
 
 function Get-MSBuildPath {
-    $paths = @(
-        "C:\Program Files\Microsoft Visual Studio\2026\Professional\MSBuild\Current\Bin\MSBuild.exe",
-        "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
-    )
-
-    foreach ($path in $paths) {
-        if (Test-Path $path) {
-            return $path
-        }
-    }
-
+    # 1. Use vswhere to find latest VS 2026 / 18 installation across all editions (Enterprise, Professional, Community) and drives
     $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
     if (Test-Path $vswhere) {
-        $foundPath = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe -prerelease
+        $foundPath = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -find "MSBuild\**\Bin\MSBuild.exe" -prerelease | Select-Object -First 1
         if ($foundPath -and (Test-Path $foundPath)) {
             if (($foundPath -like "*2026*") -or ($foundPath -like "*\18\*")) {
                 return $foundPath
             }
         }
+        $foundPath = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -find "MSBuild\**\Bin\MSBuild.exe" | Select-Object -First 1
+        if ($foundPath -and (Test-Path $foundPath)) {
+            return $foundPath
+        }
     }
 
-    throw "MSBuild.exe for Visual Studio 2026 Professional not found. Checked paths: $($paths -join ', ')"
+    # 2. Check candidate editions across drives and versions
+    $editions = @("Enterprise", "Professional", "Community", "BuildTools")
+    $versions = @("18", "2026")
+    $drives = @($env:ProgramFiles, "C:\Program Files", "D:\Program Files", "E:\Program Files") | Where-Object { $_ -and (Test-Path $_) } | Select-Object -Unique
+
+    foreach ($drive in $drives) {
+        foreach ($ver in $versions) {
+            foreach ($ed in $editions) {
+                $candidate = Join-Path $drive "Microsoft Visual Studio\$ver\$ed\MSBuild\Current\Bin\MSBuild.exe"
+                if (Test-Path $candidate) {
+                    return $candidate
+                }
+            }
+        }
+    }
+
+    # 3. Fallback to msbuild on PATH
+    $cmd = Get-Command msbuild.exe -ErrorAction SilentlyContinue
+    if ($cmd -and (Test-Path $cmd.Source)) {
+        return $cmd.Source
+    }
+
+    throw "MSBuild.exe for Visual Studio 2026 / v18 not found (checked vswhere, candidate editions Enterprise/Professional/Community across drives, and PATH)."
 }
 
 function Get-ConfiguredBuildDate {

@@ -5,13 +5,33 @@ description: Build the VSIX (Visual Studio 2026 extension, net48) with Visual St
 
 # DevKit Skill Build VSIX
 
-Use Visual Studio MSBuild, not `dotnet build`:
+Use Visual Studio MSBuild, never `dotnet build`.
+
+Dynamically locate MSBuild across any installed Visual Studio edition (Enterprise, Professional, Community, BuildTools) and drive:
 
 ```powershell
-$msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
+$vswhere = Join-Path (${env:ProgramFiles(x86)}) "Microsoft Visual Studio\Installer\vswhere.exe"
+$msbuild = if (Test-Path $vswhere) {
+    & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -find "MSBuild\**\Bin\MSBuild.exe" -prerelease | Select-Object -First 1
+}
+if (-not $msbuild -or -not (Test-Path $msbuild)) {
+    $editions = @("Enterprise", "Professional", "Community", "BuildTools")
+    $versions = @("18", "2026")
+    $drives = @($env:ProgramFiles, "C:\Program Files", "D:\Program Files", "E:\Program Files") | Where-Object { $_ -and (Test-Path $_) } | Select-Object -Unique
+    foreach ($drive in $drives) {
+        foreach ($ver in $versions) {
+            foreach ($ed in $editions) {
+                $candidate = Join-Path $drive "Microsoft Visual Studio\$ver\$ed\MSBuild\Current\Bin\MSBuild.exe"
+                if (Test-Path $candidate) { $msbuild = $candidate; break }
+            }
+            if ($msbuild) { break }
+        }
+        if ($msbuild) { break }
+    }
+}
+if (-not $msbuild) { throw "VS MSBuild not found. Ensure Visual Studio (Enterprise, Professional, or Community) is installed." }
+
 & $msbuild "DynamicsCrm.DevKit.Vsix\DynamicsCrm.DevKit.Vsix.csproj" /t:Build /p:Configuration=Debug /p:DeployExtension=false /v:m
 ```
 
-Pick the MSBuild edition actually installed on this machine (`18\Enterprise`
-on the current one) — check the folder if the path does not exist. Verify
-`DynamicsCrm.DevKit.Vsix\bin\Debug\DynamicsCrm.DevKit.vsix` exists.
+Verify `DynamicsCrm.DevKit.Vsix\bin\Debug\DynamicsCrm.DevKit.vsix` exists. Never assume a fixed drive letter or Visual Studio edition.

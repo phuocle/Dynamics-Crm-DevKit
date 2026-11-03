@@ -1,4 +1,4 @@
-﻿# Run Unit Tests with Code Coverage for all five DevKit components
+# Run Unit Tests with Code Coverage for all five DevKit components
 # (Cli, Tool, Vsix, Analyzers, 2019) and generate a per-component HTML
 # report under <component project>\CoverageReport\.
 #
@@ -117,8 +117,16 @@ if ($selected.Key -contains "2019") {
             $installPath = & $vswhere -latest -products '*' -requires Microsoft.Component.MSBuild -property installationPath | Select-Object -First 1
             if ($installPath) { $candidates += (Join-Path $installPath "MSBuild\Current\Bin\MSBuild.exe") }
         }
-        $candidates += @("Professional", "Enterprise", "Community", "BuildTools") | ForEach-Object {
-            "C:\Program Files\Microsoft Visual Studio\18\$_\MSBuild\Current\Bin\MSBuild.exe"
+        $editions = @("Enterprise", "Professional", "Community", "BuildTools")
+        $versions = @("18", "2026")
+        $drives = @($env:ProgramFiles, "C:\Program Files", "D:\Program Files", "E:\Program Files") | Where-Object { $_ -and (Test-Path $_) } | Select-Object -Unique
+        foreach ($drive in $drives) {
+            foreach ($ver in $versions) {
+                foreach ($ed in $editions) {
+                    $candidate = Join-Path $drive "Microsoft Visual Studio\$ver\$ed\MSBuild\Current\Bin\MSBuild.exe"
+                    if (Test-Path $candidate) { $candidates += $candidate }
+                }
+            }
         }
         $VSMSBuild = $candidates | Where-Object { Test-Path $_ } | Select-Object -First 1
     }

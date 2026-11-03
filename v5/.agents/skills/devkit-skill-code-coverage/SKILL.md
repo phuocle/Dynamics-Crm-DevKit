@@ -83,8 +83,8 @@ dotnet-coverage collect -f cobertura -o "DynamicsCrm.DevKit.Vsix.UnitTests\TestR
 # Analyzers (net48) — wrapped
 dotnet-coverage collect -f cobertura -o "DynamicsCrm.DevKit.Analyzers.UnitTests\TestResults\coverage.cobertura.xml" dotnet test "DynamicsCrm.DevKit.Analyzers.UnitTests\DynamicsCrm.DevKit.Analyzers.UnitTests.csproj" --no-build -v:q --nologo
 
-# 2019 (net472, non-SDK) — build with VS MSBuild (see devkit-skill-unit-test), then wrapped vstest.console
-dotnet-coverage collect -f cobertura -o "DynamicsCrm.DevKit.Vsix.2019.UnitTests\TestResults\coverage.cobertura.xml" "C:\Program Files\Microsoft Visual Studio\18\Professional\Common7\IDE\Extensions\TestPlatform\vstest.console.exe" "DynamicsCrm.DevKit.Vsix.2019.UnitTests\bin\Debug\net472\win\DynamicsCrm.DevKit.2019.UnitTests.dll"
+# 2019 (net472, non-SDK) — build with dynamically located VS MSBuild, then wrapped vstest.console ($vstest, see devkit-skill-unit-test)
+dotnet-coverage collect -f cobertura -o "DynamicsCrm.DevKit.Vsix.2019.UnitTests\TestResults\coverage.cobertura.xml" $vstest "DynamicsCrm.DevKit.Vsix.2019.UnitTests\bin\Debug\net472\win\DynamicsCrm.DevKit.Vsix.2019.UnitTests.dll"
 ```
 
 The wrapper output path (`-o`) and the collector's

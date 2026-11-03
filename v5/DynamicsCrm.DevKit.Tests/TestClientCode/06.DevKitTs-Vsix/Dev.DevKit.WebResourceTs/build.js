@@ -92,7 +92,7 @@ function getBuildFiles() {
  */
 async function buildDevkitMinified() {
     if (!fs.existsSync(devkitPath)) {
-        console.log('  ⚠ lib/devkit.ts not found, skipping...');
+        console.log('  [WARN] lib/devkit.ts not found, skipping...');
         return null;
     }
 
@@ -112,10 +112,10 @@ async function buildDevkitMinified() {
 
         const code = result.outputFiles[0].text;
         const sizeKb = (code.length / 1024).toFixed(1);
-        console.log(`  ✓ devkit.ts pre-compiled (${sizeKb} KB) [MINIFIED]`);
+        console.log(`  [OK] devkit.ts pre-compiled (${sizeKb} KB) [MINIFIED]`);
         return code;
     } catch (error) {
-        console.error(`  ✗ devkit.ts - Build failed:`, error.message);
+        console.error(`  [X] devkit.ts - Build failed:`, error.message);
         return null;
     }
 }
@@ -169,7 +169,7 @@ function checkTypeScript(file) {
         return true;
     } catch (error) {
         // tsc returns exit code 1 when there are errors
-        console.error(`  ✗ ${name}.ts - TypeScript errors:`);
+        console.error(`  [X] ${name}.ts - TypeScript errors:`);
         if (error.stdout) {
             console.error(error.stdout);
         }
@@ -251,10 +251,10 @@ async function buildEntry(file, devkitCode) {
         const sizeKb = (stats.size / 1024).toFixed(1);
         const modeLabel = isDebug ? 'DEBUG' : 'MINIFIED';
         const devkitNote = devkitCode ? ' (devkit: MINIFIED)' : '';
-        console.log(`  ✓ ${relativeOutputFile} (${sizeKb} KB) [${modeLabel}]${devkitNote}`);
+        console.log(`  [OK] ${relativeOutputFile} (${sizeKb} KB) [${modeLabel}]${devkitNote}`);
         return true;
     } catch (error) {
-        console.error(`  ✗ ${name}.ts - Build failed:`, error.message);
+        console.error(`  [X] ${name}.ts - Build failed:`, error.message);
         return false;
     }
 }
@@ -268,7 +268,7 @@ function cleanupBuildFolder() {
         const filePath = path.join(buildDir, fileName);
         if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
-            console.log(`  ✓ Cleaned up ${fileName} from build folder`);
+            console.log(`  [OK] Cleaned up ${fileName} from build folder`);
         }
     });
 }

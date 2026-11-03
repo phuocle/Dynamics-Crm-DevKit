@@ -32,12 +32,35 @@ dotnet test "DynamicsCrm.DevKit.Analyzers.UnitTests\DynamicsCrm.DevKit.Analyzers
 
 `DynamicsCrm.DevKit.Vsix.2019.UnitTests` is a legacy non-SDK project;
 `dotnet test` cannot build it (VSSDK BuildTools targets fail on .NET Core
-MSBuild). Build with VS MSBuild, then run via `vstest.console` (pick the
-MSBuild edition installed on this machine — `18\Enterprise` here):
+MSBuild). Dynamically locate Visual Studio MSBuild and `vstest.console.exe`
+(supporting any edition Enterprise, Professional, Community and installed drive):
 
 ```powershell
-& "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe" DynamicsCrm.DevKit.Vsix.2019.UnitTests\DynamicsCrm.DevKit.Vsix.2019.UnitTests.csproj -restore -p:Configuration=Debug -v:q -nologo
-& "C:\Program Files\Microsoft Visual Studio\18\Professional\Common7\IDE\Extensions\TestPlatform\vstest.console.exe" DynamicsCrm.DevKit.Vsix.2019.UnitTests\bin\Debug\net472\win\DynamicsCrm.DevKit.2019.UnitTests.dll
+# Dynamically locate MSBuild and vstest.console
+$vswhere = Join-Path (${env:ProgramFiles(x86)}) "Microsoft Visual Studio\Installer\vswhere.exe"
+$msbuild = if (Test-Path $vswhere) {
+    & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -find "MSBuild\**\Bin\MSBuild.exe" -prerelease | Select-Object -First 1
+}
+if (-not $msbuild -or -not (Test-Path $msbuild)) {
+    $editions = @("Enterprise", "Professional", "Community", "BuildTools")
+    $versions = @("18", "2026")
+    $drives = @($env:ProgramFiles, "C:\Program Files", "D:\Program Files", "E:\Program Files") | Where-Object { $_ -and (Test-Path $_) } | Select-Object -Unique
+    foreach ($drive in $drives) {
+        foreach ($ver in $versions) {
+            foreach ($ed in $editions) {
+                $candidate = Join-Path $drive "Microsoft Visual Studio\$ver\$ed\MSBuild\Current\Bin\MSBuild.exe"
+                if (Test-Path $candidate) { $msbuild = $candidate; break }
+            }
+            if ($msbuild) { break }
+        }
+        if ($msbuild) { break }
+    }
+}
+$vsRoot = Split-Path (Split-Path (Split-Path (Split-Path $msbuild)))
+$vstest = Join-Path $vsRoot "Common7\IDE\Extensions\TestPlatform\vstest.console.exe"
+
+& $msbuild DynamicsCrm.DevKit.Vsix.2019.UnitTests\DynamicsCrm.DevKit.Vsix.2019.UnitTests.csproj -restore -p:Configuration=Debug -v:q -nologo
+& $vstest DynamicsCrm.DevKit.Vsix.2019.UnitTests\bin\Debug\net472\win\DynamicsCrm.DevKit.Vsix.2019.UnitTests.dll
 ```
 
 Report pass/fail per project and distinguish failures caused by the current
