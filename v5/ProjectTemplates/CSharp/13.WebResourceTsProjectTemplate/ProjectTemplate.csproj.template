@@ -48,6 +48,8 @@
 		<Folder Include="resources\" />
 	</ItemGroup>
 	<ItemGroup>
+		<None Include="deploy.debug.bat" />
+		<None Include="deploy.release.bat" />
 		<None Include="package.json" />
 		<None Include=".eslintrc.json" />
 		<None Include="tsconfig.json" />
@@ -55,6 +57,8 @@
 		<Content Include="build.js" />
 		<TypeScriptCompile Include="lib\devkit.d.ts" />
 		<TypeScriptCompile Include="lib\devkit.ts" />
+		<None Include="entities\generator.form.bat" />
+		<None Include="entities\generator.webapi.bat" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Remove="build\**" />

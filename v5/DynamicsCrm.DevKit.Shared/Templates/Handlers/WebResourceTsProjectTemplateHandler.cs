@@ -160,6 +160,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
                 Directory.CreateDirectory(Path.Combine(projectDirectory, folder));
             }
             await ScaffoldingEngine.RenderManifestFilesAsync(CreateManifest(), request.Tokens, projectDirectory, input.Force, result);
+            ScaffoldingEngine.RewritePlatformScriptReferences(csprojPath);
             ScaffoldingEngine.MarkExecutable(Path.Combine(projectDirectory, "deploy.debug.sh"));
             ScaffoldingEngine.MarkExecutable(Path.Combine(projectDirectory, "deploy.release.sh"));
             ScaffoldingEngine.MarkExecutable(Path.Combine(projectDirectory, "entities", "generator.form.sh"));

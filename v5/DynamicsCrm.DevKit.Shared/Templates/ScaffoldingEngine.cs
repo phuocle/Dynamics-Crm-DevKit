@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -283,6 +284,37 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 // Best effort — the script still runs via "bash <script>".
             }
 #endif
+        }
+
+        /// <summary>
+        /// On macOS/Linux, flips the rendered project file's Windows batch
+        /// script references (<None Include="...bat" />) to their bash twins
+        /// (...sh) — the same platform choice the manifest made when it
+        /// emitted only the OS-appropriate script, so the runner stays
+        /// listed in Solution Explorer on every host OS. Byte-faithful
+        /// rewrite: only those lines change, line endings and encoding are
+        /// preserved. No-op on Windows, where the template keeps the
+        /// vstemplate's .bat references for byte parity with the wizard.
+        /// </summary>
+        public static void RewritePlatformScriptReferences(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath)) return;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) return;
+            var content = File.ReadAllText(filePath);
+            var lines = content.Split('\n');
+            var changed = false;
+            for (var i = 0; i < lines.Length; i++)
+            {
+                var line = lines[i];
+                if (!line.Contains("<None Include=") || !line.Contains(".bat\"")) continue;
+                var platformLine = line.Replace(".bat\"", ".sh\"");
+                if (!string.Equals(line, platformLine, StringComparison.Ordinal))
+                {
+                    lines[i] = platformLine;
+                    changed = true;
+                }
+            }
+            if (changed) File.WriteAllText(filePath, string.Join("\n", lines));
         }
 
         private static async Task<ScaffoldResult> DispatchAsync(TemplateDescriptor descriptor, WorkspaceContext workspace, Dictionary<string, string> tokens, ProjectTemplateInput projectInput, ItemTemplateInput itemInput, string projectFile = null)

@@ -209,9 +209,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\download.webresources.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\download.webresources.sh" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\deploy.datasource.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\sh\deploy.datasource.sh" />
     <!-- WithCulture=false: MSBuild AssignCulture reads "something.run.anything"
          as culture "run" (a valid ICU culture on .NET 10) and silently drops the
          file from the main assembly; the VSIX net48 build is unaffected. -->

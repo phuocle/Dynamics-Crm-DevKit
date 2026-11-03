@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
@@ -135,8 +136,16 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             // The wizard's replacements: $batfilename$ names the batfile.bat
             // payload and each pick's content token carries the resource
             // content (the bats with the connection args embedded, like the
-            // wizard dialog's connection).
-            request.Tokens["$batfilename$"] = canonical;
+            // wizard dialog's connection). A script pick writes the
+            // platform twin: download.reports.bat on Windows,
+            // download.reports.sh on macOS/Linux — the devkit.js and
+            // managed-identity picks keep their names on every OS.
+            var writtenName = canonical;
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && canonical.EndsWith(".bat", StringComparison.OrdinalIgnoreCase))
+            {
+                writtenName = Path.ChangeExtension(canonical, ".sh");
+            }
+            request.Tokens["$batfilename$"] = writtenName;
             foreach (var file in FilesForPick(canonical))
             {
                 var payload = await TemplatePayload.ReadContentAsync(file.ResourceName);
@@ -151,7 +160,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
                     result.AddError($"resource not found: {file.SharedResource}");
                     return result;
                 }
-                if (file.IsBat)
+                if (file.IsScript)
                 {
                     content = TokenEngine.ApplyCliConnectionArgs(content, input.CrmConnection);
                 }
@@ -176,6 +185,10 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
                 else
                 {
                     await FileHelper.ForceWriteAllTextWithoutUTF8Async(fullPath, output);
+                }
+                if (file.IsScript)
+                {
+                    ScaffoldingEngine.MarkExecutable(fullPath);
                 }
                 result.Files.Add(new ScaffoldFileResult(targetFileName, fullPath, exists ? "Updated" : "Created"));
             }
@@ -205,9 +218,14 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
                     yield return new UtilityFile { ResourceName = prefix + "Plugin-Managed-Identity.md", TargetFileName = "Plugin-Managed-Identity.md", Token = "$mdfile$", SharedResource = "ManagedIdentity.Plugin-Managed-Identity.md", WriteWithBom = true };
                     break;
                 default:
-                    // The four deploy/generator bats — the pick names the
-                    // bat resource ("bat.download.reports.bat", ...).
-                    yield return new UtilityFile { ResourceName = prefix + "batfile.bat", TargetFileName = "$batfilename$", Token = "$batfile.bat$", SharedResource = "bat." + pick, IsBat = true };
+                    // The four deploy/generator scripts — the pick keeps its
+                    // wizard name ("download.reports.bat", ...); Windows
+                    // reads the bat resource ("bat.download.reports.bat"),
+                    // macOS/Linux the bash twin ("sh.download.reports.sh")
+                    // written under the .sh name.
+                    var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+                    var scriptFile = isWindows ? pick : Path.ChangeExtension(pick, ".sh");
+                    yield return new UtilityFile { ResourceName = prefix + "batfile.bat", TargetFileName = "$batfilename$", Token = "$batfile.bat$", SharedResource = (isWindows ? "bat." : "sh.") + scriptFile, IsScript = true };
                     break;
             }
         }
@@ -231,11 +249,13 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             public string SharedResource { get; set; }
 
             /// <summary>
-            /// The wizard reads the four bats through
-            /// Replacement.ReadBatResourceAsync — the CLI connection
-            /// arguments embedded (everything else is read raw).
+            /// The four deploy/generator scripts embed the CLI connection
+            /// arguments (the wizard's Replacement.ReadBatResourceAsync —
+            /// the bat on Windows, the bash twin on macOS/Linux);
+            /// everything else is read raw. Their written files are marked
+            /// executable where the OS has an executable bit.
             /// </summary>
-            public bool IsBat { get; set; }
+            public bool IsScript { get; set; }
 
             /// <summary>
             /// Wizard-output ground truth (2026-10-31, fresh VSIX):

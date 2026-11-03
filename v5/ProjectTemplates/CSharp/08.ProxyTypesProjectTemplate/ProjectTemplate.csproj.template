@@ -32,6 +32,7 @@
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="$Microsoft.CrmSdk.CoreAssemblies.Version$" />
 	</ItemGroup>
 	<ItemGroup>
+		<None Include="run.bat" />
 		<None Include="README.md" />
 	</ItemGroup>
 </Project>

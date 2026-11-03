@@ -93,19 +93,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
 
             Directory.CreateDirectory(projectDirectory);
             await ScaffoldingEngine.RenderManifestFilesAsync(CreateManifest(), request.Tokens, projectDirectory, input.Force, result);
-            if (!System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
-            {
-                var projitemsPath = Path.Combine(projectDirectory, input.ProjectName + ".projitems");
-                if (File.Exists(projitemsPath))
-                {
-                    var projitems = File.ReadAllText(projitemsPath);
-                    var platformProjitems = projitems.Replace("Entities\\generator.bat", "Entities\\generator.sh");
-                    if (!string.Equals(projitems, platformProjitems, StringComparison.Ordinal))
-                    {
-                        File.WriteAllText(projitemsPath, platformProjitems);
-                    }
-                }
-            }
+            ScaffoldingEngine.RewritePlatformScriptReferences(Path.Combine(projectDirectory, input.ProjectName + ".projitems"));
             ScaffoldingEngine.MarkExecutable(Path.Combine(projectDirectory, "Entities", "generator.sh"));
 
             var cliJsonPath = Path.Combine(workspace.SolutionDirectory, Const.DynamicsCrmDevKitCliJson);

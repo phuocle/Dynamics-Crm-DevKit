@@ -125,6 +125,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
 
             Directory.CreateDirectory(projectDirectory);
             await ScaffoldingEngine.RenderManifestFilesAsync(CreateManifest(), request.Tokens, projectDirectory, input.Force, result);
+            ScaffoldingEngine.RewritePlatformScriptReferences(csprojPath);
             ScaffoldingEngine.MarkExecutable(Path.Combine(projectDirectory, "Extract-Both.sh"));
             ScaffoldingEngine.MarkExecutable(Path.Combine(projectDirectory, "Pack-Both.sh"));
 
