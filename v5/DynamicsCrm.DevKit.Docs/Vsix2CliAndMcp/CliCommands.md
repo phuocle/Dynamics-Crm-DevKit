@@ -22,7 +22,7 @@ devkit new-item --type CustomApi --entity none --message v4_CustomApi --name v4_
 devkit new-item --type Workflow --name SendEmailToTeam --project Dev.AllInOne.Server
 devkit new-item --type DataProvider --datasource all_serversql --project Dev.AllInOne.Server
 dotnet add Dev.AllInOne.Test\Dev.AllInOne.Test.csproj reference Dev.AllInOne.Server\Dev.AllInOne.Server.csproj
-devkit new-item --type Test --test-target Dev.AllInOne.Server.PostAccountCreateAsynchronous --project Dev.AllInOne.Test
+devkit new-item --type Test --name PostAccountCreateAsynchronousTest --test-target Dev.AllInOne.Server.PostAccountCreateAsynchronous --project Dev.AllInOne.Test
 devkit new-item --type UiTest --name Login --project Dev.AllInOne.UiTest
 devkit new-item --type ResourceString --name Resource --language 1033 --project Dev.AllInOne.WebResource --out Dev.AllInOne.WebResource\resources
 mkdir Dev.AllInOne.WebResource\bat
