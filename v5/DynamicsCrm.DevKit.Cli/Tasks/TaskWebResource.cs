@@ -34,6 +34,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private MetadataService Metadata => _metadataService ??= new MetadataService(OrgServiceAsync);
         public async Task<bool> IsValidAsync()
         {
+            if (!string.IsNullOrEmpty(Arg.File) && string.IsNullOrEmpty(Arg.WebResource))
+            {
+                var mapping = GetWebResourceMapping(Arg.File);
+                if (mapping != null && !string.IsNullOrEmpty(mapping.WebResource))
+                {
+                    Arg.WebResource = mapping.WebResource;
+                }
+            }
+
             if (!string.IsNullOrEmpty(Arg.File) && !string.IsNullOrEmpty(Arg.WebResource))
             {
                 return true; // Bypass profile validation for explicit single file update
@@ -554,20 +563,121 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private string GetConfigDirectory()
         {
-            return string.IsNullOrEmpty(Arg.JsonResolvedDirectory) ? CurrentDirectory : Arg.JsonResolvedDirectory;
+            return GetConfigDirectory(Arg.JsonResolvedDirectory, CurrentDirectory, Arg.File);
+        }
+
+        internal static string GetConfigDirectory(string jsonResolvedDirectory, string currentDirectory, string filePath = null)
+        {
+            var dir = string.IsNullOrEmpty(jsonResolvedDirectory) ? currentDirectory : jsonResolvedDirectory;
+            if (!string.IsNullOrEmpty(dir) && File.Exists(Path.Combine(dir, Const.DynamicsCrmDevKitConfigJson)))
+            {
+                return dir;
+            }
+
+            if (!string.IsNullOrEmpty(dir))
+            {
+                for (var d = new DirectoryInfo(dir); d != null; d = d.Parent)
+                {
+                    if (File.Exists(Path.Combine(d.FullName, Const.DynamicsCrmDevKitConfigJson)))
+                    {
+                        return d.FullName;
+                    }
+                }
+            }
+
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                var fileDir = Path.GetDirectoryName(Path.GetFullPath(filePath));
+                for (var d = new DirectoryInfo(fileDir); d != null; d = d.Parent)
+                {
+                    if (File.Exists(Path.Combine(d.FullName, Const.DynamicsCrmDevKitConfigJson)))
+                    {
+                        return d.FullName;
+                    }
+                }
+            }
+
+            return dir;
         }
 
         private string GetConfigFileValue(string file)
         {
+            return GetConfigFileValue(file, GetConfigDirectory());
+        }
+
+        internal static string GetConfigFileValue(string file, string configDirectory)
+        {
             var fullFile = Path.GetFullPath(file);
-            var root = GetConfigDirectory();
-            var relative = Path.GetRelativePath(root, fullFile);
+            var relative = Path.GetRelativePath(configDirectory, fullFile);
             if (!relative.StartsWith("..", StringComparison.Ordinal) && !Path.IsPathRooted(relative))
             {
                 return "\\" + relative.Replace("/", "\\");
             }
 
             return fullFile;
+        }
+
+        private DeployWebResource GetWebResourceMapping(string file)
+        {
+            return GetWebResourceMapping(file, GetConfigDirectory(), Arg.File);
+        }
+
+        internal static DeployWebResource GetWebResourceMapping(string file, string configDirectory, string sourceFile = null)
+        {
+            if (string.IsNullOrEmpty(configDirectory)) return null;
+            var configFile = Path.Combine(configDirectory, Const.DynamicsCrmDevKitConfigJson);
+            if (!File.Exists(configFile)) return null;
+
+            try
+            {
+                var configJson = JsonHelper.Deserialize<ConfigJson>(File.ReadAllText(configFile));
+                if (configJson?.WebResources == null || configJson.WebResources.Count == 0) return null;
+
+                var fullFile = Path.GetFullPath(file);
+                var fileValue = GetConfigFileValue(fullFile, configDirectory);
+
+                // 1. Exact match by relative file value (e.g. "\Abiz.WebResourceTs\build\ab_SalesLine.js") or full path
+                var found = configJson.WebResources.FirstOrDefault(x =>
+                    string.Equals(x?.File, fileValue, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(x?.File, fullFile, StringComparison.OrdinalIgnoreCase));
+                if (found != null) return found;
+
+                // 2. If sourceFile or file is TypeScript, check built JavaScript candidates
+                var tsFile = !string.IsNullOrEmpty(sourceFile) ? sourceFile : file;
+                if (TypeScriptBuildPathHelper.IsDeployableTypeScript(tsFile))
+                {
+                    var projectRoot = TypeScriptBuildPathHelper.FindProjectRoot(tsFile);
+                    if (!string.IsNullOrEmpty(projectRoot))
+                    {
+                        var candidates = TypeScriptBuildPathHelper.GetBuiltJavaScriptCandidates(tsFile, projectRoot);
+                        foreach (var candidate in candidates)
+                        {
+                            var candidateValue = GetConfigFileValue(candidate, configDirectory);
+                            found = configJson.WebResources.FirstOrDefault(x =>
+                                string.Equals(x?.File, candidateValue, StringComparison.OrdinalIgnoreCase) ||
+                                string.Equals(x?.File, candidate, StringComparison.OrdinalIgnoreCase));
+                            if (found != null) return found;
+                        }
+                    }
+                }
+
+                // 3. Fallback: match by filename without extension
+                var fileNameWithoutExt = Path.GetFileNameWithoutExtension(file);
+                found = configJson.WebResources.FirstOrDefault(x =>
+                    !string.IsNullOrEmpty(x?.File) &&
+                    Path.GetFileNameWithoutExtension(x.File).Equals(fileNameWithoutExt, StringComparison.OrdinalIgnoreCase));
+                if (found != null) return found;
+
+                // 4. Fallback: match if WebResource name contains fileNameWithoutExt
+                return configJson.WebResources.FirstOrDefault(x =>
+                    !string.IsNullOrEmpty(x?.WebResource) &&
+                    (x.WebResource.EndsWith("/" + fileNameWithoutExt + ".js", StringComparison.OrdinalIgnoreCase) ||
+                     x.WebResource.EndsWith("/" + fileNameWithoutExt + ".ts", StringComparison.OrdinalIgnoreCase)));
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private async Task AddWebResourceToSolutionAsync(Entity webResource)
@@ -723,11 +833,20 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var uniquename = Arg.WebResource;
                     if (string.IsNullOrEmpty(uniquename))
                     {
-                        var rootPath = $"{CurrentDirectory}\\{Json.rootfolder}\\".Replace(@"\\", @"\");
-                        if (file.StartsWith(rootPath, StringComparison.OrdinalIgnoreCase))
+                        var mapping = GetWebResourceMapping(file);
+                        if (mapping != null && !string.IsNullOrEmpty(mapping.WebResource))
+                        {
+                            uniquename = mapping.WebResource;
+                        }
+                    }
+
+                    if (string.IsNullOrEmpty(uniquename))
+                    {
+                        var rootPath = $"{CurrentDirectory}\\{Json?.rootfolder}\\".Replace(@"\\", @"\");
+                        if (!string.IsNullOrEmpty(Json?.rootfolder) && file.StartsWith(rootPath, StringComparison.OrdinalIgnoreCase))
                         {
                             var name = file.Substring(rootPath.Length).Replace("\\", "/");
-                            if (!name.StartsWith(SolutionPrefix))
+                            if (!string.IsNullOrEmpty(SolutionPrefix) && !name.StartsWith(SolutionPrefix))
                                 name = SolutionPrefix + "/" + name;
                             uniquename = name;
                         }

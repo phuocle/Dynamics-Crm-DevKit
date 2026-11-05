@@ -32,10 +32,20 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     SpectreLog.ActionError($"Profile '{settings.Profile}' not found, and --file is not fully provided for update override.");
                     return;
                 }
-                
+
                 if (string.IsNullOrEmpty(settings.WebResource))
                 {
-                    SpectreLog.ActionError("--webresource: required when deploying --file without json/profile.");
+                    var configDir = TaskWebResource.GetConfigDirectory(null, System.IO.Directory.GetCurrentDirectory(), settings.File);
+                    var mapping = TaskWebResource.GetWebResourceMapping(settings.File, configDir, settings.File);
+                    if (mapping != null && !string.IsNullOrEmpty(mapping.WebResource))
+                    {
+                        settings.WebResource = mapping.WebResource;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(settings.WebResource))
+                {
+                    SpectreLog.ActionError("--webresource: required when deploying --file without json/profile, or ensure file mapping exists in DynamicsCrm.DevKit.Config.json.");
                     return;
                 }
                 profile = new JsonWebResource 
