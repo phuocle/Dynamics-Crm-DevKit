@@ -74,6 +74,71 @@ public sealed class TaskWebResourceCoverageTests
         Assert.AreEqual(0, mappings.Count);
     }
 
+    [TestMethod]
+    public async Task IsValidAsync_ResolvesWebResourceFromConfigJson()
+    {
+        var configJsonContent = """
+        {
+          "WebResources": [
+            {
+              "File": "\\build\\myScript.js",
+              "WebResource": "my_prefix/myScript.js"
+            }
+          ]
+        }
+        """;
+        File.WriteAllText(Path.Combine(_root, "DynamicsCrm.DevKit.Config.json"), configJsonContent);
+        var subDir = Path.Combine(_root, "src");
+        Directory.CreateDirectory(subDir);
+        var scriptPath = Path.Combine(_root, "build", "myScript.js");
+        Directory.CreateDirectory(Path.GetDirectoryName(scriptPath)!);
+        File.WriteAllText(scriptPath, "console.log('test');");
+
+        var task = new TaskWebResource(new CommandLineArgs { File = scriptPath }, null) { CurrentDirectory = subDir };
+        var valid = await task.IsValidAsync();
+
+        Assert.IsTrue(valid);
+        Assert.AreEqual("my_prefix/myScript.js", task.Arg.WebResource);
+    }
+
+    [TestMethod]
+    public void GetWebResourceMapping_MatchesTypeScriptCandidates()
+    {
+        var configJsonContent = """
+        {
+          "WebResources": [
+            {
+              "File": "\\Abiz.WebResourceTs\\build\\ab_SalesLine.js",
+              "WebResource": "ab_/entities/ab_SalesLine.ts"
+            }
+          ]
+        }
+        """;
+        File.WriteAllText(Path.Combine(_root, "DynamicsCrm.DevKit.Config.json"), configJsonContent);
+        var tsProjectDir = Path.Combine(_root, "Abiz.WebResourceTs");
+        var entitiesDir = Path.Combine(tsProjectDir, "entities");
+        Directory.CreateDirectory(entitiesDir);
+        File.WriteAllText(Path.Combine(tsProjectDir, "package.json"), "{}");
+        var tsFile = Path.Combine(entitiesDir, "ab_SalesLine.ts");
+        File.WriteAllText(tsFile, "export class SalesLine {}");
+
+        var mapping = TaskWebResource.GetWebResourceMapping(tsFile, _root, tsFile);
+        Assert.IsNotNull(mapping);
+        Assert.AreEqual("ab_/entities/ab_SalesLine.ts", mapping.WebResource);
+    }
+
+    [TestMethod]
+    public void GetConfigDirectory_FindsConfigInParentDirectory()
+    {
+        File.WriteAllText(Path.Combine(_root, "DynamicsCrm.DevKit.Config.json"), "{}");
+        var deepDir = Path.Combine(_root, "sub1", "sub2");
+        Directory.CreateDirectory(deepDir);
+        var dummyFile = Path.Combine(deepDir, "dummy.ts");
+
+        var configDir = TaskWebResource.GetConfigDirectory(null, deepDir, dummyFile);
+        Assert.AreEqual(_root, configDir);
+    }
+
     private TaskWebResource Task(CommandLineArgs args, JsonWebResource json)
         => new(args, json) { CurrentDirectory = _root };
 
