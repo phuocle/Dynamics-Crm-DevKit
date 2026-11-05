@@ -64,7 +64,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- execute_webapi → raw access (Restore action is redirected here)")]
         public CallToolResult manage_deleted_records(
             [Description("Action: 'list' (default) | 'detail' | 'restore' | 'status' | 'turn'.")] string action = "list",
-            [Description("Entity Display/logical name. list: required. detail: required. restore: required if record_ids span multiple entities. status: not used. turn: not used.")] string entity_name = "",
+            [Description("Entity Display/logical name. Required for list, detail, and restore, including mixed-entity restores. Not used for status or turn.")] string entity_name = "",
             [Description("Single GUID. detail: required. list: not used. restore: optional if record_ids set.")] string record_id = "",
             [Description("Array of GUIDs (preferred for restore). detail/list: not used. restore: alternative to record_id.")] string[] record_ids = null,
             [Description("Search by primary attribute value (contains, case-insensitive). list only. Empty = all deleted records of entity.")] string name_filter = "",

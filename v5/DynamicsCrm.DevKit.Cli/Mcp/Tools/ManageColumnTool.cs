@@ -41,43 +41,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageColumnResult)),
         Description(
-            "Dataverse column (attribute) — auto-detect create vs update. Types: string, memo, integer, bigint, decimal, money, float, boolean, datetime, lookup, customer, picklist, multipicklist, image, file.\n\n" +
-
-            "Update (column exists): pass logical_name that matches an existing attribute. attribute_type ignored (immutable). picklist: use add/update/delete_options; use default_value to change the DefaultFormValue (single integer, e.g. 100000001) — omit to keep current; not supported on multipicklist. boolean: use default_value ('true'/'false' or '1'/'0') to flip the DefaultValue — omit to keep current. Omit params to keep current. Formula clone parameters are CREATE-only; if any are passed for an existing column, the tool returns an error and does not update the formula.\n\n" +
-
-            "Create (no attribute): need attribute_type + display_name.\n" +
-            "- schema_name: if provided, used AS-IS as SchemaName (skip auto-derive from display_name). Caller responsible for casing. Must start with the publisher prefix (e.g. 'devkit_InvoiceLineId'). Create only — ignored on update.\n" +
-            "- logical_name: if provided, used AS-IS as the lowercase logical name. Must start with the publisher prefix and be the lowercase form of schema_name (e.g. 'devkit_invoicelineid'). Create only — ignored on update.\n" +
-            "- If both omitted: SchemaName is auto-derived from display_name via DataverseNamer, logical name derives from schemaName.ToLowerInvariant().\n" +
-            "- lookup: needs lookup_target (auto-creates 1:N)\n" +
-            "- customer: polymorphic (account+contact), no lookup_target\n" +
-            "- picklist/multipicklist: options JSON or global_optionset_name\n" +
-            "- formula clone (PowerFx/Calculated/Rollup): pass only get_tables' `formulaDefinition` reference into formula_definition. Format: `source_table_logical_name:source_column_logical_name`. Pass it unchanged; never provide formula content directly.\n" +
-            "- The server retrieves the raw source formula and kind directly from Dataverse, then rewrites entity/column/relationship references for the target. Supported underlying types: string/memo/integer/decimal/money/float/boolean/datetime.\n" +
-            "- To intentionally create an empty formula column, omit formula_definition and pass formula_source_type as powerfx, calculated, or rollup.\n" +
-            "- 5 create flags (so a column can be cloned in a SINGLE create call, no follow-up update): required_level (None/Recommended/Required — default None), is_audit_enabled (default true), is_valid_for_advanced_find (default true), is_secured (default false), is_sortable (default true when supported). On UPDATE, omit=null to keep current.\n" +
-            "- Autonumber (string only): auto_number_format sets the pattern — placeholders {SEQNUM:n} (n≥1, minimum zero-padded length), {RANDSTRING:n} (1-6), {DATETIMEUTC:format}; literal text allowed. format must stay 'Text'. auto_number_seed (≥1) sets the start value via SetAutoNumberSeed after the metadata create/update (environment-only: NOT carried in solutions). UPDATE: change the pattern via auto_number_format, remove it via clear_auto_number=true. Patterns are validated client-side — Dataverse only rejects bad patterns at record-save time. Set form controls bound to autonumber columns read-only.\n\n" +
-
-            "CREATE resolves the publisher prefix from solution_name (required for CREATE) and adds the column to that solution.\n" +
-            "Statuscode (statuscode / StatusType): pass logical_name='statuscode' and use add_options/update_options/delete_options.\n" +
-            "add_options: JSON array with optional 'state' field (linked statecode value, default 0): [{\"label\":\"Under Review\",\"value\":100000001,\"state\":0}].\n" +
-            "update_options: rename by value (no 'state' needed). delete_options: JSON array of integer values. statecode column is read-only.\n" +
-            "Name resolution: entity_name resolves Display Name contains first, then logical/schema name contains — ambiguity returns candidates. logical_name (UPDATE) follows the same Display Name first rule. lookup_target, global_optionset_name, and solution_name use their shared resolvers.\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- Create a new attribute on an existing table (need attribute_type + display_name)\n" +
-            "- Clone a PowerFx, Calculated, or Rollup column read by get_tables (CREATE only)\n" +
-            "- Create/convert a string column to Autonumber or change its pattern/seed\n" +
-            "- Update mutable metadata, format, required_level, and picklist options\n" +
-            "- Add/rename/remove options on an existing picklist via add_options/update_options/delete_options\n\n" +
-
-            "RELATED TOOLS:\n" +
-            "- get_tables → discover entities and attribute logical names\n" +
-            "- manage_table → create the table before its columns\n" +
-            "- manage_relationship → 1:N / N:N\n" +
-            "- manage_choice → global option sets\n" +
-            "- manage_record_file → file/image column data\n" +
-            "- execute_webapi → raw Web API for endpoints not covered here")]
+            "Dataverse columns: create or update is detected automatically. Create requires entity_name, attribute_type, display_name, solution_name; update identifies an existing column by logical_name. Attribute type is immutable.\n\n" +
+            "For lookup/customer/choice types, autonumbers and formula cloning, use the parameter contracts and read docs://schema_tools_guide for detailed rules. Formula cloning is create-only: use the formulaDefinition reference returned by get_tables, never formula content. For statuscode use add_options/update_options/delete_options; statecode is read-only.\n\n" +
+            "Names resolve Display Name first, then logical/schema name; ambiguous matches return candidates. Use get_tables to discover columns and manage_table to create tables.")]
         public CallToolResult manage_column(
             [Description("Logical name (e.g. 'account').")] string entity_name = "",
             [Description("Logical name of the existing attribute to update (e.g. 'new_priority'). For CREATE: optional lowercase override of logical name; if omitted derives from schema_name/display_name. Must start with publisher prefix.")] string logical_name = "",
@@ -106,7 +72,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Show column in Advanced Find. CREATE: pass to override Dataverse default (true). UPDATE: omit=null keeps current.)")] bool? is_valid_for_advanced_find = null,
             [Description("Enable field-level security. CREATE: pass to override Dataverse default (false). UPDATE: omit=null keeps current.")] bool? is_secured = null,
             [Description("Make column sortable in views. CREATE: pass to override Dataverse default (true, when supported by the attribute type). UPDATE: omit=null keeps current.")] bool? is_sortable = null,
-            [Description("picklist/boolean create: default option value. Picklist: single integer value (e.g. 100000002) — must match one of the options. Boolean: 'true'/'false' or '1'/'0'. Not supported on multipicklist.")] string default_value = "",
+            [Description("picklist/boolean create or update: default option value. Picklist: one integer matching an option. Boolean: 'true'/'false' or '1'/'0'. Omit on update to keep current; unsupported for multipicklist.")] string default_value = "",
             [Description("SchemaName for the new column (e.g. 'devkit_InvoiceLineId'). If provided, used AS-IS as SchemaName (skip auto-derive from display_name). Caller responsible for casing. Create only — ignored on update. Must start with the publisher prefix.")] string schema_name = "",
             [Description("Create-only formula clone reference returned by get_tables, exactly `source_table_logical_name:source_column_logical_name` (for example `account:new_total`). Pass it unchanged; the server retrieves and rewrites the source formula directly. Omit it and pass formula_source_type only to create an empty formula column.")] string formula_definition = "",
             [Description("Create only. Use powerfx, calculated, or rollup only when creating an empty formula column without formula_definition. Clone mode derives the kind from the referenced source column.")] string formula_source_type = "",

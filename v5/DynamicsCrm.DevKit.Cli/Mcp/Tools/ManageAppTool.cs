@@ -55,7 +55,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "List, inspect, create, update, and validate model-driven apps, edit app sitemap navigation, or restore an app from a .app.json backup.\n\n" +
             "WHEN TO USE:\n" +
             "- List/inspect model-driven apps, or create/update app metadata (name, description, icon)\n" +
-            "- Apply app-scoped sitemap navigation operations (add_area/add_group/add_item), validate an app, or restore from a .app.json backup (undo) — the result's backupPath points to the pre-change snapshot; pass it as operations to action='undo' to restore\n" +
+            "- Apply app-scoped sitemap navigation operations, validate an app, or restore from a .app.json backup (undo) — the result's backupPath points to the pre-change snapshot; pass it as operations to action='undo' to restore\n" +
+            "- Read docs://instructions_for_manage_app before update_navigation for operation fields, positions, and examples.\n" +
             "- App is resolved by Display Name first, then unique name/GUID; ambiguous Display Names return the candidates\n\n" +
             "RELATED TOOLS:\n" +
             "- get_solution_components → solution names for create\n" +
@@ -71,7 +72,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Optional for create. The solution publisher prefix is always prepended (e.g. 'MyApp' with solution all_in_one becomes 'all_MyApp'). If empty, derived from display_name.")] string unique_name = "",
             [Description("Optional for create/update.")] string description = "",
             [Description("Optional app icon web resource name or GUID.")] string icon_webresource = "",
-            [Description("JSON array for update_navigation, or backup file path for undo.")] string operations = "",
+            [Description("update_navigation: JSON array serialized as a string; read docs://instructions_for_manage_app for the operation contract and examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
             [Description("list only. 1-500.")] int max_records = 100)
         {
             try

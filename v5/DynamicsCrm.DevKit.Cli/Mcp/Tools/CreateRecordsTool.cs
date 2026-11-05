@@ -60,18 +60,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(BatchCreateResult)),
         Description(
-            "Bulk create Dataverse records in parallel (max 5000/call). Partial failures: successes committed, failures reported per-item. Input: inline JSON array, .json path, or .csv path (Display Name headers).\n\n" +
-            "Field syntax: polymorphic lookup 'field@targetentity' (e.g. 'customerid@account'); activity parties (to/from/cc/bcc/requiredattendees/organizer/customers/resources) are a JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"} (single object auto-wrapped; do NOT set participationtypemask). For single-record CRUD → manage_record.\n\n" +
-            "BYPASS: bypass_custom_logic=true sets BypassBusinessLogicExecution=CustomSync,CustomAsync so sync+async plugins/workflows do NOT run for this create. Default false. Requires the System Administrator role (prvBypassCustomBusinessLogic privilege); rejected early if the calling user lacks it. Use for bulk seed/data-load where custom logic would slow or block creates.\n\n" +
-            "IMPORT_SEQUENCE_NUMBER: Every record in the batch is auto-stamped with the same importsequencenumber value so the entire batch can be queried and bulk-deleted as a unit (e.g. <condition attribute='importsequencenumber' operator='eq' value='999990'/>). The value is computed as max(999990, maxInTable+1) and returned in the result as importSequenceNumber. If a record explicitly provides importsequencenumber, that value wins for that record (no duplicate checking). Set importsequencenumber on every record to override the auto-fill entirely.\n\n" +
-            "WHEN TO USE:\n" +
-            "- Seed many records at once (accounts, contacts, tasks) or import from CSV\n" +
-            "- Pipe generate_demo_data output file (.json) into records_json\n" +
-            "- High-throughput parallel creates (server hints concurrency when max_parallelism=0)\n\n" +
-            "RELATED TOOLS:\n" +
-            "- generate_demo_data → produce JSON to pipe into records_json\n" +
-            "- manage_record → single-record create/update/delete/associate/disassociate\n" +
-            "- search_records / execute_fetchxml → verify created records")]
+            "Bulk create up to 5000 Dataverse records in parallel from inline JSON, a .json file or a .csv file. Partial failures do not roll back successful records. Use manage_record for single-record CRUD.\n\n" +
+            "Activity parties use objects with id and type; polymorphic lookups use field@targetentity. Records are stamped with an importsequencenumber unless explicitly supplied. bypass_custom_logic skips custom sync/async logic and requires System Administrator. Read docs://data_operations_guide for field formats and batch details.\n\n" +
+            "Use generate_demo_data to produce input and execute_fetchxml or search_records to verify records.")]
         public async Task<CallToolResult> create_records(
             [Description("Entity Display Name or logical name (Display Name resolved first).")] string entity_name = "",
             [Description("Inline JSON array, .json file path, or .csv file path. Max 5000 records.")] string records_json = "",

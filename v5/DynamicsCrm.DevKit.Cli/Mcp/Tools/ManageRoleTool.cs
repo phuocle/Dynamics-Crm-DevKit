@@ -36,31 +36,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageRoleResult)),
         Description(
-            "Security roles — list/detail/user/assign/unassign/create/update/delete/copy/restore.\n" +
-            "- list: optional role_name, business_unit_id, max_records\n" +
-            "- detail: role_id OR role_name (+optional entity_name) → privileges grouped by entity. Resolves role name first (fuzzy), then GUID fallback.\n" +
-            "- user: user_id (+optional entity_name) → user's roles + effective privileges\n" +
-            "- assign / unassign: role_id + user_id (direct) or team_id (role for a team; members inherit it). user action also reports roles inherited via team membership.\n" +
-            "- create: role_name (+optional business_unit_id)\n" +
-            "- update: role_id + optional role_name (rename) and/or privileges (JSON array of {entity, right, depth}) to add/change/remove privileges and depth on an existing role. Depth: User | BusinessUnit | Parent:ChildBU | Organization; 'None' removes. Rights: Create | Read | Write | Delete | Append | AppendTo | Assign | Share, or '*' to apply to all rights of the entity.\n" +
-            "- delete: role_id (managed roles can't delete — use copy)\n" +
-            "- copy: role_id + role_name (clone with all privileges)\n" +
-            "- restore: backup_path → restore a role from a .role.json backup written by update/delete (result's backupPath; backups at .devkit/manage_role/). If the role was deleted it is re-created with a NEW role ID — re-assign users/teams yourself (assignments are not backed up).\n" +
-            "Mutating actions require the System Administrator role on the calling user.\n\n" +
-            "Depth: User < BU < Parent:ChildBU < Org. Only root roles listed (not BU-inherited copies). Fuzzy on role_name: 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto. update/delete save a pre-change privilege backup (backupPath) before mutating.\n\n" +
-            "WHEN TO USE:\n" +
-            "- Debug 'access denied' (action='user' + entity_name)\n" +
-            "- Audit role privileges (action='detail')\n" +
-            "- Provision access (assign/unassign or create/copy)\n" +
-            "- Roll back a bad privilege update or a mistaken delete (action='restore')\n\n" +
-            "RELATED TOOLS:\n" +
-            "- whoami → verify the connected user and their direct roles\n" +
-            "- manage_record → read/create/update role and team records directly\n" +
-            "- execute_fetchxml → query roles and privileges with deterministic filters")]
+            "Manage Dataverse security roles: list/detail/user, assign/unassign, create/update/delete/copy and restore. Mutations require System Administrator. list shows root roles; user includes direct and team-inherited roles.\n\n" +
+            "update/delete save a pre-change backup; restore takes backupPath. Restoring a deleted role creates a new role ID and does not restore user/team assignments. Managed roles cannot be deleted; copy them instead. Ambiguous role-name matches return candidates.\n\n" +
+            "Use user with entity_name to inspect effective privileges; detail shows role privileges. Use whoami for the current user.")]
         public async Task<CallToolResult> manage_role(
             McpServer server,
             [Description("list, detail, user, assign, unassign, create, update, delete, copy, restore.")] string action = "",
-            [Description("Email or GUID. Required: user/assign/unassign (unless team_id is used).")] string user_id = "",
+            [Description("Email or GUID. Required for user; assign/unassign require user_id or team_id.")] string user_id = "",
             [Description("Team GUID or exact name. assign/unassign: assign the role to this team instead of a user (members inherit it).")] string team_id = "",
             [Description("Role GUID. For detail only, this may also be a role name; if empty, role_name is used. Required: detail/assign/unassign/update/delete/copy.")] string role_id = "",
             [Description("list: filter (contains). detail: role display name when role_id is empty. create/update/copy: new name.")] string role_name = "",

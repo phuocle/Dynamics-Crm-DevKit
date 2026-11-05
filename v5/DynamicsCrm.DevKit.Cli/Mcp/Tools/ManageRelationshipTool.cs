@@ -43,6 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Create a 1:N relationship (with auto lookup) or an N:N relationship (with auto intersect).\n" +
             "- Adjust cascade behaviors, relationship menu display, or hierarchy.\n" +
             "- Add or remove a polymorphic lookup target.\n\n" +
+            "Read docs://schema_tools_guide before relationship changes for cascade, hierarchy and polymorphic lookup rules.\n\n" +
             "RELATED TOOLS:\n" +
             "- get_tables → discover relationships\n" +
             "- manage_column → lookup columns\n" +
@@ -66,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Override cascade Unshare behavior.")] string cascade_unshare = "",
             [Description("UseCollectionName / UseLabel / DoNotDisplay.")] string menu_behavior = "",
             [Description("Details / Sales / Service / Marketing.")] string menu_group = "",
-            [Description("")] int menu_order = 10000,
+            [Description("Associated relationship menu order for create_1n/create_nn/add_target; default 10000. For update, 10000 means leave the existing order unchanged.")] int menu_order = 10000,
             [Description("1:N create only.")] string lookup_display_name = "",
             [Description("Required: create_1n, create_nn, add_target.")] string solution_name = "",
             [Description("Self-referential 1:N (create_1n/update). 1 per entity, referenced=referencing.")] bool is_hierarchical = false)

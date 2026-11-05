@@ -35,6 +35,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
         internal static readonly Dictionary<string, string[]> ToolResourceMap = new()
         {
             [nameof(Tools.ExecuteSqlTool)] = new[] { "instructions_for_sql" },
+            [nameof(Tools.ManageRibbonTool)] = new[] { "instructions_for_manage_ribbon" },
+            [nameof(Tools.ManageReportTool)] = new[] { "instructions_for_manage_report" },
         };
 
         internal static readonly Dictionary<string, int> CategoryLevel = new()
@@ -81,7 +83,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                         $"Connected to Dataverse environment: {_serviceClient.ConnectedOrgUriActual} | " +
                         $"Org: {_serviceClient.ConnectedOrgFriendlyName} ({_serviceClient.ConnectedOrgUniqueName}) | " +
                         $"Version: {_serviceClient.ConnectedOrgVersion} | " +
-                        $"Category: {displayCategory} ({toolCount} tools)" +
+                        $"Category: {displayCategory} ({toolCount} tools). " +
+                        "Tool descriptions reference docs:// resources for detailed contracts. " +
+                        "When your client supports MCP resources, read the relevant resource before complex operations; " +
+                        "use tool parameter descriptions for basic inputs and do not guess missing fields." +
                         (string.IsNullOrEmpty(impersonatedUserDisplay)
                             ? ""
                             : $" | Impersonating: {impersonatedUserDisplay} (CallerId set server-side)");

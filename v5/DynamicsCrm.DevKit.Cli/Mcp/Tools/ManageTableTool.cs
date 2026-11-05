@@ -37,6 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- UPDATE (entity exists): logical_name + optional display_name, display_collection_name, description, is_audit_enabled, is_quick_create_enabled, is_search_enabled.\n" +
             "- CREATE (new table): display_name + display_collection_name + solution_name (resolves publisher prefix). Auto-creates primary name attribute.\n" +
             "Technical names come from logical_name / schema_name or are auto-derived from display_name.\n\n" +
+            "For publisher prefixes, create/update requirements and immutable properties, read docs://schema_tools_guide before changing metadata.\n\n" +
             "WHEN TO USE:\n" +
             "- Create a new custom table, or update mutable metadata of an existing one\n" +
             "\n" +
@@ -52,17 +53,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Required: create.")] string solution_name = "",
             [Description("Optional table description.")] string description = "",
             [Description("Auto-derived if omitted. [create-only]")] string primary_attribute_name = "",
-            [Description("[create-only]")] string primary_attribute_display_name = "Name",
+            [Description("Display label of the primary name column on create. Default 'Name'.")] string primary_attribute_display_name = "Name",
             [Description("'User' or 'Organization'. [create-only, immutable]")] string ownership_type = "User",
             [Description("'Standard' or 'Elastic' (Cosmos DB, no charts). [create-only, immutable]")] string table_type = "Standard",
             [Description("Activity entity. [create-only, immutable]")] bool is_activity = false,
             [Description("Enable notes. [create-only]")] bool has_notes = false,
-            [Description("null = keep current (update).")] bool? is_quick_create_enabled = null,
+            [Description("Enable quick create for this table. null = keep current on update.")] bool? is_quick_create_enabled = null,
             [Description("null = keep current (update). Default true on create.")] bool? is_audit_enabled = null,
             [Description("Enable this table for Dataverse Search/Relevance Search (SyncToExternalSearchIndex). null = keep current on update; false by default on create unless specified.")] bool? is_search_enabled = null,
             [Description("1-850. [create-only]")] int primary_attribute_max_length = 100,
             [Description("SchemaName for the new table (e.g. 'all_InOne' or 'all_In_One'). If provided, used AS-IS as SchemaName (skip auto-derive). Caller responsible for casing. Create only — ignored on update. Must start with the publisher prefix.")] string schema_name = "",
-            [Description("Logical name for the new table (e.g. 'all_inone' or 'all_in_one'). If provided, used AS-IS as the lowercase logical name. Create only — ignored on update. Must start with the publisher prefix and be the lowercase form of schema_name.")] string logical_name = "")
+            [Description("Update: identifies the existing table by display or logical name. Create: optional logical name override (e.g. 'all_in_one'), normalized to lowercase; must start with the solution publisher prefix and match the lowercase schema name.")] string logical_name = "")
         {
             try
             {

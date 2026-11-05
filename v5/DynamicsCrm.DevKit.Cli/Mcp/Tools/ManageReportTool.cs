@@ -48,24 +48,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageReportResult)),
         Description(
-            "Manage Dataverse SSRS reports (report entity). Actions: 'list', 'detail', 'create', 'download', 'update', 'add_dataset', 'update_dataset'.\n" +
-            "- list/detail/download read Dataverse; update is the ONLY action that writes to Dataverse; create and dataset actions work on local .rdl files only\n" +
-            "- create: LOCAL ONLY — never touches Dataverse; saves a new .rdl built from the embedded ReportTemplate.rdl (normalized for the connected organization) or from file_path content; name defaults: name > file_path file name > 'Report Template'; existing local output files fail fast; default output is .devkit/manage_report/\n" +
-            "- download writes bodytext to .devkit/manage_report/downloads/{languageCode}/ as {report}.rdl and returns the saved path and SHA-256\n" +
-            "- create/download: output_folder saves the .rdl into that local folder instead of the default .devkit folder; when the folder contains exactly one .rptproj, the saved .rdl is auto-added as a Report item if not already present (0 or multiple .rptproj files = the project is left untouched)\n" +
-            "- update replaces bodytext (.rdl content) and/or description of an existing report; when report_id is a name, language selects which language copy to update (multiple reports can share a name across languages) — default is the organization's base language; reports need no publish after update; NEW reports are created by the VSIX/CLI deploy, not by this tool; when file_path is provided and the RDL has a ReportFilter, report.defaultfilter is synced from it (Dataverse only extracts it on create, so redeploys otherwise leave it stale)\n" +
-            "- add_dataset/update_dataset require file_path and edit only that local RDL; both actions create a pre-change backup under .devkit/manage_report/backups and accept FetchXML or a system view name with entity_name; prefilter controls only the root entity (linked-entity prefiltering is not supported)\n" +
-            "- dataset FetchXML follows the VSIX projection model: explicit or <all-attributes/> fields, aggregate/group-by aliases, nested linked entities with explicit aliases, and FetchXML parameters are supported; MultiSelectPicklist, File, and Image attributes remain unsupported by MSCRMFETCH; generated fields include formatted strings plus typed companions\n" +
-            "- managed reports (isManaged=true) cannot be updated\n\n" +
-            "WHEN TO USE:\n" +
-            "- List or inspect reports of the organization or of a solution (solution component type 31)\n" +
-            "- Create a new local .rdl file from the built-in template to design a report locally\n" +
-            "- Download a report definition (.rdl) to local disk for editing\n" +
-            "- Deploy an updated local .rdl back to an existing report\n" +
-            "- Add, update, or delete a simple local RDL dataset before designing it in SSRS\n\n" +
-            "RELATED TOOLS:\n" +
-            "- get_solution_components → find valid solution names and report components\n" +
-            "- execute_fetchxml → query report records directly")]
+            "Manage Dataverse SSRS reports and local RDL files: list/detail/download read Dataverse; update writes an existing unmanaged report. create, add_dataset and update_dataset operate locally only. New reports are deployed via VSIX/CLI; update needs no publish.\n\n" +
+            "Before RDL or dataset work, read docs://instructions_for_manage_report for local paths, backups, FetchXML support, language selection and deployment behavior. Dataset actions require file_path, dataset_name and fetchxml; a system view name also requires entity_name.\n\n" +
+            "Use get_solution_components to find solutions and execute_fetchxml to query report records.")]
         public async Task<CallToolResult> manage_report(
             McpServer server,
             [Description("'list', 'detail', 'create', 'download', 'update', 'add_dataset', 'update_dataset'.")] string action = "",

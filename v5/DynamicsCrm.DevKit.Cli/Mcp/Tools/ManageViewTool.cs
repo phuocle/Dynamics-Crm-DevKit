@@ -51,6 +51,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Create/update a view from FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type); patch cell attributes, rename, set the default public view. Created views are always Public (querytype=0)\n" +
             "- QuickFind views: searchable fields are <condition> in <filter isquickfindfields=\"1\">; grid columns are display only\n" +
             "- Restore a view from a backup pair written by update/rename/undo (undo) — the result's fetchXmlBackupPath + layoutXmlBackupPath point to the pre-change backup; pass both to action='undo' to restore\n\n" +
+            "Read docs://instructions_for_views before creating or changing views, especially layout cell attributes and icon/tooltip functions.\n\n" +
             "RELATED TOOLS:\n" +
             "- get_tables → column logical names for FetchXML attributes/conditions\n" +
             "- execute_fetchxml → test a FetchXML before putting it into a view\n" +
@@ -64,7 +65,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("false = system views (savedquery), true = personal views (userquery) — scopes list and view_name resolution.")] bool is_personal_view = false,
             [Description("create/update: FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type). undo: .fetchxml.xml backup file path (pass layoutxml too).")] string fetchxml = "",
             [Description("undo only: .layoutxml.xml backup file path — required together with fetchxml to restore the pair verbatim.")] string layoutxml = "",
-            [Description("JSON array of {cell_name, set_attributes, remove_attributes}. Patch cell attrs (imageproviderwebresource, ishidden, …) without changing the FetchXML. Do not combine with fetchxml.")] string cell_updates_json = "")
+            [Description("update: JSON array serialized as a string, e.g. [{\"cell_name\":\"name\",\"set_attributes\":{\"ishidden\":\"1\"}}]. Patch layout cell attributes without changing FetchXML; do not combine with fetchxml. Read docs://instructions_for_views for supported attributes and icon/tooltip contracts.")] string cell_updates_json = "")
         {
             try
             {

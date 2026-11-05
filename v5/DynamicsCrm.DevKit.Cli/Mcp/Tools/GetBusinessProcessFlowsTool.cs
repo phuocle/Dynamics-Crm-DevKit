@@ -46,6 +46,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Inspect stage categories and primary entities for a BPF\n" +
             "- Find BPFs bound to an entity (entity_name filter)\n" +
             "- Resolve BPF unique/logical name for the auto-created entity\n\n" +
+            "For BPF and related server-logic inspection modes, read docs://server_logic_guide.\n\n" +
             "RELATED TOOLS:\n" +
             "- get_workflows → classic workflow definitions (background async + realtime sync)\n" +
             "- get_business_rules → client-side business rules\n" +

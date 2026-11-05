@@ -58,12 +58,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             McpServer server,
             [Description("'list', 'detail', 'update', 'rename', 'undo'.")] string action = "",
             [Description("Entity Display Name or logical name (Display Name is resolved first; e.g. 'Account' or 'account').")] string entity_name = "",
-            [Description("GUID. Required for detail/update/rename/undo.")] string form_id = "",
-            [Description("Name contains filter. 1 match → auto-detail. Ignored if form_id is set.")] string form_name = "",
+            [Description("Form GUID. Required for update/rename/undo. For detail, provide form_id or a form_name filter; use the GUID when name matches are ambiguous.")] string form_id = "",
+            [Description("list/detail: name contains filter; one match returns detail. In detail, ignored if form_id is set. rename: new form name; form_id identifies the form.")] string form_name = "",
             [Description("2=Main, 5=Mobile, 6=QuickView, 7=QuickCreate. 0 or omit = all types.")] int form_type = 0,
             [Description("List mode only — include formxml in each entry. Detail always includes formxml.")] bool include_formxml = false,
             [Description("update (advanced) / undo: raw FormXML string or backup file path (.formxml). Auto-detects. Use 'operations' for the recommended flow.")] string formxml = "",
-            [Description("update (recommended): JSON array of form operations. Read docs://instructions_for_formxml for format and examples.")] string operations = "")
+            [Description("update (recommended): string containing a JSON array of operations. Each object uses action for the operation family (e.g. manage_tab) and manage_action for its verb (e.g. add). Read docs://instructions_for_formxml for fields and examples; serialize the array once.")] string operations = "")
         {
             try
             {

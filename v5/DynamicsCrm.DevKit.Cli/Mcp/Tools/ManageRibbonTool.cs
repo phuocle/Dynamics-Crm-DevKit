@@ -49,6 +49,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- classic/legacy ribbon & button customization — 'ribbon', 'classic', 'legacy', 'button', 'custom button', 'action button', 'JavaScript button', 'sub_grid/homepage grid button', or generic button\n" +
             "- the 10 operations: add_button, update_button, hide_button, show_button, add_split_button, update_split_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item\n" +
             "- update_button identifies by 'button_id' (then 'label' = new value) or by 'label' (then 'new_label' = new value)\n" +
+            "- add_button requires surface (form/main_grid/sub_grid), label, library, function, enable_library, enable_function. Optional: modern_image, tooltip_title, tooltip_description, sequence; grid buttons also support selection_min/selection_max.\n" +
+            "- add_split_button requires those same fields plus non-empty items; add_flyout_static requires surface, label, items. Each item requires label, library, function, enable_library, enable_function. hide/show_button require button_id. hide/show_flyout_item require item_label and flyout_id or flyout_label.\n" +
+            "- Read docs://instructions_for_manage_ribbon BEFORE update: it specifies the JSON string format, required and optional fields for every operation, and examples. Do not guess fields.\n" +
             "- entity_name and web-resource fields resolve Display Name contains first, then logical/unique/schema\n" +
             "- NOT for the modern Power Fx command bar (appaction)\n\n" +
 
@@ -61,8 +64,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             McpServer server,
             [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action = "",
             [Description("Entity Display Name or logical name. Required: detail/update/undo/buttons.")] string entity_name = "",
-            [Description("JSON array of ribbon operations for action='update'. See tool description for the 10 supported actions and their fields.")] string operations = "",
-            [Description("For 'undo': backup file path.")] string ribbonxml = "")
+            [Description("update: non-empty JSON array serialized as a string. Each object has an action and action-specific fields; read docs://instructions_for_manage_ribbon for the complete contract and examples.")] string operations = "",
+            [Description("undo: backup file path from result.backupPath. update: alternatively, inline RibbonDiffXml or a file path; applied as a patch preserving missing existing elements. If operations is provided it takes precedence.")] string ribbonxml = "")
         {
             var actionName = (action ?? "").Trim().ToLowerInvariant();
 

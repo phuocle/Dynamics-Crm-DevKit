@@ -45,6 +45,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Find records by keywords across one or more searchable tables\n" +
             "- Diagnose whether Dataverse Search and entity indexes are ready\n" +
             "- detail_level='full' → raw API payload saved to {workspace}/.devkit/search_records/ (workspace auto-resolved from MCP roots or server cwd; path returned in the result's filePath); read it with file tools\n\n" +
+            "Read docs://data_operations_guide for search operators, filtering and prerequisites.\n\n" +
             "RELATED TOOLS:\n" +
             "- execute_fetchxml → deterministic field filters and joins\n" +
             "- get_tables → discover searchable entity logical names")]

@@ -88,6 +88,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Find steps registered on an entity (entity_name wins over assembly_name)\n" +
             "- Check if a field triggers any plugin (trigger_field + entity_name)\n" +
             "- Find synchronous plugins (mode='sync'; Pre-op can cancel/rollback)\n\n" +
+            "For plugin and related server-logic inspection modes, read docs://server_logic_guide.\n\n" +
             "RELATED TOOLS:\n" +
             "- get_plugin_trace_logs → execution traces\n" +
             "- get_system_jobs → async failures\n" +

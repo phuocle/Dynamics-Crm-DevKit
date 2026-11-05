@@ -35,6 +35,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Inspect a business rule's conditions and actions before refactoring or disabling it\n" +
             "- Find business rules bound to an entity (entity_name filter)\n" +
             "- Check if a field is referenced in any client-side rule logic\n\n" +
+            "For business-rule and related server-logic inspection modes, read docs://server_logic_guide.\n\n" +
             "RELATED TOOLS:\n" +
             "- get_workflows → classic workflow definitions (background async + realtime sync)\n" +
             "- get_messages → legacy workflow Custom Actions (category=3) + SDK messages\n" +
@@ -44,7 +45,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult get_business_rules(
             [Description("Entity display name, logical name, or schema name.")] string entity_name = "",
             [Description("GUID. Empty = list mode; set with entity_name = detail mode.")] string rule_id = "",
-            [Description("Lifecycle filter. Empty = all.")] string status = "",
+            [Description("Lifecycle filter: active, draft, inactivedraft, or canceled. Empty = all.")] string status = "",
             [Description("Default 50. <=0 falls back to 50. Ignored in detail mode.")] int max_records = 50)
         {
             try

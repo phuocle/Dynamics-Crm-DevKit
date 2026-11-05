@@ -44,7 +44,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("'list', 'detail', 'validate', 'invoke'. 'create'/'update'/'delete' are gated.")] string action = "",
             [Description("Display name, unique name, or GUID (customapiid) of the Custom API. Required: detail/validate/invoke.")] string function_name = "",
             [Description("Unique/display name. 'list': filter by solution membership.")] string solution_name = "",
-            [Description("'validate' only: DevKit definition JSON to cross-check against metadata.")] string definition_json = "",
+            [Description("validate only: DevKit definition JSON object serialized as a string. Required: displayName and formula (Power Fx record expression starting with '{'). Optional: description, inputs and outputs arrays of {name,type,description}, tableReferences array of up to 5 logical names. Types: boolean, datetime, decimal, float, integer, string. Checks structure and metadata; does not compile the formula.")] string definition_json = "",
             [Description("'invoke' only: JSON object of {\"inputName\": value} per the declared signature.")] string arguments_json = "",
             [Description("'invoke' only: record GUID for entity-bound functions (bindingtype=Entity).")] string record_id = "",
             [Description("'list' only. ≤0 → 50, >500 → 500.")] int max_records = 50,

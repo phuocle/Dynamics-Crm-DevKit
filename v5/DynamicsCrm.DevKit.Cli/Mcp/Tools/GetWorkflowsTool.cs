@@ -44,6 +44,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Check if a field triggers any workflow (trigger_field + entity_name)\n" +
             "- Find synchronous workflows (mode='realtime'; Pre-op can cancel/rollback)\n" +
             "- Inspect workflow triggers and execution metadata before refactoring/disabling\n\n" +
+            "For workflow and related server-logic inspection modes, read docs://server_logic_guide.\n\n" +
             "RELATED TOOLS:\n" +
             "- get_business_process_flows → BPF definitions + stages\n" +
             "- get_business_rules → client-side business rules\n" +

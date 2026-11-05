@@ -62,27 +62,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertChartResult)),
         Description(
-            "Manage Dataverse system charts (savedqueryvisualization). Actions: 'list', 'detail' (read-only) | 'create', 'update', 'rename', 'set_default', 'undo' (mutations). " +
-            "datadescription FetchXML is built from entity metadata — no view binding. " +
-            "Omitted chart_type on create defaults to Pie (category=statecode, legend=importsequencenumber/count). " +
-            "Pie create first returns needs_confirmation without creating; re-call with confirmed=true after user approval. " +
-            "Multi-series: measures='col:agg[:label]; ...' (agg: count/countcolumn/sum/avg/min/max) defaults chart_type to Column and is mutually exclusive with aggregate_column. " +
-            "filter='field op value; ...' (ops: =, !=, >, >=, <, <=, like, in, null, not-null) filters chart data. Create with measures or filter also requires confirmed=true.\n\n" +
-            "WHEN TO USE:\n" +
-            "- List or inspect system charts of an entity\n" +
-            "- Create a chart from group-by/aggregate columns, update chart type or columns, rename, set the entity default chart\n" +
-            "- Restore a chart from a .chart.json backup written by update (undo) — the update result's backupPath points to the pre-change backup; pass it as presentationdescription to action='undo' to restore\n\n" +
-            "RELATED TOOLS:\n" +
-            "- get_tables → column logical names for group_by_column/aggregate_column\n" +
-            "- publish_customizations → batch publish after multiple metadata changes\n" +
-            "- manage_view → views; execute_webapi → raw savedqueryvisualization access")]
+            "Manage Dataverse system charts: list/detail/create/update/rename/set_default/undo. Chart FetchXML is built from entity metadata, without a view binding.\n\n" +
+            "Create defaults to Pie with statecode and importsequencenumber/count unless measures alter the default. Pie or any create with measures/filter requires confirmation; inspect the plan and call again with confirmed=true only after user approval. undo takes the update result backupPath in presentationdescription.\n\n" +
+            "Read docs://schema_tools_guide for chart defaults, multi-series and confirmation workflow; get_tables discovers column names.")]
         public async Task<CallToolResult> manage_chart(
             McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",
             [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Required for list/create.")] string entity_name = "",
-            [Description("Chart GUID. Required for detail/update/rename/set_default/undo (unless chart_name uniquely identifies chart).")] string chart_id = "",
-            [Description("Chart name. Used for detail/update/rename lookup or create. Required for create.")] string chart_name = "",
-            [Description("OOB Chart Type: Column, Bar, Line, Pie, Doughnut, Funnel, Area, Bubble, Radar. Default: Pie when omitted on create.")] string chart_type = "",
+            [Description("Chart GUID. detail/update/set_default also accept a uniquely identifying chart_name. rename uses chart_id to identify the chart. undo restores from the backup in presentationdescription.")] string chart_id = "",
+            [Description("create: new chart name. detail/update/set_default: lookup by name when chart_id is omitted. rename: new name; chart_id identifies the chart.")] string chart_name = "",
+            [Description("Chart type: Column, Bar, Line, Pie, Doughnut, Funnel, Area, Bubble, Radar. Create default: Column for multiple measures, otherwise Pie.")] string chart_type = "",
             [Description("Category / group-by attribute logical name or display name. Pie default: statecode.")] string group_by_column = "",
             [Description("Legend / measure attribute logical name or display name. Pie default: importsequencenumber.")] string aggregate_column = "",
             [Description("Aggregation type: 'count' (default), 'sum', 'avg', 'min', 'max'.")] string aggregate_type = "count",
@@ -93,7 +82,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Optional solution unique/display name. When provided and non-empty, chart is added to the solution after create/update.")] string solution_name = "",
             [Description("Validate XML syntax and chart types before saving.")] bool validate = true,
             [Description("Publish entity after create/update/rename/set_default/undo so changes become visible. Default: true. Set false to batch-publish later via publish_customizations.")] bool publish = true,
-            [Description("Pie create only: set true only after user approved the confirmation summary. Default false returns needs_confirmation without creating.")] bool confirmed = false)
+            [Description("create: Pie charts and charts with measures or filter return needs_confirmation when false. Set true after the user approves the returned plan, with the same inputs.")] bool confirmed = false)
         {
             try
             {

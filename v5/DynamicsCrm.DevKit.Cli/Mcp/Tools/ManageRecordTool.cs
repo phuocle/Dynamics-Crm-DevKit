@@ -39,6 +39,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Partial-update specific fields without rewriting whole record\n" +
             "- Associate/disassociate two records via an N:N relationship\n" +
             "- Verify a record before destructive changes\n\n" +
+            "For field value formats, lookup targets and delete considerations, read docs://data_operations_guide before constructing fields_json.\n\n" +
             "RELATED TOOLS:\n" +
             "- get_tables → entity/attribute names before building fields_json\n" +
             "- execute_fetchxml → find lookup GUIDs and record_id\n" +
@@ -47,7 +48,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult manage_record(
             [Description("'create', 'read', 'update', 'delete', 'associate', 'disassociate'.")] string action = "",
             [Description("Entity logical name (e.g., 'account').")] string entity_name = "",
-            [Description("GUID. Required: read/update/delete. Empty: create.")] string record_id = "",
+            [Description("GUID of the primary record. Required for read/update/delete/associate/disassociate; must be empty for create.")] string record_id = "",
             [Description("JSON object of field values. Required: create/update. Polymorphic lookup: 'fieldname@targetentity' key. Activity party fields (to/from/cc/bcc/requiredattendees/optionalattendees): JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Single party auto-wrapped: {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Optional: \"addressused\":\"email\". Regular lookup: {\"fieldname\": \"guid\"}.")] string fields_json = "",
             [Description("Read only. Comma-separated columns. Empty = all.")] string columns = "",
             [Description("Related Entity Name for associate/disassociate.")] string related_entity_name = "",

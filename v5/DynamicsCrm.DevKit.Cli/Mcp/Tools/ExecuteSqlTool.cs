@@ -41,6 +41,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- Query Dataverse records with the Dataverse Web API SQL subset (JOINs, aggregates, WHERE, ORDER BY)\n" +
             "- Read-only analytical queries, multi-table joins, or summaries after validating logical names\n\n" +
+            "Read docs://instructions_for_sql when composing complex queries, joins, aggregates or paged results.\n\n" +
             "RELATED TOOLS:\n" +
             "- get_tables → discover entity and attribute logical names before querying\n" +
             "- execute_fetchxml → alternative for FetchXML-specific conditions or deep hierarchies\n" +

@@ -109,28 +109,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageCommandResult)),
         Description(
-            "Modern command bar buttons (appaction) for MDA + visibility/enable rules (appactionrule).\n\n" +
-
-            "ONLY for 'modern', 'Power Fx', 'formula', 'appaction', 'new command bar', 'command designer'. NOT for 'button'/'ribbon'/'custom button'/generic button → use manage_ribbon. When in doubt → manage_ribbon.\n\n" +
-
-            "Actions: list, detail (rules+children), create, update, hide/show (OOB override per app), add_flyout/update_flyout (Dropdown), add_split_button/update_split_button (Split), add_flyout_item/remove_flyout_item (Dropdown + Split).\n\n" +
-
-            "Commands are app-scoped (same entity differs per app); origin='default' excludes auto-migrated. CRITICAL: if error mentions 'classic ribbon button', STOP and report — don't call other tools.\n\n" +
-
-            "Name resolution: entity_name, app_name, javascript_webresource, icon_webresource resolve Display Name contains first, then logical/unique/schema contains. Fuzzy label (within entity+location+app) or app_name: 0/multi matches → ask user; 1 → auto-resolve.\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- Add/update modern command bar buttons in MDA (Power Fx / appaction only)\n" +
-            "- Hide/show OOB or custom commands in a specific app\n" +
-            "- Inspect appactionrule visibility/enable rules (include_rules=true)\n\n" +
-            "RELATED TOOLS:\n" +
-            "- manage_ribbon → classic/legacy RibbonDiffXml buttons (NOT modern appaction)\n" +
-            "- manage_app → app module metadata (commands are app-scoped)\n" +
-            "- get_tables → entity logical/display names for entity_name\n" +
-            "- publish_customizations → batch publish after multiple command changes")]
+            "Manage modern model-driven app command bar appactions, including buttons, dropdowns, split buttons, visibility and enable rules. Use only for explicitly modern/Power Fx/command designer requests; for classic or generic ribbon buttons use manage_ribbon.\n\n" +
+            "Commands are app-scoped. origin=default excludes auto-migrated commands. If an error identifies a classic ribbon button, stop and report it. Entity, app and web-resource names resolve display name first, then logical/unique/schema; ambiguous matches require disambiguation.\n\n" +
+            "Actions and their parameters cover list/detail/create/update/hide/show and flyout/split operations. Use include_rules or include_children to inspect related records.")]
         public CallToolResult manage_command(
             [Description("list/detail/create/update/hide/show/add_flyout/update_flyout/add_flyout_item/remove_flyout_item/add_split_button/update_split_button.")] string action = "",
-            [Description("appaction GUID. Required: detail/update.")] string command_id = "",
+            [Description("appaction GUID. Required for update, update_flyout, update_split_button, and remove_flyout_item. For detail use command_id or label with entity_name and location; hide/show also support label-based lookup.")] string command_id = "",
             [Description("Entity Display Name or logical name. Required: create.")] string entity_name = "",
             [Description("form/main_grid/sub_grid/associated_grid/quick_form/global_header/dashboard. Required: create.")] string location = "",
             [Description("App module GUID. Required: create (or app_name).")] string app_id = "",
@@ -140,10 +124,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Handler (e.g. 'Namespace.fn').")] string javascript_function = "",
             [Description("Icon name (e.g. 'SalesPlaybook'). 'none' = clear.")] string font_icon = "",
             [Description("Icon WR name/GUID. 'none' = clear.")] string icon_webresource = "",
-            [Description("")] string tooltip_title = "",
-            [Description("")] string tooltip_description = "",
+            [Description("Tooltip title for create/update and flyout/split button create/update.")] string tooltip_title = "",
+            [Description("Tooltip description for create/update and flyout/split button create/update.")] string tooltip_description = "",
             [Description("Order. Default 100 on create.")] int sequence = 0,
-            [Description("")] bool hidden = false,
+            [Description("Initial hidden state for create, add_flyout, or add_split_button. add_flyout_item creates a visible item. For existing commands use action='hide' or 'show'.")] bool hidden = false,
             [Description("MDA name contains.")] string app_name = "",
             [Description("default/migrated/enhanced_migrated/all.")] string origin = "",
             [Description("javascript/formula/none filter.")] string action_type = "",
@@ -151,7 +135,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Add appactionrule records.")] bool include_rules = false,
             [Description("Dropdown/split items.")] bool include_children = false,
             [Description("1–500.")] int max_records = 50,
-            [Description("JSON array of items for add_flyout/add_split_button: {label, onclick_type, javascript_webresource, javascript_function, sequence}.")] string items = "",
+            [Description("add_flyout/add_split_button: non-empty JSON array serialized as a string. Each item requires label; optional string fields: onclick_type (none/javascript/formula), javascript_webresource, javascript_function, sequence (integer encoded as a JSON string, e.g. \"10000\"). Omitted or invalid sequence defaults to item order in steps of 10000.")] string items = "",
             [Description("GUID of Dropdown or Split Button. Required: add_flyout_item.")] string flyout_command_id = "")
         {
             var actionName = (action ?? "").Trim().ToLowerInvariant();

@@ -32,6 +32,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- Query Dataverse records with deterministic columns, filters, joins, or aggregates\n" +
             "- Page through a bounded result after validating logical names\n\n" +
+            "For FetchXML joins, operators and paging rules, read docs://data_operations_guide when building a query.\n\n" +
             "RELATED TOOLS:\n" +
             "- get_tables → discover entity and attribute logical names\n" +
             "- search_records → keyword relevance search\n" +

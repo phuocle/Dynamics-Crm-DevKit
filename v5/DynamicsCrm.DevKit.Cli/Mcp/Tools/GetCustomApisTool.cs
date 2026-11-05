@@ -63,6 +63,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Inspect a Custom API's request/response parameters and plugin binding before registering or invoking it\n" +
             "- Discover Custom APIs bound to a specific entity\n" +
             "- Distinguish modern Custom APIs from legacy workflow Custom Actions\n\n" +
+            "For Custom API and related server-logic inspection modes, read docs://server_logic_guide.\n\n" +
             "RELATED TOOLS:\n" +
             "- get_messages → legacy workflow Custom Actions (category=3) + SDK messages\n" +
             "- get_plugins → plugin assemblies/types/steps registered on these APIs\n" +

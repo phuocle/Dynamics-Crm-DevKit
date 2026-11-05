@@ -45,6 +45,9 @@
 	  <Content Include="icon.ico" />
 	</ItemGroup>
 	<ItemGroup>
+	  <EmbeddedResource Include="Mcp\Resources\Instructions\*.md" LogicalName="DynamicsCrm.DevKit.Cli.Mcp.Resources.Instructions.%(Filename)%(Extension)" />
+	</ItemGroup>
+	<ItemGroup>
 	  <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 	    <_Parameter1>DynamicsCrm.DevKit.Cli.UnitTests</_Parameter1>
 	  </AssemblyAttribute>

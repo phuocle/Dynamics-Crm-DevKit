@@ -48,6 +48,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- List flows by name/owner/status\n" +
             "- Inspect a specific flow + recent runs\n" +
             "- Drill into run history with status_filter (debug failures)\n\n" +
+            "For cloud-flow list/detail/run modes and filters, read docs://server_logic_guide.\n\n" +
             "RELATED TOOLS:\n" +
             "- get_workflows → classic workflows (category=0)\n" +
             "- get_business_process_flows → BPF definitions + stages\n" +
