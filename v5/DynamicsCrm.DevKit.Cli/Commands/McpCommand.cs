@@ -246,8 +246,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         /// target user. Returns <c>null</c> if the user cannot be resolved, does not
         /// exist, or is disabled. Never throws — the caller checks for <c>null</c>.
         /// Privilege check is done separately via <see cref="RoleGateHelper.IsSystemAdministrator"/>
-        /// before calling this method. Internal so the <c>devkit tool call</c> branch
-        /// shares the identical resolution (and its stderr diagnostics).
+        /// before calling this method.
         /// </summary>
         internal static Guid? ResolveAsUser(ServiceClient serviceClient, string asUser, out string display)
         {

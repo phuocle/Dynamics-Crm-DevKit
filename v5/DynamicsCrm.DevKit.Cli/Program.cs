@@ -51,13 +51,6 @@ namespace DynamicsCrm.DevKit.Cli
                     return 1;
                 }
 
-                // `devkit tool` runs in its own lifecycle: no update check, no
-                // WaitForKeyPress, parse errors mapped to the branch's exit codes.
-                if (args != null && args.Length > 0 && string.Equals(args[0], "tool", StringComparison.OrdinalIgnoreCase))
-                {
-                    return await Tool.ToolProgram.RunAsync(args);
-                }
-
                 var updateTask = UpdateChecker.CheckAsync();
 
                 // Show help if no args or explicit help request
