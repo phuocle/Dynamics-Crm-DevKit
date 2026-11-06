@@ -55,5 +55,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("pluginStepCount")]
         public int PluginStepCount { get; set; }
+
+        [JsonPropertyName("xamlParseStatus")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? XamlParseStatus { get; set; }
+
+        [JsonPropertyName("parseIssues")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<WorkflowParseIssue>? ParseIssues { get; set; }
+
+        [JsonPropertyName("dependencies")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public WorkflowDependencies? Dependencies { get; set; }
+
+        [JsonPropertyName("steps")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<WorkflowStepNode>? Steps { get; set; }
     }
 }

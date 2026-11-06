@@ -118,5 +118,29 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("modifiedOn")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string ModifiedOn { get; set; }
+
+        [JsonPropertyName("category")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Category { get; set; }
+
+        [JsonPropertyName("xamlParseStatus")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string XamlParseStatus { get; set; }
+
+        [JsonPropertyName("workflowText")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string WorkflowText { get; set; }
+
+        [JsonPropertyName("parseIssues")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public System.Collections.Generic.List<WorkflowParseIssue> ParseIssues { get; set; }
+
+        [JsonPropertyName("dependencies")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public WorkflowDependencies Dependencies { get; set; }
+
+        [JsonPropertyName("steps")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public System.Collections.Generic.List<WorkflowStepNode> Steps { get; set; }
     }
 }

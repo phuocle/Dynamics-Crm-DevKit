@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -49,6 +50,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- Discover available SDK messages for an entity before writing plugin registration\n" +
             "- Inspect a legacy Custom Action's input/output parameters from XAML\n" +
+            "- Inspect a Custom Action's decompiled steps and dependencies\n" +
+            "MIGRATION RULE (STRICT): Inspect and convert ONE custom action at a time in detail mode. Never batch-convert actions.\n\n" +
             "- Check plugin step count registered on a specific message\n\n" +
             "RELATED TOOLS:\n" +
             "- get_custom_apis → modern Custom API definitions (replaces Custom Actions)\n" +
@@ -201,8 +204,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var owner = workflow.GetAttributeValue<EntityReference>("ownerid")?.Name ?? "";
             var modifiedOn = workflow.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd") ?? "";
 
-            var (inputParams, outputParams) = GetActionParameters(workflowId);
+            var (inputParams, outputParams, xaml) = GetActionParameters(workflowId);
             var pluginStepCount = sdkMsg != null ? CountPluginSteps(sdkMsg.Id) : 0;
+
+            var decompiled = new WorkflowEntry
+            {
+                WorkflowId = workflowId.ToString(),
+                Name = name,
+                PrimaryEntity = primaryEntity,
+                Mode = "Custom Action",
+                Scope = ScopeMap.TryGetValue(scopeValue, out var actionScope) ? actionScope : scopeValue.ToString(),
+                Category = "Custom Action"
+            };
+            WorkflowXamlDecompiler.Decompile(xaml, decompiled, _orgService);
 
             var detail = new CustomActionDetail
             {
@@ -218,7 +232,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ModifiedOn = modifiedOn,
                 InputParameters = inputParams.Count > 0 ? inputParams : null,
                 OutputParameters = outputParams.Count > 0 ? outputParams : null,
-                PluginStepCount = pluginStepCount
+                PluginStepCount = pluginStepCount,
+                XamlParseStatus = decompiled.XamlParseStatus,
+                ParseIssues = decompiled.ParseIssues,
+                Dependencies = decompiled.Dependencies,
+                Steps = decompiled.Steps
             };
 
             var structured = new GetMessagesResult
@@ -229,7 +247,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
 
             return Success(
-                $"custom action '{name}': {inputParams.Count} input params, {outputParams.Count} output params, {pluginStepCount} plugin steps.",
+                $"custom action '{name}': {inputParams.Count} input params, {outputParams.Count} output params, {pluginStepCount} plugin steps. XAML: {decompiled.XamlParseStatus}.",
                 structured);
         }
 
@@ -258,6 +276,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private Entity FindCustomAction(string actionName)
         {
+            var unprefixedName = RemovePublisherPrefix(actionName);
             var fetchXml = $@"<fetch top='1'>
   <entity name='workflow'>
     <attribute name='workflowid'/>
@@ -277,6 +296,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
       <filter type='or'>
         <condition attribute='name' operator='eq' value='{EscapeXml(actionName)}'/>
         <condition attribute='uniquename' operator='eq' value='{EscapeXml(actionName)}'/>
+        <condition attribute='uniquename' operator='eq' value='{EscapeXml(unprefixedName)}'/>
       </filter>
     </filter>
   </entity>
@@ -336,7 +356,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return 0;
         }
 
-        private (List<ActionParameterEntry> inputs, List<ActionParameterEntry> outputs) GetActionParameters(Guid workflowId)
+        private (List<ActionParameterEntry> inputs, List<ActionParameterEntry> outputs, string xaml) GetActionParameters(Guid workflowId)
         {
             var inputs = new List<ActionParameterEntry>();
             var outputs = new List<ActionParameterEntry>();
@@ -351,10 +371,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 </fetch>";
 
             var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
-            if (result.Entities.Count == 0) return (inputs, outputs);
+            if (result.Entities.Count == 0) return (inputs, outputs, null);
 
             var xaml = result.Entities[0].GetAttributeValue<string>("xaml") ?? "";
-            if (string.IsNullOrEmpty(xaml)) return (inputs, outputs);
+            if (string.IsNullOrEmpty(xaml)) return (inputs, outputs, null);
 
             // XAML is typically a single line — split by <x:Property> tags instead of newlines.
             // Each property has Name, Type (InArgument/OutArgument/InOutArgument),
@@ -401,7 +421,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (isOutput) outputs.Add(entry);
             }
 
-            return (inputs, outputs);
+            return (inputs, outputs, xaml);
         }
 
         /// <summary>
@@ -570,5 +590,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string EscapeXml(string value) =>
             System.Security.SecurityElement.Escape(value ?? "") ?? "";
+
+        private static string RemovePublisherPrefix(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name)) return name;
+            var separator = name.IndexOf('_');
+            return separator > 0 && separator < name.Length - 1 ? name.Substring(separator + 1) : name;
+        }
     }
 }

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -224,6 +225,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <attribute name='ismanaged'/>
     <attribute name='iscustomizable'/>
     <attribute name='businessprocesstype'/>
+    <attribute name='category'/>
+    <attribute name='xaml'/>
     <attribute name='ownerid'/>
     <attribute name='createdby'/>
     <attribute name='createdon'/>
@@ -231,7 +234,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <attribute name='modifiedon'/>
     <filter>
       <condition attribute='workflowid' operator='eq' value='{EscapeXml(workflowId.Trim())}'/>
-      <condition attribute='category' operator='eq' value='0'/>
+      <condition attribute='category' operator='in'><value>0</value><value>3</value></condition>
       <condition attribute='type' operator='eq' value='1'/>
     </filter>
   </entity>
@@ -239,9 +242,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
-                return Error($"Classic workflow '{workflowId.Trim()}' not found.", "Ensure it is category=0 (classic workflow), not a BPF or modern flow.");
+                return Error($"Workflow '{workflowId.Trim()}' not found.", "Use a Classic Workflow (category=0) or Custom Action (category=3) ID, not a BPF or modern flow.");
 
             var entry = MapEntity(result.Entities[0], includeDetail: true);
+            var categoryValue = result.Entities[0].GetAttributeValue<OptionSetValue>("category")?.Value;
+            entry.Category = categoryValue switch { 0 => "Classic Workflow", 3 => "Custom Action", _ => "Workflow" };
+            WorkflowXamlDecompiler.Decompile(result.Entities[0].GetAttributeValue<string>("xaml"), entry, _orgService);
+            entry.WorkflowText = WorkflowTextRenderer.Render(entry);
             var structured = new GetWorkflowsResult
             {
                 Mode = "detail",
@@ -408,6 +415,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(entry.PrimaryEntity))
                 sb.Append($" on {entry.PrimaryEntity}");
             sb.Append('.');
+            if (!string.IsNullOrWhiteSpace(entry.XamlParseStatus))
+                sb.Append(" XAML: ").Append(entry.XamlParseStatus).Append('.');
             return sb.ToString();
         }
 
