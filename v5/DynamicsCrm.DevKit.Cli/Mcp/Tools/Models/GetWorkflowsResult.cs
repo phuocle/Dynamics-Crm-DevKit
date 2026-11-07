@@ -27,9 +27,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string TriggerField { get; set; }
 
-        [JsonPropertyName("summary")]
+        // JSON key must NOT be "summary": McpToolResults.Success injects a string
+        // "summary" into every structured payload, and the declared output schema
+        // would then reject the payload (object|null expected, string found).
+        [JsonPropertyName("counts")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public WorkflowSummary Summary { get; set; }
+        public WorkflowSummary Counts { get; set; }
 
         [JsonPropertyName("workflows")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

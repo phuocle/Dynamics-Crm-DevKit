@@ -46,12 +46,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string XamlParseStatus { get; set; }
 
-        [JsonPropertyName("conditions")]
+        [JsonPropertyName("steps")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<string> Conditions { get; set; }
+        public List<WorkflowStepNode> Steps { get; set; }
 
-        [JsonPropertyName("actions")]
+        [JsonPropertyName("ruleText")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<string> Actions { get; set; }
+        public string RuleText { get; set; }
+
+        [JsonPropertyName("parseIssues")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<WorkflowParseIssue> ParseIssues { get; set; }
     }
 }

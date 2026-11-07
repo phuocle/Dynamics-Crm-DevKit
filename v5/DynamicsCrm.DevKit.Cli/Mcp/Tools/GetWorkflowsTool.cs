@@ -148,7 +148,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ModeFilter = NullIfEmpty(normalizedMode),
                     StatusFilter = normalizedStatus == "active" ? null : normalizedStatus,
                     TriggerField = NullIfEmpty(triggerField),
-                    Summary = null,
+                    Counts = null,
                     Workflows = null
                 };
                 var entityPart = string.IsNullOrWhiteSpace(entityName) ? "" : $" on {entityName}";
@@ -184,7 +184,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ModeFilter = NullIfEmpty(normalizedMode),
                 StatusFilter = normalizedStatus == "active" ? null : normalizedStatus,
                 TriggerField = NullIfEmpty(triggerField),
-                Summary = summary,
+                Counts = summary,
                 Workflows = workflows
             };
 

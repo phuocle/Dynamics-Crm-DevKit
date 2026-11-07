@@ -52,7 +52,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
             }
         }
 
-        private static Dictionary<string, string> BuildSymbols(XElement root, WorkflowMetadataResolver resolver)
+        // Shared with BusinessRuleXamlDecompiler (same assembly): the symbol model of
+        // Dataverse XAML (GetEntityProperty/Evaluate*/ConvertCrmXrmTypes) is identical
+        // for classic workflows and business rules.
+        internal static Dictionary<string, string> BuildSymbols(XElement root, WorkflowMetadataResolver resolver)
         {
             var symbols = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (var variable in root.Descendants().Where(e => Local(e) == "Variable"))
@@ -432,7 +435,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
             return issues;
         }
 
-        private static bool HasUnsupportedExpression(WorkflowExpressionNode expression)
+        internal static bool HasUnsupportedExpression(WorkflowExpressionNode expression)
         {
             if (expression == null) return false;
             if (expression.Kind == "raw" || expression.Kind == "stepOutput" || expression.Kind == "variable") return true;
@@ -461,7 +464,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
             return int.TryParse(value, out var result) ? result : null;
         }
 
-        private static void NumberNodes(List<WorkflowStepNode> nodes, string prefix)
+        internal static void NumberNodes(List<WorkflowStepNode> nodes, string prefix)
         {
             for (var i = 0; i < nodes.Count; i++)
             {
@@ -559,7 +562,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
             var token = NormalizeVariable(value);
             return symbols.TryGetValue(token, out var resolved) ? resolved : value.Trim();
         }
-        private static string ResolveDeep(string value, Dictionary<string, string> symbols)
+        internal static string ResolveDeep(string value, Dictionary<string, string> symbols)
         {
             if (string.IsNullOrWhiteSpace(value)) return value;
             var resolved = value.Trim();

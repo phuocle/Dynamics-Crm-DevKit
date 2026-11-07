@@ -176,7 +176,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
                 WriteStep(child, indent, lines);
         }
 
-        private static string FormatExpression(WorkflowExpressionNode node, string fallback)
+        // Shared with BusinessRuleTextRenderer (same assembly).
+        internal static string FormatExpression(WorkflowExpressionNode node, string fallback)
         {
             if (node == null) return Clean(fallback) ?? "(value unavailable)";
             var args = node.Arguments ?? new List<WorkflowExpressionNode>();

@@ -9,9 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text.RegularExpressions;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -29,7 +29,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetBusinessRulesResult)),
         Description(
-            "Business rules (client-side logic) for an entity. rule_id empty = list; set = detail (conditions+actions from XAML). " +
+            "Business rules (client-side logic) for an entity. rule_id empty = list; set = detail (DSL steps decompiled from XAML). " +
             "Rules run BEFORE form JS. Scope 'Entity' = all forms.\n\n" +
             "WHEN TO USE:\n" +
             "- Inspect a business rule's conditions and actions before refactoring or disabling it\n" +
@@ -177,10 +177,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"Pass entity_name '{primary}' - this rule's primary entity.");
 
             var xaml = entity.GetAttributeValue<string>("xaml");
-            var parsedXaml = !string.IsNullOrEmpty(xaml)
-                ? ParseXaml(xaml)
-                : new XamlParseResult { ParseStatus = "no xaml" };
-
             var detail = new BusinessRuleDetailEntry
             {
                 RuleId = ruleId.ToString(),
@@ -192,15 +188,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 CreatedOn = entity.GetAttributeValue<DateTime?>("createdon")?.ToString("yyyy-MM-dd HH:mm:ss"),
                 CreatedBy = entity.GetAttributeValue<EntityReference>("createdby")?.Name,
                 ModifiedOn = entity.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd HH:mm:ss"),
-                ModifiedBy = entity.GetAttributeValue<EntityReference>("modifiedby")?.Name,
-                Conditions = parsedXaml.Conditions,
-                Actions = parsedXaml.Actions,
-                XamlParseStatus = parsedXaml.ParseStatus
+                ModifiedBy = entity.GetAttributeValue<EntityReference>("modifiedby")?.Name
             };
+            BusinessRuleXamlDecompiler.Decompile(xaml, detail, _orgService);
+            detail.RuleText = BusinessRuleTextRenderer.Render(detail.Steps);
 
-            var condCount = detail.Conditions?.Count ?? 0;
-            var actionCount = detail.Actions?.Count ?? 0;
-            var detailMsg = $"Business rule '{detail.Name}': {condCount} conditions, {actionCount} actions [xamlParseStatus={parsedXaml.ParseStatus}].";
+            var stepCount = CountSteps(detail.Steps);
+            var detailMsg = $"Business rule '{detail.Name}': {stepCount} steps [xamlParseStatus={detail.XamlParseStatus}].";
 
             return Success(
                 detailMsg,
@@ -224,93 +218,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return response.EntityMetadata.ObjectTypeCode;
         }
 
-        private static XamlParseResult ParseXaml(string xaml)
-        {
-            var conditions = new List<string>();
-            var actions = new List<string>();
-
-            var fieldMatches = Regex.Matches(xaml,
-                @"GetEntityProperty\s+Attribute=""(?<attr>[^""]+)""\s+Entity=""\[InputEntities\(\&quot;(?<ref>[^\&]+)\&",
-                RegexOptions.Singleline);
-            var evaluatedFields = new List<string>();
-            foreach (Match m in fieldMatches)
-                evaluatedFields.Add(m.Groups["attr"].Value);
-
-            var opMatches = Regex.Matches(xaml,
-                @"ConditionOperator""\>(?<op>[^<]+)\<",
-                RegexOptions.Singleline);
-            var operators = new List<string>();
-            foreach (Match m in opMatches)
-                operators.Add(m.Groups["op"].Value);
-
-            var constMatches = Regex.Matches(xaml,
-                @"WorkflowPropertyType\.(?<type>\w+),\s*""(?<val>[^""]*)""\s*,\s*""(?<typename>[^""]*)""",
-                RegexOptions.Singleline);
-            var constants = new List<string>();
-            foreach (Match m in constMatches)
-                constants.Add($"{m.Groups["val"].Value} ({m.Groups["typename"].Value})");
-
-            for (var i = 0; i < evaluatedFields.Count; i++)
-            {
-                var field = evaluatedFields[i];
-                var op = i < operators.Count ? operators[i] : "?";
-                var val = i < constants.Count ? constants[i] : "";
-                if (!string.IsNullOrEmpty(val))
-                    conditions.Add($"IF {field} {op} \"{val}\"");
-                else
-                    conditions.Add($"IF {field} {op}");
-            }
-
-            var visMatches = Regex.Matches(xaml,
-                @"SetVisibility\s+ControlId=""(?<ctrl>[^""]+)""[^/]*IsVisible=""(?<vis>[^""]+)""",
-                RegexOptions.Singleline);
-            foreach (Match m in visMatches)
-                actions.Add($"SetVisibility: {m.Groups["ctrl"].Value} = {m.Groups["vis"].Value}");
-
-            var reqMatches = Regex.Matches(xaml,
-                @"SetRequired\s+ControlId=""(?<ctrl>[^""]+)""[^/]*Required=""(?<req>[^""]+)""",
-                RegexOptions.Singleline);
-            foreach (Match m in reqMatches)
-                actions.Add($"SetRequired: {m.Groups["ctrl"].Value} = {m.Groups["req"].Value}");
-
-            var setValMatches = Regex.Matches(xaml,
-                @"SetAttributeValue\s+Attribute=""(?<attr>[^""]+)""[^>]*EntityName=""(?<ent>[^""]+)""",
-                RegexOptions.Singleline);
-            foreach (Match m in setValMatches)
-                actions.Add($"SetValue: {m.Groups["ent"].Value}.{m.Groups["attr"].Value}");
-
-            var errorMatches = Regex.Matches(xaml,
-                @"ShowError\s+[^>]*Message=""(?<msg>[^""]+)""",
-                RegexOptions.Singleline);
-            foreach (Match m in errorMatches)
-                actions.Add($"ShowError: {m.Groups["msg"].Value}");
-
-            var lockMatches = Regex.Matches(xaml,
-                @"LockField\s+ControlId=""(?<ctrl>[^""]+)""",
-                RegexOptions.Singleline);
-            foreach (Match m in lockMatches)
-                actions.Add($"LockField: {m.Groups["ctrl"].Value}");
-
-            var unlockMatches = Regex.Matches(xaml,
-                @"UnlockField\s+ControlId=""(?<ctrl>[^""]+)""",
-                RegexOptions.Singleline);
-            foreach (Match m in unlockMatches)
-                actions.Add($"UnlockField: {m.Groups["ctrl"].Value}");
-
-            var defValMatches = Regex.Matches(xaml,
-                @"SetDefaultValue\s+Attribute=""(?<attr>[^""]+)""",
-                RegexOptions.Singleline);
-            foreach (Match m in defValMatches)
-                actions.Add($"SetDefaultValue: {m.Groups["attr"].Value}");
-
-            return new XamlParseResult
-            {
-                Conditions = conditions.Count > 0 ? conditions : null,
-                Actions = actions.Count > 0 ? actions : null,
-                ParseStatus = string.IsNullOrWhiteSpace(xaml) ? "no xaml" : "complete"
-            };
-        }
-
         private static string SanitizeDescription(string description)
         {
             if (string.IsNullOrWhiteSpace(description)) return null;
@@ -321,11 +228,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return trimmed;
         }
 
-        private sealed class XamlParseResult
+        private static int CountSteps(List<WorkflowStepNode> steps)
         {
-            public List<string> Conditions { get; set; }
-            public List<string> Actions { get; set; }
-            public string ParseStatus { get; set; }
+            var count = 0;
+            foreach (var step in steps ?? new List<WorkflowStepNode>())
+            {
+                count++;
+                count += CountSteps(step.Steps);
+                count += (step.Branches ?? new List<WorkflowConditionBranch>()).Sum(b => CountSteps(b.Steps));
+            }
+            return count;
         }
     }
 }
