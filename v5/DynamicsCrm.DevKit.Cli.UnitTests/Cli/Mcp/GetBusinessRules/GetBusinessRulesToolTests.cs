@@ -1,7 +1,8 @@
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Reflection;
-using System.Text;
 
 using DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Shared;
 
@@ -11,9 +12,6 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.GetBusinessRules;
 public class GetBusinessRulesToolTests
 {
     private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.GetBusinessRulesTool);
-
-    private static readonly MethodInfo ParseXamlMethod = ToolType
-        .GetMethod("ParseXaml", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     private static readonly MethodInfo SanitizeDescriptionMethod = ToolType
         .GetMethod("SanitizeDescription", BindingFlags.NonPublic | BindingFlags.Static)!;
@@ -25,35 +23,42 @@ public class GetBusinessRulesToolTests
             .GetMethod("EscapeTab", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     // ──────────────────────────────────────────────
-    // ParseXaml — fallback messages reference correct tool
+    // XAML decompile — graceful degradation statuses
     // ──────────────────────────────────────────────
 
-    private static string ParseXaml(string xaml)
+    private static string DecompileStatus(string xaml)
     {
-        var result = ParseXamlMethod.Invoke(null, [xaml])!;
-        var resultType = result.GetType();
-        var conditions = resultType.GetProperty("Conditions")?.GetValue(result) as System.Collections.IList;
-        var actions = resultType.GetProperty("Actions")?.GetValue(result) as System.Collections.IList;
-        bool isEmpty = (conditions == null || conditions.Count == 0) && (actions == null || actions.Count == 0);
-        // Fallback message matches production FormatRuleDetail text
-        return isEmpty ? "[XAML] (no conditions or actions extracted - use manage_record(action='read') with columns 'xaml' to inspect raw)" : (string)(resultType.GetProperty("ParseStatus")?.GetValue(result) ?? "");
+        var entry = new BusinessRuleDetailEntry();
+        BusinessRuleXamlDecompiler.Decompile(xaml, entry, null);
+        return entry.XamlParseStatus;
     }
 
     [TestMethod]
-    public void ParseXaml_EmptyXaml_ReferencesManageRecord()
+    public void Decompile_EmptyXaml_ReturnsNoXamlStatus()
     {
-        var result = ParseXaml("<root></root>");
-        Assert.IsTrue(result.Contains("manage_record"), $"Fallback message should reference 'manage_record', got: {result}");
-        Assert.IsFalse(result.Contains("get_record"), $"Fallback message should NOT reference 'get_record', got: {result}");
+        Assert.AreEqual("no xaml", DecompileStatus(" "));
     }
 
     [TestMethod]
-    public void ParseXaml_InvalidXaml_ReferencesManageRecord()
+    public void Decompile_InvalidXaml_ReturnsParseErrorStatus()
     {
-        // Pass something that won't match any regex patterns
-        var result = ParseXaml("not valid xaml at all");
-        Assert.IsTrue(result.Contains("manage_record"), $"Fallback message should reference 'manage_record', got: {result}");
-        Assert.IsFalse(result.Contains("get_record"), $"Fallback message should NOT reference 'get_record', got: {result}");
+        Assert.IsTrue(DecompileStatus("not valid xaml at all").StartsWith("parse error"),
+            "Invalid XAML should surface a 'parse error' status.");
+    }
+
+    [TestMethod]
+    public void Decompile_XamlWithoutRuleSteps_ReturnsCompleteWithNoSteps()
+    {
+        const string xaml = """
+            <Activity xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+                      xmlns:mxswa="clr-namespace:Microsoft.Xrm.Sdk.Workflow.Activities;assembly=Microsoft.Xrm.Sdk.Workflow">
+              <mxswa:Workflow />
+            </Activity>
+            """;
+        var entry = new BusinessRuleDetailEntry();
+        BusinessRuleXamlDecompiler.Decompile(xaml, entry, null);
+        Assert.AreEqual("complete", entry.XamlParseStatus);
+        Assert.IsNull(BusinessRuleTextRenderer.Render(entry.Steps));
     }
 
     // ──────────────────────────────────────────────

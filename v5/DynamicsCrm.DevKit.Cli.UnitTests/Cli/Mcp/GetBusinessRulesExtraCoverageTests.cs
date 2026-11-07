@@ -113,18 +113,54 @@ public sealed class GetBusinessRulesExtraCoverageTests
     public void GetBusinessRules_Detail_ValidationAndParsing()
     {
         var ruleId = Guid.NewGuid();
-        var xaml = @"<Activity>
-            <GetEntityProperty Attribute=""telephone1"" Entity=""[InputEntities(&quot;primary_entity&quot;)]"" />
-            <ConditionOperator>Equal</ConditionOperator>
-            <WorkflowPropertyType.String,""123"",""System.String"">
-            <SetVisibility ControlId=""telephone1"" IsVisible=""True"" />
-            <SetRequired ControlId=""telephone1"" Required=""True"" />
-            <SetAttributeValue Attribute=""telephone1"" EntityName=""account"" />
-            <ShowError Message=""Invalid Phone"" />
-            <LockField ControlId=""telephone1"" />
-            <UnlockField ControlId=""fax"" />
-            <SetDefaultValue Attribute=""creditlimit"" />
-        </Activity>";
+        // Valid business-rule XAML: the DSL decompiler parses real XML, so the
+        // fixture must be well-formed (the old regex parser accepted pseudo-XAML).
+        var xaml = """
+            <Activity xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+                      xmlns:mxswa="clr-namespace:Microsoft.Xrm.Sdk.Workflow.Activities;assembly=Microsoft.Xrm.Sdk.Workflow"
+                      xmlns:mcwc="clr-namespace:Microsoft.Crm.Workflow.ClientActivities;assembly=Microsoft.Crm.Workflow">
+              <mxswa:Workflow>
+                <mxswa:ActivityReference AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.ConditionSequence, Microsoft.Crm.Workflow" DisplayName="ConditionStep1">
+                  <mxswa:ActivityReference.Arguments><InArgument x:TypeArguments="x:Boolean" x:Key="Wait">False</InArgument></mxswa:ActivityReference.Arguments>
+                  <mxswa:ActivityReference.Properties>
+                    <sco:Collection x:TypeArguments="Variable" x:Key="Variables">
+                      <Variable x:TypeArguments="x:Boolean" Default="False" Name="ConditionBranchStep2_condition" />
+                      <Variable x:TypeArguments="x:Object" Name="ConditionBranchStep2_1" />
+                    </sco:Collection>
+                    <sco:Collection x:TypeArguments="Activity" x:Key="Activities">
+                      <mxswa:GetEntityProperty Attribute="telephone1" Entity="[InputEntities(&quot;primaryEntity&quot;)]" EntityName="account" Value="[ConditionBranchStep2_1]" />
+                      <mxswa:ActivityReference AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.EvaluateCondition, Microsoft.Crm.Workflow" DisplayName="EvaluateCondition">
+                        <mxswa:ActivityReference.Arguments>
+                          <InArgument x:TypeArguments="mxsq:ConditionOperator" x:Key="ConditionOperator">Null</InArgument>
+                          <x:Null x:Key="Parameters" />
+                          <InArgument x:TypeArguments="x:Object" x:Key="Operand">[ConditionBranchStep2_1]</InArgument>
+                          <OutArgument x:TypeArguments="x:Boolean" x:Key="Result">[ConditionBranchStep2_condition]</OutArgument>
+                        </mxswa:ActivityReference.Arguments>
+                      </mxswa:ActivityReference>
+                      <mxswa:ActivityReference AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.ConditionBranch, Microsoft.Crm.Workflow" DisplayName="ConditionBranchStep2">
+                        <mxswa:ActivityReference.Arguments><InArgument x:TypeArguments="x:Boolean" x:Key="Condition">[ConditionBranchStep2_condition]</InArgument></mxswa:ActivityReference.Arguments>
+                        <mxswa:ActivityReference.Properties>
+                          <mxswa:ActivityReference x:Key="Then" AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.Composite, Microsoft.Crm.Workflow" DisplayName="ConditionBranchStep2">
+                            <mxswa:ActivityReference.Properties>
+                              <sco:Collection x:TypeArguments="Activity" x:Key="Activities">
+                                <Sequence DisplayName="SetVisibilityStep1: New Action"><mcwc:SetVisibility ControlId="telephone1" IsVisible="False" /></Sequence>
+                                <Sequence DisplayName="SetRequiredStep2: New Action"><mcwc:SetRequired ControlId="telephone1" Required="True" /></Sequence>
+                                <Sequence DisplayName="ShowErrorStep3: New Action"><mcwc:ShowError Message="Invalid Phone" /></Sequence>
+                                <Sequence DisplayName="LockFieldStep4: New Action"><mcwc:LockField ControlId="telephone1" /></Sequence>
+                                <Sequence DisplayName="UnlockFieldStep5: New Action"><mcwc:UnlockField ControlId="fax" /></Sequence>
+                              </sco:Collection>
+                            </mxswa:ActivityReference.Properties>
+                          </mxswa:ActivityReference>
+                        </mxswa:ActivityReference.Properties>
+                      </mxswa:ActivityReference>
+                    </sco:Collection>
+                  </mxswa:ActivityReference.Properties>
+                </mxswa:ActivityReference>
+              </mxswa:Workflow>
+            </Activity>
+            """;
 
         _fake.OnRetrieveMultiple = query =>
         {
@@ -152,6 +188,7 @@ public sealed class GetBusinessRulesExtraCoverageTests
         Assert.IsFalse(res.IsError == true, res.GetText());
         StringAssert.Contains(res.GetText(), "Complex Business Rule");
         StringAssert.Contains(res.GetText(), "complete");
+        StringAssert.Contains(res.GetText(), "6 steps");
     }
 
     [TestMethod]
