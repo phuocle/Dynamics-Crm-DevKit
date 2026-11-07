@@ -1,12 +1,14 @@
 # TESTCALL FORMAT TEMPLATE
 
-Rules for every `testcall/{N}.{tool}.md` file (39 files, one shared Wiki format). Keep this file short on purpose — every rule below matters.
+Rules for every `TestAllMcpCall/{N}.{tool}.md` file (40 files, one shared Wiki format). Keep this file short on purpose — every rule below matters.
+
+**Numbering convention:** files are ordered readonly tools first, then mutation tools — alphabetical by tool name inside each group (`1`–`18` readonly including `16.read_instruction`, `19`–`40` mutations). A new tool takes the next number in its group; every later file in that group shifts +1.
 
 **Golden reference: `3.get_audit_history.md`** — reviewed and approved by anh Phước. Read it first; compare your file side-by-side with it before reporting done. More approved examples: `1`, `4`, `5`.
 
 ## 📍 CURRENT PHASE (2026-08-29): DRY-RUN TESTING
 
-All 37 tools are refactored (rule6 + hints) and their testcall files are fully live-captured and ✅-approved. `29.manage_function` was added 2026-10-03 with the tool-39 release — its file is fresh-captured (live + error + dry-run via `devkit tool call --dry-run`), not yet ✅-approved. The phase now is **testing every dry-run path** of every tool that supports it, via the separate `devkit-claude-dry-run` MCP server. Read rule 5 (rewritten for this phase) and the dry-run workflow below before touching any file. If this task gets interrupted, resume here: pick the next dry-run-capable tool without a dry-run block at the end of its testcall file and continue.
+All 37 tools are refactored (rule6 + hints) and their TestAllMcpCall files are fully live-captured and ✅-approved. `30.manage_function` (numbered 30 after the 2026-11-07 read_instruction renumber) was added 2026-10-03 with the tool-39 release — its file is fresh-captured (live + error + dry-run via `devkit tool call --dry-run`), not yet ✅-approved. The phase now is **testing every dry-run path** of every tool that supports it, via the separate `devkit-claude-dry-run` MCP server. Read rule 5 (rewritten for this phase) and the dry-run workflow below before touching any file. If this task gets interrupted, resume here: pick the next dry-run-capable tool without a dry-run block at the end of its TestAllMcpCall file and continue.
 
 Dry-run-capable tools (grep `_options.DryRun` / `return DryRun(` under `DynamicsCrm.DevKit.Cli/Mcp/Tools/`): `18.create_records`, `19.execute_webapi` (non-GET only), `21.manage_app`, `22.manage_chart`, `23.manage_choice`, `24.manage_column`, `25.manage_command`, `26.manage_deleted_records`, `27.manage_environment_variable`, `28.manage_form`, `29.manage_function` (invoke only), `30.manage_record`, `31.manage_record_file` (uses `Status="dry_run"` in structured output, not the `[DryRun]` prefix — verify), `32.manage_relationship`, `33.manage_report`, `34.manage_ribbon`, `35.manage_role`, `36.manage_table`, `37.manage_view`, `38.manage_webresource`, `39.publish_customizations`. Read-only `get_*`/`search_records`/`whoami`/`parse_record_url`/`execute_fetchxml`/`execute_sql` have no dry-run path — skip them.
 
@@ -27,7 +29,7 @@ Dry-run-capable tools (grep `_options.DryRun` / `return DryRun(` under `Dynamics
 ## 🔨 Build workflow (aP's rule) — HARD RULES, no exceptions
 
 1. **NEVER run `Release.DynamicsCrm.DevKit.Cli.ps1` on your own initiative.** The release script reinstalls the global tool and kills the live MCP connection. Running it without aP explicitly saying **"full test"** (exact words, in the current message) is a hard violation — "a capture needs the new build" is NOT permission. When in doubt: don't run it.
-2. **Code fix during a testcall task** (rule 2/3 fix) → plain `dotnet build` on `DynamicsCrm.DevKit.Cli` to verify compile, then **STOP and report to aP**: what changed, and that a release build + `/mcp` reconnect is required before re-capture. Do not continue capturing on your own — the connected MCP server still runs the OLD build, so any post-fix capture before release+reconnect is **stale** and must never be pasted as if it were the fixed behavior.
+2. **Code fix during a TestAllMcpCall task** (rule 2/3 fix) → plain `dotnet build` on `DynamicsCrm.DevKit.Cli` to verify compile, then **STOP and report to aP**: what changed, and that a release build + `/mcp` reconnect is required before re-capture. Do not continue capturing on your own — the connected MCP server still runs the OLD build, so any post-fix capture before release+reconnect is **stale** and must never be pasted as if it were the fixed behavior.
 3. **aP says "full test"** → run `.\DynamicsCrm.DevKit.Scripts\Release.DynamicsCrm.DevKit.Cli.ps1` → ask aP to `/mcp` reconnect `devkit-claude` → proof SHA via `whoami` → re-run tests live.
 
 ## Pre-report verification (aP cannot re-check params by hand — the AI MUST)
@@ -41,7 +43,7 @@ Before reporting done, on the FINAL build (after any release + `/mcp` reconnect)
 
 - **English only** in prose (headings, descriptions, RESULTS). Captured output data stays verbatim (Vietnamese/special chars in org data are never translated or stripped).
 - **No H1 with the tool name/number** — it is in the filename.
-- `# ✅ TOOL DESCRIPTION` — the `✅` prefix marks the tool as **fully tested and confirmed by anh Phước**. Convention: exactly one `✅`, one space, then `TOOL DESCRIPTION` (uppercase). **ONLY add it when aP explicitly asks** — that request means aP has reviewed the file and confirmed every test passed. Never add it on your own; a plain `# TOOL DESCRIPTION` means unreviewed/in-progress. This ✅ is the ONLY emoji allowed anywhere in a testcall file.
+- `# ✅ TOOL DESCRIPTION` — the `✅` prefix marks the tool as **fully tested and confirmed by anh Phước**. Convention: exactly one `✅`, one space, then `TOOL DESCRIPTION` (uppercase). **ONLY add it when aP explicitly asks** — that request means aP has reviewed the file and confirmed every test passed. Never add it on your own; a plain `# TOOL DESCRIPTION` means unreviewed/in-progress. This ✅ is the ONLY emoji allowed anywhere in a TestAllMcpCall file.
 - `# TOOL DESCRIPTION` → ` ```text ` block, copied **verbatim** from the tool's `Description(...)` attribute. Exactly 3 sections in order: plain text → `WHEN TO USE:` bullets → `RELATED TOOLS:` `- tool → purpose` bullets (`→`, not `->`). Deviation (extra/missing section) → copy verbatim + **REPORT to aP** — never rewrite the description yourself.
 - `# PARAMETERS` → ` ```text ` block, one aligned line per param: `key : type : description`. Types `string`/`int`/`bool` from the C# `[Description(...)]` signatures; defaults/ranges inline (`Default 5000.`). No params → `This tool takes no parameters.`
 - Per test:
