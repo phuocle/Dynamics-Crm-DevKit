@@ -1,4 +1,4 @@
-# Run Unit Tests with Code Coverage for all five DevKit components
+﻿# Run Unit Tests with Code Coverage for all five DevKit components
 # (Cli, Tool, Vsix, Analyzers, 2019) and generate a per-component HTML
 # report under <component project>\CoverageReport\.
 #
