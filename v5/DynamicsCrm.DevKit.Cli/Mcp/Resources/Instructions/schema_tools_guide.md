@@ -83,8 +83,8 @@ These CANNOT be turned off once enabled.
 
 | Type | Valid Formats |
 |------|-------------|
-| string | Text (default), Email, Url, Phone, TextArea, RichText |
-| memo | Text (default), Email, TextArea, RichText |
+| string | Text (default), Email, Url, Phone, TextArea, TickerSymbol, RichText |
+| memo | Text (default), RichText |
 | integer | None (default), Duration, TimeZone, Language, Locale |
 | datetime format | DateOnly, DateAndTime (default) |
 | datetime behavior | UserLocal (default), DateOnly, TimeZoneIndependent |

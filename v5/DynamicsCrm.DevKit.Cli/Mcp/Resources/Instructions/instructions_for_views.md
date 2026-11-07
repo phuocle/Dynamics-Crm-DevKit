@@ -110,8 +110,14 @@ Use `cell_updates_json` parameter with `action='update'` to patch cell attribute
 [{"cell_name":"statuscode","set_attributes":{"imageproviderwebresource":"new_/js/viewIcons.js","imageproviderfunctionname":"displayIconTooltip"}}]
 ```
 
+Detach attributes with `remove_attributes` (JSON array of attribute names) — each item must carry `set_attributes`, `remove_attributes`, or both. Example (detach a custom icon from a cell):
+```json
+[{"cell_name":"statuscode","remove_attributes":["imageproviderwebresource","imageproviderfunctionname"]}]
+```
+
 Rules:
 - `cell_name` must match an existing `<cell name="...">` in the LayoutXML (case-insensitive)
+- Each item must have at least one of `set_attributes` or `remove_attributes`
 - Protected attributes (`name`) cannot be set or removed
 - `width` cannot be removed but can be set (to resize)
 - Unknown/custom attributes are allowed

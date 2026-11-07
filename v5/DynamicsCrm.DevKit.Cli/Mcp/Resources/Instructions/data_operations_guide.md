@@ -108,7 +108,7 @@ Functions: count, sum, avg, min, max. Use groupby='true' for grouping.
 ### Rules
 - Use lowercase logical names for everything
 - Use get_tables to discover entity/attribute names if unsure
-- DO NOT use top/count/page in <fetch> -- use the max_records parameter instead
+- DO NOT use top/count/page/paging-cookie in <fetch> -- use the max_records parameter instead (the tool rejects these fetch attributes)
 - For advanced syntax, read schema://fetchxml
 
 ---
