@@ -72,9 +72,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("ISO 8601, e.g. '2026-01-01'. NEVER infer — ask user.")] string from_date = "",
             [Description("ISO 8601, e.g. '2026-04-30'. Must be >= from_date.")] string to_date = "",
             [Description("1-500.")] int count = 10,
-            [Description("Comma-separated logical names. Empty = auto-select creatable.")] string fields = "",
+            [Description("Comma-separated logical names (Display Names also resolve). Empty = auto-select creatable.")] string fields = "",
             [Description("0 = random; non-zero = reproducible.")] int seed = 0,
-            [Description("JSON array of {logicalname, operator, values[]}. Operators (see description). Example: [{\"logicalname\":\"jobtitle\",\"operator\":\"in\",\"values\":[\"CEO\",\"CFO\",\"CTO\"]}].")] string field_overrides = "")
+            [Description("JSON array of {logicalname, operator, values[]}. Operators: 'eq' (pin the exact value on every row), 'in' (random pick per row), 'startswith' (value + random suffix), 'endswith' (random prefix + value; '@domain' gets a realistic username prefix), 'contains' (seniority prefix + value), 'regex' (phone-style generator: [0-9]{n} becomes n digit placeholders, not a match test). Example: [{\"logicalname\":\"jobtitle\",\"operator\":\"in\",\"values\":[\"CEO\",\"CFO\",\"CTO\"]}].")] string field_overrides = "")
         {
             try
             {

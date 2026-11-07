@@ -38,7 +38,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Manage Dataverse security roles: list/detail/user, assign/unassign, create/update/delete/copy and restore. Mutations require System Administrator. list shows root roles; user includes direct and team-inherited roles.\n\n" +
             "update/delete save a pre-change backup; restore takes backupPath. Restoring a deleted role creates a new role ID and does not restore user/team assignments. Managed roles cannot be deleted; copy them instead. Ambiguous role-name matches return candidates.\n\n" +
-            "Use user with entity_name to inspect effective privileges; detail shows role privileges. Use whoami for the current user.")]
+            "Use user with entity_name to inspect effective privileges; detail shows role privileges. Use whoami for the current user.\n\n" +
+            "WHEN TO USE:\n" +
+            "- Debug 'access denied' (action='user' + entity_name)\n" +
+            "- Audit role privileges (action='detail')\n" +
+            "- Provision access (assign/unassign or create/copy)\n" +
+            "- Roll back a bad privilege update or a mistaken delete (action='restore')\n\n" +
+            "RELATED TOOLS:\n" +
+            "- whoami → verify the connected user and their direct roles\n" +
+            "- manage_record → read/create/update role and team records directly\n" +
+            "- execute_fetchxml → query roles and privileges with deterministic filters")]
         public async Task<CallToolResult> manage_role(
             McpServer server,
             [Description("list, detail, user, assign, unassign, create, update, delete, copy, restore.")] string action = "",
@@ -48,7 +57,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("list: filter (contains). detail: role display name when role_id is empty. create/update/copy: new name.")] string role_name = "",
             [Description("BU GUID. list: filter. create: target BU (empty = root).")] string business_unit_id = "",
             [Description("detail/user: filter privileges by entity Display Name or logical name.")] string entity_name = "",
-            [Description("update only. JSON array: [{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Organization\"},...]. entity = Display Name or logical name; right = Create|Read|Write|Delete|Append|AppendTo|Assign|Share, or '*' for all rights on the entity; depth = User|BusinessUnit|Parent:ChildBU|Organization, or None to remove.")] string privileges = "",
+            [Description("update only. JSON array: [{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Organization\"},...]. entity = Display Name or logical name; right = Create|Read|Write|Delete|Append|AppendTo|Assign|Share, or '*' for all rights on the entity; depth = User|BusinessUnit|Parent:ChildBU|Organization (broadest coverage: User < BusinessUnit < Parent:ChildBU < Organization), or None to remove.")] string privileges = "",
             [Description("restore only: .role.json backup file path written by update/delete (result's backupPath). Backups are at .devkit/manage_role/.")] string backup_path = "",
             [Description("list only. Max 250.")] int max_records = 50)
         {

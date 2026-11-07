@@ -43,7 +43,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Dataverse columns: create or update is detected automatically. Create requires entity_name, attribute_type, display_name, solution_name; update identifies an existing column by logical_name. Attribute type is immutable.\n\n" +
             "For lookup/customer/choice types, autonumbers and formula cloning, use the parameter contracts and read docs://schema_tools_guide for detailed rules. Formula cloning is create-only: use the formulaDefinition reference returned by get_tables, never formula content. For statuscode use add_options/update_options/delete_options; statecode is read-only.\n\n" +
-            "Names resolve Display Name first, then logical/schema name; ambiguous matches return candidates. Use get_tables to discover columns and manage_table to create tables.")]
+            "Names resolve Display Name first, then logical/schema name; ambiguous matches return candidates.\n\n" +
+            "WHEN TO USE:\n" +
+            "- Create a new attribute on an existing table (need attribute_type + display_name)\n" +
+            "- Clone a PowerFx, Calculated, or Rollup column read by get_tables (CREATE only)\n" +
+            "- Create/convert a string column to Autonumber or change its pattern/seed\n" +
+            "- Update mutable metadata, format, required_level, and picklist options\n" +
+            "- Add/rename/remove options on an existing picklist via add_options/update_options/delete_options\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_tables → discover entities and attribute logical names\n" +
+            "- manage_table → create the table before its columns\n" +
+            "- manage_relationship → 1:N / N:N relationships (lookup_target auto-creates 1:N)\n" +
+            "- manage_choice → global option sets\n" +
+            "- manage_record_file → file/image column data upload and download\n" +
+            "- execute_webapi → raw Web API for endpoints not covered here")]
         public CallToolResult manage_column(
             [Description("Logical name (e.g. 'account').")] string entity_name = "",
             [Description("Logical name of the existing attribute to update (e.g. 'new_priority'). For CREATE: optional lowercase override of logical name; if omitted derives from schema_name/display_name. Must start with publisher prefix.")] string logical_name = "",

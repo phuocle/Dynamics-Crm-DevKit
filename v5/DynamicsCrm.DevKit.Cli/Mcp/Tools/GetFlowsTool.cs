@@ -60,7 +60,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("list only. Owner contains.")] string owner_filter = "",
             [Description("'active' / 'draft' / 'suspended' / 'all'.")] string status = "active",
             [Description("runs only: succeeded/failed/running/cancelled/waiting/paused/skipped/suspended.")] string status_filter = "",
-            [Description("runs only. Max 43200.")] int minutes_ago = 1440,
+            [Description("runs only. Default 1440 (last 24h). Max 43200.")] int minutes_ago = 1440,
             [Description("1–250.")] int max_records = 50)
         {
             try

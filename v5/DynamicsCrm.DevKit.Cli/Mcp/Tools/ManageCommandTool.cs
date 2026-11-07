@@ -109,9 +109,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageCommandResult)),
         Description(
-            "Manage modern model-driven app command bar appactions, including buttons, dropdowns, split buttons, visibility and enable rules. Use only for explicitly modern/Power Fx/command designer requests; for classic or generic ribbon buttons use manage_ribbon.\n\n" +
-            "Commands are app-scoped. origin=default excludes auto-migrated commands. If an error identifies a classic ribbon button, stop and report it. Entity, app and web-resource names resolve display name first, then logical/unique/schema; ambiguous matches require disambiguation.\n\n" +
-            "Actions and their parameters cover list/detail/create/update/hide/show and flyout/split operations. Use include_rules or include_children to inspect related records.")]
+            "Manage modern model-driven app command bar appactions, including buttons, dropdowns, split buttons, visibility and enable rules. Use only for explicitly modern/Power Fx/command designer requests; for classic or generic ribbon buttons use manage_ribbon. When in doubt → manage_ribbon.\n\n" +
+            "Commands are app-scoped (the same entity has different commands per app). origin=default excludes auto-migrated commands. hide/show on an OOB command creates an app-scoped override row; showing an OOB command again deletes the override. create, update and hide/show auto-publish the affected entity so changes are visible immediately; flyout/split operations do not publish — call publish_customizations afterward if changes are not visible. If an error identifies a classic ribbon button, stop and report it. Entity, app and web-resource names resolve display name first, then logical/unique/schema; ambiguous matches require disambiguation.\n\n" +
+            "Actions and their parameters cover list/detail/create/update/hide/show and flyout/split operations. Use include_rules or include_children to inspect related records.\n\n" +
+            "WHEN TO USE:\n" +
+            "- Add/update modern command bar buttons in MDA (Power Fx / appaction only)\n" +
+            "- Hide/show OOB or custom commands in a specific app\n" +
+            "- Inspect appactionrule visibility/enable rules (include_rules=true)\n\n" +
+            "RELATED TOOLS:\n" +
+            "- manage_ribbon → classic/legacy RibbonDiffXml buttons (NOT modern appaction)\n" +
+            "- manage_app → app module metadata (commands are app-scoped)\n" +
+            "- get_tables → entity logical/display names for entity_name\n" +
+            "- publish_customizations → publish after flyout/split item changes (create/update/hide/show already auto-publish)")]
         public CallToolResult manage_command(
             [Description("list/detail/create/update/hide/show/add_flyout/update_flyout/add_flyout_item/remove_flyout_item/add_split_button/update_split_button.")] string action = "",
             [Description("appaction GUID. Required for update, update_flyout, update_split_button, and remove_flyout_item. For detail use command_id or label with entity_name and location; hide/show also support label-based lookup.")] string command_id = "",

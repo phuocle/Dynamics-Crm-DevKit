@@ -51,8 +51,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Discover available SDK messages for an entity before writing plugin registration\n" +
             "- Inspect a legacy Custom Action's input/output parameters from XAML\n" +
             "- Inspect a Custom Action's decompiled steps and dependencies\n" +
-            "MIGRATION RULE (STRICT): Inspect and convert ONE custom action at a time in detail mode. Never batch-convert actions.\n\n" +
             "- Check plugin step count registered on a specific message\n\n" +
+            "MIGRATION RULE (STRICT): Inspect and convert ONE custom action at a time in detail mode. Never batch-convert actions.\n\n" +
             "RELATED TOOLS:\n" +
             "- get_custom_apis → modern Custom API definitions (replaces Custom Actions)\n" +
             "- get_plugins → plugin assemblies/types/steps registered on these messages\n" +

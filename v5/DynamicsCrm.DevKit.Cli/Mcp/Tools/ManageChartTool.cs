@@ -64,7 +64,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Manage Dataverse system charts: list/detail/create/update/rename/set_default/undo. Chart FetchXML is built from entity metadata, without a view binding.\n\n" +
             "Create defaults to Pie with statecode and importsequencenumber/count unless measures alter the default. Pie or any create with measures/filter requires confirmation; inspect the plan and call again with confirmed=true only after user approval. undo takes the update result backupPath in presentationdescription.\n\n" +
-            "Read docs://schema_tools_guide for chart defaults, multi-series and confirmation workflow; get_tables discovers column names.")]
+            "Read docs://schema_tools_guide for chart defaults, multi-series and confirmation workflow.\n\n" +
+            "WHEN TO USE:\n" +
+            "- List or inspect system charts of an entity\n" +
+            "- Create a chart from group-by/aggregate columns, update chart type or columns, rename, set the entity default chart\n" +
+            "- Restore a chart from a .chart.json backup written by update (undo)\n\n" +
+            "RELATED TOOLS:\n" +
+            "- get_tables → column logical names for group_by_column/aggregate_column\n" +
+            "- publish_customizations → batch publish after multiple metadata changes\n" +
+            "- manage_view → views; execute_webapi → raw savedqueryvisualization access")]
         public async Task<CallToolResult> manage_chart(
             McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",
@@ -74,7 +82,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Chart type: Column, Bar, Line, Pie, Doughnut, Funnel, Area, Bubble, Radar. Create default: Column for multiple measures, otherwise Pie.")] string chart_type = "",
             [Description("Category / group-by attribute logical name or display name. Pie default: statecode.")] string group_by_column = "",
             [Description("Legend / measure attribute logical name or display name. Pie default: importsequencenumber.")] string aggregate_column = "",
-            [Description("Aggregation type: 'count' (default), 'sum', 'avg', 'min', 'max'.")] string aggregate_type = "count",
+            [Description("Aggregation type: 'count' (default), 'countcolumn', 'sum', 'avg', 'min', 'max'.")] string aggregate_type = "count",
             [Description("Multi-measure series: 'column:aggregate_type[:label]; ...' (e.g. 'estimatedvalue:sum:Revenue; importsequencenumber:count'). Mutually exclusive with aggregate_column/aggregate_type. Optional label becomes the series legend name.")] string measures = "",
             [Description("Structured datadescription filter: 'field op value; ...'. Operators: =, !=, >, >=, <, <=, like, in (comma-separated list), null, not-null. Example: 'statecode=0; estimatedvalue>1000000'.")] string filter = "",
             [Description("Custom presentation Chart XML override (create/update). For undo: path to the .chart.json backup file from {workspace}/.devkit/manage_chart/{entity}/.")] string presentationdescription = "",

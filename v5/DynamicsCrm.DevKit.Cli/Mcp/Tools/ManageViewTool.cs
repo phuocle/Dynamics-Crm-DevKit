@@ -65,7 +65,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("false = system views (savedquery), true = personal views (userquery) — scopes list and view_name resolution.")] bool is_personal_view = false,
             [Description("create/update: FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type). undo: .fetchxml.xml backup file path (pass layoutxml too).")] string fetchxml = "",
             [Description("undo only: .layoutxml.xml backup file path — required together with fetchxml to restore the pair verbatim.")] string layoutxml = "",
-            [Description("update: JSON array serialized as a string, e.g. [{\"cell_name\":\"name\",\"set_attributes\":{\"ishidden\":\"1\"}}]. Patch layout cell attributes without changing FetchXML; do not combine with fetchxml. Read docs://instructions_for_views for supported attributes and icon/tooltip contracts.")] string cell_updates_json = "")
+            [Description("update: JSON array serialized as a string, e.g. [{\"cell_name\":\"name\",\"set_attributes\":{\"ishidden\":\"1\"}}]. Each item must carry set_attributes, remove_attributes (JSON array of attribute names to detach, e.g. [{\"cell_name\":\"iconRendererProvider\",\"remove_attributes\":[\"imageproviderwebresource\"]}]), or both. Patch layout cell attributes without changing FetchXML; do not combine with fetchxml. Read docs://instructions_for_views for supported attributes and icon/tooltip contracts.")] string cell_updates_json = "")
         {
             try
             {

@@ -61,8 +61,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(BatchCreateResult)),
         Description(
             "Bulk create up to 5000 Dataverse records in parallel from inline JSON, a .json file or a .csv file. Partial failures do not roll back successful records. Use manage_record for single-record CRUD.\n\n" +
-            "Activity parties use objects with id and type; polymorphic lookups use field@targetentity. Records are stamped with an importsequencenumber unless explicitly supplied. bypass_custom_logic skips custom sync/async logic and requires System Administrator. Read docs://data_operations_guide for field formats and batch details.\n\n" +
-            "Use generate_demo_data to produce input and execute_fetchxml or search_records to verify records.")]
+            "records_json accepts inline JSON arrays (logical field names), .json file paths, or .csv file paths — CSV headers accept Display Names or logical names; unresolvable headers are skipped with a per-item warning. Field syntax: polymorphic lookups use field@targetentity (e.g. 'customerid@account'); activity party fields (to/from/cc/bcc/requiredattendees/organizer/customers/resources) are a JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"} — a single object is auto-wrapped; do NOT supply participationtypemask. Read docs://data_operations_guide for field formats and batch details.\n\n" +
+            "Records are stamped with a shared importsequencenumber so the batch can be queried and bulk-deleted as a unit; the value is returned as importSequenceNumber and an explicitly supplied value wins for that record. bypass_custom_logic skips custom sync/async plugins/workflows and requires System Administrator.\n\n" +
+            "WHEN TO USE:\n" +
+            "- Seed many records at once (accounts, contacts, tasks) or import from CSV\n" +
+            "- Pipe generate_demo_data output (.json) into records_json\n" +
+            "- High-throughput parallel creates (server hints concurrency when max_parallelism=0)\n\n" +
+            "RELATED TOOLS:\n" +
+            "- generate_demo_data → produce JSON to pipe into records_json\n" +
+            "- manage_record → single-record create/update/delete/associate/disassociate\n" +
+            "- search_records / execute_fetchxml → verify created records")]
         public async Task<CallToolResult> create_records(
             [Description("Entity Display Name or logical name (Display Name resolved first).")] string entity_name = "",
             [Description("Inline JSON array, .json file path, or .csv file path. Max 5000 records.")] string records_json = "",
