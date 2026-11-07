@@ -53,16 +53,15 @@ public class GetBusinessProcessFlowsToolTests
     }
 
     // ──────────────────────────────────────────────
-    // Status validation — empty string must default to "active"
+    // Status validation — empty/whitespace string must normalize to the declared default "all"
     // ──────────────────────────────────────────────
 
     [TestMethod]
     public void Status_EmptyString_DoesNotBypassValidation()
     {
-        // Before fix: status="" bypassed validation and acted as "all" instead of "active"
-        // After fix: status="" is normalized to "active" before any query
+        // status="" is normalized to the declared default "all" before any query
         var tool = CreateTool();
-        // With null serviceClient, "active" status will throw when it tries to query Dataverse.
+        // With null serviceClient, the status='all' path still queries Dataverse and throws.
         // But it should NOT return an error about invalid status.
         try
         {
@@ -78,7 +77,7 @@ public class GetBusinessProcessFlowsToolTests
     }
 
     [TestMethod]
-    public void Status_WhitespaceOnly_DefaultsToActive()
+    public void Status_WhitespaceOnly_DefaultsToAll()
     {
         var tool = CreateTool();
         try
