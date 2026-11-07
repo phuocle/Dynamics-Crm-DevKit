@@ -84,9 +84,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                         $"Org: {_serviceClient.ConnectedOrgFriendlyName} ({_serviceClient.ConnectedOrgUniqueName}) | " +
                         $"Version: {_serviceClient.ConnectedOrgVersion} | " +
                         $"Category: {displayCategory} ({toolCount} tools). " +
-                        "Tool descriptions reference docs:// resources for detailed contracts. " +
+                        "Tool descriptions reference docs:// and schema:// resources for detailed contracts. " +
                         "When your client supports MCP resources, read the relevant resource before complex operations; " +
-                        "use tool parameter descriptions for basic inputs and do not guess missing fields." +
+                        "if it does not support resources, call the read_instruction tool (empty name returns the catalog, a name returns the full content). " +
+                        "Use tool parameter descriptions for basic inputs and do not guess missing fields." +
                         (string.IsNullOrEmpty(impersonatedUserDisplay)
                             ? ""
                             : $" | Impersonating: {impersonatedUserDisplay} (CallerId set server-side)");
