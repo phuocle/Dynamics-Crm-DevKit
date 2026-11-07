@@ -1,4 +1,4 @@
-﻿using Dev.AllInOne.Shared;
+using Dev.AllInOne.Shared;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Workflow;
 using System.Activities;
@@ -11,16 +11,14 @@ namespace Dev.AllInOne.Server.Workflows
         // https://learn.microsoft.com/en-us/power-apps/developer/data-platform/workflow/workflow-extensions#add-parameters
         // Supported Input/Output types: bool, DateTime, Decimal, Double, EntityReference, int, Money, OptionSetValue, string
 
-        //[Default("Default Input Value")]
-        //[Input("Input Value")]
-        //[ReferenceTarget("account")]
-        //[RequiredArgument]
-        //[AttributeTarget("account", "industrycode")]
-        //public InArgument<EntityReference> InputValue { get; set; }
+        [Input("Input Value")]
+        [ReferenceTarget("account")]
+        [RequiredArgument]
+        public InArgument<EntityReference> InputValue { get; set; }
 
-        //[Default("Default Output Value")]
-        //[Output("Output Value")]
-        //public OutArgument<string> OutputValue { get; set; }
+        [Default("Default Output Value")]
+        [Output("Output Value")]
+        public OutArgument<string> OutputValue { get; set; }
 
         protected override void Execute(CodeActivityContext executionContext)
         {
