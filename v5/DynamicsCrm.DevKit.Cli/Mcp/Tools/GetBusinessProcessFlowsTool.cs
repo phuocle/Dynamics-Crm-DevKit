@@ -73,7 +73,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var normalizedStatus = (status ?? "").Trim().ToLowerInvariant();
                 if (string.IsNullOrEmpty(normalizedStatus))
-                    normalizedStatus = "active";
+                    normalizedStatus = "all";
 
                 if (normalizedStatus != "active" && normalizedStatus != "draft" && normalizedStatus != "all")
                     return Error($"Invalid status '{status}'.",
