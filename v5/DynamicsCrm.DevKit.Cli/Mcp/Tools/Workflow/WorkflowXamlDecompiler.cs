@@ -55,6 +55,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
         private static Dictionary<string, string> BuildSymbols(XElement root, WorkflowMetadataResolver resolver)
         {
             var symbols = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var variable in root.Descendants().Where(e => Local(e) == "Variable"))
+            {
+                var name = (string)variable.Attribute("Name");
+                var type = (string)variable.Attribute(Xaml + "TypeArguments");
+                var defaultValue = (string)variable.Attribute("Default");
+                if (!string.IsNullOrWhiteSpace(name) && type == "x:Boolean" && bool.TryParse(defaultValue, out var boolean) &&
+                    !root.Descendants().Any(e => (Local(e) == "OutArgument" && NormalizeVariable(e.Value) == name) ||
+                        (Local(e) == "Assign" && NormalizeVariable((string)e.Attribute("To")) == name)))
+                    symbols[name] = boolean ? "true" : "false";
+                var span = variable.Descendants().FirstOrDefault(e => Local(e) == "XrmTimeSpan");
+                if (string.IsNullOrWhiteSpace(name) || span == null) continue;
+                var parts = new[] { "Years", "Months", "Days", "Hours", "Minutes" };
+                if (parts.All(p => int.TryParse((string)span.Attribute(p), out _)))
+                    symbols[name] = "XrmTimeSpan(" + string.Join(", ", parts.Select(p => (string)span.Attribute(p))) + ")";
+            }
             foreach (var property in root.Descendants().Where(e => Local(e) == "GetEntityProperty"))
             {
                 var variable = property.Attribute("Value")?.Value;
@@ -142,29 +157,38 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
                     Target = FindTarget(element, kind)
                 };
 
-                if (kind.Equals("Condition", StringComparison.OrdinalIgnoreCase))
+                if (kind.Equals("Wait", StringComparison.OrdinalIgnoreCase) &&
+                    ((string)element.Attribute("AssemblyQualifiedName") ?? "").Contains(".ConditionSequence,", StringComparison.Ordinal) &&
+                    bool.TryParse(Argument(element, "Wait"), out var waitEnabled))
+                    node.WaitEnabled = waitEnabled;
+
+                if (kind.Equals("Condition", StringComparison.OrdinalIgnoreCase) || kind.Equals("Wait", StringComparison.OrdinalIgnoreCase))
                 {
                     var ownedBranches = element.Descendants()
                         .Where(IsConditionBranch)
                         .Where(b => b.Ancestors().FirstOrDefault(a => stepElements.Contains(a) &&
-                            StepName.Match((string)a.Attribute("DisplayName") ?? "").Groups[1].Value.Equals("Condition", StringComparison.OrdinalIgnoreCase)) == element)
+                            new[] { "Condition", "Wait" }.Contains(StepName.Match((string)a.Attribute("DisplayName") ?? "").Groups[1].Value, StringComparer.OrdinalIgnoreCase)) == element)
                         .OrderBy(b => DocumentOrder(root, b))
                         .ToList();
                     if (ownedBranches.Count > 0)
                     {
+                        if (node.WaitEnabled == true)
+                            node.WaitBranchSelection = ownedBranches.Count > 1 ? "alternative" : "single";
                         node.Branches = new List<WorkflowConditionBranch>(ownedBranches.Count);
                         var hasConditionalBranch = false;
                         foreach (var branchElement in ownedBranches)
                         {
                             var rawCondition = Argument(branchElement, "Condition");
                             var expression = Resolve(rawCondition, symbols);
-                            var isElse = string.IsNullOrWhiteSpace(rawCondition) ||
-                                string.Equals(expression?.Trim().Trim('[', ']'), "True", StringComparison.OrdinalIgnoreCase);
-                            var branchType = isElse ? "Else" : hasConditionalBranch ? "ElseIf" : "If";
+                            var isElse = !kind.Equals("Wait", StringComparison.OrdinalIgnoreCase) &&
+                                (string.IsNullOrWhiteSpace(rawCondition) ||
+                                string.Equals(expression?.Trim().Trim('[', ']'), "True", StringComparison.OrdinalIgnoreCase));
+                            var branchType = kind.Equals("Wait", StringComparison.OrdinalIgnoreCase) ? "Wait" : isElse ? "Else" : hasConditionalBranch ? "ElseIf" : "If";
                             if (!isElse) hasConditionalBranch = true;
                             var branch = new WorkflowConditionBranch
                             {
                                 BranchType = branchType,
+                                SourceDisplayName = (string)branchElement.Attribute("DisplayName"),
                                 ConditionExpression = isElse ? null : expression,
                                 ConditionExpressionAst = isElse ? null : WorkflowExpressionParser.Parse(expression),
                                 RawConditionExpression = rawCondition,
@@ -262,7 +286,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
 
                 nodeByElement[element] = node;
                 var parent = element.Ancestors().FirstOrDefault(nodeByElement.ContainsKey);
-                var parentBranch = parent != null && nodeByElement[parent].StepType == "Condition"
+                var parentBranch = parent != null && (nodeByElement[parent].StepType == "Condition" || nodeByElement[parent].StepType == "Wait")
                     ? element.Ancestors().FirstOrDefault(branchByElement.ContainsKey)
                     : null;
                 if (parentBranch != null) branchByElement[parentBranch].Steps.Add(node);
@@ -274,7 +298,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
                 }
             }
             NumberNodes(roots, "");
+            var nodes = Flatten(roots).ToList();
+            var creates = nodes.Where(n => n.StepType == "Create" && CreatedEntityKey(n.Target) != null)
+                .GroupBy(n => CreatedEntityKey(n.Target), StringComparer.OrdinalIgnoreCase)
+                .Where(g => g.Count() == 1).ToDictionary(g => g.Key, g => g.Single(), StringComparer.OrdinalIgnoreCase);
+            foreach (var node in nodes.Where(n => n.StepType != "Create"))
+            {
+                var key = CreatedEntityKey(node.Target);
+                if (key != null && creates.TryGetValue(key, out var creator)) node.TargetStepNumber = creator.StepNumber;
+            }
             return roots;
+        }
+
+        private static string CreatedEntityKey(string target)
+        {
+            var match = Regex.Match(target ?? "", "CreatedEntities\\(\"(?<key>[^\"]+)\"\\)");
+            return match.Success ? Regex.Replace(match.Groups["key"].Value, "#Temp$", "", RegexOptions.IgnoreCase) : null;
         }
 
         private static WorkflowDependencies BuildDependencies(XElement root, List<WorkflowStepNode> steps)
@@ -325,11 +364,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
             var issues = new List<WorkflowParseIssue>();
             var parsedStepKeys = Flatten(steps).Select(n => StepIdentity(n.SourceDisplayName)).Where(n => n != null)
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var waitBranchNames = root.Descendants().Where(IsConditionBranch)
+                .Select(e => (string)e.Attribute("DisplayName"))
+                .Where(n => !string.IsNullOrWhiteSpace(n))
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
             foreach (var element in root.Descendants().Where(e => !string.IsNullOrWhiteSpace((string)e.Attribute("DisplayName"))))
             {
                 var displayName = (string)element.Attribute("DisplayName");
                 var match = AnyStepName.Match(displayName);
-                if (!match.Success || match.Groups["kind"].Value.Equals("ConditionBranch", StringComparison.OrdinalIgnoreCase)) continue;
+                if (!match.Success || match.Groups["kind"].Value.Equals("ConditionBranch", StringComparison.OrdinalIgnoreCase) ||
+                    (match.Groups["kind"].Value.Equals("WaitBranch", StringComparison.OrdinalIgnoreCase) && waitBranchNames.Contains(displayName))) continue;
                 if (!StepName.IsMatch(displayName))
                     AddParseIssue(issues, "UNRECOGNIZED_STEP", displayName, Local(element), "A displayed workflow step was not recognized and may be missing from steps.", element.ToString(SaveOptions.DisableFormatting));
                 else if (!parsedStepKeys.Contains(StepIdentity(displayName)))
@@ -345,9 +389,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
                     AddParseIssue(issues, "UNSUPPORTED_STEP_SEMANTICS", node.SourceDisplayName, node.SourceActivityType,
                         "This step is recognized, but its full execution semantics are not yet represented in the structured step object.",
                         root.Descendants().FirstOrDefault(e => Local(e) == node.SourceActivityType && (string)e.Attribute("DisplayName") == node.SourceDisplayName)?.ToString(SaveOptions.DisableFormatting));
+                if (node.StepType == "Wait" && (node.WaitEnabled != true || node.Branches == null || node.Branches.Any(b => string.IsNullOrWhiteSpace(b.RawConditionExpression))))
+                    AddParseIssue(issues, "UNRESOLVED_WAIT", node.SourceDisplayName, node.SourceActivityType,
+                        "The wait flag or a branch condition could not be resolved; inspect the source XAML.");
                 if (node.StepType == "SetState" && (!node.StateCode.HasValue || !node.StatusCode.HasValue))
                     AddParseIssue(issues, "UNRESOLVED_STATE", node.SourceDisplayName, node.SourceActivityType,
                         "The state or status value could not be resolved from the workflow XAML.");
+                if (new[] { "Update", "Assign", "SetState", "Delete" }.Contains(node.StepType) && CreatedEntityKey(node.Target) != null && node.TargetStepNumber == null)
+                    AddParseIssue(issues, "UNRESOLVED_TARGET", node.SourceDisplayName, node.SourceActivityType,
+                        "The created-record target could not be linked unambiguously to a create step; inspect the raw target.");
                 if (node.OwnerExpression != null && HasUnsupportedExpression(node.OwnerReference))
                     AddParseIssue(issues, "UNSUPPORTED_EXPRESSION", node.SourceDisplayName, node.SourceActivityType,
                         "The assigned owner expression is preserved as raw text because its structure is not recognized.");
@@ -371,10 +421,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
                             "A condition still contains an unparsed Dataverse object-array value.");
                     if (HasUnsupportedExpression(branch.ConditionExpressionAst))
                         AddParseIssue(issues, "UNSUPPORTED_EXPRESSION", node.SourceDisplayName, node.SourceActivityType,
-                            "A condition is preserved as raw text because its structure is not recognized.");
+                            "A condition contains an unresolved expression or an operator whose semantics are not verified; inspect the structured expression and source XAML.");
                 }
                 foreach (var argument in node.Arguments?.AsEnumerable() ?? Enumerable.Empty<WorkflowArgument>())
-                    if (HasUnsupportedExpression(argument.ExpressionAst))
+                    if (!string.Equals(argument.Direction, "Out", StringComparison.OrdinalIgnoreCase) && HasUnsupportedExpression(argument.ExpressionAst))
                         AddParseIssue(issues, "UNSUPPORTED_EXPRESSION", node.SourceDisplayName, node.SourceActivityType,
                             "An invocation argument is preserved as raw text because its structure is not recognized.");
             }
@@ -385,8 +435,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
         private static bool HasUnsupportedExpression(WorkflowExpressionNode expression)
         {
             if (expression == null) return false;
-            if (expression.Kind == "raw") return true;
-            if (expression.Kind == "function" && !new[] { "SelectFirstNonNull", "CreateCrmType" }.Contains(expression.Operator, StringComparer.OrdinalIgnoreCase)) return true;
+            if (expression.Kind == "raw" || expression.Kind == "stepOutput" || expression.Kind == "variable") return true;
+            if (expression.Kind == "function" && new[] { "Add", "Subtract" }.Contains(expression.Operator, StringComparer.OrdinalIgnoreCase) &&
+                !(expression.Arguments?.Any(a => a.Kind == "function" && a.Operator == "XrmTimeSpan") ?? false)) return true;
+            if (expression.Kind == "function" && !new[] { "SelectFirstNonNull", "CreateCrmType", "Add", "Subtract", "XrmTimeSpan" }.Contains(expression.Operator, StringComparer.OrdinalIgnoreCase)) return true;
             return (expression.Arguments?.AsEnumerable() ?? Enumerable.Empty<WorkflowExpressionNode>()).Any(HasUnsupportedExpression);
         }
 
@@ -551,7 +603,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
                 .Where(e => (string)e.Attribute(Xaml + "Key") is string key && key.EndsWith("#InArgumentRequired", StringComparison.Ordinal))
                 .Select(e => e.Value.Trim()).ToHashSet(StringComparer.OrdinalIgnoreCase);
             foreach (var argument in arguments)
-                argument.IsRequired = required.Contains(argument.Name);
+                argument.IsRequired = required.Contains(argument.Name) ? true : null;
             return arguments;
         }
         private static string NormalizeVariable(string value) => (value ?? "").Trim().Trim('[', ']');
@@ -574,8 +626,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
                 if (referenceToken.Success)
                     return Resolve("[" + referenceToken.Value + "]", symbols);
             }
-            if (quoted.Count > 0 && (op == "CreateCrmType" || op == null)) return "\"" + System.Net.WebUtility.HtmlDecode(quoted[0]) + "\"";
-            var refs = Regex.Matches(value, @"[A-Za-z_][A-Za-z0-9_]*Step\d+(?:_\d+)*").Cast<Match>().Select(m => Resolve("[" + m.Value + "]", symbols)).Distinct().ToList();
+            if (quoted.Count > 0 && (op == "CreateCrmType" || op == null))
+            {
+                if (value.Contains("WorkflowPropertyType.Integer", StringComparison.Ordinal) &&
+                    long.TryParse(quoted[0], System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var integer))
+                    return integer.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                return "\"" + System.Net.WebUtility.HtmlDecode(quoted[0]) + "\"";
+            }
+            var refs = Regex.Matches(value, @"[A-Za-z_][A-Za-z0-9_]*Step\d+(?:_\d+)*").Cast<Match>().Select(m => Resolve("[" + m.Value + "]", symbols)).ToList();
             if (refs.Count > 0) return op + "(" + string.Join(", ", refs) + ")";
             return value;
         }

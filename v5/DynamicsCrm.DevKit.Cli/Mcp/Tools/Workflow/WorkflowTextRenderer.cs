@@ -30,9 +30,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
                     WriteCondition(step, indent, lines);
                     return;
 
+                case "Wait":
+                    if (step.WaitEnabled != true)
+                    {
+                        Add(lines, indent, $"WAIT {step.Name ?? "(unnamed)"} (wait semantics unresolved)");
+                        foreach (var branch in step.Branches ?? new List<WorkflowConditionBranch>())
+                        {
+                            Add(lines, indent + 1, "CONDITION " + FormatExpression(branch.ConditionExpressionAst, branch.ConditionExpression));
+                            foreach (var child in branch.Steps ?? new List<WorkflowStepNode>())
+                                WriteStep(child, indent + 2, lines);
+                        }
+                        WriteChildren(step, indent + 1, lines);
+                    }
+                    else if (step.Branches == null || step.Branches.Count == 0)
+                    {
+                        Add(lines, indent, $"WAIT {step.Name ?? "(condition details unavailable)"}");
+                        WriteChildren(step, indent + 1, lines);
+                    }
+                    else if (step.WaitBranchSelection == "alternative")
+                    {
+                        Add(lines, indent, "WAIT FOR ONE OF:");
+                        foreach (var branch in step.Branches)
+                        {
+                            Add(lines, indent + 1, "WHEN " + FormatExpression(branch.ConditionExpressionAst, branch.ConditionExpression));
+                            foreach (var child in branch.Steps ?? new List<WorkflowStepNode>())
+                                WriteStep(child, indent + 2, lines);
+                        }
+                    }
+                    else
+                    {
+                        foreach (var branch in step.Branches)
+                        {
+                            Add(lines, indent, "WAIT UNTIL " + (branch.IsDefault ? "(condition unavailable)" : FormatExpression(branch.ConditionExpressionAst, branch.ConditionExpression)));
+                            foreach (var child in branch.Steps ?? new List<WorkflowStepNode>())
+                                WriteStep(child, indent + 1, lines);
+                        }
+                    }
+                    return;
+
                 case "Create":
                 case "Update":
-                    Add(lines, indent, $"{step.StepType.ToUpperInvariant()} {step.EntityName ?? step.Name}");
+                    Add(lines, indent, $"{step.StepType.ToUpperInvariant()} {step.EntityName ?? step.Name}" +
+                        (step.StepType == "Create" && step.StepNumber != null ? $" (step {step.StepNumber})" :
+                         step.TargetStepNumber == null ? "" : $" (created by step {step.TargetStepNumber})"));
                     WriteAssignments(step, indent + 1, lines);
                     WriteChildren(step, indent, lines);
                     return;
@@ -44,12 +84,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
                     return;
 
                 case "Assign":
-                    Add(lines, indent, $"ASSIGN {step.EntityName ?? "record"} TO {OwnerText(step)}");
+                    Add(lines, indent, $"ASSIGN {step.EntityName ?? "record"}" + (step.TargetStepNumber == null ? "" : $" (created by step {step.TargetStepNumber})") + $" TO {OwnerText(step)}");
                     return;
 
                 case "CustomActivity":
                     Add(lines, indent, $"CALL CUSTOM ACTIVITY {ActivityName(step)}");
-                    WriteArguments(step, indent + 1, lines);
+                    if (step.Arguments == null || step.Arguments.Count == 0)
+                        Add(lines, indent + 1, "PARAMETERS: none in XAML");
+                    else
+                        WriteArguments(step, indent + 1, lines);
                     return;
 
                 case "InvokeAction":
@@ -68,7 +111,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
                     return;
 
                 case "SetState":
-                    var state = $"SET STATE {step.EntityName ?? step.Name}";
+                    var state = $"SET STATE {step.EntityName ?? step.Name}" + (step.TargetStepNumber == null ? "" : $" (created by step {step.TargetStepNumber})");
                     if (step.StateCode.HasValue) state += $" statecode={step.StateCode.Value}";
                     if (step.StatusCode.HasValue) state += $" statuscode={step.StatusCode.Value}";
                     Add(lines, indent, state);
@@ -168,12 +211,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
                     };
                     return right == null ? $"{left} {comparison}" : $"{left} {comparison} {right}";
                 case "attribute": return $"{node.EntityName}.{node.AttributeName}";
-                case "literal": return node.DataType == "string" ? $"\"{Escape(Clean(node.Value))}\"" : node.Value;
+                case "literal": return node.DataType == "string" ? $"\"{Escape(node.Value)}\"" : node.Value;
                 case "currentDateTime": return "CURRENT DATE/TIME";
                 case "choice": return string.IsNullOrWhiteSpace(node.Label) ? node.Value : $"{node.Label} (value {node.Value})";
                 case "entityReference": return $"{node.Label} ({node.EntityName}, {node.Id})";
                 case "concatenate": return "CONCATENATE: " + string.Join(" + ", args.Select(a => FormatExpression(a, null)));
                 case "function":
+                    if (node.Operator == "XrmTimeSpan" && args.Count == 5)
+                        return $"XRM TIME SPAN (years={FormatExpression(args[0], null)}, months={FormatExpression(args[1], null)}, days={FormatExpression(args[2], null)}, hours={FormatExpression(args[3], null)}, minutes={FormatExpression(args[4], null)})";
+                    if (node.Operator == "RetrieveActivityCount")
+                        return $"RETRIEVE ACTIVITY COUNT ({string.Join(", ", args.Select(a => FormatExpression(a, null)))}; semantics unverified)";
                     var functionName = node.Operator == "SelectFirstNonNull" ? "FIRST NON-NULL VALUE OF" : (node.Operator ?? "FUNCTION").ToUpperInvariant();
                     return $"{functionName} {string.Join(", ", args.Select(a => FormatExpression(a, null)))}";
                 case "stepOutput": return $"OUTPUT OF {node.Value}";
@@ -189,10 +236,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
 
         private static string ActivityName(WorkflowStepNode step)
         {
+            var typeName = step.Expression?.Split(',')[0].Trim();
+            if (!string.IsNullOrWhiteSpace(typeName)) return typeName;
             var name = StripPrefix(step.Name, "Call");
             if (!string.IsNullOrWhiteSpace(name)) return name;
-            var typeName = step.Expression?.Split(',')[0].Split('.').LastOrDefault();
-            return typeName ?? "(activity name unavailable)";
+            return "(activity name unavailable)";
         }
 
         private static string StripPrefix(string text, string prefix) =>
@@ -204,7 +252,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
             ? null
             : text.Replace("\r", "\\r").Replace("\n", "\\n").Trim();
 
-        private static string Escape(string text) => text?.Replace("\\", "\\\\").Replace("\"", "\\\"");
+        private static string Escape(string text) => text?.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n");
 
         private static void Add(List<string> lines, int indent, string text) =>
             lines.Add(new string(' ', indent * 2) + text);

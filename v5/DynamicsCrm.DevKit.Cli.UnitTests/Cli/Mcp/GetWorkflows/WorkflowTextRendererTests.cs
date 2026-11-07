@@ -9,6 +9,12 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.GetWorkflows;
 public sealed class WorkflowTextRendererTests
 {
     [TestMethod]
+    public void Render_PreservesWhitespaceInStringLiterals()
+    {
+        var workflow = new WorkflowEntry { Steps = new List<WorkflowStepNode> { new() { StepType = "Create", EntityName = "task", Assignments = new List<WorkflowFieldAssignment> { new() { EntityName = "task", Field = "description", ValueExpressionAst = new WorkflowExpressionNode { Kind = "literal", DataType = "string", Value = "  hello \n " } } } } } };
+        StringAssert.Contains(WorkflowTextRenderer.Render(workflow), "\"  hello \\n \"");
+    }
+    [TestMethod]
     public void Render_UsesIndentedUppercaseKeywordsAndStructuredExpressions()
     {
         var workflow = new WorkflowEntry
@@ -94,7 +100,7 @@ public sealed class WorkflowTextRendererTests
                                     IsDefault = true,
                                     Steps = new List<WorkflowStepNode>
                                     {
-                                        new() { StepType = "CustomActivity", Name = "Call GetDataFromUrl" }
+                                        new() { StepType = "CustomActivity", Name = "Call Custom Workflow", Expression = "Dev.AllInOne.Server.Workflows.GetDataFromUrl, Dev.AllInOne.Server, Version=4.12.34.56" }
                                     }
                                 }
                             }
@@ -116,7 +122,7 @@ public sealed class WorkflowTextRendererTests
         var text = WorkflowTextRenderer.Render(workflow);
 
         Assert.AreEqual(
-            "STAGE 1\r\n  IF account.name IS NOT NULL\r\n    CREATE task\r\n      SET task.subject TO \"Created\"\r\n    STOP WORKFLOW Succeeded\r\n  ELSE IF account.name BEGINS WITH \"D\"\r\n    CALL CUSTOM ACTION v4_CustomAction\r\n      INPUT f = \"ABC\"\r\n  ELSE\r\n    CALL CUSTOM ACTIVITY GetDataFromUrl\r\nSTAGE 2\r\n  START CHILD WORKFLOW Child WF Acccount",
+            "STAGE 1\r\n  IF account.name IS NOT NULL\r\n    CREATE task\r\n      SET task.subject TO \"Created\"\r\n    STOP WORKFLOW Succeeded\r\n  ELSE IF account.name BEGINS WITH \"D\"\r\n    CALL CUSTOM ACTION v4_CustomAction\r\n      INPUT f = \"ABC\"\r\n  ELSE\r\n    CALL CUSTOM ACTIVITY Dev.AllInOne.Server.Workflows.GetDataFromUrl\r\n      PARAMETERS: none in XAML\r\nSTAGE 2\r\n  START CHILD WORKFLOW Child WF Acccount",
             text);
     }
 }

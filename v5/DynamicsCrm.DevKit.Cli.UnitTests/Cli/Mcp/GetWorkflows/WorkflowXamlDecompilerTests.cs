@@ -374,6 +374,106 @@ public sealed class WorkflowXamlDecompilerTests
     }
 
     [TestMethod]
+    public void Decompile_IntegerAndActivityCount_PreserveTypesAndUnknownSemantics()
+    {
+        const string xaml = """
+            <Activity xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:m="clr-namespace:Microsoft.Xrm.Sdk.Workflow.Activities;assembly=Microsoft.Xrm.Sdk.Workflow">
+              <m:ActivityReference DisplayName="WaitStep1: Count" AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.ConditionSequence, Microsoft.Crm.Workflow">
+                <m:ActivityReference.Arguments><InArgument x:Key="Wait">True</InArgument></m:ActivityReference.Arguments>
+                <Variable x:TypeArguments="x:Boolean" Default="False" Name="WaitBranchStep2_2" />
+                <m:ActivityReference AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.EvaluateExpression, Microsoft.Crm.Workflow"><m:ActivityReference.Arguments><InArgument x:Key="ExpressionOperator">RetrieveActivityCount</InArgument><InArgument x:Key="Parameters">[New Object() { WaitBranchStep2_2 }]</InArgument><OutArgument x:Key="Result">[WaitBranchStep2_1]</OutArgument></m:ActivityReference.Arguments></m:ActivityReference>
+                <m:ActivityReference AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.EvaluateExpression, Microsoft.Crm.Workflow"><m:ActivityReference.Arguments><InArgument x:Key="ExpressionOperator">CreateCrmType</InArgument><InArgument x:Key="Parameters">[New Object() { Microsoft.Xrm.Sdk.Workflow.WorkflowPropertyType.Integer, "1" }]</InArgument><OutArgument x:Key="Result">[WaitBranchStep2_3]</OutArgument></m:ActivityReference.Arguments></m:ActivityReference>
+                <m:ActivityReference AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.EvaluateCondition, Microsoft.Crm.Workflow"><m:ActivityReference.Arguments><InArgument x:Key="ConditionOperator">Equal</InArgument><InArgument x:Key="Operand">[WaitBranchStep2_1]</InArgument><InArgument x:Key="Parameters">[New Object() { WaitBranchStep2_3 }]</InArgument><OutArgument x:Key="Result">[condition]</OutArgument></m:ActivityReference.Arguments></m:ActivityReference>
+                <m:ActivityReference DisplayName="WaitBranchStep2" AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.ConditionBranch, Microsoft.Crm.Workflow"><m:ActivityReference.Arguments><InArgument x:Key="Condition">[condition]</InArgument></m:ActivityReference.Arguments></m:ActivityReference>
+              </m:ActivityReference>
+              <m:ActivityReference DisplayName="CustomActivityStep3: Invoke" AssemblyQualifiedName="Example.Activity, Example, Version=1.0.0.0"><m:ActivityReference.Arguments><InArgument x:Key="InputValue">[WaitBranchStep2_2]</InArgument><OutArgument x:Key="OutputValue">[output]</OutArgument></m:ActivityReference.Arguments></m:ActivityReference>
+            </Activity>
+            """;
+        var entry = new WorkflowEntry();
+        WorkflowXamlDecompiler.Decompile(xaml, entry);
+        var condition = entry.Steps[0].Branches.Single().ConditionExpressionAst;
+        Assert.AreEqual("RetrieveActivityCount", condition.Arguments[0].Operator);
+        Assert.AreEqual(false, condition.Arguments[0].SemanticsVerified);
+        Assert.AreEqual("false", condition.Arguments[0].Arguments[0].Value);
+        Assert.AreEqual("number", condition.Arguments[1].DataType);
+        Assert.AreEqual("1", condition.Arguments[1].Value);
+        Assert.IsTrue(entry.ParseIssues.Any(i => i.Code == "UNSUPPORTED_EXPRESSION"));
+        Assert.IsNull(entry.Steps[1].Arguments[0].IsRequired);
+        StringAssert.Contains(WorkflowTextRenderer.Render(entry), "RETRIEVE ACTIVITY COUNT (false; semantics unverified) = 1");
+    }
+
+    [TestMethod]
+    public void Decompile_DateSpanAndCreatedRecordReference_ArePreserved()
+    {
+        const string xaml = """
+            <Activity xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:m="clr-namespace:Microsoft.Xrm.Sdk.Workflow.Activities;assembly=Microsoft.Xrm.Sdk.Workflow">
+              <Sequence DisplayName="CreateStep1: Create task">
+                <Sequence.Variables><Variable Name="CreateStep1_2"><Variable.Default><Literal><XrmTimeSpan Years="0" Months="0" Days="1" Hours="0" Minutes="0" /></Literal></Variable.Default></Variable></Sequence.Variables>
+                <m:ActivityReference AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.EvaluateExpression, Microsoft.Crm.Workflow"><m:ActivityReference.Arguments><InArgument x:Key="ExpressionOperator">RetrieveCurrentTime</InArgument><InArgument x:Key="Parameters">[New Object() { }]</InArgument><OutArgument x:Key="Result">[CreateStep1_1]</OutArgument></m:ActivityReference.Arguments></m:ActivityReference>
+                <m:ActivityReference AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.EvaluateExpression, Microsoft.Crm.Workflow"><m:ActivityReference.Arguments><InArgument x:Key="ExpressionOperator">Add</InArgument><InArgument x:Key="Parameters">[New Object() { CreateStep1_1, CreateStep1_2 }]</InArgument><OutArgument x:Key="Result">[CreateStep1_3]</OutArgument></m:ActivityReference.Arguments></m:ActivityReference>
+                <m:CreateEntity EntityName="task" Entity="[CreatedEntities(&quot;CreateStep1_localParameter#Temp&quot;)]" />
+                <m:SetEntityProperty EntityName="task" Attribute="scheduledend" Value="[CreateStep1_3]" />
+              </Sequence>
+              <Sequence DisplayName="UpdateStep2: Update task"><m:UpdateEntity EntityName="task" Entity="[CreatedEntities(&quot;CreateStep1_localParameter&quot;)]" /></Sequence>
+            </Activity>
+            """;
+        var entry = new WorkflowEntry();
+        WorkflowXamlDecompiler.Decompile(xaml, entry);
+        var value = entry.Steps[0].Assignments.Single().ValueExpressionAst;
+        Assert.AreEqual("function", value.Kind);
+        Assert.AreEqual("Add", value.Operator);
+        Assert.AreEqual("XrmTimeSpan", value.Arguments[1].Operator);
+        Assert.AreEqual("1", value.Arguments[1].Arguments[2].Value);
+        Assert.AreEqual(entry.Steps[0].StepNumber, entry.Steps[1].TargetStepNumber);
+        StringAssert.Contains(WorkflowTextRenderer.Render(entry), "created by step 1");
+        var subtractEntry = new WorkflowEntry();
+        WorkflowXamlDecompiler.Decompile(xaml.Replace(">Add<", ">Subtract<"), subtractEntry);
+        Assert.AreEqual("Subtract", subtractEntry.Steps[0].Assignments.Single().ValueExpressionAst.Operator);
+        Assert.IsFalse(subtractEntry.ParseIssues.Any(i => i.Code == "UNSUPPORTED_EXPRESSION"));
+    }
+
+    [TestMethod]
+    public void Decompile_WaitBranches_PreservesConditionsAndNestedSteps()
+    {
+        const string xaml = """
+            <Activity xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:m="clr-namespace:Microsoft.Xrm.Sdk.Workflow.Activities;assembly=Microsoft.Xrm.Sdk.Workflow">
+              <m:ActivityReference DisplayName="WaitStep1: Wait" AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.ConditionSequence, Microsoft.Crm.Workflow">
+                <m:ActivityReference.Arguments><InArgument x:Key="Wait">True</InArgument></m:ActivityReference.Arguments>
+                <m:GetEntityProperty Attribute="name" EntityName="account" Value="[WaitBranchStep2_1]" />
+                <m:ActivityReference AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.EvaluateExpression, Microsoft.Crm.Workflow"><m:ActivityReference.Arguments><InArgument x:Key="ExpressionOperator">CreateCrmType</InArgument><InArgument x:Key="Parameters">[New Object() { Microsoft.Xrm.Sdk.Workflow.WorkflowPropertyType.String, "ABC", "String" }]</InArgument><OutArgument x:Key="Result">[WaitBranchStep2_2]</OutArgument></m:ActivityReference.Arguments></m:ActivityReference>
+                <m:ActivityReference AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.EvaluateCondition, Microsoft.Crm.Workflow"><m:ActivityReference.Arguments><InArgument x:Key="ConditionOperator">Equal</InArgument><InArgument x:Key="Operand">[WaitBranchStep2_1]</InArgument><InArgument x:Key="Parameters">[New Object() { WaitBranchStep2_2 }]</InArgument><OutArgument x:Key="Result">[condition]</OutArgument></m:ActivityReference.Arguments></m:ActivityReference>
+                <m:ActivityReference DisplayName="WaitBranchStep2" AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.ConditionBranch, Microsoft.Crm.Workflow"><m:ActivityReference.Arguments><InArgument x:Key="Condition">[condition]</InArgument></m:ActivityReference.Arguments><m:ActivityReference.Properties><m:ActivityReference DisplayName="WaitBranchStep2" AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.Composite, Microsoft.Crm.Workflow"><Sequence DisplayName="StopWorkflowStep3: Done"><TerminateWorkflow Exception="[Microsoft.Xrm.Sdk.OperationStatus.Succeeded]" /></Sequence></m:ActivityReference></m:ActivityReference.Properties></m:ActivityReference>
+              </m:ActivityReference>
+            </Activity>
+            """;
+        var entry = new WorkflowEntry();
+        WorkflowXamlDecompiler.Decompile(xaml, entry);
+        var branch = entry.Steps.Single().Branches.Single();
+        Assert.AreEqual("account.name = \"ABC\"", branch.ConditionExpression);
+        Assert.AreEqual("StopWorkflow", branch.Steps.Single().StepType);
+        Assert.IsFalse(entry.ParseIssues.Any(i => i.SourceDisplayName == "WaitBranchStep2"));
+        StringAssert.Contains(WorkflowTextRenderer.Render(entry), "WAIT UNTIL account.name = \"ABC\"");
+        StringAssert.Contains(WorkflowTextRenderer.Render(entry), "  STOP WORKFLOW Succeeded");
+        Assert.AreEqual(true, entry.Steps.Single().WaitEnabled);
+        Assert.AreEqual("single", entry.Steps.Single().WaitBranchSelection);
+        var secondBranch = "<m:ActivityReference DisplayName=\"WaitBranchStep4\" AssemblyQualifiedName=\"Microsoft.Crm.Workflow.Activities.ConditionBranch, Microsoft.Crm.Workflow\"><m:ActivityReference.Arguments><InArgument x:Key=\"Condition\">True</InArgument></m:ActivityReference.Arguments></m:ActivityReference>";
+        var alternatives = new WorkflowEntry();
+        WorkflowXamlDecompiler.Decompile(xaml.Replace("<m:ActivityReference DisplayName=\"WaitBranchStep2\" AssemblyQualifiedName=\"Microsoft.Crm.Workflow.Activities.ConditionBranch", secondBranch + "<m:ActivityReference DisplayName=\"WaitBranchStep2\" AssemblyQualifiedName=\"Microsoft.Crm.Workflow.Activities.ConditionBranch"), alternatives);
+        var wait = alternatives.Steps.Single();
+        Assert.AreEqual("alternative", wait.WaitBranchSelection);
+        Assert.AreEqual(2, wait.Branches.Count);
+        Assert.IsFalse(wait.Branches[0].IsDefault);
+        Assert.AreEqual("True", wait.Branches[0].ConditionExpression);
+        StringAssert.Contains(WorkflowTextRenderer.Render(alternatives), "WAIT FOR ONE OF:");
+        StringAssert.Contains(WorkflowTextRenderer.Render(alternatives), "WHEN account.name = \"ABC\"");
+        var unresolved = new WorkflowEntry();
+        WorkflowXamlDecompiler.Decompile(xaml.Replace("<InArgument x:Key=\"Wait\">True</InArgument>", "<InArgument x:Key=\"Wait\">False</InArgument>"), unresolved);
+        Assert.AreEqual(false, unresolved.Steps.Single().WaitEnabled);
+        Assert.IsTrue(unresolved.ParseIssues.Any(i => i.Code == "UNRESOLVED_WAIT"));
+        StringAssert.Contains(WorkflowTextRenderer.Render(unresolved), "wait semantics unresolved");
+    }
+
+    [TestMethod]
     public void Decompile_KnownStepOnUnsupportedElement_ReportsItInsteadOfDroppingSilently()
     {
         const string xaml = """

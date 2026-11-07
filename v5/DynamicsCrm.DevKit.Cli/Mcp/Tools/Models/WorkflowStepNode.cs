@@ -24,6 +24,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("target")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Target { get; set; }
+        [JsonPropertyName("targetStepNumber")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string TargetStepNumber { get; set; }
+        [JsonPropertyName("waitEnabled")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? WaitEnabled { get; set; }
+        [JsonPropertyName("waitBranchSelection")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string WaitBranchSelection { get; set; }
         [JsonPropertyName("expression")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Expression { get; set; }
@@ -83,6 +92,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
     internal sealed class WorkflowConditionBranch
     {
+        [JsonPropertyName("sourceDisplayName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SourceDisplayName { get; set; }
         [JsonPropertyName("branchType")]
         public string BranchType { get; set; }
         [JsonPropertyName("conditionExpression")]
@@ -142,6 +154,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string RawExpression { get; set; }
         [JsonPropertyName("isRequired")]
-        public bool IsRequired { get; set; }
+        public bool? IsRequired { get; set; }
     }
 }

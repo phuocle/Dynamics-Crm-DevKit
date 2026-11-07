@@ -43,5 +43,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("source")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Source { get; set; }
+        [JsonPropertyName("semanticsVerified")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? SemanticsVerified { get; set; }
     }
 }

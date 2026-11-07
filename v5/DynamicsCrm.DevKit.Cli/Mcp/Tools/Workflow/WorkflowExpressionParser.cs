@@ -91,8 +91,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Workflow
                 var args = SplitTopLevel(call.Groups["arguments"].Value, ',').Select(Parse).Where(x => x != null).ToList();
                 return new WorkflowExpressionNode
                 {
-                    Kind = name.Equals("Add", StringComparison.OrdinalIgnoreCase) ? "concatenate" : "function",
+                    Kind = name.Equals("Add", StringComparison.OrdinalIgnoreCase) && args.Any(a => a.Kind == "literal" && a.DataType == "string") ? "concatenate" : "function",
                     Operator = name,
+                    SemanticsVerified = name.Equals("RetrieveActivityCount", StringComparison.OrdinalIgnoreCase) ? false : null,
                     Arguments = args
                 };
             }
