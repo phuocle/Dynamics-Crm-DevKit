@@ -1,15 +1,15 @@
-{
-  "version": "4.44.44.44",
-  "buildDate": "07.11.2026 09:13:17",
-  "configuration": "Debug",
-  "builtAt": "2026-11-07T09:13:24.3353913+07:00",
-  "sourceRoot": "E:\\src\\github\\Dynamics-Crm-DevKit\\v5",
-  "gitCommit": "e4928035cf002f108c6b760c8f15ff15e358926e",
-  "gitDirty": true,
-  "packagePath": "E:\\src\\github\\Dynamics-Crm-DevKit\\v5\\Published\\4.44.44.44\\DynamicsCrm.DevKit.Cli.4.44.44.44.nupkg",
-  "packageSha256": "FDAD9FD69A5AC9E318303D1F7FCCAC49ED1CDBC7571527B0D7D315AE0570D7B3",
-  "installedAssemblyPath": "C:\\Users\\dev\\.dotnet\\tools\\.store\\dynamicscrm.devkit.cli\\4.44.44.44\\dynamicscrm.devkit.cli\\4.44.44.44\\tools\\net10.0\\any\\DynamicsCrm.DevKit.Cli.dll",
-  "installedAssemblySha256": "CCD14DC90ED70354E2208F929831872A3D1D060B478BB8DDD0AC3B9CFA9FFB18",
-  "devkitVersionOutput": "4.44.44.44 Build: 07.11.2026 09:13:17",
-  "mcpRuntimeVerification": "Call MCP whoami and compare structuredContent.devkit.version/build/assemblySha256/processStartTime with this manifest."
+﻿{
+    "version":  "4.44.44.44",
+    "buildDate":  "07.11.2026 16:45:14",
+    "configuration":  "Debug",
+    "builtAt":  "2026-11-07T16:45:25.9749891+07:00",
+    "sourceRoot":  "E:\\src\\github\\Dynamics-Crm-DevKit\\v5",
+    "gitCommit":  "e38f89927448b37906150cefb1623c3289b1c1ed",
+    "gitDirty":  true,
+    "packagePath":  "E:\\src\\github\\Dynamics-Crm-DevKit\\v5\\Published\\4.44.44.44\\DynamicsCrm.DevKit.Cli.4.44.44.44.nupkg",
+    "packageSha256":  "3550D5AC968A502FF1007CB38E62EE66552E6BD5CE9B4FCA5298AF3D572BC64C",
+    "installedAssemblyPath":  "C:\\Users\\dev\\.dotnet\\tools\\.store\\dynamicscrm.devkit.cli\\4.44.44.44\\dynamicscrm.devkit.cli\\4.44.44.44\\tools\\net10.0\\any\\DynamicsCrm.DevKit.Cli.dll",
+    "installedAssemblySha256":  "EC75765A7350427A4EA22EDC3D6C5EC40B4AB7A3E282D7CA747A2CCC36B652DC",
+    "devkitVersionOutput":  "4.44.44.44 Build: 07.11.2026 16:45:14",
+    "mcpRuntimeVerification":  "Call MCP whoami and compare structuredContent.devkit.version/build/assemblySha256/processStartTime with this manifest."
 }
