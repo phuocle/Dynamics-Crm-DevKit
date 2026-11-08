@@ -34,6 +34,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private MetadataService Metadata => _metadataService ??= new MetadataService(OrgServiceAsync);
         public async Task<bool> IsValidAsync()
         {
+            // --webresourceid fast path: no profile/solution checks — the
+            // target is explicit and the file is the only payload.
+            if (!string.IsNullOrEmpty(Arg.File) && Arg.WebResourceId.HasValue)
+            {
+                return true;
+            }
             if (!string.IsNullOrEmpty(Arg.File) && string.IsNullOrEmpty(Arg.WebResource))
             {
                 var mapping = GetWebResourceMapping(Arg.File);
@@ -300,6 +306,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private async Task DeployWebResourceFileAsync(WebResourceFile webResourceFile, int current)
         {
+            // --webresourceid: deploy straight to the id — no Config.json
+            // mapping lookup, no name-based fetch (aP 2026-11-08).
+            if (Arg.WebResourceId.HasValue)
+            {
+                await DeployWebResourceFileByIdAsync(webResourceFile);
+                return;
+            }
             if (webResourceFile.uniquename.StartsWith("/")) webResourceFile.uniquename = webResourceFile.uniquename.Substring(1);
             var fetchData = new
             {
@@ -380,11 +393,48 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                 }
             }
+            await DeployResolvedWebResourceAsync(
+                webResourceFile, webResourceId, content,
+                addToSolution: !(!string.IsNullOrEmpty(Arg.File) && !string.IsNullOrEmpty(Arg.WebResource)));
+        }
+
+        /// <summary>
+        /// --webresourceid fast path: one Retrieve by id, no name lookup.
+        /// The id must exist — deploying by id never creates a new record.
+        /// </summary>
+        private async Task DeployWebResourceFileByIdAsync(WebResourceFile webResourceFile)
+        {
+            XrmHelper.COUNT_RetrieveAsync++;
+            var entity = await OrgServiceAsync.RetrieveAsync(
+                "webresource", Arg.WebResourceId.Value,
+                new ColumnSet("content", "name", "iscustomizable", "ismanaged"));
+            if (entity == null)
+            {
+                SpectreLog.ActionError($"Web resource not found: {Arg.WebResourceId.Value}");
+                return;
+            }
+            var ismanaged = entity.GetAttributeValue<bool?>("ismanaged");
+            var iscustomizable = entity.GetAttributeValue<BooleanManagedProperty>("iscustomizable");
+            if (ismanaged.HasValue && ismanaged.Value == true && iscustomizable?.Value == false)
+            {
+                SpectreLog.ActionError($"Update webresource failed because the setting webresource.iscustomizable = false - {webResourceFile.uniquename}");
+                return;
+            }
+            var serverName = entity.GetAttributeValue<string>("name");
+            if (!string.IsNullOrEmpty(serverName)) webResourceFile.uniquename = serverName;
+            SetWebResourceManagedState(webResourceFile, ismanaged ?? false);
+            await DeployResolvedWebResourceAsync(
+                webResourceFile, entity.Id, entity.GetAttributeValue<string>("content"),
+                addToSolution: false);
+        }
+
+        private async Task DeployResolvedWebResourceAsync(WebResourceFile webResourceFile, Guid webResourceId, string content, bool addToSolution)
+        {
             var fileContent = Convert.ToBase64String(await FileHelper.ReadAllBytesAsync(webResourceFile.file));
             if (fileContent == content)
             {
                 SpectreLog.ActionWithLevel0(CliAction.DO_NOTHING, webResourceFile.file.Substring(CurrentDirectory.Length + 1));
-                if (!(!string.IsNullOrEmpty(Arg.File) && !string.IsNullOrEmpty(Arg.WebResource)))
+                if (addToSolution)
                 {
                     await AddWebResourceToSolutionAsync(new Entity("webresource")
                     {
@@ -480,7 +530,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     await OrgServiceAsync.UpdateAsync(webResource);
                 }
                 WebResourcesToPublish.Add(webResourceId);
-                if (!(!string.IsNullOrEmpty(Arg.File) && !string.IsNullOrEmpty(Arg.WebResource)))
+                if (addToSolution)
                 {
                     await AddWebResourceToSolutionAsync(webResource);
                 }
@@ -831,7 +881,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
 
                     var uniquename = Arg.WebResource;
-                    if (string.IsNullOrEmpty(uniquename))
+                    if (string.IsNullOrEmpty(uniquename) && !Arg.WebResourceId.HasValue)
                     {
                         var mapping = GetWebResourceMapping(file);
                         if (mapping != null && !string.IsNullOrEmpty(mapping.WebResource))
@@ -840,7 +890,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         }
                     }
 
-                    if (string.IsNullOrEmpty(uniquename))
+                    if (string.IsNullOrEmpty(uniquename) && !Arg.WebResourceId.HasValue)
                     {
                         var rootPath = $"{CurrentDirectory}\\{Json?.rootfolder}\\".Replace(@"\\", @"\");
                         if (!string.IsNullOrEmpty(Json?.rootfolder) && file.StartsWith(rootPath, StringComparison.OrdinalIgnoreCase))
@@ -855,6 +905,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             SpectreLog.ActionError($"File '{file}' is not under rootfolder. Please provide --webresource explicitly.");
                             return _webResourceFiles;
                         }
+                    }
+                    if (string.IsNullOrEmpty(uniquename) && Arg.WebResourceId.HasValue)
+                    {
+                        // Placeholder only — DeployWebResourceFileByIdAsync replaces
+                        // it with the exact server name from the id.
+                        uniquename = Path.GetFileName(file);
                     }
                     var webResourceFile = new WebResourceFile
                     {

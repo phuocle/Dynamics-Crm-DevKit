@@ -1,6 +1,7 @@
 using DynamicsCrm.DevKit.Cli.Tasks;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,12 +9,104 @@ using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.Commands
 {
     /// <summary>
-    /// Command for 'devkit webresource' - deploys web resources.
+    /// Command for 'devkit webresource' - deploys web resources (--type
+    /// upload, the default) or downloads them from a solution (--type
+    /// download, moved from 'devkit downloadwebresource').
     /// Syntax: devkit webresource --conn "..." --json "..." --profile "..."
+    /// Fast deploy: devkit webresource --file "..." [--webresource "..."]
     /// </summary>
     public class WebResourceCommand : DevKitCommand<WebResourceCommandArgs>
     {
+        protected override bool IsProfileRequired(WebResourceCommandArgs settings)
+        {
+            return NormalizeType(settings?.Type) == "download" || string.IsNullOrEmpty(settings.File);
+        }
+
+        protected override bool IsJsonRequired(WebResourceCommandArgs settings)
+        {
+            return NormalizeType(settings?.Type) == "download" || string.IsNullOrEmpty(settings.File);
+        }
+
+        /// <summary>
+        /// Type and option-set validation runs BEFORE the connection attempt
+        /// (base.IsValidAsync) so a bad --type fails fast with exit 1.
+        /// </summary>
+        protected override async Task<bool> IsValidAsync(WebResourceCommandArgs settings)
+        {
+            ValidateTypeAndOptions(settings);
+            return await base.IsValidAsync(settings);
+        }
+
+        internal void ValidateTypeAndOptions(WebResourceCommandArgs settings)
+        {
+            var type = NormalizeType(settings.Type);
+            if (type == "download")
+            {
+                if (!string.IsNullOrEmpty(settings.File))
+                    throw new DevKitValidationException("--file: not valid for --type download (valid: --json, --profile).");
+                if (!string.IsNullOrEmpty(settings.WebResource))
+                    throw new DevKitValidationException("--webresource: not valid for --type download (valid: --json, --profile).");
+                if (!string.IsNullOrEmpty(settings.WebResourceId))
+                    throw new DevKitValidationException("--webresourceid: not valid for --type download (valid: --json, --profile).");
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(settings.WebResourceId))
+                {
+                    if (!Guid.TryParse(settings.WebResourceId.Trim(), out _))
+                        throw new DevKitValidationException($"--webresourceid '{settings.WebResourceId}': not a valid GUID.");
+                    if (string.IsNullOrEmpty(settings.File))
+                        throw new DevKitValidationException("--webresourceid: requires --file (deploy that single file straight to the web resource id).");
+                    if (!string.IsNullOrEmpty(settings.WebResource))
+                        throw new DevKitValidationException("use only one: pass either --webresource or --webresourceid, not both.");
+                }
+            }
+        }
+
         protected override async Task RunTaskAsync(WebResourceCommandArgs settings)
+        {
+            await RunWebResourceAsync(settings);
+        }
+
+        /// <summary>
+        /// Shared dispatch — also called by the deprecated
+        /// 'devkit downloadwebresource' redirect shim.
+        /// </summary>
+        internal async Task RunWebResourceAsync(WebResourceCommandArgs settings)
+        {
+            if (NormalizeType(settings.Type) == "download")
+                await RunDownloadAsync(settings);
+            else
+                await RunUploadAsync(settings);
+        }
+
+        protected override List<string[]> BuildArgRows(WebResourceCommandArgs settings)
+        {
+            var rows = new List<string[]>();
+            if (!string.IsNullOrEmpty(settings?.Type)) rows.Add(new[] { "           --type", settings.Type.Trim().ToLowerInvariant() });
+            if (!string.IsNullOrEmpty(settings?.File))
+            {
+                rows.Add(new[] { "           --file", settings.File });
+            }
+            if (!string.IsNullOrEmpty(settings?.WebResource))
+            {
+                rows.Add(new[] { "           --webresource", settings.WebResource });
+            }
+            if (!string.IsNullOrEmpty(settings?.WebResourceId))
+            {
+                rows.Add(new[] { "           --webresourceid", settings.WebResourceId });
+            }
+            return rows;
+        }
+
+        internal static string NormalizeType(string type)
+        {
+            var value = (type ?? string.Empty).Trim().ToLowerInvariant();
+            if (value != "download") return "upload"; // default — bare 'devkit webresource' keeps its deploy behavior
+            return value;
+        }
+
+        private async Task RunUploadAsync(WebResourceCommandArgs settings)
         {
             JsonWebResource profile = null;
             if (System.IO.File.Exists(settings.JsonFile))
@@ -33,7 +126,9 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     return;
                 }
 
-                if (string.IsNullOrEmpty(settings.WebResource))
+                // --webresourceid skips the name resolution entirely — no
+                // Config.json mapping, no --webresource requirement.
+                if (settings.WebResourceId is null && string.IsNullOrEmpty(settings.WebResource))
                 {
                     var configDir = TaskWebResource.GetConfigDirectory(null, System.IO.Directory.GetCurrentDirectory(), settings.File);
                     var mapping = TaskWebResource.GetWebResourceMapping(settings.File, configDir, settings.File);
@@ -43,13 +138,13 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     }
                 }
 
-                if (string.IsNullOrEmpty(settings.WebResource))
+                if (settings.WebResourceId is null && string.IsNullOrEmpty(settings.WebResource))
                 {
                     SpectreLog.ActionError("--webresource: required when deploying --file without json/profile, or ensure file mapping exists in DynamicsCrm.DevKit.Config.json.");
                     return;
                 }
-                profile = new JsonWebResource 
-                { 
+                profile = new JsonWebResource
+                {
                     solution = string.Empty,
                     includefiles = new System.Collections.Generic.List<string>(),
                     dependencies = new System.Collections.Generic.List<Dependency>()
@@ -64,34 +159,41 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 Type = "webresources",
                 ServiceClient = settings.ServiceClient,
                 File = settings.File,
-                WebResource = settings.WebResource
+                WebResource = settings.WebResource,
+                WebResourceId = Guid.TryParse(settings.WebResourceId?.Trim(), out var webResourceId) ? webResourceId : null
             };
             var task = new TaskWebResource(args, profile);
             await task.RunAsync();
         }
 
-        protected override bool IsProfileRequired(WebResourceCommandArgs settings)
+        private async Task RunDownloadAsync(WebResourceCommandArgs settings)
         {
-            return string.IsNullOrEmpty(settings.File);
-        }
+            var json = JsonHelper.Deserialize<Json>(await FileHelper.ReadAllTextAsync(settings.JsonFile));
 
-        protected override bool IsJsonRequired(WebResourceCommandArgs settings)
-        {
-            return string.IsNullOrEmpty(settings.File);
-        }
+            if (json.downloadwebresources == null)
+            {
+                SpectreLog.ActionError("'downloadwebresources' section not found in json file");
+                return;
+            }
 
-        protected override List<string[]> BuildArgRows(WebResourceCommandArgs settings)
-        {
-            var rows = new List<string[]>();
-            if (!string.IsNullOrEmpty(settings.File))
+            var profile = json.downloadwebresources.FirstOrDefault(x => x.profile == settings.Profile);
+            if (profile != null)
             {
-                rows.Add(new[] { "           --file", settings.File });
+                var args = new CommandLineArgs
+                {
+                    Connection = settings.Connection,
+                    Json = settings.Json,
+                    Profile = settings.Profile,
+                    Type = "downloadwebresources",
+                    ServiceClient = settings.ServiceClient
+                };
+                var task = new TaskDownloadWebResource(args, profile);
+                await task.RunAsync();
             }
-            if (!string.IsNullOrEmpty(settings.WebResource))
+            else
             {
-                rows.Add(new[] { "           --webresource", settings.WebResource });
+                SpectreLog.ActionError($"Profile '{settings.Profile}' not found in 'downloadwebresources' section");
             }
-            return rows;
         }
     }
 }

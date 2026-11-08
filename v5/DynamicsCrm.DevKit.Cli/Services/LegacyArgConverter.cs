@@ -26,7 +26,7 @@ namespace DynamicsCrm.DevKit.Cli
             { "uploadreports", "report" },
             { "proxytypes", "proxytype" },
             { "solutionpackagers", "solution" },
-            { "downloadwebresources", "downloadwebresource" },
+            { "downloadwebresources", "webresource" },
             { "datasources", "datasource" }
         };
 
@@ -48,13 +48,17 @@ namespace DynamicsCrm.DevKit.Cli
 
         /// <summary>
         /// Mapping from legacy /type: values to the --type value of the grouped
-        /// 'devkit report' command (the legacy type value itself — e.g.
-        /// 'uploadreports' — is NOT valid for 'devkit report').
+        /// commands ('devkit report', 'devkit webresource') — the legacy type
+        /// value itself (e.g. 'uploadreports', 'webresources') is either not a
+        /// valid grouped type or would shadow the grouped default, so it is
+        /// replaced by the injected --type and never re-emitted.
         /// </summary>
-        private static readonly Dictionary<string, string> ReportTypeArg = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        private static readonly Dictionary<string, string> GroupedTypeArg = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             { "uploadreports", "upload" },
-            { "downloadreports", "download" }
+            { "downloadreports", "download" },
+            { "webresources", "upload" },
+            { "downloadwebresources", "download" }
         };
 
         /// <summary>
@@ -63,6 +67,25 @@ namespace DynamicsCrm.DevKit.Cli
         public static bool IsLegacyFormat(string[] args)
         {
             return args.Any(arg => arg.StartsWith("/") && arg.Contains(":"));
+        }
+
+        /// <summary>
+        /// Spectre.Console.Cli rejects multi-character short option names
+        /// ("Short option names can not be longer than one character"), so
+        /// 'devkit webresource -wid &lt;guid&gt;' (aP shorthand for
+        /// --webresourceid) is rewritten to the long form before parsing.
+        /// </summary>
+        public static string[] RewriteShorthandOptions(string[] args)
+        {
+            if (args == null || args.Length == 0) return args;
+            for (var i = 0; i < args.Length; i++)
+            {
+                if (string.Equals(args[i], "-wid", StringComparison.OrdinalIgnoreCase))
+                {
+                    args[i] = "--webresourceid";
+                }
+            }
+            return args;
         }
 
         /// <summary>
@@ -83,7 +106,7 @@ namespace DynamicsCrm.DevKit.Cli
             
             // Determine command from /type arg
             var command = "generator"; // default if not found (or should we error?)
-            var reportTypeArg = (string)null;
+            var groupedTypeArg = (string)null;
             foreach (var arg in args)
             {
                 if (arg.StartsWith("/type:", StringComparison.OrdinalIgnoreCase))
@@ -92,19 +115,21 @@ namespace DynamicsCrm.DevKit.Cli
                     if (TypeToCommand.TryGetValue(typeValue, out var cmd))
                     {
                         command = cmd;
-                        if (command == "report")
-                            ReportTypeArg.TryGetValue(typeValue, out reportTypeArg);
+                        if (command == "report" || command == "webresource")
+                            GroupedTypeArg.TryGetValue(typeValue, out groupedTypeArg);
                     }
                     break;
                 }
             }
             result.Add(command);
-            if (command == "report" && reportTypeArg != null)
+            if (groupedTypeArg != null)
             {
-                // 'devkit report' requires --type upload|download — the legacy
-                // value (uploadreports) is not a valid ReportCommand type.
+                // Grouped commands own --type — the legacy value is not valid
+                // for them ('uploadreports' for 'devkit report', and re-emitting
+                // 'webresources' for 'devkit webresource' would shadow its
+                // upload|download discriminator).
                 result.Add("--type");
-                result.Add(reportTypeArg);
+                result.Add(groupedTypeArg);
             }
 
             foreach (var arg in args)
@@ -124,9 +149,9 @@ namespace DynamicsCrm.DevKit.Cli
                     }
 
                     // The injected --type above replaces the re-emitted legacy
-                    // value for 'devkit report' — keep the legacy re-emit for
-                    // every other command (unchanged behavior).
-                    if (command == "report" && reportTypeArg != null &&
+                    // value for the grouped commands — keep the legacy re-emit
+                    // for every other command (unchanged behavior).
+                    if (groupedTypeArg != null &&
                         argName.Equals("type", StringComparison.OrdinalIgnoreCase))
                     {
                         continue;

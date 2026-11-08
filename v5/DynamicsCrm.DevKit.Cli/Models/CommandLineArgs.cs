@@ -1,5 +1,6 @@
 using Spectre.Console.Cli;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using System;
 using System.IO;
 using System.ComponentModel;
 
@@ -41,5 +42,12 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Report { get; set; }
 
         public string Language { get; set; }
+
+        /// <summary>
+        /// Runtime carrier (not a command option here) — 'devkit webresource
+        /// --webresourceid' deploys --file straight to this web resource id
+        /// without the Config.json mapping / name lookup.
+        /// </summary>
+        public Guid? WebResourceId { get; set; }
     }
 }

@@ -73,9 +73,8 @@ namespace DynamicsCrm.DevKit.Cli
                 "  new-item               Create a DevKit ITEM template in the required project\n\n" +
                 "Commands (Deploy):\n" +
                 "  server                 Deploy plugins, workflows, dataproviders (auto-detect)\n" +
-                "  webresource            Deploy web resources\n" +
+                "  webresource            Deploy or download web resources (--type upload | download)\n" +
                 "  solution               Extract or pack solutions using PAC CLI\n" +
-                "  downloadwebresource    Download web resources from a solution\n" +
                 "  datasource             Create data source entities\n" +
                 "  report                 Report operations (--type dataset | upload | download)\n" +
                 "  mcp                    Start MCP server for AI agent integration\n\n" +
@@ -86,7 +85,8 @@ namespace DynamicsCrm.DevKit.Cli
                 "  proxytype              Auto-redirects to modelbuilder\n" +
                 "  legacy-solution        Auto-redirects to solution\n" +
                 "  downloadreport         Auto-redirects to: devkit report --type download\n" +
-                "  uploadreport           Auto-redirects to: devkit report --type upload\n\n" +
+                "  uploadreport           Auto-redirects to: devkit report --type upload\n" +
+                "  downloadwebresource    Auto-redirects to: devkit webresource --type download\n\n" +
                 "Connection Options:\n" +
                 "  --conn STRING          Dynamics 365 connection string (legacy)\n" +
                 "  --auth TYPE            Modern auth type (see below)\n" +
@@ -149,9 +149,8 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]new-item[/]               Create a DevKit ITEM template in the required project\n\n" +
                     "[green]Commands (Deploy):[/]\n" +
                     "  [cyan]server[/]                 Deploy plugins, workflows, dataproviders (auto-detect)\n" +
-                    "  [cyan]webresource[/]            Deploy web resources\n" +
+                    "  [cyan]webresource[/]            Deploy or download web resources (--type upload | download)\n" +
                     "  [cyan]solution[/]               Extract or pack solutions using PAC CLI\n" +
-                    "  [cyan]downloadwebresource[/]    Download web resources from a solution\n" +
                     "  [cyan]datasource[/]             Create data source entities\n" +
                     "  [cyan]report[/]                 Report operations (--type dataset | upload | download)\n" +
                     "  [cyan]mcp[/]                    Start MCP server for AI agent integration\n\n" +
@@ -162,7 +161,8 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]proxytype[/]              Auto-redirects to modelbuilder\n" +
                     "  [cyan]legacy-solution[/]        Auto-redirects to solution\n" +
                     "  [cyan]downloadreport[/]         Auto-redirects to: devkit report --type download\n" +
-                    "  [cyan]uploadreport[/]           Auto-redirects to: devkit report --type upload\n\n" +
+                    "  [cyan]uploadreport[/]           Auto-redirects to: devkit report --type upload\n" +
+                    "  [cyan]downloadwebresource[/]    Auto-redirects to: devkit webresource --type download\n\n" +
                     "[green]Connection Options:[/]\n" +
                     "  --conn [yellow]STRING[/]          Dynamics 365 connection string (legacy)\n" +
                     "  --auth [yellow]TYPE[/]            Modern auth type (see below)\n" +

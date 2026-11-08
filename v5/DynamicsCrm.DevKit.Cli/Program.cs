@@ -40,6 +40,7 @@ namespace DynamicsCrm.DevKit.Cli
                 // Convert legacy /arg:value format to --arg value if needed
                 var originalArgs = args;
                 args = LegacyArgConverter.Convert(args);
+                args = LegacyArgConverter.RewriteShorthandOptions(args);
 
                 // 'devkit new' was removed with the new-project/new-item
                 // split (aP: keeping a list-only 'new' serves no purpose —
@@ -93,7 +94,9 @@ namespace DynamicsCrm.DevKit.Cli
                           .WithDescription("[red]DEPRECATED[/] Use: devkit server");
 
                     config.AddCommand<WebResourceCommand>("webresource")
-                          .WithDescription("Deploy web resources");
+                          .WithDescription("Deploy or download web resources (--type upload | download)")
+                          .WithExample(new[] { "webresource", "--json", "DynamicsCrm.DevKit.Cli.json", "--profile", "DEBUG" })
+                          .WithExample(new[] { "webresource", "--type", "download", "--json", "DynamicsCrm.DevKit.Cli.json", "--profile", "DOWNLOAD" });
 
                     config.AddCommand<ProxyTypeCommand>("proxytype")
                           .WithDescription("[red]DEPRECATED[/] Auto-redirects to: devkit modelbuilder");
@@ -121,7 +124,7 @@ namespace DynamicsCrm.DevKit.Cli
                           .WithDescription("[red]DEPRECATED[/] Auto-redirects to: devkit report --type upload");
 
                     config.AddCommand<DownloadWebResourceCommand>("downloadwebresource")
-                          .WithDescription("Download web resources from a solution");
+                          .WithDescription("[red]DEPRECATED[/] Auto-redirects to: devkit webresource --type download");
 
                     config.AddCommand<DataSourceCommand>("datasource")
                           .WithDescription("Create data source entities");

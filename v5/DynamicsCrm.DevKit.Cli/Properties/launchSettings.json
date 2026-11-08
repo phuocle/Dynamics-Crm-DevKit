@@ -110,7 +110,7 @@
     },
     "22.DownloadWebResources": {
       "commandName": "Project",
-      "commandLineArgs": "downloadwebresource --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "commandLineArgs": "webresource --type download --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
       "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestWebResource\\TestDownloadWebResources\\Dev.DevKit.WebResource"
     },
     "23-DEVKITV4.DataSource": {
@@ -280,7 +280,7 @@
     },
     "Dev.AllInOne.WebResource--download.webresources": {
       "commandName": "Project",
-      "commandLineArgs": "downloadwebresource --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "commandLineArgs": "webresource --type download --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
       "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.WebResource"
     },
     "Dev.AllInOne.WebResource--entities--generator.form": {
