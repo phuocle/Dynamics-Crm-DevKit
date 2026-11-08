@@ -132,13 +132,23 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionError($"File is not a .rdl report file: {file}");
                 return;
             }
-            var languageCode = await Deployment.GetLanguageCodeAsync(Arg.Language);
-            if (languageCode == null)
+            DeployReport report;
+            if (Arg.ReportId.HasValue)
             {
-                SpectreLog.ActionError($"Language not found: {Arg.Language}");
-                return;
+                // --reportid fast path: no Config.json mapping, no name search,
+                // no language filter (aP 2026-11-08, mirror --webresourceid).
+                report = await ResolveReportByIdAsync(Arg.ReportId.Value);
             }
-            var report = await ResolveReportAsync(file, languageCode.Value);
+            else
+            {
+                var languageCode = await Deployment.GetLanguageCodeAsync(Arg.Language);
+                if (languageCode == null)
+                {
+                    SpectreLog.ActionError($"Language not found: {Arg.Language}");
+                    return;
+                }
+                report = await ResolveReportAsync(file, languageCode.Value);
+            }
             if (report == null) return;
             if (report.IsManaged)
             {
@@ -168,6 +178,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionWithLevel1(CliAction.DEPLOYED, $"{report.Language} report", $" {GetDisplayFile(file)}", $"to {report.ReportFileName} report file name");
             }
             await SaveReportMappingAsync(file, report);
+        }
+
+        /// <summary>
+        /// --reportid fast path: one filtered query by reportid with no
+        /// language condition (same shape the Config.json mapping path uses).
+        /// </summary>
+        private async Task<DeployReport> ResolveReportByIdAsync(Guid reportId)
+        {
+            var reports = await Deployment.GetReportsAsync(reportId.ToString(), null);
+            if (reports.Count == 0)
+            {
+                SpectreLog.ActionError($"Report not found: {reportId}");
+                return null;
+            }
+            return reports[0];
         }
 
         private async Task<DeployReport> ResolveReportAsync(string file, int languageCode)

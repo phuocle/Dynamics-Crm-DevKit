@@ -49,5 +49,12 @@ namespace DynamicsCrm.DevKit.Shared.Models
         /// without the Config.json mapping / name lookup.
         /// </summary>
         public Guid? WebResourceId { get; set; }
+
+        /// <summary>
+        /// Runtime carrier (not a command option here) — 'devkit report
+        /// --type upload --reportid' deploys --file straight to this report
+        /// id without the Config.json mapping / name / language lookup.
+        /// </summary>
+        public Guid? ReportId { get; set; }
     }
 }

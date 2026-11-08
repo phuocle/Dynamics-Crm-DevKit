@@ -47,8 +47,12 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public bool Force { get; set; }
 
         [CommandOption("--report|-r")]
-        [Description("upload: name, filename, or GUID of the report in Dataverse")]
+        [Description("upload: name, filename, or GUID of the report")]
         public string Report { get; set; }
+
+        [CommandOption("--reportid")]
+        [Description("upload: report GUID to deploy --file directly without any lookup (exclusive with --report); '-rid' is accepted as a shorthand")]
+        public string ReportId { get; set; }
 
         [CommandOption("--language|-l")]
         [Description("upload: language name (e.g. 'English') or LCID (default: 1033)")]

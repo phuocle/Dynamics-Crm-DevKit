@@ -21,7 +21,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         private static readonly Dictionary<string, string[]> AllowedOptions = new(StringComparer.OrdinalIgnoreCase)
         {
             ["dataset"] = new[] { "file", "action", "name", "new-name", "fetchxml", "fetchxml-file", "prefilter", "force" },
-            ["upload"] = new[] { "file", "report", "language" },
+            ["upload"] = new[] { "file", "report", "reportid", "language" },
             ["download"] = Array.Empty<string>(),
         };
 
@@ -52,7 +52,25 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         {
             var type = NormalizeType(settings.Type, validate: true);
             ValidateOptionsForType(settings, type);
+            ValidateReportIdRules(settings, type);
             return await base.IsValidAsync(settings);
+        }
+
+        /// <summary>
+        /// --reportid fast-deploy rules (checked directly by tests — running
+        /// them through Execute would attempt a real connection via .env).
+        /// </summary>
+        internal static void ValidateReportIdRules(ReportCommandArgs settings, string type)
+        {
+            if (string.IsNullOrEmpty(settings.ReportId)) return;
+            if (type == "download")
+                throw new DevKitValidationException("--reportid: not valid for --type download (valid: --json, --profile).");
+            if (!Guid.TryParse(settings.ReportId.Trim(), out _))
+                throw new DevKitValidationException($"--reportid '{settings.ReportId}': not a valid GUID.");
+            if (string.IsNullOrEmpty(settings.File))
+                throw new DevKitValidationException("--reportid: requires --file (deploy that single file straight to the report id).");
+            if (!string.IsNullOrEmpty(settings.Report))
+                throw new DevKitValidationException("use only one: pass either --report or --reportid, not both.");
         }
 
         protected override async Task RunTaskAsync(ReportCommandArgs settings)
@@ -90,6 +108,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             if (!string.IsNullOrEmpty(settings?.PreFilter)) rows.Add(new[] { "           --prefilter", settings.PreFilter });
             if (settings?.Force == true) rows.Add(new[] { "           --force", "yes" });
             if (!string.IsNullOrEmpty(settings?.Report)) rows.Add(new[] { "           --report", settings.Report });
+            if (!string.IsNullOrEmpty(settings?.ReportId)) rows.Add(new[] { "           --reportid", settings.ReportId });
             if (!string.IsNullOrEmpty(settings?.Language)) rows.Add(new[] { "           --language", settings.Language });
             return rows;
         }
@@ -192,6 +211,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 ServiceClient = settings.ServiceClient,
                 File = settings.File,
                 Report = settings.Report,
+                ReportId = Guid.TryParse(settings.ReportId?.Trim(), out var reportId) ? reportId : null,
                 Language = settings.Language
             };
             var task = new TaskUploadReport(args, profile);

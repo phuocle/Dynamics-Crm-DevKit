@@ -84,6 +84,10 @@ namespace DynamicsCrm.DevKit.Cli
                 {
                     args[i] = "--webresourceid";
                 }
+                else if (string.Equals(args[i], "-rid", StringComparison.OrdinalIgnoreCase))
+                {
+                    args[i] = "--reportid";
+                }
             }
             return args;
         }
