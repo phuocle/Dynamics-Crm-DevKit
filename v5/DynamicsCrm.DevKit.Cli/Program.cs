@@ -86,7 +86,7 @@ namespace DynamicsCrm.DevKit.Cli
 
                     // Server commands (plugin/workflow deployment)
                     config.AddCommand<ServerCommand>("server")
-                          .WithDescription("Deploy plugins, workflows, dataproviders; create data source entities (--type datasources)");
+                          .WithDescription("Deploy plugins, workflows, dataproviders; Create datasource");
 
                     config.AddCommand<PluginCommand>("plugin")
                           .WithDescription("[red]DEPRECATED[/] Use: devkit server");

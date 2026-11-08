@@ -72,7 +72,7 @@ namespace DynamicsCrm.DevKit.Cli
                 "  new-project            Create a DevKit PROJECT template in the required solution\n" +
                 "  new-item               Create a DevKit ITEM template in the required project\n\n" +
                 "Commands (Deploy):\n" +
-                "  server                 Deploy plugins, workflows, dataproviders; create data source entities (--type datasources)\n" +
+                "  server                 Deploy plugins, workflows, dataproviders; Create datasource\n" +
                 "  webresource            Deploy or download web resources (--type upload | download)\n" +
                 "  solution               Extract or pack solutions using PAC CLI\n" +
                 "  report                 Report operations (--type dataset | upload | download)\n" +
@@ -148,7 +148,7 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]new-project[/]            Create a DevKit PROJECT template in the required solution\n" +
                     "  [cyan]new-item[/]               Create a DevKit ITEM template in the required project\n\n" +
                     "[green]Commands (Deploy):[/]\n" +
-                    "  [cyan]server[/]                 Deploy plugins, workflows, dataproviders; create data source entities (--type datasources)\n" +
+                    "  [cyan]server[/]                 Deploy plugins, workflows, dataproviders; Create datasource\n" +
                     "  [cyan]webresource[/]            Deploy or download web resources (--type upload | download)\n" +
                     "  [cyan]solution[/]               Extract or pack solutions using PAC CLI\n" +
                     "  [cyan]report[/]                 Report operations (--type dataset | upload | download)\n" +
@@ -184,12 +184,12 @@ namespace DynamicsCrm.DevKit.Cli
                     "  --plain                Plain text output (for AI agents/CI)\n" +
                     "  --onlyupdateassembly   Fast deploy, only update the assembly (server command only)\n\n" +
                     "[green]Examples:[/]\n" +
-                    "  devkit server --auth [cyan]Interactive[/] --url [cyan]https://org.crm.dynamics.com[/] --json [cyan]cli.json[/] --profile [cyan]PROD[/]\n" +
-                    "  devkit server --auth [cyan]FromPac[/] --pacprofile [cyan]DEVKITV4[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/]\n" +
-                    "  devkit server --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/] --json [cyan]cli.json[/] --profile [cyan]CI[/]\n" +
+                    "  devkit [cyan]server[/] --auth [cyan]Interactive[/] --url [cyan]https://org.crm.dynamics.com[/] --json [cyan]cli.json[/] --profile [cyan]PROD[/]\n" +
+                    "  devkit [cyan]server[/] --auth [cyan]FromPac[/] --pacprofile [cyan]DEVKITV4[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/]\n" +
+                    "  devkit [cyan]server[/] --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/] --json [cyan]cli.json[/] --profile [cyan]CI[/]\n" +
                     "  devkit [cyan]new-project[/] --type [cyan]Shared[/] --name [cyan]Contoso.Shared[/] --solution [cyan]MySolution.slnx[/]\n" +
                     "  devkit [cyan]new-item[/] --type [cyan]Plugin[/] --entity [cyan]Account[/] --message [cyan]Update[/] --stage [cyan]PreOperation[/] --name [cyan]PreAccountUpdate[/] --project [cyan]Contoso.Server[/]\n" +
-                    "  devkit mcp --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/]\n\n" +
+                    "  devkit [cyan]mcp[/] --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/]\n\n" +
                     "[green]Project .env values (DEVKIT_*):[/]\n" +
                     "  Normal commands: CLI args > project .env > validation error.\n" +
                     "  MCP command: CLI args > project .env (searched from current directory upward) > validation error; OS environment variables are not read.\n" +
