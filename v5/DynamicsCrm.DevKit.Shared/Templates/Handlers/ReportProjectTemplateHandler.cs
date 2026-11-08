@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
     /// $DevKitVersion$ stamped, written with a UTF-8 BOM exactly like the
     /// VSIX wizard's RunFinished (FileHelper.ForceWriteAllTextAsync always
     /// writes the BOM). The scripts bake the CLI connection arguments of
-    /// the connection (<c>devkit downloadreport</c>/<c>uploadreport</c>
+    /// the connection (<c>devkit report --type download</c>/<c>--type upload</c>
     /// through the profile "DEBUG"). No strong-name key (the wizard calls
     /// no SigningHelper), no Shared requirement. The report scripts follow
     /// the Shared template platform choice: .bat on Windows (vstemplate

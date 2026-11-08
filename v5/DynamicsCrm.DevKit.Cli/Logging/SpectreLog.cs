@@ -66,23 +66,27 @@ namespace DynamicsCrm.DevKit.Cli
                 "  devkit generator --profile NAME --json FILE [options]\n" +
                 "  devkit server --profile NAME --json FILE [options]\n\n" +
                 "Commands:\n" +
+                "Commands (Codegen):\n" +
                 "  generator              Generate form/webapi js/ts code, late-bound C# code\n" +
-                "  server                 Deploy plugins, workflows, dataproviders (auto-detect)\n" +
-                "  plugin                 (DEPRECATED) Use: devkit server\n" +
-                "  workflow               (DEPRECATED) Use: devkit server\n" +
-                "  dataprovider           (DEPRECATED) Use: devkit server\n" +
-                "  proxytype              (DEPRECATED) Auto-redirects to modelbuilder\n" +
                 "  modelbuilder           Generate early-bound entity classes using PAC ModelBuilder\n" +
+                "  new-project            Create a DevKit PROJECT template in the required solution\n" +
+                "  new-item               Create a DevKit ITEM template in the required project\n\n" +
+                "Commands (Deploy):\n" +
+                "  server                 Deploy plugins, workflows, dataproviders (auto-detect)\n" +
                 "  webresource            Deploy web resources\n" +
                 "  solution               Extract or pack solutions using PAC CLI\n" +
-                "  legacy-solution        (DEPRECATED) Auto-redirects to solution\n" +
-                "  downloadreport         Download reports from a solution\n" +
-                "  uploadreport           Upload reports to a solution\n" +
                 "  downloadwebresource    Download web resources from a solution\n" +
                 "  datasource             Create data source entities\n" +
-                "  new-project            Create a DevKit PROJECT template in the required solution\n" +
-                "  new-item               Create a DevKit ITEM template in the required project\n" +
+                "  report                 Report operations (--type dataset | upload | download)\n" +
                 "  mcp                    Start MCP server for AI agent integration\n\n" +
+                "Commands (Deprecated, auto-redirect):\n" +
+                "  plugin                 Use: devkit server\n" +
+                "  workflow               Use: devkit server\n" +
+                "  dataprovider           Use: devkit server\n" +
+                "  proxytype              Auto-redirects to modelbuilder\n" +
+                "  legacy-solution        Auto-redirects to solution\n" +
+                "  downloadreport         Auto-redirects to: devkit report --type download\n" +
+                "  uploadreport           Auto-redirects to: devkit report --type upload\n\n" +
                 "Connection Options:\n" +
                 "  --conn STRING          Dynamics 365 connection string (legacy)\n" +
                 "  --auth TYPE            Modern auth type (see below)\n" +
@@ -138,24 +142,27 @@ namespace DynamicsCrm.DevKit.Cli
                     "[green]Usage:[/]\n" +
                     "  devkit [cyan]generator[/] --profile [yellow]NAME[/] --json [yellow]FILE[/] [dim][[options]][/]\n" +
                     "  devkit [cyan]server[/] --profile [yellow]NAME[/] --json [yellow]FILE[/] [dim][[options]][/]\n\n" +
-                    "[green]Commands:[/]\n" +
+                    "[green]Commands (Codegen):[/]\n" +
                     "  [cyan]generator[/]              Generate form/webapi js/ts code, late-bound C# code\n" +
-                    "  [cyan]server[/]                 Deploy plugins, workflows, dataproviders (auto-detect)\n" +
-                    "  [cyan]plugin[/]                 [red](DEPRECATED)[/] Use: devkit server\n" +
-                    "  [cyan]workflow[/]               [red](DEPRECATED)[/] Use: devkit server\n" +
-                    "  [cyan]dataprovider[/]           [red](DEPRECATED)[/] Use: devkit server\n" +
-                    "  [cyan]proxytype[/]              [red](DEPRECATED)[/] Auto-redirects to modelbuilder\n" +
                     "  [cyan]modelbuilder[/]           Generate early-bound entity classes using PAC ModelBuilder\n" +
+                    "  [cyan]new-project[/]            Create a DevKit PROJECT template in the required solution\n" +
+                    "  [cyan]new-item[/]               Create a DevKit ITEM template in the required project\n\n" +
+                    "[green]Commands (Deploy):[/]\n" +
+                    "  [cyan]server[/]                 Deploy plugins, workflows, dataproviders (auto-detect)\n" +
                     "  [cyan]webresource[/]            Deploy web resources\n" +
                     "  [cyan]solution[/]               Extract or pack solutions using PAC CLI\n" +
-                    "  [cyan]legacy-solution[/]        [red](DEPRECATED)[/] Auto-redirects to solution\n" +
-                    "  [cyan]downloadreport[/]         Download reports from a solution\n" +
-                    "  [cyan]uploadreport[/]           Upload reports to a solution\n" +
                     "  [cyan]downloadwebresource[/]    Download web resources from a solution\n" +
                     "  [cyan]datasource[/]             Create data source entities\n" +
-                    "  [cyan]new-project[/]            Create a DevKit PROJECT template in the required solution\n" +
-                    "  [cyan]new-item[/]               Create a DevKit ITEM template in the required project\n" +
+                    "  [cyan]report[/]                 Report operations (--type dataset | upload | download)\n" +
                     "  [cyan]mcp[/]                    Start MCP server for AI agent integration\n\n" +
+                    "[green]Commands (Deprecated, auto-redirect):[/]\n" +
+                    "  [cyan]plugin[/]                 Use: devkit server\n" +
+                    "  [cyan]workflow[/]               Use: devkit server\n" +
+                    "  [cyan]dataprovider[/]           Use: devkit server\n" +
+                    "  [cyan]proxytype[/]              Auto-redirects to modelbuilder\n" +
+                    "  [cyan]legacy-solution[/]        Auto-redirects to solution\n" +
+                    "  [cyan]downloadreport[/]         Auto-redirects to: devkit report --type download\n" +
+                    "  [cyan]uploadreport[/]           Auto-redirects to: devkit report --type upload\n\n" +
                     "[green]Connection Options:[/]\n" +
                     "  --conn [yellow]STRING[/]          Dynamics 365 connection string (legacy)\n" +
                     "  --auth [yellow]TYPE[/]            Modern auth type (see below)\n" +

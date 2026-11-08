@@ -107,11 +107,18 @@ namespace DynamicsCrm.DevKit.Cli
                     config.AddCommand<PacSolutionPackagerCommand>("solution")
                           .WithDescription("Extract or pack solutions using PAC CLI");
 
+                    config.AddCommand<ReportCommand>("report")
+                          .WithDescription("Report operations (--type dataset | upload | download)")
+                          .WithExample(new[] { "report", "--type", "dataset", "--file", "Account.rdl", "--action", "list" })
+                          .WithExample(new[] { "report", "--type", "dataset", "--file", "Account.rdl", "--action", "add", "--name", "Dataset2", "--fetchxml-file", "filter.xml", "--prefilter", "account=on" })
+                          .WithExample(new[] { "report", "--type", "upload", "--file", "Report1.rdl", "--report", "Revenue", "--language", "1033" })
+                          .WithExample(new[] { "report", "--type", "download", "--json", "DynamicsCrm.DevKit.Cli.json", "--profile", "DEBUG" });
+
                     config.AddCommand<DownloadReportCommand>("downloadreport")
-                          .WithDescription("Download reports from a solution");
+                          .WithDescription("[red]DEPRECATED[/] Auto-redirects to: devkit report --type download");
 
                     config.AddCommand<UploadReportCommand>("uploadreport")
-                          .WithDescription("Upload reports to a solution");
+                          .WithDescription("[red]DEPRECATED[/] Auto-redirects to: devkit report --type upload");
 
                     config.AddCommand<DownloadWebResourceCommand>("downloadwebresource")
                           .WithDescription("Download web resources from a solution");

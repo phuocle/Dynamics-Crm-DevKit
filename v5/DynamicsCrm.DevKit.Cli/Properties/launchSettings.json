@@ -100,12 +100,12 @@
     },
     "20.TestReports-Download": {
       "commandName": "Project",
-      "commandLineArgs": "downloadreport --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "commandLineArgs": "report --type download --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
       "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestReports\\Dev.DevKit.Report"
     },
     "21.TestReports-Upload": {
       "commandName": "Project",
-      "commandLineArgs": "uploadreport --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "commandLineArgs": "report --type upload --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
       "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestReports\\Dev.DevKit.Report"
     },
     "22.DownloadWebResources": {

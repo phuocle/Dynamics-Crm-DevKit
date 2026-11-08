@@ -22,8 +22,8 @@ namespace DynamicsCrm.DevKit.Cli
             { "workflows", "workflow" },
             { "dataproviders", "dataprovider" },
             { "servers", "server" },
-            { "downloadreports", "downloadreport" },
-            { "uploadreports", "uploadreport" },
+            { "downloadreports", "report" },
+            { "uploadreports", "report" },
             { "proxytypes", "proxytype" },
             { "solutionpackagers", "solution" },
             { "downloadwebresources", "downloadwebresource" },
@@ -44,6 +44,17 @@ namespace DynamicsCrm.DevKit.Cli
             { "sdklogin", "--sdk-login" },
             { "url", "--url" },
             { "onlyupdateassembly", "--onlyupdateassembly" }
+        };
+
+        /// <summary>
+        /// Mapping from legacy /type: values to the --type value of the grouped
+        /// 'devkit report' command (the legacy type value itself — e.g.
+        /// 'uploadreports' — is NOT valid for 'devkit report').
+        /// </summary>
+        private static readonly Dictionary<string, string> ReportTypeArg = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "uploadreports", "upload" },
+            { "downloadreports", "download" }
         };
 
         /// <summary>
@@ -72,6 +83,7 @@ namespace DynamicsCrm.DevKit.Cli
             
             // Determine command from /type arg
             var command = "generator"; // default if not found (or should we error?)
+            var reportTypeArg = (string)null;
             foreach (var arg in args)
             {
                 if (arg.StartsWith("/type:", StringComparison.OrdinalIgnoreCase))
@@ -80,11 +92,20 @@ namespace DynamicsCrm.DevKit.Cli
                     if (TypeToCommand.TryGetValue(typeValue, out var cmd))
                     {
                         command = cmd;
+                        if (command == "report")
+                            ReportTypeArg.TryGetValue(typeValue, out reportTypeArg);
                     }
                     break;
                 }
             }
             result.Add(command);
+            if (command == "report" && reportTypeArg != null)
+            {
+                // 'devkit report' requires --type upload|download — the legacy
+                // value (uploadreports) is not a valid ReportCommand type.
+                result.Add("--type");
+                result.Add(reportTypeArg);
+            }
 
             foreach (var arg in args)
             {
@@ -95,17 +116,21 @@ namespace DynamicsCrm.DevKit.Cli
                     var colonIndex = arg.IndexOf(':');
                     var argName = arg.Substring(1, colonIndex - 1).Trim();
                     var argValue = arg.Substring(colonIndex + 1).Trim();
-                    
+
                     // Remove surrounding quotes if present
                     if (argValue.StartsWith("\"") && argValue.EndsWith("\""))
                     {
                         argValue = argValue.Substring(1, argValue.Length - 2);
                     }
 
-                    // Skip /type argument as it determines the command? 
-                    // Or keep it as --type for backward comaptibility inside command if needed?
-                    // RunCommand checked settings.Type. GeneratorCommand might not need it?
-                    // Let's keep it for now.
+                    // The injected --type above replaces the re-emitted legacy
+                    // value for 'devkit report' — keep the legacy re-emit for
+                    // every other command (unchanged behavior).
+                    if (command == "report" && reportTypeArg != null &&
+                        argName.Equals("type", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
 
                     // Map to new argument name
                     if (ArgMapping.TryGetValue(argName, out var newArgName))

@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-devkit downloadreport $CliConnectionArgs$ --json "DynamicsCrm.DevKit.Cli.json" --profile "DEBUG"
+devkit report --type download $CliConnectionArgs$ --json "DynamicsCrm.DevKit.Cli.json" --profile "DEBUG"

@@ -110,6 +110,13 @@
     <!-- Connection Type Metadata for dynamic form generation -->
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\ConnectionTypeRegistry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\LegacyConnectionBuilder.cs" />
+    <!-- Report dataset management (moved from VSIX Lib, shared by VSIX dialog + devkit report dataset type) -->
+    <Compile Include="$(MSBuildThisFileDirectory)ReportDataset\ReportDatasetService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReportDataset\Models\ReportDatasetInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReportDataset\Models\ReportDatasetFieldInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReportDataset\Models\ReportDatasetParameterInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReportDataset\Models\ReportDatasetValidationResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReportDataset\Models\ReportFetchEntityInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.webapi.ts_bat" />

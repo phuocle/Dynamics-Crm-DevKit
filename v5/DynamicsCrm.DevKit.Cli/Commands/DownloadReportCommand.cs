@@ -1,45 +1,41 @@
-using DynamicsCrm.DevKit.Cli.Tasks;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Commands
 {
     /// <summary>
-    /// Command for 'devkit downloadreport' - downloads reports from a solution.
-    /// Syntax: devkit downloadreport --conn "..." --json "..." --profile "..."
+    /// Command for 'devkit downloadreport' — DEPRECATED, auto-redirects to
+    /// 'devkit report --type download' (pattern ProxyTypeCommand). Kept so the
+    /// generated download.reports.bat/.sh scripts in existing user projects
+    /// keep working; behavior is unchanged apart from the notice.
     /// </summary>
     public class DownloadReportCommand : DevKitCommand<DownloadReportCommandArgs>
     {
         protected override async Task RunTaskAsync(DownloadReportCommandArgs settings)
         {
-            var json = JsonHelper.Deserialize<Json>(await FileHelper.ReadAllTextAsync(settings.JsonFile));
+            SpectreLog.ActionWithLevel0("[DEPRECATED]", "'devkit downloadreport' is deprecated and now auto-redirects to 'devkit report --type download'.");
+            SpectreLog.ActionWithLevel0("[INFO]", "Please update your scripts/CI to use 'devkit report --type download' directly.");
+            SpectreLog.ActionWithLevel0("[INFO]", "In DynamicsCrm.DevKit.Cli.json, the 'downloadreports' section is unchanged.");
+            SpectreLog.WriteLine();
 
-            if (json.downloadreports == null)
+            await new ReportCommand().RunReportAsync(new ReportCommandArgs
             {
-                SpectreLog.ActionError("'downloadreports' section not found in json file");
-                return;
-            }
-
-            var profile = json.downloadreports.FirstOrDefault(x => x.profile == settings.Profile);
-            if (profile != null)
-            {
-                var args = new CommandLineArgs
-                {
-                    Connection = settings.Connection,
-                    Json = settings.Json,
-                    Profile = settings.Profile,
-                    Type = "downloadreports",
-                    ServiceClient = settings.ServiceClient
-                };
-                var task = new TaskDownloadReport(args, profile);
-                await task.RunAsync();
-            }
-            else
-            {
-                SpectreLog.ActionError($"Profile '{settings.Profile}' not found in 'downloadreports' section");
-            }
+                Type = "download",
+                Connection = settings.Connection,
+                Json = settings.Json,
+                Profile = settings.Profile,
+                AuthType = settings.AuthType,
+                Url = settings.Url,
+                ClientId = settings.ClientId,
+                ClientSecret = settings.ClientSecret,
+                PacProfile = settings.PacProfile,
+                Username = settings.Username,
+                Password = settings.Password,
+                Domain = settings.Domain,
+                SdkLogin = settings.SdkLogin,
+                ServiceClient = settings.ServiceClient
+            });
         }
     }
 }

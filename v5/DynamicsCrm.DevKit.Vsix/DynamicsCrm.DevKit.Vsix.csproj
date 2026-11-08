@@ -82,12 +82,6 @@
     <Compile Include="Lib\Forms\FormReportDatasets.xaml.cs">
       <DependentUpon>FormReportDatasets.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Lib\Models\ReportDatasetFieldInfo.cs" />
-    <Compile Include="Lib\Models\ReportDatasetParameterInfo.cs" />
-    <Compile Include="Lib\Models\ReportFetchEntityInfo.cs" />
-    <Compile Include="Lib\Models\ReportDatasetValidationResult.cs" />
-    <Compile Include="Lib\Models\ReportDatasetInfo.cs" />
-    <Compile Include="Lib\ReportDatasetService.cs" />
     <Compile Include="Lib\Forms\FormCustom.xaml.cs">
       <DependentUpon>FormCustom.xaml</DependentUpon>
     </Compile>

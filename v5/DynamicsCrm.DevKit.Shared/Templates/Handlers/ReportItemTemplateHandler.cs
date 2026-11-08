@@ -145,7 +145,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
                 }
             }
             await FileHelper.ForceWriteAllTextAsync(fullPath, report);
-            result.AddWarning("Use 'devkit uploadreport' to upload the report to Dataverse.");
+            result.AddWarning("Use 'devkit report --type upload' to upload the report to Dataverse.");
             if (!string.IsNullOrEmpty(request.ProjectFile) &&
                 string.Equals(Path.GetExtension(request.ProjectFile), ".rptproj", StringComparison.OrdinalIgnoreCase))
             {

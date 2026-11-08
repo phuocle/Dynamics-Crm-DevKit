@@ -2,53 +2,45 @@ using DynamicsCrm.DevKit.Cli.Tasks;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Commands
 {
     /// <summary>
-    /// Command for 'devkit uploadreport' - uploads reports to a solution.
-    /// Syntax: devkit uploadreport --conn "..." --json "..." --profile "..."
-    /// Fast deploy: devkit uploadreport --conn "..." --file "..." --report "..."
+    /// Command for 'devkit uploadreport' — DEPRECATED, auto-redirects to
+    /// 'devkit report --type upload' (pattern ProxyTypeCommand). Kept so the
+    /// generated upload.reports.bat/.sh scripts in existing user projects
+    /// keep working; behavior is unchanged apart from the notice.
     /// </summary>
     public class UploadReportCommand : DevKitCommand<UploadReportCommandArgs>
     {
         protected override async Task RunTaskAsync(UploadReportCommandArgs settings)
         {
-            JsonUploadReport profile = null;
-            if (System.IO.File.Exists(settings.JsonFile))
+            SpectreLog.ActionWithLevel0("[DEPRECATED]", "'devkit uploadreport' is deprecated and now auto-redirects to 'devkit report --type upload'.");
+            SpectreLog.ActionWithLevel0("[INFO]", "Please update your scripts/CI to use 'devkit report --type upload' directly.");
+            SpectreLog.ActionWithLevel0("[INFO]", "In DynamicsCrm.DevKit.Cli.json, the 'uploadreports' section is unchanged.");
+            SpectreLog.WriteLine();
+
+            await new ReportCommand().RunReportAsync(new ReportCommandArgs
             {
-                var json = JsonHelper.Deserialize<Json>(await FileHelper.ReadAllTextAsync(settings.JsonFile));
-                if (json?.uploadreports == null && string.IsNullOrEmpty(settings.File))
-                {
-                    SpectreLog.ActionError("'uploadreports' section not found in json file");
-                    return;
-                }
-                profile = json?.uploadreports?.FirstOrDefault(x => x.profile == settings.Profile);
-            }
-            if (profile == null)
-            {
-                if (string.IsNullOrEmpty(settings.File))
-                {
-                    SpectreLog.ActionError($"Profile '{settings.Profile}' not found in 'uploadreports' section");
-                    return;
-                }
-                profile = new JsonUploadReport(); // dummy profile for single file fast deploy
-            }
-            var args = new CommandLineArgs
-            {
+                Type = "upload",
+                File = settings.File,
+                Report = settings.Report,
+                Language = settings.Language,
                 Connection = settings.Connection,
                 Json = settings.Json,
                 Profile = settings.Profile,
-                Type = "uploadreports",
-                ServiceClient = settings.ServiceClient,
-                File = settings.File,
-                Report = settings.Report,
-                Language = settings.Language
-            };
-            var task = new TaskUploadReport(args, profile);
-            await task.RunAsync();
+                AuthType = settings.AuthType,
+                Url = settings.Url,
+                ClientId = settings.ClientId,
+                ClientSecret = settings.ClientSecret,
+                PacProfile = settings.PacProfile,
+                Username = settings.Username,
+                Password = settings.Password,
+                Domain = settings.Domain,
+                SdkLogin = settings.SdkLogin,
+                ServiceClient = settings.ServiceClient
+            });
         }
         protected override bool IsProfileRequired(UploadReportCommandArgs settings)
         {

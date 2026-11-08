@@ -23,6 +23,7 @@ namespace DynamicsCrm.DevKit.Shared
         workflows,
         dataproviders,
         uploadreports,
+        reportdatasets,
         //earlybound,
     }
     public enum GeneratorType
