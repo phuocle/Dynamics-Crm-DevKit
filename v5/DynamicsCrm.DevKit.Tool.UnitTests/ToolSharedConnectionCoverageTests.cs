@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System;
 using System.IO;
 using System.Reflection;
@@ -371,7 +373,28 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
         [TestMethod]
         public async Task FromPac_ValidateAsync_WithExistingProfiles_ReturnsTrue()
         {
-            if (PacProfileHelper.HasPacProfiles())
+            // Only run against a REAL Dataverse profile. The OS-universal
+            // entry pac reports on every signed-in machine (Kind=UNIVERSAL,
+            // Resource=service.powerapps.com) is not a Dataverse connection
+            // and cannot satisfy the validation probes below.
+            var profileNames = new List<string>();
+            var profilesPath = PacProfileHelper.ProfilesPath;
+            if (File.Exists(profilesPath))
+            {
+                var json = JsonDocument.Parse(File.ReadAllText(profilesPath));
+                foreach (var profile in json.RootElement.GetProperty("Profiles").EnumerateArray())
+                {
+                    var kind = profile.TryGetProperty("Kind", out var k) ? k.GetString() : null;
+                    var name = profile.TryGetProperty("Name", out var n) ? n.GetString() : null;
+                    if (!string.Equals(kind, "UNIVERSAL", StringComparison.OrdinalIgnoreCase) &&
+                        !string.IsNullOrWhiteSpace(name))
+                    {
+                        profileNames.Add(name);
+                    }
+                }
+            }
+
+            if (profileNames.Count > 0)
             {
                 var b = new FromPacConnectionBuilder();
                 var (validActive, _) = await b.ValidateAsync(new CrmConnection { PacProfile = null });
@@ -380,8 +403,8 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
                 var (validIndex, _) = await b.ValidateAsync(new CrmConnection { PacProfile = "1" });
                 Assert.IsTrue(validIndex);
 
-                var (validName, _) = await b.ValidateAsync(new CrmConnection { PacProfile = "hitachi-hsapvn-dev" });
-                Assert.IsTrue(validName);
+                var validName = await b.ValidateAsync(new CrmConnection { PacProfile = profileNames[0] });
+                Assert.IsTrue(validName.isValid, validName.error);
 
                 var (invalidNamed, errNamed) = await b.ValidateAsync(new CrmConnection { PacProfile = "unknown_profile_999" });
                 Assert.IsFalse(invalidNamed);
