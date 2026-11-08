@@ -72,7 +72,7 @@ public sealed class LegacyArgConverterDeepCoverageTests
             ("uploadreports", "report"),
             ("proxytypes", "proxytype"),
             ("solutionpackagers", "solution"),
-            ("downloadwebresources", "downloadwebresource"),
+            ("downloadwebresources", "webresource"),
             ("datasources", "datasource"),
             ("unknown_type", "generator")
         };
@@ -100,5 +100,41 @@ public sealed class LegacyArgConverterDeepCoverageTests
         Assert.AreEqual("--type", download[1]);
         Assert.AreEqual("download", download[2]);
         CollectionAssert.DoesNotContain(download, "downloadreports");
+    }
+
+    [TestMethod]
+    public void Convert_WebResourceTypes_MapToWebResourceWithInjectedTypeAndNoLegacyReemit()
+    {
+        // Legacy deploy type → grouped upload (re-emitting '--type webresources'
+        // would shadow the new upload|download discriminator of 'devkit webresource').
+        var upload = LegacyArgConverter.Convert(new[] { "/type:webresources", "/profile:DEBUG" });
+        Assert.AreEqual("webresource", upload[0]);
+        Assert.AreEqual("--type", upload[1]);
+        Assert.AreEqual("upload", upload[2]);
+        CollectionAssert.DoesNotContain(upload, "webresources");
+
+        var download = LegacyArgConverter.Convert(new[] { "/type:downloadwebresources", "/profile:DEBUG" });
+        Assert.AreEqual("webresource", download[0]);
+        Assert.AreEqual("--type", download[1]);
+        Assert.AreEqual("download", download[2]);
+        CollectionAssert.DoesNotContain(download, "downloadwebresources");
+    }
+
+    [TestMethod]
+    public void RewriteShorthandOptions_ReplacesWidTokenWithWebResourceId()
+    {
+        Assert.IsNull(LegacyArgConverter.RewriteShorthandOptions(null!));
+        CollectionAssert.AreEqual(new string[0], LegacyArgConverter.RewriteShorthandOptions(new string[0]));
+
+        var result = LegacyArgConverter.RewriteShorthandOptions(new[] { "webresource", "-wid", "11111111-1111-1111-1111-111111111111", "--file", "app.js" });
+        CollectionAssert.AreEqual(
+            new[] { "webresource", "--webresourceid", "11111111-1111-1111-1111-111111111111", "--file", "app.js" },
+            result);
+
+        // Case-insensitive, standalone token only — '-w' and other tokens untouched.
+        var casing = LegacyArgConverter.RewriteShorthandOptions(new[] { "webresource", "-WID", "x" });
+        Assert.AreEqual("--webresourceid", casing[1]);
+        var untouched = LegacyArgConverter.RewriteShorthandOptions(new[] { "webresource", "-w", "name" });
+        Assert.AreEqual("-w", untouched[1]);
     }
 }

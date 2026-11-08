@@ -257,6 +257,82 @@ public sealed class TaskWebResourceDeployCoverageTests
     }
 
     [TestMethod]
+    public async Task RunAsync_SingleFileById_UpdatesWithoutNameLookup()
+    {
+        var file = await WriteFileAsync("app.js", "// v2 by id");
+        var existingId = Guid.NewGuid();
+        A.CallTo(() => _service.RetrieveAsync("webresource", existingId, A<ColumnSet>.Ignored))
+            .ReturnsLazily(call => Task.FromResult(new Entity("webresource", existingId)
+            {
+                ["name"] = "dev_/js/app.js",
+                ["content"] = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("// old")),
+                ["ismanaged"] = false
+            }));
+
+        var task = CreateTask(
+            new CommandLineArgs { File = file, WebResourceId = existingId },
+            new JsonWebResource { solution = "Sol", includefiles = [], excludefiles = [], dependencies = [] });
+
+        await task.RunAsync();
+
+        // No name-based fetch — the id path skips the Config.json mapping and the
+        // webresource RetrieveMultiple entirely.
+        A.CallTo(() => _service.RetrieveMultipleAsync(A<QueryBase>.That.Matches(
+                q => ((FetchExpression)q).Query.Contains("entity name='webresource'"))))
+            .MustNotHaveHappened();
+        Assert.AreEqual(0, _created.Count);
+        var updated = _updated.Single();
+        Assert.AreEqual(existingId, updated.GetAttributeValue<Guid>("webresourceid"));
+        Assert.AreEqual("dev_/js/app.js", updated.GetAttributeValue<string>("name"));
+        Assert.AreEqual(Convert.ToBase64String(File.ReadAllBytes(file)), updated.GetAttributeValue<string>("content"));
+        StringAssert.Contains(_published.Single().ParameterXml, existingId.ToString());
+    }
+
+    [TestMethod]
+    public async Task RunAsync_SingleFileById_NotFound_ErrorsWithoutCreate()
+    {
+        var file = await WriteFileAsync("app.js", "// v2 by id");
+        var missingId = Guid.NewGuid();
+        A.CallTo(() => _service.RetrieveAsync("webresource", missingId, A<ColumnSet>.Ignored))
+            .ReturnsLazily(call => Task.FromResult<Entity>(null!));
+
+        var task = CreateTask(
+            new CommandLineArgs { File = file, WebResourceId = missingId },
+            new JsonWebResource { solution = "Sol", includefiles = [], excludefiles = [], dependencies = [] });
+
+        await task.RunAsync();
+
+        Assert.AreEqual(0, _created.Count);
+        Assert.AreEqual(0, _updated.Count);
+        Assert.AreEqual(0, _published.Count);
+    }
+
+    [TestMethod]
+    public async Task RunAsync_SingleFileById_ManagedNotCustomizable_Skips()
+    {
+        var file = await WriteFileAsync("app.js", "// v2 by id");
+        var lockedId = Guid.NewGuid();
+        A.CallTo(() => _service.RetrieveAsync("webresource", lockedId, A<ColumnSet>.Ignored))
+            .ReturnsLazily(call => Task.FromResult(new Entity("webresource", lockedId)
+            {
+                ["name"] = "dev_/js/app.js",
+                ["content"] = "old",
+                ["ismanaged"] = true,
+                ["iscustomizable"] = new BooleanManagedProperty(false)
+            }));
+
+        var task = CreateTask(
+            new CommandLineArgs { File = file, WebResourceId = lockedId },
+            new JsonWebResource { solution = "Sol", includefiles = [], excludefiles = [], dependencies = [] });
+
+        await task.RunAsync();
+
+        Assert.AreEqual(0, _created.Count);
+        Assert.AreEqual(0, _updated.Count);
+        Assert.AreEqual(0, _published.Count);
+    }
+
+    [TestMethod]
     public async Task RunAsync_SingleFile_ErrorsOnMultipleMatches()
     {
         var file = await WriteFileAsync("app.js", "// v1");
