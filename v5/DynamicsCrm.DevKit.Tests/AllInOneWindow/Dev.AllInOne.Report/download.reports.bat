@@ -1,2 +1,2 @@
 @echo off
-devkit downloadreport --json "DynamicsCrm.DevKit.Cli.json" --profile "DEBUG"
+devkit report --type download --json "DynamicsCrm.DevKit.Cli.json" --profile "DEBUG"

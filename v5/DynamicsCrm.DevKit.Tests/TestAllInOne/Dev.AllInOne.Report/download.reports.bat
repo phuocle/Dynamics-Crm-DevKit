@@ -19,4 +19,4 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-devkit downloadreport --json "DynamicsCrm.DevKit.Cli.json" --profile "DEBUG"
+devkit report --type download --json "DynamicsCrm.DevKit.Cli.json" --profile "DEBUG"

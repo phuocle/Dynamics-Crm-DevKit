@@ -54,10 +54,10 @@ For Visual Studio report authoring, the Dynamics 365 Report Authoring Extension 
 
 ```bash
 # Upload report to Dataverse
-devkit uploadreport /report:"YourReport.rdl"
+devkit report --type upload --file "YourReport.rdl"
 
 # Download report from Dataverse
-devkit downloadreport /report:"Report Name"
+devkit report --type download --json "DynamicsCrm.DevKit.Cli.json" --profile "DEBUG"
 ```
 
 ## References
