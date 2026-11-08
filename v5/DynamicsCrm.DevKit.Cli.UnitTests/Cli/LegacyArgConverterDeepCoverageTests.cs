@@ -156,4 +156,33 @@ public sealed class LegacyArgConverterDeepCoverageTests
         var untouched = LegacyArgConverter.RewriteShorthandOptions(new[] { "webresource", "-w", "name" });
         Assert.AreEqual("-w", untouched[1]);
     }
+
+    [TestMethod]
+    public void RewriteTrailingHelp_ConvertsBareHelpAfterCommand_ToHelpFlag()
+    {
+        Assert.IsNull(LegacyArgConverter.RewriteTrailingHelp(null!));
+
+        // command + trailing help → --help (case-insensitive)
+        var server = LegacyArgConverter.RewriteTrailingHelp(new[] { "server", "help" });
+        CollectionAssert.AreEqual(new[] { "server", "--help" }, server);
+        var casing = LegacyArgConverter.RewriteTrailingHelp(new[] { "server", "HELP" });
+        CollectionAssert.AreEqual(new[] { "server", "--help" }, casing);
+
+        // deeper commands and extra tokens before the trailing help
+        var deep = LegacyArgConverter.RewriteTrailingHelp(new[] { "new-project", "list", "help" });
+        CollectionAssert.AreEqual(new[] { "new-project", "list", "--help" }, deep);
+
+        // single token is the root-help intercept's job — untouched here
+        CollectionAssert.AreEqual(new[] { "help" }, LegacyArgConverter.RewriteTrailingHelp(new[] { "help" }));
+
+        // 'help' as an option VALUE is never rewritten
+        var value = LegacyArgConverter.RewriteTrailingHelp(new[] { "webresource", "--file", "help" });
+        CollectionAssert.AreEqual(new[] { "webresource", "--file", "help" }, value);
+        var profile = LegacyArgConverter.RewriteTrailingHelp(new[] { "server", "--profile", "help" });
+        CollectionAssert.AreEqual(new[] { "server", "--profile", "help" }, profile);
+
+        // 'help' in the middle (not last) is untouched
+        var middle = LegacyArgConverter.RewriteTrailingHelp(new[] { "server", "help", "--json", "x.json" });
+        Assert.AreEqual("help", middle[1]);
+    }
 }

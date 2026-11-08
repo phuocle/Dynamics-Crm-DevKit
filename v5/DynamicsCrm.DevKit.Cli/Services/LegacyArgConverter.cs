@@ -89,6 +89,23 @@ namespace DynamicsCrm.DevKit.Cli
         }
 
         /// <summary>
+        /// 'devkit server help' → 'devkit server --help' — users naturally type
+        /// the bare word after any command (aP: help = --help everywhere). Only
+        /// the FINAL token is rewritten, and never when it is the value of an
+        /// option (the preceding token is a flag, e.g. '--file help').
+        /// </summary>
+        public static string[] RewriteTrailingHelp(string[] args)
+        {
+            if (args == null || args.Length < 2) return args;
+            var last = args.Length - 1;
+            if (!string.Equals(args[last], "help", StringComparison.OrdinalIgnoreCase)) return args;
+            if (args[last - 1].StartsWith("-", StringComparison.Ordinal)) return args;
+            var result = (string[])args.Clone();
+            result[last] = "--help";
+            return result;
+        }
+
+        /// <summary>
         /// Converts legacy /arg:value format to Spectre.Console --arg value format.
         /// </summary>
         /// <param name="args">Original command line arguments</param>

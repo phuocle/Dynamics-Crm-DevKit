@@ -41,6 +41,7 @@ namespace DynamicsCrm.DevKit.Cli
                 var originalArgs = args;
                 args = LegacyArgConverter.Convert(args);
                 args = LegacyArgConverter.RewriteShorthandOptions(args);
+                args = LegacyArgConverter.RewriteTrailingHelp(args);
 
                 // 'devkit new' was removed with the new-project/new-item
                 // split (aP: keeping a list-only 'new' serves no purpose —
@@ -54,9 +55,12 @@ namespace DynamicsCrm.DevKit.Cli
 
                 var updateTask = UpdateChecker.CheckAsync();
 
-                // Show help if no args or explicit help request
+                // Show help if no args or explicit help request — the bare
+                // word 'help' (what users naturally type) counts as --help
+                // (aP: 'devkit help' must not die on "No such command").
                 if (args == null || args.Length == 0 ||
-                    (args.Length == 1 && (args[0] == "--help" || args[0] == "-h")))
+                    (args.Length == 1 && (args[0] == "--help" || args[0] == "-h" ||
+                                          args[0].Equals("help", StringComparison.OrdinalIgnoreCase))))
                 {
                     SpectreLog.WriteHeader();
                     SpectreLog.WriteHelp();
