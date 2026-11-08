@@ -73,7 +73,7 @@ public sealed class LegacyArgConverterDeepCoverageTests
             ("proxytypes", "proxytype"),
             ("solutionpackagers", "solution"),
             ("downloadwebresources", "webresource"),
-            ("datasources", "datasource"),
+            ("datasources", "server"),
             ("unknown_type", "generator")
         };
 
@@ -118,6 +118,25 @@ public sealed class LegacyArgConverterDeepCoverageTests
         Assert.AreEqual("--type", download[1]);
         Assert.AreEqual("download", download[2]);
         CollectionAssert.DoesNotContain(download, "downloadwebresources");
+    }
+
+    [TestMethod]
+    public void Convert_DataSourceType_MapsToServerWithInjectedTypeAndNoDuplicateEmit()
+    {
+        var result = LegacyArgConverter.Convert(new[] { "/type:datasources", "/profile:DEBUG" });
+        Assert.AreEqual("server", result[0]);
+        Assert.AreEqual("--type", result[1]);
+        Assert.AreEqual("datasources", result[2]);
+        CollectionAssert.Contains(result, "--profile");
+        CollectionAssert.Contains(result, "DEBUG");
+        // injected exactly once — the legacy re-emit is skipped for grouped commands
+        Assert.AreEqual(1, result.Count(x => x == "--type"));
+
+        // the plain server deploy type keeps its legacy re-emit (still a valid server type)
+        var servers = LegacyArgConverter.Convert(new[] { "/type:servers", "/profile:DEBUG" });
+        Assert.AreEqual("server", servers[0]);
+        CollectionAssert.Contains(servers, "--type");
+        CollectionAssert.Contains(servers, "servers");
     }
 
     [TestMethod]

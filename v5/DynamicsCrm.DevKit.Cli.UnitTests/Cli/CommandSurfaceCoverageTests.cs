@@ -20,6 +20,9 @@ public class CommandSurfaceCoverageTests
         Assert.AreEqual("plugins", new PluginCommandProbe().DefaultType());
         Assert.AreEqual("workflows", new WorkflowCommandProbe().DefaultType());
         Assert.AreEqual("dataproviders", new DataProviderCommandProbe().DefaultType());
+        Assert.AreEqual("datasources", ServerCommand.NormalizeServerType(" DATASOURCE "));
+        Assert.AreEqual("datasources", ServerCommand.NormalizeServerType("datasources"));
+        Assert.AreEqual("servers", ServerCommand.NormalizeServerType("servers"));
     }
 
     [TestMethod]
