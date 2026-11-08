@@ -72,16 +72,16 @@ namespace DynamicsCrm.DevKit.Cli
                 "  new-project            Create a DevKit PROJECT template in the required solution\n" +
                 "  new-item               Create a DevKit ITEM template in the required project\n\n" +
                 "Commands (Deploy):\n" +
-                "  server                 Deploy plugins, workflows, dataproviders (auto-detect)\n" +
+                "  server                 Deploy plugins, workflows, dataproviders; create data source entities (--type datasources)\n" +
                 "  webresource            Deploy or download web resources (--type upload | download)\n" +
                 "  solution               Extract or pack solutions using PAC CLI\n" +
-                "  datasource             Create data source entities\n" +
                 "  report                 Report operations (--type dataset | upload | download)\n" +
                 "  mcp                    Start MCP server for AI agent integration\n\n" +
                 "Commands (Deprecated, auto-redirect):\n" +
                 "  plugin                 Use: devkit server\n" +
                 "  workflow               Use: devkit server\n" +
                 "  dataprovider           Use: devkit server\n" +
+                "  datasource             Auto-redirects to: devkit server --type datasources\n" +
                 "  proxytype              Auto-redirects to modelbuilder\n" +
                 "  legacy-solution        Auto-redirects to solution\n" +
                 "  downloadreport         Auto-redirects to: devkit report --type download\n" +
@@ -148,16 +148,16 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]new-project[/]            Create a DevKit PROJECT template in the required solution\n" +
                     "  [cyan]new-item[/]               Create a DevKit ITEM template in the required project\n\n" +
                     "[green]Commands (Deploy):[/]\n" +
-                    "  [cyan]server[/]                 Deploy plugins, workflows, dataproviders (auto-detect)\n" +
+                    "  [cyan]server[/]                 Deploy plugins, workflows, dataproviders; create data source entities (--type datasources)\n" +
                     "  [cyan]webresource[/]            Deploy or download web resources (--type upload | download)\n" +
                     "  [cyan]solution[/]               Extract or pack solutions using PAC CLI\n" +
-                    "  [cyan]datasource[/]             Create data source entities\n" +
                     "  [cyan]report[/]                 Report operations (--type dataset | upload | download)\n" +
                     "  [cyan]mcp[/]                    Start MCP server for AI agent integration\n\n" +
                     "[green]Commands (Deprecated, auto-redirect):[/]\n" +
                     "  [cyan]plugin[/]                 Use: devkit server\n" +
                     "  [cyan]workflow[/]               Use: devkit server\n" +
                     "  [cyan]dataprovider[/]           Use: devkit server\n" +
+                    "  [cyan]datasource[/]             Auto-redirects to: devkit server --type datasources\n" +
                     "  [cyan]proxytype[/]              Auto-redirects to modelbuilder\n" +
                     "  [cyan]legacy-solution[/]        Auto-redirects to solution\n" +
                     "  [cyan]downloadreport[/]         Auto-redirects to: devkit report --type download\n" +

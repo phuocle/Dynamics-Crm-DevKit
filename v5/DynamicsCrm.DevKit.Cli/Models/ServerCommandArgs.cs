@@ -7,7 +7,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
 {
     /// <summary>
     /// Command settings for 'devkit server' command.
-    /// Supports: server, plugin, workflow, dataprovider
+    /// Supports: servers, plugins, workflows, dataproviders, datasources
     /// </summary>
     public class ServerCommandArgs : DevKitCommandArgs
     {
@@ -16,11 +16,11 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public bool OnlyUpdateAssembly { get; set; }
 
         /// <summary>
-        /// Server type: servers, plugins, workflows, dataproviders
+        /// Server type: servers, plugins, workflows, dataproviders, datasources
         /// Set by the command based on which command was invoked or via --type for legacy syntax
         /// </summary>
         [CommandOption("--type")]
-        [Description("Task type (servers, plugins, workflows, dataproviders)")]
+        [Description("Task type (servers, plugins, workflows, dataproviders, datasources)")]
         public string ServerType { get; set; }
     }
 }

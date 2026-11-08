@@ -82,7 +82,7 @@ namespace DynamicsCrm.DevKit.Cli
 
                     // Server commands (plugin/workflow deployment)
                     config.AddCommand<ServerCommand>("server")
-                          .WithDescription("Deploy plugins, workflows, dataproviders");
+                          .WithDescription("Deploy plugins, workflows, dataproviders; create data source entities (--type datasources)");
 
                     config.AddCommand<PluginCommand>("plugin")
                           .WithDescription("[red]DEPRECATED[/] Use: devkit server");
@@ -127,7 +127,7 @@ namespace DynamicsCrm.DevKit.Cli
                           .WithDescription("[red]DEPRECATED[/] Auto-redirects to: devkit webresource --type download");
 
                     config.AddCommand<DataSourceCommand>("datasource")
-                          .WithDescription("Create data source entities");
+                          .WithDescription("[red]DEPRECATED[/] Auto-redirects to: devkit server --type datasources");
 
                     // The 'new' family split (aP): one combined scaffold
                     // command mixed two argument sets and could not own its

@@ -27,7 +27,7 @@ namespace DynamicsCrm.DevKit.Cli
             { "proxytypes", "proxytype" },
             { "solutionpackagers", "solution" },
             { "downloadwebresources", "webresource" },
-            { "datasources", "datasource" }
+            { "datasources", "server" }
         };
 
         /// <summary>
@@ -48,17 +48,17 @@ namespace DynamicsCrm.DevKit.Cli
 
         /// <summary>
         /// Mapping from legacy /type: values to the --type value of the grouped
-        /// commands ('devkit report', 'devkit webresource') — the legacy type
-        /// value itself (e.g. 'uploadreports', 'webresources') is either not a
-        /// valid grouped type or would shadow the grouped default, so it is
-        /// replaced by the injected --type and never re-emitted.
+        /// commands ('devkit report', 'devkit webresource', 'devkit server') —
+        /// the injected --type replaces the re-emitted legacy value so grouped
+        /// commands never receive a foreign type token.
         /// </summary>
         private static readonly Dictionary<string, string> GroupedTypeArg = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             { "uploadreports", "upload" },
             { "downloadreports", "download" },
             { "webresources", "upload" },
-            { "downloadwebresources", "download" }
+            { "downloadwebresources", "download" },
+            { "datasources", "datasources" }
         };
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace DynamicsCrm.DevKit.Cli
                     if (TypeToCommand.TryGetValue(typeValue, out var cmd))
                     {
                         command = cmd;
-                        if (command == "report" || command == "webresource")
+                        if (command == "report" || command == "webresource" || command == "server")
                             GroupedTypeArg.TryGetValue(typeValue, out groupedTypeArg);
                     }
                     break;

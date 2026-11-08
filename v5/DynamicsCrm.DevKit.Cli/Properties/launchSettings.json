@@ -115,7 +115,7 @@
     },
     "23-DEVKITV4.DataSource": {
       "commandName": "Project",
-      "commandLineArgs": "datasource --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "commandLineArgs": "server --type datasources --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
       "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestDataSource\\Dev.DevKit.Server"
     },
     "24-DEVKITV4.Interactive": {
@@ -255,7 +255,7 @@
     },
     "Dev.AllInOne.Server--DataProviders--Sql--deploy.datasource": {
       "commandName": "Project",
-      "commandLineArgs": "datasource --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"ServerSql\"",
+      "commandLineArgs": "server --type datasources --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"ServerSql\"",
       "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Server\\DataProviders\\Sql"
     },
     "Dev.AllInOne.Shared--Entities--generator": {
