@@ -155,6 +155,10 @@ public sealed class LegacyArgConverterDeepCoverageTests
         Assert.AreEqual("--webresourceid", casing[1]);
         var untouched = LegacyArgConverter.RewriteShorthandOptions(new[] { "webresource", "-w", "name" });
         Assert.AreEqual("-w", untouched[1]);
+
+        // -rid → --reportid (same multi-char-short limitation)
+        var rid = LegacyArgConverter.RewriteShorthandOptions(new[] { "report", "--type", "upload", "-RID", "11111111-1111-1111-1111-111111111111" });
+        Assert.AreEqual("--reportid", rid[3]);
     }
 
     [TestMethod]

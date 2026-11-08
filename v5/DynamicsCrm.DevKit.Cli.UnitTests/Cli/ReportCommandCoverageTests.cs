@@ -102,6 +102,56 @@ public class ReportCommandCoverageTests
         Assert.HasCount(0, probe.Rows(new ReportCommandArgs()));
     }
 
+    [TestMethod]
+    public void ReportId_Rules_AreEnforced()
+    {
+        // --reportid requires --file
+        var noFile = Assert.ThrowsExactly<DevKitValidationException>(
+            () => ReportCommand.ValidateReportIdRules(new ReportCommandArgs { ReportId = "11111111-1111-1111-1111-111111111111" }, "upload"));
+        StringAssert.Contains(noFile.Message, "--reportid: requires --file");
+
+        // exclusive with --report
+        var both = Assert.ThrowsExactly<DevKitValidationException>(
+            () => ReportCommand.ValidateReportIdRules(new ReportCommandArgs
+            {
+                File = "Account.rdl",
+                Report = "Account",
+                ReportId = "11111111-1111-1111-1111-111111111111"
+            }, "upload"));
+        StringAssert.Contains(both.Message, "use only one");
+
+        // GUID check
+        var badGuid = Assert.ThrowsExactly<DevKitValidationException>(
+            () => ReportCommand.ValidateReportIdRules(new ReportCommandArgs { File = "Account.rdl", ReportId = "nope" }, "upload"));
+        StringAssert.Contains(badGuid.Message, "not a valid GUID");
+
+        // download is rejected
+        var download = Assert.ThrowsExactly<DevKitValidationException>(
+            () => ReportCommand.ValidateReportIdRules(new ReportCommandArgs { ReportId = "11111111-1111-1111-1111-111111111111" }, "download"));
+        StringAssert.Contains(download.Message, "not valid for --type download");
+
+        // valid combination (with surrounding whitespace) passes silently
+        ReportCommand.ValidateReportIdRules(new ReportCommandArgs
+        {
+            File = "Account.rdl",
+            ReportId = " 11111111-1111-1111-1111-111111111111 "
+        }, "upload");
+    }
+
+    [TestMethod]
+    public void BuildArgRows_IncludesReportIdWithoutReportName()
+    {
+        var probe = new ReportCommandProbe();
+        var rows = probe.Rows(new ReportCommandArgs
+        {
+            Type = "upload",
+            File = "Account.rdl",
+            ReportId = "11111111-1111-1111-1111-111111111111"
+        });
+        CollectionAssert.Contains(rows.Select(r => r[0]).ToList(), "           --reportid");
+        CollectionAssert.DoesNotContain(rows.Select(r => r[0]).ToList(), "           --report");
+    }
+
     private sealed class ReportCommandProbe : ReportCommand
     {
         public Task<int> Execute(ReportCommandArgs settings) => ExecuteAsync(null!, settings, CancellationToken.None);
