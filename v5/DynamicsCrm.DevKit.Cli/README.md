@@ -42,8 +42,9 @@ dotnet tool update --global DynamicsCrm.DevKit.Cli
 | `webresource` | Active | Deploy web resources from JSON profiles or single-file arguments. |
 | `modelbuilder` | Active | Generate early-bound classes using PAC ModelBuilder. |
 | `solution` | Active | Extract and pack Dataverse solutions using Power Platform CLI. |
-| `downloadreport` | Active | Download reports from a Dataverse solution. |
-| `uploadreport` | Active | Upload reports to a Dataverse solution. |
+| `report` | Active | Report operations selected by `--type`: `dataset` (manage FetchXML datasets in a .rdl), `upload`, `download`. |
+| `downloadreport` | Compatibility | Redirects to `report --type download`. |
+| `uploadreport` | Compatibility | Redirects to `report --type upload`. |
 | `downloadwebresource` | Active | Download web resources from a Dataverse solution. |
 | `datasource` | Active | Create data source entities. |
 | `mcp` | Active | Start the MCP server for Dataverse-aware AI agents. |
