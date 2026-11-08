@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VSIX vs CLI — So sánh tính năng DynamicsCrm.DevKit v5.5</title>
+<style>
+  :root {
+    --green: #15803d; --green-bg: #ecfdf5; --green-bd: #6ee7b7;
+    --orange: #c2410c; --orange-bg: #fff7ed; --orange-bd: #fdba74;
+    --blue: #1d4ed8; --blue-bg: #eff6ff; --blue-bd: #93c5fd;
+    --amber: #b45309; --amber-bg: #fffbeb; --amber-bd: #fcd34d;
+    --ink: #1e293b; --muted: #64748b; --line: #e2e8f0; --card: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0 0 80px;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    color: var(--ink); background: #f1f5f9; line-height: 1.55; font-size: 15px;
+  }
+  header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+    color: #fff; padding: 36px 40px 28px;
+  }
+  header h1 { margin: 0 0 6px; font-size: 26px; }
+  header p { margin: 2px 0; color: #cbd5e1; font-size: 14px; }
+  header .badges { margin-top: 12px; }
+  header .badges span {
+    display: inline-block; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
+    border-radius: 20px; padding: 3px 12px; margin: 3px 6px 0 0; font-size: 12.5px; color: #e2e8f0;
+  }
+  main { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  nav {
+    position: sticky; top: 0; z-index: 10; background: #ffffffee; backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line); padding: 10px 24px; text-align: center;
+  }
+  nav a { color: #334155; text-decoration: none; margin: 0 10px; font-size: 13.5px; font-weight: 600; }
+  nav a:hover { color: #1e3a5f; text-decoration: underline; }
+  section { margin-top: 40px; }
+  h2 {
+    font-size: 20px; color: #0f172a; border-left: 5px solid #1e3a5f;
+    padding-left: 12px; margin: 0 0 16px;
+  }
+  h3 { font-size: 16.5px; color: #0f172a; margin: 26px 0 10px; }
+  .cards { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; }
+  .card {
+    flex: 1 1 210px; background: var(--card); border: 1px solid var(--line);
+    border-radius: 10px; padding: 16px 18px; box-shadow: 0 1px 3px rgba(15,23,42,.06);
+  }
+  .card .num { font-size: 28px; font-weight: 700; color: #1e3a5f; }
+  .card .lbl { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .chip {
+    display: inline-block; border-radius: 14px; padding: 2px 10px; font-size: 12px;
+    font-weight: 700; white-space: nowrap; border: 1px solid;
+  }
+  .chip.parity { color: var(--green); background: var(--green-bg); border-color: var(--green-bd); }
+  .chip.vsixonly { color: var(--orange); background: var(--orange-bg); border-color: var(--orange-bd); }
+  .chip.clionly { color: var(--blue); background: var(--blue-bg); border-color: var(--blue-bd); }
+  .chip.partial { color: var(--amber); background: var(--amber-bg); border-color: var(--amber-bd); }
+  table {
+    width: 100%; border-collapse: collapse; background: var(--card);
+    border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin-top: 12px;
+    font-size: 14px;
+  }
+  th {
+    background: #1e3a5f; color: #fff; text-align: left; padding: 9px 12px;
+    font-size: 13px; letter-spacing: .2px;
+  }
+  td { padding: 8px 12px; border-top: 1px solid var(--line); vertical-align: top; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  code, .mono {
+    font-family: Consolas, "Courier New", monospace; font-size: 12.8px;
+    background: #eef2f7; border-radius: 4px; padding: 1px 5px; color: #0f172a;
+  }
+  .evi { font-family: Consolas, monospace; font-size: 11.5px; color: #64748b; display: block; margin-top: 3px; word-break: break-all; }
+  .note {
+    background: var(--amber-bg); border: 1px solid var(--amber-bd); border-radius: 8px;
+    padding: 12px 16px; margin-top: 14px; font-size: 14px;
+  }
+  .note b { color: var(--amber); }
+  .ok-note {
+    background: var(--green-bg); border: 1px solid var(--green-bd); border-radius: 8px;
+    padding: 12px 16px; margin-top: 14px; font-size: 14px;
+  }
+  ul { margin: 8px 0; padding-left: 22px; }
+  li { margin: 4px 0; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+  .feature { font-weight: 700; color: #0f172a; }
+  .vsix-col { color: #7c2d12; }
+  .cli-col { color: #1e3a8a; }
+  footer {
+    max-width: 1180px; margin: 40px auto 0; padding: 16px 24px; color: var(--muted);
+    font-size: 12.5px; border-top: 1px solid var(--line);
+  }
+  details { margin-top: 8px; }
+  details summary { cursor: pointer; font-weight: 600; color: #1e3a5f; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>VSIX vs CLI — So sánh tính năng DynamicsCrm.DevKit v5.5</h1>
+  <p>Kết quả quét toàn bộ mã nguồn VSIX (extension Visual Studio) và CLI (<code style="background:rgba(255,255,255,.15);color:#fff;">devkit</code>), so sánh từng nhóm tính năng.</p>
+  <div class="badges">
+    <span>Ngày quét: 08/11/2026</span>
+    <span>Version nguồn: 4.44.44.44</span>
+    <span>Branch: v5.5 (3da1ed086)</span>
+    <span>VSIX: VS 2022/2026, .NET Framework 4.8</span>
+    <span>CLI: devkit global tool, .NET 10.0</span>
+    <span>MCP bị loại trừ theo yêu cầu (devkit mcp + Mcp/ không xét)</span>
+  </div>
+</header>
+
+<nav>
+  <a href="#summary">Tóm tắt</a>
+  <a href="#matrix">Bảng tổng hợp</a>
+  <a href="#projects">Project templates</a>
+  <a href="#items">Item templates</a>
+  <a href="#vsixonly">Chỉ VSIX có</a>
+  <a href="#clionly">Chỉ CLI có</a>
+  <a href="#mechanism">Khác biệt cơ chế</a>
+  <a href="#evidence">Phạm vi quét</a>
+</nav>
+
+<main>
+
+<!-- ═══════════════════ 1. TÓM TẮT ═══════════════════ -->
+<section id="summary">
+  <h2>1. Tóm tắt nhanh</h2>
+  <div class="cards">
+    <div class="card"><div class="num">13 / 13</div><div class="lbl">Project templates: VSIX wizard ↔ <code>devkit new-project</code> — ngang hàng hoàn toàn</div></div>
+    <div class="card"><div class="num">17 / 17</div><div class="lbl">Item templates: VSIX wizard ↔ <code>devkit new-item</code> — ngang hàng hoàn toàn</div></div>
+    <div class="card"><div class="num">8</div><div class="lbl">Menu commands VSIX (deploy WR/Report/TS, Add CrmPluginRegistration, Manage Datasets)</div></div>
+    <div class="card"><div class="num">9 + 9</div><div class="lbl">CLI: 9 lệnh active + 9 lệnh deprecated shim (giữ tương thích bat cũ)</div></div>
+    <div class="card"><div class="num">≈ 11</div><div class="lbl">Wizard dialogs VSIX (kết nối, pick entity/message/stage, quản lý T4…)</div></div>
+    <div class="card"><div class="num">57 .cs</div><div class="lbl">CLI ngoài Mcp/ (VSIX: 72 .cs + 13 XAML + 30 template payloads)</div></div>
+  </div>
+
+  <div class="ok-note">
+    <b>Kết luận chính:</b> Phần <b>scaffolding</b> (tạo project/item) đã ngang hàng 100% — cả hai cùng dùng một
+    <b>single source of truth</b> <code>DynamicsCrm.DevKit.Shared/Templates/TemplateCatalog.cs</code> (13 project + 17 item,
+    Id trùng tên wizard class của VSIX). Các luồng <b>deploy runtime</b> (plugin, webresource, report, datasource, solution,
+    modelbuilder) thực tế đều chạy bằng CLI — VSIX sinh sẵn file <code>*.bat</code> gọi CLI hoặc có menu tương đương.
+    VSIX nhiều hơn ở phần <b>UX tương tác trong VS</b>; CLI nhiều hơn ở phần <b>headless / batch / CI</b>.
+  </div>
+
+  <div class="note">
+    <b>Về ví dụ anh nêu — CrmPluginRegistration:</b> đoán của anh đúng một nửa. CLI <b>không thiếu hoàn toàn</b>:
+    <code>devkit new-item --type Plugin</code> tự sinh attribute <code>[CrmPluginRegistration]</code> trong class, và
+    <code>devkit server</code> đọc attribute đó trong dll rồi đăng ký ngược lên Dataverse (code → CRM).
+    <b>Thiếu đúng một chiều: CRM → code</b> — menu VSIX <i>"Add/Update Crm Plugin Registration"</i> quét
+    <code>sdkmessageprocessingstep</code> trên CRM rồi tự viết/补 attribute vào file .cs đang mở. CLI hiện
+    <b>chưa có</b> lệnh nào làm việc này → đây là gap thật sự.
+  </div>
+</section>
+
+<!-- ═══════════════════ 2. BẢNG TỔNG HỢP ═══════════════════ -->
+<section id="matrix">
+  <h2>2. Bảng tổng hợp theo nhóm tính năng</h2>
+  <div class="legend">
+    <span class="chip parity">✅ Ngang hàng</span>
+    <span class="chip partial">⚠️ Một phần / khác cơ chế</span>
+    <span class="chip vsixonly">🔶 Chỉ VSIX có</span>
+    <span class="chip clionly">🔵 Chỉ CLI có</span>
+  </div>
+  <table>
+    <tr><th style="width:19%">Nhóm tính năng</th><th style="width:30%">VSIX</th><th style="width:33%">CLI</th><th style="width:9%">Trạng thái</th><th style="width:9%">Chi tiết</th></tr>
+
+    <tr>
+      <td class="feature">Tạo project (Add New Project)</td>
+      <td class="vsix-col">13 wizard dialog: kết nối CRM + tên tự động <code>{solution}.{Type}</code>, kiểm tra loại connection theo từng loại project, link wiki, pin version NuGet live</td>
+      <td class="cli-col"><code>devkit new-project --type &lt;13 loại&gt;</code> + <code>--name --solution --out</code>, interactive prompt khi thiếu, tự đăng ký vào solution, hỗ trợ thêm Shared thiếu cho Server</td>
+      <td><span class="chip parity">Ngang hàng</span></td>
+      <td><a href="#projects">§3</a></td>
+    </tr>
+
+    <tr>
+      <td class="feature">Tạo item (Add New Item)</td>
+      <td class="vsix-col">16 <code>.vstemplate</code> + 1 <code>.vsz</code> (DevKit Report) = 17 item, wizard dạng FormItem/FormPlugin</td>
+      <td class="cli-col"><code>devkit new-item --type &lt;17 loại&gt;</code> + đủ tham số (entity, message, stage, execution, order, template/t4, datasource, language…)</td>
+      <td><span class="chip parity">Ngang hàng</span></td>
+      <td><a href="#items">§4</a></td>
+    </tr>
+
+    <tr>
+      <td class="feature">Sinh code form / webapi / late-bound</td>
+      <td class="vsix-col">Item wizard, 1 entity / lần; re-add item = <b>regenerate</b> file <code>.generated.cs</code>/<code>.form.js</code> (idempotent)</td>
+      <td class="cli-col"><code>devkit generator</code> — chạy <b>batch theo json profile</b>: <code>jsform | tsform | jswebapi | tswebapi | csharp</code>, entities <code>*</code>/all hoặc suy ra từ file sẵn có</td>
+      <td><span class="chip partial">Một phần</span></td>
+      <td>CLI batch mạnh hơn; VSIX regen từng item tiện hơn</td>
+    </tr>
+
+    <tr>
+      <td class="feature">Deploy Plugin / Workflow / DataProvider</td>
+      <td class="vsix-col"><b>Không có menu deploy riêng</b> — template Server sinh sẵn <code>deploy.debug.bat</code> / <code>deploy.debug.only.bat</code> gọi CLI</td>
+      <td class="cli-col"><code>devkit server --type plugins|workflows|dataproviders</code>: đọc <code>[CrmPluginRegistration]</code> trong dll → upload assembly, đăng ký step/image/secure config, Custom API, unregister, managed identity, <code>--onlyupdateassembly</code></td>
+      <td><span class="chip parity">Ngang hàng</span> <span style="font-size:11px;color:#64748b">(VSIX ủy thác CLI)</span></td>
+      <td>—</td>
+    </tr>
+
+    <tr>
+      <td class="feature">CrmPluginRegistration</td>
+      <td class="vsix-col">Menu <b>"Add/Update Crm Plugin Registration"</b>: quét CRM (sdkmessageprocessingstep, plugintype…) → <b>ghi attribute vào code</b> / inject <code>Id</code>. <code>PluginTestDiscovery</code> đọc attribute để sinh Test item</td>
+      <td class="cli-col">Sinh attribute lúc <code>new-item</code>; deploy attribute → CRM lúc <code>server</code>. <b>Không có chiều CRM → code</b></td>
+      <td><span class="chip partial">Một phần</span></td>
+      <td><a href="#vsixonly">§5.1</a></td>
+    </tr>
+
+    <tr>
+      <td class="feature">Datasource (virtual entity)</td>
+      <td class="vsix-col">Item "DevKit files" sinh <code>deploy.datasource.bat</code></td>
+      <td class="cli-col"><code>devkit server --type datasources</code> (TaskDataSource): <code>CreateEntityRequest</code> + DataProviderId cố định, publish vào solution</td>
+      <td><span class="chip parity">Ngang hàng</span></td>
+      <td>—</td>
+    </tr>
+
+    <tr>
+      <td class="feature">Deploy WebResource (upload)</td>
+      <td class="vsix-col">4 menu: <i>Deploy WebResource</i>, <i>Deploy New WebResource</i>, <i>Deploy TypeScript (Debug/Release)</i>, <i>Deploy New TypeScript</i> — mapping qua <code>DynamicsCrm.DevKit.Config.json</code>, publish sau deploy, pick/create qua dialog</td>
+      <td class="cli-col"><code>devkit webresource --type upload</code>: <code>--file</code> + <code>--webresource</code> / <code>--webresourceid|-wid</code> (fast deploy) hoặc mapping Config.json; cập nhật dependency XML, publish</td>
+      <td><span class="chip parity">Ngang hàng</span></td>
+      <td>TS build xem <a href="#vsixonly">§5.3</a></td>
+    </tr>
+
+    <tr>
+      <td class="feature">Download WebResource</td>
+      <td class="vsix-col">Template WebResource/WebResourceTs sinh <code>download.webresources.bat</code></td>
+      <td class="cli-col"><code>devkit webresource --type download</code> theo json <code>downloadwebresources</code></td>
+      <td><span class="chip parity">Ngang hàng</span></td>
+      <td>—</td>
+    </tr>
+
+    <tr>
+      <td class="feature">Deploy / Download Report</td>
+      <td class="vsix-col">Menu <i>Deploy Report</i> / <i>Deploy New Report</i> (mapping, kiểm tra trùng tên + managed)</td>
+      <td class="cli-col"><code>devkit report --type upload</code> (json hoặc fast deploy <code>--file --report --language</code>) / <code>--type download</code></td>
+      <td><span class="chip parity">Ngang hàng</span></td>
+      <td>—</td>
+    </tr>
+
+    <tr>
+      <td class="feature">Manage Report Datasets</td>
+      <td class="vsix-col">Menu <i>Manage Datasets…</i> — editor FetchXML trong .rdl (validate &amp; refresh fields)</td>
+      <td class="cli-col"><code>devkit report --type dataset --action list|validate|add|update|delete</code> (+ <code>--fetchxml[-file]</code>, <code>--prefilter</code>, <code>--force</code>, <code>--new-name</code>)</td>
+      <td><span class="chip parity">Ngang hàng</span></td>
+      <td>—</td>
+    </tr>
+
+    <tr>
+      <td class="feature">Solution Packager</td>
+      <td class="vsix-col">Project template #11 sinh <code>Extract-Both.bat</code> / <code>Pack-Both.bat</code></td>
+      <td class="cli-col"><code>devkit solution</code>: Extract|Pack, Managed|Unmanaged|Both, qua PAC CLI (tự cài tool nếu thiếu)</td>
+      <td><span class="chip parity">Ngang hàng</span></td>
+      <td>—</td>
+    </tr>
+
+    <tr>
+      <td class="feature">Modelbuilder / Proxy types</td>
+      <td class="vsix-col">Project template #08 ProxyTypes (run.bat CrmSvcUtil)</td>
+      <td class="cli-col"><code>devkit modelbuilder</code> — chạy ModelBuilderLib 2.0.16 in-process theo json <code>modelbuilders</code></td>
+      <td><span class="chip parity">Ngang hàng</span></td>
+      <td>—</td>
+    </tr>
+
+    <tr>
+      <td class="feature">Kết nối CRM</td>
+      <td class="vsix-col"><b>FormConnection</b>: lưu nhiều connection <b>mã hóa AES</b> trong <code>DynamicsCrm.DevKit.json</code> + default connection + nút "Check connection" + checkbox "Use project .env"</td>
+      <td class="cli-col">Ưu tiên <code>--conn</code> &gt; args (<code>--auth --url…</code>) &gt; <code>.env</code> đi ngược từ cwd lên drive root (<code>DEVKIT_*</code>), <b>không đọc OS env</b>; prompt connection interactive</td>
+      <td><span class="chip partial">Khác cơ chế</span></td>
+      <td><a href="#mechanism">§7</a></td>
+    </tr>
+
+    <tr>
+      <td class="feature">Pin version NuGet khi scaffold</td>
+      <td class="vsix-col"><code>Replacement.AddNuGetAsync</code> — query live nuget.org khi render wizard</td>
+      <td class="cli-col"><code>TokenEngine.AddNuGetTokensAsync</code> — stamp live nuget.org khi online, fallback offline</td>
+      <td><span class="chip parity">Ngang hàng</span></td>
+      <td>—</td>
+    </tr>
+
+    <tr>
+      <td class="feature">Custom T4 template</td>
+      <td class="vsix-col"><b>FormCustom</b>: UI quản lý (Set Default / Save / SaveAs / Delete / Rename / Review), lưu trong Config.json; combo chọn template trong FormPlugin</td>
+      <td class="cli-col"><code>--template &lt;tên&gt;</code> (tên đặt sẵn) + <code>--t4 &lt;đường dẫn .tt&gt;</code></td>
+      <td><span class="chip partial">Một phần</span></td>
+      <td><a href="#vsixonly">§5.4</a></td>
+    </tr>
+
+    <tr>
+      <td class="feature">Build TypeScript trước deploy</td>
+      <td class="vsix-col"><b>Chỉ VSIX</b>: <code>npm run debug/release</code> trước khi deploy, streaming output vào FormBuildOutput</td>
+      <td class="cli-col">Không có — upload nội dung file hiện có</td>
+      <td><span class="chip vsixonly">Chỉ VSIX</span></td>
+      <td><a href="#vsixonly">§5.3</a></td>
+    </tr>
+
+    <tr>
+      <td class="feature">Analyzers DEVKIT1001–1021</td>
+      <td class="vsix-col">Không nhúng trong VSIX — template project reference NuGet <code>DynamicsCrm.DevKit.Analyzers</code></td>
+      <td class="cli-col">Template CLI cũng stamp NuGet Analyzers như nhau</td>
+      <td><span class="chip parity">Ngang hàng</span></td>
+      <td>—</td>
+    </tr>
+
+    <tr>
+      <td class="feature">Chạy headless / CI / cross-platform</td>
+      <td class="vsix-col">Không (cần Visual Studio trên Windows)</td>
+      <td class="cli-col"><b>Chỉ CLI</b>: <code>--plain</code>/<code>DEVKIT_NO_COLOR</code>, exit code 0/1, update checker NuGet, chạy trên .NET 10 (Windows/Linux)</td>
+      <td><span class="chip clionly">Chỉ CLI</span></td>
+      <td><a href="#clionly">§6</a></td>
+    </tr>
+  </table>
+</section>
+
+<!-- ═══════════════════ 3. PROJECT TEMPLATES ═══════════════════ -->
+<section id="projects">
+  <h2>3. Project templates — ngang hàng 13/13</h2>
+  <p>Số thứ tự và tên khớp nhau ở cả hai phía vì cùng sinh từ <code>TemplateCatalog.cs</code>; CLI thậm chí giữ đúng tên wizard class của VSIX làm giá trị <code>--type</code>.</p>
+  <table>
+    <tr><th style="width:4%">#</th><th style="width:24%">Tên hiển thị trong VS</th><th style="width:14%">CLI <code>--type</code></th><th>Skeleton sinh ra</th></tr>
+    <tr><td>01</td><td>Shared Project</td><td><code>Shared</code></td><td>.shproj: PluginCore, DevKitJson, EntityBase, Extension, Date… + sinh <code>DynamicsCrm.DevKit.Cli.json</code> + <code>.env</code> cho solution</td></tr>
+    <tr><td>02</td><td>Console Project</td><td><code>Console</code></td><td>.NET Framework 4.6.2 console (App.cs/App.config đổi theo loại connection)</td></tr>
+    <tr><td>03</td><td>Console Core Project</td><td><code>ConsoleCore</code></td><td>.NET 10 console (AppSettings.json theo connection)</td></tr>
+    <tr><td>04</td><td>Server Project</td><td><code>Server</code></td><td>.snk + <code>deploy.debug.bat</code> + <code>deploy.debug.only.bat</code>; yêu cầu đã có Shared</td></tr>
+    <tr><td>05</td><td>Package Project</td><td><code>Package</code></td><td>Dataverse Package Deployer + deploy bats</td></tr>
+    <tr><td>06</td><td>WebResource Project</td><td><code>WebResource</code></td><td>devkit.js/.d.ts, entities/generator bats, deploy bat, package.json</td></tr>
+    <tr><td>07</td><td>Shared Test Project</td><td><code>SharedTest</code></td><td>.shproj: FakeXrmEasyTestBase, PluginContextBuilder, TestHelper, FakerHelper…</td></tr>
+    <tr><td>08</td><td>ProxyTypes Project</td><td><code>ProxyTypes</code></td><td>run.bat (CrmSvcUtil), GeneratedCode.cs, ProxyTypesAssembly.cs</td></tr>
+    <tr><td>09</td><td>Test Project</td><td><code>Test</code></td><td>Unit test MSTest + FakeXrmEasy; yêu cầu Shared + ProxyTypes + Shared.Test</td></tr>
+    <tr><td>10</td><td>Ui Test Project</td><td><code>UiTest</code></td><td>EasyRepro UI test (TestSettings, .runsettings); bắt buộc connection OAuth</td></tr>
+    <tr><td>11</td><td>Solution Packager Project</td><td><code>SolutionPackager</code></td><td>mapping.xml + Extract-Both.bat / Pack-Both.bat</td></tr>
+    <tr><td>12</td><td>Report Project</td><td><code>Report</code></td><td>.rptproj SSRS + download/upload.reports.bat</td></tr>
+    <tr><td>13</td><td>WebResource TypeScript Project</td><td><code>WebResourceTs</code></td><td>esbuild build.js, devkit.ts, tsconfig, eslint, deploy debug/release bats</td></tr>
+  </table>
+  <div class="evi">Evidence: ProjectTemplates\CSharp\01..13\*.vstemplate → Wizard\ProjectTemplates\*.cs; TemplateCatalog.cs:20–32; TaskNewProject.cs</div>
+</section>
+
+<!-- ═══════════════════ 4. ITEM TEMPLATES ═══════════════════ -->
+<section id="items">
+  <h2>4. Item templates — ngang hàng 17/17</h2>
+  <p>Ghi chú: danh sách gốc của VSIX nhảy số từ 11 sang 13 (không có item số 12) — CLI giữ nguyên thứ tự gốc này để hai bên khớp tuyệt đối. Item #18 (DevKit Report) ở VSIX là <code>.vsz</code> chỉ hiện trong Report project; CLI cho phép dùng ở mọi project.</p>
+  <table>
+    <tr><th style="width:4%">#</th><th style="width:22%">Tên hiển thị trong VS</th><th style="width:13%">CLI <code>--type</code></th><th>Sinh ra gì</th><th style="width:22%">Tham số bắt buộc CLI</th></tr>
+    <tr><td>01</td><td>C# Late Bound Class</td><td><code>LateBound</code></td><td><code>{Entity}.cs</code> (partial tay) + <code>{Entity}.generated.cs</code></td><td><code>--entity</code></td></tr>
+    <tr><td>02</td><td>Javascript Form</td><td><code>JsForm</code></td><td><code>{Entity}.js</code> + <code>{Entity}.form.js</code> + <code>{Entity}.d.ts</code></td><td><code>--entity</code></td></tr>
+    <tr><td>03</td><td>Javascript WebApi</td><td><code>JsWebApi</code></td><td><code>{Entity}.webapi.js</code> + <code>{Entity}.d.ts</code></td><td><code>--entity</code></td></tr>
+    <tr><td>04</td><td>C# Plugin Class</td><td><code>Plugin</code></td><td>Plugin step class T4, kèm <code>[CrmPluginRegistration]</code></td><td><code>--entity --message --stage --name</code></td></tr>
+    <tr><td>05</td><td>C# Custom Action Class</td><td><code>CustomAction</code></td><td>Custom action handler (T4)</td><td><code>--message --stage --name</code></td></tr>
+    <tr><td>06</td><td>C# Custom Api Class</td><td><code>CustomApi</code></td><td>Custom API handler (T4)</td><td><code>--message --name</code></td></tr>
+    <tr><td>07</td><td>C# Workflow Class</td><td><code>Workflow</code></td><td>CodeActivity (T4)</td><td><code>--name</code></td></tr>
+    <tr><td>08</td><td>C# Data Provider Class</td><td><code>DataProvider</code></td><td>5 file Retrieve / RetrieveMultiple / Create / Update / Delete</td><td><code>--datasource</code></td></tr>
+    <tr><td>09</td><td>C# Test Class</td><td><code>Test</code></td><td>Unit test cho plugin/workflow (T4) — VSIX còn scan project tham chiếu để tìm plugin có sẵn</td><td><code>--test-target</code> hoặc <code>--name</code></td></tr>
+    <tr><td>10</td><td>C# Ui Test Class</td><td><code>UiTest</code></td><td>UI test EasyRepro (T4)</td><td><code>--name</code></td></tr>
+    <tr><td>11</td><td>Resource String</td><td><code>ResourceString</code></td><td><code>{Entity}.{LanguageCode}.resx</code> — ngôn ngữ lấy từ CRM</td><td><code>--language --name</code></td></tr>
+    <tr><td>13</td><td>DevKit files</td><td><code>BatFile</code></td><td>devkit.js/.d.ts, download/upload.reports.bat, download.webresources.bat, deploy.datasource.bat, Plugin-Managed-Identity (.ps1/.json/.md)</td><td><code>--name &lt;utility-file&gt;</code></td></tr>
+    <tr><td>14</td><td>TypeScript Form</td><td><code>TsForm</code></td><td><code>{Entity}.ts</code> + <code>{Entity}.form.ts</code></td><td><code>--entity</code></td></tr>
+    <tr><td>15</td><td>TypeScript WebApi</td><td><code>TsWebApi</code></td><td><code>{Entity}.webapi.ts</code> + <code>{Entity}.ts</code></td><td><code>--entity</code></td></tr>
+    <tr><td>16</td><td>TypeScript Dialog</td><td><code>TsDialog</code></td><td><code>{Dialog}.ts</code> + <code>{Dialog}.dialog.ts</code> — VSIX pick danh sách dialog form từ CRM</td><td><code>--name &lt;dialog&gt;</code></td></tr>
+    <tr><td>17</td><td>JavaScript Dialog</td><td><code>JsDialog</code></td><td><code>{Dialog}.js</code> + <code>{Dialog}.dialog.js</code> + <code>.dialog.d.ts</code></td><td><code>--name &lt;dialog&gt;</code></td></tr>
+    <tr><td>18</td><td>DevKit Report (vsz)</td><td><code>Report</code></td><td><code>.rdl</code> từ ReportTemplate.rdl + dataset FetchXML của entity; VSIX mở luôn Report Designer</td><td><code>--entity</code></td></tr>
+  </table>
+  <div class="evi">Evidence: ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\*.vstemplate + 18.ReportItemTemplate\DevKitReport.vsz; TemplateCatalog.cs:35–51; TaskNewItem.cs:49–196</div>
+</section>
+
+<!-- ═══════════════════ 5. VSIX-ONLY ═══════════════════ -->
+<section id="vsixonly">
+  <h2>5. Tính năng chỉ VSIX có (CLI chưa có)</h2>
+
+  <h3>5.1 Add/Update Crm Plugin Registration — chiều CRM → code</h3>
+  <ul>
+    <li>Menu chuột phải trong code window, hiện khi cursor đang trong class <code>IPlugin</code>/<code>CodeActivity</code>; ẩn khi mọi attribute đã có <code>Id</code>.</li>
+    <li>Quét CRM: <code>sdkmessageprocessingstep</code> join <code>sdkmessage</code>/<code>plugintype</code>/<code>sdkmessagefilter</code>/secure config + step images; workflow quét <code>plugintype (isworkflowactivity=1)</code>.</li>
+    <li>Viết attribute qua FileCodeModel: thêm mới <code>[CrmPluginRegistration(...)]</code> đủ tham số (Stage, Execution, Isolation, Id, UnSecure/SecureConfiguration, RunAs, Image1–4…), hoặc <b>inject <code>Id</code></b> vào attribute sẵn có.</li>
+    <li>Khi chưa đăng ký bước nào → sinh attribute placeholder <code>"???", "???", StageEnum.PostOperation…</code>.</li>
+    <li>Tác dụng phụ tiện lợi: tự sinh <code>deploy.debug.bat</code> / <code>deploy.debug.only.bat</code> và thêm using namespace Shared.</li>
+    <li>Nếu máy chưa cài CLI → copy lệnh <code>dotnet tool install -g DynamicsCrm.DevKit.Cli</code> vào clipboard.</li>
+    <li class="evi">Evidence: DynamicsCrm.DevKit.Vsix\Commands\CommandAddCrmPluginRegistration.cs (fetch 323–480, add attribute 91–141, inject Id 143–189, visibility 204–240); Lib\VsixHelper.cs:289–320</li>
+  </ul>
+
+  <h3>5.2 Wizard dialogs &amp; visual pickers (11 dialog)</h3>
+  <ul>
+    <li><b>FormProject</b> — connection + tên project, ràng buộc loại connection theo project (Console chặn DeviceCode/FromPac, UiTest bắt OAuth…).</li>
+    <li><b>FormItem</b> — picker entity nạp toàn bộ metadata của org (LateBound, Js/Ts Form/WebApi, Dialog, Report).</li>
+    <li><b>FormPlugin</b> — 1 dialog dùng chung 9 item: Class, Entity, Message (lọc theo entity), Stage, Execution, Data Source (DataProvider), ngôn ngữ (ResourceString), chọn file (BatFile), dropdown plugin để sinh Test.</li>
+    <li><b>FormConnection</b> — quản lý nhiều connection mã hóa AES, default, test connection, checkbox "Use project .env" ghi DEVKIT_* vào .env solution.</li>
+    <li><b>FormWebResource</b> — pick webresource sẵn có hoặc tạo mới (chọn solution + prefix + tên).</li>
+    <li><b>FormReportMapping</b> — map .rdl ↔ report CRM có sẵn / tạo mới.</li>
+    <li><b>FormReportDatasets</b> — editor dataset FetchXML trong .rdl ("Validate &amp; Refresh Fields", "Format XML").</li>
+    <li><b>FormCustom / FormInput / FormReview</b> — quản lý T4 template; <b>FormBuildOutput</b> — cửa sổ streaming khi npm build.</li>
+    <li class="evi">Evidence: DynamicsCrm.DevKit.Vsix\Lib\Forms\*.xaml.cs; CLI tương đương chỉ là interactive prompt (ConnectionPrompter.cs, TaskNewShared.cs:18–33) — không có visual picker</li>
+  </ul>
+
+  <h3>5.3 Build TypeScript trước khi deploy</h3>
+  <ul>
+    <li>Menu <i>Deploy TypeScript (Debug/Release)</i> chạy <code>npm run debug|release {file}</code> tại package.json gần nhất, stream output vào FormBuildOutput, rồi mới deploy + publish. CLI upload file hiện có, không build.</li>
+    <li class="evi">Evidence: Commands\CommandTypeScriptRelease.cs, CommandNewTypeScriptRelease.cs; Lib\TypeScriptBuildHelper.cs:28–100</li>
+  </ul>
+
+  <h3>5.4 Quản lý custom T4 template bằng UI</h3>
+  <ul>
+    <li>FormCustom: Set Default / Save / SaveAs / Delete / Rename / Review preview; lưu trong <code>DynamicsCrm.DevKit.Config.json</code>. CLI chỉ nhận tên template đặt sẵn (<code>--template</code>) hoặc đường dẫn file .tt (<code>--t4</code>).</li>
+    <li class="evi">Evidence: Lib\Forms\FormCustom.xaml.cs; Lib\VsixHelper.cs:651–705</li>
+  </ul>
+
+  <h3>5.5 Regenerate idempotent khi re-add item</h3>
+  <ul>
+    <li>Re-add một item (vd LateBound, JsForm) trong VSIX = <b>cập nhật lại</b> phần generated (<code>.generated.cs</code>, <code>.form.js</code>) và chỉ ghi file khi nội dung đổi (<code>ShouldAddProjectItemAsync</code>, <code>WriteTargetFileIfChangedAsync</code>). CLI <code>new-item</code> dùng <code>--force</code> để ghi đè, không có khái niệm "chỉ regen phần generated".</li>
+    <li class="evi">Evidence: Wizard\ItemTemplates\ItemTemplateBase.cs:44–103</li>
+  </ul>
+
+  <h3>5.6 UX trong trình soạn thảo</h3>
+  <ul>
+    <li>Context menu "DynamicsCrm.DevKit" trên item node của Solution Explorer (7 lệnh deploy), menu trong code window, CSS editor và HTML editor (Deploy WebResource); tự save file đang chọn trước khi deploy; status bar animation; cache ServiceClient 60 phút.</li>
+    <li>Sau khi tạo .rdl, VSIX mở ngay Report Designer để chỉnh tiếp.</li>
+    <li class="evi">Evidence: DevKitPackageVsct.vsct:108–178; VsixHelper.SaveSelectedItemAsync:507; Lib\CacheHelper.cs:21–129; Wizard\ItemTemplates\ReportItemWizard.cs:40–82</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════ 6. CLI-ONLY ═══════════════════ -->
+<section id="clionly">
+  <h2>6. Tính năng chỉ CLI có (VSIX không có)</h2>
+
+  <h3>6.1 <code>devkit generator</code> — sinh code hàng loạt theo json profile</h3>
+  <ul>
+    <li>Types: <code>jsform | tsform | jswebapi | tswebapi | csharp</code> (trong json <code>generators</code> section).</li>
+    <li>Chọn entity: <code>*</code>/<code>all</code> (toàn bộ org), để trống = suy ra từ các file <code>*{suffix}</code> sẵn có trong folder, hoặc danh sách cụ thể — VSIX chỉ làm được 1 item/lần.</li>
+    <li class="evi">Evidence: Tasks\TaskGenerator.cs:56–143; Shared\Enum.cs:29–37</li>
+  </ul>
+
+  <h3>6.2 Headless / CI / cross-platform</h3>
+  <ul>
+    <li><code>--plain</code> / <code>DEVKIT_NO_COLOR</code> trong .env → output plain-text cho AI agent/CI; exit code rõ ràng (0 Success / 1 ValidationError…).</li>
+    <li>Chạy được trên .NET 10 (Windows và Linux), không cần Visual Studio; <code>new-project list</code> / <code>new-item list</code> in bảng catalog (cột Ready cho biết type nào scaffold được).</li>
+    <li>Update checker: check NuGet <code>DynamicsCrm.DevKit.Cli</code> mới hơn (cache 7 ngày, panel "UPDATE AVAILABLE").</li>
+    <li class="evi">Evidence: Program.cs:25–75, 163–202; Services\UpdateChecker.cs:17–78; Tasks\TaskNewShared.cs:36–92</li>
+  </ul>
+
+  <h3>6.3 Deprecated shims + legacy arg converter</h3>
+  <ul>
+    <li>9 lệnh giữ lại chỉ để <b>bat cũ sinh bởi VSIX/tiện ích trước đây tiếp tục chạy</b>: <code>plugin, workflow, dataprovider, datasource, proxytype, legacy-solution, downloadreport, uploadreport, downloadwebresource</code> — tự redirect sang lệnh mới.</li>
+    <li>Converter legacy <code>/type:generators</code>, <code>/arg:value</code> → cú pháp mới.</li>
+    <li class="evi">Evidence: Program.cs:91–134; Services\LegacyArgConverter.cs:17–106</li>
+  </ul>
+
+  <h3>6.4 Fast deploy bằng GUID và pre-flight validator</h3>
+  <ul>
+    <li><code>webresource upload --webresourceid|-wid</code>: đẩy file thẳng tới webresource theo GUID, bỏ qua mapping/tên; report upload nhận <code>--report</code> dạng name/filename/GUID.</li>
+    <li>DeploymentValidator pre-flight kiểm tra config server/webresource trước khi deploy.</li>
+    <li class="evi">Evidence: Commands\WebResourceCommand.cs:109–167; Services\DeploymentValidator.cs:24–76</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════ 7. KHÁC BIỆT CƠ CHẾ ═══════════════════ -->
+<section id="mechanism">
+  <h2>7. Khác biệt cơ chế đáng lưu ý</h2>
+  <table>
+    <tr><th style="width:22%">Chủ đề</th><th style="width:39%">VSIX</th><th style="width:39%">CLI</th></tr>
+    <tr>
+      <td class="feature">Lưu thông tin kết nối</td>
+      <td>Lưu nhiều connection <b>mã hóa AES</b> trong solution <code>DynamicsCrm.DevKit.json</code>; hoặc checkbox ghi <code>DEVKIT_*</code> vào <code>.env</code></td>
+      <td>Không lưu gì cả — đọc args &gt; <code>.env</code> (walk-up đến drive root, merge từng field, arg thắng); <b>không bao giờ đọc OS env var</b>; <code>devkit mcp</code> thì chỉ nhận args</td>
+    </tr>
+    <tr>
+      <td class="feature">Chia sẻ cấu hình</td>
+      <td>Sinh <code>DynamicsCrm.DevKit.Cli.json</code> khi tạo Shared/SharedTest (pattern dll <code>{solution}.*</code>)</td>
+      <td>Tiêu thụ <code>--json</code> đó (resolve từ cwd walk-up) cho generator/server/webresource/report/modelbuilder/solution</td>
+    </tr>
+    <tr>
+      <td class="feature">Mapping deploy webresource/report</td>
+      <td>Lưu mapping file ↔ webresource / report vào <code>DynamicsCrm.DevKit.Config.json</code> sau khi pick dialog</td>
+      <td>Đọc đúng mapping <code>Config.json</code> đó, hoặc override bằng <code>--webresource</code>/<code>--webresourceid</code>/<code>--report</code></td>
+    </tr>
+    <tr>
+      <td class="feature">Vai trò tổng thể</td>
+      <td><b>Authoring UX</b>: wizard tạo code, pick metadata, deploy từ editor; mọi deploy runtime nặng đều giao cho CLI qua file bat</td>
+      <td><b>Engine</b>: chạy mọi deploy/generate thực tế, headless, batch, CI, cả Linux</td>
+    </tr>
+    <tr>
+      <td class="feature">Regenerate code sinh sẵn</td>
+      <td>Re-add item = tự động regen phần generated, chỉ ghi khi đổi nội dung</td>
+      <td>Chạy lại <code>new-item</code> + <code>--force</code> để ghi đè toàn bộ</td>
+    </tr>
+  </table>
+</section>
+
+<!-- ═══════════════════ 8. EVIDENCE ═══════════════════ -->
+<section id="evidence">
+  <h2>8. Phạm vi quét &amp; số liệu</h2>
+  <ul>
+    <li><b>VSIX</b> (<code>DynamicsCrm.DevKit.Vsix/</code>): 72 file .cs nguồn (8 Commands, 17 ItemTemplate wizards, 14 ProjectTemplate wizards, 31 Lib), 13 XAML, 29 <code>.vstemplate</code> + 1 <code>.vsz</code>, manifest VS 2022/2026 <code>[17.0,19.0)</code>.</li>
+    <li><b>CLI</b> (<code>DynamicsCrm.DevKit.Cli/</code>, <b>đã loại trừ Mcp/</b> — 228 file .cs MCP không xét theo yêu cầu): 57 file .cs — Commands 16, Tasks 15, Models 17, Services/Logging/… 9; 18 lệnh đăng ký trong Program.cs.</li>
+    <li><b>Shared</b>: <code>Templates/TemplateCatalog.cs</code> — điểm khớp chuẩn 13 project + 17 item cho cả VSIX, CLI và MCP hosts.</li>
+    <li>Quét thực hiện 08/11/2026 trên branch <code>v5.5</code> (commit 3da1ed086), version nguồn 4.44.44.44.</li>
+  </ul>
+  <details>
+    <summary>Key evidence files</summary>
+    <ul>
+      <li><code>DynamicsCrm.DevKit.Shared/Templates/TemplateCatalog.cs</code> — catalog chung</li>
+      <li><code>DynamicsCrm.DevKit.Cli/Program.cs:77–159</code> — command tree; <code>Tasks/TaskNewProject.cs</code>, <code>Tasks/TaskNewItem.cs</code>, <code>Tasks/TaskServer.cs</code> (CrmPluginRegistration deploy 968–2010), <code>Tasks/TaskGenerator.cs</code></li>
+      <li><code>DynamicsCrm.DevKit.Vsix/DevKitPackageVsct.vsct</code> — 8 menu commands; <code>Commands/*.cs</code> — handler từng lệnh</li>
+      <li><code>DynamicsCrm.DevKit.Vsix/Lib/Forms/*.xaml.cs</code> — 11 wizard dialog; <code>Wizard/**</code> — 31 wizard class</li>
+      <li>ProjectTemplates/CSharp + ItemTemplates/CSharp (repo root) — 30 template payload đóng gói vào VSIX</li>
+    </ul>
+  </details>
+</section>
+
+</main>
+
+<footer>
+  Tạo tự động từ việc quét mã nguồn DynamicsCrm.DevKit v5.5 — so sánh VSIX vs CLI, loại trừ MCP. Số liệu lấy trực tiếp từ code tại commit 3da1ed086.
+</footer>
+
+</body>
+</html>
