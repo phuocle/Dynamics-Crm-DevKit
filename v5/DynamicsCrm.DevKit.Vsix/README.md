@@ -49,7 +49,7 @@ The template names below match the display names shown by Visual Studio.
 | 12. Report Project | Dataverse SSRS report project. | [Report Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template) |
 | 13. WebResource TypeScript Project | TypeScript web resource project with generated typings and build output. | [WebResource TypeScript Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-TypeScript-Project-Template) |
 
-Project template catalog: [Projects Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-Template)
+Project template catalog: [Project Templates](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Project-Templates)
 
 ## 🧩 Item Templates
 
@@ -75,7 +75,7 @@ The item template names below match the display names shown by Visual Studio.
 | 16. JavaScript Dialog | JavaScript dialog script with typed dialog interfaces. | [JavaScript Dialog Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Dialog-Item-Template) |
 | 18. DevKit Report | Entity-aware FetchXML report for a Reporting Services project. | [DevKit Report Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DevKit-Report-Item-Template) |
 
-Item template catalog: [Items Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Items-Template)
+Item template catalog: [Item Templates](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Item-Templates)
 
 ## 🖥️ Visual Studio Commands
 
@@ -94,6 +94,6 @@ Item template catalog: [Items Template](https://github.com/phuocle/Dynamics-Crm-
 
 - [Repository README](../../README.md)
 - [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrmDevKit)
-- [Project template docs](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-Template)
-- [Item template docs](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Items-Template)
+- [Project template docs](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Project-Templates)
+- [Item template docs](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Item-Templates)
 - [Issues](https://github.com/phuocle/Dynamics-Crm-DevKit/issues)
