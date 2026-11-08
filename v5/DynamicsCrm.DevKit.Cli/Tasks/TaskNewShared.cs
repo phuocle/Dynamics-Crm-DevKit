@@ -50,7 +50,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-                var table = new Table().Border(TableBorder.Minimal).Expand();
+                // No .Expand(): the table hugs its content — padding it to the
+                // full console width explodes when the detected width is huge
+                // (pipes/odd hosts report ~8000 columns, aP: broken UI).
+                var table = new Table().Border(TableBorder.Minimal);
                 table.AddColumn(new TableColumn("[green]#[/]").Width(3));
                 table.AddColumn(new TableColumn("[green]Type (--type)[/]"));
                 table.AddColumn(new TableColumn("[green]Name[/]"));
