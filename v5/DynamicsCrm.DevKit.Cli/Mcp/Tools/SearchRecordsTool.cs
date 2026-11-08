@@ -421,8 +421,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (result.Attributes != null &&
                 result.Attributes.TryGetValue("@search.objecttypecode", out var value))
             {
-                if (value is JsonElement element && element.TryGetInt32(out var jsonValue))
+                if (value is JsonElement element && element.ValueKind == JsonValueKind.Number && element.TryGetInt32(out var jsonValue))
                     return jsonValue;
+                if (value is JsonElement stringElement && stringElement.ValueKind == JsonValueKind.String && int.TryParse(stringElement.GetString(), out var parsedJsonString))
+                    return parsedJsonString;
                 if (value is int intValue)
                     return intValue;
                 if (int.TryParse(value?.ToString(), out var parsed))
