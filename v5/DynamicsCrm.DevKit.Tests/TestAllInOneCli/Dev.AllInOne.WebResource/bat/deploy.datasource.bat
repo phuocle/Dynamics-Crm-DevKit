@@ -1,2 +1,2 @@
 @echo off
-devkit datasource --json "DynamicsCrm.DevKit.Cli.json" --profile "DEBUG"
+devkit server --type datasources --json "DynamicsCrm.DevKit.Cli.json" --profile "DEBUG"

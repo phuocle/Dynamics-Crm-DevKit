@@ -19,4 +19,4 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-devkit datasource --json "DynamicsCrm.DevKit.Cli.json" --profile "ServerSql"
+devkit server --type datasources --json "DynamicsCrm.DevKit.Cli.json" --profile "ServerSql"
