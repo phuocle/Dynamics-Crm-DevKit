@@ -38,7 +38,7 @@ dotnet tool update --global DynamicsCrm.DevKit.Cli
 | Command | Status | Purpose |
 |---|---|---|
 | `generator` | Active | Generate JavaScript, TypeScript, and C# code from Dataverse metadata. |
-| `server` | Active | Deploy server assemblies, plugin packages, workflows, custom APIs, custom actions, and data providers. |
+| `server` | Active | Deploy server assemblies, plugin packages, workflows, custom APIs, custom actions, and data providers; create data source entities (`--type datasources`). |
 | `webresource` | Active | Deploy web resources (default `--type upload`) or download them from a solution (`--type download`). |
 | `modelbuilder` | Active | Generate early-bound classes using PAC ModelBuilder. |
 | `solution` | Active | Extract and pack Dataverse solutions using Power Platform CLI. |
@@ -46,7 +46,7 @@ dotnet tool update --global DynamicsCrm.DevKit.Cli
 | `downloadreport` | Compatibility | Redirects to `report --type download`. |
 | `uploadreport` | Compatibility | Redirects to `report --type upload`. |
 | `downloadwebresource` | Compatibility | Redirects to `webresource --type download`. |
-| `datasource` | Active | Create data source entities. |
+| `datasource` | Compatibility | Redirects to `server --type datasources`. |
 | `mcp` | Active | Start the MCP server for Dataverse-aware AI agents. |
 | `plugin` | Compatibility | Redirects to server deployment behavior for plugin profiles. |
 | `workflow` | Compatibility | Redirects to server deployment behavior for workflow profiles. |
