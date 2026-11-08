@@ -157,7 +157,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             // CLI connection arguments ride in (the wizard dialog's
             // connection — CliArgsBuilder with the secrets encrypted).
             var content = File.ReadAllText(fullPath);
-            Assert.IsTrue(content.Contains("devkit downloadreport --auth ClientSecret"), content);
+            Assert.IsTrue(content.Contains("devkit report --type download --auth ClientSecret"), content);
             Assert.IsTrue(content.Contains("--url \"https://org.example.com\""), content);
             Assert.IsTrue(content.Contains("--clientid \"the-client-id\""), content);
             Assert.IsFalse(content.Contains("$CliConnectionArgs$"), content);

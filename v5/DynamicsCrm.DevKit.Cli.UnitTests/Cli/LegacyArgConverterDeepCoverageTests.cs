@@ -68,8 +68,8 @@ public sealed class LegacyArgConverterDeepCoverageTests
             ("workflows", "workflow"),
             ("dataproviders", "dataprovider"),
             ("servers", "server"),
-            ("downloadreports", "downloadreport"),
-            ("uploadreports", "uploadreport"),
+            ("downloadreports", "report"),
+            ("uploadreports", "report"),
             ("proxytypes", "proxytype"),
             ("solutionpackagers", "solution"),
             ("downloadwebresources", "downloadwebresource"),
@@ -82,5 +82,23 @@ public sealed class LegacyArgConverterDeepCoverageTests
             var result = LegacyArgConverter.Convert(new[] { $"/type:{legacyType}" });
             Assert.AreEqual(expectedCommand, result[0], $"Mismatch for legacy type '{legacyType}'");
         }
+    }
+
+    [TestMethod]
+    public void Convert_ReportTypes_MapToReportWithInjectedTypeAndNoLegacyReemit()
+    {
+        var upload = LegacyArgConverter.Convert(new[] { "/type:uploadreports", "/file:\"Report1.rdl\"" });
+        Assert.AreEqual("report", upload[0]);
+        Assert.AreEqual("--type", upload[1]);
+        Assert.AreEqual("upload", upload[2]);
+        CollectionAssert.Contains(upload, "--file");
+        CollectionAssert.Contains(upload, "Report1.rdl");
+        CollectionAssert.DoesNotContain(upload, "uploadreports");
+
+        var download = LegacyArgConverter.Convert(new[] { "/type:downloadreports", "/profile:DEBUG" });
+        Assert.AreEqual("report", download[0]);
+        Assert.AreEqual("--type", download[1]);
+        Assert.AreEqual("download", download[2]);
+        CollectionAssert.DoesNotContain(download, "downloadreports");
     }
 }

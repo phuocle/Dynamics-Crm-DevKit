@@ -275,11 +275,11 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
                 Assert.IsTrue(result.Success, string.Join("; ", result.Errors));
 
                 var download = File.ReadAllText(IsolatedScriptPath(isolated, "download.reports.bat", "download.reports.sh"));
-                StringAssert.Contains(download, "devkit downloadreport --auth ClientSecret --url \"\" --clientid \"\" --clientsecret \"\"");
+                StringAssert.Contains(download, "devkit report --type download --auth ClientSecret --url \"\" --clientid \"\" --clientsecret \"\"");
                 StringAssert.Contains(download, "--profile \"DEBUG\"");
 
                 var upload = File.ReadAllText(IsolatedScriptPath(isolated, "upload.reports.bat", "upload.reports.sh"));
-                StringAssert.Contains(upload, "devkit uploadreport --auth ClientSecret --url \"\" --clientid \"\" --clientsecret \"\"");
+                StringAssert.Contains(upload, "devkit report --type upload --auth ClientSecret --url \"\" --clientid \"\" --clientsecret \"\"");
                 StringAssert.Contains(upload, "--profile \"DEBUG\"");
             }
             finally
@@ -303,12 +303,12 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             // connection (secrets encrypted by Helper.EncryptString — the
             // scripts never carry the plain secret).
             var download = File.ReadAllText(ScriptPath("download.reports.bat", "download.reports.sh"));
-            StringAssert.Contains(download, "devkit downloadreport --auth ClientSecret --url \"https://contoso.crm.dynamics.com\" --clientid \"00000000-0000-0000-0000-000000000000\" --clientsecret \"");
+            StringAssert.Contains(download, "devkit report --type download --auth ClientSecret --url \"https://contoso.crm.dynamics.com\" --clientid \"00000000-0000-0000-0000-000000000000\" --clientsecret \"");
             StringAssert.Contains(download, "--json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"");
             Assert.IsFalse(download.Contains("plain-secret"));
 
             var upload = File.ReadAllText(ScriptPath("upload.reports.bat", "upload.reports.sh"));
-            StringAssert.Contains(upload, "devkit uploadreport --auth ClientSecret");
+            StringAssert.Contains(upload, "devkit report --type upload --auth ClientSecret");
             StringAssert.Contains(upload, "--profile \"DEBUG\"");
             Assert.IsFalse(upload.Contains("plain-secret"));
         }
@@ -322,12 +322,12 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             // scripts fall back to the project .env) — ApplyCliConnectionArgs
             // also collapses the leading space, so no double space remains.
             var download = File.ReadAllText(ScriptPath("download.reports.bat", "download.reports.sh"));
-            StringAssert.Contains(download, "devkit downloadreport --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"");
+            StringAssert.Contains(download, "devkit report --type download --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"");
             Assert.IsFalse(download.Contains("--auth"));
             Assert.IsFalse(download.Contains("  devkit"));
 
             var upload = File.ReadAllText(ScriptPath("upload.reports.bat", "upload.reports.sh"));
-            StringAssert.Contains(upload, "devkit uploadreport --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"");
+            StringAssert.Contains(upload, "devkit report --type upload --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"");
             Assert.IsFalse(upload.Contains("--auth"));
         }
 
@@ -340,11 +340,11 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             var downloadReportsSh = await TemplatePayload.ReadSharedResourceAsync("sh.download.reports.sh");
             Assert.IsNotNull(downloadReportsSh);
             StringAssert.Contains(downloadReportsSh, "#!/usr/bin/env bash");
-            StringAssert.Contains(downloadReportsSh, "devkit downloadreport $CliConnectionArgs$ --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"");
+            StringAssert.Contains(downloadReportsSh, "devkit report --type download $CliConnectionArgs$ --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"");
 
             var uploadReportsSh = await TemplatePayload.ReadSharedResourceAsync("sh.upload.reports.sh");
             Assert.IsNotNull(uploadReportsSh);
-            StringAssert.Contains(uploadReportsSh, "devkit uploadreport $CliConnectionArgs$ --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"");
+            StringAssert.Contains(uploadReportsSh, "devkit report --type upload $CliConnectionArgs$ --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"");
 
             // Lean contract (aP 2026-10-25): shebang + the devkit call only,
             // like every other bash twin.

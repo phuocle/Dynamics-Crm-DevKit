@@ -194,7 +194,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
 
             Assert.IsTrue(result.Success, string.Join("; ", result.Errors));
             Assert.AreEqual("Created", result.Files.Single(file => file.FileName == "Account.rdl").Action);
-            StringAssert.Contains(result.Warnings[0], "devkit uploadreport");
+            StringAssert.Contains(result.Warnings[0], "devkit report --type upload");
 
             // Byte-faithful to Visual Studio: the wizard writes with
             // ForceWriteAllTextAsync — UTF-8 with BOM — and the builder
