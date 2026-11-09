@@ -813,6 +813,38 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
 
         private List<WebResourceFile> _webResourceFiles = null;
+        internal Func<string, string, string, int> TypeScriptBuildRunner { get; set; }
+
+        private static int RunTypeScriptBuild(string projectRoot, string buildMode, string fileNameWithoutExtension)
+        {
+            var isWindows = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows);
+            var process = new System.Diagnostics.Process
+            {
+                StartInfo = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = isWindows ? "cmd.exe" : "/bin/sh",
+                    Arguments = isWindows
+                        ? $"/c chcp 65001 >nul && npm run {buildMode} {fileNameWithoutExtension}"
+                        : $"-c \"npm run {buildMode} {fileNameWithoutExtension}\"",
+                    WorkingDirectory = projectRoot,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true,
+                    StandardOutputEncoding = System.Text.Encoding.UTF8,
+                    StandardErrorEncoding = System.Text.Encoding.UTF8
+                }
+            };
+            process.OutputDataReceived += (s, ev) => { if (!string.IsNullOrEmpty(ev.Data)) SpectreLog.ActionWithLevel3(ev.Data); };
+            process.ErrorDataReceived += (s, ev) => { if (!string.IsNullOrEmpty(ev.Data)) SpectreLog.ActionWithLevel3($"[STDERR] {ev.Data}"); };
+
+            process.Start();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+            process.WaitForExit();
+            return process.ExitCode;
+        }
+
         private List<WebResourceFile> WebResourceFiles
         {
             get
@@ -825,41 +857,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var file = Path.GetFullPath(Arg.File);
                     if (file.EndsWith(".ts", StringComparison.OrdinalIgnoreCase))
                     {
-                        SpectreLog.ActionWithLevel0("Auto-redirecting input from .ts to compiled .js file...");
+                        var buildMode = string.Equals(Arg.Build?.Trim(), "release", StringComparison.OrdinalIgnoreCase) ? "release" : "debug";
+                        SpectreLog.ActionWithLevel0($"Auto-redirecting input from .ts to compiled .js file ({buildMode})...");
 
-                        var projectRoot = Path.GetDirectoryName(file);
-                        while (!string.IsNullOrEmpty(projectRoot))
-                        {
-                            if (System.IO.File.Exists(Path.Combine(projectRoot, "package.json"))) break;
-                            projectRoot = Path.GetDirectoryName(projectRoot);
-                        }
-
+                        var projectRoot = TypeScriptBuildPathHelper.FindProjectRoot(file);
                         if (!string.IsNullOrEmpty(projectRoot))
                         {
-                            var process = new System.Diagnostics.Process
-                            {
-                                StartInfo = new System.Diagnostics.ProcessStartInfo
-                                {
-                                    FileName = "cmd.exe",
-                                    Arguments = $"/c chcp 65001 >nul && npm run debug {Path.GetFileNameWithoutExtension(file)}",
-                                    WorkingDirectory = projectRoot,
-                                    UseShellExecute = false,
-                                    RedirectStandardOutput = true,
-                                    RedirectStandardError = true,
-                                    CreateNoWindow = true,
-                                    StandardOutputEncoding = System.Text.Encoding.UTF8,
-                                    StandardErrorEncoding = System.Text.Encoding.UTF8
-                                }
-                            };
-                            process.OutputDataReceived += (s, ev) => { if (!string.IsNullOrEmpty(ev.Data)) SpectreLog.ActionWithLevel3(ev.Data); };
-                            process.ErrorDataReceived += (s, ev) => { if (!string.IsNullOrEmpty(ev.Data)) SpectreLog.ActionWithLevel3($"[STDERR] {ev.Data}"); };
-
-                            process.Start();
-                            process.BeginOutputReadLine();
-                            process.BeginErrorReadLine();
-                            process.WaitForExit();
-
-                            if (process.ExitCode != 0)
+                            var exitCode = (TypeScriptBuildRunner ?? RunTypeScriptBuild)(projectRoot, buildMode, Path.GetFileNameWithoutExtension(file));
+                            if (exitCode != 0)
                             {
                                 SpectreLog.ActionError($"TypeScript build failed. Please check your TypeScript code.");
                                 return _webResourceFiles; // return empty

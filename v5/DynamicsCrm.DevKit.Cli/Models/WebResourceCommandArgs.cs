@@ -15,8 +15,12 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Type { get; set; }
 
         [CommandOption("--file|-f")]
-        [Description("Single web resource file to deploy")]
+        [Description("Single web resource file to deploy (for .ts files, auto-builds via npm before deploying)")]
         public string File { get; set; }
+
+        [CommandOption("--build|-b")]
+        [Description("TypeScript build mode when deploying a .ts --file: debug (default, with sourcemap) | release (minified)")]
+        public string Build { get; set; }
 
         [CommandOption("--webresource|-w")]
         [Description("Unique name of the web resource in Dataverse")]

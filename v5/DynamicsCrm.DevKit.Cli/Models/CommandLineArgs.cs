@@ -35,6 +35,8 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("Single web resource file to deploy")]
         public string File { get; set; }
 
+        public string Build { get; set; }
+
         [CommandOption("--webresource|-w")]
         [Description("Unique name of the web resource in Dataverse")]
         public string WebResource { get; set; }
