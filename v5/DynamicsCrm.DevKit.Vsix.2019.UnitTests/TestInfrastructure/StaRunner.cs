@@ -13,6 +13,7 @@ namespace DynamicsCrm.DevKit2019.UnitTests.TestInfrastructure
             {
                 try { action(); }
                 catch (Exception ex) { caught = ex; }
+                finally { System.Windows.Threading.Dispatcher.CurrentDispatcher.InvokeShutdown(); }
             });
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
