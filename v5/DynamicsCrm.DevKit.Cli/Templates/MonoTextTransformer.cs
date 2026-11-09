@@ -1,9 +1,12 @@
 using DynamicsCrm.DevKit.Shared.Templates.T4;
 using DynamicsCrm.DevKit.Shared.Models;
 using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Templates
@@ -20,28 +23,68 @@ namespace DynamicsCrm.DevKit.Cli.Templates
     {
         private const string ParameterDirective = "<#@ parameter type=\"DynamicsCrm.DevKit.Shared.Models.T4Context\" name=\"Context\"#>";
 
-        public async Task<string> TransformAsync(string t4Code, T4Context context)
+        /// <summary>
+        /// Compiled-template cache. Mono.TextTemplating compiles the T4
+        /// source into an assembly on every TransformAsync call (1-3s of
+        /// csc/CodeDom work), while the per-item variation (entity, message,
+        /// order, ...) flows through the session's T4Context — the compiled
+        /// code reads Context from the session at run time. Keying by
+        /// template text makes repeated renders of the same .tt (the common
+        /// CLI scaffold case: many items over one template) compile once and
+        /// then run instantly. Compile failures are deterministic per
+        /// template text, so a cached failure throws the same error on every
+        /// call with that content.
+        /// </summary>
+        private static readonly ConcurrentDictionary<string, Lazy<CachedTemplate>> CompiledTemplates = new(StringComparer.Ordinal);
+
+        public Task<string> TransformAsync(string t4Code, T4Context context)
         {
             if (string.IsNullOrWhiteSpace(t4Code))
             {
                 throw new InvalidOperationException("t4Code: required");
             }
 
+            var code = ParameterDirective + t4Code;
+            var lazy = CompiledTemplates.GetOrAdd(
+                code,
+                static key => new Lazy<CachedTemplate>(() => Compile(key), LazyThreadSafetyMode.ExecutionAndPublication));
+            var cached = lazy.Value;
+
+            // The gate serializes renders of one template: they share the
+            // generator's session, and two concurrent runs must not race on
+            // which T4Context the compiled code reads. Different templates
+            // keep separate gates and compile in parallel.
+            lock (cached.Gate)
+            {
+                var session = cached.Generator.GetOrCreateSession();
+                session["Context"] = context;
+
+                var output = cached.Template.Process();
+                return Task.FromResult(CollapseWhitespaceOnlyLines(SortLeadingUsings(output)));
+            }
+        }
+
+        private static CachedTemplate Compile(string code)
+        {
             var generator = new Mono.TextTemplating.TemplateGenerator();
             generator.Refs.Add(typeof(T4Context).Assembly.Location);
             generator.Imports.Add("System");
 
-            var session = generator.GetOrCreateSession();
-            session["Context"] = context;
-
-            var code = ParameterDirective + t4Code;
-            // ProcessTemplateAsync(inputFile, inputContent, outputFile)
-            // returns (outputFile, outputContent, success).
-            var result = await generator.ProcessTemplateAsync("template.tt", code, null);
-
-            if (generator.Errors.HasErrors)
+            Mono.TextTemplating.CompiledTemplate template = null;
+            try
             {
-                var errors = new System.Text.StringBuilder();
+                template = generator.CompileTemplate(code);
+            }
+            catch
+            {
+                // Parse/compile problems surface through the generator's
+                // Errors collection (same reporting as ProcessTemplateAsync);
+                // fall through to the error check below.
+            }
+
+            if (template == null || generator.Errors.HasErrors)
+            {
+                var errors = new StringBuilder();
                 foreach (System.CodeDom.Compiler.CompilerError error in generator.Errors)
                 {
                     if (error.IsWarning) continue;
@@ -50,7 +93,14 @@ namespace DynamicsCrm.DevKit.Cli.Templates
                 throw new InvalidOperationException($"T4 transformation failed:{Environment.NewLine}{errors}");
             }
 
-            return CollapseWhitespaceOnlyLines(SortLeadingUsings(result.Item2));
+            return new CachedTemplate { Generator = generator, Template = template };
+        }
+
+        private sealed class CachedTemplate
+        {
+            public Mono.TextTemplating.TemplateGenerator Generator { get; init; }
+            public Mono.TextTemplating.CompiledTemplate Template { get; init; }
+            public object Gate { get; } = new();
         }
 
         /// <summary>

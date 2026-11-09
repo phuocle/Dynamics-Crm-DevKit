@@ -46,6 +46,10 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
         {
             TemplateManifests.Clear();
             ScaffoldingEngine.ClearHandlers();
+            // Parallel scaffold tests read the process-wide registry built
+            // by TestAssemblyInit — leave the standard set behind, not an
+            // empty registry.
+            TemplateHandlers.RegisterAll();
             Directory.Delete(_directory, true);
         }
 

@@ -19,7 +19,6 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates;
 /// braces, unreadable project file).
 /// </summary>
 [TestClass]
-[DoNotParallelize]
 public class PluginTestDiscoveryGapCoverageTests
 {
     private string _directory = null!;

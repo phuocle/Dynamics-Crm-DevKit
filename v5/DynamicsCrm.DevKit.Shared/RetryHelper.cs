@@ -82,10 +82,20 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static readonly Random _random = new Random();
 
+        /// <summary>
+        /// Scales the retry backoff. Production default 100 (real backoff).
+        /// Unit tests set 0 through the same pattern as
+        /// MetadataOperationWaitHelper.WaitScalePercent: retry logic
+        /// (attempt counts, transient detection) is exercised against the
+        /// in-memory fake service without sleeping through the backoff.
+        /// </summary>
+        public static int RetryDelayScalePercent { get; set; } = 100;
+
         private static TimeSpan CalculateDelay(int attempt)
         {
             var jitter = _random.Next(0, 1000);
             var delay = DefaultBaseDelay.TotalMilliseconds * Math.Pow(2, attempt) + jitter;
+            delay *= RetryDelayScalePercent / 100.0;
             return TimeSpan.FromMilliseconds(Math.Min(delay, 30000));
         }
     }

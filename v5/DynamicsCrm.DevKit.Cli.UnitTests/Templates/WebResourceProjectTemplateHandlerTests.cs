@@ -29,7 +29,6 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
     /// builds with plain 'dotnet build'.
     /// </summary>
     [TestClass]
-    [DoNotParallelize]
     public class WebResourceProjectTemplateHandlerTests
     {
         private static readonly Regex TokenPattern = new Regex(@"\$[A-Za-z][A-Za-z0-9.]*\$", RegexOptions.Compiled);
@@ -57,16 +56,11 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
                 "EndGlobal\r\n");
             _projectDirectory = Path.Combine(_directory, "Contoso.WebResource");
 
-            ScaffoldingEngine.ClearHandlers();
-            TemplateManifests.Clear();
-            TemplateHandlers.RegisterAll();
         }
 
         [TestCleanup]
         public void Cleanup()
         {
-            ScaffoldingEngine.ClearHandlers();
-            TemplateManifests.Clear();
             Directory.Delete(_directory, true);
         }
 

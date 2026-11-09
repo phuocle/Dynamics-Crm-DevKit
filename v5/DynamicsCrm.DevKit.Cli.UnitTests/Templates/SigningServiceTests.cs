@@ -7,7 +7,6 @@ using System.Security.Cryptography;
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
 {
     [TestClass]
-    [DoNotParallelize]
     public class SigningServiceTests
     {
         private static string TempDirectory()

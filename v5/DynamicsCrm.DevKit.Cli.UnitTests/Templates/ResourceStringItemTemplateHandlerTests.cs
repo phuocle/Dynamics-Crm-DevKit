@@ -25,7 +25,6 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
     /// well-formed XML with the payload's four resheaders.
     /// </summary>
     [TestClass]
-    [DoNotParallelize]
     public class ResourceStringItemTemplateHandlerTests
     {
         private string _directory;
@@ -45,16 +44,11 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             File.WriteAllText(Path.Combine(_resourceDirectory, "Dev.Contoso.Server.csproj"),
                 "<Project Sdk=\"Microsoft.NET.Sdk\">\r\n  <PropertyGroup>\r\n    <TargetFramework>net462</TargetFramework>\r\n  </PropertyGroup>\r\n</Project>");
 
-            ScaffoldingEngine.ClearHandlers();
-            TemplateManifests.Clear();
-            TemplateHandlers.RegisterAll();
         }
 
         [TestCleanup]
         public void Cleanup()
         {
-            ScaffoldingEngine.ClearHandlers();
-            TemplateManifests.Clear();
             Directory.Delete(_directory, true);
         }
 

@@ -29,7 +29,6 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
     /// class must parse cleanly (Roslyn).
     /// </summary>
     [TestClass]
-    [DoNotParallelize]
     public class UiTestItemTemplateHandlerTests
     {
         private string _directory;
@@ -49,16 +48,11 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             File.WriteAllText(Path.Combine(_uiTestDirectory, "Dev.Contoso.UiTest.csproj"),
                 "<Project Sdk=\"Microsoft.NET.Sdk\">\r\n  <PropertyGroup>\r\n    <TargetFramework>net462</TargetFramework>\r\n  </PropertyGroup>\r\n</Project>");
 
-            ScaffoldingEngine.ClearHandlers();
-            TemplateManifests.Clear();
-            TemplateHandlers.RegisterAll();
         }
 
         [TestCleanup]
         public void Cleanup()
         {
-            ScaffoldingEngine.ClearHandlers();
-            TemplateManifests.Clear();
             Directory.Delete(_directory, true);
         }
 

@@ -71,6 +71,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             XrmHelper.EntitiesProcessForm = _originalProcessFormCache ?? new List<ProcessForm>();
             ScaffoldingEngine.ClearHandlers();
             TemplateManifests.Clear();
+            TemplateHandlers.RegisterAll();
             Directory.Delete(_directory, true);
         }
 

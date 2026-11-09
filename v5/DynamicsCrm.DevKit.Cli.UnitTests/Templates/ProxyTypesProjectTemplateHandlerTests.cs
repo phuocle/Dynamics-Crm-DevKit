@@ -27,7 +27,6 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
     /// generated net462 project builds with plain 'dotnet build'.
     /// </summary>
     [TestClass]
-    [DoNotParallelize]
     public class ProxyTypesProjectTemplateHandlerTests
     {
         private static readonly Regex TokenPattern = new Regex(@"\$[A-Za-z][A-Za-z0-9.]*\$", RegexOptions.Compiled);
@@ -55,16 +54,11 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
                 "EndGlobal\r\n");
             _projectDirectory = Path.Combine(_directory, "Contoso.ProxyTypes");
 
-            ScaffoldingEngine.ClearHandlers();
-            TemplateManifests.Clear();
-            TemplateHandlers.RegisterAll();
         }
 
         [TestCleanup]
         public void Cleanup()
         {
-            ScaffoldingEngine.ClearHandlers();
-            TemplateManifests.Clear();
             Directory.Delete(_directory, true);
         }
 

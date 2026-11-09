@@ -29,7 +29,6 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates;
 /// embedded in the Shared assembly.
 /// </summary>
 [TestClass]
-[DoNotParallelize]
 public sealed class ProjectTemplateHandlerGapWave2CoverageTests
 {
     private string _directory = null!;
@@ -40,16 +39,11 @@ public sealed class ProjectTemplateHandlerGapWave2CoverageTests
         _directory = Path.Combine(Path.GetTempPath(), "devkit-projhandler-gap2-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(_directory);
 
-        ScaffoldingEngine.ClearHandlers();
-        TemplateManifests.Clear();
-        TemplateHandlers.RegisterAll();
     }
 
     [TestCleanup]
     public void Cleanup()
     {
-        ScaffoldingEngine.ClearHandlers();
-        TemplateManifests.Clear();
         try { Directory.Delete(_directory, true); } catch { }
     }
 

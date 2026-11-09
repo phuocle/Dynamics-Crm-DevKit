@@ -32,7 +32,6 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
     /// generated at all — the payload content asserts cover the shape).
     /// </summary>
     [TestClass]
-    [DoNotParallelize]
     public class ReportProjectTemplateHandlerTests
     {
         private static readonly Regex TokenPattern = new Regex(@"\$[A-Za-z][A-Za-z0-9.]*\$", RegexOptions.Compiled);
@@ -60,16 +59,11 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
                 "EndGlobal\r\n");
             _projectDirectory = Path.Combine(_directory, "Contoso.Report");
 
-            ScaffoldingEngine.ClearHandlers();
-            TemplateManifests.Clear();
-            TemplateHandlers.RegisterAll();
         }
 
         [TestCleanup]
         public void Cleanup()
         {
-            ScaffoldingEngine.ClearHandlers();
-            TemplateManifests.Clear();
             Directory.Delete(_directory, true);
         }
 

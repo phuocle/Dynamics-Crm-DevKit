@@ -6,7 +6,6 @@ using System.IO;
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
 {
     [TestClass]
-    [DoNotParallelize]
     public class WorkspaceScannerTests
     {
         private string _directory;

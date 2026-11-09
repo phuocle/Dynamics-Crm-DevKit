@@ -65,6 +65,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             XrmHelper.EntitiesMetadata = _originalMetadataCache ?? new List<EntityMetadata>();
             ScaffoldingEngine.ClearHandlers();
             TemplateManifests.Clear();
+            TemplateHandlers.RegisterAll();
             Directory.Delete(_directory, true);
         }
 

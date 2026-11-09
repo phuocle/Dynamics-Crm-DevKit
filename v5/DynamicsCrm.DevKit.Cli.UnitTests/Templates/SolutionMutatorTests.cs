@@ -11,7 +11,6 @@ using System.Xml.Linq;
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
 {
     [TestClass]
-    [DoNotParallelize]
     public class SolutionMutatorTests
     {
         private string _directory;

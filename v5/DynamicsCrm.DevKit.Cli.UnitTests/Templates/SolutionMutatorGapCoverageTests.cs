@@ -17,7 +17,6 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates;
 /// and the ..-relative paths of projects living beside the solution.
 /// </summary>
 [TestClass]
-[DoNotParallelize]
 public class SolutionMutatorGapCoverageTests
 {
     private string _directory = null!;

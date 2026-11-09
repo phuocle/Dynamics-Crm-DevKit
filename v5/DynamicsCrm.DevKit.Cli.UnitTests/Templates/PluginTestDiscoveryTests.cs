@@ -19,7 +19,6 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
     /// already exists in the test project.
     /// </summary>
     [TestClass]
-    [DoNotParallelize]
     public class PluginTestDiscoveryTests
     {
         private string _directory;

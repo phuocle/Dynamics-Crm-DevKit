@@ -570,9 +570,20 @@ namespace DynamicsCrm.DevKit.Shared
             return Const.WEB_RESOURCE_EXTENSIONS.Contains(extension);
         }
 
+        /// <summary>
+        /// Scales every Helper.DelayAsync wait. Production default 100 (real
+        /// waits). Unit tests set 0 through the same pattern as
+        /// MetadataOperationWaitHelper.WaitScalePercent: the code-generation
+        /// helpers sleep for no functional reason, so the second is pure
+        /// test time against the in-memory fake service.
+        /// </summary>
+        public static int DelayScalePercent { get; set; } = 100;
+
         public static async Task DelayAsync(int delayInSeconds)
         {
-            await Task.Delay(delayInSeconds * 1000);
+            var milliseconds = (int)Math.Round(delayInSeconds * 1000 * (DelayScalePercent / 100.0), MidpointRounding.AwayFromZero);
+            if (milliseconds > 0)
+                await Task.Delay(milliseconds);
         }
 
         public static bool IsOptionSet(AttributeMetadata attribute)

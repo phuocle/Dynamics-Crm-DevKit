@@ -56,6 +56,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
         {
             ScaffoldingEngine.ClearHandlers();
             TemplateManifests.Clear();
+            TemplateHandlers.RegisterAll();
             Directory.Delete(_directory, true);
         }
 

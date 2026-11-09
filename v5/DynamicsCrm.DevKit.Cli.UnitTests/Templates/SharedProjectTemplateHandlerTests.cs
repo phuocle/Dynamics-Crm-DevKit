@@ -19,7 +19,6 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
     /// the idempotency rules on re-runs.
     /// </summary>
     [TestClass]
-    [DoNotParallelize]
     public class SharedProjectTemplateHandlerTests
     {
         private static readonly Regex TokenPattern = new Regex(@"\$[A-Za-z][A-Za-z0-9]*\$", RegexOptions.Compiled);
@@ -47,16 +46,11 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
                 "EndGlobal\r\n");
             _projectDirectory = Path.Combine(_directory, "Contoso.Shared");
 
-            ScaffoldingEngine.ClearHandlers();
-            TemplateManifests.Clear();
-            TemplateHandlers.RegisterAll();
         }
 
         [TestCleanup]
         public void Cleanup()
         {
-            ScaffoldingEngine.ClearHandlers();
-            TemplateManifests.Clear();
             Directory.Delete(_directory, true);
         }
 
