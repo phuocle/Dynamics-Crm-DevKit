@@ -387,10 +387,21 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             Assert.IsNotNull(generatorWebApiSh);
             StringAssert.Contains(generatorWebApiSh, "devkit generator $CliConnectionArgs$ --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"TS-WEBAPI\"");
 
-            // Lean contract (aP 2026-10-25): no install-check block in the
-            // bash twins — shebang + the devkit call only (the deploy bats
-            // keep the node/npm checks; the bash twins stay lean like the
-            // WebResource ones).
+            // Both platforms use the same single command after their header.
+            foreach (var name in new[] { "debug", "release" })
+            {
+                var bat = await TemplatePayload.ReadSharedResourceAsync($"bat.webresource.deploy.{name}.ts_bat");
+                var sh = await TemplatePayload.ReadSharedResourceAsync($"sh.webresource.deploy.{name}.ts.sh");
+                Assert.IsNotNull(bat);
+                Assert.IsNotNull(sh);
+                var batLines = bat.Trim().Replace("\r", "").Split('\n');
+                var shLines = sh.Trim().Replace("\r", "").Split('\n');
+                Assert.AreEqual(2, batLines.Length);
+                Assert.AreEqual(2, shLines.Length);
+                Assert.AreEqual("@echo off", batLines[0]);
+                Assert.AreEqual("#!/usr/bin/env bash", shLines[0]);
+                Assert.AreEqual(batLines[1], shLines[1]);
+            }
             Assert.IsFalse(deployDebugSh.Contains("command -v devkit"));
             Assert.IsFalse(deployDebugSh.Contains("where node"));
             Assert.IsFalse(deployReleaseSh.Contains("command -v devkit"));
