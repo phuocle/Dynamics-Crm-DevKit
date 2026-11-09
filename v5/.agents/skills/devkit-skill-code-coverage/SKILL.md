@@ -144,3 +144,8 @@ then Cli, Tool, Vsix, Analyzers, 2019 — then the coverage numbers:
 
 If tests fail, report the failures as in devkit-skill-unit-test and still
 report whatever coverage was collected.
+
+## Timing
+
+Report elapsed unit-test time for every suite in the final report (01.DevKitJs-UnitTest, 02.DevKitTs-UnitTest, Cli, Tool, Vsix, Analyzers, and 2019). Capture each suite's start/end duration while running; distinguish test execution time from total workflow time when scripts include build, coverage collection, or report generation. Include total elapsed time for the full coverage workflow. If a suite is run via an aggregate script, update or instrument the invocation so per-suite durations are recorded without changing test behavior.
+
