@@ -61,9 +61,9 @@ public class CodeSignerProcessGapCoverageTests
 
     private void ShadowDotnetWithFakeSigner()
     {
-        // ping.exe rejects the install arguments ("tool" never resolves) so
-        // both install probes fail deterministically — no network access.
-        File.Copy(SystemExe("ping.exe"), Path.Combine(_fakeDirectory, "dotnet.exe"), overwrite: true);
+        // choice.exe rejects the install arguments immediately and exits
+        // nonzero without DNS or network access.
+        File.Copy(SystemExe("choice.exe"), Path.Combine(_fakeDirectory, "dotnet.exe"), overwrite: true);
         RestrictPath();
     }
 
@@ -204,7 +204,7 @@ public class CodeSignerProcessGapCoverageTests
     public async Task EnsureToolInstalledAsync_BothInstallsFail_ReportsManualHint()
     {
         // No sign.exe anywhere (IsToolInstalledAsync throws and swallows) and
-        // ping.exe shadows dotnet.exe so both install probes exit non-zero —
+        // choice.exe shadows dotnet.exe so both install probes exit non-zero —
         // the whole flow fails without touching the network.
         ShadowDotnetWithFakeSigner();
 
@@ -234,7 +234,7 @@ public class CodeSignerProcessGapCoverageTests
     public async Task SignDllAsync_InstallerFails_ReturnsInstallError()
     {
         // The tool check fails (no sign.exe) and both installs fail through
-        // the ping.exe shadow — the caller sees the install error.
+        // the choice.exe shadow — the caller sees the install error.
         ShadowDotnetWithFakeSigner();
 
         var pfxPath = WriteTestPfx(_tempDir, out var dllPath);

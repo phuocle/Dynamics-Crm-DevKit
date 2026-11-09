@@ -19,8 +19,7 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
     /// Exercises the connection builders end-to-end offline: ServiceClient
     /// constructors are detoured (FakeServiceClientCtor), MSAL token
     /// acquisition and account discovery are detoured (FakeMsalToken), and the
-    /// PAC CLI cache files under %LOCALAPPDATA%\Microsoft\PowerAppsCLI are
-    /// temporarily replaced with crafted content and restored afterwards. PAC
+    /// PAC CLI cache paths are redirected to an isolated temporary directory. PAC
     /// token caches are written DPAPI-protected because MsalCacheHelper
     /// decrypts them on read.
     /// </summary>
@@ -28,45 +27,32 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
     [TestClass]
     public class ToolConnectionBuildersCoverageTests
     {
-        private static readonly string PacDirectory = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Microsoft", "PowerAppsCLI");
+        private static string PacDirectory;
+        private Harmony pacPathPatch;
 
-        private static readonly string[] PacFileNames =
+        private static bool UseTemporaryPacDirectory(ref string __result)
         {
-            "authprofiles_v2.json", "tokencache_msalv3.dat", "pac.spn.cache.dat"
-        };
-
-        private readonly Dictionary<string, byte[]> pacBackups = new();
+            __result = PacDirectory;
+            return false;
+        }
 
         [TestInitialize]
         public void SetUp()
         {
             FakeServiceClientCtor.EnsurePatched();
             FakeMsalToken.EnsurePatched();
+            PacDirectory = Path.Combine(Path.GetTempPath(), "DevKitToolPacTests", Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(PacDirectory);
-            foreach (var fileName in PacFileNames)
-            {
-                var path = Path.Combine(PacDirectory, fileName);
-                pacBackups[fileName] = File.Exists(path) ? File.ReadAllBytes(path) : null;
-            }
+            pacPathPatch = new Harmony("devkit.test.pacpath");
+            pacPathPatch.Patch(AccessTools.Method(typeof(FromPacConnectionBuilder), "GetPacCacheDirectory"),
+                prefix: new HarmonyMethod(typeof(ToolConnectionBuildersCoverageTests), nameof(UseTemporaryPacDirectory)));
         }
 
         [TestCleanup]
         public void TearDown()
         {
-            foreach (var fileName in PacFileNames)
-            {
-                var path = Path.Combine(PacDirectory, fileName);
-                var backup = pacBackups[fileName];
-                if (backup == null)
-                {
-                    if (File.Exists(path)) File.Delete(path);
-                }
-                else
-                {
-                    File.WriteAllBytes(path, backup);
-                }
-            }
+            pacPathPatch?.UnpatchAll("devkit.test.pacpath");
+            if (Directory.Exists(PacDirectory)) Directory.Delete(PacDirectory, true);
             FakeMsalToken.ThrowOnSilent = false;
             FakeMsalToken.Accounts = new List<IAccount>();
         }
@@ -553,39 +539,31 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
         [TestMethod]
         public void PacProfileHelper_Covers_Missing_Null_Empty_And_Blank_Profiles()
         {
-            var path = PacProfileHelper.ProfilesPath;
-            var backup = File.Exists(path) ? File.ReadAllText(path) : null;
+            var path = Path.Combine(Path.GetTempPath(), "devkit-pac-profile-" + Guid.NewGuid().ToString("N") + ".json");
             try
             {
                 if (File.Exists(path)) File.Delete(path);
-                Assert.AreEqual(0, PacProfileHelper.GetPacProfiles().Count);
-                Assert.IsFalse(PacProfileHelper.HasPacProfiles());
+                Assert.AreEqual(0, PacProfileHelper.GetPacProfiles(path).Count);
+                Assert.IsFalse(PacProfileHelper.HasPacProfiles(path));
 
                 File.WriteAllText(path, "null");
-                Assert.AreEqual(0, PacProfileHelper.GetPacProfiles().Count);
+                Assert.AreEqual(0, PacProfileHelper.GetPacProfiles(path).Count);
 
                 File.WriteAllText(path, "{}");
-                Assert.AreEqual(0, PacProfileHelper.GetPacProfiles().Count);
+                Assert.AreEqual(0, PacProfileHelper.GetPacProfiles(path).Count);
 
                 File.WriteAllText(path, "not json");
-                Assert.AreEqual(0, PacProfileHelper.GetPacProfiles().Count);
+                Assert.AreEqual(0, PacProfileHelper.GetPacProfiles(path).Count);
 
                 File.WriteAllText(path, @"{""Profiles"":[{},{""FriendlyName"":""only friendly""},{""Name"":""named"",""Resource"":""https://org""}]}");
-                var profiles = PacProfileHelper.GetPacProfiles();
+                var profiles = PacProfileHelper.GetPacProfiles(path);
                 Assert.AreEqual(2, profiles.Count);
                 Assert.AreEqual("only friendly", profiles[0].ConnectionName);
                 Assert.AreEqual("named", profiles[1].ConnectionName);
             }
             finally
             {
-                if (backup == null)
-                {
-                    if (File.Exists(path)) File.Delete(path);
-                }
-                else
-                {
-                    File.WriteAllText(path, backup);
-                }
+                if (File.Exists(path)) File.Delete(path);
             }
         }
 

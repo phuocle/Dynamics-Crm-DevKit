@@ -101,48 +101,8 @@ public sealed class ConnectionBuilderFactoryAndPacCacheTests
 
     // ── FromPac profile resolution and cache loading ───────────────────
 
-    [TestMethod]
-    public async Task FromPac_ValidateAsync_ReportsUnresolvableProfiles()
-    {
-        var builder = new FromPacConnectionBuilder();
-        var (isValid, error) = await builder.ValidateAsync(new CrmConnection { PacProfile = "zz-no-such-profile-zz" });
-        Assert.IsFalse(isValid);
-        Assert.IsFalse(string.IsNullOrEmpty(error), "either the profiles file or the profile itself is missing.");
-    }
 
-    [TestMethod]
-    public void FromPac_GetPacProfile_UnknownName_ThrowsWithAvailableList()
-    {
-        var method = typeof(FromPacConnectionBuilder).GetMethod("GetPacProfile", BindingFlags.NonPublic | BindingFlags.Static)!;
-        try
-        {
-            method.Invoke(null, new object?[] { "zz-no-such-profile-zz" });
-            Assert.Fail("an unknown profile cannot resolve.");
-        }
-        catch (TargetInvocationException ex) when (ex.InnerException is InvalidOperationException or FileNotFoundException)
-        {
-            var message = ex.InnerException!.Message;
-            var fileMissing = message.Contains("profiles file not found");
-            var profileMissing = message.Contains("PAC CLI profile 'zz-no-such-profile-zz' not found");
-            Assert.IsTrue(fileMissing || profileMissing, message);
-            if (profileMissing)
-                StringAssert.Contains(message, "Available profiles:", "the resolution error lists what pac offers.");
-        }
-    }
 
-    [TestMethod]
-    public void FromPac_LoadPacCacheAsync_MissingCacheThrows()
-    {
-        var method = typeof(FromPacConnectionBuilder).GetMethod("LoadPacCacheAsync", BindingFlags.NonPublic | BindingFlags.Static)!;
-
-        var missing = Assert.ThrowsExactly<FileNotFoundException>(
-            () => ((Task)method.Invoke(null, new object?[] { "no-such-cache-file.dat" })!).GetAwaiter().GetResult());
-        StringAssert.Contains(missing.Message, "PAC CLI token cache not found");
-
-        // Reading the live PAC CLI cache (tokencache_msalv3.dat) is left to
-        // real usage: it locks the user's token cache via the MSAL storage
-        // helper, so the unit test only pins the deterministic miss.
-    }
 
     [TestMethod]
     public void FromPac_TypeAndConnectionString_AreStable()

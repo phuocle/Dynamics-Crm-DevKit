@@ -76,25 +76,4 @@ public sealed class ConnectionBuilderGapWave2CoverageTests
         Assert.AreEqual("Invalid URL format: not a url", error);
     }
 
-    [TestMethod]
-    public void PacProfileHelper_ShapeIsStableRegardlessOfMachineState()
-    {
-        // Whatever the local PAC CLI state is, the helper stays consistent.
-        var hasProfiles = PacProfileHelper.HasPacProfiles();
-        var profiles = PacProfileHelper.GetPacProfiles();
-
-        Assert.IsNotNull(profiles);
-        if (!hasProfiles)
-        {
-            Assert.AreEqual(0, profiles.Count);
-            return;
-        }
-
-        foreach (var profile in profiles)
-        {
-            Assert.IsTrue(profile.Index >= 1);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(profile.DisplayText));
-            Assert.IsFalse(string.IsNullOrWhiteSpace(profile.ToString()));
-        }
-    }
 }

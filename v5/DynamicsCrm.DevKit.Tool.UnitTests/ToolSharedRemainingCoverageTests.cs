@@ -434,39 +434,31 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
         [TestMethod]
         public void PacProfileHelper_Covers_Missing_Null_Empty_And_Blank_Profiles()
         {
-            var path = PacProfileHelper.ProfilesPath;
-            var backup = File.Exists(path) ? File.ReadAllText(path) : null;
+            var path = Path.Combine(Path.GetTempPath(), "devkit-pac-profile-" + Guid.NewGuid().ToString("N") + ".json");
             try
             {
                 if (File.Exists(path)) File.Delete(path);
-                Assert.AreEqual(0, PacProfileHelper.GetPacProfiles().Count);
-                Assert.IsFalse(PacProfileHelper.HasPacProfiles());
+                Assert.AreEqual(0, PacProfileHelper.GetPacProfiles(path).Count);
+                Assert.IsFalse(PacProfileHelper.HasPacProfiles(path));
 
                 File.WriteAllText(path, "null");
-                Assert.AreEqual(0, PacProfileHelper.GetPacProfiles().Count);
+                Assert.AreEqual(0, PacProfileHelper.GetPacProfiles(path).Count);
 
                 File.WriteAllText(path, "{}");
-                Assert.AreEqual(0, PacProfileHelper.GetPacProfiles().Count);
+                Assert.AreEqual(0, PacProfileHelper.GetPacProfiles(path).Count);
 
                 File.WriteAllText(path, "not json");
-                Assert.AreEqual(0, PacProfileHelper.GetPacProfiles().Count);
+                Assert.AreEqual(0, PacProfileHelper.GetPacProfiles(path).Count);
 
                 File.WriteAllText(path, @"{""Profiles"":[{},{""FriendlyName"":""only friendly""},{""Name"":""named"",""Resource"":""https://org""}]}");
-                var profiles = PacProfileHelper.GetPacProfiles();
+                var profiles = PacProfileHelper.GetPacProfiles(path);
                 Assert.AreEqual(2, profiles.Count);
                 Assert.AreEqual("only friendly", profiles[0].ConnectionName);
                 Assert.AreEqual("named", profiles[1].ConnectionName);
             }
             finally
             {
-                if (backup == null)
-                {
-                    if (File.Exists(path)) File.Delete(path);
-                }
-                else
-                {
-                    File.WriteAllText(path, backup);
-                }
+                if (File.Exists(path)) File.Delete(path);
             }
         }
 

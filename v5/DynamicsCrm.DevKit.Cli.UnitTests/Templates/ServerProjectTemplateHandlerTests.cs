@@ -567,7 +567,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             var startInfo = new ProcessStartInfo
             {
                 FileName = "dotnet",
-                Arguments = $"build \"{projectPath}\" --nologo --verbosity quiet",
+                Arguments = $"build \"{projectPath}\" --nologo --verbosity quiet -p:NuGetAudit=false",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
@@ -575,7 +575,9 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             };
             using (var process = Process.Start(startInfo))
             {
-                var output = process.StandardOutput.ReadToEnd() + process.StandardError.ReadToEnd();
+                var stdout = process.StandardOutput.ReadToEndAsync();
+                var stderr = process.StandardError.ReadToEndAsync();
+                var output = stdout.GetAwaiter().GetResult() + stderr.GetAwaiter().GetResult();
                 process.WaitForExit();
                 return (process.ExitCode, output);
             }

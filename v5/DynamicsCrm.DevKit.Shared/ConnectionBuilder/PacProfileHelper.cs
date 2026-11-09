@@ -65,17 +65,24 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
         /// </summary>
         /// <returns>List of profile info, or empty list if no profiles found.</returns>
         public static List<PacProfileInfo> GetPacProfiles()
+            => GetPacProfiles(ProfilesPath);
+
+        /// <summary>
+        /// Loads PAC profiles from an explicit file path. Kept public so callers
+        /// and tests can evaluate profile data without depending on machine state.
+        /// </summary>
+        public static List<PacProfileInfo> GetPacProfiles(string profilesPath)
         {
             var result = new List<PacProfileInfo>();
 
-            if (!File.Exists(ProfilesPath))
+            if (!File.Exists(profilesPath))
             {
                 return result;
             }
 
             try
             {
-                var json = File.ReadAllText(ProfilesPath);
+                var json = File.ReadAllText(profilesPath);
                 var jsonOptions = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -116,9 +123,10 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
         /// Check if PAC CLI profiles file exists.
         /// </summary>
         public static bool HasPacProfiles()
-        {
-            return File.Exists(ProfilesPath);
-        }
+            => HasPacProfiles(ProfilesPath);
+
+        /// <summary>Checks whether the specified PAC profiles file exists.</summary>
+        public static bool HasPacProfiles(string profilesPath) => File.Exists(profilesPath);
 
         #region JSON Models
 

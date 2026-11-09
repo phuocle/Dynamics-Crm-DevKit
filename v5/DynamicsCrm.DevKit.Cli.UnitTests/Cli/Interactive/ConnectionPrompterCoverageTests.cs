@@ -180,38 +180,4 @@ public sealed class ConnectionPrompterCoverageTests
         Assert.AreEqual("BogusType", connection.Type);
     }
 
-    [TestMethod]
-    public void Prompt_FromPac_TypeSelected_ProfilesDependentOutcome()
-    {
-        // PromptFromPac reads the local PAC CLI profiles. The success path
-        // currently crashes before returning: PacProfileInfo.DisplayText is
-        // "[N] name (url)" and Spectre 0.57 escapes markup only on the
-        // cursor row, so the "[N]" of the other rows explodes as an
-        // unbalanced markup tag — a real crash on a real terminal, not a
-        // test artifact. The assertion accepts both that documented crash
-        // and a fixed-product connection; the no-profiles machine takes the
-        // validation-error flow.
-        var hasProfiles = PacProfileHelper.HasPacProfiles();
-        _console.Input.PushKey(ConsoleKey.DownArrow).PushKey(ConsoleKey.Enter).PushKey(ConsoleKey.Enter);
-        try
-        {
-            var connection = ConnectionPrompter.Prompt(new[] { "FromPac" }, _root);
-            if (!hasProfiles)
-            {
-                Assert.Fail("Expected DevKitValidationException on a machine without PAC profiles.");
-            }
-            Assert.IsNotNull(connection);
-            Assert.AreEqual("FromPac", connection.Type);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(connection.PacProfile));
-        }
-        catch (InvalidOperationException ex) when (ex.Message.Contains("markup"))
-        {
-            Assert.IsTrue(hasProfiles, "the markup crash requires profile rows to render.");
-        }
-        catch (DevKitValidationException ex)
-        {
-            Assert.IsFalse(hasProfiles);
-            Assert.IsTrue(ex.Message.Contains("No PAC CLI profiles found"), ex.Message);
-        }
-    }
 }

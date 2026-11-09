@@ -36,15 +36,6 @@ public sealed class FromPacConnectionBuilderCoverageTests
         Assert.AreEqual("AuthType=FromPac;Profile=DEV_ENV;", named);
     }
 
-    [TestMethod]
-    public async Task ValidateAsync_ReturnsFalseWhenProfilesFileNotFound()
-    {
-        var builder = new FromPacConnectionBuilder();
-        // If file doesn't exist or profile doesn't exist, ValidateAsync catches exception and returns (false, error)
-        var result = await builder.ValidateAsync(new CrmConnection { PacProfile = "non_existent_profile_999999" });
-        Assert.IsFalse(result.isValid);
-        Assert.IsNotNull(result.error);
-    }
 
     [TestMethod]
     public void PacProfileInfo_PropertiesFormatCorrectly()
@@ -95,15 +86,23 @@ public sealed class FromPacConnectionBuilderCoverageTests
     [TestMethod]
     public void PacProfileHelper_MethodsExecuteWithoutThrowing()
     {
-        var path = PacProfileHelper.ProfilesPath;
-        Assert.IsFalse(string.IsNullOrWhiteSpace(path));
-
-        var hasProfiles = PacProfileHelper.HasPacProfiles();
-        var profiles = PacProfileHelper.GetPacProfiles();
-        Assert.IsNotNull(profiles);
-        if (!hasProfiles)
+        var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"), "authprofiles_v2.json");
+        try
         {
-            Assert.AreEqual(0, profiles.Count);
+            Assert.IsFalse(PacProfileHelper.HasPacProfiles(path));
+            Assert.AreEqual(0, PacProfileHelper.GetPacProfiles(path).Count);
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+            File.WriteAllText(path, "{\"profiles\":[{\"name\":\"test-profile\",\"resource\":\"https://example.test\"}]}");
+            Assert.IsTrue(PacProfileHelper.HasPacProfiles(path));
+            var profiles = PacProfileHelper.GetPacProfiles(path);
+            Assert.AreEqual(1, profiles.Count);
+            Assert.AreEqual("test-profile", profiles[0].Name);
+            Assert.AreEqual("https://example.test", profiles[0].Resource);
+        }
+        finally
+        {
+            var directory = Path.GetDirectoryName(path)!;
+            if (Directory.Exists(directory)) Directory.Delete(directory, recursive: true);
         }
     }
 

@@ -99,40 +99,7 @@ public sealed class TaskPacSolutionPackagerOfflineTests
         Assert.IsFalse(await NewTask(_root, Json(type: "Extract", mapfile: "no-such-map.xml")).IsValidAsync());
     }
 
-    [TestMethod]
-    public async Task IsValidAsync_PacProbe_RunsLastAndYieldsABool()
-    {
-        // With every profile field valid the pac probe decides the outcome:
-        // installed → the Dataverse Extract lookup fails (no org), missing
-        // → the friendly install hint is printed. Both are valid exits, the
-        // test pins that the probe itself never throws.
-        Directory.CreateDirectory(Path.Combine(_root, "pack", "Unmanaged", "Other"));
-        await File.WriteAllTextAsync(
-            Path.Combine(_root, "pack", "Unmanaged", "Other", "Solution.xml"),
-            "<ImportExportXml version=\"9.0\"><SolutionManifest><UniqueName>MySolution</UniqueName></SolutionManifest></ImportExportXml>");
-        var task = NewTask(_root, Json(type: "Extract"));
-        try
-        {
-            var result = await task.IsValidAsync();
-            Assert.IsInstanceOfType(result, typeof(bool));
-        }
-        catch (NullReferenceException)
-        {
-            // pac installed: the Extract branch consults the org with a null
-            // ServiceClient — the NRE is the reachable offline outcome.
-        }
-    }
 
-    [TestMethod]
-    public void IsPacInstalled_ReturnsABoolWithoutThrowing()
-    {
-        var task = NewTask(_root, Json());
-        var method = typeof(TaskPacSolutionPackager).GetMethod("IsPacInstalled", BindingFlags.NonPublic | BindingFlags.Instance)!;
-        var result = (bool)method.Invoke(task, Array.Empty<object?>())!;
-        // true → pac CLI on PATH; false → not installed (the spawn failure
-        // is swallowed inside). Both are valid offline outcomes.
-        Assert.IsInstanceOfType(result, typeof(bool));
-    }
 
     [TestMethod]
     public void Deployment_Getter_BuildsTheServiceOnce()

@@ -26,19 +26,6 @@ public sealed class PacConnectionBuilderCoverageTests
         Assert.AreEqual("AuthType=FromPac;Profile=Profile1;", builder.BuildConnectionString(connCustom));
     }
 
-    [TestMethod]
-    public async Task FromPacConnectionBuilder_ValidateAsync_MissingProfiles_ReturnsFalse()
-    {
-        var builder = new FromPacConnectionBuilder();
-        var conn = new CrmConnection { PacProfile = "NonExistentProfile_" + Guid.NewGuid().ToString("N") };
-
-        var (isValid, error) = await builder.ValidateAsync(conn);
-        // Either PAC profiles file is missing on this machine, or the profile wasn't found
-        if (!isValid)
-        {
-            Assert.IsFalse(string.IsNullOrWhiteSpace(error));
-        }
-    }
 
     [TestMethod]
     public void FromPacConnectionBuilder_InternalHelpers_WorkAsExpected()
@@ -99,11 +86,4 @@ public sealed class PacConnectionBuilderCoverageTests
         Assert.AreEqual("[1] PAC Profile 1 (no env)", info.DisplayText);
     }
 
-    [TestMethod]
-    public void PacProfileHelper_ProfilesPathAndGetPacProfiles_DoesNotThrow()
-    {
-        Assert.IsFalse(string.IsNullOrWhiteSpace(PacProfileHelper.ProfilesPath));
-        var profiles = PacProfileHelper.GetPacProfiles();
-        Assert.IsNotNull(profiles);
-    }
 }

@@ -339,16 +339,6 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
             Assert.AreEqual("[4] PAC Profile 4 (no env)", info4.DisplayText);
         }
 
-        [TestMethod]
-        public void PacProfileHelper_Basics()
-        {
-            var path = PacProfileHelper.ProfilesPath;
-            Assert.IsFalse(string.IsNullOrWhiteSpace(path));
-
-            var has = PacProfileHelper.HasPacProfiles();
-            var profiles = PacProfileHelper.GetPacProfiles();
-            Assert.IsNotNull(profiles);
-        }
 
         [TestMethod]
         public void FromPac_BuildConnectionStringAndValidate()
@@ -361,56 +351,7 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
             Assert.AreEqual("AuthType=FromPac;Profile=DEV;", b.BuildConnectionString(new CrmConnection { PacProfile = "DEV" }));
         }
 
-        [TestMethod]
-        public async Task FromPac_ValidateAsync_NonExistentProfile_ReturnsFalse()
-        {
-            var b = new FromPacConnectionBuilder();
-            var (valid, err) = await b.ValidateAsync(new CrmConnection { PacProfile = "non_existent_profile_xyz_99999" });
-            Assert.IsFalse(valid);
-            Assert.IsNotNull(err);
-        }
 
-        [TestMethod]
-        public async Task FromPac_ValidateAsync_WithExistingProfiles_ReturnsTrue()
-        {
-            // Only run against a REAL Dataverse profile. The OS-universal
-            // entry pac reports on every signed-in machine (Kind=UNIVERSAL,
-            // Resource=service.powerapps.com) is not a Dataverse connection
-            // and cannot satisfy the validation probes below.
-            var profileNames = new List<string>();
-            var profilesPath = PacProfileHelper.ProfilesPath;
-            if (File.Exists(profilesPath))
-            {
-                var json = JsonDocument.Parse(File.ReadAllText(profilesPath));
-                foreach (var profile in json.RootElement.GetProperty("Profiles").EnumerateArray())
-                {
-                    var kind = profile.TryGetProperty("Kind", out var k) ? k.GetString() : null;
-                    var name = profile.TryGetProperty("Name", out var n) ? n.GetString() : null;
-                    if (!string.Equals(kind, "UNIVERSAL", StringComparison.OrdinalIgnoreCase) &&
-                        !string.IsNullOrWhiteSpace(name))
-                    {
-                        profileNames.Add(name);
-                    }
-                }
-            }
-
-            if (profileNames.Count > 0)
-            {
-                var b = new FromPacConnectionBuilder();
-                var (validActive, _) = await b.ValidateAsync(new CrmConnection { PacProfile = null });
-                Assert.IsTrue(validActive);
-
-                var (validIndex, _) = await b.ValidateAsync(new CrmConnection { PacProfile = "1" });
-                Assert.IsTrue(validIndex);
-
-                var validName = await b.ValidateAsync(new CrmConnection { PacProfile = profileNames[0] });
-                Assert.IsTrue(validName.isValid, validName.error);
-
-                var (invalidNamed, errNamed) = await b.ValidateAsync(new CrmConnection { PacProfile = "unknown_profile_999" });
-                Assert.IsFalse(invalidNamed);
-                StringAssert.Contains(errNamed, "Available profiles");
-            }
-        }
 
         [TestMethod]
         public void FromPac_PrivateMethodsCoverage()

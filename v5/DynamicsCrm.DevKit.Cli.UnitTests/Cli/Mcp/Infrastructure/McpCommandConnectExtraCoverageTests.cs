@@ -3,6 +3,7 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using DynamicsCrm.DevKit.Cli.Commands;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Infrastructure;
@@ -15,8 +16,31 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Infrastructure;
 /// logging is unreachable here — noted per test.
 /// </summary>
 [TestClass]
+[DoNotParallelize]
 public sealed class McpCommandConnectExtraCoverageTests
 {
+    private string _tempDir = null!;
+    private string _originalDir = null!;
+
+    [TestInitialize]
+    public void Setup()
+    {
+        _originalDir = Environment.CurrentDirectory;
+        _tempDir = Path.Combine(Path.GetTempPath(), $"devkit-mcp-conn-tests-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(_tempDir);
+        Environment.CurrentDirectory = _tempDir;
+    }
+
+    [TestCleanup]
+    public void Cleanup()
+    {
+        Environment.CurrentDirectory = _originalDir;
+        if (Directory.Exists(_tempDir))
+        {
+            try { Directory.Delete(_tempDir, true); } catch { }
+        }
+    }
+
     private sealed class NoRemaining : Spectre.Console.Cli.IRemainingArguments
     {
         public System.Linq.ILookup<string, string?> Parsed => null!;

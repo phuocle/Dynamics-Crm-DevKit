@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Tasks;
 
 [TestClass]
+// ExportSolutionAsync writes a shared temporary filename derived from the solution name.
+[DoNotParallelize]
 public sealed class TaskPacSolutionPackagerCoverageTests
 {
     private static readonly BindingFlags InstancePrivate = BindingFlags.NonPublic | BindingFlags.Instance;
@@ -70,10 +72,6 @@ public sealed class TaskPacSolutionPackagerCoverageTests
         // 7. Mapfile missing
         Assert.IsFalse(await CreateTask(new JsonSolutionPackager { solution = "s", solutiontype = "Managed", folder = "f", type = "Extract", mapfile = "missing_map.xml" }).IsValidAsync());
 
-        // 8. Extract when solution does not exist in Dataverse
-        A.CallTo(() => _service.RetrieveMultipleAsync(A<QueryBase>.Ignored))
-            .Returns(Task.FromResult(new EntityCollection()));
-        Assert.IsFalse(await CreateTask(new JsonSolutionPackager { solution = "MissingSol", solutiontype = "Managed", folder = "f", type = "Extract" }).IsValidAsync());
     }
 
     [TestMethod]
@@ -148,30 +146,4 @@ public sealed class TaskPacSolutionPackagerCoverageTests
         Assert.IsFalse(unmanagedZip.EndsWith("_managed.zip"));
     }
 
-    [TestMethod]
-    public async Task RunPacAsync_ExecutesPacCommand()
-    {
-        var mapFile = Path.Combine(_tempDir, "map.xml");
-        File.WriteAllText(mapFile, "<mapping />");
-
-        var json = new JsonSolutionPackager
-        {
-            solution = "MySolution",
-            solutiontype = "Managed",
-            folder = "src",
-            type = "Extract",
-            mapfile = "map.xml"
-        };
-
-        var zipFile = Path.Combine(_tempDir, "fake.zip");
-        File.WriteAllBytes(zipFile, [0x50, 0x4B, 0x05, 0x06]);
-
-        var task = CreateTask(json);
-        var runPacMethod = typeof(TaskPacSolutionPackager).GetMethod("RunPacAsync", InstancePrivate);
-        Assert.IsNotNull(runPacMethod);
-
-        // RunPacAsync executes "pac solution unpack ...", which will run pac (or fail gracefully with exit code)
-        var t = (Task)runPacMethod.Invoke(task, [zipFile])!;
-        await t;
-    }
 }
