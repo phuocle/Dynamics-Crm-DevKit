@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public string TaskType { get; set; } = $"[{nameof(CliType.generators).ToUpper()} - {json.type.ToUpper()}]";
 
-        private string CurrentFolder => $"{CurrentDirectory}\\{Json.rootfolder}";
+        private string CurrentFolder => Path.Combine(CurrentDirectory, Json.rootfolder);
 
         private static bool IsAll { get; set; } = false;
         public bool IsOk { get; set; }

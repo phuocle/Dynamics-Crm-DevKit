@@ -90,7 +90,6 @@ public sealed class ProgramMainExtraCoverageTests
     [TestMethod]
     public void BareHelpDispatch_PreservesMcpWizardsAndExplicitArguments()
     {
-        Assert.IsFalse(Program.ShouldShowBareCommandHelp(new[] { "mcp" }));
         Assert.IsFalse(Program.ShouldShowBareCommandHelp(new[] { "server", "--profile", "help" }));
         Assert.IsFalse(Program.ShouldShowBareCommandHelp(new[] { "unknown" }));
         Assert.IsTrue(Program.ShouldShowBareCommandHelp(new[] { "SERVER" }));
@@ -98,6 +97,7 @@ public sealed class ProgramMainExtraCoverageTests
     [TestMethod]
     [DataRow("new-item")]
     [DataRow("new-project")]
+    [DataRow("mcp")]
     public void BareScaffoldHelp_UsesNearestProjectEnvironment(string command)
     {
         var root = Path.Combine(Path.GetTempPath(), "DevKitCli_ScaffoldEnv_" + Guid.NewGuid().ToString("N"));

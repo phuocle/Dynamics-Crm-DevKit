@@ -78,8 +78,10 @@ namespace DynamicsCrm.DevKit.Cli
                 }
 
                 // These commands require arguments; show their normal help when
-                // invoked bare. MCP and configured scaffold wizards retain their startup flow.
-                if (ShouldShowBareCommandHelp(args))
+                // invoked bare. Configured MCP and scaffold wizards retain their startup flow.
+                var bareMcpHelp = args != null && args.Length == 1 &&
+                    args[0].Equals("mcp", StringComparison.OrdinalIgnoreCase) && ShouldShowBareCommandHelp(args);
+                if (bareMcpHelp || ShouldShowBareCommandHelp(args))
                     args = new[] { args[0], "--help" };
                 var app = new CommandApp();
                 app.Configure(config =>
@@ -89,7 +91,7 @@ namespace DynamicsCrm.DevKit.Cli
                     config.Settings.HelpProviderStyles = new HelpProviderStyle
                     {
                         Description = new DescriptionStyle { Header = green },
-                        Usage = new UsageStyle { Header = green, CurrentCommand = defaults.Usage.CurrentCommand, Command = defaults.Usage.Command, Options = defaults.Usage.Options, RequiredArgument = defaults.Usage.RequiredArgument, OptionalArgument = defaults.Usage.OptionalArgument },
+                        Usage = new UsageStyle { Header = green, CurrentCommand = new Style(Color.White), Command = defaults.Usage.Command, Options = defaults.Usage.Options, RequiredArgument = defaults.Usage.RequiredArgument, OptionalArgument = defaults.Usage.OptionalArgument },
                         Examples = new ExampleStyle { Header = green, Arguments = defaults.Examples.Arguments },
                         Arguments = new ArgumentStyle { Header = green, RequiredArgument = defaults.Arguments.RequiredArgument, OptionalArgument = defaults.Arguments.OptionalArgument },
                         Options = new OptionStyle { Header = green, DefaultValueHeader = defaults.Options.DefaultValueHeader, DefaultValue = defaults.Options.DefaultValue, RequiredOption = defaults.Options.RequiredOption, RequiredOptionValue = defaults.Options.RequiredOptionValue, OptionalOptionValue = defaults.Options.OptionalOptionValue },
@@ -102,6 +104,8 @@ namespace DynamicsCrm.DevKit.Cli
                     // Generator command
                     config.AddCommand<GeneratorCommand>("generator")
                           .WithDescription("Generate JavaScript/TypeScript Form and Web API code, and C# late-bound code")
+                          .WithExample(new[] { "generator", "list" })
+                          .WithExample(new[] { "generator", "--type", "JsForm", "--entities", "account", "--out", "entities", "--rootnamespace", "Contoso" })
                           .WithExample(new[] { "generator", "--json", "DynamicsCrm.DevKit.Cli.json", "--profile", "Account" });
 
                     // Server commands (plugin/workflow deployment)
@@ -184,6 +188,40 @@ namespace DynamicsCrm.DevKit.Cli
                           .WithExample(new[] { "mcp", "--auth", "Interactive", "--url", "https://org.crm.dynamics.com" });
                 });
 
+                // A client owns stdout when it starts MCP over stdio. Send the
+                // missing-configuration help to stderr and signal startup failure.
+                if (bareMcpHelp && Console.IsInputRedirected)
+                {
+                    var previousOut = Console.Out;
+                    var previousConsole = AnsiConsole.Console;
+                    var previousPlain = SpectreLog.IsPlain;
+                    try
+                    {
+                        Console.SetOut(Console.Error);
+                        AnsiConsole.Console = AnsiConsole.Create(new AnsiConsoleSettings
+                        {
+                            Out = new AnsiConsoleOutput(Console.Error),
+                            Ansi = AnsiSupport.No,
+                            Interactive = InteractionSupport.No
+                        });
+                        SpectreLog.IsPlain = true;
+                        Console.Error.WriteLine("[DevKit MCP ERROR] --auth or --conn is required; configure the project .env or pass connection arguments.");
+                        await app.RunAsync(args);
+                        return 2;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Error.WriteLine($"[DevKit MCP ERROR] {ex.Message}");
+                        return 2;
+                    }
+                    finally
+                    {
+                        AnsiConsole.Console = previousConsole;
+                        Console.SetOut(previousOut);
+                        SpectreLog.IsPlain = previousPlain;
+                    }
+                }
+
                 var result = await app.RunAsync(args);
 
                 try
@@ -218,7 +256,8 @@ namespace DynamicsCrm.DevKit.Cli
             if (args == null || args.Length != 1) return false;
             if (BareHelpCommands.Contains(args[0])) return true;
             if (!args[0].Equals("new-item", StringComparison.OrdinalIgnoreCase) &&
-                !args[0].Equals("new-project", StringComparison.OrdinalIgnoreCase)) return false;
+                !args[0].Equals("new-project", StringComparison.OrdinalIgnoreCase) &&
+                !args[0].Equals("mcp", StringComparison.OrdinalIgnoreCase)) return false;
 
             var envFile = ProjectEnvironment.FindFile(currentDirectory ?? Directory.GetCurrentDirectory());
             var values = ProjectEnvironment.Read(envFile);
