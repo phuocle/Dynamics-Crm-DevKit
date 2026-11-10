@@ -11,7 +11,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
     /// </summary>
     public class ServerCommandArgs : DevKitCommandArgs
     {
-        [CommandOption("--onlyupdateassembly|--only-assembly")]
+        [CommandOption("--onlyupdateassembly|--only-assembly|-o")]
         [Description("Only update assembly without registering steps")]
         public bool OnlyUpdateAssembly { get; set; }
 
@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         /// Server type: servers, plugins, workflows, dataproviders, datasources
         /// Set by the command based on which command was invoked or via --type for legacy syntax
         /// </summary>
-        [CommandOption("--type")]
+        [CommandOption("--type|-t")]
         [Description("Task type (servers, plugins, workflows, dataproviders, datasources)")]
         public string ServerType { get; set; }
     }

@@ -2,6 +2,9 @@ using DynamicsCrm.DevKit.Cli.Commands;
 using DynamicsCrm.DevKit.Shared;
 using Spectre.Console;
 using Spectre.Console.Cli;
+using Spectre.Console.Cli.Help;
+using Spectre.Console.Rendering;
+using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Linq;
@@ -74,19 +77,38 @@ namespace DynamicsCrm.DevKit.Cli
                     return 0;
                 }
 
+                // These commands require arguments; show their normal help when
+                // invoked bare. Keep MCP's .env startup and scaffold wizards intact.
+                if (ShouldShowBareCommandHelp(args))
+                    args = new[] { args[0], "--help" };
                 var app = new CommandApp();
                 app.Configure(config =>
                 {
+                    var defaults = HelpProviderStyle.Default;
+                    var green = new Style(Color.Green);
+                    config.Settings.HelpProviderStyles = new HelpProviderStyle
+                    {
+                        Description = new DescriptionStyle { Header = green },
+                        Usage = new UsageStyle { Header = green, CurrentCommand = defaults.Usage.CurrentCommand, Command = defaults.Usage.Command, Options = defaults.Usage.Options, RequiredArgument = defaults.Usage.RequiredArgument, OptionalArgument = defaults.Usage.OptionalArgument },
+                        Examples = new ExampleStyle { Header = green, Arguments = defaults.Examples.Arguments },
+                        Arguments = new ArgumentStyle { Header = green, RequiredArgument = defaults.Arguments.RequiredArgument, OptionalArgument = defaults.Arguments.OptionalArgument },
+                        Options = new OptionStyle { Header = green, DefaultValueHeader = defaults.Options.DefaultValueHeader, DefaultValue = defaults.Options.DefaultValue, RequiredOption = defaults.Options.RequiredOption, RequiredOptionValue = defaults.Options.RequiredOptionValue, OptionalOptionValue = defaults.Options.OptionalOptionValue },
+                        Commands = new CommandStyle { Header = green, ChildCommand = defaults.Commands.ChildCommand, RequiredArgument = defaults.Commands.RequiredArgument }
+                    };
+                    config.SetHelpProvider(new DevKitHelpProvider(config.Settings));
                     config.SetApplicationName("devkit");
                     config.SetApplicationVersion($"{DynamicsCrm.DevKit.Shared.Const.Version} Build: {DynamicsCrm.DevKit.Shared.Const.Build}");
 
                     // Generator command
                     config.AddCommand<GeneratorCommand>("generator")
-                          .WithDescription("Generate form/webapi code");
+                          .WithDescription("Generate JavaScript/TypeScript Form and Web API code, and C# late-bound code")
+                          .WithExample(new[] { "generator", "--json", "DynamicsCrm.DevKit.Cli.json", "--profile", "Account" });
 
                     // Server commands (plugin/workflow deployment)
                     config.AddCommand<ServerCommand>("server")
-                          .WithDescription("Deploy plugins, workflows, dataproviders; Create datasource");
+                          .WithDescription("Deploy plugins, workflows, dataproviders; Create datasource")
+                          .WithExample(new[] { "server", "--json", "DynamicsCrm.DevKit.Cli.json", "--profile", "DEBUG" })
+                          .WithExample(new[] { "server", "--json", "DynamicsCrm.DevKit.Cli.json", "--profile", "DEBUG", "-t", "plugins", "-o" });
 
                     config.AddCommand<PluginCommand>("plugin")
                           .WithDescription("[red]DEPRECATED[/] Use: devkit server");
@@ -108,18 +130,20 @@ namespace DynamicsCrm.DevKit.Cli
                           .WithDescription("[red]DEPRECATED[/] Auto-redirects to: devkit modelbuilder");
 
                     config.AddCommand<ModelBuilderCommand>("modelbuilder")
-                          .WithDescription("Generate early-bound entity classes using PAC ModelBuilder");
+                          .WithDescription("Generate early-bound entity classes using PAC ModelBuilder")
+                          .WithExample(new[] { "modelbuilder", "--json", "DynamicsCrm.DevKit.Cli.json", "--profile", "ALL" });
 
                     config.AddCommand<SolutionPackagerCommand>("legacy-solution")
                           .WithDescription("[red]DEPRECATED[/] Auto-redirects to: devkit solution");
 
                     config.AddCommand<PacSolutionPackagerCommand>("solution")
-                          .WithDescription("Extract or pack solutions using PAC CLI");
+                          .WithDescription("Extract or pack solutions using PAC CLI")
+                          .WithExample(new[] { "solution", "--json", "DynamicsCrm.DevKit.Cli.json", "--profile", "Extract-Both" });
 
                     config.AddCommand<ReportCommand>("report")
                           .WithDescription("Report operations (--type dataset | upload | download)")
                           .WithExample(new[] { "report", "--type", "dataset", "--file", "Account.rdl", "--action", "list" })
-                          .WithExample(new[] { "report", "--type", "dataset", "--file", "Account.rdl", "--action", "add", "--name", "Dataset2", "--fetchxml-file", "filter.xml", "--prefilter", "account=on" })
+                          .WithExample(new[] { "report", "--type", "dataset", "-f", "Account.rdl", "-a", "add", "-n", "Dataset2", "--fetchxml-file", "filter.xml", "-p", "account=on" })
                           .WithExample(new[] { "report", "--type", "upload", "--file", "Report1.rdl", "--report", "Revenue", "--language", "1033" })
                           .WithExample(new[] { "report", "--type", "download", "--json", "DynamicsCrm.DevKit.Cli.json", "--profile", "DEBUG" });
 
@@ -149,13 +173,13 @@ namespace DynamicsCrm.DevKit.Cli
                           .WithDescription("Create a DevKit item template (LateBound, Plugin, ...) in the required project")
                           .WithExample(new[] { "new-item", "list" })
                           .WithExample(new[] { "new-item", "--type", "LateBound", "--entity", "Account", "--project", "Contoso.Shared" })
-                          .WithExample(new[] { "new-item", "--type", "Plugin", "--entity", "Account", "--message", "Update", "--stage", "PreOperation", "--name", "PreAccountUpdate", "--project", "Contoso.Server" });
+                          .WithExample(new[] { "new-item", "--type", "Workflow", "--name", "MyWorkflow", "--project", "Contoso.Server" });
 
                     config.AddCommand<McpCommand>("mcp")
                           .WithDescription("Start MCP server for AI agent integration (auth: CLI args > project .env; see --setup-guide)")
                           .WithExample(new[] { "mcp", "--tools" })
                           .WithExample(new[] { "mcp", "--setup-guide" })
-                          .WithExample(new[] { "mcp", "--auth", "ClientSecret", "--url", "https://org.crm.dynamics.com", "--clientid", "APP_ID", "--clientsecret", "SECRET" })
+                          .WithExample(new[] { "mcp", "--auth", "ClientSecret", "--url", "https://org.crm.dynamics.com", "--clientid", "ID", "--clientsecret", "SECRET" })
                           .WithExample(new[] { "mcp", "--auth", "FromPac", "--pacprofile", "default" })
                           .WithExample(new[] { "mcp", "--auth", "Interactive", "--url", "https://org.crm.dynamics.com" });
                 });
@@ -182,6 +206,76 @@ namespace DynamicsCrm.DevKit.Cli
             }
         }
 
+        private static readonly HashSet<string> BareHelpCommands = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "generator", "server", "plugin", "workflow", "dataprovider", "datasource",
+            "webresource", "downloadwebresource", "modelbuilder", "proxytype",
+            "solution", "legacy-solution", "report", "downloadreport", "uploadreport"
+        };
+
+        internal static bool ShouldShowBareCommandHelp(string[] args) =>
+            args != null && args.Length == 1 && BareHelpCommands.Contains(args[0]);
+        // HelpProvider sections already include their own line breaks. Concatenate
+        // their segments without the extra separators that Rows adds.
+        private sealed class HelpContent : Renderable
+        {
+            private readonly IEnumerable<IRenderable> _sections;
+
+            public HelpContent(IEnumerable<IRenderable> sections) => _sections = sections;
+
+            protected override IEnumerable<Segment> Render(RenderOptions options, int maxWidth)
+            {
+                foreach (var section in _sections)
+                    foreach (var segment in section.Render(options, maxWidth))
+                        yield return segment;
+            }
+        }
+        private sealed class DevKitHelpProvider : HelpProvider
+        {
+            public DevKitHelpProvider(ICommandAppSettings settings) : base(settings) { }
+
+
+            public override IEnumerable<IRenderable> GetExamples(ICommandModel model, ICommandInfo command)
+            {
+                if (command == null) return base.GetExamples(model, command);
+                var examples = command.Examples.ToList();
+                if (examples.Count == 0 && BareHelpCommands.Contains(command.Name))
+                    examples.Add(new[] { command.Name, "--json", "DynamicsCrm.DevKit.Cli.json", "--profile", "DEBUG" });
+                if (examples.Count == 0) return base.GetExamples(model, command);
+
+                if (SpectreLog.IsPlain)
+                {
+                    var lines = examples.Select(example => "    devkit " + string.Join(" ", example));
+                    return new IRenderable[] { new Text("\nEXAMPLES:\n" + string.Join("\n", lines) + "\n") };
+                }
+
+                var styledLines = examples.Select(example => "    devkit " + string.Join(" ",
+                    example.Select(part => part.StartsWith("-", StringComparison.Ordinal)
+                        ? Markup.Escape(part)
+                        : $"[cyan]{Markup.Escape(part)}[/]")));
+                return new IRenderable[] { new Markup("\n[green]EXAMPLES:[/]\n" + string.Join("\n", styledLines) + "\n") };
+            }
+
+            public override IEnumerable<IRenderable> Write(ICommandModel model, ICommandInfo command)
+            {
+                SpectreLog.WriteHeader();
+                var help = base.Write(model, command);
+                if (SpectreLog.IsPlain) return help;
+
+                var title = string.IsNullOrWhiteSpace(command?.Name) ? "devkit" : $"devkit {command.Name}";
+                return new IRenderable[]
+                {
+                    new Panel(new HelpContent(help))
+                    {
+                        Border = BoxBorder.Double,
+                        BorderStyle = new Style(Color.Green),
+                        Header = new PanelHeader($" [bold]{Markup.Escape(title)} Help[/] ", Justify.Left),
+                        Padding = new Padding(2, 1),
+                        Width = 114
+                    }
+                };
+            }
+        }
         /// <summary>
         /// Plain output is also requested through DEVKIT_NO_COLOR in the project
         /// .env file, found by the same walk-up search as connection values:

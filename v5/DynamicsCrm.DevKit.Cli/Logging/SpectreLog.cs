@@ -66,27 +66,15 @@ namespace DynamicsCrm.DevKit.Cli
                 "  devkit generator --profile NAME --json FILE [options]\n" +
                 "  devkit server --profile NAME --json FILE [options]\n\n" +
                 "Commands:\n" +
-                "Commands (Codegen):\n" +
                 "  generator              Generate form/webapi js/ts code, late-bound C# code\n" +
+                "  mcp                    Start MCP server for AI agent integration\n" +
                 "  modelbuilder           Generate early-bound entity classes using PAC ModelBuilder\n" +
+                "  new-item               Create a DevKit ITEM template in the required project\n" +
                 "  new-project            Create a DevKit PROJECT template in the required solution\n" +
-                "  new-item               Create a DevKit ITEM template in the required project\n\n" +
-                "Commands (Deploy):\n" +
-                "  server                 Deploy plugins, workflows, dataproviders; Create datasource\n" +
-                "  webresource            Upload or download web resources (debug or release build)\n" +
-                "  solution               Extract or pack solutions using PAC CLI\n" +
                 "  report                 Report operations (--type dataset | upload | download)\n" +
-                "  mcp                    Start MCP server for AI agent integration\n\n" +
-                "Commands (Deprecated, auto-redirect):\n" +
-                "  plugin                 Use: devkit server\n" +
-                "  workflow               Use: devkit server\n" +
-                "  dataprovider           Use: devkit server\n" +
-                "  datasource             Auto-redirects to: devkit server --type datasources\n" +
-                "  proxytype              Auto-redirects to modelbuilder\n" +
-                "  legacy-solution        Auto-redirects to solution\n" +
-                "  downloadreport         Auto-redirects to: devkit report --type download\n" +
-                "  uploadreport           Auto-redirects to: devkit report --type upload\n" +
-                "  downloadwebresource    Auto-redirects to: devkit webresource --type download\n\n" +
+                "  server                 Deploy plugins, workflows, dataproviders; Create datasource\n" +
+                "  solution               Extract or pack solutions using PAC CLI\n" +
+                "  webresource            Upload or download web resources (debug or release build)\n\n" +
                 "Connection Options:\n" +
                 "  --conn STRING          Dynamics 365 connection string (legacy)\n" +
                 "  --auth TYPE            Modern auth type (see below)\n" +
@@ -130,10 +118,6 @@ namespace DynamicsCrm.DevKit.Cli
                 "                       (same walk-up search; --plain arg does the same)\n\n" +
                 "MCP Server (AI Agent Integration):\n" +
                 $"  devkit mcp                   Start the server ({mcpToolCount} tools, 10 resources)\n" +
-                "    Data:           metadata, schema, relationships, upsert, FetchXML, search, WebAPI\n" +
-                "    Customization:  forms, views, sitemap, ribbon, web resources, publish\n" +
-                "    Automation:     business rules, workflows, Custom APIs, cloud flows, BPFs, plugins\n" +
-                "    Administration: security, audit, environment variables, system jobs, trace logs, URL parser\n" +
                 "  devkit mcp --setup-guide     Setup instructions for all IDEs\n";
 
             if (IsPlain)
@@ -149,27 +133,16 @@ namespace DynamicsCrm.DevKit.Cli
                     "[green]Usage:[/]\n" +
                     "  devkit [cyan]generator[/] --profile [yellow]NAME[/] --json [yellow]FILE[/] [dim][[options]][/]\n" +
                     "  devkit [cyan]server[/] --profile [yellow]NAME[/] --json [yellow]FILE[/] [dim][[options]][/]\n\n" +
-                    "[green]Commands (Codegen):[/]\n" +
+                    "[green]Commands:[/]\n" +
                     "  [cyan]generator[/]              Generate form/webapi js/ts code, late-bound C# code\n" +
+                    "  [cyan]mcp[/]                    Start MCP server for AI agent integration\n" +
                     "  [cyan]modelbuilder[/]           Generate early-bound entity classes using PAC ModelBuilder\n" +
+                    "  [cyan]new-item[/]               Create a DevKit ITEM template in the required project\n" +
                     "  [cyan]new-project[/]            Create a DevKit PROJECT template in the required solution\n" +
-                    "  [cyan]new-item[/]               Create a DevKit ITEM template in the required project\n\n" +
-                    "[green]Commands (Deploy):[/]\n" +
-                    "  [cyan]server[/]                 Deploy plugins, workflows, dataproviders; Create datasource\n" +
-                    "  [cyan]webresource[/]            Upload or download web resources (debug or release build)\n" +
-                    "  [cyan]solution[/]               Extract or pack solutions using PAC CLI\n" +
                     "  [cyan]report[/]                 Report operations (--type dataset | upload | download)\n" +
-                    "  [cyan]mcp[/]                    Start MCP server for AI agent integration\n\n" +
-                    "[green]Commands (Deprecated, auto-redirect):[/]\n" +
-                    "  [cyan]plugin[/]                 Use: devkit server\n" +
-                    "  [cyan]workflow[/]               Use: devkit server\n" +
-                    "  [cyan]dataprovider[/]           Use: devkit server\n" +
-                    "  [cyan]datasource[/]             Auto-redirects to: devkit server --type datasources\n" +
-                    "  [cyan]proxytype[/]              Auto-redirects to modelbuilder\n" +
-                    "  [cyan]legacy-solution[/]        Auto-redirects to solution\n" +
-                    "  [cyan]downloadreport[/]         Auto-redirects to: devkit report --type download\n" +
-                    "  [cyan]uploadreport[/]           Auto-redirects to: devkit report --type upload\n" +
-                    "  [cyan]downloadwebresource[/]    Auto-redirects to: devkit webresource --type download\n\n" +
+                    "  [cyan]server[/]                 Deploy plugins, workflows, dataproviders; Create datasource\n" +
+                    "  [cyan]solution[/]               Extract or pack solutions using PAC CLI\n" +
+                    "  [cyan]webresource[/]            Upload or download web resources (debug or release build)\n\n" +
                     "[green]Connection Options:[/]\n" +
                     "  --conn [yellow]STRING[/]          Dynamics 365 connection string (legacy)\n" +
                     "  --auth [yellow]TYPE[/]            Modern auth type (see below)\n" +
@@ -214,10 +187,6 @@ namespace DynamicsCrm.DevKit.Cli
                     "                       (same walk-up search; --plain arg does the same)\n\n" +
                     "[green]MCP Server (AI Agent Integration):[/]\n" +
                     $"  devkit [cyan]mcp[/]                  Start the server ({mcpToolCount} tools, 10 resources)\n" +
-                    "    Data:           metadata, schema, relationships, upsert, FetchXML, search, WebAPI\n" +
-                    "    Customization:  forms, views, sitemap, ribbon, web resources, publish\n" +
-                    "    Automation:     business rules, workflows, Custom APIs, cloud flows, BPFs, plugins\n" +
-                    "    Administration: security, audit, environment variables, system jobs, trace logs, URL parser\n" +
                     "  devkit [cyan]mcp[/] --setup-guide    Setup instructions for all IDEs\n"
 
                 ))

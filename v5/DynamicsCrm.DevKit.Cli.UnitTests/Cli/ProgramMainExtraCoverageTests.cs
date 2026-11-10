@@ -2,6 +2,7 @@ using DynamicsCrm.DevKit.Shared;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli;
@@ -43,6 +44,79 @@ public sealed class ProgramMainExtraCoverageTests
         Assert.AreEqual(0, exit, "command help exits 0.");
     }
 
+    [TestMethod]
+    [DataRow("server", "help")]
+    [DataRow("server", "--help")]
+    [DataRow("server", "-h")]
+    [DataRow("generator", "help")]
+    [DataRow("mcp", "--help")]
+    public async Task Main_SubcommandHelp_PrintsPlainHeaderOnce(string command, string help)
+    {
+        var (exitCode, output) = await RunCliAsync(command, "--plain", help);
+        Assert.AreEqual(0, exitCode);
+        StringAssert.Contains(output, "| DynamicsCrm.DevKit.Cli ");
+        StringAssert.Contains(output, "DESCRIPTION:");
+        Assert.IsTrue(output.IndexOf("| DynamicsCrm.DevKit.Cli ", StringComparison.Ordinal) <
+                      output.IndexOf("DESCRIPTION:", StringComparison.Ordinal));
+        Assert.AreEqual(output.IndexOf("| DynamicsCrm.DevKit.Cli ", StringComparison.Ordinal),
+                        output.LastIndexOf("| DynamicsCrm.DevKit.Cli ", StringComparison.Ordinal));
+    }
+
+    [TestMethod]
+    [DataRow("generator")]
+    [DataRow("server")]
+    [DataRow("plugin")]
+    [DataRow("workflow")]
+    [DataRow("dataprovider")]
+    [DataRow("datasource")]
+    [DataRow("webresource")]
+    [DataRow("downloadwebresource")]
+    [DataRow("modelbuilder")]
+    [DataRow("proxytype")]
+    [DataRow("solution")]
+    [DataRow("legacy-solution")]
+    [DataRow("report")]
+    [DataRow("downloadreport")]
+    [DataRow("uploadreport")]
+    public async Task Main_BareCommand_PrintsHelp(string command)
+    {
+        var (exitCode, output) = await RunCliAsync(command, "--plain");
+        Assert.AreEqual(0, exitCode);
+        StringAssert.Contains(output, "DESCRIPTION:");
+        StringAssert.Contains(output, $"devkit {command}");
+        StringAssert.Contains(output, "OPTIONS:");
+    }
+
+    [TestMethod]
+    public void BareHelpDispatch_PreservesMcpWizardsAndExplicitArguments()
+    {
+        Assert.IsFalse(Program.ShouldShowBareCommandHelp(new[] { "mcp" }));
+        Assert.IsFalse(Program.ShouldShowBareCommandHelp(new[] { "new-project" }));
+        Assert.IsFalse(Program.ShouldShowBareCommandHelp(new[] { "new-item" }));
+        Assert.IsFalse(Program.ShouldShowBareCommandHelp(new[] { "server", "--profile", "help" }));
+        Assert.IsFalse(Program.ShouldShowBareCommandHelp(new[] { "unknown" }));
+        Assert.IsTrue(Program.ShouldShowBareCommandHelp(new[] { "SERVER" }));
+    }
+    [TestMethod]
+    public async Task Main_McpSetupGuide_DoesNotPrintHeader()
+    {
+        var (exitCode, output) = await RunCliAsync("mcp", "--plain", "--setup-guide");
+        Assert.AreEqual(0, exitCode);
+        StringAssert.Contains(output, "DevKit MCP Setup Guide");
+        Assert.IsFalse(output.Contains("| DynamicsCrm.DevKit.Cli "));
+    }
+
+    private static async Task<(int ExitCode, string Output)> RunCliAsync(params string[] args)
+    {
+        var start = new ProcessStartInfo("dotnet") { RedirectStandardOutput = true, RedirectStandardError = true };
+        start.ArgumentList.Add(typeof(Program).Assembly.Location);
+        foreach (var arg in args) start.ArgumentList.Add(arg);
+        using var process = Process.Start(start)!;
+        var output = process.StandardOutput.ReadToEndAsync();
+        var error = process.StandardError.ReadToEndAsync();
+        await process.WaitForExitAsync();
+        return (process.ExitCode, await output + await error);
+    }
     // ────────────────────────────────────────────────────────────────────
     // IsPlainFromProjectEnvironment — the DEVKIT_NO_COLOR project-.env probe.
     // ────────────────────────────────────────────────────────────────────
