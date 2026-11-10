@@ -7,6 +7,8 @@
 - Keep source version `4.44.44.44`. Build scripts may replace only `xxxx.yy.zz HH.mm.ss`; verify the placeholder is restored afterward and before any commit.
 - Preserve public command names, tool names, and JSON keys unless the task explicitly changes them.
 - Identify the affected component before editing. If its ownership remains unclear between CLI, Shared, and VSIX, ask: they use different frameworks and binaries.
+- Before describing or changing existing behavior, trace the relevant source and check applicable tests. If source, tests, and documentation disagree, identify the discrepancy and do not infer a behavior change without user direction.
+- After editing, inspect the actual diff and verify the requested outcome using an appropriate built or installed artifact. For user-visible output, inspect the rendered output as well as its content. Report what was verified and any limitations; do not claim completion without evidence.
 
 ## Guidance and workflows
 
@@ -22,7 +24,7 @@ Executable recipes live as agent skills under `.agents/skills/` — read the com
 | Full configured release | `devkit-skill-build-release` |
 | Timestamped release without tests/coverage (user-requested fast mode) | `devkit-skill-build-release-only` |
 | Visual Studio 2019 configured release | `devkit-skill-build-release-2019` |
-| Unit tests (pass/fail) / coverage reports | `devkit-skill-unit-test` / `devkit-skill-code-coverage` |
+| Unit tests (pass/fail + timing) / coverage reports | `devkit-skill-unit-test` / `devkit-skill-code-coverage` |
 | Client-code pipeline (clean/install/generate/sync/test) | `devkit-skill-client-code` |
 | Prepare and commit changes | `devkit-skill-commit` |
 
@@ -60,7 +62,7 @@ Paths are relative to this directory; abbreviated paths in later sections are re
 
 Deprecated: `plugin`, `workflow`, `dataprovider` → `server`; `proxytype` → `modelbuilder`; `legacy-solution` → `solution`.
 
-Auth priority: `--conn` > `--auth/--url/...` > fallback > empty. Normal commands use project `.env` (`DEVKIT_*`, searched from the current directory upward to the drive root) as fallback; `devkit mcp` accepts explicit connection arguments only (no .env, no environment variables). Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (legacy), `AD` (on-prem).
+Connection defaults: CLI arguments take priority, with missing values filled from project `.env` (`DEVKIT_*`); `--conn` takes precedence when connecting. For `devkit mcp`, `.env` is searched from the process working directory upward to the drive root. Normal commands may search from the resolved `--json` directory instead. OS environment variables are not read for connection values. Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (legacy), `AD` (on-prem).
 
 ## MCP
 

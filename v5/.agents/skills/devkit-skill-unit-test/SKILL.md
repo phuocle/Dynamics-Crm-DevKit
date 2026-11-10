@@ -1,12 +1,13 @@
 ---
 name: devkit-skill-unit-test
-description: Run the unit tests of the five DynamicsCrm.DevKit UnitTests projects (Cli, Tool, Vsix, Analyzers, Vsix.2019) and report pass/fail only — no coverage. Use when the user asks to run tests, "chạy test", check regressions, or verify a change passes the suite.
+description: Run the unit tests of the five DynamicsCrm.DevKit UnitTests projects (Cli, Tool, Vsix, Analyzers, Vsix.2019), measure execution duration, and report pass/fail with timings — no coverage. Use when the user asks to run tests, "chạy test", check regressions, or verify a change passes the suite.
 ---
 
 # DevKit Skill Unit Test
 
-"Unit test" means: run the tests and report pass/fail only — no code coverage
-collection. When coverage is requested, use devkit-skill-code-coverage instead.
+"Unit test" means: run the tests, measure elapsed duration, and report
+pass/fail with timing per suite — no code coverage collection. When coverage
+is requested, use devkit-skill-code-coverage instead.
 
 Five UnitTests projects, one per component. Each project is single-target:
 `net48` test assemblies cannot reference the net10.0 CLI, and the
@@ -63,6 +64,11 @@ $vstest = Join-Path $vsRoot "Common7\IDE\Extensions\TestPlatform\vstest.console.
 & $vstest DynamicsCrm.DevKit.Vsix.2019.UnitTests\bin\Debug\net472\win\DynamicsCrm.DevKit.Vsix.2019.UnitTests.dll
 ```
 
-Report pass/fail per project and distinguish failures caused by the current
-change from unrelated baseline failures. Do not collect or report code
-coverage in this skill.
+## Timing and reporting
+
+Report pass/fail and elapsed execution duration for each of the five projects
+(Cli, Tool, Vsix, Analyzers, and 2019), plus the total elapsed time. Capture each
+suite's start and end duration while running; distinguish test execution time
+from project build/restore time where applicable. Distinguish failures caused by
+the current change from unrelated baseline failures. Do not collect or report
+code coverage in this skill.

@@ -30,7 +30,7 @@ all discover the skills here with no per-tool copies:
 | `devkit-skill-build-release` | Full configured release + verification | `Release-DynamicsCrm-DevKit.ps1` |
 | `devkit-skill-build-release-only` | Fast timestamped release (current-date stamp), no tests/coverage | `Release-DynamicsCrm-DevKit-CurrentDate.ps1` |
 | `devkit-skill-build-release-2019` | Visual Studio 2019 VSIX release | `Release-DynamicsCrm-DevKit-2019.ps1` |
-| `devkit-skill-unit-test` | Unit tests, pass/fail only | `dotnet test` / `vstest.console` |
+| `devkit-skill-unit-test` | Unit tests, pass/fail and timings | `dotnet test` / `vstest.console` |
 | `devkit-skill-code-coverage` | JS suites + five C# suites + combined report | `06.Unit-Test-Fast.ps1`, `Run-Coverage.ps1` |
 | `devkit-skill-client-code` | TestClientCode pipeline (clean/install/generate/sync/test); rules in `references/` | `01`–`05` scripts in `TestClientCode/` |
 | `devkit-skill-commit` | Prepare and create local commits | git |
