@@ -35,9 +35,9 @@ namespace DynamicsCrm.DevKit.Cli.Templates
         /// template text, so a cached failure throws the same error on every
         /// call with that content.
         /// </summary>
-        private static readonly ConcurrentDictionary<string, Lazy<CachedTemplate>> CompiledTemplates = new(StringComparer.Ordinal);
+        private static readonly ConcurrentDictionary<string, Lazy<Task<CachedTemplate>>> CompiledTemplates = new(StringComparer.Ordinal);
 
-        public Task<string> TransformAsync(string t4Code, T4Context context)
+        public async Task<string> TransformAsync(string t4Code, T4Context context)
         {
             if (string.IsNullOrWhiteSpace(t4Code))
             {
@@ -47,8 +47,8 @@ namespace DynamicsCrm.DevKit.Cli.Templates
             var code = ParameterDirective + t4Code;
             var lazy = CompiledTemplates.GetOrAdd(
                 code,
-                static key => new Lazy<CachedTemplate>(() => Compile(key), LazyThreadSafetyMode.ExecutionAndPublication));
-            var cached = lazy.Value;
+                static key => new Lazy<Task<CachedTemplate>>(() => CompileAsync(key), LazyThreadSafetyMode.ExecutionAndPublication));
+            var cached = await lazy.Value.ConfigureAwait(false);
 
             // The gate serializes renders of one template: they share the
             // generator's session, and two concurrent runs must not race on
@@ -60,11 +60,11 @@ namespace DynamicsCrm.DevKit.Cli.Templates
                 session["Context"] = context;
 
                 var output = cached.Template.Process();
-                return Task.FromResult(CollapseWhitespaceOnlyLines(SortLeadingUsings(output)));
+                return CollapseWhitespaceOnlyLines(SortLeadingUsings(output));
             }
         }
 
-        private static CachedTemplate Compile(string code)
+        private static async Task<CachedTemplate> CompileAsync(string code)
         {
             var generator = new Mono.TextTemplating.TemplateGenerator();
             generator.Refs.Add(typeof(T4Context).Assembly.Location);
@@ -73,7 +73,7 @@ namespace DynamicsCrm.DevKit.Cli.Templates
             Mono.TextTemplating.CompiledTemplate template = null;
             try
             {
-                template = generator.CompileTemplate(code);
+                template = await generator.CompileTemplateAsync(code).ConfigureAwait(false);
             }
             catch
             {

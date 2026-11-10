@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ namespace DynamicsCrm.DevKit.Tool.UnitTests
     /// </summary>
     [DoNotParallelize]
     [TestClass]
+    [SupportedOSPlatform("windows")]
     public class ToolConnectionBuildersCoverageTests
     {
         private static string PacDirectory;

@@ -22,8 +22,8 @@ Other devkit skills invoke these scripts by path — never copy them.
 
 | Script | Purpose | Used by |
 |---|---|---|
-| `scripts/Release-DynamicsCrm-DevKit.ps1` | Full configured release of the four Analyzer/CLI/Tool/VSIX artifacts with annual build date; replaces and restores date placeholders in `finally` | devkit-skill-build-release, devkit-skill-build-release-only |
-| `scripts/Release-DynamicsCrm-DevKit-CurrentDate.ps1` | Same release but stamps the current date instead of the annual one | devkit-skill-build-debug |
+| `scripts/Release-DynamicsCrm-DevKit.ps1` | Full configured release of the four Analyzer/CLI/Tool/VSIX artifacts with annual build date; replaces and restores date placeholders in `finally` | devkit-skill-build-release |
+| `scripts/Release-DynamicsCrm-DevKit-CurrentDate.ps1` | Same release but stamps the current date instead of the annual one | devkit-skill-build-release-only |
 | `scripts/Release-DynamicsCrm-DevKit-2019.ps1` | Visual Studio 2019 VSIX release | devkit-skill-build-release-2019 |
 | `scripts/Release.DynamicsCrm.DevKit.Cli.ps1` | Build, pack and install only the `devkit` CLI | devkit-skill-build-cli |
 | `scripts/Release.DynamicsCrm.DevKit.Tool.ps1` | Build, pack and install only `devkit-tool` | devkit-skill-build-tool |

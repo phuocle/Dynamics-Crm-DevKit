@@ -69,6 +69,71 @@ public sealed class TaskWebResourceFileListCoverageTests
         CollectionAssert.AreEqual(new[] { "prefix/nested/a.css", "prefix/z.js" }, files.Select(f => f.uniquename).ToArray());
     }
 
+    [TestMethod]
+    public void WebResourceFiles_TypeScriptFile_BuildsInDebugOrReleaseModeAndResolvesOutput()
+    {
+        var entitiesDir = Path.Combine(_root, "entities");
+        var buildDir = Path.Combine(_root, "build", "entities");
+        Directory.CreateDirectory(entitiesDir);
+        Directory.CreateDirectory(buildDir);
+        File.WriteAllText(Path.Combine(_root, "package.json"), "{}");
+        var tsFile = Path.Combine(entitiesDir, "Account.ts");
+        var jsFile = Path.Combine(buildDir, "Account.js");
+        File.WriteAllText(tsFile, "export class Account {}");
+        File.WriteAllText(jsFile, "console.log('built');");
+
+        string? capturedMode = null;
+        string? capturedEntity = null;
+
+        // Default (no --build) -> debug
+        var debugTask = NewTask(new CommandLineArgs { File = tsFile, WebResource = "dev_/entities/Account.js" });
+        debugTask.TypeScriptBuildRunner = (root, mode, entity) =>
+        {
+            capturedMode = mode;
+            capturedEntity = entity;
+            return 0;
+        };
+        var debugFiles = Files(debugTask);
+        Assert.HasCount(1, debugFiles);
+        Assert.AreEqual("debug", capturedMode);
+        Assert.AreEqual("Account", capturedEntity);
+        Assert.AreEqual(jsFile, debugFiles[0].file);
+
+        // Explicit --build release -> release
+        var releaseTask = NewTask(new CommandLineArgs { File = tsFile, Build = "release", WebResource = "dev_/entities/Account.js" });
+        releaseTask.TypeScriptBuildRunner = (root, mode, entity) =>
+        {
+            capturedMode = mode;
+            capturedEntity = entity;
+            return 0;
+        };
+        var releaseFiles = Files(releaseTask);
+        Assert.HasCount(1, releaseFiles);
+        Assert.AreEqual("release", capturedMode);
+        Assert.AreEqual("Account", capturedEntity);
+        Assert.AreEqual(jsFile, releaseFiles[0].file);
+
+        // Explicit --build release + WebResourceId (-wid) -> release, placeholder uniquename
+        var widId = Guid.NewGuid();
+        var releaseWidTask = NewTask(new CommandLineArgs { File = tsFile, Build = "release", WebResourceId = widId });
+        releaseWidTask.TypeScriptBuildRunner = (root, mode, entity) =>
+        {
+            capturedMode = mode;
+            capturedEntity = entity;
+            return 0;
+        };
+        var releaseWidFiles = Files(releaseWidTask);
+        Assert.HasCount(1, releaseWidFiles);
+        Assert.AreEqual("release", capturedMode);
+        Assert.AreEqual(jsFile, releaseWidFiles[0].file);
+        Assert.AreEqual("Account.js", releaseWidFiles[0].uniquename);
+
+        // Non-zero exit code -> returns empty list
+        var failedTask = NewTask(new CommandLineArgs { File = tsFile, Build = "release", WebResource = "dev_/entities/Account.js" });
+        failedTask.TypeScriptBuildRunner = (_, _, _) => 1;
+        Assert.HasCount(0, Files(failedTask));
+    }
+
     private TaskWebResource NewTask(CommandLineArgs args, JsonWebResource? json = null) =>
         new(args, json ?? new JsonWebResource { solution = "solution", rootfolder = "web", includefiles = [], excludefiles = [] }) { CurrentDirectory = _root };
 

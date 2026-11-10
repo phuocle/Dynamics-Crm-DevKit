@@ -52,6 +52,8 @@ public sealed class McpCommandConnectExtraCoverageTests
 
     private static async Task<int> ExecuteAsync(McpCommandArgs settings)
     {
+        using var project = new IsolatedMcpProject();
+        settings.Json = project.JsonPath;
         var command = new McpCommand();
         return await command.ExecuteAsyncForTesting(
             new Spectre.Console.Cli.CommandContext(new[] { "mcp" }, new NoRemaining(), "mcp", null!),

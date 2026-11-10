@@ -41,7 +41,7 @@ namespace DynamicsCrm.DevKit.Tool.Commands
 
     internal class CreateEntityCommand : Command<CreateEntitySettings>
     {
-        protected override int Execute(CommandContext context, CreateEntitySettings settings, CancellationToken cancellation)
+        public override int Execute(CommandContext context, CreateEntitySettings settings, CancellationToken cancellation)
         {
             try
             {

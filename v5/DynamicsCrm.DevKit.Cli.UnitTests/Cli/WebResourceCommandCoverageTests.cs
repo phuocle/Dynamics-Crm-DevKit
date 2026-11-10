@@ -20,6 +20,16 @@ public class WebResourceCommandCoverageTests
     }
 
     [TestMethod]
+    public void NormalizeBuild_DefaultsToDebugAndValidatesRelease()
+    {
+        Assert.AreEqual("debug", WebResourceCommand.NormalizeBuild(null));
+        Assert.AreEqual("debug", WebResourceCommand.NormalizeBuild(""));
+        Assert.AreEqual("debug", WebResourceCommand.NormalizeBuild(" DEBUG "));
+        Assert.AreEqual("release", WebResourceCommand.NormalizeBuild(" RELEASE "));
+        Assert.AreEqual("debug", WebResourceCommand.NormalizeBuild("unknown", validate: false));
+    }
+
+    [TestMethod]
     public void ProfileAndJsonRequired_UploadFollowsFile_DownloadAlways()
     {
         var probe = new WebResourceCommandProbe();
@@ -37,8 +47,32 @@ public class WebResourceCommandCoverageTests
     {
         var probe = new WebResourceCommandProbe();
         Assert.AreEqual(1, await probe.Execute(new WebResourceCommandArgs { Type = "download", File = "account.js" }));
+        Assert.AreEqual(1, await probe.Execute(new WebResourceCommandArgs { Type = "download", Build = "release" }));
         Assert.AreEqual(1, await probe.Execute(new WebResourceCommandArgs { Type = "download", WebResource = "new_/account.js" }));
         Assert.AreEqual(1, await probe.Execute(new WebResourceCommandArgs { Type = "download", WebResourceId = "11111111-1111-1111-1111-111111111111" }));
+    }
+
+    [TestMethod]
+    public async Task Execute_BuildOption_Rules_AreEnforcedBeforeConnection()
+    {
+        var probe = new WebResourceCommandProbe();
+
+        // invalid --build value
+        Assert.AreEqual(1, await probe.Execute(new WebResourceCommandArgs { File = "Account.ts", Build = "invalid" }));
+
+        // --build without --file
+        Assert.AreEqual(1, await probe.Execute(new WebResourceCommandArgs { Build = "release" }));
+
+        // --build with non-TS or non-deployable TS file
+        Assert.AreEqual(1, await probe.Execute(new WebResourceCommandArgs { File = "Account.js", Build = "release" }));
+        Assert.AreEqual(1, await probe.Execute(new WebResourceCommandArgs { File = "Account.form.ts", Build = "release" }));
+        Assert.AreEqual(1, await probe.Execute(new WebResourceCommandArgs { File = "Account.webapi.ts", Build = "debug" }));
+        Assert.AreEqual(1, await probe.Execute(new WebResourceCommandArgs { File = "OptionSet.ts", Build = "release" }));
+
+        // valid deployable .ts with debug or release passes pre-connection validation
+        probe.Rules(new WebResourceCommandArgs { File = "entities/Account.ts", Build = "debug" });
+        probe.Rules(new WebResourceCommandArgs { File = "entities/Account.ts", Build = "release" });
+        probe.Rules(new WebResourceCommandArgs { File = "entities/Account.ts", Build = "release", WebResourceId = "11111111-1111-1111-1111-111111111111" });
     }
 
     [TestMethod]
@@ -79,10 +113,11 @@ public class WebResourceCommandCoverageTests
         Assert.HasCount(1, rows);
         CollectionAssert.AreEqual(new[] { "           --type", "download" }, rows[0]);
 
-        var uploadRows = probe.Rows(new WebResourceCommandArgs { File = "account.js", WebResource = "new_/account.js" });
-        Assert.HasCount(2, uploadRows);
-        CollectionAssert.AreEqual(new[] { "           --file", "account.js" }, uploadRows[0]);
-        CollectionAssert.AreEqual(new[] { "           --webresource", "new_/account.js" }, uploadRows[1]);
+        var uploadRows = probe.Rows(new WebResourceCommandArgs { File = "Account.ts", Build = "RELEASE", WebResource = "new_/Account.js" });
+        Assert.HasCount(3, uploadRows);
+        CollectionAssert.AreEqual(new[] { "           --file", "Account.ts" }, uploadRows[0]);
+        CollectionAssert.AreEqual(new[] { "           --build", "release" }, uploadRows[1]);
+        CollectionAssert.AreEqual(new[] { "           --webresource", "new_/Account.js" }, uploadRows[2]);
     }
 
     private sealed class WebResourceCommandProbe : WebResourceCommand

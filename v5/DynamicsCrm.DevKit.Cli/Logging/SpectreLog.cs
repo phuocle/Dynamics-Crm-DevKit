@@ -73,7 +73,7 @@ namespace DynamicsCrm.DevKit.Cli
                 "  new-item               Create a DevKit ITEM template in the required project\n\n" +
                 "Commands (Deploy):\n" +
                 "  server                 Deploy plugins, workflows, dataproviders; Create datasource\n" +
-                "  webresource            Deploy or download web resources (--type upload | download)\n" +
+                "  webresource            Deploy or download web resources (--type upload | download; --build debug | release)\n" +
                 "  solution               Extract or pack solutions using PAC CLI\n" +
                 "  report                 Report operations (--type dataset | upload | download)\n" +
                 "  mcp                    Start MCP server for AI agent integration\n\n" +
@@ -106,11 +106,14 @@ namespace DynamicsCrm.DevKit.Cli
                 "  --json FILE            Path to DynamicsCrm.DevKit.Cli.json\n" +
                 "  --profile NAME         Profile name from json file\n" +
                 "  --plain                Plain text output (for AI agents/CI)\n" +
-                "  --onlyupdateassembly   Fast deploy, only update the assembly (server command only)\n\n" +
+                "  --onlyupdateassembly   Fast deploy, only update the assembly (server command only)\n" +
+                "  --build MODE           TypeScript build mode for .ts --file: debug (default) | release (webresource only)\n\n" +
                 "Examples:\n" +
                 "  devkit server --auth Interactive --url https://org.crm.dynamics.com --json cli.json --profile PROD\n" +
                 "  devkit server --auth FromPac --pacprofile DEVKITV4 --json cli.json --profile DEBUG\n" +
                 "  devkit server --auth ClientSecret --url URL --clientid ID --clientsecret SEC --json cli.json --profile CI\n" +
+                "  devkit webresource --file entities/Account.ts --build release --webresource dev_/entities/Account.js\n" +
+                "  devkit webresource --file entities/Account.ts --build release -wid 00000000-0000-0000-0000-000000000000\n" +
                 "  devkit new-project --type Shared --name Contoso.Shared --solution MySolution.slnx\n" +
                 "  devkit new-item --type Plugin --entity Account --message Update --stage PreOperation --name PreAccountUpdate --project Contoso.Server\n" +
                 "  devkit mcp --auth ClientSecret --url URL --clientid ID --clientsecret SEC\n\n" +
@@ -149,7 +152,7 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]new-item[/]               Create a DevKit ITEM template in the required project\n\n" +
                     "[green]Commands (Deploy):[/]\n" +
                     "  [cyan]server[/]                 Deploy plugins, workflows, dataproviders; Create datasource\n" +
-                    "  [cyan]webresource[/]            Deploy or download web resources (--type upload | download)\n" +
+                    "  [cyan]webresource[/]            Deploy or download web resources (--type upload | download; --build debug | release)\n" +
                     "  [cyan]solution[/]               Extract or pack solutions using PAC CLI\n" +
                     "  [cyan]report[/]                 Report operations (--type dataset | upload | download)\n" +
                     "  [cyan]mcp[/]                    Start MCP server for AI agent integration\n\n" +
@@ -182,11 +185,14 @@ namespace DynamicsCrm.DevKit.Cli
                     "  --json [yellow]FILE[/]            Path to DynamicsCrm.DevKit.Cli.json\n" +
                     "  --profile [yellow]NAME[/]         Profile name from json file\n" +
                     "  --plain                Plain text output (for AI agents/CI)\n" +
-                    "  --onlyupdateassembly   Fast deploy, only update the assembly (server command only)\n\n" +
+                    "  --onlyupdateassembly   Fast deploy, only update the assembly (server command only)\n" +
+                    "  --build [yellow]MODE[/]           TypeScript build mode for .ts --file: debug (default) | release (webresource only)\n\n" +
                     "[green]Examples:[/]\n" +
                     "  devkit [cyan]server[/] --auth [cyan]Interactive[/] --url [cyan]https://org.crm.dynamics.com[/] --json [cyan]cli.json[/] --profile [cyan]PROD[/]\n" +
                     "  devkit [cyan]server[/] --auth [cyan]FromPac[/] --pacprofile [cyan]DEVKITV4[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/]\n" +
                     "  devkit [cyan]server[/] --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/] --json [cyan]cli.json[/] --profile [cyan]CI[/]\n" +
+                    "  devkit [cyan]webresource[/] --file [cyan]entities/Account.ts[/] --build [cyan]release[/] --webresource [cyan]dev_/entities/Account.js[/]\n" +
+                    "  devkit [cyan]webresource[/] --file [cyan]entities/Account.ts[/] --build [cyan]release[/] -wid [cyan]00000000-0000-0000-0000-000000000000[/]\n" +
                     "  devkit [cyan]new-project[/] --type [cyan]Shared[/] --name [cyan]Contoso.Shared[/] --solution [cyan]MySolution.slnx[/]\n" +
                     "  devkit [cyan]new-item[/] --type [cyan]Plugin[/] --entity [cyan]Account[/] --message [cyan]Update[/] --stage [cyan]PreOperation[/] --name [cyan]PreAccountUpdate[/] --project [cyan]Contoso.Server[/]\n" +
                     "  devkit [cyan]mcp[/] --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/]\n\n" +

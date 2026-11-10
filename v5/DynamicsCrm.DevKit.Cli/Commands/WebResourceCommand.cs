@@ -13,7 +13,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
     /// upload, the default) or downloads them from a solution (--type
     /// download, moved from 'devkit downloadwebresource').
     /// Syntax: devkit webresource --conn "..." --json "..." --profile "..."
-    /// Fast deploy: devkit webresource --file "..." [--webresource "..."]
+    /// Fast deploy: devkit webresource --file "..." [--build debug|release] [--webresource "..."]
     /// </summary>
     public class WebResourceCommand : DevKitCommand<WebResourceCommandArgs>
     {
@@ -44,6 +44,8 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             {
                 if (!string.IsNullOrEmpty(settings.File))
                     throw new DevKitValidationException("--file: not valid for --type download (valid: --json, --profile).");
+                if (!string.IsNullOrEmpty(settings.Build))
+                    throw new DevKitValidationException("--build: not valid for --type download (valid: --json, --profile).");
                 if (!string.IsNullOrEmpty(settings.WebResource))
                     throw new DevKitValidationException("--webresource: not valid for --type download (valid: --json, --profile).");
                 if (!string.IsNullOrEmpty(settings.WebResourceId))
@@ -59,6 +61,14 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                         throw new DevKitValidationException("--webresourceid: requires --file (deploy that single file straight to the web resource id).");
                     if (!string.IsNullOrEmpty(settings.WebResource))
                         throw new DevKitValidationException("use only one: pass either --webresource or --webresourceid, not both.");
+                }
+                if (!string.IsNullOrEmpty(settings.Build))
+                {
+                    NormalizeBuild(settings.Build, validate: true);
+                    if (string.IsNullOrEmpty(settings.File))
+                        throw new DevKitValidationException("--build: requires --file (deploy a single .ts file in debug or release mode).");
+                    if (!TypeScriptBuildPathHelper.IsDeployableTypeScript(settings.File))
+                        throw new DevKitValidationException($"--build: '{settings.File}' is not a deployable TypeScript (.ts) file (generated *.form.ts, *.webapi.ts, and OptionSet.ts are not deployed directly).");
                 }
             }
         }
@@ -88,6 +98,10 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             {
                 rows.Add(new[] { "           --file", settings.File });
             }
+            if (!string.IsNullOrEmpty(settings?.Build))
+            {
+                rows.Add(new[] { "           --build", NormalizeBuild(settings.Build) });
+            }
             if (!string.IsNullOrEmpty(settings?.WebResource))
             {
                 rows.Add(new[] { "           --webresource", settings.WebResource });
@@ -104,6 +118,16 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             var value = (type ?? string.Empty).Trim().ToLowerInvariant();
             if (value != "download") return "upload"; // default — bare 'devkit webresource' keeps its deploy behavior
             return value;
+        }
+
+        internal static string NormalizeBuild(string build, bool validate = false)
+        {
+            var value = (build ?? string.Empty).Trim().ToLowerInvariant();
+            if (string.IsNullOrEmpty(value)) return "debug";
+            if (value == "debug" || value == "release") return value;
+            if (validate)
+                throw new DevKitValidationException($"--build '{build}': unknown — valid: debug, release.");
+            return "debug";
         }
 
         private async Task RunUploadAsync(WebResourceCommandArgs settings)
@@ -159,6 +183,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 Type = "webresources",
                 ServiceClient = settings.ServiceClient,
                 File = settings.File,
+                Build = NormalizeBuild(settings.Build),
                 WebResource = settings.WebResource,
                 WebResourceId = Guid.TryParse(settings.WebResourceId?.Trim(), out var webResourceId) ? webResourceId : null
             };

@@ -109,7 +109,7 @@ public sealed class TsFormGapCoverageTests
              <columns><column width=""100%""><sections>{sections}</sections></column></columns>
            </tab>";
 
-    private static SystemForm Main(EntityMetadata meta, string formXml, string name = "Gap Main") => new()
+    private static SystemForm CreateMainForm(EntityMetadata meta, string formXml, string name = "Gap Main") => new()
     {
         Name = name,
         EntityLogicalName = meta.LogicalName,
@@ -123,7 +123,7 @@ public sealed class TsFormGapCoverageTests
         var meta = BuildEntity();
         Set(meta, nameof(EntityMetadata.IsActivityParty), (bool?)true);
         XrmHelper.EntitiesMetadata.Add(meta);
-        XrmHelper.EntitiesFormXml.Add(Main(meta, $@"<form>
+        XrmHelper.EntitiesFormXml.Add(CreateMainForm(meta, $@"<form>
           <tabs>{Tab("tab_general", "General", Section("section_general", "General", Control("name", ControlClassId.SINGLE_LINE_OF_TEXT, "name")))}</tabs>
           <header />
           <Navigation>
@@ -147,7 +147,7 @@ public sealed class TsFormGapCoverageTests
     {
         var meta = BuildEntity("Static");
         XrmHelper.EntitiesMetadata.Add(meta);
-        XrmHelper.EntitiesFormXml.Add(Main(meta, $@"<form>
+        XrmHelper.EntitiesFormXml.Add(CreateMainForm(meta, $@"<form>
           <tabs>{Tab("tab_general", "General", Section("section_general", "General", Control("name", ControlClassId.SINGLE_LINE_OF_TEXT, "name")))}</tabs>
           <header />
         </form>"));
@@ -163,7 +163,7 @@ public sealed class TsFormGapCoverageTests
     {
         var meta = BuildEntity();
         XrmHelper.EntitiesMetadata.Add(meta);
-        XrmHelper.EntitiesFormXml.Add(Main(meta, $@"<form>
+        XrmHelper.EntitiesFormXml.Add(CreateMainForm(meta, $@"<form>
           <tabs>{Tab("tab_general", "General", Section("section_general", "General", Control("name", ControlClassId.SINGLE_LINE_OF_TEXT, "name")))}</tabs>
           <header>
             <rows>
@@ -190,7 +190,7 @@ public sealed class TsFormGapCoverageTests
         var metaAttributes = new List<AttributeMetadata>(meta.Attributes!) { VirtualMultiSelect(), VirtualFile() };
         Set(meta, nameof(EntityMetadata.Attributes), metaAttributes.ToArray());
         XrmHelper.EntitiesMetadata.Add(meta);
-        XrmHelper.EntitiesFormXml.Add(Main(meta, $@"<form>
+        XrmHelper.EntitiesFormXml.Add(CreateMainForm(meta, $@"<form>
           <tabs>{Tab("tab_general", "General", Section("section_general", "General",
               Control("choices", ControlClassId.MULTI_OPTIONSET, "new_choices"),
               Control("docfile", ControlClassId.SINGLE_LINE_OF_TEXT, "new_docfile"),
@@ -249,7 +249,7 @@ public sealed class TsFormGapCoverageTests
             $"<cell><control id=\"quickView2\" classid=\"{{{ControlClassId.QUICK_VIEW_FORM}}}\" uniqueid=\"quickView2\">" +
             $"<parameters><QuickForms>&lt;QuickFormIds&gt;&lt;QuickFormId entityname=\"{QuickViewLogical}\"&gt;{MissingQuickViewFormId}&lt;/QuickFormId&gt;&lt;/QuickFormIds&gt;</QuickForms></parameters>" +
             "</control></cell>";
-        XrmHelper.EntitiesFormXml.Add(Main(meta, $@"<form>
+        XrmHelper.EntitiesFormXml.Add(CreateMainForm(meta, $@"<form>
           <tabs>{Tab("tab_general", "General", Section("section_general", "General", quickView1Cell, quickView2Cell))}</tabs>
           <header />
         </form>"));
@@ -288,11 +288,11 @@ public sealed class TsFormGapCoverageTests
     {
         var meta = BuildEntity();
         XrmHelper.EntitiesMetadata.Add(meta);
-        XrmHelper.EntitiesFormXml.Add(Main(meta, $@"<form>
+        XrmHelper.EntitiesFormXml.Add(CreateMainForm(meta, $@"<form>
           <tabs>{Tab("tab_general", "General", Section("section_one", "One", Control("name", ControlClassId.SINGLE_LINE_OF_TEXT, "name")))}</tabs>
           <header />
         </form>", "First Form"));
-        XrmHelper.EntitiesFormXml.Add(Main(meta, $@"<form>
+        XrmHelper.EntitiesFormXml.Add(CreateMainForm(meta, $@"<form>
           <tabs>{Tab("tab_general", "General", Section("section_two", "Two", Control("revenue", ControlClassId.CURRENCY, "revenue")))}</tabs>
           <header />
         </form>", "Second Form"));
@@ -322,7 +322,7 @@ public sealed class TsFormGapCoverageTests
               </mxswa:Workflow>
             </Activity>"
         });
-        XrmHelper.EntitiesFormXml.Add(Main(meta, $@"<form>
+        XrmHelper.EntitiesFormXml.Add(CreateMainForm(meta, $@"<form>
           <tabs>{Tab("tab_general", "General", Section("section_general", "General", Control("name", ControlClassId.SINGLE_LINE_OF_TEXT, "name")))}</tabs>
           <header />
         </form>"));

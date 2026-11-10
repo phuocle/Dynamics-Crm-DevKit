@@ -98,8 +98,10 @@ namespace DynamicsCrm.DevKit.Cli
                           .WithDescription("[red]DEPRECATED[/] Use: devkit server");
 
                     config.AddCommand<WebResourceCommand>("webresource")
-                          .WithDescription("Deploy or download web resources (--type upload | download)")
+                          .WithDescription("Deploy or download web resources (--type upload | download; --file .ts --build debug | release)")
                           .WithExample(new[] { "webresource", "--json", "DynamicsCrm.DevKit.Cli.json", "--profile", "DEBUG" })
+                          .WithExample(new[] { "webresource", "--file", "entities/Account.ts", "--build", "release", "--webresource", "dev_/entities/Account.js" })
+                          .WithExample(new[] { "webresource", "--file", "entities/Account.ts", "--build", "release", "-wid", "00000000-0000-0000-0000-000000000000" })
                           .WithExample(new[] { "webresource", "--type", "download", "--json", "DynamicsCrm.DevKit.Cli.json", "--profile", "DOWNLOAD" });
 
                     config.AddCommand<ProxyTypeCommand>("proxytype")

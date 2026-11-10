@@ -19,8 +19,8 @@ Executable recipes live as agent skills under `.agents/skills/` — read the com
 | Build analyzer (incl. analyzer dev rules) | `devkit-skill-build-analyzer` |
 | Build and install CLI / Tool | `devkit-skill-build-cli` / `devkit-skill-build-tool` |
 | Build VSIX | `devkit-skill-build-vsix` |
-| Full timestamped build / configured release | `devkit-skill-build-debug` / `devkit-skill-build-release` |
-| Configured release without tests/coverage (user-requested fast mode) | `devkit-skill-build-release-only` |
+| Full configured release | `devkit-skill-build-release` |
+| Timestamped release without tests/coverage (user-requested fast mode) | `devkit-skill-build-release-only` |
 | Visual Studio 2019 configured release | `devkit-skill-build-release-2019` |
 | Unit tests (pass/fail) / coverage reports | `devkit-skill-unit-test` / `devkit-skill-code-coverage` |
 | Client-code pipeline (clean/install/generate/sync/test) | `devkit-skill-client-code` |
@@ -83,7 +83,7 @@ For a requested full release verification, read and follow these two skills in o
 1. `devkit-skill-build-release`: wait for completion, verify installed CLI/Tool versions and all four Analyzer/CLI/Tool/VSIX artifacts under `Published/<version>/`, and confirm temporary build-date replacements are restored.
 2. `devkit-skill-code-coverage`: run `Run-Coverage.ps1` without `-Components` to build and test all five `*.UnitTests` projects: Cli, Tool, Vsix, Analyzers, and Vsix.2019. Allow roughly 5 minutes for coverage (an estimate, not a timeout); wait for completion. Report pass/fail per project, then measured line/branch/method coverage per assembly and HTML report locations. Report failures and any collected coverage; never infer success from the release build alone.
 
-When the user explicitly requests a release without test verification, follow `devkit-skill-build-release-only` instead: it runs the same release script with output verification only and skips the coverage pass by user decision.
+When the user explicitly requests a release without test verification, follow `devkit-skill-build-release-only` instead: it runs the current-date release script (`Release-DynamicsCrm-DevKit-CurrentDate.ps1`) with output verification only and skips the coverage pass by user decision.
 
 For component-scoped changes, use the checks below; a full release still requires an explicit user request.
 
