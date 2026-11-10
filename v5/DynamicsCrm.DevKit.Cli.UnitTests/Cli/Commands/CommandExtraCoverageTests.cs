@@ -105,7 +105,7 @@ public sealed class CommandExtraCoverageTests
     {
         var probe = new NewProjectProbe();
         Assert.IsTrue(await probe.Validate(new NewProjectCommandArgs { List = "list" }));
-        Assert.IsTrue(await probe.Validate(new NewProjectCommandArgs { Type = "Shared", Name = "N", Solution = "S" }));
+        await Assert.ThrowsExactlyAsync<DevKitConnectionException>(() => probe.Validate(new NewProjectCommandArgs { Type = "Shared", Name = "N", Solution = "S" }));
         Assert.IsFalse(probe.ProfileRequired(new NewProjectCommandArgs()));
         Assert.IsFalse(probe.JsonRequired(new NewProjectCommandArgs()));
     }

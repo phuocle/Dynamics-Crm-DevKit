@@ -91,11 +91,33 @@ public sealed class ProgramMainExtraCoverageTests
     public void BareHelpDispatch_PreservesMcpWizardsAndExplicitArguments()
     {
         Assert.IsFalse(Program.ShouldShowBareCommandHelp(new[] { "mcp" }));
-        Assert.IsFalse(Program.ShouldShowBareCommandHelp(new[] { "new-project" }));
-        Assert.IsFalse(Program.ShouldShowBareCommandHelp(new[] { "new-item" }));
         Assert.IsFalse(Program.ShouldShowBareCommandHelp(new[] { "server", "--profile", "help" }));
         Assert.IsFalse(Program.ShouldShowBareCommandHelp(new[] { "unknown" }));
         Assert.IsTrue(Program.ShouldShowBareCommandHelp(new[] { "SERVER" }));
+    }
+    [TestMethod]
+    [DataRow("new-item")]
+    [DataRow("new-project")]
+    public void BareScaffoldHelp_UsesNearestProjectEnvironment(string command)
+    {
+        var root = Path.Combine(Path.GetTempPath(), "DevKitCli_ScaffoldEnv_" + Guid.NewGuid().ToString("N"));
+        var child = Path.Combine(root, "child");
+        Directory.CreateDirectory(child);
+        try
+        {
+            Assert.IsTrue(Program.ShouldShowBareCommandHelp(new[] { command }, child));
+            File.WriteAllText(Path.Combine(root, ".env"), "DEVKIT_AUTH_TYPE=ClientSecret\n");
+            Assert.IsFalse(Program.ShouldShowBareCommandHelp(new[] { command }, child));
+            File.WriteAllText(Path.Combine(child, ".env"), "DEVKIT_NO_COLOR=1\n");
+            Assert.IsTrue(Program.ShouldShowBareCommandHelp(new[] { command }, child), "Nearest .env wins.");
+            File.WriteAllText(Path.Combine(child, ".env"), "DEVKIT_CONNECTION=AuthType=OAuth;\n");
+            Assert.IsFalse(Program.ShouldShowBareCommandHelp(new[] { command }, child));
+            Assert.IsFalse(Program.ShouldShowBareCommandHelp(new[] { command, "list" }, child));
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
     }
     [TestMethod]
     public async Task Main_McpSetupGuide_DoesNotPrintHeader()

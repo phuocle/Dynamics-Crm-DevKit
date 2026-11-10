@@ -459,7 +459,7 @@ public sealed class CommandDispatchExtraCoverageTests
     }
 
     [TestMethod]
-    public async Task NewProjectCommand_ExecuteAsync_ScaffoldsTheProject()
+    public async Task NewProjectCommand_WithoutConnection_DoesNotScaffold()
     {
         File.WriteAllText(Path.Combine(_root, "Contoso.sln"),
             "Microsoft Visual Studio Solution File, Format Version 12.00\r\n" +
@@ -471,10 +471,9 @@ public sealed class CommandDispatchExtraCoverageTests
             Solution = Path.Combine(_root, "Contoso.sln"),
             Out = _root
         });
-        Assert.AreEqual(ExitCodes.Success, exit, "the Shared project scaffolded offline.");
-        // The Shared template produces a .shproj (Shared Project), not a csproj.
-        Assert.IsTrue(File.Exists(Path.Combine(_root, "Contoso.Shared", "Contoso.Shared.shproj")),
-            "the Shared project template produced a .shproj.");
+        Assert.AreEqual(ExitCodes.ConnectionError, exit);
+        Assert.IsFalse(File.Exists(Path.Combine(_root, "Contoso.Shared", "Contoso.Shared.shproj")),
+            "the project must not be created before connecting to Dataverse.");
     }
 
     // NOTE (skipped branches — need real infrastructure):

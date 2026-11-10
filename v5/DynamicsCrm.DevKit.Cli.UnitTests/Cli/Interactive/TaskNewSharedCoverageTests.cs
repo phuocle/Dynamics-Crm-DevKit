@@ -58,6 +58,7 @@ public sealed class TaskNewSharedCoverageTests
         await ScriptedLog.PlainAsync(() => TaskNewShared.ListAsync(TemplateKind.Project));
         var output = ScriptedLog.Captured!.ToString();
         Assert.IsTrue(output.Contains("devkit new-project"), output);
+        Assert.IsTrue(output.Contains("| Shared          | Shared plugin"), output);
     }
 
     [TestMethod]
@@ -66,6 +67,7 @@ public sealed class TaskNewSharedCoverageTests
         await ScriptedLog.PlainAsync(() => TaskNewShared.ListAsync(TemplateKind.Item));
         var output = ScriptedLog.Captured!.ToString();
         Assert.IsTrue(output.Contains("devkit new-item"), output);
+        Assert.IsTrue(output.Contains("| UiTest          | Selenium"), output);
     }
 
     [TestMethod]
@@ -80,7 +82,9 @@ public sealed class TaskNewSharedCoverageTests
     public async Task ListAsync_Item_Spectre_RendersTable()
     {
         await TaskNewShared.ListAsync(TemplateKind.Item);
-        Assert.IsTrue(_console.Output.Contains("Ready"), _console.Output);
+        Assert.IsTrue(_console.Output.Contains("Description"), _console.Output);
+        Assert.IsFalse(_console.Output.Contains("Ready"), _console.Output);
+        Assert.IsFalse(_console.Output.Contains("Conn"), _console.Output);
     }
 
     [TestMethod]

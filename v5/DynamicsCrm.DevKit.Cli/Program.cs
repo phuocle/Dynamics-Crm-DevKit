@@ -78,7 +78,7 @@ namespace DynamicsCrm.DevKit.Cli
                 }
 
                 // These commands require arguments; show their normal help when
-                // invoked bare. Keep MCP's .env startup and scaffold wizards intact.
+                // invoked bare. MCP and configured scaffold wizards retain their startup flow.
                 if (ShouldShowBareCommandHelp(args))
                     args = new[] { args[0], "--help" };
                 var app = new CommandApp();
@@ -213,8 +213,18 @@ namespace DynamicsCrm.DevKit.Cli
             "solution", "legacy-solution", "report", "downloadreport", "uploadreport"
         };
 
-        internal static bool ShouldShowBareCommandHelp(string[] args) =>
-            args != null && args.Length == 1 && BareHelpCommands.Contains(args[0]);
+        internal static bool ShouldShowBareCommandHelp(string[] args, string currentDirectory = null)
+        {
+            if (args == null || args.Length != 1) return false;
+            if (BareHelpCommands.Contains(args[0])) return true;
+            if (!args[0].Equals("new-item", StringComparison.OrdinalIgnoreCase) &&
+                !args[0].Equals("new-project", StringComparison.OrdinalIgnoreCase)) return false;
+
+            var envFile = ProjectEnvironment.FindFile(currentDirectory ?? Directory.GetCurrentDirectory());
+            var values = ProjectEnvironment.Read(envFile);
+            return string.IsNullOrWhiteSpace(ProjectEnvironment.GetValue(values, ProjectEnvironment.AuthType)) &&
+                   string.IsNullOrWhiteSpace(ProjectEnvironment.GetValue(values, ProjectEnvironment.Connection));
+        }
         // HelpProvider sections already include their own line breaks. Concatenate
         // their segments without the extra separators that Rows adds.
         private sealed class HelpContent : Renderable

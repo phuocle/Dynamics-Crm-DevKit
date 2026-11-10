@@ -45,7 +45,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 foreach (var descriptor in descriptors)
                 {
                     var kindName = descriptor.Kind == TemplateKind.Project ? "project" : "item";
-                    Console.WriteLine($"| {kindName,-7} | {descriptor.Order,2} | {descriptor.Id,-15} | {(IsReady(descriptor) ? "yes" : "no "),3} | {(descriptor.RequiresConnection ? "yes" : "no "),3} | {descriptor.Description}");
+                    Console.WriteLine($"| {kindName,-7} | {descriptor.Order,2} | {descriptor.Id,-15} | {CatalogDescription(descriptor)}");
                 }
             }
             else
@@ -57,40 +57,72 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 table.AddColumn(new TableColumn("[green]#[/]").Width(3));
                 table.AddColumn(new TableColumn("[green]Type (--type)[/]"));
                 table.AddColumn(new TableColumn("[green]Name[/]"));
-                table.AddColumn(new TableColumn("[green]Ready[/]").Width(5));
-                table.AddColumn(new TableColumn("[green]Conn[/]").Width(4));
                 table.AddColumn(new TableColumn("[green]Description[/]"));
                 foreach (var descriptor in descriptors)
                 {
-                    table.AddRow($"{descriptor.Order}", $"[yellow]{descriptor.Id}[/]", descriptor.DisplayName, IsReady(descriptor) ? "[green]yes[/]" : "[grey]no[/]", descriptor.RequiresConnection ? "yes" : "no", descriptor.Description);
+                    table.AddRow($"{descriptor.Order}", $"[yellow]{descriptor.Id}[/]", descriptor.DisplayName, Markup.Escape(CatalogDescription(descriptor)));
                 }
-                AnsiConsole.Write(table);
+                var example = kind == TemplateKind.Project
+                    ? "devkit [cyan]new-project[/] --type [cyan]Shared[/] --name [cyan]Contoso.Shared[/] --solution [cyan]MySolution.slnx[/]"
+                    : "devkit [cyan]new-item[/] --type [cyan]LateBound[/] --entity [cyan]Account[/] --project [cyan]Contoso.Shared[/]";
+                AnsiConsole.Write(new Panel(new Rows(table, new Markup($"[green]Example:[/] {example}")))
+                {
+                    Border = BoxBorder.Double,
+                    BorderStyle = new Style(Color.Green),
+                    Header = new PanelHeader($" [bold]devkit new-{(kind == TemplateKind.Project ? "project" : "item")} list[/] "),
+                    Padding = new Padding(1, 1),
+                    Width = 114
+                });
+                return Task.CompletedTask;
             }
 
             SpectreLog.WriteLine();
             if (kind == TemplateKind.Project)
             {
-                SpectreLog.WriteHighLight("Usage: ", "devkit new-project --type Shared --name Contoso.Shared --solution MySolution.slnx", string.Empty);
+                SpectreLog.WriteHighLight("Example: ", "devkit new-project --type Shared --name Contoso.Shared --solution MySolution.slnx", string.Empty);
             }
             else
             {
-                SpectreLog.WriteHighLight("Usage: ", "devkit new-item --type LateBound --entity Account --project Contoso.Shared", string.Empty);
+                SpectreLog.WriteHighLight("Example: ", "devkit new-item --type LateBound --entity Account --project Contoso.Shared", string.Empty);
             }
             return Task.CompletedTask;
         }
 
-        /// <summary>
-        /// True when a kind-matching handler or manifest is registered for
-        /// the template — the "Ready" column of the catalog list tells
-        /// users and AI agents which types scaffold today. The registry is
-        /// scoped by kind, so project Test/UiTest/Report never light up
-        /// their not-yet-ported item twins.
-        /// </summary>
-        private static bool IsReady(TemplateDescriptor descriptor)
+        // Compact CLI descriptions keep the catalog readable inside the help-width frame.
+        private static string CatalogDescription(TemplateDescriptor descriptor) => (descriptor.Kind, descriptor.Id) switch
         {
-            return ScaffoldingEngine.FindHandler(descriptor.Kind, descriptor.Id) != null
-                || TemplateManifests.TryGet(descriptor.Kind, descriptor.Id, out _);
-        }
+            (TemplateKind.Project, "Shared") => "Shared plugin core, entities and CLI config",
+            (TemplateKind.Project, "Console") => ".NET Framework 4.6.2 Dataverse console",
+            (TemplateKind.Project, "ConsoleCore") => ".NET 10 Dataverse console",
+            (TemplateKind.Project, "Server") => "Plugins, workflows, APIs and data providers",
+            (TemplateKind.Project, "Package") => "Dataverse Package Deployer project",
+            (TemplateKind.Project, "WebResource") => "JavaScript web resources and deployment",
+            (TemplateKind.Project, "SharedTest") => "Shared FakeXrmEasy test helpers",
+            (TemplateKind.Project, "ProxyTypes") => "Early-bound entity classes with modelbuilder",
+            (TemplateKind.Project, "Test") => "Server unit tests with MSTest and FakeXrmEasy",
+            (TemplateKind.Project, "UiTest") => "UI tests with Selenium and Dynamics365.UIAutomation",
+            (TemplateKind.Project, "SolutionPackager") => "Extract and pack solutions using PAC CLI",
+            (TemplateKind.Project, "Report") => "Download and upload SSRS reports",
+            (TemplateKind.Project, "WebResourceTs") => "TypeScript web resources and deployment",
+            (TemplateKind.Item, "LateBound") => "Late-bound entity class and generated code",
+            (TemplateKind.Item, "JsForm") => "Entity form JavaScript and type declarations",
+            (TemplateKind.Item, "JsWebApi") => "Entity WebAPI JavaScript and type declarations",
+            (TemplateKind.Item, "Plugin") => "Plugin step class (T4-generated)",
+            (TemplateKind.Item, "CustomAction") => "Custom action handler (T4-generated)",
+            (TemplateKind.Item, "CustomApi") => "Custom API handler (T4-generated)",
+            (TemplateKind.Item, "Workflow") => "Workflow activity class (T4-generated)",
+            (TemplateKind.Item, "DataProvider") => "Virtual entity CRUD classes (T4-generated)",
+            (TemplateKind.Item, "Test") => "Plugin or workflow unit test (T4-generated)",
+            (TemplateKind.Item, "UiTest") => "Selenium UI test class (T4-generated)",
+            (TemplateKind.Item, "ResourceString") => "Entity resource strings by language",
+            (TemplateKind.Item, "BatFile") => "Deploy scripts and DevKit utility files",
+            (TemplateKind.Item, "TsForm") => "Entity form TypeScript",
+            (TemplateKind.Item, "TsWebApi") => "Entity WebAPI TypeScript",
+            (TemplateKind.Item, "TsDialog") => "Dialog TypeScript",
+            (TemplateKind.Item, "JsDialog") => "Dialog JavaScript and type declarations",
+            (TemplateKind.Item, "Report") => "SSRS report with a FetchXML dataset",
+            _ => descriptor.Description
+        };
 
         public static string PromptTemplate(TemplateKind kind)
         {
