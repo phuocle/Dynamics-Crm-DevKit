@@ -27,9 +27,8 @@ all discover the skills here with no per-tool copies:
 | `devkit-skill-build-cli` | Build, pack, install `devkit` CLI | `Release.DynamicsCrm.DevKit.Cli.ps1` |
 | `devkit-skill-build-tool` | Build, pack, install `devkit-tool` | `Release.DynamicsCrm.DevKit.Tool.ps1` |
 | `devkit-skill-build-vsix` | Build the VS 2026 VSIX | VS MSBuild (no script) |
-| `devkit-skill-build-debug` | Full timestamped build (current-date stamp) | `Release-DynamicsCrm-DevKit-CurrentDate.ps1` |
 | `devkit-skill-build-release` | Full configured release + verification | `Release-DynamicsCrm-DevKit.ps1` |
-| `devkit-skill-build-release-only` | Fast configured release, no tests/coverage | `Release-DynamicsCrm-DevKit.ps1` |
+| `devkit-skill-build-release-only` | Fast timestamped release (current-date stamp), no tests/coverage | `Release-DynamicsCrm-DevKit-CurrentDate.ps1` |
 | `devkit-skill-build-release-2019` | Visual Studio 2019 VSIX release | `Release-DynamicsCrm-DevKit-2019.ps1` |
 | `devkit-skill-unit-test` | Unit tests, pass/fail only | `dotnet test` / `vstest.console` |
 | `devkit-skill-code-coverage` | JS suites + five C# suites + combined report | `06.Unit-Test-Fast.ps1`, `Run-Coverage.ps1` |
