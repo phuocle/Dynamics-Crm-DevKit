@@ -147,7 +147,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             using (var stream = File.OpenRead(solutionFile))
             {
                 var head = new byte[3];
-                stream.Read(head, 0, head.Length);
+                stream.ReadExactly(head);
                 Assert.IsFalse(head[0] == 0xEF && head[1] == 0xBB && head[2] == 0xBF);
             }
 

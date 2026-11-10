@@ -1,4 +1,5 @@
 using DynamicsCrm.DevKit.Cli.Commands;
+using DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Infrastructure;
 using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Shared;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -144,8 +145,9 @@ public sealed class ProgramAndCommandCoverageTests
     [TestMethod]
     public async Task McpCommand_InvalidModernAuthentication_ReturnsError()
     {
+        using var project = new IsolatedMcpProject();
         var command = new McpCommand();
-        var settings = new McpCommandArgs { AuthType = "NotARealAuthType", Url = "https://example.test" };
+        var settings = new McpCommandArgs { AuthType = "NotARealAuthType", Url = "https://example.test", Json = project.JsonPath };
         var exit = await command.ExecuteAsyncForTesting(new Spectre.Console.Cli.CommandContext(new[] { "mcp" }, new NoRemaining(), "mcp", null!), settings, default);
         Assert.AreEqual(1, exit);
     }

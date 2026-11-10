@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Windows.Threading;
 
 namespace DynamicsCrm.DevKit2019.UnitTests.TestInfrastructure
 {
@@ -13,6 +14,7 @@ namespace DynamicsCrm.DevKit2019.UnitTests.TestInfrastructure
             {
                 try { action(); }
                 catch (Exception ex) { caught = ex; }
+                finally { Dispatcher.CurrentDispatcher.InvokeShutdown(); }
             });
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();

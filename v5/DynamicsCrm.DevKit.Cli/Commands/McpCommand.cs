@@ -26,7 +26,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         public Task<int> ExecuteAsyncForTesting(CommandContext context, McpCommandArgs settings, CancellationToken cancellationToken)
             => ExecuteAsync(context, settings, cancellationToken);
 
-        protected override async Task<int> ExecuteAsync(CommandContext context, McpCommandArgs settings, CancellationToken cancellationToken)
+        public override async Task<int> ExecuteAsync(CommandContext context, McpCommandArgs settings, CancellationToken cancellationToken)
         {
             try
             {

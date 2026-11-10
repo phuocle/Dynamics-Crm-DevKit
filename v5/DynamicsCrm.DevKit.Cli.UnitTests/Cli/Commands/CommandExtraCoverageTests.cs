@@ -198,7 +198,6 @@ public sealed class CommandExtraCoverageTests
             Profile = "DEBUG"
         };
         await command.RunWebResourceAsync(settings); // errors and returns — no deploy
-        Assert.IsTrue(true, "the profile-less upload reported the missing --webresource and returned.");
     }
 
     [TestMethod]
@@ -209,7 +208,6 @@ public sealed class CommandExtraCoverageTests
         var command = new WebResourceCommand();
         var settings = new WebResourceCommandArgs { Type = "download", Json = jsonFile, Profile = "DOWNLOAD" };
         await command.RunWebResourceAsync(settings);
-        Assert.IsTrue(true, "the missing 'downloadwebresources' section was reported and returned.");
     }
 
     [TestMethod]
@@ -336,7 +334,6 @@ public sealed class CommandExtraCoverageTests
             "<Body><ReportItems /></Body><CustomProperties /></Report>");
         var command = new ReportCommand();
         await command.RunReportAsync(new ReportCommandArgs { Type = "dataset", File = file, Action = "list" });
-        Assert.IsTrue(true, "the dataset list action completed without a connection.");
     }
 
     [TestMethod]
@@ -344,7 +341,6 @@ public sealed class CommandExtraCoverageTests
     {
         var command = new ReportCommand();
         await command.RunReportAsync(new ReportCommandArgs { Type = "upload", Profile = "DEBUG" });
-        Assert.IsTrue(true, "the missing profile was reported and the dispatch returned.");
     }
 
     [TestMethod]
@@ -354,7 +350,6 @@ public sealed class CommandExtraCoverageTests
         await File.WriteAllTextAsync(jsonFile, "{\"downloadreports\": []}");
         var command = new ReportCommand();
         await command.RunReportAsync(new ReportCommandArgs { Type = "download", Json = jsonFile, Profile = "DEBUG" });
-        Assert.IsTrue(true, "the missing download profile was reported and the dispatch returned.");
     }
 
     // ── McpCommand impersonation helpers (FakeSdkClient) ───────────────

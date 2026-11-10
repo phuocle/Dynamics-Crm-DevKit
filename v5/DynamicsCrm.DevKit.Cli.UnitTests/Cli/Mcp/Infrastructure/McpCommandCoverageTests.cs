@@ -83,7 +83,7 @@ public class McpCommandCoverageTests
         try
         {
             Environment.CurrentDirectory = tempDirectory;
-            var (exitCode, _, stderr) = await ExecuteWithConsoleAsync(new McpCommandArgs());
+            var (exitCode, _, stderr) = await ExecuteWithConsoleAsync(new McpCommandArgs(), useCurrentProject: true);
 
             Assert.AreEqual(1, exitCode);
             StringAssert.Contains(stderr, "Auth: ClientSecret");
@@ -99,6 +99,8 @@ public class McpCommandCoverageTests
     private static async Task<(int ExitCode, string Stdout, string Stderr)> ExecuteWithEnvironmentAsync(
         Dictionary<string, string> variables, McpCommandArgs args)
     {
+        using var project = new IsolatedMcpProject();
+        args.Json = project.JsonPath;
         var envNames = new[]
         {
             "DEVKIT_CONNECTION",
@@ -158,8 +160,10 @@ public class McpCommandCoverageTests
         StringAssert.Contains(stderr, "Interactive, DeviceCode, ClientSecret, FromPac, OAuth, AD");
     }
 
-    private static async Task<(int ExitCode, string Stdout, string Stderr)> ExecuteWithConsoleAsync(McpCommandArgs args)
+    private static async Task<(int ExitCode, string Stdout, string Stderr)> ExecuteWithConsoleAsync(McpCommandArgs args, bool useCurrentProject = false)
     {
+        using var project = new IsolatedMcpProject();
+        if (!useCurrentProject) args.Json = project.JsonPath;
         var oldOut = Console.Out;
         var oldErr = Console.Error;
         var envNames = new[]

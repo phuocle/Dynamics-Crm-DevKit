@@ -36,7 +36,7 @@ namespace DynamicsCrm.DevKit.Tool.Commands
 
     internal class DocumentGeneratorCommand : Command<DocumentGeneratorSettings>
     {
-        protected override int Execute(CommandContext context, DocumentGeneratorSettings settings, CancellationToken cancellation)
+        public override int Execute(CommandContext context, DocumentGeneratorSettings settings, CancellationToken cancellation)
         {
             try
             {

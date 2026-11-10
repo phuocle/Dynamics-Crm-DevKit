@@ -1,3 +1,5 @@
+#nullable enable
+
 using DynamicsCrm.DevKit.UnitTests.T4;
 using System.Reflection;
 

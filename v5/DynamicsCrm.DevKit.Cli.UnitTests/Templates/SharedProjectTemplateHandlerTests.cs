@@ -229,7 +229,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
             using (var stream = File.OpenRead(file))
             {
                 var buffer = new byte[count];
-                stream.Read(buffer, 0, count);
+                stream.ReadExactly(buffer);
                 return buffer;
             }
         }

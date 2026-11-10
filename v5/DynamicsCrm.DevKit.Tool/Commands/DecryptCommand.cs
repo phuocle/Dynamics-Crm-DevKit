@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Tool.Commands
 
     internal class DecryptCommand : Command<DecryptSettings>
     {
-        protected override int Execute(CommandContext context, DecryptSettings settings, CancellationToken cancellation)
+        public override int Execute(CommandContext context, DecryptSettings settings, CancellationToken cancellation)
         {
             try
             {
