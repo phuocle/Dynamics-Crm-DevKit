@@ -73,7 +73,7 @@ namespace DynamicsCrm.DevKit.Cli
                 "  new-item               Create a DevKit ITEM template in the required project\n\n" +
                 "Commands (Deploy):\n" +
                 "  server                 Deploy plugins, workflows, dataproviders; Create datasource\n" +
-                "  webresource            Deploy or download web resources (--type upload | download; --build debug | release)\n" +
+                "  webresource            Upload or download web resources (debug or release build)\n" +
                 "  solution               Extract or pack solutions using PAC CLI\n" +
                 "  report                 Report operations (--type dataset | upload | download)\n" +
                 "  mcp                    Start MCP server for AI agent integration\n\n" +
@@ -118,9 +118,9 @@ namespace DynamicsCrm.DevKit.Cli
                 "  devkit new-item --type Plugin --entity Account --message Update --stage PreOperation --name PreAccountUpdate --project Contoso.Server\n" +
                 "  devkit mcp --auth ClientSecret --url URL --clientid ID --clientsecret SEC\n\n" +
                 "Project .env Fallback (DEVKIT_*):\n" +
-                "  Normal commands & tool call: CLI args > project .env > validation error.\n" +
-                "  The .env file is searched from the current directory upward to the drive root.\n" +
-                "  MCP command: CLI args > project .env (searched from current directory upward); OS environment variables are not read.\n" +
+                "  Normal commands: CLI args override project .env.\n" +
+                "  The .env search starts in the current directory and walks up to the drive root.\n" +
+                "  MCP connection: CLI args override project .env; OS environment variables are not read.\n" +
                 "  DEVKIT_AUTH_TYPE     Auth type (Interactive, ClientSecret, FromPac, ...)\n" +
                 "  DEVKIT_URL           Environment URL\n" +
                 "  DEVKIT_CLIENT_ID     Azure AD application (client) ID\n" +
@@ -129,7 +129,11 @@ namespace DynamicsCrm.DevKit.Cli
                 "  DEVKIT_NO_COLOR      Any non-empty value enables plain output\n" +
                 "                       (same walk-up search; --plain arg does the same)\n\n" +
                 "MCP Server (AI Agent Integration):\n" +
-                $"  devkit mcp                   {mcpToolCount} tools + 10 resources: metadata, upsert, FetchXML, search, WebAPI, publish, trace logs, URL parser, forms, views, security, audit, sitemap, schema, env vars, business rules, workflows, Custom APIs, cloud flows, BPFs, system jobs, plugins, ribbon customizations, web resources, relationships\n" +
+                $"  devkit mcp                   Start the server ({mcpToolCount} tools, 10 resources)\n" +
+                "    Data:           metadata, schema, relationships, upsert, FetchXML, search, WebAPI\n" +
+                "    Customization:  forms, views, sitemap, ribbon, web resources, publish\n" +
+                "    Automation:     business rules, workflows, Custom APIs, cloud flows, BPFs, plugins\n" +
+                "    Administration: security, audit, environment variables, system jobs, trace logs, URL parser\n" +
                 "  devkit mcp --setup-guide     Setup instructions for all IDEs\n";
 
             if (IsPlain)
@@ -152,7 +156,7 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]new-item[/]               Create a DevKit ITEM template in the required project\n\n" +
                     "[green]Commands (Deploy):[/]\n" +
                     "  [cyan]server[/]                 Deploy plugins, workflows, dataproviders; Create datasource\n" +
-                    "  [cyan]webresource[/]            Deploy or download web resources (--type upload | download; --build debug | release)\n" +
+                    "  [cyan]webresource[/]            Upload or download web resources (debug or release build)\n" +
                     "  [cyan]solution[/]               Extract or pack solutions using PAC CLI\n" +
                     "  [cyan]report[/]                 Report operations (--type dataset | upload | download)\n" +
                     "  [cyan]mcp[/]                    Start MCP server for AI agent integration\n\n" +
@@ -194,11 +198,13 @@ namespace DynamicsCrm.DevKit.Cli
                     "  devkit [cyan]webresource[/] --file [cyan]entities/Account.ts[/] --build [cyan]release[/] --webresource [cyan]dev_/entities/Account.js[/]\n" +
                     "  devkit [cyan]webresource[/] --file [cyan]entities/Account.ts[/] --build [cyan]release[/] -wid [cyan]00000000-0000-0000-0000-000000000000[/]\n" +
                     "  devkit [cyan]new-project[/] --type [cyan]Shared[/] --name [cyan]Contoso.Shared[/] --solution [cyan]MySolution.slnx[/]\n" +
-                    "  devkit [cyan]new-item[/] --type [cyan]Plugin[/] --entity [cyan]Account[/] --message [cyan]Update[/] --stage [cyan]PreOperation[/] --name [cyan]PreAccountUpdate[/] --project [cyan]Contoso.Server[/]\n" +
+                    "  devkit [cyan]new-item[/] --type [cyan]Plugin[/] --entity [cyan]Account[/] --message [cyan]Update[/]\n" +
+                    "    --stage [cyan]PreOperation[/] --name [cyan]PreAccountUpdate[/] --project [cyan]Contoso.Server[/]\n" +
                     "  devkit [cyan]mcp[/] --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/]\n\n" +
                     "[green]Project .env values (DEVKIT_*):[/]\n" +
-                    "  Normal commands: CLI args > project .env > validation error.\n" +
-                    "  MCP command: CLI args > project .env (searched from current directory upward) > validation error; OS environment variables are not read.\n" +
+                    "  Normal commands: CLI args override project .env.\n" +
+                    "  .env search: current directory up to the drive root.\n" +
+                    "  MCP connection: CLI args override project .env; OS environment variables are not read.\n" +
                     "  [cyan]DEVKIT_AUTH_TYPE[/]     Auth type (Interactive, ClientSecret, FromPac, ...)\n" +
                     "  [cyan]DEVKIT_URL[/]           Environment URL\n" +
                     "  [cyan]DEVKIT_CLIENT_ID[/]     Azure AD application (client) ID\n" +
@@ -207,7 +213,11 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]DEVKIT_NO_COLOR[/]      Any non-empty value enables plain output\n" +
                     "                       (same walk-up search; --plain arg does the same)\n\n" +
                     "[green]MCP Server (AI Agent Integration):[/]\n" +
-                    $"  devkit [cyan]mcp[/]                  {mcpToolCount} tools + 10 resources: metadata, upsert, FetchXML, search, WebAPI, publish, trace logs, URL parser, forms, views, security, audit, sitemap, schema, env vars, business rules, workflows, Custom APIs, cloud flows, BPFs, system jobs, plugins, ribbon customizations, web resources, relationships\n" +
+                    $"  devkit [cyan]mcp[/]                  Start the server ({mcpToolCount} tools, 10 resources)\n" +
+                    "    Data:           metadata, schema, relationships, upsert, FetchXML, search, WebAPI\n" +
+                    "    Customization:  forms, views, sitemap, ribbon, web resources, publish\n" +
+                    "    Automation:     business rules, workflows, Custom APIs, cloud flows, BPFs, plugins\n" +
+                    "    Administration: security, audit, environment variables, system jobs, trace logs, URL parser\n" +
                     "  devkit [cyan]mcp[/] --setup-guide    Setup instructions for all IDEs\n"
 
                 ))

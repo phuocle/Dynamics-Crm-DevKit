@@ -353,18 +353,37 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             return true;
         }
 
+        private static void WriteGuideHeading(string text)
+        {
+            if (SpectreLog.IsPlain || Console.IsOutputRedirected)
+            {
+                Console.WriteLine(text);
+                return;
+            }
+
+            var previousColor = Console.ForegroundColor;
+            try
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine(text);
+            }
+            finally
+            {
+                Console.ForegroundColor = previousColor;
+            }
+        }
         private void PrintSetupGuide()
         {
             var tools = GetMcpToolInfos();
             Console.WriteLine("=========================================================================");
-            Console.WriteLine(" DevKit MCP Setup Guide");
+            WriteGuideHeading(" DevKit MCP Setup Guide");
             Console.WriteLine("=========================================================================");
             Console.WriteLine();
-            Console.WriteLine("1. INSTALLATION");
+            WriteGuideHeading("1. INSTALLATION");
             Console.WriteLine("-------------------------------------------------------------------------");
             Console.WriteLine("   dotnet tool install -g DynamicsCrm.DevKit.Cli");
             Console.WriteLine();
-            Console.WriteLine("2. CONNECTION (PROJECT .env OR COMMAND-LINE ARGUMENTS)");
+            WriteGuideHeading("2. CONNECTION (PROJECT .env OR COMMAND-LINE ARGUMENTS)");
             Console.WriteLine("-------------------------------------------------------------------------");
             Console.WriteLine("   Connection priority: explicit command-line arguments > project .env.");
             Console.WriteLine("   MCP reads DEVKIT_* connection values from the first .env found by");
@@ -392,7 +411,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine();
             Console.WriteLine("   Example: devkit mcp devkit-claude (reads connection from project .env)");
             Console.WriteLine();
-            Console.WriteLine($"3. AVAILABLE TOOLS ({tools.Count} Tools)");
+            WriteGuideHeading($"3. AVAILABLE TOOLS ({tools.Count} Tools)");
             Console.WriteLine("-------------------------------------------------------------------------");
             var readonlyCount = Mcp.McpServerHost.GetToolCount(Mcp.McpServerHost.CategoryLevel["readonly"]);
             var allCount = Mcp.McpServerHost.GetToolCount(Mcp.McpServerHost.CategoryLevel["all"]);
@@ -408,39 +427,59 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 Console.WriteLine($"   - {tool.Name,-30}: {tool.Title}");
             }
             Console.WriteLine();
-            Console.WriteLine("4. MCP CONFIGURATION EXAMPLES");
+            WriteGuideHeading("4. MCP CONFIGURATION EXAMPLES");
             Console.WriteLine("-------------------------------------------------------------------------");
             Console.WriteLine();
-            Console.WriteLine("   Use client-specific process aliases so Task Manager, logs, and");
-            Console.WriteLine("   MCP diagnostics can identify which AI client started devkit mcp:");
+            Console.WriteLine("   Use client-specific instance names so logs and MCP clients");
+            Console.WriteLine("   can identify which AI client started devkit mcp:");
             Console.WriteLine();
             Console.WriteLine("     Claude      : devkit mcp devkit-claude");
             Console.WriteLine("     Codex       : devkit mcp devkit-codex");
             Console.WriteLine("     Copilot     : devkit mcp devkit-copilot");
+            Console.WriteLine("     ZCode       : devkit mcp devkit-zcode");
             Console.WriteLine("     Antigravity : devkit mcp devkit-antigravity");
             Console.WriteLine();
-            Console.WriteLine("   [Claude - .mcp.json.example -> .mcp.json]");
+            Console.WriteLine("   Scope: project = current workspace; user = all projects for one OS user;");
+            Console.WriteLine("   system = all OS users (admin-managed where supported). ~ is the user home.");
+            Console.WriteLine("   Merge the example into the chosen config; do not overwrite other entries.");
+            Console.WriteLine("   Project config discovery depends on each client's workspace/trust rules.");
+            Console.WriteLine();
+            WriteGuideHeading("   [Claude Code project - .mcp.json]");
             Console.WriteLine("   {");
             Console.WriteLine("     \"mcpServers\": {");
             Console.WriteLine("       \"dynamicscrm-devkit\": {");
             Console.WriteLine("         \"command\": \"devkit\",");
             Console.WriteLine("         \"args\": [");
             Console.WriteLine("           \"mcp\", \"devkit-claude\"");
-            Console.WriteLine("         ]");
+            Console.WriteLine("         ],");
+            Console.WriteLine("         \"timeout\": 600000");
             Console.WriteLine("       }");
             Console.WriteLine("     }");
             Console.WriteLine("   }");
             Console.WriteLine();
-            Console.WriteLine("   [Codex - .codex/config.toml.example -> .codex/config.toml]");
+            Console.WriteLine("   User: ~/.claude.json (managed by Claude Code). In PowerShell or a Unix shell:");
+            Console.WriteLine("   claude mcp add-json --scope user dynamicscrm-devkit '{\"command\":\"devkit\",\"args\":[\"mcp\",\"devkit-claude\"],\"timeout\":600000}'");
+            Console.WriteLine("   System: managed-mcp.json (admin only), using the same JSON structure:");
+            Console.WriteLine("     Windows: C:\\Program Files\\ClaudeCode\\managed-mcp.json");
+            Console.WriteLine("     macOS:   /Library/Application Support/ClaudeCode/managed-mcp.json");
+            Console.WriteLine("     Linux:   /etc/claude-code/managed-mcp.json");
+            Console.WriteLine("   Caution: managed-mcp.json restricts which other MCP servers can load.");
+            Console.WriteLine();
+            WriteGuideHeading("   [Codex project - .codex/config.toml]");
             Console.WriteLine("   [mcp_servers.dynamicscrm-devkit]");
             Console.WriteLine("   command = \"devkit\"");
             Console.WriteLine("   args = [");
             Console.WriteLine("     \"mcp\", \"devkit-codex\"");
             Console.WriteLine("   ]");
             Console.WriteLine("   startup_timeout_sec = 20");
-            Console.WriteLine("   tool_timeout_sec = 120");
+            Console.WriteLine("   tool_timeout_sec = 600");
             Console.WriteLine();
-            Console.WriteLine("   [VS Code Copilot - .vscode/mcp.json.example -> .vscode/mcp.json]");
+            Console.WriteLine("   User:   ~/.codex/config.toml (same TOML; CODEX_HOME may change the path)");
+            Console.WriteLine("   System: /etc/codex/config.toml on Unix (same TOML; admin-managed).");
+            Console.WriteLine("           Windows: consult Codex managed configuration documentation.");
+            Console.WriteLine("   Codex only loads project configuration for trusted projects.");
+            Console.WriteLine();
+            WriteGuideHeading("   [VS Code Copilot workspace - .vscode/mcp.json]");
             Console.WriteLine("   {");
             Console.WriteLine("     \"servers\": {");
             Console.WriteLine("       \"dynamicscrm-devkit\": {");
@@ -453,28 +492,59 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("     }");
             Console.WriteLine("   }");
             Console.WriteLine();
-            Console.WriteLine("   [Antigravity CLI workspace - .agents/mcp_config.json.example -> .agents/mcp_config.json]");
+            Console.WriteLine("   User: open 'MCP: Open User Configuration' in VS Code (same JSON format).");
+            Console.WriteLine("   System: no standard all-users config file documented; see admin policy.");
+            Console.WriteLine();
+            WriteGuideHeading("   [Antigravity - workspace or enabled plugin MCP config]");
             Console.WriteLine("   {");
             Console.WriteLine("     \"mcpServers\": {");
             Console.WriteLine("       \"dynamicscrm-devkit\": {");
             Console.WriteLine("         \"command\": \"devkit\",");
             Console.WriteLine("         \"args\": [");
             Console.WriteLine("           \"mcp\", \"devkit-antigravity\"");
-            Console.WriteLine("         ]");
+            Console.WriteLine("         ],");
+            Console.WriteLine("         \"timeoutSeconds\": 600");
             Console.WriteLine("       }");
             Console.WriteLine("     }");
             Console.WriteLine("   }");
             Console.WriteLine();
-            Console.WriteLine("   Tracked examples in this repo:");
-            Console.WriteLine("     .mcp.json.example");
-            Console.WriteLine("     .codex/config.toml.example");
-            Console.WriteLine("     .vscode/mcp.json.example");
-            Console.WriteLine("     .agents/mcp_config.json.example");
+            Console.WriteLine("   Antigravity configuration locations (choose one):");
+            Console.WriteLine("     Workspace: .agents/mcp_config.json");
+            Console.WriteLine("     Plugin:    .agents/plugins/<plugin>/mcp_config.json");
+            Console.WriteLine("                (requires a valid, enabled plugin)");
+            Console.WriteLine("     User:      ~/.gemini/config/mcp_config.json");
+            Console.WriteLine("     System:    no standard all-users MCP file documented.");
+            Console.WriteLine("   Antigravity supports a per-server cwd: set it to the workspace path if");
+            Console.WriteLine("   needed for .env discovery. Avoid defining the same server twice.");
             Console.WriteLine();
-            Console.WriteLine("   Copy an example to the real local config file. The config can be committed:");
+            WriteGuideHeading("   [ZCode workspace - .zcode/config.json]");
+            Console.WriteLine("   {");
+            Console.WriteLine("     \"mcp\": {");
+            Console.WriteLine("       \"servers\": {");
+            Console.WriteLine("         \"dynamicscrm-devkit\": {");
+            Console.WriteLine("           \"type\": \"stdio\",");
+            Console.WriteLine("           \"command\": \"devkit\",");
+            Console.WriteLine("           \"args\": [\"mcp\", \"devkit-zcode\"],");
+            Console.WriteLine("           \"timeoutMs\": 600000");
+            Console.WriteLine("         }");
+            Console.WriteLine("       }");
+            Console.WriteLine("     }");
+            Console.WriteLine("   }");
+            Console.WriteLine("   ZCode user config: ~/.zcode/cli/config.json (same mcp.servers format).");
+            Console.WriteLine("   System: no standard all-users MCP file documented.");
+            Console.WriteLine("   .agents/mcp.json is a fallback per scope when .zcode has no servers.");
+            Console.WriteLine();
+            Console.WriteLine("   The configured timeouts allow 10 minutes per tool call; they are client");
+            Console.WriteLine("   settings, not a DevKit server limit. Codex startup timeout remains 20 seconds.");
+            Console.WriteLine("   VS Code .vscode/mcp.json: no per-tool timeout is documented for this");
+            Console.WriteLine("   format. Check the active agent's timeout; do not assume a 10-minute limit.");
+            Console.WriteLine();
+            Console.WriteLine("   The tool must be available to the OS user launching the MCP process.");
+            Console.WriteLine("   User/system server scope does not guarantee the project working directory:");
+            Console.WriteLine("   verify the client's launch cwd, or set it where the client supports cwd.");
+            Console.WriteLine();
+            Console.WriteLine("   Add the appropriate example to your client configuration. Keep it secret-free:");
             Console.WriteLine("   connection secrets belong in the ignored project .env, never in MCP args.");
-            Console.WriteLine("   Antigravity Editor custom MCP config: ~/.gemini/config/mcp_config.json");
-            Console.WriteLine("   Antigravity CLI global MCP config: ~/.gemini/antigravity-cli/mcp_config.json");
             Console.WriteLine("=========================================================================");
         }
 
