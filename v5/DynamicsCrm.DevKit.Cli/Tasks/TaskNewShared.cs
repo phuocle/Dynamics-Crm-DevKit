@@ -42,10 +42,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             if (SpectreLog.IsPlain)
             {
-                foreach (var descriptor in descriptors)
+                foreach (var (descriptor, index) in descriptors.Select((descriptor, index) => (descriptor, index)))
                 {
                     var kindName = descriptor.Kind == TemplateKind.Project ? "project" : "item";
-                    Console.WriteLine($"| {kindName,-7} | {descriptor.Order,2} | {descriptor.Id,-15} | {CatalogDescription(descriptor)}");
+                    Console.WriteLine($"| {kindName,-7} | {index + 1,2} | {descriptor.Id,-15} | {CatalogDescription(descriptor)}");
                 }
             }
             else
@@ -58,9 +58,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 table.AddColumn(new TableColumn("[green]Type (--type)[/]"));
                 table.AddColumn(new TableColumn("[green]Name[/]"));
                 table.AddColumn(new TableColumn("[green]Description[/]"));
-                foreach (var descriptor in descriptors)
+                foreach (var (descriptor, index) in descriptors.Select((descriptor, index) => (descriptor, index)))
                 {
-                    table.AddRow($"{descriptor.Order}", $"[yellow]{descriptor.Id}[/]", descriptor.DisplayName, Markup.Escape(CatalogDescription(descriptor)));
+                    table.AddRow($"{index + 1}", $"[yellow]{descriptor.Id}[/]", descriptor.DisplayName, Markup.Escape(CatalogDescription(descriptor)));
                 }
                 var example = kind == TemplateKind.Project
                     ? "devkit [cyan]new-project[/] --type [cyan]Shared[/] --name [cyan]Contoso.Shared[/] --solution [cyan]MySolution.slnx[/]"
@@ -127,7 +127,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public static string PromptTemplate(TemplateKind kind)
         {
             var choices = TemplateCatalog.OfKind(kind)
-                .Select(descriptor => $"{descriptor.Order,2}. {descriptor.DisplayName,-24} {descriptor.Id}")
+                .Select((descriptor, index) => $"{index + 1,2}. {descriptor.DisplayName,-24} {descriptor.Id}")
                 .ToList();
             var choice = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
