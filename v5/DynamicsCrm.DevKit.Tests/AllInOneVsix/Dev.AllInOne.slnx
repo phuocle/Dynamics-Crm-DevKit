@@ -1,8 +1,7 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
     <File Path=".env" />
     <File Path="DynamicsCrm.DevKit.json" />
   </Folder>
-  <Project Path="Dev.AllInOne.Console/Dev.AllInOne.Console.csproj" />
-  <Project Path="Dev.AllInOne.Shared/Dev.AllInOne.Shared.shproj" Id="c73cf23e-cd4f-4ea5-b9a2-943ca8b7d53a" />
 </Solution>
