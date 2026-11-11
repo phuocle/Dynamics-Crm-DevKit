@@ -38,14 +38,29 @@
   <ItemGroup>
 		<Folder Include="html\" />
 		<Folder Include="css\" />
-		<Folder Include="entities\" />
     <Folder Include="js\" />
 		<Folder Include="lib\" />
 		<Folder Include="images\" />
-		<Folder Include="resources\" />
 	</ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="entities\Account.d.ts">
+      <DependentUpon>Account.js</DependentUpon>
+    </None>
+    <None Update="entities\Account.form.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </None>
+    <None Update="entities\Account.webapi.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </None>
+    <None Update="entities\pl_dataversedialogbuilder_demo.dialog.d.ts">
+      <DependentUpon>pl_dataversedialogbuilder_demo.js</DependentUpon>
+    </None>
+    <None Update="entities\pl_dataversedialogbuilder_demo.dialog.js">
+      <DependentUpon>pl_dataversedialogbuilder_demo.js</DependentUpon>
+    </None>
   </ItemGroup>
 </Project>
 <!-- v.4.44.44.44 - Build: 11.11.2026 16:59:24 -->
