@@ -1,3 +1,8 @@
 <Solution>
-  <Project Path="Dev.AllInOne.Shared/Dev.AllInOne.Shared.shproj" Id="da178c0b-16b6-47ab-8b8b-074d9af04cdf" />
+  <Folder Name="/Solution Items/">
+    <File Path=".env" />
+    <File Path="DynamicsCrm.DevKit.json" />
+  </Folder>
+  <Project Path="Dev.AllInOne.Console/Dev.AllInOne.Console.csproj" />
+  <Project Path="Dev.AllInOne.Shared/Dev.AllInOne.Shared.shproj" Id="c73cf23e-cd4f-4ea5-b9a2-943ca8b7d53a" />
 </Solution>

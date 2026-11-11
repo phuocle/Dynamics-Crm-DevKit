@@ -32,6 +32,7 @@ Before creating this project, ensure you have:
 
 * Microsoft.PowerPlatform.Dataverse.Client
 * Microsoft.CrmSdk.CoreAssemblies
+* Microsoft.CrmSdk.Workflow
 * Microsoft.IdentityModel
 * DynamicsCrm.DevKit.Analyzers
 

@@ -143,5 +143,3 @@ namespace $NameSpace$
         public SourceTypeEnum SourceType { get; set; } = SourceTypeEnum.Database;
     }
 }
-
-

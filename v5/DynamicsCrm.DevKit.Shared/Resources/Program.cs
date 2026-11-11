@@ -1,5 +1,8 @@
-﻿using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk;
+using $NameSpace$.Lib;
 using System;
+using System.Collections.Generic;
 
 namespace $NameSpace$
 {
@@ -8,8 +11,6 @@ namespace $NameSpace$
         static void Main()
         {
             CheckWhoAmI();
-            //DebugPlugin();
-            //DebugWorkflow();
         }
 
         private static void CheckWhoAmI()
@@ -21,15 +22,10 @@ namespace $NameSpace$
 
         private static void DebugPlugin()
         {
-            //var json = "";
-            //Helper.DebugPluginWith<???>(json, App.Service);
         }
 
         private static void DebugWorkflow()
         {
-            //var json = "";
-            //var inputs = new Dictionary<string, object> { };
-            //Helper.DebugWorkflowWith<???>(json, App.Service, inputs);
         }
     }
 }

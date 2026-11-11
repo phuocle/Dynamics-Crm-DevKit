@@ -36,6 +36,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="$Microsoft.CrmSdk.Workflow.Version$" />
     <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="$Microsoft.PowerPlatform.Dataverse.Client.Version$" />
     <PackageReference Include="NSubstitute" Version="$NSubstitute.Version$" />
   </ItemGroup>

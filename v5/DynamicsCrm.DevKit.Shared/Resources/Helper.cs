@@ -3,13 +3,10 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using Microsoft.Xrm.Sdk.PluginTelemetry;
 using NSubstitute;
+using System.Activities;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Text;
+using Microsoft.Xrm.Sdk.Workflow;
 
 namespace $NameSpace$.Lib
 {
@@ -17,71 +14,78 @@ namespace $NameSpace$.Lib
     {
         #region DEBUG WORKFLOW
 
-        //public static void DebugWorkflowWith<T>(string json, ServiceClient service, Dictionary<string, object> inputs = null) where T : CodeActivity, new()
-        //{
-        //    var remoteExecutionContext = DevKitJson.Deserialize<RemoteExecutionContext>(json);
-        //    var instance = new T();
-        //    var invoker = new WorkflowInvoker(instance);
-        //    invoker.Extensions.Add<ITracingService>(() => Substitute.For<TracingServiceFake>());
-        //    invoker.Extensions.Add<IWorkflowContext>(() => CreateMockWorkflowContext());
-        //    invoker.Extensions.Add<IOrganizationServiceFactory>(() => CreateMockServiceFactory());
-        //    invoker.Extensions.Add<IServiceEndpointNotificationService>(() => Substitute.For<IServiceEndpointNotificationService>());
-        //    if (inputs == null) inputs = new Dictionary<string, object>();
-        //    invoker.Invoke(inputs);
-        //
-        //    IWorkflowContext CreateMockWorkflowContext()
-        //    {
-        //        var workflowContext = Substitute.For<IWorkflowContext>();
-        //        workflowContext.BusinessUnitId.Returns(remoteExecutionContext.BusinessUnitId);
-        //        workflowContext.CorrelationId.Returns(remoteExecutionContext.CorrelationId);
-        //        workflowContext.Depth.Returns(remoteExecutionContext.Depth);
-        //        workflowContext.InitiatingUserId.Returns(remoteExecutionContext.InitiatingUserId);
-        //        workflowContext.InputParameters.Returns(remoteExecutionContext.InputParameters);
-        //        workflowContext.IsExecutingOffline.Returns(remoteExecutionContext.IsExecutingOffline);
-        //        workflowContext.IsInTransaction.Returns(remoteExecutionContext.IsInTransaction);
-        //        workflowContext.IsOfflinePlayback.Returns(remoteExecutionContext.IsOfflinePlayback);
-        //        workflowContext.IsolationMode.Returns(remoteExecutionContext.IsolationMode);
-        //        workflowContext.MessageName.Returns(remoteExecutionContext.MessageName);
-        //        workflowContext.Mode.Returns(remoteExecutionContext.Mode);
-        //        workflowContext.OperationCreatedOn.Returns(remoteExecutionContext.OperationCreatedOn);
-        //        workflowContext.OperationId.Returns(remoteExecutionContext.OperationId);
-        //        workflowContext.OrganizationId.Returns(remoteExecutionContext.OrganizationId);
-        //        workflowContext.OrganizationName.Returns(remoteExecutionContext.OrganizationName);
-        //        workflowContext.OutputParameters.Returns(remoteExecutionContext.OutputParameters);
-        //        workflowContext.OwningExtension.Returns(remoteExecutionContext.OwningExtension);
-        //        if (remoteExecutionContext.ParentContext != null)
-        //        {
-        //            var parentWorkflowContext = Substitute.For<IWorkflowContext>();
-        //            workflowContext.ParentContext.Returns(parentWorkflowContext);
-        //        }
-        //        workflowContext.PostEntityImages.Returns(remoteExecutionContext.PostEntityImages);
-        //        workflowContext.PreEntityImages.Returns(remoteExecutionContext.PreEntityImages);
-        //        workflowContext.PrimaryEntityId.Returns(remoteExecutionContext.PrimaryEntityId);
-        //        workflowContext.PrimaryEntityName.Returns(remoteExecutionContext.PrimaryEntityName);
-        //        workflowContext.RequestId.Returns(remoteExecutionContext.RequestId);
-        //        workflowContext.SecondaryEntityName.Returns(remoteExecutionContext.SecondaryEntityName);
-        //        workflowContext.SharedVariables.Returns(remoteExecutionContext.SharedVariables);
-        //        workflowContext.UserId.Returns(remoteExecutionContext.UserId);
-        //        workflowContext.StageName.Returns($"{remoteExecutionContext.Stage}");
-        //        return workflowContext;
-        //    }
-        //    IOrganizationServiceFactory CreateMockServiceFactory()
-        //    {
-        //        var serviceFactory = Substitute.For<IOrganizationServiceFactory>();
-        //        serviceFactory.CreateOrganizationService(Arg.Any<Guid?>()).Returns((param) =>
-        //        {
-        //            var userId = param.ArgAt<Guid?>(0);
-        //            if (userId != null && userId != Guid.Empty)
-        //            {
-        //                var clone = service.Clone();
-        //                clone.CallerId = userId.GetValueOrDefault();
-        //                return clone;
-        //            }
-        //            return service;
-        //        });
-        //        return serviceFactory;
-        //    }
-        //}
+        public static void DebugWorkflowWith<T>(string json, ServiceClient service, Dictionary<string, object> inputs = null) where T : CodeActivity, new()
+        {
+            if (string.IsNullOrWhiteSpace(json)) throw new ArgumentException("Execution context JSON cannot be null or empty.", nameof(json));
+            if (service == null) throw new ArgumentNullException(nameof(service));
+
+            var executionContext = DevKitJson.DeserializeContext7(json);
+            var invoker = new WorkflowInvoker(new T());
+            invoker.Extensions.Add<ITracingService>(() => new TracingServiceFake());
+            invoker.Extensions.Add<IWorkflowContext>(() => CreateWorkflowContext(executionContext));
+            invoker.Extensions.Add<IOrganizationServiceFactory>(() => CreateServiceFactory());
+            invoker.Extensions.Add<IServiceEndpointNotificationService>(() => Substitute.For<IServiceEndpointNotificationService>());
+            invoker.Invoke(inputs ?? new Dictionary<string, object>());
+
+            IWorkflowContext CreateWorkflowContext(IPluginExecutionContext context)
+            {
+                var workflowContext = Substitute.For<IWorkflowContext>();
+                workflowContext.BusinessUnitId.Returns(context.BusinessUnitId);
+                workflowContext.CorrelationId.Returns(context.CorrelationId);
+                workflowContext.Depth.Returns(context.Depth);
+                workflowContext.InitiatingUserId.Returns(context.InitiatingUserId);
+                workflowContext.InputParameters.Returns(context.InputParameters);
+                workflowContext.IsExecutingOffline.Returns(context.IsExecutingOffline);
+                workflowContext.IsInTransaction.Returns(context.IsInTransaction);
+                workflowContext.IsOfflinePlayback.Returns(context.IsOfflinePlayback);
+                workflowContext.IsolationMode.Returns(context.IsolationMode);
+                workflowContext.MessageName.Returns(context.MessageName);
+                workflowContext.Mode.Returns(context.Mode);
+                workflowContext.OperationCreatedOn.Returns(context.OperationCreatedOn);
+                workflowContext.OperationId.Returns(context.OperationId);
+                workflowContext.OrganizationId.Returns(context.OrganizationId);
+                workflowContext.OrganizationName.Returns(context.OrganizationName);
+                workflowContext.OutputParameters.Returns(context.OutputParameters);
+                workflowContext.OwningExtension.Returns(context.OwningExtension);
+                workflowContext.PostEntityImages.Returns(context.PostEntityImages);
+                workflowContext.PreEntityImages.Returns(context.PreEntityImages);
+                workflowContext.PrimaryEntityId.Returns(context.PrimaryEntityId);
+                workflowContext.PrimaryEntityName.Returns(context.PrimaryEntityName);
+                workflowContext.RequestId.Returns(context.RequestId);
+                workflowContext.SecondaryEntityName.Returns(context.SecondaryEntityName);
+                workflowContext.SharedVariables.Returns(context.SharedVariables);
+                workflowContext.UserId.Returns(context.UserId);
+                var stageName = context.Stage.ToString();
+                if (context is DevKitJson.ExecutionContextSnapshot stageSnapshot &&
+                    stageSnapshot.Properties.TryGetValue("StageName", out var savedStageName) &&
+                    savedStageName is string restoredStageName)
+                    stageName = restoredStageName;
+                workflowContext.StageName.Returns(stageName);
+                workflowContext.ParentContext.Returns(context.ParentContext == null ? null : CreateWorkflowContext(context.ParentContext));
+
+                if (context is DevKitJson.ExecutionContextSnapshot snapshot)
+                {
+                    if (snapshot.Properties.TryGetValue("WorkflowCategory", out var category) && category != null)
+                        workflowContext.WorkflowCategory.Returns(Convert.ToInt32(category));
+                    if (snapshot.Properties.TryGetValue("WorkflowMode", out var mode) && mode != null)
+                        workflowContext.WorkflowMode.Returns(Convert.ToInt32(mode));
+                }
+
+                return workflowContext;
+            }
+
+            IOrganizationServiceFactory CreateServiceFactory()
+            {
+                var factory = Substitute.For<IOrganizationServiceFactory>();
+                factory.CreateOrganizationService(Arg.Any<Guid?>()).Returns(_ =>
+                {
+                    var clone = service.Clone();
+                    clone.CallerId = executionContext.UserId;
+                    return clone;
+                });
+                return factory;
+            }
+        }
 
         #endregion
 
@@ -89,24 +93,34 @@ namespace $NameSpace$.Lib
 
         public static void DebugPluginWith<T>(string json, ServiceClient service, params object[] constructorArgs) where T : IPlugin
         {
-            var pluginExecutionContext = DevKitJson.Deserialize<RemoteExecutionContext>(json);
+            if (string.IsNullOrWhiteSpace(json)) throw new ArgumentException("Execution context JSON cannot be null or empty.", nameof(json));
+            if (service == null) throw new ArgumentNullException(nameof(service));
+
+            var pluginExecutionContext = DevKitJson.DeserializeContext7(json);
             var serviceProvider = Substitute.For<IServiceProvider>();
             serviceProvider.Get<IPluginExecutionContext>().Returns(pluginExecutionContext);
+            serviceProvider.Get<IPluginExecutionContext2>().Returns(pluginExecutionContext);
+            serviceProvider.Get<IPluginExecutionContext3>().Returns(pluginExecutionContext);
+            serviceProvider.Get<IPluginExecutionContext4>().Returns(pluginExecutionContext);
+            serviceProvider.Get<IPluginExecutionContext5>().Returns(pluginExecutionContext);
+            serviceProvider.Get<IPluginExecutionContext6>().Returns(pluginExecutionContext);
+            serviceProvider.Get<IPluginExecutionContext7>().Returns(pluginExecutionContext);
             serviceProvider.Get<IServiceEndpointNotificationService>().Returns(Substitute.For<IServiceEndpointNotificationService>());
-            serviceProvider.Get<IExecutionContext>().Returns(Substitute.For<IExecutionContext>());
-            serviceProvider.Get<ITracingService>().Returns(Substitute.For<TracingServiceFake>());
+            serviceProvider.Get<IExecutionContext>().Returns(pluginExecutionContext);
+            serviceProvider.Get<ITracingService>().Returns(new TracingServiceFake());
             serviceProvider.Get<ILogger>().Returns(Substitute.For<ILogger>());
             var factory = Substitute.For<IOrganizationServiceFactory>();
             factory.CreateOrganizationService(Arg.Any<Guid?>()).Returns((param) =>
             {
                 var userId = param.ArgAt<Guid?>(0);
-                if (userId != null)
+                if (userId == null)
                 {
-                    var clone = service.Clone();
-                    clone.CallerId = userId.GetValueOrDefault();
-                    return clone;
+                    return service;
                 }
-                return service;
+
+                var clone = service.Clone();
+                clone.CallerId = userId == Guid.Empty ? pluginExecutionContext.UserId : userId.Value;
+                return clone;
             });
             serviceProvider.Get<IOrganizationServiceFactory>().Returns(factory);
             var pluginObj = Activator.CreateInstance(typeof(T), constructorArgs);
@@ -117,43 +131,5 @@ namespace $NameSpace$.Lib
 
         #endregion
 
-        #region PUBLIC METHODS
-
-        public static string Compress(string uncompressedString)
-        {
-            try
-            {
-                byte[] compressedBytes;
-                using (var uncompressedStream = new MemoryStream(Encoding.UTF8.GetBytes(uncompressedString)))
-                {
-                    using (var compressedStream = new MemoryStream())
-                    {
-                        using (var compressorStream = new DeflateStream(compressedStream, CompressionLevel.Fastest, true))
-                        {
-                            uncompressedStream.CopyTo(compressorStream);
-                        }
-                        compressedBytes = compressedStream.ToArray();
-                    }
-                }
-                return Convert.ToBase64String(compressedBytes);
-            }
-            catch { return uncompressedString; }
-        }
-        public static string Decompress(string compressedString)
-        {
-            byte[] decompressedBytes;
-            var compressedStream = new MemoryStream(Convert.FromBase64String(compressedString));
-            using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
-            {
-                using (var decompressedStream = new MemoryStream())
-                {
-                    decompressorStream.CopyTo(decompressedStream);
-                    decompressedBytes = decompressedStream.ToArray();
-                }
-            }
-            return Encoding.UTF8.GetString(decompressedBytes);
-        }
-
-        #endregion
     }
 }
