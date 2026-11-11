@@ -1,0 +1,17 @@
+<Solution>
+  <Project Path="Dev.AllInOne.Console/Dev.AllInOne.Console.csproj" />
+  <Project Path="Dev.AllInOne.ConsoleCore/Dev.AllInOne.ConsoleCore.csproj" />
+  <Project Path="Dev.AllInOne.Package/Dev.AllInOne.Package.csproj" />
+  <Project Path="Dev.AllInOne.ProxyTypes/Dev.AllInOne.ProxyTypes.csproj" />
+  <Project Path="Dev.AllInOne.Report/Dev.AllInOne.Report.rptproj">
+    <Deploy />
+  </Project>
+  <Project Path="Dev.AllInOne.Shared.Test/Dev.AllInOne.Shared.Test.shproj" Id="39d04818-ff12-49fd-9dd1-c2b224819c96" />
+  <Project Path="Dev.AllInOne.Shared/Dev.AllInOne.Shared.shproj" Id="bb7a1402-5f48-45fa-9a7a-cc58011c2a16" />
+  <Project Path="Dev.AllInOne.Server/Dev.AllInOne.Server.csproj" />
+  <Project Path="Dev.AllInOne.SolutionPackager/Dev.AllInOne.SolutionPackager.csproj" />
+  <Project Path="Dev.AllInOne.Test/Dev.AllInOne.Test.csproj" />
+  <Project Path="Dev.AllInOne.UiTest/Dev.AllInOne.UiTest.csproj" />
+  <Project Path="Dev.AllInOne.WebResource/Dev.AllInOne.WebResource.csproj" />
+  <Project Path="Dev.AllInOne.WebResourceTs/Dev.AllInOne.WebResourceTs.csproj" />
+</Solution>
