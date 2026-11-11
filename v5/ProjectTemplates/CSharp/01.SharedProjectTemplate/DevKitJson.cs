@@ -1437,7 +1437,7 @@ namespace Microsoft.Xrm.Sdk
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 if (assembly != typeof(Entity).Assembly && assembly.GetName().Name != "Microsoft.Crm.Sdk.Proxy") continue;
-                var type = assembly.GetType(name ?? "", false);
+                var type = assembly.GetType(name, false);
                 if (IsSdkType(type)) return type;
             }
             throw new NotSupportedException("Unsupported JSON type '" + name + "'.");
@@ -1894,7 +1894,7 @@ namespace Microsoft.Xrm.Sdk
                         }
                     }
                 }
-                if (targetType.IsClass && targetType != typeof(string) && !typeof(IEnumerable).IsAssignableFrom(targetType))
+                if (targetType.IsClass && !typeof(IEnumerable).IsAssignableFrom(targetType))
                     return MapDictionaryToObject(nestedDict, targetType);
             }
             if (value is List<object> arrayForArray && targetType.IsArray)

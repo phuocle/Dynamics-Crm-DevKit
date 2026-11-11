@@ -24,6 +24,13 @@ public sealed class DevKitJsonFullCoverageTests
 
     private sealed class PlainType { }
 
+    private sealed class EdgeProperties
+    {
+        public int Readable { get; set; }
+        public int WriteOnly { set { } }
+        public int this[int index] { get => index; set { } }
+    }
+
     private sealed class HasReadOnlyCollection
     {
         public List<int> Values { get; } = new();
@@ -46,6 +53,36 @@ public sealed class DevKitJsonFullCoverageTests
             ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
             throw;
         }
+    }
+
+    // Roslyn lowers string switches through FNV-1a hash buckets; these collisions exercise its equality fallbacks.
+    private static uint ComputeStringSwitchHash(string value)
+    {
+        unchecked
+        {
+            uint hash = 2166136261;
+            foreach (var character in value) hash = (hash ^ character) * 16777619;
+            return hash;
+        }
+    }
+
+    private static string FindStringSwitchHashCollision(string target)
+    {
+        const uint inversePrime = 899433627;
+        var targetBeforeLast = unchecked(ComputeStringSwitchHash(target) * inversePrime);
+        for (var middle = 0; middle <= char.MaxValue; middle++)
+        {
+            for (var first = 0; first <= char.MaxValue; first++)
+            {
+                var afterFirst = unchecked((2166136261u ^ (uint)first) * 16777619);
+                var afterMiddle = unchecked((afterFirst ^ (uint)middle) * 16777619);
+                var last = afterMiddle ^ targetBeforeLast;
+                if (last > char.MaxValue) continue;
+                var candidate = new string(new[] { (char)first, (char)middle, (char)last });
+                if (!string.Equals(candidate, target, StringComparison.Ordinal)) return candidate;
+            }
+        }
+        throw new AssertFailedException("Could not find a string-switch hash collision for " + target);
     }
 
     [TestMethod]
@@ -82,6 +119,20 @@ public sealed class DevKitJsonFullCoverageTests
         Assert.ThrowsExactly<FormatException>(() => DevKitJson.Deserialize("1."));
         Assert.ThrowsExactly<FormatException>(() => DevKitJson.Deserialize("1e"));
         Assert.ThrowsExactly<FormatException>(() => DevKitJson.Deserialize("-"));
+        foreach (var hex in new[] { "0", "9", "a", "f", "A", "F" })
+        {
+            var escaped = DevKitJson.Deserialize<string>($"\"\\u{hex.PadLeft(4, '0')}\"");
+            Assert.AreEqual((char)Convert.ToInt32(hex, 16), escaped[0]);
+        }
+        for (var code = 0; code < 128; code++)
+        {
+            var candidate = (char)code;
+            var json = "\"\\u" + candidate + "000\"";
+            if ((code >= '0' && code <= '9') || (code >= 'a' && code <= 'f') || (code >= 'A' && code <= 'F'))
+                _ = DevKitJson.Deserialize<string>(json);
+            else
+                Assert.ThrowsExactly<InvalidOperationException>(() => DevKitJson.Deserialize<string>(json), "U+" + code.ToString("X4"));
+        }
 
         var fromTicks = DevKitJson.Deserialize<DateTime>("{\"__type\":\"DateTime\",\"Ticks\":638712864000000000,\"Kind\":1}");
         Assert.AreEqual(DateTimeKind.Utc, fromTicks.Kind);
@@ -95,6 +146,24 @@ public sealed class DevKitJsonFullCoverageTests
     [TestMethod]
     public void Deserialize_ContextAdditionalPropertyValidation()
     {
+        var compactContext = DevKitJson.SerializeContext(new RemoteExecutionContext
+        {
+            MessageName = "Update",
+            BusinessUnitId = Guid.NewGuid()
+        });
+        StringAssert.Contains(compactContext, "\"_t\":\"RC\"");
+        Assert.AreEqual("Update", DevKitJson.DeserializeContext7(compactContext).MessageName);
+        var otherNativeType = "{\"__type\":\"OtherContextType\",\"MessageName\":\"Create\",\"BusinessUnitId\":\"" + Guid.NewGuid().ToString("D") + "\"}";
+        Assert.IsInstanceOfType(Invoke("DeserializeCore", otherNativeType, typeof(RemoteExecutionContext)), typeof(Dictionary<string, object>));
+        var nativeContextJson = (string)Invoke("WriteNativeJson", new RemoteExecutionContext
+        {
+            MessageName = "Create",
+            BusinessUnitId = Guid.NewGuid()
+        })!;
+        nativeContextJson = nativeContextJson.Insert(1, "\"__type\":\"RemoteExecutionContext:http://schemas.microsoft.com/xrm/2011/Contracts\",");
+        StringAssert.Contains(nativeContextJson, "\"__type\":\"RemoteExecutionContext:");
+        Assert.IsInstanceOfType(Invoke("DeserializeCore", nativeContextJson, typeof(RemoteExecutionContext)), typeof(RemoteExecutionContext));
+
         Assert.ThrowsExactly<InvalidOperationException>(() => DevKitJson.DeserializeContext7(
             "{\"__type\":\"RemoteExecutionContext\",\"SnapshotVersion\":1,\"AdditionalProperties\":[]}"));
         Assert.ThrowsExactly<InvalidOperationException>(() => DevKitJson.DeserializeContext7(
@@ -148,6 +217,19 @@ public sealed class DevKitJsonFullCoverageTests
         Assert.ThrowsExactly<NotSupportedException>(() => Invoke("ValueTypeName", typeof(HashSet<int>)));
         Assert.ThrowsExactly<NotSupportedException>(() => Invoke("CreateSdkInstance", typeof(IDisposable)));
         Assert.ThrowsExactly<NotSupportedException>(() => Invoke("ReadSdkObject", new Dictionary<string, object> { ["Type"] = "System.String" }));
+        var unknownTypedObject = new Dictionary<string, object> { ["future"] = true };
+        Assert.AreSame(unknownTypedObject, Invoke("ReconstructTypedObject", "FutureType", unknownTypedObject));
+        var readableProperties = (PropertyInfo[])Invoke("GetProperties", typeof(EdgeProperties))!;
+        CollectionAssert.AreEqual(new[] { nameof(EdgeProperties.Readable) }, readableProperties.Select(p => p.Name).ToArray());
+        Assert.AreEqual("fallback", Invoke("GetString", new Dictionary<string, object> { ["value"] = 42 }, "value", "fallback"));
+        foreach (var target in new[] { "DateTime", "Int32" })
+        {
+            var collision = FindStringSwitchHashCollision(target);
+            Assert.AreNotEqual(target, collision);
+            Assert.AreEqual(ComputeStringSwitchHash(target), ComputeStringSwitchHash(collision));
+            var fallback = new Dictionary<string, object> { ["collision"] = true };
+            Assert.AreSame(fallback, Invoke("ReconstructTypedObject", collision, fallback));
+        }
         Assert.ThrowsExactly<FormatException>(() => Invoke("ParseNativeJsonObject", "[]"));
         Assert.ThrowsExactly<FormatException>(() => Invoke("ParseNativeJsonObject", "{} false"));
         Assert.ThrowsExactly<FormatException>(() => Invoke("WriteRawJson", new object(), new StringBuilder()));
@@ -240,6 +322,8 @@ public sealed class DevKitJsonFullCoverageTests
         Assert.ThrowsExactly<NotSupportedException>(() => Invoke("ResolveValueType", ""));
         Assert.ThrowsExactly<NotSupportedException>(() => Invoke("ResolveValueType", "List<Int32"));
         Assert.AreEqual(typeof(Entity), Invoke("ResolveValueType", typeof(Entity).FullName));
+        Assert.AreEqual(typeof(Microsoft.Crm.Sdk.Messages.WhoAmIRequest),
+            Invoke("ResolveValueType", typeof(Microsoft.Crm.Sdk.Messages.WhoAmIRequest).FullName));
         Assert.AreEqual("System.Int32[]", Invoke("ValueTypeName", typeof(int[])));
         Assert.IsFalse((bool)Invoke("IsNumberType", (object?)null)!);
         Assert.IsFalse((bool)Invoke("IsNumberType", typeof(LocalChoice))!);
@@ -433,6 +517,10 @@ public sealed class DevKitJsonFullCoverageTests
         Assert.IsTrue((bool)Invoke("GetBool", new Dictionary<string, object> { ["v"] = true }, "v")!);
         Assert.IsFalse((bool)Invoke("GetBool", new Dictionary<string, object>(), "missing")!);
         _ = Invoke("CoerceValue", new Dictionary<string, object> { ["a"] = 1 }, typeof(IReadOnlyDictionary<string, int>));
+        Assert.IsInstanceOfType(Invoke("CoerceValue", new Dictionary<string, object> { ["a"] = 1 }, typeof(Dictionary<string, int>)), typeof(Dictionary<string, int>));
+        Assert.ThrowsExactly<InvalidCastException>(() => Invoke("CoerceValue", new Dictionary<string, object> { ["a"] = 1 }, typeof(HashSet<int>)));
+        Assert.ThrowsExactly<InvalidCastException>(() => Invoke("CoerceValue", new Dictionary<string, object> { ["a"] = 1 }, typeof(List<int>)));
+        Assert.ThrowsExactly<InvalidCastException>(() => Invoke("CoerceValue", new Dictionary<string, object> { ["a"] = 1 }, typeof(IEnumerable<int>)));
         _ = Invoke("CoerceValue", new Dictionary<string, object> { ["a"] = 1 }, typeof(string));
         _ = Invoke("CoerceValue", new Dictionary<string, object> { ["a"] = 1 }, typeof(object));
         Assert.IsInstanceOfType(Invoke("CoerceValue", new Dictionary<string, object> { ["Value"] = 1 }, typeof(NoProperties)), typeof(NoProperties));

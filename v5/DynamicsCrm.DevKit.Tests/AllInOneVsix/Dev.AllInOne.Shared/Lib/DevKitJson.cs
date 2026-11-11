@@ -1170,7 +1170,7 @@ namespace Microsoft.Xrm.Sdk
                         }
                     }
                 }
-                if (targetType.IsClass && targetType != typeof(string))
+                if (targetType.IsClass)
                     return MapDictionaryToObject(nestedDict, targetType);
             }
             if (value is List<object> arrayForArray && targetType.IsArray)
