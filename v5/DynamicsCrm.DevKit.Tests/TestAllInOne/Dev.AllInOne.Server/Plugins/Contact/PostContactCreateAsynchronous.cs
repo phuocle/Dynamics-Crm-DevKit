@@ -30,7 +30,7 @@ namespace Dev.AllInOne.Server.Plugins.Contact
 
         public void Execute(IServiceProvider serviceProvider)
         {
-            var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+            var context = serviceProvider.GetExecutionContext7();
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             if (!int.Equals(context.Stage, (int)StageEnum.PostOperation)) throw new InvalidPluginExecutionException("Stage does not equals PostOperation");
             if (!string.Equals(context.MessageName, "Create", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("MessageName does not equals Create");
@@ -45,12 +45,14 @@ namespace Dev.AllInOne.Server.Plugins.Contact
             ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing);
         }
 
-        private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
+        private void ExecutePlugin(IPluginExecutionContext7 context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
         {
             var targetEntity = context.InputParameterOrDefault<Entity>("Target");
 
             context.PostEntityImages.TryGetValue("PostImage", out Entity postEntity);
             //YOUR PLUGIN-CODE GO HERE
+
+            throw new InvalidPluginExecutionException("DEVKITJSON_REALTIME_VERIFY: intentional asynchronous plugin failure; inspect Plugin Trace Log.");
 
         }
     }

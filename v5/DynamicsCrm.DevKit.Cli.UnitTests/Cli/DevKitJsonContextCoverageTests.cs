@@ -210,8 +210,8 @@ public class DevKitJsonContextCoverageTests
 
         Assert.IsTrue(DevKitJson.TryDeserialize("null", out RichDto nothing), "JSON null is accepted.");
 
-        var tolerant = DevKitJson.Deserialize<RichDto>("{malformed");
-        Assert.IsNotNull(tolerant, "malformed input never throws out of Deserialize<T>.");
+        Assert.ThrowsExactly<InvalidOperationException>(() => DevKitJson.Deserialize<RichDto>("{malformed"));
+        Assert.IsFalse(DevKitJson.TryDeserialize<RichDto>("{malformed", out _));
     }
 
     [TestMethod]

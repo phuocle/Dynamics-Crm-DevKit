@@ -513,11 +513,20 @@ namespace Microsoft.Xrm.Sdk
 #if DEBUG
             const int MAX_TRACE_BYTES = 10 * 1024;
             var json = DevKitJson.SerializeContext(context);
-            if (Encoding.UTF8.GetByteCount(json) > MAX_TRACE_BYTES)
+            var jsonBytes = Encoding.UTF8.GetByteCount(json);
+            if (jsonBytes > MAX_TRACE_BYTES)
             {
-                json = $"var json = \"{json.Compress()}\".Decompress();";
+                var compressed = json.Compress();
+                json = $"var json = \"{compressed}\".Decompress();";
                 if (Encoding.UTF8.GetByteCount(json) > MAX_TRACE_BYTES)
-                    json = "DebugContext: context exceeds 10 KB even after compact + compress";
+                {
+                    var parentlessJson = DevKitJson.SerializeContextWithoutParentContext(context);
+                    var parentlessJsonBytes = Encoding.UTF8.GetByteCount(parentlessJson);
+                    var parentlessCompressed = parentlessJson.Compress();
+                    json = $"var json = \"{parentlessCompressed}\".Decompress();";
+                    if (Encoding.UTF8.GetByteCount(json) > MAX_TRACE_BYTES)
+                        json = $"DebugContext: context exceeds 10 KB after compact/compress and ParentContext omission (json={jsonBytes}, compressed={compressed.Length}, withoutParent={parentlessJsonBytes}, compressedWithoutParent={parentlessCompressed.Length})";
+                }
             }
             else
             {
@@ -573,7 +582,7 @@ namespace Microsoft.Xrm.Sdk
             {
                 using (var compressedStream = new MemoryStream())
                 {
-                    using (var compressorStream = new DeflateStream(compressedStream, CompressionLevel.Fastest, true))
+                    using (var compressorStream = new DeflateStream(compressedStream, CompressionLevel.Optimal, true))
                     {
                         uncompressedStream.CopyTo(compressorStream);
                     }

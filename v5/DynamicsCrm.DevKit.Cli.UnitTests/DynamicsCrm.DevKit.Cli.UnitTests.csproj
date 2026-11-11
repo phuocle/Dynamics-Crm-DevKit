@@ -33,6 +33,7 @@
   <ItemGroup>
     <Compile Remove="Lib\**\*.cs" />
     <Compile Include="Lib\CSharpLateBoundTest.cs" />
+    <Compile Include="..\DynamicsCrm.DevKit.Vsix.UnitTests\Lib\DevKitJsonRoundTripTests.cs" Link="Cli\DevKitJsonRoundTripTests.cs" />
     <Compile Remove="CoverageReport\**" />
     <Compile Remove="TestResults\**" />
     <EmbeddedResource Remove="CoverageReport\**" />

@@ -1,18 +1,43 @@
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+using System.IO.Compression;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 using System.Text;
 
 namespace Microsoft.Xrm.Sdk
 {
+    /// <summary>
+    /// Dependency-free JSON and Dataverse context snapshots (framework assemblies and Microsoft.Xrm.Sdk only).
+    /// </summary>
+    /// <remarks>
+    /// Save with SerializeContext/SerializeContextFull and restore with DeserializeContext7.
+    /// The snapshot implements IPluginExecutionContext through IPluginExecutionContext7. Boxed SDK values
+    /// retain their types; ordinary JSON scalar roots retain the legacy JSON-number behavior.
+    /// Existing full/compact JSON remains readable. Use the updated reader for new typed envelopes.
+    /// Custom POCOs are structural data and can be restored with MapTo; services and the Dataverse database
+    /// are not part of an execution-context snapshot. Serialization reports unreadable/cyclic values instead
+    /// of silently emitting an incomplete snapshot. Compact JSON is not guaranteed to fit a trace log.
+    /// </remarks>
     [DebuggerNonUserCode()]
     public static class DevKitJson
     {
         private const int BUILDER_CAPACITY = 2000;
-        private static readonly char[] EscapeChars = { '"', '\\', '\b', '\f', '\n', '\r', '\t' };
+        private const int MaxDepth = 128;
+        private const string CompressedExtensionDataPrefix = "~DKJ1:";
+        private static readonly ConcurrentDictionary<Type, PropertyInfo[]> PropertyCache = new ConcurrentDictionary<Type, PropertyInfo[]>();
+        private static readonly ConcurrentDictionary<Type, PropertyInfo[]> ContextPropertyCache = new ConcurrentDictionary<Type, PropertyInfo[]>();
+        // RemoteExecutionContext is sealed and cannot expose all v2-v7 properties. Keep the
+        // original fields alive with it so deserialize -> serialize does not discard them.
+        private static readonly ConditionalWeakTable<RemoteExecutionContext, Dictionary<string, object>> RemoteProperties =
+            new ConditionalWeakTable<RemoteExecutionContext, Dictionary<string, object>>();
         private static readonly string[] DateTimeFormats = {
             "yyyy-MM-dd'T'HH:mm:ss.fff'Z'",
             "yyyy-MM-dd'T'HH:mm:ss'Z'",
@@ -38,16 +63,16 @@ namespace Microsoft.Xrm.Sdk
         #region Public API
 
         [ThreadStatic]
-        private static bool _compact;
+        private static WriterState _writer;
+
+        private static bool _compact => _writer.Compact;
 
         /// <summary>
         /// Serialize to full JSON format with readable keys (default for objects).
         /// </summary>
         public static string Serialize(object value)
         {
-            var sb = new StringBuilder(BUILDER_CAPACITY);
-            WriteValue(value, sb);
-            return sb.ToString();
+            return SerializeCore(value, false);
         }
 
         /// <summary>
@@ -55,39 +80,60 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         public static string SerializeCompact(object value)
         {
-            _compact = true;
+            return SerializeCore(value, true);
+        }
+
+        private static string SerializeCore(object value, bool compact, bool omitParentContext = false)
+        {
+            var previous = _writer;
+            _writer = new WriterState { Compact = compact, OmitParentContext = omitParentContext };
             try
             {
                 var sb = new StringBuilder(BUILDER_CAPACITY);
                 WriteValue(value, sb);
                 return sb.ToString();
             }
-            finally { _compact = false; }
+            finally { _writer = previous; }
         }
 
         public static object Deserialize(string json)
         {
-            if (json == null) return null;
+            return DeserializeCore(json, null);
+        }
+
+        private static object DeserializeCore(string json, Type targetType)
+        {
+            if (string.IsNullOrWhiteSpace(json)) return null;
             var chars = json.ToCharArray();
             var index = 0;
-            var result = ParseValue(chars, ref index);
+            var result = ParseValue(chars, ref index, 0);
             EatWhitespace(chars, ref index);
             if (index != chars.Length)
                 throw new FormatException("Unexpected content at JSON index " + index.ToString(CultureInfo.InvariantCulture) + ".");
-            return result;
+            var context7 = targetType == typeof(ExecutionContextSnapshot) ||
+                (targetType != null && typeof(IPluginExecutionContext2).IsAssignableFrom(targetType));
+            // Microsoft webhook/Service Bus JSON is a different wire format from DevKit JSON.
+            if (result is Dictionary<string, object> native && !native.ContainsKey("_t") &&
+                (!native.TryGetValue("__type", out var nativeType) || nativeType is string nativeName && nativeName.StartsWith("RemoteExecutionContext:", StringComparison.Ordinal)) &&
+                native.ContainsKey("MessageName") && native.ContainsKey("BusinessUnitId") &&
+                (targetType == typeof(RemoteExecutionContext) || context7))
+            {
+                var remote = (RemoteExecutionContext)ReadNativeJson(json, typeof(RemoteExecutionContext));
+                var snapshot = ReadNativeContextProperties(remote, native);
+                return context7 ? snapshot : (object)remote;
+            }
+            return DecodeValue(result, targetType, context7);
         }
 
         public static T Deserialize<T>(string json)
         {
-            // Match System.Text.Json / Newtonsoft convention: null/whitespace input → default(T).
-            // Returning default instead of throwing lets callers handle the "no payload" case
-            // uniformly with `model?.field`, without each call site having to null-check first.
+            // Preserve the existing DevKit "no payload" convention.
             if (string.IsNullOrWhiteSpace(json)) return default(T);
 
             object result;
             try
             {
-                result = Deserialize(json);
+                result = DeserializeCore(json, typeof(T));
             }
             catch (Exception ex)
             {
@@ -98,22 +144,12 @@ namespace Microsoft.Xrm.Sdk
             var t = typeof(T);
             try
             {
-                if (t == typeof(int)) return (T)(object)Convert.ToInt32(result, CultureInfo.InvariantCulture);
-                if (t == typeof(long)) return (T)(object)Convert.ToInt64(result, CultureInfo.InvariantCulture);
-                if (t == typeof(double)) return (T)(object)Convert.ToDouble(result, CultureInfo.InvariantCulture);
-                if (t == typeof(decimal)) return (T)(object)Convert.ToDecimal(result, CultureInfo.InvariantCulture);
-                if (t == typeof(float)) return (T)(object)Convert.ToSingle(result, CultureInfo.InvariantCulture);
-                if (t == typeof(bool)) return (T)(object)Convert.ToBoolean(result, CultureInfo.InvariantCulture);
-                if (t == typeof(string)) return (T)(object)result.ToString();
-                if (result is Dictionary<string, object> dict && t.IsClass && !typeof(IEnumerable).IsAssignableFrom(t))
-                    return (T)MapDictionaryToObject(dict, t);
-                if (t.IsAssignableFrom(result.GetType())) return (T)result;
+                return (T)CoerceValue(result, t);
             }
             catch (Exception ex)
             {
                 throw CreateDeserializationException(t, json, result, ex);
             }
-            throw CreateDeserializationException(t, json, result, null);
         }
 
         /// <summary>
@@ -158,18 +194,16 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         public static string SerializeContext(IExecutionContext context)
         {
-            if (context == null) return "null";
-            _compact = true;
-            try
-            {
-                var sb = new StringBuilder(BUILDER_CAPACITY);
-                if (context is RemoteExecutionContext rCtx)
-                    WriteRemoteExecutionContext(rCtx, sb);
-                else
-                    WriteContextObject(context, sb);
-                return sb.ToString();
-            }
-            finally { _compact = false; }
+            return SerializeCore(context, true);
+        }
+
+        /// <summary>
+        /// Serialize a compact context snapshot without ParentContext, for trace-log fallback only.
+        /// All other available execution-context fields are retained.
+        /// </summary>
+        public static string SerializeContextWithoutParentContext(IExecutionContext context)
+        {
+            return SerializeCore(context, true, true);
         }
 
         /// <summary>
@@ -177,24 +211,137 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         public static string SerializeContextFull(IExecutionContext context)
         {
-            if (context == null) return "null";
-            var sb = new StringBuilder(BUILDER_CAPACITY);
-            if (context is RemoteExecutionContext rCtx)
-                WriteRemoteExecutionContext(rCtx, sb);
-            else
-                WriteContextObject(context, sb);
-            return sb.ToString();
+            return SerializeCore(context, false);
+        }
+
+        /// <summary>
+        /// Restore all v1-v7 properties, including bulk-operation images and parent contexts.
+        /// Accepts full/compact DevKit JSON and native Microsoft RemoteExecutionContext JSON.
+        /// Use HasProperty to distinguish unavailable properties from their default values.
+        /// The snapshot contains context data; organization services must be supplied separately.
+        /// </summary>
+        public static ExecutionContextSnapshot DeserializeContext7(string json)
+        {
+            return Deserialize<ExecutionContextSnapshot>(json);
         }
 
         #endregion
+
+        /// <summary>
+        /// A standalone v1-v7 context for inspection and local debugging. Properties contains
+        /// the captured fields, including unknown extensions. Missing fields are not invented.
+        /// </summary>
+        public sealed class ExecutionContextSnapshot : IPluginExecutionContext7
+        {
+            private readonly Dictionary<string, object> _properties;
+            public IReadOnlyDictionary<string, object> Properties { get; }
+
+            internal ExecutionContextSnapshot(Dictionary<string, object> properties)
+            {
+                _properties = new Dictionary<string, object>(properties, StringComparer.Ordinal);
+                _properties.Remove("__type");
+                _properties.Remove("SnapshotVersion");
+                foreach (var prop in GetProperties(typeof(ExecutionContextSnapshot)))
+                {
+                    if (prop.Name == "Properties" || !_properties.TryGetValue(prop.Name, out var value)) continue;
+                    _properties[prop.Name] = CoerceValue(value, prop.PropertyType);
+                }
+                Properties = new System.Collections.ObjectModel.ReadOnlyDictionary<string, object>(_properties);
+            }
+
+            public bool HasProperty(string name) { return _properties.ContainsKey(name); }
+            private T Get<T>(string name)
+            {
+                return _properties.TryGetValue(name, out var value) && value != null ? (T)value : default(T);
+            }
+
+            public int Mode => Get<int>("Mode");
+            public int IsolationMode => Get<int>("IsolationMode");
+            public int Depth => Get<int>("Depth");
+            public string MessageName => Get<string>("MessageName");
+            public string PrimaryEntityName => Get<string>("PrimaryEntityName");
+            public Guid? RequestId => Get<Guid?>("RequestId");
+            public string SecondaryEntityName => Get<string>("SecondaryEntityName");
+            public ParameterCollection InputParameters => Get<ParameterCollection>("InputParameters");
+            public ParameterCollection OutputParameters => Get<ParameterCollection>("OutputParameters");
+            public ParameterCollection SharedVariables => Get<ParameterCollection>("SharedVariables");
+            public Guid UserId => Get<Guid>("UserId");
+            public Guid InitiatingUserId => Get<Guid>("InitiatingUserId");
+            public Guid BusinessUnitId => Get<Guid>("BusinessUnitId");
+            public Guid OrganizationId => Get<Guid>("OrganizationId");
+            public string OrganizationName => Get<string>("OrganizationName");
+            public Guid PrimaryEntityId => Get<Guid>("PrimaryEntityId");
+            public EntityImageCollection PreEntityImages => Get<EntityImageCollection>("PreEntityImages");
+            public EntityImageCollection PostEntityImages => Get<EntityImageCollection>("PostEntityImages");
+            public EntityReference OwningExtension => Get<EntityReference>("OwningExtension");
+            public Guid CorrelationId => Get<Guid>("CorrelationId");
+            public bool IsExecutingOffline => Get<bool>("IsExecutingOffline");
+            public bool IsOfflinePlayback => Get<bool>("IsOfflinePlayback");
+            public bool IsInTransaction => Get<bool>("IsInTransaction");
+            public Guid OperationId => Get<Guid>("OperationId");
+            public DateTime OperationCreatedOn => Get<DateTime>("OperationCreatedOn");
+            public IPluginExecutionContext ParentContext => Get<IPluginExecutionContext>("ParentContext");
+            public int Stage => Get<int>("Stage");
+            public Guid UserAzureActiveDirectoryObjectId => Get<Guid>("UserAzureActiveDirectoryObjectId");
+            public Guid InitiatingUserAzureActiveDirectoryObjectId => Get<Guid>("InitiatingUserAzureActiveDirectoryObjectId");
+            public Guid InitiatingUserApplicationId => Get<Guid>("InitiatingUserApplicationId");
+            public Guid PortalsContactId => Get<Guid>("PortalsContactId");
+            public bool IsPortalsClientCall => Get<bool>("IsPortalsClientCall");
+            public Guid AuthenticatedUserId => Get<Guid>("AuthenticatedUserId");
+            public EntityImageCollection[] PreEntityImagesCollection => Get<EntityImageCollection[]>("PreEntityImagesCollection");
+            public EntityImageCollection[] PostEntityImagesCollection => Get<EntityImageCollection[]>("PostEntityImagesCollection");
+            public string InitiatingUserAgent => Get<string>("InitiatingUserAgent");
+            public string EnvironmentId => Get<string>("EnvironmentId");
+            public Guid TenantId => Get<Guid>("TenantId");
+            public bool IsApplicationUser => Get<bool>("IsApplicationUser");
+        }
 
         #region Serialization - Core
 
         private static void WriteValue(object value, StringBuilder sb)
         {
+            if (++_writer.Depth > MaxDepth)
+            {
+                _writer.Depth--;
+                throw new InvalidOperationException("JSON exceeds the maximum depth of " + MaxDepth + " at " + _writer.Path + ".");
+            }
+            var tracked = value != null && !(value is string) && !value.GetType().IsValueType;
+            var added = false;
+            var preserve = _writer.PreserveTypes;
+            try
+            {
+                if (tracked && !(added = _writer.Active.Add(value)))
+                    throw new InvalidOperationException("Circular reference at " + _writer.Path + ".");
+                if (!_writer.PreserveTypes && (value is IExecutionContext || (tracked && IsSdkType(value.GetType())))) _writer.PreserveTypes = true;
+                WriteValueCore(value, sb);
+            }
+            finally
+            {
+                if (added) _writer.Active.Remove(value);
+                _writer.PreserveTypes = preserve;
+                _writer.Depth--;
+            }
+        }
+
+        private static void WriteValueCore(object value, StringBuilder sb)
+        {
             if (value == null) { sb.Append("null"); return; }
             if (value is string s) { WriteString(s, sb); return; }
             if (value is bool b) { sb.Append(b ? "true" : "false"); return; }
+
+            // JSON numbers do not carry CLR types. Preserve them where SDK values are
+            // boxed (attributes, parameters, query values), keeping plain JSON at the public scalar root.
+            if (_writer.PreserveTypes && IsNumberType(value.GetType()) && !(value is int))
+            {
+                var text = value is double number64 ? number64.ToString("R", CultureInfo.InvariantCulture) :
+                    value is float number32 ? number32.ToString("R", CultureInfo.InvariantCulture) : Convert.ToString(value, CultureInfo.InvariantCulture);
+                WriteTyped(value.GetType().Name, text, sb);
+                return;
+            }
+            if (value is double specialDouble && (double.IsNaN(specialDouble) || double.IsInfinity(specialDouble)))
+            { WriteTyped("Double", specialDouble.ToString("R", CultureInfo.InvariantCulture), sb); return; }
+            if (value is float specialSingle && (float.IsNaN(specialSingle) || float.IsInfinity(specialSingle)))
+            { WriteTyped("Single", specialSingle.ToString("R", CultureInfo.InvariantCulture), sb); return; }
 
             if (value is int i32) { sb.Append(i32.ToString(CultureInfo.InvariantCulture)); return; }
             if (value is long i64) { sb.Append(i64.ToString(CultureInfo.InvariantCulture)); return; }
@@ -214,20 +361,53 @@ namespace Microsoft.Xrm.Sdk
             if (value is EntityCollection ec) { WriteEntityCollection(ec, sb); return; }
             if (value is EntityImageCollection eic) { WriteEntityImageCollection(eic, sb); return; }
             if (value is ParameterCollection pc) { WriteParameterCollection(pc, sb); return; }
-            if (value is RemoteExecutionContext ctx) { WriteRemoteExecutionContext(ctx, sb); return; }
             if (value is IExecutionContext execCtx) { WriteContextObject(execCtx, sb); return; }
 
-            if (value is DateTime dt) { WriteTyped("DateTime", dt.ToUniversalTime().ToString(DateTimeFormats[0], CultureInfo.InvariantCulture), sb); return; }
+            if (value is DateTime dt) { WriteDateTime(dt, sb); return; }
+            if (value is DateTimeOffset dto) { WriteTyped("DateTimeOffset", dto.ToString("O", CultureInfo.InvariantCulture), sb); return; }
+            if (value is TimeSpan span) { WriteTyped("TimeSpan", span.ToString("c", CultureInfo.InvariantCulture), sb); return; }
             if (value is Guid guid) { WriteTyped("Guid", guid.ToString("D"), sb); return; }
+            if (value is char character && _writer.PreserveTypes) { WriteTyped("Char", character.ToString(), sb); return; }
             if (value is byte[] bytes) { WriteTyped("File", Convert.ToBase64String(bytes), sb); return; }
-            if (value is Enum e) { sb.Append(Convert.ToInt32(e, CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture)); return; }
+            if (value is Enum e)
+            {
+                if (_writer.PreserveTypes && IsSdkType(e.GetType())) WriteSdkObject(e, sb);
+                else sb.Append(Convert.ChangeType(e, Enum.GetUnderlyingType(e.GetType()), CultureInfo.InvariantCulture));
+                return;
+            }
+
+            if (value is Array array && _writer.PreserveTypes && IsSafeValueType(array.GetType().GetElementType()))
+            {
+                if (array.Rank != 1) throw new NotSupportedException("Only one-dimensional arrays are supported at " + _writer.Path + ".");
+                WriteTypedCollection("Array", array.GetType().GetElementType(), array, sb);
+                return;
+            }
+            if (IsSdkType(value.GetType())) { WriteSdkObject(value, sb); return; }
+
+            if (_writer.PreserveTypes && value.GetType().IsGenericType)
+            {
+                var definition = value.GetType().GetGenericTypeDefinition();
+                if ((definition == typeof(List<>) || definition == typeof(Dictionary<,>) || definition == typeof(KeyValuePair<,>)) && IsSafeValueType(value.GetType()))
+                {
+                    sb.Append("{\"__type\":\"ClrCollection\",\"Type\":");
+                    WriteString(ValueTypeName(value.GetType()), sb);
+                    if (definition == typeof(KeyValuePair<,>))
+                    {
+                        WriteMember("Key", value.GetType().GetProperty("Key").GetValue(value), sb);
+                        WriteMember("Value", value.GetType().GetProperty("Value").GetValue(value), sb);
+                    }
+                    else { sb.Append(",\"Items\":"); WriteArray((IEnumerable)value, sb); }
+                    sb.Append('}');
+                    return;
+                }
+            }
 
             if (value is IDictionary<string, object> dict) { WriteDictionary(dict, sb); return; }
             if (value is IDictionary<string, string> sdict) { WriteStringDictionary(sdict, sb); return; }
             if (value is IEnumerable enumerable) { WriteArray(enumerable, sb); return; }
 
             var valueType = value.GetType();
-            if (valueType.IsClass && valueType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Length > 0)
+            if (valueType.IsClass && GetProperties(valueType).Length > 0)
             {
                 WriteReflectedObject(value, sb);
                 return;
@@ -237,28 +417,28 @@ namespace Microsoft.Xrm.Sdk
 
         private static void WriteString(string s, StringBuilder sb)
         {
+            if (s == null) { sb.Append("null"); return; }
             sb.Append('"');
-            if (s.IndexOfAny(EscapeChars) == -1)
+            var start = 0;
+            for (var index = 0; index < s.Length; index++)
             {
-                sb.Append(s);
-            }
-            else
-            {
-                foreach (var c in s)
+                var c = s[index];
+                if (c >= ' ' && c != '"' && c != '\\' && !char.IsSurrogate(c)) continue;
+                sb.Append(s, start, index - start);
+                switch (c)
                 {
-                    switch (c)
-                    {
-                        case '"': sb.Append("\\\""); break;
-                        case '\\': sb.Append("\\\\"); break;
-                        case '\b': sb.Append("\\b"); break;
-                        case '\f': sb.Append("\\f"); break;
-                        case '\n': sb.Append("\\n"); break;
-                        case '\r': sb.Append("\\r"); break;
-                        case '\t': sb.Append("\\t"); break;
-                        default: sb.Append(c); break;
-                    }
+                    case '"': sb.Append("\\\""); break;
+                    case '\\': sb.Append("\\\\"); break;
+                    case '\b': sb.Append("\\b"); break;
+                    case '\f': sb.Append("\\f"); break;
+                    case '\n': sb.Append("\\n"); break;
+                    case '\r': sb.Append("\\r"); break;
+                    case '\t': sb.Append("\\t"); break;
+                    default: sb.Append("\\u").Append(((int)c).ToString("x4", CultureInfo.InvariantCulture)); break;
                 }
+                start = index + 1;
             }
+            sb.Append(s, start, s.Length - start);
             sb.Append('"');
         }
 
@@ -287,6 +467,8 @@ namespace Microsoft.Xrm.Sdk
 
         private static void WriteDictionary(IDictionary<string, object> dict, StringBuilder sb)
         {
+            var escaped = dict.ContainsKey("_t") || dict.ContainsKey("__type");
+            if (escaped) sb.Append("{\"__type\":\"Dictionary\",\"Values\":");
             sb.Append('{');
             var first = true;
             foreach (var kvp in dict)
@@ -294,14 +476,17 @@ namespace Microsoft.Xrm.Sdk
                 if (!first) sb.Append(',');
                 WriteString(kvp.Key, sb);
                 sb.Append(':');
-                WriteValue(kvp.Value, sb);
+                WriteChild(kvp.Value, sb, kvp.Key);
                 first = false;
             }
             sb.Append('}');
+            if (escaped) sb.Append('}');
         }
 
         private static void WriteStringDictionary(IDictionary<string, string> dict, StringBuilder sb)
         {
+            var escaped = dict.ContainsKey("_t") || dict.ContainsKey("__type");
+            if (escaped) sb.Append("{\"__type\":\"Dictionary\",\"Values\":");
             sb.Append('{');
             var first = true;
             foreach (var kvp in dict)
@@ -313,16 +498,18 @@ namespace Microsoft.Xrm.Sdk
                 first = false;
             }
             sb.Append('}');
+            if (escaped) sb.Append('}');
         }
 
         private static void WriteArray(IEnumerable enumerable, StringBuilder sb)
         {
             sb.Append('[');
             var first = true;
+            var index = 0;
             foreach (var item in enumerable)
             {
                 if (!first) sb.Append(',');
-                WriteValue(item, sb);
+                WriteChild(item, sb, "[" + (index++).ToString(CultureInfo.InvariantCulture) + "]");
                 first = false;
             }
             sb.Append(']');
@@ -330,23 +517,12 @@ namespace Microsoft.Xrm.Sdk
 
         private static void WriteReflectedObject(object value, StringBuilder sb)
         {
-            sb.Append('{');
-            var first = true;
-            foreach (var prop in value.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            var properties = new Dictionary<string, object>(StringComparer.Ordinal);
+            foreach (var prop in GetProperties(value.GetType()))
             {
-                if (prop.GetIndexParameters().Length > 0) continue;
-                if (!prop.CanRead) continue;
-                try
-                {
-                    if (!first) sb.Append(',');
-                    WriteString(prop.Name, sb);
-                    sb.Append(':');
-                    WriteValue(prop.GetValue(value), sb);
-                    first = false;
-                }
-                catch { }
+                properties.Add(prop.Name, ReadProperty(prop, value));
             }
-            sb.Append('}');
+            WriteDictionary(properties, sb);
         }
 
         #endregion
@@ -366,11 +542,12 @@ namespace Microsoft.Xrm.Sdk
                 if (!first) sb.Append(',');
                 WriteString(attr.Key, sb);
                 sb.Append(':');
-                WriteValue(attr.Value, sb);
+                WriteChild(attr.Value, sb, attr.Key);
                 first = false;
             }
             sb.Append('}');
-            if (entity.FormattedValues != null && entity.FormattedValues.Count > 0)
+            // The SDK getter always initializes an empty collection; only the count can be absent.
+            if (entity.FormattedValues.Count > 0)
             {
                 sb.Append(_compact ? ",\"fv\":{" : ",\"FormattedValues\":{");
                 first = true;
@@ -384,6 +561,11 @@ namespace Microsoft.Xrm.Sdk
                 }
                 sb.Append('}');
             }
+            if (entity.KeyAttributes.Count > 0) WriteMember("KeyAttributes", entity.KeyAttributes, sb);
+            if (entity.RowVersion != null) WriteMember("RowVersion", entity.RowVersion, sb);
+            if (entity.EntityState.HasValue) WriteMember("EntityState", (int)entity.EntityState.Value, sb);
+            if (entity.RelatedEntities.Count > 0) WriteMember("RelatedEntities", entity.RelatedEntities, sb);
+            WriteExtensionData(entity, sb);
             sb.Append('}');
         }
 
@@ -398,6 +580,9 @@ namespace Microsoft.Xrm.Sdk
                 sb.Append(_compact ? ",\"n\":" : ",\"Name\":");
                 WriteString(er.Name, sb);
             }
+            if (er.KeyAttributes.Count > 0) WriteMember("KeyAttributes", er.KeyAttributes, sb);
+            if (er.RowVersion != null) WriteMember("RowVersion", er.RowVersion, sb);
+            WriteExtensionData(er, sb);
             sb.Append('}');
         }
 
@@ -405,6 +590,7 @@ namespace Microsoft.Xrm.Sdk
         {
             sb.Append(_compact ? "{\"_t\":\"M\",\"v\":" : "{\"__type\":\"Money\",\"Value\":");
             sb.Append(money.Value.ToString(CultureInfo.InvariantCulture));
+            WriteExtensionData(money, sb);
             sb.Append('}');
         }
 
@@ -412,6 +598,7 @@ namespace Microsoft.Xrm.Sdk
         {
             sb.Append(_compact ? "{\"_t\":\"O\",\"v\":" : "{\"__type\":\"OptionSetValue\",\"Value\":");
             sb.Append(osv.Value.ToString(CultureInfo.InvariantCulture));
+            WriteExtensionData(osv, sb);
             sb.Append('}');
         }
 
@@ -422,7 +609,8 @@ namespace Microsoft.Xrm.Sdk
             foreach (var osv in osvc)
             {
                 if (!first) sb.Append(',');
-                sb.Append(osv.Value.ToString(CultureInfo.InvariantCulture));
+                if (osv == null || osv.ExtensionData != null) WriteChild(osv, sb, "Values");
+                else sb.Append(osv.Value.ToString(CultureInfo.InvariantCulture));
                 first = false;
             }
             sb.Append("]}");
@@ -435,7 +623,8 @@ namespace Microsoft.Xrm.Sdk
             sb.Append(_compact ? ",\"aln\":" : ",\"AttributeLogicalName\":");
             WriteString(av.AttributeLogicalName ?? "", sb);
             sb.Append(_compact ? ",\"v\":" : ",\"Value\":");
-            WriteValue(av.Value, sb);
+            WriteChild(av.Value, sb, "Value");
+            WriteExtensionData(av, sb);
             sb.Append('}');
         }
 
@@ -450,6 +639,7 @@ namespace Microsoft.Xrm.Sdk
                 sb.Append(_compact ? ",\"ml\":" : ",\"ManagedPropertyLogicalName\":");
                 WriteString(bmp.ManagedPropertyLogicalName, sb);
             }
+            WriteExtensionData(bmp, sb);
             sb.Append('}');
         }
 
@@ -466,10 +656,17 @@ namespace Microsoft.Xrm.Sdk
             foreach (var entity in ec.Entities)
             {
                 if (!first) sb.Append(',');
-                WriteEntity(entity, sb);
+                WriteChild(entity, sb, "Entities");
                 first = false;
             }
-            sb.Append("]}");
+            sb.Append(']');
+            WriteMember("MoreRecords", ec.MoreRecords, sb);
+            WriteMember("TotalRecordCount", ec.TotalRecordCount, sb);
+            WriteMember("TotalRecordCountLimitExceeded", ec.TotalRecordCountLimitExceeded, sb);
+            if (ec.PagingCookie != null) WriteMember("PagingCookie", ec.PagingCookie, sb);
+            if (ec.MinActiveRowVersion != null) WriteMember("MinActiveRowVersion", ec.MinActiveRowVersion, sb);
+            WriteExtensionData(ec, sb);
+            sb.Append('}');
         }
 
         private static void WriteParameterCollection(ParameterCollection pc, StringBuilder sb)
@@ -481,7 +678,7 @@ namespace Microsoft.Xrm.Sdk
                 if (!first) sb.Append(',');
                 WriteString(kvp.Key, sb);
                 sb.Append(':');
-                WriteValue(kvp.Value, sb);
+                WriteChild(kvp.Value, sb, kvp.Key);
                 first = false;
             }
             sb.Append("}}");
@@ -496,55 +693,10 @@ namespace Microsoft.Xrm.Sdk
                 if (!first) sb.Append(',');
                 WriteString(kvp.Key, sb);
                 sb.Append(':');
-                WriteEntity(kvp.Value, sb);
+                WriteChild(kvp.Value, sb, kvp.Key);
                 first = false;
             }
             sb.Append("}}");
-        }
-
-        private static void WriteRemoteExecutionContext(RemoteExecutionContext ctx, StringBuilder sb)
-        {
-            sb.Append(_compact ? "{\"_t\":\"RC\"" : "{\"__type\":\"RemoteExecutionContext\"");
-            sb.Append(_compact ? ",\"bu\":" : ",\"BusinessUnitId\":"); WriteString(ctx.BusinessUnitId.ToString("D"), sb);
-            sb.Append(_compact ? ",\"ci\":" : ",\"CorrelationId\":"); WriteString(ctx.CorrelationId.ToString("D"), sb);
-            sb.Append(_compact ? ",\"dp\":" : ",\"Depth\":"); sb.Append(ctx.Depth.ToString(CultureInfo.InvariantCulture));
-            sb.Append(_compact ? ",\"iu\":" : ",\"InitiatingUserId\":"); WriteString(ctx.InitiatingUserId.ToString("D"), sb);
-            sb.Append(_compact ? ",\"ip\":" : ",\"InputParameters\":"); WriteParameterCollection(ctx.InputParameters ?? new ParameterCollection(), sb);
-            sb.Append(_compact ? ",\"xo\":" : ",\"IsExecutingOffline\":"); sb.Append(ctx.IsExecutingOffline ? "true" : "false");
-            sb.Append(_compact ? ",\"xt\":" : ",\"IsInTransaction\":"); sb.Append(ctx.IsInTransaction ? "true" : "false");
-            sb.Append(_compact ? ",\"xp\":" : ",\"IsOfflinePlayback\":"); sb.Append(ctx.IsOfflinePlayback ? "true" : "false");
-            sb.Append(_compact ? ",\"im\":" : ",\"IsolationMode\":"); sb.Append(ctx.IsolationMode.ToString(CultureInfo.InvariantCulture));
-            sb.Append(_compact ? ",\"mn\":" : ",\"MessageName\":"); WriteString(ctx.MessageName ?? "", sb);
-            sb.Append(_compact ? ",\"md\":" : ",\"Mode\":"); sb.Append(ctx.Mode.ToString(CultureInfo.InvariantCulture));
-            sb.Append(_compact ? ",\"oc\":" : ",\"OperationCreatedOn\":"); WriteString(ctx.OperationCreatedOn.ToUniversalTime().ToString(DateTimeFormats[0], CultureInfo.InvariantCulture), sb);
-            sb.Append(_compact ? ",\"oi\":" : ",\"OperationId\":"); WriteString(ctx.OperationId.ToString("D"), sb);
-            sb.Append(_compact ? ",\"og\":" : ",\"OrganizationId\":"); WriteString(ctx.OrganizationId.ToString("D"), sb);
-            sb.Append(_compact ? ",\"on\":" : ",\"OrganizationName\":"); WriteString(ctx.OrganizationName ?? "", sb);
-            sb.Append(_compact ? ",\"ou\":" : ",\"OutputParameters\":"); WriteParameterCollection(ctx.OutputParameters ?? new ParameterCollection(), sb);
-            sb.Append(_compact ? ",\"oe\":" : ",\"OwningExtension\":");
-            if (ctx.OwningExtension != null) WriteEntityReference(ctx.OwningExtension, sb); else sb.Append("null");
-            sb.Append(_compact ? ",\"po\":" : ",\"PostEntityImages\":"); WriteEntityImageCollection(ctx.PostEntityImages ?? new EntityImageCollection(), sb);
-            sb.Append(_compact ? ",\"pr\":" : ",\"PreEntityImages\":"); WriteEntityImageCollection(ctx.PreEntityImages ?? new EntityImageCollection(), sb);
-            sb.Append(_compact ? ",\"pi\":" : ",\"PrimaryEntityId\":"); WriteString(ctx.PrimaryEntityId.ToString("D"), sb);
-            sb.Append(_compact ? ",\"pn\":" : ",\"PrimaryEntityName\":"); WriteString(ctx.PrimaryEntityName ?? "", sb);
-            sb.Append(_compact ? ",\"ri\":" : ",\"RequestId\":");
-            if (ctx.RequestId.HasValue) WriteString(ctx.RequestId.Value.ToString("D"), sb); else sb.Append("null");
-            sb.Append(_compact ? ",\"sn\":" : ",\"SecondaryEntityName\":"); WriteString(ctx.SecondaryEntityName ?? "", sb);
-            sb.Append(_compact ? ",\"sv\":" : ",\"SharedVariables\":"); WriteParameterCollection(ctx.SharedVariables ?? new ParameterCollection(), sb);
-            sb.Append(_compact ? ",\"st\":" : ",\"Stage\":"); sb.Append(ctx.Stage.ToString(CultureInfo.InvariantCulture));
-            sb.Append(_compact ? ",\"ui\":" : ",\"UserId\":"); WriteString(ctx.UserId.ToString("D"), sb);
-            if (ctx.ParentContext != null)
-            {
-                sb.Append(_compact ? ",\"pc\":" : ",\"ParentContext\":");
-                if (ctx.ParentContext is RemoteExecutionContext parentCtx)
-                    WriteRemoteExecutionContext(parentCtx, sb);
-                else if (ctx.ParentContext is IExecutionContext parentExec)
-                    WriteContextObject(parentExec, sb);
-                else
-                    sb.Append("null");
-            }
-            WriteExtraContextProperties(ctx, sb);
-            sb.Append('}');
         }
 
         private static readonly Dictionary<string, string> FullToCompactContextKey = new Dictionary<string, string>(StringComparer.Ordinal)
@@ -575,61 +727,54 @@ namespace Microsoft.Xrm.Sdk
             return FullToCompactContextKey.TryGetValue(propertyName, out var compact) ? compact : propertyName;
         }
 
-        /// <summary>
-        /// Auto-discover v2-v7+ properties via reflection that aren't in the v1 known set.
-        /// When Microsoft updates RemoteExecutionContext with new properties, they'll be captured automatically.
-        /// </summary>
-        private static void WriteExtraContextProperties(object ctx, StringBuilder sb)
-        {
-            foreach (var prop in ctx.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
-            {
-                if (KnownContextProperties.Contains(prop.Name)) continue;
-                if (prop.GetIndexParameters().Length > 0) continue;
-                try
-                {
-                    var val = prop.GetValue(ctx);
-                    sb.Append(",\"");
-                    sb.Append(_compact ? GetCompactContextKey(prop.Name) : prop.Name);
-                    sb.Append("\":");
-                    WriteValue(val, sb);
-                }
-                catch { }
-            }
-        }
-
-        /// <summary>
-        /// Serialize any IExecutionContext (including IPluginExecutionContext v2-v7+) purely via reflection.
-        /// Captures ALL public properties from the runtime type, not just v1 RemoteExecutionContext properties.
-        /// </summary>
         private static void WriteContextObject(object context, StringBuilder sb)
         {
-            sb.Append(_compact ? "{\"_t\":\"RC\"" : "{\"__type\":\"RemoteExecutionContext\"");
-            object parentContextValue = null;
-            foreach (var prop in context.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            var values = new Dictionary<string, object>(StringComparer.Ordinal);
+            if (context is ExecutionContextSnapshot snapshot)
             {
-                if (prop.GetIndexParameters().Length > 0) continue;
-                if (prop.Name == "ParentContext")
+                foreach (var item in snapshot.Properties) values.Add(item.Key, item.Value);
+            }
+            else
+            {
+                if (context is RemoteExecutionContext remote && RemoteProperties.TryGetValue(remote, out var saved))
+                    foreach (var item in saved) values[item.Key] = item.Value;
+                foreach (var prop in GetContextProperties(context.GetType()))
                 {
-                    try { parentContextValue = prop.GetValue(context); } catch { }
+                    if (prop.Name == "ExtensionData") continue;
+                    values[prop.Name] = ReadProperty(prop, context);
+                }
+                if (context is IExtensibleDataObject extensible && extensible.ExtensionData != null)
+                    values["ExtensionData"] = WriteUnknownContextExtensionData(context);
+            }
+
+            sb.Append(_compact ? "{\"_t\":\"RC\"" : "{\"__type\":\"RemoteExecutionContext\"");
+            sb.Append(",\"SnapshotVersion\":1");
+            var extras = new Dictionary<string, object>(StringComparer.Ordinal);
+            foreach (var item in values)
+            {
+                if (item.Key == "__type" || item.Key == "_t" || item.Key == "SnapshotVersion") continue;
+                if (_writer.OmitParentContext && item.Key == "ParentContext") continue;
+                if (!KnownContextProperties.Contains(item.Key) && item.Key != "ExtensionData")
+                {
+                    extras.Add(item.Key, item.Value);
                     continue;
                 }
-                try
-                {
-                    var val = prop.GetValue(context);
-                    sb.Append(",\"");
-                    sb.Append(_compact ? GetCompactContextKey(prop.Name) : prop.Name);
-                    sb.Append("\":");
-                    WriteValue(val, sb);
-                }
-                catch { }
+                sb.Append(',');
+                WriteString(_compact ? GetCompactContextKey(item.Key) : item.Key, sb);
+                sb.Append(':');
+                // The context contract supplies scalar types, unlike boxed parameter values.
+                if (KnownContextProperties.Contains(item.Key) && item.Value is Guid guid)
+                    WriteString(guid.ToString("D"), sb);
+                else if (item.Key == "OperationCreatedOn" && item.Value is DateTime date && date.Kind == DateTimeKind.Utc)
+                    WriteString(date.ToString("O", CultureInfo.InvariantCulture), sb);
+                else if (item.Key == "ExtensionData" && item.Value is string extensionJson)
+                    WriteChild(EncodeExtensionData(extensionJson), sb, item.Key);
+                else WriteChild(item.Value, sb, item.Key);
             }
-            if (parentContextValue != null)
+            if (extras.Count > 0)
             {
-                sb.Append(_compact ? ",\"pc\":" : ",\"ParentContext\":");
-                if (parentContextValue is RemoteExecutionContext parentRemote)
-                    WriteRemoteExecutionContext(parentRemote, sb);
-                else
-                    WriteContextObject(parentContextValue, sb);
+                sb.Append(",\"AdditionalProperties\":");
+                WriteDictionary(extras, sb);
             }
             sb.Append('}');
         }
@@ -638,52 +783,51 @@ namespace Microsoft.Xrm.Sdk
 
         #region Parsing
 
-        private static object ParseValue(char[] json, ref int index)
+        private static object ParseValue(char[] json, ref int index, int depth)
         {
             EatWhitespace(json, ref index);
-            if (index >= json.Length) return null;
+            if (depth > MaxDepth) throw JsonError(index, "Maximum depth exceeded");
+            if (index >= json.Length) throw JsonError(index, "Expected a value");
             switch (json[index])
             {
                 case '"': return ParseString(json, ref index);
-                case '{': return ParseObjectAndReconstruct(json, ref index);
-                case '[': return ParseArray(json, ref index);
-                case 't':
-                    if (MatchLiteral(json, index, "true")) { index += 4; return true; }
+                case '{': return ParseObject(json, ref index, depth + 1);
+                case '[': return ParseArray(json, ref index, depth + 1);
+                case 't': if (MatchLiteral(json, index, "true")) { index += 4; return true; } break;
+                case 'f': if (MatchLiteral(json, index, "false")) { index += 5; return false; } break;
+                case 'n': if (MatchLiteral(json, index, "null")) { index += 4; return null; } break;
+                default:
+                    if (json[index] == '-' || IsDigit(json[index])) return ParseNumber(json, ref index);
                     break;
-                case 'f':
-                    if (MatchLiteral(json, index, "false")) { index += 5; return false; }
-                    break;
-                case 'n':
-                    if (MatchLiteral(json, index, "null")) { index += 4; return null; }
-                    break;
-                case '-':
-                case '0': case '1': case '2': case '3': case '4':
-                case '5': case '6': case '7': case '8': case '9':
-                    return ParseNumber(json, ref index);
             }
-            throw new FormatException("Unexpected token at JSON index " + index.ToString(CultureInfo.InvariantCulture) + ".");
+            throw JsonError(index, "Unexpected token");
+        }
+
+        private static FormatException JsonError(int index, string message)
+        {
+            return new FormatException(message + " at JSON index " + index.ToString(CultureInfo.InvariantCulture) + ".");
         }
 
         private static bool MatchLiteral(char[] json, int index, string literal)
         {
             if (index + literal.Length > json.Length) return false;
-            for (var i = 0; i < literal.Length; i++)
-                if (json[index + i] != literal[i]) return false;
+            for (var i = 0; i < literal.Length; i++) if (json[index + i] != literal[i]) return false;
             return true;
         }
 
         private static string ParseString(char[] json, ref int index)
         {
+            if (index >= json.Length || json[index] != '"') throw JsonError(index, "Expected a quoted string");
             index++;
             var sb = new StringBuilder();
             while (index < json.Length)
             {
                 var c = json[index++];
                 if (c == '"') return sb.ToString();
+                if (c < ' ') throw JsonError(index - 1, "Unescaped control character");
                 if (c != '\\') { sb.Append(c); continue; }
-                if (index >= json.Length) break;
-                c = json[index++];
-                switch (c)
+                if (index >= json.Length) throw JsonError(index, "Incomplete escape sequence");
+                switch (json[index++])
                 {
                     case '"': sb.Append('"'); break;
                     case '\\': sb.Append('\\'); break;
@@ -694,88 +838,86 @@ namespace Microsoft.Xrm.Sdk
                     case 'r': sb.Append('\r'); break;
                     case 't': sb.Append('\t'); break;
                     case 'u':
-                        if (index + 4 <= json.Length)
+                        var code = 0;
+                        for (var i = 0; i < 4; i++)
                         {
-                            if (uint.TryParse(new string(json, index, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var cp))
-                            {
-                                if (cp >= 0xD800 && cp <= 0xDBFF && index + 10 <= json.Length && json[index + 4] == '\\' && json[index + 5] == 'u')
-                                {
-                                    if (uint.TryParse(new string(json, index + 6, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var low) && low >= 0xDC00 && low <= 0xDFFF)
-                                    {
-                                        sb.Append((char)cp);
-                                        sb.Append((char)low);
-                                        index += 10;
-                                        continue;
-                                    }
-                                }
-                                sb.Append((char)cp);
-                                index += 4;
-                            }
+                            if (index >= json.Length) throw JsonError(index, "Incomplete Unicode escape");
+                            var digit = json[index++];
+                            var hex = digit >= '0' && digit <= '9' ? digit - '0' :
+                                digit >= 'a' && digit <= 'f' ? digit - 'a' + 10 :
+                                digit >= 'A' && digit <= 'F' ? digit - 'A' + 10 : -1;
+                            if (hex < 0) throw JsonError(index - 1, "Invalid Unicode escape");
+                            code = code * 16 + hex;
                         }
+                        // Preserve UTF-16 code units, including escaped lone surrogates.
+                        sb.Append((char)code);
                         break;
+                    default: throw JsonError(index - 1, "Invalid escape sequence");
                 }
             }
-            return sb.ToString();
+            throw JsonError(index, "Unterminated string");
         }
 
-        private static object ParseObjectAndReconstruct(char[] json, ref int index)
+        private static Dictionary<string, object> ParseObject(char[] json, ref int index, int depth)
         {
-            var dict = ParseObject(json, ref index);
-            if (dict.ContainsKey("_t"))
-                dict = ExpandCompactDict(dict);
-            if (dict.TryGetValue("__type", out var typeObj) && typeObj is string typeName)
-                return ReconstructTypedObject(typeName, dict);
-            return dict;
-        }
-
-        private static Dictionary<string, object> ParseObject(char[] json, ref int index)
-        {
-            var dict = new Dictionary<string, object>();
+            var dict = new Dictionary<string, object>(StringComparer.Ordinal);
             index++;
-            while (index < json.Length)
+            EatWhitespace(json, ref index);
+            if (index < json.Length && json[index] == '}') { index++; return dict; }
+            while (true)
             {
-                EatWhitespace(json, ref index);
-                if (index < json.Length && json[index] == '}') { index++; return dict; }
-                if (index < json.Length && json[index] == ',') { index++; continue; }
                 var key = ParseString(json, ref index);
                 EatWhitespace(json, ref index);
-                if (index < json.Length && json[index] == ':') index++;
-                dict[key] = ParseValue(json, ref index);
+                if (index >= json.Length || json[index++] != ':') throw JsonError(index, "Expected ':'");
+                dict[key] = ParseValue(json, ref index, depth);
+                EatWhitespace(json, ref index);
+                if (index >= json.Length) throw JsonError(index, "Unterminated object");
+                if (json[index] == '}') { index++; return dict; }
+                if (json[index++] != ',') throw JsonError(index - 1, "Expected ',' or '}'");
+                EatWhitespace(json, ref index);
             }
-            return dict;
         }
 
-        private static List<object> ParseArray(char[] json, ref int index)
+        private static List<object> ParseArray(char[] json, ref int index, int depth)
         {
             var list = new List<object>();
             index++;
-            while (index < json.Length)
+            EatWhitespace(json, ref index);
+            if (index < json.Length && json[index] == ']') { index++; return list; }
+            while (true)
             {
+                list.Add(ParseValue(json, ref index, depth));
                 EatWhitespace(json, ref index);
-                if (index < json.Length && json[index] == ']') { index++; return list; }
-                if (index < json.Length && json[index] == ',') { index++; continue; }
-                list.Add(ParseValue(json, ref index));
+                if (index >= json.Length) throw JsonError(index, "Unterminated array");
+                if (json[index] == ']') { index++; return list; }
+                if (json[index++] != ',') throw JsonError(index - 1, "Expected ',' or ']'");
             }
-            return list;
         }
+
+        private static bool IsDigit(char c) { return c >= '0' && c <= '9'; }
 
         private static object ParseNumber(char[] json, ref int index)
         {
             var start = index;
-            while (index < json.Length && "0123456789.eE+-".IndexOf(json[index]) != -1) index++;
-            var s = new string(json, start, index - start);
-            if (s.IndexOfAny(new[] { '.', 'e', 'E' }) >= 0)
+            if (json[index] == '-') index++;
+            if (index >= json.Length || !IsDigit(json[index])) throw JsonError(index, "Expected a digit");
+            if (json[index] == '0') index++;
+            else while (index < json.Length && IsDigit(json[index])) index++;
+            if (index < json.Length && json[index] == '.')
             {
-                if (double.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out var d)) return d;
+                index++;
+                if (index >= json.Length || !IsDigit(json[index])) throw JsonError(index, "Expected fractional digits");
+                while (index < json.Length && IsDigit(json[index])) index++;
             }
-            else
+            if (index < json.Length && (json[index] == 'e' || json[index] == 'E'))
             {
-                if (long.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out var l))
-                    return (l >= int.MinValue && l <= int.MaxValue) ? (object)(int)l : l;
-                if (decimal.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out var m))
-                    return m;
+                index++;
+                if (index < json.Length && (json[index] == '+' || json[index] == '-')) index++;
+                if (index >= json.Length || !IsDigit(json[index])) throw JsonError(index, "Expected exponent digits");
+                while (index < json.Length && IsDigit(json[index])) index++;
             }
-            throw new FormatException("Invalid number at JSON index " + start.ToString(CultureInfo.InvariantCulture) + ".");
+            // Retain the original token until the destination type is known (Money/decimal).
+            return new JsonNumber(new string(json, start, index - start));
         }
 
         private static void EatWhitespace(char[] json, ref int index)
@@ -792,14 +934,111 @@ namespace Microsoft.Xrm.Sdk
 
         #region Type Reconstruction
 
+        private static object DecodeValue(object raw, Type targetType, bool context7)
+        {
+            if (raw is JsonNumber number) return number.ToValue(targetType);
+            if (raw is List<object> rawList)
+            {
+                var list = new List<object>(rawList.Count);
+                var elementType = GetElementType(targetType);
+                foreach (var item in rawList) list.Add(DecodeValue(item, elementType, context7));
+                return targetType == null || targetType == typeof(object) ? list : CoerceValue(list, targetType);
+            }
+            if (!(raw is Dictionary<string, object> source)) return raw;
+            if (source.TryGetValue("_t", out var shortType) && shortType is string shortName && CompactToFullType.ContainsKey(shortName))
+                source = ExpandCompactDict(source);
+            var typeName = source.TryGetValue("__type", out var typeValue) ? typeValue as string : null;
+            if (typeName == "RemoteExecutionContext" && source.TryGetValue("SnapshotVersion", out var version) &&
+                (!(version is JsonNumber versionNumber) || versionNumber.Text != "1"))
+                throw new NotSupportedException("Unsupported DevKit context snapshot version.");
+            if (typeName == "Dictionary")
+                return DecodeDictionary((Dictionary<string, object>)source["Values"], targetType, context7);
+
+            Type contract = null;
+            if (typeName == "RemoteExecutionContext") contract = typeof(ExecutionContextSnapshot);
+            if (typeName == "SdkObject") contract = ResolveSdkObjectType(source);
+            var dict = new Dictionary<string, object>(StringComparer.Ordinal);
+            foreach (var item in source)
+            {
+                if (typeName == "SdkObject" && item.Key == "Properties")
+                    dict[item.Key] = DecodeDictionary((Dictionary<string, object>)item.Value, contract, context7);
+                else if ((typeName == "Entity" && (item.Key == "Attributes" || item.Key == "FormattedValues")) ||
+                    ((typeName == "ParameterCollection" || typeName == "EntityImageCollection") && item.Key == "Values"))
+                    dict[item.Key] = item.Value == null ? null : DecodeDictionary((Dictionary<string, object>)item.Value, null, context7);
+                else
+                {
+                    var hint = GetMemberType(contract ?? (typeName == null ? targetType : null), item.Key);
+                    if (typeName == "Money" && item.Key == "Value") hint = typeof(decimal);
+                    if (typeName == "RemoteExecutionContext" && item.Key == "ParentContext") hint = null;
+                    dict[item.Key] = DecodeValue(item.Value, hint, context7);
+                }
+            }
+            if (typeName == "RemoteExecutionContext" && dict.TryGetValue("AdditionalProperties", out var extra))
+            {
+                if (!(extra is Dictionary<string, object> extras)) throw new FormatException("Expected AdditionalProperties to be a dictionary.");
+                dict.Remove("AdditionalProperties");
+                foreach (var item in extras)
+                {
+                    if (dict.ContainsKey(item.Key)) throw new FormatException("Duplicate context property '" + item.Key + "'.");
+                    dict.Add(item.Key, item.Value);
+                }
+            }
+            if (typeName == "RemoteExecutionContext" && context7) return new ExecutionContextSnapshot(dict);
+            if (typeName != null) return ReconstructTypedObject(typeName, dict);
+            return dict;
+        }
+
+        private static Dictionary<string, object> DecodeDictionary(Dictionary<string, object> raw, Type targetType, bool context7)
+        {
+            var result = new Dictionary<string, object>(StringComparer.Ordinal);
+            foreach (var item in raw)
+                result.Add(item.Key, DecodeValue(item.Value, GetMemberType(targetType, item.Key), context7));
+            return result;
+        }
+
+        private static Type GetMemberType(Type type, string name)
+        {
+            if (type == null || type == typeof(object)) return null;
+            if (type.IsGenericType)
+            {
+                var definition = type.GetGenericTypeDefinition();
+                if (definition == typeof(Dictionary<,>) || definition == typeof(IDictionary<,>) || definition == typeof(IReadOnlyDictionary<,>))
+                    return type.GetGenericArguments()[1];
+            }
+            foreach (var prop in GetProperties(type))
+                if (string.Equals(prop.Name, name, StringComparison.OrdinalIgnoreCase)) return prop.PropertyType;
+            return null;
+        }
+
         private static object ReconstructTypedObject(string typeName, Dictionary<string, object> dict)
         {
             switch (typeName)
             {
+                case "Byte": case "SByte": case "Int16": case "UInt16": case "Int32": case "UInt32":
+                case "Int64": case "UInt64": case "Single": case "Double": case "Decimal":
+                    return Convert.ChangeType(dict["Value"], ResolveValueType(typeName), CultureInfo.InvariantCulture);
+                case "Array":
+                    return CoerceValue(dict["Values"], ResolveValueType((string)dict["ElementType"]).MakeArrayType());
+                case "SdkObject": return ReadSdkObject(dict);
+                case "ClrCollection":
+                    var collectionType = ResolveValueType((string)dict["Type"]);
+                    if (!collectionType.IsGenericType) throw new FormatException("Expected a generic collection type.");
+                    if (collectionType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
+                    {
+                        var arguments = collectionType.GetGenericArguments();
+                        return Activator.CreateInstance(collectionType, CoerceValue(dict["Key"], arguments[0]), CoerceValue(dict["Value"], arguments[1]));
+                    }
+                    var collection = Activator.CreateInstance(collectionType);
+                    PopulateCollection(collection, (IEnumerable)dict["Items"]);
+                    return collection;
                 case "Entity": return ReconstructEntity(dict);
                 case "EntityReference": return ReconstructEntityReference(dict);
-                case "Money": return new Money(Convert.ToDecimal(dict["Value"], CultureInfo.InvariantCulture));
-                case "OptionSetValue": return new OptionSetValue(Convert.ToInt32(dict["Value"], CultureInfo.InvariantCulture));
+                case "Money":
+                    var money = new Money(Convert.ToDecimal(dict["Value"], CultureInfo.InvariantCulture));
+                    RestoreExtensionData(money, dict); return money;
+                case "OptionSetValue":
+                    var option = new OptionSetValue(Convert.ToInt32(dict["Value"], CultureInfo.InvariantCulture));
+                    RestoreExtensionData(option, dict); return option;
                 case "OptionSetValueCollection": return ReconstructOptionSetValueCollection(dict);
                 case "AliasedValue": return ReconstructAliasedValue(dict);
                 case "BooleanManagedProperty": return ReconstructBooleanManagedProperty(dict);
@@ -808,8 +1047,13 @@ namespace Microsoft.Xrm.Sdk
                 case "EntityImageCollection": return ReconstructEntityImageCollection(dict);
                 case "RemoteExecutionContext": return ReconstructRemoteExecutionContext(dict);
                 case "DateTime":
+                    if (dict.TryGetValue("Ticks", out var ticks))
+                        return new DateTime(Convert.ToInt64(ticks, CultureInfo.InvariantCulture), (DateTimeKind)GetInt(dict, "Kind"));
                     return DateTime.ParseExact((string)dict["Value"], DateTimeFormats, CultureInfo.InvariantCulture,
                         DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+                case "DateTimeOffset": return DateTimeOffset.ParseExact((string)dict["Value"], "O", CultureInfo.InvariantCulture);
+                case "TimeSpan": return TimeSpan.ParseExact((string)dict["Value"], "c", CultureInfo.InvariantCulture);
+                case "Char": return Convert.ToChar(dict["Value"], CultureInfo.InvariantCulture);
                 case "Guid": return Guid.Parse((string)dict["Value"]);
                 case "File": return Convert.FromBase64String((string)dict["Value"]);
                 default: return dict;
@@ -824,6 +1068,12 @@ namespace Microsoft.Xrm.Sdk
                 foreach (var kvp in attrDict) entity[kvp.Key] = kvp.Value;
             if (dict.TryGetValue("FormattedValues", out var fv) && fv is Dictionary<string, object> fvDict)
                 foreach (var kvp in fvDict) entity.FormattedValues[kvp.Key] = (string)kvp.Value;
+            if (dict.TryGetValue("KeyAttributes", out var keys)) CopyKeyAttributes(entity.KeyAttributes, keys);
+            if (dict.TryGetValue("RowVersion", out var version)) entity.RowVersion = (string)version;
+            if (dict.TryGetValue("EntityState", out var state) && state != null) entity.EntityState = (EntityState)Convert.ToInt32(state, CultureInfo.InvariantCulture);
+            if (dict.TryGetValue("RelatedEntities", out var related) && related is RelatedEntityCollection relatedEntities)
+                foreach (var pair in relatedEntities) entity.RelatedEntities.Add(pair.Key, pair.Value);
+            RestoreExtensionData(entity, dict);
             return entity;
         }
 
@@ -836,6 +1086,10 @@ namespace Microsoft.Xrm.Sdk
             };
             if (dict.TryGetValue("Name", out var name) && name is string n) 
                 er.Name = n;
+            if (dict.TryGetValue("KeyAttributes", out var keys)) CopyKeyAttributes(er.KeyAttributes, keys);
+            if (dict.TryGetValue("RowVersion", out var version)) er.RowVersion = (string)version;
+            RestoreExtensionData(er, dict);
+            if (string.IsNullOrWhiteSpace(er.Name)) er.Name = "(No Name)";
             return er;
         }
 
@@ -843,16 +1097,18 @@ namespace Microsoft.Xrm.Sdk
         {
             var osvc = new OptionSetValueCollection();
             if (dict.TryGetValue("Values", out var values) && values is List<object> list)
-                foreach (var v in list) osvc.Add(new OptionSetValue(Convert.ToInt32(v, CultureInfo.InvariantCulture)));
+                foreach (var v in list) osvc.Add(v == null ? null : v is OptionSetValue option ? option : new OptionSetValue(Convert.ToInt32(v, CultureInfo.InvariantCulture)));
             return osvc;
         }
 
         private static AliasedValue ReconstructAliasedValue(Dictionary<string, object> dict)
         {
-            return new AliasedValue(
+            var value = new AliasedValue(
                 GetString(dict, "EntityLogicalName", ""),
                 GetString(dict, "AttributeLogicalName", ""),
                 dict.TryGetValue("Value", out var v) ? v : null);
+            RestoreExtensionData(value, dict);
+            return value;
         }
 
         private static BooleanManagedProperty ReconstructBooleanManagedProperty(Dictionary<string, object> dict)
@@ -861,14 +1117,14 @@ namespace Microsoft.Xrm.Sdk
             if (dict.TryGetValue("CanBeChanged", out var cc) && cc is bool canChange) bmp.CanBeChanged = canChange;
             if (dict.TryGetValue("ManagedPropertyLogicalName", out var mpln) && mpln is string s)
             {
-                var prop = typeof(BooleanManagedProperty).GetProperty("ManagedPropertyLogicalName");
-                if (prop != null)
+                // This data member has no public setter; use the SDK's public serialization
+                // contract instead of guessing its private backing-field name.
+                bmp = (BooleanManagedProperty)ReadNativeJson(Serialize(new Dictionary<string, object>
                 {
-                    var backingField = typeof(BooleanManagedProperty).BaseType?.GetField("_managedPropertyLogicalName", BindingFlags.NonPublic | BindingFlags.Instance)
-                        ?? typeof(BooleanManagedProperty).BaseType?.GetField("ManagedPropertyLogicalName", BindingFlags.NonPublic | BindingFlags.Instance);
-                    backingField?.SetValue(bmp, s);
-                }
+                    { "Value", bmp.Value }, { "CanBeChanged", bmp.CanBeChanged }, { "ManagedPropertyLogicalName", s }
+                }), typeof(BooleanManagedProperty));
             }
+            RestoreExtensionData(bmp, dict);
             return bmp;
         }
 
@@ -878,7 +1134,16 @@ namespace Microsoft.Xrm.Sdk
             if (dict.TryGetValue("EntityName", out var en) && en is string name) ec.EntityName = name;
             if (dict.TryGetValue("Entities", out var entities) && entities is List<object> list)
                 foreach (var item in list)
-                    if (item is Entity entity) ec.Entities.Add(entity);
+                {
+                    if (item != null && !(item is Entity)) throw new FormatException("Expected an Entity in EntityCollection.");
+                    ec.Entities.Add((Entity)item);
+                }
+            ec.MoreRecords = GetBool(dict, "MoreRecords");
+            if (dict.ContainsKey("TotalRecordCount")) ec.TotalRecordCount = GetInt(dict, "TotalRecordCount");
+            ec.TotalRecordCountLimitExceeded = GetBool(dict, "TotalRecordCountLimitExceeded");
+            ec.PagingCookie = GetString(dict, "PagingCookie", null);
+            ec.MinActiveRowVersion = GetString(dict, "MinActiveRowVersion", null);
+            RestoreExtensionData(ec, dict);
             return ec;
         }
 
@@ -895,76 +1160,26 @@ namespace Microsoft.Xrm.Sdk
             var eic = new EntityImageCollection();
             if (dict.TryGetValue("Values", out var values) && values is Dictionary<string, object> valDict)
                 foreach (var kvp in valDict)
-                    if (kvp.Value is Entity entity) eic[kvp.Key] = entity;
+                {
+                    if (kvp.Value != null && !(kvp.Value is Entity)) throw new FormatException("Expected an Entity image.");
+                    eic[kvp.Key] = (Entity)kvp.Value;
+                }
             return eic;
         }
 
         private static RemoteExecutionContext ReconstructRemoteExecutionContext(Dictionary<string, object> dict)
         {
             var ctx = new RemoteExecutionContext();
-            var fields = ctx.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-
-            SetField(fields, ctx, "_businessUnitId", ParseGuid(dict, "BusinessUnitId"));
-            SetField(fields, ctx, "_correlationId", ParseGuid(dict, "CorrelationId"));
-            SetField(fields, ctx, "_depth", GetInt(dict, "Depth"));
-            SetField(fields, ctx, "_initiatingUserId", ParseGuid(dict, "InitiatingUserId"));
-            if (dict.TryGetValue("InputParameters", out var ip) && ip is ParameterCollection ipColl) SetField(fields, ctx, "_inputParameters", ipColl);
-            SetField(fields, ctx, "_isOffline", GetBool(dict, "IsExecutingOffline"));
-            SetField(fields, ctx, "_isInTransaction", GetBool(dict, "IsInTransaction"));
-            SetField(fields, ctx, "_isOfflinePlayback", GetBool(dict, "IsOfflinePlayback"));
-            SetField(fields, ctx, "_isolationMode", GetInt(dict, "IsolationMode"));
-            SetField(fields, ctx, "_messageName", GetString(dict, "MessageName", ""));
-            SetField(fields, ctx, "_mode", GetInt(dict, "Mode"));
-            if (dict.TryGetValue("OperationCreatedOn", out var oco))
+            foreach (var prop in GetProperties(typeof(RemoteExecutionContext)))
             {
-                if (oco is string ocoStr)
-                    SetField(fields, ctx, "_operationCreatedOnTime", DateTime.ParseExact(ocoStr, DateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal));
-                else if (oco is DateTime ocoDate)
-                    SetField(fields, ctx, "_operationCreatedOnTime", ocoDate);
+                if (prop.Name == "ExtensionData" || !dict.TryGetValue(prop.Name, out var value)) continue;
+                if (prop.CanWrite) prop.SetValue(ctx, CoerceValue(value, prop.PropertyType));
+                else if (value is IEnumerable items && !(value is string)) PopulateCollection(prop.GetValue(ctx), items);
             }
-            SetField(fields, ctx, "_asyncOperationId", ParseGuid(dict, "OperationId"));
-            SetField(fields, ctx, "_organizationId", ParseGuid(dict, "OrganizationId"));
-            SetField(fields, ctx, "_organizationName", GetString(dict, "OrganizationName", ""));
-            if (dict.TryGetValue("OutputParameters", out var op) && op is ParameterCollection opColl) SetField(fields, ctx, "_outputParameters", opColl);
-            if (dict.TryGetValue("OwningExtension", out var oe) && oe is EntityReference oeRef) SetField(fields, ctx, "_owningExtension", oeRef);
-            if (dict.TryGetValue("PostEntityImages", out var pei) && pei is EntityImageCollection peiColl) SetField(fields, ctx, "_postImages", peiColl);
-            if (dict.TryGetValue("PreEntityImages", out var prei) && prei is EntityImageCollection preiColl) SetField(fields, ctx, "_preImages", preiColl);
-            SetField(fields, ctx, "_primaryEntityId", ParseGuid(dict, "PrimaryEntityId"));
-            SetField(fields, ctx, "_primaryEntityName", GetString(dict, "PrimaryEntityName", ""));
-            if (dict.TryGetValue("RequestId", out var rid))
-            {
-                if (rid is string ridStr) SetField(fields, ctx, "_requestId", (Guid?)Guid.Parse(ridStr));
-                else if (rid is Guid ridGuid) SetField(fields, ctx, "_requestId", (Guid?)ridGuid);
-                else SetField(fields, ctx, "_requestId", (Guid?)null);
-            }
-            SetField(fields, ctx, "_secondaryEntityName", GetString(dict, "SecondaryEntityName", ""));
-            if (dict.TryGetValue("SharedVariables", out var sv) && sv is ParameterCollection svColl) SetField(fields, ctx, "_sharedVariables", svColl);
-            SetField(fields, ctx, "_stage", GetInt(dict, "Stage"));
-            SetField(fields, ctx, "_userId", ParseGuid(dict, "UserId"));
-            if (dict.TryGetValue("ParentContext", out var pc) && pc is RemoteExecutionContext parentCtx)
-                SetField(fields, ctx, "_parentContext", parentCtx);
-
-            // IPluginExecutionContext2–7 properties (set via fuzzy match against runtime backing fields)
-            if (dict.TryGetValue("UserAzureActiveDirectoryObjectId", out var uaVal)) SetFieldFuzzy(fields, ctx, "UserAzureActiveDirectoryObjectId", uaVal);
-            if (dict.TryGetValue("InitiatingUserAzureActiveDirectoryObjectId", out var iaVal)) SetFieldFuzzy(fields, ctx, "InitiatingUserAzureActiveDirectoryObjectId", iaVal);
-            if (dict.TryGetValue("InitiatingUserApplicationId", out var iapVal)) SetFieldFuzzy(fields, ctx, "InitiatingUserApplicationId", iapVal);
-            if (dict.TryGetValue("PortalsContactId", out var pciVal)) SetFieldFuzzy(fields, ctx, "PortalsContactId", pciVal);
-            if (dict.TryGetValue("IsPortalsClientCall", out var xpcVal)) SetFieldFuzzy(fields, ctx, "IsPortalsClientCall", xpcVal);
-            if (dict.TryGetValue("AuthenticatedUserId", out var auVal)) SetFieldFuzzy(fields, ctx, "AuthenticatedUserId", auVal);
-            if (dict.TryGetValue("InitiatingUserAgent", out var iagVal)) SetFieldFuzzy(fields, ctx, "InitiatingUserAgent", iagVal);
-            if (dict.TryGetValue("EnvironmentId", out var eiVal)) SetFieldFuzzy(fields, ctx, "EnvironmentId", eiVal);
-            if (dict.TryGetValue("TenantId", out var tiVal)) SetFieldFuzzy(fields, ctx, "TenantId", tiVal);
-            if (dict.TryGetValue("IsApplicationUser", out var xauVal)) SetFieldFuzzy(fields, ctx, "IsApplicationUser", xauVal);
-            if (dict.TryGetValue("PreEntityImagesCollection", out var prcVal)) SetFieldFuzzy(fields, ctx, "PreEntityImagesCollection", prcVal);
-            if (dict.TryGetValue("PostEntityImagesCollection", out var pocVal)) SetFieldFuzzy(fields, ctx, "PostEntityImagesCollection", pocVal);
-
-            var knownDictKeys = new HashSet<string>(KnownContextProperties, StringComparer.Ordinal) { "__type" };
-            foreach (var kvp in dict)
-            {
-                if (knownDictKeys.Contains(kvp.Key)) continue;
-                SetFieldFuzzy(fields, ctx, kvp.Key, kvp.Value);
-            }
-
+            RestoreExtensionData(ctx, dict);
+            var saved = new Dictionary<string, object>(dict, StringComparer.Ordinal);
+            saved.Remove("__type");
+            RemoteProperties.Add(ctx, saved);
             return ctx;
         }
 
@@ -1008,7 +1223,11 @@ namespace Microsoft.Xrm.Sdk
             {"AV", "AliasedValue"}, {"BM", "BooleanManagedProperty"},
             {"EC", "EntityCollection"}, {"PC", "ParameterCollection"},
             {"IC", "EntityImageCollection"}, {"RC", "RemoteExecutionContext"},
-            {"DT", "DateTime"}, {"G", "Guid"}, {"F", "File"}
+            {"DT", "DateTime"}, {"G", "Guid"}, {"F", "File"},
+            {"Byte", "Byte"}, {"SByte", "SByte"}, {"Int16", "Int16"}, {"UInt16", "UInt16"},
+            {"Int32", "Int32"}, {"UInt32", "UInt32"}, {"Int64", "Int64"}, {"UInt64", "UInt64"},
+            {"Single", "Single"}, {"Double", "Double"}, {"Decimal", "Decimal"},
+            {"DateTimeOffset", "DateTimeOffset"}, {"TimeSpan", "TimeSpan"}, {"Char", "Char"}
         };
 
         private static Dictionary<string, object> ExpandCompactDict(Dictionary<string, object> dict)
@@ -1029,6 +1248,541 @@ namespace Microsoft.Xrm.Sdk
 
         #region Helpers
 
+        private sealed class WriterState
+        {
+            internal bool Compact;
+            internal bool OmitParentContext;
+            internal bool PreserveTypes;
+            internal int Depth;
+            internal string Path = "$";
+            internal readonly HashSet<object> Active = new HashSet<object>(ReferenceComparer.Instance);
+        }
+
+        private sealed class ReferenceComparer : IEqualityComparer<object>
+        {
+            internal static readonly ReferenceComparer Instance = new ReferenceComparer();
+            public new bool Equals(object x, object y) { return ReferenceEquals(x, y); }
+            public int GetHashCode(object obj) { return RuntimeHelpers.GetHashCode(obj); }
+        }
+
+        private sealed class JsonNumber
+        {
+            internal readonly string Text;
+            internal JsonNumber(string text) { Text = text; }
+            internal object ToValue(Type targetType)
+            {
+                targetType = Nullable.GetUnderlyingType(targetType ?? typeof(object)) ?? targetType;
+                if (targetType == typeof(decimal)) return decimal.Parse(Text, NumberStyles.Float, CultureInfo.InvariantCulture);
+                if (targetType != null && IsNumberType(targetType))
+                {
+                    if (targetType != typeof(double) && targetType != typeof(float) && Text.IndexOfAny(new[] { '.', 'e', 'E' }) >= 0)
+                        return Convert.ChangeType(decimal.Parse(Text, NumberStyles.Float, CultureInfo.InvariantCulture), targetType, CultureInfo.InvariantCulture);
+                    return Convert.ChangeType(Text, targetType, CultureInfo.InvariantCulture);
+                }
+                if (targetType == typeof(string)) return Text;
+                if (Text.IndexOfAny(new[] { '.', 'e', 'E' }) >= 0)
+                {
+                    var number = double.Parse(Text, NumberStyles.Float, CultureInfo.InvariantCulture);
+                    if (double.IsInfinity(number)) throw new FormatException("JSON number is outside the Double range.");
+                    return number;
+                }
+                if (long.TryParse(Text, NumberStyles.Integer, CultureInfo.InvariantCulture, out var integer))
+                    return integer >= int.MinValue && integer <= int.MaxValue ? (object)(int)integer : integer;
+                return decimal.Parse(Text, NumberStyles.Integer, CultureInfo.InvariantCulture);
+            }
+        }
+
+        private static PropertyInfo[] GetProperties(Type type)
+        {
+            return PropertyCache.GetOrAdd(type, t =>
+            {
+                var result = new List<PropertyInfo>();
+                foreach (var prop in t.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                    if (prop.GetGetMethod() != null && prop.GetIndexParameters().Length == 0) result.Add(prop);
+                return result.ToArray();
+            });
+        }
+
+        private static PropertyInfo[] GetContextProperties(Type type)
+        {
+            return ContextPropertyCache.GetOrAdd(type, t =>
+            {
+                var properties = new Dictionary<string, PropertyInfo>(StringComparer.Ordinal);
+                foreach (var contract in t.GetInterfaces())
+                    if (typeof(IExecutionContext).IsAssignableFrom(contract))
+                        foreach (var prop in GetProperties(contract)) properties[prop.Name] = prop;
+                // Contract access works for explicit implementations and runtime proxies.
+                foreach (var prop in GetProperties(t))
+                    if (!properties.ContainsKey(prop.Name)) properties.Add(prop.Name, prop);
+                return new List<PropertyInfo>(properties.Values).ToArray();
+            });
+        }
+
+        private static object ReadProperty(PropertyInfo property, object value)
+        {
+            try { return property.GetValue(value); }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Cannot read " + _writer.Path + "." + property.Name + ".",
+                    ex is TargetInvocationException invocation ? invocation.InnerException : ex);
+            }
+        }
+
+        private static void WriteChild(object value, StringBuilder sb, string name)
+        {
+            var previous = _writer.Path;
+            _writer.Path = previous + (name.StartsWith("[", StringComparison.Ordinal) ? name : "." + name);
+            try { WriteValue(value, sb); }
+            finally { _writer.Path = previous; }
+        }
+
+        private static void WriteMember(string name, object value, StringBuilder sb)
+        {
+            sb.Append(',');
+            WriteString(name, sb);
+            sb.Append(':');
+            WriteChild(value, sb, name);
+        }
+
+        private static void WriteDateTime(DateTime value, StringBuilder sb)
+        {
+            sb.Append(_compact ? "{\"_t\":\"DT\",\"v\":" : "{\"__type\":\"DateTime\",\"Value\":");
+            // Never use ToUniversalTime on Unspecified values. Ticks also preserve local
+            // wall time across machines in different time zones.
+            WriteString(value.ToString(value.Kind == DateTimeKind.Utc && value.Ticks % TimeSpan.TicksPerMillisecond == 0 ? DateTimeFormats[0] : "O", CultureInfo.InvariantCulture), sb);
+            sb.Append(",\"Ticks\":");
+            WriteString(value.Ticks.ToString(CultureInfo.InvariantCulture), sb);
+            sb.Append(",\"Kind\":").Append(((int)value.Kind).ToString(CultureInfo.InvariantCulture)).Append('}');
+        }
+
+        private static bool IsNumberType(Type type)
+        {
+            if (type == null || type.IsEnum) return false;
+            switch (Type.GetTypeCode(type))
+            {
+                case TypeCode.Byte: case TypeCode.SByte: case TypeCode.Int16: case TypeCode.UInt16:
+                case TypeCode.Int32: case TypeCode.UInt32: case TypeCode.Int64: case TypeCode.UInt64:
+                case TypeCode.Single: case TypeCode.Double: case TypeCode.Decimal: return true;
+                default: return false;
+            }
+        }
+
+        private static bool IsSdkType(Type type)
+        {
+            if (type == null || !(type.IsPublic || type.IsNestedPublic)) return false;
+            var assembly = type.Assembly;
+            if (assembly != typeof(Entity).Assembly)
+            {
+                if (assembly.GetName().Name != "Microsoft.Crm.Sdk.Proxy" ||
+                    BitConverter.ToString(assembly.GetName().GetPublicKeyToken()) != "31-BF-38-56-AD-36-4E-35") return false;
+            }
+            return type.IsEnum || typeof(IEnumerable).IsAssignableFrom(type) ||
+                Attribute.IsDefined(type, typeof(DataContractAttribute), true);
+        }
+
+        private static bool IsSafeValueType(Type type)
+        {
+            if (type.IsGenericType)
+            {
+                var definition = type.GetGenericTypeDefinition();
+                if (definition != typeof(List<>) && definition != typeof(Dictionary<,>) && definition != typeof(KeyValuePair<,>) &&
+                    definition != typeof(Nullable<>) && !IsSdkType(type)) return false;
+                foreach (var argument in type.GetGenericArguments()) if (!IsSafeValueType(argument)) return false;
+                return true;
+            }
+            return type == typeof(object) || type == typeof(string) || type == typeof(bool) || type == typeof(char) ||
+                type == typeof(Guid) || type == typeof(DateTime) || type == typeof(DateTimeOffset) ||
+                type == typeof(TimeSpan) || IsNumberType(type) || IsSdkType(type) ||
+                (type.IsArray && IsSafeValueType(type.GetElementType()));
+        }
+
+        private static Type ResolveValueType(string name)
+        {
+            if (string.IsNullOrEmpty(name) || name.Length > 1024 || name.IndexOf(',') >= 0 || name.IndexOf("[[", StringComparison.Ordinal) >= 0)
+                throw new NotSupportedException("Invalid JSON type name.");
+            if (name.EndsWith("[]", StringComparison.Ordinal))
+                return ResolveValueType(name.Substring(0, name.Length - 2)).MakeArrayType();
+            var opening = name.IndexOf('<');
+            if (opening >= 0)
+            {
+                if (!name.EndsWith(">", StringComparison.Ordinal)) throw new NotSupportedException("Invalid generic type name.");
+                var definition = name.Substring(0, opening);
+                Type generic;
+                switch (definition)
+                {
+                    case "List": generic = typeof(List<>); break;
+                    case "Dictionary": generic = typeof(Dictionary<,>); break;
+                    case "KeyValuePair": generic = typeof(KeyValuePair<,>); break;
+                    case "Nullable": generic = typeof(Nullable<>); break;
+                    default: throw new NotSupportedException("Unsupported generic type " + definition + ".");
+                }
+                var arguments = new List<Type>();
+                var start = opening + 1;
+                var depth = 0;
+                for (var i = start; i < name.Length - 1; i++)
+                {
+                    if (name[i] == '<') depth++;
+                    else if (name[i] == '>') depth--;
+                    else if (name[i] == ';' && depth == 0)
+                    { arguments.Add(ResolveValueType(name.Substring(start, i - start))); start = i + 1; }
+                }
+                arguments.Add(ResolveValueType(name.Substring(start, name.Length - 1 - start)));
+                return generic.MakeGenericType(arguments.ToArray());
+            }
+            foreach (var type in new[] { typeof(object), typeof(string), typeof(bool), typeof(char), typeof(Guid),
+                typeof(DateTime), typeof(DateTimeOffset), typeof(TimeSpan), typeof(byte), typeof(sbyte), typeof(short),
+                typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(decimal) })
+                if (type.FullName == name || type.Name == name) return type;
+            // Never load an assembly or invoke arbitrary CLR types named by JSON.
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                if (assembly != typeof(Entity).Assembly && assembly.GetName().Name != "Microsoft.Crm.Sdk.Proxy") continue;
+                var type = assembly.GetType(name ?? "", false);
+                if (IsSdkType(type)) return type;
+            }
+            throw new NotSupportedException("Unsupported JSON type '" + name + "'.");
+        }
+
+        private static string ValueTypeName(Type type)
+        {
+            if (type.IsArray) return ValueTypeName(type.GetElementType()) + "[]";
+            if (!type.IsGenericType) return type.FullName;
+            var definition = type.GetGenericTypeDefinition();
+            var name = definition == typeof(List<>) ? "List" : definition == typeof(Dictionary<,>) ? "Dictionary" :
+                definition == typeof(KeyValuePair<,>) ? "KeyValuePair" : definition == typeof(Nullable<>) ? "Nullable" : null;
+            if (name == null) throw new NotSupportedException("Unsupported nested generic type " + type.FullName + ".");
+            var arguments = new List<string>();
+            foreach (var argument in type.GetGenericArguments()) arguments.Add(ValueTypeName(argument));
+            return name + "<" + string.Join(";", arguments) + ">";
+        }
+
+        private static void WriteTypedCollection(string typeName, Type elementType, IEnumerable value, StringBuilder sb)
+        {
+            sb.Append("{\"__type\":"); WriteString(typeName, sb);
+            sb.Append(",\"ElementType\":"); WriteString(ValueTypeName(elementType), sb);
+            sb.Append(",\"Values\":"); WriteArray(value, sb); sb.Append('}');
+        }
+
+        private static void WriteSdkObject(object value, StringBuilder sb)
+        {
+            sb.Append("{\"__type\":\"SdkObject\",\"Type\":");
+            var valueType = value.GetType();
+            WriteString(valueType.IsGenericType ? valueType.GetGenericTypeDefinition().FullName : valueType.FullName, sb);
+            if (valueType.IsGenericType)
+            {
+                sb.Append(",\"TypeArguments\":[");
+                var firstType = true;
+                foreach (var argument in valueType.GetGenericArguments())
+                {
+                    if (!IsSafeValueType(argument)) throw new NotSupportedException("Unsupported SDK collection element type " + argument.FullName + ".");
+                    if (!firstType) sb.Append(',');
+                    WriteString(ValueTypeName(argument), sb);
+                    firstType = false;
+                }
+                sb.Append(']');
+            }
+            if (value is Enum)
+            {
+                sb.Append(",\"Value\":"); WriteString(value.ToString(), sb);
+            }
+            else if (value is IEnumerable items)
+            {
+                sb.Append(",\"Items\":[");
+                var first = true;
+                var index = 0;
+                foreach (var item in items)
+                {
+                    if (!first) sb.Append(',');
+                    var type = item?.GetType();
+                    if (type != null && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
+                    {
+                        sb.Append("{\"Key\":"); WriteChild(type.GetProperty("Key").GetValue(item), sb, "Key");
+                        sb.Append(",\"Value\":"); WriteChild(type.GetProperty("Value").GetValue(item), sb, "Value"); sb.Append('}');
+                    }
+                    else WriteChild(item, sb, "[" + (index++).ToString(CultureInfo.InvariantCulture) + "]");
+                    first = false;
+                }
+                sb.Append(']');
+            }
+            else
+            {
+                var properties = new Dictionary<string, object>(StringComparer.Ordinal);
+                foreach (var prop in GetProperties(value.GetType()))
+                {
+                    if (prop.Name == "ExtensionData") continue;
+                    // Read-only calculated scalar properties are not state to restore.
+                    if (!prop.CanWrite && !typeof(IEnumerable).IsAssignableFrom(prop.PropertyType)) continue;
+                    properties.Add(prop.Name, ReadProperty(prop, value));
+                }
+                sb.Append(",\"Properties\":"); WriteDictionary(properties, sb);
+            }
+            WriteExtensionData(value, sb);
+            sb.Append('}');
+        }
+
+        private static object ReadSdkObject(Dictionary<string, object> dict)
+        {
+            var type = ResolveSdkObjectType(dict);
+            if (!IsSdkType(type)) throw new NotSupportedException("Expected an SDK data contract.");
+            if (type.IsEnum) return Enum.Parse(type, (string)dict["Value"]);
+            var instance = CreateSdkInstance(type);
+            if (dict.TryGetValue("Items", out var items)) PopulateCollection(instance, (IEnumerable)items);
+            if (dict.TryGetValue("Properties", out var properties))
+                PopulateObject(instance, (Dictionary<string, object>)properties);
+            RestoreExtensionData(instance, dict);
+            return instance;
+        }
+
+        private static Type ResolveSdkObjectType(Dictionary<string, object> dict)
+        {
+            var type = ResolveValueType((string)dict["Type"]);
+            if (dict.TryGetValue("TypeArguments", out var arguments))
+            {
+                var types = new List<Type>();
+                foreach (var name in (IEnumerable)arguments) types.Add(ResolveValueType((string)name));
+                type = type.MakeGenericType(types.ToArray());
+            }
+            return type;
+        }
+
+        private static object CreateSdkInstance(Type type)
+        {
+            if (type.IsAbstract || type.IsInterface || type.ContainsGenericParameters)
+                throw new NotSupportedException("Cannot instantiate SDK type " + type.FullName + ".");
+            try
+            {
+                if (type.GetConstructor(Type.EmptyTypes) != null) return Activator.CreateInstance(type);
+                // Some SDK collection constructors are internal. Their data contracts are public.
+                return ReadNativeJson(typeof(IEnumerable).IsAssignableFrom(type) ? "[]" : "{}", type);
+            }
+            catch (Exception ex) { throw new InvalidOperationException("Cannot restore SDK type " + type.FullName + ".", ex); }
+        }
+
+        private static void PopulateCollection(object target, IEnumerable values)
+        {
+            if (target == null) throw new InvalidOperationException("Cannot populate a null collection.");
+            if (target is IList list)
+            {
+                var elementType = GetElementType(target.GetType());
+                list.Clear();
+                foreach (var value in values) list.Add(CoerceValue(value, elementType));
+                return;
+            }
+            var type = target.GetType();
+            type.GetMethod("Clear", Type.EmptyTypes)?.Invoke(target, null);
+            MethodInfo addOne = null, addTwo = null;
+            foreach (var method in type.GetMethods(BindingFlags.Instance | BindingFlags.Public))
+            {
+                if (method.Name != "Add") continue;
+                if (method.GetParameters().Length == 1) addOne = method;
+                if (method.GetParameters().Length == 2) addTwo = method;
+            }
+            foreach (var value in values)
+            {
+                if (addTwo != null && value is Dictionary<string, object> pair)
+                {
+                    var parameters = addTwo.GetParameters();
+                    addTwo.Invoke(target, new[] { CoerceValue(pair["Key"], parameters[0].ParameterType), CoerceValue(pair["Value"], parameters[1].ParameterType) });
+                }
+                else if (addTwo != null && value != null && value.GetType().IsGenericType && value.GetType().GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
+                {
+                    var parameters = addTwo.GetParameters();
+                    addTwo.Invoke(target, new[] { CoerceValue(value.GetType().GetProperty("Key").GetValue(value), parameters[0].ParameterType),
+                        CoerceValue(value.GetType().GetProperty("Value").GetValue(value), parameters[1].ParameterType) });
+                }
+                else if (addOne != null) addOne.Invoke(target, new[] { CoerceValue(value, addOne.GetParameters()[0].ParameterType) });
+                else throw new NotSupportedException("Cannot populate collection " + type.FullName + ".");
+            }
+        }
+
+        private static Type GetElementType(Type type)
+        {
+            if (type == null) return typeof(object);
+            if (type.IsArray) return type.GetElementType();
+            if (type.IsGenericType && type.GetGenericArguments().Length == 1) return type.GetGenericArguments()[0];
+            foreach (var contract in type.GetInterfaces())
+                if (contract.IsGenericType && contract.GetGenericTypeDefinition() == typeof(IEnumerable<>)) return contract.GetGenericArguments()[0];
+            return typeof(object);
+        }
+
+        private static string WriteNativeJson(object value)
+        {
+            using (var stream = new MemoryStream())
+            {
+                new DataContractJsonSerializer(value.GetType(), new DataContractJsonSerializerSettings
+                {
+                    MaxItemsInObjectGraph = 100000,
+                    DateTimeFormat = new DateTimeFormat("yyyy-MM-dd'T'HH:mm:ss.FFFFFFFK") { DateTimeStyles = DateTimeStyles.RoundtripKind }
+                }).WriteObject(stream, value);
+                return Encoding.UTF8.GetString(stream.ToArray());
+            }
+        }
+
+        private static object ReadNativeJson(string json, Type type)
+        {
+            var bytes = Encoding.UTF8.GetBytes(json);
+            try
+            {
+                using (var stream = new MemoryStream(bytes))
+                    return new DataContractJsonSerializer(type, new DataContractJsonSerializerSettings { MaxItemsInObjectGraph = 100000 }).ReadObject(stream);
+            }
+            catch (SerializationException)
+            {
+                using (var stream = new MemoryStream(bytes))
+                    return new DataContractJsonSerializer(type, new DataContractJsonSerializerSettings
+                    {
+                        MaxItemsInObjectGraph = 100000,
+                        DateTimeFormat = new DateTimeFormat("yyyy-MM-dd'T'HH:mm:ss.FFFFFFFK") { DateTimeStyles = DateTimeStyles.RoundtripKind }
+                    }).ReadObject(stream);
+            }
+        }
+
+        private static ExecutionContextSnapshot ReadNativeContextProperties(RemoteExecutionContext remote, Dictionary<string, object> raw)
+        {
+            var values = new Dictionary<string, object>(StringComparer.Ordinal);
+            var extra = new Dictionary<string, object>(StringComparer.Ordinal);
+            foreach (var item in raw)
+            {
+                if (item.Key == "__type") continue;
+                if (item.Value == null)
+                {
+                    values[item.Key] = null;
+                    if (typeof(RemoteExecutionContext).GetProperty(item.Key, BindingFlags.Public | BindingFlags.Instance) == null)
+                        extra[item.Key] = null;
+                    continue;
+                }
+                if (item.Key == "ParentContext" && item.Value is Dictionary<string, object> parent && remote.ParentContext != null)
+                {
+                    values[item.Key] = ReadNativeContextProperties(remote.ParentContext, parent);
+                    continue;
+                }
+                var property = typeof(RemoteExecutionContext).GetProperty(item.Key, BindingFlags.Public | BindingFlags.Instance);
+                if (property != null) values[item.Key] = property.GetValue(remote);
+                else
+                {
+                    var type = GetMemberType(typeof(ExecutionContextSnapshot), item.Key);
+                    if (type != null)
+                    {
+                        var json = new StringBuilder();
+                        WriteRawJson(item.Value, json);
+                        values[item.Key] = ReadNativeJson(json.ToString(), type);
+                    }
+                    else values[item.Key] = DecodeValue(item.Value, null, true);
+                    extra[item.Key] = values[item.Key];
+                }
+            }
+            if (remote.ExtensionData != null) values["ExtensionData"] = WriteUnknownContextExtensionData(remote);
+            RemoteProperties.Add(remote, extra);
+            return new ExecutionContextSnapshot(values);
+        }
+
+        private static void WriteRawJson(object value, StringBuilder sb)
+        {
+            if (value == null) sb.Append("null");
+            else if (value is JsonNumber number) sb.Append(number.Text);
+            else if (value is string text) WriteString(text, sb);
+            else if (value is bool flag) sb.Append(flag ? "true" : "false");
+            else if (value is Dictionary<string, object> dict)
+            {
+                sb.Append('{');
+                var first = true;
+                foreach (var pair in dict)
+                {
+                    if (!first) sb.Append(',');
+                    WriteString(pair.Key, sb); sb.Append(':'); WriteRawJson(pair.Value, sb);
+                    first = false;
+                }
+                sb.Append('}');
+            }
+            else if (value is List<object> list)
+            {
+                sb.Append('[');
+                for (var i = 0; i < list.Count; i++) { if (i > 0) sb.Append(','); WriteRawJson(list[i], sb); }
+                sb.Append(']');
+            }
+            else throw new FormatException("Invalid native JSON value.");
+        }
+
+        private static void WriteExtensionData(object value, StringBuilder sb)
+        {
+            if (value is IExtensibleDataObject data && data.ExtensionData != null)
+                WriteMember("ExtensionData", EncodeExtensionData(WriteNativeJson(value)), sb);
+        }
+
+        private static void RestoreExtensionData(object value, Dictionary<string, object> dict)
+        {
+            if (value is IExtensibleDataObject data && dict.TryGetValue("ExtensionData", out var extension) && extension is string json)
+            {
+                var extensionJson = DecodeExtensionData(json);
+                if (value is RemoteExecutionContext)
+                {
+                    var native = ParseNativeJsonObject(WriteNativeJson(value));
+                    foreach (var item in ParseNativeJsonObject(extensionJson))
+                        if (!native.ContainsKey(item.Key)) native.Add(item.Key, item.Value);
+                    extensionJson = SerializeRawJson(native);
+                }
+                data.ExtensionData = ((IExtensibleDataObject)ReadNativeJson(extensionJson, value.GetType())).ExtensionData;
+            }
+        }
+
+        private static string WriteUnknownContextExtensionData(object context)
+        {
+            var native = ParseNativeJsonObject(WriteNativeJson(context));
+            foreach (var name in KnownContextProperties) native.Remove(name);
+            native.Remove("__type");
+            native.Remove("_t");
+            native.Remove("SnapshotVersion");
+            return SerializeRawJson(native);
+        }
+
+        private static string SerializeRawJson(object value)
+        {
+            var sb = new StringBuilder();
+            WriteRawJson(value, sb);
+            return sb.ToString();
+        }
+
+        private static Dictionary<string, object> ParseNativeJsonObject(string json)
+        {
+            var chars = json.ToCharArray();
+            var index = 0;
+            var value = ParseValue(chars, ref index, 0);
+            EatWhitespace(chars, ref index);
+            if (index != chars.Length || !(value is Dictionary<string, object> result))
+                throw new FormatException("Expected a native JSON object.");
+            return result;
+        }
+
+        private static string EncodeExtensionData(string json)
+        {
+            // Keep extension data in the same text stream as the rest of the snapshot.
+            // DebugContext compresses the complete JSON; compressing this nested JSON first
+            // turns it into high-entropy base64 and prevents the outer compressor from
+            // removing duplicated context fields and property names effectively.
+            return json;
+        }
+
+        private static string DecodeExtensionData(string value)
+        {
+            if (value == null || !value.StartsWith(CompressedExtensionDataPrefix, StringComparison.Ordinal))
+                return value;
+
+            var bytes = Convert.FromBase64String(value.Substring(CompressedExtensionDataPrefix.Length));
+            using (var input = new MemoryStream(bytes))
+            using (var decompressor = new DeflateStream(input, CompressionMode.Decompress))
+            using (var output = new MemoryStream())
+            {
+                decompressor.CopyTo(output);
+                return Encoding.UTF8.GetString(output.ToArray());
+            }
+        }
+
+        private static void CopyKeyAttributes(KeyAttributeCollection target, object value)
+        {
+            if (!(value is IEnumerable<KeyValuePair<string, object>> keys)) throw new FormatException("Expected key attributes.");
+            foreach (var pair in keys) target.Add(pair.Key, pair.Value);
+        }
+
         private static string GetString(Dictionary<string, object> dict, string key, string defaultValue)
         {
             return dict.TryGetValue(key, out var v) && v is string s ? s : defaultValue;
@@ -1044,50 +1798,24 @@ namespace Microsoft.Xrm.Sdk
             return dict.TryGetValue(key, out var v) && v is bool b && b;
         }
 
-        private static Guid ParseGuid(Dictionary<string, object> dict, string key)
-        {
-            if (!dict.TryGetValue(key, out var v)) return Guid.Empty;
-            if (v is string s) return Guid.Parse(s);
-            if (v is Guid g) return g;
-            return Guid.Empty;
-        }
-
-        private static void SetField(FieldInfo[] fields, object target, string fieldName, object value)
-        {
-            for (var i = 0; i < fields.Length; i++)
-            {
-                if (string.Equals(fields[i].Name, fieldName, StringComparison.Ordinal))
-                {
-                    fields[i].SetValue(target, value);
-                    return;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Fuzzy field matching for v2-v7+ properties, mirrors ToRemoteExecutionContext() logic in Extension.cs.
-        /// </summary>
-        private static void SetFieldFuzzy(FieldInfo[] fields, object target, string propertyName, object value)
-        {
-            var lowerName = propertyName.ToLowerInvariant();
-            for (var i = 0; i < fields.Length; i++)
-            {
-                if (!fields[i].Name.ToLowerInvariant().Contains(lowerName)) continue;
-                if (value != null && !fields[i].FieldType.IsAssignableFrom(value.GetType())) continue;
-                try { fields[i].SetValue(target, value); }
-                catch { }
-                break;
-            }
-        }
-
         private static object MapDictionaryToObject(Dictionary<string, object> dict, Type targetType)
         {
             var instance = Activator.CreateInstance(targetType);
-            foreach (var prop in targetType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            PopulateObject(instance, dict);
+            return instance;
+        }
+
+        private static void PopulateObject(object instance, Dictionary<string, object> dict)
+        {
+            foreach (var prop in GetProperties(instance.GetType()))
             {
-                if (!prop.CanWrite) continue;
                 object value;
                 if (!TryGetDictValue(dict, prop.Name, out value)) continue;
+                if (!prop.CanWrite)
+                {
+                    if (value is IEnumerable items && !(value is string)) PopulateCollection(prop.GetValue(instance), items);
+                    continue;
+                }
                 if (value == null)
                 {
                     if (!prop.PropertyType.IsValueType || Nullable.GetUnderlyingType(prop.PropertyType) != null)
@@ -1096,7 +1824,6 @@ namespace Microsoft.Xrm.Sdk
                 }
                 prop.SetValue(instance, CoerceValue(value, prop.PropertyType));
             }
-            return instance;
         }
 
         private static bool TryGetDictValue(Dictionary<string, object> dict, string name, out object value)
@@ -1120,6 +1847,11 @@ namespace Microsoft.Xrm.Sdk
             var underlying = Nullable.GetUnderlyingType(targetType);
             if (underlying != null) targetType = underlying;
             if (targetType.IsAssignableFrom(value.GetType())) return value;
+            if (targetType.IsEnum) return value is string text ? Enum.Parse(targetType, text, true) : Enum.ToObject(targetType, value);
+            if (targetType == typeof(DateTime) && value is string date)
+                return DateTime.Parse(date, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
+            if (typeof(IPluginExecutionContext).IsAssignableFrom(targetType) && value is RemoteExecutionContext remote && targetType != typeof(RemoteExecutionContext))
+                return DeserializeContext7(SerializeContextFull(remote));
             if (targetType == typeof(string)) return value.ToString();
             if (targetType == typeof(Guid) && value is string gs) return Guid.Parse(gs);
             if (targetType == typeof(int)) return Convert.ToInt32(value, CultureInfo.InvariantCulture);
@@ -1143,7 +1875,7 @@ namespace Microsoft.Xrm.Sdk
             }
             if (value is Dictionary<string, object> nestedDict)
             {
-                if (nestedDict.TryGetValue("__type", out var typeObj) && typeObj is string typeName)
+                if (IsSdkType(targetType) && nestedDict.TryGetValue("__type", out var typeObj) && typeObj is string typeName)
                     return ReconstructTypedObject(typeName, nestedDict);
                 if (targetType.IsGenericType)
                 {
@@ -1162,7 +1894,7 @@ namespace Microsoft.Xrm.Sdk
                         }
                     }
                 }
-                if (targetType.IsClass && targetType != typeof(string))
+                if (targetType.IsClass && targetType != typeof(string) && !typeof(IEnumerable).IsAssignableFrom(targetType))
                     return MapDictionaryToObject(nestedDict, targetType);
             }
             if (value is List<object> arrayForArray && targetType.IsArray)
@@ -1172,6 +1904,12 @@ namespace Microsoft.Xrm.Sdk
                 for (var i = 0; i < arrayForArray.Count; i++)
                     array.SetValue(CoerceValue(arrayForArray[i], elementType), i);
                 return array;
+            }
+            if (value is IEnumerable collection && !(value is string) && typeof(IEnumerable).IsAssignableFrom(targetType) && !targetType.IsInterface)
+            {
+                var instance = IsSdkType(targetType) ? CreateSdkInstance(targetType) : Activator.CreateInstance(targetType);
+                PopulateCollection(instance, collection);
+                return instance;
             }
             return Convert.ChangeType(value, targetType, CultureInfo.InvariantCulture);
         }

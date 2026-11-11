@@ -34,7 +34,8 @@ public sealed class DevKitJsonGapCoverageTests
     private sealed class CustomExecutionContext : IExecutionContext
     {
         public object? ParentContext { get; set; }
-        public string ExplodingValue => throw new InvalidOperationException("explode");
+        public bool ThrowOnRead { get; set; }
+        public string ExplodingValue => ThrowOnRead ? throw new InvalidOperationException("explode") : "readable";
 
         public ParameterCollection InputParameters { get; } = new();
         public ParameterCollection OutputParameters { get; } = new();
@@ -128,16 +129,12 @@ public sealed class DevKitJsonGapCoverageTests
     }
 
     [TestMethod]
-    public void SerializeContext_CustomContext_ReflectionSerializesAndSkipsThrowingProperty()
+    public void SerializeContext_CustomContext_ReportsThrowingProperty()
     {
-        var ctx = new CustomExecutionContext { MessageName = "Update" };
-        var json = DevKitJson.SerializeContext(ctx);
-        StringAssert.Contains(json, "\"mn\":\"Update\"");
-        Assert.IsFalse(json.Contains("explode"), "the throwing property must be swallowed by the catch.");
-
-        var ctxWithThrow = new CustomExecutionContext();
-        var json2 = DevKitJson.Serialize(ctxWithThrow);
-        Assert.IsFalse(json2.Contains("ExplodingValue"));
+        var ctx = new CustomExecutionContext { MessageName = "Update", ThrowOnRead = true };
+        var error = Assert.ThrowsExactly<InvalidOperationException>(() => DevKitJson.SerializeContext(ctx));
+        StringAssert.Contains(error.Message, "$.ExplodingValue");
+        Assert.ThrowsExactly<InvalidOperationException>(() => DevKitJson.Serialize(ctx));
     }
 
     [TestMethod]
@@ -190,7 +187,7 @@ public sealed class DevKitJsonGapCoverageTests
     {
         Assert.AreEqual("\U0001F600", DevKitJson.Deserialize<string>("\"\\uD83D\\uDE00\""));
         Assert.AreEqual("\uD83D", DevKitJson.Deserialize<string>("\"\\uD83D\""));
-        Assert.AreEqual("\uD83DZZZZ", DevKitJson.Deserialize<string>("\"\\uD83D\\uZZZZ\""));
+        Assert.ThrowsExactly<InvalidOperationException>(() => DevKitJson.Deserialize<string>("\"\\uD83D\\uZZZZ\""));
     }
 
     [TestMethod]
@@ -240,9 +237,8 @@ public sealed class DevKitJsonGapCoverageTests
         var json = "{\"Map\":{\"k\":\"v\"},\"Numbered\":{\"1\":\"one\"}}";
         var poco = DevKitJson.Deserialize<Poco>(json);
         Assert.AreEqual("v", poco.Map["k"]);
-        // int-keyed dictionaries fall back to POCO mapping of Dictionary<int,string>
-        // itself, which has no writable properties — the result is empty by design.
-        Assert.AreEqual(0, poco.Numbered.Count);
+        Assert.AreEqual(1, poco.Numbered.Count);
+        Assert.AreEqual("one", poco.Numbered[1]);
     }
 
     [TestMethod]

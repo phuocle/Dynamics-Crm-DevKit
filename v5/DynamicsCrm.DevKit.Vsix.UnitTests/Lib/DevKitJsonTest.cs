@@ -432,7 +432,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             var result = DevKitJson.Deserialize<EntityReference>(json);
             Assert.AreEqual("contact", result.LogicalName);
             Assert.AreEqual(id, result.Id);
-            Assert.IsNull(result.Name);
+            Assert.AreEqual("(No Name)", result.Name);
         }
 
         #endregion
@@ -697,14 +697,12 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             Assert.AreEqual(9876543210L, (long)vn);
             // double
             Assert.AreEqual(47.6062, (double)result["new_latitude"], 4);
-            // decimal - comes back as double from JSON parser, verified via Money for exact decimal
-            Assert.IsInstanceOfType(result["exchangerate"], typeof(double));
-            Assert.AreEqual(1.2345, (double)result["exchangerate"], 4);
-            // float - serialized as float, parsed back as double
-            Assert.IsInstanceOfType(result["new_temperature"], typeof(double));
-            Assert.AreEqual(36.6, (double)result["new_temperature"], 1);
-            // byte - serialized as number, parsed as int
-            Assert.AreEqual(5, result["new_priority"]);
+            // Boxed SDK values retain their CLR type, as well as their exact value.
+            Assert.IsInstanceOfType(result["exchangerate"], typeof(decimal));
+            Assert.AreEqual(1.2345m, (decimal)result["exchangerate"]);
+            Assert.IsInstanceOfType(result["new_temperature"], typeof(float));
+            Assert.AreEqual(36.6f, (float)result["new_temperature"]);
+            Assert.AreEqual((byte)5, result["new_priority"]);
             // bool
             Assert.AreEqual(true, result["donotphone"]);
             // DateTime
@@ -1242,7 +1240,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             var money = new Money(999999999999.9999m);
             var json = DevKitJson.Serialize(money);
             var result = DevKitJson.Deserialize<Money>(json);
-            Assert.AreEqual(999999999999.9999m, result.Value, 2);
+            Assert.AreEqual(999999999999.9999m, result.Value);
         }
 
         [TestMethod]
