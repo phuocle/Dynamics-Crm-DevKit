@@ -3,6 +3,7 @@
 ## Core operating rules
 
 - Preserve unrelated working-tree changes. Never stage, commit, or push unless explicitly requested; never use `git add .` or `git add -A`.
+- Treat missing or deleted files as intentional user state, especially during test cycles. Never recreate, restore, check out, reset, or overwrite them because a build or diff shows them missing; restore them only when the user explicitly asks. If a build or tool removes files, preserve that state and report it without bringing files back.
 - Run the smallest build covering the changed component. Full debug/release packaging requires an explicit user request; component-specific installation requirements are listed below.
 - Keep source version `4.44.44.44`. Build scripts may replace only `xxxx.yy.zz HH.mm.ss`; verify the placeholder is restored afterward and before any commit.
 - Preserve public command names, tool names, and JSON keys unless the task explicitly changes them.
