@@ -278,4 +278,83 @@ public class ProjectEnvironmentCoverageTests
         StringAssert.Contains(content, "KEY1=val1");
         StringAssert.Contains(content, "KEY2=val2");
     }
+
+    [TestMethod]
+    [DataRow("1", true)]
+    [DataRow("2", true)]
+    [DataRow("10", true)]
+    [DataRow("100", true)]
+    [DataRow("999999999999999999999999999999", true)]
+    [DataRow(null, false)]
+    [DataRow("", false)]
+    [DataRow("   ", false)]
+    [DataRow("0", false)]
+    [DataRow("01", false)]
+    [DataRow("-1", false)]
+    [DataRow("1.5", false)]
+    [DataRow("abc", false)]
+    [DataRow("help", false)]
+    public void IsValidGroupId_ValidatesCanonicalPositiveIntegersWithoutInt32Limit(string? groupId, bool expected)
+    {
+        Assert.AreEqual(expected, ProjectEnvironment.IsValidGroupId(groupId));
+    }
+
+    [TestMethod]
+    public void GetGroupPrefix_And_GetGroupKey_MapAllConnectionKeysAndRejectNonConnectionKeys()
+    {
+        Assert.AreEqual("DEVKIT_", ProjectEnvironment.GetGroupPrefix(null));
+        Assert.AreEqual("DEVKIT_", ProjectEnvironment.GetGroupPrefix(""));
+        Assert.AreEqual("DEVKIT_1_", ProjectEnvironment.GetGroupPrefix("1"));
+        Assert.AreEqual("DEVKIT_100_", ProjectEnvironment.GetGroupPrefix("100"));
+
+        Assert.AreEqual("DEVKIT_1_AUTH_TYPE", ProjectEnvironment.GetGroupKey(ProjectEnvironment.AuthType, "1"));
+        Assert.AreEqual("DEVKIT_1_URL", ProjectEnvironment.GetGroupKey(ProjectEnvironment.Url, "1"));
+        Assert.AreEqual("DEVKIT_1_CLIENT_ID", ProjectEnvironment.GetGroupKey(ProjectEnvironment.ClientId, "1"));
+        Assert.AreEqual("DEVKIT_1_CLIENT_SECRET", ProjectEnvironment.GetGroupKey(ProjectEnvironment.ClientSecret, "1"));
+        Assert.AreEqual("DEVKIT_1_PAC_PROFILE", ProjectEnvironment.GetGroupKey(ProjectEnvironment.PacProfile, "1"));
+        Assert.AreEqual("DEVKIT_1_USERNAME", ProjectEnvironment.GetGroupKey(ProjectEnvironment.Username, "1"));
+        Assert.AreEqual("DEVKIT_1_PASSWORD", ProjectEnvironment.GetGroupKey(ProjectEnvironment.Password, "1"));
+        Assert.AreEqual("DEVKIT_1_DOMAIN", ProjectEnvironment.GetGroupKey(ProjectEnvironment.Domain, "1"));
+        Assert.AreEqual("DEVKIT_1_CONNECTION", ProjectEnvironment.GetGroupKey(ProjectEnvironment.Connection, "1"));
+        Assert.AreEqual("DEVKIT_100_URL", ProjectEnvironment.GetGroupKey("devkit_url", "100"));
+        Assert.AreEqual("DEVKIT_URL", ProjectEnvironment.GetGroupKey("devkit_url", null));
+
+        // Non-connection keys such as DEVKIT_NO_COLOR are never mapped to numbered groups.
+        Assert.IsNull(ProjectEnvironment.GetGroupKey(ProjectEnvironment.NoColor, "1"));
+        Assert.IsNull(ProjectEnvironment.GetGroupKey("DEVKIT_UNKNOWN", "1"));
+        Assert.IsNull(ProjectEnvironment.GetGroupKey(null, "1"));
+        Assert.IsNull(ProjectEnvironment.GetGroupKey(ProjectEnvironment.Url, "0"));
+    }
+
+    [TestMethod]
+    public void HasGroup_And_GetValue_SupportMultipleNonConsecutiveGroupsWithoutMixing()
+    {
+        var path = Path.Combine(_tempDir, ".env");
+        File.WriteAllText(path,
+            "DEVKIT_1_AUTH_TYPE=ClientSecret\n" +
+            "DEVKIT_1_URL=https://org-one.crm.dynamics.com\n" +
+            "DEVKIT_2_AUTH_TYPE=FromPac\n" +
+            "DEVKIT_2_PAC_PROFILE=UAT\n" +
+            "DEVKIT_10_URL=\n" +
+            "DEVKIT_100_AUTH_TYPE=ClientSecret\n" +
+            "DEVKIT_100_URL=https://org-hundred.crm.dynamics.com\n" +
+            "DEVKIT_99_NOTE=not-a-connection-key\n");
+
+        var values = ProjectEnvironment.Read(path);
+
+        Assert.IsFalse(ProjectEnvironment.HasGroup(values, null), "Default group is not required when using numbered groups.");
+        Assert.IsTrue(ProjectEnvironment.HasGroup(values, "1"));
+        Assert.IsTrue(ProjectEnvironment.HasGroup(values, "2"));
+        Assert.IsFalse(ProjectEnvironment.HasGroup(values, "3"));
+        Assert.IsTrue(ProjectEnvironment.HasGroup(values, "10"), "Empty value still counts as an existing group.");
+        Assert.IsTrue(ProjectEnvironment.HasGroup(values, "100"));
+        Assert.IsFalse(ProjectEnvironment.HasGroup(values, "99"), "Unknown keys like DEVKIT_99_NOTE do not define a connection group.");
+        Assert.IsFalse(ProjectEnvironment.HasGroup(values, "0"));
+        Assert.IsFalse(ProjectEnvironment.HasGroup(null, "1"));
+
+        Assert.AreEqual("https://org-one.crm.dynamics.com", ProjectEnvironment.GetValue(values, ProjectEnvironment.Url, "1"));
+        Assert.AreEqual("UAT", ProjectEnvironment.GetValue(values, ProjectEnvironment.PacProfile, "2"));
+        Assert.IsNull(ProjectEnvironment.GetValue(values, ProjectEnvironment.Url, "2"));
+        Assert.AreEqual("https://org-hundred.crm.dynamics.com", ProjectEnvironment.GetValue(values, ProjectEnvironment.Url, "100"));
+    }
 }

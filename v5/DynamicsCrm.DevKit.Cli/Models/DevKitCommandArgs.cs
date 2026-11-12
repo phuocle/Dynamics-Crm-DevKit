@@ -1,7 +1,9 @@
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.ConnectionBuilder;
 using Spectre.Console.Cli;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.ComponentModel;
 
@@ -161,6 +163,51 @@ namespace DynamicsCrm.DevKit.Shared.Models
         }
 
         /// <summary>
+        /// True when any connection-related argument was explicitly supplied on the command line.
+        /// </summary>
+        public bool HasExplicitConnectionArgs()
+        {
+            return !string.IsNullOrEmpty(Connection) ||
+                   !string.IsNullOrEmpty(AuthType) ||
+                   !string.IsNullOrEmpty(Url) ||
+                   !string.IsNullOrEmpty(ClientId) ||
+                   !string.IsNullOrEmpty(ClientSecret) ||
+                   !string.IsNullOrEmpty(PacProfile) ||
+                   !string.IsNullOrEmpty(Username) ||
+                   !string.IsNullOrEmpty(Password) ||
+                   !string.IsNullOrEmpty(Domain);
+        }
+
+        /// <summary>
+        /// True when the command-line connection arguments are already complete for the
+        /// selected authentication mode (or legacy --conn) so no project .env fallback is needed.
+        /// </summary>
+        public bool HasCompleteExplicitConnectionArgs()
+        {
+            if (string.IsNullOrWhiteSpace(AuthType))
+                return !string.IsNullOrEmpty(Connection);
+
+            if (!ConnectionBuilderFactory.IsSupported(AuthType))
+                return true;
+
+            return AuthType.Trim().ToUpperInvariant() switch
+            {
+                "CLIENTSECRET" => !string.IsNullOrWhiteSpace(Url)
+                    && (!string.IsNullOrWhiteSpace(ClientId) || !string.IsNullOrWhiteSpace(Username))
+                    && (!string.IsNullOrWhiteSpace(ClientSecret) || !string.IsNullOrWhiteSpace(Password)),
+                "FROMPAC" => true, // An omitted profile selects the active PAC profile.
+                "INTERACTIVE" or "DEVICECODE" => !string.IsNullOrWhiteSpace(Url),
+                "OAUTH" => !string.IsNullOrWhiteSpace(Url)
+                    && !string.IsNullOrWhiteSpace(Username)
+                    && !string.IsNullOrWhiteSpace(Password),
+                "AD" => !string.IsNullOrWhiteSpace(Url)
+                    && !string.IsNullOrWhiteSpace(Username)
+                    && !string.IsNullOrWhiteSpace(Password),
+                _ => false
+            };
+        }
+
+        /// <summary>
         /// Fill empty connection properties from project .env.
         /// Priority: CLI args > project .env > empty string.
         /// The .env file is searched from the current directory (or the resolved
@@ -169,14 +216,27 @@ namespace DynamicsCrm.DevKit.Shared.Models
         /// </summary>
         public void ResolveProjectEnvironmentDefaults()
         {
+            ResolveProjectEnvironmentDefaults((string)null);
+        }
+
+        public void ResolveProjectEnvironmentDefaults(string groupId)
+        {
             var projectEnvironment = ProjectEnvironment.Read(
                 ProjectEnvironment.ResolveFileFromJsonOrDirectory(JsonFile, CurrentDirectory));
 
-            ResolveDefaults(key => ProjectEnvironment.GetValue(projectEnvironment, key));
+            ResolveProjectEnvironmentDefaults(projectEnvironment, groupId);
         }
 
-        private void ResolveDefaults(Func<string, string> getValue)
+        public void ResolveProjectEnvironmentDefaults(IDictionary<string, string> projectEnvironment, string groupId = null)
         {
+            ResolveDefaults(key => ProjectEnvironment.GetValue(projectEnvironment, key, groupId), groupId != null);
+        }
+
+        private void ResolveDefaults(Func<string, string> getValue, bool preserveExplicitConnectionMode)
+        {
+            var hadExplicitConnection = !string.IsNullOrEmpty(Connection);
+            var hadExplicitAuthType = !string.IsNullOrEmpty(AuthType);
+
             // The connection-defining VALUE arguments: when ALL of them arrive
             // empty the connection is the project .env's (resolved below) —
             // ConnectionFromProjectEnvironment marks it so the BatFile bats
@@ -195,10 +255,12 @@ namespace DynamicsCrm.DevKit.Shared.Models
                 string.IsNullOrEmpty(Password) &&
                 string.IsNullOrEmpty(Domain);
 
-            if (string.IsNullOrEmpty(Connection))
+            // Numbered groups preserve the explicit connection mode. The default
+            // resolver keeps its original per-property merge, including both fields.
+            if (string.IsNullOrEmpty(Connection) && (!preserveExplicitConnectionMode || !hadExplicitAuthType))
                 Connection = getValue(ProjectEnvironment.Connection) ?? string.Empty;
 
-            if (string.IsNullOrEmpty(AuthType))
+            if (string.IsNullOrEmpty(AuthType) && (!preserveExplicitConnectionMode || !hadExplicitConnection))
                 AuthType = getValue(ProjectEnvironment.AuthType) ?? string.Empty;
 
             if (string.IsNullOrEmpty(Url))

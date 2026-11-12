@@ -180,7 +180,10 @@ namespace DynamicsCrm.DevKit.Cli
                           .WithExample(new[] { "new-item", "--type", "Workflow", "--name", "MyWorkflow", "--project", "Contoso.Server" });
 
                     config.AddCommand<McpCommand>("mcp")
-                          .WithDescription("Start MCP server for AI agent integration (auth: CLI args > project .env; see --setup-guide)")
+                          .WithDescription("Start MCP server for AI agent integration. Without --env, preserve the original DEVKIT_* per-property merge, including optional fields, auth/conn merging and credential alias priority. With --env <id>, complete explicit connection args skip .env; missing values use only DEVKIT_<id>_* (a missing selected group is an error when fallback is needed). [[name]] sets the MCP instance display name, --env <id> selects the .env fallback group, and --profile is for DynamicsCrm.DevKit.Cli.json commands. Run 'devkit mcp --setup-guide' for multi-instance configuration.")
+                          .WithExample(new[] { "mcp", "devkit-codex" })
+                          .WithExample(new[] { "mcp", "--env", "1", "devkit-codex-2", "--dry-run" })
+                          .WithExample(new[] { "mcp", "--env", "100", "devkit-uat", "--category", "readonly" })
                           .WithExample(new[] { "mcp", "--tools" })
                           .WithExample(new[] { "mcp", "--setup-guide" })
                           .WithExample(new[] { "mcp", "--auth", "ClientSecret", "--url", "https://org.crm.dynamics.com", "--clientid", "ID", "--clientsecret", "SECRET" })

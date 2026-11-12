@@ -43,6 +43,47 @@ public sealed class McpServerHostCoverageTests
         StringAssert.Contains(exception.Message, "basic/standard/advanced were removed");
     }
 
+    [TestMethod]
+    public void BuildServerInstructions_IncludesInstanceFallbackGroupConnectionSourceAndConnectedOrg()
+    {
+        var groupInstructions = McpServerHost.BuildServerInstructions(
+            serverName: "devkit-codex-2",
+            displayCategory: "all",
+            toolCount: 40,
+            connectedOrgUriActual: new Uri("https://org-one.crm.dynamics.com/"),
+            connectedOrgFriendlyName: "Org One",
+            connectedOrgUniqueName: "unq_one",
+            connectedOrgVersion: new Version(9, 2, 0, 0),
+            impersonatedUserDisplay: null,
+            envGroup: "1",
+            connectionSource: "project .env (DEVKIT_1_*)",
+            usedFallback: true);
+
+        StringAssert.Contains(groupInstructions, "Instance: devkit-codex-2");
+        StringAssert.Contains(groupInstructions, "Fallback group: 1 (DEVKIT_1_*)");
+        StringAssert.Contains(groupInstructions, "Connection source: project .env (DEVKIT_1_*)");
+        StringAssert.Contains(groupInstructions, "Connected to Dataverse environment: https://org-one.crm.dynamics.com/");
+        StringAssert.Contains(groupInstructions, "Org: Org One (unq_one)");
+
+        var explicitInstructions = McpServerHost.BuildServerInstructions(
+            serverName: null,
+            displayCategory: "readonly",
+            toolCount: 18,
+            connectedOrgUriActual: new Uri("https://explicit.crm.dynamics.com/"),
+            connectedOrgFriendlyName: "Explicit Org",
+            connectedOrgUniqueName: "unq_explicit",
+            connectedOrgVersion: new Version(9, 2, 0, 0),
+            impersonatedUserDisplay: "Alice (alice@contoso.com)",
+            envGroup: "99",
+            connectionSource: null,
+            usedFallback: false);
+
+        StringAssert.Contains(explicitInstructions, "Instance: DynamicsCrm.DevKit (readonly)");
+        StringAssert.Contains(explicitInstructions, "Fallback group: 99 (DEVKIT_99_*; fallback not used)");
+        StringAssert.Contains(explicitInstructions, "Connection source: command-line arguments (fallback not used)");
+        StringAssert.Contains(explicitInstructions, "Impersonating: Alice (alice@contoso.com)");
+    }
+
     private static System.Collections.Generic.HashSet<string> InvokeFilteredToolNames(int level)
     {
         var method = typeof(McpServerHost).GetMethod(

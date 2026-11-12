@@ -118,7 +118,16 @@ namespace DynamicsCrm.DevKit.Cli
                 "                       (same walk-up search; --plain arg does the same)\n\n" +
                 "MCP Server (AI Agent Integration):\n" +
                 $"  devkit mcp                   Start the server ({mcpToolCount} tools, 10 resources)\n" +
-                "  devkit mcp --setup-guide     Setup instructions for all IDEs\n";
+                "  devkit mcp --setup-guide     Setup instructions for all IDEs\n\n" +
+                "MCP connection fallback:\n" +
+                "  Without --env, the original DEVKIT_* per-property merge is preserved.\n" +
+                "  Optional fields, auth/conn merging, and credential alias priority stay as before.\n" +
+                "  With --env <id>, complete args skip .env; missing values use DEVKIT_<id>_*.\n" +
+                "  A missing selected group is an error when fallback is needed.\n" +
+                "  Multiple MCP instances can select different groups; no fixed group limit.\n\n" +
+                "  devkit mcp devkit-codex\n" +
+                "  devkit mcp --env 1 devkit-codex-2 --dry-run\n" +
+                "  devkit mcp --setup-guide\n";
 
             if (IsPlain)
             {
@@ -187,7 +196,16 @@ namespace DynamicsCrm.DevKit.Cli
                     "                       (same walk-up search; --plain arg does the same)\n\n" +
                     "[green]MCP Server (AI Agent Integration):[/]\n" +
                     $"  devkit [cyan]mcp[/]                  Start the server ({mcpToolCount} tools, 10 resources)\n" +
-                    "  devkit [cyan]mcp[/] --setup-guide    Setup instructions for all IDEs\n"
+                    "  devkit [cyan]mcp[/] --setup-guide    Setup instructions for all IDEs\n\n" +
+                    "[green]MCP connection fallback:[/]\n" +
+                    "  Without --env, the original DEVKIT_* per-property merge is preserved.\n" +
+                    "  Optional fields, auth/conn merging, and credential alias priority stay as before.\n" +
+                    "  With --env [yellow]<id>[/], complete args skip .env; missing values use [cyan]DEVKIT_<id>_*[/].\n" +
+                    "  A missing selected group is an error when fallback is needed.\n" +
+                    "  Multiple MCP instances can select different groups; no fixed group limit.\n\n" +
+                    "  devkit [cyan]mcp[/] [cyan]devkit-codex[/]\n" +
+                    "  devkit [cyan]mcp[/] --env [cyan]1[/] [cyan]devkit-codex-2[/] --dry-run\n" +
+                    "  devkit [cyan]mcp[/] --setup-guide\n"
 
                 ))
             {

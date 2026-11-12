@@ -128,6 +128,40 @@ public sealed class ProgramMainExtraCoverageTests
         Assert.IsFalse(output.Contains("| DynamicsCrm.DevKit.Cli "));
     }
 
+    [TestMethod]
+    public async Task Main_RootAndMcpHelp_IncludeEnvOptionAndFallbackGuidance()
+    {
+        var (rootExit, rootOutput) = await RunCliAsync("help", "--plain");
+        Assert.AreEqual(0, rootExit);
+        StringAssert.Contains(rootOutput, "MCP connection fallback:");
+        StringAssert.Contains(rootOutput, "Without --env, the original DEVKIT_* per-property merge is preserved.");
+        StringAssert.Contains(rootOutput, "With --env <id>, complete args skip .env; missing values use DEVKIT_<id>_*.");
+        StringAssert.Contains(rootOutput, "devkit mcp --env 1 devkit-codex-2 --dry-run");
+
+        var (mcpHelpExit, mcpHelpOutput) = await RunCliAsync("mcp", "help", "--plain");
+        Assert.AreEqual(0, mcpHelpExit);
+        StringAssert.Contains(mcpHelpOutput, "--env <id>");
+        StringAssert.Contains(mcpHelpOutput, "devkit mcp --env 1 devkit-codex-2 --dry-run");
+        StringAssert.Contains(mcpHelpOutput, "devkit mcp --env 100 devkit-uat --category readonly");
+
+        // '--env help' treats 'help' as the option value for --env, not as a help alias.
+        var (envHelpExit, envHelpOutput) = await RunCliAsync("mcp", "--plain", "--env", "help");
+        Assert.AreNotEqual(0, envHelpExit);
+        StringAssert.Contains(envHelpOutput, "Invalid --env value 'help'");
+    }
+
+    [TestMethod]
+    [DataRow("0")]
+    [DataRow("help")]
+    public async Task Main_McpParserHelp_BypassesEnvSelectorValidation(string selector)
+    {
+        var (exitCode, output) = await RunCliAsync("mcp", "--env", selector, "--help", "--plain");
+        Assert.AreEqual(0, exitCode);
+        StringAssert.Contains(output, "DESCRIPTION:");
+        StringAssert.Contains(output, "--env <id>");
+        Assert.IsFalse(output.Contains("Invalid --env value"));
+    }
+
     private static async Task<(int ExitCode, string Output)> RunCliAsync(params string[] args)
     {
         var start = new ProcessStartInfo("dotnet") { RedirectStandardOutput = true, RedirectStandardError = true };

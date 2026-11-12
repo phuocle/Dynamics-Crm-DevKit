@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Commands
 {
-    [Description("Start MCP server for AI agent integration. Connection priority: explicit CLI args, then DEVKIT_* values from a project .env found from the process working directory upward. OS environment variables are not read.")]
+    [Description("Start MCP server for AI agent integration. Without --env, preserve the original DEVKIT_* per-property merge, including optional fields, auth/conn merging and credential alias priority. With --env <id>, complete explicit connection args skip .env; missing values use only DEVKIT_<id>_* (a missing selected group is an error when fallback is needed). [[name]] sets the MCP instance display name, --env <id> selects the .env fallback group, and --profile is for DynamicsCrm.DevKit.Cli.json commands. Run 'devkit mcp --setup-guide' for multi-instance configuration.")]
     public class McpCommand : AsyncCommand<McpCommandArgs>
     {
         private static TextWriter Stderr => Console.Error;
@@ -30,6 +30,12 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         {
             try
             {
+                if (settings.Env != null && !ProjectEnvironment.IsValidGroupId(settings.Env))
+                {
+                    LogError($"Invalid --env value '{settings.Env}'. Expected a positive integer group ID without leading zeros (for example: 1, 2, 10, 100).");
+                    return 2;
+                }
+
                 if (settings.SetupGuide)
                 {
                     PrintSetupGuide();
@@ -42,10 +48,9 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     return 0;
                 }
 
-                // Use the process working directory to find the project .env.
-                // MCP clients should start this global tool with the workspace as
-                // cwd; explicit CLI args retain priority over .env values.
-                settings.ResolveProjectEnvironmentDefaults();
+                if (!ResolveConnectionSettings(settings))
+                    return 2;
+
                 LogConnectionInfo(settings);
                 var serviceClient = await ConnectAsync(settings);
                 if (serviceClient == null) return 2;
@@ -89,7 +94,15 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 LogInfo($"Starting MCP server v{Shared.Const.Version}...");
 
                 var host = new Mcp.McpServerHost(serviceClient);
-                await host.RunAsync(settings.Category, settings.DryRun, settings.Name, impersonatedUserId, impersonatedUserDisplay);
+                await host.RunAsync(
+                    settings.Category,
+                    settings.DryRun,
+                    settings.Name,
+                    impersonatedUserId,
+                    impersonatedUserDisplay,
+                    settings.Env,
+                    settings.ResolvedConnectionSource,
+                    settings.UsedEnvironmentFallback);
 
                 return 0;
             }
@@ -102,11 +115,77 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             }
         }
 
+        private static bool ResolveConnectionSettings(McpCommandArgs settings)
+        {
+            var hadExplicitArgs = settings.HasExplicitConnectionArgs();
+
+            // Preserve the pre-selector resolver for every call without --env,
+            // including optional fields and the original auth/connection merge.
+            if (settings.Env == null)
+            {
+                var defaultValues = ProjectEnvironment.Read(ProjectEnvironment.ResolveFileFromJsonOrDirectory(settings.JsonFile, settings.CurrentDirectory));
+                var hadDefaultEnvValues = ProjectEnvironment.HasGroup(defaultValues, null);
+                settings.ResolveProjectEnvironmentDefaults(defaultValues);
+                settings.UsedEnvironmentFallback = hadDefaultEnvValues;
+                settings.UsedEnvironmentGroupFallback = false;
+                settings.ResolvedConnectionSource = hadExplicitArgs && hadDefaultEnvValues
+                    ? "command-line arguments + project .env (DEVKIT_*)"
+                    : hadDefaultEnvValues
+                        ? "project .env (DEVKIT_*)"
+                        : "command-line arguments";
+                return true;
+            }
+
+            if (settings.HasCompleteExplicitConnectionArgs())
+            {
+                settings.UsedEnvironmentFallback = false;
+                settings.UsedEnvironmentGroupFallback = false;
+                settings.ResolvedConnectionSource = $"command-line arguments (fallback group {settings.Env} (DEVKIT_{settings.Env}_*) was not used)";
+                return true;
+            }
+
+            // Use the resolved --json directory (when provided) or the process working directory
+            // to find the nearest project .env upward to the drive root.
+            var envFile = ProjectEnvironment.ResolveFileFromJsonOrDirectory(settings.JsonFile, settings.CurrentDirectory);
+
+            if (string.IsNullOrEmpty(envFile) || !File.Exists(envFile))
+            {
+                LogError($"Cannot resolve environment group '{settings.Env}': no project .env file was found.");
+                return false;
+            }
+
+            var envValues = ProjectEnvironment.Read(envFile);
+            if (!ProjectEnvironment.HasGroup(envValues, settings.Env))
+            {
+                LogError($"Environment group '{settings.Env}' was not found in the selected .env file (expected DEVKIT_{settings.Env}_* connection keys).");
+                return false;
+            }
+
+            settings.ResolveProjectEnvironmentDefaults(envValues, settings.Env);
+            settings.UsedEnvironmentFallback = true;
+            settings.UsedEnvironmentGroupFallback = true;
+            settings.ResolvedConnectionSource = hadExplicitArgs
+                ? $"command-line arguments + project .env (DEVKIT_{settings.Env}_*)"
+                : $"project .env (DEVKIT_{settings.Env}_*)";
+            return true;
+        }
+
         private async Task<ServiceClient> ConnectAsync(McpCommandArgs settings)
         {
+            var groupId = settings.UsedEnvironmentGroupFallback && !string.IsNullOrEmpty(settings.Env)
+                ? settings.Env
+                : null;
+
             if (string.IsNullOrEmpty(settings.AuthType) && string.IsNullOrEmpty(settings.Connection))
             {
-                LogError("--auth or --conn is required for MCP server. Provide connection arguments or set DEVKIT_* values in a project .env file.");
+                if (groupId != null)
+                {
+                    LogError($"Environment group '{groupId}': {ProjectEnvironment.GetGroupKey(ProjectEnvironment.AuthType, groupId)} (or --auth) or {ProjectEnvironment.GetGroupKey(ProjectEnvironment.Connection, groupId)} (or --conn) is required for MCP server.");
+                }
+                else
+                {
+                    LogError("--auth or --conn is required for MCP server. Provide connection arguments or set DEVKIT_* values in a project .env file.");
+                }
                 return null;
             }
 
@@ -124,7 +203,9 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 var crmConn = legacyBuilder.ParseConnectionString(settings.Connection);
                 if (crmConn == null)
                 {
-                    LogError("Invalid connection string.");
+                    LogError(groupId != null
+                        ? $"Environment group '{groupId}' ({ProjectEnvironment.GetGroupKey(ProjectEnvironment.Connection, groupId)}): Invalid connection string."
+                        : "Invalid connection string.");
                     return null;
                 }
 
@@ -146,11 +227,23 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
         private static async Task<ServiceClient> ConnectModernAsync(McpCommandArgs settings)
         {
+            var groupId = settings.UsedEnvironmentGroupFallback && !string.IsNullOrEmpty(settings.Env)
+                ? settings.Env
+                : null;
+
             if (string.IsNullOrEmpty(settings.Url) && !settings.AuthType.Equals("FromPac", StringComparison.OrdinalIgnoreCase))
+            {
+                if (groupId != null)
+                    throw new Exception($"Environment group '{groupId}': {ProjectEnvironment.GetGroupKey(ProjectEnvironment.Url, groupId)} or --url is required for {settings.AuthType} authentication.");
                 throw new Exception("--url is required for modern authentication (except FromPac).");
+            }
 
             if (!ConnectionBuilderFactory.IsSupported(settings.AuthType))
+            {
+                if (groupId != null)
+                    throw new Exception($"Environment group '{groupId}': Authentication type '{settings.AuthType}' is not supported. Use: Interactive, DeviceCode, ClientSecret, FromPac, OAuth, AD.");
                 throw new Exception($"Authentication type '{settings.AuthType}' is not supported. Use: Interactive, DeviceCode, ClientSecret, FromPac, OAuth, AD.");
+            }
 
             var builder = ConnectionBuilderFactory.GetBuilder(settings.AuthType);
 
@@ -170,9 +263,18 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 PacProfile = settings.PacProfile
             };
 
+            if (groupId != null)
+            {
+                ValidateGroupRequiredFields(settings.AuthType, connection, groupId);
+            }
+
             var (isValid, error) = await builder.ValidateAsync(connection);
             if (!isValid)
+            {
+                if (groupId != null)
+                    throw new Exception($"Environment group '{groupId}' (DEVKIT_{groupId}_*): Validation failed: {error}");
                 throw new Exception($"Validation failed: {error}");
+            }
 
             if (builder is DeviceCodeConnectionBuilder deviceCodeBuilder)
             {
@@ -185,9 +287,42 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             return await builder.CreateServiceClientAsync(connection);
         }
 
+        private static void ValidateGroupRequiredFields(string authType, CrmConnection connection, string groupId)
+        {
+            if (authType.Equals("ClientSecret", StringComparison.OrdinalIgnoreCase))
+            {
+                if (string.IsNullOrEmpty(connection.ClientId) && string.IsNullOrEmpty(connection.UserName))
+                    throw new Exception($"Environment group '{groupId}': {ProjectEnvironment.GetGroupKey(ProjectEnvironment.ClientId, groupId)} or --clientid is required for ClientSecret authentication.");
+                if (string.IsNullOrEmpty(connection.ClientSecret) && string.IsNullOrEmpty(connection.Password))
+                    throw new Exception($"Environment group '{groupId}': {ProjectEnvironment.GetGroupKey(ProjectEnvironment.ClientSecret, groupId)} or --clientsecret is required for ClientSecret authentication.");
+            }
+            else if (authType.Equals("OAuth", StringComparison.OrdinalIgnoreCase))
+            {
+                if (string.IsNullOrEmpty(connection.UserName))
+                    throw new Exception($"Environment group '{groupId}': {ProjectEnvironment.GetGroupKey(ProjectEnvironment.Username, groupId)} or --username is required for OAuth authentication.");
+                if (string.IsNullOrEmpty(connection.Password))
+                    throw new Exception($"Environment group '{groupId}': {ProjectEnvironment.GetGroupKey(ProjectEnvironment.Password, groupId)} or --password is required for OAuth authentication.");
+            }
+            else if (authType.Equals("AD", StringComparison.OrdinalIgnoreCase))
+            {
+                if (string.IsNullOrEmpty(connection.UserName))
+                    throw new Exception($"Environment group '{groupId}': {ProjectEnvironment.GetGroupKey(ProjectEnvironment.Username, groupId)} or --username is required for AD authentication.");
+                if (string.IsNullOrEmpty(connection.Password))
+                    throw new Exception($"Environment group '{groupId}': {ProjectEnvironment.GetGroupKey(ProjectEnvironment.Password, groupId)} or --password is required for AD authentication.");
+            }
+        }
+
         private static void LogConnectionInfo(McpCommandArgs settings)
         {
             LogInfo($"Auth: {(string.IsNullOrEmpty(settings.AuthType) ? "(legacy --conn)" : settings.AuthType)}");
+            if (!string.IsNullOrEmpty(settings.Env))
+            {
+                LogInfo(settings.UsedEnvironmentGroupFallback
+                    ? $"Fallback group: {settings.Env} (DEVKIT_{settings.Env}_*)"
+                    : $"Fallback group: {settings.Env} (DEVKIT_{settings.Env}_*; not used)");
+            }
+            if (!string.IsNullOrEmpty(settings.ResolvedConnectionSource))
+                LogInfo($"Connection source: {settings.ResolvedConnectionSource}");
             if (!settings.AuthType.Equals("FromPac", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(settings.Url))
                 LogInfo($"URL: {settings.Url}");
             if (ShouldLogClientId(settings.AuthType) && !string.IsNullOrEmpty(settings.ClientId))
@@ -385,31 +520,67 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine();
             WriteGuideHeading("2. CONNECTION (PROJECT .env OR COMMAND-LINE ARGUMENTS)");
             Console.WriteLine("-------------------------------------------------------------------------");
-            Console.WriteLine("   Connection priority: explicit command-line arguments > project .env.");
-            Console.WriteLine("   MCP reads DEVKIT_* connection values from the first .env found by");
-            Console.WriteLine("   searching from the process working directory upward to the drive root.");
+            Console.WriteLine("   Without --env: preserve the original DEVKIT_* per-property merge, even");
+            Console.WriteLine("   with complete args. Empty optional fields are still filled from .env.");
+            Console.WriteLine("   Both --auth and --conn may be filled; a non-empty auth selects its builder.");
+            Console.WriteLine("   ClientSecret prefers ClientId/ClientSecret over username/password aliases.");
+            Console.WriteLine("   With --env <id>: explicit connection args take priority. Complete args");
+            Console.WriteLine("   skip .env; otherwise only DEVKIT_<id>_* fills missing connection values.");
+            Console.WriteLine("   Neither mode requires .env when args suffice to connect without it.");
+            Console.WriteLine("   When reading project defaults, MCP uses the");
+            Console.WriteLine("   first .env found by searching from the resolved --json directory (if set)");
+            Console.WriteLine("   or from the process working directory upward to the drive root.");
+            Console.WriteLine("   Only the nearest .env file is used (never merged with parent .env files).");
             Console.WriteLine("   OS environment variables are not read for connection values.");
             Console.WriteLine("   Configure the MCP client to launch devkit with the project/workspace as");
             Console.WriteLine("   its working directory. Global installation does not change this directory.");
             Console.WriteLine("   Keep .env local and ignored by Git; commit the MCP config without secrets.");
             Console.WriteLine();
-            Console.WriteLine("   Example project .env (do not commit):");
+            Console.WriteLine("   Fallback key groups in project .env:");
+            Console.WriteLine("   - Default group (no --env): DEVKIT_<FIELD> (for example DEVKIT_URL)");
+            Console.WriteLine("   - Numbered group (--env <id>): DEVKIT_<id>_<FIELD> (for example DEVKIT_1_URL)");
+            Console.WriteLine("   - Groups do not need to be consecutive (1, 2, 100); there is no fixed group");
+            Console.WriteLine("     limit and no group list declaration is needed.");
+            Console.WriteLine("   - Groups are never mixed: when fallback is needed, --env 1 reads only");
+            Console.WriteLine("     DEVKIT_1_* keys and fails if the .env file or group 1 is missing.");
+            Console.WriteLine();
+            Console.WriteLine("   Example project .env with multiple groups (do not commit):");
+            Console.WriteLine("     # Default group");
             Console.WriteLine("     DEVKIT_AUTH_TYPE=ClientSecret");
             Console.WriteLine("     DEVKIT_URL=https://org.crm.dynamics.com");
             Console.WriteLine("     DEVKIT_CLIENT_ID=APP_ID");
             Console.WriteLine("     DEVKIT_CLIENT_SECRET=SECRET");
             Console.WriteLine();
+            Console.WriteLine("     # Group 1 (--env 1)");
+            Console.WriteLine("     DEVKIT_1_AUTH_TYPE=ClientSecret");
+            Console.WriteLine("     DEVKIT_1_URL=https://org-one.crm.dynamics.com");
+            Console.WriteLine("     DEVKIT_1_CLIENT_ID=APP_ID_ONE");
+            Console.WriteLine("     DEVKIT_1_CLIENT_SECRET=SECRET_ONE");
+            Console.WriteLine();
+            Console.WriteLine("     # Group 2 (--env 2): can use a different auth type");
+            Console.WriteLine("     DEVKIT_2_AUTH_TYPE=FromPac");
+            Console.WriteLine("     DEVKIT_2_PAC_PROFILE=UAT");
+            Console.WriteLine();
+            Console.WriteLine("     # Group 100 (--env 100): non-consecutive IDs are valid");
+            Console.WriteLine("     DEVKIT_100_AUTH_TYPE=ClientSecret");
+            Console.WriteLine("     DEVKIT_100_URL=https://org-hundred.crm.dynamics.com");
+            Console.WriteLine("     DEVKIT_100_CLIENT_ID=APP_ID_HUNDRED");
+            Console.WriteLine("     DEVKIT_100_CLIENT_SECRET=SECRET_HUNDRED");
+            Console.WriteLine();
+            Console.WriteLine("   --env <id>           : Project .env fallback group (selects DEVKIT_<id>_*; default: DEVKIT_*)");
             Console.WriteLine("   --auth               : Interactive, DeviceCode, ClientSecret, FromPac, OAuth, AD");
             Console.WriteLine("   --url                : https://org.crm.dynamics.com (except FromPac)");
             Console.WriteLine("   --clientid           : Azure AD Application (Client) ID");
             Console.WriteLine("   --clientsecret       : Azure AD Client Secret (required for ClientSecret)");
-            Console.WriteLine("   --pacprofile         : PAC CLI profile name (required for FromPac)");
+            Console.WriteLine("   --pacprofile         : PAC CLI profile name (optional; defaults to active profile)");
             Console.WriteLine("   --username           : Username (OAuth)");
             Console.WriteLine("   --password           : Password (OAuth, can be encrypted)");
-            Console.WriteLine("   --domain             : Domain (AD, on-premises)");
+            Console.WriteLine("   --domain             : Optional domain (AD, on-premises)");
             Console.WriteLine("   --conn               : Full legacy connection string (alternative to the above)");
             Console.WriteLine();
-            Console.WriteLine("   Example: devkit mcp devkit-claude (reads connection from project .env)");
+            Console.WriteLine("   Examples:");
+            Console.WriteLine("     devkit mcp devkit-claude                  (reads DEVKIT_* from project .env)");
+            Console.WriteLine("     devkit mcp --env 1 devkit-claude-2 --dry-run (reads DEVKIT_1_* from project .env)");
             Console.WriteLine();
             WriteGuideHeading($"3. AVAILABLE TOOLS ({tools.Count} Tools)");
             Console.WriteLine("-------------------------------------------------------------------------");
@@ -418,7 +589,8 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine($"   Filter tools with --category: readonly ({readonlyCount}), all ({allCount})");
             Console.WriteLine("   Default: all (loads everything)");
             Console.WriteLine("   Session options:");
-            Console.WriteLine("   --dry-run              : Block mutations at execution time");
+            Console.WriteLine("   --dry-run              : Block mutations at execution time (keeps full catalog;");
+            Console.WriteLine("                            differs from --category readonly which hides mutation tools)");
             Console.WriteLine("   --as-user <guid|email> : Impersonate a user for the whole session");
             Console.WriteLine("                            (requires System Administrator)");
             Console.WriteLine();
@@ -439,6 +611,14 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("     ZCode       : devkit mcp devkit-zcode");
             Console.WriteLine("     Antigravity : devkit mcp devkit-antigravity");
             Console.WriteLine();
+            Console.WriteLine("   Multi-instance naming and verification:");
+            Console.WriteLine("   - [name] sets the instance display name; --env <id> selects DEVKIT_<id>_*.");
+            Console.WriteLine("   - A number in [name] (such as devkit-codex-2) is independent of --env <id>");
+            Console.WriteLine("     (for example, instance 2 can use --env 1 while instance 1 uses DEVKIT_*).");
+            Console.WriteLine("   - Keep the client server key and [name] aligned so each instance is clear.");
+            Console.WriteLine("   - Reload or restart the MCP client after editing its configuration, then");
+            Console.WriteLine("     call 'whoami' on each server to verify separate live PIDs, URLs, and Org IDs.");
+            Console.WriteLine();
             Console.WriteLine("   Scope: project = current workspace; user = all projects for one OS user;");
             Console.WriteLine("   system = all OS users (admin-managed where supported). ~ is the user home.");
             Console.WriteLine("   Merge the example into the chosen config; do not overwrite other entries.");
@@ -453,12 +633,20 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("           \"mcp\", \"devkit-claude\"");
             Console.WriteLine("         ],");
             Console.WriteLine("         \"timeout\": 600000");
+            Console.WriteLine("       },");
+            Console.WriteLine("       \"dynamicscrm-devkit-2\": {");
+            Console.WriteLine("         \"command\": \"devkit\",");
+            Console.WriteLine("         \"args\": [");
+            Console.WriteLine("           \"mcp\", \"--env\", \"1\", \"devkit-claude-2\", \"--dry-run\"");
+            Console.WriteLine("         ],");
+            Console.WriteLine("         \"timeout\": 600000");
             Console.WriteLine("       }");
             Console.WriteLine("     }");
             Console.WriteLine("   }");
             Console.WriteLine();
             Console.WriteLine("   User: ~/.claude.json (managed by Claude Code). In PowerShell or a Unix shell:");
             Console.WriteLine("   claude mcp add-json --scope user dynamicscrm-devkit '{\"command\":\"devkit\",\"args\":[\"mcp\",\"devkit-claude\"],\"timeout\":600000}'");
+            Console.WriteLine("   claude mcp add-json --scope user dynamicscrm-devkit-2 '{\"command\":\"devkit\",\"args\":[\"mcp\",\"--env\",\"1\",\"devkit-claude-2\",\"--dry-run\"],\"timeout\":600000}'");
             Console.WriteLine("   System: managed-mcp.json (admin only), using the same JSON structure:");
             Console.WriteLine("     Windows: C:\\Program Files\\ClaudeCode\\managed-mcp.json");
             Console.WriteLine("     macOS:   /Library/Application Support/ClaudeCode/managed-mcp.json");
@@ -470,6 +658,14 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("   command = \"devkit\"");
             Console.WriteLine("   args = [");
             Console.WriteLine("     \"mcp\", \"devkit-codex\"");
+            Console.WriteLine("   ]");
+            Console.WriteLine("   startup_timeout_sec = 20");
+            Console.WriteLine("   tool_timeout_sec = 600");
+            Console.WriteLine();
+            Console.WriteLine("   [mcp_servers.dynamicscrm-devkit-2]");
+            Console.WriteLine("   command = \"devkit\"");
+            Console.WriteLine("   args = [");
+            Console.WriteLine("     \"mcp\", \"--env\", \"1\", \"devkit-codex-2\", \"--dry-run\"");
             Console.WriteLine("   ]");
             Console.WriteLine("   startup_timeout_sec = 20");
             Console.WriteLine("   tool_timeout_sec = 600");
@@ -488,6 +684,13 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("         \"args\": [");
             Console.WriteLine("           \"mcp\", \"devkit-copilot\"");
             Console.WriteLine("         ]");
+            Console.WriteLine("       },");
+            Console.WriteLine("       \"dynamicscrm-devkit-2\": {");
+            Console.WriteLine("         \"type\": \"stdio\",");
+            Console.WriteLine("         \"command\": \"devkit\",");
+            Console.WriteLine("         \"args\": [");
+            Console.WriteLine("           \"mcp\", \"--env\", \"1\", \"devkit-copilot-2\", \"--dry-run\"");
+            Console.WriteLine("         ]");
             Console.WriteLine("       }");
             Console.WriteLine("     }");
             Console.WriteLine("   }");
@@ -502,6 +705,13 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("         \"command\": \"devkit\",");
             Console.WriteLine("         \"args\": [");
             Console.WriteLine("           \"mcp\", \"devkit-antigravity\"");
+            Console.WriteLine("         ],");
+            Console.WriteLine("         \"timeoutSeconds\": 600");
+            Console.WriteLine("       },");
+            Console.WriteLine("       \"dynamicscrm-devkit-2\": {");
+            Console.WriteLine("         \"command\": \"devkit\",");
+            Console.WriteLine("         \"args\": [");
+            Console.WriteLine("           \"mcp\", \"--env\", \"1\", \"devkit-antigravity-2\", \"--dry-run\"");
             Console.WriteLine("         ],");
             Console.WriteLine("         \"timeoutSeconds\": 600");
             Console.WriteLine("       }");
@@ -525,6 +735,12 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("           \"type\": \"stdio\",");
             Console.WriteLine("           \"command\": \"devkit\",");
             Console.WriteLine("           \"args\": [\"mcp\", \"devkit-zcode\"],");
+            Console.WriteLine("           \"timeoutMs\": 600000");
+            Console.WriteLine("         },");
+            Console.WriteLine("         \"dynamicscrm-devkit-2\": {");
+            Console.WriteLine("           \"type\": \"stdio\",");
+            Console.WriteLine("           \"command\": \"devkit\",");
+            Console.WriteLine("           \"args\": [\"mcp\", \"--env\", \"1\", \"devkit-zcode-2\", \"--dry-run\"],");
             Console.WriteLine("           \"timeoutMs\": 600000");
             Console.WriteLine("         }");
             Console.WriteLine("       }");
@@ -580,7 +796,14 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine();
             Console.WriteLine("=========================================================================");
             Console.WriteLine("Filter with: devkit mcp --category readonly|all");
-            Console.WriteLine("Run 'devkit mcp --setup-guide' for full configuration guide.");
+            Console.WriteLine("This catalog describes one DevKit MCP instance.");
+            Console.WriteLine("Use --env <id> to select DEVKIT_<id>_* fallback connection keys.");
+            Console.WriteLine("Explicit connection args still take priority.");
+            Console.WriteLine("Without --env, the original DEVKIT_* per-property merge is preserved,");
+            Console.WriteLine("including optional fields, auth/conn merging, and credential alias priority.");
+            Console.WriteLine("Different MCP client entries can run separate instances with the same tool names.");
+            Console.WriteLine("Example: devkit mcp --env 1 devkit-codex-2 --dry-run");
+            Console.WriteLine("Run 'devkit mcp --setup-guide' for multi-instance configuration.");
         }
 
         private static List<McpToolInfo> GetMcpToolInfos()

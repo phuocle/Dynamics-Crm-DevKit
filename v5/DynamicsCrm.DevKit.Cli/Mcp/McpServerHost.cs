@@ -46,7 +46,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
         };
 
         public async Task RunAsync(string category = "all", bool dryRun = false, string instanceName = null,
-            Guid? impersonatedUserId = null, string impersonatedUserDisplay = null)
+            Guid? impersonatedUserId = null, string impersonatedUserDisplay = null,
+            string envGroup = null, string connectionSource = null, bool usedFallback = false)
         {
             var normalizedCategory = category.Trim().ToLowerInvariant();
             if (!CategoryLevel.ContainsKey(normalizedCategory))
@@ -79,18 +80,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                         Name = serverName,
                         Version = DynamicsCrm.DevKit.Shared.Const.Version
                     };
-                    options.ServerInstructions =
-                        $"Connected to Dataverse environment: {_serviceClient.ConnectedOrgUriActual} | " +
-                        $"Org: {_serviceClient.ConnectedOrgFriendlyName} ({_serviceClient.ConnectedOrgUniqueName}) | " +
-                        $"Version: {_serviceClient.ConnectedOrgVersion} | " +
-                        $"Category: {displayCategory} ({toolCount} tools). " +
-                        "Tool descriptions reference docs:// and schema:// resources for detailed contracts. " +
-                        "When your client supports MCP resources, read the relevant resource before complex operations; " +
-                        "if it does not support resources, call the read_instruction tool (empty name returns the catalog, a name returns the full content). " +
-                        "Use tool parameter descriptions for basic inputs and do not guess missing fields." +
-                        (string.IsNullOrEmpty(impersonatedUserDisplay)
-                            ? ""
-                            : $" | Impersonating: {impersonatedUserDisplay} (CallerId set server-side)");
+                    options.ServerInstructions = BuildServerInstructions(
+                        serverName,
+                        displayCategory,
+                        toolCount,
+                        _serviceClient.ConnectedOrgUriActual,
+                        _serviceClient.ConnectedOrgFriendlyName,
+                        _serviceClient.ConnectedOrgUniqueName,
+                        _serviceClient.ConnectedOrgVersion,
+                        impersonatedUserDisplay,
+                        envGroup,
+                        connectionSource,
+                        usedFallback);
                 })
                 .WithStdioServerTransport()
                 .WithToolsFromAssembly()
@@ -181,6 +182,46 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             }
 
             return allowedNames;
+        }
+
+        internal static string BuildServerInstructions(
+            string serverName,
+            string displayCategory,
+            int toolCount,
+            Uri connectedOrgUriActual,
+            string connectedOrgFriendlyName,
+            string connectedOrgUniqueName,
+            Version connectedOrgVersion,
+            string impersonatedUserDisplay = null,
+            string envGroup = null,
+            string connectionSource = null,
+            bool usedFallback = false)
+        {
+            var resolvedName = string.IsNullOrWhiteSpace(serverName)
+                ? $"DynamicsCrm.DevKit ({displayCategory})"
+                : serverName;
+            var fallbackGroupText = string.IsNullOrEmpty(envGroup)
+                ? (usedFallback ? "default (DEVKIT_*)" : "default (DEVKIT_*; fallback not used)")
+                : (usedFallback ? $"{envGroup} (DEVKIT_{envGroup}_*)" : $"{envGroup} (DEVKIT_{envGroup}_*; fallback not used)");
+            var sourceText = string.IsNullOrWhiteSpace(connectionSource)
+                ? (usedFallback ? "project .env" : "command-line arguments (fallback not used)")
+                : connectionSource;
+
+            return
+                $"Instance: {resolvedName} | " +
+                $"Fallback group: {fallbackGroupText} | " +
+                $"Connection source: {sourceText} | " +
+                $"Connected to Dataverse environment: {connectedOrgUriActual} | " +
+                $"Org: {connectedOrgFriendlyName} ({connectedOrgUniqueName}) | " +
+                $"Version: {connectedOrgVersion} | " +
+                $"Category: {displayCategory} ({toolCount} tools). " +
+                "Tool descriptions reference docs:// and schema:// resources for detailed contracts. " +
+                "When your client supports MCP resources, read the relevant resource before complex operations; " +
+                "if it does not support resources, call the read_instruction tool (empty name returns the catalog, a name returns the full content). " +
+                "Use tool parameter descriptions for basic inputs and do not guess missing fields." +
+                (string.IsNullOrEmpty(impersonatedUserDisplay)
+                    ? ""
+                    : $" | Impersonating: {impersonatedUserDisplay} (CallerId set server-side)");
         }
 
         internal static int GetToolCount(int requestedLevel)

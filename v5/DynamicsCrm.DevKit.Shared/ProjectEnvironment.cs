@@ -94,7 +94,72 @@ namespace DynamicsCrm.DevKit.Shared
         public static string GetValue(IDictionary<string, string> values, string key)
         {
             if (values == null || string.IsNullOrWhiteSpace(key)) return null;
-            return values.TryGetValue(key, out var value) ? value : null;
+            if (values.TryGetValue(key, out var value)) return value;
+            foreach (var pair in values)
+            {
+                if (string.Equals(pair.Key, key, StringComparison.OrdinalIgnoreCase))
+                    return pair.Value;
+            }
+            return null;
+        }
+
+        public static string GetValue(IDictionary<string, string> values, string key, string groupId)
+        {
+            if (string.IsNullOrEmpty(groupId)) return GetValue(values, key);
+            var groupKey = GetGroupKey(key, groupId);
+            return GetValue(values, groupKey);
+        }
+
+        public static bool IsValidGroupId(string groupId)
+        {
+            if (string.IsNullOrEmpty(groupId)) return false;
+            if (groupId[0] < '1' || groupId[0] > '9') return false;
+            for (var i = 1; i < groupId.Length; i++)
+            {
+                if (groupId[i] < '0' || groupId[i] > '9') return false;
+            }
+            return true;
+        }
+
+        public static string GetGroupPrefix(string groupId)
+        {
+            return string.IsNullOrEmpty(groupId) ? "DEVKIT_" : $"DEVKIT_{groupId}_";
+        }
+
+        public static string GetGroupKey(string key, string groupId)
+        {
+            if (string.IsNullOrWhiteSpace(key)) return null;
+            var canonicalKey = ConnectionKeys.FirstOrDefault(k => string.Equals(k, key, StringComparison.OrdinalIgnoreCase));
+            if (canonicalKey == null) return null;
+            if (string.IsNullOrEmpty(groupId)) return canonicalKey;
+            if (!IsValidGroupId(groupId)) return null;
+            return $"DEVKIT_{groupId}_{canonicalKey.Substring("DEVKIT_".Length)}";
+        }
+
+        public static bool HasGroup(IDictionary<string, string> values, string groupId)
+        {
+            if (values == null || values.Count == 0) return false;
+            if (!string.IsNullOrEmpty(groupId) && !IsValidGroupId(groupId)) return false;
+
+            foreach (var baseKey in ConnectionKeys)
+            {
+                var groupKey = GetGroupKey(baseKey, groupId);
+                if (groupKey != null && ContainsKeyIgnoreCase(values, groupKey))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static bool ContainsKeyIgnoreCase(IDictionary<string, string> values, string key)
+        {
+            if (values.ContainsKey(key)) return true;
+            foreach (var existingKey in values.Keys)
+            {
+                if (string.Equals(existingKey, key, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+            return false;
         }
 
         public static void EnsureFile(string directory)
