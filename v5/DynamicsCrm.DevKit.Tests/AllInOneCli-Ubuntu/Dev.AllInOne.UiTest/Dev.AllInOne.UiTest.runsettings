@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <RunConfiguration>
+    <TestSessionTimeout>10800000</TestSessionTimeout>
+    <MaxCpuCount>1</MaxCpuCount>
+    <TargetFrameworkVersion>.NETFramework,Version=v4.6.2</TargetFrameworkVersion>
+  </RunConfiguration>
+</RunSettings>

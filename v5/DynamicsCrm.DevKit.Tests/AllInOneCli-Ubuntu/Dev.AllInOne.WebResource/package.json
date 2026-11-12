@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "name": "dev.allinone.webresource",
+  "version": "1.0.0",
+  "description": "dev.allinone.webresource",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "check": "tsc -p jsconfig.json --noEmit"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/xrm": "^9.0.87",
+    "typescript": "^5.9.3"
+  }
+}
