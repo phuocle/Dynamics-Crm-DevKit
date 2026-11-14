@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>DevKit MCP · Từ 40 tool xuống 10</title>
+<style>
+:root{--ink:#182e36;--muted:#586c73;--paper:#f6f5ef;--white:#fff;--line:#d8e0dc;--teal:#116859;--light:#e8f1ec;--orange:#ae5823;--gold:#e4bd68;--blue:#477b99;--nav:#102e35;--mono:Consolas,"Cascadia Code",monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:30px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 "Segoe UI",Arial,sans-serif}a{color:var(--teal);text-decoration-thickness:1px;text-underline-offset:3px}a:hover{color:#a45322}button,input,select{font:inherit}code{font: .88em/1.5 var(--mono);overflow-wrap:anywhere}pre{background:#102e35;color:#eaf7f1;padding:22px;border-radius:12px;overflow:auto;font:14px/1.6 var(--mono)}pre code{overflow-wrap:normal;font:inherit}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(36px,4.2vw,62px);line-height:1.1;letter-spacing:-2px;font-weight:750;margin-bottom:25px}h2{font-size:30px;line-height:1.25;letter-spacing:-.7px;margin-bottom:20px}h3{font-size:19px;line-height:1.35;margin-bottom:12px}p{margin-bottom:16px}small{font-size:12px;color:var(--muted)}.shell{display:grid;grid-template-columns:232px minmax(0,1fr)}aside{position:sticky;top:0;height:100vh;padding:35px 24px;background:var(--nav);color:#fff;display:flex;flex-direction:column;gap:25px}.brand{font-weight:750;font-size:20px;letter-spacing:-.5px}.brand span{display:block;font-size:11px;letter-spacing:2px;color:#9ac5b8;margin-top:4px;text-transform:uppercase}.side-note{font-size:12px;color:#a8c0c5}nav a{display:block;color:#cedfdf;text-decoration:none;font-size:13px;padding:9px 0;border-bottom:1px solid #2b454a}nav a:hover{color:#fff}aside .doclink{margin-top:auto;border:1px solid #74918f;border-radius:8px;color:#fff;padding:10px 12px;text-decoration:none;font-size:13px}main{min-width:0;padding:50px 52px 70px;max-width:1440px;width:100%;margin:auto}.eyebrow{color:var(--teal);font-size:11px;font-weight:750;letter-spacing:2px;text-transform:uppercase;margin-bottom:19px}.lead{font-size:20px;color:#405e63;max-width:840px}.hero{border-bottom:1px solid var(--line);padding-bottom:32px}.hero strong{color:var(--teal)}.status{display:inline-block;padding:5px 10px;border-radius:6px;background:#fff1d6;color:#825317;font-size:12px;font-weight:650;margin-bottom:24px}.hero-meta{display:flex;gap:20px;flex-wrap:wrap;font-size:12px;color:var(--muted)}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:26px 0}.stat{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:20px}.stat b{display:block;font-size:31px;line-height:1.2;letter-spacing:-1px}.stat span{display:block;color:var(--muted);font-size:12px;margin-top:8px}.stat em{font-style:normal;font-size:11px;color:var(--teal)}section{padding-top:48px}.section-head{display:flex;gap:16px;align-items:baseline}.section-no{font:13px var(--mono);color:#71918a;min-width:23px}.callout{background:var(--light);border-left:4px solid var(--teal);border-radius:0 10px 10px 0;padding:19px 24px;margin:22px 0}.callout p:last-child{margin-bottom:0}.callout.warn{background:#fcf0dc;border-color:#be7d30}.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}.box{padding:24px;background:var(--white);border:1px solid var(--line);border-radius:12px}.box p:last-child{margin:0}.muted{color:var(--muted)}.stack{display:flex;height:48px;border-radius:8px;overflow:hidden;margin:22px 0 18px}.stack span{display:grid;place-content:center;color:#fff;font-size:12px;font-weight:700}.legend{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.legend b{display:block;font-size:16px}.legend small{display:block}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px}.table-scroll{overflow:auto;border:1px solid var(--line);border-radius:10px;background:#fff;margin:18px 0}table{border-collapse:collapse;width:100%;font-size:13px;text-align:left}th{background:#eef2ed;padding:13px 15px;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:#4c686a}td{padding:13px 15px;border-top:1px solid #e3e8e3;vertical-align:top}td small{display:block;margin-top:5px}.num{text-align:right;font:13px var(--mono);white-space:nowrap}.inventory{min-width:850px}.inventory td:first-child{width:210px}.inventory td:nth-child(2){width:175px}.inventory td:last-child{min-width:320px}.recommended td{background:#edf5ef}.group-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.group{padding:22px;border:1px solid var(--line);background:#fff;border-radius:12px}.group-top{display:flex;justify-content:space-between;margin-bottom:12px}.index{font:13px var(--mono);color:#7a9790}.badge{font-size:10px;font-weight:750;padding:2px 8px;border-radius:4px;letter-spacing:1px}.read{color:#1a6953;background:#e5f2e9}.write{color:#9a5a1f;background:#fff0d8}.group p{font-size:14px;color:var(--muted)}.ops{display:flex;flex-wrap:wrap;gap:5px}.ops span{font:10px/1.6 var(--mono);padding:3px 6px;background:#f3f4ef;border-radius:4px;overflow-wrap:anywhere}.flow{display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr;align-items:stretch;margin:24px 0}.flow .step{border:1px solid var(--line);border-radius:10px;background:#fff;padding:20px}.flow .arrow{align-self:center;text-align:center;color:var(--teal);font-size:22px}.flow strong{display:block;font-size:14px;margin-bottom:8px}.flow p{font-size:13px;margin:0;color:var(--muted)}.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:end;margin-top:24px}.controls label{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:5px}.controls input,.controls select{border:1px solid #acbbb5;border-radius:7px;padding:9px 12px;background:#fff;color:var(--ink)}.controls input{width:310px;max-width:100%}.controls output{font-size:13px;color:var(--muted);padding-bottom:9px}.risk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.risk{border-top:2px solid #a8bab2;padding:19px 5px 7px}.risk h3{font-size:16px}.risk p{font-size:14px;color:var(--muted)}.phases{counter-reset:phase;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}.phase{background:white;border:1px solid var(--line);border-radius:10px;padding:20px}.phase span{font:12px var(--mono);color:var(--teal)}.phase h3{font-size:16px;margin-top:14px}.phase p{font-size:13px;color:var(--muted);margin:0}ul{padding-left:22px}li{margin:7px 0}.checklist li{font-size:14px}.source-box{font-size:13px;border-top:1px solid var(--line);padding-top:25px;margin-top:24px}.source-box code{word-break:break-all}.foot{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}details{border-top:1px solid var(--line);padding-top:16px;margin-top:20px}summary{cursor:pointer;font-weight:650;font-size:14px}details p{font-size:13px;margin-top:14px}a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #cc9032;outline-offset:4px}[hidden]{display:none!important}
+@media(min-width:1500px){main{padding-left:70px;padding-right:70px}}
+@media(max-width:1100px){.shell{grid-template-columns:190px minmax(0,1fr)}aside{padding:28px 18px}main{padding:35px 28px}.stats{grid-template-columns:repeat(2,1fr)}.phases{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.shell{display:block}aside{position:static;height:auto;padding:20px;gap:12px}nav{display:flex;gap:14px;overflow:auto}nav a{white-space:nowrap;padding:5px 0}aside .doclink{margin:0;align-self:start}.side-note{display:none}main{padding:30px 20px}h1{letter-spacing:-1px}h2{font-size:26px}.lead{font-size:18px}.two,.group-grid,.risk-grid{grid-template-columns:1fr}.legend{grid-template-columns:repeat(2,1fr)}.flow{grid-template-columns:1fr;gap:9px}.flow .arrow{transform:rotate(90deg)}.stat{padding:16px}.stat b{font-size:27px}.controls input{width:100%}.controls label:first-child{flex:1 1 230px}.phases{grid-template-columns:1fr}section{padding-top:38px}}
+@media print{body{background:white;font-size:11pt}.shell{display:block}aside,.controls{display:none}main{max-width:none;padding:0}section{padding-top:25px}.hero{padding-bottom:20px}h1{font-size:34pt}.stat,.box,.group,.phase,.risk{break-inside:avoid}.table-scroll{overflow:visible;border-radius:0}.inventory{min-width:0;font-size:9pt}.inventory td:first-child{width:auto}.inventory td:last-child{min-width:0}td,th{padding:7px}.stats{grid-template-columns:repeat(4,1fr)}a{color:inherit}tr{break-inside:avoid}.foot{font-size:9pt}.stack{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside aria-label="Điều hướng tài liệu">
+<div class="brand">DevKit MCP<span>Architecture review</span></div>
+<div class="side-note">14.11.2026<br>Phân tích từ source, test<br>và catalog đang cài.</div>
+<nav aria-label="Mục lục">
+<a href="#decision">01 · Kết luận</a><a href="#cost">02 · Chi phí thực tế</a><a href="#options">03 · So sánh phương án</a><a href="#catalog">04 · Catalog 10 tool</a><a href="#contract">05 · Cách hoạt động</a><a href="#mapping">06 · Đối chiếu 40 tool</a><a href="#risks">07 · Các đánh đổi</a><a href="#rollout">08 · Triển khai & nghiệm thu</a>
+<a href="#review-tests">09 · Giữ nguyên test cũ</a><a href="#result-tokens">10 · Token của kết quả trả về</a>
+</nav>
+<a class="doclink" href="Mcp-Tool-Consolidation.md">Mở kế hoạch cho AI ↗</a>
+</aside>
+<main>
+<header class="hero" id="decision">
+<div class="eyebrow">DynamicsCrm.DevKit / CLI / MCP</div>
+<div class="status">Review 2 · 14/11/2026 · Chưa sửa MCP</div>
+<h1>40 năng lực.<br><strong>10 cửa vào.</strong></h1>
+<p class="lead">Có thể gộp tool mà vẫn giữ các chức năng đang có. Muốn giảm token đáng kể, cần thu nhỏ cả <strong>input schema lẫn output schema</strong>, rồi tải contract chi tiết khi sử dụng.</p>
+<div class="hero-meta"><span>Khảo sát: 14/11/2026 · Asia/Saigon</span><span>CLI 4.44.44.44</span><span>Build 14.11.2026 07:51:43</span></div>
+</header>
+<div class="stats" aria-label="Các chỉ số chính">
+<div class="stat"><b>40 → 10</b><span>Số tool đề xuất</span><em>Giảm 75% số tool</em></div>
+<div class="stat"><b>172 KB</b><span>Catalog thực tế qua tools/list</span><em>172.009 byte UTF-8</em></div>
+<div class="stat"><b>348</b><span>Tham số trong 40 schema</span><em>Phải bảo toàn contract</em></div>
+<div class="stat"><b>43,1%</b><span>Kích thước thuộc outputSchema</span><em>Phần thường bị bỏ sót</em></div>
+</div>
+<div class="callout"><p><strong>Khuyến nghị:</strong> giữ <code>whoami</code> và <code>read_instruction</code>; gộp 38 tool còn lại vào 8 nhóm nghiệp vụ. Giữ tên cũ làm mã <code>operation</code>, dùng lại handler hiện có. Catalog chỉ nêu cách chọn thao tác; contract đầy đủ được đọc khi cần.</p></div>
+<p class="muted">75% là mức giảm <strong>số tool</strong>, chưa phải mức giảm token. Bản compact chưa được triển khai hoặc benchmark. Tài liệu này phân biệt số đã đo với mục tiêu đề xuất.</p>
+<div class="two" aria-label="Trả lời review lần hai">
+<article class="box"><h3>1. Test cũ phải reuse và giữ nguyên</h3><p><strong>Đúng. Không sửa test cũ; chỉ thêm file test mới.</strong> Test cũ chứng minh regression trong phạm vi đã kiểm tra; test mới và runtime checks chứng minh phần compact.</p><a href="#review-tests">Xem thiết kế để test cũ vẫn chạy nguyên trạng ↓</a></article>
+<article class="box"><h3>2. structuredContent vẫn tốn token</h3><p>Nếu host gửi cho model đọc, nó thành <strong>input token của lượt model tiếp theo</strong>. Giảm outputSchema không tự giảm dữ liệu kết quả. Nên tối ưu theo nhu cầu và giữ đường lấy đủ thông tin.</p><a href="#result-tokens">Xem cách tính và phương án giảm result ↓</a></article>
+</div>
+
+<section id="cost">
+<div class="section-head"><span class="section-no">02</span><h2>Token đang tốn ở đâu?</h2></div>
+<p>Tôi đã khởi động một tiến trình MCP riêng, đọc đầy đủ <code>tools/list</code>, rồi đóng tiến trình. Catalog chuẩn hóa dài <strong>171.583 ký tự Unicode</strong>. Phép đo chỉ khám phá schema, không gọi thao tác sửa dữ liệu.</p>
+<div class="stack" role="img" aria-label="Input schema 30,5%, output schema 43,1%, mô tả tool 20,2%, phần còn lại 6,1%">
+<span style="width:30.53%;background:#477b99">Input 30,5%</span><span style="width:43.13%;background:#116859">Output 43,1%</span><span style="width:20.24%;background:#b57b33">Mô tả 20,2%</span><span style="width:6.10%;background:#82948c">6%</span>
+</div>
+<div class="legend">
+<div><b><i class="dot" style="background:#477b99"></i>52.376</b><small>Ký tự inputSchema</small></div>
+<div><b><i class="dot" style="background:#116859"></i>74.000</b><small>Ký tự outputSchema</small></div>
+<div><b><i class="dot" style="background:#b57b33"></i>34.732</b><small>Ký tự mô tả tool</small></div>
+<div><b><i class="dot" style="background:#82948c"></i>10.475</b><small>Name, title, JSON, escape…</small></div>
+</div>
+<p><small>28.880 ký tự mô tả tham số đã nằm trong inputSchema; không cộng lại. Độ dài mô tả dùng văn bản đã decode, phần escape thuộc phần còn lại.</small></p>
+<div class="two">
+<article class="box"><h3>Schema đầu ra mới là phần lớn nhất</h3><p>Riêng outputSchema của <code>get_workflows</code>, <code>get_messages</code> và <code>get_business_rules</code> đã chiếm <strong>23.045 ký tự</strong>. Gộp tên nhưng vẫn gắn toàn bộ union schema có thể gần như không giảm tổng kích thước.</p></article>
+<article class="box"><h3>Host còn lặp server instructions</h3><p>Trong metadata của một connector hiện tại, phần instructions lặp ở 40 tool chiếm <strong>30.280 UTF-16 code units</strong>. Có thể rút ngắn phần này, giữ nhận diện môi trường và chuyển chi tiết sang <code>whoami</code>.</p></article>
+</div>
+<details><summary>Xem những tool có catalog lớn nhất</summary>
+<div class="table-scroll"><table><thead><tr><th>Tool</th><th class="num">Tổng ký tự</th><th class="num">Input</th><th class="num">Output</th></tr></thead><tbody><tr><td><code>get_workflows</code></td><td class="num">10,261</td><td class="num">800</td><td class="num">8,528</td></tr><tr><td><code>manage_column</code></td><td class="num">9,750</td><td class="num">6,738</td><td class="num">1,287</td></tr><tr><td><code>get_messages</code></td><td class="num">9,495</td><td class="num">552</td><td class="num">7,945</td></tr><tr><td><code>get_business_rules</code></td><td class="num">8,199</td><td class="num">512</td><td class="num">6,572</td></tr><tr><td><code>manage_command</code></td><td class="num">7,303</td><td class="num">3,175</td><td class="num">2,117</td></tr><tr><td><code>manage_chart</code></td><td class="num">5,854</td><td class="num">2,995</td><td class="num">1,570</td></tr><tr><td><code>get_tables</code></td><td class="num">5,710</td><td class="num">933</td><td class="num">3,742</td></tr></tbody></table></div>
+</details>
+<div class="callout warn"><p><strong>Ba loại số khác nhau:</strong> dữ liệu trên wire, schema host đưa cho model và token tính phí. MCP không bắt buộc host đưa toàn bộ catalog vào mọi request. Client có thể lazy-load, cache hoặc chuyển đổi schema. Nếu client bỏ outputSchema khỏi model context, giảm outputSchema vẫn giảm wire nhưng mức tiết kiệm model token sẽ khác.</p></div>
+</section>
+
+<section id="options">
+<div class="section-head"><span class="section-no">03</span><h2>Chọn cách gộp phù hợp</h2></div>
+<div class="table-scroll"><table><thead><tr><th>Phương án</th><th>Số tool</th><th>Lợi ích</th><th>Đánh đổi</th></tr></thead><tbody>
+<tr><td>Rút gọn descriptions</td><td>40</td><td>Ít thay đổi, giữ typed schema.</td><td>Không xử lý phần outputSchema lớn; số tool giữ nguyên.</td></tr>
+<tr><td>Gộp và giữ toàn bộ union schema</td><td>Khoảng 16–20</td><td>Client còn schema chi tiết sẵn.</td><td>Kích thước có thể gần như cũ; chưa có thiết kế/benchmark riêng.</td></tr>
+<tr class="recommended"><td><strong>Nhóm nghiệp vụ + contract theo nhu cầu</strong></td><td><strong>10</strong></td><td><strong>Catalog nhỏ, domain rõ, dùng lại 40 handler.</strong></td><td>Cần binder/validation ở server và kiểm thử client. Khuyến nghị.</td></tr>
+<tr><td>Gateway tổng quát</td><td>2–3</td><td>Rất ít khai báo.</td><td>Mất tín hiệu chọn domain, quyền theo tool quá rộng, dễ đoán sai tham số.</td></tr>
+</tbody></table></div>
+<p><strong>Không nên “gộp bằng cách xóa”.</strong> Thay mọi công cụ bằng <code>execute_webapi</code> sẽ bỏ rơi validation, backup/undo, xử lý file, publish và cấu trúc kết quả chuyên biệt.</p>
+</section>
+
+<section id="catalog">
+<div class="section-head"><span class="section-no">04</span><h2>Catalog đề xuất: 10 tool</h2></div>
+<p><strong>6 tool chỉ đọc</strong> bao phủ 18 operation chỉ đọc hiện tại; <strong>4 tool hỗn hợp/ghi</strong> bao phủ 22 operation còn lại. Một thao tác đọc bên trong mixed tool vẫn giữ nguyên category hiện tại.</p>
+<div class="group-grid"><article class="group"><div class="group-top"><span class="index">01</span><span class="badge read">READ</span></div><h3><code>whoami</code></h3><p>Danh tính, môi trường và bằng chứng runtime; giữ nguyên.</p><div class="ops"><span>whoami</span></div></article>
+<article class="group"><div class="group-top"><span class="index">02</span><span class="badge read">READ</span></div><h3><code>read_instruction</code></h3><p>13 resource hiện có và contract thao tác theo nhu cầu.</p><div class="ops"><span>read_instruction</span></div></article>
+<article class="group"><div class="group-top"><span class="index">03</span><span class="badge read">READ</span></div><h3><code>query_data</code></h3><p>FetchXML, SQL, tìm kiếm và phân tích URL.</p><div class="ops"><span>execute_fetchxml</span><span>execute_sql</span><span>search_records</span><span>parse_record_url</span></div></article>
+<article class="group"><div class="group-top"><span class="index">04</span><span class="badge read">READ</span></div><h3><code>inspect_metadata</code></h3><p>Metadata bảng/cột/quan hệ và thành phần solution.</p><div class="ops"><span>get_tables</span><span>get_solution_components</span></div></article>
+<article class="group"><div class="group-top"><span class="index">05</span><span class="badge read">READ</span></div><h3><code>inspect_logic</code></h3><p>Plugin, workflow, flow, BPF, rule, Custom API và SDK message.</p><div class="ops"><span>get_plugins</span><span>get_workflows</span><span>get_flows</span><span>get_business_process_flows</span><span>get_business_rules</span><span>get_custom_apis</span><span>get_messages</span></div></article>
+<article class="group"><div class="group-top"><span class="index">06</span><span class="badge read">READ</span></div><h3><code>inspect_diagnostics</code></h3><p>Audit, plugin trace và system job.</p><div class="ops"><span>get_audit_history</span><span>get_plugin_trace_logs</span><span>get_system_jobs</span></div></article>
+<article class="group"><div class="group-top"><span class="index">07</span><span class="badge write">MIXED</span></div><h3><code>manage_data</code></h3><p>Dữ liệu bản ghi, bulk create, dữ liệu mẫu, file và recycle bin.</p><div class="ops"><span>manage_record</span><span>create_records</span><span>generate_demo_data</span><span>manage_record_file</span><span>manage_deleted_records</span></div></article>
+<article class="group"><div class="group-top"><span class="index">08</span><span class="badge write">MIXED</span></div><h3><code>manage_schema</code></h3><p>Metadata có thể thay đổi: bảng, cột, quan hệ và global choice.</p><div class="ops"><span>manage_table</span><span>manage_column</span><span>manage_relationship</span><span>manage_choice</span></div></article>
+<article class="group"><div class="group-top"><span class="index">09</span><span class="badge write">MIXED</span></div><h3><code>manage_ui</code></h3><p>Form/view/chart/app, classic ribbon, modern command, web resource và report.</p><div class="ops"><span>manage_form</span><span>manage_view</span><span>manage_chart</span><span>manage_app</span><span>manage_ribbon</span><span>manage_command</span><span>manage_webresource</span><span>manage_report</span></div></article>
+<article class="group"><div class="group-top"><span class="index">10</span><span class="badge write">MIXED</span></div><h3><code>manage_platform</code></h3><p>Role, biến môi trường, Power Fx function, publish và Web API.</p><div class="ops"><span>manage_role</span><span>manage_environment_variable</span><span>manage_function</span><span>publish_customizations</span><span>execute_webapi</span></div></article></div>
+<div class="callout"><p><strong>Hai ranh giới cần giữ:</strong> classic ribbon và modern command chỉ chung cửa gọi, vẫn dùng hai handler khác nhau. Power Fx function vẫn chỉ có list/detail/validate/invoke; create/update/delete hiện bị chặn và tiếp tục bị chặn.</p></div>
+</section>
+
+<section id="contract">
+<div class="section-head"><span class="section-no">05</span><h2>Gọi ít tool hơn, vẫn dùng đúng contract</h2></div>
+<div class="flow">
+<div class="step"><strong>1 · Chọn operation</strong><p>Danh sách enum ngắn trong tool chỉ ra các tên cũ: manage_view, manage_form…</p></div><span class="arrow" aria-hidden="true">→</span>
+<div class="step"><strong>2 · Đọc contract khi cần</strong><p>read_instruction(name="contract://manage_view") hoặc resource tương ứng.</p></div><span class="arrow" aria-hidden="true">→</span>
+<div class="step"><strong>3 · Gọi handler qua router</strong><p>Giữ nguyên tên tham số, default, action, lỗi và dữ liệu kết quả.</p></div>
+</div>
+<div class="two">
+<div><h3>Trước</h3><pre><code>manage_view({
+  "action": "list",
+  "entity_name": "account"
+})</code></pre></div>
+<div><h3>Sau — đề xuất</h3><pre><code>manage_ui({
+  "operation": "manage_view",
+  "arguments": {
+    "action": "list",
+    "entity_name": "account"
+  }
+})</code></pre></div>
+</div>
+<p>Hai utility giữ cách gọi hiện tại. Tám router có <code>operation</code> và <code>arguments</code>. Object arguments giữ nguyên các field cũ; field nào vốn là JSON string vẫn giữ string. Server lấy schema/default từ descriptor và bind theo đúng handler, không cho gọi method tùy ý.</p>
+<div class="two">
+<article class="box"><h3>Contract không biến mất</h3><p>Input/output schema chi tiết, quy tắc theo action, default, ví dụ và hướng dẫn file/backup được trả cho đúng operation. Giữ 13 resource cũ. Client không hỗ trợ resources vẫn dùng <code>read_instruction</code>.</p></article>
+<article class="box"><h3>Payload mặc định giữ nguyên</h3><p>Đợt gộp catalog chuyển nguyên <code>CallToolResult</code>, gồm text, structuredContent và isError. Tối ưu result bằng tham số hiện có trước; view ngắn mới là hạng mục opt-in riêng. Không tự retry mutation khi gặp timeout.</p></article>
+</div>
+<div class="callout warn"><p><strong>Đánh đổi thật:</strong> compact không còn công bố sẵn typed schema chi tiết cho mỗi operation. Client autocomplete/kiểm tra output tĩnh phải đọc contract hoặc dùng legacy. Đây là thay đổi API khám phá/gọi tool; mục tiêu là giữ chức năng thực thi và payload, không khẳng định API cũ vẫn giống hệt.</p></div>
+</section>
+
+<section id="mapping">
+<div class="section-head"><span class="section-no">06</span><h2>40 tool, không để rơi một chức năng</h2></div>
+<p>Bảng dưới đây ánh xạ đủ 40 tên hiện tại. Số tham số lấy từ inputSchema thực tế. Bấm tên cũ để mở file source; bản Markdown có thêm snapshot tên/default và kế hoạch kiểm thử.</p>
+<div class="controls">
+<label>Tìm tool hoặc chức năng<input id="filter" type="search" placeholder="Ví dụ: backup, function, report…" autocomplete="off"></label>
+<label>Phân loại<select id="kind"><option value="all">Tất cả</option><option value="true">Chỉ đọc</option><option value="false">Hỗn hợp / ghi</option></select></label>
+<output id="count" aria-live="polite">40 / 40 operation</output>
+</div>
+<div class="table-scroll"><table class="inventory"><thead><tr><th>Tool cũ / operation</th><th>Tool compact</th><th class="num">Params</th><th>Tính năng và điểm cần giữ</th></tr></thead><tbody id="inventory"><tr data-read="true" data-search="whoami whoami Identity, organization, direct roles, runtime version/build/process/SHA."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/WhoAmITool.cs"><code>whoami</code></a></td><td><code>whoami</code><small>Chỉ đọc</small></td><td class="num">0</td><td>Identity, organization, direct roles, runtime version/build/process/SHA.</td></tr>
+<tr data-read="true" data-search="read_instruction read_instruction Catalog 9 docs + 4 schema; tên ngắn/full URI, không phân biệt hoa thường; nội dung resource và tool phải đồng nhất."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ReadInstructionTool.cs"><code>read_instruction</code></a></td><td><code>read_instruction</code><small>Chỉ đọc</small></td><td class="num">1</td><td>Catalog 9 docs + 4 schema; tên ngắn/full URI, không phân biệt hoa thường; nội dung resource và tool phải đồng nhất.</td></tr>
+<tr data-read="true" data-search="execute_fetchxml query_data FetchXML, aggregate/join, max_records, auto-page get_all; giữ kết quả và lỗi hiện có."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ExecuteFetchXmlTool.cs"><code>execute_fetchxml</code></a></td><td><code>query_data</code><small>Chỉ đọc</small></td><td class="num">3</td><td>FetchXML, aggregate/join, max_records, auto-page get_all; giữ kết quả và lỗi hiện có.</td></tr>
+<tr data-read="true" data-search="execute_sql query_data SELECT, giới hạn bản ghi và get_all; giữ SQL riêng, không thay bằng Web API."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ExecuteSqlTool.cs"><code>execute_sql</code></a></td><td><code>query_data</code><small>Chỉ đọc</small></td><td class="num">3</td><td>SELECT, giới hạn bản ghi và get_all; giữ SQL riêng, không thay bằng Web API.</td></tr>
+<tr data-read="true" data-search="search_records query_data search/status; cú pháp tìm kiếm, entities/filter/top, compact/full và file raw payload."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/SearchRecordsTool.cs"><code>search_records</code></a></td><td><code>query_data</code><small>Chỉ đọc</small></td><td class="num">6</td><td>search/status; cú pháp tìm kiếm, entities/filter/top, compact/full và file raw payload.</td></tr>
+<tr data-read="true" data-search="parse_record_url query_data URL/GUID/text, URL decode và thứ tự parser."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ParseRecordUrlTool.cs"><code>parse_record_url</code></a></td><td><code>query_data</code><small>Chỉ đọc</small></td><td class="num">1</td><td>URL/GUID/text, URL decode và thứ tự parser.</td></tr>
+<tr data-read="true" data-search="get_tables inspect_metadata List/detail, filter/names/custom/intersect; compact/standard/full; full chứa metadata clone/formula."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetTablesTool.cs"><code>get_tables</code></a></td><td><code>inspect_metadata</code><small>Chỉ đọc</small></td><td class="num">7</td><td>List/detail, filter/names/custom/intersect; compact/standard/full; full chứa metadata clone/formula.</td></tr>
+<tr data-read="true" data-search="get_solution_components inspect_metadata Solution unique/display name; phân giải nhiều kết quả; include_active_layers/active_layers_only."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetSolutionComponentsTool.cs"><code>get_solution_components</code></a></td><td><code>inspect_metadata</code><small>Chỉ đọc</small></td><td class="num">3</td><td>Solution unique/display name; phân giải nhiều kết quả; include_active_layers/active_layers_only.</td></tr>
+<tr data-read="true" data-search="get_plugins inspect_logic Assembly/entity routing; steps, images/config, stage/mode/active filters; entity_name có ưu tiên."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetPluginsTool.cs"><code>get_plugins</code></a></td><td><code>inspect_logic</code><small>Chỉ đọc</small></td><td class="num">10</td><td>Assembly/entity routing; steps, images/config, stage/mode/active filters; entity_name có ưu tiên.</td></tr>
+<tr data-read="true" data-search="get_workflows inspect_logic List/detail, tên khớp duy nhất tự detail, trigger_field, background/realtime và trạng thái."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetWorkflowsTool.cs"><code>get_workflows</code></a></td><td><code>inspect_logic</code><small>Chỉ đọc</small></td><td class="num">7</td><td>List/detail, tên khớp duy nhất tự detail, trigger_field, background/realtime và trạng thái.</td></tr>
+<tr data-read="true" data-search="get_flows inspect_logic List/detail và action=runs; owner/name/lifecycle/run-status, khoảng thời gian."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetFlowsTool.cs"><code>get_flows</code></a></td><td><code>inspect_logic</code><small>Chỉ đọc</small></td><td class="num">8</td><td>List/detail và action=runs; owner/name/lifecycle/run-status, khoảng thời gian.</td></tr>
+<tr data-read="true" data-search="get_business_process_flows inspect_logic List/detail, bpf_id/bpf_name/entity; status mặc định all; stage detail luôn có."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetBusinessProcessFlowsTool.cs"><code>get_business_process_flows</code></a></td><td><code>inspect_logic</code><small>Chỉ đọc</small></td><td class="num">6</td><td>List/detail, bpf_id/bpf_name/entity; status mặc định all; stage detail luôn có.</td></tr>
+<tr data-read="true" data-search="get_business_rules inspect_logic List/detail theo entity/rule_id; lifecycle; điều kiện/hành động đã parse và trạng thái parse."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetBusinessRulesTool.cs"><code>get_business_rules</code></a></td><td><code>inspect_logic</code><small>Chỉ đọc</small></td><td class="num">4</td><td>List/detail theo entity/rule_id; lifecycle; điều kiện/hành động đã parse và trạng thái parse.</td></tr>
+<tr data-read="true" data-search="get_custom_apis inspect_logic List/detail, api_name, bound entity, managed/status và signature."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetCustomApisTool.cs"><code>get_custom_apis</code></a></td><td><code>inspect_logic</code><small>Chỉ đọc</small></td><td class="num">5</td><td>List/detail, api_name, bound entity, managed/status và signature.</td></tr>
+<tr data-read="true" data-search="get_messages inspect_logic SDK messages và Custom Actions; global/entity/detail, input/output parameters."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetMessagesTool.cs"><code>get_messages</code></a></td><td><code>inspect_logic</code><small>Chỉ đọc</small></td><td class="num">4</td><td>SDK messages và Custom Actions; global/entity/detail, input/output parameters.</td></tr>
+<tr data-read="true" data-search="get_audit_history inspect_diagnostics Browse/detail theo record; user/operation/attribute/date filters và các dạng audit detail."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetAuditHistoryTool.cs"><code>get_audit_history</code></a></td><td><code>inspect_diagnostics</code><small>Chỉ đọc</small></td><td class="num">9</td><td>Browse/detail theo record; user/operation/attribute/date filters và các dạng audit detail.</td></tr>
+<tr data-read="true" data-search="get_plugin_trace_logs inspect_diagnostics List/detail; type/entity/message/mode/correlation/time; text lỗi/trace."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetPluginTraceLogsTool.cs"><code>get_plugin_trace_logs</code></a></td><td><code>inspect_diagnostics</code><small>Chỉ đọc</small></td><td class="num">8</td><td>List/detail; type/entity/message/mode/correlation/time; text lỗi/trace.</td></tr>
+<tr data-read="true" data-search="get_system_jobs inspect_diagnostics List/detail; status/operation type/entity/name/correlation/time; mặc định failed."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetSystemJobsTool.cs"><code>get_system_jobs</code></a></td><td><code>inspect_diagnostics</code><small>Chỉ đọc</small></td><td class="num">8</td><td>List/detail; status/operation type/entity/name/correlation/time; mặc định failed.</td></tr>
+<tr data-read="false" data-search="manage_record manage_data create/read/update/delete/associate/disassociate; fields_json, lookup binding và quan hệ."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageRecordTool.cs"><code>manage_record</code></a></td><td><code>manage_data</code><small>Hỗn hợp / ghi</small></td><td class="num">8</td><td>create/read/update/delete/associate/disassociate; fields_json, lookup binding và quan hệ.</td></tr>
+<tr data-read="false" data-search="create_records manage_data JSON inline hoặc file JSON/CSV; tối đa 5000; parallelism, partial failures và gate bypass_custom_logic."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/CreateRecordsTool.cs"><code>create_records</code></a></td><td><code>manage_data</code><small>Hỗn hợp / ghi</small></td><td class="num">4</td><td>JSON inline hoặc file JSON/CSV; tối đa 5000; parallelism, partial failures và gate bypass_custom_logic.</td></tr>
+<tr data-read="false" data-search="generate_demo_data manage_data Tạo dữ liệu mẫu theo entity/date/count/fields/seed; field_overrides sáu operator; không tự suy luận ngày."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/GenerateDemoDataTool.cs"><code>generate_demo_data</code></a></td><td><code>manage_data</code><small>Hỗn hợp / ghi</small></td><td class="num">7</td><td>Tạo dữ liệu mẫu theo entity/date/count/fields/seed; field_overrides sáu operator; không tự suy luận ngày.</td></tr>
+<tr data-read="false" data-search="manage_record_file manage_data info/upload/download/delete; file/image, file_path/base64/full_size, block transfer và đường dẫn output."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageRecordFileTool.cs"><code>manage_record_file</code></a></td><td><code>manage_data</code><small>Hỗn hợp / ghi</small></td><td class="num">8</td><td>info/upload/download/delete; file/image, file_path/base64/full_size, block transfer và đường dẫn output.</td></tr>
+<tr data-read="false" data-search="manage_deleted_records manage_data list/detail/restore/status/turn; record_id hoặc record_ids[], retention_days, name_prefix kể cả chuỗi rỗng."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageDeletedRecordsTool.cs"><code>manage_deleted_records</code></a></td><td><code>manage_data</code><small>Hỗn hợp / ghi</small></td><td class="num">9</td><td>list/detail/restore/status/turn; record_id hoặc record_ids[], retention_days, name_prefix kể cả chuỗi rỗng.</td></tr>
+<tr data-read="false" data-search="manage_table manage_schema Tự nhận create/update; schema/logical name, publisher, immutable fields, audit/search/quick create."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageTableTool.cs"><code>manage_table</code></a></td><td><code>manage_schema</code><small>Hỗn hợp / ghi</small></td><td class="num">16</td><td>Tự nhận create/update; schema/logical name, publisher, immutable fields, audit/search/quick create.</td></tr>
+<tr data-read="false" data-search="manage_column manage_schema 35 tham số; create/update; lookup/customer/options/statuscode, formula clone, autonumber pattern/seed/clear, nullable flags."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageColumnTool.cs"><code>manage_column</code></a></td><td><code>manage_schema</code><small>Hỗn hợp / ghi</small></td><td class="num">35</td><td>35 tham số; create/update; lookup/customer/options/statuscode, formula clone, autonumber pattern/seed/clear, nullable flags.</td></tr>
+<tr data-read="false" data-search="manage_relationship manage_schema create_1n/create_nn/update/delete/add_target/remove_target; cascade, menu, polymorphic lookup và hierarchy."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageRelationshipTool.cs"><code>manage_relationship</code></a></td><td><code>manage_schema</code><small>Hỗn hợp / ghi</small></td><td class="num">22</td><td>create_1n/create_nn/update/delete/add_target/remove_target; cascade, menu, polymorphic lookup và hierarchy.</td></tr>
+<tr data-read="false" data-search="manage_choice manage_schema list/detail/create/update; options/add/update/remove, màu option và solution."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageChoiceTool.cs"><code>manage_choice</code></a></td><td><code>manage_schema</code><small>Hỗn hợp / ghi</small></td><td class="num">11</td><td>list/detail/create/update; options/add/update/remove, màu option và solution.</td></tr>
+<tr data-read="false" data-search="manage_form manage_ui list/detail/update/rename/undo; FormXML hoặc operations, resolve tên, admin gate, validate/backup/publish."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageFormTool.cs"><code>manage_form</code></a></td><td><code>manage_ui</code><small>Hỗn hợp / ghi</small></td><td class="num">8</td><td>list/detail/update/rename/undo; FormXML hoặc operations, resolve tên, admin gate, validate/backup/publish.</td></tr>
+<tr data-read="false" data-search="manage_view manage_ui list/detail/create/update/rename/set_default/undo; system/personal, FetchXML→LayoutXML, cell patch và backup cặp XML."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageViewTool.cs"><code>manage_view</code></a></td><td><code>manage_ui</code><small>Hỗn hợp / ghi</small></td><td class="num">8</td><td>list/detail/create/update/rename/set_default/undo; system/personal, FetchXML→LayoutXML, cell patch và backup cặp XML.</td></tr>
+<tr data-read="false" data-search="manage_chart manage_ui list/detail/create/update/rename/set_default/undo; measures/filter/XML, validate/publish/confirmed và confirmation khi áp default."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageChartTool.cs"><code>manage_chart</code></a></td><td><code>manage_ui</code><small>Hỗn hợp / ghi</small></td><td class="num">16</td><td>list/detail/create/update/rename/set_default/undo; measures/filter/XML, validate/publish/confirmed và confirmation khi áp default.</td></tr>
+<tr data-read="false" data-search="manage_app manage_ui list/detail/create/update/update_navigation/validate/undo; sitemap operations, backup .app.json, validation và publish theo hành vi hiện tại."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageAppTool.cs"><code>manage_app</code></a></td><td><code>manage_ui</code><small>Hỗn hợp / ghi</small></td><td class="num">10</td><td>list/detail/create/update/update_navigation/validate/undo; sitemap operations, backup .app.json, validation và publish theo hành vi hiện tại.</td></tr>
+<tr data-read="false" data-search="manage_ribbon manage_ui list/buttons/detail/update/undo; classic RibbonDiffXml patch/operations, backup và restore."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageRibbonTool.cs"><code>manage_ribbon</code></a></td><td><code>manage_ui</code><small>Hỗn hợp / ghi</small></td><td class="num">4</td><td>list/buttons/detail/update/undo; classic RibbonDiffXml patch/operations, backup và restore.</td></tr>
+<tr data-read="false" data-search="manage_command manage_ui list/detail/create/update/hide/show/add_flyout/update_flyout/add_flyout_item/remove_flyout_item/add_split_button/update_split_button; modern appaction riêng classic ribbon."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageCommandTool.cs"><code>manage_command</code></a></td><td><code>manage_ui</code><small>Hỗn hợp / ghi</small></td><td class="num">24</td><td>list/detail/create/update/hide/show/add_flyout/update_flyout/add_flyout_item/remove_flyout_item/add_split_button/update_split_button; modern appaction riêng classic ribbon.</td></tr>
+<tr data-read="false" data-search="manage_webresource manage_ui list/detail/create/update/delete; resolve GUID/name, file→base64, type, publisher và solution."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageWebResourceTool.cs"><code>manage_webresource</code></a></td><td><code>manage_ui</code><small>Hỗn hợp / ghi</small></td><td class="num">10</td><td>list/detail/create/update/delete; resolve GUID/name, file→base64, type, publisher và solution.</td></tr>
+<tr data-read="false" data-search="manage_report manage_ui list/detail/create/download/update/add_dataset/update_dataset; create/dataset local-only, update Dataverse; language/output_folder, .rptproj và backup."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageReportTool.cs"><code>manage_report</code></a></td><td><code>manage_ui</code><small>Hỗn hợp / ghi</small></td><td class="num">14</td><td>list/detail/create/download/update/add_dataset/update_dataset; create/dataset local-only, update Dataverse; language/output_folder, .rptproj và backup.</td></tr>
+<tr data-read="false" data-search="manage_role manage_platform list/detail/user/assign/unassign/create/update/delete/copy/restore; user/team/BU, privilege depths và backup."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageRoleTool.cs"><code>manage_role</code></a></td><td><code>manage_platform</code><small>Hỗn hợp / ghi</small></td><td class="num">10</td><td>list/detail/user/assign/unassign/create/update/delete/copy/restore; user/team/BU, privilege depths và backup.</td></tr>
+<tr data-read="false" data-search="manage_environment_variable manage_platform list/detail/create/update/delete/clear; definition/current/default value, type và solution."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageEnvironmentVariableTool.cs"><code>manage_environment_variable</code></a></td><td><code>manage_platform</code><small>Hỗn hợp / ghi</small></td><td class="num">9</td><td>list/detail/create/update/delete/clear; definition/current/default value, type và solution.</td></tr>
+<tr data-read="false" data-search="manage_function manage_platform list/detail/validate/invoke; validate chỉ structural+metadata; create/update/delete vẫn gated; typed arguments, entity binding, không tự retry invoke sau timeout."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageFunctionTool.cs"><code>manage_function</code></a></td><td><code>manage_platform</code><small>Hỗn hợp / ghi</small></td><td class="num">8</td><td>list/detail/validate/invoke; validate chỉ structural+metadata; create/update/delete vẫn gated; typed arguments, entity binding, không tự retry invoke sau timeout.</td></tr>
+<tr data-read="false" data-search="publish_customizations manage_platform Targeted entities/optionsets/ribbon/dashboard/webresources/sitemap/apps; không target thì PublishAll theo contract hiện tại."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/PublishCustomizationsTool.cs"><code>publish_customizations</code></a></td><td><code>manage_platform</code><small>Hỗn hợp / ghi</small></td><td class="num">8</td><td>Targeted entities/optionsets/ribbon/dashboard/webresources/sitemap/apps; không target thì PublishAll theo contract hiện tại.</td></tr>
+<tr data-read="false" data-search="execute_webapi manage_platform GET/POST/PUT/PATCH/DELETE; relative URL, body/header, response lines và response headers; vẫn là mixed tool."><td><a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ExecuteWebApiTool.cs"><code>execute_webapi</code></a></td><td><code>manage_platform</code><small>Hỗn hợp / ghi</small></td><td class="num">6</td><td>GET/POST/PUT/PATCH/DELETE; relative URL, body/header, response lines và response headers; vẫn là mixed tool.</td></tr></tbody></table></div>
+<p><small>Bảng là checklist bao phủ, không thay thế schema và validation đầy đủ trong source.</small></p>
+</section>
+
+<section id="risks">
+<div class="section-head"><span class="section-no">07</span><h2>Những chỗ dễ “gộp xong mà mất tính năng”</h2></div>
+<div class="risk-grid">
+<article class="risk"><h3>01 · Nullable, default và kiểu dữ liệu</h3><p>Không đồng nhất omitted/null/false/0/chuỗi rỗng. Bảo toàn record_ids dạng array, auto_number_seed nullable Int64 và JSON-string fields. Dùng binder tương đương SDK, kiểm thử parity.</p></article>
+<article class="risk"><h3>02 · Quyền và category</h3><p>Category lấy từ attribute ReadOnly. Mixed facade không được quảng bá là read-only. Giữ dry-run, admin gate và impersonation ở server; không thêm tham số để AI override policy.</p></article>
+<article class="risk"><h3>03 · Backup, file local và publish</h3><p>Report create/dataset là local-only; download ghi file. View undo cần cặp XML. App/form/chart có publish và validation riêng. Router không “đơn giản hóa” các side effect này.</p></article>
+<article class="risk"><h3>04 · Discovery và resource references</h3><p>Host hiện scan assembly; read_instruction scan URI trong descriptions. Rút mô tả hoặc bỏ registration thiếu kiểm soát sẽ làm mất tool/resource mapping. Cần một catalog dùng chung.</p></article>
+<article class="risk"><h3>05 · Compatibility và tool permissions</h3><p>Giữ --tool-surface legacy|compact. Tên compact mới có thể cần cấu hình quyền ở client. Không advertise cả hai: 40 cũ + 8 router mới thành 48 tool.</p></article>
+<article class="risk"><h3>06 · Help và lỗi làm tăng token trở lại</h3><p>Chỉ tải contract cho operation cần dùng, cache theo instance/build/hash. Đo cả help, lịch sử hội thoại, retry và latency; không chỉ chụp catalog nhỏ rồi coi là thành công.</p></article>
+</div>
+<p>Handler có state theo invocation phải giữ lifetime phù hợp; không biến registry singleton thành nơi giữ instance mutable. Chạy thử đồng thời để tránh một request dùng nhầm dữ liệu request khác.</p>
+</section>
+
+<section id="rollout">
+<div class="section-head"><span class="section-no">08</span><h2>Triển khai có thể kiểm chứng</h2></div>
+<div class="phases">
+<article class="phase"><span>P0</span><h3>Baseline & thử nhỏ</h3><p>Snapshot 40/18 tool và hash test cũ; chạy baseline. Thử đăng ký compact riêng trên SDK 2.4.0.</p></article>
+<article class="phase"><span>P1</span><h3>Catalog compact</h3><p>Thêm factory/8 router ngoài scan legacy; giữ handler, metadata và test cũ. Chỉ thêm file test mới.</p></article>
+<article class="phase"><span>P2</span><h3>Parity & đo hiệu quả</h3><p>Chạy lại suite CLI cũ nguyên trạng và test mới; đo cả catalog, tool result, help và lịch sử.</p></article>
+<article class="phase"><span>P3</span><h3>Build & xác minh</h3><p>Build/install CLI theo skill; restart connector, whoami, đối chiếu SHA/build/process và manifest mới.</p></article>
+</div>
+<div class="two" style="margin-top:22px">
+<article class="box"><h3>Điều kiện chấp nhận</h3><ul class="checklist">
+<li>Mapping đủ 40 operation; không trùng, không thiếu.</li>
+<li>Không đổi file test cũ; không giảm discovery/execution hoặc tăng skip.</li>
+<li>Catalog thực tế: legacy 40/18, compact 10/6.</li>
+<li>Giữ handler behavior, output, error, file, undo, quyền.</li>
+<li>Client có/không có resource reader đều dùng được.</li>
+<li>Mục tiêu catalog ≤35% baseline, khoảng ≤60.054 ký tự.</li>
+<li>Task success không giảm; báo tổng token và latency workflow.</li>
+</ul><small>Mục tiêu kích thước là acceptance target đề xuất, chưa phải kết quả đo sau gộp.</small></article>
+<article class="box"><h3>Chuyển đổi và quay lại</h3><p>Ban đầu giữ default legacy, cho opt-in compact. Chỉ đổi default sau khi đạt kiểm thử và đánh giá. Quay về legacy khôi phục catalog 40/18, không rollback dữ liệu nghiệp vụ.</p><p>Scope triển khai là CLI/MCP. Không cần full release toàn repo cho riêng thay đổi này; theo skill build CLI, giữ version nguồn 4.44.44.44 và phục hồi placeholder ngày build.</p><a href="Mcp-Tool-Consolidation.md">Đọc checklist triển khai chi tiết cho AI ↗</a></article>
+</div>
+<div class="callout"><p><strong>Đề nghị thực hiện:</strong> bắt đầu bằng một spike nhỏ để chứng minh generic arguments + contract provider chạy đúng trên client đang dùng. Sau đó mở rộng đủ 10 facade. Kết quả phải được quyết định bằng chức năng giữ nguyên và token thực, không chỉ số tool đẹp hơn.</p></div>
+
+<div class="source-box">
+<h3>Nguồn và phạm vi kiểm chứng</h3><p><strong>Kiểm tra tài liệu:</strong> UTF-8, liên kết/anchor, 40 operation duy nhất (18/22), ID HTML và cú pháp JavaScript đều hợp lệ; 7 trường hợp tìm kiếm/lọc đạt. Chưa xác nhận layout bằng screenshot: Browser Use chặn protocol file://, nên không kiểm tra render/mobile trực tiếp.</p>
+<p>Đã đọc source/annotations/signatures/dispatch của catalog, host/resource discovery và các test liên quan; kiểm tra sâu dry-run, function, report, view, chart, command và file. Tác vụ hiện tại chỉ tạo tài liệu, chưa sửa MCP và chưa chạy unit tests.</p>
+<p>Baseline: <code>devkit --version</code> → 4.44.44.44 Build 14.11.2026 07:51:43. Protocol negotiate 2025-11-25. HEAD: <code>c1e64343bb26e27a51020f93a843fdb9ac257655</code>.</p>
+<p>SHA assembly cài: <code>9C2532ADDB70F831F7ED146FD786D70C1608EA96AED5AAAB9E9517F823CB456A</code>.</p>
+<p><strong>Chênh lệch đã thấy:</strong> manifest release còn ghi build 12/11/2026 và SHA khác. Phép đo dùng bản cài 14/11, không lấy manifest cũ làm bằng chứng trùng build. Bốn package Published modified từ trước được giữ nguyên.</p>
+<p><a href="../DynamicsCrm.DevKit.Cli/Mcp/McpServerHost.cs">McpServerHost</a> · <a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ReadInstructionTool.cs">ReadInstructionTool</a> · <a href="../DynamicsCrm.DevKit.Cli.UnitTests/Cli/Mcp/Infrastructure/McpServerHostCoverageTests.cs">Catalog tests</a> · <a href="../DynamicsCrm.DevKit.Cli.UnitTests/Cli/Mcp/CrossTool/DryRunGatewayContractTests.cs">Dry-run contract tests</a> · <a href="../DynamicsCrm.DevKit.Cli.UnitTests/Cli/Mcp/ManageFunction/ManageFunctionContractTests.cs">Function contract tests</a>.</p>
+<p>Bổ sung review 2: <a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/Helper/McpToolResults.cs">McpToolResults</a> · <a href="../DynamicsCrm.DevKit.Cli.UnitTests/Cli/McpToolResultsCoverageTests.cs">Output contract tests</a> · <a href="../DynamicsCrm.DevKit.Cli/Mcp/Tools/ExecuteWebApiTool.cs">ExecuteWebApiTool</a>.</p>
+<p>Đối chiếu giao thức: <a href="https://modelcontextprotocol.io/specification/2025-11-25/server/tools">MCP tools</a> định nghĩa discovery và schemas; <a href="https://modelcontextprotocol.io/specification/2025-11-25/server/resources">MCP resources</a> để host quyết định cách tải nội dung. Không suy ra quy tắc tính token từ protocol. Phương án 10 tool và budget là đề xuất trong báo cáo này.</p>
+</div>
+</section>
+<section id="review-tests">
+<div class="section-head"><span class="section-no">09</span><h2>Reuse test cũ, không sửa test cũ</h2></div>
+<div class="callout"><p><strong>Ràng buộc theo review:</strong> không sửa, xóa, rename, tham số hóa hay bổ sung method vào file test cũ. Không đổi expected values, helper, fixture, snapshot, Ignore/Skip hoặc cấu hình chạy để làm test xanh. Chỉ thêm file test mới.</p></div>
+<p>Test cũ phải chạy lại để phát hiện regression. Tuy nhiên, test cũ pass chỉ chứng minh những tình huống suite đã kiểm tra; router, binder, discovery và client compact cần test mới. Không thể dùng một bên để thay cho bên còn lại.</p>
+<h3>Yêu cầu này thay đổi cách đăng ký tool</h3>
+<p><code>McpServerHostCoverageTests</code> đang assert <strong>18/40</strong>. <code>DryRunGatewayContractTests</code> scan assembly trực tiếp và yêu cầu đúng <strong>22 mixed tool</strong>. Nếu thêm 8 annotated classes vào cùng scan, test có thể fail dù runtime chỉ quảng bá 10 tool. Vì vậy, <strong>lọc runtime chưa đủ</strong>.</p>
+<div class="two">
+<article class="box"><h3>Legacy giữ nguyên</h3><p>Giữ signatures, attributes, descriptions và helper counts cũ; giữ 13 resource, references và output helper. Test 18/40/22 tiếp tục kiểm tra hợp đồng đó, không đổi kỳ vọng.</p></article>
+<article class="box"><h3>Compact đăng ký riêng</h3><p>Thêm factory/descriptor và adapter tường minh, không lọt vào scan legacy. Descriptions ngắn nằm trên descriptor mới. Category tính từ attribute của operation cũ; test 6/10 nằm trong file mới.</p></article>
+</div>
+<p>API count/instructions cũ vẫn phục vụ legacy; API chọn surface mới cung cấp đúng catalog cho compact <code>--tools</code>, initialize và tools/list. Provider compact cho <code>read_instruction</code> dùng cùng nội dung cũ và bổ sung contract riêng. Nếu SDK không đáp ứng được cách tách này, phải báo xung đột thiết kế để review, không sửa test để hợp thức hóa.</p>
+<div class="table-scroll"><table><thead><tr><th>Bằng chứng cần có</th><th>Điều kiện đạt</th></tr></thead><tbody>
+<tr><td>Hash/diff test cũ</td><td>File cũ giữ nguyên; không đổi fixture/helper/config hoặc làm mất test.</td></tr>
+<tr><td>TRX trước và sau</td><td>Chạy lại suite CLI UnitTests net10.0 cũ; báo discovered/executed/pass/fail/skip, không chỉ một dòng “pass”.</td></tr>
+<tr><td>Test mới</td><td>Catalog 10/6, route đủ 40, binder/null/defaults, policy, contract resource và concurrency.</td></tr>
+<tr><td>Parity và artifact thực</td><td>Cùng fixture cho handler cũ/router; so payload, error, SDK calls, file/backup/publish; kiểm tra connector sau build/install.</td></tr>
+</tbody></table></div>
+<p class="muted">Nếu baseline đã có lỗi, giữ bằng chứng và báo lỗi trước/sau; không claim tất cả xanh. Tác vụ hiện tại chỉ cập nhật tài liệu, không tạo hoặc chạy các unit test đề xuất.</p>
+</section>
+
+<section id="result-tokens">
+<div class="section-head"><span class="section-no">10</span><h2>Output của tool không phải output token của model</h2></div>
+<p><strong>structuredContent không miễn token.</strong> Phần host đưa vào model context — JSON keys, values và cấu trúc — được đọc như input. Phần chỉ lưu ở server hoặc hiển thị ở UI mà không gửi cho model thì chưa trở thành model input.</p>
+<div class="flow">
+<div class="step"><strong>Model sinh lời gọi</strong><p>Tên tool và arguments thuộc output của model.</p></div><span class="arrow" aria-hidden="true">→</span>
+<div class="step"><strong>MCP trả dữ liệu</strong><p>Host chọn content/structuredContent đưa vào input của lượt model tiếp theo.</p></div><span class="arrow" aria-hidden="true">→</span>
+<div class="step"><strong>Model đọc và trả lời</strong><p>Result là input; câu trả lời mới là model output. Result có thể còn trong lịch sử các lượt sau.</p></div>
+</div>
+<p><small>Phân loại dựa trên luồng function calling của <a href="https://developers.openai.com/api/docs/guides/function-calling">OpenAI</a>. Lịch sử trong API không tự miễn input token khi dùng <a href="https://developers.openai.com/api/docs/guides/conversation-state">conversation state</a>. Chưa có phép đo representation/usage của host hiện tại; không suy ra hóa đơn hoặc quota Codex từ giá API.</small></p>
+<div class="two">
+<article class="box"><h3>outputSchema</h3><p>Mô tả <em>hình dạng</em> dữ liệu: field nào, kiểu gì. Con số <strong>43,1%</strong> ở trên thuộc catalog schema này.</p><pre><code>{"properties":{"name":{"type":"string"}}}</code></pre></article>
+<article class="box"><h3>structuredContent</h3><p><em>Dữ liệu thật</em> của một lần gọi: bản ghi, log, metadata, XML… Giảm schema không tự làm phần này ngắn hơn.</p><pre><code>{"name":"Account"}</code></pre></article>
+</div>
+<h3>Trong DevKit hiện tại, cần chú ý phần nào?</h3>
+<div class="table-scroll"><table><thead><tr><th>Luồng</th><th>Hành vi từ source</th><th>Ý nghĩa</th></tr></thead><tbody>
+<tr><td>Success / DryRun</td><td>Content text được chép vào structured.summary.</td><td>Thường lặp summary ngắn; helper không giới hạn độ dài text đầu vào.</td></tr>
+<tr><td>Partial / Failed / Error có details</td><td>Chi tiết trong text [Detail] và structured payload.</td><td>Có thể lặp nhiều dữ liệu, nhưng phục vụ tương thích client.</td></tr>
+<tr><td><strong>execute_webapi</strong></td><td>Body nằm trong Content, responseBody và summary.</td><td>Ưu tiên đo: có thể ba bản trên wire, hoặc hai bản trong structured. Không mặc định host gửi tất cả cho model.</td></tr>
+</tbody></table></div>
+<p>Web API đã cắt theo số dòng và giới hạn 20.000 ký tự, nhưng body sau giới hạn vẫn được đưa vào summary. Các test cũ kiểm tra summary/[Detail]/IsError phải giữ nguyên. MCP khuyến nghị JSON text fallback cho structured content, nên không xóa một kênh trả dữ liệu trước khi kiểm chứng client. <a href="https://modelcontextprotocol.io/specification/2025-11-25/server/tools#structured-content">MCP structured content</a>.</p>
+<h3>Nên giảm, nhưng giảm theo nhu cầu</h3>
+<div class="two">
+<article class="box"><h3>Đợt A · Dùng contract hiện có</h3><ul class="checklist">
+<li>Query chỉ chọn cột cần, filter đúng; dùng aggregate cho yêu cầu đếm/tổng.</li>
+<li>Dùng max_records/top và get_all=false khi chỉ cần xem mẫu; không đổi default legacy.</li>
+<li>Metadata compact/standard khi đủ; dùng full khi clone cột/formula.</li>
+<li>List trước, detail theo ID; giới hạn thời gian/status khi đọc log.</li>
+<li>Giữ XML/RDL và backup đầy đủ cho sửa/undo; không cắt dữ liệu cần cho hành động.</li>
+</ul></article>
+<article class="box"><h3>Đợt B · View ngắn opt-in, nếu cần</h3><ul class="checklist">
+<li>Thêm presentation riêng; full/default và helper legacy giữ nguyên.</li>
+<li>Summary/page có schema công bố đúng; báo rõ phần nào chưa đầy đủ.</li>
+<li>Giữ ID/status/warnings/errors/partial counts/backupPath và kết quả publish.</li>
+<li>Mọi phần không inline phải lấy lại được bằng detail/paging/resource hoặc đường đọc đã kiểm thử.</li>
+<li>Đọc lại snapshot của mutation không được chạy lại mutation.</li>
+</ul></article>
+</div>
+<div class="callout warn"><p><strong>Chỉ trả đường dẫn file chưa đủ.</strong> Client ở máy khác có thể không đọc được; client không hỗ trợ resources cần đường đọc phù hợp. Chưa chứng minh lấy lại đủ dữ liệu thì giữ full result. Thiết kế view mới là hạng mục cần review riêng, chưa chốt thêm tham số vào tám router hiện tại.</p></div>
+<p>Giảm duplication tốt nhất tại lớp presentation/host đã biết client cần kênh nào: cho model đọc một bản cần thiết, giữ fallback/display đúng hợp đồng. Nếu không kiểm soát host, không cam kết mức giảm này. Không đổi key thành a/b/c, bỏ null/false/0 có ý nghĩa hoặc nén/base64 rồi bắt model đọc.</p>
+<p><strong>Đo toàn workflow:</strong> catalog + result mới + lịch sử + help/retry, cùng output model sinh. Không cộng “tool output token” thêm một lần vào input đã chứa result. Báo cached input riêng. Nếu người dùng cần đọc toàn bộ dữ liệu thì chia trang có thể vẫn tốn tổng token tương đương hoặc hơn; tiết kiệm thật đến từ không nạp phần không cần hoặc xử lý phù hợp phía server.</p>
+<p class="muted">Chưa benchmark result-size/token của 40 operation. Những điểm về duplication ở đây là truy vết source; mức token phải xác nhận bằng representation/usage thật của từng client.</p>
+</section>
+<footer class="foot">DevKit MCP · Architecture review 2 · 14/11/2026 · Test cũ bất biến; catalog và result được đánh giá riêng.</footer>
+</main></div>
+<script>
+(function(){
+const input=document.getElementById('filter'), kind=document.getElementById('kind'), rows=Array.from(document.querySelectorAll('#inventory tr')), count=document.getElementById('count');
+function normalized(value){return value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').toLowerCase();}
+function apply(){const q=normalized(input.value.trim());let visible=0;rows.forEach(row=>{const match=(!q||normalized(row.dataset.search).includes(q))&&(kind.value==='all'||row.dataset.read===kind.value);row.hidden=!match;if(match)visible++;});count.textContent=visible+' / 40 operation';}
+input.addEventListener('input',apply);kind.addEventListener('change',apply);
+window.addEventListener('beforeprint',()=>rows.forEach(row=>row.hidden=false));window.addEventListener('afterprint',apply);
+})();
+</script>
+</body></html>
