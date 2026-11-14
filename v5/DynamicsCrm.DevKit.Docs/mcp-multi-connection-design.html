@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevKit MCP Multi-Connection — 1 server, nhiều env, policy per-connection, alias theo tên</title>
+<style>
+  :root { --ink:#1a1a2e; --muted:#555; --accent:#0b66c3; --accent2:#0a7d4f; --warn:#b35900; --bad:#b32424; --bg:#fbfbfd; --code:#f4f4f8; --border:#ddd; }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", system-ui, -apple-system, sans-serif; color: var(--ink); background: var(--bg); margin: 0; line-height: 1.55; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 24px 32px 80px; }
+  h1 { font-size: 1.7em; border-bottom: 3px solid var(--accent); padding-bottom: 10px; margin-top: 8px; }
+  h2 { font-size: 1.3em; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-top: 40px; }
+  h3 { font-size: 1.1em; margin-top: 26px; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.93em; background: #fff; }
+  th, td { border: 1px solid var(--border); padding: 7px 10px; text-align: left; vertical-align: top; }
+  th { background: #eef3fa; }
+  code, pre { font-family: Consolas, "Cascadia Mono", monospace; font-size: 0.9em; }
+  code { background: var(--code); padding: 1px 5px; border-radius: 3px; }
+  pre { background: var(--code); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; overflow-x: auto; line-height: 1.45; }
+  .tldr { background: #e8f4ec; border: 2px solid var(--accent2); border-radius: 8px; padding: 14px 18px; margin: 18px 0; }
+  .warnbox { background: #fdf3e7; border-left: 5px solid var(--warn); border-radius: 4px; padding: 10px 16px; margin: 14px 0; }
+  .badbox { background: #fdecec; border-left: 5px solid var(--bad); border-radius: 4px; padding: 10px 16px; margin: 14px 0; }
+  .safebox { background: #e8f4ec; border-left: 5px solid var(--accent2); border-radius: 4px; padding: 10px 16px; margin: 14px 0; }
+  .tag { display: inline-block; padding: 1px 9px; border-radius: 10px; font-size: 0.8em; font-weight: 600; vertical-align: middle; }
+  .tag-ok { background: #d9f2e3; color: #0a6b3d; }
+  .tag-no { background: #fadcdc; color: #9a2020; }
+  .tag-mid { background: #fdeecb; color: #8a5a00; }
+  .meta { color: var(--muted); font-size: 0.92em; }
+  .toc a { color: var(--accent); text-decoration: none; }
+  .toc li { margin: 3px 0; }
+  .small { font-size: 0.88em; color: var(--muted); }
+  .q { background: #f0f5ff; border-left: 5px solid var(--accent); border-radius: 4px; padding: 10px 16px; margin: 14px 0; }
+  kbd { background:#eee; border:1px solid #ccc; border-radius:3px; padding:0 5px; font-family: monospace; font-size:0.88em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>DevKit MCP Multi-Connection — 1 server, nhiều env, policy per-connection, alias theo tên</h1>
+<p class="meta">
+  Ngày: 2026-11-14 · rev 3 — <strong>env setup luôn là SỐ, thêm ALIAS</strong> (<code>DEVKIT_1_ALIAS=prod</code>) theo ruling anh Phước ·
+  rev 2 — dry-run / impersonation per-connection, phân tích lại dry-run vs readonly ·
+  Trạng thái: <strong>PROPOSAL — chờ anh Phước review</strong> ·
+  File spec để AI code: <a href="Cli/mcp-multi-connection.md"><code>DynamicsCrm.DevKit.Docs/Cli/mcp-multi-connection.md</code></a> ·
+  Feature nền (đã ship): <a href="Cli/mcp-env.md"><code>Cli/mcp-env.md</code></a>
+</p>
+
+<div class="tldr">
+  <strong>TL;DR — Khuyến nghị:</strong> Giữ <strong>1 MCP server duy nhất</strong> trong client config, thêm
+  <strong>1 param tùy chọn <code>env</code></strong> vào mọi tool + <strong>1 tool mới <code>connection_list</code></strong>.
+  Server tự khai phá các nhóm <code>DEVKIT_1_*</code>, <code>DEVKIT_2_*</code>… trong <code>.env</code> và
+  <strong>connect lười (lazy) khi lần đầu được gọi tới</strong>.
+  <br><br>
+  <strong>Policy theo connection:</strong> key <code>DEVKIT_1_DRY_RUN=true</code> biến nhóm 1 thành
+  <strong>PROD đọc-chỉ-an-toàn</strong> (mutation bị chặn tại boundary, đọc thoải mái), nhóm không có key thì ghi tự do
+  → đúng kịch bản <em>"prod để dry-run cho an toàn, dev tự do, nhờ AI compare data / compare schema… đủ thứ"</em>.
+  <br><br>
+  <strong>Alias theo tên (rev 3):</strong> <code>.env</code> vẫn đặt bằng số, mỗi nhóm có thể đặt thêm bí danh —
+  <code>DEVKIT_1_ALIAS=prod</code>, <code>DEVKIT_2_ALIAS=uat</code>. AI truyền <code>env: "prod"</code> hoặc
+  <code>env: "1"</code> — cùng một nhóm. Prompt <em>"hãy dùng mcp uat…"</em> → <code>env:"uat"</code>;
+  prompt không mention → default. Numeric là canonical, alias chỉ là địa chỉ thêm.
+  <br><br>
+  Chi phí schema: <strong>~40K → ~42K tokens</strong> thay vì <strong>~80K</strong> khi chạy 2 server
+  (tiết kiệm <strong>~48%</strong>). Behavior mặc định <strong>không đổi</strong>.
+</div>
+
+<h2 id="toc">Mục lục</h2>
+<ol class="toc">
+  <li><a href="#s1">Vấn đề hiện tại &amp; số liệu đo thật (2026-11-14)</a></li>
+  <li><a href="#s2">Mục tiêu &amp; ràng buộc</a></li>
+  <li><a href="#s3">Các phương án: A / B / C / D</a></li>
+  <li><a href="#s4">Thiết kế chi tiết phương án A (khuyến nghị)</a></li>
+  <li><a href="#s5">Safety model — dry-run per-connection vs <code>--category readonly</code></a></li>
+  <li><a href="#s6">AI dùng "mcp uat" như thế nào? Kịch bản prod/dev</a></li>
+  <li><a href="#s7">Token budget</a></li>
+  <li><a href="#s8">Công việc triển khai dự kiến (work units)</a></li>
+  <li><a href="#s9">Câu hỏi mở — chờ anh Phước chốt</a></li>
+</ol>
+
+<h2 id="s1">1. Vấn đề hiện tại &amp; số liệu đo thật (2026-11-14)</h2>
+
+<h3>1.1 Hiện trạng kiến trúc</h3>
+<p>Đo bằng probe stdio thật trên <code>devkit 4.44.44.44 (Build 14.11.2026 07:51:43)</code>, đếm token bằng
+tokenizer <code>o200k_base</code>:</p>
+
+<table>
+  <tr><th>Thiết lập</th><th>Số tool</th><th>Chars (raw <code>tools/list</code>)</th><th>Tokens (o200k)</th><th>Ghi chú</th></tr>
+  <tr><td>1 server, <code>all</code> (mặc định)</td><td>40</td><td>171,583</td><td><strong>~39,900</strong></td><td>18 readonly + 22 mutation</td></tr>
+  <tr><td>1 server, <code>--category readonly</code></td><td>18</td><td>71,076</td><td>~16,800</td><td>−58%</td></tr>
+  <tr><td><strong>2 server</strong> (env 1 + env 2 trong client config)</td><td>80</td><td>343,166</td><td><strong>~79,800</strong></td><td>Không dedup — schema y hệt nhân đôi</td></tr>
+</table>
+
+<p>Cơ chế nối kết + policy hiện tại — <strong>cả connection lẫn policy đều resolve một lần lúc startup rồi "đóng băng"
+toàn cục</strong>:</p>
+
+<pre>McpCommand.ExecuteAsync                     (Commands/McpCommand.cs:29)
+  ├─ ResolveConnectionSettings()            (:118)  args → .env walk-up, --env chọn nhóm DEVKIT_&lt;id&gt;_*
+  ├─ ConnectAsync()                         (:173)  → ĐÚNG MỘT ServiceClient
+  └─ new McpServerHost(serviceClient).RunAsync()
+
+McpServerHost.RegisterSharedServices()      (Mcp/McpServerHost.cs:144)
+  ├─ AddSingleton(serviceClient)                        ← connection đóng băng
+  ├─ AddSingleton&lt;IOrganizationService&gt;(…ServiceClient)
+  ├─ AddSingleton&lt;IMcpConnectionInfo&gt; / IWebApiExecutor / MetadataService
+  └─ AddSingleton(McpExecutionPolicy)        ← policy đóng băng: --dry-run + --as-user ÁP CHO TOÀN PROCESS
+
+McpExecutionPolicy                          (Mcp/McpServerOptions.cs:13) — "startup-only policy source"
+  ├─ Options: McpDryRunOptions { DryRun }
+  └─ Context: McpExecutionContext { MutationsBlocked, ImpersonatedUser }
+       └─ AssertMutationAllowed() gọi ở MỌI mutation boundary (29 tool inject Context, 23 inject Options)
+
+Mỗi tool: constructor injection
+  ManageRecordTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)</pre>
+
+<p>Để một session AI dùng được 2 môi trường, hiện phải khai báo <strong>2 server entry</strong>:</p>
+
+<pre>"devkit-zcode":   { "args": ["mcp", "devkit-zcode"] }                    → DEVKIT_*
+"devkit-zcode-2": { "args": ["mcp", "--env", "1", "devkit-zcode-2", "--dry-run"] }  → DEVKIT_1_* + dry-run cả process</pre>
+
+<div class="badbox">
+  <strong>Hậu quả:</strong> 80 tool schema → <strong>~80K tokens</strong> mỗi session, 2 process, 2 lần
+  <code>whoami</code> để xác minh. Và điểm mù về an toàn: <code>--dry-run</code> là <strong>toàn cục</strong> —
+  muốn prod an toàn thì dev cũng bị kèm dry-run (hoặc phải chạy 2 process với 2 flag khác nhau).
+</div>
+
+<h3>1.2 Điều đã có sẵn</h3>
+<p>Feature <code>--env &lt;id&gt;</code> (ship 2026-11-12, <a href="Cli/mcp-env.md">Cli/mcp-env.md</a>) đã dựng xong
+nền móng — <strong>không cần đổi format <code>.env</code>, chỉ thêm key <code>ALIAS</code> + key policy</strong>:</p>
+<ul>
+  <li>Nhóm mặc định <code>DEVKIT_*</code> + các nhóm đánh số <code>DEVKIT_1_*</code>, <code>DEVKIT_2_*</code>, … không cần liên tiếp, không giới hạn số lượng.</li>
+  <li><code>ProjectEnvironment</code> (Shared): <code>Read()</code>, <code>HasGroup()</code>, <code>GetValue(values, key, groupId)</code> (đã có overload theo nhóm), <code>IsValidGroupId()</code>, <code>GetGroupKey()</code> — <strong>giữ nguyên 100%</strong>, alias là key không-phải-connection-field (tiền tố <code>DEVKIT_NO_COLOR</code> đã mở đường).</li>
+  <li>Rules đã phê: args thắng per-field, <strong>không bao giờ</strong> trộn nhóm, không đọc OS env var.</li>
+  <li>File <code>.env</code> ở workspace hiện tại <em>đã có sẵn</em> nhóm mặc định + nhóm <code>1</code> (đã xác minh tên key, không đọc giá trị).</li>
+</ul>
+
+<h2 id="s2">2. Mục tiêu &amp; ràng buộc</h2>
+
+<table>
+  <tr><th>#</th><th>Mục tiêu</th></tr>
+  <tr><td>G1</td><td><strong>1 server entry</strong> trong MCP client config — 1× token schema (~40K), 1 process.</td></tr>
+  <tr><td>G2</td><td>AI gọi được <strong>cả hai (hoặc N) connection</strong> khai trong <code>.env</code> — chọn <strong>từng lệnh gọi</strong>, không cần restart.</td></tr>
+  <tr><td>G3</td><td>Behavior mặc định (không truyền <code>env</code>, không có key mới) <strong>byte-identical</strong> với hôm nay.</td></tr>
+  <tr><td>G4</td><td>AI <strong>tự khám phá</strong> được danh sách env (id + alias + trạng thái bảo vệ) mà không cần hỏi lại người dùng.</td></tr>
+  <tr><td>G5</td><td><strong>An toàn per-connection:</strong> env PROD đặt dry-run → mutation bị chặn ngay trên env đó; env DEV ghi tự do. AI compare data/schema chéo 2 env một cách an toàn.</td></tr>
+  <tr><td>G6</td><td><strong>Ngôn ngữ prompt = ngôn ngữ .env:</strong> nhóm có alias (<code>prod</code>, <code>uat</code>) thì prompt "dùng mcp uat" khớp trực tiếp; không mention gì → default. <code>.env</code> <strong>vẫn đặt bằng số</strong> (ruling rev 3).</td></tr>
+  <tr><td>G7</td><td>Không lộ secret; không tạo state ẩn AI có thể quên (an toàn khi mutation).</td></tr>
+</table>
+
+<table>
+  <tr><th>#</th><th>Ràng buộc</th></tr>
+  <tr><td>C1</td><td>Scope <strong>chỉ <code>devkit mcp</code></strong> — không đụng <code>generator</code>/<code>server</code>/VSIX (ruling của mcp-env.md).</td></tr>
+  <tr><td>C2</td><td>Giữ nguyên mọi error text / output shape / JSON key hiện có, trừ những chỗ task này explicitly đổi.</td></tr>
+  <tr><td>C3</td><td>Startup fail-fast giữ nguyên: chỉ connection <em>default</em> được connect lúc startup (hỏng → exit 2 như cũ); thêm: validate giá trị key mới (<code>ALIAS</code>, <code>DRY_RUN</code>) lúc startup.</td></tr>
+  <tr><td>C4</td><td><code>--dry-run</code> / <code>--as-user</code> giữ nguyên ngữ nghĩa khi <strong>không có</strong> key policy trong <code>.env</code> (cascade — xem mục 5.2). <code>--category</code> giữ nguyên per-server.</td></tr>
+  <tr><td>C5</td><td>Không đọc lại <code>.env</code> khi server đang chạy — đổi <code>.env</code> phải restart server.</td></tr>
+  <tr><td>C6</td><td>Nhóm trong <code>.env</code> <strong>luôn định danh bằng số</strong> (<code>DEVKIT_1_*</code>); alias chỉ là tên gọi thêm, không bao giờ thay thế id trong cấu hình.</td></tr>
+</table>
+
+<h2 id="s3">3. Các phương án: A / B / C / D</h2>
+
+<table>
+  <tr>
+    <th>Phương án</th><th>Cơ chế</th><th>Tokens (full)</th><th>State ẩn / rủi ro mutation sai env</th>
+    <th>Policy per-connection</th><th>Kết luận</th>
+  </tr>
+  <tr>
+    <td><strong>A — Param <code>env</code> per-call</strong><br><span class="small">(khuyến nghị)</span></td>
+    <td>Mọi tool thêm param optional <code>env</code> (id hoặc alias); registry connect lười theo nhóm; <strong>policy đi theo bundle</strong>.</td>
+    <td>~42K</td>
+    <td><span class="tag tag-ok">KHÔNG</span> — mỗi call tự khai rõ; 2 call song song 2 env vẫn an toàn</td>
+    <td><span class="tag tag-ok">CÓ</span> — <code>DEVKIT_1_DRY_RUN=true</code> chặn mutation riêng nhóm 1</td>
+    <td><span class="tag tag-ok">CHỌN</span></td>
+  </tr>
+  <tr>
+    <td><strong>B — Tool <code>use_env</code> chuyển connection "active"</strong></td>
+    <td>1 tool mới đổi connection toàn process; các tool giữ nguyên signature.</td>
+    <td>~40.3K</td>
+    <td><span class="tag tag-no">CÓ</span> — state ẩn toàn process: AI quên mình đã switch → mutation nhầm org; call song song đè nhau; policy cũng phải "active theo state"</td>
+    <td><span class="tag tag-mid">Khó</span> — policy phải đổi theo state, cách cửa mutation</td>
+    <td><span class="tag tag-no">LOẠI</span></td>
+  </tr>
+  <tr>
+    <td><strong>C — Nhân tool theo env</strong> (<code>whoami_1</code>…)</td>
+    <td>Clone tool set per env trong 1 process.</td>
+    <td>~80K</td>
+    <td><span class="tag tag-ok">KHÔNG</span></td>
+    <td><span class="tag tag-ok">CÓ</span> (per clone)</td>
+    <td><span class="tag tag-no">LOẠI</span> — token bằng đúng 2 server, mất hết ý nghĩa</td>
+  </tr>
+  <tr>
+    <td><strong>D — Giữ nguyên 2 server</strong></td>
+    <td>Status quo — cách hiện nay đạt "prod dry-run / dev tự do": 2 process, 2 flag khác nhau.</td>
+    <td>~80K</td>
+    <td><span class="tag tag-ok">KHÔNG</span></td>
+    <td><span class="tag tag-ok">CÓ</span> (mỗi process 1 flag)</td>
+    <td><span class="tag tag-mid">Baseline</span> — an toàn được nhưng đắt gấp đôi token</td>
+  </tr>
+</table>
+
+<div class="warnbox">
+  <strong>Vì sao loại B dù rẻ nhất?</strong> Thiết kế hiện tại của DevKit cố tình đặt policy
+  (<code>McpExecutionContext</code>, dry-run, CallerId) <strong>ngoài tầm với của AI</strong> — server-side, fail-closed.
+  Connection "active" AI-controlled là state ẩn ngược hẳn triết lý đó: quên switch = mutation nhầm org, và nếu policy
+  cũng đi theo "active connection" thì một lần quên switch là prod mất áo giáp. Lưu AsyncLocal không cứu được vì
+  AsyncLocal set trong 1 request <em>không chảy</em> sang request khác.
+</div>
+
+<div class="warnbox">
+  <strong>Vì sao alias thay vì nhóm đặt tên tự do (<code>DEVKIT_PROD_URL</code>)?</strong> Parser hiện tại đọc
+  <code>DEVKIT_&lt;FIELD&gt;</code> cho nhóm default — không có cách phân biệt chắc chắn
+  <code>DEVKIT_AUTH_TYPE</code> (field default) với <code>DEVKIT_AUTH_TYPE_URL</code> (nhóm "AUTH_TYPE", field "URL")
+  mà không sinh ra parser two-pass dễ lỗi và rủi ro phá file <code>.env</code> cũ. Alias
+  (<code>DEVKIT_1_ALIAS=prod</code>) giữ numeric làm xương sống — đúng ruling "env setup luôn là số" — với
+  <strong>0 thay đổi parser</strong>.
+</div>
+
+<h2 id="s4">4. Thiết kế chi tiết phương án A (khuyến nghị)</h2>
+
+<h3>4.1 Sơ đồ</h3>
+<pre>MCP client (ZCode / Claude / Codex / Copilot / Antigravity)      ← CHỈ 1 server entry
+        │  stdio
+        ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│  devkit mcp devkit-zcode                         (1 process)             │
+│                                                                          │
+│  tools/list → 40 tool + connection_list (41)                             │
+│  mọi tool: param optional  env?: string   (id "1" HOẶC alias "prod")     │
+│  ServerInstructions: "Connection groups: default (startup),              │
+│                       1 (prod; dry-run: mutations blocked), 2 (uat)"     │
+│                                                                          │
+│  McpConnectionRegistry  (singleton, thread-safe)                         │
+│    ├─ "default" → bundle{ client, policy }  ← connect LÚC STARTUP        │
+│    ├─ "1"       → Lazy&lt;bundle{ client, policy }&gt;  ← connect lần đầu      │
+│    │              alias: "prod" → nhóm 1                                 │
+│    │              policy từ DEVKIT_1_DRY_RUN / DEVKIT_1_AS_USER          │
+│    ├─ "2"       → Lazy&lt;bundle…&gt;   alias: "uat"                           │
+│                                                                          │
+│  { env:"prod" } → alias→1 → bundle 1 (dry-run ON) → mutation bị chặn     │
+│  { env:"1" }    → bundle 1  (cùng nhóm, hai địa chỉ)                     │
+│  { }            → default bundle (dry-run OFF) → ghi được                │
+│  { env:"xyz" }  → [Error] + [Hint] + [Detail] (3-part error)             │
+└──────────────────────────────────────────────────────────────────────────┘
+        │                                    │
+        ▼                                    ▼
+  DEV org (DEVKIT_*)                    PROD org (DEVKIT_1_*, alias prod)
+  mutation OK                           dry-run ON — đọc thoải mái,
+                                        mutation → [DryRun] blocked</pre>
+
+<h3>4.2 Thành phần mới</h3>
+
+<table>
+  <tr><th>Thành phần</th><th>Loại</th><th>Trách nhiệm</th></tr>
+  <tr>
+    <td><code>Mcp/McpConnectionRegistry.cs</code><br>+ interface <code>IMcpConnectionResolver</code></td>
+    <td>NEW (Cli)</td>
+    <td>Giữ <code>ConnectionBundle</code> default (từ startup) + <code>ConcurrentDictionary&lt;string, Lazy&lt;ConnectionBundle&gt;&gt;</code> theo nhóm. <code>Resolve(env)</code>: null/whitespace/"default" → default bundle; id số → nhóm đó; alias → lookup case-insensitive về id; unknown → exception mang danh sách id(+alias). Policy per-bundle.</td>
+  </tr>
+  <tr>
+    <td><code>Mcp/ConnectionBundle.cs</code></td>
+    <td>NEW (Cli)</td>
+    <td>Record gói dependency của MỘT connection: <code>ServiceClient</code>, <code>IOrganizationService</code>, <code>IOrganizationServiceAsync2</code>, <code>MetadataService</code>, <code>IMcpConnectionInfo</code>, <code>IWebApiExecutor</code>, <strong><code>McpDryRunOptions Options</code>, <code>McpExecutionContext Context</code></strong> (policy per-connection qua <code>McpExecutionPolicy</code> hiện có), <code>EnvId</code>, <code>Alias</code>, <code>Source</code>.</td>
+  </tr>
+  <tr>
+    <td><code>McpConnectionFactory</code> (extract từ <code>McpCommand.ResolveConnectionSettings</code> + <code>ConnectAsync</code>)</td>
+    <td>REFACTOR (Cli)</td>
+    <td>Tách logic resolve-args + connect + <strong>resolve policy nhóm</strong> ra helper tái sử dụng — startup và lazy path dùng <strong>cùng một code path</strong> (cùng builder, cùng validation, cùng decrypt secret, cùng resolve impersonation + check System Administrator per connection).</td>
+  </tr>
+  <tr>
+    <td><code>ProjectEnvironment</code>: key <code>DEVKIT_&lt;id&gt;_ALIAS</code> (+<code>DEVKIT_ALIAS</code> cho default, D10) + <code>GetAvailableGroupIds()</code> + validate key mới</td>
+    <td>NEW (Shared)</td>
+    <td>ALIAS là key không-phải-connection-field. <code>GetAvailableGroupIds(values)</code>: scan TÊN key → id nhóm tồn tại, không đọc giá trị. Validation alias: charset, không trùng, không reserved (mục 4.4).</td>
+  </tr>
+  <tr>
+    <td><code>Mcp/Tools/ConnectionListTool.cs</code></td>
+    <td>NEW tool (readonly)</td>
+    <td>Liệt kê nhóm: id, alias, authType, url, clientId/username, trạng thái connected, <strong>dryRun (effective)</strong>, impersonation — không bao giờ secret.</td>
+  </tr>
+</table>
+
+<h3>4.3 Param <code>env</code> — hợp đồng chính xác</h3>
+
+<ul>
+  <li><strong>Tên:</strong> <code>env</code> — parity với flag <code>--env</code> của CLI.</li>
+  <li><strong>Kiểu:</strong> <code>string</code>, optional (schema không required).</li>
+  <li><strong>Value space:</strong></li>
+</ul>
+
+<table>
+  <tr><th>Giá trị</th><th>Ý nghĩa</th></tr>
+  <tr><td>bỏ trống / <code>null</code> / <code>""</code></td><td>Nhóm default (startup connection) — hành vi hôm nay</td></tr>
+  <tr><td><code>"default"</code></td><td>Nhóm default (tường minh)</td></tr>
+  <tr><td><code>"1"</code>, <code>"2"</code>, …</td><td>Nhóm số tương ứng (<code>DEVKIT_1_*</code>, …)</td></tr>
+  <tr><td><code>"prod"</code>, <code>"uat"</code>, …</td><td>Nhóm có <code>ALIAS</code> khớp (case-insensitive) → <code>env:"prod"</code> ≡ <code>env:"1"</code> nếu nhóm 1 alias prod</td></tr>
+  <tr><td>khác</td><td>[Error] 3-phần + danh sách nhóm khả dụng (mục 4.8)</td></tr>
+</table>
+
+<ul>
+  <li><strong>Vị trí:</strong> param đầu tiên của mỗi tool method (nhất quán để AI dễ nhận diện).</li>
+  <li><strong>Description chuẩn (verbatim, dùng chung 40 tool):</strong></li>
+</ul>
+
+<pre>"Optional .env connection group (numeric id like \"1\" or alias like \"prod\") to
+target for this call. Omit to use the startup connection. Use connection_list
+to list groups."</pre>
+
+<h3>4.4 Alias — quy tắc</h3>
+
+<table>
+  <tr><th>Rule</th><th>Nội dung</th></tr>
+  <tr><td>Key</td><td><code>DEVKIT_&lt;id&gt;_ALIAS</code> (nhóm số) và <code>DEVKIT_ALIAS</code> (nhóm default — D10). Không thuộc <code>ConnectionKeys</code> — build cũ đọc .env mới sẽ bỏ qua an toàn.</td></tr>
+  <tr><td>Charset</td><td><code>[A-Za-z][A-Za-z0-9_-]*</code> — phải bắt đầu bằng chữ cái ⇒ <strong>không bao giờ trùng vùng giá trị số</strong> ("1" luôn là id, "prod" luôn là alias).</td></tr>
+  <tr><td>Case</td><td>Khớp case-insensitive; hiển thị theo dạng viết trong .env.</td></tr>
+  <tr><td>Reserved</td><td><code>default</code> (bất kỳ hoa/thường) bị cấm — trùng giá trị reserved của param.</td></tr>
+  <tr><td>Unique</td><td>Hai nhóm trùng alias (kể cả khác hoa/thường) → <strong>lỗi startup, exit 2</strong>.</td></tr>
+  <tr><td>Tùy chọn</td><td>Nhóm không có alias vẫn dùng được qua id số. Alias rỗng/trắng = không đặt.</td></tr>
+  <tr><td>Fail-fast</td><td>Alias sai charset / reserved / trùng lặp → báo lỗi ngay lúc startup (cùng lượt validate DRY_RUN).</td></tr>
+</table>
+
+<h3>4.5 Tool mới <code>connection_list</code> (readonly)</h3>
+
+<pre>[Success] Found 3 connection group(s): default (startup), 1 (prod), 2 (uat).
+
+Structured:
+{
+  "groups": [
+    { "env": "default", "alias": "dev", "isStartupDefault": true,  "connected": true,
+      "authType": "ClientSecret", "url": "https://dev-org.crm.dynamics.com",
+      "clientId": "…", "username": null,
+      "dryRun": false, "impersonating": null,
+      "source": "project .env (DEVKIT_*)" },
+    { "env": "1", "alias": "prod", "isStartupDefault": false, "connected": false,
+      "authType": "ClientSecret", "url": "https://prod-org.crm.dynamics.com",
+      "clientId": "…", "username": null,
+      "dryRun": true, "impersonating": null,
+      "source": "project .env (DEVKIT_1_*)" },
+    { "env": "2", "alias": "uat", "isStartupDefault": false, "connected": false,
+      "authType": "ClientSecret", "url": "https://uat-org.crm.dynamics.com",
+      "clientId": "…", "username": null,
+      "dryRun": false, "impersonating": null,
+      "source": "project .env (DEVKIT_2_*)" }
+  ],
+  "summary": "[Success] Found 3 connection group(s): default (startup), 1 (prod), 2 (uat)."
+}</pre>
+
+<ul>
+  <li><code>env</code> = id số canonical (luôn gọi được); <code>alias</code> = tên gọi hoặc <code>null</code> — AI thấy cả hai địa chỉ.</li>
+  <li><code>dryRun</code> là giá trị <strong>effective sau cascade</strong> (mục 5.2) — nhìn phát biết env nào được bảo vệ.</li>
+  <li><strong>Không bao giờ</strong> trả <code>clientSecret</code>/<code>password</code>; nhóm chưa từng dùng không được connect (cột <code>connected</code>).</li>
+  <li>Hoàn toàn tương thích <code>--category readonly</code> (là readonly tool).</li>
+</ul>
+
+<h3>4.6 <code>whoami</code> — thay đổi</h3>
+<ul>
+  <li>Thêm param <code>env</code> (như mọi tool).</li>
+  <li>Structured output thêm 2 field ở top-level (D2 — luôn có, kể cả default):
+    <ul>
+      <li><code>"env"</code>: <code>"default"</code> hoặc <strong>giá trị AI truyền vào</strong> (id <em>hoặc</em> alias) — khớp ngôn ngữ prompt để đối chiếu.</li>
+      <li><code>"dryRun"</code>: <code>true</code>/<code>false</code> — policy effective của connection vừa dùng.</li>
+    </ul>
+  </li>
+  <li>Summary line khi dùng nhóm ≠ default: thêm <code>(env &lt;giá trị truyền&gt;)</code> — VD
+  <code>[Success] Connected to PROD (…) as # DEVKIT. Dataverse 9.2.…. 1 security role(s). (env prod)</code>.
+  Khi default → <strong>không thêm gì</strong>, output giữ nguyên byte cũ (kể cả khi truyền alias của default).</li>
+</ul>
+
+<h3>4.7 Tag env trên các tool còn lại</h3>
+<p>Để mặc định byte-identical (G3): các tool khác <strong>chỉ thêm tag khi env ≠ default</strong> — hậu tố
+<code> | env &lt;giá trị truyền&gt;</code> ở cuối dòng summary (echo đúng giá trị AI truyền: <code>| env 1</code>
+hoặc <code>| env prod</code>). Call không truyền <code>env</code> → output giữ nguyên 100%. Áp dụng cả text
+<code>[DryRun]</code>: <code>[DryRun] Mutation blocked: Create account | env prod</code>.
+<span class="small">(Decision point #3)</span></p>
+
+<h3>4.8 Error contract (mẫu 3 phần đã phê)</h3>
+
+<pre>→ gọi tool với env="xyz" khi .env chỉ có default + nhóm 1 (alias prod) + 2 (alias uat):
+
+[Error] Unknown connection group 'xyz'.
+[Hint] Use connection_list to list available groups, or omit env (or pass "default") to use the startup connection.
+[Detail] { "requested": "xyz", "availableGroups": ["default", "1 (prod)", "2 (uat)"], "startupDefault": "default" }
+
+→ lazy connect thất bại cho nhóm "1":
+
+[Error] Connection failed for group '1': &lt;LastError&gt;
+[Hint] Fix the DEVKIT_1_* keys in the project .env, then retry; the server does not reload .env while running.
+[Detail] { "requested": "1", "authType": "ClientSecret", "url": "https://prod-org.crm.dynamics.com" }
+
+→ alias sai quy tắc (bắt TẠI STARTUP, exit 2):
+
+[DevKit MCP ERROR] Invalid DEVKIT_2_ALIAS value '1dev' in the project .env. Aliases must start with a letter and use only letters, digits, '_' or '-'.
+[DevKit MCP ERROR] Duplicate alias 'prod' in the project .env (DEVKIT_1_ALIAS, DEVKIT_3_ALIAS). Aliases must be unique.
+[DevKit MCP ERROR] DEVKIT_1_ALIAS uses the reserved name 'default'. Choose another alias.</pre>
+
+<h3>4.9 Thread-safety &amp; vòng đời</h3>
+<ul>
+  <li><code>ConcurrentDictionary&lt;string, Lazy&lt;ConnectionBundle&gt;&gt;</code> — connect đúng 1 lần/nhóm dù gọi song song; alias lookup là thuần map → không thêm state.</li>
+  <li>Policy per-bundle dựng 1 lúc connect nhóm (từ <code>McpExecutionPolicy</code>) — <strong>immutable suốt process</strong>: AI không thể "tắt dry-run prod" lúc chạy (giữ triết lý policy-ngoài-tầm-với).</li>
+  <li>Mutation executors (<code>DataverseMutationExecutor</code>, <code>DataverseWebApiMutationExecutor</code>) đã nhận <code>context</code> qua argument → context bundle chảy vào boundary tự nhiên, không đổi chữ ký.</li>
+  <li><code>ServiceClient</code> an toàn gọi đồng thời; token refresh SDK tự quản. Failed lazy connect KHÔNG cache — lần sau thử lại.</li>
+  <li>Không reload <code>.env</code> lúc chạy (C5).</li>
+</ul>
+
+<h3>4.10 Client config sau khi ship (ZCode)</h3>
+
+<pre>.zcode/config.json — KHÔNG ĐỔI so với hôm nay (đang là 1 entry):
+{
+  "mcp": {
+    "servers": {
+      "devkit-zcode": {
+        "type": "stdio",
+        "command": "devkit",
+        "args": ["mcp", "devkit-zcode"],
+        "timeoutMs": 600000
+      }
+    }
+  }
+}
+
+.env (gitignored) — kịch bản prod/dev/uat của anh Phước:
+# Default group = DEV (ghi tự do), có tên gọi riêng nếu muốn
+DEVKIT_AUTH_TYPE=ClientSecret
+DEVKIT_URL=https://dev-org.crm.dynamics.com
+DEVKIT_CLIENT_ID=…
+DEVKIT_CLIENT_SECRET=…
+DEVKIT_ALIAS=dev                 ← tên gọi nhóm default (D10)
+
+# Group 1 = PROD (mutation bị chặn ở lớp DevKit)
+DEVKIT_1_AUTH_TYPE=ClientSecret
+DEVKIT_1_URL=https://prod-org.crm.dynamics.com
+DEVKIT_1_CLIENT_ID=…
+DEVKIT_1_CLIENT_SECRET=…
+DEVKIT_1_DRY_RUN=true            ← key policy mới
+DEVKIT_1_ALIAS=prod              ← alias mới (rev 3)
+
+# Group 2 = UAT
+DEVKIT_2_AUTH_TYPE=ClientSecret
+DEVKIT_2_URL=https://uat-org.crm.dynamics.com
+DEVKIT_2_CLIENT_ID=…
+DEVKIT_2_CLIENT_SECRET=…
+DEVKIT_2_ALIAS=uat</pre>
+
+<p class="small"><strong>Phân biệt <code>[name]</code> và alias:</strong> <code>devkit mcp devkit-zcode</code> —
+<code>[name]</code> chỉ định danh instance để log/MCP client nhận process (ruling mcp-env.md), không dính connection.
+Alias là tên gọi của NHÓM connection, dùng trong prompt và param <code>env</code>.</p>
+
+<div class="warnbox">
+  <strong>Lưu ý riêng cho ZCode:</strong> client cache tool schema lúc session init (đã xác minh 2026-11).
+  Sau khi release bản multi-env, phải <strong>new session (Ctrl+N) hoặc re-Trust connector</strong> thì
+  param <code>env</code> và tool <code>connection_list</code> mới xuất hiện.
+</div>
+
+<h2 id="s5">5. Safety model — dry-run per-connection vs <code>--category readonly</code></h2>
+
+<p>Hai cơ chế <strong>không phải một thứ</strong>, không thay thế nhau, và nằm ở <strong>hai tầng khác nhau</strong>:</p>
+
+<h3>5.1 Ba lớp phòng thủ</h3>
+
+<table>
+  <tr><th>Lớp</th><th>Cơ chế</th><th>Phạm vi</th><th>Chặn cái gì</th><th>Ai thực thi</th></tr>
+  <tr>
+    <td><strong>L1 — Catalog</strong></td>
+    <td><code>--category readonly</code></td>
+    <td><strong>Per-server</strong> (cả process)</td>
+    <td>Ẩn hẳn 22 mutation tool khỏi <code>tools/list</code> — AI <em>không nhìn thấy</em> tool để gọi.</td>
+    <td>DevKit (schema filter)</td>
+  </tr>
+  <tr>
+    <td><strong>L2 — Execution</strong></td>
+    <td><code>DEVKIT_&lt;id&gt;_DRY_RUN=true</code> / <code>--dry-run</code></td>
+    <td><strong>Per-connection</strong> (mỗi bundle 1 policy)</td>
+    <td>Mutation tool <em>vẫn hiện</em>; lệnh mutation vào env đó bị chặn tại boundary → <code>[DryRun]</code> + preview.</td>
+    <td>DevKit (<code>AssertMutationAllowed</code>)</td>
+  </tr>
+  <tr>
+    <td><strong>L3 — Identity</strong></td>
+    <td>Security role của service account (VD role chỉ có Read)</td>
+    <td>Per-connection (theo credential)</td>
+    <td>Chặn <strong>tại Dataverse</strong> — kể cả ai đó gọi API ngoài DevKit.</td>
+    <td>Dataverse (mạnh nhất)</td>
+  </tr>
+</table>
+
+<div class="q">
+  <strong>Vì sao <code>--category readonly</code> KHÔNG thể per-connection?</strong> Catalog tool là thứ của
+  <em>process</em>: một <code>tools/list</code> duy nhất, tool không biết trước caller sẽ truyền <code>env</code> nào.
+  Param <code>env</code> được chọn <em>tại mỗi call</em>, trong khi ẩn/hiện tool xảy ra <em>trước session</em>.
+  Muốn "ẩn mutation tool chỉ khi env=prod" là mâu thuẫn bản chất — L2 giải quyết đúng cái đó bằng cách
+  <strong>hiện tool nhưng chặn execution theo env</strong>.
+</div>
+
+<h3>5.2 Cascade DryRun — quy tắc hiệu lực (theo id số; alias chỉ là địa chỉ)</h3>
+
+<table>
+  <tr><th>Thứ tự</th><th>Nguồn</th><th>Áp dụng cho</th></tr>
+  <tr><td>1 (cao nhất)</td><td><code>DEVKIT_&lt;id&gt;_DRY_RUN</code> trong nhóm đánh số</td><td>Nhóm đó</td></tr>
+  <tr><td>2</td><td>Flag <code>--dry-run</code> lúc startup</td><td>Nhóm default (và kế thừa xuống nhóm đánh số không có key riêng)</td></tr>
+  <tr><td>3</td><td><code>DEVKIT_DRY_RUN</code> (nhóm default trong .env)</td><td>Nhóm default (chỉ khi flag không truyền)</td></tr>
+  <tr><td>4 (sàn)</td><td><code>false</code></td><td>Mọi nhóm không khớp nguồn trên</td></tr>
+</table>
+
+<pre>Ví dụ kiểm chứng cascade:
+(A) không flag, không key            → mọi nhóm false    = hôm nay, byte-identical
+(B) --dry-run, không key             → mọi nhóm true     = hôm nay, byte-identical
+(C) --dry-run + DEVKIT_1_DRY_RUN=false → default=true, nhóm 1=false  (prod=default, dev=1)
+(D) không flag + DEVKIT_1_DRY_RUN=true → default=false, nhóm 1=true   (dev=default, prod=1) ← kịch bản chính
+(E) DEVKIT_DRY_RUN=true, nhóm 1 không key → default=true, nhóm 1=true (kế thừa)</pre>
+
+<p>Giá trị chỉ nhận <code>true</code>/<code>false</code> (case-insensitive, strict) — sai giá trị báo lỗi
+<strong>tại startup</strong> (fail-fast, C3), không chờ tới lần gọi đầu tiên.</p>
+
+<h3>5.3 Kịch bản prod/dev — "an toàn mà vẫn nhờ AI làm đủ thứ"</h3>
+
+<pre>.env:   default = DEV, alias "dev"   |   nhóm 1 = PROD, alias "prod", DEVKIT_1_DRY_RUN=true
+server: devkit mcp devkit-zcode     (KHÔNG cần --dry-run)
+
+Anh Phước nói                       AI làm                    → Kết quả
+──────────────────────────────────────────────────────────────────────────────────
+"compare schema account giữa        2 call get_tables          → prod chỉ đọc, an toàn
+ prod và dev"                       song song (env:"prod" và
+                                    không env)
+"đếm account trên prod"             execute_fetchxml           → đọc PROD OK (readonly KHÔNG
+                                    (env:"prod")                  bao giờ bị dry-run chặn)
+"tạo test record trên dev"          manage_record              → DEV tạo thành công ✓
+                                    (không env — default)
+"cập nhật record đó lên prod"       manage_record              → [DryRun] Mutation blocked:
+                                    (env:"prod")                  Create account | env prod
+"env nào đang được bảo vệ?"         connection_list            → "1 (prod): dryRun=true"</pre>
+
+<div class="safebox">
+  <strong>Kết quả:</strong> AI có toàn quyền đọc trên cả 2 env (so sánh, đối chiếu schema, đếm dữ liệu…),
+  ghi thoải mái trên DEV, và PROD được chặn mutation <strong>ngay tại lệnh gọi</strong> — không cần AI
+  "hứa là cẩn thận", không cần 2 process. Muốn chắc hơn nữa: ghép L3 — service account của nhóm PROD
+  dùng role chỉ-đọc, khi đó dry-run chỉ còn là lớp dự phòng.
+</div>
+
+<h3>5.4 Impersonation per-connection (D8)</h3>
+<p>Cùng cơ chế cascade với <code>DEVKIT_&lt;id&gt;_AS_USER</code> (nhóm số) và <code>DEVKIT_AS_USER</code>
+(nhóm default, khi flag <code>--as-user</code> không truyền): key nhóm thắng flag; nhóm không có key thì
+kế thừa giá trị effective của nhóm default. Resolve + check System Administrator chạy <strong>per connection lúc
+connect nhóm đó</strong> (lazy), giữ nguyên semantics "không resolve được thì IGNORE + warning". Nếu aP không cần
+→ bỏ phần này, dry-run vẫn hoạt động độc lập.</p>
+
+<h2 id="s6">6. AI dùng "mcp uat" như thế nào? (trả lời câu hỏi 3)</h2>
+
+<p>Với người dùng, cách chỉ định env khi ra lệnh <strong>giống hệt ngày thường</strong>. AI định hướng nhờ
+<strong>ServerInstructions</strong> liệt kê nhóm theo id + alias ngay đầu session — prompt khớp tên là chạm đúng nhóm:</p>
+
+<table>
+  <tr><th>Anh Phước nói</th><th>AI hiểu &amp; làm</th></tr>
+  <tr>
+    <td><strong>"Hãy dùng mcp uat: tạo record Test Mcp Final"</strong></td>
+    <td>Thấy <code>2 (uat)</code> trong instructions → mọi call trong task này đều truyền <code>env: "uat"</code>
+    (≡ <code>env: "2"</code>). Output tag <code>| env uat</code> xác nhận.</td>
+  </tr>
+  <tr>
+    <td><strong>"Hãy dùng mcp: tạo record Test Mcp Final"</strong> — không mention gì</td>
+    <td>Không truyền <code>env</code> → <strong>default</strong> (nhóm <code>DEVKIT_*</code> — đúng hành vi hôm nay).</td>
+  </tr>
+  <tr>
+    <td>"Trên prod, đếm số account"</td>
+    <td><code>execute_fetchxml</code> với <code>{ "fetchxml": "…", "env": "prod" }</code> — đọc OK dù prod đang dry-run.</td>
+  </tr>
+  <tr>
+    <td>"So sánh schema account giữa prod và dev"</td>
+    <td>2 call <code>get_tables</code> song song (<code>env:"prod"</code> + <code>env:"dev"</code> hoặc không env) —
+    <strong>stateless nên song song an toàn</strong>.</td>
+  </tr>
+  <tr>
+    <td>"Cập nhật record đó lên prod"</td>
+    <td><code>manage_record</code> với <code>env:"prod"</code> → <strong>[DryRun] blocked</strong> + preview. AI báo lại
+    "prod đang dry-run, chỉ xem trước được" — đúng ý đồ an toàn.</td>
+  </tr>
+  <tr>
+    <td>"Env nào đang được bảo vệ?" / "có những env nào?"</td>
+    <td><code>connection_list</code> → id + alias + dryRun. <code>whoami {env:"uat"}</code> →
+    <code>"env": "uat", "dryRun": false</code> xác minh từng env.</td>
+  </tr>
+  <tr>
+    <td>"Dùng env 9…" (không tồn tại)</td>
+    <td>[Error] Unknown connection group + [Detail] danh sách khả dụng → AI báo lại, không đoán mò.</td>
+  </tr>
+</table>
+
+<p><strong>Vì sao AI không quên truyền <code>env</code>?</strong> 3 lớp nhắc:</p>
+<ol>
+  <li><code>ServerInstructions</code> liệt kê nhóm + alias + trạng thái dry-run ngay đầu session (chỉ khi có &gt;1 nhóm — ai dùng 1 env không bị nhiễu).</li>
+  <li>Description của param <code>env</code> hiện trên <strong>40/40 tool schema</strong>.</li>
+  <li>Kết quả output có tag env khi ≠ default + <code>[DryRun]</code> tag khi bị chặn → AI tự đối chiếu được với yêu cầu.</li>
+</ol>
+
+<h2 id="s7">7. Token budget</h2>
+
+<table>
+  <tr><th>Thiết lập</th><th>Tools</th><th>Tokens (o200k, full)</th><th>So với baseline 2 server</th></tr>
+  <tr><td>D — 2 server (hôm nay; muốn prod dry-run thì thêm flag cho 1 process)</td><td>40 × 2</td><td>~79,800</td><td>—</td></tr>
+  <tr><td><strong>A — 1 server + env param + connection_list + policy per-connection + alias</strong></td><td>41</td><td><strong>~42,300</strong></td><td><strong>−47% (~37.5K tokens/session)</strong></td></tr>
+  <tr><td>A readonly (nếu cần gọn hơn nữa)</td><td>19</td><td>~18,000</td><td>−77%</td></tr>
+</table>
+
+<p class="small">Cơ cấu phần tăng thêm của A: param <code>env</code> ~47 tokens × 40 tool ≈ 1.9K;
+tool <code>connection_list</code> ≈ 0.3K; câu instructions liệt kê nhóm + alias + dry-run ≈ 0.1K (chỉ khi có ≥2 nhóm).
+Key <code>ALIAS</code>/<code>DRY_RUN</code> nằm trong <code>.env</code> — <strong>không tốn schema token</strong>.
+Con số đo bằng probe stdio thật 2026-11-14 trên build 4.44.44.44, tokenizer o200k_base — tokenizer của model khác
+lệch trong khoảng ±10%.</p>
+
+<h2 id="s8">8. Công việc triển khai dự kiến (work units)</h2>
+
+<table>
+  <tr><th>WU</th><th>Nội dung</th><th>Component</th></tr>
+  <tr><td>W1</td><td><code>ProjectEnvironment</code>: <code>GetAvailableGroupIds</code> + key <code>ALIAS</code> (charset/unique/reserved/empty rules) + key policy <code>DRY_RUN</code> (strict true/false) [<code>AS_USER</code> nếu D8 duyệt] + validation startup + unit tests (cascade + alias rules)</td><td>Shared</td></tr>
+  <tr><td>W2</td><td>Extract <code>McpConnectionFactory</code> từ <code>McpCommand</code> (resolve + connect + resolve policy nhóm theo cascade) + <code>ConnectionBundle</code> (kèm <code>McpExecutionPolicy</code> per bundle) + <code>McpConnectionRegistry</code>/<code>IMcpConnectionResolver</code> (alias→id lookup) + rewire DI + tests (default/unknown/lazy/thread-safety/cascade/alias)</td><td>Cli</td></tr>
+  <tr><td>W3</td><td>Thêm param <code>env</code> vào 40 tool method + inject resolver (mechanical: <code>_orgService/_options/_context</code> dùng từ bundle trong method; helper nhận service qua argument giữ nguyên) + cập nhật tests hiện hữu</td><td>Cli</td></tr>
+  <tr><td>W4</td><td>Tool <code>connection_list</code> (id + alias + dryRun effective) + <code>whoami</code> field <code>env</code>+<code>dryRun</code> + tag echo <code>| env &lt;giá trị truyền&gt;</code> khi ≠ default (gồm text <code>[DryRun]</code>) + tests output shape</td><td>Cli</td></tr>
+  <tr><td>W5</td><td><code>--setup-guide</code>: mục "one instance, multiple .env groups + per-group dry-run + alias"; <code>ServerInstructions</code>; docs <code>Cli/mcp-multi-connection.md</code> cập nhật trạng thái; <code>TestAllMcpCall</code>: file mới cho connection_list + re-capture 18.whoami (nếu D2 duyệt)</td><td>Cli/Docs</td></tr>
+  <tr><td>W6</td><td>Release theo workflow (<code>build-release-only</code>) → restart connector → <code>whoami</code> xác minh SHA → probe đo lại token → so sánh</td><td>—</td></tr>
+</table>
+
+<p class="small">W3 là phần khối lượng lớn nhất nhưng thuần cơ học, rủi ro thấp vì helper không đổi.
+Chi tiết từng thay đổi file nằm trong file .md spec.</p>
+
+<h2 id="s9">9. Câu hỏi mở — chờ anh Phước chốt</h2>
+
+<table>
+  <tr><th>#</th><th>Câu hỏi</th><th>Khuyến nghị</th></tr>
+  <tr><td>D1</td><td>Tên param: <code>env</code> hay <code>connection</code>?</td><td><code>env</code> — parity với <code>--env</code> của CLI.</td></tr>
+  <tr><td>D2</td><td><code>whoami</code>: thêm field <code>"env"</code> + <code>"dryRun"</code> vĩnh viễn trong structured output (kể cả khi default)?</td><td>Có — shape ổn định, AI tự kiểm tra bảo vệ từng env; đánh đổi re-capture <code>TestAllMcpCall/18.whoami.md</code> một lần.</td></tr>
+  <tr><td>D3</td><td>Tag <code> | env &lt;giá trị truyền&gt;</code> trên dòng summary (gồm text <code>[DryRun]</code>) của mọi tool khi ≠ default?</td><td>Có — chỉ xuất hiện khi ≠ default nên output mặc định không đổi byte nào.</td></tr>
+  <tr><td>D4</td><td>Số thứ tự file trong <code>TestAllMcpCall</code> khi thêm <code>connection_list</code> (readonly → chèn alphabet vào 1–18 làm dịch chuyển đánh số)?</td><td>Giữ đúng convention alphabet hiện hành — hoặc anh chỉ định append cuối để tránh renumber.</td></tr>
+  <tr><td>D5</td><td><code>connection_list</code> có được trả <code>clientId</code>/<code>username</code> không?</td><td>Có — không phải secret (đã xuất hiện trong log startup hiện tại); secret tuyệt đối không.</td></tr>
+  <tr><td>D6</td><td>Param <code>env</code> cho 40 tool Dataverse, resources (<code>read_instruction</code>) loại trừ?</td><td>Có — resource là tài liệu tĩnh, không chạm connection.</td></tr>
+  <tr><td>D7</td><td>Rollout: per-WU commits rồi <code>build-release-only</code>; ZCode phải new session sau release để thấy schema mới.</td><td>Có — theo workflow hiện hành.</td></tr>
+  <tr><td>D8</td><td>Impersonation per-connection: <code>DEVKIT_&lt;id&gt;_AS_USER</code> / <code>DEVKIT_AS_USER</code> (mục 5.4)?</td><td>Có — cùng cascade, resolve per connection lúc connect; nếu không cần thì bỏ, dry-run độc lập.</td></tr>
+  <tr><td>D9</td><td>Cascade DryRun mục 5.2 + strict <code>true</code>/<code>false</code> + validate fail-fast tại startup?</td><td>Có — bảo toàn 100% behavior hiện tại khi không có key (hợp lệ A/B), hỗ trợ cả 2 cách xếp prod/dev (C/D).</td></tr>
+  <tr><td>D10</td><td><strong>Alias</strong>: key <code>DEVKIT_&lt;id&gt;_ALIAS</code> (nhóm số) + <code>DEVKIT_ALIAS</code> (default) — charset <code>[A-Za-z][A-Za-z0-9_-]*</code>, case-insensitive, unique, cấm <code>default</code>, fail-fast startup; <code>env</code> + <code>--env</code> nhận cả id và alias; tag/whoami echo giá trị truyền.</td><td>Có — numeric giữ nguyên là canonical (ruling rev 3), alias chỉ là địa chỉ gọi thêm; 0 thay đổi parser .env.</td></tr>
+</table>
+
+<h2>10. Rủi ro &amp; tương thích</h2>
+
+<table>
+  <tr><th>Rủi ro</th><th>Đánh giá</th><th>Giảm thiểu</th></tr>
+  <tr>
+    <td>Safety giờ cấu hình bằng <code>.env</code> — sửa nhầm key là prod mất áo giáp</td>
+    <td>Trung bình</td>
+    <td>Validate giá trị tại startup (fail-fast); <code>connection_list</code> + <code>whoami</code> hiển thị <code>dryRun</code> effective để AI/người review nhìn thấy ngay; <strong>khuyến nghị ghép L3</strong>: service account PROD dùng security role chỉ-đọc — dry-run chỉ là lớp dự phòng của DevKit, Dataverse mới là nơi thực thi thật.</td>
+  </tr>
+  <tr>
+    <td>AI mutation nhầm env (quên truyền <code>env</code>)</td>
+    <td>Thấp — luôn rơi vào default; nếu default=PROD thì đặt <code>DEVKIT_DRY_RUN=true</code> hoặc flag <code>--dry-run</code></td>
+    <td>Tag <code>| env</code> trong output + instructions liệt kê nhóm ngay đầu session.</td>
+  </tr>
+  <tr>
+    <td>Alias trùng / sai quy tắc gây hành vi khó đoán</td>
+    <td>Thấp</td>
+    <td>Charset bắt đầu bằng chữ ⇒ không đụng vùng id số; unique + reserved <code>default</code> + fail-fast startup; alias không resolve → error 3-phần kèm danh sách id(+alias).</td>
+  </tr>
+  <tr>
+    <td>Semantic mới của <code>--dry-run</code> làm vỡ usage cũ</td>
+    <td>Không — cascade bảo toàn (hợp lệ A/B mục 5.2)</td>
+    <td>Unit tests chốt 5 tình huống cascade; <code>mcp-env</code> suite 150 test phải pass nguyên vẹn.</td>
+  </tr>
+  <tr>
+    <td>Rollback</td>
+    <td>—</td>
+    <td>Param additive + registry tách bạch; revert W2–W4 trả về trạng thái cũ; file <code>.env</code> cũ vẫn chạy (key lạ <code>_ALIAS</code>/<code>_DRY_RUN</code> bị build cũ bỏ qua an toàn vì không thuộc <code>ConnectionKeys</code>).</td>
+  </tr>
+</table>
+
+<p class="meta" style="margin-top:40px">Hết tài liệu review. Spec triển khai chi tiết cho AI:
+<a href="Cli/mcp-multi-connection.md"><code>DynamicsCrm.DevKit.Docs/Cli/mcp-multi-connection.md</code></a></p>
+
+</div>
+</body>
+</html>
