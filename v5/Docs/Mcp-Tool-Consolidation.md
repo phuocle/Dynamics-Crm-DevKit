@@ -6,6 +6,8 @@
 
 > **Review 2 — 14/11/2026:** (1) Reuse và chạy lại test cũ, **không sửa bất kỳ test cũ nào, chỉ thêm file test mới**; thiết kế registration được điều chỉnh để đáp ứng điều này. (2) `structuredContent` được model đọc vẫn tốn **input token ở lượt tiếp theo**; không phải model output token. Xem §9 về test bất biến và §10.1–10.5 về token của dữ liệu trả về.
 
+> **Review 3 — 14/11/2026:** tái cấu trúc §14 thành giao thức thực thi và tách kế hoạch triển khai thành 4 work file W0–W3 tại `Mcp-Tool-Consolidation/` (mỗi work file một session; spec vẫn là nguồn sự thật duy nhất, không tách spec). Một bản nháp multi-connection từng được nhắc ở vòng review này nhưng đã gỡ khỏi tree — mọi tham chiếu tới nó đã bỏ; khi đưa lại cần đánh lại §14. Không đổi bất kỳ mục kỹ thuật nào khác.
+
 ## 1. Quyết định đề xuất
 
 **Có thể làm: 40 → 10 tool (giảm 75% số tool), nhưng không được suy ra giảm 75% token mỗi request.**
@@ -475,3 +477,34 @@ Phần kiến trúc 10 tool, budget và migration là **đề xuất của tác 
 Đã kiểm tra UTF-8, 40 operation duy nhất, phân loại 18/22, liên kết tương đối và anchor không hỏng, ID HTML không trùng, cú pháp JavaScript và 7 trường hợp tìm kiếm/lọc. Chỉ tạo hai file báo cáo trong Docs; không sửa source MCP. Chưa kiểm tra hình ảnh render hoặc layout mobile: Browser Use chặn protocol file://, nên không có screenshot xác nhận. Không tìm cách vượt chính sách trình duyệt.
 
 Review 2 chỉ chỉnh hai báo cáo này. Đối chiếu SHA256 527 file đã tracked thuộc các thư mục UnitTests trước/sau để xác nhận test cũ không bị thay đổi; đây là kiểm tra tính toàn vẹn file, **không phải kết quả chạy unit test**. Kiểm tra lại liên kết/anchor, 40 operation và logic lọc sau cập nhật. Giới hạn chưa có screenshot render ở trên vẫn còn.
+
+## 14. Thực thi theo work file (Review 3 — 14/11/2026)
+
+### 14.1 Quyết định cách chia việc
+
+**Đọc spec: một file, một mạch. Tách spec: không. Thực thi: bốn work file W0–W3, mỗi work file một session.**
+
+- Spec này 64.435 byte (~16–18K token): một session đọc trọn trong một lượt Read; không cần tách vì lý do kích thước.
+- **Không tách spec thành nhiều file**: mọi quy tắc bất biến (§9 test cũ, §5/§6 contract và kiến trúc, §11 snapshot tham số, §10 quy tắc đo token) phải nằm một chỗ; các bản copy dễ drift và session sau có thể đọc thiếu quy tắc. File này là nguồn sự thật duy nhất.
+- **Không làm toàn bộ trong một session**: W0 là spike quyết định thiết kế W1 (SDK 2.4.0 hỗ trợ invoke nội bộ hay phải viết typed adapter); mỗi phase sinh nhiều context build/test/capture. Khớp quy tắc làm việc hiện có: một work-unit một session, bàn giao bằng prompt handoff tự chứa.
+- Work file là **mệnh lệnh công việc** của session đó: phạm vi, các bước, bất biến trích từ spec, bằng chứng, cổng dừng. Work file không thay thế spec — chỗ nào nghi nghĩa thì quay lại spec; nếu spec thiếu thì cập nhật spec trước rồi mới sửa work file.
+
+### 14.2 Danh mục work file
+
+| Work file | Phase | Phạm vi | Trạng thái |
+|---|---|---|---|
+| [W0-Baseline-Spike.md](Mcp-Tool-Consolidation/W0-Baseline-Spike.md) | P0 | Baseline test + capture tools/list legacy + spike router `query_data` | CHƯA BẮT ĐẦU |
+| [W1-Compact-Catalog-Adapter.md](Mcp-Tool-Consolidation/W1-Compact-Catalog-Adapter.md) | P1 | OperationCatalog + 8 router + binder + contract provider; chỉ thêm test mới | CHƯA BẮT ĐẦU |
+| [W2-Parity-Benchmark.md](Mcp-Tool-Consolidation/W2-Parity-Benchmark.md) | P2 | Parity từng operation + benchmark ba tầng + rút description compact | CHƯA BẮT ĐẦU |
+| [W3-Build-Install-Verify.md](Mcp-Tool-Consolidation/W3-Build-Install-Verify.md) | P3 | Build/install qua skill + capture 4 combination + verify manifest | CHƯA BẮT ĐẦU |
+
+Cột Trạng thái cập nhật sau nghiệm thu của aP: `DONE <ngày>` / `BLOCKED <lý do>`; chi tiết nằm trong mục State của từng work file.
+
+### 14.3 Quy tắc chạy session
+
+1. Một session chỉ nhận một work file. Bắt đầu: đọc `AGENTS.md`, đọc spec theo danh mục "Đọc trước khi làm" của work file, đọc State các work trước.
+2. Kết thúc (kể cả dừng sớm/fail): cập nhật mục State trong work file của mình — status, HEAD, kết quả, lệch, bài học.
+3. Xuất handoff prompt tự chứa: objective, state, constraints, completed checks, remaining work.
+4. Cổng dừng giữa các work: chờ aP nghiệm thu kết quả work trước rồi mới sang work sau. Tiêu chí chấp nhận tổng thể là §9; bằng chứng riêng của từng work nằm trong work file đó.
+5. Checkbox §8 tương ứng chỉ tick khi bằng chứng của phase đó đã tồn tại.
+6. Không stage/commit/push nếu aP không yêu cầu; khi được lệnh commit thì chạy skill `devkit-skill-commit`.

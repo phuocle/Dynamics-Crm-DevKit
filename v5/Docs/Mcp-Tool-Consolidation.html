@@ -21,14 +21,14 @@
 <div class="side-note">14.11.2026<br>Phân tích từ source, test<br>và catalog đang cài.</div>
 <nav aria-label="Mục lục">
 <a href="#decision">01 · Kết luận</a><a href="#cost">02 · Chi phí thực tế</a><a href="#options">03 · So sánh phương án</a><a href="#catalog">04 · Catalog 10 tool</a><a href="#contract">05 · Cách hoạt động</a><a href="#mapping">06 · Đối chiếu 40 tool</a><a href="#risks">07 · Các đánh đổi</a><a href="#rollout">08 · Triển khai & nghiệm thu</a>
-<a href="#review-tests">09 · Giữ nguyên test cũ</a><a href="#result-tokens">10 · Token của kết quả trả về</a>
+<a href="#review-tests">09 · Giữ nguyên test cũ</a><a href="#result-tokens">10 · Token của kết quả trả về</a><a href="#execution">11 · Chia việc &amp; thực thi</a>
 </nav>
 <a class="doclink" href="Mcp-Tool-Consolidation.md">Mở kế hoạch cho AI ↗</a>
 </aside>
 <main>
 <header class="hero" id="decision">
 <div class="eyebrow">DynamicsCrm.DevKit / CLI / MCP</div>
-<div class="status">Review 2 · 14/11/2026 · Chưa sửa MCP</div>
+<div class="status">Review 3 · 14/11/2026 · Chưa sửa MCP</div>
 <h1>40 năng lực.<br><strong>10 cửa vào.</strong></h1>
 <p class="lead">Có thể gộp tool mà vẫn giữ các chức năng đang có. Muốn giảm token đáng kể, cần thu nhỏ cả <strong>input schema lẫn output schema</strong>, rồi tải contract chi tiết khi sử dụng.</p>
 <div class="hero-meta"><span>Khảo sát: 14/11/2026 · Asia/Saigon</span><span>CLI 4.44.44.44</span><span>Build 14.11.2026 07:51:43</span></div>
@@ -283,7 +283,21 @@
 <p><strong>Đo toàn workflow:</strong> catalog + result mới + lịch sử + help/retry, cùng output model sinh. Không cộng “tool output token” thêm một lần vào input đã chứa result. Báo cached input riêng. Nếu người dùng cần đọc toàn bộ dữ liệu thì chia trang có thể vẫn tốn tổng token tương đương hoặc hơn; tiết kiệm thật đến từ không nạp phần không cần hoặc xử lý phù hợp phía server.</p>
 <p class="muted">Chưa benchmark result-size/token của 40 operation. Những điểm về duplication ở đây là truy vết source; mức token phải xác nhận bằng representation/usage thật của từng client.</p>
 </section>
-<footer class="foot">DevKit MCP · Architecture review 2 · 14/11/2026 · Test cũ bất biến; catalog và result được đánh giá riêng.</footer>
+<section id="execution">
+<div class="section-head"><span class="section-no">11</span><h2>Cách chia việc cho AI</h2></div>
+<div class="two">
+<article class="box"><h3>Đọc và spec — giữ 1 file</h3><p>MD ~64KB (~16–18K token): một session đọc trọn được trong một lượt. <strong>Không tách spec thành nhiều file</strong> — quy tắc bất biến (test cũ, contract, snapshot tham số) phải nằm một chỗ; tách file là mồi cho drift giữa các bản copy.</p></article>
+<article class="box"><h3>Thực thi — 4 work file, mỗi file một session</h3><p>Spec là nguồn sự thật; work file là mệnh lệnh công việc: phạm vi, các bước, bất biến trích từ spec, bằng chứng, cổng dừng, handoff. W0 là spike quyết định thiết kế W1 (SDK 2.4.0 invoke nội bộ hay typed adapter).</p></article>
+</div>
+<div class="table-scroll"><table><thead><tr><th>Work file</th><th>Phase</th><th>Làm gì</th><th>Trạng thái</th></tr></thead><tbody>
+<tr><td><a href="Mcp-Tool-Consolidation/W0-Baseline-Spike.md"><code>W0-Baseline-Spike.md</code></a></td><td>P0</td><td>Baseline test + capture tools/list legacy + spike router chỉ đọc <code>query_data</code></td><td>Chưa bắt đầu</td></tr>
+<tr><td><a href="Mcp-Tool-Consolidation/W1-Compact-Catalog-Adapter.md"><code>W1-Compact-Catalog-Adapter.md</code></a></td><td>P1</td><td>Catalog + 8 router + binder + contract provider; chỉ thêm file test mới</td><td>Chưa bắt đầu</td></tr>
+<tr><td><a href="Mcp-Tool-Consolidation/W2-Parity-Benchmark.md"><code>W2-Parity-Benchmark.md</code></a></td><td>P2</td><td>Parity từng operation + benchmark ba tầng + rút description compact</td><td>Chưa bắt đầu</td></tr>
+<tr><td><a href="Mcp-Tool-Consolidation/W3-Build-Install-Verify.md"><code>W3-Build-Install-Verify.md</code></a></td><td>P3</td><td>Build/install qua skill + capture 4 combination + verify manifest</td><td>Chưa bắt đầu</td></tr>
+</tbody></table></div>
+<p class="muted">Quy tắc session: một session một work file; bắt đầu đọc AGENTS.md + đúng phần spec theo danh mục "Đọc trước khi làm" của work file; kết thúc cập nhật State trong work file và xuất handoff prompt tự chứa. Cổng dừng giữa các work chờ nghiệm thu. Chi tiết ở §14 của bản Markdown.</p>
+</section>
+<footer class="foot">DevKit MCP · Architecture review 3 · 14/11/2026 · Test cũ bất biến; catalog và result được đánh giá riêng.</footer>
 </main></div>
 <script>
 (function(){
