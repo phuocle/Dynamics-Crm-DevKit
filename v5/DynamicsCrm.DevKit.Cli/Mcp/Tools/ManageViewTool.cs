@@ -33,8 +33,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpExecutionContext _context;
         private string _workspaceFolder;
 
-        public ManageViewTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, IWebApiExecutor webApi)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ManageViewTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, IWebApiExecutor webApi) : this(orgService, options, context, webApi, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ManageViewTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, IWebApiExecutor webApi, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
             _webApi = webApi;
             _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -56,6 +62,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_tables → column logical names for FetchXML attributes/conditions\n" +
             "- execute_fetchxml → test a FetchXML before putting it into a view\n" +
             "- manage_form → entity forms; publish_customizations → batch publish; execute_webapi → raw savedquery access")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            McpServer server,
+            [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",
+            [Description("Entity Display/logical name (Display Name resolved first).")] string entity_name = "",
+            [Description("GUID. Required: detail/update/rename/undo.")] string view_id = "",
+            [Description("Name contains. 1 match → auto-select; multiple → returns candidates, use view_id.")] string view_name = "",
+            [Description("false = system views (savedquery), true = personal views (userquery) — scopes list and view_name resolution.")] bool is_personal_view = false,
+            [Description("create/update: FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type). undo: .fetchxml.xml backup file path (pass layoutxml too).")] string fetchxml = "",
+            [Description("undo only: .layoutxml.xml backup file path — required together with fetchxml to restore the pair verbatim.")] string layoutxml = "",
+            [Description("update: JSON array serialized as a string, e.g. [{\"cell_name\":\"name\",\"set_attributes\":{\"ishidden\":\"1\"}}]. Each item must carry set_attributes, remove_attributes (JSON array of attribute names to detach, e.g. [{\"cell_name\":\"iconRendererProvider\",\"remove_attributes\":[\"imageproviderwebresource\"]}]), or both. Patch layout cell attributes without changing FetchXML; do not combine with fetchxml. Read docs://instructions_for_views for supported attributes and icon/tooltip contracts.")] string cell_updates_json = "",
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ManageViewTool(conn.OrgService, conn.Options, conn.Context, conn.WebApi);
+                return worker.manage_view(server, action, entity_name, view_id, view_name, is_personal_view, fetchxml, layoutxml, cell_updates_json);
+            }, cancellationToken);
+        }
+
         public async Task<CallToolResult> manage_view(
             McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",

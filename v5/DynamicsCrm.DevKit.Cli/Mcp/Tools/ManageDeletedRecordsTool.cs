@@ -35,8 +35,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public ManageDeletedRecordsTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, IWebApiExecutor webApi)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ManageDeletedRecordsTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, IWebApiExecutor webApi) : this(orgService, options, context, webApi, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ManageDeletedRecordsTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, IWebApiExecutor webApi, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
             _webApi = webApi;
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -62,6 +68,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- manage_record → live CRUD; delete becomes soft-delete when the bin is ON\n" +
             "- get_audit_history → who deleted a record and when\n" +
             "- execute_webapi → raw access (Restore action is redirected here)")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("Action: 'list' (default) | 'detail' | 'restore' | 'status' | 'turn'.")] string action = "list",
+            [Description("Entity Display/logical name. Required for list, detail, and restore, including mixed-entity restores. Not used for status or turn.")] string entity_name = "",
+            [Description("Single GUID. detail: required. list: not used. restore: optional if record_ids set.")] string record_id = "",
+            [Description("Array of GUIDs (preferred for restore). detail/list: not used. restore: alternative to record_id.")] string[] record_ids = null,
+            [Description("Search by primary attribute value (contains, case-insensitive). list only. Empty = all deleted records of entity.")] string name_filter = "",
+            [Description("Max records. list: default 100, max 5000. detail/restore/status/turn: not used.")] int max_records = 100,
+            [Description("Toggle direction for action='turn': 'on' to enable soft-delete, 'off' to disable. Required when action='turn'.")] string turn = "",
+            [Description("Retention days for action='turn' turn='on'. Integer 1..30 inclusive. Default 30. Ignored for turn='off' or other actions.")] int retention_days = 30,
+            [Description("restore only. Prefix prepended to the primary name of each restored record. Default '[RESTORE] '. Pass '' (empty string) to restore names unchanged.")] string name_prefix = "[RESTORE] ",
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ManageDeletedRecordsTool(conn.OrgService, conn.Options, conn.Context, conn.WebApi);
+                return System.Threading.Tasks.Task.FromResult(worker.manage_deleted_records(action, entity_name, record_id, record_ids, name_filter, max_records, turn, retention_days, name_prefix));
+            }, cancellationToken);
+        }
+
         public CallToolResult manage_deleted_records(
             [Description("Action: 'list' (default) | 'detail' | 'restore' | 'status' | 'turn'.")] string action = "list",
             [Description("Entity Display/logical name. Required for list, detail, and restore, including mixed-entity restores. Not used for status or turn.")] string entity_name = "",

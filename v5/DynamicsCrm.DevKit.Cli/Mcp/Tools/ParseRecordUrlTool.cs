@@ -18,8 +18,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly IOrganizationService _orgService;
 
-        public ParseRecordUrlTool(IOrganizationService orgService)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ParseRecordUrlTool(IOrganizationService orgService) : this(orgService, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ParseRecordUrlTool(IOrganizationService orgService, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
         }
 
@@ -34,6 +40,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- manage_record → read or change a parsed record\n" +
             "- get_tables → resolve or verify an unknown entity logical name")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("URL, GUID, or text. URL-decoded automatically; first matching parser wins.")] string input = "",
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ParseRecordUrlTool(conn.OrgService);
+                return System.Threading.Tasks.Task.FromResult(worker.parse_record_url(input));
+            }, cancellationToken);
+        }
+
         public CallToolResult parse_record_url(
             [Description("URL, GUID, or text. URL-decoded automatically; first matching parser wins.")] string input = "")
         {

@@ -5,6 +5,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 {
     internal sealed class WhoAmIResult
     {
+        [JsonPropertyName("env")]
+        public string Env { get; set; }
+
+        [JsonPropertyName("dryRun")]
+        public bool DryRun { get; set; }
+
         [JsonPropertyName("userId")]
         public string UserId { get; set; }
 

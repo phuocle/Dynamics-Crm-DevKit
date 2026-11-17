@@ -87,8 +87,6 @@ public class McpCommandCoverageTests
     [DataRow("-1")]
     [DataRow("01")]
     [DataRow("1.5")]
-    [DataRow("abc")]
-    [DataRow("help")]
     [DataRow("")]
     [DataRow("   ")]
     public async Task ExecuteAsync_InvalidEnvSelector_ReturnsErrorBeforeRunningModes(string invalidEnv)

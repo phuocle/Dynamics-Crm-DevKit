@@ -20,8 +20,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly IOrganizationService _orgService;
 
-        public GetBusinessProcessFlowsTool(IOrganizationService orgService)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver? _connections;
+
+        public GetBusinessProcessFlowsTool(IOrganizationService orgService) : this(orgService, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public GetBusinessProcessFlowsTool(IOrganizationService orgService, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver? connections)
         {
+            _connections = connections;
             _orgService = orgService;
         }
 
@@ -51,6 +57,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_workflows → classic workflow definitions (background async + realtime sync)\n" +
             "- get_business_rules → client-side business rules\n" +
             "- get_flows → Power Automate cloud flows")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("GUID -> detail. Empty = list.")] string? bpf_id = null,
+            [Description("Name contains. 1 match -> auto-detail. Omit or pass null to list all.")] string? bpf_name = null,
+            [Description("Primary entity filter, Display Name or logical name (e.g. 'Lead' or 'lead').")] string? entity_name = null,
+            [Description("Filter by state: 'active' (Draft hidden), 'draft' (only Draft), or 'all' (no filter). Default 'all' returns every BPF regardless of state.")] string status = "all",
+            [Description("List only. Detail always includes.")] bool include_stages = false,
+            [Description("1-250.")] int max_records = 50,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string? env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new GetBusinessProcessFlowsTool(conn.OrgService);
+                return System.Threading.Tasks.Task.FromResult(worker.get_business_process_flows(bpf_id, bpf_name, entity_name, status, include_stages, max_records));
+            }, cancellationToken);
+        }
+
         public CallToolResult get_business_process_flows(
             [Description("GUID -> detail. Empty = list.")] string? bpf_id = null,
             [Description("Name contains. 1 match -> auto-detail. Omit or pass null to list all.")] string? bpf_name = null,

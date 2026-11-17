@@ -10,7 +10,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Name { get; set; }
 
         [CommandOption("--env <id>")]
-        [Description("Project .env fallback connection group ID: selects DEVKIT_<id>_* when connection args are missing (default: DEVKIT_*; no fixed group limit)")]
+        [Description("Startup connection: numeric .env group ID, alias, or default for DEVKIT_*. Calls may select another group with env; omitted env uses startup.")]
         public string Env { get; set; }
 
         [CommandOption("--transport")]
@@ -39,9 +39,12 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public bool DryRun { get; set; }
 
         [CommandOption("--as-user")]
-        [Description("Impersonate this user (GUID or email) for the session; requires admin privileges")]
+        [Description("Impersonate this user (GUID or email) on the startup connection; other groups use their own AS_USER key. Requires admin privileges.")]
         public string AsUser { get; set; }
 
+        internal System.Collections.Generic.IDictionary<string, string> EnvironmentSnapshot { get; set; }
+        internal string EnvironmentSnapshotPath { get; set; }
+        internal string AuthenticationCacheName { get; set; }
         internal bool UsedEnvironmentFallback { get; set; }
         internal bool UsedEnvironmentGroupFallback { get; set; }
         internal string ResolvedConnectionSource { get; set; }

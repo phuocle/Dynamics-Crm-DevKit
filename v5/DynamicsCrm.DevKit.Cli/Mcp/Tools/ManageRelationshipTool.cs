@@ -22,8 +22,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public ManageRelationshipTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ManageRelationshipTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context) : this(orgService, options, context, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ManageRelationshipTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService ?? throw new ArgumentNullException(nameof(orgService));
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -48,6 +54,39 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_tables → discover relationships\n" +
             "- manage_column → lookup columns\n" +
             "- publish_customizations → batch publish after multiple relationship changes")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("create_1n / create_nn / update / delete / add_target / remove_target.")] string action = "",
+            [Description("Schema name. Required: update/delete. Auto-generated on create.")] string relationship_name = "",
+            [Description("Parent (1:N create, add/remove target).")] string referenced_entity = "",
+            [Description("Child (1:N create).")] string referencing_entity = "",
+            [Description("First entity for N:N.")] string entity1 = "",
+            [Description("Second entity for N:N.")] string entity2 = "",
+            [Description("N:N intersect entity. Auto if empty.")] string intersect_entity_name = "",
+            [Description("Entity with polymorphic lookup (add/remove target).")] string entity_name = "",
+            [Description("Polymorphic lookup logical name.")] string attribute_name = "",
+            [Description("Parental / Referential / ReferentialRestrictDelete.")] string cascade_preset = "",
+            [Description("Override cascade Assign behavior.")] string cascade_assign = "",
+            [Description("Override cascade Delete behavior.")] string cascade_delete = "",
+            [Description("Override cascade Merge behavior.")] string cascade_merge = "",
+            [Description("Override cascade Reparent behavior.")] string cascade_reparent = "",
+            [Description("Override cascade Share behavior.")] string cascade_share = "",
+            [Description("Override cascade Unshare behavior.")] string cascade_unshare = "",
+            [Description("UseCollectionName / UseLabel / DoNotDisplay.")] string menu_behavior = "",
+            [Description("Details / Sales / Service / Marketing.")] string menu_group = "",
+            [Description("Associated relationship menu order for create_1n/create_nn/add_target; default 10000. For update, 10000 means leave the existing order unchanged.")] int menu_order = 10000,
+            [Description("1:N create only.")] string lookup_display_name = "",
+            [Description("Required: create_1n, create_nn, add_target.")] string solution_name = "",
+            [Description("Self-referential 1:N (create_1n/update). 1 per entity, referenced=referencing.")] bool is_hierarchical = false,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ManageRelationshipTool(conn.OrgService, conn.Options, conn.Context);
+                return System.Threading.Tasks.Task.FromResult(worker.manage_relationship(action, relationship_name, referenced_entity, referencing_entity, entity1, entity2, intersect_entity_name, entity_name, attribute_name, cascade_preset, cascade_assign, cascade_delete, cascade_merge, cascade_reparent, cascade_share, cascade_unshare, menu_behavior, menu_group, menu_order, lookup_display_name, solution_name, is_hierarchical));
+            }, cancellationToken);
+        }
+
         public CallToolResult manage_relationship(
             [Description("create_1n / create_nn / update / delete / add_target / remove_target.")] string action = "",
             [Description("Schema name. Required: update/delete. Auto-generated on create.")] string relationship_name = "",

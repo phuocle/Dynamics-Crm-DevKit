@@ -29,8 +29,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private const string PublishWaitTimeoutInstruction =
             "After the third get_system_jobs poll, if the PublishAll system job is not Succeeded or no result is returned, stop waiting, do not call manage_ribbon(buttons/detail), and report the ribbon result to the user with a note that Dataverse publish is still running or did not complete successfully and the user must wait/check the job.";
 
-        public ManageRibbonTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ManageRibbonTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context) : this(orgService, options, context, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ManageRibbonTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             // Keep null service construction usable for argument-validation tests;
             // any Dataverse action still fails safely when it reaches the service.
             _orgService = orgService;
@@ -60,6 +66,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_system_jobs → poll the PublishAll async job\n" +
             "- publish_customizations → manual publish if the async publish did not finish\n" +
             "- manage_webresource → list/verify web resources used as button libraries and icons")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            McpServer server,
+            [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action = "",
+            [Description("Entity Display Name or logical name. Required: detail/update/undo/buttons.")] string entity_name = "",
+            [Description("update: non-empty JSON array serialized as a string. Each object has an action and action-specific fields; read docs://instructions_for_manage_ribbon for the complete contract and examples.")] string operations = "",
+            [Description("undo: backup file path from result.backupPath. update: alternatively, inline RibbonDiffXml or a file path; applied as a patch preserving missing existing elements. If operations is provided it takes precedence.")] string ribbonxml = "",
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ManageRibbonTool(conn.OrgService, conn.Options, conn.Context);
+                return worker.manage_ribbon(server, action, entity_name, operations, ribbonxml);
+            }, cancellationToken);
+        }
+
         public async Task<CallToolResult> manage_ribbon(
             McpServer server,
             [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action = "",

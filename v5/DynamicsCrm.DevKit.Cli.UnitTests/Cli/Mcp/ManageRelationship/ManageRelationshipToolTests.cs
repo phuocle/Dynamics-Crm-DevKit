@@ -395,7 +395,7 @@ public class ManageRelationshipToolTests
     [TestMethod]
     public void ManageRelationship_HasAllExpectedParameters()
     {
-        var method = ToolType.GetMethod("manage_relationship")!;
+        var method = ToolType.GetMethod("InvokeAsync")!;
         var parameters = method.GetParameters();
         var paramNames = parameters.Select(p => p.Name).ToArray();
         CollectionAssert.Contains(paramNames, "action");
@@ -425,7 +425,7 @@ public class ManageRelationshipToolTests
     [TestMethod]
     public void ManageRelationship_DescriptionMentionsAllActions()
     {
-        var method = ToolType.GetMethod("manage_relationship")!;
+        var method = ToolType.GetMethod("InvokeAsync")!;
         var desc = method.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>()?.Description ?? "";
         Assert.IsTrue(desc.Contains("create_1n"), "Description should mention create_1n");
         Assert.IsTrue(desc.Contains("create_nn"), "Description should mention create_nn");
@@ -438,7 +438,7 @@ public class ManageRelationshipToolTests
     [TestMethod]
     public void ManageRelationship_DescriptionMentionsCascadeTypes()
     {
-        var method = ToolType.GetMethod("manage_relationship")!;
+        var method = ToolType.GetMethod("InvokeAsync")!;
         var desc = method.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>()?.Description ?? "";
         Assert.IsTrue(desc.Contains("Cascade"), "Description should mention Cascade type");
         Assert.IsTrue(desc.Contains("NoCascade"), "Description should mention NoCascade type");
@@ -449,7 +449,7 @@ public class ManageRelationshipToolTests
     [TestMethod]
     public void ManageRelationship_DescriptionMentionsPresets()
     {
-        var method = ToolType.GetMethod("manage_relationship")!;
+        var method = ToolType.GetMethod("InvokeAsync")!;
         var desc = method.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>()?.Description ?? "";
         Assert.IsTrue(desc.Contains("Parental"), "Description should mention Parental preset");
         Assert.IsTrue(desc.Contains("Referential"), "Description should mention Referential preset");

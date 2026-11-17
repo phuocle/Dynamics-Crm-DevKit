@@ -21,8 +21,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly MetadataService _metadataService;
         private readonly IOrganizationService _orgService;
 
-        public GetMessagesTool(MetadataService metadataService, IOrganizationService orgService)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public GetMessagesTool(MetadataService metadataService, IOrganizationService orgService) : this(metadataService, orgService, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public GetMessagesTool(MetadataService metadataService, IOrganizationService orgService, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _metadataService = metadataService;
             _orgService = orgService;
         }
@@ -57,6 +63,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_custom_apis → modern Custom API definitions (replaces Custom Actions)\n" +
             "- get_plugins → plugin assemblies/types/steps registered on these messages\n" +
             "- get_workflows → classic workflow definitions (background + realtime)")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("Entity Display/logical name. 'none'/empty = global. Ignored in detail mode.")] string entity_name = "none",
+            [Description("Message/Action name → detail mode. Empty = list mode.")] string message_name = "",
+            [Description("List: include Custom Actions. false = SDK only. Ignored in detail mode.")] bool include_custom_actions = true,
+            [Description("List: maximum 1-500 names per category. Default 100.")] int max_records = 100,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new GetMessagesTool(conn.Metadata, conn.OrgService);
+                return worker.get_messages(entity_name, message_name, include_custom_actions, max_records);
+            }, cancellationToken);
+        }
+
         public async Task<CallToolResult> get_messages(
             [Description("Entity Display/logical name. 'none'/empty = global. Ignored in detail mode.")] string entity_name = "none",
             [Description("Message/Action name → detail mode. Empty = list mode.")] string message_name = "",

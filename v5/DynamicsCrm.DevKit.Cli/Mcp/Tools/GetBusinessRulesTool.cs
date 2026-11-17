@@ -20,8 +20,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly IOrganizationService _orgService;
 
-        public GetBusinessRulesTool(IOrganizationService orgService)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public GetBusinessRulesTool(IOrganizationService orgService) : this(orgService, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public GetBusinessRulesTool(IOrganizationService orgService, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
         }
 
@@ -42,6 +48,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_custom_apis → modern Custom API definitions\n" +
             "- get_business_process_flows → BPF definitions + stages\n" +
             "- manage_record(action='read', columns='xaml') → raw XAML when parse is incomplete")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("Entity display name, logical name, or schema name.")] string entity_name = "",
+            [Description("GUID. Empty = list mode; set with entity_name = detail mode.")] string rule_id = "",
+            [Description("Lifecycle filter: active, draft, inactivedraft, or canceled. Empty = all.")] string status = "",
+            [Description("Default 50. <=0 falls back to 50. Ignored in detail mode.")] int max_records = 50,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new GetBusinessRulesTool(conn.OrgService);
+                return System.Threading.Tasks.Task.FromResult(worker.get_business_rules(entity_name, rule_id, status, max_records));
+            }, cancellationToken);
+        }
+
         public CallToolResult get_business_rules(
             [Description("Entity display name, logical name, or schema name.")] string entity_name = "",
             [Description("GUID. Empty = list mode; set with entity_name = detail mode.")] string rule_id = "",

@@ -23,8 +23,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public ExecuteWebApiTool(IWebApiExecutor webApi, McpDryRunOptions options, McpExecutionContext context, IMcpConnectionInfo connectionInfo)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ExecuteWebApiTool(IWebApiExecutor webApi, McpDryRunOptions options, McpExecutionContext context, IMcpConnectionInfo connectionInfo) : this(webApi, options, context, connectionInfo, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ExecuteWebApiTool(IWebApiExecutor webApi, McpDryRunOptions options, McpExecutionContext context, IMcpConnectionInfo connectionInfo, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _webApi = webApi;
             _connectionInfo = connectionInfo;
             _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -52,6 +58,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- manage_deleted_records → restore\n" +
             "- execute_sql → SQL SELECT queries; the ?sql= query option is BLOCKED/REDIRECTED to execute_sql\n" +
             "- publish_customizations → publish after metadata changes")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("GET, POST, PUT, PATCH, or DELETE. Default GET.")] string method = "GET",
+            [Description("Relative path, e.g. 'accounts', 'contacts(guid)', '$metadata'. SDK adds base URL. Required.")] string url = "",
+            [Description("JSON body for POST/PUT/PATCH. Default empty (no body).")] string body = "",
+            [Description("Extra headers as JSON object, e.g. '{\"Prefer\":\"return=representation\"}'. Default empty.")] string headers = "",
+            [Description("Include response headers in text output. Default false.")] bool include_headers = false,
+            [Description("Truncate response body. Use 50 for large outputs ($metadata). Default 200.")] int max_response_lines = 200,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ExecuteWebApiTool(conn.WebApi, conn.Options, conn.Context, conn.ConnectionInfo);
+                return System.Threading.Tasks.Task.FromResult(worker.execute_webapi(method, url, body, headers, include_headers, max_response_lines));
+            }, cancellationToken);
+        }
+
         public CallToolResult execute_webapi(
             [Description("GET, POST, PUT, PATCH, or DELETE. Default GET.")] string method = "GET",
             [Description("Relative path, e.g. 'accounts', 'contacts(guid)', '$metadata'. SDK adds base URL. Required.")] string url = "",

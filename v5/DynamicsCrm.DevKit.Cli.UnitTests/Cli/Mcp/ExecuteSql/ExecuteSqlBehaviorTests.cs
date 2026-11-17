@@ -538,7 +538,7 @@ public sealed class ExecuteSqlBehaviorTests
     [TestMethod]
     public async Task RegistrationDefaultsAndSuccessContract_ArePreserved()
     {
-        var method = typeof(ExecuteSqlTool).GetMethod(nameof(ExecuteSqlTool.execute_sql))!;
+        var method = typeof(ExecuteSqlTool).GetMethod(nameof(ExecuteSqlTool.InvokeAsync))!;
         var tool = method.GetCustomAttribute<McpServerToolAttribute>()!;
         Assert.AreEqual("execute_sql", tool.Name);
         Assert.IsTrue(tool.ReadOnly);
@@ -546,9 +546,9 @@ public sealed class ExecuteSqlBehaviorTests
         Assert.IsFalse(tool.Destructive);
         Assert.IsTrue(tool.UseStructuredContent);
         Assert.AreEqual(typeof(SqlQueryResult), tool.OutputSchemaType);
-        var parameters = method.GetParameters();
-        CollectionAssert.AreEqual(new[] { "sql", "max_records", "get_all" }, parameters.Select(p => p.Name).ToArray());
-        CollectionAssert.AreEqual(new object[] { "", 5000, false }, parameters.Select(p => p.DefaultValue).ToArray());
+        var parameters = method.GetParameters().Where(p => p.ParameterType != typeof(System.Threading.CancellationToken)).ToArray();
+        CollectionAssert.AreEqual(new[] { "sql", "max_records", "get_all", "env" }, parameters.Select(p => p.Name).ToArray());
+        CollectionAssert.AreEqual(new object?[] { "", 5000, false, null }, parameters.Select(p => p.DefaultValue).ToArray());
         _webApi.Responses.Add(Body("one"));
 
         var result = await Tool().execute_sql(SelectNames);

@@ -22,8 +22,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
-        public ManageWebResourceTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ManageWebResourceTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context) : this(orgService, options, context, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ManageWebResourceTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -82,6 +88,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_solution_components → find solution names for create\n" +
             "- manage_form → wire the JS library into a form\n" +
             "- publish_customizations → publish other components (create/update auto-publish)")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("list / detail / create / update / delete.")] string action = "",
+            [Description("GUID, Display Name, or unique name. Required: detail/update/delete.")] string web_resource_id = "",
+            [Description("Unique name (e.g. 'v4_/entities/Account.form.js'). Required: create. list: contains filter across Display Name and unique name.")] string name = "",
+            [Description("Display Name. Optional: create/update.")] string display_name = "",
+            [Description("Description. Optional: create/update.")] string description = "",
+            [Description("Absolute or relative file path. Required: create. Tool reads file and converts to base64 internally.")] string file_path = "",
+            [Description("Required: create. See description for values. Ignored on other actions.")] string type = "",
+            [Description("list: filter. create: REQUIRED — used to resolve publisher prefix and add WR to solution.")] string solution_name = "",
+            [Description("list only. See type values.")] string type_filter = "",
+            [Description("1-500.")] int max_records = 50,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ManageWebResourceTool(conn.OrgService, conn.Options, conn.Context);
+                return System.Threading.Tasks.Task.FromResult(worker.manage_webresource(action, web_resource_id, name, display_name, description, file_path, type, solution_name, type_filter, max_records));
+            }, cancellationToken);
+        }
+
         public CallToolResult manage_webresource(
             [Description("list / detail / create / update / delete.")] string action = "",
             [Description("GUID, Display Name, or unique name. Required: detail/update/delete.")] string web_resource_id = "",

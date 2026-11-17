@@ -17,8 +17,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly IOrganizationService _orgService;
 
-        public GetPluginTraceLogsTool(IOrganizationService orgService)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public GetPluginTraceLogsTool(IOrganizationService orgService) : this(orgService, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public GetPluginTraceLogsTool(IOrganizationService orgService, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
         }
 
@@ -33,6 +39,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- get_plugins → plugin registrations and steps\n" +
             "- get_system_jobs → asynchronous job failures")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("plugintracelog GUID → detail. Empty = list.")] string record_id = "",
+            [Description("Plugin type name (contains). NOT table name.")] string type_name = "",
+            [Description("Primary entity Display/logical name.")] string entity_name = "",
+            [Description("SDK message: Create, Update, Delete, etc.")] string message_name = "",
+            [Description("'sync' / 'async'. Empty = both.")] string mode = "",
+            [Description("GUID. Trace one request across logs.")] string correlation_id = "",
+            [Description("0 = 60 min default. Max 43200 (30d).")] int minutes_ago = 0,
+            [Description("Default 50. Max 200.")] int max_records = 50,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new GetPluginTraceLogsTool(conn.OrgService);
+                return System.Threading.Tasks.Task.FromResult(worker.get_plugin_trace_logs(record_id, type_name, entity_name, message_name, mode, correlation_id, minutes_ago, max_records));
+            }, cancellationToken);
+        }
+
         public CallToolResult get_plugin_trace_logs(
             [Description("plugintracelog GUID → detail. Empty = list.")] string record_id = "",
             [Description("Plugin type name (contains). NOT table name.")] string type_name = "",

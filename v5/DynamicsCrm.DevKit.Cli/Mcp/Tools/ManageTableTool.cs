@@ -22,8 +22,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public ManageTableTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ManageTableTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context) : this(orgService, options, context, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ManageTableTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -47,6 +53,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- manage_relationship → 1:N / N:N\n" +
             "- manage_form → forms\n" +
             "- publish_customizations → batch publish after multiple metadata changes")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("Singular display name (e.g. 'Project'). Required for CREATE.")] string display_name = "",
+            [Description("Plural (e.g. 'Projects'). Required: create.")] string display_collection_name = "",
+            [Description("Required: create.")] string solution_name = "",
+            [Description("Optional table description.")] string description = "",
+            [Description("Auto-derived if omitted. [create-only]")] string primary_attribute_name = "",
+            [Description("Display label of the primary name column on create. Default 'Name'.")] string primary_attribute_display_name = "Name",
+            [Description("'User' or 'Organization'. [create-only, immutable]")] string ownership_type = "User",
+            [Description("'Standard' or 'Elastic' (Cosmos DB, no charts). [create-only, immutable]")] string table_type = "Standard",
+            [Description("Activity entity. [create-only, immutable]")] bool is_activity = false,
+            [Description("Enable notes. [create-only]")] bool has_notes = false,
+            [Description("Enable quick create for this table. null = keep current on update.")] bool? is_quick_create_enabled = null,
+            [Description("null = keep current (update). Default true on create.")] bool? is_audit_enabled = null,
+            [Description("Enable this table for Dataverse Search/Relevance Search (SyncToExternalSearchIndex). null = keep current on update; false by default on create unless specified.")] bool? is_search_enabled = null,
+            [Description("1-850. [create-only]")] int primary_attribute_max_length = 100,
+            [Description("SchemaName for the new table (e.g. 'all_InOne' or 'all_In_One'). If provided, used AS-IS as SchemaName (skip auto-derive). Caller responsible for casing. Create only — ignored on update. Must start with the publisher prefix.")] string schema_name = "",
+            [Description("Update: identifies the existing table by display or logical name. Create: optional logical name override (e.g. 'all_in_one'), normalized to lowercase; must start with the solution publisher prefix and match the lowercase schema name.")] string logical_name = "",
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ManageTableTool(conn.OrgService, conn.Options, conn.Context);
+                return System.Threading.Tasks.Task.FromResult(worker.manage_table(display_name, display_collection_name, solution_name, description, primary_attribute_name, primary_attribute_display_name, ownership_type, table_type, is_activity, has_notes, is_quick_create_enabled, is_audit_enabled, is_search_enabled, primary_attribute_max_length, schema_name, logical_name));
+            }, cancellationToken);
+        }
+
         public CallToolResult manage_table(
             [Description("Singular display name (e.g. 'Project'). Required for CREATE.")] string display_name = "",
             [Description("Plural (e.g. 'Projects'). Required: create.")] string display_collection_name = "",

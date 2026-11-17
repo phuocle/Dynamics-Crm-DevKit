@@ -19,8 +19,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly IOrganizationService _orgService;
         private const int DataversePageLimit = 5000;
 
-        public ExecuteFetchXmlTool(IOrganizationService orgService)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ExecuteFetchXmlTool(IOrganizationService orgService) : this(orgService, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ExecuteFetchXmlTool(IOrganizationService orgService, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
         }
 
@@ -37,6 +43,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_tables → discover entity and attribute logical names\n" +
             "- search_records → keyword relevance search\n" +
             "- schema://fetchxml → FetchXML syntax and examples")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("FetchXML starting with <fetch>. Lowercase logical names.")] string fetchxml = "",
+            [Description("1-5000. Default 5000. Use 10-100 for samples.")] int max_records = 5000,
+            [Description("true = auto-page until max_records. false = first page only.")] bool get_all = false,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ExecuteFetchXmlTool(conn.OrgService);
+                return System.Threading.Tasks.Task.FromResult(worker.execute_fetchxml(fetchxml, max_records, get_all));
+            }, cancellationToken);
+        }
+
         public CallToolResult execute_fetchxml(
             [Description("FetchXML starting with <fetch>. Lowercase logical names.")] string fetchxml = "",
             [Description("1-5000. Default 5000. Use 10-100 for samples.")] int max_records = 5000,

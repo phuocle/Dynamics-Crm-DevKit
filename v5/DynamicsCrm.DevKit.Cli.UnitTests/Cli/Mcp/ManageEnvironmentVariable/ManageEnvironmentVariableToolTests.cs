@@ -34,7 +34,7 @@ public class ManageEnvironmentVariableToolTests
     [TestMethod]
     public void ToolDescription_MentionsAllSixActions()
     {
-        var method = ToolType.GetMethod("manage_environment_variable")!;
+        var method = ToolType.GetMethod("InvokeAsync")!;
         var descAttr = method.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>()!;
         var desc = descAttr.Description;
 

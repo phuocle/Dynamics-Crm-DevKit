@@ -29,7 +29,7 @@ public class ManageFunctionContractTests
     [TestMethod]
     public void ToolAttribute_HasExpectedFlagsAndName()
     {
-        var method = ToolType.GetMethod("manage_function")!;
+        var method = ToolType.GetMethod("InvokeAsync")!;
         var attr = method.GetCustomAttribute<ModelContextProtocol.Server.McpServerToolAttribute>()!;
 
         Assert.AreEqual("manage_function", attr.Name);
@@ -43,7 +43,7 @@ public class ManageFunctionContractTests
     [TestMethod]
     public void ToolDescription_AdvertisesOnlyShippedActions()
     {
-        var method = ToolType.GetMethod("manage_function")!;
+        var method = ToolType.GetMethod("InvokeAsync")!;
         var desc = method.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>()!.Description;
 
         foreach (var shipped in new[] { "list", "detail", "validate", "invoke" })

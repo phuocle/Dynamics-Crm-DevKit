@@ -18,10 +18,18 @@ using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Commands
 {
-    [Description("Start MCP server for AI agent integration. Without --env, preserve the original DEVKIT_* per-property merge, including optional fields, auth/conn merging and credential alias priority. With --env <id>, complete explicit connection args skip .env; missing values use only DEVKIT_<id>_* (a missing selected group is an error when fallback is needed). [[name]] sets the MCP instance display name, --env <id> selects the .env fallback group, and --profile is for DynamicsCrm.DevKit.Cli.json commands. Run 'devkit mcp --setup-guide' for multi-instance configuration.")]
+    [Description("Start MCP server for AI agent integration. Without --env, preserve the original DEVKIT_* per-property merge, including optional fields, auth/conn merging and credential alias priority. With --env <id> (numeric ID, alias, or default), complete explicit connection args skip connection fallback; missing values use only DEVKIT_<id>_* (a missing selected group is an error when fallback is needed). [[name]] sets the MCP instance display name, --env <id> selects the .env fallback group, and --profile is for DynamicsCrm.DevKit.Cli.json commands. Run 'devkit mcp --setup-guide' for multi-instance configuration.")]
     public class McpCommand : AsyncCommand<McpCommandArgs>
     {
         private static TextWriter Stderr => Console.Error;
+        private static string RedactConnectionError(string message, McpCommandArgs settings)
+        {
+            var text = message ?? "";
+            foreach (var secret in new[] { settings.ClientSecret, settings.Password, settings.Connection })
+                if (!string.IsNullOrEmpty(secret)) text = text.Replace(secret, "[redacted]", StringComparison.Ordinal);
+            return System.Text.RegularExpressions.Regex.Replace(text,
+                @"(?i)(clientsecret|client_secret|password|access_token|refresh_token)\s*=\s*[^;\r\n]+", "$1=[redacted]");
+        }
 
         public Task<int> ExecuteAsyncForTesting(CommandContext context, McpCommandArgs settings, CancellationToken cancellationToken)
             => ExecuteAsync(context, settings, cancellationToken);
@@ -30,9 +38,9 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         {
             try
             {
-                if (settings.Env != null && !ProjectEnvironment.IsValidGroupId(settings.Env))
+                if (settings.Env != null && !Mcp.McpConnectionSnapshot.IsSelector(settings.Env))
                 {
-                    LogError($"Invalid --env value '{settings.Env}'. Expected a positive integer group ID without leading zeros (for example: 1, 2, 10, 100).");
+                    LogError($"Invalid --env value '{settings.Env}'. Expected a positive integer group ID without leading zeros, an alias, or default (for example: 1, 2, prod, default).");
                     return 2;
                 }
 
@@ -47,6 +55,15 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     PrintTools();
                     return 0;
                 }
+
+                var snapshot = Mcp.McpConnectionSnapshot.Load(settings);
+                settings.EnvironmentSnapshot = snapshot.CopyValues();
+                settings.EnvironmentSnapshotPath = snapshot.FilePath;
+                settings.Env = snapshot.StartupEnvId == "default" ? null : snapshot.StartupEnvId;
+                var dryRunFlag = settings.DryRun;
+                var legacyAsUser = !string.IsNullOrWhiteSpace(settings.AsUser);
+                settings.DryRun = snapshot.DryRun(snapshot.StartupEnvId, dryRunFlag);
+                if (!legacyAsUser) settings.AsUser = snapshot.Value(snapshot.StartupEnvId, "AS_USER")?.Trim();
 
                 if (!ResolveConnectionSettings(settings))
                     return 2;
@@ -68,7 +85,12 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 // the setting is IGNORED with a warning rather than failing the server.
                 Guid? impersonatedUserId = null;
                 string impersonatedUserDisplay = null;
-                if (!string.IsNullOrWhiteSpace(settings.AsUser))
+                if (!legacyAsUser && !string.IsNullOrWhiteSpace(settings.AsUser))
+                {
+                    try { impersonatedUserDisplay = Mcp.McpConnectionFactory.ApplyConfiguredImpersonation(serviceClient, settings.AsUser); impersonatedUserId = serviceClient.CallerId; }
+                    catch { serviceClient.Dispose(); throw; }
+                }
+                else if (!string.IsNullOrWhiteSpace(settings.AsUser))
                 {
                     if (RoleGateHelper.IsSystemAdministrator(serviceClient))
                     {
@@ -93,7 +115,9 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
                 LogInfo($"Starting MCP server v{Shared.Const.Version}...");
 
-                var host = new Mcp.McpServerHost(serviceClient);
+                var startupBundle = new Mcp.ConnectionBundle(snapshot.StartupEnvId, serviceClient, settings.DryRun, impersonatedUserDisplay);
+                await using var connections = new Mcp.McpConnectionRegistry(snapshot, settings, dryRunFlag, startupBundle);
+                var host = new Mcp.McpServerHost(serviceClient, connections);
                 await host.RunAsync(
                     settings.Category,
                     settings.DryRun,
@@ -106,11 +130,16 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
                 return 0;
             }
+            catch (Mcp.McpConnectionConfigurationException ex)
+            {
+                LogError(RedactConnectionError(ex.Message, settings));
+                return 2;
+            }
             catch (Exception ex)
             {
-                LogError(ex.Message);
+                LogError(RedactConnectionError(ex.Message, settings));
                 if (ex.InnerException != null)
-                    LogError($"Inner: {ex.InnerException.Message}");
+                    LogError($"Inner: {RedactConnectionError(ex.InnerException.Message, settings)}");
                 return 1;
             }
         }
@@ -123,7 +152,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             // including optional fields and the original auth/connection merge.
             if (settings.Env == null)
             {
-                var defaultValues = ProjectEnvironment.Read(ProjectEnvironment.ResolveFileFromJsonOrDirectory(settings.JsonFile, settings.CurrentDirectory));
+                var defaultValues = settings.EnvironmentSnapshot ?? ProjectEnvironment.Read(ProjectEnvironment.ResolveFileFromJsonOrDirectory(settings.JsonFile, settings.CurrentDirectory));
                 var hadDefaultEnvValues = ProjectEnvironment.HasGroup(defaultValues, null);
                 settings.ResolveProjectEnvironmentDefaults(defaultValues);
                 settings.UsedEnvironmentFallback = hadDefaultEnvValues;
@@ -146,7 +175,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
             // Use the resolved --json directory (when provided) or the process working directory
             // to find the nearest project .env upward to the drive root.
-            var envFile = ProjectEnvironment.ResolveFileFromJsonOrDirectory(settings.JsonFile, settings.CurrentDirectory);
+            var envFile = settings.EnvironmentSnapshotPath ?? ProjectEnvironment.ResolveFileFromJsonOrDirectory(settings.JsonFile, settings.CurrentDirectory);
 
             if (string.IsNullOrEmpty(envFile) || !File.Exists(envFile))
             {
@@ -154,8 +183,10 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 return false;
             }
 
-            var envValues = ProjectEnvironment.Read(envFile);
-            if (!ProjectEnvironment.HasGroup(envValues, settings.Env))
+            var envValues = settings.EnvironmentSnapshot ?? ProjectEnvironment.Read(envFile);
+            var hasMcpDeclaration = settings.EnvironmentSnapshot != null && new[] { "ALIAS", "DRY_RUN", "AS_USER" }
+                .Any(suffix => envValues.ContainsKey(Mcp.McpConnectionSnapshot.Key(settings.Env, suffix)));
+            if (!ProjectEnvironment.HasGroup(envValues, settings.Env) && !hasMcpDeclaration)
             {
                 LogError($"Environment group '{settings.Env}' was not found in the selected .env file (expected DEVKIT_{settings.Env}_* connection keys).");
                 return false;
@@ -170,147 +201,9 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             return true;
         }
 
-        private async Task<ServiceClient> ConnectAsync(McpCommandArgs settings)
-        {
-            var groupId = settings.UsedEnvironmentGroupFallback && !string.IsNullOrEmpty(settings.Env)
-                ? settings.Env
-                : null;
-
-            if (string.IsNullOrEmpty(settings.AuthType) && string.IsNullOrEmpty(settings.Connection))
-            {
-                if (groupId != null)
-                {
-                    LogError($"Environment group '{groupId}': {ProjectEnvironment.GetGroupKey(ProjectEnvironment.AuthType, groupId)} (or --auth) or {ProjectEnvironment.GetGroupKey(ProjectEnvironment.Connection, groupId)} (or --conn) is required for MCP server.");
-                }
-                else
-                {
-                    LogError("--auth or --conn is required for MCP server. Provide connection arguments or set DEVKIT_* values in a project .env file.");
-                }
-                return null;
-            }
-
-            LogInfo("Connecting to Dynamics 365...");
-
-            ServiceClient serviceClient;
-
-            if (!string.IsNullOrEmpty(settings.AuthType))
-            {
-                serviceClient = await ConnectModernAsync(settings);
-            }
-            else
-            {
-                var legacyBuilder = new LegacyConnectionBuilder();
-                var crmConn = legacyBuilder.ParseConnectionString(settings.Connection);
-                if (crmConn == null)
-                {
-                    LogError(groupId != null
-                        ? $"Environment group '{groupId}' ({ProjectEnvironment.GetGroupKey(ProjectEnvironment.Connection, groupId)}): Invalid connection string."
-                        : "Invalid connection string.");
-                    return null;
-                }
-
-                var builder = ConnectionBuilderFactory.GetBuilder(crmConn.Type);
-                serviceClient = await builder.CreateServiceClientAsync(crmConn);
-            }
-
-            if (serviceClient?.IsReady != true)
-            {
-                LogError($"Connection failed: {serviceClient?.LastError}");
-                return null;
-            }
-
-            ServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
-            LogInfo($"Connected: {serviceClient.ConnectedOrgUriActual}");
-
-            return serviceClient;
-        }
-
-        private static async Task<ServiceClient> ConnectModernAsync(McpCommandArgs settings)
-        {
-            var groupId = settings.UsedEnvironmentGroupFallback && !string.IsNullOrEmpty(settings.Env)
-                ? settings.Env
-                : null;
-
-            if (string.IsNullOrEmpty(settings.Url) && !settings.AuthType.Equals("FromPac", StringComparison.OrdinalIgnoreCase))
-            {
-                if (groupId != null)
-                    throw new Exception($"Environment group '{groupId}': {ProjectEnvironment.GetGroupKey(ProjectEnvironment.Url, groupId)} or --url is required for {settings.AuthType} authentication.");
-                throw new Exception("--url is required for modern authentication (except FromPac).");
-            }
-
-            if (!ConnectionBuilderFactory.IsSupported(settings.AuthType))
-            {
-                if (groupId != null)
-                    throw new Exception($"Environment group '{groupId}': Authentication type '{settings.AuthType}' is not supported. Use: Interactive, DeviceCode, ClientSecret, FromPac, OAuth, AD.");
-                throw new Exception($"Authentication type '{settings.AuthType}' is not supported. Use: Interactive, DeviceCode, ClientSecret, FromPac, OAuth, AD.");
-            }
-
-            var builder = ConnectionBuilderFactory.GetBuilder(settings.AuthType);
-
-            var clientSecret = settings.ClientSecret;
-            if (!string.IsNullOrEmpty(clientSecret))
-                clientSecret = Helper.DecryptString(clientSecret);
-
-            var connection = new CrmConnection
-            {
-                Name = "mcp",
-                Url = settings.Url,
-                UserName = GetConnectionUserName(settings),
-                Password = settings.Password,
-                ClientId = settings.ClientId,
-                ClientSecret = clientSecret,
-                Type = settings.AuthType,
-                PacProfile = settings.PacProfile
-            };
-
-            if (groupId != null)
-            {
-                ValidateGroupRequiredFields(settings.AuthType, connection, groupId);
-            }
-
-            var (isValid, error) = await builder.ValidateAsync(connection);
-            if (!isValid)
-            {
-                if (groupId != null)
-                    throw new Exception($"Environment group '{groupId}' (DEVKIT_{groupId}_*): Validation failed: {error}");
-                throw new Exception($"Validation failed: {error}");
-            }
-
-            if (builder is DeviceCodeConnectionBuilder deviceCodeBuilder)
-            {
-                deviceCodeBuilder.DeviceCodeCallback = message =>
-                {
-                    LogInfo($"[DeviceCode] {message}");
-                };
-            }
-
-            return await builder.CreateServiceClientAsync(connection);
-        }
-
-        private static void ValidateGroupRequiredFields(string authType, CrmConnection connection, string groupId)
-        {
-            if (authType.Equals("ClientSecret", StringComparison.OrdinalIgnoreCase))
-            {
-                if (string.IsNullOrEmpty(connection.ClientId) && string.IsNullOrEmpty(connection.UserName))
-                    throw new Exception($"Environment group '{groupId}': {ProjectEnvironment.GetGroupKey(ProjectEnvironment.ClientId, groupId)} or --clientid is required for ClientSecret authentication.");
-                if (string.IsNullOrEmpty(connection.ClientSecret) && string.IsNullOrEmpty(connection.Password))
-                    throw new Exception($"Environment group '{groupId}': {ProjectEnvironment.GetGroupKey(ProjectEnvironment.ClientSecret, groupId)} or --clientsecret is required for ClientSecret authentication.");
-            }
-            else if (authType.Equals("OAuth", StringComparison.OrdinalIgnoreCase))
-            {
-                if (string.IsNullOrEmpty(connection.UserName))
-                    throw new Exception($"Environment group '{groupId}': {ProjectEnvironment.GetGroupKey(ProjectEnvironment.Username, groupId)} or --username is required for OAuth authentication.");
-                if (string.IsNullOrEmpty(connection.Password))
-                    throw new Exception($"Environment group '{groupId}': {ProjectEnvironment.GetGroupKey(ProjectEnvironment.Password, groupId)} or --password is required for OAuth authentication.");
-            }
-            else if (authType.Equals("AD", StringComparison.OrdinalIgnoreCase))
-            {
-                if (string.IsNullOrEmpty(connection.UserName))
-                    throw new Exception($"Environment group '{groupId}': {ProjectEnvironment.GetGroupKey(ProjectEnvironment.Username, groupId)} or --username is required for AD authentication.");
-                if (string.IsNullOrEmpty(connection.Password))
-                    throw new Exception($"Environment group '{groupId}': {ProjectEnvironment.GetGroupKey(ProjectEnvironment.Password, groupId)} or --password is required for AD authentication.");
-            }
-        }
+        private Task<ServiceClient> ConnectAsync(McpCommandArgs settings) => Mcp.McpConnectionFactory.ConnectAsync(settings);
+        private static Task<ServiceClient> ConnectModernAsync(McpCommandArgs settings) => Mcp.McpConnectionFactory.ConnectModernAsync(settings);
+        private static void ValidateGroupRequiredFields(string authType, CrmConnection connection, string groupId) => Mcp.McpConnectionFactory.ValidateGroupRequiredFields(authType, connection, groupId);
 
         private static void LogConnectionInfo(McpCommandArgs settings)
         {
@@ -349,18 +242,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                    authType.Equals("AD", StringComparison.OrdinalIgnoreCase);
         }
 
-        private static string GetConnectionUserName(McpCommandArgs settings)
-        {
-            if (!settings.AuthType.Equals("AD", StringComparison.OrdinalIgnoreCase) ||
-                string.IsNullOrEmpty(settings.Domain) ||
-                string.IsNullOrEmpty(settings.Username) ||
-                settings.Username.Contains("\\"))
-            {
-                return settings.Username;
-            }
-
-            return $"{settings.Domain}\\{settings.Username}";
-        }
+        private static string GetConnectionUserName(McpCommandArgs settings) => Mcp.McpConnectionFactory.GetConnectionUserName(settings);
 
         private static void LogInfo(string message)
         {
@@ -525,8 +407,9 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("   Both --auth and --conn may be filled; a non-empty auth selects its builder.");
             Console.WriteLine("   ClientSecret prefers ClientId/ClientSecret over username/password aliases.");
             Console.WriteLine("   With --env <id>: explicit connection args take priority. Complete args");
-            Console.WriteLine("   skip .env; otherwise only DEVKIT_<id>_* fills missing connection values.");
-            Console.WriteLine("   Neither mode requires .env when args suffice to connect without it.");
+            Console.WriteLine("   skip connection fallback; otherwise the selected group fills missing values.");
+            Console.WriteLine("   Complete connection args skip connection fallback. Startup still snapshots");
+            Console.WriteLine("   the nearest .env for group discovery and alias/policy validation.");
             Console.WriteLine("   When reading project defaults, MCP uses the");
             Console.WriteLine("   first .env found by searching from the resolved --json directory (if set)");
             Console.WriteLine("   or from the process working directory upward to the drive root.");
@@ -568,6 +451,18 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("     DEVKIT_100_CLIENT_SECRET=SECRET_HUNDRED");
             Console.WriteLine();
             Console.WriteLine("   --env <id>           : Project .env fallback group (selects DEVKIT_<id>_*; default: DEVKIT_*)");
+            Console.WriteLine("   --env also accepts an alias or default (the unnumbered DEVKIT_* group).");
+            Console.WriteLine("   One process can serve multiple connections. Dataverse tools take optional env:");
+            Console.WriteLine("     omitted = startup; numeric ID/alias = that group; default = DEVKIT_*.");
+            Console.WriteLine("   Call connection_list to inspect groups and whoami with env to verify identity.");
+            Console.WriteLine("   Aliases: DEVKIT_ALIAS=dev, DEVKIT_1_ALIAS=prod; unique ignoring case,");
+            Console.WriteLine("     start with a letter, then letters/digits/_/-. The name default is reserved.");
+            Console.WriteLine("   Protect PROD with DEVKIT_1_DRY_RUN=true; DEV may remain writable.");
+            Console.WriteLine("     --dry-run blocks ALL groups. Otherwise group DRY_RUN overrides DEVKIT_DRY_RUN.");
+            Console.WriteLine("   DEVKIT_AS_USER and DEVKIT_1_AS_USER apply only to their own group.");
+            Console.WriteLine("     --as-user overrides startup only; unresolved .env AS_USER fails that connection.");
+            Console.WriteLine("   New policy values are validated at startup. File edits require a server restart.");
+            Console.WriteLine("   read_instruction, connection_list and resources do not take env.");
             Console.WriteLine("   --auth               : Interactive, DeviceCode, ClientSecret, FromPac, OAuth, AD");
             Console.WriteLine("   --url                : https://org.crm.dynamics.com (except FromPac)");
             Console.WriteLine("   --clientid           : Azure AD Application (Client) ID");

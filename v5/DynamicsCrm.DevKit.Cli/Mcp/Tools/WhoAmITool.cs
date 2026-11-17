@@ -20,12 +20,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class WhoAmITool : McpToolBase
     {
+        internal string RoutingEnvId { get; set; } = "default";
         private readonly IOrganizationService _orgService;
         private readonly IMcpConnectionInfo _connectionInfo;
         private readonly McpExecutionContext _context;
 
-        public WhoAmITool(IOrganizationService orgService, McpExecutionContext context, IMcpConnectionInfo connectionInfo)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public WhoAmITool(IOrganizationService orgService, McpExecutionContext context, IMcpConnectionInfo connectionInfo) : this(orgService, context, connectionInfo, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public WhoAmITool(IOrganizationService orgService, McpExecutionContext context, IMcpConnectionInfo connectionInfo, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
             _connectionInfo = connectionInfo;
             _context = context;
@@ -42,19 +49,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- execute_fetchxml → query records with the returned userId\n" +
             "- manage_role → inspect role definitions and assignments")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new WhoAmITool(conn.OrgService, conn.Context, conn.ConnectionInfo);
+                worker.RoutingEnvId = conn.EnvId;
+                return System.Threading.Tasks.Task.FromResult(worker.whoami());
+            }, cancellationToken);
+        }
+
         public CallToolResult whoami()
         {
             try
             {
                 var response = (WhoAmIResponse)_orgService.Execute(new WhoAmIRequest());
+                // ConnectedOrgVersion can still contain the SDK's 9.0.0.0 placeholder
+                // on a freshly opened lazy connection. Ask the selected organization
+                // directly so even the first response contains its actual version.
+                var version = (RetrieveVersionResponse)_orgService.Execute(new RetrieveVersionRequest());
 
                 var structured = new WhoAmIResult
                 {
+                    Env = RoutingEnvId,
+                    DryRun = _context?.MutationsBlocked ?? false,
                     UserId = response.UserId.ToString(),
                     BusinessUnitId = response.BusinessUnitId.ToString(),
                     OrganizationId = response.OrganizationId.ToString(),
                     EnvironmentUrl = GetBaseUrl(_connectionInfo.ConnectedOrgUri),
-                    Version = _connectionInfo.ConnectedOrgVersion?.ToString(),
+                    Version = version.Version,
                     OrgFriendlyName = _connectionInfo.ConnectedOrgFriendlyName,
                     OrgUniqueName = _connectionInfo.ConnectedOrgUniqueName,
                     TenantId = _connectionInfo.TenantId.ToString(),

@@ -31,8 +31,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private const long MaxBase64UploadBytes = 1L * 1024 * 1024; // 1 MB
         private static readonly string[] ImageExtensions = [".gif", ".jpeg", ".jpg", ".tiff", ".tif", ".bmp", ".png"];
 
-        public ManageRecordFileTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ManageRecordFileTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context) : this(orgService, options, context, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ManageRecordFileTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService ?? throw new ArgumentNullException(nameof(orgService));
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -55,6 +61,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_tables → find File/Image columns of a table\n" +
             "- manage_record / search_records → find record_id\n" +
             "- manage_column → create file/image columns or raise MaxSizeInKB")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            McpServer server,
+            [Description("'info', 'upload', 'download', 'delete'.")] string action = "",
+            [Description("Table Display or logical name (Display Name resolved first). Required.")] string entity_name = "",
+            [Description("File/Image column Display or logical name (Display Name resolved first). Required.")] string column_name = "",
+            [Description("GUID of the record. Required.")] string record_id = "",
+            [Description("upload: local file path or http(s) URL (auto-downloaded). Relative paths resolve against the workspace folder (auto-resolved from MCP roots or server cwd).")] string file_path = "",
+            [Description("upload alternative: base64 content, files < 1 MB only. Requires file_name.")] string content_base64 = "",
+            [Description("upload: override file name. Required with content_base64; default = name from path/URL.")] string file_name = "",
+            [Description("download: image columns only. true = full-sized image (requires CanStoreFullImage); false = thumbnail. Default false.")] bool full_size = false,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ManageRecordFileTool(conn.OrgService, conn.Options, conn.Context);
+                return worker.manage_record_file(server, action, entity_name, column_name, record_id, file_path, content_base64, file_name, full_size);
+            }, cancellationToken);
+        }
+
         public async Task<CallToolResult> manage_record_file(
             McpServer server,
             [Description("'info', 'upload', 'download', 'delete'.")] string action = "",

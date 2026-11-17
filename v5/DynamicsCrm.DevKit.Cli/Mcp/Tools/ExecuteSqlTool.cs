@@ -22,8 +22,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly IWebApiExecutor _webApi;
         private readonly MetadataService _metadataService;
 
-        public ExecuteSqlTool(IWebApiExecutor webApi, MetadataService metadataService)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ExecuteSqlTool(IWebApiExecutor webApi, MetadataService metadataService) : this(webApi, metadataService, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ExecuteSqlTool(IWebApiExecutor webApi, MetadataService metadataService, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _webApi = webApi ?? throw new ArgumentNullException(nameof(webApi));
             _metadataService = metadataService ?? throw new ArgumentNullException(nameof(metadataService));
         }
@@ -47,6 +53,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- execute_fetchxml → alternative for FetchXML-specific conditions or deep hierarchies\n" +
             "- execute_webapi → raw REST calls (non-SQL; ?sql= returns guidance to call execute_sql)\n" +
             "- docs://instructions_for_sql → Dataverse SQL syntax rules and conversion cheat sheet")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("SQL SELECT query. Lowercase logical names. No SELECT *.")] string sql = "",
+            [Description("1-50000. Default 5000. Use 10-100 for samples.")] int max_records = 5000,
+            [Description("true = auto-page until max_records. false = first page only.")] bool get_all = false,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ExecuteSqlTool(conn.WebApi, conn.Metadata);
+                return worker.execute_sql(sql, max_records, get_all);
+            }, cancellationToken);
+        }
+
         public async Task<CallToolResult> execute_sql(
             [Description("SQL SELECT query. Lowercase logical names. No SELECT *.")] string sql = "",
             [Description("1-50000. Default 5000. Use 10-100 for samples.")] int max_records = 5000,

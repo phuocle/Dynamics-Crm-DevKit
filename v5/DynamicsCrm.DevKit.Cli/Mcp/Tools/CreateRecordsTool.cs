@@ -30,8 +30,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public CreateRecordsTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public CreateRecordsTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context) : this(serviceClient, options, context, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public CreateRecordsTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _serviceClient = serviceClient;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -71,6 +77,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- generate_demo_data → produce JSON to pipe into records_json\n" +
             "- manage_record → single-record create/update/delete/associate/disassociate\n" +
             "- search_records / execute_fetchxml → verify created records")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("Entity Display Name or logical name (Display Name resolved first).")] string entity_name = "",
+            [Description("Inline JSON array, .json file path, or .csv file path. Max 5000 records.")] string records_json = "",
+            [Description("Concurrent requests. 0 = server hint. Clamped 1-52. Use 1-2 for on-prem.")] int max_parallelism = 0,
+            [Description("Bypass custom sync+async plugins/workflows (BypassBusinessLogicExecution=CustomSync,CustomAsync). Default false. Requires System Administrator role; rejected early otherwise. Use for bulk data load where plugins would slow/block creates.")] bool bypass_custom_logic = false,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new CreateRecordsTool(conn.Client, conn.Options, conn.Context);
+                return worker.create_records(entity_name, records_json, max_parallelism, bypass_custom_logic);
+            }, cancellationToken);
+        }
+
         public async Task<CallToolResult> create_records(
             [Description("Entity Display Name or logical name (Display Name resolved first).")] string entity_name = "",
             [Description("Inline JSON array, .json file path, or .csv file path. Max 5000 records.")] string records_json = "",
@@ -266,10 +287,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         MaxDegreeOfParallelism = batchedParallelism
                     }, async (chunk, ct) =>
                     {
-                        using var worker = _serviceClient.Clone() ?? _serviceClient;
+                        using var ownedWorker = _serviceClient.Clone();
+                        var worker = ownedWorker ?? _serviceClient;
                         // Propagate CallerId (impersonation) to cloned connections.
                         // ServiceClient.Clone() may not copy CallerId, so set it explicitly.
-                        worker.CallerId = _serviceClient.CallerId;
+                        if (ownedWorker != null) ownedWorker.CallerId = _serviceClient.CallerId;
                         foreach (var item in await ExecuteChunkAsync(worker, chunk, bypass_custom_logic, ct))
                             chunkResults.Add(item);
                     });

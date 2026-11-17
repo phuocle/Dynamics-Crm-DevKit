@@ -18,8 +18,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly IOrganizationService _orgService;
 
-        public GetCustomApisTool(IOrganizationService orgService)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public GetCustomApisTool(IOrganizationService orgService) : this(orgService, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public GetCustomApisTool(IOrganizationService orgService, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
         }
 
@@ -68,6 +74,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_messages → legacy workflow Custom Actions (category=3) + SDK messages\n" +
             "- get_plugins → plugin assemblies/types/steps registered on these APIs\n" +
             "- get_workflows → classic workflow definitions")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("Display Name or unique name → detail. Empty = list.")] string api_name = "",
+            [Description("Bound entity Display/logical name. Empty = all.")] string entity_name = "",
+            [Description("Include managed APIs. Default false.")] bool include_microsoft = false,
+            [Description("'active' / 'inactive' / 'all'.")] string status = "active",
+            [Description("1-500. Default 100.")] int max_records = 100,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new GetCustomApisTool(conn.OrgService);
+                return System.Threading.Tasks.Task.FromResult(worker.get_custom_apis(api_name, entity_name, include_microsoft, status, max_records));
+            }, cancellationToken);
+        }
+
         public CallToolResult get_custom_apis(
             [Description("Display Name or unique name → detail. Empty = list.")] string api_name = "",
             [Description("Bound entity Display/logical name. Empty = all.")] string entity_name = "",

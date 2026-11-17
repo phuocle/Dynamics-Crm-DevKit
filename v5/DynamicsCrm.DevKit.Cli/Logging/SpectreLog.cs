@@ -122,7 +122,7 @@ namespace DynamicsCrm.DevKit.Cli
                 "MCP connection fallback:\n" +
                 "  Without --env, the original DEVKIT_* per-property merge is preserved.\n" +
                 "  Optional fields, auth/conn merging, and credential alias priority stay as before.\n" +
-                "  With --env <id>, complete args skip .env; missing values use DEVKIT_<id>_*.\n" +
+                "  With --env <id>, complete args skip connection fallback; missing values use DEVKIT_<id>_*.\n" +
                 "  A missing selected group is an error when fallback is needed.\n" +
                 "  Multiple MCP instances can select different groups; no fixed group limit.\n\n" +
                 "  devkit mcp devkit-codex\n" +
@@ -200,7 +200,7 @@ namespace DynamicsCrm.DevKit.Cli
                     "[green]MCP connection fallback:[/]\n" +
                     "  Without --env, the original DEVKIT_* per-property merge is preserved.\n" +
                     "  Optional fields, auth/conn merging, and credential alias priority stay as before.\n" +
-                    "  With --env [yellow]<id>[/], complete args skip .env; missing values use [cyan]DEVKIT_<id>_*[/].\n" +
+                    "  With --env [yellow]<id>[/], complete args skip connection fallback; missing values use [cyan]DEVKIT_<id>_*[/].\n" +
                     "  A missing selected group is an error when fallback is needed.\n" +
                     "  Multiple MCP instances can select different groups; no fixed group limit.\n\n" +
                     "  devkit [cyan]mcp[/] [cyan]devkit-codex[/]\n" +

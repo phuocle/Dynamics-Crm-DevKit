@@ -21,8 +21,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly IOrganizationService _orgService;
 
-        public GetWorkflowsTool(IOrganizationService orgService)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public GetWorkflowsTool(IOrganizationService orgService) : this(orgService, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public GetWorkflowsTool(IOrganizationService orgService, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
         }
 
@@ -51,6 +57,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_business_rules → client-side business rules\n" +
             "- get_flows → Power Automate cloud flows + run history\n" +
             "- get_system_jobs → workflow execution results (asyncoperation)")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("GUID → detail. Empty = list.")] string workflow_id = "",
+            [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Empty = all.")] string entity_name = "",
+            [Description("'background' / 'realtime'. Empty = both.")] string mode = "",
+            [Description("'active' / 'draft' / 'all'. Default: active.")] string status = "active",
+            [Description("Update trigger field Display Name or logical name when entity_name is set; otherwise contains filter.")] string trigger_field = "",
+            [Description("Name contains. 1 match → auto-detail.")] string name_filter = "",
+            [Description("Max 250.")] int max_records = 50,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new GetWorkflowsTool(conn.OrgService);
+                return System.Threading.Tasks.Task.FromResult(worker.get_workflows(workflow_id, entity_name, mode, status, trigger_field, name_filter, max_records));
+            }, cancellationToken);
+        }
+
         public CallToolResult get_workflows(
             [Description("GUID → detail. Empty = list.")] string workflow_id = "",
             [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Empty = all.")] string entity_name = "",

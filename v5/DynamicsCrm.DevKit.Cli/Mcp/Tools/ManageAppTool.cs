@@ -41,8 +41,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpExecutionContext _context;
         private string _workspaceFolder;
 
-        public ManageAppTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ManageAppTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context) : this(orgService, options, context, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ManageAppTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -62,6 +68,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_solution_components → solution names for create\n" +
             "- publish_customizations → publish other components (manage_app mutations auto-publish the app)\n" +
             "- execute_webapi → blocked for appmodule/sitemap/appmodulecomponent; use this tool instead")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            McpServer server,
+            [Description("'list', 'detail', 'create', 'update', 'update_navigation', 'validate', or 'undo'.")] string action = "detail",
+            [Description("App display name, unique name, or GUID. Required for detail/update/update_navigation/validate/undo.")] string app = "",
+            [Description("list only. App display/unique name contains filter.")] string app_name = "",
+            [Description("Required for create. Used to resolve the solution publisher prefix.")] string solution_name = "",
+            [Description("Required for create. Optional for update.")] string display_name = "",
+            [Description("Optional for create. The solution publisher prefix is always prepended (e.g. 'MyApp' with solution all_in_one becomes 'all_MyApp'). If empty, derived from display_name.")] string unique_name = "",
+            [Description("Optional for create/update.")] string description = "",
+            [Description("Optional app icon web resource name or GUID.")] string icon_webresource = "",
+            [Description("update_navigation: JSON array serialized as a string; read docs://instructions_for_manage_app for the operation contract and examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
+            [Description("list only. 1-500.")] int max_records = 100,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ManageAppTool(conn.OrgService, conn.Options, conn.Context);
+                return worker.manage_app(server, action, app, app_name, solution_name, display_name, unique_name, description, icon_webresource, operations, max_records);
+            }, cancellationToken);
+        }
+
         public async Task<CallToolResult> manage_app(
             McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'update_navigation', 'validate', or 'undo'.")] string action = "detail",

@@ -23,8 +23,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public ManageChoiceTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ManageChoiceTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context) : this(orgService, options, context, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ManageChoiceTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -43,6 +49,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- manage_column → local picklists; bind a global choice to a column\n" +
             "- get_tables → see which columns use a choice\n" +
             "- publish_customizations → batch publish after multiple metadata changes")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("'list', 'detail', 'create', 'update'.")] string action = "",
+            [Description("Logical or display name. Required: detail/update. Optional: create (auto-derived). Display Name matched first.")] string optionset_name = "",
+            [Description("Required: create. Optional: update (rename). For list, prefer filter=.")] string display_name = "",
+            [Description("'list' only. Contains filter on logical+display name.")] string filter = "",
+            [Description("Optional: create/update. Localized description.")] string description = "",
+            [Description("'create' only. 'Draft;Confirmed' (auto-value) or 'value:label'. solution_name required.")] string options = "",
+            [Description("'update' only. 'NewLabel' (needs solution_name) or 'value:label'. Existing labels skipped.")] string add_options = "",
+            [Description("'update' only. 'OldLabel:NewLabel;...' pairs.")] string update_options = "",
+            [Description("'update' only. 'Label1,Label2'. IRREVERSIBLE.")] string remove_options = "",
+            [Description("Required: create + label-only add_options. Solution unique/display name.")] string solution_name = "",
+            [Description("Optional: create/update. 'Label:#RRGGBB;...' or 'value:#RRGGBB;...'.")] string option_colors = "",
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ManageChoiceTool(conn.OrgService, conn.Options, conn.Context);
+                return System.Threading.Tasks.Task.FromResult(worker.manage_choice(action, optionset_name, display_name, filter, description, options, add_options, update_options, remove_options, solution_name, option_colors));
+            }, cancellationToken);
+        }
+
         public CallToolResult manage_choice(
             [Description("'list', 'detail', 'create', 'update'.")] string action = "",
             [Description("Logical or display name. Required: detail/update. Optional: create (auto-derived). Display Name matched first.")] string optionset_name = "",

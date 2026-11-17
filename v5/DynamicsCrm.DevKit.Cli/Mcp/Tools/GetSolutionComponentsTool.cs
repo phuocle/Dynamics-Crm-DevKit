@@ -117,8 +117,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             { 10326, "App Action" },
         };
 
-        public GetSolutionComponentsTool(IOrganizationService orgService)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public GetSolutionComponentsTool(IOrganizationService orgService) : this(orgService, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public GetSolutionComponentsTool(IOrganizationService orgService, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
         }
 
@@ -136,6 +142,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_tables → entity/attribute metadata for sub-components\n" +
             "- get_plugins → plugin assembly/type/step detail\n" +
             "- manage_webresource → web resource detail")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("Solution unique/display name; multiple matches return choices.")] string solution_name = "",
+            [Description("Add ActiveLayer (Yes/No) via msdyn_componentlayer. Active = unmanaged customization exists.")] bool include_active_layers = false,
+            [Description("Show only active-layer components; implies include_active_layers.")] bool active_layers_only = false,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new GetSolutionComponentsTool(conn.OrgService);
+                return System.Threading.Tasks.Task.FromResult(worker.get_solution_components(solution_name, include_active_layers, active_layers_only));
+            }, cancellationToken);
+        }
+
         public CallToolResult get_solution_components(
             [Description("Solution unique/display name; multiple matches return choices.")] string solution_name = "",
             [Description("Add ActiveLayer (Yes/No) via msdyn_componentlayer. Active = unmanaged customization exists.")] bool include_active_layers = false,

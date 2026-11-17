@@ -21,8 +21,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public ManageFunctionTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ManageFunctionTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context) : this(orgService, options, context, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ManageFunctionTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -40,6 +46,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- get_custom_apis → every Custom API, with or without an expression\n" +
             "- get_solution_components → verify a function's solution membership")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("'list', 'detail', 'validate', 'invoke'. 'create'/'update'/'delete' are gated.")] string action = "",
+            [Description("Display name, unique name, or GUID (customapiid) of the Custom API. Required: detail/validate/invoke.")] string function_name = "",
+            [Description("Unique/display name. 'list': filter by solution membership.")] string solution_name = "",
+            [Description("validate only: DevKit definition JSON object serialized as a string. Required: displayName and formula (Power Fx record expression starting with '{'). Optional: description, inputs and outputs arrays of {name,type,description}, tableReferences array of up to 5 logical names. Types: boolean, datetime, decimal, float, integer, string. Checks structure and metadata; does not compile the formula.")] string definition_json = "",
+            [Description("'invoke' only: JSON object of {\"inputName\": value} per the declared signature.")] string arguments_json = "",
+            [Description("'invoke' only: record GUID for entity-bound functions (bindingtype=Entity).")] string record_id = "",
+            [Description("'list' only. ≤0 → 50, >500 → 500.")] int max_records = 50,
+            [Description("'list' only. Include managed (solution-imported) functions.")] bool include_managed = false,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ManageFunctionTool(conn.OrgService, conn.Options, conn.Context);
+                return System.Threading.Tasks.Task.FromResult(worker.manage_function(action, function_name, solution_name, definition_json, arguments_json, record_id, max_records, include_managed));
+            }, cancellationToken);
+        }
+
         public CallToolResult manage_function(
             [Description("'list', 'detail', 'validate', 'invoke'. 'create'/'update'/'delete' are gated.")] string action = "",
             [Description("Display name, unique name, or GUID (customapiid) of the Custom API. Required: detail/validate/invoke.")] string function_name = "",

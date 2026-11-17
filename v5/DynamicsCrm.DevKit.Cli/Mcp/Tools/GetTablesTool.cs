@@ -17,8 +17,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly MetadataService _metadataService;
 
-        public GetTablesTool(MetadataService metadataService)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public GetTablesTool(MetadataService metadataService) : this(metadataService, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public GetTablesTool(MetadataService metadataService, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _metadataService = metadataService;
         }
 
@@ -37,6 +43,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- manage_table → create/update tables\n" +
             "- manage_relationship → create/update relationships\n" +
             "- execute_fetchxml → query data once you know attribute names")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("Logical name → detail mode. Empty = list mode.")] string entity_name = "",
+            [Description("LIST: keyword filter on entity. DETAIL: single value = prefix match on logical names; comma/pipe/semicolon-separated = word-boundary match on logical name + exact match on display name.")] string filter = "",
+            [Description("LIST: only custom entities.")] bool custom_only = false,
+            [Description("LIST: include N:N intersect entities.")] bool include_intersect = false,
+            [Description("LIST: comma-separated logical names. Overrides filter/custom_only.")] string names = "",
+            [Description("DETAIL: 'compact' (default), 'standard', or 'full'.")] string detail_level = "compact",
+            [Description("LIST: maximum 1-500 entities. Default 100.")] int max_records = 100,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new GetTablesTool(conn.Metadata);
+                return worker.get_tables(entity_name, filter, custom_only, include_intersect, names, detail_level, max_records);
+            }, cancellationToken);
+        }
+
         public async Task<CallToolResult> get_tables(
             [Description("Logical name → detail mode. Empty = list mode.")] string entity_name = "",
             [Description("LIST: keyword filter on entity. DETAIL: single value = prefix match on logical names; comma/pipe/semicolon-separated = word-boundary match on logical name + exact match on display name.")] string filter = "",

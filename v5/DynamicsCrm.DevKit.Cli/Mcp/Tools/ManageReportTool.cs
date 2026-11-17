@@ -34,8 +34,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly IMcpConnectionInfo _connectionInfo;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
-        public ManageReportTool(IOrganizationServiceAsync2 orgServiceAsync, McpDryRunOptions options, McpExecutionContext context, IMcpConnectionInfo connectionInfo)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ManageReportTool(IOrganizationServiceAsync2 orgServiceAsync, McpDryRunOptions options, McpExecutionContext context, IMcpConnectionInfo connectionInfo) : this(orgServiceAsync, options, context, connectionInfo, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ManageReportTool(IOrganizationServiceAsync2 orgServiceAsync, McpDryRunOptions options, McpExecutionContext context, IMcpConnectionInfo connectionInfo, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgServiceAsync = orgServiceAsync;
             _connectionInfo = connectionInfo;
             _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -51,6 +57,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Manage Dataverse SSRS reports and local RDL files: list/detail/download read Dataverse; update writes an existing unmanaged report. create, add_dataset and update_dataset operate locally only. New reports are deployed via VSIX/CLI; update needs no publish.\n\n" +
             "Before RDL or dataset work, read docs://instructions_for_manage_report for local paths, backups, FetchXML support, language selection and deployment behavior. Dataset actions require file_path, dataset_name and fetchxml; a system view name also requires entity_name.\n\n" +
             "Use get_solution_components to find solutions and execute_fetchxml to query report records.")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            McpServer server,
+            [Description("'list', 'detail', 'create', 'download', 'update', 'add_dataset', 'update_dataset'.")] string action = "",
+            [Description("Report identifier: GUID, report name, or .rdl file name. Required for detail/download/update.")] string report_id = "",
+            [Description("create/update: local .rdl file path. Relative paths resolve against the workspace folder (auto-resolved from MCP roots or server cwd). create: content source for the new local file — omit to use the embedded ReportTemplate.rdl.")] string file_path = "",
+            [Description("create: report name, also used for the new local file name. Default: file_path file name without extension, or 'Report Template' when using the embedded template.")] string name = "",
+            [Description("update: report description.")] string description = "",
+            [Description("update: language name (e.g. 'English') or LCID selecting which language copy of a same-named report to update. Ignored when report_id is a GUID. Default: organization's base language.")] string language = "",
+            [Description("list: filter reports by solution unique or display name.")] string solution_name = "",
+            [Description("list: case-insensitive contains filter on report name or file name.")] string name_filter = "",
+            [Description("list: max records, 1-500. Default 50.")] int max_records = 50,
+            [Description("add_dataset/update_dataset: dataset name to create or update. Required for dataset actions.")] string dataset_name = "",
+            [Description("add_dataset/update_dataset: FetchXML or a system view name. A view name also requires entity_name. Required for add_dataset/update_dataset.")] string fetchxml = "",
+            [Description("add_dataset/update_dataset: entity display/logical name required when fetchxml is a system view name; optional for direct FetchXML and validated when supplied.")] string entity_name = "",
+            [Description("create/download: local folder to save the .rdl into instead of the default folder (.devkit/manage_report/ for create, .devkit/manage_report/downloads/{languageCode}/ for download). Relative paths resolve against the workspace folder. If the folder contains exactly one .rptproj, the saved .rdl is added to it as a Report item when missing.")] string output_folder = "",
+            [Description("add_dataset/update_dataset: enable the VSIX-style pre-filter for the root entity. Linked entities are never pre-filtered.")] bool prefilter = true,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ManageReportTool(conn.OrgServiceAsync, conn.Options, conn.Context, conn.ConnectionInfo);
+                return worker.manage_report(server, action, report_id, file_path, name, description, language, solution_name, name_filter, max_records, dataset_name, fetchxml, entity_name, output_folder, prefilter);
+            }, cancellationToken);
+        }
+
         public async Task<CallToolResult> manage_report(
             McpServer server,
             [Description("'list', 'detail', 'create', 'download', 'update', 'add_dataset', 'update_dataset'.")] string action = "",

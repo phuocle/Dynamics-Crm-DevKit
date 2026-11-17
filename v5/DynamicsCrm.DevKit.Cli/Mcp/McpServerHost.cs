@@ -16,10 +16,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
     public class McpServerHost
     {
         private readonly ServiceClient _serviceClient;
+        private readonly IMcpConnectionResolver _connections;
 
         public McpServerHost(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
+        }
+
+        internal McpServerHost(ServiceClient serviceClient, IMcpConnectionResolver connections) : this(serviceClient)
+        {
+            _connections = connections;
         }
 
         // Tool category derives from [McpServerTool(ReadOnly = ...)] on each tool method —
@@ -65,7 +71,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                 options.LogToStandardErrorThreshold = Microsoft.Extensions.Logging.LogLevel.Trace;
             });
 
-            RegisterSharedServices(builder.Services, _serviceClient, dryRun, impersonatedUserDisplay);
+            if (_connections == null)
+                RegisterSharedServices(builder.Services, _serviceClient, dryRun, impersonatedUserDisplay);
+            else
+            {
+                var startup = await _connections.ResolveAsync(null, System.Threading.CancellationToken.None);
+                // Externally owned instances: only the registry disposes connected clients.
+                builder.Services.AddSingleton(_connections);
+                builder.Services.AddSingleton(startup.Client);
+                builder.Services.AddSingleton(startup.OrgService);
+                builder.Services.AddSingleton(startup.OrgServiceAsync);
+                builder.Services.AddSingleton(startup.Metadata);
+                builder.Services.AddSingleton(startup.ConnectionInfo);
+                builder.Services.AddSingleton(startup.WebApi);
+                builder.Services.AddSingleton(startup.Options);
+                builder.Services.AddSingleton(startup.Context);
+            }
 
             var displayCategory = normalizedCategory;
             var serverName = string.IsNullOrWhiteSpace(instanceName)
@@ -91,7 +112,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                         impersonatedUserDisplay,
                         envGroup,
                         connectionSource,
-                        usedFallback);
+                        usedFallback) + BuildConnectionInstructions(_connections);
                 })
                 .WithStdioServerTransport()
                 .WithToolsFromAssembly()
@@ -132,7 +153,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                 });
             }
 
-            await builder.Build().RunAsync();
+            using var host = builder.Build();
+            await host.RunAsync();
+        }
+
+        internal static string BuildConnectionInstructions(IMcpConnectionResolver connections)
+        {
+            if (connections == null) return "";
+            var groups = connections.ListGroups();
+            if (groups.Count == 1 && groups[0].Alias == null) return "";
+            var labels = groups.Select(g => g.Env +
+                (g.Alias == null ? "" : $" ({g.Alias})") +
+                (g.IsStartupDefault ? " (startup)" : "") +
+                (g.DryRun ? " (dry-run: mutations blocked)" : ""));
+            return $" | Startup connection: {connections.StartupEnvId}. Connection groups: {string.Join(", ", labels)}. " +
+                "Omit env to use the startup connection; pass an ID, alias, or default for the unnumbered group. " +
+                "Call connection_list for details. Dataverse tools accept env; read_instruction and connection_list do not.";
         }
 
         /// <summary>

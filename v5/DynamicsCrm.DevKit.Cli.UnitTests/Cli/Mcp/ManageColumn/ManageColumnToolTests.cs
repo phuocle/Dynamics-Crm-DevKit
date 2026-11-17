@@ -433,7 +433,7 @@ public class ManageColumnToolTests
     [TestMethod]
     public void ManageColumn_DescriptionMentionsMoneyPrecisionCap()
     {
-        var method = ToolType.GetMethod("manage_column")!;
+        var method = ToolType.GetMethod("InvokeAsync")!;
         var precisionParam = method.GetParameters().First(p => p.Name == "precision");
         var desc = precisionParam.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>()?.Description ?? "";
         Assert.IsTrue(desc.Contains("money max is 4"), "Precision description should mention money max is 4");
@@ -442,7 +442,7 @@ public class ManageColumnToolTests
     [TestMethod]
     public void ManageColumn_HasAllExpectedParameters()
     {
-        var method = ToolType.GetMethod("manage_column")!;
+        var method = ToolType.GetMethod("InvokeAsync")!;
         var paramNames = method.GetParameters().Select(p => p.Name).ToArray();
         CollectionAssert.Contains(paramNames, "entity_name");
         CollectionAssert.Contains(paramNames, "logical_name");
@@ -499,7 +499,7 @@ public class ManageColumnToolTests
     [TestMethod]
     public void ManageColumn_StatusCode_DescriptionMentionsStatecode()
     {
-        var method = ToolType.GetMethod("manage_column")!;
+        var method = ToolType.GetMethod("InvokeAsync")!;
         var desc = method.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>()?.Description ?? "";
         StringAssert.Contains(desc, "statuscode");
         StringAssert.Contains(desc, "state");
@@ -509,7 +509,7 @@ public class ManageColumnToolTests
     [TestMethod]
     public void ManageColumn_AddOptions_DescriptionMentionsStateField()
     {
-        var method = ToolType.GetMethod("manage_column")!;
+        var method = ToolType.GetMethod("InvokeAsync")!;
         var addOptionsParam = method.GetParameters().First(p => p.Name == "add_options");
         var desc = addOptionsParam.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>()?.Description ?? "";
         StringAssert.Contains(desc, "state");

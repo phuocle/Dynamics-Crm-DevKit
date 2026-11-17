@@ -29,8 +29,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public ManageColumnTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, IWebApiExecutor webApi)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ManageColumnTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, IWebApiExecutor webApi) : this(orgService, options, context, webApi, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ManageColumnTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, IWebApiExecutor webApi, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
             _webApi = webApi;
             _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -57,6 +63,52 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- manage_choice → global option sets\n" +
             "- manage_record_file → file/image column data upload and download\n" +
             "- execute_webapi → raw Web API for endpoints not covered here")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("Logical name (e.g. 'account').")] string entity_name = "",
+            [Description("Logical name of the existing attribute to update (e.g. 'new_priority'). For CREATE: optional lowercase override of logical name; if omitted derives from schema_name/display_name. Must start with publisher prefix.")] string logical_name = "",
+            [Description("string/memo/integer/bigint/decimal/money/float/boolean/datetime/lookup/customer/picklist/multipicklist/image/file. Required for CREATE. Ignored on UPDATE (immutable).")] string attribute_type = "",
+            [Description("Required for CREATE. Optional on UPDATE — pass only to rename the display label.")] string display_name = "",
+            [Description("Required for CREATE. Resolves the publisher prefix and adds the attribute to the solution.")] string solution_name = "",
+            [Description("Optional column description.")] string description = "",
+            [Description("Required level for the column. CREATE: always applied (None when omitted — NOT a Dataverse default). UPDATE: omit=keep current.")] string required_level = "",
+            [Description("string 1-4000 (def 100); memo 1-1048576 (def 2000); file KB (def 32768).")] int max_length = 0,
+            [Description("Numeric types: minimum value.")] double? min_value = null,
+            [Description("Numeric types: maximum value.")] double? max_value = null,
+            [Description("decimal/money/float 0-10 (def 2; money max is 4). [update: omit=keep]")] int precision = -1,
+            [Description("string: Text/Email/Url/Phone/TextArea/TickerSymbol/RichText. datetime: DateOnly/DateAndTime. integer: None/Duration/TimeZone/Language/Locale.")] string format = "",
+            [Description("datetime: UserLocal (def)/DateOnly/TimeZoneIndependent. DateOnly forces DateOnly format.")] string behavior = "",
+            [Description("money: 0=Attribute (def), 1=Organization, 2=Currency.")] int precision_source = -1,
+            [Description("picklist create: JSON array [{\"label\":\"Low\",\"value\":100000000}]. Optional 'color' field: {\"label\":\"Low\",\"value\":100000000,\"color\":\"#808080\"}.")] string options = "",
+            [Description("picklist create: existing global option set.")] string global_optionset_name = "",
+            [Description("lookup create: target entity. Comma-separated = polymorphic.")] string lookup_target = "",
+            [Description("lookup: schema name. Auto if empty.")] string lookup_relationship_name = "",
+            [Description("boolean true label (def 'Yes'). [update: omit=keep]")] string true_label = "",
+            [Description("boolean false label (def 'No'). [update: omit=keep]")] string false_label = "",
+            [Description("picklist update: JSON array — options to add. Optional 'color' field: {\"label\":\"New\",\"value\":100000003,\"color\":\"#FF0000\"}. StatusType (statuscode): include 'state' field (statecode value, default 0): {\"label\":\"Under Review\",\"value\":100000001,\"state\":0}.")] string add_options = "",
+            [Description("picklist update: JSON array — options to rename. Optional 'color' field: {\"label\":\"NewLabel\",\"value\":100000000,\"color\":\"#FF0000\"}.")] string update_options = "",
+            [Description("picklist update: JSON array of integer values to remove.")] string delete_options = "",
+            [Description("Enable audit on this column. CREATE: pass to override Dataverse default (true). UPDATE: omit=null keeps current.")] bool? is_audit_enabled = null,
+            [Description("Show column in Advanced Find. CREATE: pass to override Dataverse default (true). UPDATE: omit=null keeps current.)")] bool? is_valid_for_advanced_find = null,
+            [Description("Enable field-level security. CREATE: pass to override Dataverse default (false). UPDATE: omit=null keeps current.")] bool? is_secured = null,
+            [Description("Make column sortable in views. CREATE: pass to override Dataverse default (true, when supported by the attribute type). UPDATE: omit=null keeps current.")] bool? is_sortable = null,
+            [Description("picklist/boolean create or update: default option value. Picklist: one integer matching an option. Boolean: 'true'/'false' or '1'/'0'. Omit on update to keep current; unsupported for multipicklist.")] string default_value = "",
+            [Description("SchemaName for the new column (e.g. 'devkit_InvoiceLineId'). If provided, used AS-IS as SchemaName (skip auto-derive from display_name). Caller responsible for casing. Create only — ignored on update. Must start with the publisher prefix.")] string schema_name = "",
+            [Description("Create-only formula clone reference returned by get_tables, exactly `source_table_logical_name:source_column_logical_name` (for example `account:new_total`). Pass it unchanged; the server retrieves and rewrites the source formula directly. Omit it and pass formula_source_type only to create an empty formula column.")] string formula_definition = "",
+            [Description("Create only. Use powerfx, calculated, or rollup only when creating an empty formula column without formula_definition. Clone mode derives the kind from the referenced source column.")] string formula_source_type = "",
+            [Description("image only. CREATE: true = store the full-sized image (default false). UPDATE: omit = keep current.")] bool? can_store_full_image = null,
+            [Description("Autonumber pattern for string columns, e.g. 'TKT-{SEQNUM:5}-{RANDSTRING:3}'. Placeholders: {SEQNUM:n} (n>=1, minimum zero-padded length), {RANDSTRING:n} (1-6), {DATETIMEUTC:format}. CREATE: sets the pattern; UPDATE: changes it (omit = keep current). format must be Text. Validated client-side — Dataverse only rejects bad patterns at record-save time.")] string auto_number_format = "",
+            [Description("string UPDATE only: true removes the autonumber pattern, turning the column back into plain text. Mutually exclusive with auto_number_format.")] bool? clear_auto_number = null,
+            [Description("Autonumber seed (>=1; Dataverse default sequence starts at 1000). String autonumber columns only. Executed via SetAutoNumberSeed after the metadata create/update succeeds. Environment-only: NOT carried in solutions. Omit to keep the current seed.")] long? auto_number_seed = null,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ManageColumnTool(conn.OrgService, conn.Options, conn.Context, conn.WebApi);
+                return System.Threading.Tasks.Task.FromResult(worker.manage_column(entity_name, logical_name, attribute_type, display_name, solution_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, precision_source, options, global_optionset_name, lookup_target, lookup_relationship_name, true_label, false_label, add_options, update_options, delete_options, is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, default_value, schema_name, formula_definition, formula_source_type, can_store_full_image, auto_number_format, clear_auto_number, auto_number_seed));
+            }, cancellationToken);
+        }
+
         public CallToolResult manage_column(
             [Description("Logical name (e.g. 'account').")] string entity_name = "",
             [Description("Logical name of the existing attribute to update (e.g. 'new_priority'). For CREATE: optional lowercase override of logical name; if omitted derives from schema_name/display_name. Must start with publisher prefix.")] string logical_name = "",

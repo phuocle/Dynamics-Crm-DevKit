@@ -69,6 +69,33 @@ public sealed class WhoAmIFakeXrmEasyFullCoverageTests
     private static string Json(CallToolResult r) => r.StructuredContent?.GetRawText() ?? "";
 
     [TestMethod]
+    [DataRow("9.0.0.0")]
+    [DataRow("9.2.23000.1")]
+    public void FirstCall_ReturnsServerVersion_WhenSdkVersionIsPlaceholderOrStale(string sdkVersion)
+    {
+        A.CallTo(() => _connectionInfo.ConnectedOrgVersion).Returns(new Version(sdkVersion));
+
+        var result = NewTool().whoami();
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        Assert.AreEqual("9.2.24000.1", result.StructuredContent!.Value.GetProperty("version").GetString());
+        StringAssert.Contains(Text(result), ". Dataverse 9.2.24000.1");
+    }
+
+    [TestMethod]
+    public void RetrieveVersionFails_ReturnsFriendlyError_InsteadOfSdkPlaceholder()
+    {
+        A.CallTo(() => _connectionInfo.ConnectedOrgVersion).Returns(new Version("9.0.0.0"));
+        _service.FailRetrieveVersion = true;
+
+        var result = NewTool().whoami();
+
+        Assert.IsTrue(result.IsError == true);
+        StringAssert.Contains(Text(result), "[Error]");
+        Assert.IsFalse(Text(result).Contains("Dataverse 9.0.0.0"));
+    }
+
+    [TestMethod]
     public void FullInfo_ReturnsIdentityOrgRoles()
     {
         _ctx.GetOrganizationService().Create(new Entity("organization", Guid.NewGuid())
@@ -191,6 +218,7 @@ public sealed class WhoAmIFakeXrmEasyFullCoverageTests
         public Guid OrganizationId;
         public List<Entity>? RoleRows;
         public bool FailWhoAmI;
+        public bool FailRetrieveVersion;
 
         public WhoAmIOrgService(IOrganizationService inner) => _inner = inner;
 
@@ -201,6 +229,14 @@ public sealed class WhoAmIFakeXrmEasyFullCoverageTests
 
         public OrganizationResponse Execute(OrganizationRequest request)
         {
+            if (request is RetrieveVersionRequest)
+            {
+                if (FailRetrieveVersion)
+                    throw new InvalidOperationException("version unavailable");
+                var response = new RetrieveVersionResponse();
+                response.Results["Version"] = "9.2.24000.1";
+                return response;
+            }
             if (request is WhoAmIRequest)
             {
                 if (FailWhoAmI)

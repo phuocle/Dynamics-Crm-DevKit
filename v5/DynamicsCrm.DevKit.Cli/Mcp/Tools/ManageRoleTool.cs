@@ -24,8 +24,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpExecutionContext _context;
         private string _workspaceFolder;
 
-        public ManageRoleTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ManageRoleTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context) : this(orgService, options, context, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ManageRoleTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -48,6 +54,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- whoami → verify the connected user and their direct roles\n" +
             "- manage_record → read/create/update role and team records directly\n" +
             "- execute_fetchxml → query roles and privileges with deterministic filters")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            McpServer server,
+            [Description("list, detail, user, assign, unassign, create, update, delete, copy, restore.")] string action = "",
+            [Description("Email or GUID. Required for user; assign/unassign require user_id or team_id.")] string user_id = "",
+            [Description("Team GUID or exact name. assign/unassign: assign the role to this team instead of a user (members inherit it).")] string team_id = "",
+            [Description("Role GUID. For detail only, this may also be a role name; if empty, role_name is used. Required: detail/assign/unassign/update/delete/copy.")] string role_id = "",
+            [Description("list: filter (contains). detail: role display name when role_id is empty. create/update/copy: new name.")] string role_name = "",
+            [Description("BU GUID. list: filter. create: target BU (empty = root).")] string business_unit_id = "",
+            [Description("detail/user: filter privileges by entity Display Name or logical name.")] string entity_name = "",
+            [Description("update only. JSON array: [{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Organization\"},...]. entity = Display Name or logical name; right = Create|Read|Write|Delete|Append|AppendTo|Assign|Share, or '*' for all rights on the entity; depth = User|BusinessUnit|Parent:ChildBU|Organization (broadest coverage: User < BusinessUnit < Parent:ChildBU < Organization), or None to remove.")] string privileges = "",
+            [Description("restore only: .role.json backup file path written by update/delete (result's backupPath). Backups are at .devkit/manage_role/.")] string backup_path = "",
+            [Description("list only. Max 250.")] int max_records = 50,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ManageRoleTool(conn.OrgService, conn.Options, conn.Context);
+                return worker.manage_role(server, action, user_id, team_id, role_id, role_name, business_unit_id, entity_name, privileges, backup_path, max_records);
+            }, cancellationToken);
+        }
+
         public async Task<CallToolResult> manage_role(
             McpServer server,
             [Description("list, detail, user, assign, unassign, create, update, delete, copy, restore.")] string action = "",

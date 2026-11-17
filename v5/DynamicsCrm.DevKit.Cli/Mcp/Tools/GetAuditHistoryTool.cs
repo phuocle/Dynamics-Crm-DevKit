@@ -23,8 +23,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly IOrganizationService _orgService;
         private const int PagingPageSize = 5000;
 
-        public GetAuditHistoryTool(IOrganizationService orgService)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public GetAuditHistoryTool(IOrganizationService orgService) : this(orgService, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public GetAuditHistoryTool(IOrganizationService orgService, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
         }
 
@@ -63,6 +69,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_plugin_trace_logs → plugin execution traces\n" +
             "- get_system_jobs → asynchronous failures\n" +
             "- get_tables → verify entity and attribute logical names")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("Entity Display/logical name. Required with record_id. Optional in browse mode.")] string entity_name = "",
+            [Description("GUID → detail mode. Empty = browse list.")] string record_id = "",
+            [Description("Last N min. Default 1440 (24h). Max 43200. Ignored if from_date set.")] int minutes_ago = 1440,
+            [Description("User name (contains) or email. Empty = all users.")] string user_filter = "",
+            [Description("Create, Update, Delete, Activate, Deactivate, Assign, Merge, Cascade, SetState. Empty = all.")] string operation = "",
+            [Description("Detail mode only. Filter one field. Error if set without record_id.")] string attribute_name = "",
+            [Description("Default 50. Max 500.")] int max_records = 50,
+            [Description("ISO 8601. Overrides minutes_ago.")] string from_date = "",
+            [Description("ISO 8601. With from_date. Default = now.")] string to_date = "",
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new GetAuditHistoryTool(conn.OrgService);
+                return System.Threading.Tasks.Task.FromResult(worker.get_audit_history(entity_name, record_id, minutes_ago, user_filter, operation, attribute_name, max_records, from_date, to_date));
+            }, cancellationToken);
+        }
+
         public CallToolResult get_audit_history(
             [Description("Entity Display/logical name. Required with record_id. Optional in browse mode.")] string entity_name = "",
             [Description("GUID → detail mode. Empty = browse list.")] string record_id = "",

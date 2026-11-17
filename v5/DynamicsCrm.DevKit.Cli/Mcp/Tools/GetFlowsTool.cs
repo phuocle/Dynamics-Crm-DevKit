@@ -18,8 +18,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly IOrganizationService _orgService;
 
-        public GetFlowsTool(IOrganizationService orgService)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public GetFlowsTool(IOrganizationService orgService) : this(orgService, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public GetFlowsTool(IOrganizationService orgService, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
         }
 
@@ -53,6 +59,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_workflows → classic workflows (category=0)\n" +
             "- get_business_process_flows → BPF definitions + stages\n" +
             "- get_business_rules → client-side business rules")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("GUID. Empty = list. Set: action determines detail vs runs.")] string flow_id = "",
+            [Description("'list' or 'runs'. 'runs' needs flow_id.")] string action = "list",
+            [Description("list only. Name contains.")] string name_filter = "",
+            [Description("list only. Owner contains.")] string owner_filter = "",
+            [Description("'active' / 'draft' / 'suspended' / 'all'.")] string status = "active",
+            [Description("runs only: succeeded/failed/running/cancelled/waiting/paused/skipped/suspended.")] string status_filter = "",
+            [Description("runs only. Default 1440 (last 24h). Max 43200.")] int minutes_ago = 1440,
+            [Description("1–250.")] int max_records = 50,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new GetFlowsTool(conn.OrgService);
+                return System.Threading.Tasks.Task.FromResult(worker.get_flows(flow_id, action, name_filter, owner_filter, status, status_filter, minutes_ago, max_records));
+            }, cancellationToken);
+        }
+
         public CallToolResult get_flows(
             [Description("GUID. Empty = list. Set: action determines detail vs runs.")] string flow_id = "",
             [Description("'list' or 'runs'. 'runs' needs flow_id.")] string action = "list",

@@ -135,7 +135,7 @@ public sealed class ProgramMainExtraCoverageTests
         Assert.AreEqual(0, rootExit);
         StringAssert.Contains(rootOutput, "MCP connection fallback:");
         StringAssert.Contains(rootOutput, "Without --env, the original DEVKIT_* per-property merge is preserved.");
-        StringAssert.Contains(rootOutput, "With --env <id>, complete args skip .env; missing values use DEVKIT_<id>_*.");
+        StringAssert.Contains(rootOutput, "With --env <id>, complete args skip connection fallback; missing values use DEVKIT_<id>_*.");
         StringAssert.Contains(rootOutput, "devkit mcp --env 1 devkit-codex-2 --dry-run");
 
         var (mcpHelpExit, mcpHelpOutput) = await RunCliAsync("mcp", "help", "--plain");
@@ -147,7 +147,7 @@ public sealed class ProgramMainExtraCoverageTests
         // '--env help' treats 'help' as the option value for --env, not as a help alias.
         var (envHelpExit, envHelpOutput) = await RunCliAsync("mcp", "--plain", "--env", "help");
         Assert.AreNotEqual(0, envHelpExit);
-        StringAssert.Contains(envHelpOutput, "Invalid --env value 'help'");
+        StringAssert.Contains(envHelpOutput, "Unknown connection group 'help'");
     }
 
     [TestMethod]

@@ -18,9 +18,9 @@ public class GetCustomApisToolTests
     [TestMethod]
     public void GetCustomApis_ReturnType_IsCallToolResult()
     {
-        var method = ToolType.GetMethod("get_custom_apis")!;
-        Assert.AreEqual("CallToolResult", method.ReturnType.Name,
-            "get_custom_apis must return CallToolResult, not string");
+        var method = ToolType.GetMethod("InvokeAsync")!;
+        Assert.AreEqual(typeof(System.Threading.Tasks.Task<ModelContextProtocol.Protocol.CallToolResult>), method.ReturnType,
+            "The routed get_custom_apis entry returns an asynchronous structured tool result.");
     }
 
     // ──────────────────────────────────────────────
@@ -90,7 +90,7 @@ public class GetCustomApisToolTests
     [TestMethod]
     public void GetCustomApis_IncludeMicrosoftDescription_SaysManagedNotPrefixes()
     {
-        var method = ToolType.GetMethod("get_custom_apis")!;
+        var method = ToolType.GetMethod("InvokeAsync")!;
         var param = method.GetParameters()[2]; // include_microsoft
         Assert.AreEqual("include_microsoft", param.Name);
         var descAttr = param.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>();
@@ -109,7 +109,7 @@ public class GetCustomApisToolTests
     [TestMethod]
     public void GetCustomApis_ToolDescription_ReferencesIncludeMicrosoftNotIncludeManaged()
     {
-        var method = ToolType.GetMethod("get_custom_apis")!;
+        var method = ToolType.GetMethod("InvokeAsync")!;
         var descAttr = method.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>();
         Assert.IsNotNull(descAttr, "get_custom_apis must have a Description attribute");
         // The description should mention Custom API definitions

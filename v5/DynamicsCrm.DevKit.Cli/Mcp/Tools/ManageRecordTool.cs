@@ -22,8 +22,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public ManageRecordTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ManageRecordTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context) : this(orgService, options, context, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ManageRecordTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -45,6 +51,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- execute_fetchxml → find lookup GUIDs and record_id\n" +
             "- create_records → bulk create multiple records\n" +
             "- execute_webapi → raw OData JSON/annotations")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("'create', 'read', 'update', 'delete', 'associate', 'disassociate'.")] string action = "",
+            [Description("Entity logical name (e.g., 'account').")] string entity_name = "",
+            [Description("GUID of the primary record. Required for read/update/delete/associate/disassociate; must be empty for create.")] string record_id = "",
+            [Description("JSON object of field values. Required: create/update. Polymorphic lookup: 'fieldname@targetentity' key. Activity party fields (to/from/cc/bcc/requiredattendees/optionalattendees): JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Single party auto-wrapped: {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Optional: \"addressused\":\"email\". Regular lookup: {\"fieldname\": \"guid\"}.")] string fields_json = "",
+            [Description("Read only. Comma-separated columns. Empty = all.")] string columns = "",
+            [Description("Related Entity Name for associate/disassociate.")] string related_entity_name = "",
+            [Description("Related Record GUID for associate/disassociate.")] string related_record_id = "",
+            [Description("N:N Relationship Name for associate/disassociate.")] string relationship_name = "",
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ManageRecordTool(conn.OrgService, conn.Options, conn.Context);
+                return System.Threading.Tasks.Task.FromResult(worker.manage_record(action, entity_name, record_id, fields_json, columns, related_entity_name, related_record_id, relationship_name));
+            }, cancellationToken);
+        }
+
         public CallToolResult manage_record(
             [Description("'create', 'read', 'update', 'delete', 'associate', 'disassociate'.")] string action = "",
             [Description("Entity logical name (e.g., 'account').")] string entity_name = "",

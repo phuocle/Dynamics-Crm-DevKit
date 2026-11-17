@@ -51,8 +51,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpExecutionContext _context;
         private string _workspaceFolder;
 
-        public ManageChartTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ManageChartTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context) : this(orgService, options, context, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ManageChartTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -73,6 +79,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_tables → column logical names for group_by_column/aggregate_column\n" +
             "- publish_customizations → batch publish after multiple metadata changes\n" +
             "- manage_view → views; execute_webapi → raw savedqueryvisualization access")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            McpServer server,
+            [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",
+            [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Required for list/create.")] string entity_name = "",
+            [Description("Chart GUID. detail/update/set_default also accept a uniquely identifying chart_name. rename uses chart_id to identify the chart. undo restores from the backup in presentationdescription.")] string chart_id = "",
+            [Description("create: new chart name. detail/update/set_default: lookup by name when chart_id is omitted. rename: new name; chart_id identifies the chart.")] string chart_name = "",
+            [Description("Chart type: Column, Bar, Line, Pie, Doughnut, Funnel, Area, Bubble, Radar. Create default: Column for multiple measures, otherwise Pie.")] string chart_type = "",
+            [Description("Category / group-by attribute logical name or display name. Pie default: statecode.")] string group_by_column = "",
+            [Description("Legend / measure attribute logical name or display name. Pie default: importsequencenumber.")] string aggregate_column = "",
+            [Description("Aggregation type: 'count' (default), 'countcolumn', 'sum', 'avg', 'min', 'max'.")] string aggregate_type = "count",
+            [Description("Multi-measure series: 'column:aggregate_type[:label]; ...' (e.g. 'estimatedvalue:sum:Revenue; importsequencenumber:count'). Mutually exclusive with aggregate_column/aggregate_type. Optional label becomes the series legend name.")] string measures = "",
+            [Description("Structured datadescription filter: 'field op value; ...'. Operators: =, !=, >, >=, <, <=, like, in (comma-separated list), null, not-null. Example: 'statecode=0; estimatedvalue>1000000'.")] string filter = "",
+            [Description("Custom presentation Chart XML override (create/update). For undo: path to the .chart.json backup file from {workspace}/.devkit/manage_chart/{entity}/.")] string presentationdescription = "",
+            [Description("Chart description text.")] string description = "",
+            [Description("Optional solution unique/display name. When provided and non-empty, chart is added to the solution after create/update.")] string solution_name = "",
+            [Description("Validate XML syntax and chart types before saving.")] bool validate = true,
+            [Description("Publish entity after create/update/rename/set_default/undo so changes become visible. Default: true. Set false to batch-publish later via publish_customizations.")] bool publish = true,
+            [Description("create: Pie charts and charts with measures or filter return needs_confirmation when false. Set true after the user approves the returned plan, with the same inputs.")] bool confirmed = false,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ManageChartTool(conn.OrgService, conn.Options, conn.Context);
+                return worker.manage_chart(server, action, entity_name, chart_id, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, measures, filter, presentationdescription, description, solution_name, validate, publish, confirmed);
+            }, cancellationToken);
+        }
+
         public async Task<CallToolResult> manage_chart(
             McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",

@@ -24,8 +24,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly IOrganizationService _orgService;
 
-        public GetPluginsTool(IOrganizationService orgService)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public GetPluginsTool(IOrganizationService orgService) : this(orgService, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public GetPluginsTool(IOrganizationService orgService, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
         }
 
@@ -99,6 +105,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_system_jobs → async failures\n" +
             "- get_messages → SDK messages + legacy Custom Actions\n" +
             "- get_custom_apis → modern Custom API definitions")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("Assembly name contains. 1 match → detail; 0/2+ → disambiguation. Empty = list all.")] string assembly_name = "",
+            [Description("Steps for entity Display/logical name. Wins over assembly_name.")] string entity_name = "",
+            [Description("SDK message name (Create, Update, …). Empty = all.")] string message_name = "",
+            [Description("Plugin type typename contains. Empty = all.")] string type_name = "",
+            [Description("Include pre/post images. Default true.")] bool include_images = true,
+            [Description("Include unsecure/secure config (security-sensitive). Default false.")] bool include_config = false,
+            [Description("'prevalidation'/'preoperation'/'postoperation'/'mainoperation'. Empty = all.")] string stage = "",
+            [Description("'sync' / 'async'. Empty = both.")] string mode = "",
+            [Description("Only activated steps. Default true.")] bool active_only = true,
+            [Description("1-500. Default 100.")] int max_records = 100,
+            [Description("Save an assembly DLL or original plugin .nupkg under .devkit/get_plugins/. Requires one assembly or package selector; no step filters. Default false.")] bool download = false,
+            [Description("Download only: pluginassembly GUID from the assembly list. Use instead of assembly_name to select duplicate names.")] string assembly_id = "",
+            McpServer server = null,
+            [Description("Download only: pluginpackage GUID from packages in list mode. Saves the original .nupkg including dependencies.")] string package_id = "",
+            [Description("Download only: package name contains; must match exactly one package. Saves the original .nupkg. Use instead of package_id.")] string package_name = "",
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new GetPluginsTool(conn.OrgService);
+                return worker.get_plugins(assembly_name, entity_name, message_name, type_name, include_images, include_config, stage, mode, active_only, max_records, download, assembly_id, server, package_id, package_name);
+            }, cancellationToken);
+        }
+
         public async Task<CallToolResult> get_plugins(
             [Description("Assembly name contains. 1 match → detail; 0/2+ → disambiguation. Empty = list all.")] string assembly_name = "",
             [Description("Steps for entity Display/logical name. Wins over assembly_name.")] string entity_name = "",

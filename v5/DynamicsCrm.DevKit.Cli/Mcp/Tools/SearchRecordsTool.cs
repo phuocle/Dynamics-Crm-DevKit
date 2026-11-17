@@ -29,8 +29,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly IWebApiExecutor _webApi;
         private readonly McpDryRunOptions _options;
 
-        public SearchRecordsTool(IOrganizationService orgService, McpDryRunOptions options, IWebApiExecutor webApi)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public SearchRecordsTool(IOrganizationService orgService, McpDryRunOptions options, IWebApiExecutor webApi) : this(orgService, options, webApi, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public SearchRecordsTool(IOrganizationService orgService, McpDryRunOptions options, IWebApiExecutor webApi, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
             _webApi = webApi;
             _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -49,6 +55,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- execute_fetchxml → deterministic field filters and joins\n" +
             "- get_tables → discover searchable entity logical names")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            McpServer server,
+            [Description("'search' (default) or 'status'.")] string action = "search",
+            [Description("Required for search. 1-100 chars. Operators: + (AND), | (OR), - (NOT), * (wildcard), \"phrase\", () (group).")] string search_term = "",
+            [Description("Comma-separated Display Names or logical names (e.g. 'Account,contact'). Empty = all searchable.")] string entities = "",
+            [Description("Max results to return. 1-100 (default 50).")] int top = 50,
+            [Description("OData filter applied after search. e.g. 'statecode eq 0'.")] string filter = "",
+            [Description("DETAIL: 'compact' (default) or 'full' — full writes the raw API payload to {workspace}/.devkit/search_records/ (workspace auto-resolved).")] string detail_level = "compact",
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new SearchRecordsTool(conn.OrgService, conn.Options, conn.WebApi);
+                return worker.search_records(server, action, search_term, entities, top, filter, detail_level);
+            }, cancellationToken);
+        }
+
         public async Task<CallToolResult> search_records(
             McpServer server,
             [Description("'search' (default) or 'status'.")] string action = "search",

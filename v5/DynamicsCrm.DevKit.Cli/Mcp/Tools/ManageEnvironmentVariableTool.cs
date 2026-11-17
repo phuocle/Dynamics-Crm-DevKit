@@ -21,8 +21,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public ManageEnvironmentVariableTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public ManageEnvironmentVariableTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context) : this(orgService, options, context, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public ManageEnvironmentVariableTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -40,6 +46,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- execute_webapi → environmentvariable* endpoints are blocked; use this tool\n" +
             "- get_solution_components → verify a variable's solution membership")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("'list', 'detail', 'create', 'update', 'delete', 'clear'.")] string action = "",
+            [Description("Display/schema name with prefix (e.g. 'v4_ApiEndpoint'). Required: detail/update/delete/clear. Omit for create (derived from solution).")] string variable_name = "",
+            [Description("Display/unique name or GUID. 'list': filter. 'create': REQUIRED (resolves publisher prefix).")] string solution_name = "",
+            [Description("List only. Default 50, max 5000.")] int max_records = 50,
+            [Description("Human-readable label. Required: create.")] string display_name = "",
+            [Description("'string'/'number'/'boolean'/'json'/'datasource'/'secret'. Required: create. Immutable after.")] string type = "",
+            [Description("Default value. Optional: create/update.")] string default_value = "",
+            [Description("Current value (overrides default). Optional: create/update. On update, omit/empty = keep existing — use action='clear' to remove.")] string value = "",
+            [Description("Description. Optional: create/update.")] string description = "",
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new ManageEnvironmentVariableTool(conn.OrgService, conn.Options, conn.Context);
+                return System.Threading.Tasks.Task.FromResult(worker.manage_environment_variable(action, variable_name, solution_name, max_records, display_name, type, default_value, value, description));
+            }, cancellationToken);
+        }
+
         public CallToolResult manage_environment_variable(
             [Description("'list', 'detail', 'create', 'update', 'delete', 'clear'.")] string action = "",
             [Description("Display/schema name with prefix (e.g. 'v4_ApiEndpoint'). Required: detail/update/delete/clear. Omit for create (derived from solution).")] string variable_name = "",

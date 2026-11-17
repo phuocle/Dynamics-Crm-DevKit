@@ -19,8 +19,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly IOrganizationService _orgService;
 
-        public GetSystemJobsTool(IOrganizationService orgService)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public GetSystemJobsTool(IOrganizationService orgService) : this(orgService, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public GetSystemJobsTool(IOrganizationService orgService, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
         }
 
@@ -48,6 +54,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_plugin_trace_logs → plugin execution traces (sync + async)\n" +
             "- get_workflows → classic workflow definitions (background + realtime)\n" +
             "- get_flows → Power Automate cloud flows + run history")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("GUID → detail. Empty = list.")] string record_id = "",
+            [Description("Filter by entity Display Name or logical name (e.g. 'Account' or 'account').")] string entity_name = "",
+            [Description("failed/succeeded/waiting/in_progress/canceled/all.")] string status = "failed",
+            [Description("plugin/workflow/bulk_delete/import/goal_rollup/solution/all.")] string operation_type = "",
+            [Description("Name contains.")] string name_filter = "",
+            [Description("GUID. Trace one request across jobs.")] string correlation_id = "",
+            [Description("0 = 1440 (24h) default. Max 43200.")] int minutes_ago = 0,
+            [Description("Max 500.")] int max_records = 50,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new GetSystemJobsTool(conn.OrgService);
+                return System.Threading.Tasks.Task.FromResult(worker.get_system_jobs(record_id, entity_name, status, operation_type, name_filter, correlation_id, minutes_ago, max_records));
+            }, cancellationToken);
+        }
+
         public CallToolResult get_system_jobs(
             [Description("GUID → detail. Empty = list.")] string record_id = "",
             [Description("Filter by entity Display Name or logical name (e.g. 'Account' or 'account').")] string entity_name = "",

@@ -10,15 +10,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
     /// <remarks>
     /// <para>
     /// This class is the single source of truth for whether Dataverse mutations are
-    /// allowed in the current server session. It is created once at host startup from
-    /// the <c>--dry-run</c> CLI flag and injected into every tool via DI. It MUST NOT
-    /// appear in any MCP tool parameter, description, schema, resource, or server
-    /// instruction — the policy is not discoverable or controllable by the AI.
+    /// allowed for one connection. It is created from the startup flag and that
+    /// group's frozen .env policy. Connection discovery and whoami expose its
+    /// effective state, but tool parameters cannot change it.
     /// </para>
     /// <para>
-    /// The only signal an AI client may observe is the <c>[DryRun]</c> text prefix
-    /// returned by <see cref="Tools.Helper.McpToolResults.DryRun(string, object)"/>
-    /// after a mutation has been blocked.
+    /// Action-level previews retain their <c>[DryRun]</c> prefix. The context
+    /// itself is never an MCP input; the selected connection supplies it.
     /// </para>
     /// </remarks>
     public sealed class McpExecutionContext

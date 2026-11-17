@@ -7,13 +7,16 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 {
     internal static class EntityParserHelper
     {
-        private static readonly ConcurrentDictionary<string, AttributeMetadataIndex> MetadataCache = new();
+        // Weak service identity prevents metadata reuse across organizations/principals
+        // without retaining registry-owned clients after shutdown.
+        private static ConditionalWeakTable<IOrganizationService, ConcurrentDictionary<string, AttributeMetadataIndex>> MetadataCache = new();
 
         public static Entity ParseFieldsToEntity(
             IOrganizationService orgService,
@@ -60,12 +63,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
         public static void ClearCache()
         {
-            MetadataCache.Clear();
+            System.Threading.Interlocked.Exchange(ref MetadataCache, new());
         }
 
         private static AttributeMetadataIndex GetAttributeIndex(IOrganizationService orgService, string entityLogicalName)
         {
-            return MetadataCache.GetOrAdd(entityLogicalName, _ =>
+            return MetadataCache.GetValue(orgService, _ => new(StringComparer.OrdinalIgnoreCase)).GetOrAdd(entityLogicalName, _ =>
             {
                 var request = new RetrieveEntityRequest
                 {

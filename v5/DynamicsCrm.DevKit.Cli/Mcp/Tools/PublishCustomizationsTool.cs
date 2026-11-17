@@ -22,8 +22,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
 
-        public PublishCustomizationsTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context)
+        private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+
+        public PublishCustomizationsTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context) : this(orgService, options, context, null) { }
+
+        [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
+        public PublishCustomizationsTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
+            _connections = connections;
             _orgService = orgService;
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -61,6 +67,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- get_system_jobs → track PublishAll async operation status\n" +
             "- get_tables / manage_app / manage_webresource → discover valid target identifiers")]
+        public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            [Description("Comma-separated entity Display Names or logical names (e.g. 'Account,contact'). Empty with no other targets = PublishAll.")] string entities = "",
+            [Description("Comma-separated global option set unique names (e.g. 'new_priority,new_status'). Use instead of include_global_optionset for targeted publish.")] string optionset_names = "",
+            [Description("Publish the application (global) ribbon. Entity-level ribbons are covered by 'entities'.")] bool include_ribbons = false,
+            [Description("Comma-separated system-form (dashboard) GUIDs to publish.")] string dashboards = "",
+            [Description("Comma-separated web resource GUIDs or logical names to publish.")] string webresources = "",
+            [Description("Publish ALL global option sets at once. Prefer optionset_names for targeted publish.")] bool include_global_optionset = false,
+            [Description("Also publish sitemap.")] bool include_sitemap = false,
+            [Description("Comma-separated appmodule GUIDs, Display Names, or unique names for model-driven apps.")] string appmodules = "",
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new PublishCustomizationsTool(conn.OrgService, conn.Options, conn.Context);
+                return System.Threading.Tasks.Task.FromResult(worker.publish_customizations(entities, optionset_names, include_ribbons, dashboards, webresources, include_global_optionset, include_sitemap, appmodules));
+            }, cancellationToken);
+        }
+
         public CallToolResult publish_customizations(
             [Description("Comma-separated entity Display Names or logical names (e.g. 'Account,contact'). Empty with no other targets = PublishAll.")] string entities = "",
             [Description("Comma-separated global option set unique names (e.g. 'new_priority,new_status'). Use instead of include_global_optionset for targeted publish.")] string optionset_names = "",
