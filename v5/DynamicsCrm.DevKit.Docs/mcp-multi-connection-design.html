@@ -611,7 +611,7 @@ lệch trong khoảng ±10%.</p>
   <tr><td>W2</td><td>Extract <code>McpConnectionFactory</code> từ <code>McpCommand</code> (resolve + connect + resolve policy nhóm theo cascade) + <code>ConnectionBundle</code> (kèm <code>McpExecutionPolicy</code> per bundle) + <code>McpConnectionRegistry</code>/<code>IMcpConnectionResolver</code> (alias→id lookup) + rewire DI + tests (default/unknown/lazy/thread-safety/cascade/alias)</td><td>Cli</td></tr>
   <tr><td>W3</td><td>Thêm param <code>env</code> vào 40 tool method + inject resolver (mechanical: <code>_orgService/_options/_context</code> dùng từ bundle trong method; helper nhận service qua argument giữ nguyên) + cập nhật tests hiện hữu</td><td>Cli</td></tr>
   <tr><td>W4</td><td>Tool <code>connection_list</code> (id + alias + dryRun effective) + <code>whoami</code> field <code>env</code>+<code>dryRun</code> + tag echo <code>| env &lt;giá trị truyền&gt;</code> khi ≠ default (gồm text <code>[DryRun]</code>) + tests output shape</td><td>Cli</td></tr>
-  <tr><td>W5</td><td><code>--setup-guide</code>: mục "one instance, multiple .env groups + per-group dry-run + alias"; <code>ServerInstructions</code>; docs <code>Cli/mcp-multi-connection.md</code> cập nhật trạng thái; <code>TestAllMcpCall</code>: file mới cho connection_list + re-capture 18.whoami (nếu D2 duyệt)</td><td>Cli/Docs</td></tr>
+  <tr><td>W5</td><td><code>--setup-guide</code>: mục "one instance, multiple .env groups + per-group dry-run + alias"; <code>ServerInstructions</code>; docs <code>Cli/mcp-multi-connection.md</code> cập nhật trạng thái; <code>TestAllMcpCall</code>: file mới cho connection_list + re-capture 19.whoami (nếu D2 duyệt)</td><td>Cli/Docs</td></tr>
   <tr><td>W6</td><td>Release theo workflow (<code>build-release-only</code>) → restart connector → <code>whoami</code> xác minh SHA → probe đo lại token → so sánh</td><td>—</td></tr>
 </table>
 
@@ -623,7 +623,7 @@ Chi tiết từng thay đổi file nằm trong file .md spec.</p>
 <table>
   <tr><th>#</th><th>Câu hỏi</th><th>Khuyến nghị</th></tr>
   <tr><td>D1</td><td>Tên param: <code>env</code> hay <code>connection</code>?</td><td><code>env</code> — parity với <code>--env</code> của CLI.</td></tr>
-  <tr><td>D2</td><td><code>whoami</code>: thêm field <code>"env"</code> + <code>"dryRun"</code> vĩnh viễn trong structured output (kể cả khi default)?</td><td>Có — shape ổn định, AI tự kiểm tra bảo vệ từng env; đánh đổi re-capture <code>TestAllMcpCall/18.whoami.md</code> một lần.</td></tr>
+  <tr><td>D2</td><td><code>whoami</code>: thêm field <code>"env"</code> + <code>"dryRun"</code> vĩnh viễn trong structured output (kể cả khi default)?</td><td>Có — shape ổn định, AI tự kiểm tra bảo vệ từng env; đánh đổi re-capture <code>TestAllMcpCall/19.whoami.md</code> một lần.</td></tr>
   <tr><td>D3</td><td>Tag <code> | env &lt;giá trị truyền&gt;</code> trên dòng summary (gồm text <code>[DryRun]</code>) của mọi tool khi ≠ default?</td><td>Có — chỉ xuất hiện khi ≠ default nên output mặc định không đổi byte nào.</td></tr>
   <tr><td>D4</td><td>Số thứ tự file trong <code>TestAllMcpCall</code> khi thêm <code>connection_list</code> (readonly → chèn alphabet vào 1–18 làm dịch chuyển đánh số)?</td><td>Giữ đúng convention alphabet hiện hành — hoặc anh chỉ định append cuối để tránh renumber.</td></tr>
   <tr><td>D5</td><td><code>connection_list</code> có được trả <code>clientId</code>/<code>username</code> không?</td><td>Có — không phải secret (đã xuất hiện trong log startup hiện tại); secret tuyệt đối không.</td></tr>
