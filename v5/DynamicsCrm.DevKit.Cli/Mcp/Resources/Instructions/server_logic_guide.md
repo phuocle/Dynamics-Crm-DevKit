@@ -45,6 +45,20 @@ For get_custom_apis use api_name; get_business_process_flows also supports bpf_n
 | mode | sync or async | No | Yes |
 | active_only | Only active steps (default: true) | No | Yes |
 
+### Download a Plugin DLL
+
+Call `get_plugins` with `download=true` and either `assembly_name` (must match exactly one assembly) or `assembly_id` (the GUID from list mode). Do not combine these selectors or supply entity/step filters. `max_records` does not bypass download disambiguation.
+
+The DLL is saved to `{workspace}/.devkit/get_plugins/{assemblyId:N}/{assemblyName}_{timestamp}.dll`. Workspace resolves from MCP roots, then the server working directory. Names are sanitized and previous downloads are never overwritten. The result has `mode="download"`, assembly metadata, `savedPath`, `fileName`, `sizeBytes`, and `sha256`; binary/Base64 content is not returned in the response.
+
+Database assembly content is decoded directly. For package assemblies without direct content, the tool reads the related NuGet package (content or file storage) and copies only the matching DLL. Missing/inaccessible content or ambiguous package DLLs return an error. Disk/external/system assemblies may not expose a downloadable DLL. The tool remains read-only in Dataverse.
+
+### Download the Original Plugin Package (.nupkg)
+
+Use `download=true` with `package_name` (contains; exactly one match) or `package_id` (the `packageId` from `packages` in list mode). Choose exactly one selector; do not combine package and assembly selectors or supply entity/step filters. `max_records=1` cannot bypass disambiguation.
+
+This downloads the original NuGet package bytes, including all DLLs, dependencies and NuGet metadata. It does not extract or repack the archive. Files are saved to `{workspace}/.devkit/get_plugins/packages/{packageId:N}/{packageName}_{timestamp}.nupkg`. The result has `mode="download"`, `packages`, `savedPath`, `fileName`, `sizeBytes`, and `sha256`. Missing content or an invalid archive returns an error before writing a file. For just one DLL, use an assembly selector instead.
+
 ### Stage Values
 | Stage | Value | When |
 |-------|-------|------|

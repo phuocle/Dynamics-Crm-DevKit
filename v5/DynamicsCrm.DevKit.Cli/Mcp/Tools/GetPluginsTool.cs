@@ -10,8 +10,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.IO;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Plugin;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -83,6 +87,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Plugin assemblies, types, steps. No filters = assembly list. assembly_name (1 match) = detail (types+steps+images). entity_name = steps on entity (wins over assembly_name). " +
             "Stages: PreValidation/PreOperation/PostOperation/MainOperation (Custom API/DataProvider). include_config=true only for secure config inspection.\n\n" +
+            "download=true with assembly_name (one match) or assembly_id saves the DLL to {workspace}/.devkit/get_plugins/{assemblyId}/. Use package_name (one match) or package_id instead to save the original .nupkg including dependencies under .devkit/get_plugins/packages/{packageId}/. Workspace resolves from MCP roots or server cwd. Returns savedPath, fileName, sizeBytes and sha256.\n\n" +
             "WHEN TO USE:\n" +
             "- Inspect a plugin assembly's types+steps before refactoring/disabling\n" +
             "- Find steps registered on an entity (entity_name wins over assembly_name)\n" +
@@ -94,7 +99,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_system_jobs → async failures\n" +
             "- get_messages → SDK messages + legacy Custom Actions\n" +
             "- get_custom_apis → modern Custom API definitions")]
-        public CallToolResult get_plugins(
+        public async Task<CallToolResult> get_plugins(
             [Description("Assembly name contains. 1 match → detail; 0/2+ → disambiguation. Empty = list all.")] string assembly_name = "",
             [Description("Steps for entity Display/logical name. Wins over assembly_name.")] string entity_name = "",
             [Description("SDK message name (Create, Update, …). Empty = all.")] string message_name = "",
@@ -104,11 +109,86 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("'prevalidation'/'preoperation'/'postoperation'/'mainoperation'. Empty = all.")] string stage = "",
             [Description("'sync' / 'async'. Empty = both.")] string mode = "",
             [Description("Only activated steps. Default true.")] bool active_only = true,
-            [Description("1-500. Default 100.")] int max_records = 100)
+            [Description("1-500. Default 100.")] int max_records = 100,
+            [Description("Save an assembly DLL or original plugin .nupkg under .devkit/get_plugins/. Requires one assembly or package selector; no step filters. Default false.")] bool download = false,
+            [Description("Download only: pluginassembly GUID from the assembly list. Use instead of assembly_name to select duplicate names.")] string assembly_id = "",
+            McpServer server = null,
+            [Description("Download only: pluginpackage GUID from packages in list mode. Saves the original .nupkg including dependencies.")] string package_id = "",
+            [Description("Download only: package name contains; must match exactly one package. Saves the original .nupkg. Use instead of package_id.")] string package_name = "")
         {
             try
             {
                 // ── Validation ──────────────────────────────────────────────
+                if (!download && !string.IsNullOrWhiteSpace(assembly_id))
+                    return Error("assembly_id requires download=true.", "Use assembly_name for registration detail, or download=true to save the DLL.");
+                if (!download && (!string.IsNullOrWhiteSpace(package_id) || !string.IsNullOrWhiteSpace(package_name)))
+                    return Error("package_id and package_name require download=true.", "Use download=true to save the original plugin .nupkg.");
+
+                if (download)
+                {
+                    if (!string.IsNullOrWhiteSpace(entity_name) || !string.IsNullOrWhiteSpace(message_name) ||
+                        !string.IsNullOrWhiteSpace(type_name) || !string.IsNullOrWhiteSpace(stage) || !string.IsNullOrWhiteSpace(mode))
+                        return Error("Download does not support entity_name or step filters.", "Provide download=true with one assembly or package selector only.");
+
+                    if (!string.IsNullOrWhiteSpace(package_id) || !string.IsNullOrWhiteSpace(package_name))
+                    {
+                        if (!string.IsNullOrWhiteSpace(assembly_id) || !string.IsNullOrWhiteSpace(assembly_name))
+                            return Error("Package and assembly selectors cannot be combined for download.", "Use package_id or package_name for .nupkg; assembly_id or assembly_name for .dll.");
+                        if (!string.IsNullOrWhiteSpace(package_id) && !string.IsNullOrWhiteSpace(package_name))
+                            return Error("Provide either package_name or package_id for download, not both.", "Use package_id to select a package unambiguously.");
+
+                        Guid? packageId = null;
+                        if (!string.IsNullOrWhiteSpace(package_id))
+                        {
+                            if (!Guid.TryParse(package_id.Trim(), out var parsedPackageId) || parsedPackageId == Guid.Empty)
+                                return Error("package_id must be a non-empty GUID.", "Use the packageId returned in packages by get_plugins.");
+                            packageId = parsedPackageId;
+                        }
+                        var packageMatches = GetPackages(2, package_name?.Trim(), packageId);
+                        if (packageMatches.Count == 0)
+                            return Error("No plugin package found for download.", "Use get_plugins without filters to list available packages.");
+                        if (packageMatches.Count > 1)
+                            return Error($"Multiple plugin packages match '{package_name.Trim()}'. No file written.",
+                                "Use package_id from the package list to select exactly one package.",
+                                new GetPluginsResult { TotalCount = packageMatches.Count, Mode = "packages", Packages = packageMatches });
+
+                        var package = packageMatches[0];
+                        var packageData = PluginAssemblyDownloadHelper.ReadPackage(_orgService, Guid.Parse(package.PackageId));
+                        var packageWorkspace = await WorkspaceFolderHelper.GetAsync(server);
+                        var packageFolder = Path.Combine(packageWorkspace, ".devkit", "get_plugins", "packages", Guid.Parse(package.PackageId).ToString("N"));
+                        return SaveDownload(packageData, packageFolder, package.Name, ".nupkg", "plugin package",
+                            new GetPluginsResult { TotalCount = 1, Mode = "download", Packages = packageMatches });
+                    }
+
+                    Guid? assemblyId = null;
+                    if (!string.IsNullOrWhiteSpace(assembly_id))
+                    {
+                        if (!Guid.TryParse(assembly_id.Trim(), out var parsedId) || parsedId == Guid.Empty)
+                            return Error("assembly_id must be a non-empty GUID.", "Use the assemblyId returned by get_plugins.");
+                        assemblyId = parsedId;
+                        if (!string.IsNullOrWhiteSpace(assembly_name))
+                            return Error("Provide either assembly_name or assembly_id for download, not both.", "Use assembly_id to select an assembly unambiguously.");
+                    }
+                    else if (string.IsNullOrWhiteSpace(assembly_name))
+                        return Error("assembly_name or assembly_id is required for download.", "Use get_plugins without filters to list available assemblies.");
+
+                    // Always inspect at least two matches, even when max_records=1.
+                    var matches = FetchAssemblies(assembly_name?.Trim(), 2, assemblyId);
+                    if (matches.Count == 0)
+                        return Error("No plugin assembly found for download.", "Use get_plugins without filters to list available assemblies.");
+                    if (matches.Count > 1)
+                        return Error($"Multiple plugin assemblies match '{assembly_name.Trim()}'. No file written.",
+                            "Use assembly_id from the assembly list to select exactly one assembly.",
+                            new GetPluginsResult { TotalCount = matches.Count, Mode = "assemblies", Assemblies = matches });
+
+                    var assembly = matches[0];
+                    var data = PluginAssemblyDownloadHelper.ReadAssembly(_orgService, Guid.Parse(assembly.AssemblyId), assembly.Name);
+                    var workspaceFolder = await WorkspaceFolderHelper.GetAsync(server);
+                    var folder = Path.Combine(workspaceFolder, ".devkit", "get_plugins", Guid.Parse(assembly.AssemblyId).ToString("N"));
+                    return SaveDownload(data, folder, assembly.Name, ".dll", "plugin assembly",
+                        new GetPluginsResult { TotalCount = 1, Mode = "download", Assemblies = matches });
+                }
+
                 if (!string.IsNullOrWhiteSpace(stage))
                 {
                     var s = stage.Trim().ToLowerInvariant();
@@ -245,11 +325,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Data fetchers (return data, not CallToolResult) ────────────────
 
-        private List<PluginAssemblyEntry> FetchAssemblies(string nameFilter, int maxRecords)
+        private CallToolResult SaveDownload(byte[] data, string folder, string name, string extension, string label, GetPluginsResult result)
+        {
+            var safeName = FileColumnTransferHelper.SanitizeFolderName(name);
+            if (safeName.EndsWith(extension, StringComparison.OrdinalIgnoreCase))
+                safeName = safeName[..^extension.Length];
+            var fileName = $"{safeName}_{DateTime.Now:yyyyMMddHHmmssfff}{extension}";
+            Directory.CreateDirectory(folder);
+            var savedPath = FileColumnTransferHelper.GetUniqueFilePath(folder, fileName);
+            using (var file = new FileStream(savedPath, FileMode.CreateNew, FileAccess.Write))
+                file.Write(data);
+            result.SavedPath = savedPath;
+            result.FileName = Path.GetFileName(savedPath);
+            result.SizeBytes = data.LongLength;
+            result.Sha256 = Convert.ToHexString(SHA256.HashData(data)).ToLowerInvariant();
+            return Success($"Downloaded {label} '{name}' ({data.LongLength:N0} bytes) — saved to '{savedPath}'.", result);
+        }
+
+        private List<PluginAssemblyEntry> FetchAssemblies(string nameFilter, int maxRecords, Guid? assemblyId = null)
         {
             var nameCondition = string.IsNullOrWhiteSpace(nameFilter)
                 ? ""
                 : $"\n      <condition attribute='name' operator='like' value='%{EscapeXml(nameFilter)}%'/>";
+
+            if (assemblyId.HasValue)
+                nameCondition += $"\n      <condition attribute='pluginassemblyid' operator='eq' value='{assemblyId.Value:D}'/>";
 
             var fetchXml = $@"<fetch top='{maxRecords}'>
   <entity name='pluginassembly'>
@@ -501,8 +601,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return result.Entities.Count > 0 ? result.Entities[0].Id.ToString() : null;
         }
 
-        private List<PluginPackageEntry> GetPackages(int maxRecords)
+        private List<PluginPackageEntry> GetPackages(int maxRecords, string nameFilter = null, Guid? packageId = null)
         {
+            var conditions = "";
+            if (!string.IsNullOrWhiteSpace(nameFilter))
+                conditions += $"<condition attribute='name' operator='like' value='%{EscapeXml(nameFilter)}%'/>";
+            if (packageId.HasValue)
+                conditions += $"<condition attribute='pluginpackageid' operator='eq' value='{packageId.Value:D}'/>";
+            var filter = conditions.Length > 0 ? $"<filter>{conditions}</filter>" : "";
             var fetchXml = $@"<fetch top='{maxRecords}'>
               <entity name='pluginpackage'>
                 <attribute name='pluginpackageid'/>
@@ -511,6 +617,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 <attribute name='ismanaged'/>
                 <attribute name='managedidentityid'/>
                 <attribute name='modifiedon'/>
+                {filter}
                 <order attribute='name'/>
               </entity>
             </fetch>";

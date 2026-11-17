@@ -249,7 +249,7 @@ public sealed class GetPluginsFakeXrmEasySweepTests
     // ──────────────────────────────────────────────
 
     [TestMethod]
-    public void ListAll_AssembliesPackagesTypeCountsAndManagedIdentity()
+    public async System.Threading.Tasks.Task ListAll_AssembliesPackagesTypeCountsAndManagedIdentity()
     {
         var miCertId = Guid.NewGuid();
         var miCertApp = Guid.NewGuid();
@@ -273,7 +273,7 @@ public sealed class GetPluginsFakeXrmEasySweepTests
         SeedPackageAssembly(packageB, null);
         SeedPackageAssembly(null, "Orphan Assembly");
 
-        var result = NewTool().get_plugins();
+        var result = await NewTool().get_plugins();
 
         Assert.IsFalse(result.IsError == true, Text(result));
         StringAssert.Contains(Text(result), "[Success] 2 plugin assemblies (2 plugin packages) registered.");
@@ -310,11 +310,11 @@ public sealed class GetPluginsFakeXrmEasySweepTests
     }
 
     [TestMethod]
-    public void ListAll_NoPackagesRegistered_OmitsPackageLabel()
+    public async System.Threading.Tasks.Task ListAll_NoPackagesRegistered_OmitsPackageLabel()
     {
         SeedAssembly("Solo Assembly", "1.0.0.0");
 
-        var result = NewTool().get_plugins();
+        var result = await NewTool().get_plugins();
 
         Assert.IsFalse(result.IsError == true, Text(result));
         StringAssert.Contains(Text(result), "[Success] 1 plugin assemblies registered.");
@@ -329,25 +329,25 @@ public sealed class GetPluginsFakeXrmEasySweepTests
     // ──────────────────────────────────────────────
 
     [TestMethod]
-    public void AssemblyName_NoMatch_ReturnsError()
+    public async System.Threading.Tasks.Task AssemblyName_NoMatch_ReturnsError()
     {
         SeedAssembly("Contoso Assembly", "1.0.0.0");
 
-        var result = NewTool().get_plugins(assembly_name: "zzz");
+        var result = await NewTool().get_plugins(assembly_name: "zzz");
 
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "No plugin assembly matching 'zzz' found.");
     }
 
     [TestMethod]
-    public void AssemblyName_MultipleMatches_ReturnsDisambiguationWithTypeCounts()
+    public async System.Threading.Tasks.Task AssemblyName_MultipleMatches_ReturnsDisambiguationWithTypeCounts()
     {
         var assembly1 = SeedAssembly("Contoso Assembly", "1.0.0.0");
         var assembly2 = SeedAssembly("Contoso Assembly Two", "2.0.0.0");
         SeedTypeCount(assembly1, 3);
         SeedTypeCount(assembly2, 1, new EntityReference("pluginassembly", assembly2));
 
-        var result = NewTool().get_plugins(assembly_name: "Contoso Assembly");
+        var result = await NewTool().get_plugins(assembly_name: "Contoso Assembly");
 
         Assert.IsFalse(result.IsError == true, Text(result));
         StringAssert.Contains(Text(result), "2 plugin assemblies matching 'Contoso Assembly'.");
@@ -359,7 +359,7 @@ public sealed class GetPluginsFakeXrmEasySweepTests
     }
 
     [TestMethod]
-    public void AssemblyName_SingleMatch_ReturnsDetailWithTypesStepsAndImages()
+    public async System.Threading.Tasks.Task AssemblyName_SingleMatch_ReturnsDetailWithTypesStepsAndImages()
     {
         var assemblyId = SeedAssembly("Contoso Assembly", "1.0.0.0");
         SeedType(assemblyId, "Contoso.Plugins.Step1", description: "  desc  ");
@@ -367,7 +367,7 @@ public sealed class GetPluginsFakeXrmEasySweepTests
         var stepId = SeedStep(assemblyId, "Contoso Assembly", "Contoso.Plugins.Step1", "Create", "account", 1);
         SeedImage(stepId, imageType: 0, attributes: "name");
 
-        var result = NewTool().get_plugins(assembly_name: "Contoso Assembly");
+        var result = await NewTool().get_plugins(assembly_name: "Contoso Assembly");
 
         Assert.IsFalse(result.IsError == true, Text(result));
         StringAssert.Contains(Text(result), "[Success] Contoso Assembly (1.0.0.0): 2 types, 1 steps.");
@@ -404,7 +404,7 @@ public sealed class GetPluginsFakeXrmEasySweepTests
     }
 
     [TestMethod]
-    public void AssemblyDetail_FiltersByStageModeMessageAndTypeName()
+    public async System.Threading.Tasks.Task AssemblyDetail_FiltersByStageModeMessageAndTypeName()
     {
         var assemblyId = SeedAssembly("Contoso Assembly", "1.0.0.0");
         SeedType(assemblyId, "Contoso.Plugins.Step1");
@@ -414,7 +414,7 @@ public sealed class GetPluginsFakeXrmEasySweepTests
         SeedStep(assemblyId, "Contoso Assembly", "Contoso.Plugins.Step2", "Update", "account", 1, stage: 40, mode: 1);
         SeedStep(assemblyId, "Contoso Assembly", "Contoso.Workflows.Wf", "Create", "account", 1, stage: 40, mode: 1);
 
-        var result = NewTool().get_plugins(assembly_name: "Contoso Assembly", message_name: "Create",
+        var result = await NewTool().get_plugins(assembly_name: "Contoso Assembly", message_name: "Create",
             type_name: "Plugins", stage: "postoperation", mode: "async", include_images: false);
 
         Assert.IsFalse(result.IsError == true, Text(result));
@@ -429,11 +429,11 @@ public sealed class GetPluginsFakeXrmEasySweepTests
     }
 
     [TestMethod]
-    public void AssemblyDetail_NoTypesOrSteps_ReturnsEmptyCounts()
+    public async System.Threading.Tasks.Task AssemblyDetail_NoTypesOrSteps_ReturnsEmptyCounts()
     {
         SeedAssembly("Empty Assembly", "2.0.0.0");
 
-        var result = NewTool().get_plugins(assembly_name: "Empty Assembly");
+        var result = await NewTool().get_plugins(assembly_name: "Empty Assembly");
 
         Assert.IsFalse(result.IsError == true, Text(result));
         StringAssert.Contains(Text(result), "[Success] Empty Assembly (2.0.0.0): 0 types, 0 steps.");
@@ -448,7 +448,7 @@ public sealed class GetPluginsFakeXrmEasySweepTests
     // ──────────────────────────────────────────────
 
     [TestMethod]
-    public void EntityName_StepsOnEntity_WinsOverAssembly_AndPostFiltersLeaks()
+    public async System.Threading.Tasks.Task EntityName_StepsOnEntity_WinsOverAssembly_AndPostFiltersLeaks()
     {
         _service.Entities.Add(MakeEntityMetadata("account", "Account", 1));
         _service.Entities.Add(MakeEntityMetadata("contact", "Contact", 2));
@@ -464,7 +464,7 @@ public sealed class GetPluginsFakeXrmEasySweepTests
         SeedStep(Guid.NewGuid(), "Contoso Assembly", "Contoso.Plugins.Step4", "Create", null, 1);
         SeedStep(Guid.NewGuid(), "Contoso Assembly", "Contoso.Plugins.Step5", "Create", "contact", 2);
 
-        var result = NewTool().get_plugins(entity_name: "Account", assembly_name: "Contoso Assembly", active_only: false);
+        var result = await NewTool().get_plugins(entity_name: "Account", assembly_name: "Contoso Assembly", active_only: false);
 
         Assert.IsFalse(result.IsError == true, Text(result));
         StringAssert.Contains(Text(result), "[Success] 2 plugin steps on account.");
@@ -493,22 +493,22 @@ public sealed class GetPluginsFakeXrmEasySweepTests
     }
 
     [TestMethod]
-    public void EntityName_UnknownEntity_ReturnsResolverError()
+    public async System.Threading.Tasks.Task EntityName_UnknownEntity_ReturnsResolverError()
     {
         _service.Entities.Add(MakeEntityMetadata("account", "Account", 1));
 
-        var result = NewTool().get_plugins(entity_name: "zzz");
+        var result = await NewTool().get_plugins(entity_name: "zzz");
 
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "entity_name 'zzz': 'zzz' was not found by Display Name or Logical/Unique/Schema Name.");
     }
 
     [TestMethod]
-    public void EntityName_MetadataWithoutObjectTypeCode_ReturnsError()
+    public async System.Threading.Tasks.Task EntityName_MetadataWithoutObjectTypeCode_ReturnsError()
     {
         _service.Entities.Add(MakeEntityMetadata("orphan", "Orphan", null));
 
-        var result = NewTool().get_plugins(entity_name: "orphan");
+        var result = await NewTool().get_plugins(entity_name: "orphan");
 
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "Entity 'orphan' not found.");
@@ -519,9 +519,9 @@ public sealed class GetPluginsFakeXrmEasySweepTests
     // ──────────────────────────────────────────────
 
     [TestMethod]
-    public void MessageName_Unknown_ReturnsValidationError()
+    public async System.Threading.Tasks.Task MessageName_Unknown_ReturnsValidationError()
     {
-        var result = NewTool().get_plugins(message_name: "Nope");
+        var result = await NewTool().get_plugins(message_name: "Nope");
 
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "SDK message 'Nope' not found.");
@@ -529,14 +529,14 @@ public sealed class GetPluginsFakeXrmEasySweepTests
     }
 
     [TestMethod]
-    public void EntityName_WithMessageName_FiltersStepsByMessage()
+    public async System.Threading.Tasks.Task EntityName_WithMessageName_FiltersStepsByMessage()
     {
         _service.Entities.Add(MakeEntityMetadata("account", "Account", 1));
         var assemblyId = Guid.NewGuid();
         SeedStep(assemblyId, "Contoso Assembly", "Contoso.Plugins.Step1", "Create", "account", 1);
         SeedStep(assemblyId, "Contoso Assembly", "Contoso.Plugins.Step2", "Update", "account", 1);
 
-        var result = NewTool().get_plugins(entity_name: "account", message_name: "Create");
+        var result = await NewTool().get_plugins(entity_name: "account", message_name: "Create");
 
         Assert.IsFalse(result.IsError == true, Text(result));
         StringAssert.Contains(Text(result), "[Success] 1 plugin step on account.");
@@ -551,14 +551,14 @@ public sealed class GetPluginsFakeXrmEasySweepTests
     // ──────────────────────────────────────────────
 
     [TestMethod]
-    public void MaxRecords_ClampsOutOfRangeValues()
+    public async System.Threading.Tasks.Task MaxRecords_ClampsOutOfRangeValues()
     {
-        var clamped = NewTool().get_plugins(max_records: 600);
+        var clamped = await NewTool().get_plugins(max_records: 600);
         Assert.IsFalse(clamped.IsError == true, Text(clamped));
         StringAssert.Contains(Text(clamped), "0 plugin assemblies registered.");
         StringAssert.Contains(_service.LastAssembliesFetch, "top='500'");
 
-        var defaulted = NewTool().get_plugins(max_records: 0);
+        var defaulted = await NewTool().get_plugins(max_records: 0);
         Assert.IsFalse(defaulted.IsError == true, Text(defaulted));
         StringAssert.Contains(_service.LastAssembliesFetch, "top='100'");
     }
@@ -568,7 +568,7 @@ public sealed class GetPluginsFakeXrmEasySweepTests
     // ──────────────────────────────────────────────
 
     [TestMethod]
-    public void Images_UnknownTypeAndUnreferencedRows_UseFallbackBranches()
+    public async System.Threading.Tasks.Task Images_UnknownTypeAndUnreferencedRows_UseFallbackBranches()
     {
         _service.Entities.Add(MakeEntityMetadata("account", "Account", 1));
         var stepWithImage = SeedStep(Guid.NewGuid(), "Contoso Assembly", "Contoso.Plugins.Step1", "Create", "account", 1);
@@ -577,7 +577,7 @@ public sealed class GetPluginsFakeXrmEasySweepTests
         SeedImage(stepWithImage, name: "Weird Image", imageType: 7, attributes: null);
         SeedImage(stepWithoutImage, includeStepReference: false);
 
-        var result = NewTool().get_plugins(entity_name: "account");
+        var result = await NewTool().get_plugins(entity_name: "account");
 
         Assert.IsFalse(result.IsError == true, Text(result));
         var payload = Payload(result);
@@ -595,7 +595,7 @@ public sealed class GetPluginsFakeXrmEasySweepTests
     }
 
     [TestMethod]
-    public void Images_MoreThanPackSize_UsesMultipleBatches()
+    public async System.Threading.Tasks.Task Images_MoreThanPackSize_UsesMultipleBatches()
     {
         _service.Entities.Add(MakeEntityMetadata("account", "Account", 1));
         for (var i = 0; i < 51; i++)
@@ -604,7 +604,7 @@ public sealed class GetPluginsFakeXrmEasySweepTests
             SeedImage(stepId, imageType: 1);
         }
 
-        var result = NewTool().get_plugins(entity_name: "account", max_records: 100);
+        var result = await NewTool().get_plugins(entity_name: "account", max_records: 100);
 
         Assert.IsFalse(result.IsError == true, Text(result));
         var payload = Payload(result);

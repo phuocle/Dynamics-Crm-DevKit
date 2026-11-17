@@ -101,33 +101,33 @@ public class GetPluginsToolTests
     // ──────────────────────────────────────────────
 
     [TestMethod]
-    public void GetPlugins_TypeNameFilter_ValidationViaInputValidation()
+    public async System.Threading.Tasks.Task GetPlugins_TypeNameFilter_ValidationViaInputValidation()
     {
         // The tool validates stage/mode BEFORE building FetchXML.
         // We verify that passing an invalid stage still returns proper error
         // even when type_name is also provided — confirming input validation runs first.
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.GetPluginsTool(null!);
-        var result = tool.get_plugins(stage: "badstage", type_name: "SomeType", entity_name: "account");
+        var result = await tool.get_plugins(stage: "badstage", type_name: "SomeType", entity_name: "account");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("Invalid stage"));
     }
 
     [TestMethod]
-    public void GetPlugins_InvalidMode_ReturnsError()
+    public async System.Threading.Tasks.Task GetPlugins_InvalidMode_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.GetPluginsTool(null!);
-        var result = tool.get_plugins(mode: "badmode", entity_name: "account");
+        var result = await tool.get_plugins(mode: "badmode", entity_name: "account");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("Invalid mode"));
     }
 
     [TestMethod]
-    public void GetPlugins_FiltersWithoutEntityOrAssembly_ReturnsError()
+    public async System.Threading.Tasks.Task GetPlugins_FiltersWithoutEntityOrAssembly_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.GetPluginsTool(null!);
-        var result = tool.get_plugins(stage: "prevalidation");
+        var result = await tool.get_plugins(stage: "prevalidation");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("require entity_name or assembly_name"));

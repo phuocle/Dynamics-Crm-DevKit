@@ -30,5 +30,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("packages")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<PluginPackageEntry> Packages { get; set; }
+
+        [JsonPropertyName("savedPath")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SavedPath { get; set; }
+
+        [JsonPropertyName("fileName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string FileName { get; set; }
+
+        [JsonPropertyName("sizeBytes")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public long? SizeBytes { get; set; }
+
+        [JsonPropertyName("sha256")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Sha256 { get; set; }
     }
 }
