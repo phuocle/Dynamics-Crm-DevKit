@@ -65,7 +65,7 @@ public class McpConnectionResolutionTests
     [TestMethod]
     [DataRow("--auth", "ClientSecret")] [DataRow("--url", "")] [DataRow("--conn", "")]
     [DataRow("--clientsecret", "")] [DataRow("--dry-run", "")] [DataRow("--dry-run=false", "")]
-    [DataRow("--category", "all")] [DataRow("--transport", "stdio")] [DataRow("--as-user", "")]
+    [DataRow("--transport", "stdio")] [DataRow("--as-user", "")]
     [DataRow("--json", "")] [DataRow("--profile", "")] [DataRow("--sdk-login", "")]
     public void AnyConfigurationOption_EvenEmptyOrDefault_DoesNotFallBackToValidEnv(string option, string value)
     {
@@ -76,7 +76,7 @@ public class McpConnectionResolutionTests
 
     [TestMethod]
     [DataRow("--auth", "ClientSecret")] [DataRow("--dry-run", "")] [DataRow("--dry-run=false", "")]
-    [DataRow("--category", "all")] [DataRow("--transport", "stdio")] [DataRow("--as-user", "")]
+    [DataRow("--transport", "stdio")] [DataRow("--as-user", "")]
     public void EnvAndAnyConfigurationOption_AreRejectedBeforeReadingEnv(string option, string value)
     {
         WriteEnv("DEVKIT_ALIAS=default\n");
@@ -167,7 +167,7 @@ public class McpConnectionResolutionTests
     public void ArgsOnly_ControlOptionsAreAllowedWithCompleteConnection()
     {
         WriteEnv("DEVKIT_ALIAS=default\n");
-        var settings = CompleteArgs(); settings.Category = "readonly"; settings.DryRun = true; settings.AsUser = "args-user";
+        var settings = CompleteArgs(); settings.DryRun = true; settings.AsUser = "args-user";
         Assert.AreEqual(1, McpStartupConfiguration.Resolve(settings).GroupIds.Count);
         Assert.IsTrue(settings.DryRun); Assert.AreEqual("args-user", settings.AsUser);
     }

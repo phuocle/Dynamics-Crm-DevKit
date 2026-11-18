@@ -19,16 +19,12 @@ public class McpCommandCoverageTests
         var (exitCode, stdout, stderr) = await ExecuteWithConsoleAsync(new McpCommandArgs { ListTools = true });
 
         Assert.AreEqual(0, exitCode);
-        StringAssert.Contains(stdout, "DevKit MCP Tools");
-        StringAssert.Contains(stdout, "ReadOnly");
-        StringAssert.Contains(stdout, "Mutation");
+        StringAssert.Contains(stdout, "DevKit MCP Tools (41)");
+        StringAssert.Contains(stdout, "whoami");
         StringAssert.Contains(stdout, "manage_record");
-        StringAssert.Contains(stdout, "This catalog describes one DevKit MCP instance.");
-        StringAssert.Contains(stdout, "Use only the instance name and optional --env <id> to select .env connections.");
-        StringAssert.Contains(stdout, "Any configuration option selects args-only mode; --env cannot be mixed with it.");
-        StringAssert.Contains(stdout, "Different MCP client entries can run separate instances with the same tool names.");
-        StringAssert.Contains(stdout, "Example: devkit mcp devkit-codex-2 --env 1");
-        StringAssert.Contains(stdout, "Run 'devkit mcp --setup-guide' for multi-instance configuration.");
+        var lines = stdout.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+        Assert.AreEqual("=========================================================================", lines[^2]);
+        Assert.AreEqual("Run 'devkit mcp --setup-guide' for setup instructions.", lines[^1]);
         Assert.AreEqual("", stderr);
     }
 
@@ -39,46 +35,43 @@ public class McpCommandCoverageTests
 
         Assert.AreEqual(0, exitCode);
         StringAssert.Contains(stdout, "DevKit MCP Setup Guide");
-        // The guide explains project .env support so the MCP config can be committed safely.
-        StringAssert.Contains(stdout, "CONNECTION (PROJECT .env OR COMMAND-LINE ARGUMENTS)");
-        StringAssert.Contains(stdout, "project .env");
-        StringAssert.Contains(stdout, "working directory");
-        StringAssert.Contains(stdout, "connection secrets belong in the ignored project .env");
-        StringAssert.Contains(stdout, "--auth");
-        StringAssert.Contains(stdout, "devkit-claude");
-        StringAssert.Contains(stdout, "AVAILABLE TOOLS");
-        StringAssert.Contains(stdout, ".agents/mcp_config.json");
-        StringAssert.Contains(stdout, ".agents/plugins/<plugin>/mcp_config.json");
-        StringAssert.Contains(stdout, ".zcode/config.json");
-        StringAssert.Contains(stdout, "~/.zcode/cli/config.json");
-        StringAssert.Contains(stdout, "\"timeoutMs\": 600000");
-        StringAssert.Contains(stdout, "\"timeoutSeconds\": 600");
-        StringAssert.Contains(stdout, "\"timeout\": 600000");
-        StringAssert.Contains(stdout, "tool_timeout_sec = 600");
-        StringAssert.Contains(stdout, "claude mcp add-json --scope user");
-        StringAssert.Contains(stdout, "~/.codex/config.toml");
-        StringAssert.Contains(stdout, "/etc/codex/config.toml");
-        StringAssert.Contains(stdout, "MCP: Open User Configuration");
-        StringAssert.Contains(stdout, "no standard all-users MCP file documented");
-        Assert.IsFalse(stdout.Contains("ZCode 3.1.4+"));
+        Assert.IsFalse(stdout.Contains("dotnet tool install"));
+        StringAssert.Contains(stdout, "MCP reads the nearest .env found by searching upward from the launch directory.");
+        StringAssert.Contains(stdout, "otherwise DEVKIT_DRY_RUN, otherwise false.");
+        StringAssert.Contains(stdout, "AS_USER applies to its own group and is checked when");
+        StringAssert.Contains(stdout, "Use devkit mcp --tools for the tool list.");
+        StringAssert.Contains(stdout, "Use --auth with its required options or use --conn.");
         Assert.IsFalse(stdout.Contains("\u001b["), "Captured guide must remain plain text");
-        Assert.IsFalse(stdout.Contains("this repo's devkit plugin"));
-        StringAssert.Contains(stdout, "~/.gemini/config/mcp_config.json");
-        Assert.IsFalse(stdout.Contains(".example"), "Guide must not refer to missing example files");
-        Assert.IsFalse(stdout.Contains("antigravity-cli/mcp_config.json"), "Use the current global MCP path");
-        Assert.IsFalse(stdout.Contains("\"--clientsecret\""), "MCP config examples must not expose secrets");
-        Assert.IsFalse(stdout.Contains("\"SECRET\""), "MCP config examples must not expose secrets");
-        StringAssert.Contains(stdout, "--env <id>");
-        StringAssert.Contains(stdout, "DEVKIT_1_URL");
-        StringAssert.Contains(stdout, "DEVKIT_2_AUTH_TYPE=FromPac");
-        StringAssert.Contains(stdout, "DEVKIT_100_URL");
-        StringAssert.Contains(stdout, "dynamicscrm-devkit-2");
-        StringAssert.Contains(stdout, "devkit-claude-2");
-        StringAssert.Contains(stdout, "devkit-codex-2");
-        StringAssert.Contains(stdout, "devkit-copilot-2");
-        StringAssert.Contains(stdout, "devkit-antigravity-2");
-        StringAssert.Contains(stdout, "devkit-zcode-2");
-        StringAssert.Contains(stdout, "whoami");
+
+        var groupConfig = stdout.IndexOf("1. Define your groups in the project .env", StringComparison.Ordinal);
+        var clientConfig = stdout.IndexOf("2. Add one entry to your MCP client", StringComparison.Ordinal);
+        var verifyGroups = stdout.IndexOf("3. Reload the client and verify the groups", StringComparison.Ordinal);
+        var startupGroup = stdout.IndexOf("Change the startup group", StringComparison.Ordinal);
+        var optionalServer = stdout.IndexOf("Optional second MCP server", StringComparison.Ordinal);
+        Assert.IsTrue(groupConfig >= 0 && clientConfig > groupConfig && verifyGroups > clientConfig &&
+            startupGroup > verifyGroups && optionalServer > startupGroup);
+        var envExample = stdout[groupConfig..clientConfig];
+        StringAssert.Contains(envExample, "DEVKIT_AUTH_TYPE=FromPac");
+        StringAssert.Contains(envExample, "DEVKIT_PAC_PROFILE=PAC_PROFILE_NAME");
+        StringAssert.Contains(envExample, "DEVKIT_ALIAS=org-a");
+        StringAssert.Contains(envExample, "DEVKIT_1_AUTH_TYPE=ClientSecret");
+        StringAssert.Contains(envExample, "DEVKIT_1_URL=https://org-b.crm.dynamics.com");
+        StringAssert.Contains(envExample, "DEVKIT_1_CLIENT_ID=APP_ID");
+        StringAssert.Contains(envExample, "DEVKIT_1_CLIENT_SECRET=APP_SECRET");
+        StringAssert.Contains(envExample, "DEVKIT_1_ALIAS=org-b");
+        StringAssert.Contains(envExample, "DEVKIT_1_DRY_RUN=true");
+        StringAssert.Contains(stdout[clientConfig..verifyGroups], "args = [\"mcp\", \"devkit-codex\"]");
+        StringAssert.Contains(stdout[verifyGroups..startupGroup], "env=default, dryRun=false");
+        StringAssert.Contains(stdout[verifyGroups..startupGroup], "{\"env\":\"org-b\"}      env=1, dryRun=true");
+        StringAssert.Contains(stdout[startupGroup..optionalServer], "args = [\"mcp\", \"devkit-codex\", \"--env\", \"org-b\"]");
+        StringAssert.Contains(stdout, "OAuth (legacy) and AD (on-premises) use URL, USERNAME and PASSWORD.");
+        StringAssert.Contains(stdout[clientConfig..optionalServer], ".mcp.json");
+        StringAssert.Contains(stdout[clientConfig..optionalServer], ".vscode/mcp.json");
+        StringAssert.Contains(stdout[clientConfig..optionalServer], ".agents/mcp_config.json");
+        StringAssert.Contains(stdout[clientConfig..optionalServer], ".zcode/config.json");
+        Assert.IsFalse(stdout[..optionalServer].Contains("dynamicscrm-devkit-2"));
+        StringAssert.Contains(stdout[optionalServer..], "[mcp_servers.dynamicscrm-devkit-2]");
+        StringAssert.Contains(stdout[optionalServer..], "args = [\"mcp\", \"devkit-codex-2\", \"--env\", \"1\"]");
         Assert.AreEqual("", stderr);
     }
 

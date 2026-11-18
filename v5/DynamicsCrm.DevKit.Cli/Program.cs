@@ -185,13 +185,11 @@ namespace DynamicsCrm.DevKit.Cli
                     mcp.WithData(plainRequested);
                     mcp.WithDescription(Mcp.McpStartupConfiguration.Description)
                           .WithExample(new[] { "mcp", "devkit-codex" })
-                          .WithExample(new[] { "mcp", "devkit-codex-2", "--env", "1" })
-                          .WithExample(new[] { "mcp", "devkit-uat", "--env", "99" })
-                          .WithExample(new[] { "mcp", "--tools" })
+                          .WithExample(new[] { "mcp", "devkit-codex", "--env", "org-b" })
                           .WithExample(new[] { "mcp", "--setup-guide" })
-                          .WithExample(new[] { "mcp", "--auth", "ClientSecret", "--url", "https://org.crm.dynamics.com", "--clientid", "ID", "--clientsecret", "SECRET" })
-                          .WithExample(new[] { "mcp", "--auth", "FromPac", "--pacprofile", "default" })
-                          .WithExample(new[] { "mcp", "--auth", "Interactive", "--url", "https://org.crm.dynamics.com" });
+                          .WithExample(new[] { "mcp", "--tools" })
+                          .WithExample(new[] { "mcp", "--auth", "FromPac" })
+                          .WithExample(new[] { "mcp", "devkit-codex", "--auth", "FromPac", "--pacprofile", "PAC_PROFILE_NAME", "--dry-run" });
                 });
 
                 // A client owns stdout when it starts MCP over stdio. Send the
@@ -289,6 +287,10 @@ namespace DynamicsCrm.DevKit.Cli
         {
             public DevKitHelpProvider(ICommandAppSettings settings) : base(settings) { }
 
+            public override IEnumerable<IRenderable> GetOptions(ICommandModel model, ICommandInfo command)
+            {
+                return base.GetOptions(model, command?.Name == "mcp" ? new McpHelpCommandInfo(command) : command);
+            }
 
             public override IEnumerable<IRenderable> GetExamples(ICommandModel model, ICommandInfo command)
             {
@@ -331,6 +333,40 @@ namespace DynamicsCrm.DevKit.Cli
                 };
             }
         }
+
+        private sealed class McpHelpCommandInfo(ICommandInfo command) : ICommandInfo
+        {
+            public string Name => command.Name;
+            public string Description => command.Description;
+            public bool IsBranch => command.IsBranch;
+            public bool IsDefaultCommand => command.IsDefaultCommand;
+            public bool IsHidden => command.IsHidden;
+            public ICommandInfo Parent => command.Parent;
+            public IReadOnlyList<string[]> Examples => command.Examples;
+            public IReadOnlyList<ICommandInfo> Commands => command.Commands;
+            public ICommandInfo DefaultCommand => command.DefaultCommand;
+
+            public IReadOnlyList<ICommandParameter> Parameters { get; } = command.Parameters
+                .Where(parameter => parameter is not ICommandOption option ||
+                    !option.LongNames.Any(name => name is "json" or "profile" or "sdk-login" or "transport"))
+                .Append(new PlainHelpOption())
+                .ToArray();
+        }
+
+        // Program consumes --plain before Spectre sees the arguments.
+        private sealed class PlainHelpOption : ICommandOption
+        {
+            public IReadOnlyList<string> LongNames { get; } = new[] { "plain" };
+            public IReadOnlyList<string> ShortNames => Array.Empty<string>();
+            public string ValueName => null;
+            public bool ValueIsOptional => false;
+            public bool IsFlag => true;
+            public bool IsRequired => false;
+            public string Description => "Use plain output. When starting MCP, this selects args-only mode and requires complete connection arguments.";
+            public System.ComponentModel.DefaultValueAttribute DefaultValue => null;
+            public bool IsHidden => false;
+        }
+
         /// <summary>
         /// Plain output is also requested through DEVKIT_NO_COLOR in the project
         /// .env file, found by the same walk-up search as connection values:

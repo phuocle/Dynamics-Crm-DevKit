@@ -28,9 +28,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             _connections = connections;
         }
 
-        // Tool category derives from [McpServerTool(ReadOnly = ...)] on each tool method —
-        // single source of truth, no manual mapping. Two cumulative levels:
-        // readonly = read-only tools only; all = every tool (default).
+        private const string DefaultServerName = "DynamicsCrm.DevKit";
 
         // Tools permanently disabled (set = type names using nameof() for compile-time safety)
         internal static readonly HashSet<string> DisabledToolSet = new()
@@ -45,24 +43,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(Tools.ManageReportTool)] = new[] { "instructions_for_manage_report" },
         };
 
-        internal static readonly Dictionary<string, int> CategoryLevel = new()
-        {
-            ["readonly"] = 1,
-            ["all"] = 2,
-        };
-
-        public async Task RunAsync(string category = "all", bool dryRun = false, string instanceName = null,
+        public async Task RunAsync(bool dryRun = false, string instanceName = null,
             Guid? impersonatedUserId = null, string impersonatedUserDisplay = null,
             string envGroup = null, string connectionSource = null, bool usedFallback = false)
         {
-            var normalizedCategory = category.Trim().ToLowerInvariant();
-            if (!CategoryLevel.ContainsKey(normalizedCategory))
-                throw new InvalidOperationException(
-                    $"Unknown tool category '{category}'. Supported: readonly ({GetToolCount(CategoryLevel["readonly"])} tools), all ({GetToolCount(CategoryLevel["all"])} tools). " +
-                    "Note: basic/standard/advanced were removed — use 'all' (default) or 'readonly'.");
-            var requestedLevel = CategoryLevel[normalizedCategory];
-            var allowedTypeNames = GetFilteredToolTypeNames(requestedLevel);
-            var toolCount = allowedTypeNames.Count;
+            var tools = GetToolCatalog();
 
             var builder = Host.CreateApplicationBuilder();
 
@@ -88,9 +73,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                 builder.Services.AddSingleton(startup.Context);
             }
 
-            var displayCategory = normalizedCategory;
             var serverName = string.IsNullOrWhiteSpace(instanceName)
-                ? $"DynamicsCrm.DevKit ({displayCategory})"
+                ? DefaultServerName
                 : instanceName;
 
             builder.Services
@@ -103,8 +87,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                     };
                     options.ServerInstructions = BuildServerInstructions(
                         serverName,
-                        displayCategory,
-                        toolCount,
+                        tools.Count,
                         _serviceClient.ConnectedOrgUriActual,
                         _serviceClient.ConnectedOrgFriendlyName,
                         _serviceClient.ConnectedOrgUniqueName,
@@ -118,31 +101,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                 .WithToolsFromAssembly()
                 .WithResourcesFromAssembly();
 
-            // Compute resource names to disable (from DisabledToolSet)
-            var disabledResourceNames = new System.Collections.Generic.HashSet<string>(
-                DisabledToolSet
-                    .Where(t => ToolResourceMap.ContainsKey(t))
-                    .SelectMany(t => ToolResourceMap[t]));
-
-            var needsCategoryFilter = requestedLevel < CategoryLevel["all"];
-            var needsToolFilter = needsCategoryFilter || DisabledToolSet.Count > 0;
-            var needsResourceFilter = disabledResourceNames.Count > 0;
-
-            // Filter tools by category and/or disabled resources after registration
-            if (needsToolFilter || needsResourceFilter)
+            if (DisabledToolSet.Count > 0)
             {
+                var allowedToolNames = tools.Select(t => t.Name).ToHashSet();
+                var disabledResourceNames = DisabledToolSet
+                    .Where(ToolResourceMap.ContainsKey)
+                    .SelectMany(t => ToolResourceMap[t])
+                    .ToHashSet();
                 builder.Services.PostConfigure<McpServerOptions>(options =>
                 {
-                    if (needsToolFilter && options.ToolCollection != null)
+                    if (options.ToolCollection != null)
                     {
                         var toRemove = options.ToolCollection
-                            .Where(t => !allowedTypeNames.Contains(t.ProtocolTool.Name))
+                            .Where(t => !allowedToolNames.Contains(t.ProtocolTool.Name))
                             .ToList();
                         foreach (var tool in toRemove)
                             options.ToolCollection.Remove(tool);
                     }
 
-                    if (needsResourceFilter && options.ResourceCollection != null)
+                    if (disabledResourceNames.Count > 0 && options.ResourceCollection != null)
                     {
                         var toRemove = options.ResourceCollection
                             .Where(r => disabledResourceNames.Contains(r.ProtocolResource.Name))
@@ -194,35 +171,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             services.AddSingleton(executionPolicy.Context);
         }
 
-        internal static HashSet<string> GetFilteredToolTypeNames(int requestedLevel)
+        internal static List<McpToolInfo> GetToolCatalog()
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var allToolTypes = assembly.GetTypes()
-                .Where(t => t.GetCustomAttribute<McpServerToolTypeAttribute>() != null)
-                .ToList();
+            var toolTypes = assembly.GetTypes()
+                .Where(t => t.GetCustomAttribute<McpServerToolTypeAttribute>() != null
+                         && !DisabledToolSet.Contains(t.Name));
 
-            // Resolve MCP tool names from [McpServerTool(Name = "...")] attributes.
-            // Category filter derives from the attribute's ReadOnly flag.
-            var allowedNames = new HashSet<string>();
-            foreach (var type in allToolTypes)
+            var tools = new List<McpToolInfo>();
+            foreach (var type in toolTypes)
             {
-                if (DisabledToolSet.Contains(type.Name)) continue;
-
                 foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static))
                 {
                     var attr = method.GetCustomAttribute<McpServerToolAttribute>();
                     if (attr == null) continue;
-                    if (requestedLevel < CategoryLevel["all"] && !attr.ReadOnly) continue;
-                    allowedNames.Add(attr.Name ?? method.Name);
+                    var name = attr.Name ?? method.Name;
+                    tools.Add(new McpToolInfo(name, attr.Title ?? name));
                 }
             }
 
-            return allowedNames;
+            return tools.OrderBy(t => t.Name, StringComparer.Ordinal).ToList();
         }
+
+        internal record McpToolInfo(string Name, string Title);
 
         internal static string BuildServerInstructions(
             string serverName,
-            string displayCategory,
             int toolCount,
             Uri connectedOrgUriActual,
             string connectedOrgFriendlyName,
@@ -234,7 +208,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             bool usedFallback = false)
         {
             var resolvedName = string.IsNullOrWhiteSpace(serverName)
-                ? $"DynamicsCrm.DevKit ({displayCategory})"
+                ? DefaultServerName
                 : serverName;
             var fallbackGroupText = string.IsNullOrEmpty(envGroup)
                 ? (usedFallback ? "default (DEVKIT_*)" : "default (DEVKIT_*; fallback not used)")
@@ -250,7 +224,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                 $"Connected to Dataverse environment: {connectedOrgUriActual} | " +
                 $"Org: {connectedOrgFriendlyName} ({connectedOrgUniqueName}) | " +
                 $"Version: {connectedOrgVersion} | " +
-                $"Category: {displayCategory} ({toolCount} tools). " +
+                $"Available tools: {toolCount}. " +
                 "Tool descriptions reference docs:// and schema:// resources for detailed contracts. " +
                 "When your client supports MCP resources, read the relevant resource before complex operations; " +
                 "if it does not support resources, call the read_instruction tool (empty name returns the catalog, a name returns the full content). " +
@@ -258,11 +232,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                 (string.IsNullOrEmpty(impersonatedUserDisplay)
                     ? ""
                     : $" | Impersonating: {impersonatedUserDisplay} (CallerId set server-side)");
-        }
-
-        internal static int GetToolCount(int requestedLevel)
-        {
-            return GetFilteredToolTypeNames(requestedLevel).Count;
         }
     }
 }

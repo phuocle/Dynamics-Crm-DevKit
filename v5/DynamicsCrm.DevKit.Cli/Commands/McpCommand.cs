@@ -5,14 +5,11 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
-using ModelContextProtocol.Server;
 using Spectre.Console.Cli;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -40,7 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             {
                 if (settings.Env != null && !Mcp.McpConnectionSnapshot.IsSelector(settings.Env))
                 {
-                    LogError($"Invalid --env value '{settings.Env}'. Expected a positive integer group ID without leading zeros, an alias, or default (for example: 1, 2, prod, default).");
+                    LogError($"Invalid --env value '{settings.Env}'. Expected a positive integer group ID without leading zeros, an alias, or default (for example: 1, 2, org-b, default).");
                     return 2;
                 }
 
@@ -111,7 +108,6 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 await using var connections = new Mcp.McpConnectionRegistry(snapshot, settings, dryRunFlag, startupBundle);
                 var host = new Mcp.McpServerHost(serviceClient, connections);
                 await host.RunAsync(
-                    settings.Category,
                     settings.DryRun,
                     settings.Name,
                     impersonatedUserId,
@@ -326,350 +322,165 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         }
         private void PrintSetupGuide()
         {
-            var tools = GetMcpToolInfos();
-            Console.WriteLine("=========================================================================");
-            WriteGuideHeading(" DevKit MCP Setup Guide");
-            Console.WriteLine("=========================================================================");
+            WriteGuideHeading("DevKit MCP Setup Guide");
+            Console.WriteLine("One MCP server can serve multiple environments. Choose the group on each Dataverse tool call.");
             Console.WriteLine();
-            WriteGuideHeading("1. INSTALLATION");
-            Console.WriteLine("-------------------------------------------------------------------------");
-            Console.WriteLine("   dotnet tool install -g DynamicsCrm.DevKit.Cli");
+
+            WriteGuideHeading("1. Define your groups in the project .env");
+            Console.WriteLine("""
+                Choose the authentication method independently for each group. This sample uses
+                FromPac for org-a and ClientSecret for org-b. Replace the PAC profile, Dataverse URL,
+                application (client) ID and client secret with your values. Keep .env out of Git.
+                For one environment, keep just the default group and configure its authentication.
+
+                  # Group default, alias org-a
+                  DEVKIT_AUTH_TYPE=FromPac
+                  DEVKIT_PAC_PROFILE=PAC_PROFILE_NAME
+                  DEVKIT_ALIAS=org-a
+
+                  # Group 1, alias org-b
+                  DEVKIT_1_AUTH_TYPE=ClientSecret
+                  DEVKIT_1_URL=https://org-b.crm.dynamics.com
+                  DEVKIT_1_CLIENT_ID=APP_ID
+                  DEVKIT_1_CLIENT_SECRET=APP_SECRET
+                  DEVKIT_1_ALIAS=org-b
+                  DEVKIT_1_DRY_RUN=true
+                """);
             Console.WriteLine();
-            WriteGuideHeading("2. CONNECTION (PROJECT .env OR COMMAND-LINE ARGUMENTS)");
-            Console.WriteLine("-------------------------------------------------------------------------");
-            Console.WriteLine("   Choose exactly one source. Configuration arguments and .env never mix.");
-            Console.WriteLine("   .env mode: devkit mcp <name>, optionally followed by --env <id|alias|default>.");
-            Console.WriteLine("   Only .env mode discovers multiple organizations. Startup uses DEVKIT_*");
-            Console.WriteLine("   unless --env selects another group. Missing startup fields stop the server.");
-            Console.WriteLine("   Any other configuration option selects args-only mode: one organization,");
-            Console.WriteLine("   complete connection arguments required, no .env lookup or merging.");
-            Console.WriteLine("   This includes explicit default/empty values and --dry-run, --category,");
-            Console.WriteLine("   --as-user, --transport, --json, --profile and --plain.");
-            Console.WriteLine("   --env plus any configuration option is an error. --conn plus --auth is an error.");
-            Console.WriteLine("   .env is searched from the process working directory upward to the drive root.");
-            Console.WriteLine("   Only the nearest .env file is used (never merged with parent .env files).");
-            Console.WriteLine("   OS environment variables are not read for connection values.");
-            Console.WriteLine("   Configure the MCP client to launch devkit with the project/workspace as");
-            Console.WriteLine("   its working directory. Global installation does not change this directory.");
-            Console.WriteLine("   Keep .env local and ignored by Git; commit the MCP config without secrets.");
+
+            WriteGuideHeading("2. Add one entry to your MCP client");
+            Console.WriteLine("""
+                For Codex, merge this stdio server entry into .codex/config.toml. For other clients,
+                see the matching example below. Launch the server from the project directory.
+
+                  [mcp_servers.dynamicscrm-devkit]
+                  command = "devkit"
+                  args = ["mcp", "devkit-codex"]
+                  startup_timeout_sec = 20
+                  tool_timeout_sec = 600
+
+                These args start the server in group default and make group 1 available on demand.
+                """);
             Console.WriteLine();
-            Console.WriteLine("   Connection groups in project .env:");
-            Console.WriteLine("   - Default group (no --env): DEVKIT_<FIELD> (for example DEVKIT_URL)");
-            Console.WriteLine("   - Numbered group (--env <id>): DEVKIT_<id>_<FIELD> (for example DEVKIT_1_URL)");
-            Console.WriteLine("   - Groups do not need to be consecutive (1, 2, 100); there is no fixed group");
-            Console.WriteLine("     limit and no group list declaration is needed.");
-            Console.WriteLine("   - Groups are never mixed: in .env mode, --env 1 reads only");
-            Console.WriteLine("     DEVKIT_1_* keys and fails if the .env file or group 1 is missing.");
+
+            WriteGuideHeading("3. Reload the client and verify the groups");
+            Console.WriteLine("""
+                Invoke these MCP tools from your client. The middle column is the JSON argument object.
+
+                  Tool              JSON arguments       Expected with this .env
+                  connection_list   {}                   default (org-a, startup), 1 (org-b, dry-run)
+                  whoami            {}                   env=default, dryRun=false
+                  whoami            {"env":"org-b"}      env=1, dryRun=true
+
+                Check that whoami returns the intended organization for each group. With just one
+                group configured, skip the org-b check.
+
+                Pass env on any Dataverse tool call to select a group. "org-b" and "1" select
+                the same group on this server. Omit env to use the startup group.
+                """);
             Console.WriteLine();
-            Console.WriteLine("   Example project .env with multiple groups (do not commit):");
-            Console.WriteLine("     # Default group");
-            Console.WriteLine("     DEVKIT_AUTH_TYPE=ClientSecret");
-            Console.WriteLine("     DEVKIT_URL=https://org.crm.dynamics.com");
-            Console.WriteLine("     DEVKIT_CLIENT_ID=APP_ID");
-            Console.WriteLine("     DEVKIT_CLIENT_SECRET=SECRET");
+
+            WriteGuideHeading("Change the startup group");
+            Console.WriteLine("""
+                To make calls without env use org-b, change args in the same server entry and reload.
+
+                  args = ["mcp", "devkit-codex", "--env", "org-b"]
+
+                After the change, whoami with {} returns env=1. Use {"env":"default"} to call the
+                unnumbered DEVKIT_* group when it is configured. --env accepts an ID, alias or default.
+                """);
             Console.WriteLine();
-            Console.WriteLine("     # Group 1 (--env 1)");
-            Console.WriteLine("     DEVKIT_1_AUTH_TYPE=ClientSecret");
-            Console.WriteLine("     DEVKIT_1_URL=https://org-one.crm.dynamics.com");
-            Console.WriteLine("     DEVKIT_1_CLIENT_ID=APP_ID_ONE");
-            Console.WriteLine("     DEVKIT_1_CLIENT_SECRET=SECRET_ONE");
+
+            WriteGuideHeading("Other MCP clients");
+            Console.WriteLine("""
+                Use one of these entries in step 2. Merge it into the client config. Keep credentials in .env.
+
+                Claude Code (.mcp.json)
+                {"mcpServers":{"dynamicscrm-devkit":{"command":"devkit","args":["mcp","devkit-claude"],"timeout":600000}}}
+
+                VS Code Copilot (.vscode/mcp.json)
+                {"servers":{"dynamicscrm-devkit":{"type":"stdio","command":"devkit","args":["mcp","devkit-copilot"]}}}
+
+                Antigravity (.agents/mcp_config.json or ~/.gemini/config/mcp_config.json)
+                {"mcpServers":{"dynamicscrm-devkit":{"command":"devkit","args":["mcp","devkit-antigravity"],"timeoutSeconds":600}}}
+
+                ZCode (.zcode/config.json or ~/.zcode/cli/config.json)
+                {"mcp":{"servers":{"dynamicscrm-devkit":{"type":"stdio","command":"devkit","args":["mcp","devkit-zcode"],"timeoutMs":600000}}}}
+                """);
             Console.WriteLine();
-            Console.WriteLine("     # Group 2 (--env 2): can use a different auth type");
-            Console.WriteLine("     DEVKIT_2_AUTH_TYPE=FromPac");
-            Console.WriteLine("     DEVKIT_2_PAC_PROFILE=UAT");
+
+            WriteGuideHeading("Group rules");
+            Console.WriteLine("""
+                - MCP reads the nearest .env found by searching upward from the launch directory.
+                  Each group uses its own connection settings and may use a different auth type.
+                  A missing or incomplete startup group stops the server. Other groups connect
+                  on their first tool call. connection_list lists groups without connecting them.
+                - Use positive numeric IDs without leading zeros (1, 2, 100). Aliases must be unique
+                  ignoring case, start with an ASCII letter, and use only ASCII letters, digits, _ or -.
+                  The alias default is reserved.
+                - Dry-run blocks Dataverse mutations. MCP uses the group's DRY_RUN value if set,
+                  otherwise DEVKIT_DRY_RUN, otherwise false. Aliases and DRY_RUN (true/false) are
+                  validated at startup. AS_USER applies to its own group and is checked when
+                  that group connects. A failed impersonation stops that group's connection.
+                - Restart the server after editing .env. connection_list, read_instruction and
+                  resources have no env parameter. Use devkit mcp --tools for the tool list.
+
+                Authentication settings per group
+                Set AUTH_TYPE and the matching fields with prefix DEVKIT_ or DEVKIT_<id>_.
+                - FromPac uses PAC_PROFILE when specified. Omit it to use the active profile.
+                - ClientSecret uses URL, CLIENT_ID and CLIENT_SECRET.
+                - Interactive and DeviceCode use URL.
+                - OAuth (legacy) and AD (on-premises) use URL, USERNAME and PASSWORD.
+                  AD also accepts an optional DOMAIN.
+                """);
             Console.WriteLine();
-            Console.WriteLine("     # Group 100 (--env 100): non-consecutive IDs are valid");
-            Console.WriteLine("     DEVKIT_100_AUTH_TYPE=ClientSecret");
-            Console.WriteLine("     DEVKIT_100_URL=https://org-hundred.crm.dynamics.com");
-            Console.WriteLine("     DEVKIT_100_CLIENT_ID=APP_ID_HUNDRED");
-            Console.WriteLine("     DEVKIT_100_CLIENT_SECRET=SECRET_HUNDRED");
+
+            WriteGuideHeading("Args-only mode (one organization)");
+            Console.WriteLine("""
+                Only the instance name and optional --env select .env mode. Other configuration
+                options, including --dry-run, --as-user and --plain, require a complete args-only
+                connection. Use --auth with its required options or use --conn. Args-only mode
+                skips .env and cannot be combined with --env.
+
+                  devkit mcp devkit-codex --auth FromPac --pacprofile PAC_PROFILE_NAME --dry-run
+
+                See devkit mcp --help for connection options.
+                """);
             Console.WriteLine();
-            Console.WriteLine("   --env <id>           : Startup .env group (selects DEVKIT_<id>_*; default: DEVKIT_*)");
-            Console.WriteLine("   --env also accepts an alias or default (the unnumbered DEVKIT_* group).");
-            Console.WriteLine("   One process can serve multiple connections. Dataverse tools take optional env:");
-            Console.WriteLine("     omitted = startup; numeric ID/alias = that group; default = DEVKIT_*.");
-            Console.WriteLine("   Call connection_list to inspect groups and whoami with env to verify identity.");
-            Console.WriteLine("   Aliases: DEVKIT_ALIAS=dev, DEVKIT_1_ALIAS=prod; unique ignoring case,");
-            Console.WriteLine("     start with a letter, then letters/digits/_/-. The name default is reserved.");
-            Console.WriteLine("   Protect PROD with DEVKIT_1_DRY_RUN=true; DEV may remain writable.");
-            Console.WriteLine("     In .env mode group DRY_RUN overrides DEVKIT_DRY_RUN; --dry-run is args-only.");
-            Console.WriteLine("   DEVKIT_AS_USER and DEVKIT_1_AS_USER apply only to their own group.");
-            Console.WriteLine("     --as-user is args-only; unresolved .env AS_USER fails that connection.");
-            Console.WriteLine("   New policy values are validated at startup. File edits require a server restart.");
-            Console.WriteLine("   read_instruction, connection_list and resources do not take env.");
-            Console.WriteLine("   --auth               : Interactive, DeviceCode, ClientSecret, FromPac, OAuth, AD");
-            Console.WriteLine("   --url                : https://org.crm.dynamics.com (except FromPac)");
-            Console.WriteLine("   --clientid           : Azure AD Application (Client) ID");
-            Console.WriteLine("   --clientsecret       : Azure AD Client Secret (required for ClientSecret)");
-            Console.WriteLine("   --pacprofile         : PAC CLI profile name (optional; defaults to active profile)");
-            Console.WriteLine("   --username           : Username (OAuth)");
-            Console.WriteLine("   --password           : Password (OAuth, can be encrypted)");
-            Console.WriteLine("   --domain             : Optional domain (AD, on-premises)");
-            Console.WriteLine("   --conn               : Full legacy connection string (alternative to the above)");
-            Console.WriteLine();
-            Console.WriteLine("   Examples:");
-            Console.WriteLine("     devkit mcp devkit-claude                  (reads DEVKIT_* from project .env)");
-            Console.WriteLine("     devkit mcp devkit-claude-2 --env 1 (reads DEVKIT_1_* from project .env)");
-            Console.WriteLine();
-            WriteGuideHeading($"3. AVAILABLE TOOLS ({tools.Count} Tools)");
-            Console.WriteLine("-------------------------------------------------------------------------");
-            var readonlyCount = Mcp.McpServerHost.GetToolCount(Mcp.McpServerHost.CategoryLevel["readonly"]);
-            var allCount = Mcp.McpServerHost.GetToolCount(Mcp.McpServerHost.CategoryLevel["all"]);
-            Console.WriteLine($"   Filter tools with --category: readonly ({readonlyCount}), all ({allCount})");
-            Console.WriteLine("   Default: all (loads everything)");
-            Console.WriteLine("   Session options:");
-            Console.WriteLine("   --dry-run              : Block mutations at execution time (keeps full catalog;");
-            Console.WriteLine("                            differs from --category readonly which hides mutation tools)");
-            Console.WriteLine("   --as-user <guid|email> : Impersonate a user for the whole session");
-            Console.WriteLine("                            (requires System Administrator)");
-            Console.WriteLine();
-            foreach (var tool in tools)
-            {
-                Console.WriteLine($"   - {tool.Name,-30}: {tool.Title}");
-            }
-            Console.WriteLine();
-            WriteGuideHeading("4. MCP CONFIGURATION EXAMPLES");
-            Console.WriteLine("-------------------------------------------------------------------------");
-            Console.WriteLine();
-            Console.WriteLine("   Use client-specific instance names so logs and MCP clients");
-            Console.WriteLine("   can identify which AI client started devkit mcp:");
-            Console.WriteLine();
-            Console.WriteLine("     Claude      : devkit mcp devkit-claude");
-            Console.WriteLine("     Codex       : devkit mcp devkit-codex");
-            Console.WriteLine("     Copilot     : devkit mcp devkit-copilot");
-            Console.WriteLine("     ZCode       : devkit mcp devkit-zcode");
-            Console.WriteLine("     Antigravity : devkit mcp devkit-antigravity");
-            Console.WriteLine();
-            Console.WriteLine("   Multi-instance naming and verification:");
-            Console.WriteLine("   - [name] sets the instance display name; --env <id> selects DEVKIT_<id>_*.");
-            Console.WriteLine("   - A number in [name] (such as devkit-codex-2) is independent of --env <id>");
-            Console.WriteLine("     (for example, instance 2 can use --env 1 while instance 1 uses DEVKIT_*).");
-            Console.WriteLine("   - Keep the client server key and [name] aligned so each instance is clear.");
-            Console.WriteLine("   - Reload or restart the MCP client after editing its configuration, then");
-            Console.WriteLine("     call 'whoami' on each server to verify separate live PIDs, URLs, and Org IDs.");
-            Console.WriteLine();
-            Console.WriteLine("   Scope: project = current workspace; user = all projects for one OS user;");
-            Console.WriteLine("   system = all OS users (admin-managed where supported). ~ is the user home.");
-            Console.WriteLine("   Merge the example into the chosen config; do not overwrite other entries.");
-            Console.WriteLine("   Project config discovery depends on each client's workspace/trust rules.");
-            Console.WriteLine();
-            WriteGuideHeading("   [Claude Code project - .mcp.json]");
-            Console.WriteLine("   {");
-            Console.WriteLine("     \"mcpServers\": {");
-            Console.WriteLine("       \"dynamicscrm-devkit\": {");
-            Console.WriteLine("         \"command\": \"devkit\",");
-            Console.WriteLine("         \"args\": [");
-            Console.WriteLine("           \"mcp\", \"devkit-claude\"");
-            Console.WriteLine("         ],");
-            Console.WriteLine("         \"timeout\": 600000");
-            Console.WriteLine("       },");
-            Console.WriteLine("       \"dynamicscrm-devkit-2\": {");
-            Console.WriteLine("         \"command\": \"devkit\",");
-            Console.WriteLine("         \"args\": [");
-            Console.WriteLine("           \"mcp\", \"--env\", \"1\", \"devkit-claude-2\"");
-            Console.WriteLine("         ],");
-            Console.WriteLine("         \"timeout\": 600000");
-            Console.WriteLine("       }");
-            Console.WriteLine("     }");
-            Console.WriteLine("   }");
-            Console.WriteLine();
-            Console.WriteLine("   User: ~/.claude.json (managed by Claude Code). In PowerShell or a Unix shell:");
-            Console.WriteLine("   claude mcp add-json --scope user dynamicscrm-devkit '{\"command\":\"devkit\",\"args\":[\"mcp\",\"devkit-claude\"],\"timeout\":600000}'");
-            Console.WriteLine("   claude mcp add-json --scope user dynamicscrm-devkit-2 '{\"command\":\"devkit\",\"args\":[\"mcp\",\"--env\",\"1\",\"devkit-claude-2\"],\"timeout\":600000}'");
-            Console.WriteLine("   System: managed-mcp.json (admin only), using the same JSON structure:");
-            Console.WriteLine("     Windows: C:\\Program Files\\ClaudeCode\\managed-mcp.json");
-            Console.WriteLine("     macOS:   /Library/Application Support/ClaudeCode/managed-mcp.json");
-            Console.WriteLine("     Linux:   /etc/claude-code/managed-mcp.json");
-            Console.WriteLine("   Caution: managed-mcp.json restricts which other MCP servers can load.");
-            Console.WriteLine();
-            WriteGuideHeading("   [Codex project - .codex/config.toml]");
-            Console.WriteLine("   [mcp_servers.dynamicscrm-devkit]");
-            Console.WriteLine("   command = \"devkit\"");
-            Console.WriteLine("   args = [");
-            Console.WriteLine("     \"mcp\", \"devkit-codex\"");
-            Console.WriteLine("   ]");
-            Console.WriteLine("   startup_timeout_sec = 20");
-            Console.WriteLine("   tool_timeout_sec = 600");
-            Console.WriteLine();
-            Console.WriteLine("   [mcp_servers.dynamicscrm-devkit-2]");
-            Console.WriteLine("   command = \"devkit\"");
-            Console.WriteLine("   args = [");
-            Console.WriteLine("     \"mcp\", \"--env\", \"1\", \"devkit-codex-2\"");
-            Console.WriteLine("   ]");
-            Console.WriteLine("   startup_timeout_sec = 20");
-            Console.WriteLine("   tool_timeout_sec = 600");
-            Console.WriteLine();
-            Console.WriteLine("   User:   ~/.codex/config.toml (same TOML; CODEX_HOME may change the path)");
-            Console.WriteLine("   System: /etc/codex/config.toml on Unix (same TOML; admin-managed).");
-            Console.WriteLine("           Windows: consult Codex managed configuration documentation.");
-            Console.WriteLine("   Codex only loads project configuration for trusted projects.");
-            Console.WriteLine();
-            WriteGuideHeading("   [VS Code Copilot workspace - .vscode/mcp.json]");
-            Console.WriteLine("   {");
-            Console.WriteLine("     \"servers\": {");
-            Console.WriteLine("       \"dynamicscrm-devkit\": {");
-            Console.WriteLine("         \"type\": \"stdio\",");
-            Console.WriteLine("         \"command\": \"devkit\",");
-            Console.WriteLine("         \"args\": [");
-            Console.WriteLine("           \"mcp\", \"devkit-copilot\"");
-            Console.WriteLine("         ]");
-            Console.WriteLine("       },");
-            Console.WriteLine("       \"dynamicscrm-devkit-2\": {");
-            Console.WriteLine("         \"type\": \"stdio\",");
-            Console.WriteLine("         \"command\": \"devkit\",");
-            Console.WriteLine("         \"args\": [");
-            Console.WriteLine("           \"mcp\", \"--env\", \"1\", \"devkit-copilot-2\"");
-            Console.WriteLine("         ]");
-            Console.WriteLine("       }");
-            Console.WriteLine("     }");
-            Console.WriteLine("   }");
-            Console.WriteLine();
-            Console.WriteLine("   User: open 'MCP: Open User Configuration' in VS Code (same JSON format).");
-            Console.WriteLine("   System: no standard all-users config file documented; see admin policy.");
-            Console.WriteLine();
-            WriteGuideHeading("   [Antigravity - workspace or enabled plugin MCP config]");
-            Console.WriteLine("   {");
-            Console.WriteLine("     \"mcpServers\": {");
-            Console.WriteLine("       \"dynamicscrm-devkit\": {");
-            Console.WriteLine("         \"command\": \"devkit\",");
-            Console.WriteLine("         \"args\": [");
-            Console.WriteLine("           \"mcp\", \"devkit-antigravity\"");
-            Console.WriteLine("         ],");
-            Console.WriteLine("         \"timeoutSeconds\": 600");
-            Console.WriteLine("       },");
-            Console.WriteLine("       \"dynamicscrm-devkit-2\": {");
-            Console.WriteLine("         \"command\": \"devkit\",");
-            Console.WriteLine("         \"args\": [");
-            Console.WriteLine("           \"mcp\", \"--env\", \"1\", \"devkit-antigravity-2\"");
-            Console.WriteLine("         ],");
-            Console.WriteLine("         \"timeoutSeconds\": 600");
-            Console.WriteLine("       }");
-            Console.WriteLine("     }");
-            Console.WriteLine("   }");
-            Console.WriteLine();
-            Console.WriteLine("   Antigravity configuration locations (choose one):");
-            Console.WriteLine("     Workspace: .agents/mcp_config.json");
-            Console.WriteLine("     Plugin:    .agents/plugins/<plugin>/mcp_config.json");
-            Console.WriteLine("                (requires a valid, enabled plugin)");
-            Console.WriteLine("     User:      ~/.gemini/config/mcp_config.json");
-            Console.WriteLine("     System:    no standard all-users MCP file documented.");
-            Console.WriteLine("   Antigravity supports a per-server cwd: set it to the workspace path if");
-            Console.WriteLine("   needed for .env discovery. Avoid defining the same server twice.");
-            Console.WriteLine();
-            WriteGuideHeading("   [ZCode workspace - .zcode/config.json]");
-            Console.WriteLine("   {");
-            Console.WriteLine("     \"mcp\": {");
-            Console.WriteLine("       \"servers\": {");
-            Console.WriteLine("         \"dynamicscrm-devkit\": {");
-            Console.WriteLine("           \"type\": \"stdio\",");
-            Console.WriteLine("           \"command\": \"devkit\",");
-            Console.WriteLine("           \"args\": [\"mcp\", \"devkit-zcode\"],");
-            Console.WriteLine("           \"timeoutMs\": 600000");
-            Console.WriteLine("         },");
-            Console.WriteLine("         \"dynamicscrm-devkit-2\": {");
-            Console.WriteLine("           \"type\": \"stdio\",");
-            Console.WriteLine("           \"command\": \"devkit\",");
-            Console.WriteLine("           \"args\": [\"mcp\", \"--env\", \"1\", \"devkit-zcode-2\"],");
-            Console.WriteLine("           \"timeoutMs\": 600000");
-            Console.WriteLine("         }");
-            Console.WriteLine("       }");
-            Console.WriteLine("     }");
-            Console.WriteLine("   }");
-            Console.WriteLine("   ZCode user config: ~/.zcode/cli/config.json (same mcp.servers format).");
-            Console.WriteLine("   System: no standard all-users MCP file documented.");
-            Console.WriteLine("   .agents/mcp.json is a fallback per scope when .zcode has no servers.");
-            Console.WriteLine();
-            Console.WriteLine("   The configured timeouts allow 10 minutes per tool call; they are client");
-            Console.WriteLine("   settings, not a DevKit server limit. Codex startup timeout remains 20 seconds.");
-            Console.WriteLine("   VS Code .vscode/mcp.json: no per-tool timeout is documented for this");
-            Console.WriteLine("   format. Check the active agent's timeout; do not assume a 10-minute limit.");
-            Console.WriteLine();
-            Console.WriteLine("   The tool must be available to the OS user launching the MCP process.");
-            Console.WriteLine("   User/system server scope does not guarantee the project working directory:");
-            Console.WriteLine("   verify the client's launch cwd, or set it where the client supports cwd.");
-            Console.WriteLine();
-            Console.WriteLine("   Add the appropriate example to your client configuration. Keep it secret-free:");
-            Console.WriteLine("   connection secrets belong in the ignored project .env, never in MCP args.");
-            Console.WriteLine("=========================================================================");
+
+            WriteGuideHeading("Optional second MCP server");
+            Console.WriteLine("""
+                Add a second entry only if you want a separate process with a different startup group.
+                Use a unique client key and instance name. For example, add this entry in Codex.
+
+                  [mcp_servers.dynamicscrm-devkit-2]
+                  command = "devkit"
+                  args = ["mcp", "devkit-codex-2", "--env", "1"]
+                  startup_timeout_sec = 20
+                  tool_timeout_sec = 600
+
+                Both servers still serve the configured groups. After reloading the client, call
+                whoami with {} on each server to verify its startup group and process ID.
+                """);
         }
 
         private static void PrintTools()
         {
-            var tools = GetMcpToolInfos();
-            var categories = new (string Name, string Description)[]
-            {
-                ("ReadOnly", "Query data and inspect metadata — never changes anything"),
-                ("Mutation", "Create, update, delete, publish — changes data or metadata")
-            };
+            var tools = Mcp.McpServerHost.GetToolCatalog();
 
             Console.WriteLine();
             Console.WriteLine($"DevKit MCP Tools ({tools.Count})");
             Console.WriteLine("=========================================================================");
 
-            var index = 1;
-            foreach (var (name, description) in categories)
+            for (var index = 0; index < tools.Count; index++)
             {
-                var categoryTools = tools.Where(t => t.Category == name).ToList();
-                if (categoryTools.Count == 0) continue;
-
-                Console.WriteLine();
-                Console.WriteLine($"  {name} ({categoryTools.Count} tools) - {description}");
-                Console.WriteLine("  -------------------------------------------------------------------------");
-                foreach (var tool in categoryTools)
-                {
-                    Console.WriteLine($"  {index,3}. {tool.Name,-30} {tool.Title}");
-                    index++;
-                }
+                var tool = tools[index];
+                Console.WriteLine($"  {index + 1,3}. {tool.Name,-30} {tool.Title}");
             }
 
             Console.WriteLine();
             Console.WriteLine("=========================================================================");
-            Console.WriteLine("Filter with: devkit mcp --category readonly|all");
-            Console.WriteLine("This catalog describes one DevKit MCP instance.");
-            Console.WriteLine("Use only the instance name and optional --env <id> to select .env connections.");
-            Console.WriteLine("Any configuration option selects args-only mode; --env cannot be mixed with it.");
-            Console.WriteLine("Args-only mode requires complete connection arguments and never reads .env,");
-            Console.WriteLine("and supports one organization. Multiple organizations require .env mode.");
-            Console.WriteLine("Different MCP client entries can run separate instances with the same tool names.");
-            Console.WriteLine("Example: devkit mcp devkit-codex-2 --env 1");
-            Console.WriteLine("Run 'devkit mcp --setup-guide' for multi-instance configuration.");
+            Console.WriteLine("Run 'devkit mcp --setup-guide' for setup instructions.");
         }
-
-        private static List<McpToolInfo> GetMcpToolInfos()
-        {
-            var results = new List<McpToolInfo>();
-            var assembly = Assembly.GetExecutingAssembly();
-            var toolTypes = assembly.GetTypes()
-                .Where(t => t.GetCustomAttribute<McpServerToolTypeAttribute>() != null
-                         && !Mcp.McpServerHost.DisabledToolSet.Contains(t.Name));
-
-            foreach (var type in toolTypes)
-            {
-                foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static))
-                {
-                    var toolAttr = method.GetCustomAttribute<McpServerToolAttribute>();
-                    if (toolAttr == null) continue;
-
-                    var name = toolAttr.Name ?? method.Name;
-                    var title = toolAttr.Title ?? name;
-
-                    var category = toolAttr.ReadOnly ? "ReadOnly" : "Mutation";
-                    results.Add(new McpToolInfo(name, title, category));
-                }
-            }
-
-            var categoryOrder = new Dictionary<string, int>
-            {
-                ["ReadOnly"] = 0,
-                ["Mutation"] = 1
-            };
-
-            return results
-                .OrderBy(t => categoryOrder.TryGetValue(t.Category, out var order) ? order : 99)
-                .ThenBy(t => t.Name)
-                .ToList();
-        }
-
-        private record McpToolInfo(string Name, string Title, string Category);
     }
 }

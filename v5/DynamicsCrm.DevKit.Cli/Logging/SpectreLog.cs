@@ -60,7 +60,7 @@ namespace DynamicsCrm.DevKit.Cli
         }
         public static void WriteHelp()
         {
-            var mcpToolCount = Mcp.McpServerHost.GetToolCount(Mcp.McpServerHost.CategoryLevel["all"]);
+            var mcpToolCount = Mcp.McpServerHost.GetToolCatalog().Count;
             var helpContent =
                 "Usage:\n" +
                 "  devkit generator --profile NAME --json FILE [options]\n" +

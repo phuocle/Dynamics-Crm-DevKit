@@ -54,7 +54,6 @@ public sealed class DevKitCommandArgsDeepCoverageTests
         {
             Name = "MyMcpServer",
             Transport = "sse",
-            Category = "readonly",
             DryRun = true,
             AsUser = "admin@org.com",
             SetupGuide = true,
@@ -63,7 +62,6 @@ public sealed class DevKitCommandArgsDeepCoverageTests
 
         Assert.AreEqual("MyMcpServer", args.Name);
         Assert.AreEqual("sse", args.Transport);
-        Assert.AreEqual("readonly", args.Category);
         Assert.IsTrue(args.DryRun);
         Assert.AreEqual("admin@org.com", args.AsUser);
         Assert.IsTrue(args.SetupGuide);

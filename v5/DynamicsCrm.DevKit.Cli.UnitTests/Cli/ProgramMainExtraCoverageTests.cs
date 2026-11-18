@@ -140,9 +140,16 @@ public sealed class ProgramMainExtraCoverageTests
 
         var (mcpHelpExit, mcpHelpOutput) = await RunCliAsync("mcp", "help", "--plain");
         Assert.AreEqual(0, mcpHelpExit);
+        StringAssert.Contains(mcpHelpOutput, "over stdio only");
         StringAssert.Contains(mcpHelpOutput, "--env");
-        StringAssert.Contains(mcpHelpOutput, "devkit mcp devkit-codex-2 --env 1");
-        StringAssert.Contains(mcpHelpOutput, "devkit mcp devkit-uat --env 99");
+        StringAssert.Contains(mcpHelpOutput, "--plain");
+        StringAssert.Contains(mcpHelpOutput, "devkit mcp devkit-codex --env org-b");
+        StringAssert.Contains(mcpHelpOutput, "devkit mcp --auth FromPac");
+        StringAssert.Contains(mcpHelpOutput, "devkit mcp devkit-codex --auth FromPac --pacprofile PAC_PROFILE_NAME --dry-run");
+        Assert.IsFalse(mcpHelpOutput.Contains("--json"));
+        Assert.IsFalse(mcpHelpOutput.Contains("--profile"));
+        Assert.IsFalse(mcpHelpOutput.Contains("--sdk-login"));
+        Assert.IsFalse(mcpHelpOutput.Contains("--transport"));
 
         // '--env help' treats 'help' as the option value for --env, not as a help alias.
         var (envHelpExit, envHelpOutput) = await RunCliAsync("mcp", "--plain", "--env", "help");

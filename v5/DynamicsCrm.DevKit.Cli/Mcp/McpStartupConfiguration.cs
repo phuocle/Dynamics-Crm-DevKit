@@ -10,7 +10,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
     /// <summary>Select one configuration source before any project-file lookup.</summary>
     internal static class McpStartupConfiguration
     {
-        internal const string Description = "Start MCP server with one configuration source. Bare instance name (optionally --env <id|alias|default>) reads project .env and supports multiple organizations. Any other configuration option selects args-only mode: one organization, complete connection arguments required, no .env lookup or merging. --env cannot be combined with configuration options. Run 'devkit mcp --setup-guide' for examples.";
+        internal const string Description = "Start an MCP server over stdio only. Use the instance name with optional --env <id|alias|default> to load project .env and serve multiple groups from one server. Other configuration options select args-only mode for one organization, require complete connection arguments, and skip .env. Run 'devkit mcp --setup-guide' for setup instructions.";
 
         internal static bool HasConfigurationOptions(IEnumerable<string> arguments)
         {
@@ -30,7 +30,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
         {
             var argsOnly = plainOption || HasConfigurationOptions(arguments) || settings.HasExplicitConnectionArgs()
                 || !string.IsNullOrEmpty(settings.Json) || !string.IsNullOrEmpty(settings.Profile) || settings.SdkLogin
-                || settings.DryRun || settings.AsUser != null || settings.Category != "all" || settings.Transport != "stdio";
+                || settings.DryRun || settings.AsUser != null || settings.Transport != "stdio";
             settings.UsedEnvironmentFallback = false;
             settings.UsedEnvironmentGroupFallback = false;
             settings.EnvironmentSnapshot = null;

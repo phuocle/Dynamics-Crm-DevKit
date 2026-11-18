@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Transport { get; set; } = "stdio";
 
         [CommandOption("--setup-guide")]
-        [Description("Show comprehensive setup guide for configuring MCP in your IDE")]
+        [Description("Show MCP client and env group setup instructions")]
         [DefaultValue(false)]
         public bool SetupGuide { get; set; }
 
@@ -27,11 +27,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("List all available MCP tools")]
         [DefaultValue(false)]
         public bool ListTools { get; set; }
-
-        [CommandOption("--category")]
-        [Description("Args-only tool category: readonly or all. Requires complete connection arguments; cannot be combined with --env. Default: all.")]
-        [DefaultValue("all")]
-        public string Category { get; set; } = "all";
 
         [CommandOption("--dry-run")]
         [Description("Args-only mutation protection. Requires complete connection arguments; cannot accompany --env. In .env mode use the group's DRY_RUN key.")]

@@ -37,7 +37,6 @@ public sealed class McpExclusiveConfigurationParserTests
     }
 
     [TestMethod]
-    [DataRow("--category", "all")]
     [DataRow("--transport", "stdio")]
     [DataRow("--auth", "ClientSecret")]
     [DataRow("--url", "")]
@@ -63,7 +62,6 @@ public sealed class McpExclusiveConfigurationParserTests
     }
 
     [TestMethod]
-    [DataRow("--category", "all")]
     [DataRow("--transport", "stdio")]
     [DataRow("--clientsecret", "")]
     public async Task EnvPlusConfigurationOption_IsRejectedByRealParser(string option, string value)
