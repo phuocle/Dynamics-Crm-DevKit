@@ -63,7 +63,9 @@ Paths are relative to this directory; abbreviated paths in later sections are re
 
 Deprecated: `plugin`, `workflow`, `dataprovider` → `server`; `proxytype` → `modelbuilder`; `legacy-solution` → `solution`.
 
-Connection defaults: CLI arguments take priority, with missing values filled from project `.env` (`DEVKIT_*`); `--conn` takes precedence when connecting. For `devkit mcp`, `.env` is searched from the process working directory upward to the drive root. Normal commands may search from the resolved `--json` directory instead. OS environment variables are not read for connection values. Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (legacy), `AD` (on-prem).
+Normal CLI connection defaults: arguments take priority, with missing values filled from project `.env` (`DEVKIT_*`); `--conn` takes precedence when connecting. Normal commands may search from the resolved `--json` directory. OS environment variables are not read for connection values. Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (legacy), `AD` (on-prem).
+
+MCP uses mutually exclusive configuration sources. The instance name with optional `--env <id|alias|default>` selects `.env` mode, searching from the process working directory upward to the drive root; multiple organizations are available only in this mode. Any other explicit configuration option (even empty/default-valued, including `--plain`, `--dry-run`, `--category` and `--as-user`) selects args-only mode: one organization, complete connection arguments, no `.env` lookup/merge/discovery/policy/color. Combining `--env` with configuration options, or `--conn` with `--auth`, is an error. Informational modes do not start a server or require `.env` credentials.
 
 ## MCP
 

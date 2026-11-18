@@ -1,6 +1,29 @@
 # Tiếp tục sau khi người dùng restart app
 
-## Hiện tại: release-only 18:16:45 đã build — chờ restart app để nạp MCP mới
+## Hiện tại: rev 5 .env mode ĐÃ XÁC MINH LIVE (2026-11-18)
+
+- User hiện đã yêu cầu chạy skill commit **hết tất cả file và push**. Yêu cầu này thay thế ràng buộc chưa commit của các lượt trước. Đã fetch và xác nhận hai commit release/handoff `951ac861c` / `df3699203` đã nằm trên origin/v5.5; lượt này ghi code/tests, docs/guidance/note và package/manifest của rev 5. Tra git log để lấy các hash được tạo sau trạng thái trong note này.
+
+- User đã restart app. Đã gọi connection_list trước UAT: default/mcp-dev connected true, env 1/mcp-uat connected false; source đều là project .env, policy DEV false / UAT true.
+- whoami mcp-uat lần đầu trả đúng Dataverse **9.2.26104.146**, canonical env 1 và dryRun true. Numeric ID 1 trả cùng identity/version; mcp-dev trả Dataverse **9.2.26112.137**, canonical default và dryRun false.
+- Cả ba identity dùng **PID 14484**, parent 5408, start **2026-11-18T12:26:27.2400687+07:00**, cùng path/version/build/SHA. Runtime build **18.11.2026 11:25:29**, SHA **D20FA760D21374E694E54DCB57910401C0851AA07B24692D1E0DAA9841D92E41** khớp manifest/assembly đã cài; package hash cũng khớp. Process start sau install; OS inventory có đúng một process devkit-codex, chạy args `["mcp", "devkit-codex"]`.
+- Sau khi gọi, cả hai group connected true, policy/source không đổi. Text và structured summary khớp cho mọi kết quả. Không chạy mutation thật.
+- Raw output trước/sau, first UAT, numeric UAT, DEV, inventory và verification.json: `.devkit/verification/mcp-exclusive-2026-11-18/live/` (ignored). Spec rev 5 đã ghi live proof; không thay các output lịch sử.
+- Không sửa code/build/cấu hình ở lượt kiểm tra live này, không stage/commit/push. Args-only vẫn được kiểm tra bằng offline/parser tests; không tuyên bố đã chạy live args-only process. Chỉ kiểm tra thêm nếu user yêu cầu; nếu cần đổi config/chạy lại MCP phải dừng báo user restart app.
+
+### Lịch sử chuẩn bị rev 5 (đã hoàn tất bước restart/.env live bên trên)
+
+- User đã chốt và yêu cầu sửa code/spec/tests: chỉ tên instance, hoặc tên instance + --env, mới đọc .env; bất kỳ configuration option nào khác (kể cả empty/default, --plain, --dry-run, --category, --as-user) chọn args-only. --env + configuration options là lỗi. Args-only có một org, không tìm/đọc .env cho connection, alias, policy hoặc màu; thiếu cấu hình dừng. Multiple org chỉ trong .env. Chưa commit; không tự restart MCP.
+- Đã thêm McpStartupConfiguration, nối vào McpCommand; Program không đọc .env màu trước MCP và truyền dấu --plain đã tiêu thụ qua CommandContext.Data. Giữ built-in auth defaults; --conn + --auth bị từ chối, kể cả option rỗng. Cập nhật CLI descriptions/help/setup examples, spec rev 5 và guidance MCP trong AGENTS.md. Các CLI command khác giữ fallback cũ.
+- 164 focused tests đã pass; full CLI sau các case bổ sung: **6.360 pass, 0 fail, 0 skip**, test execution khoảng 71 giây, tổng lệnh 78,01 giây. Có parser subprocess tests với .env bị khóa, options rỗng/default, env + flags, source selection chính xác; không mở connection Dataverse thật. TRX: `TestResults/McpExclusiveConfiguration/focused.trx`, `cli.trx`.
+- Đã build/pack/install CLI theo skill: **4.44.44.44, Debug, build `18.11.2026 11:25:29`**, 0 warning/error. Manifest `Published/4.44.44.44/DynamicsCrm.DevKit.Cli.4.44.44.44.build-manifest.json`; assembly SHA256 **`D20FA760D21374E694E54DCB57910401C0851AA07B24692D1E0DAA9841D92E41`**. Installed assembly và package hash khớp manifest; đủ 21 dateReplacement files giữ nguyên byte, source version/placeholder không đổi.
+- Script cài đã dừng PID 15048. **Chưa gọi MCP connector sau cài**, chưa có live proof cho rev 5. Không dùng SHA/build Release 18:16:45 hoặc Debug 17:50:32 bên dưới để xác minh bản mới.
+- Cấu hình project hiện vẫn chỉ có active args `["mcp", "devkit-codex"]`, nên sau restart sẽ là .env mode với mcp-dev/mcp-uat. Không sửa .env hay config local.
+- Sau user restart: đọc guidance/manifest mới, connection_list trước UAT (kỳ vọng default/mcp-dev connected true dryRun false; 1/mcp-uat connected false dryRun true), gọi whoami mcp-uat lần đầu rồi env 1 và mcp-dev. Kiểm tra version thật, đúng organization/canonical env/policy, cùng PID/start/path/SHA và đúng build mới. Giữ raw capture tại `.devkit/verification/mcp-exclusive-2026-11-18/` (ignored). Không chạy mutation thật, không sửa output lịch sử thành output mới.
+- Tests đã kiểm tra args-only bằng fixture và parser âm tính; nếu cần live args-only process, phải cùng user đổi cấu hình rồi user restart app. Không tự chạy process MCP thay thế để kiểm tra.
+- HEAD vẫn `df3699203`, hai commit release/handoff cũ chưa push. Yêu cầu hiện tại là sửa rev 5 **chưa commit**; không tự commit/push. Spec/tests/code và CLI package/manifest mới đang ở working tree.
+
+## Lịch sử: release-only 18:16:45 đã build
 
 - User yêu cầu chạy `devkit-skill-build-release-only` và commit hết tất cả file. Đã chạy đúng script current-date, configuration Release: exit code 0, 37,77 giây. Không chạy unit tests hay code coverage cho lượt release-only này.
 - Cả bốn artifact Analyzer/CLI/Tool/VSIX dưới `Published/4.44.44.44/` đã tạo mới, metadata version `4.44.44.44`, README build `17.11.2026 18:16:45` (VSIX kiểm tra đủ 13 template README).
