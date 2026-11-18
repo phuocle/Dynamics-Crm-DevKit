@@ -1,6 +1,17 @@
 # Tiếp tục sau khi người dùng restart app
 
-## Hiện tại: rev 5 .env mode ĐÃ XÁC MINH LIVE (2026-11-18)
+## Hiện tại: Release 12:35:50 đã build — CHỜ USER RESTART APP
+
+- User yêu cầu chạy `devkit-skill-build-release-only`, rồi commit **hết tất cả file và push**. Đã chạy script current-date, configuration Release: **exit code 0**, **53,31 giây**. Không chạy unit tests hoặc code coverage cho lượt này; 6.360 tests/live proof bên dưới thuộc lượt rev 5 trước đó.
+- Cả bốn artifact Analyzer/CLI/Tool/VSIX dưới `Published/4.44.44.44/` đã tạo mới, version `4.44.44.44`, build **`18.11.2026 12:35:50`**. Đã kiểm tra manifest version và build trong README của cả bốn artifact, gồm đủ 13 template README trong VSIX; package không chứa local config/token cache.
+- `devkit --version` và `devkit-tool --help` thành công cùng version/build. Assembly CLI/Tool đã cài có SHA khớp DLL trong package tương ứng. Manifest CLI đã refresh sang Release mới, package hash khớp.
+- CLI assembly SHA256 mới: **`0AF4DEB9BF393AF735DACF745403308537FA6E00486012598ECB5E77339FA309`**. Manifest: `Published/4.44.44.44/DynamicsCrm.DevKit.Cli.4.44.44.44.build-manifest.json`; thời điểm hoàn tất install `2026-11-18T12:36:44.2329041+07:00`. Không dùng SHA Debug D20FA7... bên dưới để xác minh bản Release mới.
+- Đủ 21 file dateReplacement đã khôi phục byte-for-byte; stable source version/placeholder giữ nguyên. Logs/artifact hashes/baseline nằm trong `.devkit/verification/release-only-2026-11-18/` (ignored).
+- Script đã dừng MCP để cài lại global tools. **Chưa gọi MCP sau release**, chưa có live runtime proof cho Release 12:35:50. Không tự restart connector hoặc chạy MCP process thay thế.
+- Sau user restart: đọc manifest mới; gọi connection_list trước (UAT còn lazy), rồi whoami mcp-uat lần đầu, numeric env 1 và mcp-dev. Đối chiếu version thật, env/policy/organization đúng, cùng PID/start/path/SHA và đúng build mới; process phải bắt đầu sau install. Lưu raw output local, không sửa capture lịch sử hoặc chạy mutation thật.
+- User đã ủy quyền commit/push toàn bộ artifact, manifest và note này; `.env`, config local và verification ignored không force-add. Tra git log để lấy hash commit của lượt release này.
+
+## Lịch sử: rev 5 .env mode đã xác minh live trên Debug 11:25:29
 
 - User hiện đã yêu cầu chạy skill commit **hết tất cả file và push**. Yêu cầu này thay thế ràng buộc chưa commit của các lượt trước. Đã fetch và xác nhận hai commit release/handoff `951ac861c` / `df3699203` đã nằm trên origin/v5.5; lượt này ghi code/tests, docs/guidance/note và package/manifest của rev 5. Tra git log để lấy các hash được tạo sau trạng thái trong note này.
 
