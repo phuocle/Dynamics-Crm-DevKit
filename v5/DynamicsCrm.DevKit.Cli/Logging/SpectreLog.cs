@@ -108,7 +108,7 @@ namespace DynamicsCrm.DevKit.Cli
                 "Project .env Fallback (DEVKIT_*):\n" +
                 "  Normal commands: CLI args override project .env.\n" +
                 "  The .env search starts in the current directory and walks up to the drive root.\n" +
-                "  MCP connection: CLI args override project .env; OS environment variables are not read.\n" +
+                "  MCP: choose args-only or project .env; the two sources never mix.\n" +
                 "  DEVKIT_AUTH_TYPE     Auth type (Interactive, ClientSecret, FromPac, ...)\n" +
                 "  DEVKIT_URL           Environment URL\n" +
                 "  DEVKIT_CLIENT_ID     Azure AD application (client) ID\n" +
@@ -119,14 +119,14 @@ namespace DynamicsCrm.DevKit.Cli
                 "MCP Server (AI Agent Integration):\n" +
                 $"  devkit mcp                   Start the server ({mcpToolCount} tools, 10 resources)\n" +
                 "  devkit mcp --setup-guide     Setup instructions for all IDEs\n\n" +
-                "MCP connection fallback:\n" +
-                "  Without --env, the original DEVKIT_* per-property merge is preserved.\n" +
-                "  Optional fields, auth/conn merging, and credential alias priority stay as before.\n" +
-                "  With --env <id>, complete args skip connection fallback; missing values use DEVKIT_<id>_*.\n" +
-                "  A missing selected group is an error when fallback is needed.\n" +
+                "MCP configuration sources:\n" +
+                "  Use only the instance name and optional --env to read project .env.\n" +
+                "  Any other configuration option selects args-only mode; no .env lookup or merge.\n" +
+                "  --env cannot be combined with configuration options; incomplete args stop startup.\n" +
+                "  Multiple organizations require .env; args-only supports one organization.\n" +
                 "  Multiple MCP instances can select different groups; no fixed group limit.\n\n" +
                 "  devkit mcp devkit-codex\n" +
-                "  devkit mcp --env 1 devkit-codex-2 --dry-run\n" +
+                "  devkit mcp devkit-codex-2 --env 1\n" +
                 "  devkit mcp --setup-guide\n";
 
             if (IsPlain)
@@ -186,7 +186,7 @@ namespace DynamicsCrm.DevKit.Cli
                     "[green]Project .env values (DEVKIT_*):[/]\n" +
                     "  Normal commands: CLI args override project .env.\n" +
                     "  .env search: current directory up to the drive root.\n" +
-                    "  MCP connection: CLI args override project .env; OS environment variables are not read.\n" +
+                    "  MCP: choose args-only or project .env; the two sources never mix.\n" +
                     "  [cyan]DEVKIT_AUTH_TYPE[/]     Auth type (Interactive, ClientSecret, FromPac, ...)\n" +
                     "  [cyan]DEVKIT_URL[/]           Environment URL\n" +
                     "  [cyan]DEVKIT_CLIENT_ID[/]     Azure AD application (client) ID\n" +
@@ -197,14 +197,14 @@ namespace DynamicsCrm.DevKit.Cli
                     "[green]MCP Server (AI Agent Integration):[/]\n" +
                     $"  devkit [cyan]mcp[/]                  Start the server ({mcpToolCount} tools, 10 resources)\n" +
                     "  devkit [cyan]mcp[/] --setup-guide    Setup instructions for all IDEs\n\n" +
-                    "[green]MCP connection fallback:[/]\n" +
-                    "  Without --env, the original DEVKIT_* per-property merge is preserved.\n" +
-                    "  Optional fields, auth/conn merging, and credential alias priority stay as before.\n" +
-                    "  With --env [yellow]<id>[/], complete args skip connection fallback; missing values use [cyan]DEVKIT_<id>_*[/].\n" +
-                    "  A missing selected group is an error when fallback is needed.\n" +
+                    "[green]MCP configuration sources:[/]\n" +
+                    "  Use only the instance name and optional --env to read project .env.\n" +
+                    "  Any other configuration option selects args-only mode; no .env lookup or merge.\n" +
+                    "  --env cannot be combined with configuration options; incomplete args stop startup.\n" +
+                    "  Multiple organizations require .env; args-only supports one organization.\n" +
                     "  Multiple MCP instances can select different groups; no fixed group limit.\n\n" +
                     "  devkit [cyan]mcp[/] [cyan]devkit-codex[/]\n" +
-                    "  devkit [cyan]mcp[/] --env [cyan]1[/] [cyan]devkit-codex-2[/] --dry-run\n" +
+                    "  devkit [cyan]mcp[/] [cyan]devkit-codex-2[/] --env [cyan]1[/]\n" +
                     "  devkit [cyan]mcp[/] --setup-guide\n"
 
                 ))

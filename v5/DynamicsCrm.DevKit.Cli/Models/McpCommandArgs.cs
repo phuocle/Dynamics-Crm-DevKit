@@ -6,15 +6,15 @@ namespace DynamicsCrm.DevKit.Shared.Models
     public class McpCommandArgs : DevKitCommandArgs
     {
         [CommandArgument(0, "[name]")]
-        [Description("Optional display name for this MCP server instance (shown to MCP clients; distinct from --env fallback group and --profile json profile)")]
+        [Description("Optional MCP instance display name. With no configuration options, connections come only from project .env.")]
         public string Name { get; set; }
 
         [CommandOption("--env <id>")]
-        [Description("Startup connection: numeric .env group ID, alias, or default for DEVKIT_*. Calls may select another group with env; omitted env uses startup.")]
+        [Description("Select the startup .env group by numeric ID, alias, or default. Cannot be combined with other configuration options.")]
         public string Env { get; set; }
 
         [CommandOption("--transport")]
-        [Description("MCP transport type: stdio (default)")]
+        [Description("Args-only MCP transport type: stdio (default). An explicit option requires complete connection arguments and cannot accompany --env.")]
         [DefaultValue("stdio")]
         public string Transport { get; set; } = "stdio";
 
@@ -29,17 +29,17 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public bool ListTools { get; set; }
 
         [CommandOption("--category")]
-        [Description("Tool category: readonly or all. Default: all.")]
+        [Description("Args-only tool category: readonly or all. Requires complete connection arguments; cannot be combined with --env. Default: all.")]
         [DefaultValue("all")]
         public string Category { get; set; } = "all";
 
         [CommandOption("--dry-run")]
-        [Description("Prevent mutating operations from executing. Read operations still work normally.")]
+        [Description("Args-only mutation protection. Requires complete connection arguments; cannot accompany --env. In .env mode use the group's DRY_RUN key.")]
         [DefaultValue(false)]
         public bool DryRun { get; set; }
 
         [CommandOption("--as-user")]
-        [Description("Impersonate this user (GUID or email) on the startup connection; other groups use their own AS_USER key. Requires admin privileges.")]
+        [Description("Args-only impersonation (GUID or email). Requires complete connection arguments and admin privileges; cannot be combined with --env.")]
         public string AsUser { get; set; }
 
         internal System.Collections.Generic.IDictionary<string, string> EnvironmentSnapshot { get; set; }

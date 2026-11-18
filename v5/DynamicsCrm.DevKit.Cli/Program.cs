@@ -25,16 +25,17 @@ namespace DynamicsCrm.DevKit.Cli
                 // Force console width to 8000 to prevent wrapping
                 AnsiConsole.Profile.Width = 8000;
 
-                // Detect plain mode: --plain flag > DEVKIT_NO_COLOR in the project
-                // .env (searched from the current directory upward to the drive
-                // root) > default (rich). Environment variables are never read.
-                if (args != null && args.Any(a => a.Equals("--plain", StringComparison.OrdinalIgnoreCase)))
+                // Normal commands may discover project color settings here. MCP
+                // defers .env color to source selection; --plain itself is args-only.
+                var plainRequested = args != null && args.Any(a => a.Equals("--plain", StringComparison.OrdinalIgnoreCase));
+                var isMcp = args?.Length > 0 && args[0].Equals("mcp", StringComparison.OrdinalIgnoreCase);
+                if (plainRequested)
                 {
                     SpectreLog.IsPlain = true;
                     // Remove --plain from args so Spectre.Console.Cli doesn't reject it
                     args = args.Where(a => !a.Equals("--plain", StringComparison.OrdinalIgnoreCase)).ToArray();
                 }
-                else if (IsPlainFromProjectEnvironment())
+                else if (!isMcp && IsPlainFromProjectEnvironment())
                 {
                     SpectreLog.IsPlain = true;
                 }
@@ -79,9 +80,9 @@ namespace DynamicsCrm.DevKit.Cli
 
                 // These commands require arguments; show their normal help when
                 // invoked bare. Configured MCP and scaffold wizards retain their startup flow.
-                var bareMcpHelp = args != null && args.Length == 1 &&
+                var bareMcpHelp = !plainRequested && args != null && args.Length == 1 &&
                     args[0].Equals("mcp", StringComparison.OrdinalIgnoreCase) && ShouldShowBareCommandHelp(args);
-                if (bareMcpHelp || ShouldShowBareCommandHelp(args))
+                if (bareMcpHelp || (!isMcp && ShouldShowBareCommandHelp(args)))
                     args = new[] { args[0], "--help" };
                 var app = new CommandApp();
                 app.Configure(config =>
@@ -179,11 +180,13 @@ namespace DynamicsCrm.DevKit.Cli
                           .WithExample(new[] { "new-item", "--type", "LateBound", "--entity", "Account", "--project", "Contoso.Shared" })
                           .WithExample(new[] { "new-item", "--type", "Workflow", "--name", "MyWorkflow", "--project", "Contoso.Server" });
 
-                    config.AddCommand<McpCommand>("mcp")
-                          .WithDescription("Start MCP server for AI agent integration. Without --env, preserve the original DEVKIT_* per-property merge, including optional fields, auth/conn merging and credential alias priority. With --env <id> (numeric ID, alias, or default), complete explicit connection args skip connection fallback; missing values use only DEVKIT_<id>_* (a missing selected group is an error when fallback is needed). [[name]] sets the MCP instance display name, --env <id> selects the .env fallback group, and --profile is for DynamicsCrm.DevKit.Cli.json commands. Run 'devkit mcp --setup-guide' for multi-instance configuration.")
+                    var mcp = config.AddCommand<McpCommand>("mcp");
+                    // --plain is consumed before parsing, but still selects args-only mode.
+                    mcp.WithData(plainRequested);
+                    mcp.WithDescription(Mcp.McpStartupConfiguration.Description)
                           .WithExample(new[] { "mcp", "devkit-codex" })
-                          .WithExample(new[] { "mcp", "--env", "1", "devkit-codex-2", "--dry-run" })
-                          .WithExample(new[] { "mcp", "--env", "100", "devkit-uat", "--category", "readonly" })
+                          .WithExample(new[] { "mcp", "devkit-codex-2", "--env", "1" })
+                          .WithExample(new[] { "mcp", "devkit-uat", "--env", "99" })
                           .WithExample(new[] { "mcp", "--tools" })
                           .WithExample(new[] { "mcp", "--setup-guide" })
                           .WithExample(new[] { "mcp", "--auth", "ClientSecret", "--url", "https://org.crm.dynamics.com", "--clientid", "ID", "--clientsecret", "SECRET" })

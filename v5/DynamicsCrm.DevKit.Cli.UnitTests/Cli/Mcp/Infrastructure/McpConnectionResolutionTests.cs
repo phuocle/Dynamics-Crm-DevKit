@@ -1,13 +1,9 @@
-using DynamicsCrm.DevKit.Cli.Commands;
-using DynamicsCrm.DevKit.Shared;
-using DynamicsCrm.DevKit.Shared.ConnectionBuilder;
+using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Infrastructure;
 
@@ -15,246 +11,164 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Infrastructure;
 [DoNotParallelize]
 public class McpConnectionResolutionTests
 {
-    private string _directory = null!;
-    private string _originalDirectory = null!;
-    private string _jsonPath = null!;
-
+    private string _directory = null!, _originalDirectory = null!;
     [TestInitialize]
     public void Initialize()
     {
         _originalDirectory = Environment.CurrentDirectory;
         _directory = Path.Combine(Path.GetTempPath(), "devkit-mcp-resolution-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(_directory);
-        _jsonPath = Path.Combine(_directory, "test.json");
-        File.WriteAllText(_jsonPath, "{}");
         Environment.CurrentDirectory = _directory;
     }
-
     [TestCleanup]
-    public void Cleanup()
+    public void Cleanup() { Environment.CurrentDirectory = _originalDirectory; Directory.Delete(_directory, true); }
+    private void WriteEnv(string extra = "") => File.WriteAllText(Path.Combine(_directory, ".env"),
+        "DEVKIT_AUTH_TYPE=ClientSecret\nDEVKIT_URL=https://dev.example.invalid\nDEVKIT_CLIENT_ID=dev-id\nDEVKIT_CLIENT_SECRET=dev-secret\n" +
+        "DEVKIT_99_AUTH_TYPE=ClientSecret\nDEVKIT_99_URL=https://uat.example.invalid\nDEVKIT_99_CLIENT_ID=uat-id\nDEVKIT_99_CLIENT_SECRET=uat-secret\nDEVKIT_99_ALIAS=uat\nDEVKIT_99_DRY_RUN=true\n" + extra);
+    private static McpCommandArgs CompleteArgs() => new()
+    { AuthType = "ClientSecret", Url = "https://args.example.invalid", ClientId = "args-id", ClientSecret = "args-secret" };
+    private static McpConnectionConfigurationException Error(Action action)
     {
-        Environment.CurrentDirectory = _originalDirectory;
-        Directory.Delete(_directory, recursive: true);
+        try { action(); } catch (McpConnectionConfigurationException ex) { return ex; }
+        throw new AssertFailedException("Expected startup configuration error");
     }
 
-    // Expected values follow the pre--env resolver at commit 5160d4c7.
-    // No connection is opened; these fixtures never read PAC/MSAL caches.
     [TestMethod]
-    [DataRow("ClientSecret", "default")]
-    [DataRow("Interactive", "default")]
-    [DataRow("DeviceCode", "default")]
-    [DataRow("OAuth", "default")]
-    [DataRow("AD", "default")]
-    [DataRow("FromPac", "default")]
-    [DataRow("", "legacy")]
-    [DataRow("ClientSecret", "override-url")]
-    [DataRow("ClientSecret", "override-clientid")]
-    [DataRow("ClientSecret", "override-secret")]
-    [DataRow("ClientSecret", "partial")]
-    [DataRow("ClientSecret", "complete")]
-    [DataRow("ClientSecret", "complete-no-default")]
-    [DataRow("FromPac", "auth-only")]
-    [DataRow("FromPac", "override-profile")]
-    [DataRow("FromPac", "active-no-default")]
-    [DataRow("Interactive", "auth-only")]
-    [DataRow("OAuth", "auth-url")]
-    [DataRow("AD", "domain-fallback")]
-    [DataRow("", "numbered-only")]
-    [DataRow("Interactive", "auth-url")]
-    [DataRow("DeviceCode", "auth-url")]
-    [DataRow("ClientSecret", "explicit-conn")]
-    [DataRow("ClientSecret", "aliases")]
-    public void NoSelector_MatchesOriginalConnectionMerge(string authType, string scenario)
+    [DataRow(null, "default", "https://dev.example.invalid", false)]
+    [DataRow("default", "default", "https://dev.example.invalid", false)]
+    [DataRow("99", "99", "https://uat.example.invalid", true)]
+    [DataRow("UAT", "99", "https://uat.example.invalid", true)]
+    public void EnvOnly_UsesExactStartupGroup_AndDiscoversAllGroups(string? selector, string id, string url, bool dryRun)
     {
-        var args = new McpCommandArgs { Json = _jsonPath };
-        var expected = new DevKitCommandArgs
-        {
-            AuthType = authType,
-            Url = "https://default.example.invalid",
-            ClientId = "default-id",
-            ClientSecret = "default-secret",
-            PacProfile = "default-profile",
-            Username = "intended@example.invalid",
-            Password = "default-password",
-            Domain = "DEFAULT"
-        };
-        if (scenario == "legacy") expected.Connection = "AuthType=AD;Url=https://legacy.example.invalid;";
-        WriteDefaults(expected);
-        if (authType is "Interactive" or "DeviceCode" or "OAuth") expected.ClientId = "";
+        WriteEnv("DEVKIT_2_AUTH_TYPE=Interactive\nDEVKIT_2_URL=https://third.example.invalid\n");
+        var settings = new McpCommandArgs { Name = "devkit-codex", Env = selector };
+        var snapshot = McpStartupConfiguration.Resolve(settings);
+        Assert.AreEqual(id, snapshot.StartupEnvId); Assert.AreEqual(url, settings.Url); Assert.AreEqual(dryRun, settings.DryRun);
+        CollectionAssert.AreEquivalent(new[] { "default", "2", "99" }, snapshot.GroupIds.ToArray());
+        Assert.IsTrue(settings.UsedEnvironmentFallback);
+    }
 
-        switch (scenario)
-        {
-            case "override-url": args.Url = expected.Url = "https://override.example.invalid"; break;
-            case "override-clientid": args.ClientId = expected.ClientId = "explicit-id"; break;
-            case "override-secret": args.ClientSecret = expected.ClientSecret = "explicit-secret"; break;
-            case "partial":
-                args.AuthType = authType;
-                args.Url = expected.Url = "https://override.example.invalid";
-                args.ClientId = expected.ClientId = "explicit-id";
-                break;
-            case "complete":
-            case "complete-no-default":
-                args.AuthType = authType;
-                args.Url = "https://explicit.example.invalid";
-                args.ClientId = "explicit-id";
-                args.ClientSecret = "explicit-secret";
-                if (scenario == "complete-no-default")
-                {
-                    WriteDefaults(null);
-                    expected = new DevKitCommandArgs();
-                }
-                expected.AuthType = args.AuthType;
-                expected.Url = args.Url;
-                expected.ClientId = args.ClientId;
-                expected.ClientSecret = args.ClientSecret;
-                break;
-            case "auth-only": args.AuthType = authType; break;
-            case "override-profile":
-                args.AuthType = authType;
-                args.PacProfile = expected.PacProfile = "explicit-profile";
-                break;
-            case "active-no-default":
-                WriteDefaults(null);
-                args.AuthType = authType;
-                expected = new DevKitCommandArgs { AuthType = authType };
-                break;
-            case "auth-url":
-                args.AuthType = authType;
-                args.Url = expected.Url = "https://override.example.invalid";
-                break;
-            case "domain-fallback":
-                args.AuthType = authType;
-                args.Url = expected.Url = "https://override.example.invalid";
-                args.Username = expected.Username = "explicit-user";
-                args.Password = expected.Password = "explicit-password";
-                break;
-            case "numbered-only":
-                WriteDefaults(null);
-                expected = new DevKitCommandArgs();
-                break;
-            case "explicit-conn":
-                args.Connection = expected.Connection = "AuthType=AD;Url=https://explicit.example.invalid;";
-                break;
-            case "aliases":
-                args.AuthType = authType;
-                args.Url = expected.Url = "https://override.example.invalid";
-                args.Username = expected.Username = "alias-id";
-                args.Password = expected.Password = "alias-secret";
-                // Standard ClientId/ClientSecret from .env still win in the builder.
-                break;
-        }
+    [TestMethod]
+    public void ArgsOnly_DoesNotOpenEnv_OrInheritPoliciesOptionalFieldsAndGroups()
+    {
+        WriteEnv("DEVKIT_ALIAS=default\nDEVKIT_DRY_RUN=true\nDEVKIT_AS_USER=env-user\nDEVKIT_USERNAME=env-user\nDEVKIT_PAC_PROFILE=env-profile\n");
+        using var lockedEnv = new FileStream(Path.Combine(_directory, ".env"), FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+        var settings = CompleteArgs(); var snapshot = McpStartupConfiguration.Resolve(settings);
+        CollectionAssert.AreEqual(new[] { "default" }, snapshot.GroupIds.ToArray());
+        Assert.AreEqual("https://args.example.invalid", settings.Url); Assert.AreEqual("args-secret", settings.ClientSecret);
+        Assert.AreEqual("", settings.Username); Assert.AreEqual("", settings.PacProfile);
+        Assert.IsFalse(settings.DryRun); Assert.IsNull(settings.AsUser); Assert.IsNull(settings.EnvironmentSnapshot);
+        Assert.IsNull(snapshot.FilePath); Assert.IsFalse(settings.UsedEnvironmentFallback);
+        Assert.IsNull(snapshot.ResolveId("99")); Assert.IsNull(snapshot.ResolveId("uat"));
+    }
 
-        var hadExplicitValue = ConnectionProperties.Where(p => p.Name != "AuthType")
-            .Any(p => !string.IsNullOrEmpty((string?)p.GetValue(args)));
-        Assert.IsTrue(Resolve(args));
-        foreach (var property in ConnectionProperties)
-            Assert.AreEqual(property.GetValue(expected), property.GetValue(args), $"{scenario}: {property.Name}");
-        Assert.AreEqual(!hadExplicitValue, args.ConnectionFromProjectEnvironment);
+    [TestMethod]
+    [DataRow("--auth", "ClientSecret")] [DataRow("--url", "")] [DataRow("--conn", "")]
+    [DataRow("--clientsecret", "")] [DataRow("--dry-run", "")] [DataRow("--dry-run=false", "")]
+    [DataRow("--category", "all")] [DataRow("--transport", "stdio")] [DataRow("--as-user", "")]
+    [DataRow("--json", "")] [DataRow("--profile", "")] [DataRow("--sdk-login", "")]
+    public void AnyConfigurationOption_EvenEmptyOrDefault_DoesNotFallBackToValidEnv(string option, string value)
+    {
+        WriteEnv();
+        var error = Error(() => McpStartupConfiguration.Resolve(new McpCommandArgs(), new[] { "mcp", "devkit-codex", option, value }));
+        StringAssert.Contains(error.Message, "Incomplete MCP connection arguments"); StringAssert.Contains(error.Message, "never reads .env");
+    }
+
+    [TestMethod]
+    [DataRow("--auth", "ClientSecret")] [DataRow("--dry-run", "")] [DataRow("--dry-run=false", "")]
+    [DataRow("--category", "all")] [DataRow("--transport", "stdio")] [DataRow("--as-user", "")]
+    public void EnvAndAnyConfigurationOption_AreRejectedBeforeReadingEnv(string option, string value)
+    {
+        WriteEnv("DEVKIT_ALIAS=default\n");
+        StringAssert.Contains(Error(() => McpStartupConfiguration.Resolve(new McpCommandArgs { Env = "99" },
+            new[] { "mcp", "--env", "99", option, value })).Message, "--env cannot be combined");
+    }
+
+    [TestMethod]
+    public void ConsumedPlainOption_StillSelectsArgsOnly_AndRejectsEnvMix()
+    {
+        WriteEnv();
+        StringAssert.Contains(Error(() => McpStartupConfiguration.Resolve(new McpCommandArgs(), plainOption: true)).Message, "Incomplete MCP connection arguments");
+        StringAssert.Contains(Error(() => McpStartupConfiguration.Resolve(new McpCommandArgs { Env = "99" }, plainOption: true)).Message, "--env cannot be combined");
+    }
+
+    [TestMethod]
+    public void PartialConnection_DoesNotFillMissingCredentialsFromEnv()
+    {
+        WriteEnv();
+        var settings = CompleteArgs(); settings.ClientSecret = "";
+        Error(() => McpStartupConfiguration.Resolve(settings)); Assert.AreEqual("", settings.ClientSecret);
+    }
+
+    [TestMethod]
+    public void ConnectionStringAndAuth_AreRejectedWithoutLeakingValues()
+    {
+        var settings = CompleteArgs(); settings.Connection = "AuthType=ClientSecret;secret=not-printed";
+        var error = Error(() => McpStartupConfiguration.Resolve(settings));
+        StringAssert.Contains(error.Message, "--conn cannot be combined with --auth"); Assert.IsFalse(error.Message.Contains("not-printed"));
+    }
+
+    [TestMethod]
+    [DataRow("ClientSecret")] [DataRow("Interactive")] [DataRow("DeviceCode")]
+    [DataRow("FromPac")] [DataRow("OAuth")] [DataRow("AD")]
+    public void CompleteArgs_DoNotRequireEnv_AndKeepAuthenticationDefaults(string auth)
+    {
+        var settings = CompleteArgs(); settings.AuthType = auth; settings.Username = "user"; settings.Password = "password";
+        Assert.AreEqual("default", McpStartupConfiguration.Resolve(settings).StartupEnvId);
+        Assert.AreEqual("", settings.Domain); Assert.AreEqual("", settings.PacProfile); Assert.IsFalse(settings.UsedEnvironmentFallback);
+    }
+
+    [TestMethod]
+    public void LegacyConnectionString_IsArgsOnly()
+    {
+        WriteEnv("DEVKIT_ALIAS=default\n");
+        var settings = new McpCommandArgs { Connection = "AuthType=ClientSecret;Url=https://args.example.invalid" };
+        Assert.AreEqual(1, McpStartupConfiguration.Resolve(settings).GroupIds.Count); Assert.AreEqual("", settings.AuthType);
+    }
+
+    [TestMethod]
+    public void EmptyAuthOption_CannotBeCombinedWithConnectionString()
+    {
+        var settings = new McpCommandArgs { Connection = "not-printed" };
+        StringAssert.Contains(Error(() => McpStartupConfiguration.Resolve(settings,
+            new[] { "mcp", "--conn", "not-printed", "--auth", "" })).Message, "--conn cannot be combined with --auth");
     }
 
     [TestMethod]
     [DataRow("Interactive")]
     [DataRow("DeviceCode")]
-    public void NoSelector_CompleteArgs_KeepExplicitUsernameAndFillOtherOptionalFields(string authType)
+    [DataRow("FromPac")]
+    public void BuiltInAuthDefaults_DoNotRequireExtraArguments(string auth)
     {
-        WriteDefaults(new DevKitCommandArgs { Username = "env-user", Password = "env-password", Domain = "env-domain", PacProfile = "env-profile" });
-        var args = new McpCommandArgs { Json = _jsonPath, AuthType = authType, Url = "https://explicit.example.invalid", Username = "explicit-user" };
-        Assert.IsTrue(Resolve(args));
-        Assert.AreEqual("explicit-user", args.Username);
-        Assert.AreEqual("env-password", args.Password);
-        Assert.AreEqual("env-domain", args.Domain);
-        Assert.AreEqual("env-profile", args.PacProfile);
+        var settings = new McpCommandArgs { AuthType = auth, Url = auth == "FromPac" ? "" : "https://args.example.invalid" };
+        Assert.AreEqual(1, McpStartupConfiguration.Resolve(settings).GroupIds.Count);
+        Assert.AreEqual("", settings.ClientId);
+        Assert.AreEqual("", settings.PacProfile);
     }
 
     [TestMethod]
-    public void NoSelector_ExplicitAuth_StillFillsLegacyConnection()
+    public void MissingDefault_DoesNotAutoSelectNumberedGroup()
     {
-        WriteDefaults(new DevKitCommandArgs { Connection = "env-connection", AuthType = "ClientSecret" });
-        var args = new McpCommandArgs { Json = _jsonPath, AuthType = "AD" };
-        Assert.IsTrue(Resolve(args));
-        Assert.AreEqual("AD", args.AuthType);
-        Assert.AreEqual("env-connection", args.Connection);
-        Assert.IsTrue(args.ConnectionFromProjectEnvironment);
+        File.WriteAllText(Path.Combine(_directory, ".env"), "DEVKIT_99_AUTH_TYPE=FromPac\n");
+        StringAssert.Contains(Error(() => McpStartupConfiguration.Resolve(new McpCommandArgs())).Message, "group 'default' was not found");
+        Assert.AreEqual("99", McpStartupConfiguration.Resolve(new McpCommandArgs { Env = "99" }).StartupEnvId);
     }
 
     [TestMethod]
-    [DataRow("FromPac", false)]
-    [DataRow("FromPac", true)]
-    [DataRow("AD", false)]
-    [DataRow("AD", true)]
-    public void Selector_OptionalProfileOrDomain_DoesNotRequireMissingGroup(string authType, bool hasFile)
+    public void EnvOnly_MissingFieldsDoNotBorrowFromOtherGroups()
     {
-        if (hasFile) WriteDefaults(new DevKitCommandArgs { PacProfile = "must-not-inherit", Domain = "must-not-inherit" });
-        var args = new McpCommandArgs { Json = _jsonPath, Env = "99", AuthType = authType };
-        if (authType == "AD")
-        {
-            args.Url = "https://explicit.example.invalid";
-            args.Username = "user@example.invalid";
-            args.Password = "placeholder";
-        }
-        Assert.IsTrue(Resolve(args));
-        Assert.IsFalse(args.UsedEnvironmentFallback);
-        Assert.IsFalse(args.UsedEnvironmentGroupFallback);
-        Assert.AreEqual("", args.PacProfile);
-        Assert.AreEqual("", args.Domain);
+        WriteEnv("DEVKIT_99_CLIENT_SECRET=\n");
+        var settings = new McpCommandArgs { Env = "99" };
+        StringAssert.Contains(Error(() => McpStartupConfiguration.Resolve(settings)).Message, "Incomplete connection configuration");
+        Assert.AreEqual("", settings.ClientSecret);
     }
 
     [TestMethod]
-    [DataRow("ClientSecret")]
-    [DataRow("Interactive")]
-    public void NoSelector_CompleteArgs_DoNotRequireEnvFile(string authType)
+    public void ArgsOnly_ControlOptionsAreAllowedWithCompleteConnection()
     {
-        var args = new McpCommandArgs { Json = _jsonPath, AuthType = authType, Url = "https://explicit.example.invalid", ClientId = "id", ClientSecret = "secret" };
-        Assert.IsTrue(Resolve(args));
-        Assert.AreEqual(authType, args.AuthType);
-        Assert.AreEqual("https://explicit.example.invalid", args.Url);
-        Assert.IsFalse(args.UsedEnvironmentFallback);
+        WriteEnv("DEVKIT_ALIAS=default\n");
+        var settings = CompleteArgs(); settings.Category = "readonly"; settings.DryRun = true; settings.AsUser = "args-user";
+        Assert.AreEqual(1, McpStartupConfiguration.Resolve(settings).GroupIds.Count);
+        Assert.IsTrue(settings.DryRun); Assert.AreEqual("args-user", settings.AsUser);
     }
-
-    [TestMethod]
-    public async Task OptionalProfileAndDomain_MatchBuilderContracts()
-    {
-        var fromPac = new CrmConnection { Type = "FromPac" };
-        StringAssert.Contains(new FromPacConnectionBuilder().BuildConnectionString(fromPac), "Profile=(active)");
-        var ad = new CrmConnection { Type = "AD", Url = "https://explicit.example.invalid", UserName = "user@example.invalid", Password = "placeholder" };
-        var (valid, error) = await new ADConnectionBuilder().ValidateAsync(ad);
-        Assert.IsTrue(valid, error);
-        Assert.IsFalse(new ADConnectionBuilder().BuildConnectionString(ad).Contains("Domain="));
-    }
-
-    [TestMethod]
-    public void NoSelector_ResolvedJsonDirectory_SelectsDefaultsBeforeWorkingDirectory()
-    {
-        WriteDefaults(new DevKitCommandArgs { AuthType = "Interactive", Username = "json-user" });
-        var child = Path.Combine(_directory, "child");
-        Directory.CreateDirectory(child);
-        File.WriteAllText(Path.Combine(child, ".env"), "DEVKIT_USERNAME=wrong-cwd-user\n");
-        Environment.CurrentDirectory = child;
-        var args = new McpCommandArgs { Json = _jsonPath, AuthType = "Interactive", Url = "https://explicit.example.invalid" };
-        Assert.IsTrue(Resolve(args));
-        Assert.AreEqual("json-user", args.Username);
-    }
-
-    private static readonly PropertyInfo[] ConnectionProperties = new[]
-    {
-        "Connection", "AuthType", "Url", "ClientId", "ClientSecret", "PacProfile", "Username", "Password", "Domain"
-    }.Select(name => typeof(DevKitCommandArgs).GetProperty(name)!).ToArray();
-
-    private void WriteDefaults(DevKitCommandArgs? defaults)
-    {
-        // Use explicit key mapping; CLI property names and .env fields differ.
-        var values = defaults == null ? "" : string.Join("\n", new[]
-        {
-            "DEVKIT_CONNECTION=" + defaults.Connection, "DEVKIT_AUTH_TYPE=" + defaults.AuthType,
-            "DEVKIT_URL=" + defaults.Url, "DEVKIT_CLIENT_ID=" + defaults.ClientId,
-            "DEVKIT_CLIENT_SECRET=" + defaults.ClientSecret, "DEVKIT_PAC_PROFILE=" + defaults.PacProfile,
-            "DEVKIT_USERNAME=" + defaults.Username, "DEVKIT_PASSWORD=" + defaults.Password,
-            "DEVKIT_DOMAIN=" + defaults.Domain
-        });
-        File.WriteAllText(Path.Combine(_directory, ".env"), values + "\nDEVKIT_1_AUTH_TYPE=ClientSecret\nDEVKIT_1_URL=https://other.example.invalid\nDEVKIT_1_CLIENT_SECRET=other-secret\n");
-    }
-
-    private static bool Resolve(McpCommandArgs args) => (bool)typeof(McpCommand)
-        .GetMethod("ResolveConnectionSettings", BindingFlags.NonPublic | BindingFlags.Static)!
-        .Invoke(null, new object[] { args })!;
 }

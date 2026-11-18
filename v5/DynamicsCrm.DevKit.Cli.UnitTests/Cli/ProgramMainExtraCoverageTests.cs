@@ -133,21 +133,21 @@ public sealed class ProgramMainExtraCoverageTests
     {
         var (rootExit, rootOutput) = await RunCliAsync("help", "--plain");
         Assert.AreEqual(0, rootExit);
-        StringAssert.Contains(rootOutput, "MCP connection fallback:");
-        StringAssert.Contains(rootOutput, "Without --env, the original DEVKIT_* per-property merge is preserved.");
-        StringAssert.Contains(rootOutput, "With --env <id>, complete args skip connection fallback; missing values use DEVKIT_<id>_*.");
-        StringAssert.Contains(rootOutput, "devkit mcp --env 1 devkit-codex-2 --dry-run");
+        StringAssert.Contains(rootOutput, "MCP configuration sources:");
+        StringAssert.Contains(rootOutput, "Use only the instance name and optional --env to read project .env.");
+        StringAssert.Contains(rootOutput, "--env cannot be combined with configuration options; incomplete args stop startup.");
+        StringAssert.Contains(rootOutput, "devkit mcp devkit-codex-2 --env 1");
 
         var (mcpHelpExit, mcpHelpOutput) = await RunCliAsync("mcp", "help", "--plain");
         Assert.AreEqual(0, mcpHelpExit);
-        StringAssert.Contains(mcpHelpOutput, "--env <id>");
-        StringAssert.Contains(mcpHelpOutput, "devkit mcp --env 1 devkit-codex-2 --dry-run");
-        StringAssert.Contains(mcpHelpOutput, "devkit mcp --env 100 devkit-uat --category readonly");
+        StringAssert.Contains(mcpHelpOutput, "--env");
+        StringAssert.Contains(mcpHelpOutput, "devkit mcp devkit-codex-2 --env 1");
+        StringAssert.Contains(mcpHelpOutput, "devkit mcp devkit-uat --env 99");
 
         // '--env help' treats 'help' as the option value for --env, not as a help alias.
         var (envHelpExit, envHelpOutput) = await RunCliAsync("mcp", "--plain", "--env", "help");
         Assert.AreNotEqual(0, envHelpExit);
-        StringAssert.Contains(envHelpOutput, "Unknown connection group 'help'");
+        StringAssert.Contains(envHelpOutput, "--env cannot be combined");
     }
 
     [TestMethod]
@@ -158,7 +158,7 @@ public sealed class ProgramMainExtraCoverageTests
         var (exitCode, output) = await RunCliAsync("mcp", "--env", selector, "--help", "--plain");
         Assert.AreEqual(0, exitCode);
         StringAssert.Contains(output, "DESCRIPTION:");
-        StringAssert.Contains(output, "--env <id>");
+        StringAssert.Contains(output, "--env");
         Assert.IsFalse(output.Contains("Invalid --env value"));
     }
 

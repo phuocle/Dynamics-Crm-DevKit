@@ -61,18 +61,17 @@ public sealed class McpCommandConnectExtraCoverageTests
     }
 
     [TestMethod]
-    public async Task ExecuteAsync_ClientSecret_MissingClientSecret_FailsValidation_ReturnsOne()
+    public async Task ExecuteAsync_ClientSecret_MissingClientSecret_StopsBeforeConnecting()
     {
-        // ConnectModernAsync → GetBuilder → CrmConnection → ValidateAsync
-        // rejects (ClientSecret required) → the DevKitConnectionException-style
-        // error text flows through the command catch → exit 1.
+        // Source selection rejects incomplete args before a builder can connect
+        // or try to supply the missing secret from a project .env.
         var exit = await ExecuteAsync(new McpCommandArgs
         {
             AuthType = "ClientSecret",
             Url = "https://org.example.test",
             ClientId = "app"
         });
-        Assert.AreEqual(1, exit, "a failed modern-auth validation surfaces as exit 1.");
+        Assert.AreEqual(2, exit, "incomplete args are rejected before opening a connection.");
     }
 
     [TestMethod]

@@ -24,10 +24,10 @@ public class McpCommandCoverageTests
         StringAssert.Contains(stdout, "Mutation");
         StringAssert.Contains(stdout, "manage_record");
         StringAssert.Contains(stdout, "This catalog describes one DevKit MCP instance.");
-        StringAssert.Contains(stdout, "Use --env <id> to select DEVKIT_<id>_* fallback connection keys.");
-        StringAssert.Contains(stdout, "Explicit connection args still take priority.");
+        StringAssert.Contains(stdout, "Use only the instance name and optional --env <id> to select .env connections.");
+        StringAssert.Contains(stdout, "Any configuration option selects args-only mode; --env cannot be mixed with it.");
         StringAssert.Contains(stdout, "Different MCP client entries can run separate instances with the same tool names.");
-        StringAssert.Contains(stdout, "Example: devkit mcp --env 1 devkit-codex-2 --dry-run");
+        StringAssert.Contains(stdout, "Example: devkit mcp devkit-codex-2 --env 1");
         StringAssert.Contains(stdout, "Run 'devkit mcp --setup-guide' for multi-instance configuration.");
         Assert.AreEqual("", stderr);
     }
@@ -197,9 +197,8 @@ public class McpCommandCoverageTests
             Environment.CurrentDirectory = tempDirectory;
             var (exitCode, _, stderr) = await ExecuteWithConsoleAsync(new McpCommandArgs { Env = "1" }, useCurrentProject: true);
 
-            Assert.AreEqual(1, exitCode);
-            StringAssert.Contains(stderr, "Fallback group: 1 (DEVKIT_1_*)");
-            StringAssert.Contains(stderr, "Environment group '1': DEVKIT_1_CLIENT_SECRET or --clientsecret is required for ClientSecret authentication.");
+            Assert.AreEqual(2, exitCode);
+            StringAssert.Contains(stderr, "Incomplete connection configuration for environment group '1'");
             Assert.IsFalse(stderr.Contains("default-super-secret"), "Secrets must never be printed in error messages.");
         }
         finally
@@ -210,7 +209,7 @@ public class McpCommandCoverageTests
     }
 
     [TestMethod]
-    public async Task ExecuteAsync_EnvGroup_PartialArgOverride_UsesArgUrlAndGroupFallback()
+    public async Task ExecuteAsync_EnvGroup_PartialArgOverride_IsRejectedWithoutReadingEnv()
     {
         var originalDirectory = Environment.CurrentDirectory;
         var tempDirectory = Path.Combine(Path.GetTempPath(), "devkit-mcp-override-" + Guid.NewGuid().ToString("N"));
@@ -227,11 +226,9 @@ public class McpCommandCoverageTests
                 Url = "https://override-org.crm.dynamics.com"
             }, useCurrentProject: true);
 
-            Assert.AreEqual(1, exitCode);
-            StringAssert.Contains(stderr, "Fallback group: 100 (DEVKIT_100_*)");
-            StringAssert.Contains(stderr, "Connection source: command-line arguments + project .env (DEVKIT_100_*)");
-            StringAssert.Contains(stderr, "URL: https://override-org.crm.dynamics.com");
-            StringAssert.Contains(stderr, "Environment group '100': DEVKIT_100_CLIENT_ID or --clientid is required for ClientSecret authentication.");
+            Assert.AreEqual(2, exitCode);
+            StringAssert.Contains(stderr, "--env cannot be combined");
+            Assert.IsFalse(stderr.Contains("override-org"));
         }
         finally
         {
@@ -241,7 +238,7 @@ public class McpCommandCoverageTests
     }
 
     [TestMethod]
-    public async Task ExecuteAsync_CompleteExplicitArgsWithMissingEnvGroup_DoesNotRequireEnvOrGroup()
+    public async Task ExecuteAsync_CompleteExplicitArgsWithEnv_AreRejectedBeforeConnection()
     {
         var originalDirectory = Environment.CurrentDirectory;
         var tempDirectory = Path.Combine(Path.GetTempPath(), "devkit-mcp-complete-args-" + Guid.NewGuid().ToString("N"));
@@ -258,10 +255,9 @@ public class McpCommandCoverageTests
                 ClientSecret = "explicit-secret"
             }, useCurrentProject: true);
 
-            // Did not fail on missing .env or missing group 99; proceeded to validate the explicit args.
-            Assert.AreEqual(1, exitCode);
-            StringAssert.Contains(stderr, "Fallback group: 99 (DEVKIT_99_*; not used)");
-            StringAssert.Contains(stderr, "Validation failed: Invalid URL format: not-a-valid-url");
+            // Even complete arguments cannot be combined with --env.
+            Assert.AreEqual(2, exitCode);
+            StringAssert.Contains(stderr, "--env cannot be combined");
             Assert.IsFalse(stderr.Contains("Cannot resolve environment group '99'"));
             Assert.IsFalse(stderr.Contains("was not found in the selected .env file"));
         }
@@ -300,27 +296,27 @@ public class McpCommandCoverageTests
 
             var (e1, _, err1) = await ExecuteWithConsoleAsync(new McpCommandArgs { Env = "1" }, useCurrentProject: true);
             Assert.AreEqual(2, e1);
-            StringAssert.Contains(err1, "Environment group '1': DEVKIT_1_AUTH_TYPE (or --auth) or DEVKIT_1_CONNECTION (or --conn) is required for MCP server.");
+            StringAssert.Contains(err1, "Incomplete connection configuration for environment group '1'");
 
             var (e2, _, err2) = await ExecuteWithConsoleAsync(new McpCommandArgs { Env = "2" }, useCurrentProject: true);
-            Assert.AreEqual(1, e2);
-            StringAssert.Contains(err2, "Environment group '2': DEVKIT_2_URL or --url is required for ClientSecret authentication.");
+            Assert.AreEqual(2, e2);
+            StringAssert.Contains(err2, "Incomplete connection configuration for environment group '2'");
 
             var (e3, _, err3) = await ExecuteWithConsoleAsync(new McpCommandArgs { Env = "3" }, useCurrentProject: true);
-            Assert.AreEqual(1, e3);
-            StringAssert.Contains(err3, "Environment group '3': DEVKIT_3_USERNAME or --username is required for OAuth authentication.");
+            Assert.AreEqual(2, e3);
+            StringAssert.Contains(err3, "Incomplete connection configuration for environment group '3'");
 
             var (e4, _, err4) = await ExecuteWithConsoleAsync(new McpCommandArgs { Env = "4" }, useCurrentProject: true);
-            Assert.AreEqual(1, e4);
-            StringAssert.Contains(err4, "Environment group '4': DEVKIT_4_PASSWORD or --password is required for OAuth authentication.");
+            Assert.AreEqual(2, e4);
+            StringAssert.Contains(err4, "Incomplete connection configuration for environment group '4'");
 
             var (e5, _, err5) = await ExecuteWithConsoleAsync(new McpCommandArgs { Env = "5" }, useCurrentProject: true);
-            Assert.AreEqual(1, e5);
-            StringAssert.Contains(err5, "Environment group '5': DEVKIT_5_USERNAME or --username is required for AD authentication.");
+            Assert.AreEqual(2, e5);
+            StringAssert.Contains(err5, "Incomplete connection configuration for environment group '5'");
 
             var (e6, _, err6) = await ExecuteWithConsoleAsync(new McpCommandArgs { Env = "6" }, useCurrentProject: true);
-            Assert.AreEqual(1, e6);
-            StringAssert.Contains(err6, "Environment group '6': DEVKIT_6_PASSWORD or --password is required for AD authentication.");
+            Assert.AreEqual(2, e6);
+            StringAssert.Contains(err6, "Incomplete connection configuration for environment group '6'");
 
             var (e7, _, err7) = await ExecuteWithConsoleAsync(new McpCommandArgs { Env = "7" }, useCurrentProject: true);
             Assert.AreEqual(1, e7);
@@ -344,8 +340,7 @@ public class McpCommandCoverageTests
 
         Assert.AreEqual(2, exitCode);
         Assert.AreEqual("", stdout);
-        StringAssert.Contains(stderr, "Auth: (legacy --conn)");
-        StringAssert.Contains(stderr, "--auth or --conn is required");
+        StringAssert.Contains(stderr, "Environment group 'default' was not found");
     }
 
     [TestMethod]
@@ -361,7 +356,7 @@ public class McpCommandCoverageTests
         }, new McpCommandArgs());
 
         Assert.AreEqual(2, exitCode);
-        StringAssert.Contains(stderr, "--auth or --conn is required");
+        StringAssert.Contains(stderr, "Environment group 'default' was not found");
     }
 
     [TestMethod]
@@ -376,9 +371,8 @@ public class McpCommandCoverageTests
             Environment.CurrentDirectory = tempDirectory;
             var (exitCode, _, stderr) = await ExecuteWithConsoleAsync(new McpCommandArgs(), useCurrentProject: true);
 
-            Assert.AreEqual(1, exitCode);
-            StringAssert.Contains(stderr, "Auth: ClientSecret");
-            StringAssert.Contains(stderr, "--url is required");
+            Assert.AreEqual(2, exitCode);
+            StringAssert.Contains(stderr, "Incomplete connection configuration");
         }
         finally
         {
@@ -391,7 +385,8 @@ public class McpCommandCoverageTests
         Dictionary<string, string> variables, McpCommandArgs args)
     {
         using var project = new IsolatedMcpProject();
-        args.Json = project.JsonPath;
+        var originalDirectory = Environment.CurrentDirectory;
+        Environment.CurrentDirectory = Path.GetDirectoryName(project.JsonPath)!;
         var envNames = new[]
         {
             "DEVKIT_CONNECTION",
@@ -422,6 +417,7 @@ public class McpCommandCoverageTests
         {
             foreach (var pair in oldEnv)
                 Environment.SetEnvironmentVariable(pair.Key, pair.Value);
+            Environment.CurrentDirectory = originalDirectory;
             Console.SetOut(oldOut);
             Console.SetError(oldErr);
         }
@@ -432,9 +428,8 @@ public class McpCommandCoverageTests
     {
         var (exitCode, _, stderr) = await ExecuteWithConsoleAsync(new McpCommandArgs { AuthType = "ClientSecret" });
 
-        Assert.AreEqual(1, exitCode);
-        StringAssert.Contains(stderr, "Auth: ClientSecret");
-        StringAssert.Contains(stderr, "--url is required");
+        Assert.AreEqual(2, exitCode);
+        StringAssert.Contains(stderr, "Incomplete MCP connection arguments");
     }
 
     [TestMethod]
@@ -454,7 +449,8 @@ public class McpCommandCoverageTests
     private static async Task<(int ExitCode, string Stdout, string Stderr)> ExecuteWithConsoleAsync(McpCommandArgs args, bool useCurrentProject = false)
     {
         using var project = new IsolatedMcpProject();
-        if (!useCurrentProject) args.Json = project.JsonPath;
+        var originalDirectory = Environment.CurrentDirectory;
+        if (!useCurrentProject) Environment.CurrentDirectory = Path.GetDirectoryName(project.JsonPath)!;
         var oldOut = Console.Out;
         var oldErr = Console.Error;
         var envNames = new[]
@@ -485,6 +481,7 @@ public class McpCommandCoverageTests
         {
             foreach (var pair in oldEnv)
                 Environment.SetEnvironmentVariable(pair.Key, pair.Value);
+            Environment.CurrentDirectory = originalDirectory;
             Console.SetOut(oldOut);
             Console.SetError(oldErr);
         }
