@@ -133,10 +133,16 @@ public sealed class ProgramMainExtraCoverageTests
     {
         var (rootExit, rootOutput) = await RunCliAsync("help", "--plain");
         Assert.AreEqual(0, rootExit);
-        StringAssert.Contains(rootOutput, "MCP configuration sources:");
-        StringAssert.Contains(rootOutput, "Use only the instance name and optional --env to read project .env.");
-        StringAssert.Contains(rootOutput, "--env cannot be combined with configuration options; incomplete args stop startup.");
-        StringAssert.Contains(rootOutput, "devkit mcp devkit-codex-2 --env 1");
+        StringAssert.Contains(rootOutput, "devkit <command> [options]");
+        StringAssert.Contains(rootOutput, "devkit <command> --help");
+        StringAssert.Contains(rootOutput, "Search starts at the resolved --json file's directory");
+        StringAssert.Contains(rootOutput, "MCP .env mode searches upward from the server's working directory.");
+        StringAssert.Contains(rootOutput, "MCP server (41 tools, 13 resources)");
+        StringAssert.Contains(rootOutput, "One server in .env mode can serve multiple env groups.");
+        StringAssert.Contains(rootOutput, "--plain and --dry-run, select args-only mode.");
+        StringAssert.Contains(rootOutput, "devkit mcp devkit-codex --env org-b");
+        Assert.IsFalse(rootOutput.Contains("--sdk-login"));
+        Assert.IsFalse(rootOutput.Contains("--profile PROD"));
 
         var (mcpHelpExit, mcpHelpOutput) = await RunCliAsync("mcp", "help", "--plain");
         Assert.AreEqual(0, mcpHelpExit);

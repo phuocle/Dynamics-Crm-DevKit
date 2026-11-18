@@ -61,153 +61,95 @@ namespace DynamicsCrm.DevKit.Cli
         public static void WriteHelp()
         {
             var mcpToolCount = Mcp.McpServerHost.GetToolCatalog().Count;
-            var helpContent =
-                "Usage:\n" +
-                "  devkit generator --profile NAME --json FILE [options]\n" +
-                "  devkit server --profile NAME --json FILE [options]\n\n" +
-                "Commands:\n" +
-                "  generator              Generate form/webapi js/ts code, late-bound C# code\n" +
-                "  mcp                    Start MCP server for AI agent integration\n" +
-                "  modelbuilder           Generate early-bound entity classes using PAC ModelBuilder\n" +
-                "  new-item               Create a DevKit ITEM template in the required project\n" +
-                "  new-project            Create a DevKit PROJECT template in the required solution\n" +
-                "  report                 Report operations (--type dataset | upload | download)\n" +
-                "  server                 Deploy plugins, workflows, dataproviders; Create datasource\n" +
-                "  solution               Extract or pack solutions using PAC CLI\n" +
-                "  webresource            Upload or download web resources (debug or release build)\n\n" +
-                "Connection Options:\n" +
-                "  --conn STRING          Dynamics 365 connection string (legacy)\n" +
-                "  --auth TYPE            Modern auth type (see below)\n" +
-                "  --url URL              Dynamics 365 environment URL\n" +
-                "  --clientid GUID        Azure AD application (client) ID\n" +
-                "  --clientsecret SECRET  Client secret (plain or encrypted)\n" +
-                "  --pacprofile NAME      PAC CLI profile name\n" +
-                "  --sdk-login            Use SDK OOB login dialog (legacy)\n\n" +
-                "Auth Types (--auth):\n" +
-                "  Interactive            Browser-based login (MFA supported)\n" +
-                "  DeviceCode             Device code flow for headless/SSH\n" +
-                "  ClientSecret           App registration with secret\n" +
-                "  FromPac                Use PAC CLI cached tokens\n" +
-                "  OAuth                  Username/password (legacy)\n" +
-                "  AD                     On-premise Active Directory\n\n" +
-                "Common Options:\n" +
-                "  --json FILE            Path to DynamicsCrm.DevKit.Cli.json\n" +
-                "  --profile NAME         Profile name from json file\n" +
-                "  --plain                Plain text output (for AI agents/CI)\n" +
-                "  --onlyupdateassembly   Fast deploy, only update the assembly (server command only)\n" +
-                "  --build MODE           TypeScript build mode for .ts --file: debug (default) | release (webresource only)\n\n" +
-                "Examples:\n" +
-                "  devkit server --auth Interactive --url https://org.crm.dynamics.com --json cli.json --profile PROD\n" +
-                "  devkit server --auth FromPac --pacprofile DEVKITV4 --json cli.json --profile DEBUG\n" +
-                "  devkit server --auth ClientSecret --url URL --clientid ID --clientsecret SEC --json cli.json --profile CI\n" +
-                "  devkit webresource --file entities/Account.ts --build release --webresource dev_/entities/Account.js\n" +
-                "  devkit webresource --file entities/Account.ts --build release -wid 00000000-0000-0000-0000-000000000000\n" +
-                "  devkit new-project --type Shared --name Contoso.Shared --solution MySolution.slnx\n" +
-                "  devkit new-item --type Plugin --entity Account --message Update --stage PreOperation --name PreAccountUpdate --project Contoso.Server\n" +
-                "  devkit mcp --auth ClientSecret --url URL --clientid ID --clientsecret SEC\n\n" +
-                "Project .env Fallback (DEVKIT_*):\n" +
-                "  Normal commands: CLI args override project .env.\n" +
-                "  The .env search starts in the current directory and walks up to the drive root.\n" +
-                "  MCP: choose args-only or project .env; the two sources never mix.\n" +
-                "  DEVKIT_AUTH_TYPE     Auth type (Interactive, ClientSecret, FromPac, ...)\n" +
-                "  DEVKIT_URL           Environment URL\n" +
-                "  DEVKIT_CLIENT_ID     Azure AD application (client) ID\n" +
-                "  DEVKIT_CLIENT_SECRET Client secret\n" +
-                "  DEVKIT_PAC_PROFILE   PAC CLI profile name\n" +
-                "  DEVKIT_NO_COLOR      Any non-empty value enables plain output\n" +
-                "                       (same walk-up search; --plain arg does the same)\n\n" +
-                "MCP Server (AI Agent Integration):\n" +
-                $"  devkit mcp                   Start the server ({mcpToolCount} tools, 10 resources)\n" +
-                "  devkit mcp --setup-guide     Setup instructions for all IDEs\n\n" +
-                "MCP configuration sources:\n" +
-                "  Use only the instance name and optional --env to read project .env.\n" +
-                "  Any other configuration option selects args-only mode; no .env lookup or merge.\n" +
-                "  --env cannot be combined with configuration options; incomplete args stop startup.\n" +
-                "  Multiple organizations require .env; args-only supports one organization.\n" +
-                "  Multiple MCP instances can select different groups; no fixed group limit.\n\n" +
-                "  devkit mcp devkit-codex\n" +
-                "  devkit mcp devkit-codex-2 --env 1\n" +
-                "  devkit mcp --setup-guide\n";
+            var mcpResourceCount = Mcp.McpServerHost.GetResourceCount();
+            var helpContent = $$"""
+                [green]Usage[/]
+                  devkit [cyan]<command>[/] [dim][[options]][/]
+                  devkit [cyan]<command>[/] --help
+                  devkit --version
+
+                [green]Commands[/]
+                  [cyan]generator[/]              Generate JavaScript/TypeScript and late-bound C# code
+                  [cyan]mcp[/]                    Start an MCP server over stdio
+                  [cyan]modelbuilder[/]           Generate early-bound entity classes using PAC ModelBuilder
+                  [cyan]new-item[/]               Create a DevKit item in an existing project
+                  [cyan]new-project[/]            Create a DevKit project in an existing solution
+                  [cyan]report[/]                 Work with reports (dataset, upload, download)
+                  [cyan]server[/]                 Deploy plugins, workflows and data providers, or create a data source
+                  [cyan]solution[/]               Extract or pack solutions using PAC CLI
+                  [cyan]webresource[/]            Upload or download web resources
+
+                [green]Connection options[/]
+                  --conn [yellow]STRING[/]             Dynamics 365 connection string (legacy)
+                  --auth [yellow]TYPE[/]               Authentication type (see below)
+                  --url [yellow]URL[/]                 Dynamics 365 environment URL
+                  --clientid [yellow]GUID[/]           Application (client) ID
+                  --clientsecret [yellow]SECRET[/]     Client secret (plain or encrypted)
+                  --pacprofile [yellow]NAME_OR_INDEX[/] PAC CLI profile for FromPac (default is the active profile)
+                  --username [yellow]USERNAME[/]       Account for OAuth or AD
+                  --password [yellow]PASSWORD[/]       Password for OAuth or AD
+                  --domain [yellow]DOMAIN[/]           Optional domain for AD
+
+                [green]Auth types (--auth)[/]
+                  [cyan]Interactive[/]            Browser-based login (MFA supported)
+                  [cyan]DeviceCode[/]             Device code flow for headless sessions
+                  [cyan]ClientSecret[/]           App registration with a client secret
+                  [cyan]FromPac[/]                Use a PAC CLI auth profile
+                  [cyan]OAuth[/]                  Username and password (legacy)
+                  [cyan]AD[/]                     On-premises Active Directory
+
+                [green]Other options[/]
+                  --json [yellow]FILE[/]            Path to the DevKit CLI JSON configuration
+                  --profile [yellow]NAME[/]         Profile from the JSON configuration
+                  --plain                Plain text output
+                  --onlyupdateassembly   Update just the assembly (server)
+                  --build [yellow]MODE[/]           TypeScript build for webresource --file (debug by default, or release)
+
+                [green]Examples[/]
+                  devkit [cyan]server[/] --auth FromPac --pacprofile PAC_PROFILE_NAME --json cli.json --profile PROFILE_NAME
+                  devkit [cyan]webresource[/] --file entities/Account.ts --build release --webresource contoso_/entities/Account.js
+                  devkit [cyan]webresource[/] --file entities/Account.ts --build release -wid 00000000-0000-0000-0000-000000000000
+                  devkit [cyan]new-project[/] --type Shared --name Contoso.Shared --solution MySolution.slnx
+                  devkit [cyan]new-item[/] --type Plugin --entity Account --message Update --stage PreOperation --name PreAccountUpdate --project Contoso.Server
+
+                [green]Project .env[/]
+                  Standard CLI commands use connection arguments first and fill missing values from .env.
+                  Search starts at the resolved --json file's directory, or at the working directory if no
+                  JSON file is resolved, and walks up to the drive root.
+                  MCP .env mode searches upward from the server's working directory.
+
+                  DEVKIT_AUTH_TYPE       Authentication type
+                  DEVKIT_URL             Environment URL
+                  DEVKIT_CLIENT_ID       Application (client) ID
+                  DEVKIT_CLIENT_SECRET   Client secret
+                  DEVKIT_PAC_PROFILE     PAC CLI profile
+                  DEVKIT_NO_COLOR        Any non-empty value enables plain output when read from .env
+
+                [green]MCP server ({{mcpToolCount}} tools, {{mcpResourceCount}} resources)[/]
+                  devkit [cyan]mcp[/] [cyan]devkit-codex[/]               Start with the default .env group
+                  devkit [cyan]mcp[/] [cyan]devkit-codex[/] --env [cyan]org-b[/]   Choose the startup group by alias
+                  devkit [cyan]mcp[/] --setup-guide              Set up an MCP client and env groups
+                  devkit [cyan]mcp[/] --tools                    List the available tools
+
+                  With a configured default .env group, devkit mcp can start without a name.
+                  One server in .env mode can serve multiple env groups. Pass env on each Dataverse tool call.
+
+                [green]MCP configuration sources[/]
+                  Use an optional server name and optional --env to read project .env.
+                  Other configuration options, including --plain and --dry-run, select args-only mode.
+                  Args-only mode requires complete connection arguments, skips .env and serves one organization.
+                  --env is available in .env mode. Use DEVKIT_NO_COLOR for plain output in that mode.
+                """;
 
             if (IsPlain)
             {
                 Console.WriteLine("DynamicsCrm.DevKit.Cli Help");
                 Console.WriteLine(new string('-', 40));
-                Console.WriteLine(helpContent);
+                Console.WriteLine(Markup.Remove(helpContent));
                 return;
             }
 
-            var panel = new Panel(
-                new Markup(
-                    "[green]Usage:[/]\n" +
-                    "  devkit [cyan]generator[/] --profile [yellow]NAME[/] --json [yellow]FILE[/] [dim][[options]][/]\n" +
-                    "  devkit [cyan]server[/] --profile [yellow]NAME[/] --json [yellow]FILE[/] [dim][[options]][/]\n\n" +
-                    "[green]Commands:[/]\n" +
-                    "  [cyan]generator[/]              Generate form/webapi js/ts code, late-bound C# code\n" +
-                    "  [cyan]mcp[/]                    Start MCP server for AI agent integration\n" +
-                    "  [cyan]modelbuilder[/]           Generate early-bound entity classes using PAC ModelBuilder\n" +
-                    "  [cyan]new-item[/]               Create a DevKit ITEM template in the required project\n" +
-                    "  [cyan]new-project[/]            Create a DevKit PROJECT template in the required solution\n" +
-                    "  [cyan]report[/]                 Report operations (--type dataset | upload | download)\n" +
-                    "  [cyan]server[/]                 Deploy plugins, workflows, dataproviders; Create datasource\n" +
-                    "  [cyan]solution[/]               Extract or pack solutions using PAC CLI\n" +
-                    "  [cyan]webresource[/]            Upload or download web resources (debug or release build)\n\n" +
-                    "[green]Connection Options:[/]\n" +
-                    "  --conn [yellow]STRING[/]          Dynamics 365 connection string (legacy)\n" +
-                    "  --auth [yellow]TYPE[/]            Modern auth type (see below)\n" +
-                    "  --url [yellow]URL[/]              Dynamics 365 environment URL\n" +
-                    "  --clientid [yellow]GUID[/]        Azure AD application (client) ID\n" +
-                    "  --clientsecret [yellow]SECRET[/]  Client secret (plain or encrypted)\n" +
-                    "  --pacprofile [yellow]NAME[/]      PAC CLI profile name\n" +
-                    "  --sdk-login            Use SDK OOB login dialog (legacy)\n\n" +
-                    "[green]Auth Types (--auth):[/]\n" +
-                    "  [cyan]Interactive[/]            Browser-based login (MFA supported)\n" +
-                    "  [cyan]DeviceCode[/]             Device code flow for headless/SSH\n" +
-                    "  [cyan]ClientSecret[/]           App registration with secret\n" +
-                    "  [cyan]FromPac[/]                Use PAC CLI cached tokens\n" +
-                    "  [cyan]OAuth[/]                  Username/password (legacy)\n" +
-                    "  [cyan]AD[/]                     On-premise Active Directory\n\n" +
-                    "[green]Common Options:[/]\n" +
-                    "  --json [yellow]FILE[/]            Path to DynamicsCrm.DevKit.Cli.json\n" +
-                    "  --profile [yellow]NAME[/]         Profile name from json file\n" +
-                    "  --plain                Plain text output (for AI agents/CI)\n" +
-                    "  --onlyupdateassembly   Fast deploy, only update the assembly (server command only)\n" +
-                    "  --build [yellow]MODE[/]           TypeScript build mode for .ts --file: debug (default) | release (webresource only)\n\n" +
-                    "[green]Examples:[/]\n" +
-                    "  devkit [cyan]server[/] --auth [cyan]Interactive[/] --url [cyan]https://org.crm.dynamics.com[/] --json [cyan]cli.json[/] --profile [cyan]PROD[/]\n" +
-                    "  devkit [cyan]server[/] --auth [cyan]FromPac[/] --pacprofile [cyan]DEVKITV4[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/]\n" +
-                    "  devkit [cyan]server[/] --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/] --json [cyan]cli.json[/] --profile [cyan]CI[/]\n" +
-                    "  devkit [cyan]webresource[/] --file [cyan]entities/Account.ts[/] --build [cyan]release[/] --webresource [cyan]dev_/entities/Account.js[/]\n" +
-                    "  devkit [cyan]webresource[/] --file [cyan]entities/Account.ts[/] --build [cyan]release[/] -wid [cyan]00000000-0000-0000-0000-000000000000[/]\n" +
-                    "  devkit [cyan]new-project[/] --type [cyan]Shared[/] --name [cyan]Contoso.Shared[/] --solution [cyan]MySolution.slnx[/]\n" +
-                    "  devkit [cyan]new-item[/] --type [cyan]Plugin[/] --entity [cyan]Account[/] --message [cyan]Update[/]\n" +
-                    "    --stage [cyan]PreOperation[/] --name [cyan]PreAccountUpdate[/] --project [cyan]Contoso.Server[/]\n" +
-                    "  devkit [cyan]mcp[/] --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/]\n\n" +
-                    "[green]Project .env values (DEVKIT_*):[/]\n" +
-                    "  Normal commands: CLI args override project .env.\n" +
-                    "  .env search: current directory up to the drive root.\n" +
-                    "  MCP: choose args-only or project .env; the two sources never mix.\n" +
-                    "  [cyan]DEVKIT_AUTH_TYPE[/]     Auth type (Interactive, ClientSecret, FromPac, ...)\n" +
-                    "  [cyan]DEVKIT_URL[/]           Environment URL\n" +
-                    "  [cyan]DEVKIT_CLIENT_ID[/]     Azure AD application (client) ID\n" +
-                    "  [cyan]DEVKIT_CLIENT_SECRET[/] Client secret\n" +
-                    "  [cyan]DEVKIT_PAC_PROFILE[/]   PAC CLI profile name\n" +
-                    "  [cyan]DEVKIT_NO_COLOR[/]      Any non-empty value enables plain output\n" +
-                    "                       (same walk-up search; --plain arg does the same)\n\n" +
-                    "[green]MCP Server (AI Agent Integration):[/]\n" +
-                    $"  devkit [cyan]mcp[/]                  Start the server ({mcpToolCount} tools, 10 resources)\n" +
-                    "  devkit [cyan]mcp[/] --setup-guide    Setup instructions for all IDEs\n\n" +
-                    "[green]MCP configuration sources:[/]\n" +
-                    "  Use only the instance name and optional --env to read project .env.\n" +
-                    "  Any other configuration option selects args-only mode; no .env lookup or merge.\n" +
-                    "  --env cannot be combined with configuration options; incomplete args stop startup.\n" +
-                    "  Multiple organizations require .env; args-only supports one organization.\n" +
-                    "  Multiple MCP instances can select different groups; no fixed group limit.\n\n" +
-                    "  devkit [cyan]mcp[/] [cyan]devkit-codex[/]\n" +
-                    "  devkit [cyan]mcp[/] [cyan]devkit-codex-2[/] --env [cyan]1[/]\n" +
-                    "  devkit [cyan]mcp[/] --setup-guide\n"
-
-                ))
+            var panel = new Panel(new Markup(helpContent))
             {
                 Border = BoxBorder.Double,
                 BorderStyle = new Style(Color.Green),

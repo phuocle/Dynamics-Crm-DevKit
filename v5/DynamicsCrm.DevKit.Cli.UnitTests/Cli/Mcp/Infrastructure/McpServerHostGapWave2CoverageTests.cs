@@ -13,25 +13,29 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Infrastructure;
 public sealed class McpServerHostGapWave2CoverageTests
 {
     [TestMethod]
-    public void GetToolCatalog_DisabledType_IsExcludedFromCatalog()
+    public void DisabledTool_IsExcludedFromCatalogWithItsResource()
     {
         var catalog = McpServerHost.GetToolCatalog();
-        Assert.IsTrue(catalog.Any(tool => tool.Name == "whoami"));
+        var resourceCount = McpServerHost.GetResourceCount();
+        Assert.IsTrue(catalog.Any(tool => tool.Name == "execute_sql"));
+        Assert.AreEqual(13, resourceCount);
 
         try
         {
-            McpServerHost.DisabledToolSet.Add(nameof(WhoAmITool));
+            McpServerHost.DisabledToolSet.Add(nameof(ExecuteSqlTool));
             var filtered = McpServerHost.GetToolCatalog();
 
             Assert.AreEqual(catalog.Count - 1, filtered.Count);
-            Assert.IsFalse(filtered.Any(tool => tool.Name == "whoami"));
+            Assert.IsFalse(filtered.Any(tool => tool.Name == "execute_sql"));
+            Assert.AreEqual(resourceCount - 1, McpServerHost.GetResourceCount());
         }
         finally
         {
-            McpServerHost.DisabledToolSet.Remove(nameof(WhoAmITool));
+            McpServerHost.DisabledToolSet.Remove(nameof(ExecuteSqlTool));
         }
 
         Assert.AreEqual(catalog.Count, McpServerHost.GetToolCatalog().Count);
+        Assert.AreEqual(resourceCount, McpServerHost.GetResourceCount());
     }
 
     [TestMethod]

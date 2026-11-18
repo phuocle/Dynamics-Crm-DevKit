@@ -104,10 +104,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             if (DisabledToolSet.Count > 0)
             {
                 var allowedToolNames = tools.Select(t => t.Name).ToHashSet();
-                var disabledResourceNames = DisabledToolSet
-                    .Where(ToolResourceMap.ContainsKey)
-                    .SelectMany(t => ToolResourceMap[t])
-                    .ToHashSet();
+                var disabledResourceNames = GetDisabledResourceNames();
                 builder.Services.PostConfigure<McpServerOptions>(options =>
                 {
                     if (options.ToolCollection != null)
@@ -194,6 +191,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
         }
 
         internal record McpToolInfo(string Name, string Title);
+
+        internal static int GetResourceCount()
+        {
+            var disabledResourceNames = GetDisabledResourceNames();
+            return Assembly.GetExecutingAssembly().GetTypes()
+                .Where(type => type.GetCustomAttribute<McpServerResourceTypeAttribute>() != null)
+                .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static))
+                .Count(method => method.GetCustomAttribute<McpServerResourceAttribute>() is { } resource &&
+                                 !disabledResourceNames.Contains(resource.Name ?? method.Name));
+        }
+
+        private static HashSet<string> GetDisabledResourceNames() => DisabledToolSet
+            .Where(ToolResourceMap.ContainsKey)
+            .SelectMany(typeName => ToolResourceMap[typeName])
+            .ToHashSet();
 
         internal static string BuildServerInstructions(
             string serverName,
