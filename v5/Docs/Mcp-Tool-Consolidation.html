@@ -41,6 +41,7 @@
 </div>
 <div class="callout"><p><strong>Khuyến nghị:</strong> giữ <code>whoami</code> và <code>read_instruction</code>; gộp 38 tool còn lại vào 8 nhóm nghiệp vụ. Giữ tên cũ làm mã <code>operation</code>, dùng lại handler hiện có. Catalog chỉ nêu cách chọn thao tác; contract đầy đủ được đọc khi cần.</p></div>
 <p class="muted">75% là mức giảm <strong>số tool</strong>, chưa phải mức giảm token. Bản compact chưa được triển khai hoặc benchmark. Tài liệu này phân biệt số đã đo với mục tiêu đề xuất.</p>
+<p class="muted">Số liệu 40 tool thuộc snapshot ngày 14/11/2026. MCP hiện có một catalog 41 tool. Đo lại baseline ở W0 và bổ sung <code>connection_list</code> vào inventory trước khi triển khai compact.</p>
 <div class="two" aria-label="Trả lời review lần hai">
 <article class="box"><h3>1. Test cũ phải reuse và giữ nguyên</h3><p><strong>Đúng. Không sửa test cũ; chỉ thêm file test mới.</strong> Test cũ chứng minh regression trong phạm vi đã kiểm tra; test mới và runtime checks chứng minh phần compact.</p><a href="#review-tests">Xem thiết kế để test cũ vẫn chạy nguyên trạng ↓</a></article>
 <article class="box"><h3>2. structuredContent vẫn tốn token</h3><p>Nếu host gửi cho model đọc, nó thành <strong>input token của lượt model tiếp theo</strong>. Giảm outputSchema không tự giảm dữ liệu kết quả. Nên tối ưu theo nhu cầu và giữ đường lấy đủ thông tin.</p><a href="#result-tokens">Xem cách tính và phương án giảm result ↓</a></article>
@@ -82,7 +83,7 @@
 
 <section id="catalog">
 <div class="section-head"><span class="section-no">04</span><h2>Catalog đề xuất: 10 tool</h2></div>
-<p><strong>6 tool chỉ đọc</strong> bao phủ 18 operation chỉ đọc hiện tại; <strong>4 tool hỗn hợp/ghi</strong> bao phủ 22 operation còn lại. Một thao tác đọc bên trong mixed tool vẫn giữ nguyên category hiện tại.</p>
+<p>Trong ma trận đề xuất, <strong>6 tool chỉ đọc</strong> bao phủ 18 operation chỉ đọc, còn <strong>4 tool hỗn hợp/ghi</strong> bao phủ 22 operation còn lại. Các tool này xuất hiện cùng nhau trong catalog compact.</p>
 <div class="group-grid"><article class="group"><div class="group-top"><span class="index">01</span><span class="badge read">READ</span></div><h3><code>whoami</code></h3><p>Danh tính, môi trường và bằng chứng runtime; giữ nguyên.</p><div class="ops"><span>whoami</span></div></article>
 <article class="group"><div class="group-top"><span class="index">02</span><span class="badge read">READ</span></div><h3><code>read_instruction</code></h3><p>13 resource hiện có và contract thao tác theo nhu cầu.</p><div class="ops"><span>read_instruction</span></div></article>
 <article class="group"><div class="group-top"><span class="index">03</span><span class="badge read">READ</span></div><h3><code>query_data</code></h3><p>FetchXML, SQL, tìm kiếm và phân tích URL.</p><div class="ops"><span>execute_fetchxml</span><span>execute_sql</span><span>search_records</span><span>parse_record_url</span></div></article>
@@ -179,7 +180,7 @@
 <div class="section-head"><span class="section-no">07</span><h2>Những chỗ dễ “gộp xong mà mất tính năng”</h2></div>
 <div class="risk-grid">
 <article class="risk"><h3>01 · Nullable, default và kiểu dữ liệu</h3><p>Không đồng nhất omitted/null/false/0/chuỗi rỗng. Bảo toàn record_ids dạng array, auto_number_seed nullable Int64 và JSON-string fields. Dùng binder tương đương SDK, kiểm thử parity.</p></article>
-<article class="risk"><h3>02 · Quyền và category</h3><p>Category lấy từ attribute ReadOnly. Mixed facade không được quảng bá là read-only. Giữ dry-run, admin gate và impersonation ở server; không thêm tham số để AI override policy.</p></article>
+<article class="risk"><h3>02 · Quyền và annotation</h3><p>Tính annotation ReadOnly của facade từ các operation thành viên. Tiếp tục áp dụng dry-run, quyền admin và impersonation ở server.</p></article>
 <article class="risk"><h3>03 · Backup, file local và publish</h3><p>Report create/dataset là local-only; download ghi file. View undo cần cặp XML. App/form/chart có publish và validation riêng. Router không “đơn giản hóa” các side effect này.</p></article>
 <article class="risk"><h3>04 · Discovery và resource references</h3><p>Host hiện scan assembly; read_instruction scan URI trong descriptions. Rút mô tả hoặc bỏ registration thiếu kiểm soát sẽ làm mất tool/resource mapping. Cần một catalog dùng chung.</p></article>
 <article class="risk"><h3>05 · Compatibility và tool permissions</h3><p>Giữ --tool-surface legacy|compact. Tên compact mới có thể cần cấu hình quyền ở client. Không advertise cả hai: 40 cũ + 8 router mới thành 48 tool.</p></article>
@@ -191,7 +192,7 @@
 <section id="rollout">
 <div class="section-head"><span class="section-no">08</span><h2>Triển khai có thể kiểm chứng</h2></div>
 <div class="phases">
-<article class="phase"><span>P0</span><h3>Baseline & thử nhỏ</h3><p>Snapshot 40/18 tool và hash test cũ; chạy baseline. Thử đăng ký compact riêng trên SDK 2.4.0.</p></article>
+<article class="phase"><span>P0</span><h3>Baseline & thử nhỏ</h3><p>Chụp catalog legacy và hash test cũ. Thử đăng ký compact riêng trên SDK 2.4.0.</p></article>
 <article class="phase"><span>P1</span><h3>Catalog compact</h3><p>Thêm factory/8 router ngoài scan legacy; giữ handler, metadata và test cũ. Chỉ thêm file test mới.</p></article>
 <article class="phase"><span>P2</span><h3>Parity & đo hiệu quả</h3><p>Chạy lại suite CLI cũ nguyên trạng và test mới; đo cả catalog, tool result, help và lịch sử.</p></article>
 <article class="phase"><span>P3</span><h3>Build & xác minh</h3><p>Build/install CLI theo skill; restart connector, whoami, đối chiếu SHA/build/process và manifest mới.</p></article>
@@ -200,13 +201,13 @@
 <article class="box"><h3>Điều kiện chấp nhận</h3><ul class="checklist">
 <li>Mapping đủ 40 operation; không trùng, không thiếu.</li>
 <li>Không đổi file test cũ; không giảm discovery/execution hoặc tăng skip.</li>
-<li>Catalog thực tế: legacy 40/18, compact 10/6.</li>
+<li>Đối chiếu catalog legacy với W0 và compact với ma trận.</li>
 <li>Giữ handler behavior, output, error, file, undo, quyền.</li>
 <li>Client có/không có resource reader đều dùng được.</li>
 <li>Mục tiêu catalog ≤35% baseline, khoảng ≤60.054 ký tự.</li>
 <li>Task success không giảm; báo tổng token và latency workflow.</li>
 </ul><small>Mục tiêu kích thước là acceptance target đề xuất, chưa phải kết quả đo sau gộp.</small></article>
-<article class="box"><h3>Chuyển đổi và quay lại</h3><p>Ban đầu giữ default legacy, cho opt-in compact. Chỉ đổi default sau khi đạt kiểm thử và đánh giá. Quay về legacy khôi phục catalog 40/18, không rollback dữ liệu nghiệp vụ.</p><p>Scope triển khai là CLI/MCP. Không cần full release toàn repo cho riêng thay đổi này; theo skill build CLI, giữ version nguồn 4.44.44.44 và phục hồi placeholder ngày build.</p><a href="Mcp-Tool-Consolidation.md">Đọc checklist triển khai chi tiết cho AI ↗</a></article>
+<article class="box"><h3>Chuyển đổi và quay lại</h3><p>Ban đầu giữ default legacy, cho opt-in compact. Chỉ đổi default sau khi đạt kiểm thử và đánh giá. Quay về legacy khôi phục catalog tại W0.</p><p>Dùng skill build CLI, giữ version nguồn 4.44.44.44 và phục hồi placeholder ngày build.</p><a href="Mcp-Tool-Consolidation.md">Đọc checklist triển khai chi tiết cho AI ↗</a></article>
 </div>
 <div class="callout"><p><strong>Đề nghị thực hiện:</strong> bắt đầu bằng một spike nhỏ để chứng minh generic arguments + contract provider chạy đúng trên client đang dùng. Sau đó mở rộng đủ 10 facade. Kết quả phải được quyết định bằng chức năng giữ nguyên và token thực, không chỉ số tool đẹp hơn.</p></div>
 
@@ -229,13 +230,13 @@
 <p><code>McpServerHostCoverageTests</code> đang assert <strong>18/40</strong>. <code>DryRunGatewayContractTests</code> scan assembly trực tiếp và yêu cầu đúng <strong>22 mixed tool</strong>. Nếu thêm 8 annotated classes vào cùng scan, test có thể fail dù runtime chỉ quảng bá 10 tool. Vì vậy, <strong>lọc runtime chưa đủ</strong>.</p>
 <div class="two">
 <article class="box"><h3>Legacy giữ nguyên</h3><p>Giữ signatures, attributes, descriptions và helper counts cũ; giữ 13 resource, references và output helper. Test 18/40/22 tiếp tục kiểm tra hợp đồng đó, không đổi kỳ vọng.</p></article>
-<article class="box"><h3>Compact đăng ký riêng</h3><p>Thêm factory/descriptor và adapter tường minh, không lọt vào scan legacy. Descriptions ngắn nằm trên descriptor mới. Category tính từ attribute của operation cũ; test 6/10 nằm trong file mới.</p></article>
+<article class="box"><h3>Compact đăng ký riêng</h3><p>Đăng ký factory và adapter compact ngoài assembly scan legacy. Tính annotation ReadOnly từ operation thành viên và ghi mô tả ngắn trên descriptor compact.</p></article>
 </div>
 <p>API count/instructions cũ vẫn phục vụ legacy; API chọn surface mới cung cấp đúng catalog cho compact <code>--tools</code>, initialize và tools/list. Provider compact cho <code>read_instruction</code> dùng cùng nội dung cũ và bổ sung contract riêng. Nếu SDK không đáp ứng được cách tách này, phải báo xung đột thiết kế để review, không sửa test để hợp thức hóa.</p>
 <div class="table-scroll"><table><thead><tr><th>Bằng chứng cần có</th><th>Điều kiện đạt</th></tr></thead><tbody>
 <tr><td>Hash/diff test cũ</td><td>File cũ giữ nguyên; không đổi fixture/helper/config hoặc làm mất test.</td></tr>
 <tr><td>TRX trước và sau</td><td>Chạy lại suite CLI UnitTests net10.0 cũ; báo discovered/executed/pass/fail/skip, không chỉ một dòng “pass”.</td></tr>
-<tr><td>Test mới</td><td>Catalog 10/6, route đủ 40, binder/null/defaults, policy, contract resource và concurrency.</td></tr>
+<tr><td>Test mới</td><td>Catalog theo ma trận, routing từng operation, binder/null/defaults, policy, contract resource và concurrency.</td></tr>
 <tr><td>Parity và artifact thực</td><td>Cùng fixture cho handler cũ/router; so payload, error, SDK calls, file/backup/publish; kiểm tra connector sau build/install.</td></tr>
 </tbody></table></div>
 <p class="muted">Nếu baseline đã có lỗi, giữ bằng chứng và báo lỗi trước/sau; không claim tất cả xanh. Tác vụ hiện tại chỉ cập nhật tài liệu, không tạo hoặc chạy các unit test đề xuất.</p>
@@ -293,7 +294,7 @@
 <tr><td><a href="Mcp-Tool-Consolidation/W0-Baseline-Spike.md"><code>W0-Baseline-Spike.md</code></a></td><td>P0</td><td>Baseline test + capture tools/list legacy + spike router chỉ đọc <code>query_data</code></td><td>Chưa bắt đầu</td></tr>
 <tr><td><a href="Mcp-Tool-Consolidation/W1-Compact-Catalog-Adapter.md"><code>W1-Compact-Catalog-Adapter.md</code></a></td><td>P1</td><td>Catalog + 8 router + binder + contract provider; chỉ thêm file test mới</td><td>Chưa bắt đầu</td></tr>
 <tr><td><a href="Mcp-Tool-Consolidation/W2-Parity-Benchmark.md"><code>W2-Parity-Benchmark.md</code></a></td><td>P2</td><td>Parity từng operation + benchmark ba tầng + rút description compact</td><td>Chưa bắt đầu</td></tr>
-<tr><td><a href="Mcp-Tool-Consolidation/W3-Build-Install-Verify.md"><code>W3-Build-Install-Verify.md</code></a></td><td>P3</td><td>Build/install qua skill + capture 4 combination + verify manifest</td><td>Chưa bắt đầu</td></tr>
+<tr><td><a href="Mcp-Tool-Consolidation/W3-Build-Install-Verify.md"><code>W3-Build-Install-Verify.md</code></a></td><td>P3</td><td>Build/install qua skill, capture hai catalog và xác minh manifest</td><td>Chưa bắt đầu</td></tr>
 </tbody></table></div>
 <p class="muted">Quy tắc session: một session một work file; bắt đầu đọc AGENTS.md + đúng phần spec theo danh mục "Đọc trước khi làm" của work file; kết thúc cập nhật State trong work file và xuất handoff prompt tự chứa. Cổng dừng giữa các work chờ nghiệm thu. Chi tiết ở §14 của bản Markdown.</p>
 </section>

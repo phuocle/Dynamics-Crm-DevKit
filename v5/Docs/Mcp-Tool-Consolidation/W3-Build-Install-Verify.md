@@ -12,7 +12,7 @@
 
 ## Mục tiêu
 
-Cài bản compact lên máy thật và chứng minh runtime đúng: whoami khớp manifest, 4 combination surface/category đúng số, tree sạch, placeholder phục hồi.
+Cài bản compact và xác minh `whoami` khớp manifest, hai catalog có đúng số tool và placeholder được phục hồi.
 
 ## Bất biến phải giữ (trích spec — vi phạm là fail)
 
@@ -27,7 +27,7 @@ Cài bản compact lên máy thật và chứng minh runtime đúng: whoami kh�
 1. **Build gate cuối:** `dotnet build DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj` + chạy test net10.0 (Cli).
 2. **Cài qua skill:** chạy `devkit-skill-build-cli` (script `Release.DynamicsCrm.DevKit.Cli.ps1`) — làm theo SKILL.md từng bước, không tự chế cách cài.
 3. **Restart connector** MCP đang dùng; gọi `whoami`; đối chiếu version, build timestamp, process start time, assembly SHA với manifest `Published/<version>/` vừa tạo. Nếu cả hai connector DevKit đều dùng bản mới — verify TỪNG connector (AGENTS.md MCP bước 2–3).
-4. **Capture 4 combination** tools/list thật từ artifact vừa cài: legacy+all = 40, legacy+readonly = 18, compact+all = 10, compact+readonly = 6; xác nhận không surface nào quảng bá cả legacy lẫn compact (§8 P3).
+4. **Capture hai catalog** qua `tools/list` từ artifact vừa cài. Đối chiếu legacy với baseline W0 và compact với ma trận (§8 P3).
 5. **Gọi thử qua connector thật:** vài operation chỉ đọc qua router compact + một `contract://` read; xác nhận hành vi khớp capture stdio của W1/W2.
 6. **Inspect working tree:** `git status` — chỉ còn thay đổi dự kiến; xác nhận placeholder `xxxx.yy.zz HH.mm.ss` đã phục hồi (mắt thường, dù script restore trong `finally`); source version 4.44.44.44.
 7. **Báo kết quả + giới hạn** còn lại; đề xuất nhưng KHÔNG tự chuyển default compact; KHÔNG commit (chờ aP lệnh — khi được lệnh thì qua skill `devkit-skill-commit`).
@@ -35,7 +35,7 @@ Cài bản compact lên máy thật và chứng minh runtime đúng: whoami kh�
 ## Bằng chứng / DoD
 
 - [ ] whoami: version/build/SHA khớp manifest vừa tạo (paste output thật).
-- [ ] 4 capture: 40/18/10/6 đúng, raw JSON lưu được.
+- [ ] Hai capture có đúng số tool và đã lưu raw JSON.
 - [ ] Tree sạch ngoài phần dự kiến; placeholder phục hồi; version 4.44.44.44.
 - [ ] Không file test cũ bị đụng (hash khớp manifest W0 lần cuối).
 

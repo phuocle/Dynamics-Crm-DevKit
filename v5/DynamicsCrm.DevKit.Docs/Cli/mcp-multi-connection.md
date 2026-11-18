@@ -19,13 +19,13 @@ Choose one mode before any project-file lookup:
 | devkit mcp devkit-codex --env uat | .env mode; resolve the configured alias |
 | devkit mcp devkit-codex --auth ClientSecret ... | Args-only; one organization |
 | devkit mcp devkit-codex --dry-run | Args-only; missing connection arguments stop startup |
-| devkit mcp devkit-codex --category all | Args-only even though all is the default |
+| devkit mcp devkit-codex --transport stdio | Args-only even though stdio is the default |
 | devkit mcp devkit-codex --env 99 --dry-run | Configuration error; never mix sources |
 | devkit mcp devkit-codex --env 99 --auth ClientSecret ... | Configuration error even when arguments are complete |
 
 The instance name does not select args-only mode. Every other explicit configuration option does, except --env, which selects an .env group. Detect option presence, including empty values and values equal to defaults. Do not infer mode only from nonempty parsed properties.
 
-This includes connection options --conn, --auth, --url, --clientid, --clientsecret, --username, --password, --domain, --pacprofile and control/inherited options --dry-run, --category, --as-user, --transport, --json, --profile, --sdk-login and --plain.
+This includes connection options --conn, --auth, --url, --clientid, --clientsecret, --username, --password, --domain, --pacprofile and control/inherited options --dry-run, --as-user, --transport, --json, --profile, --sdk-login and --plain.
 Informational modes (--help, --setup-guide, --tools) do not start an MCP server and do not need project credentials or an .env snapshot.
 
 ## 2. Args-only mode
@@ -37,7 +37,7 @@ Informational modes (--help, --setup-guide, --tools) do not start an MCP server 
 - --conn and --auth are mutually exclusive. Neither method silently wins.
 - Create exactly one registry group: canonical default, no .env alias, source command-line arguments.
 - Tool env omitted/default selects that connection. Other IDs/aliases fail without fallback.
-- Explicit --dry-run and --as-user operate on this single connection; category filtering remains attribute-derived.
+- Explicit --dry-run and --as-user operate on this single connection.
 - --json/--profile do not authorize project-file connection fallback in MCP.
 - No OS environment variables supply missing connection values.
 
@@ -97,7 +97,7 @@ In args-only mode:
 - --env plus either option is a configuration error.
 
 The context/options supplied to each invocation remain fixed. Tools expose effective policy through connection_list/whoami but cannot change it.
-Category readonly/all is derived from tool attributes. Explicit --category requires args-only mode and a complete connection.
+Every instance exposes the enabled tool catalog. Dry-run applies to the connection selected for each invocation.
 
 ## 7. Factory, registry and lifecycle
 
@@ -111,7 +111,7 @@ No args-only path may construct a second connection from a local .env, including
 
 ## 8. Tool routing and cache isolation
 
-Keep the 39 routed Dataverse tools, connection_list and read_instruction: 41 all / 19 readonly.
+The catalog exposes 41 tools including the 39 routed Dataverse tools, connection_list and read_instruction.
 Only the 39 Dataverse tools accept optional env; resources and static instruction/discovery tools do not.
 Invocation-local workers receive the selected service, metadata, Web API, options, connection info and context.
 Preserve public tool names, JSON keys, output shapes, error prefixes, temp paths and domain operations.
@@ -141,7 +141,7 @@ This intentionally removes these rev 4 behaviors:
 - complete numbered arguments bypassing a missing selected group;
 - argument URL/credential overrides on an .env startup group;
 - reading aliases/policies from .env while using argument credentials;
-- --env combined with --dry-run/--category/--as-user/--plain or other configuration options;
+- --env combined with --dry-run/--as-user/--plain or other configuration options;
 - resolved --json directory selecting the MCP .env.
 
 Other CLI commands keep their current merge and JSON-directory behavior.
@@ -162,7 +162,7 @@ Focused tests must cover:
 - three .env groups discovered with lazy initialization;
 - complete arguments ignoring a locked/invalid .env, aliases, optional values and policies;
 - partial arguments and control-only options stopping even beside valid .env;
-- explicit empty/default-valued options, including --category all and --dry-run=false;
+- explicit empty/default-valued options, including --transport stdio and --dry-run=false;
 - --plain consumed by Program still selecting args-only and never probing .env for color;
 - --env plus argument/control options failing before .env access;
 - --conn plus --auth conflicts without leaking argument values;
@@ -194,7 +194,7 @@ Implementation verification checklist. Unchecked items have not yet been verifie
 
 - [ ] Decisions and compatibility effects agree across code, help, schemas, examples, and tests.
 - [ ] Omitted-env calls retain startup target/action semantics when new configuration does not change policy. Deterministic fixtures remain stable except approved whoami/discovery changes; dynamic runtime evidence is not compared byte-for-byte.
-- [x] Catalog is 41/19; exactly 39 existing tool schemas gain optional env; categories still derive from attributes.
+- [x] Catalog has 41 tools and exactly 39 tool schemas accept optional env.
 - [ ] Routing identifies the expected organization/policy, including `--env 1`, aliases, CLI overrides, and explicit unnumbered selection.
 - [ ] Parallel calls cannot mix clients, metadata, caches, identity, policy, or output attribution; failure/cancellation/disposal checks pass.
 - [ ] Protected-group attempts execute zero mutations; permitted reads work; SDK, Web API, and workers are covered.

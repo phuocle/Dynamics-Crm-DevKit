@@ -4,6 +4,8 @@
 >
 > Bản cho người đọc: [Mcp-Tool-Consolidation.html](Mcp-Tool-Consolidation.html). Đặt tại `v5/Docs/` theo yêu cầu trực tiếp của người dùng; không di chuyển tài liệu sản phẩm hiện có.
 
+> MCP hiện công bố một catalog 41 tool. Các số liệu và ma trận 40 tool bên dưới thuộc bản đo ngày 14/11/2026. Khi triển khai đề xuất compact, dùng W0 để đo lại baseline và bổ sung `connection_list` vào inventory.
+
 > **Review 2 — 14/11/2026:** (1) Reuse và chạy lại test cũ, **không sửa bất kỳ test cũ nào, chỉ thêm file test mới**; thiết kế registration được điều chỉnh để đáp ứng điều này. (2) `structuredContent` được model đọc vẫn tốn **input token ở lượt tiếp theo**; không phải model output token. Xem §9 về test bất biến và §10.1–10.5 về token của dữ liệu trả về.
 
 > **Review 3 — 14/11/2026:** tái cấu trúc §14 thành giao thức thực thi và tách kế hoạch triển khai thành 4 work file W0–W3 tại `Mcp-Tool-Consolidation/` (mỗi work file một session; spec vẫn là nguồn sự thật duy nhất, không tách spec). Một bản nháp multi-connection từng được nhắc ở vòng review này nhưng đã gỡ khỏi tree — mọi tham chiếu tới nó đã bỏ; khi đưa lại cần đánh lại §14. Không đổi bất kỳ mục kỹ thuật nào khác.
@@ -72,7 +74,7 @@ Trong metadata connector của **một instance đang kết nối trong chat**, 
 | **10 tool + contract theo nhu cầu** | **10** | Domain rõ, schema khởi tạo nhỏ, reuse 40 handler | **Khuyến nghị**; phải bổ sung binder/validation/discovery và kiểm thử client. |
 | 2–3 gateway chung với operation bất kỳ | 2–3 | Catalog tối thiểu | Mất tín hiệu domain, quyền/approval quá rộng, dễ đoán args; không chọn ở vòng đầu. |
 
-Server instructions hiện được host lặp theo tool trong snapshot này. Có thể thử rút còn mục tiêu 150–200 ký tự, giữ nhận diện instance/org/category và chỉ dẫn lấy contract; đưa thông tin runtime đầy đủ vào whoami. Đây là ngân sách đề xuất, không phải số đã triển khai. Không xóa thông tin phân biệt môi trường chỉ để tiết kiệm token.
+Server instructions hiện được host lặp theo tool trong snapshot này. Có thể thử rút còn mục tiêu 150–200 ký tự, giữ nhận diện instance/org và chỉ dẫn lấy contract; đưa thông tin runtime đầy đủ vào whoami. Đây là ngân sách đề xuất, không phải số đã triển khai. Không xóa thông tin phân biệt môi trường chỉ để tiết kiệm token.
 
 ## 4. Catalog 10 tool
 
@@ -89,11 +91,10 @@ Server instructions hiện được host lặp theo tool trong snapshot này. C�
 | `manage_ui` | false | 8 | `manage_form`, `manage_view`, `manage_chart`, `manage_app`, `manage_ribbon`, `manage_command`, `manage_webresource`, `manage_report` |
 | `manage_platform` | false | 5 | `manage_role`, `manage_environment_variable`, `manage_function`, `publish_customizations`, `execute_webapi` |
 
-- Compact + all: **10**. Compact + readonly: **6**, vẫn cung cấp đúng 18 operation cũ có ReadOnly=true.
-- Legacy + all: **40**. Legacy + readonly: **18**.
-- Những action đọc nằm trong mixed tool (ví dụ manage_record/read, execute_webapi/GET) tiếp tục thuộc mixed facade. Không mở rộng category readonly trong cùng thay đổi.
+- Catalog compact dự kiến có **10** tool theo ma trận hiện tại. Catalog legacy dùng baseline đo lại tại W0.
+- Những action đọc nằm trong mixed tool (ví dụ manage_record/read, execute_webapi/GET) tiếp tục thuộc mixed facade.
 - Descriptor của router mixed: ReadOnly=false; Destructive=true và Idempotent=false theo hợp nhất bảo thủ. Router read: ReadOnly=true, Destructive=false, Idempotent=true, tính từ flags của operation thành viên. Giữ utility flags hiện có.
-- Membership category tiếp tục suy ra từ **[McpServerTool(ReadOnly=...)] của method legacy**. Compact factory tính annotation tổng hợp từ nguồn này, không thêm bảng category thủ công hoặc basic/standard/advanced. Không thêm compact entry vào phạm vi assembly scan legacy (§6.1).
+- Compact factory tính `ReadOnly` từ **[McpServerTool(ReadOnly=...)] của method legacy**. Giữ compact entry ngoài phạm vi assembly scan legacy (§6.1).
 - Router không được dispatch sang operation ngoài nhóm hoặc operation bị disable, kể cả khi client tự gửi tên ngoài enum. Xác minh ở server.
 
 ## 5. Contract gọi compact
@@ -147,7 +148,7 @@ Generic arguments làm mất kiểm tra tĩnh từng field ở phía client. Đ�
 Mở rộng read_instruction **cùng tham số name hiện có**:
 
 - `name=""`: giữ catalog 13 resource hiện tại; legacy giữ ý nghĩa/kết quả cũ. Compact remap referencedBy về tên facade hợp lệ.
-- `name="operations"`: catalog ngắn operation → facade + mô tả một dòng, chỉ operation được phép của surface/category hiện tại.
+- `name="operations"`: catalog ngắn operation → facade + mô tả một dòng cho mỗi operation được bật trên surface hiện tại.
 - `name="contract://manage_view"`: trả một contract, gồm inputSchema, outputSchema, defaults, điều kiện bắt buộc theo action, constraints, side effects/local paths, ví dụ và URI hướng dẫn liên quan.
 - Cung cấp resource template `contract://{operation}` dùng **cùng provider** với read_instruction. Không đòi client phải hỗ trợ resources.
 - Reuse envelope ReadInstructionResult: nội dung contract JSON/Markdown nằm trong Content; Kind có thể là "contract"; giữ các field cũ. Không trả toàn bộ 40 schema khi gọi catalog.
@@ -173,7 +174,7 @@ Luồng: compact facade → OperationCatalog (allowlist) → binder SDK/adapter 
 
 1. Tạo catalog bất biến chứa operation name, owner type/method, exposed facade, attribute flags, SDK-generated schema, default values, guide refs và invoker.
 2. Dùng nameof() cho type references. Entry classes vẫn ở DynamicsCrm.DevKit.Cli.Mcp.Tools; catalog/helper vào subnamespace. Giữ nguyên attributes của 40 tool legacy. Compact entries đăng ký tường minh qua factory, không gắn thêm [McpServerToolType] khiến chúng lọt vào scan legacy; helper không có attribute này.
-3. Không dispatch bằng tên method tùy ý hoặc eval/reflection không allowlist. Mapping domain là presentation mapping, không phải bản sao category mapping.
+3. Dispatch operation qua allowlist của nhóm tương ứng.
 4. Spike API thực tế SDK 2.4.0: dựng compact descriptor tường minh và gọi bằng SDK binder để giữ service injection, McpServer, cancellation và default/null. Descriptor compact có descriptions ngắn riêng; không sửa DescriptionAttribute/parameter metadata legacy chỉ để giảm catalog. Nếu SDK không hỗ trợ invoke nội bộ phù hợp, dùng typed adapter có parity tests mới. Không đoán tên API SDK trong code.
 5. Handler đang có mutable instance state (ví dụ ManageFunctionTool._resolvedApi; ManageAppTool._workspaceFolder): giữ lifetime hiện tại hoặc tạo instance riêng theo invocation. Không cache instance mutable vào registry singleton; kiểm thử concurrent calls.
 6. Chính sách mutation vẫn qua McpExecutionPolicy/McpExecutionContext và mutation executors; wrapper không tạo context mới với mutationsBlocked=false.
@@ -183,14 +184,14 @@ Luồng: compact facade → OperationCatalog (allowlist) → binder SDK/adapter 
 
 ### 6.1 Surface legacy/compact
 
-Đề xuất option mới: `--tool-surface legacy|compact`, độc lập `--category readonly|all`.
+Đề xuất option `--tool-surface legacy|compact` để chọn một catalog.
 
 - Giai đoạn đầu default legacy, opt-in compact; sau khi đạt nghiệm thu mới chuyển mặc định trong một quyết định migration rõ ràng.
 - Không quảng bá legacy và compact cùng lúc: 40 legacy + 8 router mới = **48 tool**, phản tác dụng. Không coi hidden/unlisted alias là cơ chế tương thích MCP đáng tin.
 - Giữ nguyên attributes, signatures và metadata legacy mà test cũ quan sát. Không thêm 8 annotated tool classes vào cùng assembly scan: test inventory 22 mixed sẽ thấy thêm tool và fail dù runtime có lọc đi.
 - Tạo factory/registration path riêng cho compact, đăng ký programmatically từ operation allowlist. Spike SDK 2.4.0 phải chứng minh cách này không làm thay đổi scan legacy; không sửa test để chấp nhận một cách đăng ký làm vỡ baseline.
-- Giữ overload/API legacy của GetToolCount/GetFilteredToolTypeNames và hành vi mặc định 40/18. Thêm API chọn surface riêng (tên dự kiến BuildExposedCatalog); compact count lấy từ catalog đó. CLI compact `--tools`, initialize instructions và tools/list dùng cùng catalog mới, không gọi helper legacy rồi sửa số hiển thị.
-- Giữ BuildServerInstructions legacy và lỗi category cũ đang được test. Thêm builder compact cho instructions ngắn. Mọi filter phải chạy đúng **all + compact**, không chỉ readonly; không cần đăng ký đồng thời 48 tool rồi hy vọng filter sẽ sửa được cả reflection tests.
+- Dùng `GetToolCatalog` làm điểm tham chiếu cho catalog legacy. CLI `--tools`, initialize instructions và tools/list dùng danh mục của surface đang chọn.
+- Giữ BuildServerInstructions legacy. Thêm builder compact cho instructions ngắn. Áp dụng `DisabledToolSet` cho cả hai surface.
 - DisabledToolSet vẫn kiểm tra owner type của operation. Cập nhật ToolResourceMap để resource dùng chung không bị xóa khi compact không advertise legacy owner. Xóa một tool khỏi surface không đồng nghĩa disable năng lực.
 - Giữ nguyên ReadInstructionTool legacy, 13 resource và referencedBy đang được test. Compact descriptor cùng tên public `read_instruction` dùng adapter/provider mới để phục vụ contracts và remap referencedBy; hai surface không đăng ký trùng tên. Dùng nội dung resource legacy làm nguồn, không sửa Description legacy để remap references.
 - Legacy client/tool permissions phải được giữ cho legacy profile. Compact có tên tool mới và quyền theo nhóm rộng hơn; host có thể cần cấu hình lại quyền. Không giả định approval cho tên cũ tự chuyển sang wrapper.
@@ -250,7 +251,7 @@ Số tham số dưới đây là inputSchema thực đo, không tính DI. Bảng
 ### P0 — baseline và spike, chưa thay default
 - [ ] Đọc hướng dẫn repo và skill build CLI; ghi status, HEAD, version/build/hash.
 - [ ] Chụp danh sách và SHA256 mọi file test hiện có; chạy baseline suite liên quan, lưu TRX, số discovered/executed/passed/failed/skipped. Không chỉ ghi "test xanh".
-- [ ] Capture tools/list của legacy all/readonly và 13 resources; ghi signature/default/annotation/shape.
+- [ ] Capture `tools/list` và `resources/list` của legacy. Ghi signature, default, annotation và output shape.
 - [ ] Thử một router chỉ đọc query_data và contract provider với SDK 2.4.0.
 - [ ] Xác minh object arguments không bị SDK bung thành union lớn; kiểm thử một client có resources và một client chỉ có tools.
 - [ ] Đo schema/output thực serialize; nếu schema generic không tương thích, báo giới hạn và giữ legacy.
@@ -259,8 +260,8 @@ Số tham số dưới đây là inputSchema thực đo, không tính DI. Bảng
 ### P1 — compact catalog và adapter
 - [ ] Thêm compact factory/8 router không đi vào scan legacy, OperationCatalog, binding/validation và compact contract provider.
 - [ ] Giữ 40 handlers và payload; tách registration surface khỏi operation capability.
-- [ ] Giữ category theo attribute; filter all+compact; xử lý DisabledToolSet/ToolResourceMap/resource references.
-- [ ] Thêm option --tool-surface và cập nhật --tools/setup guide/counts. Không thêm category khác.
+- [ ] Giữ annotation theo attribute. Áp dụng `DisabledToolSet` và kiểm tra `ToolResourceMap` cho cả hai surface.
+- [ ] Thêm option `--tool-surface` và cập nhật danh mục trong `--tools` và setup guide.
 - [ ] Chỉ thêm **file test mới** dưới Cli.UnitTests/Cli/Mcp/; reuse helper/fixture cũ bằng cách tham chiếu nếu phù hợp, không chỉnh sửa chúng. Không tham số hóa hay bổ sung method vào file test cũ.
 
 ### P2 — parity và benchmark
@@ -276,7 +277,7 @@ Số tham số dưới đây là inputSchema thực đo, không tính DI. Bảng
 - [ ] Build nhỏ nhất: dotnet build DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj; test net10.0.
 - [ ] Sau khi sửa Mcp/**, **đọc và chạy devkit-skill-build-cli** (Release.DynamicsCrm.DevKit.Cli.ps1); không full release nếu không được yêu cầu.
 - [ ] Restart connector MCP đang dùng; gọi whoami; đối chiếu version, build, process start, assembly SHA với manifest vừa tạo. Khi cả hai connector DevKit dùng bản mới, xác minh từng connector.
-- [ ] Capture tools/list thật cho bốn surface/category combinations; xác nhận 40/18/10/6 và không còn legacy lẫn compact cùng catalog.
+- [ ] Capture `tools/list` thật cho legacy và compact. Xác nhận số tool theo baseline W0 và ma trận compact.
 - [ ] Kiểm tra diff, placeholder xxxx.yy.zz HH.mm.ss đã phục hồi, source version vẫn 4.44.44.44; không restore file thiếu/deleted.
 - [ ] Báo kết quả và giới hạn; chỉ sau nghiệm thu mới chọn default compact. Không stage/commit/push nếu không được yêu cầu.
 
@@ -306,16 +307,16 @@ Bằng chứng phải kèm: (a) manifest hash test cũ không đổi; (b) TRX tr
 |---|---|
 | Bao phủ | Set union = đúng 40 operation, không thiếu/trùng; mỗi operation có route khả dụng. |
 | Test cũ | File/hash/expected/helper/config không đổi; không giảm discovery/execution hoặc tăng skip; suite cũ chạy lại và báo đầy đủ. |
-| Category | Compact readonly chỉ expose 6 facade, route chỉ 18 operation ReadOnly=true; tên không hợp lệ không vượt allowlist. |
+| Annotation | Mỗi facade công bố `ReadOnly` dựa trên các operation thành viên và thực thi theo allowlist. |
 | Binding | Giữ omitted/null/empty string/0/false/nullable Int64/record_ids array; inject McpServer/cancellation đúng; không lộ DI args. |
 | Kết quả | Handler payload/error text/IsError/metadata giữ nguyên; không đổi file paths, backup/undo/publish, partial errors. |
 | Result view nếu có | Opt-in và contract riêng; full/default vẫn parity; thông tin quan trọng không bị giấu; mọi phần bỏ khỏi inline có cách đọc lại đã kiểm thử, không chạy lại mutation. |
 | Quyền và concurrency | Dry-run/admin/impersonation giữ đúng; concurrent operation không chia sẻ state mutable; timeout không retry mutation. |
-| Discovery | Contract resource và read_instruction cùng nội dung/hash; catalog không trả toàn bộ schema; disabled/category không bị bỏ qua. |
+| Discovery | Contract resource và read_instruction cùng nội dung/hash. Catalog tóm tắt các operation đang bật. |
 | Client | List và call chạy được ở từng client hỗ trợ; include case không có resources và generic args/output schema. |
 | Kích thước | Mục tiêu ban đầu catalog compact ≤35% baseline (≤60.054 ký tự theo phép đo này); **target, chưa đo**. |
 | Hiệu quả thực | Task success không giảm trên bộ đánh giá cố định; tổng token workflow và p95 latency được báo, kể cả help/retries/cached input. |
-| Rollback | Chọn --tool-surface legacy trả lại 40/18 tool và contract hiện tại; không rollback dữ liệu nghiệp vụ. |
+| Rollback | `--tool-surface legacy` khôi phục catalog và contract của baseline W0. |
 
 Bộ workflow tối thiểu: FetchXML+SQL+search/status; metadata full→clone column; bulk CSV+partial fail; plugin/workflow/flow runs; audit/trace/job; form/view/chart/app undo; classic/modern command; local RDL+dataset; file upload/download; role/variable/recycle; function validate/invoke/gates; targeted publish/raw Web API. Chạy mutation integration trên môi trường/test fixture phù hợp, giữ các confirmation nghiệp vụ hiện có.
 
@@ -407,7 +408,7 @@ Ghi kích thước Content, StructuredContent, phần trùng và model-visible r
 
 Giảm catalog bằng cách giấu hết descriptions rồi buộc đọc 40 contract một lượt là không đạt mục tiêu. Trả help ngắn cho đúng operation, không bỏ output fields để đạt benchmark.
 
-Để tái đo baseline: mở devkit mcp --category all qua stdio, gửi initialize protocol 2025-11-25, notifications/initialized rồi tools/list; đọc hết nextCursor nếu có. Chuẩn hóa result bằng Python như §2.2; cộng len(inputSchema), len(outputSchema), len(description) theo từng tool, đếm properties. Chỉ log schema/metrics, không log .env/token/kết quả dữ liệu thật. Tokenizer phải được nêu tên/version; model-specific usage từ host ưu tiên hơn heuristic ký tự.
+Để tái đo baseline, mở `devkit mcp <name>` qua stdio với project `.env` đã cấu hình. Gửi initialize protocol 2025-11-25, notifications/initialized rồi tools/list. Đọc hết nextCursor nếu có. Chuẩn hóa result theo §2.2, cộng len(inputSchema), len(outputSchema), len(description) theo từng tool và đếm properties. Chỉ ghi schema và số đo. Ghi tên và version tokenizer. Ưu tiên số đo trực tiếp từ host.
 
 ## 11. Snapshot tham số/default để AI không làm rơi field
 
@@ -456,7 +457,7 @@ Snapshot lấy từ source ngày khảo sát, đối chiếu count 348 với ins
 
 ## 12. Nguồn
 
-- [McpServerHost.cs](../DynamicsCrm.DevKit.Cli/Mcp/McpServerHost.cs): discovery, category, instructions, filtering.
+- [McpServerHost.cs](../DynamicsCrm.DevKit.Cli/Mcp/McpServerHost.cs) đăng ký catalog, instructions và tài nguyên MCP.
 - [McpCommand.cs](../DynamicsCrm.DevKit.Cli/Commands/McpCommand.cs) và [McpCommandArgs.cs](../DynamicsCrm.DevKit.Cli/Models/McpCommandArgs.cs): CLI --tools và option.
 - [ReadInstructionTool.cs](../DynamicsCrm.DevKit.Cli/Mcp/Tools/ReadInstructionTool.cs): 13 resource, alias, references scan.
 - [McpExecutionContext.cs](../DynamicsCrm.DevKit.Cli/Mcp/McpExecutionContext.cs) và [DryRunGatewayContractTests.cs](../DynamicsCrm.DevKit.Cli.UnitTests/Cli/Mcp/CrossTool/DryRunGatewayContractTests.cs): policy invariants.
@@ -496,7 +497,7 @@ Review 2 chỉ chỉnh hai báo cáo này. Đối chiếu SHA256 527 file đã t
 | [W0-Baseline-Spike.md](Mcp-Tool-Consolidation/W0-Baseline-Spike.md) | P0 | Baseline test + capture tools/list legacy + spike router `query_data` | CHƯA BẮT ĐẦU |
 | [W1-Compact-Catalog-Adapter.md](Mcp-Tool-Consolidation/W1-Compact-Catalog-Adapter.md) | P1 | OperationCatalog + 8 router + binder + contract provider; chỉ thêm test mới | CHƯA BẮT ĐẦU |
 | [W2-Parity-Benchmark.md](Mcp-Tool-Consolidation/W2-Parity-Benchmark.md) | P2 | Parity từng operation + benchmark ba tầng + rút description compact | CHƯA BẮT ĐẦU |
-| [W3-Build-Install-Verify.md](Mcp-Tool-Consolidation/W3-Build-Install-Verify.md) | P3 | Build/install qua skill + capture 4 combination + verify manifest | CHƯA BẮT ĐẦU |
+| [W3-Build-Install-Verify.md](Mcp-Tool-Consolidation/W3-Build-Install-Verify.md) | P3 | Build/install qua skill, capture hai catalog và xác minh manifest | CHƯA BẮT ĐẦU |
 
 Cột Trạng thái cập nhật sau nghiệm thu của aP: `DONE <ngày>` / `BLOCKED <lý do>`; chi tiết nằm trong mục State của từng work file.
 

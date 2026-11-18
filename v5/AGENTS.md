@@ -65,14 +65,14 @@ Deprecated: `plugin`, `workflow`, `dataprovider` → `server`; `proxytype` → `
 
 Normal CLI connection defaults: arguments take priority, with missing values filled from project `.env` (`DEVKIT_*`); `--conn` takes precedence when connecting. Normal commands may search from the resolved `--json` directory. OS environment variables are not read for connection values. Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (legacy), `AD` (on-prem).
 
-MCP uses mutually exclusive configuration sources. The instance name with optional `--env <id|alias|default>` selects `.env` mode, searching from the process working directory upward to the drive root; multiple organizations are available only in this mode. Any other explicit configuration option (even empty/default-valued, including `--plain`, `--dry-run`, `--category` and `--as-user`) selects args-only mode: one organization, complete connection arguments, no `.env` lookup/merge/discovery/policy/color. Combining `--env` with configuration options, or `--conn` with `--auth`, is an error. Informational modes do not start a server or require `.env` credentials.
+MCP uses mutually exclusive configuration sources. The instance name with optional `--env <id|alias|default>` selects `.env` mode, searching from the process working directory upward to the drive root; multiple organizations are available only in this mode. Any other explicit configuration option (even empty/default-valued, including `--plain`, `--dry-run` and `--as-user`) selects args-only mode: one organization, complete connection arguments, no `.env` lookup/merge/discovery/policy/color. Combining `--env` with configuration options, or `--conn` with `--auth`, is an error. Informational modes do not start a server or require `.env` credentials.
 
 ## MCP
 
-- Categories: `readonly` and `all` (default). Derive membership from each method's `[McpServerTool(ReadOnly = ...)]`; do not add manual category mappings or restore the removed `basic`/`standard`/`advanced` tiers.
+- MCP exposes one catalog of enabled tools. Each method's `[McpServerTool(ReadOnly = ...)]` describes its behavior to MCP clients. Dry-run protects mutations at execution time.
 - Apply `[McpServerToolType]` only to tool classes, never helpers.
 - Keep entry classes in `DynamicsCrm.DevKit.Cli.Mcp.Tools`; put extracted domain helpers in subnamespaces such as `Tools.Form`, `Tools.Ribbon`, and `Tools.SiteMap`.
-- Maintain `DisabledToolSet`, `ToolResourceMap`, and `CategoryLevel` in `McpServerHost.cs` when adding tools; use `nameof()` for tool type references.
+- Maintain `DisabledToolSet` and `ToolResourceMap` in `McpServerHost.cs` when adding tools; use `nameof()` for tool type references.
 - When editing `Mcp/Tools/`, preserve error text, output shape, structured result fields, and temp-file paths unless explicitly changed by the task.
 
 After editing `DynamicsCrm.DevKit.Cli/Mcp/**`:

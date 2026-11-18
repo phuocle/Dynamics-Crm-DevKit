@@ -27,7 +27,7 @@ Chốt baseline đo được và verdict spike quyết định thiết kế W1.
 1. **Ghi mốc khởi điểm:** `git branch --show-current`, `git status --porcelain`, HEAD full SHA, `devkit --version` (version + Build + SHA256 assembly cài). Ghi vào State.
 2. **Manifest hash test cũ:** hash SHA256 toàn bộ file dưới mọi thư mục `*.UnitTests` (mẫu §13 đã làm 527 file tracked). Lưu manifest (đường dẫn + SHA từng file) ra thư mục ngoài tree track — kiểm tra `.gitignore` trước; nếu `.devkit/` bị ignore thì dùng `.devkit/w0/`, không thì `%TEMP%\w0\`. Ghi tổng số file.
 3. **Baseline suite Cli (nguyên trạng, unfiltered):** `dotnet test DynamicsCrm.DevKit.Cli.UnitTests/DynamicsCrm.DevKit.Cli.UnitTests.csproj --logger "trx;LogFileName=w0-baseline.trx"`. Ghi discovered/executed/passed/failed/skipped + thời gian + điều kiện máy (W2 sẽ chạy lại cùng điều kiện này). Nếu suite fail ngay từ baseline — ghi nguyên trạng, không sửa gì.
-4. **Capture tools/list legacy:** theo §10.5 — stdio probe `devkit mcp --category all` → initialize (protocol `2025-11-25`) → notifications/initialized → tools/list (đọc hết nextCursor). Lặp với `--category readonly`. Đọc resources/list (kỳ vọng 13). Lưu raw JSON ngoài tree track. Chuẩn hóa và đo theo §2.2 (catalog chars, inputSchema, outputSchema, descriptions, SHA256 chuẩn hóa); nếu máy thiếu Python thì dùng cách chuẩn hóa tương đương và ghi rõ tool đã dùng trong State.
+4. **Capture tools/list legacy:** theo §10.5. Mở `devkit mcp <name>` với project `.env` đã cấu hình, gửi initialize (protocol `2025-11-25`), notifications/initialized, tools/list và resources/list. Đọc hết nextCursor. Lưu raw JSON ngoài tree track và ghi số đo theo §2.2.
 5. **Spike router chỉ đọc:** dựng prototype `query_data` router + contract provider cho ít nhất một `contract://execute_fetchxml`, net10.0, trong working tree — KHÔNG commit. Yêu cầu: không gắn `[McpServerToolType]` (không lọt scan legacy); router hai tham số `operation`/`arguments` (§5.1); trả nguyên CallToolResult của handler (§5.3); tái dùng handler `ExecuteFetchXmlTool` hiện có.
 6. **Verdict spike** phải trả lời đủ, kèm bằng chứng (file/đo/trial):
    - (a) SDK ModelContextProtocol 2.4.0 có API nào cho phép đăng ký tool programmatically và invoke handler nội bộ mà giữ service injection, McpServer, cancellation, default/null? Đọc source SDK trong NuGet cache (`%USERPROFILE%\.nuget\packages\modelcontextprotocol*`), không đoán tên API.
@@ -41,7 +41,7 @@ Chốt baseline đo được và verdict spike quyết định thiết kế W1.
 
 - [ ] TRX baseline đầy đủ số liệu (đường dẫn TRX ghi trong State).
 - [ ] Manifest SHA256 test cũ: tổng số file + từng SHA, lưu được để W1/W2 đối chiếu.
-- [ ] Raw JSON capture: legacy all (40), legacy readonly (18), resources (13) + số liệu chuẩn hóa khớp §2.2 hoặc lệch được giải thích.
+- [ ] Có raw JSON cho catalog legacy và resources, kèm số đo chuẩn hóa và chênh lệch với snapshot tại §2.2.
 - [ ] Verdict (a)–(d) đủ, có bằng chứng.
 - [ ] Sau spike: hash test cũ vẫn khớp manifest bước 2.
 - [ ] Kế hoạch benchmark được định nghĩa.

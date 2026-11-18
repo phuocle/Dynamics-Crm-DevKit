@@ -18,7 +18,7 @@ DynamicsCrm.DevKit CLI is the `devkit` .NET global tool for Dataverse deployment
 - One command-line surface for server deployments, web resources, reports, generated code, modelbuilder output, and solution packaging.
 - Modern Spectre.Console CLI with `devkit <command> --option value` syntax and compatibility with legacy `/option:value` arguments.
 - Connection support through `--conn`, explicit auth options, project `.env`, PAC profiles, client secrets, SDK login, and MCP `DEVKIT_*` environment variables.
-- MCP server built into the CLI, exposing 36 Dataverse tools across `readonly` and `all` categories.
+- MCP server built into the CLI, exposing 41 tools for Dataverse and server discovery.
 - Single-file web resource deployment using `--file` and `--webresource`, including TypeScript release output deployment when project build scripts are present.
 
 ## 📦 Install
@@ -87,11 +87,11 @@ devkit solution --auth FromPac --pacprofile DEV --json "DynamicsCrm.DevKit.Cli.j
 The `mcp` command turns `devkit` into a stdio MCP server for AI agents that need to inspect, operate, and safely customize Dataverse environments. The server writes operational logs to `stderr` and reserves `stdout` for the MCP protocol, which is the expected behavior for stdio MCP clients.
 
 ```powershell
-devkit mcp --auth FromPac --pacprofile DEV --category readonly
-devkit mcp "DynamicsCrm.DevKit" --auth FromPac --pacprofile DEV --category readonly
+devkit mcp --auth FromPac --pacprofile DEV
+devkit mcp "DynamicsCrm.DevKit" --auth FromPac --pacprofile DEV
 ```
 
-Use `readonly` as the default onboarding mode for AI agents. It gives the agent full read/debugging capability to understand the environment while exposing zero mutating tools. Move to `all` only when the agent is intentionally allowed to change data, schema, app navigation, command bar, ribbon, or raw Web API behavior — optionally combined with `--dry-run` to block mutations at execution time.
+MCP exposes the full tool catalog. Use `--dry-run` in args-only mode or the connection group's `DRY_RUN=true` key in project `.env` to block mutations at execution time.
 
 `FromPac` is supported by the MCP command through `FromPacConnectionBuilder`. It requires an existing PAC CLI auth profile name and does not require `--url`; the environment URL is resolved from `%LOCALAPPDATA%\Microsoft\PowerAppsCLI\authprofiles_v2.json`.
 
@@ -101,7 +101,7 @@ When an AI agent reads this repository and needs to configure MCP, use this sequ
 
 1. Install or update the CLI with `dotnet tool install --global DynamicsCrm.DevKit.Cli` or `dotnet tool update --global DynamicsCrm.DevKit.Cli`.
 2. Choose an auth mode. `FromPac` is the simplest local developer setup when a PAC CLI profile already exists and has an active Dataverse environment; `ClientSecret` is the best unattended setup for a service principal.
-3. Add the MCP client entry with `command: "devkit"` and `args: ["mcp", "DynamicsCrm.DevKit", "--category", "readonly"]`.
+3. Configure the connection in the project `.env`. Add the MCP client entry with `command: "devkit"` and `args: ["mcp", "DynamicsCrm.DevKit"]` and launch it from the project directory.
 4. Start the client and call `whoami` first to confirm the connected Dataverse organization.
 5. Read MCP resources such as `schema://fetchxml`, `schema://formxml`, `docs://data_operations_guide`, `docs://schema_tools_guide`, `docs://instructions_for_formxml`, `docs://instructions_for_views`, and `docs://instructions_for_manage_app` before editing Dataverse metadata.
 
@@ -114,7 +114,7 @@ devkit mcp --tools
 
 ### 🔌 MCP Client Config
 
-Most MCP clients use one of these JSON shapes. Keep secrets in environment variables or your MCP client's secret store when possible. The `FromPac` examples intentionally omit `DEVKIT_URL` because MCP resolves the environment URL from the PAC CLI profile.
+Most MCP clients use one of these JSON shapes. Launch the server from the project directory and keep connection secrets in the Git-ignored project `.env`. For example, `FromPac` uses `DEVKIT_AUTH_TYPE=FromPac` and `DEVKIT_PAC_PROFILE=DEV` in `.env` and resolves the URL from the PAC CLI profile.
 
 `mcpServers` style:
 
@@ -123,11 +123,7 @@ Most MCP clients use one of these JSON shapes. Keep secrets in environment varia
   "mcpServers": {
     "dynamicscrm-devkit": {
       "command": "devkit",
-      "args": ["mcp", "DynamicsCrm.DevKit", "--category", "readonly"],
-      "env": {
-        "DEVKIT_AUTH_TYPE": "FromPac",
-        "DEVKIT_PAC_PROFILE": "DEV"
-      }
+      "args": ["mcp", "DynamicsCrm.DevKit"]
     }
   }
 }
@@ -141,38 +137,24 @@ Most MCP clients use one of these JSON shapes. Keep secrets in environment varia
     "dynamicscrm-devkit": {
       "type": "stdio",
       "command": "devkit",
-      "args": ["mcp", "DynamicsCrm.DevKit", "--category", "readonly"],
-      "env": {
-        "DEVKIT_AUTH_TYPE": "FromPac",
-        "DEVKIT_PAC_PROFILE": "DEV"
-      }
+      "args": ["mcp", "DynamicsCrm.DevKit"]
     }
   }
 }
 ```
 
-Service-principal configuration:
+Service-principal settings in project `.env`:
 
-```json
-{
-  "mcpServers": {
-    "dynamicscrm-devkit": {
-      "command": "devkit",
-      "args": ["mcp", "DynamicsCrm.DevKit", "--category", "all"],
-      "env": {
-        "DEVKIT_AUTH_TYPE": "ClientSecret",
-        "DEVKIT_URL": "https://org.crm.dynamics.com",
-        "DEVKIT_CLIENT_ID": "00000000-0000-0000-0000-000000000000",
-        "DEVKIT_CLIENT_SECRET": "client-secret"
-      }
-    }
-  }
-}
+```dotenv
+DEVKIT_AUTH_TYPE=ClientSecret
+DEVKIT_URL=https://org.crm.dynamics.com
+DEVKIT_CLIENT_ID=00000000-0000-0000-0000-000000000000
+DEVKIT_CLIENT_SECRET=client-secret
 ```
 
 ### 🔐 MCP Authentication
 
-MCP resolves connection values from explicit command-line arguments first, then OS `DEVKIT_*` environment variables. MCP does not read project `.env` by default.
+An instance name with optional `--env <id|alias|default>` reads its connection from the project `.env`. Other configuration options require complete connection arguments on the command line.
 
 | Mode | Required values | Best for |
 |---|---|---|
@@ -187,39 +169,14 @@ For `FromPac`, run `pac auth list` first and use the profile name shown there. I
 Equivalent command-line form:
 
 ```powershell
-devkit mcp "DynamicsCrm.DevKit" --auth FromPac --pacprofile DEV --category readonly
-devkit mcp "DynamicsCrm.DevKit" --auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "<app-id>" --clientsecret "<secret>" --category all
-devkit mcp "DynamicsCrm.DevKit" --conn "AuthType=OAuth;..." --category readonly
+devkit mcp "DynamicsCrm.DevKit" --auth FromPac --pacprofile DEV
+devkit mcp "DynamicsCrm.DevKit" --auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "<app-id>" --clientsecret "<secret>"
+devkit mcp "DynamicsCrm.DevKit" --conn "AuthType=OAuth;..."
 ```
 
-### 🧰 Tool Categories
+### 🧰 Tool Catalog
 
-Tool categories derive from each tool's `ReadOnly` flag and are cumulative: `all` includes every `readonly` tool. The old `basic`/`standard`/`advanced` categories were removed — use `readonly` or `all`.
-
-| Category | Tools | Use when |
-|---|---:|---|
-| `readonly` | 16 | The agent only needs to inspect the environment: metadata lookup, queries, FetchXML, search, logs, audit, and URL parsing. Nothing can be changed. |
-| `all` | 36 | The agent is allowed to create, update, delete, and publish — records, schema, forms, views, apps, ribbon, command bar, or raw Web API endpoints. Combine with `--dry-run` to block mutations at execution time. |
-
-ReadOnly tools:
-
-```text
-whoami, get_tables, get_messages, get_workflows, get_flows,
-get_business_process_flows, get_business_rules, get_custom_apis,
-get_audit_history, get_solution_components, get_plugin_trace_logs,
-get_system_jobs, get_plugins, execute_fetchxml, search_records,
-parse_record_url
-```
-
-Mutation tools (added by `all`):
-
-```text
-manage_record, create_records, manage_deleted_records, generate_demo_data,
-manage_record_file, manage_choice, manage_environment_variable,
-manage_webresource, publish_customizations, manage_form, manage_view,
-manage_chart, manage_role, manage_app, manage_table, manage_column,
-manage_relationship, manage_ribbon, manage_command, execute_webapi
-```
+Run `devkit mcp --tools` to list the enabled tools and their titles without opening a Dataverse connection.
 
 ### 📚 MCP Resources
 
@@ -243,7 +200,6 @@ MCP resources are bundled with the server so AI agents can read the exact schema
 | Option | Purpose |
 |---|---|
 | `[name]` | Optional display name reported to MCP clients, for example `DynamicsCrm.DevKit`. |
-| `--category`| readonly/all, limits the toolset loaded into the MCP server. Default is `all`. |
 | `--dry-run` | Blocks mutating MCP operations while keeping read operations available. Recommended for initial AI access. |
 | `--as-user` | Impersonate a user (systemuserid GUID or email) for the whole session. The connecting user must be System Administrator. |
 | `--tools` | Lists available MCP tools without connecting to Dataverse. |
@@ -258,7 +214,6 @@ MCP resources are bundled with the server so AI agents can read the exact schema
 | `--url is required for modern authentication` | Add `DEVKIT_URL`, except when using `FromPac`. |
 | `PAC CLI profile ... not found` | Run `pac auth list`, confirm the profile name, and set `DEVKIT_PAC_PROFILE`. |
 | The MCP client shows protocol or JSON errors | Confirm the client starts `devkit mcp` through stdio and does not wrap the command in a shell that writes extra text to `stdout`. |
-| The agent needs to edit schema or app metadata | Switch from `readonly` to `all`, remove `--dry-run` only after review, and prefer the typed tools over `execute_webapi`. |
 
 ## 🔗 Links
 
