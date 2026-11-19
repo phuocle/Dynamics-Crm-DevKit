@@ -53,6 +53,7 @@ namespace DynamicsCrm.DevKit.Cli
                 // 'devkit new-item list'). Point old scripts the right way.
                 if (args != null && args.Length > 0 && args[0].Equals("new", StringComparison.OrdinalIgnoreCase))
                 {
+                    SpectreLog.WriteHeader();
                     SpectreLog.WriteException(new InvalidOperationException("'devkit new' was removed — the scaffold split into 'devkit new-project' and 'devkit new-item'. List templates with 'devkit new-project list' / 'devkit new-item list'."));
                     return 1;
                 }
@@ -201,6 +202,7 @@ namespace DynamicsCrm.DevKit.Cli
                     var previousPlain = SpectreLog.IsPlain;
                     try
                     {
+                        SpectreLog.WriteHeader(Console.Error);
                         Console.SetOut(Console.Error);
                         AnsiConsole.Console = AnsiConsole.Create(new AnsiConsoleSettings
                         {
@@ -224,6 +226,19 @@ namespace DynamicsCrm.DevKit.Cli
                         Console.SetOut(previousOut);
                         SpectreLog.IsPlain = previousPlain;
                     }
+                }
+
+                var mcpInfoOrHelp = isMcp && args.Any(a =>
+                    a.Equals("--tools", StringComparison.OrdinalIgnoreCase) ||
+                    a.Equals("--setup-guide", StringComparison.OrdinalIgnoreCase) ||
+                    a.Equals("--help", StringComparison.OrdinalIgnoreCase) ||
+                    a.Equals("-h", StringComparison.OrdinalIgnoreCase));
+                if (!(isMcp && plainRequested))
+                {
+                    if (isMcp && !mcpInfoOrHelp)
+                        SpectreLog.WriteHeader(Console.Error);
+                    else
+                        SpectreLog.WriteHeader();
                 }
 
                 var result = await app.RunAsync(args);
@@ -315,7 +330,6 @@ namespace DynamicsCrm.DevKit.Cli
 
             public override IEnumerable<IRenderable> Write(ICommandModel model, ICommandInfo command)
             {
-                SpectreLog.WriteHeader();
                 var help = base.Write(model, command);
                 if (SpectreLog.IsPlain) return help;
 

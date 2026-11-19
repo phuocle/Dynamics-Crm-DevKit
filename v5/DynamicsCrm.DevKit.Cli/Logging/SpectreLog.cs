@@ -4,6 +4,7 @@ using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,8 +37,7 @@ namespace DynamicsCrm.DevKit.Cli
         {
             if (IsPlain)
             {
-                Console.WriteLine($"{PLAIN_PREFIX} DynamicsCrm.DevKit.Cli {Const.Version} Build: {Const.Build}");
-                Console.WriteLine($"{PLAIN_PREFIX} https://github.com/phuocle/Dynamics-Crm-DevKit");
+                WritePlainHeader(Console.Out);
                 return;
             }
             var width = 112;
@@ -57,6 +57,17 @@ namespace DynamicsCrm.DevKit.Cli
             var padding = new string(' ', 109 - currentLen);
             AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}]{part1}[/][green]{part2}[/][{colorText}]{part3}{padding}[/][{colorBox}]  ║[/]");
             AnsiConsole.MarkupLine($"[{colorBox}]╚{new string('═', width)}╝[/]");
+        }
+        public static void WriteHeader(TextWriter output)
+        {
+            if (output == null) throw new ArgumentNullException(nameof(output));
+            WritePlainHeader(output);
+        }
+        private static void WritePlainHeader(TextWriter output)
+        {
+            output.WriteLine($"{PLAIN_PREFIX} DynamicsCrm.DevKit.Cli {Const.Version} Build: {Const.Build}");
+            output.WriteLine($"{PLAIN_PREFIX} https://github.com/phuocle/Dynamics-Crm-DevKit");
+            output.Flush();
         }
         public static void WriteHelp()
         {
@@ -80,15 +91,15 @@ namespace DynamicsCrm.DevKit.Cli
                   [cyan]webresource[/]            Upload or download web resources
 
                 [green]Connection options[/]
-                  --conn [yellow]STRING[/]             Dynamics 365 connection string (legacy)
-                  --auth [yellow]TYPE[/]               Authentication type (see below)
-                  --url [yellow]URL[/]                 Dynamics 365 environment URL
-                  --clientid [yellow]GUID[/]           Application (client) ID
-                  --clientsecret [yellow]SECRET[/]     Client secret (plain or encrypted)
-                  --pacprofile [yellow]NAME_OR_INDEX[/] PAC CLI profile for FromPac (default is the active profile)
-                  --username [yellow]USERNAME[/]       Account for OAuth or AD
-                  --password [yellow]PASSWORD[/]       Password for OAuth or AD
-                  --domain [yellow]DOMAIN[/]           Optional domain for AD
+                  --conn [cyan]STRING[/]             Dynamics 365 connection string (legacy)
+                  --auth [cyan]TYPE[/]               Authentication type (see below)
+                  --url [cyan]URL[/]                 Dynamics 365 environment URL
+                  --clientid [cyan]GUID[/]           Application (client) ID
+                  --clientsecret [cyan]SECRET[/]     Client secret (plain or encrypted)
+                  --pacprofile [cyan]NAME_OR_INDEX[/] PAC CLI profile for FromPac (default is the active profile)
+                  --username [cyan]USERNAME[/]       Account for OAuth or AD
+                  --password [cyan]PASSWORD[/]       Password for OAuth or AD
+                  --domain [cyan]DOMAIN[/]           Optional domain for AD
 
                 [green]Auth types (--auth)[/]
                   [cyan]Interactive[/]            Browser-based login (MFA supported)
@@ -99,18 +110,18 @@ namespace DynamicsCrm.DevKit.Cli
                   [cyan]AD[/]                     On-premises Active Directory
 
                 [green]Other options[/]
-                  --json [yellow]FILE[/]            Path to the DevKit CLI JSON configuration
-                  --profile [yellow]NAME[/]         Profile from the JSON configuration
+                  --json [cyan]FILE[/]            Path to the DevKit CLI JSON configuration
+                  --profile [cyan]NAME[/]         Profile from the JSON configuration
                   --plain                Plain text output
                   --onlyupdateassembly   Update just the assembly (server)
-                  --build [yellow]MODE[/]           TypeScript build for webresource --file (debug by default, or release)
+                  --build [cyan]MODE[/]           TypeScript build for webresource --file (debug by default, or release)
 
                 [green]Examples[/]
-                  devkit [cyan]server[/] --auth FromPac --pacprofile PAC_PROFILE_NAME --json cli.json --profile PROFILE_NAME
-                  devkit [cyan]webresource[/] --file entities/Account.ts --build release --webresource contoso_/entities/Account.js
-                  devkit [cyan]webresource[/] --file entities/Account.ts --build release -wid 00000000-0000-0000-0000-000000000000
-                  devkit [cyan]new-project[/] --type Shared --name Contoso.Shared --solution MySolution.slnx
-                  devkit [cyan]new-item[/] --type Plugin --entity Account --message Update --stage PreOperation --name PreAccountUpdate --project Contoso.Server
+                  devkit [cyan]server[/] [white]--auth[/] [cyan]FromPac[/] [white]--pacprofile[/] [cyan]PAC_PROFILE_NAME[/] [white]--json[/] [cyan]cli.json[/] [white]--profile[/] [cyan]PROFILE_NAME[/]
+                  devkit [cyan]webresource[/] [white]--file[/] [cyan]entities/Account.ts[/] [white]--build[/] [cyan]release[/] [white]--webresource[/] [cyan]contoso_/entities/Account.js[/]
+                  devkit [cyan]webresource[/] [white]--file[/] [cyan]entities/Account.ts[/] [white]--build[/] [cyan]release[/] [white]-wid[/] [cyan]00000000-0000-0000-0000-000000000000[/]
+                  devkit [cyan]new-project[/] [white]--type[/] [cyan]Shared[/] [white]--name[/] [cyan]Contoso.Shared[/] [white]--solution[/] [cyan]MySolution.slnx[/]
+                  devkit [cyan]new-item[/] [white]--type[/] [cyan]Plugin[/] [white]--entity[/] [cyan]Account[/] [white]--message[/] [cyan]Update[/] [white]--stage[/] [cyan]PreOperation[/] [white]--name[/] [cyan]PreAccountUpdate[/] [white]--project[/] [cyan]Contoso.Server[/]
 
                 [green]Project .env[/]
                   Standard CLI commands use connection arguments first and fill missing values from .env.
