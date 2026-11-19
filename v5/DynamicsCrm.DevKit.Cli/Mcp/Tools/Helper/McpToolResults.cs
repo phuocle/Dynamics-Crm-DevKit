@@ -1,4 +1,4 @@
-#nullable enable
+﻿#nullable enable
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using Microsoft.Xrm.Sdk;
 using ModelContextProtocol.Protocol;
@@ -38,11 +38,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// because some clients (Claude Code CLI) surface only the structured side
         /// on success. Same duplication philosophy as <see cref="Error"/>.
         /// </summary>
+        internal static string? ClientName { get; set; }
+
+        internal static bool IsAntigravity =>
+            !string.IsNullOrWhiteSpace(ClientName) &&
+            ClientName.Contains("antigravity", StringComparison.OrdinalIgnoreCase);
+
         internal static CallToolResult Success(string summary, object? structured)
         {
-            var text = $"{SuccessPrefix} {StripPrefix(summary, SuccessPrefix)}";
+            var summaryLine = $"{SuccessPrefix} {StripPrefix(summary, SuccessPrefix)}";
             var payload = JsonSerializer.SerializeToNode(structured) as JsonObject ?? new JsonObject();
-            payload["summary"] = text;
+            payload["summary"] = summaryLine;
+            var text = IsAntigravity && structured != null
+                ? $"{summaryLine}\n[Detail] {JsonSerializer.Serialize(structured)}"
+                : summaryLine;
             return new()
             {
                 Content = [new TextContentBlock { Text = text }],
@@ -133,9 +142,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// </summary>
         internal static CallToolResult DryRun(string summary, object structured)
         {
-            var text = $"{DryRunPrefix} {StripPrefix(summary, DryRunPrefix)}";
+            var summaryLine = $"{DryRunPrefix} {StripPrefix(summary, DryRunPrefix)}";
             var payload = JsonSerializer.SerializeToNode(structured) as JsonObject ?? new JsonObject();
-            payload["summary"] = text;
+            payload["summary"] = summaryLine;
+            var text = IsAntigravity && structured != null
+                ? $"{summaryLine}\n[Detail] {JsonSerializer.Serialize(structured)}"
+                : summaryLine;
             return new()
             {
                 Content = [new TextContentBlock { Text = text }],

@@ -163,5 +163,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("formulaDefinition")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string FormulaDefinition { get; set; }
+
+        [JsonPropertyName("formulaExpression")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string FormulaExpression { get; set; }
+
+        [JsonPropertyName("isAlternateKey")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsAlternateKey { get; set; }
     }
 }

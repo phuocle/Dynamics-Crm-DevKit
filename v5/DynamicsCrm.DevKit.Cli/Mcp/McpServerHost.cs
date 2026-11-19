@@ -99,7 +99,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                 })
                 .WithStdioServerTransport()
                 .WithToolsFromAssembly()
-                .WithResourcesFromAssembly();
+                .WithResourcesFromAssembly()
+                .WithRequestFilters(filters =>
+                {
+                    filters.AddCallToolFilter(next => (context, cancellationToken) =>
+                    {
+                        Tools.Helper.McpToolResults.ClientName = context.Server?.ClientInfo?.Name;
+                        return next(context, cancellationToken);
+                    });
+                });
 
             if (DisabledToolSet.Count > 0)
             {

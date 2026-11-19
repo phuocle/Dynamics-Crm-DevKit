@@ -70,13 +70,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("1-850. [create-only]")] int primary_attribute_max_length = 100,
             [Description("SchemaName for the new table (e.g. 'all_InOne' or 'all_In_One'). If provided, used AS-IS as SchemaName (skip auto-derive). Caller responsible for casing. Create only — ignored on update. Must start with the publisher prefix.")] string schema_name = "",
             [Description("Update: identifies the existing table by display or logical name. Create: optional logical name override (e.g. 'all_in_one'), normalized to lowercase; must start with the solution publisher prefix and match the lowercase schema name.")] string logical_name = "",
+            [Description("SchemaName for the primary name column (e.g. 'ab_name'). If provided, used AS-IS as SchemaName (skip auto-TitleCase). Create only — ignored on update. Must start with the publisher prefix.")] string primary_attribute_schema_name = "",
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
                 var worker = new ManageTableTool(conn.OrgService, conn.Options, conn.Context);
-                return System.Threading.Tasks.Task.FromResult(worker.manage_table(display_name, display_collection_name, solution_name, description, primary_attribute_name, primary_attribute_display_name, ownership_type, table_type, is_activity, has_notes, is_quick_create_enabled, is_audit_enabled, is_search_enabled, primary_attribute_max_length, schema_name, logical_name));
+                return System.Threading.Tasks.Task.FromResult(worker.manage_table(display_name, display_collection_name, solution_name, description, primary_attribute_name, primary_attribute_display_name, ownership_type, table_type, is_activity, has_notes, is_quick_create_enabled, is_audit_enabled, is_search_enabled, primary_attribute_max_length, schema_name, logical_name, primary_attribute_schema_name));
             }, cancellationToken);
         }
 
@@ -96,7 +97,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Enable this table for Dataverse Search/Relevance Search (SyncToExternalSearchIndex). null = keep current on update; false by default on create unless specified.")] bool? is_search_enabled = null,
             [Description("1-850. [create-only]")] int primary_attribute_max_length = 100,
             [Description("SchemaName for the new table (e.g. 'all_InOne' or 'all_In_One'). If provided, used AS-IS as SchemaName (skip auto-derive). Caller responsible for casing. Create only — ignored on update. Must start with the publisher prefix.")] string schema_name = "",
-            [Description("Update: identifies the existing table by display or logical name. Create: optional logical name override (e.g. 'all_in_one'), normalized to lowercase; must start with the solution publisher prefix and match the lowercase schema name.")] string logical_name = "")
+            [Description("Update: identifies the existing table by display or logical name. Create: optional logical name override (e.g. 'all_in_one'), normalized to lowercase; must start with the solution publisher prefix and match the lowercase schema name.")] string logical_name = "",
+            [Description("SchemaName for the primary name column (e.g. 'ab_name'). If provided, used AS-IS as SchemaName (skip auto-TitleCase). Create only — ignored on update. Must start with the publisher prefix.")] string primary_attribute_schema_name = "")
         {
             try
             {
@@ -107,6 +109,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 solution_name = solution_name?.Trim() ?? "";
                 description = description?.Trim() ?? "";
                 primary_attribute_name = primary_attribute_name?.Trim() ?? "";
+                primary_attribute_schema_name = primary_attribute_schema_name?.Trim() ?? "";
                 primary_attribute_display_name = primary_attribute_display_name?.Trim() ?? "";
                 ownership_type = ownership_type?.Trim() ?? "";
                 table_type = table_type?.Trim() ?? "";
@@ -166,7 +169,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     primary_attribute_name, primary_attribute_display_name,
                     primary_attribute_max_length,
                     schema_name, logical_name,
-                    resolvedPrefix, resolvedSolutionUniqueName, solution_name);
+                    resolvedPrefix, resolvedSolutionUniqueName, solution_name,
+                    primary_attribute_schema_name);
             }
             catch (Exception ex)
             {
@@ -181,7 +185,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string primary_attribute_name, string primary_attribute_display_name,
             int primary_attribute_max_length,
             string schema_name, string logical_name,
-            string resolvedPrefix, string resolvedSolutionUniqueName, string solution_name)
+            string resolvedPrefix, string resolvedSolutionUniqueName, string solution_name,
+            string primary_attribute_schema_name = "")
         {
             if (string.IsNullOrWhiteSpace(display_name))
                 return Error("display_name is required when creating a new entity.",
@@ -240,21 +245,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (primary_attribute_max_length > 850) primary_attribute_max_length = 850;
 
             if (string.IsNullOrWhiteSpace(primary_attribute_name))
-                primary_attribute_name = prefix + "_name";
+                primary_attribute_name = !string.IsNullOrWhiteSpace(primary_attribute_schema_name)
+                    ? primary_attribute_schema_name.ToLowerInvariant()
+                    : prefix + "_name";
             else
                 primary_attribute_name = primary_attribute_name.ToLowerInvariant();
 
-            var primaryUnderscoreIndex = primary_attribute_name.IndexOf('_');
             string primarySchemaName;
-            if (primaryUnderscoreIndex > 0 && primaryUnderscoreIndex < primary_attribute_name.Length - 1)
+            if (!string.IsNullOrWhiteSpace(primary_attribute_schema_name))
             {
-                var primaryPrefix = primary_attribute_name.Substring(0, primaryUnderscoreIndex);
-                var primaryNamePart = primary_attribute_name.Substring(primaryUnderscoreIndex + 1);
-                primarySchemaName = primaryPrefix + "_" + CultureInfo.InvariantCulture.TextInfo.ToTitleCase(primaryNamePart);
+                if (!primary_attribute_schema_name.StartsWith(prefixWithUnderscore, StringComparison.OrdinalIgnoreCase))
+                    return Error(
+                        $"primary_attribute_schema_name '{primary_attribute_schema_name}' must start with the publisher prefix '{prefixWithUnderscore}' (resolved from solution '{resolvedSolutionUniqueName ?? solution_name}').",
+                        "Prepend the publisher prefix, e.g. 'ab_name'.");
+                primarySchemaName = primary_attribute_schema_name;
             }
             else
             {
-                primarySchemaName = primary_attribute_name;
+                var primaryUnderscoreIndex = primary_attribute_name.IndexOf('_');
+                if (primaryUnderscoreIndex > 0 && primaryUnderscoreIndex < primary_attribute_name.Length - 1)
+                {
+                    var primaryPrefix = primary_attribute_name.Substring(0, primaryUnderscoreIndex);
+                    var primaryNamePart = primary_attribute_name.Substring(primaryUnderscoreIndex + 1);
+                    primarySchemaName = primaryPrefix + "_" + CultureInfo.InvariantCulture.TextInfo.ToTitleCase(primaryNamePart);
+                }
+                else
+                {
+                    primarySchemaName = primary_attribute_name;
+                }
             }
 
             var ownershipTypeValue = OwnershipTypes.UserOwned;
@@ -358,6 +376,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var createdMetadata = ((RetrieveEntityResponse)_orgService.Execute(retrieveRequest)).EntityMetadata;
 
             MetadataOperationWaitHelper.WaitAfterTableCreation();
+
+            var retrievePrimaryAttrReq = new RetrieveAttributeRequest
+            {
+                EntityLogicalName = entityName,
+                LogicalName = primary_attribute_name,
+                RetrieveAsIfPublished = true
+            };
+            var createdPrimaryAttr = ((RetrieveAttributeResponse)_orgService.Execute(retrievePrimaryAttrReq)).AttributeMetadata as StringAttributeMetadata;
+            if (createdPrimaryAttr != null && createdPrimaryAttr.MaxLength != primary_attribute_max_length)
+            {
+                var fixPrimaryAttr = new StringAttributeMetadata
+                {
+                    MetadataId = createdPrimaryAttr.MetadataId,
+                    LogicalName = createdPrimaryAttr.LogicalName,
+                    SchemaName = createdPrimaryAttr.SchemaName,
+                    MaxLength = primary_attribute_max_length
+                };
+                var updatePrimaryReq = new UpdateAttributeRequest
+                {
+                    EntityName = entityName,
+                    Attribute = fixPrimaryAttr,
+                    MergeLabels = true
+                };
+                DataverseMutationExecutor.Execute(_context, _orgService, updatePrimaryReq);
+            }
 
             var published = PublishHelper.PublishEntity(_context, _orgService, entityName);
 

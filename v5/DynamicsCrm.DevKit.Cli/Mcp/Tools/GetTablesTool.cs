@@ -268,6 +268,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 })
                 .ToList();
 
+            if (detailLevel == "full" && alternateKeys.Count > 0)
+            {
+                var keyAttrSet = new HashSet<string>(
+                    alternateKeys.SelectMany(k => k.KeyAttributes ?? Enumerable.Empty<string>()),
+                    StringComparer.OrdinalIgnoreCase);
+                foreach (var attrEntry in attributes)
+                {
+                    if (!string.IsNullOrEmpty(attrEntry.LogicalName) && keyAttrSet.Contains(attrEntry.LogicalName))
+                        attrEntry.IsAlternateKey = true;
+                }
+            }
+
             var detail = new TableDetailEntry
             {
                 LogicalName = summary.LogicalName,
@@ -537,6 +549,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 entry.SourceType = null;
                 entry.DefaultValue = null;
                 entry.FormulaDefinition = null;
+                entry.FormulaExpression = null;
                 entry.MinValue = null;
                 entry.MaxValue = null;
                 entry.Precision = null;
@@ -610,6 +623,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Keep raw SDK FormulaDefinition server-side. manage_column resolves this
             // compact source reference when the caller requests a clone.
             entry.FormulaDefinition = $"{entityLogicalName}:{attribute.LogicalName}";
+
+            var rawFormula = attribute.GetType().GetProperty("FormulaDefinition")?.GetValue(attribute, null)?.ToString();
+            if (!string.IsNullOrWhiteSpace(rawFormula))
+                entry.FormulaExpression = rawFormula.Trim();
         }
 
         private static void PopulateAttributeDetails(TableAttributeEntry entry, AttributeMetadata attribute)

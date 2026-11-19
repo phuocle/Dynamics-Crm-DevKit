@@ -30,6 +30,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpExecutionContext _context;
 
         private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+        private IOrganizationService _formulaSourceOrgService;
+        private string _formulaCustomReplacements;
+        private bool? _requestedAlternateKey;
+        private string _effectiveSolutionName;
+        private FormulaColumnSpec _requestedFormulaUpdate;
 
         public ManageColumnTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, IWebApiExecutor webApi) : this(orgService, options, context, webApi, null) { }
 
@@ -99,13 +104,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Autonumber pattern for string columns, e.g. 'TKT-{SEQNUM:5}-{RANDSTRING:3}'. Placeholders: {SEQNUM:n} (n>=1, minimum zero-padded length), {RANDSTRING:n} (1-6), {DATETIMEUTC:format}. CREATE: sets the pattern; UPDATE: changes it (omit = keep current). format must be Text. Validated client-side — Dataverse only rejects bad patterns at record-save time.")] string auto_number_format = "",
             [Description("string UPDATE only: true removes the autonumber pattern, turning the column back into plain text. Mutually exclusive with auto_number_format.")] bool? clear_auto_number = null,
             [Description("Autonumber seed (>=1; Dataverse default sequence starts at 1000). String autonumber columns only. Executed via SetAutoNumberSeed after the metadata create/update succeeds. Environment-only: NOT carried in solutions. Omit to keep the current seed.")] long? auto_number_seed = null,
+            [Description("Create or remove a single-column Alternate Key (EntityKeyMetadata) for this column. CREATE: true creates an alternate key using the column's schema_name, logical_name, and display_name. UPDATE: true creates the alternate key if missing; false deletes it; omit = keep current.")] bool? is_alternate_key = null,
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
-                var worker = new ManageColumnTool(conn.OrgService, conn.Options, conn.Context, conn.WebApi);
-                return System.Threading.Tasks.Task.FromResult(worker.manage_column(entity_name, logical_name, attribute_type, display_name, solution_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, precision_source, options, global_optionset_name, lookup_target, lookup_relationship_name, true_label, false_label, add_options, update_options, delete_options, is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, default_value, schema_name, formula_definition, formula_source_type, can_store_full_image, auto_number_format, clear_auto_number, auto_number_seed));
+                var worker = new ManageColumnTool(conn.OrgService, conn.Options, conn.Context, conn.WebApi, _connections);
+                return System.Threading.Tasks.Task.FromResult(worker.manage_column(entity_name, logical_name, attribute_type, display_name, solution_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, precision_source, options, global_optionset_name, lookup_target, lookup_relationship_name, true_label, false_label, add_options, update_options, delete_options, is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, default_value, schema_name, formula_definition, formula_source_type, can_store_full_image, auto_number_format, clear_auto_number, auto_number_seed, is_alternate_key));
             }, cancellationToken);
         }
 
@@ -144,8 +150,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("image only. CREATE: true = store the full-sized image (default false). UPDATE: omit = keep current.")] bool? can_store_full_image = null,
             [Description("Autonumber pattern for string columns, e.g. 'TKT-{SEQNUM:5}-{RANDSTRING:3}'. Placeholders: {SEQNUM:n} (n>=1, minimum zero-padded length), {RANDSTRING:n} (1-6), {DATETIMEUTC:format}. CREATE: sets the pattern; UPDATE: changes it (omit = keep current). format must be Text. Validated client-side — Dataverse only rejects bad patterns at record-save time.")] string auto_number_format = "",
             [Description("string UPDATE only: true removes the autonumber pattern, turning the column back into plain text. Mutually exclusive with auto_number_format.")] bool? clear_auto_number = null,
-            [Description("Autonumber seed (>=1; Dataverse default sequence starts at 1000). String autonumber columns only. Executed via SetAutoNumberSeed after the metadata create/update succeeds. Environment-only: NOT carried in solutions. Omit to keep the current seed.")] long? auto_number_seed = null)
+            [Description("Autonumber seed (>=1; Dataverse default sequence starts at 1000). String autonumber columns only. Executed via SetAutoNumberSeed after the metadata create/update succeeds. Environment-only: NOT carried in solutions. Omit to keep the current seed.")] long? auto_number_seed = null,
+            [Description("Create or remove a single-column Alternate Key (EntityKeyMetadata) for this column. CREATE: true creates an alternate key using the column's schema_name, logical_name, and display_name. UPDATE: true creates the alternate key if missing; false deletes it; omit = keep current.")] bool? is_alternate_key = null)
         {
+            _requestedAlternateKey = is_alternate_key;
+            _requestedFormulaUpdate = null;
+            _effectiveSolutionName = null;
+
             // --- Validate required parameters ---
             if (string.IsNullOrWhiteSpace(entity_name))
                 return Error("entity_name is required.", "Use get_tables to list entities.");
@@ -264,6 +275,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 resolvedPrefix = solResult.Prefix;
                 resolvedSolutionUniqueName = solResult.UniqueName;
             }
+            _effectiveSolutionName = resolvedSolutionUniqueName ?? solution_name;
 
 
             // ===== UPDATE MODE: logical_name identifies an existing attribute =====
@@ -313,9 +325,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrWhiteSpace(formula_definition) ||
                     !string.IsNullOrWhiteSpace(formula_source_type))
                 {
-                    return Error(
-                        "Formula clone parameters are create-only and cannot update an existing column.",
-                        "Read the source column with get_tables, then create a new column with its formulaDefinition reference.");
+                    if ((existingMetadata.SourceType is 1 or 2 or 3) && !string.IsNullOrWhiteSpace(formula_definition))
+                    {
+                        var existingTypeKey = GetAttributeTypeName(existingMetadata).ToLowerInvariant();
+                        if (existingTypeKey == "multiselectpicklist") existingTypeKey = "multipicklist";
+                        var formulaErr = TryBuildFormulaSpec(entity_name, existingMetadata.LogicalName, existingTypeKey,
+                            formula_definition, formula_source_type, out var updateFormulaSpec);
+                        if (formulaErr != null)
+                            return formulaErr;
+                        _requestedFormulaUpdate = updateFormulaSpec;
+                    }
+                    else
+                    {
+                        return Error(
+                            "Formula clone parameters are create-only and cannot update an existing column.",
+                            "Read the source column with get_tables, then create a new column with its formulaDefinition reference.");
+                    }
                 }
                 return UpdateExistingAttribute(entity_name, logical_name, existingMetadata,
                     display_name, description, required_level, max_length, min_value, max_value,
@@ -462,50 +487,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var effectiveSolutionName = resolvedSolutionUniqueName ?? solution_name;
 
             // --- Resolve formula column (Power Fx / Calculated / Rollup) ---
-            // formula_definition is the table:column reference returned by get_tables.
-            // Raw SDK FormulaDefinition stays inside the server process.
-            FormulaColumnSpec formulaSpec = null;
-            if (!string.IsNullOrWhiteSpace(formula_definition))
-            {
-                if (!TryResolveFormulaCloneSource(formula_definition, out var resolvedFormula, out var sourceTypeVal,
-                    out var kind, out var sourceEntity, out var sourceAttribute, out var sourceError))
-                    return Error(sourceError, "Use get_tables to read the source column and pass its formulaDefinition reference unchanged.");
-
-                if (!string.IsNullOrWhiteSpace(formula_source_type))
-                {
-                    var (requestedSourceType, requestedKindError) = ParseFormulaSourceType(formula_source_type.Trim().ToLowerInvariant());
-                    if (requestedKindError != null) return Error(requestedKindError, "Valid values: 'powerfx' (default), 'calculated', 'rollup'.");
-                    if (requestedSourceType != sourceTypeVal)
-                        return Error($"formula_source_type does not match source column '{sourceEntity}:{sourceAttribute}'.", $"Omit it in clone mode; the server derives '{kind}' from Dataverse.");
-                }
-
-                var formulaCompatErr = ValidateFormulaAttributeType(attribute_type, kind);
-                if (formulaCompatErr != null) return Error(formulaCompatErr, "Formula columns (Power Fx/Calculated/Rollup) only work on: string, memo, integer, decimal, money, float, double, boolean, datetime. Remove formula_definition/formula_source_type for this attribute_type.");
-
-                FormulaRelationshipMapping relationshipMapping = null;
-                if (kind == "rollup")
-                {
-                    var mappingError = TryResolveRollupRelationshipMapping(
-                        resolvedFormula, sourceEntity, entity_name, out relationshipMapping);
-                    if (mappingError != null) return Error(mappingError, "Use manage_relationship to check the 1:N relationships between the source and target tables.");
-                }
-
-                resolvedFormula = FormulaReferenceHelper.RewriteFormulaReferences(
-                    resolvedFormula, sourceEntity, entity_name, sourceAttribute, attributeName, relationshipMapping);
-
-                formulaSpec = new FormulaColumnSpec(sourceTypeVal, resolvedFormula, kind);
-            }
-            else if (!string.IsNullOrWhiteSpace(formula_source_type))
-            {
-                var kind = formula_source_type.Trim().ToLowerInvariant();
-                var (sourceTypeVal, kindErr) = ParseFormulaSourceType(kind);
-                if (kindErr != null) return Error(kindErr, "Valid values: 'powerfx' (default), 'calculated', 'rollup'.");
-
-                var formulaCompatErr = ValidateFormulaAttributeType(attribute_type, kind);
-                if (formulaCompatErr != null) return Error(formulaCompatErr, "Formula columns (Power Fx/Calculated/Rollup) only work on: string, memo, integer, decimal, money, float, double, boolean, datetime. Remove formula_definition/formula_source_type for this attribute_type.");
-
-                formulaSpec = new FormulaColumnSpec(sourceTypeVal, null, kind);
-            }
+            // formula_definition is the table:column reference returned by get_tables
+            // (or raw Power Fx expression when formula_source_type='powerfx').
+            var formulaBuildError = TryBuildFormulaSpec(entity_name, attributeName, attribute_type,
+                formula_definition, formula_source_type, out var formulaSpec);
+            if (formulaBuildError != null)
+                return formulaBuildError;
 
             CallToolResult CreateTypedColumn(AttributeMetadata _ = null)
             {
@@ -1817,7 +1804,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sourceRelationshipName = match.Groups["relationship"].Value;
             var sourceLookupAttribute = match.Groups["lookup"].Value;
 
-            var sourceMetadata = ((RetrieveEntityResponse)_orgService.Execute(new RetrieveEntityRequest
+            var sourceService = _formulaSourceOrgService ?? _orgService;
+            var sourceMetadata = ((RetrieveEntityResponse)sourceService.Execute(new RetrieveEntityRequest
             {
                 EntityFilters = EntityFilters.Relationships,
                 LogicalName = sourceEntityName,
@@ -1839,6 +1827,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 relationship =>
                     string.Equals(relationship.ReferencingEntity, sourceRelationship.ReferencingEntity, StringComparison.OrdinalIgnoreCase) &&
                     string.Equals(relationship.ReferencedEntity, targetEntityName, StringComparison.OrdinalIgnoreCase));
+            if (targetRelationship == null && !ReferenceEquals(sourceService, _orgService))
+            {
+                var srcPrefix = ExtractPrefixWithUnderscore(sourceEntityName);
+                var tgtPrefix = ExtractPrefixWithUnderscore(targetEntityName);
+                if (!string.IsNullOrEmpty(srcPrefix) && !string.IsNullOrEmpty(tgtPrefix) &&
+                    sourceRelationship.ReferencingEntity != null &&
+                    sourceRelationship.ReferencingEntity.StartsWith(srcPrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    var mappedRefEntity = tgtPrefix + sourceRelationship.ReferencingEntity.Substring(srcPrefix.Length);
+                    targetRelationship = targetMetadata.OneToManyRelationships?.FirstOrDefault(
+                        relationship =>
+                            string.Equals(relationship.ReferencingEntity, mappedRefEntity, StringComparison.OrdinalIgnoreCase) &&
+                            string.Equals(relationship.ReferencedEntity, targetEntityName, StringComparison.OrdinalIgnoreCase));
+                }
+            }
             if (targetRelationship == null)
                 return $"No matching Rollup relationship from '{sourceRelationship.ReferencingEntity}' to target table '{targetEntityName}' was found.";
 
@@ -1886,6 +1889,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var actualLogicalName = ResolveCreatedAttributeLogicalName(entityName, metadataId, logicalName);
             if (!string.Equals(actualLogicalName, logicalName, StringComparison.OrdinalIgnoreCase))
                 sb.Replace($"'{logicalName}'", $"'{actualLogicalName}'");
+
+            if (_requestedAlternateKey == true && !_options.DryRun)
+            {
+                var keyWarning = TryCreateAlternateKey(entityName, actualLogicalName, schemaName, displayName, solutionName);
+                if (keyWarning == null)
+                {
+                    extra ??= new Dictionary<string, string>();
+                    extra["isAlternateKey"] = "true";
+                }
+                else
+                {
+                    warnings ??= new List<string>();
+                    warnings.Add(keyWarning);
+                }
+            }
 
             var structured = new ManageColumnResult
             {
@@ -1995,8 +2013,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sourceEntity = null;
             sourceAttribute = null;
             error = null;
+            _formulaSourceOrgService = _orgService;
+            _formulaCustomReplacements = null;
 
-            var parts = (reference ?? "").Trim().Split(':');
+            var rawRef = (reference ?? "").Trim();
+            var pipeIdx = rawRef.IndexOf('|');
+            if (pipeIdx >= 0)
+            {
+                _formulaCustomReplacements = rawRef.Substring(pipeIdx + 1);
+                rawRef = rawRef.Substring(0, pipeIdx).Trim();
+            }
+
+            var parts = rawRef.Split(':');
             if (parts.Length != 2 || string.IsNullOrWhiteSpace(parts[0]) || string.IsNullOrWhiteSpace(parts[1]))
             {
                 error = "Invalid formula_definition. Pass the exact `table_logical_name:column_logical_name` reference returned by get_tables.";
@@ -2011,7 +2039,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return false;
             }
 
-            AttributeMetadata metadata;
+            AttributeMetadata metadata = null;
+            Exception lastEx = null;
             try
             {
                 var response = (RetrieveAttributeResponse)_orgService.Execute(new RetrieveAttributeRequest
@@ -2024,7 +2053,38 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                error = $"Cannot resolve formula source '{sourceEntity}:{sourceAttribute}'. {ex.Message}";
+                lastEx = ex;
+                if (_connections != null)
+                {
+                    foreach (var group in _connections.ListGroups())
+                    {
+                        try
+                        {
+                            var bundle = _connections.ResolveAsync(group.Env, System.Threading.CancellationToken.None).GetAwaiter().GetResult();
+                            if (bundle?.OrgService == null || ReferenceEquals(bundle.OrgService, _orgService))
+                                continue;
+                            var response = (RetrieveAttributeResponse)bundle.OrgService.Execute(new RetrieveAttributeRequest
+                            {
+                                EntityLogicalName = sourceEntity,
+                                LogicalName = sourceAttribute,
+                                RetrieveAsIfPublished = true
+                            });
+                            metadata = response.AttributeMetadata;
+                            _formulaSourceOrgService = bundle.OrgService;
+                            lastEx = null;
+                            break;
+                        }
+                        catch
+                        {
+                            // Try next configured environment group
+                        }
+                    }
+                }
+            }
+
+            if (metadata == null)
+            {
+                error = $"Cannot resolve formula source '{sourceEntity}:{sourceAttribute}'. {lastEx?.Message}";
                 return false;
             }
 
@@ -2051,6 +2111,216 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             return true;
+        }
+
+        private CallToolResult TryBuildFormulaSpec(string entityName, string attributeName, string attributeType,
+            string formulaDefinition, string formulaSourceType, out FormulaColumnSpec formulaSpec)
+        {
+            formulaSpec = null;
+            if (!string.IsNullOrWhiteSpace(formulaDefinition) &&
+                !string.IsNullOrWhiteSpace(formulaSourceType) &&
+                formulaSourceType.Trim().Equals("powerfx", StringComparison.OrdinalIgnoreCase) &&
+                !IsFormulaCloneReference(formulaDefinition))
+            {
+                var formulaCompatErr = ValidateFormulaAttributeType(attributeType, "powerfx");
+                if (formulaCompatErr != null) return Error(formulaCompatErr, "Formula columns (Power Fx/Calculated/Rollup) only work on: string, memo, integer, decimal, money, float, double, boolean, datetime. Remove formula_definition/formula_source_type for this attribute_type.");
+
+                formulaSpec = new FormulaColumnSpec(3, formulaDefinition.Trim(), "powerfx");
+                return null;
+            }
+
+            if (!string.IsNullOrWhiteSpace(formulaDefinition))
+            {
+                if (!TryResolveFormulaCloneSource(formulaDefinition, out var resolvedFormula, out var sourceTypeVal,
+                    out var kind, out var sourceEntity, out var sourceAttribute, out var sourceError))
+                    return Error(sourceError, "Use get_tables to read the source column and pass its formulaDefinition reference unchanged.");
+
+                if (!string.IsNullOrWhiteSpace(formulaSourceType))
+                {
+                    var (requestedSourceType, requestedKindError) = ParseFormulaSourceType(formulaSourceType.Trim().ToLowerInvariant());
+                    if (requestedKindError != null) return Error(requestedKindError, "Valid values: 'powerfx' (default), 'calculated', 'rollup'.");
+                    if (requestedSourceType != sourceTypeVal)
+                        return Error($"formula_source_type does not match source column '{sourceEntity}:{sourceAttribute}'.", $"Omit it in clone mode; the server derives '{kind}' from Dataverse.");
+                }
+
+                var formulaCompatErr = ValidateFormulaAttributeType(attributeType, kind);
+                if (formulaCompatErr != null) return Error(formulaCompatErr, "Formula columns (Power Fx/Calculated/Rollup) only work on: string, memo, integer, decimal, money, float, double, boolean, datetime. Remove formula_definition/formula_source_type for this attribute_type.");
+
+                FormulaRelationshipMapping relationshipMapping = null;
+                if (kind == "rollup")
+                {
+                    var mappingError = TryResolveRollupRelationshipMapping(
+                        resolvedFormula, sourceEntity, entityName, out relationshipMapping);
+                    if (mappingError != null) return Error(mappingError, "Use manage_relationship to check the 1:N relationships between the source and target tables.");
+                }
+
+                resolvedFormula = FormulaReferenceHelper.RewriteFormulaReferences(
+                    resolvedFormula, sourceEntity, entityName, sourceAttribute, attributeName, relationshipMapping);
+
+                resolvedFormula = ApplyCrossEnvAndCustomFormulaRewrites(
+                    resolvedFormula, entityName, sourceAttribute, attributeName);
+
+                formulaSpec = new FormulaColumnSpec(sourceTypeVal, resolvedFormula, kind);
+                return null;
+            }
+
+            if (!string.IsNullOrWhiteSpace(formulaSourceType))
+            {
+                var kind = formulaSourceType.Trim().ToLowerInvariant();
+                var (sourceTypeVal, kindErr) = ParseFormulaSourceType(kind);
+                if (kindErr != null) return Error(kindErr, "Valid values: 'powerfx' (default), 'calculated', 'rollup'.");
+
+                var formulaCompatErr = ValidateFormulaAttributeType(attributeType, kind);
+                if (formulaCompatErr != null) return Error(formulaCompatErr, "Formula columns (Power Fx/Calculated/Rollup) only work on: string, memo, integer, decimal, money, float, double, boolean, datetime. Remove formula_definition/formula_source_type for this attribute_type.");
+
+                formulaSpec = new FormulaColumnSpec(sourceTypeVal, null, kind);
+            }
+
+            return null;
+        }
+
+        private string TryCreateAlternateKey(string entityName, string logicalName, string schemaName, string displayName, string solutionName)
+        {
+            try
+            {
+                var keyLabel = string.IsNullOrWhiteSpace(displayName) ? logicalName : displayName.Trim();
+                var keySchema = string.IsNullOrWhiteSpace(schemaName) ? logicalName : schemaName.Trim();
+                var request = new CreateEntityKeyRequest
+                {
+                    EntityName = entityName,
+                    EntityKey = new EntityKeyMetadata
+                    {
+                        SchemaName = keySchema,
+                        LogicalName = keySchema.ToLowerInvariant(),
+                        DisplayName = new Label(keyLabel, McpHelper.GetBaseLanguageCode(_orgService)),
+                        KeyAttributes = new[] { logicalName }
+                    }
+                };
+                SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solutionName);
+                DataverseMutationExecutor.Execute(_context, _orgService, request);
+                return null;
+            }
+            catch (InvalidOperationException) when (_context.MutationsBlocked)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                return $"Column created, but failed to create Alternate Key for '{entityName}.{logicalName}': {ex.Message}";
+            }
+        }
+
+        private static bool IsFormulaCloneReference(string reference)
+        {
+            if (string.IsNullOrWhiteSpace(reference)) return false;
+            var rawRef = reference.Trim();
+            var pipeIdx = rawRef.IndexOf('|');
+            if (pipeIdx >= 0) rawRef = rawRef.Substring(0, pipeIdx).Trim();
+            var parts = rawRef.Split(':');
+            return parts.Length == 2 && IsLogicalName(parts[0].Trim()) && IsLogicalName(parts[1].Trim());
+        }
+
+        private static string ExtractPrefixWithUnderscore(string logicalName)
+        {
+            if (string.IsNullOrWhiteSpace(logicalName)) return null;
+            var idx = logicalName.IndexOf('_');
+            return idx > 0 ? logicalName.Substring(0, idx + 1) : null;
+        }
+
+        private string ApplyCrossEnvAndCustomFormulaRewrites(string formula, string targetEntityName, string sourceAttribute, string targetAttribute)
+        {
+            if (string.IsNullOrEmpty(formula)) return formula;
+            var result = formula;
+
+            if (_formulaSourceOrgService != null && !ReferenceEquals(_formulaSourceOrgService, _orgService))
+            {
+                var srcPrefix = ExtractPrefixWithUnderscore(sourceAttribute);
+                var tgtPrefix = ExtractPrefixWithUnderscore(targetAttribute);
+                if (!string.IsNullOrEmpty(srcPrefix) && !string.IsNullOrEmpty(tgtPrefix) &&
+                    !srcPrefix.Equals(tgtPrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    result = System.Text.RegularExpressions.Regex.Replace(
+                        result,
+                        $@"(?:\b|(?<=related_)|(?<=relatedlinked_)){System.Text.RegularExpressions.Regex.Escape(srcPrefix)}(?=[A-Za-z0-9_])",
+                        tgtPrefix);
+                }
+            }
+
+            if (_orgService != null && !string.IsNullOrWhiteSpace(targetEntityName) &&
+                result.IndexOf("related_", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                var matches = System.Text.RegularExpressions.Regex.Matches(
+                    result,
+                    @"related_(?<lookup>[a-z0-9_]+)#(?<relEntity>[a-z0-9_]+)");
+                foreach (System.Text.RegularExpressions.Match m in matches)
+                {
+                    var lookupName = m.Groups["lookup"].Value;
+                    var oldTargetEntity = m.Groups["relEntity"].Value;
+                    try
+                    {
+                        var lookupResp = (RetrieveAttributeResponse)_orgService.Execute(new RetrieveAttributeRequest
+                        {
+                            EntityLogicalName = targetEntityName,
+                            LogicalName = lookupName,
+                            RetrieveAsIfPublished = true
+                        });
+                        if (lookupResp?.AttributeMetadata is LookupAttributeMetadata lookupMeta &&
+                            lookupMeta.Targets is { Length: 1 })
+                        {
+                            var actualTargetEntity = lookupMeta.Targets[0];
+                            if (!string.IsNullOrEmpty(actualTargetEntity) &&
+                                !actualTargetEntity.Equals(oldTargetEntity, StringComparison.OrdinalIgnoreCase))
+                            {
+                                result = result.Replace($"related_{lookupName}#{oldTargetEntity}", $"related_{lookupName}#{actualTargetEntity}");
+                                result = result.Replace($"EntityName=\"{oldTargetEntity}\"", $"EntityName=\"{actualTargetEntity}\"");
+                                if (oldTargetEntity.Equals("systemuser", StringComparison.OrdinalIgnoreCase) &&
+                                    actualTargetEntity.Equals("contact", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    result = result.Replace("Attribute=\"internalemailaddress\"", "Attribute=\"emailaddress1\"");
+                                }
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        // Ignore lookup metadata resolution errors in offline/mocked tests
+                    }
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(_formulaCustomReplacements))
+            {
+                foreach (var pair in _formulaCustomReplacements.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (TrySplitFormulaReplacementPair(pair, out var oldToken, out var newToken))
+                        result = result.Replace(oldToken, newToken);
+                }
+            }
+
+            return result;
+        }
+
+        private static bool TrySplitFormulaReplacementPair(string pair, out string oldToken, out string newToken)
+        {
+            oldToken = null;
+            newToken = null;
+            if (string.IsNullOrWhiteSpace(pair)) return false;
+
+            var arrowIdx = pair.IndexOf("->", StringComparison.Ordinal);
+            if (arrowIdx > 0)
+            {
+                oldToken = pair.Substring(0, arrowIdx).Trim();
+                newToken = pair.Substring(arrowIdx + 2).Trim();
+                return !string.IsNullOrEmpty(oldToken);
+            }
+
+            var quotedEqIdx = pair.IndexOf("\"=", StringComparison.Ordinal);
+            var eqIdx = quotedEqIdx >= 0 ? quotedEqIdx + 1 : pair.IndexOf('=');
+            if (eqIdx <= 0) return false;
+
+            oldToken = pair.Substring(0, eqIdx).Trim();
+            newToken = pair.Substring(eqIdx + 1).Trim();
+            return !string.IsNullOrEmpty(oldToken);
         }
 
         private static bool IsLogicalName(string value)
@@ -2430,6 +2700,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                 }
 
+                if (_requestedFormulaUpdate != null)
+                {
+                    var oldFormula = metadata.GetType().GetProperty("FormulaDefinition")?.GetValue(metadata, null)?.ToString() ?? "";
+                    if (oldFormula != (_requestedFormulaUpdate.FormulaDefinition ?? ""))
+                    {
+                        _requestedFormulaUpdate.Apply(metadata);
+                        changes.Add("FormulaDefinition: updated");
+                        structuredChanges["formulaDefinition"] = new UpdateAttributeChange
+                        {
+                            OldValue = string.IsNullOrEmpty(oldFormula) ? "(empty)" : "(formula)",
+                            NewValue = "(updated)"
+                        };
+                    }
+                }
+
+                var alternateKeyRequested = _requestedAlternateKey.HasValue;
+                if (alternateKeyRequested)
+                {
+                    structuredChanges["isAlternateKey"] = new UpdateAttributeChange
+                    {
+                        OldValue = "",
+                        NewValue = _requestedAlternateKey.Value.ToString().ToLowerInvariant()
+                    };
+                }
+
                 var hasOptionRequests = !string.IsNullOrWhiteSpace(addOptions) ||
                     !string.IsNullOrWhiteSpace(updateOptions) ||
                     !string.IsNullOrWhiteSpace(deleteOptions);
@@ -2437,13 +2732,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // Plan the complete mutation before any metadata, Web API, option,
                 // or publish request. This also covers option-only updates: they
                 // must not fall through to PublishIfNeeded below.
-                if (_options.DryRun && (changes.Count > 0 || hasOptionRequests || seedRequested))
+                if (_options.DryRun && (changes.Count > 0 || hasOptionRequests || seedRequested || alternateKeyRequested))
                 {
                     var plannedParts = new List<string>(changes);
                     if (!string.IsNullOrWhiteSpace(addOptions)) plannedParts.Add("add options");
                     if (!string.IsNullOrWhiteSpace(updateOptions)) plannedParts.Add("update options");
                     if (!string.IsNullOrWhiteSpace(deleteOptions)) plannedParts.Add("delete options");
                     if (seedRequested) plannedParts.Add($"set autonumber seed {autoNumberSeed.Value}");
+                    if (alternateKeyRequested) plannedParts.Add($"is_alternate_key={_requestedAlternateKey.Value.ToString().ToLowerInvariant()}");
 
                     var dryRunSummary =
                         $"Would UPDATE column '{entityName}.{attributeName}' with changes: {string.Join(", ", plannedParts)}";
@@ -2473,7 +2769,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Attribute = metadata,
                         MergeLabels = true
                     };
-                    DataverseMutationExecutor.Execute(_context, _orgService, updateRequest);
+                    try
+                    {
+                        DataverseMutationExecutor.Execute(_context, _orgService, updateRequest);
+                    }
+                    catch when (_requestedFormulaUpdate != null)
+                    {
+                        DataverseMutationExecutor.Execute(_context, _orgService, new DeleteAttributeRequest
+                        {
+                            EntityLogicalName = entityName,
+                            LogicalName = attributeName
+                        });
+                        metadata.MetadataId = null;
+                        ExecuteCreateAttribute(entityName, metadata, _effectiveSolutionName);
+                    }
 
                     // WORKAROUND: UpdateAttributeRequest silently fails to persist
                     // RequiredLevel on an existing attribute (the request succeeds
@@ -2528,14 +2837,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     optionResults.AddRange(statusResults);
                 }
 
-                if (changes.Count == 0 && optionResults.Count == 0 && !seedRequested)
+                if (alternateKeyRequested)
+                {
+                    if (_requestedAlternateKey.Value)
+                    {
+                        var keyDisplay = !string.IsNullOrWhiteSpace(displayName)
+                            ? displayName.Trim()
+                            : (metadata.DisplayName?.UserLocalizedLabel?.Label ?? attributeName);
+                        var keySchema = metadata.SchemaName ?? attributeName;
+                        var keyError = TryCreateAlternateKey(entityName, attributeName, keySchema, keyDisplay, _effectiveSolutionName);
+                        if (keyError != null)
+                            return Error(keyError, "Ensure the column type supports alternate keys (string, integer, decimal, lookup, picklist, datetime) and contains unique values.");
+                    }
+                    else
+                    {
+                        var delReq = new DeleteEntityKeyRequest
+                        {
+                            EntityLogicalName = entityName,
+                            Name = attributeName
+                        };
+                        DataverseMutationExecutor.Execute(_context, _orgService, delReq);
+                    }
+                }
+
+                if (changes.Count == 0 && optionResults.Count == 0 && !seedRequested && !alternateKeyRequested)
                     return Error(
                         $"No changes specified for '{entityName}.{attributeName}'.",
-                        "Provide at least one updatable parameter: display_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, true_label, false_label, add_options, update_options, delete_options, default_value (picklist/boolean), is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, can_store_full_image (image), auto_number_format, clear_auto_number, auto_number_seed (string), or statuscode add/update/delete_options (for statuscode attribute).");
+                        "Provide at least one updatable parameter: display_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, true_label, false_label, add_options, update_options, delete_options, default_value (picklist/boolean), is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, can_store_full_image (image), auto_number_format, clear_auto_number, auto_number_seed (string), is_alternate_key, or statuscode add/update/delete_options (for statuscode attribute).");
 
                 // --- Publish (skipped for a seed-only update — the seed is not a
                 //     metadata change and needs no publish) ---
-                var published = changes.Count > 0 || optionResults.Count > 0
+                var published = changes.Count > 0 || optionResults.Count > 0 || alternateKeyRequested
                     ? PublishIfNeeded(entityName)
                     : false;
 
@@ -2912,8 +3244,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             StateCode = stateValue
                         };
                         if (opt.Value.HasValue) req.Value = opt.Value.Value;
+                        if (!string.IsNullOrWhiteSpace(opt.Color) && ManageChoiceTool.TryNormalizeHexColor(opt.Color, out var hexAdd))
+                            req.Parameters["Color"] = hexAdd;
                         var resp = (InsertStatusValueResponse)DataverseMutationExecutor.Execute(_context, _orgService, req);
-                        results.Add($"OptionsAdded: {opt.Label} ({resp.NewOptionValue}) [state={stateValue}]");
+                        results.Add(string.IsNullOrWhiteSpace(opt.Color)
+                            ? $"OptionsAdded: {opt.Label} ({resp.NewOptionValue}) [state={stateValue}]"
+                            : $"OptionsAdded: {opt.Label} ({resp.NewOptionValue}) [state={stateValue}] [{opt.Color}]");
                     }
             }
 
@@ -2934,8 +3270,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             Label = new Label(opt.Label, McpHelper.GetBaseLanguageCode(_orgService)),
                             MergeLabels = true
                         };
+                        if (!string.IsNullOrWhiteSpace(opt.Color) && ManageChoiceTool.TryNormalizeHexColor(opt.Color, out var hexUpd))
+                            req.Parameters["Color"] = hexUpd;
                         DataverseMutationExecutor.Execute(_context, _orgService, req);
-                        results.Add($"OptionsRenamed: {opt.Value.Value} -> \"{opt.Label}\"");
+                        results.Add(string.IsNullOrWhiteSpace(opt.Color)
+                            ? $"OptionsRenamed: {opt.Value.Value} -> \"{opt.Label}\""
+                            : $"OptionsRenamed: {opt.Value.Value} -> \"{opt.Label}\" [{opt.Color}]");
                     }
             }
 
@@ -3049,15 +3389,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             payload["warnings"] = new JsonArray(warning);
             var summary = payload["summary"]?.GetValue<string>() ?? "";
             if (!string.IsNullOrEmpty(summary))
-            {
                 summary += " 1 warning(s).";
-                payload["summary"] = summary;
-            }
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = summary }],
-                StructuredContent = JsonSerializer.SerializeToElement(payload)
-            };
+            return McpToolResults.Success(summary, payload);
         }
 
     }
