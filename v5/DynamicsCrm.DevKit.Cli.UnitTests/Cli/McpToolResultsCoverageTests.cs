@@ -1,9 +1,11 @@
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Shared;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModelContextProtocol.Protocol;
 using System;
 using System.Text.Json;
+using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli;
 
@@ -188,5 +190,40 @@ public class McpToolResultsCoverageTests
             nameof(McpToolResults.ThrowException) => McpToolResults.ThrowException(new InvalidOperationException(xml)),
             _ => throw new ArgumentOutOfRangeException(nameof(resultType))
         };
+    }
+
+    [TestMethod]
+    [DoNotParallelize]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void Antigravity_FormXml_CompactsOnlyLayoutIndentation(bool isList)
+    {
+        const string xml = "<form>\r\n  <tabs>\r\n    <tab name=\"general\" />\r\n  </tabs>\r\n" +
+            "  <labels xml:space=\"preserve\">\r\n    <label />\r\n  </labels>\r\n" +
+            "  <control note=\"first&#xD;second\">\r\n    <parameters><![CDATA[first\r\nsecond]]></parameters>\r\n  </control>\r\n</form>";
+        var payload = isList
+            ? new UpsertFormResult { Action = "list", Forms = [new FormListEntry { FormXml = xml }] }
+            : new UpsertFormResult { Action = "detail", FormXml = xml };
+        var previousClient = McpToolResults.ClientName;
+        try
+        {
+            McpToolResults.ClientName = "Antigravity";
+            var result = McpToolResults.Success("form", payload);
+            using var detail = JsonDocument.Parse(result.GetText().Split("\n[Detail] ", 2, StringSplitOptions.None)[1]);
+            var displayedXml = GetFormXml(detail.RootElement);
+            StringAssert.StartsWith(displayedXml, "<form><tabs><tab name=\"general\" /></tabs><labels");
+            Assert.AreEqual(xml, GetFormXml(result.StructuredContent!.Value));
+
+            var originalForm = XElement.Parse(xml, LoadOptions.PreserveWhitespace);
+            var compactForm = XElement.Parse(displayedXml, LoadOptions.PreserveWhitespace);
+            Assert.IsTrue(XNode.DeepEquals(originalForm.Element("labels"), compactForm.Element("labels")));
+            Assert.IsTrue(XNode.DeepEquals(originalForm.Element("control"), compactForm.Element("control")));
+        }
+        finally
+        {
+            McpToolResults.ClientName = previousClient;
+        }
+
+        string GetFormXml(JsonElement data) => (isList ? data.GetProperty("forms")[0] : data).GetProperty("formXml").GetString()!;
     }
 }

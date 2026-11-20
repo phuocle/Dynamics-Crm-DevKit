@@ -73,12 +73,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("undo only: .layoutxml.xml backup file path — required together with fetchxml to restore the pair verbatim.")] string layoutxml = "",
             [Description("update: JSON array serialized as a string, e.g. [{\"cell_name\":\"name\",\"set_attributes\":{\"ishidden\":\"1\"}}]. Each item must carry set_attributes, remove_attributes (JSON array of attribute names to detach, e.g. [{\"cell_name\":\"iconRendererProvider\",\"remove_attributes\":[\"imageproviderwebresource\"]}]), or both. Patch layout cell attributes without changing FetchXML; do not combine with fetchxml. Read docs://instructions_for_views for supported attributes and icon/tooltip contracts.")] string cell_updates_json = "",
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
-            System.Threading.CancellationToken cancellationToken = default)
+            System.Threading.CancellationToken cancellationToken = default,
+            [Description("Detail: include raw layoutJson in Antigravity's text result when layoutXml is available. Use when you need the JSON grid settings.")] bool include_layoutjson = false)
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
                 var worker = new ManageViewTool(conn.OrgService, conn.Options, conn.Context, conn.WebApi);
-                return worker.manage_view(server, action, entity_name, view_id, view_name, is_personal_view, fetchxml, layoutxml, cell_updates_json);
+                return worker.manage_view(server, action, entity_name, view_id, view_name, is_personal_view, fetchxml, layoutxml, cell_updates_json, include_layoutjson);
             }, cancellationToken);
         }
 
@@ -91,7 +92,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("false = system views (savedquery), true = personal views (userquery) — scopes list and view_name resolution.")] bool is_personal_view = false,
             [Description("create/update: FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type). undo: .fetchxml.xml backup file path (pass layoutxml too).")] string fetchxml = "",
             [Description("undo only: .layoutxml.xml backup file path — required together with fetchxml to restore the pair verbatim.")] string layoutxml = "",
-            [Description("update: JSON array serialized as a string, e.g. [{\"cell_name\":\"name\",\"set_attributes\":{\"ishidden\":\"1\"}}]. Each item must carry set_attributes, remove_attributes (JSON array of attribute names to detach, e.g. [{\"cell_name\":\"iconRendererProvider\",\"remove_attributes\":[\"imageproviderwebresource\"]}]), or both. Patch layout cell attributes without changing FetchXML; do not combine with fetchxml. Read docs://instructions_for_views for supported attributes and icon/tooltip contracts.")] string cell_updates_json = "")
+            [Description("update: JSON array serialized as a string, e.g. [{\"cell_name\":\"name\",\"set_attributes\":{\"ishidden\":\"1\"}}]. Each item must carry set_attributes, remove_attributes (JSON array of attribute names to detach, e.g. [{\"cell_name\":\"iconRendererProvider\",\"remove_attributes\":[\"imageproviderwebresource\"]}]), or both. Patch layout cell attributes without changing FetchXML; do not combine with fetchxml. Read docs://instructions_for_views for supported attributes and icon/tooltip contracts.")] string cell_updates_json = "",
+            bool include_layoutjson = false)
         {
             try
             {
@@ -135,8 +137,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 return normalizedAction switch
                 {
-                    "list" => HandleList(entityName, view_name, is_personal_view),
-                    "detail" => HandleDetail(entityName, view_id, view_name, is_personal_view),
+                    "list" => HandleList(entityName, view_name, is_personal_view, include_layoutjson),
+                    "detail" => HandleDetail(entityName, view_id, view_name, is_personal_view, include_layoutjson),
                     "create" => HandleCreate(entityName, view_name, fetchxml),
                     "update" => HandleUpdate(entityName, view_id, view_name, is_personal_view, fetchxml, cell_updates_json),
                     "rename" => HandleRename(entityName, view_id, view_name),
@@ -152,7 +154,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
 
-        private CallToolResult HandleList(string entityName, string viewName, bool isPersonalView)
+        private CallToolResult HandleList(string entityName, string viewName, bool isPersonalView, bool includeLayoutJson)
         {
             var empty = new EntityCollection().Entities;
             if (!string.IsNullOrWhiteSpace(viewName))
@@ -169,12 +171,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (matchingViews.Count == 1 && matchingPersonal.Count == 0)
                 {
                     var matchId = matchingViews[0].GetAttributeValue<Guid>("savedqueryid");
-                    return HandleDetail(entityName, matchId.ToString(), "", false);
+                    return HandleDetail(entityName, matchId.ToString(), "", false, includeLayoutJson);
                 }
                 if (matchingViews.Count == 0 && matchingPersonal.Count == 1)
                 {
                     var matchId = matchingPersonal[0].GetAttributeValue<Guid>("userqueryid");
-                    return HandleDetail(entityName, matchId.ToString(), "", true);
+                    return HandleDetail(entityName, matchId.ToString(), "", true, includeLayoutJson);
                 }
 
                 var matchingEntries = BuildViewListEntries(matchingViews, matchingPersonal);
@@ -237,7 +239,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
 
-        private CallToolResult HandleDetail(string entityName, string viewId, string viewName, bool isPersonalView)
+        private CallToolResult HandleDetail(string entityName, string viewId, string viewName, bool isPersonalView, bool includeLayoutJson)
         {
             if (string.IsNullOrWhiteSpace(viewId) && string.IsNullOrWhiteSpace(viewName))
                 return Error("view_id or view_name is required when action='detail'.",
@@ -263,7 +265,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"No {(isPersonalView ? "personal" : "system")} view found with ID '{id}'.",
                     $"Use manage_view action='list' entity_name='{entityName}' to find valid view IDs.");
 
-            return BuildViewDetailResult(view);
+            return BuildViewDetailResult(view, includeLayoutJson);
         }
 
 
@@ -892,7 +894,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
 
-        private CallToolResult BuildViewDetailResult(Entity view)
+        private CallToolResult BuildViewDetailResult(Entity view, bool includeLayoutJson)
         {
             var isSystem = view.LogicalName == "savedquery";
             var viewId = GetViewId(view);
@@ -934,6 +936,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 FetchXml = string.IsNullOrEmpty(fetchXml) ? null : fetchXml,
                 LayoutXml = string.IsNullOrEmpty(layoutXml) ? null : layoutXml,
                 LayoutJson = string.IsNullOrWhiteSpace(layoutJson) ? null : layoutJson,
+                IncludeLayoutJson = includeLayoutJson,
                 ConditionalFormatting = string.IsNullOrWhiteSpace(conditionalFormatting) ? null : conditionalFormatting,
                 QuickFindColumns = qt == 4 ? ExtractQuickFindColumns(fetchXml) : null
             });

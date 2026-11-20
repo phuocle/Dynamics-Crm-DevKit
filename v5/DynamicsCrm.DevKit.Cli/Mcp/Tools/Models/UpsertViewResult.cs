@@ -112,6 +112,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string LayoutJson { get; set; }
 
+        [JsonIgnore]
+        internal bool IncludeLayoutJson { get; init; }
+
         [JsonPropertyName("conditionalFormatting")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string ConditionalFormatting { get; set; }

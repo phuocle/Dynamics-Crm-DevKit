@@ -32,8 +32,8 @@ public sealed class DeepMcpCoverageTests
         Assert.Contains("entity_name is required", Text(await tool.manage_view(null!, "list", "")));
         Assert.Contains("not a valid GUID", Text(await tool.manage_view(null!, "detail", "account", view_id: "bad")));
 
-        Call(tool, "HandleDetail", "account", "", "", false);
-        Call(tool, "HandleDetail", "account", "bad", "", false);
+        Call(tool, "HandleDetail", "account", "", "", false, false);
+        Call(tool, "HandleDetail", "account", "bad", "", false, false);
         Call(tool, "HandleCreate", "account", "", "");
         Call(tool, "HandleCreate", "account", "New view", "<fetch />");
         Call(tool, "HandleUpdate", "account", "", "", false, "", "");
@@ -79,7 +79,7 @@ public sealed class DeepMcpCoverageTests
             ["statecode"] = new OptionSetValue(0),
             ["fetchxml"] = "<fetch><entity name='account'><attribute name='name' /></entity></fetch>",
             ["layoutxml"] = "<grid><row name='result' id='accountid'><cell name='name' width='150' /></row></grid>"
-        });
+        }, false);
         Assert.IsNotNull(detail);
     }
 

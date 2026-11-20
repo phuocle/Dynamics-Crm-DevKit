@@ -5,6 +5,7 @@ using ModelContextProtocol.Protocol;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.ServiceModel;
 using System.Text;
@@ -12,6 +13,8 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
 using WebApiHttpException = Microsoft.PowerPlatform.Dataverse.Client.Exceptions.HttpOperationException;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
@@ -37,6 +40,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         };
 
+        private static readonly HashSet<XName> FormLayoutContainers =
+        [
+            "form", "tabs", "tab", "columns", "column", "sections", "section",
+            "rows", "row", "cell", "labels", "header", "footer", "DisplayConditions",
+            "events", "event", "Handlers", "InternalHandlers", "dependencies", "formLibraries",
+            "Navigation", "NavBar", "NavBarAreas", "formparameters", "externaldependencies"
+        ];
+
         /// <summary>
         /// Successful result with a concise text summary and the full structured payload.
         /// The summary is duplicated into the structured payload as a <c>summary</c>
@@ -57,16 +68,84 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         {
             var summaryLine = $"{SuccessPrefix} {StripPrefix(summary, SuccessPrefix)}";
             var payload = JsonSerializer.SerializeToNode(structured) as JsonObject ?? new JsonObject();
-            payload["summary"] = summaryLine;
             var text = IsAntigravity && structured != null
-                ? $"{summaryLine}\n[Detail] {SerializeTextDetail(structured)}"
+                ? summaryLine + FormatAntigravitySuccessDetail(structured, payload)
                 : summaryLine;
+            payload["summary"] = summaryLine;
             return new()
             {
                 Content = [new TextContentBlock { Text = text }],
                 StructuredContent = JsonSerializer.SerializeToElement(payload)
             };
         }
+
+        private static string FormatAntigravitySuccessDetail(object structured, JsonObject payload)
+        {
+            if (structured is UpsertViewResult { Action: "detail", IncludeLayoutJson: false,
+                LayoutXml: not null, LayoutJson: not null })
+            {
+                var detail = (JsonObject)payload.DeepClone();
+                detail.Remove("layoutJson");
+                return $"\n[Hint] Pass include_layoutjson=true to include layoutJson here.\n[Detail] {detail.ToJsonString(AntigravityDetailJsonOptions)}";
+            }
+
+            if (structured is UpsertFormResult formResult &&
+                (formResult.FormXml != null || formResult.Forms?.Any(form => form.FormXml != null) == true))
+            {
+                var detail = (JsonObject)payload.DeepClone();
+                CompactFormXmlField(detail);
+                if (detail["forms"] is JsonArray forms)
+                {
+                    foreach (var form in forms.OfType<JsonObject>())
+                        CompactFormXmlField(form);
+                }
+                return $"\n[Detail] {detail.ToJsonString(AntigravityDetailJsonOptions)}";
+            }
+
+            return $"\n[Detail] {SerializeTextDetail(structured)}";
+        }
+
+        private static void CompactFormXmlField(JsonObject form)
+        {
+            if (form["formXml"] is not JsonValue value || !value.TryGetValue<string>(out var xml) ||
+                xml.AsSpan().IndexOfAny('\r', '\n') < 0)
+                return;
+
+            try
+            {
+                using var input = new StringReader(xml!);
+                using var reader = XmlReader.Create(input, new XmlReaderSettings { DtdProcessing = DtdProcessing.Prohibit });
+                var document = XDocument.Load(reader, LoadOptions.PreserveWhitespace);
+                // Traverse only known element-only containers from FormXml.xsd.
+                var indentation = document.Descendants()
+                    .Where(IsFormLayoutContainer)
+                    .SelectMany(element => element.Nodes().OfType<XText>())
+                    .Where(text => text.Value.AsSpan().IndexOfAny('\r', '\n') >= 0)
+                    .ToList();
+                if (indentation.Count == 0)
+                    return;
+
+                indentation.Remove();
+                var compact = new StringBuilder(xml!.Length);
+                compact.Append(document.Declaration);
+                using (var writer = XmlWriter.Create(compact, new XmlWriterSettings
+                {
+                    OmitXmlDeclaration = true,
+                    NewLineHandling = NewLineHandling.Entitize
+                }))
+                    document.WriteTo(writer);
+                form["formXml"] = compact.ToString();
+            }
+            catch (XmlException)
+            {
+                // The text fallback can still carry the original XML if it cannot be compacted.
+            }
+        }
+
+        private static bool IsFormLayoutContainer(XElement element) =>
+            element.HasElements && element.AncestorsAndSelf().All(ancestor =>
+                FormLayoutContainers.Contains(ancestor.Name) && (string?)ancestor.Attribute(XNamespace.Xml + "space") != "preserve") &&
+            element.Nodes().OfType<XText>().All(text => text is not XCData && text.Value.All(ch => ch is ' ' or '\t' or '\r' or '\n'));
 
         /// <summary>
         /// Partial-failure result: some records succeeded, some failed.

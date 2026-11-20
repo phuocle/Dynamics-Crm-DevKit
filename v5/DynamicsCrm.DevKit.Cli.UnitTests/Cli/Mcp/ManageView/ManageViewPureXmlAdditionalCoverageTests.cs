@@ -70,7 +70,7 @@ public sealed class ManageViewPureXmlAdditionalCoverageTests
             ["layoutjson"] = "{ }"
         };
         var tool = new ManageViewTool(null!, new McpDryRunOptions(), new McpExecutionContext(true), null!);
-        var systemResult = InvokeInstance(tool, "BuildViewDetailResult", system);
+        var systemResult = InvokeInstance(tool, "BuildViewDetailResult", system, false);
         StringAssert.Contains(Text(systemResult), "QuickFind view, system, default, active, 2 columns (1 hidden)");
 
         var personalId = Guid.NewGuid();
@@ -82,7 +82,7 @@ public sealed class ManageViewPureXmlAdditionalCoverageTests
             ["returnedtypecode"] = "contact",
             ["statecode"] = new OptionSetValue(1)
         };
-        var personalResult = InvokeInstance(tool, "BuildViewDetailResult", personal);
+        var personalResult = InvokeInstance(tool, "BuildViewDetailResult", personal, false);
         StringAssert.Contains(Text(personalResult), "SubGrid view, personal, inactive");
     }
 

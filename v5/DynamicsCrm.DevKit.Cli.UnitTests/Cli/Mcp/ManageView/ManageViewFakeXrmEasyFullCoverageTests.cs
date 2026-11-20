@@ -1,5 +1,6 @@
 using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Shared.Services;
 using DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Shared;
 using FakeXrmEasy.Abstractions;
@@ -20,6 +21,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -252,6 +254,43 @@ public sealed class ManageViewFakeXrmEasyFullCoverageTests
         Assert.IsFalse(result.IsError == true);
         StringAssert.Contains(Text(result), "'Detail Me'");
         StringAssert.Contains(Text(result), "2 columns");
+    }
+
+    [TestMethod]
+    [DataRow("detail", false, true)]
+    [DataRow("detail", true, true)]
+    [DataRow("detail", false, false)]
+    [DataRow("list", true, true)]
+    public async Task Antigravity_ViewDetail_IncludesLayoutJsonOnRequestOrWithoutXml(string action, bool includeLayoutJson, bool hasLayoutXml)
+    {
+        const string name = "Detail with JSON layout";
+        const string layoutJson = """{"IconRenderer":"custom"}""";
+        var id = SeedView(name, layoutXml: hasLayoutXml ? SimpleLayout : "");
+        _ctx.GetOrganizationService().Update(new Entity("savedquery", id) { ["layoutjson"] = layoutJson });
+        var previousClient = McpToolResults.ClientName;
+        try
+        {
+            McpToolResults.ClientName = "Antigravity";
+            var result = await NewTool().manage_view(null!, action, "account", view_id: id.ToString(), view_name: name,
+                include_layoutjson: includeLayoutJson);
+            Assert.IsFalse(result.IsError == true);
+            Assert.AreEqual(layoutJson, result.StructuredContent!.Value.GetProperty("layoutJson").GetString());
+
+            var text = Text(result);
+            using var detail = JsonDocument.Parse(text.Split("\n[Detail] ", 2, StringSplitOptions.None)[1]);
+            if (includeLayoutJson || !hasLayoutXml)
+                Assert.AreEqual(layoutJson, detail.RootElement.GetProperty("layoutJson").GetString());
+            else
+            {
+                Assert.IsFalse(detail.RootElement.TryGetProperty("layoutJson", out _));
+                Assert.AreEqual(SimpleLayout, detail.RootElement.GetProperty("layoutXml").GetString());
+                StringAssert.Contains(text, "include_layoutjson=true");
+            }
+        }
+        finally
+        {
+            McpToolResults.ClientName = previousClient;
+        }
     }
 
     [TestMethod]
