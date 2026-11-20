@@ -8,6 +8,7 @@ using System.IO;
 using System.Net.Http;
 using System.ServiceModel;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
@@ -31,6 +32,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         internal const string FailedPrefix = "[Failed]";
         internal const string HintLabel = "Hint";
 
+        private static readonly JsonSerializerOptions AntigravityDetailJsonOptions = new()
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        };
+
         /// <summary>
         /// Successful result with a concise text summary and the full structured payload.
         /// The summary is duplicated into the structured payload as a <c>summary</c>
@@ -44,13 +50,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             !string.IsNullOrWhiteSpace(ClientName) &&
             ClientName.Contains("antigravity", StringComparison.OrdinalIgnoreCase);
 
+        private static string SerializeTextDetail<T>(T value) =>
+            JsonSerializer.Serialize(value, IsAntigravity ? AntigravityDetailJsonOptions : null);
+
         internal static CallToolResult Success(string summary, object? structured)
         {
             var summaryLine = $"{SuccessPrefix} {StripPrefix(summary, SuccessPrefix)}";
             var payload = JsonSerializer.SerializeToNode(structured) as JsonObject ?? new JsonObject();
             payload["summary"] = summaryLine;
             var text = IsAntigravity && structured != null
-                ? $"{summaryLine}\n[Detail] {JsonSerializer.Serialize(structured)}"
+                ? $"{summaryLine}\n[Detail] {SerializeTextDetail(structured)}"
                 : summaryLine;
             return new()
             {
@@ -70,7 +79,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// </summary>
         internal static CallToolResult Partial(string summary, object structured)
         {
-            var text = $"{PartialPrefix} {StripPrefix(summary, PartialPrefix)}\n[Detail] {JsonSerializer.Serialize(structured)}";
+            var text = $"{PartialPrefix} {StripPrefix(summary, PartialPrefix)}\n[Detail] {SerializeTextDetail(structured)}";
             return new CallToolResult
             {
                 Content = [new TextContentBlock { Text = text }],
@@ -89,7 +98,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// </summary>
         internal static CallToolResult Failed(string summary, object structured)
         {
-            var text = $"{FailedPrefix} {StripPrefix(summary, FailedPrefix)}\n[Detail] {JsonSerializer.Serialize(structured)}";
+            var text = $"{FailedPrefix} {StripPrefix(summary, FailedPrefix)}\n[Detail] {SerializeTextDetail(structured)}";
             return new CallToolResult
             {
                 Content = [new TextContentBlock { Text = text }],
@@ -115,7 +124,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             if (normalizedHint != null)
                 textLines.Add($"[Hint] {normalizedHint}");
             if (details != null)
-                textLines.Add($"[Detail] {JsonSerializer.Serialize(details)}");
+                textLines.Add($"[Detail] {SerializeTextDetail(details)}");
             var text = string.Join("\n", textLines);
 
             var structured = new McpErrorResult
@@ -146,7 +155,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             var payload = JsonSerializer.SerializeToNode(structured) as JsonObject ?? new JsonObject();
             payload["summary"] = summaryLine;
             var text = IsAntigravity && structured != null
-                ? $"{summaryLine}\n[Detail] {JsonSerializer.Serialize(structured)}"
+                ? $"{summaryLine}\n[Detail] {SerializeTextDetail(structured)}"
                 : summaryLine;
             return new()
             {
@@ -262,7 +271,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             }
             if (hint != null)
                 textLines.Add($"[Hint] {hint}");
-            textLines.Add($"[Detail] {JsonSerializer.Serialize(details)}");
+            textLines.Add($"[Detail] {SerializeTextDetail(details)}");
             var text = string.Join("\n", textLines);
 
             var structured = new McpErrorResult
@@ -404,7 +413,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     var recordId2 = recordMatch.Groups["id"].Value;
                     recordSb.Append($"{ErrorPrefix} {entityName2} record with id {recordId2} does not exist. It may have been deleted.");
                     recordSb.Append("\n[Hint] Verify with manage_record(action='read'), or find the correct id via search_records / parse_record_url.");
-                    recordSb.Append($"\n[Detail] {{\"entity\":{JsonSerializer.Serialize(entityName2)},\"id\":\"{recordId2}\",\"errorCode\":\"0x80040217\",\"message\":{JsonSerializer.Serialize(faultMessage)}}}");
+                    recordSb.Append($"\n[Detail] {{\"entity\":{SerializeTextDetail(entityName2)},\"id\":\"{recordId2}\",\"errorCode\":\"0x80040217\",\"message\":{SerializeTextDetail(faultMessage)}}}");
                 }
                 else
                 {
@@ -445,9 +454,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 sb.AppendLine();
                 sb.Append("[Hint] The request reached Dataverse but was rejected. Check the url path, HTTP method, and request body against the Web API endpoint.");
                 sb.AppendLine();
-                sb.Append($"[Detail] {{\"statusCode\":{status},\"reasonPhrase\":{JsonSerializer.Serialize(reason)}");
+                sb.Append($"[Detail] {{\"statusCode\":{status},\"reasonPhrase\":{SerializeTextDetail(reason)}");
                 if (!string.IsNullOrEmpty(cappedContent))
-                    sb.Append($",\"responseContent\":{JsonSerializer.Serialize(cappedContent)}");
+                    sb.Append($",\"responseContent\":{SerializeTextDetail(cappedContent)}");
                 sb.Append('}');
                 rewritten = sb.ToString();
             }

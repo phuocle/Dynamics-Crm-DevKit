@@ -1,6 +1,8 @@
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
+using DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Shared;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModelContextProtocol.Protocol;
+using System;
 using System.Text.Json;
 
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli;
@@ -130,5 +132,61 @@ public class McpToolResultsCoverageTests
     {
         var r = McpToolResults.DryRun(null!, new { });
         Assert.IsNotNull(r);
+    }
+
+    [TestMethod]
+    [DoNotParallelize]
+    [DataRow(nameof(McpToolResults.Success), false)]
+    [DataRow(nameof(McpToolResults.DryRun), false)]
+    [DataRow(nameof(McpToolResults.Partial), true)]
+    [DataRow(nameof(McpToolResults.Failed), true)]
+    [DataRow(nameof(McpToolResults.Error), true)]
+    [DataRow(nameof(McpToolResults.ThrowException), true)]
+    public void TextDetail_UsesShortEscapesOnlyForAntigravity(string resultType, bool otherClientShowsDetail)
+    {
+        const string xml = "<condition value=\"1033\" />";
+        const string defaultEscaping = @"\u003Ccondition value=\u00221033\u0022 /\u003E";
+        const string shortEscaping = """<condition value=\"1033\" />""";
+        const string detailSeparator = "\n[Detail] ";
+        var payload = new { fetchXml = xml };
+        var previousClient = McpToolResults.ClientName;
+        try
+        {
+            McpToolResults.ClientName = "Antigravity";
+            var antigravity = BuildResult();
+            McpToolResults.ClientName = "Other MCP client";
+            var otherClient = BuildResult();
+
+            Assert.AreEqual(otherClient.StructuredContent!.Value.GetRawText(), antigravity.StructuredContent!.Value.GetRawText());
+            var antigravityDetail = antigravity.GetText().Split(detailSeparator, 2, StringSplitOptions.None)[1];
+            StringAssert.Contains(antigravityDetail, shortEscaping);
+            using var parsedDetail = JsonDocument.Parse(antigravityDetail);
+            var xmlProperty = resultType == nameof(McpToolResults.ThrowException) ? "message" : "fetchXml";
+            Assert.AreEqual(xml, parsedDetail.RootElement.GetProperty(xmlProperty).GetString());
+
+            var otherText = otherClient.GetText();
+            if (otherClientShowsDetail)
+            {
+                var otherDetail = otherText.Split(detailSeparator, 2, StringSplitOptions.None)[1];
+                StringAssert.Contains(otherDetail, defaultEscaping);
+            }
+            else
+                Assert.IsFalse(otherText.Contains(detailSeparator, StringComparison.Ordinal));
+        }
+        finally
+        {
+            McpToolResults.ClientName = previousClient;
+        }
+
+        CallToolResult BuildResult() => resultType switch
+        {
+            nameof(McpToolResults.Success) => McpToolResults.Success("summary", payload),
+            nameof(McpToolResults.DryRun) => McpToolResults.DryRun("summary", payload),
+            nameof(McpToolResults.Partial) => McpToolResults.Partial("summary", payload),
+            nameof(McpToolResults.Failed) => McpToolResults.Failed("summary", payload),
+            nameof(McpToolResults.Error) => McpToolResults.Error("summary", details: payload),
+            nameof(McpToolResults.ThrowException) => McpToolResults.ThrowException(new InvalidOperationException(xml)),
+            _ => throw new ArgumentOutOfRangeException(nameof(resultType))
+        };
     }
 }
