@@ -224,7 +224,7 @@ public sealed class DeepMcpCoverageTests
         }
 
         foreach (var xml in new[] { "", "<form />", "<form><tabs /></form>", "<not-form />", "not xml" })
-            Invoke(typeof(ManageFormTool), null, "ValidateFormXml", xml);
+            Invoke(typeof(ManageFormTool), null, "ValidateFormXml", xml, false);
         Invoke(typeof(ManageFormTool), null, "IsSchemaEvolutionError", "The relationship does not exist");
         Invoke(typeof(ManageFormTool), null, "IsSchemaEvolutionError", "ordinary error");
 

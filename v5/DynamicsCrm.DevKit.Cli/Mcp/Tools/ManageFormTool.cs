@@ -1,5 +1,6 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
@@ -27,6 +28,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageFormTool : McpToolBase
     {
+        private const int QuickCreateFormType = (int)DynamicsCrm.DevKit.Shared.FormType.QuickCreate;
         private readonly IOrganizationService _orgService;
         private static XmlSchemaSet _cachedSchemaSet;
         private static readonly object _schemaLock = new();
@@ -52,9 +54,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertFormResult)),
         Description(
-            "Manage form definitions (systemform) for a Dataverse entity. Actions: 'list', 'detail' (read-only) | 'update', 'rename', 'undo' (mutations — require System Administrator).\n\n" +
+            "Manage form definitions (systemform) for a Dataverse entity. Actions: 'list', 'detail' (read-only) | 'create', 'update', 'rename', 'undo' (mutations — require System Administrator).\n\n" +
             "WHEN TO USE:\n" +
             "- List or inspect forms of an entity (list, detail) before editing\n" +
+            "- Create a Quick Create form with action='create', form_type=7, form_name, and FormXML from the source form's detail result or a file\n" +
             "- Apply form operations via action=update (recommended: operations JSON) or raw formxml (advanced/undo)\n" +
             "- Rename a form, or restore a form from a .formxml backup (undo) — the result's backupPath points to the pre-change backup; pass it as formxml to action='undo' to restore\n\n" +
             "RELATED TOOLS:\n" +
@@ -62,13 +65,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- See schema://formxml + docs://instructions_for_formxml for FormXML structure and operation examples")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
-            [Description("'list', 'detail', 'update', 'rename', 'undo'.")] string action = "",
+            [Description("'list', 'detail', 'create', 'update', 'rename', 'undo'.")] string action = "",
             [Description("Entity Display Name or logical name (Display Name is resolved first; e.g. 'Account' or 'account').")] string entity_name = "",
             [Description("Form GUID. Required for update/rename/undo. For detail, provide form_id or a form_name filter; use the GUID when name matches are ambiguous.")] string form_id = "",
-            [Description("list/detail: name contains filter; one match returns detail. In detail, ignored if form_id is set. rename: new form name; form_id identifies the form.")] string form_name = "",
-            [Description("2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. 0 or omit = all types.")] int form_type = 0,
+            [Description("create/rename: new form name. list/detail: name contains filter; one match returns detail. In detail, ignored if form_id is set.")] string form_name = "",
+            [Description("create requires 7=QuickCreate. list/detail: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. 0 or omit = all types.")] int form_type = 0,
             [Description("List mode only — include formxml in each entry. Detail always includes formxml.")] bool include_formxml = false,
-            [Description("update (advanced) / undo: raw FormXML string or backup file path (.formxml). Auto-detects. Use 'operations' for the recommended flow.")] string formxml = "",
+            [Description("create/update/undo: raw FormXML string or FormXML file path. Use 'operations' for the recommended update flow.")] string formxml = "",
             [Description("update (recommended): string containing a JSON array of operations. Each object uses action for the operation family (e.g. manage_tab) and manage_action for its verb (e.g. add). Read docs://instructions_for_formxml for fields and examples; serialize the array once.")] string operations = "",
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)
@@ -82,19 +85,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         public async Task<CallToolResult> manage_form(
             McpServer server,
-            [Description("'list', 'detail', 'update', 'rename', 'undo'.")] string action = "",
+            [Description("'list', 'detail', 'create', 'update', 'rename', 'undo'.")] string action = "",
             [Description("Entity Display Name or logical name (Display Name is resolved first; e.g. 'Account' or 'account').")] string entity_name = "",
             [Description("Form GUID. Required for update/rename/undo. For detail, provide form_id or a form_name filter; use the GUID when name matches are ambiguous.")] string form_id = "",
-            [Description("list/detail: name contains filter; one match returns detail. In detail, ignored if form_id is set. rename: new form name; form_id identifies the form.")] string form_name = "",
-            [Description("2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. 0 or omit = all types.")] int form_type = 0,
+            [Description("create/rename: new form name. list/detail: name contains filter; one match returns detail. In detail, ignored if form_id is set.")] string form_name = "",
+            [Description("create requires 7=QuickCreate. list/detail: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. 0 or omit = all types.")] int form_type = 0,
             [Description("List mode only — include formxml in each entry. Detail always includes formxml.")] bool include_formxml = false,
-            [Description("update (advanced) / undo: raw FormXML string or backup file path (.formxml). Auto-detects. Use 'operations' for the recommended flow.")] string formxml = "",
+            [Description("create/update/undo: raw FormXML string or FormXML file path. Use 'operations' for the recommended update flow.")] string formxml = "",
             [Description("update (recommended): string containing a JSON array of operations. Each object uses action for the operation family (e.g. manage_tab) and manage_action for its verb (e.g. add). Read docs://instructions_for_formxml for fields and examples; serialize the array once.")] string operations = "")
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(action))
-                    return Error("action is required.", "Valid values: 'list', 'detail', 'update', 'rename', 'undo'.");
+                    return Error("action is required.", "Valid values: 'list', 'detail', 'create', 'update', 'rename', 'undo'.");
 
                 if (string.IsNullOrWhiteSpace(entity_name))
                     return Error("entity_name is required.", "Use get_tables to find the entity logical name.");
@@ -106,8 +109,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error(entityResult.Error);
                 entityName = entityResult.Value.LogicalName;
 
-                // Rule12: gate mutation actions (update/rename/undo) behind System Administrator.
-                if (normalizedAction is "update" or "rename" or "undo"
+                // Rule12: gate form mutations behind System Administrator.
+                if (normalizedAction is "create" or "update" or "rename" or "undo"
                     && RoleGateHelper.EnsureSystemAdministrator(_orgService) is { } gate)
                     return gate;
 
@@ -118,10 +121,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "list" => HandleList(entityName, form_name, form_type, include_formxml),
                     "detail" => HandleDetail(entityName, form_id, form_name, form_type),
+                    "create" => HandleCreate(entityResult.Value, form_id, form_name, form_type, formxml, operations),
                     "update" => HandleUpdate(entityName, form_id, formxml, operations),
                     "rename" => HandleRename(entityName, form_id, form_name),
                     "undo" => HandleUndo(entityName, form_id, formxml),
-                    _ => Error($"'{action}' is not a valid action.", "Valid actions: list, detail, update, rename, undo.")
+                    _ => Error($"'{action}' is not a valid action.", "Valid actions: list, detail, create, update, rename, undo.")
                 };
             }
             catch (Exception ex)
@@ -329,6 +333,84 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Description = description,
                 FormXml = !string.IsNullOrEmpty(formXml) ? PrettyPrintXml(formXml) : null
             });
+        }
+
+        // ── Action: create ────────────────────────────────────────────────
+
+        private CallToolResult HandleCreate(EntityMetadata entity, string formId, string formName, int formType,
+            string formxml, string operations)
+        {
+            if (formType != QuickCreateFormType)
+                return Error("action='create' requires form_type=7 (QuickCreate).");
+            if (string.IsNullOrWhiteSpace(formName) || formName.Trim().Length > 100)
+                return Error("form_name must contain 1 to 100 characters when action='create'.");
+            if (!string.IsNullOrWhiteSpace(formId) || !string.IsNullOrWhiteSpace(operations))
+                return Error("action='create' does not accept form_id or operations.",
+                    "Pass form_name, form_type=7, and formxml. Dataverse assigns the new form ID.");
+            if (string.IsNullOrWhiteSpace(formxml))
+                return Error("formxml is required when action='create'.",
+                    "Pass formXml from a Quick Create form's detail result or a FormXML file path.");
+
+            var entityName = entity.LogicalName;
+            if (entity.CanCreateForms?.Value == false)
+                return Error($"Dataverse does not allow new forms on '{entityName}'.");
+
+            formName = formName.Trim();
+            var result = new UpsertFormResult
+            {
+                Action = "create", Entity = entityName, FormName = formName,
+                FormType = formType, FormTypeName = MapFormType(formType)
+            };
+
+            var duplicate = FindFormByName(entityName, formName, formType);
+            if (duplicate != null)
+            {
+                result.FormId = duplicate.Id.ToString();
+                result.Status = "already_exists";
+                return Error($"A Quick Create form named '{formName}' already exists on '{entityName}' ({result.FormId}).",
+                    "Use the existing form ID for detail or update. If only publishing failed, use publish_customizations.", result);
+            }
+
+            var resolvedXml = ResolveFormXmlInput(formxml.Trim(), deleteTempFileAfterRead: false);
+            if (resolvedXml == null)
+                return Error($"FormXML file not found at '{formxml.Trim()}'.", "Pass inline FormXML or an existing file path.");
+
+            var newFormXml = StripXmlDeclaration(resolvedXml);
+            var (errors, warnings) = ValidateFormXml(newFormXml, requireFormRoot: true);
+            result.Validated = true;
+            result.ValidationWarnings = warnings.Count > 0 ? warnings : null;
+            if (errors.Count > 0)
+            {
+                result.Status = "blocked_validation";
+                result.ValidationErrors = errors;
+                return Error($"FormXML validation failed for new form '{formName}' — {errors.Count} error(s). First: {errors[0]}",
+                    "Fix the FormXML errors and retry. Read schema://formxml and docs://instructions_for_formxml.", result);
+            }
+
+            if (_options.DryRun)
+            {
+                result.Status = "not_executed";
+                return DryRun($"Would CREATE Quick Create form '{formName}' on '{entityName}'.", result);
+            }
+
+            var form = new Entity("systemform")
+            {
+                ["name"] = formName,
+                ["objecttypecode"] = entityName,
+                ["type"] = new OptionSetValue(formType),
+                ["formactivationstate"] = new OptionSetValue(1),
+                ["formxml"] = newFormXml
+            };
+            var id = DataverseMutationExecutor.Create(_context, _orgService, form);
+            result.Action = "created";
+            result.FormId = id.ToString();
+            result.IsActive = true;
+            result.Published = PublishHelper.PublishEntity(_context, _orgService, entityName);
+            result.Status = result.Published ? "created" : "created_publish_failed";
+
+            return result.Published
+                ? Success($"Created and published Quick Create form '{formName}' ({id}) on '{entityName}'.", result)
+                : Partial($"Created Quick Create form '{formName}' ({id}) on '{entityName}' but publish failed. Retry with publish_customizations.", result);
         }
 
         // ── Action: update ────────────────────────────────────────────────
@@ -1020,7 +1102,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return backupPath;
         }
 
-        private static (List<string> Errors, List<string> Warnings) ValidateFormXml(string formXml)
+        private static (List<string> Errors, List<string> Warnings) ValidateFormXml(string formXml, bool requireFormRoot = false)
         {
             var errors = new List<string>();
             var warnings = new List<string>();
@@ -1029,7 +1111,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var schemaSet = GetSchemaSet();
                 if (schemaSet == null || schemaSet.Count == 0)
+                {
+                    if (requireFormRoot) errors.Add("Error: The FormXML schema is unavailable.");
                     return (errors, warnings);
+                }
 
                 var settings = new XmlReaderSettings
                 {
@@ -1061,6 +1146,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 using var stringReader = new StringReader(formXml);
                 using var xmlReader = XmlReader.Create(stringReader, settings);
+                if (requireFormRoot && (xmlReader.MoveToContent() != XmlNodeType.Element || xmlReader.Name != "form" || xmlReader.NamespaceURI.Length != 0))
+                {
+                    errors.Add("Error: FormXML for a Quick Create form must have a <form> root element.");
+                    return (errors, warnings);
+                }
                 while (xmlReader.Read()) { }
             }
             catch (XmlException xmlEx)

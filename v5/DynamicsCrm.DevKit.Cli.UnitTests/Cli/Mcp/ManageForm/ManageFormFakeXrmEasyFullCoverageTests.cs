@@ -181,7 +181,7 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
         var result = await NewTool().manage_form(null!, action: "frobnicate", entity_name: "account");
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "'frobnicate' is not a valid action.");
-        StringAssert.Contains(Text(result), "Valid actions: list, detail, update, rename, undo.");
+        StringAssert.Contains(Text(result), "Valid actions: list, detail, create, update, rename, undo.");
     }
 
     [TestMethod]
@@ -446,6 +446,89 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
         StringAssert.Contains(Text(result), "provide form_id for detail.");
         StringAssert.Contains(Text(result), "Multiple forms match 'Account' for 'account'");
         StringAssert.Contains(Text(result), "provide form_id for detail.");
+    }
+
+    // ──────────────────────────────────────────────
+    // create — Quick Create forms
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task Create_QuickCreate_ValidatesAndPreservesSourceFile(bool dryRun)
+    {
+        var sourcePath = Path.Combine(_tempDir, "source.formxml");
+        await File.WriteAllTextAsync(sourcePath, ValidFormXml);
+        SeedForm("New Form", type: 2);
+
+        var result = await NewTool(dryRun).manage_form(null!, "create", "Account", form_name: " New Form ",
+            form_type: 7, formxml: sourcePath);
+
+        Assert.IsFalse(result.IsError == true);
+        var data = Structured(result);
+        Assert.AreEqual(dryRun ? "not_executed" : "created", data.GetProperty("status").GetString());
+        Assert.IsTrue(data.GetProperty("validated").GetBoolean());
+        Assert.AreEqual(dryRun ? 0 : 1, _service.Creates);
+        Assert.AreEqual(dryRun ? 0 : 1, _service.Publishes);
+        Assert.AreEqual(ValidFormXml, await File.ReadAllTextAsync(sourcePath));
+
+        if (!dryRun)
+        {
+            var id = Guid.Parse(data.GetProperty("formId").GetString()!);
+            var form = _service.Retrieve("systemform", id, new ColumnSet(true));
+            Assert.AreEqual("account", form.GetAttributeValue<string>("objecttypecode"));
+            Assert.AreEqual("New Form", form.GetAttributeValue<string>("name"));
+            Assert.AreEqual(7, form.GetAttributeValue<OptionSetValue>("type").Value);
+            Assert.AreEqual(1, form.GetAttributeValue<OptionSetValue>("formactivationstate").Value);
+            Assert.AreEqual(ValidFormXml, form.GetAttributeValue<string>("formxml"));
+        }
+    }
+
+    [TestMethod]
+    [DataRow(2, "<form />", "requires form_type=7")]
+    [DataRow(7, "<not-form />", "must have a <form> root element")]
+    [DataRow(7, "<form>", "XML Parsing Error")]
+    public async Task Create_InvalidTypeOrXml_DoesNotWrite(int formType, string xml, string expectedError)
+    {
+        var result = await NewTool().manage_form(null!, "create", "account", form_name: "New Form",
+            form_type: formType, formxml: xml);
+
+        Assert.IsTrue(result.IsError == true);
+        StringAssert.Contains(Text(result), expectedError);
+        Assert.AreEqual(0, _service.Creates);
+        Assert.AreEqual(0, _service.Publishes);
+    }
+
+    [TestMethod]
+    public async Task Create_WithoutSysAdminRole_DoesNotWrite()
+    {
+        _service.Roles.Clear();
+        var result = await NewTool().manage_form(null!, "create", "account", form_name: "New Form",
+            form_type: 7, formxml: ValidFormXml);
+
+        Assert.IsTrue(result.IsError == true);
+        StringAssert.Contains(Text(result), "requires the 'System Administrator' role");
+        Assert.AreEqual(0, _service.Creates);
+    }
+
+    [TestMethod]
+    public async Task Create_PublishFails_ReturnsCreatedIdAndRetryDoesNotCreateAgain()
+    {
+        _service.FailPublish = true;
+        var tool = NewTool();
+        var first = await tool.manage_form(null!, "create", "account", form_name: "New Form",
+            form_type: 7, formxml: ValidFormXml);
+        Assert.IsTrue(first.IsError == true);
+        var data = Structured(first);
+        Assert.AreEqual("created_publish_failed", data.GetProperty("status").GetString());
+        var id = data.GetProperty("formId").GetString();
+        Assert.IsTrue(Guid.TryParse(id, out _));
+
+        var retry = await tool.manage_form(null!, "create", "account", form_name: "New Form",
+            form_type: 7, formxml: ValidFormXml);
+        Assert.IsTrue(retry.IsError == true);
+        StringAssert.Contains(Text(retry), id!);
+        Assert.AreEqual(1, _service.Creates);
     }
 
     // ──────────────────────────────────────────────

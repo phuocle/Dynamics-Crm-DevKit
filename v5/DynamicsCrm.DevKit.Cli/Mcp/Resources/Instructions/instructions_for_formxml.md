@@ -1,7 +1,7 @@
 
 # FormXML Manipulation Rules
 
-## CRITICAL: Backup Before ANY Modification
+## CRITICAL: Backup Before Modifying an Existing Form
 - ALWAYS retrieve the current FormXML using manage_form with action='detail' and the specific form_id FIRST
 - `manage_form` automatically saves the current FormXML before update or rename and returns `backupPath`. Keep that path for rollback.
 - Backup file naming (manage_form update/rename auto-backup): {form_id}_{yyyyMMddHHmmss}.formxml.json
@@ -21,9 +21,17 @@
 - If the field does not exist, inform the user and list similar fields as suggestions.
 
 ## Before Making Changes
-- Always read the current FormXML using manage_form with action='detail' and the specific form_id
+- When editing an existing form, read its FormXML using manage_form with action='detail' and the specific form_id
 - Understand the existing structure before modifying
 - Validate changes against schema://formxml XSD before writing
+
+## Create a Quick Create Form
+
+1. Read the source Quick Create form with `manage_form(action='detail', entity_name=..., form_id=...)` in the source environment.
+2. In the target environment, call `manage_form(action='create', entity_name=..., form_type=7, form_name=..., formxml=...)`. Pass the source `formXml` or a path to a FormXML file.
+3. Use the returned `formId` to inspect the new form. If `status` is `created_publish_failed`, publish the target table with `publish_customizations`.
+
+The target table and the fields and web resources referenced by the form must already exist. Enable Quick Create on the target table to use the form in the app.
 
 ## Operation JSON Contract
 Call `manage_form` with tool-level `action='update'`. Inside the `operations` JSON array, each operation object uses:
