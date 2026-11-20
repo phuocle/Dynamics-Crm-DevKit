@@ -333,6 +333,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 OwnershipType = ownershipTypeValue,
                 IsActivity = is_activity,
                 IsAuditEnabled = new BooleanManagedProperty(is_audit_enabled ?? true),
+                IsDuplicateDetectionEnabled = new BooleanManagedProperty(false),
                 IsQuickCreateEnabled = effectiveIsQuickCreateEnabled,
                 SyncToExternalSearchIndex = is_search_enabled ?? false
             };

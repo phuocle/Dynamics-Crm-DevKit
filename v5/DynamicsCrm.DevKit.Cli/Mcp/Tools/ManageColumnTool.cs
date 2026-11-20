@@ -288,10 +288,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var attributeResolve = DisplayNameFirstResolver.ResolveAttribute(_orgService, entity_name, logical_name, "manage_column");
                 if (attributeResolve.IsSuccess)
                 {
-                    var hasFormulaCreateIntent = !string.IsNullOrWhiteSpace(formula_definition) &&
-                        !string.IsNullOrWhiteSpace(attribute_type) &&
+                    var hasCreateIntent = !string.IsNullOrWhiteSpace(attribute_type) &&
                         !string.IsNullOrWhiteSpace(display_name);
-                    if (!hasFormulaCreateIntent || string.Equals(
+                    if (!hasCreateIntent || string.Equals(
                         attributeResolve.Value.LogicalName, requestedLogicalName, StringComparison.OrdinalIgnoreCase))
                     {
                         existingMetadata = attributeResolve.Value;
@@ -2243,6 +2242,52 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         result,
                         $@"(?:\b|(?<=related_)|(?<=relatedlinked_)){System.Text.RegularExpressions.Regex.Escape(srcPrefix)}(?=[A-Za-z0-9_])",
                         tgtPrefix);
+                    result = System.Text.RegularExpressions.Regex.Replace(
+                        result,
+                        $@"relatedlinked_[^#""\]]+",
+                        m => m.Value.Replace($"_{srcPrefix}", $"_{tgtPrefix}"));
+                }
+            }
+
+            if (_orgService != null && !string.IsNullOrWhiteSpace(targetEntityName) &&
+                result.IndexOf("relatedlinked_", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                var relMatches = System.Text.RegularExpressions.Regex.Matches(
+                    result,
+                    @"relatedlinked_(?<relationship>[^#]+)#(?<lookup>[^#]+)#(?<relatedEntity>[^#]+)#");
+                if (relMatches.Count > 0)
+                {
+                    try
+                    {
+                        var entityResp = (RetrieveEntityResponse)_orgService.Execute(new RetrieveEntityRequest
+                        {
+                            LogicalName = targetEntityName,
+                            EntityFilters = EntityFilters.Relationships,
+                            RetrieveAsIfPublished = true
+                        });
+                        var oneToMany = entityResp?.EntityMetadata?.OneToManyRelationships;
+                        if (oneToMany != null)
+                        {
+                            foreach (System.Text.RegularExpressions.Match m in relMatches)
+                            {
+                                var oldRelName = m.Groups["relationship"].Value;
+                                var lookupName = m.Groups["lookup"].Value;
+                                var relatedEntity = m.Groups["relatedEntity"].Value;
+                                var actualRel = oneToMany.FirstOrDefault(r =>
+                                    string.Equals(r.ReferencingEntity, relatedEntity, StringComparison.OrdinalIgnoreCase) &&
+                                    string.Equals(r.ReferencingAttribute, lookupName, StringComparison.OrdinalIgnoreCase));
+                                if (actualRel != null && !string.IsNullOrEmpty(actualRel.SchemaName) &&
+                                    !actualRel.SchemaName.Equals(oldRelName, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    result = result.Replace(oldRelName, actualRel.SchemaName);
+                                }
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        // Ignore relationship metadata resolution errors in offline/mocked tests
+                    }
                 }
             }
 
