@@ -131,7 +131,9 @@ public sealed class ManageViewHelperCoverageTests
 
         var entity = XElement.Parse("<entity name='account'><attribute name='name'/><attribute /><order attribute='accountnumber'/><filter><condition attribute='statecode'/></filter><link-entity name='contact'><filter><condition attribute='fullname'/></filter></link-entity></entity>");
         var names = InvokeStatic<HashSet<string>>("ExtractFieldNames", entity);
-        CollectionAssert.AreEquivalent(new[] { "name", "accountnumber", "statecode", "fullname" }, names.ToArray());
+        CollectionAssert.AreEquivalent(new[] { "name", "accountnumber", "statecode" }, names.ToArray());
+        var linkNames = InvokeStatic<HashSet<string>>("ExtractFieldNames", entity.Element("link-entity")!);
+        CollectionAssert.AreEquivalent(new[] { "fullname" }, linkNames.ToArray());
         Assert.IsTrue(InvokeStatic<bool>("IsLocalName", new XElement("NAME"), "name"));
         Assert.IsFalse(InvokeStatic<bool>("IsLocalName", null, "name"));
     }

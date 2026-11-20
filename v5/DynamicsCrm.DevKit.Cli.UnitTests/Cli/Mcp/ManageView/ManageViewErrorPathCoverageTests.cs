@@ -301,6 +301,26 @@ public sealed class ManageViewErrorPathCoverageTests
         StringAssert.Contains(layout, "c.fullname");
     }
 
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task Create_FilterOnLinkedColumn_UsesLinkedMetadata(bool useAlias)
+    {
+        SeedStandardMetadata();
+        var condition = $"<filter><condition{(useAlias ? " entityname='c'" : "")} attribute='emailaddress1' operator='not-null'/></filter>";
+        var fetch = $"<fetch><entity name='{EntityName}'><attribute name='name'/>" +
+                    (useAlias ? condition : "") +
+                    $"<link-entity name='{LinkEntityName}' alias='c' from='accountidlink' to='primarycontactid' link-type='outer'>" +
+                    (useAlias ? "" : condition) +
+                    "</link-entity></entity></fetch>";
+
+        var result = await NewDryRunTool().manage_view(null!, action: "create", entity_name: EntityName,
+            view_name: "Linked email", fetchxml: fetch);
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.AreEqual("not_executed", result.StructuredContent!.Value.GetProperty("status").GetString());
+    }
+
     // ── update ──────────────────────────────────────────────────────────────
 
     [TestMethod]

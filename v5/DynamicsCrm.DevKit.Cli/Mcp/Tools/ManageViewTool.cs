@@ -1500,78 +1500,69 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private List<string> ValidateFieldNames(string entityName, string fetchXml)
         {
             var errors = new List<string>();
-            XDocument fetchDoc;
-            fetchDoc = XDocument.Parse(fetchXml);
-
-            var mainEntity = fetchDoc.Root?.Element("entity");
+            var mainEntity = XDocument.Parse(fetchXml).Root?.Element("entity");
             if (mainEntity == null)
                 return errors;
 
-            var mainFields = ExtractFieldNames(mainEntity);
-            var linkEntities = mainEntity.Elements("link-entity").ToList();
-
-            Dictionary<string, AttributeMetadata> attrMap;
-            var request = new RetrieveEntityRequest
+            var fieldsByEntity = new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase)
             {
-                LogicalName = entityName,
-                EntityFilters = EntityFilters.Attributes
+                [entityName] = ExtractFieldNames(mainEntity)
             };
-            var response = (RetrieveEntityResponse)_orgService.Execute(request);
-            attrMap = response.EntityMetadata.Attributes
-                .ToDictionary(a => a.LogicalName, a => a, StringComparer.OrdinalIgnoreCase);
+            var aliasEntityMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var mainAlias = mainEntity.Attribute("alias")?.Value;
+            if (!string.IsNullOrWhiteSpace(mainAlias))
+                aliasEntityMap[mainAlias] = entityName;
 
-            var allMissing = new List<(string Field, string Entity)>();
-
-            var missingMain = mainFields.Where(f => !attrMap.ContainsKey(f)).ToList();
-            foreach (var f in missingMain)
-                allMissing.Add((f, entityName));
-
-            var linkAttrMaps = new Dictionary<string, Dictionary<string, AttributeMetadata>>(StringComparer.OrdinalIgnoreCase);
-            foreach (var le in linkEntities)
+            foreach (var link in DescendantsByLocalName(mainEntity, "link-entity"))
             {
-                var linkedEntityName = le.Attribute("name")?.Value;
+                var linkedEntityName = link.Attribute("name")?.Value;
                 if (string.IsNullOrEmpty(linkedEntityName))
                     continue;
 
-                var linkFields = ExtractFieldNames(le);
-                if (linkFields.Count == 0)
-                    continue;
+                var alias = link.Attribute("alias")?.Value;
+                if (!string.IsNullOrWhiteSpace(alias))
+                    aliasEntityMap[alias] = linkedEntityName;
 
-                if (!linkAttrMaps.TryGetValue(linkedEntityName, out var linkMap))
-                {
-                    var linkRequest = new RetrieveEntityRequest
-                    {
-                        LogicalName = linkedEntityName,
-                        EntityFilters = EntityFilters.Attributes
-                    };
-                    var linkResponse = (RetrieveEntityResponse)_orgService.Execute(linkRequest);
-                    linkMap = linkResponse.EntityMetadata.Attributes
-                        .ToDictionary(a => a.LogicalName, a => a, StringComparer.OrdinalIgnoreCase);
-                    linkAttrMaps[linkedEntityName] = linkMap;
-                }
-
-                var missingLink = linkFields.Where(f => !linkMap.ContainsKey(f)).ToList();
-                foreach (var f in missingLink)
-                    allMissing.Add((f, linkedEntityName));
+                var linkFields = ExtractFieldNames(link);
+                if (fieldsByEntity.TryGetValue(linkedEntityName, out var fields))
+                    fields.UnionWith(linkFields);
+                else
+                    fieldsByEntity[linkedEntityName] = linkFields;
             }
 
-            if (allMissing.Count == 0)
-                return errors;
-
-            foreach (var (field, entity) in allMissing)
+            foreach (var condition in DescendantsByLocalName(mainEntity, "condition"))
             {
-                var error = $"'{field}' not found on '{entity}'";
-                var map = entity == entityName ? attrMap : linkAttrMaps.GetValueOrDefault(entity);
-                if (map != null)
+                var qualifier = condition.Attribute("entityname")?.Value;
+                var field = condition.Attribute("attribute")?.Value;
+                if (string.IsNullOrWhiteSpace(qualifier) || string.IsNullOrEmpty(field))
+                    continue;
+
+                var targetEntity = aliasEntityMap.GetValueOrDefault(qualifier, qualifier);
+                if (fieldsByEntity.TryGetValue(targetEntity, out var fields))
+                    fields.Add(field);
+                else
+                    errors.Add($"FetchXML condition entityname '{qualifier}' was not found in FetchXML.");
+            }
+
+            foreach (var (entity, fields) in fieldsByEntity)
+            {
+                if (fields.Count == 0)
+                    continue;
+
+                var request = new RetrieveEntityRequest { LogicalName = entity, EntityFilters = EntityFilters.Attributes };
+                var response = (RetrieveEntityResponse)_orgService.Execute(request);
+                var attributeNames = response.EntityMetadata.Attributes.Select(a => a.LogicalName).ToHashSet(StringComparer.OrdinalIgnoreCase);
+                foreach (var field in fields.Where(field => !attributeNames.Contains(field)))
                 {
-                    var similar = map.Keys
+                    var error = $"'{field}' not found on '{entity}'";
+                    var similar = attributeNames
                         .Where(k => k.Contains(field) || field.Contains(k) || LevenshteinClose(k, field))
                         .Take(5)
                         .ToList();
                     if (similar.Count > 0)
                         error += $" (Similar: {string.Join(", ", similar)})";
+                    errors.Add(error);
                 }
-                errors.Add(error);
             }
             return errors;
         }
@@ -1585,10 +1576,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrEmpty(name))
                     names.Add(name);
             }
-            foreach (var cond in entityElement.Descendants("condition"))
+            foreach (var cond in ConditionsOwnedBy(entityElement))
             {
                 var name = cond.Attribute("attribute")?.Value;
-                if (!string.IsNullOrEmpty(name))
+                if (!string.IsNullOrEmpty(name) && string.IsNullOrWhiteSpace(cond.Attribute("entityname")?.Value))
                     names.Add(name);
             }
             foreach (var order in entityElement.Elements("order"))
