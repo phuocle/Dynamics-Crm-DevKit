@@ -45,7 +45,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             "form", "tabs", "tab", "columns", "column", "sections", "section",
             "rows", "row", "cell", "labels", "header", "footer", "DisplayConditions",
             "events", "event", "Handlers", "InternalHandlers", "dependencies", "formLibraries",
-            "Navigation", "NavBar", "NavBarAreas", "formparameters", "externaldependencies"
+            "Navigation", "NavBar", "NavBarAreas", "NavBarArea", "NavBarItem", "NavBarByRelationshipItem",
+            "Titles", "ToolTip", "Privileges", "controlDescriptions", "controlDescription", "customControl",
+            "formparameters", "externaldependencies"
         ];
 
         /// <summary>
@@ -142,8 +144,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             }
         }
 
+        // Keep parameters out of the ancestor allowlist to preserve arbitrary custom control payloads.
         private static bool IsFormLayoutContainer(XElement element) =>
-            element.HasElements && element.AncestorsAndSelf().All(ancestor =>
+            element.HasElements &&
+            (FormLayoutContainers.Contains(element.Name) || (element.Name == "parameters" && element.Parent?.Name == "customControl")) &&
+            (string?)element.Attribute(XNamespace.Xml + "space") != "preserve" &&
+            element.Ancestors().All(ancestor =>
                 FormLayoutContainers.Contains(ancestor.Name) && (string?)ancestor.Attribute(XNamespace.Xml + "space") != "preserve") &&
             element.Nodes().OfType<XText>().All(text => text is not XCData && text.Value.All(ch => ch is ' ' or '\t' or '\r' or '\n'));
 

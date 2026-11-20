@@ -4,6 +4,7 @@ using DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Shared;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModelContextProtocol.Protocol;
 using System;
+using System.Linq;
 using System.Text.Json;
 using System.Xml.Linq;
 
@@ -198,9 +199,17 @@ public class McpToolResultsCoverageTests
     [DataRow(true)]
     public void Antigravity_FormXml_CompactsOnlyLayoutIndentation(bool isList)
     {
+        const string navigation = "<Navigation>\n  <NavBar>\n    <NavBarByRelationshipItem RelationshipName=\"accounts\" Id=\"accounts\">\n" +
+            "      <Titles>\n        <Title LCID=\"1033\" Text=\"Accounts\" />\n      </Titles>\n" +
+            "      <ToolTip>\n        <Titles>\n          <Title LCID=\"1033\" Text=\"Related accounts\" />\n        </Titles>\n      </ToolTip>\n" +
+            "    </NavBarByRelationshipItem>\n  </NavBar>\n</Navigation>";
+        const string controlDescriptions = "<controlDescriptions>\n  <controlDescription forControl=\"account\">\n    <customControl>\n" +
+            "      <parameters>\n        <labels>\n          <label />\n        </labels>\n      </parameters>\n" +
+            "    </customControl>\n  </controlDescription>\n</controlDescriptions>";
         const string xml = "<form>\r\n  <tabs>\r\n    <tab name=\"general\" />\r\n  </tabs>\r\n" +
             "  <labels xml:space=\"preserve\">\r\n    <label />\r\n  </labels>\r\n" +
-            "  <control note=\"first&#xD;second\">\r\n    <parameters><![CDATA[first\r\nsecond]]></parameters>\r\n  </control>\r\n</form>";
+            "  <control note=\"first&#xD;second\">\r\n    <parameters><![CDATA[first\r\nsecond]]></parameters>\r\n  </control>\r\n" +
+            navigation + "\n" + controlDescriptions + "\n</form>";
         var payload = isList
             ? new UpsertFormResult { Action = "list", Forms = [new FormListEntry { FormXml = xml }] }
             : new UpsertFormResult { Action = "detail", FormXml = xml };
@@ -212,12 +221,17 @@ public class McpToolResultsCoverageTests
             using var detail = JsonDocument.Parse(result.GetText().Split("\n[Detail] ", 2, StringSplitOptions.None)[1]);
             var displayedXml = GetFormXml(detail.RootElement);
             StringAssert.StartsWith(displayedXml, "<form><tabs><tab name=\"general\" /></tabs><labels");
+            StringAssert.Contains(displayedXml, "<controlDescriptions><controlDescription forControl=\"account\"><customControl><parameters><labels>");
+            StringAssert.Contains(displayedXml, "</labels></parameters></customControl></controlDescription></controlDescriptions>");
             Assert.AreEqual(xml, GetFormXml(result.StructuredContent!.Value));
 
             var originalForm = XElement.Parse(xml, LoadOptions.PreserveWhitespace);
             var compactForm = XElement.Parse(displayedXml, LoadOptions.PreserveWhitespace);
+            Assert.IsTrue(XNode.DeepEquals(XElement.Parse(navigation), compactForm.Element("Navigation")));
             Assert.IsTrue(XNode.DeepEquals(originalForm.Element("labels"), compactForm.Element("labels")));
             Assert.IsTrue(XNode.DeepEquals(originalForm.Element("control"), compactForm.Element("control")));
+            Assert.IsTrue(XNode.DeepEquals(originalForm.Descendants("parameters").Last().Element("labels"),
+                compactForm.Descendants("parameters").Last().Element("labels")));
         }
         finally
         {
