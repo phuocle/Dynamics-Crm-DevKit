@@ -1,4 +1,5 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
@@ -28,6 +29,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageFormTool : McpToolBase
     {
+        private const int DashboardFormType = 0;
+        private const int SystemFormComponentType = 60;
         private const int QuickCreateFormType = (int)DynamicsCrm.DevKit.Shared.FormType.QuickCreate;
         private readonly IOrganizationService _orgService;
         private static XmlSchemaSet _cachedSchemaSet;
@@ -54,10 +57,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertFormResult)),
         Description(
-            "Manage form definitions (systemform) for a Dataverse entity. Actions: 'list', 'detail' (read-only) | 'create', 'update', 'rename', 'undo' (mutations — require System Administrator).\n\n" +
+            "Manage Dataverse entity forms and system dashboards (systemform). Actions: 'list', 'detail' (read-only) | 'create', 'update', 'rename', 'undo' (mutations — require System Administrator).\n\n" +
             "WHEN TO USE:\n" +
             "- List or inspect forms of an entity (list, detail) before editing\n" +
             "- Create a Quick Create form with action='create', form_type=7, form_name, and FormXML from the source form's detail result or a file\n" +
+            "- Create a system dashboard with form_type=0, form_name, and formxml. For dashboard detail, update, or undo, pass form_id. Omit entity_name for dashboards.\n" +
             "- Apply form operations via action=update (recommended: operations JSON) or raw formxml (advanced/undo)\n" +
             "- Rename a form, or restore a form from a .formxml backup (undo) — the result's backupPath points to the pre-change backup; pass it as formxml to action='undo' to restore\n\n" +
             "RELATED TOOLS:\n" +
@@ -66,48 +70,56 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'rename', 'undo'.")] string action = "",
-            [Description("Entity Display Name or logical name (Display Name is resolved first; e.g. 'Account' or 'account').")] string entity_name = "",
+            [Description("Entity display or logical name, e.g. 'Account' or 'account'. Omit for system dashboard create/detail/update/undo.")] string entity_name = "",
             [Description("Form GUID. Required for update/rename/undo. For detail, provide form_id or a form_name filter; use the GUID when name matches are ambiguous.")] string form_id = "",
             [Description("create/rename: new form name. list/detail: name contains filter; one match returns detail. In detail, ignored if form_id is set.")] string form_name = "",
-            [Description("create requires 7=QuickCreate. list/detail: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. 0 or omit = all types.")] int form_type = 0,
+            [Description("create: 0=Dashboard (omit entity_name), 7=QuickCreate (requires entity_name). Entity list/detail: 0 or omit for all types, 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card.")] int form_type = 0,
             [Description("List mode only — include formxml in each entry. Detail always includes formxml.")] bool include_formxml = false,
-            [Description("create/update/undo: raw FormXML string or FormXML file path. Use 'operations' for the recommended update flow.")] string formxml = "",
-            [Description("update (recommended): string containing a JSON array of operations. Each object uses action for the operation family (e.g. manage_tab) and manage_action for its verb (e.g. add). Read docs://instructions_for_formxml for fields and examples; serialize the array once.")] string operations = "",
+            [Description("Raw FormXML or a file path for create/update. Required for dashboards. For undo, use the backupPath from update.")] string formxml = "",
+            [Description("Entity-form update only: serialized JSON operation array. Each object uses action for the family and manage_action for its verb. See docs://instructions_for_formxml.")] string operations = "",
+            [Description("Optional solution unique or display name for system dashboard create/update.")] string solution_name = "",
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
                 var worker = new ManageFormTool(conn.OrgService, conn.Options, conn.Context);
-                return worker.manage_form(server, action, entity_name, form_id, form_name, form_type, include_formxml, formxml, operations);
+                return worker.manage_form(server, action, entity_name, form_id, form_name, form_type, include_formxml, formxml, operations, solution_name);
             }, cancellationToken);
         }
 
         public async Task<CallToolResult> manage_form(
             McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'rename', 'undo'.")] string action = "",
-            [Description("Entity Display Name or logical name (Display Name is resolved first; e.g. 'Account' or 'account').")] string entity_name = "",
+            [Description("Entity display or logical name, e.g. 'Account' or 'account'. Omit for system dashboard create/detail/update/undo.")] string entity_name = "",
             [Description("Form GUID. Required for update/rename/undo. For detail, provide form_id or a form_name filter; use the GUID when name matches are ambiguous.")] string form_id = "",
             [Description("create/rename: new form name. list/detail: name contains filter; one match returns detail. In detail, ignored if form_id is set.")] string form_name = "",
-            [Description("create requires 7=QuickCreate. list/detail: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. 0 or omit = all types.")] int form_type = 0,
+            [Description("create: 0=Dashboard (omit entity_name), 7=QuickCreate (requires entity_name). Entity list/detail: 0 or omit for all types, 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card.")] int form_type = 0,
             [Description("List mode only — include formxml in each entry. Detail always includes formxml.")] bool include_formxml = false,
-            [Description("create/update/undo: raw FormXML string or FormXML file path. Use 'operations' for the recommended update flow.")] string formxml = "",
-            [Description("update (recommended): string containing a JSON array of operations. Each object uses action for the operation family (e.g. manage_tab) and manage_action for its verb (e.g. add). Read docs://instructions_for_formxml for fields and examples; serialize the array once.")] string operations = "")
+            [Description("Raw FormXML or a file path for create/update. Required for dashboards. For undo, use the backupPath from update.")] string formxml = "",
+            [Description("Entity-form update only: serialized JSON operation array. Each object uses action for the family and manage_action for its verb. See docs://instructions_for_formxml.")] string operations = "",
+            [Description("Optional solution unique or display name for system dashboard create/update.")] string solution_name = "")
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(action))
                     return Error("action is required.", "Valid values: 'list', 'detail', 'create', 'update', 'rename', 'undo'.");
 
-                if (string.IsNullOrWhiteSpace(entity_name))
-                    return Error("entity_name is required.", "Use get_tables to find the entity logical name.");
-
                 var normalizedAction = action.Trim().ToLowerInvariant();
-                var entityName = entity_name.Trim();
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_form");
-                if (!entityResult.IsSuccess)
-                    return Error(entityResult.Error);
-                entityName = entityResult.Value.LogicalName;
+                var dashboard = string.IsNullOrWhiteSpace(entity_name) && form_type == DashboardFormType &&
+                    (normalizedAction is "create" or "update" or "undo" ||
+                     normalizedAction == "detail" && !string.IsNullOrWhiteSpace(form_id));
+                EntityMetadata entity = null;
+                if (!dashboard)
+                {
+                    if (string.IsNullOrWhiteSpace(entity_name))
+                        return Error("entity_name is required.", "Use get_tables to find the entity logical name.");
+                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "manage_form");
+                    if (!entityResult.IsSuccess)
+                        return Error(entityResult.Error);
+                    entity = entityResult.Value;
+                }
+                var entityName = entity?.LogicalName;
 
                 // Rule12: gate form mutations behind System Administrator.
                 if (normalizedAction is "create" or "update" or "rename" or "undo"
@@ -117,12 +129,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (normalizedAction is "update" or "rename")
                     _workspaceFolder = await WorkspaceFolderHelper.GetAsync(server);
 
+                string solution = null;
+                if (!string.IsNullOrWhiteSpace(solution_name))
+                {
+                    if (!dashboard || normalizedAction is not ("create" or "update"))
+                        return Error("solution_name is supported for system dashboard create and update.");
+                    var resolved = SolutionResolverHelper.Resolve(_orgService, solution_name);
+                    if (!resolved.IsSuccess || string.IsNullOrWhiteSpace(resolved.UniqueName))
+                        return Error(resolved.Error ?? $"Solution '{solution_name}' has no unique name.",
+                            "Use get_solution_components to find valid solution names.");
+                    solution = resolved.UniqueName;
+                }
+
                 return normalizedAction switch
                 {
                     "list" => HandleList(entityName, form_name, form_type, include_formxml),
                     "detail" => HandleDetail(entityName, form_id, form_name, form_type),
-                    "create" => HandleCreate(entityResult.Value, form_id, form_name, form_type, formxml, operations),
-                    "update" => HandleUpdate(entityName, form_id, formxml, operations),
+                    "create" => HandleCreate(entity, form_id, form_name, form_type, formxml, operations, solution),
+                    "update" => HandleUpdate(entityName, form_id, formxml, operations, solution),
                     "rename" => HandleRename(entityName, form_id, form_name),
                     "undo" => HandleUndo(entityName, form_id, formxml),
                     _ => Error($"'{action}' is not a valid action.", "Valid actions: list, detail, create, update, rename, undo.")
@@ -287,7 +311,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             query.Criteria.AddCondition("formid", ConditionOperator.Equal, formId);
 
-            var result = _orgService.RetrieveMultiple(query);
+            var result = entityName == null ? RetrieveDashboardForms(query) : _orgService.RetrieveMultiple(query);
 
             if (result.Entities.Count == 0)
                 return Error(
@@ -297,7 +321,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var form = result.Entities[0];
             var objectTypeCode = form.GetAttributeValue<string>("objecttypecode") ?? "";
 
-            if (!string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
+            if (entityName == null && !IsSystemDashboard(form))
+                return Error($"Form '{formId}' is not a system dashboard.", "Provide entity_name to inspect an entity form.");
+            if (entityName != null && !string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
                 return Error(
                     $"Form '{formId}' belongs to '{objectTypeCode}', not '{entityName}'.",
                     $"Use action='list' entity_name='{entityName}' to find forms for that entity.");
@@ -311,7 +337,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var description = form.GetAttributeValue<string>("description");
             var formXml = form.GetAttributeValue<string>("formxml") ?? "";
 
-            var text = $"'{name}' ({formId}) on '{objectTypeCode}' — {MapFormType(type)} form, " +
+            var scope = entityName == null ? "system dashboard" : $"'{objectTypeCode}' — {MapFormType(type)} form";
+            var text = $"'{name}' ({formId}) on {scope}, " +
                 $"{(activationState == 1 ? "active" : "inactive")}" +
                 (isDefault ? ", default" : "") +
                 (isManaged ? ", managed" : "") +
@@ -320,7 +347,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success(text, new UpsertFormResult
             {
                 Action = "detail",
-                Entity = objectTypeCode,
+                Entity = entityName == null ? null : objectTypeCode,
                 FormId = formId.ToString(),
                 FormName = name,
                 Status = "success",
@@ -338,28 +365,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Action: create ────────────────────────────────────────────────
 
         private CallToolResult HandleCreate(EntityMetadata entity, string formId, string formName, int formType,
-            string formxml, string operations)
+            string formxml, string operations, string solution)
         {
-            if (formType != QuickCreateFormType)
-                return Error("action='create' requires form_type=7 (QuickCreate).");
+            var dashboard = entity == null;
+            if (!dashboard && formType != QuickCreateFormType)
+                return Error("action='create' requires form_type=7 (QuickCreate) for entity forms. For a system dashboard, use form_type=0 and omit entity_name.");
+            var kind = dashboard ? "Dashboard" : "Quick Create form";
+            var entityName = entity?.LogicalName;
+            var scope = dashboard ? "" : $" on '{entityName}'";
             if (string.IsNullOrWhiteSpace(formName) || formName.Trim().Length > 100)
                 return Error("form_name must contain 1 to 100 characters when action='create'.");
             if (!string.IsNullOrWhiteSpace(formId) || !string.IsNullOrWhiteSpace(operations))
                 return Error("action='create' does not accept form_id or operations.",
-                    "Pass form_name, form_type=7, and formxml. Dataverse assigns the new form ID.");
+                    $"Pass form_name, form_type={formType}, and formxml. Dataverse assigns the new form ID.");
             if (string.IsNullOrWhiteSpace(formxml))
                 return Error("formxml is required when action='create'.",
-                    "Pass formXml from a Quick Create form's detail result or a FormXML file path.");
-
-            var entityName = entity.LogicalName;
-            if (entity.CanCreateForms?.Value == false)
+                    $"Pass FormXML for the {kind} inline or as a file path.");
+            if (entity?.CanCreateForms?.Value == false)
                 return Error($"Dataverse does not allow new forms on '{entityName}'.");
 
             formName = formName.Trim();
             var result = new UpsertFormResult
             {
                 Action = "create", Entity = entityName, FormName = formName,
-                FormType = formType, FormTypeName = MapFormType(formType)
+                FormType = formType, FormTypeName = MapFormType(formType), SolutionName = solution
             };
 
             var duplicate = FindFormByName(entityName, formName, formType);
@@ -367,7 +396,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 result.FormId = duplicate.Id.ToString();
                 result.Status = "already_exists";
-                return Error($"A Quick Create form named '{formName}' already exists on '{entityName}' ({result.FormId}).",
+                return Error($"A {kind} named '{formName}' already exists{scope} ({result.FormId}).",
                     "Use the existing form ID for detail or update. If only publishing failed, use publish_customizations.", result);
             }
 
@@ -376,7 +405,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"FormXML file not found at '{formxml.Trim()}'.", "Pass inline FormXML or an existing file path.");
 
             var newFormXml = StripXmlDeclaration(resolvedXml);
-            var (errors, warnings) = ValidateFormXml(newFormXml, requireFormRoot: true);
+            var (errors, warnings) = ValidateFormXml(newFormXml, requireFormRoot: true, dashboard: dashboard);
             result.Validated = true;
             result.ValidationWarnings = warnings.Count > 0 ? warnings : null;
             if (errors.Count > 0)
@@ -390,33 +419,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (_options.DryRun)
             {
                 result.Status = "not_executed";
-                return DryRun($"Would CREATE Quick Create form '{formName}' on '{entityName}'.", result);
+                return DryRun($"Would CREATE {kind} '{formName}'{scope}.", result);
             }
 
             var form = new Entity("systemform")
             {
                 ["name"] = formName,
-                ["objecttypecode"] = entityName,
                 ["type"] = new OptionSetValue(formType),
                 ["formactivationstate"] = new OptionSetValue(1),
                 ["formxml"] = newFormXml
             };
+            if (!dashboard)
+                form["objecttypecode"] = entityName;
             var id = DataverseMutationExecutor.Create(_context, _orgService, form);
             result.Action = "created";
             result.FormId = id.ToString();
             result.IsActive = true;
-            result.Published = PublishHelper.PublishEntity(_context, _orgService, entityName);
+            AddDashboardToSolution(id, solution, result);
+            result.Published = PublishForm(entityName, id);
             result.Status = result.Published ? "created" : "created_publish_failed";
 
-            return result.Published
-                ? Success($"Created and published Quick Create form '{formName}' ({id}) on '{entityName}'.", result)
-                : Partial($"Created Quick Create form '{formName}' ({id}) on '{entityName}' but publish failed. Retry with publish_customizations.", result);
+            var summary = result.Published
+                ? $"Created and published {kind} '{formName}' ({id}){scope}."
+                : $"Created {kind} '{formName}' ({id}){scope} but publish failed. Retry with publish_customizations.";
+            return ReportFormMutation(summary, result);
         }
 
         // ── Action: update ────────────────────────────────────────────────
 
         private CallToolResult HandleUpdate(string entityName, string formId,
-            string formxml, string operations)
+            string formxml, string operations, string solution)
         {
             if (string.IsNullOrWhiteSpace(formId))
                 return Error("form_id is required when action='update'.",
@@ -428,6 +460,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var hasOperations = !string.IsNullOrWhiteSpace(operations);
             var hasFormxml    = !string.IsNullOrWhiteSpace(formxml);
+
+            if (entityName == null && (!hasFormxml || hasOperations))
+                return Error("System dashboard update requires formxml.", "Pass the full dashboard FormXML inline or as a file path.");
 
             if (!hasOperations && !hasFormxml)
                 return Error(
@@ -442,7 +477,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (hasOperations)
                 return HandleUpdateWithOperations(entityName, id, operations);
 
-            return HandleUpdateWithFormXml(entityName, id, formxml);
+            return HandleUpdateWithFormXml(entityName, id, formxml, solution);
         }
 
         private CallToolResult HandleUpdateWithOperations(string entityName, Guid id,
@@ -464,7 +499,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var formName       = currentForm.GetAttributeValue<string>("name") ?? "";
             var objectTypeCode = currentForm.GetAttributeValue<string>("objecttypecode") ?? entityName;
 
-            if (!string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
+            if (IsSystemDashboard(currentForm) || !string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
                 return Error(
                     $"Form '{id}' belongs to '{objectTypeCode}', not '{entityName}'.",
                     $"Use action='list' entity_name='{entityName}' to find forms for that entity.");
@@ -557,18 +592,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult HandleUpdateWithFormXml(string entityName, Guid id,
-            string formxml)
+            string formxml, string solution)
         {
+            var dashboard = entityName == null;
             // Resolve formxml: if it's a file path, read content from file.
             // In dry-run never delete the source file — zero disk side effects.
-            var resolvedFormXml = ResolveFormXmlInput(formxml.Trim(), deleteTempFileAfterRead: !_options.DryRun);
+            var resolvedFormXml = ResolveFormXmlInput(formxml.Trim(), deleteTempFileAfterRead: !dashboard && !_options.DryRun);
             if (resolvedFormXml == null)
                 return Error(
                     $"FormXML file not found at '{formxml.Trim()}'.",
                     "The file path may have been deleted. Re-run the export or use 'operations' for inline build+import.");
 
             // Step 1: Retrieve current form
-            var currentForm = RetrieveForm(id);
+            var currentForm = RetrieveForm(id, dashboard);
             if (currentForm == null)
                 return Error(
                     $"Form '{id}' not found.",
@@ -578,8 +614,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var formName = currentForm.GetAttributeValue<string>("name") ?? "";
             var objectTypeCode = currentForm.GetAttributeValue<string>("objecttypecode") ?? entityName;
 
+            if (dashboard && !IsSystemDashboard(currentForm))
+                return Error($"Form '{id}' is not a system dashboard.", "Provide entity_name to update an entity form.");
+            if (!dashboard && IsSystemDashboard(currentForm))
+                return Error($"Form '{id}' is a system dashboard. Omit entity_name to update it.");
+
             // Validate entity name matches the form's actual entity
-            if (!string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
+            if (!dashboard && !string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
                 return Error(
                     $"Form '{id}' belongs to '{objectTypeCode}', not '{entityName}'.",
                     $"Use action='list' entity_name='{entityName}' to find forms for that entity.");
@@ -588,7 +629,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var newFormXml = StripXmlDeclaration(resolvedFormXml);
 
             // Step 3: Validate new FormXML against XSD (always — no bypass)
-            var (errors, warnings) = ValidateFormXml(newFormXml);
+            var (errors, warnings) = ValidateFormXml(newFormXml, requireFormRoot: dashboard, dashboard: dashboard);
             List<string> validationWarnings = warnings.Count > 0 ? warnings : null;
 
             if (errors.Count > 0)
@@ -615,60 +656,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Step 4: Update form record in Dataverse
             var update = new Entity("systemform", id);
             update["formxml"] = newFormXml;
-            if (_options.DryRun)
-                return DryRun($"Would UPDATE FormXML for form '{formName}' ({id}) on entity '{entityName}'.", new UpsertFormResult
-                {
-                    Action = "update",
-                    Entity = entityName,
-                    FormId = id.ToString(),
-                    FormName = formName,
-                    Status = "not_executed",
-                    Validated = true,
-                    Published = false
-                });
-
-            // Backup (fail-safe: exception bubbles to entry catch) — only when actually mutating
-            var backupPath = SaveBackup(entityName, id, formName, currentFormXml);
-            DataverseMutationExecutor.Update(_context, _orgService, update);
-
-            // Step 5: Publish via helper (swallows faults, returns false on failure)
-            var published = PublishHelper.PublishEntity(_context, _orgService, objectTypeCode);
-
-            if (!published)
-                return Partial(
-                    $"Updated form '{formName}' ({id}) on '{entityName}' but publish failed — Dataverse rejected the publish.",
-                    new UpsertFormResult
-                    {
-                        Action = "updated",
-                        Entity = entityName,
-                        FormId = id.ToString(),
-                        FormName = formName,
-                        Status = "updated_publish_failed",
-                        Validated = true,
-                        ValidationWarnings = validationWarnings,
-                        BackupPath = backupPath,
-                        Published = false
-                    });
-
-            // Step 6: Return success
-            var summary = $"Updated form '{formName}' ({id}) on '{entityName}' — raw FormXML import" +
-                $", validated" +
-                $", {(published ? "published" : "publish pending")}" +
-                ". Backup saved." +
-                (validationWarnings?.Count > 0 ? $" {validationWarnings.Count} validation warning(s) (see validationWarnings)." : "");
-
-            return Success(summary, new UpsertFormResult
+            var result = new UpsertFormResult
             {
-                Action = "updated",
+                Action = "update",
                 Entity = entityName,
                 FormId = id.ToString(),
                 FormName = formName,
-                Status = "updated",
+                Status = "not_executed",
                 Validated = true,
-                ValidationWarnings = validationWarnings,
-                BackupPath = backupPath,
-                Published = published
-            });
+                FormType = dashboard ? DashboardFormType : null,
+                FormTypeName = dashboard ? "Dashboard" : null,
+                SolutionName = solution
+            };
+            var target = dashboard ? $"dashboard '{formName}' ({id})" : $"form '{formName}' ({id}) on '{entityName}'";
+            if (_options.DryRun)
+                return DryRun(dashboard ? $"Would UPDATE FormXML for {target}." :
+                    $"Would UPDATE FormXML for form '{formName}' ({id}) on entity '{entityName}'.", result);
+
+            // Backup (fail-safe: exception bubbles to entry catch) — only when actually mutating
+            result.BackupPath = SaveBackup(entityName, id, formName, currentFormXml);
+            DataverseMutationExecutor.Update(_context, _orgService, update);
+
+            AddDashboardToSolution(id, solution, result);
+            result.Published = PublishForm(dashboard ? null : objectTypeCode, id);
+            result.Action = "updated";
+            result.Status = result.Published ? "updated" : "updated_publish_failed";
+            result.ValidationWarnings = validationWarnings;
+            var summary = result.Published
+                ? $"Updated {target} — raw FormXML import, validated, published. Backup saved." +
+                (validationWarnings?.Count > 0 ? $" {validationWarnings.Count} validation warning(s) (see validationWarnings)." : "")
+                : $"Updated {target} but publish failed — Dataverse rejected the publish.";
+            return ReportFormMutation(summary, result);
         }
 
         // ── Action: rename ────────────────────────────────────────────────
@@ -701,7 +719,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var formType = currentForm.GetAttributeValue<OptionSetValue>("type")?.Value;
 
             // Validate entity name matches the form's actual entity
-            if (!string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
+            if (IsSystemDashboard(currentForm) || !string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
                 return Error(
                     $"Form '{id}' belongs to '{objectTypeCode}', not '{entityName}'.",
                     $"Use action='list' entity_name='{entityName}' to find forms for that entity.");
@@ -777,6 +795,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleUndo(string entityName, string formId,
             string backupFilePath)
         {
+            var dashboard = entityName == null;
             if (string.IsNullOrWhiteSpace(formId))
                 return Error("form_id is required when action='undo'.",
                     $"Pass the target form GUID. Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
@@ -807,7 +826,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var restoredFormXml = StripXmlDeclaration(backupData.FormXml.Trim());
 
             // Step 2: Verify the form exists
-            var currentForm = RetrieveForm(id);
+            var currentForm = RetrieveForm(id, dashboard);
             if (currentForm == null)
                 return Error(
                     $"Form '{id}' not found.",
@@ -816,14 +835,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var formName = currentForm.GetAttributeValue<string>("name") ?? "";
             var objectTypeCode = currentForm.GetAttributeValue<string>("objecttypecode") ?? entityName;
 
-            // Validate entity name matches the form's actual entity
-            if (!string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
+            if (dashboard != IsSystemDashboard(currentForm))
+                return Error($"Form '{id}' does not match the requested form type.", "Omit entity_name for a system dashboard.");
+            if (!dashboard && !string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
                 return Error(
                     $"Form '{id}' belongs to '{objectTypeCode}', not '{entityName}'.",
                     $"Use action='list' entity_name='{entityName}' to find forms for that entity.");
 
             // Step 3: Validate restored FormXML against XSD (always — no backup, but still validate!)
-            var (errors, warnings) = ValidateFormXml(restoredFormXml);
+            var (errors, warnings) = ValidateFormXml(restoredFormXml, requireFormRoot: dashboard, dashboard: dashboard);
             List<string> validationWarnings = warnings.Count > 0 ? warnings : null;
 
             if (errors.Count > 0)
@@ -852,7 +872,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var update = new Entity("systemform", id);
             update["formxml"] = restoredFormXml;
             if (_options.DryRun)
-                return DryRun($"Would RESTORE form '{formName}' ({id}) from backup on entity '{entityName}'.", new UpsertFormResult
+                return DryRun(dashboard ? $"Would RESTORE dashboard '{formName}' ({id}) from backup." :
+                    $"Would RESTORE form '{formName}' ({id}) from backup on entity '{entityName}'.", new UpsertFormResult
                 {
                     Action = "undo",
                     Entity = entityName,
@@ -866,11 +887,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             DataverseMutationExecutor.Update(_context, _orgService, update);
 
             // Step 5: Publish via helper (swallows faults, returns false on failure)
-            var published = PublishHelper.PublishEntity(_context, _orgService, objectTypeCode);
+            var published = PublishForm(dashboard ? null : objectTypeCode, id);
+            var target = dashboard ? $"dashboard '{formName}' ({id})" : $"form '{formName}' ({id}) on '{entityName}'";
 
             if (!published)
                 return Partial(
-                    $"Restored form '{formName}' ({id}) on '{entityName}' from '{backupFilePath}' but publish failed — Dataverse rejected the publish.",
+                    $"Restored {target} from '{backupFilePath}' but publish failed — Dataverse rejected the publish.",
                     new UpsertFormResult
                     {
                         Action = "undo",
@@ -885,7 +907,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     });
 
             // Step 6: Return success
-            var summary = $"Restored form '{formName}' ({id}) on '{entityName}' from '{backupFilePath}'" +
+            var summary = $"Restored {target} from '{backupFilePath}'" +
                 $", validated" +
                 $", {(published ? "published" : "publish pending")}" +
                 (validationWarnings?.Count > 0 ? $" {validationWarnings.Count} validation warning(s) (see validationWarnings)." : "");
@@ -967,7 +989,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Shared Helpers (write actions) ────────────────────────────────
 
-        private Entity RetrieveForm(Guid formId)
+        private static bool IsSystemDashboard(Entity form) =>
+            form.GetAttributeValue<OptionSetValue>("type")?.Value == DashboardFormType;
+
+        private bool PublishForm(string entityName, Guid id) => entityName == null
+            ? PublishHelper.PublishDashboard(_context, _orgService, id)
+            : PublishHelper.PublishEntity(_context, _orgService, entityName);
+
+        private void AddDashboardToSolution(Guid id, string solution, UpsertFormResult result)
+        {
+            if (solution == null) return;
+            var association = SolutionComponentCreateHelper.AddExistingComponent(
+                _context, _orgService, id, SystemFormComponentType, solution);
+            result.IsAddToSolution = association.IsAddToSolution;
+            result.SolutionWarning = association.AddToSolutionWarning;
+        }
+
+        private CallToolResult ReportFormMutation(string summary, UpsertFormResult result)
+        {
+            if (result.SolutionWarning != null)
+            {
+                if (result.Published)
+                    result.Status += "_solution_failed";
+                return Partial($"{summary} Could not add the dashboard to solution '{result.SolutionName}'. {result.SolutionWarning}", result);
+            }
+            return result.Published ? Success(summary, result) : Partial(summary, result);
+        }
+
+        private Entity RetrieveForm(Guid formId, bool dashboard = false)
         {
             // RetrieveMultiple never throws on a missing row (Retrieve does) — returns empty set.
             var query = new QueryExpression("systemform")
@@ -976,8 +1025,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 TopCount = 1
             };
             query.Criteria.AddCondition("formid", ConditionOperator.Equal, formId);
-            var result = _orgService.RetrieveMultiple(query);
+            var result = dashboard ? RetrieveDashboardForms(query) : _orgService.RetrieveMultiple(query);
             return result.Entities.Count > 0 ? result.Entities[0] : null;
+        }
+
+        private EntityCollection RetrieveDashboardForms(QueryExpression query)
+        {
+            try
+            {
+                var response = (RetrieveUnpublishedMultipleResponse)_orgService.Execute(
+                    new RetrieveUnpublishedMultipleRequest { Query = query });
+                if (response.EntityCollection?.Entities.Count > 0)
+                    return response.EntityCollection;
+            }
+            catch (Exception) { /* Some environments expose only the published records. */ }
+            return _orgService.RetrieveMultiple(query);
         }
 
         /// <summary>
@@ -1055,7 +1117,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ColumnSet = new ColumnSet("formid", "name"),
                 TopCount = 1
             };
-            query.Criteria.AddCondition("objecttypecode", ConditionOperator.Equal, entityName);
+            if (entityName != null)
+                query.Criteria.AddCondition("objecttypecode", ConditionOperator.Equal, entityName);
             query.Criteria.AddCondition("name", ConditionOperator.Equal, formName);
 
             if (formType.HasValue)
@@ -1064,13 +1127,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (excludeFormId.HasValue)
                 query.Criteria.AddCondition("formid", ConditionOperator.NotEqual, excludeFormId.Value);
 
-            var result = _orgService.RetrieveMultiple(query);
+            var result = entityName == null ? RetrieveDashboardForms(query) : _orgService.RetrieveMultiple(query);
             return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
         private string SaveBackup(string entityName, Guid formId, string formName, string currentFormXml)
         {
-            var backupDir = Path.Combine(_workspaceFolder, ".devkit", "manage_form", entityName);
+            var backupDir = Path.Combine(_workspaceFolder, ".devkit", "manage_form", entityName ?? "dashboard");
             Directory.CreateDirectory(backupDir);
 
             var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -1102,7 +1165,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return backupPath;
         }
 
-        private static (List<string> Errors, List<string> Warnings) ValidateFormXml(string formXml, bool requireFormRoot = false)
+        private static (List<string> Errors, List<string> Warnings) ValidateFormXml(string formXml, bool requireFormRoot = false, bool dashboard = false)
         {
             var errors = new List<string>();
             var warnings = new List<string>();
@@ -1148,7 +1211,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 using var xmlReader = XmlReader.Create(stringReader, settings);
                 if (requireFormRoot && (xmlReader.MoveToContent() != XmlNodeType.Element || xmlReader.Name != "form" || xmlReader.NamespaceURI.Length != 0))
                 {
-                    errors.Add("Error: FormXML for a Quick Create form must have a <form> root element.");
+                    errors.Add($"Error: FormXML for a {(dashboard ? "dashboard" : "Quick Create form")} must have a <form> root element.");
                     return (errors, warnings);
                 }
                 while (xmlReader.Read()) { }

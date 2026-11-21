@@ -12,6 +12,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
         public string ModifiedSiteMapXml { get; set; }
         public List<string> OperationSummaries { get; set; } = [];
         public List<string> AddedEntities { get; set; } = [];
+        internal HashSet<XElement> ComponentItems { get; } = [];
         public int ChangedOperations { get; set; }
         public int NoOpOperations { get; set; }
         public bool HasChanges => ChangedOperations > 0;
@@ -83,10 +84,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
                 "order_group" => OrderGroup(doc, op),
                 "remove_group" => RemoveGroup(doc, op),
                 "add_item" => AddItem(doc, op, lcid, result),
+                "update_item" => UpdateItem(doc, op, lcid, result),
                 "move_item" => MoveItem(doc, op),
                 "remove_item" => RemoveItem(doc, op),
                 _ => throw new InvalidOperationException(
-                    $"Unknown action '{action}'. Valid actions: add_area, order_area, remove_area, add_group, order_group, remove_group, add_item, move_item, remove_item.")
+                    $"Unknown action '{action}'. Valid actions: add_area, order_area, remove_area, add_group, order_group, remove_group, add_item, update_item, move_item, remove_item.")
             };
 
         private static string AddArea(XDocument doc, JsonElement op, int lcid)
@@ -178,32 +180,172 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
         {
             var areaRef = Required(op, "area", "add_item");
             var groupRef = Required(op, "group", "add_item");
-            var entity = Required(op, "entity", "add_item");
+            var target = ReadItemTarget(op, "add_item")
+                ?? throw new InvalidOperationException("add_item requires 'entity', 'url', 'dashboard_id' (alias: 'default_dashboard'), or 'webresource'.");
             var area = FindArea(doc, areaRef)
                 ?? throw new InvalidOperationException($"Area '{areaRef}' not found.");
             var group = FindGroup(area, groupRef)
                 ?? throw new InvalidOperationException($"Group '{groupRef}' not found in Area '{GetTitle(area)}'.");
 
-            var existingInGroup = group.Elements("SubArea")
-                .FirstOrDefault(sa => string.Equals(sa.Attribute("Entity")?.Value, entity, StringComparison.OrdinalIgnoreCase));
-            if (existingInGroup != null)
-                return $"Entity item '{entity}' already exists in Group '{GetTitle(group)}'; no changes made";
+            if (target.Attribute == "Entity" && group.Elements("SubArea").Any(target.Matches))
+                return $"Entity item '{target.Value}' already exists in Group '{GetTitle(group)}'; no changes made";
 
-            var id = GetStringProp(op, "id") ?? $"sa_{Sanitize(entity)}";
+            var label = GetLabel(op);
+            var id = GetStringProp(op, "id") ?? $"sa_{Sanitize(target.Attribute == "Entity" ? target.Value : label ?? target.Value)}";
+            var existing = group.Elements("SubArea")
+                .FirstOrDefault(sa => string.Equals(sa.Attribute("Id")?.Value, id, StringComparison.OrdinalIgnoreCase));
+            if (existing != null && target.Matches(existing))
+            {
+                if (target.IsAppComponent)
+                    result.ComponentItems.Add(existing);
+                return $"Item '{id}' already exists in Group '{GetTitle(group)}'; no changes made";
+            }
             if (FindSubArea(doc, id, null, null).Count > 0)
                 throw new AppNavigationOperationException("add_item", $"SubArea id/item '{id}' already exists elsewhere.", "Provide a unique id or set the 'id' field on the add_item operation.");
 
-            var subArea = new XElement("SubArea",
-                new XAttribute("Id", id),
-                new XAttribute("Entity", entity));
-            var label = GetLabel(op);
+            var subArea = new XElement("SubArea", new XAttribute("Id", id));
+            target.WriteTo(subArea);
             if (!string.IsNullOrWhiteSpace(label))
                 subArea.Add(BuildTitles(label, lcid));
 
             InsertElement(group, subArea, GetStringProp(op, "position"), "SubArea", r => FindSubAreaInGroup(group, r));
-            if (!result.AddedEntities.Any(e => string.Equals(e, entity, StringComparison.OrdinalIgnoreCase)))
-                result.AddedEntities.Add(entity);
-            return $"Added Entity item '{entity}' (Id={id}) to Group '{GetTitle(group)}' in Area '{GetTitle(area)}'";
+            if (target.Attribute == "Entity" &&
+                !result.AddedEntities.Contains(target.Value, StringComparer.OrdinalIgnoreCase))
+                result.AddedEntities.Add(target.Value);
+            if (target.IsAppComponent)
+                result.ComponentItems.Add(subArea);
+            return $"Added {target.Kind} item '{target.Value}' (Id={id}) to Group '{GetTitle(group)}' in Area '{GetTitle(area)}'";
+        }
+
+        private static string UpdateItem(XDocument doc, JsonElement op, int lcid, AppNavigationOperationsResult result)
+        {
+            var areaRef = Required(op, "area", "update_item");
+            var groupRef = Required(op, "group", "update_item");
+            var itemRef = Required(op, "item", "update_item");
+            var matches = FindSubArea(doc, itemRef, areaRef, groupRef);
+            if (matches.Count != 1)
+                throw new InvalidOperationException($"Expected one item matching '{itemRef}' in Group '{groupRef}' / Area '{areaRef}'. Found {matches.Count}.");
+
+            var target = ReadItemTarget(op, "update_item");
+            var label = GetLabel(op);
+            if (target == null && string.IsNullOrWhiteSpace(label))
+                throw new InvalidOperationException("update_item requires a target or a 'label'.");
+
+            var subArea = matches[0];
+            var changed = false;
+            if (target != null)
+            {
+                if (!target.Matches(subArea))
+                {
+                    if (target.Attribute == "Entity" && subArea.ElementsBeforeSelf("SubArea")
+                        .Concat(subArea.ElementsAfterSelf("SubArea")).Any(target.Matches))
+                        throw new InvalidOperationException($"Entity item '{target.Value}' already exists in Group '{groupRef}'.");
+                    target.WriteTo(subArea);
+                    if (target.Attribute == "Entity" &&
+                        !result.AddedEntities.Contains(target.Value, StringComparer.OrdinalIgnoreCase))
+                        result.AddedEntities.Add(target.Value);
+                    changed = true;
+                }
+                if (target.IsAppComponent)
+                    result.ComponentItems.Add(subArea);
+                else
+                    result.ComponentItems.Remove(subArea);
+            }
+
+            if (!string.IsNullOrWhiteSpace(label))
+            {
+                var titles = subArea.Element("Titles");
+                var title = titles?.Elements("Title").FirstOrDefault(t => (int?)t.Attribute("LCID") == lcid);
+                if (title == null)
+                {
+                    if (titles == null)
+                        subArea.AddFirst(BuildTitles(label, lcid));
+                    else
+                        titles.Add(new XElement("Title", new XAttribute("LCID", lcid), new XAttribute("Title", label)));
+                    changed = true;
+                }
+                else if ((string)title.Attribute("Title") != label)
+                {
+                    title.SetAttributeValue("Title", label);
+                    changed = true;
+                }
+            }
+
+            return changed ? $"Updated item '{itemRef}'" : $"Item '{itemRef}' already matches; no changes made";
+        }
+
+        internal const string WebResourcePrefix = "$webresource:";
+
+        private static ItemTarget ReadItemTarget(JsonElement op, string action)
+        {
+            string Read(string name)
+            {
+                if (!op.TryGetProperty(name, out var value))
+                    return null;
+                if (value.ValueKind != JsonValueKind.String || string.IsNullOrWhiteSpace(value.GetString()))
+                    throw new InvalidOperationException($"{action} requires '{name}' to be a non-empty string.");
+                return value.GetString().Trim();
+            }
+
+            // Keep the original entity input coercion for existing operation callers.
+            var entity = GetStringProp(op, "entity");
+            if (op.TryGetProperty("entity", out _) && string.IsNullOrWhiteSpace(entity))
+                throw new InvalidOperationException($"{action} requires 'entity'.");
+            var url = Read("url");
+            var dashboard = Read("dashboard_id");
+            var defaultDashboard = Read("default_dashboard");
+            var webResource = Read("webresource");
+            if (dashboard != null && defaultDashboard != null)
+                throw new InvalidOperationException($"{action} accepts only one of 'dashboard_id' or 'default_dashboard'.");
+            dashboard ??= defaultDashboard;
+            if (new[] { entity, url, dashboard, webResource }.Count(value => value != null) > 1)
+                throw new InvalidOperationException($"{action} accepts only one target: 'entity', 'url', 'dashboard_id' (alias: 'default_dashboard'), or 'webresource'.");
+            if (entity != null)
+                return new ItemTarget("Entity", "Entity", entity);
+            if (dashboard != null)
+            {
+                if (!Guid.TryParse(dashboard, out var id) || id == Guid.Empty)
+                    throw new InvalidOperationException($"{action} requires a non-empty dashboard GUID.");
+                return new ItemTarget("Dashboard", "DefaultDashboard", id.ToString("B"));
+            }
+            if (webResource != null)
+            {
+                var name = webResource.StartsWith(WebResourcePrefix, StringComparison.OrdinalIgnoreCase)
+                    ? webResource[WebResourcePrefix.Length..].Trim() : webResource;
+                if (name.Length == 0)
+                    throw new InvalidOperationException($"{action} requires a web resource name after '{WebResourcePrefix}'.");
+                return new ItemTarget("WebResource", "Url", WebResourcePrefix + name);
+            }
+            return url == null ? null : new ItemTarget("URL", "Url", url);
+        }
+
+        private sealed record ItemTarget(string Kind, string Attribute, string Value)
+        {
+            public bool IsAppComponent => Kind is "Dashboard" or "WebResource";
+
+            private string DashboardUrl => $"/dashboards/dashboard.aspx?dashboardId={Guid.Parse(Value):D}";
+
+            public bool Matches(XElement item)
+            {
+                var current = (string)item.Attribute(Attribute);
+                return Attribute switch
+                {
+                    "DefaultDashboard" => Guid.TryParse(current, out var id) && id == Guid.Parse(Value),
+                    "Url" => item.Attribute("DefaultDashboard") == null && item.Attribute("Entity") == null &&
+                        string.Equals(current, Value, Kind == "WebResource" ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal),
+                    _ => string.Equals(current, Value, StringComparison.OrdinalIgnoreCase)
+                };
+            }
+
+            public void WriteTo(XElement item)
+            {
+                item.SetAttributeValue("Entity", null);
+                item.SetAttributeValue("DefaultDashboard", null);
+                item.SetAttributeValue("Url", null);
+                item.SetAttributeValue(Attribute, Value);
+                if (Kind == "Dashboard")
+                    item.SetAttributeValue("Url", DashboardUrl);
+            }
         }
 
         private static string MoveItem(XDocument doc, JsonElement op)

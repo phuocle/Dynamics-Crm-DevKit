@@ -20,5 +20,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("url")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Url { get; set; }
+
+        [JsonPropertyName("defaultDashboard")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string DefaultDashboard { get; set; }
     }
 }

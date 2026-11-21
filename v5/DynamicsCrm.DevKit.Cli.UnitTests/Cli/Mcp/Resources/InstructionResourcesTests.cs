@@ -28,7 +28,7 @@ public class InstructionResourcesTests
     {
         var result = InstructionResources.FormXmlInstructions();
 
-        Assert.IsTrue(result.Contains("Backup Before ANY Modification"), "Should contain critical backup instructions");
+        Assert.IsTrue(result.Contains("Backup Before Modifying an Existing Form"), "Should contain critical backup instructions");
     }
 
     [TestMethod]

@@ -174,10 +174,10 @@ public sealed class DeepMcpCoverageTests
         Call(tool, "HandleDetail", "account", "", "", 0);
         Call(tool, "HandleDetail", "account", "bad", "", 0);
         Call(tool, "HandleDetail", "account", Guid.NewGuid().ToString(), "", 99);
-        Call(tool, "HandleUpdate", "account", "", "", "");
-        Call(tool, "HandleUpdate", "account", "bad", "<form />", "");
-        Call(tool, "HandleUpdate", "account", Guid.NewGuid().ToString(), "", "");
-        Call(tool, "HandleUpdate", "account", Guid.NewGuid().ToString(), "<form />", "[]");
+        Call(tool, "HandleUpdate", "account", "", "", "", null);
+        Call(tool, "HandleUpdate", "account", "bad", "<form />", "", null);
+        Call(tool, "HandleUpdate", "account", Guid.NewGuid().ToString(), "", "", null);
+        Call(tool, "HandleUpdate", "account", Guid.NewGuid().ToString(), "<form />", "[]", null);
         Call(tool, "HandleRename", "account", "", "");
         Call(tool, "HandleRename", "account", "bad", "New form");
         Call(tool, "HandleRename", "account", Guid.NewGuid().ToString(), "");
@@ -224,7 +224,7 @@ public sealed class DeepMcpCoverageTests
         }
 
         foreach (var xml in new[] { "", "<form />", "<form><tabs /></form>", "<not-form />", "not xml" })
-            Invoke(typeof(ManageFormTool), null, "ValidateFormXml", xml, false);
+            Invoke(typeof(ManageFormTool), null, "ValidateFormXml", xml, false, false);
         Invoke(typeof(ManageFormTool), null, "IsSchemaEvolutionError", "The relationship does not exist");
         Invoke(typeof(ManageFormTool), null, "IsSchemaEvolutionError", "ordinary error");
 

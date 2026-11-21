@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.ManageApp;
 
@@ -37,6 +38,8 @@ public sealed class ManageAppFakeXrmEasyTests
     private IXrmFakedContext _context = null!;
     private FakeRetrieveEntityExecutor _entityExecutor = null!;
     private FakeValidateAppExecutor _validateExecutor = null!;
+    private FakeAddAppComponentsExecutor _componentExecutor = null!;
+    private FakeAppComponentTypeExecutor _componentTypeExecutor = null!;
     private string _workspace = null!;
 
     private const string StarterXml = @"<SiteMap>
@@ -62,13 +65,16 @@ public sealed class ManageAppFakeXrmEasyTests
     {
         _entityExecutor = new FakeRetrieveEntityExecutor();
         _validateExecutor = new FakeValidateAppExecutor();
+        _componentExecutor = new FakeAddAppComponentsExecutor();
+        _componentTypeExecutor = new FakeAppComponentTypeExecutor();
         _context = MiddlewareBuilder.New()
             .AddCrud()
             .AddFakeMessageExecutors()
             .AddFakeMessageExecutor(_entityExecutor)
             .AddFakeMessageExecutor(new FakeRetrieveAllEntitiesExecutor(_entityExecutor))
             .AddFakeMessageExecutor(_validateExecutor)
-            .AddFakeMessageExecutor(new FakeAddAppComponentsExecutor())
+            .AddFakeMessageExecutor(_componentExecutor)
+            .AddFakeMessageExecutor(_componentTypeExecutor)
             .AddFakeMessageExecutor(new FakeThrowingPublishXmlExecutor())
             .UseCrud()
             .UseMessages()
@@ -447,6 +453,186 @@ public sealed class ManageAppFakeXrmEasyTests
         StringAssert.Contains(xml, "Title=\"Contact\"");
     }
 
+    [TestMethod]
+    public void UpdateNavigation_AddsAllPageTypesAndSkipsExistingComponentsOnRetry()
+    {
+        var (appId, appUniqueId, siteMapId) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
+        var (dashboardId, webResourceId) = SeedNavigationPages();
+        var tool = NewTool();
+        SetWorkspace(tool, _workspace);
+        var operations = $$"""
+            [
+              {"action":"add_item","area":"area_default","group":"group_default","id":"sa_link","label":"Link","url":"/workplace/home_dashboards.aspx?a=1&b=2"},
+              {"action":"add_item","area":"area_default","group":"group_default","id":"sa_dashboard","label":"Dashboard","dashboard_id":"{{dashboardId}}"},
+              {"action":"add_item","area":"area_default","group":"group_default","id":"sa_web","label":"Page","webresource":"ab_/html/page.html"},
+              {"action":"add_item","area":"area_default","group":"group_default","id":"sa_web2","label":"Second page","webresource":"$webresource:ab_/html/page.html"}
+            ]
+            """;
+
+        var first = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
+        Assert.IsFalse(first.IsError == true, first.GetText());
+        var result = first.StructuredContent!.Value;
+        Assert.IsTrue(result.GetProperty("published").GetBoolean());
+        Assert.AreEqual(4, result.GetProperty("changedOperations").GetInt32());
+        Assert.AreEqual(2, result.GetProperty("addedAppComponents").GetArrayLength());
+        var request = _componentExecutor.Requests.Single();
+        Assert.AreEqual(appId, request.AppId);
+        CollectionAssert.AreEquivalent(
+            new[] { new EntityReference("systemform", dashboardId), new EntityReference("webresource", webResourceId) },
+            request.Components.ToArray());
+
+        var items = XDocument.Parse(ReadSiteMap(siteMapId)).Descendants("SubArea").ToDictionary(item => (string)item.Attribute("Id")!);
+        Assert.AreEqual("/workplace/home_dashboards.aspx?a=1&b=2", (string?)items["sa_link"].Attribute("Url"));
+        Assert.AreEqual(dashboardId, Guid.Parse((string)items["sa_dashboard"].Attribute("DefaultDashboard")!));
+        Assert.AreEqual($"/dashboards/dashboard.aspx?dashboardId={dashboardId:D}", (string?)items["sa_dashboard"].Attribute("Url"));
+        Assert.AreEqual("$webresource:ab_/html/page.html", (string?)items["sa_web"].Attribute("Url"));
+        Assert.AreEqual("$webresource:ab_/html/page.html", (string?)items["sa_web2"].Attribute("Url"));
+        Assert.AreEqual("Link", (string?)items["sa_link"].Descendants("Title").Single().Attribute("Title"));
+        Assert.IsNull(items["sa_link"].Attribute("Entity"));
+
+        SeedPageComponent(appUniqueId, 60, dashboardId);
+        SeedPageComponent(appUniqueId, 61, webResourceId);
+        var retry = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
+        Assert.AreEqual("no_changes", retry.StructuredContent!.Value.GetProperty("status").GetString());
+        Assert.HasCount(1, _componentExecutor.Requests);
+    }
+
+    [TestMethod]
+    public void UpdateNavigation_UpdatesMovesAndRemovesNonEntityItems()
+    {
+        var (appId, appUniqueId, siteMapId) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
+        var (dashboardId, _) = SeedNavigationPages();
+        SeedPageComponent(appUniqueId, 60, dashboardId);
+        var tool = NewTool();
+        SetWorkspace(tool, _workspace);
+        var operations = $$"""
+            [
+              {"action":"add_group","area":"area_default","id":"group_extra","label":"Extra"},
+              {"action":"add_item","area":"area_default","group":"group_default","id":"sa_retarget","url":"/first","label":"First"},
+              {"action":"update_item","area":"area_default","group":"group_default","item":"sa_retarget","default_dashboard":"{{dashboardId:B}}","label":"Retargeted"},
+              {"action":"move_item","from_area":"area_default","from_group":"group_default","item":"sa_retarget","to_area":"area_default","to_group":"group_extra"},
+              {"action":"add_item","area":"area_default","group":"group_extra","id":"sa_removed","webresource":"ab_/html/missing.html"},
+              {"action":"remove_item","area":"area_default","group":"group_extra","item":"sa_removed"}
+            ]
+            """;
+
+        var result = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.IsEmpty(_componentExecutor.Requests);
+        var group = XDocument.Parse(ReadSiteMap(siteMapId)).Descendants("Group").Single(e => (string?)e.Attribute("Id") == "group_extra");
+        var item = group.Elements("SubArea").Single();
+        Assert.AreEqual("sa_retarget", (string?)item.Attribute("Id"));
+        Assert.AreEqual(dashboardId, Guid.Parse((string)item.Attribute("DefaultDashboard")!));
+        Assert.AreEqual("Retargeted", (string?)item.Descendants("Title").Single().Attribute("Title"));
+    }
+
+    [TestMethod]
+    [DataRow("\"dashboard_id\":\"not-a-guid\"", "dashboard GUID")]
+    [DataRow("\"dashboard_id\":\"00000000-0000-0000-0000-000000000000\"", "dashboard GUID")]
+    [DataRow("\"webresource\":\"$webresource:\"", "web resource name")]
+    [DataRow("\"entity\":\"account\",\"url\":\"/two-targets\"", "only one target")]
+    [DataRow("\"url\":false", "non-empty string")]
+    public void UpdateNavigation_RejectsInvalidTargets(string targetJson, string expectedError)
+    {
+        var (appId, _, siteMapId) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
+        var tool = NewTool();
+        SetWorkspace(tool, _workspace);
+        var result = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), $$"""
+            [{"action":"add_item","area":"area_default","group":"group_default","id":"sa_invalid",{{targetJson}} }]
+            """);
+        Assert.IsTrue(result.IsError == true);
+        StringAssert.Contains(result.GetText(), expectedError);
+        Assert.AreEqual(StarterXml, ReadSiteMap(siteMapId));
+        Assert.IsEmpty(_componentExecutor.Requests);
+    }
+
+    [TestMethod]
+    public void UpdateNavigation_WebResourceUsesSiteMapDependencyWhenAppTypeIsUnavailable()
+    {
+        var (appId, _, siteMapId) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
+        SeedNavigationPages();
+        _componentTypeExecutor.SupportsWebResources = false;
+        var tool = NewTool();
+        SetWorkspace(tool, _workspace);
+
+        var result = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), """
+            [{"action":"add_item","area":"area_default","group":"group_default","id":"sa_help","webresource":"ab_/html/page.html"}]
+            """);
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.IsTrue(result.StructuredContent!.Value.GetProperty("published").GetBoolean());
+        StringAssert.Contains(ReadSiteMap(siteMapId), """Url="$webresource:ab_/html/page.html" """.TrimEnd());
+        Assert.IsEmpty(_componentExecutor.Requests);
+    }
+
+    [TestMethod]
+    public void UpdateNavigation_RepairsMissingComponentForExistingPageWithoutChangingXml()
+    {
+        var (appId, _, siteMapId) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
+        var (_, webResourceId) = SeedNavigationPages();
+        var originalXml = StarterXml.Replace("</Group>", """<SubArea Id="sa_web" Url="$webresource:ab_/html/page.html" /></Group>""");
+        _context.GetOrganizationService().Update(new Entity("sitemap", siteMapId) { ["sitemapxml"] = originalXml });
+        var tool = NewTool();
+        SetWorkspace(tool, _workspace);
+        var result = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), """
+            [{"action":"add_item","area":"area_default","group":"group_default","id":"sa_web","webresource":"ab_/html/page.html"}]
+            """);
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        var data = result.StructuredContent!.Value;
+        Assert.IsTrue(data.GetProperty("published").GetBoolean());
+        Assert.IsFalse(data.GetProperty("navigationChanged").GetBoolean());
+        Assert.AreEqual(webResourceId, _componentExecutor.Requests.Single().Components.Single().Id);
+        Assert.AreEqual(originalXml, ReadSiteMap(siteMapId));
+    }
+
+    [TestMethod]
+    [DataRow("url", "/workplace/home_dashboards.aspx")]
+    [DataRow("dashboard_id", "e768c201-a0c8-4194-b027-5324a51e628b")]
+    [DataRow("webresource", "ab_/html/page.html")]
+    public void UpdateNavigation_MissingReferencesAndDryRunHaveNoSideEffects(string field, string value)
+    {
+        var (appId, _, siteMapId) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
+        var dryRun = field == "url";
+        if (field == "dashboard_id")
+            _context.GetOrganizationService().Create(new Entity("systemform", Guid.Parse(value))
+            {
+                ["formid"] = Guid.Parse(value), ["type"] = new OptionSetValue(2)
+            });
+        var tool = NewTool(dryRun);
+        SetWorkspace(tool, _workspace);
+        var operations = $$"""
+            [{"action":"add_item","area":"area_default","group":"group_default","id":"sa_new","label":"Page","{{field}}":"{{value}}"}]
+            """;
+        var result = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
+        Assert.AreEqual(!dryRun, result.IsError == true, result.GetText());
+        if (dryRun)
+            Assert.AreEqual("not_executed", result.StructuredContent!.Value.GetProperty("status").GetString());
+        else
+            StringAssert.Contains(result.GetText(), "was not found");
+        Assert.AreEqual(StarterXml, ReadSiteMap(siteMapId));
+        Assert.IsEmpty(_componentExecutor.Requests);
+        Assert.IsEmpty(Directory.GetFiles(_workspace, "*", SearchOption.AllDirectories));
+    }
+
+    private (Guid DashboardId, Guid WebResourceId) SeedNavigationPages()
+    {
+        var orgService = _context.GetOrganizationService();
+        var dashboardId = Guid.NewGuid();
+        return (orgService.Create(new Entity("systemform", dashboardId)
+                { ["formid"] = dashboardId, ["type"] = new OptionSetValue(0) }),
+            orgService.Create(new Entity("webresource") { ["name"] = "ab_/html/page.html" }));
+    }
+
+    private string ReadSiteMap(Guid id) => _context.GetOrganizationService()
+        .Retrieve("sitemap", id, new ColumnSet("sitemapxml")).GetAttributeValue<string>("sitemapxml");
+
+    private void SeedPageComponent(Guid appUniqueId, int type, Guid id) =>
+        _context.GetOrganizationService().Create(new Entity("appmodulecomponent")
+        {
+            ["appmoduleidunique"] = appUniqueId, ["componenttype"] = new OptionSetValue(type), ["objectid"] = id
+        });
+
     // ──────────────────────────────────────────────
     // undo (mutation paths + guards)
     // ──────────────────────────────────────────────
@@ -669,12 +855,38 @@ public sealed class ManageAppFakeXrmEasyTests
         public Type GetResponsibleRequestType() => typeof(OrganizationRequest);
     }
 
+    private sealed class FakeAppComponentTypeExecutor : FakeXrmEasy.Abstractions.FakeMessageExecutors.IFakeMessageExecutor
+    {
+        public bool SupportsWebResources { get; set; } = true;
+
+        public bool CanExecute(OrganizationRequest request) => request is RetrieveAttributeRequest;
+
+        public OrganizationResponse Execute(OrganizationRequest request, IXrmFakedContext context)
+        {
+            var options = new OptionSetMetadata();
+            options.Options.Add(new OptionMetadata(new Label("Forms", 1033), 60));
+            if (SupportsWebResources)
+                options.Options.Add(new OptionMetadata(new Label("Web Resources", 1033), 61));
+            var response = new RetrieveAttributeResponse();
+            response.Results["AttributeMetadata"] = new PicklistAttributeMetadata { OptionSet = options };
+            return response;
+        }
+
+        public Type GetResponsibleRequestType() => typeof(RetrieveAttributeRequest);
+    }
+
     /// <summary>Answers AddAppComponentsRequest (appmodulecomponent add) with an empty response.</summary>
     private sealed class FakeAddAppComponentsExecutor : FakeXrmEasy.Abstractions.FakeMessageExecutors.IFakeMessageExecutor
     {
+        public List<AddAppComponentsRequest> Requests { get; } = [];
+
         public bool CanExecute(OrganizationRequest request) => request is AddAppComponentsRequest;
 
-        public OrganizationResponse Execute(OrganizationRequest request, IXrmFakedContext context) => new();
+        public OrganizationResponse Execute(OrganizationRequest request, IXrmFakedContext context)
+        {
+            Requests.Add((AddAppComponentsRequest)request);
+            return new OrganizationResponse();
+        }
 
         public Type GetResponsibleRequestType() => typeof(AddAppComponentsRequest);
     }

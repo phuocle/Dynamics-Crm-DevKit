@@ -500,6 +500,152 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task CreateDashboard_ValidatesAddsToSolutionAndPublishesById(bool dryRun)
+    {
+        SeedDashboardSolution();
+        SeedForm("Sales Overview", type: 7);
+        var result = await NewTool(dryRun).manage_form(null!, "create", form_name: " Sales Overview ",
+            form_type: 0, formxml: ValidFormXml, solution_name: "Dashboard Solution");
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var data = Structured(result);
+        Assert.AreEqual(dryRun ? "not_executed" : "created", data.GetProperty("status").GetString());
+        Assert.AreEqual(0, data.GetProperty("formType").GetInt32());
+        Assert.AreEqual("Dashboard", data.GetProperty("formTypeName").GetString());
+        Assert.AreEqual("dashboards_solution", data.GetProperty("solutionName").GetString());
+        Assert.IsTrue(data.GetProperty("validated").GetBoolean());
+        Assert.AreEqual(!dryRun, data.GetProperty("published").GetBoolean());
+        Assert.AreEqual(dryRun ? 0 : 1, _service.Creates);
+        if (dryRun)
+        {
+            Assert.IsEmpty(_service.SolutionRequests);
+            Assert.IsEmpty(_service.PublishRequests);
+            return;
+        }
+
+        var id = Guid.Parse(data.GetProperty("formId").GetString()!);
+        var dashboard = _service.Retrieve("systemform", id, new ColumnSet(true));
+        Assert.IsNull(dashboard.GetAttributeValue<string>("objecttypecode"));
+        Assert.AreEqual(0, dashboard.GetAttributeValue<OptionSetValue>("type").Value);
+        Assert.AreEqual("Sales Overview", dashboard.GetAttributeValue<string>("name"));
+        Assert.AreEqual(ValidFormXml, dashboard.GetAttributeValue<string>("formxml"));
+        Assert.IsTrue(data.GetProperty("isAddToSolution").GetBoolean());
+        var added = _service.SolutionRequests.Single();
+        Assert.AreEqual(id, added.ComponentId);
+        Assert.AreEqual(60, added.ComponentType);
+        Assert.AreEqual("dashboards_solution", added.SolutionUniqueName);
+        StringAssert.Contains(_service.PublishRequests.Single(), $"<dashboards><dashboard>{id:D}</dashboard></dashboards>");
+    }
+
+    [TestMethod]
+    [DataRow("<not-form />", "must have a <form> root element")]
+    [DataRow("<form>", "XML Parsing Error")]
+    [DataRow("<form><tabs /></form>", "incomplete content")]
+    public async Task CreateDashboard_InvalidXmlBlocksAllWrites(string xml, string expectedError)
+    {
+        var result = await NewTool().manage_form(null!, "create", form_name: "Sales Overview", formxml: xml);
+
+        Assert.IsTrue(result.IsError == true);
+        StringAssert.Contains(Text(result), expectedError);
+        Assert.AreEqual("blocked_validation", Structured(result).GetProperty("details").GetProperty("status").GetString());
+        Assert.AreEqual(0, _service.Creates);
+        Assert.IsEmpty(_service.PublishRequests);
+        Assert.IsEmpty(_service.SolutionRequests);
+    }
+
+    [TestMethod]
+    [DataRow(true, false, "created_publish_failed")]
+    [DataRow(false, true, "created_solution_failed")]
+    public async Task CreateDashboard_PartialFailureReturnsIdAndRetryDetectsDuplicate(
+        bool failPublish, bool failSolution, string status)
+    {
+        SeedDashboardSolution();
+        _service.FailPublish = failPublish;
+        _service.FailSolution = failSolution;
+        var tool = NewTool();
+        var first = await tool.manage_form(null!, "create", form_name: "Sales Overview",
+            formxml: ValidFormXml, solution_name: "dashboards_solution");
+        var data = Structured(first);
+        Assert.AreEqual(status, data.GetProperty("status").GetString());
+        Assert.AreEqual(!failPublish, data.GetProperty("published").GetBoolean());
+        Assert.AreEqual(!failSolution, data.GetProperty("isAddToSolution").GetBoolean());
+        if (failSolution)
+            StringAssert.Contains(data.GetProperty("solutionWarning").GetString(), "Simulated solution failure");
+
+        var retry = await tool.manage_form(null!, "create", form_name: "Sales Overview", formxml: ValidFormXml);
+        var duplicate = Structured(retry).GetProperty("details");
+        Assert.AreEqual("already_exists", duplicate.GetProperty("status").GetString());
+        Assert.AreEqual(data.GetProperty("formId").GetString(), duplicate.GetProperty("formId").GetString());
+        Assert.AreEqual(1, _service.Creates);
+    }
+
+    [TestMethod]
+    public async Task UpdateDashboard_BackupDetailAndUndoUseDashboardScope()
+    {
+        SeedDashboardSolution();
+        var id = SeedForm("Sales Overview", entity: null!, type: 0);
+        var tool = NewTool();
+        var preview = await NewTool(dryRun: true).manage_form(null!, "update", form_id: id.ToString(),
+            formxml: RestoreFormXml);
+        Assert.AreEqual("not_executed", Structured(preview).GetProperty("status").GetString());
+        Assert.AreEqual(0, _service.Updates);
+        Assert.IsFalse(Directory.Exists(BackupDir("dashboard")));
+
+        var update = await tool.manage_form(null!, "update", form_id: id.ToString(),
+            formxml: RestoreFormXml, solution_name: "dashboards_solution");
+        Assert.IsFalse(update.IsError == true, Text(update));
+        var data = Structured(update);
+        Assert.AreEqual("updated", data.GetProperty("status").GetString());
+        Assert.IsTrue(data.GetProperty("published").GetBoolean());
+        Assert.AreEqual(id, _service.SolutionRequests.Single().ComponentId);
+        var backupPath = data.GetProperty("backupPath").GetString()!;
+        Assert.AreEqual(BackupDir("dashboard"), Path.GetDirectoryName(backupPath));
+        Assert.IsTrue(File.Exists(backupPath));
+
+        var detail = await tool.manage_form(null!, "detail", form_id: id.ToString());
+        Assert.AreEqual("Dashboard", Structured(detail).GetProperty("formTypeName").GetString());
+        StringAssert.Contains(Structured(detail).GetProperty("formXml").GetString(), "tab_restored");
+
+        var undo = await tool.manage_form(null!, "undo", form_id: id.ToString(), formxml: backupPath);
+        Assert.IsTrue(Structured(undo).GetProperty("published").GetBoolean(), Text(undo));
+        Assert.AreEqual(ValidFormXml, _service.Retrieve("systemform", id, new ColumnSet("formxml")).GetAttributeValue<string>("formxml"));
+        Assert.AreEqual(2, _service.Updates);
+        Assert.HasCount(2, _service.PublishRequests);
+        Assert.IsTrue(_service.PublishRequests.All(xml => xml.Contains($"<dashboards><dashboard>{id:D}</dashboard></dashboards>")));
+    }
+
+    [TestMethod]
+    public async Task UpdateDashboard_RejectsEntityFormsOperationsAndBadXml()
+    {
+        var formId = SeedForm("Account Main");
+        var dashboardId = SeedForm("Sales Overview", entity: null!, type: 0);
+        var tool = NewTool();
+        var wrongType = await tool.manage_form(null!, "update", form_id: formId.ToString(), formxml: ValidFormXml);
+        StringAssert.Contains(Text(wrongType), "is not a system dashboard");
+        var operations = await tool.manage_form(null!, "update", form_id: dashboardId.ToString(), operations: AddTabOps);
+        StringAssert.Contains(Text(operations), "dashboard update requires formxml");
+        var invalid = await tool.manage_form(null!, "update", form_id: dashboardId.ToString(), formxml: "<not-form />");
+        Assert.AreEqual("blocked_validation", Structured(invalid).GetProperty("details").GetProperty("status").GetString());
+        Assert.AreEqual(0, _service.Updates);
+        Assert.IsEmpty(_service.PublishRequests);
+        Assert.IsFalse(Directory.Exists(BackupDir("dashboard")));
+    }
+
+    private void SeedDashboardSolution()
+    {
+        var orgService = _ctx.GetOrganizationService();
+        var publisher = orgService.Create(new Entity("publisher") { ["customizationprefix"] = "ab" });
+        orgService.Create(new Entity("solution")
+        {
+            ["publisherid"] = new EntityReference("publisher", publisher),
+            ["friendlyname"] = "Dashboard Solution",
+            ["uniquename"] = "dashboards_solution"
+        });
+    }
+
+    [TestMethod]
     public async Task Create_WithoutSysAdminRole_DoesNotWrite()
     {
         _service.Roles.Clear();
@@ -1080,6 +1226,9 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
 
         /// <summary>When true, PublishXmlRequest throws so PublishHelper returns false.</summary>
         public bool FailPublish;
+        public bool FailSolution;
+        public readonly List<string> PublishRequests = new();
+        public readonly List<AddSolutionComponentRequest> SolutionRequests = new();
 
         public int Creates;
         public int Updates;
@@ -1106,10 +1255,17 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
 
         public OrganizationResponse Execute(OrganizationRequest request)
         {
-            if (request is PublishXmlRequest)
+            if (request is PublishXmlRequest publish)
             {
+                PublishRequests.Add(publish.ParameterXml);
                 if (FailPublish) throw new InvalidOperationException("Simulated publish failure (FailPublish).");
                 Publishes++;
+                return new OrganizationResponse();
+            }
+            if (request is AddSolutionComponentRequest association)
+            {
+                SolutionRequests.Add(association);
+                if (FailSolution) throw new InvalidOperationException("Simulated solution failure.");
                 return new OrganizationResponse();
             }
             if (request is RetrieveAllEntitiesRequest)

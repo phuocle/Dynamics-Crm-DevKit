@@ -16,6 +16,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.ServiceModel;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -30,6 +31,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageAppTool : McpToolBase
     {
+        private const int WebResourceComponentType = 61;
         private const string NotPublishedNextStep =
             "Not published. Run publish_customizations(appmodules='<AppModuleId>') when ready.";
         private static readonly Guid DefaultAppIconWebResourceId = new("953b9fac-1e5e-e611-80d6-00155ded156f");
@@ -78,7 +80,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Optional for create. The solution publisher prefix is always prepended (e.g. 'MyApp' with solution all_in_one becomes 'all_MyApp'). If empty, derived from display_name.")] string unique_name = "",
             [Description("Optional for create/update.")] string description = "",
             [Description("Optional app icon web resource name or GUID.")] string icon_webresource = "",
-            [Description("update_navigation: JSON array serialized as a string; read docs://instructions_for_manage_app for the operation contract and examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
+            [Description("update_navigation: JSON array serialized as a string. add_item/update_item targets: entity, url, dashboard_id (alias default_dashboard), or webresource. See docs://instructions_for_manage_app for examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
             [Description("list only. 1-500.")] int max_records = 100,
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)
@@ -598,6 +600,39 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     NextStep = NotPublishedNextStep
                 });
 
+            var pageComponents = new EntityReferenceCollection();
+            var addedComponents = new List<string>(navResult.AddedEntities);
+            var pageItems = navResult.ComponentItems.Where(item => item.Document != null).ToList();
+            if (pageItems.Count > 0)
+            {
+                var existing = GetAppComponents(appModuleIdUnique.Value)
+                    .Select(c => (c.GetAttributeValue<OptionSetValue>("componenttype")?.Value, c.GetAttributeValue<Guid>("objectid")))
+                    .ToHashSet();
+                var targets = pageItems
+                    .Select(item => ((string)item.Attribute("DefaultDashboard"), (string)item.Attribute("Url")))
+                    .Distinct();
+                bool? supportsWebResourceComponents = null;
+                foreach (var (dashboard, url) in targets)
+                {
+                    var (reference, componentType, error) = ResolveNavigationPage(dashboard, url);
+                    if (error != null)
+                        return Error(error, "Provide an existing system dashboard GUID or web resource name.");
+
+                    if (!existing.Add((componentType, reference.Id)))
+                        continue;
+                    // $webresource creates a SiteMap dependency even when the app component type is unavailable.
+                    if (componentType == WebResourceComponentType)
+                    {
+                        supportsWebResourceComponents ??= SupportsWebResourceAppComponents();
+                        if (supportsWebResourceComponents == false)
+                            continue;
+                    }
+
+                    pageComponents.Add(reference);
+                    addedComponents.Add($"{reference.LogicalName}:{reference.Id:D}");
+                }
+            }
+
             if (_options.DryRun)
             {
                 var previewText = $"Would update navigation of app '{appModule.GetAttributeValue<string>("name")}' with {ops.Count} operation(s): {navResult.ChangedOperations} changed, {navResult.NoOpOperations} no-op.";
@@ -616,14 +651,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ChangedOperations = navResult.ChangedOperations,
                     NoOpOperations = navResult.NoOpOperations,
                     OperationSummaries = navResult.OperationSummaries,
-                    AddedAppComponents = navResult.AddedEntities.Count > 0 ? navResult.AddedEntities : null
+                    AddedAppComponents = addedComponents.Count > 0 ? addedComponents : null
                 });
             }
 
             // Snapshot only when actually mutating
             var backupPath = SaveAppSnapshot(appModule);
 
-            if (!navResult.HasChanges)
+            if (!navResult.HasChanges && pageComponents.Count == 0)
             {
                 var noOpText = $"No changes for app '{appModule.GetAttributeValue<string>("name")}': all {ops.Count} navigation operation(s) already satisfied — sitemap update and publish skipped.";
 
@@ -648,11 +683,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
             }
 
-            var updateSiteMap = new Entity("sitemap", siteMapId.Value)
+            // Associate page components first so a retry never sees a new page pointing at a missing component.
+            if (pageComponents.Count > 0)
+                AddAppComponents(appModule.Id, pageComponents);
+
+            if (navResult.HasChanges)
             {
-                ["sitemapxml"] = navResult.ModifiedSiteMapXml
-            };
-            DataverseMutationExecutor.Update(_context, _orgService, updateSiteMap);
+                var updateSiteMap = new Entity("sitemap", siteMapId.Value)
+                {
+                    ["sitemapxml"] = navResult.ModifiedSiteMapXml
+                };
+                DataverseMutationExecutor.Update(_context, _orgService, updateSiteMap);
+            }
 
             if (entityComponentRefs.Count > 0)
                 AddAppComponents(appModule.Id, entityComponentRefs);
@@ -683,7 +725,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ChangedOperations = navResult.ChangedOperations,
                 NoOpOperations = navResult.NoOpOperations,
                 OperationSummaries = navResult.OperationSummaries,
-                AddedAppComponents = navResult.AddedEntities.Count > 0 ? navResult.AddedEntities : null
+                AddedAppComponents = addedComponents.Count > 0 ? addedComponents : null
             });
         }
 
@@ -885,8 +927,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     continue;
                 }
 
-                var action = GetJsonString(obj, "action");
-                if (string.Equals(action, "add_item", StringComparison.OrdinalIgnoreCase))
+                var action = GetJsonString(obj, "action")?.Trim().ToLowerInvariant();
+                if ((action is "add_item" or "update_item") &&
+                    !obj.ContainsKey("url") && !obj.ContainsKey("dashboard_id") &&
+                    !obj.ContainsKey("default_dashboard") && !obj.ContainsKey("webresource"))
                 {
                     var entity = GetJsonString(obj, "entity");
                     if (!string.IsNullOrWhiteSpace(entity))
@@ -895,7 +939,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         if (result.IsSuccess)
                         {
                             obj["entity"] = result.Value.LogicalName;
-                            if (!HasNavigationLabel(obj))
+                            if (action == "add_item" && !HasNavigationLabel(obj))
                             {
                                 var displayName = result.Value.DisplayName?.UserLocalizedLabel?.Label;
                                 if (!string.IsNullOrWhiteSpace(displayName))
@@ -1094,6 +1138,47 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             });
         }
 
+        private (EntityReference Reference, int ComponentType, string Error) ResolveNavigationPage(string dashboard, string url)
+        {
+            if (dashboard != null)
+            {
+                var id = Guid.Parse(dashboard);
+                var query = new QueryExpression("systemform") { ColumnSet = new ColumnSet(false), TopCount = 1 };
+                query.Criteria.AddCondition("formid", ConditionOperator.Equal, id);
+                query.Criteria.AddCondition("type", ConditionOperator.Equal, 0);
+                if (_orgService.RetrieveMultiple(query).Entities.Count == 0)
+                    return (null, 0, $"System dashboard '{id:D}' was not found.");
+                return (new EntityReference("systemform", id), 60, null);
+            }
+
+            var name = url[AppNavigationOperationsHelper.WebResourcePrefix.Length..];
+            var resources = new QueryExpression("webresource") { ColumnSet = new ColumnSet(false), TopCount = 1 };
+            resources.Criteria.AddCondition("name", ConditionOperator.Equal, name);
+            var resource = _orgService.RetrieveMultiple(resources).Entities.FirstOrDefault();
+            return resource == null
+                ? (null, 0, $"Web resource '{name}' was not found.")
+                : (resource.ToEntityReference(), WebResourceComponentType, null);
+        }
+
+        private bool SupportsWebResourceAppComponents()
+        {
+            try
+            {
+                var response = (RetrieveAttributeResponse)_orgService.Execute(new RetrieveAttributeRequest
+                {
+                    EntityLogicalName = "appmodulecomponent",
+                    LogicalName = "componenttype"
+                });
+                return response.AttributeMetadata is EnumAttributeMetadata attribute &&
+                    attribute.OptionSet?.Options.Any(option => option.Value == WebResourceComponentType) == true;
+            }
+            catch (FaultException<OrganizationServiceFault> ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"manage_app: app component type metadata unavailable: {ex.Message}");
+                return false;
+            }
+        }
+
         private Guid ResolveIconWebResourceId(string iconWebResource, out string error)
         {
             error = null;
@@ -1236,7 +1321,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                                         Id = subArea.Attribute("Id")?.Value,
                                         Title = GetTitle(subArea),
                                         Entity = subArea.Attribute("Entity")?.Value,
-                                        Url = subArea.Attribute("Url")?.Value
+                                        Url = subArea.Attribute("Url")?.Value,
+                                        DefaultDashboard = subArea.Attribute("DefaultDashboard")?.Value
                                     })
                                     .ToList()
                             })

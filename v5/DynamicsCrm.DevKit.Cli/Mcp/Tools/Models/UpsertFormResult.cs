@@ -40,6 +40,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("published")]
         public bool Published { get; set; }
 
+        [JsonPropertyName("solutionName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SolutionName { get; set; }
+
+        [JsonPropertyName("isAddToSolution")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsAddToSolution { get; set; }
+
+        [JsonPropertyName("solutionWarning")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SolutionWarning { get; set; }
+
         [JsonPropertyName("restoredFromBackup")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string RestoredFromBackup { get; set; }

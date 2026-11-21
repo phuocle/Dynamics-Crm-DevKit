@@ -33,6 +33,24 @@
 
 The target table and the fields and web resources referenced by the form must already exist. Enable Quick Create on the target table to use the form in the app.
 
+## Create and Update a System Dashboard
+
+Create an organization-owned dashboard with `form_type=0` and omit `entity_name`. Supply a dashboard FormXML file or inline XML with a `<form>` root. For dashboard layout examples, see [Microsoft's dashboard samples](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/sample-dashboards).
+
+```json
+{
+  "action": "create",
+  "form_type": 0,
+  "form_name": "Sales Overview",
+  "formxml": "C:/customizations/sales-overview.xml",
+  "solution_name": "sales_customizations"
+}
+```
+
+Use the returned `formId` with `detail` to read the current FormXML. To replace it, call `manage_form(action='update', form_type=0, form_id=..., formxml=...)` with the complete XML or its file path. Update saves a backup under `.devkit/manage_form/dashboard/`. Restore it with `action='undo'`, the same `form_id`, and the returned `backupPath` as `formxml`.
+
+Create and update validate against `schema://formxml` and publish the dashboard by GUID. Optionally supply `solution_name` on either action to add the dashboard to that solution. Check `published` and `isAddToSolution` when a solution is supplied. If publish fails, call `publish_customizations(dashboards='<formId>')`.
+
 ## Operation JSON Contract
 Call `manage_form` with tool-level `action='update'`. Inside the `operations` JSON array, each operation object uses:
 
