@@ -13,7 +13,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
         public List<string> OperationSummaries { get; set; } = [];
         public List<string> AddedEntities { get; set; } = [];
         internal HashSet<XElement> ComponentItems { get; } = [];
-        internal HashSet<XElement> DashboardIconItems { get; } = [];
+        internal HashSet<XElement> IconItems { get; } = [];
         public int ChangedOperations { get; set; }
         public int NoOpOperations { get; set; }
         public bool HasChanges => ChangedOperations > 0;
@@ -183,7 +183,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
             var groupRef = Required(op, "group", "add_item");
             var target = ReadItemTarget(op, "add_item")
                 ?? throw new InvalidOperationException("add_item requires 'entity', 'url', 'dashboard_id' (alias: 'default_dashboard'), or 'webresource'.");
-            var icon = ReadDashboardIcon(op, "add_item", target.Attribute == "DefaultDashboard");
+            var icon = ReadItemIcon(op, "add_item", target.Kind is "Dashboard" or "WebResource");
             var area = FindArea(doc, areaRef)
                 ?? throw new InvalidOperationException($"Area '{areaRef}' not found.");
             var group = FindGroup(area, groupRef)
@@ -202,7 +202,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
                 {
                     if ((string)existing.Attribute("Icon") != icon)
                         throw new InvalidOperationException($"Item '{id}' already exists with a different icon. Use update_item to set its icon.");
-                    result.DashboardIconItems.Add(existing);
+                    result.IconItems.Add(existing);
                 }
                 if (target.IsAppComponent)
                     result.ComponentItems.Add(existing);
@@ -213,7 +213,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
 
             var subArea = new XElement("SubArea", new XAttribute("Id", id));
             target.WriteTo(subArea);
-            SetDashboardIcon(subArea, icon, result);
+            SetItemIcon(subArea, icon, result);
             if (!string.IsNullOrWhiteSpace(label))
                 subArea.Add(BuildTitles(label, lcid));
 
@@ -238,14 +238,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
             var target = ReadItemTarget(op, "update_item");
             var label = GetLabel(op);
             var subArea = matches[0];
-            var dashboard = target == null
-                ? subArea.Attribute("DefaultDashboard") != null
-                : target.Attribute == "DefaultDashboard";
-            var icon = ReadDashboardIcon(op, "update_item", dashboard);
+            var supportsIcon = target != null
+                ? target.Kind is "Dashboard" or "WebResource"
+                : subArea.Attribute("DefaultDashboard") != null ||
+                  (subArea.Attribute("Entity") == null &&
+                   ((string)subArea.Attribute("Url"))?.StartsWith(WebResourcePrefix, StringComparison.OrdinalIgnoreCase) == true);
+            var icon = ReadItemIcon(op, "update_item", supportsIcon);
             if (target == null && string.IsNullOrWhiteSpace(label) && icon == null)
-                throw new InvalidOperationException("update_item requires a target or a 'label'. Dashboard items also accept 'icon'.");
+                throw new InvalidOperationException("update_item requires a target or a 'label'. Dashboard and WebResource items also accept 'icon'.");
 
-            var changed = SetDashboardIcon(subArea, icon, result);
+            var changed = SetItemIcon(subArea, icon, result);
             if (target != null)
             {
                 if (target.RequiresWrite(subArea))
@@ -289,21 +291,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
 
         internal const string WebResourcePrefix = "$webresource:";
 
-        private static string ReadDashboardIcon(JsonElement op, string action, bool dashboard)
+        private static string ReadItemIcon(JsonElement op, string action, bool supportsIcon)
         {
             var icon = ReadOptionalString(op, action, "icon");
             if (icon == null)
                 return null;
-            if (!dashboard)
-                throw new InvalidOperationException($"{action} supports 'icon' on Dashboard items only.");
+            if (!supportsIcon)
+                throw new InvalidOperationException($"{action} supports 'icon' on Dashboard and WebResource items only.");
             return NormalizeWebResourceReference(icon, action);
         }
 
-        private static bool SetDashboardIcon(XElement item, string icon, AppNavigationOperationsResult result)
+        private static bool SetItemIcon(XElement item, string icon, AppNavigationOperationsResult result)
         {
             if (icon == null)
                 return false;
-            result.DashboardIconItems.Add(item);
+            result.IconItems.Add(item);
             if ((string)item.Attribute("Icon") == icon)
                 return false;
             item.SetAttributeValue("Icon", icon);

@@ -15,7 +15,7 @@ Use `manage_app` for model-driven app metadata and app navigation. Never use `ex
 - `remove_area`, `remove_group`, and `remove_item` only remove navigation nodes from sitemap XML.
 - `add_item` accepts one target per SubArea. Use `entity`, `url`, `dashboard_id` (alias `default_dashboard`), or `webresource`.
 - `update_item` finds the SubArea by `area`, `group`, and `item`. Pass a new `label`, a new target, or both. Use the SubArea ID for reliable matching. `move_item` and `remove_item` accept SubArea IDs for every type.
-- Dashboard items also accept `icon` on `add_item` and `update_item`. Use the exact name of an existing SVG web resource. The `$webresource:` prefix is optional in the input.
+- Dashboard and WebResource items accept `icon` on `add_item` and `update_item`. Use the exact name of an existing SVG web resource. The `$webresource:` prefix is optional in the input.
 - All move/order positions are 1-based when numeric. Visual order is left-to-right, then top-to-bottom.
 
 ## Read Before Write Workflow
@@ -118,7 +118,8 @@ Add a URL, a system dashboard, and a web resource to an existing group:
     "group": "group_default",
     "id": "sa_help_page",
     "label": "Help",
-    "webresource": "ab_/html/page.html"
+    "webresource": "ab_/html/page.html",
+    "icon": "ab_/icons/help.svg"
   }
 ]
 ```
@@ -127,7 +128,7 @@ Add a URL, a system dashboard, and a web resource to an existing group:
 - Use the `formId` returned by `manage_form` or the GUID of an existing system dashboard. The operation writes `Url="/workplace/home_dashboards.aspx"` and `DefaultDashboard` with the GUID without braces. To repair an existing Dashboard SubArea, pass its `item` ID and the same `dashboard_id` in `update_item`. The system form is associated with the app if needed.
 - Pass an existing web resource's exact name. The `$webresource:` prefix is optional in input and always appears in the SiteMap URL, which establishes a Dataverse dependency. When the environment exposes app component type `61`, the tool also adds the web resource directly to the app if needed.
 
-Set or replace the icon on an existing Dashboard item:
+Set or replace the icon on an existing Dashboard or WebResource item with `update_item`, `area`, `group`, and `item`. For example, set the icon on the WebResource item above.
 
 ```json
 [
@@ -135,13 +136,13 @@ Set or replace the icon on an existing Dashboard item:
     "action": "update_item",
     "area": "area_default",
     "group": "group_default",
-    "item": "sa_sales_dashboard",
-    "icon": "$webresource:ab_/icons/dashboard-new.svg"
+    "item": "sa_help_page",
+    "icon": "$webresource:ab_/icons/help.svg"
   }
 ]
 ```
 
-The tool validates that the resource exists and is an SVG before saving, then writes `Icon="$webresource:ab_/icons/dashboard-new.svg"` on the Dashboard SubArea. The app detail result returns this value in `navigationAreas[].groups[].items[].icon`.
+The tool validates that the icon exists and is an SVG before saving, then writes `Icon="$webresource:ab_/icons/help.svg"` on the SubArea. The app detail result returns this value in `navigationAreas[].groups[].items[].icon`.
 
 Move item:
 

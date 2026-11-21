@@ -81,7 +81,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Optional for create. The solution publisher prefix is always prepended (e.g. 'MyApp' with solution all_in_one becomes 'all_MyApp'). If empty, derived from display_name.")] string unique_name = "",
             [Description("Optional for create/update.")] string description = "",
             [Description("Optional app icon web resource name or GUID.")] string icon_webresource = "",
-            [Description("update_navigation: JSON array serialized as a string. add_item/update_item targets: entity, url, dashboard_id (alias default_dashboard), or webresource. Dashboard items accept icon (SVG web resource name or $webresource: reference). See docs://instructions_for_manage_app for examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
+            [Description("update_navigation: JSON array serialized as a string. add_item/update_item targets: entity, url, dashboard_id (alias default_dashboard), or webresource. Dashboard and WebResource items accept icon (SVG web resource name or $webresource: reference). See docs://instructions_for_manage_app for examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
             [Description("list only. 1-500.")] int max_records = 100,
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)
@@ -103,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Optional for create. The solution publisher prefix is always prepended (e.g. 'MyApp' with solution all_in_one becomes 'all_MyApp'). If empty, derived from display_name.")] string unique_name = "",
             [Description("Optional for create/update.")] string description = "",
             [Description("Optional app icon web resource name or GUID.")] string icon_webresource = "",
-            [Description("update_navigation: JSON array serialized as a string. Dashboard add_item/update_item operations accept icon (SVG web resource name or $webresource: reference). See docs://instructions_for_manage_app for examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
+            [Description("update_navigation: JSON array serialized as a string. Dashboard and WebResource add_item/update_item operations accept icon (SVG web resource name or $webresource: reference). See docs://instructions_for_manage_app for examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
             [Description("list only. 1-500.")] int max_records = 100)
         {
             try
@@ -601,7 +601,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     NextStep = NotPublishedNextStep
                 });
 
-            var iconError = ValidateDashboardIcons(navResult.DashboardIconItems);
+            var iconError = ValidateNavigationIcons(navResult.IconItems);
             if (iconError != null)
                 return Error(iconError, "Use the exact name of an existing SVG web resource, optionally prefixed with '$webresource:'.");
 
@@ -1163,18 +1163,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 : (resource.ToEntityReference(), WebResourceComponentType, null);
         }
 
-        private string ValidateDashboardIcons(IEnumerable<XElement> iconItems)
+        private string ValidateNavigationIcons(IEnumerable<XElement> iconItems)
         {
-            var names = iconItems.Where(item => item.Document != null)
-                .Select(item => ((string)item.Attribute("Icon"))[AppNavigationOperationsHelper.WebResourcePrefix.Length..])
-                .Distinct(StringComparer.OrdinalIgnoreCase);
-            foreach (var name in names)
+            var items = iconItems.Where(item => item.Document != null)
+                .DistinctBy(item => (string)item.Attribute("Icon"), StringComparer.OrdinalIgnoreCase);
+            foreach (var item in items)
             {
+                var name = ((string)item.Attribute("Icon"))[AppNavigationOperationsHelper.WebResourcePrefix.Length..];
+                var iconDescription = item.Attribute("DefaultDashboard") != null ? "Dashboard icon web resource" : "WebResource icon";
                 var resource = FindNavigationWebResource(name, new ColumnSet("webresourcetype"));
                 if (resource == null)
-                    return $"Dashboard icon web resource '{name}' was not found.";
+                    return $"{iconDescription} '{name}' was not found.";
                 if (resource.GetAttributeValue<OptionSetValue>("webresourcetype")?.Value != SvgWebResourceType)
-                    return $"Dashboard icon web resource '{name}' must be an SVG.";
+                    return $"{iconDescription} '{name}' must be an SVG.";
             }
             return null;
         }

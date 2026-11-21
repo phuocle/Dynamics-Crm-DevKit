@@ -458,13 +458,14 @@ public sealed class ManageAppFakeXrmEasyTests
     {
         var (appId, appUniqueId, siteMapId) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
         var (dashboardId, webResourceId) = SeedNavigationPages();
+        SeedIconWebResource("ab_/icons/page.svg", 11);
         var tool = NewTool();
         SetWorkspace(tool, _workspace);
         var operations = $$"""
             [
               {"action":"add_item","area":"area_default","group":"group_default","id":"sa_link","label":"Link","url":"/workplace/home_dashboards.aspx?a=1&b=2"},
               {"action":"add_item","area":"area_default","group":"group_default","id":"sa_dashboard","label":"Dashboard","dashboard_id":"{{dashboardId}}"},
-              {"action":"add_item","area":"area_default","group":"group_default","id":"sa_web","label":"Page","webresource":"ab_/html/page.html"},
+              {"action":"add_item","area":"area_default","group":"group_default","id":"sa_web","label":"Page","webresource":"ab_/html/page.html","icon":"$webresource:ab_/icons/page.svg"},
               {"action":"add_item","area":"area_default","group":"group_default","id":"sa_web2","label":"Second page","webresource":"$webresource:ab_/html/page.html"}
             ]
             """;
@@ -486,6 +487,7 @@ public sealed class ManageAppFakeXrmEasyTests
         Assert.AreEqual(dashboardId.ToString("D"), (string?)items["sa_dashboard"].Attribute("DefaultDashboard"));
         Assert.AreEqual("/workplace/home_dashboards.aspx", (string?)items["sa_dashboard"].Attribute("Url"));
         Assert.AreEqual("$webresource:ab_/html/page.html", (string?)items["sa_web"].Attribute("Url"));
+        Assert.AreEqual("$webresource:ab_/icons/page.svg", (string?)items["sa_web"].Attribute("Icon"));
         Assert.AreEqual("$webresource:ab_/html/page.html", (string?)items["sa_web2"].Attribute("Url"));
         Assert.AreEqual("Link", (string?)items["sa_link"].Descendants("Title").Single().Attribute("Title"));
         Assert.IsNull(items["sa_link"].Attribute("Entity"));
@@ -661,7 +663,54 @@ public sealed class ManageAppFakeXrmEasyTests
     }
 
     [TestMethod]
-    [DataRow("\"url\":\"/page\",\"icon\":\"ab_/icons/test.svg\"", "on Dashboard items only")]
+    [DataRow(11, null)]
+    [DataRow(0, "was not found")]
+    [DataRow(5, "must be an SVG")]
+    public void UpdateNavigation_WebResourceIconOnlyUpdateValidatesResource(int iconType, string? expectedError)
+    {
+        var (appId, _, siteMapId) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
+        const string pageUrl = "$WEBRESOURCE:ab_/html/Dashboard.html";
+        var originalXml = StarterXml.Replace("</Group>", $"""
+            <SubArea Id="sa_executive_bi" Url="{pageUrl}">
+              <Titles><Title LCID="1033" Title="Executive BI Dashboard" /></Titles>
+            </SubArea>
+            </Group>
+            """);
+        _context.GetOrganizationService().Update(new Entity("sitemap", siteMapId) { ["sitemapxml"] = originalXml });
+        if (iconType != 0)
+            SeedIconWebResource("ab_/images/other/dashboard.svg", iconType);
+        var tool = NewTool();
+        SetWorkspace(tool, _workspace);
+        const string operations = """
+            [{"action":"update_item","area":"area_default","group":"group_default","item":"sa_executive_bi","icon":"ab_/images/other/dashboard.svg"}]
+            """;
+
+        var result = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
+        if (expectedError == null)
+        {
+            Assert.IsFalse(result.IsError == true, result.GetText());
+            Assert.AreEqual("updated", result.StructuredContent!.Value.GetProperty("status").GetString());
+            var page = XDocument.Parse(ReadSiteMap(siteMapId)).Descendants("SubArea")
+                .Single(item => (string?)item.Attribute("Id") == "sa_executive_bi");
+            Assert.AreEqual(pageUrl, (string?)page.Attribute("Url"));
+            Assert.AreEqual("$webresource:ab_/images/other/dashboard.svg", (string?)page.Attribute("Icon"));
+            Assert.IsNull(page.Attribute("DefaultDashboard"));
+
+            var retry = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
+            Assert.AreEqual("no_changes", retry.StructuredContent!.Value.GetProperty("status").GetString());
+        }
+        else
+        {
+            Assert.IsTrue(result.IsError == true, result.GetText());
+            StringAssert.Contains(result.GetText(), $"WebResource icon 'ab_/images/other/dashboard.svg' {expectedError}");
+            Assert.AreEqual(originalXml, ReadSiteMap(siteMapId));
+            Assert.IsEmpty(Directory.GetFiles(_workspace, "*", SearchOption.AllDirectories));
+        }
+        Assert.IsEmpty(_componentExecutor.Requests);
+    }
+
+    [TestMethod]
+    [DataRow("\"url\":\"/page\",\"icon\":\"ab_/icons/test.svg\"", "on Dashboard and WebResource items only")]
     [DataRow("\"dashboard_id\":\"e768c201-a0c8-4194-b027-5324a51e628b\",\"icon\":\"$webresource:\"", "requires a web resource name")]
     [DataRow("\"dashboard_id\":\"e768c201-a0c8-4194-b027-5324a51e628b\",\"icon\":false", "'icon' to be a non-empty string")]
     public void UpdateNavigation_RejectsInvalidDashboardIconArguments(string targetJson, string expectedError)
