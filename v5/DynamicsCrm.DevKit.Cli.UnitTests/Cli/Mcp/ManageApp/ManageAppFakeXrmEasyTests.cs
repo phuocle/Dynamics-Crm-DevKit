@@ -39,6 +39,7 @@ public sealed class ManageAppFakeXrmEasyTests
     private FakeRetrieveEntityExecutor _entityExecutor = null!;
     private FakeValidateAppExecutor _validateExecutor = null!;
     private FakeAddAppComponentsExecutor _componentExecutor = null!;
+    private FakeRemoveAppComponentsExecutor _removeComponentExecutor = null!;
     private FakeAppComponentTypeExecutor _componentTypeExecutor = null!;
     private FakePublishXmlExecutor _publishExecutor = null!;
     private string _workspace = null!;
@@ -67,6 +68,7 @@ public sealed class ManageAppFakeXrmEasyTests
         _entityExecutor = new FakeRetrieveEntityExecutor();
         _validateExecutor = new FakeValidateAppExecutor();
         _componentExecutor = new FakeAddAppComponentsExecutor();
+        _removeComponentExecutor = new FakeRemoveAppComponentsExecutor();
         _componentTypeExecutor = new FakeAppComponentTypeExecutor();
         _publishExecutor = new FakePublishXmlExecutor();
         _context = MiddlewareBuilder.New()
@@ -76,6 +78,7 @@ public sealed class ManageAppFakeXrmEasyTests
             .AddFakeMessageExecutor(new FakeRetrieveAllEntitiesExecutor(_entityExecutor))
             .AddFakeMessageExecutor(_validateExecutor)
             .AddFakeMessageExecutor(_componentExecutor)
+            .AddFakeMessageExecutor(_removeComponentExecutor)
             .AddFakeMessageExecutor(_componentTypeExecutor)
             .AddFakeMessageExecutor(_publishExecutor)
             .UseCrud()
@@ -904,6 +907,126 @@ public sealed class ManageAppFakeXrmEasyTests
             ["appmoduleidunique"] = appUniqueId, ["componenttype"] = new OptionSetValue(type), ["objectid"] = id
         });
 
+    [TestMethod]
+    [DataRow(true)]
+    [DataRow(false)]
+    public void ComponentActions_BackupAndPublish_AndUndoRestoresOnlyChangedMembership(bool add)
+    {
+        var (appId, appUniqueId, _) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: false);
+        var service = _context.GetOrganizationService();
+        var view = Guid.NewGuid();
+        var form = Guid.NewGuid();
+        var dashboard = Guid.NewGuid();
+        var unrelated = Guid.NewGuid();
+        service.Create(new Entity("savedquery", view) { ["name"] = "Active Accounts", ["returnedtypecode"] = "account" });
+        service.Create(new Entity("savedquery") { ["name"] = "Active Accounts", ["returnedtypecode"] = "contact" });
+        service.Create(new Entity("systemform", form) { ["formid"] = form, ["name"] = "Account Details", ["objecttypecode"] = "account", ["type"] = new OptionSetValue(2) });
+        service.Create(new Entity("systemform", dashboard) { ["name"] = "Activity Dashboard", ["objecttypecode"] = "account", ["type"] = new OptionSetValue(10) });
+        if (!add)
+        {
+            SeedPageComponent(appUniqueId, 26, view);
+            SeedPageComponent(appUniqueId, 60, form);
+            SeedPageComponent(appUniqueId, 60, dashboard);
+        }
+
+        var tool = NewTool();
+        SetWorkspace(tool, _workspace);
+        List<Entity> CurrentComponents()
+        {
+            var query = new QueryExpression("appmodulecomponent") { ColumnSet = new ColumnSet("objectid") };
+            query.Criteria.AddCondition("appmoduleidunique", ConditionOperator.Equal, appUniqueId);
+            return service.RetrieveMultiple(query).Entities.ToList();
+        }
+
+        void AssertBackupExistsBeforeRequest()
+        {
+            Assert.IsTrue(Directory.EnumerateFiles(_workspace, "*.app.json", SearchOption.AllDirectories).Any());
+        }
+
+        _componentExecutor.OnExecute = request =>
+        {
+            AssertBackupExistsBeforeRequest();
+            Assert.AreEqual(appId, request.AppId);
+            foreach (var component in request.Components)
+                SeedPageComponent(appUniqueId, component.LogicalName == "savedquery" ? 26 : 60, component.Id);
+        };
+        _removeComponentExecutor.OnExecute = request =>
+        {
+            AssertBackupExistsBeforeRequest();
+            Assert.AreEqual(appId, request.AppId);
+            var ids = request.Components.Select(component => component.Id).ToHashSet();
+            foreach (var row in CurrentComponents().Where(row => ids.Contains(row.GetAttributeValue<Guid>("objectid"))))
+                service.Delete("appmodulecomponent", row.Id);
+        };
+
+        var action = add ? "add_components" : "remove_components";
+        var viewSelectors = new[] { "Active Accounts", view.ToString() };
+        var formSelectors = new[] { form.ToString() };
+        var dashboardSelectors = new[] { "Activity Dashboard" };
+        var result = Invoke(tool, "HandleAppComponents", action, "Sales Hub", "Account", viewSelectors, formSelectors, dashboardSelectors);
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        var detail = result.StructuredContent!.Value;
+        Assert.AreEqual("updated", detail.GetProperty("status").GetString());
+        Assert.IsTrue(detail.GetProperty("published").GetBoolean());
+        Assert.AreEqual(3, detail.GetProperty("changedOperations").GetInt32());
+        CollectionAssert.AreEquivalent(new[] { $"26:{view}", $"60:{form}", $"60:{dashboard}" },
+            detail.GetProperty(add ? "addedAppComponents" : "removedAppComponents").EnumerateArray().Select(value => value.GetString()).ToArray());
+        var path = detail.GetProperty("backupPath").GetString()!;
+        var original = File.ReadAllText(path);
+        using var snapshot = JsonDocument.Parse(original);
+        Assert.AreEqual(3, snapshot.RootElement.GetProperty("componentScope").GetArrayLength());
+        Assert.AreEqual(add ? 0 : 3, snapshot.RootElement.GetProperty("appComponents").GetArrayLength());
+        StringAssert.Contains(_publishExecutor.Requests.Single().ParameterXml, $"<appmodules><appmodule>{appId}</appmodule></appmodules>");
+
+        var repeated = Invoke(tool, "HandleAppComponents", action, "Sales Hub", "Account", viewSelectors, formSelectors, dashboardSelectors);
+        Assert.AreEqual("no_changes", repeated.StructuredContent!.Value.GetProperty("status").GetString());
+        Assert.HasCount(1, _publishExecutor.Requests);
+
+        SeedPageComponent(appUniqueId, 60, unrelated);
+        var undo = Invoke(tool, "HandleUndo", "Sales Hub", path);
+        Assert.IsFalse(undo.IsError == true, undo.GetText());
+        var restored = undo.StructuredContent!.Value;
+        Assert.AreEqual("restored", restored.GetProperty("status").GetString());
+        Assert.IsTrue(restored.GetProperty("published").GetBoolean());
+        Assert.AreEqual(path, restored.GetProperty("restoredFromBackup").GetString());
+        Assert.AreNotEqual(path, restored.GetProperty("backupPath").GetString());
+        Assert.AreEqual(original, File.ReadAllText(path));
+        Assert.HasCount(2, _publishExecutor.Requests);
+        var refs = new[] { (view, "savedquery"), (form, "systemform"), (dashboard, "systemform") };
+        CollectionAssert.AreEquivalent(refs, _componentExecutor.Requests.Single().Components.Select(c => (c.Id, c.LogicalName)).ToArray());
+        CollectionAssert.AreEquivalent(refs, _removeComponentExecutor.Requests.Single().Components.Select(c => (c.Id, c.LogicalName)).ToArray());
+        CollectionAssert.AreEquivalent(add ? new[] { unrelated } : new[] { unrelated, view, form, dashboard },
+            CurrentComponents().Select(row => row.GetAttributeValue<Guid>("objectid")).ToArray());
+    }
+
+    [TestMethod]
+    public async Task ComponentActions_DryRunPreviewsResolvedComponents_AndRejectsWrongTable()
+    {
+        SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
+        var service = _context.GetOrganizationService();
+        var dashboard = Guid.NewGuid();
+        service.Create(new Entity("systemform", dashboard) { ["name"] = "Global Dashboard", ["type"] = new OptionSetValue(0) });
+        var foreignView = service.Create(new Entity("savedquery") { ["name"] = "Active Contacts", ["returnedtypecode"] = "contact" });
+        var tool = NewTool(dryRun: true, mutationsBlocked: true);
+
+        var preview = await tool.manage_app(null!, action: "add_components", app: "Sales Hub",
+            dashboard_ids: ["Global Dashboard"]);
+        Assert.IsFalse(preview.IsError == true, preview.GetText());
+        StringAssert.StartsWith(preview.GetText(), "[DryRun]");
+        var detail = preview.StructuredContent!.Value;
+        Assert.AreEqual("not_executed", detail.GetProperty("status").GetString());
+        Assert.AreEqual($"60:{dashboard}", detail.GetProperty("addedAppComponents")[0].GetString());
+        Assert.IsFalse(detail.TryGetProperty("backupPath", out _));
+
+        var invalid = await tool.manage_app(null!, action: "remove_components", app: "Sales Hub",
+            entity_name: "account", view_ids: [foreignView.ToString()]);
+        Assert.IsTrue(invalid.IsError == true);
+        StringAssert.Contains(invalid.GetText(), "was not found");
+        Assert.IsEmpty(_componentExecutor.Requests);
+        Assert.IsEmpty(_removeComponentExecutor.Requests);
+        Assert.IsEmpty(_publishExecutor.Requests);
+    }
+
     // ──────────────────────────────────────────────
     // undo (mutation paths + guards)
     // ──────────────────────────────────────────────
@@ -1150,16 +1273,37 @@ public sealed class ManageAppFakeXrmEasyTests
     private sealed class FakeAddAppComponentsExecutor : FakeXrmEasy.Abstractions.FakeMessageExecutors.IFakeMessageExecutor
     {
         public List<AddAppComponentsRequest> Requests { get; } = [];
+        public Action<AddAppComponentsRequest>? OnExecute { get; set; }
 
         public bool CanExecute(OrganizationRequest request) => request is AddAppComponentsRequest;
 
         public OrganizationResponse Execute(OrganizationRequest request, IXrmFakedContext context)
         {
-            Requests.Add((AddAppComponentsRequest)request);
+            var add = (AddAppComponentsRequest)request;
+            Requests.Add(add);
+            OnExecute?.Invoke(add);
             return new OrganizationResponse();
         }
 
         public Type GetResponsibleRequestType() => typeof(AddAppComponentsRequest);
+    }
+
+    private sealed class FakeRemoveAppComponentsExecutor : FakeXrmEasy.Abstractions.FakeMessageExecutors.IFakeMessageExecutor
+    {
+        public List<RemoveAppComponentsRequest> Requests { get; } = [];
+        public Action<RemoveAppComponentsRequest>? OnExecute { get; set; }
+
+        public bool CanExecute(OrganizationRequest request) => request is RemoveAppComponentsRequest;
+
+        public OrganizationResponse Execute(OrganizationRequest request, IXrmFakedContext context)
+        {
+            var remove = (RemoveAppComponentsRequest)request;
+            Requests.Add(remove);
+            OnExecute?.Invoke(remove);
+            return new OrganizationResponse();
+        }
+
+        public Type GetResponsibleRequestType() => typeof(RemoveAppComponentsRequest);
     }
 
     private sealed class FakePublishXmlExecutor : FakeXrmEasy.Abstractions.FakeMessageExecutors.IFakeMessageExecutor

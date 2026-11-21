@@ -29,6 +29,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string UniqueName { get; set; }
 
+        [JsonPropertyName("entityName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string EntityName { get; set; }
+
         [JsonPropertyName("description")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Description { get; set; }
@@ -116,6 +120,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("addedAppComponents")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> AddedAppComponents { get; set; }
+
+        [JsonPropertyName("removedAppComponents")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> RemovedAppComponents { get; set; }
 
         [JsonPropertyName("addedSolutionComponents")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

@@ -32,6 +32,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class ManageAppTool : McpToolBase
     {
         private const int WebResourceComponentType = 61;
+        private const int ViewComponentType = 26;
+        private const int SystemFormComponentType = 60;
+        private static readonly object[] DashboardFormTypes = [0, 10, 13, 103];
         private const int SvgWebResourceType = 11;
         private const string NotPublishedNextStep =
             "Not published. Run publish_customizations(appmodules='<AppModuleId>') when ready.";
@@ -65,6 +68,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- List/inspect model-driven apps, or create/update app metadata (name, description, icon)\n" +
             "- Apply app-scoped sitemap navigation operations, validate an app, or restore from a .app.json backup (undo) — the result's backupPath points to the pre-change snapshot; pass it as operations to action='undo' to restore\n" +
+            "- Add or remove system views, forms, and dashboards using add_components or remove_components. Pass GUIDs or names, then check backupPath and published.\n" +
             "- Read docs://instructions_for_manage_app before update_navigation for operation fields, positions, and examples.\n" +
             "- App is resolved by Display Name first, then unique name/GUID; ambiguous Display Names return the candidates\n\n" +
             "RELATED TOOLS:\n" +
@@ -73,8 +77,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- execute_webapi → blocked for appmodule/sitemap/appmodulecomponent; use this tool instead")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
-            [Description("'list', 'detail', 'create', 'update', 'update_navigation', 'validate', or 'undo'.")] string action = "detail",
-            [Description("App display name, unique name, or GUID. Required for detail/update/update_navigation/validate/undo.")] string app = "",
+            [Description("'list', 'detail', 'create', 'update', 'update_navigation', 'add_components', 'remove_components', 'validate', or 'undo'.")] string action = "detail",
+            [Description("App display name, unique name, or GUID. Required except for list and create.")] string app = "",
             [Description("list only. App display/unique name contains filter.")] string app_name = "",
             [Description("Required for create. Used to resolve the solution publisher prefix.")] string solution_name = "",
             [Description("Required for create. Optional for update.")] string display_name = "",
@@ -84,19 +88,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("update_navigation: JSON array serialized as a string. add_item/update_item targets: entity, url, dashboard_id (alias default_dashboard), or webresource. Dashboard and WebResource items accept icon (SVG web resource name, $webresource: reference, or /WebResources/ path). See docs://instructions_for_manage_app for examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
             [Description("list only. 1-500.")] int max_records = 100,
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
-            System.Threading.CancellationToken cancellationToken = default)
+            System.Threading.CancellationToken cancellationToken = default,
+            [Description("add_components/remove_components. Table display or logical name. Required with view_ids or form_ids. Optional when selecting only dashboards.")] string entity_name = "",
+            [Description("add_components/remove_components. Array of system view GUIDs or exact names for entity_name.")] string[] view_ids = null,
+            [Description("add_components/remove_components. Array of system form GUIDs or exact names for entity_name.")] string[] form_ids = null,
+            [Description("add_components/remove_components. Array of system dashboard GUIDs or exact names.")] string[] dashboard_ids = null)
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
                 var worker = new ManageAppTool(conn.OrgService, conn.Options, conn.Context);
-                return worker.manage_app(server, action, app, app_name, solution_name, display_name, unique_name, description, icon_webresource, operations, max_records);
+                return worker.manage_app(server, action, app, app_name, solution_name, display_name, unique_name, description, icon_webresource, operations, max_records,
+                    entity_name, view_ids, form_ids, dashboard_ids);
             }, cancellationToken);
         }
 
         public async Task<CallToolResult> manage_app(
             McpServer server,
-            [Description("'list', 'detail', 'create', 'update', 'update_navigation', 'validate', or 'undo'.")] string action = "detail",
-            [Description("App display name, unique name, or GUID. Required for detail/update/update_navigation/validate/undo.")] string app = "",
+            [Description("'list', 'detail', 'create', 'update', 'update_navigation', 'add_components', 'remove_components', 'validate', or 'undo'.")] string action = "detail",
+            [Description("App display name, unique name, or GUID. Required except for list and create.")] string app = "",
             [Description("list only. App display/unique name contains filter.")] string app_name = "",
             [Description("Required for create. Used to resolve the solution publisher prefix.")] string solution_name = "",
             [Description("Required for create. Optional for update.")] string display_name = "",
@@ -104,13 +113,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Optional for create/update.")] string description = "",
             [Description("Optional app icon web resource name or GUID.")] string icon_webresource = "",
             [Description("update_navigation: JSON array serialized as a string. Dashboard and WebResource add_item/update_item operations accept icon (SVG web resource name, $webresource: reference, or /WebResources/ path). See docs://instructions_for_manage_app for examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
-            [Description("list only. 1-500.")] int max_records = 100)
+            [Description("list only. 1-500.")] int max_records = 100,
+            string entity_name = "",
+            string[] view_ids = null,
+            string[] form_ids = null,
+            string[] dashboard_ids = null)
         {
             try
             {
                 var normalizedAction = (action ?? "detail").Trim().ToLowerInvariant();
 
-                if (normalizedAction is "update" or "update_navigation" or "undo")
+                if (normalizedAction is "update" or "update_navigation" or "add_components" or "remove_components" or "undo")
                     _workspaceFolder = await WorkspaceFolderHelper.GetAsync(server);
 
                 return normalizedAction switch
@@ -120,9 +133,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "create" => HandleCreate(solution_name, display_name, unique_name, description, icon_webresource),
                     "update" => HandleUpdate(app, display_name, description, icon_webresource),
                     "update_navigation" => HandleUpdateNavigation(app, operations),
+                    "add_components" or "remove_components" => HandleAppComponents(
+                        normalizedAction, app, entity_name, view_ids ?? [], form_ids ?? [], dashboard_ids ?? []),
                     "validate" => HandleValidate(app),
                     "undo" => HandleUndo(app, operations),
-                    _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'create', 'update', 'update_navigation', 'validate', 'undo'.")
+                    _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'create', 'update', 'update_navigation', 'add_components', 'remove_components', 'validate', 'undo'.")
                 };
             }
             catch (Exception ex)
@@ -732,6 +747,176 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             });
         }
 
+        private CallToolResult HandleAppComponents(string action, string app, string entityName,
+            string[] views, string[] forms, string[] dashboards)
+        {
+            if (string.IsNullOrWhiteSpace(app))
+                return Error($"app is required for action='{action}'. Provide an app display name, unique name, or GUID.", DiscoverAppsHint);
+            if (views.Length + forms.Length + dashboards.Length == 0)
+                return Error($"At least one component is required for action='{action}'.",
+                    "Supply view_ids, form_ids, or dashboard_ids as an array of GUIDs or names.");
+            if (views.Concat(forms).Concat(dashboards).Any(string.IsNullOrWhiteSpace))
+                return Error("Component selectors must be non-empty GUIDs or names.");
+            if (string.IsNullOrWhiteSpace(entityName) && (views.Length > 0 || forms.Length > 0))
+                return Error($"entity_name is required with view_ids or form_ids for action='{action}'.",
+                    "Provide the table display name or logical name.");
+
+            var (appModule, resolveError) = ResolveApp(app.Trim());
+            if (resolveError != null)
+                return resolveError;
+
+            string logicalName = null;
+            if (!string.IsNullOrWhiteSpace(entityName))
+            {
+                var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "manage_app");
+                if (!resolved.IsSuccess)
+                    return Error(resolved.Error, "Use get_tables to find the table's logical name.");
+                logicalName = resolved.Value.LogicalName;
+            }
+
+            var components = ResolveComponentSelectors(views, logicalName, "view")
+                .Concat(ResolveComponentSelectors(forms, logicalName, "form"))
+                .Concat(ResolveComponentSelectors(dashboards, logicalName, "dashboard"))
+                .Distinct().ToList();
+            return ApplyComponentMembership(appModule, components, _ => action == "add_components",
+                new ManageAppResult { Action = action, EntityName = logicalName });
+        }
+
+        private IEnumerable<AppComponent> ResolveComponentSelectors(string[] selectors, string table, string kind)
+        {
+            var isView = kind == "view";
+            var isDashboard = kind == "dashboard";
+            foreach (var selector in selectors.Select(value => value.Trim()).Distinct(StringComparer.OrdinalIgnoreCase))
+            {
+                var query = new QueryExpression(isView ? "savedquery" : "systemform")
+                {
+                    ColumnSet = new ColumnSet(false),
+                    TopCount = 2
+                };
+                if (Guid.TryParse(selector, out var id))
+                    query.Criteria.AddCondition(isView ? "savedqueryid" : "formid", ConditionOperator.Equal, id);
+                else
+                    query.Criteria.AddCondition("name", ConditionOperator.Equal, selector);
+
+                if (!isView)
+                    query.Criteria.AddCondition("type", isDashboard ? ConditionOperator.In : ConditionOperator.NotIn, DashboardFormTypes);
+
+                if (table != null)
+                {
+                    if (isDashboard)
+                    {
+                        // A dashboard can be scoped to a table or shared across the app.
+                        var scope = query.Criteria.AddFilter(LogicalOperator.Or);
+                        scope.AddCondition("objecttypecode", ConditionOperator.Equal, table);
+                        scope.AddCondition("objecttypecode", ConditionOperator.Null);
+                    }
+                    else
+                        query.Criteria.AddCondition(isView ? "returnedtypecode" : "objecttypecode", ConditionOperator.Equal, table);
+                }
+
+                var matches = _orgService.RetrieveMultiple(query).Entities;
+                var tableScope = table == null ? "" : $" for table '{table}'";
+                if (isDashboard && table != null)
+                    tableScope += " or across the app";
+                if (matches.Count == 0)
+                    throw new ArgumentException($"System {kind} '{selector}' was not found{tableScope}.");
+                if (matches.Count > 1)
+                    throw new ArgumentException($"System {kind} name '{selector}' is ambiguous{tableScope}. Use its GUID. Matches: {string.Join(", ", matches.Select(row => row.Id))}.");
+                yield return new AppComponent(isView ? ViewComponentType : SystemFormComponentType, matches[0].Id);
+            }
+        }
+
+        private CallToolResult ApplyComponentMembership(Entity app, IReadOnlyList<AppComponent> scope,
+            Func<AppComponent, bool> shouldBePresent, ManageAppResult result)
+        {
+            var appIdUnique = app.GetAttributeValue<Guid?>("appmoduleidunique");
+            var name = app.GetAttributeValue<string>("name");
+            if (!appIdUnique.HasValue)
+                return Error($"App '{name}' has no appmoduleidunique.",
+                    "The app record is incomplete; re-create it with manage_app(action='create') or fix it in the app designer.");
+
+            var existing = GetAppComponents(appIdUnique.Value);
+            var membership = existing.Select(row => (Type: row.GetAttributeValue<OptionSetValue>("componenttype")?.Value,
+                Id: row.GetAttributeValue<Guid?>("objectid"))).ToHashSet();
+            var add = scope.Where(component => shouldBePresent(component) && !membership.Contains((component.Type, component.Id))).ToList();
+            var remove = scope.Where(component => !shouldBePresent(component) && membership.Contains((component.Type, component.Id))).ToList();
+            var changes = add.Concat(remove).ToList();
+
+            result.AppModuleId = app.Id.ToString();
+            result.AppModuleIdUnique = appIdUnique.Value.ToString();
+            result.AppName = name;
+            result.UniqueName = app.GetAttributeValue<string>("uniquename");
+            result.OperationsCount = scope.Count;
+            result.ChangedOperations = changes.Count;
+            result.NoOpOperations = scope.Count - changes.Count;
+            result.Published = false;
+
+            if (_options.DryRun)
+            {
+                result.Status = "not_executed";
+                result.AddedAppComponents = add.Count > 0 ? add.Select(component => component.ToString()).ToList() : null;
+                result.RemovedAppComponents = remove.Count > 0 ? remove.Select(component => component.ToString()).ToList() : null;
+                return DryRun($"Would add {add.Count} and remove {remove.Count} explicit component(s) on app '{name}'.", result);
+            }
+
+            if (changes.Count == 0)
+            {
+                result.Status = "no_changes";
+                return Success($"App '{name}' already has the requested explicit component membership.", result);
+            }
+
+            _context.AssertMutationAllowed(result.Action);
+            result.BackupPath = SaveAppSnapshot(app, existing, changes);
+            try
+            {
+                if (add.Count > 0)
+                {
+                    AddAppComponents(app.Id, new EntityReferenceCollection(add.Select(component => component.ToReference()).ToList()));
+                    result.AddedAppComponents = add.Select(component => component.ToString()).ToList();
+                }
+                if (remove.Count > 0)
+                {
+                    DataverseMutationExecutor.Execute(_context, _orgService, new RemoveAppComponentsRequest
+                    {
+                        AppId = app.Id,
+                        Components = new EntityReferenceCollection(remove.Select(component => component.ToReference()).ToList())
+                    });
+                    result.RemovedAppComponents = remove.Select(component => component.ToString()).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                var confirmedChanges = result.AddedAppComponents?.Count ?? 0;
+                result.ChangedOperations = confirmedChanges;
+                result.NextStep = "Inspect the app with manage_app(action='detail') before retrying, or pass backupPath to action='undo'.";
+                result.Status = confirmedChanges == 0 ? "component_update_failed" : "component_update_partial";
+                var message = $"Component update for app '{name}' failed: {ex.Message}";
+                return confirmedChanges == 0 ? Error(message, result.NextStep, details: result) : Partial(message, result);
+            }
+
+            var published = PublishAppModule(app.Id);
+            var validation = ValidateApp(app.Id);
+            result.Validated = true;
+            result.ValidationErrors = validation.Errors;
+            result.ValidationWarnings = validation.Warnings;
+            var text = $"Added {add.Count} and removed {remove.Count} explicit component(s) on app '{name}'" +
+                (published ? " and published." : ". Publishing failed.") +
+                (validation.Errors?.Count > 0 ? " Validation failed." : "");
+            return CompleteMutation(text, result.Action == "undo" ? "restored" : "updated", published, validation, result);
+        }
+
+        private CallToolResult RestoreComponentSnapshot(Entity app, ManageAppSnapshot snapshot, string path)
+        {
+            var scope = snapshot.ComponentScope.Select(entry => entry?.ToComponent()).ToList();
+            if (snapshot.AppComponents == null || scope.Count == 0 || scope.Any(component => !component.HasValue))
+                return Error("Backup contains an invalid app component scope.",
+                    "Use an unmodified .app.json backup from backupPath of a previous manage_app mutation.");
+
+            var original = snapshot.AppComponents.Select(entry => entry?.ToComponent()).ToHashSet();
+            return ApplyComponentMembership(app, scope.Select(component => component.Value).Distinct().ToList(), component => original.Contains(component),
+                new ManageAppResult { Action = "undo", RestoredFromBackup = path });
+        }
+
         private CallToolResult HandleUndo(string app, string operations)
         {
             if (string.IsNullOrWhiteSpace(app))
@@ -758,13 +943,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"App '{appModule.GetAttributeValue<string>("name")}' has no appmoduleidunique.",
                     "The app record is incomplete; re-create it with manage_app(action='create') or fix it in the app designer.");
 
-            var siteMapId = ResolveSiteMapId(appModuleIdUnique.Value, appModule.GetAttributeValue<string>("uniquename"));
-            if (!siteMapId.HasValue)
-                return Error($"App '{appModule.GetAttributeValue<string>("name")}' has no sitemap component.",
-                    "Create the app with manage_app(action='create') so a starter sitemap is generated.");
-
             var backupFullPath = Path.GetFullPath(backupFile);
-            if (!File.Exists(backupFullPath))
+            var backupExists = File.Exists(backupFullPath);
+            var siteMapId = ResolveSiteMapId(appModuleIdUnique.Value, appModule.GetAttributeValue<string>("uniquename"));
+            CallToolResult MissingSiteMap() => Error($"App '{appModule.GetAttributeValue<string>("name")}' has no sitemap component.",
+                "Create the app with manage_app(action='create') so a starter sitemap is generated.");
+            if (!backupExists && !siteMapId.HasValue)
+                return MissingSiteMap();
+            if (!backupExists)
                 return Error($"backup file '{backupFile}' was not found.",
                     "Check the backupPath value returned by the manage_app call that created the backup.");
 
@@ -779,6 +965,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error(
                     $"backup app ID does not match current app. BackupAppModuleId: {snapshot.AppModuleId}. CurrentAppModuleId: {appModule.Id}.",
                     "Re-call with the app the backup was taken from, or pick a backup whose appModuleId matches this app.");
+            if (snapshot.ComponentScope != null)
+                return RestoreComponentSnapshot(appModule, snapshot, backupFullPath);
+
+            if (!siteMapId.HasValue)
+                return MissingSiteMap();
             if (string.IsNullOrWhiteSpace(snapshot.SiteMapXml))
                 return Error("backup does not contain sitemapxml.",
                     "The backup file is incomplete; use a different .app.json backup from backupPath of a previous manage_app mutation.");
@@ -1464,22 +1655,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private string SaveAppSnapshot(Entity appModule)
+        private string SaveAppSnapshot(Entity appModule, List<Entity> existingComponents = null,
+            IReadOnlyList<AppComponent> componentScope = null)
         {
             var appModuleIdUnique = appModule.GetAttributeValue<Guid?>("appmoduleidunique");
             var siteMapId = appModuleIdUnique.HasValue
                 ? ResolveSiteMapId(appModuleIdUnique.Value, appModule.GetAttributeValue<string>("uniquename"))
                 : null;
             var siteMapXml = siteMapId.HasValue ? RetrieveSiteMapXml(siteMapId.Value) : null;
-            var components = appModuleIdUnique.HasValue ? GetAppComponents(appModuleIdUnique.Value) : [];
+            var components = existingComponents ?? (appModuleIdUnique.HasValue ? GetAppComponents(appModuleIdUnique.Value) : []);
 
             var safeName = SanitizeFileName(appModule.GetAttributeValue<string>("name") ?? appModule.GetAttributeValue<string>("uniquename") ?? "app");
             var backupDir = Path.Combine(_workspaceFolder, ".devkit", "manage_app", safeName);
             Directory.CreateDirectory(backupDir);
 
-            var backupPath = Path.Combine(backupDir, $"{appModule.Id:N}_{DateTime.Now:yyyyMMddHHmmss}.app.json");
-
-            var snapshot = new
+            var snapshot = JsonSerializer.SerializeToNode(new
             {
                 kind = "manage_app.snapshot",
                 timestampUtc = DateTime.UtcNow.ToString("O"),
@@ -1496,15 +1686,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     objectId = c.GetAttributeValue<Guid?>("objectid")?.ToString()
                 }).ToList(),
                 sitemapxml = siteMapXml
-            };
+            }).AsObject();
+            if (componentScope != null)
+                snapshot["componentScope"] = JsonSerializer.SerializeToNode(componentScope.Select(component => new
+                {
+                    componentType = component.Type,
+                    objectId = component.Id
+                }));
 
             var json = JsonSerializer.Serialize(snapshot, new JsonSerializerOptions
             {
                 WriteIndented = true,
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             });
-            File.WriteAllText(backupPath, json, Encoding.UTF8);
-            return backupPath;
+            var fileName = $"{appModule.Id:N}_{DateTime.Now:yyyyMMddHHmmss}";
+            for (var suffix = 1; ; suffix++)
+            {
+                var backupPath = Path.Combine(backupDir, suffix == 1 ? $"{fileName}.app.json" : $"{fileName}-{suffix}.app.json");
+                FileStream stream;
+                try
+                {
+                    stream = new FileStream(backupPath, FileMode.CreateNew, FileAccess.Write);
+                }
+                catch (IOException) when (File.Exists(backupPath))
+                {
+                    continue;
+                }
+                using (stream)
+                using (var writer = new StreamWriter(stream, Encoding.UTF8))
+                    writer.Write(json);
+                return backupPath;
+            }
         }
 
         private static Guid? GetGuidAttribute(Entity entity, string attributeName)
@@ -1720,6 +1932,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             public string IconWebResourceId { get; set; }
             public string SiteMapId { get; set; }
             public List<ManageAppSnapshotComponent> AppComponents { get; set; }
+            public List<ManageAppSnapshotComponent> ComponentScope { get; set; }
             public string SiteMapXml { get; set; }
         }
 
@@ -1727,6 +1940,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             public int? ComponentType { get; set; }
             public string ObjectId { get; set; }
+
+            public AppComponent? ToComponent() =>
+                ComponentType is ViewComponentType or SystemFormComponentType &&
+                Guid.TryParse(ObjectId, out var id) && id != Guid.Empty
+                    ? new AppComponent(ComponentType.Value, id)
+                    : null;
+        }
+
+        private readonly record struct AppComponent(int Type, Guid Id)
+        {
+            public EntityReference ToReference() => new(Type == ViewComponentType ? "savedquery" : "systemform", Id);
+            public override string ToString() => $"{Type}:{Id:D}";
         }
     }
 }

@@ -1,14 +1,14 @@
 
 # Instructions for manage_app
 
-Use `manage_app` for model-driven app metadata and app navigation. Never use `execute_webapi` to create or update model-driven apps, sitemaps, or app module components.
+Use `manage_app` for model-driven app metadata, app navigation, and system view, form, and dashboard membership.
 
 ## Golden Rules
 
-- Always read the app first with `manage_app(action='detail', app='...')` before changing metadata or navigation.
+- Always read the app first with `manage_app(action='detail', app='...')` before changing metadata, navigation, or components.
 - Create requires `solution_name` and `display_name`.
 - Create automatically creates a starter sitemap with an Account item so Dataverse app validation can pass.
-- After saving changes, `create`, `update`, `update_navigation`, and `undo` attempt to publish the app automatically. `published: true` confirms success. If publishing fails after saving, the result includes `published: false`, a status ending in `_publish_failed`, and a `nextStep` for retrying publish. `no_changes` results skip publish.
+- After saving changes, `create`, `update`, `update_navigation`, `add_components`, `remove_components`, and `undo` attempt to publish the app automatically. `published: true` confirms success. If publishing fails after saving, the result includes `published: false`, a status ending in `_publish_failed`, and a `nextStep` for retrying publish. `no_changes` results skip publish.
 - `list`, `detail`, and `validate` omit `published` because they do not check the app's publication state.
 - `unique_name` on create always gets the solution publisher prefix prepended (e.g. 'MyApp' in a solution with prefix 'all' becomes 'all_MyApp').
 - Do not delete appmodule records.
@@ -19,6 +19,25 @@ Use `manage_app` for model-driven app metadata and app navigation. Never use `ex
 - Dashboard and WebResource items accept `icon` on `add_item` and `update_item`. Pass the exact name of an existing SVG web resource, its `$webresource:` reference, or its `/WebResources/` path.
 - `update_navigation` publishes the app and its SiteMap in one request. If publish fails after saving, follow `nextStep` to publish the app from Power Apps App Designer.
 - All move/order positions are 1-based when numeric. Visual order is left-to-right, then top-to-bottom.
+
+## App component membership
+
+Use `add_components` or `remove_components` with the app's display name, unique name, or GUID. Pass one or more of `view_ids`, `form_ids`, and `dashboard_ids` as JSON arrays of GUID strings or exact names. Views and forms require `entity_name`, which accepts the table's display or logical name. Dashboard-only calls can omit it. When supplied, dashboard lookup includes dashboards for that table and global dashboards.
+
+```json
+{
+  "action": "add_components",
+  "app": "Sales Hub",
+  "entity_name": "account",
+  "view_ids": ["Active Accounts"],
+  "form_ids": ["Account"],
+  "dashboard_ids": ["Sales Activity Dashboard"]
+}
+```
+
+Use a GUID when a name is ambiguous. The actions use Dataverse's AddAppComponents and RemoveAppComponents messages to change explicit app membership. When a table has no explicit view or form selections, Dataverse can expose all of them by default.
+
+The mutation reports `addedAppComponents`, `removedAppComponents`, and `published` as applicable. Pass the returned `backupPath` as `operations` to `manage_app(action='undo', app='...')` to restore the memberships changed by that call. Earlier navigation backups still restore the sitemap.
 
 ## Read Before Write Workflow
 
@@ -31,7 +50,7 @@ Use `manage_app` for model-driven app metadata and app navigation. Never use `ex
 }
 ```
 
-2. Apply metadata update or navigation operations.
+2. Apply metadata updates, component changes, or navigation operations.
 3. Check validation warnings or errors.
 4. Check `published` in the mutation result. If the status ends in `_publish_failed`, follow `nextStep` to retry publish.
 
