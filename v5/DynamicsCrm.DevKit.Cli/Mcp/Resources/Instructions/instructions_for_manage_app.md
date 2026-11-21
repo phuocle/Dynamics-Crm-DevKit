@@ -15,6 +15,7 @@ Use `manage_app` for model-driven app metadata and app navigation. Never use `ex
 - `remove_area`, `remove_group`, and `remove_item` only remove navigation nodes from sitemap XML.
 - `add_item` accepts one target per SubArea. Use `entity`, `url`, `dashboard_id` (alias `default_dashboard`), or `webresource`.
 - `update_item` finds the SubArea by `area`, `group`, and `item`. Pass a new `label`, a new target, or both. Use the SubArea ID for reliable matching. `move_item` and `remove_item` accept SubArea IDs for every type.
+- Dashboard items also accept `icon` on `add_item` and `update_item`. Use the exact name of an existing SVG web resource. The `$webresource:` prefix is optional in the input.
 - All move/order positions are 1-based when numeric. Visual order is left-to-right, then top-to-bottom.
 
 ## Read Before Write Workflow
@@ -108,7 +109,8 @@ Add a URL, a system dashboard, and a web resource to an existing group:
     "group": "group_default",
     "id": "sa_sales_dashboard",
     "label": "Sales Overview",
-    "dashboard_id": "e768c201-a0c8-4194-b027-5324a51e628b"
+    "dashboard_id": "e768c201-a0c8-4194-b027-5324a51e628b",
+    "icon": "ab_/icons/dashboard.svg"
   },
   {
     "action": "add_item",
@@ -122,8 +124,24 @@ Add a URL, a system dashboard, and a web resource to an existing group:
 ```
 
 - A URL item writes the supplied path or URL to the SiteMap and requires no app component. The tool accepts legacy paths such as `/workplace/home_dashboards.aspx`. Microsoft documents a limitation for generic [SiteMap links to .aspx pages](https://learn.microsoft.com/en-us/power-apps/maker/model-driven-apps/create-site-map-app).
-- Use the `formId` returned by `manage_form` or the GUID of an existing system dashboard. The operation writes `DefaultDashboard` and the dashboard URL and associates the system form with the app if needed.
+- Use the `formId` returned by `manage_form` or the GUID of an existing system dashboard. The operation writes `Url="/workplace/home_dashboards.aspx"` and `DefaultDashboard` with the GUID without braces. To repair an existing Dashboard SubArea, pass its `item` ID and the same `dashboard_id` in `update_item`. The system form is associated with the app if needed.
 - Pass an existing web resource's exact name. The `$webresource:` prefix is optional in input and always appears in the SiteMap URL, which establishes a Dataverse dependency. When the environment exposes app component type `61`, the tool also adds the web resource directly to the app if needed.
+
+Set or replace the icon on an existing Dashboard item:
+
+```json
+[
+  {
+    "action": "update_item",
+    "area": "area_default",
+    "group": "group_default",
+    "item": "sa_sales_dashboard",
+    "icon": "$webresource:ab_/icons/dashboard-new.svg"
+  }
+]
+```
+
+The tool validates that the resource exists and is an SVG before saving, then writes `Icon="$webresource:ab_/icons/dashboard-new.svg"` on the Dashboard SubArea. The app detail result returns this value in `navigationAreas[].groups[].items[].icon`.
 
 Move item:
 

@@ -483,8 +483,8 @@ public sealed class ManageAppFakeXrmEasyTests
 
         var items = XDocument.Parse(ReadSiteMap(siteMapId)).Descendants("SubArea").ToDictionary(item => (string)item.Attribute("Id")!);
         Assert.AreEqual("/workplace/home_dashboards.aspx?a=1&b=2", (string?)items["sa_link"].Attribute("Url"));
-        Assert.AreEqual(dashboardId, Guid.Parse((string)items["sa_dashboard"].Attribute("DefaultDashboard")!));
-        Assert.AreEqual($"/dashboards/dashboard.aspx?dashboardId={dashboardId:D}", (string?)items["sa_dashboard"].Attribute("Url"));
+        Assert.AreEqual(dashboardId.ToString("D"), (string?)items["sa_dashboard"].Attribute("DefaultDashboard"));
+        Assert.AreEqual("/workplace/home_dashboards.aspx", (string?)items["sa_dashboard"].Attribute("Url"));
         Assert.AreEqual("$webresource:ab_/html/page.html", (string?)items["sa_web"].Attribute("Url"));
         Assert.AreEqual("$webresource:ab_/html/page.html", (string?)items["sa_web2"].Attribute("Url"));
         Assert.AreEqual("Link", (string?)items["sa_link"].Descendants("Title").Single().Attribute("Title"));
@@ -496,6 +496,192 @@ public sealed class ManageAppFakeXrmEasyTests
         Assert.AreEqual("no_changes", retry.StructuredContent!.Value.GetProperty("status").GetString());
         Assert.HasCount(1, _componentExecutor.Requests);
     }
+
+    [TestMethod]
+    [DataRow("ab_/icons/dashboard.svg")]
+    [DataRow("$WEBRESOURCE: ab_/icons/dashboard.svg")]
+    public async Task UpdateNavigation_AddDashboardWithSvgIconNormalizesAndReportsIt(string icon)
+    {
+        var (appId, appUniqueId, siteMapId) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
+        var (dashboardId, _) = SeedNavigationPages();
+        SeedIconWebResource("ab_/icons/dashboard.svg", 11);
+        var tool = NewTool();
+        SetWorkspace(tool, _workspace);
+        var operations = $$"""
+            [{"action":"add_item","area":"area_default","group":"group_default","id":"sa_dashboard","dashboard_id":"{{dashboardId}}","icon":"{{icon}}"}]
+            """;
+
+        var added = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
+        Assert.IsFalse(added.IsError == true, added.GetText());
+        var dashboard = XDocument.Parse(ReadSiteMap(siteMapId)).Descendants("SubArea")
+            .Single(item => (string?)item.Attribute("Id") == "sa_dashboard");
+        Assert.AreEqual("$webresource:ab_/icons/dashboard.svg", (string?)dashboard.Attribute("Icon"));
+        Assert.AreEqual(dashboardId.ToString("D"), (string?)dashboard.Attribute("DefaultDashboard"));
+        Assert.AreEqual("/workplace/home_dashboards.aspx", (string?)dashboard.Attribute("Url"));
+        Assert.AreEqual("systemform", _componentExecutor.Requests.Single().Components.Single().LogicalName);
+
+        var detail = await tool.manage_app(null!, action: "detail", app: appId.ToString());
+        var navigationItem = detail.StructuredContent!.Value.GetProperty("navigationAreas")[0]
+            .GetProperty("groups")[0].GetProperty("items").EnumerateArray()
+            .Single(item => item.GetProperty("id").GetString() == "sa_dashboard");
+        Assert.AreEqual("$webresource:ab_/icons/dashboard.svg", navigationItem.GetProperty("icon").GetString());
+
+        SeedPageComponent(appUniqueId, 60, dashboardId);
+        var retry = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
+        Assert.AreEqual("no_changes", retry.StructuredContent!.Value.GetProperty("status").GetString());
+        Assert.HasCount(1, _componentExecutor.Requests);
+
+        var beforeConflict = ReadSiteMap(siteMapId);
+        var conflictingAdd = Invoke(tool, "HandleUpdateNavigation", appId.ToString(),
+            operations.Replace(icon, "ab_/icons/other.svg", StringComparison.Ordinal));
+        Assert.IsTrue(conflictingAdd.IsError == true, conflictingAdd.GetText());
+        StringAssert.Contains(conflictingAdd.GetText(), "Use update_item to set its icon");
+        Assert.AreEqual(beforeConflict, ReadSiteMap(siteMapId));
+    }
+
+    [TestMethod]
+    [DataRow(true, true)]
+    [DataRow(true, false)]
+    [DataRow(false, true)]
+    public void UpdateNavigation_RepairsDashboardXmlWhenIdIsUnchanged(bool bracedGuid, bool legacyUrl)
+    {
+        var (appId, appUniqueId, siteMapId) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
+        var (dashboardId, _) = SeedNavigationPages();
+        SeedPageComponent(appUniqueId, 60, dashboardId);
+        var oldDefault = dashboardId.ToString(bracedGuid ? "B" : "D");
+        var oldUrl = legacyUrl
+            ? $"/dashboards/dashboard.aspx?dashboardId={dashboardId:D}"
+            : "/workplace/home_dashboards.aspx";
+        _context.GetOrganizationService().Update(new Entity("sitemap", siteMapId)
+        {
+            ["sitemapxml"] = StarterXml.Replace("</Group>", $"""
+                <SubArea Id="sa_dashboard" DefaultDashboard="{oldDefault}" Url="{oldUrl}" Icon="$webresource:ab_/icons/dashboard.svg">
+                  <Titles><Title LCID="1033" Title="Dashboard" /></Titles>
+                </SubArea>
+                </Group>
+                """)
+        });
+        var tool = NewTool();
+        SetWorkspace(tool, _workspace);
+        var operations = $$"""
+            [{"action":"update_item","area":"area_default","group":"group_default","item":"sa_dashboard","dashboard_id":"{{dashboardId:B}}"}]
+            """;
+
+        var result = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        var data = result.StructuredContent!.Value;
+        Assert.AreEqual("updated", data.GetProperty("status").GetString());
+        Assert.IsTrue(data.GetProperty("published").GetBoolean());
+        var dashboard = XDocument.Parse(ReadSiteMap(siteMapId)).Descendants("SubArea")
+            .Single(item => (string?)item.Attribute("Id") == "sa_dashboard");
+        Assert.AreEqual(dashboardId.ToString("D"), (string?)dashboard.Attribute("DefaultDashboard"));
+        Assert.AreEqual("/workplace/home_dashboards.aspx", (string?)dashboard.Attribute("Url"));
+        Assert.AreEqual("$webresource:ab_/icons/dashboard.svg", (string?)dashboard.Attribute("Icon"));
+        Assert.AreEqual("Dashboard", (string?)dashboard.Descendants("Title").Single().Attribute("Title"));
+
+        var retry = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
+        Assert.AreEqual("no_changes", retry.StructuredContent!.Value.GetProperty("status").GetString());
+        Assert.IsEmpty(_componentExecutor.Requests);
+    }
+
+    [TestMethod]
+    public void UpdateNavigation_DashboardIconOnlyUpdateKeepsTargetAndIsIdempotent()
+    {
+        var (appId, _, siteMapId) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
+        var dashboardId = Guid.NewGuid();
+        var orgService = _context.GetOrganizationService();
+        orgService.Update(new Entity("sitemap", siteMapId)
+        {
+            ["sitemapxml"] = StarterXml.Replace("</Group>", $"""
+                <SubArea Id="sa_dashboard" DefaultDashboard="{dashboardId:D}" Url="/workplace/home_dashboards.aspx"
+                  Icon="$webresource:ab_/icons/old.svg"><Titles><Title LCID="1033" Title="Dashboard" /></Titles></SubArea>
+                </Group>
+                """)
+        });
+        SeedIconWebResource("ab_/icons/dashboard.svg", 11);
+        var tool = NewTool();
+        SetWorkspace(tool, _workspace);
+        const string operations = """
+            [{"action":"update_item","area":"area_default","group":"group_default","item":"sa_dashboard","icon":"$webresource:ab_/icons/dashboard.svg"}]
+            """;
+
+        var updated = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
+        Assert.IsFalse(updated.IsError == true, updated.GetText());
+        Assert.AreEqual("updated", updated.StructuredContent!.Value.GetProperty("status").GetString());
+        var dashboard = XDocument.Parse(ReadSiteMap(siteMapId)).Descendants("SubArea")
+            .Single(item => (string?)item.Attribute("Id") == "sa_dashboard");
+        Assert.AreEqual("$webresource:ab_/icons/dashboard.svg", (string?)dashboard.Attribute("Icon"));
+        Assert.AreEqual(dashboardId.ToString("D"), (string?)dashboard.Attribute("DefaultDashboard"));
+        Assert.AreEqual("/workplace/home_dashboards.aspx", (string?)dashboard.Attribute("Url"));
+        Assert.AreEqual("Dashboard", (string?)dashboard.Descendants("Title").Single().Attribute("Title"));
+
+        var retry = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
+        Assert.AreEqual("no_changes", retry.StructuredContent!.Value.GetProperty("status").GetString());
+        Assert.IsEmpty(_componentExecutor.Requests);
+    }
+
+    [TestMethod]
+    [DataRow("add_item", false, 0, "was not found")]
+    [DataRow("add_item", false, 5, "must be an SVG")]
+    [DataRow("update_item", false, 0, "was not found")]
+    [DataRow("update_item", false, 5, "must be an SVG")]
+    [DataRow("add_item", true, 0, "was not found")]
+    [DataRow("add_item", true, 11, null)]
+    public void UpdateNavigation_DashboardIconValidationPrecedesMutations(
+        string action, bool dryRun, int type, string? expectedError)
+    {
+        var (appId, _, siteMapId) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
+        var (dashboardId, _) = SeedNavigationPages();
+        if (action == "update_item")
+            _context.GetOrganizationService().Update(new Entity("sitemap", siteMapId)
+            {
+                ["sitemapxml"] = StarterXml.Replace("</Group>", $"""<SubArea Id="sa_dashboard" DefaultDashboard="{dashboardId:B}" /></Group>""")
+            });
+        var originalXml = ReadSiteMap(siteMapId);
+        if (type != 0)
+            SeedIconWebResource("ab_/icons/test.svg", type);
+        var tool = NewTool(dryRun);
+        SetWorkspace(tool, _workspace);
+        var operations = $$"""
+            [{"action":"{{action}}","area":"area_default","group":"group_default","id":"sa_dashboard","item":"sa_dashboard",
+              "dashboard_id":"{{dashboardId}}","icon":"ab_/icons/test.svg"}]
+            """;
+
+        var result = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
+        if (expectedError == null)
+            Assert.AreEqual("not_executed", result.StructuredContent!.Value.GetProperty("status").GetString());
+        else
+        {
+            Assert.IsTrue(result.IsError == true, result.GetText());
+            StringAssert.Contains(result.GetText(), expectedError);
+        }
+        Assert.AreEqual(originalXml, ReadSiteMap(siteMapId));
+        Assert.IsEmpty(_componentExecutor.Requests);
+        Assert.IsEmpty(Directory.GetFiles(_workspace, "*", SearchOption.AllDirectories));
+    }
+
+    [TestMethod]
+    [DataRow("\"url\":\"/page\",\"icon\":\"ab_/icons/test.svg\"", "on Dashboard items only")]
+    [DataRow("\"dashboard_id\":\"e768c201-a0c8-4194-b027-5324a51e628b\",\"icon\":\"$webresource:\"", "requires a web resource name")]
+    [DataRow("\"dashboard_id\":\"e768c201-a0c8-4194-b027-5324a51e628b\",\"icon\":false", "'icon' to be a non-empty string")]
+    public void UpdateNavigation_RejectsInvalidDashboardIconArguments(string targetJson, string expectedError)
+    {
+        var (appId, _, siteMapId) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
+        var tool = NewTool();
+        SetWorkspace(tool, _workspace);
+        var result = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), $$"""
+            [{"action":"add_item","area":"area_default","group":"group_default","id":"sa_invalid",{{targetJson}} }]
+            """);
+        Assert.IsTrue(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), expectedError);
+        Assert.AreEqual(StarterXml, ReadSiteMap(siteMapId));
+    }
+
+    private void SeedIconWebResource(string name, int type) =>
+        _context.GetOrganizationService().Create(new Entity("webresource")
+        {
+            ["name"] = name, ["webresourcetype"] = new OptionSetValue(type)
+        });
 
     [TestMethod]
     public void UpdateNavigation_UpdatesMovesAndRemovesNonEntityItems()
@@ -522,7 +708,8 @@ public sealed class ManageAppFakeXrmEasyTests
         var group = XDocument.Parse(ReadSiteMap(siteMapId)).Descendants("Group").Single(e => (string?)e.Attribute("Id") == "group_extra");
         var item = group.Elements("SubArea").Single();
         Assert.AreEqual("sa_retarget", (string?)item.Attribute("Id"));
-        Assert.AreEqual(dashboardId, Guid.Parse((string)item.Attribute("DefaultDashboard")!));
+        Assert.AreEqual(dashboardId.ToString("D"), (string?)item.Attribute("DefaultDashboard"));
+        Assert.AreEqual("/workplace/home_dashboards.aspx", (string?)item.Attribute("Url"));
         Assert.AreEqual("Retargeted", (string?)item.Descendants("Title").Single().Attribute("Title"));
     }
 

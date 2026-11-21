@@ -32,6 +32,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class ManageAppTool : McpToolBase
     {
         private const int WebResourceComponentType = 61;
+        private const int SvgWebResourceType = 11;
         private const string NotPublishedNextStep =
             "Not published. Run publish_customizations(appmodules='<AppModuleId>') when ready.";
         private static readonly Guid DefaultAppIconWebResourceId = new("953b9fac-1e5e-e611-80d6-00155ded156f");
@@ -80,7 +81,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Optional for create. The solution publisher prefix is always prepended (e.g. 'MyApp' with solution all_in_one becomes 'all_MyApp'). If empty, derived from display_name.")] string unique_name = "",
             [Description("Optional for create/update.")] string description = "",
             [Description("Optional app icon web resource name or GUID.")] string icon_webresource = "",
-            [Description("update_navigation: JSON array serialized as a string. add_item/update_item targets: entity, url, dashboard_id (alias default_dashboard), or webresource. See docs://instructions_for_manage_app for examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
+            [Description("update_navigation: JSON array serialized as a string. add_item/update_item targets: entity, url, dashboard_id (alias default_dashboard), or webresource. Dashboard items accept icon (SVG web resource name or $webresource: reference). See docs://instructions_for_manage_app for examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
             [Description("list only. 1-500.")] int max_records = 100,
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)
@@ -102,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Optional for create. The solution publisher prefix is always prepended (e.g. 'MyApp' with solution all_in_one becomes 'all_MyApp'). If empty, derived from display_name.")] string unique_name = "",
             [Description("Optional for create/update.")] string description = "",
             [Description("Optional app icon web resource name or GUID.")] string icon_webresource = "",
-            [Description("update_navigation: JSON array serialized as a string; read docs://instructions_for_manage_app for the operation contract and examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
+            [Description("update_navigation: JSON array serialized as a string. Dashboard add_item/update_item operations accept icon (SVG web resource name or $webresource: reference). See docs://instructions_for_manage_app for examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
             [Description("list only. 1-500.")] int max_records = 100)
         {
             try
@@ -599,6 +600,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     OperationSummaries = navResult.OperationSummaries,
                     NextStep = NotPublishedNextStep
                 });
+
+            var iconError = ValidateDashboardIcons(navResult.DashboardIconItems);
+            if (iconError != null)
+                return Error(iconError, "Use the exact name of an existing SVG web resource, optionally prefixed with '$webresource:'.");
 
             var pageComponents = new EntityReferenceCollection();
             var addedComponents = new List<string>(navResult.AddedEntities);
@@ -1152,12 +1157,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var name = url[AppNavigationOperationsHelper.WebResourcePrefix.Length..];
-            var resources = new QueryExpression("webresource") { ColumnSet = new ColumnSet(false), TopCount = 1 };
-            resources.Criteria.AddCondition("name", ConditionOperator.Equal, name);
-            var resource = _orgService.RetrieveMultiple(resources).Entities.FirstOrDefault();
+            var resource = FindNavigationWebResource(name, new ColumnSet(false));
             return resource == null
                 ? (null, 0, $"Web resource '{name}' was not found.")
                 : (resource.ToEntityReference(), WebResourceComponentType, null);
+        }
+
+        private string ValidateDashboardIcons(IEnumerable<XElement> iconItems)
+        {
+            var names = iconItems.Where(item => item.Document != null)
+                .Select(item => ((string)item.Attribute("Icon"))[AppNavigationOperationsHelper.WebResourcePrefix.Length..])
+                .Distinct(StringComparer.OrdinalIgnoreCase);
+            foreach (var name in names)
+            {
+                var resource = FindNavigationWebResource(name, new ColumnSet("webresourcetype"));
+                if (resource == null)
+                    return $"Dashboard icon web resource '{name}' was not found.";
+                if (resource.GetAttributeValue<OptionSetValue>("webresourcetype")?.Value != SvgWebResourceType)
+                    return $"Dashboard icon web resource '{name}' must be an SVG.";
+            }
+            return null;
+        }
+
+        private Entity FindNavigationWebResource(string name, ColumnSet columns)
+        {
+            var query = new QueryExpression("webresource") { ColumnSet = columns, TopCount = 1 };
+            query.Criteria.AddCondition("name", ConditionOperator.Equal, name);
+            return _orgService.RetrieveMultiple(query).Entities.FirstOrDefault();
         }
 
         private bool SupportsWebResourceAppComponents()
@@ -1225,7 +1251,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private static bool IsImageWebResourceType(int typeCode) =>
-            typeCode is 5 or 6 or 7 or 10 or 11;
+            typeCode is 5 or 6 or 7 or 10 or SvgWebResourceType;
 
         private List<Entity> GetAppComponents(Guid appModuleIdUnique)
         {
@@ -1322,7 +1348,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                                         Title = GetTitle(subArea),
                                         Entity = subArea.Attribute("Entity")?.Value,
                                         Url = subArea.Attribute("Url")?.Value,
-                                        DefaultDashboard = subArea.Attribute("DefaultDashboard")?.Value
+                                        DefaultDashboard = subArea.Attribute("DefaultDashboard")?.Value,
+                                        Icon = subArea.Attribute("Icon")?.Value
                                     })
                                     .ToList()
                             })

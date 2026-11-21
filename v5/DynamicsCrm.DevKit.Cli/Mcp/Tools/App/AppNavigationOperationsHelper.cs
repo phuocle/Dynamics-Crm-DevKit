@@ -13,6 +13,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
         public List<string> OperationSummaries { get; set; } = [];
         public List<string> AddedEntities { get; set; } = [];
         internal HashSet<XElement> ComponentItems { get; } = [];
+        internal HashSet<XElement> DashboardIconItems { get; } = [];
         public int ChangedOperations { get; set; }
         public int NoOpOperations { get; set; }
         public bool HasChanges => ChangedOperations > 0;
@@ -182,6 +183,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
             var groupRef = Required(op, "group", "add_item");
             var target = ReadItemTarget(op, "add_item")
                 ?? throw new InvalidOperationException("add_item requires 'entity', 'url', 'dashboard_id' (alias: 'default_dashboard'), or 'webresource'.");
+            var icon = ReadDashboardIcon(op, "add_item", target.Attribute == "DefaultDashboard");
             var area = FindArea(doc, areaRef)
                 ?? throw new InvalidOperationException($"Area '{areaRef}' not found.");
             var group = FindGroup(area, groupRef)
@@ -196,6 +198,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
                 .FirstOrDefault(sa => string.Equals(sa.Attribute("Id")?.Value, id, StringComparison.OrdinalIgnoreCase));
             if (existing != null && target.Matches(existing))
             {
+                if (icon != null)
+                {
+                    if ((string)existing.Attribute("Icon") != icon)
+                        throw new InvalidOperationException($"Item '{id}' already exists with a different icon. Use update_item to set its icon.");
+                    result.DashboardIconItems.Add(existing);
+                }
                 if (target.IsAppComponent)
                     result.ComponentItems.Add(existing);
                 return $"Item '{id}' already exists in Group '{GetTitle(group)}'; no changes made";
@@ -205,6 +213,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
 
             var subArea = new XElement("SubArea", new XAttribute("Id", id));
             target.WriteTo(subArea);
+            SetDashboardIcon(subArea, icon, result);
             if (!string.IsNullOrWhiteSpace(label))
                 subArea.Add(BuildTitles(label, lcid));
 
@@ -228,14 +237,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
 
             var target = ReadItemTarget(op, "update_item");
             var label = GetLabel(op);
-            if (target == null && string.IsNullOrWhiteSpace(label))
-                throw new InvalidOperationException("update_item requires a target or a 'label'.");
-
             var subArea = matches[0];
-            var changed = false;
+            var dashboard = target == null
+                ? subArea.Attribute("DefaultDashboard") != null
+                : target.Attribute == "DefaultDashboard";
+            var icon = ReadDashboardIcon(op, "update_item", dashboard);
+            if (target == null && string.IsNullOrWhiteSpace(label) && icon == null)
+                throw new InvalidOperationException("update_item requires a target or a 'label'. Dashboard items also accept 'icon'.");
+
+            var changed = SetDashboardIcon(subArea, icon, result);
             if (target != null)
             {
-                if (!target.Matches(subArea))
+                if (target.RequiresWrite(subArea))
                 {
                     if (target.Attribute == "Entity" && subArea.ElementsBeforeSelf("SubArea")
                         .Concat(subArea.ElementsAfterSelf("SubArea")).Any(target.Matches))
@@ -276,25 +289,55 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
 
         internal const string WebResourcePrefix = "$webresource:";
 
+        private static string ReadDashboardIcon(JsonElement op, string action, bool dashboard)
+        {
+            var icon = ReadOptionalString(op, action, "icon");
+            if (icon == null)
+                return null;
+            if (!dashboard)
+                throw new InvalidOperationException($"{action} supports 'icon' on Dashboard items only.");
+            return NormalizeWebResourceReference(icon, action);
+        }
+
+        private static bool SetDashboardIcon(XElement item, string icon, AppNavigationOperationsResult result)
+        {
+            if (icon == null)
+                return false;
+            result.DashboardIconItems.Add(item);
+            if ((string)item.Attribute("Icon") == icon)
+                return false;
+            item.SetAttributeValue("Icon", icon);
+            return true;
+        }
+
+        private static string ReadOptionalString(JsonElement op, string action, string name)
+        {
+            if (!op.TryGetProperty(name, out var value))
+                return null;
+            if (value.ValueKind != JsonValueKind.String || string.IsNullOrWhiteSpace(value.GetString()))
+                throw new InvalidOperationException($"{action} requires '{name}' to be a non-empty string.");
+            return value.GetString().Trim();
+        }
+
+        private static string NormalizeWebResourceReference(string reference, string action)
+        {
+            var name = reference.StartsWith(WebResourcePrefix, StringComparison.OrdinalIgnoreCase)
+                ? reference[WebResourcePrefix.Length..].Trim() : reference;
+            if (name.Length == 0)
+                throw new InvalidOperationException($"{action} requires a web resource name after '{WebResourcePrefix}'.");
+            return WebResourcePrefix + name;
+        }
+
         private static ItemTarget ReadItemTarget(JsonElement op, string action)
         {
-            string Read(string name)
-            {
-                if (!op.TryGetProperty(name, out var value))
-                    return null;
-                if (value.ValueKind != JsonValueKind.String || string.IsNullOrWhiteSpace(value.GetString()))
-                    throw new InvalidOperationException($"{action} requires '{name}' to be a non-empty string.");
-                return value.GetString().Trim();
-            }
-
             // Keep the original entity input coercion for existing operation callers.
             var entity = GetStringProp(op, "entity");
             if (op.TryGetProperty("entity", out _) && string.IsNullOrWhiteSpace(entity))
                 throw new InvalidOperationException($"{action} requires 'entity'.");
-            var url = Read("url");
-            var dashboard = Read("dashboard_id");
-            var defaultDashboard = Read("default_dashboard");
-            var webResource = Read("webresource");
+            var url = ReadOptionalString(op, action, "url");
+            var dashboard = ReadOptionalString(op, action, "dashboard_id");
+            var defaultDashboard = ReadOptionalString(op, action, "default_dashboard");
+            var webResource = ReadOptionalString(op, action, "webresource");
             if (dashboard != null && defaultDashboard != null)
                 throw new InvalidOperationException($"{action} accepts only one of 'dashboard_id' or 'default_dashboard'.");
             dashboard ??= defaultDashboard;
@@ -306,16 +349,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
             {
                 if (!Guid.TryParse(dashboard, out var id) || id == Guid.Empty)
                     throw new InvalidOperationException($"{action} requires a non-empty dashboard GUID.");
-                return new ItemTarget("Dashboard", "DefaultDashboard", id.ToString("B"));
+                return new ItemTarget("Dashboard", "DefaultDashboard", id.ToString("D"));
             }
             if (webResource != null)
-            {
-                var name = webResource.StartsWith(WebResourcePrefix, StringComparison.OrdinalIgnoreCase)
-                    ? webResource[WebResourcePrefix.Length..].Trim() : webResource;
-                if (name.Length == 0)
-                    throw new InvalidOperationException($"{action} requires a web resource name after '{WebResourcePrefix}'.");
-                return new ItemTarget("WebResource", "Url", WebResourcePrefix + name);
-            }
+                return new ItemTarget("WebResource", "Url", NormalizeWebResourceReference(webResource, action));
             return url == null ? null : new ItemTarget("URL", "Url", url);
         }
 
@@ -323,7 +360,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
         {
             public bool IsAppComponent => Kind is "Dashboard" or "WebResource";
 
-            private string DashboardUrl => $"/dashboards/dashboard.aspx?dashboardId={Guid.Parse(Value):D}";
+            private const string DashboardUrl = "/workplace/home_dashboards.aspx";
+
+            public bool RequiresWrite(XElement item) =>
+                !Matches(item) ||
+                (Attribute == "DefaultDashboard" &&
+                    ((string)item.Attribute(Attribute) != Value || (string)item.Attribute("Url") != DashboardUrl));
 
             public bool Matches(XElement item)
             {
