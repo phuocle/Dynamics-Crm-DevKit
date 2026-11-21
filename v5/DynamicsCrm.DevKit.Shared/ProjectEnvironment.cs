@@ -143,8 +143,10 @@ namespace DynamicsCrm.DevKit.Shared
 
             foreach (var baseKey in ConnectionKeys)
             {
+                // baseKey is always a ConnectionKeys entry, so GetGroupKey never
+                // returns null here (invalid group ids were filtered above).
                 var groupKey = GetGroupKey(baseKey, groupId);
-                if (groupKey != null && ContainsKeyIgnoreCase(values, groupKey))
+                if (ContainsKeyIgnoreCase(values, groupKey))
                     return true;
             }
 
