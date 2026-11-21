@@ -1072,6 +1072,499 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
     }
 
     // ──────────────────────────────────────────────
+    // CREATE — formula clone: custom replacements pipe (ref|old->new;old=new)
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void Create_FormulaCloneCustomReplacements_RewritesAllPairForms()
+    {
+        var result = NewTool().manage_column(entity_name: "contact", attribute_type: "string",
+            display_name: "Repl Clone", schema_name: "dev_ReplClone",
+            formula_definition: "account:new_formula_src|Trim(->Upper(;New_FormulaSrc=New_Other;=bad;Zed=",
+            solution_name: "DevKit");
+
+        AssertSuccess(result, "Created String column 'dev_replclone' on entity 'contact'.");
+        var attr = _service.CreatedAttributes.OfType<StringAttributeMetadata>().Single();
+        Assert.AreEqual(1, attr.SourceType);
+        StringAssert.Contains(attr.FormulaDefinition, "Upper(Text(");
+        StringAssert.Contains(attr.FormulaDefinition, "New_Other");
+        Assert.IsFalse(attr.FormulaDefinition!.Contains("Trim("), "arrow replacement must apply");
+        Assert.IsFalse(attr.FormulaDefinition!.Contains("New_FormulaSrc"), "equals replacement must apply");
+    }
+
+    // ──────────────────────────────────────────────
+    // CREATE — formula clone: related_ lookup target rewrite (same env)
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void Create_FormulaClone_RelatedLookupTargetRewritten_SystemUserToContact()
+    {
+        var meta = _service.Entities.Single(e => e.LogicalName == "account");
+        var attrs = meta.Attributes.ToList();
+        attrs.Add(new LookupAttributeMetadata
+        {
+            LogicalName = "new_lk",
+            SchemaName = "New_Lk",
+            DisplayName = Labeled("Lk")
+        });
+        Set(attrs.Last(), "Targets", new[] { "contact" });
+        attrs.Add(new StringAttributeMetadata
+        {
+            LogicalName = "new_srcl",
+            SchemaName = "New_Srcl",
+            DisplayName = Labeled("SrcL"),
+            SourceType = 1,
+            FormulaDefinition = "related_new_lk#systemuser Attribute=\"internalemailaddress\""
+        });
+        Set(meta, "Attributes", attrs.ToArray());
+
+        var result = NewTool().manage_column(entity_name: "account", attribute_type: "string",
+            display_name: "Related Clone", schema_name: "dev_RelatedClone",
+            formula_definition: "account:new_srcl", solution_name: "DevKit");
+
+        AssertSuccess(result, "Created String column 'dev_relatedclone' on entity 'account'.");
+        var attr = _service.CreatedAttributes.OfType<StringAttributeMetadata>().Single();
+        StringAssert.Contains(attr.FormulaDefinition, "related_new_lk#contact");
+        StringAssert.Contains(attr.FormulaDefinition, "emailaddress1");
+        Assert.IsFalse(attr.FormulaDefinition!.Contains("#systemuser"), "lookup target must be rewritten");
+        Assert.IsFalse(attr.FormulaDefinition!.Contains("internalemailaddress"), "systemuser→contact must swap the email attribute");
+    }
+
+    // ──────────────────────────────────────────────
+    // CREATE — formula clone: cross-environment via resolver groups
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void Create_FormulaCloneCrossEnv_PrefixRewritten()
+    {
+        var sourceService = new ColumnOrgService(_ctx.GetOrganizationService());
+        var sourceMeta = new EntityMetadata { LogicalName = "new_crment", SchemaName = "New_Crment" };
+        Set(sourceMeta, "PrimaryIdAttribute", "new_crmentid");
+        Set(sourceMeta, "Attributes", new AttributeMetadata[]
+        {
+            IdAttribute("new_crmentid"),
+            new StringAttributeMetadata
+            {
+                LogicalName = "new_ocalc",
+                SchemaName = "New_Ocalc",
+                DisplayName = Labeled("Ocalc"),
+                SourceType = 1,
+                FormulaDefinition = "ThisRecord.new_base + 1"
+            }
+        });
+        sourceService.Entities.Add(sourceMeta);
+
+        var resolver = new OneGroupResolver(new ConnectionBundle("2", null, false, null,
+            sourceService, null, null, null, null, null));
+        var tool = new ManageColumnTool(_service, new McpDryRunOptions { DryRun = false },
+            new McpExecutionContext(false), _webApi, resolver);
+
+        var result = tool.manage_column(entity_name: "account", attribute_type: "string",
+            display_name: "Cross Clone", schema_name: "dev_CrossClone",
+            formula_definition: "new_crment:new_ocalc", solution_name: "DevKit");
+
+        AssertSuccess(result, "Created String column 'dev_crossclone' on entity 'account'.");
+        var attr = _service.CreatedAttributes.OfType<StringAttributeMetadata>().Single();
+        Assert.AreEqual(1, attr.SourceType);
+        StringAssert.Contains(attr.FormulaDefinition, "ThisRecord.dev_base");
+        Assert.IsFalse(attr.FormulaDefinition!.Contains("new_base"), "cross-env source prefix must be rewritten");
+    }
+
+    [TestMethod]
+    public void Create_FormulaCloneCrossEnv_RollupRelationshipMappedByPrefix()
+    {
+        var sourceService = new ColumnOrgService(_ctx.GetOrganizationService());
+        var sourceMeta = new EntityMetadata { LogicalName = "new_srcent", SchemaName = "New_Srcent" };
+        Set(sourceMeta, "PrimaryIdAttribute", "new_srcentid");
+        Set(sourceMeta, "Attributes", new AttributeMetadata[]
+        {
+            IdAttribute("new_srcentid"),
+            new StringAttributeMetadata
+            {
+                LogicalName = "new_oroll",
+                SchemaName = "New_Oroll",
+                DisplayName = Labeled("Oroll"),
+                SourceType = 2,
+                FormulaDefinition = "EntityName=\"new_srcent\" Sum(relatedlinked_new_srcopp#new_oppid#new_opp#, ThisRecord.new_amt)"
+            }
+        });
+        Set(sourceMeta, "OneToManyRelationships", new OneToManyRelationshipMetadata[]
+        {
+            new()
+            {
+                SchemaName = "new_srcopp",
+                ReferencedEntity = "new_srcent",
+                ReferencingEntity = "new_opp",
+                ReferencingAttribute = "new_oppid"
+            }
+        });
+        sourceService.Entities.Add(sourceMeta);
+
+        var targetMeta = new EntityMetadata { LogicalName = "dev_tent", SchemaName = "Dev_Tent" };
+        Set(targetMeta, "PrimaryIdAttribute", "dev_tentid");
+        Set(targetMeta, "Attributes", new AttributeMetadata[] { IdAttribute("dev_tentid") });
+        Set(targetMeta, "OneToManyRelationships", new OneToManyRelationshipMetadata[]
+        {
+            new()
+            {
+                SchemaName = "dev_tent_opp",
+                ReferencedEntity = "dev_tent",
+                ReferencingEntity = "dev_opp",
+                ReferencingAttribute = "new_oppid"
+            }
+        });
+        _service.Entities.Add(targetMeta);
+
+        var resolver = new OneGroupResolver(new ConnectionBundle("2", null, false, null,
+            sourceService, null, null, null, null, null));
+        var tool = new ManageColumnTool(_service, new McpDryRunOptions { DryRun = false },
+            new McpExecutionContext(false), _webApi, resolver);
+
+        var result = tool.manage_column(entity_name: "dev_tent", attribute_type: "string",
+            display_name: "Cross Roll", schema_name: "dev_CrossRoll",
+            formula_definition: "new_srcent:new_oroll", solution_name: "DevKit");
+
+        AssertSuccess(result, "Created String column 'dev_crossroll' on entity 'dev_tent'.");
+        var attr = _service.CreatedAttributes.OfType<StringAttributeMetadata>().Single();
+        Assert.AreEqual(2, attr.SourceType);
+        Assert.IsFalse(attr.FormulaDefinition!.Contains("new_srcopp"), "source relationship must be mapped to the target environment");
+    }
+
+    // ──────────────────────────────────────────────
+    // UPDATE — formula parameters
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void Update_FormulaParametersOnPlainColumn_ReturnsCreateOnlyError()
+    {
+        var result = NewTool().manage_column(entity_name: "account", logical_name: "name",
+            formula_definition: "Sum(1)");
+
+        AssertError(result, "Formula clone parameters are create-only and cannot update an existing column.");
+    }
+
+    [TestMethod]
+    public void Update_FormulaOnCalculatedColumn_AppliesNewFormula()
+    {
+        var result = NewTool().manage_column(entity_name: "account", logical_name: "new_formula_src",
+            formula_definition: "Sum(1)", formula_source_type: "powerfx");
+
+        AssertSuccess(result, "Updated column 'new_formula_src'");
+        var attr = _service.UpdatedAttributes.OfType<StringAttributeMetadata>().Single();
+        Assert.AreEqual(3, attr.SourceType);
+        Assert.AreEqual("Sum(1)", attr.FormulaDefinition);
+    }
+
+    [TestMethod]
+    public void Update_FormulaChange_UpdateFails_RecreatesColumn()
+    {
+        _service.UpdateExceptionMessage = "update blocked";
+        var createdBefore = _service.CreatedAttributes.Count;
+
+        var result = NewTool().manage_column(entity_name: "account", logical_name: "new_formula_src",
+            formula_definition: "Sum(2)", formula_source_type: "powerfx");
+
+        // The formula-change workaround deletes and recreates the column after
+        // the update failure, so the run still succeeds.
+        AssertSuccess(result, "Updated column 'new_formula_src'");
+        Assert.IsTrue(_service.CreatedAttributes.Count > createdBefore, "column must be recreated");
+    }
+
+    // ──────────────────────────────────────────────
+    // UPDATE — required-level PUT failure is swallowed
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void Update_RequiredLevel_PutFailure_IsSwallowed()
+    {
+        _webApi.Responder = () => throw new HttpRequestException("put failed");
+
+        var result = NewTool().manage_column(entity_name: "contact", logical_name: "fullname",
+            required_level: "ApplicationRequired");
+
+        AssertSuccess(result, "Updated column 'fullname'");
+        Assert.IsTrue(_webApi.Calls.Any(c => c.Method == HttpMethod.Put), "required-level PUT must be attempted");
+    }
+
+    // ──────────────────────────────────────────────
+    // UPDATE — alternate key create/delete
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void Update_AlternateKeyTrue_KeyCreateFails_MapsError()
+    {
+        _service.KeyCreateExceptionMessage = "key blocked";
+
+        var result = NewTool().manage_column(entity_name: "account", logical_name: "name",
+            is_alternate_key: true);
+
+        AssertError(result, "failed to create Alternate Key for 'account.name'");
+    }
+
+    [TestMethod]
+    public void Update_AlternateKeyTrue_KeyCreateSucceeds()
+    {
+        var result = NewTool().manage_column(entity_name: "account", logical_name: "name",
+            is_alternate_key: true);
+
+        AssertSuccess(result, "Updated column 'name'");
+        StringAssert.Contains(Json(result), "isAlternateKey");
+    }
+
+    [TestMethod]
+    public void Update_AlternateKeyFalse_KeyDeleted()
+    {
+        var result = NewTool().manage_column(entity_name: "account", logical_name: "name",
+            is_alternate_key: false);
+
+        AssertSuccess(result, "Updated column 'name'");
+        StringAssert.Contains(Json(result), "isAlternateKey");
+    }
+
+    [TestMethod]
+    public void Create_AlternateKey_CreatesEntityKey()
+    {
+        var result = NewTool().manage_column(entity_name: "account", attribute_type: "string",
+            display_name: "Key Col", schema_name: "dev_KeyCol", solution_name: "DevKit",
+            is_alternate_key: true);
+
+        AssertSuccess(result, "Created String column 'dev_keycol' on entity 'account'.");
+        StringAssert.Contains(Json(result), "isAlternateKey");
+    }
+
+    // ──────────────────────────────────────────────
+    // UPDATE — statuscode options with color + state
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void Update_StatusCode_AddAndRenameOptionsWithColor()
+    {
+        var result = NewTool().manage_column(entity_name: "account", logical_name: "new_status",
+            add_options: "[{\"label\":\"Open X\",\"state\":1,\"color\":\"#FF0000\"}]",
+            update_options: "[{\"label\":\"Renamed\",\"value\":1,\"color\":\"#00FF00\"}]");
+
+        AssertSuccess(result, "Updated column 'new_status'");
+        StringAssert.Contains(Json(result), "Open X (100000000) [state=1] [#FF0000]");
+        StringAssert.Contains(Json(result), "[state=1]");
+        StringAssert.Contains(Json(result), "[#FF0000]");
+        StringAssert.Contains(Json(result), "Renamed");
+        StringAssert.Contains(Json(result), "[#00FF00]");
+        Assert.IsTrue(_service.OptionRequests.Any(r => r is InsertStatusValueRequest));
+        Assert.IsTrue(_service.OptionRequests.Any(r => r is UpdateOptionValueRequest));
+    }
+
+    // ──────────────────────────────────────────────
+    // UPDATE — datetime format change
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void Update_DateTime_FormatChanged()
+    {
+        var result = NewTool().manage_column(entity_name: "account", logical_name: "when",
+            format: "DateOnly");
+
+        AssertSuccess(result, "Updated column 'new_when' on entity 'account'.");
+        var updated = _service.UpdatedAttributes.OfType<DateTimeAttributeMetadata>().Single();
+        Assert.AreEqual(DateTimeFormat.DateOnly, updated.Format);
+    }
+
+    // ──────────────────────────────────────────────
+    // InvokeAsync — resolver routing
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public async Task InvokeAsync_WithResolver_CreatesColumn()
+    {
+        var resolver = new OneGroupResolver(new ConnectionBundle("1", null, false, null,
+            _service, null, null, null, null, null));
+        var tool = new ManageColumnTool(_service, new McpDryRunOptions { DryRun = false },
+            new McpExecutionContext(false), _webApi, resolver);
+
+        var result = await tool.InvokeAsync(entity_name: "account", attribute_type: "integer",
+            display_name: "Inv Count", solution_name: "DevKit");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "Created Integer column");
+    }
+
+    // ──────────────────────────────────────────────
+    // CREATE — formula clone: relatedlinked_ relationship rename on target
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void Create_FormulaClone_RelatedLinkedRelationshipRenamed()
+    {
+        var meta = _service.Entities.Single(e => e.LogicalName == "account");
+        var attrs = meta.Attributes.ToList();
+        attrs.Add(new LookupAttributeMetadata
+        {
+            LogicalName = "new_oppid",
+            SchemaName = "New_Oppid",
+            DisplayName = Labeled("Oppid")
+        });
+        attrs.Add(new StringAttributeMetadata
+        {
+            LogicalName = "new_srcll",
+            SchemaName = "New_Srcll",
+            DisplayName = Labeled("SrcLl"),
+            SourceType = 1,
+            FormulaDefinition = "relatedlinked_oldrel#new_oppid#dev_opp# Sum(ThisRecord.new_amt)"
+        });
+        Set(meta, "Attributes", attrs.ToArray());
+        Set(meta, "OneToManyRelationships", new OneToManyRelationshipMetadata[]
+        {
+            new()
+            {
+                SchemaName = "account_x_rel",
+                ReferencedEntity = "account",
+                ReferencingEntity = "dev_opp",
+                ReferencingAttribute = "new_oppid"
+            }
+        });
+
+        var result = NewTool().manage_column(entity_name: "account", attribute_type: "string",
+            display_name: "Linked Clone", schema_name: "dev_LinkedClone",
+            formula_definition: "account:new_srcll", solution_name: "DevKit");
+
+        AssertSuccess(result, "Created String column 'dev_linkedclone' on entity 'account'.");
+        var attr = _service.CreatedAttributes.OfType<StringAttributeMetadata>().Single();
+        StringAssert.Contains(attr.FormulaDefinition, "account_x_rel");
+        Assert.IsFalse(attr.FormulaDefinition!.Contains("oldrel"), "stale relationship schema must be renamed");
+    }
+
+    [TestMethod]
+    public void Create_FormulaClone_RelatedLookup_NonSystemUser_NoEmailSwap()
+    {
+        var meta = _service.Entities.Single(e => e.LogicalName == "account");
+        var attrs = meta.Attributes.ToList();
+        attrs.Add(new LookupAttributeMetadata
+        {
+            LogicalName = "new_lk2",
+            SchemaName = "New_Lk2",
+            DisplayName = Labeled("Lk2")
+        });
+        Set(attrs.Last(), "Targets", new[] { "lead" });
+        attrs.Add(new StringAttributeMetadata
+        {
+            LogicalName = "new_srcn",
+            SchemaName = "New_Srcn",
+            DisplayName = Labeled("SrcN"),
+            SourceType = 1,
+            FormulaDefinition = "related_new_lk2#systemuser"
+        });
+        Set(meta, "Attributes", attrs.ToArray());
+
+        var result = NewTool().manage_column(entity_name: "account", attribute_type: "string",
+            display_name: "Lead Clone", schema_name: "dev_LeadClone",
+            formula_definition: "account:new_srcn", solution_name: "DevKit");
+
+        AssertSuccess(result, "Created String column 'dev_leadclone' on entity 'account'.");
+        var attr = _service.CreatedAttributes.OfType<StringAttributeMetadata>().Single();
+        StringAssert.Contains(attr.FormulaDefinition, "related_new_lk2#lead");
+        Assert.IsFalse(attr.FormulaDefinition!.Contains("emailaddress1"), "systemuser→contact swap must not fire for non-systemuser targets");
+    }
+
+    [TestMethod]
+    public void Create_FormulaClone_FallbackAlsoFails_MapsError()
+    {
+        _service.RejectClonedFormula = true;
+        _service.CreateExceptionMessage = "create blocked";
+
+        var result = NewTool().manage_column(entity_name: "account", attribute_type: "string",
+            display_name: "Doomed Clone", schema_name: "dev_DoomedClone",
+            formula_definition: "account:new_formula_src", solution_name: "DevKit");
+
+        StringAssert.Contains(Text(result), "after multiple retry attempts");
+    }
+
+    [TestMethod]
+    public void Create_FormulaCloneCrossEnv_SkipsAndSkipsThenResolves()
+    {
+        var sourceService = new ColumnOrgService(_ctx.GetOrganizationService());
+        var sourceMeta = new EntityMetadata { LogicalName = "new_crment", SchemaName = "New_Crment" };
+        Set(sourceMeta, "PrimaryIdAttribute", "new_crmentid");
+        Set(sourceMeta, "Attributes", new AttributeMetadata[]
+        {
+            IdAttribute("new_crmentid"),
+            new StringAttributeMetadata
+            {
+                LogicalName = "new_ocalc",
+                SchemaName = "New_Ocalc",
+                DisplayName = Labeled("Ocalc"),
+                SourceType = 1,
+                FormulaDefinition = "ThisRecord.new_base + 1"
+            }
+        });
+        sourceService.Entities.Add(sourceMeta);
+
+        // Group "2" resolves to the same service as the startup connection
+        // (skipped by the equality guard), group "3" throws (inner catch),
+        // group "4" resolves the source column.
+        var failingService = new ColumnOrgService(_ctx.GetOrganizationService());
+        var resolver = new MultiGroupResolver(
+            new ConnectionBundle("2", null, false, null, _service, null, null, null, null, null),
+            new ConnectionBundle("3", null, false, null, failingService, null, null, null, null, null),
+            new ConnectionBundle("4", null, false, null, sourceService, null, null, null, null, null));
+        var tool = new ManageColumnTool(_service, new McpDryRunOptions { DryRun = false },
+            new McpExecutionContext(false), _webApi, resolver);
+
+        var result = tool.manage_column(entity_name: "account", attribute_type: "string",
+            display_name: "Multi Clone", schema_name: "dev_MultiClone",
+            formula_definition: "new_crment:new_ocalc", solution_name: "DevKit");
+
+        AssertSuccess(result, "Created String column 'dev_multiclone' on entity 'account'.");
+        var attr = _service.CreatedAttributes.OfType<StringAttributeMetadata>().Single();
+        StringAssert.Contains(attr.FormulaDefinition, "ThisRecord.dev_base");
+    }
+
+    private sealed class OneGroupResolver : DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver
+    {
+        private readonly ConnectionBundle _bundle;
+
+        public OneGroupResolver(ConnectionBundle bundle) => _bundle = bundle;
+
+        public string StartupEnvId => "1";
+
+        public Task<ConnectionBundle> ResolveAsync(string env, CancellationToken cancellationToken)
+            => Task.FromResult(_bundle);
+
+        public IReadOnlyList<ConnectionGroupInfo> ListGroups() => new[]
+        {
+            new ConnectionGroupInfo { Env = "2" }
+        };
+
+        public IDisposable BeginInvocation() => new NoopLease();
+
+        private sealed class NoopLease : IDisposable
+        {
+            public void Dispose() { }
+        }
+    }
+
+    private sealed class MultiGroupResolver : DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver
+    {
+        private readonly ConnectionBundle[] _bundles;
+
+        public MultiGroupResolver(params ConnectionBundle[] bundles) => _bundles = bundles;
+
+        public string StartupEnvId => "1";
+
+        public Task<ConnectionBundle> ResolveAsync(string env, CancellationToken cancellationToken)
+            => Task.FromResult(_bundles.First(b => b.EnvId == env));
+
+        public IReadOnlyList<ConnectionGroupInfo> ListGroups() => _bundles
+            .Select(b => new ConnectionGroupInfo { Env = b.EnvId })
+            .ToList();
+
+        public IDisposable BeginInvocation() => new NoopLease2();
+
+        private sealed class NoopLease2 : IDisposable
+        {
+            public void Dispose() { }
+        }
+    }
+
+    // ──────────────────────────────────────────────
     // fakes
     // ──────────────────────────────────────────────
 
@@ -1132,6 +1625,9 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
         /// <summary>When set, UpdateAttributeRequest throws with this message.</summary>
         public string? UpdateExceptionMessage;
 
+        /// <summary>When set, CreateEntityKeyRequest throws with this message.</summary>
+        public string? KeyCreateExceptionMessage;
+
         public ColumnOrgService(IOrganizationService inner) => _inner = inner;
 
         public Guid Create(Entity entity) => _inner.Create(entity);
@@ -1151,6 +1647,11 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
             RetrieveAllOptionSetsRequest => RetrieveOptionSets(),
             CreateAttributeRequest r => CreateAttribute(r),
             UpdateAttributeRequest r => UpdateAttribute(r),
+            CreateEntityKeyRequest when KeyCreateExceptionMessage != null
+                => throw new InvalidOperationException(KeyCreateExceptionMessage),
+            CreateEntityKeyRequest => new OrganizationResponse(),
+            DeleteEntityKeyRequest => new OrganizationResponse(),
+            DeleteAttributeRequest => new OrganizationResponse(),
             CreateOneToManyRequest r => CreateOneToMany(r),
             CreateCustomerRelationshipsRequest r => CreateLookup(r.Lookup,
                 r.OneToManyRelationships.Select(rel => rel.ReferencedEntity).ToArray(),

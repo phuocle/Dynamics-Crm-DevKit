@@ -501,6 +501,55 @@ public sealed class TaskServerManagedIdentityAndGetTypesTests
             "the data provider event loop reached RegisterDataProviderAsync.");
     }
 
+    [TestMethod]
+    public void IsValidTypes_WorkflowTypeWithTwoAttributes_StopsDeploy()
+    {
+        // IsWorkflowType only compares the type's FullName against
+        // "System.Activities.CodeActivity", so a locally compiled class with
+        // that full name trips the workflow guard without any real
+        // System.Activities dependency. AllowMultiple lets the type carry two
+        // CrmPluginRegistration attributes, which IsValidTypes rejects for
+        // workflow types.
+        var dllPath = CompileDll("""
+            using DynamicsCrm.DevKit.Shared.Models;
+            using Microsoft.Xrm.Sdk;
+
+            namespace System.Activities
+            {
+                [CrmPluginRegistration(
+                    Message = "Create",
+                    EntityLogicalName = "account",
+                    Name = "CodeActivity.A",
+                    FriendlyName = "A",
+                    PluginType = PluginType.Workflow,
+                    Stage = StageEnum.PostOperation,
+                    ExecutionMode = ExecutionModeEnum.Synchronous)]
+                [CrmPluginRegistration(
+                    Message = "Update",
+                    EntityLogicalName = "account",
+                    Name = "CodeActivity.B",
+                    FriendlyName = "B",
+                    PluginType = PluginType.Workflow,
+                    Stage = StageEnum.PostOperation,
+                    ExecutionMode = ExecutionModeEnum.Synchronous)]
+                public class CodeActivity : IPlugin
+                {
+                    public void Execute(IServiceProvider serviceProvider) { }
+                }
+            }
+            """, "DevKitWorkflowPlugins.dll");
+
+        var task = NewTask();
+        var getTypes = typeof(TaskServer).GetMethod("GetTypes", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        var types = (List<System.Reflection.TypeInfo>)getTypes.Invoke(task, new object?[] { dllPath })!;
+        Assert.AreEqual(1, types.Count, "the workflow type is the only registered type");
+
+        var isValid = typeof(TaskServer).GetMethod("IsValidTypes", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        var valid = (bool)isValid.Invoke(task, new object?[] { types });
+
+        Assert.IsFalse(valid, "a workflow type with two attributes must stop the deploy");
+    }
+
     // NOTE (skipped branches):
     // - DeployManagedIdentityAsync's post-sign bind blocks (TaskServer
     //   ~264-295 and ~414-429) run only after a SUCCESSFUL code sign, which
