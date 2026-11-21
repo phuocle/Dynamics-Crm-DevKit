@@ -30,7 +30,9 @@ Reference for `manage_table`, `manage_column`, and `manage_relationship`.
 ### Update Mode
 - Pass logical_name to identify the existing table
 - Only provided params are updated; omitted ones keep current values
-- Immutable properties are IGNORED with warnings if passed during update
+- Set `icon_vector_name` to the name of an existing SVG web resource, such as `ab_/images/svg/ab_bank.svg`. Omit it or pass an empty string to keep the current icon.
+- Pass `solution_name` to associate the update with an unmanaged solution. The tool publishes the table after applying changes.
+- Omit create-only inputs on update. The tool can warn about explicit inputs that it ignores.
 
 ### Irreversible Options (Manage via Power Apps UI Only)
 Activities, Feedback, Change Tracking, Business Process Flows, Connections, Queues, Sending Email.

@@ -75,6 +75,12 @@ public sealed class ManageTableFakeSdkCoverageTests
             resp.Results["EntityId"] = Guid.NewGuid();
             return resp;
         }),
+        RetrieveAttributeRequest r when _capturedCreate != null &&
+            r.EntityLogicalName == _capturedCreate.Entity.LogicalName &&
+            r.LogicalName == _capturedCreate.PrimaryAttribute.LogicalName => new RetrieveAttributeResponse
+        {
+            Results = { ["AttributeMetadata"] = _capturedCreate.PrimaryAttribute }
+        },
         UpdateEntityRequest => BuildResponse(request, () => new UpdateEntityResponse()),
         PublishXmlRequest => BuildResponse(request, () => new PublishXmlResponse()),
         _ => throw new InvalidOperationException($"Unexpected request '{request.RequestName}'")
@@ -134,6 +140,7 @@ public sealed class ManageTableFakeSdkCoverageTests
         Assert.AreEqual("all_Widget", json.GetProperty("schemaName").GetString());
         Assert.AreEqual("all_widget", json.GetProperty("logicalName").GetString());
         Assert.AreEqual("all_name", json.GetProperty("primaryAttributeName").GetString());
+        Assert.AreEqual("Name", json.GetProperty("primaryAttributeDisplayName").GetString());
         Assert.AreEqual("UserOwned", json.GetProperty("ownershipType").GetString());
         Assert.IsTrue(json.GetProperty("published").GetBoolean());
         Assert.AreEqual("DevKitSolution", json.GetProperty("solutionName").GetString());
@@ -148,6 +155,7 @@ public sealed class ManageTableFakeSdkCoverageTests
             display_name: "Widget", display_collection_name: "Widgets", solution_name: "DevKitSolution");
 
         Assert.IsFalse(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "type 'Standard'");
         Assert.AreEqual("not_executed", Structured(result).GetProperty("status").GetString());
         Assert.IsNull(_capturedCreate, "Dry run must not create metadata.");
     }
@@ -237,16 +245,16 @@ public sealed class ManageTableFakeSdkCoverageTests
             display_collection_name: "Gadgets", description: "Updated description",
             is_quick_create_enabled: true, is_audit_enabled: false, is_search_enabled: false,
             ownership_type: "Organization", table_type: "Elastic", is_activity: true, has_notes: true,
-            primary_attribute_name: "all_other");
+            primary_attribute_name: "all_other", primary_attribute_display_name: "Other Name");
 
         Assert.IsFalse(result.IsError == true, result.GetText());
         var json = Structured(result);
         Assert.AreEqual("updated", json.GetProperty("status").GetString());
         Assert.AreEqual("Gadget", json.GetProperty("displayName").GetString());
         var warnings = json.GetProperty("warnings").EnumerateArray().Select(w => w.GetString()!).ToList();
-        Assert.IsTrue(warnings.Any(w => w.Contains("immutable")),
-            "ownership_type/table_type/is_activity/has_notes/primary_attribute changes are ignored with warnings. Got: "
-            + string.Join(" | ", warnings));
+        foreach (var parameterName in new[] { "ownership_type", "table_type", "is_activity", "has_notes", "primary_attribute_name", "primary_attribute_display_name" })
+            Assert.IsTrue(warnings.Any(warning => warning.StartsWith(parameterName + " is immutable", StringComparison.Ordinal)),
+                $"Expected an immutable warning for '{parameterName}'. Got: {string.Join(" | ", warnings)}");
     }
 
     [TestMethod]

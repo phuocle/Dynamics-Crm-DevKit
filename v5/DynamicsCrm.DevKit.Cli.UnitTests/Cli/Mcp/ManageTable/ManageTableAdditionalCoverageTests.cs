@@ -18,7 +18,7 @@ public sealed class ManageTableAdditionalCoverageTests
         {
             "Project", "Projects", "Description", true, true, true,
             "Organization", "Elastic", false, true, "core_name", "Project Name",
-            0, "core_Project", "core_project", "core", "core_solution", "core_solution"
+            0, "core_Project", "core_project", "core", "core_solution", "core_solution", ""
         };
         var result = ToolType.GetMethod("CreateNewEntity", BindingFlags.NonPublic | BindingFlags.Instance)!.Invoke(tool, args);
 
@@ -34,7 +34,7 @@ public sealed class ManageTableAdditionalCoverageTests
         {
             "Project", "Projects", "", null, null, null, "Tenant", "Standard",
             false, false, null, "Name", 100, "core_Project", "core_project",
-            "core", "core_solution", "core_solution"
+            "core", "core_solution", "core_solution", ""
         };
         var result = (ModelContextProtocol.Protocol.CallToolResult)ToolType
             .GetMethod("CreateNewEntity", BindingFlags.NonPublic | BindingFlags.Instance)!.Invoke(tool, args)!;

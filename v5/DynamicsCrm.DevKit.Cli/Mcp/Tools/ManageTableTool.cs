@@ -40,7 +40,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(ManageTableResult)),
         Description(
             "Create or update a Dataverse table. Auto-detects create vs update from the inputs (no entity_name param).\n" +
-            "- UPDATE (entity exists): logical_name + optional display_name, display_collection_name, description, is_audit_enabled, is_quick_create_enabled, is_search_enabled.\n" +
+            "- UPDATE (entity exists): logical_name + optional display_name, display_collection_name, description, is_audit_enabled, is_quick_create_enabled, is_search_enabled, icon_vector_name, solution_name.\n" +
             "- CREATE (new table): display_name + display_collection_name + solution_name (resolves publisher prefix). Auto-creates primary name attribute.\n" +
             "Technical names come from logical_name / schema_name or are auto-derived from display_name.\n\n" +
             "For publisher prefixes, create/update requirements and immutable properties, read docs://schema_tools_guide before changing metadata.\n\n" +
@@ -56,12 +56,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Singular display name (e.g. 'Project'). Required for CREATE.")] string display_name = "",
             [Description("Plural (e.g. 'Projects'). Required: create.")] string display_collection_name = "",
-            [Description("Required: create.")] string solution_name = "",
+            [Description("Unmanaged solution name. Required on create; optional on update.")] string solution_name = "",
             [Description("Optional table description.")] string description = "",
             [Description("Auto-derived if omitted. [create-only]")] string primary_attribute_name = "",
-            [Description("Display label of the primary name column on create. Default 'Name'.")] string primary_attribute_display_name = "Name",
-            [Description("'User' or 'Organization'. [create-only, immutable]")] string ownership_type = "User",
-            [Description("'Standard' or 'Elastic' (Cosmos DB, no charts). [create-only, immutable]")] string table_type = "Standard",
+            [Description("Display label of the primary name column on create. Defaults to 'Name' on create.")] string primary_attribute_display_name = "",
+            [Description("'User' or 'Organization'. Defaults to 'User' on create. [create-only, immutable]")] string ownership_type = "",
+            [Description("'Standard' or 'Elastic' (Cosmos DB, no charts). Defaults to 'Standard' on create. [create-only, immutable]")] string table_type = "",
             [Description("Activity entity. [create-only, immutable]")] bool is_activity = false,
             [Description("Enable notes. [create-only]")] bool has_notes = false,
             [Description("Enable quick create for this table. null = keep current on update.")] bool? is_quick_create_enabled = null,
@@ -72,24 +72,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Update: identifies the existing table by display or logical name. Create: optional logical name override (e.g. 'all_in_one'), normalized to lowercase; must start with the solution publisher prefix and match the lowercase schema name.")] string logical_name = "",
             [Description("SchemaName for the primary name column (e.g. 'ab_name'). If provided, used AS-IS as SchemaName (skip auto-TitleCase). Create only — ignored on update. Must start with the publisher prefix.")] string primary_attribute_schema_name = "",
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
-            System.Threading.CancellationToken cancellationToken = default)
+            System.Threading.CancellationToken cancellationToken = default,
+            [Description("Existing SVG web resource name (e.g. 'ab_/images/svg/ab_bank.svg'). Update only. Omit or leave empty to keep the current icon.")] string icon_vector_name = "")
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
                 var worker = new ManageTableTool(conn.OrgService, conn.Options, conn.Context);
-                return System.Threading.Tasks.Task.FromResult(worker.manage_table(display_name, display_collection_name, solution_name, description, primary_attribute_name, primary_attribute_display_name, ownership_type, table_type, is_activity, has_notes, is_quick_create_enabled, is_audit_enabled, is_search_enabled, primary_attribute_max_length, schema_name, logical_name, primary_attribute_schema_name));
+                return System.Threading.Tasks.Task.FromResult(worker.manage_table(display_name, display_collection_name, solution_name, description, primary_attribute_name, primary_attribute_display_name, ownership_type, table_type, is_activity, has_notes, is_quick_create_enabled, is_audit_enabled, is_search_enabled, primary_attribute_max_length, schema_name, logical_name, primary_attribute_schema_name, icon_vector_name));
             }, cancellationToken);
         }
 
         public CallToolResult manage_table(
             [Description("Singular display name (e.g. 'Project'). Required for CREATE.")] string display_name = "",
             [Description("Plural (e.g. 'Projects'). Required: create.")] string display_collection_name = "",
-            [Description("Required: create.")] string solution_name = "",
+            [Description("Unmanaged solution name. Required on create; optional on update.")] string solution_name = "",
             [Description("Optional table description.")] string description = "",
             [Description("Auto-derived if omitted. [create-only]")] string primary_attribute_name = "",
-            [Description("Display label of the primary name column on create. Default 'Name'.")] string primary_attribute_display_name = "Name",
-            [Description("'User' or 'Organization'. [create-only, immutable]")] string ownership_type = "User",
-            [Description("'Standard' or 'Elastic' (Cosmos DB, no charts). [create-only, immutable]")] string table_type = "Standard",
+            [Description("Display label of the primary name column on create. Defaults to 'Name' on create.")] string primary_attribute_display_name = "",
+            [Description("'User' or 'Organization'. Defaults to 'User' on create. [create-only, immutable]")] string ownership_type = "",
+            [Description("'Standard' or 'Elastic' (Cosmos DB, no charts). Defaults to 'Standard' on create. [create-only, immutable]")] string table_type = "",
             [Description("Activity entity. [create-only, immutable]")] bool is_activity = false,
             [Description("Enable notes. [create-only]")] bool has_notes = false,
             [Description("Enable quick create for this table. null = keep current on update.")] bool? is_quick_create_enabled = null,
@@ -98,7 +99,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("1-850. [create-only]")] int primary_attribute_max_length = 100,
             [Description("SchemaName for the new table (e.g. 'all_InOne' or 'all_In_One'). If provided, used AS-IS as SchemaName (skip auto-derive). Caller responsible for casing. Create only — ignored on update. Must start with the publisher prefix.")] string schema_name = "",
             [Description("Update: identifies the existing table by display or logical name. Create: optional logical name override (e.g. 'all_in_one'), normalized to lowercase; must start with the solution publisher prefix and match the lowercase schema name.")] string logical_name = "",
-            [Description("SchemaName for the primary name column (e.g. 'ab_name'). If provided, used AS-IS as SchemaName (skip auto-TitleCase). Create only — ignored on update. Must start with the publisher prefix.")] string primary_attribute_schema_name = "")
+            [Description("SchemaName for the primary name column (e.g. 'ab_name'). If provided, used AS-IS as SchemaName (skip auto-TitleCase). Create only — ignored on update. Must start with the publisher prefix.")] string primary_attribute_schema_name = "",
+            [Description("Existing SVG web resource name (e.g. 'ab_/images/svg/ab_bank.svg'). Update only. Omit or leave empty to keep the current icon.")] string icon_vector_name = "")
         {
             try
             {
@@ -107,6 +109,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 display_name = display_name?.Trim() ?? "";
                 display_collection_name = display_collection_name?.Trim() ?? "";
                 solution_name = solution_name?.Trim() ?? "";
+                icon_vector_name = icon_vector_name?.Trim() ?? "";
                 description = description?.Trim() ?? "";
                 primary_attribute_name = primary_attribute_name?.Trim() ?? "";
                 primary_attribute_schema_name = primary_attribute_schema_name?.Trim() ?? "";
@@ -145,7 +148,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             is_quick_create_enabled, is_audit_enabled, is_search_enabled,
                             ownership_type, table_type, is_activity, has_notes,
                             primary_attribute_name, primary_attribute_display_name,
-                            resolvedSolutionUniqueName ?? solution_name);
+                            resolvedSolutionUniqueName, icon_vector_name);
                     }
 
                     if (string.IsNullOrWhiteSpace(display_name) || string.IsNullOrWhiteSpace(display_collection_name))
@@ -161,6 +164,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         "logical_name is required to update an existing table, or display_name + display_collection_name + solution_name to create a new one.",
                         "To UPDATE: pass logical_name (e.g. 'all_in_one'). To CREATE: pass display_name + display_collection_name + solution_name (and optionally schema_name/logical_name overrides).");
                 }
+
+                if (icon_vector_name.Length > 0)
+                    return Error("icon_vector_name can only be set on an existing table.",
+                        "Use get_tables to find the table's logical_name, then call manage_table to update it.");
 
                 return CreateNewEntity(
                     display_name, display_collection_name, description,
@@ -287,6 +294,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var isElastic = !string.IsNullOrWhiteSpace(table_type) &&
                             table_type.Equals("Elastic", StringComparison.OrdinalIgnoreCase);
+
+            if (string.IsNullOrWhiteSpace(primary_attribute_display_name))
+                primary_attribute_display_name = "Name";
 
             if (is_activity)
             {
@@ -442,7 +452,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             bool? isQuickCreateEnabled, bool? isAuditEnabled, bool? isSearchEnabled,
             string ownershipType, string tableType, bool isActivity, bool hasNotes,
             string primaryAttributeName, string primaryAttributeDisplayName,
-            string solutionName)
+            string solutionUniqueName, string iconVectorName)
         {
             var changes = new List<string>();
             var structuredChanges = new Dictionary<string, UpdateAttributeChange>();
@@ -486,6 +496,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     changes.Add($"Description: \"{oldVal}\" -> \"{description}\"");
                     structuredChanges["description"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = description };
                 }
+            }
+
+            var currentIconVectorName = existingMetadata.IconVectorName ?? "";
+            var iconChanged = iconVectorName.Length > 0 && currentIconVectorName != iconVectorName;
+            if (iconChanged)
+            {
+                changes.Add($"IconVectorName: \"{currentIconVectorName}\" -> \"{iconVectorName}\"");
+                structuredChanges["iconVectorName"] = new UpdateAttributeChange { OldValue = currentIconVectorName, NewValue = iconVectorName };
             }
 
             if (isQuickCreateEnabled.HasValue && existingMetadata.IsQuickCreateEnabled != isQuickCreateEnabled.Value)
@@ -591,10 +609,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Published = false
                     });
 
+            if (iconChanged)
+                existingMetadata.IconVectorName = iconVectorName;
+
             var updateRequest = new UpdateEntityRequest
             {
                 Entity = existingMetadata
             };
+            if (!string.IsNullOrWhiteSpace(solutionUniqueName))
+                updateRequest.SolutionUniqueName = solutionUniqueName;
 
             DataverseMutationExecutor.Execute(_context, _orgService, updateRequest);
 

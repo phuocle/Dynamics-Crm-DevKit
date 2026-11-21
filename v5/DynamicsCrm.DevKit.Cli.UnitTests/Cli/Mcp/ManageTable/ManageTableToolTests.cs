@@ -55,25 +55,20 @@ public class ManageTableToolTests
         Assert.AreEqual("options", parameters[1].Name, "Second parameter should be options");
     }
 
-    // ── Ownership type string parsing tests (inline logic) ───────────────────
-    // These test the known string → enum mapping documented in the tool.
-
     [TestMethod]
-    public void ManageTableTool_OwnershipType_User_IsDefaultInSignature()
+    [DataRow("ownership_type")]
+    [DataRow("table_type")]
+    [DataRow("primary_attribute_display_name")]
+    public void ManageTableTool_CreateDefaultsAreAbsentFromSignatures(string parameterName)
     {
-        var method = ToolType.GetMethod("manage_table");
-        var param = System.Array.Find(method!.GetParameters(), p => p.Name == "ownership_type");
-        Assert.IsNotNull(param, "ownership_type parameter must exist");
-        Assert.AreEqual("User", param.DefaultValue?.ToString(), "Default ownership_type should be 'User'");
-    }
-
-    [TestMethod]
-    public void ManageTableTool_TableType_Standard_IsDefaultInSignature()
-    {
-        var method = ToolType.GetMethod("manage_table");
-        var param = System.Array.Find(method!.GetParameters(), p => p.Name == "table_type");
-        Assert.IsNotNull(param, "table_type parameter must exist");
-        Assert.AreEqual("Standard", param.DefaultValue?.ToString(), "Default table_type should be 'Standard'");
+        foreach (var methodName in new[] { "InvokeAsync", "manage_table" })
+        {
+            var method = ToolType.GetMethod(methodName);
+            Assert.IsNotNull(method);
+            var parameter = Array.Find(method.GetParameters(), p => p.Name == parameterName);
+            Assert.IsNotNull(parameter);
+            Assert.AreEqual("", parameter.DefaultValue, $"{methodName}.{parameterName} must be empty when omitted.");
+        }
     }
 
     [TestMethod]
@@ -110,15 +105,6 @@ public class ManageTableToolTests
         var param = System.Array.Find(method!.GetParameters(), p => p.Name == "has_notes");
         Assert.IsNotNull(param, "has_notes parameter must exist");
         Assert.AreEqual(false, param.DefaultValue, "Default has_notes should be false");
-    }
-
-    [TestMethod]
-    public void ManageTableTool_PrimaryAttributeDisplayName_DefaultIsName()
-    {
-        var method = ToolType.GetMethod("manage_table");
-        var param = System.Array.Find(method!.GetParameters(), p => p.Name == "primary_attribute_display_name");
-        Assert.IsNotNull(param, "primary_attribute_display_name parameter must exist");
-        Assert.AreEqual("Name", param.DefaultValue?.ToString(), "Default primary_attribute_display_name should be 'Name'");
     }
 
     // ── SchemaName derivation logic via DataverseNamer ────────────────────────

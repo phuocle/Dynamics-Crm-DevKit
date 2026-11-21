@@ -91,7 +91,7 @@ public sealed class ManageTableErrorPathCoverageTests
         var tool = new ManageTableTool(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true));
 
         var result = InvokePrivate<CallToolResult>(tool, "CreateNewEntity",
-            "", "", "", null, null, null, "", "", false, false, "", "", 100, "", "", null, null, "");
+            "", "", "", null, null, null, "", "", false, false, "", "", 100, "", "", null, null, "", "");
 
         Assert.IsTrue(result.IsError == true, result.GetText());
         StringAssert.Contains(result.GetText(), "display_name is required when creating a new entity");
@@ -177,6 +177,85 @@ public sealed class ManageTableErrorPathCoverageTests
         Assert.IsTrue(json.GetProperty("published").GetBoolean());
     }
 
+    [TestMethod]
+    public void Update_VectorIcon_SendsResolvedSolutionAndPublishes()
+    {
+        using var harness = new TableHarness();
+        var entity = TestMetadata.Entity("ab_bank", "Bank");
+        entity.IconVectorName = "ab_/images/svg/old.svg";
+        TestMetadata.Set(entity, nameof(EntityMetadata.OwnershipType), (OwnershipTypes?)OwnershipTypes.OrganizationOwned);
+        TestMetadata.Set(entity, nameof(EntityMetadata.TableType), "Elastic");
+        TestMetadata.Set(entity, nameof(EntityMetadata.PrimaryNameAttribute), "ab_name");
+        harness.Entities.Add(entity);
+
+        var result = harness.NewTool().manage_table(logical_name: "ab_bank",
+            icon_vector_name: " ab_/images/svg/ab_bank.svg ", solution_name: "DevKit Solution");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.IsNotNull(harness.CapturedUpdate);
+        Assert.AreEqual("ab_/images/svg/ab_bank.svg", harness.CapturedUpdate.Entity.IconVectorName);
+        Assert.AreEqual("DevKit", harness.CapturedUpdate.SolutionUniqueName);
+        Assert.AreEqual(1, harness.PublishedCount);
+        var json = harness.Structured(result);
+        Assert.IsFalse(json.TryGetProperty("warnings", out _), result.GetText());
+        var change = json.GetProperty("changes").GetProperty("iconVectorName");
+        Assert.AreEqual("ab_/images/svg/old.svg", change.GetProperty("oldValue").GetString());
+        Assert.AreEqual("ab_/images/svg/ab_bank.svg", change.GetProperty("newValue").GetString());
+    }
+
+    [TestMethod]
+    public void Update_VectorIcon_DryRunShowsChangeWithoutWriting()
+    {
+        using var harness = new TableHarness();
+        var entity = TestMetadata.Entity("ab_bank", "Bank");
+        harness.Entities.Add(entity);
+
+        var result = harness.NewTool(dryRun: true).manage_table(logical_name: "ab_bank",
+            icon_vector_name: "ab_/images/svg/ab_bank.svg");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "[DryRun]");
+        var json = harness.Structured(result);
+        Assert.AreEqual("not_executed", json.GetProperty("status").GetString());
+        var change = json.GetProperty("changes").GetProperty("iconVectorName");
+        Assert.AreEqual("", change.GetProperty("oldValue").GetString());
+        Assert.AreEqual("ab_/images/svg/ab_bank.svg", change.GetProperty("newValue").GetString());
+        Assert.IsNull(entity.IconVectorName);
+        Assert.IsNull(harness.CapturedUpdate);
+        Assert.AreEqual(0, harness.PublishedCount);
+    }
+
+    [TestMethod]
+    [DataRow("")]
+    [DataRow("ab_/images/svg/ab_bank.svg")]
+    public void Update_VectorIcon_EmptyOrCurrentValueDoesNotWrite(string iconVectorName)
+    {
+        using var harness = new TableHarness();
+        var entity = TestMetadata.Entity("ab_bank", "Bank");
+        entity.IconVectorName = "ab_/images/svg/ab_bank.svg";
+        harness.Entities.Add(entity);
+
+        var result = harness.NewTool().manage_table(logical_name: "ab_bank", icon_vector_name: iconVectorName);
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.AreEqual("not_executed", harness.Structured(result).GetProperty("status").GetString());
+        Assert.IsNull(harness.CapturedUpdate);
+        Assert.AreEqual(0, harness.PublishedCount);
+    }
+
+    [TestMethod]
+    public void Create_VectorIcon_RequiresAnExistingTable()
+    {
+        using var harness = new TableHarness();
+
+        var result = harness.NewTool().manage_table(logical_name: "dev_bank", display_name: "Bank",
+            display_collection_name: "Banks", solution_name: "DevKit", icon_vector_name: "dev_/images/svg/dev_bank.svg");
+
+        Assert.IsTrue(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "icon_vector_name can only be set on an existing table");
+        Assert.IsNull(harness.CapturedCreate);
+    }
+
     // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // harness
     // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -206,6 +285,7 @@ public sealed class ManageTableErrorPathCoverageTests
         public Entity? SolutionRow { get; set; }
         public int PublishedCount { get; private set; }
         public CreateEntityRequest? CapturedCreate { get; private set; }
+        public UpdateEntityRequest? CapturedUpdate { get; private set; }
 
         public TableHarness(string publisherPrefix = "dev")
         {
@@ -230,7 +310,7 @@ public sealed class ManageTableErrorPathCoverageTests
                         ?? new EntityMetadata { LogicalName = r.LogicalName } }
                 },
                 CreateEntityRequest c => Create(c),
-                UpdateEntityRequest => new UpdateEntityResponse(),
+                UpdateEntityRequest u => Update(u),
                 PublishXmlRequest => Publish(),
                 _ => throw new InvalidOperationException($"Unexpected request '{request.RequestName}'")
             };
@@ -263,6 +343,12 @@ public sealed class ManageTableErrorPathCoverageTests
             var response = new CreateEntityResponse();
             response.Results["EntityId"] = Guid.NewGuid();
             return response;
+        }
+
+        private OrganizationResponse Update(UpdateEntityRequest request)
+        {
+            CapturedUpdate = request;
+            return new UpdateEntityResponse();
         }
 
         private OrganizationResponse Publish()
