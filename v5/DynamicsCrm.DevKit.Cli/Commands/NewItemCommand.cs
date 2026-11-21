@@ -41,8 +41,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 new[] { "           --name", settings.Name },
                 new[] { "           --entity", settings.Entity },
                 new[] { "           --project", settings.Project },
-                new[] { "           --out", settings.Out },
-                new[] { "           --force", settings.Force ? "true" : "false" }
+                new[] { "           --out", settings.Out }
             };
             SpectreLog.WriteTable(argRows);
 

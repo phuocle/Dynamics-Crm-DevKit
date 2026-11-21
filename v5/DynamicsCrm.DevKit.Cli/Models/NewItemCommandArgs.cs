@@ -74,9 +74,5 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [CommandOption("--out")]
         [Description("Output directory (default: the project directory)")]
         public string Out { get; set; } = string.Empty;
-
-        [CommandOption("--force")]
-        [Description("Overwrite existing user files")]
-        public bool Force { get; set; }
     }
 }

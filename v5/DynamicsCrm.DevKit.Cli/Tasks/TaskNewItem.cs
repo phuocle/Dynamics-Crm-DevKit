@@ -433,7 +433,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // The host's T4 engine — the Shared handlers render
                 // through the ITextTransformer contract (I.4).
                 Transformer = new MonoTextTransformer(),
-                Force = args.Force,
             };
             var result = await ScaffoldingEngine.ScaffoldItemAsync(input);
             TaskNewShared.WriteResult(result);
