@@ -18,10 +18,12 @@ namespace DynamicsCrm.DevKit.Cli
         private const int CacheDays = 7;
         private const int TimeoutSeconds = 5;
 
-        private static readonly string CacheDir = Path.Combine(
+        // Internal and mutable so unit tests can redirect the cache to a
+        // temporary directory; production code never reassigns these.
+        internal static string CacheDir = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "DynamicsCrm.DevKit");
-        private static readonly string CacheFile = Path.Combine(CacheDir, ".update-check");
+        internal static string CacheFile = Path.Combine(CacheDir, ".update-check");
 
         public static async Task<UpdateCheckResult> CheckAsync()
         {
