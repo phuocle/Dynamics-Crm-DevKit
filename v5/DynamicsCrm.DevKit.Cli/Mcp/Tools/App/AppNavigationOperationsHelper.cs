@@ -13,7 +13,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
         public List<string> OperationSummaries { get; set; } = [];
         public List<string> AddedEntities { get; set; } = [];
         internal HashSet<XElement> ComponentItems { get; } = [];
-        internal HashSet<XElement> IconItems { get; } = [];
+        internal Dictionary<XElement, string> ItemIconNames { get; } = [];
         public int ChangedOperations { get; set; }
         public int NoOpOperations { get; set; }
         public bool HasChanges => ChangedOperations > 0;
@@ -198,14 +198,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
                 .FirstOrDefault(sa => string.Equals(sa.Attribute("Id")?.Value, id, StringComparison.OrdinalIgnoreCase));
             if (existing != null && target.Matches(existing))
             {
-                if (icon != null)
+                var existingIcon = GetItemIcon(existing);
+                if (icon != null &&
+                    !string.Equals(existingIcon, WebResourcePathPrefix + icon, StringComparison.OrdinalIgnoreCase) &&
+                    !string.Equals(existingIcon, WebResourcePrefix + icon, StringComparison.OrdinalIgnoreCase))
                 {
-                    if ((string)existing.Attribute("Icon") != icon)
-                        throw new InvalidOperationException($"Item '{id}' already exists with a different icon. Use update_item to set its icon.");
-                    result.IconItems.Add(existing);
+                    throw new InvalidOperationException($"Item '{id}' already exists with a different icon. Use update_item to set its icon.");
                 }
                 if (target.IsAppComponent)
                     result.ComponentItems.Add(existing);
+                if (SetItemIcon(existing, icon, result))
+                    return $"Updated icon for item '{id}' in Group '{GetTitle(group)}'";
                 return $"Item '{id}' already exists in Group '{GetTitle(group)}'; no changes made";
             }
             if (FindSubArea(doc, id, null, null).Count > 0)
@@ -290,6 +293,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
         }
 
         internal const string WebResourcePrefix = "$webresource:";
+        private const string WebResourcePathPrefix = "/WebResources/";
+
+        internal static string GetItemIcon(XElement item)
+        {
+            var vectorIcon = (string)item.Attribute("VectorIcon");
+            return string.IsNullOrWhiteSpace(vectorIcon) ? (string)item.Attribute("Icon") : vectorIcon;
+        }
 
         private static string ReadItemIcon(JsonElement op, string action, bool supportsIcon)
         {
@@ -298,17 +308,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
                 return null;
             if (!supportsIcon)
                 throw new InvalidOperationException($"{action} supports 'icon' on Dashboard and WebResource items only.");
-            return NormalizeWebResourceReference(icon, action);
+            var prefix = icon.StartsWith(WebResourcePathPrefix, StringComparison.OrdinalIgnoreCase)
+                ? WebResourcePathPrefix : WebResourcePrefix;
+            return ReadWebResourceName(icon, action, prefix);
         }
 
         private static bool SetItemIcon(XElement item, string icon, AppNavigationOperationsResult result)
         {
             if (icon == null)
                 return false;
-            result.IconItems.Add(item);
-            if ((string)item.Attribute("Icon") == icon)
+            result.ItemIconNames[item] = icon;
+            var path = WebResourcePathPrefix + icon;
+            if ((string)item.Attribute("VectorIcon") == path && (string)item.Attribute("Icon") == path)
                 return false;
-            item.SetAttributeValue("Icon", icon);
+            item.SetAttributeValue("VectorIcon", path);
+            item.SetAttributeValue("Icon", path);
             return true;
         }
 
@@ -321,13 +335,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
             return value.GetString().Trim();
         }
 
-        private static string NormalizeWebResourceReference(string reference, string action)
+        private static string ReadWebResourceName(string reference, string action, string prefix)
         {
-            var name = reference.StartsWith(WebResourcePrefix, StringComparison.OrdinalIgnoreCase)
-                ? reference[WebResourcePrefix.Length..].Trim() : reference;
+            var name = reference.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)
+                ? reference[prefix.Length..].Trim() : reference;
             if (name.Length == 0)
-                throw new InvalidOperationException($"{action} requires a web resource name after '{WebResourcePrefix}'.");
-            return WebResourcePrefix + name;
+                throw new InvalidOperationException($"{action} requires a web resource name after '{prefix}'.");
+            return name;
         }
 
         private static ItemTarget ReadItemTarget(JsonElement op, string action)
@@ -354,7 +368,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
                 return new ItemTarget("Dashboard", "DefaultDashboard", id.ToString("D"));
             }
             if (webResource != null)
-                return new ItemTarget("WebResource", "Url", NormalizeWebResourceReference(webResource, action));
+                return new ItemTarget("WebResource", "Url", WebResourcePrefix + ReadWebResourceName(webResource, action, WebResourcePrefix));
             return url == null ? null : new ItemTarget("URL", "Url", url);
         }
 

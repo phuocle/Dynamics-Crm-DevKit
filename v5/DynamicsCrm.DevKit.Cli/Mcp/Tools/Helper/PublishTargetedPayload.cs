@@ -13,5 +13,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         public bool IncludeGlobalOptionSets { get; set; }
         public bool IncludeRibbons { get; set; }
         public bool IncludeSiteMap { get; set; }
+        internal Guid? SiteMapId { get; set; }
     }
 }

@@ -47,8 +47,8 @@ public sealed class ManageViewPureXmlAdditionalCoverageTests
         var unsortable = (XElement)InvokeStatic("BuildCell", "statecode", 125, true)!;
         Assert.AreEqual("1", unsortable.Attribute("disableSorting")!.Value);
         Assert.AreEqual("Custom", InvokeStatic<string>("MapQueryType", 131072));
-        Assert.AreEqual("Lookup", InvokeStatic<string>("MapQueryType", 1));
-        Assert.AreEqual("AdvancedSearch", InvokeStatic<string>("MapQueryType", 2));
+        Assert.AreEqual("AdvancedFind", InvokeStatic<string>("MapQueryType", 1));
+        Assert.AreEqual("Associated", InvokeStatic<string>("MapQueryType", 2));
     }
 
     [TestMethod]
@@ -83,7 +83,7 @@ public sealed class ManageViewPureXmlAdditionalCoverageTests
             ["statecode"] = new OptionSetValue(1)
         };
         var personalResult = InvokeInstance(tool, "BuildViewDetailResult", personal, false);
-        StringAssert.Contains(Text(personalResult), "SubGrid view, personal, inactive");
+        StringAssert.Contains(Text(personalResult), "Lookup view, personal, inactive");
     }
 
     private static object? InvokeStatic(string name, params object?[] args) =>

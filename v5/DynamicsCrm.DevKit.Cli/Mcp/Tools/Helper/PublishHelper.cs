@@ -254,10 +254,11 @@ public static class PublishHelper
             var optionSets = p.OptionSetNames?.Where(n => !string.IsNullOrWhiteSpace(n)).ToList() ?? new List<string>();
             var dashboards = p.DashboardIds?.Where(id => id != Guid.Empty).Distinct().ToList() ?? new List<Guid>();
             var webResources = p.WebResourceIds?.Where(id => id != Guid.Empty).Distinct().ToList() ?? new List<Guid>();
+            var siteMapId = p.SiteMapId.GetValueOrDefault();
 
             var hasAny = entities.Count > 0 || appModules.Count > 0 || optionSets.Count > 0
                 || p.IncludeGlobalOptionSets || dashboards.Count > 0
-                || webResources.Count > 0 || p.IncludeRibbons || p.IncludeSiteMap;
+                || webResources.Count > 0 || p.IncludeRibbons || p.IncludeSiteMap || siteMapId != Guid.Empty;
 
             if (!hasAny)
                 return null;
@@ -308,7 +309,10 @@ public static class PublishHelper
                 sb.Append("</webresources>");
             }
 
-            sb.Append(p.IncludeSiteMap ? "<sitemaps><sitemap /></sitemaps>" : "<sitemaps />");
+            if (siteMapId != Guid.Empty)
+                sb.Append($"<sitemaps><sitemap>{siteMapId:D}</sitemap></sitemaps>");
+            else
+                sb.Append(p.IncludeSiteMap ? "<sitemaps><sitemap /></sitemaps>" : "<sitemaps />");
 
             sb.Append("</importexportxml>");
             return sb.ToString();

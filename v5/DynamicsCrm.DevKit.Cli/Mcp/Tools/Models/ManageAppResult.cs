@@ -74,7 +74,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public bool Validated { get; set; }
 
         [JsonPropertyName("published")]
-        public bool Published { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? Published { get; set; }
 
         [JsonPropertyName("backupPath")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

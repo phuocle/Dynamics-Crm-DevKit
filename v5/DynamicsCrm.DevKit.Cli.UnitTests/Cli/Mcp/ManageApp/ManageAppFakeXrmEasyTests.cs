@@ -40,6 +40,7 @@ public sealed class ManageAppFakeXrmEasyTests
     private FakeValidateAppExecutor _validateExecutor = null!;
     private FakeAddAppComponentsExecutor _componentExecutor = null!;
     private FakeAppComponentTypeExecutor _componentTypeExecutor = null!;
+    private FakePublishXmlExecutor _publishExecutor = null!;
     private string _workspace = null!;
 
     private const string StarterXml = @"<SiteMap>
@@ -67,6 +68,7 @@ public sealed class ManageAppFakeXrmEasyTests
         _validateExecutor = new FakeValidateAppExecutor();
         _componentExecutor = new FakeAddAppComponentsExecutor();
         _componentTypeExecutor = new FakeAppComponentTypeExecutor();
+        _publishExecutor = new FakePublishXmlExecutor();
         _context = MiddlewareBuilder.New()
             .AddCrud()
             .AddFakeMessageExecutors()
@@ -75,7 +77,7 @@ public sealed class ManageAppFakeXrmEasyTests
             .AddFakeMessageExecutor(_validateExecutor)
             .AddFakeMessageExecutor(_componentExecutor)
             .AddFakeMessageExecutor(_componentTypeExecutor)
-            .AddFakeMessageExecutor(new FakeThrowingPublishXmlExecutor())
+            .AddFakeMessageExecutor(_publishExecutor)
             .UseCrud()
             .UseMessages()
             .SetLicense(FakeXrmEasy.Abstractions.Enums.FakeXrmEasyLicense.RPL_1_5)
@@ -124,6 +126,7 @@ public sealed class ManageAppFakeXrmEasyTests
         Assert.IsFalse(all.IsError == true);
         Assert.AreEqual(2, all.StructuredContent!.Value.GetProperty("totalCount").GetInt32());
         Assert.AreEqual(2, all.StructuredContent.Value.GetProperty("apps").GetArrayLength());
+        Assert.IsFalse(all.StructuredContent.Value.TryGetProperty("published", out _));
 
         var sales = await tool.manage_app(null!, action: "list", app_name: "Sales");
         var apps = sales.StructuredContent!.Value.GetProperty("apps");
@@ -154,6 +157,7 @@ public sealed class ManageAppFakeXrmEasyTests
         Assert.IsFalse(result.IsError == true);
         var structured = result.StructuredContent!.Value;
         Assert.AreEqual("detail", structured.GetProperty("action").GetString());
+        Assert.IsFalse(structured.TryGetProperty("published", out _));
         Assert.AreEqual(appId.ToString(), structured.GetProperty("appModuleId").GetString());
         Assert.AreEqual(appUniqueId.ToString(), structured.GetProperty("appModuleIdUnique").GetString());
         Assert.AreEqual(siteMapId.ToString(), structured.GetProperty("siteMapId").GetString());
@@ -196,6 +200,7 @@ public sealed class ManageAppFakeXrmEasyTests
         Assert.AreEqual("validate", structured.GetProperty("action").GetString());
         Assert.AreEqual("validated", structured.GetProperty("status").GetString());
         Assert.IsTrue(structured.GetProperty("validated").GetBoolean());
+        Assert.IsFalse(structured.TryGetProperty("published", out _));
 
         _validateExecutor.Issues.Add(new ValidationIssueStub { Message = "Careful app", ErrorType = "Warning" });
         var warned = await tool.manage_app(null!, action: "validate", app: appId.ToString());
@@ -429,21 +434,32 @@ public sealed class ManageAppFakeXrmEasyTests
     }
 
     [TestMethod]
-    public void UpdateNavigation_AddsEntityItemAndPublishes()
+    [DataRow(false)]
+    [DataRow(true)]
+    public void UpdateNavigation_AddsEntityItemAndReportsPublishOutcome(bool publishFails)
     {
-        var (_, _, siteMapId) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
+        var (appId, _, siteMapId) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
+        _publishExecutor.Fail = publishFails;
         var tool = NewTool();
         SetWorkspace(tool, _workspace);
 
         var result = Invoke(tool, "HandleUpdateNavigation", "Sales Hub",
             "[{\"action\":\"add_item\",\"area\":\"area_default\",\"group\":\"group_default\",\"entity\":\"Contact\"}]");
-        Assert.IsFalse(result.IsError == true);
+        Assert.AreEqual(publishFails, result.IsError == true, result.GetText());
         var structured = result.StructuredContent!.Value;
-        Assert.AreEqual("updated", structured.GetProperty("status").GetString());
+        Assert.AreEqual(publishFails ? "updated_publish_failed" : "updated", structured.GetProperty("status").GetString());
         Assert.AreEqual(1, structured.GetProperty("operationsCount").GetInt32());
         Assert.AreEqual(1, structured.GetProperty("changedOperations").GetInt32());
         Assert.IsTrue(structured.GetProperty("navigationChanged").GetBoolean());
-        Assert.IsTrue(structured.GetProperty("published").GetBoolean());
+        Assert.AreEqual(!publishFails, structured.GetProperty("published").GetBoolean());
+        var publishXml = XElement.Parse(_publishExecutor.Requests.Single().ParameterXml);
+        Assert.AreEqual(appId.ToString("D"), publishXml.Element("appmodules")!.Elements("appmodule").Single().Value);
+        Assert.AreEqual(siteMapId.ToString("D"), publishXml.Element("sitemaps")!.Elements("sitemap").Single().Value);
+        if (publishFails)
+        {
+            StringAssert.Contains(result.GetText(), "Publishing failed.");
+            StringAssert.Contains(structured.GetProperty("nextStep").GetString(), "Power Apps App Designer");
+        }
         Assert.AreEqual("contact", structured.GetProperty("addedAppComponents")[0].GetString());
         Assert.IsTrue(File.Exists(structured.GetProperty("backupPath").GetString()));
 
@@ -482,12 +498,14 @@ public sealed class ManageAppFakeXrmEasyTests
             new[] { new EntityReference("systemform", dashboardId), new EntityReference("webresource", webResourceId) },
             request.Components.ToArray());
 
-        var items = XDocument.Parse(ReadSiteMap(siteMapId)).Descendants("SubArea").ToDictionary(item => (string)item.Attribute("Id")!);
+        var siteMap = XDocument.Parse(ReadSiteMap(siteMapId));
+        var items = siteMap.Descendants("SubArea").ToDictionary(item => (string)item.Attribute("Id")!);
         Assert.AreEqual("/workplace/home_dashboards.aspx?a=1&b=2", (string?)items["sa_link"].Attribute("Url"));
         Assert.AreEqual(dashboardId.ToString("D"), (string?)items["sa_dashboard"].Attribute("DefaultDashboard"));
         Assert.AreEqual("/workplace/home_dashboards.aspx", (string?)items["sa_dashboard"].Attribute("Url"));
         Assert.AreEqual("$webresource:ab_/html/page.html", (string?)items["sa_web"].Attribute("Url"));
-        Assert.AreEqual("$webresource:ab_/icons/page.svg", (string?)items["sa_web"].Attribute("Icon"));
+        Assert.AreEqual("/WebResources/ab_/icons/page.svg", (string?)items["sa_web"].Attribute("Icon"));
+        Assert.AreEqual("/WebResources/ab_/icons/page.svg", (string?)items["sa_web"].Attribute("VectorIcon"));
         Assert.AreEqual("$webresource:ab_/html/page.html", (string?)items["sa_web2"].Attribute("Url"));
         Assert.AreEqual("Link", (string?)items["sa_link"].Descendants("Title").Single().Attribute("Title"));
         Assert.IsNull(items["sa_link"].Attribute("Entity"));
@@ -496,12 +514,26 @@ public sealed class ManageAppFakeXrmEasyTests
         SeedPageComponent(appUniqueId, 61, webResourceId);
         var retry = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
         Assert.AreEqual("no_changes", retry.StructuredContent!.Value.GetProperty("status").GetString());
+        Assert.HasCount(1, _publishExecutor.Requests);
+
+        items["sa_web"].SetAttributeValue("VectorIcon", null);
+        items["sa_web"].SetAttributeValue("Icon", "$webresource:ab_/icons/page.svg");
+        _context.GetOrganizationService().Update(new Entity("sitemap", siteMapId) { ["sitemapxml"] = siteMap.ToString() });
+        var repaired = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
+        Assert.IsFalse(repaired.IsError == true, repaired.GetText());
+        Assert.AreEqual(1, repaired.StructuredContent!.Value.GetProperty("changedOperations").GetInt32());
+        var repairedItem = XDocument.Parse(ReadSiteMap(siteMapId)).Descendants("SubArea")
+            .Single(item => (string?)item.Attribute("Id") == "sa_web");
+        Assert.AreEqual("/WebResources/ab_/icons/page.svg", (string?)repairedItem.Attribute("Icon"));
+        Assert.AreEqual("/WebResources/ab_/icons/page.svg", (string?)repairedItem.Attribute("VectorIcon"));
+        Assert.HasCount(2, _publishExecutor.Requests);
         Assert.HasCount(1, _componentExecutor.Requests);
     }
 
     [TestMethod]
     [DataRow("ab_/icons/dashboard.svg")]
     [DataRow("$WEBRESOURCE: ab_/icons/dashboard.svg")]
+    [DataRow("/WebResources/ab_/icons/dashboard.svg")]
     public async Task UpdateNavigation_AddDashboardWithSvgIconNormalizesAndReportsIt(string icon)
     {
         var (appId, appUniqueId, siteMapId) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
@@ -517,7 +549,8 @@ public sealed class ManageAppFakeXrmEasyTests
         Assert.IsFalse(added.IsError == true, added.GetText());
         var dashboard = XDocument.Parse(ReadSiteMap(siteMapId)).Descendants("SubArea")
             .Single(item => (string?)item.Attribute("Id") == "sa_dashboard");
-        Assert.AreEqual("$webresource:ab_/icons/dashboard.svg", (string?)dashboard.Attribute("Icon"));
+        Assert.AreEqual("/WebResources/ab_/icons/dashboard.svg", (string?)dashboard.Attribute("Icon"));
+        Assert.AreEqual("/WebResources/ab_/icons/dashboard.svg", (string?)dashboard.Attribute("VectorIcon"));
         Assert.AreEqual(dashboardId.ToString("D"), (string?)dashboard.Attribute("DefaultDashboard"));
         Assert.AreEqual("/workplace/home_dashboards.aspx", (string?)dashboard.Attribute("Url"));
         Assert.AreEqual("systemform", _componentExecutor.Requests.Single().Components.Single().LogicalName);
@@ -526,7 +559,7 @@ public sealed class ManageAppFakeXrmEasyTests
         var navigationItem = detail.StructuredContent!.Value.GetProperty("navigationAreas")[0]
             .GetProperty("groups")[0].GetProperty("items").EnumerateArray()
             .Single(item => item.GetProperty("id").GetString() == "sa_dashboard");
-        Assert.AreEqual("$webresource:ab_/icons/dashboard.svg", navigationItem.GetProperty("icon").GetString());
+        Assert.AreEqual("/WebResources/ab_/icons/dashboard.svg", navigationItem.GetProperty("icon").GetString());
 
         SeedPageComponent(appUniqueId, 60, dashboardId);
         var retry = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
@@ -612,7 +645,8 @@ public sealed class ManageAppFakeXrmEasyTests
         Assert.AreEqual("updated", updated.StructuredContent!.Value.GetProperty("status").GetString());
         var dashboard = XDocument.Parse(ReadSiteMap(siteMapId)).Descendants("SubArea")
             .Single(item => (string?)item.Attribute("Id") == "sa_dashboard");
-        Assert.AreEqual("$webresource:ab_/icons/dashboard.svg", (string?)dashboard.Attribute("Icon"));
+        Assert.AreEqual("/WebResources/ab_/icons/dashboard.svg", (string?)dashboard.Attribute("Icon"));
+        Assert.AreEqual("/WebResources/ab_/icons/dashboard.svg", (string?)dashboard.Attribute("VectorIcon"));
         Assert.AreEqual(dashboardId.ToString("D"), (string?)dashboard.Attribute("DefaultDashboard"));
         Assert.AreEqual("/workplace/home_dashboards.aspx", (string?)dashboard.Attribute("Url"));
         Assert.AreEqual("Dashboard", (string?)dashboard.Descendants("Title").Single().Attribute("Title"));
@@ -671,7 +705,7 @@ public sealed class ManageAppFakeXrmEasyTests
         var (appId, _, siteMapId) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
         const string pageUrl = "$WEBRESOURCE:ab_/html/Dashboard.html";
         var originalXml = StarterXml.Replace("</Group>", $"""
-            <SubArea Id="sa_executive_bi" Url="{pageUrl}">
+            <SubArea Id="sa_executive_bi" Url="{pageUrl}" Icon="$webresource:ab_/images/other/dashboard.svg">
               <Titles><Title LCID="1033" Title="Executive BI Dashboard" /></Titles>
             </SubArea>
             </Group>
@@ -682,7 +716,7 @@ public sealed class ManageAppFakeXrmEasyTests
         var tool = NewTool();
         SetWorkspace(tool, _workspace);
         const string operations = """
-            [{"action":"update_item","area":"area_default","group":"group_default","item":"sa_executive_bi","icon":"ab_/images/other/dashboard.svg"}]
+            [{"action":"update_item","area":"area_default","group":"group_default","item":"sa_executive_bi","icon":"$webresource:ab_/images/other/dashboard.svg"}]
             """;
 
         var result = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
@@ -693,7 +727,8 @@ public sealed class ManageAppFakeXrmEasyTests
             var page = XDocument.Parse(ReadSiteMap(siteMapId)).Descendants("SubArea")
                 .Single(item => (string?)item.Attribute("Id") == "sa_executive_bi");
             Assert.AreEqual(pageUrl, (string?)page.Attribute("Url"));
-            Assert.AreEqual("$webresource:ab_/images/other/dashboard.svg", (string?)page.Attribute("Icon"));
+            Assert.AreEqual("/WebResources/ab_/images/other/dashboard.svg", (string?)page.Attribute("Icon"));
+            Assert.AreEqual("/WebResources/ab_/images/other/dashboard.svg", (string?)page.Attribute("VectorIcon"));
             Assert.IsNull(page.Attribute("DefaultDashboard"));
 
             var retry = Invoke(tool, "HandleUpdateNavigation", appId.ToString(), operations);
@@ -1127,16 +1162,20 @@ public sealed class ManageAppFakeXrmEasyTests
         public Type GetResponsibleRequestType() => typeof(AddAppComponentsRequest);
     }
 
-    /// <summary>
-    /// Makes PublishXml fail deterministically. PublishHelper swallows the failure,
-    /// which also skips MetadataOperationWaitHelper sleeps so tests stay fast.
-    /// </summary>
-    private sealed class FakeThrowingPublishXmlExecutor : FakeXrmEasy.Abstractions.FakeMessageExecutors.IFakeMessageExecutor
+    private sealed class FakePublishXmlExecutor : FakeXrmEasy.Abstractions.FakeMessageExecutors.IFakeMessageExecutor
     {
+        public bool Fail { get; set; }
+        public List<PublishXmlRequest> Requests { get; } = [];
+
         public bool CanExecute(OrganizationRequest request) => request is PublishXmlRequest;
 
-        public OrganizationResponse Execute(OrganizationRequest request, IXrmFakedContext context) =>
-            throw new NotImplementedException("PublishXml is not simulated in unit tests.");
+        public OrganizationResponse Execute(OrganizationRequest request, IXrmFakedContext context)
+        {
+            Requests.Add((PublishXmlRequest)request);
+            if (Fail)
+                throw new InvalidOperationException("Simulated publish failure.");
+            return new OrganizationResponse();
+        }
 
         public Type GetResponsibleRequestType() => typeof(PublishXmlRequest);
     }

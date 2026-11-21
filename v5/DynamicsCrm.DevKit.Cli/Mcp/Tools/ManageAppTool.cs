@@ -81,7 +81,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Optional for create. The solution publisher prefix is always prepended (e.g. 'MyApp' with solution all_in_one becomes 'all_MyApp'). If empty, derived from display_name.")] string unique_name = "",
             [Description("Optional for create/update.")] string description = "",
             [Description("Optional app icon web resource name or GUID.")] string icon_webresource = "",
-            [Description("update_navigation: JSON array serialized as a string. add_item/update_item targets: entity, url, dashboard_id (alias default_dashboard), or webresource. Dashboard and WebResource items accept icon (SVG web resource name or $webresource: reference). See docs://instructions_for_manage_app for examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
+            [Description("update_navigation: JSON array serialized as a string. add_item/update_item targets: entity, url, dashboard_id (alias default_dashboard), or webresource. Dashboard and WebResource items accept icon (SVG web resource name, $webresource: reference, or /WebResources/ path). See docs://instructions_for_manage_app for examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
             [Description("list only. 1-500.")] int max_records = 100,
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)
@@ -103,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Optional for create. The solution publisher prefix is always prepended (e.g. 'MyApp' with solution all_in_one becomes 'all_MyApp'). If empty, derived from display_name.")] string unique_name = "",
             [Description("Optional for create/update.")] string description = "",
             [Description("Optional app icon web resource name or GUID.")] string icon_webresource = "",
-            [Description("update_navigation: JSON array serialized as a string. Dashboard and WebResource add_item/update_item operations accept icon (SVG web resource name or $webresource: reference). See docs://instructions_for_manage_app for examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
+            [Description("update_navigation: JSON array serialized as a string. Dashboard and WebResource add_item/update_item operations accept icon (SVG web resource name, $webresource: reference, or /WebResources/ path). See docs://instructions_for_manage_app for examples. undo: .app.json backup file path from result.backupPath.")] string operations = "",
             [Description("list only. 1-500.")] int max_records = 100)
         {
             try
@@ -171,8 +171,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Action = "list",
                 Status = "success",
                 TotalCount = entries.Count,
-                Apps = entries.Count > 0 ? entries : null,
-                Published = false
+                Apps = entries.Count > 0 ? entries : null
             });
         }
 
@@ -214,8 +213,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SiteMapId = siteMapId?.ToString(),
                 NavigationTree = string.IsNullOrWhiteSpace(navigationTree) ? null : navigationTree,
                 NavigationAreas = navigationAreas.Count > 0 ? navigationAreas : null,
-                AppComponents = componentRefs.Count > 0 ? componentRefs : null,
-                Published = false
+                AppComponents = componentRefs.Count > 0 ? componentRefs : null
             });
         }
 
@@ -329,7 +327,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var siteMapSolutionResult = SolutionComponentCreateHelper.AddExistingComponent(
                 _context, _orgService, siteMapId, 62, solResult.UniqueName, addRequiredComponents: true);
 
-            PublishAppModule(appModuleId);
+            var published = PublishAppModule(appModuleId);
 
             var validation = ValidateApp(appModuleId);
 
@@ -342,14 +340,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 addedSolutionComponents.Add($"sitemap warning: {siteMapSolutionResult.AddToSolutionWarning}");
 
             var warnings = MergeWarnings(validation.Warnings, xsdWarnings);
-            var text = $"Created app '{displayName.Trim()}' ({appUniqueName}) in solution '{solResult.UniqueName}' and published." +
+            var text = $"Created app '{displayName.Trim()}' ({appUniqueName}) in solution '{solResult.UniqueName}'{(published ? " and published." : ". Publishing failed.")}" +
                 (validation.Errors?.Count > 0 ? " Validation failed." : "") +
                 (warnings?.Count > 0 ? $" {warnings.Count} validation warning(s)." : "");
 
-            return Success(text, new ManageAppResult
+            return CompleteMutation(text, "created", published, validation, new ManageAppResult
             {
                 Action = "create",
-                Status = validation.StatusForMutation("created"),
                 AppModuleId = appModuleId.ToString(),
                 AppModuleIdUnique = appModuleIdUnique.ToString(),
                 AppName = displayName.Trim(),
@@ -359,7 +356,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Validated = true,
                 ValidationErrors = validation.Errors,
                 ValidationWarnings = MergeWarnings(validation.Warnings, xsdWarnings),
-                Published = true,
                 AddedAppComponents = DescribeEntityAppComponents("account", starterComponents, includeSitemap: true),
                 AddedSolutionComponents = addedSolutionComponents.Count > 0 ? addedSolutionComponents : null
             });
@@ -421,7 +417,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var backupPath = SaveAppSnapshot(appModule);
 
             DataverseMutationExecutor.Update(_context, _orgService, update);
-            PublishAppModule(appModule.Id);
+            var published = PublishAppModule(appModule.Id);
             var refreshQuery = new QueryExpression("appmodule")
             {
                 ColumnSet = new ColumnSet("appmoduleid", "appmoduleidunique", "name", "uniquename", "description", "webresourceid"),
@@ -432,14 +428,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ?? throw new InvalidOperationException($"App '{appModule.Id}' could not be retrieved after update.");
             var validation = ValidateApp(refreshed.Id);
 
-            var text = $"Updated app '{refreshed.GetAttributeValue<string>("name")}' ({refreshed.GetAttributeValue<string>("uniquename")}) and published: {string.Join(", ", changes)}." +
+            var text = $"Updated app '{refreshed.GetAttributeValue<string>("name")}' ({refreshed.GetAttributeValue<string>("uniquename")}){(published ? " and published" : "")}: {string.Join(", ", changes)}." +
+                (published ? "" : " Publishing failed.") +
                 (validation.Errors?.Count > 0 ? " Validation failed." : "") +
                 (validation.Warnings?.Count > 0 ? $" {validation.Warnings.Count} validation warning(s)." : "");
 
-            return Success(text, new ManageAppResult
+            return CompleteMutation(text, "updated", published, validation, new ManageAppResult
             {
                 Action = "update",
-                Status = validation.StatusForMutation("updated"),
                 AppModuleId = refreshed.Id.ToString(),
                 AppModuleIdUnique = refreshed.GetAttributeValue<Guid>("appmoduleidunique").ToString(),
                 AppName = refreshed.GetAttributeValue<string>("name"),
@@ -448,8 +444,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Validated = true,
                 ValidationErrors = validation.Errors,
                 ValidationWarnings = validation.Warnings,
-                BackupPath = backupPath,
-                Published = true
+                BackupPath = backupPath
             });
         }
 
@@ -478,8 +473,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 UniqueName = appModule.GetAttributeValue<string>("uniquename"),
                 Validated = true,
                 ValidationErrors = validation.Errors,
-                ValidationWarnings = validation.Warnings,
-                Published = false
+                ValidationWarnings = validation.Warnings
             });
         }
 
@@ -601,9 +595,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     NextStep = NotPublishedNextStep
                 });
 
-            var iconError = ValidateNavigationIcons(navResult.IconItems);
+            var iconError = ValidateNavigationIcons(navResult.ItemIconNames);
             if (iconError != null)
-                return Error(iconError, "Use the exact name of an existing SVG web resource, optionally prefixed with '$webresource:'.");
+                return Error(iconError, "Use the exact name of an existing SVG web resource, its '$webresource:' reference, or its '/WebResources/' path.");
 
             var pageComponents = new EntityReferenceCollection();
             var addedComponents = new List<string>(navResult.AddedEntities);
@@ -704,17 +698,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (entityComponentRefs.Count > 0)
                 AddAppComponents(appModule.Id, entityComponentRefs);
 
-            PublishAppModule(appModule.Id);
+            var published = PublishHelper.PublishTargeted(_context, _orgService, new PublishTargetedPayload
+            {
+                AppModuleIds = [appModule.Id],
+                SiteMapId = siteMapId.Value
+            });
 
             var validation = ValidateApp(appModule.Id);
-            var text = $"Updated navigation of app '{appModule.GetAttributeValue<string>("name")}' and published: {navResult.ChangedOperations} changed, {navResult.NoOpOperations} no-op." +
+            var text = $"Updated navigation of app '{appModule.GetAttributeValue<string>("name")}'{(published ? " and published" : "")}: {navResult.ChangedOperations} changed, {navResult.NoOpOperations} no-op." +
+                (published ? "" : " Publishing failed.") +
                 (validation.Errors?.Count > 0 ? " Validation failed." : "") +
                 (MergeWarnings(validation.Warnings, xsdWarnings)?.Count > 0 ? $" {MergeWarnings(validation.Warnings, xsdWarnings).Count} validation warning(s)." : "");
 
-            return Success(text, new ManageAppResult
+            return CompleteMutation(text, "updated", published, validation, new ManageAppResult
             {
                 Action = "update_navigation",
-                Status = validation.StatusForMutation("updated"),
                 AppModuleId = appModule.Id.ToString(),
                 AppModuleIdUnique = appModuleIdUnique.Value.ToString(),
                 AppName = appModule.GetAttributeValue<string>("name"),
@@ -724,7 +722,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ValidationErrors = validation.Errors,
                 ValidationWarnings = MergeWarnings(validation.Warnings, xsdWarnings),
                 BackupPath = backupPath,
-                Published = true,
+                NextStep = published ? null : "Publish the app from Power Apps App Designer to apply the saved navigation changes.",
                 OperationsCount = ops.Count,
                 NavigationChanged = navResult.HasChanges,
                 ChangedOperations = navResult.ChangedOperations,
@@ -828,17 +826,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 ["sitemapxml"] = snapshot.SiteMapXml
             });
-            PublishAppModule(appModule.Id);
+            var published = PublishAppModule(appModule.Id);
 
             var validation = ValidateApp(appModule.Id);
-            var text = $"Restored app '{appModule.GetAttributeValue<string>("name")}' navigation from backup '{backupFullPath}' and published." +
+            var text = $"Restored app '{appModule.GetAttributeValue<string>("name")}' navigation from backup '{backupFullPath}'{(published ? " and published." : ". Publishing failed.")}" +
                 (validation.Errors?.Count > 0 ? " Validation failed." : "") +
                 (MergeWarnings(validation.Warnings, xsdWarnings)?.Count > 0 ? $" {MergeWarnings(validation.Warnings, xsdWarnings).Count} validation warning(s)." : "");
 
-            return Success(text, new ManageAppResult
+            return CompleteMutation(text, "restored", published, validation, new ManageAppResult
             {
                 Action = "undo",
-                Status = validation.StatusForMutation("restored"),
                 AppModuleId = appModule.Id.ToString(),
                 AppModuleIdUnique = appModuleIdUnique.Value.ToString(),
                 AppName = appModule.GetAttributeValue<string>("name"),
@@ -849,7 +846,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ValidationWarnings = MergeWarnings(validation.Warnings, xsdWarnings),
                 BackupPath = currentBackupPath,
                 RestoredFromBackup = backupFullPath,
-                Published = true,
                 OperationSummaries = ["Restored sitemap XML from manage_app snapshot"]
             });
         }
@@ -1163,13 +1159,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 : (resource.ToEntityReference(), WebResourceComponentType, null);
         }
 
-        private string ValidateNavigationIcons(IEnumerable<XElement> iconItems)
+        private string ValidateNavigationIcons(IReadOnlyDictionary<XElement, string> itemIconNames)
         {
-            var items = iconItems.Where(item => item.Document != null)
-                .DistinctBy(item => (string)item.Attribute("Icon"), StringComparer.OrdinalIgnoreCase);
-            foreach (var item in items)
+            var items = itemIconNames.Where(entry => entry.Key.Document != null)
+                .DistinctBy(entry => entry.Value, StringComparer.OrdinalIgnoreCase);
+            foreach (var (item, name) in items)
             {
-                var name = ((string)item.Attribute("Icon"))[AppNavigationOperationsHelper.WebResourcePrefix.Length..];
                 var iconDescription = item.Attribute("DefaultDashboard") != null ? "Dashboard icon web resource" : "WebResource icon";
                 var resource = FindNavigationWebResource(name, new ColumnSet("webresourcetype"));
                 if (resource == null)
@@ -1350,7 +1345,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                                         Entity = subArea.Attribute("Entity")?.Value,
                                         Url = subArea.Attribute("Url")?.Value,
                                         DefaultDashboard = subArea.Attribute("DefaultDashboard")?.Value,
-                                        Icon = subArea.Attribute("Icon")?.Value
+                                        Icon = AppNavigationOperationsHelper.GetItemIcon(subArea)
                                     })
                                     .ToList()
                             })
@@ -1524,9 +1519,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        private void PublishAppModule(Guid appModuleId)
-        {
+        private bool PublishAppModule(Guid appModuleId) =>
             PublishHelper.PublishAppModule(_context, _orgService, appModuleId);
+
+        private CallToolResult CompleteMutation(string text, string successStatus, bool published,
+            AppValidationResult validation, ManageAppResult result)
+        {
+            result.Published = published;
+            result.Status = published ? validation.StatusForMutation(successStatus) : $"{successStatus}_publish_failed";
+            if (published)
+                return Success(text, result);
+
+            result.NextStep ??= NotPublishedNextStep;
+            return Partial(text, result);
         }
 
         private static List<string> MergeWarnings(List<string> validationWarnings, List<string> xsdWarnings)
@@ -1679,13 +1684,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 foreach (var issue in issueList)
                 {
-                    var message = issue.GetType().GetProperty("Message")?.GetValue(issue)?.ToString()
-                        ?? issue.ToString();
-                    var errorType = issue.GetType().GetProperty("ErrorType")?.GetValue(issue)?.ToString();
-                    if (string.Equals(errorType, "Warning", StringComparison.OrdinalIgnoreCase))
-                        warnings.Add(message);
-                    else
-                        errors.Add(message);
+                    if (issue == null)
+                        continue;
+
+                    var issueType = issue.GetType();
+                    var errorType = issueType.GetProperty("ErrorType")?.GetValue(issue)?.ToString();
+                    var isWarning = string.Equals(errorType, "Warning", StringComparison.OrdinalIgnoreCase);
+                    var message = issue as string ?? issueType.GetProperty("Message")?.GetValue(issue)?.ToString();
+                    if (string.IsNullOrWhiteSpace(message))
+                    {
+                        var component = issueType.GetProperty("DisplayName")?.GetValue(issue)?.ToString();
+                        if (string.IsNullOrWhiteSpace(component))
+                            component = issueType.GetProperty("ParentEntityName")?.GetValue(issue)?.ToString();
+                        var errorCode = issueType.GetProperty("CRMErrorCode")?.GetValue(issue) as int?;
+                        message = $"Dataverse returned a validation {(isWarning ? "warning" : "error")}" +
+                            (string.IsNullOrWhiteSpace(component) ? "" : $" for '{component}'") +
+                            (errorCode is null or 0 ? "" : $" (code {errorCode})") +
+                            " without a message.";
+                    }
+
+                    (isWarning ? warnings : errors).Add(message);
                 }
                 return (errors, warnings);
             }

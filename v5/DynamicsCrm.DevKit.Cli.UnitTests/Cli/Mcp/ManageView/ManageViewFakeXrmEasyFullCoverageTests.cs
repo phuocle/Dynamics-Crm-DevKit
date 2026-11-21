@@ -873,7 +873,7 @@ public sealed class ManageViewFakeXrmEasyFullCoverageTests
     [TestMethod]
     public async Task SetDefault_NonPublicView_ReturnsError()
     {
-        var id = SeedView("Lookup View", queryType: 1);
+        var id = SeedView("Lookup View", queryType: 64);
         var result = await NewTool().manage_view(null!, "set_default", "account", view_id: id.ToString());
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "Only Public views (querytype=0)");

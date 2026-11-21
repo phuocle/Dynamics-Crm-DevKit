@@ -73,7 +73,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Entity display or logical name, e.g. 'Account' or 'account'. Omit for system dashboard create/detail/update/undo.")] string entity_name = "",
             [Description("Form GUID. Required for update/rename/undo. For detail, provide form_id or a form_name filter; use the GUID when name matches are ambiguous.")] string form_id = "",
             [Description("create/rename: new form name. list/detail: name contains filter; one match returns detail. In detail, ignored if form_id is set.")] string form_name = "",
-            [Description("create: 0=Dashboard (omit entity_name), 7=QuickCreate (requires entity_name). Entity list/detail: 0 or omit for all types, 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card.")] int form_type = 0,
+            [Description("create: 0=Dashboard (omit entity_name), 7=QuickCreate (requires entity_name). Entity list/detail: 0 or omit for all types, 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=Card, 12=MainInteractive.")] int form_type = 0,
             [Description("List mode only — include formxml in each entry. Detail always includes formxml.")] bool include_formxml = false,
             [Description("Raw FormXML or a file path for create/update. Required for dashboards. For undo, use the backupPath from update.")] string formxml = "",
             [Description("Entity-form update only: serialized JSON operation array. Each object uses action for the family and manage_action for its verb. See docs://instructions_for_formxml.")] string operations = "",
@@ -94,7 +94,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Entity display or logical name, e.g. 'Account' or 'account'. Omit for system dashboard create/detail/update/undo.")] string entity_name = "",
             [Description("Form GUID. Required for update/rename/undo. For detail, provide form_id or a form_name filter; use the GUID when name matches are ambiguous.")] string form_id = "",
             [Description("create/rename: new form name. list/detail: name contains filter; one match returns detail. In detail, ignored if form_id is set.")] string form_name = "",
-            [Description("create: 0=Dashboard (omit entity_name), 7=QuickCreate (requires entity_name). Entity list/detail: 0 or omit for all types, 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card.")] int form_type = 0,
+            [Description("create: 0=Dashboard (omit entity_name), 7=QuickCreate (requires entity_name). Entity list/detail: 0 or omit for all types, 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=Card, 12=MainInteractive.")] int form_type = 0,
             [Description("List mode only — include formxml in each entry. Detail always includes formxml.")] bool include_formxml = false,
             [Description("Raw FormXML or a file path for create/update. Required for dashboards. For undo, use the backupPath from update.")] string formxml = "",
             [Description("Entity-form update only: serialized JSON operation array. Each object uses action for the family and manage_action for its verb. See docs://instructions_for_formxml.")] string operations = "",
@@ -169,7 +169,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (formType != 0 && !ValidFormTypes.Contains(formType))
-                return Error($"form_type={formType} is not valid.", "Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. Use 0 or omit for all types.");
+                return Error($"form_type={formType} is not valid.", "Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=Card, 12=MainInteractive. Use 0 or omit for all types.");
 
             var query = BuildListQuery(entityName, formType, includeFormXml);
             var result = _orgService.RetrieveMultiple(query);
@@ -195,7 +195,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult FindFormsByName(string entityName, string formName, int formType)
         {
             if (formType != 0 && !ValidFormTypes.Contains(formType))
-                return Error($"form_type={formType} is not valid.", "Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. Use 0 or omit for all types.");
+                return Error($"form_type={formType} is not valid.", "Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=Card, 12=MainInteractive. Use 0 or omit for all types.");
 
             var query = BuildListQuery(entityName, formType, includeFormXml: false);
             var escapedName = formName.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
@@ -261,7 +261,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"Pass form_id (GUID) or form_name (name filter). Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             if (formType != 0 && !ValidFormTypes.Contains(formType))
-                return Error($"form_type={formType} is not valid.", "Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. Use 0 or omit for all types.");
+                return Error($"form_type={formType} is not valid.", "Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=Card, 12=MainInteractive. Use 0 or omit for all types.");
 
             if (!string.IsNullOrWhiteSpace(formId))
             {
@@ -965,8 +965,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             6 => "QuickView",
             7 => "QuickCreate",
             8 => "Dialog",
-            11 => "MainInteractive",
-            12 => "Card",
+            11 => "Card",
+            12 => "MainInteractive",
             _ => $"Other({type})"
         };
 

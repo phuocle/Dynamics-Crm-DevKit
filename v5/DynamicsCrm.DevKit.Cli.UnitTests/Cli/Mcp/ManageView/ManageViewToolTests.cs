@@ -172,15 +172,15 @@ public class ManageViewToolTests
     }
 
     [TestMethod]
-    public void MapQueryType_1_ReturnsLookup()
+    public void MapQueryType_1_ReturnsAdvancedFind()
     {
-        Assert.AreEqual("Lookup", MapQueryType(1));
+        Assert.AreEqual("AdvancedFind", MapQueryType(1));
     }
 
     [TestMethod]
-    public void MapQueryType_2_ReturnsAdvancedSearch()
+    public void MapQueryType_2_ReturnsAssociated()
     {
-        Assert.AreEqual("AdvancedSearch", MapQueryType(2));
+        Assert.AreEqual("Associated", MapQueryType(2));
     }
 
     [TestMethod]
@@ -190,9 +190,9 @@ public class ManageViewToolTests
     }
 
     [TestMethod]
-    public void MapQueryType_64_ReturnsSubGrid()
+    public void MapQueryType_64_ReturnsLookup()
     {
-        Assert.AreEqual("SubGrid", MapQueryType(64));
+        Assert.AreEqual("Lookup", MapQueryType(64));
     }
 
     [TestMethod]

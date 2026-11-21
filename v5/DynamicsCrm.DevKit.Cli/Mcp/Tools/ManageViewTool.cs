@@ -1097,10 +1097,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string MapQueryType(int queryType) => queryType switch
         {
             0 => "Public",
-            1 => "Lookup",
-            2 => "AdvancedSearch",
+            1 => "AdvancedFind",
+            2 => "Associated",
             4 => "QuickFind",
-            64 => "SubGrid",
+            64 => "Lookup",
             131072 => "Custom",
             _ => $"Other({queryType})"
         };

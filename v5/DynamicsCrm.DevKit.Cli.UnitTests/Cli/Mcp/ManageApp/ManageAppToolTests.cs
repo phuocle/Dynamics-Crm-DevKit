@@ -1,6 +1,7 @@
 using DynamicsCrm.DevKit.Cli.Mcp.Tools;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.App;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using System;
@@ -38,6 +39,24 @@ public class ManageAppInternalsCoverageTests
         Assert.AreEqual("", Invoke("FormatNavigationTree", ""));
         Assert.AreEqual(0, ((List<ManageAppNavigationAreaResult>)Invoke("ParseNavigationAreas", "<bad>")!).Count);
         StringAssert.Contains((string)Invoke("FormatNavigationTree", "<bad>")!, "failed to parse");
+    }
+
+    [TestMethod]
+    public void ParseNavigationAreas_PrefersVectorIconAndFallsBackToLegacyIcon()
+    {
+        const string xml = """
+            <SiteMap><Area Id="main"><Group Id="pages">
+              <SubArea Id="designer" VectorIcon="/WebResources/ab_/vector.svg" Icon="/WebResources/ab_/legacy.png" />
+              <SubArea Id="legacy" Icon="$webresource:ab_/legacy.svg" />
+              <SubArea Id="emptyVector" VectorIcon=" " Icon="/WebResources/ab_/legacy.png" />
+            </Group></Area></SiteMap>
+            """;
+
+        var areas = (List<ManageAppNavigationAreaResult>)Invoke("ParseNavigationAreas", xml)!;
+        var items = areas[0].Groups[0].Items;
+        Assert.AreEqual("/WebResources/ab_/vector.svg", items[0].Icon);
+        Assert.AreEqual("$webresource:ab_/legacy.svg", items[1].Icon);
+        Assert.AreEqual("/WebResources/ab_/legacy.png", items[2].Icon);
     }
 
     [TestMethod]
@@ -179,6 +198,29 @@ public class ManageAppInternalsCoverageTests
             (List<string>)nested.GetProperty("Errors")!.GetValue(validation)!);
         CollectionAssert.AreEqual(new List<string> { "Careful app" },
             (List<string>)nested.GetProperty("Warnings")!.GetValue(validation)!);
+    }
+
+    [TestMethod]
+    public void AppValidationResult_FormatsSdkWarningsWithMissingMessages()
+    {
+        var response = new OrganizationResponse();
+        response.Results["AppValidationResponse"] = new AppValidationResponse
+        {
+            ValidationIssueList =
+            [
+                new ValidationIssue { ErrorType = ErrorType.Warning, ParentEntityName = "account", CRMErrorCode = -2147155691 },
+                new ValidationIssue { ErrorType = ErrorType.Warning, Message = " ", DisplayName = "App icon" },
+                new ValidationIssue { ErrorType = ErrorType.Warning, Message = "Careful app" }
+            ]
+        };
+
+        var nested = ToolType.GetNestedType("AppValidationResult", BindingFlags.NonPublic)!;
+        var validation = nested.GetMethod("FromResponse", BindingFlags.Public | BindingFlags.Static)!.Invoke(null, [response])!;
+        CollectionAssert.AreEqual(new[] {
+            "Dataverse returned a validation warning for 'account' (code -2147155691) without a message.",
+            "Dataverse returned a validation warning for 'App icon' without a message.",
+            "Careful app"
+        }, (List<string>)nested.GetProperty("Warnings")!.GetValue(validation)!);
     }
 
     [TestMethod]

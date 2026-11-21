@@ -8,14 +8,16 @@ Use `manage_app` for model-driven app metadata and app navigation. Never use `ex
 - Always read the app first with `manage_app(action='detail', app='...')` before changing metadata or navigation.
 - Create requires `solution_name` and `display_name`.
 - Create automatically creates a starter sitemap with an Account item so Dataverse app validation can pass.
-- Every mutating action (`create`, `update`, `update_navigation`, `undo`) publishes the app automatically so changes take effect immediately; `published: true` in the result confirms it. `no_changes` results skip publish.
+- After saving changes, `create`, `update`, `update_navigation`, and `undo` attempt to publish the app automatically. `published: true` confirms success. If publishing fails after saving, the result includes `published: false`, a status ending in `_publish_failed`, and a `nextStep` for retrying publish. `no_changes` results skip publish.
+- `list`, `detail`, and `validate` omit `published` because they do not check the app's publication state.
 - `unique_name` on create always gets the solution publisher prefix prepended (e.g. 'MyApp' in a solution with prefix 'all' becomes 'all_MyApp').
 - Do not delete appmodule records.
 - Do not delete sitemap records.
 - `remove_area`, `remove_group`, and `remove_item` only remove navigation nodes from sitemap XML.
 - `add_item` accepts one target per SubArea. Use `entity`, `url`, `dashboard_id` (alias `default_dashboard`), or `webresource`.
 - `update_item` finds the SubArea by `area`, `group`, and `item`. Pass a new `label`, a new target, or both. Use the SubArea ID for reliable matching. `move_item` and `remove_item` accept SubArea IDs for every type.
-- Dashboard and WebResource items accept `icon` on `add_item` and `update_item`. Use the exact name of an existing SVG web resource. The `$webresource:` prefix is optional in the input.
+- Dashboard and WebResource items accept `icon` on `add_item` and `update_item`. Pass the exact name of an existing SVG web resource, its `$webresource:` reference, or its `/WebResources/` path.
+- `update_navigation` publishes the app and its SiteMap in one request. If publish fails after saving, follow `nextStep` to publish the app from Power Apps App Designer.
 - All move/order positions are 1-based when numeric. Visual order is left-to-right, then top-to-bottom.
 
 ## Read Before Write Workflow
@@ -31,7 +33,7 @@ Use `manage_app` for model-driven app metadata and app navigation. Never use `ex
 
 2. Apply metadata update or navigation operations.
 3. Check validation warnings or errors.
-4. Publish happens automatically on every mutation — no separate `publish_customizations` call is needed.
+4. Check `published` in the mutation result. If the status ends in `_publish_failed`, follow `nextStep` to retry publish.
 
 ## Create App
 
@@ -142,7 +144,7 @@ Set or replace the icon on an existing Dashboard or WebResource item with `updat
 ]
 ```
 
-The tool validates that the icon exists and is an SVG before saving, then writes `Icon="$webresource:ab_/icons/help.svg"` on the SubArea. The app detail result returns this value in `navigationAreas[].groups[].items[].icon`.
+The tool validates that the icon exists and is an SVG before saving. It sets both `VectorIcon` and `Icon` on the SubArea to `/WebResources/ab_/icons/help.svg`. App detail returns `VectorIcon` in `navigationAreas[].groups[].items[].icon` when present and falls back to `Icon` for existing entries.
 
 Move item:
 

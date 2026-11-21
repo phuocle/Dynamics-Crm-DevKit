@@ -72,7 +72,10 @@ public class ManageFormToolTests
     public void MapFormType_Unknown_ReturnsOtherWithValue() => Assert.AreEqual("Other(99)", MapFormType(99));
 
     [TestMethod]
-    public void MapFormType_MainInteractive_ReturnsMainInteractive() => Assert.AreEqual("MainInteractive", MapFormType(11));
+    [DataRow(11, "Card")]
+    [DataRow(12, "MainInteractive")]
+    public void MapFormType_UsesDataverseNames(int type, string expectedName) =>
+        Assert.AreEqual(expectedName, MapFormType(type));
 
     // ──────────────────────────────────────────────
     // ValidFormTypes — Finding 1 regression guard

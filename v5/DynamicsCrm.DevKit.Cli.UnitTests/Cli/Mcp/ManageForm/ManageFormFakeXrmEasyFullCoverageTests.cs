@@ -288,13 +288,23 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
-    public async Task List_TypeFilter_ReturnsOnlyMatchingType()
+    [DataRow(7, "QuickCreate")]
+    [DataRow(11, "Card")]
+    [DataRow(12, "MainInteractive")]
+    public async Task ListAndDetail_ReturnMatchingFormType(int formType, string formTypeName)
     {
         SeedForm("Account Main");
-        SeedForm("Quick Create Form", type: 7);
-        var result = await NewTool().manage_form(null!, "list", "account", form_type: 7);
+        var id = SeedForm($"Account {formTypeName}", type: formType);
+        var tool = NewTool();
+
+        var result = await tool.manage_form(null!, "list", "account", form_type: formType);
         Assert.IsFalse(result.IsError == true);
         StringAssert.Contains(Text(result), "Found 1 form(s) for 'account'.");
+        Assert.AreEqual(formTypeName, Structured(result).GetProperty("forms")[0].GetProperty("formTypeName").GetString());
+
+        var detail = await tool.manage_form(null!, "detail", "account", form_id: id.ToString());
+        Assert.IsFalse(detail.IsError == true);
+        Assert.AreEqual(formTypeName, Structured(detail).GetProperty("formTypeName").GetString());
     }
 
     [TestMethod]
