@@ -228,17 +228,27 @@ namespace DynamicsCrm.DevKit.Cli
                     }
                 }
 
+                var mcpHelp = isMcp && args.Any(a =>
+                    a.Equals("--help", StringComparison.OrdinalIgnoreCase) ||
+                    a.Equals("-h", StringComparison.OrdinalIgnoreCase));
                 var mcpInfoOrHelp = isMcp && args.Any(a =>
                     a.Equals("--tools", StringComparison.OrdinalIgnoreCase) ||
                     a.Equals("--setup-guide", StringComparison.OrdinalIgnoreCase) ||
                     a.Equals("--help", StringComparison.OrdinalIgnoreCase) ||
                     a.Equals("-h", StringComparison.OrdinalIgnoreCase));
-                if (!(isMcp && plainRequested))
+                if (isMcp && !mcpInfoOrHelp)
                 {
-                    if (isMcp && !mcpInfoOrHelp)
+                    // MCP stdio server startup: the client owns stdout, so the
+                    // banner goes to stderr; plain args-only mode writes none.
+                    if (!plainRequested)
                         SpectreLog.WriteHeader(Console.Error);
-                    else
-                        SpectreLog.WriteHeader();
+                }
+                else if (mcpHelp || !(isMcp && plainRequested))
+                {
+                    // Help renders and every non-MCP command print the header
+                    // once on stdout, even when --plain is requested; MCP
+                    // --tools/--setup-guide keep their plain output header-free.
+                    SpectreLog.WriteHeader();
                 }
 
                 var result = await app.RunAsync(args);
