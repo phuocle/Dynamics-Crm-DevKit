@@ -80,7 +80,7 @@ public class CreateRecordsDryRunTests
 
         var chunk = new List<(int index, Entity entity)> { (0, new Entity("account")) };
         var task = (Task<List<BatchCreateItem>>)method.Invoke(tool,
-            new object?[] { null, chunk, false, CancellationToken.None })!;
+            new object?[] { null, chunk, false, CancellationToken.None, false })!;
 
         // The gateway throws, the chunk-level catch marks every item failed
         // with the gateway message.
@@ -112,7 +112,7 @@ public class CreateRecordsDryRunTests
 
         var chunk = new List<(int index, Entity entity)> { (0, new Entity("account")) };
         var task = (Task<List<BatchCreateItem>>)method.Invoke(tool,
-            new object?[] { null, chunk, false, CancellationToken.None })!;
+            new object?[] { null, chunk, false, CancellationToken.None, false })!;
         var items = await task;
 
         Assert.AreEqual(1, items.Count);

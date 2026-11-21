@@ -43,8 +43,59 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        private Entity PrepareStateChange(Entity entity, bool update)
+        {
+            var state = entity.GetAttributeValue<OptionSetValue>("statecode");
+            var status = entity.GetAttributeValue<OptionSetValue>("statuscode");
+            if ((state == null && entity.Contains("statecode")) || (status == null && entity.Contains("statuscode")))
+                throw new ArgumentException("statecode and statuscode require an integer option value or a valid label.");
+            if (state == null && status == null)
+                return null;
+
+            var statusMetadata = EntityParserHelper.FindAttribute(_serviceClient, entity.LogicalName, "statuscode") as StatusAttributeMetadata;
+            var statusOption = FindOption(statusMetadata?.OptionSet, "statuscode", status?.Value) as StatusOptionMetadata;
+            var statusState = statusOption?.State;
+            if (state != null && statusState.HasValue && state.Value != statusState.Value)
+                throw new ArgumentException($"statuscode {status.Value} belongs to statecode {statusState}, not {state.Value}.");
+
+            var desiredState = state?.Value ?? (update ? null : statusState);
+            var stateMetadata = EntityParserHelper.FindAttribute(_serviceClient, entity.LogicalName, "statecode") as StateAttributeMetadata;
+            var stateOption = FindOption(stateMetadata?.OptionSet, "statecode", desiredState) as StateOptionMetadata;
+
+            // State 0 is set by Create. An active status reason can travel with
+            // the Create if the table allows it.
+            if (!update && desiredState == 0 && (status == null || statusMetadata?.IsValidForCreate != false))
+            {
+                entity.Attributes.Remove("statecode");
+                return null;
+            }
+
+            var target = update ? entity : new Entity(entity.LogicalName);
+            if (desiredState.HasValue)
+                target["statecode"] = state ?? new OptionSetValue(desiredState.Value);
+            if (status != null)
+                target["statuscode"] = status;
+            else if (stateOption?.DefaultStatus is int defaultStatus)
+                target["statuscode"] = new OptionSetValue(defaultStatus);
+
+            if (update)
+                return null;
+            entity.Attributes.Remove("statecode");
+            entity.Attributes.Remove("statuscode");
+            return target;
+        }
+
+        private static OptionMetadata FindOption(OptionSetMetadata optionSet, string fieldName, int? value)
+        {
+            if (value == null || optionSet?.Options is not { Count: > 0 } options)
+                return null;
+            return options.FirstOrDefault(option => option.Value == value)
+                ?? throw new ArgumentException($"Field '{fieldName}' has no option with value {value.Value}.");
+        }
+
         private const int MaxRecords = 5000;
         private const int MaxParallelism = 52;
+        private const int ChunkSize = 100;
 
         // ── ImportSequenceNumber auto-fill ──────────────────────────────────
         // OOB Dataverse stamps importsequencenumber on every record during data
@@ -68,6 +119,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Bulk create up to 5000 Dataverse records in parallel from inline JSON, a .json file or a .csv file. Partial failures do not roll back successful records. Use manage_record for single-record CRUD.\n\n" +
             "records_json accepts inline JSON arrays (logical field names), .json file paths, or .csv file paths — CSV headers accept Display Names or logical names; unresolvable headers are skipped with a per-item warning. Field syntax: polymorphic lookups use field@targetentity (e.g. 'customerid@account'); activity party fields (to/from/cc/bcc/requiredattendees/organizer/customers/resources) are a JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"} — a single object is auto-wrapped; do NOT supply participationtypemask. Read docs://data_operations_guide for field formats and batch details.\n\n" +
+            "Supply the primary key as a GUID string to preserve it. Statecode and statuscode accept integer values or labels. States and status reasons that need an update are applied after create. Check each item's stateUpdate for the result.\n\n" +
             "Records are stamped with a shared importsequencenumber so the batch can be queried and bulk-deleted as a unit; the value is returned as importSequenceNumber and an explicitly supplied value wins for that record. bypass_custom_logic skips custom sync/async plugins/workflows and requires System Administrator.\n\n" +
             "WHEN TO USE:\n" +
             "- Seed many records at once (accounts, contacts, tasks) or import from CSV\n" +
@@ -75,6 +127,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- High-throughput parallel creates (server hints concurrency when max_parallelism=0)\n\n" +
             "RELATED TOOLS:\n" +
             "- generate_demo_data → produce JSON to pipe into records_json\n" +
+            "- update_records → bulk update existing records by GUID\n" +
             "- manage_record → single-record create/update/delete/associate/disassociate\n" +
             "- search_records / execute_fetchxml → verify created records")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
@@ -92,14 +145,46 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }, cancellationToken);
         }
 
-        public async Task<CallToolResult> create_records(
+        public Task<CallToolResult> create_records(
             [Description("Entity Display Name or logical name (Display Name resolved first).")] string entity_name = "",
             [Description("Inline JSON array, .json file path, or .csv file path. Max 5000 records.")] string records_json = "",
             [Description("Concurrent requests. 0 = server hint. Clamped 1-52. Use 1-2 for on-prem.")] int max_parallelism = 0,
             [Description("Bypass custom sync+async plugins/workflows (BypassBusinessLogicExecution=CustomSync,CustomAsync). Default false. Requires System Administrator role; rejected early otherwise. Use for bulk data load where plugins would slow/block creates.")] bool bypass_custom_logic = false)
         {
+            return ExecuteRecordsAsync(entity_name, records_json, max_parallelism, bypass_custom_logic, update: false);
+        }
+
+        [McpServerTool(Name = "update_records", Title = "Update multiple records in parallel",
+            Destructive = true, ReadOnly = false, Idempotent = false,
+            UseStructuredContent = true, OutputSchemaType = typeof(BatchCreateResult)),
+        Description(
+            "Bulk update up to 5000 existing Dataverse records via ExecuteMultiple. Accepts inline JSON, a .json file or a .csv file. " +
+            "Each record must include the table's primary key (for example accountid) as a GUID string and at least one field to update. " +
+            "Statecode and statuscode accept integer values or labels. Partial failures are reported per record. Read docs://data_operations_guide for field formats.")]
+        public Task<CallToolResult> InvokeUpdateAsync(
+            [Description("Entity Display Name or logical name (Display Name resolved first).")] string entity_name = "",
+            [Description("Inline JSON array, .json file path, or .csv file path. Max 5000 records.")] string records_json = "",
+            [Description("Concurrent requests. 0 = server hint. Clamped 1-52. Use 1-2 for on-prem.")] int max_parallelism = 0,
+            [Description("Bypass custom sync+async plugins/workflows. Default false. Requires System Administrator.")] bool bypass_custom_logic = false,
+            [Description(McpToolInvocation.EnvDescription)] string env = null,
+            CancellationToken cancellationToken = default)
+        {
+            return McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            {
+                var worker = new CreateRecordsTool(conn.Client, conn.Options, conn.Context);
+                return worker.ExecuteRecordsAsync(entity_name, records_json, max_parallelism, bypass_custom_logic, update: true);
+            }, cancellationToken);
+        }
+
+        private async Task<CallToolResult> ExecuteRecordsAsync(
+            string entity_name, string records_json, int max_parallelism, bool bypass_custom_logic, bool update)
+        {
             try
             {
+                var toolName = update ? "update_records" : "create_records";
+                var verb = update ? "update" : "create";
+                var successStatus = update ? "updated" : "created";
+
                 if (string.IsNullOrWhiteSpace(entity_name))
                     return Error("entity_name is required.",
                         "Provide the entity Display Name or logical name, e.g. 'Account' or 'account'.");
@@ -125,7 +210,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         $"Ask a System Administrator to assign the '{requiredRoleName}' role to your user, then retry with bypass_custom_logic=true. Current roles on the calling user: {haveList}.");
                 }
 
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "create_records");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), toolName);
                 if (!entityResult.IsSuccess)
                 {
                     if (entityResult.Status == ResolveStatus.Ambiguous)
@@ -143,9 +228,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                     return Error(
                         entityResult.Error.Split("\r\n")[0],
-                        "Use get_tables to list entities before calling create_records.");
+                        $"Use get_tables to list entities before calling {toolName}.");
                 }
                 var entityName = entityResult.Value.LogicalName;
+                var primaryKey = entityResult.Value.PrimaryIdAttribute ?? entityName + "id";
 
                 var csvWarnings = new List<string>();
                 var (resolved, inputFormat) = ResolveRecordsInput(records_json, entityName, csvWarnings);
@@ -175,7 +261,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (elements.Length > MaxRecords)
                     return Error($"records_json has {elements.Length} elements. Max is {MaxRecords}.",
-                        $"Split the input into batches of at most {MaxRecords} records and call create_records once per batch.");
+                        $"Split the input into batches of at most {MaxRecords} records and call {toolName} once per batch.");
 
                 var usedDefault = max_parallelism <= 0;
                 var parallelism = usedDefault
@@ -183,17 +269,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     : max_parallelism;
                 parallelism = Math.Clamp(parallelism, 1, MaxParallelism);
 
-                // Parse all entities up front. A field/type error in one record
-                // must not abort the batch — collect per-record parse failures so
-                // they surface as failed items alongside successful creates.
-                // Parsing happens before the dry-run check so the ISN auto-fill
-                // can report the same batch value in both dry-run and live mode.
                 var parsedEntities = new (Entity entity, string error)[elements.Length];
+                var stateChanges = new Entity[elements.Length];
+                var updateIds = new HashSet<Guid>();
                 for (var i = 0; i < elements.Length; i++)
                 {
                     try
                     {
-                        parsedEntities[i] = (EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, elements[i].GetRawText()), null);
+                        var entity = EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, elements[i].GetRawText());
+                        if (entity.Attributes.TryGetValue(primaryKey, out var key))
+                        {
+                            if (key is not Guid guid || guid == Guid.Empty)
+                                throw new ArgumentException($"Primary key '{primaryKey}' requires a non-empty GUID.");
+                            entity.Id = guid;
+                            if (update)
+                                entity.Attributes.Remove(primaryKey);
+                        }
+
+                        if (update && entity.Id == Guid.Empty)
+                            throw new ArgumentException($"Primary key '{primaryKey}' is required to update a record.");
+                        if (update && entity.Attributes.Count == 0)
+                            throw new ArgumentException("Provide at least one field to update in addition to the primary key.");
+
+                        stateChanges[i] = PrepareStateChange(entity, update);
+                        if (update && !updateIds.Add(entity.Id))
+                            throw new ArgumentException($"Duplicate primary key '{entity.Id}' in the update batch.");
+                        parsedEntities[i] = (entity, null);
                     }
                     catch (Exception ex)
                     {
@@ -204,7 +305,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // Compute the batch importsequencenumber and auto-fill it on
                 // every successfully-parsed entity that does not already have one.
                 // User-provided values always win (no duplicate checking).
-                var (batchIsn, isnWarning) = ComputeBatchImportSequenceNumber(entityName);
+                var (batchIsn, isnWarning) = update ? (null, null) : ComputeBatchImportSequenceNumber(entityName);
                 if (batchIsn.HasValue)
                     ApplyBatchImportSequenceNumber(parsedEntities, batchIsn.Value);
                 if (isnWarning != null)
@@ -213,14 +314,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (_options.DryRun)
                 {
                     var previewItems = elements.Length <= 5
-                        ? elements.Select((_, i) => new BatchCreateItem { Index = i, Id = "", Status = "pending" }).ToList()
+                        ? parsedEntities.Select((parsed, i) => new BatchCreateItem
+                        {
+                            Index = i,
+                            Id = parsed.entity?.Id is Guid id && id != Guid.Empty ? id.ToString() : "",
+                            Status = parsed.error == null ? "pending" : "failed",
+                            Error = parsed.error,
+                            StateUpdate = stateChanges[i] == null ? null : new BatchStateUpdate { Status = "pending" }
+                        }).ToList()
                         : null;
                     var preview = new BatchCreateResult
                     {
                         Entity = entityName,
                         Total = elements.Length,
                         Succeeded = 0,
-                        Failed = 0,
+                        Failed = parsedEntities.Count(item => item.error != null),
                         DurationSeconds = 0,
                         Parallelism = parallelism,
                         UsedDefaultParallelism = usedDefault,
@@ -231,76 +339,58 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Status = "not_executed"
                     };
                     return DryRun(
-                        $"Would CREATE {elements.Length} '{entityName}' record(s) (parallelism={parallelism}, input={inputFormat}, bypassCustomLogic={bypass_custom_logic.ToString().ToLowerInvariant()}{(batchIsn.HasValue ? $", importSequenceNumber={batchIsn}" : "")}).",
+                        $"Would {verb.ToUpperInvariant()} {elements.Length} '{entityName}' record(s) (parallelism={parallelism}, input={inputFormat}, bypassCustomLogic={bypass_custom_logic.ToString().ToLowerInvariant()}{(batchIsn.HasValue ? $", importSequenceNumber={batchIsn}" : "")}).",
                         preview);
                 }
 
-                // Group parsed entities into chunks of ~100 records and send each
-                // chunk as a single ExecuteMultipleRequest (ContinueOnError=true).
-                // This is the OOB Dataverse bulk path: N records → 1 request, so
-                // 1000 records cost ~10 requests instead of 1000, drastically
-                // reducing round-trips and service-protection request-count. Each
-                // item in a chunk keeps its own fault when ContinueOnError is set,
-                // so a single bad record never rolls back its chunk — successes
-                // are committed, failures are reported per-item (Index preserved).
-                //
-                // Parse-failed records are pre-collected: they never enter a chunk's
-                // request, they surface directly as failed items carrying their
-                // parse error. Only successfully parsed entities become CreateRequest
-                // items inside the ExecuteMultiple payload.
-                //
-                // Concurrency: chunks run in Parallel.ForEachAsync. Each parallel
-                // worker uses its own cloned ServiceClient (Clone() opens a fresh
-                // connection bound to the same OAuth auth) so workers don't funnel
-                // through the shared DI singleton's cross-thread lock. Clone is
-                // OAuth-only; if Clone returns null (non-OAuth connection) the
-                // worker falls back to the shared _serviceClient. Workers are
-                // disposed per-chunk (using) to release their connections.
-                var chunkSize = 100;
-                var parsedChunks = new List<List<(int index, Entity entity)>>();
-                var preParseFailed = new List<BatchCreateItem>();
-                var currentChunk = new List<(int index, Entity entity)>();
+                var ready = new List<(int index, Entity entity)>();
+                var sortedItems = new List<BatchCreateItem>(elements.Length);
                 for (var i = 0; i < parsedEntities.Length; i++)
                 {
-                    if (parsedEntities[i].entity == null)
+                    var (entity, error) = parsedEntities[i];
+                    if (entity == null)
+                        sortedItems.Add(new BatchCreateItem { Index = i, Id = "", Status = "failed", Error = error });
+                    else
+                        ready.Add((i, entity));
+                }
+
+                var sw = Stopwatch.StartNew();
+                var (completed, chunkCount, batchedParallelism) = await ExecuteBatchesAsync(
+                    ready, parallelism, bypass_custom_logic, update);
+                sortedItems.AddRange(completed);
+                sortedItems.Sort((left, right) => left.Index.CompareTo(right.Index));
+                var succeeded = completed.Count(item => item.Status == successStatus);
+                var failed = elements.Length - succeeded;
+
+                // A successful Create is committed even if its follow-up Update fails.
+                // Preserve the created item's ID and report the Update outcome separately.
+                var stateTargets = new List<(int index, Entity entity)>();
+                foreach (var item in sortedItems)
+                {
+                    var target = stateChanges[item.Index];
+                    if (target == null || item.Status != "created")
+                        continue;
+                    if (!Guid.TryParse(item.Id, out var id) || id == Guid.Empty)
                     {
-                        preParseFailed.Add(new BatchCreateItem { Index = i, Id = "", Status = "failed", Error = parsedEntities[i].error });
+                        item.StateUpdate = new BatchStateUpdate { Status = "failed", Error = "Create returned no record ID for the state update." };
                         continue;
                     }
-                    currentChunk.Add((i, parsedEntities[i].entity));
-                    if (currentChunk.Count >= chunkSize)
-                    {
-                        parsedChunks.Add(currentChunk);
-                        currentChunk = new List<(int index, Entity entity)>();
-                    }
+                    target.Id = id;
+                    stateTargets.Add((item.Index, target));
                 }
-                if (currentChunk.Count > 0) parsedChunks.Add(currentChunk);
 
-                var chunkCount = parsedChunks.Count;
-                var batchedParallelism = Math.Min(parallelism, Math.Max(1, chunkCount));
-                var chunkResults = new ConcurrentBag<BatchCreateItem>();
-                var sw = Stopwatch.StartNew();
-                if (chunkCount > 0)
+                var (stateResults, _, _) = await ExecuteBatchesAsync(stateTargets, parallelism, bypass_custom_logic, update: true);
+                foreach (var stateResult in stateResults)
                 {
-                    await Parallel.ForEachAsync(parsedChunks, new ParallelOptions
+                    sortedItems[stateResult.Index].StateUpdate = new BatchStateUpdate
                     {
-                        MaxDegreeOfParallelism = batchedParallelism
-                    }, async (chunk, ct) =>
-                    {
-                        using var ownedWorker = _serviceClient.Clone();
-                        var worker = ownedWorker ?? _serviceClient;
-                        // Propagate CallerId (impersonation) to cloned connections.
-                        // ServiceClient.Clone() may not copy CallerId, so set it explicitly.
-                        if (ownedWorker != null) ownedWorker.CallerId = _serviceClient.CallerId;
-                        foreach (var item in await ExecuteChunkAsync(worker, chunk, bypass_custom_logic, ct))
-                            chunkResults.Add(item);
-                    });
+                        Status = stateResult.Status,
+                        Error = stateResult.Error
+                    };
                 }
                 sw.Stop();
-
-                var sortedItems = chunkResults.Concat(preParseFailed).OrderBy(x => x.Index).ToList();
-                var succeeded = sortedItems.Count(x => x.Status == "created");
-                var failed = sortedItems.Count(x => x.Status == "failed");
+                var statesUpdated = stateResults.Count(item => item.Status == "updated");
+                var stateFailures = sortedItems.Count(item => item.StateUpdate?.Status == "failed");
 
                 // Build the warnings list shown in structured content: CSV header
                 // warnings + the default-parallelism notice + the bypass note.
@@ -308,16 +398,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (usedDefault)
                     structuredWarnings.Add($"Default parallelism = {parallelism} (from server hint x-ms-dop-hint; hard limit {MaxParallelism}). Provide max_parallelism explicitly to suppress this notice.");
                 if (chunkCount > 0)
-                    structuredWarnings.Add($"Batched into {chunkCount} chunk(s) of up to {chunkSize} record(s) via ExecuteMultiple (ContinueOnError=true); chunks ran on cloned connections ({batchedParallelism} concurrent). Parse failures excluded from chunks and reported per-item.");
+                    structuredWarnings.Add($"Batched into {chunkCount} chunk(s) of up to {ChunkSize} record(s) via ExecuteMultiple (ContinueOnError=true); chunks ran on cloned connections ({batchedParallelism} concurrent). Parse failures excluded from chunks and reported per-item.");
 
                 // bypass note: when bypass is OFF (the default), inform the user —
                 // especially on a first run — that the parameter exists so they can
                 // prompt to enable it next time. When bypass is ON, confirm it
                 // bypassed (no educational hint, just a fact).
                 if (!bypass_custom_logic)
-                    structuredWarnings.Add("bypass_custom_logic is false: custom sync+async plugins/workflows ran for these creates. For bulk data loads where custom logic would slow or block creates, retry with bypass_custom_logic=true (requires the System Administrator role).");
+                    structuredWarnings.Add($"bypass_custom_logic is false: custom sync+async plugins/workflows ran for these {verb}s. For bulk data loads where custom logic would slow or block {verb}s, retry with bypass_custom_logic=true (requires the System Administrator role).");
                 else
-                    structuredWarnings.Add("bypass_custom_logic=true: custom sync+async plugins/workflows were bypassed (BypassBusinessLogicExecution=CustomSync,CustomAsync) for these creates.");
+                    structuredWarnings.Add($"bypass_custom_logic=true: custom sync+async plugins/workflows were bypassed (BypassBusinessLogicExecution=CustomSync,CustomAsync) for these {verb}s.");
 
                 var durationSeconds = Math.Round(sw.Elapsed.TotalSeconds, 1);
                 var structured = new BatchCreateResult
@@ -334,17 +424,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ImportSequenceNumber = batchIsn,
                     Warnings = structuredWarnings.Count > 0 ? structuredWarnings : null,
                     Items = sortedItems.Count > 0 ? sortedItems : null,
-                    Status = failed == 0 ? "created" : (succeeded == 0 ? "failed" : "partial")
+                    Status = succeeded == 0 ? "failed" : (failed + stateFailures == 0 ? successStatus : "partial")
                 };
 
                 var bypassTag = bypass_custom_logic ? ", bypass=on" : "";
                 var chunkTag = chunkCount > 0 ? $", {chunkCount} chunk(s)" : "";
                 var isnTag = batchIsn.HasValue ? $", importSequenceNumber={batchIsn}" : "";
-                var summary = $"Created {succeeded}/{elements.Length} '{entityName}' record(s) in {durationSeconds}s ({batchedParallelism} concurrent{chunkTag}{bypassTag}{isnTag}).";
+                var action = update ? "Updated" : "Created";
+                var summary = $"{action} {succeeded}/{elements.Length} '{entityName}' record(s) in {durationSeconds}s ({batchedParallelism} concurrent{chunkTag}{bypassTag}{isnTag}).";
                 if (succeeded == 0)
-                    summary = $"Failed to create any of {elements.Length} '{entityName}' record(s) ({failed} failed{chunkTag}{bypassTag}{isnTag}).";
+                    summary = $"Failed to {verb} any of {elements.Length} '{entityName}' record(s) ({failed} failed{chunkTag}{bypassTag}{isnTag}).";
+                if (statesUpdated + stateFailures > 0)
+                    summary += $" Updated state/status for {statesUpdated}/{statesUpdated + stateFailures} created record(s).";
 
-                if (failed == 0)
+                if (failed + stateFailures == 0)
                     return Success(summary, structured);
                 if (succeeded == 0)
                     return Failed(summary, structured);
@@ -422,26 +515,35 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        // Send one chunk (~100 records) as a single ExecuteMultipleRequest with
-        // ContinueOnError=true. Each record becomes a CreateRequest item inside
-        // the batch; ContinueOnError means a fault on one item does NOT abort
-        // the chunk — the rest are still committed and the fault is returned
-        // per-item via ExecuteMultipleResponseItem.Fault. This preserves the
-        // partial-failure behavior of the old per-record parallel loop while
-        // collapsing N round-trips into 1.
-        //
-        // bypass=true sets BypassBusinessLogicExecution on EVERY CreateRequest
-        // item in the batch (the parameter is per-request, not per-batch). The
-        // role gate above already ensured the caller is a System Administrator.
-        //
-        // The mutation gateway (DataverseMutationExecutor.ExecuteAsync) asserts
-        // mutations are allowed before the SDK call. In dry-run mode the
-        // action-level preview returns before this method is reached. An
-        // unhandled throw here is caught by the caller's try/catch and the
-        // whole chunk is marked failed (all items) — matching the old loop's
-        // behavior of one bad connection attempt failing its record.
+        private async Task<(List<BatchCreateItem> items, int chunkCount, int concurrency)> ExecuteBatchesAsync(
+            List<(int index, Entity entity)> records, int parallelism, bool bypass, bool update)
+        {
+            var chunks = records.Chunk(ChunkSize).ToArray();
+            var concurrency = Math.Min(parallelism, Math.Max(1, chunks.Length));
+            var results = new ConcurrentBag<BatchCreateItem>();
+            await Parallel.ForEachAsync(chunks, new ParallelOptions { MaxDegreeOfParallelism = concurrency }, async (chunk, ct) =>
+            {
+                List<BatchCreateItem> items;
+                try
+                {
+                    // Clone is OAuth-only. Retain the shared client on connections that cannot clone.
+                    using var ownedWorker = _serviceClient.Clone();
+                    if (ownedWorker != null)
+                        ownedWorker.CallerId = _serviceClient.CallerId;
+                    items = await ExecuteChunkAsync(ownedWorker ?? _serviceClient, chunk, bypass, ct, update);
+                }
+                catch (Exception ex)
+                {
+                    items = ChunkFailures(chunk, update, ex.Message);
+                }
+                foreach (var item in items)
+                    results.Add(item);
+            });
+            return (results.ToList(), chunks.Length, concurrency);
+        }
+
         private async Task<List<BatchCreateItem>> ExecuteChunkAsync(
-            ServiceClient worker, List<(int index, Entity entity)> chunk, bool bypass, CancellationToken ct)
+            ServiceClient worker, IReadOnlyList<(int index, Entity entity)> chunk, bool bypass, CancellationToken ct, bool update)
         {
             var items = new List<BatchCreateItem>(chunk.Count);
             var request = new ExecuteMultipleRequest
@@ -453,12 +555,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 },
                 Requests = new OrganizationRequestCollection()
             };
-            foreach (var (index, entity) in chunk)
+            foreach (var (_, entity) in chunk)
             {
-                var create = new CreateRequest { Target = entity };
+                OrganizationRequest mutation = update ? new UpdateRequest { Target = entity } : new CreateRequest { Target = entity };
                 if (bypass)
-                    create.Parameters["BypassBusinessLogicExecution"] = "CustomSync,CustomAsync";
-                request.Requests.Add(create);
+                    mutation.Parameters["BypassBusinessLogicExecution"] = "CustomSync,CustomAsync";
+                request.Requests.Add(mutation);
             }
 
             try
@@ -471,29 +573,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var byIndex = response.Responses.ToDictionary(r => r.RequestIndex);
                 for (var i = 0; i < chunk.Count; i++)
                 {
+                    var (index, entity) = chunk[i];
                     if (!byIndex.TryGetValue(i, out var item) || item.Fault != null)
                     {
                         var err = item?.Fault?.Message ?? "No response returned for this item.";
-                        items.Add(new BatchCreateItem { Index = chunk[i].index, Id = "", Status = "failed", Error = err });
+                        items.Add(new BatchCreateItem { Index = index, Id = update ? entity.Id.ToString() : "", Status = "failed", Error = err });
                     }
                     else
                     {
-                        var id = item.Response != null && item.Response.Results.Contains("id")
-                            ? (Guid)item.Response.Results["id"]
-                            : Guid.Empty;
-                        items.Add(new BatchCreateItem { Index = chunk[i].index, Id = id.ToString(), Status = "created" });
+                        var id = !update && item.Response?.Results.TryGetValue("id", out var returnedId) == true
+                            && returnedId is Guid createdId && createdId != Guid.Empty ? createdId : entity.Id;
+                        items.Add(new BatchCreateItem { Index = index, Id = id.ToString(), Status = update ? "updated" : "created" });
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Chunk-level failure (timeout, auth, network) — mark all items
-                // in this chunk failed with the shared error. The caller still
-                // processes other chunks; only this chunk is lost.
-                foreach (var (index, _) in chunk)
-                    items.Add(new BatchCreateItem { Index = index, Id = "", Status = "failed", Error = ex.Message });
+                return ChunkFailures(chunk, update, ex.Message);
             }
             return items;
+        }
+
+        private static List<BatchCreateItem> ChunkFailures(
+            IReadOnlyList<(int index, Entity entity)> chunk, bool update, string error)
+        {
+            return chunk.Select(record => new BatchCreateItem
+            {
+                Index = record.index,
+                Id = update ? record.entity.Id.ToString() : "",
+                Status = "failed",
+                Error = error
+            }).ToList();
         }
 
         // Input files are read, never deleted — the generated file stays on disk
@@ -631,10 +741,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             int rowNum, string entityName,
             Dictionary<string, Guid?> lookupNameCache, List<string> warnings)
         {
+            if (attr.AttributeType == AttributeTypeCode.Uniqueidentifier)
+                return (logicalName, cellValue);
+
             switch (attr)
             {
                 case StringAttributeMetadata:
                 case MemoAttributeMetadata:
+                case UniqueIdentifierAttributeMetadata:
+                case StateAttributeMetadata:
+                case StatusAttributeMetadata:
                     return (logicalName, cellValue);
 
                 case IntegerAttributeMetadata:

@@ -66,6 +66,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             System.Threading.Interlocked.Exchange(ref MetadataCache, new());
         }
 
+        internal static AttributeMetadata FindAttribute(IOrganizationService orgService, string entityName, string logicalName)
+        {
+            return GetAttributeIndex(orgService, entityName).Candidates
+                .FirstOrDefault(candidate => candidate.LogicalName == logicalName)?.Value;
+        }
+
         private static AttributeMetadataIndex GetAttributeIndex(IOrganizationService orgService, string entityLogicalName)
         {
             return MetadataCache.GetValue(orgService, _ => new(StringComparer.OrdinalIgnoreCase)).GetOrAdd(entityLogicalName, _ =>
@@ -138,13 +144,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             if (attrMeta.AttributeType == AttributeTypeCode.PartyList)
                 return BuildActivityPartyCollection(jsonVal, fieldName);
 
+            if (attrMeta.AttributeType == AttributeTypeCode.Uniqueidentifier || attrMeta is UniqueIdentifierAttributeMetadata)
+            {
+                if (jsonVal.ValueKind == JsonValueKind.String && Guid.TryParse(jsonVal.GetString(), out var guid))
+                    return guid;
+                throw new ArgumentException($"Field '{fieldName}' requires a valid GUID string.");
+            }
+
             return attrMeta switch
             {
                 LookupAttributeMetadata lookup => BuildEntityReference(lookup, jsonVal, fieldName, targetEntityOverride),
 
                 PicklistAttributeMetadata => new OptionSetValue(jsonVal.GetInt32()),
-                StateAttributeMetadata => new OptionSetValue(jsonVal.GetInt32()),
-                StatusAttributeMetadata => new OptionSetValue(jsonVal.GetInt32()),
+                StateAttributeMetadata state => ParseStateOrStatus(jsonVal, state.OptionSet, fieldName),
+                StatusAttributeMetadata status => ParseStateOrStatus(jsonVal, status.OptionSet, fieldName),
 
                 MultiSelectPicklistAttributeMetadata => new OptionSetValueCollection(
                     jsonVal.EnumerateArray().Select(v => new OptionSetValue(v.GetInt32())).ToList()),
@@ -161,6 +174,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
                 _ => FallbackConvert(jsonVal)
             };
+        }
+
+        private static OptionSetValue ParseStateOrStatus(JsonElement value, OptionSetMetadata optionSet, string fieldName)
+        {
+            var label = value.ValueKind == JsonValueKind.String ? value.GetString().Trim() : null;
+            if ((value.ValueKind == JsonValueKind.Number && value.TryGetInt32(out var number))
+                || int.TryParse(label, NumberStyles.Integer, CultureInfo.InvariantCulture, out number))
+                return new OptionSetValue(number);
+
+            var matches = optionSet?.Options?
+                .Where(option => option.Value.HasValue && label != null &&
+                    (string.Equals(option.Label?.UserLocalizedLabel?.Label, label, StringComparison.OrdinalIgnoreCase) ||
+                    option.Label?.LocalizedLabels?.Any(localized =>
+                        string.Equals(localized.Label, label, StringComparison.OrdinalIgnoreCase)) == true ||
+                    option is StateOptionMetadata state &&
+                        string.Equals(state.InvariantName, label, StringComparison.OrdinalIgnoreCase)))
+                .Select(option => option.Value.Value)
+                .Distinct()
+                .ToArray();
+            if (matches?.Length == 1)
+                return new OptionSetValue(matches[0]);
+            if (matches?.Length > 1)
+                throw new ArgumentException($"Field '{fieldName}' has multiple options labeled '{label}'. Use the integer option value.");
+            throw new ArgumentException($"Field '{fieldName}' requires an integer option value or a valid label. Received {value.GetRawText()}.");
         }
 
         private static EntityReference BuildEntityReference(LookupAttributeMetadata lookup, JsonElement jsonVal, string fieldName, string targetEntityOverride)

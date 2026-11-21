@@ -38,6 +38,7 @@ public sealed class CreateRecordsFakeSdkMainPathTests
     private EntityCollection _lookupRows = null!;
     private EntityCollection _roleRows = null!;
     private readonly List<CreateRequest> _capturedCreates = new();
+    private readonly List<UpdateRequest> _capturedUpdates = new();
     private Func<ExecuteMultipleRequest, ExecuteMultipleResponse>? _onExecuteMultiple;
     private Exception? _onExecuteMultipleThrow;
 
@@ -89,7 +90,8 @@ public sealed class CreateRecordsFakeSdkMainPathTests
 
     private ExecuteMultipleResponse ExecuteMultipleHandler(ExecuteMultipleRequest request)
     {
-        _capturedCreates.AddRange(request.Requests.Cast<CreateRequest>());
+        _capturedCreates.AddRange(request.Requests.OfType<CreateRequest>());
+        _capturedUpdates.AddRange(request.Requests.OfType<UpdateRequest>());
         if (_onExecuteMultipleThrow != null) throw _onExecuteMultipleThrow;
         if (_onExecuteMultiple != null) return _onExecuteMultiple(request);
 
@@ -99,7 +101,9 @@ public sealed class CreateRecordsFakeSdkMainPathTests
             items.Add(new ExecuteMultipleResponseItem
             {
                 RequestIndex = i,
-                Response = new OrganizationResponse { Results = { ["id"] = Guid.NewGuid() } }
+                Response = request.Requests[i] is CreateRequest create
+                    ? new CreateResponse { Results = { ["id"] = create.Target.Id == Guid.Empty ? Guid.NewGuid() : create.Target.Id } }
+                    : new UpdateResponse()
             });
         }
         return new ExecuteMultipleResponse { Results = { ["Responses"] = items } };
@@ -129,6 +133,194 @@ public sealed class CreateRecordsFakeSdkMainPathTests
 
     private static List<string> Warnings(JsonElement json) =>
         json.GetProperty("warnings").EnumerateArray().Select(w => w.GetString()!).ToList();
+
+    private string MigrationEntity()
+    {
+        var entity = UniqueEntity();
+        var state = new StateAttributeMetadata
+        {
+            LogicalName = "statecode",
+            DisplayName = TestMetadata.Lbl("Status"),
+            OptionSet = new OptionSetMetadata(new OptionMetadataCollection
+            {
+                new StateOptionMetadata { Value = 0, InvariantName = "Active", DefaultStatus = 1, Label = new Label("Enabled", 1033) },
+                new StateOptionMetadata { Value = 1, InvariantName = "Inactive", DefaultStatus = 2, Label = new Label("Disabled", 1033) }
+            })
+        };
+        var status = new StatusAttributeMetadata
+        {
+            LogicalName = "statuscode",
+            DisplayName = TestMetadata.Lbl("Status Reason"),
+            IsValidForCreate = true,
+            OptionSet = new OptionSetMetadata(new OptionMetadataCollection
+            {
+                new StatusOptionMetadata { Value = 1, State = 0, Label = new Label("Open", 1033) },
+                new StatusOptionMetadata { Value = 2, State = 1, Label = new Label("Closed", 1033) },
+                new StatusOptionMetadata { Value = 42, State = 1, Label = new Label("Posted", 1033) }
+            })
+        };
+        var metadata = TestMetadata.Entity(entity, null,
+            TestMetadata.String("name", "Name"),
+            new UniqueIdentifierAttributeMetadata { LogicalName = "activityid", DisplayName = TestMetadata.Lbl("Record ID") },
+            new UniqueIdentifierAttributeMetadata { LogicalName = "trackingid", DisplayName = TestMetadata.Lbl("Tracking ID") },
+            state, status);
+        TestMetadata.Set(metadata, nameof(EntityMetadata.PrimaryIdAttribute), "activityid");
+        _entities[entity] = metadata;
+        return entity;
+    }
+
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task Create_MigrationPreservesGuidsAndUpdatesInactiveRecords(bool csv)
+    {
+        var entity = MigrationEntity();
+        var postedId = Guid.NewGuid();
+        var inactiveId = Guid.NewGuid();
+        var activeId = Guid.NewGuid();
+        var trackingId = Guid.NewGuid();
+        var csvPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.csv");
+        var input = $$"""
+            [
+                {"activityid":"{{postedId}}","name":"Posted","trackingid":"{{trackingId}}","statuscode":"Posted"},
+                {"activityid":"{{inactiveId}}","name":"Inactive","statecode":1},
+                {"activityid":"{{activeId}}","name":"Active","statecode":"Active","statuscode":1}
+            ]
+            """;
+        if (csv)
+        {
+            File.WriteAllText(csvPath, $"""
+                Record ID,Name,Tracking ID,Status,Status Reason
+                {postedId},Posted,{trackingId},Inactive,Posted
+                {inactiveId},Inactive,,1,
+                {activeId},Active,,Active,1
+                """);
+            input = csvPath;
+        }
+        _roleRows.Entities.Add(new Entity("role") { ["name"] = "System Administrator" });
+
+        try
+        {
+            var result = await NewTool().create_records(entity, input, 1, true);
+            Assert.IsFalse(result.IsError == true, result.GetText());
+            Assert.HasCount(3, _capturedCreates);
+            Assert.AreEqual(postedId, _capturedCreates[0].Target.Id);
+            Assert.AreEqual(postedId, _capturedCreates[0].Target.GetAttributeValue<Guid>("activityid"));
+            Assert.AreEqual(trackingId, _capturedCreates[0].Target.GetAttributeValue<Guid>("trackingid"));
+            Assert.IsTrue(_capturedCreates.All(request => !request.Target.Contains("statecode")));
+            Assert.IsFalse(_capturedCreates[0].Target.Contains("statuscode"));
+            Assert.AreEqual(1, _capturedCreates[2].Target.GetAttributeValue<OptionSetValue>("statuscode").Value);
+            CollectionAssert.AreEqual(new[] { postedId, inactiveId }, _capturedUpdates.Select(request => request.Target.Id).ToArray());
+            Assert.IsTrue(_capturedUpdates.All(request => request.Target.GetAttributeValue<OptionSetValue>("statecode").Value == 1));
+            Assert.AreEqual(42, _capturedUpdates[0].Target.GetAttributeValue<OptionSetValue>("statuscode").Value);
+            Assert.AreEqual(2, _capturedUpdates[1].Target.GetAttributeValue<OptionSetValue>("statuscode").Value);
+            Assert.IsTrue(_capturedUpdates.All(request => (string)request.Parameters["BypassBusinessLogicExecution"] == "CustomSync,CustomAsync"));
+
+            var items = Structured(result).GetProperty("items");
+            Assert.AreEqual(postedId, items[0].GetProperty("id").GetGuid());
+            Assert.AreEqual("updated", items[0].GetProperty("stateUpdate").GetProperty("status").GetString());
+            Assert.IsFalse(items[2].TryGetProperty("stateUpdate", out _));
+        }
+        finally
+        {
+            if (csv) File.Delete(csvPath);
+        }
+    }
+
+    [TestMethod]
+    public async Task Create_StateUpdateFailureKeepsCreatedIdAndSkipsFailedCreates()
+    {
+        var entity = MigrationEntity();
+        var createdId = Guid.NewGuid();
+        _onExecuteMultiple = request => new ExecuteMultipleResponse
+        {
+            Results =
+            {
+                ["Responses"] = request.Requests[0] is CreateRequest
+                    ? new ExecuteMultipleResponseItemCollection
+                    {
+                        new() { RequestIndex = 0, Response = new CreateResponse { Results = { ["id"] = createdId } } },
+                        new() { RequestIndex = 1, Fault = new OrganizationServiceFault { Message = "Create rejected" } }
+                    }
+                    : new ExecuteMultipleResponseItemCollection
+                    {
+                        new() { RequestIndex = 0, Fault = new OrganizationServiceFault { Message = "Transition rejected" } }
+                    }
+            }
+        };
+        var result = await NewTool().create_records(entity, """
+            [{"name":"Created","statecode":1,"statuscode":42},
+             {"name":"Rejected","statecode":1},
+             {"name":"Invalid GUID","activityid":"invalid","statecode":1},
+             {"name":"Invalid pair","statecode":0,"statuscode":42}]
+            """, 1);
+
+        var detail = Structured(result);
+        Assert.AreEqual("partial", detail.GetProperty("status").GetString());
+        Assert.AreEqual(1, detail.GetProperty("succeeded").GetInt32());
+        Assert.HasCount(2, _capturedCreates);
+        Assert.AreEqual(createdId, _capturedUpdates.Single().Target.Id);
+        var items = detail.GetProperty("items");
+        Assert.AreEqual("created", items[0].GetProperty("status").GetString());
+        Assert.AreEqual(createdId, items[0].GetProperty("id").GetGuid());
+        Assert.AreEqual("failed", items[0].GetProperty("stateUpdate").GetProperty("status").GetString());
+        Assert.AreEqual("Transition rejected", items[0].GetProperty("stateUpdate").GetProperty("error").GetString());
+        Assert.IsFalse(items[1].TryGetProperty("stateUpdate", out _));
+        StringAssert.Contains(items[2].GetProperty("error").GetString(), "GUID");
+        StringAssert.Contains(items[3].GetProperty("error").GetString(), "belongs to statecode");
+    }
+
+    [TestMethod]
+    [DataRow("inline-json")]
+    [DataRow("json-file")]
+    [DataRow("csv")]
+    public async Task Update_UsesPrimaryKeyAndReportsInvalidRows(string format)
+    {
+        var entity = MigrationEntity();
+        var id = Guid.NewGuid();
+        var input = $$"""
+            [
+                {"activityid":"{{id}}","statecode":"Inactive","statuscode":"Posted"},
+                {"name":"Missing primary key"},
+                {"activityid":"{{id}}","name":"Duplicate"}
+            ]
+            """;
+        var path = format == "inline-json" ? null :
+            Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.{(format == "csv" ? "csv" : "json")}");
+        if (path != null)
+        {
+            File.WriteAllText(path, format == "csv"
+                ? $"Record ID,Name,Status,Status Reason\n{id},,1,Posted\n,Missing primary key,,\n{id},Duplicate,,"
+                : input);
+            input = path;
+        }
+
+        try
+        {
+            using var bundle = new ConnectionBundle("default", _fake.Client, false, null, _fake.Client, _fake.Client, null!, null!, null!);
+            await using var registry = new McpConnectionRegistry(new McpConnectionSnapshot(new Dictionary<string, string>()), new(), false, bundle);
+            var tool = new CliCreateRecordsTool(_fake.Client, bundle.Options, bundle.Context, registry);
+            var result = await tool.InvokeUpdateAsync(entity, input, 1);
+            var detail = Structured(result);
+            Assert.AreEqual(format, detail.GetProperty("inputFormat").GetString());
+            Assert.AreEqual("partial", detail.GetProperty("status").GetString());
+            Assert.IsFalse(detail.TryGetProperty("importSequenceNumber", out _));
+            var items = detail.GetProperty("items");
+            Assert.AreEqual("updated", items[0].GetProperty("status").GetString());
+            StringAssert.Contains(items[1].GetProperty("error").GetString(), "activityid");
+            StringAssert.Contains(items[2].GetProperty("error").GetString(), "Duplicate primary key");
+            Assert.IsEmpty(_capturedCreates);
+            var target = _capturedUpdates.Single().Target;
+            Assert.AreEqual(id, target.Id);
+            Assert.IsFalse(target.Contains("activityid"));
+            Assert.AreEqual(1, target.GetAttributeValue<OptionSetValue>("statecode").Value);
+            Assert.AreEqual(42, target.GetAttributeValue<OptionSetValue>("statuscode").Value);
+        }
+        finally
+        {
+            if (path != null) File.Delete(path);
+        }
+    }
 
     // ──────────────────────────────────────────────
     // main success path

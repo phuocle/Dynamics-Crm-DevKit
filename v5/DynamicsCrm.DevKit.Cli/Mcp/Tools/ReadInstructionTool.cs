@@ -20,7 +20,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // scanning tool descriptions at first use (never hand-maintained).
         private static readonly List<CatalogEntry> CatalogEntries = new()
         {
-            new("docs://data_operations_guide", "data_operations_guide", "Guide for Dataverse data operations (manage_record, execute_fetchxml, search_records)", "instruction", () => Task.FromResult(InstructionResources.DataOperationsGuide())),
+            new("docs://data_operations_guide", "data_operations_guide", "Guide for Dataverse data operations including bulk create and update", "instruction", () => Task.FromResult(InstructionResources.DataOperationsGuide())),
             new("docs://instructions_for_sql", "instructions_for_sql", "Instructions for Dataverse SQL queries", "instruction", () => Task.FromResult(InstructionResources.SqlInstructions())),
             new("docs://instructions_for_manage_ribbon", "instructions_for_manage_ribbon", "Instructions for classic ribbon operations", "instruction", () => Task.FromResult(InstructionResources.ManageRibbonInstructions())),
             new("docs://instructions_for_manage_report", "instructions_for_manage_report", "Instructions for SSRS reports and local RDL datasets", "instruction", () => Task.FromResult(InstructionResources.ManageReportInstructions())),

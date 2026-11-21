@@ -91,11 +91,11 @@ internal static class DryRunTestHelpers
 public class DryRunGatewayContractTests
 {
     [TestMethod]
-    public void MutatingToolInventory_IsExactlyTheReviewedTwentyTwo()
+    public void MutatingToolInventory_MatchesExpectedToolNames()
     {
         var expected = new HashSet<string>(StringComparer.Ordinal)
         {
-            "create_records", "manage_record", "publish_customizations",
+            "create_records", "update_records", "manage_record", "publish_customizations",
             "manage_deleted_records", "manage_role", "manage_environment_variable",
             "manage_chart", "manage_view", "manage_form", "manage_webresource",
             "manage_choice", "manage_table", "manage_relationship", "manage_app",

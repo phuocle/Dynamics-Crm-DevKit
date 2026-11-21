@@ -1,13 +1,22 @@
 
 # Data Operations Guide
 
-Reference for `manage_record`, `execute_fetchxml`, and `search_records`.
+Reference for `create_records`, `update_records`, `manage_record`, `execute_fetchxml`, and `search_records`.
 
 ## create_records -- Batch creation
 - Input is an inline JSON array, a `.json` file, or a `.csv` file. A batch can partially succeed; successful records are not rolled back.
+- Supply the primary key as a GUID string to preserve the source ID. Other Uniqueidentifier fields also accept GUID strings.
+- Supply `statecode` and `statuscode` as integers or labels from the destination table. For example, `{"accountid":"b2235a9f-2f65-49b2-9f84-548344f98c6a","name":"Contoso","statecode":"Inactive"}` creates an inactive account with its source GUID. The tool uses the state's default status reason when only a state is supplied. If only a non-active status reason is supplied, the tool uses its associated state.
+- Records that require a state or status change are updated after creation with the same `max_parallelism` and `bypass_custom_logic`. Check `items[].stateUpdate.status` and `items[].stateUpdate.error` for the outcome. The item's `id` and `created` status describe the Create step. If the follow-up fails, the batch is `partial` and the record ID can be passed to `update_records`.
 - Activity party fields use arrays of `{ "id": "<guid>", "type": "<entity>" }`; a single object is wrapped automatically. Do not supply `participationtypemask`.
 - The tool stamps records with the batch `importsequencenumber`, calculated as `max(999990, maxInTable+1)` and returned as `importSequenceNumber`. A value explicitly provided for a record wins without duplicate checking. Use the returned value to find the batch.
 - `bypass_custom_logic=true` bypasses custom sync and async plugins/workflows (`CustomSync,CustomAsync`), requires System Administrator, and is false by default.
+
+## update_records -- Batch update
+
+- Updates up to 5000 existing records per call through ExecuteMultiple. It accepts the same input formats and concurrency and bypass settings as `create_records`.
+- Include the table's primary key (such as `accountid`) as a GUID string and the fields to change. A repeated primary key is reported as a per-item error after its first valid occurrence.
+- Supply an explicit `statecode` to change state. When changing only `statuscode`, use a reason valid for the record's current state. Dataverse applies the target table's transition rules.
 
 ## manage_record -- Field Type Formats
 

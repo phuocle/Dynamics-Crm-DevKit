@@ -18,7 +18,7 @@ DynamicsCrm.DevKit CLI is the `devkit` .NET global tool for Dataverse deployment
 - One command-line surface for server deployments, web resources, reports, generated code, modelbuilder output, and solution packaging.
 - Modern Spectre.Console CLI with `devkit <command> --option value` syntax and compatibility with legacy `/option:value` arguments.
 - Connection support through `--conn`, explicit auth options, project `.env`, PAC profiles, client secrets, SDK login, and MCP `DEVKIT_*` environment variables.
-- MCP server built into the CLI, exposing 41 tools for Dataverse and server discovery.
+- MCP server built into the CLI, exposing 42 tools for Dataverse and server discovery.
 - Single-file web resource deployment using `--file` and `--webresource`, including TypeScript release output deployment when project build scripts are present.
 
 ## 📦 Install
