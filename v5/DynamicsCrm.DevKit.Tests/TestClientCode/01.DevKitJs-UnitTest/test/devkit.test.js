@@ -1075,11 +1075,12 @@ describe('devKit', () => {
         var columnNotExist = row0.Columns.get("col_not_exisit");
         expect(columnNotExist).toBeDefined();
         expect(form.Grid.Contacts.TotalRecordCount).toBe(2);
-        expect(form.Grid.Contacts.SelectedRows.getLength()).toBe(1);
-        expect(form.Grid.Contacts.SelectedRows.get(0)).toBeDefined();
-        form.Grid.Contacts.SelectedRows.forEach(function (row, index) {
-            expect(row).toBeDefined();
-        });
+        const selected = form.Grid.Contacts.SelectedRows;
+        expect(selected.getLength()).toBe(1);
+        expect(selected.get(0).EntityId).toBe("ROW1-GUID");
+        const selectedIds = [];
+        selected.forEach(row => selectedIds.push(row.EntityId));
+        expect(selectedIds).toEqual(["ROW1-GUID"]);
         // Test subgrid control properties (lines 514-520)
         expect(form.Grid.Contacts.ControlType).toBe("subgrid");
         expect(form.Grid.Contacts.ControlName).toBe("Contacts");

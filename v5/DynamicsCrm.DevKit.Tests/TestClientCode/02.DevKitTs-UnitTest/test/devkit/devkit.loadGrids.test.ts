@@ -71,7 +71,7 @@ describe('loadGrids Tests', () => {
                     }
                 }
             },
-            getData: function () { return this; }
+            getData: function () { return this.data; }
         });
 
         const rows = [
@@ -413,19 +413,19 @@ describe('loadGrids Tests', () => {
             expect(form.Grid.Contacts.SelectedRows.getLength()).toBe(1);
         });
 
-        test('SelectedRows.get should return selected row', () => {
+        test('SelectedRows.get should return the selected row entity ID', () => {
             const form = getGridForm();
             const row = form.Grid.Contacts.SelectedRows.get(0);
-            expect(row).toBeDefined();
+            expect(row.EntityId).toBe('contact-1');
         });
 
-        test('SelectedRows.forEach should iterate selected rows', () => {
+        test('SelectedRows.forEach should return the selected row entity IDs', () => {
             const form = getGridForm();
-            let count = 0;
-            form.Grid.Contacts.SelectedRows.forEach((row: any, index: number) => {
-                count++;
+            const selectedIds: string[] = [];
+            form.Grid.Contacts.SelectedRows.forEach((row: any) => {
+                selectedIds.push(row.EntityId);
             });
-            expect(count).toBe(1);
+            expect(selectedIds).toEqual(['contact-1']);
         });
     });
 

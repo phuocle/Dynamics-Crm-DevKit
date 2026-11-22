@@ -346,7 +346,7 @@ function loadGrids(formContext: any, gridItems: string[]): any {
             const gridInstance = typeof formContext?.getControl === 'function' ? formContext.getControl(grid)?.getGrid() : null;
             return createCollectionObject(
                 () => gridInstance?.getSelectedRows(),
-                (row: any) => loadGridRow(row?.getData())
+                loadGridRow
             );
         });
         getter(obj[grid], 'TotalRecordCount', () => gridControl?.getGrid()?.getTotalRecordCount());

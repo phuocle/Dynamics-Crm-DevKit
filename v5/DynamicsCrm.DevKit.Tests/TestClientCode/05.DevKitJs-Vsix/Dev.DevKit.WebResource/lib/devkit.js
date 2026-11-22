@@ -523,7 +523,7 @@ const devKit = (function () {
                 const gridInstance = formContext?.getControl(grid)?.getGrid();
                 return createCollectionObject(
                     () => gridInstance?.getSelectedRows(),
-                    row => loadGridRow(row?.getData())
+                    loadGridRow
                 );
             });
             getter(obj[grid], 'TotalRecordCount', () => gridControl?.getGrid()?.getTotalRecordCount());
