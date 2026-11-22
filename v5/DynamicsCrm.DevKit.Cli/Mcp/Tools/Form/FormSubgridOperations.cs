@@ -94,12 +94,55 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 
             if (op.TryGetProperty("rows_per_page", out var rowsProp) && rowsProp.ValueKind == JsonValueKind.Number)
                 SetParameter(parameters, "RecordsPerPage", rowsProp.GetInt32().ToString());
-            if (op.TryGetProperty("enable_view_picker", out var viewPickerProp))
-                SetParameter(parameters, "EnableViewPicker", BoolToXml(viewPickerProp.ValueKind == JsonValueKind.True));
+            UpdateViewParameters(parameters, op);
             if (op.TryGetProperty("enable_quick_find", out var quickFindProp))
                 SetParameter(parameters, "EnableQuickFind", BoolToXml(quickFindProp.ValueKind == JsonValueKind.True));
 
             return $"update_subgrid: \"{controlId}\" updated";
+        }
+
+        private static void UpdateViewParameters(XElement parameters, JsonElement op)
+        {
+            var hasViewId = op.TryGetProperty("view_id", out var viewIdProp) && viewIdProp.ValueKind != JsonValueKind.Null;
+            if (hasViewId)
+            {
+                if (viewIdProp.ValueKind != JsonValueKind.String)
+                    throw new InvalidOperationException("view_id must be a GUID string.");
+                SetParameter(parameters, "ViewId", NormalizeViewId(viewIdProp.GetString()).ToUpperInvariant());
+            }
+
+            var hasViewPicker = op.TryGetProperty("enable_view_picker", out var viewPickerProp);
+            if (hasViewPicker)
+                SetParameter(parameters, "EnableViewPicker", BoolToXml(viewPickerProp.ValueKind == JsonValueKind.True));
+
+            if (op.TryGetProperty("view_ids", out var viewIdsProp) && viewIdsProp.ValueKind != JsonValueKind.Null)
+            {
+                SetParameter(parameters, "ViewIds", NormalizeViewIds(viewIdsProp));
+                return;
+            }
+
+            var pickerValue = parameters.Element("EnableViewPicker")?.Value.Trim();
+            if ((!hasViewId && !hasViewPicker) || pickerValue == "1" ||
+                string.Equals(pickerValue, "true", StringComparison.OrdinalIgnoreCase))
+                return;
+
+            var effectiveViewId = parameters.Element("ViewId")?.Value;
+            SetParameter(parameters, "ViewIds", string.IsNullOrWhiteSpace(effectiveViewId)
+                ? ""
+                : NormalizeViewId(effectiveViewId).ToUpperInvariant());
+        }
+
+        private static string NormalizeViewIds(JsonElement viewIds)
+        {
+            string[] ids = viewIds.ValueKind switch
+            {
+                JsonValueKind.Array => viewIds.EnumerateArray().Select(id => id.ValueKind == JsonValueKind.String
+                    ? id.GetString()
+                    : throw new InvalidOperationException("view_ids must contain GUID strings.")).ToArray(),
+                JsonValueKind.String => string.IsNullOrWhiteSpace(viewIds.GetString()) ? [] : viewIds.GetString().Split(','),
+                _ => throw new InvalidOperationException("view_ids must be an array of GUID strings or a comma-separated string.")
+            };
+            return string.Join(",", ids.Select(id => NormalizeViewId(id, "view_ids").ToUpperInvariant()));
         }
 
         public static string ExecuteRemoveSubgrid(XDocument formDoc, JsonElement op)
@@ -165,11 +208,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             return view.Id.ToString();
         }
 
-        private static string NormalizeViewId(string viewId)
+        private static string NormalizeViewId(string viewId, string parameterName = "view_id")
         {
             var trimmed = viewId?.Trim().Trim('{', '}');
             if (!Guid.TryParse(trimmed, out var parsed))
-                throw new InvalidOperationException($"view_id '{viewId}' is not a valid GUID.");
+                throw new InvalidOperationException($"{parameterName} '{viewId}' is not a valid GUID.");
 
             return $"{{{parsed}}}";
         }

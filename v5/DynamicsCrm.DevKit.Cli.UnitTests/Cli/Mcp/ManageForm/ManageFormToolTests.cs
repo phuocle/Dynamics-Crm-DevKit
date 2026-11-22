@@ -4,6 +4,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Xml.Linq;
@@ -48,6 +49,11 @@ public class ManageFormToolTests
   </tabs>
 </form>
 """;
+
+    private const string SubgridDefaultViewId = "{15B9A1E7-9C8C-475D-A775-2318D7A5E275}";
+    private const string SubgridExistingViewIds = SubgridDefaultViewId + ",{08D933F4-87E0-4B41-80A2-0F64088FE958}";
+    private const string SubgridUpdatedViewId = "{9E3CDCA1-812A-4A10-9767-DF0477649F24}";
+    private const string SubgridUpdateViewIdJson = """ "view_id": "9e3cdca1-812a-4a10-9767-df0477649f24" """;
 
     // ──────────────────────────────────────────────
     // MapFormType
@@ -265,6 +271,38 @@ public class ManageFormToolTests
 
         StringAssert.Contains(formXml, "<RecordsPerPage>25</RecordsPerPage>");
         StringAssert.Contains(formXml, "<EnableQuickFind>true</EnableQuickFind>");
+    }
+
+    [TestMethod]
+    [DataRow("false", SubgridUpdateViewIdJson, SubgridUpdatedViewId, SubgridUpdatedViewId)]
+    [DataRow("0", SubgridUpdateViewIdJson, SubgridUpdatedViewId, SubgridUpdatedViewId)]
+    [DataRow("true", SubgridUpdateViewIdJson, SubgridUpdatedViewId, SubgridExistingViewIds)]
+    [DataRow("1", SubgridUpdateViewIdJson, SubgridUpdatedViewId, SubgridExistingViewIds)]
+    [DataRow("true", """ "enable_view_picker": false """, SubgridDefaultViewId, SubgridDefaultViewId)]
+    [DataRow("true", SubgridUpdateViewIdJson + """, "enable_view_picker": false""", SubgridUpdatedViewId, SubgridUpdatedViewId)]
+    [DataRow("false", """ "view_ids": ["9e3cdca1-812a-4a10-9767-df0477649f24", "{15b9a1e7-9c8c-475d-a775-2318d7a5e275}"] """,
+        SubgridDefaultViewId, SubgridUpdatedViewId + "," + SubgridDefaultViewId)]
+    [DataRow("true", """ "view_ids": "9e3cdca1-812a-4a10-9767-df0477649f24, {15b9a1e7-9c8c-475d-a775-2318d7a5e275}" """,
+        SubgridDefaultViewId, SubgridUpdatedViewId + "," + SubgridDefaultViewId)]
+    [DataRow("true", """ "view_ids": [] """, SubgridDefaultViewId, "")]
+    public void FormXmlOperationsRunner_ManageSubgridUpdate_UpdatesViewSelection(
+        string pickerValue, string changes, string expectedViewId, string expectedViewIds)
+    {
+        var form = XDocument.Parse(SubgridFormXml);
+        var parameters = new XElement("parameters",
+            new XElement("ViewId", SubgridDefaultViewId),
+            new XElement("ViewIds", SubgridExistingViewIds),
+            new XElement("EnableViewPicker", pickerValue));
+        form.Descendants("rows").Single().Add(new XElement("row", new XElement("cell",
+            new XElement("control", new XAttribute("id", "lines_grid"), parameters))));
+
+        var updatedXml = RunFormXmlOperations(form.ToString(), $$"""
+        [{ "action": "manage_subgrid", "manage_action": "update", "control_id": "lines_grid", {{changes}} }]
+        """);
+
+        var updatedParameters = XDocument.Parse(updatedXml).Descendants("parameters").Single();
+        Assert.AreEqual(expectedViewId, updatedParameters.Element("ViewId")?.Value);
+        Assert.AreEqual(expectedViewIds, updatedParameters.Element("ViewIds")?.Value);
     }
 
     [TestMethod]

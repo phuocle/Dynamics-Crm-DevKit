@@ -257,10 +257,16 @@ Optional: `view_id` (auto-resolves the default active public view), `rows_per_pa
   "action": "manage_subgrid",
   "manage_action": "update",
   "control_id": "v4_invoice_invoiceline",
+  "view_id": "9e3cdca1-812a-4a10-9767-df0477649f24",
+  "enable_view_picker": false,
   "rows_per_page": 25,
   "enable_quick_find": true
 }
 ```
+
+Pass `view_id` to change the default view. Update writes it to `ViewId` as an uppercase GUID in braces.
+Pass `view_ids` as a JSON array of GUID strings or a comma-separated string to replace `ViewIds` explicitly.
+When you disable the view picker or change the default view while the picker is disabled, omitting `view_ids` sets `ViewIds` to the effective default view.
 
 ### Remove Subgrid
 ```json
