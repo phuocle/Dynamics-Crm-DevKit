@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -26,6 +25,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.ManageRecordFile;
 /// invalid-URL exception handling.
 /// </summary>
 [TestClass]
+[DoNotParallelize]
 public sealed class ManageRecordFileErrorPathCoverageTests
 {
     private const string EntityName = "filerecordtarget";
@@ -98,7 +98,7 @@ public sealed class ManageRecordFileErrorPathCoverageTests
         attribute is FileAttributeMetadata ? AttributeTypeCode.Virtual : AttributeTypeCode.Virtual;
 
     private ManageRecordFileTool NewDryRunTool() =>
-        new(_fake.Client, new McpDryRunOptions { DryRun = true }, DryRunTestHelpers.NormalContext());
+        new(_fake.Client, new McpDryRunOptions { DryRun = true }, DryRunTestHelpers.BlockedContext());
 
     private ManageRecordFileTool NewTool() =>
         new(_fake.Client, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
@@ -214,38 +214,42 @@ public sealed class ManageRecordFileErrorPathCoverageTests
     }
 
     [TestMethod]
-    public async Task Download_FullSizeWithImage_DryRun_PreviewsDownload()
+    [DataRow(FileColumn, false, "server-file.png")]
+    [DataRow(ImageColumn, false, "entityimage.png")]
+    [DataRow(ImageColumn, true, "server-file.png")]
+    public async Task Download_DryRun_SavesFileLocally(string columnName, bool fullSize, string expectedFileName)
     {
         SeedRecord();
-        _blockData = Encoding.ASCII.GetBytes("\x89PNG-mock-image-bytes");
-        _record[ImageColumn] = _blockData;
+        _blockData = new byte[] { 0x89, 0x50, 0x4E, 0x47 };
+        if (columnName == FileColumn)
+            _record[columnName] = Guid.NewGuid();
+        else
+            _record[columnName] = _blockData;
 
-        var result = await NewDryRunTool().manage_record_file(null!, action: "download",
-            entity_name: EntityName, column_name: ImageColumn, record_id: _record.Id.ToString(),
-            full_size: true);
+        var previousDirectory = Directory.GetCurrentDirectory();
+        var workspace = Directory.CreateTempSubdirectory("devkit-record-download-");
+        try
+        {
+            Directory.SetCurrentDirectory(workspace.FullName);
+            var result = await NewDryRunTool().manage_record_file(null!, action: "download",
+                entity_name: EntityName, column_name: columnName, record_id: _record.Id.ToString(),
+                full_size: fullSize);
 
-        Assert.IsFalse(result.IsError == true, result.GetText());
-        StringAssert.Contains(result.GetText(), "Would download");
-        var json = JsonDocument.Parse(result.StructuredContent!.Value.GetRawText()).RootElement;
-        Assert.AreEqual("image", json.GetProperty("columnType").GetString());
-        Assert.AreEqual("not_executed", json.GetProperty("status").GetString());
-        Assert.IsTrue(json.GetProperty("fullSize").GetBoolean());
-    }
-
-    [TestMethod]
-    public async Task Download_Thumbnail_DryRun_PreviewsDownload()
-    {
-        SeedRecord();
-        _record[ImageColumn] = new byte[] { 0x89, 0x50, 0x4E, 0x47 };
-
-        var result = await NewDryRunTool().manage_record_file(null!, action: "download",
-            entity_name: EntityName, column_name: ImageColumn, record_id: _record.Id.ToString(),
-            full_size: false);
-
-        Assert.IsFalse(result.IsError == true, result.GetText());
-        StringAssert.Contains(result.GetText(), "Would download");
-        var json = JsonDocument.Parse(result.StructuredContent!.Value.GetRawText()).RootElement;
-        Assert.AreEqual("entityimage.png", json.GetProperty("fileName").GetString());
+            Assert.IsFalse(result.IsError == true, result.GetText());
+            var json = result.StructuredContent!.Value;
+            Assert.AreEqual("downloaded", json.GetProperty("status").GetString());
+            Assert.AreEqual(expectedFileName, json.GetProperty("fileName").GetString());
+            if (columnName == ImageColumn)
+                Assert.AreEqual(fullSize, json.GetProperty("fullSize").GetBoolean());
+            var savedPath = json.GetProperty("savedPath").GetString()!;
+            StringAssert.StartsWith(savedPath, Path.Combine(workspace.FullName, ".devkit", "manage_record_file", EntityName));
+            CollectionAssert.AreEqual(_blockData, File.ReadAllBytes(savedPath));
+        }
+        finally
+        {
+            Directory.SetCurrentDirectory(previousDirectory);
+            workspace.Delete(recursive: true);
+        }
     }
 
     // ── delete ──────────────────────────────────────────────────────────────
