@@ -4361,5 +4361,116 @@ describe('devKit', () => {
         form.Dialog.Close();
         expect(closed).toBe(true);
     });
+
+    test('OptionSet.FileOption is an alias of OptionSet.OpenFileOption', () => {
+        expect(OptionSet.FileOption).toBe(OptionSet.OpenFileOption);
+        expect(OptionSet.FileOption.Open).toBe(1);
+        expect(OptionSet.FileOption.Save).toBe(2);
+    });
+
+    test('field.LiveValue reads the control value while typing', () => {
+        const attribute = { getValue: () => 'committed' };
+        const control = { getValue: () => 'typing', getAttribute: () => attribute };
+        const field = {};
+        devKit.LoadField({}, field, attribute, control);
+        expect(field.LiveValue).toBe('typing');
+        expect(field.Value).toBe('committed');
+    });
+
+    test.each([
+        ['there is no control', null],
+        ['the control has no getValue method', { getControlType: () => 'iframe' }]
+    ])('field.LiveValue is undefined when %s', (_label, control) => {
+        const field = {};
+        devKit.LoadField({}, field, { getValue: () => 1 }, control);
+        expect(field.LiveValue).toBeUndefined();
+        expect(field.Value).toBe(1);
+    });
+
+    test.each(['Next', 'previous'])('ExecutionContext preserves stage change direction %s', direction => {
+        const stage = { getId: () => 'stage-1' };
+        const context = devKit.LoadExecutionContext({
+            getEventArgs: () => ({ getDirection: () => direction, getStage: () => stage })
+        });
+        expect(context.Direction).toBe(direction);
+        expect(context.Stage).toBe(stage);
+        expect(context.TagValue).toBeUndefined();
+    });
+
+    test('ExecutionContext reads the selected stage without a direction', () => {
+        const stage = { getId: () => 'stage-1' };
+        const context = devKit.LoadExecutionContext({ getEventArgs: () => ({ getStage: () => stage }) });
+        expect(context.Stage).toBe(stage);
+        expect(context.Direction).toBeUndefined();
+    });
+
+    test('ExecutionContext reads the lookup tag and its field name', () => {
+        const tag = { id: 'tag-1', name: 'Tag', entityType: 'account', fieldName: 'parentaccountid' };
+        const context = devKit.LoadExecutionContext({ getEventArgs: () => ({ getTagValue: () => tag }) });
+        expect(context.TagValue).toBe(tag);
+        expect(context.Direction).toBeUndefined();
+        expect(context.Stage).toBeUndefined();
+    });
+
+    test.each([
+        ['OnSave', { getEventArgs: () => ({ getSaveMode: () => 1 }) }],
+        ['missing event args', { getEventArgs: () => undefined }],
+        ['a plain form context', {}],
+        ['a missing execution context', null]
+    ])('ExecutionContext stage and tag getters are undefined for %s', (_label, executionContext) => {
+        const context = devKit.LoadExecutionContext(executionContext);
+        expect(context.Direction).toBeUndefined();
+        expect(context.Stage).toBeUndefined();
+        expect(context.TagValue).toBeUndefined();
+    });
+
+    test('Utility.UserSettings.GetSecurityRolePrivilegesInfo resolves the promise', async () => {
+        global.Xrm = {
+            Utility: {
+                getGlobalContext: () => ({
+                    userSettings: { getSecurityRolePrivilegesInfo: () => Promise.resolve({ 'priv-1': { privilegeName: 'prvReadAccount' } }) }
+                })
+            }
+        };
+        const utility = devKit.LoadUtility('wr');
+        const privileges = await utility.UserSettings.GetSecurityRolePrivilegesInfo();
+        expect(privileges['priv-1'].privilegeName).toBe('prvReadAccount');
+    });
+
+    test('Utility.UserSettings.GetSecurityRolePrivilegesInfo supports callbacks', async () => {
+        global.Xrm = {
+            Utility: {
+                getGlobalContext: () => ({
+                    userSettings: { getSecurityRolePrivilegesInfo: () => Promise.resolve({ 'priv-2': { privilegeName: 'prvWriteAccount' } }) }
+                })
+            }
+        };
+        const utility = devKit.LoadUtility('wr');
+        let successArg = null;
+        utility.UserSettings.GetSecurityRolePrivilegesInfo(result => { successArg = result; }, null);
+        await Promise.resolve();
+        expect(successArg['priv-2'].privilegeName).toBe('prvWriteAccount');
+    });
+
+    test.each([
+        ['the API is missing', { userSettings: {} }],
+        ['user settings are missing', {}]
+    ])('Utility.UserSettings.GetSecurityRolePrivilegesInfo handles missing support when %s', async (_label, globalContext) => {
+        global.Xrm = { Utility: { getGlobalContext: () => globalContext } };
+        const { UserSettings: userSettings } = devKit.LoadUtility('wr');
+        const result = userSettings.GetSecurityRolePrivilegesInfo();
+        await expect(result).rejects.toThrow('getSecurityRolePrivilegesInfo is not available in this client');
+
+        let successCalled = false;
+        const onSuccess = () => { successCalled = true; };
+        let failure;
+        expect(userSettings.GetSecurityRolePrivilegesInfo(onSuccess, error => { failure = error; })).toBeUndefined();
+        expect(failure).toBeUndefined();
+        await Promise.resolve();
+        expect(failure).toEqual(new Error('getSecurityRolePrivilegesInfo is not available in this client'));
+        expect(userSettings.GetSecurityRolePrivilegesInfo(onSuccess)).toBeUndefined();
+        await Promise.resolve();
+        expect(successCalled).toBe(false);
+    });
 });
 

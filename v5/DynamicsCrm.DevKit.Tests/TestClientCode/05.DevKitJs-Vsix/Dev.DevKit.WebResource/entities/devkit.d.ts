@@ -383,7 +383,7 @@ declare namespace DevKit {
             AllowCreateNew(callback: (executionContext: any) => boolean): void;
             /**
              * Returns the integer value of the business process flow category
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formContext-data-process/stage/getCategory
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getcategory
              */
             readonly Category: OptionSet.ProcessCategory;
             /**
@@ -611,6 +611,11 @@ declare namespace DevKit {
              */
             interface IControlText extends IControl {
                 /**
+                 * Gets the text currently being entered, or undefined when the control cannot supply it.
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvalue
+                 */
+                readonly LiveValue: string | undefined;
+                /**
                  * Returns the maximum length of the string attribute
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmaxlength
                  */
@@ -626,6 +631,11 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
              */
             interface IControlNumber extends IControl {
+                /**
+                 * Gets the text currently being entered, or undefined when the control cannot supply it.
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvalue
+                 */
+                readonly LiveValue: string | undefined;
                 /**
                  * Returns the maximum allowed value
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmax
@@ -1050,6 +1060,11 @@ declare namespace DevKit {
          */
         interface IControlText extends IControl {
             /**
+             * Gets the text currently being entered, or undefined when the control cannot supply it.
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvalue
+             */
+            readonly LiveValue: string | undefined;
+            /**
              * Returns a number indicating the maximum length of a string or memo attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmaxlength
              */
@@ -1066,6 +1081,11 @@ declare namespace DevKit {
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface IControlNumber extends IControl {
+            /**
+             * Gets the text currently being entered, or undefined when the control cannot supply it.
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvalue
+             */
+            readonly LiveValue: string | undefined;
             /**
              * Returns a number indicating the maximum allowed value for an attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmax
@@ -2992,6 +3012,11 @@ declare namespace DevKit {
          */
         readonly Depth: number;
         /**
+         * Returns the native stage change direction, preserving its casing, or undefined when unavailable.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/events/onstagechange
+         */
+        readonly Direction: "Next" | "Previous" | "next" | "previous" | undefined;
+        /**
          * Returns an object with methods to manage the events.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/geteventargs
          */
@@ -3026,6 +3051,16 @@ declare namespace DevKit {
         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsaveerrorinfo
         */
         readonly SaveErrorInfo: string;
+        /**
+        * Returns the native stage from the event arguments, or undefined when unavailable.
+        * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process#stage-methods
+        */
+        readonly Stage: any;
+        /**
+        * Returns the clicked lookup tag and the originating column name, or undefined when unavailable.
+        * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/events/onlookuptagclick
+        */
+        readonly TagValue: (EntityReference & { name: string; fieldName: string }) | undefined;
     }
     /**
      * Provides event arguments for execution context events
@@ -3569,7 +3604,7 @@ declare namespace DevKit {
         /**
          * [Deprecated] Returns the ID of the base currency for the current organization
          * @deprecated use {@link BaseCurrency}
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrencyid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly BaseCurrencyId: Guid;
         /**
@@ -3579,7 +3614,7 @@ declare namespace DevKit {
         readonly BaseCurrency: EntityReference;
         /**
          * Returns the default country/region code for phone numbers for the current organization
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#defaultcountrycode
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly DefaultCountryCode: string;
         /**
@@ -3589,37 +3624,37 @@ declare namespace DevKit {
         readonly FullNameConventionCode: OptionSet.FullNameConventionCode;
         /**
          * Indicates whether the auto-save option is enabled for the current organization
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#isautosaveenabled
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly IsAutoSaveEnabled: boolean;
         /**
          * Indicates whether the current organization is a trial organization
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#istrialorganization
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly IsTrialOrganization: boolean;
         /**
          * Returns the preferred language ID for the current organization
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#languageid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly LanguageId: number;
         /**
          * Returns the expiry date for the current organization if it is a trial organization
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#organizationexpirydate
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly OrganizationExpiryDate: Date;
         /**
          * Returns the ID of the current organization
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#organizationid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly OrganizationId: Guid;
         /**
          * Returns the unique name of the current organization
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#uniquename
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly UniqueName: string;
         /**
          * Indicates whether the Skype protocol is used for the current organization
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#useskypeprotocol
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly UseSkypeProtocol: boolean;
     }
@@ -3719,27 +3754,27 @@ declare namespace DevKit {
         readonly DateFormattingInfo: DateFormattingInfo;
         /**
          * Returns the ID of the default dashboard for the current user
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#defaultdashboardid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly DefaultDashboardId: Guid;
         /**
          * Indicates whether guided help is enabled for the current user
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isguidedhelpenabled
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly IsGuidedHelpEnabled: boolean;
         /**
          * Indicates whether high contrast is enabled for the current user
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#ishighcontrastenabled
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly IsHighContrastEnabled: boolean;
         /**
          * Indicates whether the language for the current user is a right-to-left (RTL) language
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isrtl
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly IsRTL: boolean;
         /**
          * Returns the language ID for the current user
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#languageid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly LanguageId: number;
         /**
@@ -3749,13 +3784,13 @@ declare namespace DevKit {
         readonly Roles: Collections<EntityReference>;
         /**
          * Returns an array of strings that represent the GUID values of each of the security role privilege that the user is associated with or any teams that the user is associated with
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroleprivileges
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly SecurityRolePrivileges: Array<Guid>;
         /**
          * [Deprecated] Returns an array of strings that represent the GUID values of each of the security role privilege that the user is associated with or any teams that the user is associated with
          * @deprecated use {@link SecurityRolePrivileges}
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroles
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly SecurityRoles: Array<Guid>;
         /**
@@ -3766,17 +3801,17 @@ declare namespace DevKit {
         /**
          * [Deprecated] Returns the transaction currency ID for the current user.
          * @deprecated use {@link TransactionCurrency}
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrencyid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly TransactionCurrencyId: Guid;
         /**
          * Returns the GUID of the SystemUser.Id value for the current user
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#userid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly UserId: Guid;
         /**
          * Returns the name of the current user
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#username
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly UserName: string;
         /**
@@ -3900,7 +3935,7 @@ declare namespace DevKit {
         /**
          * Removes an event handler from the PostSave Event event.
          * @param callback The function to be removed from the PostSave event.
-         * https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/removeonpostsave
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/removeonpostsave
          */
         RemoveOnPostSave(callback: (executionContext: any) => void): void;
         /**
@@ -4497,7 +4532,7 @@ declare namespace DevKit {
     interface ISidePanes {
         /**
          * Get/Set the display state of the side panes: 0=Collapsed, 1=Expanded
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes#state
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
          */
         DisplayState: OptionSet.SidePaneState;
         /**
@@ -5008,7 +5043,7 @@ declare namespace OptionSet {
     }
     /**
      * Display state of the side pane
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes#state
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
      */
     enum SidePaneState {
         /** Side pane is fully expanded and visible */
@@ -5043,16 +5078,92 @@ declare namespace OptionSet {
      */
     interface IDialogFormBase<TDialog> {
         Dialog: TDialog;
-        Utility: Utility;
-        Close(): void;
-    }
-    /**
-     * Class for devKit.LoadFormDialog constructor
-     */
-    class LoadFormDialog<TDialog> implements IDialogFormBase<TDialog> {
-        constructor(executionContext: any, fields: Array<string>, defaultWebResourceName?: string);
-        Dialog: TDialog;
-        Utility: Utility;
+        Utility: DevKit.Utility;
         Close(): void;
     }
 }
+
+// @ts-ignore The browser runtime also declares this const when devkit.js is included in the project.
+declare const devKit: {
+    /**
+     * Builds a form wrapper object from a formContext.
+     */
+    LoadForm(formContext: any): Omit<DevKit.IForm, "ExecutionContext" | "WebApi" | "Copilot" | "SidePanes" | "Utility">;
+    /**
+     * Builds the BPF process wrapper object for the given BPF field logical names.
+     */
+    LoadProcess(formContext: any, bpf: Array<string>): DevKit.Controls.IProcess & Record<string, any>;
+    /**
+     * Builds field wrappers for the given logical names.
+     * @param type Optional logical-name prefix, e.g. "header_" or "header_process_".
+     */
+    LoadFields(formContext: any, fields: Array<string>, type?: string): any;
+    /**
+     * Builds a single field wrapper for the given attribute/control pair.
+     */
+    LoadField(formContext: any, field: any, attribute?: any, control?: any): void;
+    /**
+     * Builds tab (and section) wrappers for the given tab logical names.
+     */
+    LoadTabs(formContext: any, tabItems: Array<string>): any;
+    /**
+     * Builds navigation item wrappers.
+     */
+    LoadNavigations(formContext: any, navigationItems: Array<string>): Record<string, DevKit.Controls.NavigationItem>;
+    /**
+     * Builds quick form wrappers.
+     */
+    LoadQuickForms(formContext: any, quickItems: Array<string>): any;
+    /**
+     * Builds grid (subgrid) wrappers for the given grid control logical names.
+     */
+    LoadGrids(formContext: any, gridItems: Array<string>): Record<string, DevKit.Controls.Grid>;
+    /**
+     * Builds the Utility wrapper (Xrm.App/Device/Encoding/Navigation/Panel/Utility + global context).
+     */
+    LoadUtility(defaultWebResourceName?: string): DevKit.Utility;
+    /**
+     * Builds the Xrm.WebApi wrapper.
+     */
+    LoadWebApi(): DevKit.WebApi;
+    /**
+     * Builds the Xrm.Copilot wrapper.
+     */
+    LoadCopilot(): DevKit.Copilot;
+    /**
+     * Builds the execution context wrapper.
+     */
+    LoadExecutionContext(executionContext: any): DevKit.ExecutionContext;
+    /**
+     * Builds a dialog wrapper. Generated dialogs call this with `new`.
+     */
+    LoadFormDialog: {
+        <TDialog = Record<string, any>>(executionContext: any, fields?: Array<string>, defaultWebResourceName?: string): OptionSet.IDialogFormBase<TDialog>;
+        new <TDialog = Record<string, any>>(executionContext: any, fields?: Array<string>, defaultWebResourceName?: string): OptionSet.IDialogFormBase<TDialog>;
+    };
+    /**
+     * Builds the Xrm.App.sidePanes wrapper.
+     */
+    LoadSidePanes(): DevKit.ISidePanes;
+    /**
+     * Builds the full form wrapper from a form config.
+     */
+    LoadFormV2(executionContext: any, defaultWebResourceName: string | undefined, formConfig: {
+        body?: Array<string>;
+        tab?: Array<string>;
+        header?: Array<string>;
+        bpf?: Array<string>;
+        quick?: Array<string>;
+        grid?: Array<string>;
+        navigation?: Array<string>;
+        dialog?: Array<string>;
+    }): DevKit.IForm & {
+        Body: Record<string, any>;
+        Header: Record<string, any>;
+        Process: DevKit.Controls.IProcess & Record<string, any>;
+        QuickForm: Record<string, any>;
+        Grid: Record<string, DevKit.Controls.Grid>;
+        Navigation: Record<string, DevKit.Controls.NavigationItem>;
+        Dialog: Record<string, any> & { Close(): void };
+    };
+};

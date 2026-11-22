@@ -47,6 +47,7 @@ function loadField(formContext: any, field: any, attribute: any, control: any): 
     getter(field, 'IsDirty', () => attribute?.getIsDirty());
     getter(field, 'IsPartyList', () => attribute?.getIsPartyList());
     getter(field, 'IsValid', () => attribute?.isValid());
+    getter(field, 'LiveValue', () => control?.getValue?.());
     getter(field, 'Max', () => attribute?.getMax());
     getter(field, 'MaxLength', () => attribute?.getMaxLength());
     getter(field, 'Min', () => attribute?.getMin());
@@ -378,6 +379,7 @@ function loadGrids(formContext: any, gridItems: string[]): any {
 function loadExecutionContext(executionContext: any): DevKit.IExecutionContext {
     const obj: any = {} as DevKit.IExecutionContext;
     getter(obj, 'Depth', () => executionContext?.getDepth());
+    getter(obj, 'Direction', () => executionContext?.getEventArgs?.()?.getDirection?.());
     getter(obj, 'EntityReference', () => executionContext?.getEventArgs()?.getEntityReference());
     getter(obj, 'EventArgs', () => executionContext?.getEventArgs());
     getter(obj, 'EventSource', () => executionContext?.getEventSource());
@@ -385,6 +387,8 @@ function loadExecutionContext(executionContext: any): DevKit.IExecutionContext {
     getter(obj, 'IsSaveSuccess', () => executionContext?.getEventArgs()?.getIsSaveSuccess());
     getter(obj, 'SaveErrorInfo', () => executionContext?.getEventArgs()?.getSaveErrorInfo());
     getter(obj, 'SaveMode', () => executionContext?.getEventArgs()?.getSaveMode());
+    getter(obj, 'Stage', () => executionContext?.getEventArgs?.()?.getStage?.());
+    getter(obj, 'TagValue', () => executionContext?.getEventArgs?.()?.getTagValue?.());
     obj.DisableAsyncTimeout = () => executionContext?.getEventArgs()?.disableAsyncTimeout();
     obj.GetSharedVariable = (key: string) => executionContext?.getSharedVariable(key);
     obj.IsDefaultPrevented = () => executionContext?.getEventArgs()?.isDefaultPrevented();
@@ -856,6 +860,15 @@ function loadUtility(defaultWebResourceName?: string): DevKit.IUtility {
         getter(obj, 'TransactionCurrencyId', () => userSettings?.transactionCurrencyId);
         getter(obj, 'UserId', () => userSettings?.userId);
         getter(obj, 'UserName', () => userSettings?.userName);
+        obj.GetSecurityRolePrivilegesInfo = function (successCallback?: (rolePrivileges: any) => void, errorCallback?: (error: any) => void) {
+            let promise = userSettings?.getSecurityRolePrivilegesInfo?.();
+            if (!promise) {
+                if (successCallback && !errorCallback) return;
+                promise = Promise.reject(new Error('getSecurityRolePrivilegesInfo is not available in this client'));
+            }
+            if (successCallback) promise.then(successCallback, errorCallback);
+            else return promise;
+        };
         return obj;
     });
     getter(obj, 'Version', () => getGlobalContext?.getVersion());
