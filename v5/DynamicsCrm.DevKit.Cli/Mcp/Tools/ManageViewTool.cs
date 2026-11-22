@@ -25,6 +25,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageViewTool : McpToolBase
     {
+        private const int SavedQueryComponentType = 26;
         private static readonly object _schemaLock = new();
 
         private readonly IOrganizationService _orgService;
@@ -54,7 +55,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Manage views (savedquery/userquery). Actions: 'list', 'detail' (read-only) | 'create', 'update', 'rename', 'set_default', 'undo' (mutations).\n\n" +
             "WHEN TO USE:\n" +
             "- List or inspect views of an entity (system savedquery or personal userquery, scoped by is_personal_view; use detail for XML) — always list/detail BEFORE editing\n" +
-            "- Create/update a view from FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type); patch cell attributes, rename, set the default public view. Created views are always Public (querytype=0)\n" +
+            "- Create/update a view from FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type); patch cell attributes, edit the description, rename, set the default public view. Created views are always Public (querytype=0)\n" +
+            "- Add a system view to an unmanaged solution with solution_name. Use manage_app action='add_components' for app membership\n" +
             "- QuickFind views: searchable fields are <condition> in <filter isquickfindfields=\"1\">; grid columns are display only\n" +
             "- Restore a view from a backup pair written by update/rename/undo (undo) — the result's fetchXmlBackupPath + layoutXmlBackupPath point to the pre-change backup; pass both to action='undo' to restore\n\n" +
             "Read docs://instructions_for_views before creating or changing views, especially layout cell attributes and icon/tooltip functions.\n\n" +
@@ -66,20 +68,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",
             [Description("Entity Display/logical name (Display Name resolved first).")] string entity_name = "",
-            [Description("GUID. Required: detail/update/rename/undo.")] string view_id = "",
-            [Description("Name contains. 1 match → auto-select; multiple → returns candidates, use view_id.")] string view_name = "",
+            [Description("View GUID. Required for rename/undo. Use it to select a specific view when names are ambiguous.")] string view_id = "",
+            [Description("Create/rename: the new name. System views on the same table may share a name. List/detail/update/set_default: name filter. Use view_id to select a specific view when names are ambiguous.")] string view_name = "",
             [Description("false = system views (savedquery), true = personal views (userquery) — scopes list and view_name resolution.")] bool is_personal_view = false,
             [Description("create/update: FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type). undo: .fetchxml.xml backup file path (pass layoutxml too).")] string fetchxml = "",
             [Description("undo only: .layoutxml.xml backup file path — required together with fetchxml to restore the pair verbatim.")] string layoutxml = "",
             [Description("update: JSON array serialized as a string, e.g. [{\"cell_name\":\"name\",\"set_attributes\":{\"ishidden\":\"1\"}}]. Each item must carry set_attributes, remove_attributes (JSON array of attribute names to detach, e.g. [{\"cell_name\":\"iconRendererProvider\",\"remove_attributes\":[\"imageproviderwebresource\"]}]), or both. Patch layout cell attributes without changing FetchXML; do not combine with fetchxml. Read docs://instructions_for_views for supported attributes and icon/tooltip contracts.")] string cell_updates_json = "",
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default,
-            [Description("Detail: include raw layoutJson in Antigravity's text result when layoutXml is available. Use when you need the JSON grid settings.")] bool include_layoutjson = false)
+            [Description("Detail: include raw layoutJson in Antigravity's text result when layoutXml is available. Use when you need the JSON grid settings.")] bool include_layoutjson = false,
+            [Description("Optional system view description for create/update. Update can change the description by itself. Omitted or null keeps the current description on update.")] string description = null,
+            [Description("Optional unmanaged solution display or unique name for system view create/update/rename/set_default. Update can add an existing view to the solution by itself.")] string solution_name = null)
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
                 var worker = new ManageViewTool(conn.OrgService, conn.Options, conn.Context, conn.WebApi);
-                return worker.manage_view(server, action, entity_name, view_id, view_name, is_personal_view, fetchxml, layoutxml, cell_updates_json, include_layoutjson);
+                return worker.manage_view(server, action, entity_name, view_id, view_name, is_personal_view, fetchxml, layoutxml, cell_updates_json, include_layoutjson, description, solution_name);
             }, cancellationToken);
         }
 
@@ -87,13 +91,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",
             [Description("Entity Display/logical name (Display Name resolved first).")] string entity_name = "",
-            [Description("GUID. Required: detail/update/rename/undo.")] string view_id = "",
-            [Description("Name contains. 1 match → auto-select; multiple → returns candidates, use view_id.")] string view_name = "",
+            [Description("View GUID. Required for rename/undo. Use it to select a specific view when names are ambiguous.")] string view_id = "",
+            [Description("Create/rename: the new name. System views on the same table may share a name. List/detail/update/set_default: name filter. Use view_id to select a specific view when names are ambiguous.")] string view_name = "",
             [Description("false = system views (savedquery), true = personal views (userquery) — scopes list and view_name resolution.")] bool is_personal_view = false,
             [Description("create/update: FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type). undo: .fetchxml.xml backup file path (pass layoutxml too).")] string fetchxml = "",
             [Description("undo only: .layoutxml.xml backup file path — required together with fetchxml to restore the pair verbatim.")] string layoutxml = "",
             [Description("update: JSON array serialized as a string, e.g. [{\"cell_name\":\"name\",\"set_attributes\":{\"ishidden\":\"1\"}}]. Each item must carry set_attributes, remove_attributes (JSON array of attribute names to detach, e.g. [{\"cell_name\":\"iconRendererProvider\",\"remove_attributes\":[\"imageproviderwebresource\"]}]), or both. Patch layout cell attributes without changing FetchXML; do not combine with fetchxml. Read docs://instructions_for_views for supported attributes and icon/tooltip contracts.")] string cell_updates_json = "",
-            bool include_layoutjson = false)
+            bool include_layoutjson = false,
+            string description = null,
+            string solution_name = null)
         {
             try
             {
@@ -132,6 +138,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 entityName = entityResult.Value.LogicalName;
 
+                if (description != null && normalizedAction is not ("create" or "update"))
+                    return Error("description is supported for system view create and update.");
+
+                string solutionUniqueName = null;
+                if (!string.IsNullOrWhiteSpace(solution_name))
+                {
+                    if (normalizedAction is not ("create" or "update" or "rename" or "set_default"))
+                        return Error("solution_name is supported for system view create, update, rename and set_default.");
+
+                    var solution = DisplayNameFirstResolver.ResolveDataverseRecord(
+                        _orgService, solution_name.Trim(), entityName: "solution", idColumn: "solutionid",
+                        columns: new ColumnSet("solutionid", "friendlyname", "uniquename", "ismanaged"),
+                        displayColumn: "friendlyname", logicalColumn: null, uniqueColumn: "uniquename",
+                        schemaColumn: null, kind: "solution", ambiguousTag: "[AmbiguousSolution]",
+                        notFoundTag: "[NotFoundSolution]", notFoundTip: "Hint: Use get_solution_components to list available solutions.",
+                        retryParameterName: "solution_name");
+                    if (!solution.IsSuccess)
+                        return Error(solution.Error, "Use get_solution_components to find valid solution names.");
+                    if (solution.Value.GetAttributeValue<bool>("ismanaged"))
+                        return Error($"Solution '{solution_name.Trim()}' is managed.", "Pass an unmanaged solution in solution_name.");
+
+                    solutionUniqueName = solution.Value.GetAttributeValue<string>("uniquename");
+                    if (string.IsNullOrWhiteSpace(solutionUniqueName))
+                        return Error($"Solution '{solution_name.Trim()}' has no unique name.", "Pass an unmanaged solution with a unique name.");
+                }
+
                 if (normalizedAction is "update" or "rename" or "undo")
                     _workspaceFolder = await WorkspaceFolderHelper.GetAsync(server);
 
@@ -139,10 +171,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "list" => HandleList(entityName, view_name, is_personal_view, include_layoutjson),
                     "detail" => HandleDetail(entityName, view_id, view_name, is_personal_view, include_layoutjson),
-                    "create" => HandleCreate(entityName, view_name, fetchxml),
-                    "update" => HandleUpdate(entityName, view_id, view_name, is_personal_view, fetchxml, cell_updates_json),
-                    "rename" => HandleRename(entityName, view_id, view_name),
-                    "set_default" => HandleSetDefault(entityName, view_id, view_name),
+                    "create" => HandleCreate(entityName, view_name, fetchxml, description, solutionUniqueName),
+                    "update" => HandleUpdate(entityName, view_id, view_name, is_personal_view, fetchxml, cell_updates_json, description, solutionUniqueName),
+                    "rename" => HandleRename(entityName, view_id, view_name, solutionUniqueName),
+                    "set_default" => HandleSetDefault(entityName, view_id, view_name, solutionUniqueName),
                     "undo" => HandleUndo(entityName, view_id, fetchxml, layoutxml),
                     _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")
                 };
@@ -269,7 +301,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
 
-        private CallToolResult HandleCreate(string entityName, string viewName, string fetchxml)
+        private CallToolResult HandleCreate(string entityName, string viewName, string fetchxml,
+            string description, string solutionUniqueName)
         {
             if (string.IsNullOrWhiteSpace(viewName))
                 return Error("view_name is required when action='create'.",
@@ -288,15 +321,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"Use get_tables(entity_name='{entityName}') to list valid fields. Use a more specific name when matches are ambiguous.", new { errors = fetchNormalization.Errors });
             newFetchXml = fetchNormalization.Xml;
             newFetchXml = EnsureLayoutBuildableFetchXml(newFetchXml, meta);
-
-            var duplicate = FindViewByName(entityName, viewName);
-            if (duplicate != null)
-            {
-                var dupId = duplicate.GetAttributeValue<Guid>("savedqueryid");
-                return Error(
-                    $"A view named '{viewName}' already exists on '{entityName}' (view_id={dupId}).",
-                    "Choose a different name or use action='update' with the existing view_id.");
-            }
 
             var (fetchErrors, fetchWarnings) = ViewXmlHelper.ValidateFetchXml(newFetchXml);
             if (fetchErrors.Count > 0)
@@ -352,8 +376,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ["fetchxml"] = newFetchXml,
                 ["layoutxml"] = newLayoutXml
             };
+            if (description != null)
+                newView["description"] = description;
+
             if (_options.DryRun)
-                return DryRun($"Would CREATE view '{viewName}' on entity '{entityName}' — {layout.ColumnCount} columns auto-generated from FetchXML.", new UpsertViewResult
+                return PreviewMutation($"Would CREATE view '{viewName}' on entity '{entityName}' — {layout.ColumnCount} columns auto-generated from FetchXML.", new UpsertViewResult
                 {
                     Action = "create",
                     Entity = entityName,
@@ -362,9 +389,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Validated = true,
                     Published = false,
                     CreateMode = "metadata",
+                    Description = description,
                     FetchXml = newFetchXml,
                     LayoutXml = newLayoutXml
-                });
+                }, solutionUniqueName);
 
             var newViewId = DataverseMutationExecutor.Create(_context, _orgService, newView);
 
@@ -373,21 +401,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var text = $"Created view '{viewName}' ({newViewId}) on '{entityName}' — Public view, {layout.ColumnCount} columns auto-generated from FetchXML" +
                 ", validated (client + server), published.";
 
-            return Success(text, new UpsertViewResult
+            return CompleteMutation(text, new UpsertViewResult
             {
                 Action = "created", Entity = entityName, ViewId = newViewId.ToString(), ViewName = viewName,
                 Status = "created", Validated = true, Published = published,
-                CreateMode = SolutionComponentCreateMode.None.ToString(),
+                CreateMode = (solutionUniqueName == null ? SolutionComponentCreateMode.None
+                    : SolutionComponentCreateMode.RecordCreateThenAddSolutionComponent).ToString(),
+                Description = description,
                 FetchXml = newFetchXml,
                 LayoutXml = newLayoutXml
-            });
+            }, newViewId, solutionUniqueName);
         }
 
 
         private CallToolResult HandleUpdate(string entityName, string viewId,
             string viewName, bool isPersonalView,
             string fetchxml,
-            string cellUpdatesJson = "")
+            string cellUpdatesJson, string description, string solutionUniqueName)
         {
             if (string.IsNullOrWhiteSpace(viewId) && string.IsNullOrWhiteSpace(viewName))
                 return Error("view_id or view_name is required when action='update'.",
@@ -409,22 +439,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var hasCellUpdates = !string.IsNullOrWhiteSpace(cellUpdatesJson);
+            var hasFetchXml = !string.IsNullOrWhiteSpace(fetchxml);
 
-            if (!hasCellUpdates && string.IsNullOrWhiteSpace(fetchxml))
-                return Error("at least one of fetchxml or cell_updates_json is required when action='update'.",
-                    "LayoutXML is always auto-generated from fetchxml — pass fetchxml to rebuild the grid or cell_updates_json to patch cells.");
+            if (!hasCellUpdates && !hasFetchXml && description == null && solutionUniqueName == null)
+                return Error("Pass at least one of fetchxml, cell_updates_json, description or solution_name when action='update'.",
+                    "Pass fetchxml to rebuild the grid, cell_updates_json to patch cells, description to edit the description, or solution_name to add a system view to a solution.");
 
-            if (hasCellUpdates && !string.IsNullOrWhiteSpace(fetchxml))
+            if (hasCellUpdates && hasFetchXml)
                 return Error("pass either fetchxml (rebuild grid) or cell_updates_json (patch cells) — not both.",
                     "One call = one action. To patch icon/cell attributes, call update with cell_updates_json only; to rebuild the grid, call update with fetchxml only (surviving cells keep their attributes).");
 
-            var newFetchXml = string.IsNullOrWhiteSpace(fetchxml) ? null : ViewXmlHelper.StripXmlDeclaration(fetchxml.Trim());
+            var newFetchXml = hasFetchXml ? ViewXmlHelper.StripXmlDeclaration(fetchxml.Trim()) : null;
 
             var currentView = RetrieveView(updateId);
             if (currentView == null)
                 return Error(
                     $"View not found (view_id={updateId}).",
                     $"Use manage_view action='list' entity_name='{entityName}' to find valid view IDs.");
+
+            var isPersonal = currentView.LogicalName == "userquery";
+            if (isPersonal && (description != null || solutionUniqueName != null))
+                return Error("description and solution_name are only supported for system views (savedquery).");
+
+            if (!hasCellUpdates && !hasFetchXml)
+                return UpdateViewMetadata(entityName, currentView, description, solutionUniqueName);
 
             var currentFetchXml = currentView.GetAttributeValue<string>("fetchxml") ?? "";
             var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
@@ -542,16 +580,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var updatedParts = DetermineUpdatedParts(usedCellPatch, newFetchXml != null, regenerateLayout);
+            if (description != null)
+                updatedParts += " + Description";
 
-            var isPersonal = currentView.LogicalName == "userquery";
             var update = new Entity(currentView.LogicalName, updateId);
             update["layoutxml"] = newLayoutXml;
             if (newFetchXml != null)
                 update["fetchxml"] = newFetchXml;
             if (!isPersonal)
                 update["returnedtypecode"] = returnedTypeCode;
+            if (description != null)
+                update["description"] = description;
             if (_options.DryRun)
-                return DryRun($"Would UPDATE view '{currentViewName}' ({updateId}) on entity '{entityName}'.", new UpsertViewResult
+                return PreviewMutation($"Would UPDATE view '{currentViewName}' ({updateId}) on entity '{entityName}'.", new UpsertViewResult
                 {
                     Action = "update",
                     Entity = entityName,
@@ -560,8 +601,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = "not_executed",
                     Validated = true,
                     UpdatedParts = updatedParts,
+                    Description = description,
                     Published = false
-                });
+                }, solutionUniqueName);
 
             var (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, updateId, currentViewName, currentFetchXml, currentLayoutXml, _workspaceFolder);
             DataverseMutationExecutor.Update(_context, _orgService, update);
@@ -575,14 +617,44 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 (quickFindColumns?.Count > 0 ? $" {quickFindColumns.Count} find columns (see quickFindColumns)." : "") +
                 (cellPatchWarnings?.Count > 0 ? $" {cellPatchWarnings.Count} cell patch warning(s) (see validationWarnings)." : "");
 
-            return Success(text, new UpsertViewResult
+            return CompleteMutation(text, new UpsertViewResult
             {
                 Action = "updated", Entity = entityName, ViewId = updateId.ToString(), ViewName = currentViewName,
                 Status = "updated", Validated = true,
-                UpdatedParts = updatedParts, ValidationWarnings = cellPatchWarnings,
+                UpdatedParts = updatedParts, Description = description, ValidationWarnings = cellPatchWarnings,
                 FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = published,
                 QuickFindColumns = quickFindColumns?.Count > 0 ? quickFindColumns : null
-            });
+            }, updateId, solutionUniqueName);
+        }
+
+        private CallToolResult UpdateViewMetadata(string entityName, Entity currentView,
+            string description, string solutionUniqueName)
+        {
+            var viewName = currentView.GetAttributeValue<string>("name") ?? "";
+            var result = new UpsertViewResult
+            {
+                Action = "update", Entity = entityName, ViewId = currentView.Id.ToString(), ViewName = viewName,
+                Status = "not_executed", UpdatedParts = description != null ? "Description" : null,
+                Description = description
+            };
+            var viewLabel = $"'{viewName}' ({currentView.Id}) on '{entityName}'";
+            var text = $"View {viewLabel}.";
+            if (_options.DryRun)
+                return PreviewMutation(description != null ? $"Would update description for view {viewLabel}." : $"View {viewLabel}.",
+                    result, solutionUniqueName);
+
+            if (description != null)
+            {
+                var update = new Entity("savedquery", currentView.Id) { ["description"] = description };
+                DataverseMutationExecutor.Update(_context, _orgService, update);
+                var tableName = currentView.GetAttributeValue<string>("returnedtypecode") ?? entityName;
+                result.Published = PublishHelper.PublishEntity(_context, _orgService, tableName);
+                text = $"Updated description for view {viewLabel}.";
+            }
+
+            result.Action = "updated";
+            result.Status = "updated";
+            return CompleteMutation(text, result, currentView.Id, solutionUniqueName);
         }
 
         private static string DetermineUpdatedParts(bool usedCellPatch, bool hasFetchXml, bool regeneratedLayout)
@@ -601,7 +673,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
 
-        private CallToolResult HandleRename(string entityName, string viewId, string viewName)
+        private CallToolResult HandleRename(string entityName, string viewId, string viewName, string solutionUniqueName)
         {
             if (string.IsNullOrWhiteSpace(viewId))
                 return Error("view_id is required when action='rename'.",
@@ -621,23 +693,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"View not found (view_id={renameId}).",
                     $"Use manage_view action='list' entity_name='{entityName}' to find valid view IDs.");
 
+            if (solutionUniqueName != null && currentView.LogicalName == "userquery")
+                return Error("solution_name is only supported for system views (savedquery).");
+
             var oldName = currentView.GetAttributeValue<string>("name") ?? "";
             var returnedTypeCode = currentView.GetAttributeValue<string>("returnedtypecode") ?? entityName;
-
-            var duplicate = FindViewByName(returnedTypeCode, viewName, excludeViewId: renameId);
-            if (duplicate != null)
-            {
-                var dupId = duplicate.GetAttributeValue<Guid>("savedqueryid");
-                return Error(
-                    $"A view named '{viewName}' already exists on '{entityName}' (view_id={dupId}).",
-                    "Choose a different name.");
-            }
 
             var currentFetchXml = currentView.GetAttributeValue<string>("fetchxml") ?? "";
             var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
             var update = new Entity(currentView.LogicalName, renameId) { ["name"] = viewName };
             if (_options.DryRun)
-                return DryRun($"Would RENAME view '{oldName}' to '{viewName}' ({renameId}) on entity '{entityName}'.", new UpsertViewResult
+                return PreviewMutation($"Would RENAME view '{oldName}' to '{viewName}' ({renameId}) on entity '{entityName}'.", new UpsertViewResult
                 {
                     Action = "rename",
                     Entity = entityName,
@@ -645,7 +711,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ViewName = viewName,
                     Status = "not_executed",
                     Published = false
-                });
+                }, solutionUniqueName);
 
             // Backup only when actually mutating
             var (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, renameId, oldName, currentFetchXml, currentLayoutXml, _workspaceFolder);
@@ -655,16 +721,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var text = $"Renamed view '{oldName}' to '{viewName}' ({renameId}) on '{entityName}', published. Backup saved.";
 
-            return Success(text, new UpsertViewResult
+            return CompleteMutation(text, new UpsertViewResult
             {
                 Action = "renamed", Entity = entityName, ViewId = renameId.ToString(), ViewName = viewName,
                 Status = "renamed", Validated = false,
                 FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = true
-            });
+            }, renameId, solutionUniqueName);
         }
 
 
-        private CallToolResult HandleSetDefault(string entityName, string viewId, string viewName)
+        private CallToolResult HandleSetDefault(string entityName, string viewId, string viewName, string solutionUniqueName)
         {
             if (string.IsNullOrWhiteSpace(viewId) && string.IsNullOrWhiteSpace(viewName))
                 return Error("view_id or view_name is required when action='set_default'.",
@@ -709,7 +775,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var previousDefaults = _orgService.RetrieveMultiple(prevQuery).Entities;
 
             if (_options.DryRun)
-                return DryRun($"Would SET DEFAULT view '{viewName}' ({targetId}) on entity '{entityName}'" +
+                return PreviewMutation($"Would SET DEFAULT view '{viewName}' ({targetId}) on entity '{entityName}'" +
                     (previousDefaults.Count > 0 ? $", clearing {previousDefaults.Count} previous default(s)." : "."), new UpsertViewResult
                 {
                     Action = "set_default",
@@ -719,7 +785,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = "not_executed",
                     ClearedPreviousDefaults = previousDefaults.Count > 0 ? previousDefaults.Count : null,
                     Published = false
-                });
+                }, solutionUniqueName);
 
             foreach (var prev in previousDefaults)
                 DataverseMutationExecutor.Update(_context, _orgService, new Entity("savedquery", prev.Id) { ["isdefault"] = false });
@@ -730,13 +796,40 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var published = PublishHelper.PublishEntity(_context, _orgService, entityName);
 
             var clearedText = previousDefaults.Count > 0 ? $", cleared {previousDefaults.Count} previous default(s)" : "";
-            return Success($"Set default view for '{entityName}' to '{viewName}' ({targetId}){clearedText}, published.", new UpsertViewResult
+            return CompleteMutation($"Set default view for '{entityName}' to '{viewName}' ({targetId}){clearedText}, published.", new UpsertViewResult
             {
                 Action = "set_default", Entity = entityName, ViewId = targetId.ToString(), ViewName = viewName,
                 Status = "set_default", Validated = false,
                 ClearedPreviousDefaults = previousDefaults.Count > 0 ? previousDefaults.Count : null,
                 Published = published
-            });
+            }, targetId, solutionUniqueName);
+        }
+
+        private CallToolResult PreviewMutation(string text, UpsertViewResult result, string solutionUniqueName)
+        {
+            result.SolutionName = solutionUniqueName;
+            if (solutionUniqueName != null)
+                text += $" Would add view to solution '{solutionUniqueName}'.";
+
+            return DryRun(text, result);
+        }
+
+        private CallToolResult CompleteMutation(string text, UpsertViewResult result, Guid viewId, string solutionUniqueName)
+        {
+            if (solutionUniqueName != null)
+            {
+                var association = SolutionComponentCreateHelper.AddExistingComponent(
+                    _context, _orgService, viewId, SavedQueryComponentType, solutionUniqueName);
+                result.SolutionName = association.SolutionUniqueName;
+                result.IsAddToSolution = association.IsAddToSolution;
+                result.AddToSolutionMethod = association.AddToSolutionMethod;
+                result.AddToSolutionWarning = association.AddToSolutionWarning;
+                text += association.IsAddToSolution
+                    ? $" Added view to solution '{association.SolutionUniqueName}'."
+                    : $" Failed to add view to solution '{association.SolutionUniqueName}': {association.AddToSolutionWarning}";
+            }
+
+            return Success(text, result);
         }
 
 
@@ -1220,25 +1313,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             return parts.Count > 0 ? string.Join("; ", parts) : null;
         }
-
-        private Entity FindViewByName(string entityName, string viewName, Guid? excludeViewId = null)
-        {
-            var query = new QueryExpression("savedquery")
-            {
-                ColumnSet = new ColumnSet("savedqueryid", "name"),
-                TopCount = 1
-            };
-            query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
-            query.Criteria.AddCondition("name", ConditionOperator.Equal, viewName);
-
-            if (excludeViewId.HasValue)
-                query.Criteria.AddCondition("savedqueryid", ConditionOperator.NotEqual, excludeViewId.Value);
-
-            var result = _orgService.RetrieveMultiple(query);
-            return result.Entities.Count > 0 ? result.Entities[0] : null;
-        }
-
-
 
         private (string Xml, List<string> Errors) NormalizeFetchXmlNames(string fetchXml, string entityName)
         {

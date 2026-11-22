@@ -8,6 +8,20 @@
 ## Rollback (If View Breaks)
 1. Call manage_view action='undo' with view_id + fetchxml=<.fetchxml.xml path> AND layoutxml=<.layoutxml.xml path> — BOTH files of one backup pair from the update/rename response (fetchXmlBackupPath + layoutXmlBackupPath)
 2. Tool auto-handles: read both backups > validate > restore both fields verbatim > publish; pre-restore state is backed up again as a new pair
+3. To revert a description change, call `update` with the previous description. The XML backups cover FetchXML and LayoutXML.
+
+## System View Names
+
+- `create` and `rename` accept a name already used by another system view on the same table. A create returns a new `viewId`, and a rename changes the view identified by `view_id`.
+- Use `list` to find views that share a name, then pass the intended `view_id` in your next call. Each system view has its own `savedqueryid`.
+
+## System View Description and Solution Membership
+
+- Pass `description` on `create` or `update` to write the system view's description. Omitting it or passing `null` on `update` keeps the current description. Pass an empty string to remove the description.
+- For a description-only edit, call `update` with `entity_name`, `view_id` (or a unique `view_name`), and `description`. You can also include `description` with a FetchXML rebuild or a cell patch.
+- Pass `solution_name` on `create`, `update`, `rename`, or `set_default` to add the system view to an unmanaged solution. Use the solution display name or unique name. The tool adds the view as component type 26 using `AddSolutionComponentRequest`.
+- To add an existing view to a solution, call `update` with the view identifier and `solution_name`. Add it to a model-driven app separately with `manage_app(action='add_components')`.
+- Check `isAddToSolution` for the result and `addToSolutionMethod` for the method used. If the add request fails, `addToSolutionWarning` describes the failure and any changes to the view have already been saved. A dry run previews the request and reports `isAddToSolution: false`.
 
 ## CRITICAL: Verify Field Names Before Modifying Views
 - Before adding ANY field to a view (FetchXML attributes/conditions, Quick Find columns), you MUST call `get_tables` first to verify the field's logical name exists on the entity.

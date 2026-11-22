@@ -57,11 +57,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string CreateMode { get; set; }
 
+        [JsonPropertyName("solutionName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SolutionName { get; set; }
+
         [JsonPropertyName("isAddToSolution")]
         public bool IsAddToSolution { get; set; }
 
         [JsonPropertyName("addToSolutionMethod")]
         public string AddToSolutionMethod { get; set; } = "none";
+
+        [JsonPropertyName("addToSolutionWarning")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AddToSolutionWarning { get; set; }
 
 
         [JsonPropertyName("queryType")]

@@ -34,17 +34,17 @@ public sealed class DeepMcpCoverageTests
 
         Call(tool, "HandleDetail", "account", "", "", false, false);
         Call(tool, "HandleDetail", "account", "bad", "", false, false);
-        Call(tool, "HandleCreate", "account", "", "");
-        Call(tool, "HandleCreate", "account", "New view", "<fetch />");
-        Call(tool, "HandleUpdate", "account", "", "", false, "", "");
-        Call(tool, "HandleUpdate", "account", "bad", "", false, "", "");
-        Call(tool, "HandleUpdate", "account", Guid.NewGuid().ToString(), "", false, "", "");
-        Call(tool, "HandleUpdate", "account", Guid.NewGuid().ToString(), "", false, "<fetch />", "[]");
-        Call(tool, "HandleRename", "account", "", "");
-        Call(tool, "HandleRename", "account", "bad", "New name");
-        Call(tool, "HandleRename", "account", Guid.NewGuid().ToString(), "");
-        Call(tool, "HandleSetDefault", "account", "", "");
-        Call(tool, "HandleSetDefault", "account", "bad", "");
+        Call(tool, "HandleCreate", "account", "", "", null, null);
+        Call(tool, "HandleCreate", "account", "New view", "<fetch />", null, null);
+        Call(tool, "HandleUpdate", "account", "", "", false, "", "", null, null);
+        Call(tool, "HandleUpdate", "account", "bad", "", false, "", "", null, null);
+        Call(tool, "HandleUpdate", "account", Guid.NewGuid().ToString(), "", false, "", "", null, null);
+        Call(tool, "HandleUpdate", "account", Guid.NewGuid().ToString(), "", false, "<fetch />", "[]", null, null);
+        Call(tool, "HandleRename", "account", "", "", null);
+        Call(tool, "HandleRename", "account", "bad", "New name", null);
+        Call(tool, "HandleRename", "account", Guid.NewGuid().ToString(), "", null);
+        Call(tool, "HandleSetDefault", "account", "", "", null);
+        Call(tool, "HandleSetDefault", "account", "bad", "", null);
         Call(tool, "HandleUndo", "account", "", "", "");
         Call(tool, "HandleUndo", "account", "bad", "a.fetchxml.xml", "a.layoutxml.xml");
         Call(tool, "HandleUndo", "account", Guid.NewGuid().ToString(), "", "a.layoutxml.xml");

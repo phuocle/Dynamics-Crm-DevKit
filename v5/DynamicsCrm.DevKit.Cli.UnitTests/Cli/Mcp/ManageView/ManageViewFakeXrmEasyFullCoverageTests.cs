@@ -173,6 +173,173 @@ public sealed class ManageViewFakeXrmEasyFullCoverageTests
 
     private static string Text(CallToolResult r) => r.GetText();
 
+    private void SeedSolution(string uniqueName = "view_customizations", bool isManaged = false)
+    {
+        _ctx.GetOrganizationService().Create(new Entity("solution")
+        {
+            ["uniquename"] = uniqueName,
+            ["friendlyname"] = "View Customizations",
+            ["ismanaged"] = isManaged
+        });
+    }
+
+    [TestMethod]
+    public async Task Create_WritesSystemViewDescription()
+    {
+        const string description = "Accounts included in the monthly review.";
+        var result = await NewTool().manage_view(null!, "create", "account", view_name: "Monthly Review",
+            fetchxml: SimpleFetch, description: description);
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var data = result.StructuredContent!.Value;
+        var id = Guid.Parse(data.GetProperty("viewId").GetString()!);
+        Assert.AreEqual(description, _service.Retrieve("savedquery", id, new ColumnSet("description")).GetAttributeValue<string>("description"));
+        Assert.AreEqual(description, data.GetProperty("description").GetString());
+        Assert.IsFalse(data.GetProperty("isAddToSolution").GetBoolean());
+        Assert.AreEqual("none", data.GetProperty("addToSolutionMethod").GetString());
+        Assert.HasCount(0, _service.SolutionAdds);
+    }
+
+    [TestMethod]
+    [DataRow("Revised description")]
+    [DataRow("")]
+    public async Task Update_DescriptionOnly_WritesOnlyDescription(string description)
+    {
+        // Description edits also work when the current XML needs repair.
+        var id = SeedView("Description Only", fetchXml: "<fetch>", layoutXml: "<grid>");
+        var result = await NewTool().manage_view(null!, "update", "account", view_id: id.ToString(), description: description);
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        Assert.AreEqual("Description", result.StructuredContent!.Value.GetProperty("updatedParts").GetString());
+        Assert.HasCount(1, _service.LastUpdatedEntity!.Attributes);
+        Assert.AreEqual(description, _service.LastUpdatedEntity.GetAttributeValue<string>("description"));
+        var stored = _service.Retrieve("savedquery", id, new ColumnSet("description", "fetchxml", "layoutxml"));
+        Assert.AreEqual(description, stored.GetAttributeValue<string>("description") ?? "");
+        Assert.AreEqual("<fetch>", stored.GetAttributeValue<string>("fetchxml"));
+        Assert.AreEqual("<grid>", stored.GetAttributeValue<string>("layoutxml"));
+    }
+
+    [TestMethod]
+    [DataRow(null)]
+    [DataRow("Revised description")]
+    public async Task Update_WithCellPatch_WritesDescriptionOnlyWhenSupplied(string? description)
+    {
+        var id = SeedView("Cell Patch Description");
+        var result = await NewTool().manage_view(null!, "update", "account", view_id: id.ToString(),
+            cell_updates_json: """[{"cell_name":"name","set_attributes":{"width":"350"}}]""", description: description!);
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        Assert.AreEqual(description != null, _service.LastUpdatedEntity!.Contains("description"));
+        var stored = _service.Retrieve("savedquery", id, new ColumnSet("description", "layoutxml"));
+        Assert.AreEqual(description ?? "seeded view", stored.GetAttributeValue<string>("description"));
+        StringAssert.Contains(stored.GetAttributeValue<string>("layoutxml"), "width=\"350\"");
+    }
+
+    [TestMethod]
+    [DataRow("create", "View Customizations")]
+    [DataRow("update", "view_customizations")]
+    [DataRow("rename", "view_customizations")]
+    [DataRow("set_default", "view_customizations")]
+    public async Task Mutation_AddsTargetSystemViewToUnmanagedSolution(string action, string solutionName)
+    {
+        SeedSolution();
+        var viewId = action == "create" ? "" : SeedView("Existing View").ToString();
+        var result = await NewTool().manage_view(null!, action, "account", view_id: viewId, view_name: "New Name",
+            fetchxml: action is "create" or "update" ? SimpleFetch : "", solution_name: solutionName);
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var data = result.StructuredContent!.Value;
+        var request = _service.SolutionAdds.Single();
+        Assert.AreEqual("view_customizations", request.SolutionUniqueName);
+        Assert.AreEqual(26, request.ComponentType);
+        Assert.AreNotEqual(Guid.Empty, request.ComponentId);
+        Assert.AreEqual(Guid.Parse(data.GetProperty("viewId").GetString()!), request.ComponentId);
+        Assert.AreEqual("view_customizations", data.GetProperty("solutionName").GetString());
+        Assert.IsTrue(data.GetProperty("isAddToSolution").GetBoolean());
+        Assert.AreEqual("AddSolutionComponentRequest", data.GetProperty("addToSolutionMethod").GetString());
+        StringAssert.Contains(Text(result), "Added view to solution 'view_customizations'.");
+    }
+
+    [TestMethod]
+    public async Task Update_SolutionOnly_AddsExistingViewWithoutRewritingIt()
+    {
+        SeedSolution();
+        var id = SeedView("Add Existing");
+        var result = await NewTool().manage_view(null!, "update", "account", view_name: "Add Existing", solution_name: "view_customizations");
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        Assert.AreEqual(id, _service.SolutionAdds.Single().ComponentId);
+        Assert.AreEqual(0, _service.Updates);
+        Assert.AreEqual(0, _service.Publishes);
+    }
+
+    [TestMethod]
+    public async Task Update_AddToSolutionFails_ReportsFailureAndKeepsDescription()
+    {
+        SeedSolution();
+        var id = SeedView("Partial Update");
+        _service.SolutionAddError = "Solution component could not be added.";
+        var result = await NewTool().manage_view(null!, "update", "account", view_id: id.ToString(),
+            description: "Saved description", solution_name: "view_customizations");
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var data = result.StructuredContent!.Value;
+        Assert.IsFalse(data.GetProperty("isAddToSolution").GetBoolean());
+        Assert.AreEqual("AddSolutionComponentRequest", data.GetProperty("addToSolutionMethod").GetString());
+        Assert.AreEqual(_service.SolutionAddError, data.GetProperty("addToSolutionWarning").GetString());
+        StringAssert.Contains(Text(result), _service.SolutionAddError);
+        Assert.AreEqual("Saved description", _service.Retrieve("savedquery", id, new ColumnSet("description")).GetAttributeValue<string>("description"));
+    }
+
+    [TestMethod]
+    public async Task Update_ManagedSolution_ReturnsErrorBeforeMutation()
+    {
+        SeedSolution(isManaged: true);
+        var id = SeedView("Managed Solution Target");
+        var result = await NewTool().manage_view(null!, "update", "account", view_id: id.ToString(),
+            description: "New description", solution_name: "view_customizations");
+
+        Assert.IsTrue(result.IsError == true, Text(result));
+        StringAssert.Contains(Text(result), "Pass an unmanaged solution");
+        Assert.AreEqual(0, _service.Updates);
+        Assert.HasCount(0, _service.SolutionAdds);
+    }
+
+    [TestMethod]
+    public async Task Update_PersonalViewWithNewOptions_ReturnsErrorBeforeMutation()
+    {
+        SeedSolution();
+        var id = SeedPersonalView("Personal View");
+        var tool = NewTool();
+        var descriptionResult = await tool.manage_view(null!, "update", "account", view_id: id.ToString(), description: "New description");
+        var solutionResult = await tool.manage_view(null!, "update", "account", view_id: id.ToString(), solution_name: "view_customizations");
+
+        Assert.IsTrue(descriptionResult.IsError == true, Text(descriptionResult));
+        Assert.IsTrue(solutionResult.IsError == true, Text(solutionResult));
+        Assert.AreEqual(0, _service.Updates);
+        Assert.HasCount(0, _service.SolutionAdds);
+    }
+
+    [TestMethod]
+    public async Task Update_DryRun_PreviewsDescriptionAndSolutionWithoutMutation()
+    {
+        SeedSolution();
+        var id = SeedView("Dry Run Description");
+        var result = await NewTool(dryRun: true).manage_view(null!, "update", "account", view_id: id.ToString(),
+            description: "Preview description", solution_name: "view_customizations");
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var data = result.StructuredContent!.Value;
+        Assert.AreEqual("not_executed", data.GetProperty("status").GetString());
+        Assert.AreEqual("Preview description", data.GetProperty("description").GetString());
+        Assert.IsFalse(data.GetProperty("isAddToSolution").GetBoolean());
+        Assert.AreEqual("none", data.GetProperty("addToSolutionMethod").GetString());
+        StringAssert.Contains(Text(result), "Would add view to solution 'view_customizations'.");
+        Assert.AreEqual(0, _service.Updates);
+        Assert.AreEqual(0, _service.Publishes);
+        Assert.HasCount(0, _service.SolutionAdds);
+    }
+
     // ──────────────────────────────────────────────
     // list
     // ──────────────────────────────────────────────
@@ -336,13 +503,16 @@ public sealed class ManageViewFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
-    public async Task Detail_ByName_MultipleMatches_ReturnsCandidates()
+    [DataRow("Common A", "Common B")]
+    [DataRow("Common", "Common")]
+    public async Task Detail_ByName_MultipleMatches_ReturnsCandidates(string firstName, string secondName)
     {
-        SeedView("Common A");
-        SeedView("Common B");
+        SeedView(firstName);
+        SeedView(secondName);
         var result = await NewTool().manage_view(null!, "detail", "account", view_name: "Common");
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "Multiple views match 'Common'");
+        StringAssert.Contains(Text(result), "Provide view_id to disambiguate.");
     }
 
     [TestMethod]
@@ -387,12 +557,25 @@ public sealed class ManageViewFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
-    public async Task Create_DuplicateName_ReturnsError()
+    public async Task Create_DuplicateName_CreatesSeparateSystemView()
     {
-        SeedView("Existing Name");
-        var result = await NewTool().manage_view(null!, "create", "account", view_name: "Existing Name", fetchxml: SimpleFetch);
-        Assert.IsTrue(result.IsError == true);
-        StringAssert.Contains(Text(result), "already exists");
+        const string viewName = "Shared Name";
+        const string description = "Subgrid view";
+        var existingId = SeedView(viewName);
+        var result = await NewTool().manage_view(null!, "create", "account", view_name: viewName,
+            fetchxml: SimpleFetch, description: description);
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var createdId = Guid.Parse(result.StructuredContent!.Value.GetProperty("viewId").GetString()!);
+        Assert.AreNotEqual(existingId, createdId);
+
+        var columns = new ColumnSet("name", "description");
+        var created = _service.Retrieve("savedquery", createdId, columns);
+        Assert.AreEqual(viewName, created.GetAttributeValue<string>("name"));
+        Assert.AreEqual(description, created.GetAttributeValue<string>("description"));
+        var existing = _service.Retrieve("savedquery", existingId, columns);
+        Assert.AreEqual(viewName, existing.GetAttributeValue<string>("name"));
+        Assert.AreEqual("seeded view", existing.GetAttributeValue<string>("description"));
     }
 
     [TestMethod]
@@ -537,7 +720,7 @@ public sealed class ManageViewFakeXrmEasyFullCoverageTests
         var id = SeedView("Update Me");
         var result = await NewTool().manage_view(null!, "update", "account", view_id: id.ToString());
         Assert.IsTrue(result.IsError == true);
-        StringAssert.Contains(Text(result), "at least one of fetchxml or cell_updates_json is required");
+        StringAssert.Contains(Text(result), "Pass at least one of fetchxml, cell_updates_json, description or solution_name");
     }
 
     [TestMethod]
@@ -809,17 +992,25 @@ public sealed class ManageViewFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
-    public async Task Rename_DuplicateName_ReturnsError()
+    public async Task Rename_DuplicateName_UpdatesOnlyTheRequestedViewId()
     {
-        var id = SeedView("Original");
-        SeedView("Taken Name");
-        var result = await NewTool().manage_view(null!, "rename", "account", view_id: id.ToString(), view_name: "Taken Name");
-        Assert.IsTrue(result.IsError == true);
-        StringAssert.Contains(Text(result), "already exists");
+        const string sharedName = "Shared Name";
+        var targetId = SeedView("Original");
+        var existingId = SeedView(sharedName);
+        var result = await NewTool().manage_view(null!, "rename", "account", view_id: targetId.ToString(), view_name: sharedName);
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        Assert.AreEqual(targetId.ToString(), result.StructuredContent!.Value.GetProperty("viewId").GetString());
+        Assert.AreEqual(1, _service.Updates);
+        Assert.AreEqual(targetId, _service.LastUpdatedEntity!.Id);
+
+        var columns = new ColumnSet("name");
+        Assert.AreEqual(sharedName, _service.Retrieve("savedquery", targetId, columns).GetAttributeValue<string>("name"));
+        Assert.AreEqual(sharedName, _service.Retrieve("savedquery", existingId, columns).GetAttributeValue<string>("name"));
     }
 
     [TestMethod]
-    public async Task Rename_SameNameExcludingSelf_Succeeds()
+    public async Task Rename_ToCurrentName_Succeeds()
     {
         var id = SeedView("Same Name");
         var result = await NewTool().manage_view(null!, "rename", "account", view_id: id.ToString(), view_name: "Same Name");
@@ -1163,6 +1354,8 @@ public sealed class ManageViewFakeXrmEasyFullCoverageTests
         public int Creates;
         public int Updates;
         public int Publishes;
+        public readonly List<AddSolutionComponentRequest> SolutionAdds = new();
+        public string? SolutionAddError;
         public Entity? LastCreatedEntity;
         public Entity? LastUpdatedEntity;
 
@@ -1189,6 +1382,13 @@ public sealed class ManageViewFakeXrmEasyFullCoverageTests
         public OrganizationResponse Execute(OrganizationRequest request)
         {
             if (request is PublishXmlRequest) { Publishes++; return new OrganizationResponse(); }
+            if (request is AddSolutionComponentRequest add)
+            {
+                SolutionAdds.Add(add);
+                if (SolutionAddError != null)
+                    throw new InvalidOperationException(SolutionAddError);
+                return new AddSolutionComponentResponse();
+            }
             if (request is RetrieveAllEntitiesRequest)
             {
                 var resp = new RetrieveAllEntitiesResponse();

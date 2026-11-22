@@ -20,13 +20,13 @@ public sealed class ManageViewActionValidationCoverageTests
     {
         var tool = new ManageViewTool(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true), null!);
 
-        StringAssert.Contains(Text(Invoke(tool, "HandleCreate", "account", "", "")), "view_name is required");
-        StringAssert.Contains(Text(Invoke(tool, "HandleUpdate", "account", "", "", false, "", "")), "view_id or view_name is required");
-        StringAssert.Contains(Text(Invoke(tool, "HandleUpdate", "account", "not-a-guid", "", false, "", "")), "not a valid GUID");
-        StringAssert.Contains(Text(Invoke(tool, "HandleRename", "account", "", "")), "view_id is required");
-        StringAssert.Contains(Text(Invoke(tool, "HandleRename", "account", "bad", "")), "not a valid GUID");
-        StringAssert.Contains(Text(Invoke(tool, "HandleSetDefault", "account", "", "")), "view_id or view_name is required");
-        StringAssert.Contains(Text(Invoke(tool, "HandleSetDefault", "account", "bad", "")), "not a valid GUID");
+        StringAssert.Contains(Text(Invoke(tool, "HandleCreate", "account", "", "", null, null)), "view_name is required");
+        StringAssert.Contains(Text(Invoke(tool, "HandleUpdate", "account", "", "", false, "", "", null, null)), "view_id or view_name is required");
+        StringAssert.Contains(Text(Invoke(tool, "HandleUpdate", "account", "not-a-guid", "", false, "", "", null, null)), "not a valid GUID");
+        StringAssert.Contains(Text(Invoke(tool, "HandleRename", "account", "", "", null)), "view_id is required");
+        StringAssert.Contains(Text(Invoke(tool, "HandleRename", "account", "bad", "", null)), "not a valid GUID");
+        StringAssert.Contains(Text(Invoke(tool, "HandleSetDefault", "account", "", "", null)), "view_id or view_name is required");
+        StringAssert.Contains(Text(Invoke(tool, "HandleSetDefault", "account", "bad", "", null)), "not a valid GUID");
         StringAssert.Contains(Text(Invoke(tool, "HandleUndo", "account", "", "", "")), "view_id is required");
         StringAssert.Contains(Text(Invoke(tool, "HandleUndo", "account", "bad", "", "")), "not a valid GUID");
     }
