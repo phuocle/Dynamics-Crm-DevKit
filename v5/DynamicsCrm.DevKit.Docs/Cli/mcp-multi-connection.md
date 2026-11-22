@@ -210,7 +210,7 @@ Full release, all five suites/coverage, and commits are not automatically author
 ### Implementation checkpoint — 2026-11-17
 
 - Implemented snapshot/alias/policy resolution, asynchronous registry, per-invocation workers for all 39 Dataverse tools, connection_list, canonical whoami fields, output attribution, and setup/help changes.
-- Fixed service-identity scoping of EntityParserHelper metadata and ownership of CreateRecordsTool clone fallback. Shared connection-key parsing remains unchanged.
+- Fixed service-identity scoping of EntityParserHelper metadata and ownership of UpsertRecordsTool clone fallback. Shared connection-key parsing remains unchanged.
 - CLI build passed. Final CLI regression suite: 6,333 passed, 0 failed (42 seconds of test execution). The 30 new multi-connection cases are included. Evidence: TestResults/MultiConnection/multi-connection-final.trx.
 - A development-build stdio probe verified live reads on both configured organizations, ID/alias identity, protected create preview, unknown-selector errors, and catalog counts 41/19 with exactly 39 optional env schemas. No live writes were executed. This is not evidence for the final installed assembly.
 - In the initial verification pass, the user restarted the app and both connected MCP instances matched the installed build and manifest; the process starts below are later than manifest `builtAt` (`2026-11-17T15:26:46.4958556+07:00`). No MCP process was restarted or reinstalled during that verification pass. The later single-process pass is recorded separately below.

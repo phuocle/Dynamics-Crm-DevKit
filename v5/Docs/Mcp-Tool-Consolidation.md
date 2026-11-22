@@ -86,7 +86,7 @@ Server instructions hiện được host lặp theo tool trong snapshot này. C�
 | `inspect_metadata` | true | 2 | `get_tables`, `get_solution_components` |
 | `inspect_logic` | true | 7 | `get_plugins`, `get_workflows`, `get_flows`, `get_business_process_flows`, `get_business_rules`, `get_custom_apis`, `get_messages` |
 | `inspect_diagnostics` | true | 3 | `get_audit_history`, `get_plugin_trace_logs`, `get_system_jobs` |
-| `manage_data` | false | 5 | `manage_record`, `create_records`, `generate_demo_data`, `manage_record_file`, `manage_deleted_records` |
+| `manage_data` | false | 5 | `manage_record`, `upsert_records`, `generate_demo_data`, `manage_record_file`, `manage_deleted_records` |
 | `manage_schema` | false | 4 | `manage_table`, `manage_column`, `manage_relationship`, `manage_choice` |
 | `manage_ui` | false | 8 | `manage_form`, `manage_view`, `manage_chart`, `manage_app`, `manage_ribbon`, `manage_command`, `manage_webresource`, `manage_report` |
 | `manage_platform` | false | 5 | `manage_role`, `manage_environment_variable`, `manage_function`, `publish_customizations`, `execute_webapi` |
@@ -222,7 +222,7 @@ Số tham số dưới đây là inputSchema thực đo, không tính DI. Bảng
 | `get_plugin_trace_logs` | `inspect_diagnostics` | 8 | List/detail; type/entity/message/mode/correlation/time; text lỗi/trace. | [source](../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetPluginTraceLogsTool.cs) |
 | `get_system_jobs` | `inspect_diagnostics` | 8 | List/detail; status/operation type/entity/name/correlation/time; mặc định failed. | [source](../DynamicsCrm.DevKit.Cli/Mcp/Tools/GetSystemJobsTool.cs) |
 | `manage_record` | `manage_data` | 8 | create/read/update/delete/associate/disassociate; fields_json, lookup binding và quan hệ. | [source](../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageRecordTool.cs) |
-| `create_records` | `manage_data` | 4 | JSON inline hoặc file JSON/CSV; tối đa 5000; parallelism, partial failures và gate bypass_custom_logic. | [source](../DynamicsCrm.DevKit.Cli/Mcp/Tools/CreateRecordsTool.cs) |
+| `upsert_records` | `manage_data` | 5 | JSON inline hoặc file JSON/CSV; tối đa 5000; Create/Upsert theo GUID hoặc `key_fields`; state/status hai bước; parallelism, partial failures và gate bypass_custom_logic. | [source](../DynamicsCrm.DevKit.Cli/Mcp/Tools/UpsertRecordsTool.cs) |
 | `generate_demo_data` | `manage_data` | 7 | Tạo dữ liệu mẫu theo entity/date/count/fields/seed; field_overrides sáu operator; không tự suy luận ngày. | [source](../DynamicsCrm.DevKit.Cli/Mcp/Tools/GenerateDemoDataTool.cs) |
 | `manage_record_file` | `manage_data` | 8 | info/upload/download/delete; file/image, file_path/base64/full_size, block transfer và đường dẫn output. | [source](../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageRecordFileTool.cs) |
 | `manage_deleted_records` | `manage_data` | 9 | list/detail/restore/status/turn; record_id hoặc record_ids[], retention_days, name_prefix kể cả chuỗi rỗng. | [source](../DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageDeletedRecordsTool.cs) |
@@ -296,7 +296,7 @@ Các test hiện có chạy lại **nguyên trạng**:
 - ManageViewFakeXrmEasyFullCoverageTests: system/personal view, backup cặp XML, undo.
 - ManageReportFakeXrmEasyFullCoverageTests và ManageReportFakeSdkExtraCoverageTests: local files, dataset, language, output_folder/.rptproj, dry-run.
 - ManageRecordFileFakeSdkCoverageTests: info/upload/download/file blocks; ManageChartFakeXrmEasyFullCoverageTests: confirmed/defaults.
-- CommandFlyoutFakeXrmEasyFullCoverageTests; CreateRecordsMainPathCoverageTests; các folder MCP còn lại trong inventory.
+- CommandFlyoutFakeXrmEasyFullCoverageTests; UpsertRecordsMainPathCoverageTests; các folder MCP còn lại trong inventory.
 - McpToolResultsCoverageTests và McpToolResultsThrowCoverageTests: giữ summary, [Detail], IsError và structured payload. Không sửa helper output legacy để xóa duplication rồi đổi expected test.
 
 Các file mới dự kiến: CompactCatalogTests.cs, CompactRoutingParityTests.cs, CompactContractProviderTests.cs, CompactPolicyTests.cs, CompactStdioIntegrationTests.cs. Nếu mở hạng mục result view riêng, thêm CompactResultPresentationTests.cs. Đây là kế hoạch; tác vụ tài liệu này không tạo/chạy các test đó.
@@ -414,7 +414,7 @@ Giảm catalog bằng cách giấu hết descriptions rồi buộc đọc 40 con
 
 Snapshot lấy từ source ngày khảo sát, đối chiếu count 348 với installed tools/list. Bắt buộc regenerate từ SDK descriptor lúc triển khai để lấy đúng kiểu, nullable, enum và docs; danh sách dưới đây chỉ là checklist tên/default, không phải serializer.
 
-- `create_records`: `entity_name=""`, `records_json=""`, `max_parallelism=0`, `bypass_custom_logic=false`
+- `upsert_records`: `entity_name=""`, `records_json=""`, `max_parallelism=0`, `bypass_custom_logic=false`, `key_fields=""`
 - `execute_fetchxml`: `fetchxml=""`, `max_records=5000`, `get_all=false`
 - `execute_sql`: `sql=""`, `max_records=5000`, `get_all=false`
 - `execute_webapi`: `method="GET"`, `url=""`, `body=""`, `headers=""`, `include_headers=false`, `max_response_lines=200`
