@@ -49,7 +49,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- get_tables → entity/attribute names before building fields_json\n" +
             "- execute_fetchxml → find lookup GUIDs and record_id\n" +
-            "- create_records → bulk create multiple records\n" +
+            "- upsert_records → bulk create or update multiple records\n" +
             "- execute_webapi → raw OData JSON/annotations")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("'create', 'read', 'update', 'delete', 'associate', 'disassociate'.")] string action = "",

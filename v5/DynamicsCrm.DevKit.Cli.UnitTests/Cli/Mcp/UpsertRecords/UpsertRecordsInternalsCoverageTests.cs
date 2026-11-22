@@ -1,6 +1,6 @@
 using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools;
-using CliCreateRecordsTool = DynamicsCrm.DevKit.Cli.Mcp.Tools.CreateRecordsTool;
+using CliUpsertRecordsTool = DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRecordsTool;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -13,12 +13,12 @@ using System.Reflection;
 using DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Shared;
 using DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.CrossTool;
 
-namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.CreateRecords;
+namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.UpsertRecords;
 
 [TestClass]
-public class CreateRecordsInternalsCoverageTests
+public class UpsertRecordsInternalsCoverageTests
 {
-    private static readonly Type ToolType = typeof(CliCreateRecordsTool);
+    private static readonly Type ToolType = typeof(CliUpsertRecordsTool);
 
     [TestMethod]
     public void ParseCsvLine_HandlesQuotesCommasAndEscapedQuotes()
@@ -39,7 +39,7 @@ public class CreateRecordsInternalsCoverageTests
     [TestMethod]
     public void ResolveRecordsInput_InlineJsonAndJsonFile_ReturnContent()
     {
-        var tool = new CliCreateRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
+        var tool = new CliUpsertRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
         var warnings = new List<string>();
         var inline = ((string json, string format))InvokeInstance(tool, "ResolveRecordsInput", "[{\"name\":\"A\"}]", "account", warnings)!;
         Assert.AreEqual("[{\"name\":\"A\"}]", inline.json);
@@ -73,7 +73,7 @@ public class CreateRecordsInternalsCoverageTests
     [TestMethod]
     public void ConvertCsvValue_Primitives_ReturnConvertedValuesAndWarnings()
     {
-        var tool = new CliCreateRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
+        var tool = new CliUpsertRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
         var warnings = new List<string>();
         var cache = new Dictionary<string, Guid?>(StringComparer.OrdinalIgnoreCase);
 
@@ -94,7 +94,7 @@ public class CreateRecordsInternalsCoverageTests
     [TestMethod]
     public void ConvertCsvValue_InvalidPrimitiveValues_AddWarningsAndReturnNull()
     {
-        var tool = new CliCreateRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
+        var tool = new CliUpsertRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
         var warnings = new List<string>();
         var cache = new Dictionary<string, Guid?>(StringComparer.OrdinalIgnoreCase);
 
@@ -109,7 +109,7 @@ public class CreateRecordsInternalsCoverageTests
     [TestMethod]
     public void ConvertCsvValue_PicklistAndMultiSelect_ResolveLabels()
     {
-        var tool = new CliCreateRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
+        var tool = new CliUpsertRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
         var warnings = new List<string>();
         var cache = new Dictionary<string, Guid?>(StringComparer.OrdinalIgnoreCase);
         var options = new OptionMetadataCollection
@@ -132,7 +132,7 @@ public class CreateRecordsInternalsCoverageTests
     [TestMethod]
     public void ConvertCsvValue_LookupWithoutTargetsAndUnsupportedType_ReturnWarnings()
     {
-        var tool = new CliCreateRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
+        var tool = new CliUpsertRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
         var warnings = new List<string>();
         var cache = new Dictionary<string, Guid?>(StringComparer.OrdinalIgnoreCase);
 
@@ -144,10 +144,6 @@ public class CreateRecordsInternalsCoverageTests
 
     // ── ImportSequenceNumber auto-fill tests ──────────────────────────────
 
-    /// <summary>
-    /// ApplyBatchImportSequenceNumber fills the ISN field on entities that do
-    /// not already have it set. Entities with a user-provided ISN keep their value.
-    /// </summary>
     [TestMethod]
     public void ApplyBatchImportSequenceNumber_FillsMissingPreservesUserValue()
     {
@@ -167,11 +163,6 @@ public class CreateRecordsInternalsCoverageTests
         Assert.AreEqual(999990, parsed[3].entity!["importsequencenumber"]);
     }
 
-    /// <summary>
-    /// ApplyBatchImportSequenceNumber does not overwrite an explicitly-set
-    /// ISN of 0 (edge case: user sets it to 0, which is a valid value).
-    /// Entity.Contains returns true for explicitly set values including 0.
-    /// </summary>
     [TestMethod]
     public void ApplyBatchImportSequenceNumber_PreservesExplicitZero()
     {
@@ -185,10 +176,6 @@ public class CreateRecordsInternalsCoverageTests
         Assert.AreEqual(0, parsed[0].entity!["importsequencenumber"]);
     }
 
-    /// <summary>
-    /// ApplyBatchImportSequenceNumber handles an all-null array (all parse
-    /// failures) without throwing.
-    /// </summary>
     [TestMethod]
     public void ApplyBatchImportSequenceNumber_AllNulls_DoesNotThrow()
     {
@@ -203,7 +190,7 @@ public class CreateRecordsInternalsCoverageTests
         Assert.IsNull(parsed[1].entity);
     }
 
-    private static void AssertValue(CliCreateRecordsTool tool, AttributeMetadata attr, string cellValue, string logicalName,
+    private static void AssertValue(CliUpsertRecordsTool tool, AttributeMetadata attr, string cellValue, string logicalName,
         object expected, List<string> warnings, Dictionary<string, Guid?> cache)
     {
         var result = InvokeConvert(tool, attr, cellValue, logicalName, warnings, cache);
@@ -216,7 +203,7 @@ public class CreateRecordsInternalsCoverageTests
             Assert.AreEqual(expected, actual);
     }
 
-    private static object? InvokeConvert(CliCreateRecordsTool tool, AttributeMetadata attr, string cellValue, string logicalName,
+    private static object? InvokeConvert(CliUpsertRecordsTool tool, AttributeMetadata attr, string cellValue, string logicalName,
         List<string> warnings, Dictionary<string, Guid?> cache)
     {
         return InvokeInstance(tool, "ConvertCsvValue", attr, cellValue, logicalName, 2, "account", cache, warnings);

@@ -6,15 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-using CliCreateRecordsTool = DynamicsCrm.DevKit.Cli.Mcp.Tools.CreateRecordsTool;
+using CliUpsertRecordsTool = DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRecordsTool;
 using DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.CrossTool;
 
-namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.CreateRecords;
+namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.UpsertRecords;
 
 [TestClass]
-public sealed class CreateRecordsAdditionalCoverageTests
+public sealed class UpsertRecordsAdditionalCoverageTests
 {
-    private static readonly Type ToolType = typeof(CliCreateRecordsTool);
+    private static readonly Type ToolType = typeof(CliUpsertRecordsTool);
 
     [TestMethod]
     public void ParseCsvLine_HandlesUnquotedEmptyAndTrailingFields()
@@ -27,7 +27,7 @@ public sealed class CreateRecordsAdditionalCoverageTests
     [TestMethod]
     public void ConvertCsvValue_MultiSelectWithOnlyUnknownLabels_ReturnsNull()
     {
-        var tool = new CliCreateRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
+        var tool = new CliUpsertRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
         var warnings = new List<string>();
         var cache = new Dictionary<string, Guid?>(StringComparer.OrdinalIgnoreCase);
         var metadata = new MultiSelectPicklistAttributeMetadata
@@ -50,7 +50,7 @@ public sealed class CreateRecordsAdditionalCoverageTests
     [TestMethod]
     public void ResolveLookupByName_WithTargetAndUnavailableMetadata_ReturnsNullAndWarning()
     {
-        var tool = new CliCreateRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
+        var tool = new CliUpsertRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
         var warnings = new List<string>();
         var cache = new Dictionary<string, Guid?>(StringComparer.OrdinalIgnoreCase);
         var metadata = new LookupAttributeMetadata { Targets = new[] { "account", "contact" } };
@@ -65,7 +65,7 @@ public sealed class CreateRecordsAdditionalCoverageTests
     [TestMethod]
     public void LoadEntityMetadata_NullServiceClient_ReturnsNull()
     {
-        var tool = new CliCreateRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
+        var tool = new CliUpsertRecordsTool(null!, new McpDryRunOptions(), DryRunTestHelpers.NormalContext());
 
         Assert.IsNull(InvokeInstance(tool, "LoadEntityMetadata", "account"));
     }

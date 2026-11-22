@@ -64,13 +64,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = false, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GenerateDemoDataResult)),
         Description(
-            "Bogus-generated demo data for an entity → JSON file at {workspace}/.devkit/generate_demo_data/{entity}/ (workspace auto-resolved from MCP roots or server cwd) → pipe to create_records. from_date/to_date REQUIRED (ISO 8601, ask user, never infer). Auto-selects creatable fields with smart mapping (email→Email, telephone→Phone…) and overriddencreatedon. Lookups: real GUIDs auto-fetched; polymorphic uses 'field@entity'.\n\n" +
+            "Bogus-generated demo data for an entity → JSON file at {workspace}/.devkit/generate_demo_data/{entity}/ (workspace auto-resolved from MCP roots or server cwd) → pipe to upsert_records. from_date/to_date REQUIRED (ISO 8601, ask user, never infer). Auto-selects creatable fields with smart mapping (email→Email, telephone→Phone…) and overriddencreatedon. Lookups: real GUIDs auto-fetched; polymorphic uses 'field@entity'.\n\n" +
             "WHEN TO USE:\n" +
-            "- Generate demo/test data for an entity → pipe to create_records\n" +
+            "- Generate demo/test data for an entity → pipe to upsert_records\n" +
             "- Reproducible runs (fix seed); rotate lookups/enums via field_overrides 'in'\n" +
             "- Pin specific FK values across all rows via field_overrides 'eq'\n\n" +
             "RELATED TOOLS:\n" +
-            "- create_records → import generated JSON into Dataverse\n" +
+            "- upsert_records → import generated JSON into Dataverse\n" +
             "- get_tables → discover entity fields before generating")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
@@ -127,7 +127,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (count > MaxCount)
                     return Error($"count {count} exceeds maximum {MaxCount}.",
-                        $"Pass count between 1 and {MaxCount}. For larger batches, call multiple times and pipe each output file into create_records.");
+                        $"Pass count between 1 and {MaxCount}. For larger batches, call multiple times and pipe each output file into upsert_records.");
 
                 count = Math.Max(1, count);
 

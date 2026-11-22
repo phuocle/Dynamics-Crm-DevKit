@@ -72,6 +72,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 .FirstOrDefault(candidate => candidate.LogicalName == logicalName)?.Value;
         }
 
+        internal static AttributeMetadata ResolveAttribute(IOrganizationService orgService, string entityLogicalName, string fieldInput)
+        {
+            var attrIndex = GetAttributeIndex(orgService, entityLogicalName);
+            return ResolveAttribute(attrIndex, entityLogicalName, fieldInput);
+        }
+
         private static AttributeMetadataIndex GetAttributeIndex(IOrganizationService orgService, string entityLogicalName)
         {
             return MetadataCache.GetValue(orgService, _ => new(StringComparer.OrdinalIgnoreCase)).GetOrAdd(entityLogicalName, _ =>
@@ -111,7 +117,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             if (string.IsNullOrWhiteSpace(targetEntityInput))
                 return null;
 
-            var resolved = DisplayNameFirstResolver.ResolveEntity(orgService, targetEntityInput, "manage_record/create_records");
+            var resolved = DisplayNameFirstResolver.ResolveEntity(orgService, targetEntityInput, "manage_record/upsert_records");
             if (resolved.IsSuccess)
                 return resolved.Value.LogicalName;
 

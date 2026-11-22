@@ -14,22 +14,22 @@ public class McpToolBasicCoverageTests
     private static McpDryRunOptions DryRunOptions() => new() { DryRun = true };
 
     [TestMethod]
-    public async Task CreateRecords_MissingEntityName_ReturnsError()
+    public async Task UpsertRecords_MissingEntityName_ReturnsError()
     {
-        var tool = new CreateRecordsTool(null!, DryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var tool = new UpsertRecordsTool(null!, DryRunOptions(), DryRunTestHelpers.BlockedContext());
 
-        var result = await tool.create_records("", "[]");
+        var result = await tool.upsert_records("", "[]");
 
         Assert.IsTrue(result.IsError);
         StringAssert.Contains(result.GetText(), "entity_name is required");
     }
 
     [TestMethod]
-    public async Task CreateRecords_MissingRecordsJson_ReturnsError()
+    public async Task UpsertRecords_MissingRecordsJson_ReturnsError()
     {
-        var tool = new CreateRecordsTool(null!, DryRunOptions(), DryRunTestHelpers.BlockedContext());
+        var tool = new UpsertRecordsTool(null!, DryRunOptions(), DryRunTestHelpers.BlockedContext());
 
-        var result = await tool.create_records("account", "");
+        var result = await tool.upsert_records("account", "");
 
         Assert.IsTrue(result.IsError);
         StringAssert.Contains(result.GetText(), "records_json is required");

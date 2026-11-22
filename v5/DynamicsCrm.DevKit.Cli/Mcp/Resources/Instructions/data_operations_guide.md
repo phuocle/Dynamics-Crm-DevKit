@@ -1,22 +1,20 @@
 
 # Data Operations Guide
 
-Reference for `create_records`, `update_records`, `manage_record`, `execute_fetchxml`, and `search_records`.
+Reference for `upsert_records`, `manage_record`, `execute_fetchxml`, and `search_records`.
 
-## create_records -- Batch creation
-- Input is an inline JSON array, a `.json` file, or a `.csv` file. A batch can partially succeed; successful records are not rolled back.
-- Supply the primary key as a GUID string to preserve the source ID. Other Uniqueidentifier fields also accept GUID strings.
-- Supply `statecode` and `statuscode` as integers or labels from the destination table. For example, `{"accountid":"b2235a9f-2f65-49b2-9f84-548344f98c6a","name":"Contoso","statecode":"Inactive"}` creates an inactive account with its source GUID. The tool uses the state's default status reason when only a state is supplied. If only a non-active status reason is supplied, the tool uses its associated state.
-- Records that require a state or status change are updated after creation with the same `max_parallelism` and `bypass_custom_logic`. Check `items[].stateUpdate.status` and `items[].stateUpdate.error` for the outcome. The item's `id` and `created` status describe the Create step. If the follow-up fails, the batch is `partial` and the record ID can be passed to `update_records`.
+## upsert_records -- Batch create and upsert
+- Input is an inline JSON array, a `.json` file, or a `.csv` file (max 5000 records). A batch can partially succeed; successful records are not rolled back.
+- Per-record execution mode:
+  - Without primary key (`<entity>id`) and without `key_fields`: runs `CreateRequest` (Dataverse generates the GUID and stamps the shared `importSequenceNumber`).
+  - With primary key (`<entity>id` as a GUID string): runs `UpsertRequest` with `Entity(logicalName, id)` to create with that exact GUID or update if the record already exists. Duplicate primary keys in one batch are rejected per item.
+  - With `key_fields` (comma-separated field names or JSON array of strings): runs `UpsertRequest` using `KeyAttributeCollection`. Each record must include all specified alternate key fields.
+- Supply `statecode` and `statuscode` as integers or labels from the destination table (in JSON or CSV). For example, `{"accountid":"b2235a9f-2f65-49b2-9f84-548344f98c6a","name":"Contoso","statecode":"Inactive"}` upserts the account with its GUID and applies the Inactive state in step 2. The tool uses the state's default status reason when only a state is supplied; if only an inactive status reason is supplied, the tool uses its associated state.
+- Records that require a non-active state or status change are updated in a follow-up parallel `ExecuteMultiple` `UpdateRequest` batch using the same `max_parallelism` and `bypass_custom_logic`. Check `items[].stateUpdate.status`, `items[].stateUpdate.error`, and top-level `stateUpdated` for the outcome. If step 2 fails, the step 1 record stays committed and the batch reports `partial`.
 - Activity party fields use arrays of `{ "id": "<guid>", "type": "<entity>" }`; a single object is wrapped automatically. Do not supply `participationtypemask`.
-- The tool stamps records with the batch `importsequencenumber`, calculated as `max(999990, maxInTable+1)` and returned as `importSequenceNumber`. A value explicitly provided for a record wins without duplicate checking. Use the returned value to find the batch.
+- Pure-create records are stamped with the batch `importsequencenumber`, calculated as `max(999990, maxInTable+1)` and returned as `importSequenceNumber`. A value explicitly provided for a record wins without duplicate checking. Use the returned value to find the batch.
 - `bypass_custom_logic=true` bypasses custom sync and async plugins/workflows (`CustomSync,CustomAsync`), requires System Administrator, and is false by default.
-
-## update_records -- Batch update
-
-- Updates up to 5000 existing records per call through ExecuteMultiple. It accepts the same input formats and concurrency and bypass settings as `create_records`.
-- Include the table's primary key (such as `accountid`) as a GUID string and the fields to change. A repeated primary key is reported as a per-item error after its first valid occurrence.
-- Supply an explicit `statecode` to change state. When changing only `statuscode`, use a reason valid for the record's current state. Dataverse applies the target table's transition rules.
+- Structured result includes `created`, `updated` (from `UpsertResponse.RecordCreated`), `succeeded`, `failed`, `stateUpdated`, `durationSeconds`, and per-row `items`.
 
 ## manage_record -- Field Type Formats
 

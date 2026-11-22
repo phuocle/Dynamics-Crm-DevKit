@@ -95,7 +95,7 @@ public class DryRunGatewayContractTests
     {
         var expected = new HashSet<string>(StringComparer.Ordinal)
         {
-            "create_records", "update_records", "manage_record", "publish_customizations",
+            "upsert_records", "manage_record", "publish_customizations",
             "manage_deleted_records", "manage_role", "manage_environment_variable",
             "manage_chart", "manage_view", "manage_form", "manage_webresource",
             "manage_choice", "manage_table", "manage_relationship", "manage_app",
@@ -104,7 +104,7 @@ public class DryRunGatewayContractTests
             "manage_function"
         };
 
-        var actual = typeof(CreateRecordsTool).Assembly
+        var actual = typeof(UpsertRecordsTool).Assembly
             .GetTypes()
             .Where(t => t.GetCustomAttribute<McpServerToolTypeAttribute>() != null)
             .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static))

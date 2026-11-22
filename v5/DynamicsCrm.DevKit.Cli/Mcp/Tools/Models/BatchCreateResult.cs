@@ -14,8 +14,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("succeeded")]
         public int Succeeded { get; set; }
 
+        [JsonPropertyName("created")]
+        public int Created { get; set; }
+
+        [JsonPropertyName("updated")]
+        public int Updated { get; set; }
+
         [JsonPropertyName("failed")]
         public int Failed { get; set; }
+
+        [JsonPropertyName("stateUpdated")]
+        public int StateUpdated { get; set; }
 
         [JsonPropertyName("durationSeconds")]
         public double DurationSeconds { get; set; }

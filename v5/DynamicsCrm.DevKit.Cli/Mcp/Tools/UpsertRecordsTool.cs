@@ -24,7 +24,7 @@ using DynamicsCrm.DevKit.Cli.Mcp;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class CreateRecordsTool : McpToolBase
+    public class UpsertRecordsTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
@@ -32,10 +32,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
 
-        public CreateRecordsTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context) : this(serviceClient, options, context, null) { }
+        public UpsertRecordsTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context) : this(serviceClient, options, context, null) { }
 
         [Microsoft.Extensions.DependencyInjection.ActivatorUtilitiesConstructor]
-        public CreateRecordsTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
+        public UpsertRecordsTool(ServiceClient serviceClient, McpDryRunOptions options, McpExecutionContext context, DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver connections)
         {
             _connections = connections;
             _serviceClient = serviceClient;
@@ -43,7 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        private Entity PrepareStateChange(Entity entity, bool update)
+        private Entity PrepareStateChange(Entity entity)
         {
             var state = entity.GetAttributeValue<OptionSetValue>("statecode");
             var status = entity.GetAttributeValue<OptionSetValue>("statuscode");
@@ -58,19 +58,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (state != null && statusState.HasValue && state.Value != statusState.Value)
                 throw new ArgumentException($"statuscode {status.Value} belongs to statecode {statusState}, not {state.Value}.");
 
-            var desiredState = state?.Value ?? (update ? null : statusState);
+            var desiredState = state?.Value ?? statusState;
             var stateMetadata = EntityParserHelper.FindAttribute(_serviceClient, entity.LogicalName, "statecode") as StateAttributeMetadata;
             var stateOption = FindOption(stateMetadata?.OptionSet, "statecode", desiredState) as StateOptionMetadata;
 
-            // State 0 is set by Create. An active status reason can travel with
-            // the Create if the table allows it.
-            if (!update && desiredState == 0 && (status == null || statusMetadata?.IsValidForCreate != false))
+            // State 0 is set by Create/Upsert. An active status reason can travel with
+            // the Create/Upsert if the table allows it.
+            if (desiredState == 0 && (status == null || statusMetadata?.IsValidForCreate != false))
             {
                 entity.Attributes.Remove("statecode");
                 return null;
             }
 
-            var target = update ? entity : new Entity(entity.LogicalName);
+            var target = new Entity(entity.LogicalName);
             if (desiredState.HasValue)
                 target["statecode"] = state ?? new OptionSetValue(desiredState.Value);
             if (status != null)
@@ -78,8 +78,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             else if (stateOption?.DefaultStatus is int defaultStatus)
                 target["statuscode"] = new OptionSetValue(defaultStatus);
 
-            if (update)
-                return null;
             entity.Attributes.Remove("statecode");
             entity.Attributes.Remove("statuscode");
             return target;
@@ -101,89 +99,62 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // OOB Dataverse stamps importsequencenumber on every record during data
         // import/migration so the batch can be queried and rolled back as a unit.
         // The field is Integer (Int32, max 2,147,483,647), create-only, present on
-        // virtually all entities. We auto-fill it for every create_records batch:
+        // virtually all entities. We auto-fill it for pure-create records in an
+        // upsert_records batch:
         //
         //   batchValue = max(IsnBaseline, maxInTable + 1)
         //
-        // All records in one tool call share the same batchValue (so they form a
-        // queryable group). If the user explicitly provides importsequencenumber
+        // All pure-create records in one tool call share the same batchValue (so they
+        // form a queryable group). If the user explicitly provides importsequencenumber
         // on a record, that value wins for that record — no duplicate checking.
         // The batchValue is returned in the result so the user can query back:
         //   <condition attribute='importsequencenumber' operator='eq' value='999990'/>
         private const string IsnLogicalName = "importsequencenumber";
         private const int IsnBaseline = 999990;
 
-        [McpServerTool(Name = "create_records", Title = "Create multiple records in parallel",
+        [McpServerTool(Name = "upsert_records", Title = "Create or update multiple records in parallel",
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(BatchCreateResult)),
         Description(
-            "Bulk create up to 5000 Dataverse records in parallel from inline JSON, a .json file or a .csv file. Partial failures do not roll back successful records. Use manage_record for single-record CRUD.\n\n" +
+            "Bulk create or upsert up to 5000 Dataverse records in parallel from inline JSON, a .json file or a .csv file. Partial failures do not roll back successful records. Use manage_record for single-record CRUD.\n\n" +
             "records_json accepts inline JSON arrays (logical field names), .json file paths, or .csv file paths — CSV headers accept Display Names or logical names; unresolvable headers are skipped with a per-item warning. Field syntax: polymorphic lookups use field@targetentity (e.g. 'customerid@account'); activity party fields (to/from/cc/bcc/requiredattendees/organizer/customers/resources) are a JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"} — a single object is auto-wrapped; do NOT supply participationtypemask. Read docs://data_operations_guide for field formats and batch details.\n\n" +
-            "Supply the primary key as a GUID string to preserve it. Statecode and statuscode accept integer values or labels. States and status reasons that need an update are applied after create. Check each item's stateUpdate for the result.\n\n" +
-            "Records are stamped with a shared importsequencenumber so the batch can be queried and bulk-deleted as a unit; the value is returned as importSequenceNumber and an explicitly supplied value wins for that record. bypass_custom_logic skips custom sync/async plugins/workflows and requires System Administrator.\n\n" +
+            "Per-record mode: without primary key (<entity>id) and without key_fields, runs CreateRequest (Dataverse generates GUID and stamps shared importSequenceNumber); with primary key (<entity>id as GUID), runs UpsertRequest with Entity(logicalName, id) to create with that exact GUID or update if it exists; with key_fields (comma-separated or JSON array of alternate key columns), runs UpsertRequest using KeyAttributeCollection. Statecode and statuscode accept integer values or labels; non-active states/status reasons are applied via a follow-up parallel ExecuteMultiple UpdateRequest batch (check each item's stateUpdate and top-level stateUpdated).\n\n" +
+            "Pure-create records are stamped with a shared importsequencenumber so the batch can be queried and bulk-deleted as a unit; the value is returned as importSequenceNumber and an explicitly supplied value wins for that record. bypass_custom_logic skips custom sync/async plugins/workflows and requires System Administrator.\n\n" +
             "WHEN TO USE:\n" +
-            "- Seed many records at once (accounts, contacts, tasks) or import from CSV\n" +
+            "- Seed or migrate many records at once (accounts, contacts, tasks) or import from CSV\n" +
+            "- Bulk update existing records by primary key GUID or alternate key (key_fields)\n" +
             "- Pipe generate_demo_data output (.json) into records_json\n" +
-            "- High-throughput parallel creates (server hints concurrency when max_parallelism=0)\n\n" +
+            "- High-throughput parallel creates/upserts (server hints concurrency when max_parallelism=0)\n\n" +
             "RELATED TOOLS:\n" +
             "- generate_demo_data → produce JSON to pipe into records_json\n" +
-            "- update_records → bulk update existing records by GUID\n" +
             "- manage_record → single-record create/update/delete/associate/disassociate\n" +
-            "- search_records / execute_fetchxml → verify created records")]
+            "- search_records / execute_fetchxml → verify created or updated records")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Entity Display Name or logical name (Display Name resolved first).")] string entity_name = "",
             [Description("Inline JSON array, .json file path, or .csv file path. Max 5000 records.")] string records_json = "",
             [Description("Concurrent requests. 0 = server hint. Clamped 1-52. Use 1-2 for on-prem.")] int max_parallelism = 0,
-            [Description("Bypass custom sync+async plugins/workflows (BypassBusinessLogicExecution=CustomSync,CustomAsync). Default false. Requires System Administrator role; rejected early otherwise. Use for bulk data load where plugins would slow/block creates.")] bool bypass_custom_logic = false,
+            [Description("Bypass custom sync+async plugins/workflows (BypassBusinessLogicExecution=CustomSync,CustomAsync). Default false. Requires System Administrator role; rejected early otherwise. Use for bulk data load where plugins would slow/block creates or updates.")] bool bypass_custom_logic = false,
+            [Description("Optional alternate key column(s) for UpsertRequest: comma-separated names or JSON array of strings (e.g. 'accountnumber' or '[\"accountnumber\",\"emailaddress1\"]'). Default empty.")] string key_fields = "",
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
-                var worker = new CreateRecordsTool(conn.Client, conn.Options, conn.Context);
-                return worker.create_records(entity_name, records_json, max_parallelism, bypass_custom_logic);
+                var worker = new UpsertRecordsTool(conn.Client, conn.Options, conn.Context);
+                return worker.upsert_records(entity_name, records_json, max_parallelism, bypass_custom_logic, key_fields);
             }, cancellationToken);
         }
 
-        public Task<CallToolResult> create_records(
+        public async Task<CallToolResult> upsert_records(
             [Description("Entity Display Name or logical name (Display Name resolved first).")] string entity_name = "",
             [Description("Inline JSON array, .json file path, or .csv file path. Max 5000 records.")] string records_json = "",
             [Description("Concurrent requests. 0 = server hint. Clamped 1-52. Use 1-2 for on-prem.")] int max_parallelism = 0,
-            [Description("Bypass custom sync+async plugins/workflows (BypassBusinessLogicExecution=CustomSync,CustomAsync). Default false. Requires System Administrator role; rejected early otherwise. Use for bulk data load where plugins would slow/block creates.")] bool bypass_custom_logic = false)
-        {
-            return ExecuteRecordsAsync(entity_name, records_json, max_parallelism, bypass_custom_logic, update: false);
-        }
-
-        [McpServerTool(Name = "update_records", Title = "Update multiple records in parallel",
-            Destructive = true, ReadOnly = false, Idempotent = false,
-            UseStructuredContent = true, OutputSchemaType = typeof(BatchCreateResult)),
-        Description(
-            "Bulk update up to 5000 existing Dataverse records via ExecuteMultiple. Accepts inline JSON, a .json file or a .csv file. " +
-            "Each record must include the table's primary key (for example accountid) as a GUID string and at least one field to update. " +
-            "Statecode and statuscode accept integer values or labels. Partial failures are reported per record. Read docs://data_operations_guide for field formats.")]
-        public Task<CallToolResult> InvokeUpdateAsync(
-            [Description("Entity Display Name or logical name (Display Name resolved first).")] string entity_name = "",
-            [Description("Inline JSON array, .json file path, or .csv file path. Max 5000 records.")] string records_json = "",
-            [Description("Concurrent requests. 0 = server hint. Clamped 1-52. Use 1-2 for on-prem.")] int max_parallelism = 0,
-            [Description("Bypass custom sync+async plugins/workflows. Default false. Requires System Administrator.")] bool bypass_custom_logic = false,
-            [Description(McpToolInvocation.EnvDescription)] string env = null,
-            CancellationToken cancellationToken = default)
-        {
-            return McpToolInvocation.InvokeAsync(_connections, env, conn =>
-            {
-                var worker = new CreateRecordsTool(conn.Client, conn.Options, conn.Context);
-                return worker.ExecuteRecordsAsync(entity_name, records_json, max_parallelism, bypass_custom_logic, update: true);
-            }, cancellationToken);
-        }
-
-        private async Task<CallToolResult> ExecuteRecordsAsync(
-            string entity_name, string records_json, int max_parallelism, bool bypass_custom_logic, bool update)
+            [Description("Bypass custom sync+async plugins/workflows (BypassBusinessLogicExecution=CustomSync,CustomAsync). Default false. Requires System Administrator role; rejected early otherwise. Use for bulk data load where plugins would slow/block creates or updates.")] bool bypass_custom_logic = false,
+            [Description("Optional alternate key column(s) for UpsertRequest: comma-separated names or JSON array of strings (e.g. 'accountnumber' or '[\"accountnumber\",\"emailaddress1\"]'). Default empty.")] string key_fields = "")
         {
             try
             {
-                var toolName = update ? "update_records" : "create_records";
-                var verb = update ? "update" : "create";
-                var successStatus = update ? "updated" : "created";
+                const string toolName = "upsert_records";
 
                 if (string.IsNullOrWhiteSpace(entity_name))
                     return Error("entity_name is required.",
@@ -192,6 +163,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (string.IsNullOrWhiteSpace(records_json))
                     return Error("records_json is required.",
                         "Provide a JSON array, .json file path, or .csv file path.");
+
+                if (!TryParseKeyFields(key_fields, out var rawKeyFields))
+                    return Error("key_fields must be a comma-separated list or a JSON array of field names.",
+                        "Pass comma-separated field names (e.g. 'accountnumber') or a JSON array (e.g. '[\"accountnumber\"]').");
 
                 // Bypass privilege gate: BypassBusinessLogicExecution requires the
                 // prvBypassCustomBusinessLogic privilege, granted to the System
@@ -233,6 +208,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var entityName = entityResult.Value.LogicalName;
                 var primaryKey = entityResult.Value.PrimaryIdAttribute ?? entityName + "id";
 
+                var resolvedKeyFields = new List<string>();
+                if (rawKeyFields.Count > 0)
+                {
+                    var seenKeyFields = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    foreach (var field in rawKeyFields)
+                    {
+                        try
+                        {
+                            var attrMeta = EntityParserHelper.ResolveAttribute(_serviceClient, entityName, field);
+                            if (seenKeyFields.Add(attrMeta.LogicalName))
+                                resolvedKeyFields.Add(attrMeta.LogicalName);
+                        }
+                        catch (Exception ex)
+                        {
+                            return Error(ex.Message, $"Use get_tables(entity_name='{entityName}') to discover valid alternate key field names.");
+                        }
+                    }
+                }
+
                 var csvWarnings = new List<string>();
                 var (resolved, inputFormat) = ResolveRecordsInput(records_json, entityName, csvWarnings);
                 if (resolved == null)
@@ -271,7 +265,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var parsedEntities = new (Entity entity, string error)[elements.Length];
                 var stateChanges = new Entity[elements.Length];
-                var updateIds = new HashSet<Guid>();
+                var seenIds = new HashSet<Guid>();
                 for (var i = 0; i < elements.Length; i++)
                 {
                     try
@@ -279,21 +273,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         var entity = EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, elements[i].GetRawText());
                         if (entity.Attributes.TryGetValue(primaryKey, out var key))
                         {
-                            if (key is not Guid guid || guid == Guid.Empty)
+                            var guid = key is Guid g
+                                ? g
+                                : (key is string s && Guid.TryParse(s, out var parsed) ? parsed : Guid.Empty);
+                            if (guid == Guid.Empty)
                                 throw new ArgumentException($"Primary key '{primaryKey}' requires a non-empty GUID.");
                             entity.Id = guid;
-                            if (update)
-                                entity.Attributes.Remove(primaryKey);
+                            entity.Attributes.Remove(primaryKey);
+                            if (!seenIds.Add(entity.Id))
+                                throw new ArgumentException($"Duplicate primary key '{entity.Id}' in the batch.");
                         }
 
-                        if (update && entity.Id == Guid.Empty)
-                            throw new ArgumentException($"Primary key '{primaryKey}' is required to update a record.");
-                        if (update && entity.Attributes.Count == 0)
-                            throw new ArgumentException("Provide at least one field to update in addition to the primary key.");
+                        if (resolvedKeyFields.Count > 0)
+                        {
+                            foreach (var keyField in resolvedKeyFields)
+                            {
+                                if (!entity.Attributes.TryGetValue(keyField, out var keyVal) ||
+                                    keyVal == null ||
+                                    (keyVal is string str && string.IsNullOrWhiteSpace(str)))
+                                {
+                                    throw new ArgumentException($"Alternate key field '{keyField}' is required on each record when key_fields is specified.");
+                                }
+                                entity.KeyAttributes[keyField] = keyVal;
+                            }
+                        }
 
-                        stateChanges[i] = PrepareStateChange(entity, update);
-                        if (update && !updateIds.Add(entity.Id))
-                            throw new ArgumentException($"Duplicate primary key '{entity.Id}' in the update batch.");
+                        stateChanges[i] = PrepareStateChange(entity);
                         parsedEntities[i] = (entity, null);
                     }
                     catch (Exception ex)
@@ -303,9 +308,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
 
                 // Compute the batch importsequencenumber and auto-fill it on
-                // every successfully-parsed entity that does not already have one.
+                // every successfully-parsed pure-create entity that does not already have one.
                 // User-provided values always win (no duplicate checking).
-                var (batchIsn, isnWarning) = update ? (null, null) : ComputeBatchImportSequenceNumber(entityName);
+                var hasPureCreates = parsedEntities.Any(item => item.entity != null && !IsUpsertEntity(item.entity));
+                var allFailedWithoutKeyFields = parsedEntities.All(item => item.entity == null) && resolvedKeyFields.Count == 0;
+                var (batchIsn, isnWarning) = (hasPureCreates || allFailedWithoutKeyFields)
+                    ? ComputeBatchImportSequenceNumber(entityName)
+                    : (null, null);
                 if (batchIsn.HasValue)
                     ApplyBatchImportSequenceNumber(parsedEntities, batchIsn.Value);
                 if (isnWarning != null)
@@ -323,12 +332,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             StateUpdate = stateChanges[i] == null ? null : new BatchStateUpdate { Status = "pending" }
                         }).ToList()
                         : null;
+                    var upsertPreviewCount = parsedEntities.Count(item => item.entity != null && IsUpsertEntity(item.entity));
+                    var createPreviewCount = parsedEntities.Count(item => item.entity != null && !IsUpsertEntity(item.entity));
+                    var previewVerb = upsertPreviewCount == 0
+                        ? "CREATE"
+                        : (createPreviewCount == 0 ? "UPSERT" : "CREATE/UPSERT");
                     var preview = new BatchCreateResult
                     {
                         Entity = entityName,
                         Total = elements.Length,
                         Succeeded = 0,
+                        Created = 0,
+                        Updated = 0,
                         Failed = parsedEntities.Count(item => item.error != null),
+                        StateUpdated = 0,
                         DurationSeconds = 0,
                         Parallelism = parallelism,
                         UsedDefaultParallelism = usedDefault,
@@ -339,7 +356,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Status = "not_executed"
                     };
                     return DryRun(
-                        $"Would {verb.ToUpperInvariant()} {elements.Length} '{entityName}' record(s) (parallelism={parallelism}, input={inputFormat}, bypassCustomLogic={bypass_custom_logic.ToString().ToLowerInvariant()}{(batchIsn.HasValue ? $", importSequenceNumber={batchIsn}" : "")}).",
+                        $"Would {previewVerb} {elements.Length} '{entityName}' record(s) (parallelism={parallelism}, input={inputFormat}, bypassCustomLogic={bypass_custom_logic.ToString().ToLowerInvariant()}{(batchIsn.HasValue ? $", importSequenceNumber={batchIsn}" : "")}).",
                         preview);
                 }
 
@@ -356,40 +373,46 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var sw = Stopwatch.StartNew();
                 var (completed, chunkCount, batchedParallelism) = await ExecuteBatchesAsync(
-                    ready, parallelism, bypass_custom_logic, update);
+                    ready, parallelism, bypass_custom_logic, stateUpdate: false);
                 sortedItems.AddRange(completed);
                 sortedItems.Sort((left, right) => left.Index.CompareTo(right.Index));
-                var succeeded = completed.Count(item => item.Status == successStatus);
+
+                var created = completed.Count(item => item.Status == "created");
+                var updated = completed.Count(item => item.Status == "updated");
+                var succeeded = created + updated;
                 var failed = elements.Length - succeeded;
 
-                // A successful Create is committed even if its follow-up Update fails.
-                // Preserve the created item's ID and report the Update outcome separately.
+                // A successful Create/Upsert is committed even if its follow-up Update fails.
+                // Preserve the record ID and report the state update outcome separately.
                 var stateTargets = new List<(int index, Entity entity)>();
                 foreach (var item in sortedItems)
                 {
                     var target = stateChanges[item.Index];
-                    if (target == null || item.Status != "created")
+                    if (target == null || (item.Status != "created" && item.Status != "updated"))
                         continue;
                     if (!Guid.TryParse(item.Id, out var id) || id == Guid.Empty)
                     {
-                        item.StateUpdate = new BatchStateUpdate { Status = "failed", Error = "Create returned no record ID for the state update." };
+                        item.StateUpdate = new BatchStateUpdate { Status = "failed", Error = "Operation returned no record ID for the state update." };
                         continue;
                     }
                     target.Id = id;
                     stateTargets.Add((item.Index, target));
                 }
 
-                var (stateResults, _, _) = await ExecuteBatchesAsync(stateTargets, parallelism, bypass_custom_logic, update: true);
-                foreach (var stateResult in stateResults)
+                if (stateTargets.Count > 0)
                 {
-                    sortedItems[stateResult.Index].StateUpdate = new BatchStateUpdate
+                    var (stateResults, _, _) = await ExecuteBatchesAsync(stateTargets, parallelism, bypass_custom_logic, stateUpdate: true);
+                    foreach (var stateResult in stateResults)
                     {
-                        Status = stateResult.Status,
-                        Error = stateResult.Error
-                    };
+                        sortedItems[stateResult.Index].StateUpdate = new BatchStateUpdate
+                        {
+                            Status = stateResult.Status,
+                            Error = stateResult.Error
+                        };
+                    }
                 }
                 sw.Stop();
-                var statesUpdated = stateResults.Count(item => item.Status == "updated");
+                var statesUpdated = sortedItems.Count(item => item.StateUpdate?.Status == "updated");
                 var stateFailures = sortedItems.Count(item => item.StateUpdate?.Status == "failed");
 
                 // Build the warnings list shown in structured content: CSV header
@@ -405,9 +428,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // prompt to enable it next time. When bypass is ON, confirm it
                 // bypassed (no educational hint, just a fact).
                 if (!bypass_custom_logic)
-                    structuredWarnings.Add($"bypass_custom_logic is false: custom sync+async plugins/workflows ran for these {verb}s. For bulk data loads where custom logic would slow or block {verb}s, retry with bypass_custom_logic=true (requires the System Administrator role).");
+                    structuredWarnings.Add("bypass_custom_logic is false: custom sync+async plugins/workflows ran for these records. For bulk data loads where custom logic would slow or block operations, retry with bypass_custom_logic=true (requires the System Administrator role).");
                 else
-                    structuredWarnings.Add($"bypass_custom_logic=true: custom sync+async plugins/workflows were bypassed (BypassBusinessLogicExecution=CustomSync,CustomAsync) for these {verb}s.");
+                    structuredWarnings.Add("bypass_custom_logic=true: custom sync+async plugins/workflows were bypassed (BypassBusinessLogicExecution=CustomSync,CustomAsync) for these records.");
+
+                var overallSuccessStatus = created > 0 && updated > 0
+                    ? "upserted"
+                    : (updated > 0 ? "updated" : "created");
 
                 var durationSeconds = Math.Round(sw.Elapsed.TotalSeconds, 1);
                 var structured = new BatchCreateResult
@@ -415,7 +442,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Entity = entityName,
                     Total = elements.Length,
                     Succeeded = succeeded,
+                    Created = created,
+                    Updated = updated,
                     Failed = failed,
+                    StateUpdated = statesUpdated,
                     DurationSeconds = durationSeconds,
                     Parallelism = parallelism,
                     UsedDefaultParallelism = usedDefault,
@@ -424,18 +454,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ImportSequenceNumber = batchIsn,
                     Warnings = structuredWarnings.Count > 0 ? structuredWarnings : null,
                     Items = sortedItems.Count > 0 ? sortedItems : null,
-                    Status = succeeded == 0 ? "failed" : (failed + stateFailures == 0 ? successStatus : "partial")
+                    Status = succeeded == 0 ? "failed" : (failed + stateFailures == 0 ? overallSuccessStatus : "partial")
                 };
 
+                var hasUpserts = ready.Any(r => IsUpsertEntity(r.entity));
                 var bypassTag = bypass_custom_logic ? ", bypass=on" : "";
                 var chunkTag = chunkCount > 0 ? $", {chunkCount} chunk(s)" : "";
                 var isnTag = batchIsn.HasValue ? $", importSequenceNumber={batchIsn}" : "";
-                var action = update ? "Updated" : "Created";
-                var summary = $"{action} {succeeded}/{elements.Length} '{entityName}' record(s) in {durationSeconds}s ({batchedParallelism} concurrent{chunkTag}{bypassTag}{isnTag}).";
+                string summary;
                 if (succeeded == 0)
-                    summary = $"Failed to {verb} any of {elements.Length} '{entityName}' record(s) ({failed} failed{chunkTag}{bypassTag}{isnTag}).";
+                {
+                    var failVerb = hasUpserts && !hasPureCreates ? "upsert" : (!hasUpserts ? "create" : "process");
+                    summary = $"Failed to {failVerb} any of {elements.Length} '{entityName}' record(s) ({failed} failed{chunkTag}{bypassTag}{isnTag}).";
+                }
+                else if (created > 0 && updated == 0)
+                {
+                    summary = $"Created {created}/{elements.Length} '{entityName}' record(s) in {durationSeconds}s ({batchedParallelism} concurrent{chunkTag}{bypassTag}{isnTag}).";
+                }
+                else if (updated > 0 && created == 0)
+                {
+                    summary = $"Updated {updated}/{elements.Length} '{entityName}' record(s) in {durationSeconds}s ({batchedParallelism} concurrent{chunkTag}{bypassTag}{isnTag}).";
+                }
+                else
+                {
+                    summary = $"Upserted {succeeded}/{elements.Length} '{entityName}' record(s) ({created} created, {updated} updated) in {durationSeconds}s ({batchedParallelism} concurrent{chunkTag}{bypassTag}{isnTag}).";
+                }
                 if (statesUpdated + stateFailures > 0)
-                    summary += $" Updated state/status for {statesUpdated}/{statesUpdated + stateFailures} created record(s).";
+                    summary += $" Updated state/status for {statesUpdated}/{statesUpdated + stateFailures} record(s).";
 
                 if (failed + stateFailures == 0)
                     return Success(summary, structured);
@@ -448,6 +493,51 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ThrowExceptionFriendly(ex);
             }
         }
+
+        private static bool TryParseKeyFields(string keyFieldsInput, out List<string> keyFields)
+        {
+            keyFields = new List<string>();
+            if (string.IsNullOrWhiteSpace(keyFieldsInput))
+                return true;
+
+            var trimmed = keyFieldsInput.Trim();
+            if (trimmed.StartsWith("[", StringComparison.Ordinal))
+            {
+                try
+                {
+                    var root = JsonSerializer.Deserialize<JsonElement>(trimmed);
+                    if (root.ValueKind != JsonValueKind.Array || root.GetArrayLength() == 0)
+                        return false;
+                    foreach (var elem in root.EnumerateArray())
+                    {
+                        if (elem.ValueKind != JsonValueKind.String)
+                            return false;
+                        var val = elem.GetString()?.Trim();
+                        if (string.IsNullOrEmpty(val))
+                            return false;
+                        keyFields.Add(val);
+                    }
+                    return true;
+                }
+                catch (JsonException)
+                {
+                    return false;
+                }
+            }
+
+            if (trimmed.StartsWith("{", StringComparison.Ordinal))
+                return false;
+
+            var parts = trimmed.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 0)
+                return false;
+
+            keyFields.AddRange(parts);
+            return true;
+        }
+
+        private static bool IsUpsertEntity(Entity entity) =>
+            entity.Id != Guid.Empty || entity.KeyAttributes.Count > 0;
 
         /// <summary>
         /// Computes the batch importsequencenumber: max(IsnBaseline, maxInTable + 1).
@@ -500,8 +590,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         /// <summary>
-        /// Applies the batch importsequencenumber to every successfully-parsed entity
-        /// that does not already have the field set. User-provided values are
+        /// Applies the batch importsequencenumber to every successfully-parsed pure-create
+        /// entity that does not already have the field set. User-provided values are
         /// preserved — this method only fills in entities where the key is absent.
         /// </summary>
         private static void ApplyBatchImportSequenceNumber(
@@ -509,14 +599,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             foreach (var (entity, _) in parsedEntities)
             {
-                if (entity == null) continue;
+                if (entity == null || IsUpsertEntity(entity)) continue;
                 if (!entity.Contains(IsnLogicalName))
                     entity[IsnLogicalName] = batchIsn;
             }
         }
 
         private async Task<(List<BatchCreateItem> items, int chunkCount, int concurrency)> ExecuteBatchesAsync(
-            List<(int index, Entity entity)> records, int parallelism, bool bypass, bool update)
+            List<(int index, Entity entity)> records, int parallelism, bool bypass, bool stateUpdate)
         {
             var chunks = records.Chunk(ChunkSize).ToArray();
             var concurrency = Math.Min(parallelism, Math.Max(1, chunks.Length));
@@ -530,11 +620,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     using var ownedWorker = _serviceClient.Clone();
                     if (ownedWorker != null)
                         ownedWorker.CallerId = _serviceClient.CallerId;
-                    items = await ExecuteChunkAsync(ownedWorker ?? _serviceClient, chunk, bypass, ct, update);
+                    items = await ExecuteChunkAsync(ownedWorker ?? _serviceClient, chunk, bypass, ct, stateUpdate);
                 }
                 catch (Exception ex)
                 {
-                    items = ChunkFailures(chunk, update, ex.Message);
+                    items = ChunkFailures(chunk, ex.Message);
                 }
                 foreach (var item in items)
                     results.Add(item);
@@ -543,7 +633,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private async Task<List<BatchCreateItem>> ExecuteChunkAsync(
-            ServiceClient worker, IReadOnlyList<(int index, Entity entity)> chunk, bool bypass, CancellationToken ct, bool update)
+            ServiceClient worker, IReadOnlyList<(int index, Entity entity)> chunk, bool bypass, CancellationToken ct, bool stateUpdate = false)
         {
             var items = new List<BatchCreateItem>(chunk.Count);
             var request = new ExecuteMultipleRequest
@@ -557,7 +647,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             foreach (var (_, entity) in chunk)
             {
-                OrganizationRequest mutation = update ? new UpdateRequest { Target = entity } : new CreateRequest { Target = entity };
+                OrganizationRequest mutation = stateUpdate
+                    ? new UpdateRequest { Target = entity }
+                    : IsUpsertEntity(entity)
+                        ? new UpsertRequest { Target = entity }
+                        : new CreateRequest { Target = entity };
                 if (bypass)
                     mutation.Parameters["BypassBusinessLogicExecution"] = "CustomSync,CustomAsync";
                 request.Requests.Add(mutation);
@@ -574,33 +668,77 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 for (var i = 0; i < chunk.Count; i++)
                 {
                     var (index, entity) = chunk[i];
+                    var isUpsert = !stateUpdate && IsUpsertEntity(entity);
                     if (!byIndex.TryGetValue(i, out var item) || item.Fault != null)
                     {
                         var err = item?.Fault?.Message ?? "No response returned for this item.";
-                        items.Add(new BatchCreateItem { Index = index, Id = update ? entity.Id.ToString() : "", Status = "failed", Error = err });
+                        items.Add(new BatchCreateItem
+                        {
+                            Index = index,
+                            Id = entity.Id != Guid.Empty ? entity.Id.ToString() : "",
+                            Status = "failed",
+                            Error = err
+                        });
+                    }
+                    else if (stateUpdate)
+                    {
+                        items.Add(new BatchCreateItem
+                        {
+                            Index = index,
+                            Id = entity.Id != Guid.Empty ? entity.Id.ToString() : "",
+                            Status = "updated"
+                        });
+                    }
+                    else if (isUpsert)
+                    {
+                        var id = ResolveUpsertId(item.Response, entity);
+                        var recordCreated = item.Response?.Results.TryGetValue("RecordCreated", out var rcObj) == true && rcObj is bool rc ? rc : true;
+                        items.Add(new BatchCreateItem
+                        {
+                            Index = index,
+                            Id = id != Guid.Empty ? id.ToString() : "",
+                            Status = recordCreated ? "created" : "updated"
+                        });
                     }
                     else
                     {
-                        var id = !update && item.Response?.Results.TryGetValue("id", out var returnedId) == true
+                        var id = item.Response?.Results.TryGetValue("id", out var returnedId) == true
                             && returnedId is Guid createdId && createdId != Guid.Empty ? createdId : entity.Id;
-                        items.Add(new BatchCreateItem { Index = index, Id = id.ToString(), Status = update ? "updated" : "created" });
+                        items.Add(new BatchCreateItem
+                        {
+                            Index = index,
+                            Id = id != Guid.Empty ? id.ToString() : "",
+                            Status = "created"
+                        });
                     }
                 }
             }
             catch (Exception ex)
             {
-                return ChunkFailures(chunk, update, ex.Message);
+                return ChunkFailures(chunk, ex.Message);
             }
             return items;
         }
 
+        private static Guid ResolveUpsertId(OrganizationResponse response, Entity entity)
+        {
+            if (response?.Results != null)
+            {
+                if (response.Results.TryGetValue("Target", out var targetObj) && targetObj is EntityReference er && er.Id != Guid.Empty)
+                    return er.Id;
+                if (response.Results.TryGetValue("id", out var idObj) && idObj is Guid id && id != Guid.Empty)
+                    return id;
+            }
+            return entity.Id;
+        }
+
         private static List<BatchCreateItem> ChunkFailures(
-            IReadOnlyList<(int index, Entity entity)> chunk, bool update, string error)
+            IReadOnlyList<(int index, Entity entity)> chunk, string error)
         {
             return chunk.Select(record => new BatchCreateItem
             {
                 Index = record.index,
-                Id = update ? record.entity.Id.ToString() : "",
+                Id = record.entity.Id != Guid.Empty ? record.entity.Id.ToString() : "",
                 Status = "failed",
                 Error = error
             }).ToList();

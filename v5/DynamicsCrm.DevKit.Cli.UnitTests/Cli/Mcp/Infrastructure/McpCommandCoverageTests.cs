@@ -19,7 +19,7 @@ public class McpCommandCoverageTests
         var (exitCode, stdout, stderr) = await ExecuteWithConsoleAsync(new McpCommandArgs { ListTools = true });
 
         Assert.AreEqual(0, exitCode);
-        StringAssert.Contains(stdout, "DevKit MCP Tools (42)");
+        StringAssert.Contains(stdout, "DevKit MCP Tools (41)");
         StringAssert.Contains(stdout, "whoami");
         StringAssert.Contains(stdout, "manage_record");
         var lines = stdout.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
