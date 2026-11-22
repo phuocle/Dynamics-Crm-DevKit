@@ -39,6 +39,12 @@ declare namespace DevKit {
         readonly Depth: number;
 
         /**
+         * Returns the native stage change direction, preserving its casing, or undefined when unavailable.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/events/onstagechange
+         */
+        readonly Direction: "Next" | "Previous" | "next" | "previous" | undefined;
+
+        /**
          * Returns an object with the Id, Name, and EntityType of the saved entity.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getentityreference
          */
@@ -81,6 +87,18 @@ declare namespace DevKit {
         readonly SaveMode: number;
 
         /**
+         * Returns the native stage from the event arguments, or undefined when unavailable.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process#stage-methods
+         */
+        readonly Stage: any;
+
+        /**
+         * Returns the clicked lookup tag and the originating column name, or undefined when unavailable.
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/events/onlookuptagclick
+         */
+        readonly TagValue: (EntityReference & { name: string; fieldName: string }) | undefined;
+
+        /**
          * Disables the asynchronous timeout for the OnSave event handler.
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/disableasynctimeout
          */
@@ -101,7 +119,7 @@ declare namespace DevKit {
 
         /**
          * Returns a value indicating whether the form data is loading for the first time.
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments#getdataloadstate
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/executioncontext/geteventargs#return-value
          */
         IsInitialLoad(): boolean;
 
@@ -324,6 +342,12 @@ declare namespace DevKit {
          */
         interface IControlText extends IControl {
             /**
+             * Gets the text currently being entered, or undefined when the control cannot supply it.
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvalue
+             */
+            readonly LiveValue: string | undefined;
+
+            /**
              * Returns a number indicating the maximum length of a string or memo attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmaxlength
              */
@@ -341,6 +365,12 @@ declare namespace DevKit {
          * Base interface for numeric controls (Integer, Decimal, Double, Money)
          */
         interface IControlNumber extends IControl {
+            /**
+             * Gets the text currently being entered, or undefined when the control cannot supply it.
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvalue
+             */
+            readonly LiveValue: string | undefined;
+
             /**
              * Returns a number indicating the maximum allowed value for an attribute
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmax
@@ -1284,6 +1314,12 @@ declare namespace DevKit {
              */
             interface IControlText extends IControl {
                 /**
+                 * Gets the text currently being entered, or undefined when the control cannot supply it.
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvalue
+                 */
+                readonly LiveValue: string | undefined;
+
+                /**
                  * Returns a number indicating the maximum length of a string or memo attribute
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmaxlength
                  */
@@ -1301,6 +1337,12 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
              */
             interface IControlNumber extends IControl {
+                /**
+                 * Gets the text currently being entered, or undefined when the control cannot supply it.
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvalue
+                 */
+                readonly LiveValue: string | undefined;
+
                 /**
                  * Returns a number indicating the maximum allowed value for an attribute
                  * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes/getmax
@@ -2799,6 +2841,8 @@ declare namespace DevKit {
         readonly UserId: string;
         /** User's full name */
         readonly UserName: string;
+        /** Gets the user's security role privileges and reports an error when the client API is unavailable. */
+        GetSecurityRolePrivilegesInfo: UserSettings["GetSecurityRolePrivilegesInfo"];
     }
 
     /**
@@ -3671,7 +3715,7 @@ declare namespace DevKit {
     interface ISidePanes {
         /**
          * Get/Set the display state of the side panes: 0=Collapsed, 1=Expanded
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes#state
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
          */
         DisplayState: OptionSet.SidePaneState;
 
@@ -4263,7 +4307,7 @@ declare namespace DevKit {
         AllowCreateNew(callback: (executionContext: any) => boolean): void;
         /**
          * Returns the integer value of the business process flow category
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formContext-data-process/stage/getCategory
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getcategory
          */
         readonly Category: OptionSet.ProcessCategory;
         /**
@@ -4358,7 +4402,7 @@ declare namespace DevKit {
         /**
          * [Deprecated] Returns the ID of the base currency for the current organization
          * @deprecated use {@link BaseCurrency}
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrencyid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly BaseCurrencyId: Guid;
         /**
@@ -4368,7 +4412,7 @@ declare namespace DevKit {
         readonly BaseCurrency: EntityReference;
         /**
          * Returns the default country/region code for phone numbers for the current organization
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#defaultcountrycode
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly DefaultCountryCode: string;
         /**
@@ -4378,37 +4422,37 @@ declare namespace DevKit {
         readonly FullNameConventionCode: OptionSet.FullNameConventionCode;
         /**
          * Indicates whether the auto-save option is enabled for the current organization
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#isautosaveenabled
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly IsAutoSaveEnabled: boolean;
         /**
          * Indicates whether the current organization is a trial organization
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#istrialorganization
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly IsTrialOrganization: boolean;
         /**
          * Returns the preferred language ID for the current organization
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#languageid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly LanguageId: number;
         /**
          * Returns the expiry date for the current organization if it is a trial organization
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#organizationexpirydate
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly OrganizationExpiryDate: Date;
         /**
          * Returns the ID of the current organization
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#organizationid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly OrganizationId: Guid;
         /**
          * Returns the unique name of the current organization
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#uniquename
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly UniqueName: string;
         /**
          * Indicates whether the Skype protocol is used for the current organization
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#useskypeprotocol
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
          */
         readonly UseSkypeProtocol: boolean;
     }
@@ -4491,27 +4535,27 @@ declare namespace DevKit {
         readonly DateFormattingInfo: DateFormattingInfo;
         /**
          * Returns the ID of the default dashboard for the current user
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#defaultdashboardid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly DefaultDashboardId: Guid;
         /**
          * Indicates whether guided help is enabled for the current user
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isguidedhelpenabled
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly IsGuidedHelpEnabled: boolean;
         /**
          * Indicates whether high contrast is enabled for the current user
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#ishighcontrastenabled
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly IsHighContrastEnabled: boolean;
         /**
          * Indicates whether the language for the current user is a right-to-left (RTL) language
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isrtl
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly IsRTL: boolean;
         /**
          * Returns the language ID for the current user
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#languageid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly LanguageId: number;
         /**
@@ -4521,13 +4565,13 @@ declare namespace DevKit {
         readonly Roles: Collections<EntityReference>;
         /**
          * Returns an array of strings that represent the GUID values of each of the security role privilege that the user is associated with
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroleprivileges
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly SecurityRolePrivileges: Array<Guid>;
         /**
          * [Deprecated] Returns an array of strings that represent the GUID values of each of the security role privilege
          * @deprecated use {@link SecurityRolePrivileges}
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroles
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly SecurityRoles: Array<Guid>;
         /**
@@ -4538,17 +4582,17 @@ declare namespace DevKit {
         /**
          * [Deprecated] Returns the transaction currency ID for the current user.
          * @deprecated use {@link TransactionCurrency}
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrencyid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly TransactionCurrencyId: Guid;
         /**
          * Returns the GUID of the SystemUser.Id value for the current user
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#userid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly UserId: Guid;
         /**
          * Returns the name of the current user
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#username
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings
          */
         readonly UserName: string;
         /**
@@ -4706,6 +4750,11 @@ declare namespace OptionSet {
      */
     type FileOption = 1 | 2;
     /**
+     * Alias of FileOption matching the runtime OptionSet member name
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openfile
+     */
+    type OpenFileOption = FileOption;
+    /**
      * Describes the type of privilege for security operations
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymetadata
      */
@@ -4742,7 +4791,7 @@ declare namespace OptionSet {
     type GridType = 1 | 2;
     /**
      * Display state of the side pane
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes#state
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
      */
     type SidePaneState = 0 | 1;
     /**

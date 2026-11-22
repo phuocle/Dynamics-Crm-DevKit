@@ -247,6 +247,7 @@ const devKit = (function () {
         getter(field, 'IsDirty', () => attribute?.getIsDirty());
         getter(field, 'IsPartyList', () => attribute?.getIsPartyList());
         getter(field, 'IsValid', () => attribute?.isValid());
+        getter(field, 'LiveValue', () => control?.getValue?.());
         getter(field, 'Max', () => attribute?.getMax());
         getter(field, 'MaxLength', () => attribute?.getMaxLength());
         getter(field, 'Min', () => attribute?.getMin());
@@ -522,7 +523,7 @@ const devKit = (function () {
                 const gridInstance = formContext?.getControl(grid)?.getGrid();
                 return createCollectionObject(
                     () => gridInstance?.getSelectedRows(),
-                    row => loadGridRow(row?.getData())
+                    loadGridRow
                 );
             });
             getter(obj[grid], 'TotalRecordCount', () => gridControl?.getGrid()?.getTotalRecordCount());
@@ -612,6 +613,15 @@ const devKit = (function () {
             getter(obj, 'TransactionCurrencyId', () => userSettings?.transactionCurrencyId);
             getter(obj, 'UserId', () => userSettings?.userId);
             getter(obj, 'UserName', () => userSettings?.userName);
+            obj.GetSecurityRolePrivilegesInfo = function (successCallback, errorCallback) {
+                let promise = userSettings?.getSecurityRolePrivilegesInfo?.();
+                if (!promise) {
+                    if (successCallback && !errorCallback) return;
+                    promise = Promise.reject(new Error('getSecurityRolePrivilegesInfo is not available in this client'));
+                }
+                if (successCallback) promise.then(successCallback, errorCallback);
+                else return promise;
+            };
             return obj;
         });
         getter(obj, 'Version', () => getGlobalContext?.getVersion());
@@ -982,6 +992,7 @@ const devKit = (function () {
     function loadExecutionContext(executionContext) {
         const obj = {};
         getter(obj, 'Depth', () => executionContext?.getDepth());
+        getter(obj, 'Direction', () => executionContext?.getEventArgs?.()?.getDirection?.());
         getter(obj, 'EntityReference', () => executionContext?.getEventArgs()?.getEntityReference());
         getter(obj, 'EventArgs', () => executionContext?.getEventArgs());
         getter(obj, 'EventSource', () => executionContext?.getEventSource());
@@ -989,6 +1000,8 @@ const devKit = (function () {
         getter(obj, 'IsSaveSuccess', () => executionContext?.getEventArgs()?.getIsSaveSuccess());
         getter(obj, 'SaveErrorInfo', () => executionContext?.getEventArgs()?.getSaveErrorInfo());
         getter(obj, 'SaveMode', () => executionContext?.getEventArgs()?.getSaveMode());
+        getter(obj, 'Stage', () => executionContext?.getEventArgs?.()?.getStage?.());
+        getter(obj, 'TagValue', () => executionContext?.getEventArgs?.()?.getTagValue?.());
         obj.DisableAsyncTimeout = () => executionContext?.getEventArgs()?.disableAsyncTimeout();
         obj.GetSharedVariable = key => executionContext?.getSharedVariable(key);
         obj.IsDefaultPrevented = () => executionContext?.getEventArgs()?.isDefaultPrevented();
@@ -1091,6 +1104,7 @@ var OptionSet;
     OptionSet.FullNameConventionCode = Object.freeze({ LastName_Comma_FirstName: 0, FirstName_LastName: 1, LastName_Comma_FirstName_MiddleInitial: 2, FirstName_MiddleInitial_LastName: 3, LastName_Comma_FirstName_MiddleName: 4, FirstName_MiddleName_LastName: 5, LastName_FirstName: 6, LastNameFirstName: 7 });
     OptionSet.GridType = Object.freeze({ HomePageGrid: 1, Subgrid: 2 });
     OptionSet.OpenFileOption = Object.freeze({ Open: 1, Save: 2 });
+    OptionSet.FileOption = OptionSet.OpenFileOption;
     OptionSet.ProcessCategory = Object.freeze({ Qualify: 0, Develop: 1, Propose: 2, Close: 3, Identify: 4, Research: 5, Resolve: 6 });
     OptionSet.ProcessDisplayState = Object.freeze({ Expanded: 'expanded', Collapsed: 'collapsed', Floating: 'floating' });
     OptionSet.ProcessStageStatus = Object.freeze({ Active: 'active', Inactive: 'inactive' });
