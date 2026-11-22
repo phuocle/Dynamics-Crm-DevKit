@@ -643,6 +643,50 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
         Assert.IsFalse(Directory.Exists(BackupDir("dashboard")));
     }
 
+    [TestMethod]
+    [DataRow("create", false)]
+    [DataRow("update", false)]
+    [DataRow("operations", false)]
+    [DataRow("rename", false)]
+    [DataRow("undo", false)]
+    [DataRow("operations", true)]
+    public async Task EntityFormMutation_WithSolution_AssociatesSystemForm(string scenario, bool dryRun)
+    {
+        SeedDashboardSolution();
+        var id = scenario == "create" ? Guid.Empty : SeedForm("Account Form");
+        string formxml = scenario is "create" or "update" ? RestoreFormXml : "";
+        if (scenario == "undo")
+        {
+            formxml = Path.Combine(_tempDir, "solution-form-backup.json");
+            await File.WriteAllTextAsync(formxml, MakeBackupJson(RestoreFormXml, formId: id));
+        }
+
+        var result = await NewTool(dryRun).manage_form(null!, scenario == "operations" ? "update" : scenario,
+            "account", form_id: id == Guid.Empty ? "" : id.ToString(), form_name: "Account Form Updated",
+            form_type: 7, formxml: formxml, operations: scenario == "operations" ? AddTabOps : "",
+            solution_name: "Dashboard Solution");
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var data = Structured(result);
+        Assert.AreEqual("dashboards_solution", data.GetProperty("solutionName").GetString());
+        if (dryRun)
+        {
+            Assert.AreEqual("not_executed", data.GetProperty("status").GetString());
+            Assert.HasCount(0, _service.SolutionRequests);
+            Assert.AreEqual(0, _service.Updates);
+            return;
+        }
+
+        var request = _service.SolutionRequests.Single();
+        var formId = Guid.Parse(data.GetProperty("formId").GetString()!);
+        Assert.AreEqual(60, request.ComponentType);
+        Assert.AreEqual(formId, request.ComponentId);
+        if (id != Guid.Empty)
+            Assert.AreEqual(id, request.ComponentId);
+        Assert.AreEqual("dashboards_solution", request.SolutionUniqueName);
+        Assert.IsTrue(data.GetProperty("isAddToSolution").GetBoolean());
+    }
+
     private void SeedDashboardSolution()
     {
         var orgService = _ctx.GetOrganizationService();

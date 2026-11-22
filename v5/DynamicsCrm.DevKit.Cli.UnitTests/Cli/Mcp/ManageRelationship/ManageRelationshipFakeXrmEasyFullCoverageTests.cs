@@ -406,14 +406,21 @@ public sealed class ManageRelationshipFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
-    public void Update_CascadeChanges_Updates()
+    public void Update_CascadeChanges_WithSolution_AssociatesRelationship()
     {
+        var relationshipId = _service.OneToMany["devkit_account_contact"].MetadataId!.Value;
         var result = NewTool().manage_relationship("update", relationship_name: "devkit_account_contact",
-            cascade_assign: "Cascade", cascade_delete: "Restrict");
+            cascade_assign: "Cascade", cascade_delete: "Restrict", solution_name: "Test Solution");
         Assert.IsFalse(result.IsError == true);
         StringAssert.Contains(Text(result), "Updated relationship 'devkit_account_contact' with 2 change(s)");
         Assert.AreEqual(1, _service.UpdateRelationships);
         Assert.AreEqual(1, _service.Publishes);
+        Assert.AreEqual("TestSolution", _service.LastUpdateRequest!.SolutionUniqueName);
+        var association = _service.SolutionRequests.Single();
+        Assert.AreEqual(10, association.ComponentType);
+        Assert.AreEqual(relationshipId, association.ComponentId);
+        Assert.AreEqual("TestSolution", association.SolutionUniqueName);
+        Assert.IsTrue(result.StructuredContent!.Value.GetProperty("isAddToSolution").GetBoolean());
     }
 
     [TestMethod]
@@ -457,11 +464,12 @@ public sealed class ManageRelationshipFakeXrmEasyFullCoverageTests
     public void Update_DryRun_NoMutation()
     {
         var result = NewTool(dryRun: true).manage_relationship("update", relationship_name: "devkit_account_contact",
-            cascade_assign: "Cascade");
+            cascade_assign: "Cascade", solution_name: "Test Solution");
         Assert.IsFalse(result.IsError == true);
         StringAssert.Contains(Text(result), "[DryRun]");
         StringAssert.Contains(Text(result), "Would UPDATE relationship 'devkit_account_contact' with 1 change(s)");
         Assert.AreEqual(0, _service.UpdateRelationships);
+        Assert.HasCount(0, _service.SolutionRequests);
     }
 
     [TestMethod]
@@ -650,6 +658,8 @@ public sealed class ManageRelationshipFakeXrmEasyFullCoverageTests
         public int CreateRelationships;
         public int UpdateRelationships;
         public int DeleteRelationships;
+        public UpdateRelationshipRequest? LastUpdateRequest { get; private set; }
+        public readonly List<AddSolutionComponentRequest> SolutionRequests = new();
 
         public RelationshipOrgService(IOrganizationService inner) => _inner = inner;
 
@@ -713,9 +723,13 @@ public sealed class ManageRelationshipFakeXrmEasyFullCoverageTests
                     resp.Results["mmrelationshipid"] = Guid.NewGuid();
                     return resp;
                 }
-                case UpdateRelationshipRequest:
+                case UpdateRelationshipRequest updateRelationship:
+                    LastUpdateRequest = updateRelationship;
                     UpdateRelationships++;
                     return new OrganizationResponse();
+                case AddSolutionComponentRequest association:
+                    SolutionRequests.Add(association);
+                    return new AddSolutionComponentResponse();
                 case DeleteRelationshipRequest:
                     DeleteRelationships++;
                     return new OrganizationResponse();

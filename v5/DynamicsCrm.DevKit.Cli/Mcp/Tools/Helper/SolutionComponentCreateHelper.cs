@@ -55,9 +55,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             var trimmedSolutionName = solutionUniqueName.Trim();
 
             // Keep the policy assertion outside the warning-producing catch.
-            // A blocked mutation is a safety decision, not an optional
-            // Add-to-solution warning and must propagate to the caller.
             context.AssertMutationAllowed($"AddSolutionComponentRequest {trimmedSolutionName}");
+            if (componentId == Guid.Empty)
+                return new SolutionComponentCreateResult
+                {
+                    SolutionUniqueName = trimmedSolutionName,
+                    AddToSolutionMethod = "none",
+                    AddToSolutionWarning = "Component ID is unavailable."
+                };
 
             try
             {

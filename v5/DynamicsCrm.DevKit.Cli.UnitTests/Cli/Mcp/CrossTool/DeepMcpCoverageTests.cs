@@ -178,12 +178,12 @@ public sealed class DeepMcpCoverageTests
         Call(tool, "HandleUpdate", "account", "bad", "<form />", "", null);
         Call(tool, "HandleUpdate", "account", Guid.NewGuid().ToString(), "", "", null);
         Call(tool, "HandleUpdate", "account", Guid.NewGuid().ToString(), "<form />", "[]", null);
-        Call(tool, "HandleRename", "account", "", "");
-        Call(tool, "HandleRename", "account", "bad", "New form");
-        Call(tool, "HandleRename", "account", Guid.NewGuid().ToString(), "");
-        Call(tool, "HandleUndo", "account", "", "");
-        Call(tool, "HandleUndo", "account", "bad", "missing.json");
-        Call(tool, "HandleUndo", "account", Guid.NewGuid().ToString(), "");
+        Call(tool, "HandleRename", "account", "", "", null);
+        Call(tool, "HandleRename", "account", "bad", "New form", null);
+        Call(tool, "HandleRename", "account", Guid.NewGuid().ToString(), "", null);
+        Call(tool, "HandleUndo", "account", "", "", null);
+        Call(tool, "HandleUndo", "account", "bad", "missing.json", null);
+        Call(tool, "HandleUndo", "account", Guid.NewGuid().ToString(), "", null);
 
         var formTypeNames = new[] { 0, 2, 4, 5, 6, 7, 8, 11, 12, 999 };
         foreach (var formType in formTypeNames)

@@ -13,7 +13,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
     /// </summary>
     internal static class SolutionResolverHelper
     {
-        internal static SolutionResolveResult Resolve(IOrganizationService orgService, string solutionInput)
+        internal static SolutionResolveResult Resolve(IOrganizationService orgService, string solutionInput, bool requireUnmanaged = false)
         {
             if (orgService == null)
                 return SolutionResolveResult.Fail("IOrganizationService is null.");
@@ -29,7 +29,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     solutionInput,
                     entityName: "solution",
                     idColumn: "solutionid",
-                    columns: new ColumnSet("solutionid", "publisherid", "uniquename", "friendlyname"),
+                    columns: new ColumnSet("solutionid", "publisherid", "uniquename", "friendlyname", "ismanaged"),
                     displayColumn: "friendlyname",
                     logicalColumn: null,
                     uniqueColumn: "uniquename",
@@ -42,6 +42,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
                 if (!resolved.IsSuccess)
                     return SolutionResolveResult.Fail(resolved.Error, resolved.Status, resolved.Candidates);
+
+                if (requireUnmanaged && resolved.Value.GetAttributeValue<bool>("ismanaged"))
+                    return SolutionResolveResult.Fail($"Solution '{solutionInput}' is managed. Pass an unmanaged solution in solution_name.");
+                if (requireUnmanaged && string.IsNullOrWhiteSpace(resolved.Value.GetAttributeValue<string>("uniquename")))
+                    return SolutionResolveResult.Fail($"Solution '{solutionInput}' has no unique name.");
 
                 return BuildResult(orgService, resolved.Value, solutionInput);
             }

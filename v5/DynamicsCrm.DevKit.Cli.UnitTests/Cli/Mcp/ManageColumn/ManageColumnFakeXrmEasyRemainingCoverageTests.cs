@@ -892,9 +892,13 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
     }
 
     [TestMethod]
-    public void Update_RequiredLevel_IssuesWebApiPut()
+    public void Update_RequiredLevel_IssuesWebApiPutAndAddsColumnToSolution()
     {
-        var result = NewTool().manage_column(entity_name: "account", logical_name: "name", required_level: "Recommended");
+        var attribute = _service.Entities.Single(e => e.LogicalName == "account").Attributes.Single(a => a.LogicalName == "name");
+        var attributeId = Guid.NewGuid();
+        attribute.MetadataId = attributeId;
+        var result = NewTool().manage_column(entity_name: "account", logical_name: "name",
+            required_level: "Recommended", solution_name: "DevKit Solution");
         AssertSuccess(result, "Updated column 'name' on entity 'account'.");
         var call = _webApi.Calls.Single();
         Assert.AreEqual(HttpMethod.Put, call.Method);
@@ -902,6 +906,47 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
         StringAssert.Contains(call.Body!, "\"RequiredLevel\":{\"Value\":\"Recommended\"");
         StringAssert.Contains(call.Body!, "\"CanBeChanged\":true");
         StringAssert.Contains(Json(result), "\"requiredLevel\"");
+        Assert.AreEqual("DevKit", _service.LastUpdateRequest!.Parameters["SolutionUniqueName"]);
+        var association = _service.SolutionRequests.Single();
+        Assert.AreEqual(attributeId, association.ComponentId);
+        Assert.AreEqual(2, association.ComponentType);
+        Assert.AreEqual("DevKit", association.SolutionUniqueName);
+        Assert.IsTrue(result.StructuredContent!.Value.GetProperty("isAddToSolution").GetBoolean());
+    }
+
+    [TestMethod]
+    [DataRow("new_choice", false)]
+    [DataRow("new_status", false)]
+    [DataRow("new_status", true)]
+    public void Update_OptionsOnly_WithSolution_AssociatesColumn(string attributeName, bool dryRun)
+    {
+        var attribute = _service.Entities.Single(e => e.LogicalName == "account").Attributes.Single(a => a.LogicalName == attributeName);
+        var attributeId = Guid.NewGuid();
+        attribute.MetadataId = attributeId;
+        var result = NewTool(dryRun).manage_column(entity_name: "account", logical_name: attributeName,
+            add_options: """[{"label":"Under Review","value":100000001}]""",
+            update_options: """[{"label":"Renamed","value":1}]""", delete_options: "[2]", solution_name: "DevKit Solution");
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        Assert.HasCount(0, _service.UpdatedAttributes);
+        var data = result.StructuredContent!.Value;
+        Assert.AreEqual("DevKit", data.GetProperty("solutionName").GetString());
+        if (dryRun)
+        {
+            Assert.AreEqual("not_executed", data.GetProperty("status").GetString());
+            Assert.HasCount(0, _service.OptionRequests);
+            Assert.HasCount(0, _service.SolutionRequests);
+            return;
+        }
+
+        Assert.HasCount(3, _service.OptionRequests);
+        foreach (var request in _service.OptionRequests)
+            Assert.AreEqual("DevKit", request.Parameters["SolutionUniqueName"]);
+        var association = _service.SolutionRequests.Single();
+        Assert.AreEqual(attributeId, association.ComponentId);
+        Assert.AreEqual(2, association.ComponentType);
+        Assert.AreEqual("DevKit", association.SolutionUniqueName);
+        Assert.IsTrue(data.GetProperty("isAddToSolution").GetBoolean());
     }
 
     [TestMethod]
@@ -1606,6 +1651,8 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
 
         /// <summary>Attributes received via UpdateAttributeRequest.</summary>
         public List<AttributeMetadata> UpdatedAttributes { get; } = new();
+        public UpdateAttributeRequest? LastUpdateRequest { get; private set; }
+        public List<AddSolutionComponentRequest> SolutionRequests { get; } = new();
 
         /// <summary>Option management requests (insert/update/delete/status).</summary>
         public List<OrganizationRequest> OptionRequests { get; } = new();
@@ -1647,6 +1694,7 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
             RetrieveAllOptionSetsRequest => RetrieveOptionSets(),
             CreateAttributeRequest r => CreateAttribute(r),
             UpdateAttributeRequest r => UpdateAttribute(r),
+            AddSolutionComponentRequest r => AddToSolution(r),
             CreateEntityKeyRequest when KeyCreateExceptionMessage != null
                 => throw new InvalidOperationException(KeyCreateExceptionMessage),
             CreateEntityKeyRequest => new OrganizationResponse(),
@@ -1740,8 +1788,15 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
         {
             if (UpdateExceptionMessage != null)
                 throw new InvalidOperationException(UpdateExceptionMessage);
+            LastUpdateRequest = request;
             UpdatedAttributes.Add(request.Attribute);
             return new OrganizationResponse();
+        }
+
+        private OrganizationResponse AddToSolution(AddSolutionComponentRequest request)
+        {
+            SolutionRequests.Add(request);
+            return new AddSolutionComponentResponse();
         }
 
         private OrganizationResponse CreateOneToMany(CreateOneToManyRequest request)

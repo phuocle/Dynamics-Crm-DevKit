@@ -18,6 +18,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageRelationshipTool : McpToolBase
     {
+        private const int RelationshipComponentType = 10;
         private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
@@ -75,7 +76,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Details / Sales / Service / Marketing.")] string menu_group = "",
             [Description("Associated relationship menu order for create_1n/create_nn/add_target; default 10000. For update, 10000 means leave the existing order unchanged.")] int menu_order = 10000,
             [Description("1:N create only.")] string lookup_display_name = "",
-            [Description("Required: create_1n, create_nn, add_target.")] string solution_name = "",
+            [Description("Unmanaged solution unique or display name. Required for create_1n, create_nn, add_target. Optional on update to add the changed relationship to the solution.")] string solution_name = "",
             [Description("Self-referential 1:N (create_1n/update). 1 per entity, referenced=referencing.")] bool is_hierarchical = false,
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)
@@ -108,7 +109,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Details / Sales / Service / Marketing.")] string menu_group = "",
             [Description("Associated relationship menu order for create_1n/create_nn/add_target; default 10000. For update, 10000 means leave the existing order unchanged.")] int menu_order = 10000,
             [Description("1:N create only.")] string lookup_display_name = "",
-            [Description("Required: create_1n, create_nn, add_target.")] string solution_name = "",
+            [Description("Unmanaged solution unique or display name. Required for create_1n, create_nn, add_target. Optional on update to add the changed relationship to the solution.")] string solution_name = "",
             [Description("Self-referential 1:N (create_1n/update). 1 per entity, referenced=referencing.")] bool is_hierarchical = false)
         {
             try
@@ -126,7 +127,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "create_nn" => HandleCreateNN(entity1, entity2, relationship_name, intersect_entity_name, solution_name),
                     "update" => HandleUpdate(relationship_name,
                         cascade_preset, cascade_assign, cascade_delete, cascade_merge, cascade_reparent, cascade_share, cascade_unshare,
-                        menu_behavior, menu_group, menu_order, is_hierarchical),
+                        menu_behavior, menu_group, menu_order, is_hierarchical, solution_name),
                     "delete" => HandleDelete(relationship_name),
                     "add_target" => HandleAddTarget(entity_name, attribute_name, referenced_entity,
                         cascade_preset, cascade_assign, cascade_delete, cascade_merge, cascade_reparent, cascade_share, cascade_unshare,
@@ -372,13 +373,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult HandleUpdate(string relationshipName,
             string cascadePreset, string cascadeAssign, string cascadeDelete, string cascadeMerge, string cascadeReparent, string cascadeShare, string cascadeUnshare,
-            string menuBehavior, string menuGroup, int menuOrder, bool isHierarchical)
+            string menuBehavior, string menuGroup, int menuOrder, bool isHierarchical, string solutionName)
         {
             if (string.IsNullOrWhiteSpace(relationshipName))
                 return Error("relationship_name is required for update.",
                     "Use get_tables with entity_name to find relationship_name. Read docs://schema_tools_guide for cascade preset and type values.");
 
             relationshipName = relationshipName.Trim();
+
+            string solutionUniqueName = null;
+            if (!string.IsNullOrWhiteSpace(solutionName))
+            {
+                var solution = SolutionResolverHelper.Resolve(_orgService, solutionName, requireUnmanaged: true);
+                if (!solution.IsSuccess)
+                    return Error(solution.Error, "Use get_solution_components to find valid solution names.");
+                solutionUniqueName = solution.UniqueName;
+            }
 
             var retrieveResponse = (RetrieveRelationshipResponse)_orgService.Execute(new RetrieveRelationshipRequest { Name = relationshipName });
             var metadata = retrieveResponse.RelationshipMetadata;
@@ -457,6 +467,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"No changes detected for relationship '{relationshipName}'.",
                     "Provide cascade_preset, cascade_* overrides, or menu_* values to update.");
 
+            SolutionComponentCreateResult association = null;
             if (changes.Count > 0)
             {
                 if (_options.DryRun)
@@ -465,6 +476,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Action = "update",
                         RelationshipName = relationshipName,
                         Changes = changes,
+                        SolutionName = solutionUniqueName,
                         Status = "not_executed",
                         Published = false
                     });
@@ -474,13 +486,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Relationship = metadata,
                     MergeLabels = true
                 };
+                SolutionComponentCreateHelper.ApplySolutionUniqueName(updateRequest, solutionUniqueName);
                 DataverseMutationExecutor.Execute(_context, _orgService, updateRequest);
+                if (solutionUniqueName != null)
+                    association = SolutionComponentCreateHelper.AddExistingComponent(_context, _orgService,
+                        metadata.MetadataId.GetValueOrDefault(), RelationshipComponentType, solutionUniqueName);
             }
 
             var published = changes.Count > 0 && entityToPublish != null
                 && PublishHelper.PublishEntity(_context, _orgService, entityToPublish);
 
             var summary = $"Updated relationship '{relationshipName}' with {changes.Count} change(s), published={(published ? "yes" : "no")}.";
+            if (association?.AddToSolutionWarning != null)
+            {
+                var warning = $"Could not add the relationship to solution '{association.SolutionUniqueName}'. {association.AddToSolutionWarning}";
+                warnings.Add(warning);
+                summary += $" {warning}";
+            }
 
             return Success(summary, new ManageRelationshipResult
             {
@@ -489,6 +511,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 RelationshipType = metadata is OneToManyRelationshipMetadata ? "OneToMany" : "ManyToMany",
                 IsHierarchical = metadata is OneToManyRelationshipMetadata otm2 ? otm2.IsHierarchical : null,
                 MetadataId = metadata.MetadataId?.ToString(),
+                SolutionName = association?.SolutionUniqueName,
+                IsAddToSolution = association?.IsAddToSolution,
+                AddToSolutionMethod = association?.AddToSolutionMethod,
+                AddToSolutionWarning = association?.AddToSolutionWarning,
                 Published = published,
                 Changes = changes.Count > 0 ? changes : null,
                 Warnings = warnings.Count > 0 ? warnings : null,

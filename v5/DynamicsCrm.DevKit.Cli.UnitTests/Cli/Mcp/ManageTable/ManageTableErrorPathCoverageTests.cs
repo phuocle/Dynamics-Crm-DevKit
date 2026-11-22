@@ -178,10 +178,14 @@ public sealed class ManageTableErrorPathCoverageTests
     }
 
     [TestMethod]
-    public void Update_VectorIcon_SendsResolvedSolutionAndPublishes()
+    [DataRow(false)]
+    [DataRow(true)]
+    public void Update_VectorIcon_SendsResolvedSolutionAndPublishes(bool failSolutionAdd)
     {
         using var harness = new TableHarness();
+        harness.FailSolutionAdd = failSolutionAdd;
         var entity = TestMetadata.Entity("ab_bank", "Bank");
+        entity.MetadataId = Guid.NewGuid();
         entity.IconVectorName = "ab_/images/svg/old.svg";
         TestMetadata.Set(entity, nameof(EntityMetadata.OwnershipType), (OwnershipTypes?)OwnershipTypes.OrganizationOwned);
         TestMetadata.Set(entity, nameof(EntityMetadata.TableType), "Elastic");
@@ -197,10 +201,36 @@ public sealed class ManageTableErrorPathCoverageTests
         Assert.AreEqual("DevKit", harness.CapturedUpdate.SolutionUniqueName);
         Assert.AreEqual(1, harness.PublishedCount);
         var json = harness.Structured(result);
-        Assert.IsFalse(json.TryGetProperty("warnings", out _), result.GetText());
+        Assert.AreEqual("DevKit", json.GetProperty("solutionName").GetString());
+        Assert.AreEqual(!failSolutionAdd, json.GetProperty("isAddToSolution").GetBoolean());
+        Assert.AreEqual("AddSolutionComponentRequest", json.GetProperty("addToSolutionMethod").GetString());
+        Assert.IsNotNull(harness.CapturedSolutionAdd);
+        Assert.AreEqual(1, harness.CapturedSolutionAdd.ComponentType);
+        Assert.AreEqual(entity.MetadataId.Value, harness.CapturedSolutionAdd.ComponentId);
+        Assert.AreEqual("DevKit", harness.CapturedSolutionAdd.SolutionUniqueName);
+        Assert.IsTrue(harness.CapturedSolutionAdd.DoNotIncludeSubcomponents);
+        Assert.AreEqual(failSolutionAdd, json.TryGetProperty("warnings", out _), result.GetText());
+        if (failSolutionAdd)
+            Assert.AreEqual("Simulated solution failure.", json.GetProperty("addToSolutionWarning").GetString());
         var change = json.GetProperty("changes").GetProperty("iconVectorName");
         Assert.AreEqual("ab_/images/svg/old.svg", change.GetProperty("oldValue").GetString());
         Assert.AreEqual("ab_/images/svg/ab_bank.svg", change.GetProperty("newValue").GetString());
+    }
+
+    [TestMethod]
+    public void Update_WithManagedTargetSolution_DoesNotWrite()
+    {
+        using var harness = new TableHarness();
+        harness.Entities.Add(TestMetadata.Entity("ab_bank", "Bank"));
+        harness.SolutionRow!["ismanaged"] = true;
+
+        var result = harness.NewTool().manage_table(logical_name: "ab_bank", description: "Updated",
+            solution_name: "DevKit Solution");
+
+        Assert.IsTrue(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "Pass an unmanaged solution");
+        Assert.IsNull(harness.CapturedUpdate);
+        Assert.IsNull(harness.CapturedSolutionAdd);
     }
 
     [TestMethod]
@@ -211,7 +241,7 @@ public sealed class ManageTableErrorPathCoverageTests
         harness.Entities.Add(entity);
 
         var result = harness.NewTool(dryRun: true).manage_table(logical_name: "ab_bank",
-            icon_vector_name: "ab_/images/svg/ab_bank.svg");
+            icon_vector_name: "ab_/images/svg/ab_bank.svg", solution_name: "DevKit Solution");
 
         Assert.IsFalse(result.IsError == true, result.GetText());
         StringAssert.Contains(result.GetText(), "[DryRun]");
@@ -222,6 +252,7 @@ public sealed class ManageTableErrorPathCoverageTests
         Assert.AreEqual("ab_/images/svg/ab_bank.svg", change.GetProperty("newValue").GetString());
         Assert.IsNull(entity.IconVectorName);
         Assert.IsNull(harness.CapturedUpdate);
+        Assert.IsNull(harness.CapturedSolutionAdd);
         Assert.AreEqual(0, harness.PublishedCount);
     }
 
@@ -286,6 +317,8 @@ public sealed class ManageTableErrorPathCoverageTests
         public int PublishedCount { get; private set; }
         public CreateEntityRequest? CapturedCreate { get; private set; }
         public UpdateEntityRequest? CapturedUpdate { get; private set; }
+        public AddSolutionComponentRequest? CapturedSolutionAdd { get; private set; }
+        public bool FailSolutionAdd { get; set; }
 
         public TableHarness(string publisherPrefix = "dev")
         {
@@ -311,6 +344,7 @@ public sealed class ManageTableErrorPathCoverageTests
                 },
                 CreateEntityRequest c => Create(c),
                 UpdateEntityRequest u => Update(u),
+                AddSolutionComponentRequest a => AddToSolution(a),
                 PublishXmlRequest => Publish(),
                 _ => throw new InvalidOperationException($"Unexpected request '{request.RequestName}'")
             };
@@ -349,6 +383,14 @@ public sealed class ManageTableErrorPathCoverageTests
         {
             CapturedUpdate = request;
             return new UpdateEntityResponse();
+        }
+
+        private OrganizationResponse AddToSolution(AddSolutionComponentRequest request)
+        {
+            CapturedSolutionAdd = request;
+            if (FailSolutionAdd)
+                throw new InvalidOperationException("Simulated solution failure.");
+            return new AddSolutionComponentResponse();
         }
 
         private OrganizationResponse Publish()

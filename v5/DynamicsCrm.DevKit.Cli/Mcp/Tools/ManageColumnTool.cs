@@ -24,6 +24,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageColumnTool : McpToolBase
     {
+        private const int AttributeComponentType = 2;
         private readonly IOrganizationService _orgService;
         private readonly IWebApiExecutor _webApi;
         private readonly McpDryRunOptions _options;
@@ -73,7 +74,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Logical name of the existing attribute to update (e.g. 'new_priority'). For CREATE: optional lowercase override of logical name; if omitted derives from schema_name/display_name. Must start with publisher prefix.")] string logical_name = "",
             [Description("string/memo/integer/bigint/decimal/money/float/boolean/datetime/lookup/customer/picklist/multipicklist/image/file. Required for CREATE. Ignored on UPDATE (immutable).")] string attribute_type = "",
             [Description("Required for CREATE. Optional on UPDATE — pass only to rename the display label.")] string display_name = "",
-            [Description("Required for CREATE. Resolves the publisher prefix and adds the attribute to the solution.")] string solution_name = "",
+            [Description("Unmanaged solution unique or display name. Required for CREATE to resolve the publisher prefix. Optional on UPDATE to add the changed column to the solution.")] string solution_name = "",
             [Description("Optional column description.")] string description = "",
             [Description("Required level for the column. CREATE: always applied (None when omitted — NOT a Dataverse default). UPDATE: omit=keep current.")] string required_level = "",
             [Description("string 1-4000 (def 100); memo 1-1048576 (def 2000); file KB (def 32768).")] int max_length = 0,
@@ -120,7 +121,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Logical name of the existing attribute to update (e.g. 'new_priority'). For CREATE: optional lowercase override of logical name; if omitted derives from schema_name/display_name. Must start with publisher prefix.")] string logical_name = "",
             [Description("string/memo/integer/bigint/decimal/money/float/boolean/datetime/lookup/customer/picklist/multipicklist/image/file. Required for CREATE. Ignored on UPDATE (immutable).")] string attribute_type = "",
             [Description("Required for CREATE. Optional on UPDATE — pass only to rename the display label.")] string display_name = "",
-            [Description("Required for CREATE. Resolves the publisher prefix and adds the attribute to the solution.")] string solution_name = "",
+            [Description("Unmanaged solution unique or display name. Required for CREATE to resolve the publisher prefix. Optional on UPDATE to add the changed column to the solution.")] string solution_name = "",
             [Description("Optional column description.")] string description = "",
             [Description("Required level for the column. CREATE: always applied (None when omitted — NOT a Dataverse default). UPDATE: omit=keep current.")] string required_level = "",
             [Description("string 1-4000 (def 100); memo 1-1048576 (def 2000); file KB (def 32768).")] int max_length = 0,
@@ -267,7 +268,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string resolvedSolutionUniqueName = null;
             if (!string.IsNullOrWhiteSpace(solution_name))
             {
-                var solResult = SolutionResolverHelper.Resolve(_orgService, solution_name);
+                var solResult = SolutionResolverHelper.Resolve(_orgService, solution_name, requireUnmanaged: true);
                 if (!solResult.IsSuccess)
                     return Error(
                         solResult.Error.Split("\r\n")[0],
@@ -2799,12 +2800,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             LogicalName = attributeName,
                             AttributeType = GetAttributeTypeName(metadata),
                             Changes = structuredChanges.Count > 0 ? structuredChanges : null,
+                            SolutionName = string.IsNullOrWhiteSpace(_effectiveSolutionName) ? null : _effectiveSolutionName,
                             Status = "not_executed",
                             Published = false,
                             Warnings = autoNumberWarnings is { Count: > 0 } ? autoNumberWarnings : null
                         });
                 }
 
+                var componentId = metadata.MetadataId.GetValueOrDefault();
                 // --- Execute metadata update (if any generic/type-specific changes) ---
                 if (changes.Count > 0)
                 {
@@ -2814,6 +2817,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Attribute = metadata,
                         MergeLabels = true
                     };
+                    SolutionComponentCreateHelper.ApplySolutionUniqueName(updateRequest, _effectiveSolutionName);
                     try
                     {
                         DataverseMutationExecutor.Execute(_context, _orgService, updateRequest);
@@ -2826,7 +2830,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             LogicalName = attributeName
                         });
                         metadata.MetadataId = null;
-                        ExecuteCreateAttribute(entityName, metadata, _effectiveSolutionName);
+                        componentId = ExecuteCreateAttribute(entityName, metadata, _effectiveSolutionName);
                     }
 
                     // WORKAROUND: UpdateAttributeRequest silently fails to persist
@@ -2910,6 +2914,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         $"No changes specified for '{entityName}.{attributeName}'.",
                         "Provide at least one updatable parameter: display_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, true_label, false_label, add_options, update_options, delete_options, default_value (picklist/boolean), is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, can_store_full_image (image), auto_number_format, clear_auto_number, auto_number_seed (string), is_alternate_key, or statuscode add/update/delete_options (for statuscode attribute).");
 
+                var optionsAdded = optionResults.Where(r => r.StartsWith("OptionsAdded: ")).Select(r => r.Substring("OptionsAdded: ".Length)).ToList();
+                var optionsRenamed = optionResults.Where(r => r.StartsWith("OptionsRenamed: ")).Select(r => r.Substring("OptionsRenamed: ".Length)).ToList();
+                var optionsDeleted = optionResults.Where(r => r.StartsWith("OptionsDeleted: ")).Select(r => r.Substring("OptionsDeleted: ".Length)).ToList();
+                var optionsChanged = optionsAdded.Count > 0 || optionsRenamed.Count > 0 || optionsDeleted.Count > 0;
+                var association = !string.IsNullOrWhiteSpace(_effectiveSolutionName) && (changes.Count > 0 || optionsChanged)
+                    ? SolutionComponentCreateHelper.AddExistingComponent(_context, _orgService, componentId, AttributeComponentType, _effectiveSolutionName)
+                    : null;
+
                 // --- Publish (skipped for a seed-only update — the seed is not a
                 //     metadata change and needs no publish) ---
                 var published = changes.Count > 0 || optionResults.Count > 0 || alternateKeyRequested
@@ -2944,20 +2956,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     EntityName = entityName,
                     AttributeName = attributeName,
                     AttributeType = typeName,
+                    SolutionName = association?.SolutionUniqueName,
+                    IsAddToSolution = association?.IsAddToSolution,
+                    AddToSolutionMethod = association?.AddToSolutionMethod,
+                    AddToSolutionWarning = association?.AddToSolutionWarning,
                     Changes = structuredChanges.Count > 0 ? structuredChanges : null,
-                    OptionsAdded = optionResults.Where(r => r.StartsWith("OptionsAdded:")).Select(r => r.Substring("OptionsAdded: ".Length)).ToList(),
-                    OptionsRenamed = optionResults.Where(r => r.StartsWith("OptionsRenamed:")).Select(r => r.Substring("OptionsRenamed: ".Length)).ToList(),
-                    OptionsDeleted = optionResults.Where(r => r.StartsWith("OptionsDeleted:")).Select(r => r.Substring("OptionsDeleted: ".Length)).ToList(),
+                    OptionsAdded = optionsAdded.Count > 0 ? optionsAdded : null,
+                    OptionsRenamed = optionsRenamed.Count > 0 ? optionsRenamed : null,
+                    OptionsDeleted = optionsDeleted.Count > 0 ? optionsDeleted : null,
                     Published = published,
                     Status = "updated"
                 };
-                if (structured.OptionsAdded?.Count == 0) structured.OptionsAdded = null;
-                if (structured.OptionsRenamed?.Count == 0) structured.OptionsRenamed = null;
-                if (structured.OptionsDeleted?.Count == 0) structured.OptionsDeleted = null;
-
                 var updateWarnings = new List<string>();
                 if (autoNumberWarnings is { Count: > 0 }) updateWarnings.AddRange(autoNumberWarnings);
                 if (seedWarning != null) updateWarnings.Add(seedWarning);
+                if (association?.AddToSolutionWarning != null)
+                    updateWarnings.Add($"Could not add the column to solution '{association.SolutionUniqueName}'. {association.AddToSolutionWarning}");
                 if (updateWarnings.Count > 0) structured.Warnings = updateWarnings;
 
                 var updateSummary = $"Updated column '{attributeName}' on entity '{entityName}'.";
@@ -3206,6 +3220,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         if (opt.Value.HasValue) req.Value = opt.Value.Value;
                         if (!string.IsNullOrWhiteSpace(opt.Color) && ManageChoiceTool.TryNormalizeHexColor(opt.Color, out var hexAdd))
                             req.Parameters["Color"] = hexAdd;
+                        SolutionComponentCreateHelper.ApplySolutionUniqueName(req, _effectiveSolutionName);
                         var resp = (InsertOptionValueResponse)DataverseMutationExecutor.Execute(_context, _orgService, req);
                         results.Add(string.IsNullOrWhiteSpace(opt.Color)
                             ? $"OptionsAdded: {opt.Label} ({resp.NewOptionValue})"
@@ -3232,6 +3247,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         }
                         if (!string.IsNullOrWhiteSpace(opt.Color) && ManageChoiceTool.TryNormalizeHexColor(opt.Color, out var hexUpd))
                             req.Parameters["Color"] = hexUpd;
+                        SolutionComponentCreateHelper.ApplySolutionUniqueName(req, _effectiveSolutionName);
                         DataverseMutationExecutor.Execute(_context, _orgService, req);
                         results.Add(string.IsNullOrWhiteSpace(opt.Color)
                             ? $"OptionsRenamed: {opt.Value.Value} -> \"{opt.Label}\""
@@ -3255,6 +3271,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             req.EntityLogicalName = entityName;
                             req.AttributeLogicalName = attributeName;
                         }
+                        SolutionComponentCreateHelper.ApplySolutionUniqueName(req, _effectiveSolutionName);
                         DataverseMutationExecutor.Execute(_context, _orgService, req);
                         results.Add($"OptionsDeleted: {val}");
                     }
@@ -3291,6 +3308,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         if (opt.Value.HasValue) req.Value = opt.Value.Value;
                         if (!string.IsNullOrWhiteSpace(opt.Color) && ManageChoiceTool.TryNormalizeHexColor(opt.Color, out var hexAdd))
                             req.Parameters["Color"] = hexAdd;
+                        SolutionComponentCreateHelper.ApplySolutionUniqueName(req, _effectiveSolutionName);
                         var resp = (InsertStatusValueResponse)DataverseMutationExecutor.Execute(_context, _orgService, req);
                         results.Add(string.IsNullOrWhiteSpace(opt.Color)
                             ? $"OptionsAdded: {opt.Label} ({resp.NewOptionValue}) [state={stateValue}]"
@@ -3317,6 +3335,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         };
                         if (!string.IsNullOrWhiteSpace(opt.Color) && ManageChoiceTool.TryNormalizeHexColor(opt.Color, out var hexUpd))
                             req.Parameters["Color"] = hexUpd;
+                        SolutionComponentCreateHelper.ApplySolutionUniqueName(req, _effectiveSolutionName);
                         DataverseMutationExecutor.Execute(_context, _orgService, req);
                         results.Add(string.IsNullOrWhiteSpace(opt.Color)
                             ? $"OptionsRenamed: {opt.Value.Value} -> \"{opt.Label}\""
@@ -3338,6 +3357,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             AttributeLogicalName = attributeName,
                             Value = val
                         };
+                        SolutionComponentCreateHelper.ApplySolutionUniqueName(req, _effectiveSolutionName);
                         DataverseMutationExecutor.Execute(_context, _orgService, req);
                         results.Add($"OptionsDeleted: {val}");
                     }

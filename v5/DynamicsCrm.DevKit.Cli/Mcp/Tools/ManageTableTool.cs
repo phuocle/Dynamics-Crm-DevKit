@@ -18,6 +18,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageTableTool : McpToolBase
     {
+        private const int TableComponentType = 1;
         private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
@@ -56,7 +57,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Singular display name (e.g. 'Project'). Required for CREATE.")] string display_name = "",
             [Description("Plural (e.g. 'Projects'). Required: create.")] string display_collection_name = "",
-            [Description("Unmanaged solution name. Required on create; optional on update.")] string solution_name = "",
+            [Description("Unmanaged solution unique or display name. Required on create. Optional on update to add the changed table to the solution.")] string solution_name = "",
             [Description("Optional table description.")] string description = "",
             [Description("Auto-derived if omitted. [create-only]")] string primary_attribute_name = "",
             [Description("Display label of the primary name column on create. Defaults to 'Name' on create.")] string primary_attribute_display_name = "",
@@ -85,7 +86,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult manage_table(
             [Description("Singular display name (e.g. 'Project'). Required for CREATE.")] string display_name = "",
             [Description("Plural (e.g. 'Projects'). Required: create.")] string display_collection_name = "",
-            [Description("Unmanaged solution name. Required on create; optional on update.")] string solution_name = "",
+            [Description("Unmanaged solution unique or display name. Required on create. Optional on update to add the changed table to the solution.")] string solution_name = "",
             [Description("Optional table description.")] string description = "",
             [Description("Auto-derived if omitted. [create-only]")] string primary_attribute_name = "",
             [Description("Display label of the primary name column on create. Defaults to 'Name' on create.")] string primary_attribute_display_name = "",
@@ -121,7 +122,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 string resolvedSolutionUniqueName = null;
                 if (!string.IsNullOrWhiteSpace(solution_name))
                 {
-                    var solResult = SolutionResolverHelper.Resolve(_orgService, solution_name);
+                    var solResult = SolutionResolverHelper.Resolve(_orgService, solution_name, requireUnmanaged: true);
                     if (!solResult.IsSuccess)
                         return Error(solResult.Error.Split("\r\n")[0], "Use get_solution_components to find valid solution names.");
                     resolvedPrefix = solResult.Prefix;
@@ -605,6 +606,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         EntitySetName = existingMetadata.EntitySetName,
                         Changes = structuredChanges.Count > 0 ? structuredChanges : null,
                         Warnings = warnings.Count > 0 ? warnings : null,
+                        SolutionName = solutionUniqueName,
                         Status = "not_executed",
                         Published = false
                     });
@@ -616,10 +618,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 Entity = existingMetadata
             };
-            if (!string.IsNullOrWhiteSpace(solutionUniqueName))
-                updateRequest.SolutionUniqueName = solutionUniqueName;
-
+            SolutionComponentCreateHelper.ApplySolutionUniqueName(updateRequest, solutionUniqueName);
             DataverseMutationExecutor.Execute(_context, _orgService, updateRequest);
+
+            var association = string.IsNullOrWhiteSpace(solutionUniqueName) ? null
+                : SolutionComponentCreateHelper.AddExistingComponent(_context, _orgService,
+                    existingMetadata.MetadataId.GetValueOrDefault(), TableComponentType, solutionUniqueName, doNotIncludeSubcomponents: true);
+            if (association?.AddToSolutionWarning != null)
+                warnings.Add($"Could not add the table to solution '{association.SolutionUniqueName}'. {association.AddToSolutionWarning}");
 
             var published = PublishHelper.PublishEntity(_context, _orgService, entityName);
 
@@ -636,6 +642,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 OwnershipType = existingMetadata.OwnershipType?.ToString() ?? "",
                 MetadataId = existingMetadata.MetadataId?.ToString() ?? "",
                 EntitySetName = existingMetadata.EntitySetName,
+                SolutionName = association?.SolutionUniqueName,
+                IsAddToSolution = association?.IsAddToSolution,
+                AddToSolutionMethod = association?.AddToSolutionMethod,
+                AddToSolutionWarning = association?.AddToSolutionWarning,
                 Published = published,
                 IsAuditEnabled = existingMetadata.IsAuditEnabled?.Value,
                 IsQuickCreateEnabled = existingMetadata.IsQuickCreateEnabled == true,

@@ -77,7 +77,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("List mode only — include formxml in each entry. Detail always includes formxml.")] bool include_formxml = false,
             [Description("Raw FormXML or a file path for create/update. Required for dashboards. For undo, use the backupPath from update.")] string formxml = "",
             [Description("Entity-form update only: serialized JSON operation array. Each object uses action for the family and manage_action for its verb. See docs://instructions_for_formxml.")] string operations = "",
-            [Description("Optional solution unique or display name for system dashboard create/update.")] string solution_name = "",
+            [Description("Optional unmanaged solution unique or display name. Entity forms: create/update/rename/undo. System dashboards: create/update.")] string solution_name = "",
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)
         {
@@ -98,7 +98,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("List mode only — include formxml in each entry. Detail always includes formxml.")] bool include_formxml = false,
             [Description("Raw FormXML or a file path for create/update. Required for dashboards. For undo, use the backupPath from update.")] string formxml = "",
             [Description("Entity-form update only: serialized JSON operation array. Each object uses action for the family and manage_action for its verb. See docs://instructions_for_formxml.")] string operations = "",
-            [Description("Optional solution unique or display name for system dashboard create/update.")] string solution_name = "")
+            [Description("Optional unmanaged solution unique or display name. Entity forms: create/update/rename/undo. System dashboards: create/update.")] string solution_name = "")
         {
             try
             {
@@ -132,9 +132,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 string solution = null;
                 if (!string.IsNullOrWhiteSpace(solution_name))
                 {
-                    if (!dashboard || normalizedAction is not ("create" or "update"))
-                        return Error("solution_name is supported for system dashboard create and update.");
-                    var resolved = SolutionResolverHelper.Resolve(_orgService, solution_name);
+                    var supportsSolution = normalizedAction is "create" or "update"
+                        || (!dashboard && normalizedAction is ("rename" or "undo"));
+                    if (!supportsSolution)
+                        return Error("solution_name is supported for entity form create, update, rename and undo, and system dashboard create and update.");
+                    var resolved = SolutionResolverHelper.Resolve(_orgService, solution_name, requireUnmanaged: true);
                     if (!resolved.IsSuccess || string.IsNullOrWhiteSpace(resolved.UniqueName))
                         return Error(resolved.Error ?? $"Solution '{solution_name}' has no unique name.",
                             "Use get_solution_components to find valid solution names.");
@@ -147,8 +149,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "detail" => HandleDetail(entityName, form_id, form_name, form_type),
                     "create" => HandleCreate(entity, form_id, form_name, form_type, formxml, operations, solution),
                     "update" => HandleUpdate(entityName, form_id, formxml, operations, solution),
-                    "rename" => HandleRename(entityName, form_id, form_name),
-                    "undo" => HandleUndo(entityName, form_id, formxml),
+                    "rename" => HandleRename(entityName, form_id, form_name, solution),
+                    "undo" => HandleUndo(entityName, form_id, formxml, solution),
                     _ => Error($"'{action}' is not a valid action.", "Valid actions: list, detail, create, update, rename, undo.")
                 };
             }
@@ -435,7 +437,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             result.Action = "created";
             result.FormId = id.ToString();
             result.IsActive = true;
-            AddDashboardToSolution(id, solution, result);
+            AddFormToSolution(id, solution, result);
             result.Published = PublishForm(entityName, id);
             result.Status = result.Published ? "created" : "created_publish_failed";
 
@@ -475,13 +477,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Use 'operations' for the recommended inline build+import flow; 'formxml' for advanced/undo scenarios only.");
 
             if (hasOperations)
-                return HandleUpdateWithOperations(entityName, id, operations);
+                return HandleUpdateWithOperations(entityName, id, operations, solution);
 
             return HandleUpdateWithFormXml(entityName, id, formxml, solution);
         }
 
         private CallToolResult HandleUpdateWithOperations(string entityName, Guid id,
-            string operations)
+            string operations, string solution)
         {
             // 1. Parse operations JSON (JsonException bubbles to entry catch)
             var ops = JsonSerializer.Deserialize<List<JsonElement>>(operations);
@@ -551,44 +553,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Validated = true,
                     ValidationWarnings = validationWarnings,
                     Published = false,
-                    OperationsCount = ops?.Count
+                    OperationsCount = ops?.Count,
+                    SolutionName = solution
                 });
 
             // Backup (fail-safe: exception bubbles to entry catch) — only when actually mutating
             var backupPath = SaveBackup(entityName, id, formName, currentFormXml);
             DataverseMutationExecutor.Update(_context, _orgService, updateEntity);
 
-            // Publish via helper (swallows faults, returns false on failure)
-            var published = PublishHelper.PublishEntity(_context, _orgService, objectTypeCode);
-
-            if (!published)
-                return Partial(
-                    $"Updated form '{formName}' ({id}) on '{entityName}' but publish failed — Dataverse rejected the publish.",
-                    new UpsertFormResult
-                    {
-                        Action = "updated", Entity = entityName, FormId = id.ToString(),
-                        FormName = formName, Status = "updated_publish_failed",
-                        Validated = true, BackupPath = backupPath, Published = false,
-                        OperationsCount = ops.Count, FieldsResolved = classIdMap.Count,
-                        ValidationWarnings = validationWarnings
-                    });
-
-            // 7. Build success response
-            var summary = $"Updated form '{formName}' ({id}) on '{entityName}' — {ops.Count} operation(s)" +
-                $", validated" +
-                $", {(published ? "published" : "publish pending")}" +
-                ". Backup saved." +
-                (classIdMap.Count > 0 ? $" {classIdMap.Count} field(s) resolved." : "") +
-                (validationWarnings?.Count > 0 ? $" {validationWarnings.Count} validation warning(s) (see validationWarnings)." : "");
-
-            return Success(summary, new UpsertFormResult
+            var result = new UpsertFormResult
             {
                 Action = "updated", Entity = entityName, FormId = id.ToString(),
-                FormName = formName, Status = "updated",
+                FormName = formName,
                 Validated = true, ValidationWarnings = validationWarnings,
-                BackupPath = backupPath, Published = published,
+                BackupPath = backupPath, SolutionName = solution,
                 OperationsCount = ops.Count, FieldsResolved = classIdMap.Count
-            });
+            };
+            AddFormToSolution(id, solution, result);
+            result.Published = PublishHelper.PublishEntity(_context, _orgService, objectTypeCode);
+            result.Status = result.Published ? "updated" : "updated_publish_failed";
+            var summary = result.Published
+                ? $"Updated form '{formName}' ({id}) on '{entityName}' — {ops.Count} operation(s), validated, published. Backup saved." +
+                    (classIdMap.Count > 0 ? $" {classIdMap.Count} field(s) resolved." : "") +
+                    (validationWarnings?.Count > 0 ? $" {validationWarnings.Count} validation warning(s) (see validationWarnings)." : "")
+                : $"Updated form '{formName}' ({id}) on '{entityName}' but publish failed — Dataverse rejected the publish.";
+            return ReportFormMutation(summary, result);
         }
 
         private CallToolResult HandleUpdateWithFormXml(string entityName, Guid id,
@@ -677,7 +666,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             result.BackupPath = SaveBackup(entityName, id, formName, currentFormXml);
             DataverseMutationExecutor.Update(_context, _orgService, update);
 
-            AddDashboardToSolution(id, solution, result);
+            AddFormToSolution(id, solution, result);
             result.Published = PublishForm(dashboard ? null : objectTypeCode, id);
             result.Action = "updated";
             result.Status = result.Published ? "updated" : "updated_publish_failed";
@@ -691,7 +680,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Action: rename ────────────────────────────────────────────────
 
-        private CallToolResult HandleRename(string entityName, string formId, string formName)
+        private CallToolResult HandleRename(string entityName, string formId, string formName, string solution)
         {
             if (string.IsNullOrWhiteSpace(formId))
                 return Error("form_id is required when action='rename'.",
@@ -747,6 +736,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     FormId = id.ToString(),
                     FormName = formName,
                     Status = "not_executed",
+                    SolutionName = solution,
                     Published = false
                 });
 
@@ -755,45 +745,29 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var backupPath = SaveBackup(entityName, id, oldName, currentFormXml);
             DataverseMutationExecutor.Update(_context, _orgService, update);
 
-            // Step 5: Publish via helper (swallows faults, returns false on failure)
-            var published = PublishHelper.PublishEntity(_context, _orgService, objectTypeCode);
-
-            if (!published)
-                return Partial(
-                    $"Renamed form '{oldName}' → '{formName}' ({id}) on '{entityName}' but publish failed — Dataverse rejected the publish.",
-                    new UpsertFormResult
-                    {
-                        Action = "renamed",
-                        Entity = entityName,
-                        FormId = id.ToString(),
-                        FormName = formName,
-                        Status = "renamed_publish_failed",
-                        Validated = false,
-                        BackupPath = backupPath,
-                        Published = false
-                    });
-
-            // Step 6: Return success
-            var summary = $"Renamed form '{oldName}' → '{formName}' ({id}) on '{entityName}', published" +
-                ". Backup saved.";
-
-            return Success(summary, new UpsertFormResult
+            var result = new UpsertFormResult
             {
                 Action = "renamed",
                 Entity = entityName,
                 FormId = id.ToString(),
                 FormName = formName,
-                Status = "renamed",
                 Validated = false,
                 BackupPath = backupPath,
-                Published = published
-            });
+                SolutionName = solution
+            };
+            AddFormToSolution(id, solution, result);
+            result.Published = PublishHelper.PublishEntity(_context, _orgService, objectTypeCode);
+            result.Status = result.Published ? "renamed" : "renamed_publish_failed";
+            var summary = result.Published
+                ? $"Renamed form '{oldName}' → '{formName}' ({id}) on '{entityName}', published. Backup saved."
+                : $"Renamed form '{oldName}' → '{formName}' ({id}) on '{entityName}' but publish failed — Dataverse rejected the publish.";
+            return ReportFormMutation(summary, result);
         }
 
         // ── Action: undo ──────────────────────────────────────────────────
 
         private CallToolResult HandleUndo(string entityName, string formId,
-            string backupFilePath)
+            string backupFilePath, string solution)
         {
             var dashboard = entityName == null;
             if (string.IsNullOrWhiteSpace(formId))
@@ -882,48 +856,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = "not_executed",
                     Validated = true,
                     RestoredFromBackup = backupFilePath,
+                    SolutionName = solution,
                     Published = false
                 });
             DataverseMutationExecutor.Update(_context, _orgService, update);
 
-            // Step 5: Publish via helper (swallows faults, returns false on failure)
-            var published = PublishForm(dashboard ? null : objectTypeCode, id);
             var target = dashboard ? $"dashboard '{formName}' ({id})" : $"form '{formName}' ({id}) on '{entityName}'";
-
-            if (!published)
-                return Partial(
-                    $"Restored {target} from '{backupFilePath}' but publish failed — Dataverse rejected the publish.",
-                    new UpsertFormResult
-                    {
-                        Action = "undo",
-                        Entity = entityName,
-                        FormId = id.ToString(),
-                        FormName = formName,
-                        Status = "restored_publish_failed",
-                        Validated = true,
-                        ValidationWarnings = validationWarnings,
-                        RestoredFromBackup = backupFilePath,
-                        Published = false
-                    });
-
-            // Step 6: Return success
-            var summary = $"Restored {target} from '{backupFilePath}'" +
-                $", validated" +
-                $", {(published ? "published" : "publish pending")}" +
-                (validationWarnings?.Count > 0 ? $" {validationWarnings.Count} validation warning(s) (see validationWarnings)." : "");
-
-            return Success(summary, new UpsertFormResult
+            var result = new UpsertFormResult
             {
                 Action = "undo",
                 Entity = entityName,
                 FormId = id.ToString(),
                 FormName = formName,
-                Status = "restored",
                 Validated = true,
                 ValidationWarnings = validationWarnings,
                 RestoredFromBackup = backupFilePath,
-                Published = published
-            });
+                SolutionName = solution
+            };
+            AddFormToSolution(id, solution, result);
+            result.Published = PublishForm(dashboard ? null : objectTypeCode, id);
+            result.Status = result.Published ? "restored" : "restored_publish_failed";
+            var summary = result.Published
+                ? $"Restored {target} from '{backupFilePath}', validated, published" +
+                    (validationWarnings?.Count > 0 ? $" {validationWarnings.Count} validation warning(s) (see validationWarnings)." : "")
+                : $"Restored {target} from '{backupFilePath}' but publish failed — Dataverse rejected the publish.";
+            return ReportFormMutation(summary, result);
         }
 
         // ── List/Detail Helpers ───────────────────────────────────────────
@@ -996,7 +953,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ? PublishHelper.PublishDashboard(_context, _orgService, id)
             : PublishHelper.PublishEntity(_context, _orgService, entityName);
 
-        private void AddDashboardToSolution(Guid id, string solution, UpsertFormResult result)
+        private void AddFormToSolution(Guid id, string solution, UpsertFormResult result)
         {
             if (solution == null) return;
             var association = SolutionComponentCreateHelper.AddExistingComponent(
@@ -1011,7 +968,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (result.Published)
                     result.Status += "_solution_failed";
-                return Partial($"{summary} Could not add the dashboard to solution '{result.SolutionName}'. {result.SolutionWarning}", result);
+                var kind = result.Entity == null ? "dashboard" : "form";
+                return Partial($"{summary} Could not add the {kind} to solution '{result.SolutionName}'. {result.SolutionWarning}", result);
             }
             return result.Published ? Success(summary, result) : Partial(summary, result);
         }
