@@ -231,6 +231,16 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
         };
         var badFormula = new StringAttributeMetadata { LogicalName = "new_badformula", SchemaName = "New_BadFormula", DisplayName = Labeled("Bad Formula"), SourceType = 0 };
         var emptyFormula = new StringAttributeMetadata { LogicalName = "new_emptyformula", SchemaName = "New_EmptyFormula", DisplayName = Labeled("Empty Formula"), SourceType = 3 };
+        emptyFormula.MetadataId = Guid.NewGuid();
+        var powerFx = new StringAttributeMetadata
+        {
+            LogicalName = "new_powerfx",
+            SchemaName = "New_PowerFx",
+            DisplayName = Labeled("Power Fx"),
+            MetadataId = Guid.NewGuid(),
+            SourceType = 3,
+            FormulaDefinition = "Text(name)"
+        };
         var dup1 = new StringAttributeMetadata { LogicalName = "new_dup1", SchemaName = "New_Dup1", DisplayName = Labeled("Dup Field") };
         var dup2 = new StringAttributeMetadata { LogicalName = "new_dup2", SchemaName = "New_Dup2", DisplayName = Labeled("Dup Field") };
 
@@ -245,7 +255,7 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
         Set(meta, "Attributes", new AttributeMetadata[]
         {
             name, description, count, amount, ratio, score, flag, when, choice, tags, globalChoice,
-            photo, status, big, formulaSrc, rollupTotal, rollupOrphan, badFormula, emptyFormula,
+            photo, status, big, formulaSrc, rollupTotal, rollupOrphan, badFormula, emptyFormula, powerFx,
             dup1, dup2, IdAttribute("accountid")
         });
         Set(meta, "OneToManyRelationships", new OneToManyRelationshipMetadata[]
@@ -768,7 +778,7 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
     {
         var result = NewTool().manage_column(entity_name: "account", logical_name: "name",
             formula_source_type: "powerfx");
-        AssertError(result, "Formula clone parameters are create-only and cannot update an existing column.");
+        AssertError(result, "Formula cloning on update requires an existing formula column and formula_definition.");
         Assert.AreEqual(0, _service.UpdatedAttributes.Count);
     }
 
@@ -1280,12 +1290,12 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
     // ──────────────────────────────────────────────
 
     [TestMethod]
-    public void Update_FormulaParametersOnPlainColumn_ReturnsCreateOnlyError()
+    public void Update_FormulaCloneOnPlainColumn_ReturnsError()
     {
         var result = NewTool().manage_column(entity_name: "account", logical_name: "name",
             formula_definition: "Sum(1)");
 
-        AssertError(result, "Formula clone parameters are create-only and cannot update an existing column.");
+        AssertError(result, "Formula cloning on update requires an existing formula column and formula_definition.");
     }
 
     [TestMethod]
@@ -1301,18 +1311,114 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
     }
 
     [TestMethod]
-    public void Update_FormulaChange_UpdateFails_RecreatesColumn()
+    public void Update_PowerFxExpression_PreservesColumnAndAddsItToSolution()
+    {
+        var target = _service.Entities.Single(e => e.LogicalName == "account")
+            .Attributes.Single(a => a.LogicalName == "new_powerfx");
+        const string expression = """Text(new_union_fee_id.new_date, "yyyy-mm-dd")""";
+
+        var result = NewTool().manage_column(entity_name: "account", logical_name: "new_powerfx",
+            formula_expression: $"={expression}", solution_name: "DevKit Solution");
+
+        AssertSuccess(result, "Updated column 'new_powerfx'");
+        var updated = (StringAttributeMetadata)_service.UpdatedAttributes.Single();
+        Assert.AreEqual(target.MetadataId, updated.MetadataId);
+        Assert.AreEqual(3, updated.SourceType);
+        Assert.AreEqual(expression, updated.FormulaDefinition);
+        var change = result.StructuredContent!.Value.GetProperty("changes").GetProperty("formulaDefinition");
+        Assert.AreEqual("Text(name)", change.GetProperty("oldValue").GetString());
+        Assert.AreEqual(expression, change.GetProperty("newValue").GetString());
+        var solutionRequest = _service.SolutionRequests.Single();
+        Assert.AreEqual(target.MetadataId, solutionRequest.ComponentId);
+        Assert.AreEqual(2, solutionRequest.ComponentType);
+        Assert.AreEqual("DevKit", solutionRequest.SolutionUniqueName);
+        Assert.AreEqual(1, _service.PublishAttempts);
+        Assert.AreEqual(0, _service.CreatedAttributes.Count);
+        Assert.AreEqual(0, _service.DeleteAttributeAttempts);
+    }
+
+    [TestMethod]
+    public void Update_PowerFxClone_RewritesTableAndPrefixOnEmptyTarget()
+    {
+        var source = new StringAttributeMetadata
+        {
+            LogicalName = "dev_powerfx",
+            SourceType = 3,
+            FormulaDefinition = """Text(contact.'dev_lookup'.dev_date, "dev_date")"""
+        };
+        var contact = _service.Entities.Single(e => e.LogicalName == "contact");
+        Set(contact, "Attributes", contact.Attributes.Append(source).ToArray());
+
+        var result = NewTool().manage_column(entity_name: "account", logical_name: "new_emptyformula",
+            formula_definition: "contact:dev_powerfx");
+
+        AssertSuccess(result, "Updated column 'new_emptyformula'");
+        var expected = """Text(account.'new_lookup'.new_date, "dev_date")""";
+        Assert.AreEqual(expected, ((StringAttributeMetadata)_service.UpdatedAttributes.Single()).FormulaDefinition);
+        var change = result.StructuredContent!.Value.GetProperty("changes").GetProperty("formulaDefinition");
+        Assert.AreEqual("", change.GetProperty("oldValue").GetString());
+        Assert.AreEqual(expected, change.GetProperty("newValue").GetString());
+    }
+
+    [TestMethod]
+    public void Update_PowerFxExpression_DryRunReportsFormulaWithoutWriting()
+    {
+        var result = NewTool(dryRun: true).manage_column(entity_name: "account", logical_name: "new_emptyformula",
+            formula_expression: "=Text(name)", solution_name: "DevKit");
+
+        Assert.IsFalse(result.IsError == true);
+        var change = result.StructuredContent!.Value.GetProperty("changes").GetProperty("formulaDefinition");
+        Assert.AreEqual("", change.GetProperty("oldValue").GetString());
+        Assert.AreEqual("Text(name)", change.GetProperty("newValue").GetString());
+        Assert.AreEqual(0, _service.UpdatedAttributes.Count);
+        Assert.AreEqual(0, _service.SolutionRequests.Count);
+        Assert.AreEqual(0, _service.PublishAttempts);
+    }
+
+    [TestMethod]
+    public void Update_PowerFxExpression_WhenUpdateFails_ReturnsErrorWithoutRecreatingColumn()
     {
         _service.UpdateExceptionMessage = "update blocked";
-        var createdBefore = _service.CreatedAttributes.Count;
 
-        var result = NewTool().manage_column(entity_name: "account", logical_name: "new_formula_src",
-            formula_definition: "Sum(2)", formula_source_type: "powerfx");
+        var result = NewTool().manage_column(entity_name: "account", logical_name: "new_powerfx",
+            formula_expression: "Upper(name)");
 
-        // The formula-change workaround deletes and recreates the column after
-        // the update failure, so the run still succeeds.
-        AssertSuccess(result, "Updated column 'new_formula_src'");
-        Assert.IsTrue(_service.CreatedAttributes.Count > createdBefore, "column must be recreated");
+        AssertError(result, "update blocked");
+        Assert.AreEqual(0, _service.CreatedAttributes.Count);
+        Assert.AreEqual(0, _service.DeleteAttributeAttempts);
+        Assert.AreEqual(0, _service.PublishAttempts);
+    }
+
+    [TestMethod]
+    public void Update_PowerFxExpression_WhenDataverseIgnoresFormula_ReturnsError()
+    {
+        _service.AttributeReadBack = new StringAttributeMetadata { SourceType = 3, FormulaDefinition = "Text(name)" };
+
+        var result = NewTool().manage_column(entity_name: "account", logical_name: "new_powerfx",
+            formula_expression: "Upper(name)", solution_name: "DevKit");
+
+        AssertError(result, "Could not verify the Power Fx formula update");
+        Assert.AreEqual(1, _service.UpdatedAttributes.Count);
+        Assert.AreEqual(0, _service.SolutionRequests.Count);
+        Assert.AreEqual(0, _service.PublishAttempts);
+    }
+
+    [TestMethod]
+    [DataRow("name", "=Text(name)", "", "", "requires an existing Power Fx column")]
+    [DataRow("dev_missing", "=Text(name)", "", "", "requires an existing Power Fx column")]
+    [DataRow("new_powerfx", "=", "", "", "must contain a Power Fx expression")]
+    [DataRow("new_powerfx", "=Text(name)", "account:new_powerfx", "", "cannot be combined")]
+    [DataRow("new_powerfx", "=Text(name)", "", "powerfx", "cannot be combined")]
+    [DataRow("new_powerfx", null, "account:new_formula_src", "", "requires a Power Fx source formula")]
+    public void Update_PowerFxFormula_InvalidParametersAreRejected(string logicalName, string expression,
+        string reference, string kind, string expectedError)
+    {
+        var result = NewTool().manage_column(entity_name: "account", logical_name: logicalName,
+            formula_definition: reference, formula_source_type: kind, formula_expression: expression);
+
+        AssertError(result, expectedError);
+        Assert.AreEqual(0, _service.UpdatedAttributes.Count);
+        Assert.AreEqual(0, _service.CreatedAttributes.Count);
     }
 
     // ──────────────────────────────────────────────
@@ -1672,6 +1778,10 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
         /// <summary>When set, UpdateAttributeRequest throws with this message.</summary>
         public string? UpdateExceptionMessage;
 
+        public AttributeMetadata? AttributeReadBack;
+
+        public int DeleteAttributeAttempts;
+
         /// <summary>When set, CreateEntityKeyRequest throws with this message.</summary>
         public string? KeyCreateExceptionMessage;
 
@@ -1699,7 +1809,7 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
                 => throw new InvalidOperationException(KeyCreateExceptionMessage),
             CreateEntityKeyRequest => new OrganizationResponse(),
             DeleteEntityKeyRequest => new OrganizationResponse(),
-            DeleteAttributeRequest => new OrganizationResponse(),
+            DeleteAttributeRequest => DeleteAttribute(),
             CreateOneToManyRequest r => CreateOneToMany(r),
             CreateCustomerRelationshipsRequest r => CreateLookup(r.Lookup,
                 r.OneToManyRelationships.Select(rel => rel.ReferencedEntity).ToArray(),
@@ -1754,7 +1864,9 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
                     $"Attribute metadata not found: {request.EntityLogicalName}:{request.LogicalName ?? request.MetadataId.ToString()}");
 
             var response = new RetrieveAttributeResponse();
-            response.Results["AttributeMetadata"] = attribute;
+            response.Results["AttributeMetadata"] = LastUpdateRequest?.Attribute.LogicalName == request.LogicalName
+                ? AttributeReadBack ?? attribute
+                : attribute;
             return response;
         }
 
@@ -1790,6 +1902,12 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
                 throw new InvalidOperationException(UpdateExceptionMessage);
             LastUpdateRequest = request;
             UpdatedAttributes.Add(request.Attribute);
+            return new OrganizationResponse();
+        }
+
+        private OrganizationResponse DeleteAttribute()
+        {
+            DeleteAttributeAttempts++;
             return new OrganizationResponse();
         }
 

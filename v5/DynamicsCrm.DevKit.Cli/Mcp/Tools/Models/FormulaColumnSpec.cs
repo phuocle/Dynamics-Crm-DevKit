@@ -5,8 +5,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 {
     /// <summary>
-    /// Resolved formula definition to attach to an attribute during create, so a column
-    /// becomes a Power Fx / Calculated / Rollup column instead of a plain Simple field.
+    /// Resolved formula definition to attach to an attribute during create or update.
     ///
     /// <see cref="SourceType"/> matches <c>AttributeMetadata.SourceType</c>:
     /// 1 = Calculated, 2 = Rollup, 3 = Power Fx.
@@ -31,6 +30,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
             KindName = kindName;
         }
 
+        private static PropertyInfo GetFormulaProperty(AttributeMetadata attribute) =>
+            attribute?.GetType().GetProperty("FormulaDefinition",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+        public static string ReadDefinition(AttributeMetadata attribute) =>
+            GetFormulaProperty(attribute)?.GetValue(attribute) as string;
+
         /// <summary>
         /// Attach SourceType + FormulaDefinition to <paramref name="attribute"/> via reflection.
         /// <c>FormulaDefinition</c> is not on the public <see cref="AttributeMetadata"/> base
@@ -41,9 +47,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         {
             attribute.SourceType = SourceType;
 
-            var propInfo = attribute.GetType().GetProperty(
-                "FormulaDefinition",
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            var propInfo = GetFormulaProperty(attribute);
             if (propInfo == null || !propInfo.CanWrite)
                 throw new InvalidOperationException(
                     $"Cannot set FormulaDefinition on attribute metadata type '{attribute.GetType().FullName}'.");

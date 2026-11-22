@@ -38,9 +38,50 @@ public sealed class GetTablesRareBranchCoverageTests
         var attrs = await GetAttributesAsync(harness, "gt_probe", "full");
 
         Assert.AreEqual("Simple", Attr(attrs, "gt_simple").GetProperty("sourceType").GetString());
+        Assert.IsFalse(Attr(attrs, "gt_simple").TryGetProperty("rawFormulaDefinition", out _));
         Assert.AreEqual("SourceType99", Attr(attrs, "gt_unknown").GetProperty("sourceType").GetString());
         Assert.IsFalse(Attr(attrs, "").TryGetProperty("formulaDefinition", out _),
             "an attribute without a logical name cannot get a formula reference");
+    }
+
+    [TestMethod]
+    [DataRow(1, " <Activity>\r\n  <SetValue />\r\n</Activity>\n")]
+    [DataRow(2, "\t<Rollup>&lt;sum&gt;</Rollup> ")]
+    [DataRow(3, "  =Text(New_Date, \"yyyy-mm-dd\") \r\n")]
+    [DataRow(3, " \r\n\t")]
+    [DataRow(3, null)]
+    public async Task Detail_Full_ReportsRawFormulaAndKeepsCloneReference(int sourceType, string? rawFormula)
+    {
+        using var harness = new MetadataHarness();
+        var formula = TestMetadata.String("gt_formula", "Formula");
+        formula.SourceType = sourceType;
+        formula.FormulaDefinition = rawFormula;
+        harness.Entities.Add(TestMetadata.Entity("gt_probe", "Probe", formula));
+
+        var entry = Attr(await GetAttributesAsync(harness, "gt_probe", "full"), "gt_formula");
+
+        Assert.AreEqual("gt_probe:gt_formula", entry.GetProperty("formulaDefinition").GetString());
+        Assert.AreEqual(rawFormula ?? "", entry.GetProperty("rawFormulaDefinition").GetString());
+        if (!string.IsNullOrWhiteSpace(rawFormula))
+            Assert.AreEqual(rawFormula.Trim(), entry.GetProperty("formulaExpression").GetString());
+    }
+
+    [TestMethod]
+    [DataRow("compact")]
+    [DataRow("standard")]
+    public async Task Detail_OmitsFormulaFieldsOutsideFull(string detailLevel)
+    {
+        using var harness = new MetadataHarness();
+        var formula = TestMetadata.String("gt_formula", "Formula");
+        formula.SourceType = 3;
+        formula.FormulaDefinition = "Text(name)";
+        harness.Entities.Add(TestMetadata.Entity("gt_probe", "Probe", formula));
+
+        var entry = Attr(await GetAttributesAsync(harness, "gt_probe", detailLevel), "gt_formula");
+
+        Assert.IsFalse(entry.TryGetProperty("formulaDefinition", out _));
+        Assert.IsFalse(entry.TryGetProperty("rawFormulaDefinition", out _));
+        Assert.IsFalse(entry.TryGetProperty("formulaExpression", out _));
     }
 
     [TestMethod]

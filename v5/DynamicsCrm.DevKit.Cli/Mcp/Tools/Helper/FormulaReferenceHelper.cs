@@ -1,10 +1,42 @@
 using System;
+using System.Text.RegularExpressions;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 {
     /// <summary>Rewrites raw SDK formula references while cloning a formula column.</summary>
     internal static class FormulaReferenceHelper
     {
+        // Match strings and comments as whole tokens so identifier rewrites leave them intact.
+        private static readonly Regex PowerFxTokens = new(
+            """//[^\r\n]*|/\*[\s\S]*?\*/|"(?:""|[^"])*"|'(?:''|[^'])*'|[\p{L}_][\p{L}\p{Nd}_]*""");
+
+        public static string RewritePowerFxReferences(string formula, string sourceEntity, string targetEntity,
+            string sourceAttribute, string targetAttribute, string sourcePrefix, string targetPrefix)
+        {
+            var remapPrefix = !string.IsNullOrEmpty(sourcePrefix) && !string.IsNullOrEmpty(targetPrefix) &&
+                !sourcePrefix.Equals(targetPrefix, StringComparison.OrdinalIgnoreCase);
+            return PowerFxTokens.Replace(formula, match =>
+            {
+                var token = match.Value;
+                if (token[0] is '"' or '/')
+                    return token;
+
+                var quoted = token[0] == '\'';
+                var identifier = quoted ? token[1..^1] : token;
+                string replacement;
+                if (identifier.Equals(sourceAttribute, StringComparison.OrdinalIgnoreCase))
+                    replacement = targetAttribute;
+                else if (identifier.Equals(sourceEntity, StringComparison.OrdinalIgnoreCase))
+                    replacement = targetEntity;
+                else if (remapPrefix && identifier.StartsWith(sourcePrefix, StringComparison.OrdinalIgnoreCase))
+                    replacement = targetPrefix + identifier[sourcePrefix.Length..];
+                else
+                    return token;
+
+                return quoted ? $"'{replacement}'" : replacement;
+            });
+        }
+
         public static string RewriteFormulaReferences(string formulaDefinition, string sourceEntityName,
             string targetEntityName, string sourceAttributeName, string targetAttributeName,
             Models.FormulaRelationshipMapping relationshipMapping = null)

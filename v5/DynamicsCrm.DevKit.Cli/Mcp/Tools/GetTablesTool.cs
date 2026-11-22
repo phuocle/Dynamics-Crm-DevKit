@@ -37,9 +37,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Discover entity/attribute names before building FetchXML or calling other tools\n" +
             "- Find join columns, picklist options, required fields, primary key, lookup targets\n" +
             "- Clone or copy a column (detail_level='full' required — compact/standard lack clone metadata)\n" +
+            "- Inspect a formula in full detail: rawFormulaDefinition is the exact Dataverse definition. formulaDefinition is the entity:attribute clone reference.\n" +
             "- AI MUST use get_tables for entity/attribute metadata — do NOT use execute_webapi with EntityDefinitions\n\n" +
             "RELATED TOOLS:\n" +
-            "- manage_column → create/update columns (pass formula_definition unchanged from full mode)\n" +
+            "- manage_column → create/update columns (pass the formulaDefinition reference as formula_definition to clone)\n" +
             "- manage_table → create/update tables\n" +
             "- manage_relationship → create/update relationships\n" +
             "- execute_fetchxml → query data once you know attribute names")]
@@ -536,7 +537,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
 
             PopulateAttributeDetails(entry, attribute);
-            PopulateFormulaInfo(entry, entityLogicalName, attribute);
+            if (detailLevel == "full")
+                PopulateFormulaInfo(entry, entityLogicalName, attribute);
 
             // Standard: strip full-only fields to reduce payload
             if (detailLevel == "standard")
@@ -548,8 +550,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 entry.IsSortable = null;
                 entry.SourceType = null;
                 entry.DefaultValue = null;
-                entry.FormulaDefinition = null;
-                entry.FormulaExpression = null;
                 entry.MinValue = null;
                 entry.MaxValue = null;
                 entry.Precision = null;
@@ -614,17 +614,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static void PopulateFormulaInfo(TableAttributeEntry entry, string entityLogicalName, AttributeMetadata attribute)
         {
             // Only Calculated (1), Rollup (2), Power Fx (3) carry a formula.
-            if (attribute.SourceType != 1 && attribute.SourceType != 2 && attribute.SourceType != 3)
+            if (attribute.SourceType is not (1 or 2 or 3))
                 return;
+
+            var rawFormula = FormulaColumnSpec.ReadDefinition(attribute);
+            entry.RawFormulaDefinition = rawFormula ?? "";
 
             if (string.IsNullOrWhiteSpace(entityLogicalName) || string.IsNullOrWhiteSpace(attribute.LogicalName))
                 return;
 
-            // Keep raw SDK FormulaDefinition server-side. manage_column resolves this
-            // compact source reference when the caller requests a clone.
             entry.FormulaDefinition = $"{entityLogicalName}:{attribute.LogicalName}";
-
-            var rawFormula = attribute.GetType().GetProperty("FormulaDefinition")?.GetValue(attribute, null)?.ToString();
             if (!string.IsNullOrWhiteSpace(rawFormula))
                 entry.FormulaExpression = rawFormula.Trim();
         }

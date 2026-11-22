@@ -156,13 +156,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         /// <summary>
         /// Source reference for cloning a formula column, formatted as
-        /// <c>entityLogicalName:attributeLogicalName</c>. Raw formula XML/text is not
-        /// transported. Pass this reference unchanged to manage_column's
-        /// <c>formula_definition</c>; the server retrieves and rewrites it directly.
+        /// <c>entityLogicalName:attributeLogicalName</c>. Pass this reference to
+        /// <c>manage_column</c> as <c>formula_definition</c>.
         /// </summary>
         [JsonPropertyName("formulaDefinition")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string FormulaDefinition { get; set; }
+
+        /// <summary>
+        /// Exact Dataverse formula definition for a formula column in full detail.
+        /// An unset definition is represented by an empty string.
+        /// </summary>
+        [JsonPropertyName("rawFormulaDefinition")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string RawFormulaDefinition { get; set; }
 
         [JsonPropertyName("formulaExpression")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

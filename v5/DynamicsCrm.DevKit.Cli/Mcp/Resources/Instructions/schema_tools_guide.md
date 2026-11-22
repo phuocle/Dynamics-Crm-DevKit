@@ -76,10 +76,14 @@ These CANNOT be turned off once enabled.
 | image | same | -- | -- |
 | file | same | max_length | max_length=32768 (KB) |
 
-### Formula column cloning
-- `formula_definition` is create-only: copy the `formulaDefinition` reference returned by `get_tables` unchanged, as `source_table_logical_name:source_column_logical_name`. Do not pass raw formula content.
-- The server retrieves the source formula and its kind, then rewrites entity, column, and relationship references for the target. Supported underlying types: string, memo, integer, decimal, money, float, boolean, datetime.
-- To create an empty formula column, omit `formula_definition` and set `formula_source_type` to `powerfx`, `calculated`, or `rollup`. Formula clone parameters on update return an error.
+### Formula columns
+
+- In `get_tables` with `detail_level="full"`, `formulaDefinition` is the `entity:attribute` clone reference. `rawFormulaDefinition` is the exact Dataverse formula text or XML, including whitespace. An empty string indicates an unset definition. Compact and standard details omit both fields.
+- Use `formula_definition` on create or on update of an existing formula column. Copy the `formulaDefinition` reference from `get_tables` in the form `source_table_logical_name:source_column_logical_name`. The tool reads the source formula and rewrites references for the target. A Power Fx target requires a Power Fx source.
+- To enter Power Fx directly, pass `entity_name`, the existing column's `logical_name`, and `formula_expression` (for example, `=Text(ab_union_fee_id.ab_date, "yyyy-mm-dd")`). Omit `formula_definition` and `formula_source_type`. The expression must be valid for the target column's existing data type.
+- The tool checks the Power Fx formula in Dataverse metadata before publishing the table. The result includes the previous and saved formula under `changes.formulaDefinition`. Pass `solution_name` to add the column to an unmanaged solution.
+- Microsoft documents the Power Apps editor as the supported way to edit column formulas. If Dataverse rejects the SDK update or the tool cannot verify the saved expression, use the editor. [Specialized columns using code](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/specialized-columns)
+- To create an empty formula column, set `formula_source_type` to `powerfx`, `calculated`, or `rollup`.
 
 ### Format Values by Type
 
