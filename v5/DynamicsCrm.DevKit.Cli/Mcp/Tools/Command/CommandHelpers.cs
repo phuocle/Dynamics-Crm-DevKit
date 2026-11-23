@@ -304,6 +304,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             entry.OnClickFormula = NullIfEmpty(entity.GetAttributeValue<string>("onclickeventformulacomponentlibrary"));
         }
 
+        private byte[] TryExportDevKitRibbonSolution()
+        {
+            try
+            {
+                var exportReq = new ExportSolutionRequest { SolutionName = "devkit_ribbon", Managed = false };
+                var exportResp = (ExportSolutionResponse)_orgService.Execute(exportReq);
+                return exportResp?.ExportSolutionFile;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         private string PublishCommandTarget(string entityLogicalName, Guid? appModuleId = null)
         {
             if (!string.IsNullOrWhiteSpace(entityLogicalName))

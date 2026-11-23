@@ -39,6 +39,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var verb = wantHidden ? "hide" : "show";
 
+            if (!string.IsNullOrWhiteSpace(scope) && !ValidScopes.Contains(scope.Trim()))
+                return Error($"Invalid scope '{scope.Trim()}'.",
+                    "Valid values: 'app' (default), 'table', 'global'.");
+
             // Path 1: command_id provided
             if (!string.IsNullOrWhiteSpace(commandId))
             {
@@ -46,13 +50,89 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error($"'{commandId.Trim()}' is not a valid GUID.",
                         "Pass an appaction GUID. Use manage_command(action='list') to find command IDs.");
 
-                var existing = RetrieveAppActionOrNull(cmdGuid, "name", "hidden", "contextvalue", "origin", "appmoduleid");
+                var existing = RetrieveAppActionOrNull(cmdGuid,
+                    "name", "buttonlabeltext", "hidden", "context", "contextvalue",
+                    "location", "origin", "appmoduleid", "sequence", "fonticon",
+                    "onclickeventtype", "onclickeventjavascriptfunctionname",
+                    "onclickeventjavascriptwebresourceid", "visibilitytype");
                 if (existing == null)
                     return Error($"Command '{commandId.Trim()}' not found.",
                         "Use manage_command(action='list') to find valid command IDs.");
 
+                var existingContext = existing.GetAttributeValue<OptionSetValue>("context")?.Value;
                 var existingContextVal = existing.GetAttributeValue<string>("contextvalue");
                 var existingAppId = existing.GetAttributeValue<EntityReference>("appmoduleid")?.Id;
+                var existingName = existing.GetAttributeValue<string>("name") ?? "";
+                var isGlobalCommand = existingContext == 0
+                    || string.IsNullOrWhiteSpace(existingContextVal)
+                    || string.Equals(existingContextVal, "{!EntityLogicalName}", StringComparison.OrdinalIgnoreCase);
+
+                if (isGlobalCommand)
+                {
+                    var normalizedCmdScope = string.IsNullOrWhiteSpace(scope) ? "" : scope.Trim().ToLowerInvariant();
+                    var hasEntityOrAppArgs = !string.IsNullOrWhiteSpace(entityName)
+                        || !string.IsNullOrWhiteSpace(appId)
+                        || !string.IsNullOrWhiteSpace(appName);
+
+                    if (normalizedCmdScope == "global")
+                    {
+                        if (hasEntityOrAppArgs)
+                            return Error($"entity_name, app_id, and app_name must not be specified when scope='global' for action='{verb}'.",
+                                "Global commands apply to all tables and all apps.");
+                    }
+                    else if (hasEntityOrAppArgs || normalizedCmdScope == "table" || normalizedCmdScope == "app")
+                    {
+                        var effectiveScope = string.IsNullOrEmpty(normalizedCmdScope) ? "app" : normalizedCmdScope;
+                        if (effectiveScope == "table" && (!string.IsNullOrWhiteSpace(appId) || !string.IsNullOrWhiteSpace(appName)))
+                            return Error($"app_id and app_name must not be specified when scope='table' for action='{verb}'.",
+                                "Table-scoped commands apply across all apps.");
+                        if (string.IsNullOrWhiteSpace(entityName))
+                            return Error($"entity_name is required when hiding or showing a global command at scope='{effectiveScope}'.",
+                                "Pass the entity Display Name or logical name. Use get_tables to list available tables.");
+                        if (effectiveScope == "app" && wantHidden && string.IsNullOrWhiteSpace(appId) && string.IsNullOrWhiteSpace(appName))
+                            return Error("app_id or app_name is required for action='hide'.",
+                                "Multiple apps may exist — specify which app to apply the hide override to, or pass scope='table' to hide across all apps.");
+
+                        int cmdLocValue;
+                        if (!string.IsNullOrWhiteSpace(location))
+                        {
+                            if (!LocationFilterMap.TryGetValue(location.Trim(), out cmdLocValue))
+                                return Error($"Invalid location '{location.Trim()}'.",
+                                    "Valid values: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'.");
+                        }
+                        else
+                        {
+                            cmdLocValue = existing.GetAttributeValue<OptionSetValue>("location")?.Value ?? 0;
+                        }
+
+                        var (targetEntityLogical, targetEntityErr) = ResolveEntityLogicalName(entityName);
+                        if (targetEntityErr != null)
+                            return Error(targetEntityErr.Split("\r\n")[0],
+                                "Use get_tables to list available tables.");
+
+                        var existingLabel = existing.GetAttributeValue<string>("buttonlabeltext");
+                        var effectiveLabel = !string.IsNullOrWhiteSpace(label)
+                            ? label.Trim()
+                            : (!string.IsNullOrWhiteSpace(existingLabel) ? existingLabel.Trim() : ExtractLabelFromCommandName(existingName));
+
+                        return ExecuteEntityScopedHideShow(
+                            effectiveLabel,
+                            targetEntityLogical,
+                            cmdLocValue,
+                            effectiveScope,
+                            appId,
+                            appName,
+                            wantHidden,
+                            oobTemplateOverride: existing,
+                            overrideCommandName: NullIfEmpty(existingName));
+                    }
+                    else if (existingName.Contains("{!EntityLogicalName}", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return Error(
+                            $"Command '{existingName}' is a global OOB command (context=All). Hiding or showing it directly would affect all tables in the organization.",
+                            "Pass entity_name with scope='table' (or scope='app' with app_id/app_name) to create a table/app override, or pass scope='global' to explicitly modify the global command.");
+                    }
+                }
 
                 if (!wantHidden && IsOobOverrideCommand(existing))
                 {
@@ -77,7 +157,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var update = new Entity("appaction", cmdGuid);
                 update["hidden"] = wantHidden;
                 DataverseMutationExecutor.Update(_context, _orgService, update);
-                var publishNote = PublishCommandTarget(existingContextVal, existingAppId);
+                var publishNote = PublishCommandTarget(isGlobalCommand ? null : existingContextVal, existingAppId);
 
                 var doneMsg = $"Command '{existing.GetAttributeValue<string>("name") ?? commandId.Trim()}' is now {(wantHidden ? "hidden" : "visible")}. {publishNote}";
                 var doneResult = new ManageCommandResult { Action = verb, Status = "success", CommandId = commandId.Trim(), Message = doneMsg };
@@ -85,9 +165,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var normalizedScope = string.IsNullOrWhiteSpace(scope) ? "app" : scope.Trim().ToLowerInvariant();
-            if (!ValidScopes.Contains(normalizedScope))
-                return Error($"Invalid scope '{scope.Trim()}'.",
-                    "Valid values: 'app' (default), 'table', 'global'.");
 
             if (normalizedScope == "global")
             {
@@ -147,24 +224,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error(tableEntityErr.Split("\r\n")[0],
                         "Use get_tables to list available tables.");
 
-                var tableFound = FindCommandByLabelScoped(label.Trim(), tableEntityLogical, tableLocValue, "table");
-                if (tableFound == null)
-                    return Error($"Table-scoped command '{label.Trim()}' not found on '{tableEntityLogical}' ({LocationMap[tableLocValue]}).",
-                        "Use manage_command(action='list', scope='table') to find existing table-scoped commands.");
-
-                var tableAlreadyHidden = tableFound.GetAttributeValue<bool?>("hidden") ?? false;
-                if (tableAlreadyHidden == wantHidden)
-                {
-                    var state = wantHidden ? "already hidden" : "already visible";
-                    var msg = $"Command '{label.Trim()}' is {state}. No change needed.";
-                    return Success(msg, new ManageCommandResult { Action = verb, Status = "success", CommandId = tableFound.Id.ToString(), Message = msg });
-                }
-
-                var tableUpdate = new Entity("appaction", tableFound.Id) { ["hidden"] = wantHidden };
-                DataverseMutationExecutor.Update(_context, _orgService, tableUpdate);
-                var tablePubNote = PublishCommandTarget(tableEntityLogical);
-                var tableDoneMsg = $"Command '{label.Trim()}' is now {(wantHidden ? "hidden" : "visible")}. {tablePubNote}";
-                return Success(tableDoneMsg, new ManageCommandResult { Action = verb, Status = "success", CommandId = tableFound.Id.ToString(), Message = tableDoneMsg });
+                return ExecuteEntityScopedHideShow(label.Trim(), tableEntityLogical, tableLocValue, "table", appId, appName, wantHidden);
             }
 
             // Path 2: lookup by label + entity + location (scope = 'app' default)
@@ -189,16 +249,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (entityError != null)
                 return Error(entityError.Split("\r\n")[0],
                     "Use get_tables to list available tables.");
-            entityName = resolvedEntityName;
 
-            var found = FindCommandByLabel(label.Trim(), entityName, locationValue);
+            return ExecuteEntityScopedHideShow(label.Trim(), resolvedEntityName, locationValue, "app", appId, appName, wantHidden);
+        }
+
+        private CallToolResult ExecuteEntityScopedHideShow(
+            string trimmedLabel,
+            string entityLogical,
+            int locationValue,
+            string normalizedScope,
+            string appId,
+            string appName,
+            bool wantHidden,
+            Entity oobTemplateOverride = null,
+            string overrideCommandName = null)
+        {
+            var verb = wantHidden ? "hide" : "show";
+            var found = normalizedScope == "table"
+                ? FindCommandByLabelScoped(trimmedLabel, entityLogical, locationValue, "table")
+                : FindCommandByLabel(trimmedLabel, entityLogical, locationValue);
 
             if (found != null)
             {
                 if (!wantHidden && IsOobOverrideCommand(found))
                 {
-                    var commandName = found.GetAttributeValue<string>("name") ?? label.Trim();
-                    var contextValue = found.GetAttributeValue<string>("contextvalue");
+                    var commandName = found.GetAttributeValue<string>("name") ?? trimmedLabel;
+                    var contextValue = found.GetAttributeValue<string>("contextvalue") ?? entityLogical;
                     DataverseMutationExecutor.Delete(_context, _orgService, "appaction", found.Id);
                     PublishHelper.PublishEntity(_context, _orgService, contextValue.Trim().ToLowerInvariant());
 
@@ -211,7 +287,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (alreadyHidden == wantHidden)
                 {
                     var state = wantHidden ? "already hidden" : "already visible";
-                    var msg2 = $"Command '{label.Trim()}' is {state}. No change needed.";
+                    var msg2 = $"Command '{trimmedLabel}' is {state}. No change needed.";
                     var noopResult2 = new ManageCommandResult { Action = verb, Status = "success", CommandId = found.Id.ToString(), Message = msg2 };
                     return Success(msg2, noopResult2);
                 }
@@ -219,9 +295,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var update2 = new Entity("appaction", found.Id);
                 update2["hidden"] = wantHidden;
                 DataverseMutationExecutor.Update(_context, _orgService, update2);
-                PublishHelper.PublishEntity(_context, _orgService, found.GetAttributeValue<string>("contextvalue").Trim().ToLowerInvariant());
+                var publishEntity = found.GetAttributeValue<string>("contextvalue") ?? entityLogical;
+                PublishHelper.PublishEntity(_context, _orgService, publishEntity.Trim().ToLowerInvariant());
 
-                var doneMsg2 = $"Command '{label.Trim()}' is now {(wantHidden ? "hidden" : "visible")}. Entity published.";
+                var doneMsg2 = $"Command '{trimmedLabel}' is now {(wantHidden ? "hidden" : "visible")}. Entity published.";
                 var doneResult2 = new ManageCommandResult { Action = verb, Status = "success", CommandId = found.Id.ToString(), Message = doneMsg2 };
                 return Success(doneMsg2, doneResult2);
             }
@@ -230,35 +307,39 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!wantHidden)
             {
                 // show: OOB button with no override record is visible by default — nothing to do
-                var noRecordMsg = $"Command '{label.Trim()}' has no appaction override record. OOB buttons are visible by default — no action needed.";
+                var noRecordMsg = $"Command '{trimmedLabel}' has no appaction override record. OOB buttons are visible by default — no action needed.";
                 var noRecordResult = new ManageCommandResult { Action = verb, Status = "success", Message = noRecordMsg };
                 return Success(noRecordMsg, noRecordResult);
             }
 
             // Block if this label belongs to a custom classic ribbon button
-            if (IsClassicRibbonButton(label.Trim(), entityName))
-                return Error($"'{label.Trim()}' is a classic ribbon button defined via manage_ribbon and cannot be hidden using manage_command.",
+            if (IsClassicRibbonButton(trimmedLabel, entityLogical))
+                return Error($"'{trimmedLabel}' is a classic ribbon button defined via manage_ribbon and cannot be hidden using manage_command.",
                     "Use manage_ribbon to hide it instead.");
 
-            // hide: must create an appaction override record
-            var resolvedAppId = ResolveAppId(appId, appName, out var appResolveError2);
-            if (resolvedAppId == null)
-                return Error((appResolveError2 ?? "Could not resolve app.").Split("\r\n")[0],
-                    "Pass app_id (app module GUID) or app_name. Use manage_app(action='list') to discover apps.");
+            Guid? resolvedAppId = null;
+            if (normalizedScope == "app")
+            {
+                resolvedAppId = ResolveAppId(appId, appName, out var appResolveError2);
+                if (resolvedAppId == null)
+                    return Error((appResolveError2 ?? "Could not resolve app.").Split("\r\n")[0],
+                        "Pass app_id (app module GUID) or app_name. Use manage_app(action='list') to discover apps.");
+            }
 
-            var entityLogical = entityName;
             var oobNamePrefix = LocationOobNamePrefix(locationValue);
-            var safeLabel = label.Trim().Replace(" ", "");
-            var overrideName = $"Mscrm.{oobNamePrefix}.{{!EntityLogicalName}}.{safeLabel}";
-            var appUniqueName = ResolveAppUniqueName(resolvedAppId.Value);
+            var safeLabel = trimmedLabel.Replace(" ", "");
+            var overrideName = !string.IsNullOrWhiteSpace(overrideCommandName)
+                ? overrideCommandName
+                : $"Mscrm.{oobNamePrefix}.{{!EntityLogicalName}}.{safeLabel}";
+            var appUniqueName = resolvedAppId.HasValue ? ResolveAppUniqueName(resolvedAppId.Value) : "global";
             var publisherPrefix = ResolvePublisherPrefix(entityLogical);
-            var entitySchemaName = ResolveEntitySchemaName(entityLogical);
+            _ = ResolveEntitySchemaName(entityLogical);
             var uniqueName = $"{publisherPrefix}__{overrideName}!{appUniqueName}!{entityLogical}!{locationValue}";
 
             var contextEntityId = ResolveEntityId(entityLogical);
 
             // Look up OOB template to copy fonticon, sequence, onclickeventtype, etc.
-            var oobTemplate = FindOobTemplate(overrideName, locationValue);
+            var oobTemplate = oobTemplateOverride ?? FindOobTemplate(overrideName, locationValue);
 
             var newEntity = new Entity("appaction");
             newEntity["name"] = overrideName;
@@ -268,11 +349,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (contextEntityId.HasValue)
                 newEntity["contextentity"] = new EntityReference("entity", contextEntityId.Value);
             newEntity["location"] = new OptionSetValue(locationValue);
-            newEntity["buttonlabeltext"] = label.Trim();
+            newEntity["buttonlabeltext"] = trimmedLabel;
             newEntity["type"] = new OptionSetValue(0); // Standard Button
             newEntity["hidden"] = true;
             newEntity["origin"] = new OptionSetValue(2); // Enhanced Migrated — required for designer to show Hide option
-            newEntity["appmoduleid"] = new EntityReference("appmodule", resolvedAppId.Value);
+            if (resolvedAppId.HasValue)
+                newEntity["appmoduleid"] = new EntityReference("appmodule", resolvedAppId.Value);
 
             if (oobTemplate != null)
             {
@@ -312,9 +394,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var newId = DataverseMutationExecutor.Create(_context, _orgService, newEntity);
             PublishHelper.PublishEntity(_context, _orgService, entityLogical.Trim().ToLowerInvariant());
 
-            var createdMsg = $"Created appaction override: command '{label.Trim()}' on {entityName} ({LocationMap[locationValue]}) is now hidden. Entity published.";
+            var createdMsg = $"Created appaction override: command '{trimmedLabel}' on {entityLogical} ({LocationMap[locationValue]}) is now hidden. Entity published.";
             var createdResult = new ManageCommandResult { Action = verb, Status = "success", CommandId = newId.ToString(), Message = createdMsg, CreateMode = SolutionComponentCreateMode.None.ToString() };
             return Success(createdMsg, createdResult);
+        }
+
+        private static string ExtractLabelFromCommandName(string commandName)
+        {
+            if (string.IsNullOrWhiteSpace(commandName))
+                return "Command";
+            var lastDot = commandName.LastIndexOf('.');
+            return lastDot >= 0 && lastDot < commandName.Length - 1
+                ? commandName.Substring(lastDot + 1)
+                : commandName;
         }
 
         private Entity FindCommandByLabel(string label, string entityName, int locationValue)
@@ -401,10 +493,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private bool IsClassicRibbonButton(string label, string entityName)
         {
             // Custom ribbon buttons are always in the devkit_ribbon solution.
-            // Export it and scan LocLabel titles — same approach as ManageRibbonTool.
-            var exportReq = new ExportSolutionRequest { SolutionName = "devkit_ribbon", Managed = false };
-            var exportResp = (ExportSolutionResponse)_orgService.Execute(exportReq);
-            var ribbonXml = ExtractRibbonDiffXmlForEntity(exportResp.ExportSolutionFile, entityName);
+            // If devkit_ribbon does not exist on the org, there are no devkit_ribbon classic buttons.
+            var solutionZip = TryExportDevKitRibbonSolution();
+            if (solutionZip == null || solutionZip.Length == 0) return false;
+
+            var ribbonXml = ExtractRibbonDiffXmlForEntity(solutionZip, entityName);
             if (string.IsNullOrWhiteSpace(ribbonXml)) return false;
 
             var doc = XDocument.Parse(ribbonXml);

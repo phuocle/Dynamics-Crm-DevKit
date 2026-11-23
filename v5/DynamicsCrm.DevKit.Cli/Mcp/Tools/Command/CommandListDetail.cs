@@ -290,9 +290,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private Dictionary<string, string> LoadLocLabels(string entityName)
         {
             var locLabels = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            var exportReq = new ExportSolutionRequest { SolutionName = "devkit_ribbon", Managed = false };
-            var exportResp = (ExportSolutionResponse)_orgService.Execute(exportReq);
-            var ribbonXml = ExtractRibbonDiffXmlForEntity(exportResp.ExportSolutionFile, entityName);
+            var solutionZip = TryExportDevKitRibbonSolution();
+            if (solutionZip == null || solutionZip.Length == 0) return locLabels;
+
+            var ribbonXml = ExtractRibbonDiffXmlForEntity(solutionZip, entityName);
             if (string.IsNullOrWhiteSpace(ribbonXml)) return locLabels;
 
             var doc = XDocument.Parse(ribbonXml);
