@@ -76,6 +76,11 @@ public sealed class ManageAppRareBranchWave3CoverageTests
         var unknownEntity = await tool.manage_app(null!, action: "add_components", app: "Sales",
             entity_name: "NoSuchEntity", view_ids: new[] { _viewId.ToString() });
         StringAssert.Contains(Text(unknownEntity), "Use get_tables to find the table");
+
+        var noMetadataId = NewTool(script => script.MetadataIdNull = true);
+        var missingMetadataId = await noMetadataId.manage_app(null!, action: "add_components", app: "Sales", entity_name: "account");
+        Assert.IsTrue(missingMetadataId.IsError);
+        StringAssert.Contains(Text(missingMetadataId), "Entity metadata id not found for 'account'.");
     }
 
     [TestMethod]
@@ -114,14 +119,10 @@ public sealed class ManageAppRareBranchWave3CoverageTests
     [TestMethod]
     public void EntityMetadata_Resolution_Branches()
     {
-        var throwing = NewTool(script =>
-        {
-            script.MetadataIdNull = true;
-            script.MetadataNull = true;
-        });
-        var resolveId = typeof(ManageAppTool).GetMethod("ResolveEntityMetadataId", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        var throwing = NewTool(script => script.MetadataNull = true);
+        var resolveLogicalName = typeof(ManageAppTool).GetMethod("ResolveEntityLogicalName", BindingFlags.NonPublic | BindingFlags.Instance)!;
         Assert.ThrowsExactly<TargetInvocationException>(() =>
-            resolveId.Invoke(throwing, new object[] { "account" }));
+            resolveLogicalName.Invoke(throwing, new object[] { Guid.NewGuid() }));
 
         var resolveMeta = typeof(ManageAppTool).GetMethod("ResolveEntityMetadata", BindingFlags.NonPublic | BindingFlags.Instance)!;
         Assert.ThrowsExactly<TargetInvocationException>(() =>
@@ -190,14 +191,12 @@ public sealed class ManageAppRareBranchWave3CoverageTests
             switch (request.RequestName)
             {
                 case "RetrieveAllEntities":
-                    return new RetrieveAllEntitiesResponse { Results = { ["EntityMetadata"] = entities } };
+                    return new RetrieveAllEntitiesResponse
+                    {
+                        Results = { ["EntityMetadata"] = MetadataIdNull ? new[] { new EntityMetadata { LogicalName = "account" } } : entities }
+                    };
                 case "RetrieveEntity" when MetadataNull:
                     return new RetrieveEntityResponse { Results = { ["EntityMetadata"] = null! } };
-                case "RetrieveEntity" when MetadataIdNull:
-                    return new RetrieveEntityResponse
-                    {
-                        Results = { ["EntityMetadata"] = new EntityMetadata { LogicalName = "account" } }
-                    };
                 case "AddAppComponents" or "RemoveAppComponents" when ComponentError != null:
                     throw ComponentError;
                 default:

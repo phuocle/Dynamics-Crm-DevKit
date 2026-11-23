@@ -908,12 +908,14 @@ public sealed class ManageAppFakeXrmEasyTests
         });
 
     [TestMethod]
-    [DataRow(true)]
-    [DataRow(false)]
-    public void ComponentActions_BackupAndPublish_AndUndoRestoresOnlyChangedMembership(bool add)
+    [DataRow(true, false)]
+    [DataRow(true, true)]
+    [DataRow(false, true)]
+    public void ComponentActions_BackupAndPublish_AndUndoRestoresOnlyChangedMembership(bool add, bool tableInApp)
     {
         var (appId, appUniqueId, _) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: false);
         var service = _context.GetOrganizationService();
+        var table = _entityExecutor.Metadata.Single(metadata => metadata.LogicalName == "account").MetadataId!.Value;
         var view = Guid.NewGuid();
         var form = Guid.NewGuid();
         var dashboard = Guid.NewGuid();
@@ -922,6 +924,8 @@ public sealed class ManageAppFakeXrmEasyTests
         service.Create(new Entity("savedquery") { ["name"] = "Active Accounts", ["returnedtypecode"] = "contact" });
         service.Create(new Entity("systemform", form) { ["formid"] = form, ["name"] = "Account Details", ["objecttypecode"] = "account", ["type"] = new OptionSetValue(2) });
         service.Create(new Entity("systemform", dashboard) { ["name"] = "Activity Dashboard", ["objecttypecode"] = "account", ["type"] = new OptionSetValue(10) });
+        if (tableInApp)
+            SeedPageComponent(appUniqueId, 1, table);
         if (!add)
         {
             SeedPageComponent(appUniqueId, 26, view);
@@ -943,12 +947,20 @@ public sealed class ManageAppFakeXrmEasyTests
             Assert.IsTrue(Directory.EnumerateFiles(_workspace, "*.app.json", SearchOption.AllDirectories).Any());
         }
 
+        var changeTable = add && !tableInApp;
+        var expectedChanges = new List<(int Type, Guid Id, string LogicalName)>
+        {
+            (26, view, "savedquery"), (60, form, "systemform"), (60, dashboard, "systemform")
+        };
+        if (changeTable)
+            expectedChanges.Add((1, table, "account"));
+
         _componentExecutor.OnExecute = request =>
         {
             AssertBackupExistsBeforeRequest();
             Assert.AreEqual(appId, request.AppId);
             foreach (var component in request.Components)
-                SeedPageComponent(appUniqueId, component.LogicalName == "savedquery" ? 26 : 60, component.Id);
+                SeedPageComponent(appUniqueId, expectedChanges.Single(change => change.Id == component.Id).Type, component.Id);
         };
         _removeComponentExecutor.OnExecute = request =>
         {
@@ -968,14 +980,14 @@ public sealed class ManageAppFakeXrmEasyTests
         var detail = result.StructuredContent!.Value;
         Assert.AreEqual("updated", detail.GetProperty("status").GetString());
         Assert.IsTrue(detail.GetProperty("published").GetBoolean());
-        Assert.AreEqual(3, detail.GetProperty("changedOperations").GetInt32());
-        CollectionAssert.AreEquivalent(new[] { $"26:{view}", $"60:{form}", $"60:{dashboard}" },
+        Assert.AreEqual(expectedChanges.Count, detail.GetProperty("changedOperations").GetInt32());
+        CollectionAssert.AreEquivalent(expectedChanges.Select(change => $"{change.Type}:{change.Id}").ToArray(),
             detail.GetProperty(add ? "addedAppComponents" : "removedAppComponents").EnumerateArray().Select(value => value.GetString()).ToArray());
         var path = detail.GetProperty("backupPath").GetString()!;
         var original = File.ReadAllText(path);
         using var snapshot = JsonDocument.Parse(original);
-        Assert.AreEqual(3, snapshot.RootElement.GetProperty("componentScope").GetArrayLength());
-        Assert.AreEqual(add ? 0 : 3, snapshot.RootElement.GetProperty("appComponents").GetArrayLength());
+        Assert.AreEqual(expectedChanges.Count, snapshot.RootElement.GetProperty("componentScope").GetArrayLength());
+        Assert.AreEqual((tableInApp ? 1 : 0) + (add ? 0 : 3), snapshot.RootElement.GetProperty("appComponents").GetArrayLength());
         StringAssert.Contains(_publishExecutor.Requests.Single().ParameterXml, $"<appmodules><appmodule>{appId}</appmodule></appmodules>");
 
         var repeated = Invoke(tool, "HandleAppComponents", action, "Sales Hub", "Account", viewSelectors, formSelectors, dashboardSelectors);
@@ -992,11 +1004,44 @@ public sealed class ManageAppFakeXrmEasyTests
         Assert.AreNotEqual(path, restored.GetProperty("backupPath").GetString());
         Assert.AreEqual(original, File.ReadAllText(path));
         Assert.HasCount(2, _publishExecutor.Requests);
-        var refs = new[] { (view, "savedquery"), (form, "systemform"), (dashboard, "systemform") };
+        var refs = expectedChanges.Select(change => (change.Id, change.LogicalName)).ToArray();
         CollectionAssert.AreEquivalent(refs, _componentExecutor.Requests.Single().Components.Select(c => (c.Id, c.LogicalName)).ToArray());
         CollectionAssert.AreEquivalent(refs, _removeComponentExecutor.Requests.Single().Components.Select(c => (c.Id, c.LogicalName)).ToArray());
-        CollectionAssert.AreEquivalent(add ? new[] { unrelated } : new[] { unrelated, view, form, dashboard },
+        var remaining = new List<Guid> { unrelated };
+        if (tableInApp)
+            remaining.Add(table);
+        if (!add)
+            remaining.AddRange([view, form, dashboard]);
+        CollectionAssert.AreEquivalent(remaining.ToArray(),
             CurrentComponents().Select(row => row.GetAttributeValue<Guid>("objectid")).ToArray());
+    }
+
+    [TestMethod]
+    public void ComponentActions_TableOnly_AddsAndRemovesExplicitMembership()
+    {
+        var (appId, appUniqueId, _) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: false);
+        var table = _entityExecutor.Metadata.Single(metadata => metadata.LogicalName == "contact").MetadataId!.Value;
+        var tool = NewTool();
+        SetWorkspace(tool, _workspace);
+        string[] noSelectors = [];
+
+        var add = Invoke(tool, "HandleAppComponents", "add_components", "Sales Hub", "Contact", noSelectors, noSelectors, noSelectors);
+        Assert.IsFalse(add.IsError == true, add.GetText());
+        Assert.AreEqual($"1:{table}", add.StructuredContent!.Value.GetProperty("addedAppComponents")[0].GetString());
+        var addRequest = _componentExecutor.Requests.Single();
+        Assert.AreEqual(appId, addRequest.AppId);
+        Assert.AreEqual(new EntityReference("contact", table), addRequest.Components.Single());
+
+        SeedPageComponent(appUniqueId, 1, table);
+        var detail = Invoke(tool, "HandleDetail", "Sales Hub");
+        Assert.AreEqual($"1:{table}", detail.StructuredContent!.Value.GetProperty("appComponents")[0].GetString());
+
+        var remove = Invoke(tool, "HandleAppComponents", "remove_components", "Sales Hub", "contact", noSelectors, noSelectors, noSelectors);
+        Assert.IsFalse(remove.IsError == true, remove.GetText());
+        Assert.AreEqual($"1:{table}", remove.StructuredContent!.Value.GetProperty("removedAppComponents")[0].GetString());
+        var removeRequest = _removeComponentExecutor.Requests.Single();
+        Assert.AreEqual(appId, removeRequest.AppId);
+        Assert.AreEqual(new EntityReference("contact", table), removeRequest.Components.Single());
     }
 
     [TestMethod]
@@ -1334,8 +1379,10 @@ public sealed class ManageAppFakeXrmEasyTests
         public OrganizationResponse Execute(OrganizationRequest request, IXrmFakedContext context)
         {
             var retrieveEntity = (RetrieveEntityRequest)request;
-            var metadata = Metadata.FirstOrDefault(m => m.LogicalName == retrieveEntity.LogicalName)
-                ?? throw new InvalidOperationException($"Metadata not found: {retrieveEntity.LogicalName}");
+            var metadata = Metadata.FirstOrDefault(m => retrieveEntity.MetadataId != Guid.Empty
+                    ? m.MetadataId == retrieveEntity.MetadataId
+                    : m.LogicalName == retrieveEntity.LogicalName)
+                ?? throw new InvalidOperationException($"Metadata not found: {retrieveEntity.LogicalName ?? retrieveEntity.MetadataId.ToString()}");
             var response = new RetrieveEntityResponse();
             response.Results["EntityMetadata"] = metadata;
             return response;

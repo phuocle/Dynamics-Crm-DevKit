@@ -30,7 +30,6 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.ManageApp;
 /// - ValidateSiteMapXml ~1236-1237 (`schemaSet == null || Count == 0`):
 ///   the CLI assembly always embeds SiteMap.xsd/SiteMapType.xsd, so the
 ///   schema set is never empty.
-/// - ResolveEntityMetadataId ~1021-1032: private method with no callers.
 /// </summary>
 [TestClass]
 public sealed class ManageAppGapWave2CoverageTests

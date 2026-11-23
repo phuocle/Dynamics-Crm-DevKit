@@ -1,7 +1,7 @@
 
 # Instructions for manage_app
 
-Use `manage_app` for model-driven app metadata, app navigation, and system view, form, and dashboard membership.
+Use `manage_app` for model-driven app metadata, app navigation, and table, system view, form, and dashboard membership.
 
 ## Golden Rules
 
@@ -23,6 +23,8 @@ Use `manage_app` for model-driven app metadata, app navigation, and system view,
 ## App component membership
 
 Use `add_components` or `remove_components` with the app's display name, unique name, or GUID. Pass one or more of `view_ids`, `form_ids`, and `dashboard_ids` as JSON arrays of GUID strings or exact names. Views and forms require `entity_name`, which accepts the table's display or logical name. Dashboard-only calls can omit it. When supplied, dashboard lookup includes dashboards for that table and global dashboards.
+
+`add_components` adds the table to the app if `entity_name` is supplied and the table is missing, including for tables outside the sitemap. Pass `entity_name` alone to add or remove the table component. With view, form, or dashboard selectors, `remove_components` targets only the selected components.
 
 ```json
 {

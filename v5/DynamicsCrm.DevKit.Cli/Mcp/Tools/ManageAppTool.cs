@@ -31,6 +31,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageAppTool : McpToolBase
     {
+        private const int EntityComponentType = 1;
         private const int WebResourceComponentType = 61;
         private const int ViewComponentType = 26;
         private const int SystemFormComponentType = 60;
@@ -68,7 +69,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- List/inspect model-driven apps, or create/update app metadata (name, description, icon)\n" +
             "- Apply app-scoped sitemap navigation operations, validate an app, or restore from a .app.json backup (undo) — the result's backupPath points to the pre-change snapshot; pass it as operations to action='undo' to restore\n" +
-            "- Add or remove system views, forms, and dashboards using add_components or remove_components. Pass GUIDs or names, then check backupPath and published.\n" +
+            "- Add or remove tables, system views, forms, and dashboards using add_components or remove_components. Pass GUIDs or names, then check backupPath and published.\n" +
             "- Read docs://instructions_for_manage_app before update_navigation for operation fields, positions, and examples.\n" +
             "- App is resolved by Display Name first, then unique name/GUID; ambiguous Display Names return the candidates\n\n" +
             "RELATED TOOLS:\n" +
@@ -89,7 +90,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("list only. 1-500.")] int max_records = 100,
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default,
-            [Description("add_components/remove_components. Table display or logical name. Required with view_ids or form_ids. Optional when selecting only dashboards.")] string entity_name = "",
+            [Description("add_components/remove_components. Table display or logical name. Required with view_ids or form_ids. Add ensures the table is in the app when supplied. To remove the table itself, supply entity_name alone.")] string entity_name = "",
             [Description("add_components/remove_components. Array of system view GUIDs or exact names for entity_name.")] string[] view_ids = null,
             [Description("add_components/remove_components. Array of system form GUIDs or exact names for entity_name.")] string[] form_ids = null,
             [Description("add_components/remove_components. Array of system dashboard GUIDs or exact names.")] string[] dashboard_ids = null)
@@ -752,12 +753,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(app))
                 return Error($"app is required for action='{action}'. Provide an app display name, unique name, or GUID.", DiscoverAppsHint);
-            if (views.Length + forms.Length + dashboards.Length == 0)
+            var add = action == "add_components";
+            var hasEntity = !string.IsNullOrWhiteSpace(entityName);
+            var noSelectors = views.Length + forms.Length + dashboards.Length == 0;
+            if (noSelectors && !hasEntity)
                 return Error($"At least one component is required for action='{action}'.",
-                    "Supply view_ids, form_ids, or dashboard_ids as an array of GUIDs or names.");
+                    "Supply entity_name for a table or view_ids, form_ids, or dashboard_ids as an array of GUIDs or names.");
             if (views.Concat(forms).Concat(dashboards).Any(string.IsNullOrWhiteSpace))
                 return Error("Component selectors must be non-empty GUIDs or names.");
-            if (string.IsNullOrWhiteSpace(entityName) && (views.Length > 0 || forms.Length > 0))
+            if (!hasEntity && (views.Length > 0 || forms.Length > 0))
                 return Error($"entity_name is required with view_ids or form_ids for action='{action}'.",
                     "Provide the table display name or logical name.");
 
@@ -765,20 +769,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (resolveError != null)
                 return resolveError;
 
-            string logicalName = null;
-            if (!string.IsNullOrWhiteSpace(entityName))
+            EntityMetadata entityMetadata = null;
+            if (hasEntity)
             {
                 var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "manage_app");
                 if (!resolved.IsSuccess)
                     return Error(resolved.Error, "Use get_tables to find the table's logical name.");
-                logicalName = resolved.Value.LogicalName;
+                entityMetadata = resolved.Value;
             }
 
+            var logicalName = entityMetadata?.LogicalName;
             var components = ResolveComponentSelectors(views, logicalName, "view")
                 .Concat(ResolveComponentSelectors(forms, logicalName, "form"))
                 .Concat(ResolveComponentSelectors(dashboards, logicalName, "dashboard"))
                 .Distinct().ToList();
-            return ApplyComponentMembership(appModule, components, _ => action == "add_components",
+            if (hasEntity && (add || noSelectors))
+            {
+                var metadataId = entityMetadata.MetadataId;
+                if (!metadataId.HasValue || metadataId == Guid.Empty)
+                    return Error($"Entity metadata id not found for '{logicalName}'.");
+                components.Insert(0, new AppComponent(EntityComponentType, metadataId.Value));
+            }
+            return ApplyComponentMembership(appModule, components, _ => add,
                 new ManageAppResult { Action = action, EntityName = logicalName });
         }
 
@@ -871,7 +883,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (add.Count > 0)
                 {
-                    AddAppComponents(app.Id, new EntityReferenceCollection(add.Select(component => component.ToReference()).ToList()));
+                    AddAppComponents(app.Id, new EntityReferenceCollection(add.Select(component => ToComponentReference(component, result.EntityName)).ToList()));
                     result.AddedAppComponents = add.Select(component => component.ToString()).ToList();
                 }
                 if (remove.Count > 0)
@@ -879,7 +891,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     DataverseMutationExecutor.Execute(_context, _orgService, new RemoveAppComponentsRequest
                     {
                         AppId = app.Id,
-                        Components = new EntityReferenceCollection(remove.Select(component => component.ToReference()).ToList())
+                        Components = new EntityReferenceCollection(remove.Select(component => ToComponentReference(component, result.EntityName)).ToList())
                     });
                     result.RemovedAppComponents = remove.Select(component => component.ToString()).ToList();
                 }
@@ -1282,17 +1294,29 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return _orgService.RetrieveMultiple(query).Entities.FirstOrDefault()?.GetAttributeValue<string>("sitemapxml");
         }
 
-        private Guid ResolveEntityMetadataId(string entityLogicalName)
+        private EntityReference ToComponentReference(AppComponent component, string entityLogicalName)
         {
-            var request = new RetrieveEntityRequest
+            var logicalName = component.Type switch
             {
-                LogicalName = entityLogicalName,
+                EntityComponentType => entityLogicalName ?? ResolveEntityLogicalName(component.Id),
+                ViewComponentType => "savedquery",
+                SystemFormComponentType => "systemform",
+                _ => throw new ArgumentException($"Unsupported app component type '{component.Type}'.", nameof(component))
+            };
+            return new EntityReference(logicalName, component.Id);
+        }
+
+        private string ResolveEntityLogicalName(Guid metadataId)
+        {
+            // Undo snapshots store the component type and ID, without the table name.
+            var response = (RetrieveEntityResponse)_orgService.Execute(new RetrieveEntityRequest
+            {
+                MetadataId = metadataId,
                 EntityFilters = EntityFilters.Entity,
                 RetrieveAsIfPublished = true
-            };
-            var response = (RetrieveEntityResponse)_orgService.Execute(request);
-            return response.EntityMetadata.MetadataId
-                ?? throw new InvalidOperationException($"Entity metadata id not found for '{entityLogicalName}'.");
+            });
+            return response.EntityMetadata?.LogicalName
+                ?? throw new InvalidOperationException($"Entity logical name not found for metadata id '{metadataId}'.");
         }
 
         private EntityMetadata ResolveEntityMetadata(string entityLogicalName)
@@ -1942,7 +1966,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             public string ObjectId { get; set; }
 
             public AppComponent? ToComponent() =>
-                ComponentType is ViewComponentType or SystemFormComponentType &&
+                ComponentType is EntityComponentType or ViewComponentType or SystemFormComponentType &&
                 Guid.TryParse(ObjectId, out var id) && id != Guid.Empty
                     ? new AppComponent(ComponentType.Value, id)
                     : null;
@@ -1950,7 +1974,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private readonly record struct AppComponent(int Type, Guid Id)
         {
-            public EntityReference ToReference() => new(Type == ViewComponentType ? "savedquery" : "systemform", Id);
             public override string ToString() => $"{Type}:{Id:D}";
         }
     }
