@@ -304,6 +304,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             entry.OnClickFormula = NullIfEmpty(entity.GetAttributeValue<string>("onclickeventformulacomponentlibrary"));
         }
 
+        private string PublishCommandTarget(string entityLogicalName, Guid? appModuleId = null)
+        {
+            if (!string.IsNullOrWhiteSpace(entityLogicalName))
+            {
+                PublishHelper.PublishEntity(_context, _orgService, entityLogicalName.Trim().ToLowerInvariant());
+                return "Entity published.";
+            }
+
+            if (appModuleId.HasValue && appModuleId.Value != Guid.Empty)
+            {
+                PublishHelper.PublishAppModule(_context, _orgService, appModuleId.Value);
+                return "App published.";
+            }
+
+            PublishHelper.PublishRibbon(_context, _orgService);
+            return "Global command bar published.";
+        }
+
         private static CommandEntry MapCommandEntry(Entity e)
         {
             var typeValue = e.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
@@ -311,8 +329,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var onClickValue = e.GetAttributeValue<OptionSetValue>("onclickeventtype")?.Value ?? 0;
             var visibilityValue = e.GetAttributeValue<OptionSetValue>("visibilitytype")?.Value ?? 0;
             var originValue = e.GetAttributeValue<OptionSetValue>("origin")?.Value ?? 0;
+            var contextOpt = e.GetAttributeValue<OptionSetValue>("context");
+            var contextValue = contextOpt?.Value;
+            var entityLogicalVal = e.GetAttributeValue<string>("contextvalue") ?? "";
+            var appModuleRef = e.GetAttributeValue<EntityReference>("appmoduleid");
 
             var appName = GetAliasedString(e, "app.name");
+
+            string mappedContext = null;
+            if (contextValue.HasValue)
+                mappedContext = ContextMap.TryGetValue(contextValue.Value, out var ctxStr) ? ctxStr : contextValue.Value.ToString();
+            else if (!string.IsNullOrWhiteSpace(entityLogicalVal))
+                mappedContext = "Entity";
+
+            string mappedScope = null;
+            if (contextValue == 0)
+                mappedScope = appModuleRef != null || !string.IsNullOrEmpty(appName) ? "App" : "Global";
+            else if (contextValue == 1 || !string.IsNullOrWhiteSpace(entityLogicalVal))
+                mappedScope = appModuleRef != null || !string.IsNullOrEmpty(appName) ? "App" : "Table";
 
             return new CommandEntry
             {
@@ -320,7 +354,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Name = e.GetAttributeValue<string>("name") ?? "",
                 UniqueName = e.GetAttributeValue<string>("uniquename") ?? "",
                 ButtonLabel = NullIfEmpty(e.GetAttributeValue<string>("buttonlabeltext")),
-                Entity = e.GetAttributeValue<string>("contextvalue") ?? "",
+                Entity = entityLogicalVal,
+                Context = mappedContext,
+                Scope = mappedScope,
                 Location = LocationMap.TryGetValue(locationValue, out var loc) ? loc : locationValue.ToString(),
                 Type = TypeMap.TryGetValue(typeValue, out var t) ? t : typeValue.ToString(),
                 OnClickEventType = OnClickEventTypeMap.TryGetValue(onClickValue, out var oc) ? oc : onClickValue.ToString(),

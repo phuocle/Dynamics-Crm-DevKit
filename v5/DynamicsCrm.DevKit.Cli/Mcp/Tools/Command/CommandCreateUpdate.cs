@@ -20,7 +20,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         // ── Create ──────────────────────────────────────────────
 
-        private CallToolResult HandleCreate(string entityName, string location, string appId, string appName, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden)
+        private CallToolResult HandleCreate(string entityName, string location, string appId, string appName, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden) =>
+            HandleCreateScoped(entityName, location, appId, appName, label, onclickType, jsWebResource, jsFunction, fontIcon, iconWebResource, tooltipTitle, tooltipDescription, sequence, hidden, "");
+
+        private CallToolResult HandleCreateScoped(string entityName, string location, string appId, string appName, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden, string scope)
         {
             if (_options.DryRun)
                 return DryRun("Would create an appaction command.", new ManageCommandResult
@@ -31,7 +34,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     CreateMode = "metadata"
                 });
 
-            if (string.IsNullOrWhiteSpace(entityName))
+            var normalizedScope = string.IsNullOrWhiteSpace(scope) ? "app" : scope.Trim().ToLowerInvariant();
+            if (!ValidScopes.Contains(normalizedScope))
+                return Error($"Invalid scope '{scope.Trim()}'.",
+                    "Valid values: 'app' (default), 'table', 'global'.");
+
+            if (normalizedScope == "table" && (!string.IsNullOrWhiteSpace(appId) || !string.IsNullOrWhiteSpace(appName)))
+                return Error("app_id and app_name must not be specified when scope='table'.",
+                    "Use scope='app' (default) to target a specific app, or omit app_id/app_name for table-scoped commands across all apps.");
+
+            if (normalizedScope == "global" && (!string.IsNullOrWhiteSpace(entityName) || !string.IsNullOrWhiteSpace(appId) || !string.IsNullOrWhiteSpace(appName)))
+                return Error("entity_name, app_id, and app_name must not be specified when scope='global'.",
+                    "Global commands apply to all tables and all apps. Use scope='table' for a specific table or scope='app' for a specific app and table.");
+
+            if (normalizedScope != "global" && string.IsNullOrWhiteSpace(entityName))
                 return Error("entity_name is required for action='create'.",
                     "Pass the entity Display Name or logical name. Use get_tables to list available tables.");
             if (string.IsNullOrWhiteSpace(location))
@@ -45,10 +61,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"Invalid location '{location.Trim()}'.",
                     "Valid values: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'.");
 
-            var resolvedAppId = ResolveAppId(appId, appName, out var appResolveError);
-            if (resolvedAppId == null)
-                return Error((appResolveError ?? "Could not resolve app.").Split("\r\n")[0],
-                    "Pass app_id (app module GUID) or app_name. Use manage_app(action='list') to discover apps.");
+            Guid? resolvedAppId = null;
+            if (normalizedScope == "app")
+            {
+                resolvedAppId = ResolveAppId(appId, appName, out var appResolveError);
+                if (resolvedAppId == null)
+                    return Error((appResolveError ?? "Could not resolve app.").Split("\r\n")[0],
+                        "Pass app_id (app module GUID) or app_name. Use manage_app(action='list') to discover apps.");
+            }
 
             var onclickTypeValue = 0;
             if (!string.IsNullOrWhiteSpace(onclickType))
@@ -58,29 +78,45 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         "Valid values: 'none', 'javascript', 'formula'.");
             }
 
-            var (createEntityLogical, createEntityError) = ResolveEntityLogicalName(entityName);
-            if (createEntityError != null)
-                return Error(createEntityError.Split("\r\n")[0],
-                    "Use get_tables to list available tables.");
-            var createEntityId = ResolveEntityId(createEntityLogical);
-            var createAppUniqueName = ResolveAppUniqueName(resolvedAppId.Value);
+            string createEntityLogical = null;
+            Guid? createEntityId = null;
+            if (normalizedScope != "global")
+            {
+                var (resolvedLogical, createEntityError) = ResolveEntityLogicalName(entityName);
+                if (createEntityError != null)
+                    return Error(createEntityError.Split("\r\n")[0],
+                        "Use get_tables to list available tables.");
+                createEntityLogical = resolvedLogical;
+                createEntityId = ResolveEntityId(createEntityLogical);
+            }
+
+            var createAppUniqueName = resolvedAppId.HasValue ? ResolveAppUniqueName(resolvedAppId.Value) : "global";
             var createPublisherPrefix = ResolvePublisherPrefix(createEntityLogical);
             var createSafeLabel = label.Trim().Replace(" ", "");
             var createLocationPrefix = LocationOobNamePrefix(locationValue);
-            var createName = $"{createPublisherPrefix}.{createEntityLogical}.{createSafeLabel}.{createLocationPrefix}.Button";
-            var createUniqueName = $"{createPublisherPrefix}__{createName}!{createAppUniqueName}!{createEntityLogical}!{locationValue}";
+            var entityToken = normalizedScope == "global" ? "all" : createEntityLogical;
+            var createName = $"{createPublisherPrefix}.{entityToken}.{createSafeLabel}.{createLocationPrefix}.Button";
+            var createUniqueName = $"{createPublisherPrefix}__{createName}!{createAppUniqueName}!{entityToken}!{locationValue}";
 
             var entity = new Entity("appaction");
             entity["name"] = createName;
             entity["uniquename"] = createUniqueName;
-            entity["context"] = new OptionSetValue(1); // Entity
-            entity["contextvalue"] = createEntityLogical;
-            if (createEntityId.HasValue)
-                entity["contextentity"] = new EntityReference("entity", createEntityId.Value);
+            if (normalizedScope == "global")
+            {
+                entity["context"] = new OptionSetValue(0); // All (Global)
+            }
+            else
+            {
+                entity["context"] = new OptionSetValue(1); // Entity
+                entity["contextvalue"] = createEntityLogical;
+                if (createEntityId.HasValue)
+                    entity["contextentity"] = new EntityReference("entity", createEntityId.Value);
+            }
             entity["location"] = new OptionSetValue(locationValue);
             entity["buttonlabeltext"] = label.Trim();
             entity["onclickeventtype"] = new OptionSetValue(onclickTypeValue);
-            entity["appmoduleid"] = new EntityReference("appmodule", resolvedAppId.Value);
+            if (resolvedAppId.HasValue)
+                entity["appmoduleid"] = new EntityReference("appmodule", resolvedAppId.Value);
             entity["type"] = new OptionSetValue(0); // Standard
             entity["sequence"] = sequence > 0 ? (decimal)sequence : (decimal)100;
             entity["hidden"] = hidden;
@@ -132,14 +168,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var newId = DataverseMutationExecutor.Create(_context, _orgService, entity);
-            PublishHelper.PublishEntity(_context, _orgService, createEntityLogical.Trim().ToLowerInvariant());
+            PublishCommandTarget(createEntityLogical, resolvedAppId);
+
+            var successMsg = normalizedScope switch
+            {
+                "global" => $"Global command '{label.Trim()}' created successfully ({LocationMap[locationValue]}) and global command bar published.",
+                "table" => $"Table-scoped command '{label.Trim()}' created successfully on {entityName.Trim()} ({LocationMap[locationValue]}) across all apps and entity published.",
+                _ => $"Command '{label.Trim()}' created successfully on {entityName.Trim()} ({LocationMap[locationValue]}) and entity published."
+            };
 
             var structured = new ManageCommandResult
             {
                 Action = "create",
                 Status = "success",
                 CommandId = newId.ToString(),
-                Message = $"Command '{label.Trim()}' created successfully on {entityName.Trim()} ({LocationMap[locationValue]}) and entity published.",
+                Message = successMsg,
                 CreateMode = SolutionComponentCreateMode.None.ToString()
             };
 
@@ -166,7 +209,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"'{commandId.Trim()}' is not a valid GUID.",
                     "Pass an appaction GUID. Use manage_command(action='list') to find command IDs.");
 
-            var existing = RetrieveAppActionOrNull(cmdGuid, "name", "buttonlabeltext", "contextvalue");
+            var existing = RetrieveAppActionOrNull(cmdGuid, "name", "buttonlabeltext", "contextvalue", "appmoduleid");
             if (existing == null)
                 return Error($"Command '{commandId.Trim()}' not found.",
                     "Use manage_command(action='list') to find valid command IDs.");
@@ -261,10 +304,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             DataverseMutationExecutor.Update(_context, _orgService, entity);
             var updateEntityLogical = existing.GetAttributeValue<string>("contextvalue");
-            PublishHelper.PublishEntity(_context, _orgService, updateEntityLogical.Trim().ToLowerInvariant());
+            var updateAppId = existing.GetAttributeValue<EntityReference>("appmoduleid")?.Id;
+            var publishSuffix = PublishCommandTarget(updateEntityLogical, updateAppId);
 
             var commandName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
-            var message = $"Command '{commandName}' updated: {string.Join(", ", changes)}. Entity published.";
+            var message = $"Command '{commandName}' updated: {string.Join(", ", changes)}. {publishSuffix}";
 
             var structured = new ManageCommandResult
             {

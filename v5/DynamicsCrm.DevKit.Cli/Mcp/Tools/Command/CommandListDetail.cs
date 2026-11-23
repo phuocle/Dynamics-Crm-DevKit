@@ -20,8 +20,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         // ── List ──────────────────────────────────────────────
 
-        private CallToolResult HandleList(string entityName, string location, string appName, string origin, string actionType, string nameFilter, bool includeRules, bool includeChildren, int maxRecords)
+        private CallToolResult HandleList(string entityName, string location, string appName, string origin, string actionType, string nameFilter, bool includeRules, bool includeChildren, int maxRecords) =>
+            HandleListScoped(entityName, location, appName, origin, actionType, nameFilter, includeRules, includeChildren, maxRecords, "");
+
+        private CallToolResult HandleListScoped(string entityName, string location, string appName, string origin, string actionType, string nameFilter, bool includeRules, bool includeChildren, int maxRecords, string scope)
         {
+            if (!string.IsNullOrWhiteSpace(scope) && !ValidScopes.Contains(scope.Trim()))
+                return Error($"Invalid scope '{scope.Trim()}'.",
+                    "Valid values: 'app', 'table', 'global'.");
+
             if (!string.IsNullOrWhiteSpace(location))
             {
                 if (!LocationFilterMap.ContainsKey(location.Trim()))
@@ -59,13 +66,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Ribbon-style list when entity is specified and no extra filters narrow it down
             if (!string.IsNullOrWhiteSpace(entityName) && string.IsNullOrWhiteSpace(appName)
-                && string.IsNullOrWhiteSpace(origin) && string.IsNullOrWhiteSpace(actionType) && string.IsNullOrWhiteSpace(nameFilter))
+                && string.IsNullOrWhiteSpace(origin) && string.IsNullOrWhiteSpace(actionType)
+                && string.IsNullOrWhiteSpace(nameFilter) && string.IsNullOrWhiteSpace(scope))
             {
                 var loc = string.IsNullOrWhiteSpace(location) ? null : location.Trim();
                 return GetListRibbonStyle(entityName, loc);
             }
 
-            return GetList(entityName, location, appName, origin, actionType, nameFilter, includeRules, includeChildren, maxRecords);
+            return GetList(entityName, location, appName, origin, actionType, nameFilter, includeRules, includeChildren, maxRecords, scope);
         }
 
         // Ribbon-style list: uses RetrieveEntityRibbonRequest to show ALL buttons (OOB + custom),
@@ -308,10 +316,29 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return reader.ReadToEnd();
         }
 
-        private CallToolResult GetList(string entityName, string location, string appName, string origin, string actionType, string nameFilter, bool includeRules, bool includeChildren, int maxRecords)
+        private CallToolResult GetList(string entityName, string location, string appName, string origin, string actionType, string nameFilter, bool includeRules, bool includeChildren, int maxRecords, string scope = "")
         {
             var filters = new StringBuilder();
             filters.AppendLine("      <condition attribute='statecode' operator='eq' value='0'/>");
+
+            if (!string.IsNullOrWhiteSpace(scope))
+            {
+                var normalizedScope = scope.Trim().ToLowerInvariant();
+                if (normalizedScope == "app")
+                {
+                    filters.AppendLine("      <condition attribute='appmoduleid' operator='not-null'/>");
+                }
+                else if (normalizedScope == "table")
+                {
+                    filters.AppendLine("      <condition attribute='context' operator='eq' value='1'/>");
+                    filters.AppendLine("      <condition attribute='appmoduleid' operator='null'/>");
+                }
+                else if (normalizedScope == "global")
+                {
+                    filters.AppendLine("      <condition attribute='context' operator='eq' value='0'/>");
+                    filters.AppendLine("      <condition attribute='appmoduleid' operator='null'/>");
+                }
+            }
 
             if (!string.IsNullOrWhiteSpace(entityName))
                 filters.AppendLine($"      <condition attribute='contextvalue' operator='eq' value='{EscapeXml(entityName.Trim())}'/>");
@@ -348,6 +375,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <attribute name='buttonlabeltext'/>
     <attribute name='type'/>
     <attribute name='location'/>
+    <attribute name='context'/>
     <attribute name='contextvalue'/>
     <attribute name='onclickeventtype'/>
     <attribute name='onclickeventjavascriptfunctionname'/>
@@ -455,11 +483,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success(detailText, structured);
         }
 
-        private CallToolResult GetDetailByLabel(string label, string entityName, string location, bool includeRules, bool includeChildren)
+        private CallToolResult GetDetailByLabel(string label, string entityName, string location, bool includeRules, bool includeChildren) =>
+            GetDetailByLabelScoped(label, entityName, location, includeRules, includeChildren, "");
+
+        private CallToolResult GetDetailByLabelScoped(string label, string entityName, string location, bool includeRules, bool includeChildren, string scope)
         {
+            if (!string.IsNullOrWhiteSpace(scope) && !ValidScopes.Contains(scope.Trim()))
+                return Error($"Invalid scope '{scope.Trim()}'.",
+                    "Valid values: 'app', 'table', 'global'.");
+
             var filters = new StringBuilder();
             filters.AppendLine("      <condition attribute='statecode' operator='eq' value='0'/>");
             filters.AppendLine($"      <condition attribute='buttonlabeltext' operator='like' value='%{EscapeXml(label)}%'/>");
+
+            if (!string.IsNullOrWhiteSpace(scope))
+            {
+                var normalizedScope = scope.Trim().ToLowerInvariant();
+                if (normalizedScope == "app")
+                {
+                    filters.AppendLine("      <condition attribute='appmoduleid' operator='not-null'/>");
+                }
+                else if (normalizedScope == "table")
+                {
+                    filters.AppendLine("      <condition attribute='context' operator='eq' value='1'/>");
+                    filters.AppendLine("      <condition attribute='appmoduleid' operator='null'/>");
+                }
+                else if (normalizedScope == "global")
+                {
+                    filters.AppendLine("      <condition attribute='context' operator='eq' value='0'/>");
+                    filters.AppendLine("      <condition attribute='appmoduleid' operator='null'/>");
+                }
+            }
 
             if (!string.IsNullOrWhiteSpace(entityName))
             {

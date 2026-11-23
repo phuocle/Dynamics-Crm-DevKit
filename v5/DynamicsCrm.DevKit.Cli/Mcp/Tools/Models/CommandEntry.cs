@@ -21,6 +21,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("entity")]
         public string Entity { get; set; }
 
+        [JsonPropertyName("context")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Context { get; set; }
+
+        [JsonPropertyName("scope")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Scope { get; set; }
+
         [JsonPropertyName("location")]
         public string Location { get; set; }
 

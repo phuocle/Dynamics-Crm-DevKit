@@ -78,6 +78,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [2] = "EnhancedMigrated"
         };
 
+        private static readonly Dictionary<int, string> ContextMap = new()
+        {
+            [0] = "All",
+            [1] = "Entity"
+        };
+
+        private static readonly HashSet<string> ValidScopes = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "app",
+            "table",
+            "global"
+        };
+
         private static readonly Dictionary<string, int> LocationFilterMap = new(StringComparer.OrdinalIgnoreCase)
         {
             ["form"] = 0,
@@ -152,13 +165,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("1–500.")] int max_records = 50,
             [Description("add_flyout/add_split_button: non-empty JSON array serialized as a string. Each item requires label; optional string fields: onclick_type (none/javascript/formula), javascript_webresource, javascript_function, sequence (integer encoded as a JSON string, e.g. \"10000\"). Omitted or invalid sequence defaults to item order in steps of 10000.")] string items = "",
             [Description("GUID of Dropdown or Split Button. Required: add_flyout_item.")] string flyout_command_id = "",
+            [Description("Command scope for standard buttons: 'app' (default — bound to app and table), 'table' (bound to table across all apps), or 'global' (bound to location across all tables and all apps).")] string scope = "",
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
                 var worker = new ManageCommandTool(conn.OrgService, conn.Options, conn.Context);
-                return System.Threading.Tasks.Task.FromResult(worker.manage_command(action, command_id, entity_name, location, app_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden, app_name, origin, action_type, name_filter, include_rules, include_children, max_records, items, flyout_command_id));
+                return System.Threading.Tasks.Task.FromResult(worker.manage_command(action, command_id, entity_name, location, app_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden, app_name, origin, action_type, name_filter, include_rules, include_children, max_records, items, flyout_command_id, scope));
             }, cancellationToken);
         }
 
@@ -186,7 +200,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Dropdown/split items.")] bool include_children = false,
             [Description("1–500.")] int max_records = 50,
             [Description("add_flyout/add_split_button: non-empty JSON array serialized as a string. Each item requires label; optional string fields: onclick_type (none/javascript/formula), javascript_webresource, javascript_function, sequence (integer encoded as a JSON string, e.g. \"10000\"). Omitted or invalid sequence defaults to item order in steps of 10000.")] string items = "",
-            [Description("GUID of Dropdown or Split Button. Required: add_flyout_item.")] string flyout_command_id = "")
+            [Description("GUID of Dropdown or Split Button. Required: add_flyout_item.")] string flyout_command_id = "",
+            [Description("Command scope for standard buttons: 'app' (default — bound to app and table), 'table' (bound to table across all apps), or 'global' (bound to location across all tables and all apps).")] string scope = "")
         {
             var actionName = (action ?? "").Trim().ToLowerInvariant();
             if (string.IsNullOrWhiteSpace(actionName))
@@ -201,7 +216,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 switch (actionName)
                 {
                     case "list":
-                        return HandleList(entity_name, location, app_name, origin, action_type, name_filter, include_rules, include_children, max_records);
+                        return string.IsNullOrWhiteSpace(scope)
+                            ? HandleList(entity_name, location, app_name, origin, action_type, name_filter, include_rules, include_children, max_records)
+                            : HandleListScoped(entity_name, location, app_name, origin, action_type, name_filter, include_rules, include_children, max_records, scope);
 
                     case "detail":
                         if (string.IsNullOrWhiteSpace(command_id) && string.IsNullOrWhiteSpace(label))
@@ -214,19 +231,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                                     "Pass an appaction GUID. Use manage_command(action='list') to find command IDs.");
                             return GetDetail(command_id.Trim(), include_rules, include_children);
                         }
-                        return GetDetailByLabel(label.Trim(), entity_name.Trim(), location.Trim(), include_rules, include_children);
+                        return string.IsNullOrWhiteSpace(scope)
+                            ? GetDetailByLabel((label ?? "").Trim(), (entity_name ?? "").Trim(), (location ?? "").Trim(), include_rules, include_children)
+                            : GetDetailByLabelScoped((label ?? "").Trim(), (entity_name ?? "").Trim(), (location ?? "").Trim(), include_rules, include_children, scope);
 
                     case "create":
-                        return HandleCreate(entity_name, location, app_id, app_name, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden);
+                        return string.IsNullOrWhiteSpace(scope)
+                            ? HandleCreate(entity_name, location, app_id, app_name, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden)
+                            : HandleCreateScoped(entity_name, location, app_id, app_name, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden, scope);
 
                     case "update":
                         return HandleUpdate(command_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence);
 
                     case "hide":
-                        return HandleHideShow(command_id, entity_name, location, app_id, app_name, label, wantHidden: true);
+                        return string.IsNullOrWhiteSpace(scope)
+                            ? HandleHideShow(command_id, entity_name, location, app_id, app_name, label, wantHidden: true)
+                            : HandleHideShowScoped(command_id, entity_name, location, app_id, app_name, label, wantHidden: true, scope);
 
                     case "show":
-                        return HandleHideShow(command_id, entity_name, location, app_id, app_name, label, wantHidden: false);
+                        return string.IsNullOrWhiteSpace(scope)
+                            ? HandleHideShow(command_id, entity_name, location, app_id, app_name, label, wantHidden: false)
+                            : HandleHideShowScoped(command_id, entity_name, location, app_id, app_name, label, wantHidden: false, scope);
 
                     case "add_flyout":
                         return HandleAddFlyout(entity_name, location, app_id, app_name, label, items, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden);
