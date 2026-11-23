@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.ManageWebResource;
@@ -80,7 +81,7 @@ public sealed class ManageWebResourceFakeXrmEasyFullCoverageTests
 
     private Guid SeedWebResource(string name, string displayName = "", int typeCode = 3,
         bool isManaged = false, bool? isCustomizable = null, string description = "",
-        EntityReference? createdBy = null, EntityReference? modifiedBy = null)
+        EntityReference? createdBy = null, EntityReference? modifiedBy = null, string? content = null)
     {
         var id = Guid.NewGuid();
         var row = new Entity("webresource", id)
@@ -96,6 +97,7 @@ public sealed class ManageWebResourceFakeXrmEasyFullCoverageTests
         if (!string.IsNullOrEmpty(description)) row["description"] = description;
         if (createdBy != null) row["createdby"] = createdBy;
         if (modifiedBy != null) row["modifiedby"] = modifiedBy;
+        if (content != null) row["content"] = content;
         _ctx.GetOrganizationService().Create(row);
         return id;
     }
@@ -271,12 +273,76 @@ public sealed class ManageWebResourceFakeXrmEasyFullCoverageTests
     {
         var id = SeedWebResource("v4_/rich.js", displayName: "Rich WR", typeCode: 3, description: "Rich description",
             createdBy: new EntityReference("systemuser", Guid.NewGuid()) { Name = "Creator" },
-            modifiedBy: new EntityReference("systemuser", Guid.NewGuid()) { Name = "Editor" });
+            modifiedBy: new EntityReference("systemuser", Guid.NewGuid()) { Name = "Editor" }, content: "not base64");
         var result = NewTool().manage_webresource("detail", web_resource_id: id.ToString());
         Assert.IsFalse(result.IsError == true, Text(result));
         StringAssert.Contains(Text(result), "Web resource 'v4_/rich.js'");
         StringAssert.Contains(Text(result), "type JS");
         StringAssert.Contains(Text(result), id.ToString());
+        Assert.IsFalse(_service.LastWebResourceColumns!.Columns.Contains("content"));
+        Assert.IsFalse(result.StructuredContent!.Value.TryGetProperty("contentPath", out _));
+        Assert.IsFalse(Directory.Exists(Path.Combine(_tempDir, ".devkit")));
+    }
+
+    [TestMethod]
+    public void Detail_IncludeContent_SavesUtf8WithoutBomOrInlineContent()
+    {
+        const string script = "const source = \"Tiếng Việt\";\r\n// preserve newlines\n";
+        var bytes = Encoding.UTF8.GetBytes(script);
+        var encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes("\uFEFF" + script));
+        var id = SeedWebResource("v4_/scripts/inline.js", content: encoded);
+
+        var result = NewTool().manage_webresource("detail", web_resource_id: id.ToString(), include_content: true);
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        Assert.IsTrue(_service.LastWebResourceColumns!.Columns.Contains("content"));
+        var detail = result.StructuredContent!.Value;
+        var path = detail.GetProperty("contentPath").GetString()!;
+        Assert.IsTrue(Path.IsPathFullyQualified(path));
+        Assert.AreEqual(Path.Combine(_tempDir, ".devkit", "manage_webresource", "default"), Path.GetDirectoryName(path));
+        Assert.AreEqual(".js", Path.GetExtension(path));
+        CollectionAssert.AreEqual(bytes, File.ReadAllBytes(path));
+        Assert.AreEqual(bytes.Length, detail.GetProperty("byteLength").GetInt32());
+        Assert.AreEqual("utf-8", detail.GetProperty("encoding").GetString());
+        Assert.IsFalse(detail.GetRawText().Contains("preserve newlines", StringComparison.Ordinal));
+        Assert.IsFalse(Text(result).Contains("preserve newlines", StringComparison.Ordinal));
+        StringAssert.Contains(Text(result), path);
+    }
+
+    [TestMethod]
+    public void Detail_IncludeContent_PreservesBinaryBytesAndEarlierExports()
+    {
+        byte[] bytes = [0xEF, 0xBB, 0xBF, 0xFF, 0x00];
+        var id = SeedWebResource("v4_/binary", typeCode: 5, content: Convert.ToBase64String(bytes));
+        var tool = NewTool();
+        var first = tool.manage_webresource("detail", web_resource_id: id.ToString(), include_content: true);
+        Assert.IsFalse(first.IsError == true, Text(first));
+        var detail = first.StructuredContent!.Value;
+        var firstPath = detail.GetProperty("contentPath").GetString()!;
+        Assert.AreEqual(".png", Path.GetExtension(firstPath));
+        Assert.AreEqual("binary", detail.GetProperty("encoding").GetString());
+        Assert.AreEqual(bytes.Length, detail.GetProperty("byteLength").GetInt32());
+
+        _ctx.GetOrganizationService().Update(new Entity("webresource", id) { ["content"] = "AA==" });
+        var second = tool.manage_webresource("detail", web_resource_id: id.ToString(), include_content: true);
+        Assert.IsFalse(second.IsError == true, Text(second));
+        var secondPath = second.StructuredContent!.Value.GetProperty("contentPath").GetString()!;
+        Assert.AreNotEqual(firstPath, secondPath);
+        CollectionAssert.AreEqual(bytes, File.ReadAllBytes(firstPath));
+        CollectionAssert.AreEqual(new byte[] { 0 }, File.ReadAllBytes(secondPath));
+    }
+
+    [TestMethod]
+    [DataRow("not base64", "invalid base64")]
+    [DataRow("/w==", "invalid UTF-8")]
+    public void Detail_IncludeContent_RejectsMalformedContentWithoutWriting(string content, string error)
+    {
+        var id = SeedWebResource("v4_/malformed.js", content: content);
+        var result = NewTool().manage_webresource("detail", web_resource_id: id.ToString(), include_content: true);
+
+        Assert.IsTrue(result.IsError == true);
+        StringAssert.Contains(Text(result), error);
+        Assert.IsFalse(Directory.Exists(Path.Combine(_tempDir, ".devkit")));
     }
 
     [TestMethod]
@@ -747,6 +813,7 @@ public sealed class ManageWebResourceFakeXrmEasyFullCoverageTests
         public bool FailAddToSolution;
         public bool FailList;
         public Guid LastCreatedId;
+        public ColumnSet? LastWebResourceColumns;
 
         public WebResourceOrgService(IOrganizationService inner) => _inner = inner;
 
@@ -792,6 +859,8 @@ public sealed class ManageWebResourceFakeXrmEasyFullCoverageTests
 
         public EntityCollection RetrieveMultiple(QueryBase query)
         {
+            if (query is QueryExpression { EntityName: "webresource" } webResourceQuery)
+                LastWebResourceColumns = webResourceQuery.ColumnSet;
             if (query is FetchExpression fetch)
             {
                 if (FailList)

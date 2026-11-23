@@ -19,6 +19,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<WebResourceEntry> WebResources { get; set; }
 
+        [JsonPropertyName("contentPath")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ContentPath { get; set; }
+
+        [JsonPropertyName("byteLength")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? ByteLength { get; set; }
+
+        [JsonPropertyName("encoding")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Encoding { get; set; }
+
         [JsonPropertyName("solutionName")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SolutionName { get; set; }

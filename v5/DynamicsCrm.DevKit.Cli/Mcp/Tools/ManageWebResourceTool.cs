@@ -23,6 +23,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
         private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+        private string _workspaceFolder;
+        private string _envId = "default";
+
+        private static readonly UTF8Encoding StrictUtf8 = new(false, true);
 
         public ManageWebResourceTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context) : this(orgService, options, context, null) { }
 
@@ -74,6 +78,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Manage Dataverse web resources — list / detail / create / update / delete.\n" +
             "detail/update/delete need web_resource_id (GUID, Display Name, or unique name); " +
             "create needs name + file_path + type + solution_name.\n" +
+            "For detail, include_content=true saves the resource under the workspace's .devkit/manage_webresource/ folder. " +
+            "Open the returned absolute contentPath to read the file. byteLength counts the saved bytes and encoding is utf-8 (BOM removed) or binary.\n" +
             "On create the prefix in name must match the solution's publisher prefix; on mismatch the tool errors " +
             "with the suggested name — re-call with it. Create adds the web resource to the solution and publishes; " +
             "update also publishes; delete is irreversible.\n" +
@@ -89,6 +95,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- manage_form → wire the JS library into a form\n" +
             "- publish_customizations → publish other components (create/update auto-publish)")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
+            McpServer server,
             [Description("list / detail / create / update / delete.")] string action = "",
             [Description("GUID, Display Name, or unique name. Required: detail/update/delete.")] string web_resource_id = "",
             [Description("Unique name (e.g. 'v4_/entities/Account.form.js'). Required: create. list: contains filter across Display Name and unique name.")] string name = "",
@@ -99,13 +106,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("list: filter. create: REQUIRED — used to resolve publisher prefix and add WR to solution.")] string solution_name = "",
             [Description("list only. See type values.")] string type_filter = "",
             [Description("1-500.")] int max_records = 50,
+            [Description("detail only. Save decoded content to a local file and return its absolute contentPath. Default false (metadata only).")]
+            bool include_content = false,
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)
         {
-            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
+            return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, async conn =>
             {
-                var worker = new ManageWebResourceTool(conn.OrgService, conn.Options, conn.Context);
-                return System.Threading.Tasks.Task.FromResult(worker.manage_webresource(action, web_resource_id, name, display_name, description, file_path, type, solution_name, type_filter, max_records));
+                var worker = new ManageWebResourceTool(conn.OrgService, conn.Options, conn.Context) { _envId = conn.EnvId };
+                if (include_content && string.Equals(action?.Trim(), "detail", StringComparison.OrdinalIgnoreCase))
+                    worker._workspaceFolder = await WorkspaceFolderHelper.GetAsync(server, cancellationToken);
+                return worker.manage_webresource(action, web_resource_id, name, display_name, description, file_path, type, solution_name, type_filter, max_records, include_content);
             }, cancellationToken);
         }
 
@@ -119,7 +130,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Required: create. See description for values. Ignored on other actions.")] string type = "",
             [Description("list: filter. create: REQUIRED — used to resolve publisher prefix and add WR to solution.")] string solution_name = "",
             [Description("list only. See type values.")] string type_filter = "",
-            [Description("1-500.")] int max_records = 50)
+            [Description("1-500.")] int max_records = 50,
+            bool include_content = false)
         {
             try
             {
@@ -129,7 +141,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return normalizedAction switch
                 {
                     "list" => HandleList(name, type_filter, solution_name, max_records),
-                    "detail" => HandleDetail(web_resource_id),
+                    "detail" => HandleDetail(web_resource_id, include_content),
                     "create" => HandleCreate(name, display_name, description, file_path, type, solution_name),
                     "update" => HandleUpdate(web_resource_id, display_name, description, file_path),
                     "delete" => HandleDelete(web_resource_id),
@@ -219,7 +231,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success($"{entries.Count} {countWord} found.", structured);
         }
 
-        private CallToolResult HandleDetail(string webResourceId)
+        private CallToolResult HandleDetail(string webResourceId, bool includeContent)
         {
             if (string.IsNullOrWhiteSpace(webResourceId))
                 return Error("web_resource_id is required for 'detail'.",
@@ -237,6 +249,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "createdby", "createdon", "modifiedby", "modifiedon",
                     "solutionid", "introducedversion", "dependencyxml")
             };
+            if (includeContent)
+                query.ColumnSet.AddColumn("content");
             query.Criteria.AddCondition("webresourceid", ConditionOperator.Equal, resolved.Id.Value);
             var result = _orgService.RetrieveMultiple(query);
             if (result.Entities.Count == 0)
@@ -262,7 +276,45 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 TotalCount = 1,
                 WebResources = [entry]
             };
-            return Success($"Web resource '{entry.Name}' ({entry.WebResourceId}), type {entry.Type}.", structured);
+            var summary = $"Web resource '{entry.Name}' ({entry.WebResourceId}), type {entry.Type}.";
+            if (!includeContent)
+                return Success(summary, structured);
+
+            var content = entity.GetAttributeValue<string>("content");
+            if (content == null)
+                return Error($"Dataverse did not return content for web resource '{entry.Name}' ({entry.WebResourceId}).");
+            return SaveContent(content, entity.Id, entry.TypeCode, summary, structured);
+        }
+
+        private CallToolResult SaveContent(string content, Guid id, int typeCode, string summary, ManageWebResourceResult result)
+        {
+            byte[] bytes;
+            try { bytes = Convert.FromBase64String(content); }
+            catch (FormatException) { return Error($"Web resource '{id}' contains invalid base64 content."); }
+
+            var isText = typeCode is 1 or 2 or 3 or 4 or 9 or 11 or 12;
+            ReadOnlySpan<byte> payload = bytes;
+            if (isText)
+            {
+                if (payload.StartsWith(Encoding.UTF8.Preamble))
+                    payload = payload[Encoding.UTF8.Preamble.Length..];
+                // Validate UTF-8 without re-encoding or changing line endings.
+                try { StrictUtf8.GetCharCount(payload); }
+                catch (DecoderFallbackException) { return Error($"Web resource '{id}' contains invalid UTF-8 content."); }
+            }
+
+            var extension = TypeCodeMap.TryGetValue(typeCode, out var type) ? type.ToLowerInvariant() : "bin";
+            var folder = Path.GetFullPath(Path.Combine(_workspaceFolder ?? Environment.CurrentDirectory,
+                ".devkit", "manage_webresource", _envId));
+            Directory.CreateDirectory(folder);
+            // Keep each export so two calls can be compared even for the same resource ID.
+            var path = Path.Combine(folder, $"{id:D}_{Guid.NewGuid():N}.{extension}");
+            using (var file = new FileStream(path, FileMode.CreateNew, FileAccess.Write))
+                file.Write(payload);
+            result.ContentPath = path;
+            result.ByteLength = payload.Length;
+            result.Encoding = isText ? "utf-8" : "binary";
+            return Success($"{summary} Saved {result.ByteLength} bytes to '{path}'.", result);
         }
 
         private CallToolResult HandleCreate(string name, string displayName, string description,
