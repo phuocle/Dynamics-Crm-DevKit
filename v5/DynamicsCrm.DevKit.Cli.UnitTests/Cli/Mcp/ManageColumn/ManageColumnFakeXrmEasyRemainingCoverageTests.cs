@@ -210,6 +210,7 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
             LogicalName = "new_formula_src",
             SchemaName = "New_FormulaSrc",
             DisplayName = Labeled("Formula Source"),
+            MetadataId = Guid.NewGuid(),
             SourceType = 1,
             FormulaDefinition = "EntityName=\"account\" Attribute=\"new_formula_src\" Value=\"Trim(Text(ThisRecord.New_FormulaSrc))\""
         };
@@ -218,6 +219,7 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
             LogicalName = "new_rollup_total",
             SchemaName = "New_RollupTotal",
             DisplayName = Labeled("Rollup Total"),
+            MetadataId = Guid.NewGuid(),
             SourceType = 2,
             FormulaDefinition = "EntityName=\"account\" Attribute=\"new_rollup_total\" Sum(relatedlinked_new_account_child#new_childlook#child#, new_amount)"
         };
@@ -1328,6 +1330,16 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
         var change = result.StructuredContent!.Value.GetProperty("changes").GetProperty("formulaDefinition");
         Assert.AreEqual("Text(name)", change.GetProperty("oldValue").GetString());
         Assert.AreEqual(expression, change.GetProperty("newValue").GetString());
+        var backupPath = result.StructuredContent!.Value.GetProperty("backupPath").GetString();
+        Assert.IsFalse(string.IsNullOrWhiteSpace(backupPath));
+        Assert.IsTrue(System.IO.File.Exists(backupPath), $"Expected formula backup file at '{backupPath}'");
+        var backupJson = System.IO.File.ReadAllText(backupPath);
+        StringAssert.Contains(backupJson, "\"entityName\": \"account\"");
+        StringAssert.Contains(backupJson, "\"logicalName\": \"new_powerfx\"");
+        StringAssert.Contains(backupJson, "\"sourceType\": 3");
+        StringAssert.Contains(backupJson, "\"formulaDefinition\": \"Text(name)\"");
+        StringAssert.Contains(backupJson, "formula_expression");
+        try { System.IO.File.Delete(backupPath); } catch { }
         var solutionRequest = _service.SolutionRequests.Single();
         Assert.AreEqual(target.MetadataId, solutionRequest.ComponentId);
         Assert.AreEqual(2, solutionRequest.ComponentType);
@@ -1418,6 +1430,149 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
 
         AssertError(result, expectedError);
         Assert.AreEqual(0, _service.UpdatedAttributes.Count);
+        Assert.AreEqual(0, _service.CreatedAttributes.Count);
+    }
+
+    [TestMethod]
+    public void Update_RawFormulaDefinition_OnRollupAndCalculated_UpdatesMetadataAndPublishes()
+    {
+        var rollupTarget = _service.Entities.Single(e => e.LogicalName == "account")
+            .Attributes.Single(a => a.LogicalName == "new_rollup_total");
+        const string rollupXaml = "<Activity xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"><Sequence DisplayName=\"Aggregate\" /></Activity>";
+
+        var rollupResult = NewTool().manage_column(entity_name: "account", logical_name: "new_rollup_total",
+            raw_formula_definition: rollupXaml, solution_name: "DevKit Solution");
+
+        AssertSuccess(rollupResult, "Updated column 'new_rollup_total'");
+        var updatedRollup = (StringAttributeMetadata)_service.UpdatedAttributes.Single();
+        Assert.AreEqual(rollupTarget.MetadataId, updatedRollup.MetadataId);
+        Assert.AreEqual(2, updatedRollup.SourceType);
+        Assert.AreEqual(rollupXaml, updatedRollup.FormulaDefinition);
+        var rollupChange = rollupResult.StructuredContent!.Value.GetProperty("changes").GetProperty("formulaDefinition");
+        Assert.AreEqual(rollupXaml, rollupChange.GetProperty("newValue").GetString());
+        var rollupBackupPath = rollupResult.StructuredContent!.Value.GetProperty("backupPath").GetString();
+        Assert.IsFalse(string.IsNullOrWhiteSpace(rollupBackupPath));
+        Assert.IsTrue(System.IO.File.Exists(rollupBackupPath), $"Expected rollup formula backup at '{rollupBackupPath}'");
+        var rollupBackupJson = System.IO.File.ReadAllText(rollupBackupPath);
+        StringAssert.Contains(rollupBackupJson, "\"entityName\": \"account\"");
+        StringAssert.Contains(rollupBackupJson, "\"logicalName\": \"new_rollup_total\"");
+        StringAssert.Contains(rollupBackupJson, "\"sourceType\": 2");
+        StringAssert.Contains(rollupBackupJson, "raw_formula_definition");
+        try { System.IO.File.Delete(rollupBackupPath); } catch { }
+        Assert.AreEqual(1, _service.SolutionRequests.Count);
+        Assert.AreEqual(1, _service.PublishAttempts);
+
+        _service.UpdatedAttributes.Clear();
+        _service.SolutionRequests.Clear();
+        _service.PublishAttempts = 0;
+
+        const string calcXaml = "<?xml version=\"1.0\" encoding=\"utf-16\"?><Activity xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"><GetEntityProperty Attribute=\"name\" EntityName=\"account\" Value=\"[v1]\" /><SetEntityProperty Value=\"[v1]\" /></Activity>";
+        var calcResult = NewTool().manage_column(entity_name: "account", logical_name: "new_formula_src",
+            raw_formula_definition: calcXaml, formula_source_type: "calculated");
+
+        AssertSuccess(calcResult, "Updated column 'new_formula_src'");
+        var updatedCalc = (StringAttributeMetadata)_service.UpdatedAttributes.Single();
+        Assert.AreEqual(1, updatedCalc.SourceType);
+        Assert.AreEqual(calcXaml, updatedCalc.FormulaDefinition);
+        var calcBackupPath = calcResult.StructuredContent!.Value.GetProperty("backupPath").GetString();
+        Assert.IsFalse(string.IsNullOrWhiteSpace(calcBackupPath));
+        Assert.IsTrue(System.IO.File.Exists(calcBackupPath), $"Expected calculated formula backup at '{calcBackupPath}'");
+        var calcBackupJson = System.IO.File.ReadAllText(calcBackupPath);
+        StringAssert.Contains(calcBackupJson, "\"sourceType\": 1");
+        StringAssert.Contains(calcBackupJson, "raw_formula_definition");
+        try { System.IO.File.Delete(calcBackupPath); } catch { }
+        Assert.AreEqual(1, _service.PublishAttempts);
+    }
+
+    [TestMethod]
+    public void Create_RawFormulaDefinition_CalculatedAndRollup_ExplicitAndInferred()
+    {
+        const string rollupXaml = "<Activity xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"><Sequence DisplayName=\"Aggregate\">relatedlinked_new_account_child#new_childlook#child#</Sequence></Activity>";
+        var rollupResult = NewTool().manage_column(entity_name: "account", attribute_type: "money",
+            display_name: "Raw Rollup", schema_name: "dev_RawRollup",
+            raw_formula_definition: rollupXaml, solution_name: "DevKit");
+
+        AssertSuccess(rollupResult, "Created Money column 'dev_rawrollup' on entity 'account'.");
+        var createdRollup = _service.CreatedAttributes.OfType<MoneyAttributeMetadata>().Single();
+        Assert.AreEqual(2, createdRollup.SourceType);
+        Assert.AreEqual(rollupXaml, createdRollup.FormulaDefinition);
+
+        const string calcXaml = "<Activity xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"><SetEntityProperty Value=\"1\" /></Activity>";
+        var calcResult = NewTool().manage_column(entity_name: "account", attribute_type: "integer",
+            display_name: "Raw Calc", schema_name: "dev_RawCalc",
+            raw_formula_definition: calcXaml, formula_source_type: "calculated", solution_name: "DevKit");
+
+        AssertSuccess(calcResult, "Created Integer column 'dev_rawcalc' on entity 'account'.");
+        var createdCalc = _service.CreatedAttributes.OfType<IntegerAttributeMetadata>().Single();
+        Assert.AreEqual(1, createdCalc.SourceType);
+        Assert.AreEqual(calcXaml, createdCalc.FormulaDefinition);
+
+        // Inferred calculated when formula_source_type is omitted
+        var inferredCalcResult = NewTool().manage_column(entity_name: "account", attribute_type: "string",
+            display_name: "Raw Calc Inferred", schema_name: "dev_RawCalcInferred",
+            raw_formula_definition: calcXaml, solution_name: "DevKit");
+        AssertSuccess(inferredCalcResult, "Created String column 'dev_rawcalcinferred' on entity 'account'.");
+        var createdInferredCalc = _service.CreatedAttributes.OfType<StringAttributeMetadata>().Single();
+        Assert.AreEqual(1, createdInferredCalc.SourceType);
+        Assert.AreEqual(calcXaml, createdInferredCalc.FormulaDefinition);
+    }
+
+    [TestMethod]
+    [DataRow("new_rollup_total", "", "", null, "   ", "must contain a valid Calculated or Rollup XAML definition")]
+    [DataRow("new_rollup_total", "", "", null, "Sum(1)", "must contain a valid Calculated or Rollup XAML definition")]
+    [DataRow("new_rollup_total", "", "", null, "<Activity><Unclosed></Activity>", "raw_formula_definition contains invalid XML")]
+    [DataRow("new_rollup_total", "", "", null, "<NotActivity />", "raw_formula_definition must have an <Activity ...> root element")]
+    [DataRow("new_rollup_total", "account:new_rollup_total", "", null, "<Activity />", "cannot be combined with formula_definition or formula_expression")]
+    [DataRow("new_powerfx", "", "", "=Text(name)", "<Activity />", "cannot be combined")]
+    [DataRow("name", "", "", null, "<Activity />", "requires an existing Calculated or Rollup column")]
+    [DataRow("new_powerfx", "", "", null, "<Activity />", "requires an existing Calculated or Rollup column")]
+    [DataRow("dev_missing", "", "", null, "<Activity />", "requires an existing Calculated or Rollup column")]
+    [DataRow("new_rollup_total", "", "calculated", null, "<Activity />", "formula_source_type does not match target column")]
+    [DataRow("new_rollup_total", "", "bogus", null, "<Activity />", "Invalid formula_source_type 'bogus'")]
+    public void Update_RawFormulaDefinition_InvalidParametersAreRejected(string logicalName,
+        string reference, string kind, string? expression, string rawFormula, string expectedError)
+    {
+        var result = NewTool().manage_column(entity_name: "account", logical_name: logicalName,
+            formula_definition: reference, formula_source_type: kind,
+            formula_expression: expression, raw_formula_definition: rawFormula);
+
+        AssertError(result, expectedError);
+        Assert.AreEqual(0, _service.UpdatedAttributes.Count);
+        Assert.AreEqual(0, _service.CreatedAttributes.Count);
+    }
+
+    [TestMethod]
+    public void Create_RawFormulaDefinition_InvalidParametersAreRejected()
+    {
+        // Bare <Activity /> without formula_source_type cannot infer calculated vs rollup
+        var missingKind = NewTool().manage_column(entity_name: "account", attribute_type: "string",
+            display_name: "Ambiguous Raw", raw_formula_definition: "<Activity />", solution_name: "DevKit");
+        AssertError(missingKind, "formula_source_type ('calculated' or 'rollup') is required");
+
+        // PowerFx source type not allowed with raw_formula_definition
+        var powerFxKind = NewTool().manage_column(entity_name: "account", attribute_type: "string",
+            display_name: "PowerFx Raw", raw_formula_definition: "<Activity />",
+            formula_source_type: "powerfx", solution_name: "DevKit");
+        AssertError(powerFxKind, "raw_formula_definition is only supported for Calculated or Rollup columns");
+
+        // Invalid formula_source_type on create with raw_formula_definition
+        var bogusKind = NewTool().manage_column(entity_name: "account", attribute_type: "string",
+            display_name: "Bogus Raw", raw_formula_definition: "<Activity />",
+            formula_source_type: "bogus", solution_name: "DevKit");
+        AssertError(bogusKind, "Invalid formula_source_type 'bogus'");
+
+        // Incompatible attribute_type (e.g. image) with raw_formula_definition
+        var badType = NewTool().manage_column(entity_name: "account", attribute_type: "image",
+            display_name: "Image Raw", raw_formula_definition: "<Activity />",
+            formula_source_type: "calculated", solution_name: "DevKit");
+        AssertError(badType, "is not supported on attribute_type 'image'");
+
+        // Autonumber combined with raw_formula_definition
+        var autoNum = NewTool().manage_column(entity_name: "account", attribute_type: "string",
+            display_name: "Auto Raw", auto_number_format: "TKT-{SEQNUM:4}",
+            raw_formula_definition: "<Activity />", formula_source_type: "calculated", solution_name: "DevKit");
+        AssertError(autoNum, "auto_number_format cannot be combined with formula_definition/formula_source_type");
+
         Assert.AreEqual(0, _service.CreatedAttributes.Count);
     }
 

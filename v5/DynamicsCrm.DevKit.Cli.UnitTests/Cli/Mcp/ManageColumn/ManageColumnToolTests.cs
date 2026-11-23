@@ -472,10 +472,21 @@ public class ManageColumnToolTests
         CollectionAssert.Contains(paramNames, "schema_name");
         CollectionAssert.Contains(paramNames, "formula_definition");
         CollectionAssert.Contains(paramNames, "formula_source_type");
+        CollectionAssert.Contains(paramNames, "formula_expression");
+        CollectionAssert.Contains(paramNames, "raw_formula_definition");
         CollectionAssert.DoesNotContain(paramNames, "source_entity_name");
         CollectionAssert.DoesNotContain(paramNames, "source_attribute_name");
         // 'state' is inside the add_options JSON payload, not a top-level parameter
         CollectionAssert.DoesNotContain(paramNames, "state");
+
+        var toolInstance = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions(), DryRunTestHelpers.BlockedContext(), null!);
+        var mcpTool = ModelContextProtocol.Server.McpServerTool.Create(method, target: toolInstance, new ModelContextProtocol.Server.McpServerToolCreateOptions());
+        var rawFormulaProp = mcpTool.ProtocolTool.InputSchema.GetProperty("properties").GetProperty("raw_formula_definition");
+        var typeElement = rawFormulaProp.GetProperty("type");
+        Assert.AreEqual(System.Text.Json.JsonValueKind.Array, typeElement.ValueKind);
+        var types = typeElement.EnumerateArray().Select(e => e.GetString()).ToArray();
+        CollectionAssert.AreEquivalent(new[] { "string", "null" }, types);
+        Assert.AreEqual(System.Text.Json.JsonValueKind.Null, rawFormulaProp.GetProperty("default").ValueKind);
     }
 
     // ──────────────────────────────────────────────
