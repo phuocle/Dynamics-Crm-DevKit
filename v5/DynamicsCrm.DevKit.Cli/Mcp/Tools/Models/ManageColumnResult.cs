@@ -58,6 +58,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string AddToSolutionWarning { get; set; }
 
+        [JsonPropertyName("backupPath")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string BackupPath { get; set; }
+
         [JsonPropertyName("changes")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Dictionary<string, UpdateAttributeChange> Changes { get; set; }
