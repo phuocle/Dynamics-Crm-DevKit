@@ -38,6 +38,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Find join columns, picklist options, required fields, primary key, lookup targets\n" +
             "- Clone or copy a column (detail_level='full' required — compact/standard lack clone metadata)\n" +
             "- Inspect a formula in full detail: rawFormulaDefinition is the exact Dataverse definition. formulaDefinition is the entity:attribute clone reference.\n" +
+            "- Inspect 1:N and N:1 cascade behavior, hierarchy, and associated menu settings with detail_level='full'.\n" +
             "- AI MUST use get_tables for entity/attribute metadata — do NOT use execute_webapi with EntityDefinitions\n\n" +
             "RELATED TOOLS:\n" +
             "- manage_column → create/update columns (pass the formulaDefinition reference as formula_definition to clone)\n" +
@@ -50,7 +51,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("LIST: only custom entities.")] bool custom_only = false,
             [Description("LIST: include N:N intersect entities.")] bool include_intersect = false,
             [Description("LIST: comma-separated logical names. Overrides filter/custom_only.")] string names = "",
-            [Description("DETAIL: 'compact' (default), 'standard', or 'full'.")] string detail_level = "compact",
+            [Description("DETAIL: 'compact' (default), 'standard', or 'full'. Full includes cascadeConfiguration, isHierarchical, and associatedMenuConfiguration for 1:N and N:1 relationships.")] string detail_level = "compact",
             [Description("LIST: maximum 1-500 entities. Default 100.")] int max_records = 100,
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)
@@ -232,6 +233,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static TableDetailEntry BuildTableDetail(EntityMetadata metadata, DetailFilterInfo filterInfo, string detailLevel)
         {
             var summary = BuildTableSummary(metadata);
+            var full = detailLevel == "full";
             var attributes = FilterAttributesForOutput(metadata.Attributes, filterInfo)
                 .OrderBy(a => a.LogicalName)
                 .Select(attribute => BuildAttribute(metadata.LogicalName, attribute, detailLevel))
@@ -239,12 +241,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var oneToMany = (metadata.OneToManyRelationships ?? [])
                 .Where(r => !filterInfo.HasFilter || filterInfo.IsMultiValue || r.ReferencingEntity.StartsWith(filterInfo.PrefixFilter, StringComparison.OrdinalIgnoreCase))
                 .OrderBy(r => r.ReferencingEntity)
-                .Select(BuildRelationship)
+                .Select(r => BuildRelationship(r, full))
                 .ToList();
             var manyToOne = (metadata.ManyToOneRelationships ?? [])
                 .Where(r => !filterInfo.HasFilter || filterInfo.IsMultiValue || r.ReferencedEntity.StartsWith(filterInfo.PrefixFilter, StringComparison.OrdinalIgnoreCase))
                 .OrderBy(r => r.ReferencedEntity)
-                .Select(BuildRelationship)
+                .Select(r => BuildRelationship(r, full))
                 .ToList();
             var manyToMany = (metadata.ManyToManyRelationships ?? [])
                 .Where(r => !filterInfo.HasFilter || filterInfo.IsMultiValue ||
@@ -269,7 +271,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 })
                 .ToList();
 
-            if (detailLevel == "full" && alternateKeys.Count > 0)
+            if (full && alternateKeys.Count > 0)
             {
                 var keyAttrSet = new HashSet<string>(
                     alternateKeys.SelectMany(k => k.KeyAttributes ?? Enumerable.Empty<string>()),
@@ -746,12 +748,35 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private static TableRelationshipEntry BuildRelationship(OneToManyRelationshipMetadata relationship) => new()
+        private static TableRelationshipEntry BuildRelationship(OneToManyRelationshipMetadata relationship, bool full) => new()
         {
             SchemaName = relationship.SchemaName,
             ReferencedEntity = relationship.ReferencedEntity,
             ReferencingEntity = relationship.ReferencingEntity,
-            ReferencingAttribute = relationship.ReferencingAttribute
+            ReferencingAttribute = relationship.ReferencingAttribute,
+            IsHierarchical = full ? relationship.IsHierarchical : null,
+            CascadeConfiguration = full && relationship.CascadeConfiguration is { } cascade
+                ? new TableCascadeConfiguration
+                {
+                    Delete = cascade.Delete?.ToString(),
+                    Assign = cascade.Assign?.ToString(),
+                    Share = cascade.Share?.ToString(),
+                    Unshare = cascade.Unshare?.ToString(),
+                    Reparent = cascade.Reparent?.ToString(),
+                    Merge = cascade.Merge?.ToString(),
+                    Archive = cascade.Archive?.ToString(),
+                    RollupView = cascade.RollupView?.ToString()
+                }
+                : null,
+            AssociatedMenuConfiguration = full && relationship.AssociatedMenuConfiguration is { } menu
+                ? new TableAssociatedMenuConfiguration
+                {
+                    Behavior = menu.Behavior?.ToString(),
+                    Group = menu.Group?.ToString(),
+                    Order = menu.Order,
+                    Label = menu.Label?.UserLocalizedLabel?.Label ?? menu.Label?.LocalizedLabels?.FirstOrDefault()?.Label
+                }
+                : null
         };
 
         private static string FormatAttributeType(AttributeMetadata attribute) => attribute switch

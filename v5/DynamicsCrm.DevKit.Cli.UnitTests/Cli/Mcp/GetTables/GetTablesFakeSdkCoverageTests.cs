@@ -81,13 +81,37 @@ public sealed class GetTablesFakeSdkCoverageTests
 
         var meta = TestMetadata.Entity("all_acc", "All Acc", attributes.ToArray());
 
-        var oneToMany = new OneToManyRelationshipMetadata();
+        var oneToMany = new OneToManyRelationshipMetadata
+        {
+            IsHierarchical = false,
+            CascadeConfiguration = new CascadeConfiguration
+            {
+                Delete = CascadeType.RemoveLink,
+                Assign = CascadeType.NoCascade,
+                Share = CascadeType.Active,
+                Unshare = CascadeType.UserOwned,
+                Reparent = CascadeType.NoCascade,
+                Merge = CascadeType.Cascade,
+                Archive = CascadeType.NoCascade,
+                RollupView = CascadeType.Cascade
+            },
+            AssociatedMenuConfiguration = new AssociatedMenuConfiguration
+            {
+                Behavior = AssociatedMenuBehavior.UseLabel,
+                Group = AssociatedMenuGroup.Details,
+                Order = 10000,
+                Label = new Label("Children", 1033)
+            }
+        };
         typeof(OneToManyRelationshipMetadata).GetProperty("ReferencingEntity")!.SetValue(oneToMany, "all_child");
         typeof(OneToManyRelationshipMetadata).GetProperty("ReferencedEntity")!.SetValue(oneToMany, "all_acc");
         typeof(OneToManyRelationshipMetadata).GetProperty("SchemaName")!.SetValue(oneToMany, "all_acc_all_child");
         typeof(EntityMetadata).GetProperty("OneToManyRelationships")!.SetValue(meta, new[] { oneToMany });
 
-        var manyToOne = new OneToManyRelationshipMetadata();
+        var manyToOne = new OneToManyRelationshipMetadata
+        {
+            CascadeConfiguration = new CascadeConfiguration { Delete = CascadeType.Restrict }
+        };
         typeof(OneToManyRelationshipMetadata).GetProperty("ReferencingEntity")!.SetValue(manyToOne, "all_acc");
         typeof(OneToManyRelationshipMetadata).GetProperty("ReferencedEntity")!.SetValue(manyToOne, "all_owner");
         typeof(OneToManyRelationshipMetadata).GetProperty("SchemaName")!.SetValue(manyToOne, "all_owner_all_acc");
@@ -145,6 +169,41 @@ public sealed class GetTablesFakeSdkCoverageTests
     }
 
     [TestMethod]
+    public async Task Detail_Full_ExposesCascadeHierarchyAndMenuInBothRelationshipDirections()
+    {
+        _entities.Add(BuildAccount());
+
+        var result = await NewTool().get_tables(entity_name: "all_acc", detail_level: "full");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        var table = Structured(result).GetProperty("table");
+        var children = table.GetProperty("oneToManyRelationships")[0];
+        Assert.IsFalse(children.GetProperty("isHierarchical").GetBoolean());
+        var cascade = children.GetProperty("cascadeConfiguration");
+        var expected = new Dictionary<string, string>
+        {
+            ["delete"] = "RemoveLink", ["assign"] = "NoCascade", ["share"] = "Active",
+            ["unshare"] = "UserOwned", ["reparent"] = "NoCascade", ["merge"] = "Cascade",
+            ["archive"] = "NoCascade", ["rollupView"] = "Cascade"
+        };
+        foreach (var (key, value) in expected)
+            Assert.AreEqual(value, cascade.GetProperty(key).GetString(), key);
+
+        var menu = children.GetProperty("associatedMenuConfiguration");
+        Assert.AreEqual("UseLabel", menu.GetProperty("behavior").GetString());
+        Assert.AreEqual("Details", menu.GetProperty("group").GetString());
+        Assert.AreEqual(10000, menu.GetProperty("order").GetInt32());
+        Assert.AreEqual("Children", menu.GetProperty("label").GetString());
+
+        var parent = table.GetProperty("manyToOneRelationships")[0];
+        var parentCascade = parent.GetProperty("cascadeConfiguration");
+        Assert.AreEqual("Restrict", parentCascade.GetProperty("delete").GetString());
+        Assert.IsFalse(parentCascade.TryGetProperty("assign", out _));
+        Assert.IsFalse(parent.TryGetProperty("associatedMenuConfiguration", out _));
+        Assert.IsFalse(parent.TryGetProperty("isHierarchical", out _));
+    }
+
+    [TestMethod]
     public async Task Detail_Compact_StripsRelationshipsAndKeys()
     {
         _entities.Add(BuildAccount());
@@ -156,7 +215,11 @@ public sealed class GetTablesFakeSdkCoverageTests
 
         var standard = await NewTool().get_tables(entity_name: "all_acc", detail_level: "standard");
         var standardTable = Structured(standard).GetProperty("table");
-        Assert.IsNotNull(standardTable.GetProperty("oneToManyRelationships"));
+        var relationship = standardTable.GetProperty("oneToManyRelationships")[0];
+        Assert.AreEqual("all_acc_all_child", relationship.GetProperty("schemaName").GetString());
+        Assert.IsFalse(relationship.TryGetProperty("cascadeConfiguration", out _));
+        Assert.IsFalse(relationship.TryGetProperty("associatedMenuConfiguration", out _));
+        Assert.IsFalse(relationship.TryGetProperty("isHierarchical", out _));
         Assert.IsFalse(standardTable.TryGetProperty("alternateKeys", out _));
     }
 
