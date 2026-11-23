@@ -61,6 +61,7 @@ public sealed class CommandListDetailFakeXrmEasyFullCoverageTests
             new Microsoft.Xrm.Sdk.Metadata.StringAttributeMetadata { LogicalName = "buttonlabeltext" },
             new Microsoft.Xrm.Sdk.Metadata.IntegerAttributeMetadata { LogicalName = "type" },
             new Microsoft.Xrm.Sdk.Metadata.IntegerAttributeMetadata { LogicalName = "location" },
+            new Microsoft.Xrm.Sdk.Metadata.IntegerAttributeMetadata { LogicalName = "context" },
             new Microsoft.Xrm.Sdk.Metadata.StringAttributeMetadata { LogicalName = "contextvalue" },
             new Microsoft.Xrm.Sdk.Metadata.IntegerAttributeMetadata { LogicalName = "onclickeventtype" },
             new Microsoft.Xrm.Sdk.Metadata.StringAttributeMetadata { LogicalName = "onclickeventjavascriptfunctionname" },
@@ -601,6 +602,59 @@ public sealed class CommandListDetailFakeXrmEasyFullCoverageTests
         StringAssert.Contains(result.GetText(), "not found by Display Name");
     }
 
+    [TestMethod]
+    public void List_And_DetailByLabel_ScopeValidationAndFiltering()
+    {
+        var tool = NewTool();
+
+        var badList = tool.manage_command(action: "list", scope: "invalid_scope");
+        Assert.IsTrue(badList.IsError == true);
+        StringAssert.Contains(badList.GetText(), "Invalid scope 'invalid_scope'");
+
+        var badDetail = tool.manage_command(action: "detail", label: "Go", scope: "invalid_scope");
+        Assert.IsTrue(badDetail.IsError == true);
+        StringAssert.Contains(badDetail.GetText(), "Invalid scope 'invalid_scope'");
+
+        // Seed 3 commands across app, table, and global scopes
+        var appCmd = SeedAppAction("AppBtn", "devkit.account.AppBtn.Form.Button", "account");
+        appCmd["context"] = new OptionSetValue(1);
+        appCmd["appmoduleid"] = new EntityReference("appmodule", Guid.NewGuid());
+        _ctx.GetOrganizationService().Create(appCmd);
+
+        var tableCmd = SeedAppAction("TableBtn", "devkit.account.TableBtn.Form.Button", "account");
+        tableCmd["context"] = new OptionSetValue(1);
+        _ctx.GetOrganizationService().Create(tableCmd);
+
+        var globalCmd = SeedAppAction("GlobalBtn", "devkit.all.GlobalBtn.GlobalHeader.Button", null, 5);
+        globalCmd.Attributes.Remove("contextvalue");
+        globalCmd["context"] = new OptionSetValue(0);
+        _ctx.GetOrganizationService().Create(globalCmd);
+
+        var listApp = tool.manage_command(action: "list", scope: "app");
+        Assert.IsFalse(listApp.IsError == true, listApp.GetText());
+        StringAssert.Contains(listApp.GetText(), "Found 1 command");
+
+        var listTable = tool.manage_command(action: "list", scope: "table");
+        Assert.IsFalse(listTable.IsError == true, listTable.GetText());
+        StringAssert.Contains(listTable.GetText(), "Found 1 command");
+
+        var listGlobal = tool.manage_command(action: "list", scope: "global");
+        Assert.IsFalse(listGlobal.IsError == true, listGlobal.GetText());
+        StringAssert.Contains(listGlobal.GetText(), "Found 1 command");
+
+        var detailGlobal = tool.manage_command(action: "detail", label: "GlobalBtn", scope: "global");
+        Assert.IsFalse(detailGlobal.IsError == true, detailGlobal.GetText());
+        StringAssert.Contains(detailGlobal.GetText(), "devkit.all.GlobalBtn.GlobalHeader.Button");
+
+        var detailTable = tool.manage_command(action: "detail", label: "TableBtn", scope: "table");
+        Assert.IsFalse(detailTable.IsError == true, detailTable.GetText());
+        StringAssert.Contains(detailTable.GetText(), "devkit.account.TableBtn.Form.Button");
+
+        var detailApp = tool.manage_command(action: "detail", label: "AppBtn", scope: "app");
+        Assert.IsFalse(detailApp.IsError == true, detailApp.GetText());
+        StringAssert.Contains(detailApp.GetText(), "devkit.account.AppBtn.Form.Button");
+    }
+
     // ────────────────────── helpers ──────────────────────
 
     private static string BuildRibbonXml(string entityName, string sectionName,
@@ -758,6 +812,11 @@ public sealed class CommandListDetailFakeXrmEasyFullCoverageTests
             object raw = null;
             string strVal = null;
             int? intVal = null;
+            if (op == "null")
+                return !e.Contains(attr) || e[attr] == null;
+            if (op == "not-null")
+                return e.Contains(attr) && e[attr] != null;
+
             if (e.Contains(attr))
             {
                 raw = e[attr];

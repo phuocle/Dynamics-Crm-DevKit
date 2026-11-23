@@ -441,4 +441,71 @@ public sealed class ManageCommandHideShowFakeSdkTests
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(result.GetText(), "Invalid onclick_type 'macro'");
     }
+
+    [TestMethod]
+    public void HideShow_TableAndGlobalScopes_ValidateAndToggle()
+    {
+        var tool = NewTool();
+
+        // Invalid scope
+        var badScope = tool.manage_command(action: "hide", label: "GlobalBtn", location: "global_header", scope: "bad");
+        Assert.IsTrue(badScope.IsError == true);
+        StringAssert.Contains(badScope.GetText(), "Invalid scope 'bad'");
+
+        // Global scope validations
+        Assert.IsTrue(tool.manage_command(action: "hide", location: "global_header", scope: "global").IsError == true);
+        Assert.IsTrue(tool.manage_command(action: "hide", label: "G", entity_name: "account", location: "global_header", scope: "global").IsError == true);
+        Assert.IsTrue(tool.manage_command(action: "hide", label: "G", scope: "global").IsError == true);
+        Assert.IsTrue(tool.manage_command(action: "hide", label: "G", location: "bad_loc", scope: "global").IsError == true);
+
+        // Global not found
+        _labelLookupRows.Clear();
+        var notFoundGlobal = tool.manage_command(action: "hide", label: "G", location: "global_header", scope: "global");
+        Assert.IsTrue(notFoundGlobal.IsError == true);
+        StringAssert.Contains(notFoundGlobal.GetText(), "Global command 'G' not found");
+
+        // Global found and toggled
+        var globalCmd = new Entity("appaction", Guid.NewGuid())
+        {
+            ["name"] = "devkit.all.G.GlobalHeader.Button",
+            ["hidden"] = false,
+            ["context"] = new OptionSetValue(0)
+        };
+        _appActions.Add(globalCmd);
+        _labelLookupRows = new List<Entity> { globalCmd };
+
+        var hideGlobal = tool.manage_command(action: "hide", label: "G", location: "global_header", scope: "global");
+        Assert.IsFalse(hideGlobal.IsError == true, hideGlobal.GetText());
+        StringAssert.Contains(hideGlobal.GetText(), "Global command bar published.");
+
+        // Global already hidden no-op
+        var hideGlobalNoop = tool.manage_command(action: "hide", label: "G", location: "global_header", scope: "global");
+        Assert.IsFalse(hideGlobalNoop.IsError == true, hideGlobalNoop.GetText());
+        StringAssert.Contains(hideGlobalNoop.GetText(), "already hidden");
+
+        // Table scope validations
+        Assert.IsTrue(tool.manage_command(action: "hide", entity_name: "Account", location: "form", scope: "table").IsError == true);
+        Assert.IsTrue(tool.manage_command(action: "hide", label: "T", entity_name: "Account", location: "form", app_name: "Sales Hub", scope: "table").IsError == true);
+        Assert.IsTrue(tool.manage_command(action: "hide", label: "T", location: "form", scope: "table").IsError == true);
+        Assert.IsTrue(tool.manage_command(action: "hide", label: "T", entity_name: "Account", scope: "table").IsError == true);
+        Assert.IsTrue(tool.manage_command(action: "hide", label: "T", entity_name: "Account", location: "bad_loc", scope: "table").IsError == true);
+
+        // Table not found
+        _labelLookupRows.Clear();
+        var notFoundTable = tool.manage_command(action: "hide", label: "T", entity_name: "Account", location: "form", scope: "table");
+        Assert.IsTrue(notFoundTable.IsError == true);
+        StringAssert.Contains(notFoundTable.GetText(), "Table-scoped command 'T' not found");
+
+        // Table found and toggled
+        var tableCmd = NewCommand(hidden: false, name: "devkit.account.T.Form.Button");
+        _labelLookupRows = new List<Entity> { tableCmd };
+        var hideTable = tool.manage_command(action: "hide", label: "T", entity_name: "Account", location: "form", scope: "table");
+        Assert.IsFalse(hideTable.IsError == true, hideTable.GetText());
+        StringAssert.Contains(hideTable.GetText(), "Entity published.");
+
+        // Table already hidden no-op
+        var hideTableNoop = tool.manage_command(action: "hide", label: "T", entity_name: "Account", location: "form", scope: "table");
+        Assert.IsFalse(hideTableNoop.IsError == true, hideTableNoop.GetText());
+        StringAssert.Contains(hideTableNoop.GetText(), "already hidden");
+    }
 }

@@ -601,6 +601,128 @@ public sealed class CommandCreateUpdateFakeXrmEasyFullCoverageTests
     }
 
     // ──────────────────────────────────────────────
+    // Scope ('app' | 'table' | 'global') tests
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void Create_InvalidScope_ReturnsError()
+    {
+        var tool = NewTool();
+        var result = tool.manage_command(action: "create", entity_name: "account", location: "form", label: "Go", scope: "bad_scope");
+        Assert.IsTrue(result.IsError == true);
+        StringAssert.Contains(result.GetText(), "Invalid scope 'bad_scope'");
+    }
+
+    [TestMethod]
+    public void Create_TableScope_WithAppSpecified_ReturnsError()
+    {
+        var tool = NewTool();
+        var result = tool.manage_command(action: "create", entity_name: "account", location: "form", label: "Go", app_name: "My App", scope: "table");
+        Assert.IsTrue(result.IsError == true);
+        StringAssert.Contains(result.GetText(), "app_id and app_name must not be specified when scope='table'");
+    }
+
+    [TestMethod]
+    public void Create_TableScope_CreatesWithContext1_AndNullAppModuleId()
+    {
+        SeedEntityMetadata(_service, "all_testform", "Test Form", "all_TestForm");
+        var tool = NewTool();
+
+        var result = tool.manage_command(
+            action: "create",
+            entity_name: "all_testform",
+            location: "main_grid",
+            label: "Table Export",
+            scope: "table");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "Table-scoped command 'Table Export' created successfully");
+        var created = _service.LastCreatedEntity!;
+        Assert.AreEqual(1, created.GetAttributeValue<OptionSetValue>("context")?.Value);
+        Assert.AreEqual("all_testform", created.GetAttributeValue<string>("contextvalue"));
+        Assert.IsNull(created.GetAttributeValue<EntityReference>("appmoduleid"));
+        Assert.AreEqual("all.all_testform.TableExport.HomepageGrid.Button", created.GetAttributeValue<string>("name"));
+        Assert.AreEqual("all__all.all_testform.TableExport.HomepageGrid.Button!global!all_testform!1", created.GetAttributeValue<string>("uniquename"));
+        Assert.IsTrue(_service.Publishes >= 1);
+    }
+
+    [TestMethod]
+    public void Create_GlobalScope_WithEntityOrApp_ReturnsError()
+    {
+        var tool = NewTool();
+        var resWithEntity = tool.manage_command(action: "create", entity_name: "account", location: "global_header", label: "Go", scope: "global");
+        Assert.IsTrue(resWithEntity.IsError == true);
+        StringAssert.Contains(resWithEntity.GetText(), "entity_name, app_id, and app_name must not be specified when scope='global'");
+
+        var resWithApp = tool.manage_command(action: "create", app_name: "My App", location: "global_header", label: "Go", scope: "global");
+        Assert.IsTrue(resWithApp.IsError == true);
+        StringAssert.Contains(resWithApp.GetText(), "entity_name, app_id, and app_name must not be specified when scope='global'");
+    }
+
+    [TestMethod]
+    public void Create_GlobalScope_CreatesWithContext0_NullEntity_NullApp_AndDevKitPrefix()
+    {
+        var tool = NewTool();
+
+        var result = tool.manage_command(
+            action: "create",
+            location: "global_header",
+            label: "Global Help",
+            font_icon: "Help",
+            scope: "global");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "Global command 'Global Help' created successfully");
+        var created = _service.LastCreatedEntity!;
+        Assert.AreEqual(0, created.GetAttributeValue<OptionSetValue>("context")?.Value);
+        Assert.IsNull(created.GetAttributeValue<string>("contextvalue"));
+        Assert.IsNull(created.GetAttributeValue<EntityReference>("contextentity"));
+        Assert.IsNull(created.GetAttributeValue<EntityReference>("appmoduleid"));
+        Assert.AreEqual("devkit.all.GlobalHelp.GlobalHeader.Button", created.GetAttributeValue<string>("name"));
+        Assert.AreEqual("devkit__devkit.all.GlobalHelp.GlobalHeader.Button!global!all!5", created.GetAttributeValue<string>("uniquename"));
+        Assert.IsTrue(_service.Publishes >= 1);
+    }
+
+    [TestMethod]
+    public void Update_GlobalCommandWithoutContextValue_PublishesGlobalCommandBar()
+    {
+        var cmdId = Guid.NewGuid();
+        _ctx.GetOrganizationService().Create(new Entity("appaction", cmdId)
+        {
+            ["name"] = "devkit.all.GlobalHelp.GlobalHeader.Button",
+            ["buttonlabeltext"] = "Global Help",
+            ["context"] = new OptionSetValue(0)
+        });
+        var tool = NewTool();
+
+        var result = tool.manage_command(action: "update", command_id: cmdId.ToString(), label: "Global Help Updated");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "Global command bar published.");
+        Assert.AreEqual("Global Help Updated", _service.LastUpdatedEntity?.GetAttributeValue<string>("buttonlabeltext"));
+    }
+
+    [TestMethod]
+    public void Update_AppCommandWithoutContextValue_PublishesAppModule()
+    {
+        var cmdId = Guid.NewGuid();
+        var appId = Guid.NewGuid();
+        _ctx.GetOrganizationService().Create(new Entity("appaction", cmdId)
+        {
+            ["name"] = "devkit.all.AppHelp.GlobalHeader.Button",
+            ["buttonlabeltext"] = "App Help",
+            ["context"] = new OptionSetValue(0),
+            ["appmoduleid"] = new EntityReference("appmodule", appId)
+        });
+        var tool = NewTool();
+
+        var result = tool.manage_command(action: "update", command_id: cmdId.ToString(), label: "App Help Updated");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "App published.");
+    }
+
+    // ──────────────────────────────────────────────
     // IOrganizationService decorator
     // ──────────────────────────────────────────────
 
