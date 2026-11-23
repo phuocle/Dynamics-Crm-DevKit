@@ -490,11 +490,27 @@ public sealed class ManageCommandHideShowFakeSdkTests
         Assert.IsTrue(tool.manage_command(action: "hide", label: "T", entity_name: "Account", scope: "table").IsError == true);
         Assert.IsTrue(tool.manage_command(action: "hide", label: "T", entity_name: "Account", location: "bad_loc", scope: "table").IsError == true);
 
-        // Table not found
+        // Table not found -> creates table-scoped OOB override record (no appmoduleid)
         _labelLookupRows.Clear();
-        var notFoundTable = tool.manage_command(action: "hide", label: "T", entity_name: "Account", location: "form", scope: "table");
-        Assert.IsTrue(notFoundTable.IsError == true);
-        StringAssert.Contains(notFoundTable.GetText(), "Table-scoped command 'T' not found");
+        _createdEntities.Clear();
+        var createdTableOverride = tool.manage_command(action: "hide", label: "Activate", entity_name: "Account", location: "form", scope: "table");
+        Assert.IsFalse(createdTableOverride.IsError == true, createdTableOverride.GetText());
+        StringAssert.Contains(createdTableOverride.GetText(), "Created appaction override");
+        var tableOverrideEntity = _createdEntities.Single(e => e.LogicalName == "appaction");
+        Assert.AreEqual("Mscrm.Form.{!EntityLogicalName}.Activate", tableOverrideEntity.GetAttributeValue<string>("name"));
+        Assert.AreEqual(1, tableOverrideEntity.GetAttributeValue<OptionSetValue>("context").Value);
+        Assert.AreEqual("account", tableOverrideEntity.GetAttributeValue<string>("contextvalue"));
+        Assert.IsNull(tableOverrideEntity.GetAttributeValue<EntityReference>("appmoduleid"));
+        Assert.AreEqual(true, tableOverrideEntity.GetAttributeValue<bool>("hidden"));
+
+        // Table show when OOB override exists -> deletes override
+        tableOverrideEntity.Id = Guid.NewGuid();
+        _labelLookupRows = new List<Entity> { tableOverrideEntity };
+        var showTableOverride = tool.manage_command(action: "show", label: "Activate", entity_name: "Account", location: "form", scope: "table");
+        Assert.IsFalse(showTableOverride.IsError == true, showTableOverride.GetText());
+        StringAssert.Contains(showTableOverride.GetText(), "OOB command override");
+        StringAssert.Contains(showTableOverride.GetText(), "deleted");
+        CollectionAssert.Contains(_deletedIds, tableOverrideEntity.Id);
 
         // Table found and toggled
         var tableCmd = NewCommand(hidden: false, name: "devkit.account.T.Form.Button");
@@ -507,5 +523,90 @@ public sealed class ManageCommandHideShowFakeSdkTests
         var hideTableNoop = tool.manage_command(action: "hide", label: "T", entity_name: "Account", location: "form", scope: "table");
         Assert.IsFalse(hideTableNoop.IsError == true, hideTableNoop.GetText());
         StringAssert.Contains(hideTableNoop.GetText(), "already hidden");
+    }
+
+    [TestMethod]
+    public void HideShow_GlobalCommandIdWithTableOrAppScope_CreatesOverrideWithoutMutatingGlobalRow()
+    {
+        var tool = NewTool();
+        var globalOob = new Entity("appaction", Guid.NewGuid())
+        {
+            ["name"] = "Mscrm.Form.{!EntityLogicalName}.Activate",
+            ["buttonlabeltext"] = "Activate",
+            ["context"] = new OptionSetValue(0),
+            ["location"] = new OptionSetValue(0),
+            ["origin"] = new OptionSetValue(1),
+            ["hidden"] = false,
+            ["sequence"] = 50m,
+            ["fonticon"] = "Activate"
+        };
+        _appActions.Add(globalOob);
+        _labelLookupRows.Clear();
+
+        // Calling hide with global OOB command_id without entity_name or scope='global' is blocked
+        var directGlobalHide = tool.manage_command(action: "hide", command_id: globalOob.Id.ToString());
+        Assert.IsTrue(directGlobalHide.IsError == true);
+        StringAssert.Contains(directGlobalHide.GetText(), "global OOB command (context=All)");
+        Assert.AreEqual(0, _updatedEntities.Count);
+
+        // Calling hide with global OOB command_id + entity_name + scope='table' creates table override
+        var tableOverrideRes = tool.manage_command(
+            action: "hide",
+            command_id: globalOob.Id.ToString(),
+            entity_name: "Account",
+            scope: "table");
+        Assert.IsFalse(tableOverrideRes.IsError == true, tableOverrideRes.GetText());
+        StringAssert.Contains(tableOverrideRes.GetText(), "Created appaction override");
+        Assert.AreEqual(0, _updatedEntities.Count, "Global OOB row must not be mutated.");
+        var createdTable = _createdEntities.Single(e => e.LogicalName == "appaction");
+        Assert.AreEqual("Mscrm.Form.{!EntityLogicalName}.Activate", createdTable.GetAttributeValue<string>("name"));
+        Assert.AreEqual(1, createdTable.GetAttributeValue<OptionSetValue>("context").Value);
+        Assert.AreEqual("account", createdTable.GetAttributeValue<string>("contextvalue"));
+        Assert.IsNull(createdTable.GetAttributeValue<EntityReference>("appmoduleid"));
+        Assert.AreEqual(50m, createdTable.GetAttributeValue<decimal>("sequence"));
+
+        // Calling hide with global OOB command_id + entity_name + app_name creates app override
+        _createdEntities.Clear();
+        var appOverrideRes = tool.manage_command(
+            action: "hide",
+            command_id: globalOob.Id.ToString(),
+            entity_name: "Account",
+            app_name: "Sales Hub");
+        Assert.IsFalse(appOverrideRes.IsError == true, appOverrideRes.GetText());
+        StringAssert.Contains(appOverrideRes.GetText(), "Created appaction override");
+        var createdApp = _createdEntities.Single(e => e.LogicalName == "appaction");
+        Assert.AreEqual(_appModules[0].Id, createdApp.GetAttributeValue<EntityReference>("appmoduleid").Id);
+    }
+
+    [TestMethod]
+    public void Hide_WhenDevKitRibbonSolutionDoesNotExist_DoesNotThrowAndCreatesOverride()
+    {
+        _labelLookupRows.Clear();
+        _oobTemplateRows.Clear();
+        _fake.OnExecute = request => request switch
+        {
+            RetrieveAllEntitiesRequest => new RetrieveAllEntitiesResponse
+            {
+                Results = { ["EntityMetadata"] = new[] { _accountMeta } }
+            },
+            RetrieveEntityRequest => new RetrieveEntityResponse
+            {
+                Results = { ["EntityMetadata"] = _accountMeta }
+            },
+            ExportSolutionRequest => throw new InvalidOperationException("The given solution unique name (devkit_ribbon) is not valid (0x80040217)"),
+            PublishXmlRequest => new OrganizationResponse(),
+            _ => new OrganizationResponse()
+        };
+
+        var result = NewTool().manage_command(
+            action: "hide",
+            label: "Activate",
+            entity_name: "Account",
+            location: "form",
+            scope: "table");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "Created appaction override");
+        Assert.AreEqual(1, _createdEntities.Count);
     }
 }
