@@ -120,7 +120,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             System.Threading.CancellationToken cancellationToken = default,
             [Description("UPDATE only on an existing Power Fx column. A Power Fx expression with an optional leading '='. Mutually exclusive with formula_definition, formula_source_type, and raw_formula_definition.")] string formula_expression = null,
 #nullable enable
-            [Description("Raw XAML formula definition (<Activity ...>) from get_tables(detail_level='full') rawFormulaDefinition for CREATE or UPDATE on a Calculated or Rollup column. Mutually exclusive with formula_definition and formula_expression.")] string? raw_formula_definition = null,
+            [Description("File path to a XAML/XML file (or .formula.json backup) or inline raw XAML formula definition (<Activity ...>) from get_tables(detail_level='full') rawFormulaDefinition for CREATE or UPDATE on a Calculated or Rollup column. Mutually exclusive with formula_definition and formula_expression.")] string? raw_formula_definition = null,
             McpServer? server = null)
 #nullable restore
         {
@@ -171,7 +171,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Create or remove a single-column Alternate Key (EntityKeyMetadata) for this column. CREATE: true creates an alternate key using the column's schema_name, logical_name, and display_name. UPDATE: true creates the alternate key if missing; false deletes it; omit = keep current.")] bool? is_alternate_key = null,
             [Description("UPDATE only on an existing Power Fx column. A Power Fx expression with an optional leading '='. Mutually exclusive with formula_definition, formula_source_type, and raw_formula_definition.")] string formula_expression = null,
 #nullable enable
-            [Description("Raw XAML formula definition (<Activity ...>) from get_tables(detail_level='full') rawFormulaDefinition for CREATE or UPDATE on a Calculated or Rollup column. Mutually exclusive with formula_definition and formula_expression.")] string? raw_formula_definition = null)
+            [Description("File path to a XAML/XML file (or .formula.json backup) or inline raw XAML formula definition (<Activity ...>) from get_tables(detail_level='full') rawFormulaDefinition for CREATE or UPDATE on a Calculated or Rollup column. Mutually exclusive with formula_definition and formula_expression.")] string? raw_formula_definition = null)
 #nullable restore
         {
             _requestedAlternateKey = is_alternate_key;
@@ -208,10 +208,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         "Pass raw_formula_definition by itself on UPDATE, or with formula_source_type ('calculated' or 'rollup') on CREATE.");
 
                 raw_formula_definition = raw_formula_definition.Trim();
+                if (raw_formula_definition.Length > 0)
+                {
+                    var resolvedFormulaPath = ResolveRawFormulaFilePath(raw_formula_definition);
+                    if (resolvedFormulaPath != null)
+                    {
+                        raw_formula_definition = ReadRawFormulaFromFile(resolvedFormulaPath);
+                    }
+                    else if (!raw_formula_definition.StartsWith('<'))
+                    {
+                        return Error(
+                            $"raw_formula_definition file not found: '{raw_formula_definition}'. If passing inline XAML, it must contain a valid Calculated or Rollup XAML definition (<Activity ...>).",
+                            "Pass an existing file path containing the XAML definition, or pass the inline <Activity ...> XML string from get_tables(detail_level='full') rawFormulaDefinition.");
+                    }
+                }
+
                 var xamlError = ValidateRawFormulaXaml(raw_formula_definition);
                 if (xamlError != null)
                     return Error(xamlError,
-                        "Copy rawFormulaDefinition from get_tables(detail_level='full') for a Calculated or Rollup column and ensure it is well-formed XML with an <Activity ...> root element.");
+                        "Copy rawFormulaDefinition from get_tables(detail_level='full') for a Calculated or Rollup column (or pass a file path containing it) and ensure it is well-formed XML with an <Activity ...> root element.");
             }
 
             // --- Early validation: attribute_type, required_level, format, behavior ---
@@ -2356,6 +2371,43 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var value = expression?.Trim() ?? "";
             return value.StartsWith('=') ? value.Substring(1).TrimStart() : value;
+        }
+
+        private string ResolveRawFormulaFilePath(string pathOrXaml)
+        {
+            if (string.IsNullOrWhiteSpace(pathOrXaml) || pathOrXaml.StartsWith('<'))
+                return null;
+
+            if (File.Exists(pathOrXaml))
+                return pathOrXaml;
+
+            if (!Path.IsPathRooted(pathOrXaml) && !string.IsNullOrWhiteSpace(_workspaceFolder))
+            {
+                var workspaceCandidate = Path.Combine(_workspaceFolder, pathOrXaml);
+                if (File.Exists(workspaceCandidate))
+                    return workspaceCandidate;
+            }
+
+            return null;
+        }
+
+        private static string ReadRawFormulaFromFile(string filePath)
+        {
+            var content = File.ReadAllText(filePath, Encoding.UTF8).Trim();
+            if (content.StartsWith('{'))
+            {
+                try
+                {
+                    var backup = JsonSerializer.Deserialize<ColumnFormulaBackup>(content);
+                    if (!string.IsNullOrWhiteSpace(backup?.FormulaDefinition))
+                        return backup.FormulaDefinition.Trim();
+                }
+                catch
+                {
+                    // Fall through to standard XAML validation if not a valid backup JSON
+                }
+            }
+            return content;
         }
 
         private static string ValidateRawFormulaXaml(string value)

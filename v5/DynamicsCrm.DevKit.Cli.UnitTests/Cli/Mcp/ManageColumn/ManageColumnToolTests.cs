@@ -487,6 +487,9 @@ public class ManageColumnToolTests
         var types = typeElement.EnumerateArray().Select(e => e.GetString()).ToArray();
         CollectionAssert.AreEquivalent(new[] { "string", "null" }, types);
         Assert.AreEqual(System.Text.Json.JsonValueKind.Null, rawFormulaProp.GetProperty("default").ValueKind);
+        var rawFormulaDesc = rawFormulaProp.GetProperty("description").GetString() ?? "";
+        StringAssert.Contains(rawFormulaDesc, "File path");
+        StringAssert.Contains(rawFormulaDesc, "<Activity");
     }
 
     // ──────────────────────────────────────────────

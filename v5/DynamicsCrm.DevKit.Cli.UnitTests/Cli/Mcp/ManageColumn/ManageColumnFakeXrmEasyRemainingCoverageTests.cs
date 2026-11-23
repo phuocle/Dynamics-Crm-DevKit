@@ -1576,6 +1576,83 @@ public sealed class ManageColumnFakeXrmEasyRemainingCoverageTests
         Assert.AreEqual(0, _service.CreatedAttributes.Count);
     }
 
+    [TestMethod]
+    public void RawFormulaDefinition_FilePath_ReadsUtf8XamlAndRestoresFromBackupFile()
+    {
+        var tempDir = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "devkit_raw_formula_" + Guid.NewGuid().ToString("N"));
+        System.IO.Directory.CreateDirectory(tempDir);
+        var xmlFilePath = System.IO.Path.Combine(tempDir, "formula.xml");
+        var badXmlFilePath = System.IO.Path.Combine(tempDir, "bad_formula.xml");
+        var missingFilePath = System.IO.Path.Combine(tempDir, "nonexistent_formula.xml");
+        string? backupPath = null;
+
+        try
+        {
+            const string oldRollupXaml = "<Activity xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"><Sequence DisplayName=\"OldAggregate\" /></Activity>";
+            var rollupTarget = (StringAttributeMetadata)_service.Entities.Single(e => e.LogicalName == "account")
+                .Attributes.Single(a => a.LogicalName == "new_rollup_total");
+            rollupTarget.FormulaDefinition = oldRollupXaml;
+
+            const string fileXaml = "<Activity xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\">\r\n  <Sequence DisplayName=\"Aggregate\" />\r\n</Activity>";
+            System.IO.File.WriteAllText(xmlFilePath, "\r\n  " + fileXaml + "  \r\n", System.Text.Encoding.UTF8);
+
+            // 1. UPDATE via file path
+            var updateResult = NewTool().manage_column(entity_name: "account", logical_name: "new_rollup_total",
+                raw_formula_definition: xmlFilePath, solution_name: "DevKit Solution");
+
+            AssertSuccess(updateResult, "Updated column 'new_rollup_total'");
+            var updatedRollup = (StringAttributeMetadata)_service.UpdatedAttributes.Single();
+            Assert.AreEqual(fileXaml, updatedRollup.FormulaDefinition);
+            backupPath = updateResult.StructuredContent!.Value.GetProperty("backupPath").GetString();
+            Assert.IsFalse(string.IsNullOrWhiteSpace(backupPath));
+            Assert.IsTrue(System.IO.File.Exists(backupPath), $"Expected backup file at '{backupPath}'");
+
+            // 2. Restore directly from the .formula.json backup file path
+            _service.UpdatedAttributes.Clear();
+            var restoreResult = NewTool().manage_column(entity_name: "account", logical_name: "new_rollup_total",
+                raw_formula_definition: backupPath);
+            AssertSuccess(restoreResult, "Updated column 'new_rollup_total'");
+            var restoredRollup = (StringAttributeMetadata)_service.UpdatedAttributes.Single();
+            Assert.AreEqual(oldRollupXaml, restoredRollup.FormulaDefinition);
+            var secondBackupPath = restoreResult.StructuredContent!.Value.GetProperty("backupPath").GetString();
+            if (!string.IsNullOrWhiteSpace(secondBackupPath))
+            {
+                try { System.IO.File.Delete(secondBackupPath); } catch { }
+            }
+
+            // 3. CREATE via file path
+            var createResult = NewTool().manage_column(entity_name: "account", attribute_type: "money",
+                display_name: "File Rollup", schema_name: "dev_FileRollup",
+                raw_formula_definition: xmlFilePath, solution_name: "DevKit");
+            AssertSuccess(createResult, "Created Money column 'dev_filerollup' on entity 'account'.");
+            var createdRollup = _service.CreatedAttributes.OfType<MoneyAttributeMetadata>().Single();
+            Assert.AreEqual(2, createdRollup.SourceType);
+            Assert.AreEqual(fileXaml, createdRollup.FormulaDefinition);
+
+            // 4. Non-existent file path (does not start with '<') returns clear file-not-found error
+            _service.UpdatedAttributes.Clear();
+            var missingResult = NewTool().manage_column(entity_name: "account", logical_name: "new_rollup_total",
+                raw_formula_definition: missingFilePath);
+            AssertError(missingResult, "raw_formula_definition file not found");
+            Assert.AreEqual(0, _service.UpdatedAttributes.Count);
+
+            // 5. Existing file with invalid XML returns XML validation error
+            System.IO.File.WriteAllText(badXmlFilePath, "<Activity><Unclosed></Activity>", System.Text.Encoding.UTF8);
+            var badXmlResult = NewTool().manage_column(entity_name: "account", logical_name: "new_rollup_total",
+                raw_formula_definition: badXmlFilePath);
+            AssertError(badXmlResult, "raw_formula_definition contains invalid XML");
+            Assert.AreEqual(0, _service.UpdatedAttributes.Count);
+        }
+        finally
+        {
+            if (!string.IsNullOrWhiteSpace(backupPath))
+            {
+                try { System.IO.File.Delete(backupPath); } catch { }
+            }
+            try { System.IO.Directory.Delete(tempDir, recursive: true); } catch { }
+        }
+    }
+
     // ──────────────────────────────────────────────
     // UPDATE — required-level PUT failure is swallowed
     // ──────────────────────────────────────────────
