@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DevKit MCP Command Bar (appaction) — Nghiên cứu &amp; Kế hoạch mở rộng tầm vực Entity / App / Global</title>
+<title>DevKit MCP Command Bar (appaction) — Thiết kế chuẩn Microsoft 3 Tầm vực: app / table / global (Rev 4 Final)</title>
 <style>
   :root { --ink:#1a1a2e; --muted:#555; --accent:#0b66c3; --accent2:#0a7d4f; --warn:#b35900; --bad:#b32424; --bg:#fbfbfd; --code:#f4f4f8; --border:#ddd; }
   * { box-sizing: border-box; }
@@ -38,456 +38,334 @@
 <body>
 <div class="wrap">
 
-<h1>DevKit MCP Command Bar (<code>manage_command</code> / <code>appaction</code>) — Nghiên cứu &amp; Kế hoạch mở rộng tầm vực Entity / App / Global</h1>
+<h1>DevKit MCP Command Bar (<code>manage_command</code> / <code>appaction</code>) — Thiết kế theo chuẩn 3 Command Scopes của Microsoft: <code>app</code> | <code>table</code> | <code>global</code></h1>
 <p class="meta">
-  Ngày: 2026-11-23 · Thành phần: <code>DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageCommandTool.cs</code> &amp; <code>Tools/Command/*</code> ·
-  Đối tượng: <strong>Modern Command Bar (<code>appaction</code>)</strong> — <em>không phải Classic Ribbon (<code>RibbonDiffXml</code>)</em> ·
-  Trạng thái: <strong>Bản nghiên cứu &amp; Kế hoạch thiết kế (Plan)</strong>
+  Ngày: 2026-11-23 · <strong>Rev 4 Final (Chuẩn hóa 100% theo 3 Command Scopes của Microsoft Learn: <code>"app"</code>, <code>"table"</code>, <code>"global"</code>)</strong> ·
+  Thành phần: <code>DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageCommandTool.cs</code> &amp; <code>Tools/Command/*</code> ·
+  Đối tượng: <strong>Modern Command Bar (<code>appaction</code>)</strong> — <em>không phải Classic Ribbon (<code>RibbonDiffXml</code>)</em>
 </p>
 
 <div class="tldr">
-  <strong>TL;DR — Kết quả nghiên cứu &amp; Đề xuất:</strong>
+  <strong>TL;DR — Thiết kế tối giản, chuẩn 100% theo tài liệu Microsoft Learn:</strong>
   <br><br>
-  1. <strong>Xác nhận từ tài liệu Microsoft Dataverse:</strong> Bảng <code>appaction</code> (Modern Command Bar) hỗ trợ đầy đủ <strong>4 tầm vực (Command Scopes)</strong> thông qua tổ hợp 2 cột <code>context</code> (<code>0 = All</code>, <code>1 = Entity</code>) và <code>appmoduleid</code> (<code>Guid</code> của Model-Driven App hoặc <code>null</code>):
+  Theo tài liệu chính thức của Microsoft (<em>Modern commanding overview — Command scope</em>), Modern Command Bar có đúng <strong>3 tầm vực (Command Scopes)</strong>:
+  <ol>
+    <li><strong><code>"app"</code> (Mặc định khi không truyền <code>scope</code>):</strong> Gắn với <strong>1 App + 1 Table + 1 Location</strong> (<code>context = 1</code>, có <code>contextentity</code>/<code>contextvalue</code>, có <code>appmoduleid</code>). Nút chỉ xuất hiện trên bảng đó bên trong App đó. <em>(Đã có — giữ nguyên 100% hành vi mặc định)</em>.</li>
+    <li><strong><code>"table"</code> (Table Scope — Mọi App):</strong> Gắn với <strong>1 Table + 1 Location</strong>, không gắn App (<code>context = 1</code>, có <code>contextentity</code>/<code>contextvalue</code>, <code>appmoduleid = null</code>). Nút xuất hiện trên bảng đó ở <strong>tất cả các Model-Driven Apps</strong> trong Environment.</li>
+    <li><strong><code>"global"</code> (Global Scope — Mọi Table &amp; Mọi App):</strong> Chỉ gắn với <strong>1 Location</strong>, không gắn Table và không gắn App (<code>context = 0</code>, <code>contextentity = null</code>, <code>contextvalue = null</code>, <code>appmoduleid = null</code>). Nút xuất hiện ở vị trí đó trên <strong>tất cả các bảng và tất cả các Apps</strong> trong Environment.</li>
+  </ol>
+  <strong>Các nguyên tắc đã chốt:</strong>
   <ul>
-    <li><strong>App + Entity Scope</strong> (<code>context=1, appmoduleid!=null</code>): Nút chỉ hiện trên 1 bảng trong 1 App cụ thể. <em>(Hiện tại <code>manage_command</code> chỉ mới hỗ trợ tầm vực này)</em>.</li>
-    <li><strong>App-Level Scope</strong> (<code>context=0, appmoduleid!=null</code>): Nút gắn với 1 App nhưng không gắn bảng (<code>contextentity=null, contextvalue=null</code>) — dùng cho <code>global_header</code>, <code>dashboard</code> của App đó, hoặc hiện trên <strong>mọi bảng</strong> trong App đó.</li>
-    <li><strong>Entity / Table Scope (All Apps)</strong> (<code>context=1, appmoduleid=null</code>): Nút gắn với 1 bảng cụ thể nhưng không gắn App — tự động xuất hiện trên bảng đó ở <strong>tất cả các Model-Driven Apps</strong> trong toàn Environment.</li>
-    <li><strong>Global Scope (All Apps &amp; All Entities)</strong> (<code>context=0, appmoduleid=null</code>): Nút không gắn bảng và không gắn App — xuất hiện ở <code>location</code> chỉ định (vd: <code>global_header</code>, <code>dashboard</code>, <code>form</code>, <code>main_grid</code>...) trên <strong>mọi bảng và mọi App</strong> trong toàn Environment.</li>
+    <li>Chỉ áp dụng cho <strong>Standard Button</strong> (<code>create</code>, <code>update</code>, <code>hide</code>, <code>show</code>, <code>list</code>, <code>detail</code>). Không mở rộng cho Flyout Dropdown &amp; Split Button.</li>
+    <li>Giữ nguyên 12 action hiện tại (không thêm <code>delete</code>).</li>
+    <li>Publisher Prefix khi không có <code>entity_name</code> (ở <code>scope = "global"</code>) sẽ dùng <code>"devkit"</code> (tương ứng <code>devkit_</code>).</li>
+    <li>Auto-Publish: khi có <code>entity_name</code> (<code>app</code>, <code>table</code>) → <code>PublishHelper.PublishEntity</code>; khi là <code>global</code> (không có <code>entity_name</code>) → <code>PublishHelper.PublishRibbon</code>.</li>
   </ul>
-  2. <strong>Nguyên nhân <code>manage_command</code> hiện tại bị giới hạn:</strong> Code trong <code>CommandCreateUpdate.cs</code>, <code>CommandFlyout.cs</code>, <code>CommandHideShow.cs</code> đang <strong>bắt buộc cả <code>entity_name</code> lẫn <code>app_id/app_name</code></strong>, hardcode <code>context = OptionSetValue(1)</code>, suy diễn <code>publisherPrefix</code> từ <code>entity_name</code>, và gọi <code>PublishHelper.PublishEntity(contextvalue)</code> (sẽ gây <code>NullReferenceException</code> nếu <code>contextvalue == null</code>).
-  <br><br>
-  3. <strong>Giải pháp đề xuất:</strong> Không cần tách tool mới; giữ nguyên tool <code>manage_command</code> và mở rộng linh hoạt theo sự hiện diện của <code>entity_name</code> và <code>app_id</code>/<code>app_name</code> (hoặc tham số tùy chọn <code>scope</code>), đồng thời bổ sung thông tin <code>scope</code> / <code>context</code> vào kết quả trả về của <code>list</code> &amp; <code>detail</code>.
 </div>
 
 <h2 id="toc">Mục lục</h2>
 <ol class="toc">
-  <li><a href="#s1">Nghiên cứu tài liệu Microsoft Dataverse: Bảng <code>appaction</code> &amp; Command Scopes</a></li>
-  <li><a href="#s2">Phân tích hiện trạng <code>manage_command</code> trong DynamicsCrm.DevKit</a></li>
-  <li><a href="#s3">Ma trận 4 Tầm vực (Scopes) &amp; Quy tắc <code>location</code> / <code>uniquename</code> / <code>publish</code></a></li>
-  <li><a href="#s4">Thiết kế thay đổi trên MCP Tool <code>manage_command</code></a></li>
-  <li><a href="#s5">Chi tiết kỹ thuật theo từng file trong <code>DynamicsCrm.DevKit.Cli</code></a></li>
-  <li><a href="#s6">Kế hoạch kiểm thử (Unit Tests &amp; Live MCP Tests)</a></li>
-  <li><a href="#s7">Câu hỏi thiết kế cần chốt trước khi code</a></li>
+  <li><a href="#s1">Tài liệu Microsoft Learn: 3 Command Scopes trên bảng <code>appaction</code></a></li>
+  <li><a href="#s2">Bảng so sánh 3 giá trị <code>scope</code>: <code>"app"</code> (default) vs <code>"table"</code> vs <code>"global"</code></a></li>
+  <li><a href="#s3">Quy tắc sinh <code>name</code>, <code>uniquename</code>, Prefix &amp; Auto-Publish</a></li>
+  <li><a href="#s4">Đặc tả hành vi từng Action (<code>create</code>, <code>update</code>, <code>hide</code>, <code>show</code>, <code>list</code>, <code>detail</code>)</a></li>
+  <li><a href="#s5">Ví dụ JSON gọi MCP Tool <code>manage_command</code></a></li>
+  <li><a href="#s6">Chi tiết kỹ thuật theo từng file trong <code>DynamicsCrm.DevKit.Cli</code></a></li>
+  <li><a href="#s7">Kế hoạch kiểm thử (Unit Tests)</a></li>
 </ol>
 
-<h2 id="s1">1. Nghiên cứu tài liệu Microsoft Dataverse: Bảng <code>appaction</code> &amp; Command Scopes</h2>
+<h2 id="s1">1. Tài liệu Microsoft Learn: 3 Command Scopes trên bảng <code>appaction</code></h2>
 
-<h3>1.1 Kiến trúc lưu trữ Modern Command Bar (<code>appaction</code>)</h3>
 <p>
-  Khác với Classic Ribbon (lưu dưới dạng XML nén trong <code>RibbonDiffXml</code> của từng Entity hoặc Application Ribbon),
-  <strong>Modern Commanding</strong> lưu từng nút lệnh (Standard Button, Dropdown Flyout, Split Button, Group) thành một bản ghi độc lập trong bảng hệ thống <code>appaction</code> (và các rule classic liên kết qua bảng <code>appactionrule</code>).
+  Trong tài liệu chính thức của Microsoft Learn (<em>Modern commanding overview — Command scope</em>), Microsoft định nghĩa đúng 3 mức tầm vực từ hẹp nhất đến rộng nhất:
 </p>
 
-<p>Theo tài liệu chính thức của Microsoft Learn (<em>Modern commanding overview — Command scope</em> và <em>appaction EntityType reference</em>), phạm vi hiển thị (Scope) của một bản ghi <code>appaction</code> được quyết định bởi các cột sau:</p>
+<blockquote>
+  <strong>Command scope (Microsoft Learn):</strong>
+  <ul>
+    <li><strong>App (Narrowest / Default):</strong> Bound to a specific model-driven app, table, and command bar location. When you create a command in the modern command designer, the default scope is the App.</li>
+    <li><strong>Table:</strong> Bound to a table and a command bar location. Table-scoped commands render in all apps that utilize that table.</li>
+    <li><strong>Global (Broadest):</strong> Bound only to a command bar location, not a specific app or table. For example, a command bound to the main form location with global scope renders in all apps and for all tables.</li>
+  </ul>
+</blockquote>
 
 <table>
   <tr>
     <th>Cột trên bảng <code>appaction</code></th>
-    <th>Kiểu dữ liệu</th>
-    <th>Giá trị &amp; Ý nghĩa trong Dataverse</th>
+    <th><code>scope = "app"</code> (Default)</th>
+    <th><code>scope = "table"</code></th>
+    <th><code>scope = "global"</code></th>
   </tr>
   <tr>
-    <td><code>context</code></td>
-    <td><code>OptionSetValue</code> (Choice)</td>
-    <td>
-      <ul>
-        <li><code>0</code> = <strong>All</strong>: Không gắn với một bảng cụ thể (áp dụng cho mọi bảng hoặc cho các vùng không thuộc bảng như <code>GlobalHeader</code>, <code>Dashboard</code>).</li>
-        <li><code>1</code> = <strong>Entity</strong>: Gắn trực tiếp với một bảng Dataverse cụ thể.</li>
-      </ul>
-    </td>
+    <td><code>context</code> (OptionSetValue)</td>
+    <td><code>1</code> (Entity)</td>
+    <td><code>1</code> (Entity)</td>
+    <td><code>0</code> (All)</td>
   </tr>
   <tr>
-    <td><code>contextentity</code></td>
-    <td><code>EntityReference("entity", Guid)</code></td>
-    <td>
-      <ul>
-        <li>Khi <code>context = 1</code>: Trỏ tới <code>MetadataId</code> (<code>entityid</code>) của bảng đích.</li>
-        <li>Khi <code>context = 0</code>: Phải để <code>null</code>.</li>
-      </ul>
-    </td>
+    <td><code>contextentity</code> (EntityReference)</td>
+    <td><code>EntityReference("entity", entityId)</code></td>
+    <td><code>EntityReference("entity", entityId)</code></td>
+    <td><code>null</code></td>
   </tr>
   <tr>
-    <td><code>contextvalue</code></td>
-    <td><code>string</code></td>
-    <td>
-      <ul>
-        <li>Khi <code>context = 1</code>: Tên logical của bảng đích (ví dụ: <code>"account"</code>, <code>"all_testform"</code>).</li>
-        <li>Khi <code>context = 0</code>: Phải để <code>null</code> (hoặc không set).</li>
-      </ul>
-    </td>
+    <td><code>contextvalue</code> (string)</td>
+    <td><code>entityLogicalName</code> (vd: <code>"all_testform"</code>)</td>
+    <td><code>entityLogicalName</code> (vd: <code>"all_testform"</code>)</td>
+    <td><code>null</code></td>
   </tr>
   <tr>
-    <td><code>appmoduleid</code></td>
-    <td><code>EntityReference("appmodule", Guid)</code></td>
-    <td>
-      <ul>
-        <li>Khi có giá trị (<code>!= null</code>): Command chỉ có hiệu lực bên trong Model-Driven App được trỏ tới.</li>
-        <li>Khi để <code>null</code>: Command có hiệu lực trên <strong>tất cả các Model-Driven Apps</strong> trong toàn Environment.</li>
-      </ul>
-    </td>
+    <td><code>appmoduleid</code> (EntityReference)</td>
+    <td><code>EntityReference("appmodule", appId)</code></td>
+    <td><code>null</code></td>
+    <td><code>null</code></td>
   </tr>
   <tr>
-    <td><code>location</code></td>
-    <td><code>OptionSetValue</code> (Choice)</td>
-    <td>
-      Vị trí hiển thị trên giao diện (bắt buộc ở mọi Scope):
-      <ul>
-        <li><code>0</code> = <code>Form</code> (Main Form command bar)</li>
-        <li><code>1</code> = <code>MainGrid</code> (Main Grid / HomepageGrid command bar)</li>
-        <li><code>2</code> = <code>SubGrid</code> (Subgrid view command bar)</li>
-        <li><code>3</code> = <code>AssociatedGrid</code> (Associated view command bar)</li>
-        <li><code>4</code> = <code>QuickForm</code> (Quick Form command bar)</li>
-        <li><code>5</code> = <code>GlobalHeader</code> (Thanh Header toàn cục góc trên ứng dụng)</li>
-        <li><code>6</code> = <code>Dashboard</code> (Thanh command bar trên trang Dashboard)</li>
-      </ul>
-    </td>
-  </tr>
-  <tr>
-    <td><code>uniquename</code></td>
-    <td><code>string</code></td>
-    <td>
-      Định danh duy nhất dùng khi đóng gói Solution (không được trùng trong cùng org, lỗi <code>0x80072013</code> nếu trùng).
-    </td>
+    <td><code>location</code> (OptionSetValue)</td>
+    <td><code>0..6</code> (Form, MainGrid, SubGrid, ...)</td>
+    <td><code>0..6</code> (Form, MainGrid, SubGrid, ...)</td>
+    <td><code>0..6</code> (Form, MainGrid, GlobalHeader, ...)</td>
   </tr>
 </table>
 
-<h3>1.2 Tại sao Power Apps Command Designer UI bị hạn chế nhưng Dataverse SDK làm được trực tiếp?</h3>
-<div class="safebox">
-  <strong>Điểm mạnh vượt trội khi hỗ trợ qua DevKit MCP:</strong>
-  <br>
-  Trong giao diện kéo thả của Microsoft (<em>Power Apps Modern Command Designer</em>), khi người dùng bấm <em>"Edit command bar"</em>, giao diện của Microsoft chỉ cho phép tạo nút ở tầm vực hẹp nhất là <strong>App + Entity Scope</strong> (<code>context = 1</code> + <code>appmoduleid != null</code>). Để tạo nút ở tầm vực <strong>Table Scope (mọi App)</strong>, <strong>App Scope (mọi Table / Global Header)</strong> hoặc <strong>Global Scope (mọi App &amp; mọi Table)</strong>, tài liệu Microsoft hướng dẫn developer phải export unmanaged solution ra file zip, giải nén, mở <code>appaction.xml</code> bằng tay để xóa node <code>&lt;appmoduleid&gt;</code> và sửa <code>&lt;context&gt;0&lt;/context&gt;</code> rồi zip lại import vào!
-  <br><br>
-  Tuy nhiên, ở tầng <strong>Dataverse OrganizationService SDK (<code>IOrganizationService.Create / Update</code>)</strong>, bảng <code>appaction</code> cho phép tạo và cập nhật trực tiếp bản ghi với <code>context = 0</code> và/hoặc <code>appmoduleid = null</code> ngay lập tức mà không cần tháo lắp solution XML!
-</div>
+<hr>
 
-<h3>1.3 Lưu ý quan trọng từ Microsoft về Power Fx vs JavaScript ở tầm vực Global / Table</h3>
-<div class="warnbox">
-  <strong>Ràng buộc của Power Fx Component Library:</strong>
+<h2 id="s2">2. Bảng so sánh 3 giá trị <code>scope</code>: <code>"app"</code> (default) vs <code>"table"</code> vs <code>"global"</code></h2>
+
+<div class="safebox">
+  <strong>Tại sao mô hình 3 giá trị của Microsoft hoàn toàn không gây confuse cho Dev và AI?</strong>
+  <br>
+  Mỗi giá trị của <code>scope</code> tương ứng giảm dần đúng 1 tham số bắt buộc:
   <ul>
-    <li>Các command dùng <strong>JavaScript</strong> (<code>onclick_type = "javascript"</code>) hoặc <strong>None</strong> (<code>onclick_type = "none"</code>, vd: container Flyout Dropdown, Group) hoạt động hoàn hảo ở <strong>cả 4 tầm vực</strong> (App+Entity, App-Global, Entity-AllApps, Global).</li>
-    <li>Các command dùng <strong>Power Fx Formula</strong> (<code>onclick_type = "formula"</code>) trong kiến trúc của Microsoft thực chất lưu công thức trong một <em>Command Component Library</em> gắn với một App cụ thể. Do đó Microsoft khuyến nghị các nút ở tầm vực <strong>Entity (All Apps)</strong> và <strong>Global (All Apps)</strong> nên sử dụng <code>javascript</code> hoặc <code>none</code>.</li>
+    <li><code>scope = "app"</code> (hoặc không truyền): Cần <strong>cả 3</strong> (<code>app_name/app_id</code> + <code>entity_name</code> + <code>location</code>).</li>
+    <li><code>scope = "table"</code>: Cần <strong>2</strong> (<code>entity_name</code> + <code>location</code>) — bỏ <code>app</code> vì áp dụng cho mọi App.</li>
+    <li><code>scope = "global"</code>: Cần <strong>1</strong> (<code>location</code>) — bỏ cả <code>app</code> lẫn <code>entity_name</code> vì áp dụng cho mọi Table ở mọi App.</li>
   </ul>
 </div>
 
-<hr>
-
-<h2 id="s2">2. Phân tích hiện trạng <code>manage_command</code> trong DynamicsCrm.DevKit</h2>
-
-<p>Qua kiểm tra mã nguồn hiện tại trong <code>DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageCommandTool.cs</code> và 5 file partial trong thư mục <code>Tools/Command/</code>, dưới đây là các điểm đang khóa cứng tool ở tầm vực <code>App + Entity</code>:</p>
-
 <table>
   <tr>
-    <th>Vị trí file &amp; Hàm</th>
-    <th>Hiện trạng trong Code</th>
-    <th>Hệ quả / Vấn đề khi tạo ở mức App hoặc Global</th>
+    <th>Giá trị <code>scope</code></th>
+    <th><code>CommandEntry.Scope</code></th>
+    <th>Tham số bắt buộc khi <code>create</code></th>
+    <th>Tham số không dùng</th>
+    <th>Phạm vi hiển thị</th>
   </tr>
   <tr>
-    <td><code>CommandCreateUpdate.cs</code><br><code>HandleCreate()</code> (dòng 34–51, 76–83)</td>
-    <td>
-      <ul>
-        <li>Bắt buộc <code>entity_name</code> (dòng 34).</li>
-        <li>Bắt buộc <code>app_id</code> hoặc <code>app_name</code> (dòng 48).</li>
-        <li>Luôn gán <code>entity["context"] = new OptionSetValue(1)</code>, <code>contextvalue</code>, <code>contextentity</code>, và <code>appmoduleid</code>.</li>
-      </ul>
-    </td>
-    <td>
-      <span class="tag tag-no">Chặn</span> Không thể tạo nút Global (không có <code>entity_name</code>, không có <code>app</code>), không thể tạo nút Entity-level cho mọi App (không có <code>app</code>), và không thể tạo nút <code>global_header</code> / <code>dashboard</code> ở mức App mà không truyền một <code>entity_name</code> giả.
-    </td>
+    <td><code>""</code> hoặc <code>"app"</code><br><span class="tag tag-ok">Default</span></td>
+    <td><code>"App"</code></td>
+    <td><code>entity_name</code> + (<code>app_id</code> hoặc <code>app_name</code>) + <code>location</code> + <code>label</code></td>
+    <td>—</td>
+    <td>Chỉ hiện trên bảng <code>entity_name</code> bên trong ứng dụng <code>app_name</code>.</td>
   </tr>
   <tr>
-    <td><code>CommandCreateUpdate.cs</code><br><code>HandleUpdate()</code> (dòng 263–264)</td>
-    <td>
-      Sau khi update xong, gọi:<br>
-      <code>var updateEntityLogical = existing.GetAttributeValue&lt;string&gt;("contextvalue");</code><br>
-      <code>PublishHelper.PublishEntity(..., updateEntityLogical.Trim()...);</code>
-    </td>
-    <td>
-      <span class="tag tag-no">Crash</span> Nếu update một command có <code>context = 0</code> (không gắn entity → <code>contextvalue == null</code>), biểu thức <code>updateEntityLogical.Trim()</code> sẽ ném lỗi <code>NullReferenceException</code>!
-    </td>
+    <td><code>"table"</code><br><span class="tag tag-info">Table Scope</span></td>
+    <td><code>"Table"</code></td>
+    <td><code>entity_name</code> + <code>location</code> + <code>label</code></td>
+    <td><code>app_id</code>, <code>app_name</code></td>
+    <td>Hiện trên bảng <code>entity_name</code> ở <strong>tất cả các Model-Driven Apps</strong>.</td>
   </tr>
   <tr>
-    <td><code>CommandFlyout.cs</code><br><code>HandleAddFlyout()</code> &amp;<br><code>HandleAddSplitButton()</code> &amp;<br><code>HandleAddFlyoutItem()</code></td>
-    <td>
-      <ul>
-        <li>Đều bắt buộc cả <code>entity_name</code> lẫn <code>app_id/app_name</code>.</li>
-        <li>Trong <code>HandleAddFlyoutItem</code> (dòng 656): nếu <code>appModuleRef == null</code> thì trả lỗi <em>"Flyout has no associated app module"</em>.</li>
-        <li>Hàm <code>CreateFlyoutItem</code> luôn gán <code>context = 1</code> và <code>appmoduleid</code>.</li>
-      </ul>
-    </td>
-    <td>
-      <span class="tag tag-no">Chặn</span> Không thể tạo Flyout Dropdown hoặc Split Button ở tầm vực App (<code>context = 0</code>), Table (<code>appmoduleid = null</code>) hoặc Global (<code>context = 0, appmoduleid = null</code>).
-    </td>
-  </tr>
-  <tr>
-    <td><code>CommandHideShow.cs</code><br><code>HandleHideShow()</code> (dòng 56, 75, 86–95)</td>
-    <td>
-      <ul>
-        <li>Khi truyền <code>command_id</code>: gọi <code>existing.GetAttributeValue&lt;string&gt;("contextvalue").Trim()</code> để publish entity.</li>
-        <li>Khi tìm theo <code>label</code>: bắt buộc cả <code>entity_name</code> và <code>app_id/app_name</code>.</li>
-      </ul>
-    </td>
-    <td>
-      <span class="tag tag-no">Crash / Chặn</span> Nếu hide/show theo <code>command_id</code> của một nút Global (<code>contextvalue == null</code>), code sẽ bị <code>NullReferenceException</code> khi publish.
-    </td>
-  </tr>
-  <tr>
-    <td><code>CommandHideShow.cs</code><br><code>ResolvePublisherPrefix()</code> (dòng 338)</td>
-    <td>
-      Lấy prefix bằng cách cắt chuỗi trước dấu <code>_</code> của <code>entityLogicalName</code>:<br>
-      <code>var idx = entityLogicalName.IndexOf('_');</code>
-    </td>
-    <td>
-      <span class="tag tag-mid">Thiếu</span> Khi không có <code>entity_name</code> (App-level hoặc Global-level), cần lấy prefix từ <code>appUniqueName</code> hoặc từ Default Publisher / Solution, fallback về <code>"devkit"</code>.
-    </td>
-  </tr>
-  <tr>
-    <td><code>CommandListDetail.cs</code> &amp;<br><code>Models/CommandEntry.cs</code></td>
-    <td>
-      <code>GetList()</code> chưa query cột <code>context</code> và chưa có bộ lọc theo <code>scope</code>. <code>CommandEntry</code> chưa có thuộc tính <code>Scope</code> / <code>Context</code>.
-    </td>
-    <td>
-      <span class="tag tag-mid">Thiếu thông tin</span> Khi list các command trong org, người dùng/AI không nhìn thấy ngay command nào là Global, command nào là Table-level (All Apps), command nào là App-level.
-    </td>
+    <td><code>"global"</code><br><span class="tag tag-info">Global Scope</span></td>
+    <td><code>"Global"</code></td>
+    <td><code>location</code> + <code>label</code></td>
+    <td><code>entity_name</code>, <code>app_id</code>, <code>app_name</code></td>
+    <td>Hiện ở vị trí <code>location</code> trên <strong>tất cả các bảng và tất cả các Apps</strong>.</td>
   </tr>
 </table>
 
 <hr>
 
-<h2 id="s3">3. Ma trận 4 Tầm vực (Scopes) &amp; Quy tắc <code>location</code> / <code>uniquename</code> / <code>publish</code></h2>
+<h2 id="s3">3. Quy tắc sinh <code>name</code>, <code>uniquename</code>, Prefix &amp; Auto-Publish</h2>
 
-<h3>3.1 Ma trận 4 Tầm vực (Command Scopes)</h3>
-<p>Ta định nghĩa rõ 4 tầm vực chuẩn dựa trên sự kết hợp của <code>entity_name</code> và <code>app_id</code> / <code>app_name</code>:</p>
+<h3>3.1 Quy tắc lấy Publisher Prefix (<code>ResolvePublisherPrefix</code>)</h3>
+<ul>
+  <li>Khi có <code>entityLogicalName</code> (ở <code>scope = "app"</code> hoặc <code>scope = "table"</code>) và tên bảng có dấu <code>_</code> (vd: <code>all_testform</code>) → tách lấy phần trước dấu <code>_</code> (<code>"all"</code>).</li>
+  <li>Khi không có <code>entityLogicalName</code> (ở <code>scope = "global"</code>) hoặc bảng hệ thống không có dấu <code>_</code> (vd: <code>account</code>) → dùng fallback <code>"devkit"</code>.</li>
+</ul>
 
-<table>
-  <tr>
-    <th>Tên Scope (<code>scope</code>)</th>
-    <th>Điều kiện tham số đầu vào</th>
-    <th><code>context</code></th>
-    <th><code>contextentity</code> &amp; <code>contextvalue</code></th>
-    <th><code>appmoduleid</code></th>
-    <th>Ý nghĩa &amp; Trường hợp sử dụng thực tế</th>
-  </tr>
-  <tr>
-    <td><strong>1. <code>app_entity</code></strong><br><span class="tag tag-ok">Đã có</span></td>
-    <td>Có <code>entity_name</code><br>+ Có <code>app_id</code>/<code>app_name</code></td>
-    <td><code>1</code> (Entity)</td>
-    <td>Có (trỏ tới Entity)</td>
-    <td>Có (trỏ tới App)</td>
-    <td>Nút chỉ xuất hiện trên bảng <code>X</code> bên trong ứng dụng <code>Y</code> (mặc định của Power Apps Command Designer).</td>
-  </tr>
-  <tr>
-    <td><strong>2. <code>app</code></strong><br><span class="tag tag-info">Mới — App Level</span></td>
-    <td>Không có <code>entity_name</code><br>+ Có <code>app_id</code>/<code>app_name</code></td>
-    <td><code>0</code> (All)</td>
-    <td><code>null</code></td>
-    <td>Có (trỏ tới App)</td>
-    <td>
-      <ul>
-        <li>Nút trên <code>global_header</code> hoặc <code>dashboard</code> của riêng ứng dụng <code>Y</code>.</li>
-        <li>Hoặc nút trên <code>form</code> / <code>main_grid</code> / <code>sub_grid</code> áp dụng cho <strong>tất cả các bảng</strong> bên trong ứng dụng <code>Y</code>.</li>
-      </ul>
-    </td>
-  </tr>
-  <tr>
-    <td><strong>3. <code>entity</code></strong><br><span class="tag tag-info">Mới — Table Level</span></td>
-    <td>Có <code>entity_name</code><br>+ Không có <code>app_id</code>/<code>app_name</code></td>
-    <td><code>1</code> (Entity)</td>
-    <td>Có (trỏ tới Entity)</td>
-    <td><code>null</code></td>
-    <td>Nút gắn với bảng <code>X</code> và tự động xuất hiện trên bảng <code>X</code> ở <strong>tất cả mọi Model-Driven Apps</strong> trong toàn Environment.</td>
-  </tr>
-  <tr>
-    <td><strong>4. <code>global</code></strong><br><span class="tag tag-info">Mới — Global Level</span></td>
-    <td>Không có <code>entity_name</code><br>+ Không có <code>app_id</code>/<code>app_name</code></td>
-    <td><code>0</code> (All)</td>
-    <td><code>null</code></td>
-    <td><code>null</code></td>
-    <td>
-      <ul>
-        <li>Nút trên <code>global_header</code> hoặc <code>dashboard</code> của <strong>toàn bộ các ứng dụng</strong> trong Environment.</li>
-        <li>Hoặc nút chung trên <code>form</code> / <code>main_grid</code>... xuất hiện trên <strong>mọi bảng của mọi ứng dụng</strong> trong Environment.</li>
-      </ul>
-    </td>
-  </tr>
-</table>
+<pre>private string ResolvePublisherPrefix(string entityLogicalName)
+{
+    if (!string.IsNullOrWhiteSpace(entityLogicalName))
+    {
+        var idx = entityLogicalName.IndexOf('_');
+        if (idx &gt; 0) return entityLogicalName.Substring(0, idx);
+    }
+    return "devkit";
+}</pre>
 
-<h3>3.2 Quy tắc sinh <code>name</code> và <code>uniquename</code> theo Scope</h3>
-<p>Để đảm bảo tính nhất quán 100% với các test hiện hành khi ở tầm vực <code>app_entity</code> và không bao giờ xung đột <code>uniquename</code> ở các tầm vực mới:</p>
-
+<h3>3.2 Quy tắc sinh <code>name</code> và <code>uniquename</code> cho Standard Button</h3>
 <table>
   <tr>
     <th>Scope</th>
-    <th><code>{entitySegment}</code></th>
-    <th><code>{appSegment}</code></th>
+    <th><code>{prefix}</code></th>
     <th>Mẫu <code>name</code></th>
     <th>Mẫu <code>uniquename</code></th>
   </tr>
   <tr>
-    <td><strong><code>app_entity</code></strong> (giữ nguyên)</td>
-    <td><code>{entityLogical}</code></td>
-    <td><code>{appUniqueName}</code></td>
-    <td><code>{prefix}.{entityLogical}.{safeLabel}.{locPrefix}.{Kind}</code></td>
+    <td><strong><code>"app"</code></strong> (Default)</td>
+    <td>Từ <code>entityLogical</code> (hoặc <code>devkit</code>)</td>
+    <td><code>{prefix}.{entityLogical}.{safeLabel}.{locPrefix}.Button</code></td>
     <td><code>{prefix}__{name}!{appUniqueName}!{entityLogical}!{locationValue}</code></td>
   </tr>
   <tr>
-    <td><strong><code>app</code></strong> (App-Level)</td>
-    <td><code>all</code></td>
-    <td><code>{appUniqueName}</code></td>
-    <td><code>{prefix}.all.{safeLabel}.{locPrefix}.{Kind}</code></td>
-    <td><code>{prefix}__{name}!{appUniqueName}!all!{locationValue}</code></td>
-  </tr>
-  <tr>
-    <td><strong><code>entity</code></strong> (Entity / All Apps)</td>
-    <td><code>{entityLogical}</code></td>
-    <td><code>global</code></td>
-    <td><code>{prefix}.{entityLogical}.{safeLabel}.{locPrefix}.{Kind}</code></td>
+    <td><strong><code>"table"</code></strong></td>
+    <td>Từ <code>entityLogical</code> (hoặc <code>devkit</code>)</td>
+    <td><code>{prefix}.{entityLogical}.{safeLabel}.{locPrefix}.Button</code></td>
     <td><code>{prefix}__{name}!global!{entityLogical}!{locationValue}</code></td>
   </tr>
   <tr>
-    <td><strong><code>global</code></strong> (Environment Global)</td>
-    <td><code>all</code></td>
-    <td><code>global</code></td>
-    <td><code>{prefix}.all.{safeLabel}.{locPrefix}.{Kind}</code></td>
-    <td><code>{prefix}__{name}!global!all!{locationValue}</code></td>
+    <td><strong><code>"global"</code></strong></td>
+    <td><code>devkit</code></td>
+    <td><code>devkit.all.{safeLabel}.{locPrefix}.Button</code></td>
+    <td><code>devkit__{name}!global!all!{locationValue}</code></td>
   </tr>
 </table>
-<p class="small">Trong đó <code>{Kind}</code> là <code>Button</code>, <code>Dropdown</code>, <code>Split</code>, hoặc <code>Group</code> (và <code>{flyoutSafeLabel}.{locPrefix}.{safeItemLabel}.Button</code> cho flyout item).</p>
 
-<h3>3.3 Quy tắc tìm <code>{prefix}</code> (Publisher Prefix) khi không có <code>entity_name</code></h3>
-<pre>private string ResolvePublisherPrefix(string entityLogicalName, string appUniqueName = null)
+<h3>3.3 Quy tắc Auto-Publish (<code>PublishCommandTarget</code>)</h3>
+<pre>private string PublishCommandTarget(string entityLogicalName, Guid? appModuleId = null)
 {
-    // 1. Ưu tiên lấy prefix từ entityLogicalName nếu có (vd: "all_testform" → "all")
     if (!string.IsNullOrWhiteSpace(entityLogicalName))
     {
-        var idx = entityLogicalName.IndexOf('_');
-        if (idx > 0) return entityLogicalName.Substring(0, idx);
+        PublishHelper.PublishEntity(_context, _orgService, entityLogicalName.Trim().ToLowerInvariant());
+        return "Entity published.";
     }
-    // 2. Nếu không có entity (hoặc entity OOB như "account"), lấy từ appUniqueName nếu có (vd: "all_ALLINONE" → "all")
-    if (!string.IsNullOrWhiteSpace(appUniqueName))
+    if (appModuleId.HasValue &amp;&amp; appModuleId.Value != Guid.Empty)
     {
-        var idx = appUniqueName.IndexOf('_');
-        if (idx > 0) return appUniqueName.Substring(0, idx);
+        PublishHelper.PublishAppModule(_context, _orgService, appModuleId.Value);
+        return "App published.";
     }
-    // 3. Fallback chuẩn
-    return "devkit";
+    PublishHelper.PublishRibbon(_context, _orgService);
+    return "Global command bar published.";
 }</pre>
-
-<h3>3.4 Chiến lược Auto-Publish theo Scope (Tránh <code>NullReferenceException</code> &amp; Đảm bảo hiệu lực ngay)</h3>
-<p>Tạo một helper dùng chung <code>PublishCommandScope(string entityLogicalName, Guid? appModuleId)</code> trong <code>CommandHelpers.cs</code>:</p>
-
-<table>
-  <tr>
-    <th>Scope của Command</th>
-    <th>Có <code>entityLogicalName</code>?</th>
-    <th>Có <code>appModuleId</code>?</th>
-    <th>Hành động Publish được gọi</th>
-  </tr>
-  <tr>
-    <td><strong><code>app_entity</code></strong></td>
-    <td>Có</td>
-    <td>Có</td>
-    <td><code>PublishHelper.PublishEntity(_context, _orgService, entityLogicalName)</code> (giữ nguyên hành vi hiện tại, nhanh ~2–5s).</td>
-  </tr>
-  <tr>
-    <td><strong><code>entity</code></strong></td>
-    <td>Có</td>
-    <td>Không (<code>null</code>)</td>
-    <td><code>PublishHelper.PublishEntity(_context, _orgService, entityLogicalName)</code>.</td>
-  </tr>
-  <tr>
-    <td><strong><code>app</code></strong></td>
-    <td>Không (<code>null</code>)</td>
-    <td>Có</td>
-    <td><code>PublishHelper.PublishAppModule(_context, _orgService, appModuleId.Value)</code> (publish trực tiếp AppModule đó qua <code>&lt;appmodules&gt;</code>).</td>
-  </tr>
-  <tr>
-    <td><strong><code>global</code></strong></td>
-    <td>Không (<code>null</code>)</td>
-    <td>Không (<code>null</code>)</td>
-    <td><code>PublishHelper.PublishRibbon(_context, _orgService)</code> (publish application ribbons / global command bar mà không tốn thời gian PublishAll toàn bộ org).</td>
-  </tr>
-</table>
 
 <hr>
 
-<h2 id="s4">4. Thiết kế thay đổi trên MCP Tool <code>manage_command</code></h2>
+<h2 id="s4">4. Đặc tả hành vi từng Action (<code>create</code>, <code>update</code>, <code>hide</code>, <code>show</code>, <code>list</code>, <code>detail</code>)</h2>
 
-<h3>4.1 Phương án tham số: Bổ sung tham số <code>scope</code> hay tự suy luận từ <code>entity_name</code> &amp; <code>app_id/app_name</code>?</h3>
+<h3>4.1 <code>action = "create"</code></h3>
+<ul>
+  <li>Chuẩn hóa <code>scope</code>: nếu rỗng/null → <code>"app"</code>. Nếu khác <code>"app"</code>, <code>"table"</code>, <code>"global"</code> → trả lỗi <code>Invalid scope '{scope}'.</code> (Hint: <code>Valid values: 'app' (default), 'table', 'global'.</code>).</li>
+  <li><strong>Khi <code>scope == "app"</code> (mặc định):</strong>
+    <ul>
+      <li>Giữ nguyên 100% validation hiện tại: yêu cầu <code>entity_name</code>, <code>location</code>, <code>label</code>, và <code>app_id</code>/<code>app_name</code>.</li>
+      <li>Gán <code>context = OptionSetValue(1)</code>, <code>contextvalue = entityLogical</code>, <code>contextentity = entityId</code>, <code>appmoduleid = resolvedAppId</code>.</li>
+      <li>Publish entity qua <code>PublishCommandTarget(entityLogical, resolvedAppId)</code>.</li>
+    </ul>
+  </li>
+  <li><strong>Khi <code>scope == "table"</code>:</strong>
+    <ul>
+      <li>Nếu truyền <code>app_id</code> hoặc <code>app_name</code> → trả lỗi <code>app_id and app_name must not be specified when scope='table'.</code> (Hint: <code>Use scope='app' (default) to target a specific app, or omit app_id/app_name for table-scoped commands across all apps.</code>).</li>
+      <li>Yêu cầu <code>entity_name</code>, <code>location</code>, <code>label</code>.</li>
+      <li>Gán <code>context = OptionSetValue(1)</code>, <code>contextvalue = entityLogical</code>, <code>contextentity = entityId</code>, không gán <code>appmoduleid</code> (để <code>null</code>).</li>
+      <li>Publish entity qua <code>PublishCommandTarget(entityLogical)</code>.</li>
+    </ul>
+  </li>
+  <li><strong>Khi <code>scope == "global"</code>:</strong>
+    <ul>
+      <li>Nếu truyền <code>entity_name</code>, <code>app_id</code>, hoặc <code>app_name</code> → trả lỗi <code>entity_name, app_id, and app_name must not be specified when scope='global'.</code> (Hint: <code>Global commands apply to all tables and all apps. Use scope='table' for a specific table or scope='app' for a specific app and table.</code>).</li>
+      <li>Yêu cầu <code>location</code>, <code>label</code>.</li>
+      <li>Gán <code>context = OptionSetValue(0)</code>, không gán <code>contextvalue</code>, <code>contextentity</code>, và <code>appmoduleid</code>.</li>
+      <li>Publish qua <code>PublishCommandTarget(null)</code> (gọi <code>PublishHelper.PublishRibbon</code>).</li>
+    </ul>
+  </li>
+</ul>
 
-<div class="q">
-  <strong>Khuyến nghị thiết kế (An toàn + Tường minh cho cả AI lẫn Developer):</strong>
-  <br><br>
-  Hỗ trợ tham số tùy chọn <code>scope</code> (<code>""</code> | <code>"app_entity"</code> | <code>"app"</code> | <code>"entity"</code> | <code>"global"</code>) dùng cho cả <strong>Create / Add Flyout / Add Split Button</strong> và dùng làm bộ lọc trong <strong>List</strong>:
-  <ul>
-    <li><strong>Khi <code>scope</code> để trống (mặc định) hoặc <code>"app_entity"</code>:</strong> Giữ nguyên validation bắt buộc cả <code>entity_name</code> và <code>app_id/app_name</code> như hiện tại → <strong>100% backward-compatible</strong> với toàn bộ unit tests và tránh trường hợp AI quên truyền <code>app_name</code> hoặc <code>entity_name</code> rồi vô tình tạo nhầm nút Global!</li>
-    <li><strong>Khi <code>scope = "app"</code>:</strong> Bắt buộc <code>app_id</code> hoặc <code>app_name</code>; <strong>không</strong> dùng <code>entity_name</code> (nếu truyền <code>entity_name</code> thì báo lỗi hướng dẫn dùng <code>scope='app_entity'</code>). Tạo command với <code>context = 0 (All)</code> và <code>appmoduleid = resolvedAppId</code>.</li>
-    <li><strong>Khi <code>scope = "entity"</code>:</strong> Bắt buộc <code>entity_name</code>; <strong>không</strong> dùng <code>app_id/app_name</code>. Tạo command với <code>context = 1 (Entity)</code>, <code>contextentity</code>, <code>contextvalue</code>, và <code>appmoduleid = null</code> (áp dụng cho bảng đó trên mọi App).</li>
-    <li><strong>Khi <code>scope = "global"</code>:</strong> <strong>Không</strong> cần <code>entity_name</code> và <strong>không</strong> cần <code>app_id/app_name</code>. Tạo command với <code>context = 0 (All)</code> và <code>appmoduleid = null</code> (áp dụng toàn bộ Environment).</li>
-    <li><strong>Trong <code>action = "list"</code>:</strong> Nếu truyền <code>scope</code> (<code>"app_entity"</code>, <code>"app"</code>, <code>"entity"</code>, <code>"global"</code>), filter FetchXML sẽ lọc đúng các bản ghi thuộc tầm vực đó (ví dụ <code>scope="global"</code> lọc <code>context = 0</code> và <code>appmoduleid null</code>).</li>
-  </ul>
-</div>
+<h3>4.2 <code>action = "update"</code></h3>
+<ul>
+  <li>Truy vấn <code>RetrieveAppActionOrNull(cmdGuid, "name", "buttonlabeltext", "contextvalue", "appmoduleid")</code>.</li>
+  <li>Sau khi <code>Update</code>, gọi <code>PublishCommandTarget(existing.GetAttributeValue&lt;string&gt;("contextvalue"), existing.GetAttributeValue&lt;EntityReference&gt;("appmoduleid")?.Id)</code> để không bao giờ bị <code>NullReferenceException</code> khi update một nút Global (<code>contextvalue == null</code>).</li>
+</ul>
 
-<h3>4.2 Ví dụ các lệnh MCP JSON sau khi nâng cấp</h3>
+<h3>4.3 <code>action = "hide"</code> &amp; <code>action = "show"</code></h3>
+<ul>
+  <li><strong>Path 1 (Theo <code>command_id</code>):</strong> Truy vấn thêm <code>appmoduleid</code> và dùng <code>PublishCommandTarget</code> sau khi cập nhật <code>hidden</code> hoặc xóa override.</li>
+  <li><strong>Path 2 (Theo <code>label</code>):</strong>
+    <ul>
+      <li>Chuẩn hóa <code>scope</code> (mặc định <code>"app"</code>).</li>
+      <li>Nếu <code>scope == "app"</code>: giữ nguyên 100% logic hiện tại (yêu cầu <code>label</code> + <code>entity_name</code> + <code>location</code>, và <code>app_id/app_name</code> khi <code>hide</code>; hỗ trợ tạo/xóa OOB override).</li>
+      <li>Nếu <code>scope == "table"</code>: yêu cầu <code>label</code> + <code>entity_name</code> + <code>location</code>. Tìm bản ghi <code>appaction</code> có <code>context = 1</code>, <code>contextvalue = entityName</code>, <code>appmoduleid null</code>, <code>location = locationValue</code>, <code>buttonlabeltext = label</code>. Cập nhật <code>hidden = wantHidden</code> và publish entity.</li>
+      <li>Nếu <code>scope == "global"</code>: yêu cầu <code>label</code> + <code>location</code>. Tìm bản ghi <code>appaction</code> có <code>context = 0</code>, <code>appmoduleid null</code>, <code>location = locationValue</code>, <code>buttonlabeltext = label</code>. Cập nhật <code>hidden = wantHidden</code> và publish global command bar.</li>
+    </ul>
+  </li>
+</ul>
 
-<h4>Ví dụ 1: Tạo nút ở tầm vực App (<code>scope: "app"</code>) trên thanh Global Header của 1 App</h4>
+<h3>4.4 <code>action = "list"</code> &amp; <code>action = "detail"</code></h3>
+<ul>
+  <li>Trong <code>CommandEntry</code>:
+    <ul>
+      <li>Thêm <code>Context</code> (<code>"Entity"</code> khi <code>context = 1</code>, <code>"All"</code> khi <code>context = 0</code>).</li>
+      <li>Thêm <code>Scope</code>:
+        <ul>
+          <li><code>context == 0</code> → <code>"Global"</code> (hoặc <code>"App"</code> nếu có <code>appmoduleid</code>).</li>
+          <li><code>context == 1</code> và có <code>appmoduleid</code> → <code>"App"</code>.</li>
+          <li><code>context == 1</code> và <code>appmoduleid == null</code> → <code>"Table"</code>.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Trong <code>HandleList</code> / <code>GetList</code>:
+    <ul>
+      <li>Khi truyền <code>scope</code> (<code>"app"</code>, <code>"table"</code>, <code>"global"</code>):
+        <ul>
+          <li><code>scope = "app"</code>: lọc <code>appmoduleid not-null</code>.</li>
+          <li><code>scope = "table"</code>: lọc <code>context = 1</code> và <code>appmoduleid null</code>.</li>
+          <li><code>scope = "global"</code>: lọc <code>context = 0</code> và <code>appmoduleid null</code>.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Trong <code>GetDetailByLabel</code>:
+    <ul>
+      <li>Khi <code>scope = "global"</code>: tìm theo <code>label</code> + <code>location</code> + <code>context = 0</code> (không bắt buộc <code>entity_name</code>).</li>
+      <li>Khi <code>scope = "table"</code>: tìm theo <code>label</code> + <code>entity_name</code> + <code>location</code> + <code>appmoduleid null</code>.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr>
+
+<h2 id="s5">5. Ví dụ JSON gọi MCP Tool <code>manage_command</code></h2>
+
+<h3>5.1 Tạo nút ở tầm vực App (Default — không cần truyền <code>scope</code>)</h3>
 <pre>{
   "action": "create",
-  "scope": "app",
   "app_name": "ALL-IN-ONE",
-  "location": "global_header",
-  "label": "App Help Center",
-  "font_icon": "Help",
-  "onclick_type": "javascript",
-  "javascript_webresource": "all_/test/test_manage_command.js",
-  "javascript_function": "test_manage_command.openHelp"
-}</pre>
-
-<h4>Ví dụ 2: Tạo nút ở tầm vực App (<code>scope: "app"</code>) xuất hiện trên Main Form của MỌI bảng trong App đó</h4>
-<pre>{
-  "action": "create",
-  "scope": "app",
-  "app_name": "ALL-IN-ONE",
+  "entity_name": "all_testform",
   "location": "form",
-  "label": "Audit Snapshot",
+  "label": "App Scoped Button",
   "onclick_type": "javascript",
   "javascript_webresource": "all_/test/test_manage_command.js",
-  "javascript_function": "test_manage_command.captureSnapshot"
+  "javascript_function": "test_manage_command.onClick"
 }</pre>
 
-<h4>Ví dụ 3: Tạo nút ở tầm vực Entity / Table (<code>scope: "entity"</code>) xuất hiện trên bảng <code>all_testform</code> ở MỌI App</h4>
+<h3>5.2 Tạo nút ở tầm vực Table (<code>scope: "table"</code> — hiện trên bảng <code>all_testform</code> ở mọi App)</h3>
 <pre>{
   "action": "create",
-  "scope": "entity",
+  "scope": "table",
   "entity_name": "all_testform",
   "location": "main_grid",
-  "label": "Export Master",
+  "label": "Table Scoped Button",
   "onclick_type": "javascript",
   "javascript_webresource": "all_/test/test_manage_command.js",
-  "javascript_function": "test_manage_command.exportMaster"
+  "javascript_function": "test_manage_command.onTableClick"
 }</pre>
 
-<h4>Ví dụ 4: Tạo nút ở tầm vực Global (<code>scope: "global"</code>) trên Global Header của TOÀN BỘ Environment</h4>
+<h3>5.3 Tạo nút ở tầm vực Global (<code>scope: "global"</code> — hiện ở mọi Table và mọi App)</h3>
 <pre>{
   "action": "create",
   "scope": "global",
   "location": "global_header",
-  "label": "Global Announcement",
+  "label": "Global Header Button",
   "font_icon": "Megaphone",
   "onclick_type": "javascript",
   "javascript_webresource": "all_/test/test_manage_command.js",
-  "javascript_function": "test_manage_command.showAnnouncement"
-}</pre>
-
-<h4>Ví dụ 5: List tất cả các nút Global hoặc App-level trong Environment</h4>
-<pre>{
-  "action": "list",
-  "scope": "global"
+  "javascript_function": "test_manage_command.onGlobalClick"
 }</pre>
 
 <hr>
 
-<h2 id="s5">5. Chi tiết kỹ thuật theo từng file trong <code>DynamicsCrm.DevKit.Cli</code></h2>
+<h2 id="s6">6. Chi tiết kỹ thuật theo từng file trong <code>DynamicsCrm.DevKit.Cli</code></h2>
 
 <table>
   <tr>
@@ -497,129 +375,50 @@
   <tr>
     <td><code>Mcp/Tools/Models/CommandEntry.cs</code></td>
     <td>
-      <ul>
-        <li>Thêm property <code>Context</code> (<code>[JsonPropertyName("context")]</code>: <code>"Entity"</code> hoặc <code>"All"</code>).</li>
-        <li>Thêm property <code>Scope</code> (<code>[JsonPropertyName("scope")]</code>: <code>"AppEntity"</code>, <code>"App"</code>, <code>"Entity"</code>, <code>"Global"</code>).</li>
-      </ul>
+      Thêm <code>Context</code> (<code>[JsonPropertyName("context")]</code>) và <code>Scope</code> (<code>[JsonPropertyName("scope")]</code>: <code>"App"</code>, <code>"Table"</code>, <code>"Global"</code>).
     </td>
   </tr>
   <tr>
     <td><code>Mcp/Tools/ManageCommandTool.cs</code></td>
     <td>
-      <ul>
-        <li>Thêm dictionary <code>ContextMap</code> (<code>0 → "All"</code>, <code>1 → "Entity"</code>) và <code>ScopeFilterMap</code> (<code>"app_entity"</code>, <code>"app"</code>, <code>"entity"</code>, <code>"global"</code>).</li>
-        <li>Thêm tham số tùy chọn <code>string scope = ""</code> vào <code>InvokeAsync</code> và <code>manage_command</code>, cập nhật Description của tool &amp; các tham số <code>entity_name</code>, <code>app_id</code>, <code>scope</code>.</li>
-      </ul>
+      Thêm <code>ContextMap</code> (<code>0 → "All"</code>, <code>1 → "Entity"</code>), <code>ValidScopes</code> (<code>"app"</code>, <code>"table"</code>, <code>"global"</code>), và tham số tùy chọn <code>string scope = ""</code>.
     </td>
   </tr>
   <tr>
     <td><code>Mcp/Tools/Command/CommandHelpers.cs</code></td>
     <td>
-      <ul>
-        <li>Thêm helper <code>ResolveCommandScope(...)</code>: kiểm tra tính hợp lệ của <code>scope</code>, <code>entity_name</code>, <code>app_id</code>/<code>app_name</code> và trả về bộ giá trị đã chuẩn hóa: <code>(int ContextValue, string EntityLogical, Guid? EntityId, Guid? AppModuleId, string AppUniqueName, string PublisherPrefix, string ScopeLabel, string ErrorMessage, string ErrorHint)</code>.</li>
-        <li>Thêm helper <code>PublishCommandTarget(string entityLogical, Guid? appModuleId)</code>: tự động chọn <code>PublishEntity</code>, <code>PublishAppModule</code>, hoặc <code>PublishRibbon</code> tùy theo <code>entityLogical</code> và <code>appModuleId</code>.</li>
-        <li>Cập nhật <code>CreateFlyoutItem</code> để nhận <code>int contextType</code>, <code>Guid? appModuleId</code> (nullable) và <code>string entityLogical</code> (nullable).</li>
-        <li>Cập nhật <code>MapCommandEntry</code> để đọc <code>context</code> và<code>appmoduleid</code>, gán <code>entry.Context</code> và <code>entry.Scope</code>.</li>
-      </ul>
+      Thêm <code>PublishCommandTarget</code> và cập nhật <code>MapCommandEntry</code> để gán <code>Context</code> và <code>Scope</code>.
     </td>
   </tr>
   <tr>
     <td><code>Mcp/Tools/Command/CommandCreateUpdate.cs</code></td>
     <td>
-      <ul>
-        <li><code>HandleCreate</code>: Dùng <code>ResolveCommandScope</code> để hỗ trợ tạo command ở cả 4 tầm vực (<code>app_entity</code>, <code>app</code>, <code>entity</code>, <code>global</code>); gọi <code>PublishCommandTarget</code>.</li>
-        <li><code>HandleUpdate</code>: Truy vấn thêm cột <code>appmoduleid</code> bên cạnh <code>contextvalue</code>; gọi <code>PublishCommandTarget</code> thay vì gọi cứng <code>PublishEntity(contextvalue.Trim())</code> để không bị lỗi khi update command ở tầm vực <code>app</code> hoặc <code>global</code>.</li>
-      </ul>
-    </td>
-  </tr>
-  <tr>
-    <td><code>Mcp/Tools/Command/CommandFlyout.cs</code></td>
-    <td>
-      <ul>
-        <li><code>HandleAddFlyout</code> &amp; <code>HandleAddSplitButton</code>: Dùng <code>ResolveCommandScope</code> để cho phép tạo Dropdown Flyout và Split Button ở cả 4 tầm vực.</li>
-        <li><code>HandleAddFlyoutItem</code>: Không còn báo lỗi khi <code>appModuleRef == null</code> (tầm vực <code>entity</code> hoặc <code>global</code>) hoặc khi <code>contextvalue</code> rỗng (tầm vực <code>app</code> hoặc <code>global</code>); kế thừa chính xác <code>context</code>, <code>contextvalue</code>, <code>contextentity</code>, <code>appmoduleid</code> từ Flyout/Split cha xuống Group và Item con.</li>
-      </ul>
+      Cập nhật <code>HandleCreate</code> hỗ trợ 3 scope (<code>"app"</code>, <code>"table"</code>, <code>"global"</code>) và <code>HandleUpdate</code> dùng <code>PublishCommandTarget</code>.
     </td>
   </tr>
   <tr>
     <td><code>Mcp/Tools/Command/CommandHideShow.cs</code></td>
     <td>
-      <ul>
-        <li>Khi truyền <code>command_id</code>: Truy vấn thêm <code>appmoduleid</code> và dùng <code>PublishCommandTarget</code> để có thể hide/show các command ở tầm vực <code>app</code> và <code>global</code> mà không bị <code>NullReferenceException</code>.</li>
-        <li>Mở rộng <code>ResolvePublisherPrefix(string entityLogicalName, string appUniqueName = null)</code>.</li>
-      </ul>
+      Cập nhật <code>HandleHideShow</code> hỗ trợ 3 scope (<code>"app"</code>, <code>"table"</code>, <code>"global"</code>) và cập nhật <code>ResolvePublisherPrefix</code> với fallback <code>"devkit"</code>.
     </td>
   </tr>
   <tr>
     <td><code>Mcp/Tools/Command/CommandListDetail.cs</code></td>
     <td>
-      <ul>
-        <li>Bổ sung <code>&lt;attribute name='context'/&gt;</code> vào FetchXML của <code>GetList</code>.</li>
-        <li>Hỗ trợ lọc theo <code>scope</code> trong <code>HandleList</code> / <code>GetList</code>:
-          <ul>
-            <li><code>scope = "app_entity"</code> → <code>context = 1</code> AND <code>appmoduleid not-null</code></li>
-            <li><code>scope = "app"</code> → <code>context = 0</code> AND <code>appmoduleid not-null</code></li>
-            <li><code>scope = "entity"</code> → <code>context = 1</code> AND <code>appmoduleid null</code></li>
-            <li><code>scope = "global"</code> → <code>context = 0</code> AND <code>appmoduleid null</code></li>
-          </ul>
-        </li>
-      </ul>
+      Cập nhật <code>HandleList</code>, <code>GetList</code>, <code>GetDetailByLabel</code> hỗ trợ tham số <code>scope</code> (<code>"app"</code>, <code>"table"</code>, <code>"global"</code>).
     </td>
   </tr>
 </table>
 
 <hr>
 
-<h2 id="s6">6. Kế hoạch kiểm thử (Unit Tests &amp; Live MCP Tests)</h2>
+<h2 id="s7">7. Kế hoạch kiểm thử (Unit Tests)</h2>
 
 <ol>
-  <li>
-    <strong>Giữ nguyên 100% các Unit Tests hiện tại:</strong>
-    <ul>
-      <li>Tất cả các test trong <code>DynamicsCrm.DevKit.Cli.UnitTests/Cli/Mcp/ManageCommand/*</code> và <code>Cli/Mcp/Command/*</code> khi không truyền <code>scope</code> vẫn mặc định chạy theo <code>scope = "app_entity"</code> và giữ nguyên mọi câu thông báo lỗi validation.</li>
-    </ul>
-  </li>
-  <li>
-    <strong>Bổ sung Unit Tests mới (FakeXrmEasy) cho các tầm vực mới:</strong>
-    <ul>
-      <li><code>Create_AppScope_GlobalHeader_SetsContext0_AndAppModuleId</code></li>
-      <li><code>Create_EntityScope_AllApps_SetsContext1_AndNullAppModuleId</code></li>
-      <li><code>Create_GlobalScope_SetsContext0_AndNullAppModuleId_AndPublishesRibbon</code></li>
-      <li><code>Update_AppOrGlobalScopeCommand_WithoutContextValue_DoesNotThrow_AndPublishesCorrectly</code></li>
-      <li><code>HideShow_ByCommandId_GlobalScopeCommand_WithoutContextValue_PublishesCorrectly</code></li>
-      <li><code>AddFlyout_And_AddSplitButton_AppAndGlobalScopes_PropagatesScopeToGroupAndItems</code></li>
-      <li><code>List_FilterByScope_ReturnsMatchingAppEntity_App_Entity_GlobalCommands</code></li>
-    </ul>
-  </li>
-  <li>
-    <strong>Cập nhật tài liệu test MCP:</strong>
-    <ul>
-      <li>Cập nhật <code>DynamicsCrm.DevKit.Docs/TestAllMcpCall/27.manage_command.md</code> khi triển khai xong.</li>
-    </ul>
-  </li>
+  <li><strong>Chạy toàn bộ Unit Tests hiện có</strong> của <code>ManageCommand</code> để đảm bảo 100% pass.</li>
+  <li><strong>Viết thêm Unit Tests mới</strong> cho <code>scope = "table"</code> và <code>scope = "global"</code> trên các thao tác <code>create</code>, <code>update</code>, <code>hide</code>, <code>show</code>, <code>list</code>, <code>detail</code>.</li>
+  <li><strong>Build &amp; Refresh CLI</strong> bằng <code>Release.DynamicsCrm.DevKit.Cli.ps1</code> sau khi hoàn tất chỉnh sửa code.</li>
 </ol>
-
-<hr>
-
-<h2 id="s7">7. Câu hỏi thiết kế cần chốt trước khi triển khai code</h2>
-
-<div class="warnbox">
-  <strong>3 điểm cần anh xác nhận để bắt đầu code:</strong>
-  <ol>
-    <li>
-      <strong>Cơ chế chọn tầm vực (<code>scope</code> parameter):</strong>
-      Anh đồng ý thêm tham số tùy chọn <code>scope</code> (<code>app_entity</code> | <code>app</code> | <code>entity</code> | <code>global</code>, mặc định khi bỏ trống là <code>app_entity</code> cho <code>create</code>/<code>add_flyout</code>/<code>add_split_button</code> để không phá vỡ backward-compatibility), hay anh muốn tool <strong>tự động suy luận (auto-infer)</strong> luôn từ việc có/không có <code>entity_name</code> và <code>app_id/app_name</code> mà không bắt truyền <code>scope</code>? (Hoặc kết hợp: có thể truyền <code>scope</code> tường minh HOẶC tự suy luận nếu bỏ trống?)
-    </li>
-    <li>
-      <strong>Phạm vi các action áp dụng tầm vực App / Global:</strong>
-      Ngoài <code>create</code>, <code>update</code>, <code>list</code>, <code>detail</code>, <code>hide</code>, <code>show</code>, anh có muốn mở rộng luôn cho cả bộ <code>add_flyout</code>, <code>add_split_button</code>, <code>add_flyout_item</code> ở tầm vực <code>app</code>, <code>entity</code>, <code>global</code> trong cùng đợt này không? (Khuyến nghị: <strong>Có</strong>, vì logic dùng chung <code>ResolveCommandScope</code> rất gọn).
-    </li>
-    <li>
-      <strong>Xử lý <code>onclick_type = "formula"</code> ở tầm vực <code>global</code> / <code>entity</code> (không gắn App):</strong>
-      Khi không có <code>app_id/app_name</code>, anh muốn cho phép tạo bình thường hay chặn/cảnh báo nếu <code>onclick_type = "formula"</code>?
-    </li>
-  </ol>
-</div>
 
 </div>
 </body>
