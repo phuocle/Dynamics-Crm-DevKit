@@ -21,18 +21,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Create ──────────────────────────────────────────────
 
         private CallToolResult HandleCreate(string entityName, string location, string appId, string appName, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden) =>
-            HandleCreateScoped(entityName, location, appId, appName, label, onclickType, jsWebResource, jsFunction, fontIcon, iconWebResource, tooltipTitle, tooltipDescription, sequence, hidden, "");
+            HandleCreateScoped(entityName, location, appId, appName, label, onclickType, jsWebResource, jsFunction, fontIcon, iconWebResource, tooltipTitle, tooltipDescription, sequence, hidden, "", "");
 
-        private CallToolResult HandleCreateScoped(string entityName, string location, string appId, string appName, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden, string scope)
+        private CallToolResult HandleCreateScoped(string entityName, string location, string appId, string appName, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden, string scope) =>
+            HandleCreateScoped(entityName, location, appId, appName, label, onclickType, jsWebResource, jsFunction, fontIcon, iconWebResource, tooltipTitle, tooltipDescription, sequence, hidden, scope, "");
+
+        private CallToolResult HandleCreateScoped(string entityName, string location, string appId, string appName, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden, string scope, string solutionName)
         {
+            var (resolvedSolutionUniqueName, solErr) = ResolveSolutionUniqueName(solutionName);
+            if (solErr != null)
+                return solErr;
+
             if (_options.DryRun)
-                return DryRun("Would create an appaction command.", new ManageCommandResult
+            {
+                var dryMsg = "Would create an appaction command." +
+                    (resolvedSolutionUniqueName != null ? $" (solution={resolvedSolutionUniqueName})" : "");
+                return DryRun(dryMsg, new ManageCommandResult
                 {
                     Action = "create",
                     Status = "not_executed",
                     Message = "The appaction command was not created.",
-                    CreateMode = "metadata"
+                    SolutionName = resolvedSolutionUniqueName,
+                    CreateMode = resolvedSolutionUniqueName != null
+                        ? SolutionComponentCreateMode.RecordCreateThenAddSolutionComponent.ToString()
+                        : SolutionComponentCreateMode.None.ToString(),
+                    IsAddToSolution = resolvedSolutionUniqueName != null,
+                    AddToSolutionMethod = resolvedSolutionUniqueName != null ? "AddSolutionComponentRequest" : "none"
                 });
+            }
 
             var normalizedScope = string.IsNullOrWhiteSpace(scope) ? "app" : scope.Trim().ToLowerInvariant();
             if (!ValidScopes.Contains(normalizedScope))
@@ -168,6 +184,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var newId = DataverseMutationExecutor.Create(_context, _orgService, entity);
+
+            var addResult = AddCommandToSolution(newId, resolvedSolutionUniqueName);
+
             PublishCommandTarget(createEntityLogical, resolvedAppId);
 
             var successMsg = normalizedScope switch
@@ -177,13 +196,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _ => $"Command '{label.Trim()}' created successfully on {entityName.Trim()} ({LocationMap[locationValue]}) and entity published."
             };
 
+            successMsg += FormatSolutionSuffix(resolvedSolutionUniqueName, addResult);
+
             var structured = new ManageCommandResult
             {
                 Action = "create",
                 Status = "success",
                 CommandId = newId.ToString(),
                 Message = successMsg,
-                CreateMode = SolutionComponentCreateMode.None.ToString()
+                SolutionName = resolvedSolutionUniqueName,
+                CreateMode = resolvedSolutionUniqueName != null
+                    ? SolutionComponentCreateMode.RecordCreateThenAddSolutionComponent.ToString()
+                    : SolutionComponentCreateMode.None.ToString(),
+                IsAddToSolution = addResult?.IsAddToSolution ?? false,
+                AddToSolutionMethod = addResult?.AddToSolutionMethod ?? "none",
+                AddToSolutionWarning = addResult?.AddToSolutionWarning
             };
 
             return Success(structured.Message, structured);
@@ -191,16 +218,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Update ──────────────────────────────────────────────
 
-        private CallToolResult HandleUpdate(string commandId, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence)
+        private CallToolResult HandleUpdate(string commandId, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence) =>
+            HandleUpdateWithSolution(commandId, label, onclickType, jsWebResource, jsFunction, fontIcon, iconWebResource, tooltipTitle, tooltipDescription, sequence, "");
+
+        private CallToolResult HandleUpdateWithSolution(string commandId, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, string solutionName)
         {
+            var (resolvedSolutionUniqueName, solErr) = ResolveSolutionUniqueName(solutionName);
+            if (solErr != null)
+                return solErr;
+
             if (_options.DryRun)
-                return DryRun($"Would update appaction command '{commandId}'.", new ManageCommandResult
+            {
+                var dryMsg = $"Would update appaction command '{commandId}'." +
+                    (resolvedSolutionUniqueName != null ? $" (solution={resolvedSolutionUniqueName})" : "");
+                return DryRun(dryMsg, new ManageCommandResult
                 {
                     Action = "update",
                     Status = "not_executed",
                     CommandId = commandId,
-                    Message = "The appaction command was not updated."
+                    Message = "The appaction command was not updated.",
+                    SolutionName = resolvedSolutionUniqueName,
+                    IsAddToSolution = resolvedSolutionUniqueName != null,
+                    AddToSolutionMethod = resolvedSolutionUniqueName != null ? "AddSolutionComponentRequest" : "none"
                 });
+            }
 
             if (string.IsNullOrWhiteSpace(commandId))
                 return Error("command_id is required for action='update'.",
@@ -303,19 +344,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Provide at least one field to change (label, sequence, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description). Use action='hide'/'show' to change visibility.");
 
             DataverseMutationExecutor.Update(_context, _orgService, entity);
+            var addResult = AddCommandToSolution(cmdGuid, resolvedSolutionUniqueName);
             var updateEntityLogical = existing.GetAttributeValue<string>("contextvalue");
             var updateAppId = existing.GetAttributeValue<EntityReference>("appmoduleid")?.Id;
             var publishSuffix = PublishCommandTarget(updateEntityLogical, updateAppId);
 
             var commandName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
-            var message = $"Command '{commandName}' updated: {string.Join(", ", changes)}. {publishSuffix}";
+            var message = $"Command '{commandName}' updated: {string.Join(", ", changes)}. {publishSuffix}" +
+                FormatSolutionSuffix(resolvedSolutionUniqueName, addResult);
 
             var structured = new ManageCommandResult
             {
                 Action = "update",
                 Status = "success",
                 CommandId = commandId.Trim(),
-                Message = message
+                Message = message,
+                SolutionName = resolvedSolutionUniqueName,
+                IsAddToSolution = addResult?.IsAddToSolution ?? false,
+                AddToSolutionMethod = addResult?.AddToSolutionMethod ?? "none",
+                AddToSolutionWarning = addResult?.AddToSolutionWarning
             };
 
             return Success(message, structured);

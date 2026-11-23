@@ -20,16 +20,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         // ── Add Flyout ──────────────────────────────────────────
 
-        private CallToolResult HandleAddFlyout(string entityName, string location, string appId, string appName, string label, string itemsJson, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden)
+        private CallToolResult HandleAddFlyout(string entityName, string location, string appId, string appName, string label, string itemsJson, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden) =>
+            HandleAddFlyout(entityName, location, appId, appName, label, itemsJson, fontIcon, iconWebResource, tooltipTitle, tooltipDescription, sequence, hidden, "");
+
+        private CallToolResult HandleAddFlyout(string entityName, string location, string appId, string appName, string label, string itemsJson, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden, string solutionName)
         {
+            var (resolvedSolutionUniqueName, solErr) = ResolveSolutionUniqueName(solutionName);
+            if (solErr != null)
+                return solErr;
+
             if (_options.DryRun)
-                return DryRun("Would create a Dropdown Button, Group, and flyout items.", new ManageCommandResult
+            {
+                var dryMsg = "Would create a Dropdown Button, Group, and flyout items." +
+                    (resolvedSolutionUniqueName != null ? $" (solution={resolvedSolutionUniqueName})" : "");
+                return DryRun(dryMsg, new ManageCommandResult
                 {
                     Action = "add_flyout",
                     Status = "not_executed",
                     Message = "The flyout command was not created.",
-                    CreateMode = "metadata"
+                    SolutionName = resolvedSolutionUniqueName,
+                    CreateMode = resolvedSolutionUniqueName != null
+                        ? SolutionComponentCreateMode.RecordCreateThenAddSolutionComponent.ToString()
+                        : SolutionComponentCreateMode.None.ToString(),
+                    IsAddToSolution = resolvedSolutionUniqueName != null,
+                    AddToSolutionMethod = resolvedSolutionUniqueName != null ? "AddSolutionComponentRequest" : "none"
                 });
+            }
 
             if (string.IsNullOrWhiteSpace(entityName))
                 return Error("entity_name is required for action='add_flyout'.",
@@ -138,6 +154,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Create items as Standard Buttons under the Group
             var createdItems = new List<string>();
+            var createdItemGuids = new List<Guid>();
             for (var i = 0; i < itemList.Count; i++)
             {
                 var item = itemList[i];
@@ -162,17 +179,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error($"Error creating item '{itemLabel}': {createResult.error}.",
                         $"Flyout '{label.Trim()}' was partially created (dropdown + group already exist with id {dropdownId}). Clean it up via the Dataverse UI or manage_record(action='delete') before retrying.");
                 }
+                if (Guid.TryParse(createResult.itemId, out var parsedItemGuid))
+                    createdItemGuids.Add(parsedItemGuid);
                 createdItems.Add(itemLabel);
             }
 
-            var message = $"Flyout '{label.Trim()}' created on {entityLogical} ({LocationMap[locationValue]}) with {createdItems.Count} item(s): {string.Join(", ", createdItems.Select(x => $"'{x}'"))}. FlyoutCommandId: {dropdownId}.";
+            SolutionComponentCreateResult addResult = null;
+            if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
+            {
+                addResult = AddCommandsToSolution(resolvedSolutionUniqueName, dropdownId, new[] { groupId }.Concat(createdItemGuids));
+            }
+
+            var message = $"Flyout '{label.Trim()}' created on {entityLogical} ({LocationMap[locationValue]}) with {createdItems.Count} item(s): {string.Join(", ", createdItems.Select(x => $"'{x}'"))}. FlyoutCommandId: {dropdownId}." +
+                FormatSolutionSuffix(resolvedSolutionUniqueName, addResult);
+
             var structured = new ManageCommandResult
             {
                 Action = "add_flyout",
                 Status = "success",
                 CommandId = dropdownId.ToString(),
                 Message = message,
-                CreateMode = SolutionComponentCreateMode.None.ToString()
+                SolutionName = resolvedSolutionUniqueName,
+                CreateMode = resolvedSolutionUniqueName != null
+                    ? SolutionComponentCreateMode.RecordCreateThenAddSolutionComponent.ToString()
+                    : SolutionComponentCreateMode.None.ToString(),
+                IsAddToSolution = addResult?.IsAddToSolution ?? false,
+                AddToSolutionMethod = addResult?.AddToSolutionMethod ?? "none",
+                AddToSolutionWarning = addResult?.AddToSolutionWarning
             };
 
             return Success(message, structured);
@@ -180,16 +213,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Update Flyout ──────────────────────────────────────
 
-        private CallToolResult HandleUpdateFlyout(string commandId, string label, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence)
+        private CallToolResult HandleUpdateFlyout(string commandId, string label, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence) =>
+            HandleUpdateFlyoutWithSolution(commandId, label, fontIcon, iconWebResource, tooltipTitle, tooltipDescription, sequence, "");
+
+        private CallToolResult HandleUpdateFlyoutWithSolution(string commandId, string label, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, string solutionName)
         {
+            var (resolvedSolutionUniqueName, solErr) = ResolveSolutionUniqueName(solutionName);
+            if (solErr != null)
+                return solErr;
+
             if (_options.DryRun)
-                return DryRun($"Would update flyout command '{commandId}'.", new ManageCommandResult
+            {
+                var dryMsg = $"Would update flyout command '{commandId}'." +
+                    (resolvedSolutionUniqueName != null ? $" (solution={resolvedSolutionUniqueName})" : "");
+                return DryRun(dryMsg, new ManageCommandResult
                 {
                     Action = "update_flyout",
                     Status = "not_executed",
                     CommandId = commandId,
-                    Message = "The flyout command was not updated."
+                    Message = "The flyout command was not updated.",
+                    SolutionName = resolvedSolutionUniqueName,
+                    IsAddToSolution = resolvedSolutionUniqueName != null,
+                    AddToSolutionMethod = resolvedSolutionUniqueName != null ? "AddSolutionComponentRequest" : "none"
                 });
+            }
 
             if (string.IsNullOrWhiteSpace(commandId))
                 return Error("command_id is required for action='update_flyout'.",
@@ -273,16 +320,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Provide at least one: label, sequence, font_icon, icon_webresource, tooltip_title, tooltip_description.");
 
             DataverseMutationExecutor.Update(_context, _orgService, entity);
+            var addResult = AddCommandToSolution(cmdGuid, resolvedSolutionUniqueName);
 
             var commandName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
-            var message = $"Flyout '{commandName}' updated: {string.Join(", ", changes)}.";
+            var message = $"Flyout '{commandName}' updated: {string.Join(", ", changes)}." +
+                FormatSolutionSuffix(resolvedSolutionUniqueName, addResult);
 
             var structured = new ManageCommandResult
             {
                 Action = "update_flyout",
                 Status = "success",
                 CommandId = commandId.Trim(),
-                Message = message
+                Message = message,
+                SolutionName = resolvedSolutionUniqueName,
+                IsAddToSolution = addResult?.IsAddToSolution ?? false,
+                AddToSolutionMethod = addResult?.AddToSolutionMethod ?? "none",
+                AddToSolutionWarning = addResult?.AddToSolutionWarning
             };
 
             return Success(message, structured);
@@ -290,16 +343,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Add Split Button ────────────────────────────────────
 
-        private CallToolResult HandleAddSplitButton(string entityName, string location, string appId, string appName, string label, string onclickType, string jsWebResource, string jsFunction, string itemsJson, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden)
+        private CallToolResult HandleAddSplitButton(string entityName, string location, string appId, string appName, string label, string onclickType, string jsWebResource, string jsFunction, string itemsJson, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden) =>
+            HandleAddSplitButton(entityName, location, appId, appName, label, onclickType, jsWebResource, jsFunction, itemsJson, fontIcon, iconWebResource, tooltipTitle, tooltipDescription, sequence, hidden, "");
+
+        private CallToolResult HandleAddSplitButton(string entityName, string location, string appId, string appName, string label, string onclickType, string jsWebResource, string jsFunction, string itemsJson, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden, string solutionName)
         {
+            var (resolvedSolutionUniqueName, solErr) = ResolveSolutionUniqueName(solutionName);
+            if (solErr != null)
+                return solErr;
+
             if (_options.DryRun)
-                return DryRun("Would create a Split Button, Group, and split-button items.", new ManageCommandResult
+            {
+                var dryMsg = "Would create a Split Button, Group, and split-button items." +
+                    (resolvedSolutionUniqueName != null ? $" (solution={resolvedSolutionUniqueName})" : "");
+                return DryRun(dryMsg, new ManageCommandResult
                 {
                     Action = "add_split_button",
                     Status = "not_executed",
                     Message = "The split button was not created.",
-                    CreateMode = "metadata"
+                    SolutionName = resolvedSolutionUniqueName,
+                    CreateMode = resolvedSolutionUniqueName != null
+                        ? SolutionComponentCreateMode.RecordCreateThenAddSolutionComponent.ToString()
+                        : SolutionComponentCreateMode.None.ToString(),
+                    IsAddToSolution = resolvedSolutionUniqueName != null,
+                    AddToSolutionMethod = resolvedSolutionUniqueName != null ? "AddSolutionComponentRequest" : "none"
                 });
+            }
 
             if (string.IsNullOrWhiteSpace(entityName))
                 return Error("entity_name is required for action='add_split_button'.",
@@ -442,6 +511,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Create dropdown items as Standard Buttons under the Group
             var createdItems = new List<string>();
+            var createdItemGuids = new List<Guid>();
             for (var i = 0; i < itemList.Count; i++)
             {
                 var item = itemList[i];
@@ -464,17 +534,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error($"Error creating item '{itemLabel}': {createResult.error}.",
                         $"Split button '{label.Trim()}' was partially created (split + group already exist with id {splitId}). Clean it up via the Dataverse UI or manage_record(action='delete') before retrying.");
 
+                if (Guid.TryParse(createResult.itemId, out var parsedItemGuid))
+                    createdItemGuids.Add(parsedItemGuid);
                 createdItems.Add(itemLabel);
             }
 
-            var message = $"Split Button '{label.Trim()}' created on {entityLogical} ({LocationMap[locationValue]}) with {createdItems.Count} item(s): {string.Join(", ", createdItems.Select(x => $"'{x}'"))}. SplitCommandId: {splitId}.";
+            SolutionComponentCreateResult addResult = null;
+            if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
+            {
+                addResult = AddCommandsToSolution(resolvedSolutionUniqueName, splitId, new[] { groupId }.Concat(createdItemGuids));
+            }
+
+            var message = $"Split Button '{label.Trim()}' created on {entityLogical} ({LocationMap[locationValue]}) with {createdItems.Count} item(s): {string.Join(", ", createdItems.Select(x => $"'{x}'"))}. SplitCommandId: {splitId}." +
+                FormatSolutionSuffix(resolvedSolutionUniqueName, addResult);
+
             var structured = new ManageCommandResult
             {
                 Action = "add_split_button",
                 Status = "success",
                 CommandId = splitId.ToString(),
                 Message = message,
-                CreateMode = SolutionComponentCreateMode.None.ToString()
+                SolutionName = resolvedSolutionUniqueName,
+                CreateMode = resolvedSolutionUniqueName != null
+                    ? SolutionComponentCreateMode.RecordCreateThenAddSolutionComponent.ToString()
+                    : SolutionComponentCreateMode.None.ToString(),
+                IsAddToSolution = addResult?.IsAddToSolution ?? false,
+                AddToSolutionMethod = addResult?.AddToSolutionMethod ?? "none",
+                AddToSolutionWarning = addResult?.AddToSolutionWarning
             };
 
             return Success(message, structured);
@@ -482,16 +568,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Update Split Button ─────────────────────────────────
 
-        private CallToolResult HandleUpdateSplitButton(string commandId, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence)
+        private CallToolResult HandleUpdateSplitButton(string commandId, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence) =>
+            HandleUpdateSplitButtonWithSolution(commandId, label, onclickType, jsWebResource, jsFunction, fontIcon, iconWebResource, tooltipTitle, tooltipDescription, sequence, "");
+
+        private CallToolResult HandleUpdateSplitButtonWithSolution(string commandId, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, string solutionName)
         {
+            var (resolvedSolutionUniqueName, solErr) = ResolveSolutionUniqueName(solutionName);
+            if (solErr != null)
+                return solErr;
+
             if (_options.DryRun)
-                return DryRun($"Would update split button command '{commandId}'.", new ManageCommandResult
+            {
+                var dryMsg = $"Would update split button command '{commandId}'." +
+                    (resolvedSolutionUniqueName != null ? $" (solution={resolvedSolutionUniqueName})" : "");
+                return DryRun(dryMsg, new ManageCommandResult
                 {
                     Action = "update_split_button",
                     Status = "not_executed",
                     CommandId = commandId,
-                    Message = "The split button was not updated."
+                    Message = "The split button was not updated.",
+                    SolutionName = resolvedSolutionUniqueName,
+                    IsAddToSolution = resolvedSolutionUniqueName != null,
+                    AddToSolutionMethod = resolvedSolutionUniqueName != null ? "AddSolutionComponentRequest" : "none"
                 });
+            }
 
             if (string.IsNullOrWhiteSpace(commandId))
                 return Error("command_id is required for action='update_split_button'.",
@@ -600,16 +700,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Provide at least one: label, sequence, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description.");
 
             DataverseMutationExecutor.Update(_context, _orgService, entity);
+            var addResult = AddCommandToSolution(cmdGuid, resolvedSolutionUniqueName);
 
             var commandName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
-            var message = $"Split Button '{commandName}' updated: {string.Join(", ", changes)}.";
+            var message = $"Split Button '{commandName}' updated: {string.Join(", ", changes)}." +
+                FormatSolutionSuffix(resolvedSolutionUniqueName, addResult);
 
             var structured = new ManageCommandResult
             {
                 Action = "update_split_button",
                 Status = "success",
                 CommandId = commandId.Trim(),
-                Message = message
+                Message = message,
+                SolutionName = resolvedSolutionUniqueName,
+                IsAddToSolution = addResult?.IsAddToSolution ?? false,
+                AddToSolutionMethod = addResult?.AddToSolutionMethod ?? "none",
+                AddToSolutionWarning = addResult?.AddToSolutionWarning
             };
 
             return Success(message, structured);
@@ -617,16 +723,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Add Flyout Item ─────────────────────────────────────
 
-        private CallToolResult HandleAddFlyoutItem(string flyoutCommandId, string label, string onclickType, string jsWebResource, string jsFunction, int sequence, bool hidden)
+        private CallToolResult HandleAddFlyoutItem(string flyoutCommandId, string label, string onclickType, string jsWebResource, string jsFunction, int sequence, bool hidden) =>
+            HandleAddFlyoutItem(flyoutCommandId, label, onclickType, jsWebResource, jsFunction, sequence, hidden, "");
+
+        private CallToolResult HandleAddFlyoutItem(string flyoutCommandId, string label, string onclickType, string jsWebResource, string jsFunction, int sequence, bool hidden, string solutionName)
         {
+            var (resolvedSolutionUniqueName, solErr) = ResolveSolutionUniqueName(solutionName);
+            if (solErr != null)
+                return solErr;
+
             if (_options.DryRun)
-                return DryRun($"Would add an item to flyout command '{flyoutCommandId}'.", new ManageCommandResult
+            {
+                var dryMsg = $"Would add an item to flyout command '{flyoutCommandId}'." +
+                    (resolvedSolutionUniqueName != null ? $" (solution={resolvedSolutionUniqueName})" : "");
+                return DryRun(dryMsg, new ManageCommandResult
                 {
                     Action = "add_flyout_item",
                     Status = "not_executed",
                     CommandId = flyoutCommandId,
-                    Message = "The flyout item was not created."
+                    Message = "The flyout item was not created.",
+                    SolutionName = resolvedSolutionUniqueName,
+                    CreateMode = resolvedSolutionUniqueName != null
+                        ? SolutionComponentCreateMode.RecordCreateThenAddSolutionComponent.ToString()
+                        : SolutionComponentCreateMode.None.ToString(),
+                    IsAddToSolution = resolvedSolutionUniqueName != null,
+                    AddToSolutionMethod = resolvedSolutionUniqueName != null ? "AddSolutionComponentRequest" : "none"
                 });
+            }
 
             if (string.IsNullOrWhiteSpace(flyoutCommandId))
                 return Error("flyout_command_id is required for action='add_flyout_item'.",
@@ -659,6 +782,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Find the Group child of the flyout
             var groupId = FindFlyoutGroup(flyoutGuid);
+            var autoCreatedGroup = false;
             if (groupId == null)
             {
                 // Auto-create a Group if it doesn't exist (defensive)
@@ -689,6 +813,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 groupEntity["parentappactionid"] = new EntityReference("appaction", flyoutGuid);
 
                 groupId = DataverseMutationExecutor.Create(_context, _orgService, groupEntity);
+                autoCreatedGroup = true;
             }
 
             // Count existing items to auto-assign sequence
@@ -721,14 +846,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error(result.error,
                     "Check the item's onclick_type ('none', 'javascript', 'formula') and javascript_webresource — use manage_webresource(action='list') to find valid web resource names.");
 
-            var message = $"Item '{label.Trim()}' added to flyout '{flyoutNameStr}'. ItemCommandId: {result.itemId}.";
+            SolutionComponentCreateResult addResult = null;
+            if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName) && Guid.TryParse(result.itemId, out var parsedItemGuid))
+            {
+                addResult = AddCommandsToSolution(
+                    resolvedSolutionUniqueName,
+                    parsedItemGuid,
+                    autoCreatedGroup && groupId.HasValue ? new[] { groupId.Value } : null);
+            }
+
+            var message = $"Item '{label.Trim()}' added to flyout '{flyoutNameStr}'. ItemCommandId: {result.itemId}." +
+                FormatSolutionSuffix(resolvedSolutionUniqueName, addResult);
+
             var structured = new ManageCommandResult
             {
                 Action = "add_flyout_item",
                 Status = "success",
                 CommandId = result.itemId,
                 Message = message,
-                CreateMode = SolutionComponentCreateMode.None.ToString()
+                SolutionName = resolvedSolutionUniqueName,
+                CreateMode = resolvedSolutionUniqueName != null
+                    ? SolutionComponentCreateMode.RecordCreateThenAddSolutionComponent.ToString()
+                    : SolutionComponentCreateMode.None.ToString(),
+                IsAddToSolution = addResult?.IsAddToSolution ?? false,
+                AddToSolutionMethod = addResult?.AddToSolutionMethod ?? "none",
+                AddToSolutionWarning = addResult?.AddToSolutionWarning
             };
 
             return Success(message, structured);

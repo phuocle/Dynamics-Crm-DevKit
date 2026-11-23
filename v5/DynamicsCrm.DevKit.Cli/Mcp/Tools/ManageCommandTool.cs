@@ -166,13 +166,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("add_flyout/add_split_button: non-empty JSON array serialized as a string. Each item requires label; optional string fields: onclick_type (none/javascript/formula), javascript_webresource, javascript_function, sequence (integer encoded as a JSON string, e.g. \"10000\"). Omitted or invalid sequence defaults to item order in steps of 10000.")] string items = "",
             [Description("GUID of Dropdown or Split Button. Required: add_flyout_item.")] string flyout_command_id = "",
             [Description("Command scope for standard buttons: 'app' (default — bound to app and table), 'table' (bound to table across all apps), or 'global' (bound to location across all tables and all apps).")] string scope = "",
+            [Description("Solution unique name or display name to add created appaction component to.")] string solution_name = "",
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
                 var worker = new ManageCommandTool(conn.OrgService, conn.Options, conn.Context);
-                return System.Threading.Tasks.Task.FromResult(worker.manage_command(action, command_id, entity_name, location, app_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden, app_name, origin, action_type, name_filter, include_rules, include_children, max_records, items, flyout_command_id, scope));
+                return System.Threading.Tasks.Task.FromResult(worker.manage_command(action, command_id, entity_name, location, app_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden, app_name, origin, action_type, name_filter, include_rules, include_children, max_records, items, flyout_command_id, scope, solution_name));
             }, cancellationToken);
         }
 
@@ -201,7 +202,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("1–500.")] int max_records = 50,
             [Description("add_flyout/add_split_button: non-empty JSON array serialized as a string. Each item requires label; optional string fields: onclick_type (none/javascript/formula), javascript_webresource, javascript_function, sequence (integer encoded as a JSON string, e.g. \"10000\"). Omitted or invalid sequence defaults to item order in steps of 10000.")] string items = "",
             [Description("GUID of Dropdown or Split Button. Required: add_flyout_item.")] string flyout_command_id = "",
-            [Description("Command scope for standard buttons: 'app' (default — bound to app and table), 'table' (bound to table across all apps), or 'global' (bound to location across all tables and all apps).")] string scope = "")
+            [Description("Command scope for standard buttons: 'app' (default — bound to app and table), 'table' (bound to table across all apps), or 'global' (bound to location across all tables and all apps).")] string scope = "",
+            [Description("Solution unique name or display name to add created appaction component to.")] string solution_name = "")
         {
             var actionName = (action ?? "").Trim().ToLowerInvariant();
             if (string.IsNullOrWhiteSpace(actionName))
@@ -236,40 +238,52 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             : GetDetailByLabelScoped((label ?? "").Trim(), (entity_name ?? "").Trim(), (location ?? "").Trim(), include_rules, include_children, scope);
 
                     case "create":
-                        return string.IsNullOrWhiteSpace(scope)
+                        return string.IsNullOrWhiteSpace(scope) && string.IsNullOrWhiteSpace(solution_name)
                             ? HandleCreate(entity_name, location, app_id, app_name, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden)
-                            : HandleCreateScoped(entity_name, location, app_id, app_name, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden, scope);
+                            : HandleCreateScoped(entity_name, location, app_id, app_name, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden, scope, solution_name);
 
                     case "update":
-                        return HandleUpdate(command_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence);
+                        return string.IsNullOrWhiteSpace(solution_name)
+                            ? HandleUpdate(command_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence)
+                            : HandleUpdateWithSolution(command_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, solution_name);
 
                     case "hide":
-                        return string.IsNullOrWhiteSpace(scope)
+                        return string.IsNullOrWhiteSpace(scope) && string.IsNullOrWhiteSpace(solution_name)
                             ? HandleHideShow(command_id, entity_name, location, app_id, app_name, label, wantHidden: true)
-                            : HandleHideShowScoped(command_id, entity_name, location, app_id, app_name, label, wantHidden: true, scope);
+                            : HandleHideShowScoped(command_id, entity_name, location, app_id, app_name, label, wantHidden: true, scope, solution_name);
 
                     case "show":
-                        return string.IsNullOrWhiteSpace(scope)
+                        return string.IsNullOrWhiteSpace(scope) && string.IsNullOrWhiteSpace(solution_name)
                             ? HandleHideShow(command_id, entity_name, location, app_id, app_name, label, wantHidden: false)
-                            : HandleHideShowScoped(command_id, entity_name, location, app_id, app_name, label, wantHidden: false, scope);
+                            : HandleHideShowScoped(command_id, entity_name, location, app_id, app_name, label, wantHidden: false, scope, solution_name);
 
                     case "add_flyout":
-                        return HandleAddFlyout(entity_name, location, app_id, app_name, label, items, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden);
+                        return string.IsNullOrWhiteSpace(solution_name)
+                            ? HandleAddFlyout(entity_name, location, app_id, app_name, label, items, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden)
+                            : HandleAddFlyout(entity_name, location, app_id, app_name, label, items, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden, solution_name);
 
                     case "update_flyout":
-                        return HandleUpdateFlyout(command_id, label, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence);
+                        return string.IsNullOrWhiteSpace(solution_name)
+                            ? HandleUpdateFlyout(command_id, label, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence)
+                            : HandleUpdateFlyoutWithSolution(command_id, label, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, solution_name);
 
                     case "add_flyout_item":
-                        return HandleAddFlyoutItem(flyout_command_id, label, onclick_type, javascript_webresource, javascript_function, sequence, hidden);
+                        return string.IsNullOrWhiteSpace(solution_name)
+                            ? HandleAddFlyoutItem(flyout_command_id, label, onclick_type, javascript_webresource, javascript_function, sequence, hidden)
+                            : HandleAddFlyoutItem(flyout_command_id, label, onclick_type, javascript_webresource, javascript_function, sequence, hidden, solution_name);
 
                     case "remove_flyout_item":
                         return HandleRemoveFlyoutItem(command_id);
 
                     case "add_split_button":
-                        return HandleAddSplitButton(entity_name, location, app_id, app_name, label, onclick_type, javascript_webresource, javascript_function, items, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden);
+                        return string.IsNullOrWhiteSpace(solution_name)
+                            ? HandleAddSplitButton(entity_name, location, app_id, app_name, label, onclick_type, javascript_webresource, javascript_function, items, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden)
+                            : HandleAddSplitButton(entity_name, location, app_id, app_name, label, onclick_type, javascript_webresource, javascript_function, items, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden, solution_name);
 
                     case "update_split_button":
-                        return HandleUpdateSplitButton(command_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence);
+                        return string.IsNullOrWhiteSpace(solution_name)
+                            ? HandleUpdateSplitButton(command_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence)
+                            : HandleUpdateSplitButtonWithSolution(command_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, solution_name);
 
                     default:
                         return Error(

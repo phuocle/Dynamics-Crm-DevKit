@@ -304,6 +304,88 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             entry.OnClickFormula = NullIfEmpty(entity.GetAttributeValue<string>("onclickeventformulacomponentlibrary"));
         }
 
+        private const int AppActionComponentType = 10326;
+
+        private (string UniqueName, CallToolResult Error) ResolveSolutionUniqueName(string solutionName)
+        {
+            if (string.IsNullOrWhiteSpace(solutionName))
+                return (null, null);
+
+            if (_orgService == null && _options.DryRun)
+                return (solutionName.Trim(), null);
+
+            var solResult = SolutionResolverHelper.Resolve(_orgService, solutionName.Trim(), requireUnmanaged: true);
+            if (!solResult.IsSuccess)
+                return (null, Error(solResult.Error.Split("\r\n")[0],
+                    "Use get_solution_components to find valid solution names."));
+
+            if (string.IsNullOrWhiteSpace(solResult.UniqueName))
+                return (null, Error($"Solution '{solutionName.Trim()}' resolved but unique name is null/empty.",
+                    "Pick another solution via get_solution_components, or omit solution_name."));
+
+            return (solResult.UniqueName, null);
+        }
+
+        private SolutionComponentCreateResult AddCommandToSolution(Guid commandId, string solutionUniqueName)
+        {
+            if (string.IsNullOrWhiteSpace(solutionUniqueName) || commandId == Guid.Empty)
+                return null;
+
+            return SolutionComponentCreateHelper.AddExistingComponent(
+                _context,
+                _orgService,
+                commandId,
+                AppActionComponentType,
+                solutionUniqueName);
+        }
+
+        private SolutionComponentCreateResult AddCommandsToSolution(string solutionUniqueName, Guid primaryCommandId, IEnumerable<Guid> childCommandIds)
+        {
+            if (string.IsNullOrWhiteSpace(solutionUniqueName) || primaryCommandId == Guid.Empty)
+                return null;
+
+            var primaryResult = AddCommandToSolution(primaryCommandId, solutionUniqueName);
+            var warnings = new List<string>();
+            if (!string.IsNullOrWhiteSpace(primaryResult?.AddToSolutionWarning))
+                warnings.Add(primaryResult.AddToSolutionWarning);
+
+            if (childCommandIds != null)
+            {
+                foreach (var childId in childCommandIds)
+                {
+                    if (childId == Guid.Empty)
+                        continue;
+                    var childResult = AddCommandToSolution(childId, solutionUniqueName);
+                    if (!string.IsNullOrWhiteSpace(childResult?.AddToSolutionWarning))
+                        warnings.Add(childResult.AddToSolutionWarning);
+                }
+            }
+
+            if (warnings.Count > 0 && primaryResult != null)
+            {
+                return new SolutionComponentCreateResult
+                {
+                    ComponentId = primaryResult.ComponentId,
+                    SolutionUniqueName = primaryResult.SolutionUniqueName,
+                    IsAddToSolution = false,
+                    AddToSolutionMethod = primaryResult.AddToSolutionMethod,
+                    AddToSolutionWarning = string.Join("; ", warnings.Distinct())
+                };
+            }
+
+            return primaryResult;
+        }
+
+        private static string FormatSolutionSuffix(string resolvedSolutionUniqueName, SolutionComponentCreateResult addResult)
+        {
+            if (string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
+                return string.Empty;
+
+            return addResult?.IsAddToSolution == true
+                ? $" Added to solution '{resolvedSolutionUniqueName}'."
+                : $" Not added to solution '{resolvedSolutionUniqueName}' (see addToSolutionWarning).";
+        }
+
         private byte[] TryExportDevKitRibbonSolution()
         {
             try

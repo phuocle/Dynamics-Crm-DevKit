@@ -21,19 +21,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Hide / Show ──────────────────────────────────────────
 
         private CallToolResult HandleHideShow(string commandId, string entityName, string location, string appId, string appName, string label, bool wantHidden) =>
-            HandleHideShowScoped(commandId, entityName, location, appId, appName, label, wantHidden, "");
+            HandleHideShowScoped(commandId, entityName, location, appId, appName, label, wantHidden, "", "");
 
-        private CallToolResult HandleHideShowScoped(string commandId, string entityName, string location, string appId, string appName, string label, bool wantHidden, string scope)
+        private CallToolResult HandleHideShowScoped(string commandId, string entityName, string location, string appId, string appName, string label, bool wantHidden, string scope) =>
+            HandleHideShowScoped(commandId, entityName, location, appId, appName, label, wantHidden, scope, "");
+
+        private CallToolResult HandleHideShowScoped(string commandId, string entityName, string location, string appId, string appName, string label, bool wantHidden, string scope, string solutionName)
         {
+            var (resolvedSolutionUniqueName, solErr) = ResolveSolutionUniqueName(solutionName);
+            if (solErr != null)
+                return solErr;
+
             if (_options.DryRun)
             {
                 var action = wantHidden ? "hide" : "show";
-                return DryRun($"Would {action} appaction command '{commandId}'.", new ManageCommandResult
+                var dryMsg = $"Would {action} appaction command '{commandId}'." +
+                    (resolvedSolutionUniqueName != null ? $" (solution={resolvedSolutionUniqueName})" : "");
+                return DryRun(dryMsg, new ManageCommandResult
                 {
                     Action = action,
                     Status = "not_executed",
                     CommandId = commandId,
-                    Message = $"The appaction command was not {(wantHidden ? "hidden" : "shown")}."
+                    Message = $"The appaction command was not {(wantHidden ? "hidden" : "shown")}.",
+                    SolutionName = resolvedSolutionUniqueName,
+                    CreateMode = resolvedSolutionUniqueName != null
+                        ? SolutionComponentCreateMode.RecordCreateThenAddSolutionComponent.ToString()
+                        : SolutionComponentCreateMode.None.ToString(),
+                    IsAddToSolution = resolvedSolutionUniqueName != null,
+                    AddToSolutionMethod = resolvedSolutionUniqueName != null ? "AddSolutionComponentRequest" : "none"
                 });
             }
 
@@ -124,7 +139,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             appName,
                             wantHidden,
                             oobTemplateOverride: existing,
-                            overrideCommandName: NullIfEmpty(existingName));
+                            overrideCommandName: NullIfEmpty(existingName),
+                            solutionName: solutionName);
                     }
                     else if (existingName.Contains("{!EntityLogicalName}", StringComparison.OrdinalIgnoreCase))
                     {
@@ -148,19 +164,43 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var alreadyHidden = existing.GetAttributeValue<bool?>("hidden") ?? false;
                 if (alreadyHidden == wantHidden)
                 {
+                    var noopSolResult = wantHidden ? AddCommandToSolution(cmdGuid, resolvedSolutionUniqueName) : null;
                     var state = wantHidden ? "already hidden" : "already visible";
-                    var msg = $"Command '{existing.GetAttributeValue<string>("name") ?? commandId.Trim()}' is {state}. No change needed.";
-                    var noopResult = new ManageCommandResult { Action = verb, Status = "success", CommandId = commandId.Trim(), Message = msg };
+                    var msg = $"Command '{existing.GetAttributeValue<string>("name") ?? commandId.Trim()}' is {state}. No change needed." +
+                        (wantHidden ? FormatSolutionSuffix(resolvedSolutionUniqueName, noopSolResult) : "");
+                    var noopResult = new ManageCommandResult
+                    {
+                        Action = verb,
+                        Status = "success",
+                        CommandId = commandId.Trim(),
+                        Message = msg,
+                        SolutionName = wantHidden ? resolvedSolutionUniqueName : null,
+                        IsAddToSolution = noopSolResult?.IsAddToSolution ?? false,
+                        AddToSolutionMethod = noopSolResult?.AddToSolutionMethod ?? "none",
+                        AddToSolutionWarning = noopSolResult?.AddToSolutionWarning
+                    };
                     return Success(msg, noopResult);
                 }
 
                 var update = new Entity("appaction", cmdGuid);
                 update["hidden"] = wantHidden;
                 DataverseMutationExecutor.Update(_context, _orgService, update);
+                var cmdSolResult = wantHidden ? AddCommandToSolution(cmdGuid, resolvedSolutionUniqueName) : null;
                 var publishNote = PublishCommandTarget(isGlobalCommand ? null : existingContextVal, existingAppId);
 
-                var doneMsg = $"Command '{existing.GetAttributeValue<string>("name") ?? commandId.Trim()}' is now {(wantHidden ? "hidden" : "visible")}. {publishNote}";
-                var doneResult = new ManageCommandResult { Action = verb, Status = "success", CommandId = commandId.Trim(), Message = doneMsg };
+                var doneMsg = $"Command '{existing.GetAttributeValue<string>("name") ?? commandId.Trim()}' is now {(wantHidden ? "hidden" : "visible")}. {publishNote}" +
+                    (wantHidden ? FormatSolutionSuffix(resolvedSolutionUniqueName, cmdSolResult) : "");
+                var doneResult = new ManageCommandResult
+                {
+                    Action = verb,
+                    Status = "success",
+                    CommandId = commandId.Trim(),
+                    Message = doneMsg,
+                    SolutionName = wantHidden ? resolvedSolutionUniqueName : null,
+                    IsAddToSolution = cmdSolResult?.IsAddToSolution ?? false,
+                    AddToSolutionMethod = cmdSolResult?.AddToSolutionMethod ?? "none",
+                    AddToSolutionWarning = cmdSolResult?.AddToSolutionWarning
+                };
                 return Success(doneMsg, doneResult);
             }
 
@@ -189,16 +229,40 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var globalAlreadyHidden = globalFound.GetAttributeValue<bool?>("hidden") ?? false;
                 if (globalAlreadyHidden == wantHidden)
                 {
+                    var globalNoopSol = wantHidden ? AddCommandToSolution(globalFound.Id, resolvedSolutionUniqueName) : null;
                     var state = wantHidden ? "already hidden" : "already visible";
-                    var msg = $"Command '{label.Trim()}' is {state}. No change needed.";
-                    return Success(msg, new ManageCommandResult { Action = verb, Status = "success", CommandId = globalFound.Id.ToString(), Message = msg });
+                    var msg = $"Command '{label.Trim()}' is {state}. No change needed." +
+                        (wantHidden ? FormatSolutionSuffix(resolvedSolutionUniqueName, globalNoopSol) : "");
+                    return Success(msg, new ManageCommandResult
+                    {
+                        Action = verb,
+                        Status = "success",
+                        CommandId = globalFound.Id.ToString(),
+                        Message = msg,
+                        SolutionName = wantHidden ? resolvedSolutionUniqueName : null,
+                        IsAddToSolution = globalNoopSol?.IsAddToSolution ?? false,
+                        AddToSolutionMethod = globalNoopSol?.AddToSolutionMethod ?? "none",
+                        AddToSolutionWarning = globalNoopSol?.AddToSolutionWarning
+                    });
                 }
 
                 var globalUpdate = new Entity("appaction", globalFound.Id) { ["hidden"] = wantHidden };
                 DataverseMutationExecutor.Update(_context, _orgService, globalUpdate);
+                var globalSolResult = wantHidden ? AddCommandToSolution(globalFound.Id, resolvedSolutionUniqueName) : null;
                 var globalPubNote = PublishCommandTarget(null);
-                var globalDoneMsg = $"Command '{label.Trim()}' is now {(wantHidden ? "hidden" : "visible")}. {globalPubNote}";
-                return Success(globalDoneMsg, new ManageCommandResult { Action = verb, Status = "success", CommandId = globalFound.Id.ToString(), Message = globalDoneMsg });
+                var globalDoneMsg = $"Command '{label.Trim()}' is now {(wantHidden ? "hidden" : "visible")}. {globalPubNote}" +
+                    (wantHidden ? FormatSolutionSuffix(resolvedSolutionUniqueName, globalSolResult) : "");
+                return Success(globalDoneMsg, new ManageCommandResult
+                {
+                    Action = verb,
+                    Status = "success",
+                    CommandId = globalFound.Id.ToString(),
+                    Message = globalDoneMsg,
+                    SolutionName = wantHidden ? resolvedSolutionUniqueName : null,
+                    IsAddToSolution = globalSolResult?.IsAddToSolution ?? false,
+                    AddToSolutionMethod = globalSolResult?.AddToSolutionMethod ?? "none",
+                    AddToSolutionWarning = globalSolResult?.AddToSolutionWarning
+                });
             }
 
             if (normalizedScope == "table")
@@ -224,7 +288,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error(tableEntityErr.Split("\r\n")[0],
                         "Use get_tables to list available tables.");
 
-                return ExecuteEntityScopedHideShow(label.Trim(), tableEntityLogical, tableLocValue, "table", appId, appName, wantHidden);
+                return ExecuteEntityScopedHideShow(label.Trim(), tableEntityLogical, tableLocValue, "table", appId, appName, wantHidden, solutionName: solutionName);
             }
 
             // Path 2: lookup by label + entity + location (scope = 'app' default)
@@ -250,7 +314,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error(entityError.Split("\r\n")[0],
                     "Use get_tables to list available tables.");
 
-            return ExecuteEntityScopedHideShow(label.Trim(), resolvedEntityName, locationValue, "app", appId, appName, wantHidden);
+            return ExecuteEntityScopedHideShow(label.Trim(), resolvedEntityName, locationValue, "app", appId, appName, wantHidden, solutionName: solutionName);
         }
 
         private CallToolResult ExecuteEntityScopedHideShow(
@@ -262,8 +326,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string appName,
             bool wantHidden,
             Entity oobTemplateOverride = null,
-            string overrideCommandName = null)
+            string overrideCommandName = null,
+            string solutionName = null)
         {
+            var (resolvedSolutionUniqueName, solErr) = ResolveSolutionUniqueName(solutionName);
+            if (solErr != null)
+                return solErr;
+
             var verb = wantHidden ? "hide" : "show";
             var found = normalizedScope == "table"
                 ? FindCommandByLabelScoped(trimmedLabel, entityLogical, locationValue, "table")
@@ -274,7 +343,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!wantHidden && IsOobOverrideCommand(found))
                 {
                     var commandName = found.GetAttributeValue<string>("name") ?? trimmedLabel;
-                    var contextValue = found.GetAttributeValue<string>("contextvalue") ?? entityLogical;
+                    var rawContext = found.GetAttributeValue<string>("contextvalue");
+                    var contextValue = !string.IsNullOrWhiteSpace(rawContext) ? rawContext : entityLogical;
                     DataverseMutationExecutor.Delete(_context, _orgService, "appaction", found.Id);
                     PublishHelper.PublishEntity(_context, _orgService, contextValue.Trim().ToLowerInvariant());
 
@@ -286,20 +356,45 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var alreadyHidden = found.GetAttributeValue<bool?>("hidden") ?? false;
                 if (alreadyHidden == wantHidden)
                 {
+                    var noopSol = wantHidden ? AddCommandToSolution(found.Id, resolvedSolutionUniqueName) : null;
                     var state = wantHidden ? "already hidden" : "already visible";
-                    var msg2 = $"Command '{trimmedLabel}' is {state}. No change needed.";
-                    var noopResult2 = new ManageCommandResult { Action = verb, Status = "success", CommandId = found.Id.ToString(), Message = msg2 };
+                    var msg2 = $"Command '{trimmedLabel}' is {state}. No change needed." +
+                        (wantHidden ? FormatSolutionSuffix(resolvedSolutionUniqueName, noopSol) : "");
+                    var noopResult2 = new ManageCommandResult
+                    {
+                        Action = verb,
+                        Status = "success",
+                        CommandId = found.Id.ToString(),
+                        Message = msg2,
+                        SolutionName = wantHidden ? resolvedSolutionUniqueName : null,
+                        IsAddToSolution = noopSol?.IsAddToSolution ?? false,
+                        AddToSolutionMethod = noopSol?.AddToSolutionMethod ?? "none",
+                        AddToSolutionWarning = noopSol?.AddToSolutionWarning
+                    };
                     return Success(msg2, noopResult2);
                 }
 
                 var update2 = new Entity("appaction", found.Id);
                 update2["hidden"] = wantHidden;
                 DataverseMutationExecutor.Update(_context, _orgService, update2);
-                var publishEntity = found.GetAttributeValue<string>("contextvalue") ?? entityLogical;
+                var existingSol = wantHidden ? AddCommandToSolution(found.Id, resolvedSolutionUniqueName) : null;
+                var rawPublish = found.GetAttributeValue<string>("contextvalue");
+                var publishEntity = !string.IsNullOrWhiteSpace(rawPublish) ? rawPublish : entityLogical;
                 PublishHelper.PublishEntity(_context, _orgService, publishEntity.Trim().ToLowerInvariant());
 
-                var doneMsg2 = $"Command '{trimmedLabel}' is now {(wantHidden ? "hidden" : "visible")}. Entity published.";
-                var doneResult2 = new ManageCommandResult { Action = verb, Status = "success", CommandId = found.Id.ToString(), Message = doneMsg2 };
+                var doneMsg2 = $"Command '{trimmedLabel}' is now {(wantHidden ? "hidden" : "visible")}. Entity published." +
+                    (wantHidden ? FormatSolutionSuffix(resolvedSolutionUniqueName, existingSol) : "");
+                var doneResult2 = new ManageCommandResult
+                {
+                    Action = verb,
+                    Status = "success",
+                    CommandId = found.Id.ToString(),
+                    Message = doneMsg2,
+                    SolutionName = wantHidden ? resolvedSolutionUniqueName : null,
+                    IsAddToSolution = existingSol?.IsAddToSolution ?? false,
+                    AddToSolutionMethod = existingSol?.AddToSolutionMethod ?? "none",
+                    AddToSolutionWarning = existingSol?.AddToSolutionWarning
+                };
                 return Success(doneMsg2, doneResult2);
             }
 
@@ -392,10 +487,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var newId = DataverseMutationExecutor.Create(_context, _orgService, newEntity);
+
+            var addResult = AddCommandToSolution(newId, resolvedSolutionUniqueName);
+
             PublishHelper.PublishEntity(_context, _orgService, entityLogical.Trim().ToLowerInvariant());
 
             var createdMsg = $"Created appaction override: command '{trimmedLabel}' on {entityLogical} ({LocationMap[locationValue]}) is now hidden. Entity published.";
-            var createdResult = new ManageCommandResult { Action = verb, Status = "success", CommandId = newId.ToString(), Message = createdMsg, CreateMode = SolutionComponentCreateMode.None.ToString() };
+            if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
+            {
+                createdMsg += (addResult?.IsAddToSolution == true)
+                    ? $" Added to solution '{resolvedSolutionUniqueName}'."
+                    : $" Not added to solution '{resolvedSolutionUniqueName}' (see addToSolutionWarning).";
+            }
+
+            var createdResult = new ManageCommandResult
+            {
+                Action = verb,
+                Status = "success",
+                CommandId = newId.ToString(),
+                Message = createdMsg,
+                SolutionName = resolvedSolutionUniqueName,
+                CreateMode = resolvedSolutionUniqueName != null
+                    ? SolutionComponentCreateMode.RecordCreateThenAddSolutionComponent.ToString()
+                    : SolutionComponentCreateMode.None.ToString(),
+                IsAddToSolution = addResult?.IsAddToSolution ?? false,
+                AddToSolutionMethod = addResult?.AddToSolutionMethod ?? "none",
+                AddToSolutionWarning = addResult?.AddToSolutionWarning
+            };
             return Success(createdMsg, createdResult);
         }
 
