@@ -56,7 +56,7 @@ Call `manage_form` with tool-level `action='update'`. Inside the `operations` JS
 
 | Field | Meaning | Example |
 |-------|---------|---------|
-| `action` | Operation family | `"manage_subgrid"`, `"manage_fields"`, `"manage_tab"` |
+| `action` | Operation family | `"manage_subgrid"`, `"manage_fields"`, `"manage_tab"`, `"manage_navigation"` |
 | `manage_action` | Verb within that family | `"add"`, `"update"`, `"rename"`, `"move"`, `"remove"`, `"delete"` |
 
 Do not put verbs like `"add"` or `"remove"` in operation `action`.
@@ -275,6 +275,44 @@ When you disable the view picker or change the default view while the picker is 
   "manage_action": "remove",
   "control_id": "v4_invoice_invoiceline"
 }
+```
+
+## Related Navigation
+
+Call `manage_form(action='navigation_list', entity_name='account', form_id='<form GUID>')` and use the `navigation` array in `structuredContent` to show the current items for confirmation before making changes. Each entry has `id`, `type` (`relationship` or `system`), `relationshipName`, `label`, `area`, `sequence`, and `visible`. `relationshipName` is null for system entries. `area` and `sequence` can be null when neither metadata nor FormXML supplies a value.
+
+The list combines relationship menu settings, available built-in items, and the form's explicit `Navigation/NavBar` items. FormXML overrides take precedence. Inherited relationships use the table-side menu settings, with `Details` mapped to `Info` and the menu order used as the sequence. The `<entity>_connection1` relationship uses `navConnections`. Built-in entries include `navAudit`, `navAsyncOperations`, `navProcessSessions`, and `navSPDocuments` when supported by the entity metadata. Record access and app settings can also affect what users see in the app.
+
+Use `manage_navigation` with `manage_form(action='update')`. Put `relationship_name` or `nav_id` directly on a single-item operation, or supply a non-empty `items` array of selector objects. Use the exact relationship schema name or ID from `navigation_list`. Each item in a batch uses the same `manage_action`.
+
+| `manage_action` | Effect |
+|---|---|
+| `hide` / `show` | Set `Show` to `false` / `true`. If the item is inherited, create a FormXML override using its metadata defaults. |
+| `update` | Set any supplied `area`, `sequence` (non-negative integer), `label`, or `visible` (boolean). A `label` updates one `Titles/Title` entry. Use `language_code` to select its LCID, or omit it to use the organization base language. |
+| `remove` | Remove the item's explicit FormXML override. An inherited item can reappear with its default settings. Use `hide` to keep it out of the Related menu. |
+
+```json
+[
+  {
+    "action": "manage_navigation",
+    "manage_action": "hide",
+    "items": [
+      {"relationship_name": "account_employees"},
+      {"nav_id": "navConnections"},
+      {"nav_id": "navAudit"},
+      {"nav_id": "navAsyncOperations"}
+    ]
+  },
+  {
+    "action": "manage_navigation",
+    "manage_action": "update",
+    "relationship_name": "account_employees",
+    "area": "Info",
+    "sequence": 120,
+    "label": "Employees",
+    "language_code": 1033
+  }
+]
 ```
 
 ## manage_library and manage_event Operations
