@@ -43,5 +43,5 @@ official release, follow devkit-skill-build-release + devkit-skill-code-coverage
 in that order.
 
 If MCP code changed, restarting the MCP client connector and calling
-`whoami` still applies (see devkit-skill-build-cli).
+`whoami` still applies (see devkit-skill-build-release-cli).
 `Release-DynamicsCrm-DevKit-CurrentDate.ps1` is a long-running release. Do not end the turn after starting it or after an intermediate build message. Keep the process/session alive, poll until it exits, and continue through every post-release verification below. Report the final exit code and concise results to the user; if any step fails, report the failure instead of implying success.

@@ -20,10 +20,11 @@ Executable recipes live as agent skills under `.agents/skills/` — read the com
 | Task | Skill |
 |---|---|
 | Build analyzer (incl. analyzer dev rules) | `devkit-skill-build-analyzer` |
-| Build and install CLI / Tool | `devkit-skill-build-cli` / `devkit-skill-build-tool` |
+| Build and install Tool | `devkit-skill-build-tool` |
 | Build VSIX | `devkit-skill-build-vsix` |
 | Full configured release | `devkit-skill-build-release` |
 | Timestamped release without tests/coverage (user-requested fast mode) | `devkit-skill-build-release-only` |
+| Timestamped CLI-only Release build/install without tests/coverage | `devkit-skill-build-release-cli` |
 | Visual Studio 2019 configured release | `devkit-skill-build-release-2019` |
 | Unit tests (pass/fail + timing) / coverage reports | `devkit-skill-unit-test` / `devkit-skill-code-coverage` |
 | Client-code pipeline (clean/install/generate/sync/test) | `devkit-skill-client-code` |
@@ -77,7 +78,7 @@ MCP uses mutually exclusive configuration sources. The instance name with option
 
 After editing `DynamicsCrm.DevKit.Cli/Mcp/**`:
 
-1. Rebuild and reinstall using the devkit-skill-build-cli skill (`.agents/skills/devkit-skill-shared/scripts/Release.DynamicsCrm.DevKit.Cli.ps1`).
+1. Rebuild and reinstall using the devkit-skill-build-release-cli skill (`.agents/skills/devkit-skill-shared/scripts/Release.DynamicsCrm.DevKit.Cli.ps1 -Configuration Release`).
 2. Restart the active MCP client connector and call `whoami` to start a fresh DevKit MCP process.
 3. Verify runtime version, build timestamp, process start time, and assembly SHA against the manifest under `Published/<version>/`.
 
@@ -99,7 +100,7 @@ For component-scoped changes, use the checks below; a full release still require
 | Tool | the devkit-skill-build-tool skill (`Release.DynamicsCrm.DevKit.Tool.ps1`) when the installed tool must be refreshed |
 | VSIX | Build with Visual Studio MSBuild, not `dotnet build` |
 
-When CLI changes require refreshing the installed `devkit`, use the devkit-skill-build-cli skill (`Release.DynamicsCrm.DevKit.Cli.ps1`). Release scripts restore date-replacement files in `finally`; still inspect the working tree afterward.
+When CLI changes require refreshing the installed `devkit`, use the devkit-skill-build-release-cli skill (`Release.DynamicsCrm.DevKit.Cli.ps1 -Configuration Release`). Release scripts restore date-replacement files in `finally`; still inspect the working tree afterward.
 
 All test projects use MSTest and are named `DynamicsCrm.DevKit.<Component>.UnitTests`:
 

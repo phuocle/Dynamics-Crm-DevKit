@@ -221,7 +221,7 @@ function Stop-DevKitProcesses {
     Write-Host "Killing running CLI/devkit processes (MCP server)..." -ForegroundColor Yellow
     $killed = 0
 
-    foreach ($name in @("DynamicsCrm.DevKit.Cli", "devkit")) {
+    foreach ($name in @("DynamicsCrm.DevKit.Cli", "devkit", "DynamicsCrm.DevKit.Tool", "devkit-tool")) {
         $procs = Get-Process -Name $name -ErrorAction SilentlyContinue
         if ($procs) {
             $procs | Stop-Process -Force -ErrorAction SilentlyContinue
@@ -232,7 +232,7 @@ function Stop-DevKitProcesses {
     Get-Process -Name "dotnet" -ErrorAction SilentlyContinue | ForEach-Object {
         try {
             $cmdline = (Get-CimInstance Win32_Process -Filter "ProcessId=$($_.Id)" -ErrorAction SilentlyContinue).CommandLine
-            if ($cmdline -match "devkit|DynamicsCrm\.DevKit\.Cli") {
+            if ($cmdline -match "devkit|DynamicsCrm\.DevKit\.Cli|DynamicsCrm\.DevKit\.Tool") {
                 Stop-Process -Id $_.Id -Force -ErrorAction SilentlyContinue
                 $killed++
             }
@@ -454,6 +454,7 @@ try {
     }
 
     Write-Host "`nInstalling CLI Locally..." -ForegroundColor Yellow
+    Stop-DevKitProcesses
     $cliToolName = "DynamicsCrm.DevKit.Cli"
     $nupkgPath = $publishDir
 
@@ -508,6 +509,7 @@ try {
     }
 
     Write-Host "`nInstalling Tool Locally..." -ForegroundColor Yellow
+    Stop-DevKitProcesses
     $toolToolName = "DynamicsCrm.DevKit.Tool"
 
     $existingDevkitTool = dotnet tool list -g | Select-String -Pattern $toolToolName
