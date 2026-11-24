@@ -14,9 +14,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
     internal sealed class FormNavigation
     {
         private const string RelationshipElement = "NavBarByRelationshipItem";
-        private const string SystemElement = "NavBarItem";
+        private const string CustomLinkElement = "NavBarItem";
         private const string RelationshipType = "relationship";
         private const string SystemType = "system";
+        // These built-in overrides use the synthetic relationship names found in Dataverse form exports.
+        private const string BuiltInRelationshipPrefix = "hardcoded_{B7196B13-6B9D-42CD-BD58-B19A3953126F}";
         private const int EnglishLanguageCode = 1033;
         private static readonly StringComparer Names = StringComparer.OrdinalIgnoreCase;
 
@@ -147,12 +149,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 _ => GetOptionalVisibility(input)
             };
 
+            if (visible.HasValue && element?.Name == CustomLinkElement)
+                throw new InvalidOperationException($"Cannot change visibility for navigation item '{item.Id}'. FormXML does not allow Show on a custom NavBarItem. Use manage_action='remove' to delete the link.");
+
             if (element == null)
             {
-                element = item.Type == RelationshipType
-                    ? new XElement(RelationshipElement, new XAttribute("RelationshipName", item.RelationshipName))
-                    : new XElement(SystemElement, new XAttribute("Icon", ""), new XAttribute("Url", ""));
-                element.SetAttributeValue("Id", item.Id);
+                var overrideRelationshipName = item.RelationshipName ?? (item.Id switch
+                {
+                    "navAudit" or "navAsyncOperations" or "navProcessSessions" => BuiltInRelationshipPrefix + item.Id,
+                    _ => throw new InvalidOperationException($"Cannot create a FormXML override for built-in navigation item '{item.Id}'. Its Dataverse relationship mapping is unavailable.")
+                });
+                element = new XElement(RelationshipElement,
+                    new XAttribute("Id", item.Id), new XAttribute("RelationshipName", overrideRelationshipName));
                 area ??= item.Area;
                 sequence ??= item.Sequence;
                 visible ??= item.Visible;
@@ -183,7 +191,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             var navBar = root.Element("Navigation")?.Element("NavBar");
             foreach (var element in navBar?.Elements() ?? [])
             {
-                if (element.Name != RelationshipElement && element.Name != SystemElement)
+                if (element.Name != RelationshipElement && element.Name != CustomLinkElement)
                     continue;
 
                 var id = (string)element.Attribute("Id");
@@ -200,7 +208,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 if (defaults != null)
                     overridden.Add(defaults.Id);
 
-                var show = ((string)element.Attribute("Show"))?.Trim();
+                var show = element.Name == RelationshipElement ? ((string)element.Attribute("Show"))?.Trim() : null;
                 yield return (new FormNavigationItem(id,
                     defaults?.Type ?? (isRelationship ? RelationshipType : SystemType),
                     defaults?.RelationshipName ?? (isRelationship ? relationshipName : null),

@@ -16,9 +16,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Xml.Schema;
 
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.ManageForm;
 
@@ -942,18 +944,19 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
         const string hide = """
             [{"action":"manage_navigation","manage_action":"hide","items":[
                 {"relationship_name":"account_employees"},{"nav_id":"navConnections"},
-                {"nav_id":"navaudit"},{"nav_id":"navAsyncOperations"}
+                {"nav_id":"navaudit"},{"nav_id":"navAsyncOperations"},{"nav_id":"navProcessSessions"}
             ]}]
             """;
         await ApplyNavigation(id, hide);
 
         var items = ReadNavBar(id).Elements().ToDictionary(element => (string)element.Attribute("Id")!);
-        Assert.HasCount(4, items);
-        Assert.AreEqual("NavBarByRelationshipItem", items["nav_account_employees"].Name.LocalName);
+        Assert.HasCount(5, items);
+        Assert.IsTrue(items.Values.All(item => item.Name == "NavBarByRelationshipItem"));
         Assert.AreEqual("account_employees", (string?)items["nav_account_employees"].Attribute("RelationshipName"));
         Assert.AreEqual("account_connection1", (string?)items["navConnections"].Attribute("RelationshipName"));
-        Assert.AreEqual("NavBarItem", items["navAudit"].Name.LocalName);
-        Assert.AreEqual("NavBarItem", items["navAsyncOperations"].Name.LocalName);
+        foreach (var systemId in new[] { "navAudit", "navAsyncOperations", "navProcessSessions" })
+            Assert.AreEqual($"hardcoded_{{B7196B13-6B9D-42CD-BD58-B19A3953126F}}{systemId}",
+                (string?)items[systemId].Attribute("RelationshipName"));
         Assert.AreEqual("Audit History", (string?)items["navAudit"].Element("Titles")?.Element("Title")?.Attribute("Text"));
         Assert.IsTrue(items.Values.All(item => (string?)item.Attribute("Show") == "false"));
 
@@ -962,20 +965,88 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
         Assert.IsFalse(hidden["navConnections"].GetProperty("visible").GetBoolean());
         Assert.IsFalse(hidden["navAudit"].GetProperty("visible").GetBoolean());
         Assert.IsFalse(hidden["navAsyncOperations"].GetProperty("visible").GetBoolean());
+        AssertNavigation(hidden["navProcessSessions"], "system", null, "Dialog Sessions", "ProcessCenter", 9700, false);
 
         await ApplyNavigation(id, """
             [
               {"action":"manage_navigation","manage_action":"show","nav_id":"nav_account_employees"},
               {"action":"manage_navigation","manage_action":"show","items":[
                  {"relationship_name":"account_connection1"},{"nav_id":"navAudit"},{"nav_id":"navAsyncOperations"}
-              ]}
+              ]},
+              {"action":"manage_navigation","manage_action":"update","nav_id":"navProcessSessions","visible":true}
             ]
             """);
         var shown = ReadNavBar(id).Elements().ToList();
-        Assert.HasCount(4, shown);
+        Assert.HasCount(5, shown);
         Assert.IsTrue(shown.All(item => (string?)item.Attribute("Show") == "true"));
         var visible = await ReadNavigation(id);
         Assert.IsTrue(items.Keys.All(key => visible[key].GetProperty("visible").GetBoolean()));
+    }
+
+    [TestMethod]
+    [DataRow("hide", false)]
+    [DataRow("show", true)]
+    [DataRow("update", false)]
+    [DataRow("update", true)]
+    public async Task Update_Operations_Navigation_RejectsVisibilityChangesOnCustomLinks(string action, bool visible)
+    {
+        var id = SeedForm("Related", formXml: ValidFormXml.Replace("</form>", """
+            <Navigation><NavBar>
+              <NavBarItem Id="navSupport" Icon="support.png" Url="/support">
+                <Titles><Title LCID="1033" Text="Support" /></Titles>
+              </NavBarItem>
+            </NavBar></Navigation></form>
+            """));
+        var operation = new Dictionary<string, object>
+        {
+            ["action"] = "manage_navigation", ["manage_action"] = action, ["nav_id"] = "navSupport"
+        };
+        if (action == "update")
+            operation["visible"] = visible;
+
+        var result = await NewTool().manage_form(null!, "update", "account", form_id: id.ToString(),
+            operations: JsonSerializer.Serialize(new[] { operation }));
+
+        Assert.IsTrue(result.IsError == true);
+        StringAssert.Contains(Text(result), "Cannot change visibility for navigation item 'navSupport'.");
+        StringAssert.Contains(Text(result), "FormXML does not allow Show on a custom NavBarItem.");
+        Assert.AreEqual(0, _service.Updates);
+        Assert.AreEqual(0, _service.Publishes);
+    }
+
+    [TestMethod]
+    public async Task Update_Operations_Navigation_RejectsNewOverrideForUnmappedBuiltInItem()
+    {
+        SeedNavigationMetadata();
+        var id = SeedForm("Related");
+        var result = await NewTool().manage_form(null!, "update", "account", form_id: id.ToString(), operations: """
+            [{"action":"manage_navigation","manage_action":"hide","nav_id":"navSPDocuments"}]
+            """);
+
+        Assert.IsTrue(result.IsError == true);
+        StringAssert.Contains(Text(result), "Cannot create a FormXML override for built-in navigation item 'navSPDocuments'.");
+        Assert.AreEqual(0, _service.Updates);
+        Assert.AreEqual(0, _service.Publishes);
+    }
+
+    [TestMethod]
+    public void Navigation_FormXmlXsdRejectsShowOnCustomLinks()
+    {
+        var getSchemaSet = typeof(ManageFormTool).GetMethod("GetSchemaSet", BindingFlags.NonPublic | BindingFlags.Static)!;
+        var schemas = (XmlSchemaSet)getSchemaSet.Invoke(null, null)!;
+        var document = XDocument.Parse(ValidFormXml.Replace("</form>", """
+            <Navigation><NavBar>
+              <NavBarByRelationshipItem Id="navAudit" RelationshipName="hardcoded_{B7196B13-6B9D-42CD-BD58-B19A3953126F}navAudit" Show="false" />
+              <NavBarItem Id="navSupport" Icon="support.png" Url="/support">
+                <Titles><Title LCID="1033" Text="Support" /></Titles>
+              </NavBarItem>
+            </NavBar></Navigation></form>
+            """));
+        document.Validate(schemas, null);
+
+        document.Descendants("NavBarItem").Single().SetAttributeValue("Show", "false");
+        var error = Assert.ThrowsExactly<XmlSchemaValidationException>(() => document.Validate(schemas, null));
+        StringAssert.Contains(error.Message, "'Show' attribute is not declared");
     }
 
     [TestMethod]

@@ -144,7 +144,6 @@
 					<xs:attribute name="PassParams" type="FormCRM_Boolean" use="optional" />
 					<xs:attribute name="Sequence" type="xs:nonNegativeInteger" use="optional" />
 					<xs:attribute name="Area" type="xs:string" use="optional" />
-					<xs:attribute name="Show" type="xs:boolean" use="optional" />
 					<xs:attribute name="Client" type="xs:string" use="optional" />
 					<xs:attribute name="AvailableOffline" type="xs:boolean" use="optional" />
 					
