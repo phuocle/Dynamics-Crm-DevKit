@@ -9,19 +9,25 @@ For mutations call `manage_ribbon(action='update', entity_name='...', operations
 
 `surface` is `form`, `main_grid`, or `sub_grid`. JS `library` and `enable_library` are web resource names; `function` is the click handler and `enable_function` is the enable-rule handler. Resource names resolve by display name first, then logical/unique/schema name; ambiguous matches fail.
 
-- `add_button`: required `surface`, `label`, `library`, `function`, `enable_library`, `enable_function`. Optional `modern_image` (image web resource), `tooltip_title`, `tooltip_description`, `sequence` (integer; default 85). On `main_grid` or `sub_grid` only, `selection_min` and `selection_max` are optional nonnegative integers for a selection count rule; minimum must not exceed maximum. These selection fields are supported on add, not update.
-- `update_button`: identify a custom button using `button_id` or `label`. With `button_id`, `label` is the new label; when using `label` to identify it, use `new_label` to rename. Supply at least one of the new label, `library`, `function`, `enable_library`, `enable_function`, `modern_image`, `tooltip_title`, `tooltip_description`, or `sequence`. Updating OOB buttons is unsupported.
+- `add_button`: required `surface`, `label`, `library`, `function`, `enable_library`, `enable_function`. Optional `dependency_libraries`, `modern_image` (image web resource), `tooltip_title`, `tooltip_description`, `sequence` (integer; default 85). On `main_grid` or `sub_grid` only, `selection_min` and `selection_max` are optional nonnegative integers for a selection count rule; minimum must not exceed maximum. These selection fields are supported on add, not update.
+- `update_button`: identify a custom button using `button_id` or `label`. With `button_id`, `label` is the new label; when using `label` to identify it, use `new_label` to rename. Supply at least one of the new label, `library`, `function`, `enable_library`, `enable_function`, `dependency_libraries`, `modern_image`, `tooltip_title`, `tooltip_description`, or `sequence`. Updating OOB buttons is unsupported.
 - `hide_button`, `show_button`: require `button_id` from `buttons`; work with OOB or custom buttons. For custom buttons hide uses an always-disabled enable rule; for OOB it adds a HideCustomAction.
-- `add_split_button`: required `surface`, `label`, `library`, `function`, `enable_library`, `enable_function`, and non-empty `items` array. The handler fields describe the split button's main action. Each item requires `label`, `library`, `function`, `enable_library`, and `enable_function`; optional item fields are `modern_image`, `tooltip_title`, `sequence`. Parent optional fields: `modern_image`, `tooltip_title`, `tooltip_description`, `sequence` (default 85).
+- `add_split_button`: required `surface`, `label`, `library`, `function`, `enable_library`, `enable_function`, and non-empty `items` array. The handler fields describe the split button's main action. Each item requires `label`, `library`, `function`, `enable_library`, and `enable_function`; optional item fields are `dependency_libraries`, `modern_image`, `tooltip_title`, `sequence`. Parent optional fields are `dependency_libraries`, `modern_image`, `tooltip_title`, `tooltip_description`, and `sequence` (default 85).
 - `add_flyout_static`: required `surface`, `label`, and non-empty `items` array. Each item has the same required and optional fields as an `add_split_button` item. Parent optional fields: `modern_image`, `tooltip_title`, `tooltip_description`, `sequence` (default 85).
-- `update_split_button`: identify by `split_button_id` or `label`; `update_flyout_static`: identify by `flyout_id` or `label`. With an ID, `label` is the new label; when identifying by label, use `new_label` to rename. Both accept `modern_image`, `tooltip_title`, `tooltip_description`, `sequence`, and `items` updates. The split button also accepts `library`, `function`, `enable_library`, `enable_function` for its main action. Each item update identifies an existing item by `item_label` and can set `label` (new label), `modern_image`, `tooltip_title`, `sequence`, `library`, `function`, `enable_library`, or `enable_function`. These item updates do not add new items.
+- `update_split_button`: identify by `split_button_id` or `label`; `update_flyout_static`: identify by `flyout_id` or `label`. With an ID, `label` is the new label; when identifying by label, use `new_label` to rename. Both accept `modern_image`, `tooltip_title`, `tooltip_description`, `sequence`, and `items` updates. The split button also accepts `library`, `function`, `enable_library`, `enable_function`, and `dependency_libraries` for its main action. Each item update identifies an existing item by `item_label` and can set `label` (new label), `modern_image`, `tooltip_title`, `sequence`, `library`, `function`, `enable_library`, `enable_function`, or `dependency_libraries`. These item updates do not add new items.
 - `hide_flyout_item`, `show_flyout_item`: require `item_label` and either `flyout_id` or `flyout_label` for an existing flyout anchor. These operations target the item's generated button and toggle its always-disabled rule.
+
+### JavaScript dependency libraries
+
+Set `dependency_libraries` to an ordered array of existing JavaScript web resource display names or unique names. Unique names can be passed with or without the `$webresource:` prefix. Each distinct library produces an `isNaN` `CustomRule` with `Default="true"` and an `isNaN` `JavaScriptFunction` before the main handlers. List prerequisite libraries first. Set the array separately for each split button action or menu item that needs dependencies. This lets a `main_grid` or `sub_grid` button load dependencies when no form has been opened.
+
+On updates, supplying `dependency_libraries` replaces the current preload list. Omit the field to keep that list, or supply `[]` to clear it.
 
 Example array to serialize into `operations`:
 
 ```json
 [
-  {"action":"add_button","surface":"sub_grid","label":"Review","library":"example_/review.js","function":"Example.review","enable_library":"example_/review.js","enable_function":"Example.canReview","selection_min":1,"selection_max":1},
+  {"action":"add_button","surface":"sub_grid","label":"Review","library":"example_/review.js","function":"Example.review","enable_library":"example_/review.js","enable_function":"Example.canReview","dependency_libraries":["example_/lib/shared.js","$webresource:example_/lib/devkit.js"],"selection_min":1,"selection_max":1},
   {"action":"hide_button","button_id":"<existing button ID from buttons>"}
 ]
 ```
@@ -29,7 +35,7 @@ Example array to serialize into `operations`:
 Example flyout array (serialize before passing as `operations`):
 
 ```json
-[{"action":"add_flyout_static","surface":"form","label":"Actions","items":[{"label":"Review","library":"example_/review.js","function":"Example.review","enable_library":"example_/review.js","enable_function":"Example.canReview"}]}]
+[{"action":"add_flyout_static","surface":"main_grid","label":"Actions","items":[{"label":"Review","library":"example_/review.js","function":"Example.review","enable_library":"example_/review.js","enable_function":"Example.canReview","dependency_libraries":["example_/lib/shared.js"]}]}]
 ```
 
 The tool validates, backs up, imports, then starts PublishAll asynchronously. Follow the returned wait/poll instructions using `get_system_jobs`; do not read back with `buttons` or `detail` while publish is pending. The result's `backupPath` can be passed as `ribbonxml` to `action='undo'`. The advanced `ribbonxml` update input accepts inline RibbonDiffXml or a file path and preserves existing elements absent from the supplied patch; `operations` takes precedence when both are supplied.
