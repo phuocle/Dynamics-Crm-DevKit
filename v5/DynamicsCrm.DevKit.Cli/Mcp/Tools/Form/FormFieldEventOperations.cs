@@ -107,9 +107,56 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 
             var updatedFields = new List<string>();
 
-            var allCells = formDoc.Descendants("cell")
-                .Where(c => c.Element("control") != null)
-                .ToList();
+            var tabName = FormXmlHelpers.GetStringProp(op, "tab");
+            var sectionName = FormXmlHelpers.GetStringProp(op, "section");
+            var tabsElement = formDoc.Root?.Element("tabs");
+
+            XElement scopeElement;
+            if (!string.IsNullOrWhiteSpace(tabName))
+            {
+                var tabElement = FormXmlHelpers.FindTab(formDoc, tabName);
+                if (tabElement == null)
+                    throw new InvalidOperationException(
+                        $"Tab '{tabName}' not found. Available tabs: {string.Join(", ", FormXmlHelpers.GetTabNames(formDoc))}");
+
+                if (!string.IsNullOrWhiteSpace(sectionName))
+                {
+                    var sectionElement = FormXmlHelpers.FindSection(tabElement, sectionName);
+                    if (sectionElement == null)
+                        throw new InvalidOperationException(
+                            $"Section '{sectionName}' not found in tab '{tabName}'. Available sections: {string.Join(", ", FormXmlHelpers.GetSectionNames(tabElement))}");
+                    scopeElement = sectionElement;
+                }
+                else
+                {
+                    scopeElement = tabElement;
+                }
+            }
+            else if (!string.IsNullOrWhiteSpace(sectionName))
+            {
+                var sectionElement = tabsElement != null
+                    ? FormXmlHelpers.FindSection(tabsElement, sectionName)
+                    : null;
+                if (sectionElement == null)
+                {
+                    var availableSections = tabsElement != null
+                        ? FormXmlHelpers.GetSectionNames(tabsElement)
+                        : new List<string>();
+                    throw new InvalidOperationException(
+                        $"Section '{sectionName}' not found. Available sections: {string.Join(", ", availableSections)}");
+                }
+                scopeElement = sectionElement;
+            }
+            else
+            {
+                scopeElement = tabsElement;
+            }
+
+            var allCells = scopeElement != null
+                ? scopeElement.Descendants("cell")
+                    .Where(c => c.Element("control") != null)
+                    .ToList()
+                : new List<XElement>();
 
             foreach (var fieldEl in fields)
             {

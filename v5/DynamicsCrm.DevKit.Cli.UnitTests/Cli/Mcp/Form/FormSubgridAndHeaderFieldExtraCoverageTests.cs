@@ -201,6 +201,223 @@ public sealed class FormSubgridAndHeaderFieldExtraCoverageTests
         StringAssert.Contains(ex.Message, "update_fields requires at least one field.");
     }
 
+    private static XDocument FormWithBodyHeaderAndFooterField()
+    {
+        return XDocument.Parse("""
+<form>
+  <tabs>
+    <tab name="general" verticallayout="1">
+      <labels><label description="General" languagecode="1033" /></labels>
+      <columns>
+        <column width="100%">
+          <sections>
+            <section name="sec_description" columns="1">
+              <labels><label description="Description" languagecode="1033" /></labels>
+              <rows>
+                <row>
+                  <cell id="{11111111-1111-1111-1111-111111111111}">
+                    <labels><label description="Description" languagecode="1033" /></labels>
+                    <control id="description" datafieldname="description" />
+                  </cell>
+                </row>
+              </rows>
+            </section>
+            <section name="sec_other" columns="1">
+              <labels><label description="Other" languagecode="1033" /></labels>
+              <rows>
+                <row>
+                  <cell id="{22222222-2222-2222-2222-222222222222}">
+                    <labels><label description="Description" languagecode="1033" /></labels>
+                    <control id="description1" datafieldname="description" />
+                  </cell>
+                </row>
+              </rows>
+            </section>
+          </sections>
+        </column>
+      </columns>
+    </tab>
+    <tab name="details" verticallayout="1">
+      <labels><label description="Details" languagecode="1033" /></labels>
+      <columns>
+        <column width="100%">
+          <sections>
+            <section name="sec_details" columns="1">
+              <labels><label description="Details Section" languagecode="1033" /></labels>
+              <rows>
+                <row>
+                  <cell id="{33333333-3333-3333-3333-333333333333}">
+                    <labels><label description="Description" languagecode="1033" /></labels>
+                    <control id="description2" datafieldname="description" />
+                  </cell>
+                </row>
+              </rows>
+            </section>
+          </sections>
+        </column>
+      </columns>
+    </tab>
+  </tabs>
+  <header>
+    <rows>
+      <row>
+        <cell id="{44444444-4444-4444-4444-444444444444}">
+          <labels><label description="Description" languagecode="1033" /></labels>
+          <control id="header_description" datafieldname="description" />
+        </cell>
+      </row>
+    </rows>
+  </header>
+  <footer>
+    <rows>
+      <row>
+        <cell id="{55555555-5555-5555-5555-555555555555}">
+          <labels><label description="Description" languagecode="1033" /></labels>
+          <control id="footer_description" datafieldname="description" />
+        </cell>
+      </row>
+    </rows>
+  </footer>
+</form>
+""");
+    }
+
+    [TestMethod]
+    public void UpdateFields_WithTabAndSection_OnlyUpdatesTargetSectionAndPreservesHeaderFooterAndOtherSections()
+    {
+        var form = FormWithBodyHeaderAndFooterField();
+        var ops = NewFieldOps();
+        var attrs = Attributes(TestMetadata.Memo("description", "Description"));
+
+        var summary = ops.ExecuteUpdateFields(form, Json("""
+{ "tab": "general", "section": "Description", "fields": [ { "field": "description", "rowspan": 6 } ] }
+"""), attrs, new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
+
+        Assert.AreEqual("update_fields: 1 field(s) updated (description)", summary);
+
+        var targetCell = form.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "description");
+        var otherSecCell = form.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "description1");
+        var otherTabCell = form.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "description2");
+        var headerCell = form.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "header_description");
+        var footerCell = form.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "footer_description");
+
+        Assert.AreEqual("6", targetCell.Attribute("rowspan")?.Value);
+        Assert.IsNull(otherSecCell.Attribute("rowspan"));
+        Assert.IsNull(otherTabCell.Attribute("rowspan"));
+        Assert.IsNull(headerCell.Attribute("rowspan"));
+        Assert.IsNull(footerCell.Attribute("rowspan"));
+    }
+
+    [TestMethod]
+    public void UpdateFields_WithoutTabOrSection_UpdatesBodyOnlyAndNeverTouchesHeaderOrFooter()
+    {
+        var form = FormWithBodyHeaderAndFooterField();
+        var ops = NewFieldOps();
+        var attrs = Attributes(TestMetadata.Memo("description", "Description"));
+
+        var summary = ops.ExecuteUpdateFields(form, Json("""
+{ "fields": [ { "field": "description", "rowspan": 4 } ] }
+"""), attrs, new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
+
+        Assert.AreEqual("update_fields: 1 field(s) updated (description)", summary);
+
+        var bodyCells = form.Root!.Element("tabs")!.Descendants("cell")
+            .Where(c => c.Element("control")?.Attribute("datafieldname")?.Value == "description")
+            .ToList();
+        Assert.AreEqual(3, bodyCells.Count);
+        Assert.IsTrue(bodyCells.All(c => c.Attribute("rowspan")?.Value == "4"));
+
+        var headerCell = form.Root.Element("header")!.Descendants("cell").Single();
+        var footerCell = form.Root.Element("footer")!.Descendants("cell").Single();
+        Assert.IsNull(headerCell.Attribute("rowspan"));
+        Assert.IsNull(footerCell.Attribute("rowspan"));
+    }
+
+    [TestMethod]
+    public void UpdateFields_WithTabOnlyOrSectionOnly_ScopesToSpecifiedContainer()
+    {
+        var attrs = Attributes(TestMetadata.Memo("description", "Description"));
+        var ops = NewFieldOps();
+
+        var tabScopedForm = FormWithBodyHeaderAndFooterField();
+        ops.ExecuteUpdateFields(tabScopedForm, Json("""
+{ "tab": "details", "fields": [ { "field": "description", "rowspan": 5 } ] }
+"""), attrs, new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
+
+        Assert.IsNull(tabScopedForm.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "description").Attribute("rowspan"));
+        Assert.IsNull(tabScopedForm.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "description1").Attribute("rowspan"));
+        Assert.AreEqual("5", tabScopedForm.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "description2").Attribute("rowspan")?.Value);
+        Assert.IsNull(tabScopedForm.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "header_description").Attribute("rowspan"));
+        Assert.IsNull(tabScopedForm.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "footer_description").Attribute("rowspan"));
+
+        var sectionScopedForm = FormWithBodyHeaderAndFooterField();
+        ops.ExecuteUpdateFields(sectionScopedForm, Json("""
+{ "section": "sec_other", "fields": [ { "field": "description", "rowspan": 3 } ] }
+"""), attrs, new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
+
+        Assert.IsNull(sectionScopedForm.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "description").Attribute("rowspan"));
+        Assert.AreEqual("3", sectionScopedForm.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "description1").Attribute("rowspan")?.Value);
+        Assert.IsNull(sectionScopedForm.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "description2").Attribute("rowspan"));
+        Assert.IsNull(sectionScopedForm.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "header_description").Attribute("rowspan"));
+        Assert.IsNull(sectionScopedForm.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "footer_description").Attribute("rowspan"));
+    }
+
+    [TestMethod]
+    public void UpdateFields_InvalidTabOrSection_Throws()
+    {
+        var form = FormWithBodyHeaderAndFooterField();
+        var ops = NewFieldOps();
+        var attrs = Attributes(TestMetadata.Memo("description", "Description"));
+
+        var badTab = Assert.ThrowsExactly<InvalidOperationException>(() => ops.ExecuteUpdateFields(form, Json("""
+{ "tab": "missing_tab", "fields": [ { "field": "description", "rowspan": 6 } ] }
+"""), attrs, new Dictionary<string, string>()));
+        StringAssert.Contains(badTab.Message, "Tab 'missing_tab' not found.");
+
+        var headerTab = Assert.ThrowsExactly<InvalidOperationException>(() => ops.ExecuteUpdateFields(form, Json("""
+{ "tab": "header", "fields": [ { "field": "description", "rowspan": 6 } ] }
+"""), attrs, new Dictionary<string, string>()));
+        StringAssert.Contains(headerTab.Message, "Tab 'header' not found.");
+
+        var badSectionInTab = Assert.ThrowsExactly<InvalidOperationException>(() => ops.ExecuteUpdateFields(form, Json("""
+{ "tab": "general", "section": "missing_sec", "fields": [ { "field": "description", "rowspan": 6 } ] }
+"""), attrs, new Dictionary<string, string>()));
+        StringAssert.Contains(badSectionInTab.Message, "Section 'missing_sec' not found in tab 'general'.");
+
+        var badSectionOnly = Assert.ThrowsExactly<InvalidOperationException>(() => ops.ExecuteUpdateFields(form, Json("""
+{ "section": "missing_sec", "fields": [ { "field": "description", "rowspan": 6 } ] }
+"""), attrs, new Dictionary<string, string>()));
+        StringAssert.Contains(badSectionOnly.Message, "Section 'missing_sec' not found.");
+    }
+
+    [TestMethod]
+    public void Runner_ManageFieldsUpdate_WithTabAndSection_DoesNotModifyHeader()
+    {
+        _accountMeta = TestMetadata.Entity("account", "Account",
+            TestMetadata.String("name", "Account Name"),
+            TestMetadata.Memo("description", "Description"));
+
+        var runner = new FormXmlOperationsRunner(_fake.Client);
+        var op = Json("""
+{
+  "action": "manage_fields",
+  "manage_action": "update",
+  "tab": "general",
+  "section": "Description",
+  "fields": [ { "field": "description", "rowspan": 6 } ]
+}
+""");
+
+        var (modifiedXml, summaries, _) = runner.Run(FormWithBodyHeaderAndFooterField().ToString(), "account", new List<JsonElement> { op });
+        var resultDoc = XDocument.Parse(modifiedXml);
+
+        Assert.AreEqual(1, summaries.Count);
+        Assert.AreEqual("update_fields: 1 field(s) updated (description)", summaries[0]);
+        Assert.AreEqual("6", resultDoc.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "description").Attribute("rowspan")?.Value);
+        Assert.IsNull(resultDoc.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "header_description").Attribute("rowspan"));
+        Assert.IsNull(resultDoc.Descendants("cell").Single(c => c.Element("control")?.Attribute("id")?.Value == "footer_description").Attribute("rowspan"));
+    }
+
     [TestMethod]
     public void UpdateHeaderFields_NoHeader_ReturnsNotice()
     {
