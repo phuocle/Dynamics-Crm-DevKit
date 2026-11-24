@@ -291,6 +291,10 @@ Use `manage_navigation` with `manage_form(action='update')`. Put `relationship_n
 | `update` | Set any supplied `area`, `sequence` (non-negative integer), `label`, or `visible` (boolean). A `label` updates one `Titles/Title` entry. Use `language_code` to select its LCID, or omit it to use the organization base language. |
 | `remove` | Remove the item's explicit FormXML override. An inherited item can reappear with its default settings. Use `hide` to keep it out of the Related menu. |
 
+Dataverse FormXML defines `Show` on `NavBarByRelationshipItem`. For inherited `navAudit`, `navAsyncOperations`, and `navProcessSessions`, `manage_navigation` creates `NavBarByRelationshipItem` overrides using the `hardcoded_` relationship names from Dataverse form exports. The items still appear as `type="system"` in `navigation_list`. An existing `NavBarByRelationshipItem` is edited in place.
+
+Custom `NavBarItem` links support `update` for `area`, `sequence`, and `label`. `hide`, `show`, and `update` with `visible` return an error for these links. Use `remove` to delete a custom link. For an inherited built-in item without a supported override mapping, such as `navSPDocuments`, the tool reports an error when asked to create an override.
+
 ```json
 [
   {
