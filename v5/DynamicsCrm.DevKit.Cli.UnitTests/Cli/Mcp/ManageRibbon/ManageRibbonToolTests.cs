@@ -166,6 +166,80 @@ public class ManageRibbonOperationsTests
     }
 
     [TestMethod]
+    public void ExecuteButtonOperations_SynchronizeDependenciesAndPreserveHandlers()
+    {
+        var doc = EmptyRibbon();
+        var ops = new RibbonButtonOperations(_validation, 1033);
+        const string prefix = "devkit.account.OpenDialog.HomepageGrid";
+        var (addError, _, _) = ops.ExecuteAddButton(doc, "account", Json("""
+{
+  "surface": "main_grid", "label": "Open Dialog",
+  "library": "devkit_/account.js", "function": "Account.open",
+  "enable_library": "devkit_/account.enable.js", "enable_function": "Account.canOpen",
+  "dependency_libraries": ["devkit_/shared.js", "$webresource:devkit_/webapi.js", "DEVKIT_/SHARED.js"],
+  "selection_min": 1
+}
+"""));
+        Assert.IsNull(addError);
+        AssertDependencies(doc, prefix, "Account.open", "Account.canOpen", "devkit_/shared.js", "devkit_/webapi.js");
+        AssertSelectionCountRule(doc, $"{prefix}.EnableRuleSelectCount", "1", null);
+
+        var otherAction = new XElement("JavaScriptFunction", new XAttribute("FunctionName", "Account.log"),
+            new XAttribute("Library", "$webresource:devkit_/audit.js"));
+        GetElement(doc, "CommandDefinition", $"{prefix}.Command").Element("Actions")!.Add(otherAction);
+
+        var update = Json($$"""
+{
+  "button_id": "{{prefix}}.Button", "dependency_libraries": ["devkit_/webapi.js", "devkit_/new.js"],
+  "library": "devkit_/account.v2.js", "function": "Account.openV2",
+  "enable_library": "devkit_/account.enable.v2.js", "enable_function": "Account.canOpenV2"
+}
+""");
+        Assert.IsNull(ops.ExecuteUpdateButton(doc, "account", update).error);
+        var updated = doc.ToString();
+        Assert.IsNull(ops.ExecuteUpdateButton(doc, "account", update).error);
+        Assert.AreEqual(updated, doc.ToString());
+        AssertDependencies(doc, prefix, "Account.openV2", "Account.canOpenV2", "devkit_/webapi.js", "devkit_/new.js");
+        Assert.AreEqual("$webresource:devkit_/account.v2.js", doc.Descendants("JavaScriptFunction")
+            .Single(e => (string?)e.Attribute("FunctionName") == "Account.openV2").Attribute("Library")?.Value);
+        Assert.AreEqual("$webresource:devkit_/account.enable.v2.js", doc.Descendants("CustomRule")
+            .Single(e => (string?)e.Attribute("FunctionName") == "Account.canOpenV2").Attribute("Library")?.Value);
+
+        Assert.IsNull(ops.ExecuteUpdateButton(doc, "account", Json($$"""
+{ "button_id": "{{prefix}}.Button", "function": "Account.openV3", "enable_function": "Account.canOpenV3" }
+""")).error);
+        AssertDependencies(doc, prefix, "Account.openV3", "Account.canOpenV3", "devkit_/webapi.js", "devkit_/new.js");
+
+        Assert.IsNull(ops.ExecuteUpdateButton(doc, "account", Json($$"""
+{ "button_id": "{{prefix}}.Button", "dependency_libraries": [] }
+""")).error);
+        AssertDependencies(doc, prefix, "Account.openV3", "Account.canOpenV3");
+        Assert.IsNotNull(otherAction.Parent);
+        AssertSelectionCountRule(doc, $"{prefix}.EnableRuleSelectCount", "1", null);
+    }
+
+    [TestMethod]
+    [DataRow("null", "must be an array")]
+    [DataRow("\"devkit_/shared.js\"", "must be an array")]
+    [DataRow("[42]", "non-empty web resource name")]
+    [DataRow("[\"  $webresource:  \" ]", "non-empty web resource name")]
+    [DataRow("[\"devkit_/missing.js\"]", "not found in Dataverse")]
+    public void ExecuteUpdateButton_InvalidDependencies_ReturnsError(string dependenciesJson, string expectedError)
+    {
+        var doc = EmptyRibbon();
+        var ops = new RibbonButtonOperations(_validation, 1033);
+        Assert.IsNull(ops.ExecuteAddButton(doc, "account", AddButtonJson("sub_grid", "Open Dialog")).error);
+        var before = doc.ToString();
+
+        var result = ops.ExecuteUpdateButton(doc, "account", Json($$"""
+{ "label": "Open Dialog", "dependency_libraries": {{dependenciesJson}} }
+"""));
+
+        StringAssert.Contains(result.error, expectedError);
+        Assert.AreEqual(before, doc.ToString());
+    }
+
+    [TestMethod]
     public void ExecuteHideShowButton_CustomButton_TogglesAlwaysDisabledRule()
     {
         var doc = EmptyRibbon();
@@ -311,6 +385,47 @@ public class ManageRibbonOperationsTests
     }
 
     [TestMethod]
+    [DataRow(true, "split_button_id", "SplitButton")]
+    [DataRow(false, "flyout_id", "FlyoutAnchor")]
+    public void ExecuteMenuOperations_KeepDependenciesScopedToEachCommand(bool split, string idField, string controlType)
+    {
+        var doc = EmptyRibbon();
+        var ops = new RibbonFlyoutOperations(_validation, 1033);
+        var parentDependencies = split ? "\"dependency_libraries\": [\"devkit_/main.js\"]," : "";
+        var add = Json($$"""
+{
+  "surface": "sub_grid", "label": "Actions", {{parentDependencies}}
+  "library": "devkit_/actions.js", "function": "Actions.run",
+  "enable_library": "devkit_/actions.enable.js", "enable_function": "Actions.canRun",
+  "items": [
+    { "label": "Print", "library": "devkit_/print.js", "function": "Print.run", "enable_library": "devkit_/print.js", "enable_function": "Print.canRun", "dependency_libraries": ["devkit_/shared.js"] },
+    { "label": "Email", "library": "devkit_/email.js", "function": "Email.run", "enable_library": "devkit_/email.js", "enable_function": "Email.canRun" }
+  ]
+}
+""");
+        Assert.IsNull((split ? ops.ExecuteAddSplitButton(doc, "account", add) : ops.ExecuteAddFlyoutStatic(doc, "account", add)).error);
+        const string prefix = "devkit.account.Actions.SubGrid";
+        if (split)
+            AssertDependencies(doc, prefix, "Actions.run", "Actions.canRun", "devkit_/main.js");
+        else
+            Assert.IsFalse(GetElement(doc, "CommandDefinition", $"{prefix}.Command").Element("Actions")!.HasElements);
+        AssertDependencies(doc, $"{prefix}.Print", "Print.run", "Print.canRun", "devkit_/shared.js");
+
+        var parentUpdate = split ? "\"dependency_libraries\": []," : "";
+        var update = Json($$"""
+{
+  "{{idField}}": "{{prefix}}.{{controlType}}", {{parentUpdate}}
+  "items": [{ "item_label": "Print", "dependency_libraries": ["devkit_/webapi.js"], "function": "Print.runV2" }]
+}
+""");
+        Assert.IsNull((split ? ops.ExecuteUpdateSplitButton(doc, "account", update) : ops.ExecuteUpdateFlyoutStatic(doc, "account", update)).error);
+        if (split)
+            AssertDependencies(doc, prefix, "Actions.run", "Actions.canRun");
+        AssertDependencies(doc, $"{prefix}.Print", "Print.runV2", "Print.canRun", "devkit_/webapi.js");
+        AssertDependencies(doc, $"{prefix}.Email", "Email.run", "Email.canRun");
+    }
+
+    [TestMethod]
     public void ExecuteHideShowFlyoutItem_TogglesAlwaysDisabledRule()
     {
         var doc = EmptyRibbon();
@@ -423,6 +538,25 @@ public class ManageRibbonOperationsTests
         Assert.IsNotNull(countRule);
         Assert.AreEqual(min, countRule.Attribute("Minimum")?.Value);
         Assert.AreEqual(max, countRule.Attribute("Maximum")?.Value);
+    }
+
+    private static void AssertDependencies(XDocument doc, string idPrefix, string clickHandler, string enableHandler, params string[] libraries)
+    {
+        var actions = GetElement(doc, "CommandDefinition", $"{idPrefix}.Command").Element("Actions")!
+            .Elements("JavaScriptFunction").ToArray();
+        var rules = GetRuleDefinition(doc, $"{idPrefix}.EnableRule").Elements("CustomRule").ToArray();
+        Assert.AreEqual(libraries.Length, actions.Count(e => (string?)e.Attribute("FunctionName") == "isNaN"));
+        Assert.AreEqual(libraries.Length, rules.Count(e => (string?)e.Attribute("FunctionName") == "isNaN"));
+        for (var i = 0; i < libraries.Length; i++)
+        {
+            var library = $"$webresource:{libraries[i]}";
+            Assert.IsTrue(XNode.DeepEquals(new XElement("JavaScriptFunction",
+                new XAttribute("FunctionName", "isNaN"), new XAttribute("Library", library)), actions[i]));
+            Assert.IsTrue(XNode.DeepEquals(new XElement("CustomRule",
+                new XAttribute("FunctionName", "isNaN"), new XAttribute("Library", library), new XAttribute("Default", "true")), rules[i]));
+        }
+        Assert.AreEqual(clickHandler, actions[libraries.Length].Attribute("FunctionName")?.Value);
+        Assert.AreEqual(enableHandler, rules[libraries.Length].Attribute("FunctionName")?.Value);
     }
 
     private static void AssertCommandEnableRuleOrder(XDocument doc, string commandId, string selectRuleId, string jsRuleId)

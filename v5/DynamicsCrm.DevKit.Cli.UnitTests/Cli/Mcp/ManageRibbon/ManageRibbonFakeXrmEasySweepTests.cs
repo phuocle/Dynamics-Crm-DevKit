@@ -21,6 +21,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
+using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.ManageRibbon;
 
@@ -658,6 +659,38 @@ public sealed class ManageRibbonFakeXrmEasySweepTests
         var result = await CallAsync("update", "account", operations: ops);
         Assert.IsFalse(result.IsError == true, Text(result));
         StringAssert.Contains(Text(result), "add_button: 'Open Dialog' [form]");
+    }
+
+    [TestMethod]
+    public async Task AddFlyoutStatic_ResolvesDependencyNamesInItemsAndImportsOrderedXml()
+    {
+        SeedCoreWebResources();
+        SeedWebResource("devkit_/shared.js", "Shared library");
+        SeedWebResource("devkit_/account.webapi.js", "Account Web API");
+        const string ops = """
+[{"action":"add_flyout_static","surface":"main_grid","label":"Actions","items":[
+  {"label":"Open Dialog","library":"Account Library","function":"Account.openDialog",
+   "enable_library":"Account Enable Library","enable_function":"Account.canOpen",
+   "dependency_libraries":["Shared library","$webresource:devkit_/account.webapi.js","devkit_/shared.js"]}
+]}]
+""";
+        var result = await CallAsync("update", "account", operations: ops);
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var functions = Struct(result).GetProperty("functionSignatures").EnumerateArray()
+            .Select(f => f.GetProperty("functionName").GetString()).ToArray();
+        CollectionAssert.AreEquivalent(new[] { "Account.openDialog", "Account.canOpen" }, functions);
+
+        using var zip = new ZipArchive(new MemoryStream(_service.LastImportedSolutionZip!));
+        using var stream = zip.GetEntry("customizations.xml")!.Open();
+        var xml = XDocument.Load(stream);
+        var ribbon = xml.Descendants("RibbonDiffXml").Single();
+        var actions = ribbon.Descendants("JavaScriptFunction").ToArray();
+        var rules = ribbon.Descendants("CustomRule").ToArray();
+        string[] expected = ["$webresource:devkit_/shared.js", "$webresource:devkit_/account.webapi.js"];
+        CollectionAssert.AreEqual(expected, actions.Take(2).Select(e => (string?)e.Attribute("Library")).ToArray());
+        CollectionAssert.AreEqual(expected, rules.Take(2).Select(e => (string?)e.Attribute("Library")).ToArray());
+        Assert.AreEqual("Account.openDialog", (string?)actions[2].Attribute("FunctionName"));
+        Assert.AreEqual("Account.canOpen", (string?)rules[2].Attribute("FunctionName"));
     }
 
     [TestMethod]
