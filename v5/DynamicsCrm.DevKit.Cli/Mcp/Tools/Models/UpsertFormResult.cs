@@ -102,6 +102,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<FormListEntry> Forms { get; set; }
 
+        [JsonPropertyName("navigation")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<FormNavigationItem> Navigation { get; set; }
+
         [JsonPropertyName("totalCount")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? TotalCount { get; set; }

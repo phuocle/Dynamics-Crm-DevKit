@@ -174,10 +174,10 @@ public sealed class DeepMcpCoverageTests
         Call(tool, "HandleDetail", "account", "", "", 0);
         Call(tool, "HandleDetail", "account", "bad", "", 0);
         Call(tool, "HandleDetail", "account", Guid.NewGuid().ToString(), "", 99);
-        Call(tool, "HandleUpdate", "account", "", "", "", null);
-        Call(tool, "HandleUpdate", "account", "bad", "<form />", "", null);
-        Call(tool, "HandleUpdate", "account", Guid.NewGuid().ToString(), "", "", null);
-        Call(tool, "HandleUpdate", "account", Guid.NewGuid().ToString(), "<form />", "[]", null);
+        Call(tool, "HandleUpdate", "account", "", "", "", null, null);
+        Call(tool, "HandleUpdate", "account", "bad", "<form />", "", null, null);
+        Call(tool, "HandleUpdate", "account", Guid.NewGuid().ToString(), "", "", null, null);
+        Call(tool, "HandleUpdate", "account", Guid.NewGuid().ToString(), "<form />", "[]", null, null);
         Call(tool, "HandleRename", "account", "", "", null);
         Call(tool, "HandleRename", "account", "bad", "New form", null);
         Call(tool, "HandleRename", "account", Guid.NewGuid().ToString(), "", null);

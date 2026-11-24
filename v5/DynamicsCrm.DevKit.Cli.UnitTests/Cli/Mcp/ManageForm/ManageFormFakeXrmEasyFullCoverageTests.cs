@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.ManageForm;
 
@@ -94,6 +95,48 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
 
     private static Label MakeLabel(string text) =>
         new(text, 1033) { UserLocalizedLabel = new LocalizedLabel(text, 1033) };
+
+    private void SeedNavigationMetadata()
+    {
+        var account = _service.Entities.Single(entity => entity.LogicalName == "account");
+        _service.Entities.Add(new EntityMetadata
+        {
+            LogicalName = "employee", DisplayName = MakeLabel("Employee"), DisplayCollectionName = MakeLabel("Employees")
+        });
+        account.IsAuditEnabled = new BooleanManagedProperty(true);
+        account.IsDocumentManagementEnabled = true;
+        Set(account, nameof(EntityMetadata.OneToManyRelationships), new[]
+        {
+            Relationship("account_employees", "employee", "employerid", AssociatedMenuBehavior.UseCollectionName, 120),
+            Relationship("account_connection1", "connection", "record1id", AssociatedMenuBehavior.UseCollectionName, 8500),
+            Relationship("account_hidden", "contact", "hiddenid", AssociatedMenuBehavior.DoNotDisplay, 50),
+            Relationship("Account_AsyncOperations", "asyncoperation", "regardingobjectid", AssociatedMenuBehavior.DoNotDisplay, null),
+            Relationship("Account_ProcessSessions", "processsession", "regardingobjectid", AssociatedMenuBehavior.DoNotDisplay, null)
+        });
+        Set(account, nameof(EntityMetadata.ManyToManyRelationships), new[]
+        {
+            new ManyToManyRelationshipMetadata
+            {
+                SchemaName = "account_skills", Entity1LogicalName = "skill", Entity2LogicalName = "account",
+                Entity1AssociatedMenuConfiguration = new AssociatedMenuConfiguration { Behavior = AssociatedMenuBehavior.DoNotDisplay },
+                Entity2AssociatedMenuConfiguration = new AssociatedMenuConfiguration
+                {
+                    Behavior = AssociatedMenuBehavior.UseLabel, Group = AssociatedMenuGroup.Marketing, Order = 210,
+                    Label = MakeLabel("Skills")
+                }
+            }
+        });
+
+        static OneToManyRelationshipMetadata Relationship(string name, string table, string column, AssociatedMenuBehavior behavior, int? order) =>
+            new()
+            {
+                SchemaName = name, ReferencedEntity = "account", ReferencingEntity = table, ReferencingAttribute = column,
+                AssociatedMenuConfiguration = new AssociatedMenuConfiguration
+                {
+                    Behavior = behavior, Group = AssociatedMenuGroup.Details, Order = order
+                }
+            };
+    }
 
     private Guid SeedForm(string name, string entity = "account", int type = 2,
         string formXml = ValidFormXml, bool isDefault = false, int activationState = 1, int version = 1)
@@ -181,7 +224,7 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
         var result = await NewTool().manage_form(null!, action: "frobnicate", entity_name: "account");
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "'frobnicate' is not a valid action.");
-        StringAssert.Contains(Text(result), "Valid actions: list, detail, create, update, rename, undo.");
+        StringAssert.Contains(Text(result), "Valid actions: list, detail, create, update, rename, undo, navigation_list.");
     }
 
     [TestMethod]
@@ -856,6 +899,170 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
 
         var updated = _ctx.GetOrganizationService().Retrieve("systemform", id, new ColumnSet(true));
         StringAssert.Contains(updated.GetAttributeValue<string>("formxml"), "tab_new_tab");
+    }
+
+    [TestMethod]
+    public async Task NavigationList_MergesMetadataSystemItemsAndFormOverrides()
+    {
+        SeedNavigationMetadata();
+        _service.Roles.Clear();
+        var id = SeedForm("Related", formXml: ValidFormXml.Replace("</form>", """
+            <Navigation><NavBar>
+              <NavBarByRelationshipItem Id="navEmployees" RelationshipName="account_employees" Area="Sales" Sequence="35" Show="false">
+                <Titles><Title LCID="1033" Text="Staff" /></Titles>
+              </NavBarByRelationshipItem>
+              <NavBarByRelationshipItem Id="navAudit" RelationshipName="hardcoded_{B7196B13-6B9D-42CD-BD58-B19A3953126F}navAudit" Show="false" />
+              <NavBarItem Id="navSupport" Icon="support.png" Url="/support" Area="Info" Sequence="42">
+                <Titles><Title LCID="1033" Text="Support" /></Titles>
+              </NavBarItem>
+            </NavBar></Navigation></form>
+            """));
+
+        var entries = await ReadNavigation(id);
+        Assert.HasCount(8, entries);
+        Assert.IsFalse(entries.ContainsKey("nav_account_employees"));
+        Assert.IsFalse(entries.ContainsKey("nav_account_hidden"));
+        AssertNavigation(entries["navEmployees"], "relationship", "account_employees", "Staff", "Sales", 35, false);
+        AssertNavigation(entries["navConnections"], "relationship", "account_connection1", "Connections", "Info", 8500, true);
+        AssertNavigation(entries["nav_account_skills"], "relationship", "account_skills", "Skills", "Marketing", 210, true);
+        AssertNavigation(entries["navAudit"], "system", null, "Audit History", "Info", 9600, false);
+        AssertNavigation(entries["navAsyncOperations"], "system", null, "Background Processes", "ProcessCenter", 9500, true);
+        AssertNavigation(entries["navProcessSessions"], "system", null, "Dialog Sessions", "ProcessCenter", 9700, true);
+        AssertNavigation(entries["navSPDocuments"], "system", null, "Documents", "Info", null, true);
+        AssertNavigation(entries["navSupport"], "system", null, "Support", "Info", 42, true);
+        Assert.AreEqual(0, _service.Updates);
+        Assert.AreEqual(0, _service.Publishes);
+    }
+
+    [TestMethod]
+    public async Task Update_Operations_Navigation_HidesAndShowsRelationshipsAndSystemItems()
+    {
+        SeedNavigationMetadata();
+        var id = SeedForm("Related");
+        const string hide = """
+            [{"action":"manage_navigation","manage_action":"hide","items":[
+                {"relationship_name":"account_employees"},{"nav_id":"navConnections"},
+                {"nav_id":"navaudit"},{"nav_id":"navAsyncOperations"}
+            ]}]
+            """;
+        await ApplyNavigation(id, hide);
+
+        var items = ReadNavBar(id).Elements().ToDictionary(element => (string)element.Attribute("Id")!);
+        Assert.HasCount(4, items);
+        Assert.AreEqual("NavBarByRelationshipItem", items["nav_account_employees"].Name.LocalName);
+        Assert.AreEqual("account_employees", (string?)items["nav_account_employees"].Attribute("RelationshipName"));
+        Assert.AreEqual("account_connection1", (string?)items["navConnections"].Attribute("RelationshipName"));
+        Assert.AreEqual("NavBarItem", items["navAudit"].Name.LocalName);
+        Assert.AreEqual("NavBarItem", items["navAsyncOperations"].Name.LocalName);
+        Assert.AreEqual("Audit History", (string?)items["navAudit"].Element("Titles")?.Element("Title")?.Attribute("Text"));
+        Assert.IsTrue(items.Values.All(item => (string?)item.Attribute("Show") == "false"));
+
+        var hidden = await ReadNavigation(id);
+        AssertNavigation(hidden["nav_account_employees"], "relationship", "account_employees", "Employees", "Info", 120, false);
+        Assert.IsFalse(hidden["navConnections"].GetProperty("visible").GetBoolean());
+        Assert.IsFalse(hidden["navAudit"].GetProperty("visible").GetBoolean());
+        Assert.IsFalse(hidden["navAsyncOperations"].GetProperty("visible").GetBoolean());
+
+        await ApplyNavigation(id, """
+            [
+              {"action":"manage_navigation","manage_action":"show","nav_id":"nav_account_employees"},
+              {"action":"manage_navigation","manage_action":"show","items":[
+                 {"relationship_name":"account_connection1"},{"nav_id":"navAudit"},{"nav_id":"navAsyncOperations"}
+              ]}
+            ]
+            """);
+        var shown = ReadNavBar(id).Elements().ToList();
+        Assert.HasCount(4, shown);
+        Assert.IsTrue(shown.All(item => (string?)item.Attribute("Show") == "true"));
+        var visible = await ReadNavigation(id);
+        Assert.IsTrue(items.Keys.All(key => visible[key].GetProperty("visible").GetBoolean()));
+    }
+
+    [TestMethod]
+    public async Task Update_Operations_Navigation_PreservesLegacyTagsAndTranslationsAndRemovesOverride()
+    {
+        SeedNavigationMetadata();
+        var id = SeedForm("Related", formXml: ValidFormXml.Replace("</form>", """
+            <Navigation>
+              <NavBarAreas><NavBarArea Id="Info"><Titles><Title LCID="1033" Text="Common" /></Titles></NavBarArea></NavBarAreas>
+              <NavBar>
+                <NavBarByRelationshipItem Id="navConnections" RelationshipName="hardcoded_{B7196B13-6B9D-42CD-BD58-B19A3953126F}navConnections" Show="false">
+                  <Titles><Title LCID="1033" Text="Connections" /><Title LCID="1066" Text="Kết nối" /></Titles>
+                </NavBarByRelationshipItem>
+              </NavBar>
+            </Navigation></form>
+            """));
+
+        await ApplyNavigation(id, """
+            [{"action":"manage_navigation","manage_action":"update","relationship_name":"account_connection1",
+              "area":"Service","sequence":22,"label":"Partners","visible":false}]
+            """);
+        var navBar = ReadNavBar(id);
+        var connection = navBar.Elements().Single();
+        Assert.AreEqual("NavBarByRelationshipItem", connection.Name.LocalName);
+        StringAssert.StartsWith((string?)connection.Attribute("RelationshipName"), "hardcoded_");
+        Assert.AreEqual("Kết nối", (string?)connection.Element("Titles")?.Elements("Title").Single(title => (int?)title.Attribute("LCID") == 1066).Attribute("Text"));
+        AssertNavigation((await ReadNavigation(id))["navConnections"], "relationship", "account_connection1", "Partners", "Service", 22, false);
+
+        await ApplyNavigation(id, """
+            [{"action":"manage_navigation","manage_action":"remove","nav_id":"navConnections"}]
+            """);
+        navBar = ReadNavBar(id);
+        Assert.IsFalse(navBar.HasElements);
+        Assert.IsNotNull(navBar.Parent?.Element("NavBarAreas"));
+        AssertNavigation((await ReadNavigation(id))["navConnections"], "relationship", "account_connection1", "Connections", "Info", 8500, true);
+    }
+
+    [TestMethod]
+    public async Task Update_Operations_Navigation_UnknownBatchItemDoesNotSaveChanges()
+    {
+        SeedNavigationMetadata();
+        var id = SeedForm("Related");
+        var result = await NewTool().manage_form(null!, "update", "account", form_id: id.ToString(), operations: """
+            [{"action":"manage_navigation","manage_action":"hide","items":[
+                {"nav_id":"navAudit"},{"nav_id":"navMissing"}
+            ]}]
+            """);
+        Assert.IsTrue(result.IsError == true);
+        StringAssert.Contains(Text(result), "Related navigation item 'navMissing' was not found");
+        Assert.AreEqual(0, _service.Updates);
+    }
+
+    private async Task<Dictionary<string, JsonElement>> ReadNavigation(Guid id)
+    {
+        var result = await NewTool().manage_form(null!, "navigation_list", "account", form_id: id.ToString());
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var data = Structured(result);
+        Assert.AreEqual("navigation_list", data.GetProperty("action").GetString());
+        var items = data.GetProperty("navigation");
+        Assert.AreEqual(items.GetArrayLength(), data.GetProperty("totalCount").GetInt32());
+        return items.EnumerateArray().ToDictionary(item => item.GetProperty("id").GetString()!);
+    }
+
+    private async Task ApplyNavigation(Guid id, string operations)
+    {
+        var result = await NewTool().manage_form(null!, "update", "account", form_id: id.ToString(), operations: operations);
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var data = Structured(result);
+        Assert.IsTrue(data.GetProperty("validated").GetBoolean());
+        Assert.IsFalse(data.TryGetProperty("validationWarnings", out _));
+    }
+
+    private XElement ReadNavBar(Guid id)
+    {
+        var form = _ctx.GetOrganizationService().Retrieve("systemform", id, new ColumnSet("formxml"));
+        return XElement.Parse(form.GetAttributeValue<string>("formxml")).Element("Navigation")!.Element("NavBar")!;
+    }
+
+    private static void AssertNavigation(JsonElement item, string type, string? relationship, string label, string area, int? sequence, bool visible)
+    {
+        Assert.AreEqual(type, item.GetProperty("type").GetString());
+        Assert.AreEqual(relationship, item.GetProperty("relationshipName").GetString());
+        Assert.AreEqual(label, item.GetProperty("label").GetString());
+        Assert.AreEqual(area, item.GetProperty("area").GetString());
+        var sequenceValue = item.GetProperty("sequence");
+        Assert.AreEqual(sequence, sequenceValue.ValueKind == JsonValueKind.Null ? (int?)null : sequenceValue.GetInt32());
+        Assert.AreEqual(visible, item.GetProperty("visible").GetBoolean());
     }
 
     [TestMethod]

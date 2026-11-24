@@ -166,8 +166,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             IOrganizationService orgService,
             string input,
             string callerToolName,
+            bool withNotFoundTip = true) =>
+            ResolveEntity(orgService, input, callerToolName, out _, withNotFoundTip);
+
+        internal static ResolveResult<EntityMetadata> ResolveEntity(
+            IOrganizationService orgService,
+            string input,
+            string callerToolName,
+            out EntityMetadata[] entityCatalog,
             bool withNotFoundTip = true)
         {
+            entityCatalog = [];
             try
             {
                 var request = new RetrieveAllEntitiesRequest
@@ -176,7 +185,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     RetrieveAsIfPublished = true
                 };
                 var response = (RetrieveAllEntitiesResponse)orgService.Execute(request);
-                var candidates = response.EntityMetadata.Select(e => new DisplayNameFirstCandidate<EntityMetadata>
+                entityCatalog = response.EntityMetadata;
+                var candidates = entityCatalog.Select(e => new DisplayNameFirstCandidate<EntityMetadata>
                 {
                     Value = e,
                     DisplayName = e.DisplayName?.UserLocalizedLabel?.Label,
