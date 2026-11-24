@@ -62,8 +62,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (libErr != null) return (libErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
             var enLibErr = _validation.ValidateWebResourceExists(enableLibrary);
             if (enLibErr != null) return (enLibErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
+            var (dependencies, dependencyError, dependencyHint) = RibbonJavaScript.ReadDependencies(op, _validation);
+            if (dependencyError != null) return (dependencyError, dependencyHint, null);
 
-            var slugSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var dependenciesByItemSlug = new Dictionary<string, IReadOnlyList<string>>(StringComparer.OrdinalIgnoreCase);
             foreach (var item in items)
             {
                 var itemLabel = RibbonXmlHelpers.GetJsonString(item, "label");
@@ -100,8 +102,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     if (imgErr != null) return (imgErr, "Use manage_webresource(action='list') to find valid image web resources (e.g. svg).", null);
                 }
 
+                var (itemDependencies, itemDependencyError, itemDependencyHint) = RibbonJavaScript.ReadDependencies(item, _validation);
+                if (itemDependencyError != null) return ($"Item '{itemLabel}': {itemDependencyError}", itemDependencyHint, null);
                 var itemSlug = RibbonXmlHelpers.GenerateSlug(itemLabel);
-                if (!slugSet.Add(itemSlug))
+                if (!dependenciesByItemSlug.TryAdd(itemSlug, itemDependencies))
                     return ($"Duplicate item slug '{itemSlug}' — two items resolve to the same ID.", "Use different labels.", null);
             }
 
@@ -253,7 +257,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 new XAttribute("Id", mainCommandId),
                 mainEnableRulesEl,
                 new XElement("DisplayRules"),
-                new XElement("Actions", mainJsFuncEl)));
+                new XElement("Actions", RibbonJavaScript.DependencyActions(dependencies), mainJsFuncEl)));
 
             foreach (var item in items)
             {
@@ -278,7 +282,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     new XAttribute("Id", itemCmdId),
                     itemEnableRulesEl,
                     new XElement("DisplayRules"),
-                    new XElement("Actions", jsFuncEl)));
+                    new XElement("Actions", RibbonJavaScript.DependencyActions(dependenciesByItemSlug[itemSlug]), jsFuncEl)));
             }
 
             var ruleDefsEl = RibbonXmlHelpers.GetOrCreateElement(ribbonDoc.Root, "RuleDefinitions");
@@ -291,6 +295,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
             enableRulesEl.Add(new XElement("EnableRule",
                 new XAttribute("Id", mainEnRuleId),
+                RibbonJavaScript.DependencyRules(dependencies),
                 mainCustomRuleEl));
 
             foreach (var item in items)
@@ -310,6 +315,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
                 enableRulesEl.Add(new XElement("EnableRule",
                     new XAttribute("Id", itemEnRuleId),
+                    RibbonJavaScript.DependencyRules(dependenciesByItemSlug[itemSlug]),
                     customRuleEl));
             }
 
@@ -439,51 +445,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 updatedFields.Add($"sequence={newSeq}");
             }
 
-            var newLibrary = RibbonXmlHelpers.GetJsonString(op, "library");
-            if (!string.IsNullOrWhiteSpace(newLibrary))
-            {
-                var libErr = _validation.ValidateWebResourceExists(newLibrary);
-                if (libErr != null) return (libErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
-                var cmdDefEl = ribbonDoc.Root?.Element("CommandDefinitions")
-                    ?.Elements("CommandDefinition")
-                    .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, mainCommandId, StringComparison.OrdinalIgnoreCase));
-                cmdDefEl?.Element("Actions")?.Element("JavaScriptFunction")
-                    ?.SetAttributeValue("Library", $"$webresource:{newLibrary}");
-                updatedFields.Add("library");
-            }
-
-            var newFunction = RibbonXmlHelpers.GetJsonString(op, "function");
-            if (!string.IsNullOrWhiteSpace(newFunction))
-            {
-                var cmdDefEl = ribbonDoc.Root?.Element("CommandDefinitions")
-                    ?.Elements("CommandDefinition")
-                    .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, mainCommandId, StringComparison.OrdinalIgnoreCase));
-                cmdDefEl?.Element("Actions")?.Element("JavaScriptFunction")
-                    ?.SetAttributeValue("FunctionName", newFunction);
-                updatedFields.Add("function");
-            }
-
-            var newEnLib = RibbonXmlHelpers.GetJsonString(op, "enable_library");
-            if (!string.IsNullOrWhiteSpace(newEnLib))
-            {
-                var libErr = _validation.ValidateWebResourceExists(newEnLib);
-                if (libErr != null) return (libErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
-                var enRuleEl = ribbonDoc.Root?.Element("RuleDefinitions")?.Element("EnableRules")
-                    ?.Elements("EnableRule")
-                    .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, mainEnRuleId, StringComparison.OrdinalIgnoreCase));
-                enRuleEl?.Element("CustomRule")?.SetAttributeValue("Library", $"$webresource:{newEnLib}");
-                updatedFields.Add("enable_library");
-            }
-
-            var newEnFunc = RibbonXmlHelpers.GetJsonString(op, "enable_function");
-            if (!string.IsNullOrWhiteSpace(newEnFunc))
-            {
-                var enRuleEl = ribbonDoc.Root?.Element("RuleDefinitions")?.Element("EnableRules")
-                    ?.Elements("EnableRule")
-                    .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, mainEnRuleId, StringComparison.OrdinalIgnoreCase));
-                enRuleEl?.Element("CustomRule")?.SetAttributeValue("FunctionName", newEnFunc);
-                updatedFields.Add("enable_function");
-            }
+            var (handlerError, handlerHint) = RibbonJavaScript.UpdateHandlers(ribbonDoc.Root, mainCommandId, mainEnRuleId, op, _validation, updatedFields);
+            if (handlerError != null) return (handlerError, handlerHint, null);
 
             if (op.TryGetProperty("items", out var itemsProp) && itemsProp.ValueKind == JsonValueKind.Array)
             {
@@ -542,51 +505,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                         itemUpdated.Add("sequence");
                     }
 
-                    var newItemLib = RibbonXmlHelpers.GetJsonString(item, "library");
-                    if (!string.IsNullOrWhiteSpace(newItemLib))
-                    {
-                        var libErr = _validation.ValidateWebResourceExists(newItemLib);
-                        if (libErr != null) return (libErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
-                        var cmdDefEl = ribbonDoc.Root?.Element("CommandDefinitions")
-                            ?.Elements("CommandDefinition")
-                            .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemCmdId, StringComparison.OrdinalIgnoreCase));
-                        cmdDefEl?.Element("Actions")?.Element("JavaScriptFunction")
-                            ?.SetAttributeValue("Library", $"$webresource:{newItemLib}");
-                        itemUpdated.Add("library");
-                    }
-
-                    var newItemFunc = RibbonXmlHelpers.GetJsonString(item, "function");
-                    if (!string.IsNullOrWhiteSpace(newItemFunc))
-                    {
-                        var cmdDefEl = ribbonDoc.Root?.Element("CommandDefinitions")
-                            ?.Elements("CommandDefinition")
-                            .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemCmdId, StringComparison.OrdinalIgnoreCase));
-                        cmdDefEl?.Element("Actions")?.Element("JavaScriptFunction")
-                            ?.SetAttributeValue("FunctionName", newItemFunc);
-                        itemUpdated.Add("function");
-                    }
-
-                    var newItemEnLib = RibbonXmlHelpers.GetJsonString(item, "enable_library");
-                    if (!string.IsNullOrWhiteSpace(newItemEnLib))
-                    {
-                        var libErr = _validation.ValidateWebResourceExists(newItemEnLib);
-                        if (libErr != null) return (libErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
-                        var enRuleEl = ribbonDoc.Root?.Element("RuleDefinitions")?.Element("EnableRules")
-                            ?.Elements("EnableRule")
-                            .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemEnRuleId, StringComparison.OrdinalIgnoreCase));
-                        enRuleEl?.Element("CustomRule")?.SetAttributeValue("Library", $"$webresource:{newItemEnLib}");
-                        itemUpdated.Add("enable_library");
-                    }
-
-                    var newItemEnFunc = RibbonXmlHelpers.GetJsonString(item, "enable_function");
-                    if (!string.IsNullOrWhiteSpace(newItemEnFunc))
-                    {
-                        var enRuleEl = ribbonDoc.Root?.Element("RuleDefinitions")?.Element("EnableRules")
-                            ?.Elements("EnableRule")
-                            .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemEnRuleId, StringComparison.OrdinalIgnoreCase));
-                        enRuleEl?.Element("CustomRule")?.SetAttributeValue("FunctionName", newItemEnFunc);
-                        itemUpdated.Add("enable_function");
-                    }
+                    var (itemHandlerError, itemHandlerHint) = RibbonJavaScript.UpdateHandlers(ribbonDoc.Root, itemCmdId, itemEnRuleId, item, _validation, itemUpdated);
+                    if (itemHandlerError != null) return (itemHandlerError, itemHandlerHint, null);
 
                     if (itemUpdated.Count > 0)
                         updatedFields.Add($"item[{itemLabel}]: {string.Join(", ", itemUpdated)}");
@@ -624,7 +544,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 return ("add_flyout_static requires 'items' array with at least 1 item.",
                         "Add \"items\":[{\"label\":...,\"library\":...,\"function\":...,\"enable_library\":...,\"enable_function\":...}] with at least 1 item.", null);
 
-            var slugSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var dependenciesByItemSlug = new Dictionary<string, IReadOnlyList<string>>(StringComparer.OrdinalIgnoreCase);
             foreach (var item in items)
             {
                 var itemLabel = RibbonXmlHelpers.GetJsonString(item, "label");
@@ -661,8 +581,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     if (imgErr != null) return (imgErr, "Use manage_webresource(action='list') to find valid image web resources (e.g. svg).", null);
                 }
 
+                var (itemDependencies, itemDependencyError, itemDependencyHint) = RibbonJavaScript.ReadDependencies(item, _validation);
+                if (itemDependencyError != null) return ($"Item '{itemLabel}': {itemDependencyError}", itemDependencyHint, null);
                 var itemSlug = RibbonXmlHelpers.GenerateSlug(itemLabel);
-                if (!slugSet.Add(itemSlug))
+                if (!dependenciesByItemSlug.TryAdd(itemSlug, itemDependencies))
                     return ($"Duplicate item slug '{itemSlug}' — two items resolve to the same ID.", "Use different labels.", null);
             }
 
@@ -829,7 +751,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     new XAttribute("Id", itemCmdId),
                     itemEnableRulesEl,
                     new XElement("DisplayRules"),
-                    new XElement("Actions", jsFuncEl)));
+                    new XElement("Actions", RibbonJavaScript.DependencyActions(dependenciesByItemSlug[itemSlug]), jsFuncEl)));
             }
 
             var ruleDefsEl = RibbonXmlHelpers.GetOrCreateElement(ribbonDoc.Root, "RuleDefinitions");
@@ -852,6 +774,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
                 enableRulesEl.Add(new XElement("EnableRule",
                     new XAttribute("Id", itemEnRuleId),
+                    RibbonJavaScript.DependencyRules(dependenciesByItemSlug[itemSlug]),
                     customRuleEl));
             }
 
@@ -1036,51 +959,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                         itemUpdated.Add($"sequence={newItemSeq}");
                     }
 
-                    var newItemLib = RibbonXmlHelpers.GetJsonString(item, "library");
-                    if (!string.IsNullOrWhiteSpace(newItemLib))
-                    {
-                        var libErr = _validation.ValidateWebResourceExists(newItemLib);
-                        if (libErr != null) return (libErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
-                        var cmdDefEl = ribbonDoc.Root?.Element("CommandDefinitions")
-                            ?.Elements("CommandDefinition")
-                            .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemCmdId, StringComparison.OrdinalIgnoreCase));
-                        cmdDefEl?.Element("Actions")?.Element("JavaScriptFunction")?.SetAttributeValue("Library", $"$webresource:{newItemLib}");
-                        itemUpdated.Add("library");
-                    }
-
-                    var newItemFunc = RibbonXmlHelpers.GetJsonString(item, "function");
-                    if (!string.IsNullOrWhiteSpace(newItemFunc))
-                    {
-                        var cmdDefEl = ribbonDoc.Root?.Element("CommandDefinitions")
-                            ?.Elements("CommandDefinition")
-                            .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemCmdId, StringComparison.OrdinalIgnoreCase));
-                        cmdDefEl?.Element("Actions")?.Element("JavaScriptFunction")?.SetAttributeValue("FunctionName", newItemFunc);
-                        itemUpdated.Add("function");
-                    }
-
-                    var newItemEnLib = RibbonXmlHelpers.GetJsonString(item, "enable_library");
-                    if (!string.IsNullOrWhiteSpace(newItemEnLib))
-                    {
-                        var libErr = _validation.ValidateWebResourceExists(newItemEnLib);
-                        if (libErr != null) return (libErr, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
-                        var enRuleEl = ribbonDoc.Root?.Element("RuleDefinitions")
-                            ?.Element("EnableRules")
-                            ?.Elements("EnableRule")
-                            .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemEnRuleId, StringComparison.OrdinalIgnoreCase));
-                        enRuleEl?.Element("CustomRule")?.SetAttributeValue("Library", $"$webresource:{newItemEnLib}");
-                        itemUpdated.Add("enable_library");
-                    }
-
-                    var newItemEnFunc = RibbonXmlHelpers.GetJsonString(item, "enable_function");
-                    if (!string.IsNullOrWhiteSpace(newItemEnFunc))
-                    {
-                        var enRuleEl = ribbonDoc.Root?.Element("RuleDefinitions")
-                            ?.Element("EnableRules")
-                            ?.Elements("EnableRule")
-                            .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemEnRuleId, StringComparison.OrdinalIgnoreCase));
-                        enRuleEl?.Element("CustomRule")?.SetAttributeValue("FunctionName", newItemEnFunc);
-                        itemUpdated.Add("enable_function");
-                    }
+                    var (itemHandlerError, itemHandlerHint) = RibbonJavaScript.UpdateHandlers(ribbonDoc.Root, itemCmdId, itemEnRuleId, item, _validation, itemUpdated);
+                    if (itemHandlerError != null) return (itemHandlerError, itemHandlerHint, null);
 
                     if (itemUpdated.Count > 0)
                         updatedFields.Add($"item[{itemLabel}]: {string.Join(", ", itemUpdated)}");

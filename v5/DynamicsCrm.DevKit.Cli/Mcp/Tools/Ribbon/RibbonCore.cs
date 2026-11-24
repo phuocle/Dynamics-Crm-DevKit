@@ -185,7 +185,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 value.TryGetValue<string>(out var text) &&
                 !string.IsNullOrWhiteSpace(text))
             {
-                var resolved = ResolveWebResourceName(text, errors, path);
+                var resolved = ResolveWebResourceName(text, errors, path, propertyName == RibbonJavaScript.DependencyLibrariesField);
                 node.ReplaceWith(JsonValue.Create(resolved));
                 return;
             }
@@ -200,15 +200,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (node is JsonObject obj)
             {
                 foreach (var key in obj.Select(kv => kv.Key).ToList())
+                {
+                    if (key == RibbonJavaScript.DependencyLibrariesField && obj[key] is not JsonArray)
+                        continue;
                     NormalizeWebResourceProperties(obj[key], key, errors, $"{path}.{key}");
+                }
             }
         }
 
-        private string ResolveWebResourceName(string input, List<string> errors, string path)
+        private string ResolveWebResourceName(string input, List<string> errors, string path, bool isDependency)
         {
             var name = input.Trim();
             if (name.StartsWith("$webresource:", StringComparison.OrdinalIgnoreCase))
                 name = name.Substring("$webresource:".Length);
+            if (isDependency)
+            {
+                name = name.Trim();
+                if (name.Length == 0) return input;
+            }
 
             var result = DisplayNameFirstResolver.ResolveWebResource(_orgService, name, "manage_ribbon", withNotFoundTip: false);
             if (result.IsSuccess)
@@ -223,6 +232,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static bool IsWebResourceOperationProperty(string propertyName) =>
             string.Equals(propertyName, "library", StringComparison.OrdinalIgnoreCase) ||
             string.Equals(propertyName, "enable_library", StringComparison.OrdinalIgnoreCase) ||
+            propertyName == RibbonJavaScript.DependencyLibrariesField ||
             string.Equals(propertyName, "modern_image", StringComparison.OrdinalIgnoreCase);
 
         private static string FormatOperationNameResolutionErrors(List<string> errors)
@@ -304,7 +314,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 foreach (var jsFunction in commandDef.Element("Actions")?.Elements("JavaScriptFunction") ?? Enumerable.Empty<XElement>())
                 {
                     var functionName = jsFunction.Attribute("FunctionName")?.Value;
-                    if (string.IsNullOrWhiteSpace(functionName))
+                    if (string.IsNullOrWhiteSpace(functionName) || RibbonJavaScript.IsDependency(jsFunction))
                         continue;
 
                     var parameters = GetCrmParameterValues(jsFunction);
@@ -324,7 +334,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             foreach (var enableRule in ribbonDoc.Root.Element("RuleDefinitions")?.Element("EnableRules")?.Elements("EnableRule") ?? Enumerable.Empty<XElement>())
             {
-                var customRule = enableRule.Element("CustomRule");
+                var customRule = enableRule.Elements("CustomRule").FirstOrDefault(e => !RibbonJavaScript.IsDependency(e));
                 if (customRule == null) continue;
 
                 var functionName = customRule.Attribute("FunctionName")?.Value;

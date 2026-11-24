@@ -28,6 +28,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private const string PublishWaitTimeoutAction = "stop_without_readback";
         private const string PublishWaitTimeoutInstruction =
             "After the third get_system_jobs poll, if the PublishAll system job is not Succeeded or no result is returned, stop waiting, do not call manage_ribbon(buttons/detail), and report the ribbon result to the user with a note that Dataverse publish is still running or did not complete successfully and the user must wait/check the job.";
+        private const string OperationsDescription =
+            "update: non-empty JSON array serialized as a string. Each object has an action and action-specific fields. " +
+            "The optional dependency_libraries field (string[]) preloads JS web resources in order on add_button, update_button, and the main action of add_split_button and update_split_button. " +
+            "It is also accepted on each item in add_split_button, update_split_button, add_flyout_static, and update_flyout_static. " +
+            "On update, omit it to keep the existing dependencies or pass [] to clear them. Read docs://instructions_for_manage_ribbon for the complete contract and examples.";
 
         private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
 
@@ -70,7 +75,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             McpServer server,
             [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action = "",
             [Description("Entity Display Name or logical name. Required: detail/update/undo/buttons.")] string entity_name = "",
-            [Description("update: non-empty JSON array serialized as a string. Each object has an action and action-specific fields; read docs://instructions_for_manage_ribbon for the complete contract and examples.")] string operations = "",
+            [Description(OperationsDescription)] string operations = "",
             [Description("undo: backup file path from result.backupPath. update: alternatively, inline RibbonDiffXml or a file path; applied as a patch preserving missing existing elements. If operations is provided it takes precedence.")] string ribbonxml = "",
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)
@@ -86,7 +91,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             McpServer server,
             [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action = "",
             [Description("Entity Display Name or logical name. Required: detail/update/undo/buttons.")] string entity_name = "",
-            [Description("update: non-empty JSON array serialized as a string. Each object has an action and action-specific fields; read docs://instructions_for_manage_ribbon for the complete contract and examples.")] string operations = "",
+            [Description(OperationsDescription)] string operations = "",
             [Description("undo: backup file path from result.backupPath. update: alternatively, inline RibbonDiffXml or a file path; applied as a patch preserving missing existing elements. If operations is provided it takes precedence.")] string ribbonxml = "")
         {
             var actionName = (action ?? "").Trim().ToLowerInvariant();

@@ -53,6 +53,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (libError != null) return (libError, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
             var enableLibError = _validation.ValidateWebResourceExists(enableLibrary);
             if (enableLibError != null) return (enableLibError, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
+            var (dependencies, dependencyError, dependencyHint) = RibbonJavaScript.ReadDependencies(op, _validation);
+            if (dependencyError != null) return (dependencyError, dependencyHint, null);
 
             var modernImage = RibbonXmlHelpers.GetJsonString(op, "modern_image");
             var tooltipTitle = RibbonXmlHelpers.GetJsonString(op, "tooltip_title");
@@ -133,7 +135,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 new XAttribute("Id", commandId),
                 enableRulesInCommand,
                 displayRulesInCommand,
-                new XElement("Actions", jsFunctionEl)));
+                new XElement("Actions", RibbonJavaScript.DependencyActions(dependencies), jsFunctionEl)));
 
             var ruleDefsEl = RibbonXmlHelpers.GetOrCreateElement(ribbonDoc.Root, "RuleDefinitions");
             RibbonXmlHelpers.RemoveByIdInChild(ruleDefsEl, "EnableRules", "EnableRule", enableRuleId);
@@ -148,6 +150,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             foreach (var p in crmParams) enableCustomRuleEl.Add(new XElement(p));
             enableRulesEl.Add(new XElement("EnableRule",
                 new XAttribute("Id", enableRuleId),
+                RibbonJavaScript.DependencyRules(dependencies),
                 enableCustomRuleEl));
 
             if (selectionEnableRuleId != null)
@@ -213,17 +216,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             var commandId = buttonId.Replace(".Button", ".Command");
             var enableRuleId = buttonId.Replace(".Button", ".EnableRule");
 
-            var commandDefEl = ribbonDoc.Root
-                ?.Element("CommandDefinitions")
-                ?.Elements("CommandDefinition")
-                .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, commandId, StringComparison.OrdinalIgnoreCase));
-
-            var ruleDefsEl = ribbonDoc.Root?.Element("RuleDefinitions");
-            var enableRuleEl = ruleDefsEl
-                ?.Element("EnableRules")
-                ?.Elements("EnableRule")
-                .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, enableRuleId, StringComparison.OrdinalIgnoreCase));
-
             var updatedFields = new List<string>();
 
             // Label update: 'label' is the new value when identifying by button_id;
@@ -272,43 +264,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 updatedFields.Add("modern_image");
             }
 
-            var newLibrary = RibbonXmlHelpers.GetJsonString(op, "library");
-            if (!string.IsNullOrWhiteSpace(newLibrary))
-            {
-                var libError = _validation.ValidateWebResourceExists(newLibrary);
-                if (libError != null) return (libError, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
-                if (commandDefEl != null)
-                    commandDefEl.Element("Actions")?.Element("JavaScriptFunction")?.SetAttributeValue("Library", $"$webresource:{newLibrary}");
-                updatedFields.Add("library");
-            }
-
-            var newFunction = RibbonXmlHelpers.GetJsonString(op, "function");
-            if (!string.IsNullOrWhiteSpace(newFunction))
-            {
-                if (commandDefEl != null)
-                    commandDefEl.Element("Actions")?.Element("JavaScriptFunction")?.SetAttributeValue("FunctionName", newFunction);
-                updatedFields.Add("function");
-            }
-
-            var newEnableLibrary = RibbonXmlHelpers.GetJsonString(op, "enable_library");
-            if (!string.IsNullOrWhiteSpace(newEnableLibrary))
-            {
-                var libError = _validation.ValidateWebResourceExists(newEnableLibrary);
-                if (libError != null) return (libError, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
-                enableRuleEl?.Element("CustomRule")?.SetAttributeValue("Library", $"$webresource:{newEnableLibrary}");
-                updatedFields.Add("enable_library");
-            }
-
-            var newEnableFunction = RibbonXmlHelpers.GetJsonString(op, "enable_function");
-            if (!string.IsNullOrWhiteSpace(newEnableFunction))
-            {
-                enableRuleEl?.Element("CustomRule")?.SetAttributeValue("FunctionName", newEnableFunction);
-                updatedFields.Add("enable_function");
-            }
+            var (handlerError, handlerHint) = RibbonJavaScript.UpdateHandlers(ribbonDoc.Root, commandId, enableRuleId, op, _validation, updatedFields);
+            if (handlerError != null) return (handlerError, handlerHint, null);
 
             if (updatedFields.Count == 0)
                 return ("update_button requires at least one updatable field.",
-                        "Updatable fields: label, library, function, enable_library, enable_function, modern_image, tooltip_title, tooltip_description, sequence.",
+                        "Updatable fields: label, library, function, enable_library, enable_function, modern_image, tooltip_title, tooltip_description, sequence, dependency_libraries.",
                         null);
 
             return (null, null, $"update_button: '{buttonId}' updated [{string.Join(", ", updatedFields)}]");
