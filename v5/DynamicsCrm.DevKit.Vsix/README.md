@@ -48,6 +48,9 @@ The template names below match the display names shown by Visual Studio.
 | 11. Solution Packager Project | Dataverse solution extract/pack automation. | [Solution Packager Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Solution-Packager-Project-Template) |
 | 12. Report Project | Dataverse SSRS report project. | [Report Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template) |
 | 13. WebResource TypeScript Project | TypeScript web resource project with generated typings and build output. | [WebResource TypeScript Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-TypeScript-Project-Template) |
+| 14. Dataverse Test Project | MSTest project for DevKit Server components using DataverseFakes.Community. | [Dataverse Test Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Dataverse-Test-Project-Template) |
+
+For template 14, connect to Dataverse in the DevKit dialog, use **Edit** to change the full project name, and select **OK** to create the project.
 
 Project template catalog: [Project Templates](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Project-Templates)
 
@@ -73,7 +76,8 @@ The item template names below match the display names shown by Visual Studio.
 | 14. TypeScript WebApi | TypeScript Web API script with typed interfaces. | [TypeScript WebApi Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-WebApi-Item-Template) |
 | 15. TypeScript Dialog | TypeScript dialog script with typed dialog interfaces. | [TypeScript Dialog Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-Dialog-Item-Template) |
 | 16. JavaScript Dialog | JavaScript dialog script with typed dialog interfaces. | [JavaScript Dialog Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Dialog-Item-Template) |
-| 18. DevKit Report | Entity-aware FetchXML report for a Reporting Services project. | [DevKit Report Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DevKit-Report-Item-Template) |
+| 17. C# Dataverse Test Class | Test scaffold for a selected Server class in a DataverseTest project. | [C# Dataverse Test Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Dataverse-Test-Item-Template) |
+| DevKit Report | Entity-aware FetchXML report for a Reporting Services project. | [DevKit Report Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DevKit-Report-Item-Template) |
 
 Item template catalog: [Item Templates](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Item-Templates)
 

@@ -43,6 +43,8 @@ dotnet tool update --global DynamicsCrm.DevKit.Cli
 | `modelbuilder` | Active | Generate early-bound classes using PAC ModelBuilder. |
 | `solution` | Active | Extract and pack Dataverse solutions using Power Platform CLI. |
 | `report` | Active | Report operations selected by `--type`: `dataset` (manage FetchXML datasets in a .rdl), `upload`, `download`. |
+| `new-project` | Active | Create a DevKit project in an existing solution. Use `new-project list` to see template IDs. |
+| `new-item` | Active | Create a DevKit item in an existing project. Use `new-item list` to see template IDs. |
 | `downloadreport` | Compatibility | Redirects to `report --type download`. |
 | `uploadreport` | Compatibility | Redirects to `report --type upload`. |
 | `downloadwebresource` | Compatibility | Redirects to `webresource --type download`. |
@@ -81,6 +83,20 @@ devkit generator --auth FromPac --pacprofile DEV --json "DynamicsCrm.DevKit.Cli.
 devkit modelbuilder --auth FromPac --pacprofile DEV --json "DynamicsCrm.DevKit.Cli.json" --profile ALL
 devkit solution --auth FromPac --pacprofile DEV --json "DynamicsCrm.DevKit.Cli.json" --profile Extract-Both
 ```
+
+### Dataverse server tests
+
+Run these commands from a solution containing a DevKit Server project, its Shared project, and ProxyTypes. The example assumes `Contoso.Server.OnUpdate` is a server class in that solution.
+
+```powershell
+devkit new-project --type DataverseTest --name Contoso.Tests --solution Contoso.slnx
+devkit new-item --type DataverseTest --project Contoso.Tests --test-target Contoso.Server.OnUpdate
+dotnet test .\Contoso.Tests\Contoso.Tests.csproj
+```
+
+The CLI uses the normal Dataverse connection settings when scaffolding. The generated MSTest project runs in memory on Windows x64 with .NET Framework 4.6.2 and DataverseFakes.Community. It imports production Shared code and includes its own `Framework/` helpers. You can add it alongside an existing `Test` and `SharedTest` pair.
+
+If the solution has several Server projects, use `--server-project` with an absolute `.csproj` path or a path relative to the solution. The generated `_01` method is marked inconclusive until you supply test data and an assertion. [Dataverse Test Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Dataverse-Test-Project-Template)
 
 ## 🤖 MCP Server
 

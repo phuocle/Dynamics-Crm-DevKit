@@ -22,6 +22,7 @@ DynamicsCrm.DevKit is an integrated development toolkit for Microsoft Dataverse,
 - MCP server with 33 active Dataverse tools across `basic`, `standard`, and `advanced` tiers for AI-assisted inspection, CRUD, metadata, forms, views, ribbon, apps, security, audit, plugins, workflows, and Web API scenarios.
 - Roslyn analyzer package with 21 diagnostics, `DEVKIT1001` through `DEVKIT1021`, focused on Dataverse plugin, workflow, data provider, and integration safety.
 - TypeScript and JavaScript client scaffolding for form scripts, Web API modules, dialog scripts, generated typings, and deployable web resources.
+- Dataverse server test scaffolding with MSTest and DataverseFakes.Community in Visual Studio and the CLI.
 
 ## 📦 Install
 
@@ -114,8 +115,9 @@ The template names below match the display names shown by Visual Studio.
 | 11. Solution Packager Project      | Dataverse solution extract/pack automation.                                     | [Solution Packager Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Solution-Packager-Project-Template)           |
 | 12. Report Project                 | Dataverse SSRS report project.                                                  | [Report Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template)                                 |
 | 13. WebResource TypeScript Project | TypeScript web resource project with generated typings and build output.        | [WebResource TypeScript Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-TypeScript-Project-Template) |
+| 14. Dataverse Test Project | MSTest project for DevKit Server components using DataverseFakes.Community. | [Dataverse Test Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Dataverse-Test-Project-Template) |
 
-Project template catalog: [Projects Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-Template)
+Project template catalog: [Project Templates](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Project-Templates)
 
 ## 🧩 Item Templates
 
@@ -139,8 +141,9 @@ The item template names below match the display names shown by Visual Studio.
 | 14. TypeScript WebApi      | TypeScript Web API script with typed interfaces.                                             | [TypeScript WebApi Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-WebApi-Item-Template)             |
 | 15. TypeScript Dialog      | TypeScript dialog script with typed dialog interfaces.                                       | [TypeScript Dialog Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-Dialog-Item-Template)             |
 | 16. JavaScript Dialog      | JavaScript dialog script with typed dialog interfaces.                                       | [JavaScript Dialog Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Dialog-Item-Template)             |
+| 17. C# Dataverse Test Class | Test scaffold for a Server component in a DataverseTest project. | [C# Dataverse Test Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Dataverse-Test-Item-Template) |
 
-Item template catalog: [Items Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Items-Template)
+Item template catalog: [Item Templates](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Item-Templates)
 
 ## ⚙️ CLI
 
