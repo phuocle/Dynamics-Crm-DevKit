@@ -1,7 +1,7 @@
 
 # Instructions for manage_app
 
-Use `manage_app` for model-driven app metadata, app navigation, and table, system view, form, and dashboard membership.
+Use `manage_app` for model-driven app metadata, app navigation, and table, system view, form, chart, and dashboard membership.
 
 ## Golden Rules
 
@@ -22,9 +22,9 @@ Use `manage_app` for model-driven app metadata, app navigation, and table, syste
 
 ## App component membership
 
-Use `add_components` or `remove_components` with the app's display name, unique name, or GUID. Pass one or more of `view_ids`, `form_ids`, and `dashboard_ids` as JSON arrays of GUID strings or exact names. Views and forms require `entity_name`, which accepts the table's display or logical name. Dashboard-only calls can omit it. When supplied, dashboard lookup includes dashboards for that table and global dashboards.
+Use `add_components` or `remove_components` with the app's display name, unique name, or GUID. Pass one or more of `view_ids`, `form_ids`, `chart_ids`, and `dashboard_ids` as JSON arrays of GUID strings or exact names. View, form, and chart selectors require `entity_name`, which accepts the table's display or logical name. Chart selectors resolve system charts (`savedqueryvisualization`, component type `59`) for that table. Use `manage_chart(action='list', entity_name=...)` to discover them. Dashboard-only calls can omit `entity_name`. When supplied, dashboard lookup includes dashboards for that table and global dashboards.
 
-`add_components` adds the table to the app if `entity_name` is supplied and the table is missing, including for tables outside the sitemap. Pass `entity_name` alone to add or remove the table component. With view, form, or dashboard selectors, `remove_components` targets only the selected components.
+`add_components` adds the table to the app if `entity_name` is supplied and the table is missing, including for tables outside the sitemap. Pass `entity_name` alone to add or remove the table component. With view, form, chart, or dashboard selectors, `remove_components` targets only the selected components.
 
 ```json
 {
@@ -33,6 +33,7 @@ Use `add_components` or `remove_components` with the app's display name, unique 
   "entity_name": "account",
   "view_ids": ["Active Accounts"],
   "form_ids": ["Account"],
+  "chart_ids": ["Accounts by Industry"],
   "dashboard_ids": ["Sales Activity Dashboard"]
 }
 ```

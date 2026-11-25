@@ -14,6 +14,7 @@
 
 - `create` and `rename` accept a name already used by another system view on the same table. A create returns a new `viewId`, and a rename changes the view identified by `view_id`.
 - Use `list` to find views that share a name, then pass the intended `view_id` in your next call. Each system view has its own `savedqueryid`.
+- List summaries include `modifiedOn` when Dataverse returns a modification timestamp for the view.
 
 ## System View Description and Solution Membership
 

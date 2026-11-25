@@ -33,7 +33,11 @@
 
 The target table and the fields and web resources referenced by the form must already exist. Enable Quick Create on the target table to use the form in the app.
 
-## Create and Update a System Dashboard
+## System Dashboards
+
+Call `manage_form(action='list', form_type=0)` with `entity_name` omitted to discover system dashboard IDs. Use `form_name` to filter by a substring and `include_formxml=true` to include the XML in each matching entry.
+
+Call `manage_form(action='detail', form_type=0, form_id=...)` to inspect one dashboard. You can pass `form_name` instead when the substring identifies a single dashboard. If several match, use a candidate `formId` from the response.
 
 Create an organization-owned dashboard with `form_type=0` and omit `entity_name`. Supply a dashboard FormXML file or inline XML with a `<form>` root. For dashboard layout examples, see [Microsoft's dashboard samples](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/sample-dashboards).
 
@@ -47,7 +51,7 @@ Create an organization-owned dashboard with `form_type=0` and omit `entity_name`
 }
 ```
 
-Use the returned `formId` with `detail` to read the current FormXML. To replace it, call `manage_form(action='update', form_type=0, form_id=..., formxml=...)` with the complete XML or its file path. Update saves a backup under `.devkit/manage_form/dashboard/`. Restore it with `action='undo'`, the same `form_id`, and the returned `backupPath` as `formxml`.
+To replace the FormXML, call `manage_form(action='update', form_type=0, form_id=..., formxml=...)` with the complete XML or its file path. Update saves a backup under `.devkit/manage_form/dashboard/`. Restore it with `action='undo'`, the same `form_id`, and the returned `backupPath` as `formxml`.
 
 Create and update validate against `schema://formxml` and publish the dashboard by GUID. Optionally supply `solution_name` on either action to add the dashboard to that solution. Check `published` and `isAddToSolution` when a solution is supplied. If publish fails, call `publish_customizations(dashboards='<formId>')`.
 
