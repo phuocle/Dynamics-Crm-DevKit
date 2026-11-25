@@ -181,6 +181,7 @@
 		</xs:choice>
 		<!-- -->
 		<xs:attribute name="version"/>
+		<xs:attribute name="savedqueryid" type="guid"/>
 		<xs:attribute name="count" type="xs:integer"/>
 		<xs:attribute name="page" type="xs:integer"/>
 		<xs:attribute name="paging-cookie" type="xs:string"/>

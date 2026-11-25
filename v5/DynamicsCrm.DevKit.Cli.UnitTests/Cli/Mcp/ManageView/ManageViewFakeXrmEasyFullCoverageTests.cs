@@ -24,6 +24,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.ManageView;
 
@@ -754,13 +755,66 @@ public sealed class ManageViewFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
-    public async Task Update_BothFetchAndCells_ReturnsError()
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task Update_LayoutXml_ReturnsErrorPointingToCellUpdates(bool includeFetchXml)
     {
-        var id = SeedView("Update Both");
-        const string cells = """[{"cell_name":"name","set_attributes":{"width":"400"}}]""";
-        var result = await NewTool().manage_view(null!, "update", "account", view_id: id.ToString(), fetchxml: SimpleFetch, cell_updates_json: cells);
-        Assert.IsTrue(result.IsError == true);
-        StringAssert.Contains(Text(result), "not both");
+        var id = SeedView("Reject Explicit Layout");
+
+        var result = await NewTool().manage_view(null!, "update", "account", view_id: id.ToString(),
+            fetchxml: includeFetchXml ? SimpleFetch : "", layoutxml: SimpleLayout);
+
+        Assert.IsTrue(result.IsError == true, Text(result));
+        StringAssert.Contains(Text(result), "layoutxml is not supported when action='update'");
+        StringAssert.Contains(Text(result), "cell_updates_json");
+        Assert.AreEqual(0, _service.Updates);
+        Assert.AreEqual(0, _service.Publishes);
+        Assert.IsFalse(Directory.Exists(Path.Combine(_tempDir, ".devkit")));
+    }
+
+    [TestMethod]
+    public async Task Update_FetchAndCells_PatchesRebuiltLayoutBeforeSaving()
+    {
+        var originalLayout = SimpleLayout.Replace("width='200'", "width='245'");
+        var id = SeedView("Update Both", layoutXml: originalLayout);
+        const string fetch = "<fetch><entity name='account'><attribute name='new_active'/><attribute name='name'/><attribute name='emailaddress1'/></entity></fetch>";
+        const string patches = """[{"cell_name":"new_active","set_attributes":{"width":"125"}},{"cell_name":"name","set_attributes":{"width":"420"}}]""";
+
+        var result = await NewTool().manage_view(null!, "update", "account", view_id: id.ToString(), fetchxml: fetch, cell_updates_json: patches);
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var data = result.StructuredContent!.Value;
+        StringAssert.Contains(data.GetProperty("updatedParts").GetString()!, "cell patch");
+        Assert.AreEqual(1, _service.Updates);
+        Assert.AreEqual(1, _service.Publishes);
+        var saved = _service.Retrieve("savedquery", id, new ColumnSet("fetchxml", "layoutxml"));
+        var fetchAttributes = XDocument.Parse(saved.GetAttributeValue<string>("fetchxml")).Descendants("attribute");
+        CollectionAssert.AreEqual(new[] { "new_active", "name", "emailaddress1" }, fetchAttributes.Select(a => (string?)a.Attribute("name")).ToArray());
+        var cells = XDocument.Parse(saved.GetAttributeValue<string>("layoutxml")).Descendants("cell").ToList();
+        CollectionAssert.AreEqual(new[] { "new_active", "name", "emailaddress1" }, cells.Select(c => (string?)c.Attribute("name")).ToArray());
+        CollectionAssert.AreEqual(new[] { "125", "420", "245" }, cells.Select(c => (string?)c.Attribute("width")).ToArray());
+        var fetchBackup = XDocument.Load(data.GetProperty("fetchXmlBackupPath").GetString()!);
+        var layoutBackup = XDocument.Load(data.GetProperty("layoutXmlBackupPath").GetString()!);
+        Assert.IsTrue(XNode.DeepEquals(XDocument.Parse(SimpleFetch).Root, fetchBackup.Root));
+        Assert.IsTrue(XNode.DeepEquals(XDocument.Parse(originalLayout).Root, layoutBackup.Root));
+    }
+
+    [TestMethod]
+    [DataRow("emailaddress1", "125", "cell patch failed")]
+    [DataRow("new_active", "bad-width", "validation error")]
+    public async Task Update_FetchAndInvalidCellPatch_LeavesViewUnchanged(string cell, string width, string error)
+    {
+        var id = SeedView("Reject Invalid Combined Update");
+        const string fetch = "<fetch><entity name='account'><attribute name='name'/><attribute name='new_active'/></entity></fetch>";
+        var patch = $$"""[{"cell_name":"{{cell}}","set_attributes":{"width":"{{width}}"} }]""";
+
+        var result = await NewTool().manage_view(null!, "update", "account", view_id: id.ToString(), fetchxml: fetch, cell_updates_json: patch);
+
+        Assert.IsTrue(result.IsError == true, Text(result));
+        StringAssert.Contains(Text(result), error);
+        Assert.AreEqual(0, _service.Updates);
+        Assert.AreEqual(0, _service.Publishes);
+        Assert.IsFalse(Directory.Exists(Path.Combine(_tempDir, ".devkit")));
     }
 
     [TestMethod]
@@ -1291,17 +1345,21 @@ public sealed class ManageViewFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
-    public async Task Undo_Success_RestoresAndBacksUp()
+    public async Task Undo_SavedQueryMetadata_RestoresAndBacksUpWithoutWarnings()
     {
         var id = SeedView("Undo Real");
         var fetchPath = Path.Combine(_tempDir, "v9.fetchxml.xml");
         var layoutPath = Path.Combine(_tempDir, "v9.layoutxml.xml");
-        await File.WriteAllTextAsync(fetchPath, SimpleFetch);
+        var backupFetch = SimpleFetch.Replace("<fetch>", $"<fetch version='1.0' mapping='logical' distinct='false' savedqueryid='{id:D}'>");
+        await File.WriteAllTextAsync(fetchPath, backupFetch);
         await File.WriteAllTextAsync(layoutPath, SimpleLayout);
         var result = await NewTool().manage_view(null!, "undo", "account", view_id: id.ToString(), fetchxml: fetchPath, layoutxml: layoutPath);
         Assert.IsFalse(result.IsError == true);
         StringAssert.Contains(Text(result), "Restored view 'Undo Real'");
         StringAssert.Contains(Text(result), "Pre-restore state backed up");
+        Assert.IsFalse(result.StructuredContent!.Value.TryGetProperty("validationWarnings", out _), Text(result));
+        var restoredFetch = _service.LastUpdatedEntity!.GetAttributeValue<string>("fetchxml");
+        Assert.IsTrue(XNode.DeepEquals(XDocument.Parse(backupFetch), XDocument.Parse(restoredFetch)));
         Assert.AreEqual(1, _service.Updates);
         Assert.IsTrue(_service.Publishes >= 1);
     }

@@ -7,7 +7,7 @@
 
 ## Rollback (If View Breaks)
 1. Call manage_view action='undo' with view_id + fetchxml=<.fetchxml.xml path> AND layoutxml=<.layoutxml.xml path> — BOTH files of one backup pair from the update/rename response (fetchXmlBackupPath + layoutXmlBackupPath)
-2. Tool auto-handles: read both backups > validate > restore both fields verbatim > publish; pre-restore state is backed up again as a new pair
+2. The tool reads both backups, validates them, restores both fields, and publishes. It saves a new backup pair before restoring. The FetchXML validator accepts Dataverse's `savedqueryid` on `<fetch>` and validates `distinct` as a boolean.
 3. To revert a description change, call `update` with the previous description. The XML backups cover FetchXML and LayoutXML.
 
 ## System View Names
@@ -117,10 +117,25 @@ function displayIconTooltip(rowData, userLCID) {
 - Pass the plain web resource name for `imageproviderwebresource` — the tool stores it with the required `$webresource:` prefix automatically (a value already prefixed is kept as-is)
 - Both attributes must be set on the same `<cell>`; `imageproviderwebresource` is the JS logic file, NOT the icon image (icons are separate 16x16 web resources named in the JS return value)
 - Works on primary (replaces default icon) and non-primary columns; use a hidden cell for extra data
-- update with a new fetchxml keeps cell attributes (icon, width, ishidden, ...) on surviving columns; columns dropped from the fetchxml lose their cell config
+- An update with new `fetchxml` keeps cell attributes on surviving columns. A `cell_updates_json` patch in the same call runs after the layout is rebuilt and can override those attributes or set attributes on new columns.
 
 ### Cell Attribute Patching (cell_updates_json)
-Use `cell_updates_json` parameter with `action='update'` to patch cell attributes on the current layout without changing the FetchXML:
+Use `cell_updates_json` with `action='update'` to patch cell attributes on the current layout, or combine it with `fetchxml` to patch the regenerated layout. `layoutxml` is reserved for the backup path used by `undo`.
+
+To add a column and set its width in one call, pass the complete FetchXML and a serialized JSON array:
+
+```json
+{
+  "action": "update",
+  "entity_name": "account",
+  "view_name": "Active Accounts",
+  "fetchxml": "<fetch><entity name='account'><attribute name='name'/><attribute name='telephone1'/><filter><condition attribute='statecode' operator='eq' value='0'/></filter></entity></fetch>",
+  "cell_updates_json": "[{\"cell_name\":\"telephone1\",\"set_attributes\":{\"width\":\"125\"}}]"
+}
+```
+
+The following cell patch sets a custom icon:
+
 ```json
 [{"cell_name":"statuscode","set_attributes":{"imageproviderwebresource":"new_/js/viewIcons.js","imageproviderfunctionname":"displayIconTooltip"}}]
 ```
@@ -131,7 +146,7 @@ Detach attributes with `remove_attributes` (JSON array of attribute names) — e
 ```
 
 Rules:
-- `cell_name` must match an existing `<cell name="...">` in the LayoutXML (case-insensitive)
+- `cell_name` must match a cell in the layout being patched. With `fetchxml`, that means the regenerated layout, including any new columns.
 - Each item must have at least one of `set_attributes` or `remove_attributes`
 - Protected attributes (`name`) cannot be set or removed
 - `width` cannot be removed but can be set (to resize)
@@ -141,7 +156,7 @@ Rules:
 ### Workflow
 1. Create icon image web resources (16x16 PNG) — use `manage_webresource` action='create'
 2. Create JS web resource with the icon logic function — use `manage_webresource` action='create'
-3. Attach to the target cell via `manage_view` action='update' with `cell_updates_json` (do NOT pass fetchxml in the same call)
+3. Attach to the target cell via `manage_view` action='update' with `cell_updates_json`. Include `fetchxml` if the same update adds the target column.
 
 Source: https://learn.microsoft.com/en-us/power-apps/maker/data-platform/display-custom-icons-instead
 

@@ -55,7 +55,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Manage views (savedquery/userquery). Actions: 'list', 'detail' (read-only) | 'create', 'update', 'rename', 'set_default', 'undo' (mutations).\n\n" +
             "WHEN TO USE:\n" +
             "- List or inspect views of an entity (system savedquery or personal userquery, scoped by is_personal_view; use detail for XML) — always list/detail BEFORE editing\n" +
-            "- Create/update a view from FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type); patch cell attributes, edit the description, rename, set the default public view. Created views are always Public (querytype=0)\n" +
+            "- Create/update a view from FetchXML. Grid columns follow attribute order and start with widths based on data type. On update, use cell_updates_json to patch the current grid or the grid rebuilt from fetchxml in the same call. Use layoutxml for undo. Created views are always Public (querytype=0).\n" +
             "- Add a system view to an unmanaged solution with solution_name. Use manage_app action='add_components' for app membership\n" +
             "- QuickFind views: searchable fields are <condition> in <filter isquickfindfields=\"1\">; grid columns are display only\n" +
             "- Restore a view from a backup pair written by update/rename/undo (undo) — the result's fetchXmlBackupPath + layoutXmlBackupPath point to the pre-change backup; pass both to action='undo' to restore\n\n" +
@@ -72,8 +72,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Create/rename: the new name. System views on the same table may share a name. List/detail/update/set_default: name filter. Use view_id to select a specific view when names are ambiguous.")] string view_name = "",
             [Description("false = system views (savedquery), true = personal views (userquery) — scopes list and view_name resolution.")] bool is_personal_view = false,
             [Description("create/update: FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type). undo: .fetchxml.xml backup file path (pass layoutxml too).")] string fetchxml = "",
-            [Description("undo only: .layoutxml.xml backup file path — required together with fetchxml to restore the pair verbatim.")] string layoutxml = "",
-            [Description("update: JSON array serialized as a string, e.g. [{\"cell_name\":\"name\",\"set_attributes\":{\"ishidden\":\"1\"}}]. Each item must carry set_attributes, remove_attributes (JSON array of attribute names to detach, e.g. [{\"cell_name\":\"iconRendererProvider\",\"remove_attributes\":[\"imageproviderwebresource\"]}]), or both. Patch layout cell attributes without changing FetchXML; do not combine with fetchxml. Read docs://instructions_for_views for supported attributes and icon/tooltip contracts.")] string cell_updates_json = "",
+            [Description("undo only: .layoutxml.xml backup file path paired with fetchxml. For update, use cell_updates_json to edit grid cells.")] string layoutxml = "",
+            [Description("update: JSON array serialized as a string, e.g. [{\"cell_name\":\"name\",\"set_attributes\":{\"width\":\"125\"}}]. Each item must carry set_attributes, remove_attributes (an array of names), or both. Patch the current layout when used alone, or patch the regenerated layout when combined with fetchxml. See docs://instructions_for_views.")] string cell_updates_json = "",
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default,
             [Description("Detail: include raw layoutJson in Antigravity's text result when layoutXml is available. Use when you need the JSON grid settings.")] bool include_layoutjson = false,
@@ -95,8 +95,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Create/rename: the new name. System views on the same table may share a name. List/detail/update/set_default: name filter. Use view_id to select a specific view when names are ambiguous.")] string view_name = "",
             [Description("false = system views (savedquery), true = personal views (userquery) — scopes list and view_name resolution.")] bool is_personal_view = false,
             [Description("create/update: FetchXML — grid columns are auto-generated from it (follow attribute order, width by data type). undo: .fetchxml.xml backup file path (pass layoutxml too).")] string fetchxml = "",
-            [Description("undo only: .layoutxml.xml backup file path — required together with fetchxml to restore the pair verbatim.")] string layoutxml = "",
-            [Description("update: JSON array serialized as a string, e.g. [{\"cell_name\":\"name\",\"set_attributes\":{\"ishidden\":\"1\"}}]. Each item must carry set_attributes, remove_attributes (JSON array of attribute names to detach, e.g. [{\"cell_name\":\"iconRendererProvider\",\"remove_attributes\":[\"imageproviderwebresource\"]}]), or both. Patch layout cell attributes without changing FetchXML; do not combine with fetchxml. Read docs://instructions_for_views for supported attributes and icon/tooltip contracts.")] string cell_updates_json = "",
+            [Description("undo only: .layoutxml.xml backup file path paired with fetchxml. For update, use cell_updates_json to edit grid cells.")] string layoutxml = "",
+            [Description("update: JSON array serialized as a string, e.g. [{\"cell_name\":\"name\",\"set_attributes\":{\"width\":\"125\"}}]. Each item must carry set_attributes, remove_attributes (an array of names), or both. Patch the current layout when used alone, or patch the regenerated layout when combined with fetchxml. See docs://instructions_for_views.")] string cell_updates_json = "",
             bool include_layoutjson = false,
             string description = null,
             string solution_name = null)
@@ -111,6 +111,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var normalizedAction = action.Trim().ToLowerInvariant();
                 var entityName = entity_name.Trim();
+
+                if (normalizedAction == "update" && !string.IsNullOrWhiteSpace(layoutxml))
+                    return Error("layoutxml is not supported when action='update'.",
+                        "Use cell_updates_json to edit grid cells. You can combine it with fetchxml to patch the regenerated layout. Use layoutxml for undo.");
 
                 if (!string.IsNullOrWhiteSpace(view_id) && !Guid.TryParse(view_id.Trim(), out _))
                     return Error($"'{view_id}' is not a valid GUID.",
@@ -446,10 +450,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("Pass at least one of fetchxml, cell_updates_json, description or solution_name when action='update'.",
                     "Pass fetchxml to rebuild the grid, cell_updates_json to patch cells, description to edit the description, or solution_name to add a system view to a solution.");
 
-            if (hasCellUpdates && hasFetchXml)
-                return Error("pass either fetchxml (rebuild grid) or cell_updates_json (patch cells) — not both.",
-                    "One call = one action. To patch icon/cell attributes, call update with cell_updates_json only; to rebuild the grid, call update with fetchxml only (surviving cells keep their attributes).");
-
             var newFetchXml = hasFetchXml ? ViewXmlHelper.StripXmlDeclaration(fetchxml.Trim()) : null;
 
             var currentView = RetrieveView(updateId);
@@ -482,11 +482,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var effectiveFetchXml = newFetchXml ?? currentFetchXml;
 
-            var regenerateLayout = newFetchXml != null && !hasCellUpdates;
+            var regenerateLayout = newFetchXml != null;
 
-            string newLayoutXml;
+            var newLayoutXml = currentLayoutXml;
             List<string> cellPatchWarnings = null;
-            var usedCellPatch = false;
 
             if (regenerateLayout)
             {
@@ -510,42 +509,38 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         $"Fix the FetchXML — grid columns are auto-generated from its attributes. Use get_tables(entity_name='{entityName}') to list valid fields.");
                 newLayoutXml = ViewXmlHelper.MergeCellAttributes(built.Xml, currentLayoutXml);
             }
-            else
+            if (hasCellUpdates)
             {
-                var baseLayoutXml = currentLayoutXml;
+                var (instructions, parseError) = ParseCellUpdates(cellUpdatesJson);
+                if (parseError != null)
+                    return Error(parseError,
+                        "Expected format: [{\"cell_name\":\"...\",\"set_attributes\":{\"ishidden\":\"1\"}}]. See docs://instructions_for_views.");
 
-                if (hasCellUpdates)
-                {
-                    var (instructions, parseError) = ParseCellUpdates(cellUpdatesJson);
-                    if (parseError != null)
-                        return Error(parseError,
-                            "Expected format: [{\"cell_name\":\"...\",\"set_attributes\":{\"ishidden\":\"1\"}}]. See docs://instructions_for_views.");
+                var cellNameErrors = NormalizeCellUpdateNames(instructions, effectiveFetchXml, entityName);
+                if (cellNameErrors.Count > 0)
+                    return Error(NameResolutionMessage("update", entityName, cellNameErrors),
+                        $"Use get_tables(entity_name='{entityName}') to list valid fields. Use a more specific name when matches are ambiguous.", new { errors = cellNameErrors });
 
-                    var cellNameErrors = NormalizeCellUpdateNames(instructions, effectiveFetchXml, entityName);
-                    if (cellNameErrors.Count > 0)
-                        return Error(NameResolutionMessage("update", entityName, cellNameErrors),
-                            $"Use get_tables(entity_name='{entityName}') to list valid fields. Use a more specific name when matches are ambiguous.", new { errors = cellNameErrors });
+                var iconError = NormalizeAndValidateIconUpdates(instructions);
+                if (iconError != null)
+                    return Error($"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — {iconError}",
+                        "See docs://instructions_for_views — Custom Icons section for the cell attribute contract.");
 
-                    var iconError = NormalizeAndValidateIconUpdates(instructions);
-                    if (iconError != null)
-                        return Error($"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — {iconError}",
-                            "See docs://instructions_for_views — Custom Icons section for the cell attribute contract.");
+                var (patchedXml, patchErrors, patchWarnings) = ViewXmlHelper.ApplyCellAttributeUpdates(newLayoutXml, instructions);
+                if (patchErrors.Count > 0)
+                    return Error(
+                        $"UPDATE view '{currentViewName}' ({updateId}) blocked — cell patch failed ({patchErrors.Count} error(s)). First: {patchErrors[0]}",
+                        regenerateLayout ? "Use a cell name generated from the attributes in the supplied fetchxml."
+                            : "Use manage_view action='detail' to see current LayoutXML cells.",
+                        new { errors = patchErrors });
 
-                    var (patchedXml, patchErrors, patchWarnings) = ViewXmlHelper.ApplyCellAttributeUpdates(baseLayoutXml, instructions);
-                    if (patchErrors.Count > 0)
-                        return Error(
-                            $"UPDATE view '{currentViewName}' ({updateId}) blocked — cell patch failed ({patchErrors.Count} error(s)). First: {patchErrors[0]}",
-                            "Use manage_view action='detail' to see current LayoutXML cells.",
-                            new { errors = patchErrors });
-
-                    baseLayoutXml = patchedXml;
-                    usedCellPatch = true;
-                    if (patchWarnings.Count > 0)
-                        cellPatchWarnings = patchWarnings;
-                }
-
-                newLayoutXml = EnsureObjectTypeCode(baseLayoutXml, entityName);
+                newLayoutXml = patchedXml;
+                if (patchWarnings.Count > 0)
+                    cellPatchWarnings = patchWarnings;
             }
+
+            if (!regenerateLayout)
+                newLayoutXml = EnsureObjectTypeCode(newLayoutXml, entityName);
 
             // Backup runs only when actually mutating (after DryRun check below)
             {
@@ -569,18 +564,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             fieldErrors, null));
             }
 
-            if (newFetchXml != null && !regenerateLayout)
-            {
-                var serverError = ValidateFetchXmlExpression(newFetchXml);
-                if (serverError != null)
-                    return Error(
-                        $"UPDATE view '{currentViewName}' ({updateId}) on '{entityName}' blocked — FetchXML failed server-side validation. {serverError}",
-                        ServerValidationHint,
-                        BuildBlockedValidationDto("update", entityName, updateId, currentViewName,
-                            [serverError], null));
-            }
-
-            var updatedParts = DetermineUpdatedParts(usedCellPatch, newFetchXml != null, regenerateLayout);
+            var updatedParts = DetermineUpdatedParts(hasCellUpdates, newFetchXml != null, regenerateLayout);
             if (description != null)
                 updatedParts += " + Description";
 
@@ -662,7 +646,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             string layoutPart;
             if (regeneratedLayout)
-                layoutPart = "LayoutXML (regenerated from FetchXML)";
+                layoutPart = usedCellPatch ? "LayoutXML (regenerated from FetchXML with cell patch)" : "LayoutXML (regenerated from FetchXML)";
             else if (usedCellPatch)
                 layoutPart = "LayoutXML (cell patch)";
             else
