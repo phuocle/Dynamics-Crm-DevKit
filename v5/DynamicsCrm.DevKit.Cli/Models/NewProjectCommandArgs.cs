@@ -12,7 +12,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
     public class NewProjectCommandArgs : DevKitCommandArgs
     {
         [CommandArgument(0, "[list]")]
-        [Description("Show the available project templates")]
+        [Description("List project templates without connecting to Dataverse")]
         public string List { get; set; } = string.Empty;
 
         [CommandOption("--type")]
@@ -20,11 +20,11 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Type { get; set; } = string.Empty;
 
         [CommandOption("--name")]
-        [Description("Project name (DataverseTest suggests {SolutionName}.DataverseTests)")]
+        [Description("Project name. The DataverseTest prompt suggests <SolutionName>.DataverseTests")]
         public string Name { get; set; } = string.Empty;
 
         [CommandOption("--solution")]
-        [Description("Solution file (.sln/.slnx) the project is registered in")]
+        [Description("Path to the existing solution (.sln or .slnx) that will contain the project")]
         public string Solution { get; set; } = string.Empty;
 
         [CommandOption("--out")]
