@@ -28,10 +28,11 @@ the CLI code compiled and the CLI artifact was produced — nothing more.
 
 Wait until completion. The script stops running devkit/MCP processes (including
 the current DevKit MCP server to avoid locked assemblies), replaces the
-build-date placeholder in `DynamicsCrm.DevKit.Shared/Const.cs` with the
-current date/time, builds and packs the CLI in `Release` configuration,
-reinstalls the `devkit` global tool, writes the build manifest, and restores
-`Const.cs` in `finally`. Then verify the build output only — still no tests:
+build-date placeholders in `DynamicsCrm.DevKit.Shared/Const.cs` and the
+Dataverse Test project template README with the current date/time, builds and
+packs the CLI in `Release` configuration, reinstalls the `devkit` global tool,
+writes the build manifest, and restores both files in `finally`. Then verify
+the build output only — still no tests:
 
 - `devkit --version` succeeds with the version from
   `.agents/skills/devkit-skill-shared/scripts/DevKit.ReleaseConfig.json` and
@@ -39,8 +40,9 @@ reinstalls the `devkit` global tool, writes the build manifest, and restores
 - `Published/<version>/DynamicsCrm.DevKit.Cli.<version>.nupkg` exists.
 - `Published/<version>/DynamicsCrm.DevKit.Cli.<version>.build-manifest.json`
   exists and records `"configuration": "Release"`.
-- `DynamicsCrm.DevKit.Shared/Const.cs` contains `xxxx.yy.zz HH.mm.ss` again
-  and `git status` shows no leftover build-date replacements.
+- `DynamicsCrm.DevKit.Shared/Const.cs` and the Dataverse Test project template
+  README contain `xxxx.yy.zz HH.mm.ss` again. Check `git status` for leftover
+  build-date replacements.
 
 Do NOT run in this mode: `dotnet test`, `Run-Coverage.ps1`, and
 `Run-Analyzer-Coverage.ps1`. When the user later asks for the verified

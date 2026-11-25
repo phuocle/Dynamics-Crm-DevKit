@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using DataverseTestCandidate = DynamicsCrm.DevKit.Shared.Templates.PluginTestCandidate;
 using ItemType = DynamicsCrm.DevKit.Shared.ItemType;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
@@ -128,7 +129,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         public string LanguageCode => PluginLogicalName;
         public string BatFileName => PluginLogicalName;
-        public string TestTargetFullClassName => ItemType == ItemType.Test && SelectedTestPlugin?.SupportsGuardTest == true ? SelectedTestPlugin.FullClassName ?? string.Empty : string.Empty;
+        public string TestTargetFullClassName => ItemType switch
+        {
+            ItemType.DataverseTest => (ComboBoxTestPlugin.SelectedItem as DataverseTestCandidate)?.FullClassName ?? string.Empty,
+            ItemType.Test when SelectedTestPlugin?.SupportsGuardTest == true => SelectedTestPlugin.FullClassName ?? string.Empty,
+            _ => string.Empty
+        };
 
         public int PluginOrder
         {
@@ -147,12 +153,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private ItemType _ItemType = DynamicsCrm.DevKit.Shared.ItemType.None;
 
-        private bool IsTestClassItem => ItemType == ItemType.Test || ItemType == ItemType.UiTest;
+        private bool IsTestClassItem => ItemType is ItemType.Test or ItemType.UiTest or ItemType.DataverseTest;
 
         private string GetClassBaseName(string className)
         {
             var name = className?.Trim() ?? string.Empty;
-            if (IsTestClassItem && name.EndsWith("Test", System.StringComparison.Ordinal))
+            if ((ItemType is ItemType.Test or ItemType.UiTest) && name.EndsWith("Test", System.StringComparison.Ordinal))
                 return name.Substring(0, name.Length - 4);
             return name;
         }
@@ -161,6 +167,13 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             var name = TextboxClass.Text?.Trim() ?? string.Empty;
             if (string.IsNullOrEmpty(name)) return string.Empty;
+            if (ItemType == ItemType.DataverseTest)
+            {
+                var baseName = name.Length > 4 && name.EndsWith("Test", System.StringComparison.OrdinalIgnoreCase)
+                    ? name.Substring(0, name.Length - 4)
+                    : name;
+                return $"{baseName}Test";
+            }
             return name.EndsWith("Test", System.StringComparison.Ordinal) ? name : $"{name}Test";
         }
 
@@ -245,9 +258,19 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 }
                 void TestItem()
                 {
-                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Test-Item-Template");
+                    var dataverseTest = ItemType == ItemType.DataverseTest;
+                    HELP.NavigateUri = new System.Uri(dataverseTest
+                        ? "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Dataverse-Test-Item-Template"
+                        : "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Test-Item-Template");
                     HELP.Inlines.Clear();
-                    HELP.Inlines.Add("Test Item Template");
+                    HELP.Inlines.Add(dataverseTest ? "Dataverse Test Item Template" : "Test Item Template");
+                    if (dataverseTest)
+                    {
+                        LabelTestPlugin.Content = "Server class";
+                        CONNECTION.Visibility = System.Windows.Visibility.Collapsed;
+                        StackPanelMain.IsEnabled = true;
+                        buttonCustom.Visibility = System.Windows.Visibility.Collapsed;
+                    }
                     LabelTestPlugin.Visibility = System.Windows.Visibility.Visible;
                     ComboBoxTestPlugin.Visibility = System.Windows.Visibility.Visible;
                     LabelExecution.Visibility = System.Windows.Visibility.Collapsed;
@@ -314,6 +337,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         UiTestItem();
                         break;
                     case ItemType.Test:
+                    case ItemType.DataverseTest:
                         TestItem();
                         break;
                     case ItemType.ResourceString:
@@ -339,12 +363,21 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             _ = LoadCustomTemplatesAsync();
         }
 
+        internal FormPlugin(IReadOnlyList<DataverseTestCandidate> candidates, IReadOnlyList<string> templateTitles, string suggestedClassName)
+            : this(ItemType.DataverseTest, null)
+        {
+            TextboxClass.Text = suggestedClassName;
+            ComboBoxTestPlugin.IsEnabled = candidates.Count > 0;
+            SetTestCandidates(candidates);
+            SetCustomTemplates(templateTitles.Select(title => new CustomTemplate { Title = title }).ToList());
+        }
+
         public string CustomTemplate
         {
             get
             {
                 var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
-                return selected.Title ?? string.Empty;
+                return selected?.Title ?? string.Empty;
             }
         }
 
@@ -352,13 +385,18 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi || ItemType == ItemType.Workflow || ItemType == ItemType.UiTest || ItemType == ItemType.Test)
             {
-                CustomTemplates = await VsixHelper.GetCustomTemplatesAsync(ItemType);
-                ComboBoxTemplate.ItemsSource = null;
-                ComboBoxTemplate.ItemsSource = CustomTemplates;
-                ComboBoxTemplate.DisplayMemberPath = "Title";
-                ComboBoxTemplate.SelectedItem = CustomTemplates.FirstOrDefault(x => x.IsDefault);
-                if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
+                SetCustomTemplates(await VsixHelper.GetCustomTemplatesAsync(ItemType));
             }
+        }
+
+        private void SetCustomTemplates(List<CustomTemplate> templates)
+        {
+            CustomTemplates = templates;
+            ComboBoxTemplate.ItemsSource = null;
+            ComboBoxTemplate.ItemsSource = CustomTemplates;
+            ComboBoxTemplate.DisplayMemberPath = nameof(DynamicsCrm.DevKit.Shared.Models.CustomTemplate.Title);
+            ComboBoxTemplate.SelectedItem = CustomTemplates.FirstOrDefault(x => x.IsDefault);
+            if (ComboBoxTemplate.SelectedItem == null) ComboBoxTemplate.SelectedIndex = 0;
         }
 
         private void LoadComboBoxes()
@@ -418,9 +456,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         bool IsValid()
         {
-            if (ItemType == ItemType.Test && ComboBoxTestPlugin.Items.Count > 0 && SelectedTestPlugin == null)
+            if ((ItemType is ItemType.Test or ItemType.DataverseTest) && ComboBoxTestPlugin.Items.Count > 0 && ComboBoxTestPlugin.SelectedItem == null)
             {
-                VS.MessageBox.ShowError("Please select Plugin");
+                VS.MessageBox.ShowError($"Please select {LabelTestPlugin.Content}");
                 return false;
             }
             if (ComboBoxEntity.Visibility == System.Windows.Visibility.Visible && ComboBoxEntity.SelectedItem == null)
@@ -443,7 +481,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 VS.MessageBox.ShowError($"Please select {LabelExecution.Content}");
                 return false;
             }
-            if (TextboxClass.Visibility == System.Windows.Visibility.Visible && string.IsNullOrEmpty(TextboxClass.Text))
+            var className = ItemType == ItemType.DataverseTest ? Class : TextboxClass.Text;
+            if (TextboxClass.Visibility == System.Windows.Visibility.Visible && string.IsNullOrEmpty(className))
             {
                 VS.MessageBox.ShowError($"Please enter {LabelClass.Content}");
                 return false;
@@ -459,20 +498,29 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 LockUi(true);
                 var candidates = await PluginTestDiscovery.GetTestCandidatesAsync(TestProject);
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                ComboBoxTestPlugin.DisplayMemberPath = nameof(PluginTestCandidate.DisplayName);
-                ComboBoxTestPlugin.ItemsSource = candidates;
-                ComboBoxTestPlugin.SelectedItem = candidates.FirstOrDefault();
-                ApplySelectedTestPluginToForm();
+                SetTestCandidates(candidates);
                 LockUi(false);
             }
         }
 
+        private void SetTestCandidates<T>(IReadOnlyList<T> candidates) where T : class
+        {
+            ComboBoxTestPlugin.DisplayMemberPath = nameof(PluginTestCandidate.DisplayName);
+            ComboBoxTestPlugin.ItemsSource = candidates;
+            ComboBoxTestPlugin.SelectedItem = candidates.FirstOrDefault();
+            ApplySelectedTestPluginToForm();
+        }
+
         private void ApplySelectedTestPluginToForm()
         {
-            if (ItemType != ItemType.Test) return;
-            var plugin = SelectedTestPlugin;
-            if (plugin == null) return;
-            TextboxClass.Text = plugin.SuggestedTestClassBaseName;
+            var className = ItemType switch
+            {
+                ItemType.DataverseTest => (ComboBoxTestPlugin.SelectedItem as DataverseTestCandidate)?.SuggestedTestClassBaseName,
+                ItemType.Test => SelectedTestPlugin?.SuggestedTestClassBaseName,
+                _ => null
+            };
+            if (className == null) return;
+            TextboxClass.Text = className;
             UpdateTestClassPreview();
         }
 

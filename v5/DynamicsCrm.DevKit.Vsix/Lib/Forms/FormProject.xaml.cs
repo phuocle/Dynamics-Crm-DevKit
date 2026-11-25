@@ -1,11 +1,14 @@
 using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Templates.Handlers;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
@@ -16,6 +19,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
 
         public string ProjectName => LabelProjectName.Content?.ToString() ?? string.Empty;
+        internal string DataverseServerProject => DataverseServerCombo.SelectedValue as string;
+
+        internal void SetDataverseServerProjects(IReadOnlyList<NameValue> choices, NameValue preferred)
+        {
+            if (choices.Count < 2) return;
+            DataverseServerCombo.ItemsSource = choices;
+            DataverseServerCombo.SelectedItem = preferred ?? choices[0];
+            DataverseServerLabel.Visibility = Visibility.Visible;
+            DataverseServerCombo.Visibility = Visibility.Visible;
+        }
 
         private void LockUi(bool value)
         {
@@ -30,7 +43,13 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             get => _ProjectType;
             set
             {
-                StackPanelMain.IsEnabled = false;
+                StackPanelMain.IsEnabled = value == ProjectType.DataverseTest;
+                if (value == ProjectType.DataverseTest)
+                {
+                    var connectionState = new Binding(nameof(CONNECTION.IsConnected)) { Source = CONNECTION };
+                    ProjectFields.SetBinding(IsEnabledProperty, connectionState);
+                    ProjectConfirmation.SetBinding(IsEnabledProperty, connectionState);
+                }
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
                     try
@@ -120,6 +139,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                             LabelProjectName.Content = $"{solutionName}.Test";
                             LabelProjectName.Tag = $"{solutionName}";
                         }
+                        async Task DataverseTestProjectAsync()
+                        {
+                            var solutionName = await VsixHelper.GetSolutionNameAsync();
+                            HELP.NavigateUri = new Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Dataverse-Test-Project-Template");
+                            HELP.Inlines.Clear();
+                            HELP.Inlines.Add("Dataverse Test Project Template");
+                            LabelProjectName.Tag = solutionName;
+                            LabelProjectName.Content = DataverseTestProjectHandler.GetProjectName(solutionName);
+                        }
                         async Task UiTestAsync()
                         {
                             var solutionName = await VsixHelper.GetSolutionNameAsync();
@@ -186,6 +214,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                             case ProjectType.Test:
                                 await TestProjectAsync();
                                 break;
+                            case ProjectType.DataverseTest:
+                                await DataverseTestProjectAsync();
+                                break;
                             case ProjectType.UiTest:
                                 await UiTestAsync();
                                 break;
@@ -238,6 +269,19 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
             async Task<bool> IsValidAsync()
             {
+                if (ProjectType == ProjectType.DataverseTest)
+                {
+                    if (!CONNECTION.IsConnected)
+                    {
+                        await VS.MessageBox.ShowErrorAsync("Connect to Dataverse before creating the test project.");
+                        return false;
+                    }
+                    if (!DataverseTestProjectHandler.IsNamespace(ProjectName))
+                    {
+                        await VS.MessageBox.ShowErrorAsync("Enter a valid dotted C# project name.");
+                        return false;
+                    }
+                }
                 if (ProjectType != ProjectType.None)
                 {
                     if (await VsixHelper.IsProjectExistAsync(ProjectName))
@@ -302,6 +346,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void TextboxProject_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
+            if (ProjectType == ProjectType.DataverseTest)
+            {
+                LabelProjectName.Content = DataverseTestProjectHandler.GetProjectName(LabelProjectName.Tag as string, TextboxProject.Text);
+                return;
+            }
             if (TextboxProject.Text.Length == 0)
             {
                 if (ProjectType == ProjectType.Test)
@@ -367,7 +416,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void Connection_Connected(object sender, EventArgs e)
         {
-            LockUi(false);
+            if (ProjectType != ProjectType.DataverseTest)
+                LockUi(false);
         }
     }
 }

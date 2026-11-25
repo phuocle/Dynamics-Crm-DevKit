@@ -42,7 +42,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
 
         public string TemplateId
         {
-            get { return ItemType.DataProvider.ToString(); }
+            get { return TemplateCatalog.DataProviderId; }
         }
 
         /// <summary>
@@ -55,10 +55,10 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
         {
             var manifest = new TemplateManifest
             {
-                TemplateId = ItemType.DataProvider.ToString(),
+                TemplateId = TemplateCatalog.DataProviderId,
                 Kind = TemplateKind.Item,
             };
-            var prefix = TemplatePayload.Prefix(TemplateKind.Item, ItemType.DataProvider.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.DataProviderId);
             foreach (var subType in SubTypes)
             {
                 manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + subType + ".cs", TargetFileName = subType + ".cs", ReplaceParameters = true });
@@ -157,7 +157,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             {
                 var targetFileName = subType + ".cs";
                 var fullPath = Path.Combine(outputDirectory, targetFileName);
-                var payload = await TemplatePayload.ReadContentAsync(TemplatePayload.Prefix(TemplateKind.Item, ItemType.DataProvider.ToString()) + subType + ".cs");
+                var payload = await TemplatePayload.ReadContentAsync(TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.DataProviderId) + subType + ".cs");
                 var exists = File.Exists(fullPath);
                 if (exists && !input.Force)
                 {

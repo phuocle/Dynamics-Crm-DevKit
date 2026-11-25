@@ -71,7 +71,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
 
         public string TemplateId
         {
-            get { return ItemType.BatFile.ToString(); }
+            get { return TemplateCatalog.BatFileId; }
         }
 
         /// <summary>
@@ -85,10 +85,10 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
         {
             var manifest = new TemplateManifest
             {
-                TemplateId = ItemType.BatFile.ToString(),
+                TemplateId = TemplateCatalog.BatFileId,
                 Kind = TemplateKind.Item,
             };
-            var prefix = TemplatePayload.Prefix(TemplateKind.Item, ItemType.BatFile.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.BatFileId);
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "batfile.bat", TargetFileName = "$batfilename$", ReplaceParameters = true });
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "devkit.js", TargetFileName = "devkit.js", ReplaceParameters = true });
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "devkit.d.ts", TargetFileName = "devkit.d.ts", ReplaceParameters = true });
@@ -205,7 +205,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
         /// </summary>
         private static IEnumerable<UtilityFile> FilesForPick(string pick)
         {
-            var prefix = TemplatePayload.Prefix(TemplateKind.Item, ItemType.BatFile.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.BatFileId);
             switch (pick)
             {
                 case "devkit.js":

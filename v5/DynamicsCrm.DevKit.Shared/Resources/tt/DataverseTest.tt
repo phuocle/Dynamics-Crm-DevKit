@@ -1,0 +1,57 @@
+using <#=Context.DataverseTestFacadeNamespace#>;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+<# if (Context.HasConstructibleDataverseTestTarget) { #>
+using TargetComponent = global::<#=Context.TestTargetFullClassName#>;
+<# } #>
+
+namespace <#=Context.PluginNameSpace#>
+{
+    [TestClass]
+    public class <#=Context.ClassWithOrder#>Test : PluginTestBase
+    {
+<# if (Context.HasDataverseTestGuards) { #>
+        [TestMethod]
+        public void <#=Context.ClassWithOrder#>Test_00()
+        {
+            AssertStandardPluginGuards<TargetComponent>();
+        }
+
+<# } #>
+        [TestMethod]
+        public void <#=Context.ClassWithOrder#>Test_01()
+        {
+<# if (!Context.HasTestTarget) { #>
+            // Add a Server ProjectReference and select a public Dataverse component.
+<# } else if (!Context.HasConstructibleDataverseTestTarget) { #>
+            // Supply a public target instance and descriptor if the class requires a custom constructor.
+<# } else if (Context.DataverseTestComponentKind == "Workflow") { #>
+            // Arrange the activity input arguments.
+            // var outputs = ExecuteWorkflow<TargetComponent>(inputs);
+<# } else if (Context.DataverseTestComponentKind == "DataProvider") { #>
+            // SetDataSource(dataSource);
+<# if (Context.PluginMessage == "RetrieveMultiple") { #>
+            // var executed = RunPlugin<TargetComponent>().WithInputParameter("Query", query).Execute();
+            // Read BusinessEntityCollection from OutputParameters.
+<# } else if (Context.PluginMessage == "Retrieve" || Context.PluginMessage == "Delete") { #>
+            // var executed = RunPlugin<TargetComponent>().WithTargetReference(targetReference).Execute();
+<# if (Context.PluginMessage == "Retrieve") { #>
+            // Read BusinessEntity from OutputParameters.
+<# } #>
+<# } else { #>
+            // var executed = RunPlugin<TargetComponent>().WithTarget(target).Execute();
+<# if (Context.PluginMessage == "Create") { #>
+            // Read id from OutputParameters.
+<# } #>
+<# } #>
+<# } else if (Context.DataverseTestComponentKind == "CustomApi" || Context.DataverseTestComponentKind == "CustomAction") { #>
+            // Supply message input parameters and declare the expected output keys.
+            // var executed = RunPlugin<TargetComponent>().WithInputParameter("Input", input).WithOutputParameter("Output", null).Execute();
+<# } else { #>
+            // Arrange records with Seed and configure any Target or registered images.
+            // var executed = RunPlugin<TargetComponent>().WithTarget(target).Execute();
+<# } #>
+            // Assert the expected output or in-memory data changes.
+            Assert.Inconclusive("Add an arrangement and an assertion for the expected behavior.");
+        }
+    }
+}

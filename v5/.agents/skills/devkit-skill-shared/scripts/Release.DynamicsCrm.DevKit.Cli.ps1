@@ -20,7 +20,11 @@ if ([string]::IsNullOrWhiteSpace($BuildDate)) {
     $BuildDate = Get-Date -Format "dd.MM.yyyy HH:mm:ss"
 }
 
-$ConstFile = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Shared\Const.cs"
+$DateFiles = @(
+    "DynamicsCrm.DevKit.Shared\Const.cs"
+    "ProjectTemplates\CSharp\14.DataverseTestProjectTemplate\README.md"
+)
+$DatePlaceholder = $Config.placeholders.date
 $PublishDir = Join-Path $ProjectRoot "Published\$Version"
 $ToolName = "DynamicsCrm.DevKit.Cli"
 $PackagePath = Join-Path $PublishDir "DynamicsCrm.DevKit.Cli.$Version.nupkg"
@@ -135,15 +139,22 @@ Write-Host "Build Date:    $BuildDate" -ForegroundColor Cyan
 Write-Host "Configuration: $Configuration" -ForegroundColor Cyan
 
 $utf8NoBom = New-Object System.Text.UTF8Encoding $False
-$OriginalContent = [System.IO.File]::ReadAllText($ConstFile, $utf8NoBom)
+$dateFileBackups = @{}
 
 try {
     Stop-DevKitProcesses "before CLI build"
 
-    $newContent = $OriginalContent `
-        -replace [regex]::Escape("xxxx.yy.zz HH.mm.ss"), $BuildDate
-    [System.IO.File]::WriteAllText($ConstFile, $newContent, $utf8NoBom)
-    Write-Host "Updated Const.cs with build date $BuildDate." -ForegroundColor Green
+    foreach ($file in $DateFiles) {
+        $path = Join-Path $ProjectRoot $file
+        $content = [System.IO.File]::ReadAllText($path, $utf8NoBom)
+        if (-not $content.Contains($DatePlaceholder)) {
+            throw "Build date placeholder not found in $file."
+        }
+
+        $dateFileBackups[$path] = [System.IO.File]::ReadAllBytes($path)
+        [System.IO.File]::WriteAllText($path, $content.Replace($DatePlaceholder, $BuildDate), $utf8NoBom)
+        Write-Host "Updated $file with build date $BuildDate." -ForegroundColor Green
+    }
 
     New-Item -Path $PublishDir -ItemType Directory -Force | Out-Null
 
@@ -233,16 +244,16 @@ try {
     Write-Host "Runtime proof step: call MCP whoami now. The devkit.assemblySha256 returned by MCP must equal the manifest installedAssemblySha256." -ForegroundColor Yellow
 }
 finally {
-    [System.IO.File]::WriteAllText($ConstFile, $OriginalContent, $utf8NoBom)
-    Write-Host "Restored Const.cs to source values." -ForegroundColor Yellow
+    foreach ($entry in $dateFileBackups.GetEnumerator()) {
+        [System.IO.File]::WriteAllBytes($entry.Key, $entry.Value)
+        Write-Host "Restored $($entry.Key) to source values." -ForegroundColor Yellow
+    }
 }
 
-$content = Get-Content $ConstFile -Raw
-$versionPattern = [regex]::Escape($Version)
-if ($content -match $versionPattern -and $content -match "xxxx\.yy\.zz HH\.mm\.ss") {
-    Write-Host "[x] Const.cs restored successfully." -ForegroundColor Green
-}
-else {
-    Write-Host "[!] ERROR: Const.cs NOT restored. Please restore manually." -ForegroundColor Red
-    exit 1
+foreach ($file in $DateFiles) {
+    $content = Get-Content -LiteralPath (Join-Path $ProjectRoot $file) -Raw
+    if (-not ($content.Contains($Version) -and $content.Contains($DatePlaceholder))) {
+        throw "Source version or build date placeholder was not restored in $file."
+    }
+    Write-Host "[x] $file restored successfully." -ForegroundColor Green
 }

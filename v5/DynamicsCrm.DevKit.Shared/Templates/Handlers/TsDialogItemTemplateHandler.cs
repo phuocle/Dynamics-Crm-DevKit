@@ -31,7 +31,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
     {
         public string TemplateId
         {
-            get { return ItemType.TsDialog.ToString(); }
+            get { return TemplateCatalog.TsDialogId; }
         }
 
         /// <summary>
@@ -50,10 +50,10 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
         {
             var manifest = new TemplateManifest
             {
-                TemplateId = ItemType.TsDialog.ToString(),
+                TemplateId = TemplateCatalog.TsDialogId,
                 Kind = TemplateKind.Item,
             };
-            var prefix = TemplatePayload.Prefix(TemplateKind.Item, ItemType.TsDialog.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.TsDialogId);
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "TypeScript.ts", TargetFileName = "$DialogName$.ts", ReplaceParameters = true });
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "TypeScript.dialog.ts", TargetFileName = "$DialogName$.dialog.ts", ReplaceParameters = true, IsGenerated = true });
             return manifest;
@@ -92,7 +92,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             request.Tokens["$TypeScriptDialog$"] = await TsDialog.GetTsDialogCodeAsync(input.ServiceClient, dialog);
             request.Tokens["$TypeScript$"] = await new CodeGenService(input.ServiceClient).GetDefaultTsDialogFileAsync(dialog, dialogClassName);
 
-            var prefix = TemplatePayload.Prefix(TemplateKind.Item, ItemType.TsDialog.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.TsDialogId);
 
             // The user file ({Dialog}.ts): created when missing, never
             // overwritten unless --force (VSIX ShouldAddProjectItem +

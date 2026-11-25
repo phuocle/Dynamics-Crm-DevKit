@@ -1,5 +1,6 @@
 using DynamicsCrm.DevKit.Cli.Commands;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Templates;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using Spectre.Console.Cli.Help;
@@ -171,15 +172,17 @@ namespace DynamicsCrm.DevKit.Cli
                     // 'devkit new-item' scaffold with their own required
                     // arguments, and each lists its own catalog ('list').
                     config.AddCommand<NewProjectCommand>("new-project")
-                          .WithDescription("Create a DevKit project template (Shared, Console, Server, ...) in the required solution")
+                          .WithDescription("Create a DevKit project (Shared, Server, DataverseTest, ...) in the required solution")
                           .WithExample(new[] { "new-project", "list" })
-                          .WithExample(new[] { "new-project", "--type", "Shared", "--name", "Contoso.Shared", "--solution", "MySolution.slnx" });
+                          .WithExample(new[] { "new-project", "--type", TemplateCatalog.SharedId, "--name", "Contoso.Shared", "--solution", "MySolution.slnx" })
+                          .WithExample(new[] { "new-project", "--type", TemplateCatalog.DataverseTestId, "--name", "Contoso.Tests", "--solution", "Contoso.slnx" });
 
                     config.AddCommand<NewItemCommand>("new-item")
-                          .WithDescription("Create a DevKit item template (LateBound, Plugin, ...) in the required project")
+                          .WithDescription("Create a DevKit item (LateBound, Plugin, DataverseTest, ...) in the required project")
                           .WithExample(new[] { "new-item", "list" })
-                          .WithExample(new[] { "new-item", "--type", "LateBound", "--entity", "Account", "--project", "Contoso.Shared" })
-                          .WithExample(new[] { "new-item", "--type", "Workflow", "--name", "MyWorkflow", "--project", "Contoso.Server" });
+                          .WithExample(new[] { "new-item", "--type", TemplateCatalog.LateBoundId, "--entity", "Account", "--project", "Contoso.Shared" })
+                          .WithExample(new[] { "new-item", "--type", TemplateCatalog.WorkflowId, "--name", "MyWorkflow", "--project", "Contoso.Server" })
+                          .WithExample(new[] { "new-item", "--type", TemplateCatalog.DataverseTestId, "--project", "Contoso.Tests", "--test-target", "Contoso.Server.OnUpdate" });
 
                     var mcp = config.AddCommand<McpCommand>("mcp");
                     // --plain is consumed before parsing, but still selects args-only mode.

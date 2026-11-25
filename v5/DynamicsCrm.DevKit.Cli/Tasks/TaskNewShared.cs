@@ -35,10 +35,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         /// </summary>
         public static Task ListAsync(TemplateKind kind)
         {
-            var descriptors = TemplateCatalog.All
-                .Where(x => x.Kind == kind)
-                .OrderBy(x => x.Order)
-                .ToList();
+            var descriptors = TemplateCatalog.OfKind(kind).ToList();
 
             if (SpectreLog.IsPlain)
             {
@@ -63,8 +60,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     table.AddRow($"{index + 1}", $"[yellow]{descriptor.Id}[/]", descriptor.DisplayName, Markup.Escape(CatalogDescription(descriptor)));
                 }
                 var example = kind == TemplateKind.Project
-                    ? "devkit [cyan]new-project[/] --type [cyan]Shared[/] --name [cyan]Contoso.Shared[/] --solution [cyan]MySolution.slnx[/]"
-                    : "devkit [cyan]new-item[/] --type [cyan]LateBound[/] --entity [cyan]Account[/] --project [cyan]Contoso.Shared[/]";
+                    ? $"devkit [cyan]new-project[/] --type [cyan]{TemplateCatalog.SharedId}[/] --name [cyan]Contoso.Shared[/] --solution [cyan]MySolution.slnx[/]"
+                    : $"devkit [cyan]new-item[/] --type [cyan]{TemplateCatalog.LateBoundId}[/] --entity [cyan]Account[/] --project [cyan]Contoso.Shared[/]";
                 AnsiConsole.Write(new Panel(new Rows(table, new Markup($"[green]Example:[/] {example}")))
                 {
                     Border = BoxBorder.Double,
@@ -79,11 +76,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             SpectreLog.WriteLine();
             if (kind == TemplateKind.Project)
             {
-                SpectreLog.WriteHighLight("Example: ", "devkit new-project --type Shared --name Contoso.Shared --solution MySolution.slnx", string.Empty);
+                SpectreLog.WriteHighLight("Example: ", $"devkit new-project --type {TemplateCatalog.SharedId} --name Contoso.Shared --solution MySolution.slnx", string.Empty);
             }
             else
             {
-                SpectreLog.WriteHighLight("Example: ", "devkit new-item --type LateBound --entity Account --project Contoso.Shared", string.Empty);
+                SpectreLog.WriteHighLight("Example: ", $"devkit new-item --type {TemplateCatalog.LateBoundId} --entity Account --project Contoso.Shared", string.Empty);
             }
             return Task.CompletedTask;
         }
@@ -91,36 +88,38 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         // Compact CLI descriptions keep the catalog readable inside the help-width frame.
         private static string CatalogDescription(TemplateDescriptor descriptor) => (descriptor.Kind, descriptor.Id) switch
         {
-            (TemplateKind.Project, "Shared") => "Shared plugin core, entities and CLI config",
-            (TemplateKind.Project, "Console") => ".NET Framework 4.6.2 Dataverse console",
-            (TemplateKind.Project, "ConsoleCore") => ".NET 10 Dataverse console",
-            (TemplateKind.Project, "Server") => "Plugins, workflows, APIs and data providers",
-            (TemplateKind.Project, "Package") => "Dataverse Package Deployer project",
-            (TemplateKind.Project, "WebResource") => "JavaScript web resources and deployment",
-            (TemplateKind.Project, "SharedTest") => "Shared FakeXrmEasy test helpers",
-            (TemplateKind.Project, "ProxyTypes") => "Early-bound entity classes with modelbuilder",
-            (TemplateKind.Project, "Test") => "Server unit tests with MSTest and FakeXrmEasy",
-            (TemplateKind.Project, "UiTest") => "UI tests with Selenium and Dynamics365.UIAutomation",
-            (TemplateKind.Project, "SolutionPackager") => "Extract and pack solutions using PAC CLI",
-            (TemplateKind.Project, "Report") => "Download and upload SSRS reports",
-            (TemplateKind.Project, "WebResourceTs") => "TypeScript web resources and deployment",
-            (TemplateKind.Item, "LateBound") => "Late-bound entity class and generated code",
-            (TemplateKind.Item, "JsForm") => "Entity form JavaScript and type declarations",
-            (TemplateKind.Item, "JsWebApi") => "Entity WebAPI JavaScript and type declarations",
-            (TemplateKind.Item, "Plugin") => "Plugin step class (T4-generated)",
-            (TemplateKind.Item, "CustomAction") => "Custom action handler (T4-generated)",
-            (TemplateKind.Item, "CustomApi") => "Custom API handler (T4-generated)",
-            (TemplateKind.Item, "Workflow") => "Workflow activity class (T4-generated)",
-            (TemplateKind.Item, "DataProvider") => "Virtual entity CRUD classes (T4-generated)",
-            (TemplateKind.Item, "Test") => "Plugin or workflow unit test (T4-generated)",
-            (TemplateKind.Item, "UiTest") => "Selenium UI test class (T4-generated)",
-            (TemplateKind.Item, "ResourceString") => "Entity resource strings by language",
-            (TemplateKind.Item, "BatFile") => "Deploy scripts and DevKit utility files",
-            (TemplateKind.Item, "TsForm") => "Entity form TypeScript",
-            (TemplateKind.Item, "TsWebApi") => "Entity WebAPI TypeScript",
-            (TemplateKind.Item, "TsDialog") => "Dialog TypeScript",
-            (TemplateKind.Item, "JsDialog") => "Dialog JavaScript and type declarations",
-            (TemplateKind.Item, "Report") => "SSRS report with a FetchXML dataset",
+            (TemplateKind.Project, TemplateCatalog.SharedId) => "Shared plugin core, entities and CLI config",
+            (TemplateKind.Project, TemplateCatalog.ConsoleId) => ".NET Framework 4.6.2 Dataverse console",
+            (TemplateKind.Project, TemplateCatalog.ConsoleCoreId) => ".NET 10 Dataverse console",
+            (TemplateKind.Project, TemplateCatalog.ServerId) => "Plugins, workflows, APIs and data providers",
+            (TemplateKind.Project, TemplateCatalog.PackageId) => "Dataverse Package Deployer project",
+            (TemplateKind.Project, TemplateCatalog.WebResourceId) => "JavaScript web resources and deployment",
+            (TemplateKind.Project, TemplateCatalog.SharedTestId) => "Shared FakeXrmEasy test helpers",
+            (TemplateKind.Project, TemplateCatalog.ProxyTypesId) => "Early-bound entity classes with modelbuilder",
+            (TemplateKind.Project, TemplateCatalog.TestId) => "Server unit tests with MSTest and FakeXrmEasy",
+            (TemplateKind.Project, TemplateCatalog.DataverseTestId) => "MSTest with DataverseFakes.Community",
+            (TemplateKind.Project, TemplateCatalog.UiTestId) => "UI tests with Selenium and Dynamics365.UIAutomation",
+            (TemplateKind.Project, TemplateCatalog.SolutionPackagerId) => "Extract and pack solutions using PAC CLI",
+            (TemplateKind.Project, TemplateCatalog.ReportId) => "Download and upload SSRS reports",
+            (TemplateKind.Project, TemplateCatalog.WebResourceTsId) => "TypeScript web resources and deployment",
+            (TemplateKind.Item, TemplateCatalog.LateBoundId) => "Late-bound entity class and generated code",
+            (TemplateKind.Item, TemplateCatalog.JsFormId) => "Entity form JavaScript and type declarations",
+            (TemplateKind.Item, TemplateCatalog.JsWebApiId) => "Entity WebAPI JavaScript and type declarations",
+            (TemplateKind.Item, TemplateCatalog.PluginId) => "Plugin step class (T4-generated)",
+            (TemplateKind.Item, TemplateCatalog.CustomActionId) => "Custom action handler (T4-generated)",
+            (TemplateKind.Item, TemplateCatalog.CustomApiId) => "Custom API handler (T4-generated)",
+            (TemplateKind.Item, TemplateCatalog.WorkflowId) => "Workflow activity class (T4-generated)",
+            (TemplateKind.Item, TemplateCatalog.DataProviderId) => "Virtual entity CRUD classes (T4-generated)",
+            (TemplateKind.Item, TemplateCatalog.TestId) => "Plugin or workflow unit test (T4-generated)",
+            (TemplateKind.Item, TemplateCatalog.DataverseTestId) => "Dataverse server unit test (T4-generated)",
+            (TemplateKind.Item, TemplateCatalog.UiTestId) => "Selenium UI test class (T4-generated)",
+            (TemplateKind.Item, TemplateCatalog.ResourceStringId) => "Entity resource strings by language",
+            (TemplateKind.Item, TemplateCatalog.BatFileId) => "Deploy scripts and DevKit utility files",
+            (TemplateKind.Item, TemplateCatalog.TsFormId) => "Entity form TypeScript",
+            (TemplateKind.Item, TemplateCatalog.TsWebApiId) => "Entity WebAPI TypeScript",
+            (TemplateKind.Item, TemplateCatalog.TsDialogId) => "Dialog TypeScript",
+            (TemplateKind.Item, TemplateCatalog.JsDialogId) => "Dialog JavaScript and type declarations",
+            (TemplateKind.Item, TemplateCatalog.ReportId) => "SSRS report with a FetchXML dataset",
             _ => descriptor.Description
         };
 

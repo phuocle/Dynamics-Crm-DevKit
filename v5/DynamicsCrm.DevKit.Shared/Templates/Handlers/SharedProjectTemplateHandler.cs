@@ -20,7 +20,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
 
         public string TemplateId
         {
-            get { return ProjectType.Shared.ToString(); }
+            get { return TemplateCatalog.SharedId; }
         }
 
         /// <summary>
@@ -32,10 +32,10 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
         {
             var manifest = new TemplateManifest
             {
-                TemplateId = ProjectType.Shared.ToString(),
+                TemplateId = TemplateCatalog.SharedId,
                 Kind = TemplateKind.Project,
             };
-            var prefix = TemplatePayload.Prefix(TemplateKind.Project, ProjectType.Shared.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Project, TemplateCatalog.SharedId);
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "Shared.shproj", TargetFileName = "$SafeProjectName$.shproj", ReplaceParameters = true });
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "Shared.projitems", TargetFileName = "$NameSpace$.projitems", ReplaceParameters = true });
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "README.md", TargetFileName = "README.md", ReplaceParameters = false });

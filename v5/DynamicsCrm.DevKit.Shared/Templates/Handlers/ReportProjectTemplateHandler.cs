@@ -43,7 +43,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
 
         public string TemplateId
         {
-            get { return ProjectType.Report.ToString(); }
+            get { return TemplateCatalog.ReportId; }
         }
 
         /// <summary>
@@ -62,10 +62,10 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
         {
             var manifest = new TemplateManifest
             {
-                TemplateId = ProjectType.Report.ToString(),
+                TemplateId = TemplateCatalog.ReportId,
                 Kind = TemplateKind.Project,
             };
-            var prefix = TemplatePayload.Prefix(TemplateKind.Project, ProjectType.Report.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Project, TemplateCatalog.ReportId);
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "README.md", TargetFileName = "README.md", ReplaceParameters = true });
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {

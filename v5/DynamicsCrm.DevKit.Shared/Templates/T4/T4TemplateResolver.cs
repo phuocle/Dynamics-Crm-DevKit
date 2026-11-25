@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.T4
                 return await GetDefaultTemplateBodyAsync(itemType, subType);
             }
 
-            var customTemplate = await FindCustomTemplateAsync(itemType, templateTitle, configJsonDirectory);
+            var customTemplate = await FindCustomTemplateAsync(itemType.ToString(), templateTitle, configJsonDirectory);
             if (customTemplate == null)
             {
                 return await GetDefaultTemplateBodyAsync(itemType, subType);
@@ -70,6 +70,9 @@ namespace DynamicsCrm.DevKit.Shared.Templates.T4
         /// first themselves). File order, like the wizard's combo.
         /// </summary>
         public static List<string> GetCustomTemplateTitles(ItemType itemType, string configJsonDirectory = null)
+            => GetCustomTemplateTitles(itemType.ToString(), configJsonDirectory);
+
+        internal static List<string> GetCustomTemplateTitles(string itemType, string configJsonDirectory)
         {
             var fileName = FindConfigJsonPath(configJsonDirectory);
             if (fileName == null || !File.Exists(fileName)) return new List<string>();
@@ -77,12 +80,12 @@ namespace DynamicsCrm.DevKit.Shared.Templates.T4
             var customTemplates = configJson?.CustomTemplates;
             if (customTemplates == null) return new List<string>();
             return customTemplates
-                .Where(x => x.Type == $"{itemType}" && !string.IsNullOrWhiteSpace(x.Title))
+                .Where(x => x.Type == itemType && !string.IsNullOrWhiteSpace(x.Title))
                 .Select(x => x.Title)
                 .ToList();
         }
 
-        private static async Task<CustomTemplate> FindCustomTemplateAsync(ItemType itemType, string templateTitle, string configJsonDirectory)
+        internal static async Task<CustomTemplate> FindCustomTemplateAsync(string itemType, string templateTitle, string configJsonDirectory)
         {
             var fileName = FindConfigJsonPath(configJsonDirectory);
             if (fileName == null || !File.Exists(fileName)) return null;
@@ -91,7 +94,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.T4
             var customTemplates = configJson?.CustomTemplates;
             if (customTemplates == null) return null;
             return customTemplates.FirstOrDefault(x =>
-                x.Type == $"{itemType}" &&
+                x.Type == itemType &&
                 string.Equals(x.Title, templateTitle, StringComparison.Ordinal));
         }
 

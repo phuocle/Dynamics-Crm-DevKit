@@ -20,7 +20,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Type { get; set; } = string.Empty;
 
         [CommandOption("--name")]
-        [Description("Project name (default suggestion: {SolutionName}.{Type})")]
+        [Description("Project name (DataverseTest suggests {SolutionName}.DataverseTests)")]
         public string Name { get; set; } = string.Empty;
 
         [CommandOption("--solution")]
@@ -28,7 +28,11 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Solution { get; set; } = string.Empty;
 
         [CommandOption("--out")]
-        [Description("Output directory (default: current directory)")]
+        [Description("Output directory (DataverseTest defaults to the solution directory)")]
         public string Out { get; set; } = string.Empty;
+
+        [CommandOption("--server-project")]
+        [Description("Server .csproj path for DataverseTest (absolute or relative to the solution)")]
+        public string ServerProject { get; set; } = string.Empty;
     }
 }

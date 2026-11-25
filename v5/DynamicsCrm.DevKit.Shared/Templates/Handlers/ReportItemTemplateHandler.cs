@@ -50,7 +50,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
     {
         public string TemplateId
         {
-            get { return ItemType.Report.ToString(); }
+            get { return TemplateCatalog.ReportId; }
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
         {
             var manifest = new TemplateManifest
             {
-                TemplateId = ItemType.Report.ToString(),
+                TemplateId = TemplateCatalog.ReportId,
                 Kind = TemplateKind.Item,
             };
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = "ReportTemplate.rdl", TargetFileName = "$ReportName$.rdl", ReplaceParameters = false, IsGenerated = true });

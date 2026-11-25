@@ -6,6 +6,7 @@
   </Configurations>
   <Folder Name="/ItemTemplates/" />
   <Folder Name="/ItemTemplates/CSharp/">
+    <Project Path="ItemTemplates/CSharp/19.DataverseTestItemTemplate/19.DataverseTestItemTemplate.csproj" Id="9fd52927-24df-4381-9956-62a134cb1643" />
     <Project Path="ItemTemplates/CSharp/01.LateBoundItemTemplate/01.LateBoundItemTemplate.csproj" Id="921403be-b301-40d8-b023-083c4747b50d">
       <Platform Solution="*|arm64" Project="arm64" />
       <Platform Solution="*|x86" Project="x86" />
@@ -78,6 +79,7 @@
   </Folder>
   <Folder Name="/ProjectTemplates/" />
   <Folder Name="/ProjectTemplates/CSharp/">
+    <Project Path="ProjectTemplates/CSharp/14.DataverseTestProjectTemplate/14.DataverseTestProjectTemplate.csproj" Id="d819b9de-c58f-44b4-ae4d-b957f537cf7a" />
     <Project Path="ProjectTemplates/CSharp/01.SharedProjectTemplate/01.SharedProjectTemplate.csproj" Id="4170cd81-a77b-4c9a-bbae-29de390a4f9c">
       <Platform Solution="*|arm64" Project="arm64" />
       <Platform Solution="*|x86" Project="x86" />

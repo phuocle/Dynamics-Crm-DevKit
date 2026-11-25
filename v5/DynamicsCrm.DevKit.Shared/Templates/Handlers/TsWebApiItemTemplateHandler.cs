@@ -31,7 +31,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
     {
         public string TemplateId
         {
-            get { return ItemType.TsWebApi.ToString(); }
+            get { return TemplateCatalog.TsWebApiId; }
         }
 
         /// <summary>
@@ -49,10 +49,10 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
         {
             var manifest = new TemplateManifest
             {
-                TemplateId = ItemType.TsWebApi.ToString(),
+                TemplateId = TemplateCatalog.TsWebApiId,
                 Kind = TemplateKind.Item,
             };
-            var prefix = TemplatePayload.Prefix(TemplateKind.Item, ItemType.TsWebApi.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.TsWebApiId);
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "TypeScript.ts", TargetFileName = "$SchemaName$.ts", ReplaceParameters = true });
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "TypeScript.webapi.ts", TargetFileName = "$SchemaName$.webapi.ts", ReplaceParameters = true, IsGenerated = true });
             return manifest;
@@ -98,7 +98,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
                 return result;
             }
 
-            var prefix = TemplatePayload.Prefix(TemplateKind.Item, ItemType.TsWebApi.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.TsWebApiId);
 
             // The generated twin content: the wizard computes it in
             // RunStarted ($TypeScriptWebApi$) before any file is written,

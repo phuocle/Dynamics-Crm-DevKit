@@ -24,7 +24,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
     {
         public string TemplateId
         {
-            get { return ItemType.LateBound.ToString(); }
+            get { return TemplateCatalog.LateBoundId; }
         }
 
         /// <summary>
@@ -39,10 +39,10 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
         {
             var manifest = new TemplateManifest
             {
-                TemplateId = ItemType.LateBound.ToString(),
+                TemplateId = TemplateCatalog.LateBoundId,
                 Kind = TemplateKind.Item,
             };
-            var prefix = TemplatePayload.Prefix(TemplateKind.Item, ItemType.LateBound.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.LateBoundId);
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "Class.cs", TargetFileName = "$SchemaName$.cs", ReplaceParameters = true });
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "GeneratedClass.cs", TargetFileName = "$SchemaName$.generated.cs", ReplaceParameters = true, IsGenerated = true });
             return manifest;
@@ -87,7 +87,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             request.Tokens["$Class$"] = Helper.GetDefaultFileWithCs(metadata, rootNamespace);
             request.Tokens["$GeneratedClass$"] = CSharpLateBound.GetCsCode(input.ServiceClient, metadata, rootNamespace, sharedNamespace);
 
-            var prefix = TemplatePayload.Prefix(TemplateKind.Item, ItemType.LateBound.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.LateBoundId);
 
             // The user file ({Entity}.cs): created when missing, never
             // overwritten unless --force (VSIX ShouldAddProjectItem), then

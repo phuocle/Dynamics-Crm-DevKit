@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>14. Dataverse Test Project</Name>
+    <Description>Test DevKit Server components with MSTest and DataverseFakes.Community.</Description>
+    <DefaultName>DataverseTests</DefaultName>
+    <TemplateID>DynamicsCrm.DevKit.CSharpDataverseTestProject</TemplateID>
+    <TemplateGroupID>DynamicsCrm.DevKit.CSharpDataverseTestProject</TemplateGroupID>
+    <Icon>icon.png</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+    <CreateInPlace>true</CreateInPlace>
+    <ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
+    <LanguageTag>CSharp</LanguageTag>
+    <PlatformTag>Windows</PlatformTag>
+    <SortOrder>230</SortOrder>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj.template" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="false" TargetFileName="README.md">README.md</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>DynamicsCrm.DevKit, Version=4.44.44.44, Culture=Neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.DataverseTest</FullClassName>
+  </WizardExtension>
+</VSTemplate>

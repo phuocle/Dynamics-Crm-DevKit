@@ -136,6 +136,7 @@
     <Compile Include="Wizard\ItemTemplates\TsWebApi.cs" />
     <Compile Include="Wizard\ItemTemplates\ResourceString.cs" />
     <Compile Include="Wizard\ItemTemplates\Test.cs" />
+    <Compile Include="Wizard\ItemTemplates\DataverseTest.cs" />
     <Compile Include="Wizard\ItemTemplates\TsForm.cs" />
     <Compile Include="Wizard\ItemTemplates\TsDialog.cs" />
     <Compile Include="Wizard\ItemTemplates\JsDialog.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Wizard\ProjectTemplates\Package.cs" />
     <Compile Include="Wizard\ProjectTemplates\UiTest.cs" />
     <Compile Include="Wizard\ProjectTemplates\Test.cs" />
+    <Compile Include="Wizard\ProjectTemplates\DataverseTest.cs" />
     <Compile Include="Wizard\ProjectTemplates\ConsoleCore.cs" />
     <Compile Include="Wizard\ProjectTemplates\Console.cs" />
     <Compile Include="Wizard\ProjectTemplates\ProjectTemplateBase.cs" />
@@ -342,6 +344,12 @@
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\19.DataverseTestItemTemplate\19.DataverseTestItemTemplate.csproj">
+      <Project>{9FD52927-24DF-4381-9956-62A134CB1643}</Project>
+      <Name>19.DataverseTestItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
     <ProjectReference Include="..\ItemTemplates\CSharp\09.TestItemTemplate\09.TestItemTemplate.csproj">
       <Project>{B7281E07-25A1-4F0F-9595-A1394211DCD4}</Project>
       <Name>09.TestItemTemplate</Name>
@@ -438,6 +446,12 @@
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\CSharp\14.DataverseTestProjectTemplate\14.DataverseTestProjectTemplate.csproj">
+      <Project>{D819B9DE-C58F-44B4-AE4D-B957F537CF7A}</Project>
+      <Name>14.DataverseTestProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
     <ProjectReference Include="..\ProjectTemplates\CSharp\09.TestProjectTemplate\09.TestProjectTemplate.csproj">
       <Project>{547D1385-E9AA-47E5-A94B-D0B50719BBAB}</Project>
       <Name>09.TestProjectTemplate</Name>
@@ -504,6 +518,7 @@
       <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\11.SolutionPackagerProjectTemplate\bin\$(Configuration)\ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpSolutionPackagerProjectTemplate.zip" />
       <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\12.ReportProjectTemplate\bin\$(Configuration)\ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpReportProjectTemplate.zip" />
       <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\13.WebResourceTsProjectTemplate\bin\$(Configuration)\ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpWebResourceTsProjectTemplate.zip" />
+      <_ProjectTemplateArchive Include="..\ProjectTemplates\CSharp\14.DataverseTestProjectTemplate\bin\$(Configuration)\ProjectTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpDataverseTestProjectTemplate.zip" />
       <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\01.LateBoundItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpLateBoundItemTemplate.zip" />
       <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\02.JsFormItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpJsFormItemTemplate.zip" />
       <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\03.JsWebApiItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpJsWebApiItemTemplate.zip" />
@@ -513,6 +528,7 @@
       <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\07.WorkflowItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpWorkflowItemTemplate.zip" />
       <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\08.DataProviderItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpDataProviderItemTemplate.zip" />
       <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\09.TestItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpTestItemTemplate.zip" />
+      <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\19.DataverseTestItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpDataverseTestItemTemplate.zip" />
       <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\10.UiTestItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpUiTestItemTemplate.zip" />
       <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\11.ResourceStringItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\CSharpResourceStringItemTemplate.zip" />
       <_ItemTemplateArchive Include="..\ItemTemplates\CSharp\13.BatFileItemTemplate\bin\$(Configuration)\ItemTemplates\CSharp\DynamicsCrm.DevKit\1033\BatFileItemTemplate.zip" />

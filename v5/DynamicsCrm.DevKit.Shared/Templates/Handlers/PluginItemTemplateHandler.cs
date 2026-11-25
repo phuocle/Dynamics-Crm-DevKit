@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
     {
         public string TemplateId
         {
-            get { return ItemType.Plugin.ToString(); }
+            get { return TemplateCatalog.PluginId; }
         }
 
         /// <summary>
@@ -39,10 +39,10 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
         {
             var manifest = new TemplateManifest
             {
-                TemplateId = ItemType.Plugin.ToString(),
+                TemplateId = TemplateCatalog.PluginId,
                 Kind = TemplateKind.Item,
             };
-            var prefix = TemplatePayload.Prefix(TemplateKind.Item, ItemType.Plugin.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.PluginId);
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "Class.cs", TargetFileName = "$Class$$PluginOrder$.cs", ReplaceParameters = true });
             return manifest;
         }
@@ -238,7 +238,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             // overwritten unless force (the wizard prompts in Visual
             // Studio; the CLI skips). Byte-faithful: the payload stub
             // carries a BOM and the wizard writes one.
-            var payload = await TemplatePayload.ReadContentAsync(TemplatePayload.Prefix(TemplateKind.Item, ItemType.Plugin.ToString()) + "Class.cs");
+            var payload = await TemplatePayload.ReadContentAsync(TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.PluginId) + "Class.cs");
             var exists = File.Exists(fullPath);
             if (exists && !input.Force)
             {
