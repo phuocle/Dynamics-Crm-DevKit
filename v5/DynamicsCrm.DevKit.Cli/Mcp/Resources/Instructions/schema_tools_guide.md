@@ -203,12 +203,12 @@ Workflow:
 
 ### Actions
 - `list`: List system charts for an entity (`entity_name`).
-- `detail`: Get full chart definition by `chart_id` or `chart_name`.
+- `detail`: Get the full chart definition by `chart_id` or `chart_name`. For `detail`, `update`, and `set_default`, supply `entity_name` to scope a name lookup. If multiple charts match, use `chart_id`.
 - `create`: Create a system chart (`entity_name`, `chart_name`, optional `chart_type`/`group_by_column`/`aggregate_column`/`aggregate_type`/`measures`/`filter`/`solution_name`, `confirmed` for pie or any create with `measures`/`filter`).
-- `update`: Update chart type/data fields/description by `chart_id` or `chart_name` (also accepts `measures`/`filter` to rebuild the datadescription).
+- `update`: Update the chart type, data fields, or description by `chart_id` or `chart_name`. For a description-only edit, omit `aggregate_type` and the other chart configuration fields to preserve both XML definitions.
 - `rename`: Change chart display name.
 - `set_default`: Set a system chart as the default chart for an entity.
-- `undo`: Rollback chart state from a `.chart.json` backup file path.
+- `undo`: Pass the `.chart.json` backup path as `presentationdescription`. If you supply `chart_id`, it must match the ID in the backup. Undo restores both XML definitions and the saved description. Older backups without a description field leave the current description intact.
 
 ---
 

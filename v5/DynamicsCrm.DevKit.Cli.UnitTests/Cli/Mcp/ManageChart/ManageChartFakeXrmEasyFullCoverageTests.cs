@@ -91,7 +91,10 @@ public sealed class ManageChartFakeXrmEasyFullCoverageTests
         "</entity></fetch></fetchcollection><categorycollection><category><measurecollection>" +
         "<measure alias=\"aggregate_column\" /></measurecollection></category></categorycollection></datadefinition>";
 
-    private Guid SeedChart(string name, bool isDefault = false, string entity = "account")
+    private const string PieXml = "<Chart><Series><Series ChartType=\"Pie\" Name=\"aggregate_column\"/></Series></Chart>";
+
+    private Guid SeedChart(string name, bool isDefault = false, string entity = "account",
+        string? description = "seeded chart", string dataXml = DataXml, string presentationXml = PieXml)
     {
         var id = Guid.NewGuid();
         _ctx.GetOrganizationService().Create(new Entity("savedqueryvisualization", id)
@@ -100,9 +103,9 @@ public sealed class ManageChartFakeXrmEasyFullCoverageTests
             ["name"] = name,
             ["primaryentitytypecode"] = entity,
             ["isdefault"] = isDefault,
-            ["description"] = "seeded chart",
-            ["datadescription"] = DataXml,
-            ["presentationdescription"] = "<Chart><Series><Series ChartType=\"Pie\" Name=\"aggregate_column\"/></Series></Chart>"
+            ["description"] = description,
+            ["datadescription"] = dataXml,
+            ["presentationdescription"] = presentationXml
         });
         return id;
     }
@@ -182,9 +185,11 @@ public sealed class ManageChartFakeXrmEasyFullCoverageTests
     [TestMethod]
     public async Task Detail_ByName_Found()
     {
-        SeedChart("Name Detail Chart");
+        SeedChart("Name Detail Chart", entity: "contact");
+        var accountChart = SeedChart("Name Detail Chart");
         var result = await NewTool().manage_chart(null!, "detail", "account", chart_name: "Name Detail Chart");
-        Assert.IsFalse(result.IsError == true);
+        Assert.IsFalse(result.IsError == true, Text(result));
+        Assert.AreEqual(accountChart.ToString(), result.StructuredContent!.Value.GetProperty("chartId").GetString());
         StringAssert.Contains(Text(result), "'Name Detail Chart'");
     }
 
@@ -552,14 +557,42 @@ public sealed class ManageChartFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
-    public async Task Update_BadDataXml_IsCaughtByFriendlyHandler()
+    [DataRow("Pie")]
+    [DataRow("StackedColumn")]
+    public async Task Update_DescriptionOnly_PreservesExistingChartXml(string chartType)
     {
-        // datadescription is a stored string; forcing garbage through the rebuild path
-        // surfaces via the entry catch — here we verify the tool never corrupts state.
-        SeedChart("No Change Upd");
-        var result = await NewTool().manage_chart(null!, "update", "account", chart_name: "No Change Upd", description: "just a description");
-        Assert.IsFalse(result.IsError == true);
-        StringAssert.Contains(Text(result), "Updated chart 'No Change Upd'");
+        var dataXml = DataXml.Replace("name=\"importsequencenumber\" aggregate=\"count\"", "name=\"revenue\" aggregate=\"sum\"")
+            .Replace("</entity>", "<filter><condition attribute=\"statecode\" operator=\"eq\" value=\"0\" /></filter></entity>");
+        var presentationXml = PieXml.Replace("ChartType=\"Pie\"", $"ChartType=\"{chartType}\"");
+        var id = SeedChart("Revenue Chart", dataXml: dataXml, presentationXml: presentationXml);
+
+        var result = await NewTool().manage_chart(null!, "update", chart_id: id.ToString(), description: "Updated description");
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var saved = _service.Retrieve("savedqueryvisualization", id, new ColumnSet("description", "datadescription", "presentationdescription"));
+        Assert.AreEqual(dataXml, saved.GetAttributeValue<string>("datadescription"));
+        Assert.AreEqual(presentationXml, saved.GetAttributeValue<string>("presentationdescription"));
+        Assert.AreEqual("Updated description", saved.GetAttributeValue<string>("description"));
+        CollectionAssert.AreEqual(new[] { "description" }, _service.LastUpdate!.Attributes.Keys.ToArray());
+    }
+
+    [TestMethod]
+    [DataRow("detail", "")]
+    [DataRow("update", "account")]
+    [DataRow("set_default", "account")]
+    public async Task ChartLookup_DuplicateName_ReturnsErrorWithoutMutating(string action, string entityName)
+    {
+        SeedChart("Duplicate Chart");
+        SeedChart("Duplicate Chart", entity: entityName == "" ? "contact" : "account");
+
+        var result = await NewTool().manage_chart(null!, action, entityName, chart_name: "Duplicate Chart", description: "Updated");
+
+        Assert.IsTrue(result.IsError == true, Text(result));
+        StringAssert.Contains(Text(result), "Chart name 'Duplicate Chart' is ambiguous");
+        StringAssert.Contains(Text(result), "chart_id");
+        Assert.AreEqual(0, _service.Updates);
+        Assert.AreEqual(0, _service.Publishes);
+        Assert.IsFalse(Directory.Exists(Path.Combine(_tempDir, ".devkit")));
     }
 
     // ──────────────────────────────────────────────
@@ -687,16 +720,62 @@ public sealed class ManageChartFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
-    public async Task Undo_Success_Restores()
+    [DataRow(true)]
+    [DataRow(false)]
+    public async Task Undo_LegacyBackup_PreservesDescription(bool supplyChartId)
     {
         var id = SeedChart("Undo Real");
         var path = Path.Combine(_tempDir, "real.chart.json");
         await File.WriteAllTextAsync(path, MakeBackupJson(id, "account", "Undo Real", DataXml, "<Chart><Series><Series ChartType=\"Pie\"/></Series></Chart>"));
-        var result = await NewTool().manage_chart(null!, "undo", "account", chart_id: id.ToString(), presentationdescription: path);
+        var result = await NewTool().manage_chart(null!, "undo", "account",
+            chart_id: supplyChartId ? id.ToString() : "", presentationdescription: path);
         Assert.IsFalse(result.IsError == true);
         StringAssert.Contains(Text(result), $"Restored chart {id} from backup");
         Assert.AreEqual(1, _service.Updates);
         Assert.IsTrue(_service.Publishes >= 1);
+        var saved = _service.Retrieve("savedqueryvisualization", id, new ColumnSet("description"));
+        Assert.AreEqual("seeded chart", saved.GetAttributeValue<string>("description"), "Legacy backups must preserve the current description.");
+    }
+
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task Undo_ChartIdDoesNotMatchBackup_ReturnsErrorWithoutMutating(bool dryRun)
+    {
+        var backupId = SeedChart("Backup Chart");
+        var selectedId = SeedChart("Selected Chart");
+        var path = Path.Combine(_tempDir, "wrong-chart.chart.json");
+        await File.WriteAllTextAsync(path, MakeBackupJson(backupId, "account", "Backup Chart", DataXml, PieXml));
+
+        var result = await NewTool(dryRun).manage_chart(null!, "undo", chart_id: selectedId.ToString(), presentationdescription: path);
+
+        Assert.IsTrue(result.IsError == true, Text(result));
+        StringAssert.Contains(Text(result), "does not match chart_id");
+        StringAssert.Contains(Text(result), backupId.ToString());
+        StringAssert.Contains(Text(result), selectedId.ToString());
+        Assert.AreEqual(0, _service.Updates);
+        Assert.AreEqual(0, _service.Publishes);
+    }
+
+    [TestMethod]
+    [DataRow("Original description")]
+    [DataRow(null)]
+    public async Task Undo_UpdateBackup_RestoresDescriptionAndChartXml(string? originalDescription)
+    {
+        var id = SeedChart("Restore Chart", description: originalDescription);
+        var tool = NewTool();
+        var update = await tool.manage_chart(null!, "update", chart_id: id.ToString(), description: "Changed description",
+            chart_type: "Column", aggregate_column: "name", publish: false);
+        Assert.IsFalse(update.IsError == true, Text(update));
+        var backupPath = update.StructuredContent!.Value.GetProperty("backupPath").GetString()!;
+
+        var undo = await tool.manage_chart(null!, "undo", chart_id: id.ToString(), presentationdescription: backupPath, publish: false);
+
+        Assert.IsFalse(undo.IsError == true, Text(undo));
+        var restored = _service.Retrieve("savedqueryvisualization", id, new ColumnSet("description", "datadescription", "presentationdescription"));
+        Assert.AreEqual(originalDescription, restored.GetAttributeValue<string>("description"));
+        Assert.AreEqual(DataXml, restored.GetAttributeValue<string>("datadescription"));
+        Assert.AreEqual(PieXml, restored.GetAttributeValue<string>("presentationdescription"));
     }
 
     [TestMethod]
@@ -776,8 +855,11 @@ public sealed class ManageChartFakeXrmEasyFullCoverageTests
         public void Update(Entity entity)
         {
             Updates++;
+            LastUpdate = entity;
             _inner.Update(entity);
         }
+
+        public Entity? LastUpdate { get; private set; }
 
         public void Delete(string entityName, Guid id) => _inner.Delete(entityName, id);
 

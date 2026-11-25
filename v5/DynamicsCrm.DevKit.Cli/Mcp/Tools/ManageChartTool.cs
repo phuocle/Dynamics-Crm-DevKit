@@ -69,7 +69,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertChartResult)),
         Description(
             "Manage Dataverse system charts: list/detail/create/update/rename/set_default/undo. Chart FetchXML is built from entity metadata, without a view binding.\n\n" +
-            "Create defaults to Pie with statecode and importsequencenumber/count unless measures alter the default. Pie or any create with measures/filter requires confirmation; inspect the plan and call again with confirmed=true only after user approval. undo takes the update result backupPath in presentationdescription.\n\n" +
+            "Create defaults to Pie with statecode and importsequencenumber/count unless measures alter the default. Pie or any create with measures/filter requires confirmation; inspect the plan and call again with confirmed=true only after user approval. A description-only update preserves the chart XML. Undo takes the update result backupPath in presentationdescription and checks chart_id against the backup when supplied.\n\n" +
             "Read docs://schema_tools_guide for chart defaults, multi-series and confirmation workflow.\n\n" +
             "WHEN TO USE:\n" +
             "- List or inspect system charts of an entity\n" +
@@ -83,12 +83,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",
             [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Required for list/create.")] string entity_name = "",
-            [Description("Chart GUID. detail/update/set_default also accept a uniquely identifying chart_name. rename uses chart_id to identify the chart. undo restores from the backup in presentationdescription.")] string chart_id = "",
+            [Description("Chart GUID. detail/update/set_default also accept a uniquely identifying chart_name. rename requires chart_id. For undo, chart_id must match the backup when supplied.")] string chart_id = "",
             [Description("create: new chart name. detail/update/set_default: lookup by name when chart_id is omitted. rename: new name; chart_id identifies the chart.")] string chart_name = "",
             [Description("Chart type: Column, Bar, Line, Pie, Doughnut, Funnel, Area, Bubble, Radar. Create default: Column for multiple measures, otherwise Pie.")] string chart_type = "",
             [Description("Category / group-by attribute logical name or display name. Pie default: statecode.")] string group_by_column = "",
             [Description("Legend / measure attribute logical name or display name. Pie default: importsequencenumber.")] string aggregate_column = "",
-            [Description("Aggregation type: 'count' (default), 'countcolumn', 'sum', 'avg', 'min', 'max'.")] string aggregate_type = "count",
+            [Description("Aggregation type: 'count', 'countcolumn', 'sum', 'avg', 'min', 'max'. Defaults to count when building chart data. Omit it for a description-only update.")] string aggregate_type = "",
             [Description("Multi-measure series: 'column:aggregate_type[:label]; ...' (e.g. 'estimatedvalue:sum:Revenue; importsequencenumber:count'). Mutually exclusive with aggregate_column/aggregate_type. Optional label becomes the series legend name.")] string measures = "",
             [Description("Structured datadescription filter: 'field op value; ...'. Operators: =, !=, >, >=, <, <=, like, in (comma-separated list), null, not-null. Example: 'statecode=0; estimatedvalue>1000000'.")] string filter = "",
             [Description("Custom presentation Chart XML override (create/update). For undo: path to the .chart.json backup file from {workspace}/.devkit/manage_chart/{entity}/.")] string presentationdescription = "",
@@ -111,12 +111,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",
             [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Required for list/create.")] string entity_name = "",
-            [Description("Chart GUID. detail/update/set_default also accept a uniquely identifying chart_name. rename uses chart_id to identify the chart. undo restores from the backup in presentationdescription.")] string chart_id = "",
+            [Description("Chart GUID. detail/update/set_default also accept a uniquely identifying chart_name. rename requires chart_id. For undo, chart_id must match the backup when supplied.")] string chart_id = "",
             [Description("create: new chart name. detail/update/set_default: lookup by name when chart_id is omitted. rename: new name; chart_id identifies the chart.")] string chart_name = "",
             [Description("Chart type: Column, Bar, Line, Pie, Doughnut, Funnel, Area, Bubble, Radar. Create default: Column for multiple measures, otherwise Pie.")] string chart_type = "",
             [Description("Category / group-by attribute logical name or display name. Pie default: statecode.")] string group_by_column = "",
             [Description("Legend / measure attribute logical name or display name. Pie default: importsequencenumber.")] string aggregate_column = "",
-            [Description("Aggregation type: 'count' (default), 'countcolumn', 'sum', 'avg', 'min', 'max'.")] string aggregate_type = "count",
+            [Description("Aggregation type: 'count', 'countcolumn', 'sum', 'avg', 'min', 'max'. Defaults to count when building chart data. Omit it for a description-only update.")] string aggregate_type = "",
             [Description("Multi-measure series: 'column:aggregate_type[:label]; ...' (e.g. 'estimatedvalue:sum:Revenue; importsequencenumber:count'). Mutually exclusive with aggregate_column/aggregate_type. Optional label becomes the series legend name.")] string measures = "",
             [Description("Structured datadescription filter: 'field op value; ...'. Operators: =, !=, >, >=, <, <=, like, in (comma-separated list), null, not-null. Example: 'statecode=0; estimatedvalue>1000000'.")] string filter = "",
             [Description("Custom presentation Chart XML override (create/update). For undo: path to the .chart.json backup file from {workspace}/.devkit/manage_chart/{entity}/.")] string presentationdescription = "",
@@ -535,6 +535,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var currentDataXml = chartRecord.GetAttributeValue<string>("datadescription");
             var currentPresXml = chartRecord.GetAttributeValue<string>("presentationdescription");
+            var currentDescription = chartRecord.GetAttributeValue<string>("description");
 
             // Guard single-measure chart types: explicit chart_type wins; otherwise use the chart's current type.
             if (measures != null && measures.Count > 1)
@@ -588,6 +589,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var newPresXml = currentPresXml;
+            var shouldUpdatePresentation = !string.IsNullOrWhiteSpace(chartTypeInput) || measures != null || !string.IsNullOrWhiteSpace(presXmlInput);
             if (!string.IsNullOrWhiteSpace(chartTypeInput))
             {
                 newPresXml = measures != null
@@ -606,7 +608,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 newPresXml = ResolveXmlInput(presXmlInput);
             }
 
-            var (valErrors, valWarnings) = validate
+            var validateXml = validate && (shouldRebuildData || shouldUpdatePresentation);
+            var (valErrors, valWarnings) = validateXml
                 ? ValidateChartXmls(newDataXml, newPresXml)
                 : (new List<string>(), new List<string>());
 
@@ -638,21 +641,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Filter = conditions != null ? filterInput.Trim() : null,
                     SolutionName = resolvedSolutionUniqueName,
                     Status = "not_executed",
-                    Validated = validate,
+                    Validated = validateXml,
                     Published = false
                 });
 
             // Backup only when actually mutating
-            var backupPath = SaveBackup(primaryEntity, chartId, chartName, currentDataXml, currentPresXml);
+            var backupPath = SaveBackup(primaryEntity, chartId, chartName, currentDataXml, currentPresXml, currentDescription);
 
-            var updateRecord = new Entity(table, chartId)
-            {
-                ["datadescription"] = newDataXml,
-                ["presentationdescription"] = newPresXml
-            };
-            if (description != null && description != "") updateRecord["description"] = description;
+            var updateRecord = new Entity(table, chartId);
+            if (shouldRebuildData) updateRecord["datadescription"] = newDataXml;
+            if (shouldUpdatePresentation) updateRecord["presentationdescription"] = newPresXml;
+            if (!string.IsNullOrEmpty(description)) updateRecord["description"] = description;
 
-            DataverseMutationExecutor.Update(_context, _orgService, updateRecord);
+            if (updateRecord.Attributes.Count > 0)
+                DataverseMutationExecutor.Update(_context, _orgService, updateRecord);
 
             string solutionWarning = null;
             if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
@@ -678,7 +680,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SolutionName = resolvedSolutionUniqueName,
                 SolutionWarning = solutionWarning,
                 Status = "updated",
-                Validated = validate,
+                Validated = validateXml,
                 ValidationWarnings = valWarnings.Count > 0 ? valWarnings : null,
                 BackupPath = backupPath,
                 Published = published
@@ -803,10 +805,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var json = File.ReadAllText(backupPathInput, Encoding.UTF8);
             var backupData = JsonSerializer.Deserialize<ChartBackup>(json);
 
-            if (backupData == null || string.IsNullOrWhiteSpace(backupData.ChartId))
+            if (backupData == null || !Guid.TryParse(backupData.ChartId, out var chartId) || chartId == Guid.Empty)
                 return Error("Backup file does not contain valid chart data.", "Use a .chart.json backup file written by manage_chart(action='update').");
 
-            var chartId = Guid.Parse(backupData.ChartId);
+            if (!string.IsNullOrWhiteSpace(chartIdInput) && Guid.Parse(chartIdInput) != chartId)
+                return Error($"Backup chart ID '{chartId}' does not match chart_id '{chartIdInput.Trim()}'.",
+                    "Use the backupPath for the chart you want to restore.");
+
+            if (backupData.Description.ValueKind is not (JsonValueKind.Undefined or JsonValueKind.Null or JsonValueKind.String))
+                return Error("Backup file does not contain valid chart data.", "Use a .chart.json backup file written by manage_chart(action='update').");
 
             if (_options.DryRun)
                 return DryRun($"Would UNDO chart {chartId} using backup from '{backupPathInput}'.", new UpsertChartResult
@@ -824,6 +831,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var updateRecord = new Entity(table, chartId);
             if (backupData.DataDescription != null) updateRecord["datadescription"] = backupData.DataDescription;
             if (backupData.PresentationDescription != null) updateRecord["presentationdescription"] = backupData.PresentationDescription;
+            if (backupData.Description.ValueKind != JsonValueKind.Undefined) updateRecord["description"] = backupData.Description.GetString();
 
             DataverseMutationExecutor.Update(_context, _orgService, updateRecord);
 
@@ -1361,7 +1369,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var query = new QueryExpression(table)
                 {
-                    ColumnSet = new ColumnSet(idCol, "name", "description", "datadescription", "presentationdescription", "isdefault", "primaryentitytypecode")
+                    ColumnSet = new ColumnSet(idCol, "name", "description", "datadescription", "presentationdescription", "isdefault", "primaryentitytypecode"),
+                    TopCount = 2
                 };
                 query.Criteria.AddCondition("name", ConditionOperator.Equal, chartNameInput.Trim());
 
@@ -1379,6 +1388,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     hint = "Use manage_chart(action='list', entity_name=...) to find existing chart names.";
                     return null;
                 }
+                if (res.Entities.Count > 1)
+                {
+                    error = $"Chart name '{chartNameInput.Trim()}' is ambiguous.";
+                    hint = "Use manage_chart(action='list', entity_name=...) to find the correct chart, then pass chart_id.";
+                    return null;
+                }
                 return res.Entities[0];
             }
 
@@ -1394,7 +1409,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return resolved.IsSuccess ? resolved.Value.LogicalName : entityNameInput.Trim().ToLowerInvariant();
         }
 
-        private string SaveBackup(string entityName, Guid chartId, string chartName, string dataXml, string presXml)
+        private string SaveBackup(string entityName, Guid chartId, string chartName, string dataXml, string presXml, string description)
         {
             var backupDir = Path.Combine(_workspaceFolder, ".devkit", "manage_chart", entityName);
             Directory.CreateDirectory(backupDir);
@@ -1410,7 +1425,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ChartName = chartName,
                 Timestamp = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"),
                 DataDescription = dataXml,
-                PresentationDescription = presXml
+                PresentationDescription = presXml,
+                Description = JsonSerializer.SerializeToElement(description)
             };
 
             var json = JsonSerializer.Serialize(backupData, new JsonSerializerOptions
@@ -1482,6 +1498,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             [JsonPropertyName("presentationDescription")]
             public string PresentationDescription { get; set; }
+
+            // An absent field in a legacy backup leaves the description in Dataverse intact.
+            [JsonPropertyName("description")]
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+            public JsonElement Description { get; set; }
         }
     }
 }
