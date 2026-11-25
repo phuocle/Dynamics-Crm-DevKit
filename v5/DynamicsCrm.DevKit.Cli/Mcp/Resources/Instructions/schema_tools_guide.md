@@ -16,27 +16,28 @@ Reference for `manage_table`, `manage_column`, and `manage_relationship`.
 - display_name, display_collection_name, solution_name are REQUIRED
 - Optional schema_name and/or logical_name override the auto-derived names (must start with the publisher prefix)
 - Auto-creates primary name attribute (default: 'Name', max 100 chars)
+- `is_duplicate_detection_enabled` maps to the table's `IsDuplicateDetectionEnabled` property and defaults to `false`.
 
 ### Create-Only Properties (Immutable After Creation)
 | Property | Default | Notes |
 |----------|---------|-------|
 | ownership_type | 'User' | 'User' (supports sharing/assigning) or 'Organization' (no row-level security) |
 | table_type | 'Standard' | 'Standard' or 'Elastic' (Cosmos DB, limited charting) |
-| is_activity | false | When true: auto-sets User ownership, enables notes, uses 'Subject' as primary attr |
-| has_notes | false | Cannot be disabled once enabled |
 | primary_attribute_name | auto-derived | From display_name |
 | primary_attribute_display_name | 'Name' | Display name of primary field |
 
 ### Update Mode
 - Pass logical_name to identify the existing table
 - Only provided params are updated; omitted ones keep current values
+- Set `is_duplicate_detection_enabled` to `true` or `false` to toggle Duplicate Detection. Omit it or pass `null` to keep the current value.
 - Set `icon_vector_name` to the name of an existing SVG web resource, such as `ab_/images/svg/ab_bank.svg`. Omit it or pass an empty string to keep the current icon.
 - Pass `solution_name` to associate the update with an unmanaged solution. The tool publishes the table after applying changes.
 - Omit create-only inputs on update. The tool can warn about explicit inputs that it ignores.
 
-### Irreversible Options (Manage via Power Apps UI Only)
-Activities, Feedback, Change Tracking, Business Process Flows, Connections, Queues, Sending Email.
-These CANNOT be turned off once enabled.
+### Irreversible Table Settings
+The MCP server blocks enabling Change Tracking, Activities, Business Process Flows, Connections, Feedback, Notes, Queues, and Sending Email. `manage_table` rejects `is_activity=true` (creating an activity table) and `has_notes=true`. Updates to supported properties leave existing protected settings as configured.
+
+`execute_webapi` allows writes to verified row CRUD endpoints only. Direct metadata writes, solution import and upgrade actions, other write actions, and `$batch` are blocked, including URL-encoded paths.
 
 ### Post-Create Workflow
 1. `manage_table` -- create entity

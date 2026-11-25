@@ -1,5 +1,8 @@
 using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
@@ -9,6 +12,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
@@ -24,6 +28,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpExecutionContext _context;
 
         private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
+        internal IOrganizationService OrgService { private get; init; }
 
         public ExecuteWebApiTool(IWebApiExecutor webApi, McpDryRunOptions options, McpExecutionContext context, IMcpConnectionInfo connectionInfo) : this(webApi, options, context, connectionInfo, null) { }
 
@@ -44,7 +49,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Raw Dataverse Web API call. url is relative; SDK adds base URL. PUT/PATCH/DELETE destructive — confirm.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Endpoints not covered by a specialized tool ($metadata, custom actions, one-off data CRUD)\n" +
+            "- Read endpoints not covered by a specialized tool, including $metadata. Writes are limited to verified Dataverse row CRUD endpoints. Batch requests, solution imports, and raw write actions are blocked.\n" +
             "- Metadata/system endpoints (forms, views, sitemap, schema, choice, webresource, roles, publish, env vars, deleted records, command bar) are BLOCKED/REDIRECTED at runtime to the dedicated tool named in the error\n\n" +
 
             "RELATED TOOLS:\n" +
@@ -60,7 +65,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- publish_customizations → publish after metadata changes")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("GET, POST, PUT, PATCH, or DELETE. Default GET.")] string method = "GET",
-            [Description("Relative path, e.g. 'accounts', 'contacts(guid)', '$metadata'. SDK adds base URL. Required.")] string url = "",
+            [Description("Relative path, e.g. 'accounts', 'contacts(guid)', '$metadata'. Writes require a Dataverse entity set or a single row. SDK adds base URL. Required.")] string url = "",
             [Description("JSON body for POST/PUT/PATCH. Default empty (no body).")] string body = "",
             [Description("Extra headers as JSON object, e.g. '{\"Prefer\":\"return=representation\"}'. Default empty.")] string headers = "",
             [Description("Include response headers in text output. Default false.")] bool include_headers = false,
@@ -70,7 +75,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
-                var worker = new ExecuteWebApiTool(conn.WebApi, conn.Options, conn.Context, conn.ConnectionInfo);
+                var worker = new ExecuteWebApiTool(conn.WebApi, conn.Options, conn.Context, conn.ConnectionInfo) { OrgService = conn.OrgService };
                 return System.Threading.Tasks.Task.FromResult(worker.execute_webapi(method, url, body, headers, include_headers, max_response_lines));
             }, cancellationToken);
         }
@@ -116,9 +121,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (headersError != null)
                     return Error(headersError, "Pass a JSON object, e.g. {\"Prefer\":\"return=representation\"}.");
 
-                var fileBlocked = GetFileColumnBlocked(httpMethod, trimmedUrl, customHeaders);
+                if (customHeaders?.Keys.Any(header => RequestOverrideHeaders.Contains(header.Trim(), StringComparer.OrdinalIgnoreCase)) == true)
+                    return Error("HTTP method or URL override headers are not allowed via execute_webapi.");
+
+                var decodedPath = DecodePath(trimmedUrl);
+                var fileBlocked = GetFileColumnBlocked(httpMethod, decodedPath, customHeaders);
                 if (fileBlocked != null)
                     return Error(fileBlocked.Value.Message, fileBlocked.Value.Hint);
+
+                if (httpMethod != HttpMethod.Get && !IsRowMutation(httpMethod, decodedPath))
+                    return Error("Only verified Dataverse row CRUD endpoints are allowed for Web API writes.",
+                        "Use manage_record for row changes or a dedicated MCP tool for supported metadata changes.");
 
                 var requestBody = string.IsNullOrWhiteSpace(body) ? null : body.Trim();
                 if (_options.DryRun && httpMethod != HttpMethod.Get)
@@ -150,7 +163,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 else
                 {
-                    var isMetadata = trimmedUrl.StartsWith("$metadata", StringComparison.OrdinalIgnoreCase);
+                    var isMetadata = string.Equals(decodedPath, "$metadata", StringComparison.OrdinalIgnoreCase);
                     var getHeaders = customHeaders ?? new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
                     if (isMetadata)
                     {
@@ -249,7 +262,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Environment variable values are linked to definitions. The manage_environment_variable tool handles create/update/clear correctly with definition lookup."),
 
             ("entitydefinitions", "manage_table or manage_column",
-                "Entity metadata contains IRREVERSIBLE flags (ChangeTracking, Activities, BPF, Feedback, Connections, Queues). These cannot be turned off once enabled. Use manage_table for entity-level changes, manage_column for attribute-level changes."),
+                "Entity metadata contains IRREVERSIBLE flags, including Change Tracking, Activities, Notes, BPF, Feedback, Connections, Queues, and Sending email. Use manage_table or manage_column for supported metadata changes."),
             ("relationshipdefinitions", "manage_relationship",
                 "Relationship metadata controls cascading behavior and referential integrity. Incorrect changes can cause data loss. Use manage_relationship for safe relationship management."),
             ("managedpropertydefinitions", "manage_table",
@@ -349,6 +362,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static readonly (string UrlPattern, string RedirectTool, string Reason)[] BlockedPostEndpoints =
         [
+            ("importsolution", null, "Solution imports can change protected table metadata."),
+            ("stagesolution", null, "Staging a solution can prepare changes to protected table metadata."),
+            ("stageandupgrade", null, "Solution upgrades can change protected table metadata."),
+            ("applysolutionupgrade", null, "Solution upgrades can change protected table metadata."),
+            ("deleteandpromote", null, "Solution upgrades can change protected table metadata."),
             ("publishxml", "publish_customizations",
                 "PublishXml requires correctly formatted ParameterXml. The publish_customizations tool handles entity-specific vs all publishing with proper XML generation."),
             ("publishallxml", "publish_customizations",
@@ -473,21 +491,51 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 string.Equals(kv.Key, name, StringComparison.OrdinalIgnoreCase) &&
                 kv.Value != null && kv.Value.Any(v => v != null && v.IndexOf(valuePart, StringComparison.OrdinalIgnoreCase) >= 0));
 
+        private static readonly string[] RequestOverrideHeaders =
+            ["X-HTTP-Method", "X-HTTP-Method-Override", "X-Method-Override", "X-Original-URL", "X-Rewrite-URL"];
+
+        private static readonly Regex RowPathPattern = new(
+            @"\A(?<entitySet>[a-zA-Z_][a-zA-Z0-9_]*)(?<key>\([^/()]+\))?\z", RegexOptions.CultureInvariant);
+
+        private bool IsRowMutation(HttpMethod method, string decodedPath)
+        {
+            var match = RowPathPattern.Match(decodedPath);
+            if (!match.Success || match.Groups["key"].Success == (method == HttpMethod.Post) || OrgService == null)
+                return false;
+
+            var response = (RetrieveAllEntitiesResponse)OrgService.Execute(new RetrieveAllEntitiesRequest { EntityFilters = EntityFilters.Entity });
+            return response.EntityMetadata?.Any(table =>
+                string.Equals(table.EntitySetName, match.Groups["entitySet"].Value, StringComparison.OrdinalIgnoreCase)) == true;
+        }
+
+        private static string DecodePath(string url) => Uri.UnescapeDataString(url.Split('?', 2)[0]);
+
         private static (string Message, string Hint)? GetBlocked(HttpMethod method, string url)
         {
-            var urlLower = url.ToLowerInvariant();
+            var path = DecodePath(url);
+            if (string.IsNullOrWhiteSpace(path) || IsAbsoluteUrl(path) || path.StartsWith('/') ||
+                url.Contains('#') || path.IndexOfAny(['%', '#', '?', '\\']) >= 0 || path.Any(char.IsControl) ||
+                path.Split('/').Any(segment => segment is "" or "." or ".."))
+                return ("url must be an unambiguous relative Dataverse Web API path.",
+                    "Pass a relative endpoint without path traversal, fragments, or nested URL encoding.");
+
+            var pathLower = path.ToLowerInvariant();
+            if (pathLower.Contains("$batch"))
+                return ($"Direct {method.Method} on $batch is not allowed via execute_webapi. Batch requests can contain protected writes.",
+                    "Use the dedicated MCP tool for each supported operation.");
 
             if (method == HttpMethod.Post)
             {
                 foreach (var (pattern, tool, reason) in BlockedPostEndpoints)
                 {
-                    if (urlLower.Contains(pattern))
+                    if (pathLower.Contains(pattern))
                         return ($"Direct POST to {pattern} is not allowed via execute_webapi. {reason}", BlockedHint(tool));
                 }
             }
 
             if (method == HttpMethod.Get)
             {
+                var urlLower = Uri.UnescapeDataString(url).ToLowerInvariant();
                 if (HasSqlQueryOption(urlLower))
                     return ("The ?sql= query option is not supported in execute_webapi.",
                         "Use execute_sql instead — pass the SQL via its sql parameter (without URL-encoding). " +
@@ -501,12 +549,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
-            if (method == HttpMethod.Get || method == HttpMethod.Post)
+            if (method == HttpMethod.Get)
                 return null;
 
             foreach (var (pattern, tool, reason) in BlockedEndpoints)
             {
-                if (urlLower.Contains(pattern.ToLowerInvariant()))
+                if (pathLower.Contains(pattern) || pathLower == pattern.TrimEnd('('))
                     return ($"Direct {method.Method} on {pattern.TrimEnd('(')} is not allowed via execute_webapi. {reason}", BlockedHint(tool));
             }
 

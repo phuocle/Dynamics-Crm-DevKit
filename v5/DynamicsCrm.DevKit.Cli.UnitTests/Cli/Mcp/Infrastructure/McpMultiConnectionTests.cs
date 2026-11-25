@@ -306,8 +306,8 @@ public class McpMultiConnectionTests
     public async Task WebApi_SelectedBundleAllowsReadsAndBlocksWrites()
     {
         var dev = new StubWebApi(); var prod = new StubWebApi();
-        var startup = new ConnectionBundle("default", null!, false, null!, null!, null!, new StubConnectionInfo(), dev, null!);
-        var selected = new ConnectionBundle("1", null!, true, null!, null!, null!, new StubConnectionInfo(), prod, null!);
+        var startup = new ConnectionBundle("default", null!, false, null!, new StubService("dev"), null!, new StubConnectionInfo(), dev, null!);
+        var selected = new ConnectionBundle("1", null!, true, null!, new StubService("prod"), null!, new StubConnectionInfo(), prod, null!);
         await using var registry = Registry(new McpConnectionSnapshot(Values()), startup, (_, _, _) => Task.FromResult(selected));
         var tool = new ExecuteWebApiTool(dev, startup.Options, startup.Context, startup.ConnectionInfo, registry);
         var read = await tool.InvokeAsync(url: "accounts?$top=1", env: "prod");
@@ -414,7 +414,7 @@ public class McpMultiConnectionTests
             }
             if (request is RetrieveAllEntitiesRequest)
             {
-                var metadata = new EntityMetadata { LogicalName = "account", DisplayName = new Label("Account", 1033) };
+                var metadata = new EntityMetadata { LogicalName = "account", DisplayName = new Label("Account", 1033), EntitySetName = "accounts" };
                 var response = new RetrieveAllEntitiesResponse(); response.Results["EntityMetadata"] = new[] { metadata }; return response;
             }
             if (request is RetrieveEntityRequest)

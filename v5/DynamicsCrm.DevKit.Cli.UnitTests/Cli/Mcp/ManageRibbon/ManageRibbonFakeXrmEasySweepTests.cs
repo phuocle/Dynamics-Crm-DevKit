@@ -1299,6 +1299,27 @@ public sealed class ManageRibbonFakeXrmEasySweepTests
     }
 
     [TestMethod]
+    [DataRow("update")]
+    [DataRow("undo")]
+    public async Task NonRibbonXml_IsRejectedBeforeSolutionImport(string action)
+    {
+        const string metadataXml = "<EntityInfo><entity><ChangeTrackingEnabled>1</ChangeTrackingEnabled></entity></EntityInfo>";
+        var input = metadataXml;
+        if (action == "undo")
+        {
+            input = Path.Combine(_tempDir, "metadata.ribbon.json");
+            await File.WriteAllTextAsync(input, JsonSerializer.Serialize(new { ribbonDiffXml = metadataXml }));
+        }
+
+        var result = await CallAsync(action, "account", ribbonxml: input);
+
+        Assert.IsTrue(result.IsError == true, Text(result));
+        StringAssert.Contains(Text(result), "RibbonDiffXml root element");
+        Assert.AreEqual(0, _service.ImportSolutionRequests);
+        Assert.AreEqual(0, _service.PublishAllAsyncRequests);
+    }
+
+    [TestMethod]
     public async Task UpdateRibbonXml_InlineXml_Success_AppliesPatch()
     {
         var result = await CallAsync("update", "account", ribbonxml: RibbonXmlHelpers.GetEmptyRibbonDiffXml());

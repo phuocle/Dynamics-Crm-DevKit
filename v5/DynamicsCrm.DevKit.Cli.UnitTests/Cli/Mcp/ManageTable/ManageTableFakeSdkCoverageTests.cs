@@ -31,6 +31,8 @@ public sealed class ManageTableFakeSdkCoverageTests
     private List<EntityMetadata> _entities = null!;
     private Entity? _solutionRow;
     private CreateEntityRequest? _capturedCreate;
+    private UpdateEntityRequest? _capturedUpdate;
+    private PublishXmlRequest? _capturedPublish;
 
     [TestInitialize]
     public void Setup()
@@ -81,8 +83,16 @@ public sealed class ManageTableFakeSdkCoverageTests
         {
             Results = { ["AttributeMetadata"] = _capturedCreate.PrimaryAttribute }
         },
-        UpdateEntityRequest => BuildResponse(request, () => new UpdateEntityResponse()),
-        PublishXmlRequest => BuildResponse(request, () => new PublishXmlResponse()),
+        UpdateEntityRequest u => BuildResponse(u, () =>
+        {
+            _capturedUpdate = u;
+            return new UpdateEntityResponse();
+        }),
+        PublishXmlRequest p => BuildResponse(p, () =>
+        {
+            _capturedPublish = p;
+            return new PublishXmlResponse();
+        }),
         _ => throw new InvalidOperationException($"Unexpected request '{request.RequestName}'")
     };
 
@@ -132,7 +142,7 @@ public sealed class ManageTableFakeSdkCoverageTests
         var result = NewTool().manage_table(
             display_name: "Widget", display_collection_name: "Widgets",
             solution_name: "DevKitSolution", description: "Widget table",
-            is_audit_enabled: true, has_notes: true);
+            is_audit_enabled: true);
 
         Assert.IsFalse(result.IsError == true, result.GetText());
         var json = Structured(result);
@@ -146,6 +156,23 @@ public sealed class ManageTableFakeSdkCoverageTests
         Assert.AreEqual("DevKitSolution", json.GetProperty("solutionName").GetString());
         Assert.AreEqual("all_Widget", (string)_capturedCreate!.Entity.SchemaName);
         Assert.IsTrue(_capturedCreate.PrimaryAttribute.SchemaName!.StartsWith("all_"));
+        Assert.IsFalse(_capturedCreate.Entity.IsActivity);
+        Assert.IsFalse(_capturedCreate.Entity.ChangeTrackingEnabled);
+        Assert.IsFalse(_capturedCreate.Entity.IsDuplicateDetectionEnabled.Value);
+        Assert.IsFalse(_capturedCreate.HasActivities);
+        Assert.IsFalse(_capturedCreate.HasNotes);
+    }
+
+    [TestMethod]
+    public void Create_DuplicateDetectionEnabled_SendsManagedProperty()
+    {
+        var result = NewTool().manage_table(
+            display_name: "Widget", display_collection_name: "Widgets", solution_name: "DevKitSolution",
+            is_duplicate_detection_enabled: true);
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.IsNotNull(_capturedCreate);
+        Assert.IsTrue(_capturedCreate.Entity.IsDuplicateDetectionEnabled.Value);
     }
 
     [TestMethod]
@@ -161,16 +188,22 @@ public sealed class ManageTableFakeSdkCoverageTests
     }
 
     [TestMethod]
-    public void Create_ActivityTable_ForcesSubjectAndNotes()
+    [DataRow(null, true, false, false, "is_activity")]
+    [DataRow(null, false, true, false, "has_notes")]
+    [DataRow("all_widget", true, false, false, "is_activity")]
+    [DataRow("all_widget", false, true, false, "has_notes")]
+    [DataRow("all_widget", false, true, true, "has_notes")]
+    public void CreateOrUpdate_RejectsProtectedFlags(string? logicalName, bool activity, bool notes, bool dryRun, string flag)
     {
-        var result = NewTool().manage_table(
-            display_name: "Visits", display_collection_name: "Visits",
-            solution_name: "DevKitSolution", is_activity: true);
+        _entities.Add(TestMetadata.Entity("all_widget", "Widget"));
+        var result = NewTool(dryRun).manage_table(
+            logical_name: logicalName, display_name: "Visits", display_collection_name: "Visits",
+            solution_name: "DevKitSolution", is_activity: activity, has_notes: notes);
 
-        Assert.IsFalse(result.IsError == true, result.GetText());
-        var json = Structured(result);
-        Assert.AreEqual("subject", json.GetProperty("primaryAttributeName").GetString());
-        Assert.AreEqual("Subject", json.GetProperty("primaryAttributeDisplayName").GetString());
+        Assert.IsTrue(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), flag);
+        Assert.IsNull(_capturedCreate);
+        Assert.IsNull(_capturedUpdate);
     }
 
     [TestMethod]
@@ -238,13 +271,23 @@ public sealed class ManageTableFakeSdkCoverageTests
         typeof(EntityMetadata).GetProperty(nameof(EntityMetadata.OwnershipType))!.SetValue(existing, OwnershipTypes.UserOwned);
         typeof(EntityMetadata).GetProperty(nameof(EntityMetadata.TableType))!.SetValue(existing, "Standard");
         typeof(EntityMetadata).GetProperty(nameof(EntityMetadata.PrimaryNameAttribute))!.SetValue(existing, "all_name");
+        existing.IsDuplicateDetectionEnabled = new BooleanManagedProperty(true);
+        existing.ChangeTrackingEnabled = true;
+        existing.IsActivity = true;
+        existing.IsActivityParty = true;
+        existing.IsBusinessProcessEnabled = true;
+        existing.IsConnectionsEnabled = new BooleanManagedProperty(true);
+        existing.IsValidForQueue = new BooleanManagedProperty(true);
+        typeof(EntityMetadata).GetProperty(nameof(EntityMetadata.HasFeedback))!.SetValue(existing, true);
+        typeof(EntityMetadata).GetProperty(nameof(EntityMetadata.HasNotes))!.SetValue(existing, true);
+        typeof(EntityMetadata).GetProperty(nameof(EntityMetadata.HasActivities))!.SetValue(existing, true);
         _entities.Add(existing);
 
         var result = NewTool().manage_table(
             logical_name: "all_widget", display_name: "Gadget",
             display_collection_name: "Gadgets", description: "Updated description",
             is_quick_create_enabled: true, is_audit_enabled: false, is_search_enabled: false,
-            ownership_type: "Organization", table_type: "Elastic", is_activity: true, has_notes: true,
+            ownership_type: "Organization", table_type: "Elastic",
             primary_attribute_name: "all_other", primary_attribute_display_name: "Other Name");
 
         Assert.IsFalse(result.IsError == true, result.GetText());
@@ -252,9 +295,80 @@ public sealed class ManageTableFakeSdkCoverageTests
         Assert.AreEqual("updated", json.GetProperty("status").GetString());
         Assert.AreEqual("Gadget", json.GetProperty("displayName").GetString());
         var warnings = json.GetProperty("warnings").EnumerateArray().Select(w => w.GetString()!).ToList();
-        foreach (var parameterName in new[] { "ownership_type", "table_type", "is_activity", "has_notes", "primary_attribute_name", "primary_attribute_display_name" })
+        foreach (var parameterName in new[] { "ownership_type", "table_type", "primary_attribute_name", "primary_attribute_display_name" })
             Assert.IsTrue(warnings.Any(warning => warning.StartsWith(parameterName + " is immutable", StringComparison.Ordinal)),
                 $"Expected an immutable warning for '{parameterName}'. Got: {string.Join(" | ", warnings)}");
+        Assert.IsNotNull(_capturedUpdate);
+        var written = _capturedUpdate.Entity;
+        Assert.AreEqual("Gadget", written.DisplayName.LocalizedLabels[0].Label);
+        Assert.IsNull(written.IsDuplicateDetectionEnabled);
+        Assert.IsNull(written.ChangeTrackingEnabled);
+        Assert.IsNull(written.IsActivity);
+        Assert.IsNull(written.IsActivityParty);
+        Assert.IsNull(written.IsBusinessProcessEnabled);
+        Assert.IsNull(written.IsConnectionsEnabled);
+        Assert.IsNull(written.IsValidForQueue);
+        Assert.IsNull(written.HasFeedback);
+        Assert.IsNull(written.HasNotes);
+        Assert.IsNull(written.HasActivities);
+        Assert.IsFalse(_capturedUpdate.Parameters.Contains("HasNotes"));
+        Assert.IsFalse(_capturedUpdate.Parameters.Contains("HasActivities"));
+    }
+
+    [TestMethod]
+    [DataRow(false, true)]
+    [DataRow(true, false)]
+    public void Update_DuplicateDetectionChanged_UpdatesMetadataAndPublishes(bool current, bool requested)
+    {
+        var existing = TestMetadata.Entity("all_widget", "Widget");
+        existing.IsDuplicateDetectionEnabled = new BooleanManagedProperty(current);
+        _entities.Add(existing);
+
+        var result = NewTool().manage_table(logical_name: "all_widget", is_duplicate_detection_enabled: requested);
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.IsNotNull(_capturedUpdate);
+        Assert.AreEqual(requested, _capturedUpdate.Entity.IsDuplicateDetectionEnabled.Value);
+        Assert.IsNotNull(_capturedPublish);
+        StringAssert.Contains(_capturedPublish.ParameterXml, "<entity>all_widget</entity>");
+        var json = Structured(result);
+        Assert.IsTrue(json.GetProperty("published").GetBoolean());
+        var change = json.GetProperty("changes").GetProperty("isDuplicateDetectionEnabled");
+        Assert.AreEqual(current.ToString().ToLowerInvariant(), change.GetProperty("oldValue").GetString());
+        Assert.AreEqual(requested.ToString().ToLowerInvariant(), change.GetProperty("newValue").GetString());
+    }
+
+    [TestMethod]
+    [DataRow(true)]
+    [DataRow(null)]
+    public void Update_DuplicateDetectionUnchanged_DoesNotWriteOrPublish(bool? requested)
+    {
+        var existing = TestMetadata.Entity("all_widget", "Widget");
+        existing.IsDuplicateDetectionEnabled = new BooleanManagedProperty(true);
+        _entities.Add(existing);
+
+        var result = NewTool().manage_table(logical_name: "all_widget", is_duplicate_detection_enabled: requested);
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "No changes for table");
+        Assert.IsNull(_capturedUpdate);
+        Assert.IsNull(_capturedPublish);
+    }
+
+    [TestMethod]
+    public void Update_DuplicateDetectionDryRun_PreviewsWithoutWritingOrPublishing()
+    {
+        var existing = TestMetadata.Entity("all_widget", "Widget");
+        existing.IsDuplicateDetectionEnabled = new BooleanManagedProperty(true);
+        _entities.Add(existing);
+
+        var result = NewTool(dryRun: true).manage_table(logical_name: "all_widget", is_duplicate_detection_enabled: false);
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "IsDuplicateDetectionEnabled: true -> false");
+        Assert.AreEqual("not_executed", Structured(result).GetProperty("status").GetString());
+        Assert.IsNull(_capturedUpdate);
+        Assert.IsNull(_capturedPublish);
     }
 
     [TestMethod]

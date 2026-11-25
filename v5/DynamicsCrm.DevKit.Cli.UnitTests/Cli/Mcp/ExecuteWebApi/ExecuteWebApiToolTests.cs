@@ -658,20 +658,6 @@ public class ExecuteWebApiToolTests
         Assert.IsNull(GetBlockedReason(HttpMethod.Get, "pluginassemblies"));
     }
 
-    // ── POST custom actions: must remain ALLOWED ──
-
-    [TestMethod]
-    public void GetBlockedReason_POST_CustomAction_Allowed()
-    {
-        Assert.IsNull(GetBlockedReason(HttpMethod.Post, "new_MyCustomAction"));
-    }
-
-    [TestMethod]
-    public void GetBlockedReason_POST_WhoAmI_Allowed()
-    {
-        Assert.IsNull(GetBlockedReason(HttpMethod.Post, "WhoAmI"));
-    }
-
     [TestMethod]
     public void GetBlockedReason_POST_Contacts_Create_Allowed()
     {

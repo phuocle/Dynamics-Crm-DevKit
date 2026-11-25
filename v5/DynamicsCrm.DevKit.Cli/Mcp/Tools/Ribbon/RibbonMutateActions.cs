@@ -30,12 +30,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error(
                     "RibbonXml file not found.",
                     $"Path: {ribbonxml}. Re-run build_ribbon_xml to regenerate the file.");
+            var targetDoc = ParseRibbonDiffXml(resolvedXml);
 
             // Step 2: Preserve existing RibbonDiffXml nodes that are not present in the supplied XML.
             // Raw ribbonxml updates are treated as patches so adding one button cannot delete siblings.
             var fetcher = new RibbonSolutionFetcher(_orgService, _context);
             var existingXml = fetcher.FetchExistingRibbonDiffXml(entityName);
-            var targetDoc = XDocument.Parse(resolvedXml);
             var existingDoc = XDocument.Parse(existingXml);
 
             RibbonXmlHelpers.PreserveMissingRibbonDiffElements(targetDoc, existingDoc);
@@ -55,7 +55,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var backupPath = BackupCurrentRibbon(entityName);
 
             // Step 5: Import solution. Execute returns only after Dataverse finishes the import request.
-            var solutionZip = BuildSolutionZip(entityName, resolvedXml);
+            var solutionZip = BuildSolutionZip(entityName, targetDoc.Root);
             SolutionImportHelper.Import(_context, _orgService, solutionZip);
 
             // Step 6: Publish immediately after import completes (PublishAll async).
@@ -174,7 +174,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var backupPath = BackupCurrentRibbon(entityName);
 
             // Step 9: Build solution ZIP + import. Execute returns only after Dataverse finishes the import request.
-            var solutionZip = BuildSolutionZip(entityName, xmlString);
+            var solutionZip = BuildSolutionZip(entityName, ribbonDoc.Root);
             SolutionImportHelper.Import(_context, _orgService, solutionZip);
 
             // Step 10: Publish immediately after import completes (PublishAll async).
@@ -231,7 +231,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error(
                     "Backup file is empty or invalid.",
                     $"Path: {backupFilePath}. The backup must be a JSON file with a 'ribbonDiffXml' field.");
-            var restoredXml = backupData.RibbonDiffXml;
+            var restoredXml = ParseRibbonDiffXml(backupData.RibbonDiffXml);
 
             if (_options.DryRun)
                 return DryRun($"Would RESTORE ribbon for entity '{entityName}' from backup.", new ManageRibbonResult
@@ -244,7 +244,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
 
             // Build and import. Execute returns only after Dataverse finishes the import request.
-            var solutionZip = BuildSolutionZip(entityName, restoredXml);
+            var solutionZip = BuildSolutionZip(entityName, restoredXml.Root);
             SolutionImportHelper.Import(_context, _orgService, solutionZip);
 
             // Publish immediately after import completes (PublishAll async).
@@ -276,7 +276,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Solution ZIP builder (from template) ─────────────────────────
 
-        private byte[] BuildSolutionZip(string entityName, string ribbonDiffXml)
+        private static XDocument ParseRibbonDiffXml(string ribbonDiffXml)
+        {
+            var document = XDocument.Parse(ribbonDiffXml);
+            if (document.Root?.Name != "RibbonDiffXml")
+                throw new InvalidOperationException("Ribbon XML must have a RibbonDiffXml root element.");
+            return document;
+        }
+
+        private byte[] BuildSolutionZip(string entityName, XElement ribbonDiffXml)
         {
             // Load template from embedded resource
             var templateBytes = LoadTemplateZip();
@@ -327,10 +335,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         // Replace RibbonDiffXml
                         var ribbonEl = entityNode.Element("RibbonDiffXml");
                         if (ribbonEl != null)
-                        {
-                            var newRibbonEl = XElement.Parse(ribbonDiffXml);
-                            ribbonEl.ReplaceWith(newRibbonEl);
-                        }
+                            ribbonEl.ReplaceWith(ribbonDiffXml);
                     }
 
                     WriteEntryText(customizationsEntry, customDoc.Declaration != null

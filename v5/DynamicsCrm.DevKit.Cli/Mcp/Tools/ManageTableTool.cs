@@ -43,6 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Create or update a Dataverse table. Auto-detects create vs update from the inputs (no entity_name param).\n" +
             "- UPDATE (entity exists): logical_name + optional display_name, display_collection_name, description, is_audit_enabled, is_quick_create_enabled, is_search_enabled, icon_vector_name, solution_name.\n" +
             "- CREATE (new table): display_name + display_collection_name + solution_name (resolves publisher prefix). Auto-creates primary name attribute.\n" +
+            "- is_duplicate_detection_enabled is optional on CREATE and UPDATE. Defaults to false on create. Null keeps the current setting on update.\n" +
             "Technical names come from logical_name / schema_name or are auto-derived from display_name.\n\n" +
             "For publisher prefixes, create/update requirements and immutable properties, read docs://schema_tools_guide before changing metadata.\n\n" +
             "WHEN TO USE:\n" +
@@ -63,8 +64,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Display label of the primary name column on create. Defaults to 'Name' on create.")] string primary_attribute_display_name = "",
             [Description("'User' or 'Organization'. Defaults to 'User' on create. [create-only, immutable]")] string ownership_type = "",
             [Description("'Standard' or 'Elastic' (Cosmos DB, no charts). Defaults to 'Standard' on create. [create-only, immutable]")] string table_type = "",
-            [Description("Activity entity. [create-only, immutable]")] bool is_activity = false,
-            [Description("Enable notes. [create-only]")] bool has_notes = false,
+            [Description("Compatibility parameter. Must be false or omitted. MCP cannot create activity tables.")] bool is_activity = false,
+            [Description("Compatibility parameter. Must be false or omitted. MCP cannot enable Notes.")] bool has_notes = false,
             [Description("Enable quick create for this table. null = keep current on update.")] bool? is_quick_create_enabled = null,
             [Description("null = keep current (update). Default true on create.")] bool? is_audit_enabled = null,
             [Description("Enable this table for Dataverse Search/Relevance Search (SyncToExternalSearchIndex). null = keep current on update; false by default on create unless specified.")] bool? is_search_enabled = null,
@@ -74,12 +75,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("SchemaName for the primary name column (e.g. 'ab_name'). If provided, used AS-IS as SchemaName (skip auto-TitleCase). Create only — ignored on update. Must start with the publisher prefix.")] string primary_attribute_schema_name = "",
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default,
-            [Description("Existing SVG web resource name (e.g. 'ab_/images/svg/ab_bank.svg'). Update only. Omit or leave empty to keep the current icon.")] string icon_vector_name = "")
+            [Description("Existing SVG web resource name (e.g. 'ab_/images/svg/ab_bank.svg'). Update only. Omit or leave empty to keep the current icon.")] string icon_vector_name = "",
+            [Description("Enable or disable Duplicate Detection for this table. False by default on create. Null or omitted keeps the current value on update.")] bool? is_duplicate_detection_enabled = null)
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
                 var worker = new ManageTableTool(conn.OrgService, conn.Options, conn.Context);
-                return System.Threading.Tasks.Task.FromResult(worker.manage_table(display_name, display_collection_name, solution_name, description, primary_attribute_name, primary_attribute_display_name, ownership_type, table_type, is_activity, has_notes, is_quick_create_enabled, is_audit_enabled, is_search_enabled, primary_attribute_max_length, schema_name, logical_name, primary_attribute_schema_name, icon_vector_name));
+                return System.Threading.Tasks.Task.FromResult(worker.manage_table(display_name, display_collection_name, solution_name, description, primary_attribute_name, primary_attribute_display_name, ownership_type, table_type, is_activity, has_notes, is_quick_create_enabled, is_audit_enabled, is_search_enabled, primary_attribute_max_length, schema_name, logical_name, primary_attribute_schema_name, icon_vector_name, is_duplicate_detection_enabled));
             }, cancellationToken);
         }
 
@@ -92,8 +94,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Display label of the primary name column on create. Defaults to 'Name' on create.")] string primary_attribute_display_name = "",
             [Description("'User' or 'Organization'. Defaults to 'User' on create. [create-only, immutable]")] string ownership_type = "",
             [Description("'Standard' or 'Elastic' (Cosmos DB, no charts). Defaults to 'Standard' on create. [create-only, immutable]")] string table_type = "",
-            [Description("Activity entity. [create-only, immutable]")] bool is_activity = false,
-            [Description("Enable notes. [create-only]")] bool has_notes = false,
+            [Description("Compatibility parameter. Must be false or omitted. MCP cannot create activity tables.")] bool is_activity = false,
+            [Description("Compatibility parameter. Must be false or omitted. MCP cannot enable Notes.")] bool has_notes = false,
             [Description("Enable quick create for this table. null = keep current on update.")] bool? is_quick_create_enabled = null,
             [Description("null = keep current (update). Default true on create.")] bool? is_audit_enabled = null,
             [Description("Enable this table for Dataverse Search/Relevance Search (SyncToExternalSearchIndex). null = keep current on update; false by default on create unless specified.")] bool? is_search_enabled = null,
@@ -101,10 +103,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("SchemaName for the new table (e.g. 'all_InOne' or 'all_In_One'). If provided, used AS-IS as SchemaName (skip auto-derive). Caller responsible for casing. Create only — ignored on update. Must start with the publisher prefix.")] string schema_name = "",
             [Description("Update: identifies the existing table by display or logical name. Create: optional logical name override (e.g. 'all_in_one'), normalized to lowercase; must start with the solution publisher prefix and match the lowercase schema name.")] string logical_name = "",
             [Description("SchemaName for the primary name column (e.g. 'ab_name'). If provided, used AS-IS as SchemaName (skip auto-TitleCase). Create only — ignored on update. Must start with the publisher prefix.")] string primary_attribute_schema_name = "",
-            [Description("Existing SVG web resource name (e.g. 'ab_/images/svg/ab_bank.svg'). Update only. Omit or leave empty to keep the current icon.")] string icon_vector_name = "")
+            [Description("Existing SVG web resource name (e.g. 'ab_/images/svg/ab_bank.svg'). Update only. Omit or leave empty to keep the current icon.")] string icon_vector_name = "",
+            [Description("Enable or disable Duplicate Detection for this table. False by default on create. Null or omitted keeps the current value on update.")] bool? is_duplicate_detection_enabled = null)
         {
             try
             {
+                if (is_activity || has_notes)
+                    return Error("Protected table settings is_activity and has_notes cannot be enabled via MCP.",
+                        "Omit those parameters or pass false to continue with supported table settings.");
+
                 logical_name = logical_name?.Trim() ?? "";
                 schema_name = schema_name?.Trim() ?? "";
                 display_name = display_name?.Trim() ?? "";
@@ -146,8 +153,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         return UpdateExistingEntity(existingEntity.LogicalName, existingEntity,
                             display_name, display_collection_name, description,
-                            is_quick_create_enabled, is_audit_enabled, is_search_enabled,
-                            ownership_type, table_type, is_activity, has_notes,
+                            is_quick_create_enabled, is_audit_enabled, is_search_enabled, is_duplicate_detection_enabled,
+                            ownership_type, table_type,
                             primary_attribute_name, primary_attribute_display_name,
                             resolvedSolutionUniqueName, icon_vector_name);
                     }
@@ -172,8 +179,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 return CreateNewEntity(
                     display_name, display_collection_name, description,
-                    is_quick_create_enabled, is_audit_enabled, is_search_enabled,
-                    ownership_type, table_type, is_activity, has_notes,
+                    is_quick_create_enabled, is_audit_enabled, is_search_enabled, is_duplicate_detection_enabled,
+                    ownership_type, table_type,
                     primary_attribute_name, primary_attribute_display_name,
                     primary_attribute_max_length,
                     schema_name, logical_name,
@@ -188,8 +195,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult CreateNewEntity(
             string display_name, string display_collection_name, string description,
-            bool? is_quick_create_enabled, bool? is_audit_enabled, bool? is_search_enabled,
-            string ownership_type, string table_type, bool is_activity, bool has_notes,
+            bool? is_quick_create_enabled, bool? is_audit_enabled, bool? is_search_enabled, bool? is_duplicate_detection_enabled,
+            string ownership_type, string table_type,
             string primary_attribute_name, string primary_attribute_display_name,
             int primary_attribute_max_length,
             string schema_name, string logical_name,
@@ -299,15 +306,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(primary_attribute_display_name))
                 primary_attribute_display_name = "Name";
 
-            if (is_activity)
-            {
-                ownershipTypeValue = OwnershipTypes.UserOwned;
-                has_notes = true;
-                primarySchemaName = "Subject";
-                primary_attribute_name = "subject";
-                primary_attribute_display_name = "Subject";
-            }
-
             var effectiveIsQuickCreateEnabled = is_quick_create_enabled ?? false;
 
             if (_options.DryRun)
@@ -342,9 +340,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 DisplayName = new Label(display_name, McpHelper.GetBaseLanguageCode(_orgService)),
                 DisplayCollectionName = new Label(display_collection_name, McpHelper.GetBaseLanguageCode(_orgService)),
                 OwnershipType = ownershipTypeValue,
-                IsActivity = is_activity,
+                IsActivity = false,
+                ChangeTrackingEnabled = false,
                 IsAuditEnabled = new BooleanManagedProperty(is_audit_enabled ?? true),
-                IsDuplicateDetectionEnabled = new BooleanManagedProperty(false),
+                IsDuplicateDetectionEnabled = new BooleanManagedProperty(is_duplicate_detection_enabled ?? false),
                 IsQuickCreateEnabled = effectiveIsQuickCreateEnabled,
                 SyncToExternalSearchIndex = is_search_enabled ?? false
             };
@@ -358,9 +357,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 entityMetadata.CanCreateCharts = new BooleanManagedProperty(false);
             }
 
-            if (is_activity)
-                entityMetadata.IsAvailableOffline = true;
-
             var primaryAttribute = new StringAttributeMetadata
             {
                 SchemaName = primarySchemaName,
@@ -373,7 +369,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var request = new CreateEntityRequest
             {
                 Entity = entityMetadata,
-                PrimaryAttribute = primaryAttribute
+                PrimaryAttribute = primaryAttribute,
+                HasActivities = false,
+                HasNotes = false
             };
             SolutionComponentCreateHelper.ApplySolutionUniqueName(request, resolvedSolutionUniqueName ?? solution_name);
 
@@ -450,14 +448,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult UpdateExistingEntity(
             string entityName, EntityMetadata existingMetadata,
             string displayName, string displayCollectionName, string description,
-            bool? isQuickCreateEnabled, bool? isAuditEnabled, bool? isSearchEnabled,
-            string ownershipType, string tableType, bool isActivity, bool hasNotes,
+            bool? isQuickCreateEnabled, bool? isAuditEnabled, bool? isSearchEnabled, bool? isDuplicateDetectionEnabled,
+            string ownershipType, string tableType,
             string primaryAttributeName, string primaryAttributeDisplayName,
             string solutionUniqueName, string iconVectorName)
         {
             var changes = new List<string>();
             var structuredChanges = new Dictionary<string, UpdateAttributeChange>();
             var warnings = new List<string>();
+            var updatedMetadata = new EntityMetadata { LogicalName = entityName, MetadataId = existingMetadata.MetadataId };
 
             var effectiveDisplayName = existingMetadata.DisplayName?.UserLocalizedLabel?.Label ?? "";
             var effectiveDisplayCollectionName = existingMetadata.DisplayCollectionName?.UserLocalizedLabel?.Label ?? "";
@@ -468,7 +467,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var oldVal = effectiveDisplayName;
                 if (oldVal != displayName)
                 {
-                    existingMetadata.DisplayName = new Label(displayName, McpHelper.GetBaseLanguageCode(_orgService));
+                    updatedMetadata.DisplayName = new Label(displayName, McpHelper.GetBaseLanguageCode(_orgService));
                     effectiveDisplayName = displayName;
                     changes.Add($"DisplayName: \"{oldVal}\" -> \"{displayName}\"");
                     structuredChanges["displayName"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = displayName };
@@ -480,7 +479,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var oldVal = effectiveDisplayCollectionName;
                 if (oldVal != displayCollectionName)
                 {
-                    existingMetadata.DisplayCollectionName = new Label(displayCollectionName, McpHelper.GetBaseLanguageCode(_orgService));
+                    updatedMetadata.DisplayCollectionName = new Label(displayCollectionName, McpHelper.GetBaseLanguageCode(_orgService));
                     effectiveDisplayCollectionName = displayCollectionName;
                     changes.Add($"DisplayCollectionName: \"{oldVal}\" -> \"{displayCollectionName}\"");
                     structuredChanges["displayCollectionName"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = displayCollectionName };
@@ -492,7 +491,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var oldVal = effectiveDescription;
                 if (oldVal != description)
                 {
-                    existingMetadata.Description = new Label(description, McpHelper.GetBaseLanguageCode(_orgService));
+                    updatedMetadata.Description = new Label(description, McpHelper.GetBaseLanguageCode(_orgService));
                     effectiveDescription = description;
                     changes.Add($"Description: \"{oldVal}\" -> \"{description}\"");
                     structuredChanges["description"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = description };
@@ -510,7 +509,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (isQuickCreateEnabled.HasValue && existingMetadata.IsQuickCreateEnabled != isQuickCreateEnabled.Value)
             {
                 var oldVal = existingMetadata.IsQuickCreateEnabled == true ? "true" : "false";
-                existingMetadata.IsQuickCreateEnabled = isQuickCreateEnabled.Value;
+                updatedMetadata.IsQuickCreateEnabled = isQuickCreateEnabled.Value;
                 changes.Add($"IsQuickCreateEnabled: {oldVal} -> {isQuickCreateEnabled.Value.ToString().ToLowerInvariant()}");
                 structuredChanges["isQuickCreateEnabled"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isQuickCreateEnabled.Value.ToString().ToLowerInvariant() };
             }
@@ -518,9 +517,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (isAuditEnabled.HasValue && existingMetadata.IsAuditEnabled?.Value != isAuditEnabled.Value)
             {
                 var oldVal = existingMetadata.IsAuditEnabled?.Value == true ? "true" : "false";
-                existingMetadata.IsAuditEnabled = new BooleanManagedProperty(isAuditEnabled.Value);
+                updatedMetadata.IsAuditEnabled = new BooleanManagedProperty(isAuditEnabled.Value);
                 changes.Add($"IsAuditEnabled: {oldVal} -> {isAuditEnabled.Value.ToString().ToLowerInvariant()}");
                 structuredChanges["isAuditEnabled"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isAuditEnabled.Value.ToString().ToLowerInvariant() };
+            }
+
+            var currentDuplicateDetection = existingMetadata.IsDuplicateDetectionEnabled?.Value;
+            if (isDuplicateDetectionEnabled.HasValue && currentDuplicateDetection != isDuplicateDetectionEnabled.Value)
+            {
+                var oldValue = currentDuplicateDetection?.ToString().ToLowerInvariant();
+                var newValue = isDuplicateDetectionEnabled.Value.ToString().ToLowerInvariant();
+                updatedMetadata.IsDuplicateDetectionEnabled = new BooleanManagedProperty(isDuplicateDetectionEnabled.Value);
+                changes.Add($"IsDuplicateDetectionEnabled: {oldValue ?? "unknown"} -> {newValue}");
+                structuredChanges["isDuplicateDetectionEnabled"] = new UpdateAttributeChange { OldValue = oldValue, NewValue = newValue };
             }
 
             if (isSearchEnabled.HasValue)
@@ -537,7 +546,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                     else
                     {
-                        existingMetadata.SyncToExternalSearchIndex = isSearchEnabled.Value;
+                        updatedMetadata.SyncToExternalSearchIndex = isSearchEnabled.Value;
                         changes.Add($"SyncToExternalSearchIndex: {currentSync.ToString().ToLowerInvariant()} -> {isSearchEnabled.Value.ToString().ToLowerInvariant()}");
                         structuredChanges["syncToExternalSearchIndex"] = new UpdateAttributeChange { OldValue = currentSync.ToString().ToLowerInvariant(), NewValue = isSearchEnabled.Value.ToString().ToLowerInvariant() };
                     }
@@ -553,14 +562,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 !tableType.Equals(existingMetadata.TableType, StringComparison.OrdinalIgnoreCase))
             {
                 warnings.Add($"table_type is immutable after create and was ignored (current: {existingMetadata.TableType}).");
-            }
-            if (isActivity && !existingMetadata.IsActivity.GetValueOrDefault())
-            {
-                warnings.Add("is_activity is immutable after create and was ignored.");
-            }
-            if (hasNotes)
-            {
-                warnings.Add("has_notes is immutable after create and was ignored.");
             }
             if (!string.IsNullOrWhiteSpace(primaryAttributeName) &&
                 !primaryAttributeName.Equals(existingMetadata.PrimaryNameAttribute, StringComparison.OrdinalIgnoreCase))
@@ -612,11 +613,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     });
 
             if (iconChanged)
-                existingMetadata.IconVectorName = iconVectorName;
+                updatedMetadata.IconVectorName = iconVectorName;
 
             var updateRequest = new UpdateEntityRequest
             {
-                Entity = existingMetadata
+                Entity = updatedMetadata
             };
             SolutionComponentCreateHelper.ApplySolutionUniqueName(updateRequest, solutionUniqueName);
             DataverseMutationExecutor.Execute(_context, _orgService, updateRequest);
@@ -647,10 +648,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 AddToSolutionMethod = association?.AddToSolutionMethod,
                 AddToSolutionWarning = association?.AddToSolutionWarning,
                 Published = published,
-                IsAuditEnabled = existingMetadata.IsAuditEnabled?.Value,
-                IsQuickCreateEnabled = existingMetadata.IsQuickCreateEnabled == true,
-                IsSearchEnabled = existingMetadata.SyncToExternalSearchIndex == true,
-                SyncToExternalSearchIndex = existingMetadata.SyncToExternalSearchIndex,
+                IsAuditEnabled = (updatedMetadata.IsAuditEnabled ?? existingMetadata.IsAuditEnabled)?.Value,
+                IsQuickCreateEnabled = (updatedMetadata.IsQuickCreateEnabled ?? existingMetadata.IsQuickCreateEnabled) == true,
+                IsSearchEnabled = (updatedMetadata.SyncToExternalSearchIndex ?? existingMetadata.SyncToExternalSearchIndex) == true,
+                SyncToExternalSearchIndex = updatedMetadata.SyncToExternalSearchIndex ?? existingMetadata.SyncToExternalSearchIndex,
                 CanEnableSyncToExternalSearchIndex = existingMetadata.CanEnableSyncToExternalSearchIndex?.Value,
                 CanEnableSyncToExternalSearchIndexCanBeChanged = existingMetadata.CanEnableSyncToExternalSearchIndex?.CanBeChanged,
                 Description = string.IsNullOrWhiteSpace(effectiveDescription) ? null : effectiveDescription,

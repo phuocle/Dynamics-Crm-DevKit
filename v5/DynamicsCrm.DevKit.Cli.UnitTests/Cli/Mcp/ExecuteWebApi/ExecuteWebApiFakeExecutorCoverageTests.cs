@@ -5,6 +5,9 @@ using ModelContextProtocol.Protocol;
 using DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.CrossTool;
 using FakeItEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
 using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
@@ -28,6 +31,7 @@ public sealed class ExecuteWebApiFakeExecutorCoverageTests
 {
     private IWebApiExecutor _webApi = null!;
     private IMcpConnectionInfo _connectionInfo = null!;
+    private IOrganizationService _orgService = null!;
     private HttpResponseMessage _response = null!;
 
     [TestInitialize]
@@ -35,6 +39,15 @@ public sealed class ExecuteWebApiFakeExecutorCoverageTests
     {
         _webApi = A.Fake<IWebApiExecutor>();
         _connectionInfo = A.Fake<IMcpConnectionInfo>();
+        _orgService = A.Fake<IOrganizationService>();
+        A.CallTo(() => _orgService.Execute(A<RetrieveAllEntitiesRequest>._)).Returns(new RetrieveAllEntitiesResponse
+        {
+            Results = { ["EntityMetadata"] = new[]
+            {
+                new EntityMetadata { EntitySetName = "accounts" },
+                new EntityMetadata { EntitySetName = "ab_widgets" }
+            } }
+        });
         A.CallTo(() => _connectionInfo.ConnectedOrgUri).Returns(new Uri("https://fakeorg.crm.dynamics.com"));
         A.CallTo(() => _webApi.CurrentAccessToken).Returns("fake-token");
         _response = new HttpResponseMessage(HttpStatusCode.OK)
@@ -47,7 +60,10 @@ public sealed class ExecuteWebApiFakeExecutorCoverageTests
     }
 
     private ExecuteWebApiTool NewTool(bool dryRun = false) =>
-        new(_webApi, new McpDryRunOptions { DryRun = dryRun }, DryRunTestHelpers.NormalContext(), _connectionInfo);
+        new(_webApi, new McpDryRunOptions { DryRun = dryRun }, DryRunTestHelpers.NormalContext(), _connectionInfo)
+        {
+            OrgService = _orgService
+        };
 
     private static JsonElement Structured(CallToolResult result) =>
         JsonDocument.Parse(result.StructuredContent!.Value.GetRawText()).RootElement;
@@ -94,7 +110,84 @@ public sealed class ExecuteWebApiFakeExecutorCoverageTests
         Assert.IsFalse(result.IsError == true, result.GetText());
         StringAssert.Contains(result.GetText(), "Would execute POST");
         Assert.AreEqual("Not executed", Structured(result).GetProperty("statusText").GetString());
+        AssertNoWebRequest();
     }
+
+    [TestMethod]
+    [DataRow("PATCH", "EntityDefinitions(00000000-0000-0000-0000-000000000001)", "IRREVERSIBLE")]
+    [DataRow("PUT", "%45ntityDefinit%69ons%2800000000-0000-0000-0000-000000000001%29", "IRREVERSIBLE")]
+    [DataRow("PATCH", "%2545ntityDefinitions(guid)", "unambiguous relative")]
+    [DataRow("PATCH", "accounts/%2e%2e/EntityDefinitions(guid)", "unambiguous relative")]
+    [DataRow("POST", "EntityDefinitions?$select=LogicalName", "IRREVERSIBLE")]
+    [DataRow("POST", "Entit%79Definitions", "IRREVERSIBLE")]
+    [DataRow("POST", "ImportSolution", "Solution imports")]
+    [DataRow("POST", "%49mportSolutionAsync", "Solution imports")]
+    [DataRow("POST", "StageAndUpgrade", "Solution upgrades")]
+    [DataRow("POST", "ApplySolutionUpgrade", "Solution upgrades")]
+    [DataRow("POST", "$batch", "Batch requests")]
+    [DataRow("POST", "%24b%61tch", "Batch requests")]
+    [DataRow("GET", "%24batch", "Batch requests")]
+    [DataRow("POST", "workflows", "Workflows contain business process definitions")]
+    [DataRow("POST", "new_MyCustomAction", "verified Dataverse row CRUD")]
+    [DataRow("POST", "WhoAmI", "verified Dataverse row CRUD")]
+    [DataRow("POST", "accounts(guid)/Microsoft.Dynamics.CRM.ab_CustomAction", "verified Dataverse row CRUD")]
+    [DataRow("PATCH", "accounts", "verified Dataverse row CRUD")]
+    public void ProtectedOrUnverifiedRoutes_AreRejectedBeforeWebRequest(string method, string url, string error)
+    {
+        var result = NewTool().execute_webapi(method, url);
+
+        Assert.IsTrue(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), error);
+        AssertNoWebRequest();
+    }
+
+    [TestMethod]
+    [DataRow("post", "X-HTTP-Method-Override", "PATCH")]
+    [DataRow("GET", "x-http-method", "POST")]
+    [DataRow("GET", "X-Rewrite-URL", "$batch")]
+    public void RequestOverrideHeader_IsRejectedBeforeWebRequest(string method, string header, string value)
+    {
+        var result = NewTool().execute_webapi(method, "accounts", headers: JsonSerializer.Serialize(new Dictionary<string, string> { [header] = value }));
+
+        Assert.IsTrue(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "override headers");
+        AssertNoWebRequest();
+    }
+
+    [TestMethod]
+    public void Post_WithoutEntitySetMetadata_FailsClosed()
+    {
+        A.CallTo(() => _orgService.Execute(A<RetrieveAllEntitiesRequest>._)).Returns(new RetrieveAllEntitiesResponse
+        {
+            Results = { ["EntityMetadata"] = Array.Empty<EntityMetadata>() }
+        });
+
+        var result = NewTool().execute_webapi("POST", "accounts", body: "{}");
+
+        Assert.IsTrue(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "verified Dataverse row CRUD");
+        AssertNoWebRequest();
+    }
+
+    [TestMethod]
+    [DataRow("PATCH", "ab_widgets(00000000-0000-0000-0000-000000000001)")]
+    [DataRow("PUT", "accounts(accountnumber='41')")]
+    [DataRow("DELETE", "accounts(00000000-0000-0000-0000-000000000001)")]
+    public void VerifiedSingleRowRoutes_AreAllowed(string method, string url)
+    {
+        var result = NewTool().execute_webapi(method, url);
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.AreEqual(method, Structured(result).GetProperty("method").GetString());
+        A.CallTo(() => _webApi.ExecuteWebRequest(A<HttpMethod>.That.Matches(m => m.Method == method), url, A<string>._,
+            A<Dictionary<string, List<string>>>._, A<string>._, A<System.Threading.CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
+    }
+
+    private void AssertNoWebRequest() =>
+        A.CallTo(() => _webApi.ExecuteWebRequest(A<HttpMethod>._, A<string>._, A<string>._,
+            A<Dictionary<string, List<string>>>._, A<string>._, A<System.Threading.CancellationToken>._))
+            .MustNotHaveHappened();
 
     [TestMethod]
     public void Validation_BadMethodMissingUrlAbsoluteUrlAndBadHeaders()

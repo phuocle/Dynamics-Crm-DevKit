@@ -91,7 +91,7 @@ public sealed class ManageTableErrorPathCoverageTests
         var tool = new ManageTableTool(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true));
 
         var result = InvokePrivate<CallToolResult>(tool, "CreateNewEntity",
-            "", "", "", null, null, null, "", "", false, false, "", "", 100, "", "", null, null, "", "");
+            "", "", "", null, null, null, null, "", "", "", "", 100, "", "", null, null, "", "");
 
         Assert.IsTrue(result.IsError == true, result.GetText());
         StringAssert.Contains(result.GetText(), "display_name is required when creating a new entity");
