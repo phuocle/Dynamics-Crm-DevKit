@@ -15,27 +15,49 @@ Reference for `manage_table`, `manage_column`, and `manage_relationship`.
 ### Create Mode
 - display_name, display_collection_name, solution_name are REQUIRED
 - Optional schema_name and/or logical_name override the auto-derived names (must start with the publisher prefix)
-- Auto-creates primary name attribute (default: 'Name', max 100 chars)
+- Auto-creates the primary name column. Standard and elastic tables default to `Name`. Activity tables use `Subject`.
 - `is_duplicate_detection_enabled` maps to the table's `IsDuplicateDetectionEnabled` property and defaults to `false`.
+- New tables start with Dataverse Search disabled. Omit `is_search_enabled` or pass `false` when creating a table.
 
 ### Create-Only Properties (Immutable After Creation)
 | Property | Default | Notes |
 |----------|---------|-------|
 | ownership_type | 'User' | 'User' (supports sharing/assigning) or 'Organization' (no row-level security) |
-| table_type | 'Standard' | 'Standard' or 'Elastic' (Cosmos DB, limited charting) |
+| table_type | 'Standard' | 'Standard', 'Elastic' (Cosmos DB, limited charting), or 'Activity' (custom activity table) |
 | primary_attribute_name | auto-derived | From display_name |
 | primary_attribute_display_name | 'Name' | Display name of primary field |
+
+Use `table_type="Activity"` to create a custom activity table. It uses `User` ownership and the `Subject` primary column. Dataverse requires offline availability and a Notes relationship for a new activity table. Creation leaves the separate Activities relationship disabled and keeps mail merge disabled.
 
 ### Update Mode
 - Pass logical_name to identify the existing table
 - Only provided params are updated; omitted ones keep current values
 - Set `is_duplicate_detection_enabled` to `true` or `false` to toggle Duplicate Detection. Omit it or pass `null` to keep the current value.
+- Set `is_search_enabled` to `true` to enable Dataverse Search on a table with Change Tracking already enabled in published metadata and `CanEnableSyncToExternalSearchIndex` set to `true`. Pass `false` to disable Search regardless of Change Tracking. Omit it or pass `null` to keep the current Search setting.
 - Set `icon_vector_name` to the name of an existing SVG web resource, such as `ab_/images/svg/ab_bank.svg`. Omit it or pass an empty string to keep the current icon.
 - Pass `solution_name` to associate the update with an unmanaged solution. The tool publishes the table after applying changes.
 - Omit create-only inputs on update. The tool can warn about explicit inputs that it ignores.
 
+### Table options
+
+Optional booleans accept `true` or `false`. On update, omit an option or pass `null` to preserve its current value. Omitted settings on create use Dataverse defaults, subject to the requirements of the selected table type.
+
+| Parameter | Dataverse setting |
+|---|---|
+| `is_access_teams_enabled` | Access Teams (`AutoCreateAccessTeams`) |
+| `is_document_management_enabled` | SharePoint document management (`IsDocumentManagementEnabled`) |
+| `is_onenote_integration_enabled` | OneNote (`IsOneNoteIntegrationEnabled`). Requires document management. |
+| `is_mail_merge_enabled` | Mail merge (`IsMailMergeEnabled`) |
+| `is_custom_help_enabled`, `custom_help_url` | Enable table-specific help and configure its URL (`EntityHelpUrlEnabled`, `EntityHelpUrl`). |
+| `is_mobile_offline_enabled` | Mobile offline (`IsOfflineInMobileClient`). Enabling requires published Change Tracking. |
+| `is_available_offline` | Legacy offline availability (`IsAvailableOffline`). Enabling on an existing table requires published Change Tracking. Activity tables require offline availability. |
+| `is_visible_in_mobile` | Visibility in Dynamics 365 for phones (`IsVisibleInMobile`) |
+| `is_visible_in_mobile_client` | Visibility in the mobile client (`IsVisibleInMobileClient`) |
+| `is_read_only_in_mobile_client` | Read-only mode in the mobile client (`IsReadOnlyInMobileClient`) |
+| `is_retention_enabled` | Table eligibility for long-term retention (`IsRetentionEnabled`). Retention policies run separately. Data already retained cannot be made active by switching this setting off. |
+
 ### Irreversible Table Settings
-The MCP server blocks enabling Change Tracking, Activities, Business Process Flows, Connections, Feedback, Notes, Queues, and Sending Email. `manage_table` rejects `is_activity=true` (creating an activity table) and `has_notes=true`. Updates to supported properties leave existing protected settings as configured.
+The MCP server blocks enabling Change Tracking, Activities, Business Process Flows, Connections, Feedback, Notes, Queues, and Sending Email on existing tables. A new custom activity table receives the Notes relationship required by Dataverse. Updates to supported properties leave existing protected settings as configured.
 
 `execute_webapi` allows writes to verified row CRUD endpoints only. Direct metadata writes, solution import and upgrade actions, other write actions, and `$batch` are blocked, including URL-encoded paths.
 
