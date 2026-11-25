@@ -904,13 +904,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var typeValue = existing.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
             if (typeValue == 1)
                 return Error("Cannot remove a Dropdown Button using remove_flyout_item.",
-                    "To delete the entire flyout, use the Dataverse UI or manage_record(action='delete').");
+                    "To delete the entire flyout, use manage_command(action='delete', command_id=...).");
             if (typeValue == 2)
                 return Error("Cannot remove a Split Button using remove_flyout_item.",
-                    "To delete the entire split button, use the Dataverse UI or manage_record(action='delete').");
+                    "To delete the entire split button, use manage_command(action='delete', command_id=...).");
             if (typeValue == 3)
                 return Error("Cannot directly remove a Group.",
-                    "Remove individual items or delete the entire flyout via the Dataverse UI or manage_record(action='delete').");
+                    "Remove individual items or use manage_command(action='delete', command_id=...) to delete the group and its children.");
 
             var parentRef = existing.GetAttributeValue<EntityReference>("parentappactionid");
             if (parentRef == null)

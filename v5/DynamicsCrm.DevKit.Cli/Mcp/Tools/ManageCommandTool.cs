@@ -129,24 +129,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(ManageCommandResult)),
         Description(
             "Manage modern model-driven app command bar appactions, including buttons, dropdowns, split buttons, visibility and enable rules. Use only for explicitly modern/Power Fx/command designer requests; for classic or generic ribbon buttons use manage_ribbon. When in doubt → manage_ribbon.\n\n" +
-            "Commands are app-scoped (the same entity has different commands per app). origin=default excludes auto-migrated commands. hide/show on an OOB command creates an app-scoped override row; showing an OOB command again deletes the override. create, update and hide/show auto-publish the affected entity so changes are visible immediately; flyout/split operations do not publish — call publish_customizations afterward if changes are not visible. If an error identifies a classic ribbon button, stop and report it. Entity, app and web-resource names resolve display name first, then logical/unique/schema; ambiguous matches require disambiguation.\n\n" +
-            "Actions and their parameters cover list/detail/create/update/hide/show and flyout/split operations. Use include_rules or include_children to inspect related records.\n\n" +
+            "Commands can be app-, table-, or global-scoped. origin=default excludes auto-migrated commands from list results. hide/show on an OOB command creates an app-scoped override row; showing an OOB command again deletes the override. create, update and hide/show auto-publish the affected entity so changes are visible immediately; flyout/split operations do not publish — call publish_customizations afterward if changes are not visible. If an error identifies a classic ribbon button, stop and report it. Entity, app and web-resource names resolve display name first, then logical/unique/schema; ambiguous matches require disambiguation.\n\n" +
+            "Actions cover list/detail/create/update/delete/hide/show and flyout/split operations. Use include_rules or include_children to inspect related records.\n" +
+            "delete removes an unmanaged appaction and its child commands and exclusive rules, then publishes its context table if present. Select by GUID or by exact label/uniquename, location and scope (app/table/global). Read docs://instructions_for_manage_command for delete inputs and examples.\n\n" +
             "WHEN TO USE:\n" +
             "- Add/update modern command bar buttons in MDA (Power Fx / appaction only)\n" +
             "- Hide/show OOB or custom commands in a specific app\n" +
             "- Inspect appactionrule visibility/enable rules (include_rules=true)\n\n" +
             "RELATED TOOLS:\n" +
             "- manage_ribbon → classic/legacy RibbonDiffXml buttons (NOT modern appaction)\n" +
-            "- manage_app → app module metadata (commands are app-scoped)\n" +
+            "- manage_app → app module metadata for app-scoped commands\n" +
             "- get_tables → entity logical/display names for entity_name\n" +
             "- publish_customizations → publish after flyout/split item changes (create/update/hide/show already auto-publish)")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
-            [Description("list/detail/create/update/hide/show/add_flyout/update_flyout/add_flyout_item/remove_flyout_item/add_split_button/update_split_button.")] string action = "",
-            [Description("appaction GUID. Required for update, update_flyout, update_split_button, and remove_flyout_item. For detail use command_id or label with entity_name and location; hide/show also support label-based lookup.")] string command_id = "",
-            [Description("Entity Display Name or logical name. Required: create.")] string entity_name = "",
-            [Description("form/main_grid/sub_grid/associated_grid/quick_form/global_header/dashboard. Required: create.")] string location = "",
-            [Description("App module GUID. Required: create (or app_name).")] string app_id = "",
-            [Description("Button label. Required: create.")] string label = "",
+            [Description("list/detail/create/update/delete/hide/show/add_flyout/update_flyout/add_flyout_item/remove_flyout_item/add_split_button/update_split_button.")] string action = "",
+            [Description("appaction GUID. Required for update, update_flyout, update_split_button, and remove_flyout_item. For detail use command_id or label with entity_name and location; hide/show also support label-based lookup. For delete, a GUID is sufficient and takes precedence over name-based selectors.")] string command_id = "",
+            [Description("Entity Display Name or logical name. Required for create in app/table scope. For delete by name, supply for a table-specific command.")] string entity_name = "",
+            [Description("form/main_grid/sub_grid/associated_grid/quick_form/global_header/dashboard. Required for create and delete by name.")] string location = "",
+            [Description("App module GUID. Supply app_id or app_name for app-scope creation or deletion by name.")] string app_id = "",
+            [Description("Button label. Required for create. For delete by name use an exact label or uniquename.")] string label = "",
             [Description("none/javascript/formula. Default 'none'.")] string onclick_type = "",
             [Description("WR name or GUID for onclick.")] string javascript_webresource = "",
             [Description("Handler (e.g. 'Namespace.fn').")] string javascript_function = "",
@@ -156,7 +157,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Tooltip description for create/update and flyout/split button create/update.")] string tooltip_description = "",
             [Description("Order. Default 100 on create.")] int sequence = 0,
             [Description("Initial hidden state for create, add_flyout, or add_split_button. add_flyout_item creates a visible item. For existing commands use action='hide' or 'show'.")] bool hidden = false,
-            [Description("MDA name contains.")] string app_name = "",
+            [Description("MDA name contains for list. For delete, supply the app display or unique name when app_id is omitted.")] string app_name = "",
             [Description("default/migrated/enhanced_migrated/all.")] string origin = "",
             [Description("javascript/formula/none filter.")] string action_type = "",
             [Description("Command name contains.")] string name_filter = "",
@@ -165,25 +166,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("1–500.")] int max_records = 50,
             [Description("add_flyout/add_split_button: non-empty JSON array serialized as a string. Each item requires label; optional string fields: onclick_type (none/javascript/formula), javascript_webresource, javascript_function, sequence (integer encoded as a JSON string, e.g. \"10000\"). Omitted or invalid sequence defaults to item order in steps of 10000.")] string items = "",
             [Description("GUID of Dropdown or Split Button. Required: add_flyout_item.")] string flyout_command_id = "",
-            [Description("Command scope for standard buttons: 'app' (default — bound to app and table), 'table' (bound to table across all apps), or 'global' (bound to location across all tables and all apps).")] string scope = "",
+            [Description("Command scope for standard buttons: app (default for create), table (across apps), or global (across tables and apps). Delete by name infers app if app_id/app_name is present, table if entity_name is present, or global otherwise.")] string scope = "",
             [Description("Solution unique name or display name to add created appaction component to.")] string solution_name = "",
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
-            System.Threading.CancellationToken cancellationToken = default)
+            System.Threading.CancellationToken cancellationToken = default,
+            [Description("Exact appaction unique name. For delete by name, supply either uniquename or label.")] string uniquename = "")
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
                 var worker = new ManageCommandTool(conn.OrgService, conn.Options, conn.Context);
-                return System.Threading.Tasks.Task.FromResult(worker.manage_command(action, command_id, entity_name, location, app_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden, app_name, origin, action_type, name_filter, include_rules, include_children, max_records, items, flyout_command_id, scope, solution_name));
+                return System.Threading.Tasks.Task.FromResult(worker.manage_command(action, command_id, entity_name, location, app_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden, app_name, origin, action_type, name_filter, include_rules, include_children, max_records, items, flyout_command_id, scope, solution_name, uniquename));
             }, cancellationToken);
         }
 
         public CallToolResult manage_command(
-            [Description("list/detail/create/update/hide/show/add_flyout/update_flyout/add_flyout_item/remove_flyout_item/add_split_button/update_split_button.")] string action = "",
-            [Description("appaction GUID. Required for update, update_flyout, update_split_button, and remove_flyout_item. For detail use command_id or label with entity_name and location; hide/show also support label-based lookup.")] string command_id = "",
-            [Description("Entity Display Name or logical name. Required: create.")] string entity_name = "",
-            [Description("form/main_grid/sub_grid/associated_grid/quick_form/global_header/dashboard. Required: create.")] string location = "",
-            [Description("App module GUID. Required: create (or app_name).")] string app_id = "",
-            [Description("Button label. Required: create.")] string label = "",
+            [Description("list/detail/create/update/delete/hide/show/add_flyout/update_flyout/add_flyout_item/remove_flyout_item/add_split_button/update_split_button.")] string action = "",
+            [Description("appaction GUID. Required for update, update_flyout, update_split_button, and remove_flyout_item. For detail use command_id or label with entity_name and location; hide/show also support label-based lookup. For delete, a GUID is sufficient and takes precedence over name-based selectors.")] string command_id = "",
+            [Description("Entity Display Name or logical name. Required for create in app/table scope. For delete by name, supply for a table-specific command.")] string entity_name = "",
+            [Description("form/main_grid/sub_grid/associated_grid/quick_form/global_header/dashboard. Required for create and delete by name.")] string location = "",
+            [Description("App module GUID. Supply app_id or app_name for app-scope creation or deletion by name.")] string app_id = "",
+            [Description("Button label. Required for create. For delete by name use an exact label or uniquename.")] string label = "",
             [Description("none/javascript/formula. Default 'none'.")] string onclick_type = "",
             [Description("WR name or GUID for onclick.")] string javascript_webresource = "",
             [Description("Handler (e.g. 'Namespace.fn').")] string javascript_function = "",
@@ -193,7 +195,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Tooltip description for create/update and flyout/split button create/update.")] string tooltip_description = "",
             [Description("Order. Default 100 on create.")] int sequence = 0,
             [Description("Initial hidden state for create, add_flyout, or add_split_button. add_flyout_item creates a visible item. For existing commands use action='hide' or 'show'.")] bool hidden = false,
-            [Description("MDA name contains.")] string app_name = "",
+            [Description("MDA name contains for list. For delete, supply the app display or unique name when app_id is omitted.")] string app_name = "",
             [Description("default/migrated/enhanced_migrated/all.")] string origin = "",
             [Description("javascript/formula/none filter.")] string action_type = "",
             [Description("Command name contains.")] string name_filter = "",
@@ -202,14 +204,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("1–500.")] int max_records = 50,
             [Description("add_flyout/add_split_button: non-empty JSON array serialized as a string. Each item requires label; optional string fields: onclick_type (none/javascript/formula), javascript_webresource, javascript_function, sequence (integer encoded as a JSON string, e.g. \"10000\"). Omitted or invalid sequence defaults to item order in steps of 10000.")] string items = "",
             [Description("GUID of Dropdown or Split Button. Required: add_flyout_item.")] string flyout_command_id = "",
-            [Description("Command scope for standard buttons: 'app' (default — bound to app and table), 'table' (bound to table across all apps), or 'global' (bound to location across all tables and all apps).")] string scope = "",
-            [Description("Solution unique name or display name to add created appaction component to.")] string solution_name = "")
+            [Description("Command scope for standard buttons: app (default for create), table (across apps), or global (across tables and apps). Delete by name infers app if app_id/app_name is present, table if entity_name is present, or global otherwise.")] string scope = "",
+            [Description("Solution unique name or display name to add created appaction component to.")] string solution_name = "",
+            [Description("Exact appaction unique name. For delete by name, supply either uniquename or label.")] string uniquename = "")
         {
             var actionName = (action ?? "").Trim().ToLowerInvariant();
             if (string.IsNullOrWhiteSpace(actionName))
                 return Error(
                     "action is required.",
-                    "Valid values: 'list', 'detail', 'create', 'update', 'hide', 'show', " +
+                    "Valid values: 'list', 'detail', 'create', 'update', 'delete', 'hide', 'show', " +
                     "'add_flyout', 'update_flyout', 'add_flyout_item', 'remove_flyout_item', " +
                     "'add_split_button', 'update_split_button'.");
 
@@ -246,6 +249,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         return string.IsNullOrWhiteSpace(solution_name)
                             ? HandleUpdate(command_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence)
                             : HandleUpdateWithSolution(command_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, solution_name);
+
+                    case "delete":
+                        return HandleDelete(command_id, entity_name, location, app_id, app_name, label, uniquename, scope);
 
                     case "hide":
                         return string.IsNullOrWhiteSpace(scope) && string.IsNullOrWhiteSpace(solution_name)
@@ -288,7 +294,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     default:
                         return Error(
                         $"Invalid action '{actionName}'.",
-                        "Valid values: 'list', 'detail', 'create', 'update', 'hide', 'show', " +
+                        "Valid values: 'list', 'detail', 'create', 'update', 'delete', 'hide', 'show', " +
                         "'add_flyout', 'update_flyout', 'add_flyout_item', 'remove_flyout_item', " +
                         "'add_split_button', 'update_split_button'.");
                 }

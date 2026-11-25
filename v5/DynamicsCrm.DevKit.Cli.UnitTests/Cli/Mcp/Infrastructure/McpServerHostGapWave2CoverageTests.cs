@@ -18,7 +18,7 @@ public sealed class McpServerHostGapWave2CoverageTests
         var catalog = McpServerHost.GetToolCatalog();
         var resourceCount = McpServerHost.GetResourceCount();
         Assert.IsTrue(catalog.Any(tool => tool.Name == "execute_sql"));
-        Assert.AreEqual(13, resourceCount);
+        Assert.AreEqual(14, resourceCount);
 
         try
         {
