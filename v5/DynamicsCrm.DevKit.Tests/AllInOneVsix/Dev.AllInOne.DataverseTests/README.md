@@ -12,9 +12,11 @@
 
 MSTest runs these tests in memory using DataverseFakes.Community on .NET Framework 4.6.2 (Windows x64). Run `dotnet test` from this project folder.
 
-Use `devkit new-item --type DataverseTest --project <project-name> --test-target <full-class-name>` to add a test. A generated guard test checks the four guards of a standard DevKit plugin. Replace the inconclusive test with an arrangement and an assertion for your application's behavior.
+To add a test with the CLI, run `devkit new-item --type DataverseTest --project <project-name> --test-target <full-class-name>` from the solution or project directory. The CLI uses its normal Dataverse connection settings to scaffold the item. The generated tests run in memory.
 
 In Visual Studio, select this project or one of its source folders and choose **Add → New Item → 17. C# Dataverse Test Class**. Select the server class to test. [Dataverse Test Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Dataverse-Test-Item-Template)
+
+The built-in template generates a guard test when the selected plugin follows the standard DevKit guard pattern. Replace the inconclusive test with an arrangement and an assertion for your application's behavior.
 
 To test a plugin that trims an account name, assert the new name on the original Target.
 

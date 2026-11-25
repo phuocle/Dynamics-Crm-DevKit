@@ -1,6 +1,6 @@
 # AllInOneCli — CLI Runbook and VSIX Comparison
 
-> **Mục đích:** chạy `devkit new-project` và `devkit new-item` trên Windows hoặc Ubuntu, tạo 13 project và các item tương ứng với `DynamicsCrm.DevKit.Tests/AllInOneVsix` (source of truth), sau đó so sánh hai cây file.
+> **Mục đích:** tái tạo bộ 13 project ban đầu và các item bằng `devkit new-project` và `devkit new-item`, rồi so sánh với `DynamicsCrm.DevKit.Tests/AllInOneVsix`. Phần DataverseTest bên dưới bổ sung project thứ 14 và một test item cho Windows x64.
 >
 > **Điều kiện:** `devkit` phiên bản 4.44.44.44 trở lên, có hỗ trợ `Report` item; folder đích có sẵn `.env` và `DynamicsCrm.DevKit.json`. Đây là hai file đầu vào, không xóa.
 >
@@ -228,3 +228,15 @@ The JSON command list below is the Windows run. Use the Ubuntu commands above wh
 - So sánh source files (không tính `.vs/bin/obj/node_modules`): **112/145 byte-identical**, 33 cùng path nhưng khác nội dung, không còn path chỉ có ở một phía. Khác biệt còn lại gồm `.snk`/GUID sinh ngẫu nhiên, metadata được VS cập nhật như `<DependentUpon>`, và payload do CLI/VSIX render.
 
 Ubuntu commands above are prepared for manual execution; Ubuntu generation and comparison have not yet been run.
+
+## DataverseTest on Windows
+
+Run from the `Dev.AllInOne.slnx` directory after creating Shared, Server, and ProxyTypes and adding `PostAccountCreateAsynchronous` to Server. Use the project `.env` or pass explicit connection options on both scaffold commands.
+
+```powershell
+devkit new-project --type DataverseTest --name Dev.AllInOne.DataverseTests --solution Dev.AllInOne.slnx --plain
+devkit new-item --type DataverseTest --project Dev.AllInOne.DataverseTests --test-target Dev.AllInOne.Server.PostAccountCreateAsynchronous --plain
+dotnet test .\Dev.AllInOne.DataverseTests\Dev.AllInOne.DataverseTests.csproj
+```
+
+The project template wires Server, ProxyTypes, and production Shared automatically. The built-in test for this plugin has one guard test and one inconclusive example. For Visual Studio, use **14. Dataverse Test Project** and **17. C# Dataverse Test Class**. Compare the scaffolded files with both entry points on the same build stamp.

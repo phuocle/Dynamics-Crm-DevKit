@@ -15,9 +15,9 @@ DynamicsCrm.DevKit CLI is the `devkit` .NET global tool for Dataverse deployment
 
 ## ✨ Highlights
 
-- One command-line surface for server deployments, web resources, reports, generated code, modelbuilder output, and solution packaging.
+- One command-line surface for project and item scaffolding, server deployments, web resources, reports, generated code, modelbuilder output, and solution packaging.
 - Modern Spectre.Console CLI with `devkit <command> --option value` syntax and compatibility with legacy `/option:value` arguments.
-- Connection support through `--conn`, explicit auth options, project `.env`, PAC profiles, client secrets, SDK login, and MCP `DEVKIT_*` environment variables.
+- Connection support through `--conn`, explicit auth options, project `.env`, PAC profiles, and client secrets.
 - MCP server built into the CLI, exposing 41 tools for Dataverse and server discovery.
 - Single-file web resource deployment using `--file` and `--webresource`, including TypeScript release output deployment when project build scripts are present.
 
@@ -43,8 +43,8 @@ dotnet tool update --global DynamicsCrm.DevKit.Cli
 | `modelbuilder` | Active | Generate early-bound classes using PAC ModelBuilder. |
 | `solution` | Active | Extract and pack Dataverse solutions using Power Platform CLI. |
 | `report` | Active | Report operations selected by `--type`: `dataset` (manage FetchXML datasets in a .rdl), `upload`, `download`. |
-| `new-project` | Active | Create a DevKit project in an existing solution. Use `new-project list` to see template IDs. |
-| `new-item` | Active | Create a DevKit item in an existing project. Use `new-item list` to see template IDs. |
+| `new-project` | Active | Create a DevKit project in an existing solution. [Command reference](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/cli-new-project) |
+| `new-item` | Active | Create a DevKit item in an existing project. [Command reference](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/cli-new-item) |
 | `downloadreport` | Compatibility | Redirects to `report --type download`. |
 | `uploadreport` | Compatibility | Redirects to `report --type upload`. |
 | `downloadwebresource` | Compatibility | Redirects to `webresource --type download`. |
@@ -58,9 +58,9 @@ dotnet tool update --global DynamicsCrm.DevKit.Cli
 
 ## 🔐 Authentication
 
-Normal command connection values can be supplied by command-line options or project `.env`. Resolution order is explicit CLI arguments, then project `.env`, then validation error. The `mcp` command is the exception: it resolves explicit CLI arguments, then OS `DEVKIT_*` environment variables, then validation error.
+Normal commands use explicit CLI connection options and fill missing values from the project `.env`. MCP selects its connection source as a mode. See [MCP Authentication](#-mcp-authentication).
 
-| Option | `.env` / MCP environment key | Purpose |
+| Option | Project `.env` key | Purpose |
 |---|---|---|
 | `--conn` | `DEVKIT_CONNECTION` | Dataverse connection string. |
 | `--auth` | `DEVKIT_AUTH_TYPE` | `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth`, or `AD`. |
@@ -72,7 +72,7 @@ Normal command connection values can be supplied by command-line options or proj
 | `--password` | `DEVKIT_PASSWORD` | Password for legacy auth flows. |
 | `--domain` | `DEVKIT_DOMAIN` | On-premises AD domain. |
 
-For normal CLI commands, DevKit searches for a project `.env` file from the command directory upward. VSIX-created projects also create `.env.example` beside `.env`; commit `.env.example`, but keep `.env` local because it can contain secrets. When DevKit creates `.env`, it adds the absolute `.env` path to the nearest `.gitignore` if one exists.
+For normal CLI commands, DevKit searches upward from the resolved `--json` directory or, when no JSON file is resolved, from the working directory. VSIX-created projects also create `.env.example` beside `.env`. Commit `.env.example` and keep `.env` local because it can contain secrets. When DevKit creates `.env`, it adds the absolute `.env` path to the nearest `.gitignore` if one exists.
 
 ## 🚀 Usage
 
@@ -84,19 +84,31 @@ devkit modelbuilder --auth FromPac --pacprofile DEV --json "DynamicsCrm.DevKit.C
 devkit solution --auth FromPac --pacprofile DEV --json "DynamicsCrm.DevKit.Cli.json" --profile Extract-Both
 ```
 
-### Dataverse server tests
-
-Run these commands from a solution containing a DevKit Server project, its Shared project, and ProxyTypes. The example assumes `Contoso.Server.OnUpdate` is a server class in that solution.
+### Project and item scaffolding
 
 ```powershell
-devkit new-project --type DataverseTest --name Contoso.Tests --solution Contoso.slnx
-devkit new-item --type DataverseTest --project Contoso.Tests --test-target Contoso.Server.OnUpdate
-dotnet test .\Contoso.Tests\Contoso.Tests.csproj
+devkit new-project list
+devkit new-item list
+devkit new-project --help
+devkit new-item --help
 ```
 
-The CLI uses the normal Dataverse connection settings when scaffolding. The generated MSTest project runs in memory on Windows x64 with .NET Framework 4.6.2 and DataverseFakes.Community. It imports production Shared code and includes its own `Framework/` helpers. You can add it alongside an existing `Test` and `SharedTest` pair.
+Listing templates and viewing help work offline. Both creation commands connect to Dataverse through CLI connection options or the project `.env`. Scaffolding works without `--json` or `--profile`. Use `--plain` and supply all required options for scripts or CI.
 
-If the solution has several Server projects, use `--server-project` with an absolute `.csproj` path or a path relative to the solution. The generated `_01` method is marked inconclusive until you supply test data and an assertion. [Dataverse Test Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Dataverse-Test-Project-Template)
+### Dataverse server tests
+
+Run from the directory containing `Contoso.slnx`, a DevKit Server project, its production Shared project, and ProxyTypes. This example assumes `Contoso.Server.OnUpdate` is a discoverable Server class and the project `.env` already has a connection.
+
+```powershell
+devkit new-project --type DataverseTest --name Contoso.DataverseTests --solution Contoso.slnx --plain
+devkit new-item --type DataverseTest --project Contoso.DataverseTests --test-target Contoso.Server.OnUpdate --plain
+dotnet test .\Contoso.DataverseTests\Contoso.DataverseTests.csproj
+```
+
+The project references Server and ProxyTypes, imports production Shared code, and includes its own `Framework/` helpers. `SharedTest` belongs to the FakeXrmEasy `Test` workflow. The generated MSTest tests run in memory on Windows x64 with .NET Framework 4.6.2 and DataverseFakes.Community.
+
+- The project prompt suggests `<SolutionName>.DataverseTests`. Use `--server-project` to select a specific Server by absolute path or by path relative to the solution. Project `--out` selects the parent directory and defaults to the solution directory. [Dataverse Test Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Dataverse-Test-Project-Template)
+- Use a full class name for `--test-target`. The test name defaults from the target. Use `--name` to customize it, `--out` to choose a source folder within the test project, or `--template` / `--t4` to select a custom T4 source. Replace the generated `_01` inconclusive assertion with a test of your application behavior. [C# Dataverse Test Class](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Dataverse-Test-Item-Template)
 
 ## 🤖 MCP Server
 

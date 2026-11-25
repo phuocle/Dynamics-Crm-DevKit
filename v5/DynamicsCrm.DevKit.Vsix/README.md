@@ -14,8 +14,8 @@ DynamicsCrm.DevKit Visual Studio Extension is the VSIX package for Dataverse, Dy
 
 ## ✨ Highlights
 
-- 13 Visual Studio project templates for server-side, client-side, ALM, report, test, and utility projects.
-- 17 Visual Studio item templates for plugins, workflows, custom APIs, data providers, reports, JavaScript, TypeScript, dialogs, resources, and support files.
+- 14 Visual Studio project templates for server-side, client-side, ALM, report, test, and utility projects.
+- 17 numbered Visual Studio item templates, plus the separate DevKit Report item.
 - Connection dialog supports **Use project .env** so private `DEVKIT_*` values can live in a solution-level `.env` file while `DynamicsCrm.DevKit.json` stores only the connection marker.
 - Wizard-driven project and item creation with Dataverse-specific metadata prompts.
 - Context-menu commands for deploying web resources and reports, managing report datasets, producing TypeScript release output, and adding plugin registration attributes.
@@ -50,7 +50,7 @@ The template names below match the display names shown by Visual Studio.
 | 13. WebResource TypeScript Project | TypeScript web resource project with generated typings and build output. | [WebResource TypeScript Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-TypeScript-Project-Template) |
 | 14. Dataverse Test Project | MSTest project for DevKit Server components using DataverseFakes.Community. | [Dataverse Test Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Dataverse-Test-Project-Template) |
 
-For template 14, connect to Dataverse in the DevKit dialog, use **Edit** to change the full project name, and select **OK** to create the project.
+For template 14, open a saved solution with Server, production Shared, and ProxyTypes projects. Connect to Dataverse in the DevKit dialog. The suggested name is `<SolutionName>.DataverseTests`. Use **Name** to add a qualifier or **Edit** to set the full name. Select the Server project if prompted, then select **OK**. [Dataverse Test Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Dataverse-Test-Project-Template)
 
 Project template catalog: [Project Templates](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Project-Templates)
 
@@ -78,6 +78,8 @@ The item template names below match the display names shown by Visual Studio.
 | 16. JavaScript Dialog | JavaScript dialog script with typed dialog interfaces. | [JavaScript Dialog Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Dialog-Item-Template) |
 | 17. C# Dataverse Test Class | Test scaffold for a selected Server class in a DataverseTest project. | [C# Dataverse Test Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Dataverse-Test-Item-Template) |
 | DevKit Report | Entity-aware FetchXML report for a Reporting Services project. | [DevKit Report Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DevKit-Report-Item-Template) |
+
+Use item 17 in a DataverseTest project. The wizard discovers Server classes from project references and offers the built-in and named T4 templates. The same scaffold is available through the CLI using `--type DataverseTest`. The CLI catalog lists it at row 18 and lists Report at row 17. [C# Dataverse Test Class](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Dataverse-Test-Item-Template)
 
 Item template catalog: [Item Templates](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Item-Templates)
 
