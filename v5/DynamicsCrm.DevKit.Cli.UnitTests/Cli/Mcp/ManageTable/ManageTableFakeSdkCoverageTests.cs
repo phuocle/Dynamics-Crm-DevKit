@@ -158,6 +158,7 @@ public sealed class ManageTableFakeSdkCoverageTests
         Assert.IsTrue(_capturedCreate.PrimaryAttribute.SchemaName!.StartsWith("all_"));
         Assert.IsFalse(_capturedCreate.Entity.IsActivity);
         Assert.IsFalse(_capturedCreate.Entity.ChangeTrackingEnabled);
+        Assert.IsFalse(_capturedCreate.Entity.SyncToExternalSearchIndex);
         Assert.IsFalse(_capturedCreate.Entity.IsDuplicateDetectionEnabled.Value);
         Assert.IsFalse(_capturedCreate.HasActivities);
         Assert.IsFalse(_capturedCreate.HasNotes);
@@ -188,22 +189,118 @@ public sealed class ManageTableFakeSdkCoverageTests
     }
 
     [TestMethod]
-    [DataRow(null, true, false, false, "is_activity")]
-    [DataRow(null, false, true, false, "has_notes")]
-    [DataRow("all_widget", true, false, false, "is_activity")]
-    [DataRow("all_widget", false, true, false, "has_notes")]
-    [DataRow("all_widget", false, true, true, "has_notes")]
-    public void CreateOrUpdate_RejectsProtectedFlags(string? logicalName, bool activity, bool notes, bool dryRun, string flag)
+    public void Create_CustomActivity_UsesDataverseRequiredSettings()
+    {
+        var result = NewTool().manage_table(
+            display_name: "Site Visit", display_collection_name: "Site Visits",
+            solution_name: "DevKitSolution", table_type: "Activity");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.IsNotNull(_capturedCreate);
+        Assert.IsTrue(_capturedCreate.Entity.IsActivity);
+        Assert.AreEqual(OwnershipTypes.UserOwned, _capturedCreate.Entity.OwnershipType);
+        Assert.AreEqual("Subject", _capturedCreate.PrimaryAttribute.SchemaName);
+        Assert.AreEqual("subject", _capturedCreate.PrimaryAttribute.LogicalName);
+        Assert.IsTrue(_capturedCreate.Entity.IsAvailableOffline);
+        Assert.IsTrue(_capturedCreate.HasNotes);
+        Assert.IsFalse(_capturedCreate.HasActivities);
+        Assert.IsFalse(_capturedCreate.Entity.IsMailMergeEnabled.Value);
+        Assert.IsFalse(_capturedCreate.Entity.ChangeTrackingEnabled);
+        Assert.IsNotNull(_capturedPublish);
+        var json = Structured(result);
+        Assert.AreEqual("Activity", json.GetProperty("tableType").GetString());
+        Assert.AreEqual("subject", json.GetProperty("primaryAttributeName").GetString());
+    }
+
+    [TestMethod]
+    public void Update_ActivityType_DoesNotConvertExistingTable()
     {
         _entities.Add(TestMetadata.Entity("all_widget", "Widget"));
-        var result = NewTool(dryRun).manage_table(
-            logical_name: logicalName, display_name: "Visits", display_collection_name: "Visits",
-            solution_name: "DevKitSolution", is_activity: activity, has_notes: notes);
 
-        Assert.IsTrue(result.IsError == true, result.GetText());
-        StringAssert.Contains(result.GetText(), flag);
+        var result = NewTool().manage_table(logical_name: "all_widget", table_type: "Activity");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        StringAssert.Contains(Structured(result).GetProperty("warnings")[0].GetString(), "table_type is immutable");
         Assert.IsNull(_capturedCreate);
         Assert.IsNull(_capturedUpdate);
+        Assert.IsNull(_capturedPublish);
+    }
+
+    [TestMethod]
+    public void Create_OptionalTableFlags_AreSentAsMetadata()
+    {
+        var result = NewTool().manage_table(display_name: "Widget", display_collection_name: "Widgets",
+            solution_name: "DevKitSolution", is_access_teams_enabled: true, is_document_management_enabled: true,
+            is_onenote_integration_enabled: true, is_mail_merge_enabled: true, is_custom_help_enabled: true,
+            custom_help_url: "https://example.com/help", is_mobile_offline_enabled: false, is_available_offline: false,
+            is_visible_in_mobile: true, is_visible_in_mobile_client: false, is_read_only_in_mobile_client: true,
+            is_retention_enabled: true);
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.IsNotNull(_capturedCreate);
+        var metadata = _capturedCreate.Entity;
+        Assert.IsTrue(metadata.AutoCreateAccessTeams);
+        Assert.IsTrue(metadata.IsDocumentManagementEnabled);
+        Assert.IsTrue(metadata.IsOneNoteIntegrationEnabled);
+        Assert.IsTrue(metadata.IsMailMergeEnabled.Value);
+        Assert.IsTrue(metadata.EntityHelpUrlEnabled);
+        Assert.AreEqual("https://example.com/help", metadata.EntityHelpUrl);
+        Assert.IsFalse(metadata.IsOfflineInMobileClient.Value);
+        Assert.IsFalse(metadata.IsAvailableOffline);
+        Assert.IsTrue(metadata.IsVisibleInMobile.Value);
+        Assert.IsFalse(metadata.IsVisibleInMobileClient.Value);
+        Assert.IsTrue(metadata.IsReadOnlyInMobileClient.Value);
+        Assert.IsTrue(metadata.IsRetentionEnabled);
+        Assert.IsFalse(_capturedCreate.HasNotes);
+        Assert.IsFalse(_capturedCreate.HasActivities);
+        Assert.IsFalse(metadata.ChangeTrackingEnabled);
+    }
+
+    [TestMethod]
+    public void Update_OptionalTableFlags_OnlyWritesChangedSettings()
+    {
+        var metadata = TestMetadata.Entity("all_widget", "Widget");
+        metadata.AutoCreateAccessTeams = true;
+        metadata.IsDocumentManagementEnabled = true;
+        metadata.IsOneNoteIntegrationEnabled = true;
+        metadata.IsMailMergeEnabled = new BooleanManagedProperty(true);
+        metadata.IsVisibleInMobileClient = new BooleanManagedProperty(true);
+        metadata.IsRetentionEnabled = true;
+        _entities.Add(metadata);
+
+        var result = NewTool().manage_table(logical_name: "all_widget", is_access_teams_enabled: true,
+            is_document_management_enabled: false, is_onenote_integration_enabled: false,
+            is_mail_merge_enabled: false, is_visible_in_mobile_client: false, is_retention_enabled: false);
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.IsNotNull(_capturedUpdate);
+        Assert.IsNotNull(_capturedPublish);
+        var written = _capturedUpdate.Entity;
+        Assert.IsNull(written.AutoCreateAccessTeams);
+        Assert.IsFalse(written.IsDocumentManagementEnabled);
+        Assert.IsFalse(written.IsOneNoteIntegrationEnabled);
+        Assert.IsFalse(written.IsMailMergeEnabled.Value);
+        Assert.IsFalse(written.IsVisibleInMobileClient.Value);
+        Assert.IsFalse(written.IsRetentionEnabled);
+        Assert.IsNull(written.ChangeTrackingEnabled);
+        Assert.IsNull(written.IsActivity);
+        Assert.IsFalse(_capturedUpdate.Parameters.Contains("HasNotes"));
+        Assert.IsFalse(_capturedUpdate.Parameters.Contains("HasActivities"));
+        var changes = Structured(result).GetProperty("changes");
+        Assert.IsFalse(changes.TryGetProperty("isAccessTeamsEnabled", out _));
+        Assert.AreEqual("false", changes.GetProperty("isRetentionEnabled").GetProperty("newValue").GetString());
+    }
+
+    [TestMethod]
+    public void Create_OneNoteWithoutDocumentManagement_IsRejected()
+    {
+        var result = NewTool().manage_table(display_name: "Widget", display_collection_name: "Widgets",
+            solution_name: "DevKitSolution", is_onenote_integration_enabled: true);
+
+        Assert.IsTrue(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "requires SharePoint document management");
+        Assert.IsNull(_capturedCreate);
+        Assert.IsNull(_capturedPublish);
     }
 
     [TestMethod]

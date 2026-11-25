@@ -1,4 +1,7 @@
+using DynamicsCrm.DevKit.Cli.Mcp;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ModelContextProtocol.Server;
 using System;
 using System.Globalization;
 using System.Reflection;
@@ -90,21 +93,29 @@ public class ManageTableToolTests
     }
 
     [TestMethod]
-    public void ManageTableTool_IsActivity_DefaultIsFalse()
+    public void ManageTableTool_InputSchemaExposesSupportedSettings()
     {
-        var method = ToolType.GetMethod("manage_table");
-        var param = System.Array.Find(method!.GetParameters(), p => p.Name == "is_activity");
-        Assert.IsNotNull(param, "is_activity parameter must exist");
-        Assert.AreEqual(false, param.DefaultValue, "Default is_activity should be false");
-    }
+        var method = ToolType.GetMethod(nameof(ManageTableTool.InvokeAsync))!;
+        var target = new ManageTableTool(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true));
+        var tool = McpServerTool.Create(method, target, new McpServerToolCreateOptions());
+        var properties = tool.ProtocolTool.InputSchema.GetProperty("properties");
 
-    [TestMethod]
-    public void ManageTableTool_HasNotes_DefaultIsFalse()
-    {
-        var method = ToolType.GetMethod("manage_table");
-        var param = System.Array.Find(method!.GetParameters(), p => p.Name == "has_notes");
-        Assert.IsNotNull(param, "has_notes parameter must exist");
-        Assert.AreEqual(false, param.DefaultValue, "Default has_notes should be false");
+        Assert.IsFalse(properties.TryGetProperty("is_activity", out _));
+        Assert.IsFalse(properties.TryGetProperty("has_notes", out _));
+        Assert.IsTrue(properties.TryGetProperty("is_duplicate_detection_enabled", out _));
+        StringAssert.Contains(properties.GetProperty("table_type").GetProperty("description").GetString(), "'Activity'");
+        Assert.IsTrue(properties.TryGetProperty("is_access_teams_enabled", out _));
+        Assert.IsTrue(properties.TryGetProperty("is_document_management_enabled", out _));
+        Assert.IsTrue(properties.TryGetProperty("is_onenote_integration_enabled", out _));
+        Assert.IsTrue(properties.TryGetProperty("is_mail_merge_enabled", out _));
+        Assert.IsTrue(properties.TryGetProperty("is_custom_help_enabled", out _));
+        Assert.IsTrue(properties.TryGetProperty("custom_help_url", out _));
+        Assert.IsTrue(properties.TryGetProperty("is_mobile_offline_enabled", out _));
+        Assert.IsTrue(properties.TryGetProperty("is_available_offline", out _));
+        Assert.IsTrue(properties.TryGetProperty("is_visible_in_mobile", out _));
+        Assert.IsTrue(properties.TryGetProperty("is_visible_in_mobile_client", out _));
+        Assert.IsTrue(properties.TryGetProperty("is_read_only_in_mobile_client", out _));
+        Assert.IsTrue(properties.TryGetProperty("is_retention_enabled", out _));
     }
 
     // ── SchemaName derivation logic via DataverseNamer ────────────────────────

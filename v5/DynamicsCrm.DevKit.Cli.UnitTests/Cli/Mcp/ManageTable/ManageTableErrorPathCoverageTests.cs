@@ -91,7 +91,7 @@ public sealed class ManageTableErrorPathCoverageTests
         var tool = new ManageTableTool(null!, new McpDryRunOptions { DryRun = true }, new McpExecutionContext(true));
 
         var result = InvokePrivate<CallToolResult>(tool, "CreateNewEntity",
-            "", "", "", null, null, null, null, "", "", "", "", 100, "", "", null, null, "", "");
+            "", "", "", null, null, null, null, "", "", "", "", 100, "", "", null, null, "", "", new EntityMetadata());
 
         Assert.IsTrue(result.IsError == true, result.GetText());
         StringAssert.Contains(result.GetText(), "display_name is required when creating a new entity");
@@ -141,10 +141,50 @@ public sealed class ManageTableErrorPathCoverageTests
     }
 
     [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void Create_SearchEnabled_RejectsBeforeCreatingOrPublishing(bool dryRun)
+    {
+        using var harness = new TableHarness();
+
+        var result = harness.NewTool(dryRun).manage_table(
+            display_name: "Widget", display_collection_name: "Widgets", solution_name: "DevKit", is_search_enabled: true);
+
+        Assert.IsTrue(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "requires an existing table with Change Tracking already enabled");
+        Assert.IsNull(harness.CapturedCreate);
+        Assert.AreEqual(0, harness.PublishedCount);
+    }
+
+    [TestMethod]
+    [DataRow(false, false, false, false)]
+    [DataRow(null, null, false, true)]
+    [DataRow(true, false, false, false)]
+    [DataRow(true, false, true, false)]
+    public void Update_SearchEnabled_RequiresPublishedChangeTracking(bool? currentTracking, bool? publishedTracking, bool currentSearch, bool dryRun)
+    {
+        using var harness = new TableHarness();
+        var entity = TestMetadata.Entity("mt_search", "Search");
+        entity.ChangeTrackingEnabled = currentTracking;
+        TestMetadata.Set(entity, nameof(EntityMetadata.CanEnableSyncToExternalSearchIndex), new BooleanManagedProperty(true));
+        TestMetadata.Set(entity, nameof(EntityMetadata.SyncToExternalSearchIndex), (bool?)currentSearch);
+        harness.Entities.Add(entity);
+        harness.PublishedMetadata = new EntityMetadata { LogicalName = entity.LogicalName, ChangeTrackingEnabled = publishedTracking };
+
+        var result = harness.NewTool(dryRun).manage_table(logical_name: "mt_search", description: "New description", is_search_enabled: true);
+
+        Assert.IsTrue(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "requires Change Tracking to be already enabled in published metadata");
+        Assert.IsNull(harness.CapturedUpdate);
+        Assert.AreEqual(0, harness.PublishedCount);
+    }
+
+    [TestMethod]
     public void Update_SearchEnabled_CannotChange_WarnsAndSkips()
     {
         using var harness = new TableHarness();
         var entity = TestMetadata.Entity("mt_nosearch", "No Search");
+        entity.ChangeTrackingEnabled = true;
         TestMetadata.Set(entity, nameof(EntityMetadata.CanEnableSyncToExternalSearchIndex), new BooleanManagedProperty(false));
         TestMetadata.Set(entity, nameof(EntityMetadata.SyncToExternalSearchIndex), (bool?)false);
         harness.Entities.Add(entity);
@@ -157,6 +197,8 @@ public sealed class ManageTableErrorPathCoverageTests
         var warnings = json.GetProperty("warnings").EnumerateArray().Select(w => w.GetString()!).ToList();
         Assert.IsTrue(warnings.Any(w => w.Contains("CanEnableSyncToExternalSearchIndex is false")),
             "expected the skip warning. Got: " + string.Join(" | ", warnings));
+        Assert.IsNull(harness.CapturedUpdate);
+        Assert.AreEqual(0, harness.PublishedCount);
     }
 
     [TestMethod]
@@ -164,6 +206,7 @@ public sealed class ManageTableErrorPathCoverageTests
     {
         using var harness = new TableHarness();
         var entity = TestMetadata.Entity("mt_yessearch", "Yes Search");
+        entity.ChangeTrackingEnabled = true;
         TestMetadata.Set(entity, nameof(EntityMetadata.CanEnableSyncToExternalSearchIndex), new BooleanManagedProperty(true));
         TestMetadata.Set(entity, nameof(EntityMetadata.SyncToExternalSearchIndex), (bool?)false);
         harness.Entities.Add(entity);
@@ -175,6 +218,60 @@ public sealed class ManageTableErrorPathCoverageTests
         Assert.AreEqual("updated", json.GetProperty("status").GetString());
         Assert.IsTrue(json.GetProperty("syncToExternalSearchIndex").GetBoolean());
         Assert.IsTrue(json.GetProperty("published").GetBoolean());
+        Assert.IsNotNull(harness.CapturedUpdate);
+        Assert.IsTrue(harness.CapturedUpdate.Entity.SyncToExternalSearchIndex);
+        Assert.IsNull(harness.CapturedUpdate.Entity.ChangeTrackingEnabled);
+    }
+
+    [TestMethod]
+    [DataRow(false, false)]
+    [DataRow(null, null)]
+    public void Update_SearchDisabled_DoesNotRequireChangeTrackingOrEnablePermission(bool? tracking, bool? canEnable)
+    {
+        using var harness = new TableHarness();
+        var entity = TestMetadata.Entity("mt_search", "Search");
+        entity.ChangeTrackingEnabled = tracking;
+        if (canEnable.HasValue)
+            TestMetadata.Set(entity, nameof(EntityMetadata.CanEnableSyncToExternalSearchIndex), new BooleanManagedProperty(canEnable.Value));
+        TestMetadata.Set(entity, nameof(EntityMetadata.SyncToExternalSearchIndex), (bool?)true);
+        harness.Entities.Add(entity);
+
+        var result = harness.NewTool().manage_table(logical_name: "mt_search", is_search_enabled: false);
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.IsNotNull(harness.CapturedUpdate);
+        Assert.IsFalse(harness.CapturedUpdate.Entity.SyncToExternalSearchIndex);
+        Assert.IsNull(harness.CapturedUpdate.Entity.ChangeTrackingEnabled);
+        Assert.AreEqual(1, harness.PublishedCount);
+    }
+
+    [TestMethod]
+    public void Update_OfflineRequiresPublishedTrackingButCanBeTurnedOff()
+    {
+        using var harness = new TableHarness();
+        var entity = TestMetadata.Entity("mt_offline", "Offline");
+        entity.ChangeTrackingEnabled = true;
+        entity.IsOfflineInMobileClient = new BooleanManagedProperty(true);
+        entity.IsAvailableOffline = true;
+        harness.Entities.Add(entity);
+        harness.PublishedMetadata = new EntityMetadata { LogicalName = entity.LogicalName, ChangeTrackingEnabled = false };
+        var tool = harness.NewTool();
+
+        var blocked = tool.manage_table(logical_name: "mt_offline", is_mobile_offline_enabled: true);
+
+        Assert.IsTrue(blocked.IsError == true, blocked.GetText());
+        StringAssert.Contains(blocked.GetText(), "requires Change Tracking to be already enabled in published metadata");
+        Assert.IsNull(harness.CapturedUpdate);
+        Assert.AreEqual(0, harness.PublishedCount);
+
+        var disabled = tool.manage_table(logical_name: "mt_offline", is_mobile_offline_enabled: false, is_available_offline: false);
+
+        Assert.IsFalse(disabled.IsError == true, disabled.GetText());
+        Assert.IsNotNull(harness.CapturedUpdate);
+        Assert.IsFalse(harness.CapturedUpdate.Entity.IsOfflineInMobileClient.Value);
+        Assert.IsFalse(harness.CapturedUpdate.Entity.IsAvailableOffline);
+        Assert.IsNull(harness.CapturedUpdate.Entity.ChangeTrackingEnabled);
+        Assert.AreEqual(1, harness.PublishedCount);
     }
 
     [TestMethod]
@@ -314,6 +411,7 @@ public sealed class ManageTableErrorPathCoverageTests
         public FakeSdkClient Fake { get; } = new();
         public List<EntityMetadata> Entities { get; } = new();
         public Entity? SolutionRow { get; set; }
+        public EntityMetadata? PublishedMetadata { get; set; }
         public int PublishedCount { get; private set; }
         public CreateEntityRequest? CapturedCreate { get; private set; }
         public UpdateEntityRequest? CapturedUpdate { get; private set; }
@@ -335,6 +433,10 @@ public sealed class ManageTableErrorPathCoverageTests
                 RetrieveAllEntitiesRequest => new RetrieveAllEntitiesResponse
                 {
                     Results = { ["EntityMetadata"] = Entities.ToArray() }
+                },
+                RetrieveEntityRequest r when PublishedMetadata != null && !r.RetrieveAsIfPublished => new RetrieveEntityResponse
+                {
+                    Results = { ["EntityMetadata"] = PublishedMetadata }
                 },
                 RetrieveEntityRequest r => new RetrieveEntityResponse
                 {
