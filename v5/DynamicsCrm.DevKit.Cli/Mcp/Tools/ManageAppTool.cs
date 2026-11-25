@@ -34,6 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private const int EntityComponentType = 1;
         private const int WebResourceComponentType = 61;
         private const int ViewComponentType = 26;
+        private const int ChartComponentType = 59;
         private const int SystemFormComponentType = 60;
         private static readonly object[] DashboardFormTypes = [0, 10, 13, 103];
         private const int SvgWebResourceType = 11;
@@ -69,7 +70,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- List/inspect model-driven apps, or create/update app metadata (name, description, icon)\n" +
             "- Apply app-scoped sitemap navigation operations, validate an app, or restore from a .app.json backup (undo) — the result's backupPath points to the pre-change snapshot; pass it as operations to action='undo' to restore\n" +
-            "- Add or remove tables, system views, forms, and dashboards using add_components or remove_components. Pass GUIDs or names, then check backupPath and published.\n" +
+            "- Add or remove tables, system views, forms, charts, and dashboards using add_components or remove_components. Pass GUIDs or exact names, then check backupPath and published.\n" +
             "- Read docs://instructions_for_manage_app before update_navigation for operation fields, positions, and examples.\n" +
             "- App is resolved by Display Name first, then unique name/GUID; ambiguous Display Names return the candidates\n\n" +
             "RELATED TOOLS:\n" +
@@ -90,16 +91,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("list only. 1-500.")] int max_records = 100,
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default,
-            [Description("add_components/remove_components. Table display or logical name. Required with view_ids or form_ids. Add ensures the table is in the app when supplied. To remove the table itself, supply entity_name alone.")] string entity_name = "",
+            [Description("add_components/remove_components. Table display or logical name. Required with view_ids, form_ids, or chart_ids. Add ensures the table is in the app when supplied. To remove the table itself, supply entity_name alone.")] string entity_name = "",
             [Description("add_components/remove_components. Array of system view GUIDs or exact names for entity_name.")] string[] view_ids = null,
             [Description("add_components/remove_components. Array of system form GUIDs or exact names for entity_name.")] string[] form_ids = null,
-            [Description("add_components/remove_components. Array of system dashboard GUIDs or exact names.")] string[] dashboard_ids = null)
+            [Description("add_components/remove_components. Array of system dashboard GUIDs or exact names.")] string[] dashboard_ids = null,
+            [Description("add_components/remove_components. Array of system chart GUIDs or exact names for entity_name.")] string[] chart_ids = null)
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
                 var worker = new ManageAppTool(conn.OrgService, conn.Options, conn.Context);
                 return worker.manage_app(server, action, app, app_name, solution_name, display_name, unique_name, description, icon_webresource, operations, max_records,
-                    entity_name, view_ids, form_ids, dashboard_ids);
+                    entity_name, view_ids, form_ids, dashboard_ids, chart_ids);
             }, cancellationToken);
         }
 
@@ -118,7 +120,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string entity_name = "",
             string[] view_ids = null,
             string[] form_ids = null,
-            string[] dashboard_ids = null)
+            string[] dashboard_ids = null,
+            string[] chart_ids = null)
         {
             try
             {
@@ -135,7 +138,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "update" => HandleUpdate(app, display_name, description, icon_webresource),
                     "update_navigation" => HandleUpdateNavigation(app, operations),
                     "add_components" or "remove_components" => HandleAppComponents(
-                        normalizedAction, app, entity_name, view_ids ?? [], form_ids ?? [], dashboard_ids ?? []),
+                        normalizedAction, app, entity_name, view_ids ?? [], form_ids ?? [], dashboard_ids ?? [], chart_ids ?? []),
                     "validate" => HandleValidate(app),
                     "undo" => HandleUndo(app, operations),
                     _ => Error($"Invalid action '{action}'.", "Valid values: 'list', 'detail', 'create', 'update', 'update_navigation', 'add_components', 'remove_components', 'validate', 'undo'.")
@@ -749,18 +752,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult HandleAppComponents(string action, string app, string entityName,
-            string[] views, string[] forms, string[] dashboards)
+            string[] views, string[] forms, string[] dashboards, string[] charts)
         {
             if (string.IsNullOrWhiteSpace(app))
                 return Error($"app is required for action='{action}'. Provide an app display name, unique name, or GUID.", DiscoverAppsHint);
             var add = action == "add_components";
             var hasEntity = !string.IsNullOrWhiteSpace(entityName);
-            var noSelectors = views.Length + forms.Length + dashboards.Length == 0;
+            var noSelectors = views.Length + forms.Length + dashboards.Length + charts.Length == 0;
             if (noSelectors && !hasEntity)
                 return Error($"At least one component is required for action='{action}'.",
-                    "Supply entity_name for a table or view_ids, form_ids, or dashboard_ids as an array of GUIDs or names.");
-            if (views.Concat(forms).Concat(dashboards).Any(string.IsNullOrWhiteSpace))
+                    "Supply entity_name for a table or view_ids, form_ids, chart_ids, or dashboard_ids as an array of GUIDs or names.");
+            if (views.Concat(forms).Concat(dashboards).Concat(charts).Any(string.IsNullOrWhiteSpace))
                 return Error("Component selectors must be non-empty GUIDs or names.");
+            if (!hasEntity && charts.Length > 0)
+                return Error($"entity_name is required with chart_ids for action='{action}'.",
+                    "Provide the table display name or logical name.");
             if (!hasEntity && (views.Length > 0 || forms.Length > 0))
                 return Error($"entity_name is required with view_ids or form_ids for action='{action}'.",
                     "Provide the table display name or logical name.");
@@ -782,6 +788,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var components = ResolveComponentSelectors(views, logicalName, "view")
                 .Concat(ResolveComponentSelectors(forms, logicalName, "form"))
                 .Concat(ResolveComponentSelectors(dashboards, logicalName, "dashboard"))
+                .Concat(ResolveComponentSelectors(charts, logicalName, "chart"))
                 .Distinct().ToList();
             if (hasEntity && (add || noSelectors))
             {
@@ -796,21 +803,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private IEnumerable<AppComponent> ResolveComponentSelectors(string[] selectors, string table, string kind)
         {
-            var isView = kind == "view";
+            var (logicalName, idAttribute, scopeAttribute, componentType) = kind switch
+            {
+                "view" => ("savedquery", "savedqueryid", "returnedtypecode", ViewComponentType),
+                "chart" => ("savedqueryvisualization", "savedqueryvisualizationid", "primaryentitytypecode", ChartComponentType),
+                _ => ("systemform", "formid", "objecttypecode", SystemFormComponentType)
+            };
             var isDashboard = kind == "dashboard";
             foreach (var selector in selectors.Select(value => value.Trim()).Distinct(StringComparer.OrdinalIgnoreCase))
             {
-                var query = new QueryExpression(isView ? "savedquery" : "systemform")
+                var query = new QueryExpression(logicalName)
                 {
                     ColumnSet = new ColumnSet(false),
                     TopCount = 2
                 };
                 if (Guid.TryParse(selector, out var id))
-                    query.Criteria.AddCondition(isView ? "savedqueryid" : "formid", ConditionOperator.Equal, id);
+                    query.Criteria.AddCondition(idAttribute, ConditionOperator.Equal, id);
                 else
                     query.Criteria.AddCondition("name", ConditionOperator.Equal, selector);
 
-                if (!isView)
+                if (componentType == SystemFormComponentType)
                     query.Criteria.AddCondition("type", isDashboard ? ConditionOperator.In : ConditionOperator.NotIn, DashboardFormTypes);
 
                 if (table != null)
@@ -823,7 +835,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         scope.AddCondition("objecttypecode", ConditionOperator.Null);
                     }
                     else
-                        query.Criteria.AddCondition(isView ? "returnedtypecode" : "objecttypecode", ConditionOperator.Equal, table);
+                        query.Criteria.AddCondition(scopeAttribute, ConditionOperator.Equal, table);
                 }
 
                 var matches = _orgService.RetrieveMultiple(query).Entities;
@@ -834,7 +846,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     throw new ArgumentException($"System {kind} '{selector}' was not found{tableScope}.");
                 if (matches.Count > 1)
                     throw new ArgumentException($"System {kind} name '{selector}' is ambiguous{tableScope}. Use its GUID. Matches: {string.Join(", ", matches.Select(row => row.Id))}.");
-                yield return new AppComponent(isView ? ViewComponentType : SystemFormComponentType, matches[0].Id);
+                yield return new AppComponent(componentType, matches[0].Id);
             }
         }
 
@@ -1300,6 +1312,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 EntityComponentType => entityLogicalName ?? ResolveEntityLogicalName(component.Id),
                 ViewComponentType => "savedquery",
+                ChartComponentType => "savedqueryvisualization",
                 SystemFormComponentType => "systemform",
                 _ => throw new ArgumentException($"Unsupported app component type '{component.Type}'.", nameof(component))
             };
@@ -1966,7 +1979,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             public string ObjectId { get; set; }
 
             public AppComponent? ToComponent() =>
-                ComponentType is EntityComponentType or ViewComponentType or SystemFormComponentType &&
+                ComponentType is EntityComponentType or ViewComponentType or ChartComponentType or SystemFormComponentType &&
                 Guid.TryParse(ObjectId, out var id) && id != Guid.Empty
                     ? new AppComponent(ComponentType.Value, id)
                     : null;

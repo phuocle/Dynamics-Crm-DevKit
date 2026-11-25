@@ -82,7 +82,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Open the returned absolute contentPath to read the file. byteLength counts the saved bytes and encoding is utf-8 (BOM removed) or binary.\n" +
             "On create the prefix in name must match the solution's publisher prefix; on mismatch the tool errors " +
             "with the suggested name — re-call with it. Create adds the web resource to the solution and publishes; " +
-            "update also publishes; delete is irreversible.\n" +
+            "update accepts file_path to replace content and then publishes; delete is irreversible.\n" +
             "Types: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap. " +
             "Naming: {prefix}_/path/filename.ext (e.g. 'v4_/entities/Account.form.js').\n\n" +
             "WHEN TO USE:\n" +
@@ -101,7 +101,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Unique name (e.g. 'v4_/entities/Account.form.js'). Required: create. list: contains filter across Display Name and unique name.")] string name = "",
             [Description("Display Name. Optional: create/update.")] string display_name = "",
             [Description("Description. Optional: create/update.")] string description = "",
-            [Description("Absolute or relative file path. Required: create. Tool reads file and converts to base64 internally.")] string file_path = "",
+            [Description("Absolute or relative file path. Required: create. Optional: update. The tool reads text or binary bytes and converts them to base64 internally.")] string file_path = "",
             [Description("Required: create. See description for values. Ignored on other actions.")] string type = "",
             [Description("list: filter. create: REQUIRED — used to resolve publisher prefix and add WR to solution.")] string solution_name = "",
             [Description("list only. See type values.")] string type_filter = "",
@@ -126,7 +126,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Unique name (e.g. 'v4_/entities/Account.form.js'). Required: create. list: contains filter across Display Name and unique name.")] string name = "",
             [Description("Display Name. Optional: create/update.")] string display_name = "",
             [Description("Description. Optional: create/update.")] string description = "",
-            [Description("Absolute or relative file path. Required: create. Tool reads file and converts to base64 internally.")] string file_path = "",
+            [Description("Absolute or relative file path. Required: create. Optional: update. The tool reads text or binary bytes and converts them to base64 internally.")] string file_path = "",
             [Description("Required: create. See description for values. Ignored on other actions.")] string type = "",
             [Description("list: filter. create: REQUIRED — used to resolve publisher prefix and add WR to solution.")] string solution_name = "",
             [Description("list only. See type values.")] string type_filter = "",

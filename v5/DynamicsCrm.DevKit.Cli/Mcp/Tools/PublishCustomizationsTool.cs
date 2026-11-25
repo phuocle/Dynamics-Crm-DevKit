@@ -60,13 +60,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(PublishResult)),
         Description(
-            "Publish Dataverse customizations. Pass at least one target (entities/optionset_names/dashboards/webresources/appmodules/include_ribbons/include_sitemap/include_global_optionset) for targeted PublishXml; pass nothing for PublishAll (async, org-wide lock).\n\n" +
+            "Publish Dataverse customizations. Pass at least one target (entities/optionset_names/dashboards/webresources/appmodules/include_ribbons/include_sitemap/include_global_optionset) for targeted PublishXml; pass nothing for PublishAll (async, org-wide lock). Targeted results report the resolved dashboard and web resource GUIDs, their counts, and named option sets when supplied.\n\n" +
             "WHEN TO USE:\n" +
             "- After metadata mutations with auto_publish=false, or when changes are not showing up\n" +
             "- Batch many changes then publish once at the end\n\n" +
             "RELATED TOOLS:\n" +
             "- get_system_jobs → track PublishAll async operation status\n" +
-            "- get_tables / manage_app / manage_webresource → discover valid target identifiers")]
+            "- get_tables / manage_app / manage_form / manage_webresource → discover valid target identifiers")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Comma-separated entity Display Names or logical names (e.g. 'Account,contact'). Empty with no other targets = PublishAll.")] string entities = "",
             [Description("Comma-separated global option set unique names (e.g. 'new_priority,new_status'). Use instead of include_global_optionset for targeted publish.")] string optionset_names = "",
@@ -181,6 +181,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         EntityCount = hasSpecificTargets ? entityList.Count : null,
                         AppModules = appModuleList.Count > 0 ? appModuleList : null,
                         AppModuleCount = hasSpecificTargets ? appModuleList.Count : null,
+                        Dashboards = dashboardList.Count > 0 ? dashboardList : null,
+                        DashboardCount = dashboardList.Count > 0 ? dashboardList.Count : null,
+                        WebResources = webResourceList.Count > 0 ? webResourceList : null,
+                        WebResourceCount = webResourceList.Count > 0 ? webResourceList.Count : null,
+                        OptionSets = optionSetNameList.Count > 0 ? optionSetNameList : null,
                         IncludeGlobalOptionSets = include_global_optionset,
                         IncludeSiteMap = include_sitemap,
                         Status = "not_executed",
@@ -231,6 +236,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     EntityCount = entityList.Count,
                     AppModules = appModuleList,
                     AppModuleCount = appModuleList.Count,
+                    Dashboards = dashboardList.Count > 0 ? dashboardList : null,
+                    DashboardCount = dashboardList.Count > 0 ? dashboardList.Count : null,
+                    WebResources = webResourceList.Count > 0 ? webResourceList : null,
+                    WebResourceCount = webResourceList.Count > 0 ? webResourceList.Count : null,
+                    OptionSets = optionSetNameList.Count > 0 ? optionSetNameList : null,
                     IncludeGlobalOptionSets = include_global_optionset || optionSetNameList.Count > 0,
                     IncludeSiteMap = include_sitemap,
                     Status = published ? "published" : "failed",

@@ -24,6 +24,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? AppModuleCount { get; set; }
 
+        [JsonPropertyName("dashboards")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> Dashboards { get; set; }
+
+        [JsonPropertyName("dashboardCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? DashboardCount { get; set; }
+
+        [JsonPropertyName("webResources")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> WebResources { get; set; }
+
+        [JsonPropertyName("webResourceCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? WebResourceCount { get; set; }
+
+        [JsonPropertyName("optionSets")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> OptionSets { get; set; }
+
         [JsonPropertyName("includeGlobalOptionSets")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool IncludeGlobalOptionSets { get; set; }

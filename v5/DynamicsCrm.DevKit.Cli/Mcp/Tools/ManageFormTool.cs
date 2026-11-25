@@ -59,10 +59,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Manage Dataverse entity forms and system dashboards (systemform). Actions: 'list', 'detail', 'navigation_list' (read-only) | 'create', 'update', 'rename', 'undo' (mutations — require System Administrator).\n\n" +
             "WHEN TO USE:\n" +
-            "- List or inspect forms of an entity (list, detail) before editing\n" +
+            "- List or inspect entity forms and system dashboards (list, detail) before editing. For system dashboards, omit entity_name and use form_type=0.\n" +
             "- List the Related menu of an entity form with navigation_list and form_id before changing it with manage_navigation operations\n" +
             "- Create a Quick Create form with action='create', form_type=7, form_name, and FormXML from the source form's detail result or a file\n" +
-            "- Create a system dashboard with form_type=0, form_name, and formxml. For dashboard detail, update, or undo, pass form_id. Omit entity_name for dashboards.\n" +
+            "- Create a system dashboard with form_type=0, form_name, and formxml. Dashboard detail accepts form_id or a unique form_name match. Update and undo require form_id.\n" +
             "- Apply form operations via action=update (recommended: operations JSON) or raw formxml (advanced/undo)\n" +
             "- Rename a form, or restore a form from a .formxml backup (undo) — the result's backupPath points to the pre-change backup; pass it as formxml to action='undo' to restore\n\n" +
             "RELATED TOOLS:\n" +
@@ -71,10 +71,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'rename', 'undo', 'navigation_list'.")] string action = "",
-            [Description("Entity display or logical name, e.g. 'Account' or 'account'. Omit for system dashboard create/detail/update/undo.")] string entity_name = "",
+            [Description("Entity display or logical name, e.g. 'Account' or 'account'. Omit for system dashboard list/detail/create/update/undo.")] string entity_name = "",
             [Description("Form GUID. Required for update/rename/undo/navigation_list. For detail, provide form_id or a form_name filter; use the GUID when name matches are ambiguous.")] string form_id = "",
-            [Description("create/rename: new form name. list/detail: name contains filter; one match returns detail. In detail, ignored if form_id is set.")] string form_name = "",
-            [Description("create: 0=Dashboard (omit entity_name), 7=QuickCreate (requires entity_name). Entity list/detail: 0 or omit for all types, 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=Card, 12=MainInteractive.")] int form_type = 0,
+            [Description("create/rename: new form name. list/detail: name contains filter. Dashboard list returns all matches. Entity list with one name match returns detail. In detail, ignored if form_id is set.")] string form_name = "",
+            [Description("System dashboards: 0 (default) with entity_name omitted. Entity create: 7=QuickCreate. Entity list/detail: 0 or omit for all types, 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=Card, 12=MainInteractive.")] int form_type = 0,
             [Description("List mode only — include formxml in each entry. Detail always includes formxml.")] bool include_formxml = false,
             [Description("Raw FormXML or a file path for create/update. Required for dashboards. For undo, use the backupPath from update.")] string formxml = "",
             [Description("Entity-form update only: serialized JSON operation array. Each object uses action for the family and manage_action for its verb. See docs://instructions_for_formxml.")] string operations = "",
@@ -92,10 +92,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public async Task<CallToolResult> manage_form(
             McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'rename', 'undo', 'navigation_list'.")] string action = "",
-            [Description("Entity display or logical name, e.g. 'Account' or 'account'. Omit for system dashboard create/detail/update/undo.")] string entity_name = "",
+            [Description("Entity display or logical name, e.g. 'Account' or 'account'. Omit for system dashboard list/detail/create/update/undo.")] string entity_name = "",
             [Description("Form GUID. Required for update/rename/undo/navigation_list. For detail, provide form_id or a form_name filter; use the GUID when name matches are ambiguous.")] string form_id = "",
-            [Description("create/rename: new form name. list/detail: name contains filter; one match returns detail. In detail, ignored if form_id is set.")] string form_name = "",
-            [Description("create: 0=Dashboard (omit entity_name), 7=QuickCreate (requires entity_name). Entity list/detail: 0 or omit for all types, 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=Card, 12=MainInteractive.")] int form_type = 0,
+            [Description("create/rename: new form name. list/detail: name contains filter. Dashboard list returns all matches. Entity list with one name match returns detail. In detail, ignored if form_id is set.")] string form_name = "",
+            [Description("System dashboards: 0 (default) with entity_name omitted. Entity create: 7=QuickCreate. Entity list/detail: 0 or omit for all types, 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=Card, 12=MainInteractive.")] int form_type = 0,
             [Description("List mode only — include formxml in each entry. Detail always includes formxml.")] bool include_formxml = false,
             [Description("Raw FormXML or a file path for create/update. Required for dashboards. For undo, use the backupPath from update.")] string formxml = "",
             [Description("Entity-form update only: serialized JSON operation array. Each object uses action for the family and manage_action for its verb. See docs://instructions_for_formxml.")] string operations = "",
@@ -108,8 +108,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var normalizedAction = action.Trim().ToLowerInvariant();
                 var dashboard = string.IsNullOrWhiteSpace(entity_name) && form_type == DashboardFormType &&
-                    (normalizedAction is "create" or "update" or "undo" ||
-                     normalizedAction == "detail" && !string.IsNullOrWhiteSpace(form_id));
+                    normalizedAction is "list" or "detail" or "create" or "update" or "undo";
                 EntityMetadata entity = null;
                 EntityMetadata[] entityCatalog = [];
                 if (!dashboard)
@@ -167,30 +166,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult HandleList(string entityName, string formName, int formType, bool includeFormXml)
         {
-            if (!string.IsNullOrWhiteSpace(formName))
-            {
-                var nameFilter = formName.Trim();
-                return FindFormsByName(entityName, nameFilter, formType);
-            }
+            if (entityName != null && !string.IsNullOrWhiteSpace(formName))
+                return FindFormsByName(entityName, formName.Trim(), formType);
 
             if (formType != 0 && !ValidFormTypes.Contains(formType))
                 return Error($"form_type={formType} is not valid.", "Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=Card, 12=MainInteractive. Use 0 or omit for all types.");
 
             var query = BuildListQuery(entityName, formType, includeFormXml);
+            if (!string.IsNullOrWhiteSpace(formName))
+                AddNameContainsFilter(query, formName.Trim());
             var result = _orgService.RetrieveMultiple(query);
             var forms = result.Entities;
 
             if (forms.Count == 0)
             {
                 var typeHint = formType > 0 ? $" with type={formType}" : "";
-                return Success($"No forms found for '{entityName}'{typeHint}.", new UpsertFormResult
+                var message = entityName == null ? "No system dashboards found." : $"No forms found for '{entityName}'{typeHint}.";
+                return Success(message, new UpsertFormResult
                 {
                     Action = "list", Entity = entityName, TotalCount = 0, Status = "success"
                 });
             }
 
             var entries = BuildFormListEntries(forms, includeFormXml);
-            return Success($"Found {entries.Count} form(s) for '{entityName}'.", new UpsertFormResult
+            var summary = entityName == null
+                ? $"Found {entries.Count} system dashboard(s)."
+                : $"Found {entries.Count} form(s) for '{entityName}'.";
+            return Success(summary, new UpsertFormResult
             {
                 Action = "list", Entity = entityName, TotalCount = entries.Count,
                 Forms = entries, Status = "success"
@@ -203,8 +205,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"form_type={formType} is not valid.", "Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=Card, 12=MainInteractive. Use 0 or omit for all types.");
 
             var query = BuildListQuery(entityName, formType, includeFormXml: false);
-            var escapedName = formName.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
-            query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{escapedName}%");
+            AddNameContainsFilter(query, formName);
 
             var result = _orgService.RetrieveMultiple(query);
             var forms = result.Entities;
@@ -261,9 +262,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult HandleDetail(string entityName, string formId, string formName, int formType = 0)
         {
+            var listCall = entityName == null
+                ? "manage_form(action='list', form_type=0)"
+                : $"manage_form(action='list', entity_name='{entityName}')";
             if (string.IsNullOrWhiteSpace(formId) && string.IsNullOrWhiteSpace(formName))
                 return Error("form_id or form_name is required when action='detail'.",
-                    $"Pass form_id (GUID) or form_name (name filter). Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
+                    entityName == null ? $"Use {listCall} to find system dashboard IDs."
+                        : $"Pass form_id (GUID) or form_name (name filter). Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             if (formType != 0 && !ValidFormTypes.Contains(formType))
                 return Error($"form_type={formType} is not valid.", "Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=Card, 12=MainInteractive. Use 0 or omit for all types.");
@@ -272,15 +277,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (!Guid.TryParse(formId.Trim(), out var id))
                     return Error($"'{formId}' is not a valid GUID.",
-                        $"Pass a form GUID (e.g. from manage_form(action='list', entity_name='{entityName}')), or use form_name instead.");
+                        $"Pass a form GUID (e.g. from {listCall}), or use form_name instead.");
                 return GetFormDetailResult(entityName, id);
             }
 
             // form_name provided, no form_id
             var nameFilter = formName.Trim();
             var query = BuildListQuery(entityName, formType, includeFormXml: false);
-            var escapedName = nameFilter.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
-            query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{escapedName}%");
+            AddNameContainsFilter(query, nameFilter);
 
             var result = _orgService.RetrieveMultiple(query);
             var forms = result.Entities;
@@ -289,8 +293,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var typeHint = formType > 0 ? $" with type '{MapFormType(formType)}'" : "";
                 return Error(
-                    $"No form found matching name '{nameFilter}'{typeHint} for entity '{entityName}'.",
-                    $"Use manage_form with action='list' and entity_name='{entityName}' to list all available forms.");
+                    entityName == null ? $"No system dashboard found matching name '{nameFilter}'."
+                        : $"No form found matching name '{nameFilter}'{typeHint} for entity '{entityName}'.",
+                    entityName == null ? $"Use {listCall} to list system dashboards."
+                        : $"Use manage_form with action='list' and entity_name='{entityName}' to list all available forms.");
             }
 
             if (forms.Count == 1)
@@ -299,7 +305,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Multiple matches — return candidates for disambiguation
             var entries = BuildFormListEntries(forms, includeFormXml: false);
             return Error(
-                $"Multiple forms match '{nameFilter}' for '{entityName}' — provide form_id for detail.",
+                entityName == null ? $"Multiple system dashboards match '{nameFilter}' — provide form_id for detail."
+                    : $"Multiple forms match '{nameFilter}' for '{entityName}' — provide form_id for detail.",
                 "See the 'forms' array in structuredContent for candidate form IDs.",
                 new UpsertFormResult
                 {
@@ -321,7 +328,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (result.Entities.Count == 0)
                 return Error(
                     $"No form found with ID '{formId}'.",
-                    $"Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
+                    entityName == null ? "Use manage_form(action='list', form_type=0) to find system dashboard IDs."
+                        : $"Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             var form = result.Entities[0];
             var objectTypeCode = form.GetAttributeValue<string>("objecttypecode") ?? "";
@@ -935,16 +943,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ColumnSet = columns
             };
 
-            query.Criteria.AddCondition("objecttypecode", ConditionOperator.Equal, entityName);
-            query.Criteria.AddCondition("formactivationstate", ConditionOperator.Equal, 1);
-
-            if (formType != 0)
-                query.Criteria.AddCondition("type", ConditionOperator.Equal, formType);
+            if (entityName == null)
+            {
+                query.Criteria.AddCondition("type", ConditionOperator.Equal, DashboardFormType);
+                var scope = query.Criteria.AddFilter(LogicalOperator.Or);
+                scope.AddCondition("objecttypecode", ConditionOperator.Equal, "none");
+                scope.AddCondition("objecttypecode", ConditionOperator.Null);
+            }
+            else
+            {
+                query.Criteria.AddCondition("objecttypecode", ConditionOperator.Equal, entityName);
+                query.Criteria.AddCondition("formactivationstate", ConditionOperator.Equal, 1);
+                if (formType != 0)
+                    query.Criteria.AddCondition("type", ConditionOperator.Equal, formType);
+            }
 
             query.AddOrder("type", OrderType.Ascending);
             query.AddOrder("name", OrderType.Ascending);
 
             return query;
+        }
+
+        private static void AddNameContainsFilter(QueryExpression query, string name)
+        {
+            var escapedName = name.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
+            query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{escapedName}%");
         }
 
         private static string MapFormType(int type) => type switch

@@ -266,6 +266,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 IsActive = (view.GetAttributeValue<OptionSetValue>("statecode")?.Value ?? 0) == 0,
                 IsManaged = isSystem ? view.GetAttributeValue<bool?>("ismanaged") : null,
                 Source = isSystem ? "system" : "personal",
+                ModifiedOn = view.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd HH:mm:ss"),
                 Description = string.IsNullOrWhiteSpace(description) ? null : description
             };
         }
@@ -1121,7 +1122,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private DataCollection<Entity> FindViewsByNameContains(string entityName, string nameFilter)
         {
-            var columns = new ColumnSet("savedqueryid", "name", "querytype", "isdefault", "statecode", "ismanaged");
+            var columns = new ColumnSet("savedqueryid", "name", "querytype", "isdefault", "statecode", "ismanaged", "modifiedon");
             var query = new QueryExpression("savedquery")
             {
                 ColumnSet = columns
@@ -1134,7 +1135,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private DataCollection<Entity> FindPersonalViewsByNameContains(string entityName, string nameFilter)
         {
-            var columns = new ColumnSet("userqueryid", "name", "querytype", "statecode");
+            var columns = new ColumnSet("userqueryid", "name", "querytype", "statecode", "modifiedon");
             var query = new QueryExpression("userquery")
             {
                 ColumnSet = columns
@@ -1149,7 +1150,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var columns = new ColumnSet(
                 "savedqueryid", "name", "querytype", "isdefault",
-                "statecode", "ismanaged", "description");
+                "statecode", "ismanaged", "description", "modifiedon");
 
             var query = new QueryExpression("savedquery") { ColumnSet = columns };
             query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
@@ -1161,7 +1162,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private DataCollection<Entity> GetPersonalViews(string entityName)
         {
             var columns = new ColumnSet(
-                "userqueryid", "name", "querytype", "statecode", "description");
+                "userqueryid", "name", "querytype", "statecode", "description", "modifiedon");
 
             var query = new QueryExpression("userquery") { ColumnSet = columns };
             query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);

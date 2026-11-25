@@ -1,5 +1,6 @@
 using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Shared;
 using FakeXrmEasy.Abstractions;
@@ -199,6 +200,11 @@ public sealed class PublishCustomizationsFakeXrmEasySweepTests
         Assert.AreEqual(2, payload.EntityCount);
         CollectionAssert.AreEquivalent(new[] { "account", "contact" }, payload.Entities);
         Assert.AreEqual(2, payload.AppModuleCount);
+        CollectionAssert.AreEqual(new[] { "22222222-2222-2222-2222-222222222222" }, payload.Dashboards);
+        Assert.AreEqual(1, payload.DashboardCount);
+        CollectionAssert.AreEqual(new[] { "55555555-5555-5555-5555-555555555555" }, payload.WebResources);
+        Assert.AreEqual(1, payload.WebResourceCount);
+        CollectionAssert.AreEqual(new[] { "new_priority" }, payload.OptionSets);
         Assert.IsTrue(payload.IncludeSiteMap);
         Assert.IsFalse(payload.IncludeGlobalOptionSets, "dry-run keeps the raw include_global_optionset flag");
         Assert.AreEqual(0, _service.PublishXmlCount);
@@ -216,6 +222,7 @@ public sealed class PublishCustomizationsFakeXrmEasySweepTests
         var payload = Payload(result);
         Assert.AreEqual("specific", payload.Mode);
         Assert.IsTrue(payload.IncludeGlobalOptionSets);
+        Assert.IsFalse(result.StructuredContent!.Value.TryGetProperty("optionSets", out _));
     }
 
     // ──────────────────────────────────────────────
@@ -382,6 +389,47 @@ public sealed class PublishCustomizationsFakeXrmEasySweepTests
         StringAssert.Contains(_service.LastParameterXml, "<importexportxml><entities><entity>account</entity></entities>");
         StringAssert.Contains(_service.LastParameterXml, "<optionsets />");
         StringAssert.Contains(_service.LastParameterXml, "<sitemaps />");
+    }
+
+    [TestMethod]
+    public void TargetedPublish_ReportsResolvedDashboardsWebResourcesAndOptionSets()
+    {
+        const string dashboardId = "22222222-2222-2222-2222-222222222222";
+        const string webResourceId = "55555555-5555-5555-5555-555555555555";
+        SeedWebResource("devkit_/js/app.js");
+
+        CallToolResult result;
+        var clientName = McpToolResults.ClientName;
+        try
+        {
+            McpToolResults.ClientName = "Antigravity";
+            result = NewTool(dryRun: false).publish_customizations(
+                dashboards: $"{{{dashboardId}}}, {dashboardId}", webresources: $"devkit_/js/app.js, {webResourceId}",
+                optionset_names: "new_priority, new_status, new_priority");
+        }
+        finally
+        {
+            McpToolResults.ClientName = clientName;
+        }
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var payload = Payload(result);
+        Assert.AreEqual("published", payload.Status);
+        Assert.AreEqual(1, payload.DashboardCount);
+        Assert.AreEqual(1, payload.WebResourceCount);
+        CollectionAssert.AreEqual(new[] { dashboardId }, payload.Dashboards);
+        CollectionAssert.AreEqual(new[] { webResourceId }, payload.WebResources);
+        CollectionAssert.AreEqual(new[] { "new_priority", "new_status" }, payload.OptionSets);
+        var detailLine = Text(result).Split('\n').Single(line => line.StartsWith("[Detail] ", StringComparison.Ordinal));
+        var detail = JsonSerializer.Deserialize<PublishResult>(detailLine["[Detail] ".Length..])!;
+        Assert.AreEqual(payload.DashboardCount, detail.DashboardCount);
+        Assert.AreEqual(payload.WebResourceCount, detail.WebResourceCount);
+        CollectionAssert.AreEqual(payload.Dashboards, detail.Dashboards);
+        CollectionAssert.AreEqual(payload.WebResources, detail.WebResources);
+        CollectionAssert.AreEqual(payload.OptionSets, detail.OptionSets);
+        StringAssert.Contains(_service.LastParameterXml, $"<dashboard>{dashboardId}</dashboard>");
+        StringAssert.Contains(_service.LastParameterXml, $"<webresource>{webResourceId}</webresource>");
+        StringAssert.Contains(_service.LastParameterXml, "<optionset>new_status</optionset>");
     }
 
     // ──────────────────────────────────────────────

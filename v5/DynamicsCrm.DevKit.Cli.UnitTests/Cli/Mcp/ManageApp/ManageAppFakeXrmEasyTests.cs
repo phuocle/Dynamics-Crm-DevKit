@@ -919,11 +919,16 @@ public sealed class ManageAppFakeXrmEasyTests
         var view = Guid.NewGuid();
         var form = Guid.NewGuid();
         var dashboard = Guid.NewGuid();
+        var chart = Guid.NewGuid();
         var unrelated = Guid.NewGuid();
         service.Create(new Entity("savedquery", view) { ["name"] = "Active Accounts", ["returnedtypecode"] = "account" });
         service.Create(new Entity("savedquery") { ["name"] = "Active Accounts", ["returnedtypecode"] = "contact" });
         service.Create(new Entity("systemform", form) { ["formid"] = form, ["name"] = "Account Details", ["objecttypecode"] = "account", ["type"] = new OptionSetValue(2) });
         service.Create(new Entity("systemform", dashboard) { ["name"] = "Activity Dashboard", ["objecttypecode"] = "account", ["type"] = new OptionSetValue(10) });
+        service.Create(new Entity("savedqueryvisualization", chart)
+            { ["name"] = "Accounts by Industry", ["primaryentitytypecode"] = "account" });
+        service.Create(new Entity("savedqueryvisualization")
+            { ["name"] = "Accounts by Industry", ["primaryentitytypecode"] = "contact" });
         if (tableInApp)
             SeedPageComponent(appUniqueId, 1, table);
         if (!add)
@@ -931,6 +936,7 @@ public sealed class ManageAppFakeXrmEasyTests
             SeedPageComponent(appUniqueId, 26, view);
             SeedPageComponent(appUniqueId, 60, form);
             SeedPageComponent(appUniqueId, 60, dashboard);
+            SeedPageComponent(appUniqueId, 59, chart);
         }
 
         var tool = NewTool();
@@ -950,7 +956,8 @@ public sealed class ManageAppFakeXrmEasyTests
         var changeTable = add && !tableInApp;
         var expectedChanges = new List<(int Type, Guid Id, string LogicalName)>
         {
-            (26, view, "savedquery"), (60, form, "systemform"), (60, dashboard, "systemform")
+            (26, view, "savedquery"), (60, form, "systemform"), (60, dashboard, "systemform"),
+            (59, chart, "savedqueryvisualization")
         };
         if (changeTable)
             expectedChanges.Add((1, table, "account"));
@@ -975,7 +982,8 @@ public sealed class ManageAppFakeXrmEasyTests
         var viewSelectors = new[] { "Active Accounts", view.ToString() };
         var formSelectors = new[] { form.ToString() };
         var dashboardSelectors = new[] { "Activity Dashboard" };
-        var result = Invoke(tool, "HandleAppComponents", action, "Sales Hub", "Account", viewSelectors, formSelectors, dashboardSelectors);
+        var chartSelectors = new[] { "Accounts by Industry", chart.ToString() };
+        var result = Invoke(tool, "HandleAppComponents", action, "Sales Hub", "Account", viewSelectors, formSelectors, dashboardSelectors, chartSelectors);
         Assert.IsFalse(result.IsError == true, result.GetText());
         var detail = result.StructuredContent!.Value;
         Assert.AreEqual("updated", detail.GetProperty("status").GetString());
@@ -987,10 +995,10 @@ public sealed class ManageAppFakeXrmEasyTests
         var original = File.ReadAllText(path);
         using var snapshot = JsonDocument.Parse(original);
         Assert.AreEqual(expectedChanges.Count, snapshot.RootElement.GetProperty("componentScope").GetArrayLength());
-        Assert.AreEqual((tableInApp ? 1 : 0) + (add ? 0 : 3), snapshot.RootElement.GetProperty("appComponents").GetArrayLength());
+        Assert.AreEqual((tableInApp ? 1 : 0) + (add ? 0 : 4), snapshot.RootElement.GetProperty("appComponents").GetArrayLength());
         StringAssert.Contains(_publishExecutor.Requests.Single().ParameterXml, $"<appmodules><appmodule>{appId}</appmodule></appmodules>");
 
-        var repeated = Invoke(tool, "HandleAppComponents", action, "Sales Hub", "Account", viewSelectors, formSelectors, dashboardSelectors);
+        var repeated = Invoke(tool, "HandleAppComponents", action, "Sales Hub", "Account", viewSelectors, formSelectors, dashboardSelectors, chartSelectors);
         Assert.AreEqual("no_changes", repeated.StructuredContent!.Value.GetProperty("status").GetString());
         Assert.HasCount(1, _publishExecutor.Requests);
 
@@ -1011,7 +1019,7 @@ public sealed class ManageAppFakeXrmEasyTests
         if (tableInApp)
             remaining.Add(table);
         if (!add)
-            remaining.AddRange([view, form, dashboard]);
+            remaining.AddRange([view, form, dashboard, chart]);
         CollectionAssert.AreEquivalent(remaining.ToArray(),
             CurrentComponents().Select(row => row.GetAttributeValue<Guid>("objectid")).ToArray());
     }
@@ -1025,7 +1033,7 @@ public sealed class ManageAppFakeXrmEasyTests
         SetWorkspace(tool, _workspace);
         string[] noSelectors = [];
 
-        var add = Invoke(tool, "HandleAppComponents", "add_components", "Sales Hub", "Contact", noSelectors, noSelectors, noSelectors);
+        var add = Invoke(tool, "HandleAppComponents", "add_components", "Sales Hub", "Contact", noSelectors, noSelectors, noSelectors, noSelectors);
         Assert.IsFalse(add.IsError == true, add.GetText());
         Assert.AreEqual($"1:{table}", add.StructuredContent!.Value.GetProperty("addedAppComponents")[0].GetString());
         var addRequest = _componentExecutor.Requests.Single();
@@ -1036,7 +1044,7 @@ public sealed class ManageAppFakeXrmEasyTests
         var detail = Invoke(tool, "HandleDetail", "Sales Hub");
         Assert.AreEqual($"1:{table}", detail.StructuredContent!.Value.GetProperty("appComponents")[0].GetString());
 
-        var remove = Invoke(tool, "HandleAppComponents", "remove_components", "Sales Hub", "contact", noSelectors, noSelectors, noSelectors);
+        var remove = Invoke(tool, "HandleAppComponents", "remove_components", "Sales Hub", "contact", noSelectors, noSelectors, noSelectors, noSelectors);
         Assert.IsFalse(remove.IsError == true, remove.GetText());
         Assert.AreEqual($"1:{table}", remove.StructuredContent!.Value.GetProperty("removedAppComponents")[0].GetString());
         var removeRequest = _removeComponentExecutor.Requests.Single();
@@ -1070,6 +1078,41 @@ public sealed class ManageAppFakeXrmEasyTests
         Assert.IsEmpty(_componentExecutor.Requests);
         Assert.IsEmpty(_removeComponentExecutor.Requests);
         Assert.IsEmpty(_publishExecutor.Requests);
+    }
+
+    [TestMethod]
+    [DataRow("add_components")]
+    [DataRow("remove_components")]
+    public async Task ComponentActions_ChartSelectorsRequireEntityAndRejectAmbiguousOrForeignCharts(string action)
+    {
+        SeedApp("Sales Hub", "devkit_hub1", withSiteMap: false);
+        var service = _context.GetOrganizationService();
+        service.Create(new Entity("savedqueryvisualization") { ["name"] = "By Industry", ["primaryentitytypecode"] = "account" });
+        service.Create(new Entity("savedqueryvisualization") { ["name"] = "By Industry", ["primaryentitytypecode"] = "account" });
+        var foreign = service.Create(new Entity("savedqueryvisualization")
+            { ["name"] = "By Industry", ["primaryentitytypecode"] = "contact" });
+        var tool = NewTool(dryRun: true, mutationsBlocked: true);
+
+        var missingEntity = await tool.manage_app(null!, action: action, app: "Sales Hub", chart_ids: [foreign.ToString()]);
+        Assert.IsTrue(missingEntity.IsError == true);
+        StringAssert.Contains(missingEntity.GetText(), "entity_name is required with chart_ids");
+
+        var wrongTable = await tool.manage_app(null!, action: action, app: "Sales Hub", entity_name: "account",
+            chart_ids: [foreign.ToString()]);
+        Assert.IsTrue(wrongTable.IsError == true);
+        StringAssert.Contains(wrongTable.GetText(), $"System chart '{foreign}' was not found for table 'account'");
+
+        var ambiguous = await tool.manage_app(null!, action: action, app: "Sales Hub", entity_name: "account",
+            chart_ids: ["By Industry"]);
+        Assert.IsTrue(ambiguous.IsError == true);
+        StringAssert.Contains(ambiguous.GetText(), "System chart name 'By Industry' is ambiguous for table 'account'");
+
+        var partialName = await tool.manage_app(null!, action: action, app: "Sales Hub", entity_name: "account",
+            chart_ids: ["Industry"]);
+        Assert.IsTrue(partialName.IsError == true);
+        StringAssert.Contains(partialName.GetText(), "System chart 'Industry' was not found for table 'account'");
+        Assert.IsEmpty(_componentExecutor.Requests);
+        Assert.IsEmpty(_removeComponentExecutor.Requests);
     }
 
     // ──────────────────────────────────────────────

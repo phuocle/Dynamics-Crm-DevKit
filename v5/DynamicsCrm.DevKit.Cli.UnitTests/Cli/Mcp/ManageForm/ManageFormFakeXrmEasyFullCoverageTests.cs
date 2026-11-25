@@ -214,7 +214,7 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
     [TestMethod]
     public async Task MissingEntityName_ReturnsError()
     {
-        var result = await NewTool().manage_form(null!, action: "list", entity_name: " ");
+        var result = await NewTool().manage_form(null!, action: "list", entity_name: " ", form_type: 2);
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "[Error] entity_name is required.");
         StringAssert.Contains(Text(result), "Use get_tables to find the entity logical name.");
@@ -358,6 +358,67 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
         var result = await NewTool().manage_form(null!, "list", "contact", form_type: 7);
         Assert.IsFalse(result.IsError == true);
         StringAssert.Contains(Text(result), "No forms found for 'contact' with type=7.");
+    }
+
+    [TestMethod]
+    public async Task List_Dashboards_FiltersByNameAndOptionallyIncludesFormXml()
+    {
+        var sales = SeedForm("Sales Overview", entity: "none", type: 0);
+        var service = SeedForm("Service Overview", entity: null!, type: 0, activationState: 0);
+        SeedForm("Sales Activity", entity: "none", type: 10);
+        SeedForm("Sales Account Form");
+        SeedForm("Sales Entity Dashboard", type: 0);
+        var tool = NewTool();
+
+        var all = await tool.manage_form(null!, "list", form_type: 0);
+        Assert.IsFalse(all.IsError == true, Text(all));
+        var allForms = Structured(all).GetProperty("forms");
+        Assert.AreEqual(2, allForms.GetArrayLength());
+        Assert.AreEqual(sales.ToString(), allForms[0].GetProperty("formId").GetString());
+        Assert.AreEqual(service.ToString(), allForms[1].GetProperty("formId").GetString());
+        Assert.IsFalse(allForms[0].TryGetProperty("formXml", out _));
+
+        var filtered = await tool.manage_form(null!, "list", entity_name: " ", form_type: 0,
+            form_name: "Sales", include_formxml: true);
+        Assert.IsFalse(filtered.IsError == true, Text(filtered));
+        var data = Structured(filtered);
+        Assert.AreEqual("list", data.GetProperty("action").GetString());
+        Assert.AreEqual(1, data.GetProperty("totalCount").GetInt32());
+        var row = data.GetProperty("forms")[0];
+        Assert.AreEqual(sales.ToString(), row.GetProperty("formId").GetString());
+        Assert.AreEqual(0, row.GetProperty("formType").GetInt32());
+        Assert.AreEqual(ValidFormXml, row.GetProperty("formXml").GetString());
+
+        var empty = await tool.manage_form(null!, "list", form_type: 0, form_name: "No Match");
+        Assert.IsFalse(empty.IsError == true, Text(empty));
+        Assert.AreEqual(0, Structured(empty).GetProperty("totalCount").GetInt32());
+    }
+
+    [TestMethod]
+    public async Task Detail_DashboardName_ResolvesUniqueMatchOrReturnsCandidates()
+    {
+        var sales = SeedForm("Sales Overview", entity: "none", type: 0);
+        var service = SeedForm("Service Overview", entity: "none", type: 0);
+        SeedForm("Sales Account Overview");
+        var tool = NewTool();
+
+        var unique = await tool.manage_form(null!, "detail", form_type: 0, form_name: "Sales");
+        Assert.IsFalse(unique.IsError == true, Text(unique));
+        var detail = Structured(unique);
+        Assert.AreEqual("detail", detail.GetProperty("action").GetString());
+        Assert.AreEqual(sales.ToString(), detail.GetProperty("formId").GetString());
+        StringAssert.Contains(detail.GetProperty("formXml").GetString()!, "<form>");
+
+        var ambiguous = await tool.manage_form(null!, "detail", form_type: 0, form_name: "Overview");
+        Assert.IsTrue(ambiguous.IsError == true);
+        StringAssert.Contains(Text(ambiguous), "Multiple system dashboards match 'Overview'");
+        var candidates = Structured(ambiguous).GetProperty("details").GetProperty("forms");
+        CollectionAssert.AreEquivalent(new[] { sales.ToString(), service.ToString() },
+            candidates.EnumerateArray().Select(row => row.GetProperty("formId").GetString()).ToArray());
+
+        var missing = await tool.manage_form(null!, "detail", form_type: 0, form_name: "No Match");
+        Assert.IsTrue(missing.IsError == true);
+        StringAssert.Contains(Text(missing), "No system dashboard found matching name 'No Match'.");
     }
 
     [TestMethod]

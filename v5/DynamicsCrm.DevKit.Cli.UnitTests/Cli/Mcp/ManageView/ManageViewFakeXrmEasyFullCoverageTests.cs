@@ -377,6 +377,36 @@ public sealed class ManageViewFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
+    [DataRow(false, "")]
+    [DataRow(false, "Quarterly")]
+    [DataRow(true, "")]
+    [DataRow(true, "Quarterly")]
+    public async Task List_IncludesModifiedOnForSystemAndPersonalViews(bool personal, string nameFilter)
+    {
+        var logicalName = personal ? "userquery" : "savedquery";
+        var service = _ctx.GetOrganizationService();
+        foreach (var name in new[] { "Quarterly Review", "Quarterly Report" })
+        {
+            var id = Guid.NewGuid();
+            service.Create(new Entity(logicalName, id)
+            {
+                [$"{logicalName}id"] = id,
+                ["name"] = name,
+                ["returnedtypecode"] = "account",
+                ["querytype"] = 0,
+                ["modifiedon"] = new DateTime(2026, 1, 2, 3, 4, 5, DateTimeKind.Utc)
+            });
+        }
+
+        var result = await NewTool().manage_view(null!, "list", "account", view_name: nameFilter, is_personal_view: personal);
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var views = result.StructuredContent!.Value.GetProperty("views");
+        Assert.AreEqual(2, views.GetArrayLength());
+        foreach (var view in views.EnumerateArray())
+            Assert.AreEqual("2026-01-02 03:04:05", view.GetProperty("modifiedOn").GetString());
+    }
+
+    [TestMethod]
     public async Task List_NameFilter_NoMatch_ReturnsNoViews()
     {
         var result = await NewTool().manage_view(null!, "list", "account", view_name: "zzz-nonexistent");

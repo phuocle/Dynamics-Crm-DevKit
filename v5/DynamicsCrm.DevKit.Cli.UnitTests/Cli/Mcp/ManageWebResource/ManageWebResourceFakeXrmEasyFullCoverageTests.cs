@@ -693,19 +693,29 @@ public sealed class ManageWebResourceFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
-    public void Update_FromFile_StoresBase64Content()
+    [DataRow("js", 3)]
+    [DataRow("png", 5)]
+    public void Update_FromFile_StoresBase64ContentAndPublishes(string extension, int typeCode)
     {
-        var id = SeedWebResource("v4_/fileupd.js", displayName: "File Upd");
-        var src = WriteSourceFile("updated.js", "var updated = 42;");
-        var expectedContent = Convert.ToBase64String(File.ReadAllBytes(src));
+        var name = $"v4_/fileupd.{extension}";
+        var id = SeedWebResource(name, displayName: "File Upd", typeCode: typeCode);
+        var src = Path.Combine(_tempDir, $"updated.{extension}");
+        byte[] bytes = extension == "js" ? Encoding.UTF8.GetBytes("var updated = 42;") : [0x89, 0x50, 0x4e, 0x47, 0x00, 0xff];
+        File.WriteAllBytes(src, bytes);
+
+        var preview = NewTool(dryRun: true).manage_webresource("update", web_resource_id: id.ToString(), file_path: src);
+        Assert.IsFalse(preview.IsError == true, Text(preview));
+        Assert.AreEqual(0, _service.Updates);
+        Assert.AreEqual(0, _service.Publishes);
 
         var result = NewTool().manage_webresource("update", web_resource_id: id.ToString(), file_path: src);
 
         Assert.IsFalse(result.IsError == true, Text(result));
-        StringAssert.Contains(Text(result), $"Updated web resource 'v4_/fileupd.js' ({id}): fieldsUpdated=1, published.");
+        StringAssert.Contains(Text(result), $"Updated web resource '{name}' ({id}): fieldsUpdated=1, published.");
         Assert.AreEqual(1, _service.Updates);
+        Assert.AreEqual(1, _service.Publishes);
         var saved = _ctx.GetOrganizationService().Retrieve("webresource", id, new ColumnSet(true));
-        Assert.AreEqual(expectedContent, saved.GetAttributeValue<string>("content"));
+        CollectionAssert.AreEqual(bytes, Convert.FromBase64String(saved.GetAttributeValue<string>("content")));
     }
 
     [TestMethod]
