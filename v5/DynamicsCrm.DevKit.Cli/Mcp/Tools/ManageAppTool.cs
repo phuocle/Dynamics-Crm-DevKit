@@ -95,7 +95,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("add_components/remove_components. Array of system view GUIDs or exact names for entity_name.")] string[] view_ids = null,
             [Description("add_components/remove_components. Array of system form GUIDs or exact names for entity_name.")] string[] form_ids = null,
             [Description("add_components/remove_components. Array of system dashboard GUIDs or exact names.")] string[] dashboard_ids = null,
-            [Description("add_components/remove_components. Array of system chart GUIDs or exact names for entity_name.")] string[] chart_ids = null)
+            [Description("add_components/remove_components. Array of system chart GUIDs or exact names for entity_name. Removing default-visible charts explicitly selects the remaining charts. At least one chart must remain.")] string[] chart_ids = null)
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
@@ -790,15 +790,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 .Concat(ResolveComponentSelectors(dashboards, logicalName, "dashboard"))
                 .Concat(ResolveComponentSelectors(charts, logicalName, "chart"))
                 .Distinct().ToList();
+            var tableId = entityMetadata?.MetadataId;
+            var removeCharts = !add && charts.Length > 0;
+            if (hasEntity && (add || noSelectors || removeCharts) && (!tableId.HasValue || tableId == Guid.Empty))
+                return Error($"Entity metadata id not found for '{logicalName}'.");
             if (hasEntity && (add || noSelectors))
-            {
-                var metadataId = entityMetadata.MetadataId;
-                if (!metadataId.HasValue || metadataId == Guid.Empty)
-                    return Error($"Entity metadata id not found for '{logicalName}'.");
-                components.Insert(0, new AppComponent(EntityComponentType, metadataId.Value));
-            }
+                components.Insert(0, new AppComponent(EntityComponentType, tableId.Value));
             return ApplyComponentMembership(appModule, components, _ => add,
-                new ManageAppResult { Action = action, EntityName = logicalName });
+                new ManageAppResult { Action = action, EntityName = logicalName }, removeCharts ? tableId : null);
         }
 
         private IEnumerable<AppComponent> ResolveComponentSelectors(string[] selectors, string table, string kind)
@@ -851,7 +850,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult ApplyComponentMembership(Entity app, IReadOnlyList<AppComponent> scope,
-            Func<AppComponent, bool> shouldBePresent, ManageAppResult result)
+            Func<AppComponent, bool> shouldBePresent, ManageAppResult result, Guid? chartRemovalTableId = null)
         {
             var appIdUnique = app.GetAttributeValue<Guid?>("appmoduleidunique");
             var name = app.GetAttributeValue<string>("name");
@@ -860,27 +859,35 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "The app record is incomplete; re-create it with manage_app(action='create') or fix it in the app designer.");
 
             var existing = GetAppComponents(appIdUnique.Value);
-            var membership = existing.Select(row => (Type: row.GetAttributeValue<OptionSetValue>("componenttype")?.Value,
-                Id: row.GetAttributeValue<Guid?>("objectid"))).ToHashSet();
-            var add = scope.Where(component => shouldBePresent(component) && !membership.Contains((component.Type, component.Id))).ToList();
-            var remove = scope.Where(component => !shouldBePresent(component) && membership.Contains((component.Type, component.Id))).ToList();
+            var membership = existing.Select(row => new AppComponent(row.GetAttributeValue<OptionSetValue>("componenttype")?.Value ?? 0,
+                row.GetAttributeValue<Guid>("objectid"))).ToHashSet();
+            var (chartsToKeep, defaultChartsToRemove, chartError) = PlanChartRemoval(chartRemovalTableId, result.EntityName, scope, membership);
+            if (chartError != null)
+                return chartError;
+
+            var add = scope.Where(component => shouldBePresent(component) && !membership.Contains(component)).Concat(chartsToKeep).ToList();
+            var remove = scope.Where(component => !shouldBePresent(component) && membership.Contains(component)).ToList();
             var changes = add.Concat(remove).ToList();
+            var removedComponents = remove.Concat(defaultChartsToRemove).Select(component => component.ToString()).ToList();
 
             result.AppModuleId = app.Id.ToString();
             result.AppModuleIdUnique = appIdUnique.Value.ToString();
             result.AppName = name;
             result.UniqueName = app.GetAttributeValue<string>("uniquename");
-            result.OperationsCount = scope.Count;
-            result.ChangedOperations = changes.Count;
-            result.NoOpOperations = scope.Count - changes.Count;
+            result.OperationsCount = scope.Count + chartsToKeep.Count;
+            result.ChangedOperations = changes.Count + defaultChartsToRemove.Count;
+            result.NoOpOperations = result.OperationsCount - result.ChangedOperations;
             result.Published = false;
 
             if (_options.DryRun)
             {
                 result.Status = "not_executed";
                 result.AddedAppComponents = add.Count > 0 ? add.Select(component => component.ToString()).ToList() : null;
-                result.RemovedAppComponents = remove.Count > 0 ? remove.Select(component => component.ToString()).ToList() : null;
-                return DryRun($"Would add {add.Count} and remove {remove.Count} explicit component(s) on app '{name}'.", result);
+                result.RemovedAppComponents = removedComponents.Count > 0 ? removedComponents : null;
+                var preview = defaultChartsToRemove.Count > 0
+                    ? $"Would explicitly select {chartsToKeep.Count} remaining chart(s) and remove {removedComponents.Count} component(s) on app '{name}'."
+                    : $"Would add {add.Count} and remove {remove.Count} explicit component(s) on app '{name}'.";
+                return DryRun(preview, result);
             }
 
             if (changes.Count == 0)
@@ -897,6 +904,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     AddAppComponents(app.Id, new EntityReferenceCollection(add.Select(component => ToComponentReference(component, result.EntityName)).ToList()));
                     result.AddedAppComponents = add.Select(component => component.ToString()).ToList();
+                    if (defaultChartsToRemove.Count > 0)
+                        result.RemovedAppComponents = defaultChartsToRemove.Select(component => component.ToString()).ToList();
                 }
                 if (remove.Count > 0)
                 {
@@ -905,12 +914,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         AppId = app.Id,
                         Components = new EntityReferenceCollection(remove.Select(component => ToComponentReference(component, result.EntityName)).ToList())
                     });
-                    result.RemovedAppComponents = remove.Select(component => component.ToString()).ToList();
+                    result.RemovedAppComponents = removedComponents;
                 }
             }
             catch (Exception ex)
             {
-                var confirmedChanges = result.AddedAppComponents?.Count ?? 0;
+                var confirmedChanges = (result.AddedAppComponents?.Count ?? 0) + (result.RemovedAppComponents?.Count ?? 0);
                 result.ChangedOperations = confirmedChanges;
                 result.NextStep = "Inspect the app with manage_app(action='detail') before retrying, or pass backupPath to action='undo'.";
                 result.Status = confirmedChanges == 0 ? "component_update_failed" : "component_update_partial";
@@ -923,10 +932,42 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             result.Validated = true;
             result.ValidationErrors = validation.Errors;
             result.ValidationWarnings = validation.Warnings;
-            var text = $"Added {add.Count} and removed {remove.Count} explicit component(s) on app '{name}'" +
+            var summary = defaultChartsToRemove.Count > 0
+                ? $"Explicitly selected {chartsToKeep.Count} remaining chart(s) and removed {removedComponents.Count} component(s) on app '{name}'"
+                : $"Added {add.Count} and removed {remove.Count} explicit component(s) on app '{name}'";
+            var text = summary +
                 (published ? " and published." : ". Publishing failed.") +
                 (validation.Errors?.Count > 0 ? " Validation failed." : "");
             return CompleteMutation(text, result.Action == "undo" ? "restored" : "updated", published, validation, result);
+        }
+
+        private (List<AppComponent> ChartsToKeep, List<AppComponent> DefaultChartsToRemove, CallToolResult Error) PlanChartRemoval(
+            Guid? tableId, string table, IReadOnlyList<AppComponent> scope, HashSet<AppComponent> membership)
+        {
+            if (!tableId.HasValue || !membership.Contains(new AppComponent(EntityComponentType, tableId.Value)))
+                return ([], [], null);
+
+            var query = new QueryExpression("savedqueryvisualization") { ColumnSet = new ColumnSet(false) };
+            query.Criteria.AddCondition("primaryentitytypecode", ConditionOperator.Equal, table);
+            var tableCharts = RetrieveComponentRows(query, "savedqueryvisualizationid")
+                .Select(chart => new AppComponent(ChartComponentType, chart.Id)).ToList();
+            var explicitCharts = tableCharts.Where(membership.Contains).ToList();
+            var requestedRemovals = scope.Where(component => component.Type == ChartComponentType).ToHashSet();
+            var visibleCharts = explicitCharts.Count > 0 ? explicitCharts : tableCharts;
+            var chartsToRemove = visibleCharts.Where(requestedRemovals.Contains).ToList();
+            if (chartsToRemove.Count == 0)
+                return ([], [], null);
+
+            var remaining = visibleCharts.Where(chart => !requestedRemovals.Contains(chart)).ToList();
+
+            // An empty chart selection enables all of the table's system charts in Dataverse.
+            if (remaining.Count == 0)
+                return ([], [], Error($"Cannot remove these charts from '{table}': at least one system chart must remain selected in the app.",
+                    "Dataverse displays all system charts when the selection is empty. Keep at least one chart selected."));
+
+            return explicitCharts.Count > 0
+                ? ([], [], null)
+                : (remaining, chartsToRemove, null);
         }
 
         private CallToolResult RestoreComponentSnapshot(Entity app, ManageAppSnapshot snapshot, string path)
@@ -1492,7 +1533,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Orders = { new OrderExpression("componenttype", OrderType.Ascending) }
             };
 
-            return _orgService.RetrieveMultiple(query).Entities.ToList();
+            return RetrieveComponentRows(query, "appmodulecomponentid");
+        }
+
+        private List<Entity> RetrieveComponentRows(QueryExpression query, string primaryId)
+        {
+            query.AddOrder(primaryId, OrderType.Ascending);
+            query.PageInfo = new PagingInfo { Count = 5000, PageNumber = 1 };
+            var rows = new List<Entity>();
+            while (true)
+            {
+                var page = _orgService.RetrieveMultiple(query);
+                rows.AddRange(page.Entities);
+                if (!page.MoreRecords)
+                    return rows;
+                query.PageInfo.PageNumber++;
+                query.PageInfo.PagingCookie = page.PagingCookie;
+            }
         }
 
         private static string BuildStarterSiteMapXml(int baseLanguage) => $@"<SiteMap>

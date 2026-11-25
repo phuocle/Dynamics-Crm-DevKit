@@ -40,6 +40,8 @@ Use `add_components` or `remove_components` with the app's display name, unique 
 
 Use a GUID when a name is ambiguous. The actions use Dataverse's AddAppComponents and RemoveAppComponents messages to change explicit app membership. When a table has no explicit view or form selections, Dataverse can expose all of them by default.
 
+When a table in the app displays all its system charts by default, `remove_components` with `chart_ids` explicitly selects the remaining charts. The result lists the charts kept as explicit selections in `addedAppComponents` and the charts removed from display in `removedAppComponents`. New system charts for that table then need to be added to the app explicitly. Keep at least one chart selected, since an empty selection displays all the charts again.
+
 The mutation reports `addedAppComponents`, `removedAppComponents`, and `published` as applicable. Pass the returned `backupPath` as `operations` to `manage_app(action='undo', app='...')` to restore the memberships changed by that call. Earlier navigation backups still restore the sitemap.
 
 ## Read Before Write Workflow

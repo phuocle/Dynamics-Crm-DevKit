@@ -920,6 +920,7 @@ public sealed class ManageAppFakeXrmEasyTests
         var form = Guid.NewGuid();
         var dashboard = Guid.NewGuid();
         var chart = Guid.NewGuid();
+        var retainedChart = Guid.NewGuid();
         var unrelated = Guid.NewGuid();
         service.Create(new Entity("savedquery", view) { ["name"] = "Active Accounts", ["returnedtypecode"] = "account" });
         service.Create(new Entity("savedquery") { ["name"] = "Active Accounts", ["returnedtypecode"] = "contact" });
@@ -933,10 +934,13 @@ public sealed class ManageAppFakeXrmEasyTests
             SeedPageComponent(appUniqueId, 1, table);
         if (!add)
         {
+            service.Create(new Entity("savedqueryvisualization", retainedChart)
+                { ["name"] = "Retained Chart", ["primaryentitytypecode"] = "account" });
             SeedPageComponent(appUniqueId, 26, view);
             SeedPageComponent(appUniqueId, 60, form);
             SeedPageComponent(appUniqueId, 60, dashboard);
             SeedPageComponent(appUniqueId, 59, chart);
+            SeedPageComponent(appUniqueId, 59, retainedChart);
         }
 
         var tool = NewTool();
@@ -995,7 +999,7 @@ public sealed class ManageAppFakeXrmEasyTests
         var original = File.ReadAllText(path);
         using var snapshot = JsonDocument.Parse(original);
         Assert.AreEqual(expectedChanges.Count, snapshot.RootElement.GetProperty("componentScope").GetArrayLength());
-        Assert.AreEqual((tableInApp ? 1 : 0) + (add ? 0 : 4), snapshot.RootElement.GetProperty("appComponents").GetArrayLength());
+        Assert.AreEqual((tableInApp ? 1 : 0) + (add ? 0 : 5), snapshot.RootElement.GetProperty("appComponents").GetArrayLength());
         StringAssert.Contains(_publishExecutor.Requests.Single().ParameterXml, $"<appmodules><appmodule>{appId}</appmodule></appmodules>");
 
         var repeated = Invoke(tool, "HandleAppComponents", action, "Sales Hub", "Account", viewSelectors, formSelectors, dashboardSelectors, chartSelectors);
@@ -1019,10 +1023,144 @@ public sealed class ManageAppFakeXrmEasyTests
         if (tableInApp)
             remaining.Add(table);
         if (!add)
-            remaining.AddRange([view, form, dashboard, chart]);
+            remaining.AddRange([view, form, dashboard, chart, retainedChart]);
         CollectionAssert.AreEquivalent(remaining.ToArray(),
             CurrentComponents().Select(row => row.GetAttributeValue<Guid>("objectid")).ToArray());
     }
+
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void ComponentActions_RemoveDefaultCharts_KeepsOtherChartsAndSupportsUndo(bool dryRun)
+    {
+        var (appId, appUniqueId, _) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: true);
+        var account = _entityExecutor.Metadata.Single(metadata => metadata.LogicalName == "account").MetadataId!.Value;
+        var first = SeedSystemChart("Account Chart A");
+        var second = SeedSystemChart("Account Chart B");
+        var retained = SeedSystemChart("Account Chart C");
+        var contactChart = SeedSystemChart("Contact Chart", "contact");
+        SeedPageComponent(appUniqueId, 1, account);
+        SeedPageComponent(appUniqueId, 59, contactChart);
+        var service = _context.GetOrganizationService();
+        var chartRows = new QueryExpression("appmodulecomponent") { ColumnSet = new ColumnSet("objectid") };
+        chartRows.Criteria.AddCondition("appmoduleidunique", ConditionOperator.Equal, appUniqueId);
+        chartRows.Criteria.AddCondition("componenttype", ConditionOperator.Equal, 59);
+        Guid[] ExplicitCharts() => service.RetrieveMultiple(chartRows).Entities.Select(row => row.GetAttributeValue<Guid>("objectid")).ToArray();
+
+        _componentExecutor.OnExecute = request =>
+        {
+            Assert.AreEqual(appId, request.AppId);
+            Assert.AreEqual(new EntityReference("savedqueryvisualization", retained), request.Components.Single());
+            Assert.HasCount(1, Directory.GetFiles(_workspace, "*.app.json", SearchOption.AllDirectories));
+            SeedPageComponent(appUniqueId, 59, retained);
+        };
+        _removeComponentExecutor.OnExecute = request =>
+        {
+            Assert.AreEqual(appId, request.AppId);
+            Assert.AreEqual(new EntityReference("savedqueryvisualization", retained), request.Components.Single());
+            var row = service.RetrieveMultiple(chartRows).Entities.Single(component => component.GetAttributeValue<Guid>("objectid") == retained);
+            service.Delete("appmodulecomponent", row.Id);
+        };
+
+        var tool = NewTool(dryRun, mutationsBlocked: dryRun);
+        SetWorkspace(tool, _workspace);
+        string[] none = [];
+        string[] charts = ["Account Chart A", second.ToString()];
+        var result = Invoke(tool, "HandleAppComponents", "remove_components", "Sales Hub", "Account", none, none, none, charts);
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        var detail = result.StructuredContent!.Value;
+        Assert.AreEqual(dryRun ? "not_executed" : "updated", detail.GetProperty("status").GetString());
+        Assert.AreEqual(dryRun == false, detail.GetProperty("published").GetBoolean());
+        Assert.AreEqual($"59:{retained}", detail.GetProperty("addedAppComponents")[0].GetString());
+        CollectionAssert.AreEquivalent(new[] { $"59:{first}", $"59:{second}" },
+            detail.GetProperty("removedAppComponents").EnumerateArray().Select(component => component.GetString()).ToArray());
+        Assert.AreEqual(3, detail.GetProperty("changedOperations").GetInt32());
+        Assert.IsEmpty(_removeComponentExecutor.Requests);
+        if (dryRun)
+        {
+            Assert.IsFalse(detail.TryGetProperty("backupPath", out _));
+            Assert.IsEmpty(_componentExecutor.Requests);
+            Assert.IsEmpty(_publishExecutor.Requests);
+            CollectionAssert.AreEqual(new[] { contactChart }, ExplicitCharts());
+            return;
+        }
+
+        Assert.HasCount(1, _componentExecutor.Requests);
+        Assert.HasCount(1, _publishExecutor.Requests);
+        CollectionAssert.AreEquivalent(new[] { retained, contactChart }, ExplicitCharts());
+        var repeated = Invoke(tool, "HandleAppComponents", "remove_components", "Sales Hub", "Account", none, none, none, charts);
+        Assert.AreEqual("no_changes", repeated.StructuredContent!.Value.GetProperty("status").GetString());
+        Assert.HasCount(1, _publishExecutor.Requests);
+
+        var backupPath = detail.GetProperty("backupPath").GetString();
+        var undo = Invoke(tool, "HandleUndo", "Sales Hub", backupPath!);
+        Assert.IsFalse(undo.IsError == true, undo.GetText());
+        Assert.AreEqual("restored", undo.StructuredContent!.Value.GetProperty("status").GetString());
+        Assert.HasCount(2, _publishExecutor.Requests);
+        CollectionAssert.AreEqual(new[] { contactChart }, ExplicitCharts());
+    }
+
+    [TestMethod]
+    [DataRow(true, false, true)]
+    [DataRow(true, true, true)]
+    [DataRow(false, false, false)]
+    public async Task ComponentActions_RemoveChart_BlocksEmptySelectionOrSkipsTableOutsideApp(bool tableInApp, bool explicitChart, bool expectedError)
+    {
+        var (_, appUniqueId, _) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: false);
+        var chart = SeedSystemChart("Only Chart");
+        if (tableInApp)
+            SeedPageComponent(appUniqueId, 1, _entityExecutor.Metadata.Single(metadata => metadata.LogicalName == "account").MetadataId!.Value);
+        if (explicitChart)
+            SeedPageComponent(appUniqueId, 59, chart);
+
+        var result = await NewTool().manage_app(null!, action: "remove_components", app: "Sales Hub", entity_name: "account", chart_ids: [chart.ToString()]);
+
+        Assert.AreEqual(expectedError, result.IsError == true, result.GetText());
+        if (expectedError)
+            StringAssert.Contains(result.GetText(), "at least one system chart must remain");
+        else
+            Assert.AreEqual("no_changes", result.StructuredContent!.Value.GetProperty("status").GetString());
+        Assert.IsEmpty(_componentExecutor.Requests);
+        Assert.IsEmpty(_removeComponentExecutor.Requests);
+        Assert.IsEmpty(_publishExecutor.Requests);
+    }
+
+    [TestMethod]
+    public void ComponentActions_RemoveDefaultChartAndExplicitView_ReportsPartialChangeIfViewRemovalFails()
+    {
+        var (_, appUniqueId, _) = SeedApp("Sales Hub", "devkit_hub1", withSiteMap: false);
+        var chart = SeedSystemChart("Account Chart A");
+        var retained = SeedSystemChart("Account Chart B");
+        var view = _context.GetOrganizationService().Create(new Entity("savedquery")
+            { ["name"] = "Active Accounts", ["returnedtypecode"] = "account" });
+        SeedPageComponent(appUniqueId, 1, _entityExecutor.Metadata.Single(metadata => metadata.LogicalName == "account").MetadataId!.Value);
+        SeedPageComponent(appUniqueId, 26, view);
+        _componentExecutor.OnExecute = request => SeedPageComponent(appUniqueId, 59, request.Components.Single().Id);
+        _removeComponentExecutor.OnExecute = _ => throw new InvalidOperationException("View removal failed");
+        var tool = NewTool();
+        SetWorkspace(tool, _workspace);
+        string[] none = [];
+        string[] views = [view.ToString()];
+        string[] charts = [chart.ToString()];
+
+        var result = Invoke(tool, "HandleAppComponents", "remove_components", "Sales Hub", "account", views, none, none, charts);
+
+        StringAssert.Contains(result.GetText(), "View removal failed");
+        var detail = result.StructuredContent!.Value;
+        Assert.AreEqual("component_update_partial", detail.GetProperty("status").GetString());
+        Assert.AreEqual(2, detail.GetProperty("changedOperations").GetInt32());
+        Assert.AreEqual($"59:{retained}", detail.GetProperty("addedAppComponents")[0].GetString());
+        Assert.AreEqual($"59:{chart}", detail.GetProperty("removedAppComponents")[0].GetString());
+        Assert.IsTrue(File.Exists(detail.GetProperty("backupPath").GetString()));
+        Assert.IsEmpty(_publishExecutor.Requests);
+    }
+
+    private Guid SeedSystemChart(string name, string entity = "account") =>
+        _context.GetOrganizationService().Create(new Entity("savedqueryvisualization")
+        {
+            ["name"] = name, ["primaryentitytypecode"] = entity
+        });
 
     [TestMethod]
     public void ComponentActions_TableOnly_AddsAndRemovesExplicitMembership()
