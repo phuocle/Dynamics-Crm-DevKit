@@ -19,6 +19,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         Error
     }
 
+    internal enum EntityNameMatchMode
+    {
+        Default,
+        ExactLogicalNameFirst,
+        ExactLogicalNameOnly
+    }
+
     internal sealed class ResolveCandidate
     {
         public string DisplayName { get; init; }
@@ -166,15 +173,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             IOrganizationService orgService,
             string input,
             string callerToolName,
-            bool withNotFoundTip = true) =>
-            ResolveEntity(orgService, input, callerToolName, out _, withNotFoundTip);
+            bool withNotFoundTip = true,
+            EntityNameMatchMode matchMode = EntityNameMatchMode.Default) =>
+            ResolveEntity(orgService, input, callerToolName, out _, withNotFoundTip, matchMode);
 
         internal static ResolveResult<EntityMetadata> ResolveEntity(
             IOrganizationService orgService,
             string input,
             string callerToolName,
             out EntityMetadata[] entityCatalog,
-            bool withNotFoundTip = true)
+            bool withNotFoundTip = true,
+            EntityNameMatchMode matchMode = EntityNameMatchMode.Default)
         {
             entityCatalog = [];
             try
@@ -186,7 +195,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 };
                 var response = (RetrieveAllEntitiesResponse)orgService.Execute(request);
                 entityCatalog = response.EntityMetadata;
-                var candidates = entityCatalog.Select(e => new DisplayNameFirstCandidate<EntityMetadata>
+                var matchingEntities = entityCatalog;
+                if (matchMode != EntityNameMatchMode.Default)
+                {
+                    var trimmed = input?.Trim();
+                    var exactMatches = entityCatalog.Where(e => EqualsIgnoreCase(e.LogicalName, trimmed)).ToArray();
+                    if (exactMatches.Length > 0 || matchMode == EntityNameMatchMode.ExactLogicalNameOnly)
+                        matchingEntities = exactMatches;
+                }
+
+                var candidates = matchingEntities.Select(e => new DisplayNameFirstCandidate<EntityMetadata>
                 {
                     Value = e,
                     DisplayName = e.DisplayName?.UserLocalizedLabel?.Label,

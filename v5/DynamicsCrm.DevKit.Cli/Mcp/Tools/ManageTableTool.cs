@@ -43,6 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Create or update a Dataverse table. Auto-detects create vs update from the inputs (no entity_name param).\n" +
             "- UPDATE (entity exists): logical_name + optional display_name, display_collection_name, description, is_audit_enabled, is_quick_create_enabled, is_search_enabled, icon_vector_name, solution_name.\n" +
             "- CREATE (new table): display_name + display_collection_name + solution_name (resolves publisher prefix). Auto-creates primary name attribute.\n" +
+            "An exact logical_name match takes precedence. With all required CREATE fields, a new logical name never falls back to a partial match.\n" +
             "- Set table_type=Activity to create a custom activity with the required Subject column.\n" +
             "- is_duplicate_detection_enabled is optional on CREATE and UPDATE. Defaults to false on create. Null keeps the current setting on update.\n" +
             "Technical names come from logical_name / schema_name or are auto-derived from display_name.\n\n" +
@@ -177,8 +178,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (!string.IsNullOrWhiteSpace(logical_name))
                 {
+                    var hasCreateParameters = display_name.Length > 0 && display_collection_name.Length > 0 && solution_name.Length > 0;
                     EntityMetadata existingEntity = null;
-                    var entityResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, logical_name, "manage_table");
+                    var entityResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, logical_name, "manage_table",
+                        matchMode: hasCreateParameters ? EntityNameMatchMode.ExactLogicalNameOnly : EntityNameMatchMode.ExactLogicalNameFirst);
                     if (entityResolve.IsSuccess)
                     {
                         existingEntity = entityResolve.Value;
@@ -302,7 +305,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (string.IsNullOrWhiteSpace(logical_name))
             {
-                var collisionResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_table");
+                var collisionResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_table",
+                    matchMode: EntityNameMatchMode.ExactLogicalNameOnly);
                 if (collisionResolve.IsSuccess)
                     return Error(
                         $"Cannot create table '{display_name}' because derived logical name '{entityName}' already exists.",
