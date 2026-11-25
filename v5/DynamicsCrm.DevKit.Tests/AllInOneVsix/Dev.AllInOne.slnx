@@ -7,6 +7,7 @@
   </Folder>
   <Project Path="Dev.AllInOne.Console/Dev.AllInOne.Console.csproj" />
   <Project Path="Dev.AllInOne.ConsoleCore/Dev.AllInOne.ConsoleCore.csproj" />
+  <Project Path="Dev.AllInOne.DataverseTests/Dev.AllInOne.DataverseTests.csproj" />
   <Project Path="Dev.AllInOne.Package/Dev.AllInOne.Package.csproj" />
   <Project Path="Dev.AllInOne.ProxyTypes/Dev.AllInOne.ProxyTypes.csproj" />
   <Project Path="Dev.AllInOne.Report/Dev.AllInOne.Report.rptproj">
