@@ -89,9 +89,9 @@ public sealed class ManageChoiceFakeXrmEasyFullCoverageTests
 
     private static (int, string, string) Opt(int value, string label, string color = null) => (value, label, color);
 
-    private void SeedDevStatus()
+    private void SeedDevStatus(string name = "dev_status")
     {
-        SeedOptionSet("dev_status", "Dev Status",
+        SeedOptionSet(name, "Dev Status",
             Opt(1, "Draft", "#111111"),
             Opt(2, "Confirmed"),
             Opt(3, "Sent", "#111111"),
@@ -157,13 +157,21 @@ public sealed class ManageChoiceFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
-    public void Detail_Picklist_ReturnsOptions()
+    [DataRow("dev_status", "dev_status")]
+    [DataRow("dev_Status", "dev_status")]
+    [DataRow("dev_Status", "  DEV_STATUS  ")]
+    public void Detail_Picklist_ReturnsOptionsAndMetadataNames(string schemaName, string lookupName)
     {
-        SeedDevStatus();
+        SeedDevStatus(schemaName);
 
-        var result = NewTool().manage_choice(action: "detail", optionset_name: "dev_status");
-        Assert.IsFalse(result.IsError == true);
-        StringAssert.Contains(result.GetText(), "'dev_status' (Dev Status): 4 option(s).");
+        var result = NewTool().manage_choice(action: "detail", optionset_name: lookupName);
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), $"'{schemaName}' (Dev Status): 4 option(s).");
+
+        var json = result.StructuredContent!.Value;
+        Assert.AreEqual(schemaName, json.GetProperty("optionSetName").GetString());
+        Assert.AreEqual(schemaName, json.GetProperty("schemaName").GetString());
+        Assert.AreEqual("dev_status", json.GetProperty("logicalName").GetString());
     }
 
     [TestMethod]
@@ -304,15 +312,34 @@ public sealed class ManageChoiceFakeXrmEasyFullCoverageTests
     [TestMethod]
     public void Create_Live_ExplicitNameWithDescriptionAndColors()
     {
-        var result = NewTool().manage_choice(action: "create", optionset_name: "dev_explicit",
+        var result = NewTool().manage_choice(action: "create", optionset_name: "  dev_ExplicitChoice  ",
             display_name: "Explicit Choice", description: "Some desc",
             options: "1:One;2:Two", solution_name: "DevKit", option_colors: "One:#FF0000");
         Assert.IsFalse(result.IsError == true);
-        StringAssert.Contains(result.GetText(), "Created global option set 'dev_explicit' with 2 option(s).");
+        StringAssert.Contains(result.GetText(), "Created global option set 'dev_ExplicitChoice' with 2 option(s).");
 
-        var created = _service.Sets.OfType<OptionSetMetadata>().First(s => s.Name == "dev_explicit");
+        var created = _service.Sets.OfType<OptionSetMetadata>().Single();
+        Assert.AreEqual("dev_ExplicitChoice", created.Name);
         Assert.AreEqual("Some desc", created.Description.UserLocalizedLabel.Label);
         Assert.AreEqual("#FF0000", created.Options.First(o => o.Value == 1).Color);
+    }
+
+    [TestMethod]
+    [DataRow(false, "dev_ChannelCode")]
+    [DataRow(true, "dev_ChannelCODE")]
+    public void Create_Live_ReturnsMetadataNamesWithFallback(bool cacheMiss, string expectedSchemaName)
+    {
+        _service.CreatedOptionSetName = "dev_ChannelCode";
+        _service.NullRetrieveAfterMutations = cacheMiss;
+
+        var result = NewTool().manage_choice(action: "create", optionset_name: "dev_ChannelCODE",
+            display_name: "Channel Code", options: "Online", solution_name: "DevKit");
+        Assert.IsFalse(result.IsError == true, result.GetText());
+
+        var json = result.StructuredContent!.Value;
+        Assert.AreEqual(expectedSchemaName, json.GetProperty("optionSetName").GetString());
+        Assert.AreEqual(expectedSchemaName, json.GetProperty("schemaName").GetString());
+        Assert.AreEqual("dev_channelcode", json.GetProperty("logicalName").GetString());
     }
 
     [TestMethod]
@@ -503,21 +530,24 @@ public sealed class ManageChoiceFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
-    public void Update_Live_MixOfRenameRemoveAddAndColors_Succeeds()
+    [DataRow("dev_status", "dev_status")]
+    [DataRow("dev_Status", "dev_status")]
+    [DataRow("dev_Status", "  DEV_STATUS  ")]
+    public void Update_Live_MixOfRenameRemoveAddAndColors_Succeeds(string schemaName, string lookupName)
     {
-        SeedDevStatus();
+        SeedDevStatus(schemaName);
 
-        var result = NewTool().manage_choice(action: "update", optionset_name: "dev_status",
+        var result = NewTool().manage_choice(action: "update", optionset_name: lookupName,
             add_options: "9:Extra;10:Plain", update_options: "Draft:Open", remove_options: "Cancelled",
             option_colors: "Extra:#123456;Sent:#654321");
         Assert.IsFalse(result.IsError == true, "unexpected error: " + result.GetText());
-        StringAssert.Contains(result.GetText(), "Updated global option set 'dev_status'");
+        StringAssert.Contains(result.GetText(), $"Updated global option set '{schemaName}'");
         StringAssert.Contains(result.GetText(), "2 added");
         StringAssert.Contains(result.GetText(), "1 renamed");
         StringAssert.Contains(result.GetText(), "1 removed");
         StringAssert.Contains(result.GetText(), "2 colored");
 
-        var meta = _service.Sets.OfType<OptionSetMetadata>().First(s => s.Name == "dev_status");
+        var meta = _service.Sets.OfType<OptionSetMetadata>().First(s => s.Name == schemaName);
         Assert.IsNull(meta.Options.FirstOrDefault(o => o.Value == 4));
         Assert.AreEqual("Open", meta.Options.First(o => o.Value == 1).Label.UserLocalizedLabel.Label);
         Assert.AreEqual("#123456", meta.Options.First(o => o.Value == 9).Color);
@@ -796,6 +826,7 @@ public sealed class ManageChoiceFakeXrmEasyFullCoverageTests
         private readonly IOrganizationService _inner;
 
         public List<OptionSetMetadataBase> Sets { get; } = [];
+        public string CreatedOptionSetName { get; set; }
         public bool ApplyColors { get; set; } = true;
         public bool ThrowOnAddSolutionComponent { get; set; }
 
@@ -857,6 +888,8 @@ public sealed class ManageChoiceFakeXrmEasyFullCoverageTests
             var response = new RetrieveOptionSetResponse();
             if (NullSingleRetrieve || (NullRetrieveAfterMutations && _mutations > 0))
                 response.Results["OptionSetMetadata"] = null; // simulate metadata cache miss
+            else if (request.MetadataId is Guid metadataId && metadataId != Guid.Empty)
+                response.Results["OptionSetMetadata"] = Sets.FirstOrDefault(s => s.MetadataId == metadataId);
             else
                 response.Results["OptionSetMetadata"] = Find(request.Name);
             return response;
@@ -902,9 +935,13 @@ public sealed class ManageChoiceFakeXrmEasyFullCoverageTests
 
         private OrganizationResponse CreateSet(CreateOptionSetRequest request)
         {
-            Sets.Add(Normalize(request.OptionSet));
+            var metadata = Normalize(request.OptionSet);
+            metadata.Name = CreatedOptionSetName ?? metadata.Name;
+            var metadataId = Guid.NewGuid();
+            metadata.MetadataId = metadataId;
+            Sets.Add(metadata);
             var response = new CreateOptionSetResponse();
-            response.Results["OptionSetId"] = Guid.NewGuid();
+            response.Results["OptionSetId"] = metadataId;
             return response;
         }
 
@@ -941,7 +978,7 @@ public sealed class ManageChoiceFakeXrmEasyFullCoverageTests
 
         private OptionSetMetadata Find(string name)
             => Sets.OfType<OptionSetMetadata>().FirstOrDefault(
-                s => string.Equals(s.Name, name, StringComparison.OrdinalIgnoreCase));
+                s => string.Equals(s.Name, name, StringComparison.Ordinal));
 
         private void ApplyColor(OptionMetadata option, OrganizationRequest request, string value)
         {

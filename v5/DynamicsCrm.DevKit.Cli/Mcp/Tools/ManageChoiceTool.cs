@@ -51,7 +51,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- publish_customizations → batch publish after multiple metadata changes")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("'list', 'detail', 'create', 'update'.")] string action = "",
-            [Description("Logical or display name. Required: detail/update. Optional: create (auto-derived). Display Name matched first.")] string optionset_name = "",
+            [Description("Schema, logical, or display name for detail/update (case-insensitive). Optional schema name for create (casing preserved, auto-derived when omitted).")] string optionset_name = "",
             [Description("Required: create. Optional: update (rename). For list, prefer filter=.")] string display_name = "",
             [Description("'list' only. Contains filter on logical+display name.")] string filter = "",
             [Description("Optional: create/update. Localized description.")] string description = "",
@@ -73,7 +73,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         public CallToolResult manage_choice(
             [Description("'list', 'detail', 'create', 'update'.")] string action = "",
-            [Description("Logical or display name. Required: detail/update. Optional: create (auto-derived). Display Name matched first.")] string optionset_name = "",
+            [Description("Schema, logical, or display name for detail/update (case-insensitive). Optional schema name for create (casing preserved, auto-derived when omitted).")] string optionset_name = "",
             [Description("Required: create. Optional: update (rename). For list, prefer filter=.")] string display_name = "",
             [Description("'list' only. Contains filter on logical+display name.")] string filter = "",
             [Description("Optional: create/update. Localized description.")] string description = "",
@@ -158,9 +158,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("No changes specified.",
                     "Provide at least one of: display_name, description, add_options, update_options, remove_options, option_colors.");
 
-            if (!TryResolveToLogicalName(optionsetName, out var name, out var resolveErr))
-                return Error(resolveErr.Split("\r\n")[0], "Use manage_choice(action='list') to see all available global option sets.");
+            var resolved = DisplayNameFirstResolver.ResolveGlobalOptionSet(_orgService, optionsetName, "manage_choice");
+            if (!resolved.IsSuccess)
+                return Error(resolved.Error.Split("\r\n")[0], "Use manage_choice(action='list') to see all available global option sets.");
 
+            var name = resolved.Value.Name;
             var existingMeta = RetrieveOptionSetMetadata(name);
             if (existingMeta == null)
                 return Error($"Global option set '{name}' not found.",
@@ -441,6 +443,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 Action = "detail",
                 OptionSetName = meta.Name,
+                SchemaName = meta.Name,
+                LogicalName = meta.Name?.ToLowerInvariant(),
                 DisplayName = meta.DisplayName?.UserLocalizedLabel?.Label ?? "",
                 Description = meta.Description?.UserLocalizedLabel?.Label,
                 OptionCount = options?.Count,
@@ -474,7 +478,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (existingChoice.Status == ResolveStatus.Ambiguous || existingChoice.Status == ResolveStatus.Error)
                 return Error(existingChoice.Error.Split("\r\n")[0], "Use manage_choice(action='list') to see all available global option sets.");
 
-            var name = optionsetName.Trim().ToLowerInvariant();
+            var name = optionsetName?.Trim();
 
             // solution_name is required for create — code-level enforcement, not just AI description
             if (string.IsNullOrWhiteSpace(solutionName))
@@ -528,6 +532,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     Action = "create",
                     OptionSetName = name,
+                    SchemaName = name,
+                    LogicalName = name.ToLowerInvariant(),
                     DisplayName = displayName.Trim(),
                     Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
                     OptionCount = parsedOptions.Count,
@@ -585,6 +591,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 solWarning = $"Warning: Created but failed to add to solution '{solutionName}': {addResult.AddToSolutionWarning}";
 
             // New choice metadata is automatically published by Dataverse — no PublishXml needed.
+            name = ResolveCreatedChoiceName(createResp.OptionSetId, name);
             var summary = $"Created global option set '{name}' with {parsedOptions.Count} option(s).";
             if (solWarning != null)
                 summary += $" Not added to solution '{solutionName.Trim()}' (see solutionWarning).";
@@ -593,6 +600,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 Action = "create",
                 OptionSetName = name,
+                SchemaName = name,
+                LogicalName = name.ToLowerInvariant(),
                 DisplayName = displayName.Trim(),
                 Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
                 OptionCount = parsedOptions.Count,
@@ -618,6 +627,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         #endregion
 
         #region Helpers
+
+        private string ResolveCreatedChoiceName(Guid metadataId, string requestedName)
+        {
+            try
+            {
+                var response = (RetrieveOptionSetResponse)_orgService.Execute(new RetrieveOptionSetRequest
+                {
+                    MetadataId = metadataId,
+                    RetrieveAsIfPublished = true
+                });
+                return response?.OptionSetMetadata?.Name ?? requestedName;
+            }
+            catch
+            {
+                // The create succeeded even if Dataverse cannot serve the metadata immediately.
+                return requestedName;
+            }
+        }
 
         private OptionSetMetadata RetrieveOptionSetMetadata(string name)
         {
@@ -785,21 +812,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 PublishError = publishError,
                 Status = status
             };
-        }
-
-        private bool TryResolveToLogicalName(string nameOrDisplay, out string resolvedName, out string error)
-        {
-            resolvedName = null;
-            error = null;
-            var resolved = DisplayNameFirstResolver.ResolveGlobalOptionSet(_orgService, nameOrDisplay, "manage_choice");
-            if (resolved.IsSuccess)
-            {
-                resolvedName = resolved.CanonicalName ?? resolved.Value.Name;
-                return true;
-            }
-
-            error = resolved.Error;
-            return false;
         }
 
         internal static bool TryNormalizeHexColor(string input, out string color)

@@ -12,6 +12,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string OptionSetName { get; set; }
 
+        [JsonPropertyName("schemaName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SchemaName { get; set; }
+
+        [JsonPropertyName("logicalName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string LogicalName { get; set; }
+
         [JsonPropertyName("displayName")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string DisplayName { get; set; }
