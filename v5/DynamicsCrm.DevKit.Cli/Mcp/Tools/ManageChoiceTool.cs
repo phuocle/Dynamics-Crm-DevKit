@@ -19,6 +19,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageChoiceTool : McpToolBase
     {
+        private const string OptionSetNameDescription = "Required for detail/update (name or display name, case-insensitive). Optional for create. Sent to Dataverse with the supplied casing after trimming. Auto-derived when omitted.";
+
         private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
@@ -42,6 +44,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(ManageChoiceResult)),
         Description(
             "Manage GLOBAL option sets (choices). Actions: 'list', 'detail' (read-only) | 'create', 'update' (mutations). For local picklists → manage_column. solution_name is REQUIRED for create and label-only add_options — ask the user if missing, never guess. If needsWait=true, wait pollAfterSeconds before detail.\n\n" +
+            "Dataverse can store a global choice Name in lowercase even if the requested name uses mixed case. Create and detail report the Dataverse Name as schemaName and its lowercase form as logicalName.\n\n" +
             "WHEN TO USE:\n" +
             "- Create a global choice with options, or update options (add/rename/remove/recolor), display name, description\n" +
             "- Inspect a global choice before binding it to a column\n\n" +
@@ -51,7 +54,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- publish_customizations → batch publish after multiple metadata changes")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("'list', 'detail', 'create', 'update'.")] string action = "",
-            [Description("Schema, logical, or display name for detail/update (case-insensitive). Optional schema name for create (casing preserved, auto-derived when omitted).")] string optionset_name = "",
+            [Description(OptionSetNameDescription)] string optionset_name = "",
             [Description("Required: create. Optional: update (rename). For list, prefer filter=.")] string display_name = "",
             [Description("'list' only. Contains filter on logical+display name.")] string filter = "",
             [Description("Optional: create/update. Localized description.")] string description = "",
@@ -73,7 +76,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         public CallToolResult manage_choice(
             [Description("'list', 'detail', 'create', 'update'.")] string action = "",
-            [Description("Schema, logical, or display name for detail/update (case-insensitive). Optional schema name for create (casing preserved, auto-derived when omitted).")] string optionset_name = "",
+            [Description(OptionSetNameDescription)] string optionset_name = "",
             [Description("Required: create. Optional: update (rename). For list, prefer filter=.")] string display_name = "",
             [Description("'list' only. Contains filter on logical+display name.")] string filter = "",
             [Description("Optional: create/update. Localized description.")] string description = "",
@@ -591,17 +594,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 solWarning = $"Warning: Created but failed to add to solution '{solutionName}': {addResult.AddToSolutionWarning}";
 
             // New choice metadata is automatically published by Dataverse — no PublishXml needed.
-            name = ResolveCreatedChoiceName(createResp.OptionSetId, name);
-            var summary = $"Created global option set '{name}' with {parsedOptions.Count} option(s).";
+            var storedName = RetrieveCreatedChoiceName(createResp.OptionSetId);
+            var resultName = storedName ?? name;
+            var summary = $"Created global option set '{resultName}' with {parsedOptions.Count} option(s).";
+            if (storedName == null)
+                summary += " Dataverse could not confirm the stored name. The response shows the submitted name.";
+            else if (!string.Equals(storedName, name, StringComparison.Ordinal))
+                summary += $" Dataverse returned this name for the requested '{name}'.";
             if (solWarning != null)
                 summary += $" Not added to solution '{solutionName.Trim()}' (see solutionWarning).";
 
             return Success(summary, new ManageChoiceResult
             {
                 Action = "create",
-                OptionSetName = name,
-                SchemaName = name,
-                LogicalName = name.ToLowerInvariant(),
+                OptionSetName = resultName,
+                SchemaName = resultName,
+                LogicalName = resultName.ToLowerInvariant(),
                 DisplayName = displayName.Trim(),
                 Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
                 OptionCount = parsedOptions.Count,
@@ -628,7 +636,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         #region Helpers
 
-        private string ResolveCreatedChoiceName(Guid metadataId, string requestedName)
+        private string RetrieveCreatedChoiceName(Guid metadataId)
         {
             try
             {
@@ -637,12 +645,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     MetadataId = metadataId,
                     RetrieveAsIfPublished = true
                 });
-                return response?.OptionSetMetadata?.Name ?? requestedName;
+                return response?.OptionSetMetadata?.Name;
             }
             catch
             {
                 // The create succeeded even if Dataverse cannot serve the metadata immediately.
-                return requestedName;
+                return null;
             }
         }
 

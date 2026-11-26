@@ -325,16 +325,18 @@ public sealed class ManageChoiceFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
-    [DataRow(false, "dev_ChannelCode")]
-    [DataRow(true, "dev_ChannelCODE")]
-    public void Create_Live_ReturnsMetadataNamesWithFallback(bool cacheMiss, string expectedSchemaName)
+    [DataRow(false, "dev_channelcode", "Dataverse returned this name for the requested 'dev_ChannelCode'.")]
+    [DataRow(true, "dev_ChannelCode", "Dataverse could not confirm the stored name.")]
+    public void Create_Live_ReturnsMetadataNamesWithFallback(bool cacheMiss, string expectedSchemaName, string expectedSummary)
     {
-        _service.CreatedOptionSetName = "dev_ChannelCode";
+        _service.CreatedOptionSetName = "dev_channelcode";
         _service.NullRetrieveAfterMutations = cacheMiss;
 
-        var result = NewTool().manage_choice(action: "create", optionset_name: "dev_ChannelCODE",
+        var result = NewTool().manage_choice(action: "create", optionset_name: "dev_ChannelCode",
             display_name: "Channel Code", options: "Online", solution_name: "DevKit");
         Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.AreEqual("dev_ChannelCode", _service.RequestedOptionSetName);
+        StringAssert.Contains(result.GetText(), expectedSummary);
 
         var json = result.StructuredContent!.Value;
         Assert.AreEqual(expectedSchemaName, json.GetProperty("optionSetName").GetString());
@@ -826,6 +828,7 @@ public sealed class ManageChoiceFakeXrmEasyFullCoverageTests
         private readonly IOrganizationService _inner;
 
         public List<OptionSetMetadataBase> Sets { get; } = [];
+        public string RequestedOptionSetName { get; private set; }
         public string CreatedOptionSetName { get; set; }
         public bool ApplyColors { get; set; } = true;
         public bool ThrowOnAddSolutionComponent { get; set; }
@@ -935,6 +938,7 @@ public sealed class ManageChoiceFakeXrmEasyFullCoverageTests
 
         private OrganizationResponse CreateSet(CreateOptionSetRequest request)
         {
+            RequestedOptionSetName = request.OptionSet.Name;
             var metadata = Normalize(request.OptionSet);
             metadata.Name = CreatedOptionSetName ?? metadata.Name;
             var metadataId = Guid.NewGuid();
