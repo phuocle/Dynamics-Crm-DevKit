@@ -233,7 +233,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             IOrganizationService orgService,
             string entityLogicalName,
             string input,
-            string callerToolName)
+            string callerToolName,
+            bool exactLogicalName = false,
+            string exactDisplayNameFallback = null)
         {
             try
             {
@@ -254,6 +256,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     Kind = "attribute",
                     CanonicalName = a.LogicalName
                 });
+
+                if (exactLogicalName)
+                {
+                    var matchedName = input;
+                    var phase = "logical";
+                    var matches = candidates.Where(a => EqualsIgnoreCase(a.LogicalName, input)).ToList();
+                    if (matches.Count == 0 && !string.IsNullOrWhiteSpace(exactDisplayNameFallback))
+                    {
+                        matchedName = exactDisplayNameFallback;
+                        phase = "display";
+                        matches = candidates.Where(a => EqualsIgnoreCase(a.DisplayName, exactDisplayNameFallback)).ToList();
+                    }
+
+                    return matches.Count switch
+                    {
+                        1 => Ok(matches[0]),
+                        > 1 => Ambiguous<AttributeMetadata>("[AmbiguousField]", matchedName, phase, matches, "attribute_name"),
+                        _ => new ResolveResult<AttributeMetadata> { Status = ResolveStatus.NotFound }
+                    };
+                }
 
                 return Resolve(
                     input,

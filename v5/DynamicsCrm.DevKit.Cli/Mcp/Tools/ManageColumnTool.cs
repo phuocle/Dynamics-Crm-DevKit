@@ -63,7 +63,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Dataverse columns: create or update is detected automatically. Create requires entity_name, attribute_type, display_name, solution_name; update identifies an existing column by logical_name. Attribute type is immutable.\n\n" +
             "For lookup/customer/choice types, autonumbers and formulas, see docs://schema_tools_guide. Use formula_definition to clone a formula from get_tables, formula_expression to edit an existing Power Fx column in place, or raw_formula_definition to set raw XAML on a Calculated or Rollup column. Updating any formula saves a pre-change backup under .devkit/manage_column/{entity_name}/ and returns backupPath. For statuscode use add_options/update_options/delete_options; statecode is read-only.\n\n" +
-            "Names resolve Display Name first, then logical/schema name; ambiguous matches return candidates.\n\n" +
+            "Create requests match the exact target logical name first. An exact display name can identify an existing column when both logical_name and schema_name are omitted. Omit attribute_type to look up an update target by display name. Ambiguous matches return candidates.\n\n" +
             "WHEN TO USE:\n" +
             "- Create a new attribute on an existing table (need attribute_type + display_name)\n" +
             "- Clone a Power Fx, Calculated, or Rollup formula using a source reference\n" +
@@ -338,44 +338,41 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             _effectiveSolutionName = resolvedSolutionUniqueName ?? solution_name;
 
-
-            // ===== UPDATE MODE: logical_name identifies an existing attribute =====
-            // - logical_name provided → resolve existing attribute → UPDATE.
-            // - logical_name omitted → CREATE intent (caller must supply attribute_type + display_name).
-            AttributeMetadata existingMetadata = null;
-            if (!string.IsNullOrWhiteSpace(logical_name))
+            var prefix = resolvedPrefix;
+            var prefixWithUnderscore = prefix + "_";
+            var hasAttributeType = !string.IsNullOrWhiteSpace(attribute_type);
+            var hasCreateIntent = hasAttributeType && display_name.Length > 0 && solution_name.Length > 0;
+            var schemaName = schema_name;
+            var lookupName = logical_name;
+            string exactDisplayNameFallback = null;
+            if (hasCreateIntent && logical_name.Length == 0)
             {
-                var requestedLogicalName = logical_name;
-                var attributeResolve = DisplayNameFirstResolver.ResolveAttribute(_orgService, entity_name, logical_name, "manage_column");
+                if (schemaName.Length == 0)
+                {
+                    schemaName = DeriveColumnSchemaName(display_name, prefix);
+                    exactDisplayNameFallback = display_name;
+                }
+                if (schema_name.Length == 0 || schemaName.StartsWith(prefixWithUnderscore, StringComparison.OrdinalIgnoreCase))
+                    lookupName = schemaName.ToLowerInvariant();
+            }
+            else if (!hasAttributeType && logical_name.Length == 0)
+            {
+                lookupName = display_name;
+            }
+
+            AttributeMetadata existingMetadata = null;
+            if (lookupName.Length > 0)
+            {
+                var attributeResolve = DisplayNameFirstResolver.ResolveAttribute(_orgService, entity_name, lookupName,
+                    "manage_column", exactLogicalName: hasAttributeType, exactDisplayNameFallback: exactDisplayNameFallback);
                 if (attributeResolve.IsSuccess)
                 {
-                    var hasCreateIntent = !string.IsNullOrWhiteSpace(attribute_type) &&
-                        !string.IsNullOrWhiteSpace(display_name);
-                    if (!hasCreateIntent || string.Equals(
-                        attributeResolve.Value.LogicalName, requestedLogicalName, StringComparison.OrdinalIgnoreCase))
-                    {
-                        existingMetadata = attributeResolve.Value;
-                        logical_name = existingMetadata.LogicalName;
-                    }
+                    existingMetadata = attributeResolve.Value;
+                    logical_name = existingMetadata.LogicalName;
                 }
                 else if (attributeResolve.Status == ResolveStatus.Ambiguous || attributeResolve.Status == ResolveStatus.Error)
                 {
                     return Error(attributeResolve.Error.Split("\r\n")[0], "Use get_tables to list entities and attributes.");
-                }
-                // NotFound → fall through to CREATE if create fields are present, else error below.
-            }
-            else if (!string.IsNullOrWhiteSpace(display_name))
-            {
-                // No explicit logical_name but display_name given → try resolving by display_name (convenience).
-                var displayNameResolve = DisplayNameFirstResolver.ResolveAttribute(_orgService, entity_name, display_name, "manage_column");
-                if (displayNameResolve.IsSuccess)
-                {
-                    existingMetadata = displayNameResolve.Value;
-                    logical_name = existingMetadata.LogicalName;
-                }
-                else if (displayNameResolve.Status == ResolveStatus.Ambiguous || displayNameResolve.Status == ResolveStatus.Error)
-                {
-                    return Error(displayNameResolve.Error.Split("\r\n")[0], "Use get_tables to list entities and attributes.");
                 }
             }
 
@@ -508,33 +505,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "solution_name is required when creating a new column (needed to resolve the publisher prefix).",
                     "Required for create: attribute_type, display_name, solution_name. Read docs://schema_tools_guide for prefix resolution and solution requirements.");
 
-            var prefix = resolvedPrefix;
-
-            var prefixWithUnderscore = prefix + "_";
-
             // Determine SchemaName (CREATE-only override):
             // - schema_name provided → use AS-IS (must start with publisher prefix).
             // - otherwise derive via DataverseNamer from display_name (portal-style, preserving casing).
-            string schemaName;
-            if (!string.IsNullOrWhiteSpace(schema_name))
-            {
-                schemaName = schema_name;
-                if (!schemaName.StartsWith(prefixWithUnderscore, StringComparison.OrdinalIgnoreCase))
-                    return Error(
-                        $"schema_name '{schemaName}' must start with the publisher prefix '{prefixWithUnderscore}' (resolved from solution '{resolvedSolutionUniqueName ?? solution_name}').",
-                        "Prepend the publisher prefix, e.g. 'devkit_InvoiceLineId' instead of 'InvoiceLineId'.");
-            }
-            else
-            {
-                try
-                {
-                    (schemaName, _) = DataverseNamer.Resolve(display_name, prefix);
-                }
-                catch
-                {
-                    schemaName = $"{prefixWithUnderscore}{display_name.Trim().Replace(" ", "")}";
-                }
-            }
+            if (schema_name.Length > 0 && !schemaName.StartsWith(prefixWithUnderscore, StringComparison.OrdinalIgnoreCase))
+                return Error(
+                    $"schema_name '{schemaName}' must start with the publisher prefix '{prefixWithUnderscore}' (resolved from solution '{resolvedSolutionUniqueName ?? solution_name}').",
+                    "Prepend the publisher prefix, e.g. 'devkit_InvoiceLineId' instead of 'InvoiceLineId'.");
+            if (schemaName.Length == 0)
+                schemaName = DeriveColumnSchemaName(display_name, prefix);
 
             // Determine the attribute logical name (CREATE-only override):
             // - logical_name provided → use AS-IS (lowercased; must start with publisher prefix).
@@ -557,20 +536,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 attributeName = schemaName.ToLowerInvariant();
             }
             logical_name = attributeName;
-
-            // Anti-collision: if logical_name was NOT explicitly provided and the derived attribute already exists,
-            // refuse to silently overwrite — the caller must pass an explicit logical_name to target it for update,
-            // or pick a different display_name.
-            if (string.IsNullOrWhiteSpace(logical_name))
-            {
-                var collisionResolve = DisplayNameFirstResolver.ResolveAttribute(_orgService, entity_name, attributeName, "manage_column");
-                if (collisionResolve.IsSuccess)
-                    return Error(
-                        $"Cannot create column '{display_name}' because derived logical name '{attributeName}' already exists on entity '{entity_name}'.",
-                        "Re-call manage_column with an explicit logical_name to update the existing column, or choose a different display_name.");
-                if (collisionResolve.Status == ResolveStatus.Ambiguous || collisionResolve.Status == ResolveStatus.Error)
-                    return Error(collisionResolve.Error.Split("\r\n")[0], "Use get_tables to list entities and attributes.");
-            }
 
             // Parse required level
             var reqLevel = ParseRequiredLevel(required_level);
@@ -681,6 +646,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                 }
                 return HandleException(ex, entity_name, logical_name, effectiveSolutionName);
+            }
+        }
+
+        private static string DeriveColumnSchemaName(string displayName, string prefix)
+        {
+            try
+            {
+                return DataverseNamer.Resolve(displayName, prefix).SchemaName;
+            }
+            catch
+            {
+                return $"{prefix}_{displayName.Trim().Replace(" ", "")}";
             }
         }
 

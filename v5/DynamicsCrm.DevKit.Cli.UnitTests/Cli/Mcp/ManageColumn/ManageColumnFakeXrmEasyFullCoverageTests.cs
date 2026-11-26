@@ -132,6 +132,65 @@ public sealed class ManageColumnFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
+    [DataRow("dev_CcExpression", "dev_ccexpression")]
+    [DataRow("", "dev_ccexpressionxtl")]
+    public void Create_WithoutLogicalName_IgnoresPartialDisplayNameMatch(string schemaName, string expectedLogicalName)
+    {
+        var bcc = Attr("dev_bccexpression", "BCC Expression (XTL)", StringAttr());
+        _metadata.Entities.Add(EntityMeta("notificationtemplate", "Notification Template", bcc));
+
+        var result = NewTool().manage_column(entity_name: "notificationtemplate", attribute_type: "string",
+            display_name: "CC Expression (XTL)", schema_name: schemaName, solution_name: "DevKit");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.AreEqual(expectedLogicalName, CreatedAttributes.Single().LogicalName);
+        Assert.AreEqual(0, _metadata.Updated.Count);
+        Assert.AreEqual("BCC Expression (XTL)", LabelText(bcc.DisplayName));
+    }
+
+    [TestMethod]
+    [DataRow("DEV_CCEXPRESSION", "", "dev_ccexpression")]
+    [DataRow("", "dev_CcExpression", "dev_ccexpression")]
+    [DataRow("", "", "dev_ccexpressionxtl")]
+    public void Create_ExactLogicalTargetWinsOverMatchingDisplayName(string logicalName, string schemaName, string expectedLogicalName)
+    {
+        _metadata.Entities.Add(EntityMeta("notificationtemplate", "Notification Template",
+            Attr(expectedLogicalName, "Old CC Label", StringAttr()),
+            Attr("dev_other", "CC Expression (XTL)", StringAttr())));
+
+        var result = NewTool(dryRun: true).manage_column(entity_name: "notificationtemplate", attribute_type: "string",
+            logical_name: logicalName, display_name: "CC Expression (XTL)", schema_name: schemaName, solution_name: "DevKit");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), $"Would UPDATE column 'notificationtemplate.{expectedLogicalName}'");
+    }
+
+    [TestMethod]
+    public void Create_WithoutIdentifiers_FallsBackToExactDisplayNameIgnoringCase()
+    {
+        _metadata.Entities.Add(EntityMeta("notificationtemplate", "Notification Template",
+            Attr("dev_cclegacy", "CC Expression (XTL)", StringAttr()),
+            Attr("dev_bccexpression", "BCC Expression (XTL)", StringAttr())));
+
+        var result = NewTool(dryRun: true).manage_column(entity_name: "notificationtemplate", attribute_type: "string",
+            display_name: "cc expression (xtl)", solution_name: "DevKit");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "Would UPDATE column 'notificationtemplate.dev_cclegacy'");
+    }
+
+    [TestMethod]
+    public void Create_SchemaNameWithoutPublisherPrefix_DoesNotUpdateExistingColumn()
+    {
+        var result = NewTool().manage_column(entity_name: "account", attribute_type: "string",
+            display_name: "New Label", schema_name: "name", solution_name: "DevKit");
+
+        Assert.IsTrue(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "schema_name 'name' must start with the publisher prefix 'dev_'");
+        Assert.AreEqual(0, _metadata.Updated.Count);
+    }
+
+    [TestMethod]
     public void Create_StringDefaults_Applied()
     {
         var result = NewTool().manage_column(entity_name: "account", attribute_type: "string",
