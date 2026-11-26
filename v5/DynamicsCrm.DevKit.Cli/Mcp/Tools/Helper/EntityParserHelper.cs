@@ -128,11 +128,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// Supports "fieldname@targetentity" syntax for polymorphic lookups (Customer, Owner, PartyList).
         /// Returns (fieldLogicalName, targetEntityOverride).
         /// </summary>
-        private static (string fieldName, string targetEntity) ParseFieldKey(string key)
+        internal static (string fieldName, string targetEntity) ParseFieldKey(string key)
         {
             var atIndex = key.IndexOf('@');
             if (atIndex > 0 && atIndex < key.Length - 1)
-                return (key.Substring(0, atIndex).Trim(), key.Substring(atIndex + 1).Trim());
+            {
+                var fieldName = key.Substring(0, atIndex).Trim();
+                var targetEntity = key.Substring(atIndex + 1).Trim();
+                if (string.Equals(targetEntity, "odata.bind", StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidFieldKeyException(
+                        $"Invalid field key '{key}': Web API '@odata.bind' syntax is unsupported in manage_record and upsert_records.",
+                        $"Use '\"{fieldName}\": \"<guid>\"' for a single-target lookup or '\"{fieldName}@<target_entity>\": \"<guid>\"' for a polymorphic lookup. Use the target table's logical name for <target_entity>.");
+                return (fieldName, targetEntity);
+            }
             return (key.Trim(), null);
         }
 
@@ -330,6 +338,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                         .ToList()
                 };
             }
+        }
+    }
+
+    internal sealed class InvalidFieldKeyException : ArgumentException
+    {
+        public string Hint { get; }
+
+        public InvalidFieldKeyException(string message, string hint) : base(message)
+        {
+            Hint = hint;
         }
     }
 

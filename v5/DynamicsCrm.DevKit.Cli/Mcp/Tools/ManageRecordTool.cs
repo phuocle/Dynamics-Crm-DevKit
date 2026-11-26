@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageRecordTool : McpToolBase
     {
-        private const string SupportedActions = "'create', 'read', 'update', 'delete', 'associate', 'disassociate', 'add_to_solution', 'remove_from_solution', 'list_solutions'";
+        private const string SupportedActions = "'create', 'read', 'update', 'delete', 'associate', 'disassociate', 'add_to_solution', 'remove_from_solution', 'list_solutions', 'add_solution_component'";
 
         private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
@@ -42,10 +42,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(CrudResult)),
         Description(
-            "Manage a single Dataverse record. Read-only actions are read and list_solutions. Mutations are create, update, delete (irreversible), associate, disassociate, add_to_solution, and remove_from_solution. Record changes are live immediately.\n\n" +
+            "Manage a single Dataverse record. Read-only actions are read and list_solutions. Mutations are create, update, delete (irreversible), associate, disassociate, add_to_solution, remove_from_solution, and add_solution_component. Record changes are live immediately.\n\n" +
             "For create, use solution_name to include a supported solution component, such as a connection reference, workflow (cloud flow), or security role, in an unmanaged solution.\n\n" +
             "Use add_to_solution or remove_from_solution with entity_name, record_id, and solution_name to change unmanaged solution membership for an existing connectionreference, workflow, or role. Both preserve the record.\n\n" +
             "Use list_solutions with entity_name and record_id to list managed and unmanaged solutions containing a connectionreference, workflow, or role.\n\n" +
+            "Use add_solution_component with record_id (the component GUID or metadata ID), component_type (a name or integer ID), and solution_name to attach an existing unmanaged component to a custom unmanaged solution. Automatic inclusion of required components and subcomponents is disabled.\n\n" +
             "WHEN TO USE:\n" +
             "- Create / read / update / delete a single record by GUID\n" +
             "- Partial-update specific fields without rewriting whole record\n" +
@@ -59,7 +60,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- execute_webapi → raw OData JSON/annotations")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description(SupportedActions + ".")] string action = "",
-            [Description("Entity logical name (e.g., 'account').")] string entity_name = "",
+            [Description("Entity logical name (e.g., 'account'). Omit for add_solution_component.")] string entity_name = "",
             [Description("GUID of the primary record. Required for all actions except create, where it must be empty.")] string record_id = "",
             [Description("JSON object of field values. Required: create/update. Polymorphic lookup: 'fieldname@targetentity' key. Activity party fields (to/from/cc/bcc/requiredattendees/optionalattendees): JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Single party auto-wrapped: {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Optional: \"addressused\":\"email\". Regular lookup: {\"fieldname\": \"guid\"}.")] string fields_json = "",
             [Description("Read only. Comma-separated columns. Empty = all.")] string columns = "",
@@ -68,41 +69,46 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("N:N Relationship Name for associate/disassociate.")] string relationship_name = "",
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default,
-            [Description("Unmanaged solution display or unique name. Required for add_to_solution and remove_from_solution. Optional when creating a supported component record.")] string solution_name = null)
+            [Description("Unmanaged solution display or unique name. Required for add_to_solution, remove_from_solution, and add_solution_component. Optional when creating a supported component record.")] string solution_name = null,
+            [Description("Required for add_solution_component only. Component type name (e.g., 'workflow', 'connectionreference', or 'role') or integer ID as returned by get_solution_components.")] JsonElement? component_type = null)
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
                 var worker = new ManageRecordTool(conn.OrgService, conn.Options, conn.Context);
-                return System.Threading.Tasks.Task.FromResult(worker.manage_record(action, entity_name, record_id, fields_json, columns, related_entity_name, related_record_id, relationship_name, solution_name));
+                return System.Threading.Tasks.Task.FromResult(worker.manage_record(action, entity_name, record_id, fields_json, columns, related_entity_name, related_record_id, relationship_name, solution_name, component_type));
             }, cancellationToken);
         }
 
         public CallToolResult manage_record(
             [Description(SupportedActions + ".")] string action = "",
-            [Description("Entity logical name (e.g., 'account').")] string entity_name = "",
+            [Description("Entity logical name (e.g., 'account'). Omit for add_solution_component.")] string entity_name = "",
             [Description("GUID of the primary record. Required for all actions except create, where it must be empty.")] string record_id = "",
             [Description("JSON object of field values. Required: create/update. Polymorphic lookup: 'fieldname@targetentity' key. Activity party fields (to/from/cc/bcc/requiredattendees/optionalattendees): JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Single party auto-wrapped: {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Optional: \"addressused\":\"email\". Regular lookup: {\"fieldname\": \"guid\"}.")] string fields_json = "",
             [Description("Read only. Comma-separated columns. Empty = all.")] string columns = "",
             [Description("Related Entity Name for associate/disassociate.")] string related_entity_name = "",
             [Description("Related Record GUID for associate/disassociate.")] string related_record_id = "",
             [Description("N:N Relationship Name for associate/disassociate.")] string relationship_name = "",
-            string solution_name = null)
+            string solution_name = null,
+            JsonElement? component_type = null)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(action))
                     return Error($"action is required. Valid values: {SupportedActions}.", $"Provide one of: {SupportedActions}.");
 
+                var normalizedAction = action.Trim().ToLowerInvariant();
+                if (normalizedAction == "add_solution_component")
+                    return HandleAddSolutionComponent(record_id, solution_name, component_type);
+
                 if (string.IsNullOrWhiteSpace(entity_name))
                     return Error("entity_name is required.", "Use get_tables to discover entity logical names.");
 
-                var normalizedAction = action.Trim().ToLowerInvariant();
                 var changesSolutionMembership = normalizedAction is "add_to_solution" or "remove_from_solution";
                 if (!changesSolutionMembership && normalizedAction is not ("create" or "read" or "update" or "delete" or "associate" or "disassociate" or "list_solutions"))
                     return Error($"Invalid action '{action}'. Valid values: {SupportedActions}.", $"Provide one of: {SupportedActions}.");
 
                 if (!changesSolutionMembership && normalizedAction != "create" && !string.IsNullOrWhiteSpace(solution_name))
-                    return Error("solution_name is supported for 'create', 'add_to_solution', and 'remove_from_solution' only.",
+                    return Error("solution_name is supported for 'create', 'add_to_solution', 'remove_from_solution', and 'add_solution_component' only.",
                         "Use 'add_to_solution' or 'remove_from_solution' to change solution membership for an existing record.");
 
                 if (changesSolutionMembership && string.IsNullOrWhiteSpace(solution_name))
@@ -151,6 +157,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "add_to_solution" or "remove_from_solution" or "list_solutions" => HandleSolutionMembership(normalizedAction, entityName, Guid.Parse(record_id.Trim()), solution_name),
                     _ => Error($"Invalid action '{action}'. Valid values: {SupportedActions}.", $"Provide one of: {SupportedActions}.")
                 };
+            }
+            catch (InvalidFieldKeyException ex)
+            {
+                return Error(ex.Message, ex.Hint);
             }
             catch (AmbiguousFieldException ex)
             {
@@ -219,6 +229,86 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 FieldsUpdated = fieldCount
             };
             return Success($"Created {entityName} {newId} ({fieldCount} field(s)){solutionText}", structured);
+        }
+
+        private CallToolResult HandleAddSolutionComponent(string recordId, string solutionName, JsonElement? typeInput)
+        {
+            if (!Guid.TryParse(recordId, out var componentId) || componentId == Guid.Empty)
+                return Error("record_id must be a non-empty GUID for 'add_solution_component'.",
+                    "Pass the component's objectId from get_solution_components or its Dataverse record GUID.");
+            if (string.IsNullOrWhiteSpace(solutionName))
+                return Error("solution_name is required for 'add_solution_component'.", "Pass the display or unique name of a custom unmanaged solution.");
+
+            var typeText = typeInput switch
+            {
+                { ValueKind: JsonValueKind.String } value => value.GetString()?.Trim(),
+                { ValueKind: JsonValueKind.Number } value when value.TryGetInt32(out _) => value.GetRawText(),
+                _ => null
+            };
+            if (string.IsNullOrWhiteSpace(typeText))
+                return Error("component_type must be a name or integer for 'add_solution_component'.",
+                    "Use a name such as 'workflow' or pass the typeId returned by get_solution_components.");
+
+            var solution = SolutionResolverHelper.Resolve(_orgService, solutionName, requireUnmanaged: true, rejectSystemSolutions: true);
+            if (!solution.IsSuccess)
+                return Error(solution.Error, "Pass the unique name of a custom unmanaged solution.");
+
+            var (componentType, primaryEntityName) = SolutionComponentDefinitions.ResolveType(_orgService, typeText);
+            if (componentType == 0)
+                return Error($"Component type '{typeText}' is unknown or ambiguous in this environment.",
+                    "Use the component's typeId from get_solution_components in the current environment.");
+
+            var source = FindComponentSource(componentId, componentType, primaryEntityName);
+            if (source == null)
+                return Error($"Component '{componentId}' of type {componentType} was not found.",
+                    "Check both record_id and component_type in the current environment.");
+            if (!source.Attributes.TryGetValue("ismanaged", out var managedValue) || managedValue is not bool isManaged || isManaged)
+                return Error($"Component '{componentId}' of type {componentType} is managed or could not be verified as unmanaged.",
+                    "Pass the GUID of an existing unmanaged component.");
+
+            var target = $"component {componentId} (type {componentType}) to solution '{solution.UniqueName}'";
+            var structured = new CrudResult
+            {
+                Action = "add_solution_component",
+                Entity = primaryEntityName,
+                Id = componentId.ToString(),
+                ComponentType = componentType,
+                SolutionName = solution.UniqueName
+            };
+            if (_options.DryRun)
+            {
+                structured.Status = "not_executed";
+                return DryRun($"Would add {target}.", structured);
+            }
+
+            var association = SolutionComponentCreateHelper.AddExistingComponent(_context, _orgService, componentId,
+                componentType, solution.UniqueName, addRequiredComponents: false, doNotIncludeSubcomponents: true);
+            if (!association.IsAddToSolution)
+                return Error($"Failed to add {target}: {association.AddToSolutionWarning}",
+                    "Verify that the component is supported and that you have permission to customize the target solution.");
+
+            structured.Status = "added_to_solution";
+            return Success($"Added {target}.", structured);
+        }
+
+        private Entity FindComponentSource(Guid componentId, int componentType, string primaryEntityName)
+        {
+            QueryExpression query;
+            if (primaryEntityName is "workflow" or "role" or "connectionreference")
+            {
+                query = new QueryExpression(primaryEntityName);
+                query.Criteria.AddCondition(primaryEntityName + "id", ConditionOperator.Equal, componentId);
+            }
+            else
+            {
+                // For metadata and other component types, check existing solution memberships.
+                // Prefer a managed membership so a Default solution row cannot mask it.
+                query = CreateSolutionMembershipQuery(componentId, componentType);
+                query.AddOrder("ismanaged", OrderType.Descending);
+            }
+            query.ColumnSet = new ColumnSet("ismanaged");
+            query.TopCount = 1;
+            return _orgService.RetrieveMultiple(query).Entities.FirstOrDefault();
         }
 
         private CallToolResult HandleSolutionMembership(string action, string entityName, Guid recordId, string solutionName)
@@ -297,15 +387,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult ListContainingSolutions(string entityName, Guid recordId, int componentType)
         {
-            var query = new QueryExpression("solution")
-            {
-                ColumnSet = new ColumnSet("solutionid", "uniquename", "friendlyname", "version", "ismanaged"),
-                PageInfo = new PagingInfo { Count = 5000, PageNumber = 1 }
-            };
+            var query = CreateSolutionMembershipQuery(recordId, componentType);
+            query.ColumnSet = new ColumnSet("solutionid", "uniquename", "friendlyname", "version", "ismanaged");
+            query.PageInfo = new PagingInfo { Count = 5000, PageNumber = 1 };
             query.AddOrder("uniquename", OrderType.Ascending);
-            var membership = query.AddLink("solutioncomponent", "solutionid", "solutionid", JoinOperator.Exists);
-            membership.LinkCriteria.AddCondition("objectid", ConditionOperator.Equal, recordId);
-            membership.LinkCriteria.AddCondition("componenttype", ConditionOperator.Equal, componentType);
             var publisher = query.AddLink("publisher", "publisherid", "publisherid", JoinOperator.LeftOuter);
             publisher.EntityAlias = "pub";
             publisher.Columns = new ColumnSet("friendlyname");
@@ -341,6 +426,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Status = "listed",
                 Solutions = solutions
             });
+        }
+
+        private static QueryExpression CreateSolutionMembershipQuery(Guid componentId, int componentType)
+        {
+            var query = new QueryExpression("solution");
+            var membership = query.AddLink("solutioncomponent", "solutionid", "solutionid", JoinOperator.Exists);
+            membership.LinkCriteria.AddCondition("objectid", ConditionOperator.Equal, componentId);
+            membership.LinkCriteria.AddCondition("componenttype", ConditionOperator.Equal, componentType);
+            return query;
         }
 
         private CallToolResult HandleRead(string entityName, string recordId, string columns)
@@ -509,10 +603,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static int CountFields(string fieldsJson)
         {
-            var doc = JsonDocument.Parse(fieldsJson);
+            using var doc = JsonDocument.Parse(fieldsJson);
             var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach (var prop in doc.RootElement.EnumerateObject())
+            {
+                // Dry runs skip entity conversion but still validate field keys.
+                EntityParserHelper.ParseFieldKey(prop.Name);
                 seen.Add(prop.Name);
+            }
             return seen.Count;
         }
     }

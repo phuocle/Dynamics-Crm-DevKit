@@ -156,6 +156,86 @@ public sealed class UpsertRecordsFakeSdkMainPathTests
     private static List<string> Warnings(JsonElement json) =>
         json.GetProperty("warnings").EnumerateArray().Select(w => w.GetString()!).ToList();
 
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public async Task Upsert_ODataBindFieldKey_FailsOnlyTheInvalidRowWithLookupSyntaxHint(bool dryRun)
+    {
+        var entity = UniqueEntity();
+        _entities[entity] = TestMetadata.Entity(entity, entity,
+            TestMetadata.String("name"), TestMetadata.Integer("importsequencenumber"),
+            TestMetadata.Lookup("primarycontactid", "Primary Contact", "contact"));
+        var contactId = Guid.NewGuid();
+        var entityResolutionCount = 0;
+        _fake.OnExecute = request =>
+        {
+            if (request is RetrieveAllEntitiesRequest)
+                entityResolutionCount++;
+            return ExecuteHandler(request);
+        };
+        var records = $$"""
+            [{"name":"Invalid","primarycontactid@ODATA.BIND":"/contacts({{contactId}})"},
+             {"name":"Valid","primarycontactid":"{{contactId}}"}]
+            """;
+
+        var result = await NewTool(dryRun).upsert_records(entity_name: entity, records_json: records, max_parallelism: 1);
+
+        Assert.AreEqual(!dryRun, result.IsError == true, result.GetText());
+        var payload = Structured(result);
+        Assert.AreEqual(1, payload.GetProperty("failed").GetInt32());
+        var items = payload.GetProperty("items");
+        Assert.AreEqual("failed", items[0].GetProperty("status").GetString());
+        var error = items[0].GetProperty("error").GetString()!;
+        StringAssert.StartsWith(error, "Invalid field key 'primarycontactid@ODATA.BIND':");
+        StringAssert.Contains(error, "'\"primarycontactid\": \"<guid>\"'");
+        StringAssert.Contains(error, "'\"primarycontactid@<target_entity>\": \"<guid>\"'");
+        Assert.AreEqual(1, entityResolutionCount, "Only the primary table should be resolved.");
+        Assert.AreEqual(dryRun ? "pending" : "created", items[1].GetProperty("status").GetString());
+        Assert.AreEqual(dryRun ? 0 : 1, _capturedCreates.Count);
+        if (!dryRun)
+        {
+            var created = _capturedCreates[0].Target;
+            Assert.AreEqual("Valid", created.GetAttributeValue<string>("name"));
+            var lookup = created.GetAttributeValue<EntityReference>("primarycontactid");
+            Assert.AreEqual("contact", lookup.LogicalName);
+            Assert.AreEqual(contactId, lookup.Id);
+        }
+    }
+
+    [TestMethod]
+    public async Task Upsert_DryRunLargeBatch_PreservesODataBindHintInSummary()
+    {
+        var entity = UniqueEntity();
+        const string records = """
+            [
+              {"unknown_field":"Invalid"},
+              {"name":"Valid 1"},
+              {"name":"Valid 2"},
+              {"name":"Valid 3"},
+              {"name":"Valid 4"},
+              {"name":"Valid 5"},
+              {"primarycontactid@odata.bind":"/contacts(d7d36758-c7e8-f111-84e9-7ced8dfe9a07)"}
+            ]
+            """;
+
+        var result = await NewTool(dryRun: true).upsert_records(entity_name: entity, records_json: records, max_parallelism: 1);
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        var payload = Structured(result);
+        Assert.AreEqual("not_executed", payload.GetProperty("status").GetString());
+        Assert.AreEqual(7, payload.GetProperty("total").GetInt32());
+        Assert.AreEqual(2, payload.GetProperty("failed").GetInt32());
+        Assert.IsFalse(payload.TryGetProperty("items", out _));
+        var summary = payload.GetProperty("summary").GetString()!;
+        StringAssert.Contains(summary, "Record 7: Invalid field key 'primarycontactid@odata.bind':");
+        StringAssert.Contains(summary, "'\"primarycontactid\": \"<guid>\"'");
+        StringAssert.Contains(summary, "'\"primarycontactid@<target_entity>\": \"<guid>\"'");
+        Assert.AreEqual(summary, result.GetText().Split('\n')[0]);
+        Assert.IsEmpty(_capturedCreates);
+        Assert.IsEmpty(_capturedUpserts);
+        Assert.IsEmpty(_capturedUpdates);
+    }
+
     private string MigrationEntity()
     {
         var entity = UniqueEntity();

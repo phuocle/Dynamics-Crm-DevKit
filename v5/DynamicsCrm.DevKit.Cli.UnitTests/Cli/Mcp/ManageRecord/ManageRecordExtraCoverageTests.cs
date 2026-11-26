@@ -11,6 +11,7 @@ using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.ManageRecord;
 
@@ -76,6 +77,27 @@ public sealed class ManageRecordExtraCoverageTests
 
     private ManageRecordTool CreateTool(bool dryRun = false) =>
         new(_fake.Client, new McpDryRunOptions { DryRun = dryRun }, new McpExecutionContext(mutationsBlocked: false));
+
+    [TestMethod]
+    [DataRow("create", false, "odata.bind")]
+    [DataRow("update", false, "ODATA.BIND")]
+    [DataRow("create", true, "OData.Bind")]
+    [DataRow("update", true, "odata.bind")]
+    public void ManageRecord_ODataBindFieldKey_ReturnsLookupSyntaxHint(string action, bool dryRun, string suffix)
+    {
+        var key = $"primarycontactid@{suffix}";
+        var fields = $$"""{"{{key}}":"/contacts(d7d36758-c7e8-f111-84e9-7ced8dfe9a07)"}""";
+        var result = CreateTool(dryRun).manage_record(action: action, entity_name: "account",
+            record_id: action == "update" ? Guid.NewGuid().ToString() : "", fields_json: fields);
+
+        Assert.IsTrue(result.IsError == true, result.GetText());
+        var text = result.GetText();
+        StringAssert.StartsWith(text, $"[Error] Invalid field key '{key}':");
+        StringAssert.Contains(text, "[Hint] Use '\"primarycontactid\": \"<guid>\"'");
+        StringAssert.Contains(text, "'\"primarycontactid@<target_entity>\": \"<guid>\"'");
+        Assert.AreEqual(1, _requests.OfType<RetrieveAllEntitiesRequest>().Count(), "Only the primary table should be resolved.");
+        Assert.IsFalse(_requests.OfType<RetrieveEntityRequest>().Any(), "The key should be rejected before attribute metadata lookup.");
+    }
 
     [TestMethod]
     public void ManageRecord_LiveCreateReadUpdateDelete_ExecutesSuccessfully()
@@ -180,8 +202,143 @@ public sealed class ManageRecordExtraCoverageTests
             fields_json: """{"name":"Update"}""", solution_name: "Solution Components");
 
         Assert.IsTrue(result.IsError == true, result.GetText());
-        StringAssert.Contains(result.GetText(), "solution_name is supported for 'create', 'add_to_solution', and 'remove_from_solution' only");
+        StringAssert.Contains(result.GetText(), "solution_name is supported for 'create', 'add_to_solution', 'remove_from_solution', and 'add_solution_component' only");
         Assert.IsEmpty(_requests);
+    }
+
+    [TestMethod]
+    [DataRow("workflow", "\"workflow\"", 29)]
+    [DataRow("workflow", "29", 29)]
+    [DataRow("workflow", "\"Cloud Flow\"", 29)]
+    [DataRow("role", "\"Security Role\"", 20)]
+    [DataRow("role", "20", 20)]
+    [DataRow("connectionreference", "\"connectionreference\"", 10426)]
+    [DataRow("connectionreference", "\"Connection Reference\"", 10169)]
+    [DataRow("connectionreference", "10169", 10169)]
+    public void AddSolutionComponent_ResolvesNameOrTypeIdAndDisablesDependencies(string entity, string typeJson, int typeId)
+    {
+        var record = new Entity(entity, Guid.NewGuid()) { ["ismanaged"] = false };
+        SeedComponentForAddition(record, typeId);
+
+        var result = CreateTool().manage_record(action: "add_solution_component", record_id: record.Id.ToString(),
+            solution_name: "Solution Components", component_type: JsonSerializer.Deserialize<JsonElement>(typeJson));
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        var request = _requests.OfType<AddSolutionComponentRequest>().Single();
+        Assert.AreEqual(record.Id, request.ComponentId);
+        Assert.AreEqual(typeId, request.ComponentType);
+        Assert.AreEqual("solution_components", request.SolutionUniqueName);
+        Assert.IsFalse(request.AddRequiredComponents);
+        Assert.IsTrue(request.DoNotIncludeSubcomponents);
+        var payload = result.StructuredContent!.Value;
+        Assert.AreEqual("added_to_solution", payload.GetProperty("status").GetString());
+        Assert.AreEqual(typeId, payload.GetProperty("componentType").GetInt32());
+        Assert.AreEqual("solution_components", payload.GetProperty("solutionName").GetString());
+    }
+
+    [TestMethod]
+    [DataRow("Default", "Default Solution", false, "system solution")]
+    [DataRow("Active", "Active Solution", false, "system solution")]
+    [DataRow("managed_core", "Managed Core", true, "is managed")]
+    public void AddSolutionComponent_RejectsDefaultActiveAndManagedTargets(string uniqueName, string displayName, bool isManaged, string error)
+    {
+        SeedSolution(isManaged, uniqueName, displayName);
+        _fake.OnRetrieve = (_, _, _) => throw new InvalidOperationException("Invalid targets must fail before publisher lookup.");
+
+        var result = CreateTool().manage_record(action: "add_solution_component", record_id: Guid.NewGuid().ToString(),
+            solution_name: displayName, component_type: JsonSerializer.SerializeToElement(29));
+
+        Assert.IsTrue(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), error);
+        Assert.IsFalse(_requests.OfType<AddSolutionComponentRequest>().Any());
+    }
+
+    [TestMethod]
+    [DataRow(true, true, 29, "managed")]
+    [DataRow(false, false, 29, "was not found")]
+    [DataRow(true, false, 10169, "unknown or ambiguous")]
+    public void AddSolutionComponent_RejectsInvalidSourceOrOrgSpecificType(bool recordExists, bool managed, int requestedType, string error)
+    {
+        var record = new Entity("workflow", Guid.NewGuid()) { ["ismanaged"] = managed };
+        SeedComponentForAddition(record, 29, recordExists);
+
+        var result = CreateTool().manage_record(action: "add_solution_component", record_id: record.Id.ToString(),
+            solution_name: "solution_components", component_type: JsonSerializer.SerializeToElement(requestedType));
+
+        Assert.IsTrue(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), error);
+        Assert.IsFalse(_requests.OfType<AddSolutionComponentRequest>().Any());
+    }
+
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void AddSolutionComponent_MetadataIdUsesExistingMembershipToVerifySource(bool managed)
+    {
+        var metadataId = Guid.NewGuid();
+        SeedSolution();
+        var resolveTarget = _fake.OnRetrieveMultiple;
+        _fake.OnRetrieveMultiple = query =>
+        {
+            if (query is not QueryExpression { EntityName: "solution", LinkEntities.Count: > 0 } membership)
+                return resolveTarget!(query);
+
+            var conditions = membership.LinkEntities.Single().LinkCriteria.Conditions
+                .ToDictionary(condition => condition.AttributeName);
+            Assert.AreEqual(metadataId, conditions["objectid"].Values.Single());
+            Assert.AreEqual(9, conditions["componenttype"].Values.Single());
+            Assert.AreEqual("ismanaged", membership.Orders.Single().AttributeName);
+            Assert.AreEqual(OrderType.Descending, membership.Orders.Single().OrderType);
+            return new EntityCollection([new Entity("solution") { ["ismanaged"] = managed }]);
+        };
+
+        var result = CreateTool().manage_record(action: "add_solution_component", record_id: metadataId.ToString(),
+            solution_name: "solution_components", component_type: JsonSerializer.SerializeToElement("Global Option Set"));
+
+        Assert.AreEqual(managed, result.IsError == true, result.GetText());
+        if (managed)
+            Assert.IsFalse(_requests.OfType<AddSolutionComponentRequest>().Any());
+        else
+            Assert.AreEqual(metadataId, _requests.OfType<AddSolutionComponentRequest>().Single().ComponentId);
+    }
+
+    [TestMethod]
+    public void AddSolutionComponent_DryRunReturnsResolvedTypeAndDoesNotAttach()
+    {
+        var record = new Entity("connectionreference", Guid.NewGuid()) { ["ismanaged"] = false };
+        SeedComponentForAddition(record, 10169);
+
+        var result = CreateTool(dryRun: true).manage_record(action: "add_solution_component", record_id: record.Id.ToString(),
+            solution_name: "solution_components", component_type: JsonSerializer.SerializeToElement(10169));
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.AreEqual("not_executed", result.StructuredContent!.Value.GetProperty("status").GetString());
+        Assert.AreEqual(10169, result.StructuredContent.Value.GetProperty("componentType").GetInt32());
+        Assert.IsFalse(_requests.OfType<AddSolutionComponentRequest>().Any());
+    }
+
+    private void SeedComponentForAddition(Entity record, int typeId, bool recordExists = true)
+    {
+        SeedSolution();
+        var resolveTarget = _fake.OnRetrieveMultiple;
+        _fake.OnRetrieveMultiple = query =>
+        {
+            if (query is QueryExpression entityQuery && entityQuery.EntityName == record.LogicalName)
+            {
+                var condition = entityQuery.Criteria.Conditions.Single();
+                Assert.AreEqual(record.LogicalName + "id", condition.AttributeName);
+                Assert.AreEqual(record.Id, condition.Values.Single());
+                return recordExists ? new EntityCollection([record]) : new EntityCollection();
+            }
+            if (typeId >= 10000 && query is QueryExpression { EntityName: "solutioncomponentdefinition" })
+                return new EntityCollection([new Entity("solutioncomponentdefinition")
+                {
+                    ["solutioncomponenttype"] = typeId,
+                    ["primaryentityname"] = record.LogicalName,
+                    ["name"] = "Connection Reference"
+                }]);
+            return resolveTarget!(query);
+        };
     }
 
     [TestMethod]
@@ -473,13 +630,13 @@ public sealed class ManageRecordExtraCoverageTests
         return request;
     }
 
-    private void SeedSolution(bool isManaged = false)
+    private void SeedSolution(bool isManaged = false, string uniqueName = "solution_components", string displayName = "Solution Components")
     {
         var publisher = new Entity("publisher", Guid.NewGuid()) { ["customizationprefix"] = "contoso" };
         var solution = new Entity("solution", Guid.NewGuid())
         {
-            ["uniquename"] = "solution_components",
-            ["friendlyname"] = "Solution Components",
+            ["uniquename"] = uniqueName,
+            ["friendlyname"] = displayName,
             ["ismanaged"] = isManaged,
             ["publisherid"] = publisher.ToEntityReference()
         };

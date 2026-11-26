@@ -21,6 +21,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Status { get; set; }
 
+        [JsonPropertyName("componentType")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? ComponentType { get; set; }
+
+        [JsonPropertyName("solutionName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SolutionName { get; set; }
+
         [JsonPropertyName("fieldsUpdated")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? FieldsUpdated { get; set; }

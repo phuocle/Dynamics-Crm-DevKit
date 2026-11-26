@@ -435,6 +435,78 @@ public sealed class GetSolutionComponentsFakeXrmEasySweepTests
         Assert.IsFalse(entry.IsFullEntity);
     }
 
+    [TestMethod]
+    [DataRow("Notification Channel", "ntf_channel_code (Notification Channel)")]
+    [DataRow(null, "ntf_channel_code")]
+    public void GlobalOptionSet_ResolvesNameByMetadataId(string? label, string expectedName)
+    {
+        var (_, solutionId) = SeedSolution("notification", "Notification");
+        var component = Component(solutionId, 9);
+        var metadataId = Guid.NewGuid();
+        component["objectid"] = metadataId;
+        _service.AddRow("solutioncomponent", component);
+        _service.OptionSets[metadataId] = new OptionSetMetadata
+        {
+            MetadataId = metadataId,
+            Name = "ntf_channel_code",
+            DisplayName = label == null ? null : new Label(label, 1033)
+        };
+
+        var result = NewTool().get_solution_components("notification");
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var entry = Entry(Payload(result), metadataId);
+        Assert.AreEqual("Option Set", entry.Type);
+        Assert.AreEqual(9, entry.TypeId);
+        Assert.AreEqual(expectedName, entry.Name);
+        Assert.IsFalse(entry.IsFullEntity);
+        var request = _service.OptionSetRequests.Single() as RetrieveOptionSetRequest;
+        Assert.IsNotNull(request);
+        Assert.AreEqual(metadataId, request.MetadataId);
+    }
+
+    [TestMethod]
+    public void GlobalOptionSets_BatchesLookupAndKeepsMissingNameUnresolved()
+    {
+        var (_, solutionId) = SeedSolution("notification", "Notification");
+        var channel = Component(solutionId, 9);
+        var priority = Component(solutionId, 9);
+        var missing = Component(solutionId, 9);
+        _service.AddRow("solutioncomponent", channel, priority, missing);
+        _service.OptionSets[channel.Id] = new OptionSetMetadata { MetadataId = channel.Id, Name = "ntf_channel_code" };
+        _service.OptionSets[priority.Id] = new OptionSetMetadata { MetadataId = priority.Id, Name = "ntf_priority" };
+
+        var result = NewTool().get_solution_components("notification");
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var payload = Payload(result);
+        Assert.AreEqual("ntf_channel_code", Entry(payload, channel.Id).Name);
+        Assert.AreEqual("ntf_priority", Entry(payload, priority.Id).Name);
+        Assert.AreEqual("(unresolved)", Entry(payload, missing.Id).Name);
+        Assert.IsInstanceOfType(_service.OptionSetRequests.Single(), typeof(RetrieveAllOptionSetsRequest));
+    }
+
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void GlobalOptionSet_WhenMetadataUnavailable_KeepsOtherComponentNames(bool requestFails)
+    {
+        var (_, solutionId) = SeedSolution("notification", "Notification");
+        var optionSet = Component(solutionId, 9);
+        var role = Component(solutionId, 20);
+        _service.AddRow("solutioncomponent", optionSet, role);
+        SeedRow("role", role.Id, "roleid", ("name", "Notification User"));
+        _service.OptionSetLookupFails = requestFails;
+
+        var result = NewTool().get_solution_components("notification");
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var payload = Payload(result);
+        Assert.AreEqual("(unresolved)", Entry(payload, optionSet.Id).Name);
+        Assert.AreEqual("Notification User", Entry(payload, role.Id).Name);
+        Assert.AreEqual(1, _service.OptionSetRequests.Count);
+    }
+
     // ──────────────────────────────────────────────
     // active layers
     // ──────────────────────────────────────────────
@@ -549,6 +621,8 @@ public sealed class GetSolutionComponentsFakeXrmEasySweepTests
 
         public readonly Dictionary<string, List<Entity>> Rows = new();
         public readonly Dictionary<Guid, EntityMetadata> MetadataById = new();
+        public readonly Dictionary<Guid, OptionSetMetadataBase> OptionSets = new();
+        public readonly List<OrganizationRequest> OptionSetRequests = new();
         public readonly Dictionary<Guid, (string Entity, string Attribute)> AttributeOwners = new();
         public readonly Dictionary<Guid, (string SchemaName, bool OneToMany)> RelationshipOwners = new();
         public readonly HashSet<Guid> ActiveLayerIds = new();
@@ -560,6 +634,7 @@ public sealed class GetSolutionComponentsFakeXrmEasySweepTests
         public string IncomingPagingCookie;
         public string BulkFaultMessage;
         public Exception QueryException;
+        public bool OptionSetLookupFails;
 
         public void AddRow(string entityName, params Entity[] entities)
         {
@@ -597,6 +672,20 @@ public sealed class GetSolutionComponentsFakeXrmEasySweepTests
             {
                 case RetrieveMetadataChangesRequest changes when changes.Query is EntityQueryExpression entityQuery:
                     return MetadataChangesResponse(entityQuery);
+                case RetrieveOptionSetRequest:
+                case RetrieveAllOptionSetsRequest:
+                    OptionSetRequests.Add(request);
+                    if (OptionSetLookupFails)
+                        throw new InvalidOperationException("Choice metadata cannot be retrieved.");
+                    if (request is RetrieveOptionSetRequest choice)
+                        return new RetrieveOptionSetResponse
+                        {
+                            Results = { ["OptionSetMetadata"] = OptionSets.GetValueOrDefault(choice.MetadataId) }
+                        };
+                    return new RetrieveAllOptionSetsResponse
+                    {
+                        Results = { ["OptionSetMetadata"] = OptionSets.Values.ToArray() }
+                    };
                 case ExecuteMultipleRequest bulk:
                     return ExecuteMultipleResponse(bulk);
                 default:

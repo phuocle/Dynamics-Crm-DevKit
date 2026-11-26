@@ -26,6 +26,8 @@ With `action='remove_from_solution'`, pass the same three arguments to remove th
 
 With `action='list_solutions'`, pass `entity_name` and `record_id` to see the record's managed and unmanaged solution memberships. This read-only action returns the `solutions` array in normal and dry-run mode.
 
+With `action='add_solution_component'`, pass the component's GUID or metadata ID in `record_id`, its name or integer `typeId` in `component_type`, and a custom unmanaged `solution_name`. Omit `entity_name`. Use `workflow` or `29` for a cloud flow, `role` or `20` for a security role, and `connectionreference` or the current environment's dynamic type ID for a connection reference. The action validates the component and solution, excludes automatic inclusion of dependencies and subcomponents, and supports dry-run.
+
 ### fields_json Format by Type
 
 | Field Type | JSON Value Format | Example |

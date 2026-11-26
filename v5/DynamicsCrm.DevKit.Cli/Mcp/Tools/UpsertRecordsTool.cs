@@ -94,6 +94,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private const int MaxRecords = 5000;
         private const int MaxParallelism = 52;
         private const int ChunkSize = 100;
+        private const int PreviewItemLimit = 5;
 
         // ── ImportSequenceNumber auto-fill ──────────────────────────────────
         // OOB Dataverse stamps importsequencenumber on every record during data
@@ -266,6 +267,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var parsedEntities = new (Entity entity, string error)[elements.Length];
                 var stateChanges = new Entity[elements.Length];
                 var seenIds = new HashSet<Guid>();
+                int? firstInvalidFieldKeyIndex = null;
                 for (var i = 0; i < elements.Length; i++)
                 {
                     try
@@ -301,6 +303,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         stateChanges[i] = PrepareStateChange(entity);
                         parsedEntities[i] = (entity, null);
                     }
+                    catch (InvalidFieldKeyException ex)
+                    {
+                        parsedEntities[i] = (null, $"{ex.Message} {ex.Hint}");
+                        firstInvalidFieldKeyIndex ??= i;
+                    }
                     catch (Exception ex)
                     {
                         parsedEntities[i] = (null, ex.Message);
@@ -322,7 +329,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (_options.DryRun)
                 {
-                    var previewItems = elements.Length <= 5
+                    var includePreviewItems = elements.Length <= PreviewItemLimit;
+                    var previewItems = includePreviewItems
                         ? parsedEntities.Select((parsed, i) => new BatchCreateItem
                         {
                             Index = i,
@@ -355,9 +363,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Items = previewItems,
                         Status = "not_executed"
                     };
-                    return DryRun(
-                        $"Would {previewVerb} {elements.Length} '{entityName}' record(s) (parallelism={parallelism}, input={inputFormat}, bypassCustomLogic={bypass_custom_logic.ToString().ToLowerInvariant()}{(batchIsn.HasValue ? $", importSequenceNumber={batchIsn}" : "")}).",
-                        preview);
+                    var previewSummary = $"Would {previewVerb} {elements.Length} '{entityName}' record(s) (parallelism={parallelism}, input={inputFormat}, bypassCustomLogic={bypass_custom_logic.ToString().ToLowerInvariant()}{(batchIsn.HasValue ? $", importSequenceNumber={batchIsn}" : "")}).";
+                    if (!includePreviewItems && firstInvalidFieldKeyIndex is int index)
+                        previewSummary += $" Record {index + 1}: {parsedEntities[index].error.ReplaceLineEndings(" ")}";
+                    return DryRun(previewSummary, preview);
                 }
 
                 var ready = new List<(int index, Entity entity)>();
