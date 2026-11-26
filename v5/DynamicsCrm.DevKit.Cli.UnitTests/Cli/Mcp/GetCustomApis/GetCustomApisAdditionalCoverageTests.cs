@@ -1,3 +1,4 @@
+using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
@@ -9,7 +10,7 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.GetCustomApis;
 [TestClass]
 public sealed class GetCustomApisAdditionalCoverageTests
 {
-    private static readonly Type ToolType = typeof(GetCustomApisTool);
+    private static readonly Type ToolType = typeof(ManageCustomApiTool);
 
     [TestMethod]
     public void MapEntries_CoverLookupAliasesAndUnknownOptionValues()
@@ -36,8 +37,9 @@ public sealed class GetCustomApisAdditionalCoverageTests
         };
 
         var list = InvokeStatic("MapListEntry", entity);
+        var tool = new ManageCustomApiTool(null!, new McpDryRunOptions { DryRun = false }, new McpExecutionContext(false));
         var detail = ToolType.GetMethod("MapDetailEntry", BindingFlags.NonPublic | BindingFlags.Instance)!
-            .Invoke(new GetCustomApisTool(null!), new object?[] { entity });
+            .Invoke(tool, new object?[] { entity });
 
         Assert.IsNotNull(list);
         Assert.IsNotNull(detail);

@@ -37,19 +37,19 @@ public sealed class ManageRoleBranchCoverageTests
         Assert.Contains("user_id (or team_id) is required", Text(Invoke(tool, "HandleUnassign", null, null, null)));
         Assert.Contains("not a valid GUID", Text(Invoke(tool, "HandleUnassign", "user@example.test", null, "bad")));
 
-        Assert.Contains("role_name is required", Text(Invoke(tool, "HandleCreate", null, null)));
-        Assert.Contains("not a valid GUID", Text(Invoke(tool, "HandleCreate", "Test role", "bad")));
+        Assert.Contains("role_name is required", Text(Invoke(tool, "HandleCreate", null, null, null)));
+        Assert.Contains("not a valid GUID", Text(Invoke(tool, "HandleCreate", "Test role", "bad", null)));
 
-        Assert.Contains("role_id is required", Text(Invoke(tool, "HandleUpdate", null, "New name", null)));
-        Assert.Contains("Nothing to update", Text(Invoke(tool, "HandleUpdate", Guid.NewGuid().ToString(), null, null)));
-        Assert.Contains("not a valid GUID", Text(Invoke(tool, "HandleUpdate", "bad", "New name", null)));
+        Assert.Contains("role_id is required", Text(Invoke(tool, "HandleUpdate", null, "New name", null, null)));
+        Assert.Contains("Nothing to update", Text(Invoke(tool, "HandleUpdate", Guid.NewGuid().ToString(), null, null, null)));
+        Assert.Contains("not a valid GUID", Text(Invoke(tool, "HandleUpdate", "bad", "New name", null, null)));
 
         Assert.Contains("role_id is required", Text(Invoke(tool, "HandleDelete", (object?)null)));
         Assert.Contains("not a valid GUID", Text(Invoke(tool, "HandleDelete", "bad")));
 
-        Assert.Contains("role_id is required", Text(Invoke(tool, "HandleCopy", null, "New role")));
-        Assert.Contains("role_name is required", Text(Invoke(tool, "HandleCopy", Guid.NewGuid().ToString(), null)));
-        Assert.Contains("not a valid GUID", Text(Invoke(tool, "HandleCopy", "bad", "New role")));
+        Assert.Contains("role_id is required", Text(Invoke(tool, "HandleCopy", null, "New role", null)));
+        Assert.Contains("role_name is required", Text(Invoke(tool, "HandleCopy", Guid.NewGuid().ToString(), null, null)));
+        Assert.Contains("not a valid GUID", Text(Invoke(tool, "HandleCopy", "bad", "New role", null)));
 
         Assert.Contains("backup_path is required", Text(Invoke(tool, "HandleRestore", (object?)null)));
         Assert.Contains("must be a .role.json", Text(Invoke(tool, "HandleRestore", "backup.json")));
@@ -71,16 +71,16 @@ public sealed class ManageRoleBranchCoverageTests
         var updated = new List<string>();
         var removed = new List<string>();
 
-        Invoke(tool, "ApplyPrivilegeChange", current, "account", "Read", "User", false, added, updated, removed);
+        Invoke(tool, "ApplyPrivilegeChange", current, "account", "Read", "User", false, added, updated, removed, false);
         Assert.AreEqual(0, updated.Count);
 
-        Invoke(tool, "ApplyPrivilegeChange", current, "account", "Read", "Organization", false, added, updated, removed);
+        Invoke(tool, "ApplyPrivilegeChange", current, "account", "Read", "Organization", false, added, updated, removed, false);
         CollectionAssert.AreEqual(new[] { "account:Read=Organization" }, updated);
 
-        Invoke(tool, "ApplyPrivilegeChange", current, "account", "Read", "None", true, added, updated, removed);
+        Invoke(tool, "ApplyPrivilegeChange", current, "account", "Read", "None", true, added, updated, removed, false);
         CollectionAssert.AreEqual(new[] { "account:Read" }, removed);
 
-        Invoke(tool, "ApplyPrivilegeChange", current, "account", "Write", "None", true, added, updated, removed);
+        Invoke(tool, "ApplyPrivilegeChange", current, "account", "Write", "None", true, added, updated, removed, false);
         Assert.AreEqual(0, added.Count);
         Assert.IsFalse(current.Contains("account|Read"));
     }

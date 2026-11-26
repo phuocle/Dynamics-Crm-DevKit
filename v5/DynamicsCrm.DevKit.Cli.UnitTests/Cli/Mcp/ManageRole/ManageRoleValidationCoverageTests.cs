@@ -22,9 +22,9 @@ public sealed class ManageRoleValidationCoverageTests
         AssertError(Invoke("HandleList", null, "not-a-guid", 1), "not a valid GUID");
         AssertError(Invoke("HandleDetail", null, null, null), "role_id or role_name is required");
         AssertError(Invoke("HandleUser", null, null), "user_id is required");
-        AssertError(Invoke("HandleCreate", "New role", "not-a-guid"), "not a valid GUID");
-        AssertError(Invoke("HandleUpdate", "not-a-guid", "Name", null), "not a valid GUID");
-        AssertError(Invoke("HandleUpdate", null, null, "not json"), "role_id is required");
+        AssertError(Invoke("HandleCreate", "New role", "not-a-guid", null), "not a valid GUID");
+        AssertError(Invoke("HandleUpdate", "not-a-guid", "Name", null, null), "not a valid GUID");
+        AssertError(Invoke("HandleUpdate", null, null, "not json", null), "role_id is required");
     }
 
     [TestMethod]

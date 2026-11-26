@@ -394,9 +394,12 @@ public sealed class ManageRoleFakeXrmEasyFullCoverageTests
     [TestMethod]
     public void HandleCreate_Live_CreatesRole()
     {
-        var result = Invoke(NewTool(), "HandleCreate", "DevKit New Role", "");
+        var result = Invoke(NewTool(), "HandleCreate", "DevKit New Role", "", null);
 
         Assert.IsFalse(result.IsError == true);
+        var json = result.StructuredContent!.Value;
+        Assert.IsFalse(json.GetProperty("isAddToSolution").GetBoolean());
+        Assert.AreEqual("none", json.GetProperty("addToSolutionMethod").GetString());
         var roles = _context.GetOrganizationService().RetrieveMultiple(
             new Microsoft.Xrm.Sdk.Query.QueryExpression("role") { ColumnSet = new Microsoft.Xrm.Sdk.Query.ColumnSet("name") });
         Assert.AreEqual(1, roles.Entities.Count, string.Join(";", roles.Entities.Select(e => e.GetAttributeValue<string>("name"))));
@@ -405,7 +408,7 @@ public sealed class ManageRoleFakeXrmEasyFullCoverageTests
     [TestMethod]
     public void HandleCreate_DryRun_DoesNotCreate()
     {
-        var result = Invoke(NewTool(dryRun: true), "HandleCreate", "DevKit Dry Role", "");
+        var result = Invoke(NewTool(dryRun: true), "HandleCreate", "DevKit Dry Role", "", null);
         Assert.IsFalse(result.IsError == true);
         StringAssert.Contains(result.GetText(), "[DryRun]");
     }
@@ -413,21 +416,21 @@ public sealed class ManageRoleFakeXrmEasyFullCoverageTests
     [TestMethod]
     public void HandleCreate_MissingName_ReturnsError()
     {
-        var result = Invoke(NewTool(), "HandleCreate", "", "");
+        var result = Invoke(NewTool(), "HandleCreate", "", "", null);
         Assert.IsTrue(result.IsError == true);
     }
 
     [TestMethod]
     public void HandleCreate_WithBusinessUnit_CreatesRole()
     {
-        var result = Invoke(NewTool(), "HandleCreate", "BU Role", _rootBuId.ToString());
+        var result = Invoke(NewTool(), "HandleCreate", "BU Role", _rootBuId.ToString(), null);
         Assert.IsFalse(result.IsError == true);
     }
 
     [TestMethod]
     public void HandleCreate_InvalidBusinessUnit_ReturnsError()
     {
-        var result = Invoke(NewTool(), "HandleCreate", "BU Role", "not-a-guid");
+        var result = Invoke(NewTool(), "HandleCreate", "BU Role", "not-a-guid", null);
         Assert.IsTrue(result.IsError == true);
     }
 
@@ -442,7 +445,7 @@ public sealed class ManageRoleFakeXrmEasyFullCoverageTests
         var tool = NewTool();
         SetWorkspace(tool, _workspace);
 
-        var result = Invoke(tool, "HandleUpdate", roleId.ToString(), "New Name", null);
+        var result = Invoke(tool, "HandleUpdate", roleId.ToString(), "New Name", null, null);
 
         Assert.IsFalse(result.IsError == true);
         var updated = _context.GetOrganizationService().Retrieve("role", roleId, new Microsoft.Xrm.Sdk.Query.ColumnSet("name"));
@@ -456,7 +459,7 @@ public sealed class ManageRoleFakeXrmEasyFullCoverageTests
         var tool = NewTool(dryRun: true);
         SetWorkspace(tool, _workspace);
 
-        var result = Invoke(tool, "HandleUpdate", roleId.ToString(), "New Name", null);
+        var result = Invoke(tool, "HandleUpdate", roleId.ToString(), "New Name", null, null);
         Assert.IsFalse(result.IsError == true);
         StringAssert.Contains(result.GetText(), "[DryRun]");
     }
@@ -464,14 +467,14 @@ public sealed class ManageRoleFakeXrmEasyFullCoverageTests
     [TestMethod]
     public void HandleUpdate_MissingId_ReturnsError()
     {
-        var result = Invoke(NewTool(), "HandleUpdate", "", "New Name", null);
+        var result = Invoke(NewTool(), "HandleUpdate", "", "New Name", null, null);
         Assert.IsTrue(result.IsError == true);
     }
 
     [TestMethod]
     public void HandleUpdate_NothingToUpdate_ReturnsError()
     {
-        var result = Invoke(NewTool(), "HandleUpdate", Guid.NewGuid().ToString(), "", null);
+        var result = Invoke(NewTool(), "HandleUpdate", Guid.NewGuid().ToString(), "", null, null);
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(result.GetText(), "Nothing to update");
     }
@@ -479,14 +482,14 @@ public sealed class ManageRoleFakeXrmEasyFullCoverageTests
     [TestMethod]
     public void HandleUpdate_InvalidGuid_ReturnsError()
     {
-        var result = Invoke(NewTool(), "HandleUpdate", "not-a-guid", "New Name", null);
+        var result = Invoke(NewTool(), "HandleUpdate", "not-a-guid", "New Name", null, null);
         Assert.IsTrue(result.IsError == true);
     }
 
     [TestMethod]
     public void HandleUpdate_UnknownRole_ReturnsError()
     {
-        var result = Invoke(NewTool(), "HandleUpdate", Guid.NewGuid().ToString(), "New Name", null);
+        var result = Invoke(NewTool(), "HandleUpdate", Guid.NewGuid().ToString(), "New Name", null, null);
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(result.GetText(), "No security role found");
     }
@@ -495,7 +498,7 @@ public sealed class ManageRoleFakeXrmEasyFullCoverageTests
     public void HandleUpdate_NotCustomizable_ReturnsError()
     {
         var (roleId, _) = SeedRole("Locked Role", customizable: false);
-        var result = Invoke(NewTool(), "HandleUpdate", roleId.ToString(), "New Name", null);
+        var result = Invoke(NewTool(), "HandleUpdate", roleId.ToString(), "New Name", null, null);
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(result.GetText(), "not customizable");
     }
@@ -505,7 +508,7 @@ public sealed class ManageRoleFakeXrmEasyFullCoverageTests
     {
         var (roleId, _) = SeedRole("Manager");
         var result = Invoke(NewTool(), "HandleUpdate", roleId.ToString(), "",
-            "[{\"entity\":\"account\",\"right\":\"Fly\",\"depth\":\"User\"}]");
+            "[{\"entity\":\"account\",\"right\":\"Fly\",\"depth\":\"User\"}]", null);
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(result.GetText(), "Invalid privilege right");
     }
@@ -515,7 +518,7 @@ public sealed class ManageRoleFakeXrmEasyFullCoverageTests
     {
         var (roleId, _) = SeedRole("Manager");
         var result = Invoke(NewTool(), "HandleUpdate", roleId.ToString(), "",
-            "[{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Galaxy\"}]");
+            "[{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Galaxy\"}]", null);
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(result.GetText(), "Invalid privilege depth");
     }
@@ -524,7 +527,7 @@ public sealed class ManageRoleFakeXrmEasyFullCoverageTests
     public void HandleUpdate_InvalidPrivilegesJson_ReturnsError()
     {
         var (roleId, _) = SeedRole("Manager");
-        var result = Invoke(NewTool(), "HandleUpdate", roleId.ToString(), "", "not-json");
+        var result = Invoke(NewTool(), "HandleUpdate", roleId.ToString(), "", "not-json", null);
         Assert.IsTrue(result.IsError == true);
     }
 
@@ -537,7 +540,7 @@ public sealed class ManageRoleFakeXrmEasyFullCoverageTests
         SetWorkspace(tool, _workspace);
 
         var result = Invoke(tool, "HandleUpdate", roleId.ToString(), "",
-            "[{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Organization\"}]");
+            "[{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Organization\"}]", null);
 
         Assert.IsFalse(result.IsError == true);
         var rows = _context.GetOrganizationService().RetrieveMultiple(
@@ -556,7 +559,7 @@ public sealed class ManageRoleFakeXrmEasyFullCoverageTests
         SetWorkspace(tool, _workspace);
 
         var result = Invoke(tool, "HandleUpdate", roleId.ToString(), "",
-            "[{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"None\"}]");
+            "[{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"None\"}]", null);
 
         Assert.IsFalse(result.IsError == true);
         var rows = _context.GetOrganizationService().RetrieveMultiple(
@@ -643,7 +646,7 @@ public sealed class ManageRoleFakeXrmEasyFullCoverageTests
         var privId = SeedPrivilege("prvReadAccount", 1);
         SeedRolePrivilege(roleId, privId, 4);
 
-        var result = Invoke(NewTool(), "HandleCopy", roleId.ToString(), "Cloned Role");
+        var result = Invoke(NewTool(), "HandleCopy", roleId.ToString(), "Cloned Role", null);
 
         Assert.IsFalse(result.IsError == true);
         var roles = _context.GetOrganizationService().RetrieveMultiple(
@@ -655,7 +658,7 @@ public sealed class ManageRoleFakeXrmEasyFullCoverageTests
     public void HandleCopy_DryRun_DoesNotCreate()
     {
         var (roleId, _) = SeedRole("Source Role");
-        var result = Invoke(NewTool(dryRun: true), "HandleCopy", roleId.ToString(), "Cloned Role");
+        var result = Invoke(NewTool(dryRun: true), "HandleCopy", roleId.ToString(), "Cloned Role", null);
         Assert.IsFalse(result.IsError == true);
         StringAssert.Contains(result.GetText(), "[DryRun]");
     }
@@ -664,14 +667,14 @@ public sealed class ManageRoleFakeXrmEasyFullCoverageTests
     public void HandleCopy_MissingName_ReturnsError()
     {
         var (roleId, _) = SeedRole("Source Role");
-        var result = Invoke(NewTool(), "HandleCopy", roleId.ToString(), "");
+        var result = Invoke(NewTool(), "HandleCopy", roleId.ToString(), "", null);
         Assert.IsTrue(result.IsError == true);
     }
 
     [TestMethod]
     public void HandleCopy_UnknownRole_ReturnsError()
     {
-        var result = Invoke(NewTool(), "HandleCopy", Guid.NewGuid().ToString(), "Clone");
+        var result = Invoke(NewTool(), "HandleCopy", Guid.NewGuid().ToString(), "Clone", null);
         Assert.IsTrue(result.IsError == true);
     }
 

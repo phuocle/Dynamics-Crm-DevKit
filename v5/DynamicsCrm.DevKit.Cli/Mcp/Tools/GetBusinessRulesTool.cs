@@ -45,7 +45,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- get_workflows → classic workflow definitions (background async + realtime sync)\n" +
             "- get_messages → legacy workflow Custom Actions (category=3) + SDK messages\n" +
-            "- get_custom_apis → modern Custom API definitions\n" +
+            "- manage_custom_api → modern Custom API definitions\n" +
             "- get_business_process_flows → BPF definitions + stages\n" +
             "- manage_record(action='read', columns='xaml') → raw XAML when parse is incomplete")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(

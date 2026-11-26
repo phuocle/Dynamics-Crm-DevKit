@@ -309,8 +309,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ("appmodulecomponents(", "manage_app",
                 "App module components link model-driven apps to sitemaps, entities, forms, views, and commands. Do not use execute_webapi for app component creation/update. Use manage_app."),
 
-            ("connectionreferences(", null,
-                "Connection references link flows/apps to external services. Manage via Power Apps UI or solution import.")
+            ("connectionreferences(", "manage_record",
+                "Connection references link flows and apps to external services. Pass entity_name='connectionreference' for record changes or use add_to_solution, remove_from_solution, or list_solutions for solution membership."),
+
+            ("customapis(", "manage_custom_api",
+                "Custom APIs have linked request parameters, response properties, and publisher prefix/solution rules. Use manage_custom_api for safe create, update, and delete."),
+            ("customapirequestparameters(", "manage_custom_api",
+                "Custom API request parameters are managed together with their parent Custom API. Use manage_custom_api(action='create'|'update', request_parameters=...)."),
+            ("customapiresponseproperties(", "manage_custom_api",
+                "Custom API response properties are managed together with their parent Custom API. Use manage_custom_api(action='create'|'update', response_properties=...).")
         ];
 
         private static readonly (string UrlPattern, string RedirectTool, string Message)[] RedirectedGetEndpoints =
@@ -407,6 +414,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Use manage_command for modern appaction create/update/delete/hide/show/flyout/split-button operations. Delete supports app, table, and global scope and handles child commands, rules, and context table publishing."),
             ("appactionrules", "manage_command",
                 "appactionrule (visibility/enable rules) are managed with their parent appaction via manage_command (include_rules=true to inspect)."),
+
+            ("customapis", "manage_custom_api",
+                "Creating Custom APIs requires publisher prefix validation, solution assignment, and parameter definitions. Use manage_custom_api(action='create')."),
+            ("customapirequestparameters", "manage_custom_api",
+                "Custom API request parameters must be created with their parent Custom API in the target solution. Use manage_custom_api(action='create'|'update', request_parameters=...)."),
+            ("customapiresponseproperties", "manage_custom_api",
+                "Custom API response properties must be created with their parent Custom API in the target solution. Use manage_custom_api(action='create'|'update', response_properties=...)."),
 
             ("restore", "manage_deleted_records",
                 "Web API 'Restore' action works (returns 200 with restored id) but requires complex body with @odata.id/@odata.type. " +

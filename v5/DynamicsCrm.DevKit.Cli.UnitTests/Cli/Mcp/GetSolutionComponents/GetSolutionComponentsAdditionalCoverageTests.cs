@@ -51,7 +51,7 @@ public sealed class GetSolutionComponentsAdditionalCoverageTests
             ["pub.friendlyname"] = new AliasedValue("publisher", "friendlyname", "Contoso")
         };
         var result = ToolType.GetMethod("BuildStructuredResult", BindingFlags.NonPublic | BindingFlags.Instance)!
-            .Invoke(tool, new object?[] { solution, new List<Entity>(), new Dictionary<Guid, string>(), null, false });
+            .Invoke(tool, new object?[] { solution, new List<Entity>(), new Dictionary<Guid, string>(), null, false, null });
 
         Assert.IsNotNull(result);
         Assert.AreEqual(0, result!.GetType().GetProperty("TotalComponents")!.GetValue(result));
@@ -60,8 +60,8 @@ public sealed class GetSolutionComponentsAdditionalCoverageTests
     [TestMethod]
     public void GetComponentApiNameAndStringHelper_CoverUnknownAndEscapedValues()
     {
-        Assert.AreEqual("Entity", InvokeStatic<string>("GetComponentApiName", 1));
-        Assert.AreEqual("999", InvokeStatic<string>("GetComponentApiName", 999));
+        Assert.AreEqual("Entity", InvokeStatic<string>("GetComponentApiName", 1, null));
+        Assert.AreEqual("999", InvokeStatic<string>("GetComponentApiName", 999, null));
         var entity = new Entity("x") { ["name"] = " Name " };
         Assert.AreEqual(" Name ", InvokeStatic<string>("S", entity, "name"));
         Assert.AreEqual("", InvokeStatic<string>("S", new Entity("x"), "missing"));

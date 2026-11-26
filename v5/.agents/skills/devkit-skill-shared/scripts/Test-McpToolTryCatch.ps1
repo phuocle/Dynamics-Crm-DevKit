@@ -1,21 +1,6 @@
 ﻿# Test-McpToolTryCatch.ps1
-# Audit helper that enforces the RefactorTool.md Step 1 rule on every MCP tool file
-# under DynamicsCrm.DevKit.Cli/Mcp/Tools/. Mirrors the original bash `grep -nE` snippet
-# but works on Windows PowerShell.
-#
-# Rule (Step 1): Exactly ONE try/catch block in the main public method of each tool,
-# EXCEPT manage_view which has 2 additional contract-helper catches inside
-# ValidateFetchXmlExpression (see ToolAnalysis2026-07-27.md § 3.2 — by design).
-#
-# Expected counts:
-#   ExecuteFetchXmlTool    -> 2 (1 try + 1 catch in main method)
-#   GetMessagesTool        -> 2
-#   GetCustomApisTool      -> 2
-#   WhoAmITool             -> 2
-#   ManageChoiceTool       -> 2
-#   ManageViewTool         -> 3 (1 main + 2 inside ValidateFetchXmlExpression contract helper)
-#   ParseRecordUrlTool     -> 2
-#   GetPluginTraceLogsTool -> 2
+# Audit try/catch clauses in the MCP tools listed in $expectedCounts.
+# Each tool has one main try/catch pair. Parser helpers may have their own pair.
 #
 # Exit code 0 = all files within expected range
 # Exit code 1 = one or more files outside expected range (regression!)
@@ -34,12 +19,12 @@ $ColorInfo = "White"
 
 # Per-file expected match counts
 $expectedCounts = @{
-    "ExecuteFetchXmlTool"    = 2
+    "ExecuteFetchXmlTool"    = 4   # main method and FetchXML parsing
     "GetMessagesTool"        = 2
-    "GetCustomApisTool"      = 2
+    "ManageCustomApiTool"    = 4   # main method and JSON parameter parsing
     "WhoAmITool"             = 2
     "ManageChoiceTool"       = 2
-    "ManageViewTool"         = 3   # 1 main + 2 inside ValidateFetchXmlExpression contract helper
+    "ManageViewTool"         = 4   # main method and ValidateFetchXmlExpression
     "ParseRecordUrlTool"     = 2
     "GetPluginTraceLogsTool" = 2
 }
@@ -56,7 +41,7 @@ function Write-Header {
 # Change to script directory so relative paths resolve
 Set-Location $PSScriptRoot
 
-Write-Header "MCP Tool Try/Catch Audit (RefactorTool.md Step 1)"
+Write-Header "MCP Tool Try/Catch Audit"
 
 # Resolve tools root to an absolute path so error messages are clear
 $absToolsRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot $ToolsRoot))
@@ -82,10 +67,10 @@ foreach ($toolName in $sortedNames) {
         $allPass = $false
     }
     else {
-        # PowerShell equivalent of bash grep with regex matching 'try {' or 'catch ('.
-        # Use Select-String with a regex pattern.
-        $pattern = 'try\s*\{|catch\s*\('
-        $tryMatches = Select-String -Path $filePath -Pattern $pattern
+        # Match keywords at the start of a code line, including braces on the next line.
+        $source = Get-Content -LiteralPath $filePath -Raw
+        $pattern = '(?m)^[\t ]*(?:try(?=\s*\{)|catch(?=\s*[({]))'
+        $tryMatches = [regex]::Matches($source, $pattern)
 
         $actualCount = $tryMatches.Count
 
@@ -101,9 +86,10 @@ foreach ($toolName in $sortedNames) {
         Write-Host $line -ForegroundColor $color
 
         if ($ShowLines -or $status -eq "FAIL") {
+            $sourceLines = $source -split '\r?\n'
             foreach ($m in $tryMatches) {
-                $trimmedLine = $m.Line.Trim()
-                Write-Host ("    L{0}: {1}" -f $m.LineNumber, $trimmedLine) -ForegroundColor $ColorInfo
+                $lineIndex = [regex]::Matches($source.Substring(0, $m.Index), '\n').Count
+                Write-Host ("    L{0}: {1}" -f ($lineIndex + 1), $sourceLines[$lineIndex].Trim()) -ForegroundColor $ColorInfo
             }
         }
 
@@ -119,17 +105,16 @@ Write-Host ""
 Write-Header "Summary"
 
 if ($allPass) {
-    Write-Host "All tools within expected try/catch range — RefactorTool.md Step 1 holds." -ForegroundColor $ColorSuccess
+    Write-Host "All audited tools match the expected try/catch counts." -ForegroundColor $ColorSuccess
     exit 0
 } else {
     Write-Host "REGRESSION DETECTED. One or more tools have unexpected try/catch counts." -ForegroundColor $ColorError
     Write-Host ""
     Write-Host "Investigate each FAIL above. Likely causes:" -ForegroundColor $ColorWarning
     Write-Host "  - New inner try/catch added without updating the contract helper" -ForegroundColor $ColorWarning
-    Write-Host "  - 'catch { return null; }' swallowed exception (forbidden by Step 1)" -ForegroundColor $ColorWarning
+    Write-Host "  - 'catch { return null; }' swallowed exception" -ForegroundColor $ColorWarning
     Write-Host "  - Helper incorrectly catching a specific exception type" -ForegroundColor $ColorWarning
     Write-Host ""
-    Write-Host 'If the change is intentional and documented in ToolAnalysis.md, update' -ForegroundColor $ColorWarning
-    Write-Host 'the $expectedCounts table in this script before merging.' -ForegroundColor $ColorWarning
+    Write-Host 'For intentional changes, explain the new handler in the $expectedCounts table.' -ForegroundColor $ColorWarning
     exit 1
 }

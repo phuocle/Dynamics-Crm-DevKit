@@ -52,7 +52,7 @@ public class ManageFunctionContractTests
         Assert.IsTrue(desc.Contains("'create', 'update', 'delete') are gated"),
             "Description must state that authoring actions are gated");
         Assert.IsTrue(desc.Contains("maker portal"), "Gated authoring must point at the maker portal");
-        Assert.IsTrue(desc.Contains("get_custom_apis"), "RELATED TOOLS must mention get_custom_apis");
+        Assert.IsTrue(desc.Contains("manage_custom_api"), "RELATED TOOLS must mention manage_custom_api");
     }
 
     // ──────────────────────────────────────────────

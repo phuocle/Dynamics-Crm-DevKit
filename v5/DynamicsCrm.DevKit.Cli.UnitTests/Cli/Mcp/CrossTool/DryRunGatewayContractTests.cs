@@ -101,7 +101,7 @@ public class DryRunGatewayContractTests
             "manage_choice", "manage_table", "manage_relationship", "manage_app",
             "manage_command", "execute_webapi", "manage_column", "manage_ribbon",
             "generate_demo_data", "manage_record_file", "manage_report",
-            "manage_function"
+            "manage_function", "manage_custom_api"
         };
 
         var actual = typeof(UpsertRecordsTool).Assembly

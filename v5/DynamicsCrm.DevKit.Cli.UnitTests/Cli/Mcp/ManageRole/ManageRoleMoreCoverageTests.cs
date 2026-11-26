@@ -29,7 +29,7 @@ public sealed class ManageRoleMoreCoverageTests
     {
         Assert.Throws<ArgumentNullException>(() => new ManageRoleTool(null!, null!, new McpExecutionContext(true)));
         var tool = new ManageRoleTool(null!, new McpDryRunOptions(), new McpExecutionContext(true));
-        var create = (ModelContextProtocol.Protocol.CallToolResult)Instance(tool, "HandleCreate", "", "");
+        var create = (ModelContextProtocol.Protocol.CallToolResult)Instance(tool, "HandleCreate", "", "", null);
         Assert.IsTrue(create.IsError == true);
     }
 

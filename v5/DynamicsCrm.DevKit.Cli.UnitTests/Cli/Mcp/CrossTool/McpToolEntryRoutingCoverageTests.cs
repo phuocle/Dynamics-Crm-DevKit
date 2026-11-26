@@ -32,7 +32,7 @@ public sealed class McpToolEntryRoutingCoverageTests
         (typeof(GetAuditHistoryTool), "get_audit_history"),
         (typeof(GetBusinessProcessFlowsTool), "get_business_process_flows"),
         (typeof(GetBusinessRulesTool), "get_business_rules"),
-        (typeof(GetCustomApisTool), "get_custom_apis"),
+        (typeof(ManageCustomApiTool), "manage_custom_api"),
         (typeof(GetFlowsTool), "get_flows"),
         (typeof(GetMessagesTool), "get_messages"),
         (typeof(GetPluginTraceLogsTool), "get_plugin_trace_logs"),

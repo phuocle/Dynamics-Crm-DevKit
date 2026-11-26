@@ -18,6 +18,14 @@ Reference for `upsert_records`, `manage_record`, `execute_fetchxml`, and `search
 
 ## manage_record -- Field Type Formats
 
+With `action='create'`, set `solution_name` to the display or unique name of an unmanaged solution to include a supported component record. Examples include `connectionreference`, `workflow` (cloud flow), and `role`. Supply the record fields in `fields_json` as usual.
+
+With `action='add_to_solution'`, pass `entity_name` (`connectionreference`, `workflow`, or `role`), the existing `record_id`, and the unmanaged `solution_name`. Dry run previews the component and destination. The action adds the specified record with automatic dependency inclusion disabled.
+
+With `action='remove_from_solution'`, pass the same three arguments to remove the record's membership in that unmanaged solution. The record remains in Dataverse. Dry run previews the component and solution.
+
+With `action='list_solutions'`, pass `entity_name` and `record_id` to see the record's managed and unmanaged solution memberships. This read-only action returns the `solutions` array in normal and dry-run mode.
+
 ### fields_json Format by Type
 
 | Field Type | JSON Value Format | Example |

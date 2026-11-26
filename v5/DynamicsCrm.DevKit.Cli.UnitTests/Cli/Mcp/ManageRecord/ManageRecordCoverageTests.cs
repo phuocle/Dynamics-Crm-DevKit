@@ -62,7 +62,7 @@ public sealed class ManageRecordCoverageTests
     public void HandleCreateUpdateDelete_DryRun_ReturnsStructuredPreviews()
     {
         var tool = CreateTool();
-        var create = (CallToolResult)Invoke(tool, "HandleCreate", "account", "{\"name\":\"Contoso\",\"number\":1}");
+        var create = (CallToolResult)Invoke(tool, "HandleCreate", "account", "{\"name\":\"Contoso\",\"number\":1}", null);
         var update = (CallToolResult)Invoke(tool, "HandleUpdate", "account", "22222222-2222-2222-2222-222222222222", "{\"name\":\"New\"}");
         var delete = (CallToolResult)Invoke(tool, "HandleDelete", "account", "33333333-3333-3333-3333-333333333333");
 

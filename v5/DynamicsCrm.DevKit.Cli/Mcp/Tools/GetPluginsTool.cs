@@ -104,7 +104,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- get_plugin_trace_logs → execution traces\n" +
             "- get_system_jobs → async failures\n" +
             "- get_messages → SDK messages + legacy Custom Actions\n" +
-            "- get_custom_apis → modern Custom API definitions")]
+            "- manage_custom_api → modern Custom API definitions")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Assembly name contains. 1 match → detail; 0/2+ → disambiguation. Empty = list all.")] string assembly_name = "",
             [Description("Steps for entity Display/logical name. Wins over assembly_name.")] string entity_name = "",

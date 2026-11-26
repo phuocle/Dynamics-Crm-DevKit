@@ -44,7 +44,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Discover Power Fx functions and inspect formula, signature, binding, and compile state\n" +
             "- Invoke a resolved function with typed arguments and read the real outputs\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_custom_apis → every Custom API, with or without an expression\n" +
+            "- manage_custom_api → every Custom API, with or without an expression\n" +
             "- get_solution_components → verify a function's solution membership")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("'list', 'detail', 'validate', 'invoke'. 'create'/'update'/'delete' are gated.")] string action = "",
@@ -303,7 +303,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var bindingValue = graph.Api.GetAttributeValue<OptionSetValue>("bindingtype")?.Value ?? 0;
             if (bindingValue == 2)
                 return Error("Invoking EntityCollection-bound functions is not supported by manage_function.",
-                    "Only Global and Entity bindings can be invoked. Check get_custom_apis for the binding type.");
+                    "Only Global and Entity bindings can be invoked. Check manage_custom_api for the binding type.");
 
             FunctionInvoker.InvocationPlan plan;
             try

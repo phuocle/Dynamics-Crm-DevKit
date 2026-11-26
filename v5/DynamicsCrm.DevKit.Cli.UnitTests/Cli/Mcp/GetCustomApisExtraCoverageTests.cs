@@ -1,3 +1,4 @@
+using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools;
 using DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Infrastructure;
 using DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.Shared;
@@ -43,7 +44,7 @@ public sealed class GetCustomApisExtraCoverageTests
                 {
                     Results = { ["EntityMetadata"] = _entities.ToArray() }
                 },
-                RetrieveEntityRequest req => new RetrieveEntityResponse
+                RetrieveEntityRequest => new RetrieveEntityResponse
                 {
                     Results = { ["EntityMetadata"] = accountMeta }
                 },
@@ -62,32 +63,30 @@ public sealed class GetCustomApisExtraCoverageTests
         _fake.Dispose();
     }
 
-    private GetCustomApisTool CreateTool() => new(_fake.Client);
+    private ManageCustomApiTool CreateTool() =>
+        new(_fake.Client, new McpDryRunOptions { DryRun = false }, new McpExecutionContext(false));
 
     [TestMethod]
-    public void GetCustomApis_ValidationErrors()
+    public void ManageCustomApi_ValidationErrors()
     {
         var tool = CreateTool();
-
-        Assert.IsTrue(tool.get_custom_apis(status: "invalid_status").IsError == true);
+        Assert.IsTrue(tool.manage_custom_api(action: "list", status: "invalid_status").IsError == true);
     }
 
     [TestMethod]
-    public void GetCustomApis_List_Success()
+    public void ManageCustomApi_List_Success()
     {
         var tool = CreateTool();
-
-        var res = tool.get_custom_apis(status: "active", entity_name: "account");
+        var res = tool.manage_custom_api(action: "list", status: "active", entity_name: "account");
         Assert.IsFalse(res.IsError == true, res.GetText());
         StringAssert.Contains(res.GetText(), "custom APIs");
     }
 
     [TestMethod]
-    public void GetCustomApis_Detail_Success()
+    public void ManageCustomApi_Detail_Success()
     {
         var tool = CreateTool();
-
-        var res = tool.get_custom_apis(api_name: "devkit_CalculateTotal");
+        var res = tool.manage_custom_api(action: "detail", api_name: "devkit_CalculateTotal");
         Assert.IsFalse(res.IsError == true, res.GetText());
         StringAssert.Contains(res.GetText(), "CalculateTotal");
     }

@@ -43,6 +43,9 @@ public sealed class ManageRoleErrorPathCoverageTests
     private List<EntityMetadata> _entityMetadata = new();
     private Guid? _createdRoleId;
     private AddPrivilegesRoleRequest? _capturedAddPrivileges;
+    private Entity? _solution;
+    private readonly List<AddSolutionComponentRequest> _solutionAdds = new();
+    private bool _failSolutionAdd;
 
     [TestInitialize]
     public void Setup()
@@ -51,6 +54,9 @@ public sealed class ManageRoleErrorPathCoverageTests
         _role = null;
         _createdRoleId = null;
         _capturedAddPrivileges = null;
+        _solution = null;
+        _solutionAdds.Clear();
+        _failSolutionAdd = false;
         _nameMatchRoles.Clear();
         _users.Clear();
         _teams.Clear();
@@ -88,6 +94,13 @@ public sealed class ManageRoleErrorPathCoverageTests
             _capturedAddPrivileges = r;
             return new AddPrivilegesRoleResponse();
         }),
+        AddSolutionComponentRequest r => BuildResponse(() =>
+        {
+            _solutionAdds.Add(r);
+            if (_failSolutionAdd)
+                throw new InvalidOperationException("Solution add failed in Dataverse.");
+            return new AddSolutionComponentResponse();
+        }),
         _ => new OrganizationResponse()
     };
 
@@ -109,6 +122,8 @@ public sealed class ManageRoleErrorPathCoverageTests
                     return new EntityCollection(_teams);
                 case "businessunit":
                     return new EntityCollection(_businessUnits);
+                case "solution":
+                    return Single(_solution);
                 case "privilege":
                     // FindPrivilegeId only accepts a result set of exactly one row.
                     return _privilegeFound
@@ -403,6 +418,97 @@ public sealed class ManageRoleErrorPathCoverageTests
         StringAssert.Contains(result.GetText(), "Pass business_unit_id of an existing business unit explicitly.");
     }
 
+    [TestMethod]
+    [DataRow("create", "Role Packaging")]
+    [DataRow("update", "role_packaging")]
+    [DataRow("copy", "Role Packaging")]
+    public async Task RoleMutation_AddsResultingRoleToSolution(string action, string solutionName)
+    {
+        SeedSolution();
+        var sourceRoleId = Guid.NewGuid();
+        _role = MakeRole(sourceRoleId, "Existing Role");
+        _fake.OnUpdate = _ => Assert.Fail("A solution-only update should only add the role to the solution.");
+
+        var result = await NewTool().manage_role(null!, action: action, role_id: sourceRoleId.ToString(),
+            role_name: action == "update" ? "" : "New Role", solution_name: solutionName);
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        var json = result.StructuredContent!.Value;
+        var roleId = action == "update" ? sourceRoleId : _createdRoleId!.Value;
+        Assert.HasCount(1, _solutionAdds);
+        Assert.AreEqual(roleId, _solutionAdds[0].ComponentId);
+        Assert.AreEqual(20, _solutionAdds[0].ComponentType);
+        Assert.AreEqual("role_packaging", _solutionAdds[0].SolutionUniqueName);
+        Assert.IsFalse(_solutionAdds[0].AddRequiredComponents);
+        Assert.AreEqual(roleId.ToString(), json.GetProperty("roleId").GetString());
+        Assert.IsTrue(json.GetProperty("isAddToSolution").GetBoolean());
+        Assert.AreEqual("AddSolutionComponentRequest", json.GetProperty("addToSolutionMethod").GetString());
+        StringAssert.Contains(result.GetText(), "Added role to solution 'role_packaging'.");
+    }
+
+    [TestMethod]
+    public async Task Create_WithSolution_DryRunPreviewsTheAdd()
+    {
+        SeedSolution();
+
+        var result = await NewDryRunTool().manage_role(null!, action: "create", role_name: "New Role", solution_name: "Role Packaging");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "Would add role to solution 'role_packaging'.");
+        Assert.IsNull(_createdRoleId);
+        Assert.IsEmpty(_solutionAdds);
+        Assert.IsFalse(result.StructuredContent!.Value.GetProperty("isAddToSolution").GetBoolean());
+        Assert.AreEqual("none", result.StructuredContent.Value.GetProperty("addToSolutionMethod").GetString());
+    }
+
+    [TestMethod]
+    public async Task Create_WithManagedSolution_DoesNotCreateRole()
+    {
+        SeedSolution(isManaged: true);
+
+        var result = await NewTool().manage_role(null!, action: "create", role_name: "New Role", solution_name: "Role Packaging");
+
+        Assert.IsTrue(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "is managed");
+        Assert.IsNull(_createdRoleId);
+        Assert.IsEmpty(_solutionAdds);
+    }
+
+    [TestMethod]
+    public async Task Create_WhenSolutionAddFails_ReportsCreatedRoleAndFailedAdd()
+    {
+        SeedSolution();
+        _failSolutionAdd = true;
+
+        var result = await NewTool().manage_role(null!, action: "create", role_name: "New Role", solution_name: "Role Packaging");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        var json = result.StructuredContent!.Value;
+        Assert.AreEqual(_createdRoleId!.Value.ToString(), json.GetProperty("roleId").GetString());
+        Assert.IsFalse(json.GetProperty("isAddToSolution").GetBoolean());
+        Assert.AreEqual("AddSolutionComponentRequest", json.GetProperty("addToSolutionMethod").GetString());
+        StringAssert.Contains(result.GetText(), "Solution add failed in Dataverse.");
+    }
+
+    private void SeedSolution(bool isManaged = false)
+    {
+        var publisher = new Entity("publisher", Guid.NewGuid()) { ["customizationprefix"] = "test" };
+        _fake.OnRetrieve = (_, _, _) => publisher;
+        _solution = new Entity("solution", Guid.NewGuid())
+        {
+            ["publisherid"] = publisher.ToEntityReference(),
+            ["uniquename"] = "role_packaging",
+            ["friendlyname"] = "Role Packaging",
+            ["ismanaged"] = isManaged
+        };
+        var businessUnitId = Guid.NewGuid();
+        _businessUnits.Add(new Entity("businessunit", businessUnitId)
+        {
+            ["businessunitid"] = businessUnitId,
+            ["name"] = "Root BU"
+        });
+    }
+
     // ── update ──────────────────────────────────────────────────────────────
 
     private void SeedCustomizableRole(out Guid roleId)
@@ -461,6 +567,87 @@ public sealed class ManageRoleErrorPathCoverageTests
         StringAssert.Contains(result.GetText(), "privileges: 8 added");
         var json = JsonDocument.Parse(result.StructuredContent!.Value.GetRawText()).RootElement;
         Assert.AreEqual(8, json.GetProperty("privilegesAdded").GetArrayLength());
+    }
+
+    [TestMethod]
+    [DataRow(OwnershipTypes.OrganizationOwned, false)]
+    [DataRow(OwnershipTypes.OrganizationOwned, true)]
+    [DataRow(OwnershipTypes.UserOwned, false)]
+    public async Task Update_WildcardAdd_UsesOnlyApplicablePrivileges(OwnershipTypes ownership, bool includeAssignAndShare)
+    {
+        const string entity = "ntf_notification_template";
+        SeedCustomizableRole(out var roleId);
+        var metadata = TestMetadata.Entity(entity);
+        metadata.OwnershipType = ownership;
+        _entityMetadata.Add(metadata);
+        string[] availableRights = ["Create", "Read", "Write", "Delete", "Append", "AppendTo"];
+        var catalogRights = includeAssignAndShare ? availableRights.Concat(["Assign", "Share"]) : availableRights;
+        SeedPrivilegeCatalog(catalogRights.Select(right => $"prv{right}{entity}"));
+
+        var result = await NewDryRunTool().manage_role(null!, action: "update", role_id: roleId.ToString(),
+            privileges: """[{"entity":"ntf_notification_template","right":"*","depth":"Organization"}]""");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        var added = result.StructuredContent!.Value.GetProperty("privilegesAdded").EnumerateArray()
+            .Select(privilege => privilege.GetString()).ToArray();
+        CollectionAssert.AreEqual(availableRights.Select(right => $"{entity}:{right}=Organization").ToArray(), added);
+    }
+
+    [TestMethod]
+    [DataRow("activitypointer", "Create", "activitypointer")]
+    [DataRow("activity", "Create", "activitypointer")]
+    [DataRow("email", "AppendTo", "email")]
+    public async Task Update_ActivityTablesResolveSharedPrivileges(string entity, string right, string reportedEntity)
+    {
+        SeedCustomizableRole(out var roleId);
+        _entityMetadata.Add(TestMetadata.Entity("activitypointer"));
+        _entityMetadata.Add(TestMetadata.Entity("email"));
+        SeedPrivilegeCatalog(["prvCreateActivity", "prvAppendToActivity"]);
+
+        var result = await NewDryRunTool().manage_role(null!, action: "update", role_id: roleId.ToString(),
+            privileges: $$"""[{"entity":"{{entity}}","right":"{{right}}","depth":"Organization"}]""");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        var added = result.StructuredContent!.Value.GetProperty("privilegesAdded");
+        Assert.AreEqual(1, added.GetArrayLength());
+        Assert.AreEqual($"{reportedEntity}:{right}=Organization", added[0].GetString());
+    }
+
+    [TestMethod]
+    public async Task Update_ActivityTablesUpdateAndRemoveExistingSharedPrivileges()
+    {
+        SeedCustomizableRole(out var roleId);
+        _entityMetadata.Add(TestMetadata.Entity("activitypointer"));
+        _entityMetadata.Add(TestMetadata.Entity("email"));
+        _rolePrivileges.Add(PrivilegeRow("prvReadActivity", "Read", "activity", 1));
+        SeedPrivilegeCatalog([]);
+
+        var updated = await NewDryRunTool().manage_role(null!, action: "update", role_id: roleId.ToString(),
+            privileges: """[{"entity":"email","right":"Read","depth":"Organization"}]""");
+        var removed = await NewDryRunTool().manage_role(null!, action: "update", role_id: roleId.ToString(),
+            privileges: """[{"entity":"activitypointer","right":"*","depth":"None"}]""");
+
+        Assert.IsFalse(updated.IsError == true, updated.GetText());
+        Assert.AreEqual("email:Read=Organization", updated.StructuredContent!.Value.GetProperty("privilegesUpdated")[0].GetString());
+        Assert.IsFalse(removed.IsError == true, removed.GetText());
+        Assert.AreEqual("activitypointer:Read", removed.StructuredContent!.Value.GetProperty("privilegesRemoved")[0].GetString());
+    }
+
+    private void SeedPrivilegeCatalog(IEnumerable<string> names)
+    {
+        var catalog = names.ToDictionary(name => name, _ => Guid.NewGuid(), StringComparer.OrdinalIgnoreCase);
+        _fake.OnRetrieveMultiple = query =>
+        {
+            if (query is not QueryExpression { EntityName: "privilege" } privilegeQuery)
+                return RetrieveMultipleHandler(query);
+
+            var condition = privilegeQuery.Criteria.Conditions.Single(condition => condition.AttributeName == "name");
+            Assert.AreEqual(ConditionOperator.Equal, condition.Operator);
+            var name = (string)condition.Values.Single();
+            return catalog.TryGetValue(name, out var id)
+                ? Single(new Entity("privilege", id) { ["privilegeid"] = id })
+                : new EntityCollection();
+        };
     }
 
     [TestMethod]

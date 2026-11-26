@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
@@ -21,7 +20,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly IOrganizationService _orgService;
 
-        // Static dict: componenttype value → display name (avoids querying solutioncomponentdefinition + option set at runtime)
+        // Display names for the fixed Dataverse component types.
         private static readonly Dictionary<int, string> ComponentTypeNames = new()
         {
             { 1,   "Entity" },
@@ -105,16 +104,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             { 430, "Entity Analytics Config" },
             { 431, "Attribute Image Config" },
             { 432, "Entity Image Config" },
-            // Modern component types (from solutioncomponentdefinition)
             { 181,   "SDK Message Pair" },
-            { 10032, "Managed Identity" },
-            { 10036, "Custom API" },
-            { 10037, "Custom API Request Parameter" },
-            { 10038, "Custom API Response Property" },
-            { 10039, "Plugin Package" },
-            { 10088, "App Element" },
-            { 10091, "App Setting" },
-            { 10326, "App Action" },
         };
 
         private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
@@ -206,13 +196,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var solution = solutionResult.Value;
                 var (components, fullEntityNames) = LoadComponents(solution.Id);
+                var definitions = components.Any(c => c.GetAttributeValue<OptionSetValue>("componenttype")?.Value >= SolutionComponentDefinitions.FirstDynamicComponentType)
+                    ? SolutionComponentDefinitions.Get(_orgService)
+                    : null;
 
                 // Active layer checking (only when requested)
                 Dictionary<Guid, bool> activeLayers = null;
                 if (include_active_layers)
-                    activeLayers = CheckActiveLayers(components);
+                    activeLayers = CheckActiveLayers(components, definitions);
 
-                var structured = BuildStructuredResult(solution, components, fullEntityNames, activeLayers, active_layers_only);
+                var structured = BuildStructuredResult(solution, components, fullEntityNames, activeLayers, active_layers_only, definitions);
                 return Success(
                     BuildSummaryText(solution, components, activeLayers, active_layers_only),
                     structured);
@@ -376,9 +369,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Name resolution ──────────────────────────────────────────────────────
 
         private GetSolutionComponentsResult BuildStructuredResult(Entity solution, List<Entity> components,
-            Dictionary<Guid, string> fullEntityNames, Dictionary<Guid, bool> activeLayers, bool activeLayersOnly)
+            Dictionary<Guid, string> fullEntityNames, Dictionary<Guid, bool> activeLayers, bool activeLayersOnly,
+            IReadOnlyDictionary<int, ComponentDefinition> definitions)
         {
-            var nameMap = BuildNameMap(components, fullEntityNames);
+            var nameMap = BuildNameMap(components, fullEntityNames, definitions);
             var showActiveLayers = activeLayers != null;
             var displayComponents = activeLayersOnly
                 ? components.Where(c => activeLayers.TryGetValue(c.GetAttributeValue<Guid>("objectid"), out var a) && a).ToList()
@@ -389,7 +383,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 .OrderBy(g => g.Key)
                 .Select(g => new SolutionComponentSummaryEntry
                 {
-                    Type = GetTypeName(g.First()),
+                    Type = GetTypeName(g.First(), definitions),
                     TypeId = g.Key,
                     Count = g.Count(),
                     ActiveLayerCount = showActiveLayers
@@ -409,7 +403,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     return new SolutionComponentEntry
                     {
-                        Type = GetTypeName(c),
+                        Type = GetTypeName(c, definitions),
                         TypeId = g.Key,
                         ObjectId = objectId.ToString(),
                         Name = name ?? "(unresolved)",
@@ -442,7 +436,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        private Dictionary<Guid, string> BuildNameMap(List<Entity> components, Dictionary<Guid, string> fullEntityNames)
+        private Dictionary<Guid, string> BuildNameMap(List<Entity> components, Dictionary<Guid, string> fullEntityNames,
+            IReadOnlyDictionary<int, ComponentDefinition> definitions)
         {
             var nameMap = new Dictionary<Guid, string>();
             var byType = components
@@ -519,12 +514,35 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (byType.TryGetValue(381, out var envVarValueIds) && envVarValueIds.Count > 0)
                 ResolveEnvironmentVariableValueNames(envVarValueIds, nameMap);
             BatchResolve(byType, nameMap, 300, "canvasapp",                     "canvasappid",                     new ColumnSet("name", "displayname"),                e => S(e, "displayname") is { Length: > 0 } n ? n : S(e, "name"));
-            BatchResolve(byType, nameMap, 10032, "managedidentity",             "managedidentityid",               new ColumnSet("managedidentityid"),                  e => e.Id.ToString());
-            BatchResolve(byType, nameMap, 10036, "customapi",                   "customapiid",                     new ColumnSet("name", "uniquename"),                 e => S(e, "uniquename") is { Length: > 0 } n ? n : S(e, "name"));
-            BatchResolve(byType, nameMap, 10037, "customapirequestparameter",   "customapirequestparameterid",     new ColumnSet("name", "uniquename"),                 e => S(e, "uniquename") is { Length: > 0 } n ? n : S(e, "name"));
-            BatchResolve(byType, nameMap, 10038, "customapiresponseproperty",   "customapiresponsepropertyid",     new ColumnSet("name", "uniquename"),                 e => S(e, "uniquename") is { Length: > 0 } n ? n : S(e, "name"));
-            BatchResolve(byType, nameMap, 10039, "pluginpackage",               "pluginpackageid",                 new ColumnSet("name", "version"),                    e => $"{S(e, "name")} v{S(e, "version")}");
-            BatchResolve(byType, nameMap, 10326, "appaction",                   "appactionid",                     new ColumnSet("name"),                                e => S(e, "name"));
+
+            if (definitions != null)
+            {
+                foreach (var typeId in byType.Keys)
+                {
+                    var entity = definitions.GetValueOrDefault(typeId)?.PrimaryEntityName;
+                    switch (entity)
+                    {
+                        case "customapi" or "customapirequestparameter" or "customapiresponseproperty":
+                            BatchResolve(byType, nameMap, typeId, entity, entity + "id", new ColumnSet("uniquename", "name"),
+                                e => S(e, "uniquename") is { Length: > 0 } name ? name : S(e, "name"));
+                            break;
+                        case "connectionreference":
+                            BatchResolve(byType, nameMap, typeId, entity, "connectionreferenceid",
+                                new ColumnSet("connectionreferencelogicalname", "connectionreferencedisplayname"),
+                                e => S(e, "connectionreferencelogicalname") is { Length: > 0 } name ? name : S(e, "connectionreferencedisplayname"));
+                            break;
+                        case "managedidentity":
+                            BatchResolve(byType, nameMap, typeId, entity, "managedidentityid", new ColumnSet("managedidentityid"), e => e.Id.ToString());
+                            break;
+                        case "pluginpackage":
+                            BatchResolve(byType, nameMap, typeId, entity, "pluginpackageid", new ColumnSet("name", "version"), e => $"{S(e, "name")} v{S(e, "version")}");
+                            break;
+                        case "appaction":
+                            BatchResolve(byType, nameMap, typeId, entity, "appactionid", new ColumnSet("name"), e => S(e, "name"));
+                            break;
+                    }
+                }
+            }
 
             return nameMap;
         }
@@ -757,20 +775,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             { 430, "EntityAnalyticsConfig" },
             { 431, "AttributeImageConfig" },
             { 432, "EntityImageConfig" },
-            // Modern component types (from solutioncomponentdefinition)
             { 181,   "SdkMessagePair" },
-            { 10032, "ManagedIdentity" },
-            { 10036, "CustomApi" },
-            { 10037, "CustomApiRequestParameter" },
-            { 10038, "CustomApiResponseProperty" },
-            { 10039, "PluginPackage" },
-            { 10088, "AppElement" },
-            { 10091, "AppSetting" },
-            { 10326, "AppAction" },
         };
 
-        private static string GetComponentApiName(int typeId)
+        private static string GetComponentApiName(int typeId, IReadOnlyDictionary<int, ComponentDefinition> definitions)
         {
+            var definition = definitions?.GetValueOrDefault(typeId);
+            var dynamicName = definition?.PrimaryEntityName switch
+            {
+                "customapi" => "CustomApi",
+                "customapirequestparameter" => "CustomApiRequestParameter",
+                "customapiresponseproperty" => "CustomApiResponseProperty",
+                "connectionreference" => "ConnectionReference",
+                "pluginpackage" => "PluginPackage",
+                "managedidentity" => "ManagedIdentity",
+                "appelement" => "AppElement",
+                "appsetting" => "AppSetting",
+                "appaction" => "AppAction",
+                _ => definition?.Label?.Replace(" ", "").Replace("(", "").Replace(")", "")
+            };
+            if (!string.IsNullOrWhiteSpace(dynamicName))
+                return dynamicName;
+
             if (ComponentApiNames.TryGetValue(typeId, out var name))
                 return name;
             // Fallback: use the display name with spaces/parens removed
@@ -783,7 +809,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         /// Batch-queries msdyn_componentlayer via ExecuteMultiple to determine which components have an active (unmanaged) layer.
         /// Pattern from TaskSolutionLayer.CheckActiveLayers.
         /// </summary>
-        private Dictionary<Guid, bool> CheckActiveLayers(List<Entity> components)
+        private Dictionary<Guid, bool> CheckActiveLayers(List<Entity> components, IReadOnlyDictionary<int, ComponentDefinition> definitions)
         {
             var result = new Dictionary<Guid, bool>();
             if (components.Count == 0)
@@ -807,7 +833,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var entity = components[i];
                 var typeId = entity.GetAttributeValue<OptionSetValue>("componenttype")?.Value ?? 0;
                 var objectId = entity.GetAttributeValue<Guid>("objectid");
-                var apiName = GetComponentApiName(typeId);
+                var apiName = GetComponentApiName(typeId, definitions);
 
                 var req = new RetrieveMultipleRequest
                 {
@@ -855,12 +881,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string S(Entity e, string attr) =>
             e.Contains(attr) ? e[attr]?.ToString() ?? "" : "";
 
-        private static string GetTypeName(Entity component)
+        private static string GetTypeName(Entity component, IReadOnlyDictionary<int, ComponentDefinition> definitions)
         {
+            var typeId = component.GetAttributeValue<OptionSetValue>("componenttype")?.Value ?? 0;
+            var definition = definitions?.GetValueOrDefault(typeId);
+            if (!string.IsNullOrWhiteSpace(definition?.Label))
+                return definition.Label;
+
             if (component.FormattedValues.TryGetValue("componenttype", out var label) &&
                 !string.IsNullOrWhiteSpace(label))
                 return label;
-            var typeId = component.GetAttributeValue<OptionSetValue>("componenttype")?.Value ?? 0;
             return ComponentTypeNames.TryGetValue(typeId, out var name) ? name : $"Type_{typeId}";
         }
     }

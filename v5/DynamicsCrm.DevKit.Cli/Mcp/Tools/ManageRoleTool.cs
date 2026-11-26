@@ -19,6 +19,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageRoleTool : McpToolBase
     {
+        private const int RoleComponentType = 20;
+
         private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
@@ -63,16 +65,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("list: filter (contains). detail: role display name when role_id is empty. create/update/copy: new name.")] string role_name = "",
             [Description("BU GUID. list: filter. create: target BU (empty = root).")] string business_unit_id = "",
             [Description("detail/user: filter privileges by entity Display Name or logical name.")] string entity_name = "",
-            [Description("update only. JSON array: [{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Organization\"},...]. entity = Display Name or logical name; right = Create|Read|Write|Delete|Append|AppendTo|Assign|Share, or '*' for all rights on the entity; depth = User|BusinessUnit|Parent:ChildBU|Organization (broadest coverage: User < BusinessUnit < Parent:ChildBU < Organization), or None to remove.")] string privileges = "",
+            [Description("update only. JSON array: [{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Organization\"},...]. entity = Display Name or logical name. activitypointer, activity, and email use shared activity privileges; right = Create|Read|Write|Delete|Append|AppendTo|Assign|Share, or '*' for available rights on the entity; depth = User|BusinessUnit|Parent:ChildBU|Organization (broadest coverage: User < BusinessUnit < Parent:ChildBU < Organization), or None to remove.")] string privileges = "",
             [Description("restore only: .role.json backup file path written by update/delete (result's backupPath). Backups are at .devkit/manage_role/.")] string backup_path = "",
             [Description("list only. Max 250.")] int max_records = 50,
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
-            System.Threading.CancellationToken cancellationToken = default)
+            System.Threading.CancellationToken cancellationToken = default,
+            [Description("Optional unmanaged solution display or unique name for create, update, or copy. Update can add an existing role with just role_id and solution_name.")] string solution_name = null)
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
                 var worker = new ManageRoleTool(conn.OrgService, conn.Options, conn.Context);
-                return worker.manage_role(server, action, user_id, team_id, role_id, role_name, business_unit_id, entity_name, privileges, backup_path, max_records);
+                return worker.manage_role(server, action, user_id, team_id, role_id, role_name, business_unit_id, entity_name, privileges, backup_path, max_records, solution_name);
             }, cancellationToken);
         }
 
@@ -85,9 +88,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("list: filter (contains). detail: role display name when role_id is empty. create/update/copy: new name.")] string role_name = "",
             [Description("BU GUID. list: filter. create: target BU (empty = root).")] string business_unit_id = "",
             [Description("detail/user: filter privileges by entity Display Name or logical name.")] string entity_name = "",
-            [Description("update only. JSON array: [{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Organization\"},...]. entity = Display Name or logical name; right = Create|Read|Write|Delete|Append|AppendTo|Assign|Share, or '*' for all rights on the entity; depth = User|BusinessUnit|Parent:ChildBU|Organization (broadest coverage: User < BusinessUnit < Parent:ChildBU < Organization), or None to remove.")] string privileges = "",
+            [Description("update only. JSON array: [{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Organization\"},...]. entity = Display Name or logical name. activitypointer, activity, and email use shared activity privileges; right = Create|Read|Write|Delete|Append|AppendTo|Assign|Share, or '*' for available rights on the entity; depth = User|BusinessUnit|Parent:ChildBU|Organization (broadest coverage: User < BusinessUnit < Parent:ChildBU < Organization), or None to remove.")] string privileges = "",
             [Description("restore only: .role.json backup file path written by update/delete (result's backupPath). Backups are at .devkit/manage_role/.")] string backup_path = "",
-            [Description("list only. Max 250.")] int max_records = 50)
+            [Description("list only. Max 250.")] int max_records = 50,
+            string solution_name = null)
         {
             try
             {
@@ -105,6 +109,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         return gateError;
                 }
 
+                string solutionUniqueName = null;
+                if (!string.IsNullOrWhiteSpace(solution_name))
+                {
+                    if (normalizedAction is not ("create" or "update" or "copy"))
+                        return Error("solution_name is supported for role create, update, and copy.");
+
+                    var solution = SolutionResolverHelper.Resolve(_orgService, solution_name, requireUnmanaged: true);
+                    if (!solution.IsSuccess)
+                        return Error(solution.Error, "Use get_solution_components to find an unmanaged solution.");
+
+                    solutionUniqueName = solution.UniqueName;
+                }
+
                 if (normalizedAction is "update" or "delete" or "restore")
                     _workspaceFolder = await WorkspaceFolderHelper.GetAsync(server);
 
@@ -115,10 +132,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "user" => HandleUser(user_id?.Trim(), entity_name?.Trim()),
                     "assign" => HandleAssign(user_id?.Trim(), team_id?.Trim(), role_id?.Trim()),
                     "unassign" => HandleUnassign(user_id?.Trim(), team_id?.Trim(), role_id?.Trim()),
-                    "create" => HandleCreate(role_name?.Trim(), business_unit_id?.Trim()),
-                    "update" => HandleUpdate(role_id?.Trim(), role_name?.Trim(), privileges),
+                    "create" => HandleCreate(role_name?.Trim(), business_unit_id?.Trim(), solutionUniqueName),
+                    "update" => HandleUpdate(role_id?.Trim(), role_name?.Trim(), privileges, solutionUniqueName),
                     "delete" => HandleDelete(role_id?.Trim()),
-                    "copy" => HandleCopy(role_id?.Trim(), role_name?.Trim()),
+                    "copy" => HandleCopy(role_id?.Trim(), role_name?.Trim(), solutionUniqueName),
                     "restore" => HandleRestore(backup_path?.Trim()),
                     _ => Error($"Invalid action '{action}'.",
                         "Valid values: 'list', 'detail', 'user', 'assign', 'unassign', 'create', 'update', 'delete', 'copy', 'restore'.")
@@ -521,7 +538,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return Success($"{verb} role '{roleName}' {preposition} {targetLabel} '{targetName}'.", structured);
         }
 
-        private CallToolResult HandleCreate(string roleName, string businessUnitId)
+        private CallToolResult HandleCreate(string roleName, string businessUnitId, string solutionUniqueName)
         {
             if (string.IsNullOrWhiteSpace(roleName))
                 return Error("role_name is required for 'create' action.",
@@ -563,14 +580,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (_options.DryRun)
-                return DryRun($"Would CREATE role '{roleName}' in business unit '{buName}' ({buId}).", new ManageRoleResult
+                return PreviewSolutionMutation($"Would CREATE role '{roleName}' in business unit '{buName}' ({buId}).", new ManageRoleResult
                 {
                     Action = "create",
                     RoleName = roleName,
                     BusinessUnitId = buId.ToString(),
                     Status = "not_executed",
                     CreateMode = "metadata"
-                });
+                }, solutionUniqueName);
 
             var roleEntity = new Entity("role")
             {
@@ -580,23 +597,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var newId = DataverseMutationExecutor.Create(_context, _orgService, roleEntity);
 
-            return Success($"Created role '{roleName}' ({newId}) in business unit '{buName}'.", new ManageRoleResult
+            return CompleteSolutionMutation($"Created role '{roleName}' ({newId}) in business unit '{buName}'.", new ManageRoleResult
             {
                 Action = "created",
                 RoleId = newId.ToString(),
                 RoleName = roleName,
                 BusinessUnitId = buId.ToString(),
                 Status = "created",
-                CreateMode = SolutionComponentCreateMode.None.ToString()
-            });
+                CreateMode = (solutionUniqueName == null ? SolutionComponentCreateMode.None
+                    : SolutionComponentCreateMode.RecordCreateThenAddSolutionComponent).ToString()
+            }, newId, solutionUniqueName);
         }
 
-        private CallToolResult HandleUpdate(string roleId, string roleName, string privilegesJson)
+        private CallToolResult HandleUpdate(string roleId, string roleName, string privilegesJson, string solutionUniqueName)
         {
             if (string.IsNullOrWhiteSpace(roleId))
                 return Error("role_id is required for 'update' action.",
                     "Pass the roleid GUID of the role to update. Use action='list' to find valid role IDs.");
-            if (string.IsNullOrWhiteSpace(roleName) && string.IsNullOrWhiteSpace(privilegesJson))
+            var hasRoleChanges = !string.IsNullOrWhiteSpace(roleName) || !string.IsNullOrWhiteSpace(privilegesJson);
+            if (!hasRoleChanges && solutionUniqueName == null)
                 return Error("Nothing to update. Provide role_name (rename) and/or privileges (JSON array).",
                     "Example privileges: [{\"entity\":\"account\",\"right\":\"Read\",\"depth\":\"Organization\"}]. Use depth 'None' to remove a privilege.");
             if (!Guid.TryParse(roleId, out var id))
@@ -608,12 +627,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error($"No security role found with ID '{roleId}'.",
                     "Use action='list' to find valid role IDs.");
 
+            var oldName = existingRole.GetAttributeValue<string>("name") ?? "";
+            if (!hasRoleChanges)
+            {
+                var result = new ManageRoleResult
+                {
+                    Action = _options.DryRun ? "update" : "updated",
+                    RoleId = id.ToString(),
+                    RoleName = oldName,
+                    Status = _options.DryRun ? "not_executed" : "updated"
+                };
+                return _options.DryRun
+                    ? PreviewSolutionMutation($"Role '{oldName}' ({id}).", result, solutionUniqueName)
+                    : CompleteSolutionMutation($"Role '{oldName}' ({id}).", result, id, solutionUniqueName);
+            }
+
             var isCustomizable = existingRole.GetAttributeValue<BooleanManagedProperty>("iscustomizable")?.Value ?? true;
             if (!isCustomizable)
                 return Error($"Role '{existingRole.GetAttributeValue<string>("name")}' is not customizable and cannot be updated.",
                     "Use action='copy' to clone its privileges into a new custom role, then update the copy.");
 
-            var oldName = existingRole.GetAttributeValue<string>("name") ?? "";
             var hasRename = !string.IsNullOrWhiteSpace(roleName) && !string.Equals(roleName, oldName, StringComparison.Ordinal);
 
             List<PrivilegeChangeInput> changes = null;
@@ -657,7 +690,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var depthError = ValidateDepth(change.Depth);
                     if (depthError != null) return Error(depthError.Value.Message, depthError.Value.Hint);
 
-                    var resolvedEntity = DisplayNameFirstResolver.ResolveEntity(_orgService, change.Entity?.Trim(), "manage_role");
+                    var entityInput = change.Entity?.Trim();
+                    var isActivityAlias = string.Equals(entityInput, "activity", StringComparison.OrdinalIgnoreCase);
+                    var resolvedEntity = isActivityAlias
+                        ? DisplayNameFirstResolver.ResolveEntity(_orgService, "activitypointer", "manage_role", matchMode: EntityNameMatchMode.ExactLogicalNameOnly)
+                        : DisplayNameFirstResolver.ResolveEntity(_orgService, entityInput, "manage_role");
                     if (!resolvedEntity.IsSuccess)
                     {
                         if (resolvedEntity.Status == ResolveStatus.Ambiguous)
@@ -683,16 +720,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     if (isWildcard)
                     {
+                        var privilegeEntity = GetPrivilegeEntityName(entityLogical);
+                        var isOrganizationOwned = resolvedEntity.Value.OwnershipType?.HasFlag(OwnershipTypes.OrganizationOwned) == true;
                         var rights = isRemove
                             ? current.Keys
-                                .Where(k => k.StartsWith(entityLogical + "|", StringComparison.OrdinalIgnoreCase))
-                                .Select(k => k.Substring(entityLogical.Length + 1))
-                                .ToList()
-                            : StandardRights.ToList();
+                                .Where(k => k.StartsWith(privilegeEntity + "|", StringComparison.OrdinalIgnoreCase))
+                                .Select(k => k.Substring(privilegeEntity.Length + 1))
+                                .ToArray()
+                            : StandardRights;
 
                         foreach (var right in rights)
                         {
-                            var applyError = ApplyPrivilegeChange(current, entityLogical, right, change.Depth, isRemove, added, updatedList, removed);
+                            if (!isRemove && isOrganizationOwned && right is ("Assign" or "Share"))
+                                continue;
+
+                            var applyError = ApplyPrivilegeChange(current, entityLogical, right, change.Depth, isRemove, added, updatedList, removed, skipMissingPrivilege: true);
                             if (applyError != null) return Error(applyError.Value.Message, applyError.Value.Hint);
                         }
                         continue;
@@ -711,7 +753,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var privPart = changes == null ? "" : $", privileges: {added.Count} added, {updatedList.Count} depth-changed, {removed.Count} removed";
 
             if (_options.DryRun)
-                return DryRun($"Would UPDATE role '{oldName}' ({id}){renamePart}{privPart}.", new ManageRoleResult
+                return PreviewSolutionMutation($"Would UPDATE role '{oldName}' ({id}){renamePart}{privPart}.", new ManageRoleResult
                 {
                     Action = "update",
                     RoleId = id.ToString(),
@@ -720,7 +762,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     PrivilegesAdded = added.Count > 0 ? added : null,
                     PrivilegesUpdated = updatedList.Count > 0 ? updatedList : null,
                     PrivilegesRemoved = removed.Count > 0 ? removed : null
-                });
+                }, solutionUniqueName);
 
             // Backup runs only when actually mutating (after DryRun check above)
             var backupBuRef = existingRole.GetAttributeValue<EntityReference>("businessunitid");
@@ -758,7 +800,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var displayName = hasRename ? $"{oldName}' → '{roleName.Trim()}" : oldName;
-            return Success($"Updated role '{displayName}' ({id}){privPart}. Backup saved.", new ManageRoleResult
+            return CompleteSolutionMutation($"Updated role '{displayName}' ({id}){privPart}. Backup saved.", new ManageRoleResult
             {
                 Action = "updated",
                 RoleId = id.ToString(),
@@ -768,11 +810,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 PrivilegesUpdated = updatedList.Count > 0 ? updatedList : null,
                 PrivilegesRemoved = removed.Count > 0 ? removed : null,
                 BackupPath = backupPath
-            });
+            }, id, solutionUniqueName);
         }
 
         private static readonly string[] StandardRights =
             { "Create", "Read", "Write", "Delete", "Append", "AppendTo", "Assign", "Share" };
+
+        private static string GetPrivilegeEntityName(string entityLogical) =>
+            entityLogical is "activitypointer" or "email" ? "Activity" : entityLogical;
 
         private (string Message, string Hint)? ApplyPrivilegeChange(
             Dictionary<string, PrivilegeInfo> current,
@@ -782,9 +827,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             bool isRemove,
             List<string> added,
             List<string> updatedList,
-            List<string> removed)
+            List<string> removed,
+            bool skipMissingPrivilege = false)
         {
-            var key = $"{entityLogical}|{right}";
+            var privilegeEntity = GetPrivilegeEntityName(entityLogical);
+            var key = $"{privilegeEntity}|{right}";
 
             if (isRemove)
             {
@@ -805,15 +852,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return null;
             }
 
-            var privId = FindPrivilegeId(right, entityLogical);
+            var privilegeName = $"prv{right}{privilegeEntity}";
+            var privId = FindPrivilegeId(privilegeName);
             if (privId == null)
-                return ($"No privilege found for right '{right}' on entity '{entityLogical}'.",
+                return skipMissingPrivilege ? null : ($"No privilege found for right '{right}' on entity '{entityLogical}'.",
                     "Check the right value and entity name. Use action='detail' with entity_name to see privileges the role already has.");
             current[key] = new PrivilegeInfo
             {
-                FullName = $"prv{right}{entityLogical}",
+                FullName = privilegeName,
                 Right = right,
-                EntityName = entityLogical,
+                EntityName = privilegeEntity,
                 Depth = depth,
                 DepthMask = -1,
                 PrivilegeId = privId.Value
@@ -855,15 +903,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _ => 0
         };
 
-        private Guid? FindPrivilegeId(string right, string entityLogical)
+        private Guid? FindPrivilegeId(string privilegeName)
         {
-            var name = $"prv{right}{entityLogical}".Replace("[", "[[]").Replace("%", "[%]");
             var query = new QueryExpression("privilege")
             {
                 ColumnSet = new ColumnSet("privilegeid"),
                 TopCount = 2
             };
-            query.Criteria.AddCondition("name", ConditionOperator.Like, name);
+            query.Criteria.AddCondition("name", ConditionOperator.Equal, privilegeName);
             var result = _orgService.RetrieveMultiple(query);
             return result.Entities.Count == 1 ? result.Entities[0].GetAttributeValue<Guid>("privilegeid") : null;
         }
@@ -922,7 +969,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             });
         }
 
-        private CallToolResult HandleCopy(string roleId, string roleName)
+        private CallToolResult HandleCopy(string roleId, string roleName, string solutionUniqueName)
         {
             if (string.IsNullOrWhiteSpace(roleId))
                 return Error("role_id is required for 'copy' action.",
@@ -946,7 +993,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var privileges = GetRolePrivileges(sourceId);
 
             if (_options.DryRun)
-                return DryRun($"Would COPY role '{sourceRoleName}' ({sourceId}) → new role '{roleName}' with {privileges.Count} privileges.", new ManageRoleResult
+                return PreviewSolutionMutation($"Would COPY role '{sourceRoleName}' ({sourceId}) → new role '{roleName}' with {privileges.Count} privileges.", new ManageRoleResult
                 {
                     Action = "copy",
                     SourceRoleId = sourceId.ToString(),
@@ -955,7 +1002,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     PrivilegesCopied = privileges.Count,
                     Status = "not_executed",
                     CreateMode = "metadata"
-                });
+                }, solutionUniqueName);
 
             var newRoleEntity = new Entity("role")
             {
@@ -985,7 +1032,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 DataverseMutationExecutor.Execute(_context, _orgService, addPrivRequest);
             }
 
-            return Success($"Copied role '{sourceRoleName}' ({sourceId}) → '{roleName}' ({newRoleId}) with {privileges.Count} privileges.", new ManageRoleResult
+            return CompleteSolutionMutation($"Copied role '{sourceRoleName}' ({sourceId}) → '{roleName}' ({newRoleId}) with {privileges.Count} privileges.", new ManageRoleResult
             {
                 Action = "copied",
                 RoleId = newRoleId.ToString(),
@@ -993,7 +1040,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SourceRoleId = sourceId.ToString(),
                 PrivilegesCopied = privileges.Count,
                 Status = "copied"
-            });
+            }, newRoleId, solutionUniqueName);
+        }
+
+        private CallToolResult PreviewSolutionMutation(string summary, ManageRoleResult result, string solutionUniqueName)
+        {
+            if (solutionUniqueName != null)
+                summary += $" Would add role to solution '{solutionUniqueName}'.";
+
+            return DryRun(summary, result);
+        }
+
+        private CallToolResult CompleteSolutionMutation(string summary, ManageRoleResult result, Guid roleId, string solutionUniqueName)
+        {
+            if (solutionUniqueName != null)
+            {
+                var association = SolutionComponentCreateHelper.AddExistingComponent(
+                    _context, _orgService, roleId, RoleComponentType, solutionUniqueName, addRequiredComponents: false);
+                result.IsAddToSolution = association.IsAddToSolution;
+                result.AddToSolutionMethod = association.AddToSolutionMethod;
+                summary += association.IsAddToSolution
+                    ? $" Added role to solution '{solutionUniqueName}'."
+                    : $" Failed to add role to solution '{solutionUniqueName}': {association.AddToSolutionWarning}";
+            }
+
+            return Success(summary, result);
         }
 
         private CallToolResult HandleRestore(string backupPath)

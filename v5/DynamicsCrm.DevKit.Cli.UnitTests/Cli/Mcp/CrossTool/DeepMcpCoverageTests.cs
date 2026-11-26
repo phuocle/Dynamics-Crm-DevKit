@@ -250,12 +250,12 @@ public sealed class DeepMcpCoverageTests
         Call(tool, "HandleUser", "", "");
         Call(tool, "HandleAssign", "", "", "");
         Call(tool, "HandleUnassign", "", "", "");
-        Call(tool, "HandleCreate", "", "");
-        Call(tool, "HandleCreate", "Role", "bad");
-        Call(tool, "HandleUpdate", "", "", "");
-        Call(tool, "HandleUpdate", "bad", "Role", "");
+        Call(tool, "HandleCreate", "", "", null);
+        Call(tool, "HandleCreate", "Role", "bad", null);
+        Call(tool, "HandleUpdate", "", "", "", null);
+        Call(tool, "HandleUpdate", "bad", "Role", "", null);
         Call(tool, "HandleDelete", "");
-        Call(tool, "HandleCopy", "", "");
+        Call(tool, "HandleCopy", "", "", null);
         Call(tool, "HandleRestore", "");
         Call(tool, "HandleRestore", "bad.json");
 

@@ -35,6 +35,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("processingType")]
         public string ProcessingType { get; set; }
 
+        [JsonPropertyName("workflowSdkStepEnabled")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? WorkflowSdkStepEnabled { get; set; }
+
+        [JsonPropertyName("executePrivilegeName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ExecutePrivilegeName { get; set; }
+
         [JsonPropertyName("pluginType")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string PluginType { get; set; }

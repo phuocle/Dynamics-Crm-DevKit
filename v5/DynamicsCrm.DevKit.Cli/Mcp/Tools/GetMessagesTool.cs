@@ -60,7 +60,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Check plugin step count registered on a specific message\n\n" +
             "MIGRATION RULE (STRICT): Inspect and convert ONE custom action at a time in detail mode. Never batch-convert actions.\n\n" +
             "RELATED TOOLS:\n" +
-            "- get_custom_apis → modern Custom API definitions (replaces Custom Actions)\n" +
+            "- manage_custom_api → modern Custom API definitions (replaces Custom Actions)\n" +
             "- get_plugins → plugin assemblies/types/steps registered on these messages\n" +
             "- get_workflows → classic workflow definitions (background + realtime)")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(

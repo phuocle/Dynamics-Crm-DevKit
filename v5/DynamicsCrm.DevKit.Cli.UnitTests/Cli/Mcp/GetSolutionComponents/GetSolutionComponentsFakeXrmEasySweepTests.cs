@@ -121,6 +121,14 @@ public sealed class GetSolutionComponentsFakeXrmEasySweepTests
     private static SolutionComponentEntry Entry(GetSolutionComponentsResult payload, Guid id) =>
         payload.Components.Single(c => c.ObjectId == id.ToString());
 
+    private static Entity Definition(int typeId, string entityName, string label) =>
+        new("solutioncomponentdefinition", Guid.NewGuid())
+        {
+            ["solutioncomponenttype"] = typeId,
+            ["primaryentityname"] = entityName,
+            ["name"] = label
+        };
+
     // ──────────────────────────────────────────────
     // solution resolution
     // ──────────────────────────────────────────────
@@ -187,8 +195,8 @@ public sealed class GetSolutionComponentsFakeXrmEasySweepTests
             Component(solutionId, 381),                   // environment variable value (displayname fallback)
             Component(solutionId, 381),                   // environment variable value (id fallback)
             Component(solutionId, 300),                   // canvas app
-            Component(solutionId, 10036),                 // custom api (uniquename)
-            Component(solutionId, 10036),                 // custom api (name fallback)
+            Component(solutionId, 10038),                 // custom api (uniquename)
+            Component(solutionId, 10038),                 // custom api (name fallback)
             Component(solutionId, 9999),                  // unknown type
             Component(solutionId, 50)                     // known type without resolver
         };
@@ -254,6 +262,7 @@ public sealed class GetSolutionComponentsFakeXrmEasySweepTests
             ("def.schemaname", new AliasedValue("environmentvariabledefinition", "schemaname", "")),
             ("def.displayname", new AliasedValue("environmentvariabledefinition", "displayname", "")));
         SeedRow("canvasapp", canvasId, "canvasappid", ("name", "canvas_name"), ("displayname", "My Canvas"));
+        _service.AddRow("solutioncomponentdefinition", Definition(10038, "customapi", "Custom API"));
         SeedRow("customapi", customApi1Id, "customapiid", ("name", "DoThing"), ("uniquename", "devkit_DoThing"));
         SeedRow("customapi", customApi2Id, "customapiid", ("name", "DoFallback"), ("uniquename", ""));
 
@@ -310,6 +319,84 @@ public sealed class GetSolutionComponentsFakeXrmEasySweepTests
         // summary list is overwritten by the one-line text in structured content —
         // verify the count via the text instead
         StringAssert.Contains(Text(result), "26 components.");
+    }
+
+    [TestMethod]
+    public void DynamicComponents_UseOrganizationDefinitionsForLabelsNamesAndActiveLayers()
+    {
+        var (_, solutionId) = SeedSolution("Dynamic", "Dynamic");
+        (int Id, string Entity, string Label, string NameAttribute, string Name)[] definitions =
+        [
+            (10038, "customapi", "Custom API", "uniquename", "contoso_Process"),
+            (10039, "customapirequestparameter", "Custom API Request Parameter", "name", "Request Value"),
+            (10040, "customapiresponseproperty", "Custom API Response Property", "uniquename", "ResultValue"),
+            (10000, "connectionreference", "Connection Reference", "connectionreferencelogicalname", "contoso_reference")
+        ];
+
+        foreach (var definition in definitions)
+        {
+            var component = Component(solutionId, definition.Id);
+            component.FormattedValues["componenttype"] = "Old label";
+            _service.AddRow("solutioncomponent", component);
+            _service.AddRow("solutioncomponentdefinition", Definition(definition.Id, definition.Entity, definition.Label));
+            SeedRow(definition.Entity, component.Id, definition.Entity + "id", (definition.NameAttribute, definition.Name));
+            _service.ActiveLayerIds.Add(component.Id);
+        }
+        _service.AddRow("solutioncomponent", Component(solutionId, 10036));
+
+        var result = NewTool().get_solution_components("Dynamic", include_active_layers: true);
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        StringAssert.Contains(Text(result), "5 components, 4 with active layers.");
+        var entries = Payload(result).Components.ToDictionary(entry => entry.TypeId);
+        foreach (var definition in definitions)
+        {
+            Assert.AreEqual(definition.Label, entries[definition.Id].Type);
+            Assert.AreEqual(definition.Name, entries[definition.Id].Name);
+            Assert.IsTrue(entries[definition.Id].HasActiveLayer);
+        }
+        Assert.AreEqual("Type_10036", entries[10036].Type);
+        Assert.AreEqual("(unresolved)", entries[10036].Name);
+        CollectionAssert.AreEquivalent(
+            new[] { "CustomApi", "CustomApiRequestParameter", "CustomApiResponseProperty", "ConnectionReference", "10036" },
+            _service.LayerTypeNames);
+        CollectionAssert.AreEquivalent(new[] { "solutioncomponenttype", "primaryentityname", "name" },
+            _service.DefinitionQueries.Single().ColumnSet.Columns.ToArray());
+    }
+
+    [TestMethod]
+    public void DynamicDefinitions_AreCachedAcrossWorkersAndIsolatedByOrganizationService()
+    {
+        const int typeId = 10038;
+        var (solution, solutionId) = SeedSolution("Cache", "Cache");
+        var component = Component(solutionId, typeId);
+        _service.AddRow("solutioncomponent", component);
+        _service.AddRow("solutioncomponentdefinition", Definition(typeId, "customapi", "Custom API"));
+        SeedRow("customapi", component.Id, "customapiid", ("uniquename", "contoso_Process"));
+
+        var otherService = new SweepOrgService(_ctx.GetOrganizationService());
+        otherService.AddRow("solution", solution);
+        otherService.AddRow("solutioncomponent", component);
+        otherService.AddRow("solutioncomponentdefinition", Definition(typeId, "connectionreference", "Connection Reference"));
+        otherService.AddRow("connectionreference", new Entity("connectionreference", component.Id)
+        {
+            ["connectionreferencelogicalname"] = "contoso_reference"
+        });
+
+        var first = NewTool().get_solution_components("Cache");
+        var other = new GetSolutionComponentsTool(otherService).get_solution_components("Cache");
+        var repeated = NewTool().get_solution_components("Cache");
+
+        Assert.IsFalse(first.IsError == true, Text(first));
+        Assert.IsFalse(other.IsError == true, Text(other));
+        Assert.IsFalse(repeated.IsError == true, Text(repeated));
+        Assert.AreEqual("Custom API", Payload(first).Components.Single().Type);
+        Assert.AreEqual("Connection Reference", Payload(other).Components.Single().Type);
+        Assert.AreEqual("contoso_reference", Payload(other).Components.Single().Name);
+        Assert.AreEqual("Custom API", Payload(repeated).Components.Single().Type);
+        Assert.AreEqual("contoso_Process", Payload(repeated).Components.Single().Name);
+        Assert.HasCount(1, _service.DefinitionQueries);
+        Assert.HasCount(1, otherService.DefinitionQueries);
     }
 
     [TestMethod]
@@ -429,6 +516,7 @@ public sealed class GetSolutionComponentsFakeXrmEasySweepTests
         Assert.IsTrue(payload.IncludeActiveLayers);
         Assert.AreEqual(0, payload.ActiveLayerCount);
         Assert.AreEqual(0, payload.Components.Count);
+        Assert.IsEmpty(_service.DefinitionQueries);
     }
 
     // ──────────────────────────────────────────────
@@ -465,6 +553,8 @@ public sealed class GetSolutionComponentsFakeXrmEasySweepTests
         public readonly Dictionary<Guid, (string SchemaName, bool OneToMany)> RelationshipOwners = new();
         public readonly HashSet<Guid> ActiveLayerIds = new();
         public readonly Dictionary<Guid, string> InactiveLayerNames = new();
+        public readonly List<QueryExpression> DefinitionQueries = new();
+        public readonly List<string> LayerTypeNames = new();
         public int ComponentPageSize;
         public int LastComponentPageNumber;
         public string IncomingPagingCookie;
@@ -516,6 +606,9 @@ public sealed class GetSolutionComponentsFakeXrmEasySweepTests
 
         private EntityCollection RunQuery(QueryExpression qe)
         {
+            if (qe.EntityName == "solutioncomponentdefinition")
+                DefinitionQueries.Add(qe);
+
             var matched = (Rows.TryGetValue(qe.EntityName, out var rows) ? rows : new List<Entity>())
                 .Where(r => MatchesFilter(r, qe.Criteria))
                 .ToList();
@@ -674,6 +767,11 @@ public sealed class GetSolutionComponentsFakeXrmEasySweepTests
             var responses = new ExecuteMultipleResponseItemCollection();
             for (var i = 0; i < bulk.Requests.Count; i++)
             {
+                if (bulk.Requests[i] is RetrieveMultipleRequest { Query: QueryExpression query })
+                {
+                    var typeCondition = query.Criteria.Conditions.Single(c => c.AttributeName == "msdyn_solutioncomponentname");
+                    LayerTypeNames.Add((string)typeCondition.Values.Single());
+                }
                 var item = new ExecuteMultipleResponseItem { RequestIndex = i };
                 if (BulkFaultMessage != null && i == 0)
                 {

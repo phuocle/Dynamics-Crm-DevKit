@@ -28,5 +28,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("fields")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Dictionary<string, string> Fields { get; set; }
+
+        [JsonPropertyName("solutions")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<SolutionInfoEntry> Solutions { get; set; }
     }
 }

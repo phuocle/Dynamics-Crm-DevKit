@@ -21,7 +21,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Function
     {
         internal const string SupportedActions = "list, detail, validate, invoke";
 
-        // Custom API parameter types (same numbering as GetCustomApisTool).
+        // Dataverse Custom API parameter type codes.
         internal static readonly Dictionary<int, string> ParameterTypeMap = new()
         {
             [0] = "Boolean",

@@ -29,11 +29,11 @@ public class GetSolutionComponentsToolTests
     {
         var entity = new Entity("solutioncomponent");
         entity["componenttype"] = new OptionSetValue(typeId);
-        return (string)GetTypeNameMethod.Invoke(null, new object[] { entity })!;
+        return (string)GetTypeNameMethod.Invoke(null, new object?[] { entity, null })!;
     }
 
     private static string GetComponentApiName(int typeId) =>
-        (string)GetComponentApiNameMethod.Invoke(null, new object[] { typeId })!;
+        (string)GetComponentApiNameMethod.Invoke(null, new object?[] { typeId, null })!;
 
     private static object NewStringCandidate(string value, string displayName, string? uniqueName = null, string? logicalName = null, string? schemaName = null)
     {
@@ -99,49 +99,15 @@ public class GetSolutionComponentsToolTests
     public void GetTypeName_EnvironmentVariableValue_ReturnsCorrectName()
         => Assert.AreEqual("Environment Variable Value", GetTypeName(381));
 
-    // ──────────────────────────────────────────────
-    // GetTypeName — modern component types (Finding 1)
-    // ──────────────────────────────────────────────
-
     [TestMethod]
     public void GetTypeName_181_ReturnsSdkMessagePair()
         => Assert.AreEqual("SDK Message Pair", GetTypeName(181));
 
     [TestMethod]
-    public void GetTypeName_10032_ReturnsManagedIdentity()
-        => Assert.AreEqual("Managed Identity", GetTypeName(10032));
-
-    [TestMethod]
-    public void GetTypeName_10036_ReturnsCustomApi()
-        => Assert.AreEqual("Custom API", GetTypeName(10036));
-
-    [TestMethod]
-    public void GetTypeName_10037_ReturnsCustomApiRequestParameter()
-        => Assert.AreEqual("Custom API Request Parameter", GetTypeName(10037));
-
-    [TestMethod]
-    public void GetTypeName_10038_ReturnsCustomApiResponseProperty()
-        => Assert.AreEqual("Custom API Response Property", GetTypeName(10038));
-
-    [TestMethod]
-    public void GetTypeName_10039_ReturnsPluginPackage()
-        => Assert.AreEqual("Plugin Package", GetTypeName(10039));
-
-    [TestMethod]
-    public void GetTypeName_10088_ReturnsAppElement()
-        => Assert.AreEqual("App Element", GetTypeName(10088));
-
-    [TestMethod]
-    public void GetTypeName_10091_ReturnsAppSetting()
-        => Assert.AreEqual("App Setting", GetTypeName(10091));
-
-    [TestMethod]
-    public void GetTypeName_10326_ReturnsAppAction()
-        => Assert.AreEqual("App Action", GetTypeName(10326));
-
-    [TestMethod]
-    public void GetTypeName_UnknownType_ReturnsFallbackFormat()
-        => Assert.AreEqual("Type_99999", GetTypeName(99999));
+    [DataRow(10038)]
+    [DataRow(99999)]
+    public void GetTypeName_WithoutDefinition_ReturnsFallbackFormat(int typeId)
+        => Assert.AreEqual($"Type_{typeId}", GetTypeName(typeId));
 
     // ──────────────────────────────────────────────
     // GetComponentApiName — classic types
@@ -159,38 +125,15 @@ public class GetSolutionComponentsToolTests
     public void GetComponentApiName_PluginAssembly_ReturnsPluginAssembly()
         => Assert.AreEqual("PluginAssembly", GetComponentApiName(91));
 
-    // ──────────────────────────────────────────────
-    // GetComponentApiName — modern types (Finding 2)
-    // ──────────────────────────────────────────────
-
     [TestMethod]
     public void GetComponentApiName_181_ReturnsSdkMessagePair()
         => Assert.AreEqual("SdkMessagePair", GetComponentApiName(181));
 
     [TestMethod]
-    public void GetComponentApiName_10032_ReturnsManagedIdentity()
-        => Assert.AreEqual("ManagedIdentity", GetComponentApiName(10032));
-
-    [TestMethod]
-    public void GetComponentApiName_10036_ReturnsCustomApi()
-        => Assert.AreEqual("CustomApi", GetComponentApiName(10036));
-
-    [TestMethod]
-    public void GetComponentApiName_10039_ReturnsPluginPackage()
-        => Assert.AreEqual("PluginPackage", GetComponentApiName(10039));
-
-    [TestMethod]
-    public void GetComponentApiName_10326_ReturnsAppAction()
-        => Assert.AreEqual("AppAction", GetComponentApiName(10326));
-
-    [TestMethod]
-    public void GetComponentApiName_UnknownType_FallsBackToDisplayName()
-    {
-        // Type 300 is in ComponentTypeNames as "Canvas App" but also in ComponentApiNames as "CanvasApp"
-        // Test a type that is ONLY in ComponentTypeNames (not ComponentApiNames) — none exist now
-        // So test that a completely unknown type returns the typeId as string
-        Assert.AreEqual("99999", GetComponentApiName(99999));
-    }
+    [DataRow(10039)]
+    [DataRow(99999)]
+    public void GetComponentApiName_WithoutDefinition_ReturnsTypeId(int typeId)
+        => Assert.AreEqual(typeId.ToString(), GetComponentApiName(typeId));
 
     [TestMethod]
     public void DisplayNameFirstResolver_DisplayUniqueInput_ResolvesExactCompositeBeforeAmbiguousDisplayContains()

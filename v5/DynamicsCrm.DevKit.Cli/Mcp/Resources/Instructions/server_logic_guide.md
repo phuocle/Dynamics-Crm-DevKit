@@ -9,7 +9,7 @@ Reference for all 6 server-logic inspection tools.
 |------|-----------------|------------------|-----------------|
 | get_plugins | Plugin assemblies, types, steps, images | pluginassembly, plugintype, sdkmessageprocessingstep | N/A |
 | get_workflows | Classic workflows (background + realtime) | workflow | category=0 |
-| get_custom_apis | Custom API definitions | customapi | N/A |
+| manage_custom_api | Custom API definitions, request parameters, response properties (list/detail/create/update/delete) | customapi | N/A |
 | get_flows | Power Automate cloud flows + run history | workflow + flowsession | category=5 |
 | get_business_process_flows | BPF definitions + stages | workflow | category=4 |
 | get_business_rules | Business rules | workflow | category=2 |
@@ -25,7 +25,7 @@ These tools support list and detail modes, but their identifiers differ:
 
 For get_plugins: detail mode triggers when assembly_name matches exactly 1 assembly.
 For get_workflows: detail mode also triggers when name_filter matches exactly 1 workflow.
-For get_custom_apis use api_name; get_business_process_flows also supports bpf_name matching one result. get_business_rules requires entity_name for both modes.
+For manage_custom_api use action='list' or action='detail' with api_name (plus create/update/delete); get_business_process_flows also supports bpf_name matching one result. get_business_rules requires entity_name for both modes.
 
 ## get_plugins
 
@@ -92,21 +92,24 @@ This downloads the original NuGet package bytes, including all DLLs, dependencie
 - runas: 0=Owner (of workflow), 1=Caller (triggering user)
 - triggeronupdateattributelist: comma-separated field names that trigger on Update
 
-## get_custom_apis
+## manage_custom_api
 
-### Filter Parameters
-| Parameter | Description |
-|-----------|------------|
-| api_name | Unique name or display name (contains) |
-| entity_name | Bound entity logical name |
-| status | active (default), inactive, or all |
-| include_microsoft | Include managed APIs (default: false) |
+### Actions
+- `list`: Filter by `entity_name`, `status` (active/inactive/all), `include_microsoft` (default: false), `max_records` (1-500).
+- `detail`: Pass `api_name` (Display Name, unique name, or GUID) to inspect metadata, plugin binding, request parameters, and response properties.
+- `create`: Requires `solution_name` (unmanaged) and `display_name`; optional `api_name` (validated against publisher prefix or auto-derived), `binding_type`, `entity_name`, `is_function`, `is_private`, `allowed_custom_processing_step_type`, `workflow_sdk_step_enabled`, `execute_privilege_name`, `request_parameters` JSON array, `response_properties` JSON array.
+- `update`: Pass `api_name` plus `display_name`, `description`, `is_private`, or `execute_privilege_name`, or change `request_parameters`/`response_properties` (`action`: add/update/remove). Optional `solution_name` applies to newly added parameters and properties.
+- `delete`: Delete an unmanaged Custom API by `api_name`.
+
+`update` and `delete` are blocked for managed APIs and APIs backing Power Fx functions. Set `allowed_custom_processing_step_type` and `workflow_sdk_step_enabled` when creating the API. Existing request parameters and response properties support updates to `display_name` and `description`. Set `type`, `logical_entity_name`, and request parameter `is_optional` when creating each item.
+
+Changes involving multiple records run in one Dataverse transaction. Dry-run returns `status: "not_executed"` for the planned mutation.
 
 ### Key Fields Returned
-- unique_name, display_name, binding_type (Global, Entity, EntityCollection)
-- is_private, allowed_custom_processing_step_type
-- request_parameters, response_properties (with type, is_optional)
-- plugin_type (backing implementation)
+- uniqueName, displayName, bindingType (Global, Entity, EntityCollection)
+- isPrivate, processingType, workflowSdkStepEnabled, executePrivilegeName
+- requestParameters, responseProperties (with type, isOptional)
+- pluginType (backing implementation)
 
 ## get_flows
 

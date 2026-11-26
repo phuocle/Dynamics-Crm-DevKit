@@ -440,11 +440,12 @@ public class ExecuteWebApiToolTests
     // ── NEW: Connections ──
 
     [TestMethod]
-    public void GetBlockedReason_PATCH_ConnectionReferences_Blocked()
+    public void GetBlockedReason_PATCH_ConnectionReferences_RedirectsToManageRecord()
     {
         var result = GetBlockedReason(HttpMethod.Patch, "connectionreferences(guid)");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("not allowed via execute_webapi"));
+        StringAssert.Contains(result, "\nUse manage_record instead.");
     }
 
     // ── NEW: POST metadata actions blocked ──
