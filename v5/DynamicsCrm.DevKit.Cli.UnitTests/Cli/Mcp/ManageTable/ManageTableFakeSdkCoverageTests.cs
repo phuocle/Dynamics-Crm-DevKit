@@ -491,4 +491,74 @@ public sealed class ManageTableFakeSdkCoverageTests
         Assert.IsFalse(result.IsError == true, result.GetText());
         Assert.IsNotNull(_capturedCreate, "Unknown logical name + display names → create path.");
     }
+
+    [TestMethod]
+    [DataRow("logical", 1)]
+    [DataRow("logical", 2)]
+    [DataRow("schema", 2)]
+    [DataRow("display", 2)]
+    public void Create_LogicalNameIsPrefixOfExistingTables_CreatesNewTable(string nameSource, int existingCount)
+    {
+        _entities.Add(TestMetadata.Entity("all_notification_provider", "Notification Provider"));
+        if (existingCount == 2)
+            _entities.Add(TestMetadata.Entity("all_notification_template", "Notification Template"));
+
+        var result = NewTool().manage_table(
+            display_name: "Notification", display_collection_name: "Notifications", solution_name: "DevKitSolution",
+            logical_name: nameSource == "logical" ? "all_notification" : "",
+            schema_name: nameSource == "schema" ? "all_Notification" : "");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.AreEqual("created", Structured(result).GetProperty("status").GetString());
+        Assert.AreEqual("all_notification", _capturedCreate?.Entity.LogicalName);
+        Assert.IsNull(_capturedUpdate);
+    }
+
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void Update_ExactLogicalNameTakesPrecedenceOverOtherNameMatches(bool hasCreateParameters)
+    {
+        var other = TestMetadata.Entity("all_notification_provider", "Notification Provider");
+        other.SchemaName = "all_Notification";
+        _entities.Add(other);
+        _entities.Add(TestMetadata.Entity("all_notification_template", "Notification Template"));
+        _entities.Add(TestMetadata.Entity("all_notification", "Notification"));
+
+        var result = NewTool().manage_table(logical_name: " ALL_NOTIFICATION ", description: "New description",
+            display_name: hasCreateParameters ? "Notification" : "",
+            display_collection_name: hasCreateParameters ? "Notifications" : "",
+            solution_name: hasCreateParameters ? "DevKitSolution" : "");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.AreEqual("all_notification", _capturedUpdate?.Entity.LogicalName);
+        Assert.IsNull(_capturedCreate);
+    }
+
+    [TestMethod]
+    public void Update_WithoutSolution_CanStillResolveOnePartialLogicalName()
+    {
+        _entities.Add(TestMetadata.Entity("all_notification_provider", "Provider"));
+
+        var result = NewTool().manage_table(logical_name: "all_notification", display_name: "Updated Provider",
+            display_collection_name: "Updated Providers");
+
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        Assert.AreEqual("all_notification_provider", _capturedUpdate?.Entity.LogicalName);
+        Assert.IsNull(_capturedCreate);
+    }
+
+    [TestMethod]
+    public void Update_WithoutCreateParameters_RejectsMultiplePartialLogicalNames()
+    {
+        _entities.Add(TestMetadata.Entity("all_notification_provider", "Provider"));
+        _entities.Add(TestMetadata.Entity("all_notification_template", "Template"));
+
+        var result = NewTool().manage_table(logical_name: "all_notification", description: "New description");
+
+        Assert.IsTrue(result.IsError == true, result.GetText());
+        StringAssert.Contains(result.GetText(), "Multiple candidates match 'all_notification' during logical name search.");
+        Assert.IsNull(_capturedCreate);
+        Assert.IsNull(_capturedUpdate);
+    }
 }

@@ -76,11 +76,9 @@ MCP uses mutually exclusive configuration sources. The instance name with option
 - Maintain `DisabledToolSet` and `ToolResourceMap` in `McpServerHost.cs` when adding tools; use `nameof()` for tool type references.
 - When editing `Mcp/Tools/`, preserve error text, output shape, structured result fields, and temp-file paths unless explicitly changed by the task.
 
-After editing `DynamicsCrm.DevKit.Cli/Mcp/**`:
+After editing `DynamicsCrm.DevKit.Cli/Mcp/**`, rebuild and reinstall using the devkit-skill-build-release-cli skill (`.agents/skills/devkit-skill-shared/scripts/Release.DynamicsCrm.DevKit.Cli.ps1 -Configuration Release`).
 
-1. Rebuild and reinstall using the devkit-skill-build-release-cli skill (`.agents/skills/devkit-skill-shared/scripts/Release.DynamicsCrm.DevKit.Cli.ps1 -Configuration Release`).
-2. Restart the active MCP client connector and call `whoami` to start a fresh DevKit MCP process.
-3. Verify runtime version, build timestamp, process start time, and assembly SHA against the manifest under `Published/<version>/`.
+A separate AI handles live MCP testing for MCP fixes. Skip the release skill's live MCP verification steps, including restarting the connector, calling `whoami`, and running live MCP tool calls, unless the user explicitly requests live MCP testing. CLI build and artifact verification and explicitly requested unit tests still apply.
 
 ## Verification
 

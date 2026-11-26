@@ -27,6 +27,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
 
         [McpServerResource(
             MimeType = "text/markdown",
+            Name = "instructions_for_manage_command",
+            Title = "Instructions for deleting modern command bar appactions",
+            UriTemplate = "docs://instructions_for_manage_command"),
+        Description("Delete inputs, examples, and dependency handling for manage_command.")]
+        public static string ManageCommandInstructions() => ReadInstruction("instructions_for_manage_command.md");
+
+        [McpServerResource(
+            MimeType = "text/markdown",
             Name = "instructions_for_manage_report",
             Title = "Instructions for SSRS reports and local RDL datasets",
             UriTemplate = "docs://instructions_for_manage_report"),

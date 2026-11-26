@@ -15,6 +15,7 @@ Reference for `manage_table`, `manage_column`, and `manage_relationship`.
 ### Create Mode
 - display_name, display_collection_name, solution_name are REQUIRED
 - Optional schema_name and/or logical_name override the auto-derived names (must start with the publisher prefix)
+- With all required create inputs, only an exact logical name (case-insensitive) matches an existing table. An explicit match selects Update. A matching derived name is reported as a collision. Similar names do not prevent creation.
 - Auto-creates the primary name column. Standard and elastic tables default to `Name`. Activity tables use `Subject`.
 - `is_duplicate_detection_enabled` maps to the table's `IsDuplicateDetectionEnabled` property and defaults to `false`.
 - New tables start with Dataverse Search disabled. Omit `is_search_enabled` or pass `false` when creating a table.
@@ -31,6 +32,7 @@ Use `table_type="Activity"` to create a custom activity table. It uses `User` ow
 
 ### Update Mode
 - Pass logical_name to identify the existing table
+- An exact logical name takes precedence. If a required create input is absent, lookup can fall back to a display name or partial match. Ambiguous matches require an exact logical name.
 - Only provided params are updated; omitted ones keep current values
 - Set `is_duplicate_detection_enabled` to `true` or `false` to toggle Duplicate Detection. Omit it or pass `null` to keep the current value.
 - Set `is_search_enabled` to `true` to enable Dataverse Search on a table with Change Tracking already enabled in published metadata and `CanEnableSyncToExternalSearchIndex` set to `true`. Pass `false` to disable Search regardless of Change Tracking. Omit it or pass `null` to keep the current Search setting.

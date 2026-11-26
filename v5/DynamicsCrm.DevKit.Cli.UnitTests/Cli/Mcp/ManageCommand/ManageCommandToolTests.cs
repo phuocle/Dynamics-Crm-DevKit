@@ -146,7 +146,7 @@ public class ManageCommandToolTests
     public void Validation_InvalidAction_ReturnsError()
     {
         var tool = CreateTool();
-        var result = tool.manage_command(action: "delete");
+        var result = tool.manage_command(action: "unsupported_action");
         Assert.IsTrue(result.IsError == true);
         Assert.IsTrue(GetText(result).Contains("Invalid action"));
     }

@@ -201,7 +201,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <attribute name='type'/>
     <attribute name='definition'/>
     <attribute name='contextvalue'/>
-    <link-entity name='appaction_appactionrule_classicrules' from='appactionruleid' to='appactionruleid' intersect='true'>
+    <link-entity name='{ClassicRulesRelationship}' from='appactionruleid' to='appactionruleid' intersect='true'>
       <filter>
         <condition attribute='appactionid' operator='eq' value='{EscapeXml(commandId)}'/>
       </filter>

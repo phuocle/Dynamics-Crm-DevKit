@@ -111,19 +111,19 @@ public sealed class ManageTableErrorPathCoverageTests
     }
 
     [TestMethod]
-    public void Create_DerivedLogicalNameAmbiguous_IsRejected()
+    public void Create_DerivedLogicalNameMatchingOtherDisplayNames_IsAllowed()
     {
         using var harness = new TableHarness();
         harness.Entities.Add(TestMetadata.Entity("mt_amb_1", "dev_ambig"));
         harness.Entities.Add(TestMetadata.Entity("mt_amb_2", "dev_ambig"));
 
-        var result = harness.NewTool().manage_table(
+        var result = harness.NewTool(dryRun: true).manage_table(
             display_name: "Ambig", display_collection_name: "Ambigs", solution_name: "DevKit");
 
-        Assert.IsTrue(result.IsError == true, result.GetText());
-        // The derived name 'dev_ambig' matches both seeded display names → ambiguous collision.
-        StringAssert.Contains(result.GetText(), "Multiple candidates match 'dev_ambig' during display name search.");
-        StringAssert.Contains(result.GetText(), "Use get_tables to list entities.");
+        Assert.IsFalse(result.IsError == true, result.GetText());
+        var json = harness.Structured(result);
+        Assert.AreEqual("not_executed", json.GetProperty("status").GetString());
+        Assert.AreEqual("dev_ambig", json.GetProperty("logicalName").GetString());
     }
 
     [TestMethod]

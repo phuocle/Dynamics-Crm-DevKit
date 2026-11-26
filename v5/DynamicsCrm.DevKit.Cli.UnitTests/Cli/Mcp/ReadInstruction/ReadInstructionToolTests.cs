@@ -30,19 +30,19 @@ public sealed class ReadInstructionToolTests
     }
 
     [TestMethod]
-    public async Task Catalog_EmptyName_ReturnsNineInstructionsAndFourSchemas()
+    public async Task Catalog_EmptyName_ReturnsTenInstructionsAndFourSchemas()
     {
         var result = await CallAsync();
 
         Assert.IsFalse(result.IsError ?? false);
         var text = ((TextContentBlock)result.Content[0]).Text;
         StringAssert.StartsWith(text, "[Success]");
-        StringAssert.Contains(text, "9 instruction(s)");
+        StringAssert.Contains(text, "10 instruction(s)");
         StringAssert.Contains(text, "4 schema(s)");
 
         var payload = Structured(result);
         Assert.AreEqual("catalog", payload["kind"]?.GetValue<string>());
-        Assert.AreEqual(9, EntryArray(payload, "instructions").Count);
+        Assert.AreEqual(10, EntryArray(payload, "instructions").Count);
         Assert.AreEqual(4, EntryArray(payload, "schemas").Count);
     }
 
@@ -72,6 +72,11 @@ public sealed class ReadInstructionToolTests
         Assert.IsNotNull(ribbonRefs);
         Assert.IsTrue(ribbonRefs.Any(n => n?.GetValue<string>() == "manage_ribbon"));
 
+        var command = Entry(instructions, "docs://instructions_for_manage_command");
+        var commandRefs = command["referencedBy"] as JsonArray;
+        Assert.IsNotNull(commandRefs);
+        Assert.IsTrue(commandRefs.Any(n => n?.GetValue<string>() == "manage_command"));
+
         var views = Entry(instructions, "docs://instructions_for_views");
         var viewsRefs = views["referencedBy"] as JsonArray;
         Assert.IsNotNull(viewsRefs);
@@ -82,6 +87,17 @@ public sealed class ReadInstructionToolTests
         var fetchRefs = fetchxml["referencedBy"] as JsonArray;
         Assert.IsNotNull(fetchRefs);
         Assert.IsTrue(fetchRefs.Any(n => n?.GetValue<string>() == "execute_fetchxml"));
+    }
+
+    [TestMethod]
+    public async Task Detail_ManageCommandGuide_ReturnsDeleteInstructions()
+    {
+        var result = await CallAsync("docs://instructions_for_manage_command");
+        Assert.IsFalse(result.IsError ?? false);
+        var content = Structured(result)["content"]?.GetValue<string>();
+        StringAssert.Contains(content, "action='delete'");
+        StringAssert.Contains(content, "appmoduleid");
+        StringAssert.Contains(content, "Enhanced Migrated");
     }
 
     [TestMethod]

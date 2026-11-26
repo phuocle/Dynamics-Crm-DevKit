@@ -404,7 +404,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Do not use execute_webapi for appmodulecomponent creation/update. Use manage_app."),
 
             ("appactions", "manage_command",
-                "Modern command bar buttons (appaction) require app-scoped context, OOB override logic, and entity publish. Use manage_command for create/update/hide/show/flyout/split-button operations."),
+                "Use manage_command for modern appaction create/update/delete/hide/show/flyout/split-button operations. Delete supports app, table, and global scope and handles child commands, rules, and context table publishing."),
             ("appactionrules", "manage_command",
                 "appactionrule (visibility/enable rules) are managed with their parent appaction via manage_command (include_rules=true to inspect)."),
 

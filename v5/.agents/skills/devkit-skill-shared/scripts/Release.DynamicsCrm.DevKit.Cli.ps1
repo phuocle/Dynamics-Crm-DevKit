@@ -211,7 +211,7 @@ try {
     $installedAssembly = Get-InstalledCliAssembly
     $installedAssemblyPath = if ($installedAssembly) { $installedAssembly.FullName } else { $null }
 
-    Stop-DevKitProcesses "after CLI install; next MCP call must start the new build"
+    Stop-DevKitProcesses "after CLI install"
 
     $gitStatus = Get-GitText @("status", "--porcelain")
     $manifest = [ordered]@{
@@ -227,7 +227,7 @@ try {
         installedAssemblyPath = $installedAssemblyPath
         installedAssemblySha256 = Get-FileSha256 $installedAssemblyPath
         devkitVersionOutput = $devkitVersionOutput
-        mcpRuntimeVerification = "Call MCP whoami and compare structuredContent.devkit.version/build/assemblySha256/processStartTime with this manifest."
+        mcpRuntimeVerification = "Optional. Live MCP runtime verification is separate from this CLI release and requires an explicit request."
     }
 
     $manifest | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $ManifestPath -Encoding UTF8
@@ -241,7 +241,6 @@ try {
         Write-Host "Assembly SHA:  $($manifest.installedAssemblySha256)" -ForegroundColor Cyan
     }
     Write-Host ""
-    Write-Host "Runtime proof step: call MCP whoami now. The devkit.assemblySha256 returned by MCP must equal the manifest installedAssemblySha256." -ForegroundColor Yellow
 }
 finally {
     foreach ($entry in $dateFileBackups.GetEnumerator()) {

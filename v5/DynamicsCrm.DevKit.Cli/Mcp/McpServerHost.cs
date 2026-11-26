@@ -40,6 +40,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
         {
             [nameof(Tools.ExecuteSqlTool)] = new[] { "instructions_for_sql" },
             [nameof(Tools.ManageRibbonTool)] = new[] { "instructions_for_manage_ribbon" },
+            [nameof(Tools.ManageCommandTool)] = new[] { "instructions_for_manage_command" },
             [nameof(Tools.ManageReportTool)] = new[] { "instructions_for_manage_report" },
         };
 
