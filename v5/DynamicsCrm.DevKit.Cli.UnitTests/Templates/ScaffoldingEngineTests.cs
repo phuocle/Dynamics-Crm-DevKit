@@ -242,11 +242,13 @@ namespace DynamicsCrm.DevKit.Cli.UnitTests.Templates
         }
 
         [TestMethod]
-        public void TemplateCatalog_HasAllThirtyTemplates()
+        public void TemplateCatalog_HasThirtyLegacyTemplatesAndTwoDataverseTestTemplates()
         {
-            Assert.AreEqual(30, TemplateCatalog.All.Count);
-            Assert.AreEqual(13, TemplateCatalog.OfKind(TemplateKind.Project).Count());
-            Assert.AreEqual(17, TemplateCatalog.OfKind(TemplateKind.Item).Count());
+            Assert.AreEqual(32, TemplateCatalog.All.Count);
+            Assert.AreEqual(14, TemplateCatalog.OfKind(TemplateKind.Project).Count());
+            Assert.AreEqual(18, TemplateCatalog.OfKind(TemplateKind.Item).Count());
+            Assert.AreEqual(14, TemplateCatalog.Find("DataverseTest", TemplateKind.Project).Order);
+            Assert.AreEqual(19, TemplateCatalog.Find("DataverseTest", TemplateKind.Item).Order);
 
             // Original VSIX numbering is preserved: item order 12 does not exist.
             var itemOrders = TemplateCatalog.OfKind(TemplateKind.Item).Select(x => x.Order).ToList();

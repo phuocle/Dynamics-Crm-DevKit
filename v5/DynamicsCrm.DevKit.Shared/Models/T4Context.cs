@@ -20,6 +20,10 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string DataSource { get; set; }
         public string ProxyTypes { get; set; }
         public string TestTargetFullClassName { get; set; }
+        public string DataverseTestFacadeNamespace { get; set; }
+        public string DataverseTestComponentKind { get; set; }
+        public bool HasDataverseTestGuards { get; set; }
+        public bool HasConstructibleDataverseTestTarget { get; set; }
 
         #region Entity Properties
 

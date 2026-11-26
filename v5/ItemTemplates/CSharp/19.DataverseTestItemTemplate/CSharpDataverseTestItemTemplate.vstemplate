@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>17. C# Dataverse Test Class</Name>
+    <Description>Create a test for a DevKit Server component in a DataverseTest project.</Description>
+    <DefaultName>Class.cs</DefaultName>
+    <TemplateID>DynamicsCrm.DevKit.CSharpDataverseTestItem</TemplateID>
+    <Icon>icon.png</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>Visual C#</ProjectSubType>
+    <AppliesTo>CSharp</AppliesTo>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+    <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+    <SortOrder>270</SortOrder>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$Class$Test.cs">Class.cs</ProjectItem>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>DynamicsCrm.DevKit, Version=4.44.44.44, Culture=Neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.DataverseTest</FullClassName>
+  </WizardExtension>
+</VSTemplate>

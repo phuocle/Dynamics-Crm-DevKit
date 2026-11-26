@@ -1,5 +1,6 @@
 using DynamicsCrm.DevKit.Cli.Commands;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Templates;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using Spectre.Console.Cli.Help;
@@ -171,15 +172,17 @@ namespace DynamicsCrm.DevKit.Cli
                     // 'devkit new-item' scaffold with their own required
                     // arguments, and each lists its own catalog ('list').
                     config.AddCommand<NewProjectCommand>("new-project")
-                          .WithDescription("Create a DevKit project template (Shared, Console, Server, ...) in the required solution")
+                          .WithDescription("Create a DevKit project in an existing solution. Creation requires a Dataverse connection.")
                           .WithExample(new[] { "new-project", "list" })
-                          .WithExample(new[] { "new-project", "--type", "Shared", "--name", "Contoso.Shared", "--solution", "MySolution.slnx" });
+                          .WithExample(new[] { "new-project", "--type", TemplateCatalog.SharedId, "--name", "Contoso.Shared", "--solution", "MySolution.slnx" })
+                          .WithExample(new[] { "new-project", "--type", TemplateCatalog.DataverseTestId, "--name", "Contoso.DataverseTests", "--solution", "Contoso.slnx" });
 
                     config.AddCommand<NewItemCommand>("new-item")
-                          .WithDescription("Create a DevKit item template (LateBound, Plugin, ...) in the required project")
+                          .WithDescription("Create a DevKit item in an existing project. Creation requires a Dataverse connection.")
                           .WithExample(new[] { "new-item", "list" })
-                          .WithExample(new[] { "new-item", "--type", "LateBound", "--entity", "Account", "--project", "Contoso.Shared" })
-                          .WithExample(new[] { "new-item", "--type", "Workflow", "--name", "MyWorkflow", "--project", "Contoso.Server" });
+                          .WithExample(new[] { "new-item", "--type", TemplateCatalog.LateBoundId, "--entity", "Account", "--project", "Contoso.Shared" })
+                          .WithExample(new[] { "new-item", "--type", TemplateCatalog.WorkflowId, "--name", "MyWorkflow", "--project", "Contoso.Server" })
+                          .WithExample(new[] { "new-item", "--type", TemplateCatalog.DataverseTestId, "--project", "Contoso.DataverseTests", "--test-target", "Contoso.OnUpdate" });
 
                     var mcp = config.AddCommand<McpCommand>("mcp");
                     // --plain is consumed before parsing, but still selects args-only mode.
@@ -314,7 +317,9 @@ namespace DynamicsCrm.DevKit.Cli
 
             public override IEnumerable<IRenderable> GetOptions(ICommandModel model, ICommandInfo command)
             {
-                return base.GetOptions(model, command?.Name == "mcp" ? new McpHelpCommandInfo(command) : command);
+                return base.GetOptions(model, command?.Name is "mcp" or "new-project" or "new-item"
+                    ? new CommandInfoWithPlainOption(command, command.Name == "mcp")
+                    : command);
             }
 
             public override IEnumerable<IRenderable> GetExamples(ICommandModel model, ICommandInfo command)
@@ -358,7 +363,7 @@ namespace DynamicsCrm.DevKit.Cli
             }
         }
 
-        private sealed class McpHelpCommandInfo(ICommandInfo command) : ICommandInfo
+        private sealed class CommandInfoWithPlainOption(ICommandInfo command, bool isMcp) : ICommandInfo
         {
             public string Name => command.Name;
             public string Description => command.Description;
@@ -372,13 +377,16 @@ namespace DynamicsCrm.DevKit.Cli
 
             public IReadOnlyList<ICommandParameter> Parameters { get; } = command.Parameters
                 .Where(parameter => parameter is not ICommandOption option ||
-                    !option.LongNames.Any(name => name is "json" or "profile" or "sdk-login" or "transport"))
-                .Append(new PlainHelpOption())
+                    !option.LongNames.Any(name => name == "sdk-login" ||
+                        (isMcp && name is "json" or "profile" or "transport")))
+                .Append(new PlainHelpOption(isMcp
+                    ? "Use plain output. When starting MCP, this selects args-only mode and requires complete connection arguments."
+                    : "Print plain text and disable scaffold prompts"))
                 .ToArray();
         }
 
         // Program consumes --plain before Spectre sees the arguments.
-        private sealed class PlainHelpOption : ICommandOption
+        private sealed class PlainHelpOption(string description) : ICommandOption
         {
             public IReadOnlyList<string> LongNames { get; } = new[] { "plain" };
             public IReadOnlyList<string> ShortNames => Array.Empty<string>();
@@ -386,7 +394,7 @@ namespace DynamicsCrm.DevKit.Cli
             public bool ValueIsOptional => false;
             public bool IsFlag => true;
             public bool IsRequired => false;
-            public string Description => "Use plain output. When starting MCP, this selects args-only mode and requires complete connection arguments.";
+            public string Description => description;
             public System.ComponentModel.DefaultValueAttribute DefaultValue => null;
             public bool IsHidden => false;
         }

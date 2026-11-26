@@ -28,7 +28,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
     {
         public string TemplateId
         {
-            get { return ItemType.TsForm.ToString(); }
+            get { return TemplateCatalog.TsFormId; }
         }
 
         /// <summary>
@@ -47,10 +47,10 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
         {
             var manifest = new TemplateManifest
             {
-                TemplateId = ItemType.TsForm.ToString(),
+                TemplateId = TemplateCatalog.TsFormId,
                 Kind = TemplateKind.Item,
             };
-            var prefix = TemplatePayload.Prefix(TemplateKind.Item, ItemType.TsForm.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.TsFormId);
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "TypeScript.ts", TargetFileName = "$SchemaName$.ts", ReplaceParameters = true });
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "TypeScript.form.ts", TargetFileName = "$SchemaName$.form.ts", ReplaceParameters = true, IsGenerated = true });
             return manifest;
@@ -93,7 +93,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
                 return result;
             }
 
-            var prefix = TemplatePayload.Prefix(TemplateKind.Item, ItemType.TsForm.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.TsFormId);
 
             // The user stub ({Entity}.ts): created when missing, never
             // overwritten unless --force (VSIX ShouldAddProjectItem). An

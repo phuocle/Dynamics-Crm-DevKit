@@ -335,6 +335,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\TemplateHandlers.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\DataverseTestProjectHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Templates\Handlers\DataverseTestItemHandler.cs" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\DataverseTest.tt" LogicalName="Resources.templates.item.dataversetest.DataverseTest.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)..\ProjectTemplates\CSharp\14.DataverseTestProjectTemplate\ProjectTemplate.csproj.template" LogicalName="Resources.templates.project.dataversetest.ProjectTemplate.csproj.template" WithCulture="false" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)..\ProjectTemplates\CSharp\14.DataverseTestProjectTemplate\README.md" LogicalName="Resources.templates.project.dataversetest.README.md" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)..\ProjectTemplates\CSharp\14.DataverseTestProjectTemplate\PluginExecutionDescriptor.cs" LogicalName="Resources.templates.project.dataversetest.PluginExecutionDescriptor.cs" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)..\ProjectTemplates\CSharp\14.DataverseTestProjectTemplate\PluginRegistrationInfo.cs" LogicalName="Resources.templates.project.dataversetest.PluginRegistrationInfo.cs" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)..\ProjectTemplates\CSharp\14.DataverseTestProjectTemplate\PluginRunBuilder.cs" LogicalName="Resources.templates.project.dataversetest.PluginRunBuilder.cs" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)..\ProjectTemplates\CSharp\14.DataverseTestProjectTemplate\PluginTestBase.cs" LogicalName="Resources.templates.project.dataversetest.PluginTestBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <!-- Template payloads embedded for the cross-platform scaffolding engine (Vsix2CliAndMcp step 0).
          Physical source of truth stays in ProjectTemplates/ItemTemplates; VSIX zip builds keep reading
          the same folders. Excluded: build csproj, vstemplate, icons, Properties, bin/obj/.vs, README,

@@ -12,7 +12,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
     public class NewItemCommandArgs : DevKitCommandArgs
     {
         [CommandArgument(0, "[list]")]
-        [Description("Show the available item templates")]
+        [Description("List item templates without connecting to Dataverse")]
         public string List { get; set; } = string.Empty;
 
         [CommandOption("--type")]
@@ -48,7 +48,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Template { get; set; } = "Default";
 
         [CommandOption("--t4")]
-        [Description("Path to a custom plugin .tt T4 file (default: built-in)")]
+        [Description("Path to a local custom .tt file for supported item types")]
         public string T4 { get; set; } = string.Empty;
 
         [CommandOption("--datasource")]
@@ -56,7 +56,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Datasource { get; set; } = string.Empty;
 
         [CommandOption("--test-target")]
-        [Description("Full class name of the plugin/workflow to test (Test item)")]
+        [Description("Full class name of the server component to test (Test or DataverseTest)")]
         public string TestTarget { get; set; } = string.Empty;
 
         [CommandOption("--language")]
@@ -68,7 +68,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Namespace { get; set; } = string.Empty;
 
         [CommandOption("--project")]
-        [Description("The project the item scaffolds into")]
+        [Description("Destination project name without its file extension")]
         public string Project { get; set; } = string.Empty;
 
         [CommandOption("--out")]

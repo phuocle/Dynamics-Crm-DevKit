@@ -52,12 +52,15 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             return GetSelectableCandidatesCoreAsync(testProjectFile, excludeExistingTests: false);
         }
 
-        private static async Task<List<PluginTestCandidate>> GetSelectableCandidatesCoreAsync(string testProjectFile, bool excludeExistingTests)
+        internal static Task<List<PluginTestCandidate>> GetDataverseTestCandidatesAsync(string testProjectFile)
+            => GetSelectableCandidatesCoreAsync(testProjectFile, excludeExistingTests: false, dataverseTest: true);
+
+        private static async Task<List<PluginTestCandidate>> GetSelectableCandidatesCoreAsync(string testProjectFile, bool excludeExistingTests, bool dataverseTest = false)
         {
             if (string.IsNullOrWhiteSpace(testProjectFile) || !File.Exists(testProjectFile))
                 return new List<PluginTestCandidate>();
 
-            var referencedProjectFolders = GetReferencedProjectFolders(testProjectFile);
+            var referencedProjectFolders = GetReferencedProjectFolders(testProjectFile, dataverseTest);
             if (referencedProjectFolders.Count == 0)
                 return new List<PluginTestCandidate>();
             var testProjectFolder = Path.GetDirectoryName(Path.GetFullPath(testProjectFile));
@@ -75,7 +78,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                     .Where(@class => !@class.IsAbstract)
                     .Where(@class => InheritsFrom(@class, classMap, "IPlugin", "Microsoft.Xrm.Sdk.IPlugin") ||
                                      InheritsFrom(@class, classMap, "CodeActivity", "System.Activities.CodeActivity"))
-                    .Select(CreateCandidate)
+                    .Select(@class => dataverseTest ? CreateDataverseTestCandidate(@class, classMap) : CreateCandidate(@class))
                     .Where(candidate => !HasConventionTestClass(candidate, testClassNames))
                     .OrderBy(candidate => candidate.FullClassName)
                     .ToList();
@@ -115,10 +118,22 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             return $"{sourceFiles.Count}:{latestWriteUtc}:{totalLength}:{string.Join("|", sourceFiles.OrderBy(path => path, StringComparer.OrdinalIgnoreCase))}";
         }
 
-        private static List<string> GetReferencedProjectFolders(string testProjectFile)
+        private static List<string> GetReferencedProjectFolders(string testProjectFile, bool dataverseTest)
         {
             var folders = new List<string>();
             var projectFolder = Path.GetDirectoryName(Path.GetFullPath(testProjectFile));
+            if (dataverseTest)
+            {
+                return System.Xml.Linq.XDocument.Load(testProjectFile).Descendants()
+                    .Where(element => element.Name.LocalName == "ProjectReference")
+                    .Select(element => (string)element.Attribute("Include"))
+                    .Where(include => !string.IsNullOrWhiteSpace(include) && include.IndexOf("$(", StringComparison.Ordinal) < 0)
+                    .Select(include => Handlers.DataverseTestProjectHandler.ResolvePath(projectFolder, include))
+                    .Where(File.Exists)
+                    .Select(Path.GetDirectoryName)
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+            }
             try
             {
                 var content = File.ReadAllText(testProjectFile);
@@ -183,12 +198,19 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 yield break;
             }
 
+            var previousClassEnd = 0;
             foreach (Match classMatch in ClassRegex.Matches(source))
             {
                 var className = classMatch.Groups["name"].Value;
                 var ns = FindNamespaceBeforeClass(source, classMatch.Index);
                 if (string.IsNullOrWhiteSpace(ns)) continue;
 
+                var sourceText = ExtractClassSource(source, classMatch.Index);
+                var registrationCount = classMatch.Index >= previousClassEnd
+                    ? RegistrationRegex.Matches(RemoveComments(source.Substring(previousClassEnd, classMatch.Index - previousClassEnd))).Count
+                    : 0;
+                var nested = classMatch.Index < previousClassEnd;
+                previousClassEnd = Math.Max(previousClassEnd, classMatch.Index + sourceText.Length);
                 yield return new ClassDeclaration
                 {
                     BaseTypes = SplitBaseTypes(classMatch.Groups["bases"].Value).ToList(),
@@ -198,7 +220,9 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                     IsPublic = classMatch.Groups["modifiers"].Value.IndexOf("public", StringComparison.Ordinal) >= 0,
                     Namespace = ns,
                     RegistrationArgs = FindRegistrationBeforeClass(source, classMatch.Index)?.Groups["args"].Value,
-                    SourceText = ExtractClassSource(source, classMatch.Index),
+                    SourceText = sourceText,
+                    RegistrationCount = registrationCount,
+                    CanReference = !nested && !source.Substring(classMatch.Index + classMatch.Length).TrimStart().StartsWith("<", StringComparison.Ordinal),
                     SourceFile = sourceFile
                 };
             }
@@ -236,6 +260,28 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             candidate.DisplayName = supportsGuardTest
                 ? $"{candidate.FullClassName} ({candidate.Stage}, {candidate.MessageName}, {candidate.EntityLogicalName}, {candidate.ExecutionMode})"
                 : candidate.FullClassName;
+            return candidate;
+        }
+
+        private static PluginTestCandidate CreateDataverseTestCandidate(ClassDeclaration @class, Dictionary<string, ClassDeclaration> classMap)
+        {
+            var candidate = CreateCandidate(@class);
+            var args = @class.RegistrationArgs ?? string.Empty;
+            candidate.ComponentKind = InheritsFrom(@class, classMap, "CodeActivity", "System.Activities.CodeActivity")
+                ? "Workflow" : ReadEnumValue(args, "PluginType");
+            if (string.IsNullOrEmpty(candidate.ComponentKind))
+                candidate.ComponentKind = "Plugin";
+            if (candidate.ComponentKind is "CustomApi" or "DataProvider")
+            {
+                candidate.MessageName = ReadStringArgument(args, 1);
+                candidate.EntityLogicalName = Regex.Match(args, @"\bEntityLogicalName\s*=\s*""([^""]*)""").Groups[1].Value;
+                candidate.EntitySchemaName = candidate.EntityLogicalName;
+            }
+            if (candidate.ComponentKind == "Workflow")
+                candidate.MessageName = candidate.EntityLogicalName = candidate.EntitySchemaName = string.Empty;
+            candidate.CanConstruct = @class.IsPublic && @class.CanReference &&
+                HasPublicParameterlessConstructor(@class, RemoveComments(@class.SourceText));
+            candidate.SupportsGuardTest &= candidate.CanConstruct && @class.RegistrationCount == 1 && candidate.ComponentKind == "Plugin";
             return candidate;
         }
 
@@ -508,6 +554,8 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             public string RegistrationArgs { get; set; }
             public string SourceText { get; set; }
             public string SourceFile { get; set; }
+            public int RegistrationCount { get; set; }
+            public bool CanReference { get; set; }
         }
     }
 
@@ -530,6 +578,8 @@ namespace DynamicsCrm.DevKit.Shared.Templates
         public string SourceFile { get; set; }
         public string Stage { get; set; }
         public bool SupportsGuardTest { get; set; }
+        internal string ComponentKind { get; set; }
+        internal bool CanConstruct { get; set; }
 
         /// <summary>
         /// The class-textbox auto-fill (FormPlugin.

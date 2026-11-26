@@ -120,8 +120,12 @@ namespace DynamicsCrm.DevKit.Cli
                   devkit [cyan]server[/] [white]--auth[/] [cyan]FromPac[/] [white]--pacprofile[/] [cyan]PAC_PROFILE_NAME[/] [white]--json[/] [cyan]cli.json[/] [white]--profile[/] [cyan]PROFILE_NAME[/]
                   devkit [cyan]webresource[/] [white]--file[/] [cyan]entities/Account.ts[/] [white]--build[/] [cyan]release[/] [white]--webresource[/] [cyan]contoso_/entities/Account.js[/]
                   devkit [cyan]webresource[/] [white]--file[/] [cyan]entities/Account.ts[/] [white]--build[/] [cyan]release[/] [white]-wid[/] [cyan]00000000-0000-0000-0000-000000000000[/]
-                  devkit [cyan]new-project[/] [white]--type[/] [cyan]Shared[/] [white]--name[/] [cyan]Contoso.Shared[/] [white]--solution[/] [cyan]MySolution.slnx[/]
-                  devkit [cyan]new-item[/] [white]--type[/] [cyan]Plugin[/] [white]--entity[/] [cyan]Account[/] [white]--message[/] [cyan]Update[/] [white]--stage[/] [cyan]PreOperation[/] [white]--name[/] [cyan]PreAccountUpdate[/] [white]--project[/] [cyan]Contoso.Server[/]
+
+                [green]Scaffolding[/]
+                  devkit [cyan]new-project[/] [cyan]list[/]   List project template IDs
+                  devkit [cyan]new-item[/] [cyan]list[/]      List item template IDs
+                  Both catalogs include DataverseTest. Use --help on each command for creation examples.
+                  Listing templates works offline. Creating projects and items requires a Dataverse connection.
 
                 [green]Project .env[/]
                   Standard CLI commands use connection arguments first and fill missing values from .env.

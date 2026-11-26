@@ -74,6 +74,9 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             TemplateManifests.Register(JsDialogItemTemplateHandler.CreateManifest());
             ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new ReportItemTemplateHandler());
             TemplateManifests.Register(ReportItemTemplateHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Project, new DataverseTestProjectHandler());
+            TemplateManifests.Register(DataverseTestProjectHandler.CreateManifest());
+            ScaffoldingEngine.RegisterHandler(TemplateKind.Item, new DataverseTestItemHandler());
         }
     }
 }

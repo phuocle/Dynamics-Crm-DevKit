@@ -13,6 +13,7 @@ devkit new-project --type UiTest --name Dev.AllInOne.UiTest --solution Dev.AllIn
 devkit new-project --type SolutionPackager --name Dev.AllInOne.SolutionPackager --solution Dev.AllInOne.slnx
 devkit new-project --type Report --name Dev.AllInOne.Report --solution Dev.AllInOne.slnx
 devkit new-project --type WebResourceTs --name Dev.AllInOne.WebResourceTs --solution Dev.AllInOne.slnx
+devkit new-project --type DataverseTest --name Dev.AllInOne.DataverseTests --solution Dev.AllInOne.slnx
 devkit new-item --type LateBound --entity Account --project Dev.AllInOne.Shared --out Dev.AllInOne.Shared\Entities
 devkit new-item --type JsForm --entity Account --project Dev.AllInOne.WebResource --out Dev.AllInOne.WebResource\entities
 devkit new-item --type JsWebApi --entity Account --project Dev.AllInOne.WebResource --out Dev.AllInOne.WebResource\entities
@@ -23,6 +24,7 @@ devkit new-item --type Workflow --name SendEmailToTeam --project Dev.AllInOne.Se
 devkit new-item --type DataProvider --datasource all_serversql --project Dev.AllInOne.Server
 dotnet add Dev.AllInOne.Test\Dev.AllInOne.Test.csproj reference Dev.AllInOne.Server\Dev.AllInOne.Server.csproj
 devkit new-item --type Test --name PostAccountCreateAsynchronousTest --test-target Dev.AllInOne.Server.PostAccountCreateAsynchronous --project Dev.AllInOne.Test
+devkit new-item --type DataverseTest --project Dev.AllInOne.DataverseTests --test-target Dev.AllInOne.Server.PostAccountCreateAsynchronous
 devkit new-item --type UiTest --name Login --project Dev.AllInOne.UiTest
 devkit new-item --type ResourceString --name Resource --language 1033 --project Dev.AllInOne.WebResource --out Dev.AllInOne.WebResource\resources
 mkdir Dev.AllInOne.WebResource\bat
@@ -38,3 +40,5 @@ devkit new-item --type TsDialog --name "Dataverse Dialog Builder Demo" --project
 devkit new-item --type JsDialog --name "Dataverse Dialog Builder Demo" --project Dev.AllInOne.WebResource --out Dev.AllInOne.WebResource\entities
 devkit new-item --type Report --entity account --name Account.rdl --project Dev.AllInOne.Report
 ```
+
+Use a configured project `.env` or explicit connection options for scaffolding. The `DataverseTest` project adds the Server and ProxyTypes references and imports production Shared code. Run its tests on Windows x64 with `dotnet test .\Dev.AllInOne.DataverseTests\Dev.AllInOne.DataverseTests.csproj`. [Dataverse Test Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Dataverse-Test-Project-Template)

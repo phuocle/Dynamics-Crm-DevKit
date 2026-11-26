@@ -16,12 +16,13 @@ DynamicsCrm.DevKit is an integrated development toolkit for Microsoft Dataverse,
 
 ## ✨ Highlights
 
-- Visual Studio extension for Dataverse projects, with 13 project templates and 16 item templates.
+- Visual Studio extension for Dataverse projects, with 14 project templates, 17 numbered item templates, and a separate DevKit Report item.
 - One-click deployment from Visual Studio for server assemblies, plugin packages, web resources, TypeScript web resources, and reports.
-- `devkit` CLI for repeatable deployment, code generation, solution packaging, report operations, web resource operations, and MCP hosting.
-- MCP server with 33 active Dataverse tools across `basic`, `standard`, and `advanced` tiers for AI-assisted inspection, CRUD, metadata, forms, views, ribbon, apps, security, audit, plugins, workflows, and Web API scenarios.
+- `devkit` CLI for project and item scaffolding, deployment, code generation, solution packaging, report and web resource operations, and MCP hosting.
+- MCP server for AI-assisted Dataverse inspection, CRUD, metadata, forms, views, ribbon, apps, security, audit, plugins, workflows, and Web API scenarios.
 - Roslyn analyzer package with 21 diagnostics, `DEVKIT1001` through `DEVKIT1021`, focused on Dataverse plugin, workflow, data provider, and integration safety.
 - TypeScript and JavaScript client scaffolding for form scripts, Web API modules, dialog scripts, generated typings, and deployable web resources.
+- Dataverse server test scaffolding with MSTest and DataverseFakes.Community in Visual Studio and the CLI.
 
 ## 📦 Install
 
@@ -114,8 +115,9 @@ The template names below match the display names shown by Visual Studio.
 | 11. Solution Packager Project      | Dataverse solution extract/pack automation.                                     | [Solution Packager Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Solution-Packager-Project-Template)           |
 | 12. Report Project                 | Dataverse SSRS report project.                                                  | [Report Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template)                                 |
 | 13. WebResource TypeScript Project | TypeScript web resource project with generated typings and build output.        | [WebResource TypeScript Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-TypeScript-Project-Template) |
+| 14. Dataverse Test Project | MSTest project for DevKit Server components using DataverseFakes.Community. | [Dataverse Test Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Dataverse-Test-Project-Template) |
 
-Project template catalog: [Projects Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-Template)
+Project template catalog: [Project Templates](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Project-Templates)
 
 ## 🧩 Item Templates
 
@@ -139,8 +141,10 @@ The item template names below match the display names shown by Visual Studio.
 | 14. TypeScript WebApi      | TypeScript Web API script with typed interfaces.                                             | [TypeScript WebApi Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-WebApi-Item-Template)             |
 | 15. TypeScript Dialog      | TypeScript dialog script with typed dialog interfaces.                                       | [TypeScript Dialog Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-Dialog-Item-Template)             |
 | 16. JavaScript Dialog      | JavaScript dialog script with typed dialog interfaces.                                       | [JavaScript Dialog Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Dialog-Item-Template)             |
+| 17. C# Dataverse Test Class | Test scaffold for a Server component in a DataverseTest project. | [C# Dataverse Test Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Dataverse-Test-Item-Template) |
+| DevKit Report | Entity-aware FetchXML report for a Reporting Services project. | [DevKit Report Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DevKit-Report-Item-Template) |
 
-Item template catalog: [Items Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Items-Template)
+Item template catalog: [Item Templates](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Item-Templates)
 
 ## ⚙️ CLI
 
@@ -151,30 +155,21 @@ devkit server --conn "AuthType=OAuth;..." --json "DynamicsCrm.DevKit.Cli.json" -
 devkit webresource --conn "AuthType=OAuth;..." --file ".\js\account.js" --webresource "new_/js/account.js"
 devkit generator --conn "AuthType=OAuth;..." --json "DynamicsCrm.DevKit.Cli.json" --profile default
 devkit solution --conn "AuthType=OAuth;..." --json "DynamicsCrm.DevKit.Cli.json" --profile default
-devkit mcp --conn "AuthType=OAuth;..." --category standard
+devkit new-project list
+devkit new-item list
 ```
 
-Authentication can be supplied through `--conn`, explicit `--auth` options, PAC profile, client secret credentials, or `DEVKIT_*` environment variables.
+The two catalogs list template IDs without a Dataverse connection. Create projects with `devkit new-project` and add items with `devkit new-item`. Supply connection arguments or use the project `.env` when scaffolding. See the command references and the DataverseFakes.Community walkthrough. [CLI Commands](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CLI-Commands) · [Dataverse server tests](v5/DynamicsCrm.DevKit.Cli/README.md#dataverse-server-tests)
 
 ## 🤖 MCP Server
 
-The CLI includes an MCP server for Dataverse-aware AI agents.
-
-| Category     | Tool count | Typical use                                                                                                                       |
-| ------------ | ---------: | --------------------------------------------------------------------------------------------------------------------------------- |
-| `basic`    |          9 | WhoAmI, table discovery, choices, records, FetchXML, search, demo data, URL parsing.                                              |
-| `standard` |         26 | Forms, views, roles, workflows, flows, BPFs, business rules, custom APIs, audit, plugins, trace logs, system jobs, web resources. |
-| `advanced` |         33 | Model-driven apps, table and column metadata, relationships, raw Web API, modern command bar, and classic ribbon operations.      |
-
-Useful entry points:
-
-The server-start commands require authentication through `--conn`, explicit `--auth` options, or `DEVKIT_*` environment variables.
+The CLI includes an MCP server for Dataverse-aware AI agents. Use `--tools` to list available tools. Start with an instance name to use the project `.env`, or pass complete connection arguments for a single organization.
 
 ```powershell
 devkit mcp --setup-guide
 devkit mcp --tools
-devkit mcp --category basic --dry-run
-devkit mcp "DevKit Dataverse" --category advanced
+devkit mcp devkit-codex
+devkit mcp devkit-codex --auth FromPac --pacprofile DEV --dry-run
 ```
 
 Copy/paste prompts to try with the MCP server:

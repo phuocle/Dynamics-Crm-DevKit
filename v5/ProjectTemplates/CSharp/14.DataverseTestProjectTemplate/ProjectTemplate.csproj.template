@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <PlatformTarget>x64</PlatformTarget>
+    <RootNamespace>$NameSpace$</RootNamespace>
+    <AssemblyName>$ProjectName$</AssemblyName>
+    <Version>4.44.44.44</Version>
+    <IsTestProject>true</IsTestProject>
+    <DevKitTestFramework>DataverseFakes.Community</DevKitTestFramework>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <!-- DevKit Shared is compiled into both Server and this test assembly. -->
+    <NoWarn>$(NoWarn);CS0436</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="DataverseFakes.Community" Version="1.3.2" />
+    <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="$Microsoft.CrmSdk.CoreAssemblies.Version$" />
+    <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="$Microsoft.CrmSdk.Workflow.Version$" />
+    <PackageReference Include="MSTest.TestAdapter" Version="$MSTest.TestAdapter.Version$" />
+    <PackageReference Include="MSTest.TestFramework" Version="$MSTest.TestFramework.Version$" />
+    <Reference Include="System.Activities" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$DataverseServerReference$" />
+    <ProjectReference Include="$DataverseProxyReference$" />
+  </ItemGroup>
+  <Import Project="$DataverseSharedImport$" Label="Shared" />
+</Project>
+<!-- $DevKitVersion$ -->

@@ -34,7 +34,7 @@
         <!-- Main content area -->
         <StackPanel Grid.Row="2" IsEnabled="{Binding IsConnected, ElementName=CONNECTION}" x:Name="StackPanelMain">
             <!-- Project information container -->
-            <Border BorderBrush="Gray" BorderThickness="1" Padding="10,15,10,15" Margin="5,10,5,10">
+            <Border x:Name="ProjectFields" BorderBrush="Gray" BorderThickness="1" Padding="10,15,10,15" Margin="5,10,5,10">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
@@ -44,6 +44,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/> <!-- Project Name entry -->
                         <RowDefinition Height="Auto"/> <!-- Final Project Name / Inline edit -->
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <!-- Editable project suffix (disabled for templates that auto-generate) -->
@@ -60,6 +61,8 @@
                     </StackPanel>
                     <!-- Inline edit TextBox (toggle visibility in code-behind) -->
                     <TextBox x:Name="TextBoxProjectNameInline" Grid.Row="1" Grid.Column="1" Visibility="Collapsed" VerticalContentAlignment="Center" Margin="0,0,0,5" KeyDown="TextBoxProjectNameInline_KeyDown" Height="27"/>
+                    <Label x:Name="DataverseServerLabel" Grid.Row="2" Grid.Column="0" Content="Server project" Visibility="Collapsed" VerticalAlignment="Center" />
+                    <ComboBox x:Name="DataverseServerCombo" Grid.Row="2" Grid.Column="1" Visibility="Collapsed" DisplayMemberPath="Name" SelectedValuePath="Value" Margin="0,5,0,0" />
                 </Grid>
             </Border>
 
@@ -73,7 +76,9 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <WrapPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" Margin="5,0,8,10">
-                    <Button x:Name="buttonOK" Content="OK" Width="80" Height="30" Click="ButtonOK_Click"/>
+                    <Decorator x:Name="ProjectConfirmation">
+                        <Button x:Name="buttonOK" Content="OK" Width="80" Height="30" Click="ButtonOK_Click"/>
+                    </Decorator>
                     <Button x:Name="buttonCancel" Content="Cancel" Margin="5,0,0,0" Width="80" Height="30" IsCancel="True" Click="ButtonCancel_Click"/>
                 </WrapPanel>
             </Grid>

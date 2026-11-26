@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DataverseTest · Đề xuất cho DevKit CLI</title>
+<style>
+:root{color-scheme:light;--ink:#152f30;--soft:#415e5c;--teal:#09665d;--line:#cbd9d4;--paper:#fbfbf6;--mint:#e4f2eb;--amber:#fff1d6}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:16px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 "Segoe UI",Arial,sans-serif}main,header,footer{max-width:1110px;margin:auto;padding:0 clamp(20px,5vw,72px)}header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:24px;padding-bottom:20px;border-bottom:1px solid var(--line)}header strong{font-weight:650}header span,.soft,small{color:var(--soft)}a{color:var(--teal);text-underline-offset:3px}a:focus-visible{outline:3px solid #b56412;outline-offset:4px}h1,h2,h3,p{margin:0}h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:500;letter-spacing:-.035em;line-height:1.12}h1{font-size:clamp(2.48rem,5.8vw,4.6rem);max-width:850px}h2{font-size:clamp(1.8rem,3vw,2.55rem);max-width:830px}h3{font-size:1.08rem;line-height:1.35}section{padding:36px 0;border-bottom:1px solid var(--line)}section>p,section>h2+div,section>h2+ol{margin-top:15px}.intro{padding:42px 0 28px}.intro p{font-size:1.16rem;max-width:810px}.toc{display:flex;gap:8px 20px;flex-wrap:wrap;margin-top:22px}.toc a{font-size:.92rem;font-weight:600}.result{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}.result article{background:var(--mint);padding:19px 23px}.result strong{display:block;color:var(--teal);font:500 2.5rem/1.14 Georgia,serif;font-variant-numeric:tabular-nums}.result p{font-size:.95rem;margin-top:4px}.result small{display:block;margin-top:5px}.note{padding:12px 16px;border-left:3px solid #cb9143;background:var(--amber);font-size:.95rem}.codebox{background:#173936;color:#f5faf3;border-radius:12px;padding:20px 22px;margin-top:18px}.cmd+.cmd{margin-top:14px}.cmd span{display:block;color:#b8d7cc;font-size:.87rem;margin-bottom:3px}.cmd code{color:inherit;background:none;padding:0;font-size:.94rem}.flow{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:17px}.flow article,.choice{border:1px solid var(--line);border-radius:10px;background:#fff;padding:19px 20px}.flow p,.choice p{margin-top:7px}code{font-family:Consolas,"Courier New",monospace;font-size:.9em;background:#eaf0eb;border-radius:3px;padding:.08em .24em;overflow-wrap:anywhere}table{width:100%;border-collapse:collapse;text-align:left;margin-top:18px}th,td{vertical-align:top;padding:12px 10px;border-bottom:1px solid var(--line)}th:first-child,td:first-child{padding-left:0;width:25%}th{color:var(--soft);font-size:.85rem;font-weight:650}td:first-child{font-weight:600}td{font-size:.96rem}tr:last-child td{border-bottom:none}.choices{display:grid;gap:10px;margin-top:18px}.choice{display:grid;grid-template-columns:minmax(155px,.8fr) 2fr;gap:14px}.choice p{margin:0}ol{padding-left:1.45em}li{padding-left:.2em;margin:.44em 0}li::marker{color:var(--teal);font-weight:650}.gates{background:var(--mint);padding:19px 22px;border-radius:10px;margin-top:18px}.gates ol{margin:.2em 0}.end{display:inline-block;padding:9px 14px;border-radius:6px;background:var(--teal);color:white;text-decoration:none;font-weight:600}.sources{margin-top:18px;font-size:.92rem}.sources summary{cursor:pointer;color:var(--teal);font-weight:650}.sources ul{padding-left:1.3em}footer{padding-top:22px;padding-bottom:32px;color:var(--soft);font-size:.88rem}p,td,li{overflow-wrap:anywhere}
+@media(max-width:650px){header{font-size:.88rem;align-items:flex-start}section{padding:27px 0}.intro{padding-top:30px}.intro p{font-size:1.04rem}.result article{padding:15px 12px}.result strong{font-size:1.85rem}.result p,.result small{font-size:.82rem}.flow,.choice{grid-template-columns:1fr}.choice{gap:6px}.codebox{padding:16px}.cmd code{font-size:.85rem}th,td{padding:9px 6px}td:first-child,th:first-child{width:27%}.toc{gap:6px 15px}}
+.result{margin-top:14px}.sample{margin:9px 0 0;padding:13px 15px;background:#edf3ee;border-radius:8px;white-space:pre-wrap;overflow-wrap:anywhere}.sample code{padding:0;background:none}.sources p{margin-top:8px}
+@media(max-width:480px){.result{grid-template-columns:1fr}.result article{padding:12px 16px}.result strong{font-size:1.8rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{body{background:white;font-size:10pt}header,main,footer{max-width:none;padding-left:0;padding-right:0}.toc,.end{display:none}.intro,section{padding:14px 0}h1{font-size:30pt}h2{font-size:20pt}h2,h3{break-after:avoid}.result,.flow article,.choice,tr,.gates,.codebox{break-inside:avoid}.codebox{background:white;color:#173936;border:1px solid}.cmd span{color:#415e5c}}
+</style>
+</head>
+<body>
+<header><strong>DynamicsCrm.DevKit / CLI</strong><span>Đề xuất cho aP · 25/11/2026</span></header>
+<main>
+<section class="intro">
+<h1>Thêm bộ test Dataverse vào solution hiện có</h1>
+<p>Đề xuất thêm <strong>DataverseTest</strong> vào cả <code>new-project</code> và <code>new-item</code>. Một project MSTest dùng DataverseFakes.Community có thể chạy cạnh bộ FakeXrmEasy hiện tại. aP duyệt đầu ra CLI và kết quả test trước khi mở phần VSIX.</p>
+<nav class="toc" aria-label="Nội dung"><a href="#su-dung">Cách dùng</a><a href="#doi-chieu">Đã kiểm chứng</a><a href="#pham-vi">Loại server</a><a href="#quyet-dinh">Đề nghị duyệt</a><a href="#nghiem-thu">Điều kiện qua VSIX</a></nav>
+</section>
+<section id="su-dung">
+<h2>Từ một plugin đến một file test</h2>
+<p>Ví dụ sau mô tả CLI sau khi triển khai. Solution mẫu đã có <code>Contoso.Shared</code>, <code>Contoso.ProxyTypes</code>, <code>Contoso.Server</code> và plugin <code>PreAccountUpdate</code>.</p>
+<div class="codebox"><div class="cmd"><span>Tạo project trong solution</span><code>devkit new-project --type DataverseTest --name Contoso.DataverseTests --solution Contoso.slnx</code></div>
+<div class="cmd"><span>Chọn class cần test theo tên đầy đủ</span><code>devkit new-item --type DataverseTest --project Contoso.DataverseTests --test-target Contoso.Server.Account.PreAccountUpdate</code></div>
+<div class="cmd"><span>Chạy project vừa sinh</span><code>dotnet test .\Contoso.DataverseTests\Contoso.DataverseTests.csproj</code></div></div>
+<div class="flow"><article><h3>Project sinh ra có gì?</h3><p>Một csproj <code>net462</code>, thư mục <code>Framework/</code> và README. Project tham chiếu trực tiếp Server để tìm và chạy plugin, tham chiếu ProxyTypes cho early-bound, import Shared để dùng các wrapper nội bộ.</p></article>
+<article><h3>Người viết test thấy gì?</h3><p><code>PreAccountUpdateTest.cs</code> kế thừa <code>PluginTestBase</code>. Test chuẩn kiểm bốn guard. Test nghiệp vụ gọi <code>Seed</code>, <code>RunPlugin&lt;T&gt;</code> và kiểm thay đổi trên Target hoặc dữ liệu. Chỉ facade làm việc với engine.</p></article></div>
+<p class="soft">Lệnh tạo dùng kết nối Dataverse theo quy tắc CLI hiện tại. Hai lệnh <code>list</code> và bộ test in-memory sau restore không cần kết nối.</p>
+</section>
+<section id="doi-chieu">
+<h2>Hai bộ test Union chạy được cùng nhau</h2>
+<p>Tôi build và chạy từng csproj từ bản sao source Union Management trên Windows. Hai file TRX ghi nhận các kết quả sau.</p>
+<div class="result"><article><strong>158/158</strong><p><b>Server.Test</b> · FakeXrmEasy</p><small>0 lỗi · 0 bỏ qua · net462</small></article><article><strong>159/159</strong><p><b>Server.Test2</b> · DataverseFakes.Community 1.3.2</p><small>0 lỗi · 0 bỏ qua · net462</small></article></div>
+<p class="soft">Đây là kết quả của ứng dụng mẫu. Template CLI mới đang ở bước thiết kế. Build mẫu có warning analyzer; lần kiểm tra này không đo coverage.</p>
+<table><thead><tr><th>Đối chiếu</th><th>Ảnh hưởng đến thiết kế</th></tr></thead><tbody>
+<tr><td>Project Test hiện tại</td><td>Template 09 import Shared và Shared.Test nhưng chỉ reference ProxyTypes. Discovery đọc các <code>ProjectReference</code>. Bổ sung reference Server ngay lúc tạo project mới giúp picker tìm thấy plugin ở lần thêm item đầu tiên.</td></tr>
+<tr><td>Guard của DevKit</td><td><code>Plugin.tt</code> kiểm stage, message, entity và mode. Guard <code>Depth &gt; 5</code> và field <code>ab_debug_context</code> là quy ước của Union. Hard-code chúng sẽ sinh kỳ vọng sai cho solution khác.</td></tr>
+<tr><td>Chuỗi plugin</td><td>Test UnionFee gọi ba plugin tuần tự và tự seed Target. Muốn công bố pipeline tự chạy, cần test riêng đăng ký step rồi gọi CRUD và quan sát kết quả.</td></tr>
+<tr><td>Hành vi của engine</td><td>NuGet 1.3.2 có asset net462 và khai báo MIT. Engine chỉ cho initialize một lần mỗi context. Helper phải kiểm được hai lần seed. Rollup mặc định giữ giá trị đã nạp; công thức tổng hợp cần fixture riêng. <a href="https://www.nuget.org/packages/DataverseFakes.Community/1.3.2">NuGet 1.3.2</a></td></tr>
+</tbody></table>
+<details class="sources"><summary>Xem một assertion nghiệp vụ trong suite đã chạy</summary>
+<p>Test <code>PreCreateSynchronousTest_01_SetsNameFromMonthAndYear</code> chuẩn bị một khoản đoàn phí tháng 3 năm 2026. Đoạn dưới là phần thực thi và kiểm tra tên trong test đó.</p>
+<pre class="sample"><code>RunPlugin&lt;TargetPlugin&gt;().WithTarget(target).Execute();
+Assert.AreEqual("03-2026", target.ab_name);</code></pre>
+<p>Template cung cấp cách đưa Target vào plugin. Giá trị kỳ vọng <code>03-2026</code> do người viết test lấy từ quy tắc của ứng dụng.</p></details>
+<details class="sources"><summary>Bốn tài liệu gốc đóng góp gì?</summary><ul>
+<li><code>UnitTest-Framework-Proposal-Test2.html</code> đưa ra cách chạy hai suite song song và nhu cầu tách test khỏi engine.</li>
+<li><code>AI-Implementation-Plan-Server-Test2.md</code> mô tả facade, các tình huống nghiệp vụ và replay. Đã đối chiếu với csproj, Framework và test thực tế của Union.</li>
+<li><code>DevKit-v5-TestTemplate-Review.html</code> chỉ ra các loại server và quan hệ giữa payload, T4 và wizard. Đề xuất sửa 07/09 trong đó sẽ ảnh hưởng người dùng template cũ.</li>
+<li><code>DevKit-v5-TestTemplate-AI-Plan.md</code> gợi ý kiểm tra resource, render và build. Bản mới áp dụng các phép kiểm đó cho ID riêng; legacy vẫn có bộ regression riêng.</li>
+</ul><p>Source đối chiếu gồm DevKit <code>ca357c9cb</code> và Union <code>9a7926d</code>. <a href="../../ProjectTemplates/CSharp/09.TestProjectTemplate/ProjectTemplate.csproj.template">Project cũ</a> · <a href="../../DynamicsCrm.DevKit.Shared/Templates/PluginTestDiscovery.cs">Discovery</a> · <a href="../../DynamicsCrm.DevKit.Shared/Resources/tt/Plugin.tt">Guard plugin</a></p></details>
+</section>
+<section id="pham-vi">
+<h2>Item sinh test gì cho từng loại server?</h2>
+<p>CLI dùng metadata và kiểu cơ sở để chọn mẫu. Khi chưa biết kết quả nghiệp vụ, item để lại khung Arrange–Act–Assert có trạng thái <code>Inconclusive</code>. Mỗi loại bên dưới cần ít nhất một fixture thực thi với kết quả quan sát được.</p>
+<table><thead><tr><th>Loại server</th><th>Ví dụ để aP nghiệm thu</th></tr></thead><tbody>
+<tr><td>Plugin</td><td>Plugin Update có pre-image đúng alias, thay đổi Target; sai một trong bốn guard sinh đúng exception. Có đường chạy cho Delete bằng EntityReference.</td></tr>
+<tr><td>Workflow</td><td>Chạy CodeActivity trên .NET Framework, truyền input và đọc giá trị output thực.</td></tr>
+<tr><td>Custom Action</td><td>Chạy message bound/unbound với SDK parameters; kiểm output hoặc tác động lên dữ liệu.</td></tr>
+<tr><td>Custom API</td><td>Đọc đúng registration overload của API, chuẩn bị output key được khai báo và đọc giá trị API ghi lại.</td></tr>
+<tr><td>Data Provider</td><td>Chạy từng thao tác Create, Retrieve, Update, Delete, RetrieveMultiple với data source giả. Kiểm kiểu Target/Query và output đặc thù của từng thao tác.</td></tr>
+</tbody></table>
+</section>
+<section id="quyet-dinh">
+<h2>Các lựa chọn đề nghị aP duyệt</h2>
+<div class="choices">
+<article class="choice"><h3>Tên hiển thị và tên project</h3><p>Dùng <code>DataverseTest</code> cho cả hai danh mục. CLI ở chế độ tương tác và dialog VSIX gợi ý <code>&lt;Solution&gt;.DataverseTests</code>. Truyền <code>--name</code> để đặt tên khác từ CLI. Khi solution có nhiều Server, dùng <code>--server-project</code> để chọn project cần test từ CLI.</p></article>
+<article class="choice"><h3>Đặt facade trong project test</h3><p>Mỗi project mới sở hữu <code>Framework/</code> của mình và import production Shared. Cách này cho phép thêm một project là chạy; nếu solution có nhiều project test mới, mỗi project có một bản facade riêng.</p></article>
+<article class="choice"><h3>Phiên bản engine</h3><p>Dùng 1.3.2 cho đợt đầu, đúng bản đã chạy trên Union. Khi nâng version, chạy lại fixture net462 và các phép thử runtime. Không cần thay cơ chế cập nhật NuGet của template đang phát hành.</p></article>
+<article class="choice"><h3>Bảo vệ project hiện tại</h3><p>Giữ ID <code>SharedTest</code>, <code>Test</code>, payload và T4 hiện hành. Project mới có marker riêng; thêm item mới nhầm vào project legacy sẽ báo rõ project đích. Tạo lại project trùng tên phải dừng trước khi ghi.</p></article>
+</div>
+</section>
+<section id="nghiem-thu">
+<h2>Khi nào mới làm VSIX?</h2>
+<div class="gates"><ol>
+<li><strong>Thấy và gọi được cả hai template.</strong> Kiểm tra catalog, picker, lệnh không tương tác, trường hợp trỏ nhầm project và chạy lại.</li>
+<li><strong>Sinh đúng trong solution thật.</strong> CLI vừa build tạo project và item trong cả <code>.sln</code> và <code>.slnx</code>, chọn đúng Server, resolve được facade và cả hai project test cùng build.</li>
+<li><strong>Test mới có thể bắt lỗi.</strong> Chạy net462 với fixture năm loại server, seed, image, trace JSON/nén, mock và pipeline; cố ý đổi kết quả kỳ vọng trong fixture để thấy test đỏ. TRX phải có test đã thực thi.</li>
+<li><strong>Legacy qua hồi quy.</strong> So byte đầu ra cũ với baseline cố định, chạy test CLI đầy đủ và kiểm output từ public command. Ghi số pass/fail/skip, version engine và mọi gate còn mở.</li>
+</ol></div>
+<p class="note"><strong>Trạng thái hiện tại</strong> · Hai suite Union đã pass. Cần kết quả từ CLI mới và aP duyệt output trước khi làm wizard, đóng gói và kiểm parity trong VSIX.</p>
+<p><a class="end" href="dataverse-test-implementation.md">Mở đặc tả để AI triển khai →</a></p>
+</section>
+</main>
+<footer>DynamicsCrm.DevKit v5 · Tài liệu thiết kế CLI</footer>
+</body>
+</html>

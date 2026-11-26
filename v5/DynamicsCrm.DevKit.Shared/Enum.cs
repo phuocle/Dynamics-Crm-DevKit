@@ -79,7 +79,8 @@ namespace DynamicsCrm.DevKit.Shared
         SharedTest,
         Report,
         Package,
-        WebResourceTs
+        WebResourceTs,
+        DataverseTest
     }
 
     public enum ItemType
@@ -103,7 +104,8 @@ namespace DynamicsCrm.DevKit.Shared
         BatFile,
         TsDialog,
         JsDialog,
-        Report
+        Report,
+        DataverseTest
     }
 
     public enum DeployFileType

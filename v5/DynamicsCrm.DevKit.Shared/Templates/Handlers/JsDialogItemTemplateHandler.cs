@@ -37,7 +37,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
     {
         public string TemplateId
         {
-            get { return ItemType.JsDialog.ToString(); }
+            get { return TemplateCatalog.JsDialogId; }
         }
 
         /// <summary>
@@ -56,10 +56,10 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
         {
             var manifest = new TemplateManifest
             {
-                TemplateId = ItemType.JsDialog.ToString(),
+                TemplateId = TemplateCatalog.JsDialogId,
                 Kind = TemplateKind.Item,
             };
-            var prefix = TemplatePayload.Prefix(TemplateKind.Item, ItemType.JsDialog.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.JsDialogId);
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "JavaScript.js", TargetFileName = "$DialogName$.js", ReplaceParameters = true });
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "JavaScript.dialog.js", TargetFileName = "$DialogName$.dialog.js", ReplaceParameters = true, IsGenerated = true });
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "JavaScript.d.ts", TargetFileName = "$DialogName$.dialog.d.ts", ReplaceParameters = true, IsGenerated = true });
@@ -103,7 +103,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             request.Tokens["$TypeScriptDialog$"] = dialogCode.dts;
             request.Tokens["$JavaScript$"] = await new CodeGenService(input.ServiceClient).GetDefaultJsDialogFileAsync(dialog, dialogClassName);
 
-            var prefix = TemplatePayload.Prefix(TemplateKind.Item, ItemType.JsDialog.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.JsDialogId);
 
             // The user file ({Dialog}.js): created when missing, never
             // overwritten unless --force (VSIX ShouldAddProjectItem +

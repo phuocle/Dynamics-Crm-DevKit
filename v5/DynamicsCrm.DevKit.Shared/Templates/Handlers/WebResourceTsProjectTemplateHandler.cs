@@ -46,7 +46,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
 
         public string TemplateId
         {
-            get { return ProjectType.WebResourceTs.ToString(); }
+            get { return TemplateCatalog.WebResourceTsId; }
         }
 
         /// <summary>
@@ -62,10 +62,10 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
         {
             var manifest = new TemplateManifest
             {
-                TemplateId = ProjectType.WebResourceTs.ToString(),
+                TemplateId = TemplateCatalog.WebResourceTsId,
                 Kind = TemplateKind.Project,
             };
-            var prefix = TemplatePayload.Prefix(TemplateKind.Project, ProjectType.WebResourceTs.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Project, TemplateCatalog.WebResourceTsId);
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "ProjectTemplate.csproj.template", TargetFileName = "$SafeProjectName$.csproj", ReplaceParameters = true });
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "README.md", TargetFileName = "README.md", ReplaceParameters = false });
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

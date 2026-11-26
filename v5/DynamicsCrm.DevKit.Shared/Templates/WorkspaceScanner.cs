@@ -16,6 +16,14 @@ namespace DynamicsCrm.DevKit.Shared.Templates
     /// </summary>
     public static class WorkspaceScanner
     {
+        internal static string ExistingDirectory(string path)
+        {
+            var directory = new DirectoryInfo(path);
+            while (!directory.Exists && directory.Parent != null)
+                directory = directory.Parent;
+            return directory.FullName;
+        }
+
         public static WorkspaceContext Scan(string startDirectory)
         {
             var context = WorkspaceContext.Empty(startDirectory);

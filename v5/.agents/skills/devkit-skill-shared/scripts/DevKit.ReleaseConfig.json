@@ -27,7 +27,8 @@
                                           "ProjectTemplates\\CSharp\\10.TestUiProjectTemplate\\README.md",
                                           "ProjectTemplates\\CSharp\\11.SolutionPackagerProjectTemplate\\README.md",
                                           "ProjectTemplates\\CSharp\\12.ReportProjectTemplate\\README.md",
-                                          "ProjectTemplates\\CSharp\\13.WebResourceTsProjectTemplate\\README.md"
+                                          "ProjectTemplates\\CSharp\\13.WebResourceTsProjectTemplate\\README.md",
+                                          "ProjectTemplates\\CSharp\\14.DataverseTestProjectTemplate\\README.md"
                                       ]
               },
     "buildConfig":  {

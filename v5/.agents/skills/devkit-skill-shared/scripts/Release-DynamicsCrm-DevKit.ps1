@@ -207,9 +207,12 @@ function Assert-VsixTemplateContent {
         $reportCatalogFiles = @("DevKitReportItems.vsdir", "DevKitReport.vsz", "DevKitReport.ico")
         $missingReportCatalogFiles = @($reportCatalogFiles | Where-Object { $null -eq $archive.GetEntry("$reportCatalogRoot/$_") })
 
-        if ($projectTemplates.Count -ne 13 -or $itemTemplates.Count -ne 16 -or $missingReportCatalogFiles.Count -ne 0) {
+        $dataverseProject = @($projectTemplates | Where-Object { $_.FullName -like "*/CSharpDataverseTestProjectTemplate.vstemplate" })
+        $dataverseItem = @($itemTemplates | Where-Object { $_.FullName -like "*/CSharpDataverseTestItemTemplate.vstemplate" })
+        if ($projectTemplates.Count -ne 14 -or $itemTemplates.Count -ne 17 -or $missingReportCatalogFiles.Count -ne 0 -or
+            $dataverseProject.Count -ne 1 -or $dataverseItem.Count -ne 1) {
             $missingReportCatalog = if ($missingReportCatalogFiles.Count -eq 0) { "none" } else { $missingReportCatalogFiles -join ", " }
-            throw "VSIX template validation failed. Expected 13 project templates, 16 C# item templates, and the DevKit Report legacy catalog; found $($projectTemplates.Count) project templates, $($itemTemplates.Count) item templates, missing report catalog files: $missingReportCatalog."
+            throw "VSIX template validation failed. Expected 14 project templates, 17 C# item templates, one DataverseTest template per kind, and the DevKit Report legacy catalog. Found $($projectTemplates.Count) project templates, $($itemTemplates.Count) item templates, DataverseTest counts $($dataverseProject.Count)/$($dataverseItem.Count), missing report catalog files: $missingReportCatalog."
         }
     }
     finally {

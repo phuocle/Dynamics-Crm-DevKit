@@ -39,7 +39,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
     {
         public string TemplateId
         {
-            get { return ItemType.ResourceString.ToString(); }
+            get { return TemplateCatalog.ResourceStringId; }
         }
 
         /// <summary>
@@ -52,10 +52,10 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
         {
             var manifest = new TemplateManifest
             {
-                TemplateId = ItemType.ResourceString.ToString(),
+                TemplateId = TemplateCatalog.ResourceStringId,
                 Kind = TemplateKind.Item,
             };
-            var prefix = TemplatePayload.Prefix(TemplateKind.Item, ItemType.ResourceString.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.ResourceStringId);
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "ResourceString.resx", TargetFileName = "$Class$$PluginOrder$.$LanguageCode$.resx", ReplaceParameters = true });
             return manifest;
         }

@@ -64,7 +64,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (string.IsNullOrWhiteSpace(args.Name) && TaskNewShared.CanPrompt())
             {
                 var prompt = new TextPrompt<string>($"[green]{descriptor.DisplayName}[/] project name:");
-                var defaultName = GetDefaultProjectName(descriptor, args.Out);
+                var defaultName = descriptor.Id == TemplateCatalog.DataverseTestId && File.Exists(args.Solution)
+                    ? DataverseTestProjectHandler.GetProjectName(Path.GetFileNameWithoutExtension(args.Solution))
+                    : GetDefaultProjectName(descriptor, args.Out);
                 if (!string.IsNullOrEmpty(defaultName))
                 {
                     prompt.DefaultValue(defaultName);
@@ -74,7 +76,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             if (string.IsNullOrWhiteSpace(args.Solution) && TaskNewShared.CanPrompt())
             {
-                var nearestSolution = FindNearestSolutionFile(string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : Path.GetFullPath(args.Out));
+                var startDirectory = string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : Path.GetFullPath(args.Out);
+                if (descriptor.Id == TemplateCatalog.DataverseTestId)
+                    startDirectory = WorkspaceScanner.ExistingDirectory(startDirectory);
+                var nearestSolution = FindNearestSolutionFile(startDirectory);
                 var solutionPrompt = new TextPrompt<string>("Solution [green]file[/] [grey](--solution)[/]:");
                 if (!string.IsNullOrEmpty(nearestSolution)) solutionPrompt.DefaultValue(nearestSolution);
                 args.Solution = AnsiConsole.Prompt(solutionPrompt);
@@ -90,6 +95,34 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // the default project name as well.
                 SolutionFile = args.Solution,
             };
+            if (descriptor.Id == TemplateCatalog.DataverseTestId)
+            {
+                input.ServerProjectFile = args.ServerProject;
+                if (TaskNewShared.CanPrompt() && string.IsNullOrWhiteSpace(args.ServerProject) && File.Exists(args.Solution))
+                {
+                    List<string> candidates;
+                    try
+                    {
+                        candidates = DataverseTestProjectHandler.FindServerProjects(Path.GetFullPath(args.Solution));
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        throw new DevKitValidationException(ex.Message);
+                    }
+                    var conventionName = $"{Path.GetFileNameWithoutExtension(args.Solution)}.Server";
+                    if (candidates.Count > 1 && candidates.Count(path => DataverseTestProjectHandler.HasName(path, conventionName)) != 1)
+                    {
+                        input.ServerProjectFile = AnsiConsole.Prompt(new SelectionPrompt<string>()
+                            .Title("Server project [grey](--server-project)[/]:")
+                            .UseConverter(Markup.Escape)
+                            .AddChoices(candidates));
+                    }
+                }
+            }
+            else if (!string.IsNullOrWhiteSpace(args.ServerProject))
+            {
+                throw new DevKitValidationException("--server-project is available for the DataverseTest project template.");
+            }
             // The Console/ConsoleCore templates bake the connection
             // type into App.cs/App.config or App.cs/AppSettings.json,
             // and the Server/Package deploy scripts bake the CLI
@@ -101,25 +134,25 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             // allows OK without connecting, and the CLI mirrors that
             // instead of an --offline flag (aP: no --offline on
             // new-project).
-            if ((descriptor.Id == nameof(ProjectType.Console) || descriptor.Id == nameof(ProjectType.ConsoleCore) || descriptor.Id == nameof(ProjectType.Server) || descriptor.Id == nameof(ProjectType.Package) || descriptor.Id == nameof(ProjectType.WebResource) || descriptor.Id == nameof(ProjectType.ProxyTypes) || descriptor.Id == nameof(ProjectType.WebResourceTs) || descriptor.Id == nameof(ProjectType.UiTest) || descriptor.Id == nameof(ProjectType.SolutionPackager) || descriptor.Id == nameof(ProjectType.Report)) && TaskNewShared.CanPrompt())
+            if ((descriptor.Id == TemplateCatalog.ConsoleId || descriptor.Id == TemplateCatalog.ConsoleCoreId || descriptor.Id == TemplateCatalog.ServerId || descriptor.Id == TemplateCatalog.PackageId || descriptor.Id == TemplateCatalog.WebResourceId || descriptor.Id == TemplateCatalog.ProxyTypesId || descriptor.Id == TemplateCatalog.WebResourceTsId || descriptor.Id == TemplateCatalog.UiTestId || descriptor.Id == TemplateCatalog.SolutionPackagerId || descriptor.Id == TemplateCatalog.ReportId) && TaskNewShared.CanPrompt())
             {
-                var supportedTypes = descriptor.Id == nameof(ProjectType.ConsoleCore)
+                var supportedTypes = descriptor.Id == TemplateCatalog.ConsoleCoreId
                     ? ConsoleCoreProjectTemplateHandler.SupportedConnectionTypes
-                    : descriptor.Id == nameof(ProjectType.Console)
+                    : descriptor.Id == TemplateCatalog.ConsoleId
                         ? ConsoleProjectTemplateHandler.SupportedConnectionTypes
-                        : descriptor.Id == nameof(ProjectType.Package)
+                        : descriptor.Id == TemplateCatalog.PackageId
                             ? PackageProjectTemplateHandler.SupportedConnectionTypes
-                            : descriptor.Id == nameof(ProjectType.WebResource)
+                            : descriptor.Id == TemplateCatalog.WebResourceId
                                 ? WebResourceProjectTemplateHandler.SupportedConnectionTypes
-                                : descriptor.Id == nameof(ProjectType.ProxyTypes)
+                                : descriptor.Id == TemplateCatalog.ProxyTypesId
                                     ? ProxyTypesProjectTemplateHandler.SupportedConnectionTypes
-                                    : descriptor.Id == nameof(ProjectType.WebResourceTs)
+                                    : descriptor.Id == TemplateCatalog.WebResourceTsId
                                         ? WebResourceTsProjectTemplateHandler.SupportedConnectionTypes
-                                        : descriptor.Id == nameof(ProjectType.UiTest)
+                                        : descriptor.Id == TemplateCatalog.UiTestId
                                             ? UiTestProjectTemplateHandler.SupportedConnectionTypes
-                                            : descriptor.Id == nameof(ProjectType.SolutionPackager)
+                                            : descriptor.Id == TemplateCatalog.SolutionPackagerId
                                                 ? SolutionPackagerProjectTemplateHandler.SupportedConnectionTypes
-                                                : descriptor.Id == nameof(ProjectType.Report)
+                                                : descriptor.Id == TemplateCatalog.ReportId
                                                     ? ReportProjectTemplateHandler.SupportedConnectionTypes
                                                     : ServerProjectTemplateHandler.SupportedConnectionTypes;
                 input.CrmConnection = ConnectionPrompter.Prompt(supportedTypes, args.Out);
@@ -155,7 +188,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             // of the VSIX wizard's blocking "Please add Shared project"
             // message (the handler still refuses without it). The
             // Shared scaffold joins the same --solution.
-            if (descriptor.Id == nameof(ProjectType.Server) && TaskNewShared.CanPrompt())
+            if (descriptor.Id == TemplateCatalog.ServerId && TaskNewShared.CanPrompt())
             {
                 var directory = string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : Path.GetFullPath(args.Out);
                 var workspace = File.Exists(args.Solution)
@@ -170,7 +203,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         var sharedResult = await ScaffoldingEngine.ScaffoldProjectAsync(new ProjectTemplateInput
                         {
-                            TemplateId = nameof(ProjectType.Shared),
+                            TemplateId = TemplateCatalog.SharedId,
                             ProjectName = sharedName,
                             OutputDirectory = args.Out,
                             SolutionFile = args.Solution,
@@ -212,8 +245,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         /// <summary>
         /// Default project name shown by the interactive prompt. Mirrors the
-        /// pre-filled name of FormProject: {SolutionName}.{ProjectType} for
-        /// every project template except SharedTest ({SolutionName}.Shared.Test).
+        /// pre-filled name of FormProject, including the dedicated suffixes
+        /// for SharedTest and DataverseTest.
         /// </summary>
         private static string GetDefaultProjectName(TemplateDescriptor descriptor, string outputDirectory)
         {
@@ -222,10 +255,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 : outputDirectory;
             var workspace = WorkspaceScanner.Scan(Path.GetFullPath(directory));
             if (!workspace.HasSolution) return null;
-            if (descriptor.Id == nameof(ProjectType.SharedTest))
+            if (descriptor.Id == TemplateCatalog.SharedTestId)
             {
                 return $"{workspace.SolutionName}.{ProjectType.Shared}.{ProjectType.Test}";
             }
+            if (descriptor.Id == TemplateCatalog.DataverseTestId)
+                return DataverseTestProjectHandler.GetProjectName(workspace.SolutionName);
             return $"{workspace.SolutionName}.{descriptor.Id}";
         }
     }

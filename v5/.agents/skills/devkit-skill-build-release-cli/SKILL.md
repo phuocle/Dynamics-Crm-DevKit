@@ -13,9 +13,10 @@ install `DynamicsCrm.DevKit.Cli` with the current date and time:
 ```
 
 Wait for the script to exit. It stops running devkit/MCP processes to release
-assembly locks, reinstalls the `devkit` global tool, writes the build manifest,
-and restores `Const.cs` in `finally`. After a successful exit, verify the CLI
-output:
+assembly locks, stamps `Const.cs` and the Dataverse Test project template
+README, reinstalls the `devkit` global tool, and writes the build manifest.
+It restores both source files in `finally`. After a successful exit, verify
+the CLI output:
 
 - `devkit --version` succeeds with the version from
   `.agents/skills/devkit-skill-shared/scripts/DevKit.ReleaseConfig.json` and
@@ -25,8 +26,10 @@ output:
 - `Published/<version>/DynamicsCrm.DevKit.Cli.<version>.build-manifest.json`
   records `"configuration": "Release"` and the installed assembly at
   `installedAssemblyPath` matches `installedAssemblySha256`.
-- `DynamicsCrm.DevKit.Shared/Const.cs` contains `xxxx.yy.zz HH.mm.ss` again
-  and `git status` shows no leftover build-date replacements.
+- `DynamicsCrm.DevKit.Shared/Const.cs` and
+  `ProjectTemplates/CSharp/14.DataverseTestProjectTemplate/README.md` contain
+  `xxxx.yy.zz HH.mm.ss` again. Check `git status` for leftover build-date
+  replacements.
 
 Following [AGENTS.md](../../../AGENTS.md), finish after CLI artifact
 verification, including when MCP code changed. Skip any runtime proof prompt

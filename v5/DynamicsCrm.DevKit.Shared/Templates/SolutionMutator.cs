@@ -452,14 +452,15 @@ namespace DynamicsCrm.DevKit.Shared.Templates
         /// net10 (CLI) hosts. Handles the solution/project layout (same
         /// volume, project inside or beside the solution directory).
         /// </summary>
-        private static string GetRelativePath(string relativeTo, string path)
+        internal static string GetRelativePath(string relativeTo, string path,
+            StringComparison comparison = StringComparison.OrdinalIgnoreCase, string separator = "\\")
         {
             var fromChunks = NormalizeChunks(relativeTo);
             var toChunks = NormalizeChunks(path);
 
             var common = 0;
             while (common < fromChunks.Length && common < toChunks.Length &&
-                   string.Equals(fromChunks[common], toChunks[common], StringComparison.OrdinalIgnoreCase))
+                   string.Equals(fromChunks[common], toChunks[common], comparison))
             {
                 common++;
             }
@@ -473,7 +474,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
             {
                 parts.Add(toChunks[i]);
             }
-            return string.Join("\\", parts);
+            return string.Join(separator, parts);
         }
 
         private static string[] NormalizeChunks(string path)

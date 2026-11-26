@@ -14,4 +14,5 @@
   <Project Path="Dev.AllInOne.UiTest/Dev.AllInOne.UiTest.csproj" />
   <Project Path="Dev.AllInOne.WebResource/Dev.AllInOne.WebResource.csproj" />
   <Project Path="Dev.AllInOne.WebResourceTs/Dev.AllInOne.WebResourceTs.csproj" />
+  <Project Path="Dev.AllInOne.DataverseTests/Dev.AllInOne.DataverseTests.csproj" />
 </Solution>

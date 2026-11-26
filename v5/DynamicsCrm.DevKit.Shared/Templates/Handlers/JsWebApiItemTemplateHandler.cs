@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
     {
         public string TemplateId
         {
-            get { return ItemType.JsWebApi.ToString(); }
+            get { return TemplateCatalog.JsWebApiId; }
         }
 
         /// <summary>
@@ -42,10 +42,10 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
         {
             var manifest = new TemplateManifest
             {
-                TemplateId = ItemType.JsWebApi.ToString(),
+                TemplateId = TemplateCatalog.JsWebApiId,
                 Kind = TemplateKind.Item,
             };
-            var prefix = TemplatePayload.Prefix(TemplateKind.Item, ItemType.JsWebApi.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.JsWebApiId);
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "Javascript.js", TargetFileName = "$SchemaName$.js", ReplaceParameters = true });
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "Javascript.d.ts", TargetFileName = "$SchemaName$.d.ts", ReplaceParameters = true, IsGenerated = true });
             manifest.Files.Add(new TemplatePayloadFile { ResourceName = prefix + "Javascript.webapi.js", TargetFileName = "$SchemaName$.webapi.js", ReplaceParameters = true, IsGenerated = true });
@@ -113,7 +113,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Handlers
             request.Tokens["$Javascript$"] = await new CodeGenService(input.ServiceClient).GetDefaultWebApiFileAsync(schemaName);
             var (webApiCode, dts) = await JsWebApi.GetJsWebApiCodeAsync(input.ServiceClient, metadata, rootNamespace, isJsFormExist);
 
-            var prefix = TemplatePayload.Prefix(TemplateKind.Item, ItemType.JsWebApi.ToString());
+            var prefix = TemplatePayload.Prefix(TemplateKind.Item, TemplateCatalog.JsWebApiId);
 
             // The user stub ({Entity}.js): created when missing, never
             // overwritten unless --force (VSIX ShouldAddProjectItem).

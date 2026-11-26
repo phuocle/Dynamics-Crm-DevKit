@@ -92,6 +92,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates.Models
         public string SolutionFile { get; set; }
         public bool Force { get; set; }
         public bool Offline { get; set; }
+        internal string ServerProjectFile { get; set; }
     }
 
     /// <summary>

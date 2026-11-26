@@ -54,40 +54,45 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             else
             {
                 var typeDescriptor = TemplateCatalog.Find(args.Type, TemplateKind.Item);
-                if (typeDescriptor?.Id == ItemType.Plugin.ToString())
+                if (typeDescriptor?.Id == TemplateCatalog.PluginId)
                 {
                     if (string.IsNullOrWhiteSpace(args.Entity)) missing.Add("--entity <schema-name>");
                     if (string.IsNullOrWhiteSpace(args.Message)) missing.Add("--message <message>");
                     if (string.IsNullOrWhiteSpace(args.Stage)) missing.Add("--stage <PreValidation|PreOperation|PostOperation>");
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <class-name>");
                 }
-                else if (typeDescriptor?.Id == ItemType.CustomAction.ToString())
+                else if (typeDescriptor?.Id == TemplateCatalog.CustomActionId)
                 {
                     if (string.IsNullOrWhiteSpace(args.Entity)) missing.Add("--entity <schema-name|none>");
                     if (string.IsNullOrWhiteSpace(args.Message)) missing.Add("--message <custom-action>");
                     if (string.IsNullOrWhiteSpace(args.Stage)) missing.Add("--stage <PreValidation|PreOperation|PostOperation>");
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <class-name>");
                 }
-                else if (typeDescriptor?.Id == ItemType.CustomApi.ToString())
+                else if (typeDescriptor?.Id == TemplateCatalog.CustomApiId)
                 {
                     if (string.IsNullOrWhiteSpace(args.Entity)) missing.Add("--entity <schema-name|none>");
                     if (string.IsNullOrWhiteSpace(args.Message)) missing.Add("--message <custom-api>");
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <class-name>");
                 }
-                else if (typeDescriptor?.Id == ItemType.Workflow.ToString())
+                else if (typeDescriptor?.Id == TemplateCatalog.WorkflowId)
                 {
                     // FormPlugin.WorkflowItem collapses every org combo —
                     // the class name is the only dialog input.
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <class-name>");
                 }
-                else if (typeDescriptor?.Id == ItemType.DataProvider.ToString())
+                else if (typeDescriptor?.Id == TemplateCatalog.DataProviderId)
                 {
                     // FormPlugin.DataProviderItem collapses the class,
                     // message, stage and execution fields — the data source
                     // combo (the relabeled entity list) is the only input.
                     if (string.IsNullOrWhiteSpace(args.Datasource)) missing.Add("--datasource <data-source-logical-name>");
                 }
-                else if (typeDescriptor?.Id == ItemType.Test.ToString())
+                else if (typeDescriptor?.Id == TemplateCatalog.DataverseTestId)
+                {
+                    if (string.IsNullOrWhiteSpace(args.Name) && string.IsNullOrWhiteSpace(args.TestTarget))
+                        missing.Add("--test-target <full-class-name> (or --name when no targets exist)");
+                }
+                else if (typeDescriptor?.Id == TemplateCatalog.TestId)
                 {
                     // FormPlugin.TestItem: candidates on the test-plugin
                     // combo (the scan of the test project's ProjectReference
@@ -128,13 +133,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         }
                     }
                 }
-                else if (typeDescriptor?.Id == ItemType.UiTest.ToString())
+                else if (typeDescriptor?.Id == TemplateCatalog.UiTestId)
                 {
                     // FormPlugin.UiTestItem collapses every org combo —
                     // the class name is the only dialog input.
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <class-name>");
                 }
-                else if (typeDescriptor?.Id == ItemType.ResourceString.ToString())
+                else if (typeDescriptor?.Id == TemplateCatalog.ResourceStringId)
                 {
                     // FormPlugin.ResourceStringItem: the relabeled entity
                     // combo ("Language", filled on connect with the
@@ -145,7 +150,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (string.IsNullOrWhiteSpace(args.Language)) missing.Add("--language <lcid>");
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <class-name>");
                 }
-                else if (typeDescriptor?.Id == ItemType.BatFile.ToString())
+                else if (typeDescriptor?.Id == TemplateCatalog.BatFileId)
                 {
                     // FormPlugin.BatFileItem: the relabeled entity combo
                     // ("File", the six static utility files) is the
@@ -153,7 +158,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     // itself (the wizard's $batfilename$).
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <utility-file>");
                 }
-                else if (typeDescriptor?.Id == ItemType.TsDialog.ToString())
+                else if (typeDescriptor?.Id == TemplateCatalog.TsDialogId)
                 {
                     // FormItem.TsDialogItem: the relabeled entity combo
                     // ("Dialog", filled on connect with the org's active
@@ -163,7 +168,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     // SystemForm (its UniqueName).
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <dialog-name>");
                 }
-                else if (typeDescriptor?.Id == ItemType.JsDialog.ToString())
+                else if (typeDescriptor?.Id == TemplateCatalog.JsDialogId)
                 {
                     // FormItem.JsDialogItem: the same relabeled "Dialog"
                     // combo as TsDialogItem (the twin) — the pick's display
@@ -172,7 +177,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     // SystemForm (its UniqueName).
                     if (string.IsNullOrWhiteSpace(args.Name)) missing.Add("--name <dialog-name>");
                 }
-                else if (typeDescriptor?.Id == ItemType.Report.ToString())
+                else if (typeDescriptor?.Id == TemplateCatalog.ReportId)
                 {
                     // FormItem.ReportItem (the 18.ReportItemTemplate .vsz
                     // wizard): the entity combo is the dialog's only input.
@@ -183,11 +188,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (string.IsNullOrWhiteSpace(args.Entity)) missing.Add("--entity <schema-name>");
                 }
                 else if (typeDescriptor != null &&
-                         (typeDescriptor.Id == ItemType.LateBound.ToString() ||
-                          typeDescriptor.Id == ItemType.JsForm.ToString() ||
-                          typeDescriptor.Id == ItemType.JsWebApi.ToString() ||
-                          typeDescriptor.Id == ItemType.TsForm.ToString() ||
-                          typeDescriptor.Id == ItemType.TsWebApi.ToString()) &&
+                         (typeDescriptor.Id == TemplateCatalog.LateBoundId ||
+                          typeDescriptor.Id == TemplateCatalog.JsFormId ||
+                          typeDescriptor.Id == TemplateCatalog.JsWebApiId ||
+                          typeDescriptor.Id == TemplateCatalog.TsFormId ||
+                          typeDescriptor.Id == TemplateCatalog.TsWebApiId) &&
                          string.IsNullOrWhiteSpace(args.Entity))
                 {
                     missing.Add("--entity <schema-name>");
@@ -214,13 +219,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             // the default output directory anchor there.
             if (string.IsNullOrWhiteSpace(args.Project) && TaskNewShared.CanPrompt())
             {
-                var nearestProject = FindNearestProjectName(string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : Path.GetFullPath(args.Out));
+                var startDirectory = string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : Path.GetFullPath(args.Out);
+                if (descriptor.Id == TemplateCatalog.DataverseTestId)
+                    startDirectory = WorkspaceScanner.ExistingDirectory(startDirectory);
+                var nearestProject = FindNearestProjectName(startDirectory);
                 var projectPrompt = new TextPrompt<string>("Project [green]name[/] [grey](--project)[/]:");
                 if (!string.IsNullOrEmpty(nearestProject)) projectPrompt.DefaultValue(nearestProject);
                 args.Project = AnsiConsole.Prompt(projectPrompt);
             }
             {
                 var startDirectory = string.IsNullOrWhiteSpace(args.Out) ? Environment.CurrentDirectory : Path.GetFullPath(args.Out);
+                if (descriptor.Id == TemplateCatalog.DataverseTestId)
+                    startDirectory = WorkspaceScanner.ExistingDirectory(startDirectory);
                 var projectDirectory = ResolveProjectDirectory(args.Project, startDirectory);
                 if (projectDirectory == null)
                 {
@@ -235,18 +245,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             // Every add is connected (aP ruling 2026-10-29 — the command
             // connects before this task runs, like the VSIX wizard); the
             // engine keeps its offline path for tests/MCP only.
-            var isPlugin = descriptor.Id == ItemType.Plugin.ToString();
-            var isCustomAction = descriptor.Id == ItemType.CustomAction.ToString();
-            var isCustomApi = descriptor.Id == ItemType.CustomApi.ToString();
-            var isWorkflow = descriptor.Id == ItemType.Workflow.ToString();
-            var isDataProvider = descriptor.Id == ItemType.DataProvider.ToString();
-            var isTest = descriptor.Id == ItemType.Test.ToString();
-            var isUiTest = descriptor.Id == ItemType.UiTest.ToString();
-            var isResourceString = descriptor.Id == ItemType.ResourceString.ToString();
-            var isBatFile = descriptor.Id == ItemType.BatFile.ToString();
-            var isTsDialog = descriptor.Id == ItemType.TsDialog.ToString();
-            var isJsDialog = descriptor.Id == ItemType.JsDialog.ToString();
-            var isReport = descriptor.Id == ItemType.Report.ToString();
+            var isPlugin = descriptor.Id == TemplateCatalog.PluginId;
+            var isCustomAction = descriptor.Id == TemplateCatalog.CustomActionId;
+            var isCustomApi = descriptor.Id == TemplateCatalog.CustomApiId;
+            var isWorkflow = descriptor.Id == TemplateCatalog.WorkflowId;
+            var isDataProvider = descriptor.Id == TemplateCatalog.DataProviderId;
+            var isTest = descriptor.Id == TemplateCatalog.TestId;
+            var isUiTest = descriptor.Id == TemplateCatalog.UiTestId;
+            var isResourceString = descriptor.Id == TemplateCatalog.ResourceStringId;
+            var isBatFile = descriptor.Id == TemplateCatalog.BatFileId;
+            var isTsDialog = descriptor.Id == TemplateCatalog.TsDialogId;
+            var isJsDialog = descriptor.Id == TemplateCatalog.JsDialogId;
+            var isReport = descriptor.Id == TemplateCatalog.ReportId;
             if (descriptor.RequiresConnection)
             {
                 // Connected and interactive: pick the entity from the org
@@ -317,7 +327,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     args.Name = AnsiConsole.Prompt(new TextPrompt<string>("Report [green]file name[/] [grey](--name)[/]:").DefaultValue("Report.rdl").AllowEmpty());
                 }
             }
-            else if (!isUiTest && !isBatFile && string.IsNullOrWhiteSpace(args.Name) && TaskNewShared.CanPrompt())
+            else if (!isUiTest && !isBatFile && descriptor.Id != TemplateCatalog.DataverseTestId &&
+                string.IsNullOrWhiteSpace(args.Name) && TaskNewShared.CanPrompt())
             {
                 // UiTest is excluded: its chain owns the class-name prompt
                 // (the FormPlugin twin — the dialog's collapsed combos make
@@ -379,6 +390,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // picked candidate (resolved by the handler).
                 await PromptTestItemAsync(args);
             }
+            else if (descriptor.Id == TemplateCatalog.DataverseTestId && TaskNewShared.CanPrompt())
+            {
+                await PromptDataverseTestItemAsync(args);
+            }
             else if (isUiTest)
             {
                 // The FormPlugin twin for UiTest: class name (the only
@@ -410,6 +425,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 // template prompt.
                 await PromptBatFileItemAsync(args);
             }
+            if (descriptor.Id == TemplateCatalog.DataverseTestId &&
+                string.IsNullOrWhiteSpace(args.Name) && string.IsNullOrWhiteSpace(args.TestTarget))
+                throw new DevKitValidationException("--test-target: required for DataverseTest (or use --name when the project has no testable targets).");
+
             var input = new ItemTemplateInput
             {
                 TemplateId = descriptor.Id,
@@ -1126,6 +1145,45 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             .Title("Select a [green]template[/] [grey](--template)[/]:")
                             .AddChoices(new[] { T4TemplateResolver.DefaultTemplateTitle }.Concat(titles)));
                 }
+            }
+        }
+
+        private static async Task PromptDataverseTestItemAsync(NewItemCommandArgs args)
+        {
+            var directory = ResolveProjectDirectory(args.Project, WorkspaceScanner.ExistingDirectory(Path.GetFullPath(args.Out)));
+            var projectFile = Directory.EnumerateFiles(directory, "*.csproj").FirstOrDefault(path =>
+                DataverseTestProjectHandler.HasName(path, args.Project));
+            try
+            {
+                DataverseTestItemHandler.ReadTestProject(projectFile);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new DevKitValidationException(ex.Message);
+            }
+            if (string.IsNullOrWhiteSpace(args.TestTarget))
+            {
+                var candidates = await PluginTestDiscovery.GetDataverseTestCandidatesAsync(projectFile);
+                if (candidates.Count > 0)
+                {
+                    args.TestTarget = AnsiConsole.Prompt(new SelectionPrompt<string>()
+                        .Title("Server class [grey](--test-target)[/]:")
+                        .EnableSearch()
+                        .UseConverter(Markup.Escape)
+                        .AddChoices(candidates.Select(candidate => candidate.FullClassName).Distinct()));
+                }
+                else if (string.IsNullOrWhiteSpace(args.Name))
+                {
+                    args.Name = AnsiConsole.Prompt(new TextPrompt<string>("Test class [grey](--name)[/]:"));
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(args.T4) && DataverseTestItemHandler.IsDefault(args.Template))
+            {
+                var titles = T4TemplateResolver.GetCustomTemplateTitles(TemplateCatalog.DataverseTestId, WorkspaceScanner.ExistingDirectory(args.Out));
+                if (titles.Count > 0)
+                    args.Template = AnsiConsole.Prompt(new SelectionPrompt<string>().Title("Test template [grey](--template)[/]:")
+                        .UseConverter(Markup.Escape).AddChoices(new[] { T4TemplateResolver.DefaultTemplateTitle }.Concat(titles).Distinct()));
             }
         }
 

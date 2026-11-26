@@ -29,6 +29,9 @@ namespace DynamicsCrm.DevKit.Lib
         }     
 
         public static async Task<string> ProcessTemplateAsync(string t4code, T4Context context)
+            => await ProcessTemplateAsync(t4code, context, throwOnErrors: false);
+
+        internal static async Task<string> ProcessTemplateAsync(string t4code, T4Context context, bool throwOnErrors)
         {
             using (ItemTemplateTelemetry.Start(context?.Class, "t4", "ProcessTemplate"))
             {
@@ -39,7 +42,12 @@ namespace DynamicsCrm.DevKit.Lib
                 sessionHost.Session["Context"] = context;
                 t4code = "<#@ parameter type=\"DynamicsCrm.DevKit.Shared.Models.T4Context\" name=\"Context\"#>" + t4code;
                 var code = t4.ProcessTemplate("", t4code, cb);
-                if (cb.errorMessages.Count > 0) return string.Join("\r\n", cb.errorMessages);
+                if (cb.errorMessages.Count > 0)
+                {
+                    var errors = string.Join("\r\n", cb.errorMessages);
+                    if (throwOnErrors) throw new InvalidOperationException(errors);
+                    return errors;
+                }
                 return code;
             }
         }

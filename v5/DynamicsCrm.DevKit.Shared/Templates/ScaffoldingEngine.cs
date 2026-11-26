@@ -1,3 +1,4 @@
+using DynamicsCrm.DevKit.Shared.Templates.Handlers;
 using DynamicsCrm.DevKit.Shared.Templates.Models;
 using System;
 using System.Collections.Generic;
@@ -117,7 +118,22 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 return result;
             }
 
-            var workspace = WorkspaceScanner.Scan(ResolveOutputDirectory(input.OutputDirectory));
+            var workspaceSearchDirectory = ResolveOutputDirectory(input.OutputDirectory);
+            if (descriptor.Id == TemplateCatalog.DataverseTestId)
+            {
+                if (string.IsNullOrWhiteSpace(input.SolutionFile))
+                {
+                    result.AddError("--solution: required for DataverseTest.");
+                    return result;
+                }
+                if (!DataverseTestProjectHandler.IsNamespace(input.ProjectName))
+                {
+                    result.AddError($"--name '{input.ProjectName}': use a dotted C# project name.");
+                    return result;
+                }
+                workspaceSearchDirectory = WorkspaceScanner.ExistingDirectory(workspaceSearchDirectory);
+            }
+            var workspace = WorkspaceScanner.Scan(workspaceSearchDirectory);
             if (!string.IsNullOrWhiteSpace(input.SolutionFile))
             {
                 // The caller named the solution to register the project in
@@ -131,20 +147,24 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                     notFound.AddError($"--solution '{input.SolutionFile}': solution file not found.");
                     return notFound;
                 }
-                workspace = WorkspaceScanner.FromSolution(solutionFile, ResolveOutputDirectory(input.OutputDirectory));
+                workspace = WorkspaceScanner.FromSolution(solutionFile, workspaceSearchDirectory);
             }
 
             // The VSIX project wizards are run-once: a project that already
             // exists is an ERROR, never a regeneration (aP ruling — the CLI
             // carries no --force). The engine-level Force stays as the
             // test/MCP escape hatch.
-            var projectDirectory = Path.Combine(ResolveOutputDirectory(input.OutputDirectory), input.ProjectName);
+            var outputDirectory = ResolveOutputDirectory(input.OutputDirectory);
+            if (descriptor.Id == TemplateCatalog.DataverseTestId && string.IsNullOrWhiteSpace(input.OutputDirectory) && workspace.HasSolution)
+                outputDirectory = workspace.SolutionDirectory;
+            var projectDirectory = Path.Combine(outputDirectory, input.ProjectName);
             if (!input.Force && Directory.Exists(projectDirectory) && Directory.EnumerateFileSystemEntries(projectDirectory).Any())
             {
                 result.AddError($"--name '{input.ProjectName}': project already exists — remove it or scaffold with another name.");
                 return result;
             }
-            Directory.CreateDirectory(ResolveOutputDirectory(input.OutputDirectory));
+            if (descriptor.Id != TemplateCatalog.DataverseTestId)
+                Directory.CreateDirectory(outputDirectory);
             var tokens = new Dictionary<string, string>(StringComparer.Ordinal);
             await TokenEngine.AddProjectTokensAsync(tokens, input, workspace);
 
@@ -172,15 +192,17 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                 return result;
             }
 
-            var workspace = WorkspaceScanner.Scan(ResolveOutputDirectory(input.OutputDirectory));
-
             // Every item template scaffolds INTO a project (the wizard's
             // Solution Explorer selection): the project file names the
             // RootNamespace the generated code compiles under. Required for
             // ALL item templates — nothing resolves → error and stop, the
             // VSIX wizard could never reach this state.
             var outputDirectory = ResolveOutputDirectory(input.OutputDirectory);
-            var projectFile = ResolveItemProjectFile(input.ProjectName, outputDirectory, workspace);
+            var searchDirectory = outputDirectory;
+            if (descriptor.Id == TemplateCatalog.DataverseTestId)
+                searchDirectory = WorkspaceScanner.ExistingDirectory(searchDirectory);
+            var workspace = WorkspaceScanner.Scan(searchDirectory);
+            var projectFile = ResolveItemProjectFile(input.ProjectName, searchDirectory, workspace);
             if (projectFile == null)
             {
                 result.AddError(!string.IsNullOrWhiteSpace(input.ProjectName)
@@ -188,7 +210,7 @@ namespace DynamicsCrm.DevKit.Shared.Templates
                     : $"--project: required for item template '{descriptor.Id}' — run inside a project folder or pass --project <name>.");
                 return result;
             }
-            if (string.IsNullOrEmpty(input.RootNamespace))
+            if (string.IsNullOrEmpty(input.RootNamespace) && descriptor.Id != TemplateCatalog.DataverseTestId)
             {
                 // Read the data from the project file (aP): the RootNamespace
                 // element, or the file name like the scanner's fallback.
