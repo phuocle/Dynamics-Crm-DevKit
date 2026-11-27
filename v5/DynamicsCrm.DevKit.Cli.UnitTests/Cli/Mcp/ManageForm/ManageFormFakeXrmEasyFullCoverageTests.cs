@@ -1717,6 +1717,17 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
     }
 
     [TestMethod]
+    [DataRow("suffix", "", "name_match must be", "Pass name_match=")]
+    [DataRow("exact", "grid", "kind must be", "Pass kind=")]
+    public void PcfDiscovery_InvalidFiltersReturnActionableHints(string match, string kind, string error, string hint)
+    {
+        var result = new GetCustomControlsTool(_service).get_custom_controls(name_match: match, kind: kind);
+        Assert.IsTrue(result.IsError == true, Text(result));
+        StringAssert.Contains(Text(result), $"[Error] {error}");
+        StringAssert.Contains(Text(result), $"[Hint] {hint}");
+    }
+
+    [TestMethod]
     public async Task PcfField_BindTwoInstances_Update_ReplaceAndUnbindPerClient()
     {
         SeedPcf("Contoso.A", FieldManifest);
@@ -1817,7 +1828,8 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
         Assert.AreEqual(NativeView, (string?)dataset.Element("ViewId"));
         Assert.AreEqual(NativeView, (string?)dataset.Element("FilteredViewIds"));
         Assert.AreEqual("true", (string?)dataset.Element("EnableViewPicker"));
-        Assert.AreEqual("fullname", (string?)dataset.Element("property-set")?.Element("column"));
+        Assert.AreEqual("fullname", (string?)dataset.Element("HighlightColumn"));
+        Assert.IsNull(dataset.Element("property-set"));
 
         dataset.SetElementValue("ViewId", PcfView);
         _ctx.GetOrganizationService().Update(new Entity("systemform", id) { ["formxml"] = xml.ToString() });
@@ -1828,6 +1840,7 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
         Assert.IsFalse(patch.IsError == true, Text(patch));
         var patched = ReadFormXml(id);
         Assert.AreEqual(PcfView, (string?)PcfAt(patched, PcfGridGuid, 2).Descendants("ViewId").Single());
+        Assert.AreEqual("fullname", (string?)PcfAt(patched, PcfGridGuid, 2).Descendants("HighlightColumn").Single());
         Assert.AreEqual(NativeView, (string?)PcfTarget(patched, "Contacts_Subgrid").Descendants("ViewId").Single());
 
         var undone = await NewTool().manage_form(null!, "undo", "account", id.ToString(),
@@ -1843,6 +1856,95 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
         Assert.IsTrue(XNode.DeepEquals(PcfTarget(source, "Contacts_Subgrid").Element("parameters"),
             PcfTarget(restored, "Contacts_Subgrid").Element("parameters")));
         Assert.IsNull(restored.Root!.Element("controlDescriptions"));
+    }
+
+    [TestMethod]
+    public async Task PcfSubgrid_CalendarUsesExportedDatasetMappingsAndPreservesUntouchedMappings()
+    {
+        const string calendarName = "MscrmControls.Calendar.CalendarControl";
+        SeedPcf(calendarName, """
+            <manifest><control namespace="MscrmControls.Calendar" constructor="CalendarControl">
+              <data-set name="Calendar">
+                <property-set name="StartDate" of-type="DateAndTime.DateAndTime" usage="bound" required="true" />
+                <property-set name="Description" of-type="SingleLine.Text" usage="input" required="true" />
+              </data-set>
+              <property name="MinimumDuration" of-type="Whole.Duration" usage="input" />
+            </control></manifest>
+            """);
+        var contact = _service.Entities.Single(entity => entity.LogicalName == "contact");
+        Set(contact, "Attributes", new AttributeMetadata[]
+        {
+            contact.Attributes.Single(),
+            new DateTimeAttributeMetadata { LogicalName = "createdon", Format = DateTimeFormat.DateAndTime },
+            new DateTimeAttributeMetadata { LogicalName = "modifiedon", Format = DateTimeFormat.DateAndTime }
+        });
+
+        var id = SeedForm("Calendar PCF", formXml: PcfForm().ToString());
+        var bind = await ApplyPcf(id, """
+            {"action":"manage_custom_control","manage_action":"bind","control_id":"Contacts_Subgrid",
+             "custom_control_name":"MscrmControls.Calendar.CalendarControl","form_factors":[1,2],
+             "parameters":{"Calendar":{"source":"subgrid","property_sets":{
+               "StartDate":{"field":"createdon"},"Description":{"field":"fullname"}
+             }},"MinimumDuration":{"value":30}}}
+            """);
+        Assert.IsFalse(bind.IsError == true, Text(bind));
+        var boundXml = ReadFormXml(id);
+        var web = PcfAt(boundXml, PcfGridGuid, 2).Element("parameters")!;
+        var dataset = web.Element("data-set")!;
+
+        // Shape from the Dataverse CalendarControl export in microsoft/AdvocacyPlatform.
+        Assert.AreEqual("Calendar", (string?)dataset.Attribute("name"));
+        Assert.IsTrue(XNode.DeepEquals(new XElement("StartDate", "createdon"), dataset.Element("StartDate")));
+        Assert.IsTrue(XNode.DeepEquals(new XElement("Description", "fullname"), dataset.Element("Description")));
+        Assert.IsNull(dataset.Element("property-set"));
+        Assert.IsTrue(XNode.DeepEquals(XElement.Parse("""
+            <MinimumDuration static="true" type="Whole.Duration">30</MinimumDuration>
+            """), web.Element("MinimumDuration")));
+
+        var updated = await ApplyPcf(id, """
+            {"action":"manage_custom_control","manage_action":"update","control_id":"Contacts_Subgrid",
+             "custom_control_name":"MscrmControls.Calendar.CalendarControl","form_factors":[2],
+             "parameters":{"Calendar":{"property_sets":{"StartDate":{"field":"modifiedon"}}}}}
+            """);
+        Assert.IsFalse(updated.IsError == true, Text(updated));
+        var updatedXml = ReadFormXml(id);
+        var updatedWeb = PcfAt(updatedXml, PcfGridGuid, 2).Element("parameters")!;
+        var updatedDataset = updatedWeb.Element("data-set")!;
+        Assert.AreEqual("modifiedon", (string?)updatedDataset.Elements("StartDate").Single());
+        Assert.IsTrue(XNode.DeepEquals(dataset.Element("Description"), updatedDataset.Element("Description")));
+        Assert.IsTrue(XNode.DeepEquals(web.Element("MinimumDuration"), updatedWeb.Element("MinimumDuration")));
+        Assert.IsTrue(XNode.DeepEquals(PcfAt(boundXml, PcfGridGuid, 1), PcfAt(updatedXml, PcfGridGuid, 1)));
+    }
+
+    [TestMethod]
+    [DataRow("Whole.Duration", "30", true)]
+    [DataRow("Whole.TimeZone", "0", true)]
+    [DataRow("Whole.Language", "1033", true)]
+    [DataRow("Whole.Duration", "30.5", false)]
+    [DataRow("Whole.TimeZone", "2147483648", false)]
+    [DataRow("Whole.Language", "\"1033\"", false)]
+    public async Task PcfStaticWholeTypes_RequireJsonInt32(string type, string literal, bool valid)
+    {
+        SeedPcf("Contoso.A", FieldManifest.Replace("Whole.None", type));
+        var id = SeedForm("PCF whole value", formXml: PcfForm().ToString());
+        var result = await ApplyPcf(id, """
+            {"action":"manage_custom_control","manage_action":"bind","field":"name",
+             "custom_control_name":"Contoso.A","form_factors":[2],
+             "parameters":{"value":{"field":"name"},"limit":{"value":__LITERAL__}}}
+            """.Replace("__LITERAL__", literal));
+        if (!valid)
+        {
+            Assert.IsTrue(result.IsError == true, Text(result));
+            StringAssert.Contains(Text(result), $"does not match the manifest types: {type}");
+            Assert.AreEqual(0, _service.Updates);
+            return;
+        }
+
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var value = PcfAt(ReadFormXml(id), PcfFieldGuid, 2).Descendants("limit").Single();
+        Assert.AreEqual(literal, value.Value);
+        Assert.AreEqual(type, (string?)value.Attribute("type"));
+        Assert.AreEqual(true, (bool?)value.Attribute("static"));
     }
 
     [TestMethod]

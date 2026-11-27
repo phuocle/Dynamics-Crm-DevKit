@@ -125,27 +125,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                     if (field == null || pair.Value.TryGetProperty("value", out _))
                         throw new InvalidOperationException($"Property-set '{pair.Key}' must bind to a field in '{table}'.");
                     ValidateColumn(property, table, field, FormCustomControlOperations.ReadString(pair.Value, "type"));
-                    var mapping = new XElement("property-set", new XAttribute("name", property.Name),
-                        new XElement("column", field.ToLowerInvariant()));
-                    var previous = dataset.Elements("property-set").FirstOrDefault(element => (string)element.Attribute("name") == property.Name);
-                    if (previous == null)
-                        dataset.Add(mapping);
-                    else if (!XNode.DeepEquals(previous, mapping))
-                    {
-                        // A designer-exported mapping can contain attributes and additional metadata.
-                        var column = previous.Element("column");
-                        if (column == null)
-                            previous.Add(new XElement(mapping.Element("column")));
-                        else
-                            column.Value = mapping.Element("column").Value;
-                    }
+                    // Dataverse exports each mapping as a named scalar child of the dataset.
+                    dataset.SetElementValue(property.Name, field.ToLowerInvariant());
                 }
             }
 
             foreach (var property in primary.PropertySets.Where(property => property.Required))
             {
-                if (!dataset.Elements("property-set").Any(element => (string)element.Attribute("name") == property.Name &&
-                    !string.IsNullOrWhiteSpace((string)element.Element("column"))))
+                if (dataset.Element(property.Name) is not { HasElements: false } mapping ||
+                    string.IsNullOrWhiteSpace(mapping.Value))
                     throw new InvalidOperationException($"Required property-set '{property.Name}' is missing from dataset '{primary.Name}'.");
             }
         }
@@ -233,7 +221,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
         private static bool AcceptsLiteral(CustomControlProperty property, string type, JsonElement value) => type switch
         {
             "TwoOptions" => value.ValueKind is JsonValueKind.True or JsonValueKind.False,
-            "Whole.None" or "OptionSet" => value.ValueKind == JsonValueKind.Number && value.TryGetInt32(out _),
+            "Whole.None" or "Whole.Duration" or "Whole.TimeZone" or "Whole.Language" or "OptionSet" =>
+                value.ValueKind == JsonValueKind.Number && value.TryGetInt32(out _),
             "Decimal" or "Currency" => value.ValueKind == JsonValueKind.Number && value.TryGetDecimal(out _),
             "FP" => value.ValueKind == JsonValueKind.Number && value.TryGetDouble(out var number) && double.IsFinite(number),
             "Enum" => value.ValueKind == JsonValueKind.String && property.Options.Contains(value.GetString(), StringComparer.Ordinal),
