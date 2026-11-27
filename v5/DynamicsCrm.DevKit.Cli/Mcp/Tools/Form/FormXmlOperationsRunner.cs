@@ -72,6 +72,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             var tabSec   = new FormTabSectionOperations(_orgService, builder);
             var fieldEvt = new FormFieldEventOperations(_orgService, builder);
             var subgridOps = new FormSubgridOperations(_orgService);
+            FormCustomControlOperations customControls = null;
             FormNavigation navigation = null;
             var classIdMap  = new Dictionary<string, string>();
             var opSummaries = new List<string>();
@@ -84,11 +85,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                         "Each operation must have an 'action' field.\n" +
                         "Important: operation.action is the operation family, not the verb. Use 'manage_action' for add/update/remove/move.\n" +
                         "Example: {\"action\":\"manage_subgrid\",\"manage_action\":\"add\",...}\n" +
-                        "Valid actions: manage_tab, manage_section, manage_fields, manage_subgrid, manage_library, manage_event, manage_navigation.\n" +
+                        "Valid actions: manage_tab, manage_section, manage_fields, manage_subgrid, manage_library, manage_event, manage_navigation, manage_custom_control.\n" +
                         "Read docs://instructions_for_formxml for operation format and examples.");
 
                 var action       = actionProp.GetString()?.ToLowerInvariant();
                 var manageAction = NormalizeManageAction(FormXmlHelpers.GetStringProp(op, "manage_action"));
+                var removesControls = (action is "manage_tab" or "manage_section" or "manage_fields" or "manage_subgrid") &&
+                    (manageAction is "remove" or "remove_header") &&
+                    formDoc.Root.Element("controlDescriptions") != null;
+                var previousIds = removesControls ? FormCustomControlOperations.InstanceIds(formDoc).ToHashSet() : null;
 
                 switch (action)
                 {
@@ -160,14 +165,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                         navigation ??= new FormNavigation(_orgService, entityName, _entityCatalog);
                         opSummaries.Add(navigation.Apply(formDoc, op, manageAction));
                         break;
+                    case "manage_custom_control":
+                        customControls ??= new FormCustomControlOperations(_orgService, entityName);
+                        opSummaries.Add(customControls.Apply(formDoc, op, manageAction));
+                        break;
                     default:
                         throw new InvalidOperationException(
                             $"Unknown action '{action}'.\n" +
                             $"operation.action must be the operation family, not the verb. Use manage_action='{action}' only if the operation action is one of the valid families.\n" +
                             $"Example: {{\"action\":\"manage_subgrid\",\"manage_action\":\"{action}\",...}}\n" +
-                            $"Valid action families: manage_tab | manage_section | manage_fields | manage_subgrid | manage_library | manage_event | manage_navigation.\n" +
+                            $"Valid action families: manage_tab | manage_section | manage_fields | manage_subgrid | manage_library | manage_event | manage_navigation | manage_custom_control.\n" +
                             $"Read docs://instructions_for_formxml for operation format and examples.");
                 }
+                if (previousIds != null)
+                    FormCustomControlOperations.RemoveDeletedBindings(formDoc, previousIds);
             }
 
             var modifiedFormXml = formDoc.ToString(SaveOptions.None);

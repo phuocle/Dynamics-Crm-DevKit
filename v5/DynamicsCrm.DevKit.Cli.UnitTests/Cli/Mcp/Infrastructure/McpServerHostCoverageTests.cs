@@ -13,11 +13,12 @@ public sealed class McpServerHostCoverageTests
     {
         var names = McpServerHost.GetToolCatalog().Select(tool => tool.Name).ToArray();
 
-        Assert.AreEqual(41, names.Length);
+        Assert.AreEqual(42, names.Length);
         CollectionAssert.AllItemsAreUnique(names);
         CollectionAssert.Contains(names, "whoami");
         CollectionAssert.Contains(names, "manage_record");
         CollectionAssert.Contains(names, "upsert_records");
+        CollectionAssert.Contains(names, "get_custom_controls");
     }
 
     [TestMethod]

@@ -1609,6 +1609,315 @@ public sealed class ManageFormFakeXrmEasyFullCoverageTests
     // fakes
     // ──────────────────────────────────────────────
 
+    // Layout and fallback shapes reduced from the Microsoft CoE admin_App and admin_Environment exports.
+    private const string PcfFieldClassId = "{4273EDBD-AC1D-40D3-9FB2-095C621B552D}";
+    private const string PcfGridClassId = "{E7A81278-8635-4D9E-8D4D-59480B391C5B}";
+    private const string PcfHostClassId = "{F9A8A302-114E-466A-B582-6771B2AE0D92}";
+    private const string PcfFieldGuid = "{60d9b26a-4672-2c96-1d5b-a823e8ad64bc}";
+    private const string PcfGridGuid = "{B339949E-2C38-C5DE-DD18-DE00662EAAE6}";
+    private const string NativeView = "{0206FE31-9325-4CDE-BA6B-B188E27E0D4F}";
+    private const string PcfView = "{7EA45CAD-438B-EB11-A812-000D3A1F6308}";
+
+    private const string FieldManifest = """
+        <manifest><control namespace="Contoso" constructor="Lookup" version="1.2.3">
+          <type-group name="Text"><type>SingleLine.Text</type><type>SingleLine.Email</type></type-group>
+          <property name="value" of-type-group="Text" usage="bound" required="true" />
+          <property name="enabled" of-type="TwoOptions" usage="input" required="true" default-value="true" />
+          <property name="limit" of-type="Whole.None" usage="input" />
+          <property name="output" of-type="SingleLine.Text" usage="output" />
+        </control></manifest>
+        """;
+
+    private const string GridManifest = """
+        <manifest><control namespace="Contoso" constructor="Grid" version="1.0.0">
+          <data-set name="Items">
+            <property-set name="HighlightColumn" of-type="SingleLine.Text" usage="bound" required="true" />
+          </data-set>
+          <property name="enabled" of-type="TwoOptions" usage="input" default-value="true" />
+        </control></manifest>
+        """;
+
+    private void SeedPcf(string name, string manifest)
+    {
+        var id = Guid.NewGuid();
+        _ctx.GetOrganizationService().Create(new Entity("customcontrol", id)
+        {
+            ["customcontrolid"] = id,
+            ["name"] = name,
+            ["version"] = "9.9.9",
+            ["manifest"] = manifest
+        });
+    }
+
+    private static XElement PcfTarget(XDocument xml, string id) => xml.Descendants("control")
+        .Single(control => (string?)control.Attribute("id") == id);
+
+    private static XElement PcfAt(XDocument xml, string instance, int factor) => xml.Descendants("controlDescription")
+        .Single(description => (string?)description.Attribute("forControl") == instance)
+        .Elements("customControl").Single(custom => (int?)custom.Attribute("formFactor") == factor);
+
+    private XDocument ReadFormXml(Guid id) =>
+        XDocument.Parse(_service.Retrieve("systemform", id, new ColumnSet("formxml")).GetAttributeValue<string>("formxml"));
+
+    private Task<CallToolResult> ApplyPcf(Guid id, string operations, bool dryRun = false) =>
+        NewTool(dryRun).manage_form(null!, "update", "account", id.ToString(), operations: $"[{operations}]");
+
+    private static XDocument PcfForm(bool header = false)
+    {
+        var form = XDocument.Parse(ValidFormXml);
+        var rows = form.Descendants("rows").Single();
+        rows.Add(XElement.Parse($$"""
+            <row><cell id="{D4FEE359-F7BF-4569-A26B-C66BC890847F}">
+              <control id="name" classid="{{PcfFieldClassId}}" datafieldname="name" disabled="false" uniqueid="{{PcfFieldGuid}}"/>
+            </cell></row>
+            """));
+        rows.Add(XElement.Parse($$"""
+            <row><cell id="{0D0B6603-4D73-4604-8E3A-287BF74A5B43}">
+              <control id="Contacts_Subgrid" classid="{{PcfGridClassId}}" uniqueid="{{PcfGridGuid}}">
+                <parameters><TargetEntityType>contact</TargetEntityType><ViewId>{{NativeView}}</ViewId>
+                  <ViewIds>{{NativeView}}</ViewIds><EnableViewPicker>true</EnableViewPicker>
+                  <RelationshipName>contact_customer_accounts</RelationshipName>
+                </parameters>
+              </control>
+            </cell></row>
+            """));
+        if (header)
+            form.Root!.Add(XElement.Parse($$"""
+                <header id="{120634B0-F471-4830-BCBC-5947C05F2DA3}"><rows><row>
+                  <cell id="{35E74264-6901-469C-9827-EE7DBC3A1A06}"><control id="header_name" classid="{{PcfFieldClassId}}" datafieldname="name" /></cell>
+                </row></rows></header>
+                """));
+        return form;
+    }
+
+    [TestMethod]
+    public void PcfDiscovery_FiltersAndDescribesManifests()
+    {
+        SeedPcf("Contoso.Lookup", FieldManifest);
+        SeedPcf("Contoso.Grid", GridManifest);
+        SeedPcf("Contoso.Broken", "<manifest>");
+        SeedPcf("Other.Lookup", FieldManifest);
+        var tool = new GetCustomControlsTool(_service);
+
+        var result = tool.get_custom_controls("Contoso.", "prefix", "field", "SingleLine.Email");
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var controls = Structured(result).GetProperty("customControls").EnumerateArray().ToArray();
+        Assert.HasCount(2, controls);
+        var field = controls.Single(item => item.GetProperty("name").GetString() == "Contoso.Lookup");
+        Assert.AreEqual("1.2.3", field.GetProperty("version").GetString());
+        Assert.AreEqual("Text", field.GetProperty("properties")[0].GetProperty("ofTypeGroup").GetString());
+        Assert.AreEqual("output", field.GetProperty("properties")[3].GetProperty("usage").GetString());
+        Assert.IsNotNull(controls.Single(item => item.GetProperty("name").GetString() == "Contoso.Broken").GetProperty("manifestError").GetString());
+
+        var dataset = Structured(tool.get_custom_controls("Grid", kind: "dataset")).GetProperty("customControls")[0];
+        Assert.AreEqual("Items", dataset.GetProperty("datasets")[0].GetProperty("name").GetString());
+        Assert.AreEqual("HighlightColumn", dataset.GetProperty("datasets")[0].GetProperty("propertySets")[0].GetProperty("name").GetString());
+        Assert.HasCount(0, Structured(tool.get_custom_controls("Contoso.Lookup", "exact", data_type: "Lookup.Simple"))
+            .GetProperty("customControls").EnumerateArray().ToArray());
+    }
+
+    [TestMethod]
+    public async Task PcfField_BindTwoInstances_Update_ReplaceAndUnbindPerClient()
+    {
+        SeedPcf("Contoso.A", FieldManifest);
+        SeedPcf("Contoso.B", FieldManifest);
+        var id = SeedForm("PCF form", formXml: PcfForm(header: true).ToString());
+        const string body = """
+            {"action":"manage_custom_control","manage_action":"bind","control_id":"name","field":"name",
+             "custom_control_name":"Contoso.A","form_factors":[2]}
+            """;
+        const string header = """
+            {"action":"manage_custom_control","manage_action":"bind","control_id":"header_name","field":"name",
+             "custom_control_name":"Contoso.A","form_factors":[0,1,2]}
+            """;
+        var ambiguous = await ApplyPcf(id, """
+            {"action":"manage_custom_control","manage_action":"unbind","field":"name"}
+            """);
+        Assert.IsTrue(ambiguous.IsError == true, Text(ambiguous));
+        StringAssert.Contains(Text(ambiguous), "header_name");
+        var mismatch = await ApplyPcf(id, body.Replace("\"field\":\"name\"", "\"field\":\"fullname\""));
+        Assert.IsTrue(mismatch.IsError == true, Text(mismatch));
+
+        var bind = await ApplyPcf(id, body + "," + header);
+        Assert.IsFalse(bind.IsError == true, Text(bind));
+        var xml = ReadFormXml(id);
+        Assert.HasCount(2, xml.Descendants("controlDescription").ToArray());
+        Assert.AreEqual(PcfFieldGuid, (string?)PcfTarget(xml, "name").Attribute("uniqueid"));
+        Assert.AreEqual("Contoso.A", (string?)PcfAt(xml, PcfFieldGuid, 2).Attribute("name"));
+        Assert.AreEqual(PcfFieldClassId, (string?)PcfAt(xml, PcfFieldGuid, 0).Attribute("id"));
+        Assert.IsFalse((await ApplyPcf(id, body)).IsError == true);
+        Assert.IsTrue(XNode.DeepEquals(xml, ReadFormXml(id)));
+
+        const string patch = """
+            {"action":"manage_custom_control","manage_action":"update","control_id":"name",
+             "custom_control_name":"Contoso.A","form_factors":[2],"parameters":{"enabled":{"value":false},"limit":{"value":0}}}
+            """;
+        var updated = await ApplyPcf(id, patch);
+        Assert.IsFalse(updated.IsError == true, Text(updated));
+        var parameters = PcfAt(ReadFormXml(id), PcfFieldGuid, 2).Element("parameters")!;
+        Assert.AreEqual("name", (string?)parameters.Element("value"));
+        Assert.AreEqual("false", (string?)parameters.Element("enabled"));
+        Assert.AreEqual("0", (string?)parameters.Element("limit"));
+
+        var b = body.Replace("Contoso.A", "Contoso.B");
+        var rejected = await ApplyPcf(id, b);
+        Assert.IsTrue(rejected.IsError == true, Text(rejected));
+        StringAssert.Contains(Text(rejected), "replace: true");
+        var phone = await ApplyPcf(id, b.Replace("[2]", "[0]"));
+        Assert.IsFalse(phone.IsError == true, Text(phone));
+        var ambiguousUnbind = await ApplyPcf(id, """
+            {"action":"manage_custom_control","manage_action":"unbind","control_id":"name"}
+            """);
+        Assert.IsTrue(ambiguousUnbind.IsError == true, Text(ambiguousUnbind));
+        StringAssert.Contains(Text(ambiguousUnbind), "multiple PCFs");
+        var replace = await ApplyPcf(id, b.Replace("[2]", "[2],\"replace\":true"));
+        Assert.IsFalse(replace.IsError == true, Text(replace));
+        Assert.AreEqual("Contoso.B", (string?)PcfAt(ReadFormXml(id), PcfFieldGuid, 0).Attribute("name"));
+        Assert.AreEqual("Contoso.B", (string?)PcfAt(ReadFormXml(id), PcfFieldGuid, 2).Attribute("name"));
+        var unbind = await ApplyPcf(id, """
+            {"action":"manage_custom_control","manage_action":"unbind","control_id":"name","form_factors":[2]}
+            """);
+        Assert.IsFalse(unbind.IsError == true, Text(unbind));
+        Assert.AreEqual("Contoso.B", (string?)PcfAt(ReadFormXml(id), PcfFieldGuid, 0).Attribute("name"));
+        Assert.AreEqual(PcfFieldClassId, (string?)PcfAt(ReadFormXml(id), PcfFieldGuid, 2).Attribute("id"));
+        var last = await ApplyPcf(id, """
+            {"action":"manage_custom_control","manage_action":"unbind","control_id":"name"}
+            """);
+        Assert.IsFalse(last.IsError == true, Text(last));
+        xml = ReadFormXml(id);
+        Assert.AreEqual(PcfFieldClassId, (string?)PcfTarget(xml, "name").Attribute("classid"));
+        Assert.AreEqual(PcfFieldGuid, (string?)PcfTarget(xml, "name").Attribute("uniqueid"));
+        Assert.HasCount(1, xml.Descendants("controlDescription").ToArray());
+    }
+
+    [TestMethod]
+    public async Task PcfSubgrid_PreservesNativeAndPerClientViews_AndRejectsParentField()
+    {
+        SeedPcf("Contoso.Grid", GridManifest);
+        var source = PcfForm();
+        var id = SeedForm("PCF form", formXml: source.ToString());
+        const string bind = """
+            {"action":"manage_custom_control","manage_action":"bind","control_id":"Contacts_Subgrid",
+             "custom_control_name":"Contoso.Grid","form_factors":[2],
+             "parameters":{"Items":{"source":"subgrid","property_sets":{"HighlightColumn":{"field":"fullname"}}}}}
+            """;
+        var invalid = await ApplyPcf(id, bind.Replace("fullname", "name"));
+        Assert.IsTrue(invalid.IsError == true, Text(invalid));
+        StringAssert.Contains(Text(invalid), "table 'contact'");
+
+        var result = await ApplyPcf(id, bind);
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var xml = ReadFormXml(id);
+        var subgrid = PcfTarget(xml, "Contacts_Subgrid");
+        Assert.AreEqual(PcfHostClassId, (string?)subgrid.Attribute("classid"));
+        Assert.AreEqual(true, (bool?)subgrid.Attribute("indicationOfSubgrid"));
+        var dataset = PcfAt(xml, PcfGridGuid, 2).Descendants("data-set").Single();
+        Assert.AreEqual("contact", (string?)dataset.Element("TargetEntityType"));
+        Assert.AreEqual("contact_customer_accounts", (string?)dataset.Element("RelationshipName"));
+        Assert.AreEqual(NativeView, (string?)dataset.Element("ViewId"));
+        Assert.AreEqual(NativeView, (string?)dataset.Element("FilteredViewIds"));
+        Assert.AreEqual("true", (string?)dataset.Element("EnableViewPicker"));
+        Assert.AreEqual("fullname", (string?)dataset.Element("property-set")?.Element("column"));
+
+        dataset.SetElementValue("ViewId", PcfView);
+        _ctx.GetOrganizationService().Update(new Entity("systemform", id) { ["formxml"] = xml.ToString() });
+        var patch = await ApplyPcf(id, """
+            {"action":"manage_custom_control","manage_action":"update","control_id":"Contacts_Subgrid",
+             "custom_control_name":"Contoso.Grid","form_factors":[2],"parameters":{"enabled":{"value":false}}}
+            """);
+        Assert.IsFalse(patch.IsError == true, Text(patch));
+        var patched = ReadFormXml(id);
+        Assert.AreEqual(PcfView, (string?)PcfAt(patched, PcfGridGuid, 2).Descendants("ViewId").Single());
+        Assert.AreEqual(NativeView, (string?)PcfTarget(patched, "Contacts_Subgrid").Descendants("ViewId").Single());
+
+        var undone = await NewTool().manage_form(null!, "undo", "account", id.ToString(),
+            formxml: Structured(patch).GetProperty("backupPath").GetString()!);
+        Assert.IsFalse(undone.IsError == true, Text(undone));
+        Assert.IsNull(PcfAt(ReadFormXml(id), PcfGridGuid, 2).Descendants("enabled").SingleOrDefault());
+        var unbind = await ApplyPcf(id, """
+            {"action":"manage_custom_control","manage_action":"unbind","control_id":"Contacts_Subgrid"}
+            """);
+        Assert.IsFalse(unbind.IsError == true, Text(unbind));
+        var restored = ReadFormXml(id);
+        Assert.AreEqual(PcfGridClassId, (string?)PcfTarget(restored, "Contacts_Subgrid").Attribute("classid"));
+        Assert.IsTrue(XNode.DeepEquals(PcfTarget(source, "Contacts_Subgrid").Element("parameters"),
+            PcfTarget(restored, "Contacts_Subgrid").Element("parameters")));
+        Assert.IsNull(restored.Root!.Element("controlDescriptions"));
+    }
+
+    [TestMethod]
+    public async Task PcfBatch_DryRunAndInvalidManifestBindingsLeaveFormUntouched()
+    {
+        SeedPcf("Contoso.A", FieldManifest);
+        var source = PcfForm();
+        var id = SeedForm("PCF form", formXml: source.ToString());
+        const string bind = """
+            {"action":"manage_custom_control","manage_action":"bind","field":"name","custom_control_name":"Contoso.A","form_factors":[2]}
+            """;
+        var preview = await ApplyPcf(id, bind, dryRun: true);
+        Assert.IsFalse(preview.IsError == true, Text(preview));
+        Assert.AreEqual("not_executed", Structured(preview).GetProperty("status").GetString());
+
+        var result = await ApplyPcf(id, bind + "," + """
+            {"action":"manage_custom_control","manage_action":"update","field":"name","custom_control_name":"Contoso.A",
+             "form_factors":[2],"parameters":{"enabled":{"value":"false"}}}
+            """);
+        Assert.IsTrue(result.IsError == true, Text(result));
+        StringAssert.Contains(Text(result), "does not match the manifest types");
+        Assert.AreEqual(0, _service.Updates);
+        Assert.AreEqual(0, _service.Publishes);
+        Assert.IsFalse(Directory.Exists(BackupDir("account")));
+        Assert.IsTrue(XNode.DeepEquals(source, ReadFormXml(id)));
+    }
+
+    [TestMethod]
+    public async Task PcfBindings_FollowMovedFields_AndCleanUpOnlyRemovedTargets()
+    {
+        SeedPcf("Contoso.A", FieldManifest);
+        var id = SeedForm("PCF form", formXml: PcfForm(header: true).ToString());
+        var result = await ApplyPcf(id, """
+            {"action":"manage_custom_control","manage_action":"bind","control_id":"name","custom_control_name":"Contoso.A","form_factors":[2]},
+            {"action":"manage_custom_control","manage_action":"bind","control_id":"header_name","custom_control_name":"Contoso.A","form_factors":[2]},
+            {"action":"manage_section","manage_action":"add","tab":"tab_general","name":"other","label":"Other"},
+            {"action":"manage_fields","manage_action":"move","tab":"tab_general","section":"general_section",
+             "target_tab":"tab_general","target_section":"other","fields":["name"]},
+            {"action":"manage_section","manage_action":"remove","tab":"tab_general","section":"general_section"}
+            """);
+        Assert.IsFalse(result.IsError == true, Text(result));
+        var moved = ReadFormXml(id);
+        Assert.AreEqual("other", (string?)PcfTarget(moved, "name").Ancestors("section").Single().Attribute("name"));
+        Assert.AreEqual("Contoso.A", (string?)PcfAt(moved, PcfFieldGuid, 2).Attribute("name"));
+        var removed = await ApplyPcf(id, """
+            {"action":"manage_section","manage_action":"remove","tab":"tab_general","section":"other"}
+            """);
+        Assert.IsFalse(removed.IsError == true, Text(removed));
+        var remaining = ReadFormXml(id).Descendants("controlDescription").Single();
+        Assert.AreNotEqual(PcfFieldGuid, (string?)remaining.Attribute("forControl"));
+    }
+
+    [TestMethod]
+    public async Task PcfBind_CanFollowFieldAdd_AndMissingFallbackBlocksUnbind()
+    {
+        SeedPcf("Contoso.A", FieldManifest);
+        var id = SeedForm("PCF form");
+        var added = await ApplyPcf(id, AddFieldOps[1..^1] + "," + """
+            {"action":"manage_custom_control","manage_action":"bind","control_id":"name","custom_control_name":"Contoso.A","form_factors":[2]}
+            """);
+        Assert.IsFalse(added.IsError == true, Text(added));
+
+        var xml = ReadFormXml(id);
+        xml.Descendants("customControl").Single(node => node.Attribute("formFactor") == null).Remove();
+        _ctx.GetOrganizationService().Update(new Entity("systemform", id) { ["formxml"] = xml.ToString() });
+        var result = await ApplyPcf(id, """
+            {"action":"manage_custom_control","manage_action":"unbind","control_id":"name"}
+            """);
+        Assert.IsTrue(result.IsError == true, Text(result));
+        StringAssert.Contains(Text(result), "OOB fallback");
+        Assert.AreEqual(1, _service.Updates);
+        Assert.AreEqual(1, _service.Publishes);
+        Assert.IsTrue(XNode.DeepEquals(xml, ReadFormXml(id)));
+    }
+
     private sealed class FormOrgService : IOrganizationService
     {
         private readonly IOrganizationService _inner;

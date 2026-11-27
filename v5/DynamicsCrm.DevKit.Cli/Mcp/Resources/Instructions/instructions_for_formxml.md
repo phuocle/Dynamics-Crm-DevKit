@@ -60,7 +60,7 @@ Call `manage_form` with tool-level `action='update'`. Inside the `operations` JS
 
 | Field | Meaning | Example |
 |-------|---------|---------|
-| `action` | Operation family | `"manage_subgrid"`, `"manage_fields"`, `"manage_tab"`, `"manage_navigation"` |
+| `action` | Operation family | `"manage_subgrid"`, `"manage_fields"`, `"manage_tab"`, `"manage_navigation"`, `"manage_custom_control"` |
 | `manage_action` | Verb within that family | `"add"`, `"update"`, `"rename"`, `"move"`, `"remove"`, `"delete"` |
 
 Do not put verbs like `"add"` or `"remove"` in operation `action`.
@@ -280,6 +280,53 @@ When you disable the view picker or change the default view while the picker is 
   "control_id": "v4_invoice_invoiceline"
 }
 ```
+
+## PCF custom controls on fields and subgrids
+
+1. Call `get_custom_controls` in the form's environment. Filter by `name` with `name_match` set to `contains`, `prefix`, or `exact`. Use `kind=field` with a compatible `data_type` such as `SingleLine.Text`, or `kind=dataset` to find subgrid controls. Read the properties, dataset name, and property sets returned from the manifest.
+2. Call `manage_form(action="detail")` to find the exact target `control_id` in the form. You may use `field` alone if it appears once. For a repeated field, supply the selected instance's `control_id`. A subgrid always requires `control_id`.
+3. Pass the operations as a serialized JSON array to `manage_form(action="update")` with the entity and form GUID. Use the registered `name` from discovery as `custom_control_name`.
+
+FormXML uses `0` for Phone, `1` for Tablet, and `2` for Web. These numbers are specific to FormXML. When a binding is active, clients without a selected PCF use an explicit default control entry.
+
+The first example binds a field PCF for Web and the second binds a dataset PCF for Tablet and Web. Replace control, property, and dataset names with those from discovery and form detail.
+
+```json
+[
+  {
+    "action": "manage_custom_control",
+    "manage_action": "bind",
+    "control_id": "abiz_targetentity",
+    "custom_control_name": "abiz_Abiz.Controls.EntityLookup",
+    "form_factors": [2],
+    "parameters": {
+      "value": { "field": "abiz_targetentity" },
+      "onlyAdvancedFind": { "value": true }
+    }
+  },
+  {
+    "action": "manage_custom_control",
+    "manage_action": "bind",
+    "control_id": "Contacts_Subgrid",
+    "custom_control_name": "contoso_Controls.ContactGrid",
+    "form_factors": [1, 2],
+    "parameters": {
+      "Items": {
+        "source": "subgrid",
+        "property_sets": { "HighlightColumn": { "field": "statuscode" } }
+      }
+    }
+  }
+]
+```
+
+- Use `{"field":"logical_name"}` for column mappings, or `{"value":false}` for an input literal. Supply `type` when a literal matches multiple manifest types. A field PCF can infer the primary binding if the manifest has exactly one compatible bound property and the remaining required inputs have defaults.
+- A dataset inherits the subgrid's table, relationship, view and view picker. Property-set mappings refer to columns of the subgrid's table. Use the primary dataset name from discovery as the parameter key. Required secondary datasets must already have a binding on the form.
+- Use `manage_action="update"` with the current `custom_control_name`, explicit `form_factors` and the parameters to patch. Existing parameters such as a PCF-specific view are preserved. For example, set `"parameters":{"onlyAdvancedFind":{"value":false}}` to patch the field example on Web.
+- Use `manage_action="bind"` with `"replace":true` and the new component name to replace a different PCF on a requested device. Pass any required mappings for the new component.
+- Use `manage_action="unbind"` with the target and device array to restore the default control on those devices. For example, `{"action":"manage_custom_control","manage_action":"unbind","control_id":"Contacts_Subgrid","form_factors":[2]}` removes only the Web binding. Omitting the device array removes all bindings when the target uses one PCF. If different devices use different PCFs, specify the devices.
+
+The usual backup, dry-run, publish, and undo flow applies to all three operations.
 
 ## Related Navigation
 

@@ -42,6 +42,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(Tools.ManageRibbonTool)] = new[] { "instructions_for_manage_ribbon" },
             [nameof(Tools.ManageCommandTool)] = new[] { "instructions_for_manage_command" },
             [nameof(Tools.ManageReportTool)] = new[] { "instructions_for_manage_report" },
+            [nameof(Tools.ManageFormTool)] = new[] { "instructions_for_formxml" },
         };
 
         public async Task RunAsync(bool dryRun = false, string instanceName = null,
