@@ -18,7 +18,7 @@ DynamicsCrm.DevKit CLI is the `devkit` .NET global tool for Dataverse deployment
 - One command-line surface for project and item scaffolding, server deployments, web resources, reports, generated code, modelbuilder output, and solution packaging.
 - Modern Spectre.Console CLI with `devkit <command> --option value` syntax and compatibility with legacy `/option:value` arguments.
 - Connection support through `--conn`, explicit auth options, project `.env`, PAC profiles, and client secrets.
-- MCP server built into the CLI, exposing 41 tools for Dataverse and server discovery.
+- MCP server built into the CLI, exposing 42 tools for Dataverse and server discovery.
 - Single-file web resource deployment using `--file` and `--webresource`, including TypeScript release output deployment when project build scripts are present.
 
 ## 📦 Install
@@ -206,6 +206,8 @@ devkit mcp "DynamicsCrm.DevKit" --conn "AuthType=OAuth;..."
 
 Run `devkit mcp --tools` to list the enabled tools and their titles without opening a Dataverse connection.
 
+Use `get_custom_controls` to find installed PCF components and their manifest parameters. Use `manage_form` with `manage_custom_control` operations to bind, update, or unbind a component on an entity form field or subgrid.
+
 ### 📚 MCP Resources
 
 MCP resources are bundled with the server so AI agents can read the exact schema and workflow rules before generating XML or calling mutating tools.
@@ -219,7 +221,7 @@ MCP resources are bundled with the server so AI agents can read the exact schema
 | `docs://data_operations_guide` | Record payloads, lookup syntax, polymorphic lookups, and FetchXML data patterns. |
 | `docs://schema_tools_guide` | Table, column, relationship, solution prefix, and publish guidance. |
 | `docs://server_logic_guide` | Plugins, workflows, flows, custom APIs, traces, and system job guidance. |
-| `docs://instructions_for_formxml` | Safe form operation workflow and supported `manage_form` operations. |
+| `docs://instructions_for_formxml` | Form operations, including PCF binding for entity form fields and subgrids. |
 | `docs://instructions_for_views` | View FetchXML/LayoutXML synchronization rules and update workflow. |
 | `docs://instructions_for_manage_app` | Model-driven app and navigation operation workflow. |
 
@@ -231,6 +233,7 @@ MCP resources are bundled with the server so AI agents can read the exact schema
 | `--dry-run` | Blocks mutating MCP operations while keeping read operations available. Recommended for initial AI access. |
 | `--as-user` | Impersonate a user (systemuserid GUID or email) for the whole session. The connecting user must be System Administrator. |
 | `--tools` | Lists available MCP tools without connecting to Dataverse. |
+| `--help` | Shows MCP command options and examples without connecting to Dataverse. |
 | `--setup-guide` | Prints the runtime setup guide without connecting to Dataverse. |
 
 ### 🛟 MCP Troubleshooting

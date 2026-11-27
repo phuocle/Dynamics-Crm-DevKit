@@ -1,24 +1,28 @@
 # TESTCALL FORMAT TEMPLATE
 
-Rules for every `TestAllMcpCall/{N}.{tool}.md` file (41 files, one shared Wiki format). Keep this file short on purpose — every rule below matters.
+Rules for every `TestAllMcpCall/{N}.{tool}.md` file (42 files, one shared Wiki format). Keep this file short on purpose — every rule below matters.
 
 **Numbering convention:** Files are numbered alphabetically by tool name across the catalog.
 
 **Golden reference: `6.get_audit_history.md`** — reviewed and approved by anh Phước. Read it first; compare your file side-by-side with it before reporting done. More historical approved examples: `2.execute_fetchxml.md`, `7.get_business_process_flows.md`, `8.get_business_rules.md`.
 
-## CURRENT PHASE (2026-11-17): MULTI-CONNECTION VERIFICATION
+## CURRENT PHASE (2026-11-27): PCF DISCOVERY AND FORM BINDING
 
-Descriptions and parameter blocks match the installed 41-tool catalog. `1.connection_list.md` and `41.whoami.md` have new live captures; the other 39 files retain their original test/output blocks. Existing approval markers refer to those historical captures. New captures remain unmarked until anh Phước reviews them.
+The filenames follow the 42-tool catalog printed by `devkit mcp --tools`. `9.get_custom_controls.md` has tool metadata and is awaiting live captures. `26.manage_form.md` keeps its historical captures and includes the current form tool metadata.
 
-The later single-process alias pass extends connection_list and whoami, and appends the protected UAT preview as Test 26 in `27.manage_record.md`. Existing output blocks are retained; the historical approval marker does not approve the newly appended case.
+## HISTORICAL PHASE (2026-11-17): MULTI-CONNECTION VERIFICATION
+
+Descriptions and parameter blocks matched the 41-tool catalog for this phase. `1.connection_list.md` and `42.whoami.md` contain the captures added in that phase. Existing approval markers refer to those historical captures.
+
+The later single-process alias pass extends connection_list and whoami, and appends the protected UAT preview as Test 26 in `28.manage_record.md`. Existing output blocks are retained; the historical approval marker does not approve the newly appended case.
 
 The first-call version verification adds whoami Tests 9–11 and moves its existing error case to Test 12. Earlier outputs remain unchanged; the new captures remain unmarked pending review.
 
 ## HISTORICAL PHASE (2026-08-29): DRY-RUN TESTING
 
-All 37 tools are refactored (rule6 + hints) and their TestAllMcpCall files are fully live-captured and ✅-approved. `26.manage_function.md` was added 2026-10-03 with the tool-39 release — its file is fresh-captured (live + error + dry-run via `devkit tool call --dry-run`), not yet ✅-approved. The phase now is **testing every dry-run path** of every tool that supports it, via the separate `devkit-claude-dry-run` MCP server. Read rule 5 (rewritten for this phase) and the dry-run workflow below before touching any file. If this task gets interrupted, resume here: pick the next dry-run-capable tool without a dry-run block at the end of its TestAllMcpCall file and continue.
+All 37 tools are refactored (rule6 + hints) and their TestAllMcpCall files are fully live-captured and ✅-approved. `27.manage_function.md` was added 2026-10-03 with the tool-39 release — its file is fresh-captured (live + error + dry-run via `devkit tool call --dry-run`), not yet ✅-approved. The phase now is **testing every dry-run path** of every tool that supports it, via the separate `devkit-claude-dry-run` MCP server. Read rule 5 (rewritten for this phase) and the dry-run workflow below before touching any file. If this task gets interrupted, resume here: pick the next dry-run-capable tool without a dry-run block at the end of its TestAllMcpCall file and continue.
 
-Dry-run-capable tools (grep `_options.DryRun` / `return DryRun(` under `DynamicsCrm.DevKit.Cli/Mcp/Tools/`): `40.upsert_records.md`, `4.execute_webapi.md` (non-GET only), `17.manage_app.md`, `18.manage_chart.md`, `19.manage_choice.md`, `20.manage_column.md`, `21.manage_command.md`, `22.manage_custom_api.md` (create, update, delete), `23.manage_deleted_records.md`, `24.manage_environment_variable.md`, `25.manage_form.md`, `26.manage_function.md` (invoke only), `27.manage_record.md`, `28.manage_record_file.md` (uses `Status="dry_run"` in structured output, not the `[DryRun]` prefix — verify), `29.manage_relationship.md`, `30.manage_report.md`, `31.manage_ribbon.md`, `32.manage_role.md`, `33.manage_table.md`, `34.manage_view.md`, `35.manage_webresource.md`, `37.publish_customizations.md`. Read-only `get_*`/`search_records`/`whoami`/`parse_record_url`/`execute_fetchxml`/`execute_sql` have no dry-run path — skip them.
+Dry-run-capable tools (grep `_options.DryRun` / `return DryRun(` under `DynamicsCrm.DevKit.Cli/Mcp/Tools/`): `41.upsert_records.md`, `4.execute_webapi.md` (non-GET only), `18.manage_app.md`, `19.manage_chart.md`, `20.manage_choice.md`, `21.manage_column.md`, `22.manage_command.md`, `23.manage_custom_api.md` (create, update, delete), `24.manage_deleted_records.md`, `25.manage_environment_variable.md`, `26.manage_form.md`, `27.manage_function.md` (invoke only), `28.manage_record.md`, `29.manage_record_file.md` (uses `Status="dry_run"` in structured output, not the `[DryRun]` prefix — verify), `30.manage_relationship.md`, `31.manage_report.md`, `32.manage_ribbon.md`, `33.manage_role.md`, `34.manage_table.md`, `35.manage_view.md`, `36.manage_webresource.md`, `38.publish_customizations.md`. Read-only `get_*`/`search_records`/`whoami`/`parse_record_url`/`execute_fetchxml`/`execute_sql` have no dry-run path — skip them.
 
 ## ⛔ MANDATORY RULES — violations AI made before; check EVERY file, BEFORE and AFTER editing
 
