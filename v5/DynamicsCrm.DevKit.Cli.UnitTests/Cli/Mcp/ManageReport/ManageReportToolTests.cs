@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModelContextProtocol.Server;
 using System.Linq;
 using System.Reflection;
-using CliManageReportTool = DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageReportTool;
+using CliManageReportTool = DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageAssetsTool;
 
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.ManageReport;
 
@@ -19,9 +19,11 @@ public sealed class ManageReportToolTests
             .Single(candidate => candidate.GetCustomAttribute<McpServerToolAttribute>() != null);
         var attribute = method.GetCustomAttribute<McpServerToolAttribute>();
 
-        Assert.AreEqual("manage_report", attribute!.Name);
+        Assert.AreEqual("manage_assets", attribute!.Name);
 
-        var prefilter = method.GetParameters().Single(parameter => parameter.Name == "prefilter");
+        var workerMethod = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageReportTool)
+            .GetMethod(nameof(DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageReportTool.manage_report))!;
+        var prefilter = workerMethod.GetParameters().Single(parameter => parameter.Name == "prefilter");
         Assert.AreEqual(typeof(bool), prefilter.ParameterType);
         Assert.IsTrue((bool)prefilter.DefaultValue!);
     }

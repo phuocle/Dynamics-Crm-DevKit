@@ -454,7 +454,7 @@ public sealed class ManageFunctionFakeXrmEasyTests
         var result = NewTool().manage_function("invoke", function_name: apiId.ToString(),
             arguments_json: "{\"Payload\":5}");
         Assert.IsTrue(result.IsError == true);
-        StringAssert.Contains(Text(result), "type 'Money', which manage_function cannot convert");
+        StringAssert.Contains(Text(result), "type 'Money', which manage_logic(resource='function') cannot convert");
     }
 
     [TestMethod]

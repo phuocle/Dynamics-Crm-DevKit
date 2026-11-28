@@ -15,7 +15,6 @@ using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class PublishCustomizationsTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -66,7 +65,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Batch many changes then publish once at the end\n\n" +
             "RELATED TOOLS:\n" +
             "- inspect_diagnostics(resource='system_jobs') → track PublishAll async operation status\n" +
-            "- inspect_metadata(resource='tables') / manage_app / manage_form / manage_webresource → discover valid target identifiers")]
+            "- inspect_metadata(resource='tables') / manage_ui(resource='app') / manage_ui(resource='form') / manage_assets(resource='webresource') → discover valid target identifiers")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Comma-separated entity Display Names or logical names (e.g. 'Account,contact'). Empty with no other targets = PublishAll.")] string entities = "",
             [Description("Comma-separated global option set unique names (e.g. 'new_priority,new_status'). Use instead of include_global_optionset for targeted publish.")] string optionset_names = "",
@@ -108,7 +107,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         ? string.Join(", ", haveRoles)
                         : "(no roles assigned)";
                     return Error(
-                        $"publish_customizations requires the '{requiredRoleName}' role. The calling user does not have it.",
+                        $"manage_admin(resource='publish') requires the '{requiredRoleName}' role. The calling user does not have it.",
                         $"Publishing customizations is a destructive org-wide operation (PublishXml/PublishAll acquire locks and make pending metadata changes visible to all users). " +
                         $"Ask a System Administrator to assign the '{requiredRoleName}' role to your user, then retry. " +
                         $"Current roles on the calling user: {haveList}.");
@@ -119,7 +118,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (entitiesProvided && entityList is null)
                     return Error(
                         $"entities '{entities}': could not be resolved. One or more names were not found by Display Name or Logical/Unique/Schema Name.",
-                        "Use inspect_metadata(resource='tables') to list entities before calling publish_customizations.");
+                        "Use inspect_metadata(resource='tables') to list entities before calling manage_admin(resource='publish').");
                 entityList ??= [];
 
                 if (entitiesProvided && entityList.Count == 0)
@@ -134,14 +133,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (appModulesProvided && appModuleList is null)
                     return Error(
                         $"appmodules '{appmodules}': could not be resolved. One or more values were not found as appmodule GUID, Display Name, or unique name.",
-                        "Use manage_app(action='list') to discover valid appmodule identifiers.");
+                        "Use manage_ui(resource='app', action='list') to discover valid appmodule identifiers.");
                 appModuleList ??= [];
 
                 if (appModulesProvided && appModuleList.Count == 0)
                 {
                     return Error(
                         "No valid appmodule values found after parsing the 'appmodules' parameter.",
-                        "Valid format: comma-separated appmodule GUIDs, Display Names, or unique names. Use manage_app to discover valid appmodule identifiers.");
+                        "Valid format: comma-separated appmodule GUIDs, Display Names, or unique names. Use manage_ui(resource='app') to discover valid appmodule identifiers.");
                 }
 
                 // Named optionsets (targeted, by unique name)
@@ -152,7 +151,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (dashboardList is null)
                     return Error(
                         $"dashboards '{dashboards}': contains a value that is not a valid GUID.",
-                        "Provide comma-separated system-form (dashboard) GUIDs, e.g. 'b52daa0a-996f-f111-ab0e-0022480a530f'. Use manage_form or inspect_metadata(resource='solution_components') to find valid dashboard IDs.");
+                        "Provide comma-separated system-form (dashboard) GUIDs, e.g. 'b52daa0a-996f-f111-ab0e-0022480a530f'. Use manage_ui(resource='form') or inspect_metadata(resource='solution_components') to find valid dashboard IDs.");
                 dashboardList ??= [];
 
                 // Web resource GUIDs or logical names
@@ -160,7 +159,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (webResourceList is null)
                     return Error(
                         $"webresources '{webresources}': no web resource found with that name.",
-                        "Use manage_webresource(action='list') to find valid names.");
+                        "Use manage_assets(resource='webresource', action='list') to find valid names.");
                 webResourceList ??= [];
 
                 var hasSpecificTargets = entityList.Count > 0 || appModuleList.Count > 0
@@ -249,7 +248,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return published
                     ? Success(summary, specificStructured)
                     : Error(summary,
-                        "Dataverse rejected the publish batch — verify the target names via inspect_metadata(resource='tables') / manage_app / manage_webresource and retry. If any entity name is invalid the entire batch is rejected.",
+                        "Dataverse rejected the publish batch — verify the target names via inspect_metadata(resource='tables') / manage_ui(resource='app') / manage_assets(resource='webresource') and retry. If any entity name is invalid the entire batch is rejected.",
                         specificStructured);
             }
             catch (Exception ex)
@@ -272,7 +271,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var resolvedNames = new List<string>();
             foreach (var input in inputs)
             {
-                var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, input, "publish_customizations");
+                var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, input, "manage_admin(resource='publish')");
                 if (!resolved.IsSuccess)
                     return null;
 
@@ -305,7 +304,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     continue;
                 }
 
-                var resolved = DisplayNameFirstResolver.ResolveApp(_orgService, input, "publish_customizations");
+                var resolved = DisplayNameFirstResolver.ResolveApp(_orgService, input, "manage_admin(resource='publish')");
                 if (!resolved.IsSuccess)
                     return null;
 

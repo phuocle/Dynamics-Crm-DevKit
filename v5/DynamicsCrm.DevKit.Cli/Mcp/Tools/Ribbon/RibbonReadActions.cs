@@ -27,9 +27,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (GetSolutionId() == null)
             {
                 return Success(
-                    $"manage_ribbon list — Solution '{SOLUTION_NAME}' does not exist yet.\n" +
+                    $"manage_commanding(resource='ribbon') list — Solution '{SOLUTION_NAME}' does not exist yet.\n" +
                     "No ribbon customizations found.\n" +
-                    "Hint: Use manage_ribbon(action='update', entity_name=..., operations=[...]) to add your first ribbon button.",
+                    "Hint: Use manage_commanding(resource='ribbon', action='update', entity_name=..., operations=[...]) to add your first ribbon button.",
                     new ManageRibbonResult
                     {
                         Action = "list",
@@ -51,7 +51,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (entities.Count == 0)
             {
                 return Success(
-                    $"manage_ribbon list — 0 entities with ribbon customizations in '{SOLUTION_NAME}'.",
+                    $"manage_commanding(resource='ribbon') list — 0 entities with ribbon customizations in '{SOLUTION_NAME}'.",
                     new ManageRibbonResult
                     {
                         Action = "list",
@@ -62,7 +62,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var entitySummary = string.Join(", ", entities.Select(e => $"{e.Name} ({e.ButtonCount} buttons)"));
             return Success(
-                $"manage_ribbon list — {entities.Count} {(entities.Count == 1 ? "entity" : "entities")} with ribbon customizations: {entitySummary}.",
+                $"manage_commanding(resource='ribbon') list — {entities.Count} {(entities.Count == 1 ? "entity" : "entities")} with ribbon customizations: {entitySummary}.",
                 new ManageRibbonResult
                 {
                     Action = "list",
@@ -133,7 +133,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var countSummary = string.Join(", ", allSurfaces.Select(s => $"{s.Surface}={s.Items.Count}"));
             return Success(
-                $"manage_ribbon buttons — {entityName}: {countSummary}.",
+                $"manage_commanding(resource='ribbon') buttons — {entityName}: {countSummary}.",
                 new ManageRibbonResult
                 {
                     Action = "buttons",
@@ -276,9 +276,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (ribbonXml == null)
             {
                 return Success(
-                    $"manage_ribbon detail — {entityName}\n" +
+                    $"manage_commanding(resource='ribbon') detail — {entityName}\n" +
                     $"No ribbon customizations found for '{entityName}' in solution '{SOLUTION_NAME}'.\n" +
-                    $"Hint: Use manage_ribbon(action='update', entity_name='{entityName}', operations=[...]) to create ribbon buttons.",
+                    $"Hint: Use manage_commanding(resource='ribbon', action='update', entity_name='{entityName}', operations=[...]) to create ribbon buttons.",
                     new ManageRibbonResult
                     {
                         Action = "detail",
@@ -297,7 +297,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var locLabelCount = doc.Descendants("LocLabel").Count();
 
             return Success(
-                $"manage_ribbon detail — {entityName}: {customActionCount} CustomAction, {commandCount} CommandDefinition, {enableRuleCount} EnableRule, {locLabelCount} LocLabel.",
+                $"manage_commanding(resource='ribbon') detail — {entityName}: {customActionCount} CustomAction, {commandCount} CommandDefinition, {enableRuleCount} EnableRule, {locLabelCount} LocLabel.",
                 new ManageRibbonResult
                 {
                     Action = "detail",

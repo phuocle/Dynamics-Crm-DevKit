@@ -334,7 +334,7 @@ public sealed class ManageDeletedRecordsFakeXrmEasyFullCoverageTests
         StringAssert.Contains(Text(result), $"account {id}: not found in bin.");
         var structured = Structured(result);
         Assert.IsTrue(structured.GetProperty("notFound").GetBoolean());
-        StringAssert.Contains(structured.GetProperty("notFoundHint").GetString()!, "manage_record(action='read'");
+        StringAssert.Contains(structured.GetProperty("notFoundHint").GetString()!, "manage_data(resource='record', action='read'");
     }
 
     [TestMethod]

@@ -104,7 +104,7 @@ public class ManageAppInternalsCoverageTests
         StringAssert.Contains(createText, "[ManageApp] created");
         StringAssert.Contains(createText, "ValidationError: Broken");
         StringAssert.Contains(createText, "SiteMap XSD: xsd warning");
-        StringAssert.Contains(createText, "publish_customizations");
+        StringAssert.Contains(createText, "manage_admin(resource='publish')");
 
         var app = new Entity("appmodule", appId)
         {

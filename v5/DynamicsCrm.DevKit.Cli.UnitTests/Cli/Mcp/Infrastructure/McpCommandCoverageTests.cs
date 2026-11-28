@@ -19,9 +19,9 @@ public class McpCommandCoverageTests
         var (exitCode, stdout, stderr) = await ExecuteWithConsoleAsync(new McpCommandArgs { ListTools = true });
 
         Assert.AreEqual(0, exitCode);
-        StringAssert.Contains(stdout, "DevKit MCP Tools (29)");
+        StringAssert.Contains(stdout, "DevKit MCP Tools (14)");
         StringAssert.Contains(stdout, "get_context");
-        StringAssert.Contains(stdout, "manage_record");
+        StringAssert.Contains(stdout, "manage_data");
         var lines = stdout.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
         Assert.AreEqual("=========================================================================", lines[^2]);
         Assert.AreEqual("Run 'devkit mcp --setup-guide' for setup instructions.", lines[^1]);

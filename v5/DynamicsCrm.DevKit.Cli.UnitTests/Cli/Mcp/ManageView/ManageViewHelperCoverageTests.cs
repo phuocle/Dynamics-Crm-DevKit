@@ -89,7 +89,7 @@ public sealed class ManageViewHelperCoverageTests
         Assert.AreEqual("LayoutXML only", InvokeStatic<string>("DetermineUpdatedParts", false, false, false));
         Assert.AreEqual("LayoutXML (cell patch)", InvokeStatic<string>("DetermineUpdatedParts", true, false, false));
 
-        Assert.AreEqual("manage_view action='update' blocked on 'account' — name resolution failed (1 error(s)). First: missing",
+        Assert.AreEqual("manage_ui(resource='view') action='update' blocked on 'account' — name resolution failed (1 error(s)). First: missing",
             InvokeStatic<string>("NameResolutionMessage", "update", "account", new List<string> { "missing" }));
 
         var dto = InvokeStatic<object>("BuildBlockedValidationDto", "update", "account", Guid.Empty, "My View",

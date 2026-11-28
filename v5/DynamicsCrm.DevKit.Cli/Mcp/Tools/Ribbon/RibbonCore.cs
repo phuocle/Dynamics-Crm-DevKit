@@ -27,13 +27,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return (null, Error("entity_name is required.",
                     "Provide entity_name, e.g. entity_name='account'. Use inspect_metadata(resource='tables') to find valid entity names."));
             var trimmed = entityName.Trim();
-            var result = DisplayNameFirstResolver.ResolveEntity(_orgService, trimmed, "manage_ribbon", withNotFoundTip: false);
+            var result = DisplayNameFirstResolver.ResolveEntity(_orgService, trimmed, "manage_commanding(resource='ribbon')", withNotFoundTip: false);
             if (result.IsSuccess)
                 return (result.Value.LogicalName, null);
             if (result.Status == ResolveStatus.NotFound)
                 return (null, Error(
                     $"entity_name '{trimmed}': {result.Error}",
-                    "Use inspect_metadata(resource='tables') to list entities before calling manage_ribbon."));
+                    "Use inspect_metadata(resource='tables') to list entities before calling manage_commanding(resource='ribbon')."));
             if (result.Status == ResolveStatus.Ambiguous)
                 return (null, Error(
                     $"entity_name '{trimmed}': {result.Error.Split("\r\n")[0]}",
@@ -68,7 +68,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var name = activeJob.GetAttributeValue<string>("name") ?? operationType;
 
             return Success(
-                $"manage_ribbon {action} — {entityName}: environment_busy, {operationType} {status} ({jobId}). " +
+                $"manage_commanding(resource='ribbon') {action} — {entityName}: environment_busy, {operationType} {status} ({jobId}). " +
                 $"Use inspect_diagnostics(resource='system_jobs', record_id=\"{jobId}\") to wait.", new ManageRibbonResult
             {
                 Action = action,
@@ -219,7 +219,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (name.Length == 0) return input;
             }
 
-            var result = DisplayNameFirstResolver.ResolveWebResource(_orgService, name, "manage_ribbon", withNotFoundTip: false);
+            var result = DisplayNameFirstResolver.ResolveWebResource(_orgService, name, "manage_commanding(resource='ribbon')", withNotFoundTip: false);
             if (result.IsSuccess)
                 return result.Value.GetAttributeValue<string>("name") ?? result.CanonicalName;
 
@@ -294,7 +294,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static void AppendPublishWaitGuidance(StringBuilder sb)
         {
             sb.AppendLine("Wait schedule: call inspect_diagnostics(resource='system_jobs') after 30 seconds, then after 60 seconds, then after 120 seconds (total wait: 3 minutes 30 seconds).");
-            sb.AppendLine("After the third poll, if the job is not Succeeded or no result is returned, stop waiting, do not read back with manage_ribbon(buttons/detail), and report the result to the user with a note that Dataverse publish is still running or did not complete successfully and the user must wait/check the job.");
+            sb.AppendLine("After the third poll, if the job is not Succeeded or no result is returned, stop waiting, do not read back with manage_commanding(resource='ribbon', buttons/detail), and report the result to the user with a note that Dataverse publish is still running or did not complete successfully and the user must wait/check the job.");
         }
 
         // ── JavaScript function signatures ───────────────────────────────

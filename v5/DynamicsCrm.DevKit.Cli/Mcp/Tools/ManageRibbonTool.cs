@@ -13,7 +13,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public partial class ManageRibbonTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -27,7 +26,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private const int PublishMaxWaitSeconds = 210;
         private const string PublishWaitTimeoutAction = "stop_without_readback";
         private const string PublishWaitTimeoutInstruction =
-            "After the third inspect_diagnostics(resource='system_jobs') poll, if the PublishAll system job is not Succeeded or no result is returned, stop waiting, do not call manage_ribbon(buttons/detail), and report the ribbon result to the user with a note that Dataverse publish is still running or did not complete successfully and the user must wait/check the job.";
+            "After the third inspect_diagnostics(resource='system_jobs') poll, if the PublishAll system job is not Succeeded or no result is returned, stop waiting, do not call manage_commanding(resource='ribbon', buttons/detail), and report the ribbon result to the user with a note that Dataverse publish is still running or did not complete successfully and the user must wait/check the job.";
         private const string OperationsDescription =
             "update: non-empty JSON array serialized as a string. Each object has an action and action-specific fields. " +
             "The optional dependency_libraries field (string[]) preloads JS web resources in order on add_button, update_button, and the main action of add_split_button and update_split_button. " +
@@ -67,10 +66,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- NOT for the modern Power Fx command bar (appaction)\n\n" +
 
             "RELATED TOOLS:\n" +
-            "- manage_command → modern Power Fx command bar (appaction)\n" +
+            "- manage_commanding(resource='command') → modern Power Fx command bar (appaction)\n" +
             "- inspect_diagnostics(resource='system_jobs') → poll the PublishAll async job\n" +
-            "- publish_customizations → manual publish if the async publish did not finish\n" +
-            "- manage_webresource → list/verify web resources used as button libraries and icons")]
+            "- manage_admin(resource='publish') → manual publish if the async publish did not finish\n" +
+            "- manage_assets(resource='webresource') → list/verify web resources used as button libraries and icons")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
             [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action = "",

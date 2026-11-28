@@ -15,7 +15,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ManageCustomApiTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -111,7 +110,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- inspect_automation(resource='messages') → legacy workflow Custom Actions (category=3) + SDK messages\n" +
             "- inspect_automation(resource='plugins') → plugin assemblies/types/steps registered on these APIs\n" +
-            "- manage_function → Power Fx functions backed by Custom APIs\n" +
+            "- manage_logic(resource='function') → Power Fx functions backed by Custom APIs\n" +
             "- inspect_metadata(resource='solution_components') → verify Custom API solution membership")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("'list', 'detail', 'create', 'update', 'delete'.")] string action = "",
@@ -209,11 +208,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 : entityName.Trim().ToLowerInvariant();
             if (!string.IsNullOrWhiteSpace(entityName))
             {
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "manage_custom_api");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "manage_logic(resource='custom_api')");
                 if (!entityResult.IsSuccess)
                     return Error(
                         entityResult.Error.Split("\r\n")[0],
-                        "Use inspect_metadata(resource='tables') to list entities before calling manage_custom_api.");
+                        "Use inspect_metadata(resource='tables') to list entities before calling manage_logic(resource='custom_api').");
                 resolvedEntity = entityResult.Value.LogicalName;
             }
 
@@ -269,14 +268,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(apiName))
                 return Error("api_name is required for action='detail'.",
-                    "Use manage_custom_api(action='list') to list available Custom APIs.");
+                    "Use manage_logic(resource='custom_api', action='list') to list available Custom APIs.");
 
             var apiResult = ResolveCustomApi(apiName.Trim());
             if (!apiResult.IsSuccess)
                 return Error(
                     apiResult.Error.Split("\r\n")[0],
                     apiResult.Status == ResolveStatus.NotFound
-                        ? "Use manage_custom_api(action='list') to list available Custom APIs."
+                        ? "Use manage_logic(resource='custom_api', action='list') to list available Custom APIs."
                         : "Re-call with a more specific api_name value.");
 
             return BuildDetail(apiResult.CanonicalName);
@@ -353,7 +352,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (string.IsNullOrWhiteSpace(entityName))
                     return Error($"entity_name is required when binding_type is '{BindingTypeMap[bindingTypeCode]}'.",
                         "Provide the bound table's display or logical name.");
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "manage_custom_api");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "manage_logic(resource='custom_api')");
                 if (!entityResult.IsSuccess)
                     return Error(entityResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to verify the bound entity logical name.");
                 boundEntityLogicalName = entityResult.Value.LogicalName;
@@ -466,14 +465,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(apiName))
                 return Error("api_name is required for action='update'.",
-                    "Use manage_custom_api(action='list') to list available Custom APIs.");
+                    "Use manage_logic(resource='custom_api', action='list') to list available Custom APIs.");
 
             var resolved = ResolveCustomApi(apiName.Trim());
             if (!resolved.IsSuccess)
                 return Error(
                     resolved.Error.Split("\r\n")[0],
                     resolved.Status == ResolveStatus.NotFound
-                        ? "Use manage_custom_api(action='list') to list available Custom APIs."
+                        ? "Use manage_logic(resource='custom_api', action='list') to list available Custom APIs."
                         : "Re-call with a more specific api_name value.");
 
             var existing = _orgService.Retrieve("customapi", resolved.Value.Id,
@@ -606,14 +605,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(apiName))
                 return Error("api_name is required for action='delete'.",
-                    "Use manage_custom_api(action='list') to list available Custom APIs.");
+                    "Use manage_logic(resource='custom_api', action='list') to list available Custom APIs.");
 
             var resolved = ResolveCustomApi(apiName.Trim());
             if (!resolved.IsSuccess)
                 return Error(
                     resolved.Error.Split("\r\n")[0],
                     resolved.Status == ResolveStatus.NotFound
-                        ? "Use manage_custom_api(action='list') to list available Custom APIs."
+                        ? "Use manage_logic(resource='custom_api', action='list') to list available Custom APIs."
                         : "Re-call with a more specific api_name value.");
 
             var existing = _orgService.Retrieve("customapi", resolved.Value.Id,
@@ -681,7 +680,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (apiResult.Entities.Count == 0)
                 return Error(
                     $"Custom API '{apiName}' not found.",
-                    "Call manage_custom_api(action='list') to list available Custom APIs.");
+                    "Call manage_logic(resource='custom_api', action='list') to list available Custom APIs.");
 
             var api = apiResult.Entities[0];
             var customApiId = api.Id;

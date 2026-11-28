@@ -70,17 +70,17 @@ public sealed class ReadInstructionToolTests
         var ribbon = Entry(instructions, "docs://instructions_for_manage_ribbon");
         var ribbonRefs = ribbon["referencedBy"] as JsonArray;
         Assert.IsNotNull(ribbonRefs);
-        Assert.IsTrue(ribbonRefs.Any(n => n?.GetValue<string>() == "manage_ribbon"));
+        Assert.IsTrue(ribbonRefs.Any(n => n?.GetValue<string>() == "manage_commanding"));
 
         var command = Entry(instructions, "docs://instructions_for_manage_command");
         var commandRefs = command["referencedBy"] as JsonArray;
         Assert.IsNotNull(commandRefs);
-        Assert.IsTrue(commandRefs.Any(n => n?.GetValue<string>() == "manage_command"));
+        Assert.IsTrue(commandRefs.Any(n => n?.GetValue<string>() == "manage_commanding"));
 
         var views = Entry(instructions, "docs://instructions_for_views");
         var viewsRefs = views["referencedBy"] as JsonArray;
         Assert.IsNotNull(viewsRefs);
-        Assert.IsTrue(viewsRefs.Any(n => n?.GetValue<string>() == "manage_view"));
+        Assert.IsTrue(viewsRefs.Any(n => n?.GetValue<string>() == "manage_ui"));
 
         var schemas = EntryArray(payload, "schemas");
         var fetchxml = Entry(schemas, "schema://fetchxml");

@@ -26,7 +26,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
             var snapshot = new RoleBackupSnapshot
             {
-                Note = "Backup of security role privileges. To restore: call manage_role with action='restore' and backup_path=<this file>. If the role was deleted it is re-created with a NEW role ID — re-assign users/teams yourself (assignments are not backed up).",
+                Note = "Backup of security role privileges. To restore: call manage_admin(resource='role') with action='restore' and backup_path=<this file>. If the role was deleted it is re-created with a NEW role ID — re-assign users/teams yourself (assignments are not backed up).",
                 RoleId = roleId.ToString(),
                 RoleName = roleName,
                 BusinessUnitId = businessUnitId.ToString(),

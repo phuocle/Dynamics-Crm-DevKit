@@ -28,7 +28,6 @@ using System.Xml.Schema;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ManageAppTool : McpToolBase
     {
         private const int EntityComponentType = 1;
@@ -39,7 +38,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static readonly object[] DashboardFormTypes = [0, 10, 13, 103];
         private const int SvgWebResourceType = 11;
         private const string NotPublishedNextStep =
-            "Not published. Run publish_customizations(appmodules='<AppModuleId>') when ready.";
+            "Not published. Run manage_admin(resource='publish', appmodules='<AppModuleId>') when ready.";
         private static readonly Guid DefaultAppIconWebResourceId = new("953b9fac-1e5e-e611-80d6-00155ded156f");
         private static XmlSchemaSet _cachedSiteMapSchemaSet;
         private static readonly object _schemaLock = new();
@@ -75,7 +74,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- App is resolved by Display Name first, then unique name/GUID; ambiguous Display Names return the candidates\n\n" +
             "RELATED TOOLS:\n" +
             "- inspect_metadata(resource='solution_components') → solution names for create\n" +
-            "- publish_customizations → publish other components (manage_app mutations auto-publish the app)\n" +
+            "- manage_admin(resource='publish') → publish other components (manage_ui(resource='app') mutations auto-publish the app)\n" +
             "- execute_webapi → blocked for appmodule/sitemap/appmodulecomponent; use this tool instead")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
@@ -515,17 +514,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var appModuleIdUnique = appModule.GetAttributeValue<Guid?>("appmoduleidunique");
             if (!appModuleIdUnique.HasValue)
                 return Error($"App '{appModule.GetAttributeValue<string>("name")}' has no appmoduleidunique.",
-                    "The app record is incomplete; re-create it with manage_app(action='create') or fix it in the app designer.");
+                    "The app record is incomplete; re-create it with manage_ui(resource='app', action='create') or fix it in the app designer.");
 
             var siteMapId = ResolveSiteMapId(appModuleIdUnique.Value, appModule.GetAttributeValue<string>("uniquename"));
             if (!siteMapId.HasValue)
                 return Error($"App '{appModule.GetAttributeValue<string>("name")}' has no sitemap component.",
-                    "Create the app with manage_app(action='create') so a starter sitemap is generated.");
+                    "Create the app with manage_ui(resource='app', action='create') so a starter sitemap is generated.");
 
             var currentSiteMapXml = RetrieveSiteMapXml(siteMapId.Value);
             if (string.IsNullOrWhiteSpace(currentSiteMapXml))
                 return Error($"Sitemap '{siteMapId}' has no sitemapxml content.",
-                    "The sitemap record is empty; edit it in the app designer or re-create the app with manage_app(action='create').");
+                    "The sitemap record is empty; edit it in the app designer or re-create the app with manage_ui(resource='app', action='create').");
 
             var ops = JsonSerializer.Deserialize<List<JsonElement>>(operations);
             if (ops == null || ops.Count == 0)
@@ -778,7 +777,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             EntityMetadata entityMetadata = null;
             if (hasEntity)
             {
-                var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "manage_app");
+                var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "manage_ui(resource='app')");
                 if (!resolved.IsSuccess)
                     return Error(resolved.Error, "Use inspect_metadata(resource='tables') to find the table's logical name.");
                 entityMetadata = resolved.Value;
@@ -856,7 +855,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var name = app.GetAttributeValue<string>("name");
             if (!appIdUnique.HasValue)
                 return Error($"App '{name}' has no appmoduleidunique.",
-                    "The app record is incomplete; re-create it with manage_app(action='create') or fix it in the app designer.");
+                    "The app record is incomplete; re-create it with manage_ui(resource='app', action='create') or fix it in the app designer.");
 
             var existing = GetAppComponents(appIdUnique.Value);
             var membership = existing.Select(row => new AppComponent(row.GetAttributeValue<OptionSetValue>("componenttype")?.Value ?? 0,
@@ -921,7 +920,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var confirmedChanges = (result.AddedAppComponents?.Count ?? 0) + (result.RemovedAppComponents?.Count ?? 0);
                 result.ChangedOperations = confirmedChanges;
-                result.NextStep = "Inspect the app with manage_app(action='detail') before retrying, or pass backupPath to action='undo'.";
+                result.NextStep = "Inspect the app with manage_ui(resource='app', action='detail') before retrying, or pass backupPath to action='undo'.";
                 result.Status = confirmedChanges == 0 ? "component_update_failed" : "component_update_partial";
                 var message = $"Component update for app '{name}' failed: {ex.Message}";
                 return confirmedChanges == 0 ? Error(message, result.NextStep, details: result) : Partial(message, result);
@@ -975,7 +974,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var scope = snapshot.ComponentScope.Select(entry => entry?.ToComponent()).ToList();
             if (snapshot.AppComponents == null || scope.Count == 0 || scope.Any(component => !component.HasValue))
                 return Error("Backup contains an invalid app component scope.",
-                    "Use an unmodified .app.json backup from backupPath of a previous manage_app mutation.");
+                    "Use an unmodified .app.json backup from backupPath of a previous manage_ui(resource='app') mutation.");
 
             var original = snapshot.AppComponents.Select(entry => entry?.ToComponent()).ToHashSet();
             return ApplyComponentMembership(app, scope.Select(component => component.Value).Distinct().ToList(), component => original.Contains(component),
@@ -989,15 +988,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     DiscoverAppsHint);
             if (string.IsNullOrWhiteSpace(operations))
                 return Error("operations is required for action='undo'.",
-                    "Provide the .app.json backup file path from the backupPath of a previous manage_app mutation.");
+                    "Provide the .app.json backup file path from the backupPath of a previous manage_ui(resource='app') mutation.");
 
             var backupFile = operations.Trim();
             if (backupFile.StartsWith("<", StringComparison.Ordinal))
-                return Error("Raw sitemap XML is not supported by manage_app v1. Use operations or read schema://sitemapxml for reference.",
-                    "Pass the .app.json backup file path from the backupPath of a previous manage_app mutation.");
+                return Error("Raw sitemap XML is not supported by manage_ui(resource='app') v1. Use operations or read schema://sitemapxml for reference.",
+                    "Pass the .app.json backup file path from the backupPath of a previous manage_ui(resource='app') mutation.");
             if (backupFile.StartsWith("[", StringComparison.Ordinal))
                 return Error("undo expects a .app.json backup file path, not a navigation operations JSON array.",
-                    "Pass the .app.json backup file path from the backupPath of a previous manage_app mutation.");
+                    "Pass the .app.json backup file path from the backupPath of a previous manage_ui(resource='app') mutation.");
 
             var (appModule, resolveError) = ResolveApp(app.Trim());
             if (resolveError != null)
@@ -1006,26 +1005,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var appModuleIdUnique = appModule.GetAttributeValue<Guid?>("appmoduleidunique");
             if (!appModuleIdUnique.HasValue)
                 return Error($"App '{appModule.GetAttributeValue<string>("name")}' has no appmoduleidunique.",
-                    "The app record is incomplete; re-create it with manage_app(action='create') or fix it in the app designer.");
+                    "The app record is incomplete; re-create it with manage_ui(resource='app', action='create') or fix it in the app designer.");
 
             var backupFullPath = Path.GetFullPath(backupFile);
             var backupExists = File.Exists(backupFullPath);
             var siteMapId = ResolveSiteMapId(appModuleIdUnique.Value, appModule.GetAttributeValue<string>("uniquename"));
             CallToolResult MissingSiteMap() => Error($"App '{appModule.GetAttributeValue<string>("name")}' has no sitemap component.",
-                "Create the app with manage_app(action='create') so a starter sitemap is generated.");
+                "Create the app with manage_ui(resource='app', action='create') so a starter sitemap is generated.");
             if (!backupExists && !siteMapId.HasValue)
                 return MissingSiteMap();
             if (!backupExists)
                 return Error($"backup file '{backupFile}' was not found.",
-                    "Check the backupPath value returned by the manage_app call that created the backup.");
+                    "Check the backupPath value returned by the manage_ui(resource='app') call that created the backup.");
 
             var snapshot = JsonSerializer.Deserialize<ManageAppSnapshot>(
                 File.ReadAllText(backupFullPath, Encoding.UTF8),
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             if (snapshot == null || !string.Equals(snapshot.Kind, "manage_app.snapshot", StringComparison.Ordinal))
-                return Error("backup file is not a manage_app snapshot.",
-                    "Use a .app.json file written by manage_app (Kind='manage_app.snapshot').");
+                return Error("backup file is not a manage_ui(resource='app') snapshot.",
+                    "Use a .app.json file written by manage_ui(resource='app') (Kind='manage_app.snapshot').");
             if (!Guid.TryParse(snapshot.AppModuleId, out var backupAppModuleId) || backupAppModuleId != appModule.Id)
                 return Error(
                     $"backup app ID does not match current app. BackupAppModuleId: {snapshot.AppModuleId}. CurrentAppModuleId: {appModule.Id}.",
@@ -1037,7 +1036,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return MissingSiteMap();
             if (string.IsNullOrWhiteSpace(snapshot.SiteMapXml))
                 return Error("backup does not contain sitemapxml.",
-                    "The backup file is incomplete; use a different .app.json backup from backupPath of a previous manage_app mutation.");
+                    "The backup file is incomplete; use a different .app.json backup from backupPath of a previous manage_ui(resource='app') mutation.");
 
             var (xsdErrors, xsdWarnings) = ValidateSiteMapXml(snapshot.SiteMapXml);
             if (xsdErrors.Count > 0)
@@ -1102,11 +1101,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ValidationWarnings = MergeWarnings(validation.Warnings, xsdWarnings),
                 BackupPath = currentBackupPath,
                 RestoredFromBackup = backupFullPath,
-                OperationSummaries = ["Restored sitemap XML from manage_app snapshot"]
+                OperationSummaries = ["Restored sitemap XML from manage_ui(resource='app') snapshot"]
             });
         }
 
-        private const string DiscoverAppsHint = "Use manage_app(action='list') to discover apps.";
+        private const string DiscoverAppsHint = "Use manage_ui(resource='app', action='list') to discover apps.";
 
         private (Entity AppModule, CallToolResult Error) ResolveApp(string app)
         {
@@ -1192,7 +1191,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var entity = GetJsonString(obj, "entity");
                     if (!string.IsNullOrWhiteSpace(entity))
                     {
-                        var result = DisplayNameFirstResolver.ResolveEntity(_orgService, entity, "manage_app");
+                        var result = DisplayNameFirstResolver.ResolveEntity(_orgService, entity, "manage_ui(resource='app')");
                         if (result.IsSuccess)
                         {
                             obj["entity"] = result.Value.LogicalName;
@@ -1256,7 +1255,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             catch (Exception ex)
             {
                 // Some environments or filters may not support unpublished reads; published results are still useful.
-                System.Diagnostics.Debug.WriteLine($"manage_app: unpublished read skipped: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"manage_ui(resource='app'): unpublished read skipped: {ex.Message}");
             }
 
             return byId.Values.ToList();
@@ -1465,7 +1464,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (FaultException<OrganizationServiceFault> ex)
             {
-                System.Diagnostics.Debug.WriteLine($"manage_app: app component type metadata unavailable: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"manage_ui(resource='app'): app component type metadata unavailable: {ex.Message}");
                 return false;
             }
         }
@@ -1494,7 +1493,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }            }
             else
             {
-                var result = DisplayNameFirstResolver.ResolveWebResource(_orgService, trimmed, "manage_app");
+                var result = DisplayNameFirstResolver.ResolveWebResource(_orgService, trimmed, "manage_ui(resource='app')");
                 if (!result.IsSuccess)
                 {
                     error = $"icon_webresource '{trimmed}': {result.Error}";
@@ -1904,7 +1903,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             List<string> xsdWarnings)
         {
             var sb = new StringBuilder($"[ManageApp] {status}\nApp: {appName}\nUniqueName: {uniqueName}\nAppId: {appId}\nAppModuleIdUnique: {appUniqueId}\nSiteMapId: {siteMapId}\nPublisherPrefix: {publisherPrefix}\nBackupSaved: yes");
-            sb.Append("\nNextStep: publish_customizations");
+            sb.Append("\nNextStep: manage_admin(resource='publish')");
             foreach (var error in validation?.Errors ?? []) sb.Append($"\nValidationError: {error}");
             foreach (var warning in validation?.Warnings ?? []) sb.Append($"\nValidationWarning: {warning}");
             foreach (var warning in xsdWarnings ?? []) sb.Append($"\nSiteMap XSD: {warning}");

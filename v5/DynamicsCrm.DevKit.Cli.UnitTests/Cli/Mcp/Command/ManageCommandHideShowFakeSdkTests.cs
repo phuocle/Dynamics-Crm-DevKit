@@ -209,7 +209,7 @@ public sealed class ManageCommandHideShowFakeSdkTests
 
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(result.GetText(), "not found");
-        StringAssert.Contains(result.GetText(), "manage_command(action='list')");
+        StringAssert.Contains(result.GetText(), "manage_commanding(resource='command', action='list')");
     }
 
     [TestMethod]
@@ -353,7 +353,7 @@ public sealed class ManageCommandHideShowFakeSdkTests
 
         Assert.IsTrue(result.IsError == true, result.GetText());
         StringAssert.Contains(result.GetText(), "classic ribbon button");
-        StringAssert.Contains(result.GetText(), "manage_ribbon");
+        StringAssert.Contains(result.GetText(), "manage_commanding(resource='ribbon')");
     }
 
     [TestMethod]

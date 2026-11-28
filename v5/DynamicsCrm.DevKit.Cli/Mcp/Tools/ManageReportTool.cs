@@ -27,7 +27,6 @@ using DynamicsCrm.DevKit.Shared.Services;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ManageReportTool : McpToolBase
     {
         private readonly IOrganizationServiceAsync2 _orgServiceAsync;
@@ -48,7 +47,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        private const string DiscoverReportsHint = "Use manage_report(action='list') to discover reports.";
+        private const string DiscoverReportsHint = "Use manage_assets(resource='report', action='list') to discover reports.";
 
         [McpServerTool(Name = "manage_report", Title = "Manage SSRS reports",
             Destructive = true, ReadOnly = false, Idempotent = false,
@@ -477,7 +476,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (string.IsNullOrWhiteSpace(entityName))
                     return (false, "entity_name is required when fetchxml is a system view name.", "Provide the entity display/logical name together with the system view name.", null, null);
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgServiceAsync, entityName.Trim(), "manage_report");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgServiceAsync, entityName.Trim(), "manage_assets(resource='report')");
                 if (!entityResult.IsSuccess)
                     return (false, entityResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to resolve a valid entity name.", null, null);
                 logicalName = entityResult.Value.LogicalName;
@@ -503,7 +502,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             catch (InvalidOperationException ex) { return (false, ex.Message, "Fix the FetchXML entity/link aliases and retry.", null, null); }
             if (!string.IsNullOrWhiteSpace(entityName) && input.StartsWith("<", StringComparison.Ordinal))
             {
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgServiceAsync, entityName.Trim(), "manage_report");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgServiceAsync, entityName.Trim(), "manage_assets(resource='report')");
                 if (!entityResult.IsSuccess || !string.Equals(entityResult.Value.LogicalName, logicalName, StringComparison.OrdinalIgnoreCase))
                     return (false, $"entity_name '{entityName}' does not match FetchXML entity '{logicalName}'.", "Use the matching entity display/logical name.", null, null);
             }
@@ -1285,7 +1284,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return (guid, null);
             if (_orgServiceAsync == null)
                 return (null, $"'{trimmed}' is not a valid GUID. Use action='list' to find valid report IDs.");
-            var resolved = DisplayNameFirstResolver.ResolveReport(_orgServiceAsync, trimmed, "manage_report");
+            var resolved = DisplayNameFirstResolver.ResolveReport(_orgServiceAsync, trimmed, "manage_assets(resource='report')");
             if (!resolved.IsSuccess)
                 return (null, resolved.Error);
             var resolvedId = resolved.Value.Id;

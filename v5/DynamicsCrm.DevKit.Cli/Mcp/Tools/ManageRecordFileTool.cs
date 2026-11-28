@@ -20,7 +20,6 @@ using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ManageRecordFileTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -59,8 +58,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Clear a file/image column value without deleting the record\n\n" +
             "RELATED TOOLS:\n" +
             "- inspect_metadata(resource='tables') → find File/Image columns of a table\n" +
-            "- manage_record / query_data(mode='search') → find record_id\n" +
-            "- manage_column → create file/image columns or raise MaxSizeInKB")]
+            "- manage_data(resource='record') / query_data(mode='search') → find record_id\n" +
+            "- manage_schema(resource='column') → create file/image columns or raise MaxSizeInKB")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
             [Description("'info', 'upload', 'download', 'delete'.")] string action = "",
@@ -106,19 +105,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!Guid.TryParse(record_id?.Trim(), out var recordId))
                     return Error("record_id must be a valid GUID.", "Use query_data(mode='search') or get_context(action='parse_url') to find the record id.");
 
-                var entityResolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "manage_record_file");
+                var entityResolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "manage_data(resource='file')");
                 if (!entityResolved.IsSuccess)
                     return entityResolved.Status == ResolveStatus.NotFound
                         ? Error(entityResolved.Error.Split("\r\n")[0],
-                            "Use inspect_metadata(resource='tables') to list entities before calling manage_record_file.")
+                            "Use inspect_metadata(resource='tables') to list entities before calling manage_data(resource='file').")
                         : Error(entityResolved.Error);
                 var entityLogical = entityResolved.Value.LogicalName;
 
-                var attrResolved = DisplayNameFirstResolver.ResolveAttribute(_orgService, entityLogical, column_name.Trim(), "manage_record_file");
+                var attrResolved = DisplayNameFirstResolver.ResolveAttribute(_orgService, entityLogical, column_name.Trim(), "manage_data(resource='file')");
                 if (!attrResolved.IsSuccess)
                     return attrResolved.Status == ResolveStatus.NotFound
                         ? Error(attrResolved.Error.Split("\r\n")[0],
-                            $"Use inspect_metadata(resource='tables', name='{entityLogical}') to list fields before calling manage_record_file.")
+                            $"Use inspect_metadata(resource='tables', name='{entityLogical}') to list fields before calling manage_data(resource='file').")
                         : Error(attrResolved.Error);
                 var attribute = attrResolved.Value;
                 var fileAttr = attribute as FileAttributeMetadata;
@@ -273,7 +272,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     return Error(
                         $"File size {data.LongLength:N0} bytes exceeds the column limit MaxSizeInKB={maxSizeKb.Value} ({(long)maxSizeKb.Value * 1024:N0} bytes) on '{columnLogical}'.",
-                        "Raise MaxSizeInKB via manage_column (file columns max 131072 KB) or upload a smaller file. For image columns without CanStoreFullImage the platform rejects oversized uploads with ProcessImageFailure 0x80072553.");
+                        "Raise MaxSizeInKB via manage_schema(resource='column') (file columns max 131072 KB) or upload a smaller file. For image columns without CanStoreFullImage the platform rejects oversized uploads with ProcessImageFailure 0x80072553.");
                 }
             }
 
@@ -324,7 +323,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (imageAttr.CanStoreFullImage != true)
                     return Error(
                         $"Image column '{columnLogical}' does not store the full-sized image (CanStoreFullImage=false).",
-                        "Call again with full_size=false to download the thumbnail, or enable full-size storage on the column via manage_column.");
+                        "Call again with full_size=false to download the thumbnail, or enable full-size storage on the column via manage_schema(resource='column').");
                 if (record.GetAttributeValue<byte[]>(columnLogical) == null &&
                     record.GetAttributeValue<long?>(columnLogical + "_timestamp") == null)
                     return Error($"Image column '{columnLogical}' on {entityLogical}({recordId}) is empty — nothing to download.",

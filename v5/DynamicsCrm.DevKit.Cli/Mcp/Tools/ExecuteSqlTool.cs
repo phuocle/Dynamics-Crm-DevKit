@@ -87,7 +87,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (ContainsSemicolonOutsideLiteral(sql))
                     return Error("Multiple statements are not supported.",
                         "query_data(mode='sql') accepts a single SELECT statement only — remove the extra statements separated by ';'. " +
-                        "Dataverse SQL is read-only; use manage_record for create, update, or delete operations.");
+                        "Dataverse SQL is read-only; use manage_data(resource='record') for create, update, or delete operations.");
 
                 if (max_records < 1 || max_records > 50000)
                     return Error("max_records must be between 1 and 50000.",
@@ -121,7 +121,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (!string.Equals(firstWord[0], "SELECT", StringComparison.OrdinalIgnoreCase))
                     return Error("Only SELECT statements are supported.",
-                        "Dataverse SQL is read-only. Use manage_record for create, update, or delete operations.");
+                        "Dataverse SQL is read-only. Use manage_data(resource='record') for create, update, or delete operations.");
 
                 var syntaxSql = MaskStringLiterals(sql);
 

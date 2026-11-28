@@ -95,7 +95,7 @@ public class ManageChoiceToolTests
         Assert.IsTrue(result.IsError, "Error response must have IsError=true");
         var text = GetText(result);
         Assert.IsTrue(text.Contains("nonexistent_xyz"), "Error should echo back the input name");
-        Assert.IsTrue(text.Contains("manage_choice"), "Error should suggest using manage_choice");
+        Assert.IsTrue(text.Contains("manage_schema(resource='choice'"), "Error should suggest using manage_schema(resource='choice')");
     }
 
     [TestMethod]

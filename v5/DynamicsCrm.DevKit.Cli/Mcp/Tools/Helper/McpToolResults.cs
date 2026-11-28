@@ -497,13 +497,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     var entityName2 = recordMatch.Groups["entity"].Value;
                     var recordId2 = recordMatch.Groups["id"].Value;
                     recordSb.Append($"{ErrorPrefix} {entityName2} record with id {recordId2} does not exist. It may have been deleted.");
-                    recordSb.Append("\n[Hint] Verify with manage_record(action='read'), or find the correct id via query_data(mode='search') / get_context(action='parse_url').");
+                    recordSb.Append("\n[Hint] Verify with manage_data(resource='record', action='read'), or find the correct id via query_data(mode='search') / get_context(action='parse_url').");
                     recordSb.Append($"\n[Detail] {{\"entity\":{SerializeTextDetail(entityName2)},\"id\":\"{recordId2}\",\"errorCode\":\"0x80040217\",\"message\":{SerializeTextDetail(faultMessage)}}}");
                 }
                 else
                 {
                     recordSb.Append($"{ErrorPrefix} [RecordNotFound] {faultMessage}");
-                    recordSb.Append("\n[Hint] The record may have been deleted, or the record_id/entity_name pair is wrong. Verify with manage_record(action='read'), or find the correct id via query_data(mode='search') / get_context(action='parse_url').");
+                    recordSb.Append("\n[Hint] The record may have been deleted, or the record_id/entity_name pair is wrong. Verify with manage_data(resource='record', action='read'), or find the correct id via query_data(mode='search') / get_context(action='parse_url').");
                     if (detail.Length > 0)
                         recordSb.Append('\n').Append(detail);
                 }

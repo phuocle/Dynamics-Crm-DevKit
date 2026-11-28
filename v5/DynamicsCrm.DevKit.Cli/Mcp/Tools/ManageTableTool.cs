@@ -15,7 +15,6 @@ using DynamicsCrm.DevKit.Shared;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ManageTableTool : McpToolBase
     {
         private const int TableComponentType = 1;
@@ -53,10 +52,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "\n" +
             "RELATED TOOLS:\n" +
             "- inspect_metadata(resource='tables') → discover entities\n" +
-            "- manage_column → add columns\n" +
-            "- manage_relationship → 1:N / N:N\n" +
-            "- manage_form → forms\n" +
-            "- publish_customizations → batch publish after multiple metadata changes")]
+            "- manage_schema(resource='column') → add columns\n" +
+            "- manage_schema(resource='relationship') → 1:N / N:N\n" +
+            "- manage_ui(resource='form') → forms\n" +
+            "- manage_admin(resource='publish') → batch publish after multiple metadata changes")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Singular display name (e.g. 'Project'). Required for CREATE.")] string display_name = "",
             [Description("Plural (e.g. 'Projects'). Required: create.")] string display_collection_name = "",
@@ -180,7 +179,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var hasCreateParameters = display_name.Length > 0 && display_collection_name.Length > 0 && solution_name.Length > 0;
                     EntityMetadata existingEntity = null;
-                    var entityResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, logical_name, "manage_table",
+                    var entityResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, logical_name, "manage_schema(resource='table')",
                         matchMode: hasCreateParameters ? EntityNameMatchMode.ExactLogicalNameOnly : EntityNameMatchMode.ExactLogicalNameFirst);
                     if (entityResolve.IsSuccess)
                     {
@@ -217,7 +216,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (icon_vector_name.Length > 0)
                     return Error("icon_vector_name can only be set on an existing table.",
-                        "Use inspect_metadata(resource='tables') to find the table's logical_name, then call manage_table to update it.");
+                        "Use inspect_metadata(resource='tables') to find the table's logical_name, then call manage_schema(resource='table') to update it.");
 
                 return CreateNewEntity(
                     display_name, display_collection_name, description,
@@ -305,12 +304,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (string.IsNullOrWhiteSpace(logical_name))
             {
-                var collisionResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_table",
+                var collisionResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_schema(resource='table')",
                     matchMode: EntityNameMatchMode.ExactLogicalNameOnly);
                 if (collisionResolve.IsSuccess)
                     return Error(
                         $"Cannot create table '{display_name}' because derived logical name '{entityName}' already exists.",
-                        "Re-call manage_table with an explicit logical_name to update the existing entity, or choose a different display_name.");
+                        "Re-call manage_schema(resource='table') with an explicit logical_name to update the existing entity, or choose a different display_name.");
                 if (collisionResolve.Status == ResolveStatus.Ambiguous || collisionResolve.Status == ResolveStatus.Error)
                     return Error(collisionResolve.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to list entities.");
             }

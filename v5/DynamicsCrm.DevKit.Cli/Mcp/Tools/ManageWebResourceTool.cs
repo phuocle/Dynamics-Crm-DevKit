@@ -16,15 +16,14 @@ using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ManageWebResourceTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
         private readonly McpDryRunOptions _options;
         private readonly McpExecutionContext _context;
         private readonly DynamicsCrm.DevKit.Cli.Mcp.IMcpConnectionResolver _connections;
-        private string _workspaceFolder;
-        private string _envId = "default";
+        internal string _workspaceFolder;
+        internal string _envId = "default";
 
         private static readonly UTF8Encoding StrictUtf8 = new(false, true);
 
@@ -88,12 +87,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- Upload/update/inspect a web resource\n" +
             "- Find library_name for build_form_xml add_event/add_library (run list first)\n" +
-            "- Combine with build_form_xml + manage_form to wire JS into a form\n" +
+            "- Combine with build_form_xml + manage_ui(resource='form') to wire JS into a form\n" +
             "- Creating a JS web resource for view icons/tooltips → the function contract (rowData/{col}_Value, [imgName, tooltip] return) is in docs://instructions_for_views — read it first\n\n" +
             "RELATED TOOLS:\n" +
             "- inspect_metadata(resource='solution_components') → find solution names for create\n" +
-            "- manage_form → wire the JS library into a form\n" +
-            "- publish_customizations → publish other components (create/update auto-publish)")]
+            "- manage_ui(resource='form') → wire the JS library into a form\n" +
+            "- manage_admin(resource='publish') → publish other components (create/update auto-publish)")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
             [Description("list / detail / create / update / delete.")] string action = "",
@@ -349,7 +348,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             name = name.Trim();
 
-            var existingByInput = DisplayNameFirstResolver.ResolveWebResource(_orgService, name, "manage_webresource");
+            var existingByInput = DisplayNameFirstResolver.ResolveWebResource(_orgService, name, "manage_assets(resource='webresource')");
             if (existingByInput.IsSuccess)
             {
                 var existingName = existingByInput.Value.GetAttributeValue<string>("name") ?? existingByInput.CanonicalName ?? existingByInput.Value.Id.ToString();
@@ -360,7 +359,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(displayName))
             {
-                var existingByDisplayName = DisplayNameFirstResolver.ResolveWebResource(_orgService, displayName.Trim(), "manage_webresource");
+                var existingByDisplayName = DisplayNameFirstResolver.ResolveWebResource(_orgService, displayName.Trim(), "manage_assets(resource='webresource')");
                 if (existingByDisplayName.IsSuccess)
                 {
                     var existingName = existingByDisplayName.Value.GetAttributeValue<string>("name") ?? existingByDisplayName.CanonicalName ?? existingByDisplayName.Value.Id.ToString();
@@ -648,7 +647,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return result.Entities.FirstOrDefault();
         }
 
-        private const string DiscoverWebResourcesHint = "Use manage_webresource(action='list') to discover web resources.";
+        private const string DiscoverWebResourcesHint = "Use manage_assets(resource='webresource', action='list') to discover web resources.";
 
         private static WebResourceEntry MapEntry(Entity e)
         {
@@ -687,7 +686,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (_orgService == null)
                 return (null, $"'{trimmed}' is not a valid GUID. Use action='list' to find valid web resource IDs.");
 
-            var resolved = DisplayNameFirstResolver.ResolveWebResource(_orgService, trimmed, "manage_webresource");
+            var resolved = DisplayNameFirstResolver.ResolveWebResource(_orgService, trimmed, "manage_assets(resource='webresource')");
             if (!resolved.IsSuccess)
                 return (null, resolved.Error);
 

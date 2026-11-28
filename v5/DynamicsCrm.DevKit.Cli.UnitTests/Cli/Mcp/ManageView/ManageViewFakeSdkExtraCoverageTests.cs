@@ -109,6 +109,6 @@ public sealed class ManageViewFakeSdkExtraCoverageTests
 
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(result.GetText(), "JS web resource 'devkit_/missing.js' not found");
-        StringAssert.Contains(result.GetText(), "manage_webresource");
+        StringAssert.Contains(result.GetText(), "manage_assets(resource='webresource')");
     }
 }

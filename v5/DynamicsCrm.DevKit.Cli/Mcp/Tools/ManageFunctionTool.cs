@@ -14,7 +14,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ManageFunctionTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -44,7 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Discover Power Fx functions and inspect formula, signature, binding, and compile state\n" +
             "- Invoke a resolved function with typed arguments and read the real outputs\n\n" +
             "RELATED TOOLS:\n" +
-            "- manage_custom_api → every Custom API, with or without an expression\n" +
+            "- manage_logic(resource='custom_api') → every Custom API, with or without an expression\n" +
             "- inspect_metadata(resource='solution_components') → verify a function's solution membership")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("'list', 'detail', 'validate', 'invoke'. 'create'/'update'/'delete' are gated.")] string action = "",
@@ -221,7 +220,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var declaredInputs = structured.Inputs ?? [];
             foreach (var input in declaredInputs.Where(p => !FunctionMetadataReader.InvokableTypes.Contains(p.Type)))
-                structured.Issues.Add($"Input '{input.Name}' has type '{input.Type}' — manage_function invoke cannot convert it.");
+                structured.Issues.Add($"Input '{input.Name}' has type '{input.Type}' — manage_logic(resource='function') invoke cannot convert it.");
 
             // Optional structural cross-check of a DevKit definition against metadata.
             if (!string.IsNullOrWhiteSpace(definitionJson))
@@ -302,8 +301,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var boundEntity = graph.Api.GetAttributeValue<string>("boundentitylogicalname");
             var bindingValue = graph.Api.GetAttributeValue<OptionSetValue>("bindingtype")?.Value ?? 0;
             if (bindingValue == 2)
-                return Error("Invoking EntityCollection-bound functions is not supported by manage_function.",
-                    "Only Global and Entity bindings can be invoked. Check manage_custom_api for the binding type.");
+                return Error("Invoking EntityCollection-bound functions is not supported by manage_logic(resource='function').",
+                    "Only Global and Entity bindings can be invoked. Check manage_logic(resource='custom_api') for the binding type.");
 
             FunctionInvoker.InvocationPlan plan;
             try
@@ -314,7 +313,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (ArgumentException ex)
             {
-                return Error(ex.Message, "Read the signature with manage_function(action='detail') and align arguments_json with it.");
+                return Error(ex.Message, "Read the signature with manage_logic(resource='function', action='detail') and align arguments_json with it.");
             }
 
             if (_options.DryRun)
@@ -373,9 +372,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(functionName))
                 return Error("function_name is required.",
-                    $"Use manage_function(action='list') to discover functions. Available actions: {FunctionMetadataReader.SupportedActions}.");
+                    $"Use manage_logic(resource='function', action='list') to discover functions. Available actions: {FunctionMetadataReader.SupportedActions}.");
 
-            var resolved = FunctionResolver.Resolve(_orgService, functionName, "manage_function");
+            var resolved = FunctionResolver.Resolve(_orgService, functionName, "manage_logic(resource='function')");
             if (resolved.IsSuccess)
             {
                 _resolvedApi = resolved.Value;
@@ -386,7 +385,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 resolved.Error.Split("\r\n")[0],
                 resolved.Status == ResolveStatus.Ambiguous
                     ? "Re-call with a more specific function_name value."
-                    : "Use manage_function(action='list') to discover available functions.",
+                    : "Use manage_logic(resource='function', action='list') to discover available functions.",
                 resolved.Status == ResolveStatus.Ambiguous && resolved.Candidates?.Count > 0
                     ? resolved.Candidates.Select(c => new
                     {
@@ -443,7 +442,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 warnings.Add($"The FxExpression is referenced by {graph.SharedStepCount} sdk message processing step(s) (1 is the platform-created invocation step) — treat it as shared with automated processing.");
 
             foreach (var input in (result.Inputs ?? []).Where(p => !FunctionMetadataReader.InvokableTypes.Contains(p.Type)))
-                warnings.Add($"Input '{input.Name}' has type '{input.Type}' — manage_function invoke cannot convert it.");
+                warnings.Add($"Input '{input.Name}' has type '{input.Type}' — manage_logic(resource='function') invoke cannot convert it.");
 
             if (warnings.Count > 0)
                 result.Warnings = warnings;

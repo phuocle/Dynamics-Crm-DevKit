@@ -373,7 +373,7 @@ public sealed class ManageReportGapWave2CoverageTests
         var result = await NewTool().manage_report(null!, "download", report_id: "No Such Report");
 
         Assert.IsTrue(result.IsError == true);
-        StringAssert.Contains(result.GetText(), "manage_report(action='list')");
+        StringAssert.Contains(result.GetText(), "manage_assets(resource='report', action='list')");
     }
 
     // NOTE (dead code — not coverable): HandleDatasetLocal's "Could not read

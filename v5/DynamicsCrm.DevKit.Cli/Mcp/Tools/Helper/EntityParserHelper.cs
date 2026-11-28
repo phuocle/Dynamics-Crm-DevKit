@@ -117,7 +117,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             if (string.IsNullOrWhiteSpace(targetEntityInput))
                 return null;
 
-            var resolved = DisplayNameFirstResolver.ResolveEntity(orgService, targetEntityInput, "manage_record/upsert_records");
+            var resolved = DisplayNameFirstResolver.ResolveEntity(orgService, targetEntityInput, "manage_data(resource='record')/manage_data(resource='bulk')");
             if (resolved.IsSuccess)
                 return resolved.Value.LogicalName;
 
@@ -137,7 +137,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 var targetEntity = key.Substring(atIndex + 1).Trim();
                 if (string.Equals(targetEntity, "odata.bind", StringComparison.OrdinalIgnoreCase))
                     throw new InvalidFieldKeyException(
-                        $"Invalid field key '{key}': Web API '@odata.bind' syntax is unsupported in manage_record and upsert_records.",
+                        $"Invalid field key '{key}': Web API '@odata.bind' syntax is unsupported in manage_data(resource='record') and manage_data(resource='bulk').",
                         $"Use '\"{fieldName}\": \"<guid>\"' for a single-target lookup or '\"{fieldName}@<target_entity>\": \"<guid>\"' for a polymorphic lookup. Use the target table's logical name for <target_entity>.");
                 return (fieldName, targetEntity);
             }

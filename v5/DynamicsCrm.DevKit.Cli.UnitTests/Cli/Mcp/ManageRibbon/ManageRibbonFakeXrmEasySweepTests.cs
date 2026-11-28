@@ -1248,7 +1248,7 @@ public sealed class ManageRibbonFakeXrmEasySweepTests
         var result = await CallAsync("update", "account", operations: ops);
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "FlyoutAnchor 'devkit.account.Nope.FlyoutAnchor' not found.");
-        StringAssert.Contains(Text(result), "Use manage_ribbon(action='buttons') to list flyout Ids.");
+        StringAssert.Contains(Text(result), "Use manage_commanding(resource='ribbon', action='buttons') to list flyout Ids.");
     }
 
     [TestMethod]
@@ -1428,7 +1428,7 @@ public sealed class ManageRibbonFakeXrmEasySweepTests
 
         var result = await CallAsync("undo", "account", ribbonxml: backupPath);
         Assert.IsFalse(result.IsError == true, Text(result));
-        StringAssert.Contains(Text(result), "manage_ribbon undo");
+        StringAssert.Contains(Text(result), "manage_commanding(resource='ribbon') undo");
         StringAssert.Contains(Text(result), "restored from");
         StringAssert.Contains(Text(result), "PublishAll started asynchronously");
 
@@ -1525,7 +1525,7 @@ public sealed class ManageRibbonFakeXrmEasySweepTests
 
         var result = await CallAsync("buttons", "account");
         Assert.IsFalse(result.IsError == true, Text(result));
-        StringAssert.Contains(Text(result), "manage_ribbon buttons");
+        StringAssert.Contains(Text(result), "manage_commanding(resource='ribbon') buttons");
         StringAssert.Contains(Text(result), "form=6, main_grid=0, sub_grid=0.");
 
         var form = Struct(result).GetProperty("buttons")
@@ -1580,7 +1580,7 @@ public sealed class ManageRibbonFakeXrmEasySweepTests
     {
         var result = await CallAsync("detail", "account");
         Assert.IsFalse(result.IsError == true, Text(result));
-        StringAssert.Contains(Text(result), "manage_ribbon detail");
+        StringAssert.Contains(Text(result), "manage_commanding(resource='ribbon') detail");
         StringAssert.Contains(Text(result), "0 CustomAction, 0 CommandDefinition, 0 EnableRule, 0 LocLabel.");
         Assert.AreEqual(0, _service.ExportSolutionRequests);
     }

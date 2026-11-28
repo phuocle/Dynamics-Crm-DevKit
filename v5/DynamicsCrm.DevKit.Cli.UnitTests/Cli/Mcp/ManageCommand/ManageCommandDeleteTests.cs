@@ -267,7 +267,7 @@ public sealed class ManageCommandDeleteTests
         Assert.IsFalse(result.IsError == true, result.GetText());
         Assert.IsFalse(_service.Exists("appaction", id));
         StringAssert.Contains(result.GetText(), "Publishing table 'account' failed");
-        StringAssert.Contains(result.GetText(), "publish_customizations");
+        StringAssert.Contains(result.GetText(), "manage_admin(resource='publish')");
     }
 
     [TestMethod]

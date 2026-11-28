@@ -9,7 +9,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
     internal static class RibbonJavaScript
     {
         internal const string DependencyLibrariesField = "dependency_libraries";
-        internal const string WebResourceHint = "Use manage_webresource(action='list') to find valid JS web resource names.";
+        internal const string WebResourceHint = "Use manage_assets(resource='webresource', action='list') to find valid JS web resource names.";
         private const string WebResourcePrefix = "$webresource:";
         private const string PreloadFunction = "isNaN";
 
@@ -99,7 +99,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (libraries == null) return (null, null);
             if (clickHandler == null || enableHandler == null)
                 return ($"Cannot set 'dependency_libraries' for command '{commandId}' without a click handler and a custom enable rule.",
-                    "Use manage_ribbon(action='detail') to check the existing RibbonDiffXml.");
+                    "Use manage_commanding(resource='ribbon', action='detail') to check the existing RibbonDiffXml.");
 
             actions.Elements("JavaScriptFunction").Where(IsDependency).Remove();
             enableRule.Elements("CustomRule").Where(IsDependency).Remove();

@@ -361,7 +361,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var resolvedAppId = ResolveAppId("", appName, out var appResolveError);
                 if (resolvedAppId == null)
                     return Error((appResolveError ?? "Could not resolve app_name.").Split("\r\n")[0],
-                        "Use manage_app(action='list') to discover apps.");
+                        "Use manage_ui(resource='app', action='list') to discover apps.");
                 filters.AppendLine($"      <condition attribute='appmoduleid' operator='eq' value='{resolvedAppId.Value}'/>");
             }
 
@@ -454,7 +454,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var result = _orgService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
                 return Error($"Command '{commandId}' not found.",
-                    "Use manage_command(action='list') to find valid command IDs.");
+                    "Use manage_commanding(resource='command', action='list') to find valid command IDs.");
 
             var entity = result.Entities[0];
             var entry = MapCommandEntry(entity);
@@ -549,7 +549,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (result.Entities.Count == 0)
                 return Error($"No command found with label containing '{label}'" +
                     (string.IsNullOrWhiteSpace(entityName) ? "" : $" on entity '{entityName}'") + ".",
-                    "Check the label spelling, or use manage_command(action='list') to browse commands.");
+                    "Check the label spelling, or use manage_commanding(resource='command', action='list') to browse commands.");
 
             if (result.Entities.Count > 1)
             {

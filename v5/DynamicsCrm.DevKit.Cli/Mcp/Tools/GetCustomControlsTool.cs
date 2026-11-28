@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Find a field PCF by compatible bound column type, or a dataset PCF for a subgrid\n" +
             "- Look up the exact registered name and required manifest mappings before binding\n\n" +
             "RELATED TOOLS:\n" +
-            "- manage_form → bind, update, or unbind the PCF with manage_custom_control operations\n" +
+            "- manage_ui(resource='form') → bind, update, or unbind the PCF with manage_custom_control operations\n" +
             "- inspect_metadata(resource='tables') → inspect the Dataverse columns available for property mappings")]
         public Task<CallToolResult> InvokeAsync(
             [Description("Filter by the registered PCF name.")] string name = "",

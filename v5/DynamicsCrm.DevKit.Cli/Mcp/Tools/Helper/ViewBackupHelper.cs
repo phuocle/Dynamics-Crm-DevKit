@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             sb.AppendLine($"<!-- Backup: {viewName} ({entityName}) -->");
             sb.AppendLine($"<!-- ViewId: {viewId} -->");
             sb.AppendLine($"<!-- Timestamp: {DateTime.Now:yyyy-MM-dd HH:mm:ss} -->");
-            sb.AppendLine($"<!-- To restore: call manage_view with action='undo' and pass BOTH files of this backup pair — fetchxml=<.fetchxml.xml path> and layoutxml=<.layoutxml.xml path> -->");
+            sb.AppendLine($"<!-- To restore: call manage_ui(resource='view') with action='undo' and pass BOTH files of this backup pair — fetchxml=<.fetchxml.xml path> and layoutxml=<.layoutxml.xml path> -->");
             sb.AppendLine();
             if (!string.IsNullOrWhiteSpace(xml))
                 sb.Append(ViewXmlHelper.PrettyPrintXml(xml));

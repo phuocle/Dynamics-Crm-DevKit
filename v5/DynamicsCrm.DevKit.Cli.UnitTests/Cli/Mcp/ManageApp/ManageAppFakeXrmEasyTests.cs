@@ -1286,7 +1286,7 @@ public sealed class ManageAppFakeXrmEasyTests
         File.WriteAllText(wrongKindPath, "{\"kind\":\"other.snapshot\"}");
         var wrongKind = await tool.manage_app(null!, action: "undo", app: "Sales Hub", operations: wrongKindPath);
         Assert.IsTrue(wrongKind.IsError == true);
-        StringAssert.Contains(wrongKind.GetText(), "not a manage_app snapshot");
+        StringAssert.Contains(wrongKind.GetText(), "not a manage_ui(resource='app') snapshot");
 
         var mismatchPath = Path.Combine(_workspace, "mismatch.app.json");
         File.WriteAllText(mismatchPath, JsonSerializer.Serialize(new

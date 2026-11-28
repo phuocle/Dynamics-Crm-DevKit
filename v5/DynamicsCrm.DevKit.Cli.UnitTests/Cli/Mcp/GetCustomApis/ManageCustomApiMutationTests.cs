@@ -442,22 +442,22 @@ public sealed class ManageCustomApiMutationTests
 
         var postApi = webApi.execute_webapi(method: "POST", url: "customapis", body: "{}");
         Assert.IsTrue(postApi.IsError == true);
-        StringAssert.Contains(postApi.GetText(), "manage_custom_api");
+        StringAssert.Contains(postApi.GetText(), "manage_logic(resource='custom_api')");
 
         var postParam = webApi.execute_webapi(method: "POST", url: "customapirequestparameters", body: "{}");
         Assert.IsTrue(postParam.IsError == true);
-        StringAssert.Contains(postParam.GetText(), "manage_custom_api");
+        StringAssert.Contains(postParam.GetText(), "manage_logic(resource='custom_api')");
 
         var postProp = webApi.execute_webapi(method: "POST", url: "customapiresponseproperties", body: "{}");
         Assert.IsTrue(postProp.IsError == true);
-        StringAssert.Contains(postProp.GetText(), "manage_custom_api");
+        StringAssert.Contains(postProp.GetText(), "manage_logic(resource='custom_api')");
 
         var patchApi = webApi.execute_webapi(method: "PATCH", url: $"customapis({_existingApiId})", body: "{}");
         Assert.IsTrue(patchApi.IsError == true);
-        StringAssert.Contains(patchApi.GetText(), "manage_custom_api");
+        StringAssert.Contains(patchApi.GetText(), "manage_logic(resource='custom_api')");
 
         var deleteApi = webApi.execute_webapi(method: "DELETE", url: $"customapis({_existingApiId})");
         Assert.IsTrue(deleteApi.IsError == true);
-        StringAssert.Contains(deleteApi.GetText(), "manage_custom_api");
+        StringAssert.Contains(deleteApi.GetText(), "manage_logic(resource='custom_api')");
     }
 }

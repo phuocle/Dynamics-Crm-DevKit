@@ -33,7 +33,7 @@ public class ManageFunctionContractTests
         var attr = method.GetCustomAttribute<ModelContextProtocol.Server.McpServerToolAttribute>()!;
 
         Assert.AreEqual("manage_function", attr.Name);
-        Assert.IsFalse(attr.ReadOnly, "manage_function is a mixed tool and must stay in the Mutation category");
+        Assert.IsFalse(attr.ReadOnly, "manage_logic(resource='function') is a mixed tool and must stay in the Mutation category");
         Assert.IsTrue(attr.Destructive);
         Assert.IsFalse(attr.Idempotent);
         Assert.IsTrue(attr.UseStructuredContent);
@@ -52,7 +52,7 @@ public class ManageFunctionContractTests
         Assert.IsTrue(desc.Contains("'create', 'update', 'delete') are gated"),
             "Description must state that authoring actions are gated");
         Assert.IsTrue(desc.Contains("maker portal"), "Gated authoring must point at the maker portal");
-        Assert.IsTrue(desc.Contains("manage_custom_api"), "RELATED TOOLS must mention manage_custom_api");
+        Assert.IsTrue(desc.Contains("manage_logic(resource='custom_api')"), "RELATED TOOLS must mention manage_logic(resource='custom_api')");
     }
 
     // ──────────────────────────────────────────────

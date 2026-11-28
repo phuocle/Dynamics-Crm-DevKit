@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
             Name = "instructions_for_manage_ribbon",
             Title = "Instructions for classic ribbon operations",
             UriTemplate = "docs://instructions_for_manage_ribbon"),
-        Description("Operation fields, examples, and publish workflow for manage_ribbon. Read before updating classic ribbon buttons.")]
+        Description("Operation fields, examples, and publish workflow for manage_commanding(resource='ribbon'). Read before updating classic ribbon buttons.")]
         public static string ManageRibbonInstructions() => ReadInstruction("instructions_for_manage_ribbon.md");
 
         [McpServerResource(
@@ -30,7 +30,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
             Name = "instructions_for_manage_command",
             Title = "Instructions for deleting modern command bar appactions",
             UriTemplate = "docs://instructions_for_manage_command"),
-        Description("Delete inputs, examples, and dependency handling for manage_command.")]
+        Description("Delete inputs, examples, and dependency handling for manage_commanding(resource='command').")]
         public static string ManageCommandInstructions() => ReadInstruction("instructions_for_manage_command.md");
 
         [McpServerResource(
@@ -38,16 +38,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
             Name = "instructions_for_manage_report",
             Title = "Instructions for SSRS reports and local RDL datasets",
             UriTemplate = "docs://instructions_for_manage_report"),
-        Description("Local RDL and dataset workflows, FetchXML support, and Dataverse report deployment for manage_report.")]
+        Description("Local RDL and dataset workflows, FetchXML support, and Dataverse report deployment for manage_assets(resource='report').")]
         public static string ManageReportInstructions() => ReadInstruction("instructions_for_manage_report.md");
 
         [McpServerResource(
             MimeType = "text/markdown",
             Name = "instructions_for_manage_app",
-            Title = "Instructions for manage_app",
+            Title = "Instructions for manage_ui(resource='app')",
             UriTemplate = "docs://instructions_for_manage_app"),
         Description(
-            "Rules and examples for managing model-driven apps and app navigation through manage_app. " +
+            "Rules and examples for managing model-driven apps and app navigation through manage_ui(resource='app'). " +
             "Read this before creating or modifying model-driven apps, sitemaps, or app navigation.")]
         public static string ManageAppInstructions() => ReadInstruction("instructions_for_manage_app.md");
 
@@ -58,7 +58,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
             UriTemplate = "docs://instructions_for_formxml"),
         Description(
             "Rules and best practices for modifying Dataverse form XML definitions. " +
-            "Read this before making any changes to FormXML via manage_form.")]
+            "Read this before making any changes to FormXML via manage_ui(resource='form').")]
         public static string FormXmlInstructions() => ReadInstruction("instructions_for_formxml.md");
 
         [McpServerResource(
@@ -68,13 +68,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
             UriTemplate = "docs://instructions_for_views"),
         Description(
             "Rules and best practices for modifying Dataverse view definitions. " +
-            "Read this before creating or modifying views via manage_view.")]
+            "Read this before creating or modifying views via manage_ui(resource='view').")]
         public static string ViewInstructions() => ReadInstruction("instructions_for_views.md");
 
         [McpServerResource(
             MimeType = "text/markdown",
             Name = "schema_tools_guide",
-            Title = "Guide for Dataverse schema tools (manage_table, manage_column, manage_relationship)",
+            Title = "Guide for Dataverse schema tools (manage_schema(resource='table'), manage_schema(resource='column'), manage_schema(resource='relationship'))",
             UriTemplate = "docs://schema_tools_guide"),
         Description(
             "Rules, type matrices, and immutable property lists for schema tools. " +
@@ -84,7 +84,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
         [McpServerResource(
             MimeType = "text/markdown",
             Name = "data_operations_guide",
-            Title = "Guide for Dataverse data operations (manage_record, query_data)",
+            Title = "Guide for Dataverse data operations (manage_data(resource='record'), query_data)",
             UriTemplate = "docs://data_operations_guide"),
         Description(
             "Field type formats, FetchXML relationship joins, and search syntax. " +

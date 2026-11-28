@@ -22,7 +22,6 @@ using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ManageViewTool : McpToolBase
     {
         private const int SavedQueryComponentType = 26;
@@ -56,14 +55,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- List or inspect views of an entity (system savedquery or personal userquery, scoped by is_personal_view; use detail for XML) — always list/detail BEFORE editing\n" +
             "- Create/update a view from FetchXML. Grid columns follow attribute order and start with widths based on data type. On update, use cell_updates_json to patch the current grid or the grid rebuilt from fetchxml in the same call. Use layoutxml for undo. Created views are always Public (querytype=0).\n" +
-            "- Add a system view to an unmanaged solution with solution_name. Use manage_app action='add_components' for app membership\n" +
+            "- Add a system view to an unmanaged solution with solution_name. Use manage_ui(resource='app') action='add_components' for app membership\n" +
             "- QuickFind views: searchable fields are <condition> in <filter isquickfindfields=\"1\">; grid columns are display only\n" +
             "- Restore a view from a backup pair written by update/rename/undo (undo) — the result's fetchXmlBackupPath + layoutXmlBackupPath point to the pre-change backup; pass both to action='undo' to restore\n\n" +
             "Read docs://instructions_for_views before creating or changing views, especially layout cell attributes and icon/tooltip functions.\n\n" +
             "RELATED TOOLS:\n" +
             "- inspect_metadata(resource='tables') → column logical names for FetchXML attributes/conditions\n" +
             "- query_data(mode='fetchxml') → test a FetchXML before putting it into a view\n" +
-            "- manage_form → entity forms; publish_customizations → batch publish; execute_webapi → raw savedquery access")]
+            "- manage_ui(resource='form') → entity forms; manage_admin(resource='publish') → batch publish; execute_webapi → raw savedquery access")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",
@@ -118,9 +117,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (!string.IsNullOrWhiteSpace(view_id) && !Guid.TryParse(view_id.Trim(), out _))
                     return Error($"'{view_id}' is not a valid GUID.",
-                        "Use manage_view action='list' to find views, then pass a valid view_id GUID.");
+                        "Use manage_ui(resource='view') action='list' to find views, then pass a valid view_id GUID.");
 
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_view");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_ui(resource='view')");
                 if (!entityResult.IsSuccess)
                 {
                     if (entityResult.Status == ResolveStatus.Ambiguous)
@@ -280,14 +279,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(viewId) && string.IsNullOrWhiteSpace(viewName))
                 return Error("view_id or view_name is required when action='detail'.",
-                    "Use manage_view action='list' to find views, then pass view_id or a unique view_name.");
+                    "Use manage_ui(resource='view') action='list' to find views, then pass view_id or a unique view_name.");
 
             Guid id;
             if (!string.IsNullOrWhiteSpace(viewId))
             {
                 if (!Guid.TryParse(viewId.Trim(), out id))
                     return Error($"'{viewId}' is not a valid GUID.",
-                        "Use manage_view action='list' to find views, then pass a valid view_id GUID.");
+                        "Use manage_ui(resource='view') action='list' to find views, then pass a valid view_id GUID.");
             }
             else
             {
@@ -300,7 +299,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var view = isPersonalView ? TryGetPersonalView(id) : TryGetSystemView(id);
             if (view == null)
                 return Error($"No {(isPersonalView ? "personal" : "system")} view found with ID '{id}'.",
-                    $"Use manage_view action='list' entity_name='{entityName}' to find valid view IDs.");
+                    $"Use manage_ui(resource='view') action='list' entity_name='{entityName}' to find valid view IDs.");
 
             return BuildViewDetailResult(view, includeLayoutJson);
         }
@@ -426,14 +425,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(viewId) && string.IsNullOrWhiteSpace(viewName))
                 return Error("view_id or view_name is required when action='update'.",
-                    "Use manage_view action='list' to find views, then pass view_id or a unique view_name.");
+                    "Use manage_ui(resource='view') action='list' to find views, then pass view_id or a unique view_name.");
 
             Guid updateId;
             if (!string.IsNullOrWhiteSpace(viewId))
             {
                 if (!Guid.TryParse(viewId.Trim(), out updateId))
                     return Error($"'{viewId}' is not a valid GUID.",
-                        "Use manage_view action='list' to find views, then pass a valid view_id GUID.");
+                        "Use manage_ui(resource='view') action='list' to find views, then pass a valid view_id GUID.");
             }
             else
             {
@@ -456,7 +455,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (currentView == null)
                 return Error(
                     $"View not found (view_id={updateId}).",
-                    $"Use manage_view action='list' entity_name='{entityName}' to find valid view IDs.");
+                    $"Use manage_ui(resource='view') action='list' entity_name='{entityName}' to find valid view IDs.");
 
             var isPersonal = currentView.LogicalName == "userquery";
             if (isPersonal && (description != null || solutionUniqueName != null))
@@ -531,7 +530,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return Error(
                         $"UPDATE view '{currentViewName}' ({updateId}) blocked — cell patch failed ({patchErrors.Count} error(s)). First: {patchErrors[0]}",
                         regenerateLayout ? "Use a cell name generated from the attributes in the supplied fetchxml."
-                            : "Use manage_view action='detail' to see current LayoutXML cells.",
+                            : "Use manage_ui(resource='view') action='detail' to see current LayoutXML cells.",
                         new { errors = patchErrors });
 
                 newLayoutXml = patchedXml;
@@ -662,10 +661,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(viewId))
                 return Error("view_id is required when action='rename'.",
-                    "Use manage_view action='list' to find views, then pass view_id.");
+                    "Use manage_ui(resource='view') action='list' to find views, then pass view_id.");
             if (!Guid.TryParse(viewId.Trim(), out var renameId))
                 return Error($"'{viewId}' is not a valid GUID.",
-                    "Use manage_view action='list' to find views, then pass a valid view_id GUID.");
+                    "Use manage_ui(resource='view') action='list' to find views, then pass a valid view_id GUID.");
             if (string.IsNullOrWhiteSpace(viewName))
                 return Error("view_name is required when action='rename'.",
                     "Pass the new name in view_name.");
@@ -676,7 +675,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (currentView == null)
                 return Error(
                     $"View not found (view_id={renameId}).",
-                    $"Use manage_view action='list' entity_name='{entityName}' to find valid view IDs.");
+                    $"Use manage_ui(resource='view') action='list' entity_name='{entityName}' to find valid view IDs.");
 
             if (solutionUniqueName != null && currentView.LogicalName == "userquery")
                 return Error("solution_name is only supported for system views (savedquery).");
@@ -719,7 +718,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(viewId) && string.IsNullOrWhiteSpace(viewName))
                 return Error("view_id or view_name is required when action='set_default'.",
-                    "Use manage_view action='list' to find views, then pass view_id or a unique view_name.");
+                    "Use manage_ui(resource='view') action='list' to find views, then pass view_id or a unique view_name.");
 
             Guid targetId;
 
@@ -727,19 +726,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (!Guid.TryParse(viewId.Trim(), out targetId))
                     return Error($"'{viewId}' is not a valid GUID.",
-                        "Use manage_view action='list' to find views, then pass a valid view_id GUID.");
+                        "Use manage_ui(resource='view') action='list' to find views, then pass a valid view_id GUID.");
 
                 var check = TryGetSystemView(targetId);
                 if (check == null)
                     return Error(
                         $"View not found (view_id={targetId}).",
-                        $"Use manage_view action='list' entity_name='{entityName}' to find valid view IDs.");
+                        $"Use manage_ui(resource='view') action='list' entity_name='{entityName}' to find valid view IDs.");
 
                 viewName = check.GetAttributeValue<string>("name") ?? targetId.ToString();
                 var qt = check.GetAttributeValue<int>("querytype");
                 if (qt != 0)
                     return Error($"Only Public views (querytype=0) can be set as default — view {targetId} is {MapQueryType(qt)} (querytype={qt}).",
-                        $"Pick a Public view (querytype=0) — use manage_view action='list' entity_name='{entityName}' to find one.");
+                        $"Pick a Public view (querytype=0) — use manage_ui(resource='view') action='list' entity_name='{entityName}' to find one.");
             }
             else
             {
@@ -823,10 +822,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(viewId))
                 return Error("view_id is required when action='undo'.",
-                    "Use manage_view action='list' to find views, then pass view_id.");
+                    "Use manage_ui(resource='view') action='list' to find views, then pass view_id.");
             if (!Guid.TryParse(viewId.Trim(), out var undoId))
                 return Error($"'{viewId}' is not a valid GUID.",
-                    "Use manage_view action='list' to find views, then pass a valid view_id GUID.");
+                    "Use manage_ui(resource='view') action='list' to find views, then pass a valid view_id GUID.");
             if (string.IsNullOrWhiteSpace(backupPathArg))
                 return Error("fetchxml (.fetchxml.xml backup file path) is required when action='undo'.",
                     "Pass BOTH backup files of one pair: fetchxml=<.fetchxml.xml path> and layoutxml=<.layoutxml.xml path>. Backup pairs are at: .devkit/manage_view/{entity}/");
@@ -885,7 +884,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (currentView == null)
                 return Error(
                     $"View not found (view_id={undoId}).",
-                    $"Use manage_view action='list' entity_name='{entityName}' to find valid view IDs.");
+                    $"Use manage_ui(resource='view') action='list' entity_name='{entityName}' to find valid view IDs.");
 
             var viewName = currentView.GetAttributeValue<string>("name") ?? "";
             var returnedTypeCode = currentView.GetAttributeValue<string>("returnedtypecode") ?? entityName;
@@ -1047,7 +1046,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(viewName))
                 return (Guid.Empty, null, $"view_name is required for '{actionName}' action.",
-                    "Use manage_view action='list' to find views, then pass view_name or view_id.", null);
+                    "Use manage_ui(resource='view') action='list' to find views, then pass view_name or view_id.", null);
 
             var nameFilter = viewName.Trim();
             var systemMatches = isPersonalView
@@ -1064,7 +1063,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var scope = isPersonalView ? "personal view" : "system view";
                 return (Guid.Empty, null,
                     $"No {scope} found matching name '{nameFilter}' for entity '{entityName}'.",
-                    $"Use manage_view action='list' entity_name='{entityName}' to find valid view names.", null);
+                    $"Use manage_ui(resource='view') action='list' entity_name='{entityName}' to find valid view names.", null);
             }
 
             if (matches.Count == 1)
@@ -1245,7 +1244,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private const string ServerValidationHint = "Fix the FetchXML and retry. Read schema://fetchxml for valid FetchXML structure.";
 
         private static string NameResolutionMessage(string actionName, string entityName, List<string> errors) =>
-            $"manage_view action='{actionName}' blocked on '{entityName}' — name resolution failed ({errors.Count} error(s)). First: {errors[0]}";
+            $"manage_ui(resource='view') action='{actionName}' blocked on '{entityName}' — name resolution failed ({errors.Count} error(s)). First: {errors[0]}";
 
         private static UpsertViewResult BuildBlockedValidationDto(string action, string entityName, Guid viewId, string viewName,
             List<string> errors, List<string> warnings)
@@ -1319,7 +1318,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (!string.Equals(resolvedEntityName, entityName, StringComparison.OrdinalIgnoreCase))
                 {
-                    errors.Add($"FetchXML root entity '{declaredEntityName}' resolves to '{resolvedEntityName}', but manage_view entity_name resolves to '{entityName}'.");
+                    errors.Add($"FetchXML root entity '{declaredEntityName}' resolves to '{resolvedEntityName}', but manage_ui(resource='view') entity_name resolves to '{entityName}'.");
                     return (fetchXml, errors);
                 }
             }
@@ -1445,7 +1444,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string ResolveEntityInput(string input, List<string> errors, string context)
         {
-            var result = DisplayNameFirstResolver.ResolveEntity(_orgService, input, "manage_view");
+            var result = DisplayNameFirstResolver.ResolveEntity(_orgService, input, "manage_ui(resource='view')");
             if (result.IsSuccess) return result.Value.LogicalName;
 
             errors.Add($"{context}: {result.Error}");
@@ -1700,7 +1699,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 item.SetAttributes[wrKey] = WebResourcePrefix + wr;
 
                 if (!WebResourceExists(wr))
-                    return $"JS web resource '{wr}' not found — create it first with manage_webresource action='create' (imageproviderwebresource must be a script file, not an image).";
+                    return $"JS web resource '{wr}' not found — create it first with manage_assets(resource='webresource') action='create' (imageproviderwebresource must be a script file, not an image).";
             }
             return null;
         }

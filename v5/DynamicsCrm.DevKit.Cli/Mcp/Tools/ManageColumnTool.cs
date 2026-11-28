@@ -28,7 +28,6 @@ using DynamicsCrm.DevKit.Shared;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ManageColumnTool : McpToolBase
     {
         private const int AttributeComponentType = 2;
@@ -43,7 +42,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private bool? _requestedAlternateKey;
         private string _effectiveSolutionName;
         private FormulaColumnSpec _requestedFormulaUpdate;
-        private string _workspaceFolder;
+        internal string _workspaceFolder;
 
         public ManageColumnTool(IOrganizationService orgService, McpDryRunOptions options, McpExecutionContext context, IWebApiExecutor webApi) : this(orgService, options, context, webApi, null) { }
 
@@ -74,10 +73,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Add/rename/remove options on an existing picklist via add_options/update_options/delete_options\n\n" +
             "RELATED TOOLS:\n" +
             "- inspect_metadata(resource='tables') → discover entities and attribute logical names\n" +
-            "- manage_table → create the table before its columns\n" +
-            "- manage_relationship → 1:N / N:N relationships (lookup_target auto-creates 1:N)\n" +
-            "- manage_choice → global option sets\n" +
-            "- manage_record_file → file/image column data upload and download\n" +
+            "- manage_schema(resource='table') → create the table before its columns\n" +
+            "- manage_schema(resource='relationship') → 1:N / N:N relationships (lookup_target auto-creates 1:N)\n" +
+            "- manage_schema(resource='choice') → global option sets\n" +
+            "- manage_data(resource='file') → file/image column data upload and download\n" +
             "- execute_webapi → raw Web API for endpoints not covered here")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Logical name (e.g. 'account').")] string entity_name = "",
@@ -364,7 +363,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (lookupName.Length > 0)
             {
                 var attributeResolve = DisplayNameFirstResolver.ResolveAttribute(_orgService, entity_name, lookupName,
-                    "manage_column", exactLogicalName: hasAttributeType, exactDisplayNameFallback: exactDisplayNameFallback);
+                    "manage_schema(resource='column')", exactLogicalName: hasAttributeType, exactDisplayNameFallback: exactDisplayNameFallback);
                 if (attributeResolve.IsSuccess)
                 {
                     existingMetadata = attributeResolve.Value;
@@ -466,7 +465,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (clearAutoNumber)
                 return Error(
                     "clear_auto_number is UPDATE-only — it removes the autonumber pattern from an existing string column.",
-                    "To create an autonumber column pass auto_number_format. To convert an existing column back to plain text, call manage_column with logical_name + clear_auto_number=true.");
+                    "To create an autonumber column pass auto_number_format. To convert an existing column back to plain text, call manage_schema(resource='column') with logical_name + clear_auto_number=true.");
 
             if (autoNumberSeed.HasValue && string.IsNullOrWhiteSpace(autoNumberFormat))
                 return Error(
@@ -1253,7 +1252,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var targets = new List<string>();
             foreach (var targetInput in targetInputs)
             {
-                var targetResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, targetInput, "manage_column");
+                var targetResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, targetInput, "manage_schema(resource='column')");
                 if (!targetResolve.IsSuccess)
                     return Error($"lookup_target '{targetInput}': {targetResolve.Error.Split("\r\n")[0]}", "Use inspect_metadata(resource='tables') to find valid entity logical names.");
                 targets.Add(targetResolve.Value.LogicalName);
@@ -1571,9 +1570,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(globalOptionSetName))
             {
-                var choiceResolve = DisplayNameFirstResolver.ResolveGlobalOptionSet(_orgService, globalOptionSetName, "manage_column");
+                var choiceResolve = DisplayNameFirstResolver.ResolveGlobalOptionSet(_orgService, globalOptionSetName, "manage_schema(resource='column')");
                 if (!choiceResolve.IsSuccess)
-                    return Error($"global_optionset_name '{globalOptionSetName.Trim()}': {choiceResolve.Error.Split("\r\n")[0]}", "Use manage_choice(action='list') to find valid option set names.");
+                    return Error($"global_optionset_name '{globalOptionSetName.Trim()}': {choiceResolve.Error.Split("\r\n")[0]}", "Use manage_schema(resource='choice', action='list') to find valid option set names.");
                 globalOptionSetName = choiceResolve.Value.Name;
 
                 // Use existing global option set
@@ -2031,7 +2030,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (ok) return null;
             return
                 $"Column {succeededAction} but SetAutoNumberSeed failed after multiple retry attempts " +
-                $"(lock contention). The column itself is fine — retry the seed: manage_column with logical_name='{attributeName}' and auto_number_seed={seed}.";
+                $"(lock contention). The column itself is fine — retry the seed: manage_schema(resource='column') with logical_name='{attributeName}' and auto_number_seed={seed}.";
         }
 
         private string ResolveCreatedAttributeLogicalName(string entityName, Guid metadataId, string fallbackLogicalName)
@@ -2256,7 +2255,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var mappingError = TryResolveRollupRelationshipMapping(
                         resolvedFormula, sourceEntity, entityName, out relationshipMapping);
-                    if (mappingError != null) return Error(mappingError, "Use manage_relationship to check the 1:N relationships between the source and target tables.");
+                    if (mappingError != null) return Error(mappingError, "Use manage_schema(resource='relationship') to check the 1:N relationships between the source and target tables.");
                 }
 
                 if (sourceTypeVal == 3)
@@ -3635,7 +3634,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static (string ResolvedName, string Error) ResolveEntityName(IOrganizationService orgService, string entityName)
         {
-            var resolved = DisplayNameFirstResolver.ResolveEntity(orgService, entityName, "manage_column");
+            var resolved = DisplayNameFirstResolver.ResolveEntity(orgService, entityName, "manage_schema(resource='column')");
             if (resolved.IsSuccess)
                 return (resolved.Value.LogicalName, null);
 
@@ -3718,7 +3717,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var restoreParam = sourceType == 3 ? "formula_expression" : "raw_formula_definition";
             var snapshot = new ColumnFormulaBackup
             {
-                Note = $"Backup of {sourceTypeName} column formula before update. To restore: call manage_column(entity_name='{entityName}', logical_name='{logicalName}', {restoreParam}=<formulaDefinition from this file>).",
+                Note = $"Backup of {sourceTypeName} column formula before update. To restore: call manage_schema(resource='column', entity_name='{entityName}', logical_name='{logicalName}', {restoreParam}=<formulaDefinition from this file>).",
                 EntityName = entityName,
                 LogicalName = logicalName,
                 SourceType = sourceType,

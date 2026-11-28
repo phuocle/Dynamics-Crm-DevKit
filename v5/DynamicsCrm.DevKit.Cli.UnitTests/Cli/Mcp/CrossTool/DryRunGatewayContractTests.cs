@@ -95,13 +95,9 @@ public class DryRunGatewayContractTests
     {
         var expected = new HashSet<string>(StringComparer.Ordinal)
         {
-            "upsert_records", "manage_record", "publish_customizations",
-            "manage_deleted_records", "manage_role", "manage_environment_variable",
-            "manage_chart", "manage_view", "manage_form", "manage_webresource",
-            "manage_choice", "manage_table", "manage_relationship", "manage_app",
-            "manage_command", "execute_webapi", "manage_column", "manage_ribbon",
-            "generate_demo_data", "manage_record_file", "manage_report",
-            "manage_function", "manage_custom_api"
+            "manage_data", "manage_schema", "manage_ui",
+            "manage_commanding", "manage_logic", "manage_assets",
+            "manage_admin", "execute_webapi"
         };
 
         var actual = typeof(UpsertRecordsTool).Assembly

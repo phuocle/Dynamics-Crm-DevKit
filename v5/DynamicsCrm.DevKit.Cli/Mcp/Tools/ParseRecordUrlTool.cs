@@ -37,7 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Call first when the user pastes a model-driven app, Web API, maker, admin, or legacy URL\n" +
             "- Extract a GUID while preserving its URL context\n\n" +
             "RELATED TOOLS:\n" +
-            "- manage_record → read or change a parsed record\n" +
+            "- manage_data(resource='record') → read or change a parsed record\n" +
             "- inspect_metadata(resource='tables') → resolve or verify an unknown entity logical name")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("URL, GUID, or text. URL-decoded automatically; first matching parser wins.")] string input = "",

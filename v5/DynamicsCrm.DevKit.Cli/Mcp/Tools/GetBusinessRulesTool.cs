@@ -44,9 +44,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- inspect_automation(resource='workflows') → classic workflow definitions (background async + realtime sync)\n" +
             "- inspect_automation(resource='messages') → legacy workflow Custom Actions (category=3) + SDK messages\n" +
-            "- manage_custom_api → modern Custom API definitions\n" +
+            "- manage_logic(resource='custom_api') → modern Custom API definitions\n" +
             "- inspect_automation(resource='bpfs') → BPF definitions + stages\n" +
-            "- manage_record(action='read', columns='xaml') → raw XAML when parse is incomplete")]
+            "- manage_data(resource='record', action='read', columns='xaml') → raw XAML when parse is incomplete")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Entity display name, logical name, or schema name.")] string entity_name = "",
             [Description("GUID. Empty = list mode; set with entity_name = detail mode.")] string rule_id = "",

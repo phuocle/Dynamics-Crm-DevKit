@@ -266,7 +266,7 @@ public sealed class Phase1RouterTests
         var protocolTools = sp.GetRequiredService<IOptions<McpServerOptions>>().Value
             .ToolCollection!.Select(t => t.ProtocolTool).ToList();
 
-        Assert.AreEqual(29, protocolTools.Count, "Phase 1 must expose exactly 29 tools (6 RO + 23 RW).");
+        Assert.AreEqual(14, protocolTools.Count, "Consolidated MCP server must expose exactly 14 tools (6 RO + 8 RW).");
 
         var names = protocolTools.Select(t => t.Name).ToHashSet(StringComparer.Ordinal);
         foreach (var expected in Phase1ToolNames)

@@ -236,7 +236,7 @@ public sealed class PublishCustomizationsFakeXrmEasySweepTests
 
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "entities 'zzz': could not be resolved.");
-        StringAssert.Contains(Text(result), "Use inspect_metadata(resource='tables') to list entities before calling publish_customizations.");
+        StringAssert.Contains(Text(result), "Use inspect_metadata(resource='tables') to list entities before calling manage_admin(resource='publish').");
     }
 
     [TestMethod]
@@ -272,7 +272,7 @@ public sealed class PublishCustomizationsFakeXrmEasySweepTests
 
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "appmodules 'Nope': could not be resolved.");
-        StringAssert.Contains(Text(result), "Use manage_app(action='list') to discover valid appmodule identifiers.");
+        StringAssert.Contains(Text(result), "Use manage_ui(resource='app', action='list') to discover valid appmodule identifiers.");
     }
 
     [TestMethod]
@@ -311,7 +311,7 @@ public sealed class PublishCustomizationsFakeXrmEasySweepTests
 
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "webresources 'nope.js': no web resource found with that name.");
-        StringAssert.Contains(Text(result), "Use manage_webresource(action='list') to find valid names.");
+        StringAssert.Contains(Text(result), "Use manage_assets(resource='webresource', action='list') to find valid names.");
     }
 
     [TestMethod]

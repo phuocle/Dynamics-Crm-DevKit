@@ -25,18 +25,18 @@ public class ManageChartToolTests
     [TestMethod]
     public void ManageChart_ToolHasMcpServerToolAttribute()
     {
-        var attr = ToolType.GetCustomAttribute<ModelContextProtocol.Server.McpServerToolTypeAttribute>();
-        Assert.IsNotNull(attr, "ManageChartTool must have [McpServerToolType] attribute.");
+        var attr = typeof(ManageUiTool).GetCustomAttribute<ModelContextProtocol.Server.McpServerToolTypeAttribute>();
+        Assert.IsNotNull(attr, "ManageUiTool must have [McpServerToolType] attribute.");
     }
 
     [TestMethod]
     public void ManageChart_IsMarkedAsMutatingTool()
     {
-        var attr = ToolType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+        var attr = typeof(ManageUiTool).GetMethods(BindingFlags.Public | BindingFlags.Instance)
             .Select(m => m.GetCustomAttribute<McpServerToolAttribute>())
-            .FirstOrDefault(a => a != null && (a.Name ?? "") == "manage_chart");
-        Assert.IsNotNull(attr, "manage_chart must have [McpServerTool] attribute.");
-        Assert.IsFalse(attr.ReadOnly, "manage_chart can change Dataverse charts.");
+            .FirstOrDefault(a => a != null && (a.Name ?? "") == "manage_ui");
+        Assert.IsNotNull(attr, "manage_ui must have [McpServerTool] attribute.");
+        Assert.IsFalse(attr.ReadOnly, "manage_ui can change Dataverse charts.");
     }
 
     [TestMethod]

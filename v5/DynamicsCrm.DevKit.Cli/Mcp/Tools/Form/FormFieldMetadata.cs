@@ -65,7 +65,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                     candidates,
                     "[AmbiguousField]",
                     "[NotFoundField]",
-                    $"Tip: Use inspect_metadata(resource='tables', name='{entityName}') to list fields before calling manage_form.",
+                    $"Tip: Use inspect_metadata(resource='tables', name='{entityName}') to list fields before calling manage_ui(resource='form').",
                     "operations field");
 
                 if (!result.IsSuccess)

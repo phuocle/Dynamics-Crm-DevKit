@@ -34,13 +34,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                         "Add \"label\":\"<button display text>\".", null);
             if (string.IsNullOrWhiteSpace(library))
                 return ("add_button requires 'library' (web resource JS file for button click).",
-                        "Add \"library\":\"<web resource JS file>\". Use manage_webresource(action='list') to find valid names.", null);
+                        "Add \"library\":\"<web resource JS file>\". Use manage_assets(resource='webresource', action='list') to find valid names.", null);
             if (string.IsNullOrWhiteSpace(function))
                 return ("add_button requires 'function' (JavaScript function name for button click).",
                         "Add \"function\":\"<JavaScript function name>\" defined in the library.", null);
             if (string.IsNullOrWhiteSpace(enableLibrary))
                 return ("add_button requires 'enable_library' (web resource JS file for enable rule).",
-                        "Add \"enable_library\":\"<web resource JS file>\" for the enable rule. Use manage_webresource(action='list') to find valid names.", null);
+                        "Add \"enable_library\":\"<web resource JS file>\" for the enable rule. Use manage_assets(resource='webresource', action='list') to find valid names.", null);
             if (string.IsNullOrWhiteSpace(enableFunction))
                 return ("add_button requires 'enable_function' (JavaScript function name for enable rule).",
                         "Add \"enable_function\":\"<JavaScript function name>\" for the enable rule.", null);
@@ -50,9 +50,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 return ($"Invalid surface '{surface}'.", "Valid: form, main_grid, sub_grid.", null);
 
             var libError = _validation.ValidateWebResourceExists(library);
-            if (libError != null) return (libError, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
+            if (libError != null) return (libError, "Use manage_assets(resource='webresource', action='list') to find valid JS web resource names.", null);
             var enableLibError = _validation.ValidateWebResourceExists(enableLibrary);
-            if (enableLibError != null) return (enableLibError, "Use manage_webresource(action='list') to find valid JS web resource names.", null);
+            if (enableLibError != null) return (enableLibError, "Use manage_assets(resource='webresource', action='list') to find valid JS web resource names.", null);
             var (dependencies, dependencyError, dependencyHint) = RibbonJavaScript.ReadDependencies(op, _validation);
             if (dependencyError != null) return (dependencyError, dependencyHint, null);
 
@@ -70,7 +70,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (!string.IsNullOrWhiteSpace(modernImage))
             {
                 var imgError = _validation.ValidateWebResourceExists(modernImage);
-                if (imgError != null) return (imgError, "Use manage_webresource(action='list') to find valid image web resources (e.g. svg).", null);
+                if (imgError != null) return (imgError, "Use manage_assets(resource='webresource', action='list') to find valid image web resources (e.g. svg).", null);
             }
 
             var slug = RibbonXmlHelpers.GenerateSlug(label);
@@ -187,7 +187,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             {
                 if (string.IsNullOrWhiteSpace(labelHint))
                     return ("update_button requires 'button_id' or 'label' to identify the button.",
-                            "Provide 'button_id' (see manage_ribbon action='buttons') or 'label' of an existing custom button.", null);
+                            "Provide 'button_id' (see manage_commanding(resource='ribbon') action='buttons') or 'label' of an existing custom button.", null);
 
                 var labelResolution = ResolveCustomButtonIdByLabel(ribbonDoc, labelHint);
                 if (labelResolution.error != null)
@@ -211,7 +211,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                         "This is likely an OOB (out-of-the-box) button. " +
                         "update_button only supports custom buttons defined in RibbonDiffXml. " +
                         "For OOB buttons, only hide_button and show_button are supported.",
-                        "Use manage_ribbon(action='buttons') to list custom Button Ids.", null);
+                        "Use manage_commanding(resource='ribbon', action='buttons') to list custom Button Ids.", null);
 
             var commandId = buttonId.Replace(".Button", ".Command");
             var enableRuleId = buttonId.Replace(".Button", ".EnableRule");
@@ -257,7 +257,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (!string.IsNullOrWhiteSpace(newModernImage))
             {
                 var imgError = _validation.ValidateWebResourceExists(newModernImage);
-                if (imgError != null) return (imgError, "Use manage_webresource(action='list') to find valid image web resources (e.g. svg).", null);
+                if (imgError != null) return (imgError, "Use manage_assets(resource='webresource', action='list') to find valid image web resources (e.g. svg).", null);
                 buttonEl.SetAttributeValue("Image16by16", $"$webresource:{newModernImage}");
                 buttonEl.SetAttributeValue("Image32by32", $"$webresource:{newModernImage}");
                 buttonEl.SetAttributeValue("ModernImage", $"$webresource:{newModernImage}");
@@ -361,7 +361,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             var buttonId = RibbonXmlHelpers.GetJsonString(op, "button_id");
             if (string.IsNullOrWhiteSpace(buttonId))
                 return ("hide_button requires 'button_id' (e.g. 'Mscrm.Form.v4_mcp.Deactivate').",
-                        "Use manage_ribbon(action='buttons') to see the Button Id column.",
+                        "Use manage_commanding(resource='ribbon', action='buttons') to see the Button Id column.",
                         null);
 
             buttonId = buttonId.Trim();
@@ -393,13 +393,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
                 if (buttonEl == null)
                     return ($"Button '{buttonId}' not found in RibbonDiffXml.",
-                            "Use manage_ribbon(action='buttons') to verify the Button Id.",
+                            "Use manage_commanding(resource='ribbon', action='buttons') to verify the Button Id.",
                             null);
 
                 var commandId = buttonEl.Attribute("Command")?.Value;
                 if (string.IsNullOrWhiteSpace(commandId))
                     return ($"Button '{buttonId}' has no Command attribute.",
-                            "Use manage_ribbon(action='buttons') to verify the Button Id; the button must have a CommandDefinition.", null);
+                            "Use manage_commanding(resource='ribbon', action='buttons') to verify the Button Id; the button must have a CommandDefinition.", null);
 
                 var commandDefEl = ribbonDoc.Root
                     ?.Element("CommandDefinitions")
@@ -408,7 +408,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
                 if (commandDefEl == null)
                     return ($"CommandDefinition '{commandId}' not found for button '{buttonId}'.",
-                            "Use manage_ribbon(action='buttons') to verify the Button Id.", null);
+                            "Use manage_commanding(resource='ribbon', action='buttons') to verify the Button Id.", null);
 
                 var alwaysDisabledRuleId = $"devkit.{entityName}.AlwaysDisabled.EnableRule";
 
@@ -440,7 +440,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             var buttonId = RibbonXmlHelpers.GetJsonString(op, "button_id");
             if (string.IsNullOrWhiteSpace(buttonId))
                 return ("show_button requires 'button_id' (e.g. 'Mscrm.Form.v4_mcp.Deactivate').",
-                        "Use manage_ribbon(action='buttons') to see the Button Id column.",
+                        "Use manage_commanding(resource='ribbon', action='buttons') to see the Button Id column.",
                         null);
 
             buttonId = buttonId.Trim();
@@ -467,7 +467,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
                 if (buttonEl == null)
                     return ($"Button '{buttonId}' not found in RibbonDiffXml.",
-                            "Use manage_ribbon(action='buttons') to verify the Button Id.", null);
+                            "Use manage_commanding(resource='ribbon', action='buttons') to verify the Button Id.", null);
 
                 var commandId = buttonEl.Attribute("Command")?.Value;
                 var commandDefEl = ribbonDoc.Root

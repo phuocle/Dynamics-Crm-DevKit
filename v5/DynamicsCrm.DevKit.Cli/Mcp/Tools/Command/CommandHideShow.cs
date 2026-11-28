@@ -63,7 +63,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (!Guid.TryParse(commandId.Trim(), out var cmdGuid))
                     return Error($"'{commandId.Trim()}' is not a valid GUID.",
-                        "Pass an appaction GUID. Use manage_command(action='list') to find command IDs.");
+                        "Pass an appaction GUID. Use manage_commanding(resource='command', action='list') to find command IDs.");
 
                 var existing = RetrieveAppActionOrNull(cmdGuid,
                     "name", "buttonlabeltext", "hidden", "context", "contextvalue",
@@ -72,7 +72,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "onclickeventjavascriptwebresourceid", "visibilitytype");
                 if (existing == null)
                     return Error($"Command '{commandId.Trim()}' not found.",
-                        "Use manage_command(action='list') to find valid command IDs.");
+                        "Use manage_commanding(resource='command', action='list') to find valid command IDs.");
 
                 var existingContext = existing.GetAttributeValue<OptionSetValue>("context")?.Value;
                 var existingContextVal = existing.GetAttributeValue<string>("contextvalue");
@@ -224,7 +224,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var globalFound = FindCommandByLabelScoped(label.Trim(), null, globalLocValue, "global");
                 if (globalFound == null)
                     return Error($"Global command '{label.Trim()}' not found at location '{LocationMap[globalLocValue]}'.",
-                        "Use manage_command(action='list', scope='global') to find existing global commands.");
+                        "Use manage_commanding(resource='command', action='list', scope='global') to find existing global commands.");
 
                 var globalAlreadyHidden = globalFound.GetAttributeValue<bool?>("hidden") ?? false;
                 if (globalAlreadyHidden == wantHidden)
@@ -303,7 +303,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Pass one of: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'.");
             if (wantHidden && string.IsNullOrWhiteSpace(appId) && string.IsNullOrWhiteSpace(appName))
                 return Error("app_id or app_name is required for action='hide'.",
-                    "Multiple apps may exist — specify which app to apply the hide override to. Use manage_app(action='list') to discover apps.");
+                    "Multiple apps may exist — specify which app to apply the hide override to. Use manage_ui(resource='app', action='list') to discover apps.");
 
             if (!LocationFilterMap.TryGetValue(location.Trim(), out var locationValue))
                 return Error($"Invalid location '{location.Trim()}'.",
@@ -409,8 +409,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Block if this label belongs to a custom classic ribbon button
             if (IsClassicRibbonButton(trimmedLabel, entityLogical))
-                return Error($"'{trimmedLabel}' is a classic ribbon button defined via manage_ribbon and cannot be hidden using manage_command.",
-                    "Use manage_ribbon to hide it instead.");
+                return Error($"'{trimmedLabel}' is a classic ribbon button defined via manage_commanding(resource='ribbon') and cannot be hidden using manage_commanding(resource='command').",
+                    "Use manage_commanding(resource='ribbon') to hide it instead.");
 
             Guid? resolvedAppId = null;
             if (normalizedScope == "app")
@@ -418,7 +418,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 resolvedAppId = ResolveAppId(appId, appName, out var appResolveError2);
                 if (resolvedAppId == null)
                     return Error((appResolveError2 ?? "Could not resolve app.").Split("\r\n")[0],
-                        "Pass app_id (app module GUID) or app_name. Use manage_app(action='list') to discover apps.");
+                        "Pass app_id (app module GUID) or app_name. Use manage_ui(resource='app', action='list') to discover apps.");
             }
 
             var oobNamePrefix = LocationOobNamePrefix(locationValue);
@@ -674,7 +674,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(entityName))
                 return (null, "entity_name is required.");
 
-            var result = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "manage_command");
+            var result = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "manage_commanding(resource='command')");
             return result.IsSuccess
                 ? (result.Value.LogicalName, null)
                 : (null, $"entity_name '{entityName.Trim()}': {result.Error}");

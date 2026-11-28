@@ -194,7 +194,7 @@ public sealed class ManageChartErrorPathCoverageTests
 
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(result.GetText(), "not found");
-        StringAssert.Contains(result.GetText(), "Use manage_chart(action='list') to find existing chart ids.");
+        StringAssert.Contains(result.GetText(), "Use manage_ui(resource='chart', action='list') to find existing chart ids.");
     }
 
     [TestMethod]

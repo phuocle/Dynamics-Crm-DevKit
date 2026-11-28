@@ -380,7 +380,7 @@ public sealed class ManageWebResourceFakeXrmEasyFullCoverageTests
         var result = NewTool().manage_webresource("detail", web_resource_id: "Ghost Resource");
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(Text(result), "'Ghost Resource' was not found by Display Name");
-        StringAssert.Contains(Text(result), "Use manage_webresource(action='list') to discover web resources.");
+        StringAssert.Contains(Text(result), "Use manage_assets(resource='webresource', action='list') to discover web resources.");
     }
 
     [TestMethod]

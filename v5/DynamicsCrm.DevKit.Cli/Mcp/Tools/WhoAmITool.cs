@@ -47,7 +47,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Verify MCP process version, build timestamp, assembly path, and SHA after reinstall\n\n" +
             "RELATED TOOLS:\n" +
             "- query_data(mode='fetchxml') → query records with the returned userId\n" +
-            "- manage_role → inspect role definitions and assignments")]
+            "- manage_admin(resource='role') → inspect role definitions and assignments")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)

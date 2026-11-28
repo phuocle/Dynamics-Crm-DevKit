@@ -83,7 +83,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 resolvedAppId = ResolveAppId(appId, appName, out var appResolveError);
                 if (resolvedAppId == null)
                     return Error((appResolveError ?? "Could not resolve app.").Split("\r\n")[0],
-                        "Pass app_id (app module GUID) or app_name. Use manage_app(action='list') to discover apps.");
+                        "Pass app_id (app module GUID) or app_name. Use manage_ui(resource='app', action='list') to discover apps.");
             }
 
             var onclickTypeValue = 0;
@@ -147,7 +147,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var iconWrId = ResolveWebResourceId(iconWebResource.Trim());
                 if (iconWrId == null)
                     return Error($"Icon web resource '{iconWebResource.Trim()}' not found.",
-                        "Use manage_webresource(action='list') to find valid web resource names.");
+                        "Use manage_assets(resource='webresource', action='list') to find valid web resource names.");
                 entity["iconwebresourceid"] = new EntityReference("webresource", iconWrId.Value);
             }
 
@@ -164,7 +164,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var wrId = ResolveWebResourceId(jsWebResource.Trim());
                     if (wrId == null)
                         return Error($"Web resource '{jsWebResource.Trim()}' not found.",
-                            "Use manage_webresource(action='list') to find valid web resource names.");
+                            "Use manage_assets(resource='webresource', action='list') to find valid web resource names.");
                     entity["onclickeventjavascriptwebresourceid"] = new EntityReference("webresource", wrId.Value);
                 }
                 if (!string.IsNullOrWhiteSpace(jsFunction))
@@ -245,15 +245,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (string.IsNullOrWhiteSpace(commandId))
                 return Error("command_id is required for action='update'.",
-                    "Pass the target appaction GUID. Use manage_command(action='list') to find command IDs.");
+                    "Pass the target appaction GUID. Use manage_commanding(resource='command', action='list') to find command IDs.");
             if (!Guid.TryParse(commandId.Trim(), out var cmdGuid))
                 return Error($"'{commandId.Trim()}' is not a valid GUID.",
-                    "Pass an appaction GUID. Use manage_command(action='list') to find command IDs.");
+                    "Pass an appaction GUID. Use manage_commanding(resource='command', action='list') to find command IDs.");
 
             var existing = RetrieveAppActionOrNull(cmdGuid, "name", "buttonlabeltext", "contextvalue", "appmoduleid");
             if (existing == null)
                 return Error($"Command '{commandId.Trim()}' not found.",
-                    "Use manage_command(action='list') to find valid command IDs.");
+                    "Use manage_commanding(resource='command', action='list') to find valid command IDs.");
 
             var entity = new Entity("appaction", cmdGuid);
             var changes = new List<string>();
@@ -284,7 +284,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var wrId = ResolveWebResourceId(jsWebResource.Trim());
                 if (wrId == null)
                     return Error($"Web resource '{jsWebResource.Trim()}' not found.",
-                        "Use manage_webresource(action='list') to find valid web resource names.");
+                        "Use manage_assets(resource='webresource', action='list') to find valid web resource names.");
                 entity["onclickeventjavascriptwebresourceid"] = new EntityReference("webresource", wrId.Value);
                 changes.Add($"jsWebResource='{jsWebResource.Trim()}'");
             }
@@ -321,7 +321,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var iconWrId = ResolveWebResourceId(iconWebResource.Trim());
                     if (iconWrId == null)
                         return Error($"Icon web resource '{iconWebResource.Trim()}' not found.",
-                            "Use manage_webresource(action='list') to find valid web resource names.");
+                            "Use manage_assets(resource='webresource', action='list') to find valid web resource names.");
                     entity["iconwebresourceid"] = new EntityReference("webresource", iconWrId.Value);
                     changes.Add($"iconWebResource='{iconWebResource.Trim()}'");
                 }

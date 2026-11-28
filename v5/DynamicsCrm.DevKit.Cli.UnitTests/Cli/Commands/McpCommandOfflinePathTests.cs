@@ -46,7 +46,7 @@ public class McpCommandOfflinePathTests
         Assert.AreEqual(0, exit);
         StringAssert.Contains(output, "get_context");
         StringAssert.Contains(output, "query_data");
-        StringAssert.Contains(output, "manage_record");
+        StringAssert.Contains(output, "manage_data");
     }
 
     [TestMethod]

@@ -19,7 +19,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ManageDeletedRecordsTool : McpToolBase
     {
         private const string RecycleBinConfigTable = "recyclebinconfig";
@@ -65,7 +64,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Restore one or many deleted records back to the live table (restore prepends name_prefix, default '[RESTORE] ', to the primary name)\n" +
             "- Check (status) or toggle (turn on/off) the org-level 'Keep deleted Dataverse records' setting\n\n" +
             "RELATED TOOLS:\n" +
-            "- manage_record → live CRUD; delete becomes soft-delete when the bin is ON\n" +
+            "- manage_data(resource='record') → live CRUD; delete becomes soft-delete when the bin is ON\n" +
             "- inspect_diagnostics(resource='audit') → who deleted a record and when\n" +
             "- execute_webapi → raw access (Restore action is redirected here)")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
@@ -133,7 +132,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             entityName = entityName.Trim();
             nameFilter = nameFilter?.Trim() ?? "";
 
-            var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_deleted_records");
+            var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_data(resource='deleted')");
             if (!entityResult.IsSuccess)
                 return Error(entityResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to list entities.");
             var logicalName = entityResult.Value.LogicalName;
@@ -217,7 +216,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             entityName = entityName.Trim();
 
-            var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_deleted_records");
+            var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_data(resource='deleted')");
             if (!entityResult.IsSuccess)
                 return Error(entityResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to list entities.");
             var logicalName = entityResult.Value.LogicalName;
@@ -246,7 +245,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     EntityDisplayName = displayName,
                     RecordId = recordId.Trim(),
                     NotFound = true,
-                    NotFoundHint = $"Record not found in the bin. It may be live (not deleted), or it never existed, or the retention window has passed. Try manage_record(action='read', entity_name='{displayName}', record_id='{recordId.Trim()}') to check if it's live."
+                    NotFoundHint = $"Record not found in the bin. It may be live (not deleted), or it never existed, or the retention window has passed. Try manage_data(resource='record', action='read', entity_name='{displayName}', record_id='{recordId.Trim()}') to check if it's live."
                 };
                 return Success($"{logicalName} {recordId.Trim()}: not found in bin.", notFound);
             }
@@ -312,7 +311,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Pass entity_name (e.g. 'Account' or 'account'). Even when restoring mixed entities, entity_name is required to build the Target Entity.");
 
             entityName = entityName.Trim();
-            var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_deleted_records");
+            var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName, "manage_data(resource='deleted')");
             if (!entityResult.IsSuccess)
                 return Error(entityResult.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to list entities.");
             var logicalName = entityResult.Value.LogicalName;

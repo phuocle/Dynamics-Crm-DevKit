@@ -54,29 +54,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "RELATED TOOLS:\n" +
             "- get_context(action='whoami') → current connection identity (GET WhoAmI is redirected here)\n" +
-            "- inspect_metadata(resource='tables') / manage_table / manage_column / manage_relationship → schema\n" +
-            "- manage_choice → option sets\n" +
-            "- manage_form / manage_view / manage_app → UI; sitemap via manage_app\n" +
-            "- manage_environment_variable / manage_webresource / manage_role → config\n" +
-            "- manage_command → command bar\n" +
-            "- manage_record_file → file/image column data\n" +
-            "- manage_deleted_records → restore\n" +
-            "- query_data(mode='sql') → SQL SELECT queries; the ?sql= query option is BLOCKED/REDIRECTED to query_data(mode='sql')\n" +
-            "- publish_customizations → publish after metadata changes")]
+            "- inspect_metadata(resource='tables') / manage_schema → tables, columns, relationships, choices\n" +
+            "- manage_ui → forms, views, charts, model-driven apps & sitemap\n" +
+            "- manage_commanding → classic ribbon & modern command bar\n" +
+            "- manage_logic → Custom APIs & Power Fx functions\n" +
+            "- manage_assets → web resources & SSRS reports\n" +
+            "- manage_data → record CRUD, bulk upsert, file/image columns, deleted records, demo data\n" +
+            "- manage_admin → security roles, environment variables, publish customizations\n" +
+            "- query_data(mode='sql') → SQL SELECT queries; the ?sql= query option is BLOCKED/REDIRECTED to query_data(mode='sql')")]
+#nullable enable
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
-            [Description("GET, POST, PUT, PATCH, or DELETE. Default GET.")] string method = "GET",
-            [Description("Relative path, e.g. 'accounts', 'contacts(guid)', '$metadata'. Writes require a Dataverse entity set or a single row. SDK adds base URL. Required.")] string url = "",
-            [Description("JSON body for POST/PUT/PATCH. Default empty (no body).")] string body = "",
-            [Description("Extra headers as JSON object, e.g. '{\"Prefer\":\"return=representation\"}'. Default empty.")] string headers = "",
-            [Description("Include response headers in text output. Default false.")] bool include_headers = false,
-            [Description("Truncate response body. Use 50 for large outputs ($metadata). Default 200.")] int max_response_lines = 200,
-            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
+            [Description("GET, POST, PUT, PATCH, or DELETE. Default GET.")] string? method = "GET",
+            [Description("Relative path, e.g. 'accounts', 'contacts(guid)', '$metadata'. Writes require a Dataverse entity set or a single row. SDK adds base URL. Required.")] string? url = null,
+            [Description("JSON body for POST/PUT/PATCH. Default empty (no body).")] string? body = null,
+            [Description("Extra headers as JSON object, e.g. '{\"Prefer\":\"return=representation\"}'. Default empty.")] string? headers = null,
+            [Description("Include response headers in text output. Default false.")] bool? include_headers = null,
+            [Description("Truncate response body. Use 50 for large outputs ($metadata). Default 200.")] int? max_response_lines = null,
+            [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string? env = null,
             System.Threading.CancellationToken cancellationToken = default)
+#nullable restore
         {
             return DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.InvokeAsync(_connections, env, conn =>
             {
                 var worker = new ExecuteWebApiTool(conn.WebApi, conn.Options, conn.Context, conn.ConnectionInfo) { OrgService = conn.OrgService };
-                return System.Threading.Tasks.Task.FromResult(worker.execute_webapi(method, url, body, headers, include_headers, max_response_lines));
+                return System.Threading.Tasks.Task.FromResult(worker.execute_webapi(
+                    method ?? "GET", url ?? "", body ?? "", headers ?? "", include_headers ?? false, max_response_lines ?? 200));
             }, cancellationToken);
         }
 
@@ -131,7 +133,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (httpMethod != HttpMethod.Get && !IsRowMutation(httpMethod, decodedPath))
                     return Error("Only verified Dataverse row CRUD endpoints are allowed for Web API writes.",
-                        "Use manage_record for row changes or a dedicated MCP tool for supported metadata changes.");
+                        "Use manage_data(resource='record') for row changes or a dedicated MCP tool for supported metadata changes.");
 
                 var requestBody = string.IsNullOrWhiteSpace(body) ? null : body.Trim();
                 if (_options.DryRun && httpMethod != HttpMethod.Get)
@@ -247,39 +249,39 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static readonly (string UrlPattern, string RedirectTool, string Reason)[] BlockedEndpoints =
         [
-            ("systemforms(", "manage_form or manage_form(operations)",
+            ("systemforms(", "manage_ui(resource='form') or manage_ui(resource='form', operations)",
                 "FormXML defines the UI layout for ALL users. A malformed FormXML breaks the entire entity form with no undo."),
-            ("savedqueries(", "manage_view",
+            ("savedqueries(", "manage_ui(resource='view')",
                 "SavedQuery defines view columns and query for ALL users. A FetchXML/LayoutXML mismatch hides all data or crashes the grid."),
-            ("userqueries(", "manage_view",
+            ("userqueries(", "manage_ui(resource='view')",
                 "UserQuery defines personal views. A malformed FetchXML/LayoutXML breaks the view with no undo."),
-            ("sitemaps(", "manage_app",
-                "SiteMap defines app navigation for ALL users. A malformed SiteMap breaks navigation for the entire app. SiteMap is managed together with its model-driven app. Do not use execute_webapi for app or sitemap creation/update. Use manage_app."),
+            ("sitemaps(", "manage_ui(resource='app')",
+                "SiteMap defines app navigation for ALL users. A malformed SiteMap breaks navigation for the entire app. SiteMap is managed together with its model-driven app. Do not use execute_webapi for app or sitemap creation/update. Use manage_ui(resource='app')."),
 
-            ("environmentvariabledefinitions(", "manage_environment_variable",
-                "Environment variable definitions have linked value records. The manage_environment_variable tool handles definition+value atomically with solution awareness."),
-            ("environmentvariablevalues(", "manage_environment_variable",
-                "Environment variable values are linked to definitions. The manage_environment_variable tool handles create/update/clear correctly with definition lookup."),
+            ("environmentvariabledefinitions(", "manage_admin(resource='env_var')",
+                "Environment variable definitions have linked value records. The manage_admin(resource='env_var') tool handles definition+value atomically with solution awareness."),
+            ("environmentvariablevalues(", "manage_admin(resource='env_var')",
+                "Environment variable values are linked to definitions. The manage_admin(resource='env_var') tool handles create/update/clear correctly with definition lookup."),
 
-            ("entitydefinitions", "manage_table or manage_column",
-                "Entity metadata contains IRREVERSIBLE flags, including Change Tracking, Activities, Notes, BPF, Feedback, Connections, Queues, and Sending email. Use manage_table or manage_column for supported metadata changes."),
-            ("relationshipdefinitions", "manage_relationship",
-                "Relationship metadata controls cascading behavior and referential integrity. Incorrect changes can cause data loss. Use manage_relationship for safe relationship management."),
-            ("managedpropertydefinitions", "manage_table",
+            ("entitydefinitions", "manage_schema(resource='table') or manage_schema(resource='column')",
+                "Entity metadata contains IRREVERSIBLE flags, including Change Tracking, Activities, Notes, BPF, Feedback, Connections, Queues, and Sending email. Use manage_schema(resource='table') or manage_schema(resource='column') for supported metadata changes."),
+            ("relationshipdefinitions", "manage_schema(resource='relationship')",
+                "Relationship metadata controls cascading behavior and referential integrity. Incorrect changes can cause data loss. Use manage_schema(resource='relationship') for safe relationship management."),
+            ("managedpropertydefinitions", "manage_schema(resource='table')",
                 "Managed properties control solution layering behavior. Incorrect changes affect solution export/import."),
 
-            ("globaloptionsetdefinitions", "manage_choice",
-                "Global option sets are shared across multiple entities. Use manage_choice to list, create, update, add/remove options safely."),
-            ("optionsetdefinitions", "manage_choice or manage_column",
-                "Option set definitions should be managed via manage_choice (global) or manage_column (local picklist)."),
+            ("globaloptionsetdefinitions", "manage_schema(resource='choice')",
+                "Global option sets are shared across multiple entities. Use manage_schema(resource='choice') to list, create, update, add/remove options safely."),
+            ("optionsetdefinitions", "manage_schema(resource='choice') or manage_schema(resource='column')",
+                "Option set definitions should be managed via manage_schema(resource='choice') (global) or manage_schema(resource='column') (local picklist)."),
 
-            ("webresources(", "manage_webresource",
-                "Web resources require base64 content encoding and proper type codes. manage_webresource handles encoding, validation, publish, and solution assignment."),
-            ("webresourceset(", "manage_webresource",
-                "Web resource updates/deletes must go through manage_webresource for prefix check, publish, and customizable gate. manage_webresource handles encoding, validation, publish, and solution assignment."),
+            ("webresources(", "manage_assets(resource='webresource')",
+                "Web resources require base64 content encoding and proper type codes. manage_assets(resource='webresource') handles encoding, validation, publish, and solution assignment."),
+            ("webresourceset(", "manage_assets(resource='webresource')",
+                "Web resource updates/deletes must go through manage_assets(resource='webresource') for prefix check, publish, and customizable gate. manage_assets(resource='webresource') handles encoding, validation, publish, and solution assignment."),
 
-            ("roles(", "manage_role",
-                "Security roles control access for ALL users in a business unit. manage_role provides safe CRUD, privilege copying, and user assignment."),
+            ("roles(", "manage_admin(resource='role')",
+                "Security roles control access for ALL users in a business unit. manage_admin(resource='role') provides safe CRUD, privilege copying, and user assignment."),
 
             ("solutions(", null,
                 "Solution manipulation can corrupt customizations and break deployments. Manage solutions via Power Apps UI, PAC CLI, or the DevKit solution command."),
@@ -304,20 +306,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             ("canvasapps(", null,
                 "Canvas apps have complex internal structure. Manage via Power Apps Studio."),
-            ("appmodules(", "manage_app",
-                "Model-driven app definitions control app structure and navigation. Do not use execute_webapi for model-driven app or sitemap creation/update. Use manage_app."),
-            ("appmodulecomponents(", "manage_app",
-                "App module components link model-driven apps to sitemaps, entities, forms, views, and commands. Do not use execute_webapi for app component creation/update. Use manage_app."),
+            ("appmodules(", "manage_ui(resource='app')",
+                "Model-driven app definitions control app structure and navigation. Do not use execute_webapi for model-driven app or sitemap creation/update. Use manage_ui(resource='app')."),
+            ("appmodulecomponents(", "manage_ui(resource='app')",
+                "App module components link model-driven apps to sitemaps, entities, forms, views, and commands. Do not use execute_webapi for app component creation/update. Use manage_ui(resource='app')."),
 
-            ("connectionreferences(", "manage_record",
+            ("connectionreferences(", "manage_data(resource='record')",
                 "Connection references link flows and apps to external services. Pass entity_name='connectionreference' for record changes or use add_to_solution, remove_from_solution, or list_solutions for solution membership."),
 
-            ("customapis(", "manage_custom_api",
-                "Custom APIs have linked request parameters, response properties, and publisher prefix/solution rules. Use manage_custom_api for safe create, update, and delete."),
-            ("customapirequestparameters(", "manage_custom_api",
-                "Custom API request parameters are managed together with their parent Custom API. Use manage_custom_api(action='create'|'update', request_parameters=...)."),
-            ("customapiresponseproperties(", "manage_custom_api",
-                "Custom API response properties are managed together with their parent Custom API. Use manage_custom_api(action='create'|'update', response_properties=...).")
+            ("customapis(", "manage_logic(resource='custom_api')",
+                "Custom APIs have linked request parameters, response properties, and publisher prefix/solution rules. Use manage_logic(resource='custom_api') for safe create, update, and delete."),
+            ("customapirequestparameters(", "manage_logic(resource='custom_api')",
+                "Custom API request parameters are managed together with their parent Custom API. Use manage_logic(resource='custom_api', action='create'|'update', request_parameters=...)."),
+            ("customapiresponseproperties(", "manage_logic(resource='custom_api')",
+                "Custom API response properties are managed together with their parent Custom API. Use manage_logic(resource='custom_api', action='create'|'update', response_properties=...).")
         ];
 
         private static readonly (string UrlPattern, string RedirectTool, string Message)[] RedirectedGetEndpoints =
@@ -331,14 +333,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ("attributedefinitions", "inspect_metadata(resource='tables')",
                 "inspect_metadata(resource='tables', name='...') returns attributes with filtering, detail levels, and relationships."),
 
-            ("relationshipdefinitions", "inspect_metadata(resource='tables') or manage_relationship",
-                "inspect_metadata(resource='tables', name='...') includes 1:N, N:1, N:N relationships; manage_relationship creates/updates/deletes them safely."),
+            ("relationshipdefinitions", "inspect_metadata(resource='tables') or manage_schema(resource='relationship')",
+                "inspect_metadata(resource='tables', name='...') includes 1:N, N:1, N:N relationships; manage_schema(resource='relationship') creates/updates/deletes them safely."),
 
-            ("globaloptionsetdefinitions", "manage_choice",
-                "manage_choice lists and manages global option sets; manage_column handles local picklists on an entity."),
+            ("globaloptionsetdefinitions", "manage_schema(resource='choice')",
+                "manage_schema(resource='choice') lists and manages global option sets; manage_schema(resource='column') handles local picklists on an entity."),
 
-            ("optionsetdefinitions", "manage_choice",
-                "manage_choice lists and manages global option sets; manage_column handles local picklists on an entity."),
+            ("optionsetdefinitions", "manage_schema(resource='choice')",
+                "manage_schema(resource='choice') lists and manages global option sets; manage_schema(resource='column') handles local picklists on an entity."),
 
             ("asyncoperations", "inspect_diagnostics(resource='system_jobs')",
                 "inspect_diagnostics(resource='system_jobs') provides status/operation_type filters, time scope, correlation_id tracing, and detail mode with message + friendlyMessage."),
@@ -349,19 +351,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ("processes", "inspect_automation(resource='workflows')",
                 "inspect_automation(resource='workflows') covers classic workflows (background + realtime) with filters and detail mode."),
 
-            ("deletionstatecode", "manage_deleted_records",
+            ("deletionstatecode", "manage_data(resource='deleted')",
                 "Standard OData $filter on 'deletionstatecode' or 'statecode eq 1' is unreliable for non-activity entities " +
                 "(returns empty for account/contact default statecode=0 even after soft-delete). " +
-                "manage_deleted_records(action='list') uses FetchXml datasource='bin' " +
+                "manage_data(resource='deleted', action='list') uses FetchXml datasource='bin' " +
                 "and returns records with modifiedOn ≈ delete time."),
 
-            ("appactions", "manage_command",
-                "manage_command provides app-scoped list/detail with ribbon-style OOB+custom detection, visibility/enable rules, and flyout/split-button children."),
+            ("appactions", "manage_commanding(resource='command')",
+                "manage_commanding(resource='command') provides app-scoped list/detail with ribbon-style OOB+custom detection, visibility/enable rules, and flyout/split-button children."),
 
-            ("restore", "manage_deleted_records",
+            ("restore", "manage_data(resource='deleted')",
                 "Web API 'Restore' action works (returns 200 with restored id), " +
                 "but requires complex body with @odata.id/@odata.type. " +
-                "Use manage_deleted_records(action='restore', entity_name='<entity>', record_id='<guid>') " +
+                "Use manage_data(resource='deleted', action='restore', entity_name='<entity>', record_id='<guid>') " +
                 "which uses the SDK OrganizationRequest('Restore') late-bound with a simple Entity param " +
                 "and returns full per-record status (success/failed with reason). " +
                 "Also supports batch via record_ids[].")
@@ -374,57 +376,57 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ("stageandupgrade", null, "Solution upgrades can change protected table metadata."),
             ("applysolutionupgrade", null, "Solution upgrades can change protected table metadata."),
             ("deleteandpromote", null, "Solution upgrades can change protected table metadata."),
-            ("publishxml", "publish_customizations",
-                "PublishXml requires correctly formatted ParameterXml. The publish_customizations tool handles entity-specific vs all publishing with proper XML generation."),
-            ("publishallxml", "publish_customizations",
-                "PublishAllXml publishes ALL customizations. The publish_customizations tool provides a simpler interface with proper status reporting."),
+            ("publishxml", "manage_admin(resource='publish')",
+                "PublishXml requires correctly formatted ParameterXml. The manage_admin(resource='publish') tool handles entity-specific vs all publishing with proper XML generation."),
+            ("publishallxml", "manage_admin(resource='publish')",
+                "PublishAllXml publishes ALL customizations. The manage_admin(resource='publish') tool provides a simpler interface with proper status reporting."),
 
-            ("createoptionset", "manage_choice",
-                "Creating option sets requires proper metadata structure. Use manage_choice for global option sets or manage_column for local picklists."),
-            ("updateoptionset", "manage_choice",
-                "Updating option set metadata requires proper label handling. Use manage_choice for safe updates."),
-            ("insertoptionvalue", "manage_choice or manage_column",
-                "Inserting option values requires correct value/label pairs. Use manage_choice (global) or manage_column (local) for safe option management."),
-            ("updateoptionvalue", "manage_choice or manage_column",
-                "Updating option value labels requires merge label handling. Use manage_choice (global) or manage_column (local)."),
-            ("deleteoptionvalue", "manage_choice or manage_column",
-                "Deleting option values is irreversible. Use manage_choice (global) or manage_column (local) for safe deletion."),
-            ("insertstatusvalue", "manage_column",
-                "Inserting statuscode values requires linking to a statecode. Use manage_column with logical_name='statuscode' and add_options JSON including a 'state' field for the linked statecode value."),
-            ("updatestatusvalue", "manage_column",
-                "Updating statuscode value labels requires merge label handling. Use manage_column with logical_name='statuscode' and update_options."),
-            ("deletestatusvalue", "manage_column",
-                "Deleting statuscode values is irreversible. Use manage_column with logical_name='statuscode' and delete_options."),
+            ("createoptionset", "manage_schema(resource='choice')",
+                "Creating option sets requires proper metadata structure. Use manage_schema(resource='choice') for global option sets or manage_schema(resource='column') for local picklists."),
+            ("updateoptionset", "manage_schema(resource='choice')",
+                "Updating option set metadata requires proper label handling. Use manage_schema(resource='choice') for safe updates."),
+            ("insertoptionvalue", "manage_schema(resource='choice') or manage_schema(resource='column')",
+                "Inserting option values requires correct value/label pairs. Use manage_schema(resource='choice') (global) or manage_schema(resource='column') (local) for safe option management."),
+            ("updateoptionvalue", "manage_schema(resource='choice') or manage_schema(resource='column')",
+                "Updating option value labels requires merge label handling. Use manage_schema(resource='choice') (global) or manage_schema(resource='column') (local)."),
+            ("deleteoptionvalue", "manage_schema(resource='choice') or manage_schema(resource='column')",
+                "Deleting option values is irreversible. Use manage_schema(resource='choice') (global) or manage_schema(resource='column') (local) for safe deletion."),
+            ("insertstatusvalue", "manage_schema(resource='column')",
+                "Inserting statuscode values requires linking to a statecode. Use manage_schema(resource='column') with logical_name='statuscode' and add_options JSON including a 'state' field for the linked statecode value."),
+            ("updatestatusvalue", "manage_schema(resource='column')",
+                "Updating statuscode value labels requires merge label handling. Use manage_schema(resource='column') with logical_name='statuscode' and update_options."),
+            ("deletestatusvalue", "manage_schema(resource='column')",
+                "Deleting statuscode values is irreversible. Use manage_schema(resource='column') with logical_name='statuscode' and delete_options."),
 
-            ("webresources", "manage_webresource",
-                "Creating web resources requires base64 encoding and type codes. Use manage_webresource for safe creation with solution assignment."),
-            ("savedqueryvisualizations", "manage_chart",
-                "System charts require XML validation and solution management. Use manage_chart for system chart creation, updates, and backups."),
-            ("roles", "manage_role",
-                "Creating security roles requires proper business unit assignment. Use manage_role for safe role management."),
+            ("webresources", "manage_assets(resource='webresource')",
+                "Creating web resources requires base64 encoding and type codes. Use manage_assets(resource='webresource') for safe creation with solution assignment."),
+            ("savedqueryvisualizations", "manage_ui(resource='chart')",
+                "System charts require XML validation and solution management. Use manage_ui(resource='chart') for system chart creation, updates, and backups."),
+            ("roles", "manage_admin(resource='role')",
+                "Creating security roles requires proper business unit assignment. Use manage_admin(resource='role') for safe role management."),
 
-            ("appmodules", "manage_app",
-                "Do not use execute_webapi for model-driven app or sitemap creation/update. Use manage_app."),
-            ("sitemaps", "manage_app",
-                "Do not use execute_webapi for model-driven app or sitemap creation/update. Use manage_app."),
-            ("appmodulecomponents", "manage_app",
-                "Do not use execute_webapi for appmodulecomponent creation/update. Use manage_app."),
+            ("appmodules", "manage_ui(resource='app')",
+                "Do not use execute_webapi for model-driven app or sitemap creation/update. Use manage_ui(resource='app')."),
+            ("sitemaps", "manage_ui(resource='app')",
+                "Do not use execute_webapi for model-driven app or sitemap creation/update. Use manage_ui(resource='app')."),
+            ("appmodulecomponents", "manage_ui(resource='app')",
+                "Do not use execute_webapi for appmodulecomponent creation/update. Use manage_ui(resource='app')."),
 
-            ("appactions", "manage_command",
-                "Use manage_command for modern appaction create/update/delete/hide/show/flyout/split-button operations. Delete supports app, table, and global scope and handles child commands, rules, and context table publishing."),
-            ("appactionrules", "manage_command",
-                "appactionrule (visibility/enable rules) are managed with their parent appaction via manage_command (include_rules=true to inspect)."),
+            ("appactions", "manage_commanding(resource='command')",
+                "Use manage_commanding(resource='command') for modern appaction create/update/delete/hide/show/flyout/split-button operations. Delete supports app, table, and global scope and handles child commands, rules, and context table publishing."),
+            ("appactionrules", "manage_commanding(resource='command')",
+                "appactionrule (visibility/enable rules) are managed with their parent appaction via manage_commanding(resource='command') (include_rules=true to inspect)."),
 
-            ("customapis", "manage_custom_api",
-                "Creating Custom APIs requires publisher prefix validation, solution assignment, and parameter definitions. Use manage_custom_api(action='create')."),
-            ("customapirequestparameters", "manage_custom_api",
-                "Custom API request parameters must be created with their parent Custom API in the target solution. Use manage_custom_api(action='create'|'update', request_parameters=...)."),
-            ("customapiresponseproperties", "manage_custom_api",
-                "Custom API response properties must be created with their parent Custom API in the target solution. Use manage_custom_api(action='create'|'update', response_properties=...)."),
+            ("customapis", "manage_logic(resource='custom_api')",
+                "Creating Custom APIs requires publisher prefix validation, solution assignment, and parameter definitions. Use manage_logic(resource='custom_api', action='create')."),
+            ("customapirequestparameters", "manage_logic(resource='custom_api')",
+                "Custom API request parameters must be created with their parent Custom API in the target solution. Use manage_logic(resource='custom_api', action='create'|'update', request_parameters=...)."),
+            ("customapiresponseproperties", "manage_logic(resource='custom_api')",
+                "Custom API response properties must be created with their parent Custom API in the target solution. Use manage_logic(resource='custom_api', action='create'|'update', response_properties=...)."),
 
-            ("restore", "manage_deleted_records",
+            ("restore", "manage_data(resource='deleted')",
                 "Web API 'Restore' action works (returns 200 with restored id) but requires complex body with @odata.id/@odata.type. " +
-                "Use manage_deleted_records(action='restore', entity_name='<entity>', record_id='<guid>') " +
+                "Use manage_data(resource='deleted', action='restore', entity_name='<entity>', record_id='<guid>') " +
                 "which uses the SDK OrganizationRequest('Restore') late-bound with a simple Entity param " +
                 "and returns full per-record status (success/failed with reason). " +
                 "Also supports batch via record_ids[].")
@@ -446,7 +448,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Raw PATCH/GET on these endpoints corrupts data or fails on chunk continuation.";
 
         private const string FileColumnBlockHint =
-            "Use manage_record_file instead. Actions: 'info', 'upload', 'download', 'delete' " +
+            "Use manage_data(resource='file') instead. Actions: 'info', 'upload', 'download', 'delete' " +
             "(auto-detects File vs Image columns, supports local path, http(s) URL and base64 sources).";
 
         private static (string Message, string Hint)? GetFileColumnBlocked(HttpMethod method, string url, Dictionary<string, List<string>> headers)

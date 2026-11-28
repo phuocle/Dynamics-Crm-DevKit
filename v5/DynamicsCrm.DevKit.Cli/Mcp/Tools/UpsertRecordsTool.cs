@@ -23,7 +23,6 @@ using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class UpsertRecordsTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
@@ -117,18 +116,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(BatchCreateResult)),
         Description(
-            "Bulk create or upsert up to 5000 Dataverse records in parallel from inline JSON, a .json file or a .csv file. Partial failures do not roll back successful records. Use manage_record for single-record CRUD.\n\n" +
+            "Bulk create or upsert up to 5000 Dataverse records in parallel from inline JSON, a .json file or a .csv file. Partial failures do not roll back successful records. Use manage_data(resource='record') for single-record CRUD.\n\n" +
             "records_json accepts inline JSON arrays (logical field names), .json file paths, or .csv file paths — CSV headers accept Display Names or logical names; unresolvable headers are skipped with a per-item warning. Field syntax: polymorphic lookups use field@targetentity (e.g. 'customerid@account'); activity party fields (to/from/cc/bcc/requiredattendees/organizer/customers/resources) are a JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"} — a single object is auto-wrapped; do NOT supply participationtypemask. Read docs://data_operations_guide for field formats and batch details.\n\n" +
             "Per-record mode: without primary key (<entity>id) and without key_fields, runs CreateRequest (Dataverse generates GUID and stamps shared importSequenceNumber); with primary key (<entity>id as GUID), runs UpsertRequest with Entity(logicalName, id) to create with that exact GUID or update if it exists; with key_fields (comma-separated or JSON array of alternate key columns), runs UpsertRequest using KeyAttributeCollection. Statecode and statuscode accept integer values or labels; non-active states/status reasons are applied via a follow-up parallel ExecuteMultiple UpdateRequest batch (check each item's stateUpdate and top-level stateUpdated).\n\n" +
             "Pure-create records are stamped with a shared importsequencenumber so the batch can be queried and bulk-deleted as a unit; the value is returned as importSequenceNumber and an explicitly supplied value wins for that record. bypass_custom_logic skips custom sync/async plugins/workflows and requires System Administrator.\n\n" +
             "WHEN TO USE:\n" +
             "- Seed or migrate many records at once (accounts, contacts, tasks) or import from CSV\n" +
             "- Bulk update existing records by primary key GUID or alternate key (key_fields)\n" +
-            "- Pipe generate_demo_data output (.json) into records_json\n" +
+            "- Pipe manage_data(resource='demo') output (.json) into records_json\n" +
             "- High-throughput parallel creates/upserts (server hints concurrency when max_parallelism=0)\n\n" +
             "RELATED TOOLS:\n" +
-            "- generate_demo_data → produce JSON to pipe into records_json\n" +
-            "- manage_record → single-record create/update/delete/associate/disassociate\n" +
+            "- manage_data(resource='demo') → produce JSON to pipe into records_json\n" +
+            "- manage_data(resource='record') → single-record create/update/delete/associate/disassociate\n" +
             "- query_data(mode='search') / query_data(mode='fetchxml') → verify created or updated records")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Entity Display Name or logical name (Display Name resolved first).")] string entity_name = "",

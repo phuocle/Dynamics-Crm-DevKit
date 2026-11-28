@@ -39,10 +39,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
         internal static readonly Dictionary<string, string[]> ToolResourceMap = new()
         {
             [nameof(Tools.QueryDataTool)] = new[] { "instructions_for_sql" },
-            [nameof(Tools.ManageRibbonTool)] = new[] { "instructions_for_manage_ribbon" },
-            [nameof(Tools.ManageCommandTool)] = new[] { "instructions_for_manage_command" },
-            [nameof(Tools.ManageReportTool)] = new[] { "instructions_for_manage_report" },
-            [nameof(Tools.ManageFormTool)] = new[] { "instructions_for_formxml" },
+            [nameof(Tools.ManageCommandingTool)] = new[] { "instructions_for_manage_ribbon", "instructions_for_manage_command" },
+            [nameof(Tools.ManageAssetsTool)] = new[] { "instructions_for_manage_report" },
+            [nameof(Tools.ManageUiTool)] = new[] { "formxml_instructions", "layoutxml_instructions", "instructions_for_manage_app" },
+            [nameof(Tools.ManageSchemaTool)] = new[] { "schema_tools_guide" },
         };
 
         public async Task RunAsync(bool dryRun = false, string instanceName = null,

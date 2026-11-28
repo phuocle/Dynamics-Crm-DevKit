@@ -192,7 +192,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ? $"{opsCount.Value} operation{(opsCount.Value == 1 ? "" : "s")} ({string.Join("; ", summaries)})"
                 : "ribbonxml patch applied";
             return Success(
-                $"manage_ribbon update — {entityName}: {opsText}, PublishAll started asynchronously ({asyncJobId}).",
+                $"manage_commanding(resource='ribbon') update — {entityName}: {opsText}, PublishAll started asynchronously ({asyncJobId}).",
                 new ManageRibbonResult
                 {
                 Action = "update",
@@ -251,7 +251,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var asyncJobId = PublishHelper.PublishAllAsync(_context, _orgService);
 
             return Success(
-                $"manage_ribbon undo — {entityName}: restored from {backupFilePath}, PublishAll started asynchronously ({asyncJobId}).",
+                $"manage_commanding(resource='ribbon') undo — {entityName}: restored from {backupFilePath}, PublishAll started asynchronously ({asyncJobId}).",
                 new ManageRibbonResult
                 {
                 Action = "undo",

@@ -169,7 +169,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return null;
             }
 
-            var result = DisplayNameFirstResolver.ResolveApp(_orgService, appName.Trim(), "manage_command");
+            var result = DisplayNameFirstResolver.ResolveApp(_orgService, appName.Trim(), "manage_commanding(resource='command')");
             if (result.IsSuccess)
                 return result.Value.Id;
 
@@ -182,7 +182,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (Guid.TryParse(nameOrGuid, out var parsed))
                 return parsed;
 
-            var result = DisplayNameFirstResolver.ResolveWebResource(_orgService, nameOrGuid, "manage_command");
+            var result = DisplayNameFirstResolver.ResolveWebResource(_orgService, nameOrGuid, "manage_commanding(resource='command')");
             if (!result.IsSuccess)
                 throw new InvalidOperationException($"web_resource '{nameOrGuid}': {result.Error}");
 

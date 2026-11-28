@@ -137,7 +137,7 @@ public sealed class ProgramMainExtraCoverageTests
         StringAssert.Contains(rootOutput, "devkit <command> --help");
         StringAssert.Contains(rootOutput, "Search starts at the resolved --json file's directory");
         StringAssert.Contains(rootOutput, "MCP .env mode searches upward from the server's working directory.");
-        StringAssert.Contains(rootOutput, "MCP server (29 tools, 14 resources)");
+        StringAssert.Contains(rootOutput, "MCP server (14 tools, 14 resources)");
         StringAssert.Contains(rootOutput, "One server in .env mode can serve multiple env groups.");
         StringAssert.Contains(rootOutput, "--plain and --dry-run, select args-only mode.");
         StringAssert.Contains(rootOutput, "devkit mcp devkit-codex --env org-b");

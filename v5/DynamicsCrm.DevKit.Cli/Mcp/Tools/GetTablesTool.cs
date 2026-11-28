@@ -40,9 +40,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Inspect 1:N and N:1 cascade behavior, hierarchy, and associated menu settings with detail_level='full'.\n" +
             "- AI MUST use inspect_metadata(resource='tables') for entity/attribute metadata — do NOT use execute_webapi with EntityDefinitions\n\n" +
             "RELATED TOOLS:\n" +
-            "- manage_column → create/update columns (pass the formulaDefinition reference as formula_definition to clone)\n" +
-            "- manage_table → create/update tables\n" +
-            "- manage_relationship → create/update relationships\n" +
+            "- manage_schema(resource='column') → create/update columns (pass the formulaDefinition reference as formula_definition to clone)\n" +
+            "- manage_schema(resource='table') → create/update tables\n" +
+            "- manage_schema(resource='relationship') → create/update relationships\n" +
             "- query_data(mode='fetchxml') → query data once you know attribute names")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Logical name → detail mode. Empty = list mode.")] string entity_name = "",

@@ -193,7 +193,7 @@ public sealed class RibbonFlyoutExtraCoverageTests
 
         Assert.IsNotNull(error);
         StringAssert.Contains(error, "CommandDefinition 'devkit.account.More.Form.Print.Command' not found for item");
-        StringAssert.Contains(hint!, "manage_ribbon(action='buttons')");
+        StringAssert.Contains(hint!, "manage_commanding(resource='ribbon', action='buttons')");
     }
 
     [TestMethod]

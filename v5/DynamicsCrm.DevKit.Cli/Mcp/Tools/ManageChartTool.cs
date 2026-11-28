@@ -22,7 +22,6 @@ using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ManageChartTool : McpToolBase
     {
         private static readonly HashSet<string> SupportedChartTypes = new(StringComparer.OrdinalIgnoreCase)
@@ -77,8 +76,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Restore a chart from a .chart.json backup written by update (undo)\n\n" +
             "RELATED TOOLS:\n" +
             "- inspect_metadata(resource='tables') → column logical names for group_by_column/aggregate_column\n" +
-            "- publish_customizations → batch publish after multiple metadata changes\n" +
-            "- manage_view → views; execute_webapi → raw savedqueryvisualization access")]
+            "- manage_admin(resource='publish') → batch publish after multiple metadata changes\n" +
+            "- manage_ui(resource='view') → views; execute_webapi → raw savedqueryvisualization access")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")] string action = "",
@@ -95,7 +94,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Chart description text.")] string description = "",
             [Description("Optional solution unique/display name. When provided and non-empty, chart is added to the solution after create/update.")] string solution_name = "",
             [Description("Validate XML syntax and chart types before saving.")] bool validate = true,
-            [Description("Publish entity after create/update/rename/set_default/undo so changes become visible. Default: true. Set false to batch-publish later via publish_customizations.")] bool publish = true,
+            [Description("Publish entity after create/update/rename/set_default/undo so changes become visible. Default: true. Set false to batch-publish later via manage_admin(resource='publish').")] bool publish = true,
             [Description("create: Pie charts and charts with measures or filter return needs_confirmation when false. Set true after the user approves the returned plan, with the same inputs.")] bool confirmed = false,
             [Description(DynamicsCrm.DevKit.Cli.Mcp.McpToolInvocation.EnvDescription)] string env = null,
             System.Threading.CancellationToken cancellationToken = default)
@@ -123,7 +122,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Chart description text.")] string description = "",
             [Description("Optional solution unique/display name. When provided and non-empty, chart is added to the solution after create/update.")] string solution_name = "",
             [Description("Validate XML syntax and chart types before saving.")] bool validate = true,
-            [Description("Publish entity after create/update/rename/set_default/undo so changes become visible. Default: true. Set false to batch-publish later via publish_customizations.")] bool publish = true,
+            [Description("Publish entity after create/update/rename/set_default/undo so changes become visible. Default: true. Set false to batch-publish later via manage_admin(resource='publish').")] bool publish = true,
             [Description("create: Pie charts and charts with measures or filter return needs_confirmation when false. Set true after the user approves the returned plan, with the same inputs.")] bool confirmed = false)
         {
             try
@@ -134,7 +133,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var normalizedAction = action.Trim().ToLowerInvariant();
 
                 if (!string.IsNullOrWhiteSpace(chart_id) && !Guid.TryParse(chart_id.Trim(), out _))
-                    return Error($"'{chart_id}' is not a valid GUID.", "Pass a chart GUID (e.g. from manage_chart(action='list')), or use chart_name instead.");
+                    return Error($"'{chart_id}' is not a valid GUID.", "Pass a chart GUID (e.g. from manage_ui(resource='chart', action='list')), or use chart_name instead.");
 
                 if (normalizedAction == "update")
                     _workspaceFolder = await WorkspaceFolderHelper.GetAsync(server);
@@ -238,9 +237,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(chartName))
                 return Error("chart_name is required when action='create'.", "Pass chart_name for the new chart.");
 
-            var entityResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, entityNameInput.Trim(), "manage_chart");
+            var entityResolve = DisplayNameFirstResolver.ResolveEntity(_orgService, entityNameInput.Trim(), "manage_ui(resource='chart')");
             if (!entityResolve.IsSuccess)
-                return Error(entityResolve.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to list entities before calling manage_chart.");
+                return Error(entityResolve.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to list entities before calling manage_ui(resource='chart').");
 
             var entityName = entityResolve.Value.LogicalName;
 
@@ -799,21 +798,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("backup path is required when action='undo'.", "Pass the .chart.json backup path via presentationdescription.");
 
             if (!File.Exists(backupPathInput))
-                return Error($"Backup file not found at '{backupPathInput}'.", "Pass the backupPath returned by a previous manage_chart(action='update') call.");
+                return Error($"Backup file not found at '{backupPathInput}'.", "Pass the backupPath returned by a previous manage_ui(resource='chart', action='update') call.");
 
             // Malformed backup JSON bubbles to the entry-point catch (single-try rule).
             var json = File.ReadAllText(backupPathInput, Encoding.UTF8);
             var backupData = JsonSerializer.Deserialize<ChartBackup>(json);
 
             if (backupData == null || !Guid.TryParse(backupData.ChartId, out var chartId) || chartId == Guid.Empty)
-                return Error("Backup file does not contain valid chart data.", "Use a .chart.json backup file written by manage_chart(action='update').");
+                return Error("Backup file does not contain valid chart data.", "Use a .chart.json backup file written by manage_ui(resource='chart', action='update').");
 
             if (!string.IsNullOrWhiteSpace(chartIdInput) && Guid.Parse(chartIdInput) != chartId)
                 return Error($"Backup chart ID '{chartId}' does not match chart_id '{chartIdInput.Trim()}'.",
                     "Use the backupPath for the chart you want to restore.");
 
             if (backupData.Description.ValueKind is not (JsonValueKind.Undefined or JsonValueKind.Null or JsonValueKind.String))
-                return Error("Backup file does not contain valid chart data.", "Use a .chart.json backup file written by manage_chart(action='update').");
+                return Error("Backup file does not contain valid chart data.", "Use a .chart.json backup file written by manage_ui(resource='chart', action='update').");
 
             if (_options.DryRun)
                 return DryRun($"Would UNDO chart {chartId} using backup from '{backupPathInput}'.", new UpsertChartResult
@@ -1353,14 +1352,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!Guid.TryParse(chartIdInput.Trim(), out var guid))
                 {
                     error = $"'{chartIdInput}' is not a valid GUID.";
-                    hint = "Pass a chart GUID (e.g. from manage_chart(action='list')), or use chart_name instead.";
+                    hint = "Pass a chart GUID (e.g. from manage_ui(resource='chart', action='list')), or use chart_name instead.";
                     return null;
                 }
                 var entity = _orgService.Retrieve(table, guid, new ColumnSet(idCol, "name", "description", "datadescription", "presentationdescription", "isdefault", "primaryentitytypecode"));
                 if (entity == null)
                 {
                     error = $"Chart with ID '{chartIdInput}' not found.";
-                    hint = "Use manage_chart(action='list') to find existing chart ids.";
+                    hint = "Use manage_ui(resource='chart', action='list') to find existing chart ids.";
                 }
                 return entity;
             }
@@ -1385,13 +1384,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (res.Entities.Count == 0)
                 {
                     error = $"No chart found matching name '{chartNameInput}'.";
-                    hint = "Use manage_chart(action='list', entity_name=...) to find existing chart names.";
+                    hint = "Use manage_ui(resource='chart', action='list', entity_name=...) to find existing chart names.";
                     return null;
                 }
                 if (res.Entities.Count > 1)
                 {
                     error = $"Chart name '{chartNameInput.Trim()}' is ambiguous.";
-                    hint = "Use manage_chart(action='list', entity_name=...) to find the correct chart, then pass chart_id.";
+                    hint = "Use manage_ui(resource='chart', action='list', entity_name=...) to find the correct chart, then pass chart_id.";
                     return null;
                 }
                 return res.Entities[0];
@@ -1405,7 +1404,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private string ResolveEntityLogicalName(string entityNameInput)
         {
             if (string.IsNullOrWhiteSpace(entityNameInput)) return "";
-            var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entityNameInput.Trim(), "manage_chart");
+            var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entityNameInput.Trim(), "manage_ui(resource='chart')");
             return resolved.IsSuccess ? resolved.Value.LogicalName : entityNameInput.Trim().ToLowerInvariant();
         }
 

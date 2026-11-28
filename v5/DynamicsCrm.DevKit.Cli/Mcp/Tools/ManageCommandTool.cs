@@ -18,7 +18,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public partial class ManageCommandTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -128,8 +127,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageCommandResult)),
         Description(
-            "Manage modern model-driven app command bar appactions, including buttons, dropdowns, split buttons, visibility and enable rules. Use only for explicitly modern/Power Fx/command designer requests; for classic or generic ribbon buttons use manage_ribbon. When in doubt → manage_ribbon.\n\n" +
-            "Commands can be app-, table-, or global-scoped. origin=default excludes auto-migrated commands from list results. hide/show on an OOB command creates an app-scoped override row; showing an OOB command again deletes the override. create, update and hide/show auto-publish the affected entity so changes are visible immediately; flyout/split operations do not publish — call publish_customizations afterward if changes are not visible. If an error identifies a classic ribbon button, stop and report it. Entity, app and web-resource names resolve display name first, then logical/unique/schema; ambiguous matches require disambiguation.\n\n" +
+            "Manage modern model-driven app command bar appactions, including buttons, dropdowns, split buttons, visibility and enable rules. Use only for explicitly modern/Power Fx/command designer requests; for classic or generic ribbon buttons use manage_commanding(resource='ribbon'). When in doubt → manage_commanding(resource='ribbon').\n\n" +
+            "Commands can be app-, table-, or global-scoped. origin=default excludes auto-migrated commands from list results. hide/show on an OOB command creates an app-scoped override row; showing an OOB command again deletes the override. create, update and hide/show auto-publish the affected entity so changes are visible immediately; flyout/split operations do not publish — call manage_admin(resource='publish') afterward if changes are not visible. If an error identifies a classic ribbon button, stop and report it. Entity, app and web-resource names resolve display name first, then logical/unique/schema; ambiguous matches require disambiguation.\n\n" +
             "Actions cover list/detail/create/update/delete/hide/show and flyout/split operations. Use include_rules or include_children to inspect related records.\n" +
             "delete removes an unmanaged appaction and its child commands and exclusive rules, then publishes its context table if present. Select by GUID or by exact label/uniquename, location and scope (app/table/global). Read docs://instructions_for_manage_command for delete inputs and examples.\n\n" +
             "WHEN TO USE:\n" +
@@ -137,10 +136,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Hide/show OOB or custom commands in a specific app\n" +
             "- Inspect appactionrule visibility/enable rules (include_rules=true)\n\n" +
             "RELATED TOOLS:\n" +
-            "- manage_ribbon → classic/legacy RibbonDiffXml buttons (NOT modern appaction)\n" +
-            "- manage_app → app module metadata for app-scoped commands\n" +
+            "- manage_commanding(resource='ribbon') → classic/legacy RibbonDiffXml buttons (NOT modern appaction)\n" +
+            "- manage_ui(resource='app') → app module metadata for app-scoped commands\n" +
             "- inspect_metadata(resource='tables') → entity logical/display names for entity_name\n" +
-            "- publish_customizations → publish after flyout/split item changes (create/update/hide/show already auto-publish)")]
+            "- manage_admin(resource='publish') → publish after flyout/split item changes (create/update/hide/show already auto-publish)")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("list/detail/create/update/delete/hide/show/add_flyout/update_flyout/add_flyout_item/remove_flyout_item/add_split_button/update_split_button.")] string action = "",
             [Description("appaction GUID. Required for update, update_flyout, update_split_button, and remove_flyout_item. For detail use command_id or label with entity_name and location; hide/show also support label-based lookup. For delete, a GUID is sufficient and takes precedence over name-based selectors.")] string command_id = "",
@@ -228,12 +227,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     case "detail":
                         if (string.IsNullOrWhiteSpace(command_id) && string.IsNullOrWhiteSpace(label))
                             return Error("command_id or label is required for action='detail'.",
-                                "Pass command_id (appaction GUID), or label together with entity_name and location for fuzzy lookup. Use manage_command(action='list') to find command IDs.");
+                                "Pass command_id (appaction GUID), or label together with entity_name and location for fuzzy lookup. Use manage_commanding(resource='command', action='list') to find command IDs.");
                         if (!string.IsNullOrWhiteSpace(command_id))
                         {
                             if (!Guid.TryParse(command_id.Trim(), out _))
                                 return Error($"'{command_id.Trim()}' is not a valid GUID.",
-                                    "Pass an appaction GUID. Use manage_command(action='list') to find command IDs.");
+                                    "Pass an appaction GUID. Use manage_commanding(resource='command', action='list') to find command IDs.");
                             return GetDetail(command_id.Trim(), include_rules, include_children);
                         }
                         return string.IsNullOrWhiteSpace(scope)

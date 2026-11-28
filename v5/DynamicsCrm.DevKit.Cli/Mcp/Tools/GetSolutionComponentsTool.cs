@@ -43,7 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- inspect_metadata(resource='tables') → entity/attribute metadata for sub-components\n" +
             "- inspect_automation(resource='plugins') → plugin assembly/type/step detail\n" +
-            "- manage_webresource → web resource detail")]
+            "- manage_assets(resource='webresource') → web resource detail")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Solution unique/display name; multiple matches return choices.")] string solution_name = "",
             [Description("Add ActiveLayer (Yes/No) via msdyn_componentlayer. Active = unmanaged customization exists.")] bool include_active_layers = false,

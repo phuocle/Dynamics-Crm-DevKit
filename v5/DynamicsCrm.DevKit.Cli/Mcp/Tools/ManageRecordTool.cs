@@ -16,7 +16,6 @@ using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ManageRecordTool : McpToolBase
     {
         private const string SupportedActions = "'create', 'read', 'update', 'delete', 'associate', 'disassociate', 'add_to_solution', 'remove_from_solution', 'list_solutions', 'add_solution_component'";
@@ -56,7 +55,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RELATED TOOLS:\n" +
             "- inspect_metadata(resource='tables') → entity/attribute names before building fields_json\n" +
             "- query_data(mode='fetchxml') → find lookup GUIDs and record_id\n" +
-            "- upsert_records → bulk create or update multiple records\n" +
+            "- manage_data(resource='bulk') → bulk create or update multiple records\n" +
             "- execute_webapi → raw OData JSON/annotations")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description(SupportedActions + ".")] string action = "",
@@ -140,7 +139,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (normalizedAction == "create" && !string.IsNullOrWhiteSpace(record_id))
                     return Error("record_id must be empty for 'create'. Use 'update' to modify an existing record.", "Omit record_id when creating a new record.");
 
-                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "manage_record");
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "manage_data(resource='record')");
                 if (!entityResult.IsSuccess)
                     return Error(entityResult.Error, "Use inspect_metadata(resource='tables') to discover valid entity logical/display names.");
 
@@ -509,7 +508,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var id1 = Guid.Parse(recordId.Trim());
             var id2 = Guid.Parse(relatedRecordId.Trim());
 
-            var relatedEntityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, relatedEntityName.Trim(), "manage_record");
+            var relatedEntityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, relatedEntityName.Trim(), "manage_data(resource='record')");
             if (!relatedEntityResult.IsSuccess)
                 return Error(relatedEntityResult.Error, "Use inspect_metadata(resource='tables') to discover valid related entity names.");
             var resolvedRelatedEntity = relatedEntityResult.Value.LogicalName;
@@ -536,7 +535,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var id1 = Guid.Parse(recordId.Trim());
             var id2 = Guid.Parse(relatedRecordId.Trim());
 
-            var relatedEntityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, relatedEntityName.Trim(), "manage_record");
+            var relatedEntityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, relatedEntityName.Trim(), "manage_data(resource='record')");
             if (!relatedEntityResult.IsSuccess)
                 return Error(relatedEntityResult.Error, "Use inspect_metadata(resource='tables') to discover valid related entity names.");
             var resolvedRelatedEntity = relatedEntityResult.Value.LogicalName;
@@ -566,7 +565,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var cols = new List<string>();
             foreach (var column in columns.Split(',').Select(c => c.Trim()).Where(c => !string.IsNullOrEmpty(c)))
             {
-                var resolved = DisplayNameFirstResolver.ResolveAttribute(orgService, entityName, column, "manage_record");
+                var resolved = DisplayNameFirstResolver.ResolveAttribute(orgService, entityName, column, "manage_data(resource='record')");
                 if (!resolved.IsSuccess)
                     throw new ArgumentException($"Column '{column}': {resolved.Error}", "columns");
                 cols.Add(resolved.Value.LogicalName);

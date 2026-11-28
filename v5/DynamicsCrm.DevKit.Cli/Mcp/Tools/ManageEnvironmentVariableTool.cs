@@ -14,7 +14,6 @@ using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ManageEnvironmentVariableTool : McpToolBase
     {
         private readonly IOrganizationService _orgService;
@@ -112,7 +111,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("type is required for 'create'.",
                     "Valid values: 'string', 'number', 'boolean', 'json', 'datasource', 'secret'.");
 
-            var existingByDisplayName = DisplayNameFirstResolver.ResolveEnvironmentVariableDefinition(_orgService, displayName.Trim(), "manage_environment_variable");
+            var existingByDisplayName = DisplayNameFirstResolver.ResolveEnvironmentVariableDefinition(_orgService, displayName.Trim(), "manage_admin(resource='env_var')");
             if (existingByDisplayName.IsSuccess)
             {
                 var existingSchemaName = existingByDisplayName.Value.GetAttributeValue<string>("schemaname") ?? existingByDisplayName.CanonicalName ?? existingByDisplayName.Value.Id.ToString();
@@ -120,7 +119,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Use action='update' to modify it.");
             }
             if (existingByDisplayName.Status == ResolveStatus.Ambiguous || existingByDisplayName.Status == ResolveStatus.Error)
-                return Error(existingByDisplayName.Error.Split("\r\n")[0], "Use manage_environment_variable(action='list') to see all environment variables.");
+                return Error(existingByDisplayName.Error.Split("\r\n")[0], "Use manage_admin(resource='env_var', action='list') to see all environment variables.");
 
             // Layer 1 (AI gate): solution_name is mandatory — prefix can only come from the solution's publisher
             if (string.IsNullOrWhiteSpace(solutionName))
@@ -143,7 +142,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var prefix = solResult.Prefix.Trim().ToLowerInvariant();
             var variableName = $"{prefix}_{displayName.Trim().Replace(" ", "")}";
 
-            var existingByVariableName = DisplayNameFirstResolver.ResolveEnvironmentVariableDefinition(_orgService, variableName, "manage_environment_variable");
+            var existingByVariableName = DisplayNameFirstResolver.ResolveEnvironmentVariableDefinition(_orgService, variableName, "manage_admin(resource='env_var')");
             if (existingByVariableName.IsSuccess)
             {
                 var existingSchemaName = existingByVariableName.Value.GetAttributeValue<string>("schemaname") ?? existingByVariableName.CanonicalName ?? existingByVariableName.Value.Id.ToString();
@@ -151,7 +150,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Use action='update' to modify it.");
             }
             if (existingByVariableName.Status == ResolveStatus.Ambiguous || existingByVariableName.Status == ResolveStatus.Error)
-                return Error(existingByVariableName.Error.Split("\r\n")[0], "Use manage_environment_variable(action='list') to see all environment variables.");
+                return Error(existingByVariableName.Error.Split("\r\n")[0], "Use manage_admin(resource='env_var', action='list') to see all environment variables.");
 
             return HandleCreate(variableName, displayName, type, defaultValue, currentValue, description, solResult.UniqueName);
         }
@@ -161,11 +160,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(variableName))
                 return Error("variable_name is required for 'update'.",
-                    "Use manage_environment_variable(action='list') to see all environment variables.");
+                    "Use manage_admin(resource='env_var', action='list') to see all environment variables.");
 
             var resolved = ResolveDefinitionInput(variableName);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return Error(resolved.Error.Split("\r\n")[0], "Use manage_environment_variable(action='list') to see all environment variables.");
+                return Error(resolved.Error.Split("\r\n")[0], "Use manage_admin(resource='env_var', action='list') to see all environment variables.");
 
             return HandleUpdate(resolved.Definition, resolved.SchemaName, displayName, defaultValue, currentValue, description);
         }
@@ -240,11 +239,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(variableName))
                 return Error("variable_name is required for 'detail'.",
-                    "Use manage_environment_variable(action='list') to see all environment variables.");
+                    "Use manage_admin(resource='env_var', action='list') to see all environment variables.");
 
             var resolved = ResolveDefinitionInput(variableName);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return Error(resolved.Error.Split("\r\n")[0], "Use manage_environment_variable(action='list') to see all environment variables.");
+                return Error(resolved.Error.Split("\r\n")[0], "Use manage_admin(resource='env_var', action='list') to see all environment variables.");
             var def = resolved.Definition;
 
             var currentValues = GetCurrentValues([def.Id]);
@@ -441,11 +440,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(variableName))
                 return Error("variable_name is required for 'clear'.",
-                    "Use manage_environment_variable(action='list') to see all environment variables.");
+                    "Use manage_admin(resource='env_var', action='list') to see all environment variables.");
 
             var resolved = ResolveDefinitionInput(variableName);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return Error(resolved.Error.Split("\r\n")[0], "Use manage_environment_variable(action='list') to see all environment variables.");
+                return Error(resolved.Error.Split("\r\n")[0], "Use manage_admin(resource='env_var', action='list') to see all environment variables.");
             var def = resolved.Definition;
             variableName = resolved.SchemaName;
 
@@ -486,11 +485,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(variableName))
                 return Error("variable_name is required for 'delete'.",
-                    "Use manage_environment_variable(action='list') to see all environment variables.");
+                    "Use manage_admin(resource='env_var', action='list') to see all environment variables.");
 
             var resolved = ResolveDefinitionInput(variableName);
             if (!string.IsNullOrEmpty(resolved.Error))
-                return Error(resolved.Error.Split("\r\n")[0], "Use manage_environment_variable(action='list') to see all environment variables.");
+                return Error(resolved.Error.Split("\r\n")[0], "Use manage_admin(resource='env_var', action='list') to see all environment variables.");
             var def = resolved.Definition;
             variableName = resolved.SchemaName;
 
@@ -725,7 +724,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(trimmed))
                 return (null, null, "variable_name is required.");
 
-            var resolved = DisplayNameFirstResolver.ResolveEnvironmentVariableDefinition(_orgService, trimmed, "manage_environment_variable");
+            var resolved = DisplayNameFirstResolver.ResolveEnvironmentVariableDefinition(_orgService, trimmed, "manage_admin(resource='env_var')");
             if (!resolved.IsSuccess)
                 return (null, null, $"variable_name '{trimmed}': {resolved.Error}");
 

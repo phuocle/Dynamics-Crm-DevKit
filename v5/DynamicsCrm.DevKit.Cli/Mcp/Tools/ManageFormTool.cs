@@ -26,7 +26,6 @@ using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ManageFormTool : McpToolBase
     {
         private const int DashboardFormType = 0;
@@ -67,7 +66,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Bind installed PCF controls to field or subgrid instances with manage_custom_control operations. Discover names and manifest parameters with inspect_metadata(resource='custom_controls').\n" +
             "- Rename a form, or restore a form from a .formxml backup (undo) — the result's backupPath points to the pre-change backup; pass it as formxml to action='undo' to restore\n\n" +
             "RELATED TOOLS:\n" +
-            "- inspect_metadata(resource='tables') → entity logical names; manage_view → entity views; publish_customizations → batch publish\n" +
+            "- inspect_metadata(resource='tables') → entity logical names; manage_ui(resource='view') → entity views; manage_admin(resource='publish') → batch publish\n" +
             "- See schema://formxml + docs://instructions_for_formxml for FormXML structure and operation examples")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
@@ -116,7 +115,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     if (string.IsNullOrWhiteSpace(entity_name))
                         return Error("entity_name is required.", "Use inspect_metadata(resource='tables') to find the entity logical name.");
-                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "manage_form", out entityCatalog);
+                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_orgService, entity_name.Trim(), "manage_ui(resource='form')", out entityCatalog);
                     if (!entityResult.IsSuccess)
                         return Error(entityResult.Error);
                     entity = entityResult.Value;
@@ -216,7 +215,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var typeHint = formType > 0 ? $" (type={MapFormType(formType)})" : "";
                 return Error(
                     $"No form found matching '{formName}' for entity '{entityName}'{typeHint}.",
-                    $"Use manage_form with action='list' and entity_name='{entityName}' to list all available forms.");
+                    $"Use manage_ui(resource='form') with action='list' and entity_name='{entityName}' to list all available forms.");
             }
 
             if (forms.Count == 1)
@@ -264,12 +263,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleDetail(string entityName, string formId, string formName, int formType = 0)
         {
             var listCall = entityName == null
-                ? "manage_form(action='list', form_type=0)"
-                : $"manage_form(action='list', entity_name='{entityName}')";
+                ? "manage_ui(resource='form', action='list', form_type=0)"
+                : $"manage_ui(resource='form', action='list', entity_name='{entityName}')";
             if (string.IsNullOrWhiteSpace(formId) && string.IsNullOrWhiteSpace(formName))
                 return Error("form_id or form_name is required when action='detail'.",
                     entityName == null ? $"Use {listCall} to find system dashboard IDs."
-                        : $"Pass form_id (GUID) or form_name (name filter). Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
+                        : $"Pass form_id (GUID) or form_name (name filter). Use manage_ui(resource='form') with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             if (formType != 0 && !ValidFormTypes.Contains(formType))
                 return Error($"form_type={formType} is not valid.", "Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=Card, 12=MainInteractive. Use 0 or omit for all types.");
@@ -297,7 +296,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     entityName == null ? $"No system dashboard found matching name '{nameFilter}'."
                         : $"No form found matching name '{nameFilter}'{typeHint} for entity '{entityName}'.",
                     entityName == null ? $"Use {listCall} to list system dashboards."
-                        : $"Use manage_form with action='list' and entity_name='{entityName}' to list all available forms.");
+                        : $"Use manage_ui(resource='form') with action='list' and entity_name='{entityName}' to list all available forms.");
             }
 
             if (forms.Count == 1)
@@ -329,8 +328,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (result.Entities.Count == 0)
                 return Error(
                     $"No form found with ID '{formId}'.",
-                    entityName == null ? "Use manage_form(action='list', form_type=0) to find system dashboard IDs."
-                        : $"Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
+                    entityName == null ? "Use manage_ui(resource='form', action='list', form_type=0) to find system dashboard IDs."
+                        : $"Use manage_ui(resource='form') with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             var form = result.Entities[0];
             var objectTypeCode = form.GetAttributeValue<string>("objecttypecode") ?? "";
@@ -380,7 +379,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(formId))
                 return Error("form_id is required when action='navigation_list'.",
-                    $"Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
+                    $"Use manage_ui(resource='form') with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             if (!Guid.TryParse(formId.Trim(), out var id))
                 return Error($"'{formId}' is not a valid GUID.");
@@ -442,7 +441,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 result.FormId = duplicate.Id.ToString();
                 result.Status = "already_exists";
                 return Error($"A {kind} named '{formName}' already exists{scope} ({result.FormId}).",
-                    "Use the existing form ID for detail or update. If only publishing failed, use publish_customizations.", result);
+                    "Use the existing form ID for detail or update. If only publishing failed, use manage_admin(resource='publish').", result);
             }
 
             var resolvedXml = ResolveFormXmlInput(formxml.Trim(), deleteTempFileAfterRead: false);
@@ -486,7 +485,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var summary = result.Published
                 ? $"Created and published {kind} '{formName}' ({id}){scope}."
-                : $"Created {kind} '{formName}' ({id}){scope} but publish failed. Retry with publish_customizations.";
+                : $"Created {kind} '{formName}' ({id}){scope} but publish failed. Retry with manage_admin(resource='publish').";
             return ReportFormMutation(summary, result);
         }
 
@@ -497,11 +496,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(formId))
                 return Error("form_id is required when action='update'.",
-                    $"Pass the target form GUID. Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
+                    $"Pass the target form GUID. Use manage_ui(resource='form') with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             if (!Guid.TryParse(formId.Trim(), out var id))
                 return Error($"'{formId}' is not a valid GUID.",
-                    $"Pass a form GUID (e.g. from manage_form(action='list', entity_name='{entityName}')).");
+                    $"Pass a form GUID (e.g. from manage_ui(resource='form', action='list', entity_name='{entityName}')).");
 
             var hasOperations = !string.IsNullOrWhiteSpace(operations);
             var hasFormxml    = !string.IsNullOrWhiteSpace(formxml);
@@ -538,7 +537,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (currentForm == null)
                 return Error(
                     $"Form '{id}' not found.",
-                    $"Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
+                    $"Use manage_ui(resource='form') with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             var currentFormXml = currentForm.GetAttributeValue<string>("formxml") ?? "";
             var formName       = currentForm.GetAttributeValue<string>("name") ?? "";
@@ -640,7 +639,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (currentForm == null)
                 return Error(
                     $"Form '{id}' not found.",
-                    $"Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
+                    $"Use manage_ui(resource='form') with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             var currentFormXml = currentForm.GetAttributeValue<string>("formxml") ?? "";
             var formName = currentForm.GetAttributeValue<string>("name") ?? "";
@@ -727,11 +726,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(formId))
                 return Error("form_id is required when action='rename'.",
-                    $"Pass the target form GUID. Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
+                    $"Pass the target form GUID. Use manage_ui(resource='form') with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             if (!Guid.TryParse(formId.Trim(), out var id))
                 return Error($"'{formId}' is not a valid GUID.",
-                    $"Pass a form GUID (e.g. from manage_form(action='list', entity_name='{entityName}')).");
+                    $"Pass a form GUID (e.g. from manage_ui(resource='form', action='list', entity_name='{entityName}')).");
 
             if (string.IsNullOrWhiteSpace(formName))
                 return Error("form_name is required when action='rename'.",
@@ -744,7 +743,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (currentForm == null)
                 return Error(
                     $"Form '{id}' not found.",
-                    $"Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
+                    $"Use manage_ui(resource='form') with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             var oldName = currentForm.GetAttributeValue<string>("name") ?? "";
             var objectTypeCode = currentForm.GetAttributeValue<string>("objecttypecode") ?? entityName;
@@ -815,11 +814,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var dashboard = entityName == null;
             if (string.IsNullOrWhiteSpace(formId))
                 return Error("form_id is required when action='undo'.",
-                    $"Pass the target form GUID. Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
+                    $"Pass the target form GUID. Use manage_ui(resource='form') with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             if (!Guid.TryParse(formId.Trim(), out var id))
                 return Error($"'{formId}' is not a valid GUID.",
-                    $"Pass a form GUID (e.g. from manage_form(action='list', entity_name='{entityName}')).");
+                    $"Pass a form GUID (e.g. from manage_ui(resource='form', action='list', entity_name='{entityName}')).");
 
             if (string.IsNullOrWhiteSpace(backupFilePath))
                 return Error("formxml (backup file path) is required when action='undo'.",
@@ -847,7 +846,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (currentForm == null)
                 return Error(
                     $"Form '{id}' not found.",
-                    $"Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
+                    $"Use manage_ui(resource='form') with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             var formName = currentForm.GetAttributeValue<string>("name") ?? "";
             var objectTypeCode = currentForm.GetAttributeValue<string>("objecttypecode") ?? entityName;

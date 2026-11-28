@@ -73,7 +73,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Function
 
                 if (!FunctionMetadataReader.InvokableTypes.Contains(parameter.Type))
                     throw new ArgumentException(
-                        $"Argument '{parameter.Name}' has type '{parameter.Type}', which manage_function cannot convert. Invokable types: {string.Join(", ", FunctionMetadataReader.InvokableTypes.OrderBy(t => t, StringComparer.Ordinal))}.");
+                        $"Argument '{parameter.Name}' has type '{parameter.Type}', which manage_logic(resource='function') cannot convert. Invokable types: {string.Join(", ", FunctionMetadataReader.InvokableTypes.OrderBy(t => t, StringComparer.Ordinal))}.");
 
                 plan.ConvertedArguments[parameter.Name] = ConvertValue(parameter.Name, parameter.Type, args[parameter.Name]);
                 supplied.Remove(parameter.Name);

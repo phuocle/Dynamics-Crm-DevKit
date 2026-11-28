@@ -322,13 +322,13 @@ public class McpMultiConnectionTests
     {
         var methods = typeof(McpServerHost).Assembly.GetTypes().Where(t => t.GetCustomAttribute<McpServerToolTypeAttribute>() != null)
             .SelectMany(t => t.GetMethods()).Where(m => m.GetCustomAttribute<McpServerToolAttribute>() != null).ToArray();
-        Assert.AreEqual(29, methods.Length);
+        Assert.AreEqual(14, methods.Length);
         Assert.AreEqual(6, methods.Count(m => m.GetCustomAttribute<McpServerToolAttribute>()!.ReadOnly));
-        var customApi = methods.Select(m => m.GetCustomAttribute<McpServerToolAttribute>()!).Single(tool => tool.Name == "manage_custom_api");
-        Assert.IsFalse(customApi.ReadOnly);
-        Assert.IsTrue(customApi.Destructive);
+        var manageLogic = methods.Select(m => m.GetCustomAttribute<McpServerToolAttribute>()!).Single(tool => tool.Name == "manage_logic");
+        Assert.IsFalse(manageLogic.ReadOnly);
+        Assert.IsTrue(manageLogic.Destructive);
         var routed = methods.Where(m => m.GetParameters().Any(p => p.Name == "env")).ToArray();
-        Assert.AreEqual(28, routed.Length);
+        Assert.AreEqual(13, routed.Length);
         foreach (var method in routed)
         {
             var env = method.GetParameters().Single(p => p.Name == "env");

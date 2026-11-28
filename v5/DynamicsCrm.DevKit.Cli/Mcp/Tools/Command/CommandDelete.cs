@@ -38,7 +38,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (command == null)
                 return Error("No matching appaction found for action='delete'.",
-                    "Check the scope or use manage_command(action='list', include_children=true) to find command IDs.");
+                    "Check the scope or use manage_commanding(resource='command', action='list', include_children=true) to find command IDs.");
 
             var commands = new List<Entity>();
             var commandIds = new HashSet<Guid>();
@@ -86,7 +86,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (publishEntity != null)
                 message += PublishHelper.PublishEntity(_context, _orgService, publishEntity)
                     ? $" Table '{publishEntity}' published."
-                    : $" Publishing table '{publishEntity}' failed. Use publish_customizations to retry the publish.";
+                    : $" Publishing table '{publishEntity}' failed. Use manage_admin(resource='publish') to retry the publish.";
 
             return Success(message, new ManageCommandResult
             {
@@ -140,7 +140,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var resolvedAppId = ResolveAppId(appId, appName, out var appError);
                 if (!resolvedAppId.HasValue)
-                    return (null, Error(appError.Split("\r\n")[0], "Use manage_app(action='list') to find the app."));
+                    return (null, Error(appError.Split("\r\n")[0], "Use manage_ui(resource='app', action='list') to find the app."));
                 query.Criteria.AddCondition("appmoduleid", ConditionOperator.Equal, resolvedAppId.Value);
             }
             else
@@ -148,7 +148,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (hasEntity)
             {
-                var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "manage_command");
+                var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, entityName.Trim(), "manage_commanding(resource='command')");
                 if (!resolved.IsSuccess)
                     return (null, Error(resolved.Error.Split("\r\n")[0], "Use inspect_metadata(resource='tables') to list available tables."));
 

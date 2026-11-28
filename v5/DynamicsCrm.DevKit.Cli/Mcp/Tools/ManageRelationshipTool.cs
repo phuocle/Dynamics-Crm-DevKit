@@ -15,7 +15,6 @@ using DynamicsCrm.DevKit.Shared;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ManageRelationshipTool : McpToolBase
     {
         private const int RelationshipComponentType = 10;
@@ -53,8 +52,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Read docs://schema_tools_guide before relationship changes for cascade, hierarchy and polymorphic lookup rules.\n\n" +
             "RELATED TOOLS:\n" +
             "- inspect_metadata(resource='tables') → discover relationships\n" +
-            "- manage_column → lookup columns\n" +
-            "- publish_customizations → batch publish after multiple relationship changes")]
+            "- manage_schema(resource='column') → lookup columns\n" +
+            "- manage_admin(resource='publish') → batch publish after multiple relationship changes")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("create_1n / create_nn / update / delete / add_target / remove_target.")] string action = "",
             [Description("Schema name. Required: update/delete. Auto-generated on create.")] string relationship_name = "",
@@ -634,7 +633,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var metadataId = response.RelationshipId;
             var published = PublishHelper.PublishEntity(_context, _orgService, entityName);
 
-            var summary = $"Added target '{referencedEntity}' to polymorphic lookup '{entityName}.{attributeName}' (relationship: '{relName}'), published={(published ? "yes" : "no")}. IMPORTANT: existing form controls still display the OLD entity list — remove and re-add the field via manage_form to refresh.";
+            var summary = $"Added target '{referencedEntity}' to polymorphic lookup '{entityName}.{attributeName}' (relationship: '{relName}'), published={(published ? "yes" : "no")}. IMPORTANT: existing form controls still display the OLD entity list — remove and re-add the field via manage_ui(resource='form') to refresh.";
 
             return Success(summary, new ManageRelationshipResult
             {
@@ -711,7 +710,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             logicalName = null;
             errorResult = null;
 
-            var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, input, "manage_relationship");
+            var resolved = DisplayNameFirstResolver.ResolveEntity(_orgService, input, "manage_schema(resource='relationship')");
             if (resolved.IsSuccess)
             {
                 logicalName = resolved.Value.LogicalName;
@@ -727,7 +726,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             attribute = null;
             errorResult = null;
 
-            var resolved = DisplayNameFirstResolver.ResolveAttribute(_orgService, entityLogicalName, input, "manage_relationship");
+            var resolved = DisplayNameFirstResolver.ResolveAttribute(_orgService, entityLogicalName, input, "manage_schema(resource='relationship')");
             if (resolved.IsSuccess)
             {
                 attribute = resolved.Value;

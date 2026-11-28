@@ -63,7 +63,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
                 catch (InvalidOperationException ex)
                 {
                     throw new AppNavigationOperationException(action, ex.Message,
-                        "Fix the operation fields per the message and re-call; use manage_app(action='detail') to inspect current area/group/item ids.");
+                        "Fix the operation fields per the message and re-call; use manage_ui(resource='app', action='detail') to inspect current area/group/item ids.");
                 }
             }
 

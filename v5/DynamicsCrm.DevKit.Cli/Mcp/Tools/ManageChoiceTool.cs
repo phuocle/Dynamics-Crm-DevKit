@@ -16,7 +16,6 @@ using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ManageChoiceTool : McpToolBase
     {
         private const string OptionSetNameDescription = "Required for detail/update (name or display name, case-insensitive). Optional for create. Sent to Dataverse with the supplied casing after trimming. Auto-derived when omitted.";
@@ -43,15 +42,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageChoiceResult)),
         Description(
-            "Manage GLOBAL option sets (choices). Actions: 'list', 'detail' (read-only) | 'create', 'update' (mutations). For local picklists → manage_column. solution_name is REQUIRED for create and label-only add_options — ask the user if missing, never guess. If needsWait=true, wait pollAfterSeconds before detail.\n\n" +
+            "Manage GLOBAL option sets (choices). Actions: 'list', 'detail' (read-only) | 'create', 'update' (mutations). For local picklists → manage_schema(resource='column'). solution_name is REQUIRED for create and label-only add_options — ask the user if missing, never guess. If needsWait=true, wait pollAfterSeconds before detail.\n\n" +
             "Dataverse can store a global choice Name in lowercase even if the requested name uses mixed case. Create and detail report the Dataverse Name as schemaName and its lowercase form as logicalName.\n\n" +
             "WHEN TO USE:\n" +
             "- Create a global choice with options, or update options (add/rename/remove/recolor), display name, description\n" +
             "- Inspect a global choice before binding it to a column\n\n" +
             "RELATED TOOLS:\n" +
-            "- manage_column → local picklists; bind a global choice to a column\n" +
+            "- manage_schema(resource='column') → local picklists; bind a global choice to a column\n" +
             "- inspect_metadata(resource='tables') → see which columns use a choice\n" +
-            "- publish_customizations → batch publish after multiple metadata changes")]
+            "- manage_admin(resource='publish') → batch publish after multiple metadata changes")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("'list', 'detail', 'create', 'update'.")] string action = "",
             [Description(OptionSetNameDescription)] string optionset_name = "",
@@ -145,7 +144,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(optionsetName))
                 return Error("optionset_name is required for 'update'.",
-                    "Use manage_choice(action='list') to see all available global option sets.");
+                    "Use manage_schema(resource='choice', action='list') to see all available global option sets.");
 
             if (!string.IsNullOrWhiteSpace(removeOptionValues) && ParseLabelList(removeOptionValues) == null)
                 return Error("Invalid remove_options format.",
@@ -161,9 +160,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return Error("No changes specified.",
                     "Provide at least one of: display_name, description, add_options, update_options, remove_options, option_colors.");
 
-            var resolved = DisplayNameFirstResolver.ResolveGlobalOptionSet(_orgService, optionsetName, "manage_choice");
+            var resolved = DisplayNameFirstResolver.ResolveGlobalOptionSet(_orgService, optionsetName, "manage_schema(resource='choice')");
             if (!resolved.IsSuccess)
-                return Error(resolved.Error.Split("\r\n")[0], "Use manage_choice(action='list') to see all available global option sets.");
+                return Error(resolved.Error.Split("\r\n")[0], "Use manage_schema(resource='choice', action='list') to see all available global option sets.");
 
             var name = resolved.Value.Name;
             var existingMeta = RetrieveOptionSetMetadata(name);
@@ -414,13 +413,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(optionsetName))
                 return Error("optionset_name is required for 'detail'.",
-                    "Use manage_choice(action='list') to see all available global option sets.");
+                    "Use manage_schema(resource='choice', action='list') to see all available global option sets.");
 
             optionsetName = optionsetName.Trim().ToLowerInvariant();
 
-            var resolved = DisplayNameFirstResolver.ResolveGlobalOptionSet(_orgService, optionsetName, "manage_choice");
+            var resolved = DisplayNameFirstResolver.ResolveGlobalOptionSet(_orgService, optionsetName, "manage_schema(resource='choice')");
             if (!resolved.IsSuccess)
-                return Error(resolved.Error.Split("\r\n")[0], "Use manage_choice(action='list') to see all available global option sets.");
+                return Error(resolved.Error.Split("\r\n")[0], "Use manage_schema(resource='choice', action='list') to see all available global option sets.");
 
             return BuildDetailResult(resolved.Value);
         }
@@ -473,13 +472,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Provide label-only values separated by semicolons (e.g. 'Draft;Confirmed;Paid'), or explicit 'value:label' pairs.");
 
             var identityInput = string.IsNullOrWhiteSpace(optionsetName) ? displayName : optionsetName;
-            var existingChoice = DisplayNameFirstResolver.ResolveGlobalOptionSet(_orgService, identityInput, "manage_choice");
+            var existingChoice = DisplayNameFirstResolver.ResolveGlobalOptionSet(_orgService, identityInput, "manage_schema(resource='choice')");
             if (existingChoice.IsSuccess)
                 return Error(
                     $"Global option set '{identityInput.Trim()}' already exists as '{existingChoice.Value.Name}' ({existingChoice.Value.DisplayName?.UserLocalizedLabel?.Label ?? ""}).",
                     "Use action='update' to modify it.");
             if (existingChoice.Status == ResolveStatus.Ambiguous || existingChoice.Status == ResolveStatus.Error)
-                return Error(existingChoice.Error.Split("\r\n")[0], "Use manage_choice(action='list') to see all available global option sets.");
+                return Error(existingChoice.Error.Split("\r\n")[0], "Use manage_schema(resource='choice', action='list') to see all available global option sets.");
 
             var name = optionsetName?.Trim();
 
@@ -812,10 +811,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Published = published,
                 MetadataVerified = metadataVerified,
                 NeedsWait = needsWait,
-                WaitTool = needsWait ? "manage_choice" : null,
+                WaitTool = needsWait ? "manage_schema(resource='choice')" : null,
                 PollAfterSeconds = needsWait ? MetadataOperationWaitHelper.DefaultWaitSeconds : null,
                 ReadbackAllowed = needsWait ? false : null,
-                NextAllowedActions = needsWait ? new List<string> { "manage_choice detail" } : null,
+                NextAllowedActions = needsWait ? new List<string> { "manage_schema(resource='choice') detail" } : null,
                 WaitReason = needsWait ? "Wait for Dataverse metadata or publish propagation before readback." : null,
                 PublishError = publishError,
                 Status = status

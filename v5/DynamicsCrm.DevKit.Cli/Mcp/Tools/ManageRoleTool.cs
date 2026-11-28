@@ -16,7 +16,6 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
     public class ManageRoleTool : McpToolBase
     {
         private const int RoleComponentType = 20;
@@ -54,7 +53,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Roll back a bad privilege update or a mistaken delete (action='restore')\n\n" +
             "RELATED TOOLS:\n" +
             "- get_context(action='whoami') → verify the connected user and their direct roles\n" +
-            "- manage_record → read/create/update role and team records directly\n" +
+            "- manage_data(resource='record') → read/create/update role and team records directly\n" +
             "- query_data(mode='fetchxml') → query roles and privileges with deterministic filters")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             McpServer server,
@@ -693,8 +692,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var entityInput = change.Entity?.Trim();
                     var isActivityAlias = string.Equals(entityInput, "activity", StringComparison.OrdinalIgnoreCase);
                     var resolvedEntity = isActivityAlias
-                        ? DisplayNameFirstResolver.ResolveEntity(_orgService, "activitypointer", "manage_role", matchMode: EntityNameMatchMode.ExactLogicalNameOnly)
-                        : DisplayNameFirstResolver.ResolveEntity(_orgService, entityInput, "manage_role");
+                        ? DisplayNameFirstResolver.ResolveEntity(_orgService, "activitypointer", "manage_admin(resource='role')", matchMode: EntityNameMatchMode.ExactLogicalNameOnly)
+                        : DisplayNameFirstResolver.ResolveEntity(_orgService, entityInput, "manage_admin(resource='role')");
                     if (!resolvedEntity.IsSuccess)
                     {
                         if (resolvedEntity.Status == ResolveStatus.Ambiguous)
@@ -1521,7 +1520,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(entityFilter))
                 return null;
 
-            return DisplayNameFirstResolver.ResolveEntity(_orgService, entityFilter.Trim(), "manage_role");
+            return DisplayNameFirstResolver.ResolveEntity(_orgService, entityFilter.Trim(), "manage_admin(resource='role')");
         }
 
         private CallToolResult EntityFilterError(string entityFilter, string action, ResolveResult<EntityMetadata> resolved)

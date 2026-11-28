@@ -128,7 +128,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             if (matches.Count != 1)
             {
                 var reason = matches.Count == 0 ? "was not found" : "matches multiple items";
-                throw new InvalidOperationException($"Related navigation item '{selector}' {reason}. Use manage_form(action='navigation_list') to check the item IDs and relationship names.");
+                throw new InvalidOperationException($"Related navigation item '{selector}' {reason}. Use manage_ui(resource='form', action='navigation_list') to check the item IDs and relationship names.");
             }
 
             var (item, element) = matches[0];

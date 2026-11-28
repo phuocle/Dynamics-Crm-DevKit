@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ModelContextProtocol.Server;
 using System.Linq;
 using System.Reflection;
-using CliManageDeletedRecordsTool = DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageDeletedRecordsTool;
+using CliManageDeletedRecordsTool = DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageDataTool;
 
 namespace DynamicsCrm.DevKit.Cli.UnitTests.Cli.Mcp.ManageDeletedRecords;
 
@@ -19,6 +19,6 @@ public sealed class ManageDeletedRecordsToolTests
             .Single(candidate => candidate.GetCustomAttribute<McpServerToolAttribute>() != null);
         var attribute = method.GetCustomAttribute<McpServerToolAttribute>();
 
-        Assert.AreEqual("manage_deleted_records", attribute!.Name);
+        Assert.AreEqual("manage_data", attribute!.Name);
     }
 }

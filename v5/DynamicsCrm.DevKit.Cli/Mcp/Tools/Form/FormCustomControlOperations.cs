@@ -196,7 +196,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 (id == null || NamesMatch(id, (string)control.Attribute("id"))) &&
                 (field == null || NamesMatch(field, (string)control.Attribute("datafieldname")))).ToArray();
             if (matches.Length == 0)
-                throw new InvalidOperationException($"No form control matches control_id '{id}' and field '{field}'. Use manage_form detail to inspect the FormXML.");
+                throw new InvalidOperationException($"No form control matches control_id '{id}' and field '{field}'. Use manage_ui(resource='form') detail to inspect the FormXML.");
             if (matches.Length > 1)
                 throw new InvalidOperationException("Multiple form instances match. Select a unique control_id. Matches: " +
                     string.Join(", ", matches.Select(control => $"{control.Attribute("id")?.Value} in {Location(control)}")));

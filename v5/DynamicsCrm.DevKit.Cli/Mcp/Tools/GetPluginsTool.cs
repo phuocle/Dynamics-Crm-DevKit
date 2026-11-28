@@ -103,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- inspect_diagnostics(resource='plugin_traces') → execution traces\n" +
             "- inspect_diagnostics(resource='system_jobs') → async failures\n" +
             "- inspect_automation(resource='messages') → SDK messages + legacy Custom Actions\n" +
-            "- manage_custom_api → modern Custom API definitions")]
+            "- manage_logic(resource='custom_api') → modern Custom API definitions")]
         public System.Threading.Tasks.Task<CallToolResult> InvokeAsync(
             [Description("Assembly name contains. 1 match → detail; 0/2+ → disambiguation. Empty = list all.")] string assembly_name = "",
             [Description("Steps for entity Display/logical name. Wins over assembly_name.")] string entity_name = "",

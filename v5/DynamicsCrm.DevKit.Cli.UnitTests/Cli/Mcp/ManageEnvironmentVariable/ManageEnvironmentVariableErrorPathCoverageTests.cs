@@ -125,7 +125,7 @@ public sealed class ManageEnvironmentVariableErrorPathCoverageTests
 
         Assert.IsTrue(result.IsError == true);
         StringAssert.Contains(result.GetText(), "Multiple candidates match 'dev_NewLabel'");
-        StringAssert.Contains(result.GetText(), "Use manage_environment_variable(action='list') to see all environment variables.");
+        StringAssert.Contains(result.GetText(), "Use manage_admin(resource='env_var', action='list') to see all environment variables.");
     }
 
     [TestMethod]
