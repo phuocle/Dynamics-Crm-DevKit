@@ -1,11 +1,13 @@
+> **Consolidated MCP Routing:** Model-driven app operations use manage_ui(resource='app', action='list'|'detail'|'create'|'update'|'update_navigation'|'add_components'|'remove_components'|'validate'|'undo', id=..., name=..., entity_name=..., solution_name=..., payload={app, app_name, display_name, unique_name, description, icon_webresource, operations, max_records, view_ids, form_ids, dashboard_ids, chart_ids}).
 
-# Instructions for manage_app
 
-Use `manage_app` for model-driven app metadata, app navigation, and table, system view, form, chart, and dashboard membership.
+# Instructions for manage_ui(resource='app')
+
+Use `manage_ui(resource='app')` for model-driven app metadata, app navigation, and table, system view, form, chart, and dashboard membership.
 
 ## Golden Rules
 
-- Always read the app first with `manage_app(action='detail', app='...')` before changing metadata, navigation, or components.
+- Always read the app first with `manage_ui(resource='app', action='detail', app='...')` before changing metadata, navigation, or components.
 - Create requires `solution_name` and `display_name`.
 - Create automatically creates a starter sitemap with an Account item so Dataverse app validation can pass.
 - After saving changes, `create`, `update`, `update_navigation`, `add_components`, `remove_components`, and `undo` attempt to publish the app automatically. `published: true` confirms success. If publishing fails after saving, the result includes `published: false`, a status ending in `_publish_failed`, and a `nextStep` for retrying publish. `no_changes` results skip publish.
@@ -22,7 +24,7 @@ Use `manage_app` for model-driven app metadata, app navigation, and table, syste
 
 ## App component membership
 
-Use `add_components` or `remove_components` with the app's display name, unique name, or GUID. Pass one or more of `view_ids`, `form_ids`, `chart_ids`, and `dashboard_ids` as JSON arrays of GUID strings or exact names. View, form, and chart selectors require `entity_name`, which accepts the table's display or logical name. Chart selectors resolve system charts (`savedqueryvisualization`, component type `59`) for that table. Use `manage_chart(action='list', entity_name=...)` to discover them. Dashboard-only calls can omit `entity_name`. When supplied, dashboard lookup includes dashboards for that table and global dashboards.
+Use `add_components` or `remove_components` with the app's display name, unique name, or GUID. Pass one or more of `view_ids`, `form_ids`, `chart_ids`, and `dashboard_ids` as JSON arrays of GUID strings or exact names. View, form, and chart selectors require `entity_name`, which accepts the table's display or logical name. Chart selectors resolve system charts (`savedqueryvisualization`, component type `59`) for that table. Use `manage_ui(resource='chart', action='list', entity_name=...)` to discover them. Dashboard-only calls can omit `entity_name`. When supplied, dashboard lookup includes dashboards for that table and global dashboards.
 
 `add_components` adds the table to the app if `entity_name` is supplied and the table is missing, including for tables outside the sitemap. Pass `entity_name` alone to add or remove the table component. With view, form, chart, or dashboard selectors, `remove_components` targets only the selected components.
 
@@ -42,7 +44,7 @@ Use a GUID when a name is ambiguous. The actions use Dataverse's AddAppComponent
 
 When a table in the app displays all its system charts by default, `remove_components` with `chart_ids` explicitly selects the remaining charts. The result lists the charts kept as explicit selections in `addedAppComponents` and the charts removed from display in `removedAppComponents`. New system charts for that table then need to be added to the app explicitly. Keep at least one chart selected, since an empty selection displays all the charts again.
 
-The mutation reports `addedAppComponents`, `removedAppComponents`, and `published` as applicable. Pass the returned `backupPath` as `operations` to `manage_app(action='undo', app='...')` to restore the memberships changed by that call. Earlier navigation backups still restore the sitemap.
+The mutation reports `addedAppComponents`, `removedAppComponents`, and `published` as applicable. Pass the returned `backupPath` as `operations` to `manage_ui(resource='app', action='undo', app='...')` to restore the memberships changed by that call. Earlier navigation backups still restore the sitemap.
 
 ## Read Before Write Workflow
 
@@ -151,7 +153,7 @@ Add a URL, a system dashboard, and a web resource to an existing group:
 ```
 
 - A URL item writes the supplied path or URL to the SiteMap and requires no app component. The tool accepts legacy paths such as `/workplace/home_dashboards.aspx`. Microsoft documents a limitation for generic [SiteMap links to .aspx pages](https://learn.microsoft.com/en-us/power-apps/maker/model-driven-apps/create-site-map-app).
-- Use the `formId` returned by `manage_form` or the GUID of an existing system dashboard. The operation writes `Url="/workplace/home_dashboards.aspx"` and `DefaultDashboard` with the GUID without braces. To repair an existing Dashboard SubArea, pass its `item` ID and the same `dashboard_id` in `update_item`. The system form is associated with the app if needed.
+- Use the `formId` returned by `manage_ui(resource='form')` or the GUID of an existing system dashboard. The operation writes `Url="/workplace/home_dashboards.aspx"` and `DefaultDashboard` with the GUID without braces. To repair an existing Dashboard SubArea, pass its `item` ID and the same `dashboard_id` in `update_item`. The system form is associated with the app if needed.
 - Pass an existing web resource's exact name. The `$webresource:` prefix is optional in input and always appears in the SiteMap URL, which establishes a Dataverse dependency. When the environment exposes app component type `61`, the tool also adds the web resource directly to the app if needed.
 
 Set or replace the icon on an existing Dashboard or WebResource item with `update_item`, `area`, `group`, and `item`. For example, set the icon on the WebResource item above.

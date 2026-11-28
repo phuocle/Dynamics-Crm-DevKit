@@ -1,43 +1,45 @@
+> **Consolidated MCP Routing:** Form operations use manage_ui(resource='form', action='list'|'detail'|'navigation_list'|'create'|'update'|'rename'|'undo', entity_name=..., id=..., name=..., solution_name=..., payload={form_type, include_formxml, formxml, operations}).
+
 
 # FormXML Manipulation Rules
 
 ## CRITICAL: Backup Before Modifying an Existing Form
-- ALWAYS retrieve the current FormXML using manage_form with action='detail' and the specific form_id FIRST
-- `manage_form` automatically saves the current FormXML before update or rename and returns `backupPath`. Keep that path for rollback.
-- Backup file naming (manage_form update/rename auto-backup): {form_id}_{yyyyMMddHHmmss}.formxml.json
+- ALWAYS retrieve the current FormXML using manage_ui(resource='form') with action='detail' and the specific form_id FIRST
+- `manage_ui(resource='form')` automatically saves the current FormXML before update or rename and returns `backupPath`. Keep that path for rollback.
+- Backup file naming (manage_ui(resource='form') update/rename auto-backup): {form_id}_{yyyyMMddHHmmss}.formxml.json
   Example: 8448b78f8f42e61180ff001dd8a1c3f9_20260329180000.formxml.json
 - Backup location: {working_directory}/.devkit/manage_form/{entity}/
 - A corrupted FormXML can break the entire entity form -- without backup, you must restore the environment
 
 ## Rollback Procedure (If Form Breaks)
-1. Call `manage_form(action='undo', entity_name='...', form_id='...', formxml='<backupPath>')` using the backup path returned by the update or rename.
+1. Call `manage_ui(resource='form', action='undo', entity_name='...', form_id='...', formxml='<backupPath>')` using the backup path returned by the update or rename.
 2. Check the result's publish status and verify the form loads correctly.
-- Undo restores FormXML; to restore a changed form name, use `manage_form(action='rename', ...)` separately.
+- Undo restores FormXML; to restore a changed form name, use `manage_ui(resource='form', action='rename', ...)` separately.
 
 ## CRITICAL: Verify Field Names Before Modifying Forms
-- Before adding ANY field to a form, you MUST call `get_tables` first to verify the field's logical name exists on the entity.
+- Before adding ANY field to a form, you MUST call `inspect_metadata(resource='tables')` first to verify the field's logical name exists on the entity.
 - Do NOT guess or assume field names. User-provided names may not match the actual logical name (e.g., "fpt site" could be "ftpsiteurl", "websiteurl", or a custom field with a publisher prefix).
-- After calling `get_tables`, search the attributes list for the field by display name or logical name to find the exact match.
+- After calling `inspect_metadata(resource='tables')`, search the attributes list for the field by display name or logical name to find the exact match.
 - If the field does not exist, inform the user and list similar fields as suggestions.
 
 ## Before Making Changes
-- When editing an existing form, read its FormXML using manage_form with action='detail' and the specific form_id
+- When editing an existing form, read its FormXML using manage_ui(resource='form') with action='detail' and the specific form_id
 - Understand the existing structure before modifying
 - Validate changes against schema://formxml XSD before writing
 
 ## Create a Quick Create Form
 
-1. Read the source Quick Create form with `manage_form(action='detail', entity_name=..., form_id=...)` in the source environment.
-2. In the target environment, call `manage_form(action='create', entity_name=..., form_type=7, form_name=..., formxml=...)`. Pass the source `formXml` or a path to a FormXML file.
-3. Use the returned `formId` to inspect the new form. If `status` is `created_publish_failed`, publish the target table with `publish_customizations`.
+1. Read the source Quick Create form with `manage_ui(resource='form', action='detail', entity_name=..., form_id=...)` in the source environment.
+2. In the target environment, call `manage_ui(resource='form', action='create', entity_name=..., form_type=7, form_name=..., formxml=...)`. Pass the source `formXml` or a path to a FormXML file.
+3. Use the returned `formId` to inspect the new form. If `status` is `created_publish_failed`, publish the target table with `manage_admin(resource='publish')`.
 
 The target table and the fields and web resources referenced by the form must already exist. Enable Quick Create on the target table to use the form in the app.
 
 ## System Dashboards
 
-Call `manage_form(action='list', form_type=0)` with `entity_name` omitted to discover system dashboard IDs. Use `form_name` to filter by a substring and `include_formxml=true` to include the XML in each matching entry.
+Call `manage_ui(resource='form', action='list', form_type=0)` with `entity_name` omitted to discover system dashboard IDs. Use `form_name` to filter by a substring and `include_formxml=true` to include the XML in each matching entry.
 
-Call `manage_form(action='detail', form_type=0, form_id=...)` to inspect one dashboard. You can pass `form_name` instead when the substring identifies a single dashboard. If several match, use a candidate `formId` from the response.
+Call `manage_ui(resource='form', action='detail', form_type=0, form_id=...)` to inspect one dashboard. You can pass `form_name` instead when the substring identifies a single dashboard. If several match, use a candidate `formId` from the response.
 
 Create an organization-owned dashboard with `form_type=0` and omit `entity_name`. Supply a dashboard FormXML file or inline XML with a `<form>` root. For dashboard layout examples, see [Microsoft's dashboard samples](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/sample-dashboards).
 
@@ -51,12 +53,12 @@ Create an organization-owned dashboard with `form_type=0` and omit `entity_name`
 }
 ```
 
-To replace the FormXML, call `manage_form(action='update', form_type=0, form_id=..., formxml=...)` with the complete XML or its file path. Update saves a backup under `.devkit/manage_form/dashboard/`. Restore it with `action='undo'`, the same `form_id`, and the returned `backupPath` as `formxml`.
+To replace the FormXML, call `manage_ui(resource='form', action='update', form_type=0, form_id=..., formxml=...)` with the complete XML or its file path. Update saves a backup under `.devkit/manage_form/dashboard/`. Restore it with `action='undo'`, the same `form_id`, and the returned `backupPath` as `formxml`.
 
-Create and update validate against `schema://formxml` and publish the dashboard by GUID. Optionally supply `solution_name` on either action to add the dashboard to that solution. Check `published` and `isAddToSolution` when a solution is supplied. If publish fails, call `publish_customizations(dashboards='<formId>')`.
+Create and update validate against `schema://formxml` and publish the dashboard by GUID. Optionally supply `solution_name` on either action to add the dashboard to that solution. Check `published` and `isAddToSolution` when a solution is supplied. If publish fails, call `manage_admin(resource='publish', dashboards='<formId>')`.
 
 ## Operation JSON Contract
-Call `manage_form` with tool-level `action='update'`. Inside the `operations` JSON array, each operation object uses:
+Call `manage_ui(resource='form')` with tool-level `action='update'`. Inside the `operations` JSON array, each operation object uses:
 
 | Field | Meaning | Example |
 |-------|---------|---------|
@@ -335,9 +337,9 @@ When you disable the view picker or change the default view while the picker is 
 
 ## PCF custom controls on fields and subgrids
 
-1. Call `get_custom_controls` in the form's environment. Filter by `name` with `name_match` set to `contains`, `prefix`, or `exact`. Use `kind=field` with a compatible `data_type` such as `SingleLine.Text`, or `kind=dataset` to find subgrid controls. Read the properties, dataset name, and property sets returned from the manifest.
-2. Call `manage_form(action="detail")` to find the exact target `control_id` in the form. You may use `field` alone if it appears once. For a repeated field, supply the selected instance's `control_id`. A subgrid always requires `control_id`.
-3. Pass the operations as a serialized JSON array to `manage_form(action="update")` with the entity and form GUID. Use the registered `name` from discovery as `custom_control_name`.
+1. Call `inspect_metadata(resource='custom_controls')` in the form's environment. Filter by `name` with `name_match` set to `contains`, `prefix`, or `exact`. Use `kind=field` with a compatible `data_type` such as `SingleLine.Text`, or `kind=dataset` to find subgrid controls. Read the properties, dataset name, and property sets returned from the manifest.
+2. Call `manage_ui(resource='form', action="detail")` to find the exact target `control_id` in the form. You may use `field` alone if it appears once. For a repeated field, supply the selected instance's `control_id`. A subgrid always requires `control_id`.
+3. Pass the operations as a serialized JSON array to `manage_ui(resource='form', action="update")` with the entity and form GUID. Use the registered `name` from discovery as `custom_control_name`.
 
 FormXML uses `0` for Phone, `1` for Tablet, and `2` for Web. These numbers are specific to FormXML. When a binding is active, clients without a selected PCF use an explicit default control entry.
 
@@ -382,11 +384,11 @@ The usual backup, dry-run, publish, and undo flow applies to all three operation
 
 ## Related Navigation
 
-Call `manage_form(action='navigation_list', entity_name='account', form_id='<form GUID>')` and use the `navigation` array in `structuredContent` to show the current items for confirmation before making changes. Each entry has `id`, `type` (`relationship` or `system`), `relationshipName`, `label`, `area`, `sequence`, and `visible`. `relationshipName` is null for system entries. `area` and `sequence` can be null when neither metadata nor FormXML supplies a value.
+Call `manage_ui(resource='form', action='navigation_list', entity_name='account', form_id='<form GUID>')` and use the `navigation` array in `structuredContent` to show the current items for confirmation before making changes. Each entry has `id`, `type` (`relationship` or `system`), `relationshipName`, `label`, `area`, `sequence`, and `visible`. `relationshipName` is null for system entries. `area` and `sequence` can be null when neither metadata nor FormXML supplies a value.
 
 The list combines relationship menu settings, available built-in items, and the form's explicit `Navigation/NavBar` items. FormXML overrides take precedence. Inherited relationships use the table-side menu settings, with `Details` mapped to `Info` and the menu order used as the sequence. The `<entity>_connection1` relationship uses `navConnections`. Built-in entries include `navAudit`, `navAsyncOperations`, `navProcessSessions`, and `navSPDocuments` when supported by the entity metadata. Record access and app settings can also affect what users see in the app.
 
-Use `manage_navigation` with `manage_form(action='update')`. Put `relationship_name` or `nav_id` directly on a single-item operation, or supply a non-empty `items` array of selector objects. Use the exact relationship schema name or ID from `navigation_list`. Each item in a batch uses the same `manage_action`.
+Use `manage_navigation` with `manage_ui(resource='form', action='update')`. Put `relationship_name` or `nav_id` directly on a single-item operation, or supply a non-empty `items` array of selector objects. Use the exact relationship schema name or ID from `navigation_list`. Each item in a batch uses the same `manage_action`.
 
 | `manage_action` | Effect |
 |---|---|
@@ -475,6 +477,6 @@ Omit `function_name` to remove the entire event entry.
 ```
 
 ## After Making Changes
-- Use the dedicated manage_form tool to apply changes
-- manage_form auto-handles: backup > validate > update > publish
+- Use the dedicated manage_ui(resource='form') tool to apply changes
+- manage_ui(resource='form') auto-handles: backup > validate > update > publish
 - Verify the form loads correctly in the browser

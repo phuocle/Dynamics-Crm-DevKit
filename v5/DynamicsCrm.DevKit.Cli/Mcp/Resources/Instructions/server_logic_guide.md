@@ -1,3 +1,5 @@
+> **Consolidated MCP Routing:** Read-only inspection → inspect_automation(resource='plugins'|'workflows'|'flows'|'bpfs'|'business_rules'|'messages', entity_name=..., id=..., name=..., status=..., max_records=..., options={...}). Mutations → manage_logic(resource='custom_api'|'function', action=..., name=..., entity_name=..., solution_name=..., payload={...}).
+
 
 # Server-Side Logic Guide
 
@@ -7,12 +9,12 @@ Reference for all 6 server-logic inspection tools.
 
 | Tool | What It Inspects | Dataverse Entity | Category Filter |
 |------|-----------------|------------------|-----------------|
-| get_plugins | Plugin assemblies, types, steps, images | pluginassembly, plugintype, sdkmessageprocessingstep | N/A |
-| get_workflows | Classic workflows (background + realtime) | workflow | category=0 |
-| manage_custom_api | Custom API definitions, request parameters, response properties (list/detail/create/update/delete) | customapi | N/A |
-| get_flows | Power Automate cloud flows + run history | workflow + flowsession | category=5 |
-| get_business_process_flows | BPF definitions + stages | workflow | category=4 |
-| get_business_rules | Business rules | workflow | category=2 |
+| inspect_automation(resource='plugins') | Plugin assemblies, types, steps, images | pluginassembly, plugintype, sdkmessageprocessingstep | N/A |
+| inspect_automation(resource='workflows') | Classic workflows (background + realtime) | workflow | category=0 |
+| manage_logic(resource='custom_api') | Custom API definitions, request parameters, response properties (list/detail/create/update/delete) | customapi | N/A |
+| inspect_automation(resource='flows') | Power Automate cloud flows + run history | workflow + flowsession | category=5 |
+| inspect_automation(resource='bpfs') | BPF definitions + stages | workflow | category=4 |
+| inspect_automation(resource='business_rules') | Business rules | workflow | category=2 |
 
 ## Common Pattern: List vs Detail
 
@@ -23,11 +25,11 @@ These tools support list and detail modes, but their identifiers differ:
 | List | Omit the tool's detail identifier | Summary of matching items |
 | Detail | Supply the tool's identifier or a supported name match | Details of one item |
 
-For get_plugins: detail mode triggers when assembly_name matches exactly 1 assembly.
-For get_workflows: detail mode also triggers when name_filter matches exactly 1 workflow.
-For manage_custom_api use action='list' or action='detail' with api_name (plus create/update/delete); get_business_process_flows also supports bpf_name matching one result. get_business_rules requires entity_name for both modes.
+For inspect_automation(resource='plugins'): detail mode triggers when assembly_name matches exactly 1 assembly.
+For inspect_automation(resource='workflows'): detail mode also triggers when name_filter matches exactly 1 workflow.
+For manage_logic(resource='custom_api') use action='list' or action='detail' with api_name (plus create/update/delete); inspect_automation(resource='bpfs') also supports bpf_name matching one result. inspect_automation(resource='business_rules') requires entity_name for both modes.
 
-## get_plugins
+## inspect_automation(resource='plugins')
 
 ### Three Modes
 1. No filters: List all plugin assemblies with type counts
@@ -47,7 +49,7 @@ For manage_custom_api use action='list' or action='detail' with api_name (plus c
 
 ### Download a Plugin DLL
 
-Call `get_plugins` with `download=true` and either `assembly_name` (must match exactly one assembly) or `assembly_id` (the GUID from list mode). Do not combine these selectors or supply entity/step filters. `max_records` does not bypass download disambiguation.
+Call `inspect_automation(resource='plugins')` with `download=true` and either `assembly_name` (must match exactly one assembly) or `assembly_id` (the GUID from list mode). Do not combine these selectors or supply entity/step filters. `max_records` does not bypass download disambiguation.
 
 The DLL is saved to `{workspace}/.devkit/get_plugins/{assemblyId:N}/{assemblyName}_{timestamp}.dll`. Workspace resolves from MCP roots, then the server working directory. Names are sanitized and previous downloads are never overwritten. The result has `mode="download"`, assembly metadata, `savedPath`, `fileName`, `sizeBytes`, and `sha256`; binary/Base64 content is not returned in the response.
 
@@ -74,7 +76,7 @@ This downloads the original NuGet package bytes, including all DLLs, dependencie
 | PostImage | 1 | Record state AFTER the operation |
 | Both | 2 | Both pre and post states |
 
-## get_workflows
+## inspect_automation(resource='workflows')
 
 ### Filter Parameters
 | Parameter | Description |
@@ -92,7 +94,7 @@ This downloads the original NuGet package bytes, including all DLLs, dependencie
 - runas: 0=Owner (of workflow), 1=Caller (triggering user)
 - triggeronupdateattributelist: comma-separated field names that trigger on Update
 
-## manage_custom_api
+## manage_logic(resource='custom_api')
 
 ### Actions
 - `list`: Filter by `entity_name`, `status` (active/inactive/all), `include_microsoft` (default: false), `max_records` (1-500).
@@ -111,7 +113,7 @@ Changes involving multiple records run in one Dataverse transaction. Dry-run ret
 - requestParameters, responseProperties (with type, isOptional)
 - pluginType (backing implementation)
 
-## get_flows
+## inspect_automation(resource='flows')
 
 ### Three Modes
 1. flow_id EMPTY + action='list': List all cloud flows
@@ -130,7 +132,7 @@ Changes involving multiple records run in one Dataverse transaction. Dry-run ret
 ### Run Status Values
 NotSpecified(0), Paused(1), Running(2), Waiting(3), Succeeded(4), Skipped(5), Suspended(6), Cancelled(7), Failed(8)
 
-## get_business_process_flows
+## inspect_automation(resource='bpfs')
 
 ### Filter Parameters
 | Parameter | Description |
@@ -145,7 +147,7 @@ NotSpecified(0), Paused(1), Running(2), Waiting(3), Succeeded(4), Skipped(5), Su
 - Ordered stage IDs, names, categories, and primary entities
 - Definition metadata, including status and primary entity
 
-## get_business_rules
+## inspect_automation(resource='business_rules')
 
 ### Filter Parameters
 | Parameter | Description |
@@ -156,5 +158,5 @@ NotSpecified(0), Paused(1), Running(2), Waiting(3), Succeeded(4), Skipped(5), Su
 
 ### Notes
 - Business rules are entity-specific (no global list without entity_name)
-- Detail mode reports parsed conditions, actions, and XAML parse status; read the workflow record's `xaml` field with `manage_record` when the raw definition is needed.
+- Detail mode reports parsed conditions, actions, and XAML parse status; read the workflow record's `xaml` field with `manage_data(resource='record')` when the raw definition is needed.
 - Business rules execute client-side (form) or server-side depending on scope

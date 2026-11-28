@@ -1,9 +1,11 @@
+> **Consolidated MCP Routing:** All schema writes go through manage_schema(resource='table'|'column'|'relationship'|'choice', action=..., entity_name=..., name=..., solution_name=..., payload={...}). Read-only metadata inspection → inspect_metadata(resource='tables'|'solution_components'|'custom_controls', ...). Publish changes → manage_admin(resource='publish', ...).
+
 
 # Schema Tools Guide
 
-Reference for `manage_table`, `manage_column`, and `manage_relationship`.
+Reference for `manage_schema(resource='table')`, `manage_schema(resource='column')`, and `manage_schema(resource='relationship')`.
 
-## manage_table
+## manage_schema(resource='table')
 
 ### Three-Field Name Model
 - **display_name** / **display_collection_name** -- human labels (required for CREATE; mutable on UPDATE)
@@ -64,16 +66,16 @@ The MCP server blocks enabling Change Tracking, Activities, Business Process Flo
 `execute_webapi` allows writes to verified row CRUD endpoints only. Direct metadata writes, solution import and upgrade actions, other write actions, and `$batch` are blocked, including URL-encoded paths.
 
 ### Post-Create Workflow
-1. `manage_table` -- create entity
-2. `manage_column` -- add columns
-3. `manage_form(action='update', operations=<JSON array serialized as a string>)` -- customize the form; see `docs://instructions_for_formxml`
-4. Check each tool's published status; use `publish_customizations` when publishing is still needed.
+1. `manage_schema(resource='table')` -- create entity
+2. `manage_schema(resource='column')` -- add columns
+3. `manage_ui(resource='form', action='update', operations=<JSON array serialized as a string>)` -- customize the form; see `docs://instructions_for_formxml`
+4. Check each tool's published status; use `manage_admin(resource='publish')` when publishing is still needed.
 
 ---
 
-## manage_column
+## manage_schema(resource='column')
 
-### Three-Field Name Model (same convention as manage_table)
+### Three-Field Name Model (same convention as manage_schema(resource='table'))
 - **display_name** -- human label (required for CREATE; mutable on UPDATE)
 - **logical_name** -- lowercase logical name with publisher prefix; identifies an existing attribute for UPDATE; optional CREATE override (must be the lowercase form of schema_name)
 - **schema_name** -- PascalCase schema name with publisher prefix; optional CREATE-only override of SchemaName (ignored on UPDATE)
@@ -103,11 +105,11 @@ The MCP server blocks enabling Change Tracking, Activities, Business Process Flo
 
 ### Formula columns
 
-- In `get_tables` with `detail_level="full"`, `formulaDefinition` is the `entity:attribute` clone reference. `rawFormulaDefinition` is the exact Dataverse formula text or XML, including whitespace. An empty string indicates an unset definition. Compact and standard details omit both fields.
-- Use `formula_definition` on create or on update of an existing formula column. Copy the `formulaDefinition` reference from `get_tables` in the form `source_table_logical_name:source_column_logical_name`. The tool reads the source formula and rewrites references for the target. A Power Fx target requires a Power Fx source.
+- In `inspect_metadata(resource='tables')` with `detail_level="full"`, `formulaDefinition` is the `entity:attribute` clone reference. `rawFormulaDefinition` is the exact Dataverse formula text or XML, including whitespace. An empty string indicates an unset definition. Compact and standard details omit both fields.
+- Use `formula_definition` on create or on update of an existing formula column. Copy the `formulaDefinition` reference from `inspect_metadata(resource='tables')` in the form `source_table_logical_name:source_column_logical_name`. The tool reads the source formula and rewrites references for the target. A Power Fx target requires a Power Fx source.
 - To enter Power Fx directly, pass `entity_name`, the existing column's `logical_name`, and `formula_expression` (for example, `=Text(ab_union_fee_id.ab_date, "yyyy-mm-dd")`). Omit `formula_definition`, `formula_source_type`, and `raw_formula_definition`. The expression must be valid for the target column's existing data type.
-- To set or update a Calculated or Rollup formula directly with raw XAML (`<Activity ...>`), pass `raw_formula_definition` as either a path to an existing XAML/XML file (or `.formula.json` backup file) or the inline `<Activity ...>` XML string (taken from `rawFormulaDefinition` in `get_tables(detail_level="full")` and remapped for table/column/relationship names as needed). The XAML must be well-formed XML with an `<Activity ...>` root element. On UPDATE, target an existing Calculated (`SourceType = 1`) or Rollup (`SourceType = 2`) column by `logical_name`; on CREATE, pass `raw_formula_definition` with `formula_source_type="calculated"` or `"rollup"` (or let the tool infer the kind from the XAML). `raw_formula_definition` is mutually exclusive with `formula_definition` and `formula_expression`.
-- **Mandatory backup on formula update**: Before executing `UpdateAttributeRequest` for any formula change (Power Fx, Calculated, or Rollup — via `formula_expression`, `formula_definition`, or `raw_formula_definition`), `manage_column` saves a pre-change snapshot (`entityName`, `logicalName`, `sourceType`, `timestamp`, `formulaDefinition`) to `{workspaceFolder}/.devkit/manage_column/{entity_name}/{logical_name}_{yyyyMMddHHmmss}.formula.json` and returns `backupPath` in the structured result. To restore the previous formula, pass the saved `formulaDefinition` back via `formula_expression` (for Power Fx) or pass the backup file path / `formulaDefinition` via `raw_formula_definition` (for Calculated/Rollup).
+- To set or update a Calculated or Rollup formula directly with raw XAML (`<Activity ...>`), pass `raw_formula_definition` as either a path to an existing XAML/XML file (or `.formula.json` backup file) or the inline `<Activity ...>` XML string (taken from `rawFormulaDefinition` in `inspect_metadata(resource='tables', detail_level="full")` and remapped for table/column/relationship names as needed). The XAML must be well-formed XML with an `<Activity ...>` root element. On UPDATE, target an existing Calculated (`SourceType = 1`) or Rollup (`SourceType = 2`) column by `logical_name`; on CREATE, pass `raw_formula_definition` with `formula_source_type="calculated"` or `"rollup"` (or let the tool infer the kind from the XAML). `raw_formula_definition` is mutually exclusive with `formula_definition` and `formula_expression`.
+- **Mandatory backup on formula update**: Before executing `UpdateAttributeRequest` for any formula change (Power Fx, Calculated, or Rollup — via `formula_expression`, `formula_definition`, or `raw_formula_definition`), `manage_schema(resource='column')` saves a pre-change snapshot (`entityName`, `logicalName`, `sourceType`, `timestamp`, `formulaDefinition`) to `{workspaceFolder}/.devkit/manage_column/{entity_name}/{logical_name}_{yyyyMMddHHmmss}.formula.json` and returns `backupPath` in the structured result. To restore the previous formula, pass the saved `formulaDefinition` back via `formula_expression` (for Power Fx) or pass the backup file path / `formulaDefinition` via `raw_formula_definition` (for Calculated/Rollup).
 - The tool checks the Power Fx formula in Dataverse metadata before publishing the table. The result includes the previous and saved formula under `changes.formulaDefinition`. Pass `solution_name` to add the column to an unmanaged solution.
 - Microsoft documents the Power Apps editor as the supported way to edit column formulas. If Dataverse rejects the SDK update or the tool cannot verify the saved expression, use the editor. [Specialized columns using code](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/specialized-columns)
 - To create an empty formula column, set `formula_source_type` to `powerfx`, `calculated`, or `rollup`.
@@ -157,9 +159,9 @@ bad pattern when the first record is saved):
 - In model-driven forms, set controls bound to autonumber columns read-only.
 
 Examples:
-- Create: manage_column(entity_name='devkit_ticket', attribute_type='string', display_name='Ticket Number', solution_name='all_in_one', auto_number_format='TKT-{SEQNUM:5}-{RANDSTRING:3}', auto_number_seed=10000)
-- Convert an existing Text column: manage_column(entity_name='devkit_ticket', logical_name='devkit_code', auto_number_format='CODE-{SEQNUM:6}')
-- get_tables shows the current pattern in `autoNumberFormat`.
+- Create: manage_schema(resource='column', entity_name='devkit_ticket', attribute_type='string', display_name='Ticket Number', solution_name='all_in_one', auto_number_format='TKT-{SEQNUM:5}-{RANDSTRING:3}', auto_number_seed=10000)
+- Convert an existing Text column: manage_schema(resource='column', entity_name='devkit_ticket', logical_name='devkit_code', auto_number_format='CODE-{SEQNUM:6}')
+- inspect_metadata(resource='tables') shows the current pattern in `autoNumberFormat`.
 
 ### Picklist Options Format (Create)
 JSON array: [{"label": "Low", "value": 100000000}, {"label": "Medium", "value": 100000001}, {"label": "High", "value": 100000002}]
@@ -175,7 +177,7 @@ JSON array: [{"label": "Low", "value": 100000000}, {"label": "Medium", "value": 
 - global_optionset_name -- option set binding fixed
 
 ### StatusType (statuscode) Options
-`statuscode` is a system attribute of type StatusType. Use `manage_column` with
+`statuscode` is a system attribute of type StatusType. Use `manage_schema(resource='column')` with
 `logical_name='statuscode'` and `add_options`/`update_options`/`delete_options`.
 
 Each option in `add_options` can include a `"state"` field (integer) that links the
@@ -186,11 +188,11 @@ update_options: [{"label":"Renamed Status","value":100000001}]
 delete_options: [100000001]
 
 `state` is required to control which statecode the new status appears under.
-`statecode` column itself is read-only and cannot be managed via `manage_column`.
+`statecode` column itself is read-only and cannot be managed via `manage_schema(resource='column')`.
 
 ---
 
-## manage_chart
+## manage_ui(resource='chart')
 
 Manage Dataverse System Charts (`savedqueryvisualization`).
 
@@ -220,7 +222,7 @@ Optional:
 - `solution_name` (optional; null-check before add)
 
 Workflow:
-1. Call `manage_chart(action='create', entity_name=..., chart_name=..., ...)` with `confirmed=false` (default).
+1. Call `manage_ui(resource='chart', action='create', entity_name=..., chart_name=..., ...)` with `confirmed=false` (default).
 2. Tool returns `status=needs_confirmation` + full proposed plan (including defaults) — for Pie, and for **any** create with `measures` or `filter`. **Do not create yet.**
 3. Show the plan to the user. If they want different category/legend, re-call with updated fields and `confirmed=false` again.
 4. After user approves, re-call the same create with `confirmed=true`.
@@ -237,7 +239,7 @@ Workflow:
 
 ---
 
-## manage_relationship
+## manage_schema(resource='relationship')
 
 ### Actions
 

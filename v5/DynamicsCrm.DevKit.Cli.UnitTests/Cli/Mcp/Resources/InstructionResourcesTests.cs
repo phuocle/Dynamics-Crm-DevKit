@@ -147,9 +147,9 @@ public class InstructionResourcesTests
         var result = InstructionResources.SchemaToolsGuide();
 
         Assert.IsTrue(result.Length > 0);
-        StringAssert.Contains(result, "manage_table");
-        StringAssert.Contains(result, "manage_column");
-        StringAssert.Contains(result, "manage_relationship");
+        StringAssert.Contains(result, "manage_schema(resource='table')");
+        StringAssert.Contains(result, "manage_schema(resource='column')");
+        StringAssert.Contains(result, "manage_schema(resource='relationship')");
     }
 
     [TestMethod]
@@ -158,9 +158,9 @@ public class InstructionResourcesTests
         var result = InstructionResources.DataOperationsGuide();
 
         Assert.IsTrue(result.Length > 0);
-        StringAssert.Contains(result, "manage_record");
-        StringAssert.Contains(result, "execute_fetchxml");
-        StringAssert.Contains(result, "search_records");
+        StringAssert.Contains(result, "manage_data(resource='record')");
+        StringAssert.Contains(result, "query_data(mode='fetchxml')");
+        StringAssert.Contains(result, "query_data(mode='search')");
     }
 
     [TestMethod]
@@ -169,9 +169,9 @@ public class InstructionResourcesTests
         var result = InstructionResources.ServerLogicGuide();
 
         Assert.IsTrue(result.Length > 0);
-        StringAssert.Contains(result, "get_plugins");
-        StringAssert.Contains(result, "get_workflows");
-        StringAssert.Contains(result, "get_flows");
+        StringAssert.Contains(result, "inspect_automation(resource='plugins')");
+        StringAssert.Contains(result, "inspect_automation(resource='workflows')");
+        StringAssert.Contains(result, "inspect_automation(resource='flows')");
     }
 
     [TestMethod]
@@ -183,7 +183,7 @@ public class InstructionResourcesTests
         StringAssert.Contains(result, "# Dataverse SQL Query Rules");
         StringAssert.Contains(result, "SELECT *");
         StringAssert.Contains(result, "DATEADD");
-        StringAssert.Contains(result, "get_tables");
+        StringAssert.Contains(result, "inspect_metadata(resource='tables'");
     }
 
     [TestMethod]
@@ -191,9 +191,9 @@ public class InstructionResourcesTests
     {
         var result = InstructionResources.SqlInstructions();
 
-        StringAssert.Contains(result, "get_tables(entity_name='account', detail_level='standard')");
-        StringAssert.Contains(result, "get_tables(entity_name='account', filter='createdon', detail_level='full')");
-        Assert.IsFalse(result.Contains("get_tables(name="));
+        StringAssert.Contains(result, "inspect_metadata(resource='tables', name='account', detail_level='standard')");
+        StringAssert.Contains(result, "inspect_metadata(resource='tables', name='account', filter='createdon', detail_level='full')");
+        Assert.IsFalse(result.Contains("get_tables("));
         Assert.IsFalse(result.Contains("include_columns"));
         StringAssert.Contains(result, "primaryIdAttribute");
         StringAssert.Contains(result, "`email` is `activityid`");
@@ -234,7 +234,7 @@ public class InstructionResourcesTests
             "0x8004E023", "not fixed by lowering `max_records`"
         })
             StringAssert.Contains(result, contract);
-        StringAssert.Contains(result, "returns guidance to call `execute_sql`; it does not execute SQL");
+        StringAssert.Contains(result, "returns guidance to call `query_data(mode='sql')`; it does not execute SQL");
         Assert.IsFalse(result.Contains("redirected here"));
     }
 

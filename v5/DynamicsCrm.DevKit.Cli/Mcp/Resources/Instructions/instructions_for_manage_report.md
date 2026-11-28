@@ -1,4 +1,6 @@
-# manage_report: SSRS reports and RDL datasets
+> **Consolidated MCP Routing:** SSRS report operations use manage_assets(resource='report', action='list'|'detail'|'create'|'download'|'update'|'add_dataset'|'update_dataset', id=..., name=..., solution_name=..., payload={file_path, description, language, name_filter, max_records, dataset_name, fetchxml, entity_name, output_folder, prefilter}).
+
+# manage_assets(resource='report'): SSRS reports and RDL datasets
 
 `list`, `detail`, and `download` read Dataverse. `update` writes an existing unmanaged report. `create`, `add_dataset`, and `update_dataset` work on local RDL files only; deploy new reports through VSIX or CLI.
 

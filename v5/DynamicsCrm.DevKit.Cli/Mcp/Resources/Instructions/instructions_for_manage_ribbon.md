@@ -1,9 +1,11 @@
+> **Consolidated MCP Routing:** Classic ribbon operations use manage_commanding(resource='ribbon', action='list'|'buttons'|'detail'|'update'|'undo', entity_name=..., payload={operations, ribbonxml}).
 
-# manage_ribbon: classic RibbonDiffXml operations
 
-Use `manage_ribbon` for classic ribbon customizations; `manage_command` manages modern appaction commands. First use `buttons` or `detail` for the entity to inspect existing controls and obtain IDs. Verify JS and image web resources with `manage_webresource`. Do not invent IDs, names, functions, or operation fields.
+# manage_commanding(resource='ribbon'): classic RibbonDiffXml operations
 
-For mutations call `manage_ribbon(action='update', entity_name='...', operations=...)`. `operations` is a **string containing a non-empty JSON array**, not an array passed directly as the parameter. Serialize the array once when constructing the tool arguments. Each array element has its own `action`; do not confuse it with the tool-level `action`. JSON property names below are case-sensitive. Operations execute in array order.
+Use `manage_commanding(resource='ribbon')` for classic ribbon customizations; `manage_commanding(resource='command')` manages modern appaction commands. First use `buttons` or `detail` for the entity to inspect existing controls and obtain IDs. Verify JS and image web resources with `manage_assets(resource='webresource')`. Do not invent IDs, names, functions, or operation fields.
+
+For mutations call `manage_commanding(resource='ribbon', action='update', entity_name='...', operations=...)`. `operations` is a **string containing a non-empty JSON array**, not an array passed directly as the parameter. Serialize the array once when constructing the tool arguments. Each array element has its own `action`; do not confuse it with the tool-level `action`. JSON property names below are case-sensitive. Operations execute in array order.
 
 ## Operation contract
 
@@ -38,4 +40,4 @@ Example flyout array (serialize before passing as `operations`):
 [{"action":"add_flyout_static","surface":"main_grid","label":"Actions","items":[{"label":"Review","library":"example_/review.js","function":"Example.review","enable_library":"example_/review.js","enable_function":"Example.canReview","dependency_libraries":["example_/lib/shared.js"]}]}]
 ```
 
-The tool validates, backs up, imports, then starts PublishAll asynchronously. Follow the returned wait/poll instructions using `get_system_jobs`; do not read back with `buttons` or `detail` while publish is pending. The result's `backupPath` can be passed as `ribbonxml` to `action='undo'`. The advanced `ribbonxml` update input accepts inline RibbonDiffXml or a file path and preserves existing elements absent from the supplied patch; `operations` takes precedence when both are supplied.
+The tool validates, backs up, imports, then starts PublishAll asynchronously. Follow the returned wait/poll instructions using `inspect_diagnostics(resource='system_jobs')`; do not read back with `buttons` or `detail` while publish is pending. The result's `backupPath` can be passed as `ribbonxml` to `action='undo'`. The advanced `ribbonxml` update input accepts inline RibbonDiffXml or a file path and preserves existing elements absent from the supplied patch; `operations` takes precedence when both are supplied.

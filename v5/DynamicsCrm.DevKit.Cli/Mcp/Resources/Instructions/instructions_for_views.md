@@ -1,3 +1,5 @@
+> **Consolidated MCP Routing:** View operations use manage_ui(resource='view', action='list'|'detail'|'create'|'update'|'rename'|'set_default'|'undo', entity_name=..., id=..., name=..., solution_name=..., payload={is_personal_view, fetchxml, layoutxml, cell_updates_json, include_layoutjson, description}).
+
 
 # View (SavedQuery) Manipulation Rules
 
@@ -6,7 +8,7 @@
 - A broken FetchXML hides ALL data from users. A broken LayoutXML crashes the grid — without backup you may need to restore the entire environment.
 
 ## Rollback (If View Breaks)
-1. Call manage_view action='undo' with view_id + fetchxml=<.fetchxml.xml path> AND layoutxml=<.layoutxml.xml path> — BOTH files of one backup pair from the update/rename response (fetchXmlBackupPath + layoutXmlBackupPath)
+1. Call manage_ui(resource='view') action='undo' with view_id + fetchxml=<.fetchxml.xml path> AND layoutxml=<.layoutxml.xml path> — BOTH files of one backup pair from the update/rename response (fetchXmlBackupPath + layoutXmlBackupPath)
 2. The tool reads both backups, validates them, restores both fields, and publishes. It saves a new backup pair before restoring. The FetchXML validator accepts Dataverse's `savedqueryid` on `<fetch>` and validates `distinct` as a boolean.
 3. To revert a description change, call `update` with the previous description. The XML backups cover FetchXML and LayoutXML.
 
@@ -21,13 +23,13 @@
 - Pass `description` on `create` or `update` to write the system view's description. Omitting it or passing `null` on `update` keeps the current description. Pass an empty string to remove the description.
 - For a description-only edit, call `update` with `entity_name`, `view_id` (or a unique `view_name`), and `description`. You can also include `description` with a FetchXML rebuild or a cell patch.
 - Pass `solution_name` on `create`, `update`, `rename`, or `set_default` to add the system view to an unmanaged solution. Use the solution display name or unique name. The tool adds the view as component type 26 using `AddSolutionComponentRequest`.
-- To add an existing view to a solution, call `update` with the view identifier and `solution_name`. Add it to a model-driven app separately with `manage_app(action='add_components')`.
+- To add an existing view to a solution, call `update` with the view identifier and `solution_name`. Add it to a model-driven app separately with `manage_ui(resource='app', action='add_components')`.
 - Check `isAddToSolution` for the result and `addToSolutionMethod` for the method used. If the add request fails, `addToSolutionWarning` describes the failure and any changes to the view have already been saved. A dry run previews the request and reports `isAddToSolution: false`.
 
 ## CRITICAL: Verify Field Names Before Modifying Views
-- Before adding ANY field to a view (FetchXML attributes/conditions, Quick Find columns), you MUST call `get_tables` first to verify the field's logical name exists on the entity.
+- Before adding ANY field to a view (FetchXML attributes/conditions, Quick Find columns), you MUST call `inspect_metadata(resource='tables')` first to verify the field's logical name exists on the entity.
 - Do NOT guess or assume field names. User-provided names like "fpt site" may not match the actual logical name (e.g., it could be "ftpsiteurl", "websiteurl", or a custom field with a publisher prefix).
-- After calling `get_tables`, search the attributes list for the field by display name or logical name to find the exact match.
+- After calling `inspect_metadata(resource='tables')`, search the attributes list for the field by display name or logical name to find the exact match.
 - If the field does not exist, inform the user and list similar fields as suggestions.
 
 ## Structure
@@ -113,7 +115,7 @@ function displayIconTooltip(rowData, userLCID) {
 
 ### Rules
 - The JS function receives the row as JSON + user locale (LCID); values via `{columnname}_Value` (integer for option sets); return `[imageWebResourceName, tooltipText]` — imageWebResourceName is the image **web resource name** (not a URL); async OK (may return a Promise), never sync XHR
-- The view references only the **JS web resource + function name** (the function returns image names at runtime) — create the JS web resource FIRST (`manage_webresource`), then attach it to the cell (`manage_view`)
+- The view references only the **JS web resource + function name** (the function returns image names at runtime) — create the JS web resource FIRST (`manage_assets(resource='webresource')`), then attach it to the cell (`manage_ui(resource='view')`)
 - Pass the plain web resource name for `imageproviderwebresource` — the tool stores it with the required `$webresource:` prefix automatically (a value already prefixed is kept as-is)
 - Both attributes must be set on the same `<cell>`; `imageproviderwebresource` is the JS logic file, NOT the icon image (icons are separate 16x16 web resources named in the JS return value)
 - Works on primary (replaces default icon) and non-primary columns; use a hidden cell for extra data
@@ -154,13 +156,13 @@ Rules:
 - Backup + validation still enforced
 
 ### Workflow
-1. Create icon image web resources (16x16 PNG) — use `manage_webresource` action='create'
-2. Create JS web resource with the icon logic function — use `manage_webresource` action='create'
-3. Attach to the target cell via `manage_view` action='update' with `cell_updates_json`. Include `fetchxml` if the same update adds the target column.
+1. Create icon image web resources (16x16 PNG) — use `manage_assets(resource='webresource')` action='create'
+2. Create JS web resource with the icon logic function — use `manage_assets(resource='webresource')` action='create'
+3. Attach to the target cell via `manage_ui(resource='view')` action='update' with `cell_updates_json`. Include `fetchxml` if the same update adds the target column.
 
 Source: https://learn.microsoft.com/en-us/power-apps/maker/data-platform/display-custom-icons-instead
 
 ## After Making Changes
-- manage_view auto-handles: backup > validate > sync-check > update > publish
+- manage_ui(resource='view') auto-handles: backup > validate > sync-check > update > publish
 - If something breaks: action='undo' with BOTH paths (fetchXmlBackupPath + layoutXmlBackupPath) from the response
 - Verify the view loads correctly in the browser

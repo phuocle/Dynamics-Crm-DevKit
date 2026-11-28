@@ -1,9 +1,11 @@
+> **Consolidated MCP Routing:** Single-record CRUD/associations/solutions → manage_data(resource='record', action=..., entity_name=..., record_id=..., solution_name=..., payload={fields_json, columns, related_entity_name, related_record_id, relationship_name, component_type}). Bulk upsert → manage_data(resource='bulk', entity_name=..., payload={records_json, max_parallelism, bypass_custom_logic, key_fields}). Files/images → manage_data(resource='file', ...). Deleted records → manage_data(resource='deleted', ...). Demo data → manage_data(resource='demo', ...). Read-only queries → query_data(mode='fetchxml'|'sql'|'search'|'search_status', ...).
+
 
 # Data Operations Guide
 
-Reference for `upsert_records`, `manage_record`, `execute_fetchxml`, and `search_records`.
+Reference for `manage_data(resource='bulk')`, `manage_data(resource='record')`, `query_data(mode='fetchxml')`, and `query_data(mode='search')`.
 
-## upsert_records -- Batch create and upsert
+## manage_data(resource='bulk') -- Batch create and upsert
 - Input is an inline JSON array, a `.json` file, or a `.csv` file (max 5000 records). A batch can partially succeed; successful records are not rolled back.
 - Per-record execution mode:
   - Without primary key (`<entity>id`) and without `key_fields`: runs `CreateRequest` (Dataverse generates the GUID and stamps the shared `importSequenceNumber`).
@@ -16,7 +18,7 @@ Reference for `upsert_records`, `manage_record`, `execute_fetchxml`, and `search
 - `bypass_custom_logic=true` bypasses custom sync and async plugins/workflows (`CustomSync,CustomAsync`), requires System Administrator, and is false by default.
 - Structured result includes `created`, `updated` (from `UpsertResponse.RecordCreated`), `succeeded`, `failed`, `stateUpdated`, `durationSeconds`, and per-row `items`.
 
-## manage_record -- Field Type Formats
+## manage_data(resource='record') -- Field Type Formats
 
 With `action='create'`, set `solution_name` to the display or unique name of an unmanaged solution to include a supported component record. Examples include `connectionreference`, `workflow` (cloud flow), and `role`. Supply the record fields in `fields_json` as usual.
 
@@ -57,11 +59,11 @@ Common polymorphic lookups:
 ### Delete Considerations
 - Some records fail to delete due to dependencies (child records, required lookups)
 - Deleting a parent record may cascade-delete child records depending on relationship cascade config
-- Use get_tables with entity_name to check relationships before deleting parent records
+- Use inspect_metadata(resource='tables') with entity_name to check relationships before deleting parent records
 
 ---
 
-## execute_fetchxml -- Curated Reference
+## query_data(mode='fetchxml') -- Curated Reference
 
 ### Basic Structure
 ```xml
@@ -124,13 +126,13 @@ Functions: count, sum, avg, min, max. Use groupby='true' for grouping.
 
 ### Rules
 - Use lowercase logical names for everything
-- Use get_tables to discover entity/attribute names if unsure
+- Use inspect_metadata(resource='tables') to discover entity/attribute names if unsure
 - DO NOT use top/count/page/paging-cookie in <fetch> -- use the max_records parameter instead (the tool rejects these fetch attributes)
 - For advanced syntax, read schema://fetchxml
 
 ---
 
-## search_records -- Search Syntax
+## query_data(mode='search') -- Search Syntax
 
 ### Search Operators
 | Operator | Meaning | Example |
@@ -152,7 +154,7 @@ Relevance Search must be enabled in Power Platform admin center:
 
 ### Limitations
 - Max 100 results per query
-- For larger datasets or precise filtering, use execute_fetchxml
+- For larger datasets or precise filtering, use query_data(mode='fetchxml')
 - Only searches fields indexed by Relevance Search (use action='status' to check)
 
 ### OData Filter Syntax

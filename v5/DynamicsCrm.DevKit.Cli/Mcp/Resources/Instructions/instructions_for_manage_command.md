@@ -1,6 +1,8 @@
-# Delete modern command bar commands with `manage_command`
+> **Consolidated MCP Routing:** Modern Power Fx command bar operations use manage_commanding(resource='command', action=..., entity_name=..., id=..., solution_name=..., payload={location, app_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden, app_name, origin, action_type, name_filter, include_rules, include_children, max_records, items, flyout_command_id, scope, uniquename}).
 
-Use `manage_command(action='delete')` to remove an unmanaged Dataverse `appaction`, including migrated and Enhanced Migrated commands. A real `appaction` GUID is sufficient. Use `action='list'` with the appropriate scope and `include_children=true`, or `action='detail'`, to inspect commands before deleting them.
+# Delete modern command bar commands with `manage_commanding(resource='command')`
+
+Use `manage_commanding(resource='command', action='delete')` to remove an unmanaged Dataverse `appaction`, including migrated and Enhanced Migrated commands. A real `appaction` GUID is sufficient. Use `action='list'` with the appropriate scope and `include_children=true`, or `action='detail'`, to inspect commands before deleting them.
 
 ## Select the command
 
@@ -34,4 +36,4 @@ When `scope` is omitted, the lookup selects `app` if an app is supplied, `table`
 
 The tool checks the entire child tree, including flyout and split button groups. A managed target or child blocks deletion. Rules used only by the commands being deleted are removed first. Shared rules remain available to the other commands that use them. A managed rule that would need to be deleted also blocks the operation. The rule and command deletes run in one transaction, with children deleted before parents.
 
-After deletion, the tool publishes the table linked through `contextentity`, if present. If the publish fails, the response reports that the deletion succeeded and points to `publish_customizations` to retry publishing. The MCP server's dry-run mode previews the requested operation without reading, deleting, or publishing records.
+After deletion, the tool publishes the table linked through `contextentity`, if present. If the publish fails, the response reports that the deletion succeeded and points to `manage_admin(resource='publish')` to retry publishing. The MCP server's dry-run mode previews the requested operation without reading, deleting, or publishing records.
